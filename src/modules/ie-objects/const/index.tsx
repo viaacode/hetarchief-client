@@ -200,7 +200,8 @@ export const MEDIA_ACTIONS = (
 	canReport: boolean,
 	canRequestAccess: boolean,
 	canRequestMaterial: boolean,
-	canExport: boolean
+	canExport: boolean,
+	externalFormUrl: string | null
 ): DynamicActionMenuProps => {
 	const activeIconSet = isInAFolder ? IconNamesSolid : IconNamesLight;
 
@@ -239,6 +240,7 @@ export const MEDIA_ACTIONS = (
 							id: MediaActions.RequestMaterial,
 							ariaLabel: addToMaterialRequestsListButtonLabel,
 							tooltip: addToMaterialRequestsListButtonLabel,
+							url: externalFormUrl,
 						},
 				  ]
 				: []) as ActionItem[]),

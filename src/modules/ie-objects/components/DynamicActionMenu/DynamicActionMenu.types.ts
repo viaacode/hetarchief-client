@@ -18,4 +18,10 @@ export interface ActionItem {
 	tooltip?: string;
 	isPrimary?: boolean;
 	customElement?: ReactNode;
+
+	/**
+	 * If url is passed, the button should be wrapped in a link tag with this url
+	 * This is needed to avoid safari from blocking opening urls in a new tab
+	 */
+	url?: string | null;
 }

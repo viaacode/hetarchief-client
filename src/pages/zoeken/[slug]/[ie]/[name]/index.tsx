@@ -522,6 +522,40 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		}
 	};
 
+	/**
+	 * If the maintainer of this ie-object has an external form for material requests, we need to construct that url with certain parameters
+	 * This currently is only the case for UGent and VRT
+	 */
+	const getExternalMaterialRequestUrlIfAvailable = (): string | null => {
+		if (isAnonymous) {
+			return null;
+		}
+
+		if (mediaInfo?.maintainerFormUrl && user) {
+			// Sometimes we want to encode the url params and sometimes we dont. https://meemoo.atlassian.net/browse/ARC-1710
+			// For UGent the whole url is inside one param, so we cannot encode it
+			// For vrt the url is stored in the form_url and the params should be encoded
+			const encodeOrNotUriComponent = mediaInfo.maintainerFormUrl.startsWith('http')
+				? encodeURIComponent
+				: (param: string) => param;
+			return mediaInfo.maintainerFormUrl
+				.replaceAll('{first_name}', encodeOrNotUriComponent(user.firstName))
+				.replaceAll('{last_name}', encodeOrNotUriComponent(user.lastName))
+				.replaceAll('{email}', encodeOrNotUriComponent(user.email))
+				.replaceAll(
+					'{local_cp_id}',
+					encodeOrNotUriComponent(mediaInfo?.meemooLocalId || '')
+				)
+				.replaceAll('{pid}', encodeOrNotUriComponent(mediaInfo?.meemooIdentifier || ''))
+				.replaceAll('{title}', encodeOrNotUriComponent(mediaInfo?.name || ''))
+				.replaceAll(
+					'{title_serie}',
+					encodeOrNotUriComponent(mediaInfo?.isPartOf?.serie?.[0] || '')
+				);
+		}
+		return null;
+	};
+
 	const onRequestMaterialClick = async () => {
 		if (isAnonymous) {
 			dispatch(setShowAuthModal(true));
@@ -544,36 +578,16 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			return;
 		}
 
-		if (mediaInfo?.maintainerFormUrl && user) {
+		const externalFormUrl = getExternalMaterialRequestUrlIfAvailable();
+		if (externalFormUrl) {
 			EventsService.triggerEvent(LogEventType.ITEM_REQUEST, window.location.href, {
 				fragment_id: mediaInfo?.schemaIdentifier,
 				pid: mediaInfo?.meemooIdentifier,
 				user_group_name: user?.groupName,
-				or_id: mediaInfo.maintainerId,
+				or_id: mediaInfo?.maintainerId,
 			});
 
-			// open external form
-			// Sometimes we want to encode the url params and sometimes we dont. https://meemoo.atlassian.net/browse/ARC-1710
-			// For UGent the whole url is inside one param, so we cannot encode it
-			// For vrt the url is stored in the form_url and the params should be encoded
-			const encodeOrNotUriComponent = mediaInfo.maintainerFormUrl.startsWith('http')
-				? encodeURIComponent
-				: (param: string) => param;
-			const resolvedFormUrl = mediaInfo.maintainerFormUrl
-				.replaceAll('{first_name}', encodeOrNotUriComponent(user.firstName))
-				.replaceAll('{last_name}', encodeOrNotUriComponent(user.lastName))
-				.replaceAll('{email}', encodeOrNotUriComponent(user.email))
-				.replaceAll(
-					'{local_cp_id}',
-					encodeOrNotUriComponent(mediaInfo?.meemooLocalId || '')
-				)
-				.replaceAll('{pid}', encodeOrNotUriComponent(mediaInfo?.meemooIdentifier || ''))
-				.replaceAll('{title}', encodeOrNotUriComponent(mediaInfo?.name || ''))
-				.replaceAll(
-					'{title_serie}',
-					encodeOrNotUriComponent(mediaInfo?.isPartOf?.serie?.[0] || '')
-				);
-			window.open(resolvedFormUrl, '_blank');
+			// The external url is opened with an actual link, so safari doesn't block the popup
 		} else {
 			setActiveBlade(MediaActions.RequestMaterial);
 		}
@@ -808,7 +822,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			!isKiosk,
 			!!canRequestAccess,
 			isAnonymous || canRequestMaterial,
-			canDownloadMetadata
+			canDownloadMetadata,
+			getExternalMaterialRequestUrlIfAvailable()
 		);
 
 		// Sort, filter and tweak actions according to the given sort map

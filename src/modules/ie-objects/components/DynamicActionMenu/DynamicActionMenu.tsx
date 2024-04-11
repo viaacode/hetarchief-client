@@ -74,27 +74,49 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 		);
 	};
 
-	const renderPrimaryButton = (action: ActionItem) => (
-		<li
-			className={styles['c-dynamic-action-menu__primary-item']}
-			key={`media-action-${action.id}`}
-			role="listitem"
-		>
-			{action.customElement ? (
-				action.customElement
-			) : (
-				<Button
-					variants={['teal', 'md']}
-					iconStart={action.icon}
-					onClick={() => onClickAction(action.id)}
-					aria-label={action.ariaLabel}
-					title={action.tooltip}
+	const renderPrimaryButton = (action: ActionItem) => {
+		const $element = action.customElement ? (
+			action.customElement
+		) : (
+			<Button
+				variants={['teal', 'md']}
+				iconStart={action.icon}
+				onClick={() => onClickAction(action.id)}
+				aria-label={action.ariaLabel}
+				title={action.tooltip}
+			>
+				<span className="u-text-ellipsis">{action.label}</span>
+			</Button>
+		);
+		if (action.url) {
+			return (
+				<li
+					className={styles['c-dynamic-action-menu__primary-item']}
+					key={`media-action-${action.id}`}
+					role="listitem"
 				>
-					<span className="u-text-ellipsis">{action.label}</span>
-				</Button>
-			)}
-		</li>
-	);
+					<a
+						href={action.url}
+						target="_blank"
+						referrerPolicy="no-referrer"
+						rel="noreferrer"
+					>
+						{$element}
+					</a>
+				</li>
+			);
+		} else {
+			return (
+				<li
+					className={styles['c-dynamic-action-menu__primary-item']}
+					key={`media-action-${action.id}`}
+					role="listitem"
+				>
+					{$element}
+				</li>
+			);
+		}
+	};
 
 	const renderSecondaryButton = (action: ActionItem) => {
 		const $element = action.customElement ? (
@@ -109,15 +131,38 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 			/>
 		);
 
-		return (
-			<li
-				className={styles['c-dynamic-action-menu__secondary-item']}
-				key={`media-action-${action.id}`}
-				role="listitem"
-			>
-				{action.tooltip && !isMobile ? renderInTooltip($element, action.tooltip) : $element}
-			</li>
-		);
+		if (action.url) {
+			return (
+				<li
+					className={styles['c-dynamic-action-menu__secondary-item']}
+					key={`media-action-${action.id}`}
+					role="listitem"
+				>
+					<a
+						href={action.url}
+						target="_blank"
+						referrerPolicy="no-referrer"
+						rel="noreferrer"
+					>
+						{action.tooltip && !isMobile
+							? renderInTooltip($element, action.tooltip)
+							: $element}
+					</a>
+				</li>
+			);
+		} else {
+			return (
+				<li
+					className={styles['c-dynamic-action-menu__secondary-item']}
+					key={`media-action-${action.id}`}
+					role="listitem"
+				>
+					{action.tooltip && !isMobile
+						? renderInTooltip($element, action.tooltip)
+						: $element}
+				</li>
+			);
+		}
 	};
 
 	const renderDropdown = (dropdownActions: ActionItem[]) => {
