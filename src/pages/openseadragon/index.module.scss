@@ -1,4 +1,7 @@
 .p-object-detail__iiif {
+	width: 100%;
+	height: 100%;
+
 	:global(.mirador-window-top-bar) {
 		display: none;
 	}
@@ -12,13 +15,43 @@
 	:global(.mirador-companion-area-left) {
 		z-index: 0 !important;
 	}
+
+	:global(.openseadragon-container) {
+		background-color: #222 !important;
+	}
+}
+
+.p-object-detail__iiif__reference-strip {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	width: 100px;
+	height: calc(100vh - 10rem);
+	overflow-y: auto;
+
+	> button {
+		cursor: pointer;
+		padding: 0;
+		border: 0.2rem solid #222;
+
+		> img {
+			width: 100%;
+			vertical-align: bottom;
+		}
+
+		&:hover,
+		&:focus-visible {
+			opacity: 0.9;
+			border: 0.2rem solid #00c8aa;
+			outline: none;
+		}
+	}
 }
 
 .p-object-detail__iiif__controls {
 	z-index: 2000;
 	width: 4.8rem;
 	height: calc(100vh - 25rem);
-	background-color: red;
 	position: absolute;
 	left: 0;
 	top: 7rem;

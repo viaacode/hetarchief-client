@@ -35,7 +35,7 @@ import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import type { default as OpenSeadragon } from 'openseadragon';
 import { stringifyUrl } from 'query-string';
-import React, { Fragment, lazy, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
@@ -80,12 +80,10 @@ import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
 import { useGetIeObjectsSimilar } from '@ie-objects/hooks/get-ie-objects-similar';
 import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-ticket-url';
-import { IeObjectsService } from '@ie-objects/services';
 import {
 	IE_OBJECTS_SERVICE_BASE_URL,
 	IE_OBJECTS_SERVICE_EXPORT,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
-import { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import {
 	IeObject,
 	IeObjectAccessThrough,
@@ -106,7 +104,6 @@ import {
 	ErrorNotFound,
 	Icon,
 	IconNamesLight,
-	IconNamesSolid,
 	Loading,
 	Pill,
 	ScrollableTabs,
@@ -121,7 +118,6 @@ import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
@@ -135,8 +131,6 @@ import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
 import { selectBreadcrumbs, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
-import { MiradorConfig } from '@shared/types/mirador/mirador.config';
-import { MiradorInstance, MiradorLib } from '@shared/types/mirador/mirador.lib';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {
 	asDate,
@@ -160,7 +154,7 @@ import {
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import iiifStyles from './index.module.scss';
-import { openSeadragonConfig } from './openseadragon-config';
+import { getOpenSeadragonConfig } from './openseadragon-config';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -284,7 +278,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const [openSeaDragonInstance, setOpenSeadragonInstance] = useState<OpenSeadragon.Viewer | null>(
 		null
 	);
-	const [openSeadragonLib, setOpenSeadragonLib] = useState<any | null>(null);
 
 	// playable url
 	const {
@@ -373,17 +366,23 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	 */
 
 	const initIiifViewer = useCallback(async () => {
-		if (iiifViewerId && isBrowser()) {
-			const OpenSeadragon = (await import('openseadragon')).default;
-			setOpenSeadragonLib(OpenSeadragon);
-			const openSeadragonInstanceTemp = new OpenSeadragon.Viewer({
-				...openSeadragonConfig,
-				id: iiifViewerId,
+		if (!!iiifViewerId && isBrowser()) {
+			console.log('init open sea dragon: ', {
+				iiifViewerId,
+				isBrowser: isBrowser(),
 			});
+			const iiifContainer = document.getElementById(iiifViewerId);
+			if (iiifContainer) {
+				iiifContainer.innerHTML = '';
+			}
+			const OpenSeadragon = (await import('openseadragon')).default;
+			const openSeadragonInstanceTemp = new OpenSeadragon.Viewer(
+				getOpenSeadragonConfig(isMobile, iiifViewerId)
+			);
 			(window as any).openSeaDragonInstance = openSeadragonInstanceTemp;
 			setOpenSeadragonInstance(openSeadragonInstanceTemp);
 		}
-	}, [iiifViewerId]);
+	}, [iiifViewerId, isMobile]);
 
 	useEffect(() => {
 		initIiifViewer();
@@ -564,7 +563,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	 * If the maintainer of this ie-object has an external form for material requests, we need to construct that url with certain parameters
 	 * This currently is only the case for UGent and VRT
 	 */
-	const getExternalMaterialRequestUrlIfAvailable = (): string | null => {
+	const getExternalMaterialRequestUrlIfAvailable = useCallback((): string | null => {
 		if (isAnonymous) {
 			return null;
 		}
@@ -592,7 +591,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				);
 		}
 		return null;
-	};
+	}, [mediaInfo, user, isAnonymous]);
 
 	const onRequestMaterialClick = async () => {
 		if (isAnonymous) {
@@ -906,18 +905,28 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		canRequestAccess,
 		canRequestMaterial,
 		canDownloadMetadata,
+		getExternalMaterialRequestUrlIfAvailable,
 		getSortMapByUserType,
 		hasAccessToVisitorSpaceOfObject,
 		renderExportDropdown,
 	]);
 
 	const iiifZoom = (multiplier: number): void => {
-		// openSeaDragonInstance?.
+		openSeaDragonInstance?.viewport.zoomBy(multiplier);
 	};
 
 	const iiifFullscreen = (expand: boolean): void => {
-		// const state = openSeaDragonInstance?.store.getState();
-		// openSeaDragonInstance?.store?.dispatch(openSeadragonLib?.actions.setWorkspaceFullscreen());
+		openSeaDragonInstance?.setFullScreen(expand);
+	};
+
+	const iiifGoToPage = (pageIndex: number): void => {
+		openSeaDragonInstance?.goToPage(pageIndex);
+	};
+
+	const iiifRotate = (rotateRight: boolean): void => {
+		openSeaDragonInstance?.viewport.setRotation(
+			(openSeaDragonInstance?.viewport.getRotation() + 90 * (rotateRight ? 1 : -1)) % 360
+		);
 	};
 
 	/**
@@ -928,26 +937,58 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		return (
 			<div className={iiifStyles['p-object-detail__iiif__controls']}>
 				<Button
-					className="p-object-detail__iiif__controls__zoom-in"
+					className={'p-object-detail__iiif__controls__fullscreen'}
 					icon={<Icon name={IconNamesLight.ZoomIn} aria-hidden />}
-					aria-label={tText('Krantenviewer inzoemen')}
+					aria-label={tText('Afbeelding inzoemen')}
 					variants={['white']}
 					onClick={() => iiifZoom(1.3)}
 				/>
 				<Button
-					className="p-object-detail__iiif__controls__zoom-out"
+					className={'p-object-detail__iiif__controls__zoom-in'}
 					icon={<Icon name={IconNamesLight.ZoomOut} aria-hidden />}
-					aria-label={tText('Krantenviewer uitzoemen')}
+					aria-label={tText('Afbeelding uitzoemen')}
 					variants={['white']}
 					onClick={() => iiifZoom(0.7)}
 				/>
 				<Button
-					className="p-object-detail__iiif__controls__zoom-out"
+					className={'p-object-detail__iiif__controls__zoom-out'}
 					icon={<Icon name={IconNamesLight.Expand} aria-hidden />}
-					aria-label={tText('Krantenviewer op volledig scherm weergeven')}
+					aria-label={tText('Afbeelding op volledig scherm weergeven')}
 					variants={['white']}
 					onClick={() => iiifFullscreen(true)}
 				/>
+				<Button
+					className={'p-object-detail__iiif__controls__rotate-right'}
+					icon={<Icon name={IconNamesLight.ArrowRight} aria-hidden />}
+					aria-label={tText('Afbeelding rechts draaien')}
+					variants={['white']}
+					onClick={() => iiifRotate(true)}
+				/>
+			</div>
+		);
+	};
+
+	const renderIiifViewerReferenceStrip = () => {
+		const referenceThumbnails: string[] = [
+			'https://ids.lib.harvard.edu/ids/iiif/47174896/full/263,/0/default.jpg',
+			'https://ids.lib.harvard.edu/ids/iiif/18737483/full/263,/0/default.jpg',
+			'https://ids.lib.harvard.edu/ids/iiif/47174892/full/263,/0/default.jpg',
+			'https://ids.lib.harvard.edu/ids/iiif/43182083/full/263,/0/default.jpg',
+			'https://ids.lib.harvard.edu/ids/iiif/43183405/full/263,/0/default.jpg',
+			'https://ids.lib.harvard.edu/ids/iiif/43183422/full/263,/0/default.jpg',
+		];
+		return (
+			<div className={iiifStyles['p-object-detail__iiif__reference-strip']}>
+				{referenceThumbnails.map((referenceThumbnail, index) => {
+					return (
+						<button
+							key={'p-object-detail__iiif__reference-strip__' + index}
+							onClick={() => iiifGoToPage(index)}
+						>
+							<img src={referenceThumbnail} alt={'page ' + (index + 1)} />
+						</button>
+					);
+				})}
 			</div>
 		);
 	};
@@ -962,11 +1003,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 		// IIIF viewer
 		// TODO switch to mediaItem check
+		// eslint-disable-next-line no-constant-condition
 		if (true) {
 			return (
 				<>
 					<div className={iiifStyles['p-object-detail__iiif']} id={iiifViewerId} />
 					{renderIiifViewerButtons()}
+					{renderIiifViewerReferenceStrip()}
 				</>
 			);
 		}

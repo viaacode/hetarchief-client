@@ -3,55 +3,54 @@ import { Options } from 'openseadragon';
 export function getOpenSeadragonConfig(isMobile: boolean, id: string): Options {
 	return {
 		id,
-		sequenceMode: true,
-		tileSources: ['https://iiif.harvardartmuseums.org/manifests/object/299843'],
-		defaultZoomLevel: 0,
+		tileSources: [
+			'https://ids.lib.harvard.edu/ids/iiif/47174896/info.json',
+			'https://ids.lib.harvard.edu/ids/iiif/18737483/info.json',
+			'https://ids.lib.harvard.edu/ids/iiif/47174892/info.json',
+			'https://ids.lib.harvard.edu/ids/iiif/43182083/info.json',
+			'https://ids.lib.harvard.edu/ids/iiif/43183405/info.json',
+			'https://ids.lib.harvard.edu/ids/iiif/43183422/info.json',
+		],
 		loadTilesWithAjax: true,
-		navigatorTop: '100px',
-		navigatorLeft: '40px',
-		navigatorHeight: '200px',
-		navigatorWidth: '260px',
-		preserveViewport: true,
-		referenceStripScroll: 'vertical',
-		showFullPageControl: !isMobile,
+
+		// preserveViewport: true,
+		defaultZoomLevel: 0.5,
+
+		// Panning
+		visibilityRatio: 0.5,
+		constrainDuringPan: true,
+
+		// controls
+		autoHideControls: false,
+		showFullPageControl: false,
+		showNavigationControl: false,
+		showZoomControl: false,
+		showHomeControl: false,
+		showRotationControl: false,
+		showFlipControl: false,
+		showSequenceControl: false,
+		navPrevNextWrap: true,
+
+		// Navigator
 		showNavigator: !isMobile,
-		showReferenceStrip: true,
-		visibilityRatio: 1,
-		// window: {
-		// 	allowClose: false,
-		// 	allowMaximize: false,
-		// 	defaultView: 'single',
-		// 	hideWindowTitle: true,
-		// 	allowTopMenuButton: false,
-		// 	allowWindowSideBar: false,
-		// },
-		// windows: [
-		// 	{
-		// 		// manifestId:
-		// 		// 'https://bertyhell.s3.eu-central-1.amazonaws.com/projects/iiif/manifest-iiif.json',
-		// 		// manifestId:
-		// 		// 'http://dms-data.stanford.edu/data/manifests/McLaughlin/bc788vp3448/manifest.json',
-		// 		manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
-		// 		maximized: true,
-		// 	},
-		// ],
-		// language: 'nl',
-		// thumbnailNavigation: {
-		// 	defaultPosition: 'far-right',
-		// 	displaySettings: true,
-		// 	height: 130,
-		// 	width: 100,
-		// },
-		// workspaceControlPanel: {
-		// 	enabled: false,
-		// },
-		// selectedTheme: 'dark',
-		// workspace: {
-		// 	draggingEnabled: false,
-		// 	allowNewWindows: false,
-		// 	isWorkspaceAddVisible: false,
-		// 	showZoomControls: false,
-		// 	type: 'mosaic',
-		// },
-	};
+		navigatorPosition: 'BOTTOM_LEFT',
+		navigatorHeight: '150px',
+		navigatorWidth: '120px',
+
+		// Reference strip
+		sequenceMode: true,
+		showReferenceStrip: false,
+		// referenceStripScroll: 'vertical',
+		// referenceStripPosition: 'TOP_RIGHT',
+		// referenceStripSizeRatio: 0.1,
+		// referenceStripHeight: 700,
+		// referenceStripWidth: 120,
+
+		// // Collection mode
+		// collectionMode: true,
+		// collectionRows: 3,
+		// collectionTileSize: 1024,
+		// collectionTileMargin: 256,
+		// collectionLayout: 'vertical',
+	} as Options;
 }
