@@ -204,6 +204,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const [related, setRelated] = useState<MediaObject[]>([]);
 	const [metadataExportDropdownOpen, setMetadataExportDropdownOpen] = useState(false);
 	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
+	const [iiifGridViewEnabled, setIiifGridViewEnabled] = useState<boolean>(false);
 
 	// Layout
 	useStickyLayout();
@@ -936,47 +937,74 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const renderIiifViewerButtons = () => {
 		return (
 			<div className={iiifStyles['p-object-detail__iiif__controls']}>
-				<Button
-					className={'p-object-detail__iiif__controls__fullscreen'}
-					icon={<Icon name={IconNamesLight.ZoomIn} aria-hidden />}
-					aria-label={tText('Afbeelding inzoemen')}
-					variants={['white']}
-					onClick={() => iiifZoom(1.3)}
-				/>
-				<Button
-					className={'p-object-detail__iiif__controls__zoom-in'}
-					icon={<Icon name={IconNamesLight.ZoomOut} aria-hidden />}
-					aria-label={tText('Afbeelding uitzoemen')}
-					variants={['white']}
-					onClick={() => iiifZoom(0.7)}
-				/>
-				<Button
-					className={'p-object-detail__iiif__controls__zoom-out'}
-					icon={<Icon name={IconNamesLight.Expand} aria-hidden />}
-					aria-label={tText('Afbeelding op volledig scherm weergeven')}
-					variants={['white']}
-					onClick={() => iiifFullscreen(true)}
-				/>
-				<Button
-					className={'p-object-detail__iiif__controls__rotate-right'}
-					icon={<Icon name={IconNamesLight.ArrowRight} aria-hidden />}
-					aria-label={tText('Afbeelding rechts draaien')}
-					variants={['white']}
-					onClick={() => iiifRotate(true)}
-				/>
+				{!iiifGridViewEnabled && (
+					<Button
+						className={'p-object-detail__iiif__controls__fullscreen'}
+						icon={<Icon name={IconNamesLight.ZoomIn} aria-hidden />}
+						aria-label={tText('Afbeelding inzoemen')}
+						variants={['white']}
+						onClick={() => iiifZoom(1.3)}
+					/>
+				)}
+				{!iiifGridViewEnabled && (
+					<Button
+						className={'p-object-detail__iiif__controls__zoom-in'}
+						icon={<Icon name={IconNamesLight.ZoomOut} aria-hidden />}
+						aria-label={tText('Afbeelding uitzoemen')}
+						variants={['white']}
+						onClick={() => iiifZoom(0.7)}
+					/>
+				)}
+				{!iiifGridViewEnabled && (
+					<Button
+						className={'p-object-detail__iiif__controls__zoom-out'}
+						icon={<Icon name={IconNamesLight.Expand} aria-hidden />}
+						aria-label={tText('Afbeelding op volledig scherm weergeven')}
+						variants={['white']}
+						onClick={() => iiifFullscreen(true)}
+					/>
+				)}
+				{!iiifGridViewEnabled && (
+					<Button
+						className={'p-object-detail__iiif__controls__rotate-right'}
+						icon={<Icon name={IconNamesLight.Redo} aria-hidden />}
+						aria-label={tText('Afbeelding rechts draaien')}
+						variants={['white']}
+						onClick={() => iiifRotate(true)}
+					/>
+				)}
+				{!iiifGridViewEnabled && (
+					<Button
+						className={'p-object-detail__iiif__controls__grid-view__enable'}
+						icon={<Icon name={IconNamesLight.GridView} aria-hidden />}
+						aria-label={tText('Alle paginas in een grid bekijken')}
+						variants={['white']}
+						onClick={() => setIiifGridViewEnabled(true)}
+					/>
+				)}
+				{iiifGridViewEnabled && (
+					<Button
+						className={'p-object-detail__iiif__controls__grid-view__disable'}
+						icon={<Icon name={IconNamesLight.File} aria-hidden />}
+						aria-label={tText('één pagina bekijken')}
+						variants={['white']}
+						onClick={() => setIiifGridViewEnabled(false)}
+					/>
+				)}
 			</div>
 		);
 	};
 
+	const referenceThumbnails: string[] = [
+		'https://ids.lib.harvard.edu/ids/iiif/47174896/full/263,/0/default.jpg',
+		'https://ids.lib.harvard.edu/ids/iiif/18737483/full/263,/0/default.jpg',
+		'https://ids.lib.harvard.edu/ids/iiif/47174892/full/263,/0/default.jpg',
+		'https://ids.lib.harvard.edu/ids/iiif/43182083/full/263,/0/default.jpg',
+		'https://ids.lib.harvard.edu/ids/iiif/43183405/full/263,/0/default.jpg',
+		'https://ids.lib.harvard.edu/ids/iiif/43183422/full/263,/0/default.jpg',
+	];
+
 	const renderIiifViewerReferenceStrip = () => {
-		const referenceThumbnails: string[] = [
-			'https://ids.lib.harvard.edu/ids/iiif/47174896/full/263,/0/default.jpg',
-			'https://ids.lib.harvard.edu/ids/iiif/18737483/full/263,/0/default.jpg',
-			'https://ids.lib.harvard.edu/ids/iiif/47174892/full/263,/0/default.jpg',
-			'https://ids.lib.harvard.edu/ids/iiif/43182083/full/263,/0/default.jpg',
-			'https://ids.lib.harvard.edu/ids/iiif/43183405/full/263,/0/default.jpg',
-			'https://ids.lib.harvard.edu/ids/iiif/43183422/full/263,/0/default.jpg',
-		];
 		return (
 			<div className={iiifStyles['p-object-detail__iiif__reference-strip']}>
 				{referenceThumbnails.map((referenceThumbnail, index) => {
@@ -1007,9 +1035,41 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		if (true) {
 			return (
 				<>
-					<div className={iiifStyles['p-object-detail__iiif']} id={iiifViewerId} />
+					{/* IIIF viewer*/}
+					<div
+						className={iiifStyles['p-object-detail__iiif']}
+						id={iiifViewerId}
+						style={{ display: iiifGridViewEnabled ? 'none' : 'block' }}
+					/>
+
+					{/* IIIF sidebar with pages*/}
+					{!iiifGridViewEnabled && renderIiifViewerReferenceStrip()}
+
+					{/* IIIF viewer buttons */}
 					{renderIiifViewerButtons()}
-					{renderIiifViewerReferenceStrip()}
+
+					{/* IIIF Grid view */}
+					<div
+						className={iiifStyles['p-object-detail__iiif__grid-view-wrapper']}
+						style={{ display: iiifGridViewEnabled ? 'block' : 'none' }}
+					>
+						<div className={iiifStyles['p-object-detail__iiif__grid-view']}>
+							{referenceThumbnails.map((referenceThumbnail, index) => {
+								return (
+									<button
+										key={'p-object-detail__iiif__reference-strip__' + index}
+										onClick={() => {
+											iiifGoToPage(index);
+											setIiifGridViewEnabled(false);
+											openSeaDragonInstance?.forceRedraw();
+										}}
+									>
+										<img src={referenceThumbnail} alt={'page ' + (index + 1)} />
+									</button>
+								);
+							})}
+						</div>
+					</div>
 				</>
 			);
 		}
