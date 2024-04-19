@@ -3,7 +3,16 @@ import { Options } from 'openseadragon';
 export function getOpenSeadragonConfig(isMobile: boolean, id: string): Options {
 	return {
 		id,
+
 		tileSources: [
+			{
+				type: 'image',
+				url: 'https://assets-qas.hetarchief.be/hetarchief/BERT_TEST_IIIF_VIEWER/german.jpg',
+			},
+			{
+				type: 'image',
+				url: 'https://assets-qas.hetarchief.be/hetarchief/BERT_TEST_IIIF_VIEWER/volksgazet.png',
+			},
 			'https://ids.lib.harvard.edu/ids/iiif/47174896/info.json',
 			'https://ids.lib.harvard.edu/ids/iiif/18737483/info.json',
 			'https://ids.lib.harvard.edu/ids/iiif/47174892/info.json',
@@ -15,10 +24,13 @@ export function getOpenSeadragonConfig(isMobile: boolean, id: string): Options {
 
 		// preserveViewport: true,
 		defaultZoomLevel: 0.5,
+		minZoomLevel: 0.3,
+		maxZoomLevel: 5,
 
 		// Panning
 		visibilityRatio: 0.5,
 		constrainDuringPan: true,
+		homeFillsViewer: true,
 
 		// controls
 		autoHideControls: false,

@@ -18,6 +18,7 @@ import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import {
 	capitalize,
+	clamp,
 	indexOf,
 	intersection,
 	isEmpty,
@@ -33,7 +34,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import type { default as OpenSeadragon } from 'openseadragon';
 import { stringifyUrl } from 'query-string';
 import React, { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
@@ -153,6 +153,8 @@ import {
 } from '@visitor-space/types';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
+import altoTextLocations from './alto2-simplified.json';
+import { TextLine } from './extract-text-lines-from-alto';
 import iiifStyles from './index.module.scss';
 import { getOpenSeadragonConfig } from './openseadragon-config';
 
@@ -164,6 +166,9 @@ type ObjectDetailPageProps = {
 	title: string | null;
 	description: string | null;
 } & DefaultSeoInfo;
+
+const imageWidth = 2418;
+const imageHeight = 2415;
 
 const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description, url }) => {
 	/**
@@ -205,6 +210,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const [metadataExportDropdownOpen, setMetadataExportDropdownOpen] = useState(false);
 	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
 	const [iiifGridViewEnabled, setIiifGridViewEnabled] = useState<boolean>(false);
+	const [iiifOcrEnabled, setIiifOcrEnabled] = useState<boolean>(false);
+	const [openSeaDragonLib, setOpenSeaDragonLib] = useState<any | null>(null);
 
 	// Layout
 	useStickyLayout();
@@ -377,10 +384,75 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				iiifContainer.innerHTML = '';
 			}
 			const OpenSeadragon = (await import('openseadragon')).default;
-			const openSeadragonInstanceTemp = new OpenSeadragon.Viewer(
+			// We need to use a function here,
+			// since the library is a function itself,
+			// and otherwise the setState thinks this is a setter function
+			setOpenSeaDragonLib(() => OpenSeadragon);
+
+			// Init Open Seadragon viewer
+			const openSeadragonInstanceTemp: OpenSeadragon.Viewer = new OpenSeadragon.Viewer(
 				getOpenSeadragonConfig(isMobile, iiifViewerId)
 			);
-			(window as any).openSeaDragonInstance = openSeadragonInstanceTemp;
+
+			openSeadragonInstanceTemp.viewport.goHome(true);
+
+			// const altoTextLocations: TextLine[] = extractTextLinesFromAlto();
+			// console.log(altoTextLocations);
+
+			if (isBrowser()) {
+				altoTextLocations.forEach((altoTextLocation) => {
+					const span = document.createElement('SPAN');
+					span.className = 'p-object-detail__iiif__alto__text';
+					span.innerHTML = `
+<svg
+	width="${altoTextLocation.width}"
+	height="${altoTextLocation.height}"
+	xmlns="http://www.w3.org/2000/svg"
+	viewBox="0 0 ${altoTextLocation.width} ${altoTextLocation.height}"
+	preserveAspectRatio="xMidYMid meet"
+	>
+  <text
+  	x="50%"
+  	y="50%"
+  	fill="black"
+  	font-size="300%"
+  	dominant-baseline="middle"
+  	text-anchor="middle"
+  >
+		${altoTextLocation.text}
+	</text>
+</svg>`;
+					openSeadragonInstanceTemp.addOverlay(
+						span,
+						new OpenSeadragon.Rect(
+							altoTextLocation.x / imageWidth,
+							altoTextLocation.y / imageHeight,
+							altoTextLocation.width / imageWidth,
+							altoTextLocation.height / imageHeight,
+							0
+						),
+						OpenSeadragon.Placement.CENTER
+					);
+				});
+			}
+
+			// // Init Annotorious
+			// const anno = annotorious.createOSDAnnotator(openSeadragonInstanceTemp);
+			//
+			// // Init the text layer extension
+			// console.log(annotoriousTextLayer);
+			// const textlayer = annotoriousTextLayer.mountExtension(anno, {
+			// 	label: annotoriousTextLayer.transcriptionLabel,
+			// 	mode: 'fixedPageSize',
+			// 	position: 'center',
+			// });
+			//
+			// // Load ALTO file
+			// textlayer.loadOCR(
+			// 	'https://assets-qas.hetarchief.be/hetarchief/BERT_TEST_IIIF_VIEWER/volksgazet.alto.xml'
+			// );
+
+			// (window as any).openSeaDragonInstance = openSeadragonInstanceTemp;
 			setOpenSeadragonInstance(openSeadragonInstanceTemp);
 		}
 	}, [iiifViewerId, isMobile]);
@@ -913,7 +985,23 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	]);
 
 	const iiifZoom = (multiplier: number): void => {
-		openSeaDragonInstance?.viewport.zoomBy(multiplier);
+		if (!openSeaDragonInstance) {
+			return;
+		}
+		const currentZoom = openSeaDragonInstance.viewport.getZoom(true);
+		const desiredZoom = clamp(
+			currentZoom * multiplier,
+			openSeaDragonInstance.viewport.getMinZoom(),
+			openSeaDragonInstance.viewport.getMaxZoom()
+		);
+		//
+		console.log('zoom: ', {
+			zoom: openSeaDragonInstance?.viewport.getZoom(true),
+			min: openSeaDragonInstance?.viewport.getMinZoom(),
+			max: openSeaDragonInstance?.viewport.getMaxZoom(),
+			home: openSeaDragonInstance?.viewport.getHomeZoom(),
+		});
+		openSeaDragonInstance.viewport.zoomTo(desiredZoom);
 	};
 
 	const iiifFullscreen = (expand: boolean): void => {
@@ -930,6 +1018,30 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		);
 	};
 
+	const iiifZoomToRect = ({
+		x,
+		y,
+		width,
+		height,
+	}: {
+		x: number;
+		y: number;
+		width: number;
+		height: number;
+	}): void => {
+		if (!openSeaDragonInstance) {
+			return;
+		}
+		openSeaDragonInstance.viewport.zoomTo(2.5, undefined, true);
+		openSeaDragonInstance.viewport.panTo(
+			new openSeaDragonLib.Point(
+				(x + width / 2) / imageWidth,
+				(y + height / 2) / imageHeight
+			),
+			false
+		);
+	};
+
 	/**
 	 * Render
 	 */
@@ -937,42 +1049,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const renderIiifViewerButtons = () => {
 		return (
 			<div className={iiifStyles['p-object-detail__iiif__controls']}>
-				{!iiifGridViewEnabled && (
-					<Button
-						className={'p-object-detail__iiif__controls__fullscreen'}
-						icon={<Icon name={IconNamesLight.ZoomIn} aria-hidden />}
-						aria-label={tText('Afbeelding inzoemen')}
-						variants={['white']}
-						onClick={() => iiifZoom(1.3)}
-					/>
-				)}
-				{!iiifGridViewEnabled && (
-					<Button
-						className={'p-object-detail__iiif__controls__zoom-in'}
-						icon={<Icon name={IconNamesLight.ZoomOut} aria-hidden />}
-						aria-label={tText('Afbeelding uitzoemen')}
-						variants={['white']}
-						onClick={() => iiifZoom(0.7)}
-					/>
-				)}
-				{!iiifGridViewEnabled && (
-					<Button
-						className={'p-object-detail__iiif__controls__zoom-out'}
-						icon={<Icon name={IconNamesLight.Expand} aria-hidden />}
-						aria-label={tText('Afbeelding op volledig scherm weergeven')}
-						variants={['white']}
-						onClick={() => iiifFullscreen(true)}
-					/>
-				)}
-				{!iiifGridViewEnabled && (
-					<Button
-						className={'p-object-detail__iiif__controls__rotate-right'}
-						icon={<Icon name={IconNamesLight.Redo} aria-hidden />}
-						aria-label={tText('Afbeelding rechts draaien')}
-						variants={['white']}
-						onClick={() => iiifRotate(true)}
-					/>
-				)}
 				{!iiifGridViewEnabled && (
 					<Button
 						className={'p-object-detail__iiif__controls__grid-view__enable'}
@@ -991,11 +1067,67 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 						onClick={() => setIiifGridViewEnabled(false)}
 					/>
 				)}
+				{!iiifGridViewEnabled && (
+					<Button
+						className={'p-object-detail__iiif__controls__zoom-in'}
+						icon={<Icon name={IconNamesLight.ZoomIn} aria-hidden />}
+						aria-label={tText('Afbeelding inzoemen')}
+						variants={['white']}
+						onClick={() => iiifZoom(1.3)}
+					/>
+				)}
+				{!iiifGridViewEnabled && (
+					<Button
+						className={'p-object-detail__iiif__controls__zoom-out'}
+						icon={<Icon name={IconNamesLight.ZoomOut} aria-hidden />}
+						aria-label={tText('Afbeelding uitzoemen')}
+						variants={['white']}
+						onClick={() => iiifZoom(0.7)}
+					/>
+				)}
+				{!iiifGridViewEnabled && (
+					<Button
+						className={'p-object-detail__iiif__controls__fullscreen'}
+						icon={<Icon name={IconNamesLight.Expand} aria-hidden />}
+						aria-label={tText('Afbeelding op volledig scherm weergeven')}
+						variants={['white']}
+						onClick={() => iiifFullscreen(true)}
+					/>
+				)}
+				{!iiifGridViewEnabled && (
+					<Button
+						className={'p-object-detail__iiif__controls__rotate-right'}
+						icon={<Icon name={IconNamesLight.Redo} aria-hidden />}
+						aria-label={tText('Afbeelding rechts draaien')}
+						variants={['white']}
+						onClick={() => iiifRotate(true)}
+					/>
+				)}
+				{!iiifGridViewEnabled && (
+					<Button
+						className={'p-object-detail__iiif__controls__toggle-ocr'}
+						icon={
+							<Icon
+								name={
+									iiifOcrEnabled
+										? IconNamesLight.NoNewspaper
+										: IconNamesLight.Newspaper
+								}
+								aria-hidden
+							/>
+						}
+						aria-label={tText('Tekst boven de afbeelding tonen')}
+						variants={['white']}
+						onClick={() => setIiifOcrEnabled(!iiifOcrEnabled)}
+					/>
+				)}
 			</div>
 		);
 	};
 
 	const referenceThumbnails: string[] = [
+		'https://assets-qas.hetarchief.be/hetarchief/BERT_TEST_IIIF_VIEWER/german-thumbnail.jpg',
+		'https://assets-qas.hetarchief.be/hetarchief/BERT_TEST_IIIF_VIEWER/volksgazet-thumbnail.png',
 		'https://ids.lib.harvard.edu/ids/iiif/47174896/full/263,/0/default.jpg',
 		'https://ids.lib.harvard.edu/ids/iiif/18737483/full/263,/0/default.jpg',
 		'https://ids.lib.harvard.edu/ids/iiif/47174892/full/263,/0/default.jpg',
@@ -1037,7 +1169,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				<>
 					{/* IIIF viewer*/}
 					<div
-						className={iiifStyles['p-object-detail__iiif']}
+						className={
+							iiifStyles['p-object-detail__iiif'] +
+							(iiifOcrEnabled
+								? ' p-object-detail__iiif__ocr--enabled'
+								: ' p-object-detail__iiif__ocr--disabled')
+						}
 						id={iiifViewerId}
 						style={{ display: iiifGridViewEnabled ? 'none' : 'block' }}
 					/>
@@ -1582,6 +1719,48 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		);
 	};
 
+	const renderOcrSidebar = () => {
+		return (
+			<div
+				className={
+					'p-object-detail__metadata p-object-detail__expand-button--collapsed ' +
+					iiifStyles['p-object-detail__metadata__ocr']
+				}
+			>
+				<div className={iiifStyles['p-object-detail__metadata__ocr__close']}>
+					<Button
+						className={'p-object-detail__iiif__controls__toggle-ocr'}
+						icon={
+							<Icon
+								name={
+									iiifOcrEnabled
+										? IconNamesLight.NoNewspaper
+										: IconNamesLight.Newspaper
+								}
+								aria-hidden
+							/>
+						}
+						aria-label={tText('Tekst boven de afbeelding tonen')}
+						variants={['silver']}
+						onClick={() => setIiifOcrEnabled(!iiifOcrEnabled)}
+					/>
+				</div>
+
+				{(altoTextLocations as TextLine[]).map((textLocation, index) => {
+					return (
+						<span
+							key={'ocr-text--' + iiifViewerId + '--' + index}
+							className={'p-object-detail__metadata__ocr__word'}
+							onMouseOver={() => iiifZoomToRect(textLocation)}
+						>
+							{textLocation.text}&nbsp;
+						</span>
+					);
+				})}
+			</div>
+		);
+	};
+
 	const renderObjectDetail = () => (
 		<>
 			<Head>
@@ -1641,16 +1820,21 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					/>
 				)}
 				<div className="p-object-detail__media">{renderObjectMedia()}</div>
-				<div
-					className={clsx('p-object-detail__metadata', {
-						'p-object-detail__metadata--collapsed': !expandMetadata,
-						'p-object-detail__metadata--expanded': expandMetadata,
-						'p-object-detail__metadata--no-media': !mediaType,
-					})}
-				>
-					{renderMetaData()}
-				</div>
-				{renderRelatedObjectsBlade()}
+				{!iiifOcrEnabled && (
+					<>
+						<div
+							className={clsx('p-object-detail__metadata', {
+								'p-object-detail__metadata--collapsed': !expandMetadata,
+								'p-object-detail__metadata--expanded': expandMetadata,
+								'p-object-detail__metadata--no-media': !mediaType,
+							})}
+						>
+							{renderMetaData()}
+						</div>
+						{renderRelatedObjectsBlade()}
+					</>
+				)}
+				{iiifOcrEnabled && renderOcrSidebar()}
 			</article>
 			{canManageFolders && (
 				<AddToFolderBlade
