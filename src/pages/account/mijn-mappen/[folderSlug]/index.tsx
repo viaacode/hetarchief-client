@@ -157,7 +157,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 		dispatch(
 			setBreadcrumbs([
 				{
-					label: tText('pages/slug/ie/index___breadcrumbs___mijn-mappen'),
+					label: tText('pages/slug/ie/index___breadcrumbs-mijn-mappen'),
 					to: ROUTES.myFolders,
 				},
 				{

@@ -71,9 +71,9 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 			toastService.notify({
 				maxLines: 3,
-				title: tText('pages/nieuwsbrief/index___nieuwsbrief___formulier-succes'),
+				title: tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-succes'),
 				description: tText(
-					'pages/nieuwsbrief/index___nieuwsbrief___formulier-versturen-is-gelukt'
+					'pages/nieuwsbrief/index___nieuwsbrief-formulier-versturen-is-gelukt'
 				),
 			});
 		} catch (err) {
@@ -81,9 +81,9 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 			toastService.notify({
 				maxLines: 3,
-				title: tText('pages/nieuwsbrief/index___nieuwsbrief___formulier-error'),
+				title: tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-error'),
 				description: tText(
-					'pages/nieuwsbrief/index___nieuwsbrief___formulier-versturen-is-mislukt'
+					'pages/nieuwsbrief/index___nieuwsbrief-formulier-versturen-is-mislukt'
 				),
 			});
 		}
@@ -95,7 +95,7 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 				className="u-mb-24"
 				id={labelKeys.firstName}
 				errors={[errors.firstName?.message]}
-				label={tText('pages/nieuwsbrief/index___nieuwsbrief___formulier-voornaam')}
+				label={tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-voornaam')}
 			>
 				<Controller
 					name="firstName"
@@ -108,7 +108,7 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 				className="u-mb-24"
 				id={labelKeys.lastName}
 				errors={[errors.lastName?.message]}
-				label={tText('pages/nieuwsbrief/index___nieuwsbrief___formulier-achternaam')}
+				label={tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-achternaam')}
 			>
 				<Controller
 					name="lastName"
@@ -121,7 +121,7 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 				className="u-mb-24"
 				id={labelKeys.mail}
 				errors={[errors.mail?.message]}
-				label={tText('pages/nieuwsbrief/index___nieuwsbrief___formulier-emailadres')}
+				label={tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-emailadres')}
 			>
 				<Controller
 					name="mail"
@@ -133,7 +133,7 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 			<Button
 				variants={['dark']}
 				className="p-newsletter__form-button"
-				label={tText('pages/nieuwsbrief/index___nieuwsbrief___schrijf-me-in')}
+				label={tText('pages/nieuwsbrief/index___nieuwsbrief-schrijf-me-in')}
 				onClick={handleSubmit(onFormSubmit)}
 			/>
 
@@ -154,12 +154,12 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 				<header className="p-newsletter__header">
 					<h2 className="p-newsletter__title">
 						{tText(
-							'pages/nieuwsbrief/index___nieuwsbrief___schrijf-je-in-voor-onze-nieuwsbrief-titel'
+							'pages/nieuwsbrief/index___nieuwsbrief-schrijf-je-in-voor-onze-nieuwsbrief-titel'
 						)}
 					</h2>
 					<p className="p-newsletter__text">
 						{tHtml(
-							'pages/nieuwsbrief/index___nieuwsbrief___schrijf-je-in-voor-onze-nieuwsbrief-omschrijving'
+							'pages/nieuwsbrief/index___nieuwsbrief-schrijf-je-in-voor-onze-nieuwsbrief-omschrijving'
 						)}
 					</p>
 				</header>

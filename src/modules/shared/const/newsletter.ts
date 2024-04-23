@@ -8,23 +8,19 @@ export const NEWSLETTER_FORM_SCHEMA = (): SchemaOf<NewsletterFormState> => {
 
 	return object({
 		firstName: string().required(
-			tText('pages/nieuwsbrief/index___nieuwsbrief___formulier___voornaam-moet-ingevuld-zijn')
+			tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-voornaam-moet-ingevuld-zijn')
 		),
 		lastName: string().required(
-			tText(
-				'pages/nieuwsbrief/index___nieuwsbrief___formulier___achternaam-moet-ingevuld-zijn'
-			)
+			tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-achternaam-moet-ingevuld-zijn')
 		),
 		mail: string()
 			.email(
 				tText(
-					'pages/nieuwsbrief/index___nieuwsbrief___formulier___dit-is-geen-geldig-emailadres'
+					'pages/nieuwsbrief/index___nieuwsbrief-formulier-dit-is-geen-geldig-emailadres'
 				)
 			)
 			.required(
-				tText(
-					'pages/nieuwsbrief/index___nieuwsbrief___formulier___email-moet-ingevuld-zijn'
-				)
+				tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-email-moet-ingevuld-zijn')
 			),
 	});
 };

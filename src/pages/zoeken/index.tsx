@@ -20,11 +20,11 @@ const Search: NextPage<SearchPageProps> = ({ url }) => {
 		dispatch(
 			setBreadcrumbs([
 				{
-					label: `${tText('pages/slug/ie/index___breadcrumbs___home')}`,
+					label: `${tText('pages/slug/ie/index___breadcrumbs-home')}`,
 					to: ROUTES.home,
 				},
 				{
-					label: `${tText('pages/slug/ie/index___breadcrumbs___search')}`,
+					label: `${tText('pages/slug/ie/index___breadcrumbs-search')}`,
 					to: ROUTES.search,
 				},
 			])

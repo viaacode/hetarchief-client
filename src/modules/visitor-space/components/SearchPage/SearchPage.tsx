@@ -754,13 +754,13 @@ const SearchPage: FC = () => {
 		const staticBreadcrumbs: Breadcrumb[] = [
 			{
 				label: `${tHtml(
-					'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs___home'
+					'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs-home'
 				)}`,
 				to: ROUTES.home,
 			},
 			{
 				label: `${tHtml(
-					'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs___search'
+					'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs-search'
 				)}`,
 				to: ROUTES.search,
 			},

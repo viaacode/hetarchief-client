@@ -23,9 +23,9 @@ const NewsletterFailed: NextPage<DefaultSeoInfo> = ({ url }) => {
 	useEffect(() => {
 		toastService.notify({
 			maxLines: 3,
-			title: tHtml('pages/nieuwsbrief-mislukt/index___nieuwsbrief-mislukt___mislukt'),
+			title: tHtml('pages/nieuwsbrief-mislukt/index___nieuwsbrief-mislukt-mislukt'),
 			description: tHtml(
-				'pages/nieuwsbrief-mislukt/index___nieuwsbrief-mislukt___inschrijving-op-de-nieuwsbrief-is-mislukt'
+				'pages/nieuwsbrief-mislukt/index___nieuwsbrief-mislukt-inschrijving-op-de-nieuwsbrief-is-mislukt'
 			),
 		});
 

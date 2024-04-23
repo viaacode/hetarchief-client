@@ -24,10 +24,10 @@ const NewsletterConfirmation: NextPage<DefaultSeoInfo> = ({ url }) => {
 		toastService.notify({
 			maxLines: 3,
 			title: tHtml(
-				'pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging___bevestiging'
+				'pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging-bevestiging'
 			),
 			description: tHtml(
-				'pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging___inschrijving-op-de-nieuwsbrief-is-gelukt'
+				'pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging-inschrijving-op-de-nieuwsbrief-is-gelukt'
 			),
 		});
 

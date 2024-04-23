@@ -16,7 +16,7 @@
     "lint": "npm run lint:ts && npm run lint:scss",
     "lint:ts": "next lint --dir src --fix",
     "lint:scss": "stylelint 'src/**/*.{css,scss}' --allow-empty-input --fix",
-    "format": "prettier -c --write --ignore-unknown src",
+    "format": "prettier --log-level warn -c --write --ignore-unknown src",
     "test": "jest --cache",
     "test:ci": "npx jest --maxWorkers=1",
     "test:cov": "npm run test -- --coverage",
