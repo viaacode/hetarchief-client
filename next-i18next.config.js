@@ -9,13 +9,13 @@ module.exports = {
 			defaultLocale: 'nl',
 			locales: ['nl'],
 			backend: {
-				loadPath: `${proxyUrl}/translations/nl.json`,
+				loadPath: `${proxyUrl}/translations/NL.json`,
 			},
 			i18n: {
 				defaultLocale: 'nl',
 				locales: ['nl'],
 				backend: {
-					loadPath: `${proxyUrl}/translations/nl.json`,
+					loadPath: `${proxyUrl}/translations/NL.json`,
 				},
 			},
 			use: [I18NextHttpBackend],
