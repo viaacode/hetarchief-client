@@ -105,6 +105,34 @@ module.exports = withBundleAnalyzer(
 			FLOW_PLAYER_ID: process.env.FLOW_PLAYER_ID,
 			GOOGLE_TAG_MANAGER_ID: process.env.GOOGLE_TAG_MANAGER_ID,
 		},
+		async headers() {
+			if (
+				process.env.PROXY_URL.includes('qas') ||
+				process.env.PROXY_URL.includes('localhost')
+			) {
+				return [
+					{
+						source: '/',
+						headers: [
+							{
+								key: 'X-Robots-Tag',
+								value: 'noindex, nofollow, noarchive',
+							},
+						],
+					},
+					{
+						source: '/(.*)',
+						headers: [
+							{
+								key: 'X-Robots-Tag',
+								value: 'noindex, nofollow, noarchive',
+							},
+						],
+					},
+				];
+			}
+			return [];
+		},
 		async redirects() {
 			return [
 				// Beheer redirects
