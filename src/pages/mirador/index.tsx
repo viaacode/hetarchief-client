@@ -241,7 +241,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	// Fetch object
 	// const objectId = router.query.ie as string;
 	const objectId =
-		'986bd836338e4de39a611344d1a40bcf99f0f07c5d374bdf8966237411ff72bcc4da81b5dd914759a642ea60e34c9258';
+		'8b135c3a38664e4f8ccb32ee04cd50355ffb1b3298ac4cae8e4d98594955c2b19dbe3347d830409fbb0892a0a1b812dc';
 	const {
 		data: mediaInfo,
 		isLoading: mediaInfoIsLoading,
