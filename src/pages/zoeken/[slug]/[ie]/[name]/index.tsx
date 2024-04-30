@@ -773,7 +773,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 	const highlighted = (toHighlight: string) => (
 		<Highlighter
-			searchWords={(query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string[]) ?? []}
+			searchWords={
+				query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]
+					? decodeURIComponent(
+							query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string
+					  ).split(',')
+					: []
+			}
 			autoEscape={true}
 			textToHighlight={toHighlight}
 		/>
