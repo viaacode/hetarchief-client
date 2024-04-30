@@ -4,6 +4,7 @@ export enum VisitorSpaceMediaType {
 	All = 'all',
 	Audio = 'audio',
 	Video = 'video',
+	Newspaper = 'newspaper',
 }
 
 export enum IeObjectsSearchFilterField {
