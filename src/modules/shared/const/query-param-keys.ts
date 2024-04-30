@@ -11,3 +11,5 @@ export enum QUERY_PARAM_KEY {
 	ACTIVE_BLADE = 'blade',
 	ACTIVE_TAB = 'tab',
 }
+
+export const HIGHLIGHTED_SEARCH_TERMS_SEPARATOR = ',';

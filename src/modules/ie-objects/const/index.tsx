@@ -467,5 +467,5 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 ];
 
 export const IE_OBJECT_QUERY_PARAM_CONFIG = {
-	[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: StringParam,
+	[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: StringParam, // Comma separated string
 };

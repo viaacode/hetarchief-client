@@ -37,7 +37,10 @@ import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsChe
 import { ShareFolderBlade } from '@shared/components/ShareFolderBlade';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import {
+	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
+	QUERY_PARAM_KEY,
+} from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -542,7 +545,9 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 													}`,
 													query: {
 														[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]:
-															keywords,
+															keywords.join(
+																HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
+															),
 													},
 												});
 												if (isEmpty(media.accessThrough)) {

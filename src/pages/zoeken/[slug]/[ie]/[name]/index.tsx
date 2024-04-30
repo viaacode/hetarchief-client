@@ -113,7 +113,10 @@ import HighlightedMetadata from '@shared/components/HighlightedMetadata/Highligh
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import {
+	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
+	QUERY_PARAM_KEY,
+} from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -526,7 +529,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	 * If the maintainer of this ie-object has an external form for material requests, we need to construct that url with certain parameters
 	 * This currently is only the case for UGent and VRT
 	 */
-	const getExternalMaterialRequestUrlIfAvailable = (): string | null => {
+	const getExternalMaterialRequestUrlIfAvailable = useCallback((): string | null => {
 		if (isAnonymous) {
 			return null;
 		}
@@ -554,7 +557,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				);
 		}
 		return null;
-	};
+	}, [isAnonymous, mediaInfo, user]);
 
 	const onRequestMaterialClick = async () => {
 		if (isAnonymous) {
@@ -777,7 +780,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]
 					? decodeURIComponent(
 							query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string
-					  ).split(',')
+					  ).split(HIGHLIGHTED_SEARCH_TERMS_SEPARATOR)
 					: []
 			}
 			autoEscape={true}
@@ -877,6 +880,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		getSortMapByUserType,
 		hasAccessToVisitorSpaceOfObject,
 		renderExportDropdown,
+		getExternalMaterialRequestUrlIfAvailable,
 	]);
 
 	/**

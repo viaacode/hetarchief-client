@@ -26,7 +26,6 @@ import {
 	noop,
 	sortBy,
 } from 'lodash-es';
-import * as mirador from 'mirador';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -35,7 +34,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
-import React, { Fragment, lazy, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
@@ -80,12 +79,10 @@ import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
 import { useGetIeObjectsSimilar } from '@ie-objects/hooks/get-ie-objects-similar';
 import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-ticket-url';
-import { IeObjectsService } from '@ie-objects/services';
 import {
 	IE_OBJECTS_SERVICE_BASE_URL,
 	IE_OBJECTS_SERVICE_EXPORT,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
-import { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import {
 	IeObject,
 	IeObjectAccessThrough,
@@ -106,7 +103,6 @@ import {
 	ErrorNotFound,
 	Icon,
 	IconNamesLight,
-	IconNamesSolid,
 	Loading,
 	Pill,
 	ScrollableTabs,
@@ -118,10 +114,12 @@ import HighlightedMetadata from '@shared/components/HighlightedMetadata/Highligh
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import {
+	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
+	QUERY_PARAM_KEY,
+} from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
@@ -135,7 +133,6 @@ import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
 import { selectBreadcrumbs, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
-import { MiradorConfig } from '@shared/types/mirador/mirador.config';
 import { MiradorInstance, MiradorLib } from '@shared/types/mirador/mirador.lib';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {
@@ -565,7 +562,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	 * If the maintainer of this ie-object has an external form for material requests, we need to construct that url with certain parameters
 	 * This currently is only the case for UGent and VRT
 	 */
-	const getExternalMaterialRequestUrlIfAvailable = (): string | null => {
+	const getExternalMaterialRequestUrlIfAvailable = useCallback((): string | null => {
 		if (isAnonymous) {
 			return null;
 		}
@@ -593,7 +590,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				);
 		}
 		return null;
-	};
+	}, [isAnonymous, mediaInfo, user]);
 
 	const onRequestMaterialClick = async () => {
 		if (isAnonymous) {
@@ -812,7 +809,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 	const highlighted = (toHighlight: string) => (
 		<Highlighter
-			searchWords={(query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string[]) ?? []}
+			searchWords={
+				query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]?.split(
+					HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
+				) ?? []
+			}
 			autoEscape={true}
 			textToHighlight={toHighlight}
 		/>
@@ -910,6 +911,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		getSortMapByUserType,
 		hasAccessToVisitorSpaceOfObject,
 		renderExportDropdown,
+		getExternalMaterialRequestUrlIfAvailable,
 	]);
 
 	const iiifZoom = (multiplier: number): void => {
@@ -927,8 +929,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	};
 
 	const iiifFullscreen = (expand: boolean): void => {
-		const state = miradorInstance?.store.getState();
-		miradorInstance?.store?.dispatch(miradorLib?.actions.setWorkspaceFullscreen());
+		// const state = miradorInstance?.store.getState();
+		if (expand) {
+			miradorInstance?.store?.dispatch(miradorLib?.actions.setWorkspaceFullscreen());
+		}
 	};
 
 	/**
@@ -973,6 +977,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 		// IIIF viewer
 		// TODO switch to mediaItem check
+		// noinspection PointlessBooleanExpressionJS
+		// eslint-disable-next-line no-constant-condition
 		if (true) {
 			return (
 				<>

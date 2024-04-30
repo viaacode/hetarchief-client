@@ -53,7 +53,10 @@ import {
 } from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import {
+	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
+	QUERY_PARAM_KEY,
+} from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -697,8 +700,9 @@ const SearchPage: FC = () => {
 					kebabCase(item.name) || 'titel'
 				}`,
 				query: {
-					[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]:
-						searchResults?.searchTerms.join(','),
+					[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: searchResults?.searchTerms.join(
+						HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
+					),
 				},
 			});
 

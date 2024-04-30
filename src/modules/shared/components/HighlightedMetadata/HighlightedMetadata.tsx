@@ -4,7 +4,10 @@ import Highlighter from 'react-highlight-words';
 import { useQueryParams } from 'use-query-params';
 
 import { IE_OBJECT_QUERY_PARAM_CONFIG } from '@ie-objects/const';
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import {
+	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
+	QUERY_PARAM_KEY,
+} from '@shared/const/query-param-keys';
 
 interface HighlightedMetadataProps {
 	title?: string | ReactNode;
@@ -20,7 +23,7 @@ const HighlightedMetadata: FC<HighlightedMetadataProps> = ({ title, data }) => {
 				query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]
 					? decodeURIComponent(
 							query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string
-					  ).split(',')
+					  ).split(HIGHLIGHTED_SEARCH_TERMS_SEPARATOR)
 					: []
 			}
 			autoEscape={true}

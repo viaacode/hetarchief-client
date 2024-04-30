@@ -115,7 +115,10 @@ import HighlightedMetadata from '@shared/components/HighlightedMetadata/Highligh
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import {
+	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
+	QUERY_PARAM_KEY,
+} from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -883,7 +886,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 	const highlighted = (toHighlight: string) => (
 		<Highlighter
-			searchWords={(query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string[]) ?? []}
+			searchWords={
+				query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]?.split(
+					HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
+				) ?? []
+			}
 			autoEscape={true}
 			textToHighlight={toHighlight}
 		/>
@@ -1145,6 +1152,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 							key={'p-object-detail__iiif__reference-strip__' + index}
 							onClick={() => iiifGoToPage(index)}
 						>
+							{/* eslint-disable-next-line @next/next/no-img-element */}
 							<img src={referenceThumbnail} alt={'page ' + (index + 1)} />
 						</button>
 					);
@@ -1201,6 +1209,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 											openSeaDragonInstance?.forceRedraw();
 										}}
 									>
+										{/* eslint-disable-next-line @next/next/no-img-element */}
 										<img src={referenceThumbnail} alt={'page ' + (index + 1)} />
 									</button>
 								);

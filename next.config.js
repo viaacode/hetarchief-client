@@ -107,8 +107,8 @@ module.exports = withBundleAnalyzer(
 		},
 		async headers() {
 			if (
-				process.env.PROXY_URL.includes('-qas.') ||
-				process.env.PROXY_URL.includes('localhost:3200')
+				process.env.PROXY_URL?.includes('-qas.') ||
+				process.env.PROXY_URL?.includes('localhost:3200')
 			) {
 				return [
 					{
