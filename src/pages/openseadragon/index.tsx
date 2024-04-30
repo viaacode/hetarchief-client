@@ -156,10 +156,11 @@ import {
 } from '@visitor-space/types';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
-import altoTextLocations from './alto2-simplified.json';
-import { TextLine } from './extract-text-lines-from-alto';
+import altoTextLocations from '../../modules/iiif-viewer/alto2-simplified.json';
+import { TextLine } from '../../modules/iiif-viewer/extract-text-lines-from-alto';
+import { getOpenSeadragonConfig } from '../../modules/iiif-viewer/openseadragon-config';
+
 import iiifStyles from './index.module.scss';
-import { getOpenSeadragonConfig } from './openseadragon-config';
 
 import { VisitorLayout } from 'modules/visitors';
 

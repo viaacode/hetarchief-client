@@ -156,8 +156,9 @@ import {
 } from '@visitor-space/types';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
+import { miradorConfig } from '../../modules/iiif-viewer/mirador-config';
+
 import iiifStyles from './index.module.scss';
-import { miradorConfig } from './mirador-config';
 
 import { VisitorLayout } from 'modules/visitors';
 
