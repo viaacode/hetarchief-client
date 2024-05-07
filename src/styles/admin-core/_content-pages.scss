@@ -54,6 +54,46 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 		}
 	}
 
+	.c-table_detail-page {
+		.c-table_detail-page__translated-pages__link {
+			&:hover {
+				> * {
+					background-color: $zinc;
+				}
+			}
+
+			.c-table_detail-page__translated-pages__language,
+			.c-table_detail-page__translated-pages__title,
+			.c-table_detail-page__translations__path {
+				padding: $spacer-sm $spacer-sm;
+				display: inline-flex;
+				text-decoration: none;
+				background-color: $silver;
+				color: #000;
+				border: none;
+				border-right: 1px solid $zinc;
+				font-size: $font-size-sm;
+			}
+
+			> .c-table_detail-page__translated-pages__language {
+				border-radius: 2.4rem 0 0 2.4rem;
+				padding: 0.8rem $spacer-xs 0.8rem $spacer-sm;
+			}
+
+			> .c-table_detail-page__translated-pages__title {
+				padding: 0.8rem $spacer-xs;
+			}
+
+			> .c-table_detail-page__translations__path {
+				border-radius: 0 2.4rem 2.4rem 0;
+				padding: 0.8rem $spacer-sm 0.8rem $spacer-xs;
+				color: $shade;
+				border: none;
+				margin-left: -0.4rem;
+			}
+		}
+	}
+
 	.p-admin-content-page-labels__detail .c-admin__content .c-table_detail-page {
 		th:first-child {
 			padding-left: $spacer-md;

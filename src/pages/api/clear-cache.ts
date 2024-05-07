@@ -1,3 +1,4 @@
+import { LanguageCode } from '@meemoo/admin-core-ui';
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -46,8 +47,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
+	if (!req.query.language) {
+		res.status(400).json({
+			message:
+				'You must provide a valid path in the query param "language", containing the language code of the page for which you want to clear the cache',
+			query: req.query,
+		});
+		return;
+	}
+
+	const language = req.query.language as string;
+	const path = req.query.path as string;
+
 	try {
-		await res.revalidate(req.query.path as string);
+		await res.revalidate(`/${language.toLowerCase()}${path}`);
+		if (language === LanguageCode.Nl) {
+			await res.revalidate(path);
+		}
 		res.json({ message: 'cache for route has been cleared' });
 	} catch (err) {
 		res.status(500).json({

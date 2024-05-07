@@ -1,4 +1,9 @@
-import { AdminConfigManager, ContentPageInfo, ContentPageRenderer } from '@meemoo/admin-core-ui';
+import {
+	AdminConfigManager,
+	ContentPageInfo,
+	ContentPageRenderer,
+	LanguageCode,
+} from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSidePropsResult, NextPage } from 'next';
@@ -25,7 +30,7 @@ import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-import { useGetContentPageByPath } from 'modules/content-page/hooks/get-content-page';
+import { useGetContentPageByLanguageAndPath } from 'modules/content-page/hooks/get-content-page';
 
 const TermsOfService: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
 	useStickyLayout();
@@ -40,7 +45,10 @@ const TermsOfService: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser 
 	const [hasFinished, setHasFinished] = useState(false);
 	const [isAtBottom, setIsAtBottom] = useState(false);
 	const tosAccepted = useTermsOfService();
-	const { data: contentPageInfo } = useGetContentPageByPath(KNOWN_STATIC_ROUTES.TermsOfService);
+	const { data: contentPageInfo } = useGetContentPageByLanguageAndPath(
+		(commonUser?.language || LanguageCode.Nl) as LanguageCode,
+		KNOWN_STATIC_ROUTES.TermsOfService
+	);
 
 	const user = useSelector(selectUser);
 

@@ -48,7 +48,7 @@ const onSaveContentPage = async (contentPageInfo: ContentPageInfo) => {
 	await ApiService.getApi(false).post(
 		stringifyUrl({
 			url: 'client-cache/clear-cache',
-			query: { path: contentPageInfo.path },
+			query: { language: contentPageInfo.language, path: contentPageInfo.path },
 		})
 	);
 };
@@ -215,9 +215,9 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						// eslint-disable-next-line @typescript-eslint/no-unused-vars
 						clear: async (_key: string) => Promise.resolve(),
 					},
-					getContentPageByPathEndpoint: `${
+					getContentPageByLanguageAndPathEndpoint: `${
 						isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL
-					}/admin/content-pages`,
+					}/admin/content-pages/by-language-and-path`,
 				},
 				database: {
 					databaseApplicationType: DatabaseType.hetArchief,
