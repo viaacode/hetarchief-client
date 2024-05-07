@@ -946,21 +946,23 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				<Button
 					className="p-object-detail__iiif__controls__zoom-in"
 					icon={<Icon name={IconNamesLight.ZoomIn} aria-hidden />}
-					aria-label={tText('Krantenviewer inzoemen')}
+					aria-label={tText('pages/mirador/index___krantenviewer-inzoemen')}
 					variants={['white']}
 					onClick={() => iiifZoom(1.3)}
 				/>
 				<Button
 					className="p-object-detail__iiif__controls__zoom-out"
 					icon={<Icon name={IconNamesLight.ZoomOut} aria-hidden />}
-					aria-label={tText('Krantenviewer uitzoemen')}
+					aria-label={tText('pages/mirador/index___krantenviewer-uitzoemen')}
 					variants={['white']}
 					onClick={() => iiifZoom(0.7)}
 				/>
 				<Button
 					className="p-object-detail__iiif__controls__zoom-out"
 					icon={<Icon name={IconNamesLight.Expand} aria-hidden />}
-					aria-label={tText('Krantenviewer op volledig scherm weergeven')}
+					aria-label={tText(
+						'pages/mirador/index___krantenviewer-op-volledig-scherm-weergeven'
+					)}
 					variants={['white']}
 					onClick={() => iiifFullscreen(true)}
 				/>

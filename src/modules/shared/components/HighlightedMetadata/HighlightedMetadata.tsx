@@ -1,5 +1,5 @@
 import { compact, isString } from 'lodash-es';
-import { FC, ReactNode } from 'react';
+import { FC, ReactElement, ReactNode } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useQueryParams } from 'use-query-params';
 
@@ -17,7 +17,7 @@ interface HighlightedMetadataProps {
 const HighlightedMetadata: FC<HighlightedMetadataProps> = ({ title, data }) => {
 	const [query] = useQueryParams(IE_OBJECT_QUERY_PARAM_CONFIG);
 
-	const highlighted = (toHighlight: string) => (
+	const highlighted = (toHighlight: string): ReactNode => (
 		<Highlighter
 			searchWords={
 				query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]
@@ -33,30 +33,34 @@ const HighlightedMetadata: FC<HighlightedMetadataProps> = ({ title, data }) => {
 
 	if (isString(data)) {
 		// Split text on new lines and highlight each part separately + put each part in its own paragraph to show new lines
-		return compact(data.split(/(\\\\r|\\r)?\\\\n|\\n|<\/?br\/?>/)).map(
-			(fieldTextPart, fieldTextPartIndex) => {
-				// ARC-1936: if url make it clickable
-				if (data.startsWith('https://') || data.startsWith('http://')) {
-					return (
-						<p key={title + '-' + fieldTextPartIndex}>
-							<a href={fieldTextPart} target="_blank" rel="noreferrer">
+		return (
+			<>
+				{compact(data.split(/(\\\\r|\\r)?\\\\n|\\n|<\/?br\/?>/)).map(
+					(fieldTextPart, fieldTextPartIndex): ReactNode => {
+						// ARC-1936: if url make it clickable
+						if (data.startsWith('https://') || data.startsWith('http://')) {
+							return (
+								<p key={title + '-' + fieldTextPartIndex}>
+									<a href={fieldTextPart} target="_blank" rel="noreferrer">
+										{highlighted(fieldTextPart)}
+									</a>
+								</p>
+							);
+						}
+						return (
+							<p
+								className="u-line-height-1-4 u-font-size-14"
+								key={title + '-' + fieldTextPartIndex}
+							>
 								{highlighted(fieldTextPart)}
-							</a>
-						</p>
-					);
-				}
-				return (
-					<p
-						className="u-line-height-1-4 u-font-size-14"
-						key={title + '-' + fieldTextPartIndex}
-					>
-						{highlighted(fieldTextPart)}
-					</p>
-				);
-			}
+							</p>
+						);
+					}
+				)}
+			</>
 		);
 	} else {
-		return data || null;
+		return (data || null) as ReactElement<any, any> | null;
 	}
 };
 

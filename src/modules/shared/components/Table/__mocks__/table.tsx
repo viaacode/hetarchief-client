@@ -1,5 +1,5 @@
-import { Badge, Button } from '@meemoo/react-components';
-import React, { ReactNode } from 'react';
+import { Badge, Button, Column, TableData } from '@meemoo/react-components';
+import React, { ReactElement } from 'react';
 
 import { Icon, IconNamesLight } from '@shared/components';
 import { formatDateTime } from '@shared/components/VisitorSpaceCard/VisitorSpaceCard.utils';
@@ -34,7 +34,7 @@ export const mockData = [1, 2, 3, 4, 5, 6, 7, 8].map((data) => {
 	};
 });
 
-export const mockColumns = [
+export const mockColumns: Column<TableData>[] = [
 	{
 		Header: 'Location',
 		accessor: 'room',
@@ -50,12 +50,14 @@ export const mockColumns = [
 	{
 		Header: 'Timestamp',
 		accessor: 'created_at',
-		Cell: ({ value }: { value: number }): ReactNode => formatDateTime(new Date(value)),
+		Cell: ({ value }: { value: number }): ReactElement<any, any> => (
+			<>{formatDateTime(new Date(value))}</>
+		),
 	},
 	{
 		Header: 'Status',
 		accessor: 'approved',
-		Cell: ({ value }: { value: boolean }): ReactNode => (
+		Cell: ({ value }: { value: boolean }): ReactElement<any, any> => (
 			<div style={{ display: 'flex', alignItems: 'center' }}>
 				<Badge
 					className="u-mr-8"

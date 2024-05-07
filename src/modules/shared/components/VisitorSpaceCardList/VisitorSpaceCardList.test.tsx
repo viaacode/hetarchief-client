@@ -5,6 +5,8 @@
 // import VisitorSpaceCardList from './VisitorSpaceCardList';
 // import { sixItems } from './__mocks__/visitor-space-card-list';
 
+export {};
+
 describe('Component: <MediaCardList />', () => {
 	// TODO find out why this test fails after the vite build switch
 	test('skip', () => {

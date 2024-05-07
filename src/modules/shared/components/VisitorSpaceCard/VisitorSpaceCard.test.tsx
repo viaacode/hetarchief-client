@@ -9,6 +9,8 @@
 // 	mockVisitorSpaceCardProps,
 // } from './__mocks__/visitor-space-card';
 
+export {};
+
 describe('Component: <VisitorSpaceCard />', () => {
 	// TODO find out why this test fails after the vite build switch
 	test('skip', () => {

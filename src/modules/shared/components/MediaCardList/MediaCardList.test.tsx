@@ -11,6 +11,8 @@
 // import { MediaCardListProps } from './MediaCardList.types';
 // import { gridData } from './__mocks__/media-card-list';
 
+export {};
+
 // const renderMediaCardList = (args: Partial<MediaCardListProps>, list?: boolean) => {
 // 	const child = '<child>';
 // 	const data: IdentifiableMediaCard[] = gridData;
