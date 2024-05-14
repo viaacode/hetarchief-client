@@ -1061,7 +1061,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					<Button
 						className={'p-object-detail__iiif__controls__grid-view__enable'}
 						icon={<Icon name={IconNamesLight.GridView} aria-hidden />}
-						aria-label={tText('Alle paginas in een grid bekijken')}
+						aria-label={tText(
+							'pages/openseadragon/index___alle-paginas-in-een-grid-bekijken'
+						)}
 						variants={['white']}
 						onClick={() => setIiifGridViewEnabled(true)}
 					/>
@@ -1070,7 +1072,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					<Button
 						className={'p-object-detail__iiif__controls__grid-view__disable'}
 						icon={<Icon name={IconNamesLight.File} aria-hidden />}
-						aria-label={tText('één pagina bekijken')}
+						aria-label={tText('pages/openseadragon/index___een-pagina-bekijken')}
 						variants={['white']}
 						onClick={() => setIiifGridViewEnabled(false)}
 					/>
@@ -1079,7 +1081,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					<Button
 						className={'p-object-detail__iiif__controls__zoom-in'}
 						icon={<Icon name={IconNamesLight.ZoomIn} aria-hidden />}
-						aria-label={tText('Afbeelding inzoemen')}
+						aria-label={tText('pages/openseadragon/index___afbeelding-inzoemen')}
 						variants={['white']}
 						onClick={() => iiifZoom(1.3)}
 					/>
@@ -1088,7 +1090,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					<Button
 						className={'p-object-detail__iiif__controls__zoom-out'}
 						icon={<Icon name={IconNamesLight.ZoomOut} aria-hidden />}
-						aria-label={tText('Afbeelding uitzoemen')}
+						aria-label={tText('pages/openseadragon/index___afbeelding-uitzoemen')}
 						variants={['white']}
 						onClick={() => iiifZoom(0.7)}
 					/>
@@ -1097,7 +1099,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					<Button
 						className={'p-object-detail__iiif__controls__fullscreen'}
 						icon={<Icon name={IconNamesLight.Expand} aria-hidden />}
-						aria-label={tText('Afbeelding op volledig scherm weergeven')}
+						aria-label={tText(
+							'pages/openseadragon/index___afbeelding-op-volledig-scherm-weergeven'
+						)}
 						variants={['white']}
 						onClick={() => iiifFullscreen(true)}
 					/>
@@ -1106,7 +1110,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					<Button
 						className={'p-object-detail__iiif__controls__rotate-right'}
 						icon={<Icon name={IconNamesLight.Redo} aria-hidden />}
-						aria-label={tText('Afbeelding rechts draaien')}
+						aria-label={tText('pages/openseadragon/index___afbeelding-rechts-draaien')}
 						variants={['white']}
 						onClick={() => iiifRotate(true)}
 					/>
@@ -1124,7 +1128,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 								aria-hidden
 							/>
 						}
-						aria-label={tText('Tekst boven de afbeelding tonen')}
+						aria-label={tText(
+							'pages/openseadragon/index___tekst-boven-de-afbeelding-tonen'
+						)}
 						variants={['white']}
 						onClick={() => setIiifOcrEnabled(!iiifOcrEnabled)}
 					/>
@@ -1750,7 +1756,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 								aria-hidden
 							/>
 						}
-						aria-label={tText('Tekst boven de afbeelding tonen')}
+						aria-label={tText(
+							'pages/openseadragon/index___tekst-boven-de-afbeelding-tonen'
+						)}
 						variants={['silver']}
 						onClick={() => setIiifOcrEnabled(!iiifOcrEnabled)}
 					/>

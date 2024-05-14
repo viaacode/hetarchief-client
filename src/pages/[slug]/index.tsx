@@ -1,4 +1,4 @@
-import { ContentPageRenderer } from '@meemoo/admin-core-ui';
+import { ContentPageRenderer, LanguageCode } from '@meemoo/admin-core-ui';
 import { HTTPError } from 'ky';
 import { kebabCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
@@ -22,7 +22,7 @@ import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { isBrowser } from '@shared/utils';
 
-import { useGetContentPageByPath } from '../../modules/content-page/hooks/get-content-page';
+import { useGetContentPageByLanguageAndPath } from '../../modules/content-page/hooks/get-content-page';
 import { ContentPageClientService } from '../../modules/content-page/services/content-page-client.service';
 
 import { VisitorLayout } from 'modules/visitors';
@@ -55,7 +55,10 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 		error: contentPageError,
 		isLoading: isContentPageLoading,
 		data: contentPageInfo,
-	} = useGetContentPageByPath(`/${slug}`);
+	} = useGetContentPageByLanguageAndPath(
+		(commonUser?.language || LanguageCode.Nl) as LanguageCode,
+		`/${slug}`
+	);
 	const { isLoading: isIeObjectLoading, data: ieObjectInfo } = useGetIeObjectsInfo(
 		slug as string,
 		{ enabled: !!slug }
@@ -137,18 +140,18 @@ export async function getServerSideProps(
 	let title: string | null = null;
 	let description: string | null = null;
 	let image: string | null = null;
-	const slug = context.query.slug;
-	if (slug) {
+	const path = context.query.slug;
+	if (path) {
 		try {
-			const contentPage = await ContentPageClientService.getBySlug(`/${context.query.slug}`);
+			const contentPage = await ContentPageClientService.getByLanguageAndPath(
+				LanguageCode.Nl,
+				`/${path}`
+			);
 			title = contentPage?.title || null;
 			description = contentPage?.seoDescription || contentPage?.description || null;
 			image = contentPage?.thumbnailPath || null;
 		} catch (err) {
-			console.error(
-				'Failed to fetch content page seo info by slug: ' + context.query.slug,
-				err
-			);
+			console.error('Failed to fetch content page seo info by slug: ' + path, err);
 		}
 	} else {
 		title = 'Home - Het Archief';

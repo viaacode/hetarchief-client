@@ -8,6 +8,8 @@
 // 	return render(<FragmentSlider {...fragmentSliderMock} {...rest} />);
 // };
 
+export {};
+
 describe('Component: <FragmentSlider /> (default)', () => {
 	// TODO find out why this test fails after the vite build switch
 	test('skip', () => {

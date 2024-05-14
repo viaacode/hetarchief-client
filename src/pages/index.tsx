@@ -1,4 +1,4 @@
-import { ContentPageRenderer } from '@meemoo/admin-core-ui';
+import { ContentPageRenderer, LanguageCode } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
@@ -15,7 +15,7 @@ import { useHasAnyGroup } from '@shared/hooks/has-group';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-import { useGetContentPageByPath } from '../modules/content-page/hooks/get-content-page';
+import { useGetContentPageByLanguageAndPath } from '../modules/content-page/hooks/get-content-page';
 import { ContentPageClientService } from '../modules/content-page/services/content-page-client.service';
 
 import { VisitorLayout } from 'modules/visitors';
@@ -40,7 +40,11 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 	 * Data
 	 */
 
-	const { isLoading: isContentPageLoading, data: contentPageInfo } = useGetContentPageByPath('/');
+	const { isLoading: isContentPageLoading, data: contentPageInfo } =
+		useGetContentPageByLanguageAndPath(
+			(commonUser?.language || LanguageCode.Nl) as LanguageCode,
+			'/'
+		);
 
 	useEffect(() => {
 		if (isKioskUser) {
@@ -87,15 +91,21 @@ export async function getServerSideProps(
 	let description: string | null = null;
 	let image: string | null = null;
 	try {
-		const contentPage = await ContentPageClientService.getBySlug('/');
+		const contentPage = await ContentPageClientService.getByLanguageAndPath(
+			LanguageCode.Nl,
+			'/'
+		);
 		title = contentPage?.title || null;
 		description = contentPage?.seoDescription || contentPage?.description || null;
 		image = contentPage?.thumbnailPath || null;
 	} catch (err) {
-		console.error(
-			'Failed to fetch content page seo info for homepage by slug: ' + context.query.slug,
-			err
-		);
+		console.error({
+			message: 'Failed to fetch content page seo info for homepage by slug: ',
+			innerException: err,
+			additionalInfo: {
+				path: '/',
+			},
+		});
 	}
 
 	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> =
