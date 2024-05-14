@@ -14,7 +14,8 @@ ENV NODE_ENV production
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
 
-RUN chown nextjs:nodejs /app
+RUN chown -R nextjs:nodejs /app &&\
+  chmod -R g+x /app
 
 RUN cp ./scripts/next-config-to-env-file.js ./
 
