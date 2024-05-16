@@ -23,7 +23,7 @@ import {
 	IconNamesLight,
 } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
-import { ADMIN_CORE_ROUTES, ROUTE_PARTS } from '@shared/const';
+import { ADMIN_CORE_ROUTES, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
@@ -66,26 +66,26 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				staticPages: [
 					'/',
 					'/404',
-					`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myHistory}`,
-					`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myProfile}`,
-					`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myFolders}`,
-					`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myMaterialRequests}`,
-					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitRequests}`,
-					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.activeVisitors}`,
-					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}`,
-					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.content}`,
-					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.userManagement}/${ROUTE_PARTS.users}`,
-					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.userManagement}/${ROUTE_PARTS.permissions}`,
-					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.navigation}`,
-					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.translations}`,
-					`/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitRequests}`,
-					`/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.activeVisitors}`,
-					`/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.settings}`,
-					`/${ROUTE_PARTS.cookiePolicy}`,
-					`/${ROUTE_PARTS.userPolicy}`,
-					`/${ROUTE_PARTS.logout}`,
-					`/${ROUTE_PARTS.search}`,
-					`/${ROUTE_PARTS.visit}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].account}/${ROUTE_PARTS_BY_LOCALE[locale].myHistory}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].account}/${ROUTE_PARTS_BY_LOCALE[locale].myProfile}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].account}/${ROUTE_PARTS_BY_LOCALE[locale].myFolders}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].account}/${ROUTE_PARTS_BY_LOCALE[locale].myMaterialRequests}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaceManagement}/${ROUTE_PARTS_BY_LOCALE[locale].visitRequests}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaceManagement}/${ROUTE_PARTS_BY_LOCALE[locale].activeVisitors}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaceManagement}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaces}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].content}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].userManagement}/${ROUTE_PARTS_BY_LOCALE[locale].users}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].userManagement}/${ROUTE_PARTS_BY_LOCALE[locale].permissions}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].navigation}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].translations}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].beheer}/${ROUTE_PARTS_BY_LOCALE[locale].visitRequests}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].beheer}/${ROUTE_PARTS_BY_LOCALE[locale].activeVisitors}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].beheer}/${ROUTE_PARTS_BY_LOCALE[locale].settings}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].cookiePolicy}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].userPolicy}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].logout}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
+					`/${ROUTE_PARTS_BY_LOCALE[locale].visit}`,
 					'/',
 				],
 				contentPage: {

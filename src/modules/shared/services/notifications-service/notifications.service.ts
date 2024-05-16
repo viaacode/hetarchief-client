@@ -3,7 +3,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 
-import { ROUTES } from '@shared/const';
+import { ROUTES_NL } from '@shared/const';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
@@ -111,7 +111,7 @@ export abstract class NotificationsService {
 					)
 				) {
 					// Redirect the user to the homepage
-					NotificationsService?.router?.push?.(ROUTES.home);
+					NotificationsService?.router?.push?.(ROUTES_BY_LOCALE[locale].home);
 				}
 			}
 

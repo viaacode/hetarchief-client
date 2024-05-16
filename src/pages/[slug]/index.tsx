@@ -13,7 +13,7 @@ import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { ErrorNotFound, Loading } from '@shared/components';
-import { ROUTE_PARTS } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -84,9 +84,9 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 
 	useEffect(() => {
 		if (ieObjectInfo) {
-			const objectDetailPagePath = `/${ROUTE_PARTS.search}/${ieObjectInfo.maintainerSlug}/${
-				ieObjectInfo.schemaIdentifier
-			}/${kebabCase(ieObjectInfo.name)}`;
+			const objectDetailPagePath = `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${
+				ieObjectInfo.maintainerSlug
+			}/${ieObjectInfo.schemaIdentifier}/${kebabCase(ieObjectInfo.name)}`;
 			window.open(objectDetailPagePath, '_self');
 		}
 	}, [ieObjectInfo]);

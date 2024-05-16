@@ -16,6 +16,7 @@ import {
 import { ListNavigationItem } from '@shared/components';
 import { globalLabelKeys } from '@shared/const';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
@@ -31,6 +32,7 @@ const AdminLayout: AdminLayoutComponent = ({
 	const { asPath } = useRouter();
 	const dispatch = useDispatch();
 	const { tHtml } = useTranslation();
+	const locale = useLocale();
 
 	const actions = useSlot(AdminActions, children);
 	const filtersLeft = useSlot(AdminFiltersLeft, children);
@@ -53,7 +55,7 @@ const AdminLayout: AdminLayoutComponent = ({
 
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
-			ADMIN_NAVIGATION_LINKS().map(({ id, label, href, children }) => ({
+			ADMIN_NAVIGATION_LINKS(locale).map(({ id, label, href, children }) => ({
 				id,
 				node: ({ linkClassName }) => (
 					<Link href={href}>

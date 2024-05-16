@@ -21,7 +21,7 @@ import {
 	getAccessToDate,
 	roundToNextQuarter,
 } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.helpers';
-import { OPTIONAL_LABEL, ROUTE_PARTS } from '@shared/const';
+import { OPTIONAL_LABEL, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
@@ -499,8 +499,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 							<Link
 								href={
 									canViewAddVisitRequests
-										? `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitRequests}?${ROUTE_PARTS.visitRequest}=${overlappingRequests[0].id}`
-										: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitRequests}?${ROUTE_PARTS.visitRequest}=${overlappingRequests[0].id}`
+										? `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaceManagement}/${ROUTE_PARTS_BY_LOCALE[locale].visitRequests}?${ROUTE_PARTS_BY_LOCALE[locale].visitRequest}=${overlappingRequests[0].id}`
+										: `/${ROUTE_PARTS_BY_LOCALE[locale].beheer}/${ROUTE_PARTS_BY_LOCALE[locale].visitRequests}?${ROUTE_PARTS_BY_LOCALE[locale].visitRequest}=${overlappingRequests[0].id}`
 								}
 								passHref
 							>

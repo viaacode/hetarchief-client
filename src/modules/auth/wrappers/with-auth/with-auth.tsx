@@ -5,7 +5,7 @@ import { ComponentType, useCallback, useEffect, useState } from 'react';
 import { GroupName } from '@account/const';
 import { AuthMessage, AuthService } from '@auth/services/auth-service';
 import Loading from '@shared/components/Loading/Loading';
-import { ROUTES } from '@shared/const';
+import { ROUTES_NL } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { TosService } from '@shared/services/tos-service';
 import { isCurrentTosAccepted } from '@shared/utils';
@@ -39,12 +39,12 @@ export const withAuth = (
 			};
 
 			const toTermsOfService = async () => {
-				return router.replace(`${ROUTES.termsOfService}?${stringify(params)}`);
+				return router.replace(`${ROUTES_BY_LOCALE[locale].termsOfService}?${stringify(params)}`);
 			};
 
 			const toHome = async () => {
 				return router.replace(
-					`${ROUTES.home}?${stringify({
+					`${ROUTES_BY_LOCALE[locale].home}?${stringify({
 						...params,
 						[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
 					})}`

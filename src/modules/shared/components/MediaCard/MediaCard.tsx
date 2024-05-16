@@ -16,7 +16,7 @@ import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by
 import { DropdownMenu, IconNamesLight, Modal, Pill } from '@shared/components';
 import { TRUNCATED_TEXT_LENGTH, TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
-import { ROUTES } from '@shared/const';
+import { ROUTES_NL } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
@@ -96,7 +96,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 			setIsRequestAccessBladeOpen(false);
 			await router.push(
-				ROUTES.visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
+				ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
 			);
 		} catch (err) {
 			console.error({

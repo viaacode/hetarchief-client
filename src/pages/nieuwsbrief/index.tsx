@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 
 import { selectHasCheckedLogin, selectIsLoggedIn } from '@auth/store/user';
 import { Loading } from '@shared/components';
-import { ROUTE_PARTS } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { labelKeys, NEWSLETTER_FORM_SCHEMA } from '@shared/const/newsletter';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
@@ -54,7 +54,7 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 		}
 
 		router.replace(
-			`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myProfile}#${COMMUNICATION_SECTION_ID}`
+			`/${ROUTE_PARTS_BY_LOCALE[locale].account}/${ROUTE_PARTS_BY_LOCALE[locale].myProfile}#${COMMUNICATION_SECTION_ID}`
 		);
 	}, [router, triggerRedirect]);
 

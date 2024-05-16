@@ -10,7 +10,7 @@ import { selectIsLoggedIn } from '@auth/store/user';
 import { ErrorNoAccessToObject, ErrorNotFound, Loading } from '@shared/components';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
 import { NextRedirect } from '@shared/components/Redirect/Redirect.tsx';
-import { ROUTES } from '@shared/const';
+import { ROUTES_NL } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { AccessStatus } from '@shared/types';
@@ -98,7 +98,7 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 						<>
 							{renderLoading()}
 							<NextRedirect
-								to={ROUTES.visitRequested.replace(':slug', slug as string)}
+								to={ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', slug as string)}
 								method="replace"
 							/>
 						</>
@@ -113,7 +113,7 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 							{renderLoading()}
 							<NextRedirect
 								to={stringifyUrl({
-									url: ROUTES.search,
+									url: ROUTES_BY_LOCALE[locale].search,
 									query: { [VisitorSpaceFilterId.Maintainer]: slug },
 								})}
 								method="replace"
@@ -130,7 +130,7 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 							{renderLoading()}
 							<NextRedirect
 								to={stringifyUrl({
-									url: ROUTES.search,
+									url: ROUTES_BY_LOCALE[locale].search,
 									query: {
 										[VisitorSpaceFilterId.Maintainers]:
 											organisation?.schemaIdentifier +

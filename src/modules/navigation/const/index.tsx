@@ -5,7 +5,8 @@ import { MaterialRequestCenterButton } from '@navigation/components/MaterialRequ
 import { getNavigationItemsProfileDropdown } from '@navigation/components/Navigation/Navigation.consts';
 import { NavigationInfo, NavigationPlacement } from '@navigation/services/navigation-service';
 import { Icon, IconNamesLight, IconNamesSolid } from '@shared/components';
-import { ROUTE_PARTS } from '@shared/const';
+import LanguageSwitcher from '@shared/components/LanguageSwitcher/LanguageSwitcher';
+import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { VisitorSpaceInfo } from '@visitor-space/types';
 
@@ -17,8 +18,17 @@ export const NAV_HAMBURGER_PROPS = (): NavigationHamburgerProps => ({
 	closedLabel: tText('modules/shared/const/navigation___menu'),
 });
 
+const getLanguageSwitcher = () => {
+	return {
+		id: 'language-switcher',
+		path: '',
+		node: <LanguageSwitcher />,
+	};
+};
+
 export const NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationItem[] => {
 	return [
+		getLanguageSwitcher(),
 		{
 			id: 'auth-button',
 			path: '',
@@ -53,6 +63,7 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = (
 	const badgeCls = 'c-navigation__notifications-badge';
 
 	return [
+		getLanguageSwitcher(),
 		{
 			id: 'material-request-center',
 			path: '',
@@ -96,7 +107,7 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = (
 				),
 				{
 					id: 'log-out',
-					path: ROUTE_PARTS.logout,
+					path: ROUTE_PARTS_BY_LOCALE[locale].logout,
 					node: ({ closeDropdowns }) => (
 						<NavigationLink
 							iconStart={IconNamesLight.LogOut}

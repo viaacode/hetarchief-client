@@ -4,7 +4,7 @@ import { GetServerSidePropsContext } from 'next/types';
 import { useEffect, useState } from 'react';
 
 import { Loading } from '@shared/components';
-import { ROUTES } from '@shared/const';
+import { ROUTES_NL } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
@@ -37,7 +37,7 @@ const NewsletterFailed: NextPage<DefaultSeoInfo> = ({ url }) => {
 			return;
 		}
 
-		router.replace(`/${ROUTES.home}`);
+		router.replace(`/${ROUTES_BY_LOCALE[locale].home}`);
 	}, [router, triggerRedirect]);
 
 	return (

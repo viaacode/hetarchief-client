@@ -26,7 +26,7 @@ import {
 	sortingIcons,
 } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { globalLabelKeys, ROUTE_PARTS } from '@shared/const';
+import { globalLabelKeys, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
@@ -253,7 +253,7 @@ const VisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 								variants="black"
 								onClick={() =>
 									router.push(
-										`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/${ROUTE_PARTS.create}`
+										`/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaceManagement}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaces}/${ROUTE_PARTS_BY_LOCALE[locale].create}`
 									)
 								}
 							/>

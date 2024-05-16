@@ -5,7 +5,7 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { AdminVisitorSpaceInfoRow } from '@admin/types';
 import { DropdownMenu, Icon, IconNamesLight } from '@shared/components';
-import { ROUTES } from '@shared/const';
+import { ROUTES_NL } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
@@ -110,7 +110,7 @@ export const VisitorSpacesOverviewTableColumns = (
 				<>
 					{showEditButton && (
 						<Link
-							href={`${ROUTES.adminEditSpace.replace(':slug', row.original.slug)}`}
+							href={`${ROUTES_BY_LOCALE[locale].adminEditSpace.replace(':slug', row.original.slug)}`}
 							passHref={true}
 						>
 							<a

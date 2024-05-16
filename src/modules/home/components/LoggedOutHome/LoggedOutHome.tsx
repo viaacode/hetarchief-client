@@ -8,9 +8,10 @@ import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
 import { Icon, IconNamesLight } from '@shared/components';
-import { ROUTE_PARTS, ROUTES } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -19,6 +20,7 @@ import styles from './LoggedOutHome.module.scss';
 const LoggedOutHome: FC<DefaultSeoInfo> = (props) => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
+	const locale = useLocale();
 
 	const [query] = useQueryParams({
 		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
@@ -31,7 +33,7 @@ const LoggedOutHome: FC<DefaultSeoInfo> = (props) => {
 
 	const onRequestAccess = (visitorSpaceSlug: string) => {
 		return router.push(
-			`${ROUTES.bezoek}?${stringify({
+			`${ROUTES_BY_LOCALE[locale].visit}?${stringify({
 				[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
 				[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug,
 			})}`
@@ -44,7 +46,7 @@ const LoggedOutHome: FC<DefaultSeoInfo> = (props) => {
 			!query[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]
 		) {
 			router.push(
-				`${ROUTES.bezoek}?${stringify({
+				`${ROUTES_BY_LOCALE[locale].visit}?${stringify({
 					[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
 					[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]:
 						query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY],
@@ -57,7 +59,7 @@ const LoggedOutHome: FC<DefaultSeoInfo> = (props) => {
 		// eg: /vrt/09f17b37445c4ce59f645c2d5db9dbf8dbee79eba623459caa8c6496108641a0900618cb6ceb4e9b8ad907e47b980ee3
 		const redirectTo = router.query.redirectTo as string;
 		const firstUrlPart = redirectTo?.split('/')?.[1];
-		if (!(Object.values(ROUTE_PARTS) as string[]).includes(firstUrlPart)) {
+		if (!(Object.values(ROUTE_PARTS_BY_LOCALE[locale]) as string[]).includes(firstUrlPart)) {
 			// Not a static page => might be visitor space slug
 			return capitalize(lowerCase(firstUrlPart));
 		}

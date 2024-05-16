@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ErrorNoAccess, Loading } from '@shared/components';
-import { ROUTES } from '@shared/const';
+import { ROUTES_NL } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -58,7 +58,7 @@ const VisitRequestedPage: NextPage<VisitRequestedPageProps> = ({ name, descripti
 	 * Computed
 	 */
 
-	const spaceLink = ROUTES.space.replace(':slug', slug as string);
+	const spaceLink = ROUTES_BY_LOCALE[locale].space.replace(':slug', slug as string);
 
 	/**
 	 * Effects

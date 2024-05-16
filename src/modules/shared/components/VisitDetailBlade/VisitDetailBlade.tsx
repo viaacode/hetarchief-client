@@ -9,7 +9,7 @@ import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { Blade } from '@shared/components';
-import { ROUTES } from '@shared/const';
+import { ROUTES_NL } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
@@ -57,7 +57,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 
 			setIsRequestAccessBladeOpen(false);
 			await router.push(
-				ROUTES.visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
+				ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
 			);
 		} catch (err) {
 			console.error({

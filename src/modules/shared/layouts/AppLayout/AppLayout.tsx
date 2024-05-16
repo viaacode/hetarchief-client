@@ -75,6 +75,7 @@ const AppLayout: FC<any> = ({ children }) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const router = useRouter();
+	const locale = useLocale();
 	const { asPath } = useRouter();
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
@@ -285,7 +286,8 @@ const AppLayout: FC<any> = ({ children }) => {
 			isMobile,
 			user?.visitorSpaceSlug || null,
 			visitorSpaces,
-			isMeemooAdmin
+			isMeemooAdmin,
+			locale
 		);
 
 		const staticItems = [

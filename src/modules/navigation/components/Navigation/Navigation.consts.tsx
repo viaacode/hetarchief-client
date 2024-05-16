@@ -13,9 +13,14 @@ import {
 	NavigationPlacement,
 } from '@navigation/services/navigation-service/navigation.types';
 import { Icon, IconName, IconNamesLight } from '@shared/components';
-import { ROUTE_PARTS, ROUTE_PREFIXES, ROUTES } from '@shared/const';
+import {
+	ROUTE_PARTS_BY_LOCALE,
+	ROUTE_PREFIXES_BY_LOCALE,
+	ROUTES_BY_LOCALE,
+} from '@shared/const/routes';
 import { tText } from '@shared/helpers/translate';
 import { Breakpoints, Visit } from '@shared/types';
+import { Locale } from '@shared/utils';
 import { VisitorSpaceFilterId, VisitorSpaceInfo } from '@visitor-space/types';
 
 const linkCls = (...classNames: string[]) => {
@@ -98,11 +103,13 @@ const getVisitorSpacesDropdown = (
 	navigationLabel: string,
 	currentPath: string,
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
-	linkedSpaceOrId: string | null
+	linkedSpaceOrId: string | null,
+	locale: Locale
 ): NavigationItem => {
+	const visitPath = ROUTES_BY_LOCALE[locale].visit;
 	if (linkedSpaceOrId) {
 		// Single link to go to linked visitor space (kiosk visitor)
-		const searchRouteForSpace = `/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${linkedSpaceOrId}`;
+		const searchRouteForSpace = `/${ROUTE_PARTS_BY_LOCALE[locale].search}?${VisitorSpaceFilterId.Maintainer}=${linkedSpaceOrId}`;
 		return {
 			node: renderLink(
 				tText('modules/navigation/components/navigation/navigation___bezoekersruimte'),
@@ -118,20 +125,20 @@ const getVisitorSpacesDropdown = (
 			activeMobile: currentPath.startsWith(searchRouteForSpace),
 		};
 	} else if (accessibleVisitorSpaces.length === 0) {
-		// No visitor spaces available => show link to bezoek page without dropdown
+		// No visitor spaces available => show link to /visit page without dropdown
 		return {
-			node: renderLink(navigationLabel, ROUTES.bezoek, {
+			node: renderLink(navigationLabel, visitPath, {
 				className: linkClasses,
 			}),
 			id: 'visitor-spaces',
-			activeDesktop: currentPath === ROUTES.bezoek,
-			activeMobile: currentPath === ROUTES.bezoek,
+			activeDesktop: currentPath === visitPath,
+			activeMobile: currentPath === visitPath,
 			path: currentPath,
 		};
 	} else {
 		// Show dropdown list with bezoek page and accessible visitor spaces
 		return {
-			node: renderLink(navigationLabel, ROUTES.bezoek, {
+			node: renderLink(navigationLabel, visitPath, {
 				badge: <Badge text={accessibleVisitorSpaces.length} />,
 				className: linkClasses,
 				// Make link clickable in hamburger menu
@@ -143,15 +150,15 @@ const getVisitorSpacesDropdown = (
 			}),
 			id: 'visitor-spaces',
 			path: currentPath,
-			activeDesktop: currentPath === ROUTES.bezoek,
-			activeMobile: currentPath === ROUTES.bezoek,
+			activeDesktop: currentPath === visitPath,
+			activeMobile: currentPath === visitPath,
 			children: [
 				{
 					node: renderLink(
 						tText(
 							'modules/navigation/components/navigation/navigation___alle-bezoekersruimtes'
 						),
-						ROUTES.bezoek,
+						visitPath,
 						{
 							className: dropdownCls('u-display-none', 'u-display-block:xxl'),
 						}
@@ -161,7 +168,7 @@ const getVisitorSpacesDropdown = (
 					isDivider: accessibleVisitorSpaces.length > 0 ? 'md' : undefined,
 				},
 				...accessibleVisitorSpaces.map((visitorSpace: VisitorSpaceInfo): NavigationItem => {
-					const searchRouteForSpace = `/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${visitorSpace.slug}`;
+					const searchRouteForSpace = `/${ROUTE_PARTS_BY_LOCALE[locale].search}?${VisitorSpaceFilterId.Maintainer}=${visitorSpace.slug}`;
 					return {
 						node: ({ closeDropdowns }) =>
 							renderLink(
@@ -209,7 +216,8 @@ const getDynamicHeaderLinks = (
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
 	linkedSpaceOrId: string | null,
 	activeVisits: Visit[] | null,
-	isMeemooAdmin = false
+	isMeemooAdmin = false,
+	locale: Locale
 ) => {
 	const itemsByPlacement = navigationItems[placement];
 
@@ -227,10 +235,10 @@ const getDynamicHeaderLinks = (
 			tooltip,
 		}: NavigationInfo): NavigationItem => {
 			const hasActiveVisits = activeVisits && activeVisits.length > 0;
-			const isSearchNavItem = contentPath === ROUTES.search;
+			const isSearchNavItem = contentPath === ROUTES_BY_LOCALE[locale].search;
 			const searchUrl =
 				isSearchNavItem && hasActiveVisits && !isMeemooAdmin
-					? `${ROUTES.search}?aanbieder=${activeVisits[0].spaceSlug}`
+					? `${ROUTES_BY_LOCALE[locale].search}?aanbieder=${activeVisits[0].spaceSlug}`
 					: contentPath;
 
 			if (contentPath === NAVIGATION_DROPDOWN.VISITOR_SPACES) {
@@ -238,7 +246,8 @@ const getDynamicHeaderLinks = (
 					label,
 					currentPath,
 					accessibleVisitorSpaces,
-					linkedSpaceOrId
+					linkedSpaceOrId,
+					locale
 				);
 			}
 
@@ -267,7 +276,8 @@ const getCpAdminManagementDropdown = (
 	currentPath: string,
 	permissions: Permission[],
 	maintainerSlug: string | null,
-	isMobile: boolean
+	isMobile: boolean,
+	locale: Locale
 ): NavigationItem[] => {
 	if (
 		intersection(permissions, [
@@ -283,13 +293,13 @@ const getCpAdminManagementDropdown = (
 		{
 			node: renderLink(
 				tText('modules/navigation/components/navigation/navigation___beheer'),
-				isMobile ? ROUTES.beheerRequests : '',
+				isMobile ? ROUTES_BY_LOCALE[locale].cpAdminRequests : '',
 				{
 					className: linkClasses,
 				}
 			),
 			id: 'nav__beheer',
-			activeDesktop: currentPath.startsWith(`/${ROUTE_PREFIXES.beheer}`),
+			activeDesktop: currentPath.startsWith(`/${ROUTE_PREFIXES_BY_LOCALE[locale].cpAdmin}`),
 			path: currentPath,
 			children: [
 				...(permissions.includes(Permission.MANAGE_CP_VISIT_REQUESTS)
@@ -299,14 +309,16 @@ const getCpAdminManagementDropdown = (
 									tText(
 										'modules/navigation/components/navigation/navigation___aanvragen'
 									),
-									ROUTES.beheerRequests,
+									ROUTES_BY_LOCALE[locale].cpAdminRequests,
 									{
 										className: dropdownCls(),
 									}
 								),
 								id: 'nav__beheer--aanvragen',
 								path: currentPath,
-								activeMobile: currentPath.startsWith(ROUTES.beheerRequests),
+								activeMobile: currentPath.startsWith(
+									ROUTES_BY_LOCALE[locale].cpAdminRequests
+								),
 							},
 					  ]
 					: []),
@@ -317,14 +329,16 @@ const getCpAdminManagementDropdown = (
 									tText(
 										'modules/navigation/components/navigation/navigation___materiaalaanvragen'
 									),
-									ROUTES.beheerMaterialRequests,
+									ROUTES_BY_LOCALE[locale].cpAdminMaterialRequests,
 									{
 										className: dropdownCls(),
 									}
 								),
 								id: 'nav__beheer--materiaalaanvragen',
 								path: currentPath,
-								activeMobile: currentPath.startsWith(ROUTES.beheerMaterialRequests),
+								activeMobile: currentPath.startsWith(
+									ROUTES_BY_LOCALE[locale].cpAdminMaterialRequests
+								),
 							},
 					  ]
 					: []),
@@ -335,14 +349,16 @@ const getCpAdminManagementDropdown = (
 									tText(
 										'modules/navigation/components/navigation/navigation___bezoekers'
 									),
-									ROUTES.beheerVisitors,
+									ROUTES_BY_LOCALE[locale].cpAdminVisitors,
 									{
 										className: dropdownCls(),
 									}
 								),
 								id: 'nav__beheer--bezoekers',
 								path: currentPath,
-								activeMobile: currentPath.startsWith(ROUTES.beheerVisitors),
+								activeMobile: currentPath.startsWith(
+									ROUTES_BY_LOCALE[locale].cpAdminVisitors
+								),
 							},
 					  ]
 					: []),
@@ -353,14 +369,16 @@ const getCpAdminManagementDropdown = (
 									tText(
 										'modules/navigation/components/navigation/navigation___instellingen'
 									),
-									ROUTES.beheerSettings,
+									ROUTES_BY_LOCALE[locale].cpAdminSettings,
 									{
 										className: dropdownCls(),
 									}
 								),
 								id: 'nav__beheer--instellingen',
 								path: currentPath,
-								activeMobile: currentPath.startsWith(ROUTES.beheerSettings),
+								activeMobile: currentPath.startsWith(
+									ROUTES_BY_LOCALE[locale].cpAdminSettings
+								),
 							},
 					  ]
 					: []),
@@ -373,7 +391,7 @@ const getCpAdminManagementDropdown = (
 										'modules/navigation/components/navigation/navigation___naar-mijn-bezoekerstool'
 									),
 									stringifyUrl({
-										url: `/${ROUTE_PARTS.search}`,
+										url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 										query: {
 											[VisitorSpaceFilterId.Maintainer]: maintainerSlug,
 										},
@@ -394,7 +412,8 @@ const getCpAdminManagementDropdown = (
 
 const getMeemooAdminManagementDropdown = (
 	currentPath: string,
-	permissions: Permission[]
+	permissions: Permission[],
+	locale: Locale
 ): NavigationItem[] => {
 	if (
 		intersection(permissions, [
@@ -411,14 +430,14 @@ const getMeemooAdminManagementDropdown = (
 		{
 			node: renderLink(
 				tText('modules/navigation/components/navigation/navigation___admin'),
-				`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}`,
+				`/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaceManagement}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaces}`,
 				{
 					className: linkClasses,
 				}
 			),
 			id: 'nav__admin',
-			activeDesktop: currentPath.startsWith(`/${ROUTE_PREFIXES.admin}`),
-			activeMobile: currentPath.startsWith(`/${ROUTE_PREFIXES.admin}`),
+			activeDesktop: currentPath.startsWith(`/${ROUTE_PREFIXES_BY_LOCALE[locale].admin}`),
+			activeMobile: currentPath.startsWith(`/${ROUTE_PREFIXES_BY_LOCALE[locale].admin}`),
 			path: currentPath,
 		},
 	];
@@ -440,7 +459,8 @@ export const getNavigationItemsLeft = (
 	isMobile: boolean,
 	maintainerSlug: string | null,
 	activeVisits: Visit[] | null,
-	isMeemooAdmin: boolean
+	isMeemooAdmin: boolean,
+	locale: Locale
 ): NavigationItem[] => {
 	const beforeDivider = getDynamicHeaderLinks(
 		currentPath,
@@ -449,7 +469,8 @@ export const getNavigationItemsLeft = (
 		accessibleVisitorSpaces,
 		linkedSpaceOrId,
 		activeVisits,
-		isMeemooAdmin
+		isMeemooAdmin,
+		locale
 	);
 	const afterDivider = getDynamicHeaderLinks(
 		currentPath,
@@ -457,16 +478,19 @@ export const getNavigationItemsLeft = (
 		NavigationPlacement.HeaderRight,
 		accessibleVisitorSpaces,
 		linkedSpaceOrId,
-		null
+		null,
+		undefined,
+		locale
 	);
 
 	const cpAdminLinks = getCpAdminManagementDropdown(
 		currentPath,
 		permissions,
 		maintainerSlug,
-		isMobile
+		isMobile,
+		locale
 	);
-	const meemooAdminLinks = getMeemooAdminManagementDropdown(currentPath, permissions);
+	const meemooAdminLinks = getMeemooAdminManagementDropdown(currentPath, permissions, locale);
 
 	return [
 		// Some dynamic links from navigations table in database
@@ -487,7 +511,8 @@ export const getNavigationItemsProfileDropdown = (
 	currentPath: string,
 	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
-	linkedSpaceOrId: string | null
+	linkedSpaceOrId: string | null,
+	locale: Locale
 ): NavigationItem[] => {
 	const profileDropdown = getDynamicHeaderLinks(
 		currentPath,
@@ -495,18 +520,20 @@ export const getNavigationItemsProfileDropdown = (
 		NavigationPlacement.ProfileDropdown,
 		accessibleVisitorSpaces,
 		linkedSpaceOrId,
-		null
+		null,
+		undefined,
+		locale
 	);
 
 	// Group navigation items by type
 	const { defaultRoutes, adminRoutes, cpRoutes } = groupBy(
 		profileDropdown,
 		(navItem: NavigationItem) => {
-			if (navItem.path?.startsWith('/' + ROUTE_PARTS.admin)) {
+			if (navItem.path?.startsWith('/' + ROUTE_PARTS_BY_LOCALE[locale].admin)) {
 				return 'adminRoutes';
 			}
 
-			if (navItem.path?.startsWith('/' + ROUTE_PARTS.beheer)) {
+			if (navItem.path?.startsWith('/' + ROUTE_PARTS_BY_LOCALE[locale].cpAdmin)) {
 				return 'cpRoutes';
 			}
 

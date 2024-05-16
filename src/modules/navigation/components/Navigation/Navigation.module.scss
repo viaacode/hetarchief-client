@@ -196,9 +196,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 			grid-gap: 0;
 
 			li {
-				&:nth-child(2) {
-					padding: 0 1.5rem 0 0.5rem;
-				}
+				padding: 0 1rem 0 0.5rem;
 			}
 		}
 	}

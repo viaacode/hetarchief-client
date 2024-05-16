@@ -8,7 +8,7 @@ import { GroupName } from '@account/const';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { ErrorPage } from '@shared/components';
-import { ROUTES } from '@shared/const';
+import { ROUTES_NL } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -52,7 +52,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 
 			setIsRequestAccessBladeOpen(false);
 			await router.push(
-				ROUTES.visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
+				ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
 			);
 		} catch (err) {
 			console.error({
@@ -102,7 +102,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 							variants={['white', 'outline']}
 						/>
 					),
-					to: ROUTES.search,
+					to: ROUTES_BY_LOCALE[locale].search,
 				}}
 				buttonsComponent={
 					<div className={styles['p-error-no-access-to-object__buttons-container']}>

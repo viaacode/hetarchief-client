@@ -52,7 +52,7 @@ import {
 	PAGE_NUMBER_OF_MANY_RESULTS_TILE,
 } from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
-import { ROUTE_PARTS, ROUTES } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
@@ -62,6 +62,7 @@ import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectFolders } from '@shared/store/ie-objects';
@@ -130,6 +131,7 @@ const SearchPage: FC = () => {
 	const { tHtml, tText } = useTranslation();
 	const windowSize = useWindowSizeContext();
 	const dispatch = useDispatch();
+	const locale = useLocale();
 
 	// Get folders, to correctly show the bookmark icon statuses on the search results
 	useGetFolders();
@@ -317,7 +319,7 @@ const SearchPage: FC = () => {
 		// Ward: wait until items are rendered on the screen before scrolling
 		if (
 			lastScrollPosition &&
-			lastScrollPosition.page === ROUTES.search &&
+			lastScrollPosition.page === ROUTES_BY_LOCALE[locale].search &&
 			searchResults?.items &&
 			window.scrollY === 0
 		) {
@@ -696,9 +698,9 @@ const SearchPage: FC = () => {
 				!isKioskUser && isPublicCollection && hasAccessToVisitorSpaceOfObject;
 
 			const link: string | undefined = stringifyUrl({
-				url: `/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}/${
-					kebabCase(item.name) || 'titel'
-				}`,
+				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${item.maintainerSlug}/${
+					item.schemaIdentifier
+				}/${kebabCase(item.name) || 'titel'}`,
 				query: {
 					[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: searchResults?.searchTerms.join(
 						HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
@@ -727,7 +729,7 @@ const SearchPage: FC = () => {
 					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
 				}),
 				link,
-				previousPage: ROUTES.search,
+				previousPage: ROUTES_BY_LOCALE[locale].search,
 			};
 		});
 	}, [isKioskUser, isPublicCollection, searchResults?.items, searchResults?.searchTerms]);
@@ -742,7 +744,7 @@ const SearchPage: FC = () => {
 				'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 			)}
 			action={
-				<Link passHref href={`/${ROUTE_PARTS.kioskConditions}`}>
+				<Link passHref href={`/${ROUTE_PARTS_BY_LOCALE[locale].kioskConditions}`}>
 					<a aria-label={tText('pages/slug/index___meer-info')}>
 						<Button
 							className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
@@ -761,13 +763,13 @@ const SearchPage: FC = () => {
 				label: `${tHtml(
 					'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs-home'
 				)}`,
-				to: ROUTES.home,
+				to: ROUTES_BY_LOCALE[locale].home,
 			},
 			{
 				label: `${tHtml(
 					'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs-search'
 				)}`,
-				to: ROUTES.search,
+				to: ROUTES_BY_LOCALE[locale].search,
 			},
 		];
 
@@ -884,7 +886,7 @@ const SearchPage: FC = () => {
 			(visitorSpace: VisitorSpaceDropdownOption): ReactNode => (
 				<Link
 					key={visitorSpace.slug}
-					href={`/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${visitorSpace?.slug}`}
+					href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}?${VisitorSpaceFilterId.Maintainer}=${visitorSpace?.slug}`}
 				>
 					<a aria-label={visitorSpace?.label}>{visitorSpace?.label}</a>
 				</Link>

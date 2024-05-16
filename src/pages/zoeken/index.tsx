@@ -3,7 +3,7 @@ import { ComponentType, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { withAuth } from '@auth/wrappers/with-auth';
-import { ROUTES } from '@shared/const';
+import { ROUTES_NL } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { tText } from '@shared/helpers/translate';
@@ -21,11 +21,11 @@ const Search: NextPage<SearchPageProps> = ({ url }) => {
 			setBreadcrumbs([
 				{
 					label: `${tText('pages/slug/ie/index___breadcrumbs-home')}`,
-					to: ROUTES.home,
+					to: ROUTES_BY_LOCALE[locale].home,
 				},
 				{
 					label: `${tText('pages/slug/ie/index___breadcrumbs-search')}`,
-					to: ROUTES.search,
+					to: ROUTES_BY_LOCALE[locale].search,
 				},
 			])
 		);

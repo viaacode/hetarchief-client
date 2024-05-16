@@ -112,7 +112,7 @@ import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerA
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
-import { ROUTE_PARTS, ROUTES } from '@shared/const';
+import { ROUTE_PARTS, ROUTES_NL } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
@@ -666,7 +666,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			});
 			onCloseBlade();
 			await router.push(
-				ROUTES.visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
+				ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
 			);
 		} catch (err) {
 			console.error({
@@ -984,7 +984,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	// Metadata
 	const renderCard = (item: MediaObject, isHidden: boolean) => (
 		<li>
-			<Link passHref href={`${ROUTES.search}/${router.query.slug}/${item.id}`}>
+			<Link passHref href={`${ROUTES_BY_LOCALE[locale].search}/${router.query.slug}/${item.id}`}>
 				<a
 					tabIndex={isHidden ? -1 : 0}
 					className={`p-object-detail__metadata-card-link u-text-no-decoration`}
@@ -1003,12 +1003,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				: [
 						{
 							label: `${tText('pages/slug/ie/index___breadcrumbs-home')}`,
-							to: ROUTES.home,
+							to: ROUTES_BY_LOCALE[locale].home,
 						},
 				  ]),
 			{
 				label: `${tText('pages/slug/ie/index___breadcrumbs-search')}`,
-				to: ROUTES.search,
+				to: ROUTES_BY_LOCALE[locale].search,
 			},
 		];
 
@@ -1023,14 +1023,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 								{
 									label: mediaInfo?.maintainerName,
 									to: isKiosk
-										? ROUTES.search
-										: `${ROUTES.search}?${VisitorSpaceFilterId.Maintainer}=${mediaInfo?.maintainerSlug}`,
+										? ROUTES_BY_LOCALE[locale].search
+										: `${ROUTES_BY_LOCALE[locale].search}?${VisitorSpaceFilterId.Maintainer}=${mediaInfo?.maintainerSlug}`,
 								},
 						  ]
 						: []),
 					{
 						label: mediaInfo?.name,
-						to: `${ROUTES.search}/${mediaInfo?.maintainerSlug}/${mediaInfo?.schemaIdentifier}`,
+						to: `${ROUTES_BY_LOCALE[locale].search}/${mediaInfo?.maintainerSlug}/${mediaInfo?.schemaIdentifier}`,
 					},
 			  ]
 			: [];
@@ -1115,7 +1115,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 							onTagClicked={async () => {
 								await router.push(
 									stringifyUrl({
-										url: `/${ROUTE_PARTS.search}`,
+										url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 										query: {
 											[VisitorSpaceFilterId.Maintainers]: [
 												`${maintainerId}${FILTER_LABEL_VALUE_DELIMITER}${maintainerName}`,
@@ -1281,7 +1281,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 								),
 								data: renderKeywordsAsTags(
 									mediaInfo.keywords,
-									visitRequest ? (router.query.slug as string) : ''
+									visitRequest ? (router.query.slug as string) : '',
+									locale
 								),
 							},
 							{

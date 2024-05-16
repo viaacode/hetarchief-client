@@ -6,14 +6,14 @@ const _ = require('lodash');
 module.exports = {
 	getI18n: (proxyUrl) => {
 		return {
+			locales: ['nl', 'en'],
 			defaultLocale: 'nl',
-			locales: ['nl'],
 			backend: {
 				loadPath: `${proxyUrl}/translations/NL.json`,
 			},
 			i18n: {
+				locales: ['nl', 'en'],
 				defaultLocale: 'nl',
-				locales: ['nl'],
 				backend: {
 					loadPath: `${proxyUrl}/translations/NL.json`,
 				},

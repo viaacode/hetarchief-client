@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { Loading } from '@shared/components';
-import { ROUTE_PARTS } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -31,9 +31,9 @@ const IeObjectWithoutObjectNamePage: NextPage<MaintainerSearchPageProps> = () =>
 		if (ieObjectInfo || isError) {
 			const objectTitleSlug = kebabCase(ieObjectInfo?.name || '');
 			const searchUrl = stringifyUrl({
-				url: `/${ROUTE_PARTS.search}/${ieObjectInfo?.maintainerSlug || slug}/${objectId}/${
-					objectTitleSlug || 'titel'
-				}`,
+				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${
+					ieObjectInfo?.maintainerSlug || slug
+				}/${objectId}/${objectTitleSlug || 'titel'}`,
 			});
 			router.replace(searchUrl, undefined, { shallow: true });
 		}

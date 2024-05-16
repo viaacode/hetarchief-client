@@ -8,7 +8,7 @@ import { GroupName } from '@account/const';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { Loading } from '@shared/components';
-import { ROUTES } from '@shared/const';
+import { ROUTES_NL } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -48,7 +48,7 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 
 	useEffect(() => {
 		if (isKioskUser) {
-			router.replace(ROUTES.search);
+			router.replace(ROUTES_BY_LOCALE[locale].search);
 		}
 	}, [router, isKioskUser]);
 

@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { Loading } from '@shared/components';
-import { ROUTE_PARTS } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { useGetOrganisationBySlug } from '@visitor-space/hooks/get-organisation-by-slug';
@@ -34,7 +34,7 @@ const MaintainerSearchPage: NextPage<MaintainerSearchPageProps> = () => {
 	useEffect(() => {
 		if (organisation) {
 			const searchUrl = stringifyUrl({
-				url: `/${ROUTE_PARTS.search}`,
+				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 				query: {
 					[VisitorSpaceFilterId.Maintainers]: `${organisation.schemaIdentifier}${FILTER_LABEL_VALUE_DELIMITER}${organisation.schemaName}`,
 				},
@@ -47,7 +47,7 @@ const MaintainerSearchPage: NextPage<MaintainerSearchPageProps> = () => {
 	useEffect(() => {
 		if (ieObjectInfo) {
 			const searchUrl = stringifyUrl({
-				url: `/${ROUTE_PARTS.search}/${ieObjectInfo.maintainerSlug}/${
+				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${ieObjectInfo.maintainerSlug}/${
 					ieObjectInfo.schemaIdentifier
 				}/${kebabCase(ieObjectInfo.name)}`,
 			});

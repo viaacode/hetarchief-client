@@ -18,7 +18,7 @@ import {
 	VisitorSpaceCardProps,
 	VisitorSpaceCardType,
 } from '@shared/components';
-import { ROUTES } from '@shared/const';
+import { ROUTES_NL } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { tText } from '@shared/helpers/translate';
@@ -220,7 +220,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 			setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: undefined });
 			onCloseRequestBlade();
 			await router.push(
-				ROUTES.visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
+				ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
 			);
 		} catch (err) {
 			console.error({

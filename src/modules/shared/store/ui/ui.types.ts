@@ -9,6 +9,7 @@ export interface UIState {
 	showAuthModal: boolean;
 	isStickyLayout: boolean;
 	showMaterialRequestCenter: boolean;
+	showLanguageSelectionDropdown: boolean;
 	showNavigationHeaderRight: boolean;
 	showFooter: boolean;
 	showNotificationsCenter: boolean;

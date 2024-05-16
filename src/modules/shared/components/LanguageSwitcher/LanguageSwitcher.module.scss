@@ -1,0 +1,43 @@
+@use "sass:color";
+@use "src/styles/abstracts" as *;
+
+.c-language-switcher {
+	z-index: 3;
+	width: 4.8rem;
+
+	.c-language-switcher__select {
+		background: none;
+
+		> :global(.c-button) {
+			padding: 1.5rem 1.3rem;
+			background-color: transparent !important;
+			border: 0 !important;
+		}
+
+		&:global([class*="c-navigation__dropdown--open"]) {
+			> :global(.c-button) {
+				color: $teal;
+			}
+		}
+	}
+
+	:global(.c-dropdown__content-open) {
+		box-shadow: 0 0 2.2rem 0 rgb(0 0 0 / 20%);
+
+		:global(.c-menu) {
+			padding: 0;
+		}
+
+		:global(.c-button) {
+			padding: 1rem 1.5rem;
+			width: 100%;
+			border-radius: 0;
+			text-align: left;
+
+			&:global(:hover) {
+				background-color: $silver;
+				color: black;
+			}
+		}
+	}
+}
