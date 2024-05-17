@@ -13,10 +13,11 @@ import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { ErrorNotFound, Loading } from '@shared/components';
-import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
@@ -43,6 +44,7 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 	commonUser,
 }) => {
 	const router = useRouter();
+	const locale = useLocale();
 	const { slug } = router.query;
 	const dispatch = useDispatch();
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
@@ -84,12 +86,12 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 
 	useEffect(() => {
 		if (ieObjectInfo) {
-			const objectDetailPagePath = `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${
+			const objectDetailPagePath = `${ROUTES_BY_LOCALE[locale].search}/${
 				ieObjectInfo.maintainerSlug
 			}/${ieObjectInfo.schemaIdentifier}/${kebabCase(ieObjectInfo.name)}`;
 			window.open(objectDetailPagePath, '_self');
 		}
-	}, [ieObjectInfo]);
+	}, [ieObjectInfo, locale]);
 
 	useEffect(() => {
 		dispatch(setShowZendesk(!isKioskUser));

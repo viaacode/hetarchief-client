@@ -15,6 +15,7 @@ import { labelKeys, NEWSLETTER_FORM_SCHEMA } from '@shared/const/newsletter';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
@@ -30,6 +31,7 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	const { tText, tHtml } = useTranslation();
 	const router = useRouter();
+	const locale = useLocale();
 	const {
 		handleSubmit,
 		formState: { errors },
@@ -56,7 +58,7 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 		router.replace(
 			`/${ROUTE_PARTS_BY_LOCALE[locale].account}/${ROUTE_PARTS_BY_LOCALE[locale].myProfile}#${COMMUNICATION_SECTION_ID}`
 		);
-	}, [router, triggerRedirect]);
+	}, [locale, router, triggerRedirect]);
 
 	const onFormSubmit = async (values: NewsletterFormState): Promise<void> => {
 		try {

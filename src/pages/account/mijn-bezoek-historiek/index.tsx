@@ -19,10 +19,11 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { ErrorNoAccess, Loading, PaginationBar, sortingIcons } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { VisitDetailBlade } from '@shared/components/VisitDetailBlade';
-import { ROUTE_PARTS, ROUTES_NL } from '@shared/const';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { AccessStatus, Visit } from '@shared/types';
@@ -37,6 +38,7 @@ import { VisitorLayout } from 'modules/visitors';
 const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
+	const locale = useLocale();
 	const [filters, setFilters] = useQueryParams(ACCOUNT_HISTORY_QUERY_PARAM_CONFIG);
 	const [currentDetailVisit, setCurrentDetailVisit] = useState<Visit | null>(null);
 	const [isVisitDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
@@ -98,14 +100,16 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 			switch (response?.status) {
 				case AccessStatus.ACCESS:
 					router.push(
-						`/${ROUTE_PARTS_BY_LOCALE[locale].search}?${VisitorSpaceFilterId.Maintainer}=${visit.spaceSlug}`
+						`${ROUTES_BY_LOCALE[locale].search}?${VisitorSpaceFilterId.Maintainer}=${visit.spaceSlug}`
 					);
 					break;
 				case AccessStatus.PENDING:
-					router.push(ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', visit.spaceSlug));
+					router.push(
+						ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', visit.spaceSlug)
+					);
 					break;
 				default:
-					router.push(createVisitorSpacesWithFilterUrl(visit));
+					router.push(createVisitorSpacesWithFilterUrl(visit, locale));
 					break;
 			}
 		} catch (err) {
@@ -117,7 +121,7 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 					'pages/account/mijn-bezoek-historiek/index___het-controleren-van-je-toegang-tot-deze-bezoekersruimte-is-mislukt'
 				),
 			});
-			router.push(createVisitorSpacesWithFilterUrl(visit));
+			router.push(createVisitorSpacesWithFilterUrl(visit, locale));
 		}
 	};
 

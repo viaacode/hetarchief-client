@@ -19,7 +19,11 @@ import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';
 import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
-import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
+import {
+	GET_NAV_ITEMS_RIGHT,
+	GET_NAV_ITEMS_RIGHT_LOGGED_IN,
+	NAV_HAMBURGER_PROPS,
+} from '@navigation/const';
 import { NavigationPlacement } from '@navigation/services/navigation-service';
 import {
 	AlertIconNames,
@@ -40,6 +44,7 @@ import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSize } from '@shared/hooks/use-window-size';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import { useAppDispatch } from '@shared/store';
@@ -76,7 +81,6 @@ const AppLayout: FC<any> = ({ children }) => {
 	const queryClient = useQueryClient();
 	const router = useRouter();
 	const locale = useLocale();
-	const { asPath } = useRouter();
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const user = useSelector(selectUser);
@@ -156,14 +160,14 @@ const AppLayout: FC<any> = ({ children }) => {
 		return spaces?.items || [];
 	}, [isKioskOrAnonymous, spaces, user]);
 
-	const [isLoaded, setIsloaded] = useState(false);
+	const [isLoaded, setIsLoaded] = useState(false);
 
 	useEffect(() => {
 		// ARC-2011: small timeout so login is not shown before user is checked
 		// If this gives issues in the future, we might want to look into replacing this timeout with
 		// selectHasCheckedLogin from the redux store
 		setTimeout(() => {
-			setIsloaded(true);
+			setIsLoaded(true);
 		}, 300);
 	}, []);
 
@@ -175,11 +179,16 @@ const AppLayout: FC<any> = ({ children }) => {
 	useEffect(() => {
 		if (router && user) {
 			NotificationsService.setQueryClient(queryClient);
-			NotificationsService.initPolling(router, setNotificationsOpen, setUnreadNotifications);
+			NotificationsService.initPolling(
+				router,
+				setNotificationsOpen,
+				setUnreadNotifications,
+				locale
+			);
 		} else {
 			NotificationsService.stopPolling();
 		}
-	}, [queryClient, router, user, setNotificationsOpen, setUnreadNotifications]);
+	}, [queryClient, router, user, setNotificationsOpen, setUnreadNotifications, locale]);
 
 	useEffect(() => {
 		dispatch(checkLoginAction());
@@ -244,11 +253,12 @@ const AppLayout: FC<any> = ({ children }) => {
 				return [];
 			}
 
-			return NAV_ITEMS_RIGHT_LOGGED_IN(
-				asPath,
+			return GET_NAV_ITEMS_RIGHT_LOGGED_IN(
+				router.asPath,
 				navigationItems || {},
 				accessibleVisitorSpaces || [],
 				showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
+				locale,
 				{
 					hasUnreadNotifications,
 					notificationsOpen: showNotificationsCenter,
@@ -259,16 +269,17 @@ const AppLayout: FC<any> = ({ children }) => {
 			);
 		}
 
-		return NAV_ITEMS_RIGHT(onLoginRegisterClick);
+		return GET_NAV_ITEMS_RIGHT(onLoginRegisterClick);
 	}, [
-		onLoginRegisterClick,
 		isLoggedIn,
+		onLoginRegisterClick,
 		canManageAccount,
-		asPath,
+		router.asPath,
 		navigationItems,
 		accessibleVisitorSpaces,
 		showLinkedSpaceAsHomepage,
 		linkedSpaceSlug,
+		locale,
 		hasUnreadNotifications,
 		showNotificationsCenter,
 		userName,
@@ -278,7 +289,7 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	const leftNavItems: NavigationItem[] = useMemo(() => {
 		const dynamicItems = getNavigationItemsLeft(
-			asPath,
+			router.asPath,
 			accessibleVisitorSpaces || [],
 			navigationItems || {},
 			user?.permissions || [],
@@ -321,7 +332,7 @@ const AppLayout: FC<any> = ({ children }) => {
 
 		return [...staticItems, ...dynamicItems];
 	}, [
-		asPath,
+		router.asPath,
 		accessibleVisitorSpaces,
 		navigationItems,
 		user?.permissions,
@@ -331,6 +342,7 @@ const AppLayout: FC<any> = ({ children }) => {
 		isMobile,
 		visitorSpaces,
 		isMeemooAdmin,
+		locale,
 		isLoggedIn,
 	]);
 
@@ -415,7 +427,7 @@ const AppLayout: FC<any> = ({ children }) => {
 					</div>
 				)}
 				<Navigation.Left
-					currentPath={asPath}
+					currentPath={router.asPath}
 					hamburgerProps={NAV_HAMBURGER_PROPS()}
 					items={leftNavItems}
 					placement="left"
@@ -424,7 +436,7 @@ const AppLayout: FC<any> = ({ children }) => {
 				/>
 				{isLoaded && showNavigationHeaderRight && (
 					<Navigation.Right
-						currentPath={asPath}
+						currentPath={router.asPath}
 						placement="right"
 						items={rightNavItems}
 						onOpenDropdowns={onOpenNavDropdowns}

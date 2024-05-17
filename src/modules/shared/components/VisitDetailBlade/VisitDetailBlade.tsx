@@ -9,8 +9,9 @@ import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { Blade } from '@shared/components';
-import { ROUTES_NL } from '@shared/const';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { asDate, formatMediumDateWithTime } from '@shared/utils';
@@ -21,6 +22,7 @@ import styles from './VisitDetailBlade.module.scss';
 const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit }) => {
 	const { tText } = useTranslation();
 	const router = useRouter();
+	const locale = useLocale();
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
@@ -57,7 +59,10 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 
 			setIsRequestAccessBladeOpen(false);
 			await router.push(
-				ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
+				ROUTES_BY_LOCALE[locale].visitRequested.replace(
+					':slug',
+					createdVisitRequest.spaceSlug
+				)
 			);
 		} catch (err) {
 			console.error({

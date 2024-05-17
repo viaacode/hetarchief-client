@@ -5,11 +5,11 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { AdminVisitorSpaceInfoRow } from '@admin/types';
 import { DropdownMenu, Icon, IconNamesLight } from '@shared/components';
-import { ROUTES_NL } from '@shared/const';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { asDate, formatMediumDate } from '@shared/utils';
+import { asDate, formatMediumDate, Locale } from '@shared/utils';
 import { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
 
 export const VisitorSpacesOverviewTablePageSize = 20;
@@ -25,7 +25,8 @@ export const ADMIN_VISITOR_SPACES_OVERVIEW_QUERY_PARAM_CONFIG = {
 export const VisitorSpacesOverviewTableColumns = (
 	updateVisitorSpaceState: (roomId: string, state: VisitorSpaceStatus) => void,
 	showEditButton = false,
-	showStatusDropdown = false
+	showStatusDropdown = false,
+	locale: Locale
 ): Column<VisitorSpaceInfo>[] => [
 	{
 		Header: tText('modules/admin/const/spaces___bezoekersruimte'),
@@ -110,7 +111,10 @@ export const VisitorSpacesOverviewTableColumns = (
 				<>
 					{showEditButton && (
 						<Link
-							href={`${ROUTES_BY_LOCALE[locale].adminEditSpace.replace(':slug', row.original.slug)}`}
+							href={`${ROUTES_BY_LOCALE[locale].adminEditSpace.replace(
+								':slug',
+								row.original.slug
+							)}`}
 							passHref={true}
 						>
 							<a

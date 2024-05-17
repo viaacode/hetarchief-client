@@ -31,6 +31,7 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { DefaultSeoInfo } from '@shared/types/seo';
@@ -42,6 +43,7 @@ import { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '@v
 const VisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
+	const locale = useLocale();
 
 	const showCreateButton = useHasAllPermission(Permission.CREATE_SPACES);
 	const showEditButton = useHasAllPermission(Permission.UPDATE_ALL_SPACES);
@@ -198,7 +200,8 @@ const VisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 					columns: VisitorSpacesOverviewTableColumns(
 						updateRoomStatus,
 						showEditButton,
-						showStatusDropdown
+						showStatusDropdown,
+						locale
 					),
 					data: visitorSpaces?.items || [],
 					initialState: {

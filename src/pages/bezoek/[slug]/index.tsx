@@ -10,8 +10,9 @@ import { selectIsLoggedIn } from '@auth/store/user';
 import { ErrorNoAccessToObject, ErrorNotFound, Loading } from '@shared/components';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
 import { NextRedirect } from '@shared/components/Redirect/Redirect.tsx';
-import { ROUTES_NL } from '@shared/const';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { AccessStatus } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
@@ -32,6 +33,7 @@ type VisitPageProps = {
 const VisitPage: NextPage<VisitPageProps> = () => {
 	const { tText } = useTranslation();
 	const router = useRouter();
+	const locale = useLocale();
 	const { slug } = router.query;
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 
@@ -98,7 +100,10 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 						<>
 							{renderLoading()}
 							<NextRedirect
-								to={ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', slug as string)}
+								to={ROUTES_BY_LOCALE[locale].visitRequested.replace(
+									':slug',
+									slug as string
+								)}
 								method="replace"
 							/>
 						</>

@@ -36,13 +36,14 @@ import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard/MediaCard.consts'
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { ShareFolderBlade } from '@shared/components/ShareFolderBlade';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
-import { ROUTE_PARTS, ROUTES_NL } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
@@ -65,6 +66,7 @@ const labelKeys = {
 const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
+	const locale = useLocale();
 	const dispatch = useDispatch();
 	const { folderSlug } = router.query;
 
@@ -117,7 +119,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 					active: decodeURIComponent(slug) === folderSlug,
 				};
 			}),
-		[folders, folderSlug]
+		[folders?.items, locale, folderSlug]
 	);
 
 	const activeFolder = useMemo(() => sidebarLinks.find((link) => link.active), [sidebarLinks]);
@@ -571,7 +573,8 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 														getShowLocallyAvailableLabel(media),
 													showPlanVisitButtons:
 														getShowPlanVisitButtons(media),
-													previousPage: ROUTES_BY_LOCALE[locale].myFolders,
+													previousPage:
+														ROUTES_BY_LOCALE[locale].myFolders,
 													link: link,
 												};
 

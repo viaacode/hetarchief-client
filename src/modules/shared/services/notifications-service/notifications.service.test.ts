@@ -3,6 +3,7 @@ import { jest } from '@jest/globals';
 
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import { toastService } from '@shared/services/toast-service';
+import { Locale } from '@shared/utils';
 
 const oldDate = '2022-05-03T16:30:39.70604+00:00';
 const newDate = '2022-05-04T16:30:48.824352+00:00';
@@ -56,7 +57,8 @@ describe('NotificationService', () => {
 			await NotificationsService.initPolling(
 				null as any,
 				null as any,
-				mockSetHasUnreadNotifications
+				mockSetHasUnreadNotifications,
+				Locale.nl
 			);
 			const mockGetNotifications = jest.fn();
 			(mockGetNotifications.mockResolvedValueOnce as any)({
@@ -70,7 +72,7 @@ describe('NotificationService', () => {
 			const mockedNotifyFunc = jest.fn();
 			toastService.notify = mockedNotifyFunc as any;
 
-			await NotificationsService.checkNotifications();
+			await NotificationsService.checkNotifications(Locale.nl);
 
 			expect(mockedNotifyFunc).toBeCalledTimes(0);
 
@@ -82,7 +84,8 @@ describe('NotificationService', () => {
 			await NotificationsService.initPolling(
 				null as any,
 				null as any,
-				mockSetHasUnreadNotifications
+				mockSetHasUnreadNotifications,
+				Locale.nl
 			);
 			const mockGetNotifications = jest.fn();
 			(mockGetNotifications.mockResolvedValueOnce as any)({
@@ -96,7 +99,7 @@ describe('NotificationService', () => {
 			const mockedNotifyFunc = jest.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
-			await NotificationsService.checkNotifications();
+			await NotificationsService.checkNotifications(Locale.nl);
 
 			expect(mockedNotifyFunc).toBeCalledTimes(0);
 
@@ -108,7 +111,8 @@ describe('NotificationService', () => {
 			await NotificationsService.initPolling(
 				null as any,
 				null as any,
-				mockSetHasUnreadNotifications
+				mockSetHasUnreadNotifications,
+				Locale.nl
 			);
 
 			const mockGetNotifications = jest.fn();
@@ -123,7 +127,7 @@ describe('NotificationService', () => {
 			const mockedNotifyFunc = jest.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
-			await NotificationsService.checkNotifications();
+			await NotificationsService.checkNotifications(Locale.nl);
 
 			expect(mockedNotifyFunc).toBeCalledTimes(0);
 
@@ -135,7 +139,8 @@ describe('NotificationService', () => {
 			await NotificationsService.initPolling(
 				null as any,
 				null as any,
-				mockSetHasUnreadNotifications
+				mockSetHasUnreadNotifications,
+				Locale.nl
 			);
 
 			const mockGetNotifications = jest.fn();
@@ -150,7 +155,7 @@ describe('NotificationService', () => {
 			const mockedNotifyFunc = jest.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
-			await NotificationsService.checkNotifications();
+			await NotificationsService.checkNotifications(Locale.nl);
 
 			expect(mockedNotifyFunc).toBeCalledTimes(0);
 
@@ -162,7 +167,8 @@ describe('NotificationService', () => {
 			await NotificationsService.initPolling(
 				null as any,
 				null as any,
-				mockSetHasUnreadNotifications
+				mockSetHasUnreadNotifications,
+				Locale.nl
 			);
 
 			const mockGetNotifications = jest.fn();
@@ -185,12 +191,12 @@ describe('NotificationService', () => {
 			toastService.notify = mockedNotifyFunc;
 
 			// Initial fetch
-			await NotificationsService.checkNotifications();
+			await NotificationsService.checkNotifications(Locale.nl);
 
 			expect(mockedNotifyFunc).toBeCalledTimes(0);
 
 			// Next fetch
-			await NotificationsService.checkNotifications();
+			await NotificationsService.checkNotifications(Locale.nl);
 
 			expect(mockedNotifyFunc).toBeCalledTimes(1);
 			expect(mockedNotifyFunc).toBeCalledWith(
@@ -209,7 +215,8 @@ describe('NotificationService', () => {
 			await NotificationsService.initPolling(
 				null as any,
 				null as any,
-				mockSetHasUnreadNotifications
+				mockSetHasUnreadNotifications,
+				Locale.nl
 			);
 
 			const mockGetNotifications = jest.fn();
@@ -237,12 +244,12 @@ describe('NotificationService', () => {
 			toastService.notify = mockedNotifyFunc;
 
 			// Initial fetch
-			await NotificationsService.checkNotifications();
+			await NotificationsService.checkNotifications(Locale.nl);
 
 			expect(mockedNotifyFunc).toBeCalledTimes(0);
 
 			// Next fetch
-			await NotificationsService.checkNotifications();
+			await NotificationsService.checkNotifications(Locale.nl);
 
 			expect(mockedNotifyFunc).toBeCalledTimes(1);
 			expect(mockedNotifyFunc).toBeCalledWith(
@@ -262,7 +269,8 @@ describe('NotificationService', () => {
 			await NotificationsService.initPolling(
 				null as any,
 				null as any,
-				mockSetHasUnreadNotifications
+				mockSetHasUnreadNotifications,
+				Locale.nl
 			);
 
 			const mockGetNotifications = jest.fn();
@@ -285,12 +293,12 @@ describe('NotificationService', () => {
 			toastService.notify = mockedNotifyFunc;
 
 			// Initial fetch
-			await NotificationsService.checkNotifications();
+			await NotificationsService.checkNotifications(Locale.nl);
 
 			expect(mockedNotifyFunc).toBeCalledTimes(0);
 
 			// Next fetch
-			await NotificationsService.checkNotifications();
+			await NotificationsService.checkNotifications(Locale.nl);
 
 			expect(mockedNotifyFunc).toBeCalledTimes(0);
 
@@ -302,7 +310,8 @@ describe('NotificationService', () => {
 			await NotificationsService.initPolling(
 				null as any,
 				null as any,
-				mockSetHasUnreadNotifications
+				mockSetHasUnreadNotifications,
+				Locale.nl
 			);
 
 			const mockGetNotifications = jest.fn();
@@ -333,12 +342,12 @@ describe('NotificationService', () => {
 			toastService.notify = mockedNotifyFunc;
 
 			// Initial fetch
-			await NotificationsService.checkNotifications();
+			await NotificationsService.checkNotifications(Locale.nl);
 
 			expect(mockedNotifyFunc).toBeCalledTimes(0);
 
 			// Next fetch
-			await NotificationsService.checkNotifications();
+			await NotificationsService.checkNotifications(Locale.nl);
 
 			expect(mockedNotifyFunc).toBeCalledTimes(0);
 

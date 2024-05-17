@@ -8,10 +8,11 @@ import { GroupName } from '@account/const';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { Loading } from '@shared/components';
-import { ROUTES_NL } from '@shared/const';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -35,6 +36,7 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 }) => {
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const router = useRouter();
+	const locale = useLocale();
 
 	/**
 	 * Data
@@ -50,7 +52,7 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 		if (isKioskUser) {
 			router.replace(ROUTES_BY_LOCALE[locale].search);
 		}
-	}, [router, isKioskUser]);
+	}, [router, isKioskUser, locale]);
 
 	/**
 	 * Render

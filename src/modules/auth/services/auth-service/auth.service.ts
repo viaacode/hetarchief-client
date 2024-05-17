@@ -5,7 +5,7 @@ import getConfig from 'next/config';
 import { NextRouter } from 'next/router';
 import { parseUrl, StringifiableRecord, stringifyUrl } from 'query-string';
 
-import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { ApiService } from '@shared/services/api-service';
 import { isBrowser, Locale } from '@shared/utils';
@@ -38,7 +38,9 @@ export class AuthService {
 			// TODO split backend filter names (VisitorSpaceFilterId) from filter names in the url (create a new enum for those)
 			originalPath = `/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${slug}`;
 		}
-		if ((originalPath || '') === ROUTES_BY_LOCALE[locale].home) {
+		if (
+			(originalPath || '') === ROUTES_BY_LOCALE[(router.locale || Locale.nl) as Locale].home
+		) {
 			originalPath = `/${ROUTE_PARTS.visit}`;
 		}
 

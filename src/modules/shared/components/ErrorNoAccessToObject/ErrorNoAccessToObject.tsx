@@ -8,9 +8,10 @@ import { GroupName } from '@account/const';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { ErrorPage } from '@shared/components';
-import { ROUTES_NL } from '@shared/const';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { setShowAuthModal } from '@shared/store/ui';
@@ -30,6 +31,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 }) => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
+	const locale = useLocale();
 	const dispatch = useDispatch();
 	const isAnonymous = useHasAnyGroup(GroupName.ANONYMOUS);
 
@@ -52,7 +54,10 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 
 			setIsRequestAccessBladeOpen(false);
 			await router.push(
-				ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
+				ROUTES_BY_LOCALE[locale].visitRequested.replace(
+					':slug',
+					createdVisitRequest.spaceSlug
+				)
 			);
 		} catch (err) {
 			console.error({

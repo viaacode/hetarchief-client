@@ -23,6 +23,7 @@ import {
 } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.helpers';
 import { OPTIONAL_LABEL, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { AccessType, Visit, VisitStatus } from '@shared/types';
@@ -57,6 +58,7 @@ const defaultAccessType = {
 
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const { tHtml, tText } = useTranslation();
+	const locale = useLocale();
 	const canViewAddVisitRequests: boolean = useHasAnyPermission(
 		Permission.MANAGE_ALL_VISIT_REQUESTS
 	);
@@ -265,7 +267,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const onChangeAccessType = useCallback(
 		(
-			field: ControllerRenderProps<ApproveRequestFormState, 'accessType'>,
+			_field: ControllerRenderProps<ApproveRequestFormState, 'accessType'>,
 			selectedOption: AccessType,
 			selectedRefineOptions: string[]
 		): void => {
@@ -434,6 +436,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		[getAccessTypeOptions, onChangeAccessType]
 	);
 
+	const ROUTE_PARTS = ROUTE_PARTS_BY_LOCALE[locale];
 	return (
 		<Blade
 			{...props}
@@ -499,8 +502,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 							<Link
 								href={
 									canViewAddVisitRequests
-										? `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaceManagement}/${ROUTE_PARTS_BY_LOCALE[locale].visitRequests}?${ROUTE_PARTS_BY_LOCALE[locale].visitRequest}=${overlappingRequests[0].id}`
-										: `/${ROUTE_PARTS_BY_LOCALE[locale].beheer}/${ROUTE_PARTS_BY_LOCALE[locale].visitRequests}?${ROUTE_PARTS_BY_LOCALE[locale].visitRequest}=${overlappingRequests[0].id}`
+										? `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitRequests}?${ROUTE_PARTS.visitRequest}=${overlappingRequests[0].id}`
+										: `/${ROUTE_PARTS.cpAdmin}/${ROUTE_PARTS.visitRequests}?${ROUTE_PARTS.visitRequest}=${overlappingRequests[0].id}`
 								}
 								passHref
 							>

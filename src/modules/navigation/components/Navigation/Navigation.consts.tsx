@@ -293,7 +293,7 @@ const getCpAdminManagementDropdown = (
 		{
 			node: renderLink(
 				tText('modules/navigation/components/navigation/navigation___beheer'),
-				isMobile ? ROUTES_BY_LOCALE[locale].cpAdminRequests : '',
+				isMobile ? ROUTES_BY_LOCALE[locale].cpAdminVisitRequests : '',
 				{
 					className: linkClasses,
 				}
@@ -309,7 +309,7 @@ const getCpAdminManagementDropdown = (
 									tText(
 										'modules/navigation/components/navigation/navigation___aanvragen'
 									),
-									ROUTES_BY_LOCALE[locale].cpAdminRequests,
+									ROUTES_BY_LOCALE[locale].cpAdminVisitRequests,
 									{
 										className: dropdownCls(),
 									}
@@ -317,7 +317,7 @@ const getCpAdminManagementDropdown = (
 								id: 'nav__beheer--aanvragen',
 								path: currentPath,
 								activeMobile: currentPath.startsWith(
-									ROUTES_BY_LOCALE[locale].cpAdminRequests
+									ROUTES_BY_LOCALE[locale].cpAdminVisitRequests
 								),
 							},
 					  ]

@@ -8,6 +8,7 @@ import { Icon, IconNamesLight, IconNamesSolid } from '@shared/components';
 import LanguageSwitcher from '@shared/components/LanguageSwitcher/LanguageSwitcher';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
+import { Locale } from '@shared/utils';
 import { VisitorSpaceInfo } from '@visitor-space/types';
 
 import { NavigationHamburgerProps, NavigationItem, NavigationLink } from '../components';
@@ -26,7 +27,7 @@ const getLanguageSwitcher = () => {
 	};
 };
 
-export const NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationItem[] => {
+export const GET_NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationItem[] => {
 	return [
 		getLanguageSwitcher(),
 		{
@@ -47,11 +48,12 @@ export const NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationIte
 	];
 };
 
-export const NAV_ITEMS_RIGHT_LOGGED_IN = (
+export const GET_NAV_ITEMS_RIGHT_LOGGED_IN = (
 	currentPath: string,
 	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
 	linkedSpaceSlug: string | null,
+	locale: Locale,
 	{
 		hasUnreadNotifications,
 		notificationsOpen,
@@ -103,7 +105,8 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = (
 					currentPath,
 					navigationItems,
 					accessibleVisitorSpaces,
-					linkedSpaceSlug
+					linkedSpaceSlug,
+					locale
 				),
 				{
 					id: 'log-out',

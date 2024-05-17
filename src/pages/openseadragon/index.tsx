@@ -114,7 +114,7 @@ import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerA
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
-import { ROUTE_PARTS, ROUTES_NL } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
@@ -126,6 +126,7 @@ import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
@@ -180,6 +181,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	 */
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
+	const locale = useLocale();
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
@@ -777,7 +779,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			});
 			onCloseBlade();
 			await router.push(
-				ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
+				ROUTES_BY_LOCALE[locale].visitRequested.replace(
+					':slug',
+					createdVisitRequest.spaceSlug
+				)
 			);
 		} catch (err) {
 			console.error({
@@ -1324,7 +1329,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	// Metadata
 	const renderCard = (item: MediaObject, isHidden: boolean) => (
 		<li>
-			<Link passHref href={`${ROUTES_BY_LOCALE[locale].search}/${router.query.slug}/${item.id}`}>
+			<Link
+				passHref
+				href={`${ROUTES_BY_LOCALE[locale].search}/${router.query.slug}/${item.id}`}
+			>
 				<a
 					tabIndex={isHidden ? -1 : 0}
 					className={`p-object-detail__metadata-card-link u-text-no-decoration`}

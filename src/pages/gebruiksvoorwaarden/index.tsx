@@ -16,11 +16,12 @@ import { useQueryParams } from 'use-query-params';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { AuthService } from '@auth/services/auth-service';
 import { selectUser } from '@auth/store/user';
-import { KNOWN_STATIC_ROUTES, TOS_INDEX_QUERY_PARAM_CONFIG } from '@shared/const';
+import { GET_TOS_INDEX_QUERY_PARAM_CONFIG, KNOWN_STATIC_ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
 import { useTermsOfService } from '@shared/hooks/use-terms-of-service';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -38,10 +39,11 @@ const TermsOfService: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser 
 
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
+	const locale = useLocale();
 	const scrollable = useRef<HTMLDivElement | null>(null);
 	const dispatch = useDispatch();
 
-	const [query] = useQueryParams(TOS_INDEX_QUERY_PARAM_CONFIG);
+	const [query] = useQueryParams(GET_TOS_INDEX_QUERY_PARAM_CONFIG(locale));
 	const [hasFinished, setHasFinished] = useState(false);
 	const [isAtBottom, setIsAtBottom] = useState(false);
 	const tosAccepted = useTermsOfService();

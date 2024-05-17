@@ -6,20 +6,22 @@ import { GetServerSidePropsContext } from 'next/types';
 import React, { ComponentType, FC } from 'react';
 
 import { Permission } from '@account/const';
-import { CONTENT_PATH } from '@admin/const/Routing.const';
 import { AdminLayout } from '@admin/layouts';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { ADMIN_CORE_ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageOverviewPage: FC<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
 	const { tText } = useTranslation();
+	const locale = useLocale();
 	const canCreateContentPages = useHasAllPermission(Permission.CREATE_CONTENT_PAGES) || true; // TODO remove once permission is added to the database
 
 	const renderPageContent = () => {
@@ -30,7 +32,13 @@ const ContentPageOverviewPage: FC<DefaultSeoInfo & UserProps> = ({ url, commonUs
 			>
 				<AdminLayout.Actions>
 					{canCreateContentPages && (
-						<Link href={CONTENT_PATH.CONTENT_PAGE_CREATE} passHref>
+						<Link
+							href={
+								ADMIN_CORE_ROUTES_BY_LOCALE[locale]
+									.ADMIN_CONTENT_PAGE_CREATE as string
+							}
+							passHref
+						>
 							<a
 								aria-label={tText(
 									'admin/content/views/content-overview___maak-een-nieuwe-content-pagina-aan'

@@ -5,8 +5,9 @@ import { ComponentType, useCallback, useEffect, useState } from 'react';
 import { GroupName } from '@account/const';
 import { AuthMessage, AuthService } from '@auth/services/auth-service';
 import Loading from '@shared/components/Loading/Loading';
-import { ROUTES_NL } from '@shared/const';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { TosService } from '@shared/services/tos-service';
 import { isCurrentTosAccepted } from '@shared/utils';
 
@@ -28,6 +29,7 @@ export const withAuth = (
 ): ComponentType => {
 	return function ComponentWithAuth(props: Record<string, unknown>) {
 		const router = useRouter();
+		const locale = useLocale();
 		const [showPage, setShowPage] = useState<boolean>(false);
 
 		const checkLoginStatus = useCallback(async (): Promise<void> => {
@@ -39,7 +41,9 @@ export const withAuth = (
 			};
 
 			const toTermsOfService = async () => {
-				return router.replace(`${ROUTES_BY_LOCALE[locale].termsOfService}?${stringify(params)}`);
+				return router.replace(
+					`${ROUTES_BY_LOCALE[locale].termsOfService}?${stringify(params)}`
+				);
 			};
 
 			const toHome = async () => {

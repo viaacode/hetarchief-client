@@ -18,11 +18,12 @@ import {
 	VisitorSpaceCardProps,
 	VisitorSpaceCardType,
 } from '@shared/components';
-import { ROUTES_NL } from '@shared/const';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { tText } from '@shared/helpers/translate';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
@@ -43,6 +44,7 @@ type SelectedVisit = ProcessVisitBladeProps['selected'];
 const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml } = useTranslation();
 	const router = useRouter();
+	const locale = useLocale();
 	const searchRef = useRef<HTMLDivElement>(null);
 
 	const [query, setQuery] = useQueryParams({
@@ -220,7 +222,10 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 			setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: undefined });
 			onCloseRequestBlade();
 			await router.push(
-				ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
+				ROUTES_BY_LOCALE[locale].visitRequested.replace(
+					':slug',
+					createdVisitRequest.spaceSlug
+				)
 			);
 		} catch (err) {
 			console.error({

@@ -65,7 +65,7 @@ const AdminLayout: AdminLayoutComponent = ({
 					</Link>
 				),
 				active: shouldBeActive(asPath, href),
-				children: children?.().map(({ id, label, href }) => ({
+				children: children?.(locale).map(({ id, label, href }) => ({
 					id,
 					node: ({ linkClassName }) => (
 						<Link href={href}>
@@ -77,7 +77,7 @@ const AdminLayout: AdminLayoutComponent = ({
 					active: shouldBeActive(asPath, href),
 				})),
 			})),
-		[asPath]
+		[asPath, locale]
 	);
 
 	return (

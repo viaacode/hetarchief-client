@@ -16,7 +16,7 @@ export const CP_ADMIN_NAVIGATION_LINKS = (
 	{
 		id: 'requests',
 		label: tText('modules/cp/const/index___toegangsaanvragen'),
-		href: ROUTES_BY_LOCALE[locale].cpAdminRequests,
+		href: ROUTES_BY_LOCALE[locale].cpAdminVisitRequests,
 	},
 	{
 		id: 'material-requests',

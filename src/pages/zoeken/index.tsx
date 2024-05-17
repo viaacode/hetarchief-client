@@ -3,10 +3,11 @@ import { ComponentType, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { withAuth } from '@auth/wrappers/with-auth';
-import { ROUTES_NL } from '@shared/const';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { tText } from '@shared/helpers/translate';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { setBreadcrumbs } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { SearchPage } from '@visitor-space/components';
@@ -15,6 +16,7 @@ type SearchPageProps = DefaultSeoInfo;
 
 const Search: NextPage<SearchPageProps> = ({ url }) => {
 	const dispatch = useDispatch();
+	const locale = useLocale();
 
 	useEffect(() => {
 		dispatch(
@@ -29,7 +31,7 @@ const Search: NextPage<SearchPageProps> = ({ url }) => {
 				},
 			])
 		);
-	}, [dispatch]);
+	}, [dispatch, locale]);
 
 	const renderPageContent = () => {
 		return <SearchPage />;

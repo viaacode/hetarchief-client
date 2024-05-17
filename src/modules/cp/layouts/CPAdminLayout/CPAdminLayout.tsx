@@ -54,7 +54,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 					active: asPath.includes(url),
 				};
 			}),
-		[asPath, user?.visitorSpaceSlug]
+		[asPath, locale, user?.visitorSpaceSlug]
 	);
 
 	useEffect(() => {

@@ -1,7 +1,8 @@
 import { FC } from 'react';
 
 import Html from '@shared/components/Html/Html';
-import { ROUTES_NL } from '@shared/const';
+import { ROUTES_BY_LOCALE } from '@shared/const';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { CardImage } from '../../../shared/components';
@@ -11,6 +12,7 @@ import { WaitingPageProps } from './WaitingPage.types';
 
 const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 	const { tHtml } = useTranslation();
+	const locale = useLocale();
 
 	const renderPageContent = () => {
 		return (

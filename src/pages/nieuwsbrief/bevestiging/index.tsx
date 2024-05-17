@@ -4,10 +4,11 @@ import { GetServerSidePropsContext } from 'next/types';
 import { useEffect, useState } from 'react';
 
 import { Loading } from '@shared/components';
-import { ROUTES_NL } from '@shared/const';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { DefaultSeoInfo } from '@shared/types/seo';
@@ -17,6 +18,7 @@ const NewsletterConfirmation: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	const { tText, tHtml } = useTranslation();
 	const router = useRouter();
+	const locale = useLocale();
 
 	const [triggerRedirect, setTriggerRedirect] = useState(false);
 
@@ -40,7 +42,7 @@ const NewsletterConfirmation: NextPage<DefaultSeoInfo> = ({ url }) => {
 		}
 
 		router.replace(`/${ROUTES_BY_LOCALE[locale].home}`);
-	}, [router, triggerRedirect]);
+	}, [locale, router, triggerRedirect]);
 
 	return (
 		<div className="p-newsletter-confirmation">

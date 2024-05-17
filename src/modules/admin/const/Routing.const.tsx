@@ -6,7 +6,7 @@ export interface AdminNavigationLink {
 	id: string;
 	label: string;
 	href: string;
-	children?: () => AdminNavigationLink[];
+	children?: (locale: Locale) => AdminNavigationLink[];
 }
 
 export const ADMIN_NAVIGATION_LINKS = (locale: Locale): AdminNavigationLink[] => [
@@ -14,7 +14,7 @@ export const ADMIN_NAVIGATION_LINKS = (locale: Locale): AdminNavigationLink[] =>
 		id: 'spaces-admin',
 		label: tText('modules/admin/const/routing___bezoekersruimtesbeheer'),
 		href: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaceManagement}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaces}`,
-		children: ADMIN_SPACES_LINKS,
+		children: GET_ADMIN_SPACES_LINKS,
 	},
 	{
 		id: 'content-pages-admin',
@@ -40,7 +40,7 @@ export const ADMIN_NAVIGATION_LINKS = (locale: Locale): AdminNavigationLink[] =>
 		id: 'users-admin',
 		label: tText('modules/admin/const/routing___gebruikersbeheer'),
 		href: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].userManagement}/${ROUTE_PARTS_BY_LOCALE[locale].users}`,
-		children: ADMIN_USERS_LINKS,
+		children: GET_ADMIN_USERS_LINKS,
 	},
 	{
 		id: 'material-requests',
@@ -54,7 +54,7 @@ export const ADMIN_NAVIGATION_LINKS = (locale: Locale): AdminNavigationLink[] =>
 	},
 ];
 
-export const ADMIN_SPACES_LINKS = (): AdminNavigationLink[] => [
+export const GET_ADMIN_SPACES_LINKS = (locale: Locale): AdminNavigationLink[] => [
 	{
 		id: 'spaces',
 		label: tText('modules/admin/const/routing___alle-bezoekersruimtes'),
@@ -72,20 +72,7 @@ export const ADMIN_SPACES_LINKS = (): AdminNavigationLink[] => [
 	},
 ];
 
-export const CONTENT_PATH = {
-	CONTENT_PAGE_OVERVIEW: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].content}`,
-	CONTENT_PAGE_CREATE: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].content}/${ROUTE_PARTS_BY_LOCALE[locale].create}`,
-	CONTENT_PAGE_DETAIL: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].content}/:id`,
-	CONTENT_PAGE_EDIT: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].content}/:id/${ROUTE_PARTS_BY_LOCALE[locale].edit}`,
-	PAGES: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].content}?content_type=PAGINA`,
-	NEWS: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].content}?content_type=NIEUWS_ITEM`,
-	FAQS: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].content}?content_type=FAQ_ITEM`,
-	SCREENCASTS: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].content}?content_type=SCREENCAST`,
-	PROJECTS: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].content}?content_type=PROJECT`,
-	OVERVIEWS: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].content}?content_type=OVERZICHT`,
-};
-
-export const ADMIN_USERS_LINKS = (): AdminNavigationLink[] => [
+export const GET_ADMIN_USERS_LINKS = (locale: Locale): AdminNavigationLink[] => [
 	{
 		id: 'users',
 		label: tText('modules/admin/const/routing___gebruikers'),

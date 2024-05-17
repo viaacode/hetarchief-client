@@ -9,6 +9,7 @@ import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { Loading } from '@shared/components';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 type MaintainerSearchPageProps = DefaultSeoInfo;
@@ -19,6 +20,7 @@ type MaintainerSearchPageProps = DefaultSeoInfo;
  */
 const IeObjectWithoutObjectNamePage: NextPage<MaintainerSearchPageProps> = () => {
 	const router = useRouter();
+	const locale = useLocale();
 	const { ie: objectId, slug } = router.query;
 
 	const { data: ieObjectInfo, isError } = useGetIeObjectsInfo(objectId as string, {
@@ -37,7 +39,7 @@ const IeObjectWithoutObjectNamePage: NextPage<MaintainerSearchPageProps> = () =>
 			});
 			router.replace(searchUrl, undefined, { shallow: true });
 		}
-	}, [router, ieObjectInfo, isError, slug, objectId]);
+	}, [router, ieObjectInfo, isError, slug, objectId, locale]);
 
 	return <Loading owner="IeObjectWithoutObjectNamePage" fullscreen />;
 };

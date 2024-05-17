@@ -11,7 +11,7 @@ import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider
 import { wrapper } from '@shared/store';
 import { isBrowser } from '@shared/utils';
 
-import { getI18n } from '../../next-i18next.config';
+import { getI18n } from '../../next-i18next.config.mjs';
 import pkg from '../../package.json';
 
 import '../styles/main.scss';

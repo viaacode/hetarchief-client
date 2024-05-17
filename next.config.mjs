@@ -1,22 +1,24 @@
 /* eslint-disable @typescript-eslint/no-var-requires, import/order */
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
+import bundleAnalyser from '@next/bundle-analyzer';
+const withBundleAnalyzer = bundleAnalyser({
 	enabled: process.env.ANALYZE === 'true',
 });
 
-const path = require('path');
+import * as path from 'path';
 /*
  * next-transpile-modules is necessary because:
  * - Global CSS cannot be imported from within node_modules.
  *   Why: https://nextjs.org/docs/messages/css-npm
  *   RFC: https://github.com/vercel/next.js/discussions/27953
  */
-const withTM = require('next-transpile-modules')(['ky-universal']);
+import nextTranspileModules from 'next-transpile-modules';
+const withTM = nextTranspileModules(['ky-universal']);
 
 const proxyUrl = process.env.PROXY_URL;
-const { getI18n } = require('./next-i18next.config');
+import { getI18n } from './next-i18next.config.mjs';
 
 /** @type {import("next").NextConfig} */
-module.exports = withBundleAnalyzer(
+export default withBundleAnalyzer(
 	withTM({
 		i18n: getI18n(proxyUrl),
 		// https://stackoverflow.com/questions/71847778/why-my-nextjs-component-is-rendering-twice
@@ -135,7 +137,7 @@ module.exports = withBundleAnalyzer(
 		},
 		async redirects() {
 			return [
-				// Beheer redirects
+				// CP admin redirects
 				{
 					source: '/beheer/aanvragen',
 					destination: '/beheer/toegangsaanvragen',
@@ -143,29 +145,46 @@ module.exports = withBundleAnalyzer(
 				},
 				// Admin redirects
 				{
+					// Only the dutch redirect, since that was the only language that existed at the time
 					source: '/admin/bezoekersruimtesbeheer/aanvragen',
-					destination: '/admin/bezoekersruimtesbeheer/toegangsaanvragen',
+					destination: `/beheer/toegangsaanvragen`,
 					permanent: true,
 				},
 				// Account redirects
 				{
+					// Only the dutch redirect, since that was the only language that existed at the time
 					source: '/account',
 					destination: '/account/mijn-profiel',
 					permanent: true,
 				},
 				{
+					// Only the dutch redirect, since that was the only language that existed at the time
 					source: '/account/mijn-historiek',
 					destination: '/account/mijn-bezoek-historiek',
 					permanent: true,
 				},
 				{
+					// Only the dutch redirect, since that was the only language that existed at the time
 					source: '/bladwijzers',
-					destination: '/account/mijn-mappen',
+					destination: '/account/mijn-mappen/favorieten',
 					permanent: true,
 				},
 				{
+					source: '/account/mijn-mappen',
+					destination:
+						'/account/mijn-mappen/favorieten',
+					permanent: true,
+				},
+				{
+					source: '/account/my-folders',
+					destination:
+						'/account/my-folders/favorieten',
+					permanent: true,
+				},
+				{
+					// Only the dutch redirect, since that was the only language that existed at the time
 					source: '/gebruiker/profiel',
-					destination: '/account/mijn-profiel',
+					destination: 'account/mijn-profiel',
 					permanent: true,
 				},
 				// General redirects
@@ -175,11 +194,13 @@ module.exports = withBundleAnalyzer(
 					permanent: true,
 				},
 				{
+					// Only the dutch redirect, since that was the only language that existed at the time
 					source: '/faq',
 					destination: '/vragen',
 					permanent: true,
 				},
 				{
+					// Only the dutch redirect, since that was the only language that existed at the time
 					source: '/handleiding',
 					destination: '/vragen',
 					permanent: true,

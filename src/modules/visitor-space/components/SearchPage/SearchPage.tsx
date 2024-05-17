@@ -52,7 +52,7 @@ import {
 	PAGE_NUMBER_OF_MANY_RESULTS_TILE,
 } from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
-import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
@@ -332,7 +332,7 @@ const SearchPage: FC = () => {
 				dispatch(setLastScrollPosition(null));
 			}, 100);
 		}
-	}, [dispatch, lastScrollPosition, searchResults?.items]);
+	}, [dispatch, lastScrollPosition, locale, searchResults?.items]);
 
 	useEffect(() => {
 		setIsInitialPageLoad(true);
@@ -732,7 +732,7 @@ const SearchPage: FC = () => {
 				previousPage: ROUTES_BY_LOCALE[locale].search,
 			};
 		});
-	}, [isKioskUser, isPublicCollection, searchResults?.items, searchResults?.searchTerms]);
+	}, [isKioskUser, isPublicCollection, locale, searchResults?.items, searchResults?.searchTerms]);
 
 	/**
 	 * Render
