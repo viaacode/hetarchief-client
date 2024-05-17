@@ -5,18 +5,16 @@ import { i18n } from 'next-i18next';
 
 import { getTranslations } from '@i18n/helpers/get-translations';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { isBrowser } from '@shared/utils';
+import { isBrowser, Locale } from '@shared/utils';
 
 const { publicRuntimeConfig } = getConfig();
 
-export async function getDefaultServerSideProps(
+export async function getDefaultStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	// change caching to 30 minutes, since the backend also caches the translations for 30 minutes
-	context.res.setHeader('Cache-Control', 'public, s-maxage=1800, stale-while-revalidate=1799');
-
-	const translations = await getTranslations();
-	i18n?.addResources('nl', 'common', translations);
+	const locale = (context.locale || Locale.nl) as Locale;
+	const translations = await getTranslations(locale);
+	i18n?.addResources(locale, 'common', translations);
 	return {
 		props: {
 			url:
@@ -24,7 +22,7 @@ export async function getDefaultServerSideProps(
 				(context?.resolvedUrl || ''),
 			_nextI18Next: {
 				initialI18nStore: {
-					nl: {
+					[locale]: {
 						common: translations,
 					},
 				},

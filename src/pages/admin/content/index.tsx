@@ -11,7 +11,7 @@ import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { ADMIN_CORE_ROUTES_BY_LOCALE } from '@shared/const';
-import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
+import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -89,7 +89,7 @@ const ContentPageOverviewPage: FC<DefaultSeoInfo & UserProps> = ({ url, commonUs
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultServerSideProps(context);
+	return getDefaultStaticProps(context);
 }
 
 export default withAuth(

@@ -11,7 +11,7 @@ import { ErrorNoAccessToObject, ErrorNotFound, Loading } from '@shared/component
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
 import { NextRedirect } from '@shared/components/Redirect/Redirect.tsx';
 import { ROUTES_BY_LOCALE } from '@shared/const';
-import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
+import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { AccessStatus } from '@shared/types';
@@ -169,7 +169,7 @@ export async function getServerSideProps(
 	}
 
 	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> =
-		await getDefaultServerSideProps(context);
+		await getDefaultStaticProps(context);
 
 	return {
 		props: {

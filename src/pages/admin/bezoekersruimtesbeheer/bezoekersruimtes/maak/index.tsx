@@ -7,7 +7,7 @@ import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { VisitorSpaceSettings } from '@cp/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
+import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
@@ -58,7 +58,7 @@ const VisitorSpaceCreate: FC<DefaultSeoInfo> = ({ url }) => {
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultServerSideProps(context);
+	return getDefaultStaticProps(context);
 }
 
 export default withAuth(VisitorSpaceCreate as ComponentType, true);

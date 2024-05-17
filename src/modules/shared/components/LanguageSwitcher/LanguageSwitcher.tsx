@@ -1,22 +1,27 @@
 import { LanguageCode } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
+import { reverse, sortBy } from 'lodash-es';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { NavigationDropdown } from '@navigation/components/Navigation/NavigationDropdown';
+import { RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import {
 	setOpenNavigationDropdownId,
 	setShowLanguageSelectionDropdown,
 	setShowMaterialRequestCenter,
 	setShowNotificationsCenter,
 } from '@shared/store/ui';
+import { Locale } from '@shared/utils';
 
 import styles from './LanguageSwitcher.module.scss';
 
 export default function LanguageSwitcher() {
 	const router = useRouter();
+	const locale = useLocale();
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useDispatch();
 	const { data: allLanguages } = useGetAllLanguages();
@@ -33,6 +38,19 @@ export default function LanguageSwitcher() {
 		setTimeout(() => {
 			setShowLanguageSelectionDropdown(true);
 		}, 10);
+	};
+
+	const handleLocaleChanged = (oldLocale: Locale, newLocale: Locale) => {
+		const oldPath = router.asPath;
+		const routeEntries = Object.entries(ROUTES_BY_LOCALE[oldLocale]);
+		// We'll go in reverse order, so we'll match on the longest paths first
+		const routeEntryInOldLocale = reverse(sortBy(routeEntries, (entry) => entry[1])).find(
+			(routeEntry) => oldPath.startsWith(routeEntry[1])
+		);
+		const routeKey = (routeEntryInOldLocale?.[0] || 'home') as RouteKey;
+		const newPath = ROUTES_BY_LOCALE[newLocale][routeKey] || ROUTES_BY_LOCALE[newLocale].home;
+		// Redirect to new path
+		router.replace(newPath, newPath, { locale: newLocale });
 	};
 
 	return (
@@ -55,14 +73,8 @@ export default function LanguageSwitcher() {
 						<Button
 							variants={['text']}
 							onClick={() => {
-								router.push(
-									{
-										pathname: router.pathname,
-										query: router.query,
-									},
-									undefined,
-									{ locale: option.value }
-								);
+								const newLocale: Locale = option.value as unknown as Locale;
+								handleLocaleChanged(locale, newLocale);
 							}}
 						>
 							{option.label}

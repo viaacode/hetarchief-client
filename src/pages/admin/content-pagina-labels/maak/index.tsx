@@ -8,7 +8,7 @@ import { AdminLayout } from '@admin/layouts';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
+import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
@@ -49,7 +49,7 @@ const ContentPageLabelsEditPage: FC<DefaultSeoInfo> = ({ url }) => {
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultServerSideProps(context);
+	return getDefaultStaticProps(context);
 }
 
 export default withAuth(

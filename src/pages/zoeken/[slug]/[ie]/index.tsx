@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { Loading } from '@shared/components';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
-import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
+import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -47,7 +47,7 @@ const IeObjectWithoutObjectNamePage: NextPage<MaintainerSearchPageProps> = () =>
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultServerSideProps(context);
+	return getDefaultStaticProps(context);
 }
 
 export default IeObjectWithoutObjectNamePage;

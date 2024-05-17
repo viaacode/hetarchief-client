@@ -6,7 +6,7 @@ export function getI18n(proxyUrl) {
 		locales: ['nl', 'en'],
 		defaultLocale: 'nl',
 		backend: {
-			loadPath: `${proxyUrl}/translations/NL.json`,
+			loadPath: `${proxyUrl}/translations/{{lng}}.json`,
 		},
 		i18n: {
 			locales: ['nl', 'en'],

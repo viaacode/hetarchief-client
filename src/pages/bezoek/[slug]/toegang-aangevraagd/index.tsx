@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ErrorNoAccess, Loading } from '@shared/components';
 import { ROUTES_BY_LOCALE } from '@shared/const';
-import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
+import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -126,7 +126,7 @@ export async function getServerSideProps(
 	}
 
 	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> =
-		await getDefaultServerSideProps(context);
+		await getDefaultStaticProps(context);
 
 	return {
 		props: {

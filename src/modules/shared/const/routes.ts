@@ -157,7 +157,7 @@ const ROUTE_PREFIXES_EN: Record<RoutePrefix, string> = {
 	notFound: ROUTE_PARTS_EN.notFound,
 } as const;
 
-type RouteKey =
+export type RouteKey =
 	| 'account'
 	| 'activeVisitors'
 	| 'adminEditSpace'

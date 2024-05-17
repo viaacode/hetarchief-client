@@ -1,8 +1,11 @@
 export interface DefaultSeoInfo {
 	url: string;
-	_nextI18Next: {
+	_nextI18Next?: {
 		initialI18nStore: {
-			nl: {
+			nl?: {
+				common: Record<string, string>;
+			};
+			en?: {
 				common: Record<string, string>;
 			};
 		};

@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import { AuthService } from '@auth/services/auth-service';
 import { Loading } from '@shared/components';
-import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
+import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 const Logout: NextPage = () => {
@@ -18,7 +18,7 @@ const Logout: NextPage = () => {
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultServerSideProps(context);
+	return getDefaultStaticProps(context);
 }
 
 export default Logout;

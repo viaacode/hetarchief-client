@@ -9,7 +9,7 @@ import { selectHasCheckedLogin, selectIsLoggedIn, selectUser } from '@auth/store
 import LoggedInHome from '@home/components/LoggedInHome/LoggedInHome';
 import LoggedOutHome from '@home/components/LoggedOutHome/LoggedOutHome';
 import { Loading } from '@shared/components';
-import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
+import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { isBrowser } from '@shared/utils';
@@ -53,7 +53,7 @@ const VisitorSpacesHome: NextPage<DefaultSeoInfo> = (props) => {
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultServerSideProps(context);
+	return getDefaultStaticProps(context);
 }
 
 export default VisitorSpacesHome;
