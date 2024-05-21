@@ -178,7 +178,7 @@ export default withBundleAnalyzer(
 				{
 					source: '/account/my-folders',
 					destination:
-						'/account/my-folders/favorieten',
+						'/account/my-folders/favorites',
 					permanent: true,
 				},
 				{

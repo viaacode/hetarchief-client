@@ -2,45 +2,46 @@ import { AdminConfig } from '@meemoo/admin-core-ui/dist/react-admin/core/config/
 
 import { Locale } from '@shared/utils';
 
-type RoutePart =
-	| 'about'
-	| 'accessRequested'
-	| 'account'
-	| 'visitRequests'
-	| 'materialRequests'
-	| 'myMaterialRequests'
-	| 'faq'
-	| 'favorites'
-	| 'userPolicy'
-	| 'userManagement'
-	| 'user'
-	| 'permissions'
-	| 'translations'
-	| 'admin'
-	| 'cpAdmin'
-	| 'content'
-	| 'contentPageLabels'
-	| 'cookiePolicy'
-	| 'create'
-	| 'edit'
-	| 'logout'
-	| 'myFolders'
-	| 'myHistory'
-	| 'myProfile'
-	| 'navigation'
-	| 'notFound'
-	| 'settings'
-	| 'users'
-	| 'visitRequest'
-	| 'visitorSpaceManagement'
-	| 'visitorSpaces'
-	| 'activeVisitors'
-	| 'search'
-	| 'visitors'
-	| 'visit'
-	| 'alerts'
-	| 'shareFolder'
-	| 'kioskConditions';
+export enum RoutePart {
+	about = 'about',
+	accessRequested = 'accessRequested',
+	account = 'account',
+	visitRequests = 'visitRequests',
+	materialRequests = 'materialRequests',
+	myMaterialRequests = 'myMaterialRequests',
+	faq = 'faq',
+	favorites = 'favorites',
+	userPolicy = 'userPolicy',
+	userManagement = 'userManagement',
+	user = 'user',
+	permissions = 'permissions',
+	translations = 'translations',
+	admin = 'admin',
+	cpAdmin = 'cpAdmin',
+	content = 'content',
+	contentPageLabels = 'contentPageLabels',
+	cookiePolicy = 'cookiePolicy',
+	create = 'create',
+	edit = 'edit',
+	logout = 'logout',
+	myFolders = 'myFolders',
+	myHistory = 'myHistory',
+	myProfile = 'myProfile',
+	navigation = 'navigation',
+	notFound = 'notFound',
+	settings = 'settings',
+	users = 'users',
+	visitRequest = 'visitRequest',
+	visitorSpaceManagement = 'visitorSpaceManagement',
+	visitorSpaces = 'visitorSpaces',
+	activeVisitors = 'activeVisitors',
+	search = 'search',
+	visitors = 'visitors',
+	visit = 'visit',
+	alerts = 'alerts',
+	shareFolder = 'shareFolder',
+	kioskConditions = 'kioskConditions',
+}
 
 const ROUTE_PARTS_NL: Record<RoutePart, string> = {
 	about: 'over-bezoekersruimtes',
@@ -91,7 +92,7 @@ const ROUTE_PARTS_EN: Record<RoutePart, string> = {
 	materialRequests: 'materialrequests',
 	myMaterialRequests: 'my-materialrequests',
 	faq: 'faq',
-	favorites: 'favorieten',
+	favorites: 'favorites',
 	userPolicy: 'userconditions',
 	userManagement: 'usermanagement',
 	user: 'users',
@@ -157,39 +158,40 @@ const ROUTE_PREFIXES_EN: Record<RoutePrefix, string> = {
 	notFound: ROUTE_PARTS_EN.notFound,
 } as const;
 
-export type RouteKey =
-	| 'account'
-	| 'activeVisitors'
-	| 'adminEditSpace'
-	| 'adminVisitRequests'
-	| 'adminVisitorSpaceCreate'
-	| 'content'
-	| 'cookiePolicy'
-	| 'cpAdminActiveVisitors'
-	| 'cpAdminMaterialRequests'
-	| 'cpAdminSettings'
-	| 'cpAdminVisitRequests'
-	| 'cpAdminVisitors'
-	| 'home'
-	| 'notFound'
-	| 'logout'
-	| 'myFolders'
-	| 'myHistory'
-	| 'myMaterialRequests'
-	| 'myProfile'
-	| 'adminNavigation'
-	| 'adminPermissions'
-	| 'search'
-	| 'settings'
-	| 'shareFolder'
-	| 'space'
-	| 'termsOfService'
-	| 'adminTranslations'
-	| 'userPolicy'
-	| 'adminUsers'
-	| 'visit'
-	| 'visitRequested'
-	| 'adminVisitorSpaces';
+export enum RouteKey {
+	account = 'account',
+	activeVisitors = 'activeVisitors',
+	adminEditSpace = 'adminEditSpace',
+	adminVisitRequests = 'adminVisitRequests',
+	adminVisitorSpaceCreate = 'adminVisitorSpaceCreate',
+	content = 'content',
+	cookiePolicy = 'cookiePolicy',
+	cpAdminActiveVisitors = 'cpAdminActiveVisitors',
+	cpAdminMaterialRequests = 'cpAdminMaterialRequests',
+	cpAdminSettings = 'cpAdminSettings',
+	cpAdminVisitRequests = 'cpAdminVisitRequests',
+	cpAdminVisitors = 'cpAdminVisitors',
+	home = 'home',
+	notFound = 'notFound',
+	logout = 'logout',
+	myFolders = 'myFolders',
+	myHistory = 'myHistory',
+	myMaterialRequests = 'myMaterialRequests',
+	myProfile = 'myProfile',
+	adminNavigation = 'adminNavigation',
+	adminPermissions = 'adminPermissions',
+	search = 'search',
+	settings = 'settings',
+	shareFolder = 'shareFolder',
+	space = 'space',
+	termsOfService = 'termsOfService',
+	adminTranslations = 'adminTranslations',
+	userPolicy = 'userPolicy',
+	adminUsers = 'adminUsers',
+	visit = 'visit',
+	visitRequested = 'visitRequested',
+	adminVisitorSpaces = 'adminVisitorSpaces',
+}
 
 const ROUTES_NL: Record<RouteKey, string> = {
 	account: `/${ROUTE_PARTS_NL.account}`,

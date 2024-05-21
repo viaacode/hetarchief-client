@@ -1,0 +1,42 @@
+import { kebabCase } from 'lodash-es';
+import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
+import { FC, useEffect } from 'react';
+
+import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
+import { Loading } from '@shared/components';
+import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { DefaultSeoInfo } from '@shared/types/seo';
+
+type MaintainerSearchPageProps = DefaultSeoInfo;
+
+/**
+ * Redirect page for urls of the form: /zoeken/:maintainerSlug/:ieObjectId => redirects to: /zoeken/:maintainerSlug/:ieObjectId/:ieObjectName
+ * @constructor
+ */
+export const IeObjectWithoutObjectNamePage: FC<MaintainerSearchPageProps> = () => {
+	const router = useRouter();
+	const locale = useLocale();
+	const { ie: objectId, slug } = router.query;
+
+	const { data: ieObjectInfo, isError } = useGetIeObjectsInfo(objectId as string, {
+		keepPreviousData: true,
+		enabled: !!objectId,
+	});
+
+	// If the url is: /zoeken/:slug/:object-id => redirect to /zoeken/:slug/:object-id/:object-name
+	useEffect(() => {
+		if (ieObjectInfo || isError) {
+			const objectTitleSlug = kebabCase(ieObjectInfo?.name || '');
+			const searchUrl = stringifyUrl({
+				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${
+					ieObjectInfo?.maintainerSlug || slug
+				}/${objectId}/${objectTitleSlug || 'titel'}`,
+			});
+			router.replace(searchUrl, undefined, { shallow: true });
+		}
+	}, [router, ieObjectInfo, isError, slug, objectId, locale]);
+
+	return <Loading owner="IeObjectWithoutObjectNamePage" fullscreen />;
+};

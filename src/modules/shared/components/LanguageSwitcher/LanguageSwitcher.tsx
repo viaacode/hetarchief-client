@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { NavigationDropdown } from '@navigation/components/Navigation/NavigationDropdown';
-import { QUERY_KEYS, RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
+import { QUERY_KEYS, ROUTE_PARTS_BY_LOCALE, RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import {
@@ -43,16 +43,37 @@ export default function LanguageSwitcher() {
 	};
 
 	const handleLocaleChanged = (oldLocale: Locale, newLocale: Locale) => {
-		const oldPath = router.asPath;
+		const oldFullPath = router.asPath;
 		const routeEntries = Object.entries(ROUTES_BY_LOCALE[oldLocale]);
 		// We'll go in reverse order, so we'll match on the longest paths first
 		const routeEntryInOldLocale = reverse(sortBy(routeEntries, (entry) => entry[1])).find(
-			(routeEntry) => oldPath.startsWith(routeEntry[1])
+			(routeEntry) => oldFullPath.startsWith(routeEntry[1])
 		);
 		const routeKey = (routeEntryInOldLocale?.[0] || 'home') as RouteKey;
+		const oldPath = ROUTES_BY_LOCALE[oldLocale][routeKey] || ROUTES_BY_LOCALE[oldLocale].home;
 		const newPath = ROUTES_BY_LOCALE[newLocale][routeKey] || ROUTES_BY_LOCALE[newLocale].home;
+
+		// Replace the static first path of the full path with the localized path
+		// eg:
+		// - /account/mijn-mappen/map123
+		// should become
+		// - /account/my-folders/map123
+		let newFullPath = oldFullPath.replace(oldPath, newPath);
+
+		// exceptions for specific paths
+		if (routeKey === RouteKey.myFolders) {
+			// If route contains the default "favorites" folder, strip it off, since it will be different in the other locale
+			const favoritesInAllLanguages = Object.values(ROUTE_PARTS_BY_LOCALE).map(
+				(routeParts) => routeParts.favorites
+			);
+			const favoritesFolder = newFullPath.split('/').pop() as string;
+			if (favoritesInAllLanguages.includes(favoritesFolder)) {
+				newFullPath = newFullPath.substring(0, newFullPath.lastIndexOf('/'));
+			}
+		}
+
 		// Redirect to new path
-		router.push(newPath, newPath, { locale: newLocale });
+		router.push(newFullPath, newFullPath, { locale: newLocale });
 		queryClient.invalidateQueries([QUERY_KEYS.getNavigationItems]);
 	};
 

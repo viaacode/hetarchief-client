@@ -1,58 +1,14 @@
 import { GetServerSidePropsResult } from 'next';
-import { GetServerSidePropsContext } from 'next/types';
-import React, { ComponentType, FC } from 'react';
+import { GetServerSidePropsContext, NextPage } from 'next/types';
+import React, { ComponentType } from 'react';
 
-import { Permission } from '@account/const';
-import { AdminLayout } from '@admin/layouts';
+import { AdminVisitorSpaceCreate } from '@admin/views/visitor-spaces/create';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { VisitorSpaceSettings } from '@cp/components';
-import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-const VisitorSpaceCreate: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tText } = useTranslation();
-
-	const emptyRoom = {
-		id: '',
-		color: null,
-		image: null,
-		description: null,
-		serviceDescription: null,
-		logo: '',
-		name: '',
-		slug: '',
-	};
-
-	const renderPageContent = () => {
-		return (
-			<AdminLayout>
-				<AdminLayout.Content>
-					<div className="l-container">
-						<VisitorSpaceSettings action="create" room={emptyRoom} />
-					</div>
-				</AdminLayout.Content>
-			</AdminLayout>
-		);
-	};
-	return (
-		<>
-			{renderOgTags(
-				tText(
-					'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___nieuwe-bezoekersruimte'
-				),
-				tText(
-					'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___nieuwe-bezoekersruimte-meta-omschrijving'
-				),
-				url
-			)}
-			<PermissionsCheck allPermissions={[Permission.UPDATE_ALL_SPACES]}>
-				{renderPageContent()}
-			</PermissionsCheck>
-		</>
-	);
+const VisitorSpaceCreateDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
+	return <AdminVisitorSpaceCreate url={url} />;
 };
 
 export async function getServerSideProps(
@@ -61,4 +17,4 @@ export async function getServerSideProps(
 	return getDefaultStaticProps(context);
 }
 
-export default withAuth(VisitorSpaceCreate as ComponentType, true);
+export default withAuth(VisitorSpaceCreateDutch as ComponentType, true);

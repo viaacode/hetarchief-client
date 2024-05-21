@@ -1,0 +1,23 @@
+@use "../../../../styles/abstracts" as *;
+
+.p-action-buttons {
+	margin-bottom: 2 * $spacer-lg;
+	display: flex;
+	justify-content: flex-end;
+
+	> button:last-child {
+		margin-left: $spacer-xs;
+	}
+}
+
+.p-permissions-page {
+	:global(.c-table__cell--header) {
+		word-break: break-word;
+		white-space: normal;
+	}
+
+	:global(.c-table__cell) + :global(.c-table__cell) {
+		width: 15%;
+		text-align: center;
+	}
+}

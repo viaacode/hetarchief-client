@@ -1,51 +1,15 @@
-import { ContentPageLabelEdit } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult } from 'next';
-import { useRouter } from 'next/router';
-import { GetServerSidePropsContext } from 'next/types';
-import { FC } from 'react';
+import { GetServerSidePropsContext, NextPage } from 'next/types';
+import React, { FC } from 'react';
 
-import { Permission } from '@account/const';
-import { AdminLayout } from '@admin/layouts';
+import { ContentPageLabelsEditPage } from '@admin/views/content-page-labels/ContentPageLabelsEditPage';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
-import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-const ContentPageLabelsEditPage: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tText } = useTranslation();
-	const router = useRouter();
-
-	const renderPageContent = () => {
-		return (
-			<AdminLayout>
-				<AdminLayout.Content>
-					<div className="l-container p-admin-content-page-labels__edit">
-						<ContentPageLabelEdit contentPageLabelId={router.query.id as string} />
-					</div>
-				</AdminLayout.Content>
-			</AdminLayout>
-		);
-	};
-
-	return (
-		<>
-			{renderOgTags(
-				tText(
-					'pages/admin/content-pagina-labels/id/bewerk/index___content-pagina-label-bewerk-pagina'
-				),
-				tText(
-					'pages/admin/content-pagina-labels/id/bewerk/index___laat-de-gebruik-de-details-van-een-content-pagina-label-aanpassen'
-				),
-				url
-			)}
-			<PermissionsCheck anyPermissions={[Permission.EDIT_CONTENT_PAGE_LABELS]}>
-				{renderPageContent()}
-			</PermissionsCheck>
-		</>
-	);
+const ContentPageLabelsEditPageDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
+	return <ContentPageLabelsEditPage url={url} />;
 };
 
 export async function getServerSideProps(
@@ -55,6 +19,6 @@ export async function getServerSideProps(
 }
 
 export default withAuth(
-	withAdminCoreConfig(ContentPageLabelsEditPage as FC<unknown>),
+	withAdminCoreConfig(ContentPageLabelsEditPageDutch as FC<unknown>),
 	true
-) as FC<DefaultSeoInfo>;
+) as NextPage<DefaultSeoInfo>;

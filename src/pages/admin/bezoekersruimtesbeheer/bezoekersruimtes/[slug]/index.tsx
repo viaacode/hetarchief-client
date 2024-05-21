@@ -1,63 +1,14 @@
 import { GetServerSidePropsResult } from 'next';
-import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { ComponentType, FC } from 'react';
 
-import { Permission } from '@account/const';
-import { AdminLayout } from '@admin/layouts';
+import { AdminVisitorSpaceEdit } from '@admin/views/visitor-spaces/[slug]';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { VisitorSpaceSettings } from '@cp/components';
-import { Loading } from '@shared/components';
-import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
-const VisitorSpaceEdit: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tText } = useTranslation();
-	const router = useRouter();
-	const { slug } = router.query;
-
-	const { data: visitorSpaceInfo, isLoading, refetch } = useGetVisitorSpace(slug as string);
-
-	const renderPageContent = () => {
-		return (
-			<AdminLayout
-				pageTitle={tText(
-					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen'
-				)}
-			>
-				<AdminLayout.Content>
-					<div className="l-container">
-						{isLoading && <Loading owner="admin visitor spaces slug page" fullscreen />}
-						{visitorSpaceInfo && (
-							<VisitorSpaceSettings room={visitorSpaceInfo} refetch={refetch} />
-						)}
-					</div>
-				</AdminLayout.Content>
-			</AdminLayout>
-		);
-	};
-
-	return (
-		<>
-			{renderOgTags(
-				tText(
-					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen'
-				),
-				tText(
-					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen-meta-omschrijving'
-				),
-				url
-			)}
-
-			<PermissionsCheck allPermissions={[Permission.UPDATE_ALL_SPACES]}>
-				{renderPageContent()}
-			</PermissionsCheck>
-		</>
-	);
+const VisitorSpaceEditDutch: FC<DefaultSeoInfo> = ({ url }) => {
+	return <AdminVisitorSpaceEdit url={url} />;
 };
 
 export async function getServerSideProps(
@@ -66,4 +17,4 @@ export async function getServerSideProps(
 	return getDefaultStaticProps(context);
 }
 
-export default withAuth(VisitorSpaceEdit as ComponentType, true);
+export default withAuth(VisitorSpaceEditDutch as ComponentType, true);

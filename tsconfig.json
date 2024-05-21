@@ -12,6 +12,7 @@
       "@navigation/*": ["modules/navigation/*"],
       "@visitor-space/*": ["modules/visitor-space/*"],
       "@shared/*": ["modules/shared/*"],
+      "@modules/*": ["modules/*"],
       "@spaces/*": ["modules/spaces/*"],
       "@visitors/*": ["modules/visitors/*"],
       "@visits/*": ["modules/visits/*"],

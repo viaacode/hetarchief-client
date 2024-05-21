@@ -1,51 +1,14 @@
-import { ContentPageLabelDetail } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult } from 'next';
-import { useRouter } from 'next/router';
-import { GetServerSidePropsContext } from 'next/types';
+import { GetServerSidePropsContext, NextPage } from 'next/types';
 import React, { FC } from 'react';
 
-import { Permission } from '@account/const';
-import { AdminLayout } from '@admin/layouts';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
-import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-const ContentPageLabelsDetailPage: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tText } = useTranslation();
-	const router = useRouter();
-
-	const renderPageContent = () => {
-		return (
-			<AdminLayout>
-				<AdminLayout.Content>
-					<div className="l-container p-admin-content-page-labels__detail">
-						<ContentPageLabelDetail contentPageLabelId={router.query.id as string} />
-					</div>
-				</AdminLayout.Content>
-			</AdminLayout>
-		);
-	};
-
-	return (
-		<>
-			{renderOgTags(
-				tText(
-					'pages/admin/content-pagina-labels/id/index___content-pagina-label-detail-pagina'
-				),
-				tText(
-					'pages/admin/content-pagina-labels/id/index___toont-de-details-van-een-content-pagina-label'
-				),
-				url
-			)}
-			<PermissionsCheck anyPermissions={[Permission.EDIT_CONTENT_PAGE_LABELS]}>
-				{renderPageContent()}
-			</PermissionsCheck>
-		</>
-	);
+const ContentPageLabelsDetailPageDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
+	return <ContentPageLabelsDetailPageDutch url={url} />;
 };
 
 export async function getServerSideProps(
@@ -55,6 +18,6 @@ export async function getServerSideProps(
 }
 
 export default withAuth(
-	withAdminCoreConfig(ContentPageLabelsDetailPage as FC<unknown>),
+	withAdminCoreConfig(ContentPageLabelsDetailPageDutch as FC<unknown>),
 	true
-) as FC<DefaultSeoInfo>;
+) as NextPage<DefaultSeoInfo>;
