@@ -1,21 +1,22 @@
 /* eslint-disable @typescript-eslint/no-var-requires, import/order */
-import bundleAnalyser from '@next/bundle-analyzer';
-const withBundleAnalyzer = bundleAnalyser({
-	enabled: process.env.ANALYZE === 'true',
-});
-
-import * as path from 'path';
+import bundleAnalyser from "@next/bundle-analyzer";
 /*
  * next-transpile-modules is necessary because:
  * - Global CSS cannot be imported from within node_modules.
  *   Why: https://nextjs.org/docs/messages/css-npm
  *   RFC: https://github.com/vercel/next.js/discussions/27953
  */
-import nextTranspileModules from 'next-transpile-modules';
+import nextTranspileModules from "next-transpile-modules";
+import * as path from "path";
+import { getI18n } from "./next-i18next.config.mjs";
+
+const withBundleAnalyzer = bundleAnalyser({
+	enabled: process.env.ANALYZE === 'true',
+});
+
 const withTM = nextTranspileModules(['ky-universal']);
 
 const proxyUrl = process.env.PROXY_URL;
-import { getI18n } from './next-i18next.config.mjs';
 
 /** @type {import("next").NextConfig} */
 export default withBundleAnalyzer(
@@ -148,6 +149,16 @@ export default withBundleAnalyzer(
 					// Only the dutch redirect, since that was the only language that existed at the time
 					source: '/admin/bezoekersruimtesbeheer/aanvragen',
 					destination: `/beheer/toegangsaanvragen`,
+					permanent: true,
+				},
+				{
+					source: '/admin/content',
+					destination: `/admin/content-paginas`,
+					permanent: true,
+				},
+				{
+					source: '/admin/content/:path*',
+					destination: `/admin/content-paginas/:path*`,
 					permanent: true,
 				},
 				// Account redirects
