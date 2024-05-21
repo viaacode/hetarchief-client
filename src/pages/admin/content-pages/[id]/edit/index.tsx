@@ -1,4 +1,5 @@
 import { GetServerSidePropsResult } from 'next';
+import { useRouter } from 'next/router';
 import { GetServerSidePropsContext, NextPage } from 'next/types';
 import React, { ComponentType } from 'react';
 
@@ -10,7 +11,9 @@ import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageEditPageEnglish: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
-	return <ContentPageEditPage url={url} commonUser={commonUser} />;
+	const router = useRouter();
+
+	return <ContentPageEditPage url={url} commonUser={commonUser} id={router.query.id as string} />;
 };
 
 export async function getServerSideProps(

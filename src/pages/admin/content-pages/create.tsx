@@ -11,7 +11,13 @@ import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageEditPageEnglish: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
-	return <ContentPageEditPage url={url} commonUser={commonUser as Avo.User.CommonUser} />;
+	return (
+		<ContentPageEditPage
+			url={url}
+			commonUser={commonUser as Avo.User.CommonUser}
+			id={undefined}
+		/>
+	);
 };
 
 export async function getServerSideProps(

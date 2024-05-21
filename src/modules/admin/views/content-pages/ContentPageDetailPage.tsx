@@ -3,7 +3,6 @@
 
 import { ContentPageDetail } from '@meemoo/admin-core-ui';
 import { type Avo } from '@viaa/avo2-types';
-import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 
 import { Permission } from '@account/const';
@@ -13,20 +12,20 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
+interface ContentPageDetailPageProps {
+	id: string;
+}
+
 export const ContentPageDetailPage: FC<
-	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined }
-> = ({ url, commonUser }) => {
+	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined } & ContentPageDetailPageProps
+> = ({ url, commonUser, id }) => {
 	const { tText } = useTranslation();
-	const router = useRouter();
 
 	const renderPageContent = () => {
 		return (
 			<AdminLayout className="p-admin-content-page-detail">
 				<AdminLayout.Content>
-					<ContentPageDetail
-						id={router.query.id as string}
-						commonUser={commonUser as Avo.User.CommonUser}
-					/>
+					<ContentPageDetail id={id} commonUser={commonUser as Avo.User.CommonUser} />
 				</AdminLayout.Content>
 			</AdminLayout>
 		);

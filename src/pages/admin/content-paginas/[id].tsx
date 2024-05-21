@@ -3,6 +3,7 @@
 
 import { type Avo } from '@viaa/avo2-types';
 import { GetServerSidePropsResult } from 'next';
+import { useRouter } from 'next/router';
 import { GetServerSidePropsContext, NextPage } from 'next/types';
 import React, { ComponentType } from 'react';
 
@@ -13,11 +14,16 @@ import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-p
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-const ContentPageDetailPageEnglish: NextPage<DefaultSeoInfo & UserProps> = ({
-	url,
-	commonUser,
-}) => {
-	return <ContentPageDetailPage url={url} commonUser={commonUser as Avo.User.CommonUser} />;
+const ContentPageDetailPageDutch: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
+	const router = useRouter();
+
+	return (
+		<ContentPageDetailPage
+			url={url}
+			commonUser={commonUser as Avo.User.CommonUser}
+			id={router.query.id as string}
+		/>
+	);
 };
 
 export async function getServerSideProps(
@@ -27,6 +33,6 @@ export async function getServerSideProps(
 }
 
 export default withAuth(
-	withAdminCoreConfig(withUser(ContentPageDetailPageEnglish) as ComponentType),
+	withAdminCoreConfig(withUser(ContentPageDetailPageDutch) as ComponentType),
 	true
 ) as NextPage<DefaultSeoInfo>;

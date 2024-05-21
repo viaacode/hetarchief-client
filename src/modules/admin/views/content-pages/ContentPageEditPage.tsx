@@ -9,9 +9,13 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
+interface ContentPageEditPageProps {
+	id: string | undefined;
+}
+
 export const ContentPageEditPage: FC<
-	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined }
-> = ({ url, commonUser }) => {
+	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined } & ContentPageEditPageProps
+> = ({ url, commonUser, id }) => {
 	const { tText } = useTranslation();
 
 	const renderPageContent = () => {
@@ -19,10 +23,7 @@ export const ContentPageEditPage: FC<
 			<AdminLayout bottomPadding={false} className="p-admin-content-page-create">
 				<AdminLayout.Content>
 					<div className="p-admin-content__edit">
-						<ContentPageEdit
-							id={undefined}
-							commonUser={commonUser as Avo.User.CommonUser}
-						/>
+						<ContentPageEdit id={id} commonUser={commonUser as Avo.User.CommonUser} />
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>

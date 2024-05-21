@@ -19,7 +19,7 @@ export const ADMIN_NAVIGATION_LINKS = (locale: Locale): AdminNavigationLink[] =>
 	{
 		id: 'content-pages-admin',
 		label: tText('modules/admin/const/routing___content-paginas'),
-		href: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].content}`,
+		href: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].contentPages}`,
 	},
 	{
 		id: 'content-page-labels-admin',
