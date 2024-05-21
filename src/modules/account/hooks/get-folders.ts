@@ -14,7 +14,7 @@ export function useGetFolders(enabled = true): UseQueryResult<Folder[]> {
 		() =>
 			foldersService.getAll().then((res) => {
 				dispatch(setFolders(res.items));
-				return res;
+				return res || [];
 			}),
 		{ enabled }
 	);

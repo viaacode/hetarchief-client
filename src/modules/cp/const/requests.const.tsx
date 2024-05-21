@@ -10,7 +10,8 @@ import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import { AccessType, Visit, VisitRow, VisitStatus } from '@shared/types';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
-import { RequestStatusAll } from '@visits/types';
+
+import { RequestStatusAll } from '@modules/visit-requests/types';
 
 export const RequestTablePageSize = 20;
 export const VISIT_REQUEST_ID_QUERY_KEY = 'aanvraag';

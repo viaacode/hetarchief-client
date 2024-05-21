@@ -2,7 +2,7 @@ import { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'n
 import { useRouter } from 'next/router';
 import { ComponentType } from 'react';
 
-import { AccountSharedFolder } from '@account/components/ShareFolder';
+import { AccountSharedFolder } from '@account/views/ShareFolder';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';

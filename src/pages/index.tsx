@@ -6,7 +6,6 @@ import { ComponentType, FC, useEffect } from 'react';
 
 import { GroupName } from '@account/const';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
-import { withAuth } from '@auth/wrappers/with-auth';
 import { Loading } from '@shared/components';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
@@ -16,10 +15,12 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
+import { withAuth } from '@auth/wrappers/with-auth';
+
 import { useGetContentPageByLanguageAndPath } from '../modules/content-page/hooks/get-content-page';
 import { ContentPageClientService } from '../modules/content-page/services/content-page-client.service';
 
-import { VisitorLayout } from 'modules/visitors';
+import { VisitorLayout } from '@modules/visitor-layout';
 
 type HomepageProps = {
 	title: string | null;

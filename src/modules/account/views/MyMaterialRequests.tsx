@@ -23,7 +23,7 @@ import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-import VisitorLayout from '@visitors/layouts/VisitorLayout/VisitorLayout';
+import { VisitorLayout } from '@modules/visitor-layout';
 
 export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();

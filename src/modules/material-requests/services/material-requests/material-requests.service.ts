@@ -14,7 +14,7 @@ import {
 	MaterialRequestMaintainer,
 	MaterialRequestSendAll,
 	MaterialRequestUpdate,
-} from 'modules/material-requests/types';
+} from '@modules/material-requests/types';
 
 export class MaterialRequestsService {
 	public static async getAll({

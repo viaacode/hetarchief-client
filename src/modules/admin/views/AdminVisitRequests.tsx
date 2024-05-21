@@ -7,7 +7,8 @@ import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsChe
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import VisitRequestsOverview from '@visits/components/VisitRequestsOverview/VisitRequestsOverview';
+
+import VisitRequestsOverview from '@modules/visit-requests/components/VisitRequestsOverview/VisitRequestsOverview';
 
 export const AdminVisitRequests: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();

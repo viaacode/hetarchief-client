@@ -3,7 +3,8 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { User } from '@auth/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { Visit } from '@shared/types';
-import { VisitsService } from '@visits/services';
+
+import { VisitsService } from '@modules/visit-requests/services';
 
 export function useGetActiveVisitForUserAndSpace(
 	visitorSpaceSlug: string,

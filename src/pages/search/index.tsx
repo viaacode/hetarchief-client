@@ -4,7 +4,8 @@ import { ComponentType } from 'react';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { SearchPage } from '@visitor-space/components';
+
+import SearchPage from '@modules/search/SearchPage';
 
 type SearchPageProps = DefaultSeoInfo;
 

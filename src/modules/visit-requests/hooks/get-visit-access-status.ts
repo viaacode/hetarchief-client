@@ -2,7 +2,8 @@ import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanst
 
 import { QUERY_KEYS } from '@shared/const';
 import { VisitAccessStatus } from '@shared/types';
-import { VisitsService } from '@visits/services';
+
+import { VisitsService } from '@modules/visit-requests/services';
 
 // Query
 

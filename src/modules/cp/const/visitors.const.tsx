@@ -9,7 +9,8 @@ import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import { Visit, VisitRow } from '@shared/types';
 import { asDate, formatSameDayRange } from '@shared/utils';
-import { RequestStatusAll, VisitTimeframe } from '@visits/types';
+
+import { RequestStatusAll, VisitTimeframe } from '@modules/visit-requests/types';
 
 export const CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG = {
 	timeframe: withDefault(StringParam, RequestStatusAll.ALL),

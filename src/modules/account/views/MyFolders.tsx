@@ -19,6 +19,8 @@ import { foldersService } from '@account/services/folders';
 import { Folder, FolderIeObject } from '@account/types';
 import { createFolderSlug } from '@account/utils';
 import { IeObjectAccessThrough, IeObjectLicense } from '@ie-objects/types';
+import { VisitorLayout } from '@modules/visitor-layout';
+
 import {
 	Icon,
 	IconNamesLight,
@@ -49,8 +51,6 @@ import { Breakpoints } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDate } from '@shared/utils';
 import { AddToFolderBlade } from '@visitor-space/components';
-
-import { VisitorLayout } from 'modules/visitors';
 
 type ListNavigationFolderItem = ListNavigationItem & Folder;
 

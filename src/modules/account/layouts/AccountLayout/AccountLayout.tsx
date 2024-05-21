@@ -10,7 +10,7 @@ import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 
 import styles from './AccountLayout.module.scss';
 
-import { GET_ACCOUNT_NAVIGATION_LINKS } from 'modules/account/const';
+import { GET_ACCOUNT_NAVIGATION_LINKS } from '@modules/account/const';
 
 const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle }) => {
 	const { asPath } = useRouter();

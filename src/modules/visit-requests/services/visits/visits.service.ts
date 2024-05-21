@@ -5,11 +5,6 @@ import { stringifyUrl } from 'query-string';
 import { ApiService } from '@shared/services/api-service';
 import { Visit, VisitAccessStatus, VisitStatus } from '@shared/types';
 import { CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
-import {
-	GetAllActiveVisitsProps,
-	GetVisitsProps,
-} from '@visits/services/visits/visits.service.types';
-import { PatchVisit } from '@visits/types';
 
 import {
 	VISITS_SERVICE_ACCESS_STATUS_URL,
@@ -18,6 +13,12 @@ import {
 	VISITS_SERVICE_PENDING_COUNT_URL,
 	VISITS_SERVICE_SPACE_URL,
 } from './visits.service.const';
+
+import {
+	GetAllActiveVisitsProps,
+	GetVisitsProps,
+} from '@modules/visit-requests/services/visits/visits.service.types';
+import { PatchVisit } from '@modules/visit-requests/types';
 
 export class VisitsService {
 	public static async getAll({

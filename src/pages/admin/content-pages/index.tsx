@@ -1,5 +1,5 @@
 import { GetServerSidePropsResult } from 'next';
-import { GetServerSidePropsContext } from 'next/types';
+import { GetServerSidePropsContext, NextPage } from 'next/types';
 import React, { ComponentType } from 'react';
 
 import { ContentPageOverviewPage } from '@admin/views/content-pages/ContentPageOverviewPage';

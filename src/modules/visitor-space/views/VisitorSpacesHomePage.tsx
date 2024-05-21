@@ -11,7 +11,7 @@ import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { isBrowser } from '@shared/utils';
 
-import { VisitorLayout } from 'modules/visitor-layout';
+import { VisitorLayout } from '@modules/visitor-layout';
 
 export const VisitorSpacesHomePage: FC<DefaultSeoInfo> = (props) => {
 	const router = useRouter();

@@ -8,10 +8,11 @@ import { OPTIONAL_LABEL } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types';
-import { VisitsService } from '@visits/services/visits/visits.service';
 
 import { DECLINE_REQUEST_FORM_SCHEMA } from './DeclineRequestBlade.const';
 import { DeclineRequestBladeProps, DeclineRequestFormState } from './DeclineRequestBlade.types';
+
+import { VisitsService } from '@modules/visit-requests/services/visits/visits.service';
 
 const labelKeys: Record<keyof DeclineRequestFormState, string> = {
 	reasonForDenial: 'DeclineRequestBlade__reasonForDenial',

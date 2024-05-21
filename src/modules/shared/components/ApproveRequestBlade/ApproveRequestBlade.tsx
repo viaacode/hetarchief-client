@@ -5,10 +5,8 @@ import { addHours, areIntervalsOverlapping, endOfDay, startOfDay } from 'date-fn
 import { isEmpty } from 'lodash-es';
 import Link from 'next/link';
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { Controller, ControllerRenderProps, FieldError, useForm } from 'react-hook-form';
 
-import { Permission } from '@account/const';
-import { useGetFolders } from '@account/hooks/get-folders';
+import { Controller, ControllerRenderProps, FieldError, useForm } from 'react-hook-form';
 import {
 	APPROVE_REQUEST_FORM_SCHEMA,
 	ApproveRequestBladeProps,
@@ -29,12 +27,16 @@ import { toastService } from '@shared/services/toast-service';
 import { AccessType, Visit, VisitStatus } from '@shared/types';
 import { asDate, formatMediumDateWithTime, formatTime } from '@shared/utils';
 import DateInput from '@visitor-space/components/DateInput/DateInput';
-import { VisitsService } from '@visits/services/visits/visits.service';
-import { VisitTimeframe } from '@visits/types';
+
+import { Permission } from '@account/const';
+import { useGetFolders } from '@account/hooks/get-folders';
 
 import Timepicker from '../Timepicker/Timepicker';
 
 import styles from './ApproveRequestBlade.module.scss';
+
+import { VisitsService } from '@modules/visit-requests/services/visits/visits.service';
+import { VisitTimeframe } from '@modules/visit-requests/types';
 
 const labelKeys: Record<keyof ApproveRequestFormState, string> = {
 	accessFrom: 'ApproveRequestBlade__accessFrom',
@@ -124,7 +126,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const getAccessTypeLabel = useCallback(
 		(accessType: ApproveRequestFormState['accessType']) => {
-			const selectedFolders = folders?.items.filter(
+			const selectedFolders = (folders || []).filter(
 				(item) => accessType?.folderIds.includes(item.id)
 			);
 			const selectedFoldersNames = selectedFolders?.map((folder) => folder.name).join(', ');
@@ -136,7 +138,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				)
 			);
 		},
-		[folders?.items, tText]
+		[folders, tText]
 	);
 
 	const getAccessTypeOptions = useCallback(
@@ -156,7 +158,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					info: tText(
 						'modules/cp/components/approve-request-blade/approve-request-blade___mappen-dienen-op-voorhand-gemaakt-te-worden'
 					),
-					options: (folders?.items || []).map(
+					options: (folders || []).map(
 						({ id, name }): RefinableRadioButtonOption => ({
 							id,
 							label: name,
@@ -166,7 +168,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				},
 			},
 		],
-		[getAccessTypeLabel, tText, folders?.items]
+		[getAccessTypeLabel, tText, folders]
 	);
 
 	useEffect(() => {

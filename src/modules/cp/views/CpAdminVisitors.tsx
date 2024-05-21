@@ -28,9 +28,10 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { useGetVisits } from '@visits/hooks/get-visits';
-import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
-import { RequestStatusAll, VisitTimeframe } from '@visits/types';
+
+import { useGetVisits } from '@modules/visit-requests/hooks/get-visits';
+import { useUpdateVisitRequest } from '@modules/visit-requests/hooks/update-visit';
+import { RequestStatusAll, VisitTimeframe } from '@modules/visit-requests/types';
 
 export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();

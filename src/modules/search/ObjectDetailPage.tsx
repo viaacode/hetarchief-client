@@ -12,7 +12,6 @@ import {
 	TabProps,
 	TagList,
 } from '@meemoo/react-components';
-import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import {
@@ -25,12 +24,13 @@ import {
 	noop,
 	sortBy,
 } from 'lodash-es';
-import { VisitorLayout } from 'modules/visitors';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import Image from 'next/image';
-
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+import { stringifyUrl } from 'query-string';
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
@@ -46,6 +46,7 @@ import {
 	RelatedObjectsBlade,
 } from '@ie-objects/components';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
+import Metadata from '@ie-objects/components/Metadata/Metadata';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import {
 	ANONYMOUS_ACTION_SORT_MAP,
@@ -87,7 +88,10 @@ import {
 import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestObjectType } from '@material-requests/types';
+
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
+import { useGetActiveVisitForUserAndSpace } from '@modules/visit-requests/hooks/get-active-visit-for-user-and-space';
+import { VisitorLayout } from '@modules/visitor-layout';
 import {
 	Blade,
 	ErrorNoAccessToObject,
@@ -145,14 +149,10 @@ import {
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
 
-import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
-import React, { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
-
-import Metadata from '../../../../../modules/ie-objects/components/Metadata/Metadata';
 
 const { publicRuntimeConfig } = getConfig();
 

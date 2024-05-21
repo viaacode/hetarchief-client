@@ -16,7 +16,7 @@ import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
 import { useGetVisitAccessStatus } from '../../visit-requests/hooks/get-visit-access-status';
 
-import { VisitorLayout } from 'modules/visitor-layout';
+import { VisitorLayout } from '@modules/visitor-layout';
 
 type VisitRequestedPageProps = {
 	name: string | null;

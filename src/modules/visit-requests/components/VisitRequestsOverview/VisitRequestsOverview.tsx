@@ -6,12 +6,6 @@ import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
 import {
-	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
-	requestStatusFilters,
-	RequestTablePageSize,
-	VISIT_REQUEST_ID_QUERY_KEY,
-} from '@cp/const/requests.const';
-import {
 	Loading,
 	PaginationBar,
 	ProcessRequestBlade,
@@ -25,11 +19,19 @@ import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
-import { useGetVisit } from '@visits/hooks/get-visit';
-import { useGetVisits } from '@visits/hooks/get-visits';
-import { RequestStatusAll } from '@visits/types';
+
+import {
+	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
+	requestStatusFilters,
+	RequestTablePageSize,
+	VISIT_REQUEST_ID_QUERY_KEY,
+} from '@cp/const/requests.const';
 
 import { VisitRequestOverviewProps } from './VisitRequestsOverview.types';
+
+import { useGetVisit } from '@modules/visit-requests/hooks/get-visit';
+import { useGetVisits } from '@modules/visit-requests/hooks/get-visits';
+import { RequestStatusAll } from '@modules/visit-requests/types';
 
 const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 	const { tHtml, tText } = useTranslation();

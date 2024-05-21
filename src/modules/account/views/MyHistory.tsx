@@ -1,8 +1,6 @@
 import { OrderDirection, Table } from '@meemoo/react-components';
-import { GetServerSidePropsResult } from 'next';
 import { useRouter } from 'next/router';
-import { GetServerSidePropsContext } from 'next/types';
-import { ComponentType, FC, MouseEvent, ReactNode, useMemo, useState } from 'react';
+import { FC, MouseEvent, ReactNode, useMemo, useState } from 'react';
 import { Row, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -15,12 +13,10 @@ import {
 	Permission,
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
-import { withAuth } from '@auth/wrappers/with-auth';
 import { ErrorNoAccess, Loading, PaginationBar, sortingIcons } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { VisitDetailBlade } from '@shared/components/VisitDetailBlade';
 import { ROUTES_BY_LOCALE } from '@shared/const';
-import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -30,10 +26,10 @@ import { AccessStatus, Visit } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { createVisitorSpacesWithFilterUrl } from '@shared/utils';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
-import { useGetVisitAccessStatusMutation } from '@visits/hooks/get-visit-access-status';
-import { useGetVisits } from '@visits/hooks/get-visits';
 
-import { VisitorLayout } from 'modules/visitors';
+import { useGetVisitAccessStatusMutation } from '@modules/visit-requests/hooks/get-visit-access-status';
+import { useGetVisits } from '@modules/visit-requests/hooks/get-visits';
+import { VisitorLayout } from '@modules/visitor-layout';
 
 export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();

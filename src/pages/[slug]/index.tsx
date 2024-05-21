@@ -1,4 +1,13 @@
 import { ContentPageRenderer, LanguageCode } from '@meemoo/admin-core-ui';
+
+import { renderOgTags } from '@shared/helpers/render-og-tags';
+
+import { useHasAnyGroup } from '@shared/hooks/has-group';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import withUser, { UserProps } from '@shared/hooks/with-user';
+import { setShowZendesk } from '@shared/store/ui';
+import { DefaultSeoInfo } from '@shared/types/seo';
+import { isBrowser } from '@shared/utils';
 import { HTTPError } from 'ky';
 import { kebabCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
@@ -6,8 +15,8 @@ import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { ComponentType, FC, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 
+import { useDispatch } from 'react-redux';
 import { GroupName } from '@account/const';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
@@ -15,18 +24,9 @@ import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { ErrorNotFound, Loading } from '@shared/components';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { useHasAnyGroup } from '@shared/hooks/has-group';
-import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import withUser, { UserProps } from '@shared/hooks/with-user';
-import { setShowZendesk } from '@shared/store/ui';
-import { DefaultSeoInfo } from '@shared/types/seo';
-import { isBrowser } from '@shared/utils';
-
-import { useGetContentPageByLanguageAndPath } from '../../modules/content-page/hooks/get-content-page';
-import { ContentPageClientService } from '../../modules/content-page/services/content-page-client.service';
-
-import { VisitorLayout } from 'modules/visitors';
+import { useGetContentPageByLanguageAndPath } from '@modules/content-page/hooks/get-content-page';
+import { ContentPageClientService } from '@modules/content-page/services/content-page-client.service';
+import { VisitorLayout } from '@modules/visitor-layout';
 
 const { publicRuntimeConfig } = getConfig();
 
