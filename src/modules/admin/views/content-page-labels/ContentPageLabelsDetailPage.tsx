@@ -9,7 +9,7 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-const ContentPageLabelsDetailPage: FC<DefaultSeoInfo> = ({ url }) => {
+export const ContentPageLabelsDetailPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();
 	const router = useRouter();
 

@@ -6,7 +6,17 @@ import {
 	OrderDirection,
 	TabProps,
 } from '@meemoo/react-components';
+import clsx from 'clsx';
+import { addYears, isAfter } from 'date-fns';
+import { HTTPError } from 'ky';
+import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
+import Head from 'next/head';
+import Link from 'next/link';
+import { stringifyUrl } from 'query-string';
+import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { MultiValue } from 'react-select';
 import {
 	Callout,
 	ErrorNoAccess,
@@ -98,19 +108,8 @@ import {
 import { MetadataProp, TagIdentity, VisitorSpaceFilterId } from '@visitor-space/types';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
-import clsx from 'clsx';
-import { addYears, isAfter } from 'date-fns';
-import { HTTPError } from 'ky';
-import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
-import Head from 'next/head';
-import Link from 'next/link';
-import { stringifyUrl } from 'query-string';
-
-import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
+
 import { GroupName, Permission } from '@account/const';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
@@ -290,7 +289,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				},
 			])
 		);
-	}, [dispatch, locale]);
+	}, [dispatch, locale, tText]);
 
 	useEffect(() => {
 		if (!isLoggedIn) {

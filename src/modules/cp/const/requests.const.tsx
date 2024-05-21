@@ -4,14 +4,13 @@ import React from 'react';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
+import { RequestStatusAll } from '@modules/visit-requests/types';
 import { CopyButton, Icon, IconNamesLight, RequestStatusBadge } from '@shared/components';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import { AccessType, Visit, VisitRow, VisitStatus } from '@shared/types';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
-
-import { RequestStatusAll } from '@modules/visit-requests/types';
 
 export const RequestTablePageSize = 20;
 export const VISIT_REQUEST_ID_QUERY_KEY = 'aanvraag';

@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { FC, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { VisitorLayout } from '@modules/visitor-layout';
 import { ErrorNoAccess, Loading } from '@shared/components';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
@@ -15,8 +16,6 @@ import { WaitingPage } from '@visitor-space/components/WaitingPage';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
 import { useGetVisitAccessStatus } from '../../visit-requests/hooks/get-visit-access-status';
-
-import { VisitorLayout } from '@modules/visitor-layout';
 
 type VisitRequestedPageProps = {
 	name: string | null;

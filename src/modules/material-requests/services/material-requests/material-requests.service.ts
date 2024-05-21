@@ -2,11 +2,6 @@ import type { IPagination } from '@studiohyperdrive/pagination';
 import { isNil } from 'lodash-es';
 import { stringifyUrl } from 'query-string';
 
-import { ApiService } from '@shared/services/api-service';
-
-import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from './material-requests.service.const';
-import { GetMaterialRequestsProps } from './material-requests.service.types';
-
 import {
 	MaterialRequest,
 	MaterialRequestCreation,
@@ -15,6 +10,10 @@ import {
 	MaterialRequestSendAll,
 	MaterialRequestUpdate,
 } from '@modules/material-requests/types';
+import { ApiService } from '@shared/services/api-service';
+
+import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from './material-requests.service.const';
+import { GetMaterialRequestsProps } from './material-requests.service.types';
 
 export class MaterialRequestsService {
 	public static async getAll({

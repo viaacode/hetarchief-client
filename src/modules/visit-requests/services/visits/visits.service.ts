@@ -2,6 +2,11 @@ import { OrderDirection } from '@meemoo/react-components';
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
+import {
+	GetAllActiveVisitsProps,
+	GetVisitsProps,
+} from '@modules/visit-requests/services/visits/visits.service.types';
+import { PatchVisit } from '@modules/visit-requests/types';
 import { ApiService } from '@shared/services/api-service';
 import { Visit, VisitAccessStatus, VisitStatus } from '@shared/types';
 import { CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
@@ -13,12 +18,6 @@ import {
 	VISITS_SERVICE_PENDING_COUNT_URL,
 	VISITS_SERVICE_SPACE_URL,
 } from './visits.service.const';
-
-import {
-	GetAllActiveVisitsProps,
-	GetVisitsProps,
-} from '@modules/visit-requests/services/visits/visits.service.types';
-import { PatchVisit } from '@modules/visit-requests/types';
 
 export class VisitsService {
 	public static async getAll({

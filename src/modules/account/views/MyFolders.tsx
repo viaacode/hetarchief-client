@@ -7,8 +7,8 @@ import { stringifyUrl } from 'query-string';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { useQueryParams } from 'use-query-params';
+
 import { CreateFolderButton } from '@account/components';
 import { EditFolderTitle } from '@account/components/EditFolderTitle';
 import { ACCOUNT_FOLDERS_QUERY_PARAM_CONFIG, FolderItemListSize, Permission } from '@account/const';
@@ -20,7 +20,6 @@ import { Folder, FolderIeObject } from '@account/types';
 import { createFolderSlug } from '@account/utils';
 import { IeObjectAccessThrough, IeObjectLicense } from '@ie-objects/types';
 import { VisitorLayout } from '@modules/visitor-layout';
-
 import {
 	Icon,
 	IconNamesLight,

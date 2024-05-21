@@ -3,14 +3,13 @@ import { isWithinInterval } from 'date-fns';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
+import { RequestStatusAll, VisitTimeframe } from '@modules/visit-requests/types';
 import { CopyButton, DropdownMenu, UnreadMarker } from '@shared/components';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import { Visit, VisitRow } from '@shared/types';
 import { asDate, formatSameDayRange } from '@shared/utils';
-
-import { RequestStatusAll, VisitTimeframe } from '@modules/visit-requests/types';
 
 export const CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG = {
 	timeframe: withDefault(StringParam, RequestStatusAll.ALL),

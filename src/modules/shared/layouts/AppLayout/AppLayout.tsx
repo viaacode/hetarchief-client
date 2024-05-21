@@ -1,12 +1,27 @@
 import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
-
 import clsx from 'clsx';
+import getConfig from 'next/config';
+import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Slide, ToastContainer } from 'react-toastify';
+import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
+
+import { GroupName, Permission } from '@account/const';
+import { AuthModal } from '@auth/components';
+import { AuthService } from '@auth/services/auth-service';
+import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
+import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
+import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
+import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
+import { useGetAllActiveVisits } from '@modules/visit-requests/hooks/get-all-active-visits';
 import { Footer, Navigation, NavigationItem } from '@navigation/components';
 import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';
+import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
-import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
 import {
 	GET_NAV_ITEMS_RIGHT,
 	GET_NAV_ITEMS_RIGHT_LOGGED_IN,
@@ -31,8 +46,8 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
-import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSize } from '@shared/hooks/use-window-size';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import { useAppDispatch } from '@shared/store';
@@ -53,25 +68,8 @@ import {
 } from '@shared/store/ui/';
 import { Breakpoints, Visit } from '@shared/types';
 import { scrollTo } from '@shared/utils/scroll-to-top';
-import getConfig from 'next/config';
-import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Slide, ToastContainer } from 'react-toastify';
-import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
-
-import { GroupName, Permission } from '@account/const';
-import { AuthModal } from '@auth/components';
-import { AuthService } from '@auth/services/auth-service';
-import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
-import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 
 import packageJson from '../../../../../package.json';
-
-import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
-import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
-import { useGetAllActiveVisits } from '@modules/visit-requests/hooks/get-all-active-visits';
 
 // We want to make sure config gets fetched here, no sure why anymore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

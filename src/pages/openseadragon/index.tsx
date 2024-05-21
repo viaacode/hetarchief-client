@@ -32,8 +32,14 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-
 import { useRouter } from 'next/router';
+import { GetServerSidePropsContext } from 'next/types';
+import { stringifyUrl } from 'query-string';
+import React, { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import Highlighter from 'react-highlight-words';
+import { useDispatch, useSelector } from 'react-redux';
+import { StringParam, useQueryParams } from 'use-query-params';
+
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
@@ -96,7 +102,6 @@ import { TextLine } from '@modules/iiif-viewer/extract-text-lines-from-alto';
 import { getOpenSeadragonConfig } from '@modules/iiif-viewer/openseadragon-config';
 import { useGetActiveVisitForUserAndSpace } from '@modules/visit-requests/hooks/get-active-visit-for-user-and-space';
 import { VisitorLayout } from '@modules/visitor-layout';
-
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import {
 	Blade,
@@ -155,13 +160,6 @@ import {
 	VisitorSpaceFilterId,
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
-
-import { GetServerSidePropsContext } from 'next/types';
-import { stringifyUrl } from 'query-string';
-import React, { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import Highlighter from 'react-highlight-words';
-import { useDispatch, useSelector } from 'react-redux';
-import { StringParam, useQueryParams } from 'use-query-params';
 
 import iiifStyles from './index.module.scss';
 

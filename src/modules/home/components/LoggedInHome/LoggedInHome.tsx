@@ -1,8 +1,17 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-
 import { ComponentType, FC, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { StringParam, useQueryParams } from 'use-query-params';
+
+import { selectUser } from '@auth/store/user';
+import { withAuth } from '@auth/wrappers/with-auth';
+import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
+import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
+import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
+import { useGetVisits } from '@modules/visit-requests/hooks/get-visits';
+import { VisitTimeframe } from '@modules/visit-requests/types';
 import {
 	Blade,
 	Loading,
@@ -25,21 +34,10 @@ import { asDate } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
-import { useSelector } from 'react-redux';
-import { StringParam, useQueryParams } from 'use-query-params';
-
-import { selectUser } from '@auth/store/user';
-import { withAuth } from '@auth/wrappers/with-auth';
-import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
-import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
-import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 
 import { ProcessVisitBlade, ProcessVisitBladeProps } from '../ProcessVisitBlade';
 
 import styles from './LoggedInHome.module.scss';
-
-import { useGetVisits } from '@modules/visit-requests/hooks/get-visits';
-import { VisitTimeframe } from '@modules/visit-requests/types';
 
 type SelectedVisit = ProcessVisitBladeProps['selected'];
 

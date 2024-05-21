@@ -9,18 +9,6 @@ import {
 	keysSpacebar,
 	onKey,
 } from '@meemoo/react-components';
-
-import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { useHasAnyGroup } from '@shared/hooks/has-group';
-import { useHasAllPermission } from '@shared/hooks/has-permission';
-import { useIsKeyUser } from '@shared/hooks/is-key-user';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
-import { toastService } from '@shared/services/toast-service';
-import { DefaultSeoInfo } from '@shared/types/seo';
-import { isBrowser } from '@shared/utils';
 import { isNil } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
@@ -30,6 +18,7 @@ import { stringifyUrl } from 'query-string';
 import { ComponentType, ReactNode, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
+
 import {
 	COMMUNICATION_FORM_SCHEMA,
 	GET_PERMISSION_TRANSLATIONS_BY_GROUP,
@@ -43,8 +32,19 @@ import { CommunicationFormState } from '@account/types';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { Icon, IconNamesLight } from '@shared/components';
 import { VisitorLayout } from '@modules/visitor-layout';
+import { Icon, IconNamesLight } from '@shared/components';
+import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
+import { useIsKeyUser } from '@shared/hooks/is-key-user';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
+import { toastService } from '@shared/services/toast-service';
+import { DefaultSeoInfo } from '@shared/types/seo';
+import { isBrowser } from '@shared/utils';
 
 const { publicRuntimeConfig } = getConfig();
 

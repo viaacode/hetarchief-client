@@ -13,6 +13,9 @@ import {
 	Permission,
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
+import { useGetVisitAccessStatusMutation } from '@modules/visit-requests/hooks/get-visit-access-status';
+import { useGetVisits } from '@modules/visit-requests/hooks/get-visits';
+import { VisitorLayout } from '@modules/visitor-layout';
 import { ErrorNoAccess, Loading, PaginationBar, sortingIcons } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { VisitDetailBlade } from '@shared/components/VisitDetailBlade';
@@ -26,10 +29,6 @@ import { AccessStatus, Visit } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { createVisitorSpacesWithFilterUrl } from '@shared/utils';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
-
-import { useGetVisitAccessStatusMutation } from '@modules/visit-requests/hooks/get-visit-access-status';
-import { useGetVisits } from '@modules/visit-requests/hooks/get-visits';
-import { VisitorLayout } from '@modules/visitor-layout';
 
 export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();

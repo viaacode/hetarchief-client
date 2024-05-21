@@ -5,8 +5,12 @@ import { addHours, areIntervalsOverlapping, endOfDay, startOfDay } from 'date-fn
 import { isEmpty } from 'lodash-es';
 import Link from 'next/link';
 import React, { FC, useCallback, useEffect, useState } from 'react';
-
 import { Controller, ControllerRenderProps, FieldError, useForm } from 'react-hook-form';
+
+import { Permission } from '@account/const';
+import { useGetFolders } from '@account/hooks/get-folders';
+import { VisitsService } from '@modules/visit-requests/services/visits/visits.service';
+import { VisitTimeframe } from '@modules/visit-requests/types';
 import {
 	APPROVE_REQUEST_FORM_SCHEMA,
 	ApproveRequestBladeProps,
@@ -28,15 +32,9 @@ import { AccessType, Visit, VisitStatus } from '@shared/types';
 import { asDate, formatMediumDateWithTime, formatTime } from '@shared/utils';
 import DateInput from '@visitor-space/components/DateInput/DateInput';
 
-import { Permission } from '@account/const';
-import { useGetFolders } from '@account/hooks/get-folders';
-
 import Timepicker from '../Timepicker/Timepicker';
 
 import styles from './ApproveRequestBlade.module.scss';
-
-import { VisitsService } from '@modules/visit-requests/services/visits/visits.service';
-import { VisitTimeframe } from '@modules/visit-requests/types';
 
 const labelKeys: Record<keyof ApproveRequestFormState, string> = {
 	accessFrom: 'ApproveRequestBlade__accessFrom',
