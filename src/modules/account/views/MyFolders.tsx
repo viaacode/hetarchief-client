@@ -71,6 +71,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 		Object.values(ROUTE_PARTS_BY_LOCALE)
 			.map((routeParts) => routeParts.favorites)
 			.includes(folderSlug as string);
+	const myFoldersPath = ROUTES_BY_LOCALE[locale].accountMyFolders;
 
 	/**
 	 * Data
@@ -99,7 +100,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 		() =>
 			(folders || []).map((folder) => {
 				const slug = createFolderSlug(folder);
-				const href = `${ROUTES_BY_LOCALE[locale].myFolders}/${slug}`;
+				const href = `${myFoldersPath}/${slug}`;
 				const active = isActive(folder);
 
 				return {
@@ -166,11 +167,11 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 			setBreadcrumbs([
 				{
 					label: tText('pages/slug/ie/index___breadcrumbs-mijn-mappen'),
-					to: ROUTES_BY_LOCALE[locale].myFolders,
+					to: myFoldersPath,
 				},
 				{
 					label: activeFolder.name,
-					to: `${ROUTES_BY_LOCALE[locale].myFolders}/${createFolderSlug(activeFolder)}`,
+					to: `${myFoldersPath}/${createFolderSlug(activeFolder)}`,
 				},
 			])
 		);
@@ -180,7 +181,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 		// Ward: wait until items are rendered on the screen before scrolling
 		if (
 			lastScrollPosition &&
-			lastScrollPosition.page === ROUTES_BY_LOCALE[locale].myFolders &&
+			lastScrollPosition.page === myFoldersPath &&
 			folderMedia?.data?.items
 		) {
 			setTimeout(() => {
@@ -572,8 +573,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 														getShowLocallyAvailableLabel(media),
 													showPlanVisitButtons:
 														getShowPlanVisitButtons(media),
-													previousPage:
-														ROUTES_BY_LOCALE[locale].myFolders,
+													previousPage: myFoldersPath,
 													link: link,
 												};
 

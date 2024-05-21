@@ -53,7 +53,7 @@ export const AccountSharedFolder: FC<DefaultSeoInfo & AccountSharedFolderProps> 
 						name: response.folderName,
 						isDefault: false,
 					});
-					const folderUrl = `${ROUTES_BY_LOCALE[locale].myFolders}/${slug}`;
+					const folderUrl = `${ROUTES_BY_LOCALE[locale].accountMyFolders}/${slug}`;
 
 					await router.replace(folderUrl);
 				} catch (err) {
@@ -64,7 +64,7 @@ export const AccountSharedFolder: FC<DefaultSeoInfo & AccountSharedFolderProps> 
 							'pages/account/map-delen/folder-id/index___error-er-is-iets-misgelopen'
 						),
 					});
-					await router.replace(ROUTES_BY_LOCALE[locale].myFolders);
+					await router.replace(ROUTES_BY_LOCALE[locale].accountMyFolders);
 				}
 			}
 		}

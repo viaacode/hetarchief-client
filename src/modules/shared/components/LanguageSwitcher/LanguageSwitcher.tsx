@@ -61,7 +61,7 @@ export default function LanguageSwitcher() {
 		let newFullPath = oldFullPath.replace(oldPath, newPath);
 
 		// exceptions for specific paths
-		if (routeKey === RouteKey.myFolders) {
+		if (routeKey === RouteKey.accountMyFolders) {
 			// If route contains the default "favorites" folder, strip it off, since it will be different in the other locale
 			const favoritesInAllLanguages = Object.values(ROUTE_PARTS_BY_LOCALE).map(
 				(routeParts) => routeParts.favorites

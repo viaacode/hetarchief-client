@@ -25,7 +25,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 	const user = useSelector(selectUser);
 	const [emailInputValue, setEmailInputValue] = useState('');
 
-	const link = `${window.location.origin}${ROUTES_BY_LOCALE[locale].shareFolder.replace(
+	const link = `${window.location.origin}${ROUTES_BY_LOCALE[locale].accountShareFolder.replace(
 		':id',
 		folderId
 	)}`;

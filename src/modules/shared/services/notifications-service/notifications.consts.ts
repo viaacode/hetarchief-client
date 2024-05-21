@@ -16,7 +16,8 @@ export const GET_PATH_FROM_NOTIFICATION_TYPE = (
 		// Absolute url, so we force reload the page, so the active visitor spaces are reloaded
 		[NotificationType.ACCESS_PERIOD_VISITOR_SPACE_STARTED]: `${window.location.origin}/${ROUTE_PARTS_BY_LOCALE[locale].search}?${VisitorSpaceFilterId.Maintainer}={slug}`,
 		[NotificationType.ACCESS_PERIOD_VISITOR_SPACE_END_WARNING]: null,
-		[NotificationType.ACCESS_PERIOD_VISITOR_SPACE_ENDED]: ROUTES_BY_LOCALE[locale].myHistory,
+		[NotificationType.ACCESS_PERIOD_VISITOR_SPACE_ENDED]:
+			ROUTES_BY_LOCALE[locale].accountMyVisitHistory,
 		[NotificationType.MAINTENANCE_ALERT]: null,
 	};
 };

@@ -53,7 +53,7 @@ export const VisitRequestedPage: FC<VisitRequestedPageProps> = ({ name, descript
 	 * Computed
 	 */
 
-	const spaceLink = ROUTES_BY_LOCALE[locale].space.replace(':slug', slug as string);
+	const spaceLink = ROUTES_BY_LOCALE[locale].searchSpace.replace(':slug', slug as string);
 
 	/**
 	 * Effects

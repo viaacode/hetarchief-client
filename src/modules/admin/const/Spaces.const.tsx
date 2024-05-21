@@ -111,7 +111,7 @@ export const VisitorSpacesOverviewTableColumns = (
 				<>
 					{showEditButton && (
 						<Link
-							href={`${ROUTES_BY_LOCALE[locale].adminEditSpace.replace(
+							href={`${ROUTES_BY_LOCALE[locale].adminVisitorSpaceEdit.replace(
 								':slug',
 								row.original.slug
 							)}`}
