@@ -81,7 +81,8 @@ export default function LanguageSwitcher() {
 		// exception for content pages
 		if (router.route === '/[slug]') {
 			const translatedContentPageInfo = (contentPageInfo?.translatedPages || []).find(
-				(translatedPage) => translatedPage.language === newLocale.toUpperCase()
+				(translatedPage) =>
+					translatedPage.language === newLocale.toUpperCase() && translatedPage.isPublic
 			);
 			newFullPath = translatedContentPageInfo?.path || ROUTES_BY_LOCALE[newLocale].home;
 		}

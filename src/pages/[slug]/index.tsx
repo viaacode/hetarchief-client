@@ -56,7 +56,7 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 		isLoading: isContentPageLoading,
 		data: contentPageInfo,
 	} = useGetContentPageByLanguageAndPath(
-		(commonUser?.language || LanguageCode.Nl) as LanguageCode,
+		(locale?.toUpperCase() || LanguageCode.Nl) as LanguageCode,
 		`/${slug}`
 	);
 	const { isLoading: isIeObjectLoading, data: ieObjectInfo } = useGetIeObjectsInfo(
