@@ -33,14 +33,25 @@ export const ContentPageEditPage: FC<
 	return (
 		<>
 			{renderOgTags(
-				tText('pages/admin/content/maak/index___content-pagina-aanmaken'),
-				tText(
-					'pages/admin/content/maak/index___maak-een-nieuwe-content-pagina-adhv-blokken'
-				),
+				id
+					? tText('pages/admin/content/id/bewerk/index___content-pagina-bewerkenx')
+					: tText('pages/admin/content/maak/index___content-pagina-aanmaken'),
+				id
+					? tText(
+							'pages/admin/content/id/bewerk/index___bewerk-pagina-van-een-content-pagina'
+					  )
+					: tText(
+							'pages/admin/content/maak/index___maak-een-nieuwe-content-pagina-adhv-blokken'
+					  ),
 				url
 			)}
 
-			<PermissionsCheck allPermissions={[Permission.CREATE_CONTENT_PAGES]}>
+			<PermissionsCheck
+				anyPermissions={[
+					Permission.CREATE_CONTENT_PAGES,
+					Permission.EDIT_ANY_CONTENT_PAGES,
+				]}
+			>
 				{renderPageContent()}
 			</PermissionsCheck>
 		</>

@@ -9,7 +9,7 @@ import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-p
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageLabelsEditPageEnglish: NextPage<DefaultSeoInfo> = ({ url }) => {
-	return <ContentPageLabelsEditPage url={url} />;
+	return <ContentPageLabelsEditPage url={url} id={undefined} />;
 };
 
 export async function getServerSideProps(

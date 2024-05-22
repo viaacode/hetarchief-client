@@ -8,7 +8,14 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-export const ContentPageLabelsEditPage: FC<DefaultSeoInfo> = ({ url }) => {
+interface ContentPageLabelsEditPageProps {
+	id: string | undefined;
+}
+
+export const ContentPageLabelsEditPage: FC<DefaultSeoInfo & ContentPageLabelsEditPageProps> = ({
+	url,
+	id,
+}) => {
 	const { tText } = useTranslation();
 
 	const renderPageContent = () => {
@@ -16,7 +23,7 @@ export const ContentPageLabelsEditPage: FC<DefaultSeoInfo> = ({ url }) => {
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-content-page-labels__create">
-						<ContentPageLabelEdit contentPageLabelId={undefined} />
+						<ContentPageLabelEdit contentPageLabelId={id} />
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
@@ -26,12 +33,20 @@ export const ContentPageLabelsEditPage: FC<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<>
 			{renderOgTags(
-				tText(
-					'pages/admin/content-pagina-labels/maak/index___content-pagina-label-aanmaak-pagina'
-				),
-				tText(
-					'pages/admin/content-pagina-labels/maak/index___laat-de-gebruiker-een-content-pagina-label-aanmaken'
-				),
+				id
+					? tText(
+							'pages/admin/content-pagina-labels/id/bewerk/index___content-pagina-label-bewerk-pagina'
+					  )
+					: tText(
+							'pages/admin/content-pagina-labels/maak/index___content-pagina-label-aanmaak-pagina'
+					  ),
+				id
+					? tText(
+							'pages/admin/content-pagina-labels/id/bewerk/index___laat-de-gebruik-de-details-van-een-content-pagina-label-aanpassen'
+					  )
+					: tText(
+							'pages/admin/content-pagina-labels/maak/index___laat-de-gebruiker-een-content-pagina-label-aanmaken'
+					  ),
 				url
 			)}
 			<PermissionsCheck anyPermissions={[Permission.EDIT_CONTENT_PAGE_LABELS]}>
