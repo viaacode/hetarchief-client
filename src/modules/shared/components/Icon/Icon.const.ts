@@ -97,6 +97,7 @@ export enum IconNamesLight {
 	Video = 'video--light',
 	ZoomIn = 'zoom-in--light',
 	ZoomOut = 'zoom-out--light',
+	Warning = 'warning--light',
 }
 
 export enum IconNamesSolid {
