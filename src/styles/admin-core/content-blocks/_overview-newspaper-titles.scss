@@ -1,0 +1,42 @@
+@use "src/styles/abstracts" as *;
+
+.c-newspaper-titles {
+	&__heading {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: $spacer-sm;
+	}
+
+	input {
+		border-radius: 4rem;
+	}
+
+	.c-input .c-input__icon {
+		pointer-events: auto;
+		cursor: pointer;
+	}
+
+	&__list {
+		padding: 0;
+		margin: $spacer-sm 0 0 0;
+		list-style: none;
+
+		&__item {
+			&:hover {
+				background-color: $silver;
+				border-radius: 100px;
+			}
+
+			a {
+				padding: $spacer-xs $spacer-sm;
+				display: block;
+				text-decoration: none;
+
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+}

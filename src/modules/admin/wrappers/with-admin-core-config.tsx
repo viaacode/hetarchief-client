@@ -107,6 +107,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						ContentBlockType.TagsWithLink,
 						ContentBlockType.ThreeClickableTiles,
 						ContentBlockType.UspGrid,
+						ContentBlockType.OverviewNewspaperTitles,
 					],
 					defaultPageWidth: ContentWidth.LARGE,
 					onSaveContentPage,
