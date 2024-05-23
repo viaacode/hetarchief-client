@@ -139,6 +139,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						info: { name: IconNamesLight.Info },
 						sortTable: { name: IconNamesLight.SortTable },
 						view: { name: IconNamesLight.Show },
+						warning: { name: IconNamesLight.Exclamation },
 					},
 					list: ICON_LIST_CONFIG,
 					alerts: ALERT_ICON_LIST_CONFIG,
