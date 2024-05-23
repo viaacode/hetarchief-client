@@ -1,3 +1,4 @@
+@use "sass:math";
 /* stylelint-disable no-descending-specificity */
 @use "src/styles/abstracts" as *;
 
@@ -659,6 +660,22 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 			}
 		}
 	}
+}
+
+// Select
+.c-select__element {
+	display: block;
+	height: 5.6rem;
+	border-radius: math.div(5.6rem, 2);
+	background-color: #fff;
+	box-shadow: inset 0 0 0.3rem #0000001a;
+	border: 1px solid #bac7d1;
+	font-size: inherit;
+	min-height: 3.6rem;
+	width: 100%;
+	appearance: none;
+	transition: all 0.15s ease-in-out;
+	padding-left: 1.8rem;
 }
 
 // quote

@@ -1,4 +1,4 @@
-import { AlertsOverview } from '@meemoo/admin-core-ui';
+import { MaintenanceAlertsOverview } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSidePropsResult } from 'next';
@@ -68,7 +68,10 @@ const AdminAlertsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40">
-						<AlertsOverview className="p-admin-alerts" renderPopup={renderPopup} />
+						<MaintenanceAlertsOverview
+							className="p-admin-alerts"
+							renderPopup={renderPopup}
+						/>
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>

@@ -1,3 +1,5 @@
+@use "src/styles/abstracts" as *;
+
 .c-admin__content {
 	[class*="Table-module_c-table--bordered__"],
 	.c-table--bordered {
@@ -6,5 +8,21 @@
 
 	thead tr th {
 		border: 0 !important;
+	}
+}
+
+.c-navigation-detail__table.c-filter-table {
+	.c-button-group {
+		gap: 0;
+
+		.c-button:first-child {
+			border-radius: 50% 0 0 50%;
+		}
+
+		.c-button:last-child {
+			border: 1px solid $zinc;
+			border-width: 0 0 0 1px;
+			border-radius: 0 50% 50% 0;
+		}
 	}
 }
