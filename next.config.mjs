@@ -206,12 +206,6 @@ export default withBundleAnalyzer(
 				},
 				{
 					// Only the dutch redirect, since that was the only language that existed at the time
-					source: '/faq',
-					destination: '/vragen',
-					permanent: true,
-				},
-				{
-					// Only the dutch redirect, since that was the only language that existed at the time
 					source: '/handleiding',
 					destination: '/vragen',
 					permanent: true,

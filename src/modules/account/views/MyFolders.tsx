@@ -132,7 +132,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 					active,
 				};
 			}),
-		[folders, locale, isActive]
+		[folders, myFoldersPath, isActive]
 	);
 
 	const folderMedia = useGetFolderMedia(
