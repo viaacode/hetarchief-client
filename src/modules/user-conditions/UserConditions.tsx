@@ -1,9 +1,4 @@
-import {
-	AdminConfigManager,
-	ContentPageInfo,
-	ContentPageRenderer,
-	LanguageCode,
-} from '@meemoo/admin-core-ui';
+import { AdminConfigManager, ContentPageInfo, ContentPageRenderer } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import { Avo } from '@viaa/avo2-types';
 import clsx from 'clsx';
@@ -27,6 +22,7 @@ import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
+import { Locale } from '@shared/utils';
 
 export const UserConditions: FC<
 	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined }
@@ -45,7 +41,7 @@ export const UserConditions: FC<
 	const [isAtBottom, setIsAtBottom] = useState(false);
 	const tosAccepted = useTermsOfService();
 	const { data: contentPageInfo } = useGetContentPageByLanguageAndPath(
-		(commonUser?.language || LanguageCode.Nl) as LanguageCode,
+		(locale || Locale.nl) as Locale,
 		KNOWN_STATIC_ROUTES.TermsOfService
 	);
 

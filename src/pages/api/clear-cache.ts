@@ -1,6 +1,7 @@
-import { LanguageCode } from '@meemoo/admin-core-ui';
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
+
+import { Locale } from '@shared/utils';
 
 // Initializing the cors middleware
 const cors = Cors({
@@ -61,7 +62,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	try {
 		await res.revalidate(`/${language.toLowerCase()}${path}`);
-		if (language === LanguageCode.Nl) {
+		if (language === Locale.nl) {
 			await res.revalidate(path);
 		}
 		res.json({ message: 'cache for route has been cleared' });

@@ -1,6 +1,6 @@
-import { LanguageCode } from '@meemoo/admin-core-ui';
+import { Locale } from '@shared/utils';
 
 export interface LanguageInfo {
-	languageCode: LanguageCode;
+	languageCode: Locale;
 	languageLabel: string;
 }

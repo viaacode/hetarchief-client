@@ -1,15 +1,15 @@
-import { ContentPageInfo, fetchWithLogoutJson, LanguageCode } from '@meemoo/admin-core-ui';
+import { ContentPageInfo, fetchWithLogoutJson } from '@meemoo/admin-core-ui';
 import { startsWith } from 'lodash-es';
 import getConfig from 'next/config';
 import { stringifyUrl } from 'query-string';
 
-import { isBrowser } from '@shared/utils';
+import { isBrowser, Locale } from '@shared/utils';
 
 const { publicRuntimeConfig } = getConfig();
 
 export class ContentPageClientService {
 	public static async getByLanguageAndPath(
-		language: LanguageCode,
+		language: Locale,
 		path?: string | null
 	): Promise<ContentPageInfo | null> {
 		if (!path) {

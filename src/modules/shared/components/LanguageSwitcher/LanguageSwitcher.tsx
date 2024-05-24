@@ -1,4 +1,3 @@
-import { LanguageCode } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import { reverse, sortBy } from 'lodash-es';
@@ -85,7 +84,7 @@ export default function LanguageSwitcher() {
 				className={styles['c-language-switcher__select']}
 				trigger={
 					<Button
-						label={(router.locale || LanguageCode.Nl)?.toUpperCase()}
+						label={(router.locale || Locale.nl)?.toUpperCase()}
 						variants={['black']}
 						onClick={() => setIsOpen(true)}
 					/>
