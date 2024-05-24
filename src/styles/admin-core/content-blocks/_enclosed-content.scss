@@ -27,7 +27,6 @@ $component: "c-block-enclosed-content";
 		padding: 0;
 		row-gap: $spacer-md;
 
-
 		@include respond-at("md") {
 			column-gap: $spacer-lg;
 			grid-template-columns: repeat(3, 1fr);
@@ -73,26 +72,29 @@ $component: "c-block-enclosed-content";
 				margin-right: 2rem;
 				box-shadow: $shadow-24-black-24;
 				background-size: cover;
+				background-position: center;
 				padding: $spacer-sm;
 				text-align: center;
 				display: flex;
 				justify-content: center;
 				align-items: center;
+				background-color: $zinc;
+				color: $neutral;
 
 				@include respond-at("md") {
 					max-width: unset;
 					margin-right: unset;
 					max-height: unset;
-					min-height: 205px
-
+					min-height: 205px;
 				}
 
 				&__icon {
 					position: absolute;
 					left: 0;
-					bottom: 0;
-					padding: $spacer-xs;
-					background-color: color.adjust($black, $lightness: 80%);
+					top: 0;
+					padding: $spacer-xs $spacer-xs 0.5rem $spacer-xs;
+					background-color: $white;
+					color: $blue;
 				}
 			}
 
@@ -108,8 +110,6 @@ $component: "c-block-enclosed-content";
 				-webkit-line-clamp: 3;
 				-webkit-box-orient: vertical;
 				display: -webkit-box;
-
-
 
 				@include respond-at("md") {
 					-webkit-line-clamp: 2;
@@ -153,9 +153,7 @@ $component: "c-block-enclosed-content";
 						line-height: math.div($font-size-md, 9) * 10; // 2rem;
 					}
 				}
-
 			}
 		}
 	}
-
 }
