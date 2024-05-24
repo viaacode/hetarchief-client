@@ -1,0 +1,134 @@
+@use "sass:map";
+@use "sass:math";
+@use "sass:color";
+@use "src/styles/abstracts" as *;
+
+$component: "c-block-enclosed-content";
+
+.#{$component} {
+	&__header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: $spacer-sm;
+
+		p {
+			margin-top: $spacer-xs;
+			padding: 0 !important;
+			color: $neutral;
+		}
+	}
+
+	&__cards {
+		display: grid;
+		list-style: none;
+		grid-template-columns: minmax(0, 1fr);
+		margin: 0;
+		padding: 0;
+		row-gap: $spacer-md;
+
+
+		@include respond-at("md") {
+			column-gap: $spacer-lg;
+			grid-template-columns: repeat(3, 1fr);
+			grid-template-rows: max-content;
+			row-gap: $spacer-lg * 2;
+		}
+
+		@include respond-at("xl") {
+			grid-template-columns: repeat(4, 1fr);
+		}
+
+		&__card {
+			display: flex;
+			flex-direction: row;
+			flex-grow: 0;
+
+			@include respond-at("md") {
+				flex-direction: column;
+			}
+
+			&__image {
+				min-height: 160px;
+				min-width: 120px;
+				max-height: 160px;
+				max-width: 120px;
+				margin-right: 2rem;
+				box-shadow: $shadow-24-black-24;
+				background-size: cover;
+				padding: $spacer-sm;
+				text-align: center;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+
+				@include respond-at("md") {
+					max-width: unset;
+					margin-right: unset;
+					max-height: unset;
+					min-height: 205px
+
+				}
+			}
+
+			&__title {
+				$title-spacer: $spacer-xxs * 3;
+
+				font-size: $font-size-base;
+				line-height: math.div($font-size-md, 9) * 10; // 2rem
+				margin: $title-spacer 0 $title-spacer 0;
+				font-weight: $font-weight-bold;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				-webkit-line-clamp: 3;
+				-webkit-box-orient: vertical;
+				display: -webkit-box;
+
+				@include respond-at("md") {
+					-webkit-line-clamp: 2;
+				}
+			}
+
+			&__wrapper {
+				display: flex;
+				flex-direction: column;
+			}
+
+			&__description-wrapper {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				-webkit-line-clamp: 3;
+				-webkit-box-orient: vertical;
+				display: -webkit-box;
+
+				@include respond-at("md") {
+					-webkit-line-clamp: 2;
+				}
+			}
+
+			&__description {
+				color: $neutral;
+				font-size: $font-size-xs;
+				line-height: $line-height-lg;
+
+				@include respond-at("md") {
+					font-size: $font-size-sm;
+					line-height: math.div($font-size-md, 9) * 10; // 2rem;
+				}
+
+				p {
+					color: $neutral;
+					font-size: $font-size-xs;
+					line-height: $line-height-lg;
+
+					@include respond-at("md") {
+						font-size: $font-size-sm;
+						line-height: math.div($font-size-md, 9) * 10; // 2rem;
+					}
+				}
+
+			}
+		}
+	}
+
+}
