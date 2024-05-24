@@ -40,6 +40,10 @@ $component: "c-block-enclosed-content";
 		}
 
 		&__card {
+			a {
+				text-decoration: none;
+			}
+
 			display: flex;
 			flex-direction: row;
 			flex-grow: 0;
@@ -48,7 +52,20 @@ $component: "c-block-enclosed-content";
 				flex-direction: column;
 			}
 
+			&__meta {
+				display: flex;
+				gap: 1rem;
+				flex-wrap: wrap;
+				margin-top: $spacer-xs;
+				font-size: $font-size-xs;
+				color: $neutral;
+				justify-content: space-between;
+				border-top: 1px solid $silver;
+				padding-top: $spacer-xs;
+			}
+
 			&__image {
+				position: relative;
 				min-height: 160px;
 				min-width: 120px;
 				max-height: 160px;
@@ -69,6 +86,14 @@ $component: "c-block-enclosed-content";
 					min-height: 205px
 
 				}
+
+				&__icon {
+					position: absolute;
+					left: 0;
+					bottom: 0;
+					padding: $spacer-xs;
+					background-color: color.adjust($black, $lightness: 80%);
+				}
 			}
 
 			&__title {
@@ -83,6 +108,8 @@ $component: "c-block-enclosed-content";
 				-webkit-line-clamp: 3;
 				-webkit-box-orient: vertical;
 				display: -webkit-box;
+
+
 
 				@include respond-at("md") {
 					-webkit-line-clamp: 2;
