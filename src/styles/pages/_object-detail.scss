@@ -110,7 +110,6 @@ $breakpoint-md: map.get($breakpoints, "md");
 
 	&__flowplayer {
 		align-self: center;
-		position: absolute !important;
 		inset: 0;
 
 		&--with-slider {
