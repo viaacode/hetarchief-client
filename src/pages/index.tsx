@@ -43,7 +43,7 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 
 	const { isLoading: isContentPageLoading, data: contentPageInfo } =
 		useGetContentPageByLanguageAndPath(
-			(commonUser?.language || LanguageCode.Nl) as LanguageCode,
+			(locale?.toUpperCase() || LanguageCode.Nl) as LanguageCode,
 			'/'
 		);
 

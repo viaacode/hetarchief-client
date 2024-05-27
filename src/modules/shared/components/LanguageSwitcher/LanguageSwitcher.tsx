@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { useGetContentPageByLanguageAndPath } from '@modules/content-page/hooks/get-content-page';
 import { NavigationDropdown } from '@navigation/components/Navigation/NavigationDropdown';
 import { QUERY_KEYS, ROUTE_PARTS_BY_LOCALE, RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
@@ -27,6 +28,11 @@ export default function LanguageSwitcher() {
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useDispatch();
 	const { data: allLanguages } = useGetAllLanguages();
+	const { data: contentPageInfo } = useGetContentPageByLanguageAndPath(
+		(locale?.toUpperCase() || LanguageCode.Nl) as LanguageCode,
+		`/${router.query.slug}`,
+		{ enabled: router.route === '/[slug]' }
+	);
 
 	const languageOptions = (allLanguages || []).map((languageInfo) => ({
 		label: languageInfo.languageLabel,
@@ -70,6 +76,15 @@ export default function LanguageSwitcher() {
 			if (favoritesInAllLanguages.includes(favoritesFolder)) {
 				newFullPath = newFullPath.substring(0, newFullPath.lastIndexOf('/'));
 			}
+		}
+
+		// exception for content pages
+		if (router.route === '/[slug]') {
+			const translatedContentPageInfo = (contentPageInfo?.translatedPages || []).find(
+				(translatedPage) =>
+					translatedPage.language === newLocale.toUpperCase() && translatedPage.isPublic
+			);
+			newFullPath = translatedContentPageInfo?.path || ROUTES_BY_LOCALE[newLocale].home;
 		}
 
 		// Redirect to new path

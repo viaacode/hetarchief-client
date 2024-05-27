@@ -27,7 +27,6 @@ export * from './Placeholder';
 export * from './ProcessRequestBlade';
 export * from './RefinableRadioButton';
 export * from './RequestStatusBadge';
-export * from './RichTextEditor';
 export * from './SearchBar';
 export * from './Sidebar';
 export * from './SidebarLayoutTitle';
