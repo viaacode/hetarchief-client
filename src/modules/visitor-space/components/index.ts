@@ -23,5 +23,4 @@ export * from './MediumSelect';
 export * from './ObjectTypeSelect';
 export * from './PublishedFilterForm';
 export * from './VisitorSpaceNavigation';
-export * from './SearchPage';
 export * from './WaitingPage';

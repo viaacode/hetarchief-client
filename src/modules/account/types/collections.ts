@@ -1,9 +1,5 @@
-import type { IPagination } from '@studiohyperdrive/pagination';
-
 import { IeObjectAccessThrough, IeObjectLicense, IsPartOfKey } from '@ie-objects/types';
 import { IeObjectTypes } from '@shared/types';
-
-export type GetFoldersResponse = IPagination<Folder>;
 
 export interface Folder {
 	createdAt: string;

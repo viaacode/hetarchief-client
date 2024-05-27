@@ -7,18 +7,18 @@ import { ComponentType, FC, useEffect } from 'react';
 import { GroupName } from '@account/const';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { VisitorLayout } from '@modules/visitor-layout';
 import { Loading } from '@shared/components';
-import { ROUTES } from '@shared/const';
-import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
+import { ROUTES_BY_LOCALE } from '@shared/const';
+import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 import { useGetContentPageByLanguageAndPath } from '../modules/content-page/hooks/get-content-page';
 import { ContentPageClientService } from '../modules/content-page/services/content-page-client.service';
-
-import { VisitorLayout } from 'modules/visitors';
 
 type HomepageProps = {
 	title: string | null;
@@ -35,6 +35,7 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 }) => {
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const router = useRouter();
+	const locale = useLocale();
 
 	/**
 	 * Data
@@ -48,9 +49,9 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 
 	useEffect(() => {
 		if (isKioskUser) {
-			router.replace(ROUTES.search);
+			router.replace(ROUTES_BY_LOCALE[locale].search);
 		}
-	}, [router, isKioskUser]);
+	}, [router, isKioskUser, locale]);
 
 	/**
 	 * Render
@@ -109,7 +110,7 @@ export async function getServerSideProps(
 	}
 
 	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> =
-		await getDefaultServerSideProps(context);
+		await getDefaultStaticProps(context);
 
 	return {
 		props: { ...(defaultProps as { props: DefaultSeoInfo }).props, title, description, image },

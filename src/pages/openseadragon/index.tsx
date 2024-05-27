@@ -97,6 +97,11 @@ import {
 import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestObjectType } from '@material-requests/types';
+import altoTextLocations from '@modules/iiif-viewer/alto2-simplified.json';
+import { TextLine } from '@modules/iiif-viewer/extract-text-lines-from-alto';
+import { getOpenSeadragonConfig } from '@modules/iiif-viewer/openseadragon-config';
+import { useGetActiveVisitForUserAndSpace } from '@modules/visit-requests/hooks/get-active-visit-for-user-and-space';
+import { VisitorLayout } from '@modules/visitor-layout';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import {
 	Blade,
@@ -114,18 +119,19 @@ import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerA
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
-import { ROUTE_PARTS, ROUTES } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
-import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
+import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
@@ -154,15 +160,8 @@ import {
 	VisitorSpaceFilterId,
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
-import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
-
-import altoTextLocations from '../../modules/iiif-viewer/alto2-simplified.json';
-import { TextLine } from '../../modules/iiif-viewer/extract-text-lines-from-alto';
-import { getOpenSeadragonConfig } from '../../modules/iiif-viewer/openseadragon-config';
 
 import iiifStyles from './index.module.scss';
-
-import { VisitorLayout } from 'modules/visitors';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -180,6 +179,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	 */
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
+	const locale = useLocale();
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
@@ -777,7 +777,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			});
 			onCloseBlade();
 			await router.push(
-				ROUTES.visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
+				ROUTES_BY_LOCALE[locale].visitRequested.replace(
+					':slug',
+					createdVisitRequest.spaceSlug
+				)
 			);
 		} catch (err) {
 			console.error({
@@ -1324,7 +1327,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	// Metadata
 	const renderCard = (item: MediaObject, isHidden: boolean) => (
 		<li>
-			<Link passHref href={`${ROUTES.search}/${router.query.slug}/${item.id}`}>
+			<Link
+				passHref
+				href={`${ROUTES_BY_LOCALE[locale].search}/${router.query.slug}/${item.id}`}
+			>
 				<a
 					tabIndex={isHidden ? -1 : 0}
 					className={`p-object-detail__metadata-card-link u-text-no-decoration`}
@@ -1343,12 +1349,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				: [
 						{
 							label: `${tText('pages/slug/ie/index___breadcrumbs___home')}`,
-							to: ROUTES.home,
+							to: ROUTES_BY_LOCALE[locale].home,
 						},
 				  ]),
 			{
 				label: `${tText('pages/slug/ie/index___breadcrumbs___search')}`,
-				to: ROUTES.search,
+				to: ROUTES_BY_LOCALE[locale].search,
 			},
 		];
 
@@ -1363,14 +1369,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 								{
 									label: mediaInfo?.maintainerName,
 									to: isKiosk
-										? ROUTES.search
-										: `${ROUTES.search}?${VisitorSpaceFilterId.Maintainer}=${mediaInfo?.maintainerSlug}`,
+										? ROUTES_BY_LOCALE[locale].search
+										: `${ROUTES_BY_LOCALE[locale].search}?${VisitorSpaceFilterId.Maintainer}=${mediaInfo?.maintainerSlug}`,
 								},
 						  ]
 						: []),
 					{
 						label: mediaInfo?.name,
-						to: `${ROUTES.search}/${mediaInfo?.maintainerSlug}/${mediaInfo?.schemaIdentifier}`,
+						to: `${ROUTES_BY_LOCALE[locale].search}/${mediaInfo?.maintainerSlug}/${mediaInfo?.schemaIdentifier}`,
 					},
 			  ]
 			: [];
@@ -1455,7 +1461,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 							onTagClicked={async () => {
 								await router.push(
 									stringifyUrl({
-										url: `/${ROUTE_PARTS.search}`,
+										url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 										query: {
 											[VisitorSpaceFilterId.Maintainers]: [
 												`${maintainerId}${FILTER_LABEL_VALUE_DELIMITER}${maintainerName}`,
@@ -1621,7 +1627,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 								),
 								data: renderKeywordsAsTags(
 									mediaInfo.keywords,
-									visitRequest ? (router.query.slug as string) : ''
+									visitRequest ? (router.query.slug as string) : '',
+									locale
 								),
 							},
 							{
@@ -2000,7 +2007,7 @@ export async function getServerSideProps(
 	// }
 
 	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> =
-		await getDefaultServerSideProps(context);
+		await getDefaultStaticProps(context);
 
 	return {
 		props: {

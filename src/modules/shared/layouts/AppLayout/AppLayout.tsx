@@ -13,13 +13,20 @@ import { GroupName, Permission } from '@account/const';
 import { AuthModal } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
+import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
+import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
+import { useGetAllActiveVisits } from '@modules/visit-requests/hooks/get-all-active-visits';
 import { Footer, Navigation, NavigationItem } from '@navigation/components';
 import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';
 import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
-import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
+import {
+	GET_NAV_ITEMS_RIGHT,
+	GET_NAV_ITEMS_RIGHT_LOGGED_IN,
+	NAV_HAMBURGER_PROPS,
+} from '@navigation/const';
 import { NavigationPlacement } from '@navigation/services/navigation-service';
 import {
 	AlertIconNames,
@@ -32,6 +39,7 @@ import {
 } from '@shared/components';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import Html from '@shared/components/Html/Html';
+import LanguageSwitcher from '@shared/components/LanguageSwitcher/LanguageSwitcher';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
@@ -40,6 +48,7 @@ import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSize } from '@shared/hooks/use-window-size';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import { useAppDispatch } from '@shared/store';
@@ -60,12 +69,10 @@ import {
 } from '@shared/store/ui/';
 import { Breakpoints, Visit } from '@shared/types';
 import { scrollTo } from '@shared/utils/scroll-to-top';
-import { useGetAllActiveVisits } from '@visits/hooks/get-all-active-visits';
 
 import packageJson from '../../../../../package.json';
 
-import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
-import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
+import styles from './AppLayout.module.scss';
 
 // We want to make sure config gets fetched here, no sure why anymore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -75,7 +82,7 @@ const AppLayout: FC<any> = ({ children }) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const router = useRouter();
-	const { asPath } = useRouter();
+	const locale = useLocale();
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const user = useSelector(selectUser);
@@ -92,7 +99,7 @@ const AppLayout: FC<any> = ({ children }) => {
 		canViewAllSpaces,
 	});
 	const { data: materialRequests } = useGetPendingMaterialRequests({}, { enabled: isKioskUser });
-	const { data: navigationItems } = useGetNavigationItems();
+	const { data: navigationItems } = useGetNavigationItems(locale);
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const linkedSpaceSlug: string | null = user?.visitorSpaceSlug || null;
@@ -155,14 +162,14 @@ const AppLayout: FC<any> = ({ children }) => {
 		return spaces?.items || [];
 	}, [isKioskOrAnonymous, spaces, user]);
 
-	const [isLoaded, setIsloaded] = useState(false);
+	const [isLoaded, setIsLoaded] = useState(false);
 
 	useEffect(() => {
 		// ARC-2011: small timeout so login is not shown before user is checked
 		// If this gives issues in the future, we might want to look into replacing this timeout with
 		// selectHasCheckedLogin from the redux store
 		setTimeout(() => {
-			setIsloaded(true);
+			setIsLoaded(true);
 		}, 300);
 	}, []);
 
@@ -174,11 +181,16 @@ const AppLayout: FC<any> = ({ children }) => {
 	useEffect(() => {
 		if (router && user) {
 			NotificationsService.setQueryClient(queryClient);
-			NotificationsService.initPolling(router, setNotificationsOpen, setUnreadNotifications);
+			NotificationsService.initPolling(
+				router,
+				setNotificationsOpen,
+				setUnreadNotifications,
+				locale
+			);
 		} else {
 			NotificationsService.stopPolling();
 		}
-	}, [queryClient, router, user, setNotificationsOpen, setUnreadNotifications]);
+	}, [queryClient, router, user, setNotificationsOpen, setUnreadNotifications, locale]);
 
 	useEffect(() => {
 		dispatch(checkLoginAction());
@@ -243,11 +255,12 @@ const AppLayout: FC<any> = ({ children }) => {
 				return [];
 			}
 
-			return NAV_ITEMS_RIGHT_LOGGED_IN(
-				asPath,
+			return GET_NAV_ITEMS_RIGHT_LOGGED_IN(
+				router.asPath,
 				navigationItems || {},
 				accessibleVisitorSpaces || [],
 				showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
+				locale,
 				{
 					hasUnreadNotifications,
 					notificationsOpen: showNotificationsCenter,
@@ -258,16 +271,17 @@ const AppLayout: FC<any> = ({ children }) => {
 			);
 		}
 
-		return NAV_ITEMS_RIGHT(onLoginRegisterClick);
+		return GET_NAV_ITEMS_RIGHT(onLoginRegisterClick);
 	}, [
-		onLoginRegisterClick,
 		isLoggedIn,
+		onLoginRegisterClick,
 		canManageAccount,
-		asPath,
+		router.asPath,
 		navigationItems,
 		accessibleVisitorSpaces,
 		showLinkedSpaceAsHomepage,
 		linkedSpaceSlug,
+		locale,
 		hasUnreadNotifications,
 		showNotificationsCenter,
 		userName,
@@ -277,7 +291,7 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	const leftNavItems: NavigationItem[] = useMemo(() => {
 		const dynamicItems = getNavigationItemsLeft(
-			asPath,
+			router.asPath,
 			accessibleVisitorSpaces || [],
 			navigationItems || {},
 			user?.permissions || [],
@@ -285,7 +299,8 @@ const AppLayout: FC<any> = ({ children }) => {
 			isMobile,
 			user?.visitorSpaceSlug || null,
 			visitorSpaces,
-			isMeemooAdmin
+			isMeemooAdmin,
+			locale
 		);
 
 		const staticItems = [
@@ -319,7 +334,7 @@ const AppLayout: FC<any> = ({ children }) => {
 
 		return [...staticItems, ...dynamicItems];
 	}, [
-		asPath,
+		router.asPath,
 		accessibleVisitorSpaces,
 		navigationItems,
 		user?.permissions,
@@ -329,6 +344,7 @@ const AppLayout: FC<any> = ({ children }) => {
 		isMobile,
 		visitorSpaces,
 		isMeemooAdmin,
+		locale,
 		isLoggedIn,
 	]);
 
@@ -395,7 +411,7 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	return (
 		<div
-			className={clsx('l-app', {
+			className={clsx(styles['l-app'], {
 				'l-app--sticky': sticky,
 			})}
 		>
@@ -413,7 +429,7 @@ const AppLayout: FC<any> = ({ children }) => {
 					</div>
 				)}
 				<Navigation.Left
-					currentPath={asPath}
+					currentPath={router.asPath}
 					hamburgerProps={NAV_HAMBURGER_PROPS()}
 					items={leftNavItems}
 					placement="left"
@@ -421,12 +437,15 @@ const AppLayout: FC<any> = ({ children }) => {
 					onOpenDropdowns={onOpenNavDropdowns}
 				/>
 				{isLoaded && showNavigationHeaderRight && (
-					<Navigation.Right
-						currentPath={asPath}
-						placement="right"
-						items={rightNavItems}
-						onOpenDropdowns={onOpenNavDropdowns}
-					/>
+					<div className={styles['c-navigation__section--right']}>
+						<LanguageSwitcher />
+						<Navigation.Right
+							currentPath={router.asPath}
+							placement="right"
+							items={rightNavItems}
+							onOpenDropdowns={onOpenNavDropdowns}
+						/>
+					</div>
 				)}
 			</Navigation>
 

@@ -1,0 +1,270 @@
+import { OrderDirection, Table } from '@meemoo/react-components';
+import React, { FC, ReactNode, useMemo, useState } from 'react';
+import { TableState } from 'react-table';
+import { useQueryParams } from 'use-query-params';
+
+import { Permission } from '@account/const';
+import {
+	ADMIN_VISITORS_QUERY_PARAM_CONFIG,
+	VisitorsTableColumns,
+	VisitorsTablePageSize,
+} from '@admin/const/Visitors.const';
+import { AdminLayout } from '@admin/layouts';
+import { useGetVisits } from '@modules/visit-requests/hooks/get-visits';
+import { useUpdateVisitRequest } from '@modules/visit-requests/hooks/update-visit';
+import { VisitTimeframe } from '@modules/visit-requests/types';
+import {
+	ApproveRequestBlade,
+	ConfirmationModal,
+	PaginationBar,
+	SearchBar,
+	sortingIcons,
+} from '@shared/components';
+import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { globalLabelKeys } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { toastService } from '@shared/services/toast-service';
+import { Visit, VisitStatus } from '@shared/types';
+import { DefaultSeoInfo } from '@shared/types/seo';
+
+export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
+	const { tHtml, tText } = useTranslation();
+	const [filters, setFilters] = useQueryParams(ADMIN_VISITORS_QUERY_PARAM_CONFIG);
+	const [showDenyVisitRequestModal, setShowDenyVisitRequestModal] = useState<boolean>(false);
+	const [showEditVisitRequestModal, setShowEditVisitRequestModal] = useState<boolean>(false);
+	const [selected, setSelected] = useState<string | number | null>(null);
+
+	const {
+		data: visits,
+		isFetching,
+		refetch: refetchVisitRequests,
+	} = useGetVisits({
+		searchInput: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
+		timeframe: VisitTimeframe.ACTIVE,
+		status: VisitStatus.APPROVED,
+		page: filters.page,
+		size: VisitorsTablePageSize,
+		orderProp: filters.orderProp as keyof Visit,
+		orderDirection: filters.orderDirection as OrderDirection,
+	});
+	const [search, setSearch] = useState<string>('');
+	const { mutateAsync: updateVisitRequest } = useUpdateVisitRequest();
+	const selectedItem = useMemo(
+		() => visits?.items.find((item) => item.id === selected),
+		[visits, selected]
+	);
+
+	// Filters
+	const sortFilters = useMemo(() => {
+		return [
+			{
+				id: filters.orderProp,
+				desc: filters.orderDirection !== OrderDirection.asc,
+			},
+		];
+	}, [filters]);
+
+	// Events
+
+	const onSortChange = (
+		orderProp: string | undefined,
+		orderDirection: OrderDirection | undefined
+	) => {
+		if (!orderProp) {
+			orderProp = 'startAt';
+		}
+		if (!orderDirection) {
+			orderDirection = OrderDirection.desc;
+		}
+		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
+			setFilters({
+				...filters,
+				orderProp,
+				orderDirection,
+				page: 1,
+			});
+		}
+	};
+
+	const denyVisitRequest = (visitRequest: Visit) => {
+		setSelected(visitRequest.id);
+		setShowDenyVisitRequestModal(true);
+	};
+
+	const editVisitRequest = (visitRequest: Visit) => {
+		setSelected(visitRequest.id);
+		setShowEditVisitRequestModal(true);
+	};
+
+	const handleDenyVisitRequestConfirmed = async () => {
+		try {
+			setShowDenyVisitRequestModal(false);
+			if (!selected) {
+				return;
+			}
+			await updateVisitRequest({
+				id: selected.toString(),
+				updatedProps: { status: VisitStatus.DENIED },
+			});
+			await refetchVisitRequests();
+			toastService.notify({
+				title: tHtml('pages/beheer/bezoekers/index___de-toegang-is-ingetrokken'),
+				description: tHtml(
+					'pages/beheer/bezoekers/index___deze-gebruiker-heeft-nu-geen-toegang-meer'
+				),
+			});
+		} catch (err) {
+			console.error(err);
+			toastService.notify({
+				title: tHtml('pages/beheer/bezoekers/index___error'),
+				description: tHtml(
+					'pages/beheer/bezoekers/index___het-updaten-van-de-bezoekersaanvraag-is-mislukt'
+				),
+			});
+		}
+	};
+
+	const handleEditVisitRequestFinished = async () => {
+		setSelected(null);
+		setShowEditVisitRequestModal(false);
+		await refetchVisitRequests();
+	};
+
+	// Render
+
+	const renderEmptyMessage = (): string | ReactNode => {
+		return tHtml(
+			'modules/admin/visitor-spaces/pages/visitors/visitors___er-zijn-geen-actieve-bezoekers'
+		);
+	};
+
+	const renderPageContent = () => {
+		return (
+			<AdminLayout
+				pageTitle={tText(
+					'pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers'
+				)}
+			>
+				<AdminLayout.Content>
+					<div className="p-admin-visitors l-container">
+						<div className="p-admin-visitors__header">
+							<SearchBar
+								id={globalLabelKeys.adminLayout.title}
+								value={search}
+								className="p-admin-visitors__search"
+								placeholder={tText(
+									'pages/admin/bezoekersruimtesbeheer/bezoekers/index___zoek'
+								)}
+								onChange={setSearch}
+								onSearch={(value) =>
+									setFilters({
+										[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: value,
+										page: 1,
+									})
+								}
+							/>
+						</div>
+
+						{(visits?.items?.length || 0) > 0 ? (
+							<div className="l-container--edgeless-to-lg">
+								<Table<Visit>
+									className="u-mt-24 c-table--no-padding-last-column"
+									options={{
+										columns: VisitorsTableColumns(
+											denyVisitRequest,
+											editVisitRequest
+										),
+										data: visits?.items || [],
+										initialState: {
+											pageSize: VisitorsTablePageSize,
+											sortBy: sortFilters,
+										} as TableState<Visit>,
+									}}
+									onSortChange={onSortChange}
+									sortingIcons={sortingIcons}
+									pagination={({ gotoPage }) => {
+										return (
+											<PaginationBar
+												className="u-mt-16 u-mb-16"
+												count={VisitorsTablePageSize}
+												start={
+													Math.max(0, filters.page - 1) *
+													VisitorsTablePageSize
+												}
+												total={visits?.total || 0}
+												onPageChange={(pageZeroBased) => {
+													gotoPage(pageZeroBased);
+													// setSelected(null);
+													setFilters({
+														...filters,
+														page: pageZeroBased + 1,
+													});
+												}}
+											/>
+										);
+									}}
+								/>
+							</div>
+						) : (
+							<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
+								{isFetching
+									? tHtml(
+											'modules/admin/visitor-spaces/pages/visitors/visitors___laden'
+									  )
+									: renderEmptyMessage()}
+							</div>
+						)}
+						<ConfirmationModal
+							isOpen={showDenyVisitRequestModal}
+							onClose={() => {
+								setSelected(null);
+								setShowDenyVisitRequestModal(false);
+							}}
+							onConfirm={handleDenyVisitRequestConfirmed}
+							onCancel={() => {
+								setSelected(null);
+								setShowDenyVisitRequestModal(false);
+							}}
+						/>
+						<ApproveRequestBlade
+							title={tHtml('pages/beheer/bezoekers/index___aanvraag-aanpassen')}
+							approveButtonLabel={tText('pages/beheer/bezoekers/index___aanpassen')}
+							successTitle={tHtml(
+								'pages/beheer/bezoekers/index___de-aanpassingen-zijn-opgeslagen'
+							)}
+							successDescription={tHtml(
+								'pages/beheer/bezoekers/index___de-aanpassingen-aan-de-bezoekersaanvraag-zijn-opgeslagen'
+							)}
+							isOpen={showEditVisitRequestModal}
+							selected={selectedItem}
+							onClose={() => {
+								setSelected(null);
+								setShowEditVisitRequestModal(false);
+							}}
+							onSubmit={handleEditVisitRequestFinished}
+							id="active-visitors-page__approve-request-blade"
+						/>
+					</div>
+				</AdminLayout.Content>
+			</AdminLayout>
+		);
+	};
+
+	return (
+		<>
+			{renderOgTags(
+				tText('pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers'),
+				tText(
+					'pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers-meta-omschrijving'
+				),
+				url
+			)}
+
+			<PermissionsCheck allPermissions={[Permission.MANAGE_ALL_VISIT_REQUESTS]}>
+				{renderPageContent()}
+			</PermissionsCheck>
+		</>
+	);
+};

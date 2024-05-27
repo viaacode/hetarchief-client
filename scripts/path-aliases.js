@@ -2,16 +2,19 @@ const pathAliases = [
 	'account',
 	'admin',
 	'auth',
-	'config',
 	'cp',
 	'home',
 	'i18n',
 	'ie-objects',
 	'navigation',
 	'visitor-space',
-	'material-requests',
 	'shared',
+	'modules',
+	'spaces',
+	'visitors',
 	'visits',
+	'material-requests',
+	'maintenance-alerts',
 ];
 
 module.exports = pathAliases;

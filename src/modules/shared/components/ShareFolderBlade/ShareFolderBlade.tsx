@@ -8,7 +8,8 @@ import { useSelector } from 'react-redux';
 
 import { selectUser } from '@auth/store/user';
 import { Blade, CopyButton, Icon, IconNamesLight } from '@shared/components';
-import { ROUTES } from '@shared/const';
+import { ROUTES_BY_LOCALE } from '@shared/const';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service/campaign-monitor.service';
 import { toastService } from '@shared/services/toast-service';
@@ -19,11 +20,15 @@ import { ShareFolderBladeFormState, ShareFolderBladeProps } from './ShareFolderB
 
 const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId, folderName }) => {
 	const { tText } = useTranslation();
+	const locale = useLocale();
 
 	const user = useSelector(selectUser);
 	const [emailInputValue, setEmailInputValue] = useState('');
 
-	const link = `${window.location.origin}${ROUTES.shareFolder.replace(':id', folderId)}`;
+	const link = `${window.location.origin}${ROUTES_BY_LOCALE[locale].accountShareFolder.replace(
+		':id',
+		folderId
+	)}`;
 
 	const {
 		handleSubmit,

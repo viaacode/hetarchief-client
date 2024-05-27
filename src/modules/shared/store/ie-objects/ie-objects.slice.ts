@@ -1,6 +1,6 @@
 import * as toolkitRaw from '@reduxjs/toolkit';
 
-import { GetFoldersResponse } from '@account/types';
+import { Folder } from '@account/types';
 import { IeObjectSearchAggregations } from '@ie-objects/types';
 import { GetIeObjectsResponse } from '@shared/types';
 
@@ -9,7 +9,7 @@ import { IeObjectsState } from './ie-objects.types';
 const initialState: IeObjectsState = {
 	results: undefined,
 	filterOptions: undefined,
-	folders: undefined,
+	folders: [],
 };
 
 export const IeObjectsSlice = toolkitRaw.createSlice({
@@ -22,7 +22,7 @@ export const IeObjectsSlice = toolkitRaw.createSlice({
 		setFilterOptions(state, action: toolkitRaw.PayloadAction<IeObjectSearchAggregations>) {
 			state.filterOptions = action.payload;
 		},
-		setFolders(state, action: toolkitRaw.PayloadAction<GetFoldersResponse>) {
+		setFolders(state, action: toolkitRaw.PayloadAction<Folder[]>) {
 			state.folders = action.payload;
 		},
 	},

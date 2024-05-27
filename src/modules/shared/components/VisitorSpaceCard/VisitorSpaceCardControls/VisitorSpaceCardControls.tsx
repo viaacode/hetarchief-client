@@ -9,7 +9,8 @@ import {
 	VisitorSpaceCardProps,
 	VisitorSpaceCardType,
 } from '@shared/components';
-import { ROUTE_PARTS } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 
@@ -25,6 +26,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 	type,
 }) => {
 	const { tHtml, tText } = useTranslation();
+	const locale = useLocale();
 
 	const typeNoAccess = type === VisitorSpaceCardType.noAccess;
 	const typeAccessGranted = type === VisitorSpaceCardType.access;
@@ -130,7 +132,10 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 					</>
 				)}
 
-				<Link href={`/${ROUTE_PARTS.search}?aanbieder=${room.slug}`} passHref>
+				<Link
+					href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}?aanbieder=${room.slug}`}
+					passHref
+				>
 					<a
 						aria-label={tText(
 							'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'

@@ -12,20 +12,19 @@ import { GroupName } from '@account/const';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
+import { useGetContentPageByLanguageAndPath } from '@modules/content-page/hooks/get-content-page';
+import { ContentPageClientService } from '@modules/content-page/services/content-page-client.service';
+import { VisitorLayout } from '@modules/visitor-layout';
 import { ErrorNotFound, Loading } from '@shared/components';
-import { ROUTE_PARTS } from '@shared/const';
-import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
+import { ROUTES_BY_LOCALE } from '@shared/const';
+import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { isBrowser } from '@shared/utils';
-
-import { useGetContentPageByLanguageAndPath } from '../../modules/content-page/hooks/get-content-page';
-import { ContentPageClientService } from '../../modules/content-page/services/content-page-client.service';
-
-import { VisitorLayout } from 'modules/visitors';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -43,6 +42,7 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 	commonUser,
 }) => {
 	const router = useRouter();
+	const locale = useLocale();
 	const { slug } = router.query;
 	const dispatch = useDispatch();
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
@@ -84,12 +84,12 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 
 	useEffect(() => {
 		if (ieObjectInfo) {
-			const objectDetailPagePath = `/${ROUTE_PARTS.search}/${ieObjectInfo.maintainerSlug}/${
-				ieObjectInfo.schemaIdentifier
-			}/${kebabCase(ieObjectInfo.name)}`;
+			const objectDetailPagePath = `${ROUTES_BY_LOCALE[locale].search}/${
+				ieObjectInfo.maintainerSlug
+			}/${ieObjectInfo.schemaIdentifier}/${kebabCase(ieObjectInfo.name)}`;
 			window.open(objectDetailPagePath, '_self');
 		}
-	}, [ieObjectInfo]);
+	}, [ieObjectInfo, locale]);
 
 	useEffect(() => {
 		dispatch(setShowZendesk(!isKioskUser));
@@ -158,7 +158,7 @@ export async function getServerSideProps(
 	}
 
 	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> =
-		await getDefaultServerSideProps(context);
+		await getDefaultStaticProps(context);
 
 	return {
 		props: { ...(defaultProps as { props: DefaultSeoInfo }).props, title, description, image },

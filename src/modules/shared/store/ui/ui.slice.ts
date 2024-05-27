@@ -10,6 +10,7 @@ const initialState: UIState = {
 	showFooter: true,
 	showNotificationsCenter: false,
 	showMaterialRequestCenter: false,
+	showLanguageSelectionDropdown: false,
 	openNavigationDropdownId: null,
 	hasUnreadNotifications: false,
 	showZendesk: true,
@@ -40,6 +41,9 @@ export const uiSlice = toolkitRaw.createSlice({
 		},
 		setShowMaterialRequestCenter(state, action: toolkitRaw.PayloadAction<boolean>) {
 			state.showMaterialRequestCenter = action.payload;
+		},
+		setShowLanguageSelectionDropdown(state, action: toolkitRaw.PayloadAction<boolean>) {
+			state.showLanguageSelectionDropdown = action.payload;
 		},
 		setOpenNavigationDropdownId(state, action: toolkitRaw.PayloadAction<string | null>) {
 			state.openNavigationDropdownId = action.payload;
@@ -82,6 +86,7 @@ export const {
 	setShowNotificationsCenter,
 	setShowMaterialRequestCenter,
 	setHasUnreadNotifications,
+	setShowLanguageSelectionDropdown,
 	setOpenNavigationDropdownId,
 	setShowZendesk,
 	setLockScroll,

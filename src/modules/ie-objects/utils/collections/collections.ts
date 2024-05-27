@@ -1,13 +1,10 @@
-import { GetFoldersResponse } from '@account/types';
+import { Folder } from '@account/types';
 
-export const isInAFolder = (
-	collections: GetFoldersResponse | undefined,
-	schemaIdentifier?: string
-): boolean => {
+export const isInAFolder = (folders: Folder[] | undefined, schemaIdentifier?: string): boolean => {
 	if (!schemaIdentifier) {
 		return false;
 	}
-	return (collections?.items || []).some((collection) => {
+	return (folders || []).some((collection) => {
 		return collection.objects?.find((object) => object.schemaIdentifier === schemaIdentifier);
 	});
 };

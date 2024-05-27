@@ -5,8 +5,9 @@ import { FC, useRef, useState } from 'react';
 
 import { Permission } from '@account/const';
 import { RichTextForm } from '@shared/components/RichTextForm';
-import { globalLabelKeys, ROUTE_PARTS } from '@shared/const';
+import { globalLabelKeys, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { isBrowser } from '@shared/utils';
@@ -43,6 +44,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({
 }) => {
 	const { tText, tHtml } = useTranslation();
 	const router = useRouter();
+	const locale = useLocale();
 
 	const showSiteSettings = useHasAllPermission(
 		action === 'create' ? Permission.CREATE_SPACES : Permission.UPDATE_ALL_SPACES
@@ -87,7 +89,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({
 					),
 				});
 				await router.replace(
-					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/${formValues.slug}`
+					`/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaceManagement}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaces}/${formValues.slug}`
 				);
 			}
 		} catch (err) {
@@ -134,7 +136,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({
 				if (!!values.slug && values.slug !== room.slug) {
 					// Slug was changed, redirect to the new url
 					await router.replace(
-						`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/${values.slug}`
+						`/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaceManagement}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaces}/${values.slug}`
 					);
 				}
 			}
@@ -183,7 +185,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({
 							variants="silver"
 							onClick={() =>
 								router.push(
-									`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}`
+									`/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaceManagement}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaces}`
 								)
 							}
 						/>

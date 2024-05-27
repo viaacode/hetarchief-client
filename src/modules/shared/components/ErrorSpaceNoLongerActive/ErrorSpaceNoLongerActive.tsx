@@ -2,7 +2,8 @@ import { Button } from '@meemoo/react-components';
 import { FC } from 'react';
 
 import { ErrorPage } from '@shared/components';
-import { ROUTE_PARTS } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 interface ErrorSpaceNoLongerActiveProps {
@@ -11,6 +12,7 @@ interface ErrorSpaceNoLongerActiveProps {
 
 const ErrorSpaceNoLongerActive: FC<ErrorSpaceNoLongerActiveProps> = () => {
 	const { tHtml } = useTranslation();
+	const locale = useLocale();
 
 	return (
 		<ErrorPage
@@ -29,7 +31,7 @@ const ErrorSpaceNoLongerActive: FC<ErrorSpaceNoLongerActiveProps> = () => {
 						variants="black"
 					/>
 				),
-				to: `/${ROUTE_PARTS.search}`,
+				to: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 			}}
 			image={{ image: '/images/no-access.svg', left: true }}
 		/>

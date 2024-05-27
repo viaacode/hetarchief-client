@@ -1,14 +1,18 @@
 import { Folder } from '@account/types';
 
-export function createFolderSlug(collection: Pick<Folder, 'id' | 'name' | 'isDefault'>): string {
-	if (!collection.name) {
+export function createFolderSlug(folder: Pick<Folder, 'id' | 'name' | 'isDefault'>): string {
+	if (!folder.name) {
 		return '';
 	}
 
-	const uuidPart = collection.id.split('-', 1)[0];
+	if (folder.isDefault) {
+		return '';
+	}
+
+	const uuidPart = folder.id.split('-', 1)[0];
 
 	return encodeURIComponent(
-		`${collection.name.toLowerCase().replaceAll(' ', '-')}` +
-			(!collection.isDefault && uuidPart.length >= 1 ? `--${uuidPart}` : ``)
+		`${folder.name.toLowerCase().replaceAll(' ', '-')}` +
+			(!folder.isDefault && uuidPart.length >= 1 ? `--${uuidPart}` : ``)
 	);
 }
