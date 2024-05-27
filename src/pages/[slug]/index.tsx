@@ -1,4 +1,4 @@
-import { ContentPageRenderer, LanguageCode } from '@meemoo/admin-core-ui';
+import { ContentPageRenderer } from '@meemoo/admin-core-ui';
 import { HTTPError } from 'ky';
 import { kebabCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
@@ -24,7 +24,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { isBrowser } from '@shared/utils';
+import { isBrowser, Locale } from '@shared/utils';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -56,7 +56,7 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 		isLoading: isContentPageLoading,
 		data: contentPageInfo,
 	} = useGetContentPageByLanguageAndPath(
-		(locale?.toUpperCase() || LanguageCode.Nl) as LanguageCode,
+		(locale?.toUpperCase() || Locale.nl) as Locale,
 		`/${slug}`
 	);
 	const { isLoading: isIeObjectLoading, data: ieObjectInfo } = useGetIeObjectsInfo(
@@ -144,7 +144,7 @@ export async function getServerSideProps(
 	if (path) {
 		try {
 			const contentPage = await ContentPageClientService.getByLanguageAndPath(
-				LanguageCode.Nl,
+				Locale.nl,
 				`/${path}`
 			);
 			title = contentPage?.title || null;

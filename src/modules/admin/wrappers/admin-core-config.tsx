@@ -183,9 +183,7 @@ export function getAdminCoreConfig(router: NextRouter, locale: Locale): AdminCon
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				clear: async (_key: string) => Promise.resolve(),
 			},
-			getContentPageByLanguageAndPathEndpoint: `${
-				isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL
-			}/admin/content-pages/by-language-and-path`,
+			getContentPageByLanguageAndPathEndpoint: null,
 		},
 		database: {
 			databaseApplicationType: DatabaseType.hetArchief,

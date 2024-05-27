@@ -1,11 +1,12 @@
-import { ContentPageInfo, ContentPageService, LanguageCode } from '@meemoo/admin-core-ui';
+import { ContentPageInfo, ContentPageService } from '@meemoo/admin-core-ui';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { startsWith } from 'lodash-es';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
+import { Locale } from '@shared/utils';
 
 export const useGetContentPageByLanguageAndPath = (
-	language: LanguageCode,
+	language: Locale,
 	path: string | undefined,
 	options?: { enabled?: boolean }
 ): UseQueryResult<ContentPageInfo | null> => {
@@ -20,7 +21,7 @@ export const useGetContentPageByLanguageAndPath = (
 				throw new Error(`Given path doesn't start with a slash. Received path: ${path}`);
 			}
 
-			return ContentPageService.getContentPageByLanguageAndPath(language, path);
+			return ContentPageService.getContentPageByLanguageAndPath(language as any, path);
 		},
 		{ enabled: true, ...options }
 	);

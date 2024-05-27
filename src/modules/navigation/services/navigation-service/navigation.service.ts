@@ -12,7 +12,7 @@ export class NavigationService {
 		locale: Locale
 	): Promise<Record<NavigationPlacement, NavigationInfo[]>> {
 		const response: Record<NavigationPlacement, NavigationInfo[]> = await ApiService.getApi()
-			.get(stringifyUrl({ url: this.baseUrl, query: { locale } }))
+			.get(stringifyUrl({ url: this.baseUrl, query: { languageCode: locale } }))
 			.json();
 
 		return response ?? {};
