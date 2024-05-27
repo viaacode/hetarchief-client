@@ -152,6 +152,8 @@ import {
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
 
+import styles from './ObjectDetailPage.module.scss';
+
 const { publicRuntimeConfig } = getConfig();
 
 type ObjectDetailPageProps = {
@@ -723,7 +725,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 			);
 
 			return (
-				<div className="p-object-detail__export">
+				<div className={styles['p-object-detail__export']}>
 					<Dropdown
 						isOpen={metadataExportDropdownOpen}
 						onOpen={() => setMetadataExportDropdownOpen(true)}
@@ -733,7 +735,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 							{isPrimary ? (
 								<Button
 									variants={[isPrimary ? 'teal' : 'silver']}
-									className="p-object-detail__export"
+									className={styles['p-object-detail__export']}
 									iconStart={icon}
 									iconEnd={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 									aria-label={label}
@@ -760,7 +762,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 						<DropdownContent>
 							<MenuContent
 								rootClassName="c-dropdown-menu"
-								className="p-object-detail__export-dropdown"
+								className={styles['p-object-detail__export-dropdown']}
 								menuItems={METADATA_EXPORT_OPTIONS()}
 								onClick={(id) => onExportClick(id as MetadataExportFormats)}
 							/>
@@ -921,8 +923,8 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 		}
 
 		const shared: Partial<FlowPlayerProps> = {
-			className: clsx('p-object-detail__flowplayer', {
-				'p-object-detail__flowplayer--with-slider': showFragmentSlider,
+			className: clsx(styles['p-object-detail__flowplayer'], {
+				[styles['p-object-detail__flowplayer--with-slider']]: showFragmentSlider,
 			}),
 			poster: mediaInfo?.thumbnailUrl || undefined,
 			title: representation.name,
@@ -967,7 +969,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 		// Image
 		if (IMAGE_FORMATS.includes(representation.dctermsFormat)) {
 			return (
-				<div className="p-object-detail__image">
+				<div className={styles['p-object-detail__image']}>
 					<Image
 						src={representation.files[0]?.schemaIdentifier ?? null}
 						alt={representation.name}
@@ -988,7 +990,10 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 			>
 				<a
 					tabIndex={isHidden ? -1 : 0}
-					className={`p-object-detail__metadata-card-link u-text-no-decoration`}
+					className={clsx(
+						styles['p-object-detail__metadata-card-link'],
+						'u-text-no-decoration'
+					)}
 					aria-label={item.title}
 				>
 					{<RelatedObject object={item} />}
@@ -1048,7 +1053,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 
 	const renderResearchWarning = (): ReactNode => (
 		<Callout
-			className="p-object-detail__callout u-pt-32 u-pb-24"
+			className={clsx(styles['p-object-detail__callout'], 'u-pt-32 u-pb-24')}
 			icon={<Icon name={IconNamesLight.Info} aria-hidden />}
 			text={tHtml(
 				'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
@@ -1077,12 +1082,14 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 				<ul
 					className={clsx(
 						'u-bg-platinum',
-						'u-list-reset p-object-detail__metadata-list',
+						'u-list-reset',
+						styles['p-object-detail__metadata-list'],
 						`p-object-detail__metadata-list--${type}`,
 						{
-							'p-object-detail__metadata-list--collapsed':
+							[styles['p-object-detail__metadata-list--collapsed']]:
 								!expandMetadata || isMobile,
-							'p-object-detail__metadata-list--expanded': expandMetadata && !isMobile,
+							[styles['p-object-detail__metadata-list--expanded']]:
+								expandMetadata && !isMobile,
 						}
 					)}
 				>
@@ -1103,13 +1110,13 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 		maintainerLogo,
 		maintainerId,
 	}: IeObject): ReactNode => (
-		<div className="p-object-detail__metadata-maintainer-title">
-			<p className="p-object-detail__metadata-label">
+		<div className={styles['p-object-detail__metadata-maintainer-title']}>
+			<p className={styles['p-object-detail__metadata-label']}>
 				{tText('modules/ie-objects/const/index___aanbieder')}
 			</p>
 			{!isKiosk && !hasAccessToVisitorSpaceOfObject && (
 				<>
-					<p className="p-object-detail__metadata-pill">
+					<p className={styles['p-object-detail__metadata-pill']}>
 						<TagList
 							className="u-pt-12"
 							tags={mapKeywordsToTags([maintainerName])}
@@ -1129,7 +1136,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 						/>
 					</p>
 					{maintainerLogo && (
-						<div className="p-object-detail__metadata-logo">
+						<div className={styles['p-object-detail__metadata-logo']}>
 							{/* eslint-disable-next-line @next/next/no-img-element */}
 							<img src={maintainerLogo} alt={`Logo ${maintainerName}`} />
 						</div>
@@ -1151,7 +1158,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 		<Button
 			label={tText('modules/ie-objects/components/metadata/metadata___plan-een-bezoek')}
 			variants={['dark', 'sm']}
-			className="p-object-detail__visit-button"
+			className={styles['p-object-detail__visit-button']}
 			onClick={openRequestAccessBlade}
 		/>
 	);
@@ -1163,14 +1170,14 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 	}: IeObject): ReactNode => {
 		if (!isKiosk && !hasAccessToVisitorSpaceOfObject) {
 			return (
-				<div className="p-object-detail__metadata-maintainer-data">
+				<div className={styles['p-object-detail__metadata-maintainer-data']}>
 					{maintainerDescription && (
-						<p className="p-object-detail__metadata-description">
+						<p className={styles['p-object-detail__metadata-description']}>
 							{maintainerDescription}
 						</p>
 					)}
 					{maintainerSiteUrl && (
-						<p className="p-object-detail__metadata-link">
+						<p className={styles['p-object-detail__metadata-link']}>
 							<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
 								{maintainerSiteUrl}
 							</a>
@@ -1182,7 +1189,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 			);
 		} else {
 			return (
-				<div className="p-object-detail__metadata-maintainer-data">
+				<div className={styles['p-object-detail__metadata-maintainer-data']}>
 					{maintainerName}
 					{showVisitButton && isMobile && renderVisitButton()}
 				</div>
@@ -1215,14 +1222,14 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 
 		return (
 			<>
-				<div className="p-object-detail__metadata-content">
+				<div className={styles['p-object-detail__metadata-content']}>
 					{showResearchWarning && renderResearchWarning()}
 					{renderBreadcrumbs()}
 					{showKeyUserPill && renderKeyUserPill()}
 					<h3
 						className={clsx(
 							'u-pb-32',
-							'p-object-detail__title',
+							styles['p-object-detail__title'],
 							showKeyUserPill ? 'u-pt-8' : 'u-pt-24'
 						)}
 					>
@@ -1358,7 +1365,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 					{showFragmentSlider && (
 						<FragmentSlider
 							thumbnail={mediaInfo?.thumbnailUrl}
-							className="p-object-detail__slider"
+							className={styles['p-object-detail__slider']}
 							fragments={representationsToDisplay}
 							onChangeFragment={(index) =>
 								setCurrentRepresentation(representationsToDisplay[index])
@@ -1375,7 +1382,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 		if (!isNil(accessEndDate) || isKiosk) {
 			return (
 				<VisitorSpaceNavigation
-					className="p-object-detail__nav"
+					className={styles['p-object-detail__nav']}
 					title={mediaInfo?.maintainerName ?? ''}
 					accessEndDate={accessEndDate}
 				/>
@@ -1388,7 +1395,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 		return (
 			showBackButton && (
 				<Button
-					className="p-object-detail__back"
+					className={styles['p-object-detail__back']}
 					icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
 					onClick={() => window.history.back()}
 					variants={['white', 'xs']}
@@ -1404,7 +1411,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 			</Head>
 			{renderNavigationBar()}
 			<ScrollableTabs
-				className="p-object-detail__tabs"
+				className={styles['p-object-detail__tabs']}
 				variants={['dark']}
 				tabs={tabs}
 				onClick={(tabId) => setActiveTab(tabId as ObjectDetailTabs | null)}
@@ -1426,19 +1433,21 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 				</p>
 			)}
 			<article
-				className={clsx('p-object-detail__wrapper', {
-					'p-object-detail--hidden': mediaInfoIsLoading || mediaInfoIsError,
-					'p-object-detail__wrapper--collapsed': !expandMetadata,
-					'p-object-detail__wrapper--expanded': expandMetadata,
-					'p-object-detail__wrapper--metadata': activeTab === ObjectDetailTabs.Metadata,
-					'p-object-detail__wrapper--video': activeTab === ObjectDetailTabs.Media,
+				className={clsx(styles['p-object-detail__wrapper'], {
+					[styles['p-object-detail--hidden']]: mediaInfoIsLoading || mediaInfoIsError,
+					[styles['p-object-detail__wrapper--collapsed']]: !expandMetadata,
+					[styles['p-object-detail__wrapper--expanded']]: expandMetadata,
+					[styles['p-object-detail__wrapper--metadata']]:
+						activeTab === ObjectDetailTabs.Metadata,
+					[styles['p-object-detail__wrapper--video']]:
+						activeTab === ObjectDetailTabs.Media,
 				})}
 			>
 				{mediaType && hasMedia && (
 					<Button
-						className={clsx('p-object-detail__expand-button', {
-							'p-object-detail__expand-button--collapsed': !expandMetadata,
-							'p-object-detail__expand-button--expanded': expandMetadata,
+						className={clsx(styles['p-object-detail__expand-button'], {
+							[styles['p-object-detail__expand-button--collapsed']]: !expandMetadata,
+							[styles['p-object-detail__expand-button--expanded']]: expandMetadata,
 						})}
 						icon={
 							<Icon
@@ -1454,12 +1463,12 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 						variants="white"
 					/>
 				)}
-				<div className="p-object-detail__video">{renderObjectMedia()}</div>
+				<div className={styles['p-object-detail__video']}>{renderObjectMedia()}</div>
 				<div
-					className={clsx('p-object-detail__metadata', {
-						'p-object-detail__metadata--collapsed': !expandMetadata,
-						'p-object-detail__metadata--expanded': expandMetadata,
-						'p-object-detail__metadata--no-media': !mediaType,
+					className={clsx(styles['p-object-detail__metadata'], {
+						[styles['p-object-detail__metadata--collapsed']]: !expandMetadata,
+						[styles['p-object-detail__metadata--expanded']]: expandMetadata,
+						[styles['p-object-detail__metadata--no-media']]: !mediaType,
 					})}
 				>
 					{renderMetaData()}
@@ -1545,7 +1554,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 		}
 
 		if (mediaInfo) {
-			return <div className="p-object-detail">{renderObjectDetail()}</div>;
+			return <div className={styles['p-object-detail']}>{renderObjectDetail()}</div>;
 		}
 
 		if (isMediaInfoErrorNoAccess || isMediaInfoErrorNotFound) {
