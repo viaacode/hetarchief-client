@@ -39,6 +39,7 @@ import {
 } from '@shared/components';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import Html from '@shared/components/Html/Html';
+import LanguageSwitcher from '@shared/components/LanguageSwitcher/LanguageSwitcher';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
@@ -70,6 +71,8 @@ import { Breakpoints, Visit } from '@shared/types';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 
 import packageJson from '../../../../../package.json';
+
+import styles from './AppLayout.module.scss';
 
 // We want to make sure config gets fetched here, no sure why anymore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -408,7 +411,7 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	return (
 		<div
-			className={clsx('l-app', {
+			className={clsx(styles['l-app'], {
 				'l-app--sticky': sticky,
 			})}
 		>
@@ -434,12 +437,15 @@ const AppLayout: FC<any> = ({ children }) => {
 					onOpenDropdowns={onOpenNavDropdowns}
 				/>
 				{isLoaded && showNavigationHeaderRight && (
-					<Navigation.Right
-						currentPath={router.asPath}
-						placement="right"
-						items={rightNavItems}
-						onOpenDropdowns={onOpenNavDropdowns}
-					/>
+					<div className={styles['c-navigation__section--right']}>
+						<LanguageSwitcher />
+						<Navigation.Right
+							currentPath={router.asPath}
+							placement="right"
+							items={rightNavItems}
+							onOpenDropdowns={onOpenNavDropdowns}
+						/>
+					</div>
 				)}
 			</Navigation>
 

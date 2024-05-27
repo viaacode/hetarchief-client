@@ -1,4 +1,5 @@
 import { GetServerSidePropsResult } from 'next';
+import { useRouter } from 'next/router';
 import { GetServerSidePropsContext, NextPage } from 'next/types';
 import React, { FC } from 'react';
 
@@ -9,7 +10,9 @@ import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-p
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageLabelsEditPageDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
-	return <ContentPageLabelsEditPage url={url} />;
+	const router = useRouter();
+
+	return <ContentPageLabelsEditPage url={url} id={router.query.id as string} />;
 };
 
 export async function getServerSideProps(

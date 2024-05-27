@@ -15,8 +15,19 @@ import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { MultiValue } from 'react-select';
+import { useQueryParams } from 'use-query-params';
+
+import { GroupName, Permission } from '@account/const';
+import { useGetFolders } from '@account/hooks/get-folders';
+import { selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
+import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/get-ie-object-format-counts';
+import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
+import { IeObjectAccessThrough } from '@ie-objects/types';
+import { isInAFolder } from '@ie-objects/utils';
+import { useGetActiveVisitForUserAndSpace } from '@modules/visit-requests/hooks/get-active-visit-for-user-and-space';
+import { VisitsService } from '@modules/visit-requests/services';
+import { VisitTimeframe } from '@modules/visit-requests/types';
 import {
 	Callout,
 	ErrorNoAccess,
@@ -54,8 +65,8 @@ import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
-import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectFolders } from '@shared/store/ie-objects';
@@ -108,18 +119,6 @@ import {
 import { MetadataProp, TagIdentity, VisitorSpaceFilterId } from '@visitor-space/types';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
-import { useQueryParams } from 'use-query-params';
-
-import { GroupName, Permission } from '@account/const';
-import { useGetFolders } from '@account/hooks/get-folders';
-import { selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
-import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/get-ie-object-format-counts';
-import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
-import { IeObjectAccessThrough } from '@ie-objects/types';
-import { isInAFolder } from '@ie-objects/utils';
-import { useGetActiveVisitForUserAndSpace } from '@modules/visit-requests/hooks/get-active-visit-for-user-and-space';
-import { VisitsService } from '@modules/visit-requests/services';
-import { VisitTimeframe } from '@modules/visit-requests/types';
 
 const labelKeys = {
 	search: 'SearchPage__search',

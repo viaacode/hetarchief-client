@@ -40,7 +40,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	position: relative;
 	display: grid;
 	align-items: center;
-	grid-template-columns: auto 1fr 2fr;
+	grid-template-columns: auto 1fr;
 	min-height: $c-navigation-height-md;
 	padding: 0 2rem;
 	background-color: $black;

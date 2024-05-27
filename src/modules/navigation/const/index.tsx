@@ -5,7 +5,6 @@ import { MaterialRequestCenterButton } from '@navigation/components/MaterialRequ
 import { getNavigationItemsProfileDropdown } from '@navigation/components/Navigation/Navigation.consts';
 import { NavigationInfo, NavigationPlacement } from '@navigation/services/navigation-service';
 import { Icon, IconNamesLight, IconNamesSolid } from '@shared/components';
-import LanguageSwitcher from '@shared/components/LanguageSwitcher/LanguageSwitcher';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { Locale } from '@shared/utils';
@@ -19,17 +18,8 @@ export const NAV_HAMBURGER_PROPS = (): NavigationHamburgerProps => ({
 	closedLabel: tText('modules/shared/const/navigation___menu'),
 });
 
-const getLanguageSwitcher = () => {
-	return {
-		id: 'language-switcher',
-		path: '',
-		node: <LanguageSwitcher />,
-	};
-};
-
 export const GET_NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationItem[] => {
 	return [
-		getLanguageSwitcher(),
 		{
 			id: 'auth-button',
 			path: '',
@@ -65,7 +55,6 @@ export const GET_NAV_ITEMS_RIGHT_LOGGED_IN = (
 	const badgeCls = 'c-navigation__notifications-badge';
 
 	return [
-		getLanguageSwitcher(),
 		{
 			id: 'material-request-center',
 			path: '',

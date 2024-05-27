@@ -74,6 +74,8 @@ export function getAdminCoreConfig(router: NextRouter, locale: Locale): AdminCon
 				ContentBlockType.TagsWithLink,
 				ContentBlockType.ThreeClickableTiles,
 				ContentBlockType.UspGrid,
+				ContentBlockType.OverviewNewspaperTitles,
+				ContentBlockType.ContentEncloseGrid,
 			],
 			defaultPageWidth: ContentWidth.LARGE,
 			onSaveContentPage,
