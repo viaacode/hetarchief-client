@@ -4,6 +4,8 @@
 $metadata-expanded-width: 72vw;
 $metadata-collapsed-width: 36vw;
 $breakpoint-md: map.get($breakpoints, "md");
+$top-navigation-bar-height: 10rem;
+$top-visitor-space-bar-height: 6.4rem;
 
 .p-object-detail {
 	visibility: visible;
@@ -22,7 +24,7 @@ $breakpoint-md: map.get($breakpoints, "md");
 		flex-grow: 1;
 		min-height: 0;
 		display: grid;
-		max-height: calc(100vh - 16.4rem);
+		max-height: calc(100vh - $top-navigation-bar-height - $top-visitor-space-bar-height);
 
 		@include respond-at(md) {
 			grid-template-columns: 1fr min-content;
