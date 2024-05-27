@@ -7,7 +7,8 @@ import { useDispatch } from 'react-redux';
 
 import { useGetContentPageByLanguageAndPath } from '@modules/content-page/hooks/get-content-page';
 import { NavigationDropdown } from '@navigation/components/Navigation/NavigationDropdown';
-import { QUERY_KEYS, ROUTE_PARTS_BY_LOCALE, RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
+import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/LanguageSwitcher.exceptions';
+import { QUERY_KEYS, RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import {
@@ -66,16 +67,7 @@ export default function LanguageSwitcher() {
 		let newFullPath = oldFullPath.replace(oldPath, newPath);
 
 		// exceptions for specific paths
-		if (routeKey === RouteKey.accountMyFolders) {
-			// If route contains the default "favorites" folder, strip it off, since it will be different in the other locale
-			const favoritesInAllLanguages = Object.values(ROUTE_PARTS_BY_LOCALE).map(
-				(routeParts) => routeParts.favorites
-			);
-			const favoritesFolder = newFullPath.split('/').pop() as string;
-			if (favoritesInAllLanguages.includes(favoritesFolder)) {
-				newFullPath = newFullPath.substring(0, newFullPath.lastIndexOf('/'));
-			}
-		}
+		newFullPath = handleRouteExceptions(routeKey, newFullPath);
 
 		// exception for content pages
 		if (router.route === '/[slug]') {
