@@ -22,6 +22,7 @@ $breakpoint-md: map.get($breakpoints, "md");
 		flex-grow: 1;
 		min-height: 0;
 		display: grid;
+		max-height: calc(100vh - 16.4rem);
 
 		@include respond-at(md) {
 			grid-template-columns: 1fr min-content;
@@ -117,29 +118,29 @@ $breakpoint-md: map.get($breakpoints, "md");
 			bottom: 135px;
 		}
 
-		&-fullscreen-button {
+		:global(.p-object-detail__flowplayer-fullscreen-button) {
 			z-index: get-z-layer("modal"); // Current highest
 			position: absolute;
 			bottom: $spacer-md;
 			right: $spacer-md;
 
-			&--exit {
+			:global(.p-object-detail__flowplayer-fullscreen-button--exit) {
 				display: none;
 				bottom: $spacer-lg;
 				right: $spacer-lg;
 
-				.c-button__icon {
+				:global(.c-button__icon) {
 					color: $black;
 				}
 			}
 		}
 
-		& .is-fullscreen &-fullscreen-button--exit {
+		& :global(.is-fullscreen) :global(.p-object-detail__flowplayer-fullscreen-button--exit) {
 			display: block;
 		}
 
-		& .is-hovered &-fullscreen-button--exit,
-		& .is-paused &-fullscreen-button--exit {
+		& :global(.is-hovered) :global(.p-object-detail__flowplayer-fullscreen-button--exit),
+		& :global(.is-paused) :global(.p-object-detail__flowplayer-fullscreen-button--exit) {
 			bottom: calc(#{$spacer-lg} + 5.8rem); // Add height of controls bar
 		}
 	}
@@ -148,7 +149,7 @@ $breakpoint-md: map.get($breakpoints, "md");
 		position: relative;
 	}
 
-	&__media {
+	:global(.p-object-detail__media) {
 		position: relative;
 		display: flex;
 		flex-direction: column;
@@ -192,8 +193,8 @@ $breakpoint-md: map.get($breakpoints, "md");
 	&__metadata-content {
 		padding: 0 2rem;
 
-		p {
-			span {
+		:global(p) {
+			:global(span) {
 				white-space: pre-line;
 			}
 		}
@@ -203,14 +204,14 @@ $breakpoint-md: map.get($breakpoints, "md");
 		}
 
 		& > {
-			& h1,
-			h2,
-			h3,
-			h4,
-			h5,
-			h6,
-			p,
-			span {
+			:global(h1),
+			:global(h2),
+			:global(h3),
+			:global(h4),
+			:global(h5),
+			:global(h6),
+			:global(p),
+			:global(span) {
 				@include respond-at("md") {
 					word-break: break-all;
 				}
@@ -222,7 +223,7 @@ $breakpoint-md: map.get($breakpoints, "md");
 		}
 	}
 
-	&__metadata-component {
+	:global(.p-object-detail__metadata-component) {
 		padding: 0 2rem;
 
 		@include respond-at("md") {
@@ -243,7 +244,7 @@ $breakpoint-md: map.get($breakpoints, "md");
 		}
 	}
 
-	&__metadata-list--similar {
+	:global(.p-object-detail__metadata-list--similar) {
 		// Firefox and Safari render weirdly with: margin: 0 - $spacer-md;
 		margin-left: -$spacer-md;
 		margin-right: -$spacer-md;
@@ -266,7 +267,7 @@ $breakpoint-md: map.get($breakpoints, "md");
 		}
 	}
 
-	&__metadata-list--related {
+	:global(.p-object-detail__metadata-list--related) {
 		padding: 2rem;
 		height: max-content;
 
@@ -425,15 +426,15 @@ $breakpoint-md: map.get($breakpoints, "md");
 		}
 	}
 
-	.c-menu--default {
+	:global(.c-menu--default) {
 		padding: 0;
 		margin-top: $spacer-xxs;
 	}
 
-	&__request-material {
+	:global(.p-object-detail__request-material) {
 		min-width: 0;
 
-		.c-button__content {
+		:global(.c-button__content) {
 			width: 100%;
 		}
 	}
