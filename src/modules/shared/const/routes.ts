@@ -117,7 +117,7 @@ const ROUTE_PARTS_EN: Record<RoutePart, string> = {
 	permissions: 'permissions',
 	search: 'search',
 	settings: 'settings',
-	shareFolder: 'folder share',
+	shareFolder: 'folder-share',
 	translations: 'translations',
 	user: 'users',
 	userManagement: 'usermanagement',
