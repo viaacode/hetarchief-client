@@ -7,17 +7,22 @@ import { Locale } from '@shared/utils';
 
 export const useGetContentPageByLanguageAndPath = (
 	language: Locale,
-	path: string | undefined
+	path: string | undefined,
+	options?: { enabled?: boolean }
 ): UseQueryResult<ContentPageInfo | null> => {
-	return useQuery([QUERY_KEYS.getContentPage, { path }], () => {
-		if (!path) {
-			return null;
-		}
+	return useQuery(
+		[QUERY_KEYS.getContentPage, { path, language }],
+		() => {
+			if (!path) {
+				return null;
+			}
 
-		if (!startsWith(path, '/')) {
-			throw new Error(`Given path doesn't start with a slash. Received path: ${path}`);
-		}
+			if (!startsWith(path, '/')) {
+				throw new Error(`Given path doesn't start with a slash. Received path: ${path}`);
+			}
 
-		return ContentPageService.getContentPageByLanguageAndPath(language as any, path);
-	});
+			return ContentPageService.getContentPageByLanguageAndPath(language as any, path);
+		},
+		{ enabled: true, ...options }
+	);
 };
