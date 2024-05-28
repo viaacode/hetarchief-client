@@ -20,18 +20,15 @@ $component: "c-block-enclosed-content";
 	}
 
 	&__cards {
-		display: grid;
+		display: flex;
 		list-style: none;
-		grid-template-columns: minmax(0, 1fr);
 		margin: 0;
 		padding: 0;
 		row-gap: $spacer-md;
+		flex-wrap: wrap;
 
-		@include respond-at("md") {
-			column-gap: $spacer-lg;
-			grid-template-columns: repeat(3, 1fr);
-			grid-template-rows: max-content;
-			row-gap: $spacer-lg * 2;
+		@include respond-at("sm") {
+			gap: $spacer-lg;
 		}
 
 		@include respond-at("xl") {
@@ -43,34 +40,36 @@ $component: "c-block-enclosed-content";
 				text-decoration: none;
 			}
 
+			background-color: $white;
+			border: 1px solid #adadad66;
 			display: flex;
+			padding: 1.6rem;
 			flex-direction: row;
-			flex-grow: 0;
+			width: 100%;
+
+			@include respond-at("sm") {
+				width: calc(50% - #{$spacer-md});
+			}
 
 			@include respond-at("md") {
-				flex-direction: column;
+				width: calc(33.3% - #{$spacer-md});
+			}
+
+			@include respond-at("lg") {
+				width: calc(25% - #{$spacer-md});
 			}
 
 			&__meta {
 				display: flex;
-				gap: 1rem;
-				flex-wrap: wrap;
-				margin-top: $spacer-xs;
-				font-size: $font-size-xs;
+				flex-direction: column-reverse;
+				margin-top: 0.4rem;
+				font-size: $font-size-sm;
+				line-height: 2.2rem;
 				color: $neutral;
-				justify-content: space-between;
-				border-top: 1px solid $silver;
-				padding-top: $spacer-xs;
 			}
 
 			&__image {
 				position: relative;
-				min-height: 160px;
-				min-width: 120px;
-				max-height: 160px;
-				max-width: 120px;
-				margin-right: 2rem;
-				box-shadow: $shadow-24-black-24;
 				background-size: cover;
 				background-position: center;
 				padding: $spacer-sm;
@@ -78,15 +77,13 @@ $component: "c-block-enclosed-content";
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				background-color: $zinc;
-				color: $neutral;
-
-				@include respond-at("md") {
-					max-width: unset;
-					margin-right: unset;
-					max-height: unset;
-					min-height: 205px;
-				}
+				background-color: $platinum;
+				color: $teal;
+				max-width: unset;
+				margin-right: unset;
+				max-height: unset;
+				min-height: 13rem;
+				width: 100%;
 
 				&__icon {
 					position: absolute;
@@ -105,11 +102,6 @@ $component: "c-block-enclosed-content";
 				line-height: math.div($font-size-md, 9) * 10; // 2rem
 				margin: $title-spacer 0 $title-spacer 0;
 				font-weight: $font-weight-bold;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				-webkit-line-clamp: 3;
-				-webkit-box-orient: vertical;
-				display: -webkit-box;
 
 				@include respond-at("md") {
 					-webkit-line-clamp: 2;
