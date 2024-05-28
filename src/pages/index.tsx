@@ -1,17 +1,19 @@
-import { ContentPageRenderer } from '@meemoo/admin-core-ui';
-import { GetServerSidePropsResult, NextPage } from 'next';
+import { ContentPageRenderer, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { GetServerSidePropsContext } from 'next/types';
 import { ComponentType, FC, useEffect } from 'react';
 
 import { GroupName } from '@account/const';
-import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { useGetContentPageByLanguageAndPath } from '@modules/content-page/hooks/get-content-page';
+import {
+	getContentPageByLanguageAndPath,
+	useGetContentPageByLanguageAndPath,
+} from '@modules/content-page/hooks/get-content-page';
 import { ContentPageClientService } from '@modules/content-page/services/content-page-client.service';
 import { VisitorLayout } from '@modules/visitor-layout';
 import { Loading } from '@shared/components';
-import { ROUTES_BY_LOCALE } from '@shared/const';
+import { KNOWN_STATIC_ROUTES, QUERY_KEYS, ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -41,8 +43,11 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 	 * Data
 	 */
 
-	const { isLoading: isContentPageLoading, data: contentPageInfo } =
-		useGetContentPageByLanguageAndPath(locale || Locale.nl, '/');
+	const { isLoading: isContentPageLoading, data: dbContentPage } =
+		useGetContentPageByLanguageAndPath(locale || Locale.nl, KNOWN_STATIC_ROUTES.Home);
+	const contentPageInfo = dbContentPage
+		? convertDbContentPageToContentPageInfo(dbContentPage)
+		: null;
 
 	useEffect(() => {
 		if (isKioskUser) {
@@ -60,7 +65,12 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 		}
 		if (contentPageInfo) {
 			return (
-				<ContentPageRenderer contentPageInfo={contentPageInfo} commonUser={commonUser} />
+				<>
+					<ContentPageRenderer
+						contentPageInfo={contentPageInfo}
+						commonUser={commonUser}
+					/>
+				</>
 			);
 		}
 	};
@@ -82,7 +92,7 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 	);
 };
 
-export async function getServerSideProps(
+export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<HomepageProps>> {
 	let title: string | null = null;
@@ -106,11 +116,26 @@ export async function getServerSideProps(
 	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> =
 		await getDefaultStaticProps(context);
 
+	const queryClient = new QueryClient();
+
+	const path = KNOWN_STATIC_ROUTES.Home;
+	const language = (context.locale || Locale.nl) as Locale;
+	await queryClient.prefetchQuery({
+		queryKey: [QUERY_KEYS.getContentPage, { path, language }],
+		queryFn: () => getContentPageByLanguageAndPath(language, path),
+	});
+
+	const dehydratedState = dehydrate(queryClient);
+
 	return {
-		props: { ...(defaultProps as { props: DefaultSeoInfo }).props, title, description, image },
+		props: {
+			...(defaultProps as { props: DefaultSeoInfo }).props,
+			title,
+			description,
+			image,
+			dehydratedState,
+		},
 	};
 }
 
-export default withAdminCoreConfig(
-	withUser(withAuth(Homepage as ComponentType, false)) as ComponentType
-) as FC<HomepageProps>;
+export default withUser(withAuth(Homepage as ComponentType, false)) as FC<HomepageProps>;

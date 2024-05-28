@@ -52,7 +52,7 @@ const onSaveContentPage = async (contentPageInfo: ContentPageInfo) => {
 	);
 };
 
-export function getAdminCoreConfig(router: NextRouter, locale: Locale): AdminConfig {
+export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): AdminConfig {
 	return {
 		staticPages: Object.values(ROUTES_BY_LOCALE.nl),
 		contentPage: {
@@ -175,8 +175,8 @@ export function getAdminCoreConfig(router: NextRouter, locale: Locale): AdminCon
 			router: {
 				Link: InternalLink as FunctionComponent<LinkInfo>,
 				useHistory: () => ({
-					push: router.push,
-					replace: router.replace,
+					push: router?.push as any,
+					replace: router?.replace as any,
 				}),
 			},
 			queryCache: {
@@ -203,6 +203,8 @@ export function getAdminCoreConfig(router: NextRouter, locale: Locale): AdminCon
 			},
 		},
 		routes: ADMIN_CORE_ROUTES_BY_LOCALE[locale],
-		env: {},
+		env: {
+			CLIENT_URL: publicRuntimeConfig.CLIENT_URL,
+		},
 	};
 }

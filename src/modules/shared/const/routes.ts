@@ -354,7 +354,7 @@ const ADMIN_CORE_ROUTES_EN: AdminConfig['routes'] = {
 export enum KNOWN_STATIC_ROUTES {
 	TermsOfService = '/gebruikersvoorwaarden-tekst',
 	aboutTheVisitorTool = '/over-de-bezoekertool',
-	Home = '',
+	Home = '/',
 	kioskConditions = '/kiosk-voorwaarden',
 }
 

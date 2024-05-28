@@ -1,5 +1,8 @@
+import { DehydratedState } from '@tanstack/react-query';
+
 export interface DefaultSeoInfo {
 	url: string;
+	dehydratedState?: DehydratedState;
 	_nextI18Next?: {
 		initialI18nStore: {
 			nl?: {

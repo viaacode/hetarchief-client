@@ -1,28 +1,30 @@
-import { ContentPageInfo, ContentPageService } from '@meemoo/admin-core-ui';
+import { ContentPageService, DbContentPage } from '@meemoo/admin-core-ui';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { startsWith } from 'lodash-es';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { Locale } from '@shared/utils';
 
+export function getContentPageByLanguageAndPath(language: Locale, path: string | undefined) {
+	if (!path) {
+		return null;
+	}
+
+	if (!startsWith(path, '/')) {
+		throw new Error(`Given path doesn't start with a slash. Received path: ${path}`);
+	}
+
+	return ContentPageService.getContentPageByLanguageAndPath(language as any, path);
+}
+
 export const useGetContentPageByLanguageAndPath = (
 	language: Locale,
 	path: string | undefined,
 	options?: { enabled?: boolean }
-): UseQueryResult<ContentPageInfo | null> => {
+): UseQueryResult<DbContentPage | null> => {
 	return useQuery(
 		[QUERY_KEYS.getContentPage, { path, language }],
-		() => {
-			if (!path) {
-				return null;
-			}
-
-			if (!startsWith(path, '/')) {
-				throw new Error(`Given path doesn't start with a slash. Received path: ${path}`);
-			}
-
-			return ContentPageService.getContentPageByLanguageAndPath(language as any, path);
-		},
+		() => getContentPageByLanguageAndPath(language, path),
 		{ enabled: true, ...options }
 	);
 };

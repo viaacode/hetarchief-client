@@ -1,4 +1,4 @@
-import { ContentPageRenderer } from '@meemoo/admin-core-ui';
+import { ContentPageRenderer, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
 import { HTTPError } from 'ky';
 import { kebabCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
@@ -54,11 +54,12 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 	const {
 		error: contentPageError,
 		isLoading: isContentPageLoading,
-		data: contentPageInfo,
-	} = useGetContentPageByLanguageAndPath(
-		(locale?.toUpperCase() || Locale.nl) as Locale,
-		`/${slug}`
-	);
+		data: dbContentPage,
+	} = useGetContentPageByLanguageAndPath((locale || Locale.nl) as Locale, `/${slug}`);
+	const contentPageInfo = dbContentPage
+		? convertDbContentPageToContentPageInfo(dbContentPage)
+		: null;
+
 	const { isLoading: isIeObjectLoading, data: ieObjectInfo } = useGetIeObjectsInfo(
 		slug as string,
 		{ enabled: !!slug }

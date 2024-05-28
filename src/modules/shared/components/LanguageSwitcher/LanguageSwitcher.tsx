@@ -1,3 +1,4 @@
+import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import { reverse, sortBy } from 'lodash-es';
@@ -28,11 +29,14 @@ export default function LanguageSwitcher() {
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useDispatch();
 	const { data: allLanguages } = useGetAllLanguages();
-	const { data: contentPageInfo } = useGetContentPageByLanguageAndPath(
+	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
 		(locale?.toUpperCase() || Locale.nl) as Locale,
 		`/${router.query.slug}`,
 		{ enabled: router.route === '/[slug]' }
 	);
+	const contentPageInfo = dbContentPage
+		? convertDbContentPageToContentPageInfo(dbContentPage)
+		: null;
 
 	const languageOptions = (allLanguages || []).map((languageInfo) => ({
 		label: languageInfo.languageLabel,
@@ -48,7 +52,7 @@ export default function LanguageSwitcher() {
 		}, 10);
 	};
 
-	const handleLocaleChanged = (oldLocale: Locale, newLocale: Locale) => {
+	const handleLocaleChanged = async (oldLocale: Locale, newLocale: Locale) => {
 		const oldFullPath = router.asPath;
 		const routeEntries = Object.entries(ROUTES_BY_LOCALE[oldLocale]);
 		// We'll go in reverse order, so we'll match on the longest paths first
@@ -79,8 +83,8 @@ export default function LanguageSwitcher() {
 		}
 
 		// Redirect to new path
-		router.push(newFullPath, newFullPath, { locale: newLocale });
-		queryClient.invalidateQueries([QUERY_KEYS.getNavigationItems]);
+		await router.push(newFullPath, newFullPath, { locale: newLocale });
+		await queryClient.invalidateQueries([QUERY_KEYS.getNavigationItems]);
 	};
 
 	return (

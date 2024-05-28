@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
 import { selectHasCheckedLogin, selectIsLoggedIn, selectUser } from '@auth/store/user';
-import LoggedInHome from '@home/components/LoggedInHome/LoggedInHome';
-import LoggedOutHome from '@home/components/LoggedOutHome/LoggedOutHome';
+import LoggedInVisitorSpacesHome from '@home/components/LoggedInVisitorSpacesHome/LoggedInVisitorSpacesHome';
+import LoggedOutVisitorSpacesHome from '@home/components/LoggedOutVisitorSpacesHome/LoggedOutVisitorSpacesHome';
 import { VisitorLayout } from '@modules/visitor-layout';
 import { Loading } from '@shared/components';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -38,9 +38,9 @@ export const VisitorSpacesHomePage: FC<DefaultSeoInfo> = (props) => {
 			if (showLinkedSpaceAsHomepage && linkedSpaceSlug) {
 				return <Loading fullscreen owner="root page logged" />;
 			}
-			return <LoggedInHome {...props} />;
+			return <LoggedInVisitorSpacesHome {...props} />;
 		}
-		return <LoggedOutHome {...props} />;
+		return <LoggedOutVisitorSpacesHome {...props} />;
 	};
 
 	return <VisitorLayout>{renderPageContent()}</VisitorLayout>;
