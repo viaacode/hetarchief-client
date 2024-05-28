@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
 
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { ComponentLink } from '@shared/types';
 
@@ -11,6 +12,7 @@ import { FooterProps } from './Footer.types';
 
 const Footer: FC<FooterProps> = ({ linkSections }) => {
 	const { tText } = useTranslation();
+	const locale = useLocale();
 
 	const renderLinks = (links: ComponentLink[], key: string) => {
 		return (
@@ -40,7 +42,7 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 						aria-label={'Link naar hetarchief.be'}
 					>
 						<Image
-							src={'/images/logo_hetarchief.svg'}
+							src={`/images/logo_hetarchief_${locale}.svg`}
 							alt={tText(
 								'modules/navigation/components/footer/footer___hetarchief-logo'
 							)}
@@ -68,7 +70,7 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 						)}
 					>
 						<Image
-							src={'/images/logo_vlaanderen.svg'}
+							src={`/images/logo_vlaanderen_${locale}.svg`}
 							alt={tText(
 								'modules/navigation/components/footer/footer___vlaanderen-logo'
 							)}
@@ -92,7 +94,7 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 						)}
 					>
 						<Image
-							src={'/images/logo_meemoo.svg'}
+							src={`/images/logo_meemoo_${locale}.svg`}
 							alt={tText('modules/navigation/components/footer/footer___meemoo-logo')}
 							width={104}
 							height={44}

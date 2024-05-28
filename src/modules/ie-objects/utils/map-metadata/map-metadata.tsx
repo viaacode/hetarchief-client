@@ -5,9 +5,10 @@ import { stringifyUrl } from 'query-string';
 import { ReactNode } from 'react';
 
 import { MetadataItem } from '@ie-objects/components';
-import { ROUTE_PARTS } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
+import { Locale } from '@shared/utils';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
@@ -19,7 +20,11 @@ export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
 	});
 };
 
-export const renderKeywordsAsTags = (keywords: string[], slug: string): ReactNode | null =>
+export const renderKeywordsAsTags = (
+	keywords: string[],
+	slug: string,
+	locale: Locale
+): ReactNode | null =>
 	keywords.length ? (
 		<TagList
 			className="u-pb-24 u-pt-12"
@@ -27,7 +32,7 @@ export const renderKeywordsAsTags = (keywords: string[], slug: string): ReactNod
 			onTagClicked={(keyword: string | number) => {
 				router.push(
 					stringifyUrl({
-						url: `/${ROUTE_PARTS.search}`,
+						url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 						query: {
 							[VisitorSpaceFilterId.Maintainer]: slug,
 							[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: keyword,

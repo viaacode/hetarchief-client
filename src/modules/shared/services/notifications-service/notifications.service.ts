@@ -3,12 +3,12 @@ import { QueryClient } from '@tanstack/react-query';
 import { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 
-import { ROUTES } from '@shared/const';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
-import { asDate } from '@shared/utils';
+import { asDate, Locale } from '@shared/utils';
 
 import { GET_PATH_FROM_NOTIFICATION_TYPE } from './notifications.consts';
 import {
@@ -35,14 +35,15 @@ export abstract class NotificationsService {
 	public static async initPolling(
 		router: NextRouter,
 		showNotificationsCenter: (show: boolean) => void,
-		setHasUnreadNotifications: (hasUnreadNotifications: boolean) => void
+		setHasUnreadNotifications: (hasUnreadNotifications: boolean) => void,
+		locale: Locale
 	): Promise<void> {
 		this.router = router;
 		this.showNotificationsCenter = showNotificationsCenter;
 		this.setHasUnreadNotifications = setHasUnreadNotifications;
 		if (!this.pollingTimer && process.env.NODE_ENV !== 'test') {
 			NotificationsService.pollingTimer = window.setInterval(this.checkNotifications, 15000);
-			await this.checkNotifications();
+			await this.checkNotifications(locale);
 		}
 	}
 
@@ -60,15 +61,15 @@ export abstract class NotificationsService {
 		this.setHasUnreadNotifications = null;
 	}
 
-	public static getPath(notification: Notification): string | null {
+	public static getPath(notification: Notification, locale: Locale): string | null {
 		return (
-			GET_PATH_FROM_NOTIFICATION_TYPE()
+			GET_PATH_FROM_NOTIFICATION_TYPE(locale)
 				[notification.type]?.replace('{visitRequestId}', notification.visitId)
 				?.replace('{slug}', notification.visitorSpaceSlug) || null
 		);
 	}
 
-	public static async checkNotifications(): Promise<void> {
+	public static async checkNotifications(locale: Locale): Promise<void> {
 		const mostRecent = asDate(NotificationsService.lastNotifications?.[0]?.createdAt);
 		const lastCheckNotificationTime = mostRecent ? mostRecent.getTime() : 0;
 		const notificationResponse = await NotificationsService.getNotifications(1, 20);
@@ -111,7 +112,7 @@ export abstract class NotificationsService {
 					)
 				) {
 					// Redirect the user to the homepage
-					NotificationsService?.router?.push?.(ROUTES.home);
+					NotificationsService?.router?.push?.(ROUTES_BY_LOCALE[locale].home);
 				}
 			}
 
@@ -124,7 +125,7 @@ export abstract class NotificationsService {
 						'modules/shared/services/notifications-service/notifications___bekijk'
 					),
 					onClose: async () => {
-						const url = NotificationsService.getPath(newNotifications[0]);
+						const url = NotificationsService.getPath(newNotifications[0], locale);
 						if (url) {
 							// Go to page
 							await NotificationsService.markOneAsRead(newNotifications[0].id);

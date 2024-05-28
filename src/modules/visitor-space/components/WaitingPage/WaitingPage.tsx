@@ -1,7 +1,8 @@
 import { FC } from 'react';
 
 import Html from '@shared/components/Html/Html';
-import { ROUTES } from '@shared/const';
+import { ROUTES_BY_LOCALE } from '@shared/const';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { CardImage } from '../../../shared/components';
@@ -11,6 +12,7 @@ import { WaitingPageProps } from './WaitingPage.types';
 
 const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 	const { tHtml } = useTranslation();
+	const locale = useLocale();
 
 	const renderPageContent = () => {
 		return (
@@ -19,7 +21,7 @@ const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 					title={space?.name}
 					phone={space?.contactInfo.telephone || ''}
 					email={space?.contactInfo.email || ''}
-					backLink={backLink ?? ROUTES.home}
+					backLink={backLink ?? ROUTES_BY_LOCALE[locale].home}
 				/>
 
 				{/* I'm choosing to duplicate the above instead of splitting to a separate layout because back-button functionality on this page differs from the `[slug]` page */}

@@ -17,6 +17,7 @@ const renderHome = () => {
 						_nextI18Next={{
 							initialI18nStore: {
 								nl: { common: {} },
+								en: { common: {} },
 							},
 						}}
 					/>

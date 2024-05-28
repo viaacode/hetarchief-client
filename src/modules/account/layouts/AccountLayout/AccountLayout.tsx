@@ -4,13 +4,12 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 
 import { AccountLayoutProps } from '@account/layouts';
+import { GET_ACCOUNT_NAVIGATION_LINKS } from '@modules/account/const';
 import { ListNavigationItem } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 
 import styles from './AccountLayout.module.scss';
-
-import { GET_ACCOUNT_NAVIGATION_LINKS } from 'modules/account/const';
 
 const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle }) => {
 	const { asPath } = useRouter();

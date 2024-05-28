@@ -8,6 +8,14 @@ $pill-color: color.adjust(red, $lightness: 10%);
 .c-material-request-center {
 	position: relative;
 
+	:global(.c-button) {
+		outline: 0;
+
+		&:focus {
+			color: $teal;
+		}
+	}
+
 	&__icon-container {
 		&-badge {
 			position: absolute;

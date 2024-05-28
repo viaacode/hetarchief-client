@@ -9,6 +9,8 @@ import { Controller, ControllerRenderProps, FieldError, useForm } from 'react-ho
 
 import { Permission } from '@account/const';
 import { useGetFolders } from '@account/hooks/get-folders';
+import { VisitsService } from '@modules/visit-requests/services/visits/visits.service';
+import { VisitTimeframe } from '@modules/visit-requests/types';
 import {
 	APPROVE_REQUEST_FORM_SCHEMA,
 	ApproveRequestBladeProps,
@@ -21,15 +23,14 @@ import {
 	getAccessToDate,
 	roundToNextQuarter,
 } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.helpers';
-import { OPTIONAL_LABEL, ROUTE_PARTS } from '@shared/const';
+import { OPTIONAL_LABEL, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { AccessType, Visit, VisitStatus } from '@shared/types';
 import { asDate, formatMediumDateWithTime, formatTime } from '@shared/utils';
 import DateInput from '@visitor-space/components/DateInput/DateInput';
-import { VisitsService } from '@visits/services/visits/visits.service';
-import { VisitTimeframe } from '@visits/types';
 
 import Timepicker from '../Timepicker/Timepicker';
 
@@ -57,6 +58,7 @@ const defaultAccessType = {
 
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const { tHtml, tText } = useTranslation();
+	const locale = useLocale();
 	const canViewAddVisitRequests: boolean = useHasAnyPermission(
 		Permission.MANAGE_ALL_VISIT_REQUESTS
 	);
@@ -122,7 +124,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const getAccessTypeLabel = useCallback(
 		(accessType: ApproveRequestFormState['accessType']) => {
-			const selectedFolders = folders?.items.filter(
+			const selectedFolders = (folders || []).filter(
 				(item) => accessType?.folderIds.includes(item.id)
 			);
 			const selectedFoldersNames = selectedFolders?.map((folder) => folder.name).join(', ');
@@ -134,7 +136,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				)
 			);
 		},
-		[folders?.items, tText]
+		[folders, tText]
 	);
 
 	const getAccessTypeOptions = useCallback(
@@ -154,7 +156,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					info: tText(
 						'modules/cp/components/approve-request-blade/approve-request-blade___mappen-dienen-op-voorhand-gemaakt-te-worden'
 					),
-					options: (folders?.items || []).map(
+					options: (folders || []).map(
 						({ id, name }): RefinableRadioButtonOption => ({
 							id,
 							label: name,
@@ -164,7 +166,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				},
 			},
 		],
-		[getAccessTypeLabel, tText, folders?.items]
+		[getAccessTypeLabel, tText, folders]
 	);
 
 	useEffect(() => {
@@ -265,7 +267,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const onChangeAccessType = useCallback(
 		(
-			field: ControllerRenderProps<ApproveRequestFormState, 'accessType'>,
+			_field: ControllerRenderProps<ApproveRequestFormState, 'accessType'>,
 			selectedOption: AccessType,
 			selectedRefineOptions: string[]
 		): void => {
@@ -434,6 +436,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		[getAccessTypeOptions, onChangeAccessType]
 	);
 
+	const ROUTE_PARTS = ROUTE_PARTS_BY_LOCALE[locale];
 	return (
 		<Blade
 			{...props}
@@ -500,7 +503,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 								href={
 									canViewAddVisitRequests
 										? `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitRequests}?${ROUTE_PARTS.visitRequest}=${overlappingRequests[0].id}`
-										: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitRequests}?${ROUTE_PARTS.visitRequest}=${overlappingRequests[0].id}`
+										: `/${ROUTE_PARTS.cpAdmin}/${ROUTE_PARTS.visitRequests}?${ROUTE_PARTS.visitRequest}=${overlappingRequests[0].id}`
 								}
 								passHref
 							>

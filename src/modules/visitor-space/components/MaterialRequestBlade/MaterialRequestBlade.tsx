@@ -11,8 +11,9 @@ import {
 	MaterialRequestType,
 } from '@material-requests/types';
 import { Blade, Icon, IconNamesLight } from '@shared/components';
-import { ROUTE_PARTS } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount } from '@shared/store/ui';
@@ -58,6 +59,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 }) => {
 	const { tText, tHtml } = useTranslation();
 	const dispatch = useDispatch();
+	const locale = useLocale();
 
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestType>(
 		type || MaterialRequestType.VIEW
@@ -268,7 +270,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			</div>
 			<a
 				tabIndex={-1}
-				href={`/${ROUTE_PARTS.search}/${maintainerSlug}/${objectId}`}
+				href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectId}`}
 				className={styles['c-request-material__material-link']}
 			>
 				<div className={styles['c-request-material__material']} tabIndex={0}>

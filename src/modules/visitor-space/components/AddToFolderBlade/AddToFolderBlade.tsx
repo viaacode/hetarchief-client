@@ -1,7 +1,7 @@
 import { Button, Checkbox } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { compact, isNil } from 'lodash-es';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { CreateFolderButton } from '@account/components';
@@ -27,8 +27,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	const { tHtml } = useTranslation();
 
 	const getFolders = useGetFolders();
-	const folderResponse = useSelector(selectFolders);
-	const folders = useMemo(() => folderResponse?.items || null, [folderResponse?.items]);
+	const folders = useSelector(selectFolders);
 	const [originalSelectedFolderIds, setOriginalSelectedFolderIds] = useState<string[] | null>(
 		null
 	);

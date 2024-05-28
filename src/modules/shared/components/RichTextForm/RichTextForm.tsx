@@ -1,11 +1,13 @@
-import { FormControl, RichEditorState } from '@meemoo/react-components';
+import { FormControl, RichEditorState, RichTextEditor } from '@meemoo/react-components';
 import { FC, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { RichTextEditor } from '../RichTextEditor';
-
 import styles from './RichTextForm.module.scss';
-import { RichTextFormProps, RichTextFormState } from './RichTextForm.types';
+import {
+	RICH_TEXT_EDITOR_OPTIONS,
+	RichTextFormProps,
+	RichTextFormState,
+} from './RichTextForm.types';
 import { isEqualHtml } from './RichTextForm.utils';
 
 const RichTextForm: FC<RichTextFormProps> = ({
@@ -34,9 +36,11 @@ const RichTextForm: FC<RichTextFormProps> = ({
 					return (
 						<div className={styles['c-rich-text-form__wrapper']}>
 							<RichTextEditor
+								controls={RICH_TEXT_EDITOR_OPTIONS}
+								className="c-rich-text-editor"
 								{...editor}
 								onBlur={field.onBlur}
-								onChange={(state) => {
+								onChange={(state: RichEditorState) => {
 									if (!savedState) {
 										setSavedState(state);
 									}
@@ -46,6 +50,14 @@ const RichTextForm: FC<RichTextFormProps> = ({
 									editor?.onChange?.(state);
 								}}
 								state={currentState}
+								braft={{
+									...editor?.braft,
+									draftProps: {
+										ariaAutoComplete: false,
+										ariaMultiline: true,
+										...editor?.braft?.draftProps,
+									},
+								}}
 							/>
 
 							{!isEqualHtml(currentState, savedState) &&

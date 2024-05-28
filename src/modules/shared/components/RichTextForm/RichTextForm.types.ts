@@ -1,4 +1,9 @@
-import { FormControlProps, RichEditorState, RichTextEditorProps } from '@meemoo/react-components';
+import {
+	FormControlProps,
+	RichEditorState,
+	RichTextEditorControl,
+	RichTextEditorProps,
+} from '@meemoo/react-components';
 import { ReactNode } from 'react';
 
 import { DefaultComponentProps } from '@shared/types';
@@ -15,3 +20,21 @@ export interface RichTextFormProps extends DefaultComponentProps {
 export interface RichTextFormState {
 	richText?: RichEditorState;
 }
+
+export const RICH_TEXT_EDITOR_OPTIONS: RichTextEditorControl[] = [
+	'fullscreen',
+	'separator',
+	'undo',
+	'redo',
+	'separator',
+	'headings',
+	'separator',
+	'bold',
+	'underline',
+	'italic',
+	'separator',
+	'link',
+	'separator',
+	'list-ul',
+	'list-ol',
+];

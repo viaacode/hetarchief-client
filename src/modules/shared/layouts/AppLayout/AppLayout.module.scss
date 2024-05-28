@@ -1,0 +1,11 @@
+.l-app {
+	> :global(.c-navigation) {
+		width: 100%;
+	}
+}
+
+.c-navigation__section--right {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}

@@ -31,4 +31,5 @@ export enum QUERY_KEYS {
 	getMaintenanceAlerts = 'getMaintenanceAlerts',
 	getNewsletterPreferences = 'getNewsletterPreferences',
 	getIeObjectPlayerTicket = 'getIeObjectPlayerTicket',
+	getAllLanguages = 'getAllLanguages',
 }

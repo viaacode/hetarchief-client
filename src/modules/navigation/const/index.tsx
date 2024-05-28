@@ -5,8 +5,9 @@ import { MaterialRequestCenterButton } from '@navigation/components/MaterialRequ
 import { getNavigationItemsProfileDropdown } from '@navigation/components/Navigation/Navigation.consts';
 import { NavigationInfo, NavigationPlacement } from '@navigation/services/navigation-service';
 import { Icon, IconNamesLight, IconNamesSolid } from '@shared/components';
-import { ROUTE_PARTS } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
+import { Locale } from '@shared/utils';
 import { VisitorSpaceInfo } from '@visitor-space/types';
 
 import { NavigationHamburgerProps, NavigationItem, NavigationLink } from '../components';
@@ -17,7 +18,7 @@ export const NAV_HAMBURGER_PROPS = (): NavigationHamburgerProps => ({
 	closedLabel: tText('modules/shared/const/navigation___menu'),
 });
 
-export const NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationItem[] => {
+export const GET_NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationItem[] => {
 	return [
 		{
 			id: 'auth-button',
@@ -37,11 +38,12 @@ export const NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationIte
 	];
 };
 
-export const NAV_ITEMS_RIGHT_LOGGED_IN = (
+export const GET_NAV_ITEMS_RIGHT_LOGGED_IN = (
 	currentPath: string,
 	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
 	linkedSpaceSlug: string | null,
+	locale: Locale,
 	{
 		hasUnreadNotifications,
 		notificationsOpen,
@@ -92,11 +94,12 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = (
 					currentPath,
 					navigationItems,
 					accessibleVisitorSpaces,
-					linkedSpaceSlug
+					linkedSpaceSlug,
+					locale
 				),
 				{
 					id: 'log-out',
-					path: ROUTE_PARTS.logout,
+					path: ROUTE_PARTS_BY_LOCALE[locale].logout,
 					node: ({ closeDropdowns }) => (
 						<NavigationLink
 							iconStart={IconNamesLight.LogOut}

@@ -12,6 +12,7 @@ import { CPAdminLayoutProps } from '@cp/layouts';
 import { Icon, ListNavigationItem } from '@shared/components';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { globalLabelKeys } from '@shared/const';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
@@ -23,12 +24,13 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 	const { asPath } = useRouter();
 	const dispatch = useDispatch();
 	const { tHtml } = useTranslation();
+	const locale = useLocale();
 
 	const user = useSelector(selectUser);
 
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
-			CP_ADMIN_NAVIGATION_LINKS().map(({ id, label, href, iconName }) => {
+			CP_ADMIN_NAVIGATION_LINKS(locale).map(({ id, label, href, iconName }) => {
 				const url =
 					id !== CP_ADMIN_SEARCH_VISITOR_SPACE_KEY
 						? href
@@ -52,7 +54,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 					active: asPath.includes(url),
 				};
 			}),
-		[asPath, user?.visitorSpaceSlug]
+		[asPath, locale, user?.visitorSpaceSlug]
 	);
 
 	useEffect(() => {

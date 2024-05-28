@@ -5,10 +5,10 @@ import getConfig from 'next/config';
 import { NextRouter } from 'next/router';
 import { parseUrl, StringifiableRecord, stringifyUrl } from 'query-string';
 
-import { ROUTE_PARTS, ROUTES } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { ApiService } from '@shared/services/api-service';
-import { isBrowser } from '@shared/utils';
+import { isBrowser, Locale } from '@shared/utils';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 import { CheckLoginResponse } from './auth.service.types';
@@ -24,6 +24,7 @@ export class AuthService {
 		query: StringifiableRecord,
 		router: NextRouter
 	): Promise<void> {
+		const ROUTE_PARTS = ROUTE_PARTS_BY_LOCALE[(router.locale || Locale.nl) as Locale];
 		const { redirectTo, slug, ie, ...otherQueryParams } = query;
 		let originalPath: string = (redirectTo as string) || router.asPath || '';
 
@@ -37,7 +38,9 @@ export class AuthService {
 			// TODO split backend filter names (VisitorSpaceFilterId) from filter names in the url (create a new enum for those)
 			originalPath = `/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${slug}`;
 		}
-		if ((originalPath || '') === ROUTES.home) {
+		if (
+			(originalPath || '') === ROUTES_BY_LOCALE[(router.locale || Locale.nl) as Locale].home
+		) {
 			originalPath = `/${ROUTE_PARTS.visit}`;
 		}
 
@@ -96,37 +99,16 @@ export class AuthService {
 		);
 	}
 
-	public static async redirectToLoginMeemoo(
-		query: StringifiableRecord,
-		router: NextRouter
-	): Promise<void> {
-		const { redirectTo, ...otherQueryParams } = query;
-		const returnToUrl = stringifyUrl({
-			url: `${isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL}/${
-				redirectTo ?? ''
-			}`,
-			query: otherQueryParams,
-		});
-
-		await router.replace(
-			stringifyUrl({
-				url: `${
-					isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL
-				}/auth/meemoo/login`,
-				query: {
-					returnToUrl,
-				},
-			})
-		);
-	}
-
 	public static async logout(shouldRedirectToOriginalPage = false): Promise<void> {
 		let returnToUrl = isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL;
 		if (shouldRedirectToOriginalPage) {
 			let originalPath = window.location.href.substring(
 				(isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL).length
 			);
-			if (originalPath.startsWith(`/${ROUTE_PARTS.logout}`)) {
+			const originalPathIsLogoutPath = !!Object.values(ROUTE_PARTS_BY_LOCALE)
+				.map((value) => value.logout)
+				.find((logoutPart) => originalPath.startsWith(`/${logoutPart}`));
+			if (originalPathIsLogoutPath) {
 				originalPath = '/';
 			}
 			returnToUrl = stringifyUrl({
