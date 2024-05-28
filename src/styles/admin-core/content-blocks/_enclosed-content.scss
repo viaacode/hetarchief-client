@@ -22,10 +22,10 @@ $component: "c-block-enclosed-content";
 	&__cards {
 		display: flex;
 		list-style: none;
-		margin: 0;
 		padding: 0;
 		row-gap: $spacer-md;
 		flex-wrap: wrap;
+		margin: $spacer-md 0 0;
 
 		@include respond-at("sm") {
 			gap: $spacer-lg;
@@ -38,6 +38,7 @@ $component: "c-block-enclosed-content";
 		&__card {
 			a {
 				text-decoration: none;
+				width: 100%;
 			}
 
 			background-color: $white;
@@ -84,6 +85,7 @@ $component: "c-block-enclosed-content";
 				max-height: unset;
 				min-height: 13rem;
 				width: 100%;
+				font-size: $font-size-lg;
 
 				&__icon {
 					position: absolute;
