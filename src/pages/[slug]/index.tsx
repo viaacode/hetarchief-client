@@ -55,10 +55,7 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 		error: contentPageError,
 		isLoading: isContentPageLoading,
 		data: contentPageInfo,
-	} = useGetContentPageByLanguageAndPath(
-		(locale?.toUpperCase() || Locale.nl) as Locale,
-		`/${slug}`
-	);
+	} = useGetContentPageByLanguageAndPath(locale, `/${slug}`);
 	const { isLoading: isIeObjectLoading, data: ieObjectInfo } = useGetIeObjectsInfo(
 		slug as string,
 		{ enabled: !!slug }

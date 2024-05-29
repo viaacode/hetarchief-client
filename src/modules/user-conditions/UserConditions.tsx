@@ -22,7 +22,6 @@ import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { Locale } from '@shared/utils';
 
 export const UserConditions: FC<
 	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined }
@@ -41,7 +40,7 @@ export const UserConditions: FC<
 	const [isAtBottom, setIsAtBottom] = useState(false);
 	const tosAccepted = useTermsOfService();
 	const { data: contentPageInfo } = useGetContentPageByLanguageAndPath(
-		(locale || Locale.nl) as Locale,
+		locale,
 		KNOWN_STATIC_ROUTES.TermsOfService
 	);
 

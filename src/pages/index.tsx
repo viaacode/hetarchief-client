@@ -42,7 +42,7 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 	 */
 
 	const { isLoading: isContentPageLoading, data: contentPageInfo } =
-		useGetContentPageByLanguageAndPath(locale || Locale.nl, '/');
+		useGetContentPageByLanguageAndPath(locale, '/');
 
 	useEffect(() => {
 		if (isKioskUser) {

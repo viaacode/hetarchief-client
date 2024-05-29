@@ -29,7 +29,7 @@ export default function LanguageSwitcher() {
 	const dispatch = useDispatch();
 	const { data: allLanguages } = useGetAllLanguages();
 	const { data: contentPageInfo } = useGetContentPageByLanguageAndPath(
-		(locale?.toUpperCase() || Locale.nl) as Locale,
+		locale,
 		`/${router.query.slug}`,
 		{ enabled: router.route === '/[slug]' }
 	);
