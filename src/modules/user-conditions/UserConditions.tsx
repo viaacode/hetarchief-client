@@ -9,7 +9,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { AuthService } from '@auth/services/auth-service';
 import { selectUser } from '@auth/store/user';
-import { useGetContentPageByLanguageAndPath } from '@modules/content-page/hooks/get-content-page';
+import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { GET_TOS_INDEX_QUERY_PARAM_CONFIG, KNOWN_STATIC_ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { renderOgTags } from '@shared/helpers/render-og-tags';

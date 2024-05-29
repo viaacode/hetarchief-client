@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { FC, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { VisitorLayout } from '@modules/visitor-layout';
 import { ErrorNoAccess, Loading } from '@shared/components';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
@@ -12,6 +11,7 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { setShowZendesk } from '@shared/store/ui';
 import { AccessStatus } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
+import { VisitorLayout } from '@visitor-layout/index';
 import { WaitingPage } from '@visitor-space/components/WaitingPage';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 

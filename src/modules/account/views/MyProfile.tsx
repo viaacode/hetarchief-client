@@ -32,7 +32,6 @@ import { CommunicationFormState } from '@account/types';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { VisitorLayout } from '@modules/visitor-layout';
 import { Icon, IconNamesLight } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
@@ -45,6 +44,7 @@ import { CampaignMonitorService } from '@shared/services/campaign-monitor-servic
 import { toastService } from '@shared/services/toast-service';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { isBrowser } from '@shared/utils';
+import { VisitorLayout } from '@visitor-layout/index';
 
 const { publicRuntimeConfig } = getConfig();
 

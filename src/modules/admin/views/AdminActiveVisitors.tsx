@@ -10,9 +10,6 @@ import {
 	VisitorsTablePageSize,
 } from '@admin/const/Visitors.const';
 import { AdminLayout } from '@admin/layouts';
-import { useGetVisits } from '@modules/visit-requests/hooks/get-visits';
-import { useUpdateVisitRequest } from '@modules/visit-requests/hooks/update-visit';
-import { VisitTimeframe } from '@modules/visit-requests/types';
 import {
 	ApproveRequestBlade,
 	ConfirmationModal,
@@ -28,6 +25,9 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
+import { useGetVisits } from '@visit-requests/hooks/get-visits';
+import { useUpdateVisitRequest } from '@visit-requests/hooks/update-visit';
+import { VisitTimeframe } from '@visit-requests/types';
 
 export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();

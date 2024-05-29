@@ -92,8 +92,6 @@ import {
 import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestObjectType } from '@material-requests/types';
-import { useGetActiveVisitForUserAndSpace } from '@modules/visit-requests/hooks/get-active-visit-for-user-and-space';
-import { VisitorLayout } from '@modules/visitor-layout';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import {
 	Blade,
@@ -139,6 +137,8 @@ import {
 	formatSameDayTimeOrDate,
 	isBrowser,
 } from '@shared/utils';
+import { useGetActiveVisitForUserAndSpace } from '@visit-requests/hooks/get-active-visit-for-user-and-space';
+import { VisitorLayout } from '@visitor-layout/index';
 import {
 	AddToFolderBlade,
 	MaterialRequestBlade,

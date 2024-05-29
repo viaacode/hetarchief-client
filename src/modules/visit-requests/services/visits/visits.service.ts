@@ -2,13 +2,13 @@ import { OrderDirection } from '@meemoo/react-components';
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
+import { ApiService } from '@shared/services/api-service';
+import { Visit, VisitAccessStatus, VisitStatus } from '@shared/types';
 import {
 	GetAllActiveVisitsProps,
 	GetVisitsProps,
-} from '@modules/visit-requests/services/visits/visits.service.types';
-import { PatchVisit } from '@modules/visit-requests/types';
-import { ApiService } from '@shared/services/api-service';
-import { Visit, VisitAccessStatus, VisitStatus } from '@shared/types';
+} from '@visit-requests/services/visits/visits.service.types';
+import { PatchVisit } from '@visit-requests/types';
 import { CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 
 import {

@@ -25,9 +25,6 @@ import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/get-ie-object-form
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
 import { IeObjectAccessThrough } from '@ie-objects/types';
 import { isInAFolder } from '@ie-objects/utils';
-import { useGetActiveVisitForUserAndSpace } from '@modules/visit-requests/hooks/get-active-visit-for-user-and-space';
-import { VisitsService } from '@modules/visit-requests/services';
-import { VisitTimeframe } from '@modules/visit-requests/types';
 import {
 	Callout,
 	ErrorNoAccess,
@@ -88,6 +85,9 @@ import {
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
+import { useGetActiveVisitForUserAndSpace } from '@visit-requests/hooks/get-active-visit-for-user-and-space';
+import { VisitsService } from '@visit-requests/services';
+import { VisitTimeframe } from '@visit-requests/types';
 import {
 	AddToFolderBlade,
 	AdvancedFilterFormState,
