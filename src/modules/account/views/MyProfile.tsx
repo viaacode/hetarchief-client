@@ -358,7 +358,9 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 					<Box className={'u-mb-32'}>
 						<section className="u-p-24 p-account-my-profile__language-preferences">
 							<header className="p-account-my-profile__language-preferences-header u-mb-24">
-								<h6>{tText('Taalvoorkeuren')}</h6>
+								<h6>
+									{tText('modules/account/views/my-profile___taalvoorkeuren')}
+								</h6>
 							</header>
 							<div className="p-account-my-profile__language-preferences-list u-mb-24">
 								{renderLanguagePreferencesForm()}
