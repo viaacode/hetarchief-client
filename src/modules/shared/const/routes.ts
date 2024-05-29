@@ -3,7 +3,6 @@ import { AdminConfig } from '@meemoo/admin-core-ui/dist/react-admin/core/config/
 import { Locale } from '@shared/utils';
 
 export enum RoutePart {
-	about = 'about',
 	accessRequested = 'accessRequested',
 	account = 'account',
 	visitRequests = 'visitRequests',
@@ -47,7 +46,6 @@ export enum RoutePart {
 }
 
 const ROUTE_PARTS_NL: Record<RoutePart, string> = {
-	about: 'over-bezoekersruimtes',
 	accessRequested: 'toegang-aangevraagd',
 	account: 'account',
 	activeVisitors: 'actieve-bezoekers',
@@ -91,7 +89,6 @@ const ROUTE_PARTS_NL: Record<RoutePart, string> = {
 } as const;
 
 const ROUTE_PARTS_EN: Record<RoutePart, string> = {
-	about: 'about-visitorspaces',
 	accessRequested: 'access-requested',
 	account: 'account',
 	activeVisitors: 'active-visitors',
@@ -107,10 +104,10 @@ const ROUTE_PARTS_EN: Record<RoutePart, string> = {
 	favorites: 'favorites',
 	kioskConditions: 'kiosk-conditions',
 	logout: 'logout',
-	materialRequests: 'materialrequests',
+	materialRequests: 'item-requests',
 	myFolders: 'my-folders',
 	myHistory: 'my-visit-history',
-	myMaterialRequests: 'my-materialrequests',
+	myMaterialRequests: 'my-item-requests',
 	myProfile: 'my-profile',
 	navigation: 'navigation',
 	notFound: '404',
@@ -120,14 +117,14 @@ const ROUTE_PARTS_EN: Record<RoutePart, string> = {
 	shareFolder: 'folder-share',
 	translations: 'translations',
 	user: 'users',
-	userManagement: 'usermanagement',
-	userPolicy: 'userconditions',
+	userManagement: 'user-management',
+	userPolicy: 'user-conditions',
 	users: 'users',
 	visit: 'visit',
 	visitRequest: 'requests',
-	visitRequests: 'visitrequests',
-	visitorSpaceManagement: 'visitorspacemanagement',
-	visitorSpaces: 'visitorspaces',
+	visitRequests: 'visit-requests',
+	visitorSpaceManagement: 'manage-local-access',
+	visitorSpaces: 'organisations',
 	visitors: 'visitors',
 	newsletter: 'newsletter',
 	confirmation: 'confirmation',
@@ -139,7 +136,6 @@ type RoutePrefix =
 	| 'cpAdmin'
 	| 'admin'
 	| 'account'
-	| 'about'
 	| 'faq'
 	| 'userConditions'
 	| 'cookiePolicy'
@@ -149,7 +145,6 @@ const ROUTE_PREFIXES_NL: Record<RoutePrefix, string> = {
 	cpAdmin: ROUTE_PARTS_NL.cpAdmin,
 	admin: ROUTE_PARTS_NL.admin,
 	account: ROUTE_PARTS_NL.account,
-	about: ROUTE_PARTS_NL.about,
 	faq: ROUTE_PARTS_NL.faq,
 	userConditions: ROUTE_PARTS_NL.userPolicy,
 	cookiePolicy: ROUTE_PARTS_NL.cookiePolicy,
@@ -160,7 +155,6 @@ const ROUTE_PREFIXES_EN: Record<RoutePrefix, string> = {
 	cpAdmin: ROUTE_PARTS_EN.cpAdmin,
 	admin: ROUTE_PARTS_EN.admin,
 	account: ROUTE_PARTS_EN.account,
-	about: ROUTE_PARTS_EN.about,
 	faq: ROUTE_PARTS_EN.faq,
 	userConditions: ROUTE_PARTS_EN.userPolicy,
 	cookiePolicy: ROUTE_PARTS_EN.cookiePolicy,
