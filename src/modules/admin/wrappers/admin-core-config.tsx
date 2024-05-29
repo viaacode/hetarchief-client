@@ -208,6 +208,8 @@ export function getAdminCoreConfig(router: NextRouter, locale: Locale): AdminCon
 		},
 		routes: ADMIN_CORE_ROUTES_BY_LOCALE[locale],
 		locale: locale as any,
-		env: {},
+		env: {
+			CLIENT_URL: publicRuntimeConfig.CLIENT_URL,
+		},
 	};
 }
