@@ -11,7 +11,10 @@ import { ComponentType, FC, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { GroupName } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { getIeObjectInfo, useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
+import {
+	makeServerSideRequestGetIeObjectInfo,
+	useGetIeObjectInfo,
+} from '@ie-objects/hooks/get-ie-objects-info';
 import {
 	getContentPageByLanguageAndPath,
 	useGetContentPageByLanguageAndPath,
@@ -167,14 +170,16 @@ export async function getServerSideProps(
 	}
 
 	const queryClient = new QueryClient();
-	await queryClient.prefetchQuery({
-		queryKey: [QUERY_KEYS.getContentPage, { path: `/${pathOrIeObjectId}`, language: locale }],
-		queryFn: () => getContentPageByLanguageAndPath(locale, `/${pathOrIeObjectId}`),
-	});
-	await queryClient.prefetchQuery({
-		queryKey: [QUERY_KEYS.getIeObjectsInfo, { id: pathOrIeObjectId }],
-		queryFn: () => getIeObjectInfo(pathOrIeObjectId),
-	});
+	await Promise.all([
+		queryClient.prefetchQuery({
+			queryKey: [
+				QUERY_KEYS.getContentPage,
+				{ path: `/${pathOrIeObjectId}`, language: locale },
+			],
+			queryFn: () => getContentPageByLanguageAndPath(locale, `/${pathOrIeObjectId}`),
+		}),
+		makeServerSideRequestGetIeObjectInfo(queryClient, pathOrIeObjectId),
+	]);
 	const dehydratedState = dehydrate(queryClient);
 
 	return getDefaultStaticProps(context, dehydratedState, title, description, image);

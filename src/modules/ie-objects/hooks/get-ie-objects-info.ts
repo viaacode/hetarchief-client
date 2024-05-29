@@ -1,4 +1,4 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { QueryClient, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 import { isStringOfFormatIeObjectSchemaIdentifier } from '@ie-objects/helpers/isStringOfFormatIeObjectSchemaIdentifier';
 import { QUERY_KEYS } from '@shared/const/query-keys';
@@ -28,3 +28,13 @@ export const useGetIeObjectInfo = (
 		...options,
 	});
 };
+
+export function makeServerSideRequestGetIeObjectInfo(
+	queryClient: QueryClient,
+	id: string
+): Promise<void> {
+	return queryClient.prefetchQuery({
+		queryKey: [QUERY_KEYS.getIeObjectsInfo, { id }],
+		queryFn: () => getIeObjectInfo(id),
+	});
+}
