@@ -4,15 +4,17 @@ import {
 	Box,
 	Button,
 	Checkbox,
+	CheckboxList,
 	FormControl,
 	keysEnter,
 	keysSpacebar,
 	onKey,
 } from '@meemoo/react-components';
-import { isNil } from 'lodash-es';
+import { isNil, reverse, sortBy } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Link from 'next/link';
+import router from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
 import { ComponentType, ReactNode, useEffect, useState } from 'react';
@@ -26,6 +28,7 @@ import {
 	Permission,
 } from '@account/const';
 import { COMMUNICATION_SECTION_ID } from '@account/const/MyProfile.consts';
+import { useChangeLanguagePreference } from '@account/hooks/change-language-preference';
 import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
 import { AccountLayout } from '@account/layouts';
 import { CommunicationFormState } from '@account/types';
@@ -34,17 +37,21 @@ import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { VisitorLayout } from '@modules/visitor-layout';
 import { Icon, IconNamesLight } from '@shared/components';
+import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/LanguageSwitcher.exceptions';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
+import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { isBrowser } from '@shared/utils';
+import { isBrowser, Locale } from '@shared/utils';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -55,15 +62,40 @@ const labelKeys: Record<keyof CommunicationFormState, string> = {
 export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const user = useSelector(selectUser);
 	const { tHtml, tText } = useTranslation();
+	const locale = useLocale();
 
 	const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false);
 	const [acceptNewsletter, setAcceptNewsletter] = useState<boolean>(false);
-
+	const [defaultLanguage, setDefaultLanguage] = useState<Locale>(locale);
 	const isAdminUser: boolean = useHasAnyGroup(GroupName.MEEMOO_ADMIN, GroupName.CP_ADMIN);
 	const canEditProfile: boolean = useHasAllPermission(Permission.CAN_EDIT_PROFILE_INFO);
 	const isKeyUser: boolean = useIsKeyUser();
-
+	const { data: allLanguages } = useGetAllLanguages();
+	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference(defaultLanguage);
 	const { data: preferences } = useGetNewsletterPreferences(user?.email);
+
+	const handleLocaleChanged = (oldLocale: Locale, newLocale: Locale) => {
+		const oldFullPath = router.asPath;
+		const routeKey = (reverse(
+			sortBy(Object.entries(ROUTES_BY_LOCALE[oldLocale]), (entry) => entry[1])
+		).find((routeEntry) => oldFullPath.startsWith(routeEntry[1]))?.[0] || 'home') as RouteKey;
+
+		let newFullPath = oldFullPath.replace(
+			ROUTES_BY_LOCALE[oldLocale][routeKey] || ROUTES_BY_LOCALE[oldLocale].home,
+			ROUTES_BY_LOCALE[newLocale][routeKey] || ROUTES_BY_LOCALE[newLocale].home
+		);
+
+		// exceptions for specific paths
+		newFullPath = handleRouteExceptions(routeKey, newFullPath);
+
+		// Redirect to new path
+		router.push(newFullPath, newFullPath, { locale: newLocale });
+	};
+
+	useEffect(() => {
+		mutateLanguagePreference(defaultLanguage);
+		handleLocaleChanged(locale, defaultLanguage);
+	}, [defaultLanguage, mutateLanguagePreference]);
 
 	const {
 		control,
@@ -259,6 +291,19 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 		</FormControl>
 	);
 
+	const renderLanguagePreferencesForm = () => (
+		<CheckboxList
+			items={
+				allLanguages?.map((language) => ({
+					label: tText(language.languageLabel),
+					value: language.languageCode,
+					checked: defaultLanguage === language.languageCode,
+				})) || []
+			}
+			onItemClick={(_, value) => setDefaultLanguage(value as Locale)}
+		/>
+	);
+
 	const renderPageContent = () => {
 		return (
 			<AccountLayout
@@ -307,6 +352,16 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 							</header>
 							<div className="p-account-my-profile__communication-list u-mb-24">
 								{renderNewsletterForm()}
+							</div>
+						</section>
+					</Box>
+					<Box className={'u-mb-32'}>
+						<section className="u-p-24 p-account-my-profile__language-preferences">
+							<header className="p-account-my-profile__language-preferences-header u-mb-24">
+								<h6>{tText('Taalvoorkeuren')}</h6>
+							</header>
+							<div className="p-account-my-profile__language-preferences-list u-mb-24">
+								{renderLanguagePreferencesForm()}
 							</div>
 						</section>
 					</Box>
