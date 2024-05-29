@@ -17,7 +17,7 @@ const ObjectDetailPageEnglish: NextPage<ObjectDetailPageProps> = ({ title, descr
 	return <ObjectDetailPage title={title} description={description} url={url} />;
 };
 
-export async function getServerSideProps(
+export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<ObjectDetailPageProps>> {
 	let seoInfo: SeoInfo | null = null;

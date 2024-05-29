@@ -3,7 +3,7 @@ import { mixed, object, SchemaOf, string } from 'yup';
 import { Operator } from '@shared/types';
 
 import { AdvancedFilterArrayParam } from '../../const/query-params';
-import { VisitorSpaceFilterId } from '../../types';
+import { SearchFilterId } from '../../types';
 
 import { PublishedFilterFormState } from './PublishedFilterForm.types';
 
@@ -14,5 +14,5 @@ export const PUBLISHED_FILTER_FORM_SCHEMA = (): SchemaOf<PublishedFilterFormStat
 	});
 
 export const PUBLISHED_FILTER_FORM_QUERY_PARAM_CONFIG = {
-	[VisitorSpaceFilterId.Published]: AdvancedFilterArrayParam,
+	[SearchFilterId.Published]: AdvancedFilterArrayParam,
 };

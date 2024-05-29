@@ -4,7 +4,7 @@ import { FC, ReactElement, useCallback, useEffect, useState } from 'react';
 
 import { Icon, IconNamesLight, Overlay } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { SearchFilterId } from '@visitor-space/types';
 
 import { FilterButton } from '../FilterButton';
 import FilterForm from '../FilterForm/FilterForm';
@@ -70,15 +70,15 @@ const FilterOption: FC<FilterOptionProps> = ({
 	const renderCheckbox = (): ReactElement =>
 		renderFilterForm('c-filter-menu__form--inline', true);
 
-	const FILTER_MENU_HEIGHTS: Partial<Record<VisitorSpaceFilterId, string>> = {
-		[VisitorSpaceFilterId.Medium]: '63.7rem',
-		[VisitorSpaceFilterId.Duration]: '48.1rem',
-		[VisitorSpaceFilterId.Created]: '61.3rem',
-		[VisitorSpaceFilterId.Published]: '61.3rem',
-		[VisitorSpaceFilterId.Creator]: '33.5rem',
-		[VisitorSpaceFilterId.Language]: '53.7rem',
-		[VisitorSpaceFilterId.Maintainers]: '63.7rem',
-		[VisitorSpaceFilterId.Advanced]: '60.1rem',
+	const FILTER_MENU_HEIGHTS: Partial<Record<SearchFilterId, string>> = {
+		[SearchFilterId.Medium]: '63.7rem',
+		[SearchFilterId.Duration]: '48.1rem',
+		[SearchFilterId.Created]: '61.3rem',
+		[SearchFilterId.Published]: '61.3rem',
+		[SearchFilterId.Creator]: '33.5rem',
+		[SearchFilterId.Language]: '53.7rem',
+		[SearchFilterId.Maintainers]: '63.7rem',
+		[SearchFilterId.Advanced]: '60.1rem',
 	};
 	const renderModal = (): ReactElement => (
 		<>

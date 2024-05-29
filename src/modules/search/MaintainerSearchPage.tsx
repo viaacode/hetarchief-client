@@ -9,7 +9,7 @@ import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { useGetOrganisationBySlug } from '@visitor-space/hooks/get-organisation-by-slug';
-import { FILTER_LABEL_VALUE_DELIMITER, VisitorSpaceFilterId } from '@visitor-space/types';
+import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
 
 type MaintainerSearchPageProps = DefaultSeoInfo;
 
@@ -35,7 +35,7 @@ export const MaintainerSearchPage: FC<MaintainerSearchPageProps> = () => {
 			const searchUrl = stringifyUrl({
 				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 				query: {
-					[VisitorSpaceFilterId.Maintainers]: `${organisation.schemaIdentifier}${FILTER_LABEL_VALUE_DELIMITER}${organisation.schemaName}`,
+					[SearchFilterId.Maintainers]: `${organisation.schemaIdentifier}${FILTER_LABEL_VALUE_DELIMITER}${organisation.schemaName}`,
 				},
 			});
 			router.replace(searchUrl, undefined, { shallow: true });

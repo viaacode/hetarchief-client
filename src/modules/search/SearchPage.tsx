@@ -13,7 +13,7 @@ import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es'
 import Head from 'next/head';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
-import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
@@ -43,7 +43,6 @@ import {
 	Placeholder,
 	ScrollableTabs,
 	TabLabel,
-	TagSearchBar,
 	ToggleOption,
 	TYPE_TO_ICON_MAP,
 	TYPE_TO_NO_ICON_MAP,
@@ -55,6 +54,7 @@ import {
 	PAGE_NUMBER_OF_MANY_RESULTS_TILE,
 } from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
+import TagSearchBar from '@shared/components/TagSearchBar/TagSearchBar';
 import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
@@ -80,9 +80,9 @@ import {
 	Breakpoints,
 	IeObjectsSearchFilterField,
 	IeObjectTypes,
+	SearchPageMediaType,
 	SortObject,
 	Visit,
-	VisitorSpaceMediaType,
 	VisitStatus,
 } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
@@ -108,15 +108,15 @@ import {
 } from '@visitor-space/components';
 import {
 	PUBLIC_COLLECTION,
+	SEARCH_PAGE_QUERY_PARAM_CONFIG,
+	SEARCH_RESULTS_PAGE_SIZE,
 	VISITOR_SPACE_FILTERS,
-	VISITOR_SPACE_ITEM_COUNT,
-	VISITOR_SPACE_QUERY_PARAM_CONFIG,
 	VISITOR_SPACE_QUERY_PARAM_INIT,
 	VISITOR_SPACE_SORT_OPTIONS,
 	VISITOR_SPACE_TABS,
 	VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
 } from '@visitor-space/const';
-import { MetadataProp, TagIdentity, VisitorSpaceFilterId } from '@visitor-space/types';
+import { MetadataProp, SearchFilterId, TagIdentity } from '@visitor-space/types';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
 
@@ -167,18 +167,18 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
 
 	const [searchBarInputValue, setSearchBarInputValue] = useState<string>();
-	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
+	const [query, setQuery] = useQueryParams(SEARCH_PAGE_QUERY_PARAM_CONFIG);
 
 	// Keep defaults only in code, not in the query params in the url
 	const page = query.page || VISITOR_SPACE_QUERY_PARAM_INIT.page;
-	const format = (query.format || VISITOR_SPACE_QUERY_PARAM_INIT.format) as VisitorSpaceMediaType;
+	const format = (query.format || VISITOR_SPACE_QUERY_PARAM_INIT.format) as SearchPageMediaType;
 	const orderProp = query.orderProp || VISITOR_SPACE_QUERY_PARAM_INIT.orderProp;
 	const orderDirection = (query.orderDirection ||
 		VISITOR_SPACE_QUERY_PARAM_INIT.orderDirection) as OrderDirection;
 
 	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
 	const { data: activeVisitRequest, isLoading: isLoadingActiveVisitRequest } =
-		useGetActiveVisitForUserAndSpace(query[VisitorSpaceFilterId.Maintainer], user, true);
+		useGetActiveVisitForUserAndSpace(query[SearchFilterId.Maintainer], user, true);
 
 	const [isInitialPageLoad, setIsInitialPageLoad] = useState(false);
 
@@ -188,7 +188,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		orderDirection,
 	};
 
-	const queryParamMaintainer = query?.[VisitorSpaceFilterId.Maintainer];
+	const queryParamMaintainer = query?.[SearchFilterId.Maintainer];
 	const activeVisitorSpaceSlug: string | undefined = useMemo(() => {
 		if (!visitorSpaces.length) {
 			// Until visitor spaces is loaded, we cannot know which option to select
@@ -207,7 +207,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		// No visitor space set in query params or the visitor space is not recognized
 		setQuery({
 			...query,
-			[VisitorSpaceFilterId.Maintainer]: undefined,
+			[SearchFilterId.Maintainer]: undefined,
 		});
 		return PUBLIC_COLLECTION;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -254,7 +254,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				...mapFiltersToElastic(query),
 			],
 			page,
-			size: VISITOR_SPACE_ITEM_COUNT,
+			size: SEARCH_RESULTS_PAGE_SIZE,
 			sort: activeSort,
 		},
 		{ enabled: !isLoadingActiveVisitRequest }
@@ -299,25 +299,23 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	}, [getVisitorSpaces, isLoggedIn]);
 
 	useEffect(() => {
-		dispatch(setShowZendesk(!isKioskUser && !query[VisitorSpaceFilterId.Maintainer]));
+		dispatch(setShowZendesk(!isKioskUser && !query[SearchFilterId.Maintainer]));
 	}, [dispatch, isKioskUser, query]);
 
 	useEffect(() => {
 		// Filter out all disabled query param keys/ids
-		const disabledFilterKeys: VisitorSpaceFilterId[] = VISITOR_SPACE_FILTERS(
+		const disabledFilterKeys: SearchFilterId[] = VISITOR_SPACE_FILTERS(
 			isPublicCollection,
 			isKioskUser,
 			isKeyUser
 		)
 			.filter(({ isDisabled }: FilterMenuFilterOption): boolean => !!isDisabled?.())
-			.map(
-				({ id }: FilterMenuFilterOption): VisitorSpaceFilterId => id as VisitorSpaceFilterId
-			);
+			.map(({ id }: FilterMenuFilterOption): SearchFilterId => id as SearchFilterId);
 
 		// Loop over all existing query params and strip out the disabled filters if they exist
-		const disabledKeysSet: Set<VisitorSpaceFilterId> = new Set(disabledFilterKeys);
+		const disabledKeysSet: Set<SearchFilterId> = new Set(disabledFilterKeys);
 		const strippedQuery = Object.keys(query).reduce((result, current) => {
-			const id = current as VisitorSpaceFilterId;
+			const id = current as SearchFilterId;
 			if (disabledKeysSet.has(id)) {
 				return {
 					...result,
@@ -368,8 +366,8 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	};
 
 	const getItemCounts = useCallback(
-		(type: VisitorSpaceMediaType): number => {
-			if (type === VisitorSpaceMediaType.All) {
+		(type: SearchPageMediaType): number => {
+			if (type === SearchPageMediaType.All) {
 				return sum(Object.values(formatCounts || {})) || 0;
 			} else {
 				return formatCounts?.[type] || 0;
@@ -385,7 +383,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				label: (
 					<TabLabel
 						label={tab.label}
-						count={getItemCounts(tab.id as VisitorSpaceMediaType)}
+						count={getItemCounts(tab.id as SearchPageMediaType)}
 					/>
 				),
 				active: tab.id === format,
@@ -480,7 +478,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const onResetFilters = () => {
 		setQuery({
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
-			[VisitorSpaceFilterId.Maintainer]: query[VisitorSpaceFilterId.Maintainer],
+			[SearchFilterId.Maintainer]: query[SearchFilterId.Maintainer],
 		});
 	};
 
@@ -488,7 +486,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	 * Reset one filter by id
 	 * @param id
 	 */
-	const onResetFilter = (id: VisitorSpaceFilterId) => {
+	const onResetFilter = (id: SearchFilterId) => {
 		const newQueryParams = { ...query };
 		newQueryParams[id] = undefined;
 		setQuery(newQueryParams);
@@ -499,16 +497,16 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	 * @param id
 	 * @param values
 	 */
-	const onSubmitFilter = (id: VisitorSpaceFilterId, values: unknown) => {
+	const onSubmitFilter = (id: SearchFilterId, values: unknown) => {
 		const searchValue = prepareSearchValue(searchBarInputValue);
 		let data;
 
 		switch (id) {
-			case VisitorSpaceFilterId.Medium:
+			case SearchFilterId.Medium:
 				data = (values as MediumFilterFormState).mediums;
 				break;
 
-			case VisitorSpaceFilterId.Duration:
+			case SearchFilterId.Duration:
 				data = values as DurationFilterFormState;
 				data = data.duration
 					? [
@@ -521,7 +519,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 					: undefined;
 				break;
 
-			case VisitorSpaceFilterId.Created:
+			case SearchFilterId.Created:
 				data = values as CreatedFilterFormState;
 				data = data.created
 					? [
@@ -534,7 +532,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 					: undefined;
 				break;
 
-			case VisitorSpaceFilterId.Published:
+			case SearchFilterId.Published:
 				data = values as PublishedFilterFormState;
 				data = data.published
 					? [
@@ -547,27 +545,27 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 					: undefined;
 				break;
 
-			case VisitorSpaceFilterId.Creator:
+			case SearchFilterId.Creator:
 				data = (values as CreatorFilterFormState).creator;
 				break;
 
-			case VisitorSpaceFilterId.Genre:
+			case SearchFilterId.Genre:
 				data = (values as GenreFilterFormState).genres;
 				break;
 
-			case VisitorSpaceFilterId.Keywords:
+			case SearchFilterId.Keywords:
 				data = (values as KeywordsFilterFormState).values;
 				break;
 
-			case VisitorSpaceFilterId.Language:
+			case SearchFilterId.Language:
 				data = (values as LanguageFilterFormState).languages;
 				break;
 
-			case VisitorSpaceFilterId.Maintainers:
+			case SearchFilterId.Maintainers:
 				data = (values as MaintainerFilterFormState).maintainers;
 				break;
 
-			case VisitorSpaceFilterId.ConsultableOnlyOnLocation:
+			case SearchFilterId.ConsultableOnlyOnLocation:
 				// Info: remove query param if false (= set to undefined)
 				data = (values as ConsultableOnlyOnLocationFilterFormState)[
 					IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
@@ -578,7 +576,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 					: undefined;
 				break;
 
-			case VisitorSpaceFilterId.ConsultableMedia:
+			case SearchFilterId.ConsultableMedia:
 				// Info: remove query param if false (= set to undefined)
 				data = (values as ConsultableMediaFilterFormState)[
 					IeObjectsSearchFilterField.CONSULTABLE_MEDIA
@@ -589,7 +587,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 					: undefined;
 				break;
 
-			case VisitorSpaceFilterId.Advanced:
+			case SearchFilterId.Advanced:
 				data = (values as AdvancedFilterFormState).advanced.filter((advanced) => {
 					return !isNil(advanced.val) && advanced.val !== initialFields().val;
 				});
@@ -623,31 +621,31 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 		tags.forEach((tag) => {
 			switch (tag.key) {
-				case VisitorSpaceFilterId.Genre:
-				case VisitorSpaceFilterId.Keywords:
-				case VisitorSpaceFilterId.Language:
-				case VisitorSpaceFilterId.Medium:
-				case VisitorSpaceFilterId.Maintainers:
+				case SearchFilterId.Genre:
+				case SearchFilterId.Keywords:
+				case SearchFilterId.Language:
+				case SearchFilterId.Medium:
+				case SearchFilterId.Maintainers:
 				case QUERY_PARAM_KEY.SEARCH_QUERY_KEY:
-				case VisitorSpaceFilterId.Creator:
+				case SearchFilterId.Creator:
 					updatedQuery[tag.key] = [
 						...((updatedQuery[tag.key] as Array<unknown>) || []),
 						`${tag.value}`.replace(tagPrefix(tag.key), ''),
 					];
 					break;
 
-				case VisitorSpaceFilterId.Advanced:
-				case VisitorSpaceFilterId.Created:
-				case VisitorSpaceFilterId.Duration:
-				case VisitorSpaceFilterId.Published:
+				case SearchFilterId.Advanced:
+				case SearchFilterId.Created:
+				case SearchFilterId.Duration:
+				case SearchFilterId.Published:
 					updatedQuery[tag.key] = [
 						...((updatedQuery[tag.key] as Array<unknown>) || []),
 						tag,
 					];
 					break;
 
-				case VisitorSpaceFilterId.ConsultableMedia:
-				case VisitorSpaceFilterId.ConsultableOnlyOnLocation:
+				case SearchFilterId.ConsultableMedia:
+				case SearchFilterId.ConsultableOnlyOnLocation:
 					// eslint-disable-next-line no-case-declarations
 					const newValue = `${tag.value ?? 'false'}`.replace(tagPrefix(tag.key), '');
 					updatedQuery[tag.key] = newValue === 'true' ? 'false' : 'true';
@@ -667,7 +665,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			orderDirection,
 			page,
 			// Dynamically destructure the maintainer qp using our enum so we don't need to change it every time the qp value changes
-			[VisitorSpaceFilterId.Maintainer]: maintainer,
+			[SearchFilterId.Maintainer]: maintainer,
 			...rest
 		} = {
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
@@ -691,7 +689,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		setQuery({
 			...query,
 			page: undefined,
-			[VisitorSpaceFilterId.Maintainer]: id === PUBLIC_COLLECTION ? undefined : id,
+			[SearchFilterId.Maintainer]: id === PUBLIC_COLLECTION ? undefined : id,
 		});
 	};
 
@@ -907,7 +905,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			(visitorSpace: VisitorSpaceDropdownOption): ReactNode => (
 				<Link
 					key={visitorSpace.slug}
-					href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}?${VisitorSpaceFilterId.Maintainer}=${visitorSpace?.slug}`}
+					href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${visitorSpace?.slug}`}
 				>
 					<a aria-label={visitorSpace?.label}>{visitorSpace?.label}</a>
 				</Link>
@@ -956,8 +954,8 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			/>
 			<PaginationBar
 				className="u-mb-48"
-				start={(page - 1) * VISITOR_SPACE_ITEM_COUNT}
-				count={VISITOR_SPACE_ITEM_COUNT}
+				start={(page - 1) * SEARCH_RESULTS_PAGE_SIZE}
+				count={SEARCH_RESULTS_PAGE_SIZE}
 				showBackToTop
 				total={limitToMaxResults(getItemCounts(format))}
 				onPageChange={(zeroBasedPage) => {
@@ -977,7 +975,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				<Head>
 					<link rel="canonical" href="https://hetarchief.be/zoeken" />
 				</Head>
-
 				{visitorSpaces && (
 					<div className="p-visitor-space">
 						<section className="u-bg-black u-pt-8">
@@ -1082,7 +1079,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 						</section>
 					</div>
 				)}
-
 				{!searchResultsLoading && (
 					<AddToFolderBlade
 						isOpen={isAddToFolderBladeOpen}

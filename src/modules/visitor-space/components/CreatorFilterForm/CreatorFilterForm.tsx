@@ -8,7 +8,7 @@ import { useQueryParams } from 'use-query-params';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { CREATOR_FILTER_FORM_SCHEMA, CreatorFilterFormState } from '@visitor-space/components';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { SearchFilterId } from '@visitor-space/types';
 
 import { CREATOR_FILTER_FORM_QUERY_PARAM_CONFIG } from './CreatorFilterForm.const';
 import styles from './CreatorFilterForm.module.scss';
@@ -24,7 +24,7 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 	// State
 	const [query] = useQueryParams(CREATOR_FILTER_FORM_QUERY_PARAM_CONFIG);
 
-	const initial = query?.[VisitorSpaceFilterId.Creator] || '';
+	const initial = query?.[SearchFilterId.Creator] || '';
 
 	const [form, setForm] = useState<CreatorFilterFormState>({ creator: initial });
 	const {

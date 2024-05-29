@@ -16,7 +16,7 @@ const ContentPageEditPageEnglish: NextPage<DefaultSeoInfo & UserProps> = ({ url,
 	return <ContentPageEditPage url={url} commonUser={commonUser} id={router.query.id as string} />;
 };
 
-export async function getServerSideProps(
+export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	return getDefaultStaticProps(context);

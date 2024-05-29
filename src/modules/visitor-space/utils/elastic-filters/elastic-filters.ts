@@ -10,11 +10,7 @@ import {
 } from '@shared/types';
 
 import { VISITOR_SPACE_QUERY_PARAM_INIT } from '../../const';
-import {
-	FILTER_LABEL_VALUE_DELIMITER,
-	VisitorSpaceFilterId,
-	VisitorSpaceQueryParams,
-} from '../../types';
+import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId, SearchPageQueryParams } from '../../types';
 import { mapAdvancedToElastic } from '../map-filters';
 
 export const VISITOR_SPACE_LICENSES = [
@@ -23,11 +19,11 @@ export const VISITOR_SPACE_LICENSES = [
 ];
 
 export const mapMaintainerToElastic = (
-	query: VisitorSpaceQueryParams,
+	query: SearchPageQueryParams,
 	activeVisitorSpace: Visit | undefined
 ): IeObjectsSearchFilter[] => {
 	const maintainerId =
-		activeVisitorSpace?.spaceSlug === query?.[VisitorSpaceFilterId.Maintainer]
+		activeVisitorSpace?.spaceSlug === query?.[SearchFilterId.Maintainer]
 			? activeVisitorSpace?.spaceMaintainerId
 			: '';
 
@@ -63,7 +59,7 @@ export const mapMaintainerToElastic = (
 	]);
 };
 
-const getFiltersForSearchTerms = (query: VisitorSpaceQueryParams): IeObjectsSearchFilter[] => {
+const getFiltersForSearchTerms = (query: SearchPageQueryParams): IeObjectsSearchFilter[] => {
 	if (!query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]) {
 		return [];
 	}
@@ -79,7 +75,7 @@ const getFiltersForSearchTerms = (query: VisitorSpaceQueryParams): IeObjectsSear
 	});
 };
 
-export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSearchFilter[] => {
+export const mapFiltersToElastic = (query: SearchPageQueryParams): IeObjectsSearchFilter[] => {
 	return [
 		// Searchbar
 		...getFiltersForSearchTerms(query),
@@ -93,37 +89,37 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 		{
 			field: IeObjectsSearchFilterField.MEDIUM,
 			operator: IeObjectsSearchOperator.IS,
-			multiValue: compact(query[VisitorSpaceFilterId.Medium] || []) as string[],
+			multiValue: compact(query[SearchFilterId.Medium] || []) as string[],
 		},
 		// Duration
-		...(query[VisitorSpaceFilterId.Duration] || []).flatMap(mapAdvancedToElastic),
+		...(query[SearchFilterId.Duration] || []).flatMap(mapAdvancedToElastic),
 		// Created
-		...(query[VisitorSpaceFilterId.Created] || []).flatMap(mapAdvancedToElastic),
+		...(query[SearchFilterId.Created] || []).flatMap(mapAdvancedToElastic),
 		// Published
-		...(query[VisitorSpaceFilterId.Published] || []).flatMap(mapAdvancedToElastic),
+		...(query[SearchFilterId.Published] || []).flatMap(mapAdvancedToElastic),
 		// Creator
 		{
 			field: IeObjectsSearchFilterField.CREATOR,
 			operator: IeObjectsSearchOperator.CONTAINS,
-			value: (query[VisitorSpaceFilterId.Creator] as string) || '',
+			value: (query[SearchFilterId.Creator] as string) || '',
 		},
 		// Genre
 		{
 			field: IeObjectsSearchFilterField.GENRE,
 			operator: IeObjectsSearchOperator.IS,
-			multiValue: compact(query[VisitorSpaceFilterId.Genre] || []) as string[],
+			multiValue: compact(query[SearchFilterId.Genre] || []) as string[],
 		},
 		// Keywords
 		{
 			field: IeObjectsSearchFilterField.KEYWORD,
 			operator: IeObjectsSearchOperator.IS,
-			multiValue: compact(query[VisitorSpaceFilterId.Keywords] || []) as string[],
+			multiValue: compact(query[SearchFilterId.Keywords] || []) as string[],
 		},
 		// Language
 		{
 			field: IeObjectsSearchFilterField.LANGUAGE,
 			operator: IeObjectsSearchOperator.IS,
-			multiValue: (compact(query[VisitorSpaceFilterId.Language] || []) as string[]).map(
+			multiValue: (compact(query[SearchFilterId.Language] || []) as string[]).map(
 				(language) => language?.split(FILTER_LABEL_VALUE_DELIMITER)[0]
 			) as string[],
 		},
@@ -131,7 +127,7 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 		{
 			field: IeObjectsSearchFilterField.MAINTAINER_ID,
 			operator: IeObjectsSearchOperator.IS,
-			multiValue: (compact(query[VisitorSpaceFilterId.Maintainers] || []) as string[]).map(
+			multiValue: (compact(query[SearchFilterId.Maintainers] || []) as string[]).map(
 				(maintainerId: string) =>
 					maintainerId.split(FILTER_LABEL_VALUE_DELIMITER)[0] as string
 			),
@@ -140,13 +136,13 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 		{
 			field: IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION,
 			operator: IeObjectsSearchOperator.IS,
-			value: query[VisitorSpaceFilterId.ConsultableOnlyOnLocation] ? 'true' : '',
+			value: query[SearchFilterId.ConsultableOnlyOnLocation] ? 'true' : '',
 		},
 		// Consultable Media
 		{
 			field: IeObjectsSearchFilterField.CONSULTABLE_MEDIA,
 			operator: IeObjectsSearchOperator.IS,
-			value: query[VisitorSpaceFilterId.ConsultableMedia] ? 'true' : '',
+			value: query[SearchFilterId.ConsultableMedia] ? 'true' : '',
 		},
 		// Advanced
 		...(query.advanced || []).flatMap(mapAdvancedToElastic),

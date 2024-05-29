@@ -15,7 +15,7 @@ const ContentPageLabelsEditPageDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
 	return <ContentPageLabelsEditPage url={url} id={router.query.id as string} />;
 };
 
-export async function getServerSideProps(
+export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	return getDefaultStaticProps(context);

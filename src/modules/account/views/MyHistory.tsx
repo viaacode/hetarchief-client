@@ -28,7 +28,7 @@ import { toastService } from '@shared/services/toast-service';
 import { AccessStatus, Visit } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { createVisitorSpacesWithFilterUrl } from '@shared/utils';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { SearchFilterId } from '@visitor-space/types';
 
 export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
@@ -95,7 +95,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 			switch (response?.status) {
 				case AccessStatus.ACCESS:
 					router.push(
-						`${ROUTES_BY_LOCALE[locale].search}?${VisitorSpaceFilterId.Maintainer}=${visit.spaceSlug}`
+						`${ROUTES_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${visit.spaceSlug}`
 					);
 					break;
 				case AccessStatus.PENDING:

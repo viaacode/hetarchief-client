@@ -1,9 +1,9 @@
 import { Icon, IconNamesLight } from '@shared/components';
-import { VisitorSpaceMediaType } from '@shared/types';
+import { SearchPageMediaType } from '@shared/types';
 
 export const mockTabs = [
 	{
-		id: VisitorSpaceMediaType.All,
+		id: SearchPageMediaType.All,
 		label: (
 			<>
 				<strong className="u-mr-8">Alles</strong>
@@ -13,7 +13,7 @@ export const mockTabs = [
 		active: true,
 	},
 	{
-		id: VisitorSpaceMediaType.Audio,
+		id: SearchPageMediaType.Audio,
 		label: (
 			<>
 				<strong className="u-mr-8">Audio</strong>
@@ -23,7 +23,7 @@ export const mockTabs = [
 		icon: <Icon name={IconNamesLight.Audio} />,
 	},
 	{
-		id: VisitorSpaceMediaType.Video,
+		id: SearchPageMediaType.Video,
 		label: (
 			<>
 				<strong className="u-mr-8">Video</strong>

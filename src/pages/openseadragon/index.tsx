@@ -139,7 +139,7 @@ import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
 import { selectBreadcrumbs, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
-import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
+import { Breakpoints, IeObjectTypes, SearchPageMediaType } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {
 	asDate,
@@ -157,7 +157,7 @@ import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import {
 	FILTER_LABEL_VALUE_DELIMITER,
-	VisitorSpaceFilterId,
+	SearchFilterId,
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
 
@@ -504,7 +504,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		setMediaType(mediaInfo?.dctermsFormat as IeObjectTypes);
 
 		// Filter out peak files if type === video
-		if (mediaInfo?.dctermsFormat === VisitorSpaceMediaType.Video) {
+		if (mediaInfo?.dctermsFormat === SearchPageMediaType.Video) {
 			mediaInfo.representations = mediaInfo?.representations?.filter(
 				(object) => object.dctermsFormat !== 'peak'
 			);
@@ -1370,7 +1370,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 									label: mediaInfo?.maintainerName,
 									to: isKiosk
 										? ROUTES_BY_LOCALE[locale].search
-										: `${ROUTES_BY_LOCALE[locale].search}?${VisitorSpaceFilterId.Maintainer}=${mediaInfo?.maintainerSlug}`,
+										: `${ROUTES_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${mediaInfo?.maintainerSlug}`,
 								},
 						  ]
 						: []),
@@ -1463,7 +1463,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 									stringifyUrl({
 										url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 										query: {
-											[VisitorSpaceFilterId.Maintainers]: [
+											[SearchFilterId.Maintainers]: [
 												`${maintainerId}${FILTER_LABEL_VALUE_DELIMITER}${maintainerName}`,
 											],
 										},
@@ -1996,7 +1996,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	);
 };
 
-export async function getServerSideProps(
+export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<ObjectDetailPageProps>> {
 	// let seoInfo: SeoInfo | null = null;

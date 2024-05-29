@@ -15,7 +15,7 @@ const Logout: NextPage = () => {
 	return <Loading fullscreen owner="uitloggen" />;
 };
 
-export async function getServerSideProps(
+export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	return getDefaultStaticProps(context);

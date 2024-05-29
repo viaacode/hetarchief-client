@@ -7,9 +7,9 @@ import { DefaultComponentProps, SortObject } from '@shared/types';
 import {
 	DefaultFilterFormProps,
 	InlineFilterFormProps,
+	SearchFilterId,
+	SearchSortProp,
 	TagIdentity,
-	VisitorSpaceFilterId,
-	VisitorSpaceSort,
 } from '../../types';
 
 export interface FilterMenuProps extends DefaultComponentProps {
@@ -32,7 +32,7 @@ export interface FilterMenuProps extends DefaultComponentProps {
 
 export interface FilterMenuSortOption {
 	label: string;
-	orderProp: VisitorSpaceSort;
+	orderProp: SearchSortProp;
 	orderDirection?: OrderDirection;
 }
 
@@ -42,7 +42,7 @@ export enum FilterMenuType {
 }
 
 export interface FilterMenuFilterOption {
-	id: VisitorSpaceFilterId;
+	id: SearchFilterId;
 	icon?: IconName;
 	label: string;
 	form: FC<DefaultFilterFormProps<any>> | FC<InlineFilterFormProps<any>> | null; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -50,6 +50,6 @@ export interface FilterMenuFilterOption {
 	isDisabled?: () => boolean;
 }
 
-export type OnFilterMenuSortClick = (key: VisitorSpaceSort, order?: OrderDirection) => void;
-export type OnFilterMenuFormSubmit = <Values>(id: VisitorSpaceFilterId, values: Values) => void;
-export type OnFilterMenuFormReset = (id: VisitorSpaceFilterId) => void;
+export type OnFilterMenuSortClick = (key: SearchSortProp, order?: OrderDirection) => void;
+export type OnFilterMenuFormSubmit = <Values>(id: SearchFilterId, values: Values) => void;
+export type OnFilterMenuFormReset = (id: SearchFilterId) => void;

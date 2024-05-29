@@ -6,7 +6,7 @@ import { Operator } from '@shared/types';
 
 import { durationRegex } from '../../components/DurationInput/DurationInput.consts';
 import { AdvancedFilterArrayParam } from '../../const/query-params';
-import { VisitorSpaceFilterId } from '../../types';
+import { SearchFilterId } from '../../types';
 
 import { DurationFilterFormState } from './DurationFilterForm.types';
 
@@ -28,5 +28,5 @@ export const DURATION_FILTER_FORM_SCHEMA = (): SchemaOf<DurationFilterFormState>
 	});
 
 export const DURATION_FILTER_FORM_QUERY_PARAM_CONFIG = {
-	[VisitorSpaceFilterId.Duration]: AdvancedFilterArrayParam,
+	[SearchFilterId.Duration]: AdvancedFilterArrayParam,
 };

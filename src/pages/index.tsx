@@ -22,13 +22,7 @@ import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils';
 
-type HomepageProps = {
-	title: string | null;
-	description: string | null;
-	image: string | null;
-} & DefaultSeoInfo;
-
-const Homepage: NextPage<HomepageProps & UserProps> = ({
+const Homepage: NextPage<DefaultSeoInfo & UserProps> = ({
 	title,
 	description,
 	image,
@@ -78,7 +72,7 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 	return (
 		<VisitorLayout>
 			{renderOgTags(
-				title,
+				title || null,
 				description ||
 					contentPageInfo?.seoDescription ||
 					contentPageInfo?.description ||
@@ -94,7 +88,7 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 
 export async function getStaticProps(
 	context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<HomepageProps>> {
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	let title: string | null = null;
 	let description: string | null = null;
 	let image: string | null = null;
@@ -113,9 +107,6 @@ export async function getStaticProps(
 		});
 	}
 
-	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> =
-		await getDefaultStaticProps(context);
-
 	const queryClient = new QueryClient();
 
 	const path = KNOWN_STATIC_ROUTES.Home;
@@ -127,15 +118,7 @@ export async function getStaticProps(
 
 	const dehydratedState = dehydrate(queryClient);
 
-	return {
-		props: {
-			...(defaultProps as { props: DefaultSeoInfo }).props,
-			title,
-			description,
-			image,
-			dehydratedState,
-		},
-	};
+	return getDefaultStaticProps(context, dehydratedState, title, description, image);
 }
 
-export default withUser(withAuth(Homepage as ComponentType, false)) as FC<HomepageProps>;
+export default withUser(withAuth(Homepage as ComponentType, false)) as FC<DefaultSeoInfo>;

@@ -9,7 +9,7 @@ import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { ApiService } from '@shared/services/api-service';
 import { isBrowser, Locale } from '@shared/utils';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { SearchFilterId } from '@visitor-space/types';
 
 import { CheckLoginResponse } from './auth.service.types';
 
@@ -36,7 +36,7 @@ export class AuthService {
 		// Redirect /slug to the search page with filter
 		if (slug && !ie) {
 			// TODO split backend filter names (VisitorSpaceFilterId) from filter names in the url (create a new enum for those)
-			originalPath = `/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${slug}`;
+			originalPath = `/${ROUTE_PARTS.search}?${SearchFilterId.Maintainer}=${slug}`;
 		}
 		if (
 			(originalPath || '') === ROUTES_BY_LOCALE[(router.locale || Locale.nl) as Locale].home

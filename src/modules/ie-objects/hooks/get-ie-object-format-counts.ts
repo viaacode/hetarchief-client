@@ -5,7 +5,7 @@ import { QUERY_KEYS } from '@shared/const/query-keys';
 import {
 	IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
-	VisitorSpaceMediaType,
+	SearchPageMediaType,
 } from '@shared/types';
 import { ElasticsearchFieldNames } from '@visitor-space/types';
 
@@ -14,7 +14,7 @@ import { IeObjectsService } from './../services';
 export const useGetIeObjectFormatCounts = (
 	filters: IeObjectsSearchFilter[],
 	options: { enabled: boolean } = { enabled: true }
-): UseQueryResult<Record<VisitorSpaceMediaType, number>> => {
+): UseQueryResult<Record<SearchPageMediaType, number>> => {
 	return useQuery(
 		[QUERY_KEYS.getIeObjectFormatCounts, filters, options],
 		async () => {
@@ -26,7 +26,7 @@ export const useGetIeObjectFormatCounts = (
 
 			return Object.fromEntries(
 				results.aggregations[ElasticsearchFieldNames.Format].buckets.map((bucket) => [
-					bucket.key as VisitorSpaceMediaType,
+					bucket.key as SearchPageMediaType,
 					bucket.doc_count,
 				])
 			);
