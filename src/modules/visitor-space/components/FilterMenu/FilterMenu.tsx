@@ -9,7 +9,6 @@ import { tText } from '@shared/helpers/translate';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
-import { isServerSideRendering } from '@shared/utils';
 
 import { SEARCH_PAGE_QUERY_PARAM_CONFIG, VISITOR_SPACE_ACTIVE_SORT_MAP } from '../../const';
 import { SearchFilterId, SearchSortProp } from '../../types';
@@ -135,12 +134,6 @@ const FilterMenu: FC<FilterMenuProps> = ({
 				/>
 			)
 		);
-
-	if (isServerSideRendering()) {
-		// ReactSelect doesn't work with server side rendering
-		// React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: object.
-		return null;
-	}
 
 	return (
 		<div className={clsx(className, styles['c-filter-menu'])}>
