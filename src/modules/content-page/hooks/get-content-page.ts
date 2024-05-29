@@ -20,7 +20,7 @@ export function getContentPageByLanguageAndPath(language: Locale, path: string |
 export const useGetContentPageByLanguageAndPath = (
 	language: Locale,
 	path: string | undefined,
-	options?: { enabled?: boolean }
+	options: { enabled?: boolean } = {}
 ): UseQueryResult<DbContentPage | null> => {
 	return useQuery(
 		[QUERY_KEYS.getContentPage, { path, language }],

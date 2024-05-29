@@ -1,6 +1,6 @@
 import { DehydratedState } from '@tanstack/react-query';
 import getConfig from 'next/config';
-import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next/types';
+import { GetServerSidePropsContext, GetStaticPropsResult } from 'next/types';
 import { i18n } from 'next-i18next';
 
 import { getTranslations } from '@i18n/helpers/get-translations';
@@ -15,7 +15,7 @@ export async function getDefaultStaticProps(
 	title?: string | null,
 	description?: string | null,
 	image?: string | null
-): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+): Promise<GetStaticPropsResult<DefaultSeoInfo>> {
 	const locale = (context.locale || Locale.nl) as Locale;
 	const translations = await getTranslations(locale);
 	i18n?.addResources(locale, 'common', translations);
@@ -27,7 +27,7 @@ export async function getDefaultStaticProps(
 			title: title || null,
 			description: description || null,
 			image: image || null,
-			dehydratedState,
+			...(dehydratedState ? { dehydratedState } : {}),
 			_nextI18Next: {
 				initialI18nStore: {
 					[locale]: {

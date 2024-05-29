@@ -19,7 +19,7 @@ const VisitRequestedPageDutch: NextPage<VisitRequestedPageProps> = ({ name, desc
 	return <VisitRequestedPage name={name} description={description} url={url} />;
 };
 
-export async function getStaticProps(
+export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<VisitRequestedPageProps>> {
 	let space: VisitorSpaceInfo | null = null;

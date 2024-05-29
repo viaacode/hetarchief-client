@@ -9,7 +9,7 @@ const VisitorSpacesHomeEnglish: NextPage<DefaultSeoInfo> = (seo) => {
 	return <VisitorSpacesHomePage {...seo} />;
 };
 
-export async function getStaticProps(
+export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	return getDefaultStaticProps(context);

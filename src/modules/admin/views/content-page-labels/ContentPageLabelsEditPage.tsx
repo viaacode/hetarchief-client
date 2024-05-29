@@ -30,25 +30,23 @@ export const ContentPageLabelsEditPage: FC<DefaultSeoInfo & ContentPageLabelsEdi
 		);
 	};
 
+	const title = id
+		? tText(
+				'pages/admin/content-pagina-labels/id/bewerk/index___content-pagina-label-bewerk-pagina'
+		  )
+		: tText(
+				'pages/admin/content-pagina-labels/maak/index___content-pagina-label-aanmaak-pagina'
+		  );
+	const description = id
+		? tText(
+				'pages/admin/content-pagina-labels/id/bewerk/index___laat-de-gebruik-de-details-van-een-content-pagina-label-aanpassen'
+		  )
+		: tText(
+				'pages/admin/content-pagina-labels/maak/index___laat-de-gebruiker-een-content-pagina-label-aanmaken'
+		  );
 	return (
 		<>
-			{renderOgTags(
-				id
-					? tText(
-							'pages/admin/content-pagina-labels/id/bewerk/index___content-pagina-label-bewerk-pagina'
-					  )
-					: tText(
-							'pages/admin/content-pagina-labels/maak/index___content-pagina-label-aanmaak-pagina'
-					  ),
-				id
-					? tText(
-							'pages/admin/content-pagina-labels/id/bewerk/index___laat-de-gebruik-de-details-van-een-content-pagina-label-aanpassen'
-					  )
-					: tText(
-							'pages/admin/content-pagina-labels/maak/index___laat-de-gebruiker-een-content-pagina-label-aanmaken'
-					  ),
-				url
-			)}
+			{renderOgTags(title, description, url)}
 			<PermissionsCheck anyPermissions={[Permission.EDIT_CONTENT_PAGE_LABELS]}>
 				{renderPageContent()}
 			</PermissionsCheck>

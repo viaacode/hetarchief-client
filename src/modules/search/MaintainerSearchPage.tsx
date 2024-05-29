@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { FC, useEffect } from 'react';
 
-import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
+import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { Loading } from '@shared/components';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -24,7 +24,7 @@ export const MaintainerSearchPage: FC<MaintainerSearchPageProps> = () => {
 			enabled: !!slugOrObjectId,
 		}
 	);
-	const { data: ieObjectInfo } = useGetIeObjectsInfo(slugOrObjectId as string, {
+	const { data: ieObjectInfo } = useGetIeObjectInfo(slugOrObjectId as string, {
 		keepPreviousData: true,
 		enabled: !!slugOrObjectId,
 	});

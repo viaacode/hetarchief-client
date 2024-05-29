@@ -9,7 +9,7 @@ const MaintainerSearchPageDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
 	return <MaintainerSearchPage url={url} />;
 };
 
-export async function getStaticProps(
+export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	return getDefaultStaticProps(context);

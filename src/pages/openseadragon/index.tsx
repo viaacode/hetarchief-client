@@ -32,14 +32,8 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { GetServerSidePropsContext } from 'next/types';
-import { stringifyUrl } from 'query-string';
-import React, { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import Highlighter from 'react-highlight-words';
-import { useDispatch, useSelector } from 'react-redux';
-import { StringParam, useQueryParams } from 'use-query-params';
 
+import { useRouter } from 'next/router';
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
@@ -76,7 +70,7 @@ import {
 	ticketErrorPlaceholder,
 	VISITOR_ACTION_SORT_MAP,
 } from '@ie-objects/const';
-import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
+import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
 import { useGetIeObjectsSimilar } from '@ie-objects/hooks/get-ie-objects-similar';
 import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-ticket-url';
@@ -160,6 +154,13 @@ import {
 	SearchFilterId,
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
+
+import { GetServerSidePropsContext } from 'next/types';
+import { stringifyUrl } from 'query-string';
+import React, { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import Highlighter from 'react-highlight-words';
+import { useDispatch, useSelector } from 'react-redux';
+import { StringParam, useQueryParams } from 'use-query-params';
 
 import iiifStyles from './index.module.scss';
 
@@ -255,7 +256,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		isLoading: mediaInfoIsLoading,
 		isError: mediaInfoIsError,
 		error: mediaInfoError,
-	} = useGetIeObjectsInfo(objectId);
+	} = useGetIeObjectInfo(objectId);
 
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 

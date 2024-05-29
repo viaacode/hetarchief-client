@@ -203,6 +203,7 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 			},
 		},
 		routes: ADMIN_CORE_ROUTES_BY_LOCALE[locale],
+		locale: locale as any,
 		env: {
 			CLIENT_URL: publicRuntimeConfig.CLIENT_URL,
 		},

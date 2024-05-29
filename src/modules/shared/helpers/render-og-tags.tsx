@@ -6,17 +6,25 @@ import { createPageTitle, isBrowser } from '@shared/utils';
 
 const { publicRuntimeConfig } = getConfig();
 
+/**
+ * Renders Open Graph tags for the page
+ * @param title
+ * @param description
+ * @param url
+ * @param imgUrl
+ * @param isFullTitle The passed title should be used as is, and should not be appended with " | hetarchief.be"
+ */
 export function renderOgTags(
-	title: string | null,
-	description: string | null,
+	title: string | null | undefined,
+	description: string | null | undefined,
 	url: string,
-	fullTitle = false,
-	imgUrl: string | null = null
+	imgUrl: string | null | undefined = null,
+	isFullTitle = false
 ): ReactNode {
 	const resolvedTitle = createPageTitle(title);
 	return (
 		<Head>
-			<title>{fullTitle ? title : resolvedTitle}</title>
+			<title>{isFullTitle ? title : resolvedTitle}</title>
 			{description && <meta name="description" content={description} />}
 			<meta property="og:type" content="website" />
 			<meta property="og:url" content={url} />

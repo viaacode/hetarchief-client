@@ -1,5 +1,5 @@
-import { GetServerSidePropsResult, NextPage } from 'next';
-import { GetServerSidePropsContext } from 'next/types';
+import { NextPage } from 'next';
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next/types';
 import React from 'react';
 
 import { IeObjectsService } from '@ie-objects/services';
@@ -13,11 +13,17 @@ type ObjectDetailPageProps = {
 	description: string | null;
 } & DefaultSeoInfo;
 
-const ObjectDetailPageDutch: NextPage<ObjectDetailPageProps> = ({ title, description, url }) => {
-	return <ObjectDetailPage title={title} description={description} url={url} />;
+const ObjectDetailPageDutch: NextPage<ObjectDetailPageProps> = ({
+	title,
+	description,
+	image,
+	url,
+}) => {
+	return <ObjectDetailPage title={title} description={description} image={image} url={url} />;
 };
 
-export async function getStaticProps(
+// We need to use server side props here, since we want to load one specific object
+export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<ObjectDetailPageProps>> {
 	let seoInfo: SeoInfo | null = null;
@@ -35,6 +41,7 @@ export async function getStaticProps(
 			...(defaultProps as { props: DefaultSeoInfo }).props,
 			title: seoInfo?.name || null,
 			description: seoInfo?.description || null,
+			image: seoInfo?.thumbnailUrl || null,
 		},
 	};
 }

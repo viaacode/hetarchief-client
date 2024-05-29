@@ -38,7 +38,7 @@ const Homepage: NextPage<DefaultSeoInfo & UserProps> = ({
 	 */
 
 	const { isLoading: isContentPageLoading, data: dbContentPage } =
-		useGetContentPageByLanguageAndPath(locale || Locale.nl, KNOWN_STATIC_ROUTES.Home);
+		useGetContentPageByLanguageAndPath(locale, KNOWN_STATIC_ROUTES.Home);
 	const contentPageInfo = dbContentPage
 		? convertDbContentPageToContentPageInfo(dbContentPage)
 		: null;
@@ -78,7 +78,6 @@ const Homepage: NextPage<DefaultSeoInfo & UserProps> = ({
 					contentPageInfo?.description ||
 					null,
 				url,
-				undefined,
 				image || contentPageInfo?.thumbnailPath || null
 			)}
 			{renderPageContent()}

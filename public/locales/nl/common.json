@@ -620,6 +620,8 @@
   "modules/visitor-space/utils/metadata/metadata___trefwoord": "Trefwoord",
   "modules/visitor-space/utils/select/options___select": "Select...",
   "pages/404___ga-naar-de-homepage": "Ga naar de startpagina",
+  "pages/404___niet-gevonden": "Niet gevonden",
+  "pages/404___pagina-niet-gevonden": "Pagina niet gevonden",
   "pages/account/map-delen/folder-id/index___deel-map": "Deel map",
   "pages/account/map-delen/folder-id/index___deze-map-is-reeds-deel-van-je-mappen": "Deze map is reeds deel van je mappen.",
   "pages/account/map-delen/folder-id/index___dit-is-geen-geldig-emailadres": "Dit is geen geldig e-mailadres",
