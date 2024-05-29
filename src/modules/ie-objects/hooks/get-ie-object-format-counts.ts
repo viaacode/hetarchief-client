@@ -1,4 +1,4 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { QueryClient, useQuery, UseQueryResult } from '@tanstack/react-query';
 import { isEmpty, isNil } from 'lodash-es';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
@@ -11,29 +11,38 @@ import { ElasticsearchFieldNames } from '@visitor-space/types';
 
 import { IeObjectsService } from './../services';
 
+export async function getIeObjectFormatCounts(filters: IeObjectsSearchFilter[]) {
+	const filterQuery = !isNil(filters) && !isEmpty(filters) ? filters : [];
+
+	const results = await IeObjectsService.getSearchResults(filterQuery, 0, 0, undefined, [
+		IeObjectsSearchFilterField.FORMAT,
+	]);
+
+	return Object.fromEntries(
+		results.aggregations[ElasticsearchFieldNames.Format].buckets.map((bucket) => [
+			bucket.key as SearchPageMediaType,
+			bucket.doc_count,
+		])
+	);
+}
+
 export const useGetIeObjectFormatCounts = (
 	filters: IeObjectsSearchFilter[],
 	options: { enabled: boolean } = { enabled: true }
 ): UseQueryResult<Record<SearchPageMediaType, number>> => {
 	return useQuery(
 		[QUERY_KEYS.getIeObjectFormatCounts, filters, options],
-		async () => {
-			const filterQuery = !isNil(filters) && !isEmpty(filters) ? filters : [];
-
-			const results = await IeObjectsService.getSearchResults(filterQuery, 0, 0, undefined, [
-				IeObjectsSearchFilterField.FORMAT,
-			]);
-
-			return Object.fromEntries(
-				results.aggregations[ElasticsearchFieldNames.Format].buckets.map((bucket) => [
-					bucket.key as SearchPageMediaType,
-					bucket.doc_count,
-				])
-			);
-		},
+		async () => getIeObjectFormatCounts,
 		{
 			keepPreviousData: true,
 			enabled: options.enabled,
 		}
 	);
 };
+
+export async function makeServerSideRequestGetIeObjectFormatCounts(queryClient: QueryClient) {
+	await queryClient.prefetchQuery({
+		queryKey: [QUERY_KEYS.getIeObjectFormatCounts, [], { enabled: true }],
+		queryFn: () => getIeObjectFormatCounts([]),
+	});
+}

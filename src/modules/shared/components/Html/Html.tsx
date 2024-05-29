@@ -15,7 +15,7 @@ export interface HtmlProps {
 const Html: FunctionComponent<HtmlProps> = ({
 	content,
 	sanitizePreset = RICH_TEXT_SANITIZATION,
-	type = 'p',
+	type = 'div',
 	className,
 }) => {
 	const Type = type;

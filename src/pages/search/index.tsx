@@ -3,6 +3,7 @@ import { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'n
 import { ComponentType } from 'react';
 
 import { withAuth } from '@auth/wrappers/with-auth';
+import { makeServerSideRequestGetIeObjectFormatCounts } from '@ie-objects/hooks/get-ie-object-format-counts';
 import { makeServerSideRequestGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
 import SearchPage from '@modules/search/SearchPage';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
@@ -33,6 +34,7 @@ export async function getStaticProps(
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	const queryClient = new QueryClient();
 	await makeServerSideRequestGetIeObjects(queryClient);
+	await makeServerSideRequestGetIeObjectFormatCounts(queryClient);
 	const dehydratedState = dehydrate(queryClient);
 
 	return getDefaultStaticProps(context, dehydratedState);

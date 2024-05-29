@@ -14,10 +14,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
 import React, { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { MultiValue } from 'react-select';
-import { useQueryParams } from 'use-query-params';
 
+import { useDispatch, useSelector } from 'react-redux';
 import { GroupName, Permission } from '@account/const';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
@@ -119,6 +117,9 @@ import {
 import { MetadataProp, SearchFilterId, TagIdentity } from '@visitor-space/types';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
+
+import { MultiValue } from 'react-select';
+import { useQueryParams } from 'use-query-params';
 
 const labelKeys = {
 	search: 'SearchPage__search',
@@ -969,7 +970,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		</>
 	);
 
-	const renderVisitorSpace = () => {
+	const renderSearchPage = () => {
 		return (
 			<>
 				<Head>
@@ -1121,7 +1122,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			);
 		}
 
-		return renderVisitorSpace();
+		return renderSearchPage();
 	};
 
 	return (
