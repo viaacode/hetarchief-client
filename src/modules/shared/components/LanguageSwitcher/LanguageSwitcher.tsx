@@ -1,6 +1,12 @@
-import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { ContentPageInfo } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
+import { useQueryClient } from '@tanstack/react-query';
+import { reverse, sortBy } from 'lodash-es';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { NavigationDropdown } from '@navigation/components/Navigation/NavigationDropdown';
 import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/LanguageSwitcher.exceptions';
 import { QUERY_KEYS, RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
@@ -13,11 +19,6 @@ import {
 	setShowNotificationsCenter,
 } from '@shared/store/ui';
 import { Locale } from '@shared/utils';
-import { useQueryClient } from '@tanstack/react-query';
-import { reverse, sortBy } from 'lodash-es';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import styles from './LanguageSwitcher.module.scss';
 

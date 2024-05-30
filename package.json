@@ -33,8 +33,8 @@
   "dependencies": {
     "@emotion/cache": "11.11.0",
     "@hookform/resolvers": "2.9.11",
-    "@meemoo/admin-core-ui": "4.0.17",
-    "@meemoo/react-components": "4.0.4",
+    "@meemoo/admin-core-ui": "4.0.20",
+    "@meemoo/react-components": "4.0.5",
     "@react-hook/resize-observer": "1.2.5",
     "@reduxjs/toolkit": "1.9.6",
     "@studiohyperdrive/pagination": "1.0.0",
