@@ -2,7 +2,7 @@ import { pathAliases } from "./scripts/path-aliases.mjs";
 
 const pathAliasesRegex = `^@(${pathAliases.join('|')})/?(.*)$`;
 
-module.exports = {
+export default {
 	collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!**/*.d.ts', '!**/node_modules/**'],
 	moduleNameMapper: {
 		/* Handle CSS imports (with CSS modules)
