@@ -7,9 +7,8 @@ import { ComponentType, FC, useEffect } from 'react';
 import { GroupName } from '@account/const';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { useGetContentPageByLanguageAndPath } from '@modules/content-page/hooks/get-content-page';
-import { ContentPageClientService } from '@modules/content-page/services/content-page-client.service';
-import { VisitorLayout } from '@modules/visitor-layout';
+import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
+import { ContentPageClientService } from '@content-page/services/content-page-client.service';
 import { Loading } from '@shared/components';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
@@ -19,6 +18,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils';
+import { VisitorLayout } from '@visitor-layout/index';
 
 type HomepageProps = {
 	title: string | null;
@@ -42,7 +42,7 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 	 */
 
 	const { isLoading: isContentPageLoading, data: contentPageInfo } =
-		useGetContentPageByLanguageAndPath(locale || Locale.nl, '/');
+		useGetContentPageByLanguageAndPath(locale, '/');
 
 	useEffect(() => {
 		if (isKioskUser) {

@@ -95,13 +95,11 @@ import {
 	ObjectDetailTabs,
 } from '@ie-objects/types';
 import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
+import altoTextLocations from '@iiif-viewer/alto2-simplified.json';
+import { TextLine } from '@iiif-viewer/extract-text-lines-from-alto';
+import { getOpenSeadragonConfig } from '@iiif-viewer/openseadragon-config';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestObjectType } from '@material-requests/types';
-import altoTextLocations from '@modules/iiif-viewer/alto2-simplified.json';
-import { TextLine } from '@modules/iiif-viewer/extract-text-lines-from-alto';
-import { getOpenSeadragonConfig } from '@modules/iiif-viewer/openseadragon-config';
-import { useGetActiveVisitForUserAndSpace } from '@modules/visit-requests/hooks/get-active-visit-for-user-and-space';
-import { VisitorLayout } from '@modules/visitor-layout';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import {
 	Blade,
@@ -148,6 +146,8 @@ import {
 	formatSameDayTimeOrDate,
 	isBrowser,
 } from '@shared/utils';
+import { useGetActiveVisitForUserAndSpace } from '@visit-requests/hooks/get-active-visit-for-user-and-space';
+import { VisitorLayout } from '@visitor-layout/index';
 import {
 	AddToFolderBlade,
 	MaterialRequestBlade,

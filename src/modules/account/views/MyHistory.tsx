@@ -13,9 +13,6 @@ import {
 	Permission,
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
-import { useGetVisitAccessStatusMutation } from '@modules/visit-requests/hooks/get-visit-access-status';
-import { useGetVisits } from '@modules/visit-requests/hooks/get-visits';
-import { VisitorLayout } from '@modules/visitor-layout';
 import { ErrorNoAccess, Loading, PaginationBar, sortingIcons } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { VisitDetailBlade } from '@shared/components/VisitDetailBlade';
@@ -28,6 +25,9 @@ import { toastService } from '@shared/services/toast-service';
 import { AccessStatus, Visit } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { createVisitorSpacesWithFilterUrl } from '@shared/utils';
+import { useGetVisitAccessStatusMutation } from '@visit-requests/hooks/get-visit-access-status';
+import { useGetVisits } from '@visit-requests/hooks/get-visits';
+import { VisitorLayout } from '@visitor-layout/index';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {

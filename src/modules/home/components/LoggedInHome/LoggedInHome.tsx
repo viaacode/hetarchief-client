@@ -10,8 +10,6 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
-import { useGetVisits } from '@modules/visit-requests/hooks/get-visits';
-import { VisitTimeframe } from '@modules/visit-requests/types';
 import {
 	Blade,
 	Loading,
@@ -32,6 +30,8 @@ import { Visit, VisitStatus } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
+import { useGetVisits } from '@visit-requests/hooks/get-visits';
+import { VisitTimeframe } from '@visit-requests/types';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 

@@ -7,6 +7,7 @@ import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsChe
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
+import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 
 interface NavigationPageCreatePageProps {
 	navigationBarId: string;
@@ -25,10 +26,12 @@ export const AdminNavigationItemEditPage: FC<DefaultSeoInfo & NavigationPageCrea
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-navigation__create">
-						<NavigationEdit
-							navigationBarId={navigationBarId}
-							navigationItemId={navigationItemId}
-						/>
+						<NoServerSideRendering>
+							<NavigationEdit
+								navigationBarId={navigationBarId}
+								navigationItemId={navigationItemId}
+							/>
+						</NoServerSideRendering>
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>

@@ -1,7 +1,7 @@
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 
-import { MaintainerSearchPage } from '@modules/search/MaintainerSearchPage';
+import { MaintainerSearchPage } from '@search/MaintainerSearchPage';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';
 

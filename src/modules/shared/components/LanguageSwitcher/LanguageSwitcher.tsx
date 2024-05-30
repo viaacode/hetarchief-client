@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useGetContentPageByLanguageAndPath } from '@modules/content-page/hooks/get-content-page';
+import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { NavigationDropdown } from '@navigation/components/Navigation/NavigationDropdown';
 import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/LanguageSwitcher.exceptions';
 import { QUERY_KEYS, RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
@@ -29,7 +29,7 @@ export default function LanguageSwitcher() {
 	const dispatch = useDispatch();
 	const { data: allLanguages } = useGetAllLanguages();
 	const { data: contentPageInfo } = useGetContentPageByLanguageAndPath(
-		(locale?.toUpperCase() || Locale.nl) as Locale,
+		locale,
 		`/${router.query.slug}`,
 		{ enabled: router.route === '/[slug]' }
 	);

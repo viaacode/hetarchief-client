@@ -9,7 +9,7 @@ import {
 	MaterialRequestMaintainer,
 	MaterialRequestSendAll,
 	MaterialRequestUpdate,
-} from '@modules/material-requests/types';
+} from '@material-requests/types';
 import { ApiService } from '@shared/services/api-service';
 
 import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from './material-requests.service.const';
