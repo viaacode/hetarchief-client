@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { pathAliases } from "./scripts/path-aliases";
+import { pathAliases } from "./scripts/path-aliases.mjs";
 
 const modulesPathGroupPattern = `@{${pathAliases.join(',')}}/**`;
 

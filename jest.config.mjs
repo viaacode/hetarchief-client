@@ -1,4 +1,4 @@
-import { pathAliases } from "./scripts/path-aliases";
+import { pathAliases } from "./scripts/path-aliases.mjs";
 
 const pathAliasesRegex = `^@(${pathAliases.join('|')})/?(.*)$`;
 
