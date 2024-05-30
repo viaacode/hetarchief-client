@@ -1,4 +1,4 @@
-const pathAliases = [
+export const pathAliases = [
 	'account',
 	'admin',
 	'auth',
@@ -21,5 +21,3 @@ const pathAliases = [
 	'visitor-layout',
 	'visitor-space',
 ];
-
-module.exports = pathAliases;

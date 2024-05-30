@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const pathAliases = require('./scripts/path-aliases');
+import { pathAliases } from "./scripts/path-aliases";
 
 const pathAliasesRegex = `^@(${pathAliases.join('|')})/?(.*)$`;
 
