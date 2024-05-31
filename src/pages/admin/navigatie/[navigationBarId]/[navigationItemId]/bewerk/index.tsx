@@ -21,7 +21,7 @@ const AdminNavigationItemEditPageDutch: NextPage<DefaultSeoInfo> = ({ url }) => 
 	);
 };
 
-export async function getStaticProps(
+export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	return getDefaultStaticProps(context);

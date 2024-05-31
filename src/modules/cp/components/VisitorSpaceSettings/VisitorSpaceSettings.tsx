@@ -276,6 +276,8 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({
 						)}
 					</p>
 
+					{/* Disable serverside rendering of rich text editor to conserve RAM on the server */}
+					{/* Otherwise we getJavaScript heap out of memory errors */}
 					<NoServerSideRendering>
 						<RichTextForm
 							editor={{

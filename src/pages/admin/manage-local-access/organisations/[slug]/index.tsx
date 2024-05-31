@@ -11,7 +11,7 @@ const VisitorSpaceEditEnglish: FC<DefaultSeoInfo> = ({ url }) => {
 	return <AdminVisitorSpaceEdit url={url} />;
 };
 
-export async function getStaticProps(
+export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	return getDefaultStaticProps(context);

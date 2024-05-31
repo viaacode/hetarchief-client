@@ -1543,7 +1543,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const renderPageContent = () => {
 		if (mediaInfoIsLoading || visitRequestIsLoading || visitorSpaceIsLoading) {
-			return <Loading fullscreen owner={'object detail page: render page content'} />;
+			return <Loading fullscreen owner="object detail page: render page content" />;
 		}
 
 		if (mediaInfo) {
