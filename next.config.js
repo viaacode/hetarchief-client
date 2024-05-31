@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires, import/order */
-import bundleAnalyser from "@next/bundle-analyzer";
+const bundleAnalyser = require('@next/bundle-analyzer');
 /*
  * next-transpile-modules is necessary because:
  * - Global CSS cannot be imported from within node_modules.
  *   Why: https://nextjs.org/docs/messages/css-npm
  *   RFC: https://github.com/vercel/next.js/discussions/27953
  */
-import nextTranspileModules from "next-transpile-modules";
-import * as path from "path";
-import { getI18n } from "./next-i18next.config.mjs";
+const nextTranspileModules = require('next-transpile-modules');
+const path = require('path');
+const getI18n = require('./next-i18next.config.js');
 
 const withBundleAnalyzer = bundleAnalyser({
 	enabled: process.env.ANALYZE === 'true',
@@ -19,7 +19,7 @@ const withTM = nextTranspileModules(['ky-universal']);
 const proxyUrl = process.env.PROXY_URL;
 
 /** @type {import("next").NextConfig} */
-export default withBundleAnalyzer(
+module.exports = withBundleAnalyzer(
 	withTM({
 		i18n: getI18n(proxyUrl),
 		// https://stackoverflow.com/questions/71847778/why-my-nextjs-component-is-rendering-twice
@@ -182,14 +182,12 @@ export default withBundleAnalyzer(
 				},
 				{
 					source: '/account/mijn-mappen',
-					destination:
-						'/account/mijn-mappen/favorieten',
+					destination: '/account/mijn-mappen/favorieten',
 					permanent: true,
 				},
 				{
 					source: '/account/my-folders',
-					destination:
-						'/account/my-folders/favorites',
+					destination: '/account/my-folders/favorites',
 					permanent: true,
 				},
 				{

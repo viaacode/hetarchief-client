@@ -87,6 +87,12 @@ $component: "c-block-enclosed-content";
 				width: 100%;
 				font-size: $font-size-lg;
 
+				&--audio {
+					background-size: contain;
+					background-position: center;
+					background-repeat: no-repeat;
+				}
+
 				&__icon {
 					position: absolute;
 					left: 0;

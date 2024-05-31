@@ -1,8 +1,9 @@
-import { pathAliases } from "./scripts/path-aliases.mjs";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const pathAliases = require('./scripts/path-aliases.js');
 
 const pathAliasesRegex = `^@(${pathAliases.join('|')})/?(.*)$`;
 
-export default {
+module.exports = {
 	collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!**/*.d.ts', '!**/node_modules/**'],
 	moduleNameMapper: {
 		/* Handle CSS imports (with CSS modules)

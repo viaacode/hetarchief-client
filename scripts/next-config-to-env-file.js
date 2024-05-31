@@ -1,6 +1,6 @@
-import fs from "fs";
+const fs = require('fs');
 
-import config from "./next.config.mjs";
+const config = require('./next.config');
 
 let envFileContent = '';
 Object.keys(config.publicRuntimeConfig).forEach((envKey) => {

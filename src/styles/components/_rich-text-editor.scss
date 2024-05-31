@@ -41,7 +41,9 @@
 		}
 	}
 
-	.bf-content {
-		border: 1px solid $zinc;
+	.bf-content,
+	pre,
+	textarea {
+		border: 1px solid $zinc !important;
 	}
 }

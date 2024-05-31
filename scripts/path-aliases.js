@@ -1,4 +1,4 @@
-export const pathAliases = [
+module.exports = [
 	'account',
 	'admin',
 	'auth',

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { pathAliases } from "./scripts/path-aliases.mjs";
+const pathAliases = require('./scripts/path-aliases');
 
 const modulesPathGroupPattern = `@{${pathAliases.join(',')}}/**`;
 
-export default {
+module.exports = {
 	parser: '@typescript-eslint/parser',
 	extends: [
 		'eslint:recommended',
