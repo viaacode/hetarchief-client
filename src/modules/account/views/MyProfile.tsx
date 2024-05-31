@@ -25,6 +25,7 @@ import { useSelector } from 'react-redux';
 import {
 	COMMUNICATION_FORM_SCHEMA,
 	GET_PERMISSION_TRANSLATIONS_BY_GROUP,
+	GET_TRANSLATED_LANGUAGE_LABELS,
 	GroupName,
 	Permission,
 } from '@account/const';
@@ -285,7 +286,7 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 		<CheckboxList
 			items={
 				allLanguages?.map((language) => ({
-					label: tText(language.languageLabel),
+					label: GET_TRANSLATED_LANGUAGE_LABELS()[language.languageCode],
 					value: language.languageCode,
 					checked: defaultLanguage === language.languageCode,
 				})) || []
