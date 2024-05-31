@@ -17,7 +17,9 @@ const { publicRuntimeConfig } = getConfig();
 
 export class AuthService {
 	public static async checkLogin(options: Options = {}): Promise<CheckLoginResponse> {
-		return await ApiService.getApi().get(`auth/check-login`, options).json();
+		const test = await ApiService.getApi().get(`auth/check-login`, options).json();
+		console.log(test);
+		return test as CheckLoginResponse;
 	}
 
 	public static async redirectToLoginHetArchief(

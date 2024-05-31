@@ -10,7 +10,8 @@ import {
 	keysSpacebar,
 	onKey,
 } from '@meemoo/react-components';
-import { isNil, reverse, sortBy } from 'lodash-es';
+import { useQueryClient } from '@tanstack/react-query';
+import { isNil } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Link from 'next/link';
@@ -35,11 +36,10 @@ import { CommunicationFormState } from '@account/types';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { VisitorLayout } from '@modules/visitor-layout';
+import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { Icon, IconNamesLight } from '@shared/components';
-import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/LanguageSwitcher.exceptions';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
+import { changeLocalSlug } from '@shared/helpers/change-local-slug';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -52,6 +52,7 @@ import { CampaignMonitorService } from '@shared/services/campaign-monitor-servic
 import { toastService } from '@shared/services/toast-service';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { isBrowser, Locale } from '@shared/utils';
+import { VisitorLayout } from '@visitor-layout/index';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -63,7 +64,7 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const user = useSelector(selectUser);
 	const { tHtml, tText } = useTranslation();
 	const locale = useLocale();
-
+	const queryClient = useQueryClient();
 	const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false);
 	const [acceptNewsletter, setAcceptNewsletter] = useState<boolean>(false);
 	const [defaultLanguage, setDefaultLanguage] = useState<Locale>(locale);
@@ -74,27 +75,16 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference(defaultLanguage);
 	const { data: preferences } = useGetNewsletterPreferences(user?.email);
 
-	const handleLocaleChanged = (oldLocale: Locale, newLocale: Locale) => {
-		const oldFullPath = router.asPath;
-		const routeKey = (reverse(
-			sortBy(Object.entries(ROUTES_BY_LOCALE[oldLocale]), (entry) => entry[1])
-		).find((routeEntry) => oldFullPath.startsWith(routeEntry[1]))?.[0] || 'home') as RouteKey;
-
-		let newFullPath = oldFullPath.replace(
-			ROUTES_BY_LOCALE[oldLocale][routeKey] || ROUTES_BY_LOCALE[oldLocale].home,
-			ROUTES_BY_LOCALE[newLocale][routeKey] || ROUTES_BY_LOCALE[newLocale].home
-		);
-
-		// exceptions for specific paths
-		newFullPath = handleRouteExceptions(routeKey, newFullPath);
-
-		// Redirect to new path
-		router.push(newFullPath, newFullPath, { locale: newLocale });
-	};
+	const { data: contentPageInfo } = useGetContentPageByLanguageAndPath(
+		locale,
+		`/${router.query.slug}`,
+		{ enabled: router.route === '/[slug]' }
+	);
 
 	useEffect(() => {
 		mutateLanguagePreference(defaultLanguage);
-		handleLocaleChanged(locale, defaultLanguage);
+		changeLocalSlug(locale, defaultLanguage, queryClient, contentPageInfo);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [defaultLanguage, mutateLanguagePreference]);
 
 	const {
