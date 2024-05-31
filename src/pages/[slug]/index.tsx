@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux';
 import { GroupName } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
-	getContentPageByLanguageAndPath,
+	makeServerSideRequestGetContentPageByLanguageAndPath,
 	useGetContentPageByLanguageAndPath,
 } from '@content-page/hooks/get-content-page';
 import { ContentPageClientService } from '@content-page/services/content-page-client.service';
@@ -21,7 +21,7 @@ import {
 	useGetIeObjectInfo,
 } from '@ie-objects/hooks/get-ie-objects-info';
 import { ErrorNotFound, Loading } from '@shared/components';
-import { QUERY_KEYS, ROUTES_BY_LOCALE } from '@shared/const';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { tText } from '@shared/helpers/translate';
@@ -168,13 +168,7 @@ export async function getServerSideProps(
 
 	const queryClient = new QueryClient();
 	await Promise.all([
-		queryClient.prefetchQuery({
-			queryKey: [
-				QUERY_KEYS.getContentPage,
-				{ path: `/${pathOrIeObjectId}`, language: locale },
-			],
-			queryFn: () => getContentPageByLanguageAndPath(locale, `/${pathOrIeObjectId}`),
-		}),
+		makeServerSideRequestGetContentPageByLanguageAndPath(queryClient, pathOrIeObjectId, locale),
 		makeServerSideRequestGetIeObjectInfo(queryClient, pathOrIeObjectId),
 	]);
 	const dehydratedState = dehydrate(queryClient);
