@@ -21,7 +21,6 @@ export function useGetActiveVisitForUserAndSpace(
 	user: User | null | undefined,
 	options: { enabled?: boolean } = {}
 ): UseQueryResult<Visit> {
-	console.log('getting active visit request', { visitorSpaceSlug, user });
 	return useQuery(
 		[QUERY_KEYS.getActiveVisitForUserAndSpace, visitorSpaceSlug, user?.id || null],
 		() => getActiveVisitForUserAndSpace(visitorSpaceSlug, user || null),
@@ -37,8 +36,4 @@ export async function makeServerSideRequestGetActiveVisitForUserAndSpace(
 		[QUERY_KEYS.getActiveVisitForUserAndSpace, visitorSpaceSlug, null],
 		null
 	);
-	// return queryClient.prefetchQuery({
-	// 	queryKey: [QUERY_KEYS.getActiveVisitForUserAndSpace, visitorSpaceSlug, null],
-	// 	queryFn: () => getActiveVisitForUserAndSpace(visitorSpaceSlug, null),
-	// });
 }

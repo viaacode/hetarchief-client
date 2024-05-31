@@ -143,6 +143,7 @@ import {
 	MaterialRequestBlade,
 	VisitorSpaceNavigation,
 } from '@visitor-space/components';
+import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import {
@@ -1067,7 +1068,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		items: MediaObject[],
 		isHidden = false
 	): ReactNode => (
-		<dd className="u-m-0">
+		<div className="u-m-0">
 			{
 				<ul
 					className={clsx(
@@ -1092,7 +1093,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					})}
 				</ul>
 			}
-		</dd>
+		</div>
 	);
 
 	const renderMaintainerMetaTitle = ({
@@ -1106,25 +1107,27 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			</p>
 			{!isKiosk && !hasAccessToVisitorSpaceOfObject && (
 				<>
-					<p className={styles['p-object-detail__metadata-pill']}>
-						<TagList
-							className="u-pt-12"
-							tags={mapKeywordsToTags([maintainerName])}
-							onTagClicked={async () => {
-								await router.push(
-									stringifyUrl({
-										url: ROUTES_BY_LOCALE[locale].search,
-										query: {
-											[SearchFilterId.Maintainers]: [
-												`${maintainerId}${FILTER_LABEL_VALUE_DELIMITER}${maintainerName}`,
-											],
-										},
-									})
-								);
-							}}
-							variants={['clickable', 'silver', 'medium']}
-						/>
-					</p>
+					<NoServerSideRendering>
+						<div className={styles['p-object-detail__metadata-pill']}>
+							<TagList
+								className="u-pt-12"
+								tags={mapKeywordsToTags([maintainerName])}
+								onTagClicked={async () => {
+									await router.push(
+										stringifyUrl({
+											url: ROUTES_BY_LOCALE[locale].search,
+											query: {
+												[SearchFilterId.Maintainers]: [
+													`${maintainerId}${FILTER_LABEL_VALUE_DELIMITER}${maintainerName}`,
+												],
+											},
+										})
+									);
+								}}
+								variants={['clickable', 'silver', 'medium']}
+							/>
+						</div>
+					</NoServerSideRendering>
 					{maintainerLogo && (
 						<div className={styles['p-object-detail__metadata-logo']}>
 							{/* eslint-disable-next-line @next/next/no-img-element */}
