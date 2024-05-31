@@ -16,7 +16,7 @@ import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner'
 import {
 	ElasticsearchFieldNames,
 	FILTER_LABEL_VALUE_DELIMITER,
-	VisitorSpaceFilterId,
+	SearchFilterId,
 } from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
@@ -37,7 +37,7 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 
 	// Contains the filters that have already been applied and are present in the url
 	const appliedSelectedMaintainerIds = compact(
-		(query[VisitorSpaceFilterId.Maintainers] || []).map(
+		(query[SearchFilterId.Maintainers] || []).map(
 			(maintainerIdAndName) => maintainerIdAndName?.split(FILTER_LABEL_VALUE_DELIMITER)?.[0]
 		)
 	);
@@ -110,7 +110,7 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<SearchBar
-					id={`${visitorSpaceLabelKeys.filters.title}--${VisitorSpaceFilterId.Maintainers}`}
+					id={`${visitorSpaceLabelKeys.filters.title}--${SearchFilterId.Maintainers}`}
 					value={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
 					placeholder={tText(

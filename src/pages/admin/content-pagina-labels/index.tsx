@@ -12,7 +12,7 @@ export const ContentPageLabelsOverviewPageDutch: NextPage<DefaultSeoInfo> = ({ u
 	return <ContentPageLabelsOverviewPage url={url} />;
 };
 
-export async function getServerSideProps(
+export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	return getDefaultStaticProps(context);

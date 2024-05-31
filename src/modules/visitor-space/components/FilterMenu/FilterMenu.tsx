@@ -10,8 +10,8 @@ import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 
-import { VISITOR_SPACE_ACTIVE_SORT_MAP, VISITOR_SPACE_QUERY_PARAM_CONFIG } from '../../const';
-import { VisitorSpaceFilterId, VisitorSpaceSort } from '../../types';
+import { SEARCH_PAGE_QUERY_PARAM_CONFIG, VISITOR_SPACE_ACTIVE_SORT_MAP } from '../../const';
+import { SearchFilterId, SearchSortProp } from '../../types';
 
 import styles from './FilterMenu.module.scss';
 import { FilterMenuFilterOption, FilterMenuProps } from './FilterMenu.types';
@@ -36,7 +36,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	onViewToggle = () => null,
 	onRemoveValue,
 }) => {
-	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
+	const [query, setQuery] = useQueryParams(SEARCH_PAGE_QUERY_PARAM_CONFIG);
 
 	const [lockScroll, setLockScroll] = useState<boolean>(false);
 	// We need different functionalities for different viewport sizes
@@ -69,11 +69,11 @@ const FilterMenu: FC<FilterMenuProps> = ({
 		setQuery({ filter });
 	};
 
-	const onFilterFormReset = (id: VisitorSpaceFilterId) => {
+	const onFilterFormReset = (id: SearchFilterId) => {
 		onFilterReset(id);
 	};
 
-	const onFilterFormSubmit = (id: VisitorSpaceFilterId, values: unknown) => {
+	const onFilterFormSubmit = (id: SearchFilterId, values: unknown) => {
 		onFilterSubmit(id, values);
 	};
 
@@ -95,7 +95,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 
 	const renderActiveSortLabel = () => {
 		const sortBtnLabel = activeSort
-			? VISITOR_SPACE_ACTIVE_SORT_MAP()[activeSort.orderProp as VisitorSpaceSort]
+			? VISITOR_SPACE_ACTIVE_SORT_MAP()[activeSort.orderProp as SearchSortProp]
 			: '';
 
 		return (

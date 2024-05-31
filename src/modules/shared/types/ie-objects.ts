@@ -1,6 +1,6 @@
 export type IeObjectTypes = 'video' | 'audio' | 'film' | null;
 
-export enum VisitorSpaceMediaType {
+export enum SearchPageMediaType {
 	All = 'all',
 	Audio = 'audio',
 	Video = 'video',

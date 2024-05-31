@@ -26,7 +26,7 @@ import { ADMIN_CORE_ROUTES_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
-import { isBrowser, Locale } from '@shared/utils';
+import { Locale } from '@shared/utils';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -52,7 +52,7 @@ const onSaveContentPage = async (contentPageInfo: ContentPageInfo) => {
 	);
 };
 
-export function getAdminCoreConfig(router: NextRouter, locale: Locale): AdminConfig {
+export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): AdminConfig {
 	return {
 		staticPages: Object.fromEntries(
 			Object.keys(ROUTES_BY_LOCALE).map((language) => [
@@ -184,8 +184,8 @@ export function getAdminCoreConfig(router: NextRouter, locale: Locale): AdminCon
 			router: {
 				Link: InternalLink as FunctionComponent<LinkInfo>,
 				useHistory: () => ({
-					push: router.push,
-					replace: router.replace,
+					push: router?.push as any,
+					replace: router?.replace as any,
 				}),
 			},
 			queryCache: {
@@ -196,15 +196,11 @@ export function getAdminCoreConfig(router: NextRouter, locale: Locale): AdminCon
 		},
 		database: {
 			databaseApplicationType: DatabaseType.hetArchief,
-			proxyUrl: isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL,
+			proxyUrl: publicRuntimeConfig.PROXY_URL,
 		},
 		flowplayer: {
-			FLOW_PLAYER_ID: isBrowser()
-				? publicRuntimeConfig.FLOW_PLAYER_ID
-				: process.env.FLOW_PLAYER_ID,
-			FLOW_PLAYER_TOKEN: isBrowser()
-				? publicRuntimeConfig.FLOW_PLAYER_TOKEN
-				: process.env.FLOW_PLAYER_TOKEN,
+			FLOW_PLAYER_ID: publicRuntimeConfig.FLOW_PLAYER_ID,
+			FLOW_PLAYER_TOKEN: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
 		},
 		handlers: {
 			onExternalLink: () => {

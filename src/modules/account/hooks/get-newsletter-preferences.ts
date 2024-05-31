@@ -8,7 +8,7 @@ import { GetNewsletterPreferencesResponse } from '@shared/types/newsletter';
 export const useGetNewsletterPreferences = (
 	email: string | undefined
 ): UseQueryResult<GetNewsletterPreferencesResponse | null> => {
-	return useQuery([QUERY_KEYS.getNewsletterPreferences, { email }], () => {
+	return useQuery([QUERY_KEYS.getNewsletterPreferences, email], () => {
 		if (isNil(email)) {
 			return null;
 		}

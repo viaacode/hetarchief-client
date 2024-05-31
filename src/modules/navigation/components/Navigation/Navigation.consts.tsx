@@ -21,7 +21,7 @@ import {
 import { tText } from '@shared/helpers/translate';
 import { Breakpoints, Visit } from '@shared/types';
 import { Locale } from '@shared/utils';
-import { VisitorSpaceFilterId, VisitorSpaceInfo } from '@visitor-space/types';
+import { SearchFilterId, VisitorSpaceInfo } from '@visitor-space/types';
 
 const linkCls = (...classNames: string[]) => {
 	return clsx(styles['c-navigation__link'], ...classNames);
@@ -109,7 +109,7 @@ const getVisitorSpacesDropdown = (
 	const visitPath = ROUTES_BY_LOCALE[locale].visit;
 	if (linkedSpaceOrId) {
 		// Single link to go to linked visitor space (kiosk visitor)
-		const searchRouteForSpace = `/${ROUTE_PARTS_BY_LOCALE[locale].search}?${VisitorSpaceFilterId.Maintainer}=${linkedSpaceOrId}`;
+		const searchRouteForSpace = `/${ROUTE_PARTS_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${linkedSpaceOrId}`;
 		return {
 			node: renderLink(
 				tText('modules/navigation/components/navigation/navigation___bezoekersruimte'),
@@ -168,7 +168,7 @@ const getVisitorSpacesDropdown = (
 					isDivider: accessibleVisitorSpaces.length > 0 ? 'md' : undefined,
 				},
 				...accessibleVisitorSpaces.map((visitorSpace: VisitorSpaceInfo): NavigationItem => {
-					const searchRouteForSpace = `/${ROUTE_PARTS_BY_LOCALE[locale].search}?${VisitorSpaceFilterId.Maintainer}=${visitorSpace.slug}`;
+					const searchRouteForSpace = `/${ROUTE_PARTS_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${visitorSpace.slug}`;
 					return {
 						node: ({ closeDropdowns }) =>
 							renderLink(
@@ -393,7 +393,7 @@ const getCpAdminManagementDropdown = (
 									stringifyUrl({
 										url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 										query: {
-											[VisitorSpaceFilterId.Maintainer]: maintainerSlug,
+											[SearchFilterId.Maintainer]: maintainerSlug,
 										},
 									}),
 									{

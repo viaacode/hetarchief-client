@@ -15,9 +15,9 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-import styles from './LoggedOutHome.module.scss';
+import styles from './LoggedOutVisitorSpacesHome.module.scss';
 
-const LoggedOutHome: FC<DefaultSeoInfo> = (props) => {
+const LoggedOutVisitorSpacesHome: FC<DefaultSeoInfo> = (props) => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
@@ -124,4 +124,4 @@ const LoggedOutHome: FC<DefaultSeoInfo> = (props) => {
 	);
 };
 
-export default LoggedOutHome;
+export default LoggedOutVisitorSpacesHome;

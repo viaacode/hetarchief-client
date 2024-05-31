@@ -8,8 +8,8 @@ import { parseUrl, StringifiableRecord, stringifyUrl } from 'query-string';
 import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { ApiService } from '@shared/services/api-service';
-import { isBrowser, Locale } from '@shared/utils';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { Locale } from '@shared/utils';
+import { SearchFilterId } from '@visitor-space/types';
 
 import { CheckLoginResponse } from './auth.service.types';
 
@@ -36,7 +36,7 @@ export class AuthService {
 		// Redirect /slug to the search page with filter
 		if (slug && !ie) {
 			// TODO split backend filter names (VisitorSpaceFilterId) from filter names in the url (create a new enum for those)
-			originalPath = `/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${slug}`;
+			originalPath = `/${ROUTE_PARTS.search}?${SearchFilterId.Maintainer}=${slug}`;
 		}
 		if (
 			(originalPath || '') === ROUTES_BY_LOCALE[(router.locale || Locale.nl) as Locale].home
@@ -65,9 +65,7 @@ export class AuthService {
 
 		await router.replace(
 			stringifyUrl({
-				url: `${
-					isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL
-				}/auth/hetarchief/login`,
+				url: `${publicRuntimeConfig.PROXY_URL}/auth/hetarchief/login`,
 				query: {
 					returnToUrl,
 				},
@@ -81,17 +79,13 @@ export class AuthService {
 	): Promise<void> {
 		const { redirectTo, ...otherQueryParams } = query;
 		const returnToUrl = stringifyUrl({
-			url: `${isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL}/${
-				redirectTo ?? ''
-			}`,
+			url: `${publicRuntimeConfig.CLIENT_URL}/${redirectTo ?? ''}`,
 			query: otherQueryParams,
 		});
 
 		await router.replace(
 			stringifyUrl({
-				url: `${
-					isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL
-				}/auth/hetarchief/register`,
+				url: `${publicRuntimeConfig.PROXY_URL}/auth/hetarchief/register`,
 				query: {
 					returnToUrl,
 				},
@@ -100,10 +94,10 @@ export class AuthService {
 	}
 
 	public static async logout(shouldRedirectToOriginalPage = false): Promise<void> {
-		let returnToUrl = isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL;
+		let returnToUrl = publicRuntimeConfig.CLIENT_URL;
 		if (shouldRedirectToOriginalPage) {
 			let originalPath = window.location.href.substring(
-				(isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL).length
+				publicRuntimeConfig.CLIENT_URL.length
 			);
 			const originalPathIsLogoutPath = !!Object.values(ROUTE_PARTS_BY_LOCALE)
 				.map((value) => value.logout)
@@ -112,7 +106,7 @@ export class AuthService {
 				originalPath = '/';
 			}
 			returnToUrl = stringifyUrl({
-				url: isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL,
+				url: publicRuntimeConfig.CLIENT_URL,
 				query: {
 					redirectTo: originalPath,
 					showAuth: 1,
@@ -127,9 +121,7 @@ export class AuthService {
 		queryClient.clear();
 
 		window.location.href = stringifyUrl({
-			url: `${
-				isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL
-			}/auth/global-logout`,
+			url: `${publicRuntimeConfig.PROXY_URL}/auth/global-logout`,
 			query: {
 				returnToUrl,
 			},

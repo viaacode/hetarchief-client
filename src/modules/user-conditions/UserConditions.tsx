@@ -1,4 +1,9 @@
-import { AdminConfigManager, ContentPageInfo, ContentPageRenderer } from '@meemoo/admin-core-ui';
+import {
+	AdminConfigManager,
+	ContentPageInfo,
+	ContentPageRenderer,
+	convertDbContentPageToContentPageInfo,
+} from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import { Avo } from '@viaa/avo2-types';
 import clsx from 'clsx';
@@ -39,10 +44,13 @@ export const UserConditions: FC<
 	const [hasFinished, setHasFinished] = useState(false);
 	const [isAtBottom, setIsAtBottom] = useState(false);
 	const tosAccepted = useTermsOfService();
-	const { data: contentPageInfo } = useGetContentPageByLanguageAndPath(
+	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
 		locale,
 		KNOWN_STATIC_ROUTES.TermsOfService
 	);
+	const contentPageInfo = dbContentPage
+		? convertDbContentPageToContentPageInfo(dbContentPage)
+		: null;
 
 	const user = useSelector(selectUser);
 

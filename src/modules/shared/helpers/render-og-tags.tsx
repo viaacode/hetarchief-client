@@ -2,21 +2,29 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import { ReactNode } from 'react';
 
-import { createPageTitle, isBrowser } from '@shared/utils';
+import { createPageTitle } from '@shared/utils';
 
 const { publicRuntimeConfig } = getConfig();
 
+/**
+ * Renders Open Graph tags for the page
+ * @param title
+ * @param description
+ * @param url
+ * @param imgUrl
+ * @param isFullTitle The passed title should be used as is, and should not be appended with " | hetarchief.be"
+ */
 export function renderOgTags(
-	title: string | null,
-	description: string | null,
+	title: string | null | undefined,
+	description: string | null | undefined,
 	url: string,
-	fullTitle = false,
-	imgUrl: string | null = null
+	imgUrl: string | null | undefined = null,
+	isFullTitle = false
 ): ReactNode {
 	const resolvedTitle = createPageTitle(title);
 	return (
 		<Head>
-			<title>{fullTitle ? title : resolvedTitle}</title>
+			<title>{isFullTitle ? title : resolvedTitle}</title>
 			{description && <meta name="description" content={description} />}
 			<meta property="og:type" content="website" />
 			<meta property="og:url" content={url} />
@@ -27,16 +35,11 @@ export function renderOgTags(
 			) : (
 				<meta
 					property="og:image"
-					content={`${
-						isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL
-					}/images/og.jpg`}
+					content={`${publicRuntimeConfig.CLIENT_URL}/images/og.jpg`}
 				/>
 			)}
 			<meta property="twitter:card" content="summary_large_image" />
-			<meta
-				property="twitter:domain"
-				content={isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL}
-			/>
+			<meta property="twitter:domain" content={publicRuntimeConfig.CLIENT_URL} />
 			<meta property="twitter:title" content={resolvedTitle} />
 			{description && <meta property="twitter:description" content={description} />}
 		</Head>

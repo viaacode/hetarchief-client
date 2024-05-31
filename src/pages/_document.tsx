@@ -2,8 +2,6 @@ import getConfig from 'next/config';
 import { Head, Html, Main, NextScript } from 'next/document';
 import React, { ReactElement } from 'react';
 
-import { isBrowser } from '@shared/utils';
-
 declare type DocumentFiles = {
 	sharedFiles: readonly string[];
 	pageFiles: readonly string[];
@@ -46,11 +44,7 @@ const Document = (): ReactElement => {
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer', '${
-							isBrowser()
-								? publicRuntimeConfig.GOOGLE_TAG_MANAGER_ID
-								: process.env.GOOGLE_TAG_MANAGER_ID
-						}');
+})(window,document,'script','dataLayer', '${publicRuntimeConfig.GOOGLE_TAG_MANAGER_ID}');
   `,
 					}}
 				/>
@@ -67,11 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 				{/* Google Tag Manager (noscript) */}
 				<noscript>
 					<iframe
-						src={`https://www.googletagmanager.com/ns.html?id=${
-							isBrowser()
-								? publicRuntimeConfig.GOOGLE_TAG_MANAGER_ID
-								: process.env.GOOGLE_TAG_MANAGER_ID
-						}`}
+						src={`https://www.googletagmanager.com/ns.html?id=${publicRuntimeConfig.GOOGLE_TAG_MANAGER_ID}`}
 						height="0"
 						width="0"
 						style={{ display: 'none', visibility: 'hidden' }}

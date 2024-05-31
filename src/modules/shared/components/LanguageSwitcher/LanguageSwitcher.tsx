@@ -1,4 +1,4 @@
-import { ContentPageInfo } from '@meemoo/admin-core-ui';
+import { ContentPageInfo, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import { reverse, sortBy } from 'lodash-es';
@@ -29,11 +29,14 @@ export default function LanguageSwitcher() {
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useDispatch();
 	const { data: allLanguages } = useGetAllLanguages();
-	const { data: contentPageInfo } = useGetContentPageByLanguageAndPath(
+	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
 		locale,
 		`/${router.query.slug}`,
 		{ enabled: router.route === '/[slug]' }
 	);
+	const contentPageInfo = dbContentPage
+		? convertDbContentPageToContentPageInfo(dbContentPage)
+		: null;
 
 	const languageOptions = (allLanguages || []).map((languageInfo) => ({
 		label: languageInfo.languageLabel,
