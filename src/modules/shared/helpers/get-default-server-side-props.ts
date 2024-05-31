@@ -5,7 +5,7 @@ import { i18n } from 'next-i18next';
 
 import { getTranslations } from '@i18n/helpers/get-translations';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { isBrowser, Locale } from '@shared/utils';
+import { Locale } from '@shared/utils';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -21,9 +21,7 @@ export async function getDefaultStaticProps(
 	i18n?.addResources(locale, 'common', translations);
 	return {
 		props: {
-			url:
-				(isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL) +
-				(context?.resolvedUrl || ''),
+			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
 			title: title || null,
 			description: description || null,
 			image: image || null,

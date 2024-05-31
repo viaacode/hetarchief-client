@@ -3,19 +3,17 @@ import { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
-import { selectHasCheckedLogin, selectIsLoggedIn, selectUser } from '@auth/store/user';
+import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import LoggedInVisitorSpacesHome from '@home/components/LoggedInVisitorSpacesHome/LoggedInVisitorSpacesHome';
 import LoggedOutVisitorSpacesHome from '@home/components/LoggedOutVisitorSpacesHome/LoggedOutVisitorSpacesHome';
 import { Loading } from '@shared/components';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { isBrowser } from '@shared/utils';
 import { VisitorLayout } from '@visitor-layout/index';
 
 export const VisitorSpacesHomePage: FC<DefaultSeoInfo> = (props) => {
 	const router = useRouter();
 	const isLoggedIn = useSelector(selectIsLoggedIn);
-	const hasCheckedLogin: boolean = useSelector(selectHasCheckedLogin);
 	const user = useSelector(selectUser);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const linkedSpaceSlug: string | null = user?.visitorSpaceSlug || null;
@@ -31,9 +29,6 @@ export const VisitorSpacesHomePage: FC<DefaultSeoInfo> = (props) => {
 	 */
 
 	const renderPageContent = () => {
-		if (!hasCheckedLogin && isBrowser()) {
-			return <Loading fullscreen owner="root index page" />;
-		}
 		if (isLoggedIn && !!user) {
 			if (showLinkedSpaceAsHomepage && linkedSpaceSlug) {
 				return <Loading fullscreen owner="root page logged" />;

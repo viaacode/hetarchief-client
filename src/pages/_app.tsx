@@ -64,8 +64,5 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
 }
 
 export default wrapper.withRedux(
-	appWithTranslation(
-		MyApp,
-		getI18n(isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL) as any
-	)
+	appWithTranslation(MyApp, getI18n(publicRuntimeConfig.PROXY_URL) as any)
 );

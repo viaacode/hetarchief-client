@@ -10,7 +10,7 @@ import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { isBrowser } from '@shared/utils';
+import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import { VisitorSpaceService } from '@visitor-space/services';
 import {
 	CreateVisitorSpaceSettings,
@@ -276,9 +276,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({
 						)}
 					</p>
 
-					{/* Disable serverside rendering of rich text editor to conserve RAM on the server */}
-					{/* Otherwise we getJavaScript heap out of memory errors */}
-					{isBrowser() && (
+					<NoServerSideRendering>
 						<RichTextForm
 							editor={{
 								braft: {
@@ -300,7 +298,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({
 									: undefined
 							}
 						/>
-					)}
+					</NoServerSideRendering>
 				</Box>
 			</article>
 
@@ -327,9 +325,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({
 						)}
 					</p>
 
-					{/* Disable serverside rendering of rich text editor to conserve RAM on the server */}
-					{/* Otherwise we getJavaScript heap out of memory errors */}
-					{isBrowser() && (
+					<NoServerSideRendering>
 						<RichTextForm
 							className={styles['c-cp-settings__rich-text--no-heading']}
 							editor={{
@@ -352,7 +348,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({
 									: undefined
 							}
 						/>
-					)}
+					</NoServerSideRendering>
 				</Box>
 			</article>
 		</div>

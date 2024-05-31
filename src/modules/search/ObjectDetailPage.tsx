@@ -135,7 +135,6 @@ import {
 	formatMediumDate,
 	formatMediumDateWithTime,
 	formatSameDayTimeOrDate,
-	isBrowser,
 } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visit-requests/hooks/get-active-visit-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
@@ -927,12 +926,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			pause: isMediaPaused,
 			onPlay: handleOnPlay,
 			onPause: handleOnPause,
-			token: isBrowser()
-				? publicRuntimeConfig.FLOW_PLAYER_TOKEN
-				: process.env.FLOW_PLAYER_TOKEN,
-			dataPlayerId: isBrowser()
-				? publicRuntimeConfig.FLOW_PLAYER_ID
-				: process.env.FLOW_PLAYER_ID,
+			token: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
+			dataPlayerId: publicRuntimeConfig.FLOW_PLAYER_ID,
 			plugins: ['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio', 'keyboard'],
 		};
 

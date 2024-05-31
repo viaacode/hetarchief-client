@@ -2,7 +2,7 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import { ReactNode } from 'react';
 
-import { createPageTitle, isBrowser } from '@shared/utils';
+import { createPageTitle } from '@shared/utils';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -35,16 +35,11 @@ export function renderOgTags(
 			) : (
 				<meta
 					property="og:image"
-					content={`${
-						isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL
-					}/images/og.jpg`}
+					content={`${publicRuntimeConfig.CLIENT_URL}/images/og.jpg`}
 				/>
 			)}
 			<meta property="twitter:card" content="summary_large_image" />
-			<meta
-				property="twitter:domain"
-				content={isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL}
-			/>
+			<meta property="twitter:domain" content={publicRuntimeConfig.CLIENT_URL} />
 			<meta property="twitter:title" content={resolvedTitle} />
 			{description && <meta property="twitter:description" content={description} />}
 		</Head>

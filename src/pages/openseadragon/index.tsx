@@ -1268,12 +1268,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			pause: isMediaPaused,
 			onPlay: handleOnPlay,
 			onPause: handleOnPause,
-			token: isBrowser()
-				? publicRuntimeConfig.FLOW_PLAYER_TOKEN
-				: process.env.FLOW_PLAYER_TOKEN,
-			dataPlayerId: isBrowser()
-				? publicRuntimeConfig.FLOW_PLAYER_ID
-				: process.env.FLOW_PLAYER_ID,
+			token: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
+			dataPlayerId: publicRuntimeConfig.FLOW_PLAYER_ID,
 			plugins: ['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio', 'keyboard'],
 		};
 

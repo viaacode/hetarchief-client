@@ -30,7 +30,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { isBrowser, Locale } from '@shared/utils';
+import { Locale } from '@shared/utils';
 import { VisitorLayout } from '@visitor-layout/index';
 
 const { publicRuntimeConfig } = getConfig();
@@ -73,10 +73,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 
 	useEffect(() => {
 		if (isContentPageNotFoundError && !isIeObjectLoading && !ieObjectInfo) {
-			window.open(
-				`${isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL}/not-found`,
-				'_self'
-			);
+			window.open(`${publicRuntimeConfig.PROXY_URL}/not-found`, '_self');
 		}
 	}, [ieObjectInfo, isContentPageNotFoundError, isIeObjectLoading]);
 
