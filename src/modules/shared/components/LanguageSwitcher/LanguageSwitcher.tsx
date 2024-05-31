@@ -25,10 +25,10 @@ export default function LanguageSwitcher() {
 	const locale = useLocale();
 	const queryClient = useQueryClient();
 	const [isOpen, setIsOpen] = useState(false);
-	const [defaultLanguage, setDefaultLanguage] = useState<Locale>(locale);
+	const [selectedLanguage, setSelectedLanguage] = useState<Locale>(locale);
 	const dispatch = useDispatch();
 	const { data: allLanguages } = useGetAllLanguages();
-	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference(defaultLanguage);
+	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference(selectedLanguage);
 	const { data: contentPageInfo } = useGetContentPageByLanguageAndPath(
 		locale,
 		`/${router.query.slug}`,
@@ -42,10 +42,10 @@ export default function LanguageSwitcher() {
 			return; // skip the effect on the first render
 		}
 
-		mutateLanguagePreference(defaultLanguage);
-		changeLocalSlug(locale, defaultLanguage, queryClient, contentPageInfo);
+		mutateLanguagePreference(selectedLanguage);
+		changeLocalSlug(locale, selectedLanguage, queryClient, contentPageInfo);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [defaultLanguage, mutateLanguagePreference]);
+	}, [selectedLanguage, mutateLanguagePreference]);
 
 	const languageOptions = (allLanguages || []).map((languageInfo) => ({
 		label: languageInfo.languageLabel,
@@ -81,7 +81,7 @@ export default function LanguageSwitcher() {
 						<Button
 							variants={['text']}
 							onClick={() => {
-								setDefaultLanguage(option.value as unknown as Locale);
+								setSelectedLanguage(option.value as unknown as Locale);
 							}}
 						>
 							{option.label}

@@ -68,12 +68,12 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const queryClient = useQueryClient();
 	const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false);
 	const [acceptNewsletter, setAcceptNewsletter] = useState<boolean>(false);
-	const [defaultLanguage, setDefaultLanguage] = useState<Locale>(locale);
+	const [selectedLanguage, setSelectedLanguage] = useState<Locale>(locale);
 	const isAdminUser: boolean = useHasAnyGroup(GroupName.MEEMOO_ADMIN, GroupName.CP_ADMIN);
 	const canEditProfile: boolean = useHasAllPermission(Permission.CAN_EDIT_PROFILE_INFO);
 	const isKeyUser: boolean = useIsKeyUser();
 	const { data: allLanguages } = useGetAllLanguages();
-	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference(defaultLanguage);
+	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference(selectedLanguage);
 	const { data: preferences } = useGetNewsletterPreferences(user?.email);
 
 	const { data: contentPageInfo } = useGetContentPageByLanguageAndPath(
@@ -83,10 +83,10 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	);
 
 	useEffect(() => {
-		mutateLanguagePreference(defaultLanguage);
-		changeLocalSlug(locale, defaultLanguage, queryClient, contentPageInfo);
+		mutateLanguagePreference(selectedLanguage);
+		changeLocalSlug(locale, selectedLanguage, queryClient, contentPageInfo);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [defaultLanguage, mutateLanguagePreference]);
+	}, [selectedLanguage, mutateLanguagePreference]);
 
 	const {
 		control,
@@ -288,10 +288,10 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 				allLanguages?.map((language) => ({
 					label: GET_TRANSLATED_LANGUAGE_LABELS()[language.languageCode],
 					value: language.languageCode,
-					checked: defaultLanguage === language.languageCode,
+					checked: selectedLanguage === language.languageCode,
 				})) || []
 			}
-			onItemClick={(_, value) => setDefaultLanguage(value as Locale)}
+			onItemClick={(_, value) => setSelectedLanguage(value as Locale)}
 		/>
 	);
 
