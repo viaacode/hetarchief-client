@@ -5,11 +5,11 @@ import { QUERY_KEYS } from '@shared/const/query-keys';
 import { Locale } from '@shared/utils';
 
 export function useGetNavigationItems(
-	locale: Locale
+	language: Locale
 ): UseQueryResult<Record<string, NavigationInfo[]>> {
 	return useQuery(
-		[QUERY_KEYS.getNavigationItems, locale],
-		() => NavigationService.getAll(locale),
+		[QUERY_KEYS.getNavigationItems, language],
+		() => NavigationService.getAll(language),
 		{
 			keepPreviousData: true,
 		}

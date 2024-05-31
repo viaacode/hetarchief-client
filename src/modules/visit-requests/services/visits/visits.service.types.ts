@@ -1,7 +1,7 @@
 import { OrderDirection } from '@meemoo/react-components';
 
-import { VisitTimeframe } from '@modules/visit-requests/types';
 import { Visit, VisitStatus } from '@shared/types';
+import { VisitTimeframe } from '@visit-requests/types';
 
 export interface GetVisitsProps {
 	children?: React.ReactNode;

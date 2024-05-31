@@ -9,9 +9,7 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import {
 	getContentPageByLanguageAndPath,
 	useGetContentPageByLanguageAndPath,
-} from '@modules/content-page/hooks/get-content-page';
-import { ContentPageClientService } from '@modules/content-page/services/content-page-client.service';
-import { VisitorLayout } from '@modules/visitor-layout';
+} from '@content-page/hooks/get-content-page';
 import { Loading } from '@shared/components';
 import { KNOWN_STATIC_ROUTES, QUERY_KEYS, ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
@@ -21,6 +19,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils';
+import { VisitorLayout } from '@visitor-layout/index';
 
 const Homepage: NextPage<DefaultSeoInfo & UserProps> = ({
 	title,
@@ -38,7 +37,7 @@ const Homepage: NextPage<DefaultSeoInfo & UserProps> = ({
 	 */
 
 	const { isLoading: isContentPageLoading, data: dbContentPage } =
-		useGetContentPageByLanguageAndPath(locale, KNOWN_STATIC_ROUTES.Home);
+		useGetContentPageByLanguageAndPath(locale, '/');
 	const contentPageInfo = dbContentPage
 		? convertDbContentPageToContentPageInfo(dbContentPage)
 		: null;
@@ -92,7 +91,8 @@ export async function getStaticProps(
 	let description: string | null = null;
 	let image: string | null = null;
 	try {
-		const contentPage = await ContentPageClientService.getByLanguageAndPath(Locale.nl, '/');
+		const contentPage = await getContentPageByLanguageAndPath(Locale.nl, '/');
+		console.log({ contentPage: JSON.stringify(contentPage, null, 2) });
 		title = contentPage?.title || null;
 		description = contentPage?.seoDescription || contentPage?.description || null;
 		image = contentPage?.thumbnailPath || null;
@@ -115,6 +115,7 @@ export async function getStaticProps(
 		queryFn: () => getContentPageByLanguageAndPath(language, path),
 	});
 
+	console.log({ queryClientCache: queryClient.getQueryCache() });
 	const dehydratedState = dehydrate(queryClient);
 
 	return getDefaultStaticProps(context, dehydratedState, title, description, image);

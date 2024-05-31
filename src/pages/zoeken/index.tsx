@@ -4,7 +4,7 @@ import { ComponentType } from 'react';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { makeServerSideRequestGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
-import SearchPage from '@modules/search/SearchPage';
+import SearchPage from '@search/SearchPage';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';
 

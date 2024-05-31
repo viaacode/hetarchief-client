@@ -16,7 +16,7 @@ RUN adduser -S nextjs -u 1001
 
 RUN chown nextjs:nodejs /app
 
-RUN cp ./scripts/next-config-to-env-file.js ./
+RUN cp ./scripts/next-config-to-env-file.mjs ./
 
 USER nextjs
 

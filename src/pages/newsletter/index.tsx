@@ -1,7 +1,7 @@
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 
-import { NewsletterPage } from '@modules/newsletter/NewsletterPage';
+import { NewsletterPage } from '@newsletter/NewsletterPage';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';
 

@@ -4,7 +4,7 @@ import React from 'react';
 
 import { IeObjectsService } from '@ie-objects/services';
 import { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
-import { ObjectDetailPage } from '@modules/search/ObjectDetailPage';
+import { ObjectDetailPage } from '@search/ObjectDetailPage';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';
 

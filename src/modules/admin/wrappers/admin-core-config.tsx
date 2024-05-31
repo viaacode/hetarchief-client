@@ -54,7 +54,12 @@ const onSaveContentPage = async (contentPageInfo: ContentPageInfo) => {
 
 export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): AdminConfig {
 	return {
-		staticPages: Object.values(ROUTES_BY_LOCALE.nl),
+		staticPages: Object.fromEntries(
+			Object.keys(ROUTES_BY_LOCALE).map((language) => [
+				language,
+				Object.values(ROUTES_BY_LOCALE[language as Locale]),
+			])
+		) as Record<Locale, string[]>,
 		contentPage: {
 			availableContentBlocks: [
 				ContentBlockType.Buttons,
@@ -109,6 +114,10 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 				sortTable: { name: IconNamesLight.SortTable },
 				view: { name: IconNamesLight.Show },
 				warning: { name: IconNamesLight.Exclamation },
+				eyeOff: { name: IconNamesLight.Hide },
+				audio: { name: IconNamesLight.Audio },
+				video: { name: IconNamesLight.Video },
+				newspaper: { name: IconNamesLight.Newspaper },
 			},
 			list: ICON_LIST_CONFIG,
 			alerts: ALERT_ICON_LIST_CONFIG,

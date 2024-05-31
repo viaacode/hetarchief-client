@@ -1,4 +1,4 @@
-import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
+import { ContentPageInfo, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import { reverse, sortBy } from 'lodash-es';
@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useGetContentPageByLanguageAndPath } from '@modules/content-page/hooks/get-content-page';
+import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { NavigationDropdown } from '@navigation/components/Navigation/NavigationDropdown';
 import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/LanguageSwitcher.exceptions';
 import { QUERY_KEYS, RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
@@ -52,7 +52,11 @@ export default function LanguageSwitcher() {
 		}, 10);
 	};
 
-	const handleLocaleChanged = async (oldLocale: Locale, newLocale: Locale) => {
+	const handleLocaleChanged = (
+		oldLocale: Locale,
+		newLocale: Locale,
+		contentPage: ContentPageInfo | null | undefined
+	) => {
 		const oldFullPath = router.asPath;
 		const routeEntries = Object.entries(ROUTES_BY_LOCALE[oldLocale]);
 		// We'll go in reverse order, so we'll match on the longest paths first
@@ -75,16 +79,17 @@ export default function LanguageSwitcher() {
 
 		// exception for content pages
 		if (router.route === '/[slug]') {
-			const translatedContentPageInfo = (contentPageInfo?.translatedPages || []).find(
+			const translatedContentPageInfo = (contentPage?.translatedPages || []).find(
 				(translatedPage) =>
-					translatedPage.language === newLocale.toUpperCase() && translatedPage.isPublic
+					(translatedPage.language as unknown as Locale) === newLocale &&
+					translatedPage.isPublic
 			);
 			newFullPath = translatedContentPageInfo?.path || ROUTES_BY_LOCALE[newLocale].home;
 		}
 
 		// Redirect to new path
-		await router.push(newFullPath, newFullPath, { locale: newLocale });
-		await queryClient.invalidateQueries([QUERY_KEYS.getNavigationItems]);
+		router.push(newFullPath, newFullPath, { locale: newLocale });
+		queryClient.invalidateQueries([QUERY_KEYS.getNavigationItems]);
 	};
 
 	return (
@@ -108,7 +113,7 @@ export default function LanguageSwitcher() {
 							variants={['text']}
 							onClick={() => {
 								const newLocale: Locale = option.value as unknown as Locale;
-								handleLocaleChanged(locale, newLocale);
+								handleLocaleChanged(locale, newLocale, contentPageInfo);
 							}}
 						>
 							{option.label}

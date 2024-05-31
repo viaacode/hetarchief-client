@@ -9,8 +9,6 @@ import { Controller, ControllerRenderProps, FieldError, useForm } from 'react-ho
 
 import { Permission } from '@account/const';
 import { useGetFolders } from '@account/hooks/get-folders';
-import { VisitsService } from '@modules/visit-requests/services/visits/visits.service';
-import { VisitTimeframe } from '@modules/visit-requests/types';
 import {
 	APPROVE_REQUEST_FORM_SCHEMA,
 	ApproveRequestBladeProps,
@@ -30,6 +28,8 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { AccessType, Visit, VisitStatus } from '@shared/types';
 import { asDate, formatMediumDateWithTime, formatTime } from '@shared/utils';
+import { VisitsService } from '@visit-requests/services/visits/visits.service';
+import { VisitTimeframe } from '@visit-requests/types';
 import DateInput from '@visitor-space/components/DateInput/DateInput';
 
 import Timepicker from '../Timepicker/Timepicker';

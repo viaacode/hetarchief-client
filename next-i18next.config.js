@@ -1,18 +1,18 @@
-import I18NextHttpBackend from 'i18next-http-backend';
-import * as _ from 'lodash';
+const I18NextHttpBackend = require('i18next-http-backend');
+const _ = require('lodash');
 
-export function getI18n(proxyUrl) {
+function getI18n(proxyUrl) {
 	return {
 		locales: ['nl', 'en'],
 		defaultLocale: 'nl',
 		backend: {
-			loadPath: `${proxyUrl}/translations/{{lng}}.json`,
+			loadPath: `${proxyUrl}/admin/translations/{{lng}}.json`,
 		},
 		i18n: {
 			locales: ['nl', 'en'],
 			defaultLocale: 'nl',
 			backend: {
-				loadPath: `${proxyUrl}/translations/{{lng}}.json`,
+				loadPath: `${proxyUrl}/admin/translations/{{lng}}.json`,
 			},
 		},
 		use: [I18NextHttpBackend],
@@ -27,3 +27,5 @@ export function getI18n(proxyUrl) {
 		debug: false,
 	};
 }
+
+module.exports = getI18n;

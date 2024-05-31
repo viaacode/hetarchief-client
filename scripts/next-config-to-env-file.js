@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const config = require('./next.config.js');
+const config = require('./next.config');
 
 let envFileContent = '';
 Object.keys(config.publicRuntimeConfig).forEach((envKey) => {

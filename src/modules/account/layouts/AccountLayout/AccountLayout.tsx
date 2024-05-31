@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 
+import { GET_ACCOUNT_NAVIGATION_LINKS } from '@account/const';
 import { AccountLayoutProps } from '@account/layouts';
-import { GET_ACCOUNT_NAVIGATION_LINKS } from '@modules/account/const';
 import { ListNavigationItem } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';

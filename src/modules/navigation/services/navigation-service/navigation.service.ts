@@ -9,10 +9,10 @@ export class NavigationService {
 	private static baseUrl = 'admin/navigations/items';
 
 	public static async getAll(
-		locale: Locale
+		language: Locale
 	): Promise<Record<NavigationPlacement, NavigationInfo[]>> {
 		const response: Record<NavigationPlacement, NavigationInfo[]> = await ApiService.getApi()
-			.get(stringifyUrl({ url: this.baseUrl, query: { languageCode: locale } }))
+			.get(stringifyUrl({ url: this.baseUrl, query: { language } }))
 			.json();
 
 		return response ?? {};

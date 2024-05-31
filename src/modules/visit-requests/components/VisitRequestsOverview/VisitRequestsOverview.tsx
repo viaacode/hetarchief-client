@@ -11,9 +11,6 @@ import {
 	RequestTablePageSize,
 	VISIT_REQUEST_ID_QUERY_KEY,
 } from '@cp/const/requests.const';
-import { useGetVisit } from '@modules/visit-requests/hooks/get-visit';
-import { useGetVisits } from '@modules/visit-requests/hooks/get-visits';
-import { RequestStatusAll } from '@modules/visit-requests/types';
 import {
 	Loading,
 	PaginationBar,
@@ -28,6 +25,9 @@ import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
+import { useGetVisit } from '@visit-requests/hooks/get-visit';
+import { useGetVisits } from '@visit-requests/hooks/get-visits';
+import { RequestStatusAll } from '@visit-requests/types';
 
 import { VisitRequestOverviewProps } from './VisitRequestsOverview.types';
 

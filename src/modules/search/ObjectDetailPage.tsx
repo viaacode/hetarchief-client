@@ -29,8 +29,12 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
 import { stringifyUrl } from 'query-string';
+import React, { FC, Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import Highlighter from 'react-highlight-words';
+import { useDispatch, useSelector } from 'react-redux';
+import { StringParam, useQueryParams } from 'use-query-params';
+
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
@@ -88,8 +92,6 @@ import {
 import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestObjectType } from '@material-requests/types';
-import { useGetActiveVisitForUserAndSpace } from '@modules/visit-requests/hooks/get-active-visit-for-user-and-space';
-import { VisitorLayout } from '@modules/visitor-layout';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import {
 	Blade,
@@ -135,6 +137,8 @@ import {
 	formatSameDayTimeOrDate,
 	isBrowser,
 } from '@shared/utils';
+import { useGetActiveVisitForUserAndSpace } from '@visit-requests/hooks/get-active-visit-for-user-and-space';
+import { VisitorLayout } from '@visitor-layout/index';
 import {
 	AddToFolderBlade,
 	MaterialRequestBlade,
@@ -147,11 +151,6 @@ import {
 	SearchFilterId,
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
-
-import React, { FC, Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import Highlighter from 'react-highlight-words';
-import { useDispatch, useSelector } from 'react-redux';
-import { StringParam, useQueryParams } from 'use-query-params';
 
 import styles from './ObjectDetailPage.module.scss';
 

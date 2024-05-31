@@ -16,7 +16,6 @@ import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user
 import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
 import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
-import { useGetAllActiveVisits } from '@modules/visit-requests/hooks/get-all-active-visits';
 import { Footer, Navigation, NavigationItem } from '@navigation/components';
 import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';
 import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
@@ -69,6 +68,7 @@ import {
 } from '@shared/store/ui/';
 import { Breakpoints, Visit } from '@shared/types';
 import { scrollTo } from '@shared/utils/scroll-to-top';
+import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visits';
 
 import packageJson from '../../../../../package.json';
 

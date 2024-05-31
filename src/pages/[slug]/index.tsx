@@ -7,20 +7,19 @@ import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { ComponentType, FC, useEffect } from 'react';
-
 import { useDispatch } from 'react-redux';
+
 import { GroupName } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
+import {
+	getContentPageByLanguageAndPath,
+	useGetContentPageByLanguageAndPath,
+} from '@content-page/hooks/get-content-page';
+import { ContentPageClientService } from '@content-page/services/content-page-client.service';
 import {
 	makeServerSideRequestGetIeObjectInfo,
 	useGetIeObjectInfo,
 } from '@ie-objects/hooks/get-ie-objects-info';
-import {
-	getContentPageByLanguageAndPath,
-	useGetContentPageByLanguageAndPath,
-} from '@modules/content-page/hooks/get-content-page';
-import { ContentPageClientService } from '@modules/content-page/services/content-page-client.service';
-import { VisitorLayout } from '@modules/visitor-layout';
 import { ErrorNotFound, Loading } from '@shared/components';
 import { QUERY_KEYS, ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
@@ -32,6 +31,7 @@ import withUser, { UserProps } from '@shared/hooks/with-user';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { isBrowser, Locale } from '@shared/utils';
+import { VisitorLayout } from '@visitor-layout/index';
 
 const { publicRuntimeConfig } = getConfig();
 

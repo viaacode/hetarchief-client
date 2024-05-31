@@ -5,7 +5,10 @@ import { startsWith } from 'lodash-es';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { Locale } from '@shared/utils';
 
-export function getContentPageByLanguageAndPath(language: Locale, path: string | undefined) {
+export async function getContentPageByLanguageAndPath(
+	language: Locale,
+	path: string | undefined
+): Promise<DbContentPage | null> {
 	if (!path) {
 		return null;
 	}
