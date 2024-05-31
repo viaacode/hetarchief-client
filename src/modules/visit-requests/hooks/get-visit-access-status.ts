@@ -11,7 +11,7 @@ export function useGetVisitAccessStatus(
 	enabled = true
 ): UseQueryResult<VisitAccessStatus | null> {
 	return useQuery(
-		[QUERY_KEYS.getVisitAccessStatus, { slug }],
+		[QUERY_KEYS.getVisitAccessStatus, slug],
 		() => VisitsService.getAccessStatusBySpaceSlug(slug),
 		{ enabled }
 	);

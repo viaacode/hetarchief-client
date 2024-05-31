@@ -6,14 +6,15 @@ import { VisitorSpaceService } from '../services';
 import { VisitorSpaceInfo } from '../types';
 
 export function useGetVisitorSpace(
-	slug: string | null,
+	maintainerSlug: string | null,
 	ignoreAuthError = false,
 	options: { enabled?: boolean } = {}
 ): UseQueryResult<VisitorSpaceInfo | null> {
 	return useQuery(
-		[QUERY_KEYS.getVisitorSpaceInfo, slug, ignoreAuthError],
+		[QUERY_KEYS.getVisitorSpaceInfo, maintainerSlug, ignoreAuthError],
 		async () => {
-			return await VisitorSpaceService.getBySlug(slug as string, ignoreAuthError);
+			console.log('useGetVisitorSpace:', { maintainerSlug, ignoreAuthError, options });
+			return VisitorSpaceService.getBySlug(maintainerSlug, ignoreAuthError);
 		},
 		{ enabled: true, retry: false, ...options }
 	);

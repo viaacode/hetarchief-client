@@ -13,7 +13,6 @@ const NotFound: NextPage<DefaultSeoInfo> = ({ url }) => {
 	useHideFooter();
 	useHideNavigationHeaderRight();
 
-	console.log('rendering not found', { title: tText('pages/404___niet-gevonden') });
 	return (
 		<>
 			{renderOgTags(

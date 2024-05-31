@@ -178,7 +178,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
 	const { data: activeVisitRequest, isLoading: isLoadingActiveVisitRequest } =
-		useGetActiveVisitForUserAndSpace(query[SearchFilterId.Maintainer], user, true);
+		useGetActiveVisitForUserAndSpace(query[SearchFilterId.Maintainer], user);
 
 	const [isInitialPageLoad, setIsInitialPageLoad] = useState(false);
 

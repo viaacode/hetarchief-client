@@ -92,7 +92,6 @@ export async function getStaticProps(
 	let image: string | null = null;
 	try {
 		const contentPage = await getContentPageByLanguageAndPath(Locale.nl, '/');
-		console.log({ contentPage: JSON.stringify(contentPage, null, 2) });
 		title = contentPage?.title || null;
 		description = contentPage?.seoDescription || contentPage?.description || null;
 		image = contentPage?.thumbnailPath || null;
@@ -111,11 +110,10 @@ export async function getStaticProps(
 	const path = KNOWN_STATIC_ROUTES.Home;
 	const language = (context.locale || Locale.nl) as Locale;
 	await queryClient.prefetchQuery({
-		queryKey: [QUERY_KEYS.getContentPage, { path, language }],
+		queryKey: [QUERY_KEYS.getContentPage, path, language],
 		queryFn: () => getContentPageByLanguageAndPath(language, path),
 	});
 
-	console.log({ queryClientCache: queryClient.getQueryCache() });
 	const dehydratedState = dehydrate(queryClient);
 
 	return getDefaultStaticProps(context, dehydratedState, title, description, image);

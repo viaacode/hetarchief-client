@@ -22,7 +22,7 @@ export const useGetIeObjectInfo = (
 		enabled?: boolean;
 	} = {}
 ): UseQueryResult<IeObject | null> => {
-	return useQuery([QUERY_KEYS.getIeObjectsInfo, { id }], () => getIeObjectInfo(id), {
+	return useQuery([QUERY_KEYS.getIeObjectsInfo, id], () => getIeObjectInfo(id), {
 		keepPreviousData: true,
 		enabled: true,
 		...options,
@@ -34,7 +34,7 @@ export function makeServerSideRequestGetIeObjectInfo(
 	id: string
 ): Promise<void> {
 	return queryClient.prefetchQuery({
-		queryKey: [QUERY_KEYS.getIeObjectsInfo, { id }],
+		queryKey: [QUERY_KEYS.getIeObjectsInfo, id],
 		queryFn: () => getIeObjectInfo(id),
 	});
 }

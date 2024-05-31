@@ -11,22 +11,8 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 
 type SearchPageProps = DefaultSeoInfo;
 
-const SearchPageEnglish: NextPage<SearchPageProps> = ({
-	url,
-	title,
-	description,
-	image,
-	dehydratedState,
-}) => {
-	return (
-		<SearchPage
-			url={url}
-			title={title}
-			description={description}
-			image={image}
-			dehydratedState={dehydratedState}
-		/>
-	);
+const SearchPageEnglish: NextPage<SearchPageProps> = ({ url, title, description, image }) => {
+	return <SearchPage url={url} title={title} description={description} image={image} />;
 };
 
 export async function getStaticProps(

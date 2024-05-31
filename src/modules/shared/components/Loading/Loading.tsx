@@ -12,7 +12,7 @@ export interface LoadingProps extends DefaultComponentProps {
 	owner: string; // Used to identify which loader is shown
 }
 
-const Loading: FC<LoadingProps> = ({ fullscreen = false, className, style = {} }) => {
+const Loading: FC<LoadingProps> = ({ fullscreen = false, className, owner, style = {} }) => {
 	const { tHtml } = useTranslation();
 
 	return (
@@ -25,7 +25,7 @@ const Loading: FC<LoadingProps> = ({ fullscreen = false, className, style = {} }
 			style={style}
 		>
 			{/* enable if you want to figure out which loader is misbehaving */}
-			{/*<div dangerouslySetInnerHTML={{ __html: `<!-- ${owner} -->` }} />*/}
+			<div dangerouslySetInnerHTML={{ __html: `<!-- ${owner} -->` }} />
 			<span>{tHtml('modules/shared/components/loading/loading___laden')}</span>
 		</div>
 	);

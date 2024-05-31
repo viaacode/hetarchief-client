@@ -8,7 +8,7 @@ export const useGetIeObjectsTicketInfo = (
 	onComplete: () => void
 ): UseQueryResult<string> => {
 	return useQuery(
-		[QUERY_KEYS.getIeObjectPlayerTicket, { fileSchemaIdentifier }],
+		[QUERY_KEYS.getIeObjectPlayerTicket, fileSchemaIdentifier],
 		() => IeObjectsService.getPlayableUrl(fileSchemaIdentifier),
 		{
 			keepPreviousData: true,
