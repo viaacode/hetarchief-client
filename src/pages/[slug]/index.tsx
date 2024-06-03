@@ -168,7 +168,11 @@ export async function getServerSideProps(
 
 	const queryClient = new QueryClient();
 	await Promise.all([
-		makeServerSideRequestGetContentPageByLanguageAndPath(queryClient, pathOrIeObjectId, locale),
+		makeServerSideRequestGetContentPageByLanguageAndPath(
+			queryClient,
+			pathOrIeObjectId ? '/' + pathOrIeObjectId : undefined,
+			locale
+		),
 		makeServerSideRequestGetIeObjectInfo(queryClient, pathOrIeObjectId),
 	]);
 	const dehydratedState = dehydrate(queryClient);

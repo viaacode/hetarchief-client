@@ -7,6 +7,8 @@ import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import LoggedInVisitorSpacesHome from '@home/components/LoggedInVisitorSpacesHome/LoggedInVisitorSpacesHome';
 import LoggedOutVisitorSpacesHome from '@home/components/LoggedOutVisitorSpacesHome/LoggedOutVisitorSpacesHome';
 import { Loading } from '@shared/components';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorLayout } from '@visitor-layout/index';
@@ -33,10 +35,20 @@ export const VisitorSpacesHomePage: FC<DefaultSeoInfo> = (props) => {
 			if (showLinkedSpaceAsHomepage && linkedSpaceSlug) {
 				return <Loading fullscreen owner="root page logged" />;
 			}
-			return <LoggedInVisitorSpacesHome {...props} />;
+			return <LoggedInVisitorSpacesHome />;
 		}
-		return <LoggedOutVisitorSpacesHome {...props} />;
+		return <LoggedOutVisitorSpacesHome />;
 	};
 
-	return <VisitorLayout>{renderPageContent()}</VisitorLayout>;
+	return (
+		<VisitorLayout>
+			{renderOgTags(
+				tText('Bezoek pagina titel'),
+				tText('Bezoek pagina beschrijving'),
+				props.url,
+				undefined
+			)}
+			{renderPageContent()}
+		</VisitorLayout>
+	);
 };

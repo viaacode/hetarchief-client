@@ -20,14 +20,11 @@ import {
 } from '@shared/components';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { tText } from '@shared/helpers/translate';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
-import { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetVisits } from '@visit-requests/hooks/get-visits';
@@ -41,7 +38,7 @@ import styles from './LoggedInVisitiorSpacesHome.module.scss';
 
 type SelectedVisit = ProcessVisitBladeProps['selected'];
 
-const LoggedInVisitorSpacesHome: FC<DefaultSeoInfo> = ({ url }) => {
+const LoggedInVisitorSpacesHome: FC = () => {
 	const { tHtml } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
@@ -451,16 +448,7 @@ const LoggedInVisitorSpacesHome: FC<DefaultSeoInfo> = ({ url }) => {
 		}
 		return (
 			<>
-				<div className="p-home u-page-bottom-padding">
-					{renderOgTags(
-						tText('modules/home/components/logged-in-home/logged-in-home___home'),
-						tText(
-							'modules/home/components/logged-in-home/logged-in-home___welkom-op-de-bezoekertool'
-						),
-						url
-					)}
-					{renderPageContent()}
-				</div>
+				<div className="p-home u-page-bottom-padding">{renderPageContent()}</div>
 			</>
 		);
 	};
@@ -468,4 +456,4 @@ const LoggedInVisitorSpacesHome: FC<DefaultSeoInfo> = ({ url }) => {
 	return renderHomePageContent();
 };
 
-export default withAuth(LoggedInVisitorSpacesHome as ComponentType, true) as FC<DefaultSeoInfo>;
+export default withAuth(LoggedInVisitorSpacesHome as ComponentType, true) as FC;

@@ -1,6 +1,7 @@
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorSpacesHomePage } from '@visitor-space/views/VisitorSpacesHomePage';
@@ -12,7 +13,7 @@ const VisitorSpacesHomeEnglish: NextPage<DefaultSeoInfo> = (seo) => {
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context);
+	return getDefaultStaticProps({ ...context, resolvedUrl: ROUTES_BY_LOCALE.en.visit });
 }
 
 export default VisitorSpacesHomeEnglish;

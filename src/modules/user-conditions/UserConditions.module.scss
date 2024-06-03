@@ -3,6 +3,9 @@
 @use "src/styles/abstracts" as *;
 
 $terms-of-service-background-color: #ebfbf8;
+$top-navigation-bar-height: 10rem;
+$header-and-buttons-height: 31.4rem;
+$header-and-buttons-height-mobile: 21.8rem;
 
 .p-terms-of-service {
 	flex-grow: 1;
@@ -70,12 +73,13 @@ $terms-of-service-background-color: #ebfbf8;
 
 	&__content {
 		margin-top: $spacer-1xl;
-		max-height: 100%;
 		min-height: 0;
 		overflow-y: auto;
+		max-height: calc(100vh - $top-navigation-bar-height - $header-and-buttons-height-mobile);
 
 		@include respond-at("md") {
 			margin-top: $spacer-lg * 2;
+			max-height: calc(100vh - $top-navigation-bar-height - $header-and-buttons-height);
 		}
 
 		.c-content-page-preview {
