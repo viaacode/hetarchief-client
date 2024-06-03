@@ -6,6 +6,7 @@ import React, { ComponentType } from 'react';
 import { ContentPageEditPage } from '@admin/views/content-pages/ContentPageEditPage';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
@@ -23,7 +24,7 @@ const ContentPageEditPageEnglish: NextPage<DefaultSeoInfo & UserProps> = ({ url,
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context);
+	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.en.adminContentPageCreate);
 }
 
 export default withAuth(

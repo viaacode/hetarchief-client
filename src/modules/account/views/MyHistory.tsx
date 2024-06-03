@@ -15,9 +15,9 @@ import {
 import { AccountLayout } from '@account/layouts';
 import { ErrorNoAccess, Loading, PaginationBar, sortingIcons } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { VisitDetailBlade } from '@shared/components/VisitDetailBlade';
 import { ROUTES_BY_LOCALE } from '@shared/const';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -206,13 +206,15 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 
 	return (
 		<VisitorLayout>
-			{renderOgTags(
-				tText('pages/account/mijn-bezoek-historiek/index___mijn-bezoek-historiek'),
-				tText(
+			<SeoTags
+				title={tText('pages/account/mijn-bezoek-historiek/index___mijn-bezoek-historiek')}
+				description={tText(
 					'pages/account/mijn-bezoek-historiek/index___mijn-bezoek-historiek-meta-omschrijving'
-				),
-				url
-			)}
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT]}>
 				{renderPageContent()}
 			</PermissionsCheck>

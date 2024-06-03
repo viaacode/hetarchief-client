@@ -31,6 +31,7 @@ import {
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard/MediaCard.consts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ShareFolderBlade } from '@shared/components/ShareFolderBlade';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
@@ -38,7 +39,6 @@ import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
@@ -663,14 +663,18 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 
 	return (
 		<VisitorLayout>
-			{renderOgTags(
-				tText('pages/account/mijn-mappen/folder-slug/index___mijn-mappen') +
-					` | ${activeFolder?.name || folderSlug}`,
-				tText(
+			<SeoTags
+				title={
+					tText('pages/account/mijn-mappen/folder-slug/index___mijn-mappen') +
+					` | ${activeFolder?.name || folderSlug}`
+				}
+				description={tText(
 					'pages/account/mijn-mappen/folder-slug/index___mijn-mappen-meta-omschrijving'
-				),
-				url
-			)}
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT]}>
 				{renderPageContent()}
 			</PermissionsCheck>

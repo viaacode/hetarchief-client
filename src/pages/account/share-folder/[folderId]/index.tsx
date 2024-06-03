@@ -15,10 +15,10 @@ const AccountSharedFolderEnglish: NextPage<DefaultSeoInfo> = ({ url }) => {
 	return <AccountSharedFolder url={url} folderId={folderId} />;
 };
 
-export async function getStaticProps(
+export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context);
+	return getDefaultStaticProps(context, undefined, context.resolvedUrl);
 }
 
 export default withAuth(AccountSharedFolderEnglish as ComponentType, true);

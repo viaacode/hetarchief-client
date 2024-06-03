@@ -76,14 +76,16 @@ import {
 	ticketErrorPlaceholder,
 	VISITOR_ACTION_SORT_MAP,
 } from '@ie-objects/const';
-import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
+import { getIeObjectInfo, useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
 import { useGetIeObjectsSimilar } from '@ie-objects/hooks/get-ie-objects-similar';
 import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-ticket-url';
+import { IeObjectsService } from '@ie-objects/services';
 import {
 	IE_OBJECTS_SERVICE_BASE_URL,
 	IE_OBJECTS_SERVICE_EXPORT,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
+import { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import {
 	IeObject,
 	IeObjectAccessThrough,
@@ -101,6 +103,7 @@ import { getOpenSeadragonConfig } from '@iiif-viewer/openseadragon-config';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestObjectType } from '@material-requests/types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
+import { prefetchDetailPageQueries } from '@search/ObjectDetailPage.helpers';
 import {
 	Blade,
 	ErrorNoAccessToObject,
@@ -117,13 +120,13 @@ import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerA
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
@@ -165,15 +168,10 @@ import iiifStyles from './index.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
 
-type ObjectDetailPageProps = {
-	title: string | null;
-	description: string | null;
-} & DefaultSeoInfo;
-
 const imageWidth = 2418;
 const imageHeight = 2415;
 
-const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description, url }) => {
+const ObjectDetailPage: NextPage<DefaultSeoInfo> = ({ title, description, url }) => {
 	/**
 	 * Hooks
 	 */
@@ -379,10 +377,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 	const initIiifViewer = useCallback(async () => {
 		if (!!iiifViewerId && isBrowser()) {
-			console.log('init open sea dragon: ', {
-				iiifViewerId,
-				isBrowser: isBrowser(),
-			});
 			const iiifContainer = document.getElementById(iiifViewerId);
 			if (iiifContainer) {
 				iiifContainer.innerHTML = '';
@@ -1985,33 +1979,46 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	return (
 		<>
 			<VisitorLayout>
-				{renderOgTags(title, seoDescription, url)}
+				<SeoTags
+					title={title}
+					description={seoDescription}
+					imgUrl={undefined}
+					translatedPages={[]}
+					relativeUrl={url}
+				/>
 				{renderPageContent()}
 			</VisitorLayout>
 		</>
 	);
 };
 
-export async function getStaticProps(
+export async function getServerSideProps(
 	context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<ObjectDetailPageProps>> {
-	// let seoInfo: SeoInfo | null = null;
-	// try {
-	// 	seoInfo = await IeObjectsService.getSeoById(context.query.ie as string);
-	// } catch (err) {
-	// 	console.error('Failed to fetch media info by id: ' + context.query.ie, err);
-	// }
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	const ieObjectId = context.query.ie as string;
 
-	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> =
-		await getDefaultStaticProps(context);
+	const ieObject = await getIeObjectInfo(ieObjectId);
 
-	return {
-		props: {
-			...(defaultProps as { props: DefaultSeoInfo }).props,
-			title: null,
-			description: null,
-		},
-	};
+	let seoInfo: SeoInfo | null = null;
+	try {
+		seoInfo = await IeObjectsService.getSeoById(ieObjectId);
+	} catch (err) {
+		console.error('Failed to fetch media info by id: ' + context.query.ie, err);
+	}
+
+	return getDefaultStaticProps(
+		context,
+		await prefetchDetailPageQueries(
+			ieObjectId,
+			ieObject?.meemooIdentifier,
+			ieObject?.maintainerId,
+			ieObject?.maintainerSlug
+		),
+		context.resolvedUrl,
+		seoInfo?.name,
+		seoInfo?.description,
+		seoInfo?.thumbnailUrl
+	);
 }
 
 export default ObjectDetailPage;

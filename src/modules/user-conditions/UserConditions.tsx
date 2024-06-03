@@ -15,9 +15,9 @@ import { useQueryParams } from 'use-query-params';
 import { AuthService } from '@auth/services/auth-service';
 import { selectUser } from '@auth/store/user';
 import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { GET_TOS_INDEX_QUERY_PARAM_CONFIG, KNOWN_STATIC_ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
@@ -151,11 +151,15 @@ export const UserConditions: FC<
 
 	return (
 		<div className={styles['p-terms-of-service']}>
-			{renderOgTags(
-				tText('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden'),
-				tText('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-omschrijving'),
-				url
-			)}
+			<SeoTags
+				title={tText('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden')}
+				description={tText(
+					'pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-omschrijving'
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 
 			{renderPageContent()}
 		</div>

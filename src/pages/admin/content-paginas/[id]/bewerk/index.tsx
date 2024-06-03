@@ -19,7 +19,7 @@ const ContentPageEditPageDutch: NextPage<DefaultSeoInfo & UserProps> = ({ url, c
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context);
+	return getDefaultStaticProps(context, undefined, context.resolvedUrl);
 }
 
 export default withAuth(

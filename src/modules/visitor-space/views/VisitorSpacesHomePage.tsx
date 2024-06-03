@@ -7,7 +7,7 @@ import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import LoggedInVisitorSpacesHome from '@home/components/LoggedInVisitorSpacesHome/LoggedInVisitorSpacesHome';
 import LoggedOutVisitorSpacesHome from '@home/components/LoggedOutVisitorSpacesHome/LoggedOutVisitorSpacesHome';
 import { Loading } from '@shared/components';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { DefaultSeoInfo } from '@shared/types/seo';
@@ -42,12 +42,13 @@ export const VisitorSpacesHomePage: FC<DefaultSeoInfo> = (props) => {
 
 	return (
 		<VisitorLayout>
-			{renderOgTags(
-				tText('Bezoek pagina titel'),
-				tText('Bezoek pagina beschrijving'),
-				props.url,
-				undefined
-			)}
+			<SeoTags
+				title={tText('Bezoek pagina titel')}
+				description={tText('Bezoek pagina beschrijving')}
+				relativeUrl={props.url}
+				translatedPages={[]}
+				imgUrl={undefined}
+			/>
 			{renderPageContent()}
 		</VisitorLayout>
 	);

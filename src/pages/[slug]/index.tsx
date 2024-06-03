@@ -1,5 +1,5 @@
 import { ContentPageRenderer, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 import { HTTPError } from 'ky';
 import { kebabCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
@@ -21,9 +21,9 @@ import {
 	useGetIeObjectInfo,
 } from '@ie-objects/hooks/get-ie-objects-info';
 import { ErrorNotFound, Loading } from '@shared/components';
+import { PageInfo, SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -102,16 +102,23 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 		if (contentPageInfo) {
 			return (
 				<>
-					{renderOgTags(
-						title,
-						description ||
+					<SeoTags
+						title={title}
+						description={
+							description ||
 							contentPageInfo?.seoDescription ||
 							contentPageInfo?.description ||
-							null,
-						url,
-						image || contentPageInfo?.thumbnailPath || null,
-						false
-					)}
+							null
+						}
+						imgUrl={image || contentPageInfo?.thumbnailPath || null}
+						translatedPages={contentPageInfo.translatedPages.map(
+							(page): PageInfo => ({
+								url: page.path as string,
+								languageCode: page.language as unknown as Locale,
+							})
+						)}
+						relativeUrl={url}
+					/>
 					<ContentPageRenderer
 						contentPageInfo={contentPageInfo}
 						commonUser={commonUser}
@@ -124,12 +131,13 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 		if (!contentPageInfo && !ieObjectInfo) {
 			return (
 				<>
-					{renderOgTags(
-						tText('pages/404___niet-gevonden'),
-						tText('pages/404___pagina-niet-gevonden'),
-						url,
-						null
-					)}
+					<SeoTags
+						title={tText('pages/404___niet-gevonden')}
+						description={tText('pages/404___pagina-niet-gevonden')}
+						imgUrl={undefined}
+						translatedPages={[]}
+						relativeUrl={url}
+					/>
 					<ErrorNotFound />
 				</>
 			);
@@ -175,9 +183,15 @@ export async function getServerSideProps(
 		),
 		makeServerSideRequestGetIeObjectInfo(queryClient, pathOrIeObjectId),
 	]);
-	const dehydratedState = dehydrate(queryClient);
 
-	return getDefaultStaticProps(context, dehydratedState, title, description, image);
+	return getDefaultStaticProps(
+		context,
+		queryClient,
+		context.resolvedUrl,
+		title,
+		description,
+		image
+	);
 }
 
 export default withUser(

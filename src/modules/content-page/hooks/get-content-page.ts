@@ -31,7 +31,6 @@ export const useGetContentPageByLanguageAndPath = (
 	path: string | undefined,
 	options: { enabled?: boolean } = {}
 ): UseQueryResult<DbContentPage | null> => {
-	console.log('useGetContentPageByLanguageAndPath', [QUERY_KEYS.getContentPage, path, language]);
 	return useQuery(
 		[QUERY_KEYS.getContentPage, path, language],
 		() => getContentPageByLanguageAndPath(language, path),

@@ -1,4 +1,4 @@
-import { dehydrate, DehydratedState, QueryClient } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 
 import { makeServerSideRequestGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { makeServerSideRequestGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
@@ -11,7 +11,7 @@ export async function prefetchDetailPageQueries(
 	meemooIdentifier: string | undefined,
 	maintainerId: string | undefined,
 	maintainerSlug: string | undefined
-): Promise<DehydratedState> {
+): Promise<QueryClient> {
 	const queryClient = new QueryClient();
 	await Promise.all([
 		makeServerSideRequestGetIeObjectInfo(queryClient, ieObjectId),
@@ -29,5 +29,5 @@ export async function prefetchDetailPageQueries(
 			  ]
 			: []),
 	]);
-	return dehydrate(queryClient);
+	return queryClient;
 }

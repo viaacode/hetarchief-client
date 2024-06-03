@@ -23,9 +23,9 @@ import {
 	sortingIcons,
 } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { globalLabelKeys, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -330,15 +330,17 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	};
 	return (
 		<>
-			{renderOgTags(
-				tText(
+			<SeoTags
+				title={tText(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes'
-				),
-				tText(
+				)}
+				description={tText(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes-meta-omschrijving'
-				),
-				url
-			)}
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 			<PermissionsCheck allPermissions={[Permission.READ_ALL_SPACES]}>
 				{renderPageLayoutAndContent()}
 			</PermissionsCheck>
