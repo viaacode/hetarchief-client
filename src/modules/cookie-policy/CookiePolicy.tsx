@@ -40,9 +40,9 @@ export const CookiePolicy: FC<DefaultSeoInfo> = ({ url }) => {
 		const script = document.createElement('script');
 		// script.onload = moveCookieDeclaration;
 		script.id = 'CookieDeclaration';
+		script.setAttribute('data-culture', locale);
 		script.src =
 			'https://consent.cookiebot.com/e17bca33-78a0-484e-a204-e05274a65598/cdreport.js?referer=hetarchief.be';
-		script.setAttribute('data-culture', locale);
 		document.head.appendChild(script);
 	}, [locale]);
 
