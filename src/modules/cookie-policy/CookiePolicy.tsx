@@ -2,6 +2,7 @@ import { format } from 'date-fns';
 import React, { FC, useEffect, useState } from 'react';
 
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -9,9 +10,11 @@ import styles from './CookiePolicy.module.scss';
 
 export const CookiePolicy: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();
+	const locale = useLocale();
 	const [cookieDeclarationHtml, setCookieDeclarationHtml] = useState<string>('');
 
 	useEffect(() => {
+		document.querySelectorAll('#CookieDeclaration').forEach((item) => item.remove());
 		// Fool cookiebot to inject the html into our react useState
 		// eslint-disable-next-line
 		(window as any).CookieDeclaration = {
@@ -33,6 +36,7 @@ export const CookiePolicy: FC<DefaultSeoInfo> = ({ url }) => {
 		script.id = 'CookieDeclaration';
 		script.src =
 			'https://consent.cookiebot.com/e17bca33-78a0-484e-a204-e05274a65598/cdreport.js?referer=hetarchief.be';
+		script.setAttribute('data-culture', locale);
 		document.head.appendChild(script);
 	}, []);
 
