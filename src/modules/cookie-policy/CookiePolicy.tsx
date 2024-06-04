@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { format } from 'date-fns';
 import React, { FC, useEffect, useState } from 'react';
 
@@ -14,7 +15,12 @@ export const CookiePolicy: FC<DefaultSeoInfo> = ({ url }) => {
 	const [cookieDeclarationHtml, setCookieDeclarationHtml] = useState<string>('');
 
 	useEffect(() => {
+		// Clear previous html and script
 		document.querySelectorAll('#CookieDeclaration').forEach((item) => item.remove());
+		document
+			.querySelectorAll('.p-cookie-policy__wrapper > div')
+			.forEach((item) => (item.innerHTML = ''));
+
 		// Fool cookiebot to inject the html into our react useState
 		// eslint-disable-next-line
 		(window as any).CookieDeclaration = {
@@ -38,7 +44,7 @@ export const CookiePolicy: FC<DefaultSeoInfo> = ({ url }) => {
 			'https://consent.cookiebot.com/e17bca33-78a0-484e-a204-e05274a65598/cdreport.js?referer=hetarchief.be';
 		script.setAttribute('data-culture', locale);
 		document.head.appendChild(script);
-	}, []);
+	}, [locale]);
 
 	return (
 		<>
@@ -51,7 +57,7 @@ export const CookiePolicy: FC<DefaultSeoInfo> = ({ url }) => {
 				translatedPages={[]}
 				relativeUrl={url}
 			/>
-			<div className={styles['p-cookie-policy__wrapper']}>
+			<div className={clsx('p-cookie-policy__wrapper', styles['p-cookie-policy__wrapper'])}>
 				<div dangerouslySetInnerHTML={{ __html: cookieDeclarationHtml }} />
 			</div>
 		</>
