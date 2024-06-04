@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { format } from 'date-fns';
+import { stringifyUrl } from 'query-string';
 import React, { FC, useEffect, useState } from 'react';
 
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
@@ -41,8 +42,13 @@ export const CookiePolicy: FC<DefaultSeoInfo> = ({ url }) => {
 		// script.onload = moveCookieDeclaration;
 		script.id = 'CookieDeclaration';
 		script.setAttribute('data-culture', locale);
-		script.src =
-			'https://consent.cookiebot.com/e17bca33-78a0-484e-a204-e05274a65598/cdreport.js?referer=hetarchief.be';
+		script.src = stringifyUrl({
+			url: 'https://consent.cookiebot.com/e17bca33-78a0-484e-a204-e05274a65598/cdreport.js',
+			query: {
+				referer: 'hetarchief.be',
+				culture: locale,
+			},
+		});
 		document.head.appendChild(script);
 	}, [locale]);
 
