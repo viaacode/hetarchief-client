@@ -32,13 +32,15 @@ const { publicRuntimeConfig } = getConfig();
 
 const InternalLink = (linkInfo: LinkInfo) => {
 	const { to, ...rest } = linkInfo;
+	console.log('linkInfo', linkInfo);
 
+	if (!to) {
+		return <span> {linkInfo.title} </span>;
+	}
 	return (
-		to && (
-			<Link href={to} passHref>
-				<a {...rest} />
-			</Link>
-		)
+		<Link href={to} passHref>
+			<a {...rest} />
+		</Link>
 	);
 };
 
@@ -81,6 +83,7 @@ export function getAdminCoreConfig(router: NextRouter, locale: Locale): AdminCon
 				ContentBlockType.UspGrid,
 				ContentBlockType.OverviewNewspaperTitles,
 				ContentBlockType.ContentEncloseGrid,
+				ContentBlockType.Breadcrumbs,
 			],
 			defaultPageWidth: ContentWidth.LARGE,
 			onSaveContentPage,
