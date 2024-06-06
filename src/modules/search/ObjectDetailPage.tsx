@@ -1596,7 +1596,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	return (
 		<>
 			<VisitorLayout>
-				{' '}
 				<SeoTags
 					title={title}
 					description={seoDescription}
