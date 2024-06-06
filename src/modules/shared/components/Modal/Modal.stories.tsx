@@ -55,7 +55,7 @@ Primary.args = {
 					ultrices porta, orci massa iaculis ligula, ac luctus ligula velit at nibh.
 					Vestibulum tempus mollis efficitur. Praesent malesuada dictum neque, interdum
 					fringilla nisi. Orci varius natoque penatibus et magnis dis parturient montes,
-					nascetur ridiculus mus.{' '}
+					nascetur ridiculus mus.
 				</p>
 
 				<button>A dynamic button</button>

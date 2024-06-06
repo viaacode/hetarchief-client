@@ -16,11 +16,7 @@ const ContentPageLabelsEditPageEnglish: NextPage<DefaultSeoInfo> = ({ url }) => 
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(
-		context,
-		undefined,
-		ROUTES_BY_LOCALE.en.adminContentPageLabelCreate
-	);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.en.adminContentPageLabelCreate);
 }
 
 export default withAuth(

@@ -24,7 +24,7 @@ const ContentPageEditPageEnglish: NextPage<DefaultSeoInfo & UserProps> = ({ url,
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.en.adminContentPageCreate);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.en.adminContentPageCreate);
 }
 
 export default withAuth(

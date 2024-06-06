@@ -19,7 +19,7 @@ const Logout: NextPage = () => {
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.nl.logout);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.logout);
 }
 
 export default Logout;

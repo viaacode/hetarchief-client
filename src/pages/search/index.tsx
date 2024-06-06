@@ -23,7 +23,7 @@ export async function getStaticProps(
 	await makeServerSideRequestGetIeObjects(queryClient);
 	await makeServerSideRequestGetIeObjectFormatCounts(queryClient);
 
-	return getDefaultStaticProps(context, queryClient, ROUTES_BY_LOCALE.en.search);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.en.search, { queryClient });
 }
 
 export default withAuth(SearchPageEnglish as ComponentType, false);

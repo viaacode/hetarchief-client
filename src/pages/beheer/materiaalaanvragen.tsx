@@ -15,7 +15,7 @@ const CpAdminMaterialRequestsPageDutch: NextPage<DefaultSeoInfo> = ({ url }) => 
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.nl.cpAdminMaterialRequests);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.cpAdminMaterialRequests);
 }
 
 export default withAuth(CpAdminMaterialRequestsPageDutch as ComponentType, true);

@@ -16,7 +16,7 @@ export const ContentPageLabelsOverviewPageEnglish: NextPage<DefaultSeoInfo> = ({
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.en.adminContentPageLabels);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.en.adminContentPageLabels);
 }
 
 export default withAuth(

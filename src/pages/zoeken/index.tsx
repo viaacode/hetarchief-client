@@ -21,7 +21,7 @@ export async function getStaticProps(
 	const queryClient = new QueryClient();
 	await makeServerSideRequestGetIeObjects(queryClient);
 
-	return getDefaultStaticProps(context, queryClient, ROUTES_BY_LOCALE.nl.search);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.search, { queryClient });
 }
 
 export default withAuth(SearchPageDutch as ComponentType, false);

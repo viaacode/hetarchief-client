@@ -87,14 +87,10 @@ export const SeoTags: FC<SeoTagsProps> = ({
 			<meta property="og:url" content={url} />
 			<meta property="og:title" content={resolvedTitle} />
 			{description && <meta property="og:description" content={description} />}
-			{imgUrl ? (
-				<meta property="og:image" content={imgUrl} />
-			) : (
-				<meta
-					property="og:image"
-					content={`${publicRuntimeConfig.CLIENT_URL}/images/og.jpg`}
-				/>
-			)}
+			<meta
+				property="og:image"
+				content={imgUrl || `${publicRuntimeConfig.CLIENT_URL}/images/og.jpg`}
+			/>
 			<meta property="twitter:card" content="summary_large_image" />
 			<meta property="twitter:domain" content={publicRuntimeConfig.CLIENT_URL} />
 			<meta property="twitter:title" content={resolvedTitle} />

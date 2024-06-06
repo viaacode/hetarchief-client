@@ -16,7 +16,7 @@ const AdminNavigationOverviewEnglish: NextPage<DefaultSeoInfo> = ({ url }) => {
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.en.adminNavigation);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.en.adminNavigation);
 }
 
 export default withAuth(withAdminCoreConfig(AdminNavigationOverviewEnglish as ComponentType), true);

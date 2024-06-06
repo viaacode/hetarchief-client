@@ -13,7 +13,7 @@ const NewsletterFailedEnglish: NextPage<DefaultSeoInfo> = ({ url }) => {
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.en.newsletterFailed);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.en.newsletterFailed);
 }
 
 export default NewsletterFailedEnglish;

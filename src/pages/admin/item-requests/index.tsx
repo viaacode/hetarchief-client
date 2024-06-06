@@ -15,7 +15,7 @@ const AdminMaterialRequestsEnglish: NextPage<DefaultSeoInfo> = ({ url }) => {
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.en.adminMaterialRequests);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.en.adminMaterialRequests);
 }
 
 export default withAuth(AdminMaterialRequestsEnglish as ComponentType, true);

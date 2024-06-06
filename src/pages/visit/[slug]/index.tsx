@@ -22,13 +22,10 @@ export async function getServerSideProps(
 		console.error('Failed to fetch media info by id: ' + context.query.ie, err);
 	}
 
-	return getDefaultStaticProps(
-		context,
-		undefined,
-		context.resolvedUrl,
-		space?.name || null,
-		space?.info || null
-	);
+	return getDefaultStaticProps(context, context.resolvedUrl, {
+		title: space?.name || null,
+		description: space?.info || null,
+	});
 }
 
 export default VisitPageEnglish as ComponentType;

@@ -117,14 +117,12 @@ export async function getStaticProps(
 		queryFn: () => getContentPageByLanguageAndPath(language, path),
 	});
 
-	return getDefaultStaticProps(
-		context,
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.home, {
 		queryClient,
-		ROUTES_BY_LOCALE.nl.home,
 		title,
 		description,
-		image
-	);
+		image,
+	});
 }
 
 export default withUser(withAuth(Homepage as ComponentType, false)) as FC<DefaultSeoInfo>;

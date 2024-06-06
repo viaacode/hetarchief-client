@@ -15,7 +15,7 @@ const CpAdminVisitorsPageEnglish: NextPage<DefaultSeoInfo> = ({ url }) => {
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.en.cpAdminVisitors);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.en.cpAdminVisitors);
 }
 
 export default withAuth(CpAdminVisitorsPageEnglish as ComponentType, true);

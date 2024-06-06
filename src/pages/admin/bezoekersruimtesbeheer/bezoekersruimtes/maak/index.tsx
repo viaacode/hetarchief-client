@@ -15,7 +15,7 @@ const VisitorSpaceCreateDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.nl.adminVisitorSpaceCreate);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.adminVisitorSpaceCreate);
 }
 
 export default withAuth(VisitorSpaceCreateDutch as ComponentType, true);

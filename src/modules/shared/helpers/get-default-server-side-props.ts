@@ -9,11 +9,13 @@ import { Locale } from '@shared/utils';
 
 export async function getDefaultStaticProps(
 	context: GetServerSidePropsContext,
-	queryClient: QueryClient | undefined,
 	url: string,
-	title?: string | null,
-	description?: string | null,
-	image?: string | null
+	options?: {
+		queryClient?: QueryClient | undefined;
+		title?: string | null;
+		description?: string | null;
+		image?: string | null;
+	}
 ): Promise<GetStaticPropsResult<DefaultSeoInfo>> {
 	const locale = (context.locale || Locale.nl) as Locale;
 
@@ -22,16 +24,16 @@ export async function getDefaultStaticProps(
 	i18n?.addResources(locale, 'common', translations);
 
 	// Always add languages, since it is required for seo translated pages on almost all routes
-	queryClient = queryClient || new QueryClient();
+	const queryClient = options?.queryClient || new QueryClient();
 	await makeServerSideRequestGetAllLanguages(queryClient);
 	const dehydratedState = dehydrate(queryClient);
 
 	return {
 		props: {
 			url,
-			title: title || null,
-			description: description || null,
-			image: image || null,
+			title: options?.title || null,
+			description: options?.description || null,
+			image: options?.image || null,
 			...(dehydratedState ? { dehydratedState } : {}),
 			_nextI18Next: {
 				initialI18nStore: {
