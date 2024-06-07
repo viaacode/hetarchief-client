@@ -37,11 +37,11 @@ import { VisitorSpaceStatus } from '@visitor-space/types';
 
 import { ProcessVisitBlade, ProcessVisitBladeProps } from '../ProcessVisitBlade';
 
-import styles from './LoggedInHome.module.scss';
+import styles from './LoggedInVisitiorSpacesHome.module.scss';
 
 type SelectedVisit = ProcessVisitBladeProps['selected'];
 
-const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
+const LoggedInVisitorSpacesHome: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
@@ -112,7 +112,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 	const { data: visitorSpaceInfo, isError: isErrorGetVisitorSpace } = useGetVisitorSpace(
 		query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] as string,
 		false,
-		{ enabled: !!query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY], retry: false }
+		{ enabled: !!query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] }
 	);
 
 	// ARC-1650: Do not show all visit accesses for admin users
@@ -468,4 +468,4 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 	return renderHomePageContent();
 };
 
-export default withAuth(LoggedInHome as ComponentType, true) as FC<DefaultSeoInfo>;
+export default withAuth(LoggedInVisitorSpacesHome as ComponentType, true) as FC<DefaultSeoInfo>;

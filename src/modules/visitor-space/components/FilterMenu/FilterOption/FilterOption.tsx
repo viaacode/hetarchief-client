@@ -4,7 +4,8 @@ import { FC, ReactElement, useCallback, useEffect, useState } from 'react';
 
 import { Icon, IconNamesLight, Overlay } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
+import { SearchFilterId } from '@visitor-space/types';
 
 import { FilterButton } from '../FilterButton';
 import FilterForm from '../FilterForm/FilterForm';
@@ -70,66 +71,70 @@ const FilterOption: FC<FilterOptionProps> = ({
 	const renderCheckbox = (): ReactElement =>
 		renderFilterForm('c-filter-menu__form--inline', true);
 
-	const FILTER_MENU_HEIGHTS: Partial<Record<VisitorSpaceFilterId, string>> = {
-		[VisitorSpaceFilterId.Medium]: '63.7rem',
-		[VisitorSpaceFilterId.Duration]: '48.1rem',
-		[VisitorSpaceFilterId.Created]: '61.3rem',
-		[VisitorSpaceFilterId.Published]: '61.3rem',
-		[VisitorSpaceFilterId.Creator]: '33.5rem',
-		[VisitorSpaceFilterId.Language]: '53.7rem',
-		[VisitorSpaceFilterId.Maintainers]: '63.7rem',
-		[VisitorSpaceFilterId.Advanced]: '60.1rem',
+	const FILTER_MENU_HEIGHTS: Partial<Record<SearchFilterId, string>> = {
+		[SearchFilterId.Medium]: '63.7rem',
+		[SearchFilterId.Duration]: '48.1rem',
+		[SearchFilterId.Created]: '61.3rem',
+		[SearchFilterId.Published]: '61.3rem',
+		[SearchFilterId.Creator]: '33.5rem',
+		[SearchFilterId.Language]: '53.7rem',
+		[SearchFilterId.Maintainers]: '63.7rem',
+		[SearchFilterId.Advanced]: '60.1rem',
 	};
-	const renderModal = (): ReactElement => (
-		<>
-			<div
-				className={clsx(styles['c-filter-menu__option'], className)}
-				key={`filter-menu-btn-${id}`}
-				style={{
-					position: 'relative',
-				}}
-			>
-				<FilterButton
-					icon={
-						filterIsActive
-							? IconNamesLight.AngleLeft
-							: icon ?? IconNamesLight.AngleRight
-					}
-					isActive={filterIsActive}
-					label={label}
-					onClick={() => onClick?.(id)}
-				/>
-
+	const renderModal = (): ReactElement => {
+		return (
+			<>
 				<div
+					className={clsx(styles['c-filter-menu__option'], className)}
+					key={`filter-menu-btn-${id}`}
 					style={{
-						position: 'absolute',
-						left: '100%',
-						width: '46.4rem',
-						top: `calc(-${FILTER_MENU_HEIGHTS[id]} / 2 + 2rem)`,
-						backgroundColor: 'white',
-						zIndex: 5,
-						display: filterIsActive ? 'block' : 'none',
+						position: 'relative',
 					}}
 				>
-					<Button
-						className={styles['c-filter-menu__flyout-close']}
-						icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-						aria-label={tText(
-							'modules/visitor-space/components/filter-menu/filter-option/filter-option___sluiten'
-						)}
-						onClick={onFilterToggle}
-						variants="text"
+					<FilterButton
+						icon={
+							filterIsActive
+								? IconNamesLight.AngleLeft
+								: icon ?? IconNamesLight.AngleRight
+						}
+						isActive={filterIsActive}
+						label={label}
+						onClick={() => onClick?.(id)}
 					/>
-					{renderFilterForm('c-filter-menu__form')}
+
+					<NoServerSideRendering>
+						<div
+							style={{
+								position: 'absolute',
+								left: '100%',
+								width: '46.4rem',
+								top: `calc(-${FILTER_MENU_HEIGHTS[id]} / 2 + 2rem)`,
+								backgroundColor: 'white',
+								zIndex: 5,
+								display: filterIsActive ? 'block' : 'none',
+							}}
+						>
+							<Button
+								className={styles['c-filter-menu__flyout-close']}
+								icon={<Icon name={IconNamesLight.Times} aria-hidden />}
+								aria-label={tText(
+									'modules/visitor-space/components/filter-menu/filter-option/filter-option___sluiten'
+								)}
+								onClick={onFilterToggle}
+								variants="text"
+							/>
+							{renderFilterForm('c-filter-menu__form')}
+						</div>
+					</NoServerSideRendering>
 				</div>
-			</div>
-			<Overlay
-				className={styles['c-filter-menu__overlay']}
-				visible={filterIsActive}
-				onClick={onFilterToggle}
-			/>
-		</>
-	);
+				<Overlay
+					className={styles['c-filter-menu__overlay']}
+					visible={filterIsActive}
+					onClick={onFilterToggle}
+				/>
+			</>
+		);
+	};
 
 	return renderFilterOptionByType();
 };

@@ -12,7 +12,7 @@ export function useGetFolderMedia(
 	size: number
 ): UseQueryResult<IPagination<FolderIeObject>> {
 	return useQuery(
-		[QUERY_KEYS.getCollectionMedia, { searchInput, page, size }],
+		[QUERY_KEYS.getCollectionMedia, searchInput, page, size],
 		() => {
 			if (id) {
 				return foldersService.getById(id, searchInput, page, size);

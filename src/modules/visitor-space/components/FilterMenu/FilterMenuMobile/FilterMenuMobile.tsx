@@ -7,7 +7,7 @@ import { Navigation } from '@navigation/components';
 import { Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
-import { VisitorSpaceSort } from '../../../types';
+import { SearchSortProp } from '../../../types';
 import { mapFiltersToTags } from '../../../utils';
 import { FilterButton } from '../FilterButton';
 import FilterForm from '../FilterForm/FilterForm';
@@ -55,7 +55,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 		: () => setIsSortActive(false);
 	const tags = filterValues ? mapFiltersToTags(filterValues) : [];
 
-	const handleSortClick = (key: VisitorSpaceSort, order?: OrderDirection) => {
+	const handleSortClick = (key: SearchSortProp, order?: OrderDirection) => {
 		onSortClick?.(key, order);
 		setIsSortActive(false);
 	};

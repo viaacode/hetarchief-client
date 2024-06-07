@@ -14,9 +14,9 @@ import {
 	AdvancedFilter,
 	FILTER_LABEL_VALUE_DELIMITER,
 	MetadataProp,
+	SearchFilterId,
+	SearchPageQueryParams,
 	TagIdentity,
-	VisitorSpaceFilterId,
-	VisitorSpaceQueryParams,
 } from '../../types';
 import {
 	getAdvancedProperties,
@@ -86,7 +86,7 @@ export const mapArrayParamToTags = (
 
 export const mapAdvancedToTags = (
 	advanced: Array<AdvancedFilter>,
-	key: VisitorSpaceFilterId = VisitorSpaceFilterId.Advanced
+	key: SearchFilterId = SearchFilterId.Advanced
 ): TagIdentity[] => {
 	return advanced.map((advanced: AdvancedFilter) => {
 		const prop = advanced.prop as MetadataProp;
@@ -145,7 +145,7 @@ export const mapAdvancedToTags = (
 	});
 };
 
-export const mapFiltersToTags = (query: VisitorSpaceQueryParams): TagIdentity[] => {
+export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] => {
 	return [
 		...mapArrayParamToTags(
 			query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || [],
@@ -153,65 +153,56 @@ export const mapFiltersToTags = (query: VisitorSpaceQueryParams): TagIdentity[] 
 			QUERY_PARAM_KEY.SEARCH_QUERY_KEY
 		),
 		...mapArrayParamToTags(
-			query[VisitorSpaceFilterId.Medium] || [],
+			query[SearchFilterId.Medium] || [],
 			getFilterLabel(MetadataProp.Medium),
-			VisitorSpaceFilterId.Medium
+			SearchFilterId.Medium
 		),
 		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
-		...mapAdvancedToTags(
-			query[VisitorSpaceFilterId.Duration] || [],
-			VisitorSpaceFilterId.Duration
-		),
+		...mapAdvancedToTags(query[SearchFilterId.Duration] || [], SearchFilterId.Duration),
 		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
-		...mapAdvancedToTags(
-			query[VisitorSpaceFilterId.Created] || [],
-			VisitorSpaceFilterId.Created
-		),
+		...mapAdvancedToTags(query[SearchFilterId.Created] || [], SearchFilterId.Created),
 		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
-		...mapAdvancedToTags(
-			query[VisitorSpaceFilterId.Published] || [],
-			VisitorSpaceFilterId.Published
-		),
+		...mapAdvancedToTags(query[SearchFilterId.Published] || [], SearchFilterId.Published),
 		...mapArrayParamToTags(
-			query[VisitorSpaceFilterId.Creator] || [],
+			query[SearchFilterId.Creator] || [],
 			getFilterLabel(MetadataProp.Creator),
-			VisitorSpaceFilterId.Creator
+			SearchFilterId.Creator
 		),
 		...mapArrayParamToTags(
-			query[VisitorSpaceFilterId.Genre] || [],
+			query[SearchFilterId.Genre] || [],
 			getFilterLabel(MetadataProp.Genre),
-			VisitorSpaceFilterId.Genre
+			SearchFilterId.Genre
 		),
 		...mapArrayParamToTags(
-			query[VisitorSpaceFilterId.Keywords] || [],
+			query[SearchFilterId.Keywords] || [],
 			getFilterLabel(MetadataProp.Keywords),
-			VisitorSpaceFilterId.Keywords
+			SearchFilterId.Keywords
 		),
 		...mapArrayParamToTags(
-			query[VisitorSpaceFilterId.Language] || [],
+			query[SearchFilterId.Language] || [],
 			getFilterLabel(MetadataProp.Language),
-			VisitorSpaceFilterId.Language
+			SearchFilterId.Language
 		),
 		...mapBooleanParamToTag(
-			query[VisitorSpaceFilterId.ConsultableMedia] || false,
+			query[SearchFilterId.ConsultableMedia] || false,
 			tText(
 				'modules/visitor-space/utils/map-filters/map-filters___alles-wat-raadpleegbaar-is'
 			),
-			VisitorSpaceFilterId.ConsultableMedia
+			SearchFilterId.ConsultableMedia
 		),
 		...mapArrayParamToTags(
-			query[VisitorSpaceFilterId.Maintainers] || [],
+			query[SearchFilterId.Maintainers] || [],
 			tText('modules/visitor-space/utils/map-filters/map-filters___aanbieders'),
-			VisitorSpaceFilterId.Maintainers
+			SearchFilterId.Maintainers
 		),
 		...mapBooleanParamToTag(
-			query[VisitorSpaceFilterId.ConsultableOnlyOnLocation] || false,
+			query[SearchFilterId.ConsultableOnlyOnLocation] || false,
 			tText(
 				'modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse'
 			),
-			VisitorSpaceFilterId.ConsultableOnlyOnLocation
+			SearchFilterId.ConsultableOnlyOnLocation
 		),
-		...mapAdvancedToTags(query[VisitorSpaceFilterId.Advanced] || []),
+		...mapAdvancedToTags(query[SearchFilterId.Advanced] || []),
 	];
 };
 

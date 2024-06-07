@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 import React, { FunctionComponent } from 'react';
 
 import { RICH_TEXT_SANITIZATION } from '@shared/const';
@@ -15,7 +15,7 @@ export interface HtmlProps {
 const Html: FunctionComponent<HtmlProps> = ({
 	content,
 	sanitizePreset = RICH_TEXT_SANITIZATION,
-	type = 'p',
+	type = 'div',
 	className,
 }) => {
 	const Type = type;

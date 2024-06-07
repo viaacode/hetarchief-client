@@ -7,24 +7,22 @@ import { DecodedValueMap } from 'use-query-params';
 import { DefaultComponentProps, IeObjectTypes, Operator } from '@shared/types';
 import { OnFilterMenuFormSubmit } from '@visitor-space/components';
 
-import { VISITOR_SPACE_QUERY_PARAM_CONFIG } from '../const';
+import { SEARCH_PAGE_QUERY_PARAM_CONFIG } from '../const';
 
 import { MetadataProp } from './metadata';
 
 export * from './metadata';
 
-export type VisitorSpaceQueryParams = Partial<
-	DecodedValueMap<typeof VISITOR_SPACE_QUERY_PARAM_CONFIG>
->;
+export type SearchPageQueryParams = Partial<DecodedValueMap<typeof SEARCH_PAGE_QUERY_PARAM_CONFIG>>;
 
-export enum VisitorSpaceSort {
+export enum SearchSortProp {
 	Date = 'created',
 	Relevance = 'relevance',
 	Title = 'name',
 	Archived = 'archived',
 }
 
-export enum VisitorSpaceFilterId {
+export enum SearchFilterId {
 	Format = 'format',
 	Advanced = 'advanced',
 	Created = 'created',
@@ -90,7 +88,7 @@ export interface DefaultFilterFormProps<Values extends FieldValues>
 
 export interface InlineFilterFormProps<Values = unknown> extends DefaultComponentProps {
 	children?: React.ReactNode;
-	id: VisitorSpaceFilterId;
+	id: SearchFilterId;
 	label: string;
 	onFormSubmit: OnFilterMenuFormSubmit;
 	disabled?: boolean;

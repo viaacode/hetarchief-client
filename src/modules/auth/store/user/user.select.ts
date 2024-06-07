@@ -1,4 +1,5 @@
 import { AppState } from '@shared/store';
+import { isServerSideRendering } from '@shared/utils';
 
 import { UserState } from './user.types';
 
@@ -6,7 +7,8 @@ import { UserState } from './user.types';
  * @deprecated prefer using selectCommonUser to use a user interface that is more in line with avo
  * @param state
  */
-export const selectUser = (state: AppState): UserState['user'] => state.user.user;
+export const selectUser = (state: AppState): UserState['user'] =>
+	isServerSideRendering() ? null : state.user.user;
 export const selectCommonUser = (state: AppState): UserState['commonUser'] => state.user.commonUser;
 export const selectCheckLoginLoading = (state: AppState): UserState['loading'] =>
 	state.user.loading;

@@ -9,7 +9,7 @@ import { FC, useState } from 'react';
 
 import { IconNamesLight, Overlay } from '@shared/components';
 
-import { VisitorSpaceSort } from '../../../types';
+import { SearchSortProp } from '../../../types';
 import { FilterButton } from '../FilterButton';
 import styles from '../FilterMenu.module.scss';
 import { FilterSortList } from '../FilterSortList';
@@ -27,7 +27,7 @@ const FilterSort: FC<FilterSortProps> = ({
 
 	const onCloseDropdown = () => setSortOptionsOpen(false);
 
-	const handleOptionClick = (key: VisitorSpaceSort, order?: OrderDirection) => {
+	const handleOptionClick = (key: SearchSortProp, order?: OrderDirection) => {
 		onOptionClick?.(key, order);
 		setSortOptionsOpen(false);
 	};

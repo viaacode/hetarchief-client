@@ -19,7 +19,7 @@ export function useGetPeakFile(
 	options: { enabled: boolean } = { enabled: true }
 ): UseQueryResult<JsonWaveformData | null> {
 	return useQuery(
-		[QUERY_KEYS.getPeakFile, { fileSchemaIdentifier }],
+		[QUERY_KEYS.getPeakFile, fileSchemaIdentifier],
 		async () => {
 			if (!fileSchemaIdentifier) {
 				return null;

@@ -15,7 +15,7 @@ import { AccessStatus } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { useGetOrganisationBySlug } from '@visitor-space/hooks/get-organisation-by-slug';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { SearchFilterId } from '@visitor-space/types';
 
 import { useGetVisitAccessStatus } from '../../visit-requests/hooks/get-visit-access-status';
 import { VisitorLayout } from '../../visitor-layout';
@@ -115,7 +115,7 @@ export const VisitPage: FC<VisitPageProps> = () => {
 							<NextRedirect
 								to={stringifyUrl({
 									url: ROUTES_BY_LOCALE[locale].search,
-									query: { [VisitorSpaceFilterId.Maintainer]: slug },
+									query: { [SearchFilterId.Maintainer]: slug },
 								})}
 								method="replace"
 							/>
@@ -133,7 +133,7 @@ export const VisitPage: FC<VisitPageProps> = () => {
 								to={stringifyUrl({
 									url: ROUTES_BY_LOCALE[locale].search,
 									query: {
-										[VisitorSpaceFilterId.Maintainers]:
+										[SearchFilterId.Maintainers]:
 											organisation?.schemaIdentifier +
 											'---' +
 											organisation?.schemaName,

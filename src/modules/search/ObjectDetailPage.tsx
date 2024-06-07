@@ -71,7 +71,7 @@ import {
 	ticketErrorPlaceholder,
 	VISITOR_ACTION_SORT_MAP,
 } from '@ie-objects/const';
-import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
+import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
 import { useGetIeObjectsSimilar } from '@ie-objects/hooks/get-ie-objects-similar';
 import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-ticket-url';
@@ -128,14 +128,13 @@ import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
 import { selectBreadcrumbs, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
-import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
+import { Breakpoints, IeObjectTypes, SearchPageMediaType } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {
 	asDate,
 	formatMediumDate,
 	formatMediumDateWithTime,
 	formatSameDayTimeOrDate,
-	isBrowser,
 } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visit-requests/hooks/get-active-visit-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
@@ -144,11 +143,12 @@ import {
 	MaterialRequestBlade,
 	VisitorSpaceNavigation,
 } from '@visitor-space/components';
+import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import {
 	FILTER_LABEL_VALUE_DELIMITER,
-	VisitorSpaceFilterId,
+	SearchFilterId,
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
 
@@ -156,12 +156,7 @@ import styles from './ObjectDetailPage.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
 
-type ObjectDetailPageProps = {
-	title: string | null;
-	description: string | null;
-} & DefaultSeoInfo;
-
-export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description, url }) => {
+export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image, url }) => {
 	/**
 	 * Hooks
 	 */
@@ -236,7 +231,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 		isLoading: mediaInfoIsLoading,
 		isError: mediaInfoIsError,
 		error: mediaInfoError,
-	} = useGetIeObjectsInfo(objectId);
+	} = useGetIeObjectInfo(objectId);
 
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
@@ -390,7 +385,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 		setMediaType(mediaInfo?.dctermsFormat as IeObjectTypes);
 
 		// Filter out peak files if type === video
-		if (mediaInfo?.dctermsFormat === VisitorSpaceMediaType.Video) {
+		if (mediaInfo?.dctermsFormat === SearchPageMediaType.Video) {
 			mediaInfo.representations = mediaInfo?.representations?.filter(
 				(object) => object.dctermsFormat !== 'peak'
 			);
@@ -932,12 +927,8 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 			pause: isMediaPaused,
 			onPlay: handleOnPlay,
 			onPause: handleOnPause,
-			token: isBrowser()
-				? publicRuntimeConfig.FLOW_PLAYER_TOKEN
-				: process.env.FLOW_PLAYER_TOKEN,
-			dataPlayerId: isBrowser()
-				? publicRuntimeConfig.FLOW_PLAYER_ID
-				: process.env.FLOW_PLAYER_ID,
+			token: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
+			dataPlayerId: publicRuntimeConfig.FLOW_PLAYER_ID,
 			plugins: ['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio', 'keyboard'],
 		};
 
@@ -1030,7 +1021,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 									label: mediaInfo?.maintainerName,
 									to: isKiosk
 										? ROUTES_BY_LOCALE[locale].search
-										: `${ROUTES_BY_LOCALE[locale].search}?${VisitorSpaceFilterId.Maintainer}=${mediaInfo?.maintainerSlug}`,
+										: `${ROUTES_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${mediaInfo?.maintainerSlug}`,
 								},
 						  ]
 						: []),
@@ -1077,7 +1068,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 		items: MediaObject[],
 		isHidden = false
 	): ReactNode => (
-		<dd className="u-m-0">
+		<div className="u-m-0">
 			{
 				<ul
 					className={clsx(
@@ -1102,7 +1093,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 					})}
 				</ul>
 			}
-		</dd>
+		</div>
 	);
 
 	const renderMaintainerMetaTitle = ({
@@ -1116,25 +1107,27 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 			</p>
 			{!isKiosk && !hasAccessToVisitorSpaceOfObject && (
 				<>
-					<p className={styles['p-object-detail__metadata-pill']}>
-						<TagList
-							className="u-pt-12"
-							tags={mapKeywordsToTags([maintainerName])}
-							onTagClicked={async () => {
-								await router.push(
-									stringifyUrl({
-										url: ROUTES_BY_LOCALE[locale].search,
-										query: {
-											[VisitorSpaceFilterId.Maintainers]: [
-												`${maintainerId}${FILTER_LABEL_VALUE_DELIMITER}${maintainerName}`,
-											],
-										},
-									})
-								);
-							}}
-							variants={['clickable', 'silver', 'medium']}
-						/>
-					</p>
+					<NoServerSideRendering>
+						<div className={styles['p-object-detail__metadata-pill']}>
+							<TagList
+								className="u-pt-12"
+								tags={mapKeywordsToTags([maintainerName])}
+								onTagClicked={async () => {
+									await router.push(
+										stringifyUrl({
+											url: ROUTES_BY_LOCALE[locale].search,
+											query: {
+												[SearchFilterId.Maintainers]: [
+													`${maintainerId}${FILTER_LABEL_VALUE_DELIMITER}${maintainerName}`,
+												],
+											},
+										})
+									);
+								}}
+								variants={['clickable', 'silver', 'medium']}
+							/>
+						</div>
+					</NoServerSideRendering>
 					{maintainerLogo && (
 						<div className={styles['p-object-detail__metadata-logo']}>
 							{/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1603,7 +1596,7 @@ export const ObjectDetailPage: FC<ObjectDetailPageProps> = ({ title, description
 	return (
 		<>
 			<VisitorLayout>
-				{renderOgTags(title, seoDescription, url)}
+				{renderOgTags(title, seoDescription, url, image)}
 				{renderPageContent()}
 			</VisitorLayout>
 		</>

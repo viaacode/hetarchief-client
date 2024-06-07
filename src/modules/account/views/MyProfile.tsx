@@ -52,7 +52,7 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { isBrowser, Locale } from '@shared/utils';
+import { Locale } from '@shared/utils';
 import { VisitorLayout } from '@visitor-layout/index';
 
 const { publicRuntimeConfig } = getConfig();
@@ -204,15 +204,10 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 			{/* Which will redirect to the client homepage => after user logs in, redirect to client profile page */}
 			<Link
 				href={stringifyUrl({
-					url: isBrowser()
-						? publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL
-						: process.env.SSUM_EDIT_ACCOUNT_URL,
+					url: publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL,
 					query: {
 						redirect_to: stringifyUrl({
-							url:
-								(isBrowser()
-									? publicRuntimeConfig.PROXY_URL
-									: process.env.PROXY_URL) + '/auth/global-logout',
+							url: publicRuntimeConfig.PROXY_URL + '/auth/global-logout',
 							query: {
 								returnToUrl: window.location.href,
 							},
@@ -377,7 +372,7 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	);
 };
 
-export async function getServerSideProps(
+export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	return getDefaultStaticProps(context);

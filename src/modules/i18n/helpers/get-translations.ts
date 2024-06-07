@@ -14,6 +14,6 @@ export async function getTranslations(locale: Locale): Promise<Record<string, st
 				en: 'admin/translations/en.json',
 			},
 		});
-		return {};
+		return Promise.resolve({});
 	}
 }

@@ -18,7 +18,7 @@ const VisitPageEnglish: NextPage<VisitPageProps> = (seo) => {
 	return <VisitPage {...seo} />;
 };
 
-export async function getServerSideProps(
+export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<VisitPageProps>> {
 	let space: VisitorSpaceInfo | null = null;

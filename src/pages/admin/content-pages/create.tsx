@@ -20,7 +20,7 @@ const ContentPageEditPageEnglish: NextPage<DefaultSeoInfo & UserProps> = ({ url,
 	);
 };
 
-export async function getServerSideProps(
+export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	return getDefaultStaticProps(context);

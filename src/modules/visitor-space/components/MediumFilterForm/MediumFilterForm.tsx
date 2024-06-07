@@ -11,7 +11,7 @@ import { SearchBar } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
-import { ElasticsearchFieldNames, VisitorSpaceFilterId } from '@visitor-space/types';
+import { ElasticsearchFieldNames, SearchFilterId } from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 import {
@@ -80,7 +80,7 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<SearchBar
-					id={`${visitorSpaceLabelKeys.filters.title}--${VisitorSpaceFilterId.Medium}`}
+					id={`${visitorSpaceLabelKeys.filters.title}--${SearchFilterId.Medium}`}
 					value={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
 					placeholder={tText(

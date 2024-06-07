@@ -14,7 +14,7 @@ import { Icon, IconNamesLight } from '@shared/components';
 import { VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
-import { VisitorSpaceMediaType } from '@shared/types';
+import { SearchPageMediaType } from '@shared/types';
 import {
 	AdvancedFilterForm,
 	ConsultableMediaFilterForm,
@@ -33,7 +33,7 @@ import {
 	PublishedFilterForm,
 } from '@visitor-space/components';
 
-import { VisitorSpaceFilterId, VisitorSpaceSort, VisitorSpaceStatus } from '../types';
+import { SearchFilterId, SearchSortProp, VisitorSpaceStatus } from '../types';
 
 import { AdvancedFilterArrayParam } from './query-params';
 
@@ -44,58 +44,58 @@ export const PUBLIC_COLLECTION = ''; // No maintainer query param means the publ
 
 export const DEFAULT_VISITOR_SPACE_COLOR = '#00c8aa';
 
-export const VISITOR_SPACE_ITEM_COUNT = 24;
+export const SEARCH_RESULTS_PAGE_SIZE = 24;
 
 export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
-	VisitorSpaceFilterId | QUERY_PARAM_KEY.SEARCH_QUERY_KEY,
+	SearchFilterId | QUERY_PARAM_KEY.SEARCH_QUERY_KEY,
 	string | undefined
-> & { page: number; orderProp: VisitorSpaceSort; orderDirection: OrderDirection } = {
+> & { page: number; orderProp: SearchSortProp; orderDirection: OrderDirection } = {
 	// Filters
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: undefined,
-	[VisitorSpaceFilterId.Format]: VisitorSpaceMediaType.All,
-	[VisitorSpaceFilterId.Maintainer]: undefined,
-	[VisitorSpaceFilterId.Maintainers]: undefined,
-	[VisitorSpaceFilterId.Medium]: undefined,
-	[VisitorSpaceFilterId.Duration]: undefined,
-	[VisitorSpaceFilterId.Created]: undefined,
-	[VisitorSpaceFilterId.Published]: undefined,
-	[VisitorSpaceFilterId.Creator]: undefined,
-	[VisitorSpaceFilterId.Genre]: undefined,
-	[VisitorSpaceFilterId.Keywords]: undefined,
-	[VisitorSpaceFilterId.Language]: undefined,
-	[VisitorSpaceFilterId.Advanced]: undefined,
-	[VisitorSpaceFilterId.ConsultableOnlyOnLocation]: undefined,
-	[VisitorSpaceFilterId.ConsultableMedia]: undefined,
-	[VisitorSpaceFilterId.Cast]: undefined,
-	[VisitorSpaceFilterId.Identifier]: undefined,
-	[VisitorSpaceFilterId.ObjectType]: undefined,
-	[VisitorSpaceFilterId.SpacialCoverage]: undefined,
-	[VisitorSpaceFilterId.TemporalCoverage]: undefined,
+	[SearchFilterId.Format]: SearchPageMediaType.All,
+	[SearchFilterId.Maintainer]: undefined,
+	[SearchFilterId.Maintainers]: undefined,
+	[SearchFilterId.Medium]: undefined,
+	[SearchFilterId.Duration]: undefined,
+	[SearchFilterId.Created]: undefined,
+	[SearchFilterId.Published]: undefined,
+	[SearchFilterId.Creator]: undefined,
+	[SearchFilterId.Genre]: undefined,
+	[SearchFilterId.Keywords]: undefined,
+	[SearchFilterId.Language]: undefined,
+	[SearchFilterId.Advanced]: undefined,
+	[SearchFilterId.ConsultableOnlyOnLocation]: undefined,
+	[SearchFilterId.ConsultableMedia]: undefined,
+	[SearchFilterId.Cast]: undefined,
+	[SearchFilterId.Identifier]: undefined,
+	[SearchFilterId.ObjectType]: undefined,
+	[SearchFilterId.SpacialCoverage]: undefined,
+	[SearchFilterId.TemporalCoverage]: undefined,
 
 	// Pagination
 	page: 1,
 	// Sorting
-	orderProp: VisitorSpaceSort.Relevance,
+	orderProp: SearchSortProp.Relevance,
 	orderDirection: OrderDirection.desc,
 };
 
-export const VISITOR_SPACE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<any>> = {
+export const SEARCH_PAGE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<any>> = {
 	// Filters
 	format: StringParam,
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: ArrayParam,
-	[VisitorSpaceFilterId.Maintainer]: StringParam,
-	[VisitorSpaceFilterId.Medium]: ArrayParam,
-	[VisitorSpaceFilterId.Duration]: AdvancedFilterArrayParam,
-	[VisitorSpaceFilterId.Created]: AdvancedFilterArrayParam,
-	[VisitorSpaceFilterId.Published]: AdvancedFilterArrayParam,
-	[VisitorSpaceFilterId.Creator]: StringParam,
-	[VisitorSpaceFilterId.Genre]: ArrayParam,
-	[VisitorSpaceFilterId.Keywords]: ArrayParam,
-	[VisitorSpaceFilterId.Language]: ArrayParam,
-	[VisitorSpaceFilterId.Maintainers]: ArrayParam,
-	[VisitorSpaceFilterId.Advanced]: AdvancedFilterArrayParam,
-	[VisitorSpaceFilterId.ConsultableOnlyOnLocation]: BooleanParam,
-	[VisitorSpaceFilterId.ConsultableMedia]: BooleanParam,
+	[SearchFilterId.Maintainer]: StringParam,
+	[SearchFilterId.Medium]: ArrayParam,
+	[SearchFilterId.Duration]: AdvancedFilterArrayParam,
+	[SearchFilterId.Created]: AdvancedFilterArrayParam,
+	[SearchFilterId.Published]: AdvancedFilterArrayParam,
+	[SearchFilterId.Creator]: StringParam,
+	[SearchFilterId.Genre]: ArrayParam,
+	[SearchFilterId.Keywords]: ArrayParam,
+	[SearchFilterId.Language]: ArrayParam,
+	[SearchFilterId.Maintainers]: ArrayParam,
+	[SearchFilterId.Advanced]: AdvancedFilterArrayParam,
+	[SearchFilterId.ConsultableOnlyOnLocation]: BooleanParam,
+	[SearchFilterId.ConsultableMedia]: BooleanParam,
 	// Pagination
 	page: NumberParam,
 	// Sorting
@@ -107,16 +107,16 @@ export const VISITOR_SPACE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<a
 
 export const VISITOR_SPACE_TABS = (): TabProps[] => [
 	{
-		id: VisitorSpaceMediaType.All,
+		id: SearchPageMediaType.All,
 		label: tText('modules/visitor-space/const/index___alles'),
 	},
 	{
-		id: VisitorSpaceMediaType.Video,
+		id: SearchPageMediaType.Video,
 		icon: <Icon name={IconNamesLight.Video} aria-hidden />,
 		label: tText('modules/visitor-space/const/index___videos'),
 	},
 	{
-		id: VisitorSpaceMediaType.Audio,
+		id: SearchPageMediaType.Audio,
 		icon: <Icon name={IconNamesLight.Audio} aria-hidden />,
 		label: tText('modules/visitor-space/const/index___audio'),
 	},
@@ -131,7 +131,7 @@ export const VISITOR_SPACE_FILTERS = (
 	isKeyUser: boolean
 ): FilterMenuFilterOption[] => [
 	{
-		id: VisitorSpaceFilterId.ConsultableMedia,
+		id: SearchFilterId.ConsultableMedia,
 		label: tText('modules/visitor-space/const/index___alles-wat-raadpleegbaar-is'),
 		form: ConsultableMediaFilterForm,
 		type: FilterMenuType.Checkbox,
@@ -140,7 +140,7 @@ export const VISITOR_SPACE_FILTERS = (
 		},
 	},
 	{
-		id: VisitorSpaceFilterId.ConsultableOnlyOnLocation,
+		id: SearchFilterId.ConsultableOnlyOnLocation,
 		label: tText('modules/visitor-space/const/index___enkel-ter-plaatse-beschikbaar'),
 		form: ConsultableOnlyOnLocationFilterForm,
 		type: FilterMenuType.Checkbox,
@@ -149,38 +149,38 @@ export const VISITOR_SPACE_FILTERS = (
 		},
 	},
 	{
-		id: VisitorSpaceFilterId.Medium,
+		id: SearchFilterId.Medium,
 		label: tText('modules/visitor-space/const/index___analoge-drager'),
 		form: MediumFilterForm,
 		type: FilterMenuType.Modal,
 	},
 	{
-		id: VisitorSpaceFilterId.Duration,
+		id: SearchFilterId.Duration,
 		label: tText('modules/visitor-space/const/index___duurtijd'),
 		form: DurationFilterForm,
 		type: FilterMenuType.Modal,
 	},
 	{
-		id: VisitorSpaceFilterId.Created,
+		id: SearchFilterId.Created,
 		label: tText('modules/visitor-space/const/index___creatiedatum'),
 		form: CreatedFilterForm,
 		type: FilterMenuType.Modal,
 	},
 	{
-		id: VisitorSpaceFilterId.Published,
+		id: SearchFilterId.Published,
 		label: tText('modules/visitor-space/const/index___publicatiedatum'),
 		form: PublishedFilterForm,
 		type: FilterMenuType.Modal,
 	},
 	{
-		id: VisitorSpaceFilterId.Creator,
+		id: SearchFilterId.Creator,
 		label: tText('modules/visitor-space/const/index___maker'),
 		form: CreatorFilterForm,
 		type: FilterMenuType.Modal,
 	},
 	// Disabled for https://meemoo.atlassian.net/browse/ARC-246
 	{
-		id: VisitorSpaceFilterId.Genre,
+		id: SearchFilterId.Genre,
 		label: tText('modules/visitor-space/const/index___genre'),
 		form: GenreFilterForm,
 		type: FilterMenuType.Modal,
@@ -188,20 +188,20 @@ export const VISITOR_SPACE_FILTERS = (
 	},
 	// Disabled for https://meemoo.atlassian.net/browse/ARC-246
 	{
-		id: VisitorSpaceFilterId.Keywords,
+		id: SearchFilterId.Keywords,
 		label: tText('modules/visitor-space/const/index___trefwoorden'),
 		form: KeywordsFilterForm,
 		type: FilterMenuType.Modal,
 		isDisabled: () => true,
 	},
 	{
-		id: VisitorSpaceFilterId.Language,
+		id: SearchFilterId.Language,
 		label: tText('modules/visitor-space/const/index___taal'),
 		form: LanguageFilterForm,
 		type: FilterMenuType.Modal,
 	},
 	{
-		id: VisitorSpaceFilterId.Maintainers,
+		id: SearchFilterId.Maintainers,
 		label: tText('modules/visitor-space/const/index___aanbieder'),
 		form: MaintainerFilterForm,
 		type: FilterMenuType.Modal,
@@ -210,7 +210,7 @@ export const VISITOR_SPACE_FILTERS = (
 		},
 	},
 	{
-		id: VisitorSpaceFilterId.Advanced,
+		id: SearchFilterId.Advanced,
 		icon: IconNamesLight.DotsHorizontal,
 		label: tText('modules/visitor-space/const/index___geavanceerd'),
 		form: AdvancedFilterForm,
@@ -218,35 +218,31 @@ export const VISITOR_SPACE_FILTERS = (
 	},
 ];
 
-export const VISITOR_SPACE_ACTIVE_SORT_MAP = (): { [key in VisitorSpaceSort]: string } => ({
-	[VisitorSpaceSort.Date]: tText('modules/visitor-space/const/index___sorteer-op-datum'),
-	[VisitorSpaceSort.Relevance]: tText(
-		'modules/visitor-space/const/index___sorteer-op-relevantie'
-	),
-	[VisitorSpaceSort.Title]: tText('modules/visitor-space/const/index___sorteer-op-titel'),
-	[VisitorSpaceSort.Archived]: tText(
-		'modules/visitor-space/const/index___sorteer-op-gearchiveerd'
-	),
+export const VISITOR_SPACE_ACTIVE_SORT_MAP = (): { [key in SearchSortProp]: string } => ({
+	[SearchSortProp.Date]: tText('modules/visitor-space/const/index___sorteer-op-datum'),
+	[SearchSortProp.Relevance]: tText('modules/visitor-space/const/index___sorteer-op-relevantie'),
+	[SearchSortProp.Title]: tText('modules/visitor-space/const/index___sorteer-op-titel'),
+	[SearchSortProp.Archived]: tText('modules/visitor-space/const/index___sorteer-op-gearchiveerd'),
 });
 
 export const VISITOR_SPACE_SORT_OPTIONS = (): FilterMenuSortOption[] => [
 	{
 		label: tText('modules/visitor-space/const/index___relevantie'),
-		orderProp: VisitorSpaceSort.Relevance,
+		orderProp: SearchSortProp.Relevance,
 	},
 	{
 		label: tText('modules/visitor-space/const/index___datum-oplopend'),
-		orderProp: VisitorSpaceSort.Date,
+		orderProp: SearchSortProp.Date,
 		orderDirection: OrderDirection.asc,
 	},
 	{
 		label: tText('modules/visitor-space/const/index___datum-aflopend'),
-		orderProp: VisitorSpaceSort.Date,
+		orderProp: SearchSortProp.Date,
 		orderDirection: OrderDirection.desc,
 	},
 	{
 		label: tText('modules/visitor-space/const/index___gearchiveerd'),
-		orderProp: VisitorSpaceSort.Archived,
+		orderProp: SearchSortProp.Archived,
 		orderDirection: OrderDirection.desc,
 	},
 	// schema_name niet sorteerbaar in https://meemoo.atlassian.net/wiki/pages/viewpage.action?pageId=3309174878&pageVersion=3

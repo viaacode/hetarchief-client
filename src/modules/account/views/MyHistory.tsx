@@ -28,7 +28,7 @@ import { createVisitorSpacesWithFilterUrl } from '@shared/utils';
 import { useGetVisitAccessStatusMutation } from '@visit-requests/hooks/get-visit-access-status';
 import { useGetVisits } from '@visit-requests/hooks/get-visits';
 import { VisitorLayout } from '@visitor-layout/index';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { SearchFilterId } from '@visitor-space/types';
 
 export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
@@ -95,7 +95,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 			switch (response?.status) {
 				case AccessStatus.ACCESS:
 					router.push(
-						`${ROUTES_BY_LOCALE[locale].search}?${VisitorSpaceFilterId.Maintainer}=${visit.spaceSlug}`
+						`${ROUTES_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${visit.spaceSlug}`
 					);
 					break;
 				case AccessStatus.PENDING:

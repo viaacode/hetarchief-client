@@ -42,9 +42,9 @@ $component: "c-block-enclosed-content";
 			}
 
 			background-color: $white;
-			border: 1px solid #adadad66;
+			border: 1px solid $zinc-40;
 			display: flex;
-			padding: 1.6rem;
+			padding: $spacer-sm;
 			flex-direction: row;
 			width: 100%;
 
@@ -63,9 +63,9 @@ $component: "c-block-enclosed-content";
 			&__meta {
 				display: flex;
 				flex-direction: column-reverse;
-				margin-top: 0.4rem;
+				margin-top: $spacer-xxs;
 				font-size: $font-size-sm;
-				line-height: 2.2rem;
+				line-height: $line-height-md * 2;
 				color: $neutral;
 			}
 

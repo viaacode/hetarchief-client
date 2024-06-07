@@ -1,4 +1,5 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { OrderDirection } from '@meemoo/react-components';
+import { QueryClient, useQuery, UseQueryResult } from '@tanstack/react-query';
 import { isEmpty, isNil, noop } from 'lodash-es';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -11,11 +12,26 @@ import {
 	GetIeObjectsResponse,
 	IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
+	IeObjectsSearchOperator,
+	SearchPageMediaType,
 	SortObject,
 } from '@shared/types';
+import { SEARCH_RESULTS_PAGE_SIZE } from '@visitor-space/const';
+import { SearchSortProp } from '@visitor-space/types';
 import { VISITOR_SPACE_LICENSES } from '@visitor-space/utils/elastic-filters';
 
 import { IeObjectsService } from './../services';
+
+export async function getIeObjects(
+	filters: IeObjectsSearchFilter[],
+	page: number,
+	size: number,
+	sort: SortObject | undefined
+): Promise<GetIeObjectsResponse> {
+	const filterQuery = !isNil(filters) && !isEmpty(filters) ? filters : [];
+
+	return IeObjectsService.getSearchResults(filterQuery, page, size, sort);
+}
 
 export const useGetIeObjects = (
 	args: {
@@ -32,16 +48,13 @@ export const useGetIeObjects = (
 	return useQuery(
 		[QUERY_KEYS.getIeObjectsResults, args, options],
 		async () => {
-			const { filters, page, size, sort } = args;
-			const filterQuery = !isNil(filters) && !isEmpty(filters) ? filters : [];
-
-			const results = await IeObjectsService.getSearchResults(filterQuery, page, size, sort);
+			const results = await getIeObjects(args.filters, args.page, args.size, args.sort);
 
 			dispatch(setResults(results));
 			dispatch(setFilterOptions(results.aggregations));
 
 			// Log event
-			const isVisitorSpaceSearch = !!filters.find(
+			const isVisitorSpaceSearch = !!args.filters.find(
 				(filter) =>
 					filter.field === IeObjectsSearchFilterField.LICENSES &&
 					filter.multiValue === VISITOR_SPACE_LICENSES
@@ -52,10 +65,10 @@ export const useGetIeObjects = (
 				isVisitorSpaceSearch ? LogEventType.BEZOEK_SEARCH : LogEventType.SEARCH,
 				window.location.href,
 				{
-					filters,
-					page,
-					size,
-					sort,
+					filters: args.filters,
+					page: args.page,
+					size: args.size,
+					sort: args.sort,
 					user_group_name: user?.groupName || GroupName.ANONYMOUS,
 				}
 			).then(noop); // We don't want to wait for events calls
@@ -68,3 +81,43 @@ export const useGetIeObjects = (
 		}
 	);
 };
+
+export async function makeServerSideRequestGetIeObjects(queryClient: QueryClient) {
+	const args = {
+		filters: [
+			{
+				field: IeObjectsSearchFilterField.FORMAT,
+				operator: IeObjectsSearchOperator.IS,
+				value: SearchPageMediaType.All,
+			},
+		],
+		page: 1,
+		size: SEARCH_RESULTS_PAGE_SIZE,
+		sort: {
+			orderProp: SearchSortProp.Relevance,
+			orderDirection: OrderDirection.desc,
+		},
+	};
+	await Promise.all([
+		queryClient.prefetchQuery({
+			queryKey: [
+				QUERY_KEYS.getIeObjectsResults,
+				args,
+				{
+					enabled: false,
+				},
+			],
+			queryFn: () => getIeObjects(args.filters, args.page, args.size, args.sort),
+		}),
+		queryClient.prefetchQuery({
+			queryKey: [
+				QUERY_KEYS.getIeObjectsResults,
+				args,
+				{
+					enabled: true,
+				},
+			],
+			queryFn: () => getIeObjects(args.filters, args.page, args.size, args.sort),
+		}),
+	]);
+}

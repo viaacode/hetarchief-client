@@ -9,7 +9,7 @@ import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import { Locale } from '@shared/utils';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { SearchFilterId } from '@visitor-space/types';
 
 export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
 	return keywords.map((item) => {
@@ -34,7 +34,7 @@ export const renderKeywordsAsTags = (
 					stringifyUrl({
 						url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 						query: {
-							[VisitorSpaceFilterId.Maintainer]: slug,
+							[SearchFilterId.Maintainer]: slug,
 							[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: keyword,
 						},
 					})

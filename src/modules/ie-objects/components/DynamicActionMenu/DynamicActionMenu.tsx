@@ -17,6 +17,7 @@ import { useElementSize } from '@shared/hooks/use-element-size';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
+import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 
 import {
 	DYNAMIC_ACTION_BOX,
@@ -67,10 +68,12 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 
 	const renderInTooltip = (trigger: ReactNode, tooltip: string): ReactElement => {
 		return (
-			<Tooltip position="top">
-				<TooltipTrigger>{trigger}</TooltipTrigger>
-				<TooltipContent>{tooltip}</TooltipContent>
-			</Tooltip>
+			<NoServerSideRendering>
+				<Tooltip position="top">
+					<TooltipTrigger>{trigger}</TooltipTrigger>
+					<TooltipContent>{tooltip}</TooltipContent>
+				</Tooltip>
+			</NoServerSideRendering>
 		);
 	};
 
