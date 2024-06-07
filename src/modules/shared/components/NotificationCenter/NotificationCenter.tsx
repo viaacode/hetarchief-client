@@ -6,7 +6,6 @@ import { FC, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { Loading, NotificationCenterProps } from '@shared/components';
-import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import {
@@ -31,7 +30,6 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 	useMarkAllNotificationsAsReadHook,
 }) => {
 	const { tHtml, tText } = useTranslation();
-	const locale = useLocale();
 
 	const {
 		data: notificationResponse,
@@ -148,7 +146,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 		);
 
 		// Wrap in link if notification should link to somewhere
-		const path: string | null = NotificationsService.getPath(notification, locale);
+		const path: string | null = NotificationsService.getPath(notification);
 
 		if (!path) {
 			return content;

@@ -22,9 +22,9 @@ import { getNavigationItemsLeft } from '@navigation/components/Navigation/Naviga
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
 import {
+	GET_NAV_HAMBURGER_PROPS,
 	GET_NAV_ITEMS_RIGHT,
 	GET_NAV_ITEMS_RIGHT_LOGGED_IN,
-	NAV_HAMBURGER_PROPS,
 } from '@navigation/const';
 import { NavigationPlacement } from '@navigation/services/navigation-service';
 import {
@@ -181,12 +181,7 @@ const AppLayout: FC<any> = ({ children }) => {
 	useEffect(() => {
 		if (router && user) {
 			NotificationsService.setQueryClient(queryClient);
-			NotificationsService.initPolling(
-				router,
-				setNotificationsOpen,
-				setUnreadNotifications,
-				locale
-			);
+			NotificationsService.initPolling(router, setNotificationsOpen, setUnreadNotifications);
 		} else {
 			NotificationsService.stopPolling();
 		}
@@ -430,10 +425,10 @@ const AppLayout: FC<any> = ({ children }) => {
 				)}
 				<Navigation.Left
 					currentPath={router.asPath}
-					hamburgerProps={NAV_HAMBURGER_PROPS()}
+					hamburgerProps={GET_NAV_HAMBURGER_PROPS()}
 					items={leftNavItems}
 					placement="left"
-					renderHamburger={showNavigationHeaderRight}
+					renderHamburger={showNavigationHeaderRight && isMobile}
 					onOpenDropdowns={onOpenNavDropdowns}
 				/>
 				{isLoaded && showNavigationHeaderRight && (

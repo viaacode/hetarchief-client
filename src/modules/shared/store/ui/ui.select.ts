@@ -1,6 +1,6 @@
 import { Breadcrumb } from '@meemoo/react-components';
 
-import { AppState } from '../store.types';
+import { AppState } from '@shared/store';
 
 import { LastScrollPositionType } from './ui.types';
 
