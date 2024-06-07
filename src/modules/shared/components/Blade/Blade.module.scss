@@ -81,6 +81,15 @@
 		grid-row-start: 3;
 		overflow-y: auto;
 		overflow-x: hidden;
+		display: flex;
+		height: 100%;
+		flex-direction: column;
+		justify-content: space-between;
+
+
+		> div:only-child {
+			justify-content: flex-start; // if there's only one child, align it to the start
+		}
 
 		div {
 			white-space: pre-line;
