@@ -8,6 +8,7 @@ export enum Idp {
 export interface User {
 	acceptedTosAt: string | null;
 	email: string;
+	language: string;
 	firstName: string;
 	lastName: string;
 	fullName: string;
