@@ -75,7 +75,34 @@ $component: "c-cp-settings";
 		}
 	}
 
+	&__language-tab {
+		color: black;
+		background-color: $silver;
+		border: 1px solid $zinc;
+		border-bottom: none;
+		padding: calc($spacer-xs + 2px);
+		border-radius: 0;
+		font-weight: normal;
+
+		&:hover {
+			background-color: $teal-24;
+			border: 1px solid $zinc;
+			border-bottom: none;
+		}
+
+		&:active {
+			background-color: $teal;
+		}
+
+		&--active {
+			background-color: $teal-30;
+			font-weight: bold;
+		}
+	}
+
 	&__rich-text {
+		margin-bottom: $spacer-lg;
+
 		&--no-heading {
 			.c-rich-text-editor {
 				.headings-dropdown {

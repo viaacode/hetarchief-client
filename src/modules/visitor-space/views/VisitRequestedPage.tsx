@@ -38,9 +38,13 @@ export const VisitRequestedPage: FC<DefaultSeoInfo> = ({ title, description, url
 	const hasPendingRequest = accessStatus?.status === AccessStatus.PENDING;
 	const isNoAccessError = (accessStatusError as HTTPError)?.response?.status === 403;
 
-	const { data: space, isLoading: isLoadingSpace } = useGetVisitorSpace(slug as string, false, {
-		enabled: enabled && hasPendingRequest,
-	});
+	const { data: visitorSpace, isLoading: isLoadingSpace } = useGetVisitorSpace(
+		slug as string,
+		false,
+		{
+			enabled: enabled && hasPendingRequest,
+		}
+	);
 
 	/**
 	 * Computed
@@ -82,7 +86,7 @@ export const VisitRequestedPage: FC<DefaultSeoInfo> = ({ title, description, url
 				/>
 			);
 		}
-		return <WaitingPage space={space} />;
+		return <WaitingPage visitorSpace={visitorSpace} />;
 	};
 
 	return (

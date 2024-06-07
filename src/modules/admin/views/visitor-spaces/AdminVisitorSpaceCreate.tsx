@@ -11,24 +11,11 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 export const AdminVisitorSpaceCreate: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();
 
-	const emptyRoom = {
-		id: '',
-		color: null,
-		image: null,
-		description: null,
-		serviceDescription: null,
-		logo: '',
-		name: '',
-		slug: '',
-	};
-
 	const renderPageContent = () => {
 		return (
 			<AdminLayout>
 				<AdminLayout.Content>
-					<div className="l-container">
-						<VisitorSpaceSettings action="create" room={emptyRoom} />
-					</div>
+					<VisitorSpaceSettings action="create" visitorSpaceSlug={null} />
 				</AdminLayout.Content>
 			</AdminLayout>
 		);

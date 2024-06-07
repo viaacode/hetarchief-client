@@ -390,7 +390,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 				id="logged-in-home__visitor-space-not-available-blade"
 			>
 				<div className="u-px-32">
-					{visitorSpaceInfo && <SpacePreview space={visitorSpaceInfo} />}
+					{visitorSpaceInfo && <SpacePreview visitorSpace={visitorSpaceInfo} />}
 					<p>
 						{tHtml(
 							'modules/home/components/logged-in-home/logged-in-home___het-is-niet-mogelijk-om-toegang-tot-deze-bezoekersruimte-aan-te-vragen-op-dit-moment'

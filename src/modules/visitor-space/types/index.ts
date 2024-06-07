@@ -87,7 +87,7 @@ export interface DefaultFilterFormProps<Values extends FieldValues>
 }
 
 export interface InlineFilterFormProps<Values = unknown> extends DefaultComponentProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	id: SearchFilterId;
 	label: string;
 	onFormSubmit: OnFilterMenuFormSubmit;
@@ -101,8 +101,10 @@ export interface VisitorSpaceInfo {
 	maintainerId: string;
 	name: string;
 	info: string | null;
-	description: string | null;
-	serviceDescription: string | null;
+	descriptionNl: string | null;
+	serviceDescriptionNl: string | null;
+	descriptionEn: string | null;
+	serviceDescriptionEn: string | null;
 	image: string | null;
 	color: string | null;
 	logo: string;

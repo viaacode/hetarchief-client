@@ -95,9 +95,12 @@ export class VisitorSpaceService {
 		values.color && formData.append('color', values.color);
 		values.image && formData.append('image', values.image);
 		values.file && formData.append('file', values.file);
-		values.description && formData.append('description', values.description);
-		values.serviceDescription &&
-			formData.append('serviceDescription', values.serviceDescription);
+		values.descriptionNl && formData.append('descriptionNl', values.descriptionNl);
+		values.descriptionEn && formData.append('descriptionEn', values.descriptionEn);
+		values.serviceDescriptionNl &&
+			formData.append('serviceDescriptionNl', values.serviceDescriptionNl);
+		values.serviceDescriptionEn &&
+			formData.append('serviceDescriptionEn', values.serviceDescriptionEn);
 		values.status && formData.append('status', values.status);
 		values.slug && formData.append('slug', values.slug);
 
@@ -126,9 +129,12 @@ export class VisitorSpaceService {
 			formData.append('image', values.image || '');
 		}
 		values.file && formData.append('file', values.file);
-		values.description && formData.append('description', values.description);
-		values.serviceDescription &&
-			formData.append('serviceDescription', values.serviceDescription);
+		values.descriptionNl && formData.append('descriptionNl', values.descriptionNl);
+		values.descriptionEn && formData.append('descriptionEn', values.descriptionEn);
+		values.serviceDescriptionNl &&
+			formData.append('serviceDescriptionNl', values.serviceDescriptionNl);
+		values.serviceDescriptionEn &&
+			formData.append('serviceDescriptionEn', values.serviceDescriptionEn);
 		values.status && formData.append('status', values.status);
 		values.slug && formData.append('slug', values.slug);
 
