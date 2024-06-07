@@ -1,3 +1,4 @@
+import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
 import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
@@ -167,11 +168,15 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	const [isLoaded, setIsLoaded] = useState(false);
 
-	const { data: contentPageInfo } = useGetContentPageByLanguageAndPath(
+	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
 		locale,
 		`/${router.query.slug}`,
 		{ enabled: router.route === '/[slug]' }
 	);
+
+	const contentPageInfo = dbContentPage
+		? convertDbContentPageToContentPageInfo(dbContentPage)
+		: null;
 
 	useEffect(() => {
 		if (user?.language) {

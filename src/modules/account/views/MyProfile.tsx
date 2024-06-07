@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
 import {
 	Alert,
 	Box,
@@ -76,11 +77,15 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference(selectedLanguage);
 	const { data: preferences } = useGetNewsletterPreferences(user?.email);
 
-	const { data: contentPageInfo } = useGetContentPageByLanguageAndPath(
+	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
 		locale,
 		`/${router.query.slug}`,
 		{ enabled: router.route === '/[slug]' }
 	);
+
+	const contentPageInfo = dbContentPage
+		? convertDbContentPageToContentPageInfo(dbContentPage)
+		: null;
 
 	useEffect(() => {
 		mutateLanguagePreference(selectedLanguage);

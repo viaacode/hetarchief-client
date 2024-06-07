@@ -1,5 +1,5 @@
-import { Button } from '@meemoo/react-components';
 import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
+import { Button } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -35,6 +35,11 @@ export default function LanguageSwitcher() {
 		`/${router.query.slug}`,
 		{ enabled: router.route === '/[slug]' }
 	);
+
+	const contentPageInfo = dbContentPage
+		? convertDbContentPageToContentPageInfo(dbContentPage)
+		: null;
+
 	const isFirstRender = useRef(true);
 
 	useEffect(() => {
@@ -47,10 +52,6 @@ export default function LanguageSwitcher() {
 		changeLocalSlug(locale, selectedLanguage, queryClient, contentPageInfo);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedLanguage, mutateLanguagePreference]);
-
-	const contentPageInfo = dbContentPage
-		? convertDbContentPageToContentPageInfo(dbContentPage)
-		: null;
 
 	const languageOptions = (allLanguages || []).map((languageInfo) => ({
 		label: languageInfo.languageLabel,
