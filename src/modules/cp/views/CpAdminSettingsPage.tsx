@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
-import { VisitorSpaceSettings } from '@cp/components';
+import { VisitorSpaceSettings } from '@cp/components/VisitorSpaceSettings';
 import { CPAdminLayout } from '@cp/layouts';
 import DisableServerSideRendering from '@shared/components/DisableServerSideRendering/DisableServerSideRendering';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';

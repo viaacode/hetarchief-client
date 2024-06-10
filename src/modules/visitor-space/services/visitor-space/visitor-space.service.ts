@@ -88,6 +88,7 @@ export class VisitorSpaceService {
 	public static async create(
 		values: Partial<CreateVisitorSpaceSettings>
 	): Promise<VisitorSpaceInfo> {
+		console.log('creating visitor space');
 		const formData = new FormData();
 
 		// Set form data
@@ -111,7 +112,7 @@ export class VisitorSpaceService {
 		const response: VisitorSpaceInfo = await ApiService.getApi()
 			.post(VISITOR_SPACE_SERVICE_BASE_URL, { body: formData, headers })
 			.json();
-
+		console.log('create visitor space response', response);
 		await this.queryClient.invalidateQueries([QUERY_KEYS.getContentPartners]);
 
 		return response;
