@@ -20,6 +20,12 @@ export async function getContentPageByLanguageAndPath(
 	return ContentPageService.getContentPageByLanguageAndPath(language as any, path);
 }
 
+/**
+ * Get a content page by language and path
+ * @param language
+ * @param path path of the content page including a leading slash
+ * @param options
+ */
 export const useGetContentPageByLanguageAndPath = (
 	language: Locale,
 	path: string | undefined,
@@ -34,11 +40,11 @@ export const useGetContentPageByLanguageAndPath = (
 
 export async function makeServerSideRequestGetContentPageByLanguageAndPath(
 	queryClient: QueryClient,
-	path: string,
+	path: string | undefined,
 	locale: Locale
 ) {
 	await queryClient.prefetchQuery({
-		queryKey: [QUERY_KEYS.getContentPage, { path: `/${path}`, language: locale }],
-		queryFn: () => getContentPageByLanguageAndPath(locale, `/${path}`),
+		queryKey: [QUERY_KEYS.getContentPage, path, locale],
+		queryFn: () => getContentPageByLanguageAndPath(locale, path),
 	});
 }

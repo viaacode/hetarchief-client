@@ -6,6 +6,7 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { makeServerSideRequestGetIeObjectFormatCounts } from '@ie-objects/hooks/get-ie-object-format-counts';
 import { makeServerSideRequestGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
 import SearchPage from '@search/SearchPage';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -23,7 +24,7 @@ export async function getStaticProps(
 	await makeServerSideRequestGetIeObjectFormatCounts(queryClient);
 	const dehydratedState = dehydrate(queryClient);
 
-	return getDefaultStaticProps(context, dehydratedState);
+	return getDefaultStaticProps(context, dehydratedState, ROUTES_BY_LOCALE.en.search);
 }
 
 export default withAuth(SearchPageEnglish as ComponentType, false);

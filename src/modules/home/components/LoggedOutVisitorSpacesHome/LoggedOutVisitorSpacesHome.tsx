@@ -1,4 +1,3 @@
-import { capitalize, lowerCase } from 'lodash-es';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -8,16 +7,14 @@ import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
 import { Icon, IconNamesLight } from '@shared/components';
-import { KNOWN_STATIC_ROUTES, ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
+import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './LoggedOutVisitorSpacesHome.module.scss';
 
-const LoggedOutVisitorSpacesHome: FC<DefaultSeoInfo> = (props) => {
+const LoggedOutVisitorSpacesHome: FC = () => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
@@ -54,17 +51,6 @@ const LoggedOutVisitorSpacesHome: FC<DefaultSeoInfo> = (props) => {
 			);
 		}
 	}, [locale, query, router]);
-
-	const getPageDescription = () => {
-		// eg: /vrt/09f17b37445c4ce59f645c2d5db9dbf8dbee79eba623459caa8c6496108641a0900618cb6ceb4e9b8ad907e47b980ee3
-		const redirectTo = router.query.redirectTo as string;
-		const firstUrlPart = redirectTo?.split('/')?.[1];
-		if (!(Object.values(ROUTE_PARTS_BY_LOCALE[locale]) as string[]).includes(firstUrlPart)) {
-			// Not a static page => might be visitor space slug
-			return capitalize(lowerCase(firstUrlPart));
-		}
-		return tText('pages/index___logged-out-home-description');
-	};
 
 	/**
 	 * Render
@@ -111,17 +97,7 @@ const LoggedOutVisitorSpacesHome: FC<DefaultSeoInfo> = (props) => {
 		);
 	};
 
-	return (
-		<div className="p-home u-page-bottom-padding">
-			{renderOgTags(
-				tText('modules/home/components/logged-out-home/logged-out-home___home'),
-				getPageDescription(),
-				props.url
-			)}
-
-			{renderPageContent()}
-		</div>
-	);
+	return <div className="p-home u-page-bottom-padding">{renderPageContent()}</div>;
 };
 
 export default LoggedOutVisitorSpacesHome;
