@@ -21,7 +21,6 @@ export function renderOgTags(
 	imgUrl: string | null | undefined = null,
 	isFullTitle = false
 ): ReactNode {
-	console.log('redering og tags: ', { title, description, url, imgUrl });
 	const resolvedTitle = createPageTitle(title);
 	return (
 		<Head>
