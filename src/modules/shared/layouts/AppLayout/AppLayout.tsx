@@ -1,3 +1,4 @@
+import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
 import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
@@ -13,6 +14,7 @@ import { GroupName, Permission } from '@account/const';
 import { AuthModal } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
+import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
 import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
@@ -44,6 +46,7 @@ import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCe
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
+import { changeLocalSlug } from '@shared/helpers/change-local-slug';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
@@ -67,6 +70,7 @@ import {
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
 import { Breakpoints, Visit } from '@shared/types';
+import { Locale } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visits';
 
@@ -163,6 +167,24 @@ const AppLayout: FC<any> = ({ children }) => {
 	}, [isKioskOrAnonymous, spaces, user]);
 
 	const [isLoaded, setIsLoaded] = useState(false);
+
+	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
+		locale,
+		`/${router.query.slug}`,
+		{ enabled: router.route === '/[slug]' }
+	);
+
+	const contentPageInfo = dbContentPage
+		? convertDbContentPageToContentPageInfo(dbContentPage)
+		: null;
+
+	useEffect(() => {
+		if (user?.language) {
+			console.log('applayout', user.language, user.id);
+			changeLocalSlug(locale, user?.language as Locale, queryClient, contentPageInfo);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [user]);
 
 	useEffect(() => {
 		// ARC-2011: small timeout so login is not shown before user is checked
