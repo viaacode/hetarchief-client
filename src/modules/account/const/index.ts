@@ -63,6 +63,11 @@ export const GET_ACCOUNT_NAVIGATION_LINKS = (): NavigationLinkInfo[] => {
 	return links;
 };
 
+export const GET_TRANSLATED_LANGUAGE_LABELS = () => ({
+	nl: tText('modules/account/const/index___nederlands'),
+	en: tText('modules/account/const/index___engels'),
+});
+
 export enum Permission {
 	// Maintenance alerts
 	VIEW_ANY_MAINTENANCE_ALERTS = 'VIEW_ANY_MAINTENANCE_ALERTS',
