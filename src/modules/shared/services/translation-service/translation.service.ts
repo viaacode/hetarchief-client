@@ -16,6 +16,11 @@ export class TranslationService {
 		return response ?? {};
 	}
 
+	/**
+	 * Always prefer the useLocale hook for fetching the locale
+	 * Since this function doesn't work in server side rendering and should only be used if the useLocale hook cannot work
+	 * For instance if you're not working inside a react component context, eg polling service
+	 */
 	public static getLocale(): Locale {
 		if (isServerSideRendering()) {
 			return Locale.nl; // Window not available in server side rendering
