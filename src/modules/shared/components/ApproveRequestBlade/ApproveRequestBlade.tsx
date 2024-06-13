@@ -62,7 +62,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const canViewAddVisitRequests: boolean = useHasAnyPermission(
 		Permission.MANAGE_ALL_VISIT_REQUESTS
 	);
-	const { data: folders } = useGetFolders();
+	const { data: folderResponse } = useGetFolders();
+	const folders = folderResponse?.items || [];
 
 	const {
 		selected: visitRequest,
@@ -124,7 +125,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const getAccessTypeLabel = useCallback(
 		(accessType: ApproveRequestFormState['accessType']) => {
-			const selectedFolders = (folders || []).filter(
+			const selectedFolders = folders.filter(
 				(item) => accessType?.folderIds.includes(item.id)
 			);
 			const selectedFoldersNames = selectedFolders?.map((folder) => folder.name).join(', ');
@@ -156,7 +157,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					info: tText(
 						'modules/cp/components/approve-request-blade/approve-request-blade___mappen-dienen-op-voorhand-gemaakt-te-worden'
 					),
-					options: (folders || []).map(
+					options: folders.map(
 						({ id, name }): RefinableRadioButtonOption => ({
 							id,
 							label: name,
