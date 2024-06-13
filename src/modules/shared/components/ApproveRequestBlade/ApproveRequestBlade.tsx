@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { addHours, areIntervalsOverlapping, endOfDay, startOfDay } from 'date-fns';
 import { isEmpty } from 'lodash-es';
 import Link from 'next/link';
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, ControllerRenderProps, FieldError, useForm } from 'react-hook-form';
 
 import { Permission } from '@account/const';
@@ -63,7 +63,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		Permission.MANAGE_ALL_VISIT_REQUESTS
 	);
 	const { data: folderResponse } = useGetFolders();
-	const folders = folderResponse?.items || [];
+	const folders = useMemo(() => folderResponse?.items || [], [folderResponse?.items]);
 
 	const {
 		selected: visitRequest,
