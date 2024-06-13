@@ -15,7 +15,7 @@ const VisitorSpaceCreateEnglish: NextPage<DefaultSeoInfo> = ({ url }) => {
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.en.adminVisitorSpaceCreate);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.en.adminVisitorSpaceCreate);
 }
 
 export default withAuth(VisitorSpaceCreateEnglish as ComponentType, true);

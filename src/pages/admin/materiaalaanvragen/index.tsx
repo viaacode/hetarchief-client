@@ -15,7 +15,7 @@ const AdminMaterialRequestsDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.nl.adminMaterialRequests);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.adminMaterialRequests);
 }
 
 export default withAuth(AdminMaterialRequestsDutch as ComponentType, true);

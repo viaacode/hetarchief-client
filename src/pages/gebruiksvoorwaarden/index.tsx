@@ -14,7 +14,7 @@ const UserConditionsDutch: NextPage<DefaultSeoInfo & UserProps> = ({ commonUser,
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.nl.userPolicy);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.userPolicy);
 }
 
 export default withUser(UserConditionsDutch as NextPage<unknown>) as NextPage<DefaultSeoInfo>;

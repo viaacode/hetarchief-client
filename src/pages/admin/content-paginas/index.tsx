@@ -20,7 +20,7 @@ const ContentPageOverviewPageDutch: NextPage<DefaultSeoInfo & UserProps> = ({
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.nl.adminContentPages);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.adminContentPages);
 }
 
 export default withAuth(

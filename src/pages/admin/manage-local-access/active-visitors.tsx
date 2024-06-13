@@ -15,7 +15,7 @@ const AdminActiveVisitorsEnglish: FC<DefaultSeoInfo> = ({ url }) => {
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.en.adminActiveVisitors);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.en.adminActiveVisitors);
 }
 
 export default withAuth(AdminActiveVisitorsEnglish as ComponentType, true);

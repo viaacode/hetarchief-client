@@ -184,14 +184,12 @@ export async function getServerSideProps(
 		makeServerSideRequestGetIeObjectInfo(queryClient, pathOrIeObjectId),
 	]);
 
-	return getDefaultStaticProps(
-		context,
+	return getDefaultStaticProps(context, context.resolvedUrl, {
 		queryClient,
-		context.resolvedUrl,
 		title,
 		description,
-		image
-	);
+		image,
+	});
 }
 
 export default withUser(

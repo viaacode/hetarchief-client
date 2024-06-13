@@ -16,7 +16,7 @@ const UserConditionsEnglish: NextPage<DefaultSeoInfo & UserProps> = ({ commonUse
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.en.userPolicy);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.en.userPolicy);
 }
 
 export default withAdminCoreConfig(

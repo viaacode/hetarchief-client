@@ -13,7 +13,7 @@ const VisitorSpacesHomeDutch: NextPage<DefaultSeoInfo> = (seo) => {
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.nl.visit);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.visit);
 }
 
 export default VisitorSpacesHomeDutch;
