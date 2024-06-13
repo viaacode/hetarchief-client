@@ -5,9 +5,12 @@ export const VISITOR_SPACE_MOCK: VisitorSpaceInfo = {
 	slug: 'amsab',
 	maintainerId: 'OR-154dn75',
 	name: 'Amsab-ISG',
-	description:
+	descriptionNl:
 		'Amsab-ISG is het Instituut voor Sociale Geschiedenis. Het bewaart, ontsluit, onderzoekt en valoriseert het erfgoed van sociale en humanitaire bewegingen.',
-	serviceDescription: 'Vraag meer info aan de balie.',
+	serviceDescriptionNl: 'Vraag meer info aan de balie.',
+	descriptionEn:
+		'Amsab-ISG is the Institute for Social History. It preserves, discloses, researches, and valorizes the heritage of social and humanitarian movements.',
+	serviceDescriptionEn: 'Request more info at the receptiondesk.',
 	image: '',
 	color: '#007b60',
 	logo: 'https://assets.viaa.be/images/OR-154dn75',

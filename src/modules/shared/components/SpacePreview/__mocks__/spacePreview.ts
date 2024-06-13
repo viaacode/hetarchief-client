@@ -1,12 +1,13 @@
-import { SpacePreviewProps } from '../SpacePreview.types';
+import { SpacePreviewProps } from '@shared/components';
 
 export const SPACE_PREVIEW_PROPS_MOCK: SpacePreviewProps = {
-	space: {
+	visitorSpace: {
 		id: 'id',
 		image: '/image',
 		logo: '/logo',
 		name: 'name',
 		color: '#ff0000',
-		serviceDescription: 'service description',
+		serviceDescriptionNl: 'service beschrijving',
+		serviceDescriptionEn: 'service description',
 	},
 };

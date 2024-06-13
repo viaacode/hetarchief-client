@@ -13,7 +13,7 @@ const VisitRequestedPageEnglish: NextPage<DefaultSeoInfo> = ({ title, descriptio
 	return <VisitRequestedPage title={title} description={description} url={url} />;
 };
 
-export async function getStaticProps(
+export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	let space: VisitorSpaceInfo | null = null;

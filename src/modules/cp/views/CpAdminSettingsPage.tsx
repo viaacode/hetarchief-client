@@ -3,68 +3,45 @@ import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
-import { VisitorSpaceSettings } from '@cp/components';
+import { VisitorSpaceSettings } from '@cp/components/VisitorSpaceSettings';
 import { CPAdminLayout } from '@cp/layouts';
-import { Loading } from '@shared/components';
 import DisableServerSideRendering from '@shared/components/DisableServerSideRendering/DisableServerSideRendering';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { tHtml } from '@shared/helpers/translate';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
 export const CpAdminSettingsPage: FC<DefaultSeoInfo> = ({ url }) => {
 	/**
 	 * Hooks
 	 */
-	const { tHtml, tText } = useTranslation();
+	const { tText } = useTranslation();
 
 	/**
 	 * Data
 	 */
 	const user = useSelector(selectUser);
 
-	const {
-		data: visitorSpaceInfo,
-		isLoading,
-		refetch,
-	} = useGetVisitorSpace(user?.visitorSpaceSlug || null, false, {
-		enabled: !!user?.visitorSpaceSlug,
-	});
-
 	/**
 	 * Render
 	 */
 
-	const renderErrorMessage = () => {
+	const renderPageContent = () => {
 		if (!user?.visitorSpaceSlug) {
 			return tHtml('pages/beheer/instellingen/index___geen-maintainer-id-gevonden');
 		}
-		return tHtml(
-			'pages/beheer/instellingen/index___er-ging-iets-mis-bij-het-ophalen-van-de-instellingen'
-		);
-	};
-
-	const renderPageContent = () => {
 		return (
 			<CPAdminLayout
 				className="p-cp-settings"
 				pageTitle={tText('pages/beheer/instellingen/index___instellingen')}
 			>
-				<div className="l-container">
-					{visitorSpaceInfo ? (
-						<VisitorSpaceSettings room={visitorSpaceInfo} refetch={refetch} />
-					) : (
-						<p className="u-color-neutral">{renderErrorMessage()}</p>
-					)}
-				</div>
+				<VisitorSpaceSettings action="edit" visitorSpaceSlug={user?.visitorSpaceSlug} />
 			</CPAdminLayout>
 		);
 	};
 
-	return isLoading ? (
-		<Loading fullscreen owner="admin visitor page settings" />
-	) : (
+	return (
 		<>
 			<SeoTags
 				title={tText('pages/beheer/instellingen/index___beheer-instellingen-title')}

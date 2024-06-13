@@ -88,6 +88,7 @@ export class VisitorSpaceService {
 	public static async create(
 		values: Partial<CreateVisitorSpaceSettings>
 	): Promise<VisitorSpaceInfo> {
+		console.log('creating visitor space');
 		const formData = new FormData();
 
 		// Set form data
@@ -95,9 +96,12 @@ export class VisitorSpaceService {
 		values.color && formData.append('color', values.color);
 		values.image && formData.append('image', values.image);
 		values.file && formData.append('file', values.file);
-		values.description && formData.append('description', values.description);
-		values.serviceDescription &&
-			formData.append('serviceDescription', values.serviceDescription);
+		values.descriptionNl && formData.append('descriptionNl', values.descriptionNl);
+		values.descriptionEn && formData.append('descriptionEn', values.descriptionEn);
+		values.serviceDescriptionNl &&
+			formData.append('serviceDescriptionNl', values.serviceDescriptionNl);
+		values.serviceDescriptionEn &&
+			formData.append('serviceDescriptionEn', values.serviceDescriptionEn);
 		values.status && formData.append('status', values.status);
 		values.slug && formData.append('slug', values.slug);
 
@@ -108,7 +112,7 @@ export class VisitorSpaceService {
 		const response: VisitorSpaceInfo = await ApiService.getApi()
 			.post(VISITOR_SPACE_SERVICE_BASE_URL, { body: formData, headers })
 			.json();
-
+		console.log('create visitor space response', response);
 		await this.queryClient.invalidateQueries([QUERY_KEYS.getContentPartners]);
 
 		return response;
@@ -126,9 +130,12 @@ export class VisitorSpaceService {
 			formData.append('image', values.image || '');
 		}
 		values.file && formData.append('file', values.file);
-		values.description && formData.append('description', values.description);
-		values.serviceDescription &&
-			formData.append('serviceDescription', values.serviceDescription);
+		values.descriptionNl && formData.append('descriptionNl', values.descriptionNl);
+		values.descriptionEn && formData.append('descriptionEn', values.descriptionEn);
+		values.serviceDescriptionNl &&
+			formData.append('serviceDescriptionNl', values.serviceDescriptionNl);
+		values.serviceDescriptionEn &&
+			formData.append('serviceDescriptionEn', values.serviceDescriptionEn);
 		values.status && formData.append('status', values.status);
 		values.slug && formData.append('slug', values.slug);
 
