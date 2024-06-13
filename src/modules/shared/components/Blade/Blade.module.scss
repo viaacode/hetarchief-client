@@ -81,6 +81,10 @@
 		grid-row-start: 3;
 		overflow-y: auto;
 		overflow-x: hidden;
+		display: flex;
+		height: 100%;
+		flex-direction: column;
+		justify-content: space-between;
 
 		div {
 			white-space: pre-line;
