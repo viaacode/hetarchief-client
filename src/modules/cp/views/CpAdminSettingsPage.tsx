@@ -8,7 +8,7 @@ import { CPAdminLayout } from '@cp/layouts';
 import { Loading } from '@shared/components';
 import DisableServerSideRendering from '@shared/components/DisableServerSideRendering/DisableServerSideRendering';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
@@ -66,11 +66,15 @@ export const CpAdminSettingsPage: FC<DefaultSeoInfo> = ({ url }) => {
 		<Loading fullscreen owner="admin visitor page settings" />
 	) : (
 		<>
-			{renderOgTags(
-				tText('pages/beheer/instellingen/index___beheer-instellingen-title'),
-				tText('pages/beheer/instellingen/index___beheer-instellingen-meta-omschrijving'),
-				url
-			)}
+			<SeoTags
+				title={tText('pages/beheer/instellingen/index___beheer-instellingen-title')}
+				description={tText(
+					'pages/beheer/instellingen/index___beheer-instellingen-meta-omschrijving'
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 
 			<PermissionsCheck allPermissions={[Permission.UPDATE_OWN_SPACE]}>
 				<DisableServerSideRendering>{renderPageContent()}</DisableServerSideRendering>

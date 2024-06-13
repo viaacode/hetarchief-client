@@ -5,6 +5,7 @@ import React, { ComponentType, FC } from 'react';
 import { UsersOverviewPage } from '@admin/views/users/UsersOverviewPage';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
@@ -16,7 +17,7 @@ const UsersOverviewPageDutch: NextPage<DefaultSeoInfo & UserProps> = ({ url, com
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context);
+	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.nl.adminUsers);
 }
 
 export default withAuth(

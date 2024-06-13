@@ -16,7 +16,7 @@ const IeObjectWithoutObjectNamePageDutch: NextPage<DefaultSeoInfo> = ({ url }) =
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context);
+	return getDefaultStaticProps(context, undefined, context.resolvedUrl);
 }
 
 export default IeObjectWithoutObjectNamePageDutch;

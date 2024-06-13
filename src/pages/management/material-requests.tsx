@@ -4,6 +4,7 @@ import { ComponentType } from 'react';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { CpAdminMaterialRequests } from '@cp/views/CpAdminMaterialRequests';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -14,7 +15,7 @@ const CpAdminMaterialRequestsPageEnglish: NextPage<DefaultSeoInfo> = ({ url }) =
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context);
+	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.en.cpAdminMaterialRequests);
 }
 
 export default withAuth(CpAdminMaterialRequestsPageEnglish as ComponentType, true);

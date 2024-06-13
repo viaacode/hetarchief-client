@@ -13,13 +13,11 @@ import {
 } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import { isNil } from 'lodash-es';
-import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Link from 'next/link';
 import router from 'next/router';
-import { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
-import { ComponentType, ReactNode, useEffect, useState } from 'react';
+import { ComponentType, FC, ReactNode, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
@@ -41,9 +39,8 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { Icon, IconNamesLight } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { changeLocalSlug } from '@shared/helpers/change-local-slug';
-import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
@@ -62,7 +59,7 @@ const labelKeys: Record<keyof CommunicationFormState, string> = {
 	acceptNewsletter: 'Communication__acceptNewsletter',
 };
 
-export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
+export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 	const user = useSelector(selectUser);
 	const { tHtml, tText } = useTranslation();
 	const locale = useLocale();
@@ -364,11 +361,15 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	};
 	return (
 		<VisitorLayout>
-			{renderOgTags(
-				tText('pages/account/mijn-profiel/index___mijn-profiel'),
-				tText('pages/account/mijn-profiel/index___mijn-profiel-meta-omschrijving'),
-				url
-			)}
+			<SeoTags
+				title={tText('pages/account/mijn-profiel/index___mijn-profiel')}
+				description={tText(
+					'pages/account/mijn-profiel/index___mijn-profiel-meta-omschrijving'
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 
 			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT]}>
 				{renderPageContent()}
@@ -376,11 +377,5 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 		</VisitorLayout>
 	);
 };
-
-export async function getStaticProps(
-	context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context);
-}
 
 export default withAuth(AccountMyProfile as ComponentType, true);

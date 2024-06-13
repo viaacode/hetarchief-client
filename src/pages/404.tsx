@@ -1,8 +1,9 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
 
 import { ErrorNotFound } from '@shared/components';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { tText } from '@shared/helpers/translate';
 import useHideNavigationHeaderRight from '@shared/hooks/use-hide-navigation-header-right/use-hide-navigation-header-right';
 import { DefaultSeoInfo } from '@shared/types/seo';
@@ -15,12 +16,13 @@ const NotFound: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	return (
 		<>
-			{renderOgTags(
-				tText('pages/404___niet-gevonden'),
-				tText('pages/404___pagina-niet-gevonden'),
-				url,
-				null
-			)}
+			<SeoTags
+				title={tText('pages/404___niet-gevonden')}
+				description={tText('pages/404___pagina-niet-gevonden')}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 			<ErrorNotFound />
 		</>
 	);
@@ -29,7 +31,7 @@ const NotFound: NextPage<DefaultSeoInfo> = ({ url }) => {
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context);
+	return getDefaultStaticProps(context, undefined, ROUTES_BY_LOCALE.nl.notFound);
 }
 
 export default NotFound;

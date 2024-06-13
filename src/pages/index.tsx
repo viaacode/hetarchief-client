@@ -1,5 +1,5 @@
 import { ContentPageRenderer, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 import { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { ComponentType, FC, useEffect } from 'react';
@@ -11,9 +11,9 @@ import {
 	useGetContentPageByLanguageAndPath,
 } from '@content-page/hooks/get-content-page';
 import { Loading } from '@shared/components';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { KNOWN_STATIC_ROUTES, QUERY_KEYS, ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import withUser, { UserProps } from '@shared/hooks/with-user';
@@ -70,15 +70,18 @@ const Homepage: NextPage<DefaultSeoInfo & UserProps> = ({
 
 	return (
 		<VisitorLayout>
-			{renderOgTags(
-				title || null,
-				description ||
+			<SeoTags
+				title={title || null}
+				description={
+					description ||
 					contentPageInfo?.seoDescription ||
 					contentPageInfo?.description ||
-					null,
-				url,
-				image || contentPageInfo?.thumbnailPath || null
-			)}
+					null
+				}
+				imgUrl={image || contentPageInfo?.thumbnailPath || null}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 			{renderPageContent()}
 		</VisitorLayout>
 	);
@@ -114,9 +117,14 @@ export async function getStaticProps(
 		queryFn: () => getContentPageByLanguageAndPath(language, path),
 	});
 
-	const dehydratedState = dehydrate(queryClient);
-
-	return getDefaultStaticProps(context, dehydratedState, title, description, image);
+	return getDefaultStaticProps(
+		context,
+		queryClient,
+		ROUTES_BY_LOCALE.nl.home,
+		title,
+		description,
+		image
+	);
 }
 
 export default withUser(withAuth(Homepage as ComponentType, false)) as FC<DefaultSeoInfo>;

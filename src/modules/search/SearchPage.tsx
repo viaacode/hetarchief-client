@@ -51,13 +51,13 @@ import {
 	PAGE_NUMBER_OF_MANY_RESULTS_TILE,
 } from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import TagSearchBar from '@shared/components/TagSearchBar/TagSearchBar';
 import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -1126,11 +1126,13 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	return (
 		<>
-			{renderOgTags(
-				tText('pages/zoeken/index___zoeken-pagina-titel'),
-				tText('pages/zoeken/index___zoek-pagina-seo-omschrijving'),
-				url
-			)}
+			<SeoTags
+				title={tText('pages/zoeken/index___zoeken-pagina-titel')}
+				description={tText('pages/zoeken/index___zoek-pagina-seo-omschrijving')}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 			{renderPageContent()}
 		</>
 	);

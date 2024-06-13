@@ -15,10 +15,10 @@ const AccountMyFoldersEnglish: NextPage<DefaultSeoInfo> = ({ url }) => {
 	return <AccountMyFolders folderSlug={folderSlug} url={url} />;
 };
 
-export async function getStaticProps(
+export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context);
+	return getDefaultStaticProps(context, undefined, context.resolvedUrl);
 }
 
 export default withAuth(AccountMyFoldersEnglish as ComponentType, true);

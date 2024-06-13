@@ -109,12 +109,12 @@ import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerA
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
@@ -1596,7 +1596,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	return (
 		<>
 			<VisitorLayout>
-				{renderOgTags(title, seoDescription, url, image)}
+				{' '}
+				<SeoTags
+					title={title}
+					description={seoDescription}
+					imgUrl={image}
+					translatedPages={[]}
+					relativeUrl={url}
+				/>
 				{renderPageContent()}
 			</VisitorLayout>
 		</>

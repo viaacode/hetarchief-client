@@ -1,4 +1,4 @@
-import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 import { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
 import { ComponentType } from 'react';
 
@@ -22,9 +22,8 @@ export async function getStaticProps(
 	const queryClient = new QueryClient();
 	await makeServerSideRequestGetIeObjects(queryClient);
 	await makeServerSideRequestGetIeObjectFormatCounts(queryClient);
-	const dehydratedState = dehydrate(queryClient);
 
-	return getDefaultStaticProps(context, dehydratedState, ROUTES_BY_LOCALE.en.search);
+	return getDefaultStaticProps(context, queryClient, ROUTES_BY_LOCALE.en.search);
 }
 
 export default withAuth(SearchPageEnglish as ComponentType, false);

@@ -10,7 +10,6 @@ export async function getActiveVisitForUserAndSpace(
 	user: User | null | undefined
 ): Promise<Visit | null> {
 	if (!user) {
-		console.log('visit request getActiveVisitForUserAndSpace', null);
 		return null; // Anonymous users can never have an active visit request
 	}
 	return VisitsService.getActiveVisitForUserAndSpace(visitorSpaceSlug);

@@ -13,7 +13,6 @@ export function useGetVisitorSpace(
 	return useQuery(
 		[QUERY_KEYS.getVisitorSpaceInfo, maintainerSlug, ignoreAuthError],
 		async () => {
-			console.log('useGetVisitorSpace:', { maintainerSlug, ignoreAuthError, options });
 			return VisitorSpaceService.getBySlug(maintainerSlug, ignoreAuthError);
 		},
 		{ enabled: true, retry: false, ...options }

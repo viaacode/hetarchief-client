@@ -46,6 +46,7 @@ export async function getServerSideProps(
 			ieObject?.maintainerId,
 			ieObject?.maintainerSlug
 		),
+		context.resolvedUrl,
 		seoInfo?.name,
 		seoInfo?.description,
 		seoInfo?.thumbnailUrl

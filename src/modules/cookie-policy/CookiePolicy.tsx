@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import React, { FC, useEffect, useState } from 'react';
 
-import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -38,13 +38,15 @@ export const CookiePolicy: FC<DefaultSeoInfo> = ({ url }) => {
 
 	return (
 		<>
-			{renderOgTags(
-				tText('pages/cookiebeleid/index___cookiebeleid-seo-en-pagina-titel'),
-				tText(
+			<SeoTags
+				title={tText('pages/cookiebeleid/index___cookiebeleid-seo-en-pagina-titel')}
+				description={tText(
 					'pages/cookiebeleid/index___cookiebeleid-seo-en-pagina-titel-seo-beschrijving'
-				),
-				url
-			)}
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 			<div className={styles['p-cookie-policy__wrapper']}>
 				<div dangerouslySetInnerHTML={{ __html: cookieDeclarationHtml }} />
 			</div>
