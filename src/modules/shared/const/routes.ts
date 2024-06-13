@@ -96,7 +96,7 @@ const ROUTE_PARTS_EN: Record<RoutePart, string> = {
 	alerts: 'alerts',
 	contentPages: 'content-pages',
 	contentPageLabels: 'content-page-labels',
-	cookiePolicy: 'cookiepolicy',
+	cookiePolicy: 'cookie-policy',
 	cpAdmin: 'management',
 	create: 'create',
 	edit: 'edit',

@@ -1,5 +1,5 @@
 import getConfig from 'next/config';
-import { Head, Html, Main, NextScript } from 'next/document';
+import { DocumentProps, Head, Html, Main, NextScript } from 'next/document';
 import React, { ReactElement } from 'react';
 
 declare type DocumentFiles = {
@@ -21,7 +21,7 @@ class CustomHead extends Head {
 
 const { publicRuntimeConfig } = getConfig();
 
-const Document = (): ReactElement => {
+const Document = (props: DocumentProps): ReactElement => {
 	return (
 		<Html>
 			<CustomHead>
@@ -30,6 +30,7 @@ const Document = (): ReactElement => {
 					id="Cookiebot"
 					src="https://consent.cookiebot.com/uc.js"
 					data-cbid="e17bca33-78a0-484e-a204-e05274a65598"
+					data-culture={props.locale}
 					data-blockingmode="auto"
 					type="text/javascript"
 				/>
