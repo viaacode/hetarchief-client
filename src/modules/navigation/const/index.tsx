@@ -13,7 +13,7 @@ import { VisitorSpaceInfo } from '@visitor-space/types';
 import { NavigationHamburgerProps, NavigationItem, NavigationLink } from '../components';
 import { NavItemsRightLoggedIn } from '../types';
 
-export const NAV_HAMBURGER_PROPS = (): NavigationHamburgerProps => ({
+export const GET_NAV_HAMBURGER_PROPS = (): NavigationHamburgerProps => ({
 	openLabel: tText('modules/shared/const/navigation___sluit'),
 	closedLabel: tText('modules/shared/const/navigation___menu'),
 });
