@@ -42,6 +42,10 @@ $component: "c-personal-info-blade";
 	}
 
 	&__send-button {
-		margin-bottom: $spacer-sm;
+		margin: $spacer-sm 0 $spacer-sm 0;
+	}
+
+	&__checkbox {
+		color: $black;
 	}
 }
