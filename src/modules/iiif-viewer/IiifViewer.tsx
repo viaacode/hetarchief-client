@@ -33,6 +33,8 @@ interface IiifViewerProps {
 	imageInfos: ImageInfo[];
 	isOcrEnabled: boolean;
 	setIsOcrEnabled: (isOcrEnabled: boolean) => void;
+	activeImageIndex: number;
+	setActiveImageIndex: (newActiveImageIndex: number) => void;
 }
 
 export interface IiifViewerFunctions {
@@ -44,14 +46,16 @@ export interface IiifViewerFunctions {
 }
 
 const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
-	({ imageInfos, id, isOcrEnabled, setIsOcrEnabled }, ref) => {
+	(
+		{ imageInfos, id, isOcrEnabled, setIsOcrEnabled, activeImageIndex, setActiveImageIndex },
+		ref
+	) => {
 		/**
 		 * Hooks
 		 */
 		const { tText } = useTranslation();
 
 		// Internal state
-		const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
 		const [iiifGridViewEnabled, setIiifGridViewEnabled] = useState<boolean>(false);
 		const [openSeaDragonLib, setOpenSeaDragonLib] = useState<any | null>(null);
 		const [openSeaDragonInstance, setOpenSeadragonInstance] =

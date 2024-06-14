@@ -1,5 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
 
+import { OPEN_SEA_DRAGON_POC } from '@ie-objects/ObjectDetailPage.consts';
 import { makeServerSideRequestGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { makeServerSideRequestGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
 import { makeServerSideRequestGetIeObjectsSimilar } from '@ie-objects/hooks/get-ie-objects-similar';
@@ -13,21 +14,30 @@ export async function prefetchDetailPageQueries(
 	maintainerSlug: string | undefined
 ): Promise<QueryClient> {
 	const queryClient = new QueryClient();
-	await Promise.all([
-		makeServerSideRequestGetIeObjectInfo(queryClient, ieObjectId),
-		makeServerSideRequestGetIeObjectsRelated(
-			queryClient,
-			ieObjectId,
-			maintainerId,
-			meemooIdentifier
-		),
-		...(maintainerSlug
-			? [
-					makeServerSideRequestGetIeObjectsSimilar(queryClient, ieObjectId, maintainerId),
-					makeServerSideRequestGetActiveVisitForUserAndSpace(queryClient, maintainerSlug),
-					makeServerSideRequestGetVisitorSpace(queryClient, maintainerSlug, false),
-			  ]
-			: []),
-	]);
+	const promises = [];
+	if (ieObjectId !== OPEN_SEA_DRAGON_POC) {
+		promises.push(
+			makeServerSideRequestGetIeObjectInfo(queryClient, ieObjectId),
+			makeServerSideRequestGetIeObjectsRelated(
+				queryClient,
+				ieObjectId,
+				maintainerId,
+				meemooIdentifier
+			)
+		);
+	}
+	if (maintainerSlug) {
+		promises.push(
+			makeServerSideRequestGetIeObjectsSimilar(queryClient, ieObjectId, maintainerId),
+			makeServerSideRequestGetActiveVisitForUserAndSpace(queryClient, maintainerSlug),
+			makeServerSideRequestGetVisitorSpace(queryClient, maintainerSlug, false)
+		);
+	}
+	if (maintainerSlug && ieObjectId !== OPEN_SEA_DRAGON_POC) {
+		promises.push(
+			makeServerSideRequestGetIeObjectsSimilar(queryClient, ieObjectId, maintainerId)
+		);
+	}
+	await Promise.all(promises);
 	return queryClient;
 }

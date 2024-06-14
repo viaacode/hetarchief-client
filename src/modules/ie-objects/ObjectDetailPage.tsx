@@ -50,7 +50,13 @@ import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import {
+	OPEN_SEA_DRAGON_POC,
+	OPEN_SEA_DRAGON_POC_IMAGE_INFOS,
+	OPEN_SEA_DRAGON_POC_OBJECT_ID,
+} from '@ie-objects/ObjectDetailPage.consts';
+import {
 	ActionItem,
+	CollapsableBlade,
 	DynamicActionMenu,
 	DynamicActionMenuProps,
 	MediaObject,
@@ -58,7 +64,6 @@ import {
 	MetadataItem,
 	ObjectPlaceholder,
 	RelatedObject,
-	RelatedObjectsBlade,
 } from '@ie-objects/components';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
@@ -83,7 +88,7 @@ import {
 } from '@ie-objects/const';
 import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
-import { useGetIeObjectsSimilar } from '@ie-objects/hooks/get-ie-objects-similar';
+import { useGetIeObjectsAlsoInteresting } from '@ie-objects/hooks/get-ie-objects-similar';
 import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-ticket-url';
 import {
 	IE_OBJECTS_SERVICE_BASE_URL,
@@ -100,7 +105,7 @@ import {
 	ObjectDetailTabs,
 } from '@ie-objects/types';
 import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
-import IiifViewer, { IiifViewerFunctions, ImageInfo } from '@iiif-viewer/IiifViewer';
+import IiifViewer, { IiifViewerFunctions } from '@iiif-viewer/IiifViewer';
 import altoTextLocations from '@iiif-viewer/alto2-simplified.json';
 import { TextLine } from '@iiif-viewer/extract-text-lines-from-alto';
 import { MaterialRequestsService } from '@material-requests/services';
@@ -115,6 +120,7 @@ import {
 	Loading,
 	Pill,
 	ScrollableTabs,
+	SearchBar,
 	TabLabel,
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
@@ -180,6 +186,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const user = useSelector(selectUser);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const breadcrumbs = useSelector(selectBreadcrumbs);
+	const isOpenSeaDragonPoc = (router.query.ie as string) === OPEN_SEA_DRAGON_POC;
+	const ieObjectId = isOpenSeaDragonPoc
+		? OPEN_SEA_DRAGON_POC_OBJECT_ID
+		: (router.query.ie as string);
 
 	// User types
 	const isKeyUser = useIsKeyUser();
@@ -209,7 +219,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [related, setRelated] = useState<MediaObject[]>([]);
 	const [metadataExportDropdownOpen, setMetadataExportDropdownOpen] = useState(false);
 	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
+	const [isRelatedObjectsBladeOpen, setIsRelatedObjectsBladeOpen] = useState(false);
+	const [isOcrBladeOpen, setIsOcrBladeOpen] = useState(false);
 	const [isOcrEnabled, setIsOcrEnabled] = useState<boolean>(false);
+	const [searchOcrText, setSearchOcrText] = useState<string>('');
+	const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
 
 	// Layout
 	useStickyLayout();
@@ -238,17 +252,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const activeTab = query[QUERY_PARAM_KEY.ACTIVE_TAB];
 	const activeBlade = query[QUERY_PARAM_KEY.ACTIVE_BLADE];
 
-	// Fetch object
-	// const objectId = router.query.ie as string;
-	const objectId =
-		'8b135c3a38664e4f8ccb32ee04cd50355ffb1b3298ac4cae8e4d98594955c2b19dbe3347d830409fbb0892a0a1b812dc';
-
 	const {
 		data: mediaInfo,
 		isLoading: mediaInfoIsLoading,
 		isError: mediaInfoIsError,
 		error: mediaInfoError,
-	} = useGetIeObjectInfo(objectId);
+	} = useGetIeObjectInfo(ieObjectId);
 
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
@@ -292,22 +301,22 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		() => setFlowPlayerKey(currentRepresentation?.files[0]?.schemaIdentifier ?? undefined) // Force flowplayer rerender after successful fetch
 	);
 
-	// ook interessant
+	// also interesting
 	const userHasAccessToMaintainer =
 		mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS) ||
 		mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL);
-	const { data: similarData } = useGetIeObjectsSimilar(
-		objectId,
+	const { data: similarData } = useGetIeObjectsAlsoInteresting(
+		ieObjectId,
 		isKiosk || userHasAccessToMaintainer ? mediaInfo?.maintainerId ?? '' : '',
-		!!mediaInfo
+		{ enabled: !!mediaInfo }
 	);
 
-	// gerelateerd
+	// related
 	const { data: relatedData } = useGetIeObjectsRelated(
-		objectId,
+		ieObjectId,
 		mediaInfo?.maintainerId,
 		mediaInfo?.meemooIdentifier,
-		!!mediaInfo
+		{ enabled: !!mediaInfo }
 	);
 
 	// visit info
@@ -341,9 +350,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		(visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
-	// TODO
-	const expandMetadata = false;
-	// const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
+	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const hasAccessToVisitorSpaceOfObject =
@@ -727,11 +734,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const onExportClick = useCallback(
 		(format: MetadataExportFormats) => {
 			window.open(
-				`${publicRuntimeConfig.PROXY_URL}/${IE_OBJECTS_SERVICE_BASE_URL}/${objectId}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`
+				`${publicRuntimeConfig.PROXY_URL}/${IE_OBJECTS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`
 			);
 			setMetadataExportDropdownOpen(false);
 		},
-		[objectId]
+		[ieObjectId]
 	);
 
 	const renderExportDropdown = useCallback(
@@ -904,61 +911,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Render
 	 */
 
-	const imageInfos: ImageInfo[] = [
-		{
-			imageUrl:
-				'https://assets-qas.hetarchief.be/hetarchief/BERT_TEST_IIIF_VIEWER/german.jpg',
-			thumbnailUrl:
-				'https://assets-qas.hetarchief.be/hetarchief/BERT_TEST_IIIF_VIEWER/german-thumbnail.jpg',
-			width: 2418,
-			height: 3382,
-		},
-		{
-			imageUrl:
-				'https://assets-qas.hetarchief.be/hetarchief/BERT_TEST_IIIF_VIEWER/volksgazet.png',
-			thumbnailUrl:
-				'https://assets-qas.hetarchief.be/hetarchief/BERT_TEST_IIIF_VIEWER/volksgazet-thumbnail.png',
-			width: 5290,
-			height: 6730,
-		},
-		{
-			imageApiInfo: 'https://ids.lib.harvard.edu/ids/iiif/47174896/info.json',
-			thumbnailUrl: 'https://ids.lib.harvard.edu/ids/iiif/47174896/full/263,/0/default.jpg',
-			width: 2087,
-			height: 2550,
-		},
-		{
-			imageApiInfo: 'https://ids.lib.harvard.edu/ids/iiif/18737483/info.json',
-			thumbnailUrl: 'https://ids.lib.harvard.edu/ids/iiif/18737483/full/263,/0/default.jpg',
-			width: 2088,
-			height: 2550,
-		},
-		{
-			imageApiInfo: 'https://ids.lib.harvard.edu/ids/iiif/47174892/info.json',
-			thumbnailUrl: 'https://ids.lib.harvard.edu/ids/iiif/47174892/full/263,/0/default.jpg',
-			width: 2259,
-			height: 2550,
-		},
-		{
-			imageApiInfo: 'https://ids.lib.harvard.edu/ids/iiif/43182083/info.json',
-			thumbnailUrl: 'https://ids.lib.harvard.edu/ids/iiif/43182083/full/263,/0/default.jpg',
-			width: 2100,
-			height: 2550,
-		},
-		{
-			imageApiInfo: 'https://ids.lib.harvard.edu/ids/iiif/43183405/info.json',
-			thumbnailUrl: 'https://ids.lib.harvard.edu/ids/iiif/43183405/full/263,/0/default.jpg',
-			width: 2082,
-			height: 2550,
-		},
-		{
-			imageApiInfo: 'https://ids.lib.harvard.edu/ids/iiif/43183422/info.json',
-			thumbnailUrl: 'https://ids.lib.harvard.edu/ids/iiif/43183422/full/263,/0/default.jpg',
-			width: 2093,
-			height: 2550,
-		},
-	];
-
 	const renderMedia = (
 		playableUrl: string | undefined,
 		representation: IeObjectRepresentation | undefined
@@ -969,15 +921,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 		// IIIF viewer
 		// TODO switch to mediaItem check
-		// eslint-disable-next-line no-constant-condition
-		if (true) {
+		if (isOpenSeaDragonPoc) {
 			return (
 				<IiifViewer
-					imageInfos={imageInfos}
+					imageInfos={OPEN_SEA_DRAGON_POC_IMAGE_INFOS}
 					ref={iiifViewerReference}
 					id={mediaInfo?.schemaIdentifier as string}
 					isOcrEnabled={isOcrEnabled}
 					setIsOcrEnabled={setIsOcrEnabled}
+					activeImageIndex={activeImageIndex}
+					setActiveImageIndex={setActiveImageIndex}
 				/>
 			);
 		}
@@ -1036,6 +989,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				/>
 			);
 		}
+		// Audio player
 		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(representationTemp.dctermsFormat)) {
 			if (!fileRepresentationSchemaIdentifier || !!peakJson) {
 				return (
@@ -1421,11 +1375,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			return null;
 		}
 		return (
-			<RelatedObjectsBlade
+			<CollapsableBlade
 				className={clsx('p-object-detail__related', {
 					'p-object-detail__metadata--expanded': expandMetadata,
 					'p-object-detail__metadata--collapsed': !expandMetadata,
 				})}
+				isOpen={isRelatedObjectsBladeOpen}
+				setIsOpen={setIsRelatedObjectsBladeOpen}
 				icon={
 					<Icon
 						className="u-font-size-24 u-mr-8 u-text-left"
@@ -1447,6 +1403,89 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				}
 				renderContent={(hidden) => renderMetadataCards('related', related, hidden)}
 			/>
+		);
+	};
+
+	const renderOcrBlade = () => {
+		if (!isOpenSeaDragonPoc || !OPEN_SEA_DRAGON_POC_IMAGE_INFOS[activeImageIndex].altoUrl) {
+			return null;
+		}
+		return (
+			<CollapsableBlade
+				className={clsx('p-object-detail__ocr', {
+					'p-object-detail__metadata--expanded': expandMetadata,
+					'p-object-detail__metadata--collapsed': !expandMetadata,
+				})}
+				isOpen={isOcrBladeOpen}
+				setIsOpen={setIsOcrBladeOpen}
+				icon={
+					<Icon
+						className="u-font-size-24 u-mr-8 u-text-left"
+						name={IconNamesLight.Newspaper}
+						aria-hidden
+					/>
+				}
+				title={tHtml('OCR tekst')}
+				renderContent={renderOcrContent}
+			/>
+		);
+	};
+
+	const renderOcrContent = () => {
+		return (
+			<div className={clsx(styles['p-object-detail__ocr'])}>
+				<div className="u-flex">
+					<SearchBar
+						id="ocr-search"
+						className={styles['p-object-detail__ocr__search']}
+						value={searchOcrText}
+						variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
+						placeholder={tText('Zoek in de ocr tekst')}
+						onChange={setSearchOcrText}
+						onSearch={() => {}}
+					/>
+					<div className={styles['p-object-detail__ocr__close']}>
+						<Button
+							className={'p-object-detail__iiif__controls__toggle-ocr'}
+							icon={
+								<Icon
+									name={
+										isOcrEnabled
+											? IconNamesLight.NoNewspaper
+											: IconNamesLight.Newspaper
+									}
+									aria-hidden
+								/>
+							}
+							aria-label={tText(
+								'pages/openseadragon/index___tekst-boven-de-afbeelding-tonen'
+							)}
+							variants={['silver']}
+							onClick={() => setIsOcrEnabled(!isOcrEnabled)}
+						/>
+					</div>
+				</div>
+
+				{(altoTextLocations as TextLine[]).map((textLocation, index) => {
+					return (
+						<>
+							<span
+								key={'ocr-text--' + mediaInfo?.schemaIdentifier + '--' + index}
+								className={styles['p-object-detail__ocr__word']}
+								onMouseOver={() =>
+									iiifViewerReference?.current?.iiifZoomToRect(textLocation)
+								}
+							>
+								<Highlighter
+									searchWords={searchOcrText.split(' ')}
+									autoEscape={true}
+									textToHighlight={textLocation.text}
+								/>
+							</span>{' '}
+						</>
+					);
+				})}
+			</div>
 		);
 	};
 
@@ -1497,56 +1536,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		);
 	};
 
-	const renderOcrSidebar = () => {
-		return (
-			<div
-				className={
-					'p-object-detail__metadata p-object-detail__expand-button--collapsed ' +
-					styles['p-object-detail__metadata__ocr']
-				}
-			>
-				<div className={styles['p-object-detail__metadata__ocr__close']}>
-					<Button
-						className={'p-object-detail__iiif__controls__toggle-ocr'}
-						icon={
-							<Icon
-								name={
-									isOcrEnabled
-										? IconNamesLight.NoNewspaper
-										: IconNamesLight.Newspaper
-								}
-								aria-hidden
-							/>
-						}
-						aria-label={tText(
-							'pages/openseadragon/index___tekst-boven-de-afbeelding-tonen'
-						)}
-						variants={['silver']}
-						onClick={() => setIsOcrEnabled(!isOcrEnabled)}
-					/>
-				</div>
-
-				{(altoTextLocations as TextLine[]).map((textLocation, index) => {
-					return (
-						<span
-							key={'ocr-text--' + mediaInfo?.schemaIdentifier + '--' + index}
-							className={'p-object-detail__metadata__ocr__word'}
-							onMouseOver={() =>
-								iiifViewerReference?.current?.iiifZoomToRect(textLocation)
-							}
-						>
-							{textLocation.text}&nbsp;
-						</span>
-					);
-				})}
-			</div>
-		);
-	};
-
 	const renderObjectDetail = () => (
 		<>
 			<Head>
-				<link rel="canonical" href={`https://hetarchief.be/zoeken/${router.query.ie}`} />
+				<link rel="canonical" href={`https://hetarchief.be/zoeken/${ieObjectId}`} />
 			</Head>
 			{renderNavigationBar()}
 			<ScrollableTabs
@@ -1602,22 +1595,23 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						variants="white"
 					/>
 				)}
-				<div className={styles['p-object-detail__video']}>{renderObjectMedia()}</div>
-				{!isOcrEnabled && (
-					<>
-						<div
-							className={clsx(styles['p-object-detail__metadata'], {
-								[styles['p-object-detail__metadata--collapsed']]: !expandMetadata,
-								[styles['p-object-detail__metadata--expanded']]: expandMetadata,
-								[styles['p-object-detail__metadata--no-media']]: !mediaType,
-							})}
-						>
-							{renderMetaData()}
-						</div>
-						{renderRelatedObjectsBlade()}
-					</>
-				)}
-				{isOcrEnabled && renderOcrSidebar()}
+				<div className={styles['p-object-detail__media']}>{renderObjectMedia()}</div>
+				<div
+					className={clsx(styles['p-object-detail__sidebar'], {
+						[styles['p-object-detail__sidebar--collapsed']]: !expandMetadata,
+						[styles['p-object-detail__sidebar--expanded']]: expandMetadata,
+					})}
+				>
+					<div
+						className={clsx(styles['p-object-detail__metadata'], {
+							[styles['p-object-detail__metadata--no-media']]: !mediaType,
+						})}
+					>
+						{renderMetaData()}
+					</div>
+					{renderRelatedObjectsBlade()}
+					{renderOcrBlade()}
+				</div>
 			</article>
 			{canManageFolders && (
 				<AddToFolderBlade

@@ -27,14 +27,15 @@ export const useGetIeObjectsRelated = (
 	id: string,
 	maintainerId?: string,
 	meemooId?: string,
-	enabled = true
+	options: { enabled?: boolean } = {}
 ): UseQueryResult<IPagination<IeObject>> => {
 	return useQuery(
 		[QUERY_KEYS.getIeObjectsRelated, id, maintainerId, meemooId],
 		() => getIeObjectsRelated(id, maintainerId, meemooId),
 		{
 			keepPreviousData: true,
-			enabled: enabled,
+			enabled: true,
+			...options,
 		}
 	);
 };
