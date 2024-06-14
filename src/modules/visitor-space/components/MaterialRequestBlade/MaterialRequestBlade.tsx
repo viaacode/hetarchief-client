@@ -53,7 +53,6 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	meemooId,
 	reason,
 	refetch,
-	type,
 	layer,
 	currentLayer,
 }) => {
@@ -61,15 +60,14 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const dispatch = useDispatch();
 	const locale = useLocale();
 
-	const [typeSelected, setTypeSelected] = useState<MaterialRequestType>(
-		type || MaterialRequestType.VIEW
-	);
+	const [typeSelected, setTypeSelected] = useState<MaterialRequestType | undefined>(undefined);
+
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
 
 	const onCloseModal = () => {
 		onClose();
 		setReasonInputValue('');
-		setTypeSelected(MaterialRequestType.VIEW);
+		setTypeSelected(undefined);
 	};
 
 	const onSuccesCreated = async () => {
@@ -83,6 +81,10 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 
 	const onAddToList = async () => {
 		try {
+			if (!typeSelected) {
+				onNoTypeSelected();
+				return;
+			}
 			const response = await MaterialRequestsService.create({
 				objectId,
 				type: typeSelected,
@@ -114,6 +116,10 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			onFailedRequest();
 		} else {
 			try {
+				if (!typeSelected) {
+					onNoTypeSelected();
+					return;
+				}
 				const response = await MaterialRequestsService.update(materialRequestId, {
 					type: typeSelected,
 					reason: reasonInputValue,
@@ -150,6 +156,14 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			description: tText(
 				'modules/visitor-space/components/material-request-blade/material-request-blade___er-ging-iets-mis-tijdens-het-opslaan'
 			),
+		});
+	};
+
+	const onNoTypeSelected = () => {
+		toastService.notify({
+			maxLines: 3,
+			title: tText('selecteer-een-type'),
+			description: tText('selecteer-een-type-voor-je-aanvraag'),
 		});
 	};
 
