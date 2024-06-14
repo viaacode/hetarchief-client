@@ -32,10 +32,9 @@ const { publicRuntimeConfig } = getConfig();
 
 const InternalLink = (linkInfo: LinkInfo) => {
 	const { to, ...rest } = linkInfo;
-	console.log('linkInfo', linkInfo);
 
 	if (!to) {
-		return <span> {linkInfo.title} </span>;
+		return <span>{linkInfo.title}</span>;
 	}
 	return (
 		<Link href={to} passHref>
