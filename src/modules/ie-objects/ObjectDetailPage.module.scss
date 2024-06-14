@@ -450,3 +450,27 @@ $top-visitor-space-bar-height: 6.4rem;
 		max-width: fit-content;
 	}
 }
+
+.p-object-detail__metadata__ocr {
+	width: $metadata-collapsed-width;
+	padding: 6.4rem 3.2rem;
+	overflow-y: auto;
+
+	> :global(.p-object-detail__metadata__ocr__word) {
+		display: inline-block;
+		padding: 0.5rem 0.25rem;
+		cursor: pointer;
+
+		&:hover {
+			background-color: #00857d;
+			color: white;
+		}
+	}
+}
+
+.p-object-detail__metadata__ocr__close {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	margin-bottom: 3.2rem;
+}

@@ -30,7 +30,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import React, { FC, Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+	FC,
+	Fragment,
+	MutableRefObject,
+	ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
@@ -44,13 +54,13 @@ import {
 	DynamicActionMenu,
 	DynamicActionMenuProps,
 	MediaObject,
+	Metadata,
 	MetadataItem,
 	ObjectPlaceholder,
 	RelatedObject,
 	RelatedObjectsBlade,
 } from '@ie-objects/components';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
-import Metadata from '@ie-objects/components/Metadata/Metadata';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import {
 	ANONYMOUS_ACTION_SORT_MAP,
@@ -90,6 +100,9 @@ import {
 	ObjectDetailTabs,
 } from '@ie-objects/types';
 import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
+import IiifViewer, { IiifViewerFunctions, ImageInfo } from '@iiif-viewer/IiifViewer';
+import altoTextLocations from '@iiif-viewer/alto2-simplified.json';
+import { TextLine } from '@iiif-viewer/extract-text-lines-from-alto';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestObjectType } from '@material-requests/types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
@@ -196,6 +209,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [related, setRelated] = useState<MediaObject[]>([]);
 	const [metadataExportDropdownOpen, setMetadataExportDropdownOpen] = useState(false);
 	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
+	const [isOcrEnabled, setIsOcrEnabled] = useState<boolean>(false);
 
 	// Layout
 	useStickyLayout();
@@ -225,7 +239,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const activeBlade = query[QUERY_PARAM_KEY.ACTIVE_BLADE];
 
 	// Fetch object
-	const objectId = router.query.ie as string;
+	// const objectId = router.query.ie as string;
+	const objectId =
+		'8b135c3a38664e4f8ccb32ee04cd50355ffb1b3298ac4cae8e4d98594955c2b19dbe3347d830409fbb0892a0a1b812dc';
+
 	const {
 		data: mediaInfo,
 		isLoading: mediaInfoIsLoading,
@@ -261,6 +278,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		// Actual video files and mp3 files and images
 		return true;
 	});
+
+	const iiifViewerReference =
+		useRef<IiifViewerFunctions>() as MutableRefObject<IiifViewerFunctions>;
 
 	// playable url
 	const {
@@ -321,7 +341,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		(visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
-	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
+	// TODO
+	const expandMetadata = false;
+	// const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const hasAccessToVisitorSpaceOfObject =
@@ -882,12 +904,82 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Render
 	 */
 
+	const imageInfos: ImageInfo[] = [
+		{
+			imageUrl:
+				'https://assets-qas.hetarchief.be/hetarchief/BERT_TEST_IIIF_VIEWER/german.jpg',
+			thumbnailUrl:
+				'https://assets-qas.hetarchief.be/hetarchief/BERT_TEST_IIIF_VIEWER/german-thumbnail.jpg',
+			width: 2418,
+			height: 3382,
+		},
+		{
+			imageUrl:
+				'https://assets-qas.hetarchief.be/hetarchief/BERT_TEST_IIIF_VIEWER/volksgazet.png',
+			thumbnailUrl:
+				'https://assets-qas.hetarchief.be/hetarchief/BERT_TEST_IIIF_VIEWER/volksgazet-thumbnail.png',
+			width: 5290,
+			height: 6730,
+		},
+		{
+			imageApiInfo: 'https://ids.lib.harvard.edu/ids/iiif/47174896/info.json',
+			thumbnailUrl: 'https://ids.lib.harvard.edu/ids/iiif/47174896/full/263,/0/default.jpg',
+			width: 2087,
+			height: 2550,
+		},
+		{
+			imageApiInfo: 'https://ids.lib.harvard.edu/ids/iiif/18737483/info.json',
+			thumbnailUrl: 'https://ids.lib.harvard.edu/ids/iiif/18737483/full/263,/0/default.jpg',
+			width: 2088,
+			height: 2550,
+		},
+		{
+			imageApiInfo: 'https://ids.lib.harvard.edu/ids/iiif/47174892/info.json',
+			thumbnailUrl: 'https://ids.lib.harvard.edu/ids/iiif/47174892/full/263,/0/default.jpg',
+			width: 2259,
+			height: 2550,
+		},
+		{
+			imageApiInfo: 'https://ids.lib.harvard.edu/ids/iiif/43182083/info.json',
+			thumbnailUrl: 'https://ids.lib.harvard.edu/ids/iiif/43182083/full/263,/0/default.jpg',
+			width: 2100,
+			height: 2550,
+		},
+		{
+			imageApiInfo: 'https://ids.lib.harvard.edu/ids/iiif/43183405/info.json',
+			thumbnailUrl: 'https://ids.lib.harvard.edu/ids/iiif/43183405/full/263,/0/default.jpg',
+			width: 2082,
+			height: 2550,
+		},
+		{
+			imageApiInfo: 'https://ids.lib.harvard.edu/ids/iiif/43183422/info.json',
+			thumbnailUrl: 'https://ids.lib.harvard.edu/ids/iiif/43183422/full/263,/0/default.jpg',
+			width: 2093,
+			height: 2550,
+		},
+	];
+
 	const renderMedia = (
 		playableUrl: string | undefined,
 		representation: IeObjectRepresentation | undefined
 	): ReactNode => {
 		if (isLoadingPlayableUrl) {
 			return <Loading fullscreen owner="object detail page: render media" />;
+		}
+
+		// IIIF viewer
+		// TODO switch to mediaItem check
+		// eslint-disable-next-line no-constant-condition
+		if (true) {
+			return (
+				<IiifViewer
+					imageInfos={imageInfos}
+					ref={iiifViewerReference}
+					id={mediaInfo?.schemaIdentifier as string}
+					isOcrEnabled={isOcrEnabled}
+					setIsOcrEnabled={setIsOcrEnabled}
+				/>
+			);
 		}
 
 		if (!playableUrl) {
@@ -917,12 +1009,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			);
 		}
 
+		const representationTemp = representation as IeObjectRepresentation;
 		const shared: Partial<FlowPlayerProps> = {
-			className: clsx(styles['p-object-detail__flowplayer'], {
-				[styles['p-object-detail__flowplayer--with-slider']]: showFragmentSlider,
+			className: clsx('p-object-detail__flowplayer', {
+				'p-object-detail__flowplayer--with-slider': showFragmentSlider,
 			}),
 			poster: mediaInfo?.thumbnailUrl || undefined,
-			title: representation.name,
+			title: representationTemp.name,
 			logo: mediaInfo?.maintainerOverlay ? mediaInfo?.maintainerLogo || undefined : undefined,
 			pause: isMediaPaused,
 			onPlay: handleOnPlay,
@@ -933,10 +1026,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		};
 
 		// Flowplayer
-		if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(representation.dctermsFormat)) {
-			return <FlowPlayer key={flowPlayerKey} type="video" src={playableUrl} {...shared} />;
+		if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(representationTemp.dctermsFormat)) {
+			return (
+				<FlowPlayer
+					key={flowPlayerKey}
+					type="video"
+					src={playableUrl as string}
+					{...shared}
+				/>
+			);
 		}
-		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(representation.dctermsFormat)) {
+		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(representationTemp.dctermsFormat)) {
 			if (!fileRepresentationSchemaIdentifier || !!peakJson) {
 				return (
 					<FlowPlayer
@@ -944,7 +1044,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						type="audio"
 						src={[
 							{
-								src: playableUrl,
+								src: playableUrl as string,
 								type: 'audio/mp3',
 							},
 						]}
@@ -958,12 +1058,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 
 		// Image
-		if (IMAGE_FORMATS.includes(representation.dctermsFormat)) {
+		if (IMAGE_FORMATS.includes(representationTemp.dctermsFormat)) {
 			return (
 				<div className={styles['p-object-detail__image']}>
 					<Image
-						src={representation.files[0]?.schemaIdentifier ?? null}
-						alt={representation.name}
+						src={representationTemp.files[0]?.schemaIdentifier ?? null}
+						alt={representationTemp.name}
 						layout="fill"
 						objectFit="contain"
 					/>
@@ -999,12 +1099,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				? []
 				: [
 						{
-							label: `${tText('pages/slug/ie/index___breadcrumbs-home')}`,
+							label: `${tText('pages/slug/ie/index___breadcrumbs___home')}`,
 							to: ROUTES_BY_LOCALE[locale].home,
 						},
 				  ]),
 			{
-				label: `${tText('pages/slug/ie/index___breadcrumbs-search')}`,
+				label: `${tText('pages/slug/ie/index___breadcrumbs___search')}`,
 				to: ROUTES_BY_LOCALE[locale].search,
 			},
 		];
@@ -1397,6 +1497,52 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		);
 	};
 
+	const renderOcrSidebar = () => {
+		return (
+			<div
+				className={
+					'p-object-detail__metadata p-object-detail__expand-button--collapsed ' +
+					styles['p-object-detail__metadata__ocr']
+				}
+			>
+				<div className={styles['p-object-detail__metadata__ocr__close']}>
+					<Button
+						className={'p-object-detail__iiif__controls__toggle-ocr'}
+						icon={
+							<Icon
+								name={
+									isOcrEnabled
+										? IconNamesLight.NoNewspaper
+										: IconNamesLight.Newspaper
+								}
+								aria-hidden
+							/>
+						}
+						aria-label={tText(
+							'pages/openseadragon/index___tekst-boven-de-afbeelding-tonen'
+						)}
+						variants={['silver']}
+						onClick={() => setIsOcrEnabled(!isOcrEnabled)}
+					/>
+				</div>
+
+				{(altoTextLocations as TextLine[]).map((textLocation, index) => {
+					return (
+						<span
+							key={'ocr-text--' + mediaInfo?.schemaIdentifier + '--' + index}
+							className={'p-object-detail__metadata__ocr__word'}
+							onMouseOver={() =>
+								iiifViewerReference?.current?.iiifZoomToRect(textLocation)
+							}
+						>
+							{textLocation.text}&nbsp;
+						</span>
+					);
+				})}
+			</div>
+		);
+	};
+
 	const renderObjectDetail = () => (
 		<>
 			<Head>
@@ -1457,16 +1603,21 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					/>
 				)}
 				<div className={styles['p-object-detail__video']}>{renderObjectMedia()}</div>
-				<div
-					className={clsx(styles['p-object-detail__metadata'], {
-						[styles['p-object-detail__metadata--collapsed']]: !expandMetadata,
-						[styles['p-object-detail__metadata--expanded']]: expandMetadata,
-						[styles['p-object-detail__metadata--no-media']]: !mediaType,
-					})}
-				>
-					{renderMetaData()}
-				</div>
-				{renderRelatedObjectsBlade()}
+				{!isOcrEnabled && (
+					<>
+						<div
+							className={clsx(styles['p-object-detail__metadata'], {
+								[styles['p-object-detail__metadata--collapsed']]: !expandMetadata,
+								[styles['p-object-detail__metadata--expanded']]: expandMetadata,
+								[styles['p-object-detail__metadata--no-media']]: !mediaType,
+							})}
+						>
+							{renderMetaData()}
+						</div>
+						{renderRelatedObjectsBlade()}
+					</>
+				)}
+				{isOcrEnabled && renderOcrSidebar()}
 			</article>
 			{canManageFolders && (
 				<AddToFolderBlade
