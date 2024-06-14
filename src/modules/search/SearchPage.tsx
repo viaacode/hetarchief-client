@@ -57,6 +57,7 @@ import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
+import { numberWithCommas } from '@shared/helpers';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -385,7 +386,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				label: (
 					<TabLabel
 						label={tab.label}
-						count={getItemCounts(tab.id as VisitorSpaceMediaType)}
+						count={numberWithCommas(getItemCounts(tab.id as VisitorSpaceMediaType))}
 					/>
 				),
 				active: tab.id === format,
