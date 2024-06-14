@@ -180,7 +180,6 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	useEffect(() => {
 		if (user?.language) {
-			console.log('applayout', user.language, user.id);
 			changeLocalSlug(locale, user?.language as Locale, queryClient, contentPageInfo);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -216,7 +215,7 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	// Sync showAuth query param with store value
 	useEffect(() => {
-		if (user) {
+		if (user && typeof query.showAuth === 'boolean') {
 			setQuery({
 				...query,
 				[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: undefined,
