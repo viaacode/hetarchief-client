@@ -116,6 +116,10 @@ $component: "c-material-request-center-blade";
 	}
 
 	&__send-button {
+		div {
+			font-weight: 600;
+		}
+
 		margin-bottom: $spacer-sm;
 	}
 
