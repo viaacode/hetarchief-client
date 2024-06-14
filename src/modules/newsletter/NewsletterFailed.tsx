@@ -2,8 +2,8 @@ import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 
 import { Loading } from '@shared/components';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -41,11 +41,15 @@ export const NewsletterFailed: FC<DefaultSeoInfo> = ({ url }) => {
 
 	return (
 		<div className="p-newsletter-failed">
-			{renderOgTags(
-				tText('pages/nieuwsbrief-mislukt/index___nieuwsbrief-mislukt'),
-				tText('pages/nieuwsbrief-mislukt/index___nieuwsbrief-mislukt-omschrijving'),
-				url
-			)}
+			<SeoTags
+				title={tText('pages/nieuwsbrief-mislukt/index___nieuwsbrief-mislukt')}
+				description={tText(
+					'pages/nieuwsbrief-mislukt/index___nieuwsbrief-mislukt-omschrijving'
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 
 			<Loading fullscreen owner="nieuwsbrief mislukt" />
 		</div>

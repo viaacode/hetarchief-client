@@ -4,26 +4,19 @@ import { FC, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { ErrorNoAccess, Loading } from '@shared/components';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { setShowZendesk } from '@shared/store/ui';
 import { AccessStatus } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
+import { useGetVisitAccessStatus } from '@visit-requests/hooks/get-visit-access-status';
 import { VisitorLayout } from '@visitor-layout/index';
 import { WaitingPage } from '@visitor-space/components/WaitingPage';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
-import { useGetVisitAccessStatus } from '../../visit-requests/hooks/get-visit-access-status';
-
-type VisitRequestedPageProps = {
-	name: string | null;
-	description: string | null;
-	url: string;
-} & DefaultSeoInfo;
-
-export const VisitRequestedPage: FC<VisitRequestedPageProps> = ({ name, description, url }) => {
+export const VisitRequestedPage: FC<DefaultSeoInfo> = ({ title, description, url }) => {
 	const router = useRouter();
 	const locale = useLocale();
 	const { tHtml, tText } = useTranslation();
@@ -45,9 +38,13 @@ export const VisitRequestedPage: FC<VisitRequestedPageProps> = ({ name, descript
 	const hasPendingRequest = accessStatus?.status === AccessStatus.PENDING;
 	const isNoAccessError = (accessStatusError as HTTPError)?.response?.status === 403;
 
-	const { data: space, isLoading: isLoadingSpace } = useGetVisitorSpace(slug as string, false, {
-		enabled: enabled && hasPendingRequest,
-	});
+	const { data: visitorSpace, isLoading: isLoadingSpace } = useGetVisitorSpace(
+		slug as string,
+		false,
+		{
+			enabled: enabled && hasPendingRequest,
+		}
+	);
 
 	/**
 	 * Computed
@@ -89,20 +86,23 @@ export const VisitRequestedPage: FC<VisitRequestedPageProps> = ({ name, descript
 				/>
 			);
 		}
-		return <WaitingPage space={space} />;
+		return <WaitingPage visitorSpace={visitorSpace} />;
 	};
 
 	return (
 		<VisitorLayout>
-			{renderOgTags(
-				name,
-				description ||
+			<SeoTags
+				title={title}
+				description={
+					description ||
 					tText(
 						'pages/slug/toegang-aangevraagd/index___beschrijving-van-een-bezoekersruimte'
-					),
-				url
-			)}
-
+					)
+				}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 			{renderPageContent()}
 		</VisitorLayout>
 	);

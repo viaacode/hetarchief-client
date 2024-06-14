@@ -21,9 +21,9 @@ import {
 	sortingIcons,
 } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { globalLabelKeys } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
@@ -295,11 +295,15 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	return (
 		<>
-			{renderOgTags(
-				tText('pages/beheer/bezoekers/index___bezoekers'),
-				tText('pages/beheer/bezoekers/index___beheer-bezoekers-meta-omschrijving'),
-				url
-			)}
+			<SeoTags
+				title={tText('pages/beheer/bezoekers/index___bezoekers')}
+				description={tText(
+					'pages/beheer/bezoekers/index___beheer-bezoekers-meta-omschrijving'
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 
 			<PermissionsCheck allPermissions={[Permission.MANAGE_CP_VISIT_REQUESTS]}>
 				{renderPageContent()}

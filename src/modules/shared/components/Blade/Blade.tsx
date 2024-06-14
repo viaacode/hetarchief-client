@@ -130,13 +130,11 @@ const Blade: FC<BladeProps> = ({
 			>
 				{!hideCloseButton && renderTopBar()}
 
-				<div className={styles['c-blade__title-wrapper']}>
-					{renderTitle?.({ id, className: styles['c-blade__title'] })}
+				<div className={styles['c-blade__body-wrapper']}>
+					{renderTitle && renderTitle?.({ id, className: styles['c-blade__title'] })}
+					{children}
+					{footer && <div>{footer}</div>}
 				</div>
-
-				<div className={styles['c-blade__body-wrapper']}>{children}</div>
-
-				<div className={styles['c-blade__footer-wrapper']}>{footer || <></>}</div>
 			</div>
 		);
 	};

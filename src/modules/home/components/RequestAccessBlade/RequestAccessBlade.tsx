@@ -24,7 +24,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 	const [query] = useQueryParams({
 		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
-	const { data: space } = useGetVisitorSpace(
+	const { data: visitorSpace } = useGetVisitorSpace(
 		query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] || null
 	);
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -122,7 +122,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 			)}
 		>
 			<div className="u-px-16 u-px-32:md">
-				{space && <SpacePreview space={space} />}
+				{visitorSpace && <SpacePreview visitorSpace={visitorSpace} />}
 
 				<FormControl
 					className="u-mb-24"

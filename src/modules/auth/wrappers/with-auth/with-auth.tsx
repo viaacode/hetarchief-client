@@ -1,10 +1,9 @@
 import { useRouter } from 'next/router';
 import { stringify } from 'query-string';
-import { ComponentType, useCallback, useEffect, useState } from 'react';
+import { ComponentType, useCallback, useEffect } from 'react';
 
 import { GroupName } from '@account/const';
 import { AuthMessage, AuthService } from '@auth/services/auth-service';
-import Loading from '@shared/components/Loading/Loading';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -30,7 +29,6 @@ export const withAuth = (
 	return function ComponentWithAuth(props: Record<string, unknown>) {
 		const router = useRouter();
 		const locale = useLocale();
-		const [showPage, setShowPage] = useState<boolean>(false);
 
 		const checkLoginStatus = useCallback(async (): Promise<void> => {
 			const login = await AuthService.checkLogin();
@@ -62,7 +60,6 @@ export const withAuth = (
 					await toHome();
 				} else {
 					// User is logged out, but the page can be seen without logging in
-					setShowPage(true);
 				}
 			} else {
 				// User is logged in
@@ -72,7 +69,6 @@ export const withAuth = (
 					login.userInfo.groupName === GroupName.KIOSK_VISITOR
 				) {
 					// User has accepted the latest version of the terms of service
-					setShowPage(true);
 				} else {
 					// When the user has not accepted the TOS or accepted a previous version of the TOS => show terms of service
 					await toTermsOfService();
@@ -84,11 +80,6 @@ export const withAuth = (
 			checkLoginStatus();
 		}, [checkLoginStatus]);
 
-		// Allow server side rendering to get past this loading screen, so we can determine seo fields on the actual page
-		return showPage ? (
-			<WrappedComponent {...props} />
-		) : (
-			<Loading fullscreen owner="with auth" />
-		);
+		return <WrappedComponent {...props} />;
 	};
 };

@@ -32,8 +32,8 @@ import {
 	sortingIcons,
 } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -238,13 +238,15 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 
 	return (
 		<>
-			{renderOgTags(
-				tText('pages/beheer/materiaalaanvragen/index___materiaalaanvragen'),
-				tText(
+			<SeoTags
+				title={tText('pages/beheer/materiaalaanvragen/index___materiaalaanvragen')}
+				description={tText(
 					'pages/beheer/materiaalaanvragen/index___materiaalaanvragen-meta-omschrijving'
-				),
-				url
-			)}
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 
 			<PermissionsCheck allPermissions={[Permission.VIEW_ANY_MATERIAL_REQUESTS]}>
 				{renderPageContent()}

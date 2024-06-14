@@ -9,19 +9,13 @@ import { VisitorSpaceService } from '@visitor-space/services';
 import { VisitorSpaceInfo } from '@visitor-space/types';
 import { VisitRequestedPage } from '@visitor-space/views/VisitRequestedPage';
 
-type VisitRequestedPageProps = {
-	name: string | null;
-	description: string | null;
-	url: string;
-} & DefaultSeoInfo;
-
-const VisitRequestedPageDutch: NextPage<VisitRequestedPageProps> = ({ name, description, url }) => {
-	return <VisitRequestedPage name={name} description={description} url={url} />;
+const VisitRequestedPageDutch: NextPage<DefaultSeoInfo> = ({ title, description, url }) => {
+	return <VisitRequestedPage title={title} description={description} url={url} />;
 };
 
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<VisitRequestedPageProps>> {
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	let space: VisitorSpaceInfo | null = null;
 	try {
 		space = await VisitorSpaceService.getBySlug(context.query.slug as string, true);
@@ -29,16 +23,10 @@ export async function getServerSideProps(
 		console.error('Failed to fetch media info by id: ' + context.query.ie, err);
 	}
 
-	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> =
-		await getDefaultStaticProps(context);
-
-	return {
-		props: {
-			...(defaultProps as { props: DefaultSeoInfo }).props,
-			name: space?.name || null,
-			description: space?.info || null,
-		},
-	};
+	return getDefaultStaticProps(context, context.resolvedUrl, {
+		title: space?.name || null,
+		description: space?.info || null,
+	});
 }
 
 export default withAuth(VisitRequestedPageDutch as ComponentType, true);

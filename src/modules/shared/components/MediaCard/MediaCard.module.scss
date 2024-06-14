@@ -160,12 +160,12 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 
 	:global(.c-card__subtitle-wrapper),
 	:global(.c-card__children-wrapper) {
-		line-height: 2.2rem;
+		line-height: $line-height-md * 2rem;
 	}
 
 	&__no-content {
 		color: $blue;
-		font-variation-settings: 2.2rem;
+		font-variation-settings: $line-height-md * 2rem;
 		display: block;
 		margin-bottom: $c-media-card-no-video-intended-spacing - $spacer-sm;
 

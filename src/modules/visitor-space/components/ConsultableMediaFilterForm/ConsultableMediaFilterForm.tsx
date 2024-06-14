@@ -7,7 +7,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { Icon, IconNamesLight } from '@shared/components';
 import { IeObjectsSearchFilterField } from '@shared/types';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { SearchFilterId } from '@visitor-space/types';
 
 import {
 	CONSULTABLE_MEDIA_FILTER_FORM_QUERY_PARAM_CONFIG,
@@ -31,7 +31,7 @@ const ConsultableMediaFilterForm: FC<ConsultableMediaFilterFormProps> = ({
 	const [isInitialRender, setIsInitialRender] = useState(true);
 	const [query] = useQueryParams(CONSULTABLE_MEDIA_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [isChecked, setIsChecked] = useState<boolean>(
-		() => query[VisitorSpaceFilterId.ConsultableMedia] || false
+		() => query[SearchFilterId.ConsultableMedia] || false
 	);
 
 	const { setValue, handleSubmit } = useForm<ConsultableMediaFilterFormState>({
@@ -40,7 +40,7 @@ const ConsultableMediaFilterForm: FC<ConsultableMediaFilterFormProps> = ({
 	});
 
 	const onFilterFormSubmit = useCallback(
-		(id: VisitorSpaceFilterId, values: unknown) => onFormSubmit(id, values),
+		(id: SearchFilterId, values: unknown) => onFormSubmit(id, values),
 		[onFormSubmit]
 	);
 

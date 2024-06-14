@@ -9,9 +9,9 @@ import { useSelector } from 'react-redux';
 import { COMMUNICATION_SECTION_ID } from '@account/const/MyProfile.consts';
 import { selectHasCheckedLogin, selectIsLoggedIn } from '@auth/store/user';
 import { Loading } from '@shared/components';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { labelKeys, NEWSLETTER_FORM_SCHEMA } from '@shared/const/newsletter';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
@@ -172,11 +172,13 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 				'p-newsletter--wallpaper': !isLoggedIn && hasCheckedLogin,
 			})}
 		>
-			{renderOgTags(
-				tText('pages/nieuwsbrief/index___nieuwsbrief'),
-				tText('pages/nieuwsbrief/index___nieuwsbrief-omschrijving'),
-				url
-			)}
+			<SeoTags
+				title={tText('pages/nieuwsbrief/index___nieuwsbrief')}
+				description={tText('pages/nieuwsbrief/index___nieuwsbrief-omschrijving')}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 
 			{(hasCheckedLogin && isLoggedIn) || !hasCheckedLogin ? (
 				<Loading fullscreen owner="newsletter" />

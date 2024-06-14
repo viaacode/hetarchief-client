@@ -1,4 +1,9 @@
-import { AdminConfigManager, ContentPageInfo, ContentPageRenderer } from '@meemoo/admin-core-ui';
+import {
+	AdminConfigManager,
+	ContentPageInfo,
+	ContentPageRenderer,
+	convertDbContentPageToContentPageInfo,
+} from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import { Avo } from '@viaa/avo2-types';
 import clsx from 'clsx';
@@ -10,9 +15,9 @@ import { useQueryParams } from 'use-query-params';
 import { AuthService } from '@auth/services/auth-service';
 import { selectUser } from '@auth/store/user';
 import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { GET_TOS_INDEX_QUERY_PARAM_CONFIG, KNOWN_STATIC_ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
@@ -22,6 +27,8 @@ import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
+
+import styles from './UserConditions.module.scss';
 
 export const UserConditions: FC<
 	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined }
@@ -39,10 +46,13 @@ export const UserConditions: FC<
 	const [hasFinished, setHasFinished] = useState(false);
 	const [isAtBottom, setIsAtBottom] = useState(false);
 	const tosAccepted = useTermsOfService();
-	const { data: contentPageInfo } = useGetContentPageByLanguageAndPath(
+	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
 		locale,
 		KNOWN_STATIC_ROUTES.TermsOfService
 	);
+	const contentPageInfo = dbContentPage
+		? convertDbContentPageToContentPageInfo(dbContentPage)
+		: null;
 
 	const user = useSelector(selectUser);
 
@@ -85,18 +95,18 @@ export const UserConditions: FC<
 	const renderPageContent = () => {
 		return (
 			<>
-				<div className="p-terms-of-service__background" />
+				<div className={styles['p-terms-of-service__background']} />
 
-				<section className="u-pt-96 p-terms-of-service__text">
+				<section className={clsx('u-pt-96', styles['p-terms-of-service__text'])}>
 					<div className="l-container">
-						<h1 className="p-terms-of-service__title">
+						<h1 className={styles['p-terms-of-service__title']}>
 							{tHtml('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden')}
 						</h1>
 
 						<div
 							ref={scrollable}
 							onScroll={onContentScroll}
-							className="p-terms-of-service__content"
+							className={styles['p-terms-of-service__content']}
 						>
 							{AdminConfigManager.getConfig() && (
 								<ContentPageRenderer
@@ -109,15 +119,17 @@ export const UserConditions: FC<
 				</section>
 
 				<div
-					className={clsx('p-terms-of-service__gradient', {
-						'p-terms-of-service__gradient--hidden': isAtBottom || tosAccepted,
+					className={clsx(styles['p-terms-of-service__gradient'], {
+						[styles['p-terms-of-service__gradient--hidden']]: isAtBottom || tosAccepted,
 					})}
 				/>
 
 				{user && !tosAccepted && (
-					<section className="u-pt-96 p-terms-of-service__buttons-wrapper">
+					<section
+						className={clsx('u-pt-96', styles['p-terms-of-service__buttons-wrapper'])}
+					>
 						<div className="l-container">
-							<div className="p-terms-of-service__buttons">
+							<div className={styles['p-terms-of-service__buttons']}>
 								<Button className="u-mr-8" variants="text" onClick={onCancelClick}>
 									{tHtml('pages/gebruiksvoorwaarden/index___annuleer')}
 								</Button>
@@ -138,12 +150,16 @@ export const UserConditions: FC<
 	};
 
 	return (
-		<div className="p-terms-of-service">
-			{renderOgTags(
-				tText('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden'),
-				tText('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-omschrijving'),
-				url
-			)}
+		<div className={styles['p-terms-of-service']}>
+			<SeoTags
+				title={tText('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden')}
+				description={tText(
+					'pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-omschrijving'
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 
 			{renderPageContent()}
 		</div>

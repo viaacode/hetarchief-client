@@ -5,12 +5,14 @@ function getI18n(proxyUrl) {
 	return {
 		locales: ['nl', 'en'],
 		defaultLocale: 'nl',
+		localeDetection: false,
 		backend: {
 			loadPath: `${proxyUrl}/admin/translations/{{lng}}.json`,
 		},
 		i18n: {
 			locales: ['nl', 'en'],
 			defaultLocale: 'nl',
+			localeDetection: false,
 			backend: {
 				loadPath: `${proxyUrl}/admin/translations/{{lng}}.json`,
 			},

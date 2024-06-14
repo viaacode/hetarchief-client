@@ -5,6 +5,7 @@ import { FC } from 'react';
 import { ContentPageLabelsOverviewPage } from '@admin/views/content-page-labels/ContentPageLabelsOverviewPage';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -12,10 +13,10 @@ export const ContentPageLabelsOverviewPageDutch: NextPage<DefaultSeoInfo> = ({ u
 	return <ContentPageLabelsOverviewPage url={url} />;
 };
 
-export async function getServerSideProps(
+export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.adminContentPageLabels);
 }
 
 export default withAuth(

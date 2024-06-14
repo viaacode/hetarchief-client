@@ -1,7 +1,7 @@
-import { TagsInput } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { KeyboardEvent, ReactElement, useMemo } from 'react';
 import { InputActionMeta } from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 
 import {
 	OnSearchSingle,
@@ -103,7 +103,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 	 * Computed
 	 */
 
-	const rootCls = clsx(className, 'c-tag-search-bar', {
+	const rootCls = clsx(className, 'c-tag-search-bar', 'c-tags-input', 'c-tags-input__creatable', {
 		[`c-tag-search-bar--${size}`]: size,
 		['c-tag-search-bar--has-value-placeholder']: !!valuePlaceholder,
 		['c-tag-search-bar--light']: light,
@@ -119,7 +119,8 @@ const TagSearchBar = <IsMulti extends boolean>({
 
 	return (
 		<div className="u-flex u-align-center u-justify-between">
-			<TagsInput
+			<CreatableSelect
+				classNamePrefix={'c-tags-input'}
 				{...tagsInputProps}
 				className={rootCls}
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
