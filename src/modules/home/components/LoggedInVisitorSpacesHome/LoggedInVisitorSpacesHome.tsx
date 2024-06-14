@@ -20,14 +20,11 @@ import {
 } from '@shared/components';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { tText } from '@shared/helpers/translate';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
-import { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetVisits } from '@visit-requests/hooks/get-visits';
@@ -37,11 +34,11 @@ import { VisitorSpaceStatus } from '@visitor-space/types';
 
 import { ProcessVisitBlade, ProcessVisitBladeProps } from '../ProcessVisitBlade';
 
-import styles from './LoggedInHome.module.scss';
+import styles from './LoggedInVisitiorSpacesHome.module.scss';
 
 type SelectedVisit = ProcessVisitBladeProps['selected'];
 
-const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
+const LoggedInVisitorSpacesHome: FC = () => {
 	const { tHtml } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
@@ -112,7 +109,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 	const { data: visitorSpaceInfo, isError: isErrorGetVisitorSpace } = useGetVisitorSpace(
 		query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] as string,
 		false,
-		{ enabled: !!query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY], retry: false }
+		{ enabled: !!query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] }
 	);
 
 	// ARC-1650: Do not show all visit accesses for admin users
@@ -393,7 +390,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 				id="logged-in-home__visitor-space-not-available-blade"
 			>
 				<div className="u-px-32">
-					{visitorSpaceInfo && <SpacePreview space={visitorSpaceInfo} />}
+					{visitorSpaceInfo && <SpacePreview visitorSpace={visitorSpaceInfo} />}
 					<p>
 						{tHtml(
 							'modules/home/components/logged-in-home/logged-in-home___het-is-niet-mogelijk-om-toegang-tot-deze-bezoekersruimte-aan-te-vragen-op-dit-moment'
@@ -449,23 +446,10 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 		if (isLoadingFuture || isLoadingPending || isLoadingActive) {
 			return <Loading fullscreen owner="logged in home" />;
 		}
-		return (
-			<>
-				<div className="p-home u-page-bottom-padding">
-					{renderOgTags(
-						tText('modules/home/components/logged-in-home/logged-in-home___home'),
-						tText(
-							'modules/home/components/logged-in-home/logged-in-home___welkom-op-de-bezoekertool'
-						),
-						url
-					)}
-					{renderPageContent()}
-				</div>
-			</>
-		);
+		return <div className="p-home u-page-bottom-padding">{renderPageContent()}</div>;
 	};
 
 	return renderHomePageContent();
 };
 
-export default withAuth(LoggedInHome as ComponentType, true) as FC<DefaultSeoInfo>;
+export default withAuth(LoggedInVisitorSpacesHome as ComponentType, true) as FC;

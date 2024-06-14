@@ -7,19 +7,23 @@ export interface CreateVisitRequest {
 	acceptedTos: boolean;
 }
 
-export type VisitorSpaceSettings = Pick<
+export type UpdateVisitorSpaceSettings = Pick<
 	VisitorSpaceInfo,
-	'description' | 'color' | 'serviceDescription' | 'image' | 'status' | 'slug'
->;
-
-export interface UpdateVisitorSpaceSettings extends VisitorSpaceSettings {
+	| 'descriptionNl'
+	| 'serviceDescriptionNl'
+	| 'descriptionEn'
+	| 'serviceDescriptionEn'
+	| 'color'
+	| 'image'
+	| 'status'
+	| 'slug'
+> & {
 	file: File | null;
-}
+};
 
-export interface CreateVisitorSpaceSettings extends VisitorSpaceSettings {
-	file: File | null;
+export type CreateVisitorSpaceSettings = UpdateVisitorSpaceSettings & {
 	orId: string;
-}
+};
 
 export enum AccessType {
 	ACTIVE = 'ACTIVE',

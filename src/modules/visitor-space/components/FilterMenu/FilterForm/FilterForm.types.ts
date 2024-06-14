@@ -2,17 +2,13 @@ import { FC } from 'react';
 
 import { DefaultComponentProps } from '@shared/types';
 
-import {
-	DefaultFilterFormProps,
-	InlineFilterFormProps,
-	VisitorSpaceFilterId,
-} from '../../../types';
+import { DefaultFilterFormProps, InlineFilterFormProps, SearchFilterId } from '../../../types';
 import { FilterMenuType, OnFilterMenuFormReset, OnFilterMenuFormSubmit } from '../FilterMenu.types';
 
 export interface FilterFormProps extends DefaultComponentProps {
 	children?: React.ReactNode;
 	form: FC<DefaultFilterFormProps<any>> | FC<InlineFilterFormProps> | null;
-	id: VisitorSpaceFilterId;
+	id: SearchFilterId;
 	onFormReset: OnFilterMenuFormReset;
 	onFormSubmit: OnFilterMenuFormSubmit;
 	title: string;

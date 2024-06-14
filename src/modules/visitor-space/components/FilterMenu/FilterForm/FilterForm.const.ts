@@ -1,3 +1,3 @@
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { SearchFilterId } from '@visitor-space/types';
 
-export const HAS_SHOW_OVERFLOW: VisitorSpaceFilterId[] = [VisitorSpaceFilterId.Duration];
+export const HAS_SHOW_OVERFLOW: SearchFilterId[] = [SearchFilterId.Duration];

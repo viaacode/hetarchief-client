@@ -14,7 +14,7 @@ const VisitorSpaceEditDutch: FC<DefaultSeoInfo> = ({ url }) => {
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context);
+	return getDefaultStaticProps(context, context.resolvedUrl);
 }
 
 export default withAuth(VisitorSpaceEditDutch as ComponentType, true);

@@ -1,11 +1,11 @@
 import { FC } from 'react';
 
+import { VisitSummaryProps } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import SpacePreview from '../SpacePreview/SpacePreview';
 
 import styles from './VisitSummary.module.scss';
-import { VisitSummaryProps } from './VisitSummary.types';
 
 const VisitSummary: FC<VisitSummaryProps> = ({
 	visitorName,
@@ -16,7 +16,8 @@ const VisitSummary: FC<VisitSummaryProps> = ({
 	spaceLogo,
 	spaceName,
 	spaceColor,
-	spaceServiceDescription,
+	spaceServiceDescriptionNl,
+	spaceServiceDescriptionEn,
 	preview = false,
 }) => {
 	const { tHtml } = useTranslation();
@@ -25,13 +26,14 @@ const VisitSummary: FC<VisitSummaryProps> = ({
 		<div className={styles['c-visit-summary']}>
 			{preview && (
 				<SpacePreview
-					space={{
+					visitorSpace={{
 						id: spaceId,
 						image: spaceImage || '',
 						logo: spaceLogo || '',
 						name: spaceName || '',
 						color: spaceColor || '',
-						serviceDescription: spaceServiceDescription || '',
+						serviceDescriptionNl: spaceServiceDescriptionNl || '',
+						serviceDescriptionEn: spaceServiceDescriptionEn || '',
 					}}
 				/>
 			)}

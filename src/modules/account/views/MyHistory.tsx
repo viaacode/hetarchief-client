@@ -15,9 +15,9 @@ import {
 import { AccountLayout } from '@account/layouts';
 import { ErrorNoAccess, Loading, PaginationBar, sortingIcons } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { VisitDetailBlade } from '@shared/components/VisitDetailBlade';
 import { ROUTES_BY_LOCALE } from '@shared/const';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -28,7 +28,7 @@ import { createVisitorSpacesWithFilterUrl } from '@shared/utils';
 import { useGetVisitAccessStatusMutation } from '@visit-requests/hooks/get-visit-access-status';
 import { useGetVisits } from '@visit-requests/hooks/get-visits';
 import { VisitorLayout } from '@visitor-layout/index';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { SearchFilterId } from '@visitor-space/types';
 
 export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
@@ -95,7 +95,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 			switch (response?.status) {
 				case AccessStatus.ACCESS:
 					router.push(
-						`${ROUTES_BY_LOCALE[locale].search}?${VisitorSpaceFilterId.Maintainer}=${visit.spaceSlug}`
+						`${ROUTES_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${visit.spaceSlug}`
 					);
 					break;
 				case AccessStatus.PENDING:
@@ -206,13 +206,15 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 
 	return (
 		<VisitorLayout>
-			{renderOgTags(
-				tText('pages/account/mijn-bezoek-historiek/index___mijn-bezoek-historiek'),
-				tText(
+			<SeoTags
+				title={tText('pages/account/mijn-bezoek-historiek/index___mijn-bezoek-historiek')}
+				description={tText(
 					'pages/account/mijn-bezoek-historiek/index___mijn-bezoek-historiek-meta-omschrijving'
-				),
-				url
-			)}
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT]}>
 				{renderPageContent()}
 			</PermissionsCheck>

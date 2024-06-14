@@ -5,7 +5,7 @@ import React, { FC } from 'react';
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -27,15 +27,17 @@ export const ContentPageLabelsDetailPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	return (
 		<>
-			{renderOgTags(
-				tText(
+			<SeoTags
+				title={tText(
 					'pages/admin/content-pagina-labels/id/index___content-pagina-label-detail-pagina'
-				),
-				tText(
+				)}
+				description={tText(
 					'pages/admin/content-pagina-labels/id/index___toont-de-details-van-een-content-pagina-label'
-				),
-				url
-			)}
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 			<PermissionsCheck anyPermissions={[Permission.EDIT_CONTENT_PAGE_LABELS]}>
 				{renderPageContent()}
 			</PermissionsCheck>

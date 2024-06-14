@@ -5,7 +5,7 @@ import React, { FC } from 'react';
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { formatDistanceTodayWithoutTime } from '@shared/utils';
@@ -34,11 +34,15 @@ export const UsersOverviewPage: FC<
 
 	return (
 		<>
-			{renderOgTags(
-				tText('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers'),
-				tText('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers-omschrijving'),
-				url
-			)}
+			<SeoTags
+				title={tText('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')}
+				description={tText(
+					'pages/admin/gebruikersbeheer/gebruikers/index___gebruikers-omschrijving'
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 			<PermissionsCheck allPermissions={[Permission.VIEW_USERS]}>
 				{renderPageContent()}
 			</PermissionsCheck>

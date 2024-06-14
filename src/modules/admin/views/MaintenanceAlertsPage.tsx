@@ -7,7 +7,7 @@ import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { Blade } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -75,11 +75,13 @@ export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 
 	return (
 		<>
-			{renderOgTags(
-				tText('pages/admin/meldingen/index___meldingen'),
-				tText('pages/admin/meldingen/index___meldingen-meta-tag'),
-				url
-			)}
+			<SeoTags
+				title={tText('pages/admin/meldingen/index___meldingen')}
+				description={tText('pages/admin/meldingen/index___meldingen-meta-tag')}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 
 			<PermissionsCheck allPermissions={[Permission.VIEW_ANY_MAINTENANCE_ALERTS]}>
 				{renderPageContent()}

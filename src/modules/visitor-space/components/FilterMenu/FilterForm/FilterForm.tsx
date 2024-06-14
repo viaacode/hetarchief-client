@@ -8,7 +8,7 @@ import { visitorSpaceLabelKeys } from '@visitor-space/const';
 import {
 	DefaultFilterFormProps,
 	InlineFilterFormProps,
-	VisitorSpaceFilterId,
+	SearchFilterId,
 } from '@visitor-space/types';
 
 import { FilterMenuType } from '../FilterMenu.types';
@@ -30,17 +30,17 @@ const FilterForm: FC<FilterFormProps> = ({
 }) => {
 	const { tHtml } = useTranslation();
 
-	const onFilterFormReset = (id: VisitorSpaceFilterId, reset: () => void) => {
+	const onFilterFormReset = (id: SearchFilterId, reset: () => void) => {
 		reset();
 		onFormReset(id);
 	};
 
-	const onFilterFormSubmit = (id: VisitorSpaceFilterId, values: unknown) => {
+	const onFilterFormSubmit = (id: SearchFilterId, values: unknown) => {
 		onFormSubmit(id, values);
 	};
 
 	const showOverflow = useMemo(
-		(): boolean => HAS_SHOW_OVERFLOW.includes(id as VisitorSpaceFilterId),
+		(): boolean => HAS_SHOW_OVERFLOW.includes(id as SearchFilterId),
 		[id]
 	);
 

@@ -10,7 +10,7 @@ export interface MaintainerInfo {
 
 export function useGetContentPartners(
 	params: ContentPartnerParams,
-	enabled = true
+	options: { enabled?: boolean } = {}
 ): UseQueryResult<MaintainerInfo[]> {
 	return useQuery(
 		[QUERY_KEYS.getIeObjectsInfo, params],
@@ -18,6 +18,6 @@ export function useGetContentPartners(
 			const response = await ContentPartnersService.getAll(params);
 			return response?.items ?? [];
 		},
-		{ enabled }
+		{ enabled: true, ...options }
 	);
 }

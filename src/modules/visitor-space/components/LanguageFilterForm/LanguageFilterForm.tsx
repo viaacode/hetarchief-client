@@ -21,7 +21,7 @@ import { visitorSpaceLabelKeys } from '@visitor-space/const';
 import {
 	ElasticsearchFieldNames,
 	FILTER_LABEL_VALUE_DELIMITER,
-	VisitorSpaceFilterId,
+	SearchFilterId,
 } from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
@@ -39,7 +39,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 
 	// Contains the options that have already been applied and are present in the url
 	const appliedSelectedLanguageCodes = compact(
-		(query[VisitorSpaceFilterId.Language] || []).map(
+		(query[SearchFilterId.Language] || []).map(
 			(languageCodeAndName) => languageCodeAndName?.split(FILTER_LABEL_VALUE_DELIMITER)?.[0]
 		)
 	);
@@ -101,7 +101,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<SearchBar
-					id={`${visitorSpaceLabelKeys.filters.title}--${VisitorSpaceFilterId.Language}`}
+					id={`${visitorSpaceLabelKeys.filters.title}--${SearchFilterId.Language}`}
 					value={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
 					placeholder={tText(

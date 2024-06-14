@@ -3,13 +3,13 @@ import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { FC, useEffect } from 'react';
 
-import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
+import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { Loading } from '@shared/components';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { useGetOrganisationBySlug } from '@visitor-space/hooks/get-organisation-by-slug';
-import { FILTER_LABEL_VALUE_DELIMITER, VisitorSpaceFilterId } from '@visitor-space/types';
+import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
 
 type MaintainerSearchPageProps = DefaultSeoInfo;
 
@@ -24,7 +24,7 @@ export const MaintainerSearchPage: FC<MaintainerSearchPageProps> = () => {
 			enabled: !!slugOrObjectId,
 		}
 	);
-	const { data: ieObjectInfo } = useGetIeObjectsInfo(slugOrObjectId as string, {
+	const { data: ieObjectInfo } = useGetIeObjectInfo(slugOrObjectId as string, {
 		keepPreviousData: true,
 		enabled: !!slugOrObjectId,
 	});
@@ -35,7 +35,7 @@ export const MaintainerSearchPage: FC<MaintainerSearchPageProps> = () => {
 			const searchUrl = stringifyUrl({
 				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 				query: {
-					[VisitorSpaceFilterId.Maintainers]: `${organisation.schemaIdentifier}${FILTER_LABEL_VALUE_DELIMITER}${organisation.schemaName}`,
+					[SearchFilterId.Maintainers]: `${organisation.schemaIdentifier}${FILTER_LABEL_VALUE_DELIMITER}${organisation.schemaName}`,
 				},
 			});
 			router.replace(searchUrl, undefined, { shallow: true });

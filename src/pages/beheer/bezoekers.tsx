@@ -4,6 +4,7 @@ import { ComponentType } from 'react';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { CpAdminVisitorsPage } from '@cp/views/CpAdminVisitors';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -11,10 +12,10 @@ const CpAdminVisitorsPageDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
 	return <CpAdminVisitorsPage url={url} />;
 };
 
-export async function getServerSideProps(
+export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.cpAdminVisitors);
 }
 
 export default withAuth(CpAdminVisitorsPageDutch as ComponentType, true);

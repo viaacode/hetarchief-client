@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
@@ -39,11 +39,15 @@ export const AdminNavigationItemEditPage: FC<DefaultSeoInfo & NavigationPageCrea
 	};
 	return (
 		<>
-			{renderOgTags(
-				tText('pages/admin/navigatie/maak/index___navigatie-pagina-aanmaken'),
-				tText('pages/admin/navigatie/maak/index___aanmaken-van-een-navigatie-item'),
-				url
-			)}
+			<SeoTags
+				title={tText('pages/admin/navigatie/maak/index___navigatie-pagina-aanmaken')}
+				description={tText(
+					'pages/admin/navigatie/maak/index___aanmaken-van-een-navigatie-item'
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 
 			<PermissionsCheck allPermissions={[Permission.EDIT_NAVIGATION_BARS]}>
 				{renderPageContent()}
