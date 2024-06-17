@@ -151,7 +151,7 @@ $top-visitor-space-bar-height: 6.4rem;
 		position: relative;
 	}
 
-	:global(.p-object-detail__media) {
+	.p-object-detail__media {
 		position: relative;
 		display: flex;
 		flex-direction: column;
@@ -208,6 +208,10 @@ $top-visitor-space-bar-height: 6.4rem;
 				// Use width for toggle because grid-template-column animation is only supported on Firefox
 				width: $metadata-collapsed-width;
 				transition: width $animate-default;
+
+				:global(.c-collapsable-blade__scrollable) {
+					display: none;
+				}
 			}
 
 			&--expanded {

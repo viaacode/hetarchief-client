@@ -342,7 +342,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	/**
 	 * Computed
 	 */
-	const hasMedia = mediaInfo?.representations?.length || 0 > 0;
+	const hasMedia = isOpenSeaDragonPoc ? true : mediaInfo?.representations?.length || 0 > 0;
 	const isMediaInfoErrorNotFound = (mediaInfoError as HTTPError)?.response?.status === 404;
 	const isMediaInfoErrorNoAccess = (mediaInfoError as HTTPError)?.response?.status === 403;
 	const isVisitRequestErrorNotFound =
@@ -411,7 +411,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	}, [activeTab, isMobile]);
 
 	useEffect(() => {
-		setMediaType(mediaInfo?.dctermsFormat as IeObjectTypes);
+		if (isOpenSeaDragonPoc) {
+			setMediaType('krant');
+		} else {
+			setMediaType(mediaInfo?.dctermsFormat as IeObjectTypes);
+		}
 
 		// Filter out peak files if type === video
 		if (mediaInfo?.dctermsFormat === SearchPageMediaType.Video) {
@@ -1412,10 +1416,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 		return (
 			<CollapsableBlade
-				className={clsx('p-object-detail__ocr', {
-					'p-object-detail__metadata--expanded': expandMetadata,
-					'p-object-detail__metadata--collapsed': !expandMetadata,
-				})}
+				className={'p-object-detail__ocr'}
 				isOpen={isOcrBladeOpen}
 				setIsOpen={setIsOcrBladeOpen}
 				icon={

@@ -17,11 +17,10 @@ const CollapsableBlade: FC<CollapsableBladeProps> = ({
 }) => {
 	return (
 		<div
-			className={clsx(
-				className,
-				styles['c-collapsable-blade'],
-				isOpen && styles['c-collapsable-blade--open']
-			)}
+			className={clsx(className, styles['c-collapsable-blade'], {
+				[styles['c-collapsable-blade--open']]: isOpen,
+				[styles['c-collapsable-blade--closed']]: !isOpen,
+			})}
 		>
 			<Button
 				className={styles['c-collapsable-blade__toggle']}

@@ -74,6 +74,12 @@ $max-drawer-height: min($max-drawer-height-desired, $max-drawer-height-available
 		max-height: $max-drawer-height;
 	}
 
+	&--closed {
+		&__scrollable {
+			display: none;
+		}
+	}
+
 	&__scrollable {
 		overflow-x: hidden;
 		overflow-y: auto;

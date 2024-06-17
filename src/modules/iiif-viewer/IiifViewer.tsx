@@ -1,4 +1,5 @@
 import { Button } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { clamp } from 'lodash-es';
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
 
@@ -81,6 +82,28 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		 * Effects
 		 */
 
+		const addFullscreenCloseButton = (openSeadragonViewer: OpenSeadragon.Viewer) => {
+			if (!openSeadragonViewer.container) {
+				return;
+			}
+			const topLeftContainer = openSeadragonViewer.container.querySelector(
+				'.openseadragon-canvas + div'
+			);
+			if (!topLeftContainer) {
+				return;
+			}
+			topLeftContainer.innerHTML = '';
+			const closeFullscreenButton = document.createElement('button');
+			closeFullscreenButton.className =
+				'p-object-detail__iiif__close-fullscreen c-button c-button--icon c-button--white';
+			closeFullscreenButton.innerHTML = 'times';
+			closeFullscreenButton.title = tText('Sluit volledig scherm');
+			closeFullscreenButton.addEventListener('click', () => {
+				openSeadragonViewer.setFullScreen(false);
+			});
+			topLeftContainer?.append(closeFullscreenButton);
+		};
+
 		const initIiifViewer = useCallback(async () => {
 			if (!!iiifViewerId && isBrowser()) {
 				const iiifContainer = document.getElementById(iiifViewerId);
@@ -97,6 +120,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				const openSeadragonInstanceTemp: OpenSeadragon.Viewer = new OpenSeadragon.Viewer(
 					getOpenSeadragonConfig(isMobile, iiifViewerId)
 				);
+
+				addFullscreenCloseButton(openSeadragonInstanceTemp);
 
 				openSeadragonInstanceTemp.viewport.goHome(true);
 
@@ -140,23 +165,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					});
 				}
 
-				// // Init Annotorious
-				// const anno = annotorious.createOSDAnnotator(openSeadragonInstanceTemp);
-				//
-				// // Init the text layer extension
-				// console.log(annotoriousTextLayer);
-				// const textlayer = annotoriousTextLayer.mountExtension(anno, {
-				// 	label: annotoriousTextLayer.transcriptionLabel,
-				// 	mode: 'fixedPageSize',
-				// 	position: 'center',
-				// });
-				//
-				// // Load ALTO file
-				// textlayer.loadOCR(
-				// 	'https://assets-qas.hetarchief.be/hetarchief/BERT_TEST_IIIF_VIEWER/volksgazet.alto.xml'
-				// );
-
-				// (window as any).openSeaDragonInstance = openSeadragonInstanceTemp;
 				setOpenSeadragonInstance(openSeadragonInstanceTemp);
 			}
 		}, [iiifViewerId, isMobile]);
@@ -245,7 +253,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				<div className={iiifStyles['p-object-detail__iiif__controls']}>
 					{!iiifGridViewEnabled && (
 						<Button
-							className={'p-object-detail__iiif__controls__grid-view__enable'}
+							className={clsx(
+								iiifStyles['p-object-detail__iiif__controls__button'],
+								'p-object-detail__iiif__controls__grid-view__enable'
+							)}
 							icon={<Icon name={IconNamesLight.GridView} aria-hidden />}
 							aria-label={tText(
 								'pages/openseadragon/index___alle-paginas-in-een-grid-bekijken'
@@ -256,7 +267,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					)}
 					{iiifGridViewEnabled && (
 						<Button
-							className={'p-object-detail__iiif__controls__grid-view__disable'}
+							className={clsx(
+								iiifStyles['p-object-detail__iiif__controls__button'],
+								'p-object-detail__iiif__controls__grid-view__disable'
+							)}
 							icon={<Icon name={IconNamesLight.File} aria-hidden />}
 							aria-label={tText('pages/openseadragon/index___een-pagina-bekijken')}
 							variants={['white']}
@@ -265,7 +279,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					)}
 					{!iiifGridViewEnabled && (
 						<Button
-							className={'p-object-detail__iiif__controls__zoom-in'}
+							className={clsx(
+								iiifStyles['p-object-detail__iiif__controls__button'],
+								'p-object-detail__iiif__controls__zoom-in'
+							)}
 							icon={<Icon name={IconNamesLight.ZoomIn} aria-hidden />}
 							aria-label={tText('pages/openseadragon/index___afbeelding-inzoemen')}
 							variants={['white']}
@@ -274,7 +291,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					)}
 					{!iiifGridViewEnabled && (
 						<Button
-							className={'p-object-detail__iiif__controls__zoom-out'}
+							className={clsx(
+								iiifStyles['p-object-detail__iiif__controls__button'],
+								'p-object-detail__iiif__controls__zoom-out'
+							)}
 							icon={<Icon name={IconNamesLight.ZoomOut} aria-hidden />}
 							aria-label={tText('pages/openseadragon/index___afbeelding-uitzoemen')}
 							variants={['white']}
@@ -283,7 +303,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					)}
 					{!iiifGridViewEnabled && (
 						<Button
-							className={'p-object-detail__iiif__controls__fullscreen'}
+							className={clsx(
+								iiifStyles['p-object-detail__iiif__controls__button'],
+								'p-object-detail__iiif__controls__fullscreen'
+							)}
 							icon={<Icon name={IconNamesLight.Expand} aria-hidden />}
 							aria-label={tText(
 								'pages/openseadragon/index___afbeelding-op-volledig-scherm-weergeven'
@@ -294,7 +317,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					)}
 					{!iiifGridViewEnabled && (
 						<Button
-							className={'p-object-detail__iiif__controls__rotate-right'}
+							className={clsx(
+								iiifStyles['p-object-detail__iiif__controls__button'],
+								'p-object-detail__iiif__controls__rotate-right'
+							)}
 							icon={<Icon name={IconNamesLight.Redo} aria-hidden />}
 							aria-label={tText(
 								'pages/openseadragon/index___afbeelding-rechts-draaien'
@@ -305,7 +331,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					)}
 					{!iiifGridViewEnabled && (
 						<Button
-							className={'p-object-detail__iiif__controls__toggle-ocr'}
+							className={clsx(
+								iiifStyles['p-object-detail__iiif__controls__button'],
+								'p-object-detail__iiif__controls__toggle-ocr'
+							)}
 							icon={
 								<Icon
 									name={
