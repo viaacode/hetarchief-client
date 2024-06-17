@@ -802,19 +802,22 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		[metadataExportDropdownOpen, onExportClick, tHtml, tText]
 	);
 
-	const highlighted = (toHighlight: string) => (
-		<Highlighter
-			searchWords={
-				query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]
-					? decodeURIComponent(
-							query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string
-					  ).split(HIGHLIGHTED_SEARCH_TERMS_SEPARATOR)
-					: []
-			}
-			autoEscape={true}
-			textToHighlight={toHighlight}
-		/>
-	);
+	const highlighted = (toHighlight: string, searchTerms?: string[]) => {
+		const searchWords = searchTerms
+			? searchTerms
+			: query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]
+			? decodeURIComponent(query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string).split(
+					HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
+			  )
+			: [];
+		return (
+			<Highlighter
+				searchWords={searchWords}
+				autoEscape={true}
+				textToHighlight={toHighlight}
+			/>
+		);
+	};
 
 	/**
 	 * Content
@@ -1487,11 +1490,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 									setIsOcrEnabled(!isOcrEnabled);
 								}}
 							>
-								<Highlighter
-									searchWords={searchOcrText.split(' ')}
-									autoEscape={true}
-									textToHighlight={textLocation.text}
-								/>
+								{highlighted(
+									textLocation.text,
+									searchOcrText ? searchOcrText.split(' ') : undefined
+								)}
 							</span>{' '}
 						</>
 					);
