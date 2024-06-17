@@ -1413,7 +1413,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	};
 
 	const renderOcrBlade = () => {
-		if (!isOpenSeaDragonPoc || !OPEN_SEA_DRAGON_POC_IMAGE_INFOS[activeImageIndex].altoUrl) {
+		if (
+			!isOpenSeaDragonPoc ||
+			!OPEN_SEA_DRAGON_POC_IMAGE_INFOS[activeImageIndex].altoUrl ||
+			(activeTab === ObjectDetailTabs.Media && isMobile)
+		) {
 			return null;
 		}
 		return (

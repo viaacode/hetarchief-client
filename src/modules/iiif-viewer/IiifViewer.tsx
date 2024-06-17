@@ -87,6 +87,12 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		 * Effects
 		 */
 
+		useEffect(() => {
+			if (openSeaDragonInstance) {
+				openSeaDragonInstance.goToPage(activeImageIndex);
+			}
+		}, [activeImageIndex, openSeaDragonInstance]);
+
 		const addFullscreenCloseButton = (openSeadragonViewer: OpenSeadragon.Viewer) => {
 			if (!openSeadragonViewer.container) {
 				return;
@@ -275,6 +281,19 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		const renderIiifViewerButtons = () => {
 			return (
 				<div className={iiifStyles['p-object-detail__iiif__controls']}>
+					{!iiifGridViewEnabled && isMobile && imageInfos.length > 1 && (
+						<Button
+							className={clsx(
+								iiifStyles['p-object-detail__iiif__controls__button'],
+								'p-object-detail__iiif__controls__grid-view__previous-image'
+							)}
+							icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
+							aria-label={tText('Ga naar de vorige afbeelding')}
+							variants={['white']}
+							onClick={() => setActiveImageIndex(activeImageIndex - 1)}
+							disabled={activeImageIndex === 0}
+						/>
+					)}
 					{!iiifGridViewEnabled && (
 						<Button
 							className={clsx(
@@ -374,6 +393,19 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 							)}
 							variants={['white']}
 							onClick={() => setIsOcrEnabled(!isOcrEnabled)}
+						/>
+					)}
+					{!iiifGridViewEnabled && isMobile && imageInfos.length > 1 && (
+						<Button
+							className={clsx(
+								iiifStyles['p-object-detail__iiif__controls__button'],
+								'p-object-detail__iiif__controls__grid-view__next-image'
+							)}
+							icon={<Icon name={IconNamesLight.ArrowRight} aria-hidden />}
+							aria-label={tText('Ga naar de volgende afbeelding')}
+							variants={['white']}
+							onClick={() => setActiveImageIndex(activeImageIndex + 1)}
+							disabled={activeImageIndex === imageInfos.length - 1}
 						/>
 					)}
 				</div>

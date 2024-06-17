@@ -75,6 +75,10 @@
 			outline: none;
 		}
 	}
+
+	@include respond-to(md) {
+		display: none;
+	}
 }
 
 .p-object-detail__iiif__controls {
@@ -110,10 +114,16 @@
 			width: 4.8rem;
 		}
 	}
+
+	@include respond-to(md) {
+		width: calc(100% - 4.8rem);
+		left: 0;
+		padding: 0;
+	}
 }
 
 .p-object-detail__iiif__grid-view {
-	padding: 10rem;
+	padding: $spacer-2xl;
 	display: flex;
 	flex-flow: row wrap;
 	gap: 3rem;
@@ -122,11 +132,22 @@
 	justify-content: center;
 	align-items: center;
 	height: calc(100vh - 10rem);
+	padding-bottom: $spacer-1xl * 4;
+
+	@include respond-to(md) {
+		padding: $spacer-1xl;
+		padding-bottom: $spacer-1xl * 4;
+		gap: 2rem;
+	}
 
 	> button {
 		cursor: pointer;
 		padding: 0;
 		border: 0.4rem solid #222;
+
+		@include respond-to(md) {
+			width: 15rem;
+		}
 
 		> img {
 			width: 100%;

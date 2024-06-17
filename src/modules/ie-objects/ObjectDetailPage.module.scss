@@ -37,11 +37,9 @@ $breakpoint-md: map.get($breakpoints, "md");
 	}
 
 	&__visitor-space-navigation-bar--visible {
-		.p-object-detail__wrapper {
-			height: calc(100vh - $top-navigation-bar-height - $top-visitor-space-bar-height);
-		}
-
-		.p-object-detail__sidebar {
+		.p-object-detail__wrapper,
+		.p-object-detail__sidebar,
+		.p-object-detail__media {
 			height: calc(100vh - $top-navigation-bar-height - $top-visitor-space-bar-height);
 		}
 
@@ -165,12 +163,13 @@ $breakpoint-md: map.get($breakpoints, "md");
 		position: relative;
 	}
 
-	.p-object-detail__media {
+	&__media {
 		position: relative;
 		display: flex;
 		flex-direction: column;
 		align-items: flex-end;
 		background-color: $silver;
+		height: calc(100vh - $top-navigation-bar-height);
 	}
 
 	&__slider {
