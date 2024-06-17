@@ -4,8 +4,6 @@
 $metadata-expanded-width: 72vw;
 $metadata-collapsed-width: 36vw;
 $breakpoint-md: map.get($breakpoints, "md");
-$top-navigation-bar-height: 10rem;
-$top-visitor-space-bar-height: 6.4rem;
 
 .p-object-detail {
 	visibility: visible;
@@ -24,7 +22,7 @@ $top-visitor-space-bar-height: 6.4rem;
 		flex-grow: 1;
 		min-height: 0;
 		display: grid;
-		max-height: calc(100vh - $top-navigation-bar-height - $top-visitor-space-bar-height);
+		height: calc(100vh - $top-navigation-bar-height);
 
 		@include respond-at(md) {
 			grid-template-columns: 1fr min-content;
@@ -38,22 +36,38 @@ $top-visitor-space-bar-height: 6.4rem;
 		grid-template-rows: 1fr min-content;
 	}
 
+	&__visitor-space-navigation-bar--visible {
+		.p-object-detail__wrapper {
+			height: calc(100vh - $top-navigation-bar-height - $top-visitor-space-bar-height);
+		}
+
+		.p-object-detail__sidebar {
+			height: calc(100vh - $top-navigation-bar-height - $top-visitor-space-bar-height);
+		}
+
+		> :global(:not([class*="object-detail__iiif__reference-strip"])) {
+			top: 0;
+		}
+	}
+
+	&__visitor-space-navigation-bar--hidden {
+		:global([class*="object-detail__iiif__reference-strip"]) {
+			top: $top-visitor-space-bar-height;
+		}
+	}
+
 	&__back {
 		position: absolute;
 		z-index: get-z-layer("foreground");
-		top: 10rem; // 2rem + 8rem (tab bar height)
-		left: 2rem;
-
-		@include respond-at(md) {
-			top: $spacer-lg;
-			left: $spacer-lg;
-		}
-
-		// `include respond-at(md)` -fix for safari
-		@media screen and (width >= $breakpoint-md) {
-			top: $spacer-lg;
-			left: $spacer-lg;
-		}
+		top: 0;
+		left: 0;
+		width: 10rem;
+		height: $top-visitor-space-bar-height;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: $black;
+		border-radius: 0;
 	}
 
 	&__nav {
@@ -171,7 +185,7 @@ $top-visitor-space-bar-height: 6.4rem;
 	&__sidebar {
 		display: flex;
 		flex-direction: column;
-		height: calc(100vh - $top-navigation-bar-height - $top-visitor-space-bar-height);
+		height: calc(100vh - $top-navigation-bar-height);
 
 		@include respond-at("md") {
 			&--collapsed {

@@ -850,6 +850,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		);
 	}, [isMobile, showLinkedSpaceAsHomepage, tHtml, visitRequest?.endAt]);
 
+	const showVisitorSpaceNavigationBar = !isNil(accessEndDate) || isKiosk;
+
 	const mediaActions: DynamicActionMenuProps = useMemo(() => {
 		const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 		const original = MEDIA_ACTIONS(
@@ -1512,7 +1514,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	};
 
 	const renderNavigationBar = (): ReactNode => {
-		if (!isNil(accessEndDate) || isKiosk) {
+		if (showVisitorSpaceNavigationBar) {
 			return (
 				<VisitorSpaceNavigation
 					className={styles['p-object-detail__nav']}
@@ -1531,7 +1533,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					className={styles['p-object-detail__back']}
 					icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
 					onClick={() => window.history.back()}
-					variants={['white', 'xs']}
+					variants={['black']}
 				/>
 			)
 		);
@@ -1693,7 +1695,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 
 		if (mediaInfo) {
-			return <div className={styles['p-object-detail']}>{renderObjectDetail()}</div>;
+			return (
+				<div
+					className={clsx(styles['p-object-detail'], {
+						[styles['p-object-detail__visitor-space-navigation-bar--visible']]:
+							showVisitorSpaceNavigationBar,
+						[styles['p-object-detail__visitor-space-navigation-bar--hidden']]:
+							!showVisitorSpaceNavigationBar,
+					})}
+				>
+					{renderObjectDetail()}
+				</div>
+			);
 		}
 
 		if (isMediaInfoErrorNoAccess || isMediaInfoErrorNotFound) {

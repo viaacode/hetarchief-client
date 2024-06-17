@@ -1,7 +1,4 @@
 import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { clamp } from 'lodash-es';
-import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
 
 import altoTextLocations from '@iiif-viewer/alto2-simplified.json';
 import { getOpenSeadragonConfig } from '@iiif-viewer/openseadragon-config';
@@ -12,6 +9,12 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 import { isBrowser } from '@shared/utils';
+
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import clsx from 'clsx';
+import { clamp } from 'lodash-es';
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import iiifStyles from './IiifViewer.module.scss';
 
@@ -358,7 +361,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 		const renderIiifViewerReferenceStrip = () => {
 			return (
-				<div className={iiifStyles['p-object-detail__iiif__reference-strip']}>
+				<PerfectScrollbar className={iiifStyles['p-object-detail__iiif__reference-strip']}>
 					{imageInfos.map((imageInfo, index) => {
 						return (
 							<button
@@ -370,7 +373,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 							</button>
 						);
 					})}
-				</div>
+				</PerfectScrollbar>
 			);
 		};
 
