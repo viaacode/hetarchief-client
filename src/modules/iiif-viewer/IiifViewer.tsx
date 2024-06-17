@@ -43,6 +43,8 @@ interface IiifViewerProps {
 
 export interface IiifViewerFunctions {
 	iiifZoomToRect: (rect: { x: number; y: number; width: number; height: number }) => void;
+	setActiveWordIndex: (wordIndex: number) => void;
+	clearActiveWordIndex: () => void;
 	iiifRotate: (rotateRight: boolean) => void;
 	iiifGoToPage: (pageIndex: number) => void;
 	iiifFullscreen: (expand: boolean) => void;
@@ -132,9 +134,11 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				// console.log(altoTextLocations);
 
 				if (isBrowser()) {
-					altoTextLocations.forEach((altoTextLocation) => {
+					altoTextLocations.forEach((altoTextLocation, index) => {
 						const span = document.createElement('SPAN');
-						span.className = 'p-object-detail__iiif__alto__text';
+						span.className =
+							'p-object-detail__iiif__alto__text p-object-detail__iiif__alto__text__' +
+							index;
 						span.innerHTML = `
 <svg
 	width="${altoTextLocation.width}"
@@ -239,12 +243,29 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			);
 		};
 
+		const clearActiveWordIndex = () => {
+			openSeaDragonInstance?.container
+				?.querySelectorAll('.p-object-detail__iiif__alto__text')
+				.forEach((element) => {
+					element.classList.remove('p-object-detail__iiif__alto__text--active');
+				});
+		};
+
+		const setActiveWordIndex = (wordIndex: number) => {
+			clearActiveWordIndex();
+			openSeaDragonInstance?.container
+				?.querySelector('.p-object-detail__iiif__alto__text__' + wordIndex)
+				?.classList?.add('p-object-detail__iiif__alto__text--active');
+		};
+
 		useImperativeHandle(ref, () => ({
 			iiifZoomToRect,
 			iiifRotate,
 			iiifGoToPage,
 			iiifFullscreen,
 			iiifZoom,
+			setActiveWordIndex,
+			clearActiveWordIndex,
 		}));
 
 		/**
@@ -332,7 +353,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 							onClick={() => iiifRotate(true)}
 						/>
 					)}
-					{!iiifGridViewEnabled && (
+					{!iiifGridViewEnabled && !!imageInfos[activeImageIndex].altoUrl && (
 						<Button
 							className={clsx(
 								iiifStyles['p-object-detail__iiif__controls__button'],

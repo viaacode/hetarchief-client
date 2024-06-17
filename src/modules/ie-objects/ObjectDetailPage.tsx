@@ -1475,9 +1475,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							<span
 								key={'ocr-text--' + mediaInfo?.schemaIdentifier + '--' + index}
 								className={styles['p-object-detail__ocr__word']}
-								onMouseOver={() =>
-									iiifViewerReference?.current?.iiifZoomToRect(textLocation)
-								}
+								onMouseOver={() => {
+									iiifViewerReference?.current?.iiifZoomToRect(textLocation);
+									iiifViewerReference?.current?.setActiveWordIndex(index);
+								}}
+								onClick={() => {
+									setIsOcrEnabled(!isOcrEnabled);
+								}}
 							>
 								<Highlighter
 									searchWords={searchOcrText.split(' ')}
