@@ -9,8 +9,6 @@
 	border-radius: 1.6rem;
 	background-color: $teal-66;
 	color: $black;
-
-	// font-weight: 700; // Tags shouldn't default to being bold
 }
 
 /**
@@ -57,7 +55,7 @@
 .c-tag--medium,
 .c-tag--small {
 	font-size: $font-size-xs;
-	font-weight: 700;
+	font-weight: $font-weight-bold;
 
 	.c-tag__close {
 		font-size: $font-size-sm;

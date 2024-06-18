@@ -15,12 +15,12 @@ $component: "c-share-folder-blade";
 		min-width: 26rem;
 
 		&-label {
-			font-weight: bold;
+			font-weight: $font-weight-bold;
 			display: block;
 			margin-bottom: $spacer-md;
 
 			&--email {
-				font-weight: bold;
+				font-weight: $font-weight-bold;
 				display: block;
 				margin-bottom: $spacer-sm;
 			}

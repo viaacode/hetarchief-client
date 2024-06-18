@@ -12,7 +12,7 @@ $component: "c-cp-settings";
 
 			label {
 				display: block;
-				font-weight: 700;
+				font-weight: $font-weight-bold;
 			}
 		}
 
@@ -81,14 +81,14 @@ $component: "c-cp-settings";
 
 	&__logo-and-color {
 		&__label {
-			font-weight: 700;
+			font-weight: $font-weight-bold;
 			padding-bottom: $spacer-sm;
 		}
 
 		&__hint {
 			padding-left: $spacer-sm;
 			font-size: $font-size-sm;
-			font-weight: 400;
+			font-weight: $font-weight-normal;
 			color: $neutral;
 		}
 
@@ -138,7 +138,7 @@ $component: "c-cp-settings";
 		border-bottom: none;
 		padding: calc($spacer-xs + 2px);
 		border-radius: 0;
-		font-weight: normal;
+		font-weight: $font-weight-normal;
 
 		&:hover {
 			background-color: $teal-24;
@@ -152,7 +152,7 @@ $component: "c-cp-settings";
 
 		&--active {
 			background-color: $teal-30;
-			font-weight: bold;
+			font-weight: $font-weight-bold;
 		}
 	}
 

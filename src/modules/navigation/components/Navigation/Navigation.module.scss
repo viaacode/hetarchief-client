@@ -69,7 +69,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		display: flex;
 		align-items: center;
 		text-decoration: none;
-		font-weight: 400;
+		font-weight: $font-weight-normal;
 		color: $black;
 	}
 
@@ -350,11 +350,11 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 
 	&--active {
 		z-index: get-z-layer("nav-dropdown") + 1;
-		font-weight: 800;
+		font-weight: $font-weight-bold;
 
 		@include respond-to(xxl) {
 			> :global(.c-dropdown-menu__item) {
-				font-weight: 700;
+				font-weight: $font-weight-bold;
 			}
 		}
 

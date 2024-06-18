@@ -70,13 +70,21 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		setTypeSelected(undefined);
 	};
 
-	const onSuccesCreated = async () => {
+	const onSuccessCreated = async () => {
 		const response = await MaterialRequestsService.getAll({
 			isPersonal: true,
 			size: 500,
 			isPending: true,
 		});
 		dispatch(setMaterialRequestCount(response.items.length));
+	};
+
+	const onNoTypeSelected = () => {
+		toastService.notify({
+			maxLines: 3,
+			title: tText('Type ontbreekt'),
+			description: tText('Selecteer een type voor je aanvraag'),
+		});
 	};
 
 	const onAddToList = async () => {
@@ -104,7 +112,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					'modules/visitor-space/components/material-request-blade/material-request-blade___rond-je-aanvragenlijst-af'
 				),
 			});
-			onSuccesCreated();
+			onSuccessCreated();
 			onCloseModal();
 		} catch (err) {
 			onFailedRequest();
@@ -138,7 +146,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-toegepast'
 					),
 				});
-				onSuccesCreated();
+				onSuccessCreated();
 				refetch && refetch();
 				onCloseModal();
 			} catch (err) {
@@ -156,14 +164,6 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			description: tText(
 				'modules/visitor-space/components/material-request-blade/material-request-blade___er-ging-iets-mis-tijdens-het-opslaan'
 			),
-		});
-	};
-
-	const onNoTypeSelected = () => {
-		toastService.notify({
-			maxLines: 3,
-			title: tText('selecteer-een-type'),
-			description: tText('selecteer-een-type-voor-je-aanvraag'),
 		});
 	};
 

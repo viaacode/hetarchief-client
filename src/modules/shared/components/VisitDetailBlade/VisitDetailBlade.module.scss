@@ -12,7 +12,7 @@ $component: "c-visit-detail-blade";
 			margin-bottom: $spacer-sm;
 
 			&-label {
-				font-weight: bold;
+				font-weight: $font-weight-bold;
 				color: $neutral;
 			}
 		}
