@@ -167,7 +167,6 @@ $breakpoint-md: map.get($breakpoints, "md");
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		align-items: flex-end;
 		background-color: $silver;
 		height: calc(100vh - $top-navigation-bar-height);
 	}

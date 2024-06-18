@@ -110,9 +110,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				if (isBrowser()) {
 					altoTextLocations.forEach((altoTextLocation, index) => {
 						const span = document.createElement('SPAN');
-						span.className =
-							'p-object-detail__iiif__alto__text p-object-detail__iiif__alto__text__' +
-							index;
+						span.id = 'p-object-detail__iiif__alto__text__' + index;
+						span.className = 'p-object-detail__iiif__alto__text';
 						span.innerHTML = `
 <svg
 	width="${altoTextLocation.width}"
@@ -228,7 +227,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		const setActiveWordIndex = (wordIndex: number) => {
 			clearActiveWordIndex();
 			openSeaDragonInstance?.container
-				?.querySelector('.p-object-detail__iiif__alto__text__' + wordIndex)
+				?.querySelector('#p-object-detail__iiif__alto__text__' + wordIndex)
 				?.classList?.add('p-object-detail__iiif__alto__text--active');
 		};
 

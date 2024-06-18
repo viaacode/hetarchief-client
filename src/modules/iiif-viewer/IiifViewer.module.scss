@@ -1,7 +1,7 @@
 @use "src/styles/abstracts" as *;
 
 $navigator-margin-top: 30rem;
-$navigator-margin-right: 30rem;
+$navigator-margin-right: 10rem;
 
 .p-object-detail__iiif {
 	display: block;
@@ -86,10 +86,11 @@ $navigator-margin-right: 30rem;
 
 .p-object-detail__iiif__controls {
 	z-index: 2000;
-	width: calc(100% - 40rem);
+	width: auto;
 	height: $button-width;
 	position: absolute;
 	left: $navigator-margin-right;
+	right: $navigator-margin-right;
 	bottom: 0;
 	margin: 2.4rem;
 	display: flex;
