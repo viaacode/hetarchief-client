@@ -1,7 +1,7 @@
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 
-import { IeObjectWithoutObjectNamePage } from '@search/IeObjectWithoutObjectNamePage';
+import { IeObjectWithoutObjectNamePage } from '@ie-objects/IeObjectWithoutObjectNamePage';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';
 

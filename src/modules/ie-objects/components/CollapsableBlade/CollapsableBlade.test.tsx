@@ -1,28 +1,29 @@
 import { jest } from '@jest/globals';
-import { render } from '@testing-library/react';
-import '@testing-library/jest-dom';
 
 import { Icon, IconNamesLight } from '@shared/components';
 
-import RelatedObjectsBlade from './RelatedObjectsBlade';
-import { relatedObjectsBladeMock } from './__mocks__/related-objects-blade';
+import '@testing-library/jest-dom';
+import { render } from '@testing-library/react';
 
-const renderRelatedObjectsBlade = ({ ...rest }) => {
-	return render(<RelatedObjectsBlade {...relatedObjectsBladeMock} {...rest} />);
+import CollapsableBlade from './CollapsableBlade';
+import { collapsableBladeMock } from './__mocks__/CollapsedBlade.mock';
+
+const renderCollapsableBlade = ({ ...rest }) => {
+	return render(<CollapsableBlade {...collapsableBladeMock} {...rest} />);
 };
 
 describe('Components', () => {
-	describe('<RelatedObjectsBlade />', () => {
+	describe('<CollapsableBlade />', () => {
 		it('Should set the correct class name', () => {
 			const className = 'custom class name';
-			const { container } = renderRelatedObjectsBlade({ className });
+			const { container } = renderCollapsableBlade({ className });
 
 			expect(container.firstChild).toHaveClass(className);
 		});
 
 		it('Should render icon', () => {
 			const icon = <Icon name={IconNamesLight.RelatedObjects} />;
-			const { getByText } = renderRelatedObjectsBlade({ icon });
+			const { getByText } = renderCollapsableBlade({ icon });
 
 			const iconNode = getByText('related-objects');
 
@@ -32,7 +33,7 @@ describe('Components', () => {
 
 		it('Should render title', () => {
 			const title = 'this is a title';
-			const { getByText } = renderRelatedObjectsBlade({ title });
+			const { getByText } = renderCollapsableBlade({ title });
 
 			const titleNode = getByText(title);
 
@@ -44,7 +45,7 @@ describe('Components', () => {
 			const text = 'this is the content';
 			const contentClass = 'custom-content-class';
 			const renderContent = () => <p className={contentClass}>{text}</p>;
-			const { getByText } = renderRelatedObjectsBlade({ renderContent });
+			const { getByText } = renderCollapsableBlade({ renderContent });
 
 			const contentNode = getByText(text);
 
@@ -54,7 +55,7 @@ describe('Components', () => {
 
 		it('Should pass props to content function', () => {
 			const renderContent = jest.fn();
-			renderRelatedObjectsBlade({ renderContent });
+			renderCollapsableBlade({ renderContent });
 
 			expect(renderContent).toHaveBeenCalled();
 			expect(renderContent).toHaveBeenCalledTimes(1);

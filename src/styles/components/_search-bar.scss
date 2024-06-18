@@ -7,7 +7,7 @@
 
 .c-tag-search-bar.c-tags-input {
 	.c-tags-input__control {
-		border-radius: 2.4rem;
+		border-radius: $button-radius;
 		background-color: $silver;
 		border-color: $silver;
 
@@ -47,8 +47,8 @@
 
 	&.c-tag-search-bar--lg {
 		.c-tags-input__control {
-			min-height: 4.8rem;
-			border-radius: 2.4rem;
+			min-height: $button-width;
+			border-radius: $button-radius;
 
 			@include respond-at(md) {
 				min-height: 6.4rem;

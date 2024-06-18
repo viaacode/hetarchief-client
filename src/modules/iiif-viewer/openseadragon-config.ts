@@ -23,7 +23,7 @@ export function getOpenSeadragonConfig(isMobile: boolean, id: string): Options {
 		loadTilesWithAjax: true,
 
 		// preserveViewport: true,
-		defaultZoomLevel: 0.5,
+		defaultZoomLevel: isMobile ? 0.9 : 0.5,
 		minZoomLevel: 0.3,
 		maxZoomLevel: 5,
 
@@ -46,8 +46,8 @@ export function getOpenSeadragonConfig(isMobile: boolean, id: string): Options {
 		// Navigator
 		showNavigator: !isMobile,
 		navigatorPosition: 'BOTTOM_LEFT',
-		navigatorHeight: '150px',
-		navigatorWidth: '120px',
+		navigatorHeight: '130px',
+		navigatorWidth: '100px',
 
 		// Reference strip
 		sequenceMode: true,

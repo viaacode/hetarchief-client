@@ -1,13 +1,11 @@
 @use "sass:math";
 @use "src/styles/abstracts" as *;
 
-$top-navigation-bar-height: 10rem;
-$top-visitor-space-bar-height: 4.8rem;
-$component: "c-related-objects-blade";
+$component: "c-collapsable-blade";
 $expand-button-height-desktop: 8.8rem;
 $expand-button-height-mobile: 6.5rem;
 $max-drawer-height-available: calc(100vh - #{$top-navigation-bar-height} - #{$top-visitor-space-bar-height});
-$max-drawer-height-desired: 50rem;
+$max-drawer-height-desired: 80rem;
 $max-drawer-height: min($max-drawer-height-desired, $max-drawer-height-available);
 
 .#{$component} {
@@ -72,6 +70,12 @@ $max-drawer-height: min($max-drawer-height-desired, $max-drawer-height-available
 
 	&--open {
 		max-height: $max-drawer-height;
+	}
+
+	&--closed {
+		&__scrollable {
+			display: none;
+		}
 	}
 
 	&__scrollable {
