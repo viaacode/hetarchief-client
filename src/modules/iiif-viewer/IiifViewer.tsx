@@ -1,5 +1,6 @@
 import { Button } from '@meemoo/react-components';
 
+import { IiifViewerFunctions, IiifViewerProps } from '@iiif-viewer/IiifViewer.types';
 import altoTextLocations from '@iiif-viewer/alto2-simplified.json';
 import { getOpenSeadragonConfig } from '@iiif-viewer/openseadragon-config';
 import { Icon, IconNamesLight } from '@shared/components';
@@ -17,39 +18,6 @@ import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useStat
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import iiifStyles from './IiifViewer.module.scss';
-
-export type ImageInfo = {
-	thumbnailUrl: string;
-	altoUrl?: string;
-	width: number;
-	height: number;
-} & (
-	| {
-			imageUrl: string;
-	  }
-	| {
-			imageApiInfo: string;
-	  }
-);
-
-interface IiifViewerProps {
-	id: string;
-	imageInfos: ImageInfo[];
-	isOcrEnabled: boolean;
-	setIsOcrEnabled: (isOcrEnabled: boolean) => void;
-	activeImageIndex: number;
-	setActiveImageIndex: (newActiveImageIndex: number) => void;
-}
-
-export interface IiifViewerFunctions {
-	iiifZoomToRect: (rect: { x: number; y: number; width: number; height: number }) => void;
-	setActiveWordIndex: (wordIndex: number) => void;
-	clearActiveWordIndex: () => void;
-	iiifRotate: (rotateRight: boolean) => void;
-	iiifGoToPage: (pageIndex: number) => void;
-	iiifFullscreen: (expand: boolean) => void;
-	iiifZoom: (multiplier: number) => void;
-}
 
 const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 	(
@@ -281,32 +249,118 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		const renderIiifViewerButtons = () => {
 			return (
 				<div className={iiifStyles['p-object-detail__iiif__controls']}>
-					{!iiifGridViewEnabled && isMobile && imageInfos.length > 1 && (
-						<Button
-							className={clsx(
-								iiifStyles['p-object-detail__iiif__controls__button'],
-								'p-object-detail__iiif__controls__grid-view__previous-image'
-							)}
-							icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
-							aria-label={tText('Ga naar de vorige afbeelding')}
-							variants={['white']}
-							onClick={() => setActiveImageIndex(activeImageIndex - 1)}
-							disabled={activeImageIndex === 0}
-						/>
-					)}
 					{!iiifGridViewEnabled && (
-						<Button
-							className={clsx(
-								iiifStyles['p-object-detail__iiif__controls__button'],
-								'p-object-detail__iiif__controls__grid-view__enable'
+						<>
+							{isMobile && imageInfos.length > 1 && (
+								<Button
+									className={clsx(
+										iiifStyles['p-object-detail__iiif__controls__button'],
+										'p-object-detail__iiif__controls__grid-view__previous-image'
+									)}
+									icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
+									aria-label={tText('Ga naar de vorige afbeelding')}
+									variants={['white']}
+									onClick={() => setActiveImageIndex(activeImageIndex - 1)}
+									disabled={activeImageIndex === 0}
+								/>
 							)}
-							icon={<Icon name={IconNamesLight.GridView} aria-hidden />}
-							aria-label={tText(
-								'pages/openseadragon/index___alle-paginas-in-een-grid-bekijken'
+							<Button
+								className={clsx(
+									iiifStyles['p-object-detail__iiif__controls__button'],
+									'p-object-detail__iiif__controls__grid-view__enable'
+								)}
+								icon={<Icon name={IconNamesLight.GridView} aria-hidden />}
+								aria-label={tText(
+									'pages/openseadragon/index___alle-paginas-in-een-grid-bekijken'
+								)}
+								variants={['white']}
+								onClick={() => setIiifGridViewEnabled(true)}
+							/>
+							<Button
+								className={clsx(
+									iiifStyles['p-object-detail__iiif__controls__button'],
+									'p-object-detail__iiif__controls__zoom-in'
+								)}
+								icon={<Icon name={IconNamesLight.ZoomIn} aria-hidden />}
+								aria-label={tText(
+									'pages/openseadragon/index___afbeelding-inzoemen'
+								)}
+								variants={['white']}
+								onClick={() => iiifZoom(1.3)}
+							/>
+							<Button
+								className={clsx(
+									iiifStyles['p-object-detail__iiif__controls__button'],
+									'p-object-detail__iiif__controls__zoom-out'
+								)}
+								icon={<Icon name={IconNamesLight.ZoomOut} aria-hidden />}
+								aria-label={tText(
+									'pages/openseadragon/index___afbeelding-uitzoemen'
+								)}
+								variants={['white']}
+								onClick={() => iiifZoom(0.7)}
+							/>
+							<Button
+								className={clsx(
+									iiifStyles['p-object-detail__iiif__controls__button'],
+									'p-object-detail__iiif__controls__fullscreen'
+								)}
+								icon={<Icon name={IconNamesLight.Expand} aria-hidden />}
+								aria-label={tText(
+									'pages/openseadragon/index___afbeelding-op-volledig-scherm-weergeven'
+								)}
+								variants={['white']}
+								onClick={() => iiifFullscreen(true)}
+							/>
+							<Button
+								className={clsx(
+									iiifStyles['p-object-detail__iiif__controls__button'],
+									'p-object-detail__iiif__controls__rotate-right'
+								)}
+								icon={<Icon name={IconNamesLight.Redo} aria-hidden />}
+								aria-label={tText(
+									'pages/openseadragon/index___afbeelding-rechts-draaien'
+								)}
+								variants={['white']}
+								onClick={() => iiifRotate(true)}
+							/>
+							{!!imageInfos[activeImageIndex].altoUrl && (
+								<Button
+									className={clsx(
+										iiifStyles['p-object-detail__iiif__controls__button'],
+										'p-object-detail__iiif__controls__toggle-ocr'
+									)}
+									icon={
+										<Icon
+											name={
+												isOcrEnabled
+													? IconNamesLight.NoNewspaper
+													: IconNamesLight.Newspaper
+											}
+											aria-hidden
+										/>
+									}
+									aria-label={tText(
+										'pages/openseadragon/index___tekst-boven-de-afbeelding-tonen'
+									)}
+									variants={['white']}
+									onClick={() => setIsOcrEnabled(!isOcrEnabled)}
+								/>
 							)}
-							variants={['white']}
-							onClick={() => setIiifGridViewEnabled(true)}
-						/>
+							{isMobile && imageInfos.length > 1 && (
+								<Button
+									className={clsx(
+										iiifStyles['p-object-detail__iiif__controls__button'],
+										'p-object-detail__iiif__controls__grid-view__next-image'
+									)}
+									icon={<Icon name={IconNamesLight.ArrowRight} aria-hidden />}
+									aria-label={tText('Ga naar de volgende afbeelding')}
+									variants={['white']}
+									onClick={() => setActiveImageIndex(activeImageIndex + 1)}
+									disabled={activeImageIndex === imageInfos.length - 1}
+								/>
+							)}
+						</>
 					)}
 					{iiifGridViewEnabled && (
 						<Button
@@ -318,94 +372,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 							aria-label={tText('pages/openseadragon/index___een-pagina-bekijken')}
 							variants={['white']}
 							onClick={() => setIiifGridViewEnabled(false)}
-						/>
-					)}
-					{!iiifGridViewEnabled && (
-						<Button
-							className={clsx(
-								iiifStyles['p-object-detail__iiif__controls__button'],
-								'p-object-detail__iiif__controls__zoom-in'
-							)}
-							icon={<Icon name={IconNamesLight.ZoomIn} aria-hidden />}
-							aria-label={tText('pages/openseadragon/index___afbeelding-inzoemen')}
-							variants={['white']}
-							onClick={() => iiifZoom(1.3)}
-						/>
-					)}
-					{!iiifGridViewEnabled && (
-						<Button
-							className={clsx(
-								iiifStyles['p-object-detail__iiif__controls__button'],
-								'p-object-detail__iiif__controls__zoom-out'
-							)}
-							icon={<Icon name={IconNamesLight.ZoomOut} aria-hidden />}
-							aria-label={tText('pages/openseadragon/index___afbeelding-uitzoemen')}
-							variants={['white']}
-							onClick={() => iiifZoom(0.7)}
-						/>
-					)}
-					{!iiifGridViewEnabled && (
-						<Button
-							className={clsx(
-								iiifStyles['p-object-detail__iiif__controls__button'],
-								'p-object-detail__iiif__controls__fullscreen'
-							)}
-							icon={<Icon name={IconNamesLight.Expand} aria-hidden />}
-							aria-label={tText(
-								'pages/openseadragon/index___afbeelding-op-volledig-scherm-weergeven'
-							)}
-							variants={['white']}
-							onClick={() => iiifFullscreen(true)}
-						/>
-					)}
-					{!iiifGridViewEnabled && (
-						<Button
-							className={clsx(
-								iiifStyles['p-object-detail__iiif__controls__button'],
-								'p-object-detail__iiif__controls__rotate-right'
-							)}
-							icon={<Icon name={IconNamesLight.Redo} aria-hidden />}
-							aria-label={tText(
-								'pages/openseadragon/index___afbeelding-rechts-draaien'
-							)}
-							variants={['white']}
-							onClick={() => iiifRotate(true)}
-						/>
-					)}
-					{!iiifGridViewEnabled && !!imageInfos[activeImageIndex].altoUrl && (
-						<Button
-							className={clsx(
-								iiifStyles['p-object-detail__iiif__controls__button'],
-								'p-object-detail__iiif__controls__toggle-ocr'
-							)}
-							icon={
-								<Icon
-									name={
-										isOcrEnabled
-											? IconNamesLight.NoNewspaper
-											: IconNamesLight.Newspaper
-									}
-									aria-hidden
-								/>
-							}
-							aria-label={tText(
-								'pages/openseadragon/index___tekst-boven-de-afbeelding-tonen'
-							)}
-							variants={['white']}
-							onClick={() => setIsOcrEnabled(!isOcrEnabled)}
-						/>
-					)}
-					{!iiifGridViewEnabled && isMobile && imageInfos.length > 1 && (
-						<Button
-							className={clsx(
-								iiifStyles['p-object-detail__iiif__controls__button'],
-								'p-object-detail__iiif__controls__grid-view__next-image'
-							)}
-							icon={<Icon name={IconNamesLight.ArrowRight} aria-hidden />}
-							aria-label={tText('Ga naar de volgende afbeelding')}
-							variants={['white']}
-							onClick={() => setActiveImageIndex(activeImageIndex + 1)}
-							disabled={activeImageIndex === imageInfos.length - 1}
 						/>
 					)}
 				</div>

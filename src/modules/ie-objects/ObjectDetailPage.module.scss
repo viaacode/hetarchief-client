@@ -212,7 +212,7 @@ $breakpoint-md: map.get($breakpoints, "md");
 	}
 
 	&__ocr {
-		padding: 6.4rem 3.2rem;
+		padding: $spacer-lg * 2 $spacer-lg;
 		overflow-y: auto;
 		background-color: $white;
 
