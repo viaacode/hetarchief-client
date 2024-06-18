@@ -80,7 +80,7 @@ export class AuthService {
 	): Promise<void> {
 		const { redirectTo, ...otherQueryParams } = query;
 		const returnToUrl = stringifyUrl({
-			url: `${publicRuntimeConfig.CLIENT_URL}/${redirectTo ?? ''}`,
+			url: `${publicRuntimeConfig.CLIENT_URL}/${router.locale}/${redirectTo ?? ''}`,
 			query: otherQueryParams,
 		});
 
@@ -89,6 +89,7 @@ export class AuthService {
 				url: `${publicRuntimeConfig.PROXY_URL}/auth/hetarchief/register`,
 				query: {
 					returnToUrl,
+					locale: router.locale,
 				},
 			})
 		);
