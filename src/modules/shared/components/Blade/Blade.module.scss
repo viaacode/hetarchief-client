@@ -95,6 +95,11 @@
 		grid-row-start: 4;
 	}
 
+	&__footer {
+		flex-grow: 1;
+		align-content: flex-end;
+	}
+
 	&__overlay {
 		z-index: get-z-layer("blade");
 
