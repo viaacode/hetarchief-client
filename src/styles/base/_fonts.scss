@@ -9,14 +9,14 @@ $base-font-path: "" !default;
 @font-face {
 	font-family: $font-family-icons-light;
 	src: url("#{$base-font-path}/fonts/meemoo-icons-light/meemoo-icons-light.woff") format("woff");
-	font-weight: normal;
+	font-weight: $font-weight-normal;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: $font-family-icons-solid;
 	src: url("#{$base-font-path}/fonts/meemoo-icons-solid/meemoo-icons-solid.woff") format("woff");
-	font-weight: normal;
+	font-weight: $font-weight-normal;
 	font-style: normal;
 }
 
@@ -29,7 +29,7 @@ $base-font-path: "" !default;
 	src: url("#{$base-font-path}/fonts/sofia-pro/sofia-pro-regular.woff") format("woff");
 	font-display: swap;
 	font-style: normal;
-	font-weight: normal;
+	font-weight: $font-weight-normal;
 	text-rendering: optimizelegibility;
 }
 
@@ -38,7 +38,7 @@ $base-font-path: "" !default;
 	src: url("#{$base-font-path}/fonts/sofia-pro/sofia-pro-regular-italic.woff") format("woff");
 	font-display: swap;
 	font-style: italic;
-	font-weight: normal;
+	font-weight: $font-weight-normal;
 	text-rendering: optimizelegibility;
 }
 
@@ -47,6 +47,6 @@ $base-font-path: "" !default;
 	src: url("#{$base-font-path}/fonts/sofia-pro/sofia-pro-bold.woff") format("woff");
 	font-display: swap;
 	font-style: normal;
-	font-weight: bold;
+	font-weight: $font-weight-bold;
 	text-rendering: optimizelegibility;
 }

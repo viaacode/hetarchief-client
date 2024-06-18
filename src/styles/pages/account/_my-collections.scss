@@ -76,7 +76,7 @@ $component: "p-account-my-folders";
 		@include respond-to("md") {
 			background-color: $platinum;
 			color: $black;
-			font-weight: 400;
+			font-weight: $font-weight-normal;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
