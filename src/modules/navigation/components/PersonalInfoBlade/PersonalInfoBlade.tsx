@@ -25,8 +25,8 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 	const { tText } = useTranslation();
 	const dispatch = useAppDispatch();
 
-	const [typeSelected, setTypeSelected] = useState<MaterialRequestRequesterCapacity>(
-		personalInfo.requesterCapacity
+	const [typeSelected, setTypeSelected] = useState<MaterialRequestRequesterCapacity | undefined>(
+		undefined
 	);
 	const [organisationInputValue, setOrganisationInputValue] = useState<string>(
 		personalInfo.organisation || ''
@@ -34,6 +34,14 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 
 	const onSendRequests = async () => {
 		try {
+			if (!typeSelected) {
+				toastService.notify({
+					maxLines: 3,
+					title: tText('verzenden mislukt'),
+					description: tText('selecteer hoedanigheid'),
+				});
+				return;
+			}
 			await MaterialRequestsService.sendAll({
 				type: typeSelected,
 				organisation: organisationInputValue,
