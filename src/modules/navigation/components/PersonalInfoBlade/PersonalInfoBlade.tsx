@@ -37,7 +37,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 		preferences?.newsletter || false
 	);
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestRequesterCapacity | undefined>(
-		undefined
+		personalInfo.requesterCapacity
 	);
 	const [organisationInputValue, setOrganisationInputValue] = useState<string>(
 		personalInfo.organisation || ''

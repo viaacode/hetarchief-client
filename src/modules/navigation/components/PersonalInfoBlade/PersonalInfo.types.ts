@@ -1,14 +1,16 @@
+import { ReactNode } from 'react';
+
 import { MaterialRequestRequesterCapacity } from '@material-requests/types';
 
 export interface PersonalInfoType {
 	fullName: string;
 	email: string;
 	organisation?: string;
-	requesterCapacity: MaterialRequestRequesterCapacity;
+	requesterCapacity?: MaterialRequestRequesterCapacity;
 }
 
 export interface PersonalInfoBladeBladeProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	isOpen: boolean;
 	onClose: () => void;
 	personalInfo: PersonalInfoType;
