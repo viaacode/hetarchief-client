@@ -18,12 +18,15 @@ const HighlightSearchTerms: FC<HighlightSearchTermsProps> = ({ toHighlight, sear
 
 	const getSearchWords = (): string[] => {
 		let searchWords: string[];
+		const queryParamSearchTerms = query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as
+			| string
+			| undefined;
 		if (searchTerms) {
 			searchWords = searchTerms;
-		} else if (query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]) {
-			searchWords = decodeURIComponent(
-				query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string
-			).split(HIGHLIGHTED_SEARCH_TERMS_SEPARATOR);
+		} else if (queryParamSearchTerms) {
+			searchWords = decodeURIComponent(queryParamSearchTerms).split(
+				HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
+			);
 		} else {
 			searchWords = [];
 		}
