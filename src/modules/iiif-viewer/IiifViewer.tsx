@@ -379,6 +379,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		};
 
 		const renderIiifViewerReferenceStrip = () => {
+			// Use custom scrollbar because on windows the default scrollbar is big and ugly
+			// and here it shows up on the right side of the reference strip, so it extra noticeable
 			return (
 				<PerfectScrollbar className={iiifStyles['p-object-detail__iiif__reference-strip']}>
 					{imageInfos.map((imageInfo, index) => {
