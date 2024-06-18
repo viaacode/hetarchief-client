@@ -6,6 +6,7 @@ import React, { ComponentType } from 'react';
 import { AdminNavigationItemCreatePage } from '@admin/views/navigation/AdminNavigationItemCreatePage';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -20,10 +21,10 @@ const AdminNavigationItemCreatePageDutch: NextPage<DefaultSeoInfo> = ({ url }) =
 	);
 };
 
-export async function getServerSideProps(
+export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.adminNavigationCreate);
 }
 
 export default withAuth(

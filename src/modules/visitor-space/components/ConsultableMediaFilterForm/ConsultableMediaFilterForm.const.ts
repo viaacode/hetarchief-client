@@ -3,7 +3,7 @@ import { boolean, object, SchemaOf } from 'yup';
 
 import { IeObjectsSearchFilterField } from '@shared/types';
 
-import { VisitorSpaceFilterId } from '../../types';
+import { SearchFilterId } from '../../types';
 
 import { ConsultableMediaFilterFormState } from './ConsultableMediaFilterForm.types';
 
@@ -13,5 +13,5 @@ export const CONSULTABLE_MEDIA_FILTER_FORM_SCHEMA = (): SchemaOf<ConsultableMedi
 	});
 
 export const CONSULTABLE_MEDIA_FILTER_FORM_QUERY_PARAM_CONFIG = {
-	[VisitorSpaceFilterId.ConsultableMedia]: BooleanParam,
+	[SearchFilterId.ConsultableMedia]: BooleanParam,
 };

@@ -8,7 +8,7 @@ import { AdminLayout } from '@admin/layouts';
 import { UserGroupOverviewRef } from '@admin/types';
 import { Icon, IconNamesLight } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -100,13 +100,17 @@ export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 
 	return (
 		<>
-			{renderOgTags(
-				tText('pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies'),
-				tText(
+			<SeoTags
+				title={tText(
+					'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies'
+				)}
+				description={tText(
 					'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies-omschrijving'
-				),
-				url
-			)}
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 
 			<PermissionsCheck allPermissions={[Permission.EDIT_PERMISSION_GROUPS]}>
 				{renderPageContent()}

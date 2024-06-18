@@ -4,13 +4,14 @@ import Html from '@shared/components/Html/Html';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { Locale } from '@shared/utils';
 
 import { CardImage } from '../../../shared/components';
 import { VisitorSpaceNavigation } from '../VisitorSpaceNavigation';
 
 import { WaitingPageProps } from './WaitingPage.types';
 
-const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
+const WaitingPage: FC<WaitingPageProps> = ({ visitorSpace, backLink }) => {
 	const { tHtml } = useTranslation();
 	const locale = useLocale();
 
@@ -18,15 +19,15 @@ const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 		return (
 			<>
 				<VisitorSpaceNavigation
-					title={space?.name}
-					phone={space?.contactInfo.telephone || ''}
-					email={space?.contactInfo.email || ''}
+					title={visitorSpace?.name}
+					phone={visitorSpace?.contactInfo.telephone || ''}
+					email={visitorSpace?.contactInfo.email || ''}
 					backLink={backLink ?? ROUTES_BY_LOCALE[locale].home}
 				/>
 
 				{/* I'm choosing to duplicate the above instead of splitting to a separate layout because back-button functionality on this page differs from the `[slug]` page */}
 
-				{space && (
+				{visitorSpace && (
 					<div className="l-container p-visit-requested__content">
 						<section className="p-visit-requested__grid">
 							<div className="p-visit-requested__top">
@@ -45,25 +46,33 @@ const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 
 							<div className="p-visit-requested__image">
 								<CardImage
-									id={space.id}
-									image={space.image}
-									color={space.color || '#00c8aa'}
-									logo={space.logo}
+									id={visitorSpace.id}
+									image={visitorSpace.image}
+									color={visitorSpace.color || '#00c8aa'}
+									logo={visitorSpace.logo}
 								/>
 							</div>
 
 							<div className="p-visit-requested__bottom u-pt-56:md">
-								{space.info && (
+								{visitorSpace.info && (
 									<p className="p-visit-requested__info">
-										<b>{space.info}</b>
+										<b>{visitorSpace.info}</b>
 									</p>
 								)}
 
-								{space.description && (
+								{locale === Locale.nl && visitorSpace.descriptionNl && (
 									<Html
 										type="div"
 										className="p-visit-requested__description u-mt-32 c-content u-padding-top-l"
-										content={space.description}
+										content={visitorSpace.descriptionNl}
+									/>
+								)}
+
+								{locale === Locale.en && visitorSpace.descriptionEn && (
+									<Html
+										type="div"
+										className="p-visit-requested__description u-mt-32 c-content u-padding-top-l"
+										content={visitorSpace.descriptionEn}
 									/>
 								)}
 							</div>

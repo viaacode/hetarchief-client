@@ -7,7 +7,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
-import { VisitorSpaceFilterId } from '../../types';
+import { SearchFilterId } from '../../types';
 import { AdvancedFilterFields } from '../AdvancedFilterFields';
 
 import { ADVANCED_FILTER_FORM_SCHEMA, initialFields } from './AdvancedFilterForm.const';
@@ -28,7 +28,7 @@ const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 		resolver: yupResolver(ADVANCED_FILTER_FORM_SCHEMA()),
 	});
 	const { append, fields, remove, update } = useFieldArray({
-		name: VisitorSpaceFilterId.Advanced,
+		name: SearchFilterId.Advanced,
 		control,
 	});
 

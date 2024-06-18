@@ -2,8 +2,8 @@ import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 
 import { Loading } from '@shared/components';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -43,11 +43,15 @@ export const NewsletterConfirmation: FC<DefaultSeoInfo> = ({ url }) => {
 
 	return (
 		<div className="p-newsletter-confirmation">
-			{renderOgTags(
-				tText('pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging'),
-				tText('pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging-omschrijving'),
-				url
-			)}
+			<SeoTags
+				title={tText('pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging')}
+				description={tText(
+					'pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging-omschrijving'
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 
 			<Loading owner="nieuwsbrief bevestiging" fullscreen />
 		</div>

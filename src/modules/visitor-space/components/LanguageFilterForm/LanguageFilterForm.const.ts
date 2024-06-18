@@ -1,7 +1,7 @@
 import { ArrayParam } from 'use-query-params';
 import { array, object, SchemaOf, string } from 'yup';
 
-import { VisitorSpaceFilterId } from '../../types';
+import { SearchFilterId } from '../../types';
 
 import { LanguageFilterFormState } from './LanguageFilterForm.types';
 
@@ -11,5 +11,5 @@ export const LANGUAGE_FILTER_FORM_SCHEMA = (): SchemaOf<LanguageFilterFormState>
 	});
 
 export const LANGUAGE_FILTER_FORM_QUERY_PARAM_CONFIG = {
-	[VisitorSpaceFilterId.Language]: ArrayParam,
+	[SearchFilterId.Language]: ArrayParam,
 };

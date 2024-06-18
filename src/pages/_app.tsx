@@ -1,15 +1,19 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AdminConfigManager } from '@meemoo/admin-core-ui';
+import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import nlBE from 'date-fns/locale/nl-BE/index.js';
 import setDefaultOptions from 'date-fns/setDefaultOptions';
 import { AppProps } from 'next/app';
 import getConfig from 'next/config';
+import { useRouter } from 'next/router';
 import { appWithTranslation } from 'next-i18next';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 
+import { getAdminCoreConfig } from '@admin/wrappers/admin-core-config';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { AppLayout } from '@shared/layouts/AppLayout';
 import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
 import { wrapper } from '@shared/store';
-import { isBrowser } from '@shared/utils';
+import { isBrowser, Locale } from '@shared/utils';
 
 import getI18n from '../../next-i18next.config.js';
 import pkg from '../../package.json';
@@ -31,7 +35,17 @@ const queryClient = new QueryClient({
 	},
 });
 
-function MyApp({ Component, pageProps }: AppProps): ReactElement {
+// Temp version with undefined router and nl locale
+AdminConfigManager.setConfig(getAdminCoreConfig(null, Locale.nl));
+
+function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
+	const router = useRouter();
+	const locale = useLocale();
+
+	useEffect(() => {
+		AdminConfigManager.setConfig(getAdminCoreConfig(router, locale || Locale.nl));
+	}, [locale, router]);
+
 	if (isBrowser()) {
 		// client-side-only code, window is not available during nextjs server side prerender
 		(window as any).APP_VERSION = { version: pkg.version };
@@ -39,17 +53,16 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
 	return (
 		<NextQueryParamProvider>
 			<QueryClientProvider client={queryClient}>
-				<AppLayout>
-					<Component {...pageProps} />
-				</AppLayout>
+				<Hydrate state={pageProps.dehydratedState}>
+					<AppLayout>
+						<Component {...pageProps} />
+					</AppLayout>
+				</Hydrate>
 			</QueryClientProvider>
 		</NextQueryParamProvider>
 	);
 }
 
 export default wrapper.withRedux(
-	appWithTranslation(
-		MyApp,
-		getI18n(isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL) as any
-	)
+	appWithTranslation(MyApp, getI18n(publicRuntimeConfig.PROXY_URL) as any)
 );

@@ -11,7 +11,7 @@ import {
 	ConsultableOnlyOnLocationFilterFormProps,
 	ConsultableOnlyOnLocationFilterFormState,
 } from '@visitor-space/components';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { SearchFilterId } from '@visitor-space/types';
 
 import {
 	CONSULTABLE_ONLY_ON_LOCATION_FILTER_FORM_SCHEMA,
@@ -31,7 +31,7 @@ const ConsultableOnlyOnLocationFilterForm: FC<ConsultableOnlyOnLocationFilterFor
 	const [isInitialRender, setIsInitialRender] = useState(true);
 	const [query] = useQueryParams(REMOTE_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [isChecked, setIsChecked] = useState<boolean>(
-		() => query[VisitorSpaceFilterId.ConsultableOnlyOnLocation] || false
+		() => query[SearchFilterId.ConsultableOnlyOnLocation] || false
 	);
 
 	const { setValue, handleSubmit } = useForm<ConsultableOnlyOnLocationFilterFormState>({
@@ -40,7 +40,7 @@ const ConsultableOnlyOnLocationFilterForm: FC<ConsultableOnlyOnLocationFilterFor
 	});
 
 	const onFilterFormSubmit = useCallback(
-		(id: VisitorSpaceFilterId, values: unknown) => onFormSubmit(id, values),
+		(id: SearchFilterId, values: unknown) => onFormSubmit(id, values),
 		[onFormSubmit]
 	);
 

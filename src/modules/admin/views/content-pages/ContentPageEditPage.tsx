@@ -5,7 +5,7 @@ import React, { FC } from 'react';
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -30,21 +30,21 @@ export const ContentPageEditPage: FC<
 		);
 	};
 
+	const title = id
+		? tText('pages/admin/content/id/bewerk/index___content-pagina-bewerkenx')
+		: tText('pages/admin/content/maak/index___content-pagina-aanmaken');
+	const description = id
+		? tText('pages/admin/content/id/bewerk/index___bewerk-pagina-van-een-content-pagina')
+		: tText('pages/admin/content/maak/index___maak-een-nieuwe-content-pagina-adhv-blokken');
 	return (
 		<>
-			{renderOgTags(
-				id
-					? tText('pages/admin/content/id/bewerk/index___content-pagina-bewerkenx')
-					: tText('pages/admin/content/maak/index___content-pagina-aanmaken'),
-				id
-					? tText(
-							'pages/admin/content/id/bewerk/index___bewerk-pagina-van-een-content-pagina'
-					  )
-					: tText(
-							'pages/admin/content/maak/index___maak-een-nieuwe-content-pagina-adhv-blokken'
-					  ),
-				url
-			)}
+			<SeoTags
+				title={title}
+				description={description}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 
 			<PermissionsCheck
 				anyPermissions={[

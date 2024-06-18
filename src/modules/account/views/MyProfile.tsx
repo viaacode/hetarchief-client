@@ -1,49 +1,56 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
 import {
 	Alert,
 	Box,
 	Button,
 	Checkbox,
+	CheckboxList,
 	FormControl,
 	keysEnter,
 	keysSpacebar,
 	onKey,
 } from '@meemoo/react-components';
+import { useQueryClient } from '@tanstack/react-query';
 import { isNil } from 'lodash-es';
-import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Link from 'next/link';
-import { GetServerSidePropsContext } from 'next/types';
+import router from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { ComponentType, ReactNode, useEffect, useState } from 'react';
+import { ComponentType, FC, ReactNode, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 import {
 	COMMUNICATION_FORM_SCHEMA,
 	GET_PERMISSION_TRANSLATIONS_BY_GROUP,
+	GET_TRANSLATED_LANGUAGE_LABELS,
 	GroupName,
 	Permission,
 } from '@account/const';
 import { COMMUNICATION_SECTION_ID } from '@account/const/MyProfile.consts';
+import { useChangeLanguagePreference } from '@account/hooks/change-language-preference';
 import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
 import { AccountLayout } from '@account/layouts';
 import { CommunicationFormState } from '@account/types';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { Icon, IconNamesLight } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { changeLocalSlug } from '@shared/helpers/change-local-slug';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
+import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { isBrowser } from '@shared/utils';
+import { Locale } from '@shared/utils';
 import { VisitorLayout } from '@visitor-layout/index';
 
 const { publicRuntimeConfig } = getConfig();
@@ -52,18 +59,36 @@ const labelKeys: Record<keyof CommunicationFormState, string> = {
 	acceptNewsletter: 'Communication__acceptNewsletter',
 };
 
-export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
+export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 	const user = useSelector(selectUser);
 	const { tHtml, tText } = useTranslation();
-
+	const locale = useLocale();
+	const queryClient = useQueryClient();
 	const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false);
 	const [acceptNewsletter, setAcceptNewsletter] = useState<boolean>(false);
-
+	const [selectedLanguage, setSelectedLanguage] = useState<Locale>(locale);
 	const isAdminUser: boolean = useHasAnyGroup(GroupName.MEEMOO_ADMIN, GroupName.CP_ADMIN);
 	const canEditProfile: boolean = useHasAllPermission(Permission.CAN_EDIT_PROFILE_INFO);
 	const isKeyUser: boolean = useIsKeyUser();
-
+	const { data: allLanguages } = useGetAllLanguages();
+	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference(selectedLanguage);
 	const { data: preferences } = useGetNewsletterPreferences(user?.email);
+
+	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
+		locale,
+		`/${router.query.slug}`,
+		{ enabled: router.route === '/[slug]' }
+	);
+
+	const contentPageInfo = dbContentPage
+		? convertDbContentPageToContentPageInfo(dbContentPage)
+		: null;
+
+	useEffect(() => {
+		mutateLanguagePreference(selectedLanguage);
+		changeLocalSlug(locale, selectedLanguage, queryClient, contentPageInfo);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [selectedLanguage, mutateLanguagePreference]);
 
 	const {
 		control,
@@ -181,15 +206,10 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 			{/* Which will redirect to the client homepage => after user logs in, redirect to client profile page */}
 			<Link
 				href={stringifyUrl({
-					url: isBrowser()
-						? publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL
-						: process.env.SSUM_EDIT_ACCOUNT_URL,
+					url: publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL,
 					query: {
 						redirect_to: stringifyUrl({
-							url:
-								(isBrowser()
-									? publicRuntimeConfig.PROXY_URL
-									: process.env.PROXY_URL) + '/auth/global-logout',
+							url: publicRuntimeConfig.PROXY_URL + '/auth/global-logout',
 							query: {
 								returnToUrl: window.location.href,
 							},
@@ -259,6 +279,19 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 		</FormControl>
 	);
 
+	const renderLanguagePreferencesForm = () => (
+		<CheckboxList
+			items={
+				allLanguages?.map((language) => ({
+					label: GET_TRANSLATED_LANGUAGE_LABELS()[language.languageCode],
+					value: language.languageCode,
+					checked: selectedLanguage === language.languageCode,
+				})) || []
+			}
+			onItemClick={(_, value) => setSelectedLanguage(value as Locale)}
+		/>
+	);
+
 	const renderPageContent = () => {
 		return (
 			<AccountLayout
@@ -310,17 +343,33 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 							</div>
 						</section>
 					</Box>
+					<Box className={'u-mb-32'}>
+						<section className="u-p-24 p-account-my-profile__language-preferences">
+							<header className="p-account-my-profile__language-preferences-header u-mb-24">
+								<h6>
+									{tText('modules/account/views/my-profile___taalvoorkeuren')}
+								</h6>
+							</header>
+							<div className="p-account-my-profile__language-preferences-list u-mb-24">
+								{renderLanguagePreferencesForm()}
+							</div>
+						</section>
+					</Box>
 				</div>
 			</AccountLayout>
 		);
 	};
 	return (
 		<VisitorLayout>
-			{renderOgTags(
-				tText('pages/account/mijn-profiel/index___mijn-profiel'),
-				tText('pages/account/mijn-profiel/index___mijn-profiel-meta-omschrijving'),
-				url
-			)}
+			<SeoTags
+				title={tText('pages/account/mijn-profiel/index___mijn-profiel')}
+				description={tText(
+					'pages/account/mijn-profiel/index___mijn-profiel-meta-omschrijving'
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 
 			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT]}>
 				{renderPageContent()}
@@ -328,11 +377,5 @@ export const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 		</VisitorLayout>
 	);
 };
-
-export async function getServerSideProps(
-	context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context);
-}
 
 export default withAuth(AccountMyProfile as ComponentType, true);

@@ -18,7 +18,7 @@ import { useGetMaterialRequests } from '@material-requests/hooks/get-material-re
 import { MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
 import { ErrorNoAccess, Loading, PaginationBar, sortingIcons } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
@@ -167,13 +167,15 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 
 	return (
 		<VisitorLayout>
-			{renderOgTags(
-				tText('pages/account/mijn-profiel/index___mijn-materiaalaanvragen'),
-				tText(
+			<SeoTags
+				title={tText('pages/account/mijn-profiel/index___mijn-materiaalaanvragen')}
+				description={tText(
 					'pages/account/mijn-profiel/index___mijn-materiaalaanvragen-meta-omschrijving'
-				),
-				url
-			)}
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 
 			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT]}>
 				{renderPageContent()}

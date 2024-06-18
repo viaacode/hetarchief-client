@@ -11,7 +11,7 @@ const HetArchiefLogo: FC<HetArchiefLogoProps> = ({ className, type = HetArchiefL
 		return (
 			<svg
 				className={clsx('c-logo', className)}
-				width={178}
+				width={200}
 				height={65}
 				fill="none"
 				version="1.1"
@@ -34,7 +34,7 @@ const HetArchiefLogo: FC<HetArchiefLogoProps> = ({ className, type = HetArchiefL
 		return (
 			<svg
 				className={clsx('c-logo', className)}
-				width={178}
+				width={200}
 				height={65}
 				fill="none"
 				xmlns="http://www.w3.org/2000/svg"

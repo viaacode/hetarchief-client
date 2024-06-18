@@ -8,11 +8,11 @@ import {
 	IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
+	SearchPageMediaType,
 	SortObject,
-	VisitorSpaceMediaType,
 } from '@shared/types';
 import { GetIeObjectsResponse } from '@shared/types/api';
-import { VisitorSpaceSort } from '@visitor-space/types';
+import { SearchSortProp } from '@visitor-space/types';
 
 import {
 	IE_OBJECT_SERVICE_SEO_URL,
@@ -32,7 +32,7 @@ export class IeObjectsService {
 		sort?: SortObject,
 		requestedAggs?: IeObjectsSearchFilterField[]
 	): Promise<GetIeObjectsResponse> {
-		const parsedSort = !sort || sort.orderProp === VisitorSpaceSort.Relevance ? {} : sort;
+		const parsedSort = !sort || sort.orderProp === SearchSortProp.Relevance ? {} : sort;
 		const filtered = [
 			...filters.filter((item) => {
 				// Don't send filters with no value(s)
@@ -46,7 +46,7 @@ export class IeObjectsService {
 				const isFormatAllFilter =
 					item.field === IeObjectsSearchFilterField.FORMAT &&
 					item.operator === IeObjectsSearchOperator.IS &&
-					item.value === VisitorSpaceMediaType.All;
+					item.value === SearchPageMediaType.All;
 
 				return hasValue && hasLength && !isFormatAllFilter;
 			}),

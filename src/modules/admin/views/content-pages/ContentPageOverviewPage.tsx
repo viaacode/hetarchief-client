@@ -7,8 +7,8 @@ import React, { FC } from 'react';
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ADMIN_CORE_ROUTES_BY_LOCALE } from '@shared/const';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -64,13 +64,15 @@ export const ContentPageOverviewPage: FC<
 
 	return (
 		<>
-			{renderOgTags(
-				tText('pages/admin/content/index___content-paginas'),
-				tText(
+			<SeoTags
+				title={tText('pages/admin/content/index___content-paginas')}
+				description={tText(
 					'pages/admin/content/index___overzicht-van-alle-content-paginas-die-beschikbaar-zijn-binnen-het-archief'
-				),
-				url
-			)}
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
 			<PermissionsCheck
 				anyPermissions={[
 					Permission.EDIT_ANY_CONTENT_PAGES,

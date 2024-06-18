@@ -2,19 +2,19 @@ import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 import React from 'react';
 
+import { CookiePolicy } from '@cookie-policy/CookiePolicy';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';
-
-import { CookiePolicy } from '../../modules/cookie-policy/CookiePolicy';
 
 const CookiePolicyDutch: NextPage<DefaultSeoInfo> = (seo) => {
 	return <CookiePolicy {...seo} />;
 };
 
-export async function getServerSideProps(
+export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.cookiePolicy);
 }
 
 export default CookiePolicyDutch;

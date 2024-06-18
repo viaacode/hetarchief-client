@@ -8,25 +8,20 @@ import { selectIsLoggedIn } from '@auth/store/user';
 import { ErrorNoAccessToObject, ErrorNotFound, Loading } from '@shared/components';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
 import { NextRedirect } from '@shared/components/Redirect/Redirect.tsx';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { AccessStatus } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
+import { useGetVisitAccessStatus } from '@visit-requests/hooks/get-visit-access-status';
 import { useGetOrganisationBySlug } from '@visitor-space/hooks/get-organisation-by-slug';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { SearchFilterId } from '@visitor-space/types';
 
-import { useGetVisitAccessStatus } from '../../visit-requests/hooks/get-visit-access-status';
 import { VisitorLayout } from '../../visitor-layout';
 
-type VisitPageProps = {
-	name: string | null;
-	description: string | null;
-	url: string;
-} & DefaultSeoInfo;
-
-export const VisitPage: FC<VisitPageProps> = () => {
+export const VisitPage: FC<DefaultSeoInfo> = ({ title, description, url }) => {
 	const { tText } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
@@ -115,7 +110,7 @@ export const VisitPage: FC<VisitPageProps> = () => {
 							<NextRedirect
 								to={stringifyUrl({
 									url: ROUTES_BY_LOCALE[locale].search,
-									query: { [VisitorSpaceFilterId.Maintainer]: slug },
+									query: { [SearchFilterId.Maintainer]: slug },
 								})}
 								method="replace"
 							/>
@@ -133,7 +128,7 @@ export const VisitPage: FC<VisitPageProps> = () => {
 								to={stringifyUrl({
 									url: ROUTES_BY_LOCALE[locale].search,
 									query: {
-										[VisitorSpaceFilterId.Maintainers]:
+										[SearchFilterId.Maintainers]:
 											organisation?.schemaIdentifier +
 											'---' +
 											organisation?.schemaName,
@@ -151,5 +146,16 @@ export const VisitPage: FC<VisitPageProps> = () => {
 		}
 	};
 
-	return <VisitorLayout>{renderPageContent()}</VisitorLayout>;
+	return (
+		<VisitorLayout>
+			<SeoTags
+				title={title}
+				description={description}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
+			{renderPageContent()}
+		</VisitorLayout>
+	);
 };

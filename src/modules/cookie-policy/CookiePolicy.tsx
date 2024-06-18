@@ -1,7 +1,10 @@
+import clsx from 'clsx';
 import { format } from 'date-fns';
+import { stringifyUrl } from 'query-string';
 import React, { FC, useEffect, useState } from 'react';
 
-import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -9,9 +12,16 @@ import styles from './CookiePolicy.module.scss';
 
 export const CookiePolicy: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();
+	const locale = useLocale();
 	const [cookieDeclarationHtml, setCookieDeclarationHtml] = useState<string>('');
 
 	useEffect(() => {
+		// Clear previous html and script
+		document.querySelectorAll('#CookieDeclaration').forEach((item) => item.remove());
+		document
+			.querySelectorAll('.p-cookie-policy__wrapper > div')
+			.forEach((item) => (item.innerHTML = ''));
+
 		// Fool cookiebot to inject the html into our react useState
 		// eslint-disable-next-line
 		(window as any).CookieDeclaration = {
@@ -31,21 +41,29 @@ export const CookiePolicy: FC<DefaultSeoInfo> = ({ url }) => {
 		const script = document.createElement('script');
 		// script.onload = moveCookieDeclaration;
 		script.id = 'CookieDeclaration';
-		script.src =
-			'https://consent.cookiebot.com/e17bca33-78a0-484e-a204-e05274a65598/cdreport.js?referer=hetarchief.be';
+		script.setAttribute('data-culture', locale);
+		script.src = stringifyUrl({
+			url: 'https://consent.cookiebot.com/e17bca33-78a0-484e-a204-e05274a65598/cdreport.js',
+			query: {
+				referer: 'hetarchief.be',
+				culture: locale,
+			},
+		});
 		document.head.appendChild(script);
-	}, []);
+	}, [locale]);
 
 	return (
 		<>
-			{renderOgTags(
-				tText('pages/cookiebeleid/index___cookiebeleid-seo-en-pagina-titel'),
-				tText(
+			<SeoTags
+				title={tText('pages/cookiebeleid/index___cookiebeleid-seo-en-pagina-titel')}
+				description={tText(
 					'pages/cookiebeleid/index___cookiebeleid-seo-en-pagina-titel-seo-beschrijving'
-				),
-				url
-			)}
-			<div className={styles['p-cookie-policy__wrapper']}>
+				)}
+				imgUrl={undefined}
+				translatedPages={[]}
+				relativeUrl={url}
+			/>
+			<div className={clsx('p-cookie-policy__wrapper', styles['p-cookie-policy__wrapper'])}>
 				<div dangerouslySetInnerHTML={{ __html: cookieDeclarationHtml }} />
 			</div>
 		</>
