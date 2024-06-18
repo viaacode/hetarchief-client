@@ -31,8 +31,9 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 	const { tText } = useTranslation();
 	const dispatch = useAppDispatch();
 	const { data: preferences } = useGetNewsletterPreferences(user?.email);
+	const shouldRenderNewsletterCheckbox: boolean = !preferences?.newsletter;
 
-	const [newsLetterChecked, setNewsLetterChecked] = useState<boolean>(
+	const [isSubscribedToNewsletter, setIsSubscribedToNewsletter] = useState<boolean>(
 		preferences?.newsletter || false
 	);
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestRequesterCapacity>(
@@ -51,7 +52,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 
 			await CampaignMonitorService.setPreferences({
 				preferences: {
-					newsletter: newsLetterChecked,
+					newsletter: isSubscribedToNewsletter,
 				},
 			});
 
@@ -73,15 +74,18 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 		}
 	};
 
-	const renderCheckbox = (renderCheckbox: boolean) => {
-		return !renderCheckbox ? (
+	const renderCheckbox = () => {
+		if (!shouldRenderNewsletterCheckbox) {
+			return null;
+		}
+		return (
 			<Checkbox
 				className={styles['c-personal-info-blade__checkbox']}
-				checked={newsLetterChecked}
+				checked={isSubscribedToNewsletter}
 				label={tHtml('schrijf je in voor de nieuwsbrief')}
-				onClick={() => setNewsLetterChecked((prevState) => !prevState)}
+				onClick={() => setIsSubscribedToNewsletter((prevState) => !prevState)}
 			/>
-		) : null;
+		);
 	};
 
 	const onFailedRequest = () => {
@@ -102,7 +106,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 				{renderMobileDesktop({
 					mobile: (
 						<>
-							{renderCheckbox(preferences?.newsletter || false)}
+							{renderCheckbox()}
 							<Button
 								label={tText(
 									'modules/navigation/components/personal-info-blade/personal-info-blade___verstuur-mobile'
@@ -115,7 +119,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 					),
 					desktop: (
 						<>
-							{renderCheckbox(preferences?.newsletter || false)}
+							{renderCheckbox()}
 							<Button
 								label={tText(
 									'modules/navigation/components/personal-info-blade/personal-info-blade___verstuur'
