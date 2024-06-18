@@ -8,7 +8,9 @@ import { useDispatch } from 'react-redux';
 import { useChangeLanguagePreference } from '@account/hooks/change-language-preference';
 import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { NavigationDropdown } from '@navigation/components/Navigation/NavigationDropdown';
+import { Icon, IconNamesLight } from '@shared/components';
 import { changeLocalSlug } from '@shared/helpers/change-local-slug';
+import { tText } from '@shared/helpers/translate';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import {
@@ -76,8 +78,10 @@ export default function LanguageSwitcher() {
 				trigger={
 					<Button
 						label={(router.locale || Locale.nl)?.toUpperCase()}
+						aria-label={tText('Pas de taal van de website aan')}
 						variants={['black']}
 						onClick={() => setIsOpen(true)}
+						iconEnd={<Icon name={IconNamesLight.AngleDown} />}
 					/>
 				}
 				items={languageOptions.map((option) => ({
