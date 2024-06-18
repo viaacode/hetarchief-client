@@ -85,6 +85,10 @@ $component: "c-request-material";
 		color: $white !important;
 		margin-bottom: $spacer-sm;
 
+		div {
+			font-weight: 600;
+		}
+
 		&:hover {
 			background-color: $white !important;
 			color: $zinc !important;

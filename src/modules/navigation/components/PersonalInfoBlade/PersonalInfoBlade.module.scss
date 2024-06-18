@@ -43,5 +43,9 @@ $component: "c-personal-info-blade";
 
 	&__send-button {
 		margin-bottom: $spacer-sm;
+
+		div {
+			font-weight: 600;
+		}
 	}
 }
