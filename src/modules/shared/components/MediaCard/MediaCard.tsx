@@ -152,11 +152,11 @@ const MediaCard: FC<MediaCardProps> = ({
 		if (typeof title === 'string') {
 			return (
 				<b className={`u-text-ellipsis--${view === 'grid' ? 7 : 3}`}>
-					{keywords?.length ? (
-						<HighlightSearchTerms toHighlight={title ?? ''} searchTerms={keywords} />
-					) : (
-						title
-					)}
+					<HighlightSearchTerms
+						toHighlight={title ?? ''}
+						searchTerms={keywords}
+						enabled={!!keywords?.length}
+					/>
 				</b>
 			);
 		}
@@ -176,16 +176,11 @@ const MediaCard: FC<MediaCardProps> = ({
 				TRUNCATED_TEXT_LENGTH
 			);
 			return (
-				<>
-					{keywords?.length ? (
-						<HighlightSearchTerms
-							toHighlight={truncatedText ?? ''}
-							searchTerms={keywords}
-						/>
-					) : (
-						description
-					)}
-				</>
+				<HighlightSearchTerms
+					toHighlight={truncatedText ?? ''}
+					searchTerms={keywords}
+					enabled={!!keywords?.length}
+				/>
 			);
 		}
 
@@ -207,10 +202,12 @@ const MediaCard: FC<MediaCardProps> = ({
 
 		subtitle = subtitle.trim();
 
-		return keywords?.length ? (
-			<HighlightSearchTerms toHighlight={subtitle} searchTerms={keywords} />
-		) : (
-			subtitle
+		return (
+			<HighlightSearchTerms
+				toHighlight={subtitle}
+				searchTerms={keywords}
+				enabled={!!keywords?.length}
+			/>
 		);
 	};
 

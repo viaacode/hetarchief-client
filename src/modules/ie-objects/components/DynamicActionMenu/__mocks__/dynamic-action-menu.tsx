@@ -1,4 +1,4 @@
-import { MediaActions } from '@ie-objects/types';
+import { MediaActions } from '@ie-objects/ie-objects.types';
 import { Icon, IconNamesLight } from '@shared/components';
 
 import { DynamicActionMenuProps } from '../DynamicActionMenu.types';

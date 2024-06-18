@@ -1,9 +1,8 @@
 import { QueryClient, useQuery, UseQueryResult } from '@tanstack/react-query';
 
+import { IeObjectSimilar } from '@ie-objects/ie-objects.types';
+import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const';
-
-import { IeObjectsService } from './../services';
-import { IeObjectSimilar } from './../types';
 
 export const useGetIeObjectsAlsoInteresting = (
 	id: string,

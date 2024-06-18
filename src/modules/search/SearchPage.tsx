@@ -23,7 +23,7 @@ import { useGetFolders } from '@account/hooks/get-folders';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
 import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/get-ie-object-format-counts';
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
-import { IeObjectAccessThrough } from '@ie-objects/types';
+import { IeObjectAccessThrough } from '@ie-objects/ie-objects.types';
 import { isInAFolder } from '@ie-objects/utils';
 import {
 	Callout,

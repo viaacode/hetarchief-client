@@ -3,8 +3,8 @@ import { QueryClient, useQuery, UseQueryResult } from '@tanstack/react-query';
 import { isStringOfFormatIeObjectSchemaIdentifier } from '@ie-objects/helpers/isStringOfFormatIeObjectSchemaIdentifier';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
+import { IeObject } from './../ie-objects.types';
 import { IeObjectsService } from './../services';
-import { IeObject } from './../types';
 
 export async function getIeObjectInfo(id: string): Promise<IeObject | null> {
 	if (!isStringOfFormatIeObjectSchemaIdentifier(id)) {

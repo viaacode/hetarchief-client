@@ -66,6 +66,10 @@ import {
 } from '@ie-objects/components';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
+import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
+import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
+import { useGetIeObjectsAlsoInteresting } from '@ie-objects/hooks/get-ie-objects-similar';
+import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-ticket-url';
 import {
 	ANONYMOUS_ACTION_SORT_MAP,
 	CP_ADMIN_ACTION_SORT_MAP,
@@ -84,15 +88,7 @@ import {
 	objectPlaceholder,
 	ticketErrorPlaceholder,
 	VISITOR_ACTION_SORT_MAP,
-} from '@ie-objects/const';
-import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
-import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
-import { useGetIeObjectsAlsoInteresting } from '@ie-objects/hooks/get-ie-objects-similar';
-import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-ticket-url';
-import {
-	IE_OBJECTS_SERVICE_BASE_URL,
-	IE_OBJECTS_SERVICE_EXPORT,
-} from '@ie-objects/services/ie-objects/ie-objects.service.const';
+} from '@ie-objects/ie-objects.consts';
 import {
 	IeObject,
 	IeObjectAccessThrough,
@@ -102,7 +98,11 @@ import {
 	MetadataExportFormats,
 	MetadataSortMap,
 	ObjectDetailTabs,
-} from '@ie-objects/types';
+} from '@ie-objects/ie-objects.types';
+import {
+	IE_OBJECTS_SERVICE_BASE_URL,
+	IE_OBJECTS_SERVICE_EXPORT,
+} from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
 import IiifViewer from '@iiif-viewer/IiifViewer';
 import { IiifViewerFunctions } from '@iiif-viewer/IiifViewer.types';
@@ -222,6 +222,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [isOcrEnabled, setIsOcrEnabled] = useState<boolean>(false);
 	const [searchOcrText, setSearchOcrText] = useState<string>('');
 	const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
+	const [isHighlightSearchTermsActive, setIsHighlightSearchTermsActive] = useState<boolean>(true);
 
 	// Layout
 	useStickyLayout();
@@ -238,6 +239,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		[QUERY_PARAM_KEY.ACTIVE_BLADE]: StringParam,
 		[QUERY_PARAM_KEY.ACTIVE_TAB]: StringParam,
 	});
+	const searchTerms = query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string | undefined;
 
 	const setActiveTab = (tabId: ObjectDetailTabs | null) => {
 		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_TAB]: tabId || undefined }, 'replace');
@@ -545,6 +547,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			case MediaActions.RequestMaterial:
 				onRequestMaterialClick();
 				break;
+			case MediaActions.ToggleHighlightSearchTerm:
+				setIsHighlightSearchTermsActive(!isHighlightSearchTermsActive);
+				break;
 		}
 	};
 
@@ -838,16 +843,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const mediaActions: DynamicActionMenuProps = useMemo(() => {
 		const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
-		const original = MEDIA_ACTIONS(
+		const original = MEDIA_ACTIONS({
 			isMobile,
-			canManageFolders || isAnonymous,
-			isInAFolder(collections, mediaInfo?.schemaIdentifier),
-			!isKiosk,
-			!!canRequestAccess,
-			isAnonymous || canRequestMaterial,
-			canDownloadMetadata,
-			getExternalMaterialRequestUrlIfAvailable()
-		);
+			canManageFolders: canManageFolders || isAnonymous,
+			isInAFolder: isInAFolder(collections, mediaInfo?.schemaIdentifier),
+			isHighlightSearchTermActive: isHighlightSearchTermsActive,
+			canToggleSearchTerms: !!searchTerms,
+			canReport: !isKiosk,
+			canRequestAccess: !!canRequestAccess,
+			canRequestMaterial: isAnonymous || canRequestMaterial,
+			canExport: canDownloadMetadata,
+			externalFormUrl: getExternalMaterialRequestUrlIfAvailable(),
+		});
 
 		// Sort, filter and tweak actions according to the given sort map
 		const sortMap = getSortMapByUserType();
@@ -887,14 +894,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		isAnonymous,
 		collections,
 		mediaInfo?.schemaIdentifier,
+		isHighlightSearchTermsActive,
+		searchTerms,
 		isKiosk,
 		canRequestAccess,
 		canRequestMaterial,
 		canDownloadMetadata,
+		getExternalMaterialRequestUrlIfAvailable,
 		getSortMapByUserType,
 		hasAccessToVisitorSpaceOfObject,
 		renderExportDropdown,
-		getExternalMaterialRequestUrlIfAvailable,
 	]);
 
 	const handleHoverOcrWord = (textLocation: TextLine, index: number) => {
@@ -1275,7 +1284,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							showKeyUserPill ? 'u-pt-8' : 'u-pt-24'
 						)}
 					>
-						<HighlightSearchTerms toHighlight={mediaInfo?.name} />
+						<HighlightSearchTerms
+							toHighlight={mediaInfo?.name}
+							enabled={isHighlightSearchTermsActive}
+						/>
 					</h3>
 
 					{renderMetaDataActions()}
@@ -1287,6 +1299,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						data={mediaInfo.description}
 						className="u-pb-24 u-line-height-1-4 u-font-size-14"
 						onReadMoreClicked={setSelectedMetadataField}
+						enableHighlighting={isHighlightSearchTermsActive}
 					/>
 
 					{showAlert && (
@@ -1316,6 +1329,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 									title={item.title}
 									data={item.data as string}
 									onReadMoreClicked={setSelectedMetadataField}
+									enableHighlighting={isHighlightSearchTermsActive}
 								/>
 							</Metadata>
 						);
@@ -1478,6 +1492,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 									searchTerms={
 										searchOcrText ? searchOcrText.split(' ') : undefined
 									}
+									enabled={isHighlightSearchTermsActive}
 								/>
 							</span>{' '}
 						</>

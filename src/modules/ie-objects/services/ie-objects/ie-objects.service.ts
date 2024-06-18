@@ -1,8 +1,8 @@
 import { isEmpty } from 'lodash-es';
 import { parseUrl, stringifyUrl } from 'query-string';
 
+import { IeObject, IeObjectSimilar, MetadataExportFormats } from '@ie-objects/ie-objects.types';
 import { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
-import { IeObject, IeObjectSimilar, MetadataExportFormats } from '@ie-objects/types';
 import { ApiService } from '@shared/services/api-service';
 import {
 	IeObjectsSearchFilter,

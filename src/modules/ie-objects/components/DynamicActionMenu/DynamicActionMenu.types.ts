@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 
-import { MediaActions } from '@ie-objects/types';
+import { MediaActions } from '@ie-objects/ie-objects.types';
 import { DefaultComponentProps } from '@shared/types';
 
 export interface DynamicActionMenuProps extends DefaultComponentProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	actions: ActionItem[];
 	limit?: number;
 	onClickAction: (id: MediaActions) => void;

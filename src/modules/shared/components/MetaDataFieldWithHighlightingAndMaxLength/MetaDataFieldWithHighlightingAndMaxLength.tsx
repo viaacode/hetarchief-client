@@ -13,11 +13,12 @@ interface MetaDataFieldWithHighlightingAndMaxLengthProps extends DefaultComponen
 	title: string | ReactNode;
 	data: string;
 	onReadMoreClicked: (item: MetadataItem) => void;
+	enableHighlighting: boolean;
 }
 
 const MetaDataFieldWithHighlightingAndMaxLength: FC<
 	MetaDataFieldWithHighlightingAndMaxLengthProps
-> = ({ title, data, className, onReadMoreClicked }) => {
+> = ({ title, data, className, onReadMoreClicked, enableHighlighting }) => {
 	const { tText } = useTranslation();
 
 	const isLongFieldData: boolean = isString(data) && data.length > METADATA_FIELD_MAX_LENGTH;
@@ -31,7 +32,11 @@ const MetaDataFieldWithHighlightingAndMaxLength: FC<
 			<div className={className}>
 				{/* ARC-1282: if there are issues with showing \\n or not showing new lines,
 				the parsedDescription used to be in a <TextWithNewLines /> component. This component was removed here to highlight text */}
-				<HighlightedMetadata title={title} data={parsedFieldData} />
+				<HighlightedMetadata
+					title={title}
+					data={parsedFieldData}
+					enabled={enableHighlighting}
+				/>
 
 				{isLongFieldData && (
 					<div

@@ -6,9 +6,10 @@ import HighlightSearchTerms from '@shared/components/HighlightedMetadata/Highlig
 interface HighlightedMetadataProps {
 	title?: string | ReactNode;
 	data?: string | ReactNode;
+	enabled?: boolean;
 }
 
-const HighlightedMetadata: FC<HighlightedMetadataProps> = ({ title, data }) => {
+const HighlightedMetadata: FC<HighlightedMetadataProps> = ({ title, data, enabled = true }) => {
 	if (isString(data)) {
 		// Split text on new lines and highlight each part separately + put each part in its own paragraph to show new lines
 		return (
@@ -30,7 +31,10 @@ const HighlightedMetadata: FC<HighlightedMetadataProps> = ({ title, data }) => {
 								className="u-line-height-1-4 u-font-size-14"
 								key={title + '-' + fieldTextPartIndex}
 							>
-								<HighlightSearchTerms toHighlight={fieldTextPart} />
+								<HighlightSearchTerms
+									toHighlight={fieldTextPart}
+									enabled={enabled}
+								/>
 							</p>
 						);
 					}

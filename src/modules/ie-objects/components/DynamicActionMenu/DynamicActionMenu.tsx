@@ -11,7 +11,7 @@ import {
 import clsx from 'clsx';
 import { FC, ReactElement, ReactNode, useRef, useState } from 'react';
 
-import { MediaActions } from '@ie-objects/types';
+import { MediaActions } from '@ie-objects/ie-objects.types';
 import { Icon, IconNamesLight } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import useTranslation from '@shared/hooks/use-translation/use-translation';

@@ -3,8 +3,8 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { FC, useEffect, useRef, useState } from 'react';
 
-import { FLOWPLAYER_FORMATS, IMAGE_FORMATS } from '@ie-objects/const';
-import { IeObjectRepresentation } from '@ie-objects/types';
+import { FLOWPLAYER_FORMATS, IMAGE_FORMATS } from '@ie-objects/ie-objects.consts';
+import { IeObjectRepresentation } from '@ie-objects/ie-objects.types';
 import { Icon, IconNamesLight } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import useTranslation from '@shared/hooks/use-translation/use-translation';

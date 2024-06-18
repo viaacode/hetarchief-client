@@ -18,7 +18,7 @@ import { AccountLayout } from '@account/layouts';
 import { foldersService } from '@account/services/folders';
 import { Folder, FolderIeObject } from '@account/types';
 import { createFolderSlug } from '@account/utils';
-import { IeObjectAccessThrough, IeObjectLicense } from '@ie-objects/types';
+import { IeObjectAccessThrough, IeObjectLicense } from '@ie-objects/ie-objects.types';
 import {
 	Icon,
 	IconNamesLight,
