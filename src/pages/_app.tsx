@@ -38,13 +38,13 @@ const queryClient = new QueryClient({
 // Temp version with undefined router and nl locale
 AdminConfigManager.setConfig(getAdminCoreConfig(null, Locale.nl));
 
-function MyApp({ Component, pageProps }: AppProps): ReactElement {
+function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 	const router = useRouter();
 	const locale = useLocale();
 
 	useEffect(() => {
-		AdminConfigManager.setConfig(getAdminCoreConfig(router, locale));
-	}, [router, locale]);
+		AdminConfigManager.setConfig(getAdminCoreConfig(router, locale || Locale.nl));
+	}, [locale, router]);
 
 	if (isBrowser()) {
 		// client-side-only code, window is not available during nextjs server side prerender

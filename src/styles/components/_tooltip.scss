@@ -10,7 +10,7 @@ $component: "c-tooltip-component";
 	color: $white;
 	opacity: 0;
 	font-size: 1.3rem;
-	font-weight: 100;
+	font-weight: $font-weight-light;
 	line-height: 1.428; // 20px equivalent
 	transition:
 		opacity 0.2s ease-in-out,

@@ -65,7 +65,7 @@ $l-container-padding-xs: 2rem;
 
 	.c-accordion__header-title {
 		color: $black;
-		font-weight: 700;
+		font-weight: $font-weight-bold;
 	}
 
 	.c-accordion__body {

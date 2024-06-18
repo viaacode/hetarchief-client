@@ -17,7 +17,7 @@ $component: "c-list-navigation";
 		display: block;
 
 		&--active {
-			font-weight: 700;
+			font-weight: $font-weight-bold;
 		}
 
 		&:hover {

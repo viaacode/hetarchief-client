@@ -43,7 +43,6 @@ export const changeLocalSlug = (
 		);
 		newFullPath = translatedContentPageInfo?.path || ROUTES_BY_LOCALE[newLocale].home;
 	}
-	console.log('changeLocale', { newFullPath, newLocale, contentPagePath: contentPageInfo?.path });
 	// Redirect to new path
 	router.push(newFullPath, newFullPath, { locale: newLocale });
 	queryClient.invalidateQueries([QUERY_KEYS.getNavigationItems]);

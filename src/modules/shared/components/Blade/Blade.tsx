@@ -133,7 +133,7 @@ const Blade: FC<BladeProps> = ({
 				<div className={styles['c-blade__body-wrapper']}>
 					{renderTitle && renderTitle?.({ id, className: styles['c-blade__title'] })}
 					{children}
-					{footer && <div>{footer}</div>}
+					{footer && <div className={styles['c-blade__footer']}>{footer}</div>}
 				</div>
 			</div>
 		);

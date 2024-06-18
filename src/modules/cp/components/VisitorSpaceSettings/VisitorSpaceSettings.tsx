@@ -510,11 +510,12 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 		);
 	}, [
 		showSiteSettings,
+		maintainer,
+		maintainerOptions,
 		tHtml,
+		action,
 		formErrors.orId,
 		formErrors.slug,
-		action,
-		maintainerOptions,
 		formValues?.slug,
 		formValues?.orId,
 		visitorSpace?.orId,

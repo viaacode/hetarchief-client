@@ -58,6 +58,7 @@ import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
+import { numberWithCommas } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -383,7 +384,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				label: (
 					<TabLabel
 						label={tab.label}
-						count={getItemCounts(tab.id as SearchPageMediaType)}
+						count={numberWithCommas(getItemCounts(tab.id as SearchPageMediaType))}
 					/>
 				),
 				active: tab.id === format,

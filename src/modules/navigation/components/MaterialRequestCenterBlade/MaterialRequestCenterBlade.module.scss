@@ -69,7 +69,7 @@ $component: "c-material-request-center-blade";
 
 		&-label {
 			color: $black;
-			font-weight: bold;
+			font-weight: $font-weight-bold;
 			margin-bottom: $spacer-xxs;
 			word-break: break-word;
 
@@ -116,6 +116,10 @@ $component: "c-material-request-center-blade";
 	}
 
 	&__send-button {
+		div {
+			font-weight: $font-weight-bold;
+		}
+
 		margin-bottom: $spacer-sm;
 	}
 
