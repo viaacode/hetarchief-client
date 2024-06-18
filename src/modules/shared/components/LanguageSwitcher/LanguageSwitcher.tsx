@@ -1,6 +1,7 @@
 import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
+import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -23,7 +24,7 @@ import { Locale } from '@shared/utils';
 
 import styles from './LanguageSwitcher.module.scss';
 
-export default function LanguageSwitcher() {
+export default function LanguageSwitcher({ className }: { className?: string }) {
 	const router = useRouter();
 	const locale = useLocale();
 	const queryClient = useQueryClient();
@@ -70,7 +71,7 @@ export default function LanguageSwitcher() {
 	};
 
 	return (
-		<div className={styles['c-language-switcher']}>
+		<div className={clsx(styles['c-language-switcher'], className)}>
 			<NavigationDropdown
 				id="c-language-switcher__dropdown"
 				isOpen={isOpen}
