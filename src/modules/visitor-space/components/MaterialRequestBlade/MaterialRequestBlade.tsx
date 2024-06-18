@@ -33,7 +33,7 @@ interface MaterialRequestBladeProps {
 	materialRequestId?: string;
 	meemooId?: string;
 	reason?: string;
-	refetch?: () => void;
+	refetchMaterialRequests?: () => void;
 	type?: MaterialRequestType;
 	layer: number;
 	currentLayer: number;
@@ -51,9 +51,9 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	maintainerSlug,
 	materialRequestId,
 	meemooId,
-	reason,
-	refetch,
 	type,
+	reason,
+	refetchMaterialRequests,
 	layer,
 	currentLayer,
 }) => {
@@ -61,18 +61,18 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const dispatch = useDispatch();
 	const locale = useLocale();
 
-	const [typeSelected, setTypeSelected] = useState<MaterialRequestType>(
-		type || MaterialRequestType.VIEW
-	);
+	const [typeSelected, setTypeSelected] = useState<MaterialRequestType | undefined>(type);
+
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
 
 	const onCloseModal = () => {
 		onClose();
 		setReasonInputValue('');
-		setTypeSelected(MaterialRequestType.VIEW);
+		setTypeSelected(undefined);
+		refetchMaterialRequests?.();
 	};
 
-	const onSuccesCreated = async () => {
+	const onSuccessCreated = async () => {
 		const response = await MaterialRequestsService.getAll({
 			isPersonal: true,
 			size: 500,
@@ -81,8 +81,20 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		dispatch(setMaterialRequestCount(response.items.length));
 	};
 
+	const onNoTypeSelected = () => {
+		toastService.notify({
+			maxLines: 3,
+			title: tText('Type ontbreekt'),
+			description: tText('Selecteer een type voor je aanvraag'),
+		});
+	};
+
 	const onAddToList = async () => {
 		try {
+			if (!typeSelected) {
+				onNoTypeSelected();
+				return;
+			}
 			const response = await MaterialRequestsService.create({
 				objectId,
 				type: typeSelected,
@@ -102,7 +114,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					'modules/visitor-space/components/material-request-blade/material-request-blade___rond-je-aanvragenlijst-af'
 				),
 			});
-			onSuccesCreated();
+			await onSuccessCreated();
 			onCloseModal();
 		} catch (err) {
 			onFailedRequest();
@@ -114,6 +126,10 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			onFailedRequest();
 		} else {
 			try {
+				if (!typeSelected) {
+					onNoTypeSelected();
+					return;
+				}
 				const response = await MaterialRequestsService.update(materialRequestId, {
 					type: typeSelected,
 					reason: reasonInputValue,
@@ -132,8 +148,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-toegepast'
 					),
 				});
-				onSuccesCreated();
-				refetch && refetch();
+				await onSuccessCreated();
 				onCloseModal();
 			} catch (err) {
 				onFailedRequest();

@@ -47,7 +47,7 @@ $component: "p-account-my-material-requests";
 		}
 
 		&-label {
-			font-weight: 900;
+			font-weight: $font-weight-bold;
 			margin-bottom: $spacer-xxs;
 
 			&-icon {
@@ -72,7 +72,7 @@ $component: "p-account-my-material-requests";
 		}
 
 		&-label {
-			font-weight: 900;
+			font-weight: $font-weight-bold;
 			margin-bottom: $spacer-xs;
 		}
 

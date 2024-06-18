@@ -14,7 +14,7 @@ table[class*="c-table--styled"] {
 			padding: 1.6rem 2.4rem;
 			position: relative;
 			text-align: left;
-			font-weight: 700;
+			font-weight: $font-weight-bold;
 			font-size: 1.2rem;
 			line-height: $line-height-1xl;
 			color: #727272;
@@ -121,7 +121,7 @@ div[class*="c-pagination__btn"] {
 div[class*="c-pagination__btn--active"] {
 	background-color: #009690;
 	color: #fff;
-	font-weight: 700;
+	font-weight: $font-weight-bold;
 	border-radius: 50%;
 
 	&:hover {
@@ -157,7 +157,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger,
 
 	.c-button__label,
 	div[class*="c-button__label"] {
-		font-weight: 400;
+		font-weight: $font-weight-normal;
 	}
 }
 
@@ -340,7 +340,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	.c-toolbar {
 		.c-modal__title {
 			font-size: $font-size-1xl;
-			font-weight: 700;
+			font-weight: $font-weight-bold;
 		}
 
 		button[class*="c-button"] {

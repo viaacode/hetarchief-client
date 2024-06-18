@@ -24,7 +24,7 @@ $component: "c-Alert";
 	}
 
 	.c-Alert__title {
-		font-weight: bold;
+		font-weight: $font-weight-bold;
 		margin-bottom: 0.4rem;
 	}
 
