@@ -4,7 +4,6 @@ import { isNil } from 'lodash-es';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { FC, MouseEvent, ReactNode, useState } from 'react';
-import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
@@ -14,6 +13,7 @@ import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
 import { DropdownMenu, IconNamesLight, Modal, Pill } from '@shared/components';
+import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
 import { TRUNCATED_TEXT_LENGTH, TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTES_BY_LOCALE } from '@shared/const';
@@ -152,7 +152,11 @@ const MediaCard: FC<MediaCardProps> = ({
 		if (typeof title === 'string') {
 			return (
 				<b className={`u-text-ellipsis--${view === 'grid' ? 7 : 3}`}>
-					{keywords?.length ? highlighted(title ?? '') : title}
+					{keywords?.length ? (
+						<HighlightSearchTerms toHighlight={title ?? ''} searchTerms={keywords} />
+					) : (
+						title
+					)}
 				</b>
 			);
 		}
@@ -171,7 +175,18 @@ const MediaCard: FC<MediaCardProps> = ({
 				keywords,
 				TRUNCATED_TEXT_LENGTH
 			);
-			return <>{keywords?.length ? highlighted(truncatedText ?? '') : description}</>;
+			return (
+				<>
+					{keywords?.length ? (
+						<HighlightSearchTerms
+							toHighlight={truncatedText ?? ''}
+							searchTerms={keywords}
+						/>
+					) : (
+						description
+					)}
+				</>
+			);
 		}
 
 		return description;
@@ -192,7 +207,11 @@ const MediaCard: FC<MediaCardProps> = ({
 
 		subtitle = subtitle.trim();
 
-		return keywords?.length ? highlighted(subtitle) : subtitle;
+		return keywords?.length ? (
+			<HighlightSearchTerms toHighlight={subtitle} searchTerms={keywords} />
+		) : (
+			subtitle
+		);
 	};
 
 	const renderNoContentIcon = () => (
@@ -279,10 +298,6 @@ const MediaCard: FC<MediaCardProps> = ({
 		) : (
 			renderNoContent()
 		);
-
-	const highlighted = (toHighlight: string) => (
-		<Highlighter searchWords={keywords ?? []} autoEscape={true} textToHighlight={toHighlight} />
-	);
 
 	const renderKeyUserPill = () => (
 		<div className="u-mt-8">

@@ -41,7 +41,6 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
@@ -126,15 +125,13 @@ import {
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
+import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
-import {
-	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
-	QUERY_PARAM_KEY,
-} from '@shared/const/query-param-keys';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
@@ -803,23 +800,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		[metadataExportDropdownOpen, onExportClick, tHtml, tText]
 	);
 
-	const highlighted = (toHighlight: string, searchTerms?: string[]) => {
-		const searchWords = searchTerms
-			? searchTerms
-			: query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]
-			? decodeURIComponent(query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string).split(
-					HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
-			  )
-			: [];
-		return (
-			<Highlighter
-				searchWords={searchWords}
-				autoEscape={true}
-				textToHighlight={toHighlight}
-			/>
-		);
-	};
-
 	/**
 	 * Content
 	 */
@@ -1295,7 +1275,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							showKeyUserPill ? 'u-pt-8' : 'u-pt-24'
 						)}
 					>
-						{highlighted(mediaInfo?.name)}
+						<HighlightSearchTerms toHighlight={mediaInfo?.name} />
 					</h3>
 
 					{renderMetaDataActions()}
@@ -1491,10 +1471,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								onMouseOver={() => handleHoverOcrWord(textLocation, index)}
 								onClick={() => setIsOcrEnabled(!isOcrEnabled)}
 							>
-								{highlighted(
-									textLocation.text,
-									searchOcrText ? searchOcrText.split(' ') : undefined
-								)}
+								<HighlightSearchTerms
+									toHighlight={textLocation.text}
+									searchTerms={
+										searchOcrText ? searchOcrText.split(' ') : undefined
+									}
+								/>
 							</span>{' '}
 						</>
 					);

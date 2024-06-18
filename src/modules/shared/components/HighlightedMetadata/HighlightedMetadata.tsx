@@ -1,13 +1,7 @@
 import { compact, isString } from 'lodash-es';
 import { FC, ReactElement, ReactNode } from 'react';
-import Highlighter from 'react-highlight-words';
-import { useQueryParams } from 'use-query-params';
 
-import { IE_OBJECT_QUERY_PARAM_CONFIG } from '@ie-objects/const';
-import {
-	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
-	QUERY_PARAM_KEY,
-} from '@shared/const/query-param-keys';
+import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
 
 interface HighlightedMetadataProps {
 	title?: string | ReactNode;
@@ -15,22 +9,6 @@ interface HighlightedMetadataProps {
 }
 
 const HighlightedMetadata: FC<HighlightedMetadataProps> = ({ title, data }) => {
-	const [query] = useQueryParams(IE_OBJECT_QUERY_PARAM_CONFIG);
-
-	const highlighted = (toHighlight: string): ReactNode => (
-		<Highlighter
-			searchWords={
-				query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]
-					? decodeURIComponent(
-							query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string
-					  ).split(HIGHLIGHTED_SEARCH_TERMS_SEPARATOR)
-					: []
-			}
-			autoEscape={true}
-			textToHighlight={toHighlight}
-		/>
-	);
-
 	if (isString(data)) {
 		// Split text on new lines and highlight each part separately + put each part in its own paragraph to show new lines
 		return (
@@ -42,7 +20,7 @@ const HighlightedMetadata: FC<HighlightedMetadataProps> = ({ title, data }) => {
 							return (
 								<p key={title + '-' + fieldTextPartIndex}>
 									<a href={fieldTextPart} target="_blank" rel="noreferrer">
-										{highlighted(fieldTextPart)}
+										<HighlightSearchTerms toHighlight={fieldTextPart} />
 									</a>
 								</p>
 							);
@@ -52,7 +30,7 @@ const HighlightedMetadata: FC<HighlightedMetadataProps> = ({ title, data }) => {
 								className="u-line-height-1-4 u-font-size-14"
 								key={title + '-' + fieldTextPartIndex}
 							>
-								{highlighted(fieldTextPart)}
+								<HighlightSearchTerms toHighlight={fieldTextPart} />
 							</p>
 						);
 					}
