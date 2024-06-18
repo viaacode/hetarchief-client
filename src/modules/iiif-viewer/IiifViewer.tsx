@@ -9,7 +9,7 @@ import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
-import { isBrowser } from '@shared/utils';
+import { isBrowser, isServerSideRendering } from '@shared/utils';
 
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import clsx from 'clsx';
@@ -85,6 +85,63 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			topLeftContainer?.append(closeFullscreenButton);
 		};
 
+		const updateOcrOverlay = useCallback(() => {
+			if (isServerSideRendering()) {
+				return;
+			}
+
+			if (!openSeaDragonInstance || !openSeaDragonLib) {
+				return null;
+			}
+
+			openSeaDragonInstance?.clearOverlays();
+
+			// TODO link altoTextLocations to activeImageIndex
+			const altoUrl = imageInfos[activeImageIndex].altoUrl;
+			console.log('alto file: ' + altoUrl);
+
+			if (!altoUrl) {
+				// No ocr text is available for this image
+				return;
+			}
+
+			altoTextLocations.forEach((altoTextLocation, index) => {
+				const span = document.createElement('SPAN');
+				span.id = 'p-object-detail__iiif__alto__text__' + index;
+				span.className = 'p-object-detail__iiif__alto__text';
+				span.innerHTML = `
+<svg
+	width="${altoTextLocation.width}"
+	height="${altoTextLocation.height}"
+	xmlns="http://www.w3.org/2000/svg"
+	viewBox="0 0 ${altoTextLocation.width} ${altoTextLocation.height}"
+	preserveAspectRatio="xMidYMid meet"
+	>
+  <text
+  	x="50%"
+  	y="50%"
+  	fill="black"
+  	font-size="300%"
+  	dominant-baseline="middle"
+  	text-anchor="middle"
+  >
+		${altoTextLocation.text}
+	</text>
+</svg>`;
+				openSeaDragonInstance.addOverlay(
+					span,
+					new openSeaDragonLib.Rect(
+						altoTextLocation.x / imageInfos[activeImageIndex].width,
+						altoTextLocation.y / imageInfos[activeImageIndex].height,
+						altoTextLocation.width / imageInfos[activeImageIndex].width,
+						altoTextLocation.height / imageInfos[activeImageIndex].height,
+						0
+					),
+					openSeaDragonLib.Placement.CENTER
+				);
+			});
+		}, [activeImageIndex, imageInfos, openSeaDragonInstance, openSeaDragonLib]);
+
 		const initIiifViewer = useCallback(async () => {
 			if (!!iiifViewerId && isBrowser()) {
 				const iiifContainer = document.getElementById(iiifViewerId);
@@ -106,50 +163,13 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 				openSeadragonInstanceTemp.viewport.goHome(true);
 
-				// const altoTextLocations: TextLine[] = extractTextLinesFromAlto();
-				// console.log(altoTextLocations);
-
-				if (isBrowser()) {
-					altoTextLocations.forEach((altoTextLocation, index) => {
-						const span = document.createElement('SPAN');
-						span.id = 'p-object-detail__iiif__alto__text__' + index;
-						span.className = 'p-object-detail__iiif__alto__text';
-						span.innerHTML = `
-<svg
-	width="${altoTextLocation.width}"
-	height="${altoTextLocation.height}"
-	xmlns="http://www.w3.org/2000/svg"
-	viewBox="0 0 ${altoTextLocation.width} ${altoTextLocation.height}"
-	preserveAspectRatio="xMidYMid meet"
-	>
-  <text
-  	x="50%"
-  	y="50%"
-  	fill="black"
-  	font-size="300%"
-  	dominant-baseline="middle"
-  	text-anchor="middle"
-  >
-		${altoTextLocation.text}
-	</text>
-</svg>`;
-						openSeadragonInstanceTemp.addOverlay(
-							span,
-							new OpenSeadragon.Rect(
-								altoTextLocation.x / imageInfos[activeImageIndex].width,
-								altoTextLocation.y / imageInfos[activeImageIndex].height,
-								altoTextLocation.width / imageInfos[activeImageIndex].width,
-								altoTextLocation.height / imageInfos[activeImageIndex].height,
-								0
-							),
-							OpenSeadragon.Placement.CENTER
-						);
-					});
-				}
-
 				setOpenSeadragonInstance(openSeadragonInstanceTemp);
 			}
 		}, [iiifViewerId, isMobile]);
+
+		useEffect(() => {
+			updateOcrOverlay();
+		}, [updateOcrOverlay]);
 
 		useEffect(() => {
 			initIiifViewer();
@@ -184,6 +204,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		};
 
 		const iiifGoToPage = (pageIndex: number): void => {
+			openSeaDragonInstance?.clearOverlays();
 			setActiveImageIndex(pageIndex);
 			openSeaDragonInstance?.goToPage(pageIndex);
 		};
@@ -405,14 +426,12 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 		return (
 			<div className={iiifStyles['c-iiif-viewer']}>
-				{/* IIIF viewer*/}
+				{/* IIIF viewer container div */}
 				<div
-					className={
-						iiifStyles['p-object-detail__iiif'] +
-						(isOcrEnabled
-							? ' p-object-detail__iiif__ocr--enabled'
-							: ' p-object-detail__iiif__ocr--disabled')
-					}
+					className={clsx(iiifStyles['p-object-detail__iiif'], {
+						'p-object-detail__iiif__ocr--enabled': isOcrEnabled,
+						'p-object-detail__iiif__ocr--disabled': !isOcrEnabled,
+					})}
 					id={iiifViewerId}
 					style={{ display: iiifGridViewEnabled ? 'none' : 'block' }}
 				/>
