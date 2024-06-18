@@ -33,7 +33,7 @@ interface MaterialRequestBladeProps {
 	materialRequestId?: string;
 	meemooId?: string;
 	reason?: string;
-	refetch?: () => void;
+	refetchMaterialRequests?: () => void;
 	type?: MaterialRequestType;
 	layer: number;
 	currentLayer: number;
@@ -51,8 +51,9 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	maintainerSlug,
 	materialRequestId,
 	meemooId,
+	type,
 	reason,
-	refetch,
+	refetchMaterialRequests,
 	layer,
 	currentLayer,
 }) => {
@@ -60,7 +61,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const dispatch = useDispatch();
 	const locale = useLocale();
 
-	const [typeSelected, setTypeSelected] = useState<MaterialRequestType | undefined>(undefined);
+	const [typeSelected, setTypeSelected] = useState<MaterialRequestType | undefined>(type);
 
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
 
@@ -68,6 +69,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		onClose();
 		setReasonInputValue('');
 		setTypeSelected(undefined);
+		refetchMaterialRequests?.();
 	};
 
 	const onSuccessCreated = async () => {
@@ -112,7 +114,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					'modules/visitor-space/components/material-request-blade/material-request-blade___rond-je-aanvragenlijst-af'
 				),
 			});
-			onSuccessCreated();
+			await onSuccessCreated();
 			onCloseModal();
 		} catch (err) {
 			onFailedRequest();
@@ -146,8 +148,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-toegepast'
 					),
 				});
-				onSuccessCreated();
-				refetch && refetch();
+				await onSuccessCreated();
 				onCloseModal();
 			} catch (err) {
 				onFailedRequest();

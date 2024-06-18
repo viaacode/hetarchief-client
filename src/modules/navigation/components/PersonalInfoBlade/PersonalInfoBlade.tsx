@@ -1,12 +1,17 @@
-import { Button, RadioButton, TextInput } from '@meemoo/react-components';
+import { Button, Checkbox, RadioButton, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
 import React, { FC, useState } from 'react';
+import { useSelector } from 'react-redux';
 
+import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
+import { selectUser } from '@auth/store/user';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestRequesterCapacity } from '@material-requests/types';
 import { Blade } from '@shared/components';
 import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
+import { tHtml } from '@shared/helpers/translate';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
 import { useAppDispatch } from '@shared/store';
 import { setShowMaterialRequestCenter } from '@shared/store/ui';
@@ -22,11 +27,17 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 	currentLayer,
 	refetch,
 }) => {
+	const user = useSelector(selectUser);
 	const { tText } = useTranslation();
 	const dispatch = useAppDispatch();
+	const { data: preferences } = useGetNewsletterPreferences(user?.email);
+	const shouldRenderNewsletterCheckbox: boolean = !preferences?.newsletter;
 
+	const [isSubscribedToNewsletter, setIsSubscribedToNewsletter] = useState<boolean>(
+		preferences?.newsletter || false
+	);
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestRequesterCapacity | undefined>(
-		undefined
+		personalInfo.requesterCapacity
 	);
 	const [organisationInputValue, setOrganisationInputValue] = useState<string>(
 		personalInfo.organisation || ''
@@ -46,6 +57,13 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 				type: typeSelected,
 				organisation: organisationInputValue,
 			});
+
+			await CampaignMonitorService.setPreferences({
+				preferences: {
+					newsletter: isSubscribedToNewsletter,
+				},
+			});
+
 			toastService.notify({
 				maxLines: 3,
 				title: tText(
@@ -62,6 +80,20 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 			console.error({ err });
 			onFailedRequest();
 		}
+	};
+
+	const renderCheckbox = () => {
+		if (!shouldRenderNewsletterCheckbox) {
+			return null;
+		}
+		return (
+			<Checkbox
+				className={styles['c-personal-info-blade__checkbox']}
+				checked={isSubscribedToNewsletter}
+				label={tHtml('schrijf je in voor de nieuwsbrief')}
+				onClick={() => setIsSubscribedToNewsletter((prevState) => !prevState)}
+			/>
+		);
 	};
 
 	const onFailedRequest = () => {
@@ -81,24 +113,30 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 			<div className={styles['c-personal-info-blade__close-button-container']}>
 				{renderMobileDesktop({
 					mobile: (
-						<Button
-							label={tText(
-								'modules/navigation/components/personal-info-blade/personal-info-blade___verstuur-mobile'
-							)}
-							variants={['block', 'text', 'dark']}
-							onClick={onSendRequests}
-							className={styles['c-personal-info-blade__send-button']}
-						/>
+						<>
+							{renderCheckbox()}
+							<Button
+								label={tText(
+									'modules/navigation/components/personal-info-blade/personal-info-blade___verstuur-mobile'
+								)}
+								variants={['block', 'text', 'dark']}
+								onClick={onSendRequests}
+								className={styles['c-personal-info-blade__send-button']}
+							/>
+						</>
 					),
 					desktop: (
-						<Button
-							label={tText(
-								'modules/navigation/components/personal-info-blade/personal-info-blade___verstuur'
-							)}
-							variants={['block', 'text', 'dark']}
-							onClick={onSendRequests}
-							className={styles['c-personal-info-blade__send-button']}
-						/>
+						<>
+							{renderCheckbox()}
+							<Button
+								label={tText(
+									'modules/navigation/components/personal-info-blade/personal-info-blade___verstuur'
+								)}
+								variants={['block', 'text', 'dark']}
+								onClick={onSendRequests}
+								className={styles['c-personal-info-blade__send-button']}
+							/>
+						</>
 					),
 				})}
 

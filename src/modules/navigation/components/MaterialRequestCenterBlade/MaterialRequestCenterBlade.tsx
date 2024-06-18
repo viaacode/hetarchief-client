@@ -11,7 +11,6 @@ import {
 	MaterialRequest,
 	MaterialRequestKeys,
 	MaterialRequestObjectType,
-	MaterialRequestRequesterCapacity,
 } from '@material-requests/types';
 import { Blade, BladeManager, Icon, IconNamesLight, Loading } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -66,7 +65,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	const {
 		data: materialRequests,
 		isFetching,
-		refetch,
+		refetch: refetchMaterialRequests,
 	} = useGetPendingMaterialRequests(
 		{
 			orderProp: MaterialRequestKeys.maintainer,
@@ -107,12 +106,12 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	}, [materialRequests, dispatch]);
 
 	useEffect(() => {
-		isOpen && refetch();
-	}, [isOpen, refetch]);
+		isOpen && refetchMaterialRequests();
+	}, [isOpen, refetchMaterialRequests]);
 
 	const deleteMaterialRequest = async (id: string) => {
 		const deleteResponse = await MaterialRequestsService.delete(id);
-		deleteResponse && (await refetch());
+		deleteResponse && (await refetchMaterialRequests());
 	};
 
 	const renderTitle = (props: any) => {
@@ -357,7 +356,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					meemooId={selectedMaterialRequest.objectMeemooIdentifier}
 					reason={selectedMaterialRequest.reason}
 					type={selectedMaterialRequest.type}
-					refetch={refetch}
+					refetchMaterialRequests={refetchMaterialRequests}
 					isEditMode
 					layer={activeBlade === MaterialRequestBladeId.EditMaterialRequest ? 2 : 99}
 					currentLayer={
@@ -376,7 +375,6 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					personalInfo={{
 						fullName: user.fullName,
 						email: user.email,
-						requesterCapacity: MaterialRequestRequesterCapacity.EDUCATION,
 						...(user.organisationName && {
 							organisation: user.organisationName,
 						}),
@@ -387,7 +385,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 							? getCurrentLayer()
 							: 9999
 					}
-					refetch={refetch}
+					refetch={refetchMaterialRequests}
 				/>
 			)}
 		</BladeManager>
