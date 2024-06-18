@@ -1421,7 +1421,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						aria-hidden
 					/>
 				}
-				title={tHtml('OCR tekst')}
+				title={tHtml('modules/ie-objects/object-detail-page___ocr-tekst')}
 				renderContent={renderOcrContent}
 			/>
 		);
@@ -1436,7 +1436,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						className={styles['p-object-detail__ocr__search']}
 						value={searchOcrText}
 						variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
-						placeholder={tText('Zoek in de ocr tekst')}
+						placeholder={tText(
+							'modules/ie-objects/object-detail-page___zoek-in-de-ocr-tekst'
+						)}
 						onChange={setSearchOcrText}
 						onSearch={() => {}}
 					/>

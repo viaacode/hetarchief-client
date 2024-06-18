@@ -84,8 +84,12 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const onNoTypeSelected = () => {
 		toastService.notify({
 			maxLines: 3,
-			title: tText('Type ontbreekt'),
-			description: tText('Selecteer een type voor je aanvraag'),
+			title: tText(
+				'modules/visitor-space/components/material-request-blade/material-request-blade___type-ontbreekt'
+			),
+			description: tText(
+				'modules/visitor-space/components/material-request-blade/material-request-blade___selecteer-een-type-voor-je-aanvraag'
+			),
 		});
 	};
 

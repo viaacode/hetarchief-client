@@ -48,8 +48,12 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 			if (!typeSelected) {
 				toastService.notify({
 					maxLines: 3,
-					title: tText('verzenden mislukt'),
-					description: tText('selecteer hoedanigheid'),
+					title: tText(
+						'modules/navigation/components/personal-info-blade/personal-info-blade___verzenden-mislukt'
+					),
+					description: tText(
+						'modules/navigation/components/personal-info-blade/personal-info-blade___selecteer-hoedanigheid'
+					),
 				});
 				return;
 			}
@@ -90,7 +94,9 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 			<Checkbox
 				className={styles['c-personal-info-blade__checkbox']}
 				checked={isSubscribedToNewsletter}
-				label={tHtml('schrijf je in voor de nieuwsbrief')}
+				label={tHtml(
+					'modules/navigation/components/personal-info-blade/personal-info-blade___schrijf-je-in-voor-de-nieuwsbrief'
+				)}
 				onClick={() => setIsSubscribedToNewsletter((prevState) => !prevState)}
 			/>
 		);

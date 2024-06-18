@@ -76,7 +76,9 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			closeFullscreenButton.className =
 				'p-object-detail__iiif__close-fullscreen c-button c-button--icon c-button--white';
 			closeFullscreenButton.innerHTML = 'times';
-			closeFullscreenButton.title = tText('Sluit volledig scherm');
+			closeFullscreenButton.title = tText(
+				'modules/iiif-viewer/iiif-viewer___sluit-volledig-scherm'
+			);
 			closeFullscreenButton.addEventListener('click', () => {
 				openSeadragonViewer.setFullScreen(false);
 			});
@@ -257,7 +259,9 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 										'p-object-detail__iiif__controls__grid-view__previous-image'
 									)}
 									icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
-									aria-label={tText('Ga naar de vorige afbeelding')}
+									aria-label={tText(
+										'modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding'
+									)}
 									variants={['white']}
 									onClick={() => setActiveImageIndex(activeImageIndex - 1)}
 									disabled={activeImageIndex === 0}
@@ -353,7 +357,9 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 										'p-object-detail__iiif__controls__grid-view__next-image'
 									)}
 									icon={<Icon name={IconNamesLight.ArrowRight} aria-hidden />}
-									aria-label={tText('Ga naar de volgende afbeelding')}
+									aria-label={tText(
+										'modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding'
+									)}
 									variants={['white']}
 									onClick={() => setActiveImageIndex(activeImageIndex + 1)}
 									disabled={activeImageIndex === imageInfos.length - 1}

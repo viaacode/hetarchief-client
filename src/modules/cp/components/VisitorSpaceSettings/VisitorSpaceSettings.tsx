@@ -190,7 +190,9 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 
 				if (showToasts) {
 					toastService.notify({
-						title: tHtml('Het formulier bevat nog errors'),
+						title: tHtml(
+							'modules/cp/components/visitor-space-settings/visitor-space-settings___het-formulier-bevat-nog-errors'
+						),
 						description: validationError.message,
 					});
 				}
@@ -246,8 +248,12 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 
 			console.error('Failed to create the visitor space', err);
 			toastService.notify({
-				title: tHtml('Het opslaan is mislukt'),
-				description: tHtml('Het aanmaken van de bezoekersruimte is mislukt.'),
+				title: tHtml(
+					'modules/cp/components/visitor-space-settings/visitor-space-settings___het-opslaan-is-mislukt'
+				),
+				description: tHtml(
+					'modules/cp/components/visitor-space-settings/visitor-space-settings___het-aanmaken-van-de-bezoekersruimte-is-mislukt'
+				),
 			});
 		}
 	}, [formValues, locale, refetchVisitorSpace, router, tHtml, validateForm]);
@@ -285,8 +291,12 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 				await refetchVisitorSpace();
 				console.error('Failed to update the visitor space', err);
 				toastService.notify({
-					title: tHtml('Het opslaan is mislukt'),
-					description: tHtml('Het updaten van de bezoekersruimte is mislukt.'),
+					title: tHtml(
+						'modules/cp/components/visitor-space-settings/visitor-space-settings___het-opslaan-is-mislukt'
+					),
+					description: tHtml(
+						'modules/cp/components/visitor-space-settings/visitor-space-settings___het-updaten-van-de-bezoekersruimte-is-mislukt'
+					),
 				});
 			}
 		},
@@ -688,7 +698,9 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 					{/* Otherwise we getJavaScript heap out of memory errors */}
 					<NoServerSideRendering>
 						<Button
-							label={tText('Nederlands')}
+							label={tText(
+								'modules/cp/components/visitor-space-settings/visitor-space-settings___nederlands'
+							)}
 							className={clsx(styles['c-cp-settings__language-tab'], {
 								[styles['c-cp-settings__language-tab--active']]:
 									descriptionEditLanguage === Locale.nl,
@@ -696,7 +708,9 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 							onClick={() => setDescriptionEditLanguage(Locale.nl)}
 						/>
 						<Button
-							label={tText('Engels')}
+							label={tText(
+								'modules/cp/components/visitor-space-settings/visitor-space-settings___engels'
+							)}
 							className={clsx(styles['c-cp-settings__language-tab'], {
 								[styles['c-cp-settings__language-tab--active']]:
 									descriptionEditLanguage === Locale.en,
@@ -776,7 +790,9 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 
 					<NoServerSideRendering>
 						<Button
-							label={tText('Nederlands')}
+							label={tText(
+								'modules/cp/components/visitor-space-settings/visitor-space-settings___nederlands'
+							)}
 							className={clsx(styles['c-cp-settings__language-tab'], {
 								[styles['c-cp-settings__language-tab--active']]:
 									serviceDescriptionEditLanguage === Locale.nl,
@@ -784,7 +800,9 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 							onClick={() => setServiceDescriptionEditLanguage(Locale.nl)}
 						/>
 						<Button
-							label={tText('Engels')}
+							label={tText(
+								'modules/cp/components/visitor-space-settings/visitor-space-settings___engels'
+							)}
 							className={clsx(styles['c-cp-settings__language-tab'], {
 								[styles['c-cp-settings__language-tab--active']]:
 									serviceDescriptionEditLanguage === Locale.en,
