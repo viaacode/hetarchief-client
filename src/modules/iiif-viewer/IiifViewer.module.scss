@@ -1,5 +1,8 @@
 @use "src/styles/abstracts" as *;
 
+$navigator-margin-top: 30rem;
+$navigator-margin-right: 30rem;
+
 .p-object-detail__iiif {
 	display: block;
 	position: absolute;
@@ -51,7 +54,7 @@
 	position: absolute !important;
 	left: 0;
 	top: 0;
-	height: calc(100% - 30rem) !important;
+	height: calc(100% - $navigator-margin-top) !important;
 	display: flex;
 	flex-direction: column;
 	width: calc(100px + $spacer-sm);
@@ -84,9 +87,9 @@
 .p-object-detail__iiif__controls {
 	z-index: 2000;
 	width: calc(100% - 40rem);
-	height: 4.8rem;
+	height: $button-width;
 	position: absolute;
-	left: 20rem;
+	left: $navigator-margin-right;
 	bottom: 0;
 	margin: 2.4rem;
 	display: flex;
@@ -97,26 +100,26 @@
 		border-radius: 0;
 
 		&:global(:first-child) {
-			border-radius: 2.4rem 0 0 2.4rem;
-			padding-left: 1rem;
+			border-radius: $button-radius 0 0 $button-radius;
+			padding-left: $spacer-xs;
 			width: 6rem;
 		}
 
 		&:global(:last-child) {
-			border-radius: 0 2.4rem 2.4rem 0;
-			padding-right: 1rem;
+			border-radius: 0 $button-radius $button-radius 0;
+			padding-right: $spacer-xs;
 			width: 6rem;
 		}
 
 		&:global(:first-child):global(:last-child) {
-			border-radius: 2.4rem;
+			border-radius: $button-radius;
 			padding: 0;
-			width: 4.8rem;
+			width: $button-width;
 		}
 	}
 
 	@include respond-to(md) {
-		width: calc(100% - 4.8rem);
+		width: calc(100% - $button-width);
 		left: 0;
 		padding: 0;
 	}

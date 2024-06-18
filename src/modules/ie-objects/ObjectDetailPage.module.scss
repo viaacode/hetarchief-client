@@ -221,10 +221,6 @@ $breakpoint-md: map.get($breakpoints, "md");
 				// Use width for toggle because grid-template-column animation is only supported on Firefox
 				width: $metadata-collapsed-width;
 				transition: width $animate-default;
-
-				:global(.c-collapsable-blade__scrollable) {
-					display: none;
-				}
 			}
 
 			&--expanded {

@@ -19,7 +19,7 @@ $component: "c-cp-settings";
 		&-controls {
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
-			grid-template-rows: auto 4.8rem;
+			grid-template-rows: auto $button-width;
 			gap: $spacer-sm;
 
 			&--create {
@@ -29,7 +29,7 @@ $component: "c-cp-settings";
 	}
 
 	&__setting-block {
-		padding-bottom: 4.8rem;
+		padding-bottom: $spacer-md * 2;
 	}
 
 	&__box {
@@ -63,7 +63,7 @@ $component: "c-cp-settings";
 			display: grid;
 			column-gap: $spacer-lg;
 			row-gap: 2rem;
-			grid-template-rows: repeat(3, auto) 4.8rem;
+			grid-template-rows: repeat(3, auto) $button-width;
 		}
 
 		&-color-picker {
@@ -175,7 +175,7 @@ $component: "c-cp-settings";
 
 		&__logo-and-color-controls {
 			grid-template-columns: 2fr 3fr;
-			grid-template-rows: repeat(2, auto) 4.8rem;
+			grid-template-rows: repeat(2, auto) $button-width;
 		}
 
 		&__bezoekersruimte-image {
