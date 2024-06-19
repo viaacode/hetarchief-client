@@ -107,7 +107,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	.c-navigation__hamburger {
 		:global(button) {
 			display: flex;
-			line-height: $line-height-xl !important;
+			line-height: $line-height-xxl !important;
 		}
 
 		@include respond-at(xxl) {
