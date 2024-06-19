@@ -36,7 +36,7 @@ import { HetArchiefLogo, HetArchiefLogoType } from '@shared/components/HetArchie
 import Html from '@shared/components/Html/Html';
 import { Icon } from '@shared/components/Icon';
 import { type AlertIconNames, IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import LanguageSwitcher from '@shared/components/LanguageSwitcher/LanguageSwitcher';
+import { LanguageSwitcher } from '@shared/components/LanguageSwitcher/LanguageSwitcher';
 import { NotificationCenter } from '@shared/components/NotificationCenter';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';

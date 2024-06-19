@@ -3,10 +3,11 @@ import { Button } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { type FC, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { useChangeLanguagePreference } from '@account/hooks/change-language-preference';
+import { selectUser } from '@auth/store/user';
 import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { NavigationDropdown } from '@navigation/components/Navigation/NavigationDropdown';
 import { Icon } from '@shared/components/Icon';
@@ -25,10 +26,11 @@ import { Locale } from '@shared/utils/i18n';
 
 import styles from './LanguageSwitcher.module.scss';
 
-export default function LanguageSwitcher({ className }: { className?: string }) {
+export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 	const router = useRouter();
 	const locale = useLocale();
 	const queryClient = useQueryClient();
+	const user = useSelector(selectUser);
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedLanguage, setSelectedLanguage] = useState<Locale>(locale);
 	const dispatch = useDispatch();
@@ -52,7 +54,9 @@ export default function LanguageSwitcher({ className }: { className?: string }) 
 			return; // skip the effect on the first render
 		}
 
-		mutateLanguagePreference(selectedLanguage);
+		if (user) {
+			mutateLanguagePreference(selectedLanguage);
+		}
 		changeLocalSlug(locale, selectedLanguage, router, queryClient, contentPageInfo);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedLanguage, mutateLanguagePreference]);
@@ -105,4 +109,4 @@ export default function LanguageSwitcher({ className }: { className?: string }) 
 			/>
 		</div>
 	);
-}
+};

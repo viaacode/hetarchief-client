@@ -4,7 +4,7 @@ import { type FC, Fragment, useState } from 'react';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import LanguageSwitcher from '@shared/components/LanguageSwitcher/LanguageSwitcher';
+import { LanguageSwitcher } from '@shared/components/LanguageSwitcher/LanguageSwitcher';
 import { Overlay } from '@shared/components/Overlay';
 
 import styles from '../Navigation.module.scss';

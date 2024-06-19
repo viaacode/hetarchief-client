@@ -8,7 +8,7 @@ import { type UserState } from './user.types';
  * @param state
  */
 export const selectUser = (state: AppState): UserState['user'] =>
-	isServerSideRendering() ? null : state.user.user;
+	isServerSideRendering() ? null : state?.user?.user || null;
 export const selectCommonUser = (state: AppState): UserState['commonUser'] => state.user.commonUser;
 export const selectCheckLoginLoading = (state: AppState): UserState['loading'] =>
 	state.user.loading;

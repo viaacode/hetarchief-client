@@ -87,7 +87,9 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 		: null;
 
 	useEffect(() => {
-		mutateLanguagePreference(selectedLanguage);
+		if (user) {
+			mutateLanguagePreference(selectedLanguage);
+		}
 		changeLocalSlug(locale, selectedLanguage, router, queryClient, contentPageInfo);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedLanguage, mutateLanguagePreference]);
