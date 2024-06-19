@@ -2,11 +2,17 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Checkbox, FormControl, TextArea, TextInput } from '@meemoo/react-components';
 import { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
+import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
+import { selectUser } from '@auth/store/user';
 import { Blade, Icon, IconNamesLight, SpacePreview } from '@shared/components';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { tText } from '@shared/helpers/translate';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
+import { toastService } from '@shared/services/toast-service';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
 import { REQUEST_ACCESS_FORM_SCHEMA } from './RequestAccessBlade.const';
@@ -21,13 +27,21 @@ const labelKeys: Record<keyof RequestAccessFormState, string> = {
 
 const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...bladeProps }) => {
 	const { tHtml } = useTranslation();
+	const user = useSelector(selectUser);
+
 	const [query] = useQueryParams({
 		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
 	const { data: visitorSpace } = useGetVisitorSpace(
 		query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] || null
 	);
+	const { data: preferences } = useGetNewsletterPreferences(user?.email);
+
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+	const [isSubscribedToNewsletter, setIsSubscribedToNewsletter] = useState<boolean>(
+		preferences?.newsletter || false
+	);
 
 	const {
 		control,
@@ -43,6 +57,18 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 	const onFormSubmit = async (values: RequestAccessFormState) => {
 		setIsSubmitting(true);
 		await onSubmit?.(values);
+		if (isSubscribedToNewsletter) {
+			CampaignMonitorService.setPreferences({
+				preferences: {
+					newsletter: isSubscribedToNewsletter,
+				},
+			}).catch(() =>
+				toastService.notify({
+					title: tText('Er ging iets mis'),
+					description: tText('Het inschrijven op de nieuwsbrief is mislukt'),
+				})
+			);
+		}
 		setIsSubmitting(false);
 	};
 
@@ -53,8 +79,19 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 	const renderFooter = () => {
 		return (
 			<div className="u-px-16 u-py-16 u-px-32:md u-py-24:md">
+				{!(preferences?.newsletter || false) ? (
+					<Checkbox
+						className={styles['c-request-access-blade__checkbox']}
+						checkIcon={<Icon name={IconNamesLight.Check} />}
+						checked={isSubscribedToNewsletter}
+						label={tHtml(
+							'modules/home/components/request-access-blade/request-access-blade___schrijf-je-in-voor-de-nieuwsbrief'
+						)}
+						onClick={() => setIsSubscribedToNewsletter((prevState) => !prevState)}
+					/>
+				) : null}
 				<FormControl
-					className="u-mb-8 u-mb-24:md"
+					className="u-mx-8 u-mb-24:md"
 					id={labelKeys.acceptTerms}
 					errors={[errors.acceptTerms?.message]}
 				>
