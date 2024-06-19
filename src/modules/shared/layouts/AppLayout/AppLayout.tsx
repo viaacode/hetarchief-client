@@ -178,7 +178,7 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	useEffect(() => {
 		if (user?.language) {
-			changeLocalSlug(locale, user?.language as Locale, queryClient, contentPageInfo);
+			changeLocalSlug(locale, user?.language as Locale, router, queryClient, contentPageInfo);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user]);

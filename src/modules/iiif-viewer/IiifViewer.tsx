@@ -189,13 +189,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				openSeaDragonInstance.viewport.getMinZoom(),
 				openSeaDragonInstance.viewport.getMaxZoom()
 			);
-			//
-			console.log('zoom: ', {
-				zoom: openSeaDragonInstance?.viewport.getZoom(true),
-				min: openSeaDragonInstance?.viewport.getMinZoom(),
-				max: openSeaDragonInstance?.viewport.getMaxZoom(),
-				home: openSeaDragonInstance?.viewport.getHomeZoom(),
-			});
 			openSeaDragonInstance.viewport.zoomTo(desiredZoom);
 		};
 

@@ -53,7 +53,7 @@ export default function LanguageSwitcher({ className }: { className?: string }) 
 		}
 
 		mutateLanguagePreference(selectedLanguage);
-		changeLocalSlug(locale, selectedLanguage, queryClient, contentPageInfo);
+		changeLocalSlug(locale, selectedLanguage, router, queryClient, contentPageInfo);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedLanguage, mutateLanguagePreference]);
 

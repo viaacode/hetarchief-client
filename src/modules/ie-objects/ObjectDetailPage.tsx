@@ -1342,7 +1342,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								data: renderKeywordsAsTags(
 									mediaInfo.keywords,
 									visitRequest ? (router.query.slug as string) : '',
-									locale
+									locale,
+									router
 								),
 							},
 							{

@@ -6,7 +6,7 @@ import { type RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { type LanguageInfo } from '@shared/services/translation-service/translation.types';
-import { type Locale } from '@shared/utils/i18n';
+import { Locale } from '@shared/utils/i18n';
 import { createPageTitle } from '@shared/utils/seo';
 
 const { publicRuntimeConfig } = getConfig();
@@ -60,10 +60,12 @@ export const SeoTags: FC<SeoTagsProps> = ({
 		if (translatedPages.length > 0) {
 			return translatedPages.filter((page) => page.languageCode !== locale);
 		}
+
 		// search for page in known routes
 		const knownRoutePair = Object.entries(ROUTES_BY_LOCALE[locale]).find(
 			(pair) => pair[1] === relativeUrl
 		);
+
 		const routeKey = knownRoutePair?.[0] as RouteKey | undefined;
 		if (routeKey) {
 			// Output routes for other languages
@@ -75,8 +77,20 @@ export const SeoTags: FC<SeoTagsProps> = ({
 			});
 		}
 
-		console.warn('No translated pages were passed for route: ' + relativeUrl);
-		return [];
+		// No known route was found and no translatedPages were passed
+		// This can be because NextJS also renders the dutch paths for the english locale
+		// We'll check that here
+		// if that isn't the case either, we should output a warning to notify the developer that he forgot something
+		const knownRoutePairForOtherLocale = Object.entries(
+			ROUTES_BY_LOCALE[locale === Locale.nl ? Locale.en : Locale.nl]
+		).find((pair) => pair[1] === relativeUrl);
+		if (knownRoutePairForOtherLocale) {
+			// This is just NextJS rendering dutch paths with the english locale or vice versa, we can ignore this
+			return [];
+		} else {
+			console.warn('No translated pages/routes found for route: ' + relativeUrl);
+			return [];
+		}
 	};
 
 	const url = getResolvedUrl(relativeUrl);

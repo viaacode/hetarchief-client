@@ -15,7 +15,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { isNil } from 'lodash-es';
 import getConfig from 'next/config';
 import Link from 'next/link';
-import router from 'next/router';
+import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { type ComponentType, type FC, type ReactNode, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -63,6 +63,7 @@ const labelKeys: Record<keyof CommunicationFormState, string> = {
 export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 	const user = useSelector(selectUser);
 	const { tHtml, tText } = useTranslation();
+	const router = useRouter();
 	const locale = useLocale();
 	const queryClient = useQueryClient();
 	const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false);
@@ -87,7 +88,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 
 	useEffect(() => {
 		mutateLanguagePreference(selectedLanguage);
-		changeLocalSlug(locale, selectedLanguage, queryClient, contentPageInfo);
+		changeLocalSlug(locale, selectedLanguage, router, queryClient, contentPageInfo);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedLanguage, mutateLanguagePreference]);
 

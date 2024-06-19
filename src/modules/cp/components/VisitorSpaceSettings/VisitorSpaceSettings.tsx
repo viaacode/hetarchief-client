@@ -182,7 +182,6 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 		): Promise<boolean> => {
 			try {
 				if (!newFormValues) {
-					console.log('form is not valid !new form values');
 					return false;
 				}
 				await VISITOR_SPACE_VALIDATION_SCHEMA().validate(newFormValues, {
@@ -191,7 +190,6 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 				setFormErrors({});
 				return true;
 			} catch (err) {
-				console.log('form is not valid: ' + JSON.stringify(err, null, 2));
 				const validationError = err as ValidationError;
 				setFormErrors({
 					[validationError.path as string]: validationError.message,
@@ -231,9 +229,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 		try {
 			// Show errors
 			const isFormValid = await validateForm(formValues, true);
-			console.log('form is not valid');
 			if (isFormValid && !!formValues) {
-				console.log('form is valid');
 				const response = await VisitorSpaceService.create(formValues);
 				if (response === undefined) {
 					return;

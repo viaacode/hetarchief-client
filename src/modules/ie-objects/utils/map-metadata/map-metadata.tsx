@@ -1,6 +1,6 @@
 import { TagList, type TagOption } from '@meemoo/react-components';
 import { capitalize, lowerCase } from 'lodash-es';
-import router from 'next/router';
+import { type NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { type ReactNode } from 'react';
 
@@ -23,7 +23,8 @@ export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
 export const renderKeywordsAsTags = (
 	keywords: string[],
 	slug: string,
-	locale: Locale
+	locale: Locale,
+	router: NextRouter
 ): ReactNode | null =>
 	keywords.length ? (
 		<TagList

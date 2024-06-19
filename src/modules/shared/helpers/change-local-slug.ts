@@ -1,7 +1,7 @@
 import { type ContentPageInfo } from '@meemoo/admin-core-ui';
 import { type QueryClient } from '@tanstack/react-query';
 import { reverse, sortBy } from 'lodash-es';
-import router from 'next/router';
+import { type NextRouter } from 'next/router';
 
 import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/LanguageSwitcher.exceptions';
 import { QUERY_KEYS, type RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
@@ -10,6 +10,7 @@ import { type Locale } from '@shared/utils/i18n';
 export const changeLocalSlug = (
 	oldLocale: Locale,
 	newLocale: Locale,
+	router: NextRouter,
 	queryClient: QueryClient,
 	contentPageInfo?: ContentPageInfo | undefined | null
 ): void => {
