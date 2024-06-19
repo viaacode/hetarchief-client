@@ -50,6 +50,21 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		min-height: $c-navigation-height;
 		padding: 0 3.2rem;
 	}
+
+	&__auth {
+		// Do not allow the text in the login or register button to wrap
+		white-space: nowrap;
+		height: $button-width;
+
+		@include respond-to(xxl) {
+			padding-left: 0 !important;
+			padding-right: 0 !important;
+		}
+
+		:global(.c-button__content) {
+			line-height: $font-size-md !important;
+		}
+	}
 }
 
 /**
@@ -92,6 +107,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	.c-navigation__hamburger {
 		:global(button) {
 			display: flex;
+			line-height: $line-height-xxl !important;
 		}
 
 		@include respond-at(xxl) {
@@ -299,6 +315,10 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		border-color $animate-md-out,
 		color $animate-md-out;
 
+	&:last-child {
+		padding-right: 0;
+	}
+
 	@include respond-at(xxl) {
 		position: relative;
 		height: $c-navigation-height;
@@ -474,16 +494,22 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 
 	&-logged-out {
 		grid-template-rows: 1fr repeat(2, 3.25rem) 1fr;
-		grid-template-columns: repeat(auto-fill, 1fr);
+		grid-template-columns: 1fr min-content;
 		column-gap: $spacer-lg;
 
-		.c-navigation__section--left {
+		@include respond-to(xxl) {
+			column-gap: 0 !important;
+			row-gap: $spacer-sm;
+		}
+
+		> :global([class*="c-navigation__section"]) {
 			grid-row: 2;
+			grid-column: 2;
 			place-content: start end;
 			width: 100%;
 		}
 
-		.c-navigation__section--right {
+		> :global([class*="c-navigation__section--right"]) {
 			grid-row: 3;
 			grid-column: 2;
 			place-self: flex-end;

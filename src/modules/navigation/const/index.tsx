@@ -11,6 +11,7 @@ import { Locale } from '@shared/utils';
 import { VisitorSpaceInfo } from '@visitor-space/types';
 
 import { NavigationHamburgerProps, NavigationItem, NavigationLink } from '../components';
+import styles from '../components/Navigation/Navigation.module.scss';
 import { NavItemsRightLoggedIn } from '../types';
 
 export const GET_NAV_HAMBURGER_PROPS = (): NavigationHamburgerProps => ({
@@ -25,7 +26,7 @@ export const GET_NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): Navigatio
 			path: '',
 			node: (
 				<Button
-					className="c-navigation__auth"
+					className={styles['c-navigation__auth']}
 					key="nav-auth-button"
 					label={tText(
 						'modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren'

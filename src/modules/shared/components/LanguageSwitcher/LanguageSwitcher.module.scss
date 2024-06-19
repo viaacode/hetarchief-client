@@ -3,7 +3,7 @@
 
 .c-language-switcher {
 	z-index: 3;
-	width: $button-width;
+	width: $button-width * 1.5;
 
 	.c-language-switcher__select {
 		background: none;

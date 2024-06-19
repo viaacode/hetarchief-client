@@ -1,6 +1,7 @@
 import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
+import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -8,7 +9,9 @@ import { useDispatch } from 'react-redux';
 import { useChangeLanguagePreference } from '@account/hooks/change-language-preference';
 import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { NavigationDropdown } from '@navigation/components/Navigation/NavigationDropdown';
+import { Icon, IconNamesLight } from '@shared/components';
 import { changeLocalSlug } from '@shared/helpers/change-local-slug';
+import { tText } from '@shared/helpers/translate';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import {
@@ -21,7 +24,7 @@ import { Locale } from '@shared/utils';
 
 import styles from './LanguageSwitcher.module.scss';
 
-export default function LanguageSwitcher() {
+export default function LanguageSwitcher({ className }: { className?: string }) {
 	const router = useRouter();
 	const locale = useLocale();
 	const queryClient = useQueryClient();
@@ -68,7 +71,7 @@ export default function LanguageSwitcher() {
 	};
 
 	return (
-		<div className={styles['c-language-switcher']}>
+		<div className={clsx(styles['c-language-switcher'], className)}>
 			<NavigationDropdown
 				id="c-language-switcher__dropdown"
 				isOpen={isOpen}
@@ -76,8 +79,10 @@ export default function LanguageSwitcher() {
 				trigger={
 					<Button
 						label={(router.locale || Locale.nl)?.toUpperCase()}
+						aria-label={tText('Pas de taal van de website aan')}
 						variants={['black']}
 						onClick={() => setIsOpen(true)}
+						iconEnd={<Icon name={IconNamesLight.AngleDown} />}
 					/>
 				}
 				items={languageOptions.map((option) => ({

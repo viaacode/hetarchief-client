@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { FC, Fragment, useState } from 'react';
 
 import { Icon, IconNamesLight, Overlay } from '@shared/components';
+import LanguageSwitcher from '@shared/components/LanguageSwitcher/LanguageSwitcher';
 
 import styles from '../Navigation.module.scss';
 import { NavigationDropdown } from '../NavigationDropdown';
@@ -25,15 +26,18 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 	const renderHamburgerMenu = () => {
 		return (
 			<div className={styles['c-navigation__section--responsive-mobile']}>
-				{renderHamburger && (
-					<Overlay
-						visible={isHamburgerMenuOpen}
-						className={clsx(
-							styles['c-navigation__dropdown-overlay'],
-							styles['c-navigation__hamburger-overlay']
-						)}
-					/>
-				)}
+				<LanguageSwitcher
+					className={
+						styles['c-navigation__section--responsive-mobile__language-switcher']
+					}
+				/>
+				<Overlay
+					visible={isHamburgerMenuOpen}
+					className={clsx(
+						styles['c-navigation__dropdown-overlay'],
+						styles['c-navigation__hamburger-overlay']
+					)}
+				/>
 				<NavigationDropdown
 					id="menu"
 					isOpen={isHamburgerMenuOpen}

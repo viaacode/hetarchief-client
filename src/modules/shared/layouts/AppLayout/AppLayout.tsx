@@ -454,7 +454,11 @@ const AppLayout: FC<any> = ({ children }) => {
 				/>
 				{isLoaded && showNavigationHeaderRight && (
 					<div className={styles['c-navigation__section--right']}>
-						<LanguageSwitcher />
+						<LanguageSwitcher
+							className={
+								styles['c-navigation_section--right__language-switcher__desktop']
+							}
+						/>
 						<Navigation.Right
 							currentPath={router.asPath}
 							placement="right"
