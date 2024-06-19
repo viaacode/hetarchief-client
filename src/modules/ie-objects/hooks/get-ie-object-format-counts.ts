@@ -28,14 +28,15 @@ export async function getIeObjectFormatCounts(filters: IeObjectsSearchFilter[]) 
 
 export const useGetIeObjectFormatCounts = (
 	filters: IeObjectsSearchFilter[],
-	options: { enabled: boolean } = { enabled: true }
+	options: { enabled?: boolean } = {}
 ): UseQueryResult<Record<SearchPageMediaType, number>> => {
 	return useQuery(
 		[QUERY_KEYS.getIeObjectFormatCounts, filters, options],
-		async () => getIeObjectFormatCounts,
+		async () => getIeObjectFormatCounts(filters),
 		{
+			enabled: true,
 			keepPreviousData: true,
-			enabled: options.enabled,
+			...options,
 		}
 	);
 };
