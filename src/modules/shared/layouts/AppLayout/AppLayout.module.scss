@@ -12,8 +12,18 @@
 	align-items: center;
 }
 
-.c-navigation_section--right__language-switcher__desktop {
-	@include respond-to(xxl) {
-		display: none;
+.c-navigation--logged-in {
+	:global(.c-navigation__hamburger__language-switcher) {
+		@include respond-to(xxl) {
+			display: none;
+		}
+	}
+}
+
+.c-navigation--logged-out {
+	:global(.c-navigation__section-right__language-switcher) {
+		@include respond-to(xxl) {
+			display: none;
+		}
 	}
 }

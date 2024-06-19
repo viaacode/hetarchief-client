@@ -461,7 +461,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 
 .c-navigation--responsive {
 	@include respond-to(xxl) {
-		grid-template-columns: auto;
+		grid-template-columns: 1fr 1fr;
 	}
 
 	.c-navigation__section {

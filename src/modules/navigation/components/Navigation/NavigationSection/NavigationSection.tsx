@@ -27,12 +27,8 @@ export const NavigationSection: FC<NavigationSectionProps> = ({
 
 	const renderHamburgerMenu = () => {
 		return (
-			<div className={styles['c-navigation__section--responsive-mobile']}>
-				<LanguageSwitcher
-					className={
-						styles['c-navigation__section--responsive-mobile__language-switcher']
-					}
-				/>
+			<div className={clsx(styles['c-navigation__section--responsive-mobile'])}>
+				<LanguageSwitcher className="c-navigation__hamburger__language-switcher" />
 				<Overlay
 					visible={isHamburgerMenuOpen}
 					className={clsx(
@@ -106,6 +102,7 @@ export const NavigationSection: FC<NavigationSectionProps> = ({
 			</Wrapper>
 		);
 	};
+
 	return (
 		<div
 			className={clsx(

@@ -429,7 +429,13 @@ const AppLayout: FC<any> = ({ children }) => {
 				'l-app--sticky': sticky,
 			})}
 		>
-			<Navigation loggedOutGrid={showLoggedOutGrid}>
+			<Navigation
+				loggedOutGrid={showLoggedOutGrid}
+				className={clsx({
+					[styles['c-navigation--logged-in']]: !!user,
+					[styles['c-navigation--logged-out']]: !user,
+				})}
+			>
 				{!isLoggedIn && isMobile && (
 					<div
 						className="c-navigation__logo--hamburger"
@@ -437,7 +443,7 @@ const AppLayout: FC<any> = ({ children }) => {
 							window.open(window.location.origin, '_self');
 						}}
 					>
-						{/* Hard reload the page when going to the homepage because of nextjs issues with the static 404 page not loading env variables */}
+						{/* Hard reload the page when going to the homepage because of NextJS issues with the static 404 page not loading env variables */}
 						{/* https://github.com/vercel/next.js/issues/37005 */}
 						<HetArchiefLogo type={HetArchiefLogoType.Light} />
 					</div>
@@ -452,11 +458,7 @@ const AppLayout: FC<any> = ({ children }) => {
 				/>
 				{isLoaded && showNavigationHeaderRight && (
 					<div className={styles['c-navigation__section--right']}>
-						<LanguageSwitcher
-							className={
-								styles['c-navigation_section--right__language-switcher__desktop']
-							}
-						/>
+						<LanguageSwitcher className="c-navigation__section-right__language-switcher" />
 						<Navigation.Right
 							currentPath={router.asPath}
 							placement="right"
