@@ -1,21 +1,21 @@
 import {
-	Breadcrumb,
+	type Breadcrumb,
 	Breadcrumbs,
 	Button,
 	FormControl,
 	OrderDirection,
-	TabProps,
+	type TabProps,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
-import { HTTPError } from 'ky';
+import { type HTTPError } from 'ky';
 import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
 import Head from 'next/head';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
-import React, { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { MultiValue } from 'react-select';
+import { type MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
@@ -25,34 +25,34 @@ import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/get-ie-object-form
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
 import { IeObjectAccessThrough } from '@ie-objects/ie-objects.types';
 import { isInAFolder } from '@ie-objects/utils';
+import { Callout } from '@shared/components/Callout';
+import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
+import { Loading } from '@shared/components/Loading';
 import {
-	Callout,
-	ErrorNoAccess,
-	Icon,
-	IconNamesLight,
-	IconNamesSolid,
-	IdentifiableMediaCard,
-	Loading,
-	MediaCardList,
-	MediaCardProps,
-	MediaCardViewMode,
-	PaginationBar,
-	Placeholder,
-	ScrollableTabs,
-	TabLabel,
-	ToggleOption,
+	type IdentifiableMediaCard,
+	type MediaCardProps,
+	type MediaCardViewMode,
 	TYPE_TO_ICON_MAP,
 	TYPE_TO_NO_ICON_MAP,
-	VisitorSpaceDropdown,
-	VisitorSpaceDropdownOption,
-} from '@shared/components';
+} from '@shared/components/MediaCard';
+import { MediaCardList } from '@shared/components/MediaCardList';
 import {
 	MAX_COUNT_SEARCH_RESULTS,
 	PAGE_NUMBER_OF_MANY_RESULTS_TILE,
 } from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
+import { PaginationBar } from '@shared/components/PaginationBar';
+import { Placeholder } from '@shared/components/Placeholder';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { ScrollableTabs, TabLabel } from '@shared/components/Tabs';
 import TagSearchBar from '@shared/components/TagSearchBar/TagSearchBar';
+import { type ToggleOption } from '@shared/components/Toggle';
+import {
+	VisitorSpaceDropdown,
+	type VisitorSpaceDropdownOption,
+} from '@shared/components/VisitorSpaceDropdown';
 import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
@@ -77,36 +77,36 @@ import {
 import {
 	Breakpoints,
 	IeObjectsSearchFilterField,
-	IeObjectTypes,
+	type IeObjectTypes,
 	SearchPageMediaType,
-	SortObject,
-	Visit,
+	type SortObject,
+	type Visit,
 	VisitStatus,
 } from '@shared/types';
-import { DefaultSeoInfo } from '@shared/types/seo';
-import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils';
+import { type DefaultSeoInfo } from '@shared/types/seo';
+import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetActiveVisitForUserAndSpace } from '@visit-requests/hooks/get-active-visit-for-user-and-space';
 import { VisitsService } from '@visit-requests/services';
 import { VisitTimeframe } from '@visit-requests/types';
+import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import {
-	AddToFolderBlade,
-	AdvancedFilterFormState,
-	ConsultableMediaFilterFormState,
-	ConsultableOnlyOnLocationFilterFormState,
-	CreatedFilterFormState,
-	CreatorFilterFormState,
-	DurationFilterFormState,
-	FilterMenu,
-	FilterMenuFilterOption,
-	GenreFilterFormState,
+	type AdvancedFilterFormState,
 	initialFields,
-	KeywordsFilterFormState,
-	LanguageFilterFormState,
-	MaintainerFilterFormState,
-	MediumFilterFormState,
-	PublishedFilterFormState,
-} from '@visitor-space/components';
+} from '@visitor-space/components/AdvancedFilterForm';
+import { type ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm';
+import { type ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm';
+import { type CreatedFilterFormState } from '@visitor-space/components/CreatedFilterForm';
+import { type CreatorFilterFormState } from '@visitor-space/components/CreatorFilterForm';
+import { type DurationFilterFormState } from '@visitor-space/components/DurationFilterForm';
+import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
+import { type FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import { type GenreFilterFormState } from '@visitor-space/components/GenreFilterForm';
+import { type KeywordsFilterFormState } from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.types';
+import { type LanguageFilterFormState } from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
+import { type MaintainerFilterFormState } from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
+import { type MediumFilterFormState } from '@visitor-space/components/MediumFilterForm';
+import { type PublishedFilterFormState } from '@visitor-space/components/PublishedFilterForm';
 import {
 	PUBLIC_COLLECTION,
 	SEARCH_PAGE_QUERY_PARAM_CONFIG,
@@ -117,9 +117,9 @@ import {
 	VISITOR_SPACE_TABS,
 	VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
 } from '@visitor-space/const';
-import { MetadataProp, SearchFilterId, TagIdentity } from '@visitor-space/types';
-import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils';
+import { MetadataProp, SearchFilterId, type TagIdentity } from '@visitor-space/types';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
+import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
 
 const labelKeys = {
 	search: 'SearchPage__search',

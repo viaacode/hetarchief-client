@@ -1,7 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { type IconTypes } from '@shared/components/Icon';
 import '@testing-library/jest-dom';
+import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
 
-import { IconNamesLight, IconNamesSolid, IconTypes } from '@shared/components';
+import { render, screen } from '@testing-library/react';
 
 import Placeholder from './Placeholder';
 

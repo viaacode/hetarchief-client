@@ -1,9 +1,9 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
-import { useInfiniteQuery, UseInfiniteQueryResult } from '@tanstack/react-query';
+import { useInfiniteQuery, type UseInfiniteQueryResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
-import { Notification } from '@shared/services/notifications-service/notifications.types';
+import { type Notification } from '@shared/services/notifications-service/notifications.types';
 
 export function useGetNotifications(
 	enabled: boolean

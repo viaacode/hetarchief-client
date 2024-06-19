@@ -2,17 +2,17 @@
 // https://github.com/vercel/next.js/issues/47232
 
 import { type Avo } from '@viaa/avo2-types';
-import { GetServerSidePropsResult } from 'next';
+import { type GetServerSidePropsResult } from 'next';
 import { useRouter } from 'next/router';
-import { GetServerSidePropsContext, NextPage } from 'next/types';
-import React, { ComponentType } from 'react';
+import { type GetServerSidePropsContext, type NextPage } from 'next/types';
+import React, { type ComponentType } from 'react';
 
 import { ContentPageDetailPage } from '@admin/views/content-pages/ContentPageDetailPage';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import withUser, { UserProps } from '@shared/hooks/with-user';
-import { DefaultSeoInfo } from '@shared/types/seo';
+import withUser, { type UserProps } from '@shared/hooks/with-user';
+import { type DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageDetailPageDutch: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
 	const router = useRouter();

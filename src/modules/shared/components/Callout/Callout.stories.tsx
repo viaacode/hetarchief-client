@@ -1,8 +1,9 @@
 import { action } from '@storybook/addon-actions';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { type ComponentMeta, type ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { Icon, IconNamesLight } from '../Icon';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 import Callout from './Callout';
 

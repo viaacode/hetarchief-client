@@ -1,12 +1,15 @@
 import { Button } from '@meemoo/react-components';
 import { truncate } from 'lodash-es';
 import React from 'react';
-import { Column } from 'react-table';
+import { type Column } from 'react-table';
 
-import { CopyButton, Icon, IconNamesLight, RequestStatusBadge } from '@shared/components';
+import { CopyButton } from '@shared/components/CopyButton';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { RequestStatusBadge } from '@shared/components/RequestStatusBadge';
 import { tText } from '@shared/helpers/translate';
-import { Visit, VisitRow } from '@shared/types';
-import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
+import { type Visit, type VisitRow } from '@shared/types';
+import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils/dates';
 
 export const RequestTableColumns = (): Column<Visit>[] => [
 	{

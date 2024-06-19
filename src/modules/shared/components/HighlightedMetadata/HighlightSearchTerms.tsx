@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useQueryParams } from 'use-query-params';
 

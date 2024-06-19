@@ -1,7 +1,7 @@
 import { Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { kebabCase } from 'lodash-es';
-import { FC, useLayoutEffect, useRef, useState } from 'react';
+import { type FC, useLayoutEffect, useRef, useState } from 'react';
 
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 
@@ -9,7 +9,7 @@ import { CardImage } from '../CardImage';
 
 import { VisitorSpaceCardType } from './VisitorSpaceCard.const';
 import styles from './VisitorSpaceCard.module.scss';
-import { VisitorSpaceCardProps } from './VisitorSpaceCard.types';
+import { type VisitorSpaceCardProps } from './VisitorSpaceCard.types';
 import { VisitorSpaceCardControls } from './VisitorSpaceCardControls';
 
 const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {

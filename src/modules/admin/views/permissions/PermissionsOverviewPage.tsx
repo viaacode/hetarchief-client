@@ -1,16 +1,17 @@
 import { UserGroupOverview } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import React, { FC, useRef, useState } from 'react';
+import React, { type FC, useRef, useState } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
-import { UserGroupOverviewRef } from '@admin/types';
-import { Icon, IconNamesLight } from '@shared/components';
+import { type UserGroupOverviewRef } from '@admin/types';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { DefaultSeoInfo } from '@shared/types/seo';
+import { type DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './PermissionsOverviewPage.module.scss';
 

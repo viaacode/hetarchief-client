@@ -1,11 +1,11 @@
 import { BooleanParam } from 'use-query-params';
-import { boolean, object, SchemaOf } from 'yup';
+import { boolean, object, type SchemaOf } from 'yup';
 
 import { IeObjectsSearchFilterField } from '@shared/types';
 
 import { SearchFilterId } from '../../types';
 
-import { ConsultableMediaFilterFormState } from './ConsultableMediaFilterForm.types';
+import { type ConsultableMediaFilterFormState } from './ConsultableMediaFilterForm.types';
 
 export const CONSULTABLE_MEDIA_FILTER_FORM_SCHEMA = (): SchemaOf<ConsultableMediaFilterFormState> =>
 	object({

@@ -1,8 +1,9 @@
 import { Avatar } from '@meemoo/react-components';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { type ComponentMeta, type ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { Icon, IconNamesSolid } from '../Icon';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesSolid } from '@shared/components/Icon/Icon.enums';
 
 export default {
 	title: 'Components/Avatar',

@@ -1,14 +1,14 @@
 import { UserOverview } from '@meemoo/admin-core-ui';
-import { Avo } from '@viaa/avo2-types';
-import React, { FC } from 'react';
+import { type Avo } from '@viaa/avo2-types';
+import React, { type FC } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { DefaultSeoInfo } from '@shared/types/seo';
-import { formatDistanceTodayWithoutTime } from '@shared/utils';
+import { type DefaultSeoInfo } from '@shared/types/seo';
+import { formatDistanceTodayWithoutTime } from '@shared/utils/dates';
 
 export const UsersOverviewPage: FC<
 	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined }

@@ -1,10 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC } from 'react';
+import { type FC } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
-import { Icon, IconNamesLight } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { SearchFilterId } from '../../types';
@@ -12,7 +13,10 @@ import { AdvancedFilterFields } from '../AdvancedFilterFields';
 
 import { ADVANCED_FILTER_FORM_SCHEMA, initialFields } from './AdvancedFilterForm.const';
 import styles from './AdvancedFilterForm.module.scss';
-import { AdvancedFilterFormProps, AdvancedFilterFormState } from './AdvancedFilterForm.types';
+import {
+	type AdvancedFilterFormProps,
+	type AdvancedFilterFormState,
+} from './AdvancedFilterForm.types';
 
 const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 	children,

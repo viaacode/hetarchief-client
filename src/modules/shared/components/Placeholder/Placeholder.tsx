@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 import Image from 'next/image';
-import { FC } from 'react';
+import { type FC } from 'react';
 
-import { Icon, IconTypes } from '../Icon';
+import { Icon, type IconTypes } from '../Icon';
 
 import styles from './Placeholder.module.scss';
-import { PlaceholderProps } from './Placeholder.types';
+import { type PlaceholderProps } from './Placeholder.types';
 
 const Placeholder: FC<PlaceholderProps> = ({
 	className,

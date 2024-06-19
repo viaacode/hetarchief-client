@@ -1,4 +1,5 @@
-import { OrderDirection } from '@meemoo/react-components';
+import { type OrderDirection } from '@meemoo/react-components';
+import { type ReactNode } from 'react';
 
 export enum MaintenanceAlertsOrderProps {
 	Id = 'id',
@@ -9,7 +10,7 @@ export enum MaintenanceAlertsOrderProps {
 }
 
 export interface GetMaterialRequestsProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	page?: number;
 	orderProp?: MaintenanceAlertsOrderProps;
 	orderDirection?: OrderDirection;

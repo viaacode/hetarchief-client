@@ -1,7 +1,9 @@
-import { NavigationItem } from '../Navigation.types';
+import { type ReactNode } from 'react';
+
+import { type NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
 
 export interface NavigationListProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	currentPath?: string;
 	items: NavigationItem[];
 	onOpenDropdowns?: () => void;

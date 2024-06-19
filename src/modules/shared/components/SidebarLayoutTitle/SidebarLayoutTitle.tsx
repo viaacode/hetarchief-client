@@ -1,7 +1,7 @@
 import clsx from 'clsx';
-import { FC } from 'react';
+import { type FC } from 'react';
 
-import { DefaultComponentProps } from '@shared/types';
+import { type DefaultComponentProps } from '@shared/types';
 
 import styles from './SidebarLayoutTitle.module.scss';
 

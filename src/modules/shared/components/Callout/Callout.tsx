@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import { FC } from 'react';
+import { type FC } from 'react';
 
 import styles from './Callout.module.scss';
-import { CalloutProps } from './Callout.types';
+import { type CalloutProps } from './Callout.types';
 
 const Callout: FC<CalloutProps> = ({ className, icon, text, action }) => {
 	const rootCls = clsx(className, styles['c-callout']);

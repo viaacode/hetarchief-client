@@ -1,19 +1,21 @@
-import { HTTPError } from 'ky';
+import { type HTTPError } from 'ky';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { FC } from 'react';
+import { type FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import { selectIsLoggedIn } from '@auth/store/user';
-import { ErrorNoAccessToObject, ErrorNotFound, Loading } from '@shared/components';
+import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
+import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
+import { Loading } from '@shared/components/Loading';
 import { NextRedirect } from '@shared/components/Redirect/Redirect.tsx';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { AccessStatus } from '@shared/types';
-import { DefaultSeoInfo } from '@shared/types/seo';
+import { type DefaultSeoInfo } from '@shared/types/seo';
 import { useGetVisitAccessStatus } from '@visit-requests/hooks/get-visit-access-status';
 import { useGetOrganisationBySlug } from '@visitor-space/hooks/get-organisation-by-slug';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';

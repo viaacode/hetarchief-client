@@ -1,16 +1,16 @@
 import { useRouter } from 'next/router';
-import { FC, useEffect } from 'react';
+import { type FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import LoggedInVisitorSpacesHome from '@home/components/LoggedInVisitorSpacesHome/LoggedInVisitorSpacesHome';
 import LoggedOutVisitorSpacesHome from '@home/components/LoggedOutVisitorSpacesHome/LoggedOutVisitorSpacesHome';
-import { Loading } from '@shared/components';
+import { Loading } from '@shared/components/Loading';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
-import { DefaultSeoInfo } from '@shared/types/seo';
+import { type DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorLayout } from '@visitor-layout/index';
 
 export const VisitorSpacesHomePage: FC<DefaultSeoInfo> = (props) => {

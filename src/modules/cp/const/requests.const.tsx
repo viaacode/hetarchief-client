@@ -1,15 +1,18 @@
-import { Button, OrderDirection, TabProps } from '@meemoo/react-components';
+import { Button, OrderDirection, type TabProps } from '@meemoo/react-components';
 import { truncate } from 'lodash-es';
 import React from 'react';
-import { Column } from 'react-table';
+import { type Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { CopyButton, Icon, IconNamesLight, RequestStatusBadge } from '@shared/components';
+import { CopyButton } from '@shared/components/CopyButton';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { RequestStatusBadge } from '@shared/components/RequestStatusBadge';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { AccessType, Visit, VisitRow, VisitStatus } from '@shared/types';
-import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
+import { AccessType, type Visit, type VisitRow, VisitStatus } from '@shared/types';
+import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils/dates';
 import { RequestStatusAll } from '@visit-requests/types';
 
 export const RequestTablePageSize = 20;

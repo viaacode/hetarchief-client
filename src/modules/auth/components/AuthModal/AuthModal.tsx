@@ -1,12 +1,14 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { FC } from 'react';
+import { type FC } from 'react';
 
-import { AuthModalProps } from '@auth/components';
+import { type AuthModalProps } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
-import { Icon, IconNamesLight, Modal } from '@shared/components';
 import Html from '@shared/components/Html/Html';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { Modal } from '@shared/components/Modal';
 import { globalLabelKeys } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 

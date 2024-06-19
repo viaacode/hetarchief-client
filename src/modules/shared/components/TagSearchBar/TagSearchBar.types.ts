@@ -1,9 +1,9 @@
-import { TagsInputProps } from '@meemoo/react-components';
-import { Dispatch, ReactNode, SetStateAction } from 'react';
-import { ActionMeta, InputActionMeta, OnChangeValue } from 'react-select';
+import { type TagsInputProps } from '@meemoo/react-components';
+import { type Dispatch, type ReactNode, type SetStateAction } from 'react';
+import { type ActionMeta, type InputActionMeta, type OnChangeValue } from 'react-select';
 
-import { DefaultComponentProps } from '@shared/types';
-import { TagIdentity } from '@visitor-space/types';
+import { type DefaultComponentProps } from '@shared/types';
+import { type TagIdentity } from '@visitor-space/types';
 
 export type TagSearchBarProps<IsMulti extends boolean = false> = DefaultComponentProps &
 	Omit<TagsInputProps<IsMulti>, 'rootClassName' | 'classNamePrefix' | 'variants'> & {

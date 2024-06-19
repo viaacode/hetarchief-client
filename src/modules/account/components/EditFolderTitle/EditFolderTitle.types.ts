@@ -1,9 +1,9 @@
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
-import { Folder } from '@account/types';
+import { type Folder } from '@account/types';
 
 export interface EditFolderTitleProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	onOpenNode?: ReactNode | null;
 	folder: Folder;
 	afterSubmit?: (values: Folder) => Promise<void>;

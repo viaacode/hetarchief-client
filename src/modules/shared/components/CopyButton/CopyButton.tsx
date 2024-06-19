@@ -1,11 +1,11 @@
-import { Button, ButtonProps } from '@meemoo/react-components';
+import { Button, type ButtonProps } from '@meemoo/react-components';
 import copy from 'copy-to-clipboard';
-import { FC, MouseEvent, useCallback } from 'react';
+import { type FC, type MouseEvent, useCallback } from 'react';
 
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-
-import { Icon, IconNamesLight } from '../Icon';
 
 const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean }> = (props) => {
 	const { tHtml, tText } = useTranslation();

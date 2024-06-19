@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import TabLabel from './TabLabel';
-import { TabLabelProps } from './TabLabel.types';
+import { type TabLabelProps } from './TabLabel.types';
 
 const mockLabel = 'Audio';
 const renderTabLabel = ({ label = mockLabel, ...rest }: Partial<TabLabelProps> = {}) =>

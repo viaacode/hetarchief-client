@@ -1,9 +1,10 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import React, { FC } from 'react';
+import React, { type FC } from 'react';
 
-import { CollapsableBladeProps } from '@ie-objects/components';
-import { Icon, IconNamesLight } from '@shared/components';
+import { type CollapsableBladeProps } from '@ie-objects/components/CollapsableBlade/CollapsableBlade.types';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 import styles from './CollapsableBlade.module.scss';
 

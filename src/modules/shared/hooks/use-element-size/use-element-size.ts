@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import useIsomorphicLayoutEffect from '@shared/hooks/use-isomorphic-layout-effect';
 
-import { UseElementSize } from './use-element-size.types';
+import { type UseElementSize } from './use-element-size.types';
 
 const useElementSize: UseElementSize = (target) => {
 	const [size, setSize] = useState<DOMRect>();

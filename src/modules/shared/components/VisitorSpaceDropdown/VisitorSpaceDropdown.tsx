@@ -1,10 +1,14 @@
 import { keysEnter, onKey } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useMemo, useState } from 'react';
+import { type FC, useMemo, useState } from 'react';
 
-import { VisitorSpaceDropdownOption, VisitorSpaceDropdownProps } from '@shared/components';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import {
+	type VisitorSpaceDropdownOption,
+	type VisitorSpaceDropdownProps,
+} from '@shared/components/VisitorSpaceDropdown/VisitorSpaceDropdown.types';
 
-import { Icon, IconNamesLight } from '../Icon';
+import { Icon } from '../Icon';
 
 import styles from './VisitorSpaceDropdown.module.scss';
 

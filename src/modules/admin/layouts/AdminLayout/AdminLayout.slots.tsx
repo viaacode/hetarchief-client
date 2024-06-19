@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react';
+import React, { type FC, type ReactNode } from 'react';
 
 export const AdminActions: FC<{ children?: ReactNode }> = ({ children }) => <>{children}</>;
 

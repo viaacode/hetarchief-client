@@ -1,20 +1,22 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
-import { FC, ReactNode } from 'react';
+import React, { type FC, type ReactNode } from 'react';
 
 import { Permission } from '@account/const';
-import { Navigation } from '@navigation/components';
-import { DropdownMenu, Icon, IconNamesLight } from '@shared/components';
+import { Navigation } from '@navigation/components/Navigation/Navigation';
 import { CopyButton } from '@shared/components/CopyButton';
+import { DropdownMenu } from '@shared/components/DropdownMenu';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { VisitorSpaceNavigationProps } from '@visitor-space/components';
+import { type VisitorSpaceNavigationProps } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation.types';
 
 import styles from './VisitorSpaceNavigation.module.scss';
 
-const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
+export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 	className,
 	email,
 	phone,
@@ -117,5 +119,3 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 		</Navigation>
 	);
 };
-
-export default VisitorSpaceNavigation;

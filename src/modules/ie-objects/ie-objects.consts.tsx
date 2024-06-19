@@ -1,19 +1,19 @@
-import { MenuItemInfo, TabProps } from '@meemoo/react-components';
+import { type MenuItemInfo, type TabProps } from '@meemoo/react-components';
 import { isString } from 'lodash-es';
 import { StringParam } from 'use-query-params';
 
 import {
-	ActionItem,
-	DynamicActionMenuProps,
-	MetadataItem,
-	ObjectPlaceholderProps,
-} from '@ie-objects/components';
+	type ActionItem,
+	type DynamicActionMenuProps,
+} from '@ie-objects/components/DynamicActionMenu';
+import { type MetadataItem } from '@ie-objects/components/Metadata';
+import { type ObjectPlaceholderProps } from '@ie-objects/components/ObjectPlaceholder';
 import { objectPlaceholderMock } from '@ie-objects/components/ObjectPlaceholder/__mocks__/object-placeholder';
 import {
-	IeObject,
+	type IeObject,
 	MediaActions,
 	MetadataExportFormats,
-	MetadataSortMap,
+	type MetadataSortMap,
 	ObjectDetailTabs,
 } from '@ie-objects/ie-objects.types';
 import {
@@ -21,11 +21,12 @@ import {
 	mapBooleanToMetadataData,
 	mapObjectToMetadata,
 } from '@ie-objects/utils';
-import { Icon, IconNamesLight, IconNamesSolid } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { IeObjectTypes } from '@shared/types';
-import { asDate, formatLongDate } from '@shared/utils';
+import { type IeObjectTypes } from '@shared/types';
+import { asDate, formatLongDate } from '@shared/utils/dates';
 
 /**
  * Render media

@@ -1,8 +1,9 @@
 import { Button } from '@meemoo/react-components';
 
-import { Icon, IconNamesLight } from '@shared/components/Icon';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
-import { CalloutProps } from '../Callout.types';
+import { type CalloutProps } from '../Callout.types';
 
 export const calloutMock: CalloutProps = {
 	icon: <Icon name={IconNamesLight.Info} />,

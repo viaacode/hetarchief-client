@@ -1,6 +1,6 @@
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
-import { Locale } from '@shared/utils';
+import { type Locale } from '@shared/utils/i18n';
 
 export interface AdminNavigationLink {
 	id: string;

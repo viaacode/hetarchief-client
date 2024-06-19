@@ -1,9 +1,9 @@
 import * as toolkitRaw from '@reduxjs/toolkit';
 
 import { TosService } from '@shared/services/tos-service/tos.service';
-import { GetTermsOfServiceResponse } from '@shared/services/tos-service/tos.service.types';
+import { type GetTermsOfServiceResponse } from '@shared/services/tos-service/tos.service.types';
 
-import { TosState } from './tos.types';
+import { type TosState } from './tos.types';
 
 const initialState: TosState = {
 	updatedAt: undefined,

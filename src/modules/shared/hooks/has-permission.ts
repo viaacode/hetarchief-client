@@ -1,7 +1,7 @@
 import { intersection } from 'lodash-es';
 import { useSelector } from 'react-redux';
 
-import { Permission } from '@account/const';
+import { type Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 
 /**

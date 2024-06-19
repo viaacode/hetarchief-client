@@ -1,6 +1,8 @@
-import { DefaultComponentProps, VisitStatus } from '@shared/types';
+import { type ReactNode } from 'react';
+
+import { type DefaultComponentProps, type VisitStatus } from '@shared/types';
 
 export interface RequestStatusBadgeProps extends DefaultComponentProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	status: VisitStatus;
 }

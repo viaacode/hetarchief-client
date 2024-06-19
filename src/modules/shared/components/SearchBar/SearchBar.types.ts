@@ -1,6 +1,6 @@
-import { TextInputProps } from '@meemoo/react-components';
+import { type TextInputProps } from '@meemoo/react-components';
 
-import { DefaultComponentProps } from '@shared/types';
+import { type DefaultComponentProps } from '@shared/types';
 
 export type SearchBarProps = Omit<TextInputProps, 'value' | 'onChange'> &
 	DefaultComponentProps & {

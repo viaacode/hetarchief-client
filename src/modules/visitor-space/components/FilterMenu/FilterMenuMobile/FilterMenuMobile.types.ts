@@ -1,15 +1,18 @@
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
-import { OnFilterMenuFormReset, OnFilterMenuFormSubmit } from '..';
-import { TagIdentity } from '../../../types';
-import { FilterMenuProps } from '../FilterMenu.types';
+import { type TagIdentity } from '../../../types';
+import {
+	type FilterMenuProps,
+	type OnFilterMenuFormReset,
+	type OnFilterMenuFormSubmit,
+} from '../FilterMenu.types';
 
 export interface FilterMenuMobileProps
 	extends Pick<
 		FilterMenuProps,
 		'activeSort' | 'filters' | 'sortOptions' | 'onSortClick' | 'filterValues'
 	> {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	activeFilter: string | null | undefined;
 	activeSortLabel: ReactNode;
 	isOpen: boolean;

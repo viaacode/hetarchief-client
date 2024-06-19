@@ -2,21 +2,23 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { partition } from 'lodash-es';
 import Link from 'next/link';
-import { FC, useState } from 'react';
+import { type FC, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import { Loading, NotificationCenterProps } from '@shared/components';
+import { Blade } from '@shared/components/Blade/Blade';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { Loading } from '@shared/components/Loading';
+import { type NotificationCenterProps } from '@shared/components/NotificationCenter/NotificationCenter.types';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import {
-	Notification,
+	type Notification,
 	NotificationStatus,
 } from '@shared/services/notifications-service/notifications.types';
 import { toastService } from '@shared/services/toast-service';
 
-import { Blade } from '../Blade';
 import Html from '../Html/Html';
-import { Icon, IconNamesLight } from '../Icon';
+import { Icon } from '../Icon';
 import { UnreadMarker } from '../UnreadMarker';
 
 import styles from './NotificationCenter.module.scss';

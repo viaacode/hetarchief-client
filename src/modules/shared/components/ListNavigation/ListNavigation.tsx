@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 import { isEmpty, isNil } from 'lodash-es';
-import React, { FC, ReactNode } from 'react';
+import React, { type FC, type ReactNode } from 'react';
 
 import styles from './ListNavigation.module.scss';
 import {
-	ListNavigationItem,
-	ListNavigationProps,
+	type ListNavigationItem,
+	type ListNavigationProps,
 	ListNavigationType,
 } from './ListNavigation.types';
 

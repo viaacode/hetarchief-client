@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { stringify } from 'query-string';
-import { ComponentType, useCallback, useEffect } from 'react';
+import { type ComponentType, useCallback, useEffect } from 'react';
 
 import { GroupName } from '@account/const';
 import { AuthMessage, AuthService } from '@auth/services/auth-service';
@@ -8,7 +8,7 @@ import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { TosService } from '@shared/services/tos-service';
-import { isCurrentTosAccepted } from '@shared/utils';
+import { isCurrentTosAccepted } from '@shared/utils/tos';
 
 /**
  * Checks the users login status

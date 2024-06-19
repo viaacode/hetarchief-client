@@ -1,7 +1,7 @@
 import { Button } from '@meemoo/react-components';
-import { FC, ReactNode } from 'react';
+import { type FC, type ReactNode } from 'react';
 
-import { ErrorPage } from '@shared/components';
+import { ErrorPage } from '@shared/components/ErrorPage';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 interface ErrorSpaceNoAccessProps {

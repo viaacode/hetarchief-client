@@ -1,19 +1,26 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FormControl, keysEnter, onKey, TagInfo, TagsInput } from '@meemoo/react-components';
+import { FormControl, keysEnter, onKey, type TagInfo, TagsInput } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, KeyboardEvent, useMemo, useState } from 'react';
+import { type FC, type KeyboardEvent, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { ActionMeta, InputActionMeta, MultiValue, SingleValue } from 'react-select';
+import {
+	type ActionMeta,
+	type InputActionMeta,
+	type MultiValue,
+	type SingleValue,
+} from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
-import { TAGS_INPUT_COMPONENTS } from '@shared/components';
+import { TAGS_INPUT_COMPONENTS } from '@shared/components/TagsInput';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import {
 	KEYWORDS_FILTER_FORM_QUERY_PARAM_CONFIG,
 	KEYWORDS_FILTER_FORM_SCHEMA,
-	KeywordsFilterFormProps,
-	KeywordsFilterFormState,
-} from '@visitor-space/components';
+} from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.const';
+import {
+	type KeywordsFilterFormProps,
+	type KeywordsFilterFormState,
+} from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.types';
 
 type multi = MultiValue<TagInfo>;
 

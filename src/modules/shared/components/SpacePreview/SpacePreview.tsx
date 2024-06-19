@@ -1,9 +1,9 @@
 import clsx from 'clsx';
-import { FC } from 'react';
+import { type FC } from 'react';
 
-import { SpacePreviewProps } from '@shared/components';
+import { type SpacePreviewProps } from '@shared/components/SpacePreview/SpacePreview.types';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { Locale } from '@shared/utils';
+import { Locale } from '@shared/utils/i18n';
 
 import { CardImage } from '../CardImage';
 import Html from '../Html/Html';

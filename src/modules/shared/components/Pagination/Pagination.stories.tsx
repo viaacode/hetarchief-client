@@ -1,9 +1,11 @@
 import { Pagination } from '@meemoo/react-components';
 import { action } from '@storybook/addon-actions';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import React, { cloneElement, ReactElement, useState } from 'react';
+import { type ComponentMeta, type ComponentStory } from '@storybook/react';
+import React, { cloneElement, type ReactElement, useState } from 'react';
 
-import { Icon, IconName, IconNamesLight } from '../Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+
+import { Icon, type IconName } from '../Icon';
 
 const PaginationStoryComponent = ({
 	children,

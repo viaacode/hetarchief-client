@@ -1,19 +1,14 @@
-import { SelectOption, TagInfo } from '@meemoo/react-components';
-import { ReactNode } from 'react';
-import { UseFormHandleSubmit } from 'react-hook-form';
-import { FieldValues } from 'react-hook-form/dist/types/fields';
-import { DecodedValueMap } from 'use-query-params';
+import { type SelectOption, type TagInfo } from '@meemoo/react-components';
+import { type ReactNode } from 'react';
+import { type UseFormHandleSubmit } from 'react-hook-form';
+import { type FieldValues } from 'react-hook-form/dist/types/fields';
 
-import { DefaultComponentProps, IeObjectTypes, Operator } from '@shared/types';
-import { OnFilterMenuFormSubmit } from '@visitor-space/components';
+import { type DefaultComponentProps, type IeObjectTypes, type Operator } from '@shared/types';
+import { type OnFilterMenuFormSubmit } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 
-import { SEARCH_PAGE_QUERY_PARAM_CONFIG } from '../const';
-
-import { MetadataProp } from './metadata';
+import { type MetadataProp } from './metadata';
 
 export * from './metadata';
-
-export type SearchPageQueryParams = Partial<DecodedValueMap<typeof SEARCH_PAGE_QUERY_PARAM_CONFIG>>;
 
 export enum SearchSortProp {
 	Date = 'created',

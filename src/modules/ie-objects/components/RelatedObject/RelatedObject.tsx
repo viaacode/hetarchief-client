@@ -1,14 +1,15 @@
 import { Card } from '@meemoo/react-components';
 import clsx from 'clsx';
-import React, { FC } from 'react';
+import React, { type FC } from 'react';
 
-import { Icon, TYPE_TO_ICON_MAP } from '@shared/components';
 import { CardImage } from '@shared/components/CardImage';
+import { Icon } from '@shared/components/Icon';
+import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
 
 import { ObjectPlaceholder } from '../ObjectPlaceholder';
 
 import styles from './RelatedObject.module.scss';
-import { RelatedObjectProps } from './RelatedObject.types';
+import { type RelatedObjectProps } from './RelatedObject.types';
 
 const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 	const { thumbnail, type } = object;

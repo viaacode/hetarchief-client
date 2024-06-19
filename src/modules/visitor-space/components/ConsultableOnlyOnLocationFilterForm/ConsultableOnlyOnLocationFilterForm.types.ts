@@ -1,6 +1,6 @@
-import { IeObjectsSearchFilterField } from '@shared/types';
+import { type IeObjectsSearchFilterField } from '@shared/types';
 
-import { InlineFilterFormProps } from '../../types';
+import { type InlineFilterFormProps } from '../../types';
 
 export type ConsultableOnlyOnLocationFilterFormProps =
 	InlineFilterFormProps<ConsultableOnlyOnLocationFilterFormState>;

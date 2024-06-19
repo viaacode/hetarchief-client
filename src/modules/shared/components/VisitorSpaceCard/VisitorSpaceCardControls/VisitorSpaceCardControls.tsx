@@ -1,20 +1,21 @@
 import { Button, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { FC, MouseEvent, ReactNode } from 'react';
+import { type FC, type MouseEvent, type ReactNode } from 'react';
 
+import { CopyButton } from '@shared/components/CopyButton';
+import { DropdownMenu } from '@shared/components/DropdownMenu';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import {
-	CopyButton,
-	DropdownMenu,
-	VisitorSpaceCardProps,
+	type VisitorSpaceCardProps,
 	VisitorSpaceCardType,
-} from '@shared/components';
+} from '@shared/components/VisitorSpaceCard';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 
-import { Icon, IconName, IconNamesLight } from '../../Icon';
+import { Icon, type IconName } from '../../Icon';
 import { formatDateTime } from '../VisitorSpaceCard.utils';
 
 import styles from './VisitorSpaceCardControls.module.scss';

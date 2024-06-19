@@ -1,4 +1,4 @@
-import { RelatedObjectProps } from '../RelatedObject.types';
+import { type RelatedObjectProps } from '../RelatedObject.types';
 
 export const relatedObjectVideoMock: RelatedObjectProps = {
 	object: {

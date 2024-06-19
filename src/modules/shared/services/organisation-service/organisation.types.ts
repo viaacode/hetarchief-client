@@ -1,4 +1,4 @@
-import { IeObjectSector } from '@ie-objects/ie-objects.types';
+import { type IeObjectSector } from '@ie-objects/ie-objects.types';
 
 export interface Organisation {
 	schemaIdentifier: string;

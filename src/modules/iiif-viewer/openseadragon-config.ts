@@ -1,4 +1,4 @@
-import { Options } from 'openseadragon';
+import { type Options } from 'openseadragon';
 
 export function getOpenSeadragonConfig(isMobile: boolean, id: string): Options {
 	return {

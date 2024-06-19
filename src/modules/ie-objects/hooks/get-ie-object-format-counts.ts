@@ -1,11 +1,11 @@
-import { QueryClient, useQuery, UseQueryResult } from '@tanstack/react-query';
+import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { isEmpty, isNil } from 'lodash-es';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import {
-	IeObjectsSearchFilter,
+	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
-	SearchPageMediaType,
+	type SearchPageMediaType,
 } from '@shared/types';
 import { ElasticsearchFieldNames } from '@visitor-space/types';
 

@@ -1,14 +1,14 @@
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
-import { IeObjectLicense } from '@ie-objects/ie-objects.types';
-import { IeObjectTypes } from '@shared/types';
+import { type IeObjectLicense } from '@ie-objects/ie-objects.types';
+import { type IeObjectTypes } from '@shared/types';
 
-import { IconName } from '../Icon';
+import { type IconName } from '../Icon';
 
 export type MediaCardViewMode = 'list' | 'grid';
 
 export interface MediaCardProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	actions?: ReactNode;
 	buttons?: ReactNode;
 	description?: ReactNode;

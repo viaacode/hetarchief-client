@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 
 import { Permission } from '@account/const';
 import { RequestTableColumns } from '@cp/const/requests.const';
@@ -6,7 +6,7 @@ import { CPAdminLayout } from '@cp/layouts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { DefaultSeoInfo } from '@shared/types/seo';
+import { type DefaultSeoInfo } from '@shared/types/seo';
 import VisitRequestsOverview from '@visit-requests/components/VisitRequestsOverview/VisitRequestsOverview';
 
 export const CpAdminVisitRequestsPage: FC<DefaultSeoInfo> = ({ url }) => {

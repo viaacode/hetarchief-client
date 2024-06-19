@@ -1,14 +1,14 @@
 import {
 	AdminConfigManager,
-	ContentPageInfo,
+	type ContentPageInfo,
 	ContentPageRenderer,
 	convertDbContentPageToContentPageInfo,
 } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
-import { Avo } from '@viaa/avo2-types';
+import { type Avo } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { type FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
@@ -26,7 +26,7 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
-import { DefaultSeoInfo } from '@shared/types/seo';
+import { type DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './UserConditions.module.scss';
 

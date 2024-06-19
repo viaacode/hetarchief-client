@@ -1,20 +1,22 @@
 import { Button, Checkbox } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { compact, isNil } from 'lodash-es';
-import { FC, useEffect, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { CreateFolderButton } from '@account/components';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { foldersService } from '@account/services/folders';
-import { Folder } from '@account/types';
-import { Blade, Icon, IconNamesLight } from '@shared/components';
+import { type Folder } from '@account/types';
+import { Blade } from '@shared/components/Blade/Blade';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
 
 import styles from './AddToFolderBlade.module.scss';
-import { AddToFolderBladeProps } from './AddToFolderBlade.types';
+import { type AddToFolderBladeProps } from './AddToFolderBlade.types';
 
 const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	objectToAdd,

@@ -1,17 +1,19 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, Fragment, useState } from 'react';
+import { type FC, Fragment, useState } from 'react';
 
-import { Icon, IconNamesLight, Overlay } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import LanguageSwitcher from '@shared/components/LanguageSwitcher/LanguageSwitcher';
+import { Overlay } from '@shared/components/Overlay';
 
 import styles from '../Navigation.module.scss';
 import { NavigationDropdown } from '../NavigationDropdown';
 import { NavigationList } from '../NavigationList';
 
-import { NavigationSectionProps } from './NavigationSection.types';
+import { type NavigationSectionProps } from './NavigationSection.types';
 
-const NavigationSection: FC<NavigationSectionProps> = ({
+export const NavigationSection: FC<NavigationSectionProps> = ({
 	children,
 	currentPath,
 	items,
@@ -116,5 +118,3 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 		</div>
 	);
 };
-
-export default NavigationSection;

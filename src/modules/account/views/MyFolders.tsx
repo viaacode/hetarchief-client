@@ -4,7 +4,7 @@ import { isEmpty, isNil, kebabCase } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
@@ -16,21 +16,19 @@ import { useGetFolderMedia } from '@account/hooks/get-folder-media';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { AccountLayout } from '@account/layouts';
 import { foldersService } from '@account/services/folders';
-import { Folder, FolderIeObject } from '@account/types';
+import { type Folder, type FolderIeObject } from '@account/types';
 import { createFolderSlug } from '@account/utils';
 import { IeObjectAccessThrough, IeObjectLicense } from '@ie-objects/ie-objects.types';
-import {
-	Icon,
-	IconNamesLight,
-	IdentifiableMediaCard,
-	ListNavigationItem,
-	MediaCardList,
-	PaginationBar,
-	SearchBar,
-} from '@shared/components';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { type ListNavigationItem } from '@shared/components/ListNavigation';
+import { type IdentifiableMediaCard } from '@shared/components/MediaCard';
 import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard/MediaCard.consts';
+import { MediaCardList } from '@shared/components/MediaCardList';
+import { PaginationBar } from '@shared/components/PaginationBar';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ShareFolderBlade } from '@shared/components/ShareFolderBlade';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
@@ -46,10 +44,10 @@ import { toastService } from '@shared/services/toast-service';
 import { selectFolders, setFolders } from '@shared/store/ie-objects';
 import { selectLastScrollPosition, setBreadcrumbs, setLastScrollPosition } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
-import { DefaultSeoInfo } from '@shared/types/seo';
-import { asDate, formatMediumDate } from '@shared/utils';
+import { type DefaultSeoInfo } from '@shared/types/seo';
+import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { VisitorLayout } from '@visitor-layout/index';
-import { AddToFolderBlade } from '@visitor-space/components';
+import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 
 type ListNavigationFolderItem = ListNavigationItem & Folder;
 

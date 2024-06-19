@@ -1,18 +1,19 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
-import { FC, useEffect, useRef, useState } from 'react';
+import { type FC, useEffect, useRef, useState } from 'react';
 
 import { FLOWPLAYER_FORMATS, IMAGE_FORMATS } from '@ie-objects/ie-objects.consts';
-import { IeObjectRepresentation } from '@ie-objects/ie-objects.types';
-import { Icon, IconNamesLight } from '@shared/components';
+import { type IeObjectRepresentation } from '@ie-objects/ie-objects.types';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { ObjectPlaceholder } from '../ObjectPlaceholder';
 
 import styles from './FragmentSlider.module.scss';
-import { FragmentSliderProps } from './FragmentSlider.types';
+import { type FragmentSliderProps } from './FragmentSlider.types';
 
 const Metadata: FC<FragmentSliderProps> = ({
 	className,

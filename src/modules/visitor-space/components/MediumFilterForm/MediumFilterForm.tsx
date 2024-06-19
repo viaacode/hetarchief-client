@@ -2,15 +2,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { compact, noop, without } from 'lodash-es';
-import { FC, useEffect, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
-import { SearchBar } from '@shared/components';
+import { SearchBar } from '@shared/components/SearchBar';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
-import { visitorSpaceLabelKeys } from '@visitor-space/const';
+import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import { ElasticsearchFieldNames, SearchFilterId } from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
@@ -18,7 +18,7 @@ import {
 	MEDIUM_FILTER_FORM_QUERY_PARAM_CONFIG,
 	MEDIUM_FILTER_FORM_SCHEMA,
 } from './MediumFilterForm.const';
-import { MediumFilterFormProps, MediumFilterFormState } from './MediumFilterForm.types';
+import { type MediumFilterFormProps, type MediumFilterFormState } from './MediumFilterForm.types';
 
 const defaultValues = {
 	mediums: [],

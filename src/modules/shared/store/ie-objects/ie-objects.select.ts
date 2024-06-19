@@ -1,7 +1,7 @@
-import { Folder } from '@account/types';
-import { IeObjectSearchAggregations } from '@ie-objects/ie-objects.types';
-import { AppState } from '@shared/store';
-import { GetIeObjectsResponse } from '@shared/types';
+import { type Folder } from '@account/types';
+import { type IeObjectSearchAggregations } from '@ie-objects/ie-objects.types';
+import { type AppState } from '@shared/store';
+import { type GetIeObjectsResponse } from '@shared/types';
 
 export const selectIeObjectsResults = (state: AppState): GetIeObjectsResponse | undefined =>
 	state.IeObjects.results;

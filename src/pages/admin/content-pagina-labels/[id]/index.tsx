@@ -1,12 +1,12 @@
-import { GetServerSidePropsResult } from 'next';
-import { GetServerSidePropsContext, NextPage } from 'next/types';
-import React, { FC } from 'react';
+import { type GetServerSidePropsResult } from 'next';
+import { type GetServerSidePropsContext, type NextPage } from 'next/types';
+import React, { type FC } from 'react';
 
 import { ContentPageLabelsDetailPage } from '@admin/views/content-page-labels/ContentPageLabelsDetailPage';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { DefaultSeoInfo } from '@shared/types/seo';
+import { type DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageLabelsDetailPageDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
 	return <ContentPageLabelsDetailPage url={url} />;

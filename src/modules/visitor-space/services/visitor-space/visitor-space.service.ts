@@ -1,4 +1,4 @@
-import { OrderDirection } from '@meemoo/react-components';
+import { type OrderDirection } from '@meemoo/react-components';
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { QueryClient } from '@tanstack/react-query';
 import { sortBy } from 'lodash-es';
@@ -7,13 +7,17 @@ import { stringifyUrl } from 'query-string';
 import { QUERY_KEYS } from '@shared/const';
 import { ApiService } from '@shared/services/api-service';
 
-import { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '../../types';
+import {
+	type VisitorSpaceInfo,
+	type VisitorSpaceOrderProps,
+	VisitorSpaceStatus,
+} from '../../types';
 
 import { VISITOR_SPACE_SERVICE_BASE_URL } from './visitor-space.service.const';
 import {
 	AccessType,
-	CreateVisitorSpaceSettings,
-	UpdateVisitorSpaceSettings,
+	type CreateVisitorSpaceSettings,
+	type UpdateVisitorSpaceSettings,
 } from './visitor-space.service.types';
 
 export class VisitorSpaceService {

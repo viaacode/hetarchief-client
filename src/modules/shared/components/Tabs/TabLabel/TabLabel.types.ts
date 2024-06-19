@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
 export interface TabLabelProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	count?: string | number;
 	label: string | ReactNode;
 }

@@ -5,7 +5,7 @@ import '@testing-library/jest-dom';
 // import { Provider } from 'react-redux';
 //
 // import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
-// import { formatMediumDate } from '@shared/utils';
+// import { formatMediumDate } from '@shared/utils/dates';
 
 // import { mockStore } from '../../../../__mocks__/store';
 

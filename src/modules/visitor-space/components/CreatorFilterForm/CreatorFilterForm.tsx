@@ -2,17 +2,22 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
-import { ChangeEvent, FC, useEffect, useState } from 'react';
+import { type ChangeEvent, type FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useQueryParams } from 'use-query-params';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { CREATOR_FILTER_FORM_SCHEMA, CreatorFilterFormState } from '@visitor-space/components';
 import { SearchFilterId } from '@visitor-space/types';
 
-import { CREATOR_FILTER_FORM_QUERY_PARAM_CONFIG } from './CreatorFilterForm.const';
+import {
+	CREATOR_FILTER_FORM_QUERY_PARAM_CONFIG,
+	CREATOR_FILTER_FORM_SCHEMA,
+} from './CreatorFilterForm.const';
 import styles from './CreatorFilterForm.module.scss';
-import { CreatorFilterFormProps } from './CreatorFilterForm.types';
+import {
+	type CreatorFilterFormProps,
+	type CreatorFilterFormState,
+} from './CreatorFilterForm.types';
 
 const defaultValues: CreatorFilterFormState = {
 	creator: '',

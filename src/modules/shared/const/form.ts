@@ -1,4 +1,4 @@
-import { IconNamesLight } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 
 export const OPTIONAL_LABEL = (): string => `(${tText('modules/shared/const/form___optioneel')})`;

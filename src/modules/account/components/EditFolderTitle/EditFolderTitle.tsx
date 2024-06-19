@@ -3,21 +3,22 @@ import {
 	Button,
 	ContentInput,
 	FormControl,
-	StopPropagationFunction,
+	type StopPropagationFunction,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useEffect, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { COLLECTION_FORM_SCHEMA } from '@account/const';
 import { foldersService } from '@account/services/folders';
-import { EditFolderFormState } from '@account/types';
-import { Icon, IconNamesLight } from '@shared/components';
+import { type EditFolderFormState } from '@account/types';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 
 import styles from './EditFolderTitle.module.scss';
-import { EditFolderTitleProps } from './EditFolderTitle.types';
+import { type EditFolderTitleProps } from './EditFolderTitle.types';
 
 const labelKeys: Record<keyof EditFolderFormState, string> = {
 	name: 'EditFolderTitle__name',

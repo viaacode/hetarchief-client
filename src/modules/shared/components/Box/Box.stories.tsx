@@ -1,5 +1,5 @@
 import { Box } from '@meemoo/react-components';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { type ComponentMeta, type ComponentStory } from '@storybook/react';
 import React from 'react';
 
 import { boxChildrenMock } from './__mocks__/box';

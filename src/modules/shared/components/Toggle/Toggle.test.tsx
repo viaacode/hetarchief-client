@@ -1,10 +1,10 @@
 import { jest } from '@jest/globals';
 import { fireEvent, render } from '@testing-library/react';
 
-import { IconNamesLight } from '@shared/components';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 import Toggle from './Toggle';
-import { ToggleOption, ToggleProps } from './Toggle.types';
+import { type ToggleOption, type ToggleProps } from './Toggle.types';
 import { toggleMock } from './__mocks__/toggle';
 
 const renderToggle = (mock: ToggleProps = toggleMock) => {

@@ -1,10 +1,11 @@
 import { Button } from '@meemoo/react-components';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { type ComponentMeta, type ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { Icon, IconNamesLight } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
-import Navigation from './Navigation';
+import { Navigation } from './Navigation';
 import { MOCK_HAMBURGER_PROPS, MOCK_ITEMS_LEFT, MOCK_ITEMS_RIGHT } from './__mocks__/navigation';
 
 export default {

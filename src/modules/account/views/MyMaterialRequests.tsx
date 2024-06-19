@@ -1,8 +1,8 @@
-import { OrderDirection, Row, Table } from '@meemoo/react-components';
+import { OrderDirection, type Row, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil } from 'lodash-es';
-import { FC, MouseEvent, ReactNode, useMemo, useState } from 'react';
-import { SortingRule, TableState } from 'react-table';
+import { type FC, type MouseEvent, type ReactNode, useMemo, useState } from 'react';
+import { type SortingRule, type TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
@@ -15,13 +15,16 @@ import {
 import { AccountLayout } from '@account/layouts';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
-import { MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
-import { ErrorNoAccess, Loading, PaginationBar, sortingIcons } from '@shared/components';
+import { type MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
+import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
+import { Loading } from '@shared/components/Loading';
+import { PaginationBar } from '@shared/components/PaginationBar';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { sortingIcons } from '@shared/components/Table';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { DefaultSeoInfo } from '@shared/types/seo';
+import { type DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorLayout } from '@visitor-layout/index';
 
 export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {

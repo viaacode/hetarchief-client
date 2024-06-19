@@ -1,7 +1,7 @@
-import { mixed, object, SchemaOf, string } from 'yup';
+import { mixed, object, type SchemaOf, string } from 'yup';
 
 import { tText } from '@shared/helpers/translate';
-import { CreateVisitorSpaceSettings } from '@visitor-space/services/visitor-space/visitor-space.service.types';
+import { type CreateVisitorSpaceSettings } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 
 import { checkFileSize, checkFileType } from './VisitorSpaceSettings.utils';
 

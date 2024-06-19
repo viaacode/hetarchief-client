@@ -1,12 +1,13 @@
 import getConfig from 'next/config';
 import Head from 'next/head';
-import { FC } from 'react';
+import { type FC } from 'react';
 
-import { RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
+import { type RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { LanguageInfo } from '@shared/services/translation-service/translation.types';
-import { createPageTitle, Locale } from '@shared/utils';
+import { type LanguageInfo } from '@shared/services/translation-service/translation.types';
+import { type Locale } from '@shared/utils/i18n';
+import { createPageTitle } from '@shared/utils/seo';
 
 const { publicRuntimeConfig } = getConfig();
 

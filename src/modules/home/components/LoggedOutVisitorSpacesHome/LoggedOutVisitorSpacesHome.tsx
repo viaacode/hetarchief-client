@@ -2,11 +2,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringify } from 'query-string';
-import { FC, useEffect } from 'react';
+import { type FC, useEffect } from 'react';
 import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
-import { Icon, IconNamesLight } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';

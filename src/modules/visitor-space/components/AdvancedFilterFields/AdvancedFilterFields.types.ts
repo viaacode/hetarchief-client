@@ -1,7 +1,9 @@
-import { AdvancedFilter } from '../../types';
+import { type ReactNode } from 'react';
+
+import { type AdvancedFilter } from '../../types';
 
 export interface AdvancedFilterFieldsProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	id: string;
 	index: number;
 	value: AdvancedFilter;

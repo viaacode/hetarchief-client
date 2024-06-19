@@ -1,7 +1,7 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { type ComponentMeta, type ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { IconNamesLight } from '../Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 import Placeholder from './Placeholder';
 

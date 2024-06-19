@@ -1,5 +1,5 @@
 import { ApiService } from '@shared/services/api-service';
-import { Organisation } from '@shared/services/organisation-service/organisation.types';
+import { type Organisation } from '@shared/services/organisation-service/organisation.types';
 
 export class OrganisationService {
 	public static async getBySlug(

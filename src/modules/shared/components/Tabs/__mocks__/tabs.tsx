@@ -1,4 +1,5 @@
-import { Icon, IconNamesLight } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { SearchPageMediaType } from '@shared/types';
 
 export const mockTabs = [

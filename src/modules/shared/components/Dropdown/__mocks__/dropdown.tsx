@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Icon, IconNamesLight } from '../../Icon';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 export const menuItemsWithIcons = [
 	[

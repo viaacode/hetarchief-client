@@ -1,6 +1,6 @@
-import { AdminConfig, AdminConfigManager } from '@meemoo/admin-core-ui';
+import { type AdminConfig, AdminConfigManager } from '@meemoo/admin-core-ui';
 import { useRouter } from 'next/router';
-import { ComponentType, useCallback, useEffect, useState } from 'react';
+import { type ComponentType, useCallback, useEffect, useState } from 'react';
 
 import { getAdminCoreConfig } from '@admin/wrappers/admin-core-config';
 import Loading from '@shared/components/Loading/Loading';

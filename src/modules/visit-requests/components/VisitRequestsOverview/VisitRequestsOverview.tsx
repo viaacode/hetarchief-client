@@ -1,7 +1,7 @@
-import { OrderDirection, Row, Table } from '@meemoo/react-components';
+import { OrderDirection, type Row, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, MouseEvent, ReactNode, useEffect, useMemo, useState } from 'react';
-import { TableState } from 'react-table';
+import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
+import { type TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
@@ -11,25 +11,23 @@ import {
 	RequestTablePageSize,
 	VISIT_REQUEST_ID_QUERY_KEY,
 } from '@cp/const/requests.const';
-import {
-	Loading,
-	PaginationBar,
-	ProcessRequestBlade,
-	ScrollableTabs,
-	SearchBar,
-	sortingIcons,
-} from '@shared/components';
+import { Loading } from '@shared/components/Loading';
+import { PaginationBar } from '@shared/components/PaginationBar';
+import ProcessRequestBlade from '@shared/components/ProcessRequestBlade/ProcessRequestBlade';
+import { SearchBar } from '@shared/components/SearchBar';
+import { sortingIcons } from '@shared/components/Table';
+import { ScrollableTabs } from '@shared/components/Tabs';
 import { globalLabelKeys } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { Visit, VisitStatus } from '@shared/types';
+import { type Visit, VisitStatus } from '@shared/types';
 import { useGetVisit } from '@visit-requests/hooks/get-visit';
 import { useGetVisits } from '@visit-requests/hooks/get-visits';
 import { RequestStatusAll } from '@visit-requests/types';
 
-import { VisitRequestOverviewProps } from './VisitRequestsOverview.types';
+import { type VisitRequestOverviewProps } from './VisitRequestsOverview.types';
 
 const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 	const { tHtml, tText } = useTranslation();

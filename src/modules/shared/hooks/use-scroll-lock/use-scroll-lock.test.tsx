@@ -1,5 +1,5 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 import { Provider } from 'react-redux';
 
 import { mockStore } from '../../../../__mocks__/store';

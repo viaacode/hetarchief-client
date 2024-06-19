@@ -1,10 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FormControl, ReactSelect, SelectOption } from '@meemoo/react-components';
+import { FormControl, ReactSelect, type SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { endOfDay, parseISO, startOfDay } from 'date-fns';
-import React, { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
+import React, { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { MultiValue, SingleValue } from 'react-select';
+import { type MultiValue, type SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { SEPARATOR } from '@shared/const';
@@ -12,7 +12,7 @@ import { YEAR_LENGTH } from '@shared/const/date';
 import { convertYearToDate } from '@shared/helpers/convert-year-to-date';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { isRange, Operator } from '@shared/types';
-import { getOperators } from '@visitor-space/utils';
+import { getOperators } from '@visitor-space/utils/metadata';
 
 import { MetadataProp } from '../../types';
 import { getSelectValue } from '../../utils/select';
@@ -27,7 +27,10 @@ import {
 	CREATED_FILTER_FORM_SCHEMA,
 } from './CreatedFilterForm.const';
 import styles from './CreatedFilterForm.module.scss';
-import { CreatedFilterFormProps, CreatedFilterFormState } from './CreatedFilterForm.types';
+import {
+	type CreatedFilterFormProps,
+	type CreatedFilterFormState,
+} from './CreatedFilterForm.types';
 
 const labelKeys: Record<keyof CreatedFilterFormState, string> = {
 	created: 'CreatedFilterForm__created',

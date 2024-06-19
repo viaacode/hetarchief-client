@@ -1,17 +1,19 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
-import React, { FC } from 'react';
+import React, { type FC } from 'react';
 
 import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
 import {
 	GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD,
-	MaterialRequestDetail,
+	type MaterialRequestDetail,
 	MaterialRequestObjectType,
 } from '@material-requests/types';
-import { Blade, Icon, IconNamesLight } from '@shared/components';
+import { Blade } from '@shared/components/Blade/Blade';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { formatMediumDate } from '@shared/utils';
+import { formatMediumDate } from '@shared/utils/dates';
 
 import styles from './MaterialRequestDetailBlade.module.scss';
 

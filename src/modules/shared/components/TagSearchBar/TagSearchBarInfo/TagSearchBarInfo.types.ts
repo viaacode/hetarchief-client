@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
-import { IconName } from '@shared/components/Icon';
-import { DefaultComponentProps } from '@shared/types';
+import { type IconName } from '@shared/components/Icon';
+import { type DefaultComponentProps } from '@shared/types';
 
 export interface TagSearchBarInfoProps extends DefaultComponentProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	icon: IconName;
 	content: string | ReactNode;
 }

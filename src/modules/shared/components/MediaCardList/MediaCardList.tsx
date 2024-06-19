@@ -1,13 +1,13 @@
 import clsx from 'clsx';
-import { FC, memo, ReactNode } from 'react';
+import { type FC, memo, type ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
 
-import { IdentifiableMediaCard, MediaCardListProps, MediaCardProps } from '@shared/components';
+import { type MediaCardListProps } from '@shared/components/MediaCardList/MediaCardList.types';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 
-import { MediaCard } from '../MediaCard';
+import { type IdentifiableMediaCard, MediaCard, type MediaCardProps } from '../MediaCard';
 
 import { MEDIA_CARD_LIST_GRID_BP_COLS } from './MediaCardList.const';
 import styles from './MediaCardList.module.scss';

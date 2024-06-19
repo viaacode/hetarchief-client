@@ -1,9 +1,9 @@
 import { Button } from '@meemoo/react-components';
 import { action } from '@storybook/addon-actions';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { type ComponentMeta, type ComponentStory } from '@storybook/react';
 import React, { useState } from 'react';
 
-import { Blade } from '../Blade';
+import { Blade } from '@shared/components/Blade/Blade';
 
 import BladeManager from './BladeManager';
 

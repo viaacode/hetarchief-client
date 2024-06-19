@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
-import { MaterialRequestRequesterCapacity } from '@material-requests/types';
+import { type MaterialRequestRequesterCapacity } from '@material-requests/types';
 
 export interface PersonalInfoType {
 	fullName: string;

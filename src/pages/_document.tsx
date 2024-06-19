@@ -1,6 +1,6 @@
 import getConfig from 'next/config';
-import { DocumentProps, Head, Html, Main, NextScript } from 'next/document';
-import React, { ReactElement } from 'react';
+import { type DocumentProps, Head, Html, Main, NextScript } from 'next/document';
+import React, { type ReactElement } from 'react';
 
 declare type DocumentFiles = {
 	sharedFiles: readonly string[];

@@ -1,6 +1,6 @@
-import { Avo } from '@viaa/avo2-types';
+import { type Avo } from '@viaa/avo2-types';
 
-import { User } from '@auth/types';
+import { type User } from '@auth/types';
 
 export interface UserState {
 	user: User | null;

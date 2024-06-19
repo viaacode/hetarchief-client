@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
-import { IconName } from '@shared/components';
-import { DefaultComponentProps } from '@shared/types';
+import { type IconName } from '@shared/components/Icon';
+import { type DefaultComponentProps } from '@shared/types';
 
 export interface FilterButtonProps extends DefaultComponentProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	label: ReactNode;
 	icon: IconName;
 	isActive: boolean;

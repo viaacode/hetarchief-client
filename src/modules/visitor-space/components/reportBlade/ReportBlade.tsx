@@ -1,18 +1,18 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, FormControl, TextArea, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { Requests } from 'node-zendesk';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { type Requests } from 'node-zendesk';
+import { type FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { Blade } from '@shared/components';
+import { Blade } from '@shared/components/Blade/Blade';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useZendesk } from '@shared/hooks/use-zendesk';
 import { toastService } from '@shared/services/toast-service';
 
 import { REPORT_FORM_SCHEMA } from './ReportBlade.const';
 import styles from './ReportBlade.module.scss';
-import { ReportBladeProps, ReportFormState } from './ReportBlade.types';
+import { type ReportBladeProps, type ReportFormState } from './ReportBlade.types';
 
 const ReportBlade: FC<ReportBladeProps> = (props) => {
 	const { tHtml } = useTranslation();

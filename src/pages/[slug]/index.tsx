@@ -1,12 +1,12 @@
 import { ContentPageRenderer, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
 import { QueryClient } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { type HTTPError } from 'ky';
 import { kebabCase } from 'lodash-es';
-import { GetServerSidePropsResult, NextPage } from 'next';
+import { type GetServerSidePropsResult, type NextPage } from 'next';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import { GetServerSidePropsContext } from 'next/types';
-import { ComponentType, FC, useEffect } from 'react';
+import { type GetServerSidePropsContext } from 'next/types';
+import { type ComponentType, type FC, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { GroupName } from '@account/const';
@@ -20,17 +20,18 @@ import {
 	makeServerSideRequestGetIeObjectInfo,
 	useGetIeObjectInfo,
 } from '@ie-objects/hooks/get-ie-objects-info';
-import { ErrorNotFound, Loading } from '@shared/components';
-import { PageInfo, SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { ErrorNotFound } from '@shared/components/ErrorNotFound';
+import { Loading } from '@shared/components/Loading';
+import { type PageInfo, SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import withUser, { UserProps } from '@shared/hooks/with-user';
+import withUser, { type UserProps } from '@shared/hooks/with-user';
 import { setShowZendesk } from '@shared/store/ui';
-import { DefaultSeoInfo } from '@shared/types/seo';
-import { Locale } from '@shared/utils';
+import { type DefaultSeoInfo } from '@shared/types/seo';
+import { Locale } from '@shared/utils/i18n';
 import { VisitorLayout } from '@visitor-layout/index';
 
 const { publicRuntimeConfig } = getConfig();

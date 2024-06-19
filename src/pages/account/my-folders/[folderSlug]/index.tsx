@@ -1,12 +1,12 @@
-import { GetServerSidePropsResult, NextPage } from 'next';
+import { type GetServerSidePropsResult, type NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { GetServerSidePropsContext } from 'next/types';
-import React, { ComponentType } from 'react';
+import { type GetServerSidePropsContext } from 'next/types';
+import React, { type ComponentType } from 'react';
 
 import { AccountMyFolders } from '@account/views/MyFolders';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { DefaultSeoInfo } from '@shared/types/seo';
+import { type DefaultSeoInfo } from '@shared/types/seo';
 
 const AccountMyFoldersEnglish: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const router = useRouter();

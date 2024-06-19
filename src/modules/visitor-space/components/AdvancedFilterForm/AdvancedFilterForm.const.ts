@@ -1,10 +1,10 @@
-import { array, object, SchemaOf, string } from 'yup';
+import { array, object, type SchemaOf, string } from 'yup';
 
 import { Operator } from '@shared/types';
 
-import { AdvancedFilter, MetadataProp } from '../../types';
+import { type AdvancedFilter, MetadataProp } from '../../types';
 
-import { AdvancedFilterFormState } from './AdvancedFilterForm.types';
+import { type AdvancedFilterFormState } from './AdvancedFilterForm.types';
 
 export const initialFields = (): AdvancedFilter => ({
 	prop: MetadataProp.Everything,

@@ -1,6 +1,7 @@
-import { IeObjectTypes } from '@shared/types';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { type IeObjectTypes } from '@shared/types';
 
-import { IconName, IconNamesLight } from '../Icon';
+import { type IconName } from '../Icon';
 
 export const TYPE_TO_NO_ICON_MAP: Record<Exclude<IeObjectTypes, null>, IconName> = {
 	audio: IconNamesLight.NoAudio,

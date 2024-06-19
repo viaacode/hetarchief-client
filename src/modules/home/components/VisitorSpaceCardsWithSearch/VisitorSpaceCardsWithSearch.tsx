@@ -1,21 +1,21 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useEffect, useRef, useState } from 'react';
+import { type FC, useEffect, useRef, useState } from 'react';
 import { StringParam, useQueryParams } from 'use-query-params';
 
+import { Loading } from '@shared/components/Loading';
+import { SearchBar } from '@shared/components/SearchBar';
 import {
-	Loading,
-	SearchBar,
-	VisitorSpaceCardList,
-	VisitorSpaceCardProps,
-} from '@shared/components';
-import { VisitorSpaceCardType } from '@shared/components/VisitorSpaceCard';
+	type VisitorSpaceCardProps,
+	VisitorSpaceCardType,
+} from '@shared/components/VisitorSpaceCard';
+import { VisitorSpaceCardList } from '@shared/components/VisitorSpaceCardList';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
-import { VisitorSpaceInfo, VisitorSpaceStatus } from '@visitor-space/types';
+import { type VisitorSpaceInfo, VisitorSpaceStatus } from '@visitor-space/types';
 
 const NUMBER_OF_VISITOR_SPACES = 6;
 const NUMBER_OF_VISITOR_SPACES_MOBILE = 3;

@@ -1,8 +1,8 @@
-import { toast, ToastOptions } from 'react-toastify';
+import { toast, type ToastOptions } from 'react-toastify';
 
-import { Toast, ToastProps } from '@shared/components';
+import { Toast, type ToastProps } from '@shared/components/Toast';
 import { tText } from '@shared/helpers/translate';
-import { Optional } from '@shared/types';
+import { type Optional } from '@shared/types';
 
 class ToastService {
 	public notify(

@@ -1,7 +1,7 @@
 import { Button, RadioButton, TextArea } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
-import React, { FC, useState } from 'react';
+import React, { type FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { MaterialRequestsService } from '@material-requests/services';
@@ -10,7 +10,9 @@ import {
 	MaterialRequestRequesterCapacity,
 	MaterialRequestType,
 } from '@material-requests/types';
-import { Blade, Icon, IconNamesLight } from '@shared/components';
+import { Blade } from '@shared/components/Blade/Blade';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -39,7 +41,7 @@ interface MaterialRequestBladeProps {
 	currentLayer: number;
 }
 
-const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
+export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	isOpen,
 	isEditMode = false,
 	onClose,
@@ -359,5 +361,3 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		</Blade>
 	);
 };
-
-export default MaterialRequestBlade;

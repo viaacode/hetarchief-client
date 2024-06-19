@@ -1,9 +1,24 @@
-import { IconName } from '@shared/components';
+import { type ReactNode } from 'react';
 
-import { NavigationItem } from '../Navigation.types';
+import { type IconName } from '@shared/components/Icon';
+
+export interface NavigationItemNodeProps {
+	children?: ReactNode;
+	closeDropdowns: () => void;
+}
+
+export interface NavigationItem {
+	node: ReactNode | ((nodeProps: NavigationItemNodeProps) => ReactNode);
+	id: string;
+	path: string;
+	activeDesktop?: boolean;
+	activeMobile?: boolean;
+	isDivider?: boolean | 'md';
+	children?: NavigationItem[];
+}
 
 export interface NavigationSectionProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	currentPath?: string;
 	items?: NavigationItem[];
 	placement: 'left' | 'right';
@@ -13,7 +28,7 @@ export interface NavigationSectionProps {
 }
 
 export interface NavigationHamburgerProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	openLabel: string;
 	closedLabel: string;
 	openIcon?: IconName;

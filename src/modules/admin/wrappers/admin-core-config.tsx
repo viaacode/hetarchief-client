@@ -1,32 +1,32 @@
 import {
-	AdminConfig,
+	type AdminConfig,
 	ContentBlockType,
-	ContentPageInfo,
+	type ContentPageInfo,
 	ContentWidth,
-	LinkInfo,
-	ToastInfo,
+	type LinkInfo,
+	type ToastInfo,
 } from '@meemoo/admin-core-ui';
 import { DatabaseType } from '@viaa/avo2-types';
 import getConfig from 'next/config';
 import Link from 'next/link';
-import { NextRouter } from 'next/router';
+import { type NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { FunctionComponent } from 'react';
+import { type FunctionComponent } from 'react';
 
-import { NAVIGATION_DROPDOWN } from '@navigation/components';
+import { NAVIGATION_DROPDOWN } from '@navigation/components/Navigation/Navigation.types';
 import {
 	ALERT_ICON_LIST_CONFIG,
 	Icon,
 	ICON_LIST_CONFIG,
-	IconName,
-	IconNamesLight,
-} from '@shared/components';
+	type IconName,
+} from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import Loading from '@shared/components/Loading/Loading';
 import { ADMIN_CORE_ROUTES_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
-import { Locale } from '@shared/utils';
+import { type Locale } from '@shared/utils/i18n';
 
 const { publicRuntimeConfig } = getConfig();
 

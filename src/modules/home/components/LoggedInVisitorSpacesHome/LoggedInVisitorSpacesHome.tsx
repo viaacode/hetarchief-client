@@ -1,38 +1,41 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { ComponentType, FC, useEffect, useRef, useState } from 'react';
+import React, { type ComponentType, type FC, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
+import {
+	RequestAccessBlade,
+	type RequestAccessFormState,
+} from '@home/components/RequestAccessBlade';
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
+import { Blade } from '@shared/components/Blade/Blade';
+import { Loading } from '@shared/components/Loading';
+import { SpacePreview } from '@shared/components/SpacePreview';
 import {
-	Blade,
-	Loading,
-	SpacePreview,
 	VisitorSpaceCard,
-	VisitorSpaceCardProps,
+	type VisitorSpaceCardProps,
 	VisitorSpaceCardType,
-} from '@shared/components';
+} from '@shared/components/VisitorSpaceCard';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { Visit, VisitStatus } from '@shared/types';
-import { asDate } from '@shared/utils';
+import { type Visit, VisitStatus } from '@shared/types';
+import { asDate } from '@shared/utils/dates';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetVisits } from '@visit-requests/hooks/get-visits';
 import { VisitTimeframe } from '@visit-requests/types';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 
-import { ProcessVisitBlade, ProcessVisitBladeProps } from '../ProcessVisitBlade';
+import { ProcessVisitBlade, type ProcessVisitBladeProps } from '../ProcessVisitBlade';
 
 import styles from './LoggedInVisitiorSpacesHome.module.scss';
 

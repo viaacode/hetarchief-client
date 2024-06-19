@@ -2,16 +2,19 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { compact, keyBy, mapValues, noop, without } from 'lodash-es';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { type FC, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
-import { SearchBar } from '@shared/components';
+import { SearchBar } from '@shared/components/SearchBar';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
-import { MaintainerFilterFormProps, MaintainerFilterFormState } from '@visitor-space/components';
-import { visitorSpaceLabelKeys } from '@visitor-space/const';
+import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
+import {
+	type MaintainerFilterFormProps,
+	type MaintainerFilterFormState,
+} from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
+import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
 import {
 	ElasticsearchFieldNames,

@@ -1,7 +1,8 @@
 import clsx from 'clsx';
-import { FC } from 'react';
+import { type FC } from 'react';
 
-import { HetArchiefLogoProps, HetArchiefLogoType } from '@shared/components';
+import { HetArchiefLogoType } from '@shared/components/HetArchiefLogo/HetArchiefLogo.const';
+import { type HetArchiefLogoProps } from '@shared/components/HetArchiefLogo/HetArchiefLogo.types';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 
 const HetArchiefLogo: FC<HetArchiefLogoProps> = ({ className, type = HetArchiefLogoType.Dark }) => {

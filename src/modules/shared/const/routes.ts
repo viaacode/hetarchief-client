@@ -1,6 +1,6 @@
-import { AdminConfig } from '@meemoo/admin-core-ui/dist/react-admin/core/config/config.types';
+import { type AdminConfig } from '@meemoo/admin-core-ui/dist/react-admin/core/config/config.types';
 
-import { Locale } from '@shared/utils';
+import { type Locale } from '@shared/utils/i18n';
 
 export enum RoutePart {
 	accessRequested = 'accessRequested',

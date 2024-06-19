@@ -1,7 +1,7 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
-import { Folder, FolderIeObject, SharedFolderResponse } from '@account/types';
+import { type Folder, type FolderIeObject, type SharedFolderResponse } from '@account/types';
 import { ApiService } from '@shared/services/api-service';
 
 import {

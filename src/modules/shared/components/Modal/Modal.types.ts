@@ -1,8 +1,8 @@
-import { ReactNode } from 'react';
-import { OnAfterOpenCallback } from 'react-modal';
+import { type ReactNode } from 'react';
+import { type OnAfterOpenCallback } from 'react-modal';
 
 export interface ModalProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	isOpen?: boolean;
 	className?: string;
 	title?: string | ReactNode;

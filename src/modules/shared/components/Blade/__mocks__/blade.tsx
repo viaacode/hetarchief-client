@@ -1,6 +1,6 @@
 import { Button } from '@meemoo/react-components';
 
-import { BladeProps } from '../Blade.types';
+import { type BladeProps } from '../Blade.types';
 
 export const mockBladeProps: BladeProps = {
 	renderTitle: () => 'Vraag toegang aan',

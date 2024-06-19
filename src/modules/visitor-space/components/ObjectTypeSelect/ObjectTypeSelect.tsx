@@ -1,5 +1,5 @@
-import { ReactSelect, ReactSelectProps } from '@meemoo/react-components';
-import { FC } from 'react';
+import { ReactSelect, type ReactSelectProps } from '@meemoo/react-components';
+import { type FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';

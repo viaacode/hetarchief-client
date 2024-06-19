@@ -1,5 +1,5 @@
 import { OrderDirection } from '@meemoo/react-components';
-import { QueryClient, useQuery, UseQueryResult } from '@tanstack/react-query';
+import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { isEmpty, isNil, noop } from 'lodash-es';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,12 +9,12 @@ import { QUERY_KEYS } from '@shared/const/query-keys';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { setFilterOptions, setResults } from '@shared/store/ie-objects';
 import {
-	GetIeObjectsResponse,
-	IeObjectsSearchFilter,
+	type GetIeObjectsResponse,
+	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
 	SearchPageMediaType,
-	SortObject,
+	type SortObject,
 } from '@shared/types';
 import { SEARCH_RESULTS_PAGE_SIZE } from '@visitor-space/const';
 import { SearchSortProp } from '@visitor-space/types';

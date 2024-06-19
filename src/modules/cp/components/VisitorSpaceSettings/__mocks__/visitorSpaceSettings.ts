@@ -1,4 +1,4 @@
-import { VisitorSpaceInfo, VisitorSpaceStatus } from '@visitor-space/types';
+import { type VisitorSpaceInfo, VisitorSpaceStatus } from '@visitor-space/types';
 
 export const VISITOR_SPACE_MOCK: VisitorSpaceInfo = {
 	id: '52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21',

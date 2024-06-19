@@ -1,10 +1,10 @@
 import { isString } from 'lodash-es';
-import { FC, ReactNode } from 'react';
+import { type FC, type ReactNode } from 'react';
 
-import { MetadataItem } from '@ie-objects/components';
+import { type MetadataItem } from '@ie-objects/components/Metadata';
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { DefaultComponentProps } from '@shared/types';
+import { type DefaultComponentProps } from '@shared/types';
 
 import { METADATA_FIELD_MAX_LENGTH } from './MetaDataFieldWithHighlightingAndMaxLength.const';
 import styles from './MetaDataFieldWithHighlightingAndMaxLength.module.scss';

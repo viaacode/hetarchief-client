@@ -1,16 +1,17 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Checkbox, keysEnter, keysSpacebar, onKey } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { type FC, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQueryParams } from 'use-query-params';
 
-import { Icon, IconNamesLight } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { IeObjectsSearchFilterField } from '@shared/types';
 import {
-	ConsultableOnlyOnLocationFilterFormProps,
-	ConsultableOnlyOnLocationFilterFormState,
-} from '@visitor-space/components';
+	type ConsultableOnlyOnLocationFilterFormProps,
+	type ConsultableOnlyOnLocationFilterFormState,
+} from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
 import { SearchFilterId } from '@visitor-space/types';
 
 import {

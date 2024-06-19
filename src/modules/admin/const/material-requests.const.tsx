@@ -1,17 +1,17 @@
-import { Column } from 'react-table';
+import { type Column } from 'react-table';
 import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
 import {
-	MaterialRequest,
+	type MaterialRequest,
 	MaterialRequestKeys,
-	MaterialRequestRow,
+	type MaterialRequestRow,
 	MaterialRequestType,
 } from '@material-requests/types';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
+import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils/dates';
 
 export const ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE = 20;
 

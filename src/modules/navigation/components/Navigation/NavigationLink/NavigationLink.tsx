@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import Link from 'next/link';
-import { FC } from 'react';
+import { type FC } from 'react';
 
-import { Icon, IconProps } from '@shared/components';
+import { Icon, type IconProps } from '@shared/components/Icon';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import styles from '../Navigation.module.scss';
 
-import { NavigationLinkIcon, NavigationLinkProps } from './NavigationLink.types';
+import { type NavigationLinkIcon, type NavigationLinkProps } from './NavigationLink.types';
 
 const NavigationLink: FC<NavigationLinkProps> = ({
 	className,

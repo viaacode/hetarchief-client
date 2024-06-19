@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import Image from 'next/image';
-import React, { FC } from 'react';
+import React, { type FC } from 'react';
 
 import styles from './CardImage.module.scss';
-import { CardImageProps } from './CardImage.types';
+import { type CardImageProps } from './CardImage.types';
 
 const CardImage: FC<CardImageProps> = ({
 	color,

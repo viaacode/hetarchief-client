@@ -2,39 +2,37 @@ import {
 	Button,
 	FormControl,
 	ReactSelect,
-	ReactSelectProps,
-	SelectOption,
+	type ReactSelectProps,
+	type SelectOption,
 	TextInput,
-	TextInputProps,
+	type TextInputProps,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { parseISO } from 'date-fns';
-import React, { FC } from 'react';
-import { SingleValue } from 'react-select';
+import React, { type FC } from 'react';
+import { type SingleValue } from 'react-select';
 
-import { Icon, IconNamesLight } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { SEPARATOR } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { Operator } from '@shared/types';
-import {
-	AdvancedFilterFieldsProps,
-	DateInput,
-	DateRangeInput,
-	DurationInput,
-	DurationRangeInput,
-	GenreSelect,
-	MediaTypeSelect,
-	MediumSelect,
-	ObjectTypeSelect,
-} from '@visitor-space/components';
-import { DateInputProps } from '@visitor-space/components/DateInput/DateInput';
-import { DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
-import { MetadataFieldProps } from '@visitor-space/const';
+import { type Operator } from '@shared/types';
+import { type AdvancedFilterFieldsProps } from '@visitor-space/components/AdvancedFilterFields/AdvancedFilterFields.types';
+import { DateInput } from '@visitor-space/components/DateInput';
+import { type DateInputProps } from '@visitor-space/components/DateInput/DateInput';
+import { DateRangeInput } from '@visitor-space/components/DateRangeInput';
+import { type DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
+import { DurationRangeInput } from '@visitor-space/components/DurationRangeInput';
+import { GenreSelect } from '@visitor-space/components/GenreSelect';
+import { MediaTypeSelect } from '@visitor-space/components/MediaTypeSelect';
+import { MediumSelect } from '@visitor-space/components/MediumSelect';
+import { ObjectTypeSelect } from '@visitor-space/components/ObjectTypeSelect';
+import { type MetadataFieldProps } from '@visitor-space/const/metadata';
+import { getAdvancedProperties, getField, getOperators } from '@visitor-space/utils/metadata';
 
-import { AdvancedFilter, MetadataProp } from '../../types';
-import { getAdvancedProperties, getField, getOperators } from '../../utils';
+import { type AdvancedFilter, type MetadataProp } from '../../types';
 import { getSelectValue } from '../../utils/select';
-import { defaultValue } from '../DurationInput/DurationInput';
+import DurationInput, { defaultValue } from '../DurationInput/DurationInput';
 
 import styles from './AdvancedFilterFields.module.scss';
 

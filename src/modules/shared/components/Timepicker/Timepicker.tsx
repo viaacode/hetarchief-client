@@ -1,11 +1,12 @@
 import { TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
-import React, { FC } from 'react';
+import React, { type FC } from 'react';
 import ReactDatePicker from 'react-datepicker';
 
-import { Icon, IconNamesLight } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
-import { TimepickerProps } from './Timepicker.types';
+import { type TimepickerProps } from './Timepicker.types';
 
 // Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: object.
 // https://github.com/Hacker0x01/react-datepicker/issues/3834#issuecomment-1451662259

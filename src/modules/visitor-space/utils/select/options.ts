@@ -1,4 +1,4 @@
-import { SelectOption } from '@meemoo/react-components';
+import { type SelectOption } from '@meemoo/react-components';
 
 import { tText } from '@shared/helpers/translate';
 

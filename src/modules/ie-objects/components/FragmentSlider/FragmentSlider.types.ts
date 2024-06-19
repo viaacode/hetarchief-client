@@ -1,8 +1,10 @@
-import { IeObjectRepresentation } from '@ie-objects/ie-objects.types';
-import { DefaultComponentProps } from '@shared/types';
+import { type ReactNode } from 'react';
+
+import { type IeObjectRepresentation } from '@ie-objects/ie-objects.types';
+import { type DefaultComponentProps } from '@shared/types';
 
 export interface FragmentSliderProps extends DefaultComponentProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	thumbnail?: string;
 	fragments: IeObjectRepresentation[];
 	onChangeFragment?: (index: number) => void;

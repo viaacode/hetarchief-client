@@ -1,7 +1,12 @@
-import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
+import {
+	useMutation,
+	type UseMutationResult,
+	useQuery,
+	type UseQueryResult,
+} from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const';
-import { VisitAccessStatus } from '@shared/types';
+import { type VisitAccessStatus } from '@shared/types';
 import { VisitsService } from '@visit-requests/services';
 
 // Query

@@ -1,4 +1,4 @@
-import { DefaultFilterFormProps } from '../../types';
+import { type DefaultFilterFormProps } from '../../types';
 
 export type LanguageFilterFormProps = DefaultFilterFormProps<LanguageFilterFormState>;
 

@@ -1,22 +1,22 @@
-import { SelectOption } from '@meemoo/react-components';
+import { type SelectOption } from '@meemoo/react-components';
 import { format, parseISO } from 'date-fns';
 import { isString } from 'lodash-es';
 
 import { SEPARATOR } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
-import { IeObjectsSearchFilter, Operator } from '@shared/types';
-import { formatDate } from '@shared/utils';
+import { type IeObjectsSearchFilter, Operator } from '@shared/types';
+import { formatDate } from '@shared/utils/dates';
+import { type SearchPageQueryParams } from '@visitor-space/const';
 
-import { getMetadataSearchFilters } from '../../const';
+import { getMetadataSearchFilters } from '../../const/metadata';
 import { AdvancedFilterArrayParam } from '../../const/query-params';
 import {
-	AdvancedFilter,
+	type AdvancedFilter,
 	FILTER_LABEL_VALUE_DELIMITER,
 	MetadataProp,
 	SearchFilterId,
-	SearchPageQueryParams,
-	TagIdentity,
+	type TagIdentity,
 } from '../../types';
 import {
 	getAdvancedProperties,

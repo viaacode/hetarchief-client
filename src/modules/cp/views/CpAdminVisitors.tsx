@@ -1,6 +1,6 @@
 import { OrderDirection, Table } from '@meemoo/react-components';
-import { FC, ReactNode, useMemo, useState } from 'react';
-import { TableState } from 'react-table';
+import { type FC, type ReactNode, useMemo, useState } from 'react';
+import { type TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
@@ -11,23 +11,21 @@ import {
 	VisitorsTableColumns,
 } from '@cp/const/visitors.const';
 import { CPAdminLayout } from '@cp/layouts';
-import {
-	ApproveRequestBlade,
-	ConfirmationModal,
-	Loading,
-	PaginationBar,
-	ScrollableTabs,
-	SearchBar,
-	sortingIcons,
-} from '@shared/components';
+import { ApproveRequestBlade } from '@shared/components/ApproveRequestBlade';
+import { ConfirmationModal } from '@shared/components/ConfirmationModal';
+import { Loading } from '@shared/components/Loading';
+import { PaginationBar } from '@shared/components/PaginationBar';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { sortingIcons } from '@shared/components/Table';
+import { ScrollableTabs } from '@shared/components/Tabs';
 import { globalLabelKeys } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { Visit, VisitStatus } from '@shared/types';
-import { DefaultSeoInfo } from '@shared/types/seo';
+import { type Visit, VisitStatus } from '@shared/types';
+import { type DefaultSeoInfo } from '@shared/types/seo';
 import { useGetVisits } from '@visit-requests/hooks/get-visits';
 import { useUpdateVisitRequest } from '@visit-requests/hooks/update-visit';
 import { RequestStatusAll, VisitTimeframe } from '@visit-requests/types';

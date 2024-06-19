@@ -1,10 +1,11 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
-import { FC, useEffect, useRef, useState } from 'react';
+import { type FC, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { Icon, IconNamesSolid } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesSolid } from '@shared/components/Icon/Icon.enums';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useAppDispatch } from '@shared/store';
 import {

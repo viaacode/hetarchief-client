@@ -1,7 +1,7 @@
 import Cors from 'cors';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { type NextApiRequest, type NextApiResponse } from 'next';
 
-import { Locale } from '@shared/utils';
+import { Locale } from '@shared/utils/i18n';
 
 // Initializing the cors middleware
 const cors = Cors({

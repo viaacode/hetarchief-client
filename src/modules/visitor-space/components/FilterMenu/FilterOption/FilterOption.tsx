@@ -1,8 +1,10 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, ReactElement, useCallback, useEffect, useState } from 'react';
+import { type FC, type ReactElement, useCallback, useEffect, useState } from 'react';
 
-import { Icon, IconNamesLight, Overlay } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { Overlay } from '@shared/components/Overlay';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import { SearchFilterId } from '@visitor-space/types';
@@ -12,7 +14,7 @@ import FilterForm from '../FilterForm/FilterForm';
 import styles from '../FilterMenu.module.scss';
 import { FilterMenuType } from '../FilterMenu.types';
 
-import { FilterOptionProps } from './FilterOption.types';
+import { type FilterOptionProps } from './FilterOption.types';
 
 const FilterOption: FC<FilterOptionProps> = ({
 	activeFilter,

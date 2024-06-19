@@ -1,10 +1,10 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
-import { GetMaterialRequestsProps, MaterialRequestsService } from '../services';
-import { MaterialRequest } from '../types';
+import { type GetMaterialRequestsProps, MaterialRequestsService } from '../services';
+import { type MaterialRequest } from '../types';
 
 export const useGetPendingMaterialRequests = (
 	props: GetMaterialRequestsProps,

@@ -1,9 +1,14 @@
 import clsx from 'clsx';
-import { FC } from 'react';
+import { type FC } from 'react';
+
+import { NavigationSection } from '@navigation/components/Navigation/NavigationSection/NavigationSection';
 
 import styles from './Navigation.module.scss';
-import { NavigationCenterProps, NavigationFC, NavigationProps } from './Navigation.types';
-import { NavigationSection } from './NavigationSection';
+import {
+	type NavigationCenterProps,
+	type NavigationFC,
+	type NavigationProps,
+} from './Navigation.types';
 
 const NavigationCenter: FC<NavigationCenterProps> = ({ children, title }) => (
 	<div className={styles['c-navigation__section']}>
@@ -11,7 +16,7 @@ const NavigationCenter: FC<NavigationCenterProps> = ({ children, title }) => (
 	</div>
 );
 
-const Navigation: NavigationFC<NavigationProps> = ({
+const NavigationInternal: NavigationFC<NavigationProps> = ({
 	children,
 	className,
 	contextual = false,
@@ -26,8 +31,8 @@ const Navigation: NavigationFC<NavigationProps> = ({
 	return <nav className={rootCls}>{children}</nav>;
 };
 
-Navigation.Left = NavigationSection;
-Navigation.Center = NavigationCenter;
-Navigation.Right = NavigationSection;
+NavigationInternal.Left = NavigationSection;
+NavigationInternal.Center = NavigationCenter;
+NavigationInternal.Right = NavigationSection;
 
-export default Navigation;
+export const Navigation = NavigationInternal;

@@ -5,11 +5,11 @@ import { userSlice } from '@auth/store/user';
 import { IeObjectsSlice } from '@shared/store/ie-objects';
 import { tosSlice } from '@shared/store/tos';
 
-import { AppStore } from './store.types';
+import { type AppStore } from './store.types';
 import { uiSlice } from './ui';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const makeStore = () =>
+export const makeStore = (): toolkitRaw.Store =>
 	toolkitRaw.configureStore({
 		reducer: {
 			[uiSlice.name]: uiSlice.reducer,

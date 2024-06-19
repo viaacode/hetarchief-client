@@ -1,6 +1,6 @@
 import { stringifyUrl } from 'query-string';
 
-import { ContentPartnerResponse } from '@admin/types';
+import { type ContentPartnerResponse } from '@admin/types';
 import { ApiService } from '@shared/services/api-service';
 
 import { CONTENT_PARTNERS_SERVICE_BASE_URL } from './content-partners.const';

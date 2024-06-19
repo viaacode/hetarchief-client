@@ -1,16 +1,16 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { VisitorSpaceSettings } from '@cp/components/VisitorSpaceSettings';
 import { CPAdminLayout } from '@cp/layouts';
-import DisableServerSideRendering from '@shared/components/DisableServerSideRendering/DisableServerSideRendering';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tHtml } from '@shared/helpers/translate';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { DefaultSeoInfo } from '@shared/types/seo';
+import { type DefaultSeoInfo } from '@shared/types/seo';
+import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 
 export const CpAdminSettingsPage: FC<DefaultSeoInfo> = ({ url }) => {
 	/**
@@ -54,7 +54,7 @@ export const CpAdminSettingsPage: FC<DefaultSeoInfo> = ({ url }) => {
 			/>
 
 			<PermissionsCheck allPermissions={[Permission.UPDATE_OWN_SPACE]}>
-				<DisableServerSideRendering>{renderPageContent()}</DisableServerSideRendering>
+				<NoServerSideRendering>{renderPageContent()}</NoServerSideRendering>
 			</PermissionsCheck>
 		</>
 	);

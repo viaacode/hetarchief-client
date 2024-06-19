@@ -1,4 +1,4 @@
-import { Folder } from '@account/types';
+import { type Folder } from '@account/types';
 
 export function createFolderSlug(folder: Pick<Folder, 'id' | 'name' | 'isDefault'>): string {
 	if (!folder.name) {

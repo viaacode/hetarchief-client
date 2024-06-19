@@ -1,9 +1,9 @@
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
-import { DefaultComponentProps } from '@shared/types';
+import { type DefaultComponentProps } from '@shared/types';
 
 export interface ToastProps extends DefaultComponentProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	title: string | ReactNode;
 	description: string | ReactNode;
 	buttonLabel: string;

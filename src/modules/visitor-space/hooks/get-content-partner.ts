@@ -1,6 +1,6 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
-import { ContentPartnerParams, ContentPartnersService } from '@cp/services/content-partners';
+import { type ContentPartnerParams, ContentPartnersService } from '@cp/services/content-partners';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
 export interface MaintainerInfo {

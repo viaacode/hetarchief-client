@@ -1,4 +1,4 @@
-import { CardImageProps } from '../CardImage.types';
+import { type CardImageProps } from '../CardImage.types';
 
 export const cardImageMock: CardImageProps = {
 	color: '#220538',

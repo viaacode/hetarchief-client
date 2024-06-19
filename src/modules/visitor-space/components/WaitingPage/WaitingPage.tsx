@@ -1,15 +1,14 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 
+import { CardImage } from '@shared/components/CardImage';
 import Html from '@shared/components/Html/Html';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { Locale } from '@shared/utils';
+import { Locale } from '@shared/utils/i18n';
+import { VisitorSpaceNavigation } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation';
 
-import { CardImage } from '../../../shared/components';
-import { VisitorSpaceNavigation } from '../VisitorSpaceNavigation';
-
-import { WaitingPageProps } from './WaitingPage.types';
+import { type WaitingPageProps } from './WaitingPage.types';
 
 const WaitingPage: FC<WaitingPageProps> = ({ visitorSpace, backLink }) => {
 	const { tHtml } = useTranslation();

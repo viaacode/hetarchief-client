@@ -1,17 +1,21 @@
 import { isEmpty } from 'lodash-es';
 import { parseUrl, stringifyUrl } from 'query-string';
 
-import { IeObject, IeObjectSimilar, MetadataExportFormats } from '@ie-objects/ie-objects.types';
-import { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
+import {
+	type IeObject,
+	type IeObjectSimilar,
+	MetadataExportFormats,
+} from '@ie-objects/ie-objects.types';
+import { type SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import { ApiService } from '@shared/services/api-service';
 import {
-	IeObjectsSearchFilter,
+	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
 	SearchPageMediaType,
-	SortObject,
+	type SortObject,
 } from '@shared/types';
-import { GetIeObjectsResponse } from '@shared/types/api';
+import { type GetIeObjectsResponse } from '@shared/types/api';
 import { SearchSortProp } from '@visitor-space/types';
 
 import {

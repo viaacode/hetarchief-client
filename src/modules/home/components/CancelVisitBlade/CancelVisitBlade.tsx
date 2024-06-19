@@ -1,13 +1,13 @@
 import { Button } from '@meemoo/react-components';
-import { FC, useState } from 'react';
+import { type FC, useState } from 'react';
 
-import { Blade } from '@shared/components';
+import { Blade } from '@shared/components/Blade/Blade';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types';
 import { VisitsService } from '@visit-requests/services';
 
-import { CancelVisitBladeProps } from './CancelVisitBlade.types';
+import { type CancelVisitBladeProps } from './CancelVisitBlade.types';
 
 const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 	const { tHtml } = useTranslation();

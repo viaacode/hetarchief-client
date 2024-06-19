@@ -3,14 +3,15 @@ import { isNil } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { FC, useEffect, useMemo } from 'react';
+import { type FC, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { selectUser } from '@auth/store/user';
 import { CP_ADMIN_NAVIGATION_LINKS, CP_ADMIN_SEARCH_VISITOR_SPACE_KEY } from '@cp/const';
-import { CPAdminLayoutProps } from '@cp/layouts';
-import { Icon, ListNavigationItem } from '@shared/components';
+import { type CPAdminLayoutProps } from '@cp/layouts';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
+import { Icon } from '@shared/components/Icon';
+import { type ListNavigationItem } from '@shared/components/ListNavigation';
 import { globalLabelKeys } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';

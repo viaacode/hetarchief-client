@@ -1,6 +1,6 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 
-import { TabLabelProps } from './TabLabel.types';
+import { type TabLabelProps } from './TabLabel.types';
 
 const TabLabel: FC<TabLabelProps> = ({ count, label }) => {
 	return (

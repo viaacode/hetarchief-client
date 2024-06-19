@@ -1,21 +1,26 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil } from 'lodash-es';
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { type FC, type ReactNode, useEffect, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
-import { Icon, IconNamesLight, Toggle } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { Toggle } from '@shared/components/Toggle';
 import { tText } from '@shared/helpers/translate';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
+import FilterMenuMobile from '@visitor-space/components/FilterMenu/FilterMenuMobile/FilterMenuMobile';
+import {
+	SEARCH_PAGE_QUERY_PARAM_CONFIG,
+	VISITOR_SPACE_ACTIVE_SORT_MAP,
+} from '@visitor-space/const';
 
-import { SEARCH_PAGE_QUERY_PARAM_CONFIG, VISITOR_SPACE_ACTIVE_SORT_MAP } from '../../const';
-import { SearchFilterId, SearchSortProp } from '../../types';
+import { type SearchFilterId, type SearchSortProp } from '../../types';
 
 import styles from './FilterMenu.module.scss';
-import { FilterMenuFilterOption, FilterMenuProps } from './FilterMenu.types';
-import { FilterMenuMobile } from './FilterMenuMobile';
+import { type FilterMenuFilterOption, type FilterMenuProps } from './FilterMenu.types';
 import { FilterOption } from './FilterOption';
 import { FilterSort } from './FilterSort';
 

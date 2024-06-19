@@ -2,10 +2,11 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Link from 'next/link';
 
-import { Icon, IconNamesLight } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 import styles from '../ListNavigation.module.scss';
-import { ListNavigationItem, ListNavigationProps } from '../ListNavigation.types';
+import { type ListNavigationItem, type ListNavigationProps } from '../ListNavigation.types';
 
 const renderLink = ({ to = '#', label = 'link', external = false }) => {
 	return (

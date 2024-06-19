@@ -1,13 +1,17 @@
 import { Button } from '@meemoo/react-components';
-import { FC, ReactNode, useState } from 'react';
+import { type FC, type ReactNode, useState } from 'react';
 
-import { Blade, BladeManager, Icon, IconNamesLight, VisitSummary } from '@shared/components';
+import { Blade } from '@shared/components/Blade/Blade';
+import { BladeManager } from '@shared/components/BladeManager';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { VisitSummary } from '@shared/components/VisitSummary';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { VisitStatus } from '@shared/types';
 
 import { CancelVisitBlade } from '../CancelVisitBlade';
 
-import { ProcessVisitBladeProps } from './ProcessVisitBlade.types';
+import { type ProcessVisitBladeProps } from './ProcessVisitBlade.types';
 
 const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 	const { tHtml } = useTranslation();

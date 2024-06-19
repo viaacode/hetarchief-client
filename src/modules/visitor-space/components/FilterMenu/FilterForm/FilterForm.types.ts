@@ -1,12 +1,20 @@
-import { FC } from 'react';
+import { type FC, type ReactNode } from 'react';
 
-import { DefaultComponentProps } from '@shared/types';
+import { type DefaultComponentProps } from '@shared/types';
 
-import { DefaultFilterFormProps, InlineFilterFormProps, SearchFilterId } from '../../../types';
-import { FilterMenuType, OnFilterMenuFormReset, OnFilterMenuFormSubmit } from '../FilterMenu.types';
+import {
+	type DefaultFilterFormProps,
+	type InlineFilterFormProps,
+	type SearchFilterId,
+} from '../../../types';
+import {
+	type FilterMenuType,
+	type OnFilterMenuFormReset,
+	type OnFilterMenuFormSubmit,
+} from '../FilterMenu.types';
 
 export interface FilterFormProps extends DefaultComponentProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	form: FC<DefaultFilterFormProps<any>> | FC<InlineFilterFormProps> | null;
 	id: SearchFilterId;
 	onFormReset: OnFilterMenuFormReset;

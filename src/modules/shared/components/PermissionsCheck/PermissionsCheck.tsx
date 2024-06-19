@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
-import { FC, ReactElement, useEffect } from 'react';
+import { type FC, type ReactElement, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import { Permission } from '@account/const';
+import { type Permission } from '@account/const';
 import { checkLoginAction, selectCheckLoginLoading, selectHasCheckedLogin } from '@auth/store/user';
-import { ErrorNoAccess } from '@shared/components';
+import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useAppDispatch } from '@shared/store';
@@ -35,7 +35,7 @@ const PermissionsCheck: FC<PermissionsCheckProps> = ({
 
 	useEffect(() => {
 		if (!checkLoginLoading && !hasCheckedLogin) {
-			dispatch(checkLoginAction());
+			dispatch(checkLoginAction() as any);
 		}
 	}, [router, hasRequiredPermissions, tHtml, hasCheckedLogin, checkLoginLoading, dispatch]);
 

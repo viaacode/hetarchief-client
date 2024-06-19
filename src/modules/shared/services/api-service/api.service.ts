@@ -1,4 +1,4 @@
-import { KyInstance } from 'ky/distribution/types/ky';
+import { type KyInstance } from 'ky/distribution/types/ky';
 import ky from 'ky-universal';
 import getConfig from 'next/config';
 

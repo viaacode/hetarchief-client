@@ -1,13 +1,13 @@
 import { Button, Checkbox, RadioButton, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
-import React, { FC, useState } from 'react';
+import React, { type FC, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
 import { selectUser } from '@auth/store/user';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestRequesterCapacity } from '@material-requests/types';
-import { Blade } from '@shared/components';
+import { Blade } from '@shared/components/Blade/Blade';
 import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
 import { tHtml } from '@shared/helpers/translate';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -16,7 +16,7 @@ import { toastService } from '@shared/services/toast-service';
 import { useAppDispatch } from '@shared/store';
 import { setShowMaterialRequestCenter } from '@shared/store/ui';
 
-import { PersonalInfoBladeBladeProps } from './PersonalInfo.types';
+import { type PersonalInfoBladeBladeProps } from './PersonalInfo.types';
 import styles from './PersonalInfoBlade.module.scss';
 
 const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({

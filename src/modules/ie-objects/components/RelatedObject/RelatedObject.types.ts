@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
-import { DefaultComponentProps, IeObjectTypes } from '@shared/types';
+import { type DefaultComponentProps, type IeObjectTypes } from '@shared/types';
 
 export interface MediaObject {
 	type: IeObjectTypes;
@@ -13,6 +13,6 @@ export interface MediaObject {
 }
 
 export interface RelatedObjectProps extends DefaultComponentProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	object: MediaObject;
 }

@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
-import { DefaultComponentProps } from '@shared/types';
-import { SidebarColor } from '@shared/types/sidebar';
+import { type DefaultComponentProps } from '@shared/types';
+import { type SidebarColor } from '@shared/types/sidebar';
 
 export enum ListNavigationType {
 	Navigation,
@@ -18,7 +18,7 @@ export interface ListNavigationItem {
 }
 
 export interface ListNavigationProps extends DefaultComponentProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	listItems: ListNavigationItem[];
 	color?: SidebarColor;
 	onClick?: (id: string) => void;
@@ -26,7 +26,7 @@ export interface ListNavigationProps extends DefaultComponentProps {
 }
 
 export interface ListNavigationItemNodeProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	buttonClassName: string;
 	linkClassName: string;
 }

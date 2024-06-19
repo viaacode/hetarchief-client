@@ -9,7 +9,8 @@ import { useDispatch } from 'react-redux';
 import { useChangeLanguagePreference } from '@account/hooks/change-language-preference';
 import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { NavigationDropdown } from '@navigation/components/Navigation/NavigationDropdown';
-import { Icon, IconNamesLight } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { changeLocalSlug } from '@shared/helpers/change-local-slug';
 import { tText } from '@shared/helpers/translate';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
@@ -20,7 +21,7 @@ import {
 	setShowMaterialRequestCenter,
 	setShowNotificationsCenter,
 } from '@shared/store/ui';
-import { Locale } from '@shared/utils';
+import { Locale } from '@shared/utils/i18n';
 
 import styles from './LanguageSwitcher.module.scss';
 

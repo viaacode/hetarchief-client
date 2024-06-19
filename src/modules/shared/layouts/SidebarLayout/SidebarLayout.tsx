@@ -1,10 +1,13 @@
 import clsx from 'clsx';
-import { FC, useState } from 'react';
+import { type FC, useState } from 'react';
 
-import { Icon, IconNamesLight, ListNavigation, Sidebar } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { ListNavigation } from '@shared/components/ListNavigation';
+import { Sidebar } from '@shared/components/Sidebar';
 
 import styles from './SidebarLayout.module.scss';
-import { SidebarLayoutProps } from './SidebarLayout.types';
+import { type SidebarLayoutProps } from './SidebarLayout.types';
 
 const SidebarLayout: FC<SidebarLayoutProps> = ({
 	children,

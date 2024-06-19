@@ -1,21 +1,22 @@
 import { Button, OrderDirection, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { type FC, type ReactElement, useEffect, useState } from 'react';
 
-import { Navigation } from '@navigation/components';
-import { Icon, IconNamesLight } from '@shared/components';
+import { Navigation } from '@navigation/components/Navigation/Navigation';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { mapFiltersToTags } from '@visitor-space/utils/map-filters';
 
-import { SearchSortProp } from '../../../types';
-import { mapFiltersToTags } from '../../../utils';
+import { type SearchSortProp } from '../../../types';
 import { FilterButton } from '../FilterButton';
 import FilterForm from '../FilterForm/FilterForm';
-import { FilterMenuFilterOption, FilterMenuType } from '../FilterMenu.types';
+import { type FilterMenuFilterOption, FilterMenuType } from '../FilterMenu.types';
 import { FilterSortList } from '../FilterSortList';
 
 import styles from './FilterMenuMobile.module.scss';
-import { FilterMenuMobileProps } from './FilterMenuMobile.types';
+import { type FilterMenuMobileProps } from './FilterMenuMobile.types';
 
 const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	activeFilter,

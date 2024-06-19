@@ -1,11 +1,12 @@
 import { TextInput } from '@meemoo/react-components';
 import { isValid } from 'date-fns';
 import { noop } from 'lodash-es';
-import { FC } from 'react';
+import { type FC } from 'react';
 import ReactDatePicker from 'react-datepicker';
 
-import { Icon, IconNamesLight } from '@shared/components';
 import { datePickerDefaultProps } from '@shared/components/DatePicker/DatePicker.consts';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 import styles from './DateInput.module.scss';
 

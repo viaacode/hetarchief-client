@@ -1,6 +1,6 @@
 import {
-	SitemapPrioritiesParseResult,
-	SitemapPriorityEntry,
+	type SitemapPrioritiesParseResult,
+	type SitemapPriorityEntry,
 } from './parse-sitemap-priorities.types';
 
 const sitemapPriorityLineRegexp = /^\s*([0-9](\.[0-9])?)\s*(\/.*)\s*$/;

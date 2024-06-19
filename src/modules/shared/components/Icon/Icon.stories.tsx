@@ -1,8 +1,9 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { type ComponentMeta, type ComponentStory } from '@storybook/react';
 import React from 'react';
 
+import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
+
 import Icon from './Icon';
-import { IconNamesLight, IconNamesSolid } from './Icon.const';
 
 export default {
 	title: 'Components/Icon',

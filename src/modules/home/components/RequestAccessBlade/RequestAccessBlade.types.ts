@@ -1,4 +1,4 @@
-import { FormBladeProps } from '@shared/types';
+import { type FormBladeProps } from '@shared/types';
 
 export type RequestAccessBladeProps = FormBladeProps<RequestAccessFormState>;
 

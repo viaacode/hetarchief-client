@@ -1,6 +1,7 @@
-import { Tag, TagsInputProps } from '@meemoo/react-components';
+import { Tag, type TagsInputProps } from '@meemoo/react-components';
 
-import { Icon, IconNamesLight } from '../Icon';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 export const clearIndicatorCxState = {
 	indicator: true,

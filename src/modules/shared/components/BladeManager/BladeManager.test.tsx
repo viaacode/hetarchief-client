@@ -2,10 +2,11 @@ import { jest } from '@jest/globals';
 import { Button } from '@meemoo/react-components';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
+
+import { Blade } from '@shared/components/Blade/Blade';
 import '@testing-library/jest-dom';
 
 import { mockStore } from '../../../../__mocks__/store';
-import { Blade } from '../Blade';
 
 import BladeManager from './BladeManager';
 

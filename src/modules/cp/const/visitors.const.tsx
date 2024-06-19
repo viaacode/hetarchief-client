@@ -1,14 +1,16 @@
-import { Button, OrderDirection, TabProps } from '@meemoo/react-components';
+import { Button, OrderDirection, type TabProps } from '@meemoo/react-components';
 import { isWithinInterval } from 'date-fns';
-import { Column } from 'react-table';
+import { type Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { CopyButton, DropdownMenu, UnreadMarker } from '@shared/components';
+import { CopyButton } from '@shared/components/CopyButton';
+import { DropdownMenu } from '@shared/components/DropdownMenu';
+import { UnreadMarker } from '@shared/components/UnreadMarker';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { Visit, VisitRow } from '@shared/types';
-import { asDate, formatSameDayRange } from '@shared/utils';
+import { type Visit, type VisitRow } from '@shared/types';
+import { asDate, formatSameDayRange } from '@shared/utils/dates';
 import { RequestStatusAll, VisitTimeframe } from '@visit-requests/types';
 
 export const CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG = {

@@ -1,9 +1,12 @@
 import { keysSpacebar, onKey } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC } from 'react';
+import { type FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Icon, IconName, IconNamesLight, Overlay } from '@shared/components';
+import { type NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
+import { Icon, type IconName } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { Overlay } from '@shared/components/Overlay';
 import {
 	selectOpenNavigationDropdownId,
 	setOpenNavigationDropdownId,
@@ -12,10 +15,9 @@ import {
 } from '@shared/store/ui';
 
 import styles from '../Navigation.module.scss';
-import { NavigationItem } from '../Navigation.types';
 import { NavigationDropdown } from '../NavigationDropdown';
 
-import { NavigationListProps } from './NavigationList.types';
+import { type NavigationListProps } from './NavigationList.types';
 
 const NavigationList: FC<NavigationListProps> = ({ items, onOpenDropdowns }) => {
 	const dispatch = useDispatch();

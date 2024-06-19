@@ -1,10 +1,11 @@
-import { OrderDirection } from '@meemoo/react-components';
+import { type OrderDirection } from '@meemoo/react-components';
+import { type ReactNode } from 'react';
 
-import { Visit, VisitStatus } from '@shared/types';
-import { VisitTimeframe } from '@visit-requests/types';
+import { type Visit, type VisitStatus } from '@shared/types';
+import { type VisitTimeframe } from '@visit-requests/types';
 
 export interface GetVisitsProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	searchInput?: string | undefined;
 	status?: VisitStatus | undefined;
 	timeframe?: VisitTimeframe | VisitTimeframe[] | undefined;
@@ -19,7 +20,7 @@ export interface GetVisitsProps {
 }
 
 export interface GetAllActiveVisitsProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	requesterId?: string;
 	page?: number;
 	size?: number;

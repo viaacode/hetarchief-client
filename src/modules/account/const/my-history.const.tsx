@@ -1,12 +1,12 @@
 import { Button, OrderDirection } from '@meemoo/react-components';
-import { MouseEvent } from 'react';
-import { Column, UseSortByColumnOptions } from 'react-table';
+import { type MouseEvent } from 'react';
+import { type Column, type UseSortByColumnOptions } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { Visit, VisitRow } from '@shared/types';
-import { formatSameDayRange } from '@shared/utils';
+import { type Visit, type VisitRow } from '@shared/types';
+import { formatSameDayRange } from '@shared/utils/dates';
 
 export const HistoryItemListSize = 20;
 

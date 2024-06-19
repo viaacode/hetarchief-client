@@ -1,15 +1,15 @@
 import { useRouter } from 'next/router';
-import { FC, useEffect } from 'react';
+import { type FC, useEffect } from 'react';
 
 import { foldersService } from '@account/services/folders';
 import { SharedFolderStatus } from '@account/types';
 import { createFolderSlug } from '@account/utils';
-import { Loading } from '@shared/components';
+import { Loading } from '@shared/components/Loading';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { DefaultSeoInfo } from '@shared/types/seo';
+import { type DefaultSeoInfo } from '@shared/types/seo';
 
 interface AccountSharedFolderProps {
 	folderId: string | undefined;

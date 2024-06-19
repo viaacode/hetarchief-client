@@ -1,8 +1,8 @@
-import { TagInfo } from '@meemoo/react-components';
-import { ReactNode } from 'react';
-import { ClearIndicatorProps } from 'react-select';
+import { type TagInfo } from '@meemoo/react-components';
+import { type ReactNode } from 'react';
+import { type ClearIndicatorProps } from 'react-select';
 
 export interface TagSearchBarClearProps extends ClearIndicatorProps<TagInfo> {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	label?: string | ReactNode;
 }

@@ -1,5 +1,5 @@
-import { TextInputProps } from '@meemoo/react-components';
-import { ChangeEvent, FC } from 'react';
+import { type TextInputProps } from '@meemoo/react-components';
+import { type ChangeEvent, type FC } from 'react';
 
 import { SEPARATOR } from '@shared/const';
 

@@ -1,7 +1,7 @@
 import { decode as decodeHtmlEntities } from 'html-entities';
-import { TOptions } from 'i18next';
+import { type TOptions } from 'i18next';
 import { i18n } from 'next-i18next';
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 import Html from '@shared/components/Html/Html';
 

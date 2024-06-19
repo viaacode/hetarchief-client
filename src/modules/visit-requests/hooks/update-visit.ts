@@ -1,9 +1,9 @@
-import { QueryClient, useMutation, UseMutationResult } from '@tanstack/react-query';
+import { QueryClient, useMutation, type UseMutationResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const';
-import { Visit } from '@shared/types';
+import { type Visit } from '@shared/types';
 import { VisitsService } from '@visit-requests/services';
-import { UpdateVisit } from '@visit-requests/types';
+import { type UpdateVisit } from '@visit-requests/types';
 
 export function useUpdateVisitRequest(): UseMutationResult<Visit, void, UpdateVisit> {
 	return useMutation(({ id, updatedProps }) => VisitsService.patchById(id, updatedProps), {

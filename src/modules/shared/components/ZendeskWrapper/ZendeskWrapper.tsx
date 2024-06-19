@@ -1,9 +1,9 @@
 import { get } from 'lodash-es';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { type FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Zendesk, { IZendeskProps } from 'react-zendesk';
+import Zendesk, { type IZendeskProps } from 'react-zendesk';
 
 import { selectShowZendesk } from '@shared/store/ui';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';

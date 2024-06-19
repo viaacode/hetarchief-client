@@ -4,7 +4,7 @@ import { forwardRef } from 'react';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import styles from './FileInput.module.scss';
-import { FileInputProps } from './FileInput.types';
+import { type FileInputProps } from './FileInput.types';
 
 const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
 	({ className, onChange, hasFile }, ref) => {

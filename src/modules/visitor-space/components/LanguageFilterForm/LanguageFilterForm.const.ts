@@ -1,9 +1,9 @@
 import { ArrayParam } from 'use-query-params';
-import { array, object, SchemaOf, string } from 'yup';
+import { array, object, type SchemaOf, string } from 'yup';
 
 import { SearchFilterId } from '../../types';
 
-import { LanguageFilterFormState } from './LanguageFilterForm.types';
+import { type LanguageFilterFormState } from './LanguageFilterForm.types';
 
 export const LANGUAGE_FILTER_FORM_SCHEMA = (): SchemaOf<LanguageFilterFormState> =>
 	object({

@@ -1,4 +1,4 @@
-import { VisitorSpaceInfo } from '../../types';
+import { type VisitorSpaceInfo } from '../../types';
 
 export interface CreateVisitRequest {
 	visitorSpaceSlug: string;

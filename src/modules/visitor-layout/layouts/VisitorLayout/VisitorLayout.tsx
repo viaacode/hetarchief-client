@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect } from 'react';
+import { type FC, type ReactNode, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { GroupName } from '@account/const';

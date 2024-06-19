@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { HoverProps } from './use-hover.types';
+import { type HoverProps } from './use-hover.types';
 
 const useHover = (): [boolean, HoverProps] => {
 	const [hovering, setHovering] = useState(false);

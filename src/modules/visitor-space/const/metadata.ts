@@ -1,23 +1,21 @@
-import { ReactSelectProps, TextInput, TextInputProps } from '@meemoo/react-components';
-import { FC } from 'react';
+import { type ReactSelectProps, TextInput, type TextInputProps } from '@meemoo/react-components';
+import { type FC } from 'react';
 
 import { tText } from '@shared/helpers/translate';
 import {
-	IeObjectsSearchFilter,
+	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
 	Operator,
 } from '@shared/types';
-import { DateInputProps } from '@visitor-space/components/DateInput/DateInput';
-import { DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
+import { DateInput } from '@visitor-space/components/DateInput';
+import { type DateInputProps } from '@visitor-space/components/DateInput/DateInput';
+import { DateRangeInput } from '@visitor-space/components/DateRangeInput';
+import { type DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
+import { DurationInput } from '@visitor-space/components/DurationInput';
+import { DurationRangeInput } from '@visitor-space/components/DurationRangeInput';
+import { GenreSelect } from '@visitor-space/components/GenreSelect';
 
-import {
-	DateInput,
-	DateRangeInput,
-	DurationInput,
-	DurationRangeInput,
-	GenreSelect,
-} from '../components';
 import { MetadataProp } from '../types';
 
 export type MetadataFields =

@@ -31,6 +31,12 @@ module.exports = {
 		'import/first': 'error',
 		'import/no-duplicates': 'error',
 		'@typescript-eslint/no-explicit-any': 'off',
+		'@typescript-eslint/consistent-type-imports': [
+			'error',
+			{
+				fixStyle: 'inline-type-imports',
+			},
+		],
 		'import/order': [
 			'warn',
 			{

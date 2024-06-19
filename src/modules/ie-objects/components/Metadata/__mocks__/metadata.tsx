@@ -1,4 +1,4 @@
-import { MetadataItem } from '@ie-objects/components';
+import { type MetadataItem } from '@ie-objects/components/Metadata';
 
 export const metadataMock: MetadataItem[] = [
 	{

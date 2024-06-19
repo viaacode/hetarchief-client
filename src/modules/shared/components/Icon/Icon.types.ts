@@ -1,8 +1,7 @@
-import { DetailedHTMLProps, HTMLAttributes } from 'react';
+import { type DetailedHTMLProps, type HTMLAttributes } from 'react';
 
-import { DefaultComponentProps } from '@shared/types';
-
-import { IconNamesLight, IconNamesSolid } from './Icon.const';
+import { type IconNamesLight, type IconNamesSolid } from '@shared/components/Icon/Icon.enums';
+import { type DefaultComponentProps } from '@shared/types';
 
 export type IconProps = DefaultComponentProps &
 	IconTypes &

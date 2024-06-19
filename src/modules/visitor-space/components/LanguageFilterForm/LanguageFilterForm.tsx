@@ -2,22 +2,24 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { compact, noop, without } from 'lodash-es';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { type FC, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
-import { SearchBar } from '@shared/components';
+import { SearchBar } from '@shared/components/SearchBar';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import {
 	LANGUAGE_FILTER_FORM_QUERY_PARAM_CONFIG,
 	LANGUAGE_FILTER_FORM_SCHEMA,
-	LanguageFilterFormProps,
-	LanguageFilterFormState,
-} from '@visitor-space/components';
+} from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.const';
+import {
+	type LanguageFilterFormProps,
+	type LanguageFilterFormState,
+} from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
 import { LANGUAGES } from '@visitor-space/components/LanguageFilterForm/languages';
-import { visitorSpaceLabelKeys } from '@visitor-space/const';
+import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import {
 	ElasticsearchFieldNames,
 	FILTER_LABEL_VALUE_DELIMITER,

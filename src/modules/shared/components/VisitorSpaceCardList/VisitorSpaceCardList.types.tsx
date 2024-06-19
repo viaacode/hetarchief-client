@@ -1,9 +1,10 @@
-import { DefaultComponentProps } from '@shared/types';
+import { type ReactNode } from 'react';
 
-import { VisitorSpaceCardProps } from '../VisitorSpaceCard/VisitorSpaceCard.types';
+import { type VisitorSpaceCardProps } from '@shared/components/VisitorSpaceCard';
+import { type DefaultComponentProps } from '@shared/types';
 
 export interface VisitorSpaceCardListProps extends DefaultComponentProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	items?: VisitorSpaceCardProps[];
 	limit?: boolean;
 }

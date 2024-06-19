@@ -6,14 +6,14 @@ import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { ADMIN_NAVIGATION_LINKS } from '@admin/const/Routing.const';
-import { AdminLayoutComponent } from '@admin/layouts';
+import { type AdminLayoutComponent } from '@admin/layouts';
 import {
 	AdminActions,
 	AdminContent,
 	AdminFiltersLeft,
 	AdminFiltersRight,
 } from '@admin/layouts/AdminLayout/AdminLayout.slots';
-import { ListNavigationItem } from '@shared/components';
+import { type ListNavigationItem } from '@shared/components/ListNavigation';
 import { globalLabelKeys } from '@shared/const';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';

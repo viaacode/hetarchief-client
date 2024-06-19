@@ -5,7 +5,7 @@
  * Waiting for official support in use-query-params
  */
 import { useRouter } from 'next/router';
-import React, { ComponentProps, memo, useMemo } from 'react';
+import React, { type ComponentProps, memo, useMemo } from 'react';
 import { QueryParamProvider } from 'use-query-params';
 
 import { isBrowser } from '@shared/utils/is-browser';

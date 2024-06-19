@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 

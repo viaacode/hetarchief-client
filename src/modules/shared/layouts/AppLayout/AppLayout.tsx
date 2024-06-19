@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
 import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
@@ -18,9 +18,11 @@ import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-cont
 import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
 import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
-import { Footer, Navigation, NavigationItem } from '@navigation/components';
+import { Footer } from '@navigation/components/Footer';
 import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';
+import { Navigation } from '@navigation/components/Navigation/Navigation';
 import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
+import { type NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
 import {
@@ -29,21 +31,17 @@ import {
 	GET_NAV_ITEMS_RIGHT_LOGGED_IN,
 } from '@navigation/const';
 import { NavigationPlacement } from '@navigation/services/navigation-service';
-import {
-	AlertIconNames,
-	HetArchiefLogo,
-	HetArchiefLogoType,
-	Icon,
-	IconNamesLight,
-	NotificationCenter,
-	ZendeskWrapper,
-} from '@shared/components';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
+import { HetArchiefLogo, HetArchiefLogoType } from '@shared/components/HetArchiefLogo';
 import Html from '@shared/components/Html/Html';
+import { Icon } from '@shared/components/Icon';
+import { type AlertIconNames, IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import LanguageSwitcher from '@shared/components/LanguageSwitcher/LanguageSwitcher';
+import { NotificationCenter } from '@shared/components/NotificationCenter';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
+import { ZendeskWrapper } from '@shared/components/ZendeskWrapper';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { changeLocalSlug } from '@shared/helpers/change-local-slug';
@@ -69,8 +67,8 @@ import {
 	setShowMaterialRequestCenter,
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
-import { Breakpoints, Visit } from '@shared/types';
-import { Locale } from '@shared/utils';
+import { Breakpoints, type Visit } from '@shared/types';
+import { type Locale } from '@shared/utils/i18n';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visits';
 
@@ -209,8 +207,8 @@ const AppLayout: FC<any> = ({ children }) => {
 	}, [queryClient, router, user, setNotificationsOpen, setUnreadNotifications, locale]);
 
 	useEffect(() => {
-		dispatch(checkLoginAction());
-		dispatch(getTosAction());
+		dispatch(checkLoginAction() as any);
+		dispatch(getTosAction() as any);
 	}, [dispatch]);
 
 	// Sync showAuth query param with store value

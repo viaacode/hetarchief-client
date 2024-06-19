@@ -1,6 +1,8 @@
-import { DefaultComponentProps } from '@shared/types';
+import { type ReactNode } from 'react';
 
-import { IconName } from '../Icon';
+import { type DefaultComponentProps } from '@shared/types';
+
+import { type IconName } from '../Icon';
 
 export interface ToggleOption {
 	id: string;
@@ -9,7 +11,7 @@ export interface ToggleOption {
 }
 
 export interface ToggleProps extends DefaultComponentProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	options: ToggleOption[];
 	onChange: (id: string) => void;
 	bordered?: boolean;

@@ -1,10 +1,10 @@
-import { InputHTMLAttributes } from 'react';
+import { type InputHTMLAttributes, type ReactNode } from 'react';
 
-import { DefaultComponentProps } from '@shared/types';
+import { type DefaultComponentProps } from '@shared/types';
 
 export interface FileInputProps
 	extends DefaultComponentProps,
 		InputHTMLAttributes<HTMLInputElement> {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	hasFile?: boolean;
 }

@@ -1,7 +1,8 @@
-import { TextInput, TextInputProps } from '@meemoo/react-components';
-import { FC } from 'react';
+import { TextInput, type TextInputProps } from '@meemoo/react-components';
+import { type FC } from 'react';
 
-import { Icon, IconNamesLight } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 import { durationRegex } from '../../components/DurationInput/DurationInput.consts';
 

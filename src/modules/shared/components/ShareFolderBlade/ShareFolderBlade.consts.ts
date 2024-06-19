@@ -1,8 +1,8 @@
-import { object, SchemaOf, string } from 'yup';
+import { object, type SchemaOf, string } from 'yup';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
-import { ShareFolderBladeFormState } from './ShareFolderBlade.types';
+import { type ShareFolderBladeFormState } from './ShareFolderBlade.types';
 
 export const SHARE_FOLDER_FORM_SCHEMA = (): SchemaOf<ShareFolderBladeFormState> => {
 	const { tText } = useTranslation();

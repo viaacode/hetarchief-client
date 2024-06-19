@@ -1,9 +1,9 @@
-import { QueryClient, useQuery, UseQueryResult } from '@tanstack/react-query';
+import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
 import { VisitorSpaceService } from '../services';
-import { VisitorSpaceInfo } from '../types';
+import { type VisitorSpaceInfo } from '../types';
 
 export function useGetVisitorSpace(
 	maintainerSlug: string | null,

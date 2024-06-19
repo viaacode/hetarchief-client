@@ -1,8 +1,8 @@
-import { boolean, object, SchemaOf, string } from 'yup';
+import { boolean, object, type SchemaOf, string } from 'yup';
 
 import { tText } from '@shared/helpers/translate';
 
-import { RequestAccessFormState } from './RequestAccessBlade.types';
+import { type RequestAccessFormState } from './RequestAccessBlade.types';
 
 export const REQUEST_ACCESS_FORM_SCHEMA = (): SchemaOf<RequestAccessFormState> =>
 	object({

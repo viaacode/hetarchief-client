@@ -1,13 +1,20 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Checkbox, FormControl, TextArea, TextInput } from '@meemoo/react-components';
-import { FC, useEffect, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
 import { selectUser } from '@auth/store/user';
-import { Blade, Icon, IconNamesLight, SpacePreview } from '@shared/components';
+import {
+	type RequestAccessBladeProps,
+	type RequestAccessFormState,
+} from '@home/components/RequestAccessBlade/RequestAccessBlade.types';
+import { Blade } from '@shared/components/Blade/Blade';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { SpacePreview } from '@shared/components/SpacePreview';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -17,7 +24,6 @@ import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
 import { REQUEST_ACCESS_FORM_SCHEMA } from './RequestAccessBlade.const';
 import styles from './RequestAccessBlade.module.scss';
-import { RequestAccessBladeProps, RequestAccessFormState } from './RequestAccessBlade.types';
 
 const labelKeys: Record<keyof RequestAccessFormState, string> = {
 	acceptTerms: 'RequestAccessBlade__acceptTerms',

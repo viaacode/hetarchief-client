@@ -1,6 +1,6 @@
-import { QueryParamConfig } from 'use-query-params';
+import { type QueryParamConfig } from 'use-query-params';
 
-import { AdvancedFilter } from '../types';
+import { type AdvancedFilter } from '../types';
 
 const divider = ',';
 export const AdvancedFilterArrayParam: QueryParamConfig<AdvancedFilter[] | undefined> = {

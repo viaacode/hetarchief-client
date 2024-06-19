@@ -1,8 +1,20 @@
-import { MultiSelect, MultiSelectOption, OrderDirection, Table } from '@meemoo/react-components';
+import {
+	MultiSelect,
+	type MultiSelectOption,
+	OrderDirection,
+	Table,
+} from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil, without } from 'lodash-es';
-import React, { FC, MouseEvent, ReactNode, useEffect, useMemo, useState } from 'react';
-import { Row, SortingRule, TableState } from 'react-table';
+import React, {
+	type FC,
+	type MouseEvent,
+	type ReactNode,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
+import { type Row, type SortingRule, type TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
@@ -18,24 +30,22 @@ import { useGetMaterialRequestById } from '@material-requests/hooks/get-material
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
 import { useGetMaterialRequestsMaintainers } from '@material-requests/hooks/get-material-requests-maintainers';
 import {
-	MaterialRequest,
+	type MaterialRequest,
 	MaterialRequestKeys,
-	MaterialRequestType,
+	type MaterialRequestType,
 } from '@material-requests/types';
-import {
-	Icon,
-	IconNamesLight,
-	Loading,
-	PaginationBar,
-	SearchBar,
-	sortingIcons,
-} from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { Loading } from '@shared/components/Loading';
+import { PaginationBar } from '@shared/components/PaginationBar';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { sortingIcons } from '@shared/components/Table';
 import { globalLabelKeys } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { DefaultSeoInfo } from '@shared/types/seo';
+import { type DefaultSeoInfo } from '@shared/types/seo';
 
 export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();

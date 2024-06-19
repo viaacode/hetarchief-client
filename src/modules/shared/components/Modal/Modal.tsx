@@ -1,17 +1,17 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useEffect, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { default as ReactModal } from 'react-modal';
 
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { globalLabelKeys } from '@shared/const';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { useScrollbarWidth } from '@shared/hooks/use-scrollbar-width';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
-import { Icon, IconNamesLight } from '../Icon';
-
 import styles from './Modal.module.scss';
-import { ModalProps } from './Modal.types';
+import { type ModalProps } from './Modal.types';
 
 const Modal: FC<ModalProps> = ({
 	children,

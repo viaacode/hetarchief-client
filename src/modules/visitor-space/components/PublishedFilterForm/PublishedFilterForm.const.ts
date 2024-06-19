@@ -1,11 +1,11 @@
-import { mixed, object, SchemaOf, string } from 'yup';
+import { mixed, object, type SchemaOf, string } from 'yup';
 
 import { Operator } from '@shared/types';
 
 import { AdvancedFilterArrayParam } from '../../const/query-params';
 import { SearchFilterId } from '../../types';
 
-import { PublishedFilterFormState } from './PublishedFilterForm.types';
+import { type PublishedFilterFormState } from './PublishedFilterForm.types';
 
 export const PUBLISHED_FILTER_FORM_SCHEMA = (): SchemaOf<PublishedFilterFormState> =>
 	object({

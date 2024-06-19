@@ -1,9 +1,9 @@
-import { ReactSelect, ReactSelectProps } from '@meemoo/react-components';
-import { FC } from 'react';
+import { ReactSelect, type ReactSelectProps } from '@meemoo/react-components';
+import { type FC } from 'react';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
-import { MediaTypeOptions } from '../../types';
+import { type MediaTypeOptions } from '../../types';
 
 const MediaTypeSelect: FC<ReactSelectProps> = (props) => {
 	const { tText } = useTranslation();

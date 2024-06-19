@@ -1,5 +1,7 @@
+import { type ReactNode } from 'react';
+
 export interface ShareFolderBladeProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	isOpen: boolean;
 	onClose: () => void;
 	folderId: string;

@@ -1,7 +1,8 @@
-import { IconName, IconNamesLight } from '@shared/components';
+import { type IconName } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
-import { Locale } from '@shared/utils';
+import { type Locale } from '@shared/utils/i18n';
 
 export const CP_ADMIN_SEARCH_VISITOR_SPACE_KEY = 'search-visitor-space';
 

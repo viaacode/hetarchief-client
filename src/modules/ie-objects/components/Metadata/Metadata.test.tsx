@@ -1,9 +1,12 @@
 import { render } from '@testing-library/react';
-import '@testing-library/jest-dom';
 
-import { MetadataItem, MetadataListProps } from '@ie-objects/components';
+import {
+	type MetadataItem,
+	type MetadataListProps,
+} from '@ie-objects/components/Metadata/Metadata.types';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 
+import '@testing-library/jest-dom';
 import Metadata from './Metadata';
 import { metadataMock } from './__mocks__/metadata';
 

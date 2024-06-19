@@ -1,21 +1,22 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, ReactElement, useMemo } from 'react';
+import { type FC, type ReactElement, useMemo } from 'react';
 
-import { Icon, IconNamesLight } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { visitorSpaceLabelKeys } from '@visitor-space/const';
+import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import {
-	DefaultFilterFormProps,
-	InlineFilterFormProps,
-	SearchFilterId,
+	type DefaultFilterFormProps,
+	type InlineFilterFormProps,
+	type SearchFilterId,
 } from '@visitor-space/types';
 
 import { FilterMenuType } from '../FilterMenu.types';
 
 import { HAS_SHOW_OVERFLOW } from './FilterForm.const';
 import styles from './FilterForm.module.scss';
-import { FilterFormProps } from './FilterForm.types';
+import { type FilterFormProps } from './FilterForm.types';
 
 const FilterForm: FC<FilterFormProps> = ({
 	className,

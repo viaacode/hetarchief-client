@@ -1,16 +1,23 @@
 import { Button, OrderDirection } from '@meemoo/react-components';
 import Link from 'next/link';
-import { Column } from 'react-table';
+import { type Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { AdminVisitorSpaceInfoRow } from '@admin/types';
-import { DropdownMenu, Icon, IconNamesLight } from '@shared/components';
+import { type AdminVisitorSpaceInfoRow } from '@admin/types';
+import { DropdownMenu } from '@shared/components/DropdownMenu';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { asDate, formatMediumDate, Locale } from '@shared/utils';
-import { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
+import { asDate, formatMediumDate } from '@shared/utils/dates';
+import { type Locale } from '@shared/utils/i18n';
+import {
+	type VisitorSpaceInfo,
+	VisitorSpaceOrderProps,
+	VisitorSpaceStatus,
+} from '@visitor-space/types';
 
 export const VisitorSpacesOverviewTablePageSize = 20;
 

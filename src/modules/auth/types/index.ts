@@ -1,4 +1,4 @@
-import { GroupName, Permission } from '@account/const';
+import { type GroupName, type Permission } from '@account/const';
 
 export enum Idp {
 	HETARCHIEF = 'HETARCHIEF',

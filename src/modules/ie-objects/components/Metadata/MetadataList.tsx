@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import { FC } from 'react';
+import { type FC } from 'react';
 
 import styles from './Metadata.module.scss';
-import { MetadataListProps } from './Metadata.types';
+import { type MetadataListProps } from './Metadata.types';
 
 const Metadata: FC<MetadataListProps> = ({
 	className,

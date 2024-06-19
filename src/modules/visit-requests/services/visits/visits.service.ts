@@ -3,13 +3,13 @@ import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
 import { ApiService } from '@shared/services/api-service';
-import { Visit, VisitAccessStatus, VisitStatus } from '@shared/types';
+import { type Visit, type VisitAccessStatus, VisitStatus } from '@shared/types';
 import {
-	GetAllActiveVisitsProps,
-	GetVisitsProps,
+	type GetAllActiveVisitsProps,
+	type GetVisitsProps,
 } from '@visit-requests/services/visits/visits.service.types';
-import { PatchVisit } from '@visit-requests/types';
-import { CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
+import { type PatchVisit } from '@visit-requests/types';
+import { type CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 
 import {
 	VISITS_SERVICE_ACCESS_STATUS_URL,

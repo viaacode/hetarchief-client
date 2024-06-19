@@ -1,9 +1,9 @@
-import { QueryClient, useQuery, UseQueryResult } from '@tanstack/react-query';
+import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import { isStringOfFormatIeObjectSchemaIdentifier } from '@ie-objects/helpers/isStringOfFormatIeObjectSchemaIdentifier';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
-import { IeObject } from './../ie-objects.types';
+import { type IeObject } from './../ie-objects.types';
 import { IeObjectsService } from './../services';
 
 export async function getIeObjectInfo(id: string): Promise<IeObject | null> {

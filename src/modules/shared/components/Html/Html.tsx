@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 import DOMPurify from 'isomorphic-dompurify';
-import React, { FunctionComponent } from 'react';
+import React, { type FunctionComponent, type ReactNode } from 'react';
 
 import { RICH_TEXT_SANITIZATION } from '@shared/const';
 
 export interface HtmlProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	content: string;
 	sanitizePreset?: DOMPurify.Config;
 	type?: 'p' | 'div' | 'span';

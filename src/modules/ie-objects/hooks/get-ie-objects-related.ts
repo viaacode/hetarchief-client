@@ -1,7 +1,7 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
-import { QueryClient, useQuery, UseQueryResult } from '@tanstack/react-query';
+import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react-query';
 
-import { IeObject, IeObjectSimilar } from '@ie-objects/ie-objects.types';
+import { type IeObject, type IeObjectSimilar } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const';
 

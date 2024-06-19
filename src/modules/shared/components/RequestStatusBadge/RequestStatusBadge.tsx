@@ -1,13 +1,14 @@
 import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
-import React, { FC } from 'react';
+import React, { type FC } from 'react';
 
-import { Icon, IconNamesLight } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { VisitStatus } from '@shared/types';
 
 import styles from './RequestStatusBadge.module.scss';
-import { RequestStatusBadgeProps } from './RequestStatusBadge.types';
+import { type RequestStatusBadgeProps } from './RequestStatusBadge.types';
 
 const RequestStatusBadge: FC<RequestStatusBadgeProps> = ({ className, style, status }) => {
 	const { tHtml } = useTranslation();

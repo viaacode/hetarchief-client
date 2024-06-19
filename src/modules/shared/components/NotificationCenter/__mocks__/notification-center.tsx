@@ -1,14 +1,17 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
-import { InfiniteQueryObserverSuccessResult, UseMutationResult } from '@tanstack/react-query';
+import {
+	type InfiniteQueryObserverSuccessResult,
+	type UseMutationResult,
+} from '@tanstack/react-query';
 
 import {
-	MarkAllAsReadResult,
-	Notification,
+	type MarkAllAsReadResult,
+	type Notification,
 	NotificationStatus,
 	NotificationType,
 } from '@shared/services/notifications-service/notifications.types';
 
-import { NotificationCenterProps } from '../NotificationCenter.types';
+import { type NotificationCenterProps } from '../NotificationCenter.types';
 
 const mockTitle = 'Je bezoek aanvraag is goedgekeurd';
 const mockDescription =

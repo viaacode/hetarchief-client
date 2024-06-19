@@ -1,14 +1,14 @@
-import { TagList, TagOption } from '@meemoo/react-components';
+import { TagList, type TagOption } from '@meemoo/react-components';
 import { capitalize, lowerCase } from 'lodash-es';
 import router from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
-import { MetadataItem } from '@ie-objects/components';
+import { type MetadataItem } from '@ie-objects/components/Metadata';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
-import { Locale } from '@shared/utils';
+import { type Locale } from '@shared/utils/i18n';
 import { SearchFilterId } from '@visitor-space/types';
 
 export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {

@@ -1,17 +1,17 @@
 import {
 	Button,
-	ButtonProps,
+	type ButtonProps,
 	Dropdown,
 	DropdownButton,
 	DropdownContent,
-	DropdownProps,
+	type DropdownProps,
 	useClickOutside,
 } from '@meemoo/react-components';
-import { FC, MouseEvent, useState } from 'react';
+import { type FC, type MouseEvent, useState } from 'react';
 
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-
-import { Icon, IconNamesLight } from '../Icon';
 
 import styles from './DropdownMenu.module.scss';
 

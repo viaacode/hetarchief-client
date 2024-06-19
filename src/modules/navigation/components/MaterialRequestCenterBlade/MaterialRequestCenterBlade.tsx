@@ -1,6 +1,6 @@
-import { Button, OrderDirection } from '@meemoo/react-components';
+import { Button, type OrderDirection } from '@meemoo/react-components';
 import Image from 'next/image';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { type FC, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { GroupName } from '@account/const';
@@ -8,14 +8,18 @@ import { selectUser } from '@auth/store/user';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { MaterialRequestsService } from '@material-requests/services';
 import {
-	MaterialRequest,
+	type MaterialRequest,
 	MaterialRequestKeys,
 	MaterialRequestObjectType,
 } from '@material-requests/types';
-import { Blade, BladeManager, Icon, IconNamesLight, Loading } from '@shared/components';
+import { Blade } from '@shared/components/Blade/Blade';
+import { BladeManager } from '@shared/components/BladeManager';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { Loading } from '@shared/components/Loading';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { setMaterialRequestCount } from '@shared/store/ui';
-import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade';
+import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
 
 import bladeStyles from '../../../shared/components/Blade/Blade.module.scss';
 import PersonalInfoBlade from '../PersonalInfoBlade/PersonalInfoBlade';

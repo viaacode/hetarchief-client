@@ -1,7 +1,7 @@
 import { ApiService } from '../api-service';
 
 import { EVENTS_BASE_URL } from './events.service.const';
-import { LogEventType } from './events.service.types';
+import { type LogEventType } from './events.service.types';
 
 export class EventsService {
 	public static async triggerEvent(

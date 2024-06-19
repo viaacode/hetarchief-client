@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
+import React, { type FC } from 'react';
 
 import styles from './PaginationProgress.module.scss';
-import { PaginationProgressProps } from './PaginationProgress.types';
+import { type PaginationProgressProps } from './PaginationProgress.types';
 
 const PaginationProgress: FC<PaginationProgressProps> = ({ start, end, total }) => {
 	const text = `${start}-${end > total ? total : end} van ${total}`;

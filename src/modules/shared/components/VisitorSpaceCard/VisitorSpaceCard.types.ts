@@ -1,8 +1,9 @@
-import { CardProps } from '@meemoo/react-components';
+import { type CardProps } from '@meemoo/react-components';
+import { type ReactNode } from 'react';
 
-import { VisitorSpaceInfo } from '@visitor-space/types';
+import { type VisitorSpaceInfo } from '@visitor-space/types';
 
-import { VisitorSpaceCardType } from './VisitorSpaceCard.const';
+import { type VisitorSpaceCardType } from './VisitorSpaceCard.const';
 
 export interface VisitorSpaceAccess {
 	granted?: boolean;
@@ -12,7 +13,7 @@ export interface VisitorSpaceAccess {
 }
 
 export interface VisitorSpaceCardProps extends CardProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	access?: VisitorSpaceAccess;
 	onAccessRequest?: (room: Partial<Omit<VisitorSpaceInfo, 'status'>>) => void;
 	onContactClick?: (room: Partial<Omit<VisitorSpaceInfo, 'status'>>) => void;

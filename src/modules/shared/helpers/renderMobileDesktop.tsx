@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 /**
  * Renders mobile parameter if width is < 700, renders desktop param in width is larger

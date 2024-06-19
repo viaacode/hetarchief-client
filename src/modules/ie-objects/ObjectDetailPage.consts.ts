@@ -1,4 +1,4 @@
-import { ImageInfo } from '@iiif-viewer/IiifViewer.types';
+import { type ImageInfo } from '@iiif-viewer/IiifViewer.types';
 
 export const OPEN_SEA_DRAGON_POC = 'openseadragon';
 export const OPEN_SEA_DRAGON_POC_OBJECT_ID =

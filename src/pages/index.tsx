@@ -1,8 +1,8 @@
 import { ContentPageRenderer, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
 import { QueryClient } from '@tanstack/react-query';
-import { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
+import { type GetServerSidePropsContext, type GetServerSidePropsResult, type NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { ComponentType, FC, useEffect } from 'react';
+import { type ComponentType, type FC, useEffect } from 'react';
 
 import { GroupName } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
@@ -10,15 +10,15 @@ import {
 	getContentPageByLanguageAndPath,
 	useGetContentPageByLanguageAndPath,
 } from '@content-page/hooks/get-content-page';
-import { Loading } from '@shared/components';
+import { Loading } from '@shared/components/Loading';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { KNOWN_STATIC_ROUTES, QUERY_KEYS, ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import withUser, { UserProps } from '@shared/hooks/with-user';
-import { DefaultSeoInfo } from '@shared/types/seo';
-import { Locale } from '@shared/utils';
+import withUser, { type UserProps } from '@shared/hooks/with-user';
+import { type DefaultSeoInfo } from '@shared/types/seo';
+import { Locale } from '@shared/utils/i18n';
 import { VisitorLayout } from '@visitor-layout/index';
 
 const Homepage: NextPage<DefaultSeoInfo & UserProps> = ({

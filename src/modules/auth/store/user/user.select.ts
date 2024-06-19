@@ -1,7 +1,7 @@
-import { AppState } from '@shared/store';
-import { isServerSideRendering } from '@shared/utils';
+import { type AppState } from '@shared/store';
+import { isServerSideRendering } from '@shared/utils/is-browser';
 
-import { UserState } from './user.types';
+import { type UserState } from './user.types';
 
 /**
  * @deprecated prefer using selectCommonUser to use a user interface that is more in line with avo

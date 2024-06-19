@@ -3,32 +3,38 @@ import clsx from 'clsx';
 import { isNil } from 'lodash-es';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { FC, MouseEvent, ReactNode, useState } from 'react';
+import { type FC, type MouseEvent, type ReactNode, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
-import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
+import {
+	RequestAccessBlade,
+	type RequestAccessFormState,
+} from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
-import { DropdownMenu, IconNamesLight, Modal, Pill } from '@shared/components';
+import { DropdownMenu } from '@shared/components/DropdownMenu';
 import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { TRUNCATED_TEXT_LENGTH, TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
+import { Modal } from '@shared/components/Modal';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
+import { Pill } from '@shared/components/Pill';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { setLastScrollPosition } from '@shared/store/ui';
-import { IeObjectTypes } from '@shared/types';
-import { formatMediumDate } from '@shared/utils';
+import { type IeObjectTypes } from '@shared/types';
+import { formatMediumDate } from '@shared/utils/dates';
 
 import Icon from '../Icon/Icon';
 
 import styles from './MediaCard.module.scss';
-import { MediaCardProps } from './MediaCard.types';
+import { type MediaCardProps } from './MediaCard.types';
 
 const MediaCard: FC<MediaCardProps> = ({
 	description,

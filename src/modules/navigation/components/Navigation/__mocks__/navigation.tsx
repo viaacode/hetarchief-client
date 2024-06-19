@@ -1,13 +1,16 @@
 import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
-import { Icon, IconNamesLight } from '@shared/components';
+import {
+	type NavigationHamburgerProps,
+	type NavigationItem,
+} from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 import styles from '../Navigation.module.scss';
-import { NavigationItem } from '../Navigation.types';
-import { NavigationHamburgerProps } from '../NavigationSection';
 
 const linkCls = (...classNames: string[]) => {
 	return clsx(styles['c-navigation__link'], ...classNames);

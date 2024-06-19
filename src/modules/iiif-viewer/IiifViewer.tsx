@@ -1,23 +1,23 @@
 import { Button } from '@meemoo/react-components';
-
-import { IiifViewerFunctions, IiifViewerProps } from '@iiif-viewer/IiifViewer.types';
-import altoTextLocations from '@iiif-viewer/alto2-simplified.json';
-import { getOpenSeadragonConfig } from '@iiif-viewer/openseadragon-config';
-import { Icon, IconNamesLight } from '@shared/components';
-import { useHideFooter } from '@shared/hooks/use-hide-footer';
-import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { Breakpoints } from '@shared/types';
-import { isBrowser, isServerSideRendering } from '@shared/utils';
-
-import 'react-perfect-scrollbar/dist/css/styles.css';
 import clsx from 'clsx';
 import { clamp } from 'lodash-es';
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
+import { type IiifViewerFunctions, type IiifViewerProps } from '@iiif-viewer/IiifViewer.types';
+import altoTextLocations from '@iiif-viewer/alto2-simplified.json';
+import { getOpenSeadragonConfig } from '@iiif-viewer/openseadragon-config';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { useHideFooter } from '@shared/hooks/use-hide-footer';
+import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { Breakpoints } from '@shared/types';
+import { isBrowser, isServerSideRendering } from '@shared/utils/is-browser';
+
 import iiifStyles from './IiifViewer.module.scss';
+import 'react-perfect-scrollbar/dist/css/styles.css';
 
 const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 	(

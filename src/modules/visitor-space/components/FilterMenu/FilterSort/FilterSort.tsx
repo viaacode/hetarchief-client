@@ -5,16 +5,17 @@ import {
 	OrderDirection,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useState } from 'react';
+import { type FC, useState } from 'react';
 
-import { IconNamesLight, Overlay } from '@shared/components';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { Overlay } from '@shared/components/Overlay';
 
-import { SearchSortProp } from '../../../types';
+import { type SearchSortProp } from '../../../types';
 import { FilterButton } from '../FilterButton';
 import styles from '../FilterMenu.module.scss';
 import { FilterSortList } from '../FilterSortList';
 
-import { FilterSortProps } from './FilterSort.types';
+import { type FilterSortProps } from './FilterSort.types';
 
 const FilterSort: FC<FilterSortProps> = ({
 	activeSort,

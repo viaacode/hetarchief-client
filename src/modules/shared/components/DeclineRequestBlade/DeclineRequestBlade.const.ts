@@ -1,6 +1,6 @@
-import { object, SchemaOf, string } from 'yup';
+import { object, type SchemaOf, string } from 'yup';
 
-import { DeclineRequestFormState } from './DeclineRequestBlade.types';
+import { type DeclineRequestFormState } from './DeclineRequestBlade.types';
 
 export const DECLINE_REQUEST_FORM_SCHEMA = (): SchemaOf<DeclineRequestFormState> => {
 	return object({

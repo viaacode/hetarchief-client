@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { setShowNavigationHeaderRight } from '@shared/store/ui';
 
-import { UseHideNavigationHeaderRight } from './use-hide-navigation-header-right.types';
+import { type UseHideNavigationHeaderRight } from './use-hide-navigation-header-right.types';
 
 const useHideNavigationHeaderRight: UseHideNavigationHeaderRight = (showNavRight = false) => {
 	const dispatch = useDispatch();

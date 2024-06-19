@@ -2,18 +2,19 @@ import { AdminConfigManager } from '@meemoo/admin-core-ui';
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import nlBE from 'date-fns/locale/nl-BE/index.js';
 import setDefaultOptions from 'date-fns/setDefaultOptions';
-import { AppProps } from 'next/app';
+import { type AppProps } from 'next/app';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { appWithTranslation } from 'next-i18next';
-import React, { ReactElement, useEffect } from 'react';
+import React, { type ReactElement, useEffect } from 'react';
 
 import { getAdminCoreConfig } from '@admin/wrappers/admin-core-config';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { AppLayout } from '@shared/layouts/AppLayout';
 import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
 import { wrapper } from '@shared/store';
-import { isBrowser, Locale } from '@shared/utils';
+import { Locale } from '@shared/utils/i18n';
+import { isServerSideRendering } from '@shared/utils/is-browser';
 
 import getI18n from '../../next-i18next.config.js';
 import pkg from '../../package.json';
@@ -46,7 +47,7 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 		AdminConfigManager.setConfig(getAdminCoreConfig(router, locale || Locale.nl));
 	}, [locale, router]);
 
-	if (isBrowser()) {
+	if (!isServerSideRendering()) {
 		// client-side-only code, window is not available during nextjs server side prerender
 		(window as any).APP_VERSION = { version: pkg.version };
 	}

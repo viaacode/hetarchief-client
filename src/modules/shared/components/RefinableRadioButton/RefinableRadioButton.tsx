@@ -1,16 +1,18 @@
 import { CheckboxList, Dropdown, RadioButton } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil, without } from 'lodash-es';
-import { FC, ReactElement, ReactNode, useState } from 'react';
+import { type FC, type ReactElement, type ReactNode, useState } from 'react';
 
-import { Icon, IconNamesLight } from '../Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+
+import { Icon } from '../Icon';
 
 import styles from './RefinableRadioButton.module.scss';
 import {
-	RefinableRadioButtonOption,
-	RefinableRadioButtonProps,
-	RefinableRadioButtonRefine,
-	RefinableRadioButtonRefineOption,
+	type RefinableRadioButtonOption,
+	type RefinableRadioButtonProps,
+	type RefinableRadioButtonRefine,
+	type RefinableRadioButtonRefineOption,
 } from './RefinableRadioButton.types';
 
 export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({

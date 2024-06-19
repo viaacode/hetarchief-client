@@ -1,4 +1,4 @@
-import { mixed, object, SchemaOf, string } from 'yup';
+import { mixed, object, type SchemaOf, string } from 'yup';
 
 import { SEPARATOR } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
@@ -8,7 +8,7 @@ import { durationRegex } from '../../components/DurationInput/DurationInput.cons
 import { AdvancedFilterArrayParam } from '../../const/query-params';
 import { SearchFilterId } from '../../types';
 
-import { DurationFilterFormState } from './DurationFilterForm.types';
+import { type DurationFilterFormState } from './DurationFilterForm.types';
 
 export const DURATION_FILTER_FORM_SCHEMA = (): SchemaOf<DurationFilterFormState> =>
 	object({

@@ -1,6 +1,6 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { QueryClient } from '@tanstack/react-query';
-import { NextRouter } from 'next/router';
+import { type NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 
 import { ROUTES_BY_LOCALE } from '@shared/const';
@@ -9,12 +9,12 @@ import { tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
 import { TranslationService } from '@shared/services/translation-service/translation.service';
-import { asDate } from '@shared/utils';
+import { asDate } from '@shared/utils/dates';
 
 import { GET_PATH_FROM_NOTIFICATION_TYPE } from './notifications.consts';
 import {
-	MarkAllAsReadResult,
-	Notification,
+	type MarkAllAsReadResult,
+	type Notification,
 	NotificationStatus,
 	NotificationType,
 } from './notifications.types';
@@ -175,10 +175,9 @@ export abstract class NotificationsService {
 		page: number,
 		size: number
 	): Promise<IPagination<Notification>> {
-		const response: IPagination<Notification> = await ApiService.getApi()
+		return await ApiService.getApi()
 			.get(stringifyUrl({ url: 'notifications', query: { page, size } }))
 			.json();
-		return response;
 	}
 
 	public static async markOneAsRead(notificationId: string): Promise<Notification> {

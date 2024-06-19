@@ -2,7 +2,7 @@ import { ContentPageOverview } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import { type Avo } from '@viaa/avo2-types';
 import Link from 'next/link';
-import React, { FC } from 'react';
+import React, { type FC } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
@@ -12,7 +12,7 @@ import { ADMIN_CORE_ROUTES_BY_LOCALE } from '@shared/const';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { DefaultSeoInfo } from '@shared/types/seo';
+import { type DefaultSeoInfo } from '@shared/types/seo';
 
 export const ContentPageOverviewPage: FC<
 	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined }

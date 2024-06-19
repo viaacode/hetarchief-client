@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { type ComponentMeta, type ComponentStory } from '@storybook/react';
 
 import VisitorSpaceCardList from './VisitorSpaceCardList';
 import { sixItems } from './__mocks__/visitor-space-card-list';

@@ -1,44 +1,43 @@
 // TODO move these files to a search page module
 // metadata => advanced filters
 // visitor space search page => search page
-import { OrderDirection, TabProps } from '@meemoo/react-components';
+import { OrderDirection, type TabProps } from '@meemoo/react-components';
 import {
 	ArrayParam,
 	BooleanParam,
+	type DecodedValueMap,
 	NumberParam,
-	QueryParamConfig,
+	type QueryParamConfig,
 	StringParam,
 } from 'use-query-params';
 
-import { Icon, IconNamesLight } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import { SearchPageMediaType } from '@shared/types';
+import { AdvancedFilterForm } from '@visitor-space/components/AdvancedFilterForm';
+import { ConsultableMediaFilterForm } from '@visitor-space/components/ConsultableMediaFilterForm';
+import { ConsultableOnlyOnLocationFilterForm } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm';
+import { CreatedFilterForm } from '@visitor-space/components/CreatedFilterForm';
+import { CreatorFilterForm } from '@visitor-space/components/CreatorFilterForm';
+import { DurationFilterForm } from '@visitor-space/components/DurationFilterForm';
 import {
-	AdvancedFilterForm,
-	ConsultableMediaFilterForm,
-	ConsultableOnlyOnLocationFilterForm,
-	CreatedFilterForm,
-	CreatorFilterForm,
-	DurationFilterForm,
-	FilterMenuFilterOption,
-	FilterMenuSortOption,
+	type FilterMenuFilterOption,
+	type FilterMenuSortOption,
 	FilterMenuType,
-	GenreFilterForm,
-	KeywordsFilterForm,
-	LanguageFilterForm,
-	MaintainerFilterForm,
-	MediumFilterForm,
-	PublishedFilterForm,
-} from '@visitor-space/components';
+} from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import { GenreFilterForm } from '@visitor-space/components/GenreFilterForm';
+import KeywordsFilterForm from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm';
+import LanguageFilterForm from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm';
+import MaintainerFilterForm from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm';
+import { MediumFilterForm } from '@visitor-space/components/MediumFilterForm';
+import { PublishedFilterForm } from '@visitor-space/components/PublishedFilterForm';
 
 import { SearchFilterId, SearchSortProp, VisitorSpaceStatus } from '../types';
 
 import { AdvancedFilterArrayParam } from './query-params';
-
-export * from './metadata';
-export * from './label-keys';
 
 export const PUBLIC_COLLECTION = ''; // No maintainer query param means the public collection should be selected
 
@@ -104,6 +103,8 @@ export const SEARCH_PAGE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<any
 	// UI
 	filter: StringParam,
 };
+
+export type SearchPageQueryParams = Partial<DecodedValueMap<typeof SEARCH_PAGE_QUERY_PARAM_CONFIG>>;
 
 export const VISITOR_SPACE_TABS = (): TabProps[] => [
 	{

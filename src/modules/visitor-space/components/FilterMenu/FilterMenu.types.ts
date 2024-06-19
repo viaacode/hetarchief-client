@@ -1,15 +1,16 @@
-import { OrderDirection } from '@meemoo/react-components';
-import { FC, ReactNode } from 'react';
+import { type OrderDirection } from '@meemoo/react-components';
+import { type FC, type ReactNode } from 'react';
 
-import { IconName, ToggleOption } from '@shared/components';
-import { DefaultComponentProps, SortObject } from '@shared/types';
+import { type IconName } from '@shared/components/Icon';
+import { type ToggleOption } from '@shared/components/Toggle';
+import { type DefaultComponentProps, type SortObject } from '@shared/types';
 
 import {
-	DefaultFilterFormProps,
-	InlineFilterFormProps,
-	SearchFilterId,
-	SearchSortProp,
-	TagIdentity,
+	type DefaultFilterFormProps,
+	type InlineFilterFormProps,
+	type SearchFilterId,
+	type SearchSortProp,
+	type TagIdentity,
 } from '../../types';
 
 export interface FilterMenuProps extends DefaultComponentProps {

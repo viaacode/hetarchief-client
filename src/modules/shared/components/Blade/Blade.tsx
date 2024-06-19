@@ -2,19 +2,20 @@ import { Button, keysEscape } from '@meemoo/react-components';
 import clsx from 'clsx';
 import FocusTrap from 'focus-trap-react';
 import { isUndefined } from 'lodash-es';
-import { FC, useCallback, useEffect } from 'react';
+import { type FC, useCallback, useEffect } from 'react';
 
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
-import { Icon, IconNamesLight } from '../Icon';
 import { Overlay } from '../Overlay';
 
 import styles from './Blade.module.scss';
-import { BladeProps } from './Blade.types';
+import { type BladeProps } from './Blade.types';
 
-const Blade: FC<BladeProps> = ({
+export const Blade: FC<BladeProps> = ({
 	className,
 	children,
 	isOpen,
@@ -171,5 +172,3 @@ const Blade: FC<BladeProps> = ({
 		</>
 	);
 };
-
-export default Blade;

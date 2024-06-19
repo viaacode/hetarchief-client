@@ -1,8 +1,8 @@
 import { BooleanParam } from 'use-query-params';
-import { boolean, object, SchemaOf } from 'yup';
+import { boolean, object, type SchemaOf } from 'yup';
 
 import { IeObjectsSearchFilterField } from '@shared/types';
-import { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components';
+import { type ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
 
 import { SearchFilterId } from '../../types';
 

@@ -1,10 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FormControl, ReactSelect, SelectOption } from '@meemoo/react-components';
+import { FormControl, ReactSelect, type SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
-import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
+import { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { SingleValue } from 'react-select';
+import { type SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { SEPARATOR } from '@shared/const';
@@ -13,10 +13,12 @@ import { isRange, Operator } from '@shared/types';
 import {
 	DURATION_FILTER_FORM_QUERY_PARAM_CONFIG,
 	DURATION_FILTER_FORM_SCHEMA,
-	DurationFilterFormProps,
-	DurationFilterFormState,
-} from '@visitor-space/components';
-import { getOperators } from '@visitor-space/utils';
+} from '@visitor-space/components/DurationFilterForm/DurationFilterForm.const';
+import {
+	type DurationFilterFormProps,
+	type DurationFilterFormState,
+} from '@visitor-space/components/DurationFilterForm/DurationFilterForm.types';
+import { getOperators } from '@visitor-space/utils/metadata';
 
 import { MetadataProp } from '../../types';
 import { getSelectValue } from '../../utils/select';

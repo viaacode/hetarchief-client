@@ -1,13 +1,16 @@
 import { Button } from '@meemoo/react-components';
 import { useRouter } from 'next/router';
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { type FC, type ReactNode, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName } from '@account/const';
-import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
+import {
+	RequestAccessBlade,
+	type RequestAccessFormState,
+} from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
-import { ErrorPage } from '@shared/components';
+import { ErrorPage } from '@shared/components/ErrorPage';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useHasAnyGroup } from '@shared/hooks/has-group';

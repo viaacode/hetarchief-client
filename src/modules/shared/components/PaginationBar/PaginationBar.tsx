@@ -1,16 +1,17 @@
 import { Button, Pagination } from '@meemoo/react-components';
 import clsx from 'clsx';
-import React, { FC } from 'react';
+import React, { type FC } from 'react';
 
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 
-import { Icon, IconNamesLight } from '../Icon';
 import { PaginationProgress } from '../PaginationProgress';
 
 import { TABLE_PAGE_SIZE } from './PaginationBar.const';
 import styles from './PaginationBar.module.scss';
-import { PaginationBarProps } from './PaginationBar.types';
+import { type PaginationBarProps } from './PaginationBar.types';
 
 const PaginationBar: FC<PaginationBarProps> = ({
 	className,

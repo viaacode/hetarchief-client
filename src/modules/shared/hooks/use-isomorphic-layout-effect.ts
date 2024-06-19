@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect } from 'react';
 
-import { isBrowser } from '@shared/utils';
+import { isBrowser } from '@shared/utils/is-browser';
 
 /**
  * Use workaround to avoid warning about using useLayoutEffect inside Server Side Rendered components:

@@ -1,10 +1,11 @@
 import clsx from 'clsx';
-import { FC } from 'react';
+import { type FC } from 'react';
 
-import { Icon, IconNamesLight } from '../../Icon';
-import { dropdownIndicatorCxState } from '../../TagsInput';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { dropdownIndicatorCxState } from '@shared/components/TagsInput';
 
-import { TagSearchBarClearProps } from './TagSearchBarClear.types';
+import { type TagSearchBarClearProps } from './TagSearchBarClear.types';
 
 const TagSearchBarClear: FC<TagSearchBarClearProps> = ({
 	className,

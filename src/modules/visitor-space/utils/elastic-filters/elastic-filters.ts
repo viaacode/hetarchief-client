@@ -3,14 +3,14 @@ import { compact, isString } from 'lodash-es';
 import { IeObjectLicense } from '@ie-objects/ie-objects.types';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import {
-	IeObjectsSearchFilter,
+	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
-	Visit,
+	type Visit,
 } from '@shared/types';
 
-import { VISITOR_SPACE_QUERY_PARAM_INIT } from '../../const';
-import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId, SearchPageQueryParams } from '../../types';
+import { type SearchPageQueryParams, VISITOR_SPACE_QUERY_PARAM_INIT } from '../../const';
+import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '../../types';
 import { mapAdvancedToElastic } from '../map-filters';
 
 export const VISITOR_SPACE_LICENSES = [

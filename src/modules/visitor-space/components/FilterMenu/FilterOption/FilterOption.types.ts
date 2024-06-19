@@ -1,13 +1,15 @@
-import { DefaultComponentProps } from '@shared/types';
+import { type ReactNode } from 'react';
+
+import { type DefaultComponentProps } from '@shared/types';
 
 import {
-	FilterMenuFilterOption,
-	OnFilterMenuFormReset,
-	OnFilterMenuFormSubmit,
+	type FilterMenuFilterOption,
+	type OnFilterMenuFormReset,
+	type OnFilterMenuFormSubmit,
 } from '../FilterMenu.types';
 
 export interface FilterOptionProps extends DefaultComponentProps, FilterMenuFilterOption {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	activeFilter: string | null | undefined;
 	values?: unknown;
 	onClick?: (filterId: string) => void;

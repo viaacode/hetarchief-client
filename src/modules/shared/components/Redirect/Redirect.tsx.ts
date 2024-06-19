@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { type ReactNode, useEffect } from 'react';
 
 export interface NextRedirectsProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	to: string;
 	method: 'push' | 'replace';
 }

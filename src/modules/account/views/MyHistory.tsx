@@ -1,7 +1,7 @@
 import { OrderDirection, Table } from '@meemoo/react-components';
 import { useRouter } from 'next/router';
-import { FC, MouseEvent, ReactNode, useMemo, useState } from 'react';
-import { Row, TableState } from 'react-table';
+import { type FC, type MouseEvent, type ReactNode, useMemo, useState } from 'react';
+import { type Row, type TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import {
@@ -13,18 +13,21 @@ import {
 	Permission,
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
-import { ErrorNoAccess, Loading, PaginationBar, sortingIcons } from '@shared/components';
+import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
+import { Loading } from '@shared/components/Loading';
+import { PaginationBar } from '@shared/components/PaginationBar';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { sortingIcons } from '@shared/components/Table';
 import { VisitDetailBlade } from '@shared/components/VisitDetailBlade';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { AccessStatus, Visit } from '@shared/types';
-import { DefaultSeoInfo } from '@shared/types/seo';
-import { createVisitorSpacesWithFilterUrl } from '@shared/utils';
+import { AccessStatus, type Visit } from '@shared/types';
+import { type DefaultSeoInfo } from '@shared/types/seo';
+import { createVisitorSpacesWithFilterUrl } from '@shared/utils/create-url';
 import { useGetVisitAccessStatusMutation } from '@visit-requests/hooks/get-visit-access-status';
 import { useGetVisits } from '@visit-requests/hooks/get-visits';
 import { VisitorLayout } from '@visitor-layout/index';

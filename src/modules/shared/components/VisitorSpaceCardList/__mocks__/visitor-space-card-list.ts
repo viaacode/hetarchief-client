@@ -1,4 +1,4 @@
-import { VisitorSpaceCardType } from '@shared/components';
+import { VisitorSpaceCardType } from '@shared/components/VisitorSpaceCard';
 import {
 	AccessGranted,
 	AccessRequested,

@@ -1,8 +1,8 @@
-import { getVariantsArray, Tabs, TabsProps } from '@meemoo/react-components';
+import { getVariantsArray, Tabs, type TabsProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { type FC, useCallback, useEffect, useRef, useState } from 'react';
 
-import { isBrowser } from '@shared/utils';
+import { isBrowser } from '@shared/utils/is-browser';
 
 import styles from './ScrollableTabs.module.scss';
 

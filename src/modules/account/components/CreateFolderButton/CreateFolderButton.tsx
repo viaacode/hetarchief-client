@@ -1,14 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, ContentInput, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useState } from 'react';
+import { type FC, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { CreateFolderButtonProps } from '@account/components';
+import { type CreateFolderButtonProps } from '@account/components';
 import { COLLECTION_FORM_SCHEMA } from '@account/const';
 import { foldersService } from '@account/services/folders';
-import { CreateFolderFormState } from '@account/types';
-import { Icon, IconNamesLight } from '@shared/components';
+import { type CreateFolderFormState } from '@account/types';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 

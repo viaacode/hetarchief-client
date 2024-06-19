@@ -1,4 +1,4 @@
-import { ToastProps } from '../Toast.types';
+import { type ToastProps } from '../Toast.types';
 
 export const toastMock: ToastProps = {
 	title: 'Je annulering voor bezoekersruimte 4 is succesvol verstuurd',

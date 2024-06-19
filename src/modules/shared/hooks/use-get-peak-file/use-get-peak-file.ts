@@ -1,4 +1,4 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 import ky from 'ky-universal';
 
 import { IeObjectsService } from '@ie-objects/services';

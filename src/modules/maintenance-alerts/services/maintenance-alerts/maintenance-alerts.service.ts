@@ -1,12 +1,12 @@
-import { IPagination } from '@studiohyperdrive/pagination';
+import { type IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
 import { ApiService } from '@shared/services/api-service';
 
-import { Alert } from '../../types';
+import { type Alert } from '../../types';
 
 import { MAINTENANCE_ALERTS_SERVICE_BASE_URL } from './maintenance-alerts.service.const';
-import { GetMaterialRequestsProps } from './maintenance-alerts.service.types';
+import { type GetMaterialRequestsProps } from './maintenance-alerts.service.types';
 
 export class MaintenanceAlertsService {
 	public static async getAllActive(

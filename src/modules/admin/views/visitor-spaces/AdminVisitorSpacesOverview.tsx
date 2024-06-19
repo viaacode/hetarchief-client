@@ -1,8 +1,8 @@
 import { Button, OrderDirection, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import React, { FC, ReactNode, useMemo, useState } from 'react';
-import { TableState } from 'react-table';
+import React, { type FC, type ReactNode, useMemo, useState } from 'react';
+import { type TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
@@ -13,28 +13,30 @@ import {
 } from '@admin/const/Spaces.const';
 import { AdminLayout } from '@admin/layouts';
 import styles from '@admin/layouts/AdminLayout/AdminLayout.module.scss';
-import {
-	Icon,
-	IconNamesLight,
-	Loading,
-	PaginationBar,
-	ScrollableTabs,
-	SearchBar,
-	sortingIcons,
-} from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { Loading } from '@shared/components/Loading';
+import { PaginationBar } from '@shared/components/PaginationBar';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { sortingIcons } from '@shared/components/Table';
+import { ScrollableTabs } from '@shared/components/Tabs';
 import { globalLabelKeys, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { DefaultSeoInfo } from '@shared/types/seo';
+import { type DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorSpaceStatusOptions } from '@visitor-space/const';
 import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
 import { VisitorSpaceService } from '@visitor-space/services';
-import { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
+import {
+	type VisitorSpaceInfo,
+	type VisitorSpaceOrderProps,
+	VisitorSpaceStatus,
+} from '@visitor-space/types';
 
 export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();

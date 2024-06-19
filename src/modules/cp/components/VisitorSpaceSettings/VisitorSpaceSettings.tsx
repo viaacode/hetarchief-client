@@ -5,36 +5,45 @@ import {
 	FormControl,
 	ReactSelect,
 	RichTextEditorWithInternalState,
-	SelectOption,
+	type SelectOption,
 	TextInput,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEqual, kebabCase } from 'lodash-es';
 import { useRouter } from 'next/router';
-import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { SingleValue } from 'react-select';
-import { ValidationError } from 'yup';
+import React, {
+	type FC,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
+import { type SingleValue } from 'react-select';
+import { type ValidationError } from 'yup';
 
 import { Permission } from '@account/const';
 import { VISITOR_SPACE_VALIDATION_SCHEMA } from '@cp/components/VisitorSpaceSettings/VisitorSpaceSettings.const';
-import { IconNamesLight, Loading } from '@shared/components';
 import CardImage from '@shared/components/CardImage/CardImage';
 import FileInput from '@shared/components/FileInput/FileInput';
 import Icon from '@shared/components/Icon/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { Loading } from '@shared/components/Loading';
 import { globalLabelKeys, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { Locale } from '@shared/utils';
+import { Locale } from '@shared/utils/i18n';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import { DEFAULT_VISITOR_SPACE_COLOR } from '@visitor-space/const';
 import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceService } from '@visitor-space/services';
 import {
-	CreateVisitorSpaceSettings,
-	UpdateVisitorSpaceSettings,
+	type CreateVisitorSpaceSettings,
+	type UpdateVisitorSpaceSettings,
 } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 
@@ -42,8 +51,8 @@ import adminLayoutStyles from '../../../admin/layouts/AdminLayout/AdminLayout.mo
 
 import styles from './VisitorSpaceSettings.module.scss';
 import {
-	VisitorSpaceSettingsFormValues,
-	VisitorSpaceSettingsProps,
+	type VisitorSpaceSettingsFormValues,
+	type VisitorSpaceSettingsProps,
 } from './VisitorSpaceSettings.types';
 
 const labelKeys: Record<keyof CreateVisitorSpaceSettings, string> = {

@@ -1,8 +1,8 @@
 import * as toolkitRaw from '@reduxjs/toolkit';
 
-import { AuthService, CheckLoginResponse } from '../../services/auth-service';
+import { AuthService, type CheckLoginResponse } from '../../services/auth-service';
 
-import { UserState } from './user.types';
+import { type UserState } from './user.types';
 
 const initialState: UserState = {
 	user: null,

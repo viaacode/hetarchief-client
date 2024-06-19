@@ -1,7 +1,7 @@
 import { Button } from '@meemoo/react-components';
-import { FC } from 'react';
+import { type FC } from 'react';
 
-import { ErrorPage } from '@shared/components';
+import { ErrorPage } from '@shared/components/ErrorPage';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';

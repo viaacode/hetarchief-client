@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
-import { boolean, object, SchemaOf } from 'yup';
+import { type ReactNode } from 'react';
+import { boolean, object, type SchemaOf } from 'yup';
 
-import { CommunicationFormState } from '@account/types';
+import { type CommunicationFormState } from '@account/types';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 

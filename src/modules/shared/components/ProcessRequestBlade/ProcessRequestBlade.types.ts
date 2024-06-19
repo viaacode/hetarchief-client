@@ -1,8 +1,10 @@
-import { BladeProps } from '@shared/components';
-import { Visit } from '@shared/types';
+import { type ReactNode } from 'react';
+
+import { type BladeProps } from '@shared/components/Blade/Blade.types';
+import { type Visit } from '@shared/types';
 
 export interface ProcessRequestBladeProps extends BladeProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	selected?: Visit;
 	onFinish?: () => void;
 }

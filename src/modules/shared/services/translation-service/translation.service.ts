@@ -2,8 +2,9 @@ import getConfig from 'next/config';
 import { parseUrl } from 'query-string';
 
 import { ApiService } from '@shared/services/api-service';
-import { LanguageInfo } from '@shared/services/translation-service/translation.types';
-import { isServerSideRendering, Locale } from '@shared/utils';
+import { type LanguageInfo } from '@shared/services/translation-service/translation.types';
+import { Locale } from '@shared/utils/i18n';
+import { isServerSideRendering } from '@shared/utils/is-browser';
 
 const { publicRuntimeConfig } = getConfig();
 

@@ -1,6 +1,6 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
 
-import { ElasticsearchFieldNames } from '@visitor-space/types';
+import { type ElasticsearchFieldNames } from '@visitor-space/types';
 
 // Mapped intellectual entity object
 

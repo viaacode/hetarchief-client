@@ -3,25 +3,28 @@ import clsx from 'clsx';
 import { groupBy, intersection, isNil } from 'lodash-es';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
-import { MouseEventHandler, ReactNode } from 'react';
+import { type MouseEventHandler, type ReactNode } from 'react';
 
 import { Permission } from '@account/const';
-import { NAVIGATION_DROPDOWN, NavigationItem, NavigationLink } from '@navigation/components';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
+import { NAVIGATION_DROPDOWN } from '@navigation/components/Navigation/Navigation.types';
+import { NavigationLink } from '@navigation/components/Navigation/NavigationLink';
+import { type NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
 import {
-	NavigationInfo,
+	type NavigationInfo,
 	NavigationPlacement,
 } from '@navigation/services/navigation-service/navigation.types';
-import { Icon, IconName, IconNamesLight } from '@shared/components';
+import { Icon, type IconName } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import {
 	ROUTE_PARTS_BY_LOCALE,
 	ROUTE_PREFIXES_BY_LOCALE,
 	ROUTES_BY_LOCALE,
 } from '@shared/const/routes';
 import { tText } from '@shared/helpers/translate';
-import { Breakpoints, Visit } from '@shared/types';
-import { Locale } from '@shared/utils';
-import { SearchFilterId, VisitorSpaceInfo } from '@visitor-space/types';
+import { Breakpoints, type Visit } from '@shared/types';
+import { type Locale } from '@shared/utils/i18n';
+import { SearchFilterId, type VisitorSpaceInfo } from '@visitor-space/types';
 
 const linkCls = (...classNames: string[]) => {
 	return clsx(styles['c-navigation__link'], ...classNames);

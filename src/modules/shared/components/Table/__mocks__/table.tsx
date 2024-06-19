@@ -1,7 +1,8 @@
-import { Badge, Button, Column, TableData } from '@meemoo/react-components';
-import React, { ReactElement } from 'react';
+import { Badge, Button, type Column, type TableData } from '@meemoo/react-components';
+import React, { type ReactElement } from 'react';
 
-import { Icon, IconNamesLight } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { formatDateTime } from '@shared/components/VisitorSpaceCard/VisitorSpaceCard.utils';
 import { tText } from '@shared/helpers/translate';
 

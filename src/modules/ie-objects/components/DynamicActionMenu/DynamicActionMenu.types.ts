@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
-import { MediaActions } from '@ie-objects/ie-objects.types';
-import { DefaultComponentProps } from '@shared/types';
+import { type MediaActions } from '@ie-objects/ie-objects.types';
+import { type DefaultComponentProps } from '@shared/types';
 
 export interface DynamicActionMenuProps extends DefaultComponentProps {
 	children?: ReactNode;

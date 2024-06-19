@@ -1,5 +1,7 @@
+import { type ReactNode } from 'react';
+
 export interface PaginationProgressProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	start: number;
 	end: number;
 	total: number;

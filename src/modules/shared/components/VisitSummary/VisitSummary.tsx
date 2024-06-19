@@ -1,6 +1,6 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 
-import { VisitSummaryProps } from '@shared/components';
+import { type VisitSummaryProps } from '@shared/components/VisitSummary';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import SpacePreview from '../SpacePreview/SpacePreview';

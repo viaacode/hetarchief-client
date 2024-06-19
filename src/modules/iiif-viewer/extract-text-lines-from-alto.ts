@@ -1,7 +1,7 @@
 import { compact, isArray } from 'lodash-es';
 
-import { AltoFormatV2, AltoString, AltoTextLine } from './alto.v2.types';
-import { AltoFormatV3 } from './alto.v3.types';
+import { type AltoFormatV2, type AltoString, type AltoTextLine } from './alto.v2.types';
+import { type AltoFormatV3 } from './alto.v3.types';
 import altoJson from './alto2.json';
 
 export interface TextLine {

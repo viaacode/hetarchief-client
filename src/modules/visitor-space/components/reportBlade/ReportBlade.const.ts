@@ -1,8 +1,8 @@
-import { object, SchemaOf, string } from 'yup';
+import { object, type SchemaOf, string } from 'yup';
 
 import { tText } from '@shared/helpers/translate';
 
-import { ReportFormState } from './ReportBlade.types';
+import { type ReportFormState } from './ReportBlade.types';
 
 export const REPORT_FORM_SCHEMA = (): SchemaOf<ReportFormState> => {
 	return object({

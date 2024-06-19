@@ -1,6 +1,6 @@
-import { IdentifiableMediaCard, MediaCardProps } from '@shared/components';
+import { type IdentifiableMediaCard, type MediaCardProps } from '@shared/components/MediaCard';
 
-import { MediaCardListProps } from '../MediaCardList.types';
+import { type MediaCardListProps } from '../MediaCardList.types';
 
 export const mock = async (
 	args: Pick<MediaCardProps, 'view'>,

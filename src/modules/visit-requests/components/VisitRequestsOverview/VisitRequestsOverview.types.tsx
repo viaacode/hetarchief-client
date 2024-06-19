@@ -1,8 +1,9 @@
-import { Column } from 'react-table';
+import { type ReactNode } from 'react';
+import { type Column } from 'react-table';
 
-import { Visit } from '@shared/types';
+import { type Visit } from '@shared/types';
 
 export interface VisitRequestOverviewProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	columns: Column<Visit>[];
 }

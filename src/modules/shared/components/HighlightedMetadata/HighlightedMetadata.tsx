@@ -1,5 +1,5 @@
 import { compact, isString } from 'lodash-es';
-import { FC, ReactElement, ReactNode } from 'react';
+import { type FC, type ReactElement, type ReactNode } from 'react';
 
 import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
 

@@ -1,22 +1,25 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import React, { FC, useState } from 'react';
+import React, { type FC, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { selectUser } from '@auth/store/user';
-import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
+import {
+	RequestAccessBlade,
+	type RequestAccessFormState,
+} from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
-import { Blade } from '@shared/components';
+import { Blade } from '@shared/components/Blade/Blade';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { asDate, formatMediumDateWithTime } from '@shared/utils';
+import { asDate, formatMediumDateWithTime } from '@shared/utils/dates';
 
-import { VisitDetailBladeProps } from './VisitDetail.types';
+import { type VisitDetailBladeProps } from './VisitDetail.types';
 import styles from './VisitDetailBlade.module.scss';
 
 const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit }) => {

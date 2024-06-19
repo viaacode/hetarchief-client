@@ -1,9 +1,9 @@
-import { ContentPageInfo, fetchWithLogoutJson } from '@meemoo/admin-core-ui';
+import { type ContentPageInfo, fetchWithLogoutJson } from '@meemoo/admin-core-ui';
 import { startsWith } from 'lodash-es';
 import getConfig from 'next/config';
 import { stringifyUrl } from 'query-string';
 
-import { Locale } from '@shared/utils';
+import { type Locale } from '@shared/utils/i18n';
 
 const { publicRuntimeConfig } = getConfig();
 

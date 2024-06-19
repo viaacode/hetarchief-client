@@ -1,7 +1,7 @@
-import { UseFormTrigger } from 'react-hook-form';
-import { FieldValues } from 'react-hook-form/dist/types/fields';
+import { type UseFormTrigger } from 'react-hook-form';
+import { type FieldValues } from 'react-hook-form/dist/types/fields';
 
-import { CreateVisitorSpaceSettings } from '@visitor-space/services/visitor-space/visitor-space.service.types';
+import { type CreateVisitorSpaceSettings } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 
 export interface VisitorSpaceSettingsProps {
 	visitorSpaceSlug: string | null;

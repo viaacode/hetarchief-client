@@ -1,8 +1,8 @@
-import { FC, ReactNode } from 'react';
+import { type FC, type ReactNode } from 'react';
 
-import { DefaultComponentProps } from '@shared/types';
+import { type DefaultComponentProps } from '@shared/types';
 
-import { NavigationSectionProps } from './NavigationSection';
+import { type NavigationSectionProps } from './NavigationSection/NavigationSection.types';
 
 export type NavigationFC<P = unknown> = FC<P> & {
 	Left: FC<NavigationSectionProps>;
@@ -11,29 +11,14 @@ export type NavigationFC<P = unknown> = FC<P> & {
 };
 
 export interface NavigationProps extends DefaultComponentProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	contextual?: boolean;
 	loggedOutGrid?: boolean;
 }
 
 export interface NavigationCenterProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	title?: ReactNode;
-}
-
-export interface NavigationItemNodeProps {
-	children?: React.ReactNode;
-	closeDropdowns: () => void;
-}
-
-export interface NavigationItem {
-	node: ReactNode | ((nodeProps: NavigationItemNodeProps) => ReactNode);
-	id: string;
-	path: string;
-	activeDesktop?: boolean;
-	activeMobile?: boolean;
-	isDivider?: boolean | 'md';
-	children?: NavigationItem[];
 }
 
 export enum NAVIGATION_DROPDOWN {

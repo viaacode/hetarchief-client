@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
+import { type GetServerSidePropsContext, type GetServerSidePropsResult } from 'next';
 
 const SiteMap = (): null => {
 	return null;

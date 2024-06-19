@@ -1,15 +1,15 @@
 import { sortBy } from 'lodash-es';
 
 import { tText } from '@shared/helpers/translate';
-import { Operator } from '@shared/types';
-
+import { type Operator } from '@shared/types';
 import {
 	ADVANCED_FILTERS,
 	FILTERS_OPTIONS_CONFIG,
-	MetadataFields,
+	type MetadataFields,
 	REGULAR_FILTERS,
-} from '../../const';
-import { MetadataProp, OperatorOptions, PropertyOptions } from '../../types';
+} from '@visitor-space/const/metadata';
+
+import { MetadataProp, type OperatorOptions, type PropertyOptions } from '../../types';
 
 export const getRegularProperties = (): PropertyOptions => {
 	return sortBy(

@@ -1,16 +1,16 @@
 import clsx from 'clsx';
-import { KeyboardEvent, ReactElement, useMemo } from 'react';
-import { InputActionMeta } from 'react-select';
+import { type KeyboardEvent, type ReactElement, useMemo } from 'react';
+import { type InputActionMeta } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import {
-	OnSearchSingle,
-	TagSearchBarMeta,
-	TagSearchBarProps,
-	TagSearchBarValue,
-} from '@shared/components';
+	type OnSearchSingle,
+	type TagSearchBarMeta,
+	type TagSearchBarProps,
+	type TagSearchBarValue,
+} from '@shared/components/TagSearchBar/TagSearchBar.types';
 
-import { IconNamesLight } from '../Icon';
 import { TAGS_INPUT_COMPONENTS } from '../TagsInput';
 
 import { TagSearchBarButton } from './TagSearchBarButton';

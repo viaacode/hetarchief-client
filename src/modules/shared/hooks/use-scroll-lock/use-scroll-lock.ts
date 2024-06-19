@@ -2,11 +2,11 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { selectIsScrollLocked, setLockScroll } from '@shared/store/ui';
-import { findParentByClass } from '@shared/utils';
+import { findParentByClass } from '@shared/utils/find-parent-by-class';
 
 import { useScrollbarWidth } from '../use-scrollbar-width';
 
-import { UseScrollLock } from './use-scroll-lock.types';
+import { type UseScrollLock } from './use-scroll-lock.types';
 
 type scrollState = { __scrollDepth?: number };
 

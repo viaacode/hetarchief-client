@@ -1,4 +1,4 @@
-import DOMPurify from 'isomorphic-dompurify';
+import type DOMPurify from 'isomorphic-dompurify';
 
 export const RICH_TEXT_SANITIZATION: DOMPurify.Config = {
 	ALLOWED_TAGS: [

@@ -1,6 +1,6 @@
-import { TagsInput, TagsInputProps } from '@meemoo/react-components';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import React, { cloneElement, ReactElement, useState } from 'react';
+import { TagsInput, type TagsInputProps } from '@meemoo/react-components';
+import { type ComponentMeta, type ComponentStory } from '@storybook/react';
+import React, { cloneElement, type ReactElement, useState } from 'react';
 
 import { TAGS_INPUT_COMPONENTS } from './TagsInput.const';
 import { tagsInputOptionsMock } from './__mocks__/tags-input';

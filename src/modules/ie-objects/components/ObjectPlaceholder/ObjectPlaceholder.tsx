@@ -1,12 +1,14 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useState } from 'react';
+import { type FC, useState } from 'react';
 
-import { Icon, IconNamesLight, Modal } from '@shared/components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { Modal } from '@shared/components/Modal';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import styles from './ObjectPlaceholder.module.scss';
-import { ObjectPlaceholderProps } from './ObjectPlaceholder.types';
+import { type ObjectPlaceholderProps } from './ObjectPlaceholder.types';
 
 const ObjectPlaceholder: FC<ObjectPlaceholderProps> = ({
 	className,

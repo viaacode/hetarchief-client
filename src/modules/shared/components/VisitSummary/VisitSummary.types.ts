@@ -1,4 +1,4 @@
-import { Visit } from '@shared/types';
+import { type Visit } from '@shared/types';
 
 export type VisitSummaryType = Pick<
 	Visit,

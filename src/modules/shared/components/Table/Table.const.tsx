@@ -1,6 +1,7 @@
-import { TableSortingIcons } from '@meemoo/react-components';
+import { type TableSortingIcons } from '@meemoo/react-components';
 
-import { Icon, IconNamesLight } from '../Icon';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 export const sortingIcons: TableSortingIcons = {
 	asc: <Icon className="c-sorting-icon" name={IconNamesLight.ArrowUp} />,

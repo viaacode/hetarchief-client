@@ -1,15 +1,15 @@
 import { MaintenanceAlertsOverview } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import React, { FC, ReactNode } from 'react';
+import React, { type FC, type ReactNode } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
-import { Blade } from '@shared/components';
+import { Blade } from '@shared/components/Blade/Blade';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { DefaultSeoInfo } from '@shared/types/seo';
+import { type DefaultSeoInfo } from '@shared/types/seo';
 
 export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();

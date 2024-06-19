@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash-es';
-import { array, date, mixed, object, ref, SchemaOf, string } from 'yup';
+import { array, date, mixed, object, ref, type SchemaOf, string } from 'yup';
 
-import { ApproveRequestFormState } from '@shared/components';
+import { type ApproveRequestFormState } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.types';
 import { tText } from '@shared/helpers/translate';
 import { AccessType } from '@shared/types';
 
