@@ -16,7 +16,7 @@ const AccountSharedFolderDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
 	return <AccountSharedFolder url={url} folderId={folderId} />;
 };
 
-export async function getStaticProps(
+export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.accountShareFolder);
