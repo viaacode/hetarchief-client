@@ -45,7 +45,7 @@ describe('Component: <Blade /> (default)', () => {
 	});
 
 	it('Should render children', () => {
-		const { getByText } = renderBlade(undefined, 'some child');
+		const { getByText } = renderBlade(undefined, <span>some child</span>);
 
 		const bladeChildren = getByText('some child');
 

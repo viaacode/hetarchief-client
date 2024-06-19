@@ -1,15 +1,18 @@
+import { CollapsableBladeProps } from '@ie-objects/components';
+
 import { jest } from '@jest/globals';
 
 import { Icon, IconNamesLight } from '@shared/components';
 
 import '@testing-library/jest-dom';
 import { render } from '@testing-library/react';
+import React, { ReactNode } from 'react';
 
 import CollapsableBlade from './CollapsableBlade';
 import { collapsableBladeMock } from './__mocks__/CollapsedBlade.mock';
 
-const renderCollapsableBlade = ({ ...rest }) => {
-	return render(<CollapsableBlade {...collapsableBladeMock} {...rest} />);
+const renderCollapsableBlade = (props: Partial<CollapsableBladeProps>) => {
+	return render(<CollapsableBlade {...collapsableBladeMock} {...props} />);
 };
 
 describe('Components', () => {
@@ -54,8 +57,8 @@ describe('Components', () => {
 		});
 
 		it('Should pass props to content function', () => {
-			const renderContent = jest.fn();
-			renderCollapsableBlade({ renderContent });
+			const renderContent = jest.fn() as (hidden: boolean) => ReactNode;
+			renderCollapsableBlade({ renderContent, isOpen: false, setIsOpen: () => {} });
 
 			expect(renderContent).toHaveBeenCalled();
 			expect(renderContent).toHaveBeenCalledTimes(1);
