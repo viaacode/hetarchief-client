@@ -1,6 +1,6 @@
 import { compact, isString } from 'lodash-es';
 
-import { IeObjectLicense } from '@ie-objects/types';
+import { IeObjectLicense } from '@ie-objects/ie-objects.types';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import {
 	IeObjectsSearchFilter,

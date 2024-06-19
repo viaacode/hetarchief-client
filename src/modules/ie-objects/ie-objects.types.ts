@@ -199,6 +199,7 @@ export enum MediaActions {
 	Report = 'report',
 	RequestAccess = 'request-access',
 	Export = 'export',
+	ToggleHighlightSearchTerm = 'toggle-highlight-search-term',
 }
 
 // Metadata

@@ -15,7 +15,7 @@ import {
 	MetadataExportFormats,
 	MetadataSortMap,
 	ObjectDetailTabs,
-} from '@ie-objects/types';
+} from '@ie-objects/ie-objects.types';
 import {
 	mapArrayToMetadataData,
 	mapBooleanToMetadataData,
@@ -155,6 +155,7 @@ export const ANONYMOUS_ACTION_SORT_MAP = (): MetadataSortMap[] => [
 	{ id: MediaActions.RequestMaterial, isPrimary: true },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
+	{ id: MediaActions.ToggleHighlightSearchTerm },
 ];
 
 export const VISITOR_ACTION_SORT_MAP = (
@@ -164,6 +165,7 @@ export const VISITOR_ACTION_SORT_MAP = (
 	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
+	{ id: MediaActions.ToggleHighlightSearchTerm },
 ];
 
 export const KEY_USER_ACTION_SORT_MAP = (
@@ -173,6 +175,7 @@ export const KEY_USER_ACTION_SORT_MAP = (
 	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
+	{ id: MediaActions.ToggleHighlightSearchTerm },
 ];
 
 export const MEEMOO_ADMIN_ACTION_SORT_MAP = (
@@ -182,6 +185,7 @@ export const MEEMOO_ADMIN_ACTION_SORT_MAP = (
 	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
+	{ id: MediaActions.ToggleHighlightSearchTerm },
 ];
 
 export const CP_ADMIN_ACTION_SORT_MAP = (
@@ -191,18 +195,32 @@ export const CP_ADMIN_ACTION_SORT_MAP = (
 	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export }] : []),
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
+	{ id: MediaActions.ToggleHighlightSearchTerm },
 ];
 
-export const MEDIA_ACTIONS = (
-	isMobile: boolean,
-	canManageFolders: boolean,
-	isInAFolder: boolean,
-	canReport: boolean,
-	canRequestAccess: boolean,
-	canRequestMaterial: boolean,
-	canExport: boolean,
-	externalFormUrl: string | null
-): DynamicActionMenuProps => {
+export const MEDIA_ACTIONS = ({
+	isMobile,
+	canManageFolders,
+	isInAFolder,
+	isHighlightSearchTermActive,
+	canToggleSearchTerms,
+	canReport,
+	canRequestAccess,
+	canRequestMaterial,
+	canExport,
+	externalFormUrl,
+}: {
+	isMobile: boolean;
+	canManageFolders: boolean;
+	isInAFolder: boolean;
+	isHighlightSearchTermActive: boolean;
+	canToggleSearchTerms: boolean;
+	canReport: boolean;
+	canRequestAccess: boolean;
+	canRequestMaterial: boolean;
+	canExport: boolean;
+	externalFormUrl: string | null;
+}): DynamicActionMenuProps => {
 	const activeIconSet = isInAFolder ? IconNamesSolid : IconNamesLight;
 
 	const addToMaterialRequestsListButtonLabelDesktop = tText(
@@ -211,6 +229,9 @@ export const MEDIA_ACTIONS = (
 	const addToMaterialRequestsListButtonLabelMobile = tText(
 		'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst-mobile'
 	);
+	const toggleHighlightSearchTermsLabel = isHighlightSearchTermActive
+		? tText('Verberg gemarkeerde zoektermen')
+		: tText('Toon gemarkeerde zoektermen');
 	const addToMaterialRequestsListButtonLabel = isMobile
 		? addToMaterialRequestsListButtonLabelMobile
 		: addToMaterialRequestsListButtonLabelDesktop;
@@ -292,6 +313,27 @@ export const MEDIA_ACTIONS = (
 							id: MediaActions.Report,
 							ariaLabel: tText('modules/ie-objects/const/index___rapporteer'),
 							tooltip: tText('modules/ie-objects/const/index___rapporteer'),
+						},
+				  ]
+				: []) as ActionItem[]),
+			...((canToggleSearchTerms
+				? [
+						{
+							label: toggleHighlightSearchTermsLabel,
+							icon: (
+								<Icon
+									aria-hidden
+									className="u-font-size-24 u-text-left"
+									name={
+										isHighlightSearchTermActive
+											? IconNamesLight.NoMarker
+											: IconNamesLight.Marker
+									}
+								/>
+							),
+							id: MediaActions.ToggleHighlightSearchTerm,
+							ariaLabel: toggleHighlightSearchTermsLabel,
+							tooltip: toggleHighlightSearchTermsLabel,
 						},
 				  ]
 				: []) as ActionItem[]),

@@ -1,6 +1,6 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
 
-import { IeObject, IeObjectSearchAggregations } from '@ie-objects/types';
+import { IeObject, IeObjectSearchAggregations } from '@ie-objects/ie-objects.types';
 
 export interface ElasticsearchResponse<T> extends ElasticsearchAggregations {
 	items: {

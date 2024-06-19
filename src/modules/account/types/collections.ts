@@ -1,4 +1,4 @@
-import { IeObjectAccessThrough, IeObjectLicense, IsPartOfKey } from '@ie-objects/types';
+import { IeObjectAccessThrough, IeObjectLicense, IsPartOfKey } from '@ie-objects/ie-objects.types';
 import { IeObjectTypes } from '@shared/types';
 
 export interface Folder {

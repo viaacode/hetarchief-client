@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useQueryParams } from 'use-query-params';
 
-import { IE_OBJECT_QUERY_PARAM_CONFIG } from '@ie-objects/const';
+import { IE_OBJECT_QUERY_PARAM_CONFIG } from '@ie-objects/ie-objects.consts';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
@@ -11,9 +11,14 @@ import {
 interface HighlightSearchTermsProps {
 	toHighlight: string;
 	searchTerms?: string[];
+	enabled?: boolean;
 }
 
-const HighlightSearchTerms: FC<HighlightSearchTermsProps> = ({ toHighlight, searchTerms }) => {
+const HighlightSearchTerms: FC<HighlightSearchTermsProps> = ({
+	toHighlight,
+	searchTerms,
+	enabled = true,
+}) => {
 	const [query] = useQueryParams(IE_OBJECT_QUERY_PARAM_CONFIG);
 
 	const getSearchWords = (): string[] => {
@@ -33,6 +38,9 @@ const HighlightSearchTerms: FC<HighlightSearchTermsProps> = ({ toHighlight, sear
 		return searchWords;
 	};
 
+	if (!enabled) {
+		return <>{toHighlight}</>;
+	}
 	return (
 		<Highlighter
 			searchWords={getSearchWords()}

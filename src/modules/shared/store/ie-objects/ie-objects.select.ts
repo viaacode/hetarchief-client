@@ -1,5 +1,5 @@
 import { Folder } from '@account/types';
-import { IeObjectSearchAggregations } from '@ie-objects/types';
+import { IeObjectSearchAggregations } from '@ie-objects/ie-objects.types';
 import { AppState } from '@shared/store';
 import { GetIeObjectsResponse } from '@shared/types';
 
