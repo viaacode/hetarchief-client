@@ -134,6 +134,7 @@ export const Blade: FC<BladeProps> = ({
 				<div className={styles['c-blade__body-wrapper']}>
 					{renderTitle && renderTitle?.({ id, className: styles['c-blade__title'] })}
 					{children}
+					<div className={styles['c-blade__flex-grow']} />
 					{footer && <div className={styles['c-blade__footer']}>{footer}</div>}
 				</div>
 			</div>

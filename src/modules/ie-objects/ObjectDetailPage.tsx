@@ -1668,7 +1668,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			/>
 			{/* Read more metadata field blade */}
 			<Blade
-				className={clsx('u-pb-24 u-line-height-1-4 u-font-size-14')}
+				className={clsx(
+					'u-pb-24 u-line-height-1-4 u-font-size-14',
+					styles['p-object-detail__metadata-blade']
+				)}
 				isOpen={!!selectedMetadataField}
 				onClose={() => setSelectedMetadataField(null)}
 				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (

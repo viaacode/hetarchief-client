@@ -165,7 +165,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 				setOpenSeadragonInstance(openSeadragonInstanceTemp);
 			}
-		}, [iiifViewerId, isMobile]);
+		}, [addFullscreenCloseButton, iiifViewerId, isMobile]);
 
 		useEffect(() => {
 			updateOcrOverlay();

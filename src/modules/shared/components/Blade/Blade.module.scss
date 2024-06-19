@@ -95,8 +95,11 @@
 		grid-row-start: 4;
 	}
 
-	&__footer {
+	&__flex-grow {
 		flex-grow: 1;
+	}
+
+	&__footer {
 		align-content: flex-end;
 	}
 
