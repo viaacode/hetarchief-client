@@ -231,8 +231,8 @@ export const MEDIA_ACTIONS = ({
 		'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst-mobile'
 	);
 	const toggleHighlightSearchTermsLabel = isHighlightSearchTermActive
-		? tText('Verberg gemarkeerde zoektermen')
-		: tText('Toon gemarkeerde zoektermen');
+		? tText('modules/ie-objects/ie-objects___verberg-gemarkeerde-zoektermen')
+		: tText('modules/ie-objects/ie-objects___toon-gemarkeerde-zoektermen');
 	const addToMaterialRequestsListButtonLabel = isMobile
 		? addToMaterialRequestsListButtonLabelMobile
 		: addToMaterialRequestsListButtonLabelDesktop;

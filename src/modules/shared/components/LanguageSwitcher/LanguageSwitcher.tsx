@@ -84,7 +84,9 @@ export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 				trigger={
 					<Button
 						label={(router.locale || Locale.nl)?.toUpperCase()}
-						aria-label={tText('Pas de taal van de website aan')}
+						aria-label={tText(
+							'modules/shared/components/language-switcher/language-switcher___pas-de-taal-van-de-website-aan'
+						)}
 						variants={['black']}
 						onClick={() => setIsOpen(true)}
 						iconEnd={<Icon name={IconNamesLight.AngleDown} />}

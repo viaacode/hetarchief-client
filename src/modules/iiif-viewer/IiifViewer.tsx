@@ -61,29 +61,32 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			}
 		}, [activeImageIndex, openSeaDragonInstance]);
 
-		const addFullscreenCloseButton = (openSeadragonViewer: OpenSeadragon.Viewer) => {
-			if (!openSeadragonViewer.container) {
-				return;
-			}
-			const topLeftContainer = openSeadragonViewer.container.querySelector(
-				'.openseadragon-canvas + div'
-			);
-			if (!topLeftContainer) {
-				return;
-			}
-			topLeftContainer.innerHTML = '';
-			const closeFullscreenButton = document.createElement('button');
-			closeFullscreenButton.className =
-				'p-object-detail__iiif__close-fullscreen c-button c-button--icon c-button--white';
-			closeFullscreenButton.innerHTML = 'times';
-			closeFullscreenButton.title = tText(
-				'modules/iiif-viewer/iiif-viewer___sluit-volledig-scherm'
-			);
-			closeFullscreenButton.addEventListener('click', () => {
-				openSeadragonViewer.setFullScreen(false);
-			});
-			topLeftContainer?.append(closeFullscreenButton);
-		};
+		const addFullscreenCloseButton = useCallback(
+			(openSeadragonViewer: OpenSeadragon.Viewer) => {
+				if (!openSeadragonViewer.container) {
+					return;
+				}
+				const topLeftContainer = openSeadragonViewer.container.querySelector(
+					'.openseadragon-canvas + div'
+				);
+				if (!topLeftContainer) {
+					return;
+				}
+				topLeftContainer.innerHTML = '';
+				const closeFullscreenButton = document.createElement('button');
+				closeFullscreenButton.className =
+					'p-object-detail__iiif__close-fullscreen c-button c-button--icon c-button--white';
+				closeFullscreenButton.innerHTML = 'times';
+				closeFullscreenButton.title = tText(
+					'modules/iiif-viewer/iiif-viewer___sluit-volledig-scherm'
+				);
+				closeFullscreenButton.addEventListener('click', () => {
+					openSeadragonViewer.setFullScreen(false);
+				});
+				topLeftContainer?.append(closeFullscreenButton);
+			},
+			[tText]
+		);
 
 		const updateOcrOverlay = useCallback(() => {
 			if (isServerSideRendering()) {

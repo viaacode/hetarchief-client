@@ -70,8 +70,12 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 				},
 			}).catch(() =>
 				toastService.notify({
-					title: tText('Er ging iets mis'),
-					description: tText('Het inschrijven op de nieuwsbrief is mislukt'),
+					title: tText(
+						'modules/home/components/request-access-blade/request-access-blade___er-ging-iets-mis'
+					),
+					description: tText(
+						'modules/home/components/request-access-blade/request-access-blade___het-inschrijven-op-de-nieuwsbrief-is-mislukt'
+					),
 				})
 			);
 		}

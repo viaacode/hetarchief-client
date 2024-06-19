@@ -1053,12 +1053,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				? []
 				: [
 						{
-							label: `${tText('pages/slug/ie/index___breadcrumbs___home')}`,
+							label: tText('modules/ie-objects/object-detail-page___home'),
 							to: ROUTES_BY_LOCALE[locale].home,
 						},
 				  ]),
 			{
-				label: `${tText('pages/slug/ie/index___breadcrumbs___search')}`,
+				label: tText('modules/ie-objects/object-detail-page___zoeken'),
 				to: ROUTES_BY_LOCALE[locale].search,
 			},
 		];
