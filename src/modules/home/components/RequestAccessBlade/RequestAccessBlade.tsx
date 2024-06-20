@@ -97,7 +97,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 					/>
 				) : null}
 				<FormControl
-					className="u-mx-8 u-mb-24:md"
+					className="u-mx-8 u-mb-24"
 					id={labelKeys.acceptTerms}
 					errors={[errors.acceptTerms?.message]}
 				>
