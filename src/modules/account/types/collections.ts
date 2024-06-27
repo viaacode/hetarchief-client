@@ -10,6 +10,7 @@ export interface Folder {
 	id: string;
 	isDefault: boolean;
 	name: string;
+	description?: string;
 	updatedAt: string;
 	userProfileId: string;
 	usedForLimitedAccessUntil: string | null;

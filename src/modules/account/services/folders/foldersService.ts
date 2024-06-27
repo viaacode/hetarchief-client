@@ -40,7 +40,10 @@ class FoldersService extends ApiService {
 		return await ApiService.getApi().post(`${COLLECTIONS_SERVICE_BASE_URL}`, { json }).json();
 	}
 
-	public async update(id: string, json: Partial<Pick<Folder, 'name'>>): Promise<Folder> {
+	public async update(
+		id: string,
+		json: Partial<Pick<Folder, 'name' | 'description'>>
+	): Promise<Folder> {
 		return await ApiService.getApi()
 			.patch(`${COLLECTIONS_SERVICE_BASE_URL}/${id}`, { json })
 			.json();

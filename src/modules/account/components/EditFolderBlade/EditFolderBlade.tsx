@@ -1,0 +1,115 @@
+import { Button, TextArea, TextInput } from '@meemoo/react-components';
+import clsx from 'clsx';
+import { type FC, useEffect, useState } from 'react';
+
+import { foldersService } from '@account/services/folders';
+import type { Folder } from '@account/types';
+import { Blade } from '@shared/components/Blade/Blade';
+import { tHtml } from '@shared/helpers/translate';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { toastService } from '@shared/services/toast-service';
+
+import styles from './EditFolderBlade.module.scss';
+
+interface EditFolderBladeProps {
+	isOpen: boolean;
+	onClose: () => void;
+	currentFolder?: Folder;
+	onSave: (folderInfo: Folder) => Promise<void>;
+}
+
+export const EditFolderBlade: FC<EditFolderBladeProps> = ({
+	isOpen,
+	onClose,
+	currentFolder,
+	onSave,
+}) => {
+	const { tText } = useTranslation();
+
+	const [name, setName] = useState(currentFolder?.name || '');
+	const [description, setDescription] = useState(currentFolder?.description || '');
+
+	useEffect(() => {
+		setName(currentFolder?.name || '');
+		setDescription(currentFolder?.description || '');
+	}, [currentFolder]);
+
+	const submitData = async (
+		values: Partial<Pick<Folder, 'name' | 'description'>>,
+		id: string
+	) => {
+		try {
+			const response = await foldersService.update(id, values);
+			console.log(response);
+
+			toastService.notify({
+				title: tHtml('Success', values),
+				description: tHtml('deze map is successvol aangepast'),
+			});
+		} catch (error) {
+			toastService.notify({
+				title: tHtml('Er is een fout opgetreden'),
+				description: tHtml('Er is een fout opgetreden bij het aanpassen van de map'),
+			});
+		}
+	};
+
+	const renderFooter = () => {
+		return (
+			<div className={clsx('u-px-32 u-py-24')}>
+				<Button
+					variants={['block', 'black']}
+					onClick={() => {
+						const newFolder = { ...currentFolder, name, description } as Folder;
+						submitData({ name, description }, newFolder.id);
+						onSave(newFolder);
+						onClose();
+					}}
+					label={tText('Bewaar')}
+				/>
+
+				<Button variants={['block', 'text']} onClick={onClose} label={tText('Sluit')} />
+			</div>
+		);
+	};
+
+	return (
+		<Blade
+			isOpen={isOpen}
+			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
+				<h1 {...props} className={clsx(props.className, styles['p-folder-editor__title'])}>
+					{tText('Map aanpassen')}
+				</h1>
+			)}
+			footer={isOpen && renderFooter()}
+			onClose={onClose}
+			id="edit-folder-blade"
+		>
+			<div className={styles['p-folder-editor__content']}>
+				<dl>
+					<>
+						<dt className={styles['p-folder-editor__content-label']}>
+							{tText('Naam')}
+						</dt>
+						<dd className={styles['p-folder-editor__content-value']}>
+							<TextInput value={name} onChange={(e) => setName(e.target.value)} />
+						</dd>
+					</>
+
+					<>
+						<dt className={styles['p-folder-editor__content-label']}>
+							{tText('Beschrijving')}
+						</dt>
+						<dd className={styles['p-folder-editor__content-value']}>
+							<TextArea
+								className={styles['c-request-material__reason-input']}
+								onChange={(e) => setDescription(e.target.value)}
+								value={description}
+							/>
+						</dd>
+					</>
+				</dl>
+			</div>
+		</Blade>
+	);
+};
