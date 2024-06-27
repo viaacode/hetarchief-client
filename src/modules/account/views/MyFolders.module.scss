@@ -1,0 +1,9 @@
+@use "src/styles/abstracts" as *;
+
+.p-my-folders {
+	&__folder-edit {
+		@include respond-to("md") {
+			display: none;
+		}
+	}
+}
