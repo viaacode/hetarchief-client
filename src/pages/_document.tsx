@@ -56,6 +56,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 					name="google-site-verification"
 					content="yl7dKP6MImaxOwur77DkLJL4SH9Apy2ytk0baoLq99g"
 				/>
+
+				{/* zendesk preconnect */}
+				<link rel="preconnect" href="https://meemoo.zendesk.com" />
+
+				{/* google tag manager preconnect*/}
+				<link rel="preconnect" href="https://www.googletagmanager.com/" />
+
+				{/* cookie bot preconnect*/}
+				<link rel="preconnect" href="https://consent.cookiebot.com/" />
 			</CustomHead>
 			<body>
 				<Main />
