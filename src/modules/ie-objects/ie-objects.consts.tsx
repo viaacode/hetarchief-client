@@ -355,10 +355,6 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 		data: mediaInfo.meemooOriginalCp,
 	},
 	{
-		title: tText('modules/ie-objects/const/index___meemoo-identifier'),
-		data: mediaInfo.meemooIdentifier,
-	},
-	{
 		title: tText('modules/ie-objects/const/index___pid'),
 		data: mediaInfo.premisIsPartOf,
 	},
