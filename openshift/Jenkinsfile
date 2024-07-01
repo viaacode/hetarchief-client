@@ -95,7 +95,7 @@ pipeline {
                             sleep 3
                             oc annotate --overwrite buildconfig/$APP_NAME ref=$BRANCH_NAME shortcommit=$GIT_SHORT_COMMIT
                             patch-bc-current-ref.sh
-                            oc start-build $APP_NAME --from-dir=. --follow=true --wait=true
+                            oc start-build --follow=true --wait=true --env CLIENT_URL=https://hetarchief.be --from-dir=. $APP_NAME
                         '''
 					}
 				}
@@ -134,7 +134,7 @@ pipeline {
 					script {
 						sh """#!/bin/bash
                             oc project $OC_PROJECT
-                            oc start-build --follow=true --wait=true -e DEBUG_TOOLS=true --build-arg DEBUG_TOOLS=true client-tst
+                            oc start-build --follow=true --wait=true --env DEBUG_TOOLS=true CLIENT_URL=https://bezoek-tst.private.cloud.meemoo.be --build-arg DEBUG_TOOLS=true client-tst
                         """
 					}
 				}
@@ -191,6 +191,7 @@ pipeline {
 								sh '''ls -ltra
                                     export NODE_ENV=dev
                                     npm pkg delete scripts.prepare
+                                    cd ./tests
                                     npm install
                                     npx playwright install
                                     npx playwright install chrome
