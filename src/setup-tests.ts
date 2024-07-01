@@ -1,4 +1,5 @@
 import { jest } from '@jest/globals';
+import '@testing-library/jest-dom';
 
 import kyMock from './__mocks__/ky-universal';
 import nextConfig from './__mocks__/next-config';
