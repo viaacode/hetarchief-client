@@ -95,7 +95,7 @@ pipeline {
                             sleep 3
                             oc annotate --overwrite buildconfig/$APP_NAME ref=$BRANCH_NAME shortcommit=$GIT_SHORT_COMMIT
                             patch-bc-current-ref.sh
-                            oc start-build --follow=true --wait=true --env CLIENT_URL=https://hetarchief.be --from-dir=. $APP_NAME
+                            oc start-build $APP_NAME --from-dir=. --follow=true --wait=true --env CLIENT_URL="https://hetarchief.be"
                         '''
 					}
 				}
