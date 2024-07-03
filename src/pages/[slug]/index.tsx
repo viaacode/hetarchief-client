@@ -83,9 +83,9 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 			const objectDetailPagePath = `${ROUTES_BY_LOCALE[locale].search}/${
 				ieObjectInfo.maintainerSlug
 			}/${ieObjectInfo.schemaIdentifier}/${kebabCase(ieObjectInfo.name)}`;
-			window.open(objectDetailPagePath, '_self');
+			router.replace(objectDetailPagePath);
 		}
-	}, [ieObjectInfo, locale]);
+	}, [ieObjectInfo, locale, router]);
 
 	useEffect(() => {
 		dispatch(setShowZendesk(!isKioskUser));
