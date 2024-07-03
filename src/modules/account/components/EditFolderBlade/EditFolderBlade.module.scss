@@ -1,0 +1,26 @@
+@use "../../../../styles/abstracts" as *;
+
+.p-folder-editor {
+	&__title {
+		font-size: $font-size-4xl;
+	}
+
+	&__content {
+		padding: $spacer-lg;
+		color: $black;
+
+		dl {
+			margin-top: 0;
+		}
+
+		&-value {
+			margin-left: 0;
+			margin-bottom: $spacer-md;
+		}
+
+		&-label {
+			font-weight: $font-weight-bold;
+			margin-bottom: $spacer-xs;
+		}
+	}
+}

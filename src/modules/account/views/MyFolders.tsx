@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
 import { CreateFolderButton } from '@account/components';
-import { EditFolderTitle } from '@account/components/EditFolderTitle';
+import { EditFolderBlade } from '@account/components/EditFolderBlade';
 import { ACCOUNT_FOLDERS_QUERY_PARAM_CONFIG, FolderItemListSize, Permission } from '@account/const';
 import { useGetFolderMedia } from '@account/hooks/get-folder-media';
 import { useGetFolders } from '@account/hooks/get-folders';
@@ -49,6 +49,8 @@ import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 
+import styles from './MyFolders.module.scss';
+
 type ListNavigationFolderItem = ListNavigationItem & Folder;
 
 const labelKeys = {
@@ -79,11 +81,13 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 	const [showShareMapBlade, setShowShareMapBlade] = useState(false);
 	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
+	const [editMode, setEditMode] = useState(false);
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 	const lastScrollPosition = useSelector(selectLastScrollPosition);
 	const getFolders = useGetFolders();
 	const folders = useSelector(selectFolders);
 	const defaultFolder = (folders || []).find((folder) => folder.isDefault);
+
 	const isActive = useCallback(
 		(folder: Folder): boolean => {
 			return decodeURIComponent(createFolderSlug(folder)) === folderSlug;
@@ -98,7 +102,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 		() =>
 			(folders || []).map((folder) => {
 				const slug = createFolderSlug(folder);
-				const href = `${myFoldersPath}/${slug}`;
+				const href = myFoldersPath.replace(':slug', slug);
 				const active = isActive(folder);
 
 				return {
@@ -198,7 +202,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 	 * Events
 	 */
 
-	const onFolderTitleChanged = async (newFolder: Folder) => {
+	const onFolderDataEdited = async (newFolder: Folder) => {
 		// Temp set folders with new name in redux store
 		if (folders) {
 			dispatch(
@@ -295,6 +299,32 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 
 	const renderTitleButtons = useMemo(() => {
 		return [
+			...(activeFolder?.id
+				? [
+						{
+							before: false,
+							node: (
+								<Button
+									variants={['silver']}
+									icon={<Icon name={IconNamesLight.Share} aria-hidden />}
+									aria-label={tText(
+										'pages/account/mijn-mappen/folder-slug/index___map-delen'
+									)}
+									name={tText(
+										'pages/account/mijn-mappen/folder-slug/index___map-delen'
+									)}
+									onClick={(e) => {
+										e.stopPropagation();
+										setShowShareMapBlade(true);
+									}}
+									toolTipText={tText(
+										'pages/account/mijn-mappen/folder-slug/index___map-delen'
+									)}
+								/>
+							),
+						},
+				  ]
+				: []),
 			...(activeFolder && !activeFolder.isDefault
 				? [
 						{
@@ -330,34 +360,34 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 						},
 				  ]
 				: []),
-			...(activeFolder?.id
-				? [
-						{
-							before: false,
-							node: (
-								<Button
-									variants={['silver']}
-									icon={<Icon name={IconNamesLight.Share} aria-hidden />}
-									aria-label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-delen'
-									)}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-delen'
-									)}
-									onClick={(e) => {
-										e.stopPropagation();
-										setShowShareMapBlade(true);
-									}}
-									toolTipText={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-delen'
-									)}
-								/>
-							),
-						},
-				  ]
-				: []),
 		];
 	}, [tText, activeFolder]);
+
+	const renderButtons = () => {
+		return (
+			<>
+				{renderTitleButtons.filter((b) => b.before).map((b) => b.node)}
+				<Button
+					key={'edit-title'}
+					onClick={() => setEditMode((prevState) => !prevState)}
+					className={styles['p-my-folders__folder-edit']}
+					variants={['silver']}
+					name={tText(
+						'modules/account/components/edit-folder-title/edit-folder-title___map-aanpassen'
+					)}
+					icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
+					aria-label={tText(
+						'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen'
+					)}
+					toolTipText={tText(
+						'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen'
+					)}
+				/>
+
+				{renderTitleButtons.filter((b) => !b.before).map((b) => b.node)}
+			</>
+		);
+	};
 
 	const renderActions = (item: IdentifiableMediaCard, folder: Folder) => (
 		<>
@@ -476,14 +506,19 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 						{activeFolder && (
 							<>
 								<div className="l-container u-mt-64 u-mb-48">
-									<SidebarLayoutTitle>
-										<EditFolderTitle
-											key={activeFolder.id}
-											folder={activeFolder}
-											afterSubmit={onFolderTitleChanged}
-											buttons={renderTitleButtons}
-										/>
-									</SidebarLayoutTitle>
+									<div className="p-account-my-folders__active-card">
+										<SidebarLayoutTitle
+											className={'p-account-my-folders__active-card__title'}
+										>
+											{activeFolder.name}
+										</SidebarLayoutTitle>
+										<div className="p-account-my-folders__active-card__buttons">
+											{renderButtons()}
+										</div>
+									</div>
+									<p className="p-account-my-folders__active-card__description">
+										{activeFolder.description || ''}
+									</p>
 								</div>
 
 								<div className="l-container u-mb-24:md u-mb-32">
@@ -626,7 +661,12 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 							});
 					}}
 				/>
-
+				<EditFolderBlade
+					isOpen={editMode}
+					onClose={() => setEditMode((prevState) => !prevState)}
+					currentFolder={activeFolder}
+					onSave={onFolderDataEdited}
+				/>
 				<AddToFolderBlade
 					isOpen={!!selected && isAddToFolderBladeOpen}
 					objectToAdd={
