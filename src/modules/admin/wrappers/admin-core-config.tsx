@@ -34,8 +34,9 @@ const InternalLink = (linkInfo: LinkInfo) => {
 	const { to, ...rest } = linkInfo;
 
 	if (!to) {
-		return <span>{linkInfo.title}</span>;
+		return <p {...rest} />;
 	}
+
 	return (
 		<Link href={to} passHref>
 			<a {...rest} />
