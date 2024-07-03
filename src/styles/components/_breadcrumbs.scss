@@ -14,6 +14,12 @@
 		margin-bottom: $spacer-xxs;
 	}
 
+	&__icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
 	&__link {
 		font-size: $font-size-xs;
 		/* stylelint-disable-next-line value-no-vendor-prefix */
@@ -27,6 +33,11 @@
 		-webkit-line-clamp: 1;
 		/* stylelint-disable-next-line property-no-unknown */
 		line-clamp: 1;
+
+		/* reference to where I got this character from: https://stackoverflow.com/questions/26972529/is-there-a-html-character-that-is-blank-including-no-whitespace-on-all-browser */
+		&:empty::before {
+			content: '\200B';
+		}
 
 		&--active {
 			-webkit-line-clamp: 2;
