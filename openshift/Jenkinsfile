@@ -80,7 +80,7 @@ pipeline {
 					buildingTag()
 				}
 				not {
-					branch 'develop'
+					anyOf { branch 'master'; branch 'develop' }
 				}
 
 			}
@@ -204,13 +204,18 @@ pipeline {
 		// 		} //end script
 		// 	}
 		// }
-		stage('Deploy QAS') {
+		stage('Build and Deploy QAS') {
 			when {
 				anyOf { branch 'master'; branch 'main' }
 			}
 			steps {
 				container('oc') {
-					tagNewImage('qas')
+					script {
+						sh """#!/bin/bash
+                            oc project $OC_PROJECT
+                            oc start-build --follow=true --wait=true client-qas
+                        """
+					}
 				}
 			}
 			post {
