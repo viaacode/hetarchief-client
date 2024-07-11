@@ -161,6 +161,8 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 	:global(.c-card__subtitle-wrapper),
 	:global(.c-card__children-wrapper) {
 		line-height: $line-height-md * 2rem;
+		text-overflow: ellipsis;
+		overflow: hidden;
 	}
 
 	&__no-content {
