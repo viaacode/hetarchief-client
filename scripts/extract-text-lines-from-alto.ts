@@ -179,14 +179,12 @@ async function convertAltoFiles(altoFiles: string[]): Promise<void> {
 		const altoJson = (await xmlParser.parseStringPromise(xml)) as AltoFormat;
 		const textLines = extractTextLinesFromAlto(altoJson);
 		await fs.writeFile(
-			path.resolve('./' + path.parse(altoFile).name + '.json'),
+			path.resolve('./scripts/altos/' + path.parse(altoFile).name + '.json'),
 			JSON.stringify(textLines, null, 2)
 		);
 	}
 }
 
-convertAltoFiles([
-	'https://archief-media.meemoo.be/viaa/MOB/KULEUVENKADOC/2669f95bbf604172942ca92642c4e9bff7d174898b21481e979ae27119f41a23/2669f95bbf604172942ca92642c4e9bff7d174898b21481e979ae27119f41a23.xml',
-	'https://archief-media.meemoo.be/viaa/MOB/KULEUVENUNIVERSITEITSBIBLIOTHEEK/267461b46ae444b7831eda3eaedc2fa34e184de2fc45479fa18e7b2d55b19aa2/267461b46ae444b7831eda3eaedc2fa34e184de2fc45479fa18e7b2d55b19aa2.xml',
-	'https://archief-media.meemoo.be/viaa/MOB/ERFGOEDCELKERF/1ec8e20f660947489ea9617ddc821a11155f86ae151a4be695c9709c21b217f6/1ec8e20f660947489ea9617ddc821a11155f86ae151a4be695c9709c21b217f6.xml',
-]);
+convertAltoFiles(process.argv.slice(2))
+	.then(() => console.log('DONE'))
+	.catch((err) => console.error(err));

@@ -56,4 +56,4 @@ dist/
 tests/end2end.xml
 
 # generated alto files
-/src/modules/iiif-viewer/*.json
+/scripts/altos/*.json
