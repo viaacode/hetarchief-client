@@ -69,6 +69,7 @@ export class AuthService {
 				url: `${publicRuntimeConfig.PROXY_URL}/auth/hetarchief/login`,
 				query: {
 					returnToUrl,
+					language: router.locale,
 				},
 			})
 		);
