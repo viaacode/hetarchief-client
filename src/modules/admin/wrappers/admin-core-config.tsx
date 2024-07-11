@@ -130,6 +130,7 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 			loader: {
 				component: () => <Loading fullscreen owner="admin-core-loader" />,
 			},
+			enableMultiLanguage: true,
 			buttonTypes: () => [
 				{
 					label: tText('modules/admin/wrappers/with-admin-core-config___zilver'),
