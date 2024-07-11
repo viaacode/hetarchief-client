@@ -1,6 +1,3 @@
-import * as fs from 'node:fs/promises';
-import * as path from 'node:path';
-
 import { compact, isArray } from 'lodash-es';
 import { Parser } from 'xml2js';
 
@@ -171,20 +168,13 @@ export function extractTextLinesFromAlto(altoJson: AltoFormat): SimplifiedAlto {
 	}
 }
 
-async function convertAltoFiles(altoFiles: string[]): Promise<void> {
-	for (const altoFile of altoFiles) {
-		const response = await fetch(altoFile);
-		const xml = await response.text();
+async function convertAltoFiles(altoFileUrl: string): Promise<void> {
+	const response = await fetch(altoFileUrl);
+	const xml = await response.text();
 
-		const altoJson = (await xmlParser.parseStringPromise(xml)) as AltoFormat;
-		const textLines = extractTextLinesFromAlto(altoJson);
-		await fs.writeFile(
-			path.resolve('./scripts/altos/' + path.parse(altoFile).name + '.json'),
-			JSON.stringify(textLines, null, 2)
-		);
-	}
+	const altoJson = (await xmlParser.parseStringPromise(xml)) as AltoFormat;
+	const textLines = extractTextLinesFromAlto(altoJson);
+	console.log(JSON.stringify(textLines, null, 2));
 }
 
-convertAltoFiles(process.argv.slice(2))
-	.then(() => console.log('DONE'))
-	.catch((err) => console.error(err));
+convertAltoFiles(process.argv[2]);
