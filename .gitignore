@@ -54,3 +54,6 @@ tests/node_modules
 dist/
 
 tests/end2end.xml
+
+# generated alto files
+/src/modules/iiif-viewer/*.json
