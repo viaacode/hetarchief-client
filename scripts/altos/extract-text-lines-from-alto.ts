@@ -1,7 +1,6 @@
 import { compact, isArray } from 'lodash';
 import { Parser } from 'xml2js';
 
-import { type AltoFormat } from './alto.types';
 import {
 	type Alto2Layout,
 	type Alto2Page,
@@ -41,6 +40,8 @@ export interface SimplifiedAlto {
 	};
 	text: TextLine[] | undefined;
 }
+
+type AltoFormat = AltoFormatV2 | AltoFormatV3;
 
 function toArray<T = any>(objectOrArray: T | T[]): T[] {
 	if (isArray(objectOrArray)) {
