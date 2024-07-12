@@ -54,6 +54,3 @@ tests/node_modules
 dist/
 
 tests/end2end.xml
-
-# generated alto files
-/scripts/altos/*.json
