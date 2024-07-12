@@ -23,7 +23,7 @@ export interface FolderIeObject {
 	meemooLocalId: string;
 	accessThrough: IeObjectAccessThrough[];
 	premisIsPartOf?: string;
-	collectionEntryCreatedAt?: string;
+	folderEntryCreatedAt?: string;
 	creator?: unknown;
 	description: string;
 	duration: string;
