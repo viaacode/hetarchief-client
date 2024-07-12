@@ -219,7 +219,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 					}}
 				>
 					{visibleActions.map(renderSecondaryButton)}
-					{!!hiddenActions.length && renderDropdown(hiddenActions)}
+					{!!hiddenActions.length && renderDropdown(secondaryActions)}
 				</div>
 			</ul>
 		</>
