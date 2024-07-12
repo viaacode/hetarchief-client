@@ -91,6 +91,7 @@ import {
 	VISITOR_ACTION_SORT_MAP,
 } from '@ie-objects/ie-objects.consts';
 import {
+	type AltoTextLine,
 	type IeObject,
 	IeObjectAccessThrough,
 	IeObjectLicense,
@@ -108,7 +109,6 @@ import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-object
 import IiifViewer from '@iiif-viewer/IiifViewer';
 import { type IiifViewerFunctions } from '@iiif-viewer/IiifViewer.types';
 import altoTextLocations from '@iiif-viewer/alto2-simplified.json';
-import { type TextLine } from '@iiif-viewer/extract-text-lines-from-alto';
 import { MaterialRequestsService } from '@material-requests/services';
 import { type MaterialRequestObjectType } from '@material-requests/types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
@@ -902,7 +902,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		renderExportDropdown,
 	]);
 
-	const handleHoverOcrWord = (textLocation: TextLine, index: number) => {
+	const handleHoverOcrWord = (textLocation: AltoTextLine, index: number) => {
 		iiifViewerReference?.current?.iiifZoomToRect(textLocation);
 		iiifViewerReference?.current?.setActiveWordIndex(index);
 	};
@@ -1475,7 +1475,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					</div>
 				</div>
 
-				{(altoTextLocations as TextLine[]).map((textLocation, index) => {
+				{(altoTextLocations as AltoTextLine[]).map((textLocation, index) => {
 					return (
 						<>
 							<span
