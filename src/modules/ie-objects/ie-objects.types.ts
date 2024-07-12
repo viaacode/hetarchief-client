@@ -213,3 +213,11 @@ export interface MetadataSortMap {
 	id: MediaActions;
 	isPrimary?: boolean;
 }
+
+export interface AltoTextLine {
+	text: string;
+	x: number;
+	y: number;
+	width: number;
+	height: number;
+}
