@@ -1,8 +1,7 @@
-import { compact, isArray } from 'lodash-es';
+import { compact, isArray } from 'lodash';
 import { Parser } from 'xml2js';
 
-import { type AltoFormat } from '@iiif-viewer/alto.types';
-
+import { type AltoFormat } from './alto.types';
 import {
 	type Alto2Layout,
 	type Alto2Page,
