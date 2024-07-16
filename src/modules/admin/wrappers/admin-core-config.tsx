@@ -34,8 +34,9 @@ const InternalLink = (linkInfo: LinkInfo) => {
 	const { to, ...rest } = linkInfo;
 
 	if (!to) {
-		return <span>{linkInfo.title}</span>;
+		return <p {...rest} />;
 	}
+
 	return (
 		<Link href={to} passHref>
 			<a {...rest} />
@@ -119,6 +120,9 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 				eyeOff: { name: IconNamesLight.Hide },
 				audio: { name: IconNamesLight.Audio },
 				video: { name: IconNamesLight.Video },
+				noAudio: { name: IconNamesLight.NoAudio },
+				noVideo: { name: IconNamesLight.NoVideo },
+				noFilm: { name: IconNamesLight.NoVideo },
 				newspaper: { name: IconNamesLight.Newspaper },
 			},
 			list: ICON_LIST_CONFIG,
@@ -129,6 +133,7 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 			loader: {
 				component: () => <Loading fullscreen owner="admin-core-loader" />,
 			},
+			enableMultiLanguage: true,
 			buttonTypes: () => [
 				{
 					label: tText('modules/admin/wrappers/with-admin-core-config___zilver'),

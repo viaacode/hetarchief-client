@@ -56,6 +56,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 					name="google-site-verification"
 					content="yl7dKP6MImaxOwur77DkLJL4SH9Apy2ytk0baoLq99g"
 				/>
+
+				{/* Add preconnect tags to speed up the loading of 3rd party assets/scripts */}
+				<link rel="preconnect" href="https://meemoo.zendesk.com" />
+				<link rel="preconnect" href="https://static.zdassets.com" />
+				<link rel="preconnect" href="https://ekr.zdassets.com" />
+				<link rel="preconnect" href="https://www.googletagmanager.com/" />
+				<link rel="preconnect" href="https://consent.cookiebot.com/" />
+				<link rel="preconnect" href="https://consentcdn.cookiebot.com/" />
+				<link rel="preconnect" href="https://imgsct.cookiebot.com/" />
 			</CustomHead>
 			<body>
 				<Main />

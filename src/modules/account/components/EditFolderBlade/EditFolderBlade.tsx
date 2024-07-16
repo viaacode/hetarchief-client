@@ -39,17 +39,25 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 		id: string
 	) => {
 		try {
-			const response = await foldersService.update(id, values);
-			console.log(response);
+			await foldersService.update(id, values);
 
 			toastService.notify({
-				title: tHtml('Success', values),
-				description: tHtml('deze map is successvol aangepast'),
+				title: tHtml(
+					'modules/account/components/edit-folder-blade/edit-folder-blade___success',
+					values
+				),
+				description: tHtml(
+					'modules/account/components/edit-folder-blade/edit-folder-blade___deze-map-is-successvol-aangepast'
+				),
 			});
 		} catch (error) {
 			toastService.notify({
-				title: tHtml('Er is een fout opgetreden'),
-				description: tHtml('Er is een fout opgetreden bij het aanpassen van de map'),
+				title: tHtml(
+					'modules/account/components/edit-folder-blade/edit-folder-blade___er-is-een-fout-opgetreden'
+				),
+				description: tHtml(
+					'modules/account/components/edit-folder-blade/edit-folder-blade___er-is-een-fout-opgetreden-bij-het-aanpassen-van-de-map'
+				),
 			});
 		}
 	};
@@ -65,10 +73,18 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 						onSave(newFolder);
 						onClose();
 					}}
-					label={tText('Bewaar')}
+					label={tText(
+						'modules/account/components/edit-folder-blade/edit-folder-blade___bewaar'
+					)}
 				/>
 
-				<Button variants={['block', 'text']} onClick={onClose} label={tText('Sluit')} />
+				<Button
+					variants={['block', 'text']}
+					onClick={onClose}
+					label={tText(
+						'modules/account/components/edit-folder-blade/edit-folder-blade___sluit'
+					)}
+				/>
 			</div>
 		);
 	};
@@ -78,7 +94,9 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 			isOpen={isOpen}
 			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 				<h1 {...props} className={clsx(props.className, styles['p-folder-editor__title'])}>
-					{tText('Map aanpassen')}
+					{tText(
+						'modules/account/components/edit-folder-blade/edit-folder-blade___map-aanpassen'
+					)}
 				</h1>
 			)}
 			footer={isOpen && renderFooter()}
@@ -89,7 +107,9 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 				<dl>
 					<>
 						<dt className={styles['p-folder-editor__content-label']}>
-							{tText('Naam')}
+							{tText(
+								'modules/account/components/edit-folder-blade/edit-folder-blade___naam'
+							)}
 						</dt>
 						<dd className={styles['p-folder-editor__content-value']}>
 							<TextInput value={name} onChange={(e) => setName(e.target.value)} />
@@ -98,7 +118,9 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 
 					<>
 						<dt className={styles['p-folder-editor__content-label']}>
-							{tText('Beschrijving')}
+							{tText(
+								'modules/account/components/edit-folder-blade/edit-folder-blade___beschrijving'
+							)}
 						</dt>
 						<dd className={styles['p-folder-editor__content-value']}>
 							<TextArea

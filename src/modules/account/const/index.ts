@@ -1,9 +1,12 @@
+import { replace } from 'lodash';
 import { type ReactNode } from 'react';
 import { boolean, object, type SchemaOf } from 'yup';
 
 import { type CommunicationFormState } from '@account/types';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
+import { type Locale } from '@shared/utils/i18n';
 
 export * from './my-collections.const';
 export * from './my-history.const';
@@ -23,7 +26,7 @@ export const COMMUNICATION_FORM_SCHEMA = (): SchemaOf<CommunicationFormState> =>
 		),
 	});
 
-export const GET_ACCOUNT_NAVIGATION_LINKS = (): NavigationLinkInfo[] => {
+export const GET_ACCOUNT_NAVIGATION_LINKS = (locale: Locale): NavigationLinkInfo[] => {
 	const hasAccountHistoryPerm = useHasAnyPermission(
 		Permission.READ_PERSONAL_APPROVED_VISIT_REQUESTS
 	);
@@ -33,12 +36,12 @@ export const GET_ACCOUNT_NAVIGATION_LINKS = (): NavigationLinkInfo[] => {
 		{
 			id: 'account-profile',
 			label: tText('modules/account/const/index___mijn-profiel'),
-			href: '/account/mijn-profiel',
+			href: ROUTES_BY_LOCALE[locale].accountMyProfile,
 		},
 		{
 			id: 'account-collections',
 			label: tText('modules/account/const/index___mijn-mappen'),
-			href: '/account/mijn-mappen',
+			href: replace(ROUTES_BY_LOCALE[locale].accountMyFolders, ':slug', ''),
 		},
 	];
 
@@ -46,7 +49,7 @@ export const GET_ACCOUNT_NAVIGATION_LINKS = (): NavigationLinkInfo[] => {
 		links.push({
 			id: 'account-history',
 			label: tText('modules/account/const/index___mijn-bezoek-historiek'),
-			href: '/account/mijn-bezoek-historiek',
+			href: ROUTES_BY_LOCALE[locale].accountMyVisitHistory,
 			hasDivider: true,
 		});
 	}
@@ -55,7 +58,7 @@ export const GET_ACCOUNT_NAVIGATION_LINKS = (): NavigationLinkInfo[] => {
 		links.push({
 			id: 'account-material-requests',
 			label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
-			href: '/account/mijn-materiaalaanvragen',
+			href: ROUTES_BY_LOCALE[locale].accountMyMaterialRequests,
 			hasDivider: true,
 		});
 	}

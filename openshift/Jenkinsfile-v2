@@ -39,7 +39,7 @@ pipeline {
 		disableConcurrentBuilds()
 	}
 	environment {
-		OC_PROJECT = 'hetarchief-v3'
+		OC_PROJECT = 'hetarchief'
 		BASE_IMG = "${getImageFromDockerfile()}"
 		BASE_IMG_NAME = "${getBaseImageName()}"
 		OC_URL = 'https://c113-e.private.eu-de.containers.cloud.ibm.com:30227'
@@ -80,7 +80,7 @@ pipeline {
 					buildingTag()
 				}
 				not {
-					anyOf { branch 'master'; branch 'develop' }
+					branch 'develop'
 				}
 
 			}
@@ -98,50 +98,6 @@ pipeline {
                             oc start-build --follow=true --wait=true --env CLIENT_URL=https://hetarchief.be --from-dir=. $APP_NAME
                         '''
 					}
-				}
-			}
-		}
-		stage('Deploy INT') {
-			when {
-				anyOf {
-					changeRequest target: 'main'
-					changeRequest target: 'master'
-					changeRequest target: 'develop'
-					changeRequest target: 'development'
-				}
-			}
-			steps {
-				container('oc') {
-					tagNewImage('int')
-				}
-			}
-			post {
-				always {
-					script {
-						env.BRANCH_NAME = env.CHANGE_BRANCH
-					}
-					jiraSendDeploymentInfo site: "${JIRA_URL}", environmentId: 'int', environmentName: 'int', environmentType: 'testing'
-				}
-			}
-		}
-		stage('Build and Deploy TST') {
-			when {
-				anyOf { branch 'develop'; branch 'development' }
-			}
-			steps {
-				container('oc') {
-					// tagNewImage('tst')
-					script {
-						sh """#!/bin/bash
-                            oc project $OC_PROJECT
-                            oc start-build --follow=true --wait=true --env DEBUG_TOOLS=true --env CLIENT_URL=https://hetarchief-tst.private.cloud.meemoo.be --build-arg DEBUG_TOOLS=true client-tst
-                        """
-					}
-				}
-			}
-			post {
-				always {
-					jiraSendDeploymentInfo site: "${JIRA_URL}", environmentId: 'tst', environmentName: 'tst', environmentType: 'staging'
 				}
 			}
 		}
@@ -204,18 +160,13 @@ pipeline {
 		// 		} //end script
 		// 	}
 		// }
-		stage('Build and Deploy QAS') {
+		stage('Deploy QAS') {
 			when {
 				anyOf { branch 'master'; branch 'main' }
 			}
 			steps {
 				container('oc') {
-					script {
-						sh """#!/bin/bash
-                            oc project $OC_PROJECT
-                            oc start-build --follow=true --wait=true client-qas
-                        """
-					}
+					tagNewImage('qas')
 				}
 			}
 			post {

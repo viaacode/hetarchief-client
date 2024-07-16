@@ -13,6 +13,9 @@ export async function prefetchDetailPageQueries(
 	maintainerId: string | undefined,
 	maintainerSlug: string | undefined
 ): Promise<QueryClient> {
+	if (ieObjectId) {
+		return new QueryClient();
+	}
 	const queryClient = new QueryClient();
 	const promises = [];
 	if (ieObjectId !== OPEN_SEA_DRAGON_POC) {
