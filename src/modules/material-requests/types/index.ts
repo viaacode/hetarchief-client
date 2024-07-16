@@ -9,7 +9,6 @@ export interface MaterialRequest {
 	maintainerName: string;
 	maintainerSlug: string;
 	objectDctermsFormat?: MaterialRequestObjectType | undefined;
-	objectMeemooIdentifier: string;
 	objectSchemaIdentifier: string;
 	objectSchemaName: string;
 	profileId: string;

@@ -200,7 +200,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 							<span>{item.objectSchemaName}</span>
 						</p>
 						<p className={styles['c-material-request-center-blade__material-id']}>
-							{item.objectMeemooIdentifier}
+							{item.objectSchemaIdentifier}
 						</p>
 					</div>
 				</a>
@@ -357,7 +357,6 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					maintainerLogo={selectedMaterialRequest.maintainerLogo}
 					maintainerSlug={selectedMaterialRequest.maintainerSlug}
 					materialRequestId={selectedMaterialRequest.id}
-					meemooId={selectedMaterialRequest.objectMeemooIdentifier}
 					reason={selectedMaterialRequest.reason}
 					type={selectedMaterialRequest.type}
 					refetchMaterialRequests={refetchMaterialRequests}

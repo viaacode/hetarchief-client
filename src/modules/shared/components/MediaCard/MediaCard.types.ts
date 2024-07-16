@@ -16,6 +16,7 @@ export interface MediaCardProps {
 	keywords?: string[];
 	name?: string;
 	id?: string;
+	objectId?: string;
 	preview?: string;
 	publishedOrCreatedDate?: Date;
 	publishedBy?: string;
@@ -25,7 +26,6 @@ export interface MediaCardProps {
 	hasRelated?: boolean;
 	icon?: IconName;
 	showKeyUserLabel?: boolean;
-	meemooIdentifier?: string;
 	showLocallyAvailable?: boolean;
 	showPlanVisitButtons?: boolean;
 	link: string | undefined;

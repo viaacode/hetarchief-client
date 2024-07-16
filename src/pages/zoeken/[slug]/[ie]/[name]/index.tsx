@@ -47,7 +47,6 @@ export async function getServerSideProps(
 	return getDefaultStaticProps(context, context.resolvedUrl, {
 		queryClient: await prefetchDetailPageQueries(
 			ieObjectId,
-			ieObject?.meemooIdentifier,
 			ieObject?.maintainerId,
 			ieObject?.maintainerSlug
 		),
