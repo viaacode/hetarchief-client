@@ -308,12 +308,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	);
 
 	// related
-	const { data: relatedData } = useGetIeObjectsRelated(
-		ieObjectId,
-		mediaInfo?.maintainerId,
-		mediaInfo?.meemooIdentifier,
-		{ enabled: !!mediaInfo }
-	);
+	const { data: relatedData } = useGetIeObjectsRelated(ieObjectId, mediaInfo?.maintainerId, {
+		enabled: !!mediaInfo,
+	});
 
 	// visit info
 	const {
@@ -386,7 +383,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			const eventData = {
 				type: mediaInfo.dctermsFormat,
 				fragment_id: mediaInfo.schemaIdentifier,
-				pid: mediaInfo.meemooIdentifier,
+				pid: mediaInfo.schemaIdentifier,
 				user_group_name: user?.groupName ?? GroupName.ANONYMOUS,
 				or_id: mediaInfo.maintainerId,
 			};
@@ -573,7 +570,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					'{local_cp_id}',
 					encodeOrNotUriComponent(mediaInfo?.meemooLocalId || '')
 				)
-				.replaceAll('{pid}', encodeOrNotUriComponent(mediaInfo?.meemooIdentifier || ''))
+				.replaceAll('{pid}', encodeOrNotUriComponent(mediaInfo?.schemaIdentifier || ''))
 				.replaceAll('{title}', encodeOrNotUriComponent(mediaInfo?.name || ''))
 				.replaceAll(
 					'{title_serie}',
@@ -609,7 +606,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		if (externalFormUrl) {
 			EventsService.triggerEvent(LogEventType.ITEM_REQUEST, window.location.href, {
 				fragment_id: mediaInfo?.schemaIdentifier,
-				pid: mediaInfo?.meemooIdentifier,
+				pid: mediaInfo?.schemaIdentifier,
 				user_group_name: user?.groupName,
 				or_id: mediaInfo?.maintainerId,
 			});
@@ -633,7 +630,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					const eventData = {
 						type: mediaInfo?.dctermsFormat,
 						fragment_id: mediaInfo?.schemaIdentifier,
-						pid: mediaInfo?.meemooIdentifier,
+						pid: mediaInfo?.schemaIdentifier,
 						user_group_name: user?.groupName,
 						or_id: mediaInfo?.maintainerId,
 					};
@@ -1649,7 +1646,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					maintainerName={mediaInfo?.maintainerName}
 					maintainerLogo={mediaInfo?.maintainerLogo}
 					maintainerSlug={mediaInfo?.maintainerSlug}
-					meemooId={mediaInfo?.meemooIdentifier}
 					layer={1}
 					currentLayer={1}
 				/>

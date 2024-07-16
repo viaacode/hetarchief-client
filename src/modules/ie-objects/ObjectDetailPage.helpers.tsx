@@ -9,7 +9,6 @@ import { makeServerSideRequestGetVisitorSpace } from '@visitor-space/hooks/get-v
 
 export async function prefetchDetailPageQueries(
 	ieObjectId: string,
-	meemooIdentifier: string | undefined,
 	maintainerId: string | undefined,
 	maintainerSlug: string | undefined
 ): Promise<QueryClient> {
@@ -24,8 +23,8 @@ export async function prefetchDetailPageQueries(
 			makeServerSideRequestGetIeObjectsRelated(
 				queryClient,
 				ieObjectId,
-				maintainerId,
-				meemooIdentifier
+				ieObjectId, // TODO replace with new query to find related objects using the 'is part of' relationship
+				maintainerId
 			)
 		);
 	}

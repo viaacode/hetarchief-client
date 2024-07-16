@@ -740,7 +740,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				publishedBy: item.maintainerName || '',
 				type,
 				preview: item.thumbnailUrl || undefined,
-				meemooIdentifier: item.meemooIdentifier,
 				name: item.name,
 				hasRelated: (item.related_count || 0) > 0,
 				hasTempAccess,

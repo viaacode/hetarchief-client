@@ -47,12 +47,12 @@ const MediaCard: FC<MediaCardProps> = ({
 	type,
 	view,
 	id,
+	objectId,
 	actions,
 	buttons,
 	hasRelated,
 	icon,
 	showKeyUserLabel,
-	meemooIdentifier,
 	showLocallyAvailable = false,
 	showPlanVisitButtons = false,
 	link,
@@ -368,7 +368,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
 				title={renderTitle()}
 				image={renderHeader()}
-				subtitle={meemooIdentifier}
+				subtitle={objectId}
 				caption={renderCaption()}
 				toolbar={renderToolbar()}
 				tags={renderTags()}

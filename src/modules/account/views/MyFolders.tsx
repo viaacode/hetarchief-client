@@ -443,7 +443,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___identifier-bij-meemoo'),
-				value: item.meemooIdentifier,
+				value: item.schemaIdentifier,
 			},
 			{
 				label: tHtml(
