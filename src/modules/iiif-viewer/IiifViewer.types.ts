@@ -30,3 +30,11 @@ export interface IiifViewerFunctions {
 	iiifFullscreen: (expand: boolean) => void;
 	iiifZoom: (multiplier: number) => void;
 }
+
+export interface TextLine {
+	text: string;
+	x: number;
+	y: number;
+	width: number;
+	height: number;
+}

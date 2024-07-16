@@ -107,7 +107,7 @@ import {
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
 import IiifViewer from '@iiif-viewer/IiifViewer';
-import { type IiifViewerFunctions } from '@iiif-viewer/IiifViewer.types';
+import { type IiifViewerFunctions, type TextLine } from '@iiif-viewer/IiifViewer.types';
 import altoTextLocations from '@iiif-viewer/alto2-simplified.json';
 import { MaterialRequestsService } from '@material-requests/services';
 import { type MaterialRequestObjectType } from '@material-requests/types';
