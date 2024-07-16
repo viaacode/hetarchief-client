@@ -25,7 +25,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { type IeObjectTypes } from '@shared/types';
+import { type IeObjectType } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils/dates';
 
 /**
@@ -127,7 +127,7 @@ export const noLicensePlaceholder = (): ObjectPlaceholderProps => ({
  * Tabs
  */
 
-const renderMediaTab = (type?: IeObjectTypes, available = true) => {
+const renderMediaTab = (type?: IeObjectType | null, available = true) => {
 	switch (type) {
 		case 'audio':
 			return {
@@ -161,7 +161,10 @@ const renderMediaTab = (type?: IeObjectTypes, available = true) => {
 	}
 };
 
-export const OBJECT_DETAIL_TABS = (mediaType?: IeObjectTypes, available = true): TabProps[] => [
+export const OBJECT_DETAIL_TABS = (
+	mediaType?: IeObjectType | null,
+	available = true
+): TabProps[] => [
 	{
 		id: ObjectDetailTabs.Metadata,
 		label: tText('modules/ie-objects/const/index___metadata'),

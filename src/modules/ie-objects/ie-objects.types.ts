@@ -1,5 +1,6 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
 
+import { type IeObjectType } from '@shared/types';
 import { type ElasticsearchFieldNames } from '@visitor-space/types';
 
 // Mapped intellectual entity object
@@ -24,7 +25,7 @@ export enum IsPartOfKey {
 
 export interface IeObject {
 	dctermsAvailable: string;
-	dctermsFormat: string;
+	dctermsFormat: IeObjectType;
 	dctermsMedium: string;
 	meemoofilmBase: string;
 	meemoofilmColor: boolean;

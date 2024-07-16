@@ -5,20 +5,17 @@ import React, { type FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { MaterialRequestsService } from '@material-requests/services';
-import {
-	MaterialRequestObjectType,
-	MaterialRequestRequesterCapacity,
-	MaterialRequestType,
-} from '@material-requests/types';
+import { MaterialRequestRequesterCapacity, MaterialRequestType } from '@material-requests/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
-import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount } from '@shared/store/ui';
+import { type IeObjectType } from '@shared/types';
 
 import styles from './MaterialRequestBlade.module.scss';
 
@@ -28,7 +25,7 @@ interface MaterialRequestBladeProps {
 	onClose: () => void;
 	objectName: string;
 	objectId: string;
-	objectDctermsFormat?: MaterialRequestObjectType | undefined;
+	objectDctermsFormat: IeObjectType;
 	maintainerName: string;
 	maintainerLogo: string | null;
 	maintainerSlug: string;
@@ -296,11 +293,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					<p className={styles['c-request-material__material-label']}>
 						<Icon
 							className={styles['c-request-material__material-label-icon']}
-							name={
-								objectDctermsFormat === MaterialRequestObjectType.AUDIO
-									? IconNamesLight.Audio
-									: IconNamesLight.Video
-							}
+							name={TYPE_TO_ICON_MAP[objectDctermsFormat]}
 						/>
 						<span>{objectName}</span>
 					</p>

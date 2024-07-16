@@ -110,7 +110,6 @@ import IiifViewer from '@iiif-viewer/IiifViewer';
 import { type IiifViewerFunctions } from '@iiif-viewer/IiifViewer.types';
 import altoTextLocations from '@iiif-viewer/alto2-simplified.json';
 import { MaterialRequestsService } from '@material-requests/services';
-import { type MaterialRequestObjectType } from '@material-requests/types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { Blade } from '@shared/components/Blade/Blade';
 import Callout from '@shared/components/Callout/Callout';
@@ -143,7 +142,7 @@ import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
 import { selectBreadcrumbs, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
-import { Breakpoints, type IeObjectTypes, SearchPageMediaType } from '@shared/types';
+import { Breakpoints, IeObjectType } from '@shared/types';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 import {
 	asDate,
@@ -201,7 +200,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	);
 
 	// Internal state
-	const [mediaType, setMediaType] = useState<IeObjectTypes>(null);
+	const [mediaType, setMediaType] = useState<IeObjectType | null>(null);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
 	const [currentFile, setCurrentFile] = useState<IeObjectFile | undefined>(undefined);
@@ -338,7 +337,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
-	const showFragmentSlider = filesToDisplay.length > 1;
+	const showFragmentSlider =
+		filesToDisplay.length > 1 && mediaInfo?.dctermsFormat !== IeObjectType.Newspaper;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const hasAccessToVisitorSpaceOfObject =
 		intersection(mediaInfo?.accessThrough, [
@@ -347,7 +347,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		]).length > 0;
 	const isPublicNewspaper =
 		mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) &&
-		mediaInfo.dctermsFormat === SearchPageMediaType.Newspaper;
+		mediaInfo.dctermsFormat === IeObjectType.Newspaper;
 	const canRequestAccess =
 		isNil(
 			accessibleVisitorSpaces?.find((space) => space.maintainerId === mediaInfo?.maintainerId)
@@ -406,9 +406,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	useEffect(() => {
 		if (isOpenSeaDragonPoc) {
-			setMediaType('newspaper');
+			setMediaType(IeObjectType.Newspaper);
 		} else {
-			setMediaType(mediaInfo?.dctermsFormat as IeObjectTypes);
+			setMediaType(mediaInfo?.dctermsFormat || null);
 		}
 
 		setCurrentFile(filesToDisplay[0]);
@@ -443,7 +443,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			const date = ieObject.datePublished ?? ieObject.dateCreatedLowerBound ?? null;
 
 			return {
-				type: (ieObject?.dctermsFormat || null) as IeObjectTypes,
+				type: ieObject?.dctermsFormat || null,
 				title: ieObject?.name || '',
 				subtitle: isNil(date)
 					? `${ieObject?.maintainerName ?? ''}`
@@ -461,7 +461,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			const date = item.datePublished ?? item.dateCreatedLowerBound ?? null;
 
 			return {
-				type: item.dctermsFormat as IeObjectTypes,
+				type: item.dctermsFormat,
 				title: item.name,
 				subtitle: isNil(date)
 					? `${item?.maintainerName ?? ''}`
@@ -1646,7 +1646,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					onClose={onCloseBlade}
 					objectName={mediaInfo?.name}
 					objectId={mediaInfo?.schemaIdentifier}
-					objectDctermsFormat={mediaInfo.dctermsFormat as MaterialRequestObjectType}
+					objectDctermsFormat={mediaInfo.dctermsFormat}
 					maintainerName={mediaInfo?.maintainerName}
 					maintainerLogo={mediaInfo?.maintainerLogo}
 					maintainerSlug={mediaInfo?.maintainerSlug}

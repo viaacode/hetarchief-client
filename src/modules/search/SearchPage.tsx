@@ -77,7 +77,7 @@ import {
 import {
 	Breakpoints,
 	IeObjectsSearchFilterField,
-	type IeObjectTypes,
+	type IeObjectType,
 	SearchPageMediaType,
 	type SortObject,
 	type Visit,
@@ -706,7 +706,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const searchResultCardData = useMemo((): IdentifiableMediaCard[] => {
 		return (searchResults?.items || []).map((item): IdentifiableMediaCard => {
-			const type = item.dctermsFormat as IeObjectTypes;
+			const type: IeObjectType | null = item.dctermsFormat;
 			const showKeyUserLabel = item.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
 			const hasAccessToVisitorSpaceOfObject = !!intersection(item?.accessThrough, [
 				IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
