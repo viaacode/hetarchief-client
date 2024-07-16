@@ -3,14 +3,8 @@ export type ImageInfo = {
 	altoUrl?: string;
 	width: number;
 	height: number;
-} & (
-	| {
-			imageUrl: string;
-	  }
-	| {
-			imageApiInfo: string;
-	  }
-);
+	imageUrl: string;
+};
 
 export interface IiifViewerProps {
 	id: string;

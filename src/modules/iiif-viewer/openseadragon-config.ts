@@ -1,25 +1,14 @@
 import { type Options } from 'openseadragon';
 
-export function getOpenSeadragonConfig(isMobile: boolean, id: string): Options {
+export function getOpenSeadragonConfig(
+	tileSources: (string | { type: 'image'; url: string })[],
+	isMobile: boolean,
+	id: string
+): Options {
 	return {
 		id,
 
-		tileSources: [
-			{
-				type: 'image',
-				url: 'https://assets-qas.hetarchief.be/hetarchief/BERT_TEST_IIIF_VIEWER/german.jpg',
-			},
-			{
-				type: 'image',
-				url: 'https://assets-qas.hetarchief.be/hetarchief/BERT_TEST_IIIF_VIEWER/volksgazet.png',
-			},
-			'https://ids.lib.harvard.edu/ids/iiif/47174896/info.json',
-			'https://ids.lib.harvard.edu/ids/iiif/18737483/info.json',
-			'https://ids.lib.harvard.edu/ids/iiif/47174892/info.json',
-			'https://ids.lib.harvard.edu/ids/iiif/43182083/info.json',
-			'https://ids.lib.harvard.edu/ids/iiif/43183405/info.json',
-			'https://ids.lib.harvard.edu/ids/iiif/43183422/info.json',
-		],
+		tileSources,
 		loadTilesWithAjax: true,
 
 		// preserveViewport: true,

@@ -51,7 +51,7 @@ export interface IeObject {
 	publisher: any;
 	spatial: string;
 	temporal: string;
-	thumbnailUrl: string;
+	thumbnailUrl: string[];
 	// EXTRA
 	sector?: IeObjectSector;
 	accessThrough?: IeObjectAccessThrough[];
@@ -64,7 +64,7 @@ export interface IeObject {
 	isPartOf?: Partial<Record<IsPartOfKey, string[]>>;
 	numberOfPages?: number;
 	meemooDescriptionCast?: string;
-	representations?: IeObjectRepresentation[];
+	pageRepresentations?: IeObjectRepresentation[][];
 	maintainerFormUrl?: string | null;
 	maintainerDescription?: string;
 	maintainerSiteUrl?: string;

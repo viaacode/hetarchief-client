@@ -56,6 +56,8 @@ export const IMAGE_FORMATS: string[] = [
 	'image/tiff',
 	'image/bmp',
 ];
+export const IMAGE_API_FORMATS: string[] = ['image/jph'];
+export const XML_FORMATS: string[] = ['application/xml'];
 
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
 	{
@@ -477,10 +479,10 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 	},
 	...mapObjectToMetadata(mediaInfo.creator),
 	...mapObjectToMetadata(mediaInfo.publisher),
-	{
-		title: tText('modules/ie-objects/const/index___transcriptie'),
-		data: mediaInfo?.representations?.[0]?.transcript, // TODO: Update voor andere representations?
-	},
+	// {
+	// 	title: tText('modules/ie-objects/const/index___transcriptie'),
+	// 	data: mediaInfo?.pageRepresentations?.[0]?.transcript, // TODO: Update voor andere representations?
+	// },
 	{
 		title: tText('modules/ie-objects/const/index___programmabeschrijving'),
 		data: mediaInfo.meemooDescriptionProgramme,

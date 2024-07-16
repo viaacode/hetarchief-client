@@ -15,7 +15,12 @@ import { ObjectPlaceholder } from '../ObjectPlaceholder';
 import styles from './FragmentSlider.module.scss';
 import { type FragmentSliderProps } from './FragmentSlider.types';
 
-const Metadata: FC<FragmentSliderProps> = ({ className, thumbnail, files, onChangeFragment }) => {
+export const FragmentSlider: FC<FragmentSliderProps> = ({
+	className,
+	thumbnail,
+	files,
+	onChangeFragment,
+}) => {
 	const { tText } = useTranslation();
 	const [offset, setOffset] = useState<number>(0);
 	const [active, setActive] = useState<number>(0);
@@ -183,4 +188,3 @@ const Metadata: FC<FragmentSliderProps> = ({ className, thumbnail, files, onChan
 		</div>
 	);
 };
-export default Metadata;

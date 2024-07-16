@@ -16,6 +16,7 @@ import clsx from 'clsx';
 import { type HTTPError } from 'ky';
 import {
 	capitalize,
+	compact,
 	indexOf,
 	intersection,
 	isEmpty,
@@ -50,11 +51,6 @@ import {
 	type RequestAccessFormState,
 } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
-import {
-	OPEN_SEA_DRAGON_POC,
-	OPEN_SEA_DRAGON_POC_IMAGE_INFOS,
-	OPEN_SEA_DRAGON_POC_OBJECT_ID,
-} from '@ie-objects/ObjectDetailPage.consts';
 import { CollapsableBlade } from '@ie-objects/components/CollapsableBlade';
 import {
 	type ActionItem,
@@ -74,8 +70,10 @@ import {
 	ANONYMOUS_ACTION_SORT_MAP,
 	CP_ADMIN_ACTION_SORT_MAP,
 	FLOWPLAYER_AUDIO_FORMATS,
+	FLOWPLAYER_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
 	IE_OBJECT_QUERY_PARAM_CONFIG,
+	IMAGE_API_FORMATS,
 	IMAGE_FORMATS,
 	KEY_USER_ACTION_SORT_MAP,
 	KIOSK_ACTION_SORT_MAP,
@@ -88,6 +86,7 @@ import {
 	objectPlaceholder,
 	ticketErrorPlaceholder,
 	VISITOR_ACTION_SORT_MAP,
+	XML_FORMATS,
 } from '@ie-objects/ie-objects.consts';
 import {
 	type AltoTextLine,
@@ -107,7 +106,7 @@ import {
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
 import IiifViewer from '@iiif-viewer/IiifViewer';
-import { type IiifViewerFunctions } from '@iiif-viewer/IiifViewer.types';
+import { type IiifViewerFunctions, type ImageInfo } from '@iiif-viewer/IiifViewer.types';
 import altoTextLocations from '@iiif-viewer/alto2-simplified.json';
 import { MaterialRequestsService } from '@material-requests/services';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
@@ -121,6 +120,7 @@ import HighlightedMetadata from '@shared/components/HighlightedMetadata/Highligh
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
+import { soundwave } from '@shared/components/MediaCard/__mocks__/media-card';
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { Pill } from '@shared/components/Pill';
@@ -179,10 +179,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const user = useSelector(selectUser);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const breadcrumbs = useSelector(selectBreadcrumbs);
-	const isOpenSeaDragonPoc = (router.query.ie as string) === OPEN_SEA_DRAGON_POC;
-	const ieObjectId = isOpenSeaDragonPoc
-		? OPEN_SEA_DRAGON_POC_OBJECT_ID
-		: (router.query.ie as string);
+	const ieObjectId = router.query.ie as string;
 
 	// User types
 	const isKeyUser = useIsKeyUser();
@@ -203,7 +200,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [mediaType, setMediaType] = useState<IeObjectType | null>(null);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
-	const [currentFile, setCurrentFile] = useState<IeObjectFile | undefined>(undefined);
+	const [currentPageIndex, setCurrentPageIndex] = useState<number>(0); // Used for going through the pages of a newspaper
+	const [currentRepresentationIndex, setCurrentRepresentationIndex] = useState<number>(0); // Used for going through the videos/audio/image representations/files inside a single detail page
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | undefined>(undefined);
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
 	const [related, setRelated] = useState<MediaObject[]>([]);
@@ -213,7 +211,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [isOcrBladeOpen, setIsOcrBladeOpen] = useState(false);
 	const [isOcrEnabled, setIsOcrEnabled] = useState<boolean>(false);
 	const [searchOcrText, setSearchOcrText] = useState<string>('');
-	const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
 	const [isHighlightSearchTermsActive, setIsHighlightSearchTermsActive] = useState<boolean>(true);
 
 	// Layout
@@ -253,34 +250,34 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
-	const files: IeObjectFile[] = mediaInfo?.representations?.flatMap((rep) => rep.files) || [];
+	const currentPage = mediaInfo?.pageRepresentations?.[currentPageIndex];
+	const currentRepresentation = currentPage?.[currentRepresentationIndex];
 
 	// peak file
 	const peakFileSchemaIdentifier: string | null =
-		files.find((file) => file.mimeType === 'application/json')?.id || null;
+		currentRepresentation?.files?.find((file) => file.mimeType === 'application/json')?.id ||
+		null;
 
 	// media info
 	const { data: peakJson } = useGetPeakFile(peakFileSchemaIdentifier, {
 		enabled: mediaInfo?.dctermsFormat === 'audio',
 	});
-	const filesToDisplay: IeObjectFile[] = files?.filter((file) => {
-		if (file.mimeType === 'application/json') {
-			// Ignore peak file containing the audio wave form in json format
-			return false;
-		}
-		if (file?.name?.includes('/audio_mp4')) {
-			// Ignore video files containing the ugly speaker image and the audio encoded in mp4 format
-			return false;
-		}
-		// Actual video files and mp3 files and images
-		return true;
-	});
 
 	const iiifViewerReference =
 		useRef<IiifViewerFunctions>() as MutableRefObject<IiifViewerFunctions>;
 
+	const representationsToDisplay =
+		(mediaInfo?.pageRepresentations || []).flatMap((reps) =>
+			reps.flatMap((rep) =>
+				rep.files.filter((file) => FLOWPLAYER_FORMATS.includes(file.mimeType))
+			)
+		) || [];
+
 	// playable url
-	const fileSchemaIdentifier: string | undefined = currentFile?.id;
+	const currentPlayableFile: IeObjectFile | undefined = currentRepresentation?.files?.find(
+		(file) => FLOWPLAYER_FORMATS.includes(file?.mimeType)
+	);
+	const fileSchemaIdentifier: string | undefined = currentPlayableFile?.id;
 	const {
 		data: playableUrl,
 		isLoading: isLoadingPlayableUrl,
@@ -328,7 +325,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	/**
 	 * Computed
 	 */
-	const hasMedia = isOpenSeaDragonPoc ? true : mediaInfo?.representations?.length || 0 > 0;
+	const hasMedia = mediaInfo?.pageRepresentations?.length || 0 > 0;
 	const isMediaInfoErrorNotFound = (mediaInfoError as HTTPError)?.response?.status === 404;
 	const isMediaInfoErrorNoAccess = (mediaInfoError as HTTPError)?.response?.status === 403;
 	const isVisitRequestErrorNotFound =
@@ -338,7 +335,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider =
-		filesToDisplay.length > 1 && mediaInfo?.dctermsFormat !== IeObjectType.Newspaper;
+		representationsToDisplay.length > 1 && mediaInfo?.dctermsFormat !== IeObjectType.Newspaper;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const hasAccessToVisitorSpaceOfObject =
 		intersection(mediaInfo?.accessThrough, [
@@ -405,13 +402,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	}, [activeTab, isMobile]);
 
 	useEffect(() => {
-		if (isOpenSeaDragonPoc) {
-			setMediaType(IeObjectType.Newspaper);
-		} else {
-			setMediaType(mediaInfo?.dctermsFormat || null);
-		}
+		setMediaType(mediaInfo?.dctermsFormat || null);
 
-		setCurrentFile(filesToDisplay[0]);
 		// Set default view
 		if (isMobile) {
 			// Default to metadata tab on mobile
@@ -736,7 +728,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 				case MetadataExportFormats.onePageNewspaperZip:
 					window.open(
-						`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${activeImageIndex}`
+						`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`
 					);
 					break;
 
@@ -749,7 +741,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			}
 			setMetadataExportDropdownOpen(false);
 		},
-		[ieObjectId]
+		[currentPageIndex, ieObjectId]
 	);
 
 	const renderExportDropdown = useCallback(
@@ -813,13 +805,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Content
 	 */
 	const tabs: TabProps[] = useMemo(() => {
-		const available = !isErrorPlayableUrl && !!playableUrl && !!currentFile;
+		const available = !isErrorPlayableUrl && !!playableUrl && !!currentPlayableFile;
 		return OBJECT_DETAIL_TABS(mediaType, available).map((tab) => ({
 			...tab,
 			label: <TabLabel label={tab.label} />,
 			active: tab.id === activeTab,
 		}));
-	}, [activeTab, mediaType, isErrorPlayableUrl, playableUrl, currentFile]);
+	}, [activeTab, mediaType, isErrorPlayableUrl, playableUrl, currentPlayableFile]);
 
 	const accessEndDate = useMemo(() => {
 		const dateDesktop = formatMediumDateWithTime(asDate(visitRequest?.endAt));
@@ -885,12 +877,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			})
 			.filter(Boolean) as ActionItem[];
 
-		const finalActions = {
+		return {
 			...originalActions,
 			actions,
 		};
-		console.log({ finalActions });
-		return finalActions;
 	}, [
 		windowSize.width,
 		canManageFolders,
@@ -913,56 +903,70 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		iiifViewerReference?.current?.setActiveWordIndex(index);
 	};
 
+	const iiifViewerImageInfos = useMemo((): ImageInfo[] => {
+		const images: ImageInfo[] = compact(
+			mediaInfo?.pageRepresentations?.flatMap((pageReps) => {
+				const files = pageReps.flatMap((pageRep) => pageRep.files);
+				const imageApiFile = files.find((file) =>
+					IMAGE_API_FORMATS.includes(file.mimeType)
+				);
+				const imageFile = files.find((file) => IMAGE_FORMATS.includes(file.mimeType));
+				const altoFile = files.find((file) => XML_FORMATS.includes(file.mimeType));
+				if (!imageFile?.storedAt) {
+					return null;
+				}
+				return {
+					imageUrl: imageApiFile?.storedAt || imageFile?.storedAt,
+					thumbnailUrl: imageFile?.thumbnailUrl || imageFile?.storedAt,
+					width: 2000, // TODO remove these dimensions and get them from the iiif viewer api
+					height: 3000,
+					altoUrl: altoFile?.storedAt,
+				};
+			})
+		);
+		return images;
+	}, [mediaInfo]);
+
 	/**
 	 * Render
 	 */
 
-	const renderMedia = (
-		playableUrl: string | undefined,
-		file: IeObjectFile | undefined
-	): ReactNode => {
-		if (isLoadingPlayableUrl) {
+	const renderMedia = (): ReactNode => {
+		const isNewspaper = mediaInfo?.dctermsFormat === IeObjectType.Newspaper;
+
+		if ((isLoadingPlayableUrl && !isNewspaper) || !mediaInfo) {
 			return <Loading fullscreen owner="object detail page: render media" />;
 		}
 
 		// IIIF viewer
-		// TODO switch to mediaItem check
-		if (isOpenSeaDragonPoc || IMAGE_FORMATS.includes(file?.mimeType || '')) {
+		if (isNewspaper && !!mediaInfo) {
 			return (
 				<IiifViewer
-					imageInfos={OPEN_SEA_DRAGON_POC_IMAGE_INFOS}
+					imageInfos={iiifViewerImageInfos}
 					ref={iiifViewerReference}
 					id={mediaInfo?.schemaIdentifier as string}
 					isOcrEnabled={isOcrEnabled}
 					setIsOcrEnabled={setIsOcrEnabled}
-					activeImageIndex={activeImageIndex}
-					setActiveImageIndex={setActiveImageIndex}
+					activeImageIndex={currentPageIndex}
+					setActiveImageIndex={setCurrentPageIndex}
 				/>
 			);
 		}
 
-		if (!playableUrl) {
-			if (showVisitButton) {
-				return (
-					<ObjectPlaceholder
-						{...noLicensePlaceholder()}
-						onOpenRequestAccess={openRequestAccessBlade}
-						addSliderPadding={showFragmentSlider}
-					/>
-				);
-			}
+		if (isErrorPlayableUrl) {
 			return (
 				<ObjectPlaceholder
-					{...noLicensePlaceholder()}
+					{...ticketErrorPlaceholder()}
 					addSliderPadding={showFragmentSlider}
 				/>
 			);
 		}
 
-		if (isErrorPlayableUrl || !file) {
+		if (!playableUrl || !currentPlayableFile) {
 			return (
 				<ObjectPlaceholder
-					{...ticketErrorPlaceholder()}
+					{...noLicensePlaceholder()}
+					onOpenRequestAccess={showVisitButton ? openRequestAccessBlade : undefined}
 					addSliderPadding={showFragmentSlider}
 				/>
 			);
@@ -972,8 +976,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			className: clsx('p-object-detail__flowplayer', {
 				'p-object-detail__flowplayer--with-slider': showFragmentSlider,
 			}),
-			poster: mediaInfo?.thumbnailUrl || undefined,
-			title: file.name,
+			poster: mediaInfo?.thumbnailUrl?.[0] || undefined,
+			title: currentPlayableFile?.name,
 			logo: mediaInfo?.maintainerOverlay ? mediaInfo?.maintainerLogo || undefined : undefined,
 			pause: isMediaPaused,
 			onPlay: handleOnPlay,
@@ -984,7 +988,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		};
 
 		// Flowplayer
-		if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(file.mimeType)) {
+		if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(currentPlayableFile.mimeType)) {
 			return (
 				<FlowPlayer
 					key={flowPlayerKey}
@@ -995,25 +999,22 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			);
 		}
 		// Audio player
-		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(file.mimeType)) {
-			if (!file || !!peakJson) {
-				return (
-					<FlowPlayer
-						key={flowPlayerKey}
-						type="audio"
-						src={[
-							{
-								src: playableUrl as string,
-								type: 'audio/mp3',
-							},
-						]}
-						waveformData={peakJson?.data || undefined}
-						{...shared}
-					/>
-				);
-			} else {
-				return <Loading fullscreen owner="object detail page: waiting for peak json" />;
-			}
+		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(currentPlayableFile.mimeType)) {
+			return (
+				<FlowPlayer
+					key={flowPlayerKey}
+					type="audio"
+					src={[
+						{
+							src: playableUrl as string,
+							type: 'audio/mp3',
+						},
+					]}
+					poster={soundwave}
+					waveformData={peakJson?.data || undefined}
+					{...shared}
+				/>
+			);
 		}
 	};
 
@@ -1191,6 +1192,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							/>
 						</div>
 					)}
+					é
 				</>
 			)}
 		</div>
@@ -1417,8 +1419,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const renderOcrBlade = () => {
 		if (
-			!isOpenSeaDragonPoc ||
-			!OPEN_SEA_DRAGON_POC_IMAGE_INFOS[activeImageIndex].altoUrl ||
+			mediaInfo?.dctermsFormat !== IeObjectType.Newspaper ||
+			!iiifViewerImageInfos[currentPageIndex].altoUrl ||
 			(activeTab === ObjectDetailTabs.Media && isMobile)
 		) {
 			return null;
@@ -1506,13 +1508,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		if (mediaType) {
 			return (
 				<>
-					{renderMedia(playableUrl, currentFile)}
+					{renderMedia()}
 					{showFragmentSlider && (
 						<FragmentSlider
-							thumbnail={mediaInfo?.thumbnailUrl}
+							thumbnail={mediaInfo?.thumbnailUrl[0]}
 							className={styles['p-object-detail__slider']}
-							files={filesToDisplay}
-							onChangeFragment={(index) => setCurrentFile(filesToDisplay[index])}
+							files={representationsToDisplay}
+							onChangeFragment={setCurrentRepresentationIndex}
 						/>
 					)}
 				</>

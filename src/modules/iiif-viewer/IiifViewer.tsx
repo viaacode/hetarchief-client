@@ -157,9 +157,19 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				// and otherwise the setState thinks this is a setter function
 				setOpenSeaDragonLib(() => OpenSeadragon);
 
+				const imageSources = imageInfos.map((imageInfo) => {
+					if (imageInfo.imageUrl.endsWith('.jph')) {
+						return imageInfo.imageUrl;
+					}
+					return {
+						type: 'image' as const,
+						url: imageInfo.imageUrl,
+					};
+				});
+
 				// Init Open Seadragon viewer
 				const openSeadragonInstanceTemp: OpenSeadragon.Viewer = new OpenSeadragon.Viewer(
-					getOpenSeadragonConfig(isMobile, iiifViewerId)
+					getOpenSeadragonConfig(imageSources, isMobile, iiifViewerId)
 				);
 
 				addFullscreenCloseButton(openSeadragonInstanceTemp);
