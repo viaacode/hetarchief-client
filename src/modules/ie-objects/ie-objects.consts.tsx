@@ -32,8 +32,19 @@ import { asDate, formatLongDate } from '@shared/utils/dates';
  * Render media
  */
 
-export const FLOWPLAYER_VIDEO_FORMATS: string[] = ['mp4', 'ogv', 'webm', 'm3u8'];
-export const FLOWPLAYER_AUDIO_FORMATS: string[] = ['mp3', 'm4a', 'aac'];
+export const FLOWPLAYER_VIDEO_FORMATS: string[] = [
+	'video/mp4',
+	'video/ogv',
+	'video/webm',
+	'video/m3u8',
+	'application/vnd.apple.mpegurl',
+];
+export const FLOWPLAYER_AUDIO_FORMATS: string[] = [
+	'audio/mpeg',
+	'audio/mp4',
+	'audio/m4a',
+	'audio/aac',
+];
 export const FLOWPLAYER_FORMATS: string[] = [
 	...FLOWPLAYER_VIDEO_FORMATS,
 	...FLOWPLAYER_AUDIO_FORMATS,
@@ -41,6 +52,14 @@ export const FLOWPLAYER_FORMATS: string[] = [
 export const IMAGE_FORMATS: string[] = ['png', 'jpg', 'jpeg', 'gif'];
 
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
+	{
+		label: tText('Download alle paginas (zip)'),
+		id: MetadataExportFormats.fullNewspaperZip,
+	},
+	{
+		label: tText('Download deze pagina (zip)'),
+		id: MetadataExportFormats.onePageNewspaperZip,
+	},
 	{
 		label: tText(
 			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-XML'

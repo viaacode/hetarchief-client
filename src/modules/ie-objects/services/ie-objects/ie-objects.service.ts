@@ -1,11 +1,7 @@
 import { isEmpty } from 'lodash-es';
 import { parseUrl, stringifyUrl } from 'query-string';
 
-import {
-	type IeObject,
-	type IeObjectSimilar,
-	MetadataExportFormats,
-} from '@ie-objects/ie-objects.types';
+import { type IeObject, type IeObjectSimilar } from '@ie-objects/ie-objects.types';
 import { type SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import { ApiService } from '@shared/services/api-service';
 import {
@@ -22,8 +18,6 @@ import {
 	IE_OBJECT_SERVICE_SEO_URL,
 	IE_OBJECT_SERVICE_TICKET_URL,
 	IE_OBJECTS_SERVICE_BASE_URL,
-	IE_OBJECTS_SERVICE_EXPORT,
-	IE_OBJECTS_SERVICE_RELATED_COUNT,
 	IE_OBJECTS_SERVICE_SIMILAR,
 	IO_OBJECTS_SERVICE_RELATED,
 } from './ie-objects.service.const';
@@ -145,37 +139,5 @@ export class IeObjectsService {
 				})
 			)
 			.json();
-	}
-
-	public static async countRelated(
-		meemooIdentifiers: string[] = []
-	): Promise<Record<string, number>> {
-		return await ApiService.getApi(true)
-			.get(
-				stringifyUrl(
-					{
-						url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECTS_SERVICE_RELATED_COUNT}`,
-						query: { meemooIdentifiers },
-					},
-					{
-						arrayFormat: 'comma',
-					}
-				)
-			)
-			.json();
-	}
-
-	public static async getExport(
-		id: string,
-		format: MetadataExportFormats
-	): Promise<string | null> {
-		if (!id || !format) {
-			return null;
-		}
-
-		const response = await ApiService.getApi().get(
-			`${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IE_OBJECTS_SERVICE_EXPORT}/${MetadataExportFormats[format]}`
-		);
-		return response.text();
 	}
 }

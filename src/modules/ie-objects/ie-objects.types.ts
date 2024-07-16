@@ -106,6 +106,8 @@ export enum IeObjectLicense {
 	INTRA_CP_METADATA_ALL = 'VIAA-INTRA_CP-METADATA-ALL',
 	INTRA_CP_METADATA_LTD = 'VIAA-INTRA_CP-METADATA-LTD',
 	INTRA_CP_CONTENT = 'VIAA-INTRA_CP-CONTENT',
+	PUBLIEK_CONTENT = 'VIAA-PUBLIEK-CONTENT', // 'Publiek-Domein', // TODO ARC-ARC-2211
+	COPYRIGHT_UNDETERMINED = 'COPYRIGHT-UNDETERMINED',
 }
 
 export enum IeObjectSector {
@@ -130,24 +132,24 @@ export interface IeObjectAddress {
 }
 
 export interface IeObjectFile {
+	id: string;
 	name: string;
-	alternateName: string;
-	description: string;
-	schemaIdentifier: string;
-	representationSchemaIdentifier: string;
-	ebucoreMediaType: string;
-	ebucoreIsMediaFragmentOf: string;
-	embedUrl: string;
+	mimeType: string;
+	storedAt: string;
+	thumbnailUrl: string;
+	duration: string;
+	edmIsNextInSequence: string;
 }
 
 export interface IeObjectRepresentation {
+	id: string;
 	name: string;
-	alternateName: string;
-	description: string;
-	schemaIdentifier: string;
-	dctermsFormat: string;
+	isMediaFragmentOf: string;
+	languages: string;
+	startTime: string;
 	transcript: string;
-	dateCreated: string;
+	edmIsNextInSequence: string;
+	updatedAt: IeObjectFile[];
 	files: IeObjectFile[];
 }
 
@@ -205,6 +207,8 @@ export enum MediaActions {
 // Metadata
 
 export enum MetadataExportFormats {
+	fullNewspaperZip = 'fullNewspaperZip',
+	onePageNewspaperZip = 'onePageNewspaperZip',
 	xml = 'xml',
 	csv = 'csv',
 }

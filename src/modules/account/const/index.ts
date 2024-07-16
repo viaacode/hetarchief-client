@@ -86,6 +86,7 @@ export enum Permission {
 	// Objects
 	SEARCH_OBJECTS = 'SEARCH_OBJECTS',
 	EXPORT_OBJECT = 'EXPORT_OBJECT',
+	DOWNLOAD_OBJECT = 'DOWNLOAD_OBJECT',
 	// Collections
 	MANAGE_FOLDERS = 'MANAGE_FOLDERS',
 	// Spaces
