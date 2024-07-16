@@ -108,7 +108,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						<span>{currentMaterialRequestDetail?.objectSchemaName}</span>
 					</p>
 					<p className={styles['p-account-my-material-requests__material-id']}>
-						{currentMaterialRequestDetail?.objectMeemooIdentifier}
+						{currentMaterialRequestDetail?.objectSchemaIdentifier}
 					</p>
 				</div>
 			</a>

@@ -149,7 +149,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 				key={getKey(item, i)}
 				id={getKey(item, i)}
 				buttons={renderButtons?.(item)}
-				meemooIdentifier={item.meemooIdentifier}
+				objectId={item.schemaIdentifier}
 				actions={renderActions?.(item)}
 				{...item}
 				keywords={keywords}

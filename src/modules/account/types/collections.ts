@@ -19,11 +19,10 @@ export interface Folder {
 
 export interface FolderIeObject {
 	schemaIdentifier: string; // Unique id per object
-	meemooIdentifier: string; // PID: not unique per object
 	meemooLocalId: string;
 	accessThrough: IeObjectAccessThrough[];
 	premisIsPartOf?: string;
-	collectionEntryCreatedAt?: string;
+	folderEntryCreatedAt?: string;
 	creator?: unknown;
 	description: string;
 	duration: string;

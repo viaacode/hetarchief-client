@@ -49,7 +49,13 @@ export const FLOWPLAYER_FORMATS: string[] = [
 	...FLOWPLAYER_VIDEO_FORMATS,
 	...FLOWPLAYER_AUDIO_FORMATS,
 ];
-export const IMAGE_FORMATS: string[] = ['png', 'jpg', 'jpeg', 'gif'];
+export const IMAGE_FORMATS: string[] = [
+	'image/png',
+	'image/jpeg',
+	'image/gif',
+	'image/tiff',
+	'image/bmp',
+];
 
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
 	{
@@ -372,10 +378,6 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 	{
 		title: tText('modules/ie-objects/const/index___oorsprong'),
 		data: mediaInfo.meemooOriginalCp,
-	},
-	{
-		title: tText('modules/ie-objects/const/index___meemoo-identifier'),
-		data: mediaInfo.meemooIdentifier,
 	},
 	{
 		title: tText('modules/ie-objects/const/index___pid'),

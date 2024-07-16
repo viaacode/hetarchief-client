@@ -26,7 +26,6 @@ export interface IeObject {
 	dctermsAvailable: string;
 	dctermsFormat: string;
 	dctermsMedium: string;
-	meemooIdentifier: string; // PID (not unique per object)
 	meemoofilmBase: string;
 	meemoofilmColor: boolean;
 	meemoofilmImageOrSound: string;
@@ -149,7 +148,7 @@ export interface IeObjectRepresentation {
 	startTime: string;
 	transcript: string;
 	edmIsNextInSequence: string;
-	updatedAt: IeObjectFile[];
+	updatedAt: string;
 	files: IeObjectFile[];
 }
 

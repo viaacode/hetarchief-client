@@ -126,15 +126,11 @@ export class IeObjectsService {
 			.json();
 	}
 
-	public static async getRelated(
-		id: string,
-		maintainerId: string,
-		meemooId: string
-	): Promise<IeObjectSimilar> {
+	public static async getRelated(id: string, maintainerId: string): Promise<IeObjectSimilar> {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IO_OBJECTS_SERVICE_RELATED}/${meemooId}`,
+					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IO_OBJECTS_SERVICE_RELATED}/${id}`, // TODO replace this endpoint with endpoint that only uses the schemaIdentifier and the maintainerId, and no meemooId is used anymore
 					query: maintainerId ? { maintainerId } : {},
 				})
 			)

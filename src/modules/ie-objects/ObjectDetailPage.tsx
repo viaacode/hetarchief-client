@@ -26,11 +26,23 @@ import {
 } from 'lodash-es';
 import getConfig from 'next/config';
 import Head from 'next/head';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
 import { stringifyUrl } from 'query-string';
+import React, {
+	type FC,
+	Fragment,
+	type MutableRefObject,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { StringParam, useQueryParams } from 'use-query-params';
+
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import {
@@ -38,6 +50,11 @@ import {
 	type RequestAccessFormState,
 } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
+import {
+	OPEN_SEA_DRAGON_POC,
+	OPEN_SEA_DRAGON_POC_IMAGE_INFOS,
+	OPEN_SEA_DRAGON_POC_OBJECT_ID,
+} from '@ie-objects/ObjectDetailPage.consts';
 import { CollapsableBlade } from '@ie-objects/components/CollapsableBlade';
 import {
 	type ActionItem,
@@ -76,28 +93,22 @@ import {
 	type AltoTextLine,
 	type IeObject,
 	IeObjectAccessThrough,
-	IeObjectFile,
+	type IeObjectFile,
 	IeObjectLicense,
-	type IeObjectRepresentation,
 	MediaActions,
 	MetadataExportFormats,
 	type MetadataSortMap,
 	ObjectDetailTabs,
 } from '@ie-objects/ie-objects.types';
 import {
-	OPEN_SEA_DRAGON_POC,
-	OPEN_SEA_DRAGON_POC_IMAGE_INFOS,
-	OPEN_SEA_DRAGON_POC_OBJECT_ID,
-} from '@ie-objects/ObjectDetailPage.consts';
-import {
 	IE_OBJECTS_SERVICE_BASE_URL,
 	IE_OBJECTS_SERVICE_EXPORT,
 	NEWSPAPERS_SERVICE_BASE_URL,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
-import altoTextLocations from '@iiif-viewer/alto2-simplified.json';
 import IiifViewer from '@iiif-viewer/IiifViewer';
 import { type IiifViewerFunctions } from '@iiif-viewer/IiifViewer.types';
+import altoTextLocations from '@iiif-viewer/alto2-simplified.json';
 import { MaterialRequestsService } from '@material-requests/services';
 import { type MaterialRequestObjectType } from '@material-requests/types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
@@ -153,20 +164,6 @@ import {
 	SearchFilterId,
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
-
-import React, {
-	type FC,
-	Fragment,
-	type MutableRefObject,
-	type ReactNode,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { StringParam, useQueryParams } from 'use-query-params';
 
 import styles from './ObjectDetailPage.module.scss';
 
@@ -257,30 +254,28 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
+	const files: IeObjectFile[] = mediaInfo?.representations?.flatMap((rep) => rep.files) || [];
+
 	// peak file
 	const peakFileSchemaIdentifier: string | null =
-		mediaInfo?.representations
-			?.flatMap((rep) => rep.files)
-			.find((file) => file.mimeType === 'application/json')?.id || null;
+		files.find((file) => file.mimeType === 'application/json')?.id || null;
 
 	// media info
 	const { data: peakJson } = useGetPeakFile(peakFileSchemaIdentifier, {
 		enabled: mediaInfo?.dctermsFormat === 'audio',
 	});
-	const representationsToDisplay: IeObjectFile[] = (mediaInfo?.representations || [])
-		.flatMap((rep) => rep.files)
-		?.filter((file) => {
-			if (file.mimeType === 'application/json') {
-				// Ignore peak file containing the audio wave form in json format
-				return false;
-			}
-			if (file?.name?.includes('/audio_mp4')) {
-				// Ignore video files containing the ugly speaker image and the audio encoded in mp4 format
-				return false;
-			}
-			// Actual video files and mp3 files and images
-			return true;
-		});
+	const filesToDisplay: IeObjectFile[] = files?.filter((file) => {
+		if (file.mimeType === 'application/json') {
+			// Ignore peak file containing the audio wave form in json format
+			return false;
+		}
+		if (file?.name?.includes('/audio_mp4')) {
+			// Ignore video files containing the ugly speaker image and the audio encoded in mp4 format
+			return false;
+		}
+		// Actual video files and mp3 files and images
+		return true;
+	});
 
 	const iiifViewerReference =
 		useRef<IiifViewerFunctions>() as MutableRefObject<IiifViewerFunctions>;
@@ -307,12 +302,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	);
 
 	// related
-	const { data: relatedData } = useGetIeObjectsRelated(
-		ieObjectId,
-		mediaInfo?.maintainerId,
-		mediaInfo?.meemooIdentifier,
-		{ enabled: !!mediaInfo }
-	);
+	const { data: relatedData } = useGetIeObjectsRelated(ieObjectId, mediaInfo?.maintainerId, {
+		enabled: !!mediaInfo,
+	});
 
 	// visit info
 	const {
@@ -346,7 +338,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
-	const showFragmentSlider = representationsToDisplay.length > 1;
+	const showFragmentSlider = filesToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const hasAccessToVisitorSpaceOfObject =
 		intersection(mediaInfo?.accessThrough, [
@@ -392,7 +384,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			const eventData = {
 				type: mediaInfo.dctermsFormat,
 				fragment_id: mediaInfo.schemaIdentifier,
-				pid: mediaInfo.meemooIdentifier,
+				pid: mediaInfo.schemaIdentifier,
 				user_group_name: user?.groupName ?? GroupName.ANONYMOUS,
 				or_id: mediaInfo.maintainerId,
 			};
@@ -419,7 +411,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			setMediaType(mediaInfo?.dctermsFormat as IeObjectTypes);
 		}
 
-		setCurrentFile(representationsToDisplay[0]);
+		setCurrentFile(filesToDisplay[0]);
 		// Set default view
 		if (isMobile) {
 			// Default to metadata tab on mobile
@@ -572,7 +564,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					'{local_cp_id}',
 					encodeOrNotUriComponent(mediaInfo?.meemooLocalId || '')
 				)
-				.replaceAll('{pid}', encodeOrNotUriComponent(mediaInfo?.meemooIdentifier || ''))
+				.replaceAll('{pid}', encodeOrNotUriComponent(mediaInfo?.schemaIdentifier || ''))
 				.replaceAll('{title}', encodeOrNotUriComponent(mediaInfo?.name || ''))
 				.replaceAll(
 					'{title_serie}',
@@ -608,7 +600,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		if (externalFormUrl) {
 			EventsService.triggerEvent(LogEventType.ITEM_REQUEST, window.location.href, {
 				fragment_id: mediaInfo?.schemaIdentifier,
-				pid: mediaInfo?.meemooIdentifier,
+				pid: mediaInfo?.schemaIdentifier,
 				user_group_name: user?.groupName,
 				or_id: mediaInfo?.maintainerId,
 			});
@@ -632,7 +624,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					const eventData = {
 						type: mediaInfo?.dctermsFormat,
 						fragment_id: mediaInfo?.schemaIdentifier,
-						pid: mediaInfo?.meemooIdentifier,
+						pid: mediaInfo?.schemaIdentifier,
 						user_group_name: user?.groupName,
 						or_id: mediaInfo?.maintainerId,
 					};
@@ -855,7 +847,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const mediaActions: DynamicActionMenuProps = useMemo(() => {
 		const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
-		console.log('media actions: ', { canDownloadMetadata });
 		const originalActions = MEDIA_ACTIONS({
 			isMobile,
 			canManageFolders: canManageFolders || isAnonymous,
@@ -928,7 +919,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const renderMedia = (
 		playableUrl: string | undefined,
-		representation: IeObjectRepresentation | undefined
+		file: IeObjectFile | undefined
 	): ReactNode => {
 		if (isLoadingPlayableUrl) {
 			return <Loading fullscreen owner="object detail page: render media" />;
@@ -936,7 +927,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 		// IIIF viewer
 		// TODO switch to mediaItem check
-		if (isOpenSeaDragonPoc) {
+		if (isOpenSeaDragonPoc || IMAGE_FORMATS.includes(file?.mimeType || '')) {
 			return (
 				<IiifViewer
 					imageInfos={OPEN_SEA_DRAGON_POC_IMAGE_INFOS}
@@ -968,7 +959,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			);
 		}
 
-		if (isErrorPlayableUrl || !representation) {
+		if (isErrorPlayableUrl || !file) {
 			return (
 				<ObjectPlaceholder
 					{...ticketErrorPlaceholder()}
@@ -977,13 +968,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			);
 		}
 
-		const representationTemp = representation as IeObjectRepresentation;
 		const shared: Partial<FlowPlayerProps> = {
 			className: clsx('p-object-detail__flowplayer', {
 				'p-object-detail__flowplayer--with-slider': showFragmentSlider,
 			}),
 			poster: mediaInfo?.thumbnailUrl || undefined,
-			title: representationTemp.name,
+			title: file.name,
 			logo: mediaInfo?.maintainerOverlay ? mediaInfo?.maintainerLogo || undefined : undefined,
 			pause: isMediaPaused,
 			onPlay: handleOnPlay,
@@ -994,13 +984,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		};
 
 		// Flowplayer
-		const playableVideoFile = representationTemp.files.find((file) =>
-			FLOWPLAYER_VIDEO_FORMATS.includes(file.mimeType)
-		);
-		const playableAudioFile = representationTemp.files.find((file) =>
-			FLOWPLAYER_AUDIO_FORMATS.includes(file.mimeType)
-		);
-		if (playableUrl && playableVideoFile) {
+		if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(file.mimeType)) {
 			return (
 				<FlowPlayer
 					key={flowPlayerKey}
@@ -1011,8 +995,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			);
 		}
 		// Audio player
-		if (playableUrl && playableAudioFile) {
-			if (!fileRepresentationSchemaIdentifier || !!peakJson) {
+		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(file.mimeType)) {
+			if (!file || !!peakJson) {
 				return (
 					<FlowPlayer
 						key={flowPlayerKey}
@@ -1030,20 +1014,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			} else {
 				return <Loading fullscreen owner="object detail page: waiting for peak json" />;
 			}
-		}
-
-		// Image
-		if (IMAGE_FORMATS.includes(representationTemp.dctermsFormat)) {
-			return (
-				<div className={styles['p-object-detail__image']}>
-					<Image
-						src={representationTemp.files[0]?.schemaIdentifier ?? null}
-						alt={representationTemp.name}
-						layout="fill"
-						objectFit="contain"
-					/>
-				</div>
-			);
 		}
 	};
 
@@ -1541,10 +1511,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						<FragmentSlider
 							thumbnail={mediaInfo?.thumbnailUrl}
 							className={styles['p-object-detail__slider']}
-							fragments={representationsToDisplay}
-							onChangeFragment={(index) =>
-								setCurrentFile(representationsToDisplay[index])
-							}
+							files={filesToDisplay}
+							onChangeFragment={(index) => setCurrentFile(filesToDisplay[index])}
 						/>
 					)}
 				</>
@@ -1682,7 +1650,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					maintainerName={mediaInfo?.maintainerName}
 					maintainerLogo={mediaInfo?.maintainerLogo}
 					maintainerSlug={mediaInfo?.maintainerSlug}
-					meemooId={mediaInfo?.meemooIdentifier}
 					layer={1}
 					currentLayer={1}
 				/>

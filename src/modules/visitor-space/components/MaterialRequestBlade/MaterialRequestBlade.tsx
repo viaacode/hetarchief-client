@@ -33,7 +33,6 @@ interface MaterialRequestBladeProps {
 	maintainerLogo: string | null;
 	maintainerSlug: string;
 	materialRequestId?: string;
-	meemooId?: string;
 	reason?: string;
 	refetchMaterialRequests?: () => void;
 	type?: MaterialRequestType;
@@ -52,7 +51,6 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	maintainerLogo,
 	maintainerSlug,
 	materialRequestId,
-	meemooId,
 	type,
 	reason,
 	refetchMaterialRequests,
@@ -306,7 +304,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						/>
 						<span>{objectName}</span>
 					</p>
-					<p className={styles['c-request-material__material-id']}>{meemooId}</p>
+					<p className={styles['c-request-material__material-id']}>{objectId}</p>
 				</div>
 			</a>
 			<div className={styles['c-request-material__content']}>

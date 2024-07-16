@@ -7,14 +7,14 @@ export const TYPE_TO_NO_ICON_MAP: Record<Exclude<IeObjectTypes, null>, IconName>
 	audio: IconNamesLight.NoAudio,
 	video: IconNamesLight.NoVideo,
 	film: IconNamesLight.NoVideo,
-	krant: IconNamesLight.NoNewspaper,
+	newspaper: IconNamesLight.NoNewspaper,
 };
 
 export const TYPE_TO_ICON_MAP: Record<Exclude<IeObjectTypes, null>, IconName> = {
 	audio: IconNamesLight.Audio,
 	video: IconNamesLight.Video,
 	film: IconNamesLight.Video,
-	krant: IconNamesLight.Newspaper,
+	newspaper: IconNamesLight.Newspaper,
 };
 
 export const TRUNCATED_TEXT_LENGTH = 50;
