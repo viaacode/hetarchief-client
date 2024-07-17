@@ -405,64 +405,68 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 	);
 
 	// We need to use Highlighter because we're passing a Link, MediaCard needs a string to auto-highlight
-	const renderTitle = (item: FolderIeObject): ReactNode => (
-		<b>
-			<Highlighter searchWords={keywords} autoEscape={true} textToHighlight={item.name} />
-		</b>
-	);
+	const renderTitle = (item: FolderIeObject): ReactNode => {
+		return (
+			<b>
+				<Highlighter searchWords={keywords} autoEscape={true} textToHighlight={item.name} />
+			</b>
+		);
+	};
 
-	const renderDescription = (item: FolderIeObject): ReactNode => {
+	const renderDescription = (folderIeObject: FolderIeObject): ReactNode => {
 		const showAccessLabel =
-			item?.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL) ||
-			item?.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS);
+			folderIeObject?.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL) ||
+			folderIeObject?.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS);
 
-		const items: { label: string | ReactNode; value: ReactNode }[] = [
+		const metadataEntries: { label: string | ReactNode; value: string }[] = [
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___aanbieder'),
-				value: item.maintainerName,
+				value: folderIeObject.maintainerName,
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___programma'),
-				value: item?.isPartOf?.programma?.join(', ') || '',
+				value: folderIeObject?.isPartOf?.programma?.join(', ') || '',
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___serie'),
-				value: item?.isPartOf?.serie?.join(', ') || '',
+				value: folderIeObject?.isPartOf?.serie?.join(', ') || '',
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___type'),
-				value: item.dctermsFormat,
+				value: folderIeObject.dctermsFormat || '',
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___creatiedatum'),
-				value: formatMediumDate(asDate(item.dateCreatedLowerBound)),
+				value: formatMediumDate(asDate(folderIeObject.dateCreatedLowerBound)),
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___uitzenddatum'),
-				value: formatMediumDate(asDate(item.datePublished)),
+				value: formatMediumDate(asDate(folderIeObject.datePublished)),
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___identifier-bij-meemoo'),
-				value: item.schemaIdentifier,
+				value: folderIeObject.schemaIdentifier || '',
 			},
 			{
 				label: tHtml(
 					'pages/account/mijn-mappen/folder-slug/index___identifier-bij-aanbieder'
 				),
-				value: item.meemooLocalId,
+				value: folderIeObject.meemooLocalId?.join(', ') || '',
 			},
 		];
 
+		console.log({ folderIeObject, metadataEntries });
+
 		return (
 			<div className="p-account-my-folders__card-description">
-				{items.map((item, i) => {
-					return item.value ? (
+				{metadataEntries.map((metadataEntry, i) => {
+					return metadataEntry.value ? (
 						<p key={i} className="u-pr-24 u-text-break">
-							<b>{item.label}: </b>
+							<b>{metadataEntry.label}: </b>
 							<Highlighter
 								searchWords={keywords}
 								autoEscape={true}
-								textToHighlight={item.value as string}
+								textToHighlight={metadataEntry.value || ''}
 							/>
 						</p>
 					) : null;

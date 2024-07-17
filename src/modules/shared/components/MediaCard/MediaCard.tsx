@@ -210,7 +210,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 		return (
 			<HighlightSearchTerms
-				toHighlight={subtitle}
+				toHighlight={subtitle ?? ''}
 				searchTerms={keywords}
 				enabled={!!keywords?.length}
 			/>
@@ -279,8 +279,14 @@ const MediaCard: FC<MediaCardProps> = ({
 		</div>
 	);
 
-	const renderImage = (imgPath: string | undefined) =>
-		imgPath ? (
+	const renderImage = (imgPath: string | undefined) => {
+		if (!imgPath) {
+			renderNoContent();
+			return;
+		}
+
+		console.log('rendering image for MediaCard: ', { imgPath });
+		return (
 			<div
 				className={clsx(
 					styles['c-media-card__header-wrapper'],
@@ -298,9 +304,8 @@ const MediaCard: FC<MediaCardProps> = ({
 				)}
 				{duration && renderDuration()}
 			</div>
-		) : (
-			renderNoContent()
 		);
+	};
 
 	const renderKeyUserPill = () => (
 		<div className="u-mt-8">
