@@ -107,7 +107,7 @@ pipeline {
 							IST=${APP_NAME}:${GIT_SHORT_COMMIT}
 							echo setting ImageStreamTag ${IST} git ref && \
 							oc -n $OC_PROJECT patch bc/${APP_NAME}-${ENVIRON} -p "{\"spec\":{\"output\":{\"to\":{\"name\":\"${IST}\"}}}}"
-                            oc start-build --follow=true --wait=true --from-dir=. $APP_NAME
+                            oc start-build --follow=true --wait=true --from-dir=. ${APP_NAME}-${ENVIRON}
                         '''
 					}
 				}
