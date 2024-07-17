@@ -104,8 +104,8 @@ pipeline {
                             oc annotate --overwrite "buildconfig/${APP_NAME}-${ENVIRON}"  ref=$BRANCH_NAME shortcommit=$GIT_SHORT_COMMIT
 							echo "enviroment: ${ENVIRON}"
 							export IST=${APP_NAME}:${GIT_SHORT_COMMIT}
-							echo setting ImageStreamTag ${IST} git ref && \
-							oc -n $OC_PROJECT patch "bc/${APP_NAME}-${ENVIRON}" -p "{\"spec\":{\"output\":{\"to\":{\"name\":\"${IST}\"}}}}"
+							echo setting ImageStreamTag ${IST} git ref
+							oc -n $OC_PROJECT patch "bc/${APP_NAME}-${ENVIRON}" -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"name\\":\\"${IST}\\"}}}}"
                             oc start-build --follow=true --wait=true --from-dir=. ${APP_NAME}-${ENVIRON}
                         '''
 					}
