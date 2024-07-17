@@ -386,7 +386,7 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 	},
 	{
 		title: tText('modules/ie-objects/const/index___pid'),
-		data: mediaInfo.premisIsPartOf,
+		data: mediaInfo.schemaIdentifier,
 	},
 	{
 		title: tText('modules/ie-objects/const/index___identifier-bij-aanbieder'),
