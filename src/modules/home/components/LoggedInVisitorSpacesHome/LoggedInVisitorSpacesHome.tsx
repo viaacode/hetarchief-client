@@ -27,7 +27,7 @@ import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { type Visit, VisitStatus } from '@shared/types';
+import { type Visit, VisitStatus } from '@shared/types/visit';
 import { asDate } from '@shared/utils/dates';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetVisits } from '@visit-requests/hooks/get-visits';

@@ -7,13 +7,16 @@ import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/Langu
 import { QUERY_KEYS, type RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
 import { type Locale } from '@shared/utils/i18n';
 
-export const changeLocalSlug = (
+export const changeApplicationLocale = (
 	oldLocale: Locale,
 	newLocale: Locale,
 	router: NextRouter,
 	queryClient: QueryClient,
 	contentPageInfo?: ContentPageInfo | undefined | null
 ): void => {
+	if (oldLocale === newLocale) {
+		return; // Already viewing the correct language
+	}
 	const oldFullPath = router.asPath;
 	const routeEntries = Object.entries(ROUTES_BY_LOCALE[oldLocale]);
 	// We'll go in reverse order, so we'll match on the longest paths first

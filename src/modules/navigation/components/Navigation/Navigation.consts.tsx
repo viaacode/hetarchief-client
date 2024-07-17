@@ -22,7 +22,8 @@ import {
 	ROUTES_BY_LOCALE,
 } from '@shared/const/routes';
 import { tText } from '@shared/helpers/translate';
-import { Breakpoints, type Visit } from '@shared/types';
+import { Breakpoints } from '@shared/types';
+import { type Visit } from '@shared/types/visit';
 import { type Locale } from '@shared/utils/i18n';
 import { SearchFilterId, type VisitorSpaceInfo } from '@visitor-space/types';
 

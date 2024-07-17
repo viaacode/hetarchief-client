@@ -7,7 +7,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { VisitSummary } from '@shared/components/VisitSummary';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { VisitStatus } from '@shared/types';
+import { VisitStatus } from '@shared/types/visit';
 
 import { CancelVisitBlade } from '../CancelVisitBlade';
 

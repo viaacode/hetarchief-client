@@ -1,7 +1,7 @@
 import { type ComponentMeta, type ComponentStory } from '@storybook/react';
 import { type CSSProperties } from 'react';
 
-import { IeObjectType } from '@shared/types';
+import { IeObjectType } from '@shared/types/ie-objects';
 
 import MediaCard from './MediaCard';
 import { soundwave, thumbnail } from './__mocks__/media-card';

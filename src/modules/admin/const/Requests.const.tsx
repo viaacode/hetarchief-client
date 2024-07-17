@@ -8,7 +8,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RequestStatusBadge } from '@shared/components/RequestStatusBadge';
 import { tText } from '@shared/helpers/translate';
-import { type Visit, type VisitRow } from '@shared/types';
+import { type Visit, type VisitRow } from '@shared/types/visit';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils/dates';
 
 export const RequestTableColumns = (): Column<Visit>[] => [

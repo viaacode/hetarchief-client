@@ -2,7 +2,7 @@ import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react
 
 import { type User } from '@auth/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { type Visit } from '@shared/types';
+import { type Visit } from '@shared/types/visit';
 import { VisitsService } from '@visit-requests/services';
 
 export async function getActiveVisitForUserAndSpace(

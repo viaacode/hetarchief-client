@@ -208,7 +208,7 @@ export enum RouteKey {
 
 const ROUTES_NL: Record<RouteKey, string> = {
 	account: `/${ROUTE_PARTS_NL.account}`,
-	accountMyFolders: `/${ROUTE_PARTS_NL.account}/${ROUTE_PARTS_NL.myFolders}/:slug`,
+	accountMyFolders: `/${ROUTE_PARTS_NL.account}/${ROUTE_PARTS_NL.myFolders}`,
 	accountMyMaterialRequests: `/${ROUTE_PARTS_NL.account}/${ROUTE_PARTS_NL.myMaterialRequests}`,
 	accountMyProfile: `/${ROUTE_PARTS_NL.account}/${ROUTE_PARTS_NL.myProfile}`,
 	accountMyVisitHistory: `/${ROUTE_PARTS_NL.account}/${ROUTE_PARTS_NL.myHistory}`,
@@ -253,7 +253,7 @@ const ROUTES_NL: Record<RouteKey, string> = {
 
 const ROUTES_EN: Record<RouteKey, string> = {
 	account: `/${ROUTE_PARTS_EN.account}`,
-	accountMyFolders: `/${ROUTE_PARTS_EN.account}/${ROUTE_PARTS_EN.myFolders}/:slug`,
+	accountMyFolders: `/${ROUTE_PARTS_EN.account}/${ROUTE_PARTS_EN.myFolders}`,
 	accountMyMaterialRequests: `/${ROUTE_PARTS_EN.account}/${ROUTE_PARTS_EN.myMaterialRequests}`,
 	accountMyProfile: `/${ROUTE_PARTS_EN.account}/${ROUTE_PARTS_EN.myProfile}`,
 	accountMyVisitHistory: `/${ROUTE_PARTS_EN.account}/${ROUTE_PARTS_EN.myHistory}`,

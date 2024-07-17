@@ -28,7 +28,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { setLastScrollPosition } from '@shared/store/ui';
-import { type IeObjectType } from '@shared/types';
+import { type IeObjectType } from '@shared/types/ie-objects';
 import { formatMediumDate } from '@shared/utils/dates';
 
 import Icon from '../Icon/Icon';

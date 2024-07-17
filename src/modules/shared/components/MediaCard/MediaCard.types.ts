@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react';
 
 import { type IeObjectLicense } from '@ie-objects/ie-objects.types';
-import { type IeObjectType } from '@shared/types';
+import { type IeObjectType } from '@shared/types/ie-objects';
 
 import { type IconName } from '../Icon';
 

@@ -1,4 +1,4 @@
-import { IeObjectType } from '@shared/types';
+import { IeObjectType } from '@shared/types/ie-objects';
 
 import { type RelatedObjectProps } from '../RelatedObject.types';
 

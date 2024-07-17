@@ -1,5 +1,5 @@
 import { type User } from '@auth/types';
-import { type FormBladeProps } from '@shared/types';
+import { type FormBladeProps } from '@shared/types/blade';
 
 export type ReportBladeProps = FormBladeProps<ReportFormState> & {
 	selected?: ReportSelected;

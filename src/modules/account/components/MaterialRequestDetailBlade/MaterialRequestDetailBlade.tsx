@@ -12,7 +12,7 @@ import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
 import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { IeObjectType } from '@shared/types';
+import { IeObjectType } from '@shared/types/ie-objects';
 import { formatMediumDate } from '@shared/utils/dates';
 
 import styles from './MaterialRequestDetailBlade.module.scss';

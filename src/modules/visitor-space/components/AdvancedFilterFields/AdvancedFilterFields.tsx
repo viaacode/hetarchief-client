@@ -43,7 +43,7 @@ const labelKeys = {
 	value: 'AdvancedFilterFields__value',
 };
 
-const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
+export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	index,
 	value: state,
 	onChange,
@@ -272,5 +272,3 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 		</div>
 	);
 };
-
-export default AdvancedFilterFields;

@@ -3,7 +3,7 @@ import { array, date, mixed, object, ref, type SchemaOf, string } from 'yup';
 
 import { type ApproveRequestFormState } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.types';
 import { tText } from '@shared/helpers/translate';
-import { AccessType } from '@shared/types';
+import { AccessType } from '@shared/types/visit';
 
 export const APPROVE_REQUEST_FORM_SCHEMA = (): SchemaOf<ApproveRequestFormState> => {
 	return object({

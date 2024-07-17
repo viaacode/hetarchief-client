@@ -1,4 +1,4 @@
-import { type IeObjectsSearchFilterField } from '@shared/types';
+import { type IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 
 import { type InlineFilterFormProps } from '../../types';
 

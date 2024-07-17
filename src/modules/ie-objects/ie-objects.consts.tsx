@@ -20,12 +20,12 @@ import {
 	mapArrayToMetadataData,
 	mapBooleanToMetadataData,
 	mapObjectToMetadata,
-} from '@ie-objects/utils';
+} from '@ie-objects/utils/map-metadata';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { type IeObjectType } from '@shared/types';
+import { type IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate } from '@shared/utils/dates';
 
 /**

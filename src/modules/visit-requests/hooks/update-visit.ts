@@ -1,7 +1,7 @@
 import { QueryClient, useMutation, type UseMutationResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const';
-import { type Visit } from '@shared/types';
+import { type Visit } from '@shared/types/visit';
 import { VisitsService } from '@visit-requests/services';
 import { type UpdateVisit } from '@visit-requests/types';
 

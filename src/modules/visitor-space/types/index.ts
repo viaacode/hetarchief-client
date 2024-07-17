@@ -1,9 +1,11 @@
+import { type DefaultComponentProps } from '@meemoo/admin-core-ui';
 import { type SelectOption, type TagInfo } from '@meemoo/react-components';
 import { type ReactNode } from 'react';
 import { type UseFormHandleSubmit } from 'react-hook-form';
 import { type FieldValues } from 'react-hook-form/dist/types/fields';
 
-import { type DefaultComponentProps, type IeObjectType, type Operator } from '@shared/types';
+import { type Operator } from '@shared/types';
+import { type IeObjectType } from '@shared/types/ie-objects';
 import { type OnFilterMenuFormSubmit } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 
 import { type MetadataProp } from './metadata';

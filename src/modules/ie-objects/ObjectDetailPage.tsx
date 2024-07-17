@@ -104,7 +104,8 @@ import {
 	IE_OBJECTS_SERVICE_EXPORT,
 	NEWSPAPERS_SERVICE_BASE_URL,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
-import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
+import { isInAFolder } from '@ie-objects/utils/folders';
+import { mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils/map-metadata';
 import IiifViewer from '@iiif-viewer/IiifViewer';
 import { type IiifViewerFunctions, type ImageInfo } from '@iiif-viewer/IiifViewer.types';
 import altoTextLocations from '@iiif-viewer/alto2-simplified.json';
@@ -141,7 +142,8 @@ import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
 import { selectBreadcrumbs, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
-import { Breakpoints, IeObjectType } from '@shared/types';
+import { Breakpoints } from '@shared/types';
+import { IeObjectType } from '@shared/types/ie-objects';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 import {
 	asDate,
@@ -218,7 +220,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	// Sizes
 	const windowSize = useWindowSizeContext();
-	const collections = useSelector(selectFolders);
+	const folders = useSelector(selectFolders);
 
 	// Query params
 	const [query, setQuery] = useQueryParams({
@@ -841,7 +843,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		const originalActions = MEDIA_ACTIONS({
 			isMobile,
 			canManageFolders: canManageFolders || isAnonymous,
-			isInAFolder: isInAFolder(collections, mediaInfo?.schemaIdentifier),
+			isInAFolder: isInAFolder(folders, mediaInfo?.schemaIdentifier),
 			isHighlightSearchTermActive: isHighlightSearchTermsActive,
 			canToggleSearchTerms: !!searchTerms,
 			canReport: !isKiosk,
@@ -884,7 +886,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		windowSize.width,
 		canManageFolders,
 		isAnonymous,
-		collections,
+		folders,
 		mediaInfo?.schemaIdentifier,
 		isHighlightSearchTermsActive,
 		searchTerms,

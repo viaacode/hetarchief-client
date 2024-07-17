@@ -24,7 +24,7 @@ import { selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
 import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/get-ie-object-format-counts';
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
 import { IeObjectAccessThrough } from '@ie-objects/ie-objects.types';
-import { isInAFolder } from '@ie-objects/utils';
+import { isInAFolder } from '@ie-objects/utils/folders';
 import { Callout } from '@shared/components/Callout';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { Icon } from '@shared/components/Icon';
@@ -74,26 +74,22 @@ import {
 	setLastScrollPosition,
 	setShowZendesk,
 } from '@shared/store/ui';
+import { Breakpoints, type SortObject } from '@shared/types';
 import {
-	Breakpoints,
 	IeObjectsSearchFilterField,
 	type IeObjectType,
 	SearchPageMediaType,
-	type SortObject,
-	type Visit,
-	VisitStatus,
-} from '@shared/types';
+} from '@shared/types/ie-objects';
 import { type DefaultSeoInfo } from '@shared/types/seo';
+import { type Visit, VisitStatus } from '@shared/types/visit';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetActiveVisitForUserAndSpace } from '@visit-requests/hooks/get-active-visit-for-user-and-space';
 import { VisitsService } from '@visit-requests/services';
 import { VisitTimeframe } from '@visit-requests/types';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
-import {
-	type AdvancedFilterFormState,
-	initialFields,
-} from '@visitor-space/components/AdvancedFilterForm';
+import { initialFields } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import { type AdvancedFilterFormState } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.types';
 import { type ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm';
 import { type ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm';
 import { type CreatedFilterFormState } from '@visitor-space/components/CreatedFilterForm';
@@ -111,12 +107,12 @@ import {
 	PUBLIC_COLLECTION,
 	SEARCH_PAGE_QUERY_PARAM_CONFIG,
 	SEARCH_RESULTS_PAGE_SIZE,
-	VISITOR_SPACE_FILTERS,
 	VISITOR_SPACE_QUERY_PARAM_INIT,
 	VISITOR_SPACE_SORT_OPTIONS,
-	VISITOR_SPACE_TABS,
 	VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
 } from '@visitor-space/const';
+import { VISITOR_SPACE_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
+import { VISITOR_SPACE_TABS } from '@visitor-space/const/visitor-space-tabs.const';
 import { MetadataProp, SearchFilterId, type TagIdentity } from '@visitor-space/types';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
@@ -154,7 +150,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	 */
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const user = useSelector(selectUser);
-	const collections = useSelector(selectFolders);
+	const folders = useSelector(selectFolders);
 	const isKeyUser = useIsKeyUser();
 	const lastScrollPosition = useSelector(selectLastScrollPosition);
 
@@ -844,7 +840,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		}
 
 		const itemIsInAFolder = isInAFolder(
-			collections,
+			folders,
 			(item as IdentifiableMediaCard).schemaIdentifier
 		);
 

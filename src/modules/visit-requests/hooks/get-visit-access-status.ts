@@ -6,7 +6,7 @@ import {
 } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const';
-import { type VisitAccessStatus } from '@shared/types';
+import { type VisitAccessStatus } from '@shared/types/visit';
 import { VisitsService } from '@visit-requests/services';
 
 // Query

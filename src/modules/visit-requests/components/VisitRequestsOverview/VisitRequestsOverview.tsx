@@ -22,7 +22,7 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { type Visit, VisitStatus } from '@shared/types';
+import { type Visit, VisitStatus } from '@shared/types/visit';
 import { useGetVisit } from '@visit-requests/hooks/get-visit';
 import { useGetVisits } from '@visit-requests/hooks/get-visits';
 import { RequestStatusAll } from '@visit-requests/types';

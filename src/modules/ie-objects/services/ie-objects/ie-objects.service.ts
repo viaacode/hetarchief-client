@@ -4,14 +4,14 @@ import { parseUrl, stringifyUrl } from 'query-string';
 import { type IeObject, type IeObjectSimilar } from '@ie-objects/ie-objects.types';
 import { type SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import { ApiService } from '@shared/services/api-service';
+import { type SortObject } from '@shared/types';
+import { type GetIeObjectsResponse } from '@shared/types/api';
 import {
 	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
 	SearchPageMediaType,
-	type SortObject,
-} from '@shared/types';
-import { type GetIeObjectsResponse } from '@shared/types/api';
+} from '@shared/types/ie-objects';
 import { SearchSortProp } from '@visitor-space/types';
 
 import {

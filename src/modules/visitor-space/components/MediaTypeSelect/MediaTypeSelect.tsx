@@ -2,7 +2,7 @@ import { ReactSelect, type ReactSelectProps } from '@meemoo/react-components';
 import { type FC } from 'react';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { IeObjectType } from '@shared/types';
+import { IeObjectType } from '@shared/types/ie-objects';
 
 import { type MediaTypeOptions } from '../../types';
 

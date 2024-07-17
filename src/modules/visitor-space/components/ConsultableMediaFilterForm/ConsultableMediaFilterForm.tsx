@@ -7,7 +7,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { IeObjectsSearchFilterField } from '@shared/types';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import { SearchFilterId } from '@visitor-space/types';
 
 import {

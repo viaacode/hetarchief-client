@@ -1,6 +1,6 @@
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { type Visit } from '@shared/types';
+import { type Visit } from '@shared/types/visit';
 import { type Locale } from '@shared/utils/i18n';
 
 export function createVisitorSpacesWithFilterUrl(visit: Visit, locale: Locale): string {

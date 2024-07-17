@@ -8,7 +8,7 @@ import { VisitSummary } from '@shared/components/VisitSummary';
 import { OPTIONAL_LABEL } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { VisitStatus } from '@shared/types';
+import { VisitStatus } from '@shared/types/visit';
 import { VisitsService } from '@visit-requests/services/visits/visits.service';
 
 import { DECLINE_REQUEST_FORM_SCHEMA } from './DeclineRequestBlade.const';

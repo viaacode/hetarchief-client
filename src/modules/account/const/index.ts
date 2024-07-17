@@ -1,4 +1,3 @@
-import { replace } from 'lodash';
 import { type ReactNode } from 'react';
 import { boolean, object, type SchemaOf } from 'yup';
 
@@ -8,7 +7,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { type Locale } from '@shared/utils/i18n';
 
-export * from './my-collections.const';
+export * from './my-folders.const';
 export * from './my-history.const';
 export * from './my-material-requests.const';
 
@@ -39,9 +38,9 @@ export const GET_ACCOUNT_NAVIGATION_LINKS = (locale: Locale): NavigationLinkInfo
 			href: ROUTES_BY_LOCALE[locale].accountMyProfile,
 		},
 		{
-			id: 'account-collections',
+			id: 'account-folders',
 			label: tText('modules/account/const/index___mijn-mappen'),
-			href: replace(ROUTES_BY_LOCALE[locale].accountMyFolders, ':slug', ''),
+			href: ROUTES_BY_LOCALE[locale].accountMyFolders,
 		},
 	];
 

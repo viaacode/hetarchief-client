@@ -1,7 +1,7 @@
 import { shuffle } from 'lodash-es';
 
 import { type IdentifiableMediaCard, type MediaCardProps } from '@shared/components/MediaCard';
-import { IeObjectType } from '@shared/types';
+import { IeObjectType } from '@shared/types/ie-objects';
 
 import { type MediaCardListProps } from '../MediaCardList.types';
 

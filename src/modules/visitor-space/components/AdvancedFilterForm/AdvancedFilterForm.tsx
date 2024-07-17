@@ -9,7 +9,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { SearchFilterId } from '../../types';
-import { AdvancedFilterFields } from '../AdvancedFilterFields';
+import { AdvancedFilterFields } from '../AdvancedFilterFields/AdvancedFilterFields';
 
 import { ADVANCED_FILTER_FORM_SCHEMA, initialFields } from './AdvancedFilterForm.const';
 import styles from './AdvancedFilterForm.module.scss';
@@ -18,7 +18,7 @@ import {
 	type AdvancedFilterFormState,
 } from './AdvancedFilterForm.types';
 
-const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
+export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 	children,
 	className,
 	disabled,
@@ -88,5 +88,3 @@ const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 		</>
 	);
 };
-
-export default AdvancedFilterForm;

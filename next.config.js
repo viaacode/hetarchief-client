@@ -180,16 +180,16 @@ module.exports = withBundleAnalyzer(
 					destination: '/account/mijn-mappen/favorieten',
 					permanent: true,
 				},
-				{
-					source: '/account/mijn-mappen',
-					destination: '/account/mijn-mappen/favorieten',
-					permanent: true,
-				},
-				{
-					source: '/account/my-folders',
-					destination: '/account/my-folders/favorites',
-					permanent: true,
-				},
+				// {
+				// 	source: '/account/mijn-mappen',
+				// 	destination: '/account/mijn-mappen/favorieten',
+				// 	permanent: true,
+				// },
+				// {
+				// 	source: '/account/my-folders',
+				// 	destination: '/account/my-folders/favorites',
+				// 	permanent: true,
+				// },
 				{
 					// Only the dutch redirect, since that was the only language that existed at the time
 					source: '/gebruiker/profiel',

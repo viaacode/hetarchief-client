@@ -1,2 +1,2 @@
-export * from './collections';
+export * from './folders';
 export * from './account';

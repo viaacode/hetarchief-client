@@ -28,7 +28,7 @@ import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { AccessType, type Visit, VisitStatus } from '@shared/types';
+import { AccessType, type Visit, VisitStatus } from '@shared/types/visit';
 import { asDate, formatMediumDateWithTime, formatTime } from '@shared/utils/dates';
 import { VisitsService } from '@visit-requests/services/visits/visits.service';
 import { VisitTimeframe } from '@visit-requests/types';

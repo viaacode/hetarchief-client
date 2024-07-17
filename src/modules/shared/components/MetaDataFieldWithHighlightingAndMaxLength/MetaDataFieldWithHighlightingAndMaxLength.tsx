@@ -1,10 +1,10 @@
+import { type DefaultComponentProps } from '@meemoo/admin-core-ui';
 import { isString } from 'lodash-es';
 import { type FC, type ReactNode } from 'react';
 
 import { type MetadataItem } from '@ie-objects/components/Metadata';
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { type DefaultComponentProps } from '@shared/types';
 
 import { METADATA_FIELD_MAX_LENGTH } from './MetaDataFieldWithHighlightingAndMaxLength.const';
 import styles from './MetaDataFieldWithHighlightingAndMaxLength.module.scss';

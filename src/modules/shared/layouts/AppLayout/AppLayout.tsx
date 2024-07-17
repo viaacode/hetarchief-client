@@ -44,7 +44,7 @@ import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCe
 import { ZendeskWrapper } from '@shared/components/ZendeskWrapper';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
-import { changeLocalSlug } from '@shared/helpers/change-local-slug';
+import { changeApplicationLocale } from '@shared/helpers/change-application-locale';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
@@ -67,7 +67,8 @@ import {
 	setShowMaterialRequestCenter,
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
-import { Breakpoints, type Visit } from '@shared/types';
+import { Breakpoints } from '@shared/types';
+import { type Visit } from '@shared/types/visit';
 import { type Locale } from '@shared/utils/i18n';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visits';
@@ -178,7 +179,13 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	useEffect(() => {
 		if (user?.language) {
-			changeLocalSlug(locale, user?.language as Locale, router, queryClient, contentPageInfo);
+			changeApplicationLocale(
+				locale,
+				user?.language as Locale,
+				router,
+				queryClient,
+				contentPageInfo
+			);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user]);

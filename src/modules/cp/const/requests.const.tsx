@@ -11,7 +11,7 @@ import { RequestStatusBadge } from '@shared/components/RequestStatusBadge';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { AccessType, type Visit, type VisitRow, VisitStatus } from '@shared/types';
+import { AccessType, type Visit, type VisitRow, VisitStatus } from '@shared/types/visit';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils/dates';
 import { RequestStatusAll } from '@visit-requests/types';
 

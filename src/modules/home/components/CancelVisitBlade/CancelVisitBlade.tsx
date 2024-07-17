@@ -4,7 +4,7 @@ import { type FC, useState } from 'react';
 import { Blade } from '@shared/components/Blade/Blade';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { VisitStatus } from '@shared/types';
+import { VisitStatus } from '@shared/types/visit';
 import { VisitsService } from '@visit-requests/services';
 
 import { type CancelVisitBladeProps } from './CancelVisitBlade.types';

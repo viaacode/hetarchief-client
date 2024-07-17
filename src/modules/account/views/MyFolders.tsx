@@ -102,7 +102,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 		() =>
 			(folders || []).map((folder) => {
 				const slug = createFolderSlug(folder);
-				const href = myFoldersPath.replace(':slug', slug);
+				const href = myFoldersPath + '/' + slug;
 				const active = isActive(folder);
 
 				return {

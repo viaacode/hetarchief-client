@@ -5,7 +5,7 @@ import React, { type FC } from 'react';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { VisitStatus } from '@shared/types';
+import { VisitStatus } from '@shared/types/visit';
 
 import styles from './RequestStatusBadge.module.scss';
 import { type RequestStatusBadgeProps } from './RequestStatusBadge.types';
