@@ -76,16 +76,24 @@ pipeline {
 		}
 		stage('Build code') {
 			when {
-				not {
-					buildingTag()
+				buildingTag()
+				anyOf {
+					changeRequest target: 'main'
+					changeRequest target: 'master'
+					changeRequest target: 'develop'
+					changeRequest target: 'development'
 				}
-				not {
-					anyOf { branch 'master'; branch 'develop' }
-				}
-
 			}
 			steps {
 				container('oc') {
+					script {
+						if(anyOf {changeRequest target: 'main' changeRequest target: 'master' changeRequest target: 'develop' changeRequest target: 'development'}){
+								def client_url = "https://hetarchief-int.private.cloud.meemoo.be"
+							}
+						else if(buildingTag()){
+							def client_url = "https://hetarchief-prd.private.cloud.meemoo.be"
+						}
+					}
 					script {
 						sh '''#!/bin/bash
                             oc project $OC_PROJECT
@@ -95,7 +103,7 @@ pipeline {
                             sleep 3
                             oc annotate --overwrite buildconfig/$APP_NAME ref=$BRANCH_NAME shortcommit=$GIT_SHORT_COMMIT
                             patch-bc-current-ref.sh
-                            oc start-build --follow=true --wait=true --env CLIENT_URL=https://hetarchief.be --from-dir=. $APP_NAME
+                            oc start-build --follow=true --wait=true --env CLIENT_URL=${client_url} --from-dir=. $APP_NAME
                         '''
 					}
 				}
