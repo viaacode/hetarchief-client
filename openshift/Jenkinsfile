@@ -76,8 +76,8 @@ pipeline {
 		}
 		stage('Build code') {
 			when {
-				buildingTag()
 				anyOf {
+					buildingTag()
 					changeRequest target: 'main'
 					changeRequest target: 'master'
 					changeRequest target: 'develop'
