@@ -88,10 +88,10 @@ pipeline {
 				container('oc') {
 					script {
 						if(anyOf {changeRequest target: 'main' changeRequest target: 'master' changeRequest target: 'develop' changeRequest target: 'development'}){
-								def environ = "int"
+								env.ENVIRON = "int"
 							}
 						else if(buildingTag()){
-							def environ = "qas"
+							env.ENVIRON = "qas"
 						}
 					}
 					script {
@@ -103,10 +103,10 @@ pipeline {
                             sleep 3
                             oc annotate --overwrite buildconfig/$APP_NAME ref=$BRANCH_NAME shortcommit=$GIT_SHORT_COMMIT
                             patch-bc-current-ref.sh
-							echo "enviroment: ${environ}"
+							echo "enviroment: ${ENVIRON}"
 							IST=${APP_NAME}:${GIT_SHORT_COMMIT}
 							echo setting ImageStreamTag ${IST} git ref && \
-							oc -n $OC_PROJECT patch bc/${APP_NAME}-${environ} -p "{\"spec\":{\"output\":{\"to\":{\"name\":\"${IST}\"}}}}"
+							oc -n $OC_PROJECT patch bc/${APP_NAME}-${ENVIRON} -p "{\"spec\":{\"output\":{\"to\":{\"name\":\"${IST}\"}}}}"
                             oc start-build --follow=true --wait=true --from-dir=. $APP_NAME
                         '''
 					}
