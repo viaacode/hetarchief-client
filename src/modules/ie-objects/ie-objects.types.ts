@@ -1,5 +1,6 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
 
+import { type IeObjectType } from '@shared/types';
 import { type ElasticsearchFieldNames } from '@visitor-space/types';
 
 // Mapped intellectual entity object
@@ -24,7 +25,7 @@ export enum IsPartOfKey {
 
 export interface IeObject {
 	dctermsAvailable: string;
-	dctermsFormat: string;
+	dctermsFormat: IeObjectType;
 	dctermsMedium: string;
 	meemoofilmBase: string;
 	meemoofilmColor: boolean;
@@ -50,7 +51,7 @@ export interface IeObject {
 	publisher: any;
 	spatial: string;
 	temporal: string;
-	thumbnailUrl: string;
+	thumbnailUrl: string[];
 	// EXTRA
 	sector?: IeObjectSector;
 	accessThrough?: IeObjectAccessThrough[];
@@ -63,7 +64,7 @@ export interface IeObject {
 	isPartOf?: Partial<Record<IsPartOfKey, string[]>>;
 	numberOfPages?: number;
 	meemooDescriptionCast?: string;
-	representations?: IeObjectRepresentation[];
+	pageRepresentations?: IeObjectRepresentation[][];
 	maintainerFormUrl?: string | null;
 	maintainerDescription?: string;
 	maintainerSiteUrl?: string;
@@ -105,6 +106,8 @@ export enum IeObjectLicense {
 	INTRA_CP_METADATA_ALL = 'VIAA-INTRA_CP-METADATA-ALL',
 	INTRA_CP_METADATA_LTD = 'VIAA-INTRA_CP-METADATA-LTD',
 	INTRA_CP_CONTENT = 'VIAA-INTRA_CP-CONTENT',
+	PUBLIEK_CONTENT = 'VIAA-PUBLIEK-CONTENT', // 'Publiek-Domein', // TODO ARC-ARC-2211
+	COPYRIGHT_UNDETERMINED = 'COPYRIGHT-UNDETERMINED',
 }
 
 export enum IeObjectSector {
@@ -129,24 +132,24 @@ export interface IeObjectAddress {
 }
 
 export interface IeObjectFile {
+	id: string;
 	name: string;
-	alternateName: string;
-	description: string;
-	schemaIdentifier: string;
-	representationSchemaIdentifier: string;
-	ebucoreMediaType: string;
-	ebucoreIsMediaFragmentOf: string;
-	embedUrl: string;
+	mimeType: string;
+	storedAt: string;
+	thumbnailUrl: string;
+	duration: string;
+	edmIsNextInSequence: string;
 }
 
 export interface IeObjectRepresentation {
+	id: string;
 	name: string;
-	alternateName: string;
-	description: string;
-	schemaIdentifier: string;
-	dctermsFormat: string;
+	isMediaFragmentOf: string;
+	languages: string;
+	startTime: string;
 	transcript: string;
-	dateCreated: string;
+	edmIsNextInSequence: string;
+	updatedAt: string;
 	files: IeObjectFile[];
 }
 
@@ -204,6 +207,8 @@ export enum MediaActions {
 // Metadata
 
 export enum MetadataExportFormats {
+	fullNewspaperZip = 'fullNewspaperZip',
+	onePageNewspaperZip = 'onePageNewspaperZip',
 	xml = 'xml',
 	csv = 'csv',
 }

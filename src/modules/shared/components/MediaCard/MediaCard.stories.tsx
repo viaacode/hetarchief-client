@@ -1,6 +1,8 @@
 import { type ComponentMeta, type ComponentStory } from '@storybook/react';
 import { type CSSProperties } from 'react';
 
+import { IeObjectType } from '@shared/types';
+
 import MediaCard from './MediaCard';
 import { soundwave, thumbnail } from './__mocks__/media-card';
 
@@ -27,7 +29,7 @@ const Template: ComponentStory<typeof MediaCard> = (args) => {
 				<MediaCard
 					{...args}
 					title="Something you can hear"
-					type="audio"
+					type={IeObjectType.Audio}
 					preview={soundwave}
 				/>
 			</div>
@@ -35,7 +37,7 @@ const Template: ComponentStory<typeof MediaCard> = (args) => {
 				<MediaCard
 					{...args}
 					title="Something you can watch"
-					type="video"
+					type={IeObjectType.Video}
 					preview={thumbnail}
 				/>
 			</div>
@@ -43,11 +45,22 @@ const Template: ComponentStory<typeof MediaCard> = (args) => {
 				<MediaCard
 					{...args}
 					title="Something you can hear very little about"
-					type="audio"
+					type={IeObjectType.Audio}
 				/>
 			</div>
 			<div style={column}>
-				<MediaCard {...args} title="Something you can see nothing of" type="video" />
+				<MediaCard
+					{...args}
+					title="Something you can read about"
+					type={IeObjectType.Newspaper}
+				/>
+			</div>
+			<div style={column}>
+				<MediaCard
+					{...args}
+					title="Something you can see nothing of"
+					type={IeObjectType.Video}
+				/>
 			</div>
 		</section>
 	);

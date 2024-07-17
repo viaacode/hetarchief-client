@@ -2,6 +2,7 @@ import { ReactSelect, type ReactSelectProps } from '@meemoo/react-components';
 import { type FC } from 'react';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { IeObjectType } from '@shared/types';
 
 import { type MediaTypeOptions } from '../../types';
 
@@ -13,13 +14,17 @@ const MediaTypeSelect: FC<ReactSelectProps> = (props) => {
 			label: tText(
 				'modules/visitor-space/components/media-type-select/media-type-select___audio'
 			),
-			value: 'audio',
+			value: IeObjectType.Audio,
 		},
 		{
 			label: tText(
 				'modules/visitor-space/components/media-type-select/media-type-select___video'
 			),
-			value: 'video',
+			value: IeObjectType.Video,
+		},
+		{
+			label: tText('Krant'),
+			value: IeObjectType.Newspaper,
 		},
 	];
 

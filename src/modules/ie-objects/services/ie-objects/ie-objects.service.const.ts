@@ -1,4 +1,5 @@
 export const IE_OBJECTS_SERVICE_BASE_URL = 'ie-objects';
+export const NEWSPAPERS_SERVICE_BASE_URL = 'newspapers';
 export const IE_OBJECT_SERVICE_TICKET_URL = 'player-ticket';
 export const IE_OBJECT_SERVICE_SEO_URL = 'seo';
 export const IE_OBJECTS_SERVICE_EXPORT = 'export';

@@ -1,9 +1,11 @@
+import { IeObjectType } from '@shared/types';
+
 import { type RelatedObjectProps } from '../RelatedObject.types';
 
 export const relatedObjectVideoMock: RelatedObjectProps = {
 	object: {
 		id: 'relatedObjectVideoMock',
-		type: 'video',
+		type: IeObjectType.Video,
 		title: 'GIVE: Gecoördineerd Initiatief voor Vlaamse Erfgoeddigitalisering',
 		subtitle: 'Digitaliseren | Toegang & hergebruik',
 		thumbnail: '/images/bg-newsletter.png',

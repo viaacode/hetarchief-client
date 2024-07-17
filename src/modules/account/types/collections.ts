@@ -3,7 +3,7 @@ import {
 	type IeObjectLicense,
 	type IsPartOfKey,
 } from '@ie-objects/ie-objects.types';
-import { type IeObjectTypes } from '@shared/types';
+import { type IeObjectType } from '@shared/types';
 
 export interface Folder {
 	createdAt: string;
@@ -26,7 +26,7 @@ export interface FolderIeObject {
 	creator?: unknown;
 	description: string;
 	duration: string;
-	dctermsFormat: IeObjectTypes;
+	dctermsFormat: IeObjectType | null;
 	name: string;
 	numberOfPages?: unknown;
 	termsAvailable: string;

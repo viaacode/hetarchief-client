@@ -25,22 +25,49 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { type IeObjectTypes } from '@shared/types';
+import { type IeObjectType } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils/dates';
 
 /**
  * Render media
  */
 
-export const FLOWPLAYER_VIDEO_FORMATS: string[] = ['mp4', 'ogv', 'webm', 'm3u8'];
-export const FLOWPLAYER_AUDIO_FORMATS: string[] = ['mp3', 'm4a', 'aac'];
+export const FLOWPLAYER_VIDEO_FORMATS: string[] = [
+	'video/mp4',
+	'video/ogv',
+	'video/webm',
+	'video/m3u8',
+	'application/vnd.apple.mpegurl',
+];
+export const FLOWPLAYER_AUDIO_FORMATS: string[] = [
+	// 'audio/mpeg', // We want to play the audio file, not the mp4 video with the ugly speaker
+	'audio/mp4',
+	'audio/m4a',
+	'audio/aac',
+];
 export const FLOWPLAYER_FORMATS: string[] = [
 	...FLOWPLAYER_VIDEO_FORMATS,
 	...FLOWPLAYER_AUDIO_FORMATS,
 ];
-export const IMAGE_FORMATS: string[] = ['png', 'jpg', 'jpeg', 'gif'];
+export const IMAGE_FORMATS: string[] = [
+	'image/png',
+	'image/jpeg',
+	'image/gif',
+	'image/tiff',
+	'image/bmp',
+];
+export const IMAGE_API_FORMATS: string[] = ['image/jph'];
+export const XML_FORMATS: string[] = ['application/xml'];
 
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
+	{
+		label: tText('Download alle paginas (zip)'),
+		id: MetadataExportFormats.fullNewspaperZip,
+	},
+	{
+		label: tText('Download deze pagina (zip)'),
+		id: MetadataExportFormats.onePageNewspaperZip,
+	},
 	{
 		label: tText(
 			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-XML'
@@ -102,7 +129,7 @@ export const noLicensePlaceholder = (): ObjectPlaceholderProps => ({
  * Tabs
  */
 
-const renderMediaTab = (type?: IeObjectTypes, available = true) => {
+const renderMediaTab = (type?: IeObjectType | null, available = true) => {
 	switch (type) {
 		case 'audio':
 			return {
@@ -136,7 +163,10 @@ const renderMediaTab = (type?: IeObjectTypes, available = true) => {
 	}
 };
 
-export const OBJECT_DETAIL_TABS = (mediaType?: IeObjectTypes, available = true): TabProps[] => [
+export const OBJECT_DETAIL_TABS = (
+	mediaType?: IeObjectType | null,
+	available = true
+): TabProps[] => [
 	{
 		id: ObjectDetailTabs.Metadata,
 		label: tText('modules/ie-objects/const/index___metadata'),
@@ -449,10 +479,10 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 	},
 	...mapObjectToMetadata(mediaInfo.creator),
 	...mapObjectToMetadata(mediaInfo.publisher),
-	{
-		title: tText('modules/ie-objects/const/index___transcriptie'),
-		data: mediaInfo?.representations?.[0]?.transcript, // TODO: Update voor andere representations?
-	},
+	// {
+	// 	title: tText('modules/ie-objects/const/index___transcriptie'),
+	// 	data: mediaInfo?.pageRepresentations?.[0]?.transcript, // TODO: Update voor andere representations?
+	// },
 	{
 		title: tText('modules/ie-objects/const/index___programmabeschrijving'),
 		data: mediaInfo.meemooDescriptionProgramme,
