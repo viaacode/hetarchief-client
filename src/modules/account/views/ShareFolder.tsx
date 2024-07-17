@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { type FC, useEffect } from 'react';
+import { type FC, useCallback, useEffect } from 'react';
 
 import { foldersService } from '@account/services/folders';
 import { SharedFolderStatus } from '@account/types';
@@ -22,54 +22,53 @@ export const AccountSharedFolder: FC<DefaultSeoInfo & AccountSharedFolderProps> 
 	const router = useRouter();
 	const locale = useLocale();
 
-	useEffect(() => {
-		async function shareFolder() {
-			if (folderId) {
-				try {
-					const response = await foldersService.shareCollection(folderId);
-					if (response.status === SharedFolderStatus.ADDED) {
-						toastService.notify({
-							maxLines: 3,
-							title: tText('pages/account/map-delen/folder-id/index___gelukt'),
-							description: tText(
-								'pages/account/map-delen/folder-id/index___gelukt-beschrijving'
-							),
-						});
-					}
-					if (response.status === SharedFolderStatus.ALREADY_OWNER) {
-						toastService.notify({
-							maxLines: 3,
-							title: tText(
-								'pages/account/map-delen/folder-id/index___map-bestaat-al'
-							),
-							description: tText(
-								'pages/account/map-delen/folder-id/index___deze-map-is-reeds-deel-van-je-mappen'
-							),
-						});
-					}
-					// Navigate to shared folder
-					const slug = createFolderSlug({
-						id: response.folderId,
-						name: response.folderName,
-						isDefault: false,
-					});
-					const folderUrl = `${ROUTES_BY_LOCALE[locale].accountMyFolders}/${slug}`;
-
-					await router.replace(folderUrl);
-				} catch (err) {
+	const shareFolder = useCallback(async () => {
+		if (folderId) {
+			try {
+				const response = await foldersService.shareCollection(folderId);
+				if (response.status === SharedFolderStatus.ADDED) {
 					toastService.notify({
 						maxLines: 3,
-						title: tText('pages/account/map-delen/folder-id/index___error'),
+						title: tText('pages/account/map-delen/folder-id/index___gelukt'),
 						description: tText(
-							'pages/account/map-delen/folder-id/index___error-er-is-iets-misgelopen'
+							'pages/account/map-delen/folder-id/index___gelukt-beschrijving'
 						),
 					});
-					await router.replace(ROUTES_BY_LOCALE[locale].accountMyFolders);
 				}
+				if (response.status === SharedFolderStatus.ALREADY_OWNER) {
+					toastService.notify({
+						maxLines: 3,
+						title: tText('pages/account/map-delen/folder-id/index___map-bestaat-al'),
+						description: tText(
+							'pages/account/map-delen/folder-id/index___deze-map-is-reeds-deel-van-je-mappen'
+						),
+					});
+				}
+				// Navigate to shared folder
+				const slug = createFolderSlug({
+					id: response.folderId,
+					name: response.folderName,
+					isDefault: false,
+				});
+				const folderUrl = `${ROUTES_BY_LOCALE[locale].accountMyFolders}/${slug}`;
+
+				await router.replace(folderUrl);
+			} catch (err) {
+				toastService.notify({
+					maxLines: 3,
+					title: tText('pages/account/map-delen/folder-id/index___error'),
+					description: tText(
+						'pages/account/map-delen/folder-id/index___error-er-is-iets-misgelopen'
+					),
+				});
+				await router.replace(ROUTES_BY_LOCALE[locale].accountMyFolders);
 			}
 		}
-		shareFolder();
 	}, [folderId, locale, router, tText]);
+
+	useEffect(() => {
+		shareFolder();
+	}, [shareFolder]);
 
 	return <Loading fullscreen owner="share folder page" />;
 };

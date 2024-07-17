@@ -14,6 +14,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { EmailTemplate } from '@shared/services/campaign-monitor-service/campaign-monitor.consts';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service/campaign-monitor.service';
 import { toastService } from '@shared/services/toast-service';
 
@@ -55,7 +56,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 		try {
 			if (user) {
 				await CampaignMonitorService.send({
-					template: 'shareFolder',
+					template: EmailTemplate.SHARE_FOLDER,
 					data: {
 						to: emailInputValue,
 						consentToTrack: 'unchanged',
