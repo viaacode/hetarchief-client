@@ -120,7 +120,6 @@ import HighlightedMetadata from '@shared/components/HighlightedMetadata/Highligh
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
-import { soundwave } from '@shared/components/MediaCard/__mocks__/media-card';
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { Pill } from '@shared/components/Pill';
@@ -202,7 +201,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
 	const [currentPageIndex, setCurrentPageIndex] = useState<number>(0); // Used for going through the pages of a newspaper
 	const [currentRepresentationIndex, setCurrentRepresentationIndex] = useState<number>(0); // Used for going through the videos/audio/image representations/files inside a single detail page
-	const [flowPlayerKey, setFlowPlayerKey] = useState<string | undefined>(undefined);
+	const [flowPlayerKey, setFlowPlayerKey] = useState<string | null>(null);
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
 	const [related, setRelated] = useState<MediaObject[]>([]);
 	const [metadataExportDropdownOpen, setMetadataExportDropdownOpen] = useState(false);
@@ -254,12 +253,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const currentRepresentation = currentPage?.[currentRepresentationIndex];
 
 	// peak file
-	const peakFileSchemaIdentifier: string | null =
-		currentRepresentation?.files?.find((file) => file.mimeType === 'application/json')?.id ||
-		null;
+	const peakFileStoredAt: string | null =
+		currentRepresentation?.files?.find((file) => file.mimeType === 'application/json')
+			?.storedAt || null;
 
 	// media info
-	const { data: peakJson } = useGetPeakFile(peakFileSchemaIdentifier, {
+	const { data: peakJson } = useGetPeakFile(peakFileStoredAt, {
 		enabled: mediaInfo?.dctermsFormat === 'audio',
 	});
 
@@ -277,14 +276,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const currentPlayableFile: IeObjectFile | undefined = currentRepresentation?.files?.find(
 		(file) => FLOWPLAYER_FORMATS.includes(file?.mimeType)
 	);
-	const fileSchemaIdentifier: string | undefined = currentPlayableFile?.id;
+	const fileStoredAt: string | null = currentPlayableFile?.storedAt ?? null;
 	const {
 		data: playableUrl,
 		isLoading: isLoadingPlayableUrl,
 		isError: isErrorPlayableUrl,
 	} = useGetIeObjectsTicketInfo(
-		fileSchemaIdentifier ?? null,
-		() => setFlowPlayerKey(fileSchemaIdentifier ?? undefined) // Force flowplayer rerender after successful fetch
+		fileStoredAt,
+		() => setFlowPlayerKey(fileStoredAt) // Force flowplayer rerender after successful fetch
 	);
 
 	// also interesting
@@ -976,7 +975,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			className: clsx('p-object-detail__flowplayer', {
 				'p-object-detail__flowplayer--with-slider': showFragmentSlider,
 			}),
-			poster: mediaInfo?.thumbnailUrl?.[0] || undefined,
 			title: currentPlayableFile?.name,
 			logo: mediaInfo?.maintainerOverlay ? mediaInfo?.maintainerLogo || undefined : undefined,
 			pause: isMediaPaused,
@@ -994,27 +992,35 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					key={flowPlayerKey}
 					type="video"
 					src={playableUrl as string}
+					poster={mediaInfo?.thumbnailUrl?.[0] || undefined}
 					{...shared}
 				/>
 			);
 		}
 		// Audio player
 		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(currentPlayableFile.mimeType)) {
-			return (
-				<FlowPlayer
-					key={flowPlayerKey}
-					type="audio"
-					src={[
-						{
-							src: playableUrl as string,
-							type: 'audio/mp3',
-						},
-					]}
-					poster={soundwave}
-					waveformData={peakJson?.data || undefined}
-					{...shared}
-				/>
-			);
+			console.log('rendering audio flowplayer: ', { playableUrl, currentPlayableFile });
+			if (peakFileStoredAt && !peakJson) {
+				return (
+					<Loading fullscreen owner="object detail page: render media audio peak file" />
+				);
+			} else {
+				return (
+					<FlowPlayer
+						key={flowPlayerKey}
+						type="audio"
+						src={[
+							{
+								src: playableUrl as string,
+								type: currentPlayableFile.mimeType,
+							},
+						]}
+						poster={'/images/waveform.svg'}
+						waveformData={peakJson?.data || undefined}
+						{...shared}
+					/>
+				);
+			}
 		}
 	};
 
@@ -1178,21 +1184,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						<div className={styles['p-object-detail__metadata-logo']}>
 							{/* eslint-disable-next-line @next/next/no-img-element */}
 							{/* TODO remove this hack once we fully switched to the new graph.organisations table */}
-							<img
-								src={maintainerLogo
-									.replace(
-										'https://assets-int.viaa.be/images/',
-										'https://assets.viaa.be/images/'
-									)
-									.replace(
-										'https://assets-tst.viaa.be/images/',
-										'https://assets.viaa.be/images/'
-									)}
-								alt={`Logo ${maintainerName}`}
-							/>
+							<img src={maintainerLogo} alt={`Logo ${maintainerName}`} />
 						</div>
 					)}
-					é
 				</>
 			)}
 		</div>

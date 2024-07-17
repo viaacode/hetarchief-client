@@ -40,7 +40,7 @@ export const FLOWPLAYER_VIDEO_FORMATS: string[] = [
 	'application/vnd.apple.mpegurl',
 ];
 export const FLOWPLAYER_AUDIO_FORMATS: string[] = [
-	'audio/mpeg',
+	// 'audio/mpeg', // We want to play the audio file, not the mp4 video with the ugly speaker
 	'audio/mp4',
 	'audio/m4a',
 	'audio/aac',
