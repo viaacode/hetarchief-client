@@ -13,5 +13,9 @@
 
 	.c-video-player-inner {
 		background-color: $shade-darker;
+
+		.c-video-player-inner.c-video-player-inner--audio {
+			background-size: contain !important;
+		}
 	}
 }
