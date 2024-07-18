@@ -87,11 +87,11 @@ pipeline {
 			steps {
 				container('oc') {
 					script {
-						if(anyOf {changeRequest target: 'main' changeRequest target: 'master' changeRequest target: 'develop' changeRequest target: 'development'}){
-							env.ENVIRON = "int"
+						if(buildingTag()){
+							env.ENVIRON = "prd"
 						}
-						else if(buildingTag()){
-							env.ENVIRON = "qas"
+						else if(anyOf {changeRequest target: 'main' changeRequest target: 'master' changeRequest target: 'develop' changeRequest target: 'development'}){
+							env.ENVIRON = "int"
 						}
 					}
 					script {
