@@ -1,4 +1,4 @@
-import { mixed, object, type SchemaOf, string } from 'yup';
+import { mixed, object, type Schema, string } from 'yup';
 
 import { Operator } from '@shared/types';
 
@@ -7,7 +7,7 @@ import { SearchFilterId } from '../../types';
 
 import { type CreatedFilterFormState } from './CreatedFilterForm.types';
 
-export const CREATED_FILTER_FORM_SCHEMA = (): SchemaOf<CreatedFilterFormState> =>
+export const CREATED_FILTER_FORM_SCHEMA = (): Schema<CreatedFilterFormState> =>
 	object({
 		operator: mixed<Operator>().required().oneOf(Object.values(Operator)),
 		created: string().optional(),
