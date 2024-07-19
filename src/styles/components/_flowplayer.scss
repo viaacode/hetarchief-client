@@ -19,3 +19,23 @@
 		}
 	}
 }
+
+.c-video-player-inner {
+	.fp-progress,
+	.fp-color {
+		background-color: $teal !important;
+	}
+
+	.fp-icon:focus,
+	.fp-menu-container summary:focus,
+	.fp-middle:focus,
+	.fp-small-pause:focus,
+	.fp-small-play:focus,
+	.fp-timeline:focus,
+	.fp-ui:focus,
+	.fp-volume:focus,
+	.fp-volumebtn:focus,
+	li[tabindex="0"]:focus {
+		outline: $teal solid 1px !important;
+	}
+}

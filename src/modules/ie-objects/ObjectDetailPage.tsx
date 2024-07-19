@@ -1416,7 +1416,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const renderOcrBlade = () => {
 		if (
 			mediaInfo?.dctermsFormat !== IeObjectType.Newspaper ||
-			!iiifViewerImageInfos[currentPageIndex].altoUrl ||
+			!iiifViewerImageInfos?.[currentPageIndex]?.altoUrl ||
 			(activeTab === ObjectDetailTabs.Media && isMobile)
 		) {
 			return null;
