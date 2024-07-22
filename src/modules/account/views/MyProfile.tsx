@@ -73,7 +73,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 	const canEditProfile: boolean = useHasAllPermission(Permission.CAN_EDIT_PROFILE_INFO);
 	const isKeyUser: boolean = useIsKeyUser();
 	const { data: allLanguages } = useGetAllLanguages();
-	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference(selectedLanguage);
+	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference();
 	const { data: preferences } = useGetNewsletterPreferences(user?.email);
 
 	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(

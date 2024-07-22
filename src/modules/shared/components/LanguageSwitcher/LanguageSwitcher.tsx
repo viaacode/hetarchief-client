@@ -35,7 +35,7 @@ export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 	const [selectedLanguage, setSelectedLanguage] = useState<Locale>(locale);
 	const dispatch = useDispatch();
 	const { data: allLanguages } = useGetAllLanguages();
-	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference(selectedLanguage);
+	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference();
 	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
 		locale,
 		`/${router.query.slug}`,
