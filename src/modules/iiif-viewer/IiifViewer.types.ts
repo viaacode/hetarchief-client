@@ -13,6 +13,8 @@ export interface IiifViewerProps {
 	setIsOcrEnabled: (isOcrEnabled: boolean) => void;
 	activeImageIndex: number;
 	setActiveImageIndex: (newActiveImageIndex: number) => void;
+	onSelection?: (rect: Rect) => void;
+	enableSelection?: boolean;
 }
 
 export interface IiifViewerFunctions {
@@ -27,6 +29,13 @@ export interface IiifViewerFunctions {
 
 export interface TextLine {
 	text: string;
+	x: number;
+	y: number;
+	width: number;
+	height: number;
+}
+
+export interface Rect {
 	x: number;
 	y: number;
 	width: number;

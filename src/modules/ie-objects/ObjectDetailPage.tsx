@@ -107,7 +107,7 @@ import {
 import { isInAFolder } from '@ie-objects/utils/folders';
 import { mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils/map-metadata';
 import IiifViewer from '@iiif-viewer/IiifViewer';
-import { type IiifViewerFunctions, type ImageInfo } from '@iiif-viewer/IiifViewer.types';
+import { type IiifViewerFunctions, type ImageInfo, type Rect } from '@iiif-viewer/IiifViewer.types';
 import altoTextLocations from '@iiif-viewer/alto2-simplified.json';
 import { MaterialRequestsService } from '@material-requests/services';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
@@ -904,35 +904,52 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		iiifViewerReference?.current?.setActiveWordIndex(index);
 	};
 
-	const iiifViewerImageInfos = useMemo((): ImageInfo[] => {
-		const images: ImageInfo[] = compact(
-			mediaInfo?.pageRepresentations?.flatMap((pageReps) => {
-				const files = pageReps.flatMap((pageRep) => pageRep.files);
-				const imageApiFile = files.find((file) =>
-					IMAGE_API_FORMATS.includes(file.mimeType)
-				);
-				const imageFile = files.find((file) => IMAGE_FORMATS.includes(file.mimeType));
-				const altoFile = files.find((file) => XML_FORMATS.includes(file.mimeType));
-				if (!imageFile?.storedAt) {
-					return null;
-				}
-				return {
-					imageUrl: imageApiFile?.storedAt || imageFile?.storedAt,
-					thumbnailUrl: imageFile?.thumbnailUrl || imageFile?.storedAt,
-					width: 2000, // TODO remove these dimensions and get them from the iiif viewer api
-					height: 3000,
-					altoUrl: altoFile?.storedAt,
-				};
+	const handleIiifViewerSelection = (rect: Rect) => {
+		window.open(
+			stringifyUrl({
+				url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/jpg/selection`,
+				query: {
+					page: currentPageIndex,
+					startX: Math.floor(rect.x),
+					startY: Math.floor(rect.y),
+					width: Math.ceil(rect.width),
+					height: Math.ceil(rect.height),
+				},
 			})
 		);
-		return images;
-	}, [mediaInfo]);
+	};
+
+	const iiifViewerImageInfos = useMemo(
+		(): ImageInfo[] =>
+			compact(
+				mediaInfo?.pageRepresentations?.flatMap((pageReps) => {
+					const files = pageReps.flatMap((pageRep) => pageRep.files);
+					const imageApiFile = files.find((file) =>
+						IMAGE_API_FORMATS.includes(file.mimeType)
+					);
+					const imageFile = files.find((file) => IMAGE_FORMATS.includes(file.mimeType));
+					const altoFile = files.find((file) => XML_FORMATS.includes(file.mimeType));
+					if (!imageFile?.storedAt) {
+						return null;
+					}
+					return {
+						imageUrl: imageApiFile?.storedAt || imageFile?.storedAt,
+						thumbnailUrl: imageFile?.thumbnailUrl || imageFile?.storedAt,
+						width: 2000, // TODO remove these dimensions and get them from the iiif viewer api
+						height: 3000,
+						altoUrl: altoFile?.storedAt,
+					};
+				})
+			),
+		[mediaInfo]
+	);
 
 	/**
 	 * Render
 	 */
 
 	const renderMedia = (): ReactNode => {
+		console.log('renderMedia');
 		const isNewspaper = mediaInfo?.dctermsFormat === IeObjectType.Newspaper;
 
 		if ((isLoadingPlayableUrl && !isNewspaper) || !mediaInfo) {
@@ -942,15 +959,21 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		// IIIF viewer
 		if (isNewspaper && !!mediaInfo) {
 			return (
-				<IiifViewer
-					imageInfos={iiifViewerImageInfos}
-					ref={iiifViewerReference}
-					id={mediaInfo?.schemaIdentifier as string}
-					isOcrEnabled={isOcrEnabled}
-					setIsOcrEnabled={setIsOcrEnabled}
-					activeImageIndex={currentPageIndex}
-					setActiveImageIndex={setCurrentPageIndex}
-				/>
+				<NoServerSideRendering>
+					<IiifViewer
+						imageInfos={iiifViewerImageInfos}
+						ref={iiifViewerReference}
+						id={mediaInfo?.schemaIdentifier as string}
+						isOcrEnabled={isOcrEnabled}
+						setIsOcrEnabled={setIsOcrEnabled}
+						activeImageIndex={currentPageIndex}
+						setActiveImageIndex={setCurrentPageIndex}
+						onSelection={handleIiifViewerSelection}
+						enableSelection={
+							!!user && user.permissions.includes(Permission.DOWNLOAD_OBJECT)
+						}
+					/>
+				</NoServerSideRendering>
 			);
 		}
 
@@ -1334,7 +1357,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				</MetadataList>
 
 				{(!!similar.length || !!mediaInfo.keywords?.length) && (
-					<MetadataList disableContainerQuery>
+					<MetadataList disableContainerQuery={true}>
 						{[
 							{
 								title: tHtml(

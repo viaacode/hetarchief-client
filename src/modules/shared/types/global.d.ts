@@ -19,4 +19,6 @@ declare global {
 	}
 }
 
+declare module 'openseadragonselection';
+
 export {};

@@ -75,6 +75,7 @@ export enum IconNamesLight {
 	Request = 'request--light',
 	Rewind = 'rewind--light',
 	Scissors = 'scissors--light',
+	ScissorsClip = 'scissors-clip--light',
 	Search = 'search--light',
 	SearchText = 'search-text--light',
 	Share = 'share--light',
