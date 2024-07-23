@@ -13,6 +13,9 @@ export interface IiifViewerProps {
 	setIsOcrEnabled: (isOcrEnabled: boolean) => void;
 	activeImageIndex: number;
 	setActiveImageIndex: (newActiveImageIndex: number) => void;
+	initialFocusX?: number;
+	initialFocusY?: number;
+	initialZoomLevel?: number;
 }
 
 export interface IiifViewerFunctions {
