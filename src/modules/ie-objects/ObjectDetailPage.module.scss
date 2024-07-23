@@ -93,6 +93,30 @@ $breakpoint-md: map.get($breakpoints, "md");
 	&__tabs {
 		flex-shrink: 0;
 
+		@include respond-at(md) {
+			&--mobile {
+				display: none;
+			}
+		}
+
+		@include respond-to(md) {
+			&--desktop {
+				display: none;
+			}
+		}
+
+		:global(.c-tabs) {
+			display: flex;
+			flex-direction: row;
+
+			:global(.c-tabs__item) {
+				display: flex;
+				justify-content: center;
+				flex-grow: 1;
+				margin-right: 0;
+			}
+		}
+
 		&-tab {
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
@@ -111,15 +135,6 @@ $breakpoint-md: map.get($breakpoints, "md");
 					background-color: $white;
 				}
 			}
-		}
-
-		@include respond-at(md) {
-			display: none;
-		}
-
-		// `include respond-at(md)` -fix for safari
-		@media screen and (width >= $breakpoint-md) {
-			display: none;
 		}
 	}
 
@@ -453,12 +468,17 @@ $breakpoint-md: map.get($breakpoints, "md");
 		visibility: hidden;
 		z-index: get-z-layer("foreground");
 		position: absolute;
-		width: 3.2rem;
-		height: 3.2rem;
+		width: $button-height-sm;
+		height: $button-height;
+		border-radius: $button-radius-sm;
+		top: calc(50% - $button-height / 2);
 		right: $metadata-collapsed-width;
 		transform: translate(50%, 3.5rem);
-		box-shadow: $shadow-12-black-16;
 		transition: right $animate-default;
+
+		:global(.c-button__icon span) {
+			font-size: $font-size-2xm;
+		}
 
 		&--expanded {
 			right: $metadata-expanded-width;

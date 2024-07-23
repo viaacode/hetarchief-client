@@ -63,6 +63,7 @@ export enum IconNamesLight {
 	NotAvailable = 'not-available--light',
 	Notification = 'notification--light',
 	OpenDoor = 'open-door--light',
+	Ocr = 'ocr--light',
 	Pause = 'pause--light',
 	Phone = 'phone--light',
 	Play = 'play--light',

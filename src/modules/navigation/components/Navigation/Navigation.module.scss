@@ -54,7 +54,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	&__auth {
 		// Do not allow the text in the login or register button to wrap
 		white-space: nowrap;
-		height: $button-width;
+		height: $button-height;
 
 		@include respond-to(xxl) {
 			padding-left: 0 !important;

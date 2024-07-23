@@ -1,7 +1,8 @@
 @use "src/styles/abstracts" as *;
 
 $navigator-margin-top: 30rem;
-$navigator-margin-right: 10rem;
+$navigator-margin-left: 10rem + $spacer-xs; // needs space next to the navigator control
+$navigator-margin-right: $spacer-xs; // Can go all the way to the edge
 
 .p-object-detail__iiif {
 	display: block;
@@ -34,7 +35,9 @@ $navigator-margin-right: 10rem;
 	&:global(.fullpage) :global(.p-object-detail__iiif__close-fullscreen) {
 		display: block;
 		font-family: meemoo-icons-light, sans-serif;
-		margin: $spacer-md;
+		margin-right: 50vw;
+		margin-bottom: 2rem;
+		transform: translateX(-50%);
 	}
 
 	&:global(.p-object-detail__iiif__ocr--enabled) {
@@ -47,6 +50,12 @@ $navigator-margin-right: 10rem;
 		:global(.p-object-detail__iiif__alto__text) {
 			display: none !important;
 		}
+	}
+
+	// Navigator display indicator
+	:global(.displayregion) {
+		outline: 3px solid black;
+		border: 3px solid white;
 	}
 }
 
@@ -87,40 +96,56 @@ $navigator-margin-right: 10rem;
 .p-object-detail__iiif__controls {
 	z-index: 2000;
 	width: auto;
-	height: $button-width;
+	height: $button-height;
 	position: absolute;
-	left: $navigator-margin-right;
+	left: $navigator-margin-left;
 	right: $navigator-margin-right;
 	bottom: 0;
-	margin: 2.4rem;
+	margin: $spacer-xs;
 	display: flex;
-	flex-direction: row;
+	flex-flow: row nowrap;
 	justify-content: center;
+	gap: $spacer-xs;
 
-	&__button {
-		border-radius: 0;
+	&__button-group {
+		display: flex;
+		flex-flow: row nowrap;
+		height: $button-height-sm;
+		border-radius: $button-radius-sm;
+		background-color: $white;
+		padding: 0.4rem;
+		align-items: center;
 
-		&:global(:first-child) {
-			border-radius: $button-radius 0 0 $button-radius;
-			padding-left: $spacer-xs;
-			width: 6rem;
+		&:nth-child(2) {
+			flex-grow: 1;
+
+			> div {
+				flex-grow: 1;
+			}
 		}
 
-		&:global(:last-child) {
-			border-radius: 0 $button-radius $button-radius 0;
-			padding-right: $spacer-xs;
-			width: 6rem;
+		> span {
+			font-size: $font-size-sm;
+			padding: $spacer-xs;
 		}
 
-		&:global(:first-child):global(:last-child) {
-			border-radius: $button-radius;
-			padding: 0;
-			width: $button-width;
+		&__divider {
+			width: 1px;
+			height: $button-height-xs;
+			background-color: $silver;
+			margin: $spacer-xxs $spacer-xs;
 		}
 	}
 
+	&__button:global(.c-button--sm) {
+		width: $button-height-sm;
+		height: $button-height-xs;
+		border-radius: $button-radius-xs;
+		padding: $spacer-xs $spacer-xxs;
+	}
+
 	@include respond-to(md) {
-		width: calc(100% - $button-width);
+		width: calc(100% - $button-height);
 		left: 0;
 		padding: 0;
 	}

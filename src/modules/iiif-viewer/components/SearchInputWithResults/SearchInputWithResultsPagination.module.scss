@@ -1,0 +1,33 @@
+@use "src/styles/abstracts" as *;
+
+.c-search-with-results-pagination {
+	display: flex;
+	flex-direction: row;
+	background-color: $silver;
+	border-radius: $button-radius;
+	align-items: center;
+
+	:global(.c-input) {
+		background-color: transparent;
+		flex-grow: 1;
+
+		:global(.c-input__field) {
+			background-color: transparent;
+			height: $button-height-xs;
+			padding: 0 $spacer-xxs * 3;
+			border: 0;
+			outline: 0;
+		}
+	}
+
+	> span {
+		font-size: $font-size-sm;
+	}
+
+	:global(.c-button--sm) {
+		width: $button-height-sm;
+		height: $button-height-xs;
+		border-radius: $button-radius-xs;
+		padding: $spacer-xxs $spacer-xxs;
+	}
+}

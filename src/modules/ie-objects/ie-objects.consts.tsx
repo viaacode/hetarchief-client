@@ -174,6 +174,11 @@ export const OBJECT_DETAIL_TABS = (
 		icon: <Icon name={IconNamesLight.Info} aria-hidden />,
 	},
 	renderMediaTab(mediaType, available),
+	{
+		id: ObjectDetailTabs.Ocr,
+		label: tText('OCR'),
+		icon: <Icon name={IconNamesLight.Ocr} aria-hidden />,
+	},
 ];
 
 /**

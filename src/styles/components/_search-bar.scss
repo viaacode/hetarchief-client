@@ -47,7 +47,7 @@
 
 	&.c-tag-search-bar--lg {
 		.c-tags-input__control {
-			min-height: $button-width;
+			min-height: $button-height;
 			border-radius: $button-radius;
 
 			@include respond-at(md) {

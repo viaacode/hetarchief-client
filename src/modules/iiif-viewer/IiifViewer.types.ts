@@ -1,3 +1,5 @@
+import { type OcrSearchResult } from '@ie-objects/ie-objects.types';
+
 export type ImageInfo = {
 	thumbnailUrl: string;
 	altoUrl?: string;
@@ -16,6 +18,14 @@ export interface IiifViewerProps {
 	initialFocusX?: number;
 	initialFocusY?: number;
 	initialZoomLevel?: number;
+
+	// Search through pages
+	searchTerms: string;
+	setSearchTerms: (searchTerms: string) => void;
+	searchPages: (searchTerms: string) => void;
+	currentSearchIndex: number;
+	searchResults: OcrSearchResult[] | null;
+	setSearchResultIndex: (newSearchIndex: number) => void;
 }
 
 export interface IiifViewerFunctions {

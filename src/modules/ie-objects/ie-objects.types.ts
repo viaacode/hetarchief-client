@@ -188,6 +188,7 @@ export interface IeObjectSearchAggregations {
 export enum ObjectDetailTabs {
 	Media = 'media',
 	Metadata = 'metadata',
+	Ocr = 'ocr',
 }
 
 export enum MediaActions {
@@ -224,4 +225,10 @@ export interface AltoTextLine {
 	y: number;
 	width: number;
 	height: number;
+}
+
+export interface OcrSearchResult {
+	pageIndex: number;
+	word: string;
+	wordIndex: number;
 }
