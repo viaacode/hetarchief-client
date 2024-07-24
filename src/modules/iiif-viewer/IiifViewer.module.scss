@@ -1,8 +1,9 @@
 @use "src/styles/abstracts" as *;
 
 $navigator-margin-top: 30rem;
-$navigator-margin-left: 10rem + $spacer-xs; // needs space next to the navigator control
-$navigator-margin-right: $spacer-xs; // Can go all the way to the edge
+$controls-margin-left: 10rem + $spacer-xs; // needs space next to the navigator control
+$controls-margin-right: $spacer-xs; // Can go all the way to the edge
+$controls-margin-bottom: $spacer-xxs; // Can go all the way to the edge
 
 .p-object-detail__iiif {
 	display: block;
@@ -98,10 +99,10 @@ $navigator-margin-right: $spacer-xs; // Can go all the way to the edge
 	width: auto;
 	height: $button-height;
 	position: absolute;
-	left: $navigator-margin-left;
-	right: $navigator-margin-right;
+	left: $controls-margin-left;
+	right: $controls-margin-right;
 	bottom: 0;
-	margin: $spacer-xs;
+	margin: $controls-margin-bottom;
 	display: flex;
 	flex-flow: row nowrap;
 	justify-content: center;

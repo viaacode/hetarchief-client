@@ -143,11 +143,11 @@ export interface IeObjectFile {
 
 export interface IeObjectRepresentation {
 	id: string;
-	name: string;
+	schemaName: string;
 	isMediaFragmentOf: string;
-	languages: string;
-	startTime: string;
-	transcript: string;
+	schemaInLanguage: string;
+	schemaStartTime: string;
+	schemaTranscript: string;
 	edmIsNextInSequence: string;
 	updatedAt: string;
 	files: IeObjectFile[];
@@ -229,6 +229,7 @@ export interface AltoTextLine {
 
 export interface OcrSearchResult {
 	pageIndex: number;
-	word: string;
-	wordIndex: number;
+	searchTerm: string;
+	searchTermCharacterOffset: number;
+	searchTermIndexOnPage: number;
 }

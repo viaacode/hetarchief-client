@@ -1,4 +1,5 @@
 import { Button, TextInput } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { type FC, type KeyboardEvent } from 'react';
 
 import { type SearchInputWithResultsPaginationProps } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination.types';
@@ -15,6 +16,8 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 	onChangeSearchIndex,
 	searchResults,
 	currentSearchIndex,
+	className,
+	variants = [],
 }) => {
 	const handleKeyUp = (evt: KeyboardEvent<HTMLInputElement>) => {
 		if (evt.key === 'Enter') {
@@ -23,12 +26,20 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 	};
 
 	return (
-		<div className={styles['c-search-with-results-pagination']}>
+		<div
+			className={clsx(
+				styles['c-search-with-results-pagination'],
+				...variants.map(
+					(variant) => styles['c-search-with-results-pagination__' + variant]
+				),
+				className
+			)}
+		>
 			<TextInput
 				value={value}
 				onChange={(evt) => onChange(evt.target.value)}
 				onKeyUp={handleKeyUp}
-				variants="sm"
+				variants={variants}
 				placeholder={tText(
 					'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___zoek'
 				)}
@@ -40,7 +51,7 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 						aria-label={tText(
 							'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___vorig-zoekresultaat'
 						)}
-						variants={['text', 'sm']}
+						variants={['text', ...variants]}
 						onClick={() => onChangeSearchIndex(currentSearchIndex - 1)}
 						disabled={currentSearchIndex === 0}
 					/>
@@ -48,7 +59,7 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 						{tText(
 							'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___current-search-index-van-de-total-search-results',
 							{
-								currentSearchIndex,
+								currentSearchIndex: currentSearchIndex + 1,
 								totalSearchResults: searchResults.length,
 							}
 						)}
@@ -58,7 +69,7 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 						aria-label={tText(
 							'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___volgend-zoekresultaat'
 						)}
-						variants={['text', 'sm']}
+						variants={['text', ...variants]}
 						onClick={() => onChangeSearchIndex(currentSearchIndex + 1)}
 						disabled={currentSearchIndex === searchResults.length - 1}
 					/>
@@ -67,8 +78,11 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 						aria-label={tText(
 							'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___verwijder-zoekterm'
 						)}
-						variants={['text', 'sm']}
-						onClick={() => onChange('')}
+						variants={['text', ...variants]}
+						onClick={() => {
+							onChange('');
+							onSearch('');
+						}}
 					/>
 				</>
 			)}
@@ -76,7 +90,7 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 				<Button
 					iconStart={<Icon name={IconNamesLight.Search} />}
 					aria-label={tText('Zoek opdracht uitvoeren')}
-					variants={['text', 'sm']}
+					variants={['text', ...variants]}
 					onClick={() => onSearch(value)}
 					disabled={!value}
 				/>

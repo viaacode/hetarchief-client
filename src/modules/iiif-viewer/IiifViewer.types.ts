@@ -2,15 +2,13 @@ import { type OcrSearchResult } from '@ie-objects/ie-objects.types';
 
 export type ImageInfo = {
 	thumbnailUrl: string;
-	altoUrl?: string;
-	width: number;
-	height: number;
 	imageUrl: string;
 };
 
 export interface IiifViewerProps {
 	id: string;
 	imageInfos: ImageInfo[];
+	altoJsonCurrentPage: SimplifiedAlto | null | undefined;
 	isOcrEnabled: boolean;
 	setIsOcrEnabled: (isOcrEnabled: boolean) => void;
 	activeImageIndex: number;
@@ -36,6 +34,8 @@ export interface IiifViewerFunctions {
 	iiifGoToPage: (pageIndex: number) => void;
 	iiifFullscreen: (expand: boolean) => void;
 	iiifZoom: (multiplier: number) => void;
+	iiifGoToHome: () => void;
+	waitForReadyState: () => Promise<void>;
 }
 
 export interface TextLine {
@@ -44,4 +44,15 @@ export interface TextLine {
 	y: number;
 	width: number;
 	height: number;
+}
+
+export interface SimplifiedAlto {
+	description: {
+		fileName: string | undefined;
+		processingDateTime: string | undefined;
+		softwareCreator: string | undefined;
+		softwareName: string | undefined;
+		softwareVersion: string | undefined;
+	};
+	text: TextLine[] | undefined;
 }

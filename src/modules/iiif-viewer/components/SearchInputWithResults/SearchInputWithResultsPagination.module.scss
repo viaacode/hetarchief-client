@@ -13,8 +13,8 @@
 
 		:global(.c-input__field) {
 			background-color: transparent;
-			height: $button-height-xs;
-			padding: 0 $spacer-xxs * 3;
+			height: $button-height-sm;
+			padding: 0 $spacer-sm;
 			border: 0;
 			outline: 0;
 		}
@@ -24,10 +24,30 @@
 		font-size: $font-size-sm;
 	}
 
-	:global(.c-button--sm) {
+	:global(.c-button) {
 		width: $button-height-sm;
-		height: $button-height-xs;
-		border-radius: $button-radius-xs;
-		padding: $spacer-xxs $spacer-xxs;
+		height: $button-height;
+		border-radius: $button-radius;
+		padding: $spacer-sm $spacer-xxs;
+	}
+
+	&__sm {
+		:global(.c-input) {
+			:global(.c-input__field) {
+				height: $button-height-xs;
+				padding: 0 $spacer-xxs * 3;
+			}
+		}
+
+		> span {
+			font-size: $font-size-sm;
+		}
+
+		:global(.c-button--sm) {
+			width: $button-height-sm;
+			height: $button-height-xs;
+			border-radius: $button-radius-xs;
+			padding: $spacer-xxs $spacer-xxs;
+		}
 	}
 }

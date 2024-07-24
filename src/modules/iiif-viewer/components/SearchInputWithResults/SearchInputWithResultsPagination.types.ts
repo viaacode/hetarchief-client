@@ -7,4 +7,6 @@ export interface SearchInputWithResultsPaginationProps {
 	onChangeSearchIndex: (newSearchIndex: number) => void;
 	searchResults: OcrSearchResult[] | null;
 	currentSearchIndex: number;
+	className?: string;
+	variants?: string[];
 }
