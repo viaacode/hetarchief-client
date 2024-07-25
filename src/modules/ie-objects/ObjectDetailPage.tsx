@@ -52,6 +52,7 @@ import {
 } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { CollapsableBlade } from '@ie-objects/components/CollapsableBlade';
+import { CopyrightConfirmationModal } from '@ie-objects/components/CopyrightConfirmationModal';
 import {
 	type ActionItem,
 	DynamicActionMenu,
@@ -213,7 +214,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [isOcrEnabled, setIsOcrEnabled] = useState<boolean>(false);
 	const [searchOcrText, setSearchOcrText] = useState<string>('');
 	const [isHighlightSearchTermsActive, setIsHighlightSearchTermsActive] = useState<boolean>(true);
-
+	const [copyrightModalOpen, setCopyrightModalOpen] = useState(false);
+	const [onConfirmCopyright, setOnConfirmCopyright] = useState<() => void>(noop);
 	// Layout
 	useStickyLayout();
 	useHideFooter();
@@ -725,14 +727,22 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		(format: MetadataExportFormats) => {
 			switch (format) {
 				case MetadataExportFormats.fullNewspaperZip:
-					window.open(
-						`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip`
+					setCopyrightModalOpen(true);
+					setOnConfirmCopyright(
+						() => () =>
+							window.open(
+								`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip`
+							)
 					);
 					break;
 
 				case MetadataExportFormats.onePageNewspaperZip:
-					window.open(
-						`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`
+					setCopyrightModalOpen(true);
+					setOnConfirmCopyright(
+						() => () =>
+							window.open(
+								`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`
+							)
 					);
 					break;
 
@@ -1775,6 +1785,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					imgUrl={image}
 					translatedPages={[]}
 					relativeUrl={url}
+				/>
+				<CopyrightConfirmationModal
+					isOpen={copyrightModalOpen}
+					onClose={() => setCopyrightModalOpen((prevState) => !prevState)}
+					onConfirm={() => {
+						onConfirmCopyright();
+						setCopyrightModalOpen((prevState) => !prevState);
+					}}
 				/>
 				{renderPageContent()}
 			</VisitorLayout>
