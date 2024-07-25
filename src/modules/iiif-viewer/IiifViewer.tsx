@@ -446,6 +446,9 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 							<div
 								className={clsx(
 									styles['p-object-detail__iiif__controls__button-group'],
+									styles[
+										'p-object-detail__iiif__controls__button-group__pagination'
+									],
 									'u-flex-shrink'
 								)}
 							>
@@ -481,7 +484,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 									onClick={() => setActiveImageIndex(activeImageIndex - 1)}
 									disabled={activeImageIndex === 0}
 								/>
-								<span>
+								<span className="pagination-info">
 									{tText(
 										'modules/iiif-viewer/iiif-viewer___current-search-index-van-total-search-results',
 										{
@@ -508,6 +511,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 							<div
 								className={clsx(
 									styles['p-object-detail__iiif__controls__button-group'],
+									styles['p-object-detail__iiif__controls__button-group__search'],
 									'u-flex-shrink'
 								)}
 							>
@@ -525,6 +529,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 							<div
 								className={clsx(
 									styles['p-object-detail__iiif__controls__button-group'],
+									styles['p-object-detail__iiif__controls__button-group__zoom'],
 									'u-flex-shrink'
 								)}
 							>

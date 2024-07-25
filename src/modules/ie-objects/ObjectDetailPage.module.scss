@@ -1,9 +1,9 @@
 @use "src/styles/abstracts" as *;
 @use "sass:map";
 
+$expand-button-vertical-position: 45%; // Visually a litter higher than halfway to compensate for the visual bottom bar
 $metadata-expanded-width: 72vw;
 $metadata-collapsed-width: 36vw;
-$breakpoint-md: map.get($breakpoints, "md");
 $metadata-media-ocr-tabs-height: 5.6rem;
 
 .p-object-detail {
@@ -185,6 +185,7 @@ $metadata-media-ocr-tabs-height: 5.6rem;
 		flex-direction: column;
 		background-color: $silver;
 		height: calc(100vh - $top-navigation-bar-height);
+		container: object-detail__media / size;
 	}
 
 	&__slider {
@@ -251,12 +252,20 @@ $metadata-media-ocr-tabs-height: 5.6rem;
 
 		&__search {
 			flex-grow: 1;
-			margin: $spacer-lg $spacer-lg $spacer-lg;
+			margin: $spacer-lg;
+
+			@include respond-to(md) {
+				margin: $spacer-sm;
+			}
 		}
 
 		&__words-container {
 			overflow-y: auto;
 			padding: 0 $spacer-lg $spacer-lg * 3;
+
+			@include respond-to(md) {
+				padding: 0 $spacer-sm $spacer-1xl $spacer-sm;
+			}
 		}
 
 		@include respond-at("md") {
@@ -276,6 +285,7 @@ $metadata-media-ocr-tabs-height: 5.6rem;
 			padding: 0.5rem 0.25rem;
 			cursor: pointer;
 			scroll-margin: 40vh;
+			word-break: break-word;
 
 			&:hover {
 				background-color: $teal-30;
@@ -407,7 +417,8 @@ $metadata-media-ocr-tabs-height: 5.6rem;
 		}
 	}
 
-	&__wrapper--metadata {
+	&__wrapper--metadata,
+	&__wrapper--ocr {
 		.p-object-detail__media {
 			display: none;
 		}
@@ -515,7 +526,7 @@ $metadata-media-ocr-tabs-height: 5.6rem;
 		width: $button-height-sm;
 		height: $button-height;
 		border-radius: $button-radius-sm;
-		top: calc(50% - $button-height / 2);
+		top: calc($expand-button-vertical-position - $button-height / 2);
 		right: $metadata-collapsed-width;
 		transform: translate(50%, 3.5rem);
 		transition: right $animate-default;

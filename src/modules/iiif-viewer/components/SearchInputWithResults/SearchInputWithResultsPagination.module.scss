@@ -22,6 +22,7 @@
 
 	> span {
 		font-size: $font-size-sm;
+		white-space: nowrap;
 	}
 
 	:global(.c-button) {

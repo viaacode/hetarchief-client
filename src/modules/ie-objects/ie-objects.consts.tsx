@@ -23,9 +23,14 @@ import {
 } from '@ie-objects/utils/map-metadata';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
+import {
+	GET_TYPE_TO_LABEL_MAP,
+	TYPE_TO_ICON_MAP,
+	TYPE_TO_NO_ICON_MAP,
+} from '@shared/components/MediaCard';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { type IeObjectType } from '@shared/types/ie-objects';
+import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate } from '@shared/utils/dates';
 
 /**
@@ -131,37 +136,21 @@ export const noLicensePlaceholder = (): ObjectPlaceholderProps => ({
  */
 
 const renderMediaTab = (type?: IeObjectType | null, available = true) => {
-	switch (type) {
-		case 'audio':
-			return {
-				id: ObjectDetailTabs.Media,
-				label: tText('modules/ie-objects/const/index___audio'),
-				icon: (
-					<Icon
-						name={available ? IconNamesLight.Audio : IconNamesLight.NoAudio}
-						aria-hidden
-					/>
-				),
-			};
-		case 'video':
-		case 'film':
-			return {
-				id: ObjectDetailTabs.Media,
-				label: tText('modules/ie-objects/const/index___video'),
-				icon: (
-					<Icon
-						name={available ? IconNamesLight.Video : IconNamesLight.NoVideo}
-						aria-hidden
-					/>
-				),
-			};
-		default:
-			return {
-				id: ObjectDetailTabs.Media,
-				label: tText('modules/ie-objects/const/index___video'),
-				icon: <Icon name={IconNamesLight.NoVideo} aria-hidden />,
-			};
-	}
+	const typeWithDefault = type || IeObjectType.Video;
+	return {
+		id: ObjectDetailTabs.Media,
+		label: GET_TYPE_TO_LABEL_MAP(typeWithDefault),
+		icon: (
+			<Icon
+				name={
+					available
+						? TYPE_TO_ICON_MAP[typeWithDefault]
+						: TYPE_TO_NO_ICON_MAP[typeWithDefault]
+				}
+				aria-hidden
+			/>
+		),
+	};
 };
 
 export const OBJECT_DETAIL_TABS = (
@@ -176,7 +165,7 @@ export const OBJECT_DETAIL_TABS = (
 	renderMediaTab(mediaType, available),
 	{
 		id: ObjectDetailTabs.Ocr,
-		label: tText('OCR'),
+		label: tText('modules/ie-objects/ie-objects___ocr'),
 		icon: <Icon name={IconNamesLight.Ocr} aria-hidden />,
 	},
 ];

@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "sass:map";
 
 /**
  * Colors
@@ -116,6 +117,12 @@ $breakpoints: (
 	"xl": 1200px,
 	"xxl": 1400px,
 );
+$breakpoint-xs: map.get($breakpoints, "xs");
+$breakpoint-sm: map.get($breakpoints, "sm");
+$breakpoint-md: map.get($breakpoints, "md");
+$breakpoint-lg: map.get($breakpoints, "lg");
+$breakpoint-xl: map.get($breakpoints, "xl");
+$breakpoint-xxl: map.get($breakpoints, "xxl");
 
 /**
  * Z-index layers

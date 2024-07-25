@@ -55,7 +55,7 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 						onClick={() => onChangeSearchIndex(currentSearchIndex - 1)}
 						disabled={currentSearchIndex === 0}
 					/>
-					<span>
+					<span className="pagination-info">
 						{tText(
 							'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___current-search-index-van-de-total-search-results',
 							{
@@ -89,7 +89,9 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 			{!searchResults && (
 				<Button
 					iconStart={<Icon name={IconNamesLight.Search} />}
-					aria-label={tText('Zoek opdracht uitvoeren')}
+					aria-label={tText(
+						'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___zoek-opdracht-uitvoeren'
+					)}
 					variants={['text', ...variants]}
 					onClick={() => onSearch(value)}
 					disabled={!value}

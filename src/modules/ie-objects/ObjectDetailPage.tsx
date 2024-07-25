@@ -42,7 +42,13 @@ import React, {
 	useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
+import {
+	BooleanParam,
+	NumberParam,
+	StringParam,
+	useQueryParam,
+	withDefault,
+} from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
@@ -73,7 +79,6 @@ import {
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
-	IE_OBJECT_QUERY_PARAM_CONFIG,
 	IMAGE_API_FORMATS,
 	IMAGE_FORMATS,
 	KEY_USER_ACTION_SORT_MAP,
@@ -202,8 +207,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [mediaType, setMediaType] = useState<IeObjectType | null>(null);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
-	const [currentPageIndex, setCurrentPageIndex] = useState<number>(0); // Used for going through the pages of a newspaper
-	const [currentRepresentationIndex, setCurrentRepresentationIndex] = useState<number>(0); // Used for going through the videos/audio/image representations/files inside a single detail page
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | null>(null);
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
 	const [related, setRelated] = useState<MediaObject[]>([]);
@@ -223,41 +226,54 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const folders = useSelector(selectFolders);
 
 	// Query params
-	const [query, setQuery] = useQueryParams({
-		...IE_OBJECT_QUERY_PARAM_CONFIG,
-		[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: StringParam,
-		[QUERY_PARAM_KEY.ACTIVE_BLADE]: StringParam,
-		[QUERY_PARAM_KEY.ACTIVE_TAB]: StringParam,
-		[QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_X]: withDefault(NumberParam, undefined),
-		[QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_Y]: withDefault(NumberParam, undefined),
-		[QUERY_PARAM_KEY.IIIF_VIEWER_ZOOM_LEVEL]: withDefault(NumberParam, undefined),
-	});
+	// Search terms are used to store the search terms after the user has confirmed the search
+	const [highlightedSearchTerms, setHighlightedSearchTerms] = useQueryParam(
+		QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS,
+		withDefault(StringParam, '')
+	);
+	const [, setShowAuthQueryKey] = useQueryParam(QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY, StringParam);
+	const [activeBlade, setActiveBlade] = useQueryParam(
+		QUERY_PARAM_KEY.ACTIVE_BLADE,
+		withDefault(StringParam, undefined)
+	);
+	const [activeTab, setActiveTab] = useQueryParam(QUERY_PARAM_KEY.ACTIVE_TAB, StringParam);
+	// Used for going through the pages of a newspaper (iiif viewer reference strip)
+	const [currentPageIndex, setCurrentPageIndex] = useQueryParam(
+		QUERY_PARAM_KEY.ACTIVE_PAGE,
+		withDefault(NumberParam, 0)
+	);
+	// Used for going through the videos/audio/image representations/files inside a single detail page (grey bottom bar)
+	const [currentRepresentationIndex, setCurrentRepresentationIndex] = useQueryParam(
+		QUERY_PARAM_KEY.ACTIVE_REPRESENTATION,
+		NumberParam
+	);
+	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useQueryParam(
+		QUERY_PARAM_KEY.ACTIVE_SEARCH_RESULT_INDEX,
+		withDefault(NumberParam, 0)
+	);
+	const [expandSidebar, setExpandSidebar] = useQueryParam(
+		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
+		withDefault(BooleanParam, false)
+	);
+	const [iiifViewerFocusX] = useQueryParam(
+		QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_X,
+		withDefault(NumberParam, undefined)
+	);
+	const [iiifViewerFocusY] = useQueryParam(
+		QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_Y,
+		withDefault(NumberParam, undefined)
+	);
+	const [iiifViewerZoomLevel] = useQueryParam(
+		QUERY_PARAM_KEY.IIIF_VIEWER_ZOOM_LEVEL,
+		withDefault(NumberParam, undefined)
+	);
+
 	// Search terms
 	// Temp search terms are used to store the search terms while the user is typing
 	const [searchTermsTemp, setSearchTermsTemp] = useState<string>('');
-	// Search terms are used to store the search terms after the user has confirmed the search
-	const searchTerms = query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] || '';
-	const setSearchTerms = (newSearchTerms: string) => {
-		setQuery(
-			{ ...query, [QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: newSearchTerms },
-			'replace'
-		);
-	};
-	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number>(0);
+
+	const [,] = useState<number>(0);
 	const [searchResults, setSearchResults] = useState<OcrSearchResult[] | null>(null);
-
-	const setActiveTab = (tabId: ObjectDetailTabs | null) => {
-		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_TAB]: tabId || undefined }, 'replace');
-	};
-
-	const setActiveBlade = (blade: MediaActions | null) => {
-		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_BLADE]: blade || undefined }, 'replace');
-	};
-
-	const activeTab: ObjectDetailTabs =
-		(query[QUERY_PARAM_KEY.ACTIVE_TAB] as ObjectDetailTabs) || ObjectDetailTabs.Metadata;
-	const activeBlade = query[QUERY_PARAM_KEY.ACTIVE_BLADE];
-	const [expandMetadata, setExpandMetadata] = useState<boolean>(false);
 
 	const {
 		data: mediaInfo,
@@ -269,7 +285,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
 	const currentPage = mediaInfo?.pageRepresentations?.[currentPageIndex];
-	const currentRepresentation = currentPage?.[currentRepresentationIndex];
+	const currentRepresentation = currentPage?.[currentRepresentationIndex || 0];
 
 	// peak file
 	const peakFileStoredAt: string | null =
@@ -424,8 +440,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	}, [windowSize]);
 
 	useEffect(() => {
-		dispatch(setShowZendesk(!isKiosk && !hasAccessToVisitorSpaceOfObject));
-	}, [dispatch, hasAccessToVisitorSpaceOfObject, isKiosk]);
+		dispatch(
+			setShowZendesk(
+				!isKiosk && !hasAccessToVisitorSpaceOfObject && activeTab !== ObjectDetailTabs.Media
+			)
+		);
+	}, [dispatch, hasAccessToVisitorSpaceOfObject, isKiosk, activeTab]);
 
 	useEffect(() => {
 		if (mediaInfo) {
@@ -462,7 +482,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			setActiveTab(ObjectDetailTabs.Metadata);
 		} else {
 			// Check media content and license for default tab on desktop
-			setExpandMetadata(!mediaInfo?.dctermsFormat || !hasMedia);
+			setExpandSidebar(!mediaInfo?.dctermsFormat || !hasMedia);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mediaInfo]);
@@ -518,7 +538,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Callbacks
 	 */
 	const handleExpandButtonClicked = () => {
-		setExpandMetadata(!expandMetadata);
+		setExpandSidebar(!expandSidebar);
 	};
 
 	const onCloseBlade = () => {
@@ -543,14 +563,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			setActiveBlade(MediaActions.RequestAccess);
 		} else {
 			// Open the login blade first
-			setQuery(
-				{
-					...query,
-					[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
-					[QUERY_PARAM_KEY.ACTIVE_BLADE]: MediaActions.RequestAccess,
-				},
-				'replace'
-			);
+			setShowAuthQueryKey('1', 'replace');
+			setActiveBlade(MediaActions.RequestAccess, 'replace');
 		}
 	};
 
@@ -748,6 +762,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			}
 			setCurrentSearchResultIndex(searchResultIndex);
 			const searchResult = searchResults[searchResultIndex];
+			if (!searchResult) {
+				return;
+			}
 			if (searchResult.pageIndex !== currentPageIndex) {
 				setCurrentPageIndex(searchResult.pageIndex);
 			}
@@ -756,7 +773,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				await handleClickOcrWord(altoText, searchResult.searchTermIndexOnPage);
 			}
 		},
-		[currentPageIndex, searchResults, simplifiedAltoInfo?.text]
+		[currentPageIndex, searchResults, setCurrentPageIndex, simplifiedAltoInfo?.text]
 	);
 
 	const searchPagesOcrText = useCallback(
@@ -766,12 +783,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				// Zoom to whole page
 				iiifViewerReference.current?.iiifGoToHome();
 			}
-			if (newSearchTerms === searchTerms && hasAppliedUrlSearchTerms) {
+			if (newSearchTerms === highlightedSearchTerms && hasAppliedUrlSearchTerms) {
 				// Pressed enter with the same search query => go to next result
 				handleChangeSearchIndex(currentSearchResultIndex + 1);
 				return;
 			}
-			setSearchTerms(newSearchTerms);
+			setHighlightedSearchTerms(newSearchTerms);
+			setActiveTab(ObjectDetailTabs.Ocr);
 
 			const pageOcrTexts: (string | null)[] = [];
 			mediaInfo?.pageRepresentations?.forEach((representations) => {
@@ -786,8 +804,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			if (!pageOcrTexts.length) {
 				toastService.notify({
 					maxLines: 3,
-					title: tText('Error'),
-					description: tText('Deze krant heeft geen OCR tekst'),
+					title: tText('modules/ie-objects/object-detail-page___error'),
+					description: tText(
+						'modules/ie-objects/object-detail-page___deze-krant-heeft-geen-ocr-tekst'
+					),
 				});
 				return;
 			}
@@ -820,6 +840,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			console.log('search results: ', searchResultsTemp);
 
 			setSearchResults(searchResultsTemp);
+			setCurrentPageIndex(searchResultsTemp?.[0]?.pageIndex || 0);
 			iiifViewerReference.current?.waitForReadyState().then(() => {
 				handleChangeSearchIndex(0);
 			});
@@ -829,24 +850,26 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			handleChangeSearchIndex,
 			hasAppliedUrlSearchTerms,
 			mediaInfo?.pageRepresentations,
-			searchTerms,
-			setSearchTerms,
+			highlightedSearchTerms,
+			setActiveTab,
+			setCurrentPageIndex,
+			setHighlightedSearchTerms,
 			tText,
 		]
 	);
 
 	useEffect(() => {
 		// When the page loads, search the ocr texts for the searchTerms in the query params in the url
-		console.log('setting initial search terms: ', searchTerms);
+		console.log('setting initial search terms: ', highlightedSearchTerms);
 		if (
-			searchTerms &&
+			highlightedSearchTerms &&
 			mediaInfo?.dctermsFormat === IeObjectType.Newspaper &&
 			!hasAppliedUrlSearchTerms
 		) {
-			console.log('setting initial search terms in fields: ', searchTerms);
-			setSearchTermsTemp(searchTerms);
+			console.log('setting initial search terms in fields: ', highlightedSearchTerms);
+			setSearchTermsTemp(highlightedSearchTerms);
 			console.log('executing search results');
-			searchPagesOcrText(searchTerms);
+			searchPagesOcrText(highlightedSearchTerms);
 			setHasAppliedUrlSearchTerms(true);
 		}
 	}, [
@@ -854,7 +877,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		mediaInfo?.dctermsFormat,
 		searchPagesOcrText,
 		searchResults,
-		searchTerms,
+		highlightedSearchTerms,
 	]);
 
 	const getSortMapByUserType = useCallback((): MetadataSortMap[] => {
@@ -1008,7 +1031,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			canManageFolders: canManageFolders || isAnonymous,
 			isInAFolder: isInAFolder(folders, mediaInfo?.schemaIdentifier),
 			isHighlightSearchTermActive: isHighlightSearchTermsActive,
-			canToggleSearchTerms: !!searchTerms,
+			canToggleSearchTerms: !!highlightedSearchTerms,
 			canReport: !isKiosk,
 			canRequestAccess: !!canRequestAccess,
 			canRequestMaterial: isAnonymous || canRequestMaterial,
@@ -1052,7 +1075,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		folders,
 		mediaInfo?.schemaIdentifier,
 		isHighlightSearchTermsActive,
-		searchTerms,
+		highlightedSearchTerms,
 		isKiosk,
 		canRequestAccess,
 		canRequestMaterial,
@@ -1114,9 +1137,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					setIsOcrEnabled={setIsOcrEnabled}
 					activeImageIndex={currentPageIndex}
 					setActiveImageIndex={setCurrentPageIndex}
-					initialFocusX={query[QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_X]}
-					initialFocusY={query[QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_Y]}
-					initialZoomLevel={query[QUERY_PARAM_KEY.IIIF_VIEWER_ZOOM_LEVEL]}
+					initialFocusX={iiifViewerFocusX}
+					initialFocusY={iiifViewerFocusY}
+					initialZoomLevel={iiifViewerZoomLevel}
 					searchTerms={searchTermsTemp}
 					setSearchTerms={setSearchTermsTemp}
 					searchPages={searchPagesOcrText}
@@ -1305,9 +1328,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						`p-object-detail__metadata-list--${type}`,
 						{
 							[styles['p-object-detail__metadata-list--collapsed']]:
-								!expandMetadata || isMobile,
+								!expandSidebar || isMobile,
 							[styles['p-object-detail__metadata-list--expanded']]:
-								expandMetadata && !isMobile,
+								expandSidebar && !isMobile,
 						}
 					)}
 				>
@@ -1551,14 +1574,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	};
 
 	const renderRelatedObjectsBlade = () => {
-		if (!related.length || (!expandMetadata && isMobile)) {
+		if (!related.length || (!expandSidebar && isMobile)) {
 			return null;
 		}
 		return (
 			<CollapsableBlade
 				className={clsx('p-object-detail__related', {
-					'p-object-detail__metadata--expanded': expandMetadata,
-					'p-object-detail__metadata--collapsed': !expandMetadata,
+					'p-object-detail__metadata--expanded': expandSidebar,
+					'p-object-detail__metadata--collapsed': !expandSidebar,
 				})}
 				isOpen={isRelatedObjectsBladeOpen}
 				setIsOpen={setIsRelatedObjectsBladeOpen}
@@ -1587,7 +1610,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	};
 
 	const renderOcrContent = () => {
-		const searchTermWords = searchTerms.split(' ');
+		const searchTermWords = compact(highlightedSearchTerms.split(' '));
 		let searchTermIndex = 0;
 		return (
 			<div className={clsx(styles['p-object-detail__ocr'])}>
@@ -1604,7 +1627,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				<div className={styles['p-object-detail__ocr__words-container']}>
 					{simplifiedAltoInfo?.text?.map((textLocation, index) => {
 						const isMarked: boolean =
-							!!searchTerms &&
+							!!highlightedSearchTerms &&
 							searchTermWords.some((searchWord) =>
 								textLocation.text.toLowerCase().includes(searchWord)
 							);
@@ -1616,7 +1639,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						const searchResultIndexWithinCurrentPage: number =
 							currentSearchResultIndex - searchResultsOnPreviousPages;
 						const isActive: boolean =
-							!!searchTerms &&
+							!!highlightedSearchTerms &&
 							isMarked &&
 							searchTermIndex === searchResultIndexWithinCurrentPage;
 
@@ -1733,12 +1756,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			<article
 				className={clsx(styles['p-object-detail__wrapper'], {
 					[styles['p-object-detail--hidden']]: mediaInfoIsLoading || mediaInfoIsError,
-					[styles['p-object-detail__wrapper--collapsed']]: !expandMetadata,
-					[styles['p-object-detail__wrapper--expanded']]: expandMetadata,
+					[styles['p-object-detail__wrapper--collapsed']]: !expandSidebar,
+					[styles['p-object-detail__wrapper--expanded']]: expandSidebar,
 					[styles['p-object-detail__wrapper--metadata']]:
 						activeTab === ObjectDetailTabs.Metadata,
 					[styles['p-object-detail__wrapper--video']]:
 						activeTab === ObjectDetailTabs.Media,
+					[styles['p-object-detail__wrapper--ocr']]: activeTab === ObjectDetailTabs.Ocr,
 				})}
 			>
 				{/* Video audio or newspaper */}
@@ -1748,13 +1772,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				{mediaType && hasMedia && (
 					<Button
 						className={clsx(styles['p-object-detail__expand-button'], {
-							[styles['p-object-detail__expand-button--collapsed']]: !expandMetadata,
-							[styles['p-object-detail__expand-button--expanded']]: expandMetadata,
+							[styles['p-object-detail__expand-button--collapsed']]: !expandSidebar,
+							[styles['p-object-detail__expand-button--expanded']]: expandSidebar,
 						})}
 						icon={
 							<Icon
 								name={
-									expandMetadata
+									expandSidebar
 										? IconNamesLight.ExpandRight
 										: IconNamesLight.ExpandLeft
 								}
@@ -1769,8 +1793,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				{/* Sidebar */}
 				<div
 					className={clsx(styles['p-object-detail__sidebar'], {
-						[styles['p-object-detail__sidebar--collapsed']]: !expandMetadata,
-						[styles['p-object-detail__sidebar--expanded']]: expandMetadata,
+						[styles['p-object-detail__sidebar--collapsed']]: !expandSidebar,
+						[styles['p-object-detail__sidebar--expanded']]: expandSidebar,
 					})}
 				>
 					<ScrollableTabs

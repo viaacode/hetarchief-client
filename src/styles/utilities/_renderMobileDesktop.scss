@@ -1,8 +1,6 @@
 @use "../abstracts" as *;
 @use "sass:map";
 
-$breakpoint-md: map.get($breakpoints, "md");
-
 .u-hide {
 	// Hide the element when the viewport is at least $breakpoint-md, bigger than mobile
 	&-gte-bp2 {
