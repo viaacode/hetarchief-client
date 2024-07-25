@@ -1,6 +1,9 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { clamp } from 'lodash-es';
+import { clamp, isNil, round } from 'lodash-es';
+import { useRouter } from 'next/router';
+import { type Viewer } from 'openseadragon';
+import { parseUrl } from 'query-string';
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
@@ -21,19 +24,31 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 
 const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 	(
-		{ imageInfos, id, isOcrEnabled, setIsOcrEnabled, activeImageIndex, setActiveImageIndex },
+		{
+			imageInfos,
+			id,
+			isOcrEnabled,
+			setIsOcrEnabled,
+			activeImageIndex,
+			setActiveImageIndex,
+			initialFocusX,
+			initialFocusY,
+			initialZoomLevel,
+		},
 		ref
 	) => {
 		/**
 		 * Hooks
 		 */
 		const { tText } = useTranslation();
+		const router = useRouter();
 
 		// Internal state
 		const [iiifGridViewEnabled, setIiifGridViewEnabled] = useState<boolean>(false);
 		const [openSeaDragonLib, setOpenSeaDragonLib] = useState<any | null>(null);
-		const [openSeaDragonInstance, setOpenSeadragonInstance] =
-			useState<OpenSeadragon.Viewer | null>(null);
+		const [openSeaDragonViewer, setOpenSeadragonViewer] = useState<OpenSeadragon.Viewer | null>(
+			null
+		);
 
 		// Layout
 		useStickyLayout();
@@ -56,10 +71,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		 */
 
 		useEffect(() => {
-			if (openSeaDragonInstance) {
-				openSeaDragonInstance.goToPage(activeImageIndex);
+			if (openSeaDragonViewer) {
+				openSeaDragonViewer.goToPage(activeImageIndex);
 			}
-		}, [activeImageIndex, openSeaDragonInstance]);
+		}, [activeImageIndex, openSeaDragonViewer]);
 
 		const addFullscreenCloseButton = useCallback(
 			(openSeadragonViewer: OpenSeadragon.Viewer) => {
@@ -93,11 +108,11 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				return;
 			}
 
-			if (!openSeaDragonInstance || !openSeaDragonLib) {
+			if (!openSeaDragonViewer || !openSeaDragonLib) {
 				return null;
 			}
 
-			openSeaDragonInstance?.clearOverlays();
+			openSeaDragonViewer?.clearOverlays();
 
 			// TODO link altoTextLocations to activeImageIndex
 			const altoUrl = imageInfos[activeImageIndex].altoUrl;
@@ -131,7 +146,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		${altoTextLocation.text}
 	</text>
 </svg>`;
-				openSeaDragonInstance.addOverlay(
+				openSeaDragonViewer.addOverlay(
 					span,
 					new openSeaDragonLib.Rect(
 						altoTextLocation.x / imageInfos[activeImageIndex].width,
@@ -143,7 +158,62 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					openSeaDragonLib.Placement.CENTER
 				);
 			});
-		}, [activeImageIndex, imageInfos, openSeaDragonInstance, openSeaDragonLib]);
+		}, [activeImageIndex, imageInfos, openSeaDragonViewer, openSeaDragonLib]);
+
+		const applyInitialZoomAndPan = useCallback(
+			(openSeadragonViewerTemp: Viewer, openSeadragonLibTemp: any) => {
+				openSeadragonViewerTemp.addHandler('open', () => {
+					// When the viewer is initialized, set the desired zoom and pan
+					if (
+						!isNil(initialFocusX) &&
+						!isNil(initialFocusY) &&
+						!isNil(initialZoomLevel)
+					) {
+						const centerPoint = new openSeadragonLibTemp.Point(
+							initialFocusX,
+							initialFocusY
+						);
+						openSeadragonViewerTemp.viewport.panTo(centerPoint, true);
+						openSeadragonViewerTemp.viewport.zoomTo(
+							initialZoomLevel,
+							centerPoint,
+							true
+						);
+					}
+				});
+			},
+			// Only update the pan and zoom once when loading the iiif viewer
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+			[]
+		);
+
+		const initZoomAndPanListeners = useCallback((openSeadragonViewerTemp: Viewer) => {
+			openSeadragonViewerTemp.addHandler('viewport-change', () => {
+				if (!openSeadragonViewerTemp) {
+					return;
+				}
+				const zoomLevel = openSeadragonViewerTemp.viewport.getZoom();
+				const centerPoint = openSeadragonViewerTemp.viewport.getCenter();
+				// Use window to parse query params, since this native event listener doesn't have access to the update-to-date router.query query params
+				// WE also include ...router.query since route params (eg: slug and ieObjectId) are also part of the router.query object
+				const parsedUrl = parseUrl(window.location.href);
+				router.push(
+					{
+						query: {
+							...router.query,
+							...parsedUrl.query,
+							zoomLevel: round(zoomLevel, 3),
+							focusX: round(centerPoint.x, 3),
+							focusY: round(centerPoint.y, 3),
+						},
+					},
+					undefined,
+					{ shallow: true }
+				);
+			});
+			// Only register the viewport-change event once when loading the iiif viewer
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, []);
 
 		const initIiifViewer = useCallback(async () => {
 			if (!!iiifViewerId && isBrowser()) {
@@ -151,11 +221,11 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				if (iiifContainer) {
 					iiifContainer.innerHTML = '';
 				}
-				const OpenSeadragon = (await import('openseadragon')).default;
+				const openSeadragonLibTemp = (await import('openseadragon')).default;
 				// We need to use a function here,
 				// since the library is a function itself,
 				// and otherwise the setState thinks this is a setter function
-				setOpenSeaDragonLib(() => OpenSeadragon);
+				setOpenSeaDragonLib(() => openSeadragonLibTemp);
 
 				const imageSources = imageInfos.map((imageInfo) => {
 					if (imageInfo.imageUrl.endsWith('.jph')) {
@@ -168,17 +238,27 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				});
 
 				// Init Open Seadragon viewer
-				const openSeadragonInstanceTemp: OpenSeadragon.Viewer = new OpenSeadragon.Viewer(
-					getOpenSeadragonConfig(imageSources, isMobile, iiifViewerId)
-				);
+				const openSeadragonViewerTemp: OpenSeadragon.Viewer =
+					new openSeadragonLibTemp.Viewer(
+						getOpenSeadragonConfig(imageSources, isMobile, iiifViewerId)
+					);
 
-				addFullscreenCloseButton(openSeadragonInstanceTemp);
+				addFullscreenCloseButton(openSeadragonViewerTemp);
 
-				openSeadragonInstanceTemp.viewport.goHome(true);
+				openSeadragonViewerTemp.viewport.goHome(true);
 
-				setOpenSeadragonInstance(openSeadragonInstanceTemp);
+				// Keep track of zoom and pan in the url
+				initZoomAndPanListeners(openSeadragonViewerTemp);
+
+				// Apply url zoom and pan to the current viewer
+				applyInitialZoomAndPan(openSeadragonViewerTemp, openSeadragonLibTemp);
+
+				setOpenSeadragonViewer(openSeadragonViewerTemp);
 			}
-		}, [addFullscreenCloseButton, iiifViewerId, isMobile]);
+			// Do not rerun this function when the queryParams change,
+			// since we only want apply the zoom and pan from the query params once to the iiif viewer
+			// eslint-disable-next-line
+		}, [addFullscreenCloseButton, iiifViewerId, imageInfos, isMobile]);
 
 		useEffect(() => {
 			updateOcrOverlay();
@@ -193,31 +273,31 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		 */
 
 		const iiifZoom = (multiplier: number): void => {
-			if (!openSeaDragonInstance) {
+			if (!openSeaDragonViewer) {
 				return;
 			}
-			const currentZoom = openSeaDragonInstance.viewport.getZoom(true);
+			const currentZoom = openSeaDragonViewer.viewport.getZoom(true);
 			const desiredZoom = clamp(
 				currentZoom * multiplier,
-				openSeaDragonInstance.viewport.getMinZoom(),
-				openSeaDragonInstance.viewport.getMaxZoom()
+				openSeaDragonViewer.viewport.getMinZoom(),
+				openSeaDragonViewer.viewport.getMaxZoom()
 			);
-			openSeaDragonInstance.viewport.zoomTo(desiredZoom);
+			openSeaDragonViewer.viewport.zoomTo(desiredZoom);
 		};
 
 		const iiifFullscreen = (expand: boolean): void => {
-			openSeaDragonInstance?.setFullScreen(expand);
+			openSeaDragonViewer?.setFullScreen(expand);
 		};
 
 		const iiifGoToPage = (pageIndex: number): void => {
-			openSeaDragonInstance?.clearOverlays();
+			openSeaDragonViewer?.clearOverlays();
 			setActiveImageIndex(pageIndex);
-			openSeaDragonInstance?.goToPage(pageIndex);
+			openSeaDragonViewer?.goToPage(pageIndex);
 		};
 
 		const iiifRotate = (rotateRight: boolean): void => {
-			openSeaDragonInstance?.viewport.setRotation(
-				(openSeaDragonInstance?.viewport.getRotation() + 90 * (rotateRight ? 1 : -1)) % 360
+			openSeaDragonViewer?.viewport.setRotation(
+				(openSeaDragonViewer?.viewport.getRotation() + 90 * (rotateRight ? 1 : -1)) % 360
 			);
 		};
 
@@ -232,11 +312,11 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			width: number;
 			height: number;
 		}): void => {
-			if (!openSeaDragonInstance) {
+			if (!openSeaDragonViewer) {
 				return;
 			}
-			openSeaDragonInstance.viewport.zoomTo(2.5, undefined, true);
-			openSeaDragonInstance.viewport.panTo(
+			openSeaDragonViewer.viewport.zoomTo(2.5, undefined, true);
+			openSeaDragonViewer.viewport.panTo(
 				new openSeaDragonLib.Point(
 					(x + width / 2) / imageInfos[activeImageIndex].width,
 					(y + height / 2) / imageInfos[activeImageIndex].height
@@ -246,7 +326,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		};
 
 		const clearActiveWordIndex = () => {
-			openSeaDragonInstance?.container
+			openSeaDragonViewer?.container
 				?.querySelectorAll('.p-object-detail__iiif__alto__text')
 				.forEach((element) => {
 					element.classList.remove('p-object-detail__iiif__alto__text--active');
@@ -255,7 +335,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 		const setActiveWordIndex = (wordIndex: number) => {
 			clearActiveWordIndex();
-			openSeaDragonInstance?.container
+			openSeaDragonViewer?.container
 				?.querySelector('#p-object-detail__iiif__alto__text__' + wordIndex)
 				?.classList?.add('p-object-detail__iiif__alto__text--active');
 		};
@@ -461,7 +541,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 									onClick={() => {
 										iiifGoToPage(index);
 										setIiifGridViewEnabled(false);
-										openSeaDragonInstance?.forceRedraw();
+										openSeaDragonViewer?.forceRedraw();
 									}}
 								>
 									{/* eslint-disable-next-line @next/next/no-img-element */}

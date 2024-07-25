@@ -42,7 +42,7 @@ import React, {
 	useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { StringParam, useQueryParams } from 'use-query-params';
+import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
@@ -228,6 +228,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: StringParam,
 		[QUERY_PARAM_KEY.ACTIVE_BLADE]: StringParam,
 		[QUERY_PARAM_KEY.ACTIVE_TAB]: StringParam,
+		[QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_X]: withDefault(NumberParam, undefined),
+		[QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_Y]: withDefault(NumberParam, undefined),
+		[QUERY_PARAM_KEY.IIIF_VIEWER_ZOOM_LEVEL]: withDefault(NumberParam, undefined),
 	});
 	const searchTerms = query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string | undefined;
 
@@ -950,6 +953,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					setIsOcrEnabled={setIsOcrEnabled}
 					activeImageIndex={currentPageIndex}
 					setActiveImageIndex={setCurrentPageIndex}
+					initialFocusX={query[QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_X]}
+					initialFocusY={query[QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_Y]}
+					initialZoomLevel={query[QUERY_PARAM_KEY.IIIF_VIEWER_ZOOM_LEVEL]}
 				/>
 			);
 		}

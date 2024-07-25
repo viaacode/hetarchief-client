@@ -10,6 +10,9 @@ export enum QUERY_PARAM_KEY {
 	HIGHLIGHTED_SEARCH_TERMS = 'searchTerms',
 	ACTIVE_BLADE = 'blade',
 	ACTIVE_TAB = 'tab',
+	IIIF_VIEWER_FOCUS_X = 'focusX',
+	IIIF_VIEWER_FOCUS_Y = 'focusY',
+	IIIF_VIEWER_ZOOM_LEVEL = 'zoomLevel',
 }
 
 export const HIGHLIGHTED_SEARCH_TERMS_SEPARATOR = ',';
