@@ -1,11 +1,11 @@
 import { StringParam } from 'use-query-params';
-import { object, type SchemaOf, string } from 'yup';
+import { object, type Schema, string } from 'yup';
 
 import { SearchFilterId } from '@visitor-space/types';
 
 import { type CreatorFilterFormState } from './CreatorFilterForm.types';
 
-export const CREATOR_FILTER_FORM_SCHEMA = (): SchemaOf<CreatorFilterFormState> =>
+export const CREATOR_FILTER_FORM_SCHEMA = (): Schema<CreatorFilterFormState> =>
 	object({
 		creator: string().required(),
 	});

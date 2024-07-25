@@ -1,4 +1,4 @@
-import { mixed, object, type SchemaOf, string } from 'yup';
+import { mixed, object, type Schema, string } from 'yup';
 
 import { SEPARATOR } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
@@ -10,7 +10,7 @@ import { SearchFilterId } from '../../types';
 
 import { type DurationFilterFormState } from './DurationFilterForm.types';
 
-export const DURATION_FILTER_FORM_SCHEMA = (): SchemaOf<DurationFilterFormState> =>
+export const DURATION_FILTER_FORM_SCHEMA = (): Schema<DurationFilterFormState> =>
 	object({
 		operator: mixed<Operator>().required().oneOf(Object.values(Operator)),
 		duration: string()

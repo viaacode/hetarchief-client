@@ -14,6 +14,24 @@ import { type DefaultSeoInfo } from '@shared/types/seo';
 export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();
 
+	const renderPopupFooter = (onSave: () => void, onClose: () => void) => {
+		return (
+			<div className={clsx('u-px-32 u-py-24')}>
+				<Button
+					variants={['block', 'black']}
+					onClick={onSave}
+					label={tText('pages/admin/vertalingen/index___bewaar-wijzigingen')}
+				/>
+
+				<Button
+					variants={['block', 'text']}
+					onClick={onClose}
+					label={tText('pages/admin/vertalingen/index___annuleer')}
+				/>
+			</div>
+		);
+	};
+
 	const renderPopup = ({
 		title,
 		body,
@@ -27,27 +45,9 @@ export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 		onSave: () => void;
 		onClose: () => void;
 	}) => {
-		const renderFooter = () => {
-			return (
-				<div className={clsx('u-px-32 u-py-24')}>
-					<Button
-						variants={['block', 'black']}
-						onClick={onSave}
-						label={tText('pages/admin/vertalingen/index___bewaar-wijzigingen')}
-					/>
-
-					<Button
-						variants={['block', 'text']}
-						onClick={onClose}
-						label={tText('pages/admin/vertalingen/index___annuleer')}
-					/>
-				</div>
-			);
-		};
-
 		return (
 			<Blade
-				footer={renderFooter()}
+				footer={renderPopupFooter(onSave, onClose)}
 				isOpen={isOpen}
 				onClose={onClose}
 				renderTitle={(props: any) => <h2 {...props}>{title}</h2>}

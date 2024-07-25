@@ -1,10 +1,10 @@
-import { object, type SchemaOf, string } from 'yup';
+import { object, type Schema, string } from 'yup';
 
 import { tText } from '@shared/helpers/translate';
 
 import { type ReportFormState } from './ReportBlade.types';
 
-export const REPORT_FORM_SCHEMA = (): SchemaOf<ReportFormState> => {
+export const REPORT_FORM_SCHEMA = (): Schema<ReportFormState> => {
 	return object({
 		report: string().required(
 			tText(

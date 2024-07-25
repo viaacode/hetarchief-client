@@ -1,9 +1,9 @@
-import { object, type SchemaOf, string } from 'yup';
+import { object, type Schema, string } from 'yup';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { type NewsletterFormState } from '@shared/types/newsletter';
 
-export const NEWSLETTER_FORM_SCHEMA = (): SchemaOf<NewsletterFormState> => {
+export const NEWSLETTER_FORM_SCHEMA = (): Schema<NewsletterFormState> => {
 	const { tText } = useTranslation();
 
 	return object({

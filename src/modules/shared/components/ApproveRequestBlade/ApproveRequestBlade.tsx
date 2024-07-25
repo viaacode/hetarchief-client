@@ -127,8 +127,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const getAccessTypeLabel = useCallback(
 		(accessType: ApproveRequestFormState['accessType']) => {
-			const selectedFolders = folders.filter(
-				(item) => accessType?.folderIds.includes(item.id)
+			const selectedFolders = folders.filter((item) =>
+				(accessType?.folderIds || []).includes(item.id)
 			);
 			const selectedFoldersNames = selectedFolders?.map((folder) => folder.name).join(', ');
 
