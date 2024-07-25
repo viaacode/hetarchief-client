@@ -696,7 +696,6 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 						onClose={() => setShowShareMapBlade(false)}
 						isOpen={showShareMapBlade}
 						folderId={activeFolder.id}
-						folderName={activeFolder.name}
 					/>
 				)}
 			</>

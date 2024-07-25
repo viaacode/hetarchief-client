@@ -19,15 +19,8 @@ export const labelKeys: Record<keyof ShareFolderBladeFormState, string> = {
 };
 
 export interface EmailTemplate {
-	template: string;
 	data: {
 		to: string;
 		consentToTrack: string;
-		data: {
-			sharer_name: string;
-			sharer_email: string;
-			folder_name: string;
-			folder_sharelink: string;
-		};
 	};
 }
