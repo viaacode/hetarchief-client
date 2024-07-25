@@ -132,7 +132,7 @@ import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDa
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { Pill } from '@shared/components/Pill';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
-import { ScrollableTabs, TabLabel } from '@shared/components/Tabs';
+import { ScrollableTabs } from '@shared/components/Tabs';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -226,6 +226,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const folders = useSelector(selectFolders);
 
 	// Query params
+
 	// Search terms are used to store the search terms after the user has confirmed the search
 	const [highlightedSearchTerms, setHighlightedSearchTerms] = useQueryParam(
 		QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS,
@@ -236,12 +237,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		QUERY_PARAM_KEY.ACTIVE_BLADE,
 		withDefault(StringParam, undefined)
 	);
-	const [activeTab, setActiveTab] = useQueryParam(QUERY_PARAM_KEY.ACTIVE_TAB, StringParam);
+	const [activeTab, setActiveTab] = useQueryParam(
+		QUERY_PARAM_KEY.ACTIVE_TAB,
+		withDefault(StringParam, ObjectDetailTabs.Metadata)
+	);
+
 	// Used for going through the pages of a newspaper (iiif viewer reference strip)
 	const [currentPageIndex, setCurrentPageIndex] = useQueryParam(
 		QUERY_PARAM_KEY.ACTIVE_PAGE,
 		withDefault(NumberParam, 0)
 	);
+
 	// Used for going through the videos/audio/image representations/files inside a single detail page (grey bottom bar)
 	const [currentRepresentationIndex, setCurrentRepresentationIndex] = useQueryParam(
 		QUERY_PARAM_KEY.ACTIVE_REPRESENTATION,
@@ -1017,12 +1023,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	]);
 
 	const tabs: TabProps[] = useMemo(() => {
-		const available = isMediaAvailable();
-		return OBJECT_DETAIL_TABS(mediaType, available).map((tab) => ({
-			...tab,
-			label: <TabLabel label={tab.label} />,
-			active: tab.id === activeTab,
-		}));
+		return OBJECT_DETAIL_TABS(mediaType, activeTab as ObjectDetailTabs, isMediaAvailable());
 	}, [isMediaAvailable, mediaType, activeTab]);
 
 	const accessEndDate = useMemo(() => {
@@ -1697,11 +1698,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		if (mediaType) {
 			return (
 				<>
-					{renderMedia()}
+					<div className={styles['p-object-detail__media']}>{renderMedia()}</div>
 					{showFragmentSlider && (
 						<FragmentSlider
 							thumbnail={mediaInfo?.thumbnailUrl[0]}
-							className={styles['p-object-detail__slider']}
+							className={styles['p-object-detail__grey-slider-bar']}
 							files={representationsToDisplay}
 							onChangeFragment={setCurrentRepresentationIndex}
 						/>
@@ -1712,11 +1713,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		return <ObjectPlaceholder {...objectPlaceholder()} />;
 	};
 
-	const renderNavigationBar = (): ReactNode => {
+	const renderVisitorSpaceNavigationBar = (): ReactNode => {
 		if (showVisitorSpaceNavigationBar) {
 			return (
 				<VisitorSpaceNavigation
-					className={styles['p-object-detail__nav']}
+					className={styles['p-object-detail__visitor-space-navigation-bar']}
 					title={mediaInfo?.maintainerName ?? ''}
 					accessEndDate={accessEndDate}
 				/>
@@ -1743,16 +1744,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			<Head>
 				<link rel="canonical" href={`https://hetarchief.be/zoeken/${ieObjectId}`} />
 			</Head>
-			{renderNavigationBar()}
-			<ScrollableTabs
-				className={clsx(
-					styles['p-object-detail__tabs'],
-					styles['p-object-detail__tabs--mobile']
-				)}
-				variants={['dark']}
-				tabs={tabs}
-				onClick={(tabId) => setActiveTab(tabId as ObjectDetailTabs | null)}
-			/>
+
 			{isNoAccessError && (
 				<ErrorNoAccessToObject
 					visitorSpaceName={visitorSpace?.name as string}
@@ -1781,8 +1773,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					[styles['p-object-detail__wrapper--ocr']]: activeTab === ObjectDetailTabs.Ocr,
 				})}
 			>
+				{/* Visitor space navigation bar */}
+				{renderVisitorSpaceNavigationBar()}
+
 				{/* Video audio or newspaper */}
-				<div className={styles['p-object-detail__media']}>{renderObjectMedia()}</div>
+				{renderObjectMedia()}
 
 				{/* Expand button */}
 				{mediaType && hasMedia && (
@@ -1806,17 +1801,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					/>
 				)}
 
+				{/* Tabs */}
+				<ScrollableTabs
+					className={clsx(styles['p-object-detail__tabs'])}
+					variants={['dark']}
+					tabs={tabs}
+					onClick={(tabId) => setActiveTab(tabId as ObjectDetailTabs | null)}
+				/>
+
 				{/* Sidebar */}
 				<div className={clsx(styles['p-object-detail__sidebar'])}>
-					<ScrollableTabs
-						className={clsx(
-							styles['p-object-detail__tabs'],
-							styles['p-object-detail__tabs--desktop']
-						)}
-						variants={['dark']}
-						tabs={tabs.filter((tab) => tab.id !== ObjectDetailTabs.Media)}
-						onClick={(tabId) => setActiveTab(tabId as ObjectDetailTabs | null)}
-					/>
 					<div
 						className={clsx(
 							styles['p-object-detail__sidebar__content'],

@@ -1,16 +1,80 @@
 @use "src/styles/abstracts" as *;
 @use "sass:map";
 
-$expand-button-vertical-position: 45%; // Visually a litter higher than halfway to compensate for the visual bottom bar
+$expand-button-vertical-position: 35vh; // Visually a litter higher than halfway to compensate for the visual bottom bar
 $metadata-expanded-width: 72vw;
 $metadata-collapsed-width: 36vw;
 $metadata-media-ocr-tabs-height: 5.6rem;
+$back-to-global-search-button-width: 10rem;
+
+/**
+ * Object Detail Page Grid layout
+ *
+ * DESKTOP:
+ *
+ *        1                                                                                   2                                           3
+ *        │                                                                                   │                                           │
+ *    1───┼───────────────────────────────────────────────────────────────────────────────────┴───────────────────────────────────────────┤
+ *        │                                                                                                                               │
+ *        │                                                                                                                               │
+ *        │  back                              visitor space navigation bar                                         visit end date        │
+ *        │                                                                                                                               │
+ *    2───┼───────────────────────────────────────────────────────────────────────────────────┬───────────────────────────────────────────┤
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │          tabs for metadata, media, ocr    │
+ *        │                                                                                   │                                           │
+ *    3───┤                                                                                   ├───────────────────────────────────────────┤
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │                                           │
+ *        │                                   media                                           │                                           │
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │                                           │
+ *    4───┼───────────────────────────────────────────────────────────────────────────────────┤                                           │
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │                                           │
+ *        │                     grey bar with prepresentations (video/audio)                  │                                           │
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │                                           │
+ *    5───┴───────────────────────────────────────────────────────────────────────────────────┴───────────────────────────────────────────┘
+ *
+ *
+ *
+ * MOBILE:
+ *
+ *        1                    2
+ *        │                    │
+ *      1─┼────────────────────┤
+ *        │                    │
+ *        │  visitor space bar │
+ *        │                    │
+ *      2─┼────────────────────┤
+ *        │                    │
+ *        │       tabs         │
+ *        │                    │
+ *      3─┼────────────────────┤
+ *        │                    │
+ *        │                    │
+ *        │       media        │
+ *        │      metadata      │
+ *        │       ocr          │
+ *        │                    │
+ *        │                    │
+ *      4─┼────────────────────┤
+ *        │                    │
+ *        │        grey        │
+ *        │                    │
+ *      5─┴────────────────────┘
+ *
+ */
 
 .p-object-detail {
 	visibility: visible;
 	flex-grow: 1;
 	min-height: 0;
-	display: flex;
 	flex-flow: column;
 
 	// Elements
@@ -20,45 +84,38 @@ $metadata-media-ocr-tabs-height: 5.6rem;
 	}
 
 	&__wrapper {
-		flex-grow: 1;
-		min-height: 0;
 		display: grid;
+		grid-template-rows: minmax(0, max-content) $metadata-media-ocr-tabs-height 1fr minmax(0, max-content);
+		grid-template-columns: $back-to-global-search-button-width 16fr 10fr;
 		width: 100vw;
-		height: calc(100vh - $top-navigation-bar-height);
-		grid-template-rows: 1fr min-content;
-		grid-template-columns: 1fr min-content;
+		min-height: calc(100vh - $top-navigation-bar-height);
+		max-height: calc(100vh - $top-navigation-bar-height);
+		align-items: stretch;
+		justify-items: stretch;
+		align-content: stretch;
+		transition: 100ms ease-out;
+		overflow: hidden;
 
-		// `include respond-at(md)` -fix for safari
-		@media screen and (width >= $breakpoint-md) {
-			grid-template-columns: 1fr min-content;
+		@include respond-to(md) {
+			grid-template-rows: minmax(0, max-content) $metadata-media-ocr-tabs-height 1fr minmax(0, max-content);
+			grid-template-columns: 1fr;
 		}
 	}
 
-	&__visitor-space-navigation-bar--visible {
-		.p-object-detail__wrapper,
-		.p-object-detail__sidebar,
-		.p-object-detail__media {
-			height: calc(100vh - $top-navigation-bar-height - $top-visitor-space-bar-height);
-		}
-
-		> :global(:not([class*="object-detail__iiif__reference-strip"])) {
-			top: 0;
-		}
-	}
-
-	&__visitor-space-navigation-bar--hidden {
-		:global([class*="object-detail__iiif__reference-strip"]) {
-			top: $top-visitor-space-bar-height;
+	&__sidebar--expanded {
+		.p-object-detail__wrapper {
+			grid-template-columns: $back-to-global-search-button-width 10fr 16fr;
 		}
 	}
 
 	&__back {
-		position: absolute;
+		grid-row: 2;
+		grid-column: 1;
 		z-index: get-z-layer("foreground");
 		top: 0;
 		left: 0;
 		width: 10rem;
-		height: $top-visitor-space-bar-height;
+		height: $metadata-media-ocr-tabs-height;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -66,9 +123,16 @@ $metadata-media-ocr-tabs-height: 5.6rem;
 		border-radius: 0;
 	}
 
-	&__nav {
+	&__visitor-space-navigation-bar {
+		grid-row: 1;
+		grid-column: 1 / 4;
 		z-index: get-z-layer("foreground");
 		flex-shrink: 0;
+
+		@include respond-to(md) {
+			grid-column: 1;
+			width: 100vw;
+		}
 
 		&::after {
 			content: "";
@@ -81,6 +145,7 @@ $metadata-media-ocr-tabs-height: 5.6rem;
 			height: 1px;
 			background-color: $shade;
 			opacity: 0.64;
+			width: 100vw;
 
 			@include respond-at("md") {
 				visibility: hidden;
@@ -88,19 +153,36 @@ $metadata-media-ocr-tabs-height: 5.6rem;
 		}
 	}
 
+	&__visitor-space-navigation-bar--visible {
+		> :global(:not([class*="object-detail__iiif__reference-strip"])) {
+			top: 0;
+		}
+	}
+
+	&__visitor-space-navigation-bar--hidden {
+		&__visitor-space-navigation-bar {
+			display: none;
+		}
+
+		:global([class*="object-detail__iiif__reference-strip"]) {
+			top: $metadata-media-ocr-tabs-height;
+		}
+	}
+
 	&__tabs {
+		grid-row: 2;
+		grid-column: 3;
 		flex-shrink: 0;
 
 		@include respond-at(md) {
-			&--mobile {
-				display: none;
+			:global(.c-tab--media) {
+				display: none !important;
 			}
 		}
 
 		@include respond-to(md) {
-			&--desktop {
-				display: none;
-			}
+			grid-column: 1;
+			width: 100vw;
 		}
 
 		:global(.c-tabs) {
@@ -177,62 +259,55 @@ $metadata-media-ocr-tabs-height: 5.6rem;
 	}
 
 	&__media {
+		grid-row: 2 / 4;
+		grid-column: 1 / 3;
 		position: relative;
+		height: inherit;
 		display: flex;
 		flex-direction: column;
 		background-color: $silver;
-		height: calc(100vh - $top-navigation-bar-height);
 		container: object-detail__media / size;
+
+		@include respond-to(md) {
+			grid-column: 1;
+			width: 100vw;
+		}
 	}
 
-	&__slider {
+	&__grey-slider-bar {
+		grid-row: 4;
+		grid-column: 1 / 2;
 		background-color: $black-8;
 		padding: 2rem 3rem;
 		position: absolute !important;
 		bottom: 0;
 		left: 0;
 		right: 0;
+
+		@include respond-to(md) {
+			grid-column: 1;
+			width: 100vw;
+		}
 	}
 
 	&__sidebar {
+		grid-row: 3/ 4;
+		grid-column: 3;
 		display: flex;
 		flex-direction: column;
-		height: calc(100vh - $top-navigation-bar-height);
+		max-height: 100%;
+		overflow: hidden;
 
-		@include respond-at("md") {
-			@include respond-at("md") {
-				&--no-media {
-					width: $metadata-expanded-width;
-				}
-			}
-		}
-	}
-
-	&__sidebar--collapsed {
-		:global([class*="p-object-detail__sidebar"]) {
-			// Use width for toggle because grid-template-column animation is only supported on Firefox
-			width: $metadata-collapsed-width;
-			transition: width $animate-default;
-		}
-
-		:global([class="p-object-detail__metadata-list"]) {
-			grid-template-columns: 100%;
-		}
-	}
-
-	&__sidebar--expanded {
-		:global([class*="p-object-detail__sidebar"]) {
-			width: $metadata-expanded-width;
-		}
-
-		:global([class="p-object-detail__metadata-list"]) {
-			grid-template-columns: repeat(2, calc(50% - #{$spacer-sm} / 2));
+		@include respond-to(md) {
+			grid-column: 1;
+			width: 100vw;
 		}
 	}
 
 	&__sidebar__content {
-		max-width: 100vw;
-		min-height: calc(100vh - $top-navigation-bar-height - $metadata-media-ocr-tabs-height);
+		height: 100%;
+		overflow-y: auto;
+		padding-bottom: $spacer-2xl;
 		box-shadow: $shadow-24-black-12;
 
 		&__tab-media {
@@ -248,17 +323,16 @@ $metadata-media-ocr-tabs-height: 5.6rem;
 			padding-left: 0;
 			padding-right: 0;
 			padding-bottom: 0;
-			height: calc(100vh - $top-navigation-bar-height - $metadata-media-ocr-tabs-height);
 		}
 	}
 
 	&__ocr {
-		overflow-y: auto;
 		background-color: $white;
 		display: grid;
 		grid-template-columns: 1fr;
 		grid-template-rows: auto 1fr;
-		height: calc(100vh - $top-navigation-bar-height - $metadata-media-ocr-tabs-height);
+		height: 100%;
+		overflow: hidden;
 
 		&__search {
 			flex-grow: 1;
@@ -270,23 +344,13 @@ $metadata-media-ocr-tabs-height: 5.6rem;
 		}
 
 		&__words-container {
+			height: 100%;
+			max-height: 100%;
 			overflow-y: auto;
 			padding: 0 $spacer-lg $spacer-lg * 3;
 
 			@include respond-to(md) {
 				padding: 0 $spacer-sm $spacer-1xl $spacer-sm;
-			}
-		}
-
-		@include respond-at("md") {
-			&--collapsed {
-				// Use width for toggle because grid-template-column animation is only supported on Firefox
-				width: $metadata-collapsed-width;
-				transition: width $animate-default;
-			}
-
-			&--expanded {
-				width: $metadata-expanded-width;
 			}
 		}
 
@@ -419,10 +483,12 @@ $metadata-media-ocr-tabs-height: 5.6rem;
 		}
 	}
 
-	&__wrapper--metadata,
-	&__wrapper--ocr {
-		.p-object-detail__media {
-			display: none;
+	@include respond-to(md) {
+		&__wrapper--metadata,
+		&__wrapper--ocr {
+			.p-object-detail__media {
+				display: none;
+			}
 		}
 	}
 
@@ -506,39 +572,19 @@ $metadata-media-ocr-tabs-height: 5.6rem;
 		display: none;
 	}
 
-	// Media queries
-
-	// `include respond-at(md)` -fix for safari
-	@media screen and (width >= $breakpoint-md) {
-		.p-object-detail__sidebar__content {
-			display: block;
-		}
-
-		.p-object-detail__media {
-			display: grid;
-			grid-template-rows: 1fr auto;
-			grid-row: 1 / 3;
-		}
-	}
-
 	&__expand-button {
+		grid-row: 3;
+		grid-column: 3;
 		visibility: hidden;
 		z-index: get-z-layer("foreground");
-		position: absolute;
 		width: $button-height-sm;
 		height: $button-height;
 		border-radius: $button-radius-sm;
-		top: calc($expand-button-vertical-position - $button-height / 2);
-		right: $metadata-collapsed-width;
-		transform: translate(50%, 3.5rem);
+		transform: translate(-50%, $expand-button-vertical-position);
 		transition: right $animate-default;
 
 		:global(.c-button__icon span) {
 			font-size: $font-size-2xm;
-		}
-
-		&--expanded {
-			right: $metadata-expanded-width;
 		}
 
 		@include respond-at(md) {

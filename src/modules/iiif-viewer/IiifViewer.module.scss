@@ -1,9 +1,45 @@
 @use "src/styles/abstracts" as *;
 
 $navigator-margin-top: 30rem;
-$controls-margin-left: 10rem + $spacer-xs; // needs space next to the navigator control
-$controls-margin-right: $spacer-xs; // Can go all the way to the edge
-$controls-margin-bottom: $spacer-xxs; // Can go all the way to the edge
+$controls-margin-left: 10rem + $spacer-sm; // needs space next to the navigator control
+$controls-margin-right: $spacer-sm; // Can go all the way to the edge
+$controls-margin-bottom: $spacer-sm;
+
+.c-iiif-viewer {
+	container: iiif_viewer / size;
+	height: 100%;
+
+	// Hide the navigator when the iiif viewer gets too narrow
+	@container (max-width: #{$breakpoint-md}) {
+		:global(.navigator) {
+			display: none !important;
+		}
+
+		.p-object-detail__iiif__reference-strip {
+			display: none !important;
+		}
+
+		// Mobile search should be shown in separate grid row above other controls
+		.p-object-detail__iiif__controls__button-group__pagination {
+			grid-column: 1;
+			grid-row: 2;
+
+			:global(.pagination-info) {
+				display: none;
+			}
+		}
+
+		.p-object-detail__iiif__controls__button-group__search {
+			grid-column: 1 / 4;
+			grid-row: 1;
+		}
+
+		.p-object-detail__iiif__controls__button-group__zoom {
+			grid-column: 3;
+			grid-row: 2;
+		}
+	}
+}
 
 .p-object-detail__iiif {
 	display: block;
@@ -102,7 +138,7 @@ $controls-margin-bottom: $spacer-xxs; // Can go all the way to the edge
 	left: $controls-margin-left;
 	right: $controls-margin-right;
 	bottom: 0;
-	margin: $controls-margin-bottom;
+	margin-bottom: $controls-margin-bottom;
 	display: grid;
 	grid-template-columns: auto 1fr auto;
 	grid-template-rows: auto;

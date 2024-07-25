@@ -117,12 +117,12 @@ $breakpoints: (
 	"xl": 1200px,
 	"xxl": 1400px,
 );
-$breakpoint-xs: map.get($breakpoints, "xs");
-$breakpoint-sm: map.get($breakpoints, "sm");
-$breakpoint-md: map.get($breakpoints, "md");
-$breakpoint-lg: map.get($breakpoints, "lg");
-$breakpoint-xl: map.get($breakpoints, "xl");
-$breakpoint-xxl: map.get($breakpoints, "xxl");
+$breakpoint-xs: 390px;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1400px;
 
 /**
  * Z-index layers
@@ -274,3 +274,4 @@ $input-border-radius: 2.8rem;
 $max-page-width: 130rem;
 $top-navigation-bar-height: 10rem;
 $top-visitor-space-bar-height: 6.4rem;
+$bottom-grey-bar-height: 6.4rem; // TODO enter correct height

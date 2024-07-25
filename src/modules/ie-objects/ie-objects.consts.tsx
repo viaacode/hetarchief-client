@@ -135,40 +135,42 @@ export const noLicensePlaceholder = (): ObjectPlaceholderProps => ({
  * Tabs
  */
 
-const renderMediaTab = (type?: IeObjectType | null, available = true) => {
-	const typeWithDefault = type || IeObjectType.Video;
-	return {
-		id: ObjectDetailTabs.Media,
-		label: GET_TYPE_TO_LABEL_MAP(typeWithDefault),
-		icon: (
-			<Icon
-				name={
-					available
-						? TYPE_TO_ICON_MAP[typeWithDefault]
-						: TYPE_TO_NO_ICON_MAP[typeWithDefault]
-				}
-				aria-hidden
-			/>
-		),
-	};
-};
-
 export const OBJECT_DETAIL_TABS = (
-	mediaType?: IeObjectType | null,
-	available = true
-): TabProps[] => [
-	{
-		id: ObjectDetailTabs.Metadata,
-		label: tText('modules/ie-objects/const/index___metadata'),
-		icon: <Icon name={IconNamesLight.Info} aria-hidden />,
-	},
-	renderMediaTab(mediaType, available),
-	{
-		id: ObjectDetailTabs.Ocr,
-		label: tText('modules/ie-objects/ie-objects___ocr'),
-		icon: <Icon name={IconNamesLight.Ocr} aria-hidden />,
-	},
-];
+	mediaType: IeObjectType | null,
+	activeTab?: ObjectDetailTabs,
+	mediaAvailable = true
+): TabProps[] => {
+	const typeWithDefault = mediaType || IeObjectType.Video;
+	return [
+		{
+			id: ObjectDetailTabs.Metadata,
+			label: tText('modules/ie-objects/const/index___metadata'),
+			icon: <Icon name={IconNamesLight.Info} aria-hidden />,
+			active: ObjectDetailTabs.Metadata === activeTab,
+		},
+		{
+			id: ObjectDetailTabs.Media,
+			label: GET_TYPE_TO_LABEL_MAP(typeWithDefault),
+			icon: (
+				<Icon
+					name={
+						mediaAvailable
+							? TYPE_TO_ICON_MAP[typeWithDefault]
+							: TYPE_TO_NO_ICON_MAP[typeWithDefault]
+					}
+					aria-hidden
+				/>
+			),
+			active: ObjectDetailTabs.Media === activeTab,
+		},
+		{
+			id: ObjectDetailTabs.Ocr,
+			label: tText('modules/ie-objects/ie-objects___ocr'),
+			icon: <Icon name={IconNamesLight.Ocr} aria-hidden />,
+			active: ObjectDetailTabs.Ocr === activeTab,
+		},
+	];
+};
 
 /**
  * Actions
