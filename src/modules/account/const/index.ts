@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react';
-import { boolean, object, type SchemaOf } from 'yup';
+import { boolean, object, type Schema } from 'yup';
 
 import { type CommunicationFormState } from '@account/types';
 import { ROUTES_BY_LOCALE } from '@shared/const';
@@ -18,7 +18,7 @@ interface NavigationLinkInfo {
 	hasDivider?: boolean;
 }
 
-export const COMMUNICATION_FORM_SCHEMA = (): SchemaOf<CommunicationFormState> =>
+export const COMMUNICATION_FORM_SCHEMA = (): Schema<CommunicationFormState> =>
 	object({
 		acceptNewsletter: boolean().required(
 			tText('modules/account/const/account___ik-ontvang-graag-de-nieuwsbrief-is-verplicht')
