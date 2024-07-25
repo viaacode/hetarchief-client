@@ -991,14 +991,39 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	/**
 	 * Content
 	 */
+
+	const isMediaAvailable = useCallback((): boolean => {
+		switch (mediaInfo?.dctermsFormat) {
+			case IeObjectType.Audio:
+			case IeObjectType.Video:
+			case IeObjectType.Film:
+				return !isErrorPlayableUrl && !!playableUrl && !!currentPlayableFile;
+
+			case IeObjectType.Newspaper: {
+				return !!currentRepresentation?.files?.find((file) =>
+					IMAGE_API_FORMATS.includes(file.mimeType)
+				);
+			}
+
+			default:
+				return false;
+		}
+	}, [
+		currentPlayableFile,
+		currentRepresentation?.files,
+		isErrorPlayableUrl,
+		mediaInfo?.dctermsFormat,
+		playableUrl,
+	]);
+
 	const tabs: TabProps[] = useMemo(() => {
-		const available = !isErrorPlayableUrl && !!playableUrl && !!currentPlayableFile;
+		const available = isMediaAvailable();
 		return OBJECT_DETAIL_TABS(mediaType, available).map((tab) => ({
 			...tab,
 			label: <TabLabel label={tab.label} />,
 			active: tab.id === activeTab,
 		}));
-	}, [activeTab, mediaType, isErrorPlayableUrl, playableUrl, currentPlayableFile]);
+	}, [isMediaAvailable, mediaType, activeTab]);
 
 	const accessEndDate = useMemo(() => {
 		const dateDesktop = formatMediumDateWithTime(asDate(visitRequest?.endAt));
@@ -1325,13 +1350,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						'u-bg-platinum',
 						'u-list-reset',
 						styles['p-object-detail__metadata-list'],
-						`p-object-detail__metadata-list--${type}`,
-						{
-							[styles['p-object-detail__metadata-list--collapsed']]:
-								!expandSidebar || isMobile,
-							[styles['p-object-detail__metadata-list--expanded']]:
-								expandSidebar && !isMobile,
-						}
+						`p-object-detail__metadata-list--${type}`
 					)}
 				>
 					{items.map((item, index) => {
@@ -1579,10 +1598,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 		return (
 			<CollapsableBlade
-				className={clsx('p-object-detail__related', {
-					'p-object-detail__metadata--expanded': expandSidebar,
-					'p-object-detail__metadata--collapsed': !expandSidebar,
-				})}
+				className={clsx('p-object-detail__related')}
 				isOpen={isRelatedObjectsBladeOpen}
 				setIsOpen={setIsRelatedObjectsBladeOpen}
 				icon={
@@ -1791,12 +1807,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				)}
 
 				{/* Sidebar */}
-				<div
-					className={clsx(styles['p-object-detail__sidebar'], {
-						[styles['p-object-detail__sidebar--collapsed']]: !expandSidebar,
-						[styles['p-object-detail__sidebar--expanded']]: expandSidebar,
-					})}
-				>
+				<div className={clsx(styles['p-object-detail__sidebar'])}>
 					<ScrollableTabs
 						className={clsx(
 							styles['p-object-detail__tabs'],
@@ -1909,6 +1920,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							showVisitorSpaceNavigationBar,
 						[styles['p-object-detail__visitor-space-navigation-bar--hidden']]:
 							!showVisitorSpaceNavigationBar,
+						[styles['p-object-detail__sidebar--expanded']]: expandSidebar,
+						[styles['p-object-detail__sidebar--collapsed']]: !expandSidebar,
 					})}
 				>
 					{renderObjectDetail()}
