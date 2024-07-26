@@ -1,9 +1,8 @@
 import clsx from 'clsx';
 import { type FC } from 'react';
 import Highlighter from 'react-highlight-words';
-import { useQueryParams } from 'use-query-params';
+import { StringParam, useQueryParam, withDefault } from 'use-query-params';
 
-import { IE_OBJECT_QUERY_PARAM_CONFIG } from '@ie-objects/ie-objects.consts';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
@@ -28,17 +27,17 @@ const HighlightSearchTerms: FC<HighlightSearchTermsProps> = ({
 	fullHeight = false,
 	className,
 }) => {
-	const [query] = useQueryParams(IE_OBJECT_QUERY_PARAM_CONFIG);
+	const [highlightedSearchTerms] = useQueryParam(
+		QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS,
+		withDefault(StringParam, '')
+	);
 
 	const getSearchWords = (): string[] => {
 		let searchWords: string[];
-		const queryParamSearchTerms = query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as
-			| string
-			| undefined;
 		if (searchTerms) {
 			searchWords = searchTerms;
-		} else if (queryParamSearchTerms) {
-			searchWords = decodeURIComponent(queryParamSearchTerms).split(
+		} else if (highlightedSearchTerms) {
+			searchWords = decodeURIComponent(highlightedSearchTerms).split(
 				HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
 			);
 		} else {

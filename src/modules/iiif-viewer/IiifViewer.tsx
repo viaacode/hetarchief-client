@@ -2,9 +2,16 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { clamp, isNil, round } from 'lodash-es';
 import { useRouter } from 'next/router';
-import { type Viewer } from 'openseadragon';
+import { type TileSource, type Viewer } from 'openseadragon';
 import { parseUrl } from 'query-string';
-import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import React, {
+	forwardRef,
+	useCallback,
+	useEffect,
+	useImperativeHandle,
+	useMemo,
+	useState,
+} from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import { type IiifViewerFunctions, type IiifViewerProps } from '@iiif-viewer/IiifViewer.types';
@@ -37,7 +44,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			initialZoomLevel,
 			searchTerms,
 			setSearchTerms,
-			searchPages,
+			onSearch,
+			onClearSearch,
 			currentSearchIndex,
 			searchResults,
 			setSearchResultIndex,
@@ -53,12 +61,15 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		// Internal state
 		const [iiifGridViewEnabled, setIiifGridViewEnabled] = useState<boolean>(false);
 		const [openSeaDragonLib, setOpenSeaDragonLib] = useState<any | null>(null);
-		const [openSeaDragonViewer, setOpenSeadragonViewer] = useState<OpenSeadragon.Viewer | null>(
-			null
-		);
-		const [currentViewerState, setCurrentViewerState] = useState<'ready' | 'loading'>(
-			'loading'
-		);
+		const openSeaDragonViewer = (window as any).meemoo__iiifViewer || null;
+		const setOpenSeadragonViewer = (newOpenSeaDragonViewer: Viewer) => {
+			(window as any).meemoo__iiifViewer = newOpenSeaDragonViewer;
+		};
+		const activeImageTileSource: TileSource | undefined =
+			openSeaDragonViewer?.world?.getItemAt(0)?.source;
+		const viewerStatus: 'loading' | 'ready' = activeImageTileSource?.ready
+			? 'ready'
+			: 'loading';
 
 		// Layout
 		useStickyLayout();
@@ -81,10 +92,16 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		 */
 
 		useEffect(() => {
-			if (openSeaDragonViewer) {
+			if (!openSeaDragonViewer) {
+				return;
+			}
+			if (openSeaDragonViewer && activeImageTileSource) {
+				openSeaDragonViewer.clearOverlays();
 				openSeaDragonViewer.goToPage(activeImageIndex);
 			}
-		}, [activeImageIndex, openSeaDragonViewer]);
+			// Do not include activeImageTileSource since it causes a rerender loop since this can change in js world without react knowing about it
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [openSeaDragonViewer, activeImageIndex]);
 
 		const addFullscreenCloseButton = useCallback(
 			(openSeadragonViewer: OpenSeadragon.Viewer) => {
@@ -100,7 +117,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				bottomLeftContainer.innerHTML = '';
 				const closeFullscreenButton = document.createElement('button');
 				closeFullscreenButton.className =
-					'p-object-detail__iiif__close-fullscreen c-button c-button--icon c-button--white';
+					'c-iiif-viewer__iiif__close-fullscreen c-button c-button--icon c-button--white';
 				closeFullscreenButton.innerHTML = 'times';
 				closeFullscreenButton.title = tText(
 					'modules/iiif-viewer/iiif-viewer___sluit-volledig-scherm'
@@ -122,7 +139,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				return null;
 			}
 
-			// console.log('updateOcrOverlay');
 			openSeaDragonViewer?.clearOverlays();
 
 			if (!altoJsonCurrentPage) {
@@ -130,21 +146,14 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				return;
 			}
 
-			// console.log('getImageSize', {
-			// 	activeImageIndex,
-			// 	itemCount: openSeaDragonViewer.world.getItemCount(),
-			// });
-			const tiledImage = openSeaDragonViewer.world.getItemAt(activeImageIndex);
-			// console.log('tiledImage', tiledImage);
-			if (!tiledImage) {
+			if (!activeImageTileSource) {
+				console.error(
+					'Failed to update ocr overlay because activeImageTileSource is undefined'
+				);
 				return;
 			}
-			const imageWidth = tiledImage.source.dimensions.x;
-			const imageHeight = tiledImage.source.dimensions.y;
-			// console.log({
-			// 	imageWidth,
-			// 	imageHeight,
-			// });
+			const imageWidth = activeImageTileSource.dimensions.x;
+			const imageHeight = activeImageTileSource.dimensions.y;
 			altoJsonCurrentPage?.text?.forEach((altoTextLocation, index) => {
 				const x = altoTextLocation.x / imageWidth;
 				const y = altoTextLocation.y / imageHeight;
@@ -167,8 +176,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					return;
 				}
 				const span = document.createElement('SPAN');
-				span.id = 'p-object-detail__iiif__alto__text__' + index;
-				span.className = 'p-object-detail__iiif__alto__text';
+				span.id = 'c-iiif-viewer__iiif__alto__text__' + index;
+				span.className = 'c-iiif-viewer__iiif__alto__text';
 				span.innerHTML = `
 <svg
 	width="${altoTextLocation.width}"
@@ -223,7 +232,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			[]
 		);
 
-		const initZoomAndPanListeners = useCallback((openSeadragonViewerTemp: Viewer) => {
+		const addEventListeners = useCallback((openSeadragonViewerTemp: Viewer) => {
 			openSeadragonViewerTemp.addHandler('viewport-change', () => {
 				if (!openSeadragonViewerTemp) {
 					return;
@@ -231,7 +240,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				const zoomLevel = openSeadragonViewerTemp.viewport.getZoom();
 				const centerPoint = openSeadragonViewerTemp.viewport.getCenter();
 				// Use window to parse query params, since this native event listener doesn't have access to the update-to-date router.query query params
-				// WE also include ...router.query since route params (eg: slug and ieObjectId) are also part of the router.query object
+				// We also include ...router.query since route params (eg: slug and ieObjectId) are also part of the router.query object
 				const parsedUrl = parseUrl(window.location.href);
 				router.push(
 					{
@@ -252,6 +261,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		}, []);
 
 		const initIiifViewer = useCallback(async () => {
+			console.log('init iiif viewer js lib------------------------');
 			if (!!iiifViewerId && isBrowser()) {
 				const iiifContainer = document.getElementById(iiifViewerId);
 				if (iiifContainer) {
@@ -279,18 +289,12 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 						getOpenSeadragonConfig(imageSources, isMobile, iiifViewerId)
 					);
 
-				// Keep track of viewer ready status
-				setCurrentViewerState('loading');
-				openSeaDragonViewer?.addHandler('open', () => {
-					setCurrentViewerState('ready');
-				});
-
 				addFullscreenCloseButton(openSeadragonViewerTemp);
 
 				openSeadragonViewerTemp.viewport.goHome(true);
 
 				// Keep track of zoom and pan in the url
-				initZoomAndPanListeners(openSeadragonViewerTemp);
+				addEventListeners(openSeadragonViewerTemp);
 
 				// Apply url zoom and pan to the current viewer
 				applyInitialZoomAndPan(openSeadragonViewerTemp, openSeadragonLibTemp);
@@ -300,7 +304,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			// Do not rerun this function when the queryParams change,
 			// since we only want apply the zoom and pan from the query params once to the iiif viewer
 			// eslint-disable-next-line
-		}, [addFullscreenCloseButton, iiifViewerId, imageInfos, isMobile]);
+		}, [imageInfos, iiifViewerId, isMobile]);
 
 		useEffect(() => {
 			if (openSeaDragonViewer) {
@@ -336,16 +340,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			openSeaDragonViewer?.setFullScreen(expand);
 		};
 
-		const iiifGoToPage = (pageIndex: number): void => {
-			setCurrentViewerState('loading');
-			openSeaDragonViewer?.addHandler('open', () => {
-				setCurrentViewerState('ready');
-			});
-			openSeaDragonViewer?.clearOverlays();
-			setActiveImageIndex(pageIndex);
-			openSeaDragonViewer?.goToPage(pageIndex);
-		};
-
 		const iiifGoToHome = (): void => {
 			openSeaDragonViewer?.viewport.goHome(false);
 		};
@@ -367,25 +361,30 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			width: number;
 			height: number;
 		}): void => {
+			console.log('iiifZoomToRect', { x, y, width, height });
 			if (!openSeaDragonViewer) {
+				console.log('iiifZoomToRect failed because openSeaDragonViewer is undefined');
 				return;
 			}
-			const imageSize = openSeaDragonViewer.world
-				?.getItemAt(activeImageIndex)
-				?.getContentSize();
-			if (!imageSize) {
-				console.log(
-					'aborting zoom to rect because openSeaDragonViewer.world?.getItemAt(activeImageIndex) is undefined',
-					{
-						item: openSeaDragonViewer.world?.getItemAt(activeImageIndex),
-						openSeaDragonViewer,
-						imageSize,
-					}
-				);
+			if (!activeImageTileSource) {
+				console.log('iiifZoomToRect failed because imageTileSource is undefined', {
+					activeImageIndex,
+				});
 				return;
 			}
-			const imageWidth = imageSize.x;
-			const imageHeight = imageSize.y;
+			const imageWidth: number | undefined = activeImageTileSource.dimensions.x;
+			const imageHeight: number | undefined = activeImageTileSource.dimensions.y;
+
+			if (!imageWidth || !imageHeight) {
+				console.log('aborting zoom to rect because activeImageTileSource is undefined', {
+					item: activeImageTileSource,
+					openSeaDragonViewer,
+					imageWidth,
+					imageHeight,
+					activeImageTileSource,
+				});
+				return;
+			}
 			console.log('zoom to rect', { x, y, width, height });
 			openSeaDragonViewer.viewport.zoomTo(1.5, undefined, true);
 			openSeaDragonViewer.viewport.panTo(
@@ -398,25 +397,36 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		};
 
 		const clearActiveWordIndex = () => {
-			document?.querySelectorAll('.p-object-detail__iiif__alto__text').forEach((element) => {
-				element.classList.remove('p-object-detail__iiif__alto__text--active');
+			document?.querySelectorAll('.c-iiif-viewer__iiif__alto__text').forEach((element) => {
+				element.classList.remove('c-iiif-viewer__iiif__alto__text--active');
 			});
 		};
 
 		const setActiveWordIndex = (wordIndex: number) => {
 			clearActiveWordIndex();
 			document
-				?.querySelector('#p-object-detail__iiif__alto__text__' + wordIndex)
-				?.classList?.add('p-object-detail__iiif__alto__text--active');
+				?.querySelector('#c-iiif-viewer__iiif__alto__text__' + wordIndex)
+				?.classList?.add('c-iiif-viewer__iiif__alto__text--active');
 		};
 
 		const waitForReadyState = async (): Promise<void> => {
 			return new Promise<void>((resolve) => {
-				if (currentViewerState === 'ready') {
+				console.log('waitForReadyState');
+				if (viewerStatus === 'ready') {
+					console.log('waitForReadyState', { currentViewerState: viewerStatus });
 					resolve();
 				} else {
-					openSeaDragonViewer?.addHandler('open', () => {
+					console.log('waitForReadyState add open handler before', {
+						id: (openSeaDragonViewer as any).id,
+					});
+					(openSeaDragonViewer as any).id = Math.random();
+					console.log('waitForReadyState add open handler after', {
+						id: (openSeaDragonViewer as any).id,
+					});
+					openSeaDragonViewer?.addHandler('fully-loaded-change', () => {
+						console.log('waitForReadyState add open handler');
 						resolve();
+						// setViewerStatus('ready');
 					});
 				}
 			});
@@ -425,7 +435,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		useImperativeHandle(ref, () => ({
 			iiifZoomToRect,
 			iiifRotate,
-			iiifGoToPage,
 			iiifFullscreen,
 			iiifZoom,
 			iiifGoToHome,
@@ -440,22 +449,22 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 		const renderIiifViewerButtons = () => {
 			return (
-				<div className={styles['p-object-detail__iiif__controls']}>
+				<div className={styles['c-iiif-viewer__iiif__controls']}>
 					{!iiifGridViewEnabled && (
 						<>
 							<div
 								className={clsx(
-									styles['p-object-detail__iiif__controls__button-group'],
+									styles['c-iiif-viewer__iiif__controls__button-group'],
 									styles[
-										'p-object-detail__iiif__controls__button-group__pagination'
+										'c-iiif-viewer__iiif__controls__button-group__pagination'
 									],
 									'u-flex-shrink'
 								)}
 							>
 								<Button
 									className={clsx(
-										styles['p-object-detail__iiif__controls__button'],
-										'p-object-detail__iiif__controls__grid-view__enable'
+										styles['c-iiif-viewer__iiif__controls__button'],
+										'c-iiif-viewer__iiif__controls__grid-view__enable'
 									)}
 									icon={<Icon name={IconNamesLight.GridView} aria-hidden />}
 									aria-label={tText(
@@ -467,14 +476,14 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 								<div
 									className={
 										styles[
-											'p-object-detail__iiif__controls__button-group__divider'
+											'c-iiif-viewer__iiif__controls__button-group__divider'
 										]
 									}
 								/>
 								<Button
 									className={clsx(
-										styles['p-object-detail__iiif__controls__button'],
-										'p-object-detail__iiif__controls__grid-view__previous-image'
+										styles['c-iiif-viewer__iiif__controls__button'],
+										'c-iiif-viewer__iiif__controls__grid-view__previous-image'
 									)}
 									icon={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
 									aria-label={tText(
@@ -486,17 +495,17 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 								/>
 								<span className="pagination-info">
 									{tText(
-										'modules/iiif-viewer/iiif-viewer___current-search-index-van-total-search-results',
+										'modules/iiif-viewer/iiif-viewer___current-image-van-total-images',
 										{
-											currentSearchIndex,
-											totalSearchResults: searchResults?.length || 0,
+											currentImage: activeImageIndex,
+											totalImages: imageInfos?.length || 0,
 										}
 									)}
 								</span>
 								<Button
 									className={clsx(
-										styles['p-object-detail__iiif__controls__button'],
-										'p-object-detail__iiif__controls__grid-view__next-image'
+										styles['c-iiif-viewer__iiif__controls__button'],
+										'c-iiif-viewer__iiif__controls__grid-view__next-image'
 									)}
 									icon={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
 									aria-label={tText(
@@ -510,15 +519,16 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 							<div
 								className={clsx(
-									styles['p-object-detail__iiif__controls__button-group'],
-									styles['p-object-detail__iiif__controls__button-group__search'],
+									styles['c-iiif-viewer__iiif__controls__button-group'],
+									styles['c-iiif-viewer__iiif__controls__button-group__search'],
 									'u-flex-shrink'
 								)}
 							>
 								<SearchInputWithResultsPagination
 									value={searchTerms}
 									onChange={setSearchTerms}
-									onSearch={() => searchPages(searchTerms)}
+									onSearch={onSearch}
+									onClearSearch={onClearSearch}
 									searchResults={searchResults}
 									currentSearchIndex={currentSearchIndex}
 									onChangeSearchIndex={setSearchResultIndex}
@@ -528,29 +538,29 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 							<div
 								className={clsx(
-									styles['p-object-detail__iiif__controls__button-group'],
-									styles['p-object-detail__iiif__controls__button-group__zoom'],
+									styles['c-iiif-viewer__iiif__controls__button-group'],
+									styles['c-iiif-viewer__iiif__controls__button-group__zoom'],
 									'u-flex-shrink'
 								)}
 							>
 								{!!altoJsonCurrentPage && (
 									<Button
 										className={clsx(
-											styles['p-object-detail__iiif__controls__button'],
-											'p-object-detail__iiif__controls__toggle-ocr'
+											styles['c-iiif-viewer__iiif__controls__button'],
+											'c-iiif-viewer__iiif__controls__toggle-ocr'
 										)}
 										icon={<Icon name={IconNamesLight.Ocr} aria-hidden />}
 										aria-label={tText(
 											'pages/openseadragon/index___tekst-boven-de-afbeelding-tonen'
 										)}
-										variants={['white', 'sm']}
+										variants={[isOcrEnabled ? 'green' : 'white', 'sm']}
 										onClick={() => setIsOcrEnabled(!isOcrEnabled)}
 									/>
 								)}
 								<Button
 									className={clsx(
-										styles['p-object-detail__iiif__controls__button'],
-										'p-object-detail__iiif__controls__zoom-in'
+										styles['c-iiif-viewer__iiif__controls__button'],
+										'c-iiif-viewer__iiif__controls__zoom-in'
 									)}
 									icon={<Icon name={IconNamesLight.ZoomIn} aria-hidden />}
 									aria-label={tText(
@@ -561,8 +571,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 								/>
 								<Button
 									className={clsx(
-										styles['p-object-detail__iiif__controls__button'],
-										'p-object-detail__iiif__controls__zoom-out'
+										styles['c-iiif-viewer__iiif__controls__button'],
+										'c-iiif-viewer__iiif__controls__zoom-out'
 									)}
 									icon={<Icon name={IconNamesLight.ZoomOut} aria-hidden />}
 									aria-label={tText(
@@ -573,8 +583,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 								/>
 								<Button
 									className={clsx(
-										styles['p-object-detail__iiif__controls__button'],
-										'p-object-detail__iiif__controls__fullscreen'
+										styles['c-iiif-viewer__iiif__controls__button'],
+										'c-iiif-viewer__iiif__controls__fullscreen'
 									)}
 									icon={<Icon name={IconNamesLight.Expand} aria-hidden />}
 									aria-label={tText(
@@ -585,8 +595,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 								/>
 								<Button
 									className={clsx(
-										styles['p-object-detail__iiif__controls__button'],
-										'p-object-detail__iiif__controls__rotate-right'
+										styles['c-iiif-viewer__iiif__controls__button'],
+										'c-iiif-viewer__iiif__controls__rotate-right'
 									)}
 									icon={<Icon name={IconNamesLight.Redo} aria-hidden />}
 									aria-label={tText(
@@ -601,8 +611,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					{iiifGridViewEnabled && (
 						<Button
 							className={clsx(
-								styles['p-object-detail__iiif__controls__button'],
-								'p-object-detail__iiif__controls__grid-view__disable'
+								styles['c-iiif-viewer__iiif__controls__button'],
+								'c-iiif-viewer__iiif__controls__grid-view__disable'
 							)}
 							icon={<Icon name={IconNamesLight.File} aria-hidden />}
 							aria-label={tText('pages/openseadragon/index___een-pagina-bekijken')}
@@ -618,12 +628,12 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			// Use custom scrollbar because on windows the default scrollbar is big and ugly
 			// and here it shows up on the right side of the reference strip, so it extra noticeable
 			return (
-				<PerfectScrollbar className={styles['p-object-detail__iiif__reference-strip']}>
+				<PerfectScrollbar className={styles['c-iiif-viewer__iiif__reference-strip']}>
 					{imageInfos.map((imageInfo, index) => {
 						return (
 							<button
-								key={'p-object-detail__iiif__reference-strip__' + index}
-								onClick={() => iiifGoToPage(index)}
+								key={'c-iiif-viewer__iiif__reference-strip__' + index}
+								onClick={() => setActiveImageIndex(index)}
 							>
 								{/* eslint-disable-next-line @next/next/no-img-element */}
 								<img src={imageInfo.thumbnailUrl} alt={'page ' + (index + 1)} />
@@ -634,18 +644,24 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			);
 		};
 
-		console.log('rerender iiifviewer--------------------');
+		const iiifViewerContainer = useMemo(() => {
+			console.log('rerender iiifviewer--------------------');
+			return (
+				<div className={clsx(styles['c-iiif-viewer__iiif-container'])} id={iiifViewerId} />
+			);
+		}, [iiifViewerId]);
+
 		return (
-			<div className={styles['c-iiif-viewer']}>
+			<div
+				className={clsx(styles['c-iiif-viewer'], {
+					'c-iiif-viewer__iiif__ocr--enabled': isOcrEnabled,
+					'c-iiif-viewer__iiif__ocr--disabled': !isOcrEnabled,
+					'c-iiif-viewer__iiif__grid-view--disabled': !iiifGridViewEnabled,
+					'c-iiif-viewer__iiif__grid-view--enabled': iiifGridViewEnabled,
+				})}
+			>
 				{/* IIIF viewer container div */}
-				<div
-					className={clsx(styles['p-object-detail__iiif'], {
-						'p-object-detail__iiif__ocr--enabled': isOcrEnabled,
-						'p-object-detail__iiif__ocr--disabled': !isOcrEnabled,
-					})}
-					id={iiifViewerId}
-					style={{ display: iiifGridViewEnabled ? 'none' : 'block' }}
-				/>
+				{iiifViewerContainer}
 
 				{/* IIIF sidebar with pages*/}
 				{!iiifGridViewEnabled && renderIiifViewerReferenceStrip()}
@@ -655,17 +671,17 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 				{/* IIIF Grid view */}
 				<div
-					className={styles['p-object-detail__iiif__grid-view-wrapper']}
+					className={styles['c-iiif-viewer__iiif__grid-view-wrapper']}
 					style={{ display: iiifGridViewEnabled ? 'block' : 'none' }}
 				>
-					<div className={styles['p-object-detail__iiif__grid-view']}>
+					<div className={styles['c-iiif-viewer__iiif__grid-view']}>
 						{imageInfos.map((imageInfo, index) => {
 							return (
 								<button
-									key={'p-object-detail__iiif__reference-strip__' + index}
+									key={'c-iiif-viewer__iiif__reference-strip__' + index}
 									onClick={() => {
-										iiifGoToPage(index);
 										setIiifGridViewEnabled(false);
+										setActiveImageIndex(index);
 										openSeaDragonViewer?.forceRedraw();
 									}}
 								>

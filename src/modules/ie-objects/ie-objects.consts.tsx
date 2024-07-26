@@ -1,6 +1,5 @@
 import { type MenuItemInfo, type TabProps } from '@meemoo/react-components';
 import { isString } from 'lodash-es';
-import { StringParam } from 'use-query-params';
 
 import {
 	type ActionItem,
@@ -28,7 +27,6 @@ import {
 	TYPE_TO_ICON_MAP,
 	TYPE_TO_NO_ICON_MAP,
 } from '@shared/components/MediaCard';
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate } from '@shared/utils/dates';
@@ -531,7 +529,3 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 		data: mediaInfo?.abstract ? mediaInfo?.abstract : null,
 	},
 ];
-
-export const IE_OBJECT_QUERY_PARAM_CONFIG = {
-	[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: StringParam, // Comma separated string
-};

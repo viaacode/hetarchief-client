@@ -13,6 +13,7 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 	value,
 	onChange,
 	onSearch,
+	onClearSearch,
 	onChangeSearchIndex,
 	searchResults,
 	currentSearchIndex,
@@ -21,6 +22,7 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 }) => {
 	const handleKeyUp = (evt: KeyboardEvent<HTMLInputElement>) => {
 		if (evt.key === 'Enter') {
+			console.log('executing search: ', { value });
 			onSearch(value);
 		}
 	};
@@ -79,10 +81,7 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 							'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___verwijder-zoekterm'
 						)}
 						variants={['text', ...variants]}
-						onClick={() => {
-							onChange('');
-							onSearch('');
-						}}
+						onClick={() => onClearSearch()}
 					/>
 				</>
 			)}

@@ -213,7 +213,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [metadataExportDropdownOpen, setMetadataExportDropdownOpen] = useState(false);
 	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
 	const [isRelatedObjectsBladeOpen, setIsRelatedObjectsBladeOpen] = useState(false);
-	const [isOcrEnabled, setIsOcrEnabled] = useState<boolean>(false);
 	const [isHighlightSearchTermsActive, setIsHighlightSearchTermsActive] = useState<boolean>(true);
 	const [hasAppliedUrlSearchTerms, setHasAppliedUrlSearchTerms] = useState<boolean>(false);
 
@@ -227,11 +226,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	// Query params
 
-	// Search terms are used to store the search terms after the user has confirmed the search
+	// Search terms that are coming from the global search page
 	const [highlightedSearchTerms, setHighlightedSearchTerms] = useQueryParam(
 		QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS,
 		withDefault(StringParam, '')
 	);
+	// Temp search terms are used to store the search terms while the user is typing
+	const [searchTermsTemp, setSearchTermsTemp] = useState<string>('');
+	// Search terms are used to store the search terms after the user has confirmed the search
+	const [searchTerms, setSearchTerms] = useState<string>('');
+
 	const [, setShowAuthQueryKey] = useQueryParam(QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY, StringParam);
 	const [activeBlade, setActiveBlade] = useQueryParam(
 		QUERY_PARAM_KEY.ACTIVE_BLADE,
@@ -253,10 +257,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		QUERY_PARAM_KEY.ACTIVE_REPRESENTATION,
 		NumberParam
 	);
-	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useQueryParam(
-		QUERY_PARAM_KEY.ACTIVE_SEARCH_RESULT_INDEX,
-		withDefault(NumberParam, 0)
-	);
+	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number>(0);
 	const [expandSidebar, setExpandSidebar] = useQueryParam(
 		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
 		withDefault(BooleanParam, false)
@@ -273,12 +274,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		QUERY_PARAM_KEY.IIIF_VIEWER_ZOOM_LEVEL,
 		withDefault(NumberParam, undefined)
 	);
+	const [isOcrEnabled, setIsOcrEnabled] = useQueryParam(
+		QUERY_PARAM_KEY.IIIF_VIEWER_OCR_OVERLAY_ENABLED,
+		withDefault(BooleanParam, false)
+	);
 
-	// Search terms
-	// Temp search terms are used to store the search terms while the user is typing
-	const [searchTermsTemp, setSearchTermsTemp] = useState<string>('');
-
-	const [,] = useState<number>(0);
 	const [searchResults, setSearchResults] = useState<OcrSearchResult[] | null>(null);
 
 	const {
@@ -485,10 +485,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		// Set default view
 		if (isMobile) {
 			// Default to metadata tab on mobile
-			setActiveTab(ObjectDetailTabs.Metadata);
+			setActiveTab(ObjectDetailTabs.Metadata, 'replaceIn');
 		} else {
 			// Check media content and license for default tab on desktop
-			setExpandSidebar(!mediaInfo?.dctermsFormat || !hasMedia);
+			setExpandSidebar(!mediaInfo?.dctermsFormat || !hasMedia, 'replaceIn');
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mediaInfo]);
@@ -544,7 +544,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Callbacks
 	 */
 	const handleExpandButtonClicked = () => {
-		setExpandSidebar(!expandSidebar);
+		setExpandSidebar(!expandSidebar, 'replaceIn');
 	};
 
 	const onCloseBlade = () => {
@@ -569,8 +569,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			setActiveBlade(MediaActions.RequestAccess);
 		} else {
 			// Open the login blade first
-			setShowAuthQueryKey('1', 'replace');
-			setActiveBlade(MediaActions.RequestAccess, 'replace');
+			setShowAuthQueryKey('1', 'replaceIn');
+			setActiveBlade(MediaActions.RequestAccess, 'replaceIn');
 		}
 	};
 
@@ -772,15 +772,29 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				return;
 			}
 			if (searchResult.pageIndex !== currentPageIndex) {
-				setCurrentPageIndex(searchResult.pageIndex);
+				setCurrentPageIndex(searchResult.pageIndex, 'replaceIn');
 			}
 			const altoText = simplifiedAltoInfo?.text?.[searchResult.searchTermIndexOnPage];
 			if (altoText) {
 				await handleClickOcrWord(altoText, searchResult.searchTermIndexOnPage);
 			}
 		},
-		[currentPageIndex, searchResults, setCurrentPageIndex, simplifiedAltoInfo?.text]
+		[
+			currentPageIndex,
+			searchResults,
+			setCurrentPageIndex,
+			setCurrentSearchResultIndex,
+			simplifiedAltoInfo?.text,
+		]
 	);
+
+	const handleClearSearch = () => {
+		setSearchTermsTemp('');
+		setSearchTerms('');
+		setHighlightedSearchTerms('');
+		setSearchResults(null);
+		iiifViewerReference.current?.iiifGoToHome();
+	};
 
 	const searchPagesOcrText = useCallback(
 		(newSearchTerms: string): void => {
@@ -789,12 +803,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				// Zoom to whole page
 				iiifViewerReference.current?.iiifGoToHome();
 			}
-			if (newSearchTerms === highlightedSearchTerms && hasAppliedUrlSearchTerms) {
-				// Pressed enter with the same search query => go to next result
-				handleChangeSearchIndex(currentSearchResultIndex + 1);
-				return;
-			}
-			setHighlightedSearchTerms(newSearchTerms);
+
+			setSearchTerms(newSearchTerms);
 			setActiveTab(ObjectDetailTabs.Ocr);
 
 			const pageOcrTexts: (string | null)[] = [];
@@ -842,39 +852,31 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					}
 				});
 			});
-
-			console.log('search results: ', searchResultsTemp);
-
 			setSearchResults(searchResultsTemp);
-			setCurrentPageIndex(searchResultsTemp?.[0]?.pageIndex || 0);
+			setCurrentPageIndex(searchResultsTemp?.[0]?.pageIndex || 0, 'replaceIn');
 			iiifViewerReference.current?.waitForReadyState().then(() => {
 				handleChangeSearchIndex(0);
 			});
 		},
 		[
-			currentSearchResultIndex,
 			handleChangeSearchIndex,
-			hasAppliedUrlSearchTerms,
 			mediaInfo?.pageRepresentations,
-			highlightedSearchTerms,
 			setActiveTab,
 			setCurrentPageIndex,
-			setHighlightedSearchTerms,
+			setSearchTerms,
 			tText,
 		]
 	);
 
 	useEffect(() => {
 		// When the page loads, search the ocr texts for the searchTerms in the query params in the url
-		console.log('setting initial search terms: ', highlightedSearchTerms);
 		if (
 			highlightedSearchTerms &&
 			mediaInfo?.dctermsFormat === IeObjectType.Newspaper &&
 			!hasAppliedUrlSearchTerms
 		) {
-			console.log('setting initial search terms in fields: ', highlightedSearchTerms);
 			setSearchTermsTemp(highlightedSearchTerms);
-			console.log('executing search results');
+			setSearchTerms(highlightedSearchTerms);
 			searchPagesOcrText(highlightedSearchTerms);
 			setHasAppliedUrlSearchTerms(true);
 		}
@@ -882,7 +884,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		hasAppliedUrlSearchTerms,
 		mediaInfo?.dctermsFormat,
 		searchPagesOcrText,
-		searchResults,
 		highlightedSearchTerms,
 	]);
 
@@ -1057,7 +1058,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			canManageFolders: canManageFolders || isAnonymous,
 			isInAFolder: isInAFolder(folders, mediaInfo?.schemaIdentifier),
 			isHighlightSearchTermActive: isHighlightSearchTermsActive,
-			canToggleSearchTerms: !!highlightedSearchTerms,
+			canToggleSearchTerms: !!searchTerms,
 			canReport: !isKiosk,
 			canRequestAccess: !!canRequestAccess,
 			canRequestMaterial: isAnonymous || canRequestMaterial,
@@ -1101,7 +1102,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		folders,
 		mediaInfo?.schemaIdentifier,
 		isHighlightSearchTermsActive,
-		highlightedSearchTerms,
+		searchTerms,
 		isKiosk,
 		canRequestAccess,
 		canRequestMaterial,
@@ -1112,7 +1113,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	]);
 
 	const handleClickOcrWord = async (textLocation: AltoTextLine, index: number) => {
-		await iiifViewerReference?.current?.waitForReadyState();
 		iiifViewerReference?.current?.iiifZoomToRect(textLocation);
 		iiifViewerReference?.current?.setActiveWordIndex(index);
 	};
@@ -1159,8 +1159,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					altoJsonCurrentPage={simplifiedAltoInfo}
 					ref={iiifViewerReference}
 					id={mediaInfo?.schemaIdentifier as string}
-					isOcrEnabled={isOcrEnabled}
-					setIsOcrEnabled={setIsOcrEnabled}
+					isOcrEnabled={isOcrEnabled || false}
+					setIsOcrEnabled={(enabled) => setIsOcrEnabled(enabled, 'replaceIn')}
 					activeImageIndex={currentPageIndex}
 					setActiveImageIndex={setCurrentPageIndex}
 					initialFocusX={iiifViewerFocusX}
@@ -1168,7 +1168,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					initialZoomLevel={iiifViewerZoomLevel}
 					searchTerms={searchTermsTemp}
 					setSearchTerms={setSearchTermsTemp}
-					searchPages={searchPagesOcrText}
+					onSearch={searchPagesOcrText}
+					onClearSearch={handleClearSearch}
 					currentSearchIndex={currentSearchResultIndex}
 					searchResults={searchResults}
 					setSearchResultIndex={handleChangeSearchIndex}
@@ -1223,7 +1224,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 		// Audio player
 		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(currentPlayableFile.mimeType)) {
-			// console.log('rendering audio flowplayer: ', { playableUrl, currentPlayableFile });
 			if (peakFileStoredAt && !peakJson) {
 				return (
 					<Loading fullscreen owner="object detail page: render media audio peak file" />
@@ -1626,9 +1626,64 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		);
 	};
 
-	const renderOcrContent = () => {
-		const searchTermWords = compact(highlightedSearchTerms.split(' '));
+	const renderedOcrText = useMemo(() => {
+		const searchTermWords = compact(searchTerms.split(' '));
 		let searchTermIndex = 0;
+		return (
+			<div className={styles['p-object-detail__ocr__words-container']}>
+				{simplifiedAltoInfo?.text?.map((textLocation, index) => {
+					const isMarked: boolean =
+						!!searchTerms &&
+						searchTermWords.some((searchWord) =>
+							textLocation.text.toLowerCase().includes(searchWord)
+						);
+
+					// Search results are counted per page, so we need to subtract the amount of results in previous page
+					const searchResultsOnPreviousPages: number =
+						searchResults?.filter((result) => result.pageIndex < currentPageIndex)
+							.length || 0;
+					const searchResultIndexWithinCurrentPage: number =
+						currentSearchResultIndex - searchResultsOnPreviousPages;
+					const isActive: boolean =
+						!!searchTerms &&
+						isMarked &&
+						searchTermIndex === searchResultIndexWithinCurrentPage;
+
+					const wordElement = (
+						<span
+							key={'ocr-text--' + ieObjectId + '--' + index}
+							onClick={() => handleClickOcrWord(textLocation, index)}
+							onDoubleClick={() =>
+								setIsOcrEnabled((oldOcrEnabled) => !oldOcrEnabled, 'replaceIn')
+							}
+							className={clsx(styles['p-object-detail__ocr__word'], {
+								[styles['p-object-detail__ocr__word--marked']]: isMarked,
+								[styles['p-object-detail__ocr__word--marked--active']]: isActive,
+							})}
+						>
+							{textLocation.text}{' '}
+						</span>
+					);
+
+					if (isMarked) {
+						searchTermIndex += 1;
+					}
+
+					return wordElement;
+				})}
+			</div>
+		);
+	}, [
+		currentPageIndex,
+		currentSearchResultIndex,
+		searchTerms,
+		ieObjectId,
+		searchResults,
+		setIsOcrEnabled,
+		simplifiedAltoInfo?.text,
+	]);
+
+	const renderOcrContent = () => {
 		return (
 			<div className={clsx(styles['p-object-detail__ocr'])}>
 				<SearchInputWithResultsPagination
@@ -1636,60 +1691,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					value={searchTermsTemp}
 					onChange={setSearchTermsTemp}
 					onSearch={(newSearchTerms) => searchPagesOcrText(newSearchTerms)}
+					onClearSearch={handleClearSearch}
 					searchResults={searchResults}
 					currentSearchIndex={currentSearchResultIndex}
 					onChangeSearchIndex={handleChangeSearchIndex}
 				/>
 
-				<div className={styles['p-object-detail__ocr__words-container']}>
-					{simplifiedAltoInfo?.text?.map((textLocation, index) => {
-						const isMarked: boolean =
-							!!highlightedSearchTerms &&
-							searchTermWords.some((searchWord) =>
-								textLocation.text.toLowerCase().includes(searchWord)
-							);
-
-						// Search results are counted per page, so we need to subtract the amount of results in previous page
-						const searchResultsOnPreviousPages: number =
-							searchResults?.filter((result) => result.pageIndex < currentPageIndex)
-								.length || 0;
-						const searchResultIndexWithinCurrentPage: number =
-							currentSearchResultIndex - searchResultsOnPreviousPages;
-						const isActive: boolean =
-							!!highlightedSearchTerms &&
-							isMarked &&
-							searchTermIndex === searchResultIndexWithinCurrentPage;
-
-						// console.log({
-						// 	searchTermWords,
-						// 	text: textLocation.text,
-						// 	isMarked,
-						// 	isActive,
-						// 	searchTermIndex,
-						// 	currentSearchResultIndex,
-						// });
-						const wordElement = (
-							<span
-								key={'ocr-text--' + mediaInfo?.schemaIdentifier + '--' + index}
-								onClick={() => handleClickOcrWord(textLocation, index)}
-								onDoubleClick={() => setIsOcrEnabled(!isOcrEnabled)}
-								className={clsx(styles['p-object-detail__ocr__word'], {
-									[styles['p-object-detail__ocr__word--marked']]: isMarked,
-									[styles['p-object-detail__ocr__word--marked--active']]:
-										isActive,
-								})}
-							>
-								{textLocation.text}{' '}
-							</span>
-						);
-
-						if (isMarked) {
-							searchTermIndex += 1;
-						}
-
-						return wordElement;
-					})}
-				</div>
+				{renderedOcrText}
 			</div>
 		);
 	};
@@ -1704,7 +1712,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							thumbnail={mediaInfo?.thumbnailUrl[0]}
 							className={styles['p-object-detail__grey-slider-bar']}
 							files={representationsToDisplay}
-							onChangeFragment={setCurrentRepresentationIndex}
+							onChangeFragment={(index) =>
+								setCurrentRepresentationIndex(index, 'replaceIn')
+							}
 						/>
 					)}
 				</>

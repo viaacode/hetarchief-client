@@ -20,7 +20,8 @@ export interface IiifViewerProps {
 	// Search through pages
 	searchTerms: string;
 	setSearchTerms: (searchTerms: string) => void;
-	searchPages: (searchTerms: string) => void;
+	onSearch: (searchTerms: string) => void;
+	onClearSearch: () => void;
 	currentSearchIndex: number;
 	searchResults: OcrSearchResult[] | null;
 	setSearchResultIndex: (newSearchIndex: number) => void;
@@ -31,7 +32,7 @@ export interface IiifViewerFunctions {
 	setActiveWordIndex: (wordIndex: number) => void;
 	clearActiveWordIndex: () => void;
 	iiifRotate: (rotateRight: boolean) => void;
-	iiifGoToPage: (pageIndex: number) => void;
+	// iiifGoToPage: (pageIndex: number) => void;
 	iiifFullscreen: (expand: boolean) => void;
 	iiifZoom: (multiplier: number) => void;
 	iiifGoToHome: () => void;
