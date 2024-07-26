@@ -216,6 +216,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [isHighlightSearchTermsActive, setIsHighlightSearchTermsActive] = useState<boolean>(true);
 	const [copyrightModalOpen, setCopyrightModalOpen] = useState(false);
 	const [onConfirmCopyright, setOnConfirmCopyright] = useState<() => void>(noop);
+	const [hasNewsPaperBeenRendered, setHasNewsPaperBeenRendered] = useState(false);
 	// Layout
 	useStickyLayout();
 	useHideFooter();
@@ -601,12 +602,25 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				pid: mediaInfo?.schemaIdentifier,
 				user_group_name: user?.groupName,
 				or_id: mediaInfo?.maintainerId,
+				type: mediaInfo?.dctermsFormat,
 			});
 
 			// The external url is opened with an actual link, so safari doesn't block the popup
 		} else {
 			setActiveBlade(MediaActions.RequestMaterial);
 		}
+	};
+
+	const handleOnDownloadEvent = () => {
+		const path = window.location.href;
+		const eventData = {
+			type: mediaInfo?.dctermsFormat,
+			fragment_id: mediaInfo?.schemaIdentifier,
+			pid: mediaInfo?.schemaIdentifier,
+			user_group_name: user?.groupName,
+			or_id: mediaInfo?.maintainerId,
+		};
+		EventsService.triggerEvent(LogEventType.DOWNLOAD, path, eventData);
 	};
 
 	const handleOnPlay = () => {
@@ -728,22 +742,22 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			switch (format) {
 				case MetadataExportFormats.fullNewspaperZip:
 					setCopyrightModalOpen(true);
-					setOnConfirmCopyright(
-						() => () =>
-							window.open(
-								`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip`
-							)
-					);
+					setOnConfirmCopyright(() => () => {
+						window.open(
+							`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip`
+						);
+						handleOnDownloadEvent();
+					});
 					break;
 
 				case MetadataExportFormats.onePageNewspaperZip:
 					setCopyrightModalOpen(true);
-					setOnConfirmCopyright(
-						() => () =>
-							window.open(
-								`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`
-							)
-					);
+					setOnConfirmCopyright(() => () => {
+						window.open(
+							`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`
+						);
+						handleOnDownloadEvent();
+					});
 					break;
 
 				case MetadataExportFormats.xml:
@@ -954,6 +968,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 		// IIIF viewer
 		if (isNewspaper && !!mediaInfo) {
+			if (!hasNewsPaperBeenRendered) {
+				handleOnPlay();
+				setHasNewsPaperBeenRendered(true);
+			}
 			return (
 				<IiifViewer
 					imageInfos={iiifViewerImageInfos}
