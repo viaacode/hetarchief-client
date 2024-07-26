@@ -50,8 +50,8 @@ $controls-margin-bottom: $spacer-sm;
 		}
 
 		:global(.c-iiif-viewer__iiif__alto__text) {
-			color: #000;
-			background-color: #cfba8c;
+			color: $black;
+			background-color: $newspaper-ocr-overlay-background;
 			text-align: center;
 
 			&:global(--active) {
