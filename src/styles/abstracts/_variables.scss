@@ -37,6 +37,7 @@ $grey: #757575;
 
 $black-8: color.adjust($black, $alpha: -0.92);
 $black-20: color.adjust($black, $alpha: -0.8);
+$black-80: color.adjust($black, $alpha: -0.2);
 $teal-66: color.adjust($teal, $alpha: -0.34);
 $teal-64: color.adjust($teal, $alpha: -0.36);
 $teal-24: color.adjust($teal, $alpha: -0.76);
@@ -49,11 +50,11 @@ $zinc-40: color.adjust($zinc, $alpha: -0.6);
  */
 
 $shadow-12-black-16: 0 0 12px color.adjust($black, $alpha: -0.84);
-$shadow-24-black-61: 0 0 24px color.adjust($black, $alpha: -0.39);
-$shadow-24-black-24: 0 0 24px color.adjust($black, $alpha: -0.76);
-$shadow-24-black-12: 0 0 24px color.adjust($black, $alpha: -0.88);
-$shadow-24-black-08: 0 0 24px color.adjust($black, $alpha: -0.92);
 $shadow-24-black-04: 0 0 24px color.adjust($black, $alpha: -0.96);
+$shadow-24-black-08: 0 0 24px color.adjust($black, $alpha: -0.92);
+$shadow-24-black-12: 0 0 24px color.adjust($black, $alpha: -0.88);
+$shadow-24-black-24: 0 0 24px color.adjust($black, $alpha: -0.76);
+$shadow-24-black-61: 0 0 24px color.adjust($black, $alpha: -0.39);
 
 /**
  * Spacers

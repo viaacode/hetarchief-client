@@ -161,12 +161,16 @@ export const OBJECT_DETAIL_TABS = (
 			),
 			active: ObjectDetailTabs.Media === activeTab,
 		},
-		{
-			id: ObjectDetailTabs.Ocr,
-			label: tText('modules/ie-objects/ie-objects___ocr'),
-			icon: <Icon name={IconNamesLight.Ocr} aria-hidden />,
-			active: ObjectDetailTabs.Ocr === activeTab,
-		},
+		...(typeWithDefault === IeObjectType.Newspaper
+			? [
+					{
+						id: ObjectDetailTabs.Ocr,
+						label: tText('modules/ie-objects/ie-objects___ocr'),
+						icon: <Icon name={IconNamesLight.Ocr} aria-hidden />,
+						active: ObjectDetailTabs.Ocr === activeTab,
+					},
+			  ]
+			: []),
 	];
 };
 

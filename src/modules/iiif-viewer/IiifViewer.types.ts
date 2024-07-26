@@ -32,7 +32,6 @@ export interface IiifViewerFunctions {
 	setActiveWordIndex: (wordIndex: number) => void;
 	clearActiveWordIndex: () => void;
 	iiifRotate: (rotateRight: boolean) => void;
-	// iiifGoToPage: (pageIndex: number) => void;
 	iiifFullscreen: (expand: boolean) => void;
 	iiifZoom: (multiplier: number) => void;
 	iiifGoToHome: () => void;

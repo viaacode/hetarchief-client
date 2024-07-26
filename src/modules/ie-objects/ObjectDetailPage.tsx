@@ -10,6 +10,7 @@ import {
 	type FlowPlayerProps,
 	MenuContent,
 	type TabProps,
+	Tabs,
 	TagList,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
@@ -132,7 +133,6 @@ import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDa
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { Pill } from '@shared/components/Pill';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
-import { ScrollableTabs } from '@shared/components/Tabs';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -448,7 +448,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	useEffect(() => {
 		dispatch(
 			setShowZendesk(
-				!isKiosk && !hasAccessToVisitorSpaceOfObject && activeTab !== ObjectDetailTabs.Media
+				!isKiosk &&
+					!hasAccessToVisitorSpaceOfObject &&
+					activeTab === ObjectDetailTabs.Metadata
 			)
 		);
 	}, [dispatch, hasAccessToVisitorSpaceOfObject, isKiosk, activeTab]);
@@ -814,7 +816,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						return representation.schemaTranscript;
 					})
 				);
-				pageOcrTexts.push(pageTranscripts[0] || null);
+				pageOcrTexts.push(pageTranscripts[0]?.toLowerCase() || null);
 			});
 
 			if (!pageOcrTexts.length) {
@@ -1208,6 +1210,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			token: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
 			dataPlayerId: publicRuntimeConfig.FLOW_PLAYER_ID,
 			plugins: ['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio', 'keyboard'],
+			peakColorBackground: '#303030', // $shade-darker
+			peakColorInactive: '#adadad', // zinc
+			peakColorActive: '#00857d', // $teal
+			peakHeightFactor: 0.6,
 		};
 
 		// Flowplayer
@@ -1217,7 +1223,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					key={flowPlayerKey}
 					type="video"
 					src={playableUrl as string}
-					poster={mediaInfo?.thumbnailUrl?.[0] || undefined}
+					poster={mediaInfo?.thumbnailUrl || undefined}
 					{...shared}
 				/>
 			);
@@ -1698,6 +1704,52 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				/>
 
 				{renderedOcrText}
+
+				<div className={styles['p-object-detail__ocr__pagination']}>
+					<Button
+						className={clsx(
+							styles['c-iiif-viewer__iiif__controls__button'],
+							'c-iiif-viewer__iiif__controls__grid-view__previous-image'
+						)}
+						iconStart={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
+						aria-label={tText(
+							'modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding'
+						)}
+						label={tText('modules/ie-objects/object-detail-page___vorige')}
+						variants={['text']}
+						onClick={() => {
+							console.log('next page: ', { index: currentPageIndex - 1 });
+							setCurrentPageIndex(currentPageIndex - 1);
+						}}
+						disabled={currentPageIndex === 0}
+					/>
+					<span className="pagination-info">
+						{tText(
+							'modules/ie-objects/object-detail-page___pagina-current-page-van-total-pages',
+							{
+								currentPage: currentPageIndex + 1,
+								totalPages: iiifViewerImageInfos?.length || 0,
+							}
+						)}
+					</span>
+					<Button
+						className={clsx(
+							styles['c-iiif-viewer__iiif__controls__button'],
+							'c-iiif-viewer__iiif__controls__grid-view__next-image'
+						)}
+						iconEnd={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
+						aria-label={tText(
+							'modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding'
+						)}
+						label={tText('modules/ie-objects/object-detail-page___volgende')}
+						variants={['text']}
+						onClick={() => {
+							console.log('next page: ', { index: currentPageIndex + 1 });
+							setCurrentPageIndex(currentPageIndex + 1);
+						}}
+						disabled={currentPageIndex === iiifViewerImageInfos.length - 1}
+					/>
+				</div>
 			</div>
 		);
 	};
@@ -1734,18 +1786,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			);
 		}
 
-		// Only show the back button on the media tab (mobile)
-		const showBackButton = (isMobile && activeTab === ObjectDetailTabs.Media) || !isMobile;
-
 		return (
-			showBackButton && (
-				<Button
-					className={styles['p-object-detail__back']}
-					icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
-					onClick={() => window.history.back()}
-					variants={['black']}
-				/>
-			)
+			<Button
+				className={styles['p-object-detail__back']}
+				icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
+				onClick={() => window.history.back()}
+				variants={['black']}
+			/>
 		);
 	};
 
@@ -1812,7 +1859,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				)}
 
 				{/* Tabs */}
-				<ScrollableTabs
+				<Tabs
 					className={clsx(styles['p-object-detail__tabs'])}
 					variants={['dark']}
 					tabs={tabs}
@@ -1919,14 +1966,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		if (mediaInfo) {
 			return (
 				<div
-					className={clsx(styles['p-object-detail'], {
-						[styles['p-object-detail__visitor-space-navigation-bar--visible']]:
-							showVisitorSpaceNavigationBar,
-						[styles['p-object-detail__visitor-space-navigation-bar--hidden']]:
-							!showVisitorSpaceNavigationBar,
-						[styles['p-object-detail__sidebar--expanded']]: expandSidebar,
-						[styles['p-object-detail__sidebar--collapsed']]: !expandSidebar,
-					})}
+					className={clsx(
+						styles['p-object-detail'],
+						'p-object-detail--' + mediaInfo.dctermsFormat,
+						{
+							[styles['p-object-detail__visitor-space-navigation-bar--visible']]:
+								showVisitorSpaceNavigationBar,
+							[styles['p-object-detail__visitor-space-navigation-bar--hidden']]:
+								!showVisitorSpaceNavigationBar,
+							[styles['p-object-detail__sidebar--expanded']]: expandSidebar,
+							[styles['p-object-detail__sidebar--collapsed']]: !expandSidebar,
+						}
+					)}
 				>
 					{renderObjectDetail()}
 				</div>

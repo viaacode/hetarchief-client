@@ -3,10 +3,15 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { type FC, useEffect, useRef, useState } from 'react';
 
-import { FLOWPLAYER_FORMATS, IMAGE_FORMATS } from '@ie-objects/ie-objects.consts';
+import {
+	FLOWPLAYER_AUDIO_FORMATS,
+	FLOWPLAYER_FORMATS,
+	IMAGE_FORMATS,
+} from '@ie-objects/ie-objects.consts';
 import { type IeObjectFile } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { soundwave } from '@shared/components/MediaCard/__mocks__/media-card';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
@@ -69,10 +74,11 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 
 	const renderThumbnail = (file: IeObjectFile) => {
 		let image = null;
-		if (FLOWPLAYER_FORMATS.includes(file.mimeType)) {
+		if (FLOWPLAYER_AUDIO_FORMATS.includes(file.mimeType)) {
+			image = soundwave;
+		} else if (FLOWPLAYER_FORMATS.includes(file.mimeType)) {
 			image = thumbnail || '';
-		}
-		if (IMAGE_FORMATS.includes(file.mimeType)) {
+		} else if (IMAGE_FORMATS.includes(file.mimeType)) {
 			// TODO: image preview
 			image = undefined; // Currently no images in representations
 		}

@@ -361,13 +361,12 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			width: number;
 			height: number;
 		}): void => {
-			console.log('iiifZoomToRect', { x, y, width, height });
 			if (!openSeaDragonViewer) {
-				console.log('iiifZoomToRect failed because openSeaDragonViewer is undefined');
+				console.error('iiifZoomToRect failed because openSeaDragonViewer is undefined');
 				return;
 			}
 			if (!activeImageTileSource) {
-				console.log('iiifZoomToRect failed because imageTileSource is undefined', {
+				console.error('iiifZoomToRect failed because imageTileSource is undefined', {
 					activeImageIndex,
 				});
 				return;
@@ -376,7 +375,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			const imageHeight: number | undefined = activeImageTileSource.dimensions.y;
 
 			if (!imageWidth || !imageHeight) {
-				console.log('aborting zoom to rect because activeImageTileSource is undefined', {
+				console.error('aborting zoom to rect because activeImageTileSource is undefined', {
 					item: activeImageTileSource,
 					openSeaDragonViewer,
 					imageWidth,
@@ -385,7 +384,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				});
 				return;
 			}
-			console.log('zoom to rect', { x, y, width, height });
 			openSeaDragonViewer.viewport.zoomTo(1.5, undefined, true);
 			openSeaDragonViewer.viewport.panTo(
 				new openSeaDragonLib.Point(
@@ -497,7 +495,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 									{tText(
 										'modules/iiif-viewer/iiif-viewer___current-image-van-total-images',
 										{
-											currentImage: activeImageIndex,
+											currentImage: activeImageIndex + 1,
 											totalImages: imageInfos?.length || 0,
 										}
 									)}
@@ -614,7 +612,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 								styles['c-iiif-viewer__iiif__controls__button'],
 								'c-iiif-viewer__iiif__controls__grid-view__disable'
 							)}
-							icon={<Icon name={IconNamesLight.File} aria-hidden />}
+							icon={<Icon name={IconNamesLight.Times} aria-hidden />}
 							aria-label={tText('pages/openseadragon/index___een-pagina-bekijken')}
 							variants={['white', 'sm']}
 							onClick={() => setIiifGridViewEnabled(false)}
@@ -631,13 +629,12 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				<PerfectScrollbar className={styles['c-iiif-viewer__iiif__reference-strip']}>
 					{imageInfos.map((imageInfo, index) => {
 						return (
-							<button
-								key={'c-iiif-viewer__iiif__reference-strip__' + index}
-								onClick={() => setActiveImageIndex(index)}
-							>
-								{/* eslint-disable-next-line @next/next/no-img-element */}
-								<img src={imageInfo.thumbnailUrl} alt={'page ' + (index + 1)} />
-							</button>
+							<div key={'c-iiif-viewer__iiif__reference-strip__' + index}>
+								<button onClick={() => setActiveImageIndex(index)}>
+									{/* eslint-disable-next-line @next/next/no-img-element */}
+									<img src={imageInfo.thumbnailUrl} alt={'page ' + (index + 1)} />
+								</button>
+							</div>
 						);
 					})}
 				</PerfectScrollbar>
@@ -671,14 +668,14 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 				{/* IIIF Grid view */}
 				<div
-					className={styles['c-iiif-viewer__iiif__grid-view-wrapper']}
+					className={styles['c-iiif-viewer__grid-view-wrapper']}
 					style={{ display: iiifGridViewEnabled ? 'block' : 'none' }}
 				>
-					<div className={styles['c-iiif-viewer__iiif__grid-view']}>
+					<div className={styles['c-iiif-viewer__grid-view']}>
 						{imageInfos.map((imageInfo, index) => {
 							return (
 								<button
-									key={'c-iiif-viewer__iiif__reference-strip__' + index}
+									key={'c-iiif-viewer__grid-view__' + index}
 									onClick={() => {
 										setIiifGridViewEnabled(false);
 										setActiveImageIndex(index);
