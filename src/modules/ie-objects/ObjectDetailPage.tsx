@@ -10,6 +10,7 @@ import {
 	type FlowPlayerProps,
 	MenuContent,
 	type TabProps,
+	Tabs,
 	TagList,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
@@ -42,7 +43,13 @@ import React, {
 	useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
+import {
+	BooleanParam,
+	NumberParam,
+	StringParam,
+	useQueryParam,
+	withDefault,
+} from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
@@ -62,6 +69,7 @@ import { Metadata, type MetadataItem } from '@ie-objects/components/Metadata';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import { ObjectPlaceholder } from '@ie-objects/components/ObjectPlaceholder';
 import { type MediaObject, RelatedObject } from '@ie-objects/components/RelatedObject';
+import { useGetAltoJsonFileContent } from '@ie-objects/hooks/get-alto-json-file-content';
 import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
 import { useGetIeObjectsAlsoInteresting } from '@ie-objects/hooks/get-ie-objects-similar';
@@ -72,7 +80,6 @@ import {
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
-	IE_OBJECT_QUERY_PARAM_CONFIG,
 	IMAGE_API_FORMATS,
 	IMAGE_FORMATS,
 	KEY_USER_ACTION_SORT_MAP,
@@ -98,6 +105,7 @@ import {
 	MetadataExportFormats,
 	type MetadataSortMap,
 	ObjectDetailTabs,
+	type OcrSearchResult,
 } from '@ie-objects/ie-objects.types';
 import {
 	IE_OBJECTS_SERVICE_BASE_URL,
@@ -108,7 +116,7 @@ import { isInAFolder } from '@ie-objects/utils/folders';
 import { mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils/map-metadata';
 import IiifViewer from '@iiif-viewer/IiifViewer';
 import { type IiifViewerFunctions, type ImageInfo } from '@iiif-viewer/IiifViewer.types';
-import altoTextLocations from '@iiif-viewer/alto2-simplified.json';
+import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { Blade } from '@shared/components/Blade/Blade';
@@ -124,9 +132,7 @@ import { Loading } from '@shared/components/Loading';
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { Pill } from '@shared/components/Pill';
-import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
-import { ScrollableTabs, TabLabel } from '@shared/components/Tabs';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -201,18 +207,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [mediaType, setMediaType] = useState<IeObjectType | null>(null);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
-	const [currentPageIndex, setCurrentPageIndex] = useState<number>(0); // Used for going through the pages of a newspaper
-	const [currentRepresentationIndex, setCurrentRepresentationIndex] = useState<number>(0); // Used for going through the videos/audio/image representations/files inside a single detail page
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | null>(null);
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
 	const [related, setRelated] = useState<MediaObject[]>([]);
 	const [metadataExportDropdownOpen, setMetadataExportDropdownOpen] = useState(false);
 	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
 	const [isRelatedObjectsBladeOpen, setIsRelatedObjectsBladeOpen] = useState(false);
-	const [isOcrBladeOpen, setIsOcrBladeOpen] = useState(false);
-	const [isOcrEnabled, setIsOcrEnabled] = useState<boolean>(false);
-	const [searchOcrText, setSearchOcrText] = useState<string>('');
 	const [isHighlightSearchTermsActive, setIsHighlightSearchTermsActive] = useState<boolean>(true);
+	const [hasAppliedUrlSearchTerms, setHasAppliedUrlSearchTerms] = useState<boolean>(false);
 
 	// Layout
 	useStickyLayout();
@@ -223,27 +225,61 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const folders = useSelector(selectFolders);
 
 	// Query params
-	const [query, setQuery] = useQueryParams({
-		...IE_OBJECT_QUERY_PARAM_CONFIG,
-		[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: StringParam,
-		[QUERY_PARAM_KEY.ACTIVE_BLADE]: StringParam,
-		[QUERY_PARAM_KEY.ACTIVE_TAB]: StringParam,
-		[QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_X]: withDefault(NumberParam, undefined),
-		[QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_Y]: withDefault(NumberParam, undefined),
-		[QUERY_PARAM_KEY.IIIF_VIEWER_ZOOM_LEVEL]: withDefault(NumberParam, undefined),
-	});
-	const searchTerms = query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string | undefined;
 
-	const setActiveTab = (tabId: ObjectDetailTabs | null) => {
-		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_TAB]: tabId || undefined }, 'replace');
-	};
+	// Search terms that are coming from the global search page
+	const [highlightedSearchTerms, setHighlightedSearchTerms] = useQueryParam(
+		QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS,
+		withDefault(StringParam, '')
+	);
+	// Temp search terms are used to store the search terms while the user is typing
+	const [searchTermsTemp, setSearchTermsTemp] = useState<string>('');
+	// Search terms are used to store the search terms after the user has confirmed the search
+	const [searchTerms, setSearchTerms] = useState<string>('');
 
-	const setActiveBlade = (blade: MediaActions | null) => {
-		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_BLADE]: blade || undefined }, 'replace');
-	};
+	const [, setShowAuthQueryKey] = useQueryParam(QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY, StringParam);
+	const [activeBlade, setActiveBlade] = useQueryParam(
+		QUERY_PARAM_KEY.ACTIVE_BLADE,
+		withDefault(StringParam, undefined)
+	);
+	const [activeTab, setActiveTab] = useQueryParam(
+		QUERY_PARAM_KEY.ACTIVE_TAB,
+		withDefault(StringParam, ObjectDetailTabs.Metadata)
+	);
 
-	const activeTab = query[QUERY_PARAM_KEY.ACTIVE_TAB];
-	const activeBlade = query[QUERY_PARAM_KEY.ACTIVE_BLADE];
+	// Used for going through the pages of a newspaper (iiif viewer reference strip)
+	const [currentPageIndex, setCurrentPageIndex] = useQueryParam(
+		QUERY_PARAM_KEY.ACTIVE_PAGE,
+		withDefault(NumberParam, 0)
+	);
+
+	// Used for going through the videos/audio/image representations/files inside a single detail page (grey bottom bar)
+	const [currentRepresentationIndex, setCurrentRepresentationIndex] = useQueryParam(
+		QUERY_PARAM_KEY.ACTIVE_REPRESENTATION,
+		NumberParam
+	);
+	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number>(0);
+	const [expandSidebar, setExpandSidebar] = useQueryParam(
+		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
+		withDefault(BooleanParam, false)
+	);
+	const [iiifViewerFocusX] = useQueryParam(
+		QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_X,
+		withDefault(NumberParam, undefined)
+	);
+	const [iiifViewerFocusY] = useQueryParam(
+		QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_Y,
+		withDefault(NumberParam, undefined)
+	);
+	const [iiifViewerZoomLevel] = useQueryParam(
+		QUERY_PARAM_KEY.IIIF_VIEWER_ZOOM_LEVEL,
+		withDefault(NumberParam, undefined)
+	);
+	const [isOcrEnabled, setIsOcrEnabled] = useQueryParam(
+		QUERY_PARAM_KEY.IIIF_VIEWER_OCR_OVERLAY_ENABLED,
+		withDefault(BooleanParam, false)
+	);
+
+	const [searchResults, setSearchResults] = useState<OcrSearchResult[] | null>(null);
 
 	const {
 		data: mediaInfo,
@@ -255,7 +291,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
 	const currentPage = mediaInfo?.pageRepresentations?.[currentPageIndex];
-	const currentRepresentation = currentPage?.[currentRepresentationIndex];
+	const currentRepresentation = currentPage?.[currentRepresentationIndex || 0];
 
 	// peak file
 	const peakFileStoredAt: string | null =
@@ -326,6 +362,23 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		canViewAllSpaces,
 	});
 
+	// ocr alto info
+	const currentPageAltoUrl = useMemo((): string | null => {
+		let altoFileUrl = null;
+		currentPage?.find(
+			(representation) =>
+				representation?.files?.find((file) => {
+					if (XML_FORMATS.includes(file.mimeType)) {
+						altoFileUrl = file.storedAt;
+						return true;
+					}
+					return false;
+				})
+		);
+		return altoFileUrl;
+	}, [currentPage]);
+	const { data: simplifiedAltoInfo } = useGetAltoJsonFileContent(currentPageAltoUrl);
+
 	/**
 	 * Computed
 	 */
@@ -337,7 +390,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		(visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
-	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider =
 		representationsToDisplay.length > 1 && mediaInfo?.dctermsFormat !== IeObjectType.Newspaper;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
@@ -369,6 +421,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	/**
 	 * Effects
 	 */
+	useEffect(() => {
+		const activeSearchResultElem = document.querySelector(
+			'[class*="p-object-detail__ocr__word--marked--active"]'
+		);
+		const scrollable = document.querySelector(
+			'[class*="p-object-detail__ocr__words-container"]'
+		);
+
+		const scrollTopWord = activeSearchResultElem?.scrollTop || 0;
+		scrollable?.scrollTo({
+			top: scrollTopWord,
+		});
+		activeSearchResultElem?.scrollIntoView({
+			behavior: 'instant',
+			block: 'nearest',
+			inline: 'nearest',
+		});
+	}, [currentSearchResultIndex]);
 
 	useEffect(() => {
 		// Close dropdown while resizing
@@ -376,8 +446,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	}, [windowSize]);
 
 	useEffect(() => {
-		dispatch(setShowZendesk(!isKiosk && !hasAccessToVisitorSpaceOfObject));
-	}, [dispatch, hasAccessToVisitorSpaceOfObject, isKiosk]);
+		dispatch(
+			setShowZendesk(
+				!isKiosk &&
+					!hasAccessToVisitorSpaceOfObject &&
+					activeTab === ObjectDetailTabs.Metadata
+			)
+		);
+	}, [dispatch, hasAccessToVisitorSpaceOfObject, isKiosk, activeTab]);
 
 	useEffect(() => {
 		if (mediaInfo) {
@@ -411,14 +487,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		// Set default view
 		if (isMobile) {
 			// Default to metadata tab on mobile
-			setActiveTab(ObjectDetailTabs.Metadata);
+			setActiveTab(ObjectDetailTabs.Metadata, 'replaceIn');
 		} else {
 			// Check media content and license for default tab on desktop
-			setActiveTab(
-				mediaInfo?.dctermsFormat && hasMedia
-					? ObjectDetailTabs.Media
-					: ObjectDetailTabs.Metadata
-			);
+			setExpandSidebar(!mediaInfo?.dctermsFormat || !hasMedia, 'replaceIn');
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mediaInfo]);
@@ -473,8 +545,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	/**
 	 * Callbacks
 	 */
-	const onClickToggle = () => {
-		setActiveTab(expandMetadata ? ObjectDetailTabs.Media : ObjectDetailTabs.Metadata);
+	const handleExpandButtonClicked = () => {
+		setExpandSidebar(!expandSidebar, 'replaceIn');
 	};
 
 	const onCloseBlade = () => {
@@ -499,14 +571,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			setActiveBlade(MediaActions.RequestAccess);
 		} else {
 			// Open the login blade first
-			setQuery(
-				{
-					...query,
-					[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
-					[QUERY_PARAM_KEY.ACTIVE_BLADE]: MediaActions.RequestAccess,
-				},
-				'replace'
-			);
+			setShowAuthQueryKey('1', 'replaceIn');
+			setActiveBlade(MediaActions.RequestAccess, 'replaceIn');
 		}
 	};
 
@@ -697,6 +763,132 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 	};
 
+	const handleChangeSearchIndex = useCallback(
+		async (searchResultIndex: number) => {
+			if (!searchResults) {
+				return;
+			}
+			setCurrentSearchResultIndex(searchResultIndex);
+			const searchResult = searchResults[searchResultIndex];
+			if (!searchResult) {
+				return;
+			}
+			if (searchResult.pageIndex !== currentPageIndex) {
+				setCurrentPageIndex(searchResult.pageIndex, 'replaceIn');
+			}
+			const altoText = simplifiedAltoInfo?.text?.[searchResult.searchTermIndexOnPage];
+			if (altoText) {
+				await handleClickOcrWord(altoText, searchResult.searchTermIndexOnPage);
+			}
+		},
+		[
+			currentPageIndex,
+			searchResults,
+			setCurrentPageIndex,
+			setCurrentSearchResultIndex,
+			simplifiedAltoInfo?.text,
+		]
+	);
+
+	const handleClearSearch = () => {
+		setSearchTermsTemp('');
+		setSearchTerms('');
+		setHighlightedSearchTerms('');
+		setSearchResults(null);
+		iiifViewerReference.current?.iiifGoToHome();
+	};
+
+	const searchPagesOcrText = useCallback(
+		(newSearchTerms: string): void => {
+			if (newSearchTerms === '') {
+				// Reset search
+				// Zoom to whole page
+				iiifViewerReference.current?.iiifGoToHome();
+			}
+
+			setSearchTerms(newSearchTerms);
+			setActiveTab(ObjectDetailTabs.Ocr);
+
+			const pageOcrTexts: (string | null)[] = [];
+			mediaInfo?.pageRepresentations?.forEach((representations) => {
+				const pageTranscripts = compact(
+					representations.map((representation) => {
+						return representation.schemaTranscript;
+					})
+				);
+				pageOcrTexts.push(pageTranscripts[0]?.toLowerCase() || null);
+			});
+
+			if (!pageOcrTexts.length) {
+				toastService.notify({
+					maxLines: 3,
+					title: tText('modules/ie-objects/object-detail-page___error'),
+					description: tText(
+						'modules/ie-objects/object-detail-page___deze-krant-heeft-geen-ocr-tekst'
+					),
+				});
+				return;
+			}
+
+			const searchResultsTemp: OcrSearchResult[] = [];
+			newSearchTerms.split(' ').forEach((searchTerm) => {
+				pageOcrTexts.forEach((pageOcrText, pageIndex) => {
+					if (!pageOcrText) {
+						return; // Skip this page since it doesn't have an ocr transcript
+					}
+					let searchTermCharacterOffset: number = pageOcrText.indexOf(searchTerm);
+					let searchTermIndexOnPage: number = 0;
+					while (searchTermCharacterOffset !== -1) {
+						const searchResult: OcrSearchResult = {
+							pageIndex,
+							searchTerm,
+							searchTermCharacterOffset,
+							searchTermIndexOnPage,
+						};
+						searchResultsTemp.push(searchResult);
+						searchTermCharacterOffset = pageOcrText?.indexOf(
+							searchTerm,
+							searchTermCharacterOffset + 1
+						);
+						searchTermIndexOnPage += 1;
+					}
+				});
+			});
+			setSearchResults(searchResultsTemp);
+			setCurrentPageIndex(searchResultsTemp?.[0]?.pageIndex || 0, 'replaceIn');
+			iiifViewerReference.current?.waitForReadyState().then(() => {
+				handleChangeSearchIndex(0);
+			});
+		},
+		[
+			handleChangeSearchIndex,
+			mediaInfo?.pageRepresentations,
+			setActiveTab,
+			setCurrentPageIndex,
+			setSearchTerms,
+			tText,
+		]
+	);
+
+	useEffect(() => {
+		// When the page loads, search the ocr texts for the searchTerms in the query params in the url
+		if (
+			highlightedSearchTerms &&
+			mediaInfo?.dctermsFormat === IeObjectType.Newspaper &&
+			!hasAppliedUrlSearchTerms
+		) {
+			setSearchTermsTemp(highlightedSearchTerms);
+			setSearchTerms(highlightedSearchTerms);
+			searchPagesOcrText(highlightedSearchTerms);
+			setHasAppliedUrlSearchTerms(true);
+		}
+	}, [
+		hasAppliedUrlSearchTerms,
+		mediaInfo?.dctermsFormat,
+		searchPagesOcrText,
+		highlightedSearchTerms,
+	]);
+
 	const getSortMapByUserType = useCallback((): MetadataSortMap[] => {
 		if (isNil(user)) {
 			return ANONYMOUS_ACTION_SORT_MAP();
@@ -808,14 +1000,34 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	/**
 	 * Content
 	 */
+
+	const isMediaAvailable = useCallback((): boolean => {
+		switch (mediaInfo?.dctermsFormat) {
+			case IeObjectType.Audio:
+			case IeObjectType.Video:
+			case IeObjectType.Film:
+				return !isErrorPlayableUrl && !!playableUrl && !!currentPlayableFile;
+
+			case IeObjectType.Newspaper: {
+				return !!currentRepresentation?.files?.find((file) =>
+					IMAGE_API_FORMATS.includes(file.mimeType)
+				);
+			}
+
+			default:
+				return false;
+		}
+	}, [
+		currentPlayableFile,
+		currentRepresentation?.files,
+		isErrorPlayableUrl,
+		mediaInfo?.dctermsFormat,
+		playableUrl,
+	]);
+
 	const tabs: TabProps[] = useMemo(() => {
-		const available = !isErrorPlayableUrl && !!playableUrl && !!currentPlayableFile;
-		return OBJECT_DETAIL_TABS(mediaType, available).map((tab) => ({
-			...tab,
-			label: <TabLabel label={tab.label} />,
-			active: tab.id === activeTab,
-		}));
-	}, [activeTab, mediaType, isErrorPlayableUrl, playableUrl, currentPlayableFile]);
+		return OBJECT_DETAIL_TABS(mediaType, activeTab as ObjectDetailTabs, isMediaAvailable());
+	}, [isMediaAvailable, mediaType, activeTab]);
 
 	const accessEndDate = useMemo(() => {
 		const dateDesktop = formatMediumDateWithTime(asDate(visitRequest?.endAt));
@@ -902,13 +1114,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		renderExportDropdown,
 	]);
 
-	const handleHoverOcrWord = (textLocation: AltoTextLine, index: number) => {
+	const handleClickOcrWord = async (textLocation: AltoTextLine, index: number) => {
 		iiifViewerReference?.current?.iiifZoomToRect(textLocation);
 		iiifViewerReference?.current?.setActiveWordIndex(index);
 	};
 
 	const iiifViewerImageInfos = useMemo((): ImageInfo[] => {
-		const images: ImageInfo[] = compact(
+		return compact(
 			mediaInfo?.pageRepresentations?.flatMap((pageReps) => {
 				const files = pageReps.flatMap((pageRep) => pageRep.files);
 				const imageApiFile = files.find((file) =>
@@ -928,7 +1140,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				};
 			})
 		);
-		return images;
 	}, [mediaInfo]);
 
 	/**
@@ -947,15 +1158,23 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			return (
 				<IiifViewer
 					imageInfos={iiifViewerImageInfos}
+					altoJsonCurrentPage={simplifiedAltoInfo}
 					ref={iiifViewerReference}
 					id={mediaInfo?.schemaIdentifier as string}
-					isOcrEnabled={isOcrEnabled}
-					setIsOcrEnabled={setIsOcrEnabled}
+					isOcrEnabled={isOcrEnabled || false}
+					setIsOcrEnabled={(enabled) => setIsOcrEnabled(enabled, 'replaceIn')}
 					activeImageIndex={currentPageIndex}
 					setActiveImageIndex={setCurrentPageIndex}
-					initialFocusX={query[QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_X]}
-					initialFocusY={query[QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_Y]}
-					initialZoomLevel={query[QUERY_PARAM_KEY.IIIF_VIEWER_ZOOM_LEVEL]}
+					initialFocusX={iiifViewerFocusX}
+					initialFocusY={iiifViewerFocusY}
+					initialZoomLevel={iiifViewerZoomLevel}
+					searchTerms={searchTermsTemp}
+					setSearchTerms={setSearchTermsTemp}
+					onSearch={searchPagesOcrText}
+					onClearSearch={handleClearSearch}
+					currentSearchIndex={currentSearchResultIndex}
+					searchResults={searchResults}
+					setSearchResultIndex={handleChangeSearchIndex}
 				/>
 			);
 		}
@@ -991,6 +1210,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			token: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
 			dataPlayerId: publicRuntimeConfig.FLOW_PLAYER_ID,
 			plugins: ['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio', 'keyboard'],
+			peakColorBackground: '#303030', // $shade-darker
+			peakColorInactive: '#adadad', // zinc
+			peakColorActive: '#00857d', // $teal
+			peakHeightFactor: 0.6,
 		};
 
 		// Flowplayer
@@ -1000,14 +1223,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					key={flowPlayerKey}
 					type="video"
 					src={playableUrl as string}
-					poster={mediaInfo?.thumbnailUrl?.[0] || undefined}
+					poster={mediaInfo?.thumbnailUrl || undefined}
 					{...shared}
 				/>
 			);
 		}
 		// Audio player
 		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(currentPlayableFile.mimeType)) {
-			console.log('rendering audio flowplayer: ', { playableUrl, currentPlayableFile });
 			if (peakFileStoredAt && !peakJson) {
 				return (
 					<Loading fullscreen owner="object detail page: render media audio peak file" />
@@ -1135,13 +1357,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						'u-bg-platinum',
 						'u-list-reset',
 						styles['p-object-detail__metadata-list'],
-						`p-object-detail__metadata-list--${type}`,
-						{
-							[styles['p-object-detail__metadata-list--collapsed']]:
-								!expandMetadata || isMobile,
-							[styles['p-object-detail__metadata-list--expanded']]:
-								expandMetadata && !isMobile,
-						}
+						`p-object-detail__metadata-list--${type}`
 					)}
 				>
 					{items.map((item, index) => {
@@ -1168,7 +1384,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			{!isKiosk && !hasAccessToVisitorSpaceOfObject && (
 				<>
 					<NoServerSideRendering>
-						<div className={styles['p-object-detail__metadata-pill']}>
+						<div className={styles['p-object-detail__sidebar__content-pill']}>
 							<TagList
 								className="u-pt-12"
 								tags={mapKeywordsToTags([maintainerName])}
@@ -1189,7 +1405,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						</div>
 					</NoServerSideRendering>
 					{maintainerLogo && (
-						<div className={styles['p-object-detail__metadata-logo']}>
+						<div className={styles['p-object-detail__sidebar__content-logo']}>
 							{/* eslint-disable-next-line @next/next/no-img-element */}
 							{/* TODO remove this hack once we fully switched to the new graph.organisations table */}
 							<img src={maintainerLogo} alt={`Logo ${maintainerName}`} />
@@ -1224,14 +1440,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	}: IeObject): ReactNode => {
 		if (!isKiosk && !hasAccessToVisitorSpaceOfObject) {
 			return (
-				<div className={styles['p-object-detail__metadata-maintainer-data']}>
+				<div className={styles['p-object-detail__sidebar__content-maintainer-data']}>
 					{maintainerDescription && (
-						<p className={styles['p-object-detail__metadata-description']}>
+						<p className={styles['p-object-detail__sidebar__content-description']}>
 							{maintainerDescription}
 						</p>
 					)}
 					{maintainerSiteUrl && (
-						<p className={styles['p-object-detail__metadata-link']}>
+						<p className={styles['p-object-detail__sidebar__content-link']}>
 							<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
 								{maintainerSiteUrl}
 							</a>
@@ -1243,7 +1459,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			);
 		} else {
 			return (
-				<div className={styles['p-object-detail__metadata-maintainer-data']}>
+				<div className={styles['p-object-detail__sidebar__content-maintainer-data']}>
 					{maintainerName}
 					{showVisitButton && isMobile && renderVisitButton()}
 				</div>
@@ -1340,7 +1556,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				</MetadataList>
 
 				{(!!similar.length || !!mediaInfo.keywords?.length) && (
-					<MetadataList disableContainerQuery>
+					<MetadataList disableContainerQuery={true}>
 						{[
 							{
 								title: tHtml(
@@ -1384,15 +1600,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	};
 
 	const renderRelatedObjectsBlade = () => {
-		if (!related.length || (!expandMetadata && isMobile)) {
+		if (!related.length || (!expandSidebar && isMobile)) {
 			return null;
 		}
 		return (
 			<CollapsableBlade
-				className={clsx('p-object-detail__related', {
-					'p-object-detail__metadata--expanded': expandMetadata,
-					'p-object-detail__metadata--collapsed': !expandMetadata,
-				})}
+				className={clsx('p-object-detail__related')}
 				isOpen={isRelatedObjectsBladeOpen}
 				setIsOpen={setIsRelatedObjectsBladeOpen}
 				icon={
@@ -1419,89 +1632,124 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		);
 	};
 
-	const renderOcrBlade = () => {
-		if (
-			mediaInfo?.dctermsFormat !== IeObjectType.Newspaper ||
-			!iiifViewerImageInfos?.[currentPageIndex]?.altoUrl ||
-			(activeTab === ObjectDetailTabs.Media && isMobile)
-		) {
-			return null;
-		}
+	const renderedOcrText = useMemo(() => {
+		const searchTermWords = compact(searchTerms.split(' '));
+		let searchTermIndex = 0;
 		return (
-			<CollapsableBlade
-				className={'p-object-detail__ocr'}
-				isOpen={isOcrBladeOpen}
-				setIsOpen={setIsOcrBladeOpen}
-				icon={
-					<Icon
-						className="u-font-size-24 u-mr-8 u-text-left"
-						name={IconNamesLight.Newspaper}
-						aria-hidden
-					/>
-				}
-				title={tHtml('modules/ie-objects/object-detail-page___ocr-tekst')}
-				renderContent={renderOcrContent}
-			/>
+			<div className={styles['p-object-detail__ocr__words-container']}>
+				{simplifiedAltoInfo?.text?.map((textLocation, index) => {
+					const isMarked: boolean =
+						!!searchTerms &&
+						searchTermWords.some((searchWord) =>
+							textLocation.text.toLowerCase().includes(searchWord)
+						);
+
+					// Search results are counted per page, so we need to subtract the amount of results in previous page
+					const searchResultsOnPreviousPages: number =
+						searchResults?.filter((result) => result.pageIndex < currentPageIndex)
+							.length || 0;
+					const searchResultIndexWithinCurrentPage: number =
+						currentSearchResultIndex - searchResultsOnPreviousPages;
+					const isActive: boolean =
+						!!searchTerms &&
+						isMarked &&
+						searchTermIndex === searchResultIndexWithinCurrentPage;
+
+					const wordElement = (
+						<span
+							key={'ocr-text--' + ieObjectId + '--' + index}
+							onClick={() => handleClickOcrWord(textLocation, index)}
+							onDoubleClick={() =>
+								setIsOcrEnabled((oldOcrEnabled) => !oldOcrEnabled, 'replaceIn')
+							}
+							className={clsx(styles['p-object-detail__ocr__word'], {
+								[styles['p-object-detail__ocr__word--marked']]: isMarked,
+								[styles['p-object-detail__ocr__word--marked--active']]: isActive,
+							})}
+						>
+							{textLocation.text}{' '}
+						</span>
+					);
+
+					if (isMarked) {
+						searchTermIndex += 1;
+					}
+
+					return wordElement;
+				})}
+			</div>
 		);
-	};
+	}, [
+		currentPageIndex,
+		currentSearchResultIndex,
+		searchTerms,
+		ieObjectId,
+		searchResults,
+		setIsOcrEnabled,
+		simplifiedAltoInfo?.text,
+	]);
 
 	const renderOcrContent = () => {
 		return (
 			<div className={clsx(styles['p-object-detail__ocr'])}>
-				<div className="u-flex">
-					<SearchBar
-						id="ocr-search"
-						className={styles['p-object-detail__ocr__search']}
-						value={searchOcrText}
-						variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
-						placeholder={tText(
-							'modules/ie-objects/object-detail-page___zoek-in-de-ocr-tekst'
-						)}
-						onChange={setSearchOcrText}
-						onSearch={() => {}}
-					/>
-					<div className={styles['p-object-detail__ocr__close']}>
-						<Button
-							className={'p-object-detail__iiif__controls__toggle-ocr'}
-							icon={
-								<Icon
-									name={
-										isOcrEnabled
-											? IconNamesLight.NoNewspaper
-											: IconNamesLight.Newspaper
-									}
-									aria-hidden
-								/>
-							}
-							aria-label={tText(
-								'pages/openseadragon/index___tekst-boven-de-afbeelding-tonen'
-							)}
-							variants={['silver']}
-							onClick={() => setIsOcrEnabled(!isOcrEnabled)}
-						/>
-					</div>
-				</div>
+				<SearchInputWithResultsPagination
+					className={styles['p-object-detail__ocr__search']}
+					value={searchTermsTemp}
+					onChange={setSearchTermsTemp}
+					onSearch={(newSearchTerms) => searchPagesOcrText(newSearchTerms)}
+					onClearSearch={handleClearSearch}
+					searchResults={searchResults}
+					currentSearchIndex={currentSearchResultIndex}
+					onChangeSearchIndex={handleChangeSearchIndex}
+				/>
 
-				{(altoTextLocations as AltoTextLine[]).map((textLocation, index) => {
-					return (
-						<>
-							<span
-								key={'ocr-text--' + mediaInfo?.schemaIdentifier + '--' + index}
-								className={styles['p-object-detail__ocr__word']}
-								onMouseOver={() => handleHoverOcrWord(textLocation, index)}
-								onClick={() => setIsOcrEnabled(!isOcrEnabled)}
-							>
-								<HighlightSearchTerms
-									toHighlight={textLocation.text}
-									searchTerms={
-										searchOcrText ? searchOcrText.split(' ') : undefined
-									}
-									enabled={isHighlightSearchTermsActive}
-								/>
-							</span>{' '}
-						</>
-					);
-				})}
+				{renderedOcrText}
+
+				<div className={styles['p-object-detail__ocr__pagination']}>
+					<Button
+						className={clsx(
+							styles['c-iiif-viewer__iiif__controls__button'],
+							'c-iiif-viewer__iiif__controls__grid-view__previous-image'
+						)}
+						iconStart={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
+						aria-label={tText(
+							'modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding'
+						)}
+						label={tText('modules/ie-objects/object-detail-page___vorige')}
+						variants={['text']}
+						onClick={() => {
+							console.log('next page: ', { index: currentPageIndex - 1 });
+							setCurrentPageIndex(currentPageIndex - 1);
+						}}
+						disabled={currentPageIndex === 0}
+					/>
+					<span className="pagination-info">
+						{tText(
+							'modules/ie-objects/object-detail-page___pagina-current-page-van-total-pages',
+							{
+								currentPage: currentPageIndex + 1,
+								totalPages: iiifViewerImageInfos?.length || 0,
+							}
+						)}
+					</span>
+					<Button
+						className={clsx(
+							styles['c-iiif-viewer__iiif__controls__button'],
+							'c-iiif-viewer__iiif__controls__grid-view__next-image'
+						)}
+						iconEnd={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
+						aria-label={tText(
+							'modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding'
+						)}
+						label={tText('modules/ie-objects/object-detail-page___volgende')}
+						variants={['text']}
+						onClick={() => {
+							console.log('next page: ', { index: currentPageIndex + 1 });
+							setCurrentPageIndex(currentPageIndex + 1);
+						}}
+						disabled={currentPageIndex === iiifViewerImageInfos.length - 1}
+					/>
+				</div>
 			</div>
 		);
 	};
@@ -1510,13 +1758,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		if (mediaType) {
 			return (
 				<>
-					{renderMedia()}
+					<div className={styles['p-object-detail__media']}>{renderMedia()}</div>
 					{showFragmentSlider && (
 						<FragmentSlider
 							thumbnail={mediaInfo?.thumbnailUrl[0]}
-							className={styles['p-object-detail__slider']}
+							className={styles['p-object-detail__grey-slider-bar']}
 							files={representationsToDisplay}
-							onChangeFragment={setCurrentRepresentationIndex}
+							onChangeFragment={(index) =>
+								setCurrentRepresentationIndex(index, 'replaceIn')
+							}
 						/>
 					)}
 				</>
@@ -1525,29 +1775,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		return <ObjectPlaceholder {...objectPlaceholder()} />;
 	};
 
-	const renderNavigationBar = (): ReactNode => {
+	const renderVisitorSpaceNavigationBar = (): ReactNode => {
 		if (showVisitorSpaceNavigationBar) {
 			return (
 				<VisitorSpaceNavigation
-					className={styles['p-object-detail__nav']}
+					className={styles['p-object-detail__visitor-space-navigation-bar']}
 					title={mediaInfo?.maintainerName ?? ''}
 					accessEndDate={accessEndDate}
 				/>
 			);
 		}
 
-		// Only show the back button on the media tab (mobile)
-		const showBackButton = (isMobile && activeTab === ObjectDetailTabs.Media) || !isMobile;
-
 		return (
-			showBackButton && (
-				<Button
-					className={styles['p-object-detail__back']}
-					icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
-					onClick={() => window.history.back()}
-					variants={['black']}
-				/>
-			)
+			<Button
+				className={styles['p-object-detail__back']}
+				icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
+				onClick={() => window.history.back()}
+				variants={['black']}
+			/>
 		);
 	};
 
@@ -1556,13 +1801,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			<Head>
 				<link rel="canonical" href={`https://hetarchief.be/zoeken/${ieObjectId}`} />
 			</Head>
-			{renderNavigationBar()}
-			<ScrollableTabs
-				className={styles['p-object-detail__tabs']}
-				variants={['dark']}
-				tabs={tabs}
-				onClick={(tabId) => setActiveTab(tabId as ObjectDetailTabs | null)}
-			/>
+
 			{isNoAccessError && (
 				<ErrorNoAccessToObject
 					visitorSpaceName={visitorSpace?.name as string}
@@ -1582,50 +1821,66 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			<article
 				className={clsx(styles['p-object-detail__wrapper'], {
 					[styles['p-object-detail--hidden']]: mediaInfoIsLoading || mediaInfoIsError,
-					[styles['p-object-detail__wrapper--collapsed']]: !expandMetadata,
-					[styles['p-object-detail__wrapper--expanded']]: expandMetadata,
+					[styles['p-object-detail__wrapper--collapsed']]: !expandSidebar,
+					[styles['p-object-detail__wrapper--expanded']]: expandSidebar,
 					[styles['p-object-detail__wrapper--metadata']]:
 						activeTab === ObjectDetailTabs.Metadata,
 					[styles['p-object-detail__wrapper--video']]:
 						activeTab === ObjectDetailTabs.Media,
+					[styles['p-object-detail__wrapper--ocr']]: activeTab === ObjectDetailTabs.Ocr,
 				})}
 			>
+				{/* Visitor space navigation bar */}
+				{renderVisitorSpaceNavigationBar()}
+
+				{/* Video audio or newspaper */}
+				{renderObjectMedia()}
+
+				{/* Expand button */}
 				{mediaType && hasMedia && (
 					<Button
 						className={clsx(styles['p-object-detail__expand-button'], {
-							[styles['p-object-detail__expand-button--collapsed']]: !expandMetadata,
-							[styles['p-object-detail__expand-button--expanded']]: expandMetadata,
+							[styles['p-object-detail__expand-button--collapsed']]: !expandSidebar,
+							[styles['p-object-detail__expand-button--expanded']]: expandSidebar,
 						})}
 						icon={
 							<Icon
 								name={
-									expandMetadata
+									expandSidebar
 										? IconNamesLight.ExpandRight
 										: IconNamesLight.ExpandLeft
 								}
 								aria-hidden
 							/>
 						}
-						onClick={onClickToggle}
+						onClick={handleExpandButtonClicked}
 						variants="white"
 					/>
 				)}
-				<div className={styles['p-object-detail__media']}>{renderObjectMedia()}</div>
-				<div
-					className={clsx(styles['p-object-detail__sidebar'], {
-						[styles['p-object-detail__sidebar--collapsed']]: !expandMetadata,
-						[styles['p-object-detail__sidebar--expanded']]: expandMetadata,
-					})}
-				>
+
+				{/* Tabs */}
+				<Tabs
+					className={clsx(styles['p-object-detail__tabs'])}
+					variants={['dark']}
+					tabs={tabs}
+					onClick={(tabId) => setActiveTab(tabId as ObjectDetailTabs | null)}
+				/>
+
+				{/* Sidebar */}
+				<div className={clsx(styles['p-object-detail__sidebar'])}>
 					<div
-						className={clsx(styles['p-object-detail__metadata'], {
-							[styles['p-object-detail__metadata--no-media']]: !mediaType,
-						})}
+						className={clsx(
+							styles['p-object-detail__sidebar__content'],
+							styles['p-object-detail__sidebar__content__tab-' + activeTab],
+							{
+								[styles['p-object-detail__sidebar__content--no-media']]: !mediaType,
+							}
+						)}
 					>
-						{renderMetaData()}
+						{activeTab === ObjectDetailTabs.Metadata && renderMetaData()}
+						{activeTab === ObjectDetailTabs.Ocr && renderOcrContent()}
 					</div>
 					{renderRelatedObjectsBlade()}
-					{renderOcrBlade()}
 				</div>
 			</article>
 			{canManageFolders && (
@@ -1711,12 +1966,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		if (mediaInfo) {
 			return (
 				<div
-					className={clsx(styles['p-object-detail'], {
-						[styles['p-object-detail__visitor-space-navigation-bar--visible']]:
-							showVisitorSpaceNavigationBar,
-						[styles['p-object-detail__visitor-space-navigation-bar--hidden']]:
-							!showVisitorSpaceNavigationBar,
-					})}
+					className={clsx(
+						styles['p-object-detail'],
+						'p-object-detail--' + mediaInfo.dctermsFormat,
+						{
+							[styles['p-object-detail__visitor-space-navigation-bar--visible']]:
+								showVisitorSpaceNavigationBar,
+							[styles['p-object-detail__visitor-space-navigation-bar--hidden']]:
+								!showVisitorSpaceNavigationBar,
+							[styles['p-object-detail__sidebar--expanded']]: expandSidebar,
+							[styles['p-object-detail__sidebar--collapsed']]: !expandSidebar,
+						}
+					)}
 				>
 					{renderObjectDetail()}
 				</div>

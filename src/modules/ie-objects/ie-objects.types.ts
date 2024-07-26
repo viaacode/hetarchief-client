@@ -143,11 +143,11 @@ export interface IeObjectFile {
 
 export interface IeObjectRepresentation {
 	id: string;
-	name: string;
+	schemaName: string;
 	isMediaFragmentOf: string;
-	languages: string;
-	startTime: string;
-	transcript: string;
+	schemaInLanguage: string;
+	schemaStartTime: string;
+	schemaTranscript: string;
 	edmIsNextInSequence: string;
 	updatedAt: string;
 	files: IeObjectFile[];
@@ -188,6 +188,7 @@ export interface IeObjectSearchAggregations {
 export enum ObjectDetailTabs {
 	Media = 'media',
 	Metadata = 'metadata',
+	Ocr = 'ocr',
 }
 
 export enum MediaActions {
@@ -224,4 +225,11 @@ export interface AltoTextLine {
 	y: number;
 	width: number;
 	height: number;
+}
+
+export interface OcrSearchResult {
+	pageIndex: number;
+	searchTerm: string;
+	searchTermCharacterOffset: number;
+	searchTermIndexOnPage: number;
 }

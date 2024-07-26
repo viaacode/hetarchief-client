@@ -1,6 +1,5 @@
 import { type MenuItemInfo, type TabProps } from '@meemoo/react-components';
 import { isString } from 'lodash-es';
-import { StringParam } from 'use-query-params';
 
 import {
 	type ActionItem,
@@ -23,9 +22,13 @@ import {
 } from '@ie-objects/utils/map-metadata';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import {
+	GET_TYPE_TO_LABEL_MAP,
+	TYPE_TO_ICON_MAP,
+	TYPE_TO_NO_ICON_MAP,
+} from '@shared/components/MediaCard';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { type IeObjectType } from '@shared/types/ie-objects';
+import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate } from '@shared/utils/dates';
 
 /**
@@ -130,51 +133,46 @@ export const noLicensePlaceholder = (): ObjectPlaceholderProps => ({
  * Tabs
  */
 
-const renderMediaTab = (type?: IeObjectType | null, available = true) => {
-	switch (type) {
-		case 'audio':
-			return {
-				id: ObjectDetailTabs.Media,
-				label: tText('modules/ie-objects/const/index___audio'),
-				icon: (
-					<Icon
-						name={available ? IconNamesLight.Audio : IconNamesLight.NoAudio}
-						aria-hidden
-					/>
-				),
-			};
-		case 'video':
-		case 'film':
-			return {
-				id: ObjectDetailTabs.Media,
-				label: tText('modules/ie-objects/const/index___video'),
-				icon: (
-					<Icon
-						name={available ? IconNamesLight.Video : IconNamesLight.NoVideo}
-						aria-hidden
-					/>
-				),
-			};
-		default:
-			return {
-				id: ObjectDetailTabs.Media,
-				label: tText('modules/ie-objects/const/index___video'),
-				icon: <Icon name={IconNamesLight.NoVideo} aria-hidden />,
-			};
-	}
-};
-
 export const OBJECT_DETAIL_TABS = (
-	mediaType?: IeObjectType | null,
-	available = true
-): TabProps[] => [
-	{
-		id: ObjectDetailTabs.Metadata,
-		label: tText('modules/ie-objects/const/index___metadata'),
-		icon: <Icon name={IconNamesLight.Info} aria-hidden />,
-	},
-	renderMediaTab(mediaType, available),
-];
+	mediaType: IeObjectType | null,
+	activeTab?: ObjectDetailTabs,
+	mediaAvailable = true
+): TabProps[] => {
+	const typeWithDefault = mediaType || IeObjectType.Video;
+	return [
+		{
+			id: ObjectDetailTabs.Metadata,
+			label: tText('modules/ie-objects/const/index___metadata'),
+			icon: <Icon name={IconNamesLight.Info} aria-hidden />,
+			active: ObjectDetailTabs.Metadata === activeTab,
+		},
+		{
+			id: ObjectDetailTabs.Media,
+			label: GET_TYPE_TO_LABEL_MAP(typeWithDefault),
+			icon: (
+				<Icon
+					name={
+						mediaAvailable
+							? TYPE_TO_ICON_MAP[typeWithDefault]
+							: TYPE_TO_NO_ICON_MAP[typeWithDefault]
+					}
+					aria-hidden
+				/>
+			),
+			active: ObjectDetailTabs.Media === activeTab,
+		},
+		...(typeWithDefault === IeObjectType.Newspaper
+			? [
+					{
+						id: ObjectDetailTabs.Ocr,
+						label: tText('modules/ie-objects/ie-objects___ocr'),
+						icon: <Icon name={IconNamesLight.Ocr} aria-hidden />,
+						active: ObjectDetailTabs.Ocr === activeTab,
+					},
+			  ]
+			: []),
+	];
+};
 
 /**
  * Actions
@@ -535,7 +533,3 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 		data: mediaInfo?.abstract ? mediaInfo?.abstract : null,
 	},
 ];
-
-export const IE_OBJECT_QUERY_PARAM_CONFIG = {
-	[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: StringParam, // Comma separated string
-};

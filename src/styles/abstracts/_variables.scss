@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "sass:map";
 
 /**
  * Colors
@@ -29,6 +30,7 @@ $coral: #e89b88;
 $mustard: #efca6a;
 $light-blue: #bddee7;
 $grey: #757575;
+$newspaper-ocr-overlay-background: #cfba8c; // Used to color the rectangles where the ocr text is shown on top of a newpaper
 
 /**
  * Derived Colors
@@ -36,6 +38,7 @@ $grey: #757575;
 
 $black-8: color.adjust($black, $alpha: -0.92);
 $black-20: color.adjust($black, $alpha: -0.8);
+$black-80: color.adjust($black, $alpha: -0.2);
 $teal-66: color.adjust($teal, $alpha: -0.34);
 $teal-64: color.adjust($teal, $alpha: -0.36);
 $teal-24: color.adjust($teal, $alpha: -0.76);
@@ -48,11 +51,11 @@ $zinc-40: color.adjust($zinc, $alpha: -0.6);
  */
 
 $shadow-12-black-16: 0 0 12px color.adjust($black, $alpha: -0.84);
-$shadow-24-black-61: 0 0 24px color.adjust($black, $alpha: -0.39);
-$shadow-24-black-24: 0 0 24px color.adjust($black, $alpha: -0.76);
-$shadow-24-black-12: 0 0 24px color.adjust($black, $alpha: -0.88);
-$shadow-24-black-08: 0 0 24px color.adjust($black, $alpha: -0.92);
 $shadow-24-black-04: 0 0 24px color.adjust($black, $alpha: -0.96);
+$shadow-24-black-08: 0 0 24px color.adjust($black, $alpha: -0.92);
+$shadow-24-black-12: 0 0 24px color.adjust($black, $alpha: -0.88);
+$shadow-24-black-24: 0 0 24px color.adjust($black, $alpha: -0.76);
+$shadow-24-black-61: 0 0 24px color.adjust($black, $alpha: -0.39);
 
 /**
  * Spacers
@@ -116,6 +119,12 @@ $breakpoints: (
 	"xl": 1200px,
 	"xxl": 1400px,
 );
+$breakpoint-xs: 390px;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1400px;
 
 /**
  * Z-index layers
@@ -202,11 +211,14 @@ $card-image-small-width-md: 96px;
  */
 
 $button-horizontal-whitespace: $spacer-md;
-$button-height-sm: $font-size-md * 2;
 $button-icon-size: 1.8rem;
 $button-radius-size: 1.8rem;
-$button-width: 4.8rem;
-$button-radius: $button-width / 2;
+$button-height: 4.8rem;
+$button-height-sm: 3.6rem;
+$button-height-xs: 2.8rem;
+$button-radius: $button-height / 2;
+$button-radius-sm: $button-height-sm / 2;
+$button-radius-xs: $button-height-xs / 2;
 
 /**
  * Dividers
@@ -264,3 +276,4 @@ $input-border-radius: 2.8rem;
 $max-page-width: 130rem;
 $top-navigation-bar-height: 10rem;
 $top-visitor-space-bar-height: 6.4rem;
+$bottom-grey-bar-height: 6.4rem; // TODO enter correct height
