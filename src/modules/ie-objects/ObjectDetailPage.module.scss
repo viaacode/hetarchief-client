@@ -51,29 +51,29 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
  *
  * MOBILE:
  *
- *        1                    2
- *        │                    │
- *      1─┼────────────────────┤
- *        │                    │
- *        │  visitor space bar │
- *        │                    │
- *      2─┼────────────────────┤
- *        │                    │
- *        │       tabs         │
- *        │                    │
- *      3─┼────────────────────┤
- *        │                    │
- *        │                    │
- *        │       media        │
- *        │      metadata      │
- *        │       ocr          │
- *        │                    │
- *        │                    │
- *      4─┼────────────────────┤
- *        │                    │
- *        │        grey        │
- *        │                    │
- *      5─┴────────────────────┘
+ *     1    2               3
+ *     │    │               │
+ *   1─┼────┴───────────────┤
+ *     │                    │
+ *     │  visitor space bar │
+ *     │                    │
+ *   2─┼────┬───────────────┤
+ *     │    │               │
+ *     │ <  │  tabs         │
+ *     │    │               │
+ *   3─┼────┴───────────────┤
+ *     │                    │
+ *     │                    │
+ *     │       media        │
+ *     │      metadata      │
+ *     │       ocr          │
+ *     │                    │
+ *     │                    │
+ *   4─┼────────────────────┤
+ *     │                    │
+ *     │        grey        │
+ *     │                    │
+ *   5─┴────────────────────┘
  *
  */
 
@@ -171,8 +171,10 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			display: none;
 		}
 
-		@include respond-to(md) {
-			.p-object-detail__tabs {
+		.p-object-detail__tabs {
+			display: none;
+
+			@include respond-to(md) {
 				grid-row: 2;
 				grid-column: 2;
 			}
@@ -194,8 +196,11 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			display: block;
 		}
 
-		@include respond-to(md) {
-			.p-object-detail__tabs {
+		.p-object-detail__tabs {
+			grid-row: 2;
+			grid-column: 3;
+
+			@include respond-to(md) {
 				grid-row: 2;
 				grid-column: 2;
 			}
@@ -217,17 +222,12 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			display: flex;
 		}
 
-		&:global(.c-tabs) {
+		:global(.c-tabs__item) {
 			display: flex;
-			flex-direction: row;
-
-			:global(.c-tabs__item) {
-				display: flex;
-				justify-content: center;
-				flex-grow: 1;
-				margin-right: 0;
-				width: 100%;
-			}
+			justify-content: center;
+			flex-grow: 1;
+			margin-right: 0;
+			width: 100%;
 		}
 
 		&-tab {
@@ -351,7 +351,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			}
 		}
 
-		:global([class^="p-object-detail__wrapper"] > [class^="ObjectDetailPage_p-object-detail__tabs"]) {
+		:global([class*="p-object-detail__wrapper"] > [class*="p-object-detail__tabs"]) {
 			grid-row: 2;
 			grid-column: 3;
 			display: flex;
