@@ -1486,7 +1486,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 
 		const showAlert = !mediaInfo.description;
-		const metaDataFields = METADATA_FIELDS(mediaInfo).filter(
+		const metaDataFields = METADATA_FIELDS(mediaInfo, simplifiedAltoInfo || null).filter(
 			({ data }: MetadataItem): boolean => !!data
 		);
 
@@ -1692,6 +1692,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const renderOcrContent = () => {
 		return (
 			<div className={clsx(styles['p-object-detail__ocr'])}>
+				<Alert
+					icon={<Icon name={IconNamesLight.Info} aria-hidden />}
+					title={tText('OCR betrouwbaarheid')}
+					content={tHtml(
+						'Deze OCR kan fouten bevatten. <a href="/ocr-betrouwbaarheid-info">Meer info vind je hier</a>.'
+					)}
+				/>
+
 				<SearchInputWithResultsPagination
 					className={styles['p-object-detail__ocr__search']}
 					value={searchTermsTemp}

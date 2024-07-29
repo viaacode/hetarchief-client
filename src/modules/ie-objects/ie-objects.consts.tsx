@@ -20,6 +20,7 @@ import {
 	mapBooleanToMetadataData,
 	mapObjectToMetadata,
 } from '@ie-objects/utils/map-metadata';
+import type { SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
 import {
@@ -377,8 +378,54 @@ export const MEDIA_ACTIONS = ({
  * Metadata
  */
 
+const getOcrMetadataFields = (simplifiedAlto: SimplifiedAlto | null): MetadataItem[] => {
+	const metadataFields: MetadataItem[] = [];
+	if (simplifiedAlto) {
+		if (simplifiedAlto.description.softwareName) {
+			metadataFields.push({
+				title: tText('OCR Software'),
+				data: simplifiedAlto.description.softwareName,
+			});
+		}
+		if (simplifiedAlto.description.softwareVersion) {
+			metadataFields.push({
+				title: tText('OCR Software version'),
+				data: simplifiedAlto.description.softwareVersion,
+			});
+		}
+		if (simplifiedAlto.description.softwareCreator) {
+			metadataFields.push({
+				title: tText('OCR Software maker'),
+				data: simplifiedAlto.description.softwareCreator,
+			});
+		}
+		if (simplifiedAlto.description.softwareCreator) {
+			metadataFields.push({
+				title: tText('OCR Software maker'),
+				data: simplifiedAlto.description.softwareCreator,
+			});
+		}
+		if (simplifiedAlto.description.processingDateTime) {
+			metadataFields.push({
+				title: tText('OCR gemaakt op'),
+				data: simplifiedAlto.description.processingDateTime,
+			});
+		}
+		if (simplifiedAlto.description.processingStepSettings) {
+			metadataFields.push({
+				title: tText('OCR betrouwbaarheid'),
+				data: simplifiedAlto.description.processingStepSettings,
+			});
+		}
+	}
+	return metadataFields;
+};
+
 // TODO: complete mapping
-export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
+export const METADATA_FIELDS = (
+	mediaInfo: IeObject,
+	simplifiedAlto: SimplifiedAlto | null
+): MetadataItem[] => [
 	{
 		title: tText('modules/ie-objects/const/index___oorsprong'),
 		data: mediaInfo.meemooOriginalCp,
@@ -532,4 +579,5 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 		title: tText('modules/ie-objects/const/index___uitgebreide-beschrijving'),
 		data: mediaInfo?.abstract ? mediaInfo?.abstract : null,
 	},
+	...getOcrMetadataFields(simplifiedAlto),
 ];

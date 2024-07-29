@@ -50,6 +50,7 @@ export interface SimplifiedAlto {
 	description: {
 		fileName: string | undefined;
 		processingDateTime: string | undefined;
+		processingStepSettings: string | undefined;
 		softwareCreator: string | undefined;
 		softwareName: string | undefined;
 		softwareVersion: string | undefined;
