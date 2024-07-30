@@ -115,7 +115,7 @@ import {
 	NEWSPAPERS_SERVICE_BASE_URL,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { isInAFolder } from '@ie-objects/utils/folders';
-import { getIeObjectCreatorAsText } from '@ie-objects/utils/get-ie-object-creator-as-text';
+import { getIeObjectRightsOwnerAsText } from '@ie-objects/utils/get-ie-object-rights-owner-as-text';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import { mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils/map-metadata';
 import IiifViewer from '@iiif-viewer/IiifViewer';
@@ -1514,7 +1514,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			rightsStatusInfo
 		) {
 			rightsAttributionText = compact([
-				getIeObjectCreatorAsText(mediaInfo),
+				getIeObjectRightsOwnerAsText(mediaInfo),
 				mediaInfo.datePublished,
 				mediaInfo.name,
 				mediaInfo.maintainerName,
@@ -1591,7 +1591,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								</Metadata>
 							);
 						} else {
-							return item.data;
+							return (
+								<Metadata
+									title={item.title}
+									key={`metadata-${index}-${item.title}`}
+								>
+									{item.data}
+								</Metadata>
+							);
 						}
 					})}
 				</MetadataList>

@@ -96,6 +96,7 @@ export interface IeObject {
 	locationCreated?: string;
 	startDate?: string;
 	endDate?: string;
+	carrierDate?: string;
 	newspaperPublisher?: string;
 	alternativeTitle?: string[];
 

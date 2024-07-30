@@ -36,6 +36,7 @@
 		border-top: $divider-black;
 		display: flex;
 		flex-direction: row;
+		break-inside: avoid;
 	}
 
 	&__item-title {
