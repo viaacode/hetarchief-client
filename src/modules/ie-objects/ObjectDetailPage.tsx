@@ -116,7 +116,7 @@ import {
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { isInAFolder } from '@ie-objects/utils/folders';
 import { getIeObjectCreatorAsText } from '@ie-objects/utils/get-ie-object-creator-as-text';
-import { getIeObjectRightsStatusAsString } from '@ie-objects/utils/get-ie-object-rights-status-as-string';
+import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import { mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils/map-metadata';
 import IiifViewer from '@iiif-viewer/IiifViewer';
 import { type IiifViewerFunctions, type ImageInfo } from '@iiif-viewer/IiifViewer.types';
@@ -1503,15 +1503,26 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			locale,
 			publicRuntimeConfig.CLIENT_URL
 		).filter(({ data }: MetadataItem): boolean => !!data);
-		const rightsAttributionText = compact([
-			getIeObjectCreatorAsText(mediaInfo),
-			mediaInfo.datePublished,
-			mediaInfo.name,
-			mediaInfo.maintainerName,
-			getIeObjectRightsStatusAsString(mediaInfo),
-			publicRuntimeConfig.CLIENT_URL +
-				ROUTES_BY_LOCALE[locale].permalink.replace(':pid', mediaInfo.schemaIdentifier),
-		]).join(', ');
+		let rightsStatusInfo = null;
+		if (mediaInfo?.dctermsFormat === IeObjectType.Newspaper) {
+			rightsStatusInfo = getIeObjectRightsStatusInfo(mediaInfo, locale);
+		}
+		let rightsAttributionText: string | null = null;
+		if (
+			mediaInfo?.dctermsFormat === IeObjectType.Newspaper &&
+			mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) &&
+			rightsStatusInfo
+		) {
+			rightsAttributionText = compact([
+				getIeObjectCreatorAsText(mediaInfo),
+				mediaInfo.datePublished,
+				mediaInfo.name,
+				mediaInfo.maintainerName,
+				rightsStatusInfo.label,
+				publicRuntimeConfig.CLIENT_URL +
+					ROUTES_BY_LOCALE[locale].permalink.replace(':pid', mediaInfo.schemaIdentifier),
+			]).join(', ');
+		}
 
 		return (
 			<>
@@ -1586,18 +1597,46 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				</MetadataList>
 
 				<MetadataList disableContainerQuery={true}>
-					<Alert
-						content={tHtml(
-							'Deze bronvermelding is automatisch gegenereerd en kan fouten bevatten. <a href="/bronvermelding-fouten">Meer info</a>'
-						)}
-					/>
-					<div className="u-flex u-flex-items-center">
-						<Metadata title={tHtml('Bronvermelding')} key="metadata-source-attribution">
-							<span>{rightsAttributionText}</span>
-						</Metadata>
+					{!!rightsAttributionText && (
+						<>
+							<Alert
+								content={tHtml(
+									'Deze bronvermelding is automatisch gegenereerd en kan fouten bevatten. <a href="/bronvermelding-fouten">Meer info</a>'
+								)}
+							/>
+							<Metadata
+								title={tHtml('Bronvermelding')}
+								key="metadata-source-attribution"
+								renderRight={
+									<CopyButton text={rightsAttributionText} variants={['white']} />
+								}
+							>
+								<span>{rightsAttributionText}</span>
+							</Metadata>
+						</>
+					)}
 
-						<CopyButton text={rightsAttributionText} variants={['white']} />
-					</div>
+					{!!rightsStatusInfo && (
+						<Metadata
+							title={tHtml('Rechten')}
+							className={styles['p-object-detail__metadata-content__rights-status']}
+							key="metadata-rights-status"
+							renderRight={
+								<a target="_blank" href={rightsStatusInfo.link} rel="noreferrer">
+									<Button
+										variants={['white']}
+										icon={<Icon name={IconNamesLight.Extern} />}
+									/>
+								</a>
+							}
+						>
+							<span className="u-flex u-flex-items-center u-gap-xs">
+								{rightsStatusInfo.icon}
+								{rightsStatusInfo?.label}
+								{rightsStatusInfo?.moreInfo}
+							</span>
+						</Metadata>
+					)}
 
 					{!!mediaInfo.keywords?.length && (
 						<Metadata

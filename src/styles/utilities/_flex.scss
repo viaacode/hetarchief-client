@@ -8,12 +8,28 @@
 	flex-shrink: 1;
 }
 
+.u-flex-grow {
+	flex-grow: 1;
+}
+
 .u-flex-space-between {
 	justify-content: space-between;
 }
 
 .u-flex-items-center {
 	align-items: center;
+}
+
+.u-gap-md {
+	gap: $spacer-md;
+}
+
+.u-gap-sm {
+	gap: $spacer-sm;
+}
+
+.u-gap-xs {
+	gap: $spacer-xs;
 }
 
 /**
