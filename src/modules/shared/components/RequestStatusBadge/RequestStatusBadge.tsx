@@ -4,15 +4,13 @@ import React, { type FC } from 'react';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
 import { VisitStatus } from '@shared/types/visit';
 
 import styles from './RequestStatusBadge.module.scss';
 import { type RequestStatusBadgeProps } from './RequestStatusBadge.types';
 
 const RequestStatusBadge: FC<RequestStatusBadgeProps> = ({ className, style, status }) => {
-	const { tHtml } = useTranslation();
-
 	const renderBadge = () => {
 		switch (status) {
 			case VisitStatus.PENDING:

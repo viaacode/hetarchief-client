@@ -59,13 +59,12 @@ import {
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
 import { numberWithCommas } from '@shared/helpers';
-import { tText } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectFolders } from '@shared/store/ie-objects';
 import {
@@ -131,7 +130,6 @@ const getDefaultOption = (): VisitorSpaceDropdownOption => {
 };
 
 const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tHtml, tText } = useTranslation();
 	const windowSize = useWindowSizeContext();
 	const dispatch = useDispatch();
 	const locale = useLocale();
@@ -285,7 +283,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				},
 			])
 		);
-	}, [dispatch, locale, tText]);
+	}, [dispatch, locale]);
 
 	useEffect(() => {
 		if (!isLoggedIn) {

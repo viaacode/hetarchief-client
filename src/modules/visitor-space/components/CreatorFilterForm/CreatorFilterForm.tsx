@@ -6,7 +6,7 @@ import { type ChangeEvent, type FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useQueryParams } from 'use-query-params';
 
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tText } from '@shared/helpers/translate';
 import { SearchFilterId } from '@visitor-space/types';
 
 import {
@@ -24,8 +24,6 @@ const defaultValues: CreatorFilterFormState = {
 };
 
 const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) => {
-	const { tText } = useTranslation();
-
 	// State
 	const [query] = useQueryParams(CREATOR_FILTER_FORM_QUERY_PARAM_CONFIG);
 

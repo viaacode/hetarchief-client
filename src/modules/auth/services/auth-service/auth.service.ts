@@ -8,6 +8,7 @@ import { parseUrl, type StringifiableRecord, stringifyUrl } from 'query-string';
 import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { ApiService } from '@shared/services/api-service';
+import { TranslationService } from '@shared/services/translation-service/translation.service';
 import { Locale } from '@shared/utils/i18n';
 import { SearchFilterId } from '@visitor-space/types';
 
@@ -54,7 +55,10 @@ export class AuthService {
 			});
 		}
 
-		let returnToUrl = trimEnd(`${publicRuntimeConfig.CLIENT_URL}${originalPath}`, '/');
+		let returnToUrl = trimEnd(
+			`${publicRuntimeConfig.CLIENT_URL}/${router.locale}${originalPath}`,
+			'/'
+		);
 		const parsedRedirectUrl = parseUrl(returnToUrl);
 		returnToUrl = stringifyUrl({
 			url: parsedRedirectUrl.url,
@@ -97,7 +101,8 @@ export class AuthService {
 	}
 
 	public static async logout(shouldRedirectToOriginalPage = false): Promise<void> {
-		let returnToUrl = publicRuntimeConfig.CLIENT_URL;
+		const locale = TranslationService.getLocale();
+		let returnToUrl = publicRuntimeConfig.CLIENT_URL + '/' + locale;
 		if (shouldRedirectToOriginalPage) {
 			let originalPath = window.location.href.substring(
 				publicRuntimeConfig.CLIENT_URL.length
@@ -109,9 +114,9 @@ export class AuthService {
 				originalPath = '/';
 			}
 			returnToUrl = stringifyUrl({
-				url: publicRuntimeConfig.CLIENT_URL,
+				url: publicRuntimeConfig.CLIENT_URL + '/' + locale,
 				query: {
-					redirectTo: originalPath,
+					redirectTo: '/' + locale + originalPath,
 					showAuth: 1,
 				},
 			});

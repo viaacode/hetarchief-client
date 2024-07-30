@@ -19,9 +19,9 @@ import { SearchInputWithResultsPagination } from '@iiif-viewer/components/Search
 import { getOpenSeadragonConfig } from '@iiif-viewer/openseadragon-config';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { tText } from '@shared/helpers/translate';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 import { isBrowser, isServerSideRendering } from '@shared/utils/is-browser';
@@ -55,7 +55,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		/**
 		 * Hooks
 		 */
-		const { tText } = useTranslation();
 		const router = useRouter();
 
 		// Internal state
@@ -127,7 +126,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				});
 				bottomLeftContainer?.append(closeFullscreenButton);
 			},
-			[tText]
+			[]
 		);
 
 		const updateOcrOverlay = useCallback(() => {
@@ -203,6 +202,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					openSeaDragonLib.Placement.CENTER
 				);
 			});
+			// We don't include the tile source since it causes a rerender loop
+			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, [openSeaDragonViewer, openSeaDragonLib, altoJsonCurrentPage, activeImageIndex]);
 
 		const applyInitialZoomAndPan = useCallback(

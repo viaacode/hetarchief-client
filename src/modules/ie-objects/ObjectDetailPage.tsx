@@ -135,6 +135,7 @@ import { Pill } from '@shared/components/Pill';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
@@ -142,7 +143,6 @@ import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-fil
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
@@ -179,7 +179,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	/**
 	 * Hooks
 	 */
-	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 	const dispatch = useDispatch();
@@ -866,7 +865,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			setActiveTab,
 			setCurrentPageIndex,
 			setSearchTerms,
-			tText,
 		]
 	);
 
@@ -994,7 +992,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				</div>
 			);
 		},
-		[metadataExportDropdownOpen, onExportClick, tHtml, tText]
+		[metadataExportDropdownOpen, onExportClick]
 	);
 
 	/**
@@ -1049,7 +1047,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				accessEndDate: dateDesktop,
 			}
 		);
-	}, [isMobile, showLinkedSpaceAsHomepage, tHtml, visitRequest?.endAt]);
+	}, [isMobile, showLinkedSpaceAsHomepage, visitRequest?.endAt]);
 
 	const showVisitorSpaceNavigationBar = !isNil(accessEndDate) || isKiosk;
 
@@ -1406,8 +1404,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					</NoServerSideRendering>
 					{maintainerLogo && (
 						<div className={styles['p-object-detail__sidebar__content-logo']}>
-							{/* eslint-disable-next-line @next/next/no-img-element */}
 							{/* TODO remove this hack once we fully switched to the new graph.organisations table */}
+							{/* eslint-disable-next-line @next/next/no-img-element */}
 							<img src={maintainerLogo} alt={`Logo ${maintainerName}`} />
 						</div>
 					)}

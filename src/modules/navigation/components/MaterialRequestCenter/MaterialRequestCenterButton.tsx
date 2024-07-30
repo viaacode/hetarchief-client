@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesSolid } from '@shared/components/Icon/Icon.enums';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tText } from '@shared/helpers/translate';
 import { useAppDispatch } from '@shared/store';
 import {
 	selectMaterialRequestCount,
@@ -22,7 +22,6 @@ import { MaterialRequestCenterBlade } from '../MaterialRequestCenterBlade';
 import styles from './MaterialRequestCenterButton.module.scss';
 
 const MaterialRequestCenterButton: FC = () => {
-	const { tText } = useTranslation();
 	const dispatch = useAppDispatch();
 
 	const [isAnimated, setIsAnimated] = useState(false);

@@ -1,7 +1,7 @@
 import { RadioButton } from '@meemoo/react-components';
 import { type FC } from 'react';
 
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tText } from '@shared/helpers/translate';
 
 import styles from './SelectDateOrYear.module.scss';
 
@@ -16,8 +16,6 @@ const SelectDateOrYear: FC<SelectDateOrYearProps> = ({
 	setYearsSelected,
 	showPluralLabel = false,
 }) => {
-	const { tText } = useTranslation();
-
 	return (
 		<div className={styles['radiobuttons-container']}>
 			<RadioButton

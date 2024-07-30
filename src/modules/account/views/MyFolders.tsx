@@ -36,8 +36,8 @@ import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders, setFolders } from '@shared/store/ie-objects';
@@ -61,7 +61,6 @@ interface AccountMyFolders {
 }
 
 export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, folderSlug }) => {
-	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 	const dispatch = useDispatch();
@@ -362,7 +361,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				  ]
 				: []),
 		];
-	}, [tText, activeFolder]);
+	}, [activeFolder]);
 
 	const renderButtons = () => {
 		return (

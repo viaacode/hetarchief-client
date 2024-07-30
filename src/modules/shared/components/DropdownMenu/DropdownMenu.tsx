@@ -11,7 +11,7 @@ import { type FC, type MouseEvent, useState } from 'react';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tText } from '@shared/helpers/translate';
 
 import styles from './DropdownMenu.module.scss';
 
@@ -20,7 +20,6 @@ type DropdownMenuProps = Omit<DropdownProps, 'isOpen'> & {
 };
 
 export const DropdownMenu: FC<DropdownMenuProps> = ({ triggerButtonProps, children, ...rest }) => {
-	const { tText } = useTranslation();
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [menuContentRef, setMenuContentRef] = useState<HTMLElement | null>(null);
 

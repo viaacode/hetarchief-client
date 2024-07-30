@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { type FC } from 'react';
 
 import { Icon, type IconProps } from '@shared/components/Icon';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tText } from '@shared/helpers/translate';
 
 import styles from '../Navigation.module.scss';
 
@@ -19,8 +19,6 @@ const NavigationLink: FC<NavigationLinkProps> = ({
 	label,
 	onClick,
 }) => {
-	const { tText } = useTranslation();
-
 	const rootCls = clsx(
 		className,
 		isDropdownItem ? 'c-dropdown-menu__item' : styles['c-navigtion__link'],

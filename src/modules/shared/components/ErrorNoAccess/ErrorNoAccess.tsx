@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import { type FC, type ReactNode } from 'react';
 
 import { ErrorPage } from '@shared/components/ErrorPage';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
 
 interface ErrorSpaceNoAccessProps {
 	visitorSpaceSlug: string | null;
@@ -10,8 +10,6 @@ interface ErrorSpaceNoAccessProps {
 }
 
 const ErrorNoAccess: FC<ErrorSpaceNoAccessProps> = ({ visitorSpaceSlug, description }) => {
-	const { tHtml } = useTranslation();
-
 	return (
 		<ErrorPage
 			title={

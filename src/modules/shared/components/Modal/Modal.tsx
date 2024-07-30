@@ -6,9 +6,9 @@ import { default as ReactModal } from 'react-modal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { globalLabelKeys } from '@shared/const';
+import { tText } from '@shared/helpers/translate';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { useScrollbarWidth } from '@shared/hooks/use-scrollbar-width';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import styles from './Modal.module.scss';
 import { type ModalProps } from './Modal.types';
@@ -24,7 +24,6 @@ const Modal: FC<ModalProps> = ({
 	onOpen,
 	excludeScrollbar = true,
 }) => {
-	const { tText } = useTranslation();
 	const [ready, setReady] = useState(false);
 	const scrollbarWidth = useScrollbarWidth(!!isOpen);
 

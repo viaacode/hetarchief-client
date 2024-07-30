@@ -11,8 +11,8 @@ import { Icon } from '@shared/components/Icon';
 import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount } from '@shared/store/ui';
 import { type IeObjectType } from '@shared/types/ie-objects';
@@ -54,7 +54,6 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	layer,
 	currentLayer,
 }) => {
-	const { tText, tHtml } = useTranslation();
 	const dispatch = useDispatch();
 	const locale = useLocale();
 

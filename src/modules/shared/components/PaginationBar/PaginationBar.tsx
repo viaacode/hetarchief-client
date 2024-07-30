@@ -4,7 +4,7 @@ import React, { type FC } from 'react';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 
 import { PaginationProgress } from '../PaginationProgress';
@@ -21,8 +21,6 @@ const PaginationBar: FC<PaginationBarProps> = ({
 	start,
 	total,
 }) => {
-	const { tHtml } = useTranslation();
-
 	const pageCount = Math.ceil(total / count);
 	const currentPage = start / count;
 

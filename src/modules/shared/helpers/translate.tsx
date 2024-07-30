@@ -13,6 +13,11 @@ import Html from '@shared/components/Html/Html';
 export function tHtml(key: string, params?: TOptions | string | undefined): ReactNode | string {
 	const translatedValue: string = tText(key, params);
 
+	// Fallback to formatted key + *** if translation is missing
+	if (!translatedValue || translatedValue === key) {
+		return (key.split('___')[1] || key).replace('-', ' ') + ' ***';
+	}
+
 	if (translatedValue.includes('<')) {
 		return <Html content={translatedValue} />;
 	}
@@ -26,12 +31,12 @@ export function tHtml(key: string, params?: TOptions | string | undefined): Reac
  * @param params
  */
 export function tText(key: string, params?: TOptions | string | undefined): string {
-	const translation: string | null | undefined = i18n?.t(key, params);
+	const translatedValue: string | null | undefined = i18n?.t(key, params);
 
-	// Fallback to formatted key + *** if translation is missing
-	if (!translation || translation === key) {
+	// Fallback to formatted key + *** if translatedValue is missing
+	if (!translatedValue || translatedValue === key) {
 		return (key.split('___')[1] || key).replace('-', ' ') + ' ***';
 	}
 
-	return decodeHtmlEntities(translation);
+	return decodeHtmlEntities(translatedValue);
 }

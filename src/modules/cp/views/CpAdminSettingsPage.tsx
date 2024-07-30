@@ -7,8 +7,7 @@ import { VisitorSpaceSettings } from '@cp/components/VisitorSpaceSettings';
 import { CPAdminLayout } from '@cp/layouts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
-import { tHtml } from '@shared/helpers/translate';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 
@@ -16,7 +15,6 @@ export const CpAdminSettingsPage: FC<DefaultSeoInfo> = ({ url }) => {
 	/**
 	 * Hooks
 	 */
-	const { tText } = useTranslation();
 
 	/**
 	 * Data

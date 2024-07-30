@@ -2,7 +2,8 @@
   "extends": "../tsconfig.json",
   "ts-node": {
     "compilerOptions": {
-      "module": "CommonJS"
+      "module": "CommonJS",
+      "noEmit": true
     }
   }
 }

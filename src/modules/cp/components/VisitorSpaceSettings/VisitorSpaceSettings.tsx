@@ -31,9 +31,9 @@ import Icon from '@shared/components/Icon/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { globalLabelKeys, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { Locale } from '@shared/utils/i18n';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
@@ -69,7 +69,6 @@ const labelKeys: Record<keyof CreateVisitorSpaceSettings, string> = {
 };
 
 const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSpaceSlug }) => {
-	const { tText, tHtml } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 	const [descriptionEditLanguage, setDescriptionEditLanguage] = useState<Locale>(Locale.nl);
@@ -173,7 +172,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 					'modules/cp/components/site-settings-form/site-settings-form___er-ging-iets-mis-bij-het-ophalen-van-de-content-partners'
 				),
 			});
-	}, [contentPartners, isErrorContentPartners, tHtml]);
+	}, [contentPartners, isErrorContentPartners]);
 
 	const validateForm = useCallback(
 		async (
@@ -206,7 +205,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 				return false;
 			}
 		},
-		[tHtml]
+		[]
 	);
 
 	/**
@@ -261,7 +260,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 				),
 			});
 		}
-	}, [formValues, locale, refetchVisitorSpace, router, tHtml, validateForm]);
+	}, [formValues, locale, refetchVisitorSpace, router, validateForm]);
 
 	const updateSpace = useCallback(
 		async (values: Partial<UpdateVisitorSpaceSettings>, afterSubmit?: () => void) => {
@@ -310,7 +309,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 			locale,
 			refetchVisitorSpace,
 			router,
-			tHtml,
+
 			validateForm,
 			visitorSpace?.id,
 			visitorSpace?.slug,
@@ -343,7 +342,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 				</div>
 			);
 		},
-		[action, tHtml]
+		[action]
 	);
 
 	const renderRichTextEditorForField = useCallback(
@@ -406,7 +405,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 				/>
 			</div>
 		);
-	}, [action, tHtml, createSpace, router, locale]);
+	}, [action, createSpace, router, locale]);
 
 	const renderedHeader = useMemo(() => {
 		if (action === 'edit') {
@@ -425,7 +424,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 				{renderedFooter}
 			</header>
 		);
-	}, [action, renderedFooter, tText]);
+	}, [action, renderedFooter]);
 
 	const renderedMaintainerSelectAndSlug: ReactNode | null = useMemo(() => {
 		if (!showSiteSettings) {
@@ -527,7 +526,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 		showSiteSettings,
 		maintainer,
 		maintainerOptions,
-		tHtml,
+
 		action,
 		formErrors.orId,
 		formErrors.slug,
@@ -667,7 +666,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 		formErrors.file,
 		formValues,
 		renderCancelSaveButtons,
-		tHtml,
+
 		updateSpace,
 		updateValues,
 		visitorSpace,
@@ -758,8 +757,6 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 		formValues?.descriptionNl,
 		renderCancelSaveButtons,
 		renderRichTextEditorForField,
-		tHtml,
-		tText,
 		updateSpace,
 		updateValues,
 		visitorSpace,
@@ -853,8 +850,6 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 	}, [
 		visitorSpace,
 		serviceDescriptionEditLanguage,
-		tHtml,
-		tText,
 		renderRichTextEditorForField,
 		formValues?.serviceDescriptionNl,
 		formValues?.serviceDescriptionEn,

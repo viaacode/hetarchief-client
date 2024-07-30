@@ -12,7 +12,7 @@ import {
 import { useQueryParams } from 'use-query-params';
 
 import { TAGS_INPUT_COMPONENTS } from '@shared/components/TagsInput';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
 import {
 	KEYWORDS_FILTER_FORM_QUERY_PARAM_CONFIG,
 	KEYWORDS_FILTER_FORM_SCHEMA,
@@ -33,7 +33,6 @@ const defaultValues: KeywordsFilterFormState = {
 };
 
 const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }) => {
-	const { tHtml } = useTranslation();
 	const [query] = useQueryParams(KEYWORDS_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [input, setInput] = useState<string | undefined>(undefined);
 

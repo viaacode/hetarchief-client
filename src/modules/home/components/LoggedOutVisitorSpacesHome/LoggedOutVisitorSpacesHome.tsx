@@ -10,13 +10,12 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import styles from './LoggedOutVisitorSpacesHome.module.scss';
 
 const LoggedOutVisitorSpacesHome: FC = () => {
-	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 

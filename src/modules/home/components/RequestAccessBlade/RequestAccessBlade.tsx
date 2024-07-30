@@ -16,8 +16,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { SpacePreview } from '@shared/components/SpacePreview';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { tText } from '@shared/helpers/translate';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
@@ -32,7 +31,6 @@ const labelKeys: Record<keyof RequestAccessFormState, string> = {
 };
 
 const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...bladeProps }) => {
-	const { tHtml } = useTranslation();
 	const user = useSelector(selectUser);
 
 	const [query] = useQueryParams({

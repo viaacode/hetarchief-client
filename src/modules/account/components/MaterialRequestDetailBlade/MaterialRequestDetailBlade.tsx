@@ -11,7 +11,7 @@ import {
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
 import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tText } from '@shared/helpers/translate';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { formatMediumDate } from '@shared/utils/dates';
 
@@ -28,8 +28,6 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	onClose,
 	currentMaterialRequestDetail,
 }) => {
-	const { tText } = useTranslation();
-
 	const renderFooter = () => {
 		return (
 			<div className={styles['p-account-my-material-requests__close-button-container']}>

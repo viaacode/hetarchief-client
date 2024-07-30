@@ -6,7 +6,7 @@ import { type FC, type ReactElement, useEffect, useState } from 'react';
 import { Navigation } from '@navigation/components/Navigation/Navigation';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
 import { mapFiltersToTags } from '@visitor-space/utils/map-filters';
 
 import { type SearchSortProp } from '../../../types';
@@ -35,7 +35,6 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 }) => {
 	const [openedAt, setOpenedAt] = useState<number | undefined>(undefined);
 	const [isSortActive, setIsSortActive] = useState(false);
-	const { tHtml } = useTranslation();
 
 	// re-render form to ensure correct state
 	// e.g. open -> reset -> close -> open === values in url, in form

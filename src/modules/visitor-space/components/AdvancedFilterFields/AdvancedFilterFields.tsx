@@ -15,7 +15,7 @@ import { type SingleValue } from 'react-select';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { SEPARATOR } from '@shared/const';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { type Operator } from '@shared/types';
 import { type AdvancedFilterFieldsProps } from '@visitor-space/components/AdvancedFilterFields/AdvancedFilterFields.types';
 import { DateInput } from '@visitor-space/components/DateInput';
@@ -49,8 +49,6 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	onChange,
 	onRemove,
 }) => {
-	const { tHtml, tText } = useTranslation();
-
 	// Computed
 
 	const operators = getOperators(state.prop as MetadataProp);
