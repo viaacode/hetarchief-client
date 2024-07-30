@@ -22,6 +22,7 @@ import {
 	intersection,
 	isEmpty,
 	isNil,
+	isString,
 	lowerCase,
 	noop,
 	sortBy,
@@ -1551,16 +1552,23 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					</Metadata>
 					{/* other metadata fields */}
 					{metaDataFields.map((item: MetadataItem, index: number) => {
-						return (
-							<Metadata title={item.title} key={`metadata-${index}-${item.title}`}>
-								<MetaDataFieldWithHighlightingAndMaxLength
+						if (isString(item.data)) {
+							return (
+								<Metadata
 									title={item.title}
-									data={item.data as string}
-									onReadMoreClicked={setSelectedMetadataField}
-									enableHighlighting={isHighlightSearchTermsActive}
-								/>
-							</Metadata>
-						);
+									key={`metadata-${index}-${item.title}`}
+								>
+									<MetaDataFieldWithHighlightingAndMaxLength
+										title={item.title}
+										data={item.data}
+										onReadMoreClicked={setSelectedMetadataField}
+										enableHighlighting={isHighlightSearchTermsActive}
+									/>
+								</Metadata>
+							);
+						} else {
+							return item.data;
+						}
 					})}
 				</MetadataList>
 

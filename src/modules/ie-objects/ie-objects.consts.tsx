@@ -464,6 +464,13 @@ function renderIsPartOfValue(
 	return value?.name || null;
 }
 
+function renderDate(date: string | null | undefined): string | null {
+	if (!date) {
+		return null;
+	}
+	return formatLongDate(asDate(date));
+}
+
 export const GET_METADATA_FIELDS = (
 	mediaInfo: IeObject,
 	activeFile: IeObjectFile | undefined,
@@ -484,21 +491,14 @@ export const GET_METADATA_FIELDS = (
 			title: tText('modules/ie-objects/const/index___pid'),
 			data: mediaInfo.schemaIdentifier,
 		},
-		{
-			title: tText('Fragmentid'),
-			data: mediaInfo.fragmentId,
-		},
+		...mapObjectsToMetadata(mediaInfo.premisIdentifier),
 		{
 			title: tText('modules/ie-objects/const/index___identifier-bij-aanbieder'),
 			data: mediaInfo.meemooLocalId,
 		},
 		{
-			title: tText('modules/ie-objects/const/index___identifier-bij-aanbieder'),
-			data: mediaInfo.meemooLocalId,
-		},
-		{
-			title: tText('Bestandsnaam'),
-			data: activeFile?.name,
+			title: tText('Permanente URL'),
+			data: `${clientUrl}/pid/${mediaInfo?.schemaIdentifier}`,
 		},
 		{
 			title: tText('modules/ie-objects/const/index___creatiedatum'),
@@ -506,15 +506,15 @@ export const GET_METADATA_FIELDS = (
 		},
 		{
 			title: tText('modules/ie-objects/const/index___publicatiedatum'),
-			data: formatLongDate(asDate(mediaInfo.datePublished)),
+			data: renderDate(mediaInfo.datePublished),
+		},
+		{
+			title: tText('Datum toegevoegd aan platform'),
+			data: renderDate(activeFile?.createdAt),
 		},
 		{
 			title: tText("Aantal pagina's"),
 			data: isNil(mediaInfo?.numberOfPages) ? null : String(mediaInfo.numberOfPages),
-		},
-		{
-			title: tText('Permanente URL'),
-			data: `${clientUrl}/pid/${mediaInfo?.schemaIdentifier}`,
 		},
 		{
 			title: tText('modules/ie-objects/const/index___taal'),
@@ -534,24 +534,12 @@ export const GET_METADATA_FIELDS = (
 			data: mediaInfo?.abrahamInfo?.code,
 		},
 		{
-			title: tText('Bestandstype'),
-			data: activeFile?.mimeType,
-		},
-		{
 			title: tText('Bronvermelding'),
 			data: mediaInfo?.creditText,
 		},
 		{
 			title: tText('Rechtenstatus'),
 			data: mediaInfo?.copyrightNotice,
-		},
-		{
-			title: tText('Datum toegevoegd aan platform'),
-			data: activeFile?.createdAt,
-		},
-		{
-			title: tText('Categorie'),
-			data: activeFile?.createdAt,
 		},
 		{
 			title: tText('Categorie'),
@@ -567,10 +555,6 @@ export const GET_METADATA_FIELDS = (
 		},
 		...mapObjectToMetadata(mediaInfo.creator),
 		...mapObjectToMetadata(mediaInfo.publisher),
-		{
-			title: tText('modules/ie-objects/const/index___analoge-drager'),
-			data: mediaInfo.dctermsMedium,
-		},
 		{
 			title: tText('modules/ie-objects/const/index___uitgebreide-beschrijving'),
 			data: mediaInfo?.abstract ? mediaInfo?.abstract : null,
@@ -641,7 +625,6 @@ export const GET_METADATA_FIELDS = (
 			title: tText('modules/ie-objects/const/index___oorsprong'),
 			data: mediaInfo.meemooOriginalCp,
 		},
-		...mapObjectsToMetadata(mediaInfo.premisIdentifier),
 		{
 			title: tText('modules/ie-objects/const/index___archief'),
 			data: renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.archief),
@@ -699,8 +682,20 @@ export const GET_METADATA_FIELDS = (
 			data: renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.seizoennummer),
 		},
 		{
-			title: tText('modules/ie-objects/const/index___bestandstype'),
+			title: tText('Fysieke drager'),
+			data: mapArrayToMetadataData(mediaInfo.dctermsMedium),
+		},
+		{
+			title: tText('Media type'),
 			data: mediaInfo.dctermsFormat,
+		},
+		{
+			title: tText('Bestandstype'),
+			data: activeFile?.mimeType,
+		},
+		{
+			title: tText('Bestandsnaam'),
+			data: activeFile?.name,
 		},
 		{
 			title: tText('modules/ie-objects/const/index___objecttype'),

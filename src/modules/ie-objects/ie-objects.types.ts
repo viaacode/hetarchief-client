@@ -37,7 +37,7 @@ export interface IsPartOfCollection {
 export interface IeObject {
 	dctermsAvailable: string;
 	dctermsFormat: IeObjectType;
-	dctermsMedium: string;
+	dctermsMedium: string[];
 	premisIdentifier: Record<string, string>[];
 	abstract: string;
 	creator: any;
