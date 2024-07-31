@@ -1,0 +1,55 @@
+@use "sass:math";
+@use "src/styles/abstracts" as *;
+
+$names-list-scrollable-height: 25rem;
+
+.c-names-list {
+	&__search input {
+		background-color: $silver;
+		border: 0;
+		border-radius: $button-radius;
+		height: $button-height;
+		margin-top: $spacer-sm;
+		margin-bottom: $spacer-sm;
+	}
+
+	&__person-container {
+		overflow-y: auto;
+		max-height: $names-list-scrollable-height;
+		min-height: $names-list-scrollable-height;
+		padding-right: $spacer-sm;
+	}
+
+	&__person {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		border-top: 1px solid $silver;
+		padding: $spacer-sm 0;
+
+		&:first-child {
+			border-top: 0;
+		}
+
+		&__confidence-indicator {
+			margin-right: $spacer-sm;
+		}
+
+		&__info {
+			&__name {
+				color: $black;
+				font-size: $font-size-md;
+				margin-bottom: $spacer-xxs;
+			}
+
+			&__dates-and-locations {
+				font-size: $font-size-base;
+			}
+		}
+	}
+
+	:global(.c-button__icon) span {
+		font-size: $font-size-1xl;
+		color: $neutral;
+	}
+}

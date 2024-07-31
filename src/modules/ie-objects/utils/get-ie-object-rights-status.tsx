@@ -12,8 +12,10 @@ export function getIeObjectRightsStatusInfo(
 ): { label: string; moreInfo: ReactNode; icon: ReactNode; link: string } | null {
 	if (ieObject.licenses.includes(IeObjectLicense.PUBLIC_DOMAIN)) {
 		return {
-			label: tText('Public domein'),
-			moreInfo: tHtml('<a href="/rechten-status-content-page-publiek-domein">Meer info</a>'),
+			label: tText('modules/ie-objects/utils/get-ie-object-rights-status___public-domein'),
+			moreInfo: tHtml(
+				'modules/ie-objects/utils/get-ie-object-rights-status___a-href-rechten-status-content-page-publiek-domein-meer-info-a'
+			),
 			icon: <Icon name={IconNamesLight.CopyrightPublicDomain} />,
 			link: 'https://creativecommons.org/public-domain/',
 		};
@@ -23,9 +25,11 @@ export function getIeObjectRightsStatusInfo(
 		ieObject.licenses.includes(IeObjectLicense.PUBLIEK_CONTENT)
 	) {
 		return {
-			label: tText('Copyright undetermined'),
+			label: tText(
+				'modules/ie-objects/utils/get-ie-object-rights-status___copyright-undetermined'
+			),
 			moreInfo: tHtml(
-				'<a href="/rechten-status-content-page-copyright-undetermined">Meer info</a>'
+				'modules/ie-objects/utils/get-ie-object-rights-status___a-href-rechten-status-content-page-copyright-undetermined-meer-info-a'
 			),
 			icon: <Icon name={IconNamesLight.CopyrightUndetermined} />,
 			link: 'https://rightsstatements.org/page/UND/1.0/?language=' + locale,

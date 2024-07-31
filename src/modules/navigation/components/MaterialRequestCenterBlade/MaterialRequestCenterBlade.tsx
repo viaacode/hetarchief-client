@@ -213,7 +213,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						aria-label={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
 						)}
-						toolTipText={tText(
+						tooltipText={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
 						)}
 					/>
@@ -226,7 +226,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						aria-label={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder-materiaal-aanvraag'
 						)}
-						toolTipText={tText(
+						tooltipText={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder'
 						)}
 					/>

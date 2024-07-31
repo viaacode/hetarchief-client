@@ -68,6 +68,8 @@ import {
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
 import { Metadata, type MetadataItem } from '@ie-objects/components/Metadata';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
+import { NamesList } from '@ie-objects/components/NamesList/NamesList';
+import { type NameInfo } from '@ie-objects/components/NamesList/NamesList.types';
 import { ObjectPlaceholder } from '@ie-objects/components/ObjectPlaceholder';
 import { type MediaObject, RelatedObject } from '@ie-objects/components/RelatedObject';
 import { useGetAltoJsonFileContent } from '@ie-objects/hooks/get-alto-json-file-content';
@@ -216,6 +218,63 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [isRelatedObjectsBladeOpen, setIsRelatedObjectsBladeOpen] = useState(false);
 	const [isHighlightSearchTermsActive, setIsHighlightSearchTermsActive] = useState<boolean>(true);
 	const [hasAppliedUrlSearchTerms, setHasAppliedUrlSearchTerms] = useState<boolean>(false);
+
+	// TODO get these names from the backend: https://meemoo.atlassian.net/browse/ARC-2219
+	const [fallenNames] = useState<NameInfo[]>([
+		{
+			name: 'Jozef van de Kerke',
+			bornYear: '1902',
+			diedYear: '1917',
+			bornLocation: 'Gent',
+			diedLocation: 'Antwerpen',
+			ocrLocationX: 500,
+			ocrLocationY: 500,
+			ocrConfidence: 96,
+			link: 'https://namenlijst.org/publicsearch/#/person/_id=bc05cd33-673c-40c1-bb4a-d8d356d838ed',
+		},
+		{
+			name: 'Jef Van Hove',
+			bornYear: '1900',
+			diedYear: '1918',
+			bornLocation: 'Brussel',
+			diedLocation: 'Duinkerke',
+			ocrLocationX: 300,
+			ocrLocationY: 700,
+			ocrConfidence: 64,
+			link: 'https://namenlijst.org/publicsearch/#/person/_id=bc05cd33-673c-40c1-bb4a-d8d356d838ed',
+		},
+		{
+			name: 'Emiel De Hertogh',
+			bornYear: '1889',
+			diedYear: '1919',
+			bornLocation: 'Kortrijk',
+			diedLocation: 'Verdun',
+			ocrLocationX: 100,
+			ocrLocationY: 900,
+			ocrConfidence: 12,
+		},
+		{
+			name: 'Ludwig Vanckeerberghen',
+			bornYear: '1910',
+			diedYear: '1918',
+			bornLocation: 'Brugge',
+			diedLocation: 'Passendeale',
+			ocrLocationX: 900,
+			ocrLocationY: 100,
+			ocrConfidence: 9,
+			link: 'https://namenlijst.org/publicsearch/#/person/_id=bc05cd33-673c-40c1-bb4a-d8d356d838ed',
+		},
+		{
+			name: 'Gerard Vanelsberghe',
+			bornYear: '1898',
+			diedYear: '1917',
+			bornLocation: 'Oostende',
+			diedLocation: 'Ieper',
+			ocrLocationX: 200,
+			ocrLocationY: 200,
+			ocrConfidence: 3,
+		},
+	]);
 
 	// Layout
 	useStickyLayout();
@@ -1604,15 +1663,36 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				</MetadataList>
 
 				<MetadataList disableContainerQuery={true}>
+					{!!fallenNames?.length && (
+						<Metadata
+							title={tText('modules/ie-objects/object-detail-page___namenlijst')}
+							key="metadata-fallen-names-list"
+							renderTitleRight={
+								<div className="u-color-neutral u-font-size-14 u-font-weight-400">
+									{tHtml(
+										'modules/ie-objects/object-detail-page___a-href-namenlijst-gesneuvelden-wat-is-dit-a'
+									)}
+								</div>
+							}
+						>
+							<NamesList
+								names={fallenNames}
+								onZoomToLocation={iiifViewerReference.current?.iiifZoomTo}
+							/>
+						</Metadata>
+					)}
+
 					{!!rightsAttributionText && (
 						<>
 							<Alert
 								content={tHtml(
-									'Deze bronvermelding is automatisch gegenereerd en kan fouten bevatten. <a href="/bronvermelding-fouten">Meer info</a>'
+									'modules/ie-objects/object-detail-page___deze-bronvermelding-is-automatisch-gegenereerd-en-kan-fouten-bevatten-a-href-bronvermelding-fouten-meer-info-a'
 								)}
 							/>
 							<Metadata
-								title={tHtml('Bronvermelding')}
+								title={tHtml(
+									'modules/ie-objects/object-detail-page___bronvermelding'
+								)}
 								key="metadata-source-attribution"
 								renderRight={
 									<CopyButton text={rightsAttributionText} variants={['white']} />
@@ -1625,7 +1705,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 					{!!rightsStatusInfo && (
 						<Metadata
-							title={tHtml('Rechten')}
+							title={tHtml('modules/ie-objects/object-detail-page___rechten')}
 							className={styles['p-object-detail__metadata-content__rights-status']}
 							key="metadata-rights-status"
 							renderRight={
@@ -1770,9 +1850,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			<div className={clsx(styles['p-object-detail__ocr'])}>
 				<Alert
 					icon={<Icon name={IconNamesLight.Info} aria-hidden />}
-					title={tText('OCR betrouwbaarheid')}
+					title={tText('modules/ie-objects/object-detail-page___ocr-betrouwbaarheid')}
 					content={tHtml(
-						'Deze OCR kan fouten bevatten. <a href="/ocr-betrouwbaarheid-info">Meer info vind je hier</a>.'
+						'modules/ie-objects/object-detail-page___deze-ocr-kan-fouten-bevatten-a-href-ocr-betrouwbaarheid-info-meer-info-vind-je-hier-a'
 					)}
 				/>
 
