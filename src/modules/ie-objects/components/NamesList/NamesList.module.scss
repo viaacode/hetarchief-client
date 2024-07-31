@@ -4,6 +4,9 @@
 $names-list-scrollable-height: 25rem;
 
 .c-names-list {
+	container-type: inline-size;
+	container-name: names-list;
+
 	&__search input {
 		background-color: $silver;
 		border: 0;
@@ -44,6 +47,16 @@ $names-list-scrollable-height: 25rem;
 
 			&__dates-and-locations {
 				font-size: $font-size-base;
+
+				@container names-list (max-width: #{$breakpoint-md}) {
+					span {
+						display: block;
+					}
+
+					&__comma {
+						display: none !important;
+					}
+				}
 			}
 		}
 	}

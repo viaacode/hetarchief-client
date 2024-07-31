@@ -88,8 +88,21 @@ export const NamesList: FC<NamesListProps> = ({ className, names, onZoomToLocati
 									styles['c-names-list__person__info__dates-and-locations']
 								}
 							>
-								° {nameInfo.bornYear} {nameInfo.bornLocation}, † {nameInfo.diedYear}{' '}
-								{nameInfo.diedLocation}
+								<span>
+									° {nameInfo.bornYear} {nameInfo.bornLocation}
+								</span>
+								<span
+									className={
+										styles[
+											'c-names-list__person__info__dates-and-locations__comma'
+										]
+									}
+								>
+									,{' '}
+								</span>
+								<span>
+									† {nameInfo.diedYear} {nameInfo.diedLocation}
+								</span>
 							</div>
 						</div>
 						{nameInfo.ocrLocationX && nameInfo.ocrLocationY && (
