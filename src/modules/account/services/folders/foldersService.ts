@@ -2,7 +2,6 @@ import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
 import { type Folder, type FolderIeObject, type SharedFolderResponse } from '@account/types';
-import { type EmailTemplate } from '@shared/components/ShareFolderBlade/ShareFolderBlade.consts';
 import { ApiService } from '@shared/services/api-service';
 
 import {
@@ -85,9 +84,9 @@ class FoldersService extends ApiService {
 			.json();
 	}
 
-	public async shareFolder(folderId: string, shareInfo: EmailTemplate): Promise<any> {
+	public async shareFolder(folderId: string, to: string): Promise<any> {
 		return await ApiService.getApi()
-			.post(`${FOLDERS_SERVICE_BASE_URL}/share/${folderId}/create`, { json: shareInfo })
+			.post(`${FOLDERS_SERVICE_BASE_URL}/share/${folderId}/create`, { json: to })
 			.json();
 	}
 }

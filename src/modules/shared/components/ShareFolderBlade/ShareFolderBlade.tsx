@@ -54,12 +54,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 	const handleSend = async () => {
 		try {
 			if (user) {
-				await foldersService.shareFolder(folderId, {
-					data: {
-						to: emailInputValue,
-						consentToTrack: 'unchanged',
-					},
-				});
+				await foldersService.shareFolder(folderId, emailInputValue);
 				toastService.notify({
 					maxLines: 3,
 					title: tText('pages/account/map-delen/folder-id/index___map-is-gedeeld'),
