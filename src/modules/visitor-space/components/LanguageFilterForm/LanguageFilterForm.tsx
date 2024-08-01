@@ -18,7 +18,10 @@ import {
 	type LanguageFilterFormProps,
 	type LanguageFilterFormState,
 } from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
-import { LANGUAGES } from '@visitor-space/components/LanguageFilterForm/languages';
+import {
+	type LanguageCode,
+	LANGUAGES,
+} from '@visitor-space/components/LanguageFilterForm/languages';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import {
 	ElasticsearchFieldNames,
@@ -62,7 +65,9 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 	const filteredOptions = filterOptions.filter(
 		(filterOption) =>
 			filterOption.toLowerCase().includes(search.toLowerCase()) ||
-			LANGUAGES.nl?.[filterOption]?.toLowerCase()?.includes(search.toLowerCase())
+			LANGUAGES.nl?.[filterOption as LanguageCode]
+				?.toLowerCase()
+				?.includes(search.toLowerCase())
 	);
 
 	// Make sure applied values are sorted at the top of the list
@@ -70,7 +75,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 	// https://meemoo.atlassian.net/browse/ARC-1882
 	const checkboxOptions = sortFilterOptions(
 		filteredOptions.map((filterOption) => ({
-			label: LANGUAGES.nl[filterOption] || filterOption,
+			label: LANGUAGES.nl[filterOption as LanguageCode] || filterOption,
 			value: filterOption,
 			checked: selectedLanguageCodes.includes(filterOption),
 		})),
@@ -78,7 +83,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 	);
 
 	const idToIdAndNameConcatinated = useCallback((id: string) => {
-		return `${id}${FILTER_LABEL_VALUE_DELIMITER}${LANGUAGES.nl?.[id] || ''}`;
+		return `${id}${FILTER_LABEL_VALUE_DELIMITER}${LANGUAGES.nl?.[id as LanguageCode] || ''}`;
 	}, []);
 
 	// Effects

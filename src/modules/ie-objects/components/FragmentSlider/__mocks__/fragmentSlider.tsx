@@ -10,6 +10,7 @@ export const fragmentSliderMock: FragmentSliderProps = {
 			thumbnailUrl: '',
 			duration: '',
 			edmIsNextInSequence: '',
+			createdAt: '2024-12-08T07:59:45.516Z',
 		},
 		{
 			id: '3',
@@ -19,6 +20,7 @@ export const fragmentSliderMock: FragmentSliderProps = {
 			thumbnailUrl: '',
 			duration: '',
 			edmIsNextInSequence: '',
+			createdAt: '2024-12-08T07:59:45.516Z',
 		},
 		{
 			id: '3',
@@ -28,6 +30,7 @@ export const fragmentSliderMock: FragmentSliderProps = {
 			thumbnailUrl: '',
 			duration: '',
 			edmIsNextInSequence: '',
+			createdAt: '2024-12-08T07:59:45.516Z',
 		},
 		// {
 		// 	name: 'item',

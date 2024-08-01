@@ -1,5 +1,5 @@
 import { TagList, type TagOption } from '@meemoo/react-components';
-import { capitalize, lowerCase } from 'lodash-es';
+import { capitalize, isArray, isString, lowerCase } from 'lodash-es';
 import { type NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { type ReactNode } from 'react';
@@ -45,17 +45,39 @@ export const renderKeywordsAsTags = (
 		/>
 	) : null;
 
-export const mapObjectToMetadata = (data: Record<string, string[]>): MetadataItem[] => {
+export const mapObjectToMetadata = (data: Record<string, string | string[]>): MetadataItem[] => {
 	if (!data) {
 		return [];
 	}
 
 	return Object.keys(data).map((key): MetadataItem => {
+		if (!data[key] || !data[key]?.length) {
+			return {
+				title: capitalize(lowerCase(key)),
+				data: null,
+			};
+		}
+		let value: string;
+		if (isString(data[key])) {
+			value = data[key] as string;
+		} else if (isArray(data[key])) {
+			value = [...data[key]].join(', ');
+		} else {
+			value = JSON.stringify(data[key]);
+		}
 		return {
 			title: capitalize(lowerCase(key)),
-			data: data[key].join(', '),
+			data: value,
 		};
 	});
+};
+
+export const mapObjectsToMetadata = (data: Record<string, string>[]): MetadataItem[] => {
+	if (!data) {
+		return [];
+	}
+
+	return data.flatMap(mapObjectToMetadata);
 };
 
 export const mapArrayToMetadataData = (data: string[] | undefined): string | null => {

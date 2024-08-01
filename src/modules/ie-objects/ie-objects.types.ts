@@ -23,17 +23,25 @@ export enum IsPartOfKey {
 	seizoennummer = 'seizoennummer',
 }
 
+export interface IsPartOfCollection {
+	name: string;
+	collectionType: IsPartOfKey;
+	isPreceededBy?: any[];
+	isSucceededBy?: any[];
+	locationCreated?: any;
+	startDate?: any;
+	endDate?: any;
+	publisher?: any;
+}
+
 export interface IeObject {
 	dctermsAvailable: string;
 	dctermsFormat: IeObjectType;
-	dctermsMedium: string;
-	meemoofilmBase: string;
-	meemoofilmColor: boolean;
-	meemoofilmImageOrSound: string;
-	premisIdentifier: any;
+	dctermsMedium: string[];
+	premisIdentifier: Record<string, string>[];
 	abstract: string;
 	creator: any;
-	dateCreated: string;
+	dateCreated: string | null;
 	datePublished: string;
 	description: string;
 	duration: string;
@@ -49,46 +57,49 @@ export interface IeObject {
 	maintainerOverlay: boolean | null;
 	name: string;
 	publisher: any;
-	spatial: string;
-	temporal: string;
+	spatial: string[];
+	temporal: string[];
 	thumbnailUrl: string;
-	// EXTRA
 	sector?: IeObjectSector;
 	accessThrough?: IeObjectAccessThrough[];
-	// OPTIONAL
 	ebucoreObjectType?: string | null;
 	meemoofilmContainsEmbeddedCaption?: boolean;
 	premisIsPartOf?: string;
 	contributor?: any;
 	copyrightHolder?: string;
-	isPartOf?: Partial<Record<IsPartOfKey, string[]>>;
+	isPartOf?: IsPartOfCollection[];
 	numberOfPages?: number;
 	meemooDescriptionCast?: string;
-	pageRepresentations?: IeObjectRepresentation[][];
 	maintainerFormUrl?: string | null;
 	maintainerDescription?: string;
 	maintainerSiteUrl?: string;
-	// FROM DB
-	meemoofilmCaption?: string;
-	meemoofilmCaptionLanguage?: string;
-	meemooDescriptionProgramme?: string;
 	meemooLocalId?: string;
 	meemooOriginalCp?: string;
 	durationInSeconds?: number;
 	copyrightNotice?: string;
 	meemooMediaObjectId?: string;
-	ebucoreIsMediaFragmentOf?: string;
-	ebucoreHasMediaFragmentOf?: boolean;
-	dateCreatedLowerBound?: string;
-	actor?: string | null; // string or object => not yet known, since all entries in the db are null
-	// Not yet available
 	transcript?: string;
-	caption?: string;
-	categorie?: string[];
-	languageSubtitles?: string;
-	meemooDescriptionCategory?: string[];
-	meemoofilmEmbeddedCaption?: string;
-	meemoofilmEmbeddedCaptionLanguage?: string;
+	abrahamInfo?: {
+		id: string;
+		uri: string;
+		code: string;
+	};
+	synopsis: string;
+	collectionName?: string;
+	issueNumber?: string;
+	fragmentId?: string;
+	creditText?: string;
+	preceededBy?: string[];
+	succeededBy?: string[];
+	width?: string;
+	height?: string;
+	locationCreated?: string;
+	startDate?: string;
+	endDate?: string;
+	newspaperPublisher?: string;
+	alternativeTitle?: string[];
+
+	pageRepresentations?: IeObjectRepresentation[][];
 }
 
 export enum IeObjectAccessThrough {
@@ -139,6 +150,7 @@ export interface IeObjectFile {
 	thumbnailUrl: string;
 	duration: string;
 	edmIsNextInSequence: string;
+	createdAt: string;
 }
 
 export interface IeObjectRepresentation {

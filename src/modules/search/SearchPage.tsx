@@ -728,12 +728,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				duration: item.duration,
 				description: item.description,
 				title: item.name,
-				publishedOrCreatedDate: asDate(
-					item.datePublished ?? item.dateCreatedLowerBound ?? null
-				),
+				publishedOrCreatedDate: asDate(item.datePublished ?? item.dateCreated ?? null),
 				publishedBy: item.maintainerName || '',
 				type,
-				preview: item.thumbnailUrl?.[0] || undefined,
+				preview: item.thumbnailUrl || undefined,
 				name: item.name,
 				hasRelated: (item.related_count || 0) > 0,
 				hasTempAccess,

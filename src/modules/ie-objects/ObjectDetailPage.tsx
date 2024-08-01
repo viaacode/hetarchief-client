@@ -22,6 +22,7 @@ import {
 	intersection,
 	isEmpty,
 	isNil,
+	isString,
 	lowerCase,
 	noop,
 	sortBy,
@@ -80,6 +81,7 @@ import {
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
+	GET_METADATA_FIELDS,
 	IMAGE_API_FORMATS,
 	IMAGE_FORMATS,
 	KEY_USER_ACTION_SORT_MAP,
@@ -87,7 +89,6 @@ import {
 	MEDIA_ACTIONS,
 	MEEMOO_ADMIN_ACTION_SORT_MAP,
 	METADATA_EXPORT_OPTIONS,
-	METADATA_FIELDS,
 	noLicensePlaceholder,
 	OBJECT_DETAIL_TABS,
 	objectPlaceholder,
@@ -101,6 +102,7 @@ import {
 	IeObjectAccessThrough,
 	type IeObjectFile,
 	IeObjectLicense,
+	IsPartOfKey,
 	MediaActions,
 	MetadataExportFormats,
 	type MetadataSortMap,
@@ -151,12 +153,7 @@ import { selectBreadcrumbs, setShowAuthModal, setShowZendesk } from '@shared/sto
 import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { type DefaultSeoInfo } from '@shared/types/seo';
-import {
-	asDate,
-	formatMediumDate,
-	formatMediumDateWithTime,
-	formatSameDayTimeOrDate,
-} from '@shared/utils/dates';
+import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
 import { useGetActiveVisitForUserAndSpace } from '@visit-requests/hooks/get-active-visit-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
@@ -312,7 +309,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			)
 		) || [];
 
-	// playable url
+	// File containing the consumable media. This can be video, audio, newspaper.
+	const currentViewableFile: IeObjectFile | undefined = currentRepresentation?.files?.find(
+		(file) => [...FLOWPLAYER_FORMATS, ...IMAGE_API_FORMATS].includes(file.mimeType)
+	);
+
+	// Playable url for flowplayer
 	const currentPlayableFile: IeObjectFile | undefined = currentRepresentation?.files?.find(
 		(file) => FLOWPLAYER_FORMATS.includes(file?.mimeType)
 	);
@@ -507,14 +509,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 */
 	const mapSimilarData = (data: Partial<IeObject>[]): MediaObject[] => {
 		return data.map((ieObject) => {
-			const date = ieObject.datePublished ?? ieObject.dateCreatedLowerBound ?? null;
+			const date = ieObject.datePublished ?? ieObject.dateCreated ?? null;
 
 			return {
 				type: ieObject?.dctermsFormat || null,
 				title: ieObject?.name || '',
 				subtitle: isNil(date)
 					? `${ieObject?.maintainerName ?? ''}`
-					: `${ieObject?.maintainerName ?? ''} (${formatMediumDate(asDate(date))})`,
+					: `${ieObject?.maintainerName ?? ''} (${date})`,
 				description: ieObject?.description || '',
 				thumbnail: ieObject?.thumbnailUrl,
 				id: ieObject?.schemaIdentifier || '',
@@ -525,14 +527,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const mapRelatedData = (data: IeObject[]): MediaObject[] => {
 		return data.map((item) => {
-			const date = item.datePublished ?? item.dateCreatedLowerBound ?? null;
+			const date = item.datePublished ?? item.dateCreated ?? null;
 
 			return {
 				type: item.dctermsFormat,
 				title: item.name,
 				subtitle: isNil(date)
 					? `${item?.maintainerName ?? ''}`
-					: `${item?.maintainerName ?? ''} (${formatMediumDate(asDate(date))})`,
+					: `${item?.maintainerName ?? ''} (${date})`,
 				description: item.description,
 				id: item.schemaIdentifier,
 				maintainer_id: item.maintainerId,
@@ -629,7 +631,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				.replaceAll('{title}', encodeOrNotUriComponent(mediaInfo?.name || ''))
 				.replaceAll(
 					'{title_serie}',
-					encodeOrNotUriComponent(mediaInfo?.isPartOf?.serie?.[0] || '')
+					encodeOrNotUriComponent(
+						mediaInfo?.isPartOf?.find(
+							(isPartOfEntry) => isPartOfEntry?.collectionType === IsPartOfKey.serie
+						)?.name || ''
+					)
 				);
 		}
 		return null;
@@ -1343,7 +1349,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		/>
 	);
 
-	const renderMetadataCards = (
+	const renderIeObjectCards = (
 		type: 'similar' | 'related',
 		items: MediaObject[],
 		isHidden = false
@@ -1484,9 +1490,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 
 		const showAlert = !mediaInfo.description;
-		const metaDataFields = METADATA_FIELDS(mediaInfo, simplifiedAltoInfo || null).filter(
-			({ data }: MetadataItem): boolean => !!data
-		);
+		const metaDataFields = GET_METADATA_FIELDS(
+			mediaInfo,
+			currentViewableFile,
+			simplifiedAltoInfo || null,
+			locale,
+			publicRuntimeConfig.CLIENT_URL
+		).filter(({ data }: MetadataItem): boolean => !!data);
 
 		return (
 			<>
@@ -1540,16 +1550,23 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					</Metadata>
 					{/* other metadata fields */}
 					{metaDataFields.map((item: MetadataItem, index: number) => {
-						return (
-							<Metadata title={item.title} key={`metadata-${index}-${item.title}`}>
-								<MetaDataFieldWithHighlightingAndMaxLength
+						if (isString(item.data)) {
+							return (
+								<Metadata
 									title={item.title}
-									data={item.data as string}
-									onReadMoreClicked={setSelectedMetadataField}
-									enableHighlighting={isHighlightSearchTermsActive}
-								/>
-							</Metadata>
-						);
+									key={`metadata-${index}-${item.title}`}
+								>
+									<MetaDataFieldWithHighlightingAndMaxLength
+										title={item.title}
+										data={item.data}
+										onReadMoreClicked={setSelectedMetadataField}
+										enableHighlighting={isHighlightSearchTermsActive}
+									/>
+								</Metadata>
+							);
+						} else {
+							return item.data;
+						}
 					})}
 				</MetadataList>
 
@@ -1570,7 +1587,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							{
 								title: tHtml('pages/slug/ie/index___ook-interessant'),
 								data: similar.length
-									? renderMetadataCards('similar', similar)
+									? renderIeObjectCards('similar', similar)
 									: null,
 							},
 						]
@@ -1625,7 +1642,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								}
 						  )
 				}
-				renderContent={(hidden: boolean) => renderMetadataCards('related', related, hidden)}
+				renderContent={(hidden: boolean) => renderIeObjectCards('related', related, hidden)}
 			/>
 		);
 	};
@@ -1767,7 +1784,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					<div className={styles['p-object-detail__media']}>{renderMedia()}</div>
 					{showFragmentSlider && (
 						<FragmentSlider
-							thumbnail={mediaInfo?.thumbnailUrl[0]}
+							thumbnail={mediaInfo?.thumbnailUrl}
 							className={styles['p-object-detail__grey-slider-bar']}
 							files={representationsToDisplay}
 							onChangeFragment={(index) =>
