@@ -83,6 +83,12 @@ class FoldersService extends ApiService {
 			.post(`${FOLDERS_SERVICE_BASE_URL}/share/${collectionId}`)
 			.json();
 	}
+
+	public async shareFolder(folderId: string, to: string): Promise<any> {
+		return await ApiService.getApi()
+			.post(`${FOLDERS_SERVICE_BASE_URL}/share/${folderId}/create`, { json: to })
+			.json();
+	}
 }
 
 export const foldersService = new FoldersService();

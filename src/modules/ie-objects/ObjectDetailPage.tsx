@@ -52,6 +52,7 @@ import {
 } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { CollapsableBlade } from '@ie-objects/components/CollapsableBlade';
+import { CopyrightConfirmationModal } from '@ie-objects/components/CopyrightConfirmationModal';
 import {
 	type ActionItem,
 	DynamicActionMenu,
@@ -149,7 +150,7 @@ import { selectBreadcrumbs, setShowAuthModal, setShowZendesk } from '@shared/sto
 import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { type DefaultSeoInfo } from '@shared/types/seo';
-import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
+import { asDate, formatMediumDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from "@shared/utils/dates";
 import { useGetActiveVisitForUserAndSpace } from '@visit-requests/hooks/get-active-visit-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
@@ -217,6 +218,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
 	const [isRelatedObjectsBladeOpen, setIsRelatedObjectsBladeOpen] = useState(false);
 	const [isHighlightSearchTermsActive, setIsHighlightSearchTermsActive] = useState<boolean>(true);
+	const [copyrightModalOpen, setCopyrightModalOpen] = useState(false);
+	const [onConfirmCopyright, setOnConfirmCopyright] = useState<() => void>(noop);
+	const [hasNewsPaperBeenRendered, setHasNewsPaperBeenRendered] = useState(false);
 	const [hasAppliedUrlSearchTerms, setHasAppliedUrlSearchTerms] = useState<boolean>(false);
 
 	// TODO get these names from the backend: https://meemoo.atlassian.net/browse/ARC-2219
@@ -733,12 +737,25 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				pid: mediaInfo?.schemaIdentifier,
 				user_group_name: user?.groupName,
 				or_id: mediaInfo?.maintainerId,
+				type: mediaInfo?.dctermsFormat,
 			});
 
 			// The external url is opened with an actual link, so safari doesn't block the popup
 		} else {
 			setActiveBlade(MediaActions.RequestMaterial);
 		}
+	};
+
+	const handleOnDownloadEvent = () => {
+		const path = window.location.href;
+		const eventData = {
+			type: mediaInfo?.dctermsFormat,
+			fragment_id: mediaInfo?.schemaIdentifier,
+			pid: mediaInfo?.schemaIdentifier,
+			user_group_name: user?.groupName,
+			or_id: mediaInfo?.maintainerId,
+		};
+		EventsService.triggerEvent(LogEventType.DOWNLOAD, path, eventData);
 	};
 
 	const handleOnPlay = () => {
@@ -980,15 +997,23 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		(format: MetadataExportFormats) => {
 			switch (format) {
 				case MetadataExportFormats.fullNewspaperZip:
-					window.open(
-						`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip`
-					);
+					setCopyrightModalOpen(true);
+					setOnConfirmCopyright(() => () => {
+						window.open(
+							`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip`
+						);
+						handleOnDownloadEvent();
+					});
 					break;
 
 				case MetadataExportFormats.onePageNewspaperZip:
-					window.open(
-						`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`
-					);
+					setCopyrightModalOpen(true);
+					setOnConfirmCopyright(() => () => {
+						window.open(
+							`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`
+						);
+						handleOnDownloadEvent();
+					});
 					break;
 
 				case MetadataExportFormats.xml:
@@ -1006,9 +1031,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const renderExportDropdown = useCallback(
 		(isPrimary: boolean) => {
 			const icon = <Icon name={IconNamesLight.Export} aria-hidden />;
-			const label = tText(
-				'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
-			);
+			const label = tText('modules/ie-objects/object-detail-page___download-deze-krant');
 
 			return (
 				<div className={styles['p-object-detail__export']}>
@@ -1216,6 +1239,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 		// IIIF viewer
 		if (isNewspaper && !!mediaInfo) {
+			if (!hasNewsPaperBeenRendered) {
+				handleOnPlay();
+				setHasNewsPaperBeenRendered(true);
+			}
 			return (
 				<IiifViewer
 					imageInfos={iiifViewerImageInfos}
@@ -2191,6 +2218,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					imgUrl={image}
 					translatedPages={[]}
 					relativeUrl={url}
+				/>
+				<CopyrightConfirmationModal
+					isOpen={copyrightModalOpen}
+					onClose={() => setCopyrightModalOpen((prevState) => !prevState)}
+					onConfirm={() => {
+						onConfirmCopyright();
+						setCopyrightModalOpen((prevState) => !prevState);
+					}}
 				/>
 				{renderPageContent()}
 			</VisitorLayout>
