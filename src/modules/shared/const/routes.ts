@@ -359,7 +359,6 @@ export enum KNOWN_STATIC_ROUTES {
 	aboutTheVisitorTool = '/over-de-bezoekertool',
 	Home = '/',
 	kioskConditions = '/kiosk-voorwaarden',
-	sourceAtrributionMistakes = '',
 }
 
 export const ROUTE_PARTS_BY_LOCALE: Record<Locale, Record<RoutePart, string>> = {
