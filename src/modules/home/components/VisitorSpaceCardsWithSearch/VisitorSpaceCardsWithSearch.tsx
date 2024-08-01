@@ -11,7 +11,7 @@ import {
 } from '@shared/components/VisitorSpaceCard';
 import { VisitorSpaceCardList } from '@shared/components/VisitorSpaceCardList';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
@@ -33,7 +33,6 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 	onRequestAccess,
 	onSearch,
 }) => {
-	const { tHtml, tText } = useTranslation();
 	const [query, setQuery] = useQueryParams({
 		[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: StringParam,
 	});

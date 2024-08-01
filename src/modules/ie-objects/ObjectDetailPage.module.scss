@@ -1,15 +1,86 @@
 @use "src/styles/abstracts" as *;
 @use "sass:map";
 
+$expand-button-vertical-position: 35vh; // Visually a litter higher than halfway to compensate for the visual bottom bar
 $metadata-expanded-width: 72vw;
 $metadata-collapsed-width: 36vw;
-$breakpoint-md: map.get($breakpoints, "md");
+$metadata-media-ocr-tabs-height-desktop: 5.6rem;
+$metadata-media-ocr-tabs-height-mobile: 3.52rem;
+$back-to-global-search-button-width-desktop: 10rem;
+$back-to-global-search-button-width-mobile: 7rem;
+$zendesk-feedback-button-width-desktop: 20rem;
+$zendesk-feedback-button-width-mobile: 8rem;
+$zendesk-feedback-button-margin-bottom-desktop: $spacer-md;
+$zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
+
+/**
+ * Object Detail Page Grid layout
+ *
+ * DESKTOP:
+ *
+ *        1                                                                                   2                                           3
+ *        │                                                                                   │                                           │
+ *    1───┼───────────────────────────────────────────────────────────────────────────────────┴───────────────────────────────────────────┤
+ *        │                                                                                                                               │
+ *        │                                                                                                                               │
+ *        │  back                              visitor space navigation bar                                         visit end date        │
+ *        │                                                                                                                               │
+ *    2───┼───────────────────────────────────────────────────────────────────────────────────┬───────────────────────────────────────────┤
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │          tabs for metadata, media, ocr    │
+ *        │                                                                                   │                                           │
+ *    3───┤                                                                                   ├───────────────────────────────────────────┤
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │                                           │
+ *        │                                   media                                           │                                           │
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │                                           │
+ *    4───┼───────────────────────────────────────────────────────────────────────────────────┤                                           │
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │                                           │
+ *        │                     grey bar with prepresentations (video/audio)                  │                                           │
+ *        │                                                                                   │                                           │
+ *        │                                                                                   │                                           │
+ *    5───┴───────────────────────────────────────────────────────────────────────────────────┴───────────────────────────────────────────┘
+ *
+ *
+ *
+ * MOBILE:
+ *
+ *     1    2               3
+ *     │    │               │
+ *   1─┼────┴───────────────┤
+ *     │                    │
+ *     │  visitor space bar │
+ *     │                    │
+ *   2─┼────┬───────────────┤
+ *     │    │               │
+ *     │ <  │  tabs         │
+ *     │    │               │
+ *   3─┼────┴───────────────┤
+ *     │                    │
+ *     │                    │
+ *     │       media        │
+ *     │      metadata      │
+ *     │       ocr          │
+ *     │                    │
+ *     │                    │
+ *   4─┼────────────────────┤
+ *     │                    │
+ *     │        grey        │
+ *     │                    │
+ *   5─┴────────────────────┘
+ *
+ */
 
 .p-object-detail {
 	visibility: visible;
 	flex-grow: 1;
 	min-height: 0;
-	display: flex;
 	flex-flow: column;
 
 	// Elements
@@ -19,58 +90,58 @@ $breakpoint-md: map.get($breakpoints, "md");
 	}
 
 	&__wrapper {
-		flex-grow: 1;
-		min-height: 0;
 		display: grid;
-		height: calc(100vh - $top-navigation-bar-height);
+		grid-template-rows: minmax(0, max-content) max-content 1fr minmax(0, max-content);
+		grid-template-columns: $back-to-global-search-button-width-desktop 16fr 10fr;
+		width: 100vw;
+		min-height: calc(100vh - $top-navigation-bar-height);
+		max-height: calc(100vh - $top-navigation-bar-height);
+		align-items: stretch;
+		justify-items: stretch;
+		align-content: stretch;
+		transition: 100ms ease-out;
+		overflow: hidden;
 
-		@include respond-at(md) {
-			grid-template-columns: 1fr min-content;
-		}
-
-		// `include respond-at(md)` -fix for safari
-		@media screen and (width >= $breakpoint-md) {
-			grid-template-columns: 1fr min-content;
-		}
-
-		grid-template-rows: 1fr min-content;
-	}
-
-	&__visitor-space-navigation-bar--visible {
-		.p-object-detail__wrapper,
-		.p-object-detail__sidebar,
-		.p-object-detail__media {
-			height: calc(100vh - $top-navigation-bar-height - $top-visitor-space-bar-height);
-		}
-
-		> :global(:not([class*="object-detail__iiif__reference-strip"])) {
-			top: 0;
+		@include respond-to(md) {
+			grid-template-rows: minmax(0, max-content) max-content 1fr minmax(0, max-content);
+			grid-template-columns: max-content 1fr;
 		}
 	}
 
-	&__visitor-space-navigation-bar--hidden {
-		:global([class*="object-detail__iiif__reference-strip"]) {
-			top: $top-visitor-space-bar-height;
+	&__sidebar--expanded {
+		.p-object-detail__wrapper {
+			grid-template-columns: $back-to-global-search-button-width-mobile 10fr 16fr;
 		}
 	}
 
 	&__back {
-		position: absolute;
+		grid-row: 2;
+		grid-column: 1 / 2;
 		z-index: get-z-layer("foreground");
-		top: 0;
-		left: 0;
-		width: 10rem;
-		height: $top-visitor-space-bar-height;
+		width: $back-to-global-search-button-width-desktop;
+		height: $metadata-media-ocr-tabs-height-desktop;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		background-color: $black;
 		border-radius: 0;
+
+		@include respond-to(md) {
+			height: $metadata-media-ocr-tabs-height-mobile;
+			width: $back-to-global-search-button-width-mobile;
+		}
 	}
 
-	&__nav {
+	&__visitor-space-navigation-bar {
+		grid-row: 1;
+		grid-column: 1 / 4;
 		z-index: get-z-layer("foreground");
 		flex-shrink: 0;
+
+		@include respond-to(md) {
+			grid-column: 1 / 2;
+			width: 100vw;
+		}
 
 		&::after {
 			content: "";
@@ -83,6 +154,7 @@ $breakpoint-md: map.get($breakpoints, "md");
 			height: 1px;
 			background-color: $shade;
 			opacity: 0.64;
+			width: 100vw;
 
 			@include respond-at("md") {
 				visibility: hidden;
@@ -90,8 +162,73 @@ $breakpoint-md: map.get($breakpoints, "md");
 		}
 	}
 
+	&__visitor-space-navigation-bar--visible {
+		> :global(:not([class*="c-iiif-viewer__iiif__reference-strip"])) {
+			top: 0;
+		}
+
+		.p-object-detail__back {
+			display: none;
+		}
+
+		.p-object-detail__tabs {
+			display: none;
+
+			@include respond-to(md) {
+				grid-row: 2;
+				grid-column: 2;
+			}
+		}
+	}
+
+	&__visitor-space-navigation-bar--hidden {
+		&__visitor-space-navigation-bar {
+			display: none;
+		}
+
+		:global([class*="c-iiif-viewer__iiif__reference-strip"]) {
+			top: $metadata-media-ocr-tabs-height-desktop;
+		}
+
+		.p-object-detail__back {
+			grid-row: 2;
+			grid-column: 1;
+			display: block;
+		}
+
+		.p-object-detail__tabs {
+			grid-row: 2;
+			grid-column: 3;
+
+			@include respond-to(md) {
+				grid-row: 2;
+				grid-column: 2;
+			}
+		}
+	}
+
 	&__tabs {
-		flex-shrink: 0;
+		display: none;
+
+		@include respond-at(md) {
+			:global(.c-tab--media) {
+				display: none !important;
+			}
+		}
+
+		@include respond-to(md) {
+			grid-column: 1 / 4;
+			width: 100%;
+			display: flex;
+		}
+
+		:global(.c-tabs__item) {
+			display: flex;
+			justify-content: center;
+			flex-grow: 1;
+			margin-right: 0;
+			width: 100%;
+		}
 
 		&-tab {
 			display: grid;
@@ -111,15 +248,6 @@ $breakpoint-md: map.get($breakpoints, "md");
 					background-color: $white;
 				}
 			}
-		}
-
-		@include respond-at(md) {
-			display: none;
-		}
-
-		// `include respond-at(md)` -fix for safari
-		@media screen and (width >= $breakpoint-md) {
-			display: none;
 		}
 	}
 
@@ -164,66 +292,136 @@ $breakpoint-md: map.get($breakpoints, "md");
 	}
 
 	&__media {
+		grid-row: 2 / 4;
+		grid-column: 1 / 3;
 		position: relative;
+		height: 100%;
+		overflow: hidden;
 		display: flex;
 		flex-direction: column;
-		background-color: $silver;
-		height: calc(100vh - $top-navigation-bar-height);
+		background-color: $shade-darker;
+		container: object-detail__media / size;
+
+		:global(.p-object-detail__flowplayer) {
+			height: 100%;
+		}
+
+		@include respond-to(md) {
+			grid-row: 3 / 4;
+			grid-column: 1 / 3;
+			width: 100vw;
+		}
 	}
 
-	&__slider {
+	&__grey-slider-bar {
+		grid-row: 4;
+		grid-column: 1 / 3;
 		background-color: $black-8;
 		padding: 2rem 3rem;
-		position: absolute !important;
-		bottom: 0;
-		left: 0;
-		right: 0;
+
+		@include respond-to(md) {
+			grid-column: 1 / 3;
+			width: 100vw;
+		}
 	}
 
 	&__sidebar {
+		grid-row: 2 / 5;
+		grid-column: 3;
 		display: flex;
 		flex-direction: column;
-		height: calc(100vh - $top-navigation-bar-height);
+		max-height: 100%;
+		overflow: hidden;
 
-		@include respond-at("md") {
-			&--collapsed {
-				// Use width for toggle because grid-template-column animation is only supported on Firefox
-				width: $metadata-collapsed-width;
-				transition: width $animate-default;
+		@include respond-to(md) {
+			grid-row: 3 / 5;
+			grid-column: 1 / 3;
+			width: 100vw;
+		}
+	}
+
+	&:global(.p-object-detail--newspaper) {
+		:global([class*="p-object-detail__wrapper"] > [class^="ObjectDetailPage_p-object-detail__sidebar__"]) {
+			grid-row: 3 / 5;
+			grid-column: 3;
+
+			@include respond-to(md) {
+				grid-row: 3 / 5;
+				grid-column: 1 / 3;
 			}
+		}
 
-			&--expanded {
-				width: $metadata-expanded-width;
-			}
+		:global([class*="p-object-detail__wrapper"] > [class*="p-object-detail__tabs"]) {
+			grid-row: 2;
+			grid-column: 3;
+			display: flex;
+			width: 100%;
+			height: $metadata-media-ocr-tabs-height-desktop;
 
-			@include respond-at("md") {
-				&--no-media {
-					width: $metadata-expanded-width;
-				}
+			@include respond-to(md) {
+				width: 100%;
+				grid-row: 2;
+				grid-column: 2 / 3;
 			}
 		}
 	}
 
-	&__metadata {
-		max-width: 100vw;
-		overflow-y: scroll;
+	&__sidebar__content {
+		height: 100%;
+		overflow-y: auto;
+		padding-bottom: $spacer-2xl;
 		box-shadow: $shadow-24-black-12;
+
+		&__tab-media {
+			overflow-y: auto;
+		}
+
+		&__tab-metadata {
+			overflow-y: auto;
+		}
+
+		&__tab-ocr {
+			overflow-y: hidden;
+			padding-left: 0;
+			padding-right: 0;
+			padding-bottom: 0;
+		}
 	}
 
 	&__ocr {
-		padding: $spacer-lg * 2 $spacer-lg;
-		overflow-y: auto;
 		background-color: $white;
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: auto 1fr;
+		height: 100%;
+		overflow: hidden;
+		width: 100%;
+		gap: $spacer-md;
+		padding-top: $spacer-lg;
 
-		@include respond-at("md") {
-			&--collapsed {
-				// Use width for toggle because grid-template-column animation is only supported on Firefox
-				width: $metadata-collapsed-width;
-				transition: width $animate-default;
+		// Search, Alert, Pagination
+		> * {
+			margin-left: $spacer-lg;
+			margin-right: $spacer-lg;
+			width: calc(100% - $spacer-lg * 2);
+
+			@include respond-to(md) {
+				margin: $spacer-sm;
+				width: calc(100% - $spacer-sm * 2);
 			}
+		}
 
-			&--expanded {
-				width: $metadata-expanded-width;
+		&__words-container {
+			height: 100%;
+			max-height: 100%;
+			overflow-y: auto;
+			padding: 0 $spacer-lg $spacer-lg * 3;
+			width: 100%;
+			margin: 0;
+
+			@include respond-to(md) {
+				padding: 0 $spacer-sm $spacer-1xl $spacer-sm;
+				width: 100vw;
 			}
 		}
 
@@ -231,21 +429,60 @@ $breakpoint-md: map.get($breakpoints, "md");
 			display: inline-block;
 			padding: 0.5rem 0.25rem;
 			cursor: pointer;
+			scroll-margin: 40vh;
+			word-break: break-word;
 
 			&:hover {
-				background-color: #00857d;
+				background-color: $teal-30;
+				color: black;
+			}
+
+			&--marked {
+				background-color: $teal-dark;
 				color: white;
+
+				&:hover {
+					background-color: $teal-30;
+					color: black;
+				}
+
+				&--active {
+					background-color: $black;
+
+					&:hover {
+						background-color: $teal-30;
+						color: black;
+					}
+				}
+			}
+		}
+
+		&__pagination {
+			display: flex;
+			align-items: center;
+			background-color: $silver;
+			border-radius: $button-radius;
+			text-align: center;
+
+			:global(.pagination-info) {
+				flex-grow: 1;
+			}
+
+			> :global(.c-button) {
+				margin: 0;
+				color: $zinc;
+			}
+
+			@include respond-to(md) {
+				:global(.c-button__label) {
+					display: none;
+				}
 			}
 		}
 
 		:global(.u-flex) {
 			margin-bottom: $spacer-1xl;
 			height: $font-size-3xl;
-		}
-
-		&__search {
-			flex-grow: 1;
-			margin-right: $spacer-sm;
 		}
 
 		&__close {
@@ -287,6 +524,22 @@ $breakpoint-md: map.get($breakpoints, "md");
 				}
 			}
 		}
+
+		&__rights-status {
+			:global([class*="c-icon"]) {
+				font-size: $font-size-lg;
+			}
+
+			:global(a) {
+				margin-left: $spacer-sm;
+			}
+		}
+
+		&__names-list {
+			&__more-info {
+				color: $neutral !important;
+			}
+		}
 	}
 
 	:global(.p-object-detail__metadata-component) {
@@ -300,14 +553,6 @@ $breakpoint-md: map.get($breakpoints, "md");
 	&__metadata-list {
 		display: grid;
 		gap: $spacer-sm;
-
-		&--expanded {
-			grid-template-columns: repeat(2, calc(50% - #{$spacer-sm} / 2));
-		}
-
-		&--collapsed {
-			grid-template-columns: 100%;
-		}
 	}
 
 	:global(.p-object-detail__metadata-list--similar) {
@@ -348,14 +593,17 @@ $breakpoint-md: map.get($breakpoints, "md");
 		}
 	}
 
-	&__wrapper--metadata {
-		.p-object-detail__media {
-			display: none;
+	@include respond-to(md) {
+		&__wrapper--metadata,
+		&__wrapper--ocr {
+			.p-object-detail__media {
+				display: none;
+			}
 		}
 	}
 
 	&__wrapper--video {
-		.p-object-detail__metadata {
+		.p-object-detail__sidebar__content {
 			display: none;
 		}
 	}
@@ -374,7 +622,7 @@ $breakpoint-md: map.get($breakpoints, "md");
 			grid-template-columns: 7fr 3fr;
 			grid-template-rows: repeat(2, min-content);
 
-			.p-object-detail__metadata {
+			.p-object-detail__sidebar__content {
 				&-label {
 					grid-row: 1;
 				}
@@ -406,7 +654,7 @@ $breakpoint-md: map.get($breakpoints, "md");
 			display: flex;
 			flex-direction: column;
 
-			.p-object-detail__metadata {
+			.p-object-detail__sidebar__content {
 				&-description {
 					margin-top: $spacer-xs;
 				}
@@ -434,34 +682,19 @@ $breakpoint-md: map.get($breakpoints, "md");
 		display: none;
 	}
 
-	// Media queries
-
-	// `include respond-at(md)` -fix for safari
-	@media screen and (width >= $breakpoint-md) {
-		.p-object-detail__metadata {
-			display: block;
-		}
-
-		.p-object-detail__media {
-			display: grid;
-			grid-template-rows: 1fr auto;
-			grid-row: 1 / 3;
-		}
-	}
-
 	&__expand-button {
+		grid-row: 3;
+		grid-column: 3;
 		visibility: hidden;
 		z-index: get-z-layer("foreground");
-		position: absolute;
-		width: 3.2rem;
-		height: 3.2rem;
-		right: $metadata-collapsed-width;
-		transform: translate(50%, 3.5rem);
-		box-shadow: $shadow-12-black-16;
+		width: $button-height-sm;
+		height: $button-height;
+		border-radius: $button-radius-sm;
+		transform: translate(-50%, $expand-button-vertical-position);
 		transition: right $animate-default;
 
-		&--expanded {
-			right: $metadata-expanded-width;
+		:global(.c-button__icon span) {
+			font-size: $font-size-2xm;
 		}
 
 		@include respond-at(md) {

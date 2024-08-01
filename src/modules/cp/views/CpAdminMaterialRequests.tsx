@@ -37,11 +37,10 @@ import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
 export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 

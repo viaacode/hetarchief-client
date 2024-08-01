@@ -19,7 +19,7 @@ export interface Folder {
 
 export interface FolderIeObject {
 	schemaIdentifier: string; // Unique id per object
-	meemooLocalId: string[];
+	meemooLocalId: string;
 	accessThrough: IeObjectAccessThrough[];
 	premisIsPartOf?: string;
 	folderEntryCreatedAt?: string;

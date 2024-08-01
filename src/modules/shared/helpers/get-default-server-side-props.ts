@@ -41,6 +41,8 @@ export async function getDefaultStaticProps(
 						common: translations,
 					},
 				},
+				initialLocale: locale,
+				ns: ['common'],
 			},
 		},
 	};

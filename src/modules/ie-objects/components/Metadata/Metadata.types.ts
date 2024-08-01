@@ -6,6 +6,8 @@ export interface MetadataProps extends DefaultComponentProps {
 	title: ReactNode;
 	key: string;
 	children: ReactNode;
+	renderRight?: ReactNode;
+	renderTitleRight?: ReactNode;
 }
 
 export interface MetadataListProps extends DefaultComponentProps {
@@ -15,5 +17,5 @@ export interface MetadataListProps extends DefaultComponentProps {
 
 export interface MetadataItem {
 	title: string | ReactNode;
-	data: string | null | undefined;
+	data: string | ReactNode | null | undefined;
 }

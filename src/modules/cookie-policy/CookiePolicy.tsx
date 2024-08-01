@@ -4,14 +4,13 @@ import { stringifyUrl } from 'query-string';
 import React, { type FC, useEffect, useState } from 'react';
 
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './CookiePolicy.module.scss';
 
 export const CookiePolicy: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tText } = useTranslation();
 	const locale = useLocale();
 	const [cookieDeclarationHtml, setCookieDeclarationHtml] = useState<string>('');
 

@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Alert, Button, FormControl, TextInput } from '@meemoo/react-components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
 import React, { type FC, type ReactNode, useState } from 'react';
@@ -14,7 +15,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+
 import { toastService } from '@shared/services/toast-service';
 
 import { labelKeys, SHARE_FOLDER_FORM_SCHEMA } from './ShareFolderBlade.consts';
@@ -24,7 +25,7 @@ import {
 	type ShareFolderBladeProps,
 } from './ShareFolderBlade.types';
 
-const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId }) => {
+const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId,folderName }) => {
 	const { tText } = useTranslation();
 	const locale = useLocale();
 

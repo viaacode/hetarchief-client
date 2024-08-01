@@ -7,7 +7,7 @@ $component: "c-space-preview";
 		display: grid;
 		grid-template-columns: 7.2rem auto;
 		align-items: center;
-		min-height: $button-width;
+		min-height: $button-height;
 
 		> div {
 			height: 100%;

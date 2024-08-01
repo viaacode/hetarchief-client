@@ -12,3 +12,15 @@ $color: (
 );
 
 @include generate-utils("color", "color", $color, ("md", "lg", "xxl"));
+
+.u-color-neutral {
+	color: $neutral;
+}
+
+.u-color-zinc {
+	color: $neutral;
+}
+
+.u-color-silver {
+	color: $neutral;
+}

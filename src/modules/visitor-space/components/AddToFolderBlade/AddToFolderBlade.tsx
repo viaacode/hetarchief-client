@@ -11,7 +11,7 @@ import { type Folder } from '@account/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
 
@@ -26,8 +26,6 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	className,
 	...bladeProps
 }) => {
-	const { tHtml } = useTranslation();
-
 	const getFolders = useGetFolders();
 	const folders = useSelector(selectFolders);
 	const [originalSelectedFolderIds, setOriginalSelectedFolderIds] = useState<string[] | null>(

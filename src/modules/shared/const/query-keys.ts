@@ -32,4 +32,5 @@ export enum QUERY_KEYS {
 	getNewsletterPreferences = 'getNewsletterPreferences',
 	getIeObjectPlayerTicket = 'getIeObjectPlayerTicket',
 	getAllLanguages = 'getAllLanguages',
+	getAltoJsonFileContent = 'getAltoJsonFileContent',
 }

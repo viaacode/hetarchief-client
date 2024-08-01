@@ -12,8 +12,8 @@ import { Loading } from '@shared/components/Loading';
 import { NextRedirect } from '@shared/components/Redirect/Redirect.tsx';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
+import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 import { AccessStatus } from '@shared/types/visit';
 import { useGetVisitAccessStatus } from '@visit-requests/hooks/get-visit-access-status';
@@ -24,7 +24,6 @@ import { SearchFilterId } from '@visitor-space/types';
 import { VisitorLayout } from '../../visitor-layout';
 
 export const VisitPage: FC<DefaultSeoInfo> = ({ title, description, url }) => {
-	const { tText } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 	const { slug } = router.query;

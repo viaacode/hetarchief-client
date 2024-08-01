@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { type FC, type ReactNode } from 'react';
 
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
 import { type DefaultComponentProps } from '@shared/types';
 
 import styles from './Loading.module.scss';
@@ -13,8 +13,6 @@ export interface LoadingProps extends DefaultComponentProps {
 }
 
 const Loading: FC<LoadingProps> = ({ fullscreen = false, className, style = {} }) => {
-	const { tHtml } = useTranslation();
-
 	return (
 		<div
 			className={clsx(

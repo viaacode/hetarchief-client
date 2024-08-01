@@ -1,7 +1,7 @@
 import { Button } from '@meemoo/react-components';
 import { type FC } from 'react';
 
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
 
 import { Modal } from '../Modal';
 
@@ -14,7 +14,6 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 	onClose,
 	isOpen,
 }) => {
-	const { tHtml } = useTranslation();
 	const { title, description, yes, no } = text;
 
 	const renderButtons = () => {

@@ -34,6 +34,7 @@ export interface Alto3GeneratedType2 {
 
 export interface Alto3OcrProcessingStep {
 	processingDateTime: string[];
+	processingStepSettings: string[];
 	processingSoftware: Alto3ProcessingSoftware[];
 }
 

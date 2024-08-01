@@ -55,6 +55,7 @@ $size: (
 	"18": $font-size-md,
 	"22": 2.2rem,
 	"24": $font-size-lg,
+	"28": $font-size-xl,
 );
 
 @include generate-utils("font-size", "font-size", $size);

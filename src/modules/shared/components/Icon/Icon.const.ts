@@ -5,7 +5,7 @@ import { tText } from '@shared/helpers/translate';
 
 import { type IconName } from './Icon.types';
 
-export const ICON_LIST_CONFIG = (): { value: IconName; label: string }[] => {
+export const GET_ICON_LIST_CONFIG = (): { value: IconName; label: string }[] => {
 	return [...Object.values(IconNamesLight), ...Object.values(IconNamesSolid)].map(
 		(IconName: IconName) => ({
 			value: IconName,
@@ -14,16 +14,28 @@ export const ICON_LIST_CONFIG = (): { value: IconName; label: string }[] => {
 	);
 };
 
-export const ALERT_ICON_LIST_CONFIG = (): {
-	key: string;
+const GET_ALERT_ICON_LABELS = (): Record<keyof typeof AlertIconNames, string> => {
+	return {
+		Notification: tText('modules/shared/components/icon/icon___notificatie'),
+		User: tText('modules/shared/components/icon/icon___gebruiker'),
+		Question: tText('modules/shared/components/icon/icon___vraagteken'),
+		Info: tText('modules/shared/components/icon/icon___info'),
+		Exclamation: tText('modules/shared/components/icon/icon___uitroepteken'),
+		Key: tText('modules/shared/components/icon/icon___sleutel'),
+		Calendar: tText('modules/shared/components/icon/icon___kalender'),
+		Book: tText('modules/shared/components/icon/icon___boek'),
+		AngleRight: tText('modules/shared/components/icon/icon___chevron-rechts'),
+	};
+};
+
+export const GET_ALERT_ICON_LIST_CONFIG = (): {
+	key: keyof typeof AlertIconNames;
 	value: AlertIconNames;
 	label: string;
 }[] => {
-	const alertIcons = Object.keys(AlertIconNames).map((key: string) => ({
-		key,
+	return Object.keys(AlertIconNames).map((key: string) => ({
+		key: key as keyof typeof AlertIconNames,
 		value: AlertIconNames[key as keyof typeof AlertIconNames],
-		label: tText(`modules/admin/icons/${key}`),
+		label: GET_ALERT_ICON_LABELS()[key as keyof typeof AlertIconNames],
 	}));
-
-	return [...alertIcons];
 };
