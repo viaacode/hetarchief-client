@@ -465,6 +465,61 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					{ shallow: true }
 				);
 			});
+			// We don't include the tile source since it causes a rerender loop
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [openSeaDragonViewer, openSeaDragonLib, altoJsonCurrentPage, activeImageIndex]);
+
+		const applyInitialZoomAndPan = useCallback(
+			(openSeadragonViewerTemp: Viewer, openSeadragonLibTemp: any) => {
+				openSeadragonViewerTemp.addHandler('open', () => {
+					// When the viewer is initialized, set the desired zoom and pan
+					if (
+						!isNil(initialFocusX) &&
+						!isNil(initialFocusY) &&
+						!isNil(initialZoomLevel)
+					) {
+						const centerPoint = new openSeadragonLibTemp.Point(
+							initialFocusX,
+							initialFocusY
+						);
+						openSeadragonViewerTemp.viewport.panTo(centerPoint, true);
+						openSeadragonViewerTemp.viewport.zoomTo(
+							initialZoomLevel,
+							centerPoint,
+							true
+						);
+					}
+				});
+			},
+			// Only update the pan and zoom once when loading the iiif viewer
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+			[]
+		);
+
+		const addEventListeners = useCallback((openSeadragonViewerTemp: Viewer) => {
+			openSeadragonViewerTemp.addHandler('viewport-change', () => {
+				if (!openSeadragonViewerTemp) {
+					return;
+				}
+				const zoomLevel = openSeadragonViewerTemp.viewport.getZoom();
+				const centerPoint = openSeadragonViewerTemp.viewport.getCenter();
+				// Use window to parse query params, since this native event listener doesn't have access to the update-to-date router.query query params
+				// We also include ...router.query since route params (eg: slug and ieObjectId) are also part of the router.query object
+				const parsedUrl = parseUrl(window.location.href);
+				router.push(
+					{
+						query: {
+							...router.query,
+							...parsedUrl.query,
+							zoomLevel: round(zoomLevel, 3),
+							focusX: round(centerPoint.x, 3),
+							focusY: round(centerPoint.y, 3),
+						},
+					},
+					undefined,
+					{ shallow: true }
+				);
+			});
 			// Only register the viewport-change event once when loading the iiif viewer
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, []);
