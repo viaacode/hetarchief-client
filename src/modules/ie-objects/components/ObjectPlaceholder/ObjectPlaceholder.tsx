@@ -5,7 +5,7 @@ import { type FC, useState } from 'react';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Modal } from '@shared/components/Modal';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tText } from '@shared/helpers/translate';
 
 import styles from './ObjectPlaceholder.module.scss';
 import { type ObjectPlaceholderProps } from './ObjectPlaceholder.types';
@@ -21,8 +21,6 @@ const ObjectPlaceholder: FC<ObjectPlaceholderProps> = ({
 	onOpenRequestAccess,
 	addSliderPadding = false,
 }) => {
-	const { tText } = useTranslation();
-
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	return (

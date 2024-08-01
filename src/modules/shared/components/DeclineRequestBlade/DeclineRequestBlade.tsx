@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Blade } from '@shared/components/Blade/Blade';
 import { VisitSummary } from '@shared/components/VisitSummary';
 import { OPTIONAL_LABEL } from '@shared/const';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types/visit';
 import { VisitsService } from '@visit-requests/services/visits/visits.service';
@@ -22,7 +22,6 @@ const labelKeys: Record<keyof DeclineRequestFormState, string> = {
 };
 
 const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
-	const { tHtml } = useTranslation();
 	const { onSubmit, selected } = props;
 
 	const {

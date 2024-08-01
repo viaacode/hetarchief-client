@@ -1,15 +1,13 @@
 import clsx from 'clsx';
 import { forwardRef } from 'react';
 
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
 
 import styles from './FileInput.module.scss';
 import { type FileInputProps } from './FileInput.types';
 
 const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
 	({ className, onChange, hasFile }, ref) => {
-		const { tHtml } = useTranslation();
-
 		return (
 			<>
 				<label

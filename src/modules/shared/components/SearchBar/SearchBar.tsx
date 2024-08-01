@@ -4,7 +4,7 @@ import { type FC } from 'react';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tText } from '@shared/helpers/translate';
 
 import { type SearchBarProps } from './SearchBar.types';
 
@@ -15,8 +15,6 @@ const SearchBar: FC<SearchBarProps> = ({
 	onChange,
 	...rest
 }) => {
-	const { tText } = useTranslation();
-
 	const getVariants = () => {
 		const modifiers: string[] = isString(variants) ? [variants] : variants;
 		return [...modifiers, ...(value ? ['black-border'] : [])];

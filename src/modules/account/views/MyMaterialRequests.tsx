@@ -22,13 +22,12 @@ import { PaginationBar } from '@shared/components/PaginationBar';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorLayout } from '@visitor-layout/index';
 
 export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();

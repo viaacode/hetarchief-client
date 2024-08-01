@@ -11,8 +11,8 @@ import {
 	VisitorSpaceCardType,
 } from '@shared/components/VisitorSpaceCard';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 
 import { Icon, type IconName } from '../../Icon';
@@ -26,7 +26,6 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 	room,
 	type,
 }) => {
-	const { tHtml, tText } = useTranslation();
 	const locale = useLocale();
 
 	const typeNoAccess = type === VisitorSpaceCardType.noAccess;

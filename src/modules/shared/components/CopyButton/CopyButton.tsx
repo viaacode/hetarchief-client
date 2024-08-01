@@ -4,11 +4,10 @@ import { type FC, type MouseEvent, useCallback } from 'react';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 
 const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean }> = (props) => {
-	const { tHtml, tText } = useTranslation();
 	const { onClick, text, enableToast = true } = props;
 
 	const clickHandler = useCallback(
@@ -32,7 +31,7 @@ const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean }> = (p
 
 			onClick?.(e);
 		},
-		[onClick, text, enableToast, tHtml]
+		[onClick, text, enableToast]
 	);
 
 	return (

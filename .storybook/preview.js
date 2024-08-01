@@ -1,6 +1,5 @@
 import * as NextImage from 'next/image';
 
-import nlJson from '../public/locales/nl/common.json';
 import './styleguide.scss';
 
 // Global parameters

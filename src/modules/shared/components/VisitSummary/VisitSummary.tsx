@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 
 import { type VisitSummaryProps } from '@shared/components/VisitSummary';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
 
 import SpacePreview from '../SpacePreview/SpacePreview';
 
@@ -20,8 +20,6 @@ const VisitSummary: FC<VisitSummaryProps> = ({
 	spaceServiceDescriptionEn,
 	preview = false,
 }) => {
-	const { tHtml } = useTranslation();
-
 	return (
 		<div className={styles['c-visit-summary']}>
 			{preview && (

@@ -6,9 +6,9 @@ import { type FC, useCallback, useEffect } from 'react';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { tText } from '@shared/helpers/translate';
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { Overlay } from '../Overlay';
 
@@ -29,7 +29,6 @@ export const Blade: FC<BladeProps> = ({
 	renderTitle,
 	id,
 }) => {
-	const { tText } = useTranslation();
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
 
 	useScrollLock(!isManaged && isOpen, 'Blade');

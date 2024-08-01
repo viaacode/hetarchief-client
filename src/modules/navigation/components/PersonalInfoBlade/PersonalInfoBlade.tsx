@@ -9,8 +9,7 @@ import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestRequesterCapacity } from '@material-requests/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
-import { tHtml } from '@shared/helpers/translate';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
 import { useAppDispatch } from '@shared/store';
@@ -28,7 +27,6 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 	refetch,
 }) => {
 	const user = useSelector(selectUser);
-	const { tText } = useTranslation();
 	const dispatch = useAppDispatch();
 	const { data: preferences } = useGetNewsletterPreferences(user?.email);
 	const shouldRenderNewsletterCheckbox: boolean = !preferences?.newsletter;

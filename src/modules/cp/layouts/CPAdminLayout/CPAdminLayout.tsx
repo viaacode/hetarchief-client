@@ -13,8 +13,8 @@ import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { Icon } from '@shared/components/Icon';
 import { type ListNavigationItem } from '@shared/components/ListNavigation';
 import { globalLabelKeys } from '@shared/const';
+import { tHtml } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
 import { SearchFilterId } from '@visitor-space/types';
@@ -24,7 +24,6 @@ import styles from './CPAdminLayout.module.scss';
 const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle }) => {
 	const { asPath } = useRouter();
 	const dispatch = useDispatch();
-	const { tHtml } = useTranslation();
 	const locale = useLocale();
 
 	const user = useSelector(selectUser);

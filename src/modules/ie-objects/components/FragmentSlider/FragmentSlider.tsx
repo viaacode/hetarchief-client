@@ -12,8 +12,8 @@ import { type IeObjectFile } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { soundwave } from '@shared/components/MediaCard/__mocks__/media-card';
+import { tText } from '@shared/helpers/translate';
 import { useElementSize } from '@shared/hooks/use-element-size';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { ObjectPlaceholder } from '../ObjectPlaceholder';
 
@@ -26,7 +26,6 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 	files,
 	onChangeFragment,
 }) => {
-	const { tText } = useTranslation();
 	const [offset, setOffset] = useState<number>(0);
 	const [active, setActive] = useState<number>(0);
 	const [isBlurred, setIsBlurred] = useState<boolean>(true);

@@ -1,15 +1,15 @@
 import { jest } from '@jest/globals';
+import { render } from '@testing-library/react';
+import React, { type ReactNode } from 'react';
 
 import { type CollapsableBladeProps } from '@ie-objects/components/CollapsableBlade';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
-import '@testing-library/jest-dom';
-import { render } from '@testing-library/react';
-import React, { type ReactNode } from 'react';
-
 import CollapsableBlade from './CollapsableBlade';
 import { collapsableBladeMock } from './__mocks__/CollapsedBlade.mock';
+
+import '@testing-library/jest-dom';
 
 const renderCollapsableBlade = (props: Partial<CollapsableBladeProps>) => {
 	return render(<CollapsableBlade {...collapsableBladeMock} {...props} />);

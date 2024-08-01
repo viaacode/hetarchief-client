@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
 import { SearchBar } from '@shared/components/SearchBar';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import {
 	LANGUAGE_FILTER_FORM_QUERY_PARAM_CONFIG,
@@ -32,8 +32,6 @@ const defaultValues = {
 };
 
 const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }) => {
-	const { tHtml, tText } = useTranslation();
-
 	// State
 
 	const [query] = useQueryParams(LANGUAGE_FILTER_FORM_QUERY_PARAM_CONFIG);

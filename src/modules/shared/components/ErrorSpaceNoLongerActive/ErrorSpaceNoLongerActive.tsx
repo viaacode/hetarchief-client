@@ -3,15 +3,14 @@ import { type FC } from 'react';
 
 import { ErrorPage } from '@shared/components/ErrorPage';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { tHtml } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 interface ErrorSpaceNoLongerActiveProps {
 	nlTranslations?: Record<string, string>;
 }
 
 const ErrorSpaceNoLongerActive: FC<ErrorSpaceNoLongerActiveProps> = () => {
-	const { tHtml } = useTranslation();
 	const locale = useLocale();
 
 	return (

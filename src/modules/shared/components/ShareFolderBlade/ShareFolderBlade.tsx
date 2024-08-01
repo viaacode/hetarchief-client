@@ -12,8 +12,8 @@ import { CopyButton } from '@shared/components/CopyButton';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { ROUTES_BY_LOCALE } from '@shared/const';
+import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { EmailTemplate } from '@shared/services/campaign-monitor-service/campaign-monitor.consts';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service/campaign-monitor.service';
 import { toastService } from '@shared/services/toast-service';
@@ -26,7 +26,6 @@ import {
 } from './ShareFolderBlade.types';
 
 const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId, folderName }) => {
-	const { tText } = useTranslation();
 	const locale = useLocale();
 
 	const user = useSelector(selectUser);

@@ -14,8 +14,8 @@ import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { Blade } from '@shared/components/Blade/Blade';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { asDate, formatMediumDateWithTime } from '@shared/utils/dates';
 
@@ -23,7 +23,6 @@ import { type VisitDetailBladeProps } from './VisitDetail.types';
 import styles from './VisitDetailBlade.module.scss';
 
 const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit }) => {
-	const { tText } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);

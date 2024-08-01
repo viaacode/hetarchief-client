@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import { type FC, useState } from 'react';
 
 import { Blade } from '@shared/components/Blade/Blade';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types/visit';
 import { VisitsService } from '@visit-requests/services';
@@ -10,7 +10,6 @@ import { VisitsService } from '@visit-requests/services';
 import { type CancelVisitBladeProps } from './CancelVisitBlade.types';
 
 const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
-	const { tHtml } = useTranslation();
 	const { selected } = props;
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 

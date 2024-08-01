@@ -5,8 +5,7 @@ import { type FC, useEffect, useState } from 'react';
 import { foldersService } from '@account/services/folders';
 import type { Folder } from '@account/types';
 import { Blade } from '@shared/components/Blade/Blade';
-import { tHtml } from '@shared/helpers/translate';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 
 import styles from './EditFolderBlade.module.scss';
@@ -24,8 +23,6 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 	currentFolder,
 	onSave,
 }) => {
-	const { tText } = useTranslation();
-
 	const [name, setName] = useState(currentFolder?.name || '');
 	const [description, setDescription] = useState(currentFolder?.description || '');
 

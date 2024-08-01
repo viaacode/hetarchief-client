@@ -19,8 +19,8 @@ import { sortingIcons } from '@shared/components/Table';
 import { ScrollableTabs } from '@shared/components/Tabs';
 import { globalLabelKeys } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { type Visit, VisitStatus } from '@shared/types/visit';
 import { useGetVisit } from '@visit-requests/hooks/get-visit';
@@ -30,7 +30,6 @@ import { RequestStatusAll } from '@visit-requests/types';
 import { type VisitRequestOverviewProps } from './VisitRequestsOverview.types';
 
 const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
-	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 
@@ -91,7 +90,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 					});
 				});
 		}
-	}, [filteredVisits, setFilters, getVisit, tHtml, selectedOnCurrentPage, filters]);
+	}, [filteredVisits, setFilters, getVisit, selectedOnCurrentPage, filters]);
 
 	// Filters
 
@@ -137,7 +136,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		}
 	};
 
-	const onRowClick = (evt: MouseEvent<HTMLTableRowElement>, row: Row<Visit>) => {
+	const onRowClick = (_evt: MouseEvent<HTMLTableRowElement>, row: Row<Visit>) => {
 		if (!canUpdateVisitRequests) {
 			toastService.notify({
 				title: tHtml('pages/beheer/toegangsaanvragen/index___geen-rechten'),
