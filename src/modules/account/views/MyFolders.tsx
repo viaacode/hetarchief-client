@@ -4,7 +4,7 @@ import { isEmpty, isNil, kebabCase } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
@@ -23,8 +23,7 @@ import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { type ListNavigationItem } from '@shared/components/ListNavigation';
-import { type IdentifiableMediaCard } from '@shared/components/MediaCard';
-import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard/MediaCard.consts';
+import { type IdentifiableMediaCard, TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
 import { MediaCardList } from '@shared/components/MediaCardList';
 import { PaginationBar } from '@shared/components/PaginationBar';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
@@ -37,8 +36,8 @@ import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders, setFolders } from '@shared/store/ie-objects';
@@ -62,7 +61,6 @@ interface AccountMyFolders {
 }
 
 export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, folderSlug }) => {
-	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 	const dispatch = useDispatch();
@@ -98,6 +96,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 		? defaultFolder
 		: (folders || []).find((folder) => isActive(folder)) || defaultFolder;
 
+	console.log({ folders });
 	const sidebarLinks: ListNavigationFolderItem[] = useMemo(
 		() =>
 			(folders || []).map((folder) => {
@@ -105,6 +104,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				const href = myFoldersPath + '/' + slug;
 				const active = isActive(folder);
 
+				console.log({ folder });
 				return {
 					...folder,
 					node: ({ linkClassName }) => (
@@ -317,7 +317,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 										e.stopPropagation();
 										setShowShareMapBlade(true);
 									}}
-									toolTipText={tText(
+									tooltipText={tText(
 										'pages/account/mijn-mappen/folder-slug/index___map-delen'
 									)}
 								/>
@@ -346,7 +346,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 										e.stopPropagation();
 										setShowConfirmDelete(true);
 									}}
-									toolTipText={
+									tooltipText={
 										activeFolder.usedForLimitedAccessUntil
 											? tText(
 													'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen'
@@ -361,7 +361,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				  ]
 				: []),
 		];
-	}, [tText, activeFolder]);
+	}, [activeFolder]);
 
 	const renderButtons = () => {
 		return (
@@ -379,7 +379,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 					aria-label={tText(
 						'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen'
 					)}
-					toolTipText={tText(
+					tooltipText={tText(
 						'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen'
 					)}
 				/>
@@ -451,11 +451,9 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				label: tHtml(
 					'pages/account/mijn-mappen/folder-slug/index___identifier-bij-aanbieder'
 				),
-				value: folderIeObject.meemooLocalId?.join(', ') || '',
+				value: folderIeObject.meemooLocalId || '',
 			},
 		];
-
-		console.log({ folderIeObject, metadataEntries });
 
 		return (
 			<div className="p-account-my-folders__card-description">
@@ -584,7 +582,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 													}/${kebabCase(media.name) || 'titel'}`,
 													query: {
 														[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]:
-															keywords.join(
+															(keywords || []).join(
 																HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
 															),
 													},
@@ -612,7 +610,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 														getShowPlanVisitButtons(media),
 													previousPage: myFoldersPath,
 													link: link,
-												};
+												} as any;
 
 												return {
 													...base,

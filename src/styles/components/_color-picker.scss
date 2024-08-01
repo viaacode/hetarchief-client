@@ -1,7 +1,7 @@
 @use "src/styles/abstracts" as *;
 
 .c-color-picker {
-	height: $button-width;
+	height: $button-height;
 	width: 100%;
 
 	.c-color-picker--controls {
@@ -9,14 +9,14 @@
 	}
 
 	.c-color-picker--trigger {
-		width: $button-width;
-		height: $button-width;
+		width: $button-height;
+		height: $button-height;
 		border: 1px solid $zinc;
 	}
 
 	.c-color-picker--input {
-		width: calc(100% - $button-width);
-		height: $button-width;
+		width: calc(100% - $button-height);
+		height: $button-height;
 		border: 1px solid $zinc;
 		border-left: 0;
 		padding-left: 1.7rem;

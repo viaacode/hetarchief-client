@@ -1,5 +1,7 @@
 import { type DehydratedState } from '@tanstack/react-query';
 
+import { type Locale } from '@shared/utils/i18n';
+
 export interface DefaultSeoInfo {
 	url: string;
 	title?: string | null;
@@ -15,5 +17,7 @@ export interface DefaultSeoInfo {
 				common: Record<string, string>;
 			};
 		};
+		initialLocale: Locale;
+		ns: ['common'];
 	};
 }

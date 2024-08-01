@@ -14,7 +14,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { setMaterialRequestCount } from '@shared/store/ui';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
 
@@ -35,7 +35,6 @@ interface MaterialRequestCenterBladeProps {
 }
 
 const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpen, onClose }) => {
-	const { tHtml, tText } = useTranslation();
 	const dispatch = useDispatch();
 
 	const [selectedMaterialRequest, setSelectedMaterialRequest] = useState<MaterialRequest | null>(
@@ -213,7 +212,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						aria-label={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
 						)}
-						toolTipText={tText(
+						tooltipText={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
 						)}
 					/>
@@ -226,7 +225,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						aria-label={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder-materiaal-aanvraag'
 						)}
-						toolTipText={tText(
+						tooltipText={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder'
 						)}
 					/>

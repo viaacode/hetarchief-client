@@ -1,0 +1,36 @@
+@use "src/styles/abstracts" as *;
+
+.c-confidence-indicator {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: 6rem;
+	border: 1px solid $silver;
+	border-radius: $button-radius-sm;
+	padding: $spacer-xxs $spacer-xs;
+	gap: $spacer-xs;
+	cursor: default;
+
+	&__bars-container {
+		display: flex;
+		flex-direction: column;
+		gap: 0.1rem;
+
+		span {
+			display: block;
+			width: 0.8rem;
+			height: 0.3rem;
+			background-color: $silver;
+			border-radius: 2px;
+
+			&:global(.active) {
+				background-color: $teal-dark;
+			}
+		}
+	}
+
+	span {
+		flex-grow: 1;
+		text-align: right;
+	}
+}

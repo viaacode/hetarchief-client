@@ -9,15 +9,14 @@ import { AdminLayout } from '@admin/layouts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ADMIN_CORE_ROUTES_BY_LOCALE } from '@shared/const';
+import { tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
 export const ContentPageOverviewPage: FC<
 	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined }
 > = ({ url, commonUser }) => {
-	const { tText } = useTranslation();
 	const locale = useLocale();
 	const canCreateContentPages = useHasAllPermission(Permission.CREATE_CONTENT_PAGES) || true; // TODO remove once permission is added to the database
 

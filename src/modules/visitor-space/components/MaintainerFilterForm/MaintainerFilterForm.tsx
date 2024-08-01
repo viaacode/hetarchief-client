@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
 import { SearchBar } from '@shared/components/SearchBar';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
 import {
 	type MaintainerFilterFormProps,
@@ -33,8 +33,6 @@ const defaultValues = {
 };
 
 const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, className }) => {
-	const { tHtml, tText } = useTranslation();
-
 	const [query] = useQueryParams(MAINTAINER_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
 

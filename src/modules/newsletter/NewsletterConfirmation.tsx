@@ -4,16 +4,15 @@ import { type FC, useEffect, useState } from 'react';
 import { Loading } from '@shared/components/Loading';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
 export const NewsletterConfirmation: FC<DefaultSeoInfo> = ({ url }) => {
 	useHideFooter();
 
-	const { tText, tHtml } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 
@@ -31,7 +30,7 @@ export const NewsletterConfirmation: FC<DefaultSeoInfo> = ({ url }) => {
 		});
 
 		setTriggerRedirect(true);
-	}, [tHtml]);
+	}, []);
 
 	useEffect(() => {
 		if (!triggerRedirect) {

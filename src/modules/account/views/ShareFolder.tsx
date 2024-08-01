@@ -6,8 +6,8 @@ import { SharedFolderStatus } from '@account/types';
 import { createFolderSlug } from '@account/utils';
 import { Loading } from '@shared/components/Loading';
 import { ROUTES_BY_LOCALE } from '@shared/const';
+import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
@@ -18,7 +18,6 @@ interface AccountSharedFolderProps {
 export const AccountSharedFolder: FC<DefaultSeoInfo & AccountSharedFolderProps> = ({
 	folderId,
 }) => {
-	const { tText } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 
@@ -64,7 +63,7 @@ export const AccountSharedFolder: FC<DefaultSeoInfo & AccountSharedFolderProps> 
 				await router.replace(ROUTES_BY_LOCALE[locale].accountMyFolders);
 			}
 		}
-	}, [folderId, locale, router, tText]);
+	}, [folderId, locale, router]);
 
 	useEffect(() => {
 		shareFolder();

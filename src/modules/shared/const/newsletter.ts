@@ -1,11 +1,9 @@
-import { object, type SchemaOf, string } from 'yup';
+import { object, type Schema, string } from 'yup';
 
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tText } from '@shared/helpers/translate';
 import { type NewsletterFormState } from '@shared/types/newsletter';
 
-export const NEWSLETTER_FORM_SCHEMA = (): SchemaOf<NewsletterFormState> => {
-	const { tText } = useTranslation();
-
+export const NEWSLETTER_FORM_SCHEMA = (): Schema<NewsletterFormState> => {
 	return object({
 		firstName: string().required(
 			tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-voornaam-moet-ingevuld-zijn')

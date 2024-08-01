@@ -9,7 +9,7 @@ import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tText } from '@shared/helpers/translate';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
 interface ContentPageDetailPageProps {
@@ -19,8 +19,6 @@ interface ContentPageDetailPageProps {
 export const ContentPageDetailPage: FC<
 	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined } & ContentPageDetailPageProps
 > = ({ url, commonUser, id }) => {
-	const { tText } = useTranslation();
-
 	const renderPageContent = () => {
 		return (
 			<AdminLayout className="p-admin-content-page-detail">

@@ -24,8 +24,8 @@ import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper'
 import { Pill } from '@shared/components/Pill';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { setLastScrollPosition } from '@shared/store/ui';
 import { type IeObjectType } from '@shared/types/ie-objects';
@@ -60,7 +60,6 @@ const MediaCard: FC<MediaCardProps> = ({
 	hasTempAccess,
 	previousPage,
 }) => {
-	const { tText } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 	const dispatch = useDispatch();

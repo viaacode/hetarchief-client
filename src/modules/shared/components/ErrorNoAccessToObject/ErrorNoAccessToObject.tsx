@@ -13,9 +13,9 @@ import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { ErrorPage } from '@shared/components/ErrorPage';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { setShowAuthModal } from '@shared/store/ui';
 
@@ -32,7 +32,6 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 	visitorSpaceName,
 	visitorSpaceSlug,
 }) => {
-	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 	const dispatch = useDispatch();

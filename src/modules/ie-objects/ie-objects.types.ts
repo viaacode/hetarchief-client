@@ -23,17 +23,25 @@ export enum IsPartOfKey {
 	seizoennummer = 'seizoennummer',
 }
 
+export interface IsPartOfCollection {
+	name: string;
+	collectionType: IsPartOfKey;
+	isPreceededBy?: any[];
+	isSucceededBy?: any[];
+	locationCreated?: any;
+	startDate?: any;
+	endDate?: any;
+	publisher?: any;
+}
+
 export interface IeObject {
 	dctermsAvailable: string;
 	dctermsFormat: IeObjectType;
-	dctermsMedium: string;
-	meemoofilmBase: string;
-	meemoofilmColor: boolean;
-	meemoofilmImageOrSound: string;
-	premisIdentifier: any;
+	dctermsMedium: string[];
+	premisIdentifier: Record<string, string>[];
 	abstract: string;
 	creator: any;
-	dateCreated: string;
+	dateCreated: string | null;
 	datePublished: string;
 	description: string;
 	duration: string;
@@ -49,46 +57,50 @@ export interface IeObject {
 	maintainerOverlay: boolean | null;
 	name: string;
 	publisher: any;
-	spatial: string;
-	temporal: string;
+	spatial: string[];
+	temporal: string[];
 	thumbnailUrl: string;
-	// EXTRA
 	sector?: IeObjectSector;
 	accessThrough?: IeObjectAccessThrough[];
-	// OPTIONAL
 	ebucoreObjectType?: string | null;
 	meemoofilmContainsEmbeddedCaption?: boolean;
 	premisIsPartOf?: string;
 	contributor?: any;
 	copyrightHolder?: string;
-	isPartOf?: Partial<Record<IsPartOfKey, string[]>>;
+	isPartOf?: IsPartOfCollection[];
 	numberOfPages?: number;
 	meemooDescriptionCast?: string;
-	pageRepresentations?: IeObjectRepresentation[][];
 	maintainerFormUrl?: string | null;
 	maintainerDescription?: string;
 	maintainerSiteUrl?: string;
-	// FROM DB
-	meemoofilmCaption?: string;
-	meemoofilmCaptionLanguage?: string;
-	meemooDescriptionProgramme?: string;
 	meemooLocalId?: string;
 	meemooOriginalCp?: string;
 	durationInSeconds?: number;
 	copyrightNotice?: string;
 	meemooMediaObjectId?: string;
-	ebucoreIsMediaFragmentOf?: string;
-	ebucoreHasMediaFragmentOf?: boolean;
-	dateCreatedLowerBound?: string;
-	actor?: string | null; // string or object => not yet known, since all entries in the db are null
-	// Not yet available
 	transcript?: string;
-	caption?: string;
-	categorie?: string[];
-	languageSubtitles?: string;
-	meemooDescriptionCategory?: string[];
-	meemoofilmEmbeddedCaption?: string;
-	meemoofilmEmbeddedCaptionLanguage?: string;
+	abrahamInfo?: {
+		id: string;
+		uri: string;
+		code: string;
+	};
+	synopsis: string;
+	collectionName?: string;
+	issueNumber?: string;
+	fragmentId?: string;
+	creditText?: string;
+	preceededBy?: string[];
+	succeededBy?: string[];
+	width?: string;
+	height?: string;
+	locationCreated?: string;
+	startDate?: string;
+	endDate?: string;
+	carrierDate?: string;
+	newspaperPublisher?: string;
+	alternativeTitle?: string[];
+
+	pageRepresentations?: IeObjectRepresentation[][];
 }
 
 export enum IeObjectAccessThrough {
@@ -99,14 +111,18 @@ export enum IeObjectAccessThrough {
 }
 
 export enum IeObjectLicense {
+	// Object Licenses
 	PUBLIEK_METADATA_LTD = 'VIAA-PUBLIEK-METADATA-LTD',
 	PUBLIEK_METADATA_ALL = 'VIAA-PUBLIEK-METADATA-ALL',
+	PUBLIEK_CONTENT = 'VIAA-PUBLIEK-CONTENT',
 	BEZOEKERTOOL_METADATA_ALL = 'BEZOEKERTOOL-METADATA-ALL',
 	BEZOEKERTOOL_CONTENT = 'BEZOEKERTOOL-CONTENT',
 	INTRA_CP_METADATA_ALL = 'VIAA-INTRA_CP-METADATA-ALL',
 	INTRA_CP_METADATA_LTD = 'VIAA-INTRA_CP-METADATA-LTD',
 	INTRA_CP_CONTENT = 'VIAA-INTRA_CP-CONTENT',
-	PUBLIEK_CONTENT = 'VIAA-PUBLIEK-CONTENT', // 'Publiek-Domein', // TODO ARC-ARC-2211
+
+	// Rights statuses
+	PUBLIC_DOMAIN = 'Publiek-Domein',
 	COPYRIGHT_UNDETERMINED = 'COPYRIGHT-UNDETERMINED',
 }
 
@@ -139,15 +155,16 @@ export interface IeObjectFile {
 	thumbnailUrl: string;
 	duration: string;
 	edmIsNextInSequence: string;
+	createdAt: string;
 }
 
 export interface IeObjectRepresentation {
 	id: string;
-	name: string;
+	schemaName: string;
 	isMediaFragmentOf: string;
-	languages: string;
-	startTime: string;
-	transcript: string;
+	schemaInLanguage: string;
+	schemaStartTime: string;
+	schemaTranscript: string;
 	edmIsNextInSequence: string;
 	updatedAt: string;
 	files: IeObjectFile[];
@@ -188,6 +205,7 @@ export interface IeObjectSearchAggregations {
 export enum ObjectDetailTabs {
 	Media = 'media',
 	Metadata = 'metadata',
+	Ocr = 'ocr',
 }
 
 export enum MediaActions {
@@ -224,4 +242,11 @@ export interface AltoTextLine {
 	y: number;
 	width: number;
 	height: number;
+}
+
+export interface OcrSearchResult {
+	pageIndex: number;
+	searchTerm: string;
+	searchTermCharacterOffset: number;
+	searchTermIndexOnPage: number;
 }

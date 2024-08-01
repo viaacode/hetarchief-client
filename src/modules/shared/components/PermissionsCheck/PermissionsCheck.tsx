@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
 import { type Permission } from '@account/const';
 import { checkLoginAction, selectCheckLoginLoading, selectHasCheckedLogin } from '@auth/store/user';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
+import { tHtml } from '@shared/helpers/translate';
 import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useAppDispatch } from '@shared/store';
 
 import Loading from '../Loading/Loading';
@@ -24,7 +24,6 @@ const PermissionsCheck: FC<PermissionsCheckProps> = ({
 }): ReactElement => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const { tHtml } = useTranslation();
 
 	const hasAllRequiredPermissions: boolean = useHasAllPermission(...allPermissions);
 	const hasAnyRequiredPermissions: boolean = useHasAnyPermission(...anyPermissions);
@@ -37,7 +36,7 @@ const PermissionsCheck: FC<PermissionsCheckProps> = ({
 		if (!checkLoginLoading && !hasCheckedLogin) {
 			dispatch(checkLoginAction() as any);
 		}
-	}, [router, hasRequiredPermissions, tHtml, hasCheckedLogin, checkLoginLoading, dispatch]);
+	}, [router, hasRequiredPermissions, hasCheckedLogin, checkLoginLoading, dispatch]);
 
 	if (hasCheckedLogin && !hasRequiredPermissions) {
 		return (

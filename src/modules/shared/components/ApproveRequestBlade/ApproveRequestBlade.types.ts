@@ -19,6 +19,6 @@ export interface ApproveRequestFormState {
 	accessRemark?: string;
 	accessType: {
 		type: AccessType;
-		folderIds: string[];
+		folderIds: string[] | undefined;
 	};
 }

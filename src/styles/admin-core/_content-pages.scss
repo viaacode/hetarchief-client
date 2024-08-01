@@ -1,7 +1,6 @@
 @use "src/styles/abstracts" as *;
 
 $content-top-bar-and-tabs-height: 113px;
-$top-navigation-bar-height: 8.8rem;
 $content-page-header-height: 16.2rem;
 $content-page-tabs-height: 5rem;
 $content-page-sidebar-margin: 4rem;
@@ -69,7 +68,7 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 				display: inline-flex;
 				text-decoration: none;
 				background-color: $silver;
-				color: #000;
+				color: $black;
 				border: none;
 				border-right: 1px solid $zinc;
 				font-size: $font-size-sm;

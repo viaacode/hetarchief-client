@@ -23907,35 +23907,6 @@ module.exports = require("timers");
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__nccwpck_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__nccwpck_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__nccwpck_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
@@ -23965,19 +23936,19 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
+// ESM COMPAT FLAG
 __nccwpck_require__.r(__webpack_exports__);
-/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   "extractTextLinesFromAlto": () => (/* binding */ extractTextLinesFromAlto)
-/* harmony export */ });
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(250);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var xml2js__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(189);
-/* harmony import */ var xml2js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(xml2js__WEBPACK_IMPORTED_MODULE_1__);
+
+// EXTERNAL MODULE: ./node_modules/lodash/lodash.js
+var lodash = __nccwpck_require__(250);
+// EXTERNAL MODULE: ./node_modules/xml2js/lib/xml2js.js
+var xml2js = __nccwpck_require__(189);
+;// CONCATENATED MODULE: ./scripts/altos/extract-text-lines-from-alto-internal.ts
 
 
-const xmlParser = new xml2js__WEBPACK_IMPORTED_MODULE_1__.Parser();
+const xmlParser = new xml2js.Parser();
 function toArray(objectOrArray) {
-    if ((0,lodash__WEBPACK_IMPORTED_MODULE_0__.isArray)(objectOrArray)) {
+    if ((0,lodash.isArray)(objectOrArray)) {
         return objectOrArray;
     }
     return [objectOrArray];
@@ -23988,7 +23959,7 @@ function extractTextLinesFromAlto(altoJson) {
         case 'http://www.loc.gov/standards/alto/ns-v2#': {
             // Alto v2
             const altoV2 = altoJson;
-            const textLines = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.compact)(toArray(altoV2.alto.Layout).flatMap((Layout) => {
+            const textLines = (0,lodash.compact)(toArray(altoV2.alto.Layout).flatMap((Layout) => {
                 return toArray(Layout.Page).flatMap((page) => {
                     return toArray(page.PrintSpace).flatMap((printSpace) => {
                         return toArray(printSpace.TextBlock).flatMap((textBlock) => {
@@ -24028,7 +23999,7 @@ function extractTextLinesFromAlto(altoJson) {
         case 'http://www.loc.gov/standards/alto/ns-v3#': {
             // Alto v3
             const altoV3 = altoJson;
-            const textLines = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.compact)(altoJson.alto.Layout.flatMap((layout) => {
+            const textLines = (0,lodash.compact)(altoJson.alto.Layout.flatMap((layout) => {
                 return layout.Page.flatMap((page) => {
                     return page.PrintSpace.flatMap((printSpace) => {
                         return printSpace.TextBlock.flatMap((textBlock) => {
@@ -24083,6 +24054,9 @@ async function convertAltoFiles(altoFileUrl) {
     const textLines = extractTextLinesFromAlto(altoJson);
     console.log(JSON.stringify(textLines, null, 2));
 }
+
+;// CONCATENATED MODULE: ./scripts/altos/extract-text-lines-from-alto.ts
+
 convertAltoFiles(process.argv[2]);
 
 })();

@@ -10,7 +10,7 @@ import { useQueryParams } from 'use-query-params';
 import { SEPARATOR } from '@shared/const';
 import { YEAR_LENGTH } from '@shared/const/date';
 import { convertYearToDate } from '@shared/helpers/convert-year-to-date';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
 import { isRange, Operator } from '@shared/types';
 import { getOperators } from '@visitor-space/utils/metadata';
 
@@ -43,7 +43,6 @@ const defaultValues: CreatedFilterFormState = {
 };
 
 const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, disabled }) => {
-	const { tHtml } = useTranslation();
 	const [query] = useQueryParams(CREATED_FILTER_FORM_QUERY_PARAM_CONFIG);
 
 	const initialValue = query?.created?.[0];

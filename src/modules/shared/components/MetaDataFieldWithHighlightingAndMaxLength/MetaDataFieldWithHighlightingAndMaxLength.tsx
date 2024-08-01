@@ -4,7 +4,7 @@ import { type FC, type ReactNode } from 'react';
 
 import { type MetadataItem } from '@ie-objects/components/Metadata';
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tText } from '@shared/helpers/translate';
 
 import { METADATA_FIELD_MAX_LENGTH } from './MetaDataFieldWithHighlightingAndMaxLength.const';
 import styles from './MetaDataFieldWithHighlightingAndMaxLength.module.scss';
@@ -19,8 +19,6 @@ interface MetaDataFieldWithHighlightingAndMaxLengthProps extends DefaultComponen
 const MetaDataFieldWithHighlightingAndMaxLength: FC<
 	MetaDataFieldWithHighlightingAndMaxLengthProps
 > = ({ title, data, className, onReadMoreClicked, enableHighlighting }) => {
-	const { tText } = useTranslation();
-
 	const isLongFieldData: boolean = isString(data) && data.length > METADATA_FIELD_MAX_LENGTH;
 
 	const parsedFieldData: string | ReactNode = isLongFieldData

@@ -31,17 +31,20 @@
 	}
 
 	&__item {
-		display: inline-flex;
 		flex-flow: column;
-		width: 100%;
 		padding: $spacer-md 0;
 		border-top: $divider-black;
+		display: flex;
+		flex-direction: row;
+		break-inside: avoid;
 	}
 
 	&__item-title {
 		font-weight: $font-weight-bold;
 		padding-bottom: $spacer-xxs;
 		font-size: $font-size-md;
+		display: flex;
+		align-items: center;
 	}
 
 	&__item-text {

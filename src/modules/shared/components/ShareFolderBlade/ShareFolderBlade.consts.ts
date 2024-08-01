@@ -1,12 +1,10 @@
-import { object, type SchemaOf, string } from 'yup';
+import { object, type Schema, string } from 'yup';
 
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tText } from '@shared/helpers/translate';
 
 import { type ShareFolderBladeFormState } from './ShareFolderBlade.types';
 
-export const SHARE_FOLDER_FORM_SCHEMA = (): SchemaOf<ShareFolderBladeFormState> => {
-	const { tText } = useTranslation();
-
+export const SHARE_FOLDER_FORM_SCHEMA = (): Schema<ShareFolderBladeFormState> => {
 	return object({
 		email: string()
 			.email(tText('pages/account/map-delen/folder-id/index___dit-is-geen-geldig-emailadres'))
