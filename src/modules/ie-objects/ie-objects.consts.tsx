@@ -62,11 +62,11 @@ export const XML_FORMATS: string[] = ['application/xml'];
 
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
 	{
-		label: tText('Download alle paginas (zip)'),
+		label: tText('modules/ie-objects/ie-objects___download-alle-paginas-zip'),
 		id: MetadataExportFormats.fullNewspaperZip,
 	},
 	{
-		label: tText('Download deze pagina (zip)'),
+		label: tText('modules/ie-objects/ie-objects___download-deze-pagina-zip'),
 		id: MetadataExportFormats.onePageNewspaperZip,
 	},
 	{

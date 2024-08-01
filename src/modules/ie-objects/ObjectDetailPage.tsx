@@ -775,9 +775,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const renderExportDropdown = useCallback(
 		(isPrimary: boolean) => {
 			const icon = <Icon name={IconNamesLight.Export} aria-hidden />;
-			const label = tText(
-				'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
-			);
+			const label = tText('modules/ie-objects/object-detail-page___download-deze-krant');
 
 			return (
 				<div className={styles['p-object-detail__export']}>
