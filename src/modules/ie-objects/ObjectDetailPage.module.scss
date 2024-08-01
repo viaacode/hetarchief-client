@@ -396,10 +396,13 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		height: 100%;
 		overflow: hidden;
 		width: 100%;
+		gap: $spacer-md;
+		padding-top: $spacer-lg;
 
-		&__search {
-			flex-grow: 1;
-			margin: $spacer-lg;
+		// Search, Alert, Pagination
+		> * {
+			margin-left: $spacer-lg;
+			margin-right: $spacer-lg;
 			width: calc(100% - $spacer-lg * 2);
 
 			@include respond-to(md) {
@@ -414,6 +417,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			overflow-y: auto;
 			padding: 0 $spacer-lg $spacer-lg * 3;
 			width: 100%;
+			margin: 0;
 
 			@include respond-to(md) {
 				padding: 0 $spacer-sm $spacer-1xl $spacer-sm;
@@ -454,13 +458,11 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		}
 
 		&__pagination {
-			margin: $spacer-lg;
 			display: flex;
 			align-items: center;
 			background-color: $silver;
 			border-radius: $button-radius;
 			text-align: center;
-			width: calc(100% - $spacer-lg * 2);
 
 			:global(.pagination-info) {
 				flex-grow: 1;
@@ -472,9 +474,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			}
 
 			@include respond-to(md) {
-				margin: $spacer-sm;
-				width: calc(100% - $spacer-sm * 2);
-
 				:global(.c-button__label) {
 					display: none;
 				}

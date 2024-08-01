@@ -34,6 +34,7 @@ export interface SimplifiedAlto {
 	description: {
 		fileName: string | undefined;
 		processingDateTime: string | undefined;
+		processingStepSettings: string | undefined;
 		softwareCreator: string | undefined;
 		softwareName: string | undefined;
 		softwareVersion: string | undefined;
@@ -93,6 +94,9 @@ export function extractTextLinesFromAlto(altoJson: AltoFormat): SimplifiedAlto {
 					processingDateTime:
 						altoV2.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
 							?.processingDateTime?.[0],
+					processingStepSettings:
+						altoV2.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
+							?.processingStepSettings?.[0],
 					softwareCreator:
 						altoV2.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
 							?.processingSoftware?.[0]?.softwareCreator?.[0],
@@ -137,6 +141,9 @@ export function extractTextLinesFromAlto(altoJson: AltoFormat): SimplifiedAlto {
 					processingDateTime:
 						altoV3.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
 							?.processingDateTime?.[0],
+					processingStepSettings:
+						altoV3.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
+							?.processingStepSettings?.[0],
 					softwareCreator:
 						altoV3.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
 							?.processingSoftware?.[0]?.softwareCreator?.[0],
@@ -159,6 +166,7 @@ export function extractTextLinesFromAlto(altoJson: AltoFormat): SimplifiedAlto {
 				description: {
 					fileName: undefined,
 					processingDateTime: undefined,
+					processingStepSettings: undefined,
 					softwareCreator: undefined,
 					softwareName: undefined,
 					softwareVersion: undefined,
