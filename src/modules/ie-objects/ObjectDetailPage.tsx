@@ -32,6 +32,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
+
 import React, {
 	type FC,
 	Fragment,
@@ -43,15 +44,6 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-	BooleanParam,
-	NumberParam,
-	StringParam,
-	useQueryParam,
-	withDefault,
-} from 'use-query-params';
-
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import {
@@ -120,9 +112,9 @@ import { isInAFolder } from '@ie-objects/utils/folders';
 import { getIeObjectRightsOwnerAsText } from '@ie-objects/utils/get-ie-object-rights-owner-as-text';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import { mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils/map-metadata';
+import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import IiifViewer from '@iiif-viewer/IiifViewer';
 import { type IiifViewerFunctions, type ImageInfo } from '@iiif-viewer/IiifViewer.types';
-import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { Blade } from '@shared/components/Blade/Blade';
@@ -171,6 +163,15 @@ import {
 	SearchFilterId,
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
+
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	BooleanParam,
+	NumberParam,
+	StringParam,
+	useQueryParam,
+	withDefault,
+} from 'use-query-params';
 
 import CopyButton from '../shared/components/CopyButton/CopyButton';
 
@@ -454,8 +455,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		(visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
-	const showFragmentSlider =
-		representationsToDisplay.length > 1 && mediaInfo?.dctermsFormat !== IeObjectType.Newspaper;
+	const isNewspaper = mediaInfo?.dctermsFormat === IeObjectType.Newspaper;
+	const showFragmentSlider = representationsToDisplay.length > 1 && !isNewspaper;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const hasAccessToVisitorSpaceOfObject =
 		intersection(mediaInfo?.accessThrough, [
@@ -463,8 +464,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			IeObjectAccessThrough.VISITOR_SPACE_FULL,
 		]).length > 0;
 	const isPublicNewspaper =
-		mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) &&
-		mediaInfo.dctermsFormat === IeObjectType.Newspaper;
+		mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) && isNewspaper;
 	const canRequestAccess =
 		isNil(
 			accessibleVisitorSpaces?.find((space) => space.maintainerId === mediaInfo?.maintainerId)
@@ -939,11 +939,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	useEffect(() => {
 		// When the page loads, search the ocr texts for the searchTerms in the query params in the url
-		if (
-			highlightedSearchTerms &&
-			mediaInfo?.dctermsFormat === IeObjectType.Newspaper &&
-			!hasAppliedUrlSearchTerms
-		) {
+		if (highlightedSearchTerms && isNewspaper && !hasAppliedUrlSearchTerms) {
 			setSearchTermsTemp(highlightedSearchTerms);
 			setSearchTerms(highlightedSearchTerms);
 			searchPagesOcrText(highlightedSearchTerms);
@@ -1214,8 +1210,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 */
 
 	const renderMedia = (): ReactNode => {
-		const isNewspaper = mediaInfo?.dctermsFormat === IeObjectType.Newspaper;
-
 		if ((isLoadingPlayableUrl && !isNewspaper) || !mediaInfo) {
 			return <Loading fullscreen owner="object detail page: render media" />;
 		}
@@ -1560,13 +1554,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			locale,
 			publicRuntimeConfig.CLIENT_URL
 		).filter(({ data }: MetadataItem): boolean => !!data);
-		let rightsStatusInfo = null;
-		if (mediaInfo?.dctermsFormat === IeObjectType.Newspaper) {
-			rightsStatusInfo = getIeObjectRightsStatusInfo(mediaInfo, locale);
-		}
+		const rightsStatusInfo = isNewspaper
+			? getIeObjectRightsStatusInfo(mediaInfo, locale)
+			: null;
 		let rightsAttributionText: string | null = null;
 		if (
-			mediaInfo?.dctermsFormat === IeObjectType.Newspaper &&
+			isNewspaper &&
 			mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) &&
 			rightsStatusInfo
 		) {

@@ -24,15 +24,15 @@ export const NamesList: FC<NamesListProps> = ({ className, names, onZoomToLocati
 	const [searchTerms, setSearchTerms] = useState('');
 	const [filteredNames, setFilteredNames] = useState(names);
 
-	function handleOnChange(evt: ChangeEvent<HTMLInputElement>): void {
+	const handleOnChange = (evt: ChangeEvent<HTMLInputElement>): void => {
 		setSearchTermsTemp(evt.target.value);
-	}
+	};
 
-	function handleOnKeyUp(evt: KeyboardEvent<HTMLInputElement>): void {
+	const handleOnKeyUp = (evt: KeyboardEvent<HTMLInputElement>): void => {
 		if (evt.key === 'Enter') {
 			setSearchTerms(searchTermsTemp);
 		}
-	}
+	};
 
 	const searchNames = useCallback(() => {
 		if (searchTerms === '') {
