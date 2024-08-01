@@ -1,6 +1,5 @@
 import { type MenuItemInfo, type TabProps } from '@meemoo/react-components';
 import { compact, isNil } from 'lodash-es';
-import Link from 'next/link';
 import React, { type ReactNode } from 'react';
 
 import {
@@ -440,9 +439,9 @@ function renderAbrahamLink(
 	}
 	if (abrahamInfo.uri && abrahamInfo.id) {
 		return (
-			<Link href={abrahamInfo?.uri} passHref>
-				<a>{abrahamInfo?.id}</a>
-			</Link>
+			<a href={abrahamInfo?.uri} target="_blank" rel="noreferrer">
+				{abrahamInfo?.id}
+			</a>
 		);
 	}
 	if (abrahamInfo?.id) {
@@ -450,9 +449,9 @@ function renderAbrahamLink(
 	}
 	if (abrahamInfo?.uri) {
 		return (
-			<Link href={abrahamInfo?.uri} passHref>
-				<a>{abrahamInfo?.uri}</a>
-			</Link>
+			<a href={abrahamInfo?.uri} target="_blank" rel="noreferrer">
+				{abrahamInfo?.uri}
+			</a>
 		);
 	}
 }
@@ -492,7 +491,16 @@ export const GET_METADATA_FIELDS = (
 			title: tText('modules/ie-objects/const/index___pid'),
 			data: mediaInfo.schemaIdentifier,
 		},
-		...mapObjectsToMetadata(mediaInfo.premisIdentifier),
+		...mapObjectsToMetadata(
+			mediaInfo.premisIdentifier?.filter(
+				(premisEntry) =>
+					!['abraham_id', 'abraham_uri'].includes(Object.keys(premisEntry)[0])
+			)
+		),
+		{
+			title: tText('Abraham ID'),
+			data: renderAbrahamLink(mediaInfo?.abrahamInfo),
+		},
 		{
 			title: tText('modules/ie-objects/const/index___identifier-bij-aanbieder'),
 			data: mediaInfo.meemooLocalId,
@@ -516,6 +524,10 @@ export const GET_METADATA_FIELDS = (
 			data: renderDate(activeFile?.createdAt),
 		},
 		{
+			title: tText('Datum drager'),
+			data: mediaInfo.carrierDate,
+		},
+		{
 			title: tText("Aantal pagina's"),
 			data: isNil(mediaInfo?.numberOfPages) ? null : String(mediaInfo.numberOfPages),
 		},
@@ -527,14 +539,6 @@ export const GET_METADATA_FIELDS = (
 						LANGUAGES[locale][languageCode as LanguageCode] || languageCode
 				)
 			),
-		},
-		{
-			title: tText('Abraham ID'),
-			data: renderAbrahamLink(mediaInfo?.abrahamInfo),
-		},
-		{
-			title: tText('Code nummer'),
-			data: mediaInfo?.abrahamInfo?.code,
 		},
 		{
 			title: tText('Bronvermelding'),

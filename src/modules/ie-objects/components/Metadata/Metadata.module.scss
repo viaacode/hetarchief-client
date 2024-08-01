@@ -31,11 +31,12 @@
 	}
 
 	&__item {
-		display: inline-flex;
 		flex-flow: column;
-		width: 100%;
 		padding: $spacer-md 0;
 		border-top: $divider-black;
+		display: flex;
+		flex-direction: row;
+		break-inside: avoid;
 	}
 
 	&__item-title {
