@@ -33,6 +33,7 @@ import {
 	TYPE_TO_ICON_MAP,
 	TYPE_TO_NO_ICON_MAP,
 } from '@shared/components/MediaCard';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate } from '@shared/utils/dates';
@@ -498,7 +499,9 @@ export const GET_METADATA_FIELDS = (
 		},
 		{
 			title: tText('Permanente URL'),
-			data: `${clientUrl}/pid/${mediaInfo?.schemaIdentifier}`,
+			data:
+				clientUrl +
+				ROUTES_BY_LOCALE[locale].permalink.replace(':pid', mediaInfo.schemaIdentifier),
 		},
 		{
 			title: tText('modules/ie-objects/const/index___creatiedatum'),

@@ -115,6 +115,8 @@ import {
 	NEWSPAPERS_SERVICE_BASE_URL,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { isInAFolder } from '@ie-objects/utils/folders';
+import { getIeObjectCreatorAsText } from '@ie-objects/utils/get-ie-object-creator-as-text';
+import { getIeObjectRightsStatusAsString } from '@ie-objects/utils/get-ie-object-rights-status-as-string';
 import { mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils/map-metadata';
 import IiifViewer from '@iiif-viewer/IiifViewer';
 import { type IiifViewerFunctions, type ImageInfo } from '@iiif-viewer/IiifViewer.types';
@@ -167,6 +169,8 @@ import {
 	SearchFilterId,
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
+
+import CopyButton from '../shared/components/CopyButton/CopyButton';
 
 import styles from './ObjectDetailPage.module.scss';
 
@@ -1497,6 +1501,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			locale,
 			publicRuntimeConfig.CLIENT_URL
 		).filter(({ data }: MetadataItem): boolean => !!data);
+		const rightsAttributionText = compact([
+			getIeObjectCreatorAsText(mediaInfo),
+			mediaInfo.datePublished,
+			mediaInfo.name,
+			mediaInfo.maintainerName,
+			getIeObjectRightsStatusAsString(mediaInfo),
+			publicRuntimeConfig.CLIENT_URL +
+				ROUTES_BY_LOCALE[locale].permalink.replace(':pid', mediaInfo.schemaIdentifier),
+		]).join(', ');
 
 		return (
 			<>
@@ -1570,46 +1583,46 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					})}
 				</MetadataList>
 
-				{(!!similar.length || !!mediaInfo.keywords?.length) && (
-					<MetadataList disableContainerQuery={true}>
-						{[
-							{
-								title: tHtml(
-									'pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden'
-								),
-								data: renderKeywordsAsTags(
-									mediaInfo.keywords,
-									visitRequest ? (router.query.slug as string) : '',
-									locale,
-									router
-								),
-							},
-							{
-								title: tHtml('pages/slug/ie/index___ook-interessant'),
-								data: similar.length
-									? renderIeObjectCards('similar', similar)
-									: null,
-							},
-						]
-							.filter((field) => !!field.data)
-							.map(
-								(
-									item: { title: ReactNode; data: ReactNode | string },
-									index: number
-								) => {
-									return (
-										<Metadata
-											title={item.title}
-											key={`metadata-${index}-${item.title}`}
-											className="u-pb-0"
-										>
-											{item.data}
-										</Metadata>
-									);
-								}
+				<MetadataList disableContainerQuery={true}>
+					<Alert
+						content={tHtml(
+							'Deze bronvermelding is automatisch gegenereerd en kan fouten bevatten. <a href="/bronvermelding-fouten">Meer info</a>'
+						)}
+					/>
+					<div className="u-flex u-flex-items-center">
+						<Metadata title={tHtml('Bronvermelding')} key="metadata-source-attribution">
+							<span>{rightsAttributionText}</span>
+						</Metadata>
+
+						<CopyButton text={rightsAttributionText} variants={['white']} />
+					</div>
+
+					{!!mediaInfo.keywords?.length && (
+						<Metadata
+							title={tHtml(
+								'pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden'
 							)}
-					</MetadataList>
-				)}
+							key="metadata-keywords"
+							className="u-pb-0"
+						>
+							{renderKeywordsAsTags(
+								mediaInfo.keywords,
+								visitRequest ? (router.query.slug as string) : '',
+								locale,
+								router
+							)}
+						</Metadata>
+					)}
+					{!!similar.length && (
+						<Metadata
+							title={tHtml('pages/slug/ie/index___ook-interessant')}
+							key="metadata-keywords"
+							className="u-pb-0"
+						>
+							{renderIeObjectCards('similar', similar)}
+						</Metadata>
+					)}
+				</MetadataList>
 			</>
 		);
 	};
