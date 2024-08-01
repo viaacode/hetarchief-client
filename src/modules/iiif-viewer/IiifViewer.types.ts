@@ -25,6 +25,10 @@ export interface IiifViewerProps {
 	currentSearchIndex: number;
 	searchResults: OcrSearchResult[] | null;
 	setSearchResultIndex: (newSearchIndex: number) => void;
+
+	// Selection + download
+	onSelection?: (rect: Rect) => void;
+	enableSelection?: boolean;
 }
 
 export interface IiifViewerFunctions {

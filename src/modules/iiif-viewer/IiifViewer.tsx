@@ -1,8 +1,14 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { clamp, isNil, round } from 'lodash-es';
+import { clamp, isNil, noop, round } from 'lodash-es';
 import { useRouter } from 'next/router';
-import { type TileSource, type Viewer } from 'openseadragon';
+import {
+	type MouseTracker,
+	type Point,
+	type PointerMouseTrackerEvent,
+	type TileSource,
+	type Viewer,
+} from 'openseadragon';
 import { parseUrl } from 'query-string';
 import React, {
 	forwardRef,
@@ -16,7 +22,9 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import { type IiifViewerFunctions, type IiifViewerProps } from '@iiif-viewer/IiifViewer.types';
 import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
+import { getRectFromPointerEventDrag } from '@iiif-viewer/helpers/rect-from-pointer-event-drag';
 import { getOpenSeadragonConfig } from '@iiif-viewer/openseadragon-config';
+
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
@@ -49,6 +57,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			currentSearchIndex,
 			searchResults,
 			setSearchResultIndex,
+			onSelection,
+			enableSelection = false,
 		},
 		ref
 	) => {
@@ -69,6 +79,19 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		const viewerStatus: 'loading' | 'ready' = activeImageTileSource?.ready
 			? 'ready'
 			: 'loading';
+
+		const setSelectionStartPoint = (newSelectionStartPoint: Point | null) => {
+			return ((window as any).selectionStartPoint = newSelectionStartPoint);
+		};
+		const setIsSelectionActive = (newIsSelectionActive: boolean) => {
+			return ((window as any).isSelectionActive = newIsSelectionActive);
+		};
+		const setSelectionOverlayElement = (newSelectionOverlayElement: HTMLDivElement | null) => {
+			return ((window as any).selectionOverlayElement = newSelectionOverlayElement);
+		};
+		const setMouseTracker = (newMouseTracker: MouseTracker) => {
+			return ((window as any).mouseTracker = newMouseTracker);
+		};
 
 		// Layout
 		useStickyLayout();
@@ -206,6 +229,246 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, [openSeaDragonViewer, openSeaDragonLib, altoJsonCurrentPage, activeImageIndex]);
 
+		const resetDragState = useCallback(() => {
+			if ((window as any).selectionOverlayElement as HTMLDivElement | null) {
+				openSeaDragonViewer?.removeOverlay(
+					(window as any).selectionOverlayElement as HTMLDivElement
+				);
+			}
+			setSelectionStartPoint(null);
+			setSelectionOverlayElement(null);
+			setIsSelectionActive(false);
+			openSeaDragonViewer?.setMouseNavEnabled(true);
+		}, [openSeaDragonViewer]);
+
+		const handlePress = useCallback(
+			(event: PointerMouseTrackerEvent) => {
+				// console.log('pressHandler', {
+				// 	event,
+				// 	selectionStartPoint: (window as any).selectionStartPoint as Point,
+				// 	isSelectionActive: (window as any).isSelectionActive,
+				// });
+				if (!openSeaDragonViewer || !openSeaDragonLib) {
+					return;
+				}
+
+				if (!(window as any).isSelectionActive) {
+					// console.log('aborting drag from start press', {
+					// 	isSelectionActive: (window as any).selectionStartPoint as Point,
+					// });
+					resetDragState();
+					return;
+				}
+
+				const getSelectionOverlayElement = document.createElement('div');
+				getSelectionOverlayElement.style.border = '4px dotted #00c8aa';
+				getSelectionOverlayElement.style.background = '#00c8aa22';
+				const selectionStartPointTemp = openSeaDragonViewer.viewport.pointFromPixel(
+					(event as PointerMouseTrackerEvent).position
+				);
+				openSeaDragonViewer.addOverlay(
+					getSelectionOverlayElement,
+					new openSeaDragonLib.Rect(
+						selectionStartPointTemp.x,
+						selectionStartPointTemp.y,
+						0,
+						0
+					)
+				);
+
+				// console.log('set drag start info', {
+				// 	getSelectionOverlayElement,
+				// 	selectionStartPointTemp,
+				// });
+				setSelectionStartPoint(selectionStartPointTemp);
+				setSelectionOverlayElement(getSelectionOverlayElement);
+			},
+			[
+				(window as any).isSelectionActive,
+				openSeaDragonLib,
+				openSeaDragonViewer,
+				resetDragState,
+			]
+		);
+
+		const handleDrag = useCallback(
+			(event: PointerMouseTrackerEvent) => {
+				// console.log('drag: ', {
+				// 	selectionStartPoint: (window as any).selectionStartPoint as Point | null,
+				// 	isSelectionActive: (window as any).isSelectionActive,
+				// });
+				if (!openSeaDragonViewer || !openSeaDragonLib) {
+					resetDragState();
+					return;
+				}
+
+				if (
+					!(window as any).isSelectionActive ||
+					!((window as any).selectionStartPoint as Point | null) ||
+					!((window as any).selectionOverlayElement as HTMLDivElement | null)
+				) {
+					console.log('aborting drag from drag handler', {
+						isSelectionActive: (window as any).isSelectionActive,
+					});
+					// setSelectionStartPoint(null);
+					// setSelectionOverlayElement(null);
+					// setIsSelectionActive(false);
+					// openSeaDragonViewer.setMouseNavEnabled(true);
+					return;
+				}
+
+				const rect = getRectFromPointerEventDrag(
+					(window as any).selectionStartPoint as Point,
+					(event as PointerMouseTrackerEvent).position,
+					openSeaDragonViewer,
+					openSeaDragonLib.Rect
+				);
+
+				openSeaDragonViewer.updateOverlay(
+					(window as any).selectionOverlayElement as HTMLDivElement,
+					rect
+				);
+			},
+			[
+				(window as any).isSelectionActive,
+				openSeaDragonLib,
+				openSeaDragonViewer,
+				(window as any).selectionOverlayElement as HTMLDivElement | null,
+				(window as any).selectionStartPoint as Point | null,
+				resetDragState,
+			]
+		);
+
+		const handleRelease = useCallback(
+			(event: PointerMouseTrackerEvent) => {
+				// const selectionDragStartInfo = (openSeaDragonViewer as any).selectionStart;
+				// console.log('releaseHandler', {
+				// 	selectionDragStartInfo,
+				// });
+				if (!openSeaDragonViewer || !openSeaDragonLib) {
+					return;
+				}
+				if (
+					!(window as any).isSelectionActive ||
+					!((window as any).selectionStartPoint as Point | null) ||
+					!((window as any).selectionOverlayElement as HTMLDivElement | null)
+				) {
+					// console.log('aborting drag from release handler', {
+					// 	isSelectionActive: (window as any).isSelectionActive,
+					// });
+					resetDragState();
+					return;
+				}
+				const rect = getRectFromPointerEventDrag(
+					(window as any).selectionStartPoint as Point,
+					(event as PointerMouseTrackerEvent).position,
+					openSeaDragonViewer,
+					openSeaDragonLib.Rect
+				);
+				// console.log('releaseHandler', { rect, onSelection });
+
+				const imageSize = openSeaDragonViewer.world
+					.getItemAt(activeImageIndex)
+					.getContentSize();
+				const imageRect = {
+					x: rect.x * imageSize.x,
+					y: rect.y * imageSize.x,
+					width: rect.width * imageSize.x,
+					height: rect.height * imageSize.x,
+				};
+				console.log({ imageSize, selectionRect: rect, imageRect });
+				(onSelection || noop)(imageRect);
+
+				resetDragState();
+			},
+			[
+				(window as any).isSelectionActive,
+				onSelection,
+				openSeaDragonLib,
+				openSeaDragonViewer,
+				(window as any).selectionOverlayElement as HTMLDivElement | null,
+				(window as any).selectionStartPoint as Point | null,
+				resetDragState,
+			]
+		);
+
+		const initOpenSeadragonViewerMouseTracker = useCallback(() => {
+			if (!openSeaDragonLib?.MouseTracker || !openSeaDragonViewer?.element) {
+				return;
+			}
+			// Code taken from https://codepen.io/iangilman/pen/qBdabGM?editors=0010
+			console.log('init mouse tracker');
+			setMouseTracker(
+				new openSeaDragonLib.MouseTracker({
+					element: openSeaDragonViewer.element,
+					pressHandler: handlePress,
+					dragHandler: handleDrag,
+					releaseHandler: handleRelease,
+				})
+			);
+		}, [
+			handleDrag,
+			handlePress,
+			handleRelease,
+			openSeaDragonLib?.MouseTracker,
+			openSeaDragonViewer?.element,
+		]);
+
+		const applyInitialZoomAndPan = useCallback(
+			(openSeadragonViewerTemp: Viewer, openSeadragonLibTemp: any) => {
+				openSeadragonViewerTemp.addHandler('open', () => {
+					// When the viewer is initialized, set the desired zoom and pan
+					if (
+						!isNil(initialFocusX) &&
+						!isNil(initialFocusY) &&
+						!isNil(initialZoomLevel)
+					) {
+						const centerPoint = new openSeadragonLibTemp.Point(
+							initialFocusX,
+							initialFocusY
+						);
+						openSeadragonViewerTemp.viewport.panTo(centerPoint, true);
+						openSeadragonViewerTemp.viewport.zoomTo(
+							initialZoomLevel,
+							centerPoint,
+							true
+						);
+					}
+				});
+			},
+			// Only update the pan and zoom once when loading the iiif viewer
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+			[]
+		);
+
+		const addEventListeners = useCallback((openSeadragonViewerTemp: Viewer) => {
+			openSeadragonViewerTemp.addHandler('viewport-change', () => {
+				if (!openSeadragonViewerTemp) {
+					return;
+				}
+				const zoomLevel = openSeadragonViewerTemp.viewport.getZoom();
+				const centerPoint = openSeadragonViewerTemp.viewport.getCenter();
+				// Use window to parse query params, since this native event listener doesn't have access to the update-to-date router.query query params
+				// We also include ...router.query since route params (eg: slug and ieObjectId) are also part of the router.query object
+				const parsedUrl = parseUrl(window.location.href);
+				router.push(
+					{
+						query: {
+							...router.query,
+							...parsedUrl.query,
+							zoomLevel: round(zoomLevel, 3),
+							focusX: round(centerPoint.x, 3),
+							focusY: round(centerPoint.y, 3),
+						},
+					},
+					undefined,
+					{ shallow: true }
+				);
+			});
+			// We don't include the tile source since it causes a rerender loop
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [openSeaDragonViewer, openSeaDragonLib, altoJsonCurrentPage, activeImageIndex]);
+
 		const applyInitialZoomAndPan = useCallback(
 			(openSeadragonViewerTemp: Viewer, openSeadragonLibTemp: any) => {
 				openSeadragonViewerTemp.addHandler('open', () => {
@@ -320,6 +583,23 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			initIiifViewer();
 		}, [initIiifViewer]);
 
+		useEffect(() => {
+			if ((window as any).isSelectionActive) {
+				console.log('init mouse tracker');
+				initOpenSeadragonViewerMouseTracker();
+			}
+		}, [initOpenSeadragonViewerMouseTracker, (window as any).isSelectionActive]);
+
+		useEffect(() => {
+			if (!(window as any).isSelectionActive) {
+				console.log('destroying mouse tracker');
+				((window as any).mouseTracker as MouseTracker | null)?.destroy();
+			}
+		}, [
+			(window as any).isSelectionActive,
+			(window as any).mouseTracker as MouseTracker | null,
+		]);
+
 		/**
 		 * Content
 		 */
@@ -349,6 +629,18 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			openSeaDragonViewer?.viewport.setRotation(
 				(openSeaDragonViewer?.viewport.getRotation() + 90 * (rotateRight ? 1 : -1)) % 360
 			);
+		};
+
+		const iiifStartSelection = async (): Promise<void> => {
+			console.log('setting selection active', { openSeaDragonViewer });
+			if (!openSeaDragonViewer) {
+				return;
+			}
+			(openSeaDragonViewer as any).id = Math.random().toString();
+			console.log('random id: ', (openSeaDragonViewer as any).id);
+			setIsSelectionActive(true);
+			openSeaDragonViewer.setMouseNavEnabled(false);
+			initOpenSeadragonViewerMouseTracker();
 		};
 
 		const iiifZoomTo = (x: number, y: number): void => {
@@ -556,6 +848,29 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 										)}
 										variants={[isOcrEnabled ? 'green' : 'white', 'sm']}
 										onClick={() => setIsOcrEnabled(!isOcrEnabled)}
+									/>
+								)}
+								{enableSelection && (
+									<Button
+										className={clsx(
+											styles['p-object-detail__iiif__controls__button'],
+											'p-object-detail__iiif__controls__selection'
+										)}
+										icon={
+											<Icon name={IconNamesLight.ScissorsClip} aria-hidden />
+										}
+										aria-label={tText(
+											'modules/iiif-viewer/iiif-viewer___selectie-downloaden'
+										)}
+										title={tText(
+											'modules/iiif-viewer/iiif-viewer___selectie-downloaden'
+										)}
+										variants={
+											(window as any).isSelectionActive
+												? ['green']
+												: ['white']
+										}
+										onClick={() => iiifStartSelection()}
 									/>
 								)}
 								<Button

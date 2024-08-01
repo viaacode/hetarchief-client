@@ -115,7 +115,11 @@ import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rig
 import { mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils/map-metadata';
 import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import IiifViewer from '@iiif-viewer/IiifViewer';
-import { type IiifViewerFunctions, type ImageInfo } from '@iiif-viewer/IiifViewer.types';
+import {
+	type IiifViewerFunctions,
+	type ImageInfo,
+	type TextLine,
+} from '@iiif-viewer/IiifViewer.types';
 import { MaterialRequestsService } from '@material-requests/services';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { Blade } from '@shared/components/Blade/Blade';
@@ -1205,6 +1209,21 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		iiifViewerReference?.current?.setActiveWordIndex(index);
 	};
 
+	const handleIiifViewerSelection = (rect: TextLine) => {
+		window.open(
+			stringifyUrl({
+				url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/jpg/selection`,
+				query: {
+					page: currentPageIndex,
+					startX: Math.floor(rect.x),
+					startY: Math.floor(rect.y),
+					width: Math.ceil(rect.width),
+					height: Math.ceil(rect.height),
+				},
+			})
+		);
+	};
+
 	const iiifViewerImageInfos = useMemo((): ImageInfo[] => {
 		return compact(
 			mediaInfo?.pageRepresentations?.flatMap((pageReps) => {
@@ -1263,6 +1282,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					currentSearchIndex={currentSearchResultIndex}
 					searchResults={searchResults}
 					setSearchResultIndex={handleChangeSearchIndex}
+					onSelection={handleIiifViewerSelection}
+					enableSelection={
+						!!user && user.permissions.includes(Permission.DOWNLOAD_OBJECT)
+					}
 				/>
 			);
 		}
