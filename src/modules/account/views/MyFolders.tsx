@@ -317,7 +317,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 										e.stopPropagation();
 										setShowShareMapBlade(true);
 									}}
-									toolTipText={tText(
+									tooltipText={tText(
 										'pages/account/mijn-mappen/folder-slug/index___map-delen'
 									)}
 								/>
@@ -346,7 +346,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 										e.stopPropagation();
 										setShowConfirmDelete(true);
 									}}
-									toolTipText={
+									tooltipText={
 										activeFolder.usedForLimitedAccessUntil
 											? tText(
 													'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen'
@@ -379,7 +379,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 					aria-label={tText(
 						'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen'
 					)}
-					toolTipText={tText(
+					tooltipText={tText(
 						'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen'
 					)}
 				/>

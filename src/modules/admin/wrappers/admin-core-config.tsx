@@ -15,9 +15,9 @@ import { type FunctionComponent } from 'react';
 
 import { NAVIGATION_DROPDOWN } from '@navigation/components/Navigation/Navigation.types';
 import {
-	ALERT_ICON_LIST_CONFIG,
+	GET_ALERT_ICON_LIST_CONFIG,
+	GET_ICON_LIST_CONFIG,
 	Icon,
-	ICON_LIST_CONFIG,
 	type IconName,
 } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -125,8 +125,8 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 				noFilm: { name: IconNamesLight.NoVideo },
 				newspaper: { name: IconNamesLight.Newspaper },
 			},
-			list: ICON_LIST_CONFIG,
-			alerts: ALERT_ICON_LIST_CONFIG,
+			list: GET_ICON_LIST_CONFIG,
+			alerts: GET_ALERT_ICON_LIST_CONFIG,
 		},
 		components: {
 			defaultAudioStill: '/images/waveform.svg',

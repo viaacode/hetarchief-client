@@ -13,7 +13,7 @@ export function getIeObjectRightsOwnerAsText(ieObject: IeObject): string {
 			return (ieObject.copyrightHolder as string[]).join(', ');
 		}
 
-		return tText('onbekend');
+		return tText('modules/ie-objects/utils/get-ie-object-rights-owner-as-text___onbekend');
 	} catch (err) {
 		return JSON.stringify(ieObject.creator).replaceAll(/[{}()"]+/, '');
 	}

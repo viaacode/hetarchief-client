@@ -351,17 +351,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			);
 		};
 
-		const iiifZoomToRect = ({
-			x,
-			y,
-			width,
-			height,
-		}: {
-			x: number;
-			y: number;
-			width: number;
-			height: number;
-		}): void => {
+		const iiifZoomTo = (x: number, y: number): void => {
 			if (!openSeaDragonViewer) {
 				console.error('iiifZoomToRect failed because openSeaDragonViewer is undefined');
 				return;
@@ -387,12 +377,23 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			}
 			openSeaDragonViewer.viewport.zoomTo(1.5, undefined, true);
 			openSeaDragonViewer.viewport.panTo(
-				new openSeaDragonLib.Point(
-					(x + width / 2) / imageWidth,
-					(y + height / 2) / imageHeight
-				),
+				new openSeaDragonLib.Point(x / imageWidth, y / imageHeight),
 				false
 			);
+		};
+
+		const iiifZoomToRect = ({
+			x,
+			y,
+			width,
+			height,
+		}: {
+			x: number;
+			y: number;
+			width: number;
+			height: number;
+		}): void => {
+			iiifZoomTo(x + width / 2, y + height / 2);
 		};
 
 		const clearActiveWordIndex = () => {
@@ -436,6 +437,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			iiifRotate,
 			iiifFullscreen,
 			iiifZoom,
+			iiifZoomTo,
 			iiifGoToHome,
 			setActiveWordIndex,
 			clearActiveWordIndex,

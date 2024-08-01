@@ -534,6 +534,12 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 				margin-left: $spacer-sm;
 			}
 		}
+
+		&__names-list {
+			&__more-info {
+				color: $neutral !important;
+			}
+		}
 	}
 
 	:global(.p-object-detail__metadata-component) {
