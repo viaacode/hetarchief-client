@@ -32,7 +32,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-
 import React, {
 	type FC,
 	Fragment,
@@ -44,6 +43,15 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	BooleanParam,
+	NumberParam,
+	StringParam,
+	useQueryParam,
+	withDefault,
+} from 'use-query-params';
+
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import {
@@ -113,9 +121,9 @@ import { isInAFolder } from '@ie-objects/utils/folders';
 import { getIeObjectRightsOwnerAsText } from '@ie-objects/utils/get-ie-object-rights-owner-as-text';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import { mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils/map-metadata';
-import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import IiifViewer from '@iiif-viewer/IiifViewer';
 import { type IiifViewerFunctions, type ImageInfo } from '@iiif-viewer/IiifViewer.types';
+import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { Blade } from '@shared/components/Blade/Blade';
@@ -150,7 +158,7 @@ import { selectBreadcrumbs, setShowAuthModal, setShowZendesk } from '@shared/sto
 import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { type DefaultSeoInfo } from '@shared/types/seo';
-import { asDate, formatMediumDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from "@shared/utils/dates";
+import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
 import { useGetActiveVisitForUserAndSpace } from '@visit-requests/hooks/get-active-visit-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
@@ -164,15 +172,6 @@ import {
 	SearchFilterId,
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
-
-import { useDispatch, useSelector } from 'react-redux';
-import {
-	BooleanParam,
-	NumberParam,
-	StringParam,
-	useQueryParam,
-	withDefault,
-} from 'use-query-params';
 
 import CopyButton from '../shared/components/CopyButton/CopyButton';
 
