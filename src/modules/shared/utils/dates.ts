@@ -1,6 +1,6 @@
 import { format, formatDistanceToNow, isSameDay, isToday } from 'date-fns';
 
-import { getLocaleFromI18nLanguage } from './i18n';
+import { getLocaleFromI18nLanguage, Locale } from './i18n';
 
 // Shared
 
@@ -27,7 +27,7 @@ export const asDate = (input: Date | string | undefined | null): Date | undefine
 };
 
 export const localisedOptions = {
-	locale: getLocaleFromI18nLanguage('nl'),
+	locale: getLocaleFromI18nLanguage(Locale.nl),
 };
 
 // Do not export to contain all user-facing formatters here
