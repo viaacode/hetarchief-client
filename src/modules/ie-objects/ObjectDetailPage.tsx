@@ -216,7 +216,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [metadataExportDropdownOpen, setMetadataExportDropdownOpen] = useState(false);
 	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
 	const [isRelatedObjectsBladeOpen, setIsRelatedObjectsBladeOpen] = useState(false);
-	const [isHighlightSearchTermsActive, setIsHighlightSearchTermsActive] = useState<boolean>(true);
 	const [copyrightModalOpen, setCopyrightModalOpen] = useState(false);
 	const [onConfirmCopyright, setOnConfirmCopyright] = useState<() => void>(noop);
 	const [hasNewsPaperBeenRendered, setHasNewsPaperBeenRendered] = useState(false);
@@ -662,9 +661,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				break;
 			case MediaActions.RequestMaterial:
 				onRequestMaterialClick();
-				break;
-			case MediaActions.ToggleHighlightSearchTerm:
-				setIsHighlightSearchTermsActive(!isHighlightSearchTermsActive);
 				break;
 		}
 	};
@@ -1144,8 +1140,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			isMobile,
 			canManageFolders: canManageFolders || isAnonymous,
 			isInAFolder: isInAFolder(folders, mediaInfo?.schemaIdentifier),
-			isHighlightSearchTermActive: isHighlightSearchTermsActive,
-			canToggleSearchTerms: !!searchTerms,
 			canReport: !isKiosk,
 			canRequestAccess: !!canRequestAccess,
 			canRequestMaterial: isAnonymous || canRequestMaterial,
@@ -1188,7 +1182,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		isAnonymous,
 		folders,
 		mediaInfo?.schemaIdentifier,
-		isHighlightSearchTermsActive,
 		searchTerms,
 		isKiosk,
 		canRequestAccess,
@@ -1613,10 +1606,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							showKeyUserPill ? 'u-pt-8' : 'u-pt-24'
 						)}
 					>
-						<HighlightSearchTerms
-							toHighlight={mediaInfo?.name}
-							enabled={isHighlightSearchTermsActive}
-						/>
+						<HighlightSearchTerms toHighlight={mediaInfo?.name} />
 					</h3>
 
 					{renderMetaDataActions()}
@@ -1628,7 +1618,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						data={mediaInfo.description}
 						className="u-pb-24 u-line-height-1-4 u-font-size-14"
 						onReadMoreClicked={setSelectedMetadataField}
-						enableHighlighting={isHighlightSearchTermsActive}
 					/>
 
 					{showAlert && (
@@ -1662,7 +1651,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 										title={item.title}
 										data={item.data}
 										onReadMoreClicked={setSelectedMetadataField}
-										enableHighlighting={isHighlightSearchTermsActive}
 									/>
 								</Metadata>
 							);

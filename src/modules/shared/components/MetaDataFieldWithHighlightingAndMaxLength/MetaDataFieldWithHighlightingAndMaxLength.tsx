@@ -13,12 +13,12 @@ interface MetaDataFieldWithHighlightingAndMaxLengthProps extends DefaultComponen
 	title: string | ReactNode;
 	data: string;
 	onReadMoreClicked: (item: MetadataItem) => void;
-	enableHighlighting: boolean;
+	enableHighlighting?: boolean;
 }
 
 const MetaDataFieldWithHighlightingAndMaxLength: FC<
 	MetaDataFieldWithHighlightingAndMaxLengthProps
-> = ({ title, data, className, onReadMoreClicked, enableHighlighting }) => {
+> = ({ title, data, className, onReadMoreClicked, enableHighlighting = true }) => {
 	const isLongFieldData: boolean = isString(data) && data.length > METADATA_FIELD_MAX_LENGTH;
 
 	const parsedFieldData: string | ReactNode = isLongFieldData
