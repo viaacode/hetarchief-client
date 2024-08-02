@@ -137,11 +137,16 @@ $controls-margin-bottom: $spacer-sm;
 			padding: 0.4rem;
 			align-items: center;
 
-			&:nth-child(2) {
+			&__search {
 				flex-grow: 1;
 
 				> div {
 					flex-grow: 1;
+				}
+
+				&--disabled {
+					visibility: hidden;
+					pointer-events: none;
 				}
 			}
 

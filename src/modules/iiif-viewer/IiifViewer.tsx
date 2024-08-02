@@ -521,28 +521,32 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 								/>
 							</div>
 
-							{isSearchEnabled && (
-								<div
-									className={clsx(
-										styles['c-iiif-viewer__iiif__controls__button-group'],
-										styles[
-											'c-iiif-viewer__iiif__controls__button-group__search'
-										],
-										'u-flex-shrink'
-									)}
-								>
-									<SearchInputWithResultsPagination
-										value={searchTerms}
-										onChange={setSearchTerms}
-										onSearch={onSearch}
-										onClearSearch={onClearSearch}
-										searchResults={searchResults}
-										currentSearchIndex={currentSearchIndex}
-										onChangeSearchIndex={setSearchResultIndex}
-										variants={['sm']}
-									/>
-								</div>
-							)}
+							<div
+								className={clsx(
+									styles['c-iiif-viewer__iiif__controls__button-group'],
+									styles['c-iiif-viewer__iiif__controls__button-group__search'],
+									{
+										[styles[
+											'c-iiif-viewer__iiif__controls__button-group__search--enabled'
+										]]: isSearchEnabled,
+										[styles[
+											'c-iiif-viewer__iiif__controls__button-group__search--disabled'
+										]]: !isSearchEnabled,
+									},
+									'u-flex-shrink'
+								)}
+							>
+								<SearchInputWithResultsPagination
+									value={searchTerms}
+									onChange={setSearchTerms}
+									onSearch={onSearch}
+									onClearSearch={onClearSearch}
+									searchResults={searchResults}
+									currentSearchIndex={currentSearchIndex}
+									onChangeSearchIndex={setSearchResultIndex}
+									variants={['sm']}
+								/>
+							</div>
 
 							<div
 								className={clsx(
