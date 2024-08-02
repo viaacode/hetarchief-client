@@ -18,6 +18,7 @@ export interface IiifViewerProps {
 	initialZoomLevel?: number;
 
 	// Search through pages
+	isSearchEnabled: boolean;
 	searchTerms: string;
 	setSearchTerms: (searchTerms: string) => void;
 	onSearch: (searchTerms: string) => void;

@@ -484,6 +484,21 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			(hasAccessToVisitorSpaceOfObject || isPublicNewspaper)) ||
 		false;
 
+	const pageOcrTexts: (string | null)[] = useMemo(() => {
+		const pageOcrTextsTemp: (string | null)[] = [];
+		mediaInfo?.pageRepresentations?.forEach((representations) => {
+			const pageTranscripts = compact(
+				representations.map((representation) => {
+					return representation.schemaTranscript;
+				})
+			);
+			pageOcrTextsTemp.push(pageTranscripts[0]?.toLowerCase() || null);
+		});
+		return pageOcrTextsTemp;
+	}, [mediaInfo?.pageRepresentations]);
+
+	const arePagesOcrTextsAvailable = compact(pageOcrTexts).length !== 0;
+
 	/**
 	 * Effects
 	 */
@@ -889,16 +904,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			setSearchTerms(newSearchTerms);
 			setActiveTab(ObjectDetailTabs.Ocr);
 
-			const pageOcrTexts: (string | null)[] = [];
-			mediaInfo?.pageRepresentations?.forEach((representations) => {
-				const pageTranscripts = compact(
-					representations.map((representation) => {
-						return representation.schemaTranscript;
-					})
-				);
-				pageOcrTexts.push(pageTranscripts[0]?.toLowerCase() || null);
-			});
-
 			if (!pageOcrTexts.length) {
 				toastService.notify({
 					maxLines: 3,
@@ -1241,6 +1246,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					initialFocusX={iiifViewerFocusX}
 					initialFocusY={iiifViewerFocusY}
 					initialZoomLevel={iiifViewerZoomLevel}
+					isSearchEnabled={arePagesOcrTextsAvailable}
 					searchTerms={searchTermsTemp}
 					setSearchTerms={setSearchTermsTemp}
 					onSearch={searchPagesOcrText}
@@ -1854,16 +1860,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					)}
 				/>
 
-				<SearchInputWithResultsPagination
-					className={styles['p-object-detail__ocr__search']}
-					value={searchTermsTemp}
-					onChange={setSearchTermsTemp}
-					onSearch={(newSearchTerms) => searchPagesOcrText(newSearchTerms)}
-					onClearSearch={handleClearSearch}
-					searchResults={searchResults}
-					currentSearchIndex={currentSearchResultIndex}
-					onChangeSearchIndex={handleChangeSearchIndex}
-				/>
+				{arePagesOcrTextsAvailable && (
+					<SearchInputWithResultsPagination
+						className={styles['p-object-detail__ocr__search']}
+						value={searchTermsTemp}
+						onChange={setSearchTermsTemp}
+						onSearch={(newSearchTerms) => searchPagesOcrText(newSearchTerms)}
+						onClearSearch={handleClearSearch}
+						searchResults={searchResults}
+						currentSearchIndex={currentSearchResultIndex}
+						onChangeSearchIndex={handleChangeSearchIndex}
+					/>
+				)}
 
 				{renderedOcrText}
 
