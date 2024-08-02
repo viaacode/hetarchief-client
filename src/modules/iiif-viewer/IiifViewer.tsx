@@ -300,6 +300,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				// Apply url zoom and pan to the current viewer
 				applyInitialZoomAndPan(openSeadragonViewerTemp, openSeadragonLibTemp);
 
+				openSeadragonViewerTemp.goToPage(activeImageIndex);
+
 				setOpenSeadragonViewer(openSeadragonViewerTemp);
 			}
 			// Do not rerun this function when the queryParams change,
