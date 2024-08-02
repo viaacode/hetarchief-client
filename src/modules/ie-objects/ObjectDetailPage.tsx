@@ -1045,14 +1045,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 									aria-label={label}
 									title={label}
 								>
-									<span className="u-text-ellipsis u-display-none u-display-block:md">
-										{label}
-									</span>
-									<span className="u-text-ellipsis u-display-none:md">
-										{tHtml(
-											'pages/bezoekersruimte/visitor-space-slug/object-id/index___metadata'
-										)}
-									</span>
+									<span className="u-display-block:md">{label}</span>
 								</Button>
 							) : (
 								<Button
