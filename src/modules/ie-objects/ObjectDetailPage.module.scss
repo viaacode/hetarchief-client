@@ -100,7 +100,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		justify-items: stretch;
 		align-content: stretch;
 		transition: 100ms ease-out;
-		overflow: hidden;
+		overflow: clip;
 
 		@include respond-to(md) {
 			grid-template-rows: minmax(0, max-content) max-content 1fr minmax(0, max-content);
