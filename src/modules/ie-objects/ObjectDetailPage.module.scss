@@ -390,9 +390,8 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 	&__ocr {
 		background-color: $white;
-		display: grid;
-		grid-template-columns: 1fr;
-		grid-template-rows: auto 1fr;
+		display: flex;
+		flex-direction: column;
 		height: 100%;
 		overflow: hidden;
 		width: 100%;

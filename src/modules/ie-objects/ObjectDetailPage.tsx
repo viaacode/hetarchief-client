@@ -502,7 +502,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		activeSearchResultElem?.scrollIntoView({
 			behavior: 'instant',
 			block: 'nearest',
-			inline: 'nearest',
+			inline: 'start',
 		});
 	}, [currentSearchResultIndex]);
 
