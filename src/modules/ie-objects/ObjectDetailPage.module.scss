@@ -397,7 +397,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		overflow: hidden;
 		width: 100%;
 		gap: $spacer-md;
-		padding-top: $spacer-lg;
+		padding: $spacer-lg 0;
 
 		// Search, Alert, Pagination
 		> * {
