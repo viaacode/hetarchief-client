@@ -110,8 +110,11 @@ $breakpoint-md: map.get($breakpoints, "md");
 
 	&__flowplayer {
 		align-self: center;
-		position: absolute !important;
 		inset: 0;
+
+		@include respond-to(md) {
+			width: 100%;
+		}
 
 		&--with-slider {
 			// ARC-1290: space for FragmentSlider
@@ -155,6 +158,11 @@ $breakpoint-md: map.get($breakpoints, "md");
 		flex-direction: column;
 		align-items: flex-end;
 		background-color: $silver;
+
+		@include respond-to(md) {
+			justify-content: center;
+			align-items: center;
+		}
 	}
 
 	&__slider {
