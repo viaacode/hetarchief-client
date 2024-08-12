@@ -118,6 +118,7 @@ import {
 	NEWSPAPERS_SERVICE_BASE_URL,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { isInAFolder } from '@ie-objects/utils/folders';
+import { getAltoTextId } from '@ie-objects/utils/get-alto-text-id';
 import { getIeObjectRightsOwnerAsText } from '@ie-objects/utils/get-ie-object-rights-owner-as-text';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import { mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils/map-metadata';
@@ -871,10 +872,21 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			if (searchResult.pageIndex !== currentPageIndex) {
 				setCurrentPageIndex(searchResult.pageIndex, 'replaceIn');
 			}
-			const altoText = simplifiedAltoInfo?.text?.[searchResult.searchTermIndexOnPage];
-			if (altoText) {
-				await handleClickOcrWord(altoText, searchResult.searchTermIndexOnPage);
+
+			// Convert search term index to word index
+			const searchTermWords = searchResult.searchTerm.split(' ');
+			const altoSearchTexts = simplifiedAltoInfo?.text?.filter((altoText) =>
+				searchTermWords.some((searchTermWord) =>
+					altoText.text.toLowerCase().includes(searchTermWord)
+				)
+			);
+			const altoSearchText = altoSearchTexts?.[searchResult.searchTermIndexOnPage];
+
+			if (!altoSearchText) {
+				return;
 			}
+
+			await handleClickOcrWord(altoSearchText);
 		},
 		[
 			currentPageIndex,
@@ -894,7 +906,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	};
 
 	const searchPagesOcrText = useCallback(
-		(newSearchTerms: string): void => {
+		async (newSearchTerms: string): Promise<void> => {
 			if (newSearchTerms === '') {
 				// Reset search
 				// Zoom to whole page
@@ -941,18 +953,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			});
 			setSearchResults(searchResultsTemp);
 			setCurrentPageIndex(searchResultsTemp?.[0]?.pageIndex || 0, 'replaceIn');
-			iiifViewerReference.current?.waitForReadyState().then(() => {
-				handleChangeSearchIndex(0);
-			});
 		},
-		[
-			handleChangeSearchIndex,
-			mediaInfo?.pageRepresentations,
-			setActiveTab,
-			setCurrentPageIndex,
-			setSearchTerms,
-		]
+		[pageOcrTexts, setActiveTab, setCurrentPageIndex]
 	);
+
+	useEffect(() => {
+		if ((searchResults?.length || 0) > 0) {
+			iiifViewerReference.current?.waitForReadyState().then(() => {
+				handleChangeSearchIndex(0).then(noop);
+			});
+		}
+	}, [searchResults, handleChangeSearchIndex]);
 
 	useEffect(() => {
 		// When the page loads, search the ocr texts for the searchTerms in the query params in the url
@@ -963,6 +974,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			setHasAppliedUrlSearchTerms(true);
 		}
 	}, [
+		isNewspaper,
 		hasAppliedUrlSearchTerms,
 		mediaInfo?.dctermsFormat,
 		searchPagesOcrText,
@@ -1190,9 +1202,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		renderExportDropdown,
 	]);
 
-	const handleClickOcrWord = async (textLocation: AltoTextLine, index: number) => {
+	const handleClickOcrWord = async (textLocation: AltoTextLine) => {
 		iiifViewerReference?.current?.iiifZoomToRect(textLocation);
-		iiifViewerReference?.current?.setActiveWordIndex(index);
+		iiifViewerReference?.current?.setActiveWordById(getAltoTextId(textLocation));
 	};
 
 	const iiifViewerImageInfos = useMemo((): ImageInfo[] => {
@@ -1818,7 +1830,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					const wordElement = (
 						<span
 							key={'ocr-text--' + ieObjectId + '--' + index}
-							onClick={() => handleClickOcrWord(textLocation, index)}
+							onClick={() => handleClickOcrWord(textLocation)}
 							onDoubleClick={() =>
 								setIsOcrEnabled((oldOcrEnabled) => !oldOcrEnabled, 'replaceIn')
 							}
