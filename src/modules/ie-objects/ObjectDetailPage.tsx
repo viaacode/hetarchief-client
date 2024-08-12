@@ -1667,7 +1667,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				</MetadataList>
 
 				<MetadataList disableContainerQuery={true}>
-					{!!fallenNames?.length && (
+					{isNewspaper && !!fallenNames?.length && (
 						<Metadata
 							title={tText('modules/ie-objects/object-detail-page___namenlijst')}
 							key="metadata-fallen-names-list"
