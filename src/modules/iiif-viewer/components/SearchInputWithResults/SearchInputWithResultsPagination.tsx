@@ -22,7 +22,6 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 }) => {
 	const handleKeyUp = (evt: KeyboardEvent<HTMLInputElement>) => {
 		if (evt.key === 'Enter') {
-			console.log('executing search: ', { value });
 			onSearch(value);
 		}
 	};

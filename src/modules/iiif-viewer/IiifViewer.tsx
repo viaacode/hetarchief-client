@@ -410,34 +410,38 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		const clearActiveWord = () => {
 			document?.querySelectorAll('.c-iiif-viewer__iiif__alto__text').forEach((element) => {
 				element.classList.remove('c-iiif-viewer__iiif__alto__text--active');
+				element.classList.remove('c-iiif-viewer__iiif__alto__text--highlighted');
 			});
 		};
 
-		const setActiveWordById = (altoTextId: string) => {
+		const setActiveWordByIds = (activeAltoTextId: string, highlightedAltoTextIds: string[]) => {
 			clearActiveWord();
 			document
-				?.querySelector('[data-ocr-word-id="' + altoTextId + '"]')
+				?.querySelector('[data-ocr-word-id="' + activeAltoTextId + '"]')
 				?.classList?.add('c-iiif-viewer__iiif__alto__text--active');
+			if (highlightedAltoTextIds.length > 0) {
+				document
+					?.querySelector(
+						highlightedAltoTextIds
+							.map(
+								(highlightedAltoTextId) =>
+									'[data-ocr-word-id="' + highlightedAltoTextId + '"]'
+							)
+							.join(',')
+					)
+					?.classList?.add('c-iiif-viewer__iiif__alto__text--highlighted');
+			}
 		};
 
 		const waitForReadyState = async (): Promise<void> => {
 			return new Promise<void>((resolve) => {
-				console.log('waitForReadyState');
 				if (viewerStatus === 'ready') {
-					console.log('waitForReadyState', { currentViewerState: viewerStatus });
 					resolve();
 				} else {
-					console.log('waitForReadyState add open handler before', {
-						id: (openSeaDragonViewer as any).id,
-					});
 					(openSeaDragonViewer as any).id = Math.random();
-					console.log('waitForReadyState add open handler after', {
-						id: (openSeaDragonViewer as any).id,
-					});
+
 					openSeaDragonViewer?.addHandler('fully-loaded-change', () => {
-						console.log('waitForReadyState add open handler');
 						resolve();
-						// setViewerStatus('ready');
 					});
 				}
 			});
@@ -450,7 +454,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			iiifZoom,
 			iiifZoomTo,
 			iiifGoToHome,
-			setActiveWordById,
+			setActiveWordByIds,
 			clearActiveWord,
 			waitForReadyState,
 		}));

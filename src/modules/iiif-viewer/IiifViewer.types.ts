@@ -31,7 +31,7 @@ export interface IiifViewerProps {
 export interface IiifViewerFunctions {
 	iiifZoomToRect: (rect: { x: number; y: number; width: number; height: number }) => void;
 	iiifZoomTo: (x: number, y: number) => void;
-	setActiveWordById: (altoTextId: string) => void;
+	setActiveWordByIds: (activeAltoTextId: string, highlightedAltoTextIds: string[]) => void;
 	clearActiveWord: () => void;
 	iiifRotate: (rotateRight: boolean) => void;
 	iiifFullscreen: (expand: boolean) => void;

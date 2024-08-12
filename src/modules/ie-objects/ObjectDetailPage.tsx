@@ -1204,7 +1204,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const handleClickOcrWord = async (textLocation: AltoTextLine) => {
 		iiifViewerReference?.current?.iiifZoomToRect(textLocation);
-		iiifViewerReference?.current?.setActiveWordById(getAltoTextId(textLocation));
+		const searchTermWords = searchTerms.split(' ');
+		const activeAltoTextId = getAltoTextId(textLocation);
+		const altoSearchTexts =
+			simplifiedAltoInfo?.text?.filter((altoText) =>
+				searchTermWords.some((searchTermWord) =>
+					altoText.text.toLowerCase().includes(searchTermWord)
+				)
+			) || [];
+		const highlightedAltoTextIds = altoSearchTexts
+			.map(getAltoTextId)
+			.filter((id) => id !== activeAltoTextId);
+		iiifViewerReference?.current?.setActiveWordByIds(activeAltoTextId, highlightedAltoTextIds);
 	};
 
 	const iiifViewerImageInfos = useMemo((): ImageInfo[] => {
@@ -1900,7 +1911,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						label={tText('modules/ie-objects/object-detail-page___vorige')}
 						variants={['text']}
 						onClick={() => {
-							console.log('next page: ', { index: currentPageIndex - 1 });
 							setCurrentPageIndex(currentPageIndex - 1);
 						}}
 						disabled={currentPageIndex === 0}
@@ -1926,7 +1936,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						label={tText('modules/ie-objects/object-detail-page___volgende')}
 						variants={['text']}
 						onClick={() => {
-							console.log('next page: ', { index: currentPageIndex + 1 });
 							setCurrentPageIndex(currentPageIndex + 1);
 						}}
 						disabled={currentPageIndex === iiifViewerImageInfos.length - 1}

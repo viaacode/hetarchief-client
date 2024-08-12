@@ -25,7 +25,19 @@ $controls-margin-bottom: $spacer-sm;
 			text-align: center;
 
 			&:global(--active) {
-				background-color: $white;
+				background-color: $black;
+
+				svg text {
+					fill: $white !important;
+				}
+			}
+
+			&:global(--highlighted) {
+				background-color: $teal-dark;
+
+				svg text {
+					fill: $white !important;
+				}
 			}
 
 			> :global(svg) {
