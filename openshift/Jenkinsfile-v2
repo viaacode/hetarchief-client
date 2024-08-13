@@ -39,7 +39,7 @@ pipeline {
 		disableConcurrentBuilds()
 	}
 	environment {
-		OC_PROJECT = 'hetarchief-v3'
+		OC_PROJECT = 'hetarchief'
 		BASE_IMG = "${getImageFromDockerfile()}"
 		BASE_IMG_NAME = "${getBaseImageName()}"
 		OC_URL = 'https://c113-e.private.eu-de.containers.cloud.ibm.com:30227'
@@ -76,82 +76,28 @@ pipeline {
 		}
 		stage('Build code') {
 			when {
-				anyOf {
+				not {
 					buildingTag()
-					changeRequest target: 'main'
-					changeRequest target: 'master'
-					changeRequest target: 'develop'
-					changeRequest target: 'development'
 				}
+				not {
+					branch 'develop'
+				}
+
 			}
 			steps {
 				container('oc') {
-					script {
-						if(buildingTag()){
-							env.ENVIRON = "prd"
-						}
-						else if(anyOf {changeRequest target: 'main' changeRequest target: 'master' changeRequest target: 'develop' changeRequest target: 'development'}){
-							env.ENVIRON = "int"
-						}
-					}
 					script {
 						sh '''#!/bin/bash
                             oc project $OC_PROJECT
                             oc import-image $BASE_IMG --confirm
                             oc set image-lookup $BASE_IMG_NAME
+                            oc new-build -l ref=$BRANCH_NAME --strategy=docker --name $APP_NAME --to $APP_NAME:$GIT_SHORT_COMMIT --binary --context-dir="" || echo "Probably already exists, start new build"
                             sleep 3
-                            oc annotate --overwrite "buildconfig/${APP_NAME}-${ENVIRON}"  ref=$BRANCH_NAME shortcommit=$GIT_SHORT_COMMIT
-							echo "enviroment: ${ENVIRON}"
-							export IST=${APP_NAME}:${GIT_SHORT_COMMIT}
-							echo setting ImageStreamTag ${IST} git ref
-							oc -n $OC_PROJECT patch "bc/${APP_NAME}-${ENVIRON}" -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"name\\":\\"${IST}\\"}}}}"
-                            oc start-build --follow=true --wait=true --from-dir=. ${APP_NAME}-${ENVIRON}
+                            oc annotate --overwrite buildconfig/$APP_NAME ref=$BRANCH_NAME shortcommit=$GIT_SHORT_COMMIT
+                            patch-bc-current-ref.sh
+                            oc start-build --follow=true --wait=true --env CLIENT_URL=https://hetarchief.be --from-dir=. $APP_NAME
                         '''
 					}
-				}
-			}
-		}
-		stage('Deploy INT') {
-			when {
-				anyOf {
-					changeRequest target: 'main'
-					changeRequest target: 'master'
-					changeRequest target: 'develop'
-					changeRequest target: 'development'
-				}
-			}
-			steps {
-				container('oc') {
-					tagNewImage('int')
-				}
-			}
-			post {
-				always {
-					script {
-						env.BRANCH_NAME = env.CHANGE_BRANCH
-					}
-					jiraSendDeploymentInfo site: "${JIRA_URL}", environmentId: 'int', environmentName: 'int', environmentType: 'testing'
-				}
-			}
-		}
-		stage('Build and Deploy TST') {
-			when {
-				anyOf { branch 'develop'; branch 'development' }
-			}
-			steps {
-				container('oc') {
-					// tagNewImage('tst')
-					script {
-						sh """#!/bin/bash
-                            oc project $OC_PROJECT
-                            oc start-build --follow=true --wait=true client-tst
-                        """
-					}
-				}
-			}
-			post {
-				always {
-					jiraSendDeploymentInfo site: "${JIRA_URL}", environmentId: 'tst', environmentName: 'tst', environmentType: 'staging'
 				}
 			}
 		}
@@ -214,18 +160,13 @@ pipeline {
 		// 		} //end script
 		// 	}
 		// }
-		stage('Build and Deploy QAS') {
+		stage('Deploy QAS') {
 			when {
 				anyOf { branch 'master'; branch 'main' }
 			}
 			steps {
 				container('oc') {
-					script {
-						sh """#!/bin/bash
-                            oc project $OC_PROJECT
-                            oc start-build --follow=true --wait=true client-qas
-                        """
-					}
+					tagNewImage('qas')
 				}
 			}
 			post {
