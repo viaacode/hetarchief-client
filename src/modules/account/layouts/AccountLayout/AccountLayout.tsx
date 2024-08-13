@@ -6,16 +6,17 @@ import { type FC } from 'react';
 import { GET_ACCOUNT_NAVIGATION_LINKS } from '@account/const';
 import { type AccountLayoutProps } from '@account/layouts';
 import { type ListNavigationItem } from '@shared/components/ListNavigation';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 
 import styles from './AccountLayout.module.scss';
 
 const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle }) => {
 	const { asPath } = useRouter();
-	const { tHtml } = useTranslation();
+	const locale = useLocale();
 
-	const sidebarLinks: ListNavigationItem[] = GET_ACCOUNT_NAVIGATION_LINKS().map(
+	const sidebarLinks: ListNavigationItem[] = GET_ACCOUNT_NAVIGATION_LINKS(locale).map(
 		({ id, label, href }) => ({
 			id,
 			node: ({ linkClassName }) => (

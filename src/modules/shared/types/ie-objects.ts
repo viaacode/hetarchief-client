@@ -1,4 +1,9 @@
-export type IeObjectTypes = 'video' | 'audio' | 'film' | 'krant' | null;
+export enum IeObjectType {
+	Video = 'video',
+	Audio = 'audio',
+	Film = 'film',
+	Newspaper = 'newspaper',
+}
 
 export enum SearchPageMediaType {
 	All = 'all',

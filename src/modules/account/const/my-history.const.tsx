@@ -5,7 +5,7 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { type Visit, type VisitRow } from '@shared/types';
+import { type Visit, type VisitRow } from '@shared/types/visit';
 import { formatSameDayRange } from '@shared/utils/dates';
 
 export const HistoryItemListSize = 20;

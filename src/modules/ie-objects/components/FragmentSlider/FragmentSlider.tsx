@@ -3,25 +3,29 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { type FC, useEffect, useRef, useState } from 'react';
 
-import { FLOWPLAYER_FORMATS, IMAGE_FORMATS } from '@ie-objects/ie-objects.consts';
-import { type IeObjectRepresentation } from '@ie-objects/ie-objects.types';
+import {
+	FLOWPLAYER_AUDIO_FORMATS,
+	FLOWPLAYER_FORMATS,
+	IMAGE_FORMATS,
+} from '@ie-objects/ie-objects.consts';
+import { type IeObjectFile } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { soundwave } from '@shared/components/MediaCard/__mocks__/media-card';
+import { tText } from '@shared/helpers/translate';
 import { useElementSize } from '@shared/hooks/use-element-size';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { ObjectPlaceholder } from '../ObjectPlaceholder';
 
 import styles from './FragmentSlider.module.scss';
 import { type FragmentSliderProps } from './FragmentSlider.types';
 
-const Metadata: FC<FragmentSliderProps> = ({
+export const FragmentSlider: FC<FragmentSliderProps> = ({
 	className,
 	thumbnail,
-	fragments,
+	files,
 	onChangeFragment,
 }) => {
-	const { tText } = useTranslation();
 	const [offset, setOffset] = useState<number>(0);
 	const [active, setActive] = useState<number>(0);
 	const [isBlurred, setIsBlurred] = useState<boolean>(true);
@@ -32,7 +36,7 @@ const Metadata: FC<FragmentSliderProps> = ({
 
 	const fragmentsSize = useElementSize(fragmentsRef);
 
-	const totalFragments = fragments.length;
+	const totalFragments = files.length;
 
 	// Equal to variables in FragmentSlider.module.scss
 	const fragmentSize = 16; // rem
@@ -67,25 +71,20 @@ const Metadata: FC<FragmentSliderProps> = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fragmentsSize, totalFragments]);
 
-	const renderThumbnail = (representation: IeObjectRepresentation) => {
+	const renderThumbnail = (file: IeObjectFile) => {
 		let image = null;
-		if (FLOWPLAYER_FORMATS.includes(representation.dctermsFormat)) {
+		if (FLOWPLAYER_AUDIO_FORMATS.includes(file.mimeType)) {
+			image = soundwave;
+		} else if (FLOWPLAYER_FORMATS.includes(file.mimeType)) {
 			image = thumbnail || '';
-		}
-		if (IMAGE_FORMATS.includes(representation.dctermsFormat)) {
+		} else if (IMAGE_FORMATS.includes(file.mimeType)) {
 			// TODO: image preview
 			image = undefined; // Currently no images in representations
 		}
 
 		// No renderer
 		return image ? (
-			<Image
-				unoptimized
-				src={image}
-				alt={representation.alternateName}
-				layout="fill"
-				objectFit="cover"
-			/>
+			<Image unoptimized src={image} alt={file.name} layout="fill" objectFit="cover" />
 		) : (
 			<ObjectPlaceholder className={styles['c-fragment-slider__item-image']} small />
 		);
@@ -132,7 +131,7 @@ const Metadata: FC<FragmentSliderProps> = ({
 						setIsBlurred(false);
 					}}
 				>
-					{fragments.map((item, index) => (
+					{files.map((file, index) => (
 						<li
 							role="listitem"
 							className={clsx(
@@ -169,7 +168,7 @@ const Metadata: FC<FragmentSliderProps> = ({
 							}}
 						>
 							<div className={styles['c-fragment-slider__item-image-wrapper']}>
-								{renderThumbnail(item)}
+								{renderThumbnail(file)}
 							</div>
 						</li>
 					))}
@@ -194,4 +193,3 @@ const Metadata: FC<FragmentSliderProps> = ({
 		</div>
 	);
 };
-export default Metadata;

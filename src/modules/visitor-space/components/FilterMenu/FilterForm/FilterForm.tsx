@@ -4,7 +4,7 @@ import { type FC, type ReactElement, useMemo } from 'react';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import {
 	type DefaultFilterFormProps,
@@ -29,8 +29,6 @@ const FilterForm: FC<FilterFormProps> = ({
 	values,
 	type,
 }) => {
-	const { tHtml } = useTranslation();
-
 	const onFilterFormReset = (id: SearchFilterId, reset: () => void) => {
 		reset();
 		onFormReset(id);

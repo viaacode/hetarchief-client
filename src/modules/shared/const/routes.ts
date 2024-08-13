@@ -43,6 +43,7 @@ export enum RoutePart {
 	newsletter = 'newsletter',
 	confirmation = 'confirmation',
 	failed = 'failed',
+	pid = 'pid',
 }
 
 const ROUTE_PARTS_NL: Record<RoutePart, string> = {
@@ -86,6 +87,7 @@ const ROUTE_PARTS_NL: Record<RoutePart, string> = {
 	newsletter: 'nieuwsbrief',
 	confirmation: 'bevestiging',
 	failed: 'mislukt',
+	pid: 'pid',
 } as const;
 
 const ROUTE_PARTS_EN: Record<RoutePart, string> = {
@@ -129,6 +131,7 @@ const ROUTE_PARTS_EN: Record<RoutePart, string> = {
 	newsletter: 'newsletter',
 	confirmation: 'confirmation',
 	failed: 'failed',
+	pid: 'pid',
 } as const;
 
 // Note: Also used to set 'Bezoekersruimtes' active state if url does not start with any of the following prefixes
@@ -204,11 +207,12 @@ export enum RouteKey {
 	visit = 'visit',
 	visitRequested = 'visitRequested',
 	visitorSpaceManagement = 'visitorSpaceManagement',
+	permalink = 'permalink',
 }
 
 const ROUTES_NL: Record<RouteKey, string> = {
 	account: `/${ROUTE_PARTS_NL.account}`,
-	accountMyFolders: `/${ROUTE_PARTS_NL.account}/${ROUTE_PARTS_NL.myFolders}/:slug`,
+	accountMyFolders: `/${ROUTE_PARTS_NL.account}/${ROUTE_PARTS_NL.myFolders}`,
 	accountMyMaterialRequests: `/${ROUTE_PARTS_NL.account}/${ROUTE_PARTS_NL.myMaterialRequests}`,
 	accountMyProfile: `/${ROUTE_PARTS_NL.account}/${ROUTE_PARTS_NL.myProfile}`,
 	accountMyVisitHistory: `/${ROUTE_PARTS_NL.account}/${ROUTE_PARTS_NL.myHistory}`,
@@ -249,11 +253,12 @@ const ROUTES_NL: Record<RouteKey, string> = {
 	visit: `/${ROUTE_PARTS_NL.visit}`,
 	visitRequested: `/${ROUTE_PARTS_NL.visit}/:slug/${ROUTE_PARTS_NL.accessRequested}`,
 	visitorSpaceManagement: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.visitorSpaceManagement}`,
+	permalink: `/${ROUTE_PARTS_NL.pid}/:pid`,
 } as const;
 
 const ROUTES_EN: Record<RouteKey, string> = {
 	account: `/${ROUTE_PARTS_EN.account}`,
-	accountMyFolders: `/${ROUTE_PARTS_EN.account}/${ROUTE_PARTS_EN.myFolders}/:slug`,
+	accountMyFolders: `/${ROUTE_PARTS_EN.account}/${ROUTE_PARTS_EN.myFolders}`,
 	accountMyMaterialRequests: `/${ROUTE_PARTS_EN.account}/${ROUTE_PARTS_EN.myMaterialRequests}`,
 	accountMyProfile: `/${ROUTE_PARTS_EN.account}/${ROUTE_PARTS_EN.myProfile}`,
 	accountMyVisitHistory: `/${ROUTE_PARTS_EN.account}/${ROUTE_PARTS_EN.myHistory}`,
@@ -294,6 +299,7 @@ const ROUTES_EN: Record<RouteKey, string> = {
 	visit: `/${ROUTE_PARTS_EN.visit}`,
 	visitRequested: `/${ROUTE_PARTS_EN.visit}/:slug/${ROUTE_PARTS_EN.accessRequested}`,
 	visitorSpaceManagement: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.visitorSpaceManagement}`,
+	permalink: `/${ROUTE_PARTS_NL.pid}/:pid`,
 } as const;
 
 const ADMIN_CORE_ROUTES_NL: AdminConfig['routes'] = {

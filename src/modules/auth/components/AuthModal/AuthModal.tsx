@@ -10,13 +10,12 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Modal } from '@shared/components/Modal';
 import { globalLabelKeys } from '@shared/const';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml, tText } from '@shared/helpers/translate';
 
 import styles from './AuthModal.module.scss';
 
 const AuthModal: FC<AuthModalProps> = (props) => {
 	const { query } = useRouter();
-	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 
 	/**

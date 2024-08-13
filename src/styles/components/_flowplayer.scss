@@ -1,9 +1,41 @@
-.c-video-player .c-logo-overlay .c-logo-overlay__img {
-	margin: 3.2rem;
-	position: absolute;
-	top: 0;
-	right: 0;
-	width: 7%;
-	opacity: 0.5;
-	pointer-events: none;
+@use "src/styles/abstracts" as *;
+
+.c-video-player {
+	.c-logo-overlay .c-logo-overlay__img {
+		margin: 3.2rem;
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 7%;
+		opacity: 0.5;
+		pointer-events: none;
+	}
+
+	.c-video-player-inner {
+		background-color: $shade-darker;
+
+		.c-video-player-inner.c-video-player-inner--audio {
+			background-size: contain !important;
+		}
+	}
+}
+
+.c-video-player-inner {
+	.fp-progress,
+	.fp-color {
+		background-color: $teal !important;
+	}
+
+	.fp-icon:focus,
+	.fp-menu-container summary:focus,
+	.fp-middle:focus,
+	.fp-small-pause:focus,
+	.fp-small-play:focus,
+	.fp-timeline:focus,
+	.fp-ui:focus,
+	.fp-volume:focus,
+	.fp-volumebtn:focus,
+	li[tabindex="0"]:focus {
+		outline: $teal solid 1px !important;
+	}
 }

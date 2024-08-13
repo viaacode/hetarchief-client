@@ -36,7 +36,7 @@
 
 		/* reference to where I got this character from: https://stackoverflow.com/questions/26972529/is-there-a-html-character-that-is-blank-including-no-whitespace-on-all-browser */
 		&:empty::before {
-			content: '\200B';
+			content: "\200B";
 		}
 
 		&--active {

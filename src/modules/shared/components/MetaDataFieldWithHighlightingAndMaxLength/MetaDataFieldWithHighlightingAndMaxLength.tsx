@@ -1,10 +1,10 @@
+import { type DefaultComponentProps } from '@meemoo/admin-core-ui';
 import { isString } from 'lodash-es';
 import { type FC, type ReactNode } from 'react';
 
 import { type MetadataItem } from '@ie-objects/components/Metadata';
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { type DefaultComponentProps } from '@shared/types';
+import { tText } from '@shared/helpers/translate';
 
 import { METADATA_FIELD_MAX_LENGTH } from './MetaDataFieldWithHighlightingAndMaxLength.const';
 import styles from './MetaDataFieldWithHighlightingAndMaxLength.module.scss';
@@ -13,14 +13,12 @@ interface MetaDataFieldWithHighlightingAndMaxLengthProps extends DefaultComponen
 	title: string | ReactNode;
 	data: string;
 	onReadMoreClicked: (item: MetadataItem) => void;
-	enableHighlighting: boolean;
+	enableHighlighting?: boolean;
 }
 
 const MetaDataFieldWithHighlightingAndMaxLength: FC<
 	MetaDataFieldWithHighlightingAndMaxLengthProps
-> = ({ title, data, className, onReadMoreClicked, enableHighlighting }) => {
-	const { tText } = useTranslation();
-
+> = ({ title, data, className, onReadMoreClicked, enableHighlighting = true }) => {
 	const isLongFieldData: boolean = isString(data) && data.length > METADATA_FIELD_MAX_LENGTH;
 
 	const parsedFieldData: string | ReactNode = isLongFieldData

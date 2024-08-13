@@ -2,12 +2,12 @@ import { type ReactSelectProps, TextInput, type TextInputProps } from '@meemoo/r
 import { type FC } from 'react';
 
 import { tText } from '@shared/helpers/translate';
+import { Operator } from '@shared/types';
 import {
 	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
-	Operator,
-} from '@shared/types';
+} from '@shared/types/ie-objects';
 import { DateInput } from '@visitor-space/components/DateInput';
 import { type DateInputProps } from '@visitor-space/components/DateInput/DateInput';
 import { DateRangeInput } from '@visitor-space/components/DateRangeInput';

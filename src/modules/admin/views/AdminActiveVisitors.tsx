@@ -19,16 +19,15 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table';
 import { globalLabelKeys } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
-import { type Visit, VisitStatus } from '@shared/types';
 import { type DefaultSeoInfo } from '@shared/types/seo';
+import { type Visit, VisitStatus } from '@shared/types/visit';
 import { useGetVisits } from '@visit-requests/hooks/get-visits';
 import { useUpdateVisitRequest } from '@visit-requests/hooks/update-visit';
 import { VisitTimeframe } from '@visit-requests/types';
 
 export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(ADMIN_VISITORS_QUERY_PARAM_CONFIG);
 	const [showDenyVisitRequestModal, setShowDenyVisitRequestModal] = useState<boolean>(false);
 	const [showEditVisitRequestModal, setShowEditVisitRequestModal] = useState<boolean>(false);

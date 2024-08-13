@@ -8,7 +8,7 @@ import { UnreadMarker } from '@shared/components/UnreadMarker';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { type Visit, type VisitRow } from '@shared/types';
+import { type Visit, type VisitRow } from '@shared/types/visit';
 import { asDate, formatSameDayRange } from '@shared/utils/dates';
 
 export const VisitorsTablePageSize = 20;

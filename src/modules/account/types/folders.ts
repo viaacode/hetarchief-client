@@ -3,7 +3,7 @@ import {
 	type IeObjectLicense,
 	type IsPartOfKey,
 } from '@ie-objects/ie-objects.types';
-import { type IeObjectTypes } from '@shared/types';
+import { type IeObjectType } from '@shared/types/ie-objects';
 
 export interface Folder {
 	createdAt: string;
@@ -19,15 +19,14 @@ export interface Folder {
 
 export interface FolderIeObject {
 	schemaIdentifier: string; // Unique id per object
-	meemooIdentifier: string; // PID: not unique per object
 	meemooLocalId: string;
 	accessThrough: IeObjectAccessThrough[];
 	premisIsPartOf?: string;
-	collectionEntryCreatedAt?: string;
+	folderEntryCreatedAt?: string;
 	creator?: unknown;
 	description: string;
 	duration: string;
-	dctermsFormat: IeObjectTypes;
+	dctermsFormat: IeObjectType | null;
 	name: string;
 	numberOfPages?: unknown;
 	termsAvailable: string;

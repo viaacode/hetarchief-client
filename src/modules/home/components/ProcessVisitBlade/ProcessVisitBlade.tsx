@@ -6,15 +6,14 @@ import { BladeManager } from '@shared/components/BladeManager';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { VisitSummary } from '@shared/components/VisitSummary';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { VisitStatus } from '@shared/types';
+import { tHtml } from '@shared/helpers/translate';
+import { VisitStatus } from '@shared/types/visit';
 
 import { CancelVisitBlade } from '../CancelVisitBlade';
 
 import { type ProcessVisitBladeProps } from './ProcessVisitBlade.types';
 
 const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
-	const { tHtml } = useTranslation();
 	const { selected, onFinish } = props;
 
 	const [showCancel, setShowCancel] = useState(false);

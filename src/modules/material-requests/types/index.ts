@@ -1,4 +1,5 @@
 import { tText } from '@shared/helpers/translate';
+import { type IeObjectType } from '@shared/types/ie-objects';
 
 export interface MaterialRequest {
 	createdAt: string;
@@ -8,8 +9,7 @@ export interface MaterialRequest {
 	maintainerLogo: string;
 	maintainerName: string;
 	maintainerSlug: string;
-	objectDctermsFormat?: MaterialRequestObjectType | undefined;
-	objectMeemooIdentifier: string;
+	objectDctermsFormat: IeObjectType;
 	objectSchemaIdentifier: string;
 	objectSchemaName: string;
 	profileId: string;
@@ -61,12 +61,6 @@ export enum MaterialRequestRequesterCapacity {
 	WORK = 'WORK',
 	PRIVATE_RESEARCH = 'PRIVATE_RESEARCH',
 	EDUCATION = 'EDUCATION',
-}
-
-export enum MaterialRequestObjectType {
-	AUDIO = 'audio',
-	VIDEO = 'video',
-	FILM = 'film',
 }
 
 export const GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_ARRAY = (): {

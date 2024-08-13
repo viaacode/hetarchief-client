@@ -18,7 +18,7 @@ function getI18n(proxyUrl) {
 			},
 		},
 		use: [I18NextHttpBackend],
-		ns: ['common', 'admin_core'],
+		ns: ['common'],
 		serializeConfig: false,
 		parseMissingKeyHandler: (key) => {
 			if (key.includes('___')) {

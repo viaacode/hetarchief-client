@@ -6,7 +6,7 @@ import {
 	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	type SearchPageMediaType,
-} from '@shared/types';
+} from '@shared/types/ie-objects';
 import { ElasticsearchFieldNames } from '@visitor-space/types';
 
 import { IeObjectsService } from './../services';

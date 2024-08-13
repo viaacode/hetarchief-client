@@ -8,14 +8,12 @@ import { AdminLayout } from '@admin/layouts';
 import { Blade } from '@shared/components/Blade/Blade';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tText } from '@shared/helpers/translate';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './AdminTranslationsOverviewPage.module.scss';
 
 export const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tText } = useTranslation();
-
 	const renderPopup = ({
 		title,
 		body,

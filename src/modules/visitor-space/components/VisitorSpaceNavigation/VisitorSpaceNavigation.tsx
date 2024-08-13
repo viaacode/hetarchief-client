@@ -10,8 +10,8 @@ import { DropdownMenu } from '@shared/components/DropdownMenu';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { type VisitorSpaceNavigationProps } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation.types';
 
 import styles from './VisitorSpaceNavigation.module.scss';
@@ -24,7 +24,6 @@ export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 	title,
 	showContactInfo,
 }) => {
-	const { tHtml, tText } = useTranslation();
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	// Check if the url is of the format: /vrt and not of the format: /vrt/some-id
 	const isSearchPage = isVisitorSpaceSearchPage(window.location.pathname);

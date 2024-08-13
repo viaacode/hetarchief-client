@@ -23,11 +23,11 @@ import {
 } from '@shared/components/VisitorSpaceCard';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { tHtml } from '@shared/helpers/translate';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { type Visit, VisitStatus } from '@shared/types';
+import { type Visit, VisitStatus } from '@shared/types/visit';
 import { asDate } from '@shared/utils/dates';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetVisits } from '@visit-requests/hooks/get-visits';
@@ -42,7 +42,6 @@ import styles from './LoggedInVisitiorSpacesHome.module.scss';
 type SelectedVisit = ProcessVisitBladeProps['selected'];
 
 const LoggedInVisitorSpacesHome: FC = () => {
-	const { tHtml } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 	const searchRef = useRef<HTMLDivElement>(null);

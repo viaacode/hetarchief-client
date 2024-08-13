@@ -5,7 +5,7 @@ import { type FC, type ReactElement, useCallback, useEffect, useState } from 're
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Overlay } from '@shared/components/Overlay';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tText } from '@shared/helpers/translate';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import { SearchFilterId } from '@visitor-space/types';
 
@@ -29,8 +29,6 @@ const FilterOption: FC<FilterOptionProps> = ({
 	values,
 	className,
 }) => {
-	const { tText } = useTranslation();
-
 	const filterIsActive = id === activeFilter;
 
 	const onFilterToggle = useCallback(() => onClick?.(id), [id, onClick]);

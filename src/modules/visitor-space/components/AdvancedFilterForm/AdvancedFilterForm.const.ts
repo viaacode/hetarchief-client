@@ -1,4 +1,4 @@
-import { array, object, type SchemaOf, string } from 'yup';
+import { array, object, type Schema, string } from 'yup';
 
 import { Operator } from '@shared/types';
 
@@ -12,7 +12,7 @@ export const initialFields = (): AdvancedFilter => ({
 	val: '',
 });
 
-export const ADVANCED_FILTER_FORM_SCHEMA = (): SchemaOf<AdvancedFilterFormState> =>
+export const ADVANCED_FILTER_FORM_SCHEMA = (): Schema<AdvancedFilterFormState> =>
 	object({
 		advanced: array(
 			object({
@@ -20,5 +20,5 @@ export const ADVANCED_FILTER_FORM_SCHEMA = (): SchemaOf<AdvancedFilterFormState>
 				op: string(),
 				val: string(),
 			})
-		),
+		).required(),
 	});

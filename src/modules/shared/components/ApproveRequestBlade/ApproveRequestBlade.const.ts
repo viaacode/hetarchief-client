@@ -1,11 +1,10 @@
-import { isEmpty } from 'lodash-es';
-import { array, date, mixed, object, ref, type SchemaOf, string } from 'yup';
+import { array, date, mixed, object, ref, type Schema, string } from 'yup';
 
 import { type ApproveRequestFormState } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.types';
 import { tText } from '@shared/helpers/translate';
-import { AccessType } from '@shared/types';
+import { AccessType } from '@shared/types/visit';
 
-export const APPROVE_REQUEST_FORM_SCHEMA = (): SchemaOf<ApproveRequestFormState> => {
+export const APPROVE_REQUEST_FORM_SCHEMA = (): Schema<ApproveRequestFormState> => {
 	return object({
 		accessFrom: date()
 			.nullable()
@@ -29,32 +28,22 @@ export const APPROVE_REQUEST_FORM_SCHEMA = (): SchemaOf<ApproveRequestFormState>
 			),
 		accessRemark: string().optional(),
 		accessType: object({
-			type: mixed<AccessType>()
-				.oneOf(Object.values(AccessType))
+			type: string()
+				.oneOf([AccessType.FULL, AccessType.FOLDERS] as const)
 				.required(
 					tText(
 						'modules/cp/components/approve-request-blade/approve-request-blade___selecteren-van-een-toegangsmachtiging-is-verplicht'
 					)
 				),
-			folderIds: array(string().required()).test(
-				'folders-conditional',
-				tText(
-					'modules/cp/components/approve-request-blade/approve-request-blade___selecteren-van-folders-is-verplicht'
-				),
-				(valueOfFolderIds, testContext) => {
-					const type = testContext.parent.type;
-
-					if (type === AccessType.FULL) {
-						return true;
-					}
-
-					if (type === AccessType.FOLDERS) {
-						return !isEmpty(valueOfFolderIds);
-					}
-
-					return false;
+			folderIds: mixed().when('type', ([value]) => {
+				if ((value as string) === AccessType.FOLDERS) {
+					return array()
+						.of(string().required())
+						.required('Selecting folders is required when access type is FOLDERS');
+				} else {
+					return array().of(string().required()).optional();
 				}
-			),
+			}),
 		}).required(),
-	});
+	}) as Schema<ApproveRequestFormState>;
 };

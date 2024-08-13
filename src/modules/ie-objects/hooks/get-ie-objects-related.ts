@@ -5,12 +5,8 @@ import { type IeObject, type IeObjectSimilar } from '@ie-objects/ie-objects.type
 import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const';
 
-export function getIeObjectsRelated(
-	id: string,
-	maintainerId?: string,
-	meemooId?: string
-): Promise<IeObjectSimilar> {
-	if (!maintainerId || !meemooId || !id) {
+export function getIeObjectsRelated(id: string, maintainerId?: string): Promise<IeObjectSimilar> {
+	if (!maintainerId || !id) {
 		return Promise.resolve({
 			items: [],
 			page: 1,
@@ -19,18 +15,17 @@ export function getIeObjectsRelated(
 			total: 0,
 		} as IPagination<IeObject>);
 	}
-	return IeObjectsService.getRelated(id, maintainerId, meemooId);
+	return IeObjectsService.getRelated(id, maintainerId);
 }
 
 export const useGetIeObjectsRelated = (
 	id: string,
 	maintainerId?: string,
-	meemooId?: string,
 	options: { enabled?: boolean } = {}
 ): UseQueryResult<IPagination<IeObject>> => {
 	return useQuery(
-		[QUERY_KEYS.getIeObjectsRelated, id, maintainerId, meemooId],
-		() => getIeObjectsRelated(id, maintainerId, meemooId),
+		[QUERY_KEYS.getIeObjectsRelated, id, maintainerId],
+		() => getIeObjectsRelated(id, maintainerId),
 		{
 			keepPreviousData: true,
 			enabled: true,

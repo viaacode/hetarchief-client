@@ -6,8 +6,8 @@ import {
 	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
-	type Visit,
-} from '@shared/types';
+} from '@shared/types/ie-objects';
+import { type Visit } from '@shared/types/visit';
 
 import { type SearchPageQueryParams, VISITOR_SPACE_QUERY_PARAM_INIT } from '../../const';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '../../types';

@@ -8,7 +8,7 @@ import { type SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { SEPARATOR } from '@shared/const';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
 import { isRange, Operator } from '@shared/types';
 import {
 	DURATION_FILTER_FORM_QUERY_PARAM_CONFIG,
@@ -37,7 +37,6 @@ const defaultValues: DurationFilterFormState = {
 };
 
 const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, disabled }) => {
-	const { tHtml } = useTranslation();
 	const [query] = useQueryParams(DURATION_FILTER_FORM_QUERY_PARAM_CONFIG);
 
 	const initial = query?.duration?.[0];

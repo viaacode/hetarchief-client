@@ -1,6 +1,6 @@
 import { type MenuItemInfo, type TabProps } from '@meemoo/react-components';
-import { isString } from 'lodash-es';
-import { StringParam } from 'use-query-params';
+import { compact, isNil } from 'lodash-es';
+import React, { type ReactNode } from 'react';
 
 import {
 	type ActionItem,
@@ -11,6 +11,9 @@ import { type ObjectPlaceholderProps } from '@ie-objects/components/ObjectPlaceh
 import { objectPlaceholderMock } from '@ie-objects/components/ObjectPlaceholder/__mocks__/object-placeholder';
 import {
 	type IeObject,
+	type IeObjectFile,
+	type IsPartOfCollection,
+	IsPartOfKey,
 	MediaActions,
 	MetadataExportFormats,
 	type MetadataSortMap,
@@ -18,29 +21,68 @@ import {
 } from '@ie-objects/ie-objects.types';
 import {
 	mapArrayToMetadataData,
-	mapBooleanToMetadataData,
+	mapObjectsToMetadata,
 	mapObjectToMetadata,
-} from '@ie-objects/utils';
+} from '@ie-objects/utils/map-metadata';
+import type { SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import {
+	GET_TYPE_TO_LABEL_MAP,
+	TYPE_TO_ICON_MAP,
+	TYPE_TO_NO_ICON_MAP,
+} from '@shared/components/MediaCard';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { type IeObjectTypes } from '@shared/types';
+import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate } from '@shared/utils/dates';
+import { type Locale } from '@shared/utils/i18n';
+import {
+	type LanguageCode,
+	LANGUAGES,
+} from '@visitor-space/components/LanguageFilterForm/languages';
 
 /**
  * Render media
  */
 
-export const FLOWPLAYER_VIDEO_FORMATS: string[] = ['mp4', 'ogv', 'webm', 'm3u8'];
-export const FLOWPLAYER_AUDIO_FORMATS: string[] = ['mp3', 'm4a', 'aac'];
+export const FLOWPLAYER_VIDEO_FORMATS: string[] = [
+	'video/mp4',
+	'video/ogv',
+	'video/webm',
+	'video/m3u8',
+	'application/vnd.apple.mpegurl',
+];
+export const FLOWPLAYER_AUDIO_FORMATS: string[] = [
+	// 'audio/mpeg', // We want to play the audio file, not the mp4 video with the ugly speaker
+	'audio/mp4',
+	'audio/m4a',
+	'audio/aac',
+];
 export const FLOWPLAYER_FORMATS: string[] = [
 	...FLOWPLAYER_VIDEO_FORMATS,
 	...FLOWPLAYER_AUDIO_FORMATS,
 ];
-export const IMAGE_FORMATS: string[] = ['png', 'jpg', 'jpeg', 'gif'];
+export const IMAGE_FORMATS: string[] = [
+	'image/png',
+	'image/jpeg',
+	'image/gif',
+	'image/tiff',
+	'image/bmp',
+];
+export const IMAGE_API_FORMATS: string[] = ['image/jph'];
+export const IMAGE_BROWSE_COPY_FORMATS: string[] = ['image/jpeg'];
+export const XML_FORMATS: string[] = ['application/xml'];
 
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
+	{
+		label: tText('modules/ie-objects/ie-objects___download-alle-paginas-zip'),
+		id: MetadataExportFormats.fullNewspaperZip,
+	},
+	{
+		label: tText('modules/ie-objects/ie-objects___download-deze-pagina-zip'),
+		id: MetadataExportFormats.onePageNewspaperZip,
+	},
 	{
 		label: tText(
 			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-XML'
@@ -102,48 +144,46 @@ export const noLicensePlaceholder = (): ObjectPlaceholderProps => ({
  * Tabs
  */
 
-const renderMediaTab = (type?: IeObjectTypes, available = true) => {
-	switch (type) {
-		case 'audio':
-			return {
-				id: ObjectDetailTabs.Media,
-				label: tText('modules/ie-objects/const/index___audio'),
-				icon: (
-					<Icon
-						name={available ? IconNamesLight.Audio : IconNamesLight.NoAudio}
-						aria-hidden
-					/>
-				),
-			};
-		case 'video':
-		case 'film':
-			return {
-				id: ObjectDetailTabs.Media,
-				label: tText('modules/ie-objects/const/index___video'),
-				icon: (
-					<Icon
-						name={available ? IconNamesLight.Video : IconNamesLight.NoVideo}
-						aria-hidden
-					/>
-				),
-			};
-		default:
-			return {
-				id: ObjectDetailTabs.Media,
-				label: tText('modules/ie-objects/const/index___video'),
-				icon: <Icon name={IconNamesLight.NoVideo} aria-hidden />,
-			};
-	}
+export const OBJECT_DETAIL_TABS = (
+	mediaType: IeObjectType | null,
+	activeTab?: ObjectDetailTabs,
+	mediaAvailable = true
+): TabProps[] => {
+	const typeWithDefault = mediaType || IeObjectType.Video;
+	return [
+		{
+			id: ObjectDetailTabs.Metadata,
+			label: tText('modules/ie-objects/const/index___metadata'),
+			icon: <Icon name={IconNamesLight.Info} aria-hidden />,
+			active: ObjectDetailTabs.Metadata === activeTab,
+		},
+		{
+			id: ObjectDetailTabs.Media,
+			label: GET_TYPE_TO_LABEL_MAP(typeWithDefault),
+			icon: (
+				<Icon
+					name={
+						mediaAvailable
+							? TYPE_TO_ICON_MAP[typeWithDefault]
+							: TYPE_TO_NO_ICON_MAP[typeWithDefault]
+					}
+					aria-hidden
+				/>
+			),
+			active: ObjectDetailTabs.Media === activeTab,
+		},
+		...(typeWithDefault === IeObjectType.Newspaper
+			? [
+					{
+						id: ObjectDetailTabs.Ocr,
+						label: tText('modules/ie-objects/ie-objects___ocr'),
+						icon: <Icon name={IconNamesLight.Ocr} aria-hidden />,
+						active: ObjectDetailTabs.Ocr === activeTab,
+					},
+			  ]
+			: []),
+	];
 };
-
-export const OBJECT_DETAIL_TABS = (mediaType?: IeObjectTypes, available = true): TabProps[] => [
-	{
-		id: ObjectDetailTabs.Metadata,
-		label: tText('modules/ie-objects/const/index___metadata'),
-		icon: <Icon name={IconNamesLight.Info} aria-hidden />,
-	},
-	renderMediaTab(mediaType, available),
-];
 
 /**
  * Actions
@@ -156,7 +196,6 @@ export const ANONYMOUS_ACTION_SORT_MAP = (): MetadataSortMap[] => [
 	{ id: MediaActions.RequestMaterial, isPrimary: true },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
-	{ id: MediaActions.ToggleHighlightSearchTerm },
 ];
 
 export const VISITOR_ACTION_SORT_MAP = (
@@ -166,7 +205,6 @@ export const VISITOR_ACTION_SORT_MAP = (
 	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
-	{ id: MediaActions.ToggleHighlightSearchTerm },
 ];
 
 export const KEY_USER_ACTION_SORT_MAP = (
@@ -176,7 +214,6 @@ export const KEY_USER_ACTION_SORT_MAP = (
 	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
-	{ id: MediaActions.ToggleHighlightSearchTerm },
 ];
 
 export const MEEMOO_ADMIN_ACTION_SORT_MAP = (
@@ -186,7 +223,6 @@ export const MEEMOO_ADMIN_ACTION_SORT_MAP = (
 	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
-	{ id: MediaActions.ToggleHighlightSearchTerm },
 ];
 
 export const CP_ADMIN_ACTION_SORT_MAP = (
@@ -196,15 +232,12 @@ export const CP_ADMIN_ACTION_SORT_MAP = (
 	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export }] : []),
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
-	{ id: MediaActions.ToggleHighlightSearchTerm },
 ];
 
 export const MEDIA_ACTIONS = ({
 	isMobile,
 	canManageFolders,
 	isInAFolder,
-	isHighlightSearchTermActive,
-	canToggleSearchTerms,
 	canReport,
 	canRequestAccess,
 	canRequestMaterial,
@@ -214,8 +247,6 @@ export const MEDIA_ACTIONS = ({
 	isMobile: boolean;
 	canManageFolders: boolean;
 	isInAFolder: boolean;
-	isHighlightSearchTermActive: boolean;
-	canToggleSearchTerms: boolean;
 	canReport: boolean;
 	canRequestAccess: boolean;
 	canRequestMaterial: boolean;
@@ -230,9 +261,6 @@ export const MEDIA_ACTIONS = ({
 	const addToMaterialRequestsListButtonLabelMobile = tText(
 		'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst-mobile'
 	);
-	const toggleHighlightSearchTermsLabel = isHighlightSearchTermActive
-		? tText('modules/ie-objects/ie-objects___verberg-gemarkeerde-zoektermen')
-		: tText('modules/ie-objects/ie-objects___toon-gemarkeerde-zoektermen');
 	const addToMaterialRequestsListButtonLabel = isMobile
 		? addToMaterialRequestsListButtonLabelMobile
 		: addToMaterialRequestsListButtonLabelDesktop;
@@ -317,27 +345,6 @@ export const MEDIA_ACTIONS = ({
 						},
 				  ]
 				: []) as ActionItem[]),
-			...((canToggleSearchTerms
-				? [
-						{
-							label: toggleHighlightSearchTermsLabel,
-							icon: (
-								<Icon
-									aria-hidden
-									className="u-font-size-24 u-text-left"
-									name={
-										isHighlightSearchTermActive
-											? IconNamesLight.NoMarker
-											: IconNamesLight.Marker
-									}
-								/>
-							),
-							id: MediaActions.ToggleHighlightSearchTerm,
-							ariaLabel: toggleHighlightSearchTermsLabel,
-							tooltip: toggleHighlightSearchTermsLabel,
-						},
-				  ]
-				: []) as ActionItem[]),
 		],
 		limit: 1,
 		onClickAction: () => null,
@@ -348,167 +355,340 @@ export const MEDIA_ACTIONS = ({
  * Metadata
  */
 
-// TODO: complete mapping
-export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
-	{
-		title: tText('modules/ie-objects/const/index___oorsprong'),
-		data: mediaInfo.meemooOriginalCp,
-	},
-	{
-		title: tText('modules/ie-objects/const/index___meemoo-identifier'),
-		data: mediaInfo.meemooIdentifier,
-	},
-	{
-		title: tText('modules/ie-objects/const/index___pid'),
-		data: mediaInfo.premisIsPartOf,
-	},
-	{
-		title: tText('modules/ie-objects/const/index___identifier-bij-aanbieder'),
-		data: mediaInfo.meemooLocalId,
-	},
-	...mapObjectToMetadata(mediaInfo.premisIdentifier),
-	{
-		title: tText('modules/ie-objects/const/index___alternatieve-naam'),
-		data: mapArrayToMetadataData(mediaInfo.isPartOf?.alternatief),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___archief'),
-		data: mapArrayToMetadataData(mediaInfo.isPartOf?.archief),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___deelarchief'),
-		data: mapArrayToMetadataData(mediaInfo.isPartOf?.deelarchief),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___deelreeks'),
-		data: mapArrayToMetadataData(mediaInfo.isPartOf?.deelreeks),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___programma'),
-		data: mapArrayToMetadataData(mediaInfo.isPartOf?.programma),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___reeks'),
-		data: mapArrayToMetadataData(mediaInfo.isPartOf?.reeks),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___seizoenen'),
-		data: mapArrayToMetadataData(mediaInfo.isPartOf?.seizoen),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___serie'),
-		data: mapArrayToMetadataData(mediaInfo.isPartOf?.serie),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___stuk'),
-		data: mapArrayToMetadataData(mediaInfo.isPartOf?.stuk),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___episode'),
-		data: mapArrayToMetadataData(mediaInfo.isPartOf?.episode),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___aflevering'),
-		data: mapArrayToMetadataData(mediaInfo.isPartOf?.aflevering),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___bestanddeel'),
-		data: mapArrayToMetadataData(mediaInfo.isPartOf?.bestanddeel),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___registratie'),
-		data: mapArrayToMetadataData(mediaInfo.isPartOf?.registratie),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___serienummer'),
-		data: mapArrayToMetadataData(mediaInfo.isPartOf?.serienummer),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___seizoennummer'),
-		data: mapArrayToMetadataData(mediaInfo.isPartOf?.seizoennummer),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___bestandstype'),
-		data: mediaInfo.dctermsFormat,
-	},
-	{
-		title: tText('modules/ie-objects/const/index___analoge-drager'),
-		data: mediaInfo.dctermsMedium,
-	},
-	{
-		title: tText('modules/ie-objects/const/index___objecttype'),
-		data: mediaInfo.ebucoreObjectType,
-	},
-	{
-		title: tText('modules/ie-objects/const/index___duurtijd'),
-		data: mediaInfo.duration,
-	},
-	{
-		title: tText('modules/ie-objects/const/index___creatiedatum'),
-		data: formatLongDate(asDate(mediaInfo.dateCreatedLowerBound)),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___publicatiedatum'),
-		data: formatLongDate(asDate(mediaInfo.datePublished)),
-	},
-	...mapObjectToMetadata(mediaInfo.creator),
-	...mapObjectToMetadata(mediaInfo.publisher),
-	{
-		title: tText('modules/ie-objects/const/index___transcriptie'),
-		data: mediaInfo?.representations?.[0]?.transcript, // TODO: Update voor andere representations?
-	},
-	{
-		title: tText('modules/ie-objects/const/index___programmabeschrijving'),
-		data: mediaInfo.meemooDescriptionProgramme,
-	},
-	{
-		title: tText('modules/ie-objects/const/index___cast'),
-		data: mediaInfo.meemooDescriptionCast,
-	},
-	{
-		title: tText('modules/ie-objects/const/index___genre'),
-		data: mapArrayToMetadataData(mediaInfo.genre),
-	},
-	...(mediaInfo.actor
-		? [
-				{
-					title: tText('modules/ie-objects/const/index___genre'),
-					data: isString(mediaInfo.actor)
-						? mediaInfo.actor
-						: JSON.stringify(mediaInfo.actor),
-				},
-		  ]
-		: []),
-	{
-		title: tText('modules/ie-objects/const/index___locatie-van-de-inhoud'),
-		data: mapArrayToMetadataData([mediaInfo.spatial]),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___tijdsperiode-van-de-inhoud'),
-		data: mapArrayToMetadataData([mediaInfo.temporal]),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___taal'),
-		data: mapArrayToMetadataData(mediaInfo.inLanguage),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___filmbasis'),
-		data: mediaInfo.meemoofilmBase,
-	},
-	{
-		title: tText('modules/ie-objects/const/index___beeld-geluid'),
-		data: mediaInfo.meemoofilmImageOrSound,
-	},
-	{
-		title: tText('modules/ie-objects/const/index___kleur-zwart-wit'),
-		data: mapBooleanToMetadataData(mediaInfo.meemoofilmColor),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___uitgebreide-beschrijving'),
-		data: mediaInfo?.abstract ? mediaInfo?.abstract : null,
-	},
-];
+const getOcrMetadataFields = (simplifiedAlto: SimplifiedAlto | null): MetadataItem[] => {
+	const metadataFields: MetadataItem[] = [];
+	if (simplifiedAlto) {
+		if (simplifiedAlto.description.softwareName) {
+			metadataFields.push({
+				title: tText('modules/ie-objects/ie-objects___ocr-software'),
+				data: simplifiedAlto.description.softwareName,
+			});
+		}
+		if (simplifiedAlto.description.softwareVersion) {
+			metadataFields.push({
+				title: tText('modules/ie-objects/ie-objects___ocr-software-version'),
+				data: simplifiedAlto.description.softwareVersion,
+			});
+		}
+		if (simplifiedAlto.description.softwareCreator) {
+			metadataFields.push({
+				title: tText('modules/ie-objects/ie-objects___ocr-software-maker'),
+				data: simplifiedAlto.description.softwareCreator,
+			});
+		}
+		if (simplifiedAlto.description.softwareCreator) {
+			metadataFields.push({
+				title: tText('modules/ie-objects/ie-objects___ocr-software-maker'),
+				data: simplifiedAlto.description.softwareCreator,
+			});
+		}
+		if (simplifiedAlto.description.processingDateTime) {
+			metadataFields.push({
+				title: tText('modules/ie-objects/ie-objects___ocr-gemaakt-op'),
+				data: simplifiedAlto.description.processingDateTime,
+			});
+		}
+		if (simplifiedAlto.description.processingStepSettings) {
+			metadataFields.push({
+				title: tText('modules/ie-objects/ie-objects___ocr-betrouwbaarheid'),
+				data: simplifiedAlto.description.processingStepSettings,
+			});
+		}
+	}
+	return metadataFields;
+};
 
-export const IE_OBJECT_QUERY_PARAM_CONFIG = {
-	[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: StringParam, // Comma separated string
+function renderAbrahamLink(
+	abrahamInfo: { id: string; uri: string; code: string } | undefined
+): ReactNode | null {
+	if (!abrahamInfo) {
+		return null;
+	}
+	if (abrahamInfo.uri && abrahamInfo.id) {
+		return (
+			<a href={abrahamInfo?.uri} target="_blank" rel="noreferrer">
+				{abrahamInfo?.id}
+			</a>
+		);
+	}
+	if (abrahamInfo?.id) {
+		return abrahamInfo.id;
+	}
+	if (abrahamInfo?.uri) {
+		return (
+			<a href={abrahamInfo?.uri} target="_blank" rel="noreferrer">
+				{abrahamInfo?.uri}
+			</a>
+		);
+	}
+}
+
+function renderIsPartOfValue(
+	isPartOfEntries: IsPartOfCollection[] | undefined,
+	key: IsPartOfKey
+): string | null {
+	const value = isPartOfEntries?.find((isPartOfEntry) => isPartOfEntry.collectionType === key);
+	return value?.name || null;
+}
+
+function renderDate(date: string | null | undefined): string | null {
+	if (!date) {
+		return null;
+	}
+	return formatLongDate(asDate(date));
+}
+
+export const GET_METADATA_FIELDS = (
+	mediaInfo: IeObject,
+	activeFile: IeObjectFile | undefined,
+	simplifiedAlto: SimplifiedAlto | null,
+	locale: Locale,
+	clientUrl: string
+): MetadataItem[] => {
+	return [
+		{
+			title: tText('modules/ie-objects/ie-objects___titel-van-de-reeks'),
+			data: mediaInfo.collectionName,
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___editie-nummer'),
+			data: mediaInfo.issueNumber,
+		},
+		{
+			title: tText('modules/ie-objects/const/index___pid'),
+			data: mediaInfo.schemaIdentifier,
+		},
+		...mapObjectsToMetadata(
+			mediaInfo.premisIdentifier?.filter(
+				(premisEntry) =>
+					!['abraham_id', 'abraham_uri'].includes(Object.keys(premisEntry)[0])
+			)
+		),
+		{
+			title: tText('modules/ie-objects/ie-objects___abraham-id'),
+			data: renderAbrahamLink(mediaInfo?.abrahamInfo),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___identifier-bij-aanbieder'),
+			data: mediaInfo.meemooLocalId,
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___permanente-url'),
+			data:
+				clientUrl +
+				ROUTES_BY_LOCALE[locale].permalink.replace(':pid', mediaInfo.schemaIdentifier),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___creatiedatum'),
+			data: mediaInfo.dateCreated,
+		},
+		{
+			title: tText('modules/ie-objects/const/index___publicatiedatum'),
+			data: renderDate(mediaInfo.datePublished),
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___datum-toegevoegd-aan-platform'),
+			data: renderDate(activeFile?.createdAt),
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___datum-drager'),
+			data: mediaInfo.carrierDate,
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___aantal-paginas'),
+			data: isNil(mediaInfo?.numberOfPages) ? null : String(mediaInfo.numberOfPages),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___taal'),
+			data: mapArrayToMetadataData(
+				mediaInfo.inLanguage?.map(
+					(languageCode) =>
+						LANGUAGES[locale][languageCode as LanguageCode] || languageCode
+				)
+			),
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___bronvermelding'),
+			data: mediaInfo?.creditText,
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___rechtenstatus'),
+			data: mediaInfo?.copyrightNotice,
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___categorie'),
+			data: mapArrayToMetadataData(mediaInfo.genre),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___locatie-van-de-inhoud'),
+			data: mapArrayToMetadataData(mediaInfo.spatial),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___tijdsperiode-van-de-inhoud'),
+			data: mapArrayToMetadataData(mediaInfo.temporal),
+		},
+		...mapObjectToMetadata(mediaInfo.creator),
+		...mapObjectToMetadata(mediaInfo.publisher),
+		{
+			title: tText('modules/ie-objects/const/index___uitgebreide-beschrijving'),
+			data: mediaInfo?.abstract ? mediaInfo?.abstract : null,
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___transcriptie'),
+			data: mediaInfo?.transcript,
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___alternatieve-titels'),
+			data: mapArrayToMetadataData(mediaInfo.alternativeTitle),
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___gerelateerde-titels'),
+			data: mapArrayToMetadataData([
+				...(mediaInfo?.preceededBy || []),
+				...(mediaInfo?.succeededBy || []),
+			]),
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___paginanummer'),
+			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___publicatietype'),
+			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___afmetingen-in-cm'),
+			data:
+				(mediaInfo?.width
+					? tText('modules/ie-objects/ie-objects___breedte') + mediaInfo?.width + 'cm'
+					: '') +
+					(mediaInfo?.height
+						? ' ' +
+						  tText('modules/ie-objects/ie-objects___hoogte') +
+						  mediaInfo?.height +
+						  'cm'
+						: '') || null,
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___digitaliseringsdatum'),
+			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___scanresolutie'),
+			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___scanmethoden'),
+			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___programmabeschrijving'),
+			data: mediaInfo.synopsis,
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___plaats-van-uitgave'),
+			data: mediaInfo.locationCreated,
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___periode-van-uitgave'),
+			data: compact([mediaInfo.startDate, mediaInfo.endDate]).join(' - '),
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___uitgevers-van-krant'),
+			data: mediaInfo?.newspaperPublisher,
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___auteursrechthouder'),
+			data: mediaInfo?.copyrightHolder,
+		},
+		{
+			title: tText('modules/ie-objects/const/index___oorsprong'),
+			data: mediaInfo.meemooOriginalCp,
+		},
+		{
+			title: tText('modules/ie-objects/const/index___archief'),
+			data: renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.archief),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___deelarchief'),
+			data: renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.deelarchief),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___deelreeks'),
+			data: renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.deelreeks),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___programma'),
+			data: renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.programma),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___reeks'),
+			data: renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.reeks),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___seizoenen'),
+			data: renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.seizoen),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___serie'),
+			data: renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.serie),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___stuk'),
+			data: renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.stuk),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___episode'),
+			data: renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.episode),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___aflevering'),
+			data: renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.aflevering),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___bestanddeel'),
+			data: renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.bestanddeel),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___registratie'),
+			data: renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.registratie),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___serienummer'),
+			data: renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.serienummer),
+		},
+		{
+			title: tText('modules/ie-objects/const/index___seizoennummer'),
+			data: renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.seizoennummer),
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___fysieke-drager'),
+			data: mapArrayToMetadataData(mediaInfo.dctermsMedium),
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___media-type'),
+			data: mediaInfo.dctermsFormat,
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___bestandstype'),
+			data: activeFile?.mimeType,
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___bestandsnaam'),
+			data: activeFile?.name,
+		},
+		{
+			title: tText('modules/ie-objects/const/index___objecttype'),
+			data: mediaInfo.ebucoreObjectType,
+		},
+		{
+			title: tText('modules/ie-objects/const/index___duurtijd'),
+			data: mediaInfo.duration,
+		},
+		{
+			title: tText('modules/ie-objects/const/index___cast'),
+			data: mediaInfo.meemooDescriptionCast,
+		},
+		...getOcrMetadataFields(simplifiedAlto),
+	];
 };

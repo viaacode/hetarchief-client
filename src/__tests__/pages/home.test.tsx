@@ -3,6 +3,7 @@ import { queryByText, render, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 
 import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
+import { Locale } from '@shared/utils/i18n';
 
 import { mockStore } from '../../__mocks__/store';
 import Home from '../../pages/bezoek/index';
@@ -19,6 +20,8 @@ const renderHome = () => {
 								nl: { common: {} },
 								en: { common: {} },
 							},
+							initialLocale: Locale.nl,
+							ns: ['common'],
 						}}
 					/>
 				</Provider>

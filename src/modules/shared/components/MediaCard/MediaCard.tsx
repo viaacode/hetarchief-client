@@ -24,11 +24,11 @@ import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper'
 import { Pill } from '@shared/components/Pill';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { setLastScrollPosition } from '@shared/store/ui';
-import { type IeObjectTypes } from '@shared/types';
+import { type IeObjectType } from '@shared/types/ie-objects';
 import { formatMediumDate } from '@shared/utils/dates';
 
 import Icon from '../Icon/Icon';
@@ -47,12 +47,12 @@ const MediaCard: FC<MediaCardProps> = ({
 	type,
 	view,
 	id,
+	objectId,
 	actions,
 	buttons,
 	hasRelated,
 	icon,
 	showKeyUserLabel,
-	meemooIdentifier,
 	showLocallyAvailable = false,
 	showPlanVisitButtons = false,
 	link,
@@ -60,7 +60,6 @@ const MediaCard: FC<MediaCardProps> = ({
 	hasTempAccess,
 	previousPage,
 }) => {
-	const { tText } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 	const dispatch = useDispatch();
@@ -210,7 +209,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 		return (
 			<HighlightSearchTerms
-				toHighlight={subtitle}
+				toHighlight={subtitle ?? ''}
 				searchTerms={keywords}
 				enabled={!!keywords?.length}
 			/>
@@ -222,7 +221,7 @@ const MediaCard: FC<MediaCardProps> = ({
 			className={clsx(styles['c-media-card__no-content'], styles['c-media-card__icon'], {
 				[styles['c-media-card__no-content-icon']]: !link,
 			})}
-			name={TYPE_TO_NO_ICON_MAP[type as Exclude<IeObjectTypes, null>]}
+			name={TYPE_TO_NO_ICON_MAP[type as IeObjectType]}
 		/>
 	);
 
@@ -279,8 +278,14 @@ const MediaCard: FC<MediaCardProps> = ({
 		</div>
 	);
 
-	const renderImage = (imgPath: string | undefined) =>
-		imgPath ? (
+	const renderImage = (imgPath: string | undefined) => {
+		if (!imgPath) {
+			renderNoContent();
+			return;
+		}
+
+		console.log('rendering image for MediaCard: ', { imgPath });
+		return (
 			<div
 				className={clsx(
 					styles['c-media-card__header-wrapper'],
@@ -298,9 +303,8 @@ const MediaCard: FC<MediaCardProps> = ({
 				)}
 				{duration && renderDuration()}
 			</div>
-		) : (
-			renderNoContent()
 		);
+	};
 
 	const renderKeyUserPill = () => (
 		<div className="u-mt-8">
@@ -368,7 +372,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
 				title={renderTitle()}
 				image={renderHeader()}
-				subtitle={meemooIdentifier}
+				subtitle={objectId}
 				caption={renderCaption()}
 				toolbar={renderToolbar()}
 				tags={renderTags()}

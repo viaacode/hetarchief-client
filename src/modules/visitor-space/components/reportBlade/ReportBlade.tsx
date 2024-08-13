@@ -6,7 +6,7 @@ import { type FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Blade } from '@shared/components/Blade/Blade';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
 import { useZendesk } from '@shared/hooks/use-zendesk';
 import { toastService } from '@shared/services/toast-service';
 
@@ -15,7 +15,6 @@ import styles from './ReportBlade.module.scss';
 import { type ReportBladeProps, type ReportFormState } from './ReportBlade.types';
 
 const ReportBlade: FC<ReportBladeProps> = (props) => {
-	const { tHtml } = useTranslation();
 	const { user } = props;
 	const { mutateAsync: createZendeskTicket } = useZendesk();
 	const [report, setReport] = useState<string>();

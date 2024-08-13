@@ -15,17 +15,17 @@ export interface JsonWaveformData {
 }
 
 export function useGetPeakFile(
-	fileSchemaIdentifier: string | null,
+	filePath: string | null,
 	options: { enabled: boolean } = { enabled: true }
 ): UseQueryResult<JsonWaveformData | null> {
 	return useQuery(
-		[QUERY_KEYS.getPeakFile, fileSchemaIdentifier],
+		[QUERY_KEYS.getPeakFile, filePath],
 		async () => {
-			if (!fileSchemaIdentifier) {
+			if (!filePath) {
 				return null;
 			}
 			const jsonFileUrl: string | null = await IeObjectsService.getPlayableUrl(
-				fileSchemaIdentifier as string
+				filePath as string
 			);
 			if (!jsonFileUrl) {
 				throw new Error('Failed to get peak file url with token');

@@ -7,12 +7,12 @@ import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/co
 import {
 	GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD,
 	type MaterialRequestDetail,
-	MaterialRequestObjectType,
 } from '@material-requests/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
-import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
+import { tText } from '@shared/helpers/translate';
+import { IeObjectType } from '@shared/types/ie-objects';
 import { formatMediumDate } from '@shared/utils/dates';
 
 import styles from './MaterialRequestDetailBlade.module.scss';
@@ -28,8 +28,6 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	onClose,
 	currentMaterialRequestDetail,
 }) => {
-	const { tText } = useTranslation();
-
 	const renderFooter = () => {
 		return (
 			<div className={styles['p-account-my-material-requests__close-button-container']}>
@@ -99,16 +97,16 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 								styles['p-account-my-material-requests__material-label-icon']
 							}
 							name={
-								currentMaterialRequestDetail?.objectDctermsFormat ===
-								MaterialRequestObjectType.AUDIO
-									? IconNamesLight.Audio
-									: IconNamesLight.Video
+								TYPE_TO_ICON_MAP[
+									currentMaterialRequestDetail?.objectDctermsFormat ||
+										IeObjectType.Video
+								]
 							}
 						/>
 						<span>{currentMaterialRequestDetail?.objectSchemaName}</span>
 					</p>
 					<p className={styles['p-account-my-material-requests__material-id']}>
-						{currentMaterialRequestDetail?.objectMeemooIdentifier}
+						{currentMaterialRequestDetail?.objectSchemaIdentifier}
 					</p>
 				</div>
 			</a>

@@ -12,7 +12,7 @@ import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-cont
 import { NavigationDropdown } from '@navigation/components/Navigation/NavigationDropdown';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { changeLocalSlug } from '@shared/helpers/change-local-slug';
+import { changeApplicationLocale } from '@shared/helpers/change-application-locale';
 import { tText } from '@shared/helpers/translate';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -35,7 +35,7 @@ export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 	const [selectedLanguage, setSelectedLanguage] = useState<Locale>(locale);
 	const dispatch = useDispatch();
 	const { data: allLanguages } = useGetAllLanguages();
-	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference(selectedLanguage);
+	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference();
 	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
 		locale,
 		`/${router.query.slug}`,
@@ -57,7 +57,7 @@ export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 		if (user) {
 			mutateLanguagePreference(selectedLanguage);
 		}
-		changeLocalSlug(locale, selectedLanguage, router, queryClient, contentPageInfo);
+		changeApplicationLocale(locale, selectedLanguage, router, queryClient, contentPageInfo);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedLanguage, mutateLanguagePreference]);
 

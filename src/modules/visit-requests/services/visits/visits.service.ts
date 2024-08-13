@@ -3,7 +3,7 @@ import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
 import { ApiService } from '@shared/services/api-service';
-import { type Visit, type VisitAccessStatus, VisitStatus } from '@shared/types';
+import { type Visit, type VisitAccessStatus, VisitStatus } from '@shared/types/visit';
 import {
 	type GetAllActiveVisitsProps,
 	type GetVisitsProps,

@@ -8,14 +8,14 @@ import { selectUser } from '@auth/store/user';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { setFilterOptions, setResults } from '@shared/store/ie-objects';
+import { type SortObject } from '@shared/types';
+import { type GetIeObjectsResponse } from '@shared/types/api';
 import {
-	type GetIeObjectsResponse,
 	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
 	SearchPageMediaType,
-	type SortObject,
-} from '@shared/types';
+} from '@shared/types/ie-objects';
 import { SEARCH_RESULTS_PAGE_SIZE } from '@visitor-space/const';
 import { SearchSortProp } from '@visitor-space/types';
 import { VISITOR_SPACE_LICENSES } from '@visitor-space/utils/elastic-filters';

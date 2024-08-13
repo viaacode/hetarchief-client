@@ -41,13 +41,13 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
-import { changeLocalSlug } from '@shared/helpers/change-local-slug';
+import { changeApplicationLocale } from '@shared/helpers/change-application-locale';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
 import { type DefaultSeoInfo } from '@shared/types/seo';
@@ -62,7 +62,6 @@ const labelKeys: Record<keyof CommunicationFormState, string> = {
 
 export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 	const user = useSelector(selectUser);
-	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 	const queryClient = useQueryClient();
@@ -73,7 +72,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 	const canEditProfile: boolean = useHasAllPermission(Permission.CAN_EDIT_PROFILE_INFO);
 	const isKeyUser: boolean = useIsKeyUser();
 	const { data: allLanguages } = useGetAllLanguages();
-	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference(selectedLanguage);
+	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference();
 	const { data: preferences } = useGetNewsletterPreferences(user?.email);
 
 	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
@@ -90,7 +89,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 		if (user) {
 			mutateLanguagePreference(selectedLanguage);
 		}
-		changeLocalSlug(locale, selectedLanguage, router, queryClient, contentPageInfo);
+		changeApplicationLocale(locale, selectedLanguage, router, queryClient, contentPageInfo);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedLanguage, mutateLanguagePreference]);
 

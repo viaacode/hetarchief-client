@@ -7,17 +7,14 @@ import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { MaterialRequestsService } from '@material-requests/services';
-import {
-	type MaterialRequest,
-	MaterialRequestKeys,
-	MaterialRequestObjectType,
-} from '@material-requests/types';
+import { type MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { BladeManager } from '@shared/components/BladeManager';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { setMaterialRequestCount } from '@shared/store/ui';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
 
@@ -38,7 +35,6 @@ interface MaterialRequestCenterBladeProps {
 }
 
 const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpen, onClose }) => {
-	const { tHtml, tText } = useTranslation();
 	const dispatch = useDispatch();
 
 	const [selectedMaterialRequest, setSelectedMaterialRequest] = useState<MaterialRequest | null>(
@@ -171,15 +167,15 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		);
 	};
 
-	const renderMaterialRequest = (item: MaterialRequest) => {
+	const renderMaterialRequest = (materialRequest: MaterialRequest) => {
 		return (
 			<div
-				key={item.id}
+				key={materialRequest.id}
 				className={styles['c-material-request-center-blade__material-container']}
 			>
 				<a
 					tabIndex={-1}
-					href={`/zoeken/${item.maintainerSlug}/${item.objectSchemaIdentifier}`}
+					href={`/zoeken/${materialRequest.maintainerSlug}/${materialRequest.objectSchemaIdentifier}`}
 					className={styles['c-material-request-center-blade__material-link']}
 				>
 					<div
@@ -191,16 +187,12 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 								className={
 									styles['c-material-request-center-blade__material-label-icon']
 								}
-								name={
-									item.objectDctermsFormat === MaterialRequestObjectType.AUDIO
-										? IconNamesLight.Audio
-										: IconNamesLight.Video
-								}
+								name={TYPE_TO_ICON_MAP[materialRequest.objectDctermsFormat]}
 							/>
-							<span>{item.objectSchemaName}</span>
+							<span>{materialRequest.objectSchemaName}</span>
 						</p>
 						<p className={styles['c-material-request-center-blade__material-id']}>
-							{item.objectMeemooIdentifier}
+							{materialRequest.objectSchemaIdentifier}
 						</p>
 					</div>
 				</a>
@@ -211,7 +203,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 							styles['c-material-request-center-blade__material-actions-button']
 						}
 						onClick={() => {
-							setSelectedMaterialRequest(item);
+							setSelectedMaterialRequest(materialRequest);
 							setActiveBlade(MaterialRequestBladeId.EditMaterialRequest);
 						}}
 						variants={['silver']}
@@ -220,20 +212,20 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						aria-label={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
 						)}
-						toolTipText={tText(
+						tooltipText={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
 						)}
 					/>
 					<Button
 						key={'delete-material-request'}
-						onClick={() => deleteMaterialRequest(item.id)}
+						onClick={() => deleteMaterialRequest(materialRequest.id)}
 						variants={['silver']}
 						name="Delete"
 						icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
 						aria-label={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder-materiaal-aanvraag'
 						)}
-						toolTipText={tText(
+						tooltipText={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder'
 						)}
 					/>
@@ -357,7 +349,6 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					maintainerLogo={selectedMaterialRequest.maintainerLogo}
 					maintainerSlug={selectedMaterialRequest.maintainerSlug}
 					materialRequestId={selectedMaterialRequest.id}
-					meemooId={selectedMaterialRequest.objectMeemooIdentifier}
 					reason={selectedMaterialRequest.reason}
 					type={selectedMaterialRequest.type}
 					refetchMaterialRequests={refetchMaterialRequests}

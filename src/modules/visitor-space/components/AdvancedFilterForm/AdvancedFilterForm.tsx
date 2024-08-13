@@ -6,10 +6,10 @@ import { useFieldArray, useForm } from 'react-hook-form';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml } from '@shared/helpers/translate';
 
 import { SearchFilterId } from '../../types';
-import { AdvancedFilterFields } from '../AdvancedFilterFields';
+import { AdvancedFilterFields } from '../AdvancedFilterFields/AdvancedFilterFields';
 
 import { ADVANCED_FILTER_FORM_SCHEMA, initialFields } from './AdvancedFilterForm.const';
 import styles from './AdvancedFilterForm.module.scss';
@@ -18,13 +18,12 @@ import {
 	type AdvancedFilterFormState,
 } from './AdvancedFilterForm.types';
 
-const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
+export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 	children,
 	className,
 	disabled,
 	values,
 }) => {
-	const { tHtml } = useTranslation();
 	const { control, getValues, setValue, handleSubmit } = useForm<AdvancedFilterFormState>({
 		defaultValues: {
 			advanced: values?.advanced ? values.advanced : [initialFields()],
@@ -88,5 +87,3 @@ const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 		</>
 	);
 };
-
-export default AdvancedFilterForm;

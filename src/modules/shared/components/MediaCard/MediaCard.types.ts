@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react';
 
 import { type IeObjectLicense } from '@ie-objects/ie-objects.types';
-import { type IeObjectTypes } from '@shared/types';
+import { type IeObjectType } from '@shared/types/ie-objects';
 
 import { type IconName } from '../Icon';
 
@@ -16,16 +16,16 @@ export interface MediaCardProps {
 	keywords?: string[];
 	name?: string;
 	id?: string;
+	objectId?: string;
 	preview?: string;
 	publishedOrCreatedDate?: Date;
 	publishedBy?: string;
 	title?: string | ReactNode;
-	type: IeObjectTypes;
+	type: IeObjectType | null;
 	view?: MediaCardViewMode;
 	hasRelated?: boolean;
 	icon?: IconName;
 	showKeyUserLabel?: boolean;
-	meemooIdentifier?: string;
 	showLocallyAvailable?: boolean;
 	showPlanVisitButtons?: boolean;
 	link: string | undefined;

@@ -1,0 +1,22 @@
+@use "src/styles/abstracts" as *;
+
+.c-highlight-search-terms {
+	&__full-height {
+		mark {
+			background-color: $teal-66;
+			background-image: none;
+			background-size:
+				0,
+				100% 100%;
+		}
+	}
+}
+
+mark.c-highlight-search-terms__active {
+	background-color: $black;
+	background-image: none;
+	color: $white;
+	background-size:
+		0,
+		100% 100%;
+}

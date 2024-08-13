@@ -19,6 +19,8 @@ const CardImage: FC<CardImageProps> = ({
 }) => {
 	color = color || '#009690'; // Set default, accounting for `null`
 
+	console.log('rendering image for CardImage: ', { image });
+	console.log('rendering image for CardImage: ', { logo });
 	return (
 		<div
 			className={clsx(

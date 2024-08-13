@@ -6,8 +6,8 @@ import { BladeManager } from '@shared/components/BladeManager';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { VisitSummary } from '@shared/components/VisitSummary';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { VisitStatus } from '@shared/types';
+import { tHtml } from '@shared/helpers/translate';
+import { VisitStatus } from '@shared/types/visit';
 import { formatDistanceToday } from '@shared/utils/dates';
 
 import { ApproveRequestBlade } from '../ApproveRequestBlade';
@@ -17,7 +17,6 @@ import styles from './ProcessRequestBlade.module.scss';
 import { type ProcessRequestBladeProps } from './ProcessRequestBlade.types';
 
 const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
-	const { tHtml } = useTranslation();
 	const { selected, onFinish } = props;
 
 	const [showApprove, setShowApprove] = useState(false);

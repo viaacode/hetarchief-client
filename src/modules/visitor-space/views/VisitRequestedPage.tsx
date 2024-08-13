@@ -7,11 +7,11 @@ import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { Loading } from '@shared/components/Loading';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { setShowZendesk } from '@shared/store/ui';
-import { AccessStatus } from '@shared/types';
 import { type DefaultSeoInfo } from '@shared/types/seo';
+import { AccessStatus } from '@shared/types/visit';
 import { useGetVisitAccessStatus } from '@visit-requests/hooks/get-visit-access-status';
 import { VisitorLayout } from '@visitor-layout/index';
 import { WaitingPage } from '@visitor-space/components/WaitingPage';
@@ -20,7 +20,6 @@ import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 export const VisitRequestedPage: FC<DefaultSeoInfo> = ({ title, description, url }) => {
 	const router = useRouter();
 	const locale = useLocale();
-	const { tHtml, tText } = useTranslation();
 	const dispatch = useDispatch();
 
 	const { slug } = router.query;

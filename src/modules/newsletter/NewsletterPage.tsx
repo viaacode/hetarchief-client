@@ -12,10 +12,10 @@ import { Loading } from '@shared/components/Loading';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { labelKeys, NEWSLETTER_FORM_SCHEMA } from '@shared/const/newsletter';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
 import { type NewsletterFormState } from '@shared/types/newsletter';
@@ -25,7 +25,6 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 	useHideFooter();
 	useStickyLayout();
 
-	const { tText, tHtml } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 	const {

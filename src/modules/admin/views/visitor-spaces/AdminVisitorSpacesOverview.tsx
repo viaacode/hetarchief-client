@@ -24,9 +24,9 @@ import { sortingIcons } from '@shared/components/Table';
 import { ScrollableTabs } from '@shared/components/Tabs';
 import { globalLabelKeys, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorSpaceStatusOptions } from '@visitor-space/const';
@@ -39,7 +39,6 @@ import {
 } from '@visitor-space/types';
 
 export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 

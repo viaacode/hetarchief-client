@@ -18,11 +18,11 @@ import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-cont
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { GET_TOS_INDEX_QUERY_PARAM_CONFIG, KNOWN_STATIC_ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
 import { useTermsOfService } from '@shared/hooks/use-terms-of-service';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
@@ -36,7 +36,6 @@ export const UserConditions: FC<
 	useStickyLayout();
 	useHideFooter();
 
-	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 	const scrollable = useRef<HTMLDivElement | null>(null);

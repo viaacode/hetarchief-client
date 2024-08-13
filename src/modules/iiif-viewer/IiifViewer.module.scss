@@ -1,168 +1,272 @@
 @use "src/styles/abstracts" as *;
 
 $navigator-margin-top: 30rem;
-$navigator-margin-right: 10rem;
+$controls-margin-left: 10rem + $spacer-sm; // needs space next to the navigator control
+$controls-margin-right: $spacer-sm; // Can go all the way to the edge
+$controls-margin-bottom: $spacer-sm;
 
-.p-object-detail__iiif {
-	display: block;
-	position: absolute;
-	inset: 0;
+.c-iiif-viewer {
+	container-name: iiif-viewer;
+	container-type: size;
+	height: 100%;
 
-	:global(.openseadragon-container) {
-		background-color: #222 !important;
-	}
-
-	:global(.p-object-detail__iiif__alto__text) {
-		color: #000;
-		background-color: #cfba8c;
-		text-align: center;
-
-		&:global(--active) {
-			background-color: $white;
-		}
-
-		> :global(svg) {
-			width: 100%;
-			height: 100%;
-		}
-	}
-
-	:global(.p-object-detail__iiif__close-fullscreen) {
-		display: none;
-	}
-
-	&:global(.fullpage) :global(.p-object-detail__iiif__close-fullscreen) {
+	&__iiif-container {
 		display: block;
-		font-family: meemoo-icons-light, sans-serif;
-		margin: $spacer-md;
+		position: absolute;
+		inset: 0;
+
+		:global(.openseadragon-container) {
+			background-color: #222 !important;
+		}
+
+		:global(.c-iiif-viewer__iiif__alto__text) {
+			color: $black;
+			background-color: $newspaper-ocr-overlay-background;
+			text-align: center;
+
+			&:global(--active) {
+				background-color: $white;
+			}
+
+			> :global(svg) {
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+		// Navigator zoom bounds indicator
+		:global(.navigator) {
+			padding: $spacer-xs !important;
+			border: 0 !important;
+			margin-bottom: -3px !important; // Push it all the way in the corner of the screen
+
+			:global(.displayregion) {
+				outline: 3px solid black;
+				border: 3px solid white !important;
+			}
+		}
 	}
 
-	&:global(.p-object-detail__iiif__ocr--enabled) {
-		:global(.p-object-detail__iiif__alto__text) {
+	&:global(.c-iiif-viewer__iiif__ocr--enabled) {
+		:global(.c-iiif-viewer__iiif__alto__text) {
 			display: block !important;
 		}
 	}
 
-	&:global(.p-object-detail__iiif__ocr--disabled) {
-		:global(.p-object-detail__iiif__alto__text) {
+	&:global(.c-iiif-viewer__iiif__ocr--disabled) {
+		:global(.c-iiif-viewer__iiif__alto__text) {
 			display: none !important;
+		}
+	}
+
+	&:global(.c-iiif-viewer__iiif__grid-view--enabled) {
+		.c-iiif-viewer__iiif-container {
+			display: none;
+		}
+	}
+
+	&__grid-view-wrapper {
+		width: 100%;
+		height: 100%;
+		background-color: $shade-darker;
+	}
+
+	&__grid-view {
+		padding: $spacer-2xl;
+		display: flex;
+		flex-flow: row wrap;
+		gap: 3rem;
+		overflow-y: auto;
+		background-color: #222;
+		justify-content: center;
+		align-items: center;
+		height: calc(100vh - 10rem);
+		padding-bottom: $spacer-1xl * 4;
+
+		@include respond-to(md) {
+			padding: $spacer-1xl;
+			padding-bottom: $spacer-1xl * 4;
+			gap: 2rem;
+		}
+
+		> button {
+			cursor: pointer;
+			padding: 0;
+			border: 0.4rem solid #222;
+			width: 25%;
+
+			@include respond-to(md) {
+				width: 40%;
+			}
+
+			> img {
+				width: 100%;
+				vertical-align: bottom;
+			}
+
+			&:hover,
+			&:focus-visible {
+				opacity: 0.9;
+				border: 0.4rem solid #00c8aa;
+				outline: none;
+			}
+		}
+	}
+
+	&__iiif__controls {
+		z-index: 2000;
+		width: auto;
+		height: $button-height-sm;
+		position: absolute;
+		left: $controls-margin-left;
+		right: $controls-margin-right;
+		bottom: 0;
+		margin-bottom: $controls-margin-bottom;
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		grid-template-rows: auto;
+		grid-gap: $spacer-xs $spacer-xs;
+		container: iiif__controls / size;
+
+		&__button-group {
+			display: flex;
+			flex-flow: row nowrap;
+			height: $button-height-sm;
+			border-radius: $button-radius-sm;
+			background-color: $white;
+			padding: 0.4rem;
+			align-items: center;
+
+			&__search {
+				flex-grow: 1;
+
+				> div {
+					flex-grow: 1;
+				}
+
+				&--disabled {
+					visibility: hidden;
+					pointer-events: none;
+				}
+			}
+
+			> span {
+				font-size: $font-size-sm;
+				padding: $spacer-xs;
+			}
+
+			&__divider {
+				width: 1px;
+				height: $button-height-xs;
+				background-color: $silver;
+				margin: $spacer-xxs $spacer-xs;
+			}
+		}
+
+		&__button:global(.c-button--sm) {
+			width: $button-height-sm;
+			height: $button-height-xs;
+			border-radius: $button-radius-xs;
+			padding: $spacer-xs $spacer-xxs;
+		}
+
+		:global(.c-iiif-viewer__iiif__controls__grid-view__disable) {
+			width: $button-height;
+			height: $button-height;
+			border-radius: $button-radius;
+			position: absolute;
+			left: 50%;
+			bottom: $spacer-sm;
+		}
+	}
+
+	// Hide the navigator when the iiif viewer gets too narrow
+	@container iiif-viewer (max-width: #{$breakpoint-md}) {
+		:global(.navigator) {
+			display: none !important;
+		}
+
+		&__iiif__reference-strip {
+			display: none !important;
+		}
+
+		&__iiif__controls {
+			left: $spacer-xs;
+			right: $spacer-xs;
+			grid-template-columns: auto 1fr auto;
+			grid-template-rows: $button-height-sm $button-height-sm;
+			height: $button-height-sm + $spacer-xs + $button-height-sm;
+			margin-bottom: $spacer-xs;
+
+			// Mobile search should be shown in separate grid row above other controls
+			&__button-group__pagination {
+				grid-column: 1;
+				grid-row: 2;
+
+				:global(.pagination-info) {
+					display: none;
+				}
+			}
+
+			&__button-group__search {
+				grid-column: 1 / 4;
+				grid-row: 1;
+			}
+
+			&__button-group__zoom {
+				grid-column: 3;
+				grid-row: 2;
+			}
+		}
+
+		&__grid-view {
+			padding: $spacer-1xl;
+			padding-bottom: $spacer-1xl * 4;
+			gap: 2rem;
 		}
 	}
 }
 
-.p-object-detail__iiif__reference-strip {
+.c-iiif-viewer__iiif__reference-strip {
 	position: absolute !important;
 	left: 0;
 	top: 0;
-	height: calc(100% - $navigator-margin-top) !important;
+	max-height: calc(100% - $navigator-margin-top) !important;
 	display: flex;
 	flex-direction: column;
 	width: calc(100px + $spacer-sm);
 	overflow-y: auto;
 	padding-right: $spacer-sm;
 
-	> button {
-		cursor: pointer;
-		padding: 0;
-		border: 0.2rem solid #222;
-
-		> img {
-			width: 100%;
-			vertical-align: bottom;
-		}
-
-		&:hover,
-		&:focus-visible {
-			opacity: 0.9;
-			border: 0.2rem solid #00c8aa;
-			outline: none;
-		}
-	}
-
 	@include respond-to(md) {
 		display: none;
 	}
-}
 
-.p-object-detail__iiif__controls {
-	z-index: 2000;
-	width: auto;
-	height: $button-width;
-	position: absolute;
-	left: $navigator-margin-right;
-	right: $navigator-margin-right;
-	bottom: 0;
-	margin: 2.4rem;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
+	> div {
+		background-color: $black-80;
+		padding: $spacer-xs;
 
-	&__button {
-		border-radius: 0;
-
-		&:global(:first-child) {
-			border-radius: $button-radius 0 0 $button-radius;
-			padding-left: $spacer-xs;
-			width: 6rem;
-		}
-
-		&:global(:last-child) {
-			border-radius: 0 $button-radius $button-radius 0;
-			padding-right: $spacer-xs;
-			width: 6rem;
-		}
-
-		&:global(:first-child):global(:last-child) {
-			border-radius: $button-radius;
+		> button {
+			cursor: pointer;
+			background-color: transparent;
+			border: 0.2rem solid transparent;
 			padding: 0;
-			width: $button-width;
-		}
-	}
 
-	@include respond-to(md) {
-		width: calc(100% - $button-width);
-		left: 0;
-		padding: 0;
-	}
-}
+			> img {
+				width: 100%;
+				vertical-align: bottom;
+			}
 
-.p-object-detail__iiif__grid-view {
-	padding: $spacer-2xl;
-	display: flex;
-	flex-flow: row wrap;
-	gap: 3rem;
-	overflow-y: auto;
-	background-color: #222;
-	justify-content: center;
-	align-items: center;
-	height: calc(100vh - 10rem);
-	padding-bottom: $spacer-1xl * 4;
-
-	@include respond-to(md) {
-		padding: $spacer-1xl;
-		padding-bottom: $spacer-1xl * 4;
-		gap: 2rem;
-	}
-
-	> button {
-		cursor: pointer;
-		padding: 0;
-		border: 0.4rem solid #222;
-
-		@include respond-to(md) {
-			width: 15rem;
+			&:hover,
+			&:focus-visible {
+				opacity: 0.9;
+				border: 0.2rem solid #00c8aa;
+				outline: none;
+			}
 		}
 
-		> img {
-			width: 100%;
-			vertical-align: bottom;
-		}
-
-		&:hover,
-		&:focus-visible {
-			opacity: 0.9;
-			border: 0.4rem solid #00c8aa;
-			outline: none;
+		+ div {
+			padding-top: 0;
 		}
 	}
 }

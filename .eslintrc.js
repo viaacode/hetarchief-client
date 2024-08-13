@@ -31,6 +31,8 @@ module.exports = {
 		'import/first': 'error',
 		'import/no-duplicates': 'error',
 		'@typescript-eslint/no-explicit-any': 'off',
+
+		// Add type if only the typescript type or interface is imported
 		'@typescript-eslint/consistent-type-imports': [
 			'error',
 			{

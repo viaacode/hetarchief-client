@@ -10,14 +10,12 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './PermissionsOverviewPage.module.scss';
 
 export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tHtml, tText } = useTranslation();
-
 	// Access child functions
 	const permissionsRef = useRef<UserGroupOverviewRef>();
 

@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tText } from '@shared/helpers/translate';
 
 import { DateInput } from '../DateInput';
 
@@ -23,8 +23,6 @@ const DateRangeInput: FC<DateRangeInputProps> = ({
 	disabled = false,
 	id = undefined,
 }) => {
-	const { tText } = useTranslation();
-
 	return (
 		<div className={styles['c-date-range-input']} id={id}>
 			<DateInput

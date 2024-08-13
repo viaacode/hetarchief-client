@@ -1,11 +1,13 @@
 import { type ReactNode } from 'react';
-import { boolean, object, type SchemaOf } from 'yup';
+import { boolean, object, type Schema } from 'yup';
 
 import { type CommunicationFormState } from '@account/types';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
+import { type Locale } from '@shared/utils/i18n';
 
-export * from './my-collections.const';
+export * from './my-folders.const';
 export * from './my-history.const';
 export * from './my-material-requests.const';
 
@@ -16,14 +18,14 @@ interface NavigationLinkInfo {
 	hasDivider?: boolean;
 }
 
-export const COMMUNICATION_FORM_SCHEMA = (): SchemaOf<CommunicationFormState> =>
+export const COMMUNICATION_FORM_SCHEMA = (): Schema<CommunicationFormState> =>
 	object({
 		acceptNewsletter: boolean().required(
 			tText('modules/account/const/account___ik-ontvang-graag-de-nieuwsbrief-is-verplicht')
 		),
 	});
 
-export const GET_ACCOUNT_NAVIGATION_LINKS = (): NavigationLinkInfo[] => {
+export const GET_ACCOUNT_NAVIGATION_LINKS = (locale: Locale): NavigationLinkInfo[] => {
 	const hasAccountHistoryPerm = useHasAnyPermission(
 		Permission.READ_PERSONAL_APPROVED_VISIT_REQUESTS
 	);
@@ -33,12 +35,12 @@ export const GET_ACCOUNT_NAVIGATION_LINKS = (): NavigationLinkInfo[] => {
 		{
 			id: 'account-profile',
 			label: tText('modules/account/const/index___mijn-profiel'),
-			href: '/account/mijn-profiel',
+			href: ROUTES_BY_LOCALE[locale].accountMyProfile,
 		},
 		{
-			id: 'account-collections',
+			id: 'account-folders',
 			label: tText('modules/account/const/index___mijn-mappen'),
-			href: '/account/mijn-mappen',
+			href: ROUTES_BY_LOCALE[locale].accountMyFolders,
 		},
 	];
 
@@ -46,7 +48,7 @@ export const GET_ACCOUNT_NAVIGATION_LINKS = (): NavigationLinkInfo[] => {
 		links.push({
 			id: 'account-history',
 			label: tText('modules/account/const/index___mijn-bezoek-historiek'),
-			href: '/account/mijn-bezoek-historiek',
+			href: ROUTES_BY_LOCALE[locale].accountMyVisitHistory,
 			hasDivider: true,
 		});
 	}
@@ -55,7 +57,7 @@ export const GET_ACCOUNT_NAVIGATION_LINKS = (): NavigationLinkInfo[] => {
 		links.push({
 			id: 'account-material-requests',
 			label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
-			href: '/account/mijn-materiaalaanvragen',
+			href: ROUTES_BY_LOCALE[locale].accountMyMaterialRequests,
 			hasDivider: true,
 		});
 	}
@@ -83,6 +85,7 @@ export enum Permission {
 	// Objects
 	SEARCH_OBJECTS = 'SEARCH_OBJECTS',
 	EXPORT_OBJECT = 'EXPORT_OBJECT',
+	DOWNLOAD_OBJECT = 'DOWNLOAD_OBJECT',
 	// Collections
 	MANAGE_FOLDERS = 'MANAGE_FOLDERS',
 	// Spaces

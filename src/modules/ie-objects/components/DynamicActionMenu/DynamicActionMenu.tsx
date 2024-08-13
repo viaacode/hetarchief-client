@@ -14,8 +14,8 @@ import { type FC, type ReactElement, type ReactNode, useRef, useState } from 're
 import { type MediaActions } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { tText } from '@shared/helpers/translate';
 import { useElementSize } from '@shared/hooks/use-element-size';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
@@ -34,7 +34,6 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	limit = 0,
 	onClickAction,
 }) => {
-	const { tText } = useTranslation();
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
 	const listRef = useRef<HTMLDivElement>(null);
@@ -219,7 +218,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 					}}
 				>
 					{visibleActions.map(renderSecondaryButton)}
-					{!!hiddenActions.length && renderDropdown(hiddenActions)}
+					{!!hiddenActions.length && renderDropdown(secondaryActions)}
 				</div>
 			</ul>
 		</>

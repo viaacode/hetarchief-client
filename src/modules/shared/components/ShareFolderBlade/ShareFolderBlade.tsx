@@ -6,15 +6,15 @@ import React, { type FC, type ReactNode, useState } from 'react';
 import { Controller, type ControllerRenderProps, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
+import { foldersService } from '@account/services/folders';
 import { selectUser } from '@auth/store/user';
 import { Blade } from '@shared/components/Blade/Blade';
 import { CopyButton } from '@shared/components/CopyButton';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { ROUTES_BY_LOCALE } from '@shared/const';
+import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { CampaignMonitorService } from '@shared/services/campaign-monitor-service/campaign-monitor.service';
 import { toastService } from '@shared/services/toast-service';
 
 import { labelKeys, SHARE_FOLDER_FORM_SCHEMA } from './ShareFolderBlade.consts';
@@ -24,8 +24,7 @@ import {
 	type ShareFolderBladeProps,
 } from './ShareFolderBlade.types';
 
-const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId, folderName }) => {
-	const { tText } = useTranslation();
+const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId }) => {
 	const locale = useLocale();
 
 	const user = useSelector(selectUser);
@@ -54,19 +53,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 	const handleSend = async () => {
 		try {
 			if (user) {
-				await CampaignMonitorService.send({
-					template: 'shareFolder',
-					data: {
-						to: emailInputValue,
-						consentToTrack: 'unchanged',
-						data: {
-							sharer_email: user.email,
-							sharer_name: user.fullName,
-							folder_name: folderName,
-							folder_sharelink: link,
-						},
-					},
-				});
+				await foldersService.shareFolder(folderId, emailInputValue);
 				toastService.notify({
 					maxLines: 3,
 					title: tText('pages/account/map-delen/folder-id/index___map-is-gedeeld'),

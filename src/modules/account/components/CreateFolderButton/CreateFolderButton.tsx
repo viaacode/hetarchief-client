@@ -10,7 +10,7 @@ import { foldersService } from '@account/services/folders';
 import { type CreateFolderFormState } from '@account/types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 
 import styles from './CreateFolderButton.module.scss';
@@ -23,7 +23,6 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 	afterSubmit = () => null,
 	onOpenNode = null,
 }) => {
-	const { tHtml, tText } = useTranslation();
 	const [isOpen, setIsOpen] = useState(false);
 
 	/**

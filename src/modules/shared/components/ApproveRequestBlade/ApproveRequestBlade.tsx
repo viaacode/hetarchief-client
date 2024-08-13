@@ -24,11 +24,11 @@ import {
 	type RefinableRadioButtonOption,
 } from '@shared/components/RefinableRadioButton';
 import { OPTIONAL_LABEL, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { AccessType, type Visit, VisitStatus } from '@shared/types';
+import { AccessType, type Visit, VisitStatus } from '@shared/types/visit';
 import { asDate, formatMediumDateWithTime, formatTime } from '@shared/utils/dates';
 import { VisitsService } from '@visit-requests/services/visits/visits.service';
 import { VisitTimeframe } from '@visit-requests/types';
@@ -59,7 +59,6 @@ const defaultAccessType = {
 };
 
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
-	const { tHtml, tText } = useTranslation();
 	const locale = useLocale();
 	const canViewAddVisitRequests: boolean = useHasAnyPermission(
 		Permission.MANAGE_ALL_VISIT_REQUESTS
@@ -127,8 +126,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const getAccessTypeLabel = useCallback(
 		(accessType: ApproveRequestFormState['accessType']) => {
-			const selectedFolders = folders.filter(
-				(item) => accessType?.folderIds.includes(item.id)
+			const selectedFolders = folders.filter((item) =>
+				(accessType?.folderIds || []).includes(item.id)
 			);
 			const selectedFoldersNames = selectedFolders?.map((folder) => folder.name).join(', ');
 
@@ -139,7 +138,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				)
 			);
 		},
-		[folders, tText]
+		[folders]
 	);
 
 	const getAccessTypeOptions = useCallback(
@@ -169,7 +168,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				},
 			},
 		],
-		[getAccessTypeLabel, tText, folders]
+		[getAccessTypeLabel, folders]
 	);
 
 	useEffect(() => {

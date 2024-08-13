@@ -4,7 +4,7 @@ import { type ChangeEvent, type FC, useState } from 'react';
 
 import { SEPARATOR } from '@shared/const';
 import { YEAR_LENGTH } from '@shared/const/date';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { tText } from '@shared/helpers/translate';
 import { asDate } from '@shared/utils/dates';
 
 import { YearInput } from '../YearInput';
@@ -16,7 +16,6 @@ interface YearRangeInputProps extends TextInputProps {
 }
 
 const YearRangeInput: FC<Omit<YearRangeInputProps, 'onSelect'>> = (props) => {
-	const { tText } = useTranslation();
 	const split = (props.value || '').toString().split(SEPARATOR, 2);
 
 	const from: string | undefined = split[0];

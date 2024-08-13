@@ -5,14 +5,14 @@ import { type Folder, type FolderIeObject, type SharedFolderResponse } from '@ac
 import { ApiService } from '@shared/services/api-service';
 
 import {
-	COLLECTIONS_SERVICE_BASE_URL,
-	COLLECTIONS_SERVICE_EXPORT_URL,
-	COLLECTIONS_SERVICE_OBJECTS_URL,
-} from './collections.const';
+	FOLDERS_SERVICE_BASE_URL,
+	FOLDERS_SERVICE_EXPORT_URL,
+	FOLDERS_SERVICE_OBJECTS_URL,
+} from './folders.const';
 
 class FoldersService extends ApiService {
 	public async getAll(): Promise<IPagination<Folder>> {
-		const parsed = await ApiService.getApi().get(COLLECTIONS_SERVICE_BASE_URL).json();
+		const parsed = await ApiService.getApi().get(FOLDERS_SERVICE_BASE_URL).json();
 		return parsed as IPagination<Folder>;
 	}
 
@@ -25,7 +25,7 @@ class FoldersService extends ApiService {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: `${COLLECTIONS_SERVICE_BASE_URL}/${id}`,
+					url: `${FOLDERS_SERVICE_BASE_URL}/${id}`,
 					query: {
 						...(searchInput ? { query: `%${searchInput}%` } : {}),
 						page,
@@ -37,7 +37,7 @@ class FoldersService extends ApiService {
 	}
 
 	public async create(json: Partial<Pick<Folder, 'name'>>): Promise<Folder> {
-		return await ApiService.getApi().post(`${COLLECTIONS_SERVICE_BASE_URL}`, { json }).json();
+		return await ApiService.getApi().post(`${FOLDERS_SERVICE_BASE_URL}`, { json }).json();
 	}
 
 	public async update(
@@ -45,18 +45,18 @@ class FoldersService extends ApiService {
 		json: Partial<Pick<Folder, 'name' | 'description'>>
 	): Promise<Folder> {
 		return await ApiService.getApi()
-			.patch(`${COLLECTIONS_SERVICE_BASE_URL}/${id}`, { json })
+			.patch(`${FOLDERS_SERVICE_BASE_URL}/${id}`, { json })
 			.json();
 	}
 
 	public async delete(id: string): Promise<number> {
-		return await ApiService.getApi().delete(`${COLLECTIONS_SERVICE_BASE_URL}/${id}`).json();
+		return await ApiService.getApi().delete(`${FOLDERS_SERVICE_BASE_URL}/${id}`).json();
 	}
 
 	public async addToFolder(collection: string, item: string): Promise<unknown> {
 		return await ApiService.getApi()
 			.post(
-				`${COLLECTIONS_SERVICE_BASE_URL}/${collection}/${COLLECTIONS_SERVICE_OBJECTS_URL}/${item}`
+				`${FOLDERS_SERVICE_BASE_URL}/${collection}/${FOLDERS_SERVICE_OBJECTS_URL}/${item}`
 			)
 			.json();
 	}
@@ -64,7 +64,7 @@ class FoldersService extends ApiService {
 	public async removeFromFolder(collection: string, item: string): Promise<unknown> {
 		return await ApiService.getApi()
 			.delete(
-				`${COLLECTIONS_SERVICE_BASE_URL}/${collection}/${COLLECTIONS_SERVICE_OBJECTS_URL}/${item}`
+				`${FOLDERS_SERVICE_BASE_URL}/${collection}/${FOLDERS_SERVICE_OBJECTS_URL}/${item}`
 			)
 			.json();
 	}
@@ -74,13 +74,19 @@ class FoldersService extends ApiService {
 			return null;
 		}
 		return await ApiService.getApi()
-			.get(`${COLLECTIONS_SERVICE_BASE_URL}/${id}/${COLLECTIONS_SERVICE_EXPORT_URL}`)
+			.get(`${FOLDERS_SERVICE_BASE_URL}/${id}/${FOLDERS_SERVICE_EXPORT_URL}`)
 			.then((r) => r.blob());
 	}
 
 	public async shareCollection(collectionId: string): Promise<SharedFolderResponse> {
 		return await ApiService.getApi()
-			.post(`${COLLECTIONS_SERVICE_BASE_URL}/share/${collectionId}`)
+			.post(`${FOLDERS_SERVICE_BASE_URL}/share/${collectionId}`)
+			.json();
+	}
+
+	public async shareFolder(folderId: string, to: string): Promise<any> {
+		return await ApiService.getApi()
+			.post(`${FOLDERS_SERVICE_BASE_URL}/share/${folderId}/create`, { json: { to } })
 			.json();
 	}
 }

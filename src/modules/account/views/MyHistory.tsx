@@ -21,12 +21,12 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table';
 import { VisitDetailBlade } from '@shared/components/VisitDetailBlade';
 import { ROUTES_BY_LOCALE } from '@shared/const';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { AccessStatus, type Visit } from '@shared/types';
 import { type DefaultSeoInfo } from '@shared/types/seo';
+import { AccessStatus, type Visit } from '@shared/types/visit';
 import { createVisitorSpacesWithFilterUrl } from '@shared/utils/create-url';
 import { useGetVisitAccessStatusMutation } from '@visit-requests/hooks/get-visit-access-status';
 import { useGetVisits } from '@visit-requests/hooks/get-visits';
@@ -34,7 +34,6 @@ import { VisitorLayout } from '@visitor-layout/index';
 import { SearchFilterId } from '@visitor-space/types';
 
 export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const locale = useLocale();
 	const [filters, setFilters] = useQueryParams(ACCOUNT_HISTORY_QUERY_PARAM_CONFIG);

@@ -5,7 +5,8 @@ import { isString } from 'lodash-es';
 import { SEPARATOR } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
-import { type IeObjectsSearchFilter, Operator } from '@shared/types';
+import { Operator } from '@shared/types';
+import { type IeObjectsSearchFilter } from '@shared/types/ie-objects';
 import { formatDate } from '@shared/utils/dates';
 import { type SearchPageQueryParams } from '@visitor-space/const';
 

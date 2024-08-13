@@ -1,6 +1,7 @@
 import { type ReactNode } from 'react';
 
-import { type AccessType, type FormBladeProps } from '@shared/types';
+import { type FormBladeProps } from '@shared/types/blade';
+import { type AccessType } from '@shared/types/visit';
 
 import { type ProcessRequestBladeProps } from '../ProcessRequestBlade/ProcessRequestBlade.types';
 
@@ -18,6 +19,6 @@ export interface ApproveRequestFormState {
 	accessRemark?: string;
 	accessType: {
 		type: AccessType;
-		folderIds: string[];
+		folderIds: string[] | undefined;
 	};
 }

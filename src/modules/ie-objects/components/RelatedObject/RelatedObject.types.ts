@@ -1,9 +1,10 @@
 import { type ReactNode } from 'react';
 
-import { type DefaultComponentProps, type IeObjectTypes } from '@shared/types';
+import { type DefaultComponentProps } from '@shared/types';
+import { type IeObjectType } from '@shared/types/ie-objects';
 
 export interface MediaObject {
-	type: IeObjectTypes;
+	type: IeObjectType | null;
 	title: string;
 	subtitle: string;
 	description: string;

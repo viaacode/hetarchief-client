@@ -1,38 +1,36 @@
 import { type FragmentSliderProps } from '../FragmentSlider.types';
 
 export const fragmentSliderMock: FragmentSliderProps = {
-	fragments: [
+	files: [
 		{
-			name: 'item',
-			alternateName: 'item',
-			description: 'item',
-			dctermsFormat: 'mp4',
-			transcript: 'item',
-			dateCreated: 'item',
-			schemaIdentifier:
-				'5dc89b7e75e649e191cd86196c255147cd1a0796146d4255acfde239296fa534236bf4ccd04741f1a35b5240a69f758b/mp4',
-			files: [],
+			id: '1',
+			name: 'item 1',
+			mimeType: '',
+			storedAt: '',
+			thumbnailUrl: '',
+			duration: '',
+			edmIsNextInSequence: '',
+			createdAt: '2024-12-08T07:59:45.516Z',
 		},
 		{
-			name: 'item',
-			alternateName: 'item',
-			description: 'item',
-			dctermsFormat: '<format>',
-			transcript: 'item',
-			dateCreated: 'item',
-			schemaIdentifier:
-				'09f17b37445c4ce59f645c2d5db9dbf8dbee79eba623459caa8c6496108641a0900618cb6ceb4e9b8ad907e47b980ee3/mp4',
-			files: [],
+			id: '3',
+			name: 'item 3',
+			mimeType: '',
+			storedAt: '',
+			thumbnailUrl: '',
+			duration: '',
+			edmIsNextInSequence: '',
+			createdAt: '2024-12-08T07:59:45.516Z',
 		},
 		{
-			name: 'item',
-			alternateName: 'item',
-			description: 'item',
-			dctermsFormat: 'png',
-			transcript: 'item',
-			dateCreated: 'item',
-			schemaIdentifier: '/images/bg-newsletter.png',
-			files: [],
+			id: '3',
+			name: 'item 3',
+			mimeType: '',
+			storedAt: '',
+			thumbnailUrl: '',
+			duration: '',
+			edmIsNextInSequence: '',
+			createdAt: '2024-12-08T07:59:45.516Z',
 		},
 		// {
 		// 	name: 'item',
