@@ -284,7 +284,6 @@ const MediaCard: FC<MediaCardProps> = ({
 			return;
 		}
 
-		console.log('rendering image for MediaCard: ', { imgPath });
 		return (
 			<div
 				className={clsx(

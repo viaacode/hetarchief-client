@@ -147,9 +147,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			}
 
 			if (!activeImageTileSource) {
-				console.error(
-					'Failed to update ocr overlay because activeImageTileSource is undefined'
-				);
 				return;
 			}
 			const imageWidth = activeImageTileSource.dimensions.x;
@@ -165,8 +162,12 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					!y ||
 					!width ||
 					!height ||
+					x < 0 ||
+					y < 0 ||
 					x > 1 ||
 					y > 1 ||
+					x + width < 0 ||
+					y + height < 0 ||
 					x + width > 1 ||
 					y + height > 1 ||
 					isSymbols
@@ -176,7 +177,17 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					return;
 				}
 				const span = document.createElement('SPAN');
-				span.id = 'c-iiif-viewer__iiif__alto__text__' + index;
+				span.setAttribute('data-ocr-word-index', String(index));
+				span.setAttribute(
+					'data-ocr-word-id',
+					[
+						altoTextLocation.x,
+						altoTextLocation.y,
+						altoTextLocation.width,
+						altoTextLocation.height,
+					].join('-')
+				);
+				span.setAttribute('data-ocr-word', altoTextLocation.text);
 				span.className = 'c-iiif-viewer__iiif__alto__text';
 				span.innerHTML = `
 <svg
@@ -205,7 +216,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			});
 			// We don't include the tile source since it causes a rerender loop
 			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, [openSeaDragonViewer, openSeaDragonLib, altoJsonCurrentPage, activeImageIndex]);
+		}, [openSeaDragonViewer, openSeaDragonLib, altoJsonCurrentPage, activeImageTileSource]);
 
 		const applyInitialZoomAndPan = useCallback(
 			(openSeadragonViewerTemp: Viewer, openSeadragonLibTemp: any) => {
@@ -311,13 +322,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		}, [imageInfos, iiifViewerId, isMobile]);
 
 		useEffect(() => {
-			if (openSeaDragonViewer) {
-				openSeaDragonViewer.addHandler('open', () => {
-					// When the viewer is initialized, initialize the ocr overlay
-					updateOcrOverlay();
-				});
+			if (openSeaDragonViewer && activeImageTileSource) {
+				updateOcrOverlay();
 			}
-		}, [openSeaDragonViewer, updateOcrOverlay]);
+		}, [openSeaDragonViewer, updateOcrOverlay, activeImageTileSource]);
 
 		useEffect(() => {
 			initIiifViewer();
@@ -399,37 +407,41 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			iiifZoomTo(x + width / 2, y + height / 2);
 		};
 
-		const clearActiveWordIndex = () => {
+		const clearActiveWord = () => {
 			document?.querySelectorAll('.c-iiif-viewer__iiif__alto__text').forEach((element) => {
 				element.classList.remove('c-iiif-viewer__iiif__alto__text--active');
+				element.classList.remove('c-iiif-viewer__iiif__alto__text--highlighted');
 			});
 		};
 
-		const setActiveWordIndex = (wordIndex: number) => {
-			clearActiveWordIndex();
+		const setActiveWordByIds = (activeAltoTextId: string, highlightedAltoTextIds: string[]) => {
+			clearActiveWord();
 			document
-				?.querySelector('#c-iiif-viewer__iiif__alto__text__' + wordIndex)
+				?.querySelector('[data-ocr-word-id="' + activeAltoTextId + '"]')
 				?.classList?.add('c-iiif-viewer__iiif__alto__text--active');
+			if (highlightedAltoTextIds.length > 0) {
+				document
+					?.querySelector(
+						highlightedAltoTextIds
+							.map(
+								(highlightedAltoTextId) =>
+									'[data-ocr-word-id="' + highlightedAltoTextId + '"]'
+							)
+							.join(',')
+					)
+					?.classList?.add('c-iiif-viewer__iiif__alto__text--highlighted');
+			}
 		};
 
 		const waitForReadyState = async (): Promise<void> => {
 			return new Promise<void>((resolve) => {
-				console.log('waitForReadyState');
 				if (viewerStatus === 'ready') {
-					console.log('waitForReadyState', { currentViewerState: viewerStatus });
 					resolve();
 				} else {
-					console.log('waitForReadyState add open handler before', {
-						id: (openSeaDragonViewer as any).id,
-					});
 					(openSeaDragonViewer as any).id = Math.random();
-					console.log('waitForReadyState add open handler after', {
-						id: (openSeaDragonViewer as any).id,
-					});
+
 					openSeaDragonViewer?.addHandler('fully-loaded-change', () => {
-						console.log('waitForReadyState add open handler');
 						resolve();
-						// setViewerStatus('ready');
 					});
 				}
 			});
@@ -442,8 +454,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			iiifZoom,
 			iiifZoomTo,
 			iiifGoToHome,
-			setActiveWordIndex,
-			clearActiveWordIndex,
+			setActiveWordByIds,
+			clearActiveWord,
 			waitForReadyState,
 		}));
 
