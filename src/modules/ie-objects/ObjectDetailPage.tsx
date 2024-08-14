@@ -315,11 +315,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		withDefault(NumberParam, 0)
 	);
 
-	// Used for going through the videos/audio/image representations/files inside a single detail page (grey bottom bar)
-	const [currentRepresentationIndex, setCurrentRepresentationIndex] = useQueryParam(
-		QUERY_PARAM_KEY.ACTIVE_REPRESENTATION,
-		NumberParam
-	);
 	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number>(0);
 	const [expandSidebar, setExpandSidebar] = useQueryParam(
 		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
@@ -354,7 +349,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
 	const currentPage = mediaInfo?.pageRepresentations?.[currentPageIndex];
-	const currentRepresentation = currentPage?.[currentRepresentationIndex || 0];
+	const currentRepresentation = currentPage?.[0];
 
 	// peak file
 	const peakFileStoredAt: string | null =
@@ -757,7 +752,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 	};
 
-	const handleOnDownloadEvent = () => {
+	const handleOnDownloadEvent = useCallback(() => {
 		const path = window.location.href;
 		const eventData = {
 			type: mediaInfo?.dctermsFormat,
@@ -766,8 +761,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			user_group_name: user?.groupName,
 			or_id: mediaInfo?.maintainerId,
 		};
-		EventsService.triggerEvent(LogEventType.DOWNLOAD, path, eventData);
-	};
+		EventsService.triggerEvent(LogEventType.DOWNLOAD, path, eventData).then(noop);
+	}, [
+		mediaInfo?.dctermsFormat,
+		mediaInfo?.maintainerId,
+		mediaInfo?.schemaIdentifier,
+		user?.groupName,
+	]);
 
 	const handleOnPlay = () => {
 		setIsMediaPaused(false);
@@ -859,6 +859,28 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 	};
 
+	const handleClickOcrWord = useCallback(
+		async (textLocation: AltoTextLine) => {
+			iiifViewerReference?.current?.iiifZoomToRect(textLocation);
+			const searchTermWords = searchTerms.split(' ');
+			const activeAltoTextId = getAltoTextId(textLocation);
+			const altoSearchTexts =
+				simplifiedAltoInfo?.text?.filter((altoText) =>
+					searchTermWords.some((searchTermWord) =>
+						altoText.text.toLowerCase().includes(searchTermWord)
+					)
+				) || [];
+			const highlightedAltoTextIds = altoSearchTexts
+				.map(getAltoTextId)
+				.filter((id) => id !== activeAltoTextId);
+			iiifViewerReference?.current?.setActiveWordByIds(
+				activeAltoTextId,
+				highlightedAltoTextIds
+			);
+		},
+		[searchTerms, simplifiedAltoInfo?.text]
+	);
+
 	const handleChangeSearchIndex = useCallback(
 		async (searchResultIndex: number) => {
 			if (!searchResults) {
@@ -894,6 +916,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			setCurrentPageIndex,
 			setCurrentSearchResultIndex,
 			simplifiedAltoInfo?.text,
+			handleClickOcrWord,
 		]
 	);
 
@@ -1037,7 +1060,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			}
 			setMetadataExportDropdownOpen(false);
 		},
-		[currentPageIndex, ieObjectId]
+		[currentPageIndex, handleOnDownloadEvent, ieObjectId]
 	);
 
 	const renderExportDropdown = useCallback(
@@ -1192,7 +1215,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		isAnonymous,
 		folders,
 		mediaInfo?.schemaIdentifier,
-		searchTerms,
 		isKiosk,
 		canRequestAccess,
 		canRequestMaterial,
@@ -1201,22 +1223,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		getSortMapByUserType,
 		renderExportDropdown,
 	]);
-
-	const handleClickOcrWord = async (textLocation: AltoTextLine) => {
-		iiifViewerReference?.current?.iiifZoomToRect(textLocation);
-		const searchTermWords = searchTerms.split(' ');
-		const activeAltoTextId = getAltoTextId(textLocation);
-		const altoSearchTexts =
-			simplifiedAltoInfo?.text?.filter((altoText) =>
-				searchTermWords.some((searchTermWord) =>
-					altoText.text.toLowerCase().includes(searchTermWord)
-				)
-			) || [];
-		const highlightedAltoTextIds = altoSearchTexts
-			.map(getAltoTextId)
-			.filter((id) => id !== activeAltoTextId);
-		iiifViewerReference?.current?.setActiveWordByIds(activeAltoTextId, highlightedAltoTextIds);
-	};
 
 	const iiifViewerImageInfos = useMemo((): ImageInfo[] => {
 		return compact(
@@ -1863,13 +1869,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			</div>
 		);
 	}, [
-		currentPageIndex,
-		currentSearchResultIndex,
 		searchTerms,
-		ieObjectId,
-		searchResults,
-		setIsOcrEnabled,
 		simplifiedAltoInfo?.text,
+		searchResults,
+		currentSearchResultIndex,
+		ieObjectId,
+		currentPageIndex,
+		handleClickOcrWord,
+		setIsOcrEnabled,
 	]);
 
 	const renderOcrContent = () => {
@@ -1952,12 +1959,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					<div className={styles['p-object-detail__media']}>{renderMedia()}</div>
 					{showFragmentSlider && (
 						<FragmentSlider
-							thumbnail={mediaInfo?.thumbnailUrl}
 							className={styles['p-object-detail__grey-slider-bar']}
-							files={representationsToDisplay}
-							onChangeFragment={(index) =>
-								setCurrentRepresentationIndex(index, 'replaceIn')
-							}
+							fileRepresentations={representationsToDisplay}
+							activeIndex={currentPageIndex}
+							setActiveIndex={(index) => setCurrentPageIndex(index, 'replaceIn')}
 						/>
 					)}
 				</>
