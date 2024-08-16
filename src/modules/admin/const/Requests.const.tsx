@@ -8,10 +8,10 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RequestStatusBadge } from '@shared/components/RequestStatusBadge';
 import { tText } from '@shared/helpers/translate';
-import { type Visit, type VisitRow } from '@shared/types/visit';
+import { type VisitRequest, type VisitRow } from '@shared/types/visit-request';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils/dates';
 
-export const RequestTableColumns = (): Column<Visit>[] => [
+export const RequestTableColumns = (): Column<VisitRequest>[] => [
 	{
 		Header: tText('modules/admin/const/requests___bezoekersruimte'),
 		accessor: 'spaceName',

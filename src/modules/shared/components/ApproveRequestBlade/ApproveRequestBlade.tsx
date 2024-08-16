@@ -28,9 +28,9 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
-import { AccessType, type Visit, VisitStatus } from '@shared/types/visit';
+import { AccessType, type VisitRequest, VisitStatus } from '@shared/types/visit-request';
 import { asDate, formatMediumDateWithTime, formatTime } from '@shared/utils/dates';
-import { VisitsService } from '@visit-requests/services/visits/visits.service';
+import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
 import { VisitTimeframe } from '@visit-requests/types';
 import DateInput from '@visitor-space/components/DateInput/DateInput';
 
@@ -97,7 +97,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		[visitRequest]
 	);
 
-	const [overlappingRequests, setOverlappingRequests] = useState<Visit[]>([]);
+	const [overlappingRequests, setOverlappingRequests] = useState<VisitRequest[]>([]);
 
 	const {
 		control,
@@ -176,8 +176,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	}, [props.isOpen, reset]);
 
 	const checkOverlappingRequests = useCallback(
-		async (formValues: ApproveRequestFormState): Promise<Visit[]> => {
-			const visitResponse = await VisitsService.getAll({
+		async (formValues: ApproveRequestFormState): Promise<VisitRequest[]> => {
+			const visitResponse = await VisitRequestService.getAll({
 				status: VisitStatus.APPROVED,
 				timeframe: [VisitTimeframe.ACTIVE, VisitTimeframe.FUTURE],
 				requesterId: visitRequest?.userProfileId,
@@ -233,7 +233,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		}
 
 		visitRequest &&
-			VisitsService.patchById(visitRequest.id, {
+			VisitRequestService.patchById(visitRequest.id, {
 				...visitRequest,
 				status: VisitStatus.APPROVED,
 				startAt: values.accessFrom?.toISOString(),

@@ -22,8 +22,8 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import { type DefaultSeoInfo } from '@shared/types/seo';
-import { type Visit, VisitStatus } from '@shared/types/visit';
-import { useGetVisits } from '@visit-requests/hooks/get-visits';
+import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
+import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { useUpdateVisitRequest } from '@visit-requests/hooks/update-visit';
 import { VisitTimeframe } from '@visit-requests/types';
 
@@ -34,23 +34,23 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
 	const [selected, setSelected] = useState<string | number | null>(null);
 
 	const {
-		data: visits,
+		data: visitRequests,
 		isFetching,
 		refetch: refetchVisitRequests,
-	} = useGetVisits({
+	} = useGetVisitRequests({
 		searchInput: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
 		timeframe: VisitTimeframe.ACTIVE,
 		status: VisitStatus.APPROVED,
 		page: filters.page,
 		size: VisitorsTablePageSize,
-		orderProp: filters.orderProp as keyof Visit,
+		orderProp: filters.orderProp as keyof VisitRequest,
 		orderDirection: filters.orderDirection as OrderDirection,
 	});
 	const [search, setSearch] = useState<string>('');
 	const { mutateAsync: updateVisitRequest } = useUpdateVisitRequest();
 	const selectedItem = useMemo(
-		() => visits?.items.find((item) => item.id === selected),
-		[visits, selected]
+		() => visitRequests?.items.find((item) => item.id === selected),
+		[visitRequests, selected]
 	);
 
 	// Filters
@@ -85,12 +85,12 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
 		}
 	};
 
-	const denyVisitRequest = (visitRequest: Visit) => {
+	const denyVisitRequest = (visitRequest: VisitRequest) => {
 		setSelected(visitRequest.id);
 		setShowDenyVisitRequestModal(true);
 	};
 
-	const editVisitRequest = (visitRequest: Visit) => {
+	const editVisitRequest = (visitRequest: VisitRequest) => {
 		setSelected(visitRequest.id);
 		setShowEditVisitRequestModal(true);
 	};
@@ -164,20 +164,20 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
 							/>
 						</div>
 
-						{(visits?.items?.length || 0) > 0 ? (
+						{(visitRequests?.items?.length || 0) > 0 ? (
 							<div className="l-container--edgeless-to-lg">
-								<Table<Visit>
+								<Table<VisitRequest>
 									className="u-mt-24 c-table--no-padding-last-column"
 									options={{
 										columns: VisitorsTableColumns(
 											denyVisitRequest,
 											editVisitRequest
 										),
-										data: visits?.items || [],
+										data: visitRequests?.items || [],
 										initialState: {
 											pageSize: VisitorsTablePageSize,
 											sortBy: sortFilters,
-										} as TableState<Visit>,
+										} as TableState<VisitRequest>,
 									}}
 									onSortChange={onSortChange}
 									sortingIcons={sortingIcons}
@@ -190,7 +190,7 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
 													Math.max(0, filters.page - 1) *
 													VisitorsTablePageSize
 												}
-												total={visits?.total || 0}
+												total={visitRequests?.total || 0}
 												onPageChange={(pageZeroBased) => {
 													gotoPage(pageZeroBased);
 													// setSelected(null);

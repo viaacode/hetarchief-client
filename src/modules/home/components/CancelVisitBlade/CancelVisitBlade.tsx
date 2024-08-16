@@ -4,8 +4,8 @@ import { type FC, useState } from 'react';
 import { Blade } from '@shared/components/Blade/Blade';
 import { tHtml } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
-import { VisitStatus } from '@shared/types/visit';
-import { VisitsService } from '@visit-requests/services';
+import { VisitStatus } from '@shared/types/visit-request';
+import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
 
 import { type CancelVisitBladeProps } from './CancelVisitBlade.types';
 
@@ -20,7 +20,7 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 				return;
 			}
 
-			await VisitsService.patchById(selected.id, {
+			await VisitRequestService.patchById(selected.id, {
 				status: VisitStatus.CANCELLED_BY_VISITOR,
 				note: `[${new Date().toISOString()}] ${tHtml(
 					'modules/home/components/cancel-visit-blade/cancel-visit-blade___deze-aanvraag-is-geannuleerd-door-de-gebruiker'

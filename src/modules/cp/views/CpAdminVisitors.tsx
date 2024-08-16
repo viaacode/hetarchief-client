@@ -25,8 +25,8 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import { type DefaultSeoInfo } from '@shared/types/seo';
-import { type Visit, VisitStatus } from '@shared/types/visit';
-import { useGetVisits } from '@visit-requests/hooks/get-visits';
+import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
+import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { useUpdateVisitRequest } from '@visit-requests/hooks/update-visit';
 import { RequestStatusAll, VisitTimeframe } from '@visit-requests/types';
 
@@ -42,7 +42,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 		data: visits,
 		isFetching,
 		refetch: refetchVisitRequests,
-	} = useGetVisits({
+	} = useGetVisitRequests({
 		searchInput: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
 		status: VisitStatus.APPROVED,
 		timeframe:
@@ -51,7 +51,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 				: (filters.timeframe as VisitTimeframe),
 		page: filters.page,
 		size: RequestTablePageSize,
-		orderProp: filters.orderProp as keyof Visit,
+		orderProp: filters.orderProp as keyof VisitRequest,
 		orderDirection: filters.orderDirection as OrderDirection,
 	});
 
@@ -105,12 +105,12 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 		}
 	};
 
-	const denyVisitRequest = (visitRequest: Visit) => {
+	const denyVisitRequest = (visitRequest: VisitRequest) => {
 		setSelected(visitRequest.id);
 		setShowDenyVisitRequestModal(true);
 	};
 
-	const editVisitRequest = (visitRequest: Visit) => {
+	const editVisitRequest = (visitRequest: VisitRequest) => {
 		setSelected(visitRequest.id);
 		setShowEditVisitRequestModal(true);
 	};
@@ -184,7 +184,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 		}
 		return (
 			<div className="l-container l-container--edgeless-to-lg">
-				<Table<Visit>
+				<Table<VisitRequest>
 					className="u-mt-24 c-table--no-padding-last-column"
 					options={{
 						columns: VisitorsTableColumns(denyVisitRequest, editVisitRequest),
@@ -192,7 +192,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 						initialState: {
 							pageSize: RequestTablePageSize,
 							sortBy: sortFilters,
-						} as TableState<Visit>,
+						} as TableState<VisitRequest>,
 					}}
 					onSortChange={onSortChange}
 					sortingIcons={sortingIcons}
