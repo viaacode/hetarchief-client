@@ -34,6 +34,7 @@ export enum SearchFilterId {
 	Maintainers = 'aanbieders',
 	ConsultableOnlyOnLocation = 'onLocation',
 	ConsultableMedia = 'media',
+	ConsultablePublicDomain = 'publicDomain',
 	ObjectType = 'objectType',
 	Cast = 'cast',
 	SpacialCoverage = 'spacialCoverage',

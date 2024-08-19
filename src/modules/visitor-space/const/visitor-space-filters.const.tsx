@@ -3,8 +3,9 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import { SearchPageMediaType } from '@shared/types/ie-objects';
 import { AdvancedFilterForm } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm';
-import { ConsultableMediaFilterForm } from '@visitor-space/components/ConsultableMediaFilterForm';
-import { ConsultableOnlyOnLocationFilterForm } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm';
+import { ConsultableMediaFilterForm } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm';
+import { ConsultableOnlyOnLocationFilterForm } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm';
+import { ConsultablePublicDomainFilterForm } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm';
 import { CreatedFilterForm } from '@visitor-space/components/CreatedFilterForm';
 import { CreatorFilterForm } from '@visitor-space/components/CreatorFilterForm';
 import { DurationFilterForm } from '@visitor-space/components/DurationFilterForm';
@@ -70,6 +71,21 @@ export const SEARCH_PAGE_FILTERS = (
 			return !isPublicCollection || isKioskUser;
 		},
 	},
+	...(activeTab === SearchPageMediaType.Newspaper
+		? [
+				{
+					id: SearchFilterId.ConsultablePublicDomain,
+					label: tText(
+						'modules/visitor-space/const/visitor-space-filters___publiek-domain'
+					),
+					form: ConsultablePublicDomainFilterForm,
+					type: FilterMenuType.Checkbox,
+					isDisabled: () => {
+						return false;
+					},
+				},
+		  ]
+		: []),
 	{
 		id: SearchFilterId.Medium,
 		label: tText('modules/visitor-space/const/index___analoge-drager'),

@@ -33,6 +33,7 @@ export enum IeObjectsSearchFilterField {
 	MAINTAINER_ID = 'maintainer', // Contains the OR-id of the maintainer
 	CONSULTABLE_ONLY_ON_LOCATION = 'isConsultableOnlyOnLocation',
 	CONSULTABLE_MEDIA = 'isConsultableMedia',
+	CONSULTABLE_PUBLIC_DOMAIN = 'isConsultablePublicDomain',
 	CAST = 'cast',
 	IDENTIFIER = 'identifier',
 	OBJECT_TYPE = 'objectType',

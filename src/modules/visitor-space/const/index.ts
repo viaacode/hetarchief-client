@@ -47,6 +47,7 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
 	[SearchFilterId.Advanced]: undefined,
 	[SearchFilterId.ConsultableOnlyOnLocation]: undefined,
 	[SearchFilterId.ConsultableMedia]: undefined,
+	[SearchFilterId.ConsultablePublicDomain]: undefined,
 	[SearchFilterId.Cast]: undefined,
 	[SearchFilterId.Identifier]: undefined,
 	[SearchFilterId.ObjectType]: undefined,
@@ -77,6 +78,7 @@ export const SEARCH_PAGE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<any
 	[SearchFilterId.Advanced]: AdvancedFilterArrayParam,
 	[SearchFilterId.ConsultableOnlyOnLocation]: BooleanParam,
 	[SearchFilterId.ConsultableMedia]: BooleanParam,
+	[SearchFilterId.ConsultablePublicDomain]: BooleanParam,
 	// Pagination
 	page: NumberParam,
 	// Sorting

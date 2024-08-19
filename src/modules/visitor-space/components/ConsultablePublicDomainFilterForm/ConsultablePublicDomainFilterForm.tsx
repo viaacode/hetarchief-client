@@ -5,35 +5,35 @@ import { useQueryParams } from 'use-query-params';
 
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import CheckboxFilterForm from '@visitor-space/components/CheckboxFilterForm/CheckboxFilterForm';
-import {
-	type ConsultableOnlyOnLocationFilterFormProps,
-	type ConsultableOnlyOnLocationFilterFormState,
-} from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
 import { SearchFilterId } from '@visitor-space/types';
 
 import {
-	CONSULTABLE_ONLY_ON_LOCATION_FILTER_FORM_SCHEMA,
-	REMOTE_FILTER_FORM_QUERY_PARAM_CONFIG,
-} from './ConsultableOnlyOnLocationFilterForm.const';
+	CONSULTABLE_PUBLIC_DOMAIN_FILTER_FORM_QUERY_PARAM_CONFIG,
+	CONSULTABLE_PUBLIC_DOMAIN_FILTER_FORM_SCHEMA,
+} from './ConsultablePublicDomainFilterForm.const';
+import {
+	type ConsultablePublicDomainFilterFormProps,
+	type ConsultablePublicDomainFilterFormState,
+} from './ConsultablePublicDomainFilterForm.types';
 
 const defaultValues = {
-	[IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION]: false,
+	[IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN]: false,
 };
 
-export const ConsultableOnlyOnLocationFilterForm: FC<ConsultableOnlyOnLocationFilterFormProps> = ({
+export const ConsultablePublicDomainFilterForm: FC<ConsultablePublicDomainFilterFormProps> = ({
 	id,
 	label,
 	onFormSubmit,
 	className,
 }) => {
 	const [isInitialRender, setIsInitialRender] = useState(true);
-	const [query] = useQueryParams(REMOTE_FILTER_FORM_QUERY_PARAM_CONFIG);
+	const [query] = useQueryParams(CONSULTABLE_PUBLIC_DOMAIN_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [isChecked, setIsChecked] = useState<boolean>(
-		() => query[SearchFilterId.ConsultableOnlyOnLocation] || false
+		() => query[SearchFilterId.ConsultablePublicDomain] || false
 	);
 
-	const { setValue, handleSubmit } = useForm<ConsultableOnlyOnLocationFilterFormState>({
-		resolver: yupResolver(CONSULTABLE_ONLY_ON_LOCATION_FILTER_FORM_SCHEMA()),
+	const { setValue, handleSubmit } = useForm<ConsultablePublicDomainFilterFormState>({
+		resolver: yupResolver(CONSULTABLE_PUBLIC_DOMAIN_FILTER_FORM_SCHEMA()),
 		defaultValues,
 	});
 
@@ -48,12 +48,12 @@ export const ConsultableOnlyOnLocationFilterForm: FC<ConsultableOnlyOnLocationFi
 			setIsInitialRender(false);
 			return;
 		}
-		setValue(IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION, isChecked);
+		setValue(IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN, isChecked);
 
 		handleSubmit(
 			() =>
 				onFilterFormSubmit(id, {
-					[IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION]: isChecked,
+					[IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN]: isChecked,
 				}),
 			(...args) => console.error(args)
 		)();

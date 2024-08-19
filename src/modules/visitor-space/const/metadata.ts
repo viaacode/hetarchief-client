@@ -60,6 +60,7 @@ export const REGULAR_FILTERS: MetadataProp[] = [
 	// MetadataProp.Maintainers,
 	// MetadataProp.ConsultableOnlyOnLocation,
 	// MetadataProp.ConsultableMedia,
+	// MetadataProp.ConsultablePublicDomain,
 ];
 
 export const GET_OPERATOR_LABELS = (): Record<string, string> => ({
