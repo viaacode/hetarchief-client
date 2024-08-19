@@ -105,6 +105,7 @@ import {
 	IeObjectAccessThrough,
 	type IeObjectFile,
 	IeObjectLicense,
+	type IeObjectRepresentation,
 	IsPartOfKey,
 	MediaActions,
 	MetadataExportFormats,
@@ -432,17 +433,20 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	// ocr alto info
 	const currentPageAltoUrl = useMemo((): string | null => {
-		let altoFileUrl = null;
-		currentPage?.find(
-			(representation) =>
-				representation?.files?.find((file) => {
-					if (XML_FORMATS.includes(file.mimeType)) {
-						altoFileUrl = file.storedAt;
-						return true;
-					}
-					return false;
-				})
-		);
+		let altoFileUrl: string | null = null;
+		currentPage?.some((representation: IeObjectRepresentation) => {
+			if (representation.schemaTranscriptUrl) {
+				altoFileUrl = representation.schemaTranscriptUrl;
+				return true; // Found the alto.json file
+			}
+			return representation?.files?.some((file) => {
+				if (XML_FORMATS.includes(file.mimeType)) {
+					altoFileUrl = file.storedAt;
+					return true; // Found the fallback alto.xml file
+				}
+				return false; // Did not find any alto files
+			});
+		});
 		return altoFileUrl;
 	}, [currentPage]);
 	const { data: simplifiedAltoInfo } = useGetAltoJsonFileContent(currentPageAltoUrl);
