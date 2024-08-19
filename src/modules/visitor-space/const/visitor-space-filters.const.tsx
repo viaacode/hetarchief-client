@@ -21,6 +21,13 @@ import { MediumFilterForm } from '@visitor-space/components/MediumFilterForm';
 import { PublishedFilterForm } from '@visitor-space/components/PublishedFilterForm';
 import { SearchFilterId } from '@visitor-space/types';
 
+const ALL_TABS: SearchPageMediaType[] = [
+	SearchPageMediaType.All,
+	SearchPageMediaType.Video,
+	SearchPageMediaType.Audio,
+	SearchPageMediaType.Newspaper,
+];
+
 export const SEARCH_PAGE_FILTERS = (
 	isPublicCollection: boolean,
 	isKioskUser: boolean,
@@ -45,6 +52,7 @@ export const SEARCH_PAGE_FILTERS = (
 		}[activeTab],
 		form: ConsultableMediaFilterForm,
 		type: FilterMenuType.Checkbox,
+		tabs: ALL_TABS,
 		isDisabled: () => {
 			return !isPublicCollection || !isKeyUser;
 		},
@@ -67,54 +75,56 @@ export const SEARCH_PAGE_FILTERS = (
 		}[activeTab],
 		form: ConsultableOnlyOnLocationFilterForm,
 		type: FilterMenuType.Checkbox,
+		tabs: ALL_TABS,
 		isDisabled: () => {
 			return !isPublicCollection || isKioskUser;
 		},
 	},
-	...(activeTab === SearchPageMediaType.Newspaper
-		? [
-				{
-					id: SearchFilterId.ConsultablePublicDomain,
-					label: tText(
-						'modules/visitor-space/const/visitor-space-filters___publiek-domain'
-					),
-					form: ConsultablePublicDomainFilterForm,
-					type: FilterMenuType.Checkbox,
-					isDisabled: () => {
-						return false;
-					},
-				},
-		  ]
-		: []),
+
+	{
+		id: SearchFilterId.ConsultablePublicDomain,
+		label: tText('modules/visitor-space/const/visitor-space-filters___publiek-domain'),
+		form: ConsultablePublicDomainFilterForm,
+		type: FilterMenuType.Checkbox,
+		tabs: [SearchPageMediaType.Newspaper],
+		isDisabled: () => {
+			return false;
+		},
+	},
 	{
 		id: SearchFilterId.Medium,
 		label: tText('modules/visitor-space/const/index___analoge-drager'),
 		form: MediumFilterForm,
 		type: FilterMenuType.Modal,
+		tabs: ALL_TABS,
 	},
 	{
 		id: SearchFilterId.Duration,
 		label: tText('modules/visitor-space/const/index___duurtijd'),
 		form: DurationFilterForm,
 		type: FilterMenuType.Modal,
+		tabs: [SearchPageMediaType.All, SearchPageMediaType.Video, SearchPageMediaType.Audio],
 	},
 	{
 		id: SearchFilterId.Created,
 		label: tText('modules/visitor-space/const/index___creatiedatum'),
 		form: CreatedFilterForm,
 		type: FilterMenuType.Modal,
+		tabs: ALL_TABS,
 	},
 	{
 		id: SearchFilterId.Published,
 		label: tText('modules/visitor-space/const/index___publicatiedatum'),
 		form: PublishedFilterForm,
 		type: FilterMenuType.Modal,
+		tabs: ALL_TABS,
 	},
 	{
 		id: SearchFilterId.Creator,
 		label: tText('modules/visitor-space/const/index___maker'),
 		form: CreatorFilterForm,
 		type: FilterMenuType.Modal,
+		tabs: ALL_TABS,
 	},
 	// Disabled for https://meemoo.atlassian.net/browse/ARC-246
 	{
@@ -122,6 +132,7 @@ export const SEARCH_PAGE_FILTERS = (
 		label: tText('modules/visitor-space/const/index___genre'),
 		form: GenreFilterForm,
 		type: FilterMenuType.Modal,
+		tabs: ALL_TABS,
 		isDisabled: () => true,
 	},
 	// Disabled for https://meemoo.atlassian.net/browse/ARC-246
@@ -130,6 +141,7 @@ export const SEARCH_PAGE_FILTERS = (
 		label: tText('modules/visitor-space/const/index___trefwoorden'),
 		form: KeywordsFilterForm,
 		type: FilterMenuType.Modal,
+		tabs: ALL_TABS,
 		isDisabled: () => true,
 	},
 	{
@@ -137,12 +149,14 @@ export const SEARCH_PAGE_FILTERS = (
 		label: tText('modules/visitor-space/const/index___taal'),
 		form: LanguageFilterForm,
 		type: FilterMenuType.Modal,
+		tabs: ALL_TABS,
 	},
 	{
 		id: SearchFilterId.Maintainers,
 		label: tText('modules/visitor-space/const/index___aanbieder'),
 		form: MaintainerFilterForm,
 		type: FilterMenuType.Modal,
+		tabs: ALL_TABS,
 		isDisabled: () => {
 			return !isPublicCollection || isKioskUser;
 		},
@@ -153,5 +167,6 @@ export const SEARCH_PAGE_FILTERS = (
 		label: tText('modules/visitor-space/const/index___geavanceerd'),
 		form: AdvancedFilterForm,
 		type: FilterMenuType.Modal,
+		tabs: ALL_TABS,
 	},
 ];

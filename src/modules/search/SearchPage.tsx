@@ -299,7 +299,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			isKeyUser,
 			format
 		)
-			.filter(({ isDisabled }: FilterMenuFilterOption): boolean => !!isDisabled?.())
+			.filter(
+				({ isDisabled, tabs }: FilterMenuFilterOption): boolean =>
+					isDisabled?.() || !tabs.includes(format)
+			)
 			.map(({ id }: FilterMenuFilterOption): SearchFilterId => id as SearchFilterId);
 
 		// Loop over all existing query params and strip out the disabled filters if they exist
@@ -423,7 +426,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const filters = useMemo(
 		() =>
 			SEARCH_PAGE_FILTERS(isPublicCollection, isKioskUser, isKeyUser, format).filter(
-				({ isDisabled }) => !isDisabled?.()
+				({ isDisabled, tabs }) => !isDisabled?.() && tabs.includes(format)
 			),
 		[isPublicCollection, isKioskUser, isKeyUser, format]
 	);
