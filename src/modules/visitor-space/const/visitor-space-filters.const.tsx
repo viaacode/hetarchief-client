@@ -1,6 +1,7 @@
 // TODO rename this to SEARCH_FILTERS since these are not specific to a visitor space anymore in fase2
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
+import { SearchPageMediaType } from '@shared/types/ie-objects';
 import { AdvancedFilterForm } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm';
 import { ConsultableMediaFilterForm } from '@visitor-space/components/ConsultableMediaFilterForm';
 import { ConsultableOnlyOnLocationFilterForm } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm';
@@ -19,14 +20,28 @@ import { MediumFilterForm } from '@visitor-space/components/MediumFilterForm';
 import { PublishedFilterForm } from '@visitor-space/components/PublishedFilterForm';
 import { SearchFilterId } from '@visitor-space/types';
 
-export const VISITOR_SPACE_FILTERS = (
+export const SEARCH_PAGE_FILTERS = (
 	isPublicCollection: boolean,
 	isKioskUser: boolean,
-	isKeyUser: boolean
+	isKeyUser: boolean,
+	activeTab: SearchPageMediaType
 ): FilterMenuFilterOption[] => [
 	{
 		id: SearchFilterId.ConsultableMedia,
-		label: tText('modules/visitor-space/const/index___alles-wat-raadpleegbaar-is'),
+		label: {
+			[SearchPageMediaType.All]: tText(
+				'modules/visitor-space/const/index___alles-wat-raadpleegbaar-is'
+			),
+			[SearchPageMediaType.Video]: tText(
+				'modules/visitor-space/const/visitor-space-filters___direct-kijken'
+			),
+			[SearchPageMediaType.Audio]: tText(
+				'modules/visitor-space/const/visitor-space-filters___direct-luisteren'
+			),
+			[SearchPageMediaType.Newspaper]: tText(
+				'modules/visitor-space/const/visitor-space-filters___direct-lezen'
+			),
+		}[activeTab],
 		form: ConsultableMediaFilterForm,
 		type: FilterMenuType.Checkbox,
 		isDisabled: () => {
@@ -35,7 +50,20 @@ export const VISITOR_SPACE_FILTERS = (
 	},
 	{
 		id: SearchFilterId.ConsultableOnlyOnLocation,
-		label: tText('modules/visitor-space/const/index___enkel-ter-plaatse-beschikbaar'),
+		label: {
+			[SearchPageMediaType.All]: tText(
+				'modules/visitor-space/const/index___enkel-ter-plaatse-beschikbaar'
+			),
+			[SearchPageMediaType.Video]: tText(
+				'modules/visitor-space/const/visitor-space-filters___ter-plaatse-kijken'
+			),
+			[SearchPageMediaType.Audio]: tText(
+				'modules/visitor-space/const/visitor-space-filters___ter-plaatse-luisteren'
+			),
+			[SearchPageMediaType.Newspaper]: tText(
+				'modules/visitor-space/const/visitor-space-filters___ter-plaatse-lezen'
+			),
+		}[activeTab],
 		form: ConsultableOnlyOnLocationFilterForm,
 		type: FilterMenuType.Checkbox,
 		isDisabled: () => {
