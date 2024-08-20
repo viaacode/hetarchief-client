@@ -1986,7 +1986,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			<Button
 				className={styles['p-object-detail__back']}
 				icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
-				onClick={() => window.history.back()}
+				onClick={() => {
+					router.back();
+				}}
 				variants={['black']}
 			/>
 		);
