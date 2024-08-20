@@ -54,8 +54,8 @@ export const FLOWPLAYER_VIDEO_FORMATS: string[] = [
 	'application/vnd.apple.mpegurl',
 ];
 export const FLOWPLAYER_AUDIO_FORMATS: string[] = [
-	// 'audio/mpeg', // We want to play the audio file, not the mp4 video with the ugly speaker
-	'audio/mp4',
+	// 'audio/mpeg', // ignore the actual audio file, since we already use the audio encoded into a view file
+	'audio/mp4', // We want to play the mp4 video file with the ugly speaker (decided by team archief)
 	'audio/m4a',
 	'audio/aac',
 ];
@@ -74,28 +74,34 @@ export const IMAGE_API_FORMATS: string[] = ['image/jph'];
 export const IMAGE_BROWSE_COPY_FORMATS: string[] = ['image/jpeg'];
 export const XML_FORMATS: string[] = ['application/xml'];
 
-export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
-	{
-		label: tText('modules/ie-objects/ie-objects___download-alle-paginas-zip'),
-		id: MetadataExportFormats.fullNewspaperZip,
-	},
-	{
-		label: tText('modules/ie-objects/ie-objects___download-deze-pagina-zip'),
-		id: MetadataExportFormats.onePageNewspaperZip,
-	},
-	{
-		label: tText(
-			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-XML'
-		),
-		id: MetadataExportFormats.xml,
-	},
-	{
-		label: tText(
-			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-CSV'
-		),
-		id: MetadataExportFormats.csv,
-	},
-];
+export const METADATA_EXPORT_OPTIONS = (isPublicNewspaper: boolean): MenuItemInfo[] => {
+	return compact([
+		isPublicNewspaper
+			? {
+					label: tText('modules/ie-objects/ie-objects___download-alle-paginas-zip'),
+					id: MetadataExportFormats.fullNewspaperZip,
+			  }
+			: null,
+		isPublicNewspaper
+			? {
+					label: tText('modules/ie-objects/ie-objects___download-deze-pagina-zip'),
+					id: MetadataExportFormats.onePageNewspaperZip,
+			  }
+			: null,
+		{
+			label: tText(
+				'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-XML'
+			),
+			id: MetadataExportFormats.xml,
+		},
+		{
+			label: tText(
+				'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-CSV'
+			),
+			id: MetadataExportFormats.csv,
+		},
+	]);
+};
 
 /**
  * Object placeholders

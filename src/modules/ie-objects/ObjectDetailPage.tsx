@@ -1066,7 +1066,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const renderExportDropdown = useCallback(
 		(isPrimary: boolean) => {
 			const icon = <Icon name={IconNamesLight.Export} aria-hidden />;
-			const label = tText('modules/ie-objects/object-detail-page___download-deze-krant');
+
+			const buttonLabelDesktop = isPublicNewspaper
+				? tText('modules/ie-objects/object-detail-page___download-deze-krant-desktop')
+				: tText('modules/ie-objects/object-detail-page___export-metadata-desktop');
+			const buttonLabelMobile = isPublicNewspaper
+				? tText('modules/ie-objects/object-detail-page___download-deze-krant-mobile')
+				: tText('modules/ie-objects/object-detail-page___export-metadata-mobile');
 
 			return (
 				<div className={styles['p-object-detail__export']}>
@@ -1082,17 +1088,22 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 									className={styles['p-object-detail__export']}
 									iconStart={icon}
 									iconEnd={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-									aria-label={label}
-									title={label}
+									aria-label={buttonLabelDesktop}
+									title={buttonLabelDesktop}
 								>
-									<span className="u-display-block:md">{label}</span>
+									<span className="u-text-ellipsis u-display-none u-display-block:md">
+										{buttonLabelDesktop}
+									</span>
+									<span className="u-text-ellipsis u-display-none:md">
+										{buttonLabelMobile}
+									</span>
 								</Button>
 							) : (
 								<Button
 									icon={icon}
 									variants={['silver']}
-									aria-label={label}
-									title={label}
+									aria-label={buttonLabelDesktop}
+									title={buttonLabelDesktop}
 								/>
 							)}
 						</DropdownButton>
@@ -1100,7 +1111,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							<MenuContent
 								rootClassName="c-dropdown-menu"
 								className={styles['p-object-detail__export-dropdown']}
-								menuItems={METADATA_EXPORT_OPTIONS()}
+								menuItems={METADATA_EXPORT_OPTIONS(isPublicNewspaper || false)}
 								onClick={(id) => onExportClick(id as MetadataExportFormats)}
 							/>
 						</DropdownContent>
@@ -1108,7 +1119,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				</div>
 			);
 		},
-		[metadataExportDropdownOpen, onExportClick]
+		[isPublicNewspaper, metadataExportDropdownOpen, onExportClick]
 	);
 
 	/**
