@@ -6,19 +6,14 @@ import { AdvancedFilterForm } from '@visitor-space/components/AdvancedFilterForm
 import { ConsultableMediaFilterForm } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm';
 import { ConsultableOnlyOnLocationFilterForm } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm';
 import { ConsultablePublicDomainFilterForm } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm';
-import { CreatedFilterForm } from '@visitor-space/components/CreatedFilterForm';
 import { CreatorFilterForm } from '@visitor-space/components/CreatorFilterForm';
-import { DurationFilterForm } from '@visitor-space/components/DurationFilterForm';
 import {
 	type FilterMenuFilterOption,
 	FilterMenuType,
 } from '@visitor-space/components/FilterMenu/FilterMenu.types';
-import { GenreFilterForm } from '@visitor-space/components/GenreFilterForm';
-import KeywordsFilterForm from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm';
-import LanguageFilterForm from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm';
 import MaintainerFilterForm from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm';
 import { MediumFilterForm } from '@visitor-space/components/MediumFilterForm';
-import { PublishedFilterForm } from '@visitor-space/components/PublishedFilterForm';
+import { ReleaseDateFilterForm } from '@visitor-space/components/ReleaseDateFilterForm';
 import { SearchFilterId } from '@visitor-space/types';
 
 const ALL_TABS: SearchPageMediaType[] = [
@@ -80,7 +75,6 @@ export const SEARCH_PAGE_FILTERS = (
 			return !isPublicCollection || isKioskUser;
 		},
 	},
-
 	{
 		id: SearchFilterId.ConsultablePublicDomain,
 		label: tText('modules/visitor-space/const/visitor-space-filters___publiek-domain'),
@@ -92,30 +86,28 @@ export const SEARCH_PAGE_FILTERS = (
 		},
 	},
 	{
+		id: SearchFilterId.Maintainers,
+		label: tText('modules/visitor-space/const/index___aanbieder'),
+		form: MaintainerFilterForm,
+		type: FilterMenuType.Modal,
+		tabs: ALL_TABS,
+		isDisabled: () => {
+			return !isPublicCollection || isKioskUser;
+		},
+	},
+	// TODO Reeks (newspaper only)
+	{
+		id: SearchFilterId.ReleaseDate,
+		label: tText('Uitgavedatum'),
+		form: ReleaseDateFilterForm,
+		type: FilterMenuType.Modal,
+		tabs: ALL_TABS,
+	},
+	// TODO Location of publication (newspaper only)
+	{
 		id: SearchFilterId.Medium,
 		label: tText('modules/visitor-space/const/index___analoge-drager'),
 		form: MediumFilterForm,
-		type: FilterMenuType.Modal,
-		tabs: ALL_TABS,
-	},
-	{
-		id: SearchFilterId.Duration,
-		label: tText('modules/visitor-space/const/index___duurtijd'),
-		form: DurationFilterForm,
-		type: FilterMenuType.Modal,
-		tabs: [SearchPageMediaType.All, SearchPageMediaType.Video, SearchPageMediaType.Audio],
-	},
-	{
-		id: SearchFilterId.Created,
-		label: tText('modules/visitor-space/const/index___creatiedatum'),
-		form: CreatedFilterForm,
-		type: FilterMenuType.Modal,
-		tabs: ALL_TABS,
-	},
-	{
-		id: SearchFilterId.Published,
-		label: tText('modules/visitor-space/const/index___publicatiedatum'),
-		form: PublishedFilterForm,
 		type: FilterMenuType.Modal,
 		tabs: ALL_TABS,
 	},
@@ -126,41 +118,7 @@ export const SEARCH_PAGE_FILTERS = (
 		type: FilterMenuType.Modal,
 		tabs: ALL_TABS,
 	},
-	// Disabled for https://meemoo.atlassian.net/browse/ARC-246
-	{
-		id: SearchFilterId.Genre,
-		label: tText('modules/visitor-space/const/index___genre'),
-		form: GenreFilterForm,
-		type: FilterMenuType.Modal,
-		tabs: ALL_TABS,
-		isDisabled: () => true,
-	},
-	// Disabled for https://meemoo.atlassian.net/browse/ARC-246
-	{
-		id: SearchFilterId.Keywords,
-		label: tText('modules/visitor-space/const/index___trefwoorden'),
-		form: KeywordsFilterForm,
-		type: FilterMenuType.Modal,
-		tabs: ALL_TABS,
-		isDisabled: () => true,
-	},
-	{
-		id: SearchFilterId.Language,
-		label: tText('modules/visitor-space/const/index___taal'),
-		form: LanguageFilterForm,
-		type: FilterMenuType.Modal,
-		tabs: ALL_TABS,
-	},
-	{
-		id: SearchFilterId.Maintainers,
-		label: tText('modules/visitor-space/const/index___aanbieder'),
-		form: MaintainerFilterForm,
-		type: FilterMenuType.Modal,
-		tabs: ALL_TABS,
-		isDisabled: () => {
-			return !isPublicCollection || isKioskUser;
-		},
-	},
+	// TODO list of names of fallen soldiers (newspaper only)
 	{
 		id: SearchFilterId.Advanced,
 		icon: IconNamesLight.DotsHorizontal,

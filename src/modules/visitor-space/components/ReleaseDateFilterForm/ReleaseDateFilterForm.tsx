@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, type SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { endOfDay, parseISO, startOfDay } from 'date-fns';
-import { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
+import React, { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { type MultiValue, type SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
@@ -12,14 +12,6 @@ import { YEAR_LENGTH } from '@shared/const/date';
 import { convertYearToDate } from '@shared/helpers/convert-year-to-date';
 import { tHtml } from '@shared/helpers/translate';
 import { isRange, Operator } from '@shared/types';
-import {
-	PUBLISHED_FILTER_FORM_QUERY_PARAM_CONFIG,
-	PUBLISHED_FILTER_FORM_SCHEMA,
-} from '@visitor-space/components/PublishedFilterForm/PublishedFilterForm.const';
-import {
-	type PublishedFilterFormProps,
-	type PublishedFilterFormState,
-} from '@visitor-space/components/PublishedFilterForm/PublishedFilterForm.types';
 import { getOperators } from '@visitor-space/utils/metadata';
 
 import { MetadataProp } from '../../types';
@@ -28,27 +20,40 @@ import { DateInput } from '../DateInput';
 import { DateRangeInput } from '../DateRangeInput';
 import { SelectDateOrYear } from '../SelectDateOrYear';
 import { YearInput } from '../YearInput';
-import { YearRangeInput } from '../YearRangeInput';
+import YearRangeInput from '../YearRangeInput/YearRangeInput';
 
-import styles from './PublishedFilterForm.module.scss';
+import {
+	RELEASE_DATE_FILTER_FORM_QUERY_PARAM_CONFIG,
+	RELEASE_DATE_FILTER_FORM_SCHEMA,
+} from './ReleaseDateFilterForm.const';
+import styles from './ReleaseDateFilterForm.module.scss';
+import {
+	type ReleaseDateFilterFormProps,
+	type ReleaseDateFilterFormState,
+} from './ReleaseDateFilterForm.types';
 
-const labelKeys: Record<keyof PublishedFilterFormState, string> = {
-	operator: 'PublishedFilterForm__operator',
-	published: 'PublishedFilterForm__published',
+const labelKeys: Record<keyof ReleaseDateFilterFormState, string> = {
+	releaseDate: 'ReleaseDateFilterForm__releaseDate',
+	operator: 'ReleaseDateFilterForm__operator',
 };
 
-const defaultValues: PublishedFilterFormState = {
+const defaultValues: ReleaseDateFilterFormState = {
+	releaseDate: undefined,
 	operator: Operator.GreaterThanOrEqual,
-	published: undefined,
 };
 
-const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className, disabled }) => {
-	const [query] = useQueryParams(PUBLISHED_FILTER_FORM_QUERY_PARAM_CONFIG);
+const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
+	children,
+	className,
+	disabled,
+}) => {
+	const [query] = useQueryParams(RELEASE_DATE_FILTER_FORM_QUERY_PARAM_CONFIG);
 
-	const initialValue = query?.published?.[0];
+	const initialValue = query?.releaseDate?.[0];
 
 	const [showRange, setShowRange] = useState(isRange(initialValue?.op));
-	const [form, setForm] = useState<PublishedFilterFormState>(defaultValues);
+	const [form, setForm] = useState<ReleaseDateFilterFormState>(defaultValues);
+
 	const [yearsSelected, setYearsSelected] = useState(false);
 	const [year, setYear] = useState<string | undefined>(undefined);
 	const [yearRange, setYearRange] = useState<string | undefined>(undefined);
@@ -59,17 +64,17 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 		formState: { errors },
 		handleSubmit,
 		setValue,
-	} = useForm<PublishedFilterFormState>({
-		resolver: yupResolver(PUBLISHED_FILTER_FORM_SCHEMA()),
+	} = useForm<ReleaseDateFilterFormState>({
+		resolver: yupResolver(RELEASE_DATE_FILTER_FORM_SCHEMA()),
 		defaultValues,
 	});
 
-	const operators = useMemo(() => getOperators(MetadataProp.PublishedAt), []);
+	const operators = useMemo(() => getOperators(MetadataProp.ReleaseDate), []);
 
 	// Effects
 
 	useEffect(() => {
-		setValue('published', form.published);
+		setValue('releaseDate', form.releaseDate);
 		setValue('operator', form.operator);
 		setShowRange(isRange(form.operator));
 	}, [form, setValue]);
@@ -78,12 +83,12 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 		if (initialValue) {
 			const { val, op } = initialValue;
 
-			val && setForm((oldForm) => ({ ...oldForm, published: val }));
 			op && setForm((oldForm) => ({ ...oldForm, operator: op as Operator }));
+			val && setForm((oldForm) => ({ ...oldForm, releaseDate: val }));
 
 			setShowRange(isRange(op)); // Not covered by other useEffects in time
 		}
-	}, [initialValue]);
+	}, [initialValue, setForm]);
 
 	// Events
 
@@ -94,7 +99,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 
 			const value = `${parsedFrom}${SEPARATOR}${parsedTo}`;
 
-			setForm((oldForm) => ({ ...oldForm, published: value }));
+			setForm((oldForm) => ({ ...oldForm, releaseDate: value }));
 		} catch (err) {
 			// ignore invalid dates since the user can still be typing something
 		}
@@ -111,32 +116,32 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 
 	const onChangeDateInput = (newDate: Date | null) => {
 		if (!newDate) {
-			setForm((oldForm) => ({ ...oldForm, published: undefined }));
+			setForm((oldForm) => ({ ...oldForm, releaseDate: undefined }));
 			return;
 		}
 		if (form.operator === Operator.Equals) {
 			convertToRange(newDate);
 			return;
 		}
-		onChangePublished((newDate || new Date()).toISOString());
+		onChangeReleaseDate((newDate || new Date()).toISOString());
 	};
 
-	const onChangePublished = (published: string) => {
-		setForm((oldForm) => ({ ...oldForm, published }));
+	const onChangeReleaseDate = (releaseDate: string) => {
+		setForm((oldForm) => ({ ...oldForm, releaseDate }));
 	};
 
 	useEffect(() => {
 		if (year) {
 			const yearDate = convertYearToDate(year, form.operator)?.toString();
-			setForm((oldForm) => ({ ...oldForm, published: yearDate }));
+			setForm((oldForm) => ({ ...oldForm, releaseDate: yearDate }));
 		}
 	}, [year, setForm, form.operator]);
 
 	useEffect(() => {
 		if (yearRange) {
-			setForm((oldForm) => ({ ...oldForm, published: yearRange }));
+			setForm((oldForm) => ({ ...oldForm, releaseDate: yearRange }));
 		}
-	}, [yearRange, setForm]);
+	}, [setForm, yearRange]);
 
 	const onChangeOperatorSelect = (
 		operator: SingleValue<SelectOption> | MultiValue<SelectOption>
@@ -146,7 +151,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 		if (value !== form.operator) {
 			setForm({
 				operator: value,
-				published: defaultValues.published,
+				releaseDate: defaultValues.releaseDate,
 			});
 		}
 	};
@@ -157,7 +162,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 				<YearRangeInput
 					disabled={disabled}
 					showLabels
-					id="published"
+					id="releaseDate"
 					onChange={(e) => {
 						setYearRange(e.target.value);
 					}}
@@ -166,7 +171,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 			);
 		}
 		if (showRange) {
-			const split = ((form.published || '') as string).split(SEPARATOR, 2);
+			const split = ((form.releaseDate || '') as string).split(SEPARATOR, 2);
 
 			const from: Date | undefined = split[0] ? parseISO(split[0]) : undefined;
 			const to: Date | undefined = split[1] ? parseISO(split[1]) : undefined;
@@ -175,9 +180,9 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 				<DateRangeInput
 					disabled={disabled}
 					showLabels
-					id="published"
+					id="releaseDate"
 					onChange={(newFromDate: Date | undefined, newToDate: Date | undefined) => {
-						onChangePublished(
+						onChangeReleaseDate(
 							`${newFromDate ? newFromDate.toISOString() : ''}${SEPARATOR}${
 								newToDate ? newToDate.toISOString() : ''
 							}`
@@ -193,18 +198,18 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 				<YearInput
 					label={getSelectValue(operators, form.operator)?.label}
 					disabled={disabled}
-					id="published"
+					id="releaseDate"
 					onChange={(e) => onChangeYear(e)}
 					value={year}
 				/>
 			);
 		}
-		const value = form.published?.split(SEPARATOR, 2)[0];
+		const value = form.releaseDate?.split(SEPARATOR, 2)[0];
 		return (
 			<DateInput
 				label={getSelectValue(operators, form.operator)?.label}
 				disabled={disabled}
-				id="published"
+				id="releaseDate"
 				onChange={(date) => {
 					onChangeDateInput(date);
 				}}
@@ -215,19 +220,13 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 
 	return (
 		<>
-			<div
-				className={clsx(
-					className,
-					styles['publishedFilterForm__operatorSelect'],
-					'u-px-20 u-px-32:md'
-				)}
-			>
+			<div className={clsx(className, styles['releaseDate'], 'u-px-20 u-px-32:md')}>
 				<FormControl
-					className="u-mb-24 c-form-control--label-hidden"
+					className={clsx('u-mb-24 c-form-control--label-hidden')}
 					errors={[errors.operator?.message]}
 					id={labelKeys.operator}
 					label={tHtml(
-						'modules/visitor-space/components/published-filter-form/published-filter-form___operator'
+						'modules/visitor-space/components/releaseDate-filter-form/releaseDate-filter-form___operator'
 					)}
 				>
 					<Controller
@@ -253,13 +252,13 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 					/>
 				</FormControl>
 			</div>
-			<div className={clsx(styles['publishedFilterForm__date'], 'u-px-20 u-px-32:md')}>
+			<div className={clsx(styles['releaseDate'], 'u-px-20 u-px-32:md')}>
 				<FormControl
 					className="u-mb-24 c-form-control--label-hidden"
-					errors={[errors.published?.message]}
-					id={labelKeys.published}
+					errors={[errors.releaseDate?.message]}
+					id={labelKeys.releaseDate}
 					label={tHtml(
-						'modules/visitor-space/components/published-filter-form/published-filter-form___waarde'
+						'modules/visitor-space/components/releaseDate-filter-form/releaseDate-filter-form___waarde'
 					)}
 				>
 					<SelectDateOrYear
@@ -267,7 +266,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 						setYearsSelected={setYearsSelected}
 						showPluralLabel={showRange}
 					/>
-					<Controller control={control} name="published" render={renderInputField} />
+					<Controller control={control} name="releaseDate" render={renderInputField} />
 				</FormControl>
 			</div>
 
@@ -285,4 +284,4 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 	);
 };
 
-export default PublishedFilterForm;
+export default ReleaseDateFilterForm;

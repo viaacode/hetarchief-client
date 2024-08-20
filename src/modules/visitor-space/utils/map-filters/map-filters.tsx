@@ -106,6 +106,7 @@ export const mapAdvancedToTags = (
 		switch (prop) {
 			case MetadataProp.CreatedAt:
 			case MetadataProp.PublishedAt:
+			case MetadataProp.ReleaseDate:
 				if (op === Operator.Between || op === Operator.Equals) {
 					value = `${formatDate(parseISO(split[0]))} - ${formatDate(parseISO(split[1]))}`;
 					operator = undefined;
@@ -164,6 +165,8 @@ export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] =>
 		...mapAdvancedToTags(query[SearchFilterId.Created] || [], SearchFilterId.Created),
 		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
 		...mapAdvancedToTags(query[SearchFilterId.Published] || [], SearchFilterId.Published),
+		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
+		...mapAdvancedToTags(query[SearchFilterId.ReleaseDate] || [], SearchFilterId.ReleaseDate),
 		...mapArrayParamToTags(
 			query[SearchFilterId.Creator] || [],
 			getFilterLabel(MetadataProp.Creator),
@@ -226,6 +229,7 @@ export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilte
 		switch (item.prop) {
 			case MetadataProp.CreatedAt:
 			case MetadataProp.PublishedAt:
+			case MetadataProp.ReleaseDate:
 				parsed = parseISO(values[i]);
 				values[i] = (parsed && format(parsed, 'yyyy-MM-dd')) || values[i];
 				break;

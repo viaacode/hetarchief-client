@@ -65,6 +65,7 @@ export const getFilterLabel = (prop: MetadataProp): string => {
 			[MetadataProp.CreatedAt]: tText(
 				'modules/visitor-space/utils/metadata/metadata___creatiedatum'
 			),
+			[MetadataProp.ReleaseDate]: tText('Uitgavedatum'),
 			[MetadataProp.Creator]: tText('modules/visitor-space/utils/metadata/metadata___maker'),
 			[MetadataProp.Description]: tText(
 				'modules/visitor-space/utils/metadata/metadata___beschrijving'

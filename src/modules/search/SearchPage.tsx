@@ -92,7 +92,6 @@ import { type AdvancedFilterFormState } from '@visitor-space/components/Advanced
 import { type ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
 import { type ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
 import { type ConsultablePublicDomainFilterFormState } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm.types';
-import { type CreatedFilterFormState } from '@visitor-space/components/CreatedFilterForm';
 import { type CreatorFilterFormState } from '@visitor-space/components/CreatorFilterForm';
 import { type DurationFilterFormState } from '@visitor-space/components/DurationFilterForm';
 import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
@@ -102,7 +101,7 @@ import { type KeywordsFilterFormState } from '@visitor-space/components/Keywords
 import { type LanguageFilterFormState } from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
 import { type MaintainerFilterFormState } from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
 import { type MediumFilterFormState } from '@visitor-space/components/MediumFilterForm';
-import { type PublishedFilterFormState } from '@visitor-space/components/PublishedFilterForm';
+import { type ReleaseDateFilterFormState } from '@visitor-space/components/ReleaseDateFilterForm';
 import {
 	PUBLIC_COLLECTION,
 	SEARCH_PAGE_QUERY_PARAM_CONFIG,
@@ -518,27 +517,14 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 					: undefined;
 				break;
 
-			case SearchFilterId.Created:
-				data = values as CreatedFilterFormState;
-				data = data.created
+			case SearchFilterId.ReleaseDate:
+				data = values as ReleaseDateFilterFormState;
+				data = data.releaseDate
 					? [
 							{
-								prop: MetadataProp.CreatedAt,
+								prop: MetadataProp.ReleaseDate,
 								op: data.operator,
-								val: data.created,
-							},
-					  ]
-					: undefined;
-				break;
-
-			case SearchFilterId.Published:
-				data = values as PublishedFilterFormState;
-				data = data.published
-					? [
-							{
-								prop: MetadataProp.PublishedAt,
-								op: data.operator,
-								val: data.published,
+								val: data.releaseDate,
 							},
 					  ]
 					: undefined;
@@ -645,9 +631,8 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 					break;
 
 				case SearchFilterId.Advanced:
-				case SearchFilterId.Created:
+				case SearchFilterId.ReleaseDate:
 				case SearchFilterId.Duration:
-				case SearchFilterId.Published:
 					updatedQuery[tag.key] = [
 						...((updatedQuery[tag.key] as Array<unknown>) || []),
 						tag,
