@@ -1,7 +1,11 @@
 import { isEmpty } from 'lodash-es';
 import { parseUrl, stringifyUrl } from 'query-string';
 
-import { type IeObject, type IeObjectSimilar } from '@ie-objects/ie-objects.types';
+import {
+	type IeObject,
+	type IeObjectSimilar,
+	type RelatedIeObjects,
+} from '@ie-objects/ie-objects.types';
 import { type SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import { ApiService } from '@shared/services/api-service';
 import { type SortObject } from '@shared/types';
@@ -113,6 +117,7 @@ export class IeObjectsService {
 		});
 	}
 
+	// Used for "ook interessant" on the detail page
 	public static async getSimilar(id: string, maintainerId: string): Promise<IeObjectSimilar> {
 		return await ApiService.getApi()
 			.get(
@@ -126,12 +131,16 @@ export class IeObjectsService {
 			.json();
 	}
 
-	public static async getRelated(id: string, maintainerId: string): Promise<IeObjectSimilar> {
+	// Used for "gerelateerde objecten" blade on the detail page
+	public static async getRelated(
+		ieObjectIri: string,
+		parentIeObjectIri: string | null
+	): Promise<RelatedIeObjects> {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IO_OBJECTS_SERVICE_RELATED}/${id}`, // TODO replace this endpoint with endpoint that only uses the schemaIdentifier and the maintainerId, and no meemooId is used anymore
-					query: maintainerId ? { maintainerId } : {},
+					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IO_OBJECTS_SERVICE_RELATED}`,
+					query: { ieObjectIri, parentIeObjectIri },
 				})
 			)
 			.json();
