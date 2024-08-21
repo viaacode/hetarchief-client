@@ -86,6 +86,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 			<>
 				<div
 					className={clsx(styles['c-filter-menu__option'], className)}
+					id={`c-filter-menu__option__${id}`}
 					key={`filter-menu-btn-${id}`}
 					style={{
 						position: 'relative',
