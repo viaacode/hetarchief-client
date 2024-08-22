@@ -89,8 +89,9 @@ import { VisitTimeframe } from '@visit-requests/types';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import { initialFields } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import { type AdvancedFilterFormState } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.types';
-import { type ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm';
-import { type ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm';
+import { type ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
+import { type ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
+import { type ConsultablePublicDomainFilterFormState } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm.types';
 import { type CreatedFilterFormState } from '@visitor-space/components/CreatedFilterForm';
 import { type CreatorFilterFormState } from '@visitor-space/components/CreatorFilterForm';
 import { type DurationFilterFormState } from '@visitor-space/components/DurationFilterForm';
@@ -582,6 +583,17 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 					: undefined;
 				break;
 
+			case SearchFilterId.ConsultablePublicDomain:
+				// Info: remove query param if false (= set to undefined)
+				data = (values as ConsultablePublicDomainFilterFormState)[
+					IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN
+				]
+					? (values as ConsultablePublicDomainFilterFormState)[
+							IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN
+					  ]
+					: undefined;
+				break;
+
 			case SearchFilterId.Advanced:
 				data = (values as AdvancedFilterFormState).advanced.filter((advanced) => {
 					return !isNil(advanced.val) && advanced.val !== initialFields().val;
@@ -639,8 +651,9 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 					];
 					break;
 
-				case SearchFilterId.ConsultableMedia:
 				case SearchFilterId.ConsultableOnlyOnLocation:
+				case SearchFilterId.ConsultableMedia:
+				case SearchFilterId.ConsultablePublicDomain:
 					// eslint-disable-next-line no-case-declarations
 					const newValue = `${tag.value ?? 'false'}`.replace(tagPrefix(tag.key), '');
 					updatedQuery[tag.key] = newValue === 'true' ? 'false' : 'true';

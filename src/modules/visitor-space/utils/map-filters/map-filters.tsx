@@ -185,23 +185,28 @@ export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] =>
 			SearchFilterId.Language
 		),
 		...mapBooleanParamToTag(
+			query[SearchFilterId.ConsultableOnlyOnLocation] || false,
+			tText(
+				'modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse'
+			),
+			SearchFilterId.ConsultableOnlyOnLocation
+		),
+		...mapBooleanParamToTag(
 			query[SearchFilterId.ConsultableMedia] || false,
 			tText(
 				'modules/visitor-space/utils/map-filters/map-filters___alles-wat-raadpleegbaar-is'
 			),
 			SearchFilterId.ConsultableMedia
 		),
+		...mapBooleanParamToTag(
+			query[SearchFilterId.ConsultablePublicDomain] || false,
+			tText('modules/visitor-space/utils/map-filters/map-filters___publiek-domain'),
+			SearchFilterId.ConsultablePublicDomain
+		),
 		...mapArrayParamToTags(
 			query[SearchFilterId.Maintainers] || [],
 			tText('modules/visitor-space/utils/map-filters/map-filters___aanbieders'),
 			SearchFilterId.Maintainers
-		),
-		...mapBooleanParamToTag(
-			query[SearchFilterId.ConsultableOnlyOnLocation] || false,
-			tText(
-				'modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse'
-			),
-			SearchFilterId.ConsultableOnlyOnLocation
 		),
 		...mapAdvancedToTags(query[SearchFilterId.Advanced] || []),
 	];
