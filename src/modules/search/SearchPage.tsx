@@ -48,6 +48,7 @@ import { Placeholder } from '@shared/components/Placeholder';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ScrollableTabs, TabLabel } from '@shared/components/Tabs';
 import TagSearchBar from '@shared/components/TagSearchBar/TagSearchBar';
+import { TagSearchBarInfo } from '@shared/components/TagSearchBar/TagSearchBarInfo';
 import { type ToggleOption } from '@shared/components/Toggle';
 import {
 	VisitorSpaceDropdown,
@@ -753,6 +754,17 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		});
 	}, [isKioskUser, isPublicCollection, locale, searchResults?.items, searchResults?.searchTerms]);
 
+	const openAndScrollToAdvancedFilters = () => {
+		setQuery({ filter: SearchFilterId.Advanced });
+		document
+			.getElementById(`c-filter-menu__option__${SearchFilterId.Advanced}`)
+			?.scrollIntoView({
+				behavior: 'smooth',
+				block: 'center',
+				inline: 'center',
+			});
+	};
+
 	/**
 	 * Render
 	 */
@@ -969,6 +981,25 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		</>
 	);
 
+	const renderSearchInputRightControls = () => {
+		return (
+			<>
+				<TagSearchBarInfo
+					icon={IconNamesLight.Info}
+					content={tHtml(
+						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-zoeken-zoek-info'
+					)}
+				/>
+				<Button
+					className="u-hide-lt-bp2"
+					variants={['text', 'white']}
+					label={tText('Geavanceerde filters')}
+					onClick={openAndScrollToAdvancedFilters}
+				/>
+			</>
+		);
+	};
+
 	const renderSearchPage = () => {
 		return (
 			<>
@@ -1020,9 +1051,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 											placeholder={tText(
 												'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
 											)}
-											infoContent={tHtml(
-												'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-zoeken-zoek-info'
-											)}
+											renderedRight={renderSearchInputRightControls()}
 											size="lg"
 											value={activeFilters}
 										/>

@@ -76,7 +76,7 @@ const FilterForm: FC<FilterFormProps> = ({
 		const FormComponent = (form as FC<DefaultFilterFormProps<any>>) ?? (() => null);
 
 		return (
-			<div className={clsx(className, styles['c-filter-form'])}>
+			<div className={clsx(className, styles['c-filter-form'])} id={`c-filter-form--${id}`}>
 				<div className={styles['c-filter-form__header']}>
 					<h2 className={styles['c-filter-form__title']}>
 						<label htmlFor={`${visitorSpaceLabelKeys.filters.title}--${id}`}>
