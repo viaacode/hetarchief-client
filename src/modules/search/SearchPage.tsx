@@ -110,7 +110,7 @@ import {
 	VISITOR_SPACE_SORT_OPTIONS,
 	VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
 } from '@visitor-space/const';
-import { VISITOR_SPACE_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
+import { SEARCH_PAGE_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
 import { SEARCH_PAGE_IE_OBJECT_TABS } from '@visitor-space/const/visitor-space-tabs.const';
 import { MetadataProp, SearchFilterId, type TagIdentity } from '@visitor-space/types';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
@@ -292,10 +292,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	useEffect(() => {
 		// Filter out all disabled query param keys/ids
-		const disabledFilterKeys: SearchFilterId[] = VISITOR_SPACE_FILTERS(
+		const disabledFilterKeys: SearchFilterId[] = SEARCH_PAGE_FILTERS(
 			isPublicCollection,
 			isKioskUser,
-			isKeyUser
+			isKeyUser,
+			format
 		)
 			.filter(({ isDisabled }: FilterMenuFilterOption): boolean => !!isDisabled?.())
 			.map(({ id }: FilterMenuFilterOption): SearchFilterId => id as SearchFilterId);
@@ -420,10 +421,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const filters = useMemo(
 		() =>
-			VISITOR_SPACE_FILTERS(isPublicCollection, isKioskUser, isKeyUser).filter(
+			SEARCH_PAGE_FILTERS(isPublicCollection, isKioskUser, isKeyUser, format).filter(
 				({ isDisabled }) => !isDisabled?.()
 			),
-		[isPublicCollection, isKioskUser, isKeyUser]
+		[isPublicCollection, isKioskUser, isKeyUser, format]
 	);
 
 	/**

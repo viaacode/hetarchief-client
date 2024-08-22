@@ -23,6 +23,6 @@ export const SEARCH_PAGE_IE_OBJECT_TABS = (): TabProps[] => [
 	{
 		id: SearchPageMediaType.Newspaper,
 		icon: <Icon name={IconNamesLight.Newspaper} aria-hidden />,
-		label: tText('Krant'),
+		label: tText('modules/visitor-space/const/visitor-space-tabs___krant'),
 	},
 ];
