@@ -85,6 +85,7 @@ import {
 	FLOWPLAYER_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
 	GET_METADATA_FIELDS,
+	GET_NEWSPAPER_DOWNLOAD_OPTIONS,
 	IMAGE_API_FORMATS,
 	IMAGE_FORMATS,
 	KEY_USER_ACTION_SORT_MAP,
@@ -92,7 +93,6 @@ import {
 	MEDIA_ACTIONS,
 	MEEMOO_ADMIN_ACTION_SORT_MAP,
 	METADATA_EXPORT_OPTIONS,
-	NEWSPAPER_DOWNLOAD_OPTIONS,
 	noLicensePlaceholder,
 	OBJECT_DETAIL_TABS,
 	objectPlaceholder,
@@ -466,8 +466,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
 			IeObjectAccessThrough.VISITOR_SPACE_FULL,
 		]).length > 0;
-	const isPublicNewspaper =
-		mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) && isNewspaper;
+	const isPublicNewspaper: boolean =
+		!!mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) && isNewspaper;
 	const canRequestAccess =
 		isNil(
 			accessibleVisitorSpaces?.find((space) => space.maintainerId === mediaInfo?.maintainerId)
@@ -480,10 +480,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
 		visitorSpace?.status === VisitorSpaceStatus.Active &&
 		!isKiosk;
-	const canDownloadMetadata: boolean = useHasAnyPermission(Permission.EXPORT_OBJECT) || false;
-	const canDownloadNewspaper: boolean | undefined =
-		(useHasAnyPermission(Permission.DOWNLOAD_OBJECT) && isNewspaper && isPublicNewspaper) ||
-		false;
+	const canDownloadMetadata: boolean = useHasAnyPermission(Permission.EXPORT_OBJECT);
+	const canDownloadNewspaper: boolean =
+		useHasAnyPermission(Permission.DOWNLOAD_OBJECT) && isNewspaper && isPublicNewspaper;
 
 	const pageOcrTexts: (string | null)[] = useMemo(() => {
 		const pageOcrTextsTemp: (string | null)[] = [];
@@ -1040,16 +1039,23 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const renderExportDropdown = useCallback(
 		(isPrimary: boolean) => {
 			const icon = <Icon name={IconNamesLight.Export} aria-hidden />;
-			const label = canDownloadNewspaper
-				? tText('modules/ie-objects/object-detail-page___download-deze-krant')
-				: tText('exporteer metadata');
 
-			const exportOptions =
-				canDownloadNewspaper && canDownloadMetadata
-					? [...NEWSPAPER_DOWNLOAD_OPTIONS(), ...METADATA_EXPORT_OPTIONS()]
-					: canDownloadNewspaper
-					? NEWSPAPER_DOWNLOAD_OPTIONS()
-					: METADATA_EXPORT_OPTIONS();
+			const buttonLabelDesktop = isPublicNewspaper
+				? tText('modules/ie-objects/object-detail-page___download-deze-krant-desktop')
+				: tText('modules/ie-objects/object-detail-page___export-metadata-desktop');
+			const buttonLabelMobile = isPublicNewspaper
+				? tText('modules/ie-objects/object-detail-page___download-deze-krant-mobile')
+				: tText('modules/ie-objects/object-detail-page___export-metadata-mobile');
+
+			const exportOptions = [];
+
+			if (canDownloadNewspaper) {
+				exportOptions.push(...GET_NEWSPAPER_DOWNLOAD_OPTIONS());
+			}
+
+			if (canDownloadMetadata) {
+				exportOptions.push(...METADATA_EXPORT_OPTIONS());
+			}
 
 			return (
 				<div className={styles['p-object-detail__export']}>
@@ -1065,17 +1071,22 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 									className={styles['p-object-detail__export']}
 									iconStart={icon}
 									iconEnd={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-									aria-label={label}
-									title={label}
+									aria-label={buttonLabelDesktop}
+									title={buttonLabelDesktop}
 								>
-									<span className="u-display-block:md">{label}</span>
+									<span className="u-text-ellipsis u-display-none u-display-block:md">
+										{buttonLabelDesktop}
+									</span>
+									<span className="u-text-ellipsis u-display-none:md">
+										{buttonLabelMobile}
+									</span>
 								</Button>
 							) : (
 								<Button
 									icon={icon}
 									variants={['silver']}
-									aria-label={label}
-									title={label}
+									aria-label={buttonLabelDesktop}
+									title={buttonLabelDesktop}
 								/>
 							)}
 						</DropdownButton>
@@ -1175,8 +1186,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				const existsInSortMap = !isNil(sortMap.find((d) => d.id === action.id));
 				const isPrimary = sortMap.find((d) => action.id === d.id)?.isPrimary ?? false;
 				const showExport =
-					(action.id === MediaActions.Export && canDownloadMetadata) ||
-					(action.id === MediaActions.Export && canDownloadNewspaper);
+					action.id === MediaActions.Export &&
+					(canDownloadMetadata || canDownloadNewspaper);
 
 				return existsInSortMap
 					? {
