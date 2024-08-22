@@ -98,7 +98,7 @@ export const SEARCH_PAGE_FILTERS = (
 	// TODO Reeks (newspaper only)
 	{
 		id: SearchFilterId.ReleaseDate,
-		label: tText('Uitgavedatum'),
+		label: tText('modules/visitor-space/const/visitor-space-filters___uitgavedatum'),
 		form: ReleaseDateFilterForm,
 		type: FilterMenuType.Modal,
 		tabs: ALL_TABS,
