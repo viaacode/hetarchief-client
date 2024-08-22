@@ -291,7 +291,7 @@ const MediaCard: FC<MediaCardProps> = ({
 					styles[`c-media-card__header-wrapper--${view}`]
 				)}
 			>
-				<Image src={imgPath} alt={''} unoptimized={true} layout="fill" />
+				<Image src={imgPath} alt={''} unoptimized={true} layout="fill" priority />
 				{!isNil(icon) && (
 					<>
 						<div className={clsx(styles['c-media-card__header-icon'])}>
