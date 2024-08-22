@@ -14,6 +14,7 @@ export enum SearchPageMediaType {
 
 export enum IeObjectsSearchFilterField {
 	ADVANCED_QUERY = 'advancedQuery',
+	RELEASE_DATE = 'releaseDate',
 	CREATED = 'created',
 	CREATOR = 'creator',
 	DESCRIPTION = 'description',

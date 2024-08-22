@@ -93,10 +93,8 @@ export const mapFiltersToElastic = (query: SearchPageQueryParams): IeObjectsSear
 		},
 		// Duration
 		...(query[SearchFilterId.Duration] || []).flatMap(mapAdvancedToElastic),
-		// Created
-		...(query[SearchFilterId.Created] || []).flatMap(mapAdvancedToElastic),
-		// Published
-		...(query[SearchFilterId.Published] || []).flatMap(mapAdvancedToElastic),
+		// ReleaseDate
+		...(query[SearchFilterId.ReleaseDate] || []).flatMap(mapAdvancedToElastic),
 		// Creator
 		{
 			field: IeObjectsSearchFilterField.CREATOR,
