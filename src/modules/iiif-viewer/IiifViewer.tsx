@@ -14,6 +14,7 @@ import React, {
 } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
+import { type AltoTextLine } from '@ie-objects/ie-objects.types';
 import { type IiifViewerFunctions, type IiifViewerProps } from '@iiif-viewer/IiifViewer.types';
 import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { getOpenSeadragonConfig } from '@iiif-viewer/openseadragon-config';
@@ -33,7 +34,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 	(
 		{
 			imageInfos,
-			altoJsonCurrentPage,
 			id,
 			isOcrEnabled,
 			setIsOcrEnabled,
@@ -130,93 +130,80 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			[]
 		);
 
-		const updateOcrOverlay = useCallback(() => {
-			if (isServerSideRendering()) {
-				return;
-			}
-
-			if (!openSeaDragonViewer || !openSeaDragonLib) {
-				return null;
-			}
-
-			openSeaDragonViewer?.clearOverlays();
-
-			if (!altoJsonCurrentPage) {
-				// No ocr text is available for this image
-				return;
-			}
-
-			if (!activeImageTileSource) {
-				return;
-			}
-			const imageWidth = activeImageTileSource.dimensions.x;
-			const imageHeight = activeImageTileSource.dimensions.y;
-			altoJsonCurrentPage?.text?.forEach((altoTextLocation, index) => {
-				const x = altoTextLocation.x / imageWidth;
-				const y = altoTextLocation.y / imageHeight;
-				const width = altoTextLocation.width / imageWidth;
-				const height = altoTextLocation.height / imageHeight;
-				const isSymbols = /^[^a-zA-Z0-9]$/g.test(altoTextLocation.text);
-				if (
-					!x ||
-					!y ||
-					!width ||
-					!height ||
-					x < 0 ||
-					y < 0 ||
-					x > 1 ||
-					y > 1 ||
-					x + width < 0 ||
-					y + height < 0 ||
-					x + width > 1 ||
-					y + height > 1 ||
-					isSymbols
-				) {
-					// This text overlay doesn't make sense,
-					// since it's outside the image or the position isn't fully defined
+		const updateHighlightedAltoTexts = useCallback(
+			(
+				highlightedAltoTexts: AltoTextLine[],
+				selectedHighlightedAltoText: AltoTextLine | null
+			) => {
+				if (isServerSideRendering()) {
 					return;
 				}
-				const span = document.createElement('SPAN');
-				span.setAttribute('data-ocr-word-index', String(index));
-				span.setAttribute(
-					'data-ocr-word-id',
-					[
-						altoTextLocation.x,
-						altoTextLocation.y,
-						altoTextLocation.width,
-						altoTextLocation.height,
-					].join('-')
-				);
-				span.setAttribute('data-ocr-word', altoTextLocation.text);
-				span.className = 'c-iiif-viewer__iiif__alto__text';
-				span.innerHTML = `
-<svg
-	width="${altoTextLocation.width}"
-	height="${altoTextLocation.height}"
-	xmlns="http://www.w3.org/2000/svg"
-	viewBox="0 0 ${altoTextLocation.width} ${altoTextLocation.height}"
-	preserveAspectRatio="xMidYMid meet"
-	>
-  <text
-  	x="50%"
-  	y="50%"
-  	fill="black"
-  	font-size="${altoTextLocation.height}px"
-  	dominant-baseline="middle"
-  	text-anchor="middle"
-  >
-		${altoTextLocation.text}
-	</text>
-</svg>`;
-				openSeaDragonViewer.addOverlay(
-					span,
-					new openSeaDragonLib.Rect(x, y, width, height, 0),
-					openSeaDragonLib.Placement.CENTER
-				);
-			});
-			// We don't include the tile source since it causes a rerender loop
-			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, [openSeaDragonViewer, openSeaDragonLib, altoJsonCurrentPage, activeImageTileSource]);
+
+				if (!openSeaDragonViewer || !openSeaDragonLib) {
+					return null;
+				}
+
+				openSeaDragonViewer?.clearOverlays();
+
+				if (!highlightedAltoTexts?.length) {
+					return;
+				}
+
+				if (!activeImageTileSource) {
+					return;
+				}
+				const imageWidth: number | undefined =
+					(activeImageTileSource as any).width || activeImageTileSource.dimensions.x;
+				const imageHeight: number | undefined =
+					(activeImageTileSource as any).height || activeImageTileSource.dimensions.y;
+
+				if (!imageWidth || !imageHeight) {
+					throw new Error('Failed to find current page width/height');
+				}
+
+				highlightedAltoTexts?.forEach((altoTextLocation) => {
+					const multiplier = 2.5;
+					const x = (altoTextLocation.x * multiplier - 110) / imageWidth;
+					const y = (altoTextLocation.y * multiplier + 20) / imageHeight;
+					const width = (altoTextLocation.width * multiplier) / imageWidth;
+					const height = (altoTextLocation.height * multiplier) / imageHeight;
+					const isSymbols = /^[^a-zA-Z0-9]$/g.test(altoTextLocation.text);
+					if (
+						!x ||
+						!y ||
+						!width ||
+						!height ||
+						x < 0 ||
+						y < 0 ||
+						x > 1 ||
+						y > 1 ||
+						x + width < 0 ||
+						y + height < 0 ||
+						x + width > 1 ||
+						y + height > 1 ||
+						isSymbols
+					) {
+						// This text overlay doesn't make sense,
+						// since it's outside the image or the position isn't fully defined
+						return;
+					}
+					const span = document.createElement('SPAN');
+					span.className =
+						'c-iiif-viewer__iiif__alto__text' +
+						(altoTextLocation === selectedHighlightedAltoText
+							? ' c-iiif-viewer__iiif__alto__text--selected'
+							: ' c-iiif-viewer__iiif__alto__text--highlighted');
+					openSeaDragonViewer.addOverlay(
+						span,
+						new openSeaDragonLib.Rect(x, y, width, height, 0),
+						openSeaDragonLib.Placement.CENTER
+					);
+				});
+				// We don't include the tile source since it causes a rerender loop
+				// eslint-disable-next-line react-hooks/exhaustive-deps
+			},
+			[openSeaDragonViewer, openSeaDragonLib, activeImageTileSource]
+		);
 
 		const applyInitialZoomAndPan = useCallback(
 			(openSeadragonViewerTemp: Viewer, openSeadragonLibTemp: any) => {
@@ -322,12 +309,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		}, [imageInfos, iiifViewerId, isMobile]);
 
 		useEffect(() => {
-			if (openSeaDragonViewer && activeImageTileSource) {
-				updateOcrOverlay();
-			}
-		}, [openSeaDragonViewer, updateOcrOverlay, activeImageTileSource]);
-
-		useEffect(() => {
 			initIiifViewer();
 		}, [initIiifViewer]);
 
@@ -373,8 +354,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				});
 				return;
 			}
-			const imageWidth: number | undefined = activeImageTileSource.dimensions.x;
-			const imageHeight: number | undefined = activeImageTileSource.dimensions.y;
+			const imageWidth: number | undefined =
+				(activeImageTileSource as any).width || activeImageTileSource.dimensions.x;
+			const imageHeight: number | undefined =
+				(activeImageTileSource as any).height || activeImageTileSource.dimensions.y;
 
 			if (!imageWidth || !imageHeight) {
 				console.error('aborting zoom to rect because activeImageTileSource is undefined', {
@@ -414,25 +397,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			});
 		};
 
-		const setActiveWordByIds = (activeAltoTextId: string, highlightedAltoTextIds: string[]) => {
-			clearActiveWord();
-			document
-				?.querySelector('[data-ocr-word-id="' + activeAltoTextId + '"]')
-				?.classList?.add('c-iiif-viewer__iiif__alto__text--active');
-			if (highlightedAltoTextIds.length > 0) {
-				document
-					?.querySelector(
-						highlightedAltoTextIds
-							.map(
-								(highlightedAltoTextId) =>
-									'[data-ocr-word-id="' + highlightedAltoTextId + '"]'
-							)
-							.join(',')
-					)
-					?.classList?.add('c-iiif-viewer__iiif__alto__text--highlighted');
-			}
-		};
-
 		const waitForReadyState = async (): Promise<void> => {
 			return new Promise<void>((resolve) => {
 				if (viewerStatus === 'ready') {
@@ -454,9 +418,9 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			iiifZoom,
 			iiifZoomTo,
 			iiifGoToHome,
-			setActiveWordByIds,
 			clearActiveWord,
 			waitForReadyState,
+			updateHighlightedAltoTexts,
 		}));
 
 		/**
@@ -567,20 +531,18 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 									'u-flex-shrink'
 								)}
 							>
-								{!!altoJsonCurrentPage && (
-									<Button
-										className={clsx(
-											styles['c-iiif-viewer__iiif__controls__button'],
-											'c-iiif-viewer__iiif__controls__toggle-ocr'
-										)}
-										icon={<Icon name={IconNamesLight.Ocr} aria-hidden />}
-										aria-label={tText(
-											'pages/openseadragon/index___tekst-boven-de-afbeelding-tonen'
-										)}
-										variants={[isOcrEnabled ? 'green' : 'white', 'sm']}
-										onClick={() => setIsOcrEnabled(!isOcrEnabled)}
-									/>
-								)}
+								<Button
+									className={clsx(
+										styles['c-iiif-viewer__iiif__controls__button'],
+										'c-iiif-viewer__iiif__controls__toggle-ocr'
+									)}
+									icon={<Icon name={IconNamesLight.Ocr} aria-hidden />}
+									aria-label={tText(
+										'pages/openseadragon/index___tekst-boven-de-afbeelding-tonen'
+									)}
+									variants={[isOcrEnabled ? 'green' : 'white', 'sm']}
+									onClick={() => setIsOcrEnabled(!isOcrEnabled)}
+								/>
 								<Button
 									className={clsx(
 										styles['c-iiif-viewer__iiif__controls__button'],

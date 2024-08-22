@@ -1,4 +1,4 @@
-import { type OcrSearchResult } from '@ie-objects/ie-objects.types';
+import { type AltoTextLine, type OcrSearchResult } from '@ie-objects/ie-objects.types';
 
 export type ImageInfo = {
 	thumbnailUrl: string;
@@ -8,7 +8,6 @@ export type ImageInfo = {
 export interface IiifViewerProps {
 	id: string;
 	imageInfos: ImageInfo[];
-	altoJsonCurrentPage: SimplifiedAlto | null | undefined;
 	isOcrEnabled: boolean;
 	setIsOcrEnabled: (isOcrEnabled: boolean) => void;
 	activeImageIndex: number;
@@ -31,13 +30,16 @@ export interface IiifViewerProps {
 export interface IiifViewerFunctions {
 	iiifZoomToRect: (rect: { x: number; y: number; width: number; height: number }) => void;
 	iiifZoomTo: (x: number, y: number) => void;
-	setActiveWordByIds: (activeAltoTextId: string, highlightedAltoTextIds: string[]) => void;
 	clearActiveWord: () => void;
 	iiifRotate: (rotateRight: boolean) => void;
 	iiifFullscreen: (expand: boolean) => void;
 	iiifZoom: (multiplier: number) => void;
 	iiifGoToHome: () => void;
 	waitForReadyState: () => Promise<void>;
+	updateHighlightedAltoTexts: (
+		highlightedAltoTexts: AltoTextLine[],
+		selectedAltoText: AltoTextLine | null
+	) => void;
 }
 
 export interface TextLine {

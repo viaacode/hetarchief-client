@@ -119,7 +119,6 @@ import {
 	NEWSPAPERS_SERVICE_BASE_URL,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { isInAFolder } from '@ie-objects/utils/folders';
-import { getAltoTextId } from '@ie-objects/utils/get-alto-text-id';
 import { getIeObjectRightsOwnerAsText } from '@ie-objects/utils/get-ie-object-rights-owner-as-text';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import { mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils/map-metadata';
@@ -221,6 +220,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [onConfirmCopyright, setOnConfirmCopyright] = useState<() => void>(noop);
 	const [hasNewsPaperBeenRendered, setHasNewsPaperBeenRendered] = useState(false);
 	const [hasAppliedUrlSearchTerms, setHasAppliedUrlSearchTerms] = useState<boolean>(false);
+
+	const [highlightedAltoTexts, setHighlightedAltoTexts] = useState<AltoTextLine[]>([]);
+	const [selectedHighlightedAltoText, setSelectedHighlightedAltoText] =
+		useState<AltoTextLine | null>(null);
 
 	// TODO get these names from the backend: https://meemoo.atlassian.net/browse/ARC-2219
 	const [fallenNames] = useState<NameInfo[]>([
@@ -413,12 +416,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			enabled: !!mediaInfo,
 		}
 	);
-	console.log({
-		relatedIeObjects,
-		mediaInfo,
-		iri: mediaInfo?.iri,
-		premisIsPartOf: mediaInfo?.premisIsPartOf,
-	});
 
 	// visit info
 	const {
@@ -881,27 +878,25 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 	};
 
-	const handleClickOcrWord = useCallback(
-		async (textLocation: AltoTextLine) => {
-			iiifViewerReference?.current?.iiifZoomToRect(textLocation);
-			const searchTermWords = searchTerms.split(' ');
-			const activeAltoTextId = getAltoTextId(textLocation);
-			const altoSearchTexts =
-				simplifiedAltoInfo?.text?.filter((altoText) =>
-					searchTermWords.some((searchTermWord) =>
-						altoText.text.toLowerCase().includes(searchTermWord)
-					)
-				) || [];
-			const highlightedAltoTextIds = altoSearchTexts
-				.map(getAltoTextId)
-				.filter((id) => id !== activeAltoTextId);
-			iiifViewerReference?.current?.setActiveWordByIds(
-				activeAltoTextId,
-				highlightedAltoTextIds
+	useEffect(() => {
+		if (isOcrEnabled) {
+			iiifViewerReference.current?.updateHighlightedAltoTexts(
+				highlightedAltoTexts,
+				selectedHighlightedAltoText
 			);
-		},
-		[searchTerms, simplifiedAltoInfo?.text]
-	);
+		} else {
+			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
+		}
+	}, [searchTerms, currentPageIndex, highlightedAltoTexts, selectedHighlightedAltoText]);
+
+	/**
+	 * Zoom to word and select word in iiif viewer
+	 * @param altoText
+	 */
+	const handleClickOcrWord = useCallback((altoText: AltoTextLine): void => {
+		setSelectedHighlightedAltoText(altoText);
+		iiifViewerReference?.current?.iiifZoomToRect(altoText);
+	}, []);
 
 	const handleChangeSearchIndex = useCallback(
 		async (searchResultIndex: number) => {
@@ -909,6 +904,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				return;
 			}
 			setCurrentSearchResultIndex(searchResultIndex);
+
+			const highlightedAltoTextsTemp = highlightedAltoTexts;
 			const searchResult = searchResults[searchResultIndex];
 			if (!searchResult) {
 				return;
@@ -917,28 +914,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				setCurrentPageIndex(searchResult.pageIndex, 'replaceIn');
 			}
 
-			// Convert search term index to word index
-			const searchTermWords = searchResult.searchTerm.split(' ');
-			const altoSearchTexts = simplifiedAltoInfo?.text?.filter((altoText) =>
-				searchTermWords.some((searchTermWord) =>
-					altoText.text.toLowerCase().includes(searchTermWord)
-				)
-			);
-			const altoSearchText = altoSearchTexts?.[searchResult.searchTermIndexOnPage];
-
-			if (!altoSearchText) {
-				return;
-			}
-
-			await handleClickOcrWord(altoSearchText);
+			handleClickOcrWord(highlightedAltoTextsTemp[searchResult.searchTermIndexOnPage]);
 		},
 		[
 			handleClickOcrWord,
 			currentPageIndex,
+			highlightedAltoTexts,
 			searchResults,
 			setCurrentPageIndex,
-			setCurrentSearchResultIndex,
-			simplifiedAltoInfo?.text,
 		]
 	);
 
@@ -958,6 +941,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				iiifViewerReference.current?.iiifGoToHome();
 			}
 
+			setIsOcrEnabled(true);
 			setSearchTerms(newSearchTerms);
 			setActiveTab(ObjectDetailTabs.Ocr);
 
@@ -998,8 +982,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			});
 			setSearchResults(searchResultsTemp);
 			setCurrentPageIndex(searchResultsTemp?.[0]?.pageIndex || 0, 'replaceIn');
+
+			setHighlightedAltoTexts(
+				simplifiedAltoInfo?.text?.filter((altoText) =>
+					newSearchTerms
+						.split(' ')
+						.some((searchTermWord) =>
+							altoText.text.toLowerCase().includes(searchTermWord)
+						)
+				) || []
+			);
 		},
-		[pageOcrTexts, setActiveTab, setCurrentPageIndex]
+		[pageOcrTexts, setActiveTab, setCurrentPageIndex, setIsOcrEnabled, simplifiedAltoInfo?.text]
 	);
 
 	useEffect(() => {
@@ -1287,7 +1281,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			return (
 				<IiifViewer
 					imageInfos={iiifViewerImageInfos}
-					altoJsonCurrentPage={simplifiedAltoInfo}
 					ref={iiifViewerReference}
 					id={mediaInfo?.schemaIdentifier as string}
 					isOcrEnabled={isOcrEnabled || false}
