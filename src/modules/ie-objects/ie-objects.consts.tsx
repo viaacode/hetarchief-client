@@ -76,14 +76,6 @@ export const XML_FORMATS: string[] = ['application/xml'];
 
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
 	{
-		label: tText('modules/ie-objects/ie-objects___download-alle-paginas-zip'),
-		id: MetadataExportFormats.fullNewspaperZip,
-	},
-	{
-		label: tText('modules/ie-objects/ie-objects___download-deze-pagina-zip'),
-		id: MetadataExportFormats.onePageNewspaperZip,
-	},
-	{
 		label: tText(
 			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-XML'
 		),
@@ -94,6 +86,17 @@ export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
 			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-CSV'
 		),
 		id: MetadataExportFormats.csv,
+	},
+];
+
+export const GET_NEWSPAPER_DOWNLOAD_OPTIONS = (): MenuItemInfo[] => [
+	{
+		label: tText('modules/ie-objects/ie-objects___download-alle-paginas-zip'),
+		id: MetadataExportFormats.fullNewspaperZip,
+	},
+	{
+		label: tText('modules/ie-objects/ie-objects___download-deze-pagina-zip'),
+		id: MetadataExportFormats.onePageNewspaperZip,
 	},
 ];
 
@@ -198,38 +201,30 @@ export const ANONYMOUS_ACTION_SORT_MAP = (): MetadataSortMap[] => [
 	{ id: MediaActions.Report },
 ];
 
-export const VISITOR_ACTION_SORT_MAP = (
-	hasAccessToVisitorSpaceOfObject: boolean
-): MetadataSortMap[] => [
-	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export, isPrimary: true }] : []),
-	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
+export const VISITOR_ACTION_SORT_MAP = (canExport: boolean): MetadataSortMap[] => [
+	...(canExport ? [{ id: MediaActions.Export, isPrimary: true }] : []),
+	{ id: MediaActions.RequestMaterial, isPrimary: !canExport },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];
 
-export const KEY_USER_ACTION_SORT_MAP = (
-	hasAccessToVisitorSpaceOfObject: boolean
-): MetadataSortMap[] => [
-	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export, isPrimary: true }] : []),
-	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
+export const KEY_USER_ACTION_SORT_MAP = (canExport: boolean): MetadataSortMap[] => [
+	...(canExport ? [{ id: MediaActions.Export, isPrimary: true }] : []),
+	{ id: MediaActions.RequestMaterial, isPrimary: !canExport },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];
 
-export const MEEMOO_ADMIN_ACTION_SORT_MAP = (
-	hasAccessToVisitorSpaceOfObject: boolean
-): MetadataSortMap[] => [
-	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export, isPrimary: true }] : []),
-	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
+export const MEEMOO_ADMIN_ACTION_SORT_MAP = (canExport: boolean): MetadataSortMap[] => [
+	...(canExport ? [{ id: MediaActions.Export, isPrimary: true }] : []),
+	{ id: MediaActions.RequestMaterial, isPrimary: !canExport },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];
 
-export const CP_ADMIN_ACTION_SORT_MAP = (
-	hasAccessToVisitorSpaceOfObject: boolean
-): MetadataSortMap[] => [
+export const CP_ADMIN_ACTION_SORT_MAP = (canExport: boolean): MetadataSortMap[] => [
 	{ id: MediaActions.RequestMaterial, isPrimary: true },
-	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export }] : []),
+	...(canExport ? [{ id: MediaActions.Export }] : []),
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];
