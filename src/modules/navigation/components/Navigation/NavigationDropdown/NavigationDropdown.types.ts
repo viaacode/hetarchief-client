@@ -6,7 +6,8 @@ export interface NavigationDropdownProps {
 	children?: ReactNode;
 	id: string;
 	isOpen: boolean;
-	items: NavigationItem[];
+	items?: NavigationItem[];
+	renderedItems?: ReactNode;
 	trigger: ReactNode;
 	lockScroll?: boolean;
 	className?: string;

@@ -28,7 +28,7 @@ import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setLastScrollPosition } from '@shared/store/ui';
-import { type IeObjectType } from '@shared/types/ie-objects';
+import { IeObjectType } from '@shared/types/ie-objects';
 import { formatMediumDate } from '@shared/utils/dates';
 
 import Icon from '../Icon/Icon';
@@ -216,14 +216,16 @@ const MediaCard: FC<MediaCardProps> = ({
 		);
 	};
 
-	const renderNoContentIcon = () => (
-		<Icon
-			className={clsx(styles['c-media-card__no-content'], styles['c-media-card__icon'], {
-				[styles['c-media-card__no-content-icon']]: !link,
-			})}
-			name={TYPE_TO_NO_ICON_MAP[type as IeObjectType]}
-		/>
-	);
+	const renderNoContentIcon = () => {
+		return (
+			<Icon
+				className={clsx(styles['c-media-card__no-content'], styles['c-media-card__icon'], {
+					[styles['c-media-card__no-content-icon']]: !link,
+				})}
+				name={TYPE_TO_NO_ICON_MAP[type as IeObjectType]}
+			/>
+		);
+	};
 
 	const renderDuration = () => (
 		<div className={clsx(styles['c-media-card__header-duration'])}>{duration}</div>
@@ -240,17 +242,22 @@ const MediaCard: FC<MediaCardProps> = ({
 		);
 
 	const renderHeader = () => {
+		if (!preview) {
+			return renderNoContent();
+		}
 		switch (type) {
-			case 'audio':
+			case IeObjectType.Audio:
 				// Only render the waveform if the thumbnail is available
 				// The thumbnail is an ugly speaker icon that we never want to show
 				// But if that thumbnail is not available it most likely means this object does not have the BEZOEKERTOOL-CONTENT license
-				return renderImage(preview ? '/images/waveform.svg' : undefined);
+				return renderImage('/images/waveform.svg');
 
-			case 'video':
+			case IeObjectType.Video:
+			case IeObjectType.VideoFragment:
+			case IeObjectType.Film:
+			case IeObjectType.Newspaper:
 				return renderImage(preview);
-			case 'film':
-				return renderImage(preview);
+
 			case null:
 				if (id === 'manyResultsTileId') {
 					return renderImage(preview);
@@ -291,7 +298,7 @@ const MediaCard: FC<MediaCardProps> = ({
 					styles[`c-media-card__header-wrapper--${view}`]
 				)}
 			>
-				<Image src={imgPath} alt={''} unoptimized={true} layout="fill" />
+				<Image src={imgPath} alt={''} unoptimized={true} layout="fill" priority />
 				{!isNil(icon) && (
 					<>
 						<div className={clsx(styles['c-media-card__header-icon'])}>
