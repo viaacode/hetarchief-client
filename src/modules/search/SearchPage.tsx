@@ -76,7 +76,7 @@ import {
 import { Breakpoints, type SortObject } from '@shared/types';
 import {
 	IeObjectsSearchFilterField,
-	type IeObjectType,
+	IeObjectType,
 	SearchPageMediaType,
 } from '@shared/types/ie-objects';
 import { type DefaultSeoInfo } from '@shared/types/seo';
@@ -111,7 +111,7 @@ import {
 	VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
 } from '@visitor-space/const';
 import { VISITOR_SPACE_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
-import { VISITOR_SPACE_TABS } from '@visitor-space/const/visitor-space-tabs.const';
+import { SEARCH_PAGE_IE_OBJECT_TABS } from '@visitor-space/const/visitor-space-tabs.const';
 import { MetadataProp, SearchFilterId, type TagIdentity } from '@visitor-space/types';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
@@ -366,7 +366,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const tabs: TabProps[] = useMemo(
 		() =>
-			VISITOR_SPACE_TABS().map((tab) => ({
+			SEARCH_PAGE_IE_OBJECT_TABS().map((tab) => ({
 				...tab,
 				label: (
 					<TabLabel
@@ -722,11 +722,17 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				},
 			});
 
+			// Newspapers should use transcript text instead of the description
+			const description =
+				type === IeObjectType.Newspaper
+					? item.transcript || item.description
+					: item.description;
+
 			return {
 				schemaIdentifier: item.schemaIdentifier,
 				maintainerSlug: item.maintainerSlug,
 				duration: item.duration,
-				description: item.description,
+				description,
 				title: item.name,
 				publishedOrCreatedDate: asDate(item.datePublished ?? item.dateCreated ?? null),
 				publishedBy: item.maintainerName || '',
