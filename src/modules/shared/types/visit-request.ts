@@ -16,7 +16,7 @@ export enum AccessType {
 	FOLDERS = 'FOLDERS',
 }
 
-export interface Visit {
+export interface VisitRequest {
 	accessibleFolderIds: string[];
 	accessibleObjectIds: string[];
 	createdAt: string;
@@ -59,7 +59,7 @@ export interface VisitNote {
 	note: string;
 }
 
-export type VisitRow = { row: { original: Visit } };
+export type VisitRow = { row: { original: VisitRequest } };
 
 export interface VisitSpaceCount {
 	count: number;

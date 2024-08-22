@@ -161,7 +161,7 @@ import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
-import { useGetActiveVisitForUserAndSpace } from '@visit-requests/hooks/get-active-visit-for-user-and-space';
+import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
@@ -411,7 +411,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		data: visitRequest,
 		error: visitRequestError,
 		isLoading: visitRequestIsLoading,
-	} = useGetActiveVisitForUserAndSpace(router.query.slug as string, user);
+	} = useGetActiveVisitRequestForUserAndSpace(router.query.slug as string, user);
 
 	// get visitor space info, used to display contact information
 	const {

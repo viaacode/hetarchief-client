@@ -7,7 +7,7 @@ import {
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
 } from '@shared/types/ie-objects';
-import { type Visit } from '@shared/types/visit';
+import { type VisitRequest } from '@shared/types/visit-request';
 
 import { type SearchPageQueryParams, VISITOR_SPACE_QUERY_PARAM_INIT } from '../../const';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '../../types';
@@ -20,7 +20,7 @@ export const VISITOR_SPACE_LICENSES = [
 
 export const mapMaintainerToElastic = (
 	query: SearchPageQueryParams,
-	activeVisitorSpace: Visit | undefined
+	activeVisitorSpace: VisitRequest | undefined
 ): IeObjectsSearchFilter[] => {
 	const maintainerId =
 		activeVisitorSpace?.spaceSlug === query?.[SearchFilterId.Maintainer]

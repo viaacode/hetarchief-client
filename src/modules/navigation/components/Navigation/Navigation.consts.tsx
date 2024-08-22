@@ -23,7 +23,7 @@ import {
 } from '@shared/const/routes';
 import { tText } from '@shared/helpers/translate';
 import { Breakpoints } from '@shared/types';
-import { type Visit } from '@shared/types/visit';
+import { type VisitRequest } from '@shared/types/visit-request';
 import { type Locale } from '@shared/utils/i18n';
 import { SearchFilterId, type VisitorSpaceInfo } from '@visitor-space/types';
 
@@ -219,7 +219,7 @@ const getDynamicHeaderLinks = (
 	placement: NavigationPlacement,
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
 	linkedSpaceOrId: string | null,
-	activeVisits: Visit[] | null,
+	activeVisits: VisitRequest[] | null,
 	isMeemooAdmin = false,
 	locale: Locale
 ) => {
@@ -462,7 +462,7 @@ export const getNavigationItemsLeft = (
 	linkedSpaceOrId: string | null,
 	isMobile: boolean,
 	maintainerSlug: string | null,
-	activeVisits: Visit[] | null,
+	activeVisits: VisitRequest[] | null,
 	isMeemooAdmin: boolean,
 	locale: Locale
 ): NavigationItem[] => {

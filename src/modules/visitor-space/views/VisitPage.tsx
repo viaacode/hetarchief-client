@@ -15,7 +15,7 @@ import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { type DefaultSeoInfo } from '@shared/types/seo';
-import { AccessStatus } from '@shared/types/visit';
+import { AccessStatus } from '@shared/types/visit-request';
 import { useGetVisitAccessStatus } from '@visit-requests/hooks/get-visit-access-status';
 import { useGetOrganisationBySlug } from '@visitor-space/hooks/get-organisation-by-slug';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
