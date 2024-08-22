@@ -165,6 +165,7 @@ export interface IeObjectRepresentation {
 	schemaInLanguage: string;
 	schemaStartTime: string;
 	schemaTranscript: string;
+	schemaTranscriptUrl: string | null;
 	edmIsNextInSequence: string;
 	updatedAt: string;
 	files: IeObjectFile[];
