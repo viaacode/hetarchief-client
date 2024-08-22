@@ -3,11 +3,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { type FC, useEffect, useRef, useState } from 'react';
 
-import {
-	FLOWPLAYER_AUDIO_FORMATS,
-	FLOWPLAYER_FORMATS,
-	IMAGE_FORMATS,
-} from '@ie-objects/ie-objects.consts';
+import { FLOWPLAYER_AUDIO_FORMATS } from '@ie-objects/ie-objects.consts';
 import { type IeObjectFile } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -22,12 +18,11 @@ import { type FragmentSliderProps } from './FragmentSlider.types';
 
 export const FragmentSlider: FC<FragmentSliderProps> = ({
 	className,
-	thumbnail,
-	files,
-	onChangeFragment,
+	fileRepresentations,
+	activeIndex,
+	setActiveIndex,
 }) => {
 	const [offset, setOffset] = useState<number>(0);
-	const [active, setActive] = useState<number>(0);
 	const [isBlurred, setIsBlurred] = useState<boolean>(true);
 	const [needsScrolling, setNeedsScrolling] = useState<boolean>(false);
 
@@ -36,7 +31,7 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 
 	const fragmentsSize = useElementSize(fragmentsRef);
 
-	const totalFragments = files.length;
+	const totalFragments = fileRepresentations.length;
 
 	// Equal to variables in FragmentSlider.module.scss
 	const fragmentSize = 16; // rem
@@ -47,7 +42,7 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 	useEffect(() => {
 		if (isBlurred) {
 			blurTimerRef.current && clearTimeout(blurTimerRef.current);
-			blurTimerRef.current = setTimeout(() => needsScrolling && setOffset(active), 150);
+			blurTimerRef.current = setTimeout(() => needsScrolling && setOffset(activeIndex), 150);
 		} else {
 			blurTimerRef.current && clearTimeout(blurTimerRef.current);
 		}
@@ -64,27 +59,24 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 
 			if (!updatedNeedsScrolling && offset > 0) {
 				setOffset(0);
-			} else if (updatedNeedsScrolling && offset !== active) {
-				setOffset(active);
+			} else if (updatedNeedsScrolling && offset !== activeIndex) {
+				setOffset(activeIndex);
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fragmentsSize, totalFragments]);
 
 	const renderThumbnail = (file: IeObjectFile) => {
-		let image = null;
+		let imageUrl: string;
 		if (FLOWPLAYER_AUDIO_FORMATS.includes(file.mimeType)) {
-			image = soundwave;
-		} else if (FLOWPLAYER_FORMATS.includes(file.mimeType)) {
-			image = thumbnail || '';
-		} else if (IMAGE_FORMATS.includes(file.mimeType)) {
-			// TODO: image preview
-			image = undefined; // Currently no images in representations
+			imageUrl = soundwave;
+		} else {
+			imageUrl = file.thumbnailUrl || '';
 		}
 
 		// No renderer
-		return image ? (
-			<Image unoptimized src={image} alt={file.name} layout="fill" objectFit="cover" />
+		return imageUrl ? (
+			<Image unoptimized src={imageUrl} alt={file.name} layout="fill" objectFit="cover" />
 		) : (
 			<ObjectPlaceholder className={styles['c-fragment-slider__item-image']} small />
 		);
@@ -131,12 +123,12 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 						setIsBlurred(false);
 					}}
 				>
-					{files.map((file, index) => (
+					{fileRepresentations.map((file, index) => (
 						<li
 							role="listitem"
 							className={clsx(
 								styles['c-fragment-slider__item'],
-								index === active && styles['c-fragment-slider__item--active']
+								index === activeIndex && styles['c-fragment-slider__item--active']
 							)}
 							key={`fragment-${index}`}
 							tabIndex={0}
@@ -146,8 +138,7 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 									e.currentTarget.getAttribute('data-index') as string
 								);
 								needsScrolling && setOffset(index);
-								setActive(index);
-								onChangeFragment?.(index);
+								setActiveIndex(index);
 							}}
 							onKeyUp={(e) => {
 								if (e.key === 'Tab') {
@@ -162,8 +153,7 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 									const activeIndex = parseInt(
 										e.currentTarget.getAttribute('data-index') as string
 									);
-									setActive(activeIndex);
-									onChangeFragment?.(index);
+									setActiveIndex(activeIndex);
 								}
 							}}
 						>

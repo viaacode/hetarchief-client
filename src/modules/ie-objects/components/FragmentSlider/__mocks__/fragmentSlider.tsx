@@ -1,7 +1,9 @@
 import { type FragmentSliderProps } from '../FragmentSlider.types';
 
 export const fragmentSliderMock: FragmentSliderProps = {
-	files: [
+	activeIndex: 0,
+	setActiveIndex: () => {},
+	fileRepresentations: [
 		{
 			id: '1',
 			name: 'item 1',

@@ -15,5 +15,5 @@ const Template: ComponentStory<typeof FragmentSlider> = (args) => <FragmentSlide
 export const Default = Template.bind({});
 Default.args = {
 	...fragmentSliderMock,
-	onChangeFragment: (index) => action('click')(index),
+	setActiveIndex: (index: number) => action('click')(index),
 };
