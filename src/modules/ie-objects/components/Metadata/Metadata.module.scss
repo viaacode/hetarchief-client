@@ -37,6 +37,10 @@
 		display: flex;
 		flex-direction: row;
 		break-inside: avoid;
+
+		> div {
+			max-width: 100%;
+		}
 	}
 
 	&__item-title {

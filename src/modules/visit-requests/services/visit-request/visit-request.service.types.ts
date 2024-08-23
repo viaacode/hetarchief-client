@@ -1,10 +1,10 @@
 import { type OrderDirection } from '@meemoo/react-components';
 import { type ReactNode } from 'react';
 
-import { type Visit, type VisitStatus } from '@shared/types/visit';
+import { type VisitRequest, type VisitStatus } from '@shared/types/visit-request';
 import { type VisitTimeframe } from '@visit-requests/types';
 
-export interface GetVisitsProps {
+export interface GetVisitRequestsProps {
 	children?: ReactNode;
 	searchInput?: string | undefined;
 	status?: VisitStatus | undefined;
@@ -13,7 +13,7 @@ export interface GetVisitsProps {
 	visitorSpaceSlug?: string;
 	page: number;
 	size: number;
-	orderProp?: keyof Visit;
+	orderProp?: keyof VisitRequest;
 	orderDirection?: OrderDirection;
 	userProfileId?: string;
 	personal?: boolean;
@@ -24,6 +24,6 @@ export interface GetAllActiveVisitsProps {
 	requesterId?: string;
 	page?: number;
 	size?: number;
-	orderProp?: keyof Visit;
+	orderProp?: keyof VisitRequest;
 	orderDirection?: OrderDirection;
 }

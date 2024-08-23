@@ -5,7 +5,7 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { type Visit, type VisitRow } from '@shared/types/visit';
+import { type VisitRequest, type VisitRow } from '@shared/types/visit-request';
 import { formatSameDayRange } from '@shared/utils/dates';
 
 export const HistoryItemListSize = 20;
@@ -19,10 +19,10 @@ export const ACCOUNT_HISTORY_QUERY_PARAM_CONFIG = {
 export const HistoryTableAccessComboId = 'account-history-from-to';
 export const HistoryTableAccessFrom = 'startAt';
 
-export type HistoryTableColumnProps = Column<Visit> & UseSortByColumnOptions<Visit>;
+export type HistoryTableColumnProps = Column<VisitRequest> & UseSortByColumnOptions<VisitRequest>;
 
 export const HistoryTableColumns = (
-	onClickRow: (visit: Visit) => void
+	onClickRow: (visit: VisitRequest) => void
 ): HistoryTableColumnProps[] => [
 	{
 		Header: tText('modules/account/const/my-history___bezoekersruimte') || '',

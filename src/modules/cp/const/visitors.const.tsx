@@ -9,7 +9,7 @@ import { UnreadMarker } from '@shared/components/UnreadMarker';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { type Visit, type VisitRow } from '@shared/types/visit';
+import { type VisitRequest, type VisitRow } from '@shared/types/visit-request';
 import { asDate, formatSameDayRange } from '@shared/utils/dates';
 import { RequestStatusAll, VisitTimeframe } from '@visit-requests/types';
 
@@ -39,9 +39,9 @@ export const visitorsStatusFilters = (): TabProps[] => {
 };
 
 export const VisitorsTableColumns = (
-	denyVisitRequest: (visitRequest: Visit) => void,
-	editVisitRequest: (visitRequest: Visit) => void
-): Column<Visit>[] => [
+	denyVisitRequest: (visitRequest: VisitRequest) => void,
+	editVisitRequest: (visitRequest: VisitRequest) => void
+): Column<VisitRequest>[] => [
 	{
 		Header: tText('modules/cp/const/visitors___naam'),
 		accessor: 'visitorName',

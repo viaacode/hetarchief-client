@@ -7,7 +7,7 @@ import {
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
 } from '@shared/types/ie-objects';
-import { type Visit } from '@shared/types/visit';
+import { type VisitRequest } from '@shared/types/visit-request';
 
 import { type SearchPageQueryParams, VISITOR_SPACE_QUERY_PARAM_INIT } from '../../const';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '../../types';
@@ -20,7 +20,7 @@ export const VISITOR_SPACE_LICENSES = [
 
 export const mapMaintainerToElastic = (
 	query: SearchPageQueryParams,
-	activeVisitorSpace: Visit | undefined
+	activeVisitorSpace: VisitRequest | undefined
 ): IeObjectsSearchFilter[] => {
 	const maintainerId =
 		activeVisitorSpace?.spaceSlug === query?.[SearchFilterId.Maintainer]
@@ -93,10 +93,8 @@ export const mapFiltersToElastic = (query: SearchPageQueryParams): IeObjectsSear
 		},
 		// Duration
 		...(query[SearchFilterId.Duration] || []).flatMap(mapAdvancedToElastic),
-		// Created
-		...(query[SearchFilterId.Created] || []).flatMap(mapAdvancedToElastic),
-		// Published
-		...(query[SearchFilterId.Published] || []).flatMap(mapAdvancedToElastic),
+		// ReleaseDate
+		...(query[SearchFilterId.ReleaseDate] || []).flatMap(mapAdvancedToElastic),
 		// Creator
 		{
 			field: IeObjectsSearchFilterField.CREATOR,
@@ -143,6 +141,12 @@ export const mapFiltersToElastic = (query: SearchPageQueryParams): IeObjectsSear
 			field: IeObjectsSearchFilterField.CONSULTABLE_MEDIA,
 			operator: IeObjectsSearchOperator.IS,
 			value: query[SearchFilterId.ConsultableMedia] ? 'true' : '',
+		},
+		// Consultable Public Domain
+		{
+			field: IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN,
+			operator: IeObjectsSearchOperator.IS,
+			value: query[SearchFilterId.ConsultablePublicDomain] ? 'true' : '',
 		},
 		// Advanced
 		...(query.advanced || []).flatMap(mapAdvancedToElastic),
