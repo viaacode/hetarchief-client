@@ -46,6 +46,7 @@ export interface IeObject {
 	description: string;
 	duration: string;
 	genre: string[];
+	iri: string;
 	schemaIdentifier: string; // Unique id per object
 	inLanguage: string[];
 	keywords: string[];
@@ -64,9 +65,9 @@ export interface IeObject {
 	accessThrough?: IeObjectAccessThrough[];
 	ebucoreObjectType?: string | null;
 	meemoofilmContainsEmbeddedCaption?: boolean;
-	premisIsPartOf?: string;
 	contributor?: any;
 	copyrightHolder?: string;
+	premisIsPartOf?: string | null;
 	isPartOf?: IsPartOfCollection[];
 	numberOfPages?: number;
 	meemooDescriptionCast?: string;
@@ -184,6 +185,33 @@ export interface IeObjectSearchAggregation<T> {
 
 // TODO: change Partial<IeObject> to IeObject with optional fields to prevent unknown values such as id and type
 export type IeObjectSimilar = IPagination<Partial<IeObject>>;
+
+export type RelatedIeObject = Pick<
+	IeObject,
+	| 'dctermsAvailable'
+	| 'dctermsFormat'
+	| 'dateCreated'
+	| 'datePublished'
+	| 'description'
+	| 'duration'
+	| 'schemaIdentifier'
+	| 'licenses'
+	| 'maintainerId'
+	| 'maintainerName'
+	| 'maintainerSlug'
+	| 'name'
+	| 'thumbnailUrl'
+	| 'sector'
+	| 'accessThrough'
+	| 'transcript'
+	| 'iri'
+	| 'premisIsPartOf'
+>;
+
+export interface RelatedIeObjects {
+	parent: Partial<RelatedIeObject> | null;
+	children: Partial<RelatedIeObject>[];
+}
 
 export interface IeObjectSimilarShards {
 	failed: number;

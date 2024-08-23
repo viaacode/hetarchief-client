@@ -113,6 +113,7 @@ import {
 	type MetadataSortMap,
 	ObjectDetailTabs,
 	type OcrSearchResult,
+	type RelatedIeObject,
 } from '@ie-objects/ie-objects.types';
 import {
 	IE_OBJECTS_SERVICE_BASE_URL,
@@ -215,7 +216,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | null>(null);
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
-	const [related, setRelated] = useState<MediaObject[]>([]);
 	const [metadataExportDropdownOpen, setMetadataExportDropdownOpen] = useState(false);
 	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
 	const [isRelatedObjectsBladeOpen, setIsRelatedObjectsBladeOpen] = useState(false);
@@ -403,8 +403,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	);
 
 	// related
-	const { data: relatedData } = useGetIeObjectsRelated(ieObjectId, mediaInfo?.maintainerId, {
-		enabled: !!mediaInfo,
+	const { data: relatedIeObjects } = useGetIeObjectsRelated(
+		mediaInfo?.iri as string,
+		mediaInfo?.premisIsPartOf || null,
+		{
+			enabled: !!mediaInfo,
+		}
+	);
+	console.log({
+		relatedIeObjects,
+		mediaInfo,
+		iri: mediaInfo?.iri,
+		premisIsPartOf: mediaInfo?.premisIsPartOf,
 	});
 
 	// visit info
@@ -580,10 +590,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		similarData && setSimilar(mapSimilarData(similarData?.items));
 	}, [similarData]);
 
-	useEffect(() => {
-		relatedData && setRelated(mapRelatedData(relatedData.items));
-	}, [relatedData]);
-
 	/**
 	 * Mapping
 	 */
@@ -605,22 +611,33 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		});
 	};
 
-	const mapRelatedData = (data: IeObject[]): MediaObject[] => {
-		return data.map((item) => {
-			const date = item.datePublished ?? item.dateCreated ?? null;
+	const mapRelatedIeObject = (
+		ieObject: Partial<RelatedIeObject> | undefined | null
+	): MediaObject | null => {
+		if (!ieObject) {
+			return null;
+		}
+		const date = ieObject.datePublished ?? ieObject.dateCreated ?? null;
 
-			return {
-				type: item.dctermsFormat,
-				title: item.name,
-				subtitle: isNil(date)
-					? `${item?.maintainerName ?? ''}`
-					: `${item?.maintainerName ?? ''} (${date})`,
-				description: item.description,
-				id: item.schemaIdentifier,
-				maintainer_id: item.maintainerId,
-				thumbnail: item.thumbnailUrl,
-			};
-		});
+		return {
+			type: ieObject.dctermsFormat as IeObjectType,
+			title: ieObject.name as string,
+			subtitle: isNil(date)
+				? `${ieObject?.maintainerName ?? ''}`
+				: `${ieObject?.maintainerName ?? ''} (${date})`,
+			description: ieObject.description as string,
+			id: ieObject.schemaIdentifier as string,
+			maintainer_id: ieObject.maintainerId,
+			thumbnail: ieObject.thumbnailUrl,
+		};
+	};
+
+	const getMappedRelatedIeObjects = (): MediaObject[] => {
+		if (relatedIeObjects?.parent) {
+			return [mapRelatedIeObject(relatedIeObjects.parent) as MediaObject];
+		} else {
+			return compact(relatedIeObjects?.children?.map(mapRelatedIeObject) || []);
+		}
 	};
 
 	/**
@@ -915,12 +932,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			await handleClickOcrWord(altoSearchText);
 		},
 		[
+			handleClickOcrWord,
 			currentPageIndex,
 			searchResults,
 			setCurrentPageIndex,
 			setCurrentSearchResultIndex,
 			simplifiedAltoInfo?.text,
-			handleClickOcrWord,
 		]
 	);
 
@@ -1141,7 +1158,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				</div>
 			);
 		},
-		[metadataExportDropdownOpen, onExportClick, canDownloadNewspaper, canDownloadMetadata]
+		[
+			isPublicNewspaper,
+			canDownloadNewspaper,
+			canDownloadMetadata,
+			metadataExportDropdownOpen,
+			onExportClick,
+		]
 	);
 
 	/**
@@ -1413,7 +1436,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					)}
 					aria-label={item.title}
 				>
-					{<RelatedObject object={item} />}
+					<RelatedObject object={item} />
 				</a>
 			</Link>
 		</li>
@@ -1825,7 +1848,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	};
 
 	const renderRelatedObjectsBlade = () => {
-		if (!related.length || (!expandSidebar && isMobile)) {
+		const mappedRelatedIeObjects = getMappedRelatedIeObjects();
+		if (!mappedRelatedIeObjects.length || (!expandSidebar && isMobile)) {
 			return null;
 		}
 		return (
@@ -1841,18 +1865,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					/>
 				}
 				title={
-					related.length === 1
-						? tHtml(
-								'pages/bezoekersruimte/visitor-space-slug/object-id/index___1-gerelateerd-object'
-						  )
-						: tHtml(
-								'pages/bezoekersruimte/visitor-space-slug/object-id/index___amount-gerelateerde-objecten',
-								{
-									amount: related.length,
-								}
-						  )
+					relatedIeObjects?.parent
+						? tHtml('Dit object is onderdeel van dit hoofdobject')
+						: tHtml('Dit object heeft {{amount}} fragmenten', {
+								amount: mappedRelatedIeObjects.length,
+						  })
 				}
-				renderContent={(hidden: boolean) => renderIeObjectCards('related', related, hidden)}
+				renderContent={(hidden: boolean) =>
+					renderIeObjectCards('related', mappedRelatedIeObjects, hidden)
+				}
 			/>
 		);
 	};
