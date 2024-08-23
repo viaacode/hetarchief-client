@@ -71,6 +71,13 @@ export const NamesList: FC<NamesListProps> = ({ className, names, onZoomToLocati
 				onKeyUp={handleOnKeyUp}
 			/>
 			<PerfectScrollbar className={styles['c-names-list__person-container']}>
+				{filteredNames.length === 0 && (
+					<div className={styles['c-names-list__person-container__no-results']}>
+						{tText(
+							'modules/ie-objects/components/names-list/names-list___we-konden-geen-resultaten-vinden-gelieve-een-andere-zoekterm-in-te-geven'
+						)}
+					</div>
+				)}
 				{filteredNames.map((nameInfo, index) => (
 					<div key={index} className={styles['c-names-list__person']}>
 						<div className={styles['c-names-list__person__occurrence-confidence']}>

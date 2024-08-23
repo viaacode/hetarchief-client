@@ -5,6 +5,13 @@ export type ImageInfo = {
 	imageUrl: string;
 };
 
+export interface Rect {
+	x: number;
+	y: number;
+	width: number;
+	height: number;
+}
+
 export interface IiifViewerProps {
 	id: string;
 	imageInfos: ImageInfo[];
@@ -18,6 +25,7 @@ export interface IiifViewerProps {
 	initialZoomLevel?: number;
 
 	// Search through pages
+	isSearchEnabled: boolean;
 	searchTerms: string;
 	setSearchTerms: (searchTerms: string) => void;
 	onSearch: (searchTerms: string) => void;
@@ -27,15 +35,15 @@ export interface IiifViewerProps {
 	setSearchResultIndex: (newSearchIndex: number) => void;
 
 	// Selection + download
-	onSelection?: (rect: Rect) => void;
+	onSelection?: (rect: TextLine) => void;
 	enableSelection?: boolean;
 }
 
 export interface IiifViewerFunctions {
-	iiifZoomToRect: (rect: { x: number; y: number; width: number; height: number }) => void;
+	iiifZoomToRect: (rect: Rect) => void;
 	iiifZoomTo: (x: number, y: number) => void;
-	setActiveWordIndex: (wordIndex: number) => void;
-	clearActiveWordIndex: () => void;
+	setActiveWordByIds: (activeAltoTextId: string, highlightedAltoTextIds: string[]) => void;
+	clearActiveWord: () => void;
 	iiifRotate: (rotateRight: boolean) => void;
 	iiifFullscreen: (expand: boolean) => void;
 	iiifZoom: (multiplier: number) => void;

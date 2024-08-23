@@ -162,7 +162,7 @@ pipeline {
 		// }
 		stage('Deploy QAS') {
 			when {
-				anyOf { branch 'master'; branch 'main' }
+				anyOf { branch 'master-v2'; branch 'main-v2' }
 			}
 			steps {
 				container('oc') {

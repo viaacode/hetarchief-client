@@ -6,8 +6,8 @@ import {
 } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const';
-import { type VisitAccessStatus } from '@shared/types/visit';
-import { VisitsService } from '@visit-requests/services';
+import { type VisitAccessStatus } from '@shared/types/visit-request';
+import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
 
 // Query
 
@@ -17,7 +17,7 @@ export function useGetVisitAccessStatus(
 ): UseQueryResult<VisitAccessStatus | null> {
 	return useQuery(
 		[QUERY_KEYS.getVisitAccessStatus, slug],
-		() => VisitsService.getAccessStatusBySpaceSlug(slug),
+		() => VisitRequestService.getAccessStatusBySpaceSlug(slug),
 		{ enabled }
 	);
 }
@@ -29,5 +29,5 @@ export function useGetVisitAccessStatusMutation(): UseMutationResult<
 	unknown,
 	string
 > {
-	return useMutation((slug: string) => VisitsService.getAccessStatusBySpaceSlug(slug));
+	return useMutation((slug: string) => VisitRequestService.getAccessStatusBySpaceSlug(slug));
 }

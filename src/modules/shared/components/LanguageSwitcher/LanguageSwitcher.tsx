@@ -3,7 +3,7 @@ import { Button } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { type FC, useEffect, useRef, useState } from 'react';
+import { type FC, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useChangeLanguagePreference } from '@account/hooks/change-language-preference';
@@ -32,7 +32,6 @@ export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 	const queryClient = useQueryClient();
 	const user = useSelector(selectUser);
 	const [isOpen, setIsOpen] = useState(false);
-	const [selectedLanguage, setSelectedLanguage] = useState<Locale>(locale);
 	const dispatch = useDispatch();
 	const { data: allLanguages } = useGetAllLanguages();
 	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference();
@@ -46,21 +45,6 @@ export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 		? convertDbContentPageToContentPageInfo(dbContentPage)
 		: null;
 
-	const isFirstRender = useRef(true);
-
-	useEffect(() => {
-		if (isFirstRender.current) {
-			isFirstRender.current = false; // it's no longer the first render
-			return; // skip the effect on the first render
-		}
-
-		if (user) {
-			mutateLanguagePreference(selectedLanguage);
-		}
-		changeApplicationLocale(locale, selectedLanguage, router, queryClient, contentPageInfo);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedLanguage, mutateLanguagePreference]);
-
 	const languageOptions = (allLanguages || []).map((languageInfo) => ({
 		label: languageInfo.languageLabel,
 		value: languageInfo.languageCode.toLowerCase(),
@@ -73,6 +57,30 @@ export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 		setTimeout(() => {
 			setShowLanguageSelectionDropdown(true);
 		}, 10);
+	};
+
+	const renderLanguageOptionButtons = () => {
+		return languageOptions.map((languageOption) => (
+			<Button
+				key={languageOption.value}
+				label={languageOption.label}
+				variants={['text']}
+				onClick={() => {
+					const selectedLanguage = languageOption.value as Locale;
+					if (user) {
+						mutateLanguagePreference(selectedLanguage);
+					}
+					changeApplicationLocale(
+						locale,
+						selectedLanguage,
+						router,
+						queryClient,
+						contentPageInfo
+					);
+					setIsOpen(false);
+				}}
+			/>
+		));
 	};
 
 	return (
@@ -92,20 +100,7 @@ export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 						iconEnd={<Icon name={IconNamesLight.AngleDown} />}
 					/>
 				}
-				items={languageOptions.map((option) => ({
-					id: option.value,
-					path: '',
-					node: (
-						<Button
-							variants={['text']}
-							onClick={() => {
-								setSelectedLanguage(option.value as unknown as Locale);
-							}}
-						>
-							{option.label}
-						</Button>
-					),
-				}))}
+				renderedItems={renderLanguageOptionButtons()}
 				onClose={() => setIsOpen(false)}
 				onOpen={handleOpen}
 			/>

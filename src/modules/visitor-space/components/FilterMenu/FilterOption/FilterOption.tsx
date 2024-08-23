@@ -74,8 +74,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 	const FILTER_MENU_HEIGHTS: Partial<Record<SearchFilterId, string>> = {
 		[SearchFilterId.Medium]: '63.7rem',
 		[SearchFilterId.Duration]: '48.1rem',
-		[SearchFilterId.Created]: '61.3rem',
-		[SearchFilterId.Published]: '61.3rem',
+		[SearchFilterId.ReleaseDate]: '61.3rem',
 		[SearchFilterId.Creator]: '33.5rem',
 		[SearchFilterId.Language]: '53.7rem',
 		[SearchFilterId.Maintainers]: '63.7rem',
@@ -86,6 +85,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 			<>
 				<div
 					className={clsx(styles['c-filter-menu__option'], className)}
+					id={`c-filter-menu__option__${id}`}
 					key={`filter-menu-btn-${id}`}
 					style={{
 						position: 'relative',

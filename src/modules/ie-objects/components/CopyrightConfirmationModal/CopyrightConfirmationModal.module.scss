@@ -1,0 +1,70 @@
+@use "src/styles/abstracts" as *;
+
+.c-copyright-modal {
+	&__heading {
+		width: 100%;
+		margin-top: $spacer-lg + $spacer-md;
+		font-size: $font-size-lg;
+		line-height: $line-height-1xl;
+
+		@include respond-at("md") {
+			font-size: $font-size-2xl;
+			line-height: $line-height-lg;
+			margin-left: auto;
+			margin-right: auto;
+			max-width: 41.8rem;
+		}
+	}
+
+	&__content {
+		padding-top: $spacer-md;
+
+		@include respond-to("sm") {
+			br {
+				display: none;
+			}
+		}
+
+		@include respond-to("md") {
+			padding-left: $spacer-sm;
+			padding-right: $spacer-sm;
+		}
+
+		@include respond-at("md") {
+			padding-top: $spacer-1xl;
+
+			button {
+				min-width: 32.8rem;
+			}
+		}
+
+		&__button-wrapper {
+			display: flex;
+			gap: $spacer-md;
+			align-items: center;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+
+		button,
+		p {
+			max-width: 100%;
+		}
+
+		p {
+			font-size: $font-size-sm;
+			line-height: $line-height-3xl;
+
+			@include respond-at("md") {
+				max-width: 38rem;
+				margin-left: auto;
+				margin-right: auto;
+			}
+		}
+
+		b,
+		strong {
+			color: $black;
+		}
+	}
+}

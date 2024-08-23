@@ -21,6 +21,10 @@ $names-list-scrollable-height: 25rem;
 		max-height: $names-list-scrollable-height;
 		min-height: $names-list-scrollable-height;
 		padding-right: $spacer-sm;
+
+		&__no-results {
+			margin-top: $spacer-sm;
+		}
 	}
 
 	&__person {

@@ -106,6 +106,7 @@ export const mapAdvancedToTags = (
 		switch (prop) {
 			case MetadataProp.CreatedAt:
 			case MetadataProp.PublishedAt:
+			case MetadataProp.ReleaseDate:
 				if (op === Operator.Between || op === Operator.Equals) {
 					value = `${formatDate(parseISO(split[0]))} - ${formatDate(parseISO(split[1]))}`;
 					operator = undefined;
@@ -164,6 +165,8 @@ export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] =>
 		...mapAdvancedToTags(query[SearchFilterId.Created] || [], SearchFilterId.Created),
 		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
 		...mapAdvancedToTags(query[SearchFilterId.Published] || [], SearchFilterId.Published),
+		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
+		...mapAdvancedToTags(query[SearchFilterId.ReleaseDate] || [], SearchFilterId.ReleaseDate),
 		...mapArrayParamToTags(
 			query[SearchFilterId.Creator] || [],
 			getFilterLabel(MetadataProp.Creator),
@@ -185,23 +188,28 @@ export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] =>
 			SearchFilterId.Language
 		),
 		...mapBooleanParamToTag(
+			query[SearchFilterId.ConsultableOnlyOnLocation] || false,
+			tText(
+				'modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse'
+			),
+			SearchFilterId.ConsultableOnlyOnLocation
+		),
+		...mapBooleanParamToTag(
 			query[SearchFilterId.ConsultableMedia] || false,
 			tText(
 				'modules/visitor-space/utils/map-filters/map-filters___alles-wat-raadpleegbaar-is'
 			),
 			SearchFilterId.ConsultableMedia
 		),
+		...mapBooleanParamToTag(
+			query[SearchFilterId.ConsultablePublicDomain] || false,
+			tText('modules/visitor-space/utils/map-filters/map-filters___publiek-domain'),
+			SearchFilterId.ConsultablePublicDomain
+		),
 		...mapArrayParamToTags(
 			query[SearchFilterId.Maintainers] || [],
 			tText('modules/visitor-space/utils/map-filters/map-filters___aanbieders'),
 			SearchFilterId.Maintainers
-		),
-		...mapBooleanParamToTag(
-			query[SearchFilterId.ConsultableOnlyOnLocation] || false,
-			tText(
-				'modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse'
-			),
-			SearchFilterId.ConsultableOnlyOnLocation
 		),
 		...mapAdvancedToTags(query[SearchFilterId.Advanced] || []),
 	];
@@ -221,6 +229,7 @@ export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilte
 		switch (item.prop) {
 			case MetadataProp.CreatedAt:
 			case MetadataProp.PublishedAt:
+			case MetadataProp.ReleaseDate:
 				parsed = parseISO(values[i]);
 				values[i] = (parsed && format(parsed, 'yyyy-MM-dd')) || values[i];
 				break;

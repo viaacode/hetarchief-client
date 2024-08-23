@@ -22,9 +22,9 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
-import { type Visit, VisitStatus } from '@shared/types/visit';
-import { useGetVisit } from '@visit-requests/hooks/get-visit';
-import { useGetVisits } from '@visit-requests/hooks/get-visits';
+import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
+import { useGetVisitRequest } from '@visit-requests/hooks/get-visit-request';
+import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { RequestStatusAll } from '@visit-requests/types';
 
 import { type VisitRequestOverviewProps } from './VisitRequestsOverview.types';
@@ -33,9 +33,9 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 
-	const [selectedNotOnCurrentPage, setSelectedNotOnCurrentPage] = useState<Visit | undefined>(
-		undefined
-	);
+	const [selectedNotOnCurrentPage, setSelectedNotOnCurrentPage] = useState<
+		VisitRequest | undefined
+	>(undefined);
 	const canUpdateVisitRequests: boolean | null = useHasAnyPermission(
 		Permission.MANAGE_CP_VISIT_REQUESTS,
 		Permission.MANAGE_ALL_VISIT_REQUESTS
@@ -45,17 +45,17 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		data: visits,
 		refetch,
 		isLoading: isLoadingVisitRequests,
-	} = useGetVisits({
+	} = useGetVisitRequests({
 		searchInput: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
 		status:
 			filters.status === RequestStatusAll.ALL ? undefined : (filters.status as VisitStatus),
 		page: filters.page,
 		size: RequestTablePageSize,
-		orderProp: filters.orderProp as keyof Visit,
+		orderProp: filters.orderProp as keyof VisitRequest,
 		orderDirection: filters.orderDirection as OrderDirection,
 	});
 
-	const { mutateAsync: getVisit } = useGetVisit();
+	const { mutateAsync: getVisitRequest } = useGetVisitRequest();
 
 	// Don't show hardcoded access
 	const filteredVisits = visits?.items.filter((visit) => !visit.id.includes('permanent-id'));
@@ -72,9 +72,9 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		const requestId = filters[VISIT_REQUEST_ID_QUERY_KEY];
 
 		if (filteredVisits && !selectedOnCurrentPage && requestId) {
-			// Check if visitrequest exists
-			getVisit(requestId)
-				.then((response: Visit | null) => {
+			// Check if visit request exists
+			getVisitRequest(requestId)
+				.then((response: VisitRequest | null) => {
 					if (response) {
 						setSelectedNotOnCurrentPage(response);
 					}
@@ -90,7 +90,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 					});
 				});
 		}
-	}, [filteredVisits, setFilters, getVisit, selectedOnCurrentPage, filters]);
+	}, [filteredVisits, setFilters, getVisitRequest, selectedOnCurrentPage, filters]);
 
 	// Filters
 
@@ -136,7 +136,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		}
 	};
 
-	const onRowClick = (_evt: MouseEvent<HTMLTableRowElement>, row: Row<Visit>) => {
+	const onRowClick = (_evt: MouseEvent<HTMLTableRowElement>, row: Row<VisitRequest>) => {
 		if (!canUpdateVisitRequests) {
 			toastService.notify({
 				title: tHtml('pages/beheer/toegangsaanvragen/index___geen-rechten'),
@@ -186,7 +186,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		} else {
 			return (
 				<div className="l-container l-container--edgeless-to-lg">
-					<Table<Visit>
+					<Table<VisitRequest>
 						className="u-mt-24"
 						options={{
 							columns: columns,
@@ -194,7 +194,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 							initialState: {
 								pageSize: RequestTablePageSize,
 								sortBy: sortFilters,
-							} as TableState<Visit>,
+							} as TableState<VisitRequest>,
 						}}
 						onRowClick={onRowClick}
 						onSortChange={onSortChange}

@@ -7,7 +7,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { VisitSummary } from '@shared/components/VisitSummary';
 import { tHtml } from '@shared/helpers/translate';
-import { VisitStatus } from '@shared/types/visit';
+import { VisitStatus } from '@shared/types/visit-request';
 import { formatDistanceToday } from '@shared/utils/dates';
 
 import { ApproveRequestBlade } from '../ApproveRequestBlade';

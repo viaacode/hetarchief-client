@@ -1,10 +1,10 @@
 import { type ReactNode } from 'react';
 
-import { type Visit } from '@shared/types/visit';
+import { type VisitRequest } from '@shared/types/visit-request';
 
 export interface VisitDetailBladeProps {
 	children?: ReactNode;
 	isOpen: boolean;
 	onClose: () => void;
-	visit: Visit;
+	visit: VisitRequest;
 }

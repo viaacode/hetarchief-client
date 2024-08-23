@@ -32,7 +32,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-
 import React, {
 	type FC,
 	Fragment,
@@ -44,6 +43,15 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	BooleanParam,
+	NumberParam,
+	StringParam,
+	useQueryParam,
+	withDefault,
+} from 'use-query-params';
+
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import {
@@ -52,6 +60,7 @@ import {
 } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { CollapsableBlade } from '@ie-objects/components/CollapsableBlade';
+import { CopyrightConfirmationModal } from '@ie-objects/components/CopyrightConfirmationModal';
 import {
 	type ActionItem,
 	DynamicActionMenu,
@@ -76,6 +85,7 @@ import {
 	FLOWPLAYER_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
 	GET_METADATA_FIELDS,
+	GET_NEWSPAPER_DOWNLOAD_OPTIONS,
 	IMAGE_API_FORMATS,
 	IMAGE_FORMATS,
 	KEY_USER_ACTION_SORT_MAP,
@@ -96,12 +106,14 @@ import {
 	IeObjectAccessThrough,
 	type IeObjectFile,
 	IeObjectLicense,
+	type IeObjectRepresentation,
 	IsPartOfKey,
 	MediaActions,
 	MetadataExportFormats,
 	type MetadataSortMap,
 	ObjectDetailTabs,
 	type OcrSearchResult,
+	type RelatedIeObject,
 } from '@ie-objects/ie-objects.types';
 import {
 	IE_OBJECTS_SERVICE_BASE_URL,
@@ -109,16 +121,17 @@ import {
 	NEWSPAPERS_SERVICE_BASE_URL,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { isInAFolder } from '@ie-objects/utils/folders';
+import { getAltoTextId } from '@ie-objects/utils/get-alto-text-id';
 import { getIeObjectRightsOwnerAsText } from '@ie-objects/utils/get-ie-object-rights-owner-as-text';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import { mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils/map-metadata';
-import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import IiifViewer from '@iiif-viewer/IiifViewer';
 import {
 	type IiifViewerFunctions,
 	type ImageInfo,
 	type TextLine,
 } from '@iiif-viewer/IiifViewer.types';
+import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { Blade } from '@shared/components/Blade/Blade';
@@ -154,7 +167,7 @@ import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
-import { useGetActiveVisitForUserAndSpace } from '@visit-requests/hooks/get-active-visit-for-user-and-space';
+import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
@@ -167,15 +180,6 @@ import {
 	SearchFilterId,
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
-
-import { useDispatch, useSelector } from 'react-redux';
-import {
-	BooleanParam,
-	NumberParam,
-	StringParam,
-	useQueryParam,
-	withDefault,
-} from 'use-query-params';
 
 import CopyButton from '../shared/components/CopyButton/CopyButton';
 
@@ -216,11 +220,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | null>(null);
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
-	const [related, setRelated] = useState<MediaObject[]>([]);
 	const [metadataExportDropdownOpen, setMetadataExportDropdownOpen] = useState(false);
 	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
 	const [isRelatedObjectsBladeOpen, setIsRelatedObjectsBladeOpen] = useState(false);
-	const [isHighlightSearchTermsActive, setIsHighlightSearchTermsActive] = useState<boolean>(true);
+	const [copyrightModalOpen, setCopyrightModalOpen] = useState(false);
+	const [onConfirmCopyright, setOnConfirmCopyright] = useState<() => void>(noop);
+	const [hasNewsPaperBeenRendered, setHasNewsPaperBeenRendered] = useState(false);
 	const [hasAppliedUrlSearchTerms, setHasAppliedUrlSearchTerms] = useState<boolean>(false);
 
 	// TODO get these names from the backend: https://meemoo.atlassian.net/browse/ARC-2219
@@ -316,11 +321,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		withDefault(NumberParam, 0)
 	);
 
-	// Used for going through the videos/audio/image representations/files inside a single detail page (grey bottom bar)
-	const [currentRepresentationIndex, setCurrentRepresentationIndex] = useQueryParam(
-		QUERY_PARAM_KEY.ACTIVE_REPRESENTATION,
-		NumberParam
-	);
 	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number>(0);
 	const [expandSidebar, setExpandSidebar] = useQueryParam(
 		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
@@ -355,7 +355,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
 	const currentPage = mediaInfo?.pageRepresentations?.[currentPageIndex];
-	const currentRepresentation = currentPage?.[currentRepresentationIndex || 0];
+	const currentRepresentation = currentPage?.[0];
 
 	// peak file
 	const peakFileStoredAt: string | null =
@@ -407,8 +407,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	);
 
 	// related
-	const { data: relatedData } = useGetIeObjectsRelated(ieObjectId, mediaInfo?.maintainerId, {
-		enabled: !!mediaInfo,
+	const { data: relatedIeObjects } = useGetIeObjectsRelated(
+		mediaInfo?.iri as string,
+		mediaInfo?.premisIsPartOf || null,
+		{
+			enabled: !!mediaInfo,
+		}
+	);
+	console.log({
+		relatedIeObjects,
+		mediaInfo,
+		iri: mediaInfo?.iri,
+		premisIsPartOf: mediaInfo?.premisIsPartOf,
 	});
 
 	// visit info
@@ -416,7 +426,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		data: visitRequest,
 		error: visitRequestError,
 		isLoading: visitRequestIsLoading,
-	} = useGetActiveVisitForUserAndSpace(router.query.slug as string, user);
+	} = useGetActiveVisitRequestForUserAndSpace(router.query.slug as string, user);
 
 	// get visitor space info, used to display contact information
 	const {
@@ -433,17 +443,20 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	// ocr alto info
 	const currentPageAltoUrl = useMemo((): string | null => {
-		let altoFileUrl = null;
-		currentPage?.find(
-			(representation) =>
-				representation?.files?.find((file) => {
-					if (XML_FORMATS.includes(file.mimeType)) {
-						altoFileUrl = file.storedAt;
-						return true;
-					}
-					return false;
-				})
-		);
+		let altoFileUrl: string | null = null;
+		currentPage?.some((representation: IeObjectRepresentation) => {
+			if (representation.schemaTranscriptUrl) {
+				altoFileUrl = representation.schemaTranscriptUrl;
+				return true; // Found the alto.json file
+			}
+			return representation?.files?.some((file) => {
+				if (XML_FORMATS.includes(file.mimeType)) {
+					altoFileUrl = file.storedAt;
+					return true; // Found the fallback alto.xml file
+				}
+				return false; // Did not find any alto files
+			});
+		});
 		return altoFileUrl;
 	}, [currentPage]);
 	const { data: simplifiedAltoInfo } = useGetAltoJsonFileContent(currentPageAltoUrl);
@@ -467,8 +480,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
 			IeObjectAccessThrough.VISITOR_SPACE_FULL,
 		]).length > 0;
-	const isPublicNewspaper =
-		mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) && isNewspaper;
+	const isPublicNewspaper: boolean =
+		!!mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) && isNewspaper;
 	const canRequestAccess =
 		isNil(
 			accessibleVisitorSpaces?.find((space) => space.maintainerId === mediaInfo?.maintainerId)
@@ -481,10 +494,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
 		visitorSpace?.status === VisitorSpaceStatus.Active &&
 		!isKiosk;
-	const canDownloadMetadata: boolean =
-		(useHasAnyPermission(Permission.EXPORT_OBJECT, Permission.DOWNLOAD_OBJECT) &&
-			(hasAccessToVisitorSpaceOfObject || isPublicNewspaper)) ||
-		false;
+	const canDownloadMetadata: boolean = useHasAnyPermission(Permission.EXPORT_OBJECT);
+	const canDownloadNewspaper: boolean =
+		useHasAnyPermission(Permission.DOWNLOAD_OBJECT) && isNewspaper && isPublicNewspaper;
+
+	const pageOcrTexts: (string | null)[] = useMemo(() => {
+		const pageOcrTextsTemp: (string | null)[] = [];
+		mediaInfo?.pageRepresentations?.forEach((representations) => {
+			const pageTranscripts = compact(
+				representations.map((representation) => {
+					return representation.schemaTranscript;
+				})
+			);
+			pageOcrTextsTemp.push(pageTranscripts[0]?.toLowerCase() || null);
+		});
+		return pageOcrTextsTemp;
+	}, [mediaInfo?.pageRepresentations]);
+
+	const arePagesOcrTextsAvailable = compact(pageOcrTexts).length !== 0;
 
 	/**
 	 * Effects
@@ -504,7 +531,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		activeSearchResultElem?.scrollIntoView({
 			behavior: 'instant',
 			block: 'nearest',
-			inline: 'nearest',
+			inline: 'start',
 		});
 	}, [currentSearchResultIndex]);
 
@@ -567,10 +594,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		similarData && setSimilar(mapSimilarData(similarData?.items));
 	}, [similarData]);
 
-	useEffect(() => {
-		relatedData && setRelated(mapRelatedData(relatedData.items));
-	}, [relatedData]);
-
 	/**
 	 * Mapping
 	 */
@@ -592,22 +615,33 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		});
 	};
 
-	const mapRelatedData = (data: IeObject[]): MediaObject[] => {
-		return data.map((item) => {
-			const date = item.datePublished ?? item.dateCreated ?? null;
+	const mapRelatedIeObject = (
+		ieObject: Partial<RelatedIeObject> | undefined | null
+	): MediaObject | null => {
+		if (!ieObject) {
+			return null;
+		}
+		const date = ieObject.datePublished ?? ieObject.dateCreated ?? null;
 
-			return {
-				type: item.dctermsFormat,
-				title: item.name,
-				subtitle: isNil(date)
-					? `${item?.maintainerName ?? ''}`
-					: `${item?.maintainerName ?? ''} (${date})`,
-				description: item.description,
-				id: item.schemaIdentifier,
-				maintainer_id: item.maintainerId,
-				thumbnail: item.thumbnailUrl,
-			};
-		});
+		return {
+			type: ieObject.dctermsFormat as IeObjectType,
+			title: ieObject.name as string,
+			subtitle: isNil(date)
+				? `${ieObject?.maintainerName ?? ''}`
+				: `${ieObject?.maintainerName ?? ''} (${date})`,
+			description: ieObject.description as string,
+			id: ieObject.schemaIdentifier as string,
+			maintainer_id: ieObject.maintainerId,
+			thumbnail: ieObject.thumbnailUrl,
+		};
+	};
+
+	const getMappedRelatedIeObjects = (): MediaObject[] => {
+		if (relatedIeObjects?.parent) {
+			return [mapRelatedIeObject(relatedIeObjects.parent) as MediaObject];
+		} else {
+			return compact(relatedIeObjects?.children?.map(mapRelatedIeObject) || []);
+		}
 	};
 
 	/**
@@ -663,9 +697,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				break;
 			case MediaActions.RequestMaterial:
 				onRequestMaterialClick();
-				break;
-			case MediaActions.ToggleHighlightSearchTerm:
-				setIsHighlightSearchTermsActive(!isHighlightSearchTermsActive);
 				break;
 		}
 	};
@@ -737,6 +768,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				pid: mediaInfo?.schemaIdentifier,
 				user_group_name: user?.groupName,
 				or_id: mediaInfo?.maintainerId,
+				type: mediaInfo?.dctermsFormat,
 			});
 
 			// The external url is opened with an actual link, so safari doesn't block the popup
@@ -744,6 +776,23 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			setActiveBlade(MediaActions.RequestMaterial);
 		}
 	};
+
+	const handleOnDownloadEvent = useCallback(() => {
+		const path = window.location.href;
+		const eventData = {
+			type: mediaInfo?.dctermsFormat,
+			fragment_id: mediaInfo?.schemaIdentifier,
+			pid: mediaInfo?.schemaIdentifier,
+			user_group_name: user?.groupName,
+			or_id: mediaInfo?.maintainerId,
+		};
+		EventsService.triggerEvent(LogEventType.DOWNLOAD, path, eventData).then(noop);
+	}, [
+		mediaInfo?.dctermsFormat,
+		mediaInfo?.maintainerId,
+		mediaInfo?.schemaIdentifier,
+		user?.groupName,
+	]);
 
 	const handleOnPlay = () => {
 		setIsMediaPaused(false);
@@ -835,6 +884,28 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 	};
 
+	const handleClickOcrWord = useCallback(
+		async (textLocation: AltoTextLine) => {
+			iiifViewerReference?.current?.iiifZoomToRect(textLocation);
+			const searchTermWords = searchTerms.split(' ');
+			const activeAltoTextId = getAltoTextId(textLocation);
+			const altoSearchTexts =
+				simplifiedAltoInfo?.text?.filter((altoText) =>
+					searchTermWords.some((searchTermWord) =>
+						altoText.text.toLowerCase().includes(searchTermWord)
+					)
+				) || [];
+			const highlightedAltoTextIds = altoSearchTexts
+				.map(getAltoTextId)
+				.filter((id) => id !== activeAltoTextId);
+			iiifViewerReference?.current?.setActiveWordByIds(
+				activeAltoTextId,
+				highlightedAltoTextIds
+			);
+		},
+		[searchTerms, simplifiedAltoInfo?.text]
+	);
+
 	const handleChangeSearchIndex = useCallback(
 		async (searchResultIndex: number) => {
 			if (!searchResults) {
@@ -848,12 +919,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			if (searchResult.pageIndex !== currentPageIndex) {
 				setCurrentPageIndex(searchResult.pageIndex, 'replaceIn');
 			}
-			const altoText = simplifiedAltoInfo?.text?.[searchResult.searchTermIndexOnPage];
-			if (altoText) {
-				await handleClickOcrWord(altoText, searchResult.searchTermIndexOnPage);
+
+			// Convert search term index to word index
+			const searchTermWords = searchResult.searchTerm.split(' ');
+			const altoSearchTexts = simplifiedAltoInfo?.text?.filter((altoText) =>
+				searchTermWords.some((searchTermWord) =>
+					altoText.text.toLowerCase().includes(searchTermWord)
+				)
+			);
+			const altoSearchText = altoSearchTexts?.[searchResult.searchTermIndexOnPage];
+
+			if (!altoSearchText) {
+				return;
 			}
+
+			await handleClickOcrWord(altoSearchText);
 		},
 		[
+			handleClickOcrWord,
 			currentPageIndex,
 			searchResults,
 			setCurrentPageIndex,
@@ -871,7 +954,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	};
 
 	const searchPagesOcrText = useCallback(
-		(newSearchTerms: string): void => {
+		async (newSearchTerms: string): Promise<void> => {
 			if (newSearchTerms === '') {
 				// Reset search
 				// Zoom to whole page
@@ -880,16 +963,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 			setSearchTerms(newSearchTerms);
 			setActiveTab(ObjectDetailTabs.Ocr);
-
-			const pageOcrTexts: (string | null)[] = [];
-			mediaInfo?.pageRepresentations?.forEach((representations) => {
-				const pageTranscripts = compact(
-					representations.map((representation) => {
-						return representation.schemaTranscript;
-					})
-				);
-				pageOcrTexts.push(pageTranscripts[0]?.toLowerCase() || null);
-			});
 
 			if (!pageOcrTexts.length) {
 				toastService.notify({
@@ -928,18 +1001,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			});
 			setSearchResults(searchResultsTemp);
 			setCurrentPageIndex(searchResultsTemp?.[0]?.pageIndex || 0, 'replaceIn');
-			iiifViewerReference.current?.waitForReadyState().then(() => {
-				handleChangeSearchIndex(0);
-			});
 		},
-		[
-			handleChangeSearchIndex,
-			mediaInfo?.pageRepresentations,
-			setActiveTab,
-			setCurrentPageIndex,
-			setSearchTerms,
-		]
+		[pageOcrTexts, setActiveTab, setCurrentPageIndex]
 	);
+
+	useEffect(() => {
+		if ((searchResults?.length || 0) > 0) {
+			iiifViewerReference.current?.waitForReadyState().then(() => {
+				handleChangeSearchIndex(0).then(noop);
+			});
+		}
+	}, [searchResults, handleChangeSearchIndex]);
 
 	useEffect(() => {
 		// When the page loads, search the ocr texts for the searchTerms in the query params in the url
@@ -950,6 +1022,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			setHasAppliedUrlSearchTerms(true);
 		}
 	}, [
+		isNewspaper,
 		hasAppliedUrlSearchTerms,
 		mediaInfo?.dctermsFormat,
 		searchPagesOcrText,
@@ -962,7 +1035,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 
 		if (isKeyUser) {
-			return KEY_USER_ACTION_SORT_MAP(canDownloadMetadata);
+			return KEY_USER_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
 		}
 
 		if (isKiosk) {
@@ -970,29 +1043,45 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 
 		if (isMeemooAdmin) {
-			return MEEMOO_ADMIN_ACTION_SORT_MAP(canDownloadMetadata);
+			return MEEMOO_ADMIN_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
 		}
 
 		if (isCPAdmin) {
-			return CP_ADMIN_ACTION_SORT_MAP(canDownloadMetadata);
+			return CP_ADMIN_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
 		}
 
-		return VISITOR_ACTION_SORT_MAP(canDownloadMetadata);
-	}, [canDownloadMetadata, isKeyUser, isMeemooAdmin, isKiosk, user, isCPAdmin]);
+		return VISITOR_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
+	}, [
+		canDownloadMetadata,
+		isKeyUser,
+		isMeemooAdmin,
+		isKiosk,
+		user,
+		isCPAdmin,
+		canDownloadNewspaper,
+	]);
 
 	const onExportClick = useCallback(
 		(format: MetadataExportFormats) => {
 			switch (format) {
 				case MetadataExportFormats.fullNewspaperZip:
-					window.open(
-						`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip`
-					);
+					setCopyrightModalOpen(true);
+					setOnConfirmCopyright(() => () => {
+						window.open(
+							`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip`
+						);
+						handleOnDownloadEvent();
+					});
 					break;
 
 				case MetadataExportFormats.onePageNewspaperZip:
-					window.open(
-						`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`
-					);
+					setCopyrightModalOpen(true);
+					setOnConfirmCopyright(() => () => {
+						window.open(
+							`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`
+						);
+						handleOnDownloadEvent();
+					});
 					break;
 
 				case MetadataExportFormats.xml:
@@ -1004,15 +1093,29 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			}
 			setMetadataExportDropdownOpen(false);
 		},
-		[currentPageIndex, ieObjectId]
+		[currentPageIndex, handleOnDownloadEvent, ieObjectId]
 	);
 
 	const renderExportDropdown = useCallback(
 		(isPrimary: boolean) => {
 			const icon = <Icon name={IconNamesLight.Export} aria-hidden />;
-			const label = tText(
-				'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
-			);
+
+			const buttonLabelDesktop = isPublicNewspaper
+				? tText('modules/ie-objects/object-detail-page___download-deze-krant-desktop')
+				: tText('modules/ie-objects/object-detail-page___export-metadata-desktop');
+			const buttonLabelMobile = isPublicNewspaper
+				? tText('modules/ie-objects/object-detail-page___download-deze-krant-mobile')
+				: tText('modules/ie-objects/object-detail-page___export-metadata-mobile');
+
+			const exportOptions = [];
+
+			if (canDownloadNewspaper) {
+				exportOptions.push(...GET_NEWSPAPER_DOWNLOAD_OPTIONS());
+			}
+
+			if (canDownloadMetadata) {
+				exportOptions.push(...METADATA_EXPORT_OPTIONS());
+			}
 
 			return (
 				<div className={styles['p-object-detail__export']}>
@@ -1028,24 +1131,22 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 									className={styles['p-object-detail__export']}
 									iconStart={icon}
 									iconEnd={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-									aria-label={label}
-									title={label}
+									aria-label={buttonLabelDesktop}
+									title={buttonLabelDesktop}
 								>
 									<span className="u-text-ellipsis u-display-none u-display-block:md">
-										{label}
+										{buttonLabelDesktop}
 									</span>
 									<span className="u-text-ellipsis u-display-none:md">
-										{tHtml(
-											'pages/bezoekersruimte/visitor-space-slug/object-id/index___metadata'
-										)}
+										{buttonLabelMobile}
 									</span>
 								</Button>
 							) : (
 								<Button
 									icon={icon}
 									variants={['silver']}
-									aria-label={label}
-									title={label}
+									aria-label={buttonLabelDesktop}
+									title={buttonLabelDesktop}
 								/>
 							)}
 						</DropdownButton>
@@ -1053,7 +1154,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							<MenuContent
 								rootClassName="c-dropdown-menu"
 								className={styles['p-object-detail__export-dropdown']}
-								menuItems={METADATA_EXPORT_OPTIONS()}
+								menuItems={exportOptions}
 								onClick={(id) => onExportClick(id as MetadataExportFormats)}
 							/>
 						</DropdownContent>
@@ -1061,7 +1162,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				</div>
 			);
 		},
-		[metadataExportDropdownOpen, onExportClick]
+		[
+			isPublicNewspaper,
+			canDownloadNewspaper,
+			canDownloadMetadata,
+			metadataExportDropdownOpen,
+			onExportClick,
+		]
 	);
 
 	/**
@@ -1126,12 +1233,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			isMobile,
 			canManageFolders: canManageFolders || isAnonymous,
 			isInAFolder: isInAFolder(folders, mediaInfo?.schemaIdentifier),
-			isHighlightSearchTermActive: isHighlightSearchTermsActive,
-			canToggleSearchTerms: !!searchTerms,
 			canReport: !isKiosk,
 			canRequestAccess: !!canRequestAccess,
 			canRequestMaterial: isAnonymous || canRequestMaterial,
-			canExport: canDownloadMetadata,
+			canExport: canDownloadMetadata || canDownloadNewspaper || false,
 			externalFormUrl: getExternalMaterialRequestUrlIfAvailable(),
 		});
 
@@ -1146,7 +1251,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			.map((action: ActionItem) => {
 				const existsInSortMap = !isNil(sortMap.find((d) => d.id === action.id));
 				const isPrimary = sortMap.find((d) => action.id === d.id)?.isPrimary ?? false;
-				const showExport = action.id === MediaActions.Export && canDownloadMetadata;
+				const showExport =
+					action.id === MediaActions.Export &&
+					(canDownloadMetadata || canDownloadNewspaper);
 
 				return existsInSortMap
 					? {
@@ -1170,21 +1277,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		isAnonymous,
 		folders,
 		mediaInfo?.schemaIdentifier,
-		isHighlightSearchTermsActive,
-		searchTerms,
 		isKiosk,
 		canRequestAccess,
 		canRequestMaterial,
+		canDownloadNewspaper,
 		canDownloadMetadata,
 		getExternalMaterialRequestUrlIfAvailable,
 		getSortMapByUserType,
 		renderExportDropdown,
 	]);
-
-	const handleClickOcrWord = async (textLocation: AltoTextLine, index: number) => {
-		iiifViewerReference?.current?.iiifZoomToRect(textLocation);
-		iiifViewerReference?.current?.setActiveWordIndex(index);
-	};
 
 	const handleIiifViewerSelection = (rect: TextLine) => {
 		window.open(
@@ -1235,6 +1336,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 		// IIIF viewer
 		if (isNewspaper && !!mediaInfo) {
+			if (!hasNewsPaperBeenRendered) {
+				handleOnPlay();
+				setHasNewsPaperBeenRendered(true);
+			}
 			return (
 				<IiifViewer
 					imageInfos={iiifViewerImageInfos}
@@ -1248,6 +1353,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					initialFocusX={iiifViewerFocusX}
 					initialFocusY={iiifViewerFocusY}
 					initialZoomLevel={iiifViewerZoomLevel}
+					isSearchEnabled={arePagesOcrTextsAvailable}
 					searchTerms={searchTermsTemp}
 					setSearchTerms={setSearchTermsTemp}
 					onSearch={searchPagesOcrText}
@@ -1353,7 +1459,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					)}
 					aria-label={item.title}
 				>
-					{<RelatedObject object={item} />}
+					<RelatedObject object={item} />
 				</a>
 			</Link>
 		</li>
@@ -1610,10 +1716,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							showKeyUserPill ? 'u-pt-8' : 'u-pt-24'
 						)}
 					>
-						<HighlightSearchTerms
-							toHighlight={mediaInfo?.name}
-							enabled={isHighlightSearchTermsActive}
-						/>
+						<HighlightSearchTerms toHighlight={mediaInfo?.name} />
 					</h3>
 
 					{renderMetaDataActions()}
@@ -1625,7 +1728,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						data={mediaInfo.description}
 						className="u-pb-24 u-line-height-1-4 u-font-size-14"
 						onReadMoreClicked={setSelectedMetadataField}
-						enableHighlighting={isHighlightSearchTermsActive}
 					/>
 
 					{showAlert && (
@@ -1659,7 +1761,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 										title={item.title}
 										data={item.data}
 										onReadMoreClicked={setSelectedMetadataField}
-										enableHighlighting={isHighlightSearchTermsActive}
 									/>
 								</Metadata>
 							);
@@ -1677,7 +1778,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				</MetadataList>
 
 				<MetadataList disableContainerQuery={true}>
-					{!!fallenNames?.length && (
+					{isNewspaper && !!fallenNames?.length && (
 						<Metadata
 							title={tText('modules/ie-objects/object-detail-page___namenlijst')}
 							key="metadata-fallen-names-list"
@@ -1770,7 +1871,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	};
 
 	const renderRelatedObjectsBlade = () => {
-		if (!related.length || (!expandSidebar && isMobile)) {
+		const mappedRelatedIeObjects = getMappedRelatedIeObjects();
+		if (!mappedRelatedIeObjects.length || (!expandSidebar && isMobile)) {
 			return null;
 		}
 		return (
@@ -1786,18 +1888,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					/>
 				}
 				title={
-					related.length === 1
-						? tHtml(
-								'pages/bezoekersruimte/visitor-space-slug/object-id/index___1-gerelateerd-object'
-						  )
-						: tHtml(
-								'pages/bezoekersruimte/visitor-space-slug/object-id/index___amount-gerelateerde-objecten',
-								{
-									amount: related.length,
-								}
-						  )
+					relatedIeObjects?.parent
+						? tHtml('Dit object is onderdeel van dit hoofdobject')
+						: tHtml('Dit object heeft {{amount}} fragmenten', {
+								amount: mappedRelatedIeObjects.length,
+						  })
 				}
-				renderContent={(hidden: boolean) => renderIeObjectCards('related', related, hidden)}
+				renderContent={(hidden: boolean) =>
+					renderIeObjectCards('related', mappedRelatedIeObjects, hidden)
+				}
 			/>
 		);
 	};
@@ -1828,7 +1927,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					const wordElement = (
 						<span
 							key={'ocr-text--' + ieObjectId + '--' + index}
-							onClick={() => handleClickOcrWord(textLocation, index)}
+							onClick={() => handleClickOcrWord(textLocation)}
 							onDoubleClick={() =>
 								setIsOcrEnabled((oldOcrEnabled) => !oldOcrEnabled, 'replaceIn')
 							}
@@ -1850,13 +1949,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			</div>
 		);
 	}, [
-		currentPageIndex,
-		currentSearchResultIndex,
 		searchTerms,
-		ieObjectId,
-		searchResults,
-		setIsOcrEnabled,
 		simplifiedAltoInfo?.text,
+		searchResults,
+		currentSearchResultIndex,
+		ieObjectId,
+		currentPageIndex,
+		handleClickOcrWord,
+		setIsOcrEnabled,
 	]);
 
 	const renderOcrContent = () => {
@@ -1870,16 +1970,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					)}
 				/>
 
-				<SearchInputWithResultsPagination
-					className={styles['p-object-detail__ocr__search']}
-					value={searchTermsTemp}
-					onChange={setSearchTermsTemp}
-					onSearch={(newSearchTerms) => searchPagesOcrText(newSearchTerms)}
-					onClearSearch={handleClearSearch}
-					searchResults={searchResults}
-					currentSearchIndex={currentSearchResultIndex}
-					onChangeSearchIndex={handleChangeSearchIndex}
-				/>
+				{arePagesOcrTextsAvailable && (
+					<SearchInputWithResultsPagination
+						className={styles['p-object-detail__ocr__search']}
+						value={searchTermsTemp}
+						onChange={setSearchTermsTemp}
+						onSearch={(newSearchTerms) => searchPagesOcrText(newSearchTerms)}
+						onClearSearch={handleClearSearch}
+						searchResults={searchResults}
+						currentSearchIndex={currentSearchResultIndex}
+						onChangeSearchIndex={handleChangeSearchIndex}
+					/>
+				)}
 
 				{renderedOcrText}
 
@@ -1896,7 +1998,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						label={tText('modules/ie-objects/object-detail-page___vorige')}
 						variants={['text']}
 						onClick={() => {
-							console.log('next page: ', { index: currentPageIndex - 1 });
 							setCurrentPageIndex(currentPageIndex - 1);
 						}}
 						disabled={currentPageIndex === 0}
@@ -1922,7 +2023,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						label={tText('modules/ie-objects/object-detail-page___volgende')}
 						variants={['text']}
 						onClick={() => {
-							console.log('next page: ', { index: currentPageIndex + 1 });
 							setCurrentPageIndex(currentPageIndex + 1);
 						}}
 						disabled={currentPageIndex === iiifViewerImageInfos.length - 1}
@@ -1939,12 +2039,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					<div className={styles['p-object-detail__media']}>{renderMedia()}</div>
 					{showFragmentSlider && (
 						<FragmentSlider
-							thumbnail={mediaInfo?.thumbnailUrl}
 							className={styles['p-object-detail__grey-slider-bar']}
-							files={representationsToDisplay}
-							onChangeFragment={(index) =>
-								setCurrentRepresentationIndex(index, 'replaceIn')
-							}
+							fileRepresentations={representationsToDisplay}
+							activeIndex={currentPageIndex}
+							setActiveIndex={(index) => setCurrentPageIndex(index, 'replaceIn')}
 						/>
 					)}
 				</>
@@ -1968,7 +2066,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			<Button
 				className={styles['p-object-detail__back']}
 				icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
-				onClick={() => window.history.back()}
+				onClick={() => {
+					router.back();
+				}}
 				variants={['black']}
 			/>
 		);
@@ -2214,6 +2314,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					imgUrl={image}
 					translatedPages={[]}
 					relativeUrl={url}
+				/>
+				<CopyrightConfirmationModal
+					isOpen={copyrightModalOpen}
+					onClose={() => setCopyrightModalOpen((prevState) => !prevState)}
+					onConfirm={() => {
+						onConfirmCopyright();
+						setCopyrightModalOpen((prevState) => !prevState);
+					}}
 				/>
 				{renderPageContent()}
 			</VisitorLayout>

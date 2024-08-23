@@ -1,5 +1,6 @@
 export enum IeObjectType {
 	Video = 'video',
+	VideoFragment = 'videofragment',
 	Audio = 'audio',
 	Film = 'film',
 	Newspaper = 'newspaper',
@@ -14,6 +15,7 @@ export enum SearchPageMediaType {
 
 export enum IeObjectsSearchFilterField {
 	ADVANCED_QUERY = 'advancedQuery',
+	RELEASE_DATE = 'releaseDate',
 	CREATED = 'created',
 	CREATOR = 'creator',
 	DESCRIPTION = 'description',
@@ -33,6 +35,7 @@ export enum IeObjectsSearchFilterField {
 	MAINTAINER_ID = 'maintainer', // Contains the OR-id of the maintainer
 	CONSULTABLE_ONLY_ON_LOCATION = 'isConsultableOnlyOnLocation',
 	CONSULTABLE_MEDIA = 'isConsultableMedia',
+	CONSULTABLE_PUBLIC_DOMAIN = 'isConsultablePublicDomain',
 	CAST = 'cast',
 	IDENTIFIER = 'identifier',
 	OBJECT_TYPE = 'objectType',

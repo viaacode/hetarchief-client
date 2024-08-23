@@ -6,41 +6,11 @@ $controls-margin-right: $spacer-sm; // Can go all the way to the edge
 $controls-margin-bottom: $spacer-sm;
 
 .c-iiif-viewer {
-	container: iiif_viewer / size;
+	container-name: iiif-viewer;
+	container-type: size;
 	height: 100%;
 
-	// Hide the navigator when the iiif viewer gets too narrow
-	@container (max-width: #{$breakpoint-md}) {
-		:global(.navigator) {
-			display: none !important;
-		}
-
-		.c-iiif-viewer__iiif__reference-strip {
-			display: none !important;
-		}
-
-		// Mobile search should be shown in separate grid row above other controls
-		.c-iiif-viewer__iiif__controls__button-group__pagination {
-			grid-column: 1;
-			grid-row: 2;
-
-			:global(.pagination-info) {
-				display: none;
-			}
-		}
-
-		.c-iiif-viewer__iiif__controls__button-group__search {
-			grid-column: 1 / 4;
-			grid-row: 1;
-		}
-
-		.c-iiif-viewer__iiif__controls__button-group__zoom {
-			grid-column: 3;
-			grid-row: 2;
-		}
-	}
-
-	.c-iiif-viewer__iiif-container {
+	&__iiif-container {
 		display: block;
 		position: absolute;
 		inset: 0;
@@ -55,25 +25,25 @@ $controls-margin-bottom: $spacer-sm;
 			text-align: center;
 
 			&:global(--active) {
-				background-color: $white;
+				background-color: $black;
+
+				svg text {
+					fill: $white !important;
+				}
+			}
+
+			&:global(--highlighted) {
+				background-color: $teal-dark;
+
+				svg text {
+					fill: $white !important;
+				}
 			}
 
 			> :global(svg) {
 				width: 100%;
 				height: 100%;
 			}
-		}
-
-		:global(.c-iiif-viewer__iiif__close-fullscreen) {
-			display: none;
-		}
-
-		&:global(.fullpage) :global(.c-iiif-viewer__iiif__close-fullscreen) {
-			display: block;
-			font-family: meemoo-icons-light, sans-serif;
-			margin-right: 50vw;
-			margin-bottom: 2rem;
-			transform: translateX(50%);
 		}
 
 		// Navigator zoom bounds indicator
@@ -154,6 +124,119 @@ $controls-margin-bottom: $spacer-sm;
 			}
 		}
 	}
+
+	&__iiif__controls {
+		z-index: 2000;
+		width: auto;
+		height: $button-height-sm;
+		position: absolute;
+		left: $controls-margin-left;
+		right: $controls-margin-right;
+		bottom: 0;
+		margin-bottom: $controls-margin-bottom;
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		grid-template-rows: auto;
+		grid-gap: $spacer-xs $spacer-xs;
+		container: iiif__controls / size;
+
+		&__button-group {
+			display: flex;
+			flex-flow: row nowrap;
+			height: $button-height-sm;
+			border-radius: $button-radius-sm;
+			background-color: $white;
+			padding: 0.4rem;
+			align-items: center;
+
+			&__search {
+				flex-grow: 1;
+
+				> div {
+					flex-grow: 1;
+				}
+
+				&--disabled {
+					visibility: hidden;
+					pointer-events: none;
+				}
+			}
+
+			> span {
+				font-size: $font-size-sm;
+				padding: $spacer-xs;
+			}
+
+			&__divider {
+				width: 1px;
+				height: $button-height-xs;
+				background-color: $silver;
+				margin: $spacer-xxs $spacer-xs;
+			}
+		}
+
+		&__button:global(.c-button--sm) {
+			width: $button-height-sm;
+			height: $button-height-xs;
+			border-radius: $button-radius-xs;
+			padding: $spacer-xs $spacer-xxs;
+		}
+
+		:global(.c-iiif-viewer__iiif__controls__grid-view__disable) {
+			width: $button-height;
+			height: $button-height;
+			border-radius: $button-radius;
+			position: absolute;
+			left: 50%;
+			bottom: $spacer-sm;
+		}
+	}
+
+	// Hide the navigator when the iiif viewer gets too narrow
+	@container iiif-viewer (max-width: #{$breakpoint-md}) {
+		:global(.navigator) {
+			display: none !important;
+		}
+
+		&__iiif__reference-strip {
+			display: none !important;
+		}
+
+		&__iiif__controls {
+			left: $spacer-xs;
+			right: $spacer-xs;
+			grid-template-columns: auto 1fr auto;
+			grid-template-rows: $button-height-sm $button-height-sm;
+			height: $button-height-sm + $spacer-xs + $button-height-sm;
+			margin-bottom: $spacer-xs;
+
+			// Mobile search should be shown in separate grid row above other controls
+			&__button-group__pagination {
+				grid-column: 1;
+				grid-row: 2;
+
+				:global(.pagination-info) {
+					display: none;
+				}
+			}
+
+			&__button-group__search {
+				grid-column: 1 / 4;
+				grid-row: 1;
+			}
+
+			&__button-group__zoom {
+				grid-column: 3;
+				grid-row: 2;
+			}
+		}
+
+		&__grid-view {
+			padding: $spacer-1xl;
+			padding-bottom: $spacer-1xl * 4;
+			gap: 2rem;
+		}
+	}
 }
 
 .c-iiif-viewer__iiif__reference-strip {
@@ -196,100 +279,6 @@ $controls-margin-bottom: $spacer-sm;
 
 		+ div {
 			padding-top: 0;
-		}
-	}
-}
-
-.c-iiif-viewer__iiif__controls {
-	z-index: 2000;
-	width: auto;
-	height: $button-height-sm;
-	position: absolute;
-	left: $controls-margin-left;
-	right: $controls-margin-right;
-	bottom: 0;
-	margin-bottom: $controls-margin-bottom;
-	display: grid;
-	grid-template-columns: auto 1fr auto;
-	grid-template-rows: auto;
-	grid-gap: $spacer-xs $spacer-xs;
-	container: iiif__controls / size;
-
-	&__button-group {
-		display: flex;
-		flex-flow: row nowrap;
-		height: $button-height-sm;
-		border-radius: $button-radius-sm;
-		background-color: $white;
-		padding: 0.4rem;
-		align-items: center;
-
-		&:nth-child(2) {
-			flex-grow: 1;
-
-			> div {
-				flex-grow: 1;
-			}
-		}
-
-		> span {
-			font-size: $font-size-sm;
-			padding: $spacer-xs;
-		}
-
-		&__divider {
-			width: 1px;
-			height: $button-height-xs;
-			background-color: $silver;
-			margin: $spacer-xxs $spacer-xs;
-		}
-	}
-
-	&__button:global(.c-button--sm) {
-		width: $button-height-sm;
-		height: $button-height-xs;
-		border-radius: $button-radius-xs;
-		padding: $spacer-xs $spacer-xxs;
-	}
-
-	:global(.c-iiif-viewer__iiif__controls__grid-view__disable) {
-		width: $button-height;
-		height: $button-height;
-		border-radius: $button-radius;
-		position: absolute;
-		left: 50%;
-		bottom: $spacer-sm;
-	}
-
-	// Mobile controls
-	@container (max-width: 700px) {
-		left: $spacer-xs;
-		right: $spacer-xs;
-		grid-template-columns: auto 1fr auto;
-		grid-template-rows: $button-height-sm $button-height-sm;
-		height: $button-height-sm + $spacer-xs + $button-height-sm;
-		margin-bottom: $spacer-xs;
-	}
-
-	// Mobile search should be shown in separate grid row above other controls
-	@container iiif__controls (max-width: 700px) {
-		.c-iiif-viewer__iiif__controls__button-group__pagination {
-			grid-column: 1;
-			grid-row: 2;
-
-			:global(.pagination-info) {
-				display: none;
-			}
-		}
-
-		.c-iiif-viewer__iiif__controls__button-group__search {
-			grid-column: 1 / 4;
-			grid-row: 1;
-		}
-
-		.c-iiif-viewer__iiif__controls__button-group__zoom {
-			grid-column: 3;
-			grid-row: 2;
 		}
 	}
 }

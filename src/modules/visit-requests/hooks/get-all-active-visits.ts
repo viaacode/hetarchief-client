@@ -2,9 +2,9 @@ import type { IPagination } from '@studiohyperdrive/pagination';
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { type Visit } from '@shared/types/visit';
-import { VisitsService } from '@visit-requests/services';
-import { type GetAllActiveVisitsProps } from '@visit-requests/services/visits/visits.service.types';
+import { type VisitRequest } from '@shared/types/visit-request';
+import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
+import { type GetAllActiveVisitsProps } from '@visit-requests/services/visit-request/visit-request.service.types';
 
 export function useGetAllActiveVisits(
 	props: GetAllActiveVisitsProps,
@@ -15,10 +15,10 @@ export function useGetAllActiveVisits(
 		keepPreviousData: true,
 		enabled: true,
 	}
-): UseQueryResult<IPagination<Visit>> {
+): UseQueryResult<IPagination<VisitRequest>> {
 	return useQuery(
-		[QUERY_KEYS.getVisits, props],
-		() => VisitsService.getAllActiveVisits(props),
+		[QUERY_KEYS.getVisitRequests, props],
+		() => VisitRequestService.getAllActiveVisits(props),
 		options
 	);
 }

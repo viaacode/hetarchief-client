@@ -3,7 +3,6 @@ import { type KeyboardEvent, type ReactElement, useMemo } from 'react';
 import { type InputActionMeta } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 
-import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import {
 	type OnSearchSingle,
 	type TagSearchBarMeta,
@@ -15,7 +14,6 @@ import { TAGS_INPUT_COMPONENTS } from '../TagsInput';
 
 import { TagSearchBarButton } from './TagSearchBarButton';
 import { TagSearchBarClear } from './TagSearchBarClear';
-import { TagSearchBarInfo } from './TagSearchBarInfo';
 import { TagSearchBarValueContainer } from './TagSearchBarValueContainer';
 
 const components = {
@@ -35,7 +33,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 	isMulti = false as IsMulti,
 	light = false,
 	hasDropdown = false,
-	infoContent,
+	renderedRight,
 	menuIsOpen,
 	onChange,
 	onClear,
@@ -108,7 +106,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 		['c-tag-search-bar--has-value-placeholder']: !!valuePlaceholder,
 		['c-tag-search-bar--light']: light,
 		['c-tag-search-bar--has-dropdown']: hasDropdown,
-		['c-tag-search-bar--has-info']: infoContent,
+		['c-tag-search-bar--has-rendered-right']: renderedRight,
 	});
 	const showMenu = typeof menuIsOpen !== 'undefined' ? menuIsOpen : (options?.length ?? 0) > 0;
 	const value = isMulti ? tagsInputProps.value : selectValue;
@@ -147,7 +145,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 				onChange={onSearchChange}
 				/* eslint-enable @typescript-eslint/ban-ts-comment */
 			/>
-			{infoContent && <TagSearchBarInfo icon={IconNamesLight.Info} content={infoContent} />}
+			{renderedRight || null}
 		</div>
 	);
 };

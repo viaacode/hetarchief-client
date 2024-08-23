@@ -26,10 +26,10 @@ import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { type DefaultSeoInfo } from '@shared/types/seo';
-import { AccessStatus, type Visit } from '@shared/types/visit';
+import { AccessStatus, type VisitRequest } from '@shared/types/visit-request';
 import { createVisitorSpacesWithFilterUrl } from '@shared/utils/create-url';
 import { useGetVisitAccessStatusMutation } from '@visit-requests/hooks/get-visit-access-status';
-import { useGetVisits } from '@visit-requests/hooks/get-visits';
+import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitorLayout } from '@visitor-layout/index';
 import { SearchFilterId } from '@visitor-space/types';
 
@@ -37,18 +37,18 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 	const router = useRouter();
 	const locale = useLocale();
 	const [filters, setFilters] = useQueryParams(ACCOUNT_HISTORY_QUERY_PARAM_CONFIG);
-	const [currentDetailVisit, setCurrentDetailVisit] = useState<Visit | null>(null);
+	const [currentDetailVisit, setCurrentDetailVisit] = useState<VisitRequest | null>(null);
 	const [isVisitDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
 
 	const hasAccountHistoryPerm = useHasAnyPermission(
 		Permission.READ_PERSONAL_APPROVED_VISIT_REQUESTS
 	);
 
-	const visits = useGetVisits({
+	const visits = useGetVisitRequests({
 		searchInput: undefined,
 		page: filters.page,
 		size: HistoryItemListSize,
-		orderProp: filters.orderProp as keyof Visit,
+		orderProp: filters.orderProp as keyof VisitRequest,
 		orderDirection: filters.orderDirection as OrderDirection,
 		personal: true,
 	});
@@ -91,7 +91,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 		}
 	};
 
-	const onClickRow = async (visit: Visit) => {
+	const onClickRow = async (visit: VisitRequest) => {
 		try {
 			const response = await getAccessStatus(visit.spaceSlug);
 			switch (response?.status) {
@@ -122,7 +122,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 		}
 	};
 
-	const onRowClick = (evt: MouseEvent<HTMLTableRowElement>, row: Row<Visit>) => {
+	const onRowClick = (evt: MouseEvent<HTMLTableRowElement>, row: Row<VisitRequest>) => {
 		setCurrentDetailVisit(row.original);
 		setIsDetailBladeOpen(true);
 	};
@@ -153,7 +153,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 			>
 				{(filteredVisits?.length || 0) > 0 ? (
 					<div className="l-container l-container--edgeless-to-lg">
-						<Table<Visit>
+						<Table<VisitRequest>
 							className="u-mt-24"
 							style={{ cursor: 'pointer' }}
 							onRowClick={onRowClick}
@@ -163,7 +163,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 								initialState: {
 									pageSize: HistoryItemListSize,
 									sortBy: sortFilters,
-								} as TableState<Visit>,
+								} as TableState<VisitRequest>,
 							}}
 							onSortChange={onSortChange}
 							sortingIcons={sortingIcons}
