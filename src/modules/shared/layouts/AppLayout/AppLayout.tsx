@@ -68,7 +68,7 @@ import {
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
 import { Breakpoints } from '@shared/types';
-import { type Visit } from '@shared/types/visit';
+import { type VisitRequest } from '@shared/types/visit-request';
 import { type Locale } from '@shared/utils/i18n';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visits';
@@ -129,7 +129,7 @@ const AppLayout: FC<any> = ({ children }) => {
 		'{}'
 	);
 
-	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
+	const [visitorSpaces, setVisitorSpaces] = useState<VisitRequest[]>([]);
 
 	useEffect(() => {
 		if (showNotificationsCenter) {
@@ -154,7 +154,7 @@ const AppLayout: FC<any> = ({ children }) => {
 		[dispatch]
 	);
 
-	const getVisitorSpaces = useCallback((): Visit[] => {
+	const getVisitorSpaces = useCallback((): VisitRequest[] => {
 		if (!user || isKioskOrAnonymous) {
 			setVisitorSpaces([]);
 			return [];

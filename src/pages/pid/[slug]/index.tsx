@@ -25,6 +25,8 @@ import { setShowZendesk } from '@shared/store/ui';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorLayout } from '@visitor-layout/index';
 
+import styles from './index.module.scss';
+
 const IeObjectLinkResolver: NextPage<DefaultSeoInfo & UserProps> = ({ url }) => {
 	const router = useRouter();
 	const locale = useLocale();
@@ -36,7 +38,7 @@ const IeObjectLinkResolver: NextPage<DefaultSeoInfo & UserProps> = ({ url }) => 
 	 * Data
 	 */
 
-	const { isLoading: isIeObjectLoading, data: ieObjectInfo } = useGetIeObjectInfo(slug as string);
+	const { data: ieObjectInfo, isError: isIeObjectError } = useGetIeObjectInfo(slug as string);
 
 	/**
 	 * Effects
@@ -60,11 +62,7 @@ const IeObjectLinkResolver: NextPage<DefaultSeoInfo & UserProps> = ({ url }) => 
 	 */
 
 	const renderPageContent = () => {
-		if (isIeObjectLoading) {
-			return <Loading fullscreen owner={'/pid/[slug]/index page'} />;
-		}
-
-		if (!ieObjectInfo) {
+		if (!ieObjectInfo && isIeObjectError) {
 			return (
 				<>
 					<SeoTags
@@ -78,6 +76,14 @@ const IeObjectLinkResolver: NextPage<DefaultSeoInfo & UserProps> = ({ url }) => 
 				</>
 			);
 		}
+
+		return (
+			<Loading
+				fullscreen
+				className={styles['p-pid__c-loading--fullscreen']}
+				owner={'/pid/[slug]/index page'}
+			/>
+		);
 	};
 
 	return <VisitorLayout>{renderPageContent()}</VisitorLayout>;

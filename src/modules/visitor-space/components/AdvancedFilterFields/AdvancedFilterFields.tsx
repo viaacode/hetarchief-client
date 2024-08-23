@@ -104,7 +104,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				return renderTextField(Component, value, props);
 
 			case DateRangeInput: {
-				const split = ((value || '') as string).split(SEPARATOR, 2);
+				const split = ((state.val || '') as string).split(SEPARATOR, 2);
 
 				const from: Date = split[0] ? parseISO(split[0]) : new Date();
 				const to: Date = split[1] ? parseISO(split[1]) : new Date();

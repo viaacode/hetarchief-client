@@ -11,7 +11,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { setShowZendesk } from '@shared/store/ui';
 import { type DefaultSeoInfo } from '@shared/types/seo';
-import { AccessStatus } from '@shared/types/visit';
+import { AccessStatus } from '@shared/types/visit-request';
 import { useGetVisitAccessStatus } from '@visit-requests/hooks/get-visit-access-status';
 import { VisitorLayout } from '@visitor-layout/index';
 import { WaitingPage } from '@visitor-space/components/WaitingPage';

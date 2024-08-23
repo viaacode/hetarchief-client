@@ -85,6 +85,7 @@ import {
 	FLOWPLAYER_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
 	GET_METADATA_FIELDS,
+	GET_NEWSPAPER_DOWNLOAD_OPTIONS,
 	IMAGE_API_FORMATS,
 	IMAGE_FORMATS,
 	KEY_USER_ACTION_SORT_MAP,
@@ -105,6 +106,7 @@ import {
 	IeObjectAccessThrough,
 	type IeObjectFile,
 	IeObjectLicense,
+	type IeObjectRepresentation,
 	IsPartOfKey,
 	MediaActions,
 	MetadataExportFormats,
@@ -160,7 +162,7 @@ import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
-import { useGetActiveVisitForUserAndSpace } from '@visit-requests/hooks/get-active-visit-for-user-and-space';
+import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
@@ -318,11 +320,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		withDefault(NumberParam, 0)
 	);
 
-	// Used for going through the videos/audio/image representations/files inside a single detail page (grey bottom bar)
-	const [currentRepresentationIndex, setCurrentRepresentationIndex] = useQueryParam(
-		QUERY_PARAM_KEY.ACTIVE_REPRESENTATION,
-		NumberParam
-	);
 	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number>(0);
 	const [expandSidebar, setExpandSidebar] = useQueryParam(
 		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
@@ -357,7 +354,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
 	const currentPage = mediaInfo?.pageRepresentations?.[currentPageIndex];
-	const currentRepresentation = currentPage?.[currentRepresentationIndex || 0];
+	const currentRepresentation = currentPage?.[0];
 
 	// peak file
 	const peakFileStoredAt: string | null =
@@ -422,7 +419,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		data: visitRequest,
 		error: visitRequestError,
 		isLoading: visitRequestIsLoading,
-	} = useGetActiveVisitForUserAndSpace(router.query.slug as string, user);
+	} = useGetActiveVisitRequestForUserAndSpace(router.query.slug as string, user);
 
 	// get visitor space info, used to display contact information
 	const {
@@ -439,17 +436,20 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	// ocr alto info
 	const currentPageAltoUrl = useMemo((): string | null => {
-		let altoFileUrl = null;
-		currentPage?.find(
-			(representation) =>
-				representation?.files?.find((file) => {
-					if (XML_FORMATS.includes(file.mimeType)) {
-						altoFileUrl = file.storedAt;
-						return true;
-					}
-					return false;
-				})
-		);
+		let altoFileUrl: string | null = null;
+		currentPage?.some((representation: IeObjectRepresentation) => {
+			if (representation.schemaTranscriptUrl) {
+				altoFileUrl = representation.schemaTranscriptUrl;
+				return true; // Found the alto.json file
+			}
+			return representation?.files?.some((file) => {
+				if (XML_FORMATS.includes(file.mimeType)) {
+					altoFileUrl = file.storedAt;
+					return true; // Found the fallback alto.xml file
+				}
+				return false; // Did not find any alto files
+			});
+		});
 		return altoFileUrl;
 	}, [currentPage]);
 	const { data: simplifiedAltoInfo } = useGetAltoJsonFileContent(currentPageAltoUrl);
@@ -473,8 +473,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
 			IeObjectAccessThrough.VISITOR_SPACE_FULL,
 		]).length > 0;
-	const isPublicNewspaper =
-		mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) && isNewspaper;
+	const isPublicNewspaper: boolean =
+		!!mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) && isNewspaper;
 	const canRequestAccess =
 		isNil(
 			accessibleVisitorSpaces?.find((space) => space.maintainerId === mediaInfo?.maintainerId)
@@ -487,10 +487,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
 		visitorSpace?.status === VisitorSpaceStatus.Active &&
 		!isKiosk;
-	const canDownloadMetadata: boolean =
-		(useHasAnyPermission(Permission.EXPORT_OBJECT, Permission.DOWNLOAD_OBJECT) &&
-			(hasAccessToVisitorSpaceOfObject || isPublicNewspaper)) ||
-		false;
+	const canDownloadMetadata: boolean = useHasAnyPermission(Permission.EXPORT_OBJECT);
+	const canDownloadNewspaper: boolean =
+		useHasAnyPermission(Permission.DOWNLOAD_OBJECT) && isNewspaper && isPublicNewspaper;
 
 	const pageOcrTexts: (string | null)[] = useMemo(() => {
 		const pageOcrTextsTemp: (string | null)[] = [];
@@ -780,7 +779,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			user_group_name: user?.groupName,
 			or_id: mediaInfo?.maintainerId,
 		};
-		EventsService.triggerEvent(LogEventType.DOWNLOAD, path, eventData);
+		EventsService.triggerEvent(LogEventType.DOWNLOAD, path, eventData).then(noop);
 	}, [
 		mediaInfo?.dctermsFormat,
 		mediaInfo?.maintainerId,
@@ -1026,7 +1025,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 
 		if (isKeyUser) {
-			return KEY_USER_ACTION_SORT_MAP(canDownloadMetadata);
+			return KEY_USER_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
 		}
 
 		if (isKiosk) {
@@ -1034,15 +1033,23 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 
 		if (isMeemooAdmin) {
-			return MEEMOO_ADMIN_ACTION_SORT_MAP(canDownloadMetadata);
+			return MEEMOO_ADMIN_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
 		}
 
 		if (isCPAdmin) {
-			return CP_ADMIN_ACTION_SORT_MAP(canDownloadMetadata);
+			return CP_ADMIN_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
 		}
 
-		return VISITOR_ACTION_SORT_MAP(canDownloadMetadata);
-	}, [canDownloadMetadata, isKeyUser, isMeemooAdmin, isKiosk, user, isCPAdmin]);
+		return VISITOR_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
+	}, [
+		canDownloadMetadata,
+		isKeyUser,
+		isMeemooAdmin,
+		isKiosk,
+		user,
+		isCPAdmin,
+		canDownloadNewspaper,
+	]);
 
 	const onExportClick = useCallback(
 		(format: MetadataExportFormats) => {
@@ -1082,7 +1089,23 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const renderExportDropdown = useCallback(
 		(isPrimary: boolean) => {
 			const icon = <Icon name={IconNamesLight.Export} aria-hidden />;
-			const label = tText('modules/ie-objects/object-detail-page___download-deze-krant');
+
+			const buttonLabelDesktop = isPublicNewspaper
+				? tText('modules/ie-objects/object-detail-page___download-deze-krant-desktop')
+				: tText('modules/ie-objects/object-detail-page___export-metadata-desktop');
+			const buttonLabelMobile = isPublicNewspaper
+				? tText('modules/ie-objects/object-detail-page___download-deze-krant-mobile')
+				: tText('modules/ie-objects/object-detail-page___export-metadata-mobile');
+
+			const exportOptions = [];
+
+			if (canDownloadNewspaper) {
+				exportOptions.push(...GET_NEWSPAPER_DOWNLOAD_OPTIONS());
+			}
+
+			if (canDownloadMetadata) {
+				exportOptions.push(...METADATA_EXPORT_OPTIONS());
+			}
 
 			return (
 				<div className={styles['p-object-detail__export']}>
@@ -1098,17 +1121,22 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 									className={styles['p-object-detail__export']}
 									iconStart={icon}
 									iconEnd={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-									aria-label={label}
-									title={label}
+									aria-label={buttonLabelDesktop}
+									title={buttonLabelDesktop}
 								>
-									<span className="u-display-block:md">{label}</span>
+									<span className="u-text-ellipsis u-display-none u-display-block:md">
+										{buttonLabelDesktop}
+									</span>
+									<span className="u-text-ellipsis u-display-none:md">
+										{buttonLabelMobile}
+									</span>
 								</Button>
 							) : (
 								<Button
 									icon={icon}
 									variants={['silver']}
-									aria-label={label}
-									title={label}
+									aria-label={buttonLabelDesktop}
+									title={buttonLabelDesktop}
 								/>
 							)}
 						</DropdownButton>
@@ -1116,7 +1144,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							<MenuContent
 								rootClassName="c-dropdown-menu"
 								className={styles['p-object-detail__export-dropdown']}
-								menuItems={METADATA_EXPORT_OPTIONS()}
+								menuItems={exportOptions}
 								onClick={(id) => onExportClick(id as MetadataExportFormats)}
 							/>
 						</DropdownContent>
@@ -1124,7 +1152,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				</div>
 			);
 		},
-		[metadataExportDropdownOpen, onExportClick]
+		[
+			isPublicNewspaper,
+			canDownloadNewspaper,
+			canDownloadMetadata,
+			metadataExportDropdownOpen,
+			onExportClick,
+		]
 	);
 
 	/**
@@ -1192,7 +1226,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			canReport: !isKiosk,
 			canRequestAccess: !!canRequestAccess,
 			canRequestMaterial: isAnonymous || canRequestMaterial,
-			canExport: canDownloadMetadata,
+			canExport: canDownloadMetadata || canDownloadNewspaper || false,
 			externalFormUrl: getExternalMaterialRequestUrlIfAvailable(),
 		});
 
@@ -1207,7 +1241,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			.map((action: ActionItem) => {
 				const existsInSortMap = !isNil(sortMap.find((d) => d.id === action.id));
 				const isPrimary = sortMap.find((d) => action.id === d.id)?.isPrimary ?? false;
-				const showExport = action.id === MediaActions.Export && canDownloadMetadata;
+				const showExport =
+					action.id === MediaActions.Export &&
+					(canDownloadMetadata || canDownloadNewspaper);
 
 				return existsInSortMap
 					? {
@@ -1234,6 +1270,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		isKiosk,
 		canRequestAccess,
 		canRequestMaterial,
+		canDownloadNewspaper,
 		canDownloadMetadata,
 		getExternalMaterialRequestUrlIfAvailable,
 		getSortMapByUserType,
@@ -1972,12 +2009,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					<div className={styles['p-object-detail__media']}>{renderMedia()}</div>
 					{showFragmentSlider && (
 						<FragmentSlider
-							thumbnail={mediaInfo?.thumbnailUrl}
 							className={styles['p-object-detail__grey-slider-bar']}
-							files={representationsToDisplay}
-							onChangeFragment={(index) =>
-								setCurrentRepresentationIndex(index, 'replaceIn')
-							}
+							fileRepresentations={representationsToDisplay}
+							activeIndex={currentPageIndex}
+							setActiveIndex={(index) => setCurrentPageIndex(index, 'replaceIn')}
 						/>
 					)}
 				</>
@@ -2001,7 +2036,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			<Button
 				className={styles['p-object-detail__back']}
 				icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
-				onClick={() => window.history.back()}
+				onClick={() => {
+					router.back();
+				}}
 				variants={['black']}
 			/>
 		);

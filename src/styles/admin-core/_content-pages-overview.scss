@@ -82,6 +82,11 @@ $button-size: 3.6rem;
 					.c-button__label {
 						line-height: 4rem;
 					}
+
+					span {
+						font-size: 1.8rem;
+						margin-right: $spacer-xs;
+					}
 				}
 			}
 		}

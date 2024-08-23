@@ -1,7 +1,7 @@
-import { type Visit } from '@shared/types/visit';
+import { type VisitRequest } from '@shared/types/visit-request';
 
 export type VisitSummaryType = Pick<
-	Visit,
+	VisitRequest,
 	| 'id'
 	| 'spaceId'
 	| 'spaceName'

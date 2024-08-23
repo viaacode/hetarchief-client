@@ -255,6 +255,10 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		align-self: center;
 		inset: 0;
 
+		@include respond-to(md) {
+			width: 100%;
+		}
+
 		&--with-slider {
 			// ARC-1290: space for FragmentSlider
 			bottom: 135px;

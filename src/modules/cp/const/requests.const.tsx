@@ -11,7 +11,12 @@ import { RequestStatusBadge } from '@shared/components/RequestStatusBadge';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { AccessType, type Visit, type VisitRow, VisitStatus } from '@shared/types/visit';
+import {
+	AccessType,
+	type VisitRequest,
+	type VisitRow,
+	VisitStatus,
+} from '@shared/types/visit-request';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils/dates';
 import { RequestStatusAll } from '@visit-requests/types';
 
@@ -60,7 +65,7 @@ export const requestStatusFilters = (): TabProps[] => {
 	];
 };
 
-export const RequestTableColumns = (): Column<Visit>[] => [
+export const RequestTableColumns = (): Column<VisitRequest>[] => [
 	{
 		Header: tText('modules/cp/const/requests___naam'),
 		accessor: 'visitorName',

@@ -237,12 +237,18 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				if (!openSeadragonViewerTemp) {
 					return;
 				}
+				if (!window.location.href.includes(id)) {
+					// Do not update query params if we're not on the detail page anymore
+					// since the update viewport event still fires when navigating away from the detail page
+					// https://meemoo.atlassian.net/browse/ARC-2228
+					return;
+				}
 				const zoomLevel = openSeadragonViewerTemp.viewport.getZoom();
 				const centerPoint = openSeadragonViewerTemp.viewport.getCenter();
 				// Use window to parse query params, since this native event listener doesn't have access to the update-to-date router.query query params
 				// We also include ...router.query since route params (eg: slug and ieObjectId) are also part of the router.query object
 				const parsedUrl = parseUrl(window.location.href);
-				router.push(
+				router.replace(
 					{
 						query: {
 							...router.query,
