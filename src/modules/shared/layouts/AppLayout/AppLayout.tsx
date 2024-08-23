@@ -75,7 +75,7 @@ import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visi
 
 import packageJson from '../../../../../package.json';
 
-import styles from './AppLayout.module.scss';
+import styles from './AppLayout.module.scss'; // We want to make sure config gets fetched here, no sure why anymore
 
 // We want to make sure config gets fetched here, no sure why anymore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -332,7 +332,7 @@ const AppLayout: FC<any> = ({ children }) => {
 				node: (
 					<div
 						onClick={() => {
-							window.open(window.location.origin, '_self');
+							window.open(`${window.location.origin}/${locale}`, '_self');
 						}}
 					>
 						<HetArchiefLogo
