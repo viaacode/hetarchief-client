@@ -76,7 +76,7 @@ import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visi
 
 import packageJson from '../../../../../package.json';
 
-import styles from './AppLayout.module.scss'; // We want to make sure config gets fetched here, no sure why anymore
+import styles from './AppLayout.module.scss';
 
 // We want to make sure config gets fetched here, no sure why anymore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
