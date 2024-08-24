@@ -3,6 +3,7 @@ import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import getConfig from 'next/config';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react';
@@ -330,16 +331,14 @@ const AppLayout: FC<any> = ({ children }) => {
 				// Otherwise you get an infinite loading state because no api calls will work
 				// https://github.com/vercel/next.js/issues/37005
 				node: (
-					<div
-						onClick={() => {
-							window.open(`${window.location.origin}/${locale}`, '_self');
-						}}
-					>
-						<HetArchiefLogo
-							className="c-navigation__logo c-navigation__logo--list"
-							type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
-						/>
-					</div>
+					<Link href={'/' + locale} passHref>
+						<a>
+							<HetArchiefLogo
+								className="c-navigation__logo c-navigation__logo--list"
+								type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
+							/>
+						</a>
+					</Link>
 				),
 				id: 'logo',
 				path: '/',
