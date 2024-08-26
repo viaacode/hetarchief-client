@@ -15,8 +15,17 @@ import React, {
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import { type AltoTextLine } from '@ie-objects/ie-objects.types';
-import { type IiifViewerFunctions, type IiifViewerProps } from '@iiif-viewer/IiifViewer.types';
+import {
+	type IiifViewerFunctions,
+	type IiifViewerProps,
+	type ImageSize,
+	type Rect,
+} from '@iiif-viewer/IiifViewer.types';
 import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
+import {
+	destroyOpenSeadragonViewerMouseTracker,
+	initOpenSeadragonViewerMouseTracker,
+} from '@iiif-viewer/helpers/iiif-viewer-selection-handler';
 import { getOpenSeadragonConfig } from '@iiif-viewer/openseadragon-config';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -50,6 +59,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			currentSearchIndex,
 			searchResults,
 			setSearchResultIndex,
+			onSelection,
+			enableSelection = false,
 		},
 		ref
 	) => {
@@ -70,6 +81,13 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		const viewerStatus: 'loading' | 'ready' = activeImageTileSource?.ready
 			? 'ready'
 			: 'loading';
+
+		const [isSelectionActive, setIsSelectionActive] = useState<boolean>(false);
+
+		const handleIsSelectionActiveChange = (newIsSelectionActive: boolean) => {
+			setIsSelectionActive(newIsSelectionActive);
+			return ((window as any).isSelectionActive = newIsSelectionActive);
+		};
 
 		// Layout
 		useStickyLayout();
@@ -129,6 +147,30 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			},
 			[]
 		);
+
+		const getCurrentImageSize = (): ImageSize => {
+			const imageSize = {
+				width: (activeImageTileSource as any)?.width || activeImageTileSource?.dimensions.x,
+				height:
+					(activeImageTileSource as any)?.height || activeImageTileSource?.dimensions.y,
+			};
+			if (!imageSize.width || !imageSize.height) {
+				throw new Error(
+					JSON.stringify(
+						{
+							message: 'Failed to get image size from the current tile source',
+							additionalInfo: {
+								activeImageTileSource,
+								activeImageIndex,
+							},
+						},
+						null,
+						2
+					)
+				);
+			}
+			return imageSize;
+		};
 
 		const updateHighlightedAltoTexts = useCallback(
 			(
@@ -349,6 +391,35 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			);
 		};
 
+		const handleSelectionCreated = (rect: Rect) => {
+			if (onSelection) {
+				onSelection(rect);
+			}
+			handleIsSelectionActiveChange(false);
+		};
+
+		const iiifToggleSelection = async (): Promise<void> => {
+			if (!openSeaDragonViewer) {
+				return;
+			}
+			const newIsSelectionActive = !isSelectionActive;
+
+			handleIsSelectionActiveChange(newIsSelectionActive);
+
+			if (newIsSelectionActive) {
+				openSeaDragonViewer.setMouseNavEnabled(false);
+				initOpenSeadragonViewerMouseTracker(
+					getCurrentImageSize(),
+					handleSelectionCreated,
+					openSeaDragonLib,
+					openSeaDragonViewer
+				);
+			} else {
+				openSeaDragonViewer.setMouseNavEnabled(true);
+				destroyOpenSeadragonViewerMouseTracker();
+			}
+		};
+
 		const iiifZoomTo = (x: number, y: number): void => {
 			if (!openSeaDragonViewer) {
 				console.error('iiifZoomToRect failed because openSeaDragonViewer is undefined');
@@ -549,6 +620,25 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 									variants={[isOcrEnabled ? 'green' : 'white', 'sm']}
 									onClick={() => setIsOcrEnabled(!isOcrEnabled)}
 								/>
+								{enableSelection && (
+									<Button
+										className={clsx(
+											styles['c-iiif-viewer__iiif__controls__button'],
+											'c-iiif-viewer__iiif__controls__selection'
+										)}
+										icon={
+											<Icon name={IconNamesLight.ScissorsClip} aria-hidden />
+										}
+										aria-label={tText(
+											'modules/iiif-viewer/iiif-viewer___selectie-downloaden'
+										)}
+										title={tText(
+											'modules/iiif-viewer/iiif-viewer___selectie-downloaden'
+										)}
+										variants={[isSelectionActive ? 'green' : 'white', 'sm']}
+										onClick={() => iiifToggleSelection()}
+									/>
+								)}
 								<Button
 									className={clsx(
 										styles['c-iiif-viewer__iiif__controls__button'],
@@ -635,6 +725,33 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			);
 		};
 
+		const renderOpenGridView = () => {
+			return (
+				<div
+					className={styles['c-iiif-viewer__grid-view-wrapper']}
+					style={{ display: iiifGridViewEnabled ? 'block' : 'none' }}
+				>
+					<div className={styles['c-iiif-viewer__grid-view']}>
+						{imageInfos.map((imageInfo, index) => {
+							return (
+								<button
+									key={'c-iiif-viewer__grid-view__' + index}
+									onClick={() => {
+										setIiifGridViewEnabled(false);
+										setActiveImageIndex(index);
+										openSeaDragonViewer?.forceRedraw();
+									}}
+								>
+									{/* eslint-disable-next-line @next/next/no-img-element */}
+									<img src={imageInfo.thumbnailUrl} alt={'page ' + (index + 1)} />
+								</button>
+							);
+						})}
+					</div>
+				</div>
+			);
+		};
+
 		const iiifViewerContainer = useMemo(() => {
 			console.log('rerender iiifviewer--------------------');
 			return (
@@ -661,28 +778,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				{renderIiifViewerButtons()}
 
 				{/* IIIF Grid view */}
-				<div
-					className={styles['c-iiif-viewer__grid-view-wrapper']}
-					style={{ display: iiifGridViewEnabled ? 'block' : 'none' }}
-				>
-					<div className={styles['c-iiif-viewer__grid-view']}>
-						{imageInfos.map((imageInfo, index) => {
-							return (
-								<button
-									key={'c-iiif-viewer__grid-view__' + index}
-									onClick={() => {
-										setIiifGridViewEnabled(false);
-										setActiveImageIndex(index);
-										openSeaDragonViewer?.forceRedraw();
-									}}
-								>
-									{/* eslint-disable-next-line @next/next/no-img-element */}
-									<img src={imageInfo.thumbnailUrl} alt={'page ' + (index + 1)} />
-								</button>
-							);
-						})}
-					</div>
-				</div>
+				{renderOpenGridView()}
 			</div>
 		);
 	}
