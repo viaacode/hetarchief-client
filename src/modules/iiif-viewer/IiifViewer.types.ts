@@ -5,6 +5,11 @@ export type ImageInfo = {
 	imageUrl: string;
 };
 
+export interface ImageSize {
+	width: number;
+	height: number;
+}
+
 export interface Rect {
 	x: number;
 	y: number;
@@ -35,7 +40,7 @@ export interface IiifViewerProps {
 	setSearchResultIndex: (newSearchIndex: number) => void;
 
 	// Selection + download
-	onSelection?: (rect: TextLine) => void;
+	onSelection?: (rect: Rect) => void;
 	enableSelection?: boolean;
 }
 
