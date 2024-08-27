@@ -44,13 +44,15 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		{
 			imageInfos,
 			id,
-			isOcrEnabled,
-			setIsOcrEnabled,
+			isTextOverlayVisible,
+			setIsTextOverlayVisible,
 			activeImageIndex,
 			setActiveImageIndex,
 			initialFocusX,
 			initialFocusY,
 			initialZoomLevel,
+			isLoading,
+			setIsLoading,
 			isSearchEnabled,
 			searchTerms,
 			setSearchTerms,
@@ -78,9 +80,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		};
 		const activeImageTileSource: TileSource | undefined =
 			openSeaDragonViewer?.world?.getItemAt(0)?.source;
-		const viewerStatus: 'loading' | 'ready' = activeImageTileSource?.ready
-			? 'ready'
-			: 'loading';
 
 		const [isSelectionActive, setIsSelectionActive] = useState<boolean>(false);
 
@@ -177,6 +176,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				highlightedAltoTexts: AltoTextLine[],
 				selectedHighlightedAltoText: AltoTextLine | null
 			) => {
+				console.log('updateHighlightedAltoTexts: ', {
+					highlightedAltoTexts,
+					selectedHighlightedAltoText,
+				});
 				if (isServerSideRendering()) {
 					return;
 				}
@@ -249,6 +252,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 		const applyInitialZoomAndPan = useCallback(
 			(openSeadragonViewerTemp: Viewer, openSeadragonLibTemp: any) => {
+				console.log('applyInitialZoomAndPan');
 				openSeadragonViewerTemp.addHandler('open', () => {
 					// When the viewer is initialized, set the desired zoom and pan
 					if (
@@ -274,36 +278,53 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			[]
 		);
 
-		const addEventListeners = useCallback((openSeadragonViewerTemp: Viewer) => {
-			openSeadragonViewerTemp.addHandler('viewport-change', () => {
-				if (!openSeadragonViewerTemp) {
-					return;
-				}
-				if (!window.location.href.includes(id)) {
-					// Do not update query params if we're not on the detail page anymore
-					// since the update viewport event still fires when navigating away from the detail page
-					// https://meemoo.atlassian.net/browse/ARC-2228
-					return;
-				}
-				const zoomLevel = openSeadragonViewerTemp.viewport.getZoom();
-				const centerPoint = openSeadragonViewerTemp.viewport.getCenter();
-				// Use window to parse query params, since this native event listener doesn't have access to the update-to-date router.query query params
-				// We also include ...router.query since route params (eg: slug and ieObjectId) are also part of the router.query object
-				const parsedUrl = parseUrl(window.location.href);
-				router.replace(
-					{
-						query: {
-							...router.query,
-							...parsedUrl.query,
-							zoomLevel: round(zoomLevel, 3),
-							focusX: round(centerPoint.x, 3),
-							focusY: round(centerPoint.y, 3),
-						},
+		const handleViewportChanged = useCallback(() => {
+			if (!openSeaDragonViewer) {
+				return;
+			}
+			if (!window.location.href.includes(id)) {
+				// Do not update query params if we're not on the detail page anymore
+				// since the update viewport event still fires when navigating away from the detail page
+				// https://meemoo.atlassian.net/browse/ARC-2228
+				return;
+			}
+			const zoomLevel = openSeaDragonViewer.viewport.getZoom();
+			const centerPoint = openSeaDragonViewer.viewport.getCenter();
+			// Use window to parse query params, since this native event listener doesn't have access to the update-to-date router.query query params
+			// We also include ...router.query since route params (eg: slug and ieObjectId) are also part of the router.query object
+			const parsedUrl = parseUrl(window.location.href);
+			router.replace(
+				{
+					query: {
+						...router.query,
+						...parsedUrl.query,
+						zoomLevel: round(zoomLevel, 3),
+						focusX: round(centerPoint.x, 3),
+						focusY: round(centerPoint.y, 3),
 					},
-					undefined,
-					{ shallow: true }
-				);
+				},
+				undefined,
+				{ shallow: true }
+			);
+		}, [id, openSeaDragonViewer, router]);
+
+		const addEventListeners = useCallback((openSeadragonViewerTemp: Viewer) => {
+			console.log('addEventListeners');
+
+			// Keep track of the current zoom and location in the url
+			openSeadragonViewerTemp.addHandler('viewport-change', handleViewportChanged);
+
+			// Keep track of the loading state of the viewer page
+			openSeadragonViewerTemp.addHandler('open', () => {
+				setIsLoading(true);
+				const tiledImage = openSeadragonViewerTemp.world.getItemAt(0);
+				if (tiledImage.getFullyLoaded()) {
+					setIsLoading(false);
+				} else {
+					tiledImage.addOnceHandler('fully-loaded-change', () => setIsLoading(false));
+				}
 			});
+
 			// Only register the viewport-change event once when loading the iiif viewer
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, []);
@@ -312,6 +333,9 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			console.log('init iiif viewer js lib------------------------');
 			if (!!iiifViewerId && isBrowser()) {
 				const iiifContainer = document.getElementById(iiifViewerId);
+				if (!iiifContainer) {
+					return;
+				}
 				if (iiifContainer) {
 					iiifContainer.innerHTML = '';
 				}
@@ -365,6 +389,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		 */
 
 		const iiifZoom = (multiplier: number): void => {
+			console.log('iiifZoom');
 			if (!openSeaDragonViewer) {
 				return;
 			}
@@ -382,6 +407,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		};
 
 		const iiifGoToHome = (): void => {
+			console.log('iiifGoToHome');
 			openSeaDragonViewer?.viewport.goHome(false);
 		};
 
@@ -421,6 +447,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		};
 
 		const iiifZoomTo = (x: number, y: number): void => {
+			console.log('iiifZoomTo');
 			if (!openSeaDragonViewer) {
 				console.error('iiifZoomToRect failed because openSeaDragonViewer is undefined');
 				return;
@@ -464,19 +491,16 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			width: number;
 			height: number;
 		}): void => {
+			console.log('iiifZoomToRect', { x, y, width, height });
+			if (isNil(x) || isNil(y) || isNil(width) || isNil(height)) {
+				throw new Error('Invalid rect provided to iiifZoomToRect');
+			}
 			iiifZoomTo(x + width / 2, y + height / 2);
-		};
-
-		const clearActiveWord = () => {
-			document?.querySelectorAll('.c-iiif-viewer__iiif__alto__text').forEach((element) => {
-				element.classList.remove('c-iiif-viewer__iiif__alto__text--active');
-				element.classList.remove('c-iiif-viewer__iiif__alto__text--highlighted');
-			});
 		};
 
 		const waitForReadyState = async (): Promise<void> => {
 			return new Promise<void>((resolve) => {
-				if (viewerStatus === 'ready') {
+				if (!isLoading) {
 					resolve();
 				} else {
 					(openSeaDragonViewer as any).id = Math.random();
@@ -495,7 +519,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			iiifZoom,
 			iiifZoomTo,
 			iiifGoToHome,
-			clearActiveWord,
 			waitForReadyState,
 			updateHighlightedAltoTexts,
 		}));
@@ -505,6 +528,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		 */
 
 		const renderIiifViewerButtons = () => {
+			console.log('render iiif buttons', { isTextOverlayVisible });
 			return (
 				<div className={styles['c-iiif-viewer__iiif__controls']}>
 					{!iiifGridViewEnabled && (
@@ -617,8 +641,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 									aria-label={tText(
 										'pages/openseadragon/index___tekst-boven-de-afbeelding-tonen'
 									)}
-									variants={[isOcrEnabled ? 'green' : 'white', 'sm']}
-									onClick={() => setIsOcrEnabled(!isOcrEnabled)}
+									variants={[isTextOverlayVisible ? 'green' : 'white', 'sm']}
+									onClick={() => setIsTextOverlayVisible(!isTextOverlayVisible)}
 								/>
 								{enableSelection && (
 									<Button
@@ -762,8 +786,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		return (
 			<div
 				className={clsx(styles['c-iiif-viewer'], {
-					'c-iiif-viewer__iiif__ocr--enabled': isOcrEnabled,
-					'c-iiif-viewer__iiif__ocr--disabled': !isOcrEnabled,
+					'c-iiif-viewer__iiif__ocr--enabled': isTextOverlayVisible,
+					'c-iiif-viewer__iiif__ocr--disabled': !isTextOverlayVisible,
 					'c-iiif-viewer__iiif__grid-view--disabled': !iiifGridViewEnabled,
 					'c-iiif-viewer__iiif__grid-view--enabled': iiifGridViewEnabled,
 				})}

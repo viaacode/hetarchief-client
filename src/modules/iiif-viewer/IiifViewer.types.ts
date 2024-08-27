@@ -20,13 +20,15 @@ export interface Rect {
 export interface IiifViewerProps {
 	id: string;
 	imageInfos: ImageInfo[];
-	isOcrEnabled: boolean;
-	setIsOcrEnabled: (isOcrEnabled: boolean) => void;
+	isTextOverlayVisible: boolean;
+	setIsTextOverlayVisible: (isOcrEnabled: boolean) => void;
 	activeImageIndex: number;
 	setActiveImageIndex: (newActiveImageIndex: number) => void;
 	initialFocusX?: number;
 	initialFocusY?: number;
 	initialZoomLevel?: number;
+	isLoading: boolean;
+	setIsLoading: (isLoading: boolean) => void;
 
 	// Search through pages
 	isSearchEnabled: boolean;
@@ -46,7 +48,6 @@ export interface IiifViewerProps {
 export interface IiifViewerFunctions {
 	iiifZoomToRect: (rect: Rect) => void;
 	iiifZoomTo: (x: number, y: number) => void;
-	clearActiveWord: () => void;
 	iiifRotate: (rotateRight: boolean) => void;
 	iiifFullscreen: (expand: boolean) => void;
 	iiifZoom: (multiplier: number) => void;
