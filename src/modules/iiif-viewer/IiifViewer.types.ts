@@ -75,6 +75,8 @@ export interface SimplifiedAlto {
 		softwareCreator: string | undefined;
 		softwareName: string | undefined;
 		softwareVersion: string | undefined;
+		width: string | undefined;
+		height: string | undefined;
 	};
 	text: TextLine[] | undefined;
 }

@@ -70,6 +70,7 @@ export interface IeObject {
 	premisIsPartOf?: string | null;
 	isPartOf?: IsPartOfCollection[];
 	numberOfPages?: number;
+	pageNumber?: number;
 	meemooDescriptionCast?: string;
 	maintainerFormUrl?: string | null;
 	maintainerDescription?: string;
@@ -94,6 +95,8 @@ export interface IeObject {
 	succeededBy?: string[];
 	width?: string;
 	height?: string;
+	bibframeProductionMethod?: string | null;
+	bibframeEdition?: string | null;
 	locationCreated?: string;
 	startDate?: string;
 	endDate?: string;
