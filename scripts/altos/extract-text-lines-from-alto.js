@@ -23986,12 +23986,16 @@ function extractTextLinesFromAlto(altoJson) {
                     fileName: altoV2.alto?.Description?.[0]?.sourceImageInformation?.[0]?.fileName?.[0],
                     processingDateTime: altoV2.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
                         ?.processingDateTime?.[0],
+                    processingStepSettings: altoV2.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
+                        ?.processingStepSettings?.[0],
                     softwareCreator: altoV2.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
                         ?.processingSoftware?.[0]?.softwareCreator?.[0],
                     softwareName: altoV2.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
                         ?.processingSoftware?.[0]?.softwareName?.[0],
                     softwareVersion: altoV2.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
                         ?.processingSoftware?.[0]?.softwareVersion?.[0],
+                    width: altoV2.alto?.Layout?.[0]?.Page?.[0]?.$?.WIDTH,
+                    height: altoV2.alto?.Layout?.[0]?.Page?.[0]?.$?.HEIGHT,
                 },
                 text: textLines,
             };
@@ -24023,12 +24027,16 @@ function extractTextLinesFromAlto(altoJson) {
                     fileName: undefined,
                     processingDateTime: altoV3.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
                         ?.processingDateTime?.[0],
+                    processingStepSettings: altoV3.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
+                        ?.processingStepSettings?.[0],
                     softwareCreator: altoV3.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
                         ?.processingSoftware?.[0]?.softwareCreator?.[0],
                     softwareName: altoV3.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
                         ?.processingSoftware?.[0]?.softwareName?.[0],
                     softwareVersion: altoV3.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
                         ?.processingSoftware?.[0]?.softwareVersion?.[0],
+                    width: altoV3.alto?.Layout?.[0]?.Page?.[0]?.$?.WIDTH,
+                    height: altoV3.alto?.Layout?.[0]?.Page?.[0]?.$?.HEIGHT,
                 },
                 text: textLines,
             };
@@ -24039,25 +24047,29 @@ function extractTextLinesFromAlto(altoJson) {
                 description: {
                     fileName: undefined,
                     processingDateTime: undefined,
+                    processingStepSettings: undefined,
                     softwareCreator: undefined,
                     softwareName: undefined,
                     softwareVersion: undefined,
+                    width: undefined,
+                    height: undefined,
                 },
                 text: undefined,
             };
     }
 }
-async function convertAltoFiles(altoFileUrl) {
+async function convertAltoXmlFileUrlToSimplifiedJson(altoFileUrl) {
     const response = await fetch(altoFileUrl);
     const xml = await response.text();
     const altoJson = (await xmlParser.parseStringPromise(xml));
-    const textLines = extractTextLinesFromAlto(altoJson);
-    console.log(JSON.stringify(textLines, null, 2));
+    return extractTextLinesFromAlto(altoJson);
 }
 
 ;// CONCATENATED MODULE: ./scripts/altos/extract-text-lines-from-alto.ts
 
-convertAltoFiles(process.argv[2]);
+convertAltoXmlFileUrlToSimplifiedJson(process.argv[2]).then((simplifiedAltoJson) => {
+    console.log(JSON.stringify(simplifiedAltoJson, null, 2));
+});
 
 })();
 

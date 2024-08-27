@@ -38,6 +38,8 @@ export interface SimplifiedAlto {
 		softwareCreator: string | undefined;
 		softwareName: string | undefined;
 		softwareVersion: string | undefined;
+		width: string | undefined;
+		height: string | undefined;
 	};
 	text: TextLine[] | undefined;
 }
@@ -106,6 +108,8 @@ export function extractTextLinesFromAlto(altoJson: AltoFormat): SimplifiedAlto {
 					softwareVersion:
 						altoV2.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
 							?.processingSoftware?.[0]?.softwareVersion?.[0],
+					width: altoV2.alto?.Layout?.[0]?.Page?.[0]?.$?.WIDTH,
+					height: altoV2.alto?.Layout?.[0]?.Page?.[0]?.$?.HEIGHT,
 				},
 				text: textLines,
 			};
@@ -153,6 +157,8 @@ export function extractTextLinesFromAlto(altoJson: AltoFormat): SimplifiedAlto {
 					softwareVersion:
 						altoV3.alto?.Description?.[0]?.OCRProcessing?.[0]?.ocrProcessingStep?.[0]
 							?.processingSoftware?.[0]?.softwareVersion?.[0],
+					width: altoV3.alto?.Layout?.[0]?.Page?.[0]?.$?.WIDTH,
+					height: altoV3.alto?.Layout?.[0]?.Page?.[0]?.$?.HEIGHT,
 				},
 				text: textLines,
 			};
@@ -170,6 +176,8 @@ export function extractTextLinesFromAlto(altoJson: AltoFormat): SimplifiedAlto {
 					softwareCreator: undefined,
 					softwareName: undefined,
 					softwareVersion: undefined,
+					width: undefined,
+					height: undefined,
 				},
 				text: undefined,
 			};
