@@ -380,6 +380,7 @@
   "modules/iiif-viewer/iiif-viewer___current-image-van-total-images": "{{currentImage}} van {{totalImages}}",
   "modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding": "Ga naar de volgende afbeelding",
   "modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding": "Ga naar de vorige afbeelding",
+  "modules/iiif-viewer/iiif-viewer___selectie-downloaden": "Selectie downloaden",
   "modules/iiif-viewer/iiif-viewer___sluit-volledig-scherm": "Sluit volledig scherm",
   "modules/material-requests/const/material-requests___type-more-info": "Meer info",
   "modules/material-requests/const/material-requests___type-reuse": "Hergebruik",

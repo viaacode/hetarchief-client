@@ -14,8 +14,17 @@ import React, {
 } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
-import { type IiifViewerFunctions, type IiifViewerProps } from '@iiif-viewer/IiifViewer.types';
+import {
+	type IiifViewerFunctions,
+	type IiifViewerProps,
+	type ImageSize,
+	type Rect,
+} from '@iiif-viewer/IiifViewer.types';
 import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
+import {
+	destroyOpenSeadragonViewerMouseTracker,
+	initOpenSeadragonViewerMouseTracker,
+} from '@iiif-viewer/helpers/iiif-viewer-selection-handler';
 import { getOpenSeadragonConfig } from '@iiif-viewer/openseadragon-config';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -50,6 +59,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			currentSearchIndex,
 			searchResults,
 			setSearchResultIndex,
+			onSelection,
+			enableSelection = false,
 		},
 		ref
 	) => {
@@ -70,6 +81,13 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		const viewerStatus: 'loading' | 'ready' = activeImageTileSource?.ready
 			? 'ready'
 			: 'loading';
+
+		const [isSelectionActive, setIsSelectionActive] = useState<boolean>(false);
+
+		const handleIsSelectionActiveChange = (newIsSelectionActive: boolean) => {
+			setIsSelectionActive(newIsSelectionActive);
+			return ((window as any).isSelectionActive = newIsSelectionActive);
+		};
 
 		// Layout
 		useStickyLayout();
@@ -130,6 +148,30 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			[]
 		);
 
+		const getCurrentImageSize = (): ImageSize => {
+			const imageSize = {
+				width: (activeImageTileSource as any)?.width || activeImageTileSource?.dimensions.x,
+				height:
+					(activeImageTileSource as any)?.height || activeImageTileSource?.dimensions.y,
+			};
+			if (!imageSize.width || !imageSize.height) {
+				throw new Error(
+					JSON.stringify(
+						{
+							message: 'Failed to get image size from the current tile source',
+							additionalInfo: {
+								activeImageTileSource,
+								activeImageIndex,
+							},
+						},
+						null,
+						2
+					)
+				);
+			}
+			return imageSize;
+		};
+
 		const updateOcrOverlay = useCallback(() => {
 			if (isServerSideRendering()) {
 				return;
@@ -149,13 +191,12 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			if (!activeImageTileSource) {
 				return;
 			}
-			const imageWidth = activeImageTileSource.dimensions.x;
-			const imageHeight = activeImageTileSource.dimensions.y;
+			const imageSize = getCurrentImageSize();
 			altoJsonCurrentPage?.text?.forEach((altoTextLocation, index) => {
-				const x = altoTextLocation.x / imageWidth;
-				const y = altoTextLocation.y / imageHeight;
-				const width = altoTextLocation.width / imageWidth;
-				const height = altoTextLocation.height / imageHeight;
+				const x = altoTextLocation.x / imageSize?.width;
+				const y = altoTextLocation.y / imageSize?.height;
+				const width = altoTextLocation.width / imageSize?.width;
+				const height = altoTextLocation.height / imageSize?.height;
 				const isSymbols = /^[^a-zA-Z0-9]$/g.test(altoTextLocation.text);
 				if (
 					!x ||
@@ -366,6 +407,35 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			openSeaDragonViewer?.viewport.setRotation(
 				(openSeaDragonViewer?.viewport.getRotation() + 90 * (rotateRight ? 1 : -1)) % 360
 			);
+		};
+
+		const handleSelectionCreated = (rect: Rect) => {
+			if (onSelection) {
+				onSelection(rect);
+			}
+			handleIsSelectionActiveChange(false);
+		};
+
+		const iiifToggleSelection = async (): Promise<void> => {
+			if (!openSeaDragonViewer) {
+				return;
+			}
+			const newIsSelectionActive = !isSelectionActive;
+
+			handleIsSelectionActiveChange(newIsSelectionActive);
+
+			if (newIsSelectionActive) {
+				openSeaDragonViewer.setMouseNavEnabled(false);
+				initOpenSeadragonViewerMouseTracker(
+					getCurrentImageSize(),
+					handleSelectionCreated,
+					openSeaDragonLib,
+					openSeaDragonViewer
+				);
+			} else {
+				openSeaDragonViewer.setMouseNavEnabled(true);
+				destroyOpenSeadragonViewerMouseTracker();
+			}
 		};
 
 		const iiifZoomTo = (x: number, y: number): void => {
@@ -587,6 +657,25 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 										onClick={() => setIsOcrEnabled(!isOcrEnabled)}
 									/>
 								)}
+								{enableSelection && (
+									<Button
+										className={clsx(
+											styles['c-iiif-viewer__iiif__controls__button'],
+											'c-iiif-viewer__iiif__controls__selection'
+										)}
+										icon={
+											<Icon name={IconNamesLight.ScissorsClip} aria-hidden />
+										}
+										aria-label={tText(
+											'modules/iiif-viewer/iiif-viewer___selectie-downloaden'
+										)}
+										title={tText(
+											'modules/iiif-viewer/iiif-viewer___selectie-downloaden'
+										)}
+										variants={[isSelectionActive ? 'green' : 'white', 'sm']}
+										onClick={() => iiifToggleSelection()}
+									/>
+								)}
 								<Button
 									className={clsx(
 										styles['c-iiif-viewer__iiif__controls__button'],
@@ -673,6 +762,33 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			);
 		};
 
+		const renderOpenGridView = () => {
+			return (
+				<div
+					className={styles['c-iiif-viewer__grid-view-wrapper']}
+					style={{ display: iiifGridViewEnabled ? 'block' : 'none' }}
+				>
+					<div className={styles['c-iiif-viewer__grid-view']}>
+						{imageInfos.map((imageInfo, index) => {
+							return (
+								<button
+									key={'c-iiif-viewer__grid-view__' + index}
+									onClick={() => {
+										setIiifGridViewEnabled(false);
+										setActiveImageIndex(index);
+										openSeaDragonViewer?.forceRedraw();
+									}}
+								>
+									{/* eslint-disable-next-line @next/next/no-img-element */}
+									<img src={imageInfo.thumbnailUrl} alt={'page ' + (index + 1)} />
+								</button>
+							);
+						})}
+					</div>
+				</div>
+			);
+		};
+
 		const iiifViewerContainer = useMemo(() => {
 			console.log('rerender iiifviewer--------------------');
 			return (
@@ -699,28 +815,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				{renderIiifViewerButtons()}
 
 				{/* IIIF Grid view */}
-				<div
-					className={styles['c-iiif-viewer__grid-view-wrapper']}
-					style={{ display: iiifGridViewEnabled ? 'block' : 'none' }}
-				>
-					<div className={styles['c-iiif-viewer__grid-view']}>
-						{imageInfos.map((imageInfo, index) => {
-							return (
-								<button
-									key={'c-iiif-viewer__grid-view__' + index}
-									onClick={() => {
-										setIiifGridViewEnabled(false);
-										setActiveImageIndex(index);
-										openSeaDragonViewer?.forceRedraw();
-									}}
-								>
-									{/* eslint-disable-next-line @next/next/no-img-element */}
-									<img src={imageInfo.thumbnailUrl} alt={'page ' + (index + 1)} />
-								</button>
-							);
-						})}
-					</div>
-				</div>
+				{renderOpenGridView()}
 			</div>
 		);
 	}

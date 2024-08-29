@@ -5,6 +5,18 @@ export type ImageInfo = {
 	imageUrl: string;
 };
 
+export interface ImageSize {
+	width: number;
+	height: number;
+}
+
+export interface Rect {
+	x: number;
+	y: number;
+	width: number;
+	height: number;
+}
+
 export interface IiifViewerProps {
 	id: string;
 	imageInfos: ImageInfo[];
@@ -26,10 +38,14 @@ export interface IiifViewerProps {
 	currentSearchIndex: number;
 	searchResults: OcrSearchResult[] | null;
 	setSearchResultIndex: (newSearchIndex: number) => void;
+
+	// Selection + download
+	onSelection?: (rect: Rect) => void;
+	enableSelection?: boolean;
 }
 
 export interface IiifViewerFunctions {
-	iiifZoomToRect: (rect: { x: number; y: number; width: number; height: number }) => void;
+	iiifZoomToRect: (rect: Rect) => void;
 	iiifZoomTo: (x: number, y: number) => void;
 	setActiveWordByIds: (activeAltoTextId: string, highlightedAltoTextIds: string[]) => void;
 	clearActiveWord: () => void;
