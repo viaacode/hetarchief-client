@@ -73,6 +73,7 @@ export const IMAGE_FORMATS: string[] = [
 export const IMAGE_API_FORMATS: string[] = ['image/jph'];
 export const IMAGE_BROWSE_COPY_FORMATS: string[] = ['image/jpeg'];
 export const XML_FORMATS: string[] = ['application/xml'];
+export const MIN_LENGTH_SCHEMA_IDENTIFIER_V2 = 36;
 
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
 	{

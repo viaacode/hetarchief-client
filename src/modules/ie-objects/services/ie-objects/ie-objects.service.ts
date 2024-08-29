@@ -145,4 +145,12 @@ export class IeObjectsService {
 			)
 			.json();
 	}
+
+	public static async schemaIdentifierLookup(
+		schemaIdentifierV2: string
+	): Promise<{ schemaIdentifierV3: string }> {
+		return await ApiService.getApi()
+			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/schemaIdentifierLookup/${schemaIdentifierV2}`)
+			.json();
+	}
 }
