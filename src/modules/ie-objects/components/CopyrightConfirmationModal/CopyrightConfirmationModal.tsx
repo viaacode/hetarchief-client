@@ -3,10 +3,9 @@ import clsx from 'clsx';
 import { type FC } from 'react';
 
 import { type CopyrightConfirmationModalProps } from '@ie-objects/components/CopyrightConfirmationModal/CopyrightConfirmationModal.types';
-import Html from '@shared/components/Html/Html';
 import { Modal } from '@shared/components/Modal';
 import { globalLabelKeys } from '@shared/const';
-import { tText } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 
 import styles from './CopyrightConfirmationModal.module.scss';
 
@@ -34,12 +33,11 @@ export const CopyrightConfirmationModal: FC<CopyrightConfirmationModalProps> = (
 					'u-px-24'
 				)}
 			>
-				<Html
-					className="u-mb-24 u-mb-40:md u-font-size-14 u-color-neutral"
-					content={tText(
+				<div className="u-mb-24 u-mb-40:md u-font-size-14 u-color-neutral">
+					{tHtml(
 						'modules/ie-objects/components/copyright-confirmation-modal/copyright-confirmation-modal___opgelet-je-gaat-deze-krant-downloaden-ga-zelf-grondig-na-of-er-nog-auteursrechten-rusten-op-dit-object-als-gebruiker-ben-je-zelf-verantwoordelijk'
 					)}
-				/>
+				</div>
 				<div
 					className={clsx(
 						styles['c-copyright-modal__content__button-wrapper'],
