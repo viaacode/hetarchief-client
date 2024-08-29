@@ -1879,10 +1879,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				}
 				title={
 					relatedIeObjects?.parent
-						? tHtml('Dit object is onderdeel van dit hoofdobject')
-						: tHtml('Dit object heeft {{amount}} fragmenten', {
-								amount: mappedRelatedIeObjects.length,
-						  })
+						? tHtml(
+								'modules/ie-objects/object-detail-page___dit-object-is-onderdeel-van-dit-hoofdobject'
+						  )
+						: tHtml(
+								'modules/ie-objects/object-detail-page___dit-object-heeft-amount-fragmenten',
+								{
+									amount: mappedRelatedIeObjects.length,
+								}
+						  )
 				}
 				renderContent={(hidden: boolean) =>
 					renderIeObjectCards('related', mappedRelatedIeObjects, hidden)

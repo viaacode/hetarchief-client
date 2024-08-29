@@ -993,7 +993,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				<Button
 					className="u-hide-lt-bp2"
 					variants={['text', 'white']}
-					label={tText('Geavanceerde filters')}
+					label={tText('modules/search/search-page___geavanceerde-filters')}
 					onClick={openAndScrollToAdvancedFilters}
 				/>
 			</>
