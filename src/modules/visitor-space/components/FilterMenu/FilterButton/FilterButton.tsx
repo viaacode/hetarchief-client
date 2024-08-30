@@ -31,7 +31,7 @@ const FilterButton: FC<FilterButtonProps> = ({
 			variants={['black', 'block']}
 			onClick={onClick}
 			type="button"
-			onKeyDown={(e) => (e as any).code !== 'Tab' && e.preventDefault()}
+			onKeyDown={(e) => e.code === 'Enter' && onClick?.()}
 		/>
 	);
 };
