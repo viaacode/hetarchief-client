@@ -112,11 +112,6 @@ export interface VisitorSpaceInfo {
 	contactInfo: {
 		email: string | null;
 		telephone: string | null;
-		address?: {
-			street: string;
-			postalCode: string;
-			locality: string;
-		};
 	};
 	status: VisitorSpaceStatus;
 	publishedAt: string | null;

@@ -135,19 +135,6 @@ export enum IeObjectSector {
 	RURAL = 'Landelijke Private Omroep',
 }
 
-export interface IeObjectContactInfo {
-	email?: string | null;
-	telephone?: string | null;
-	address: IeObjectAddress;
-}
-
-export interface IeObjectAddress {
-	street: string;
-	postalCode: string;
-	locality: string;
-	postOfficeBoxNumber: string;
-}
-
 export interface IeObjectFile {
 	id: string;
 	name: string;
@@ -211,13 +198,6 @@ export type RelatedIeObject = Pick<
 export interface RelatedIeObjects {
 	parent: Partial<RelatedIeObject> | null;
 	children: Partial<RelatedIeObject>[];
-}
-
-export interface IeObjectSimilarShards {
-	failed: number;
-	skipped: number;
-	successful: number;
-	total: number;
 }
 
 export interface IeObjectSearchAggregations {

@@ -29,7 +29,6 @@ export interface VisitRequest {
 	spaceName?: string;
 	spaceMail?: string;
 	spaceTelephone?: string;
-	spaceAddress?: string;
 	spaceColor?: string;
 	spaceImage?: string;
 	spaceLogo?: string;
