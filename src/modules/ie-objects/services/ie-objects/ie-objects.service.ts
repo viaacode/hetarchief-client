@@ -7,6 +7,7 @@ import {
 	type RelatedIeObjects,
 } from '@ie-objects/ie-objects.types';
 import { type SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
+import { type SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
 import { ApiService } from '@shared/services/api-service';
 import { type SortObject } from '@shared/types';
 import { type GetIeObjectsResponse } from '@shared/types/api';
@@ -23,6 +24,7 @@ import {
 	IE_OBJECT_SERVICE_TICKET_URL,
 	IE_OBJECTS_SERVICE_BASE_URL,
 	IE_OBJECTS_SERVICE_SIMILAR,
+	IO_OBJECTS_SERVICE_DOWNLOAD_ALTO_JSON,
 	IO_OBJECTS_SERVICE_RELATED,
 } from './ie-objects.service.const';
 
@@ -141,6 +143,17 @@ export class IeObjectsService {
 				stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IO_OBJECTS_SERVICE_RELATED}`,
 					query: { ieObjectIri, parentIeObjectIri },
+				})
+			)
+			.json();
+	}
+
+	public static async getAltoJsonFile(altoJsonUrl: string): Promise<SimplifiedAlto> {
+		return await ApiService.getApi()
+			.get(
+				stringifyUrl({
+					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IO_OBJECTS_SERVICE_DOWNLOAD_ALTO_JSON}`,
+					query: { altoJsonUrl },
 				})
 			)
 			.json();

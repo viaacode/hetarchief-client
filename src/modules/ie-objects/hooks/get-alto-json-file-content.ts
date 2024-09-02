@@ -1,5 +1,6 @@
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
+import { IeObjectsService } from '@ie-objects/services';
 import { type SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
@@ -20,8 +21,7 @@ export const useGetAltoJsonFileContent = (
 				return convertAltoXmlFileUrlToSimplifiedJson(altoJsonUrl);
 			}
 
-			const response = await fetch(altoJsonUrl);
-			return await response.json();
+			return await IeObjectsService.getAltoJsonFile(altoJsonUrl);
 		},
 		{
 			keepPreviousData: true,

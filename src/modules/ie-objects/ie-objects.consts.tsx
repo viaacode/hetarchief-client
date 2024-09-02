@@ -556,13 +556,10 @@ export const GET_METADATA_FIELDS = (
 			title: tText('modules/ie-objects/ie-objects___afmetingen-in-cm'),
 			data:
 				(mediaInfo?.width
-					? tText('modules/ie-objects/ie-objects___breedte') + mediaInfo?.width + 'cm'
+					? tText('modules/ie-objects/ie-objects___breedte') + mediaInfo?.width
 					: '') +
 					(mediaInfo?.height
-						? ' ' +
-						  tText('modules/ie-objects/ie-objects___hoogte') +
-						  mediaInfo?.height +
-						  'cm'
+						? ' ' + tText('modules/ie-objects/ie-objects___hoogte') + mediaInfo?.height
 						: '') || null,
 		},
 		{
