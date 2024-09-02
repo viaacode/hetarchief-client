@@ -2,7 +2,7 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import { type FC } from 'react';
 
-import { type RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE, type RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { type LanguageInfo } from '@shared/services/translation-service/translation.types';
@@ -88,7 +88,12 @@ export const SeoTags: FC<SeoTagsProps> = ({
 			// This is just NextJS rendering dutch paths with the english locale or vice versa, we can ignore this
 			return [];
 		} else {
-			console.warn('No translated pages/routes found for route: ' + relativeUrl);
+			if (
+				!relativeUrl.startsWith(`/${ROUTE_PARTS_BY_LOCALE.nl.search}/`) &&
+				!relativeUrl.startsWith(`/${ROUTE_PARTS_BY_LOCALE.en.search}/`)
+			) {
+				console.warn('No translated pages/routes found for route: ' + relativeUrl);
+			}
 			return [];
 		}
 	};

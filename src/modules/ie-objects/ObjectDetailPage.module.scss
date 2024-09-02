@@ -755,4 +755,14 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			word-break: break-word !important;
 		}
 	}
+
+	.c-loading__iiif-viewer {
+		background-color: rgb(255 255 255 / 60%);
+		padding: $spacer-lg;
+		z-index: 3;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
 }

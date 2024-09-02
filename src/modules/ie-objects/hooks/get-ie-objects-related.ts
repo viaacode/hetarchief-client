@@ -28,6 +28,7 @@ export const useGetIeObjectsRelated = (
 		{
 			keepPreviousData: true,
 			enabled: true,
+			cacheTime: 5 * 60 * 1000,
 			...options,
 		}
 	);

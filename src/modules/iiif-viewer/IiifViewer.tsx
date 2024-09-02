@@ -14,6 +14,7 @@ import React, {
 } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
+import { type AltoTextLine } from '@ie-objects/ie-objects.types';
 import {
 	type IiifViewerFunctions,
 	type IiifViewerProps,
@@ -42,15 +43,16 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 	(
 		{
 			imageInfos,
-			altoJsonCurrentPage,
 			id,
-			isOcrEnabled,
-			setIsOcrEnabled,
+			isTextOverlayVisible,
+			setIsTextOverlayVisible,
 			activeImageIndex,
 			setActiveImageIndex,
 			initialFocusX,
 			initialFocusY,
 			initialZoomLevel,
+			isLoading,
+			setIsLoading,
 			isSearchEnabled,
 			searchTerms,
 			setSearchTerms,
@@ -78,9 +80,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		};
 		const activeImageTileSource: TileSource | undefined =
 			openSeaDragonViewer?.world?.getItemAt(0)?.source;
-		const viewerStatus: 'loading' | 'ready' = activeImageTileSource?.ready
-			? 'ready'
-			: 'loading';
 
 		const [isSelectionActive, setIsSelectionActive] = useState<boolean>(false);
 
@@ -172,95 +171,88 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			return imageSize;
 		};
 
-		const updateOcrOverlay = useCallback(() => {
-			if (isServerSideRendering()) {
-				return;
-			}
-
-			if (!openSeaDragonViewer || !openSeaDragonLib) {
-				return null;
-			}
-
-			openSeaDragonViewer?.clearOverlays();
-
-			if (!altoJsonCurrentPage) {
-				// No ocr text is available for this image
-				return;
-			}
-
-			if (!activeImageTileSource) {
-				return;
-			}
-			const imageSize = getCurrentImageSize();
-			altoJsonCurrentPage?.text?.forEach((altoTextLocation, index) => {
-				const x = altoTextLocation.x / imageSize?.width;
-				const y = altoTextLocation.y / imageSize?.height;
-				const width = altoTextLocation.width / imageSize?.width;
-				const height = altoTextLocation.height / imageSize?.height;
-				const isSymbols = /^[^a-zA-Z0-9]$/g.test(altoTextLocation.text);
-				if (
-					!x ||
-					!y ||
-					!width ||
-					!height ||
-					x < 0 ||
-					y < 0 ||
-					x > 1 ||
-					y > 1 ||
-					x + width < 0 ||
-					y + height < 0 ||
-					x + width > 1 ||
-					y + height > 1 ||
-					isSymbols
-				) {
-					// This text overlay doesn't make sense,
-					// since it's outside the image or the position isn't fully defined
+		const updateHighlightedAltoTexts = useCallback(
+			(
+				highlightedAltoTexts: AltoTextLine[],
+				selectedHighlightedAltoText: AltoTextLine | null
+			) => {
+				console.log('updateHighlightedAltoTexts: ', {
+					highlightedAltoTexts,
+					selectedHighlightedAltoText,
+				});
+				if (isServerSideRendering()) {
 					return;
 				}
-				const span = document.createElement('SPAN');
-				span.setAttribute('data-ocr-word-index', String(index));
-				span.setAttribute(
-					'data-ocr-word-id',
-					[
-						altoTextLocation.x,
-						altoTextLocation.y,
-						altoTextLocation.width,
-						altoTextLocation.height,
-					].join('-')
-				);
-				span.setAttribute('data-ocr-word', altoTextLocation.text);
-				span.className = 'c-iiif-viewer__iiif__alto__text';
-				span.innerHTML = `
-<svg
-	width="${altoTextLocation.width}"
-	height="${altoTextLocation.height}"
-	xmlns="http://www.w3.org/2000/svg"
-	viewBox="0 0 ${altoTextLocation.width} ${altoTextLocation.height}"
-	preserveAspectRatio="xMidYMid meet"
-	>
-  <text
-  	x="50%"
-  	y="50%"
-  	fill="black"
-  	font-size="${altoTextLocation.height}px"
-  	dominant-baseline="middle"
-  	text-anchor="middle"
-  >
-		${altoTextLocation.text}
-	</text>
-</svg>`;
-				openSeaDragonViewer.addOverlay(
-					span,
-					new openSeaDragonLib.Rect(x, y, width, height, 0),
-					openSeaDragonLib.Placement.CENTER
-				);
-			});
-			// We don't include the tile source since it causes a rerender loop
-			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, [openSeaDragonViewer, openSeaDragonLib, altoJsonCurrentPage, activeImageTileSource]);
+
+				if (!openSeaDragonViewer || !openSeaDragonLib) {
+					return null;
+				}
+
+				openSeaDragonViewer?.clearOverlays();
+
+				if (!highlightedAltoTexts?.length) {
+					return;
+				}
+
+				if (!activeImageTileSource) {
+					return;
+				}
+				const imageWidth: number | undefined =
+					(activeImageTileSource as any).width || activeImageTileSource.dimensions.x;
+				const imageHeight: number | undefined =
+					(activeImageTileSource as any).height || activeImageTileSource.dimensions.y;
+
+				if (!imageWidth || !imageHeight) {
+					throw new Error('Failed to find current page width/height');
+				}
+
+				highlightedAltoTexts?.forEach((altoTextLocation) => {
+					const multiplier = 2.5;
+					const x = (altoTextLocation.x * multiplier - 110) / imageWidth;
+					const y = (altoTextLocation.y * multiplier + 20) / imageHeight;
+					const width = (altoTextLocation.width * multiplier) / imageWidth;
+					const height = (altoTextLocation.height * multiplier) / imageHeight;
+					const isSymbols = /^[^a-zA-Z0-9]$/g.test(altoTextLocation.text);
+					if (
+						!x ||
+						!y ||
+						!width ||
+						!height ||
+						x < 0 ||
+						y < 0 ||
+						x > 1 ||
+						y > 1 ||
+						x + width < 0 ||
+						y + height < 0 ||
+						x + width > 1 ||
+						y + height > 1 ||
+						isSymbols
+					) {
+						// This text overlay doesn't make sense,
+						// since it's outside the image or the position isn't fully defined
+						return;
+					}
+					const span = document.createElement('SPAN');
+					span.className =
+						'c-iiif-viewer__iiif__alto__text' +
+						(altoTextLocation === selectedHighlightedAltoText
+							? ' c-iiif-viewer__iiif__alto__text--selected'
+							: ' c-iiif-viewer__iiif__alto__text--highlighted');
+					openSeaDragonViewer.addOverlay(
+						span,
+						new openSeaDragonLib.Rect(x, y, width, height, 0),
+						openSeaDragonLib.Placement.CENTER
+					);
+				});
+				// We don't include the tile source since it causes a rerender loop
+				// eslint-disable-next-line react-hooks/exhaustive-deps
+			},
+			[openSeaDragonViewer, openSeaDragonLib, activeImageTileSource]
+		);
 
 		const applyInitialZoomAndPan = useCallback(
 			(openSeadragonViewerTemp: Viewer, openSeadragonLibTemp: any) => {
+				console.log('applyInitialZoomAndPan');
 				openSeadragonViewerTemp.addHandler('open', () => {
 					// When the viewer is initialized, set the desired zoom and pan
 					if (
@@ -286,36 +278,53 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			[]
 		);
 
-		const addEventListeners = useCallback((openSeadragonViewerTemp: Viewer) => {
-			openSeadragonViewerTemp.addHandler('viewport-change', () => {
-				if (!openSeadragonViewerTemp) {
-					return;
-				}
-				if (!window.location.href.includes(id)) {
-					// Do not update query params if we're not on the detail page anymore
-					// since the update viewport event still fires when navigating away from the detail page
-					// https://meemoo.atlassian.net/browse/ARC-2228
-					return;
-				}
-				const zoomLevel = openSeadragonViewerTemp.viewport.getZoom();
-				const centerPoint = openSeadragonViewerTemp.viewport.getCenter();
-				// Use window to parse query params, since this native event listener doesn't have access to the update-to-date router.query query params
-				// We also include ...router.query since route params (eg: slug and ieObjectId) are also part of the router.query object
-				const parsedUrl = parseUrl(window.location.href);
-				router.replace(
-					{
-						query: {
-							...router.query,
-							...parsedUrl.query,
-							zoomLevel: round(zoomLevel, 3),
-							focusX: round(centerPoint.x, 3),
-							focusY: round(centerPoint.y, 3),
-						},
+		const handleViewportChanged = useCallback(() => {
+			if (!openSeaDragonViewer) {
+				return;
+			}
+			if (!window.location.href.includes(id)) {
+				// Do not update query params if we're not on the detail page anymore
+				// since the update viewport event still fires when navigating away from the detail page
+				// https://meemoo.atlassian.net/browse/ARC-2228
+				return;
+			}
+			const zoomLevel = openSeaDragonViewer.viewport.getZoom();
+			const centerPoint = openSeaDragonViewer.viewport.getCenter();
+			// Use window to parse query params, since this native event listener doesn't have access to the update-to-date router.query query params
+			// We also include ...router.query since route params (eg: slug and ieObjectId) are also part of the router.query object
+			const parsedUrl = parseUrl(window.location.href);
+			router.replace(
+				{
+					query: {
+						...router.query,
+						...parsedUrl.query,
+						zoomLevel: round(zoomLevel, 3),
+						focusX: round(centerPoint.x, 3),
+						focusY: round(centerPoint.y, 3),
 					},
-					undefined,
-					{ shallow: true }
-				);
+				},
+				undefined,
+				{ shallow: true }
+			);
+		}, [id, openSeaDragonViewer, router]);
+
+		const addEventListeners = useCallback((openSeadragonViewerTemp: Viewer) => {
+			console.log('addEventListeners');
+
+			// Keep track of the current zoom and location in the url
+			openSeadragonViewerTemp.addHandler('viewport-change', handleViewportChanged);
+
+			// Keep track of the loading state of the viewer page
+			openSeadragonViewerTemp.addHandler('open', () => {
+				setIsLoading(true);
+				const tiledImage = openSeadragonViewerTemp.world.getItemAt(0);
+				if (tiledImage.getFullyLoaded()) {
+					setIsLoading(false);
+				} else {
+					tiledImage.addOnceHandler('fully-loaded-change', () => setIsLoading(false));
+				}
 			});
+
 			// Only register the viewport-change event once when loading the iiif viewer
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, []);
@@ -324,6 +333,9 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			console.log('init iiif viewer js lib------------------------');
 			if (!!iiifViewerId && isBrowser()) {
 				const iiifContainer = document.getElementById(iiifViewerId);
+				if (!iiifContainer) {
+					return;
+				}
 				if (iiifContainer) {
 					iiifContainer.innerHTML = '';
 				}
@@ -369,12 +381,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		}, [imageInfos, iiifViewerId, isMobile]);
 
 		useEffect(() => {
-			if (openSeaDragonViewer && activeImageTileSource) {
-				updateOcrOverlay();
-			}
-		}, [openSeaDragonViewer, updateOcrOverlay, activeImageTileSource]);
-
-		useEffect(() => {
 			initIiifViewer();
 		}, [initIiifViewer]);
 
@@ -383,6 +389,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		 */
 
 		const iiifZoom = (multiplier: number): void => {
+			console.log('iiifZoom');
 			if (!openSeaDragonViewer) {
 				return;
 			}
@@ -400,6 +407,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		};
 
 		const iiifGoToHome = (): void => {
+			console.log('iiifGoToHome');
 			openSeaDragonViewer?.viewport.goHome(false);
 		};
 
@@ -439,6 +447,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		};
 
 		const iiifZoomTo = (x: number, y: number): void => {
+			console.log('iiifZoomTo');
 			if (!openSeaDragonViewer) {
 				console.error('iiifZoomToRect failed because openSeaDragonViewer is undefined');
 				return;
@@ -449,8 +458,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				});
 				return;
 			}
-			const imageWidth: number | undefined = activeImageTileSource.dimensions.x;
-			const imageHeight: number | undefined = activeImageTileSource.dimensions.y;
+			const imageWidth: number | undefined =
+				(activeImageTileSource as any).width || activeImageTileSource.dimensions.x;
+			const imageHeight: number | undefined =
+				(activeImageTileSource as any).height || activeImageTileSource.dimensions.y;
 
 			if (!imageWidth || !imageHeight) {
 				console.error('aborting zoom to rect because activeImageTileSource is undefined', {
@@ -480,38 +491,16 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			width: number;
 			height: number;
 		}): void => {
-			iiifZoomTo(x + width / 2, y + height / 2);
-		};
-
-		const clearActiveWord = () => {
-			document?.querySelectorAll('.c-iiif-viewer__iiif__alto__text').forEach((element) => {
-				element.classList.remove('c-iiif-viewer__iiif__alto__text--active');
-				element.classList.remove('c-iiif-viewer__iiif__alto__text--highlighted');
-			});
-		};
-
-		const setActiveWordByIds = (activeAltoTextId: string, highlightedAltoTextIds: string[]) => {
-			clearActiveWord();
-			document
-				?.querySelector('[data-ocr-word-id="' + activeAltoTextId + '"]')
-				?.classList?.add('c-iiif-viewer__iiif__alto__text--active');
-			if (highlightedAltoTextIds.length > 0) {
-				document
-					?.querySelector(
-						highlightedAltoTextIds
-							.map(
-								(highlightedAltoTextId) =>
-									'[data-ocr-word-id="' + highlightedAltoTextId + '"]'
-							)
-							.join(',')
-					)
-					?.classList?.add('c-iiif-viewer__iiif__alto__text--highlighted');
+			console.log('iiifZoomToRect', { x, y, width, height });
+			if (isNil(x) || isNil(y) || isNil(width) || isNil(height)) {
+				throw new Error('Invalid rect provided to iiifZoomToRect');
 			}
+			iiifZoomTo(x + width / 2, y + height / 2);
 		};
 
 		const waitForReadyState = async (): Promise<void> => {
 			return new Promise<void>((resolve) => {
-				if (viewerStatus === 'ready') {
+				if (!isLoading) {
 					resolve();
 				} else {
 					(openSeaDragonViewer as any).id = Math.random();
@@ -530,9 +519,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			iiifZoom,
 			iiifZoomTo,
 			iiifGoToHome,
-			setActiveWordByIds,
-			clearActiveWord,
 			waitForReadyState,
+			updateHighlightedAltoTexts,
 		}));
 
 		/**
@@ -540,6 +528,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		 */
 
 		const renderIiifViewerButtons = () => {
+			console.log('render iiif buttons', { isTextOverlayVisible });
 			return (
 				<div className={styles['c-iiif-viewer__iiif__controls']}>
 					{!iiifGridViewEnabled && (
@@ -643,20 +632,18 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 									'u-flex-shrink'
 								)}
 							>
-								{!!altoJsonCurrentPage && (
-									<Button
-										className={clsx(
-											styles['c-iiif-viewer__iiif__controls__button'],
-											'c-iiif-viewer__iiif__controls__toggle-ocr'
-										)}
-										icon={<Icon name={IconNamesLight.Ocr} aria-hidden />}
-										aria-label={tText(
-											'pages/openseadragon/index___tekst-boven-de-afbeelding-tonen'
-										)}
-										variants={[isOcrEnabled ? 'green' : 'white', 'sm']}
-										onClick={() => setIsOcrEnabled(!isOcrEnabled)}
-									/>
-								)}
+								<Button
+									className={clsx(
+										styles['c-iiif-viewer__iiif__controls__button'],
+										'c-iiif-viewer__iiif__controls__toggle-ocr'
+									)}
+									icon={<Icon name={IconNamesLight.Ocr} aria-hidden />}
+									aria-label={tText(
+										'pages/openseadragon/index___tekst-boven-de-afbeelding-tonen'
+									)}
+									variants={[isTextOverlayVisible ? 'green' : 'white', 'sm']}
+									onClick={() => setIsTextOverlayVisible(!isTextOverlayVisible)}
+								/>
 								{enableSelection && (
 									<Button
 										className={clsx(
@@ -799,8 +786,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		return (
 			<div
 				className={clsx(styles['c-iiif-viewer'], {
-					'c-iiif-viewer__iiif__ocr--enabled': isOcrEnabled,
-					'c-iiif-viewer__iiif__ocr--disabled': !isOcrEnabled,
+					'c-iiif-viewer__iiif__ocr--enabled': isTextOverlayVisible,
+					'c-iiif-viewer__iiif__ocr--disabled': !isTextOverlayVisible,
 					'c-iiif-viewer__iiif__grid-view--disabled': !iiifGridViewEnabled,
 					'c-iiif-viewer__iiif__grid-view--enabled': iiifGridViewEnabled,
 				})}

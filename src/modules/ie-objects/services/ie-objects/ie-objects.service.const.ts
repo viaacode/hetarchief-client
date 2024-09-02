@@ -3,6 +3,6 @@ export const NEWSPAPERS_SERVICE_BASE_URL = 'newspapers';
 export const IE_OBJECT_SERVICE_TICKET_URL = 'player-ticket';
 export const IE_OBJECT_SERVICE_SEO_URL = 'seo';
 export const IE_OBJECTS_SERVICE_EXPORT = 'export';
-export const IE_OBJECTS_SERVICE_RELATED_COUNT = 'related/count';
 export const IE_OBJECTS_SERVICE_SIMILAR = 'similar';
 export const IO_OBJECTS_SERVICE_RELATED = 'related';
+export const IO_OBJECTS_SERVICE_DOWNLOAD_ALTO_JSON = 'alto-json';
