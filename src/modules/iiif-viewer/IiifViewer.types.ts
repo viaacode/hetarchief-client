@@ -1,4 +1,4 @@
-import { type OcrSearchResult } from '@ie-objects/ie-objects.types';
+import { type AltoTextLine, type OcrSearchResult } from '@ie-objects/ie-objects.types';
 
 export type ImageInfo = {
 	thumbnailUrl: string;
@@ -20,14 +20,15 @@ export interface Rect {
 export interface IiifViewerProps {
 	id: string;
 	imageInfos: ImageInfo[];
-	altoJsonCurrentPage: SimplifiedAlto | null | undefined;
-	isOcrEnabled: boolean;
-	setIsOcrEnabled: (isOcrEnabled: boolean) => void;
+	isTextOverlayVisible: boolean;
+	setIsTextOverlayVisible: (isOcrEnabled: boolean) => void;
 	activeImageIndex: number;
 	setActiveImageIndex: (newActiveImageIndex: number) => void;
 	initialFocusX?: number;
 	initialFocusY?: number;
 	initialZoomLevel?: number;
+	isLoading: boolean;
+	setIsLoading: (isLoading: boolean) => void;
 
 	// Search through pages
 	isSearchEnabled: boolean;
@@ -47,13 +48,15 @@ export interface IiifViewerProps {
 export interface IiifViewerFunctions {
 	iiifZoomToRect: (rect: Rect) => void;
 	iiifZoomTo: (x: number, y: number) => void;
-	setActiveWordByIds: (activeAltoTextId: string, highlightedAltoTextIds: string[]) => void;
-	clearActiveWord: () => void;
 	iiifRotate: (rotateRight: boolean) => void;
 	iiifFullscreen: (expand: boolean) => void;
 	iiifZoom: (multiplier: number) => void;
 	iiifGoToHome: () => void;
 	waitForReadyState: () => Promise<void>;
+	updateHighlightedAltoTexts: (
+		highlightedAltoTexts: AltoTextLine[],
+		selectedAltoText: AltoTextLine | null
+	) => void;
 }
 
 export interface TextLine {
@@ -72,6 +75,8 @@ export interface SimplifiedAlto {
 		softwareCreator: string | undefined;
 		softwareName: string | undefined;
 		softwareVersion: string | undefined;
+		width: string | undefined;
+		height: string | undefined;
 	};
 	text: TextLine[] | undefined;
 }

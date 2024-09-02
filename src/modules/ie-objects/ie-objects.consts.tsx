@@ -390,6 +390,12 @@ const getOcrMetadataFields = (simplifiedAlto: SimplifiedAlto | null): MetadataIt
 				data: simplifiedAlto.description.processingStepSettings,
 			});
 		}
+		if (simplifiedAlto.description.width && simplifiedAlto.description.height) {
+			metadataFields.push({
+				title: tText('Scanresolutie'),
+				data: simplifiedAlto.description.width + ' x ' + simplifiedAlto.description.height,
+			});
+		}
 	}
 	return metadataFields;
 };
@@ -546,11 +552,15 @@ export const GET_METADATA_FIELDS = (
 		},
 		{
 			title: tText('modules/ie-objects/ie-objects___paginanummer'),
-			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
+			data: mediaInfo?.pageNumber,
 		},
 		{
 			title: tText('modules/ie-objects/ie-objects___publicatietype'),
-			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
+			data: mediaInfo.bibframeEdition,
+		},
+		{
+			title: tText('Teksttype'),
+			data: mediaInfo.bibframeProductionMethod,
 		},
 		{
 			title: tText('modules/ie-objects/ie-objects___afmetingen-in-cm'),
@@ -564,14 +574,6 @@ export const GET_METADATA_FIELDS = (
 		},
 		{
 			title: tText('modules/ie-objects/ie-objects___digitaliseringsdatum'),
-			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
-		},
-		{
-			title: tText('modules/ie-objects/ie-objects___scanresolutie'),
-			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
-		},
-		{
-			title: tText('modules/ie-objects/ie-objects___scanmethoden'),
 			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
 		},
 		{
