@@ -152,6 +152,7 @@ export interface IeObjectRepresentation {
 	isMediaFragmentOf: string;
 	schemaInLanguage: string;
 	schemaStartTime: string;
+	schemaEndTime: string;
 	schemaTranscript: string;
 	schemaTranscriptUrl: string | null;
 	edmIsNextInSequence: string;

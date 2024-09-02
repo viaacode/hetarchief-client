@@ -146,6 +146,7 @@ import { Pill } from '@shared/components/Pill';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { convertDurationStringToSeconds } from '@shared/helpers/convert-duration-string-to-seconds';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
@@ -350,8 +351,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
-	const currentPage = mediaInfo?.pageRepresentations?.[currentPageIndex];
-	const currentRepresentation = currentPage?.[0];
+	const currentPage: IeObjectRepresentation[] | undefined =
+		mediaInfo?.pageRepresentations?.[currentPageIndex];
+	const currentRepresentation: IeObjectRepresentation | undefined = currentPage?.[0];
 
 	// peak file
 	const peakFileStoredAt: string | null =
@@ -1394,6 +1396,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			peakColorInactive: '#adadad', // zinc
 			peakColorActive: '#00857d', // $teal
 			peakHeightFactor: 0.6,
+			start: currentRepresentation?.schemaStartTime
+				? convertDurationStringToSeconds(currentRepresentation?.schemaStartTime)
+				: undefined,
+			end: currentRepresentation?.schemaEndTime
+				? convertDurationStringToSeconds(currentRepresentation?.schemaEndTime)
+				: undefined,
 		};
 
 		// Flowplayer
