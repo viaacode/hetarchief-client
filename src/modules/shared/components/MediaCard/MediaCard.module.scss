@@ -88,28 +88,24 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		text-decoration: none;
 	}
 
-	&__header,
-	&__no-content {
-		&-wrapper {
-			max-width: 100%;
-			min-width: 100%;
-			position: relative;
-		}
-	}
-
 	// Override next/image
-	&__header-wrapper {
-		min-height: 13rem;
+	&__header {
 		max-height: 18rem;
 		overflow: hidden;
+		font-variation-settings: $line-height-md * 2rem;
+		align-items: center;
+		background-color: $platinum;
+		color: $zinc;
+		display: flex;
+		min-height: 16rem;
+		min-width: 24.8rem;
+		place-content: center;
 
 		&--list,
 		&--grid {
 			position: relative;
 
 			> span {
-				position: static !important;
-
 				> img {
 					position: static !important;
 					height: auto !important;
@@ -118,6 +114,8 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		}
 
 		&--list {
+			min-height: 13rem;
+
 			span > img {
 				max-height: unset !important;
 				min-height: unset !important;
@@ -125,6 +123,42 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 
 			@include respond-at("md") {
 				min-width: 248px;
+			}
+		}
+
+		&__children {
+			position: absolute;
+			right: $spacer-xxs;
+			top: $spacer-xxs;
+			background-color: $black;
+			border-radius: $spacer-sm;
+			display: inline-block;
+			color: $white;
+			font-size: $font-size-xs;
+			padding: $spacer-xxs $spacer-xs;
+		}
+
+		img {
+			object-fit: cover;
+			width: 100%;
+			height: 100%;
+		}
+
+		&--no-content {
+			min-height: 3rem;
+			place-content: initial;
+			justify-content: space-between;
+			background-color: transparent;
+
+			&__children {
+				position: relative;
+			}
+
+			&.c-media-card__header--list {
+				background-color: $silver;
+				min-height: 13rem;
+				display: flex;
+				place-content: center;
 			}
 		}
 	}
@@ -165,27 +199,6 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		line-height: $line-height-md * 2rem;
 		text-overflow: ellipsis;
 		overflow: hidden;
-	}
-
-	&__no-content {
-		color: $blue;
-		font-variation-settings: $line-height-md * 2rem;
-		display: block;
-		margin-bottom: $c-media-card-no-video-intended-spacing - $spacer-sm;
-
-		&-wrapper {
-			align-items: center;
-			background-color: $platinum;
-			color: $zinc;
-			display: flex;
-			min-height: 16rem;
-			min-width: 24.8rem;
-			place-content: center;
-
-			.#{$component}__no-content {
-				transform: translateY(-25%);
-			}
-		}
 	}
 
 	&__icon {

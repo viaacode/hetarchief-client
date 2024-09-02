@@ -103,6 +103,7 @@ export interface IeObject {
 	carrierDate?: string;
 	newspaperPublisher?: string;
 	alternativeTitle?: string[];
+	children?: number;
 
 	pageRepresentations?: IeObjectRepresentation[][];
 }

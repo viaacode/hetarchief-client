@@ -59,6 +59,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	maintainerSlug,
 	hasTempAccess,
 	previousPage,
+	numOfChildren = 0,
 }) => {
 	const router = useRouter();
 	const locale = useLocale();
@@ -231,71 +232,77 @@ const MediaCard: FC<MediaCardProps> = ({
 		<div className={clsx(styles['c-media-card__header-duration'])}>{duration}</div>
 	);
 
-	const renderNoContent = () =>
-		view === 'grid' ? (
-			renderNoContentIcon()
-		) : (
-			<div className={clsx(styles['c-media-card__no-content-wrapper'])}>
-				{renderNoContentIcon()}
-				{showLocallyAvailable && renderLocallyAvailablePill()}
-			</div>
-		);
-
 	const renderHeader = () => {
-		if (!preview) {
-			return renderNoContent();
+		if (type === IeObjectType.Audio) {
+			// Only render the waveform if the thumbnail is available
+			// The thumbnail is an ugly speaker icon that we never want to show
+			// But if that thumbnail is not available it most likely means this object does not have the BEZOEKERTOOL-CONTENT license
+			return renderImage('/images/waveform.svg');
 		}
-		switch (type) {
-			case IeObjectType.Audio:
-				// Only render the waveform if the thumbnail is available
-				// The thumbnail is an ugly speaker icon that we never want to show
-				// But if that thumbnail is not available it most likely means this object does not have the BEZOEKERTOOL-CONTENT license
-				return renderImage('/images/waveform.svg');
 
-			case IeObjectType.Video:
-			case IeObjectType.VideoFragment:
-			case IeObjectType.Film:
-			case IeObjectType.Newspaper:
-				return renderImage(preview);
-
-			case null:
-				if (id === 'manyResultsTileId') {
-					return renderImage(preview);
-				}
-				return renderNoContent();
-			default:
-				return renderNoContent();
-		}
+		return renderImage(preview);
 	};
 
 	const renderTags = () => {
 		return hasRelated && <Badge variants="small" text={<Icon name={IconNamesLight.Link} />} />;
 	};
 
-	const renderLocallyAvailablePill = () => (
-		<div className={styles['c-media-card__locally-available-pill']}>
-			<Pill
-				isExpanded
-				icon={IconNamesLight.Forbidden}
-				label={tText(
-					'modules/shared/components/media-card/media-card___enkel-ter-plaatse-beschikbaar'
-				)}
-				className="u-bg-black u-color-white"
-			/>
-		</div>
-	);
+	const renderLocallyAvailablePill = () => {
+		if (!showLocallyAvailable) {
+			return null;
+		}
+		return (
+			<div className={styles['c-media-card__locally-available-pill']}>
+				<Pill
+					isExpanded
+					icon={IconNamesLight.Forbidden}
+					label={tText(
+						'modules/shared/components/media-card/media-card___enkel-ter-plaatse-beschikbaar'
+					)}
+					className="u-bg-black u-color-white"
+				/>
+			</div>
+		);
+	};
+
+	const renderNumberOfChildren = () => {
+		if (numOfChildren === 0) {
+			return;
+		}
+		return (
+			<div className={styles['c-media-card__header__children']}>
+				{numOfChildren}{' '}
+				{numOfChildren > 1
+					? tText('modules/shared/components/media-card/media-card___items')
+					: tText('modules/shared/components/media-card/media-card___item')}
+			</div>
+		);
+	};
 
 	const renderImage = (imgPath: string | undefined) => {
 		if (!imgPath) {
-			renderNoContent();
-			return;
+			return (
+				<div
+					className={clsx(
+						styles['c-media-card__header'],
+						view === 'grid' && styles['c-media-card__header--grid'],
+						view === 'list' && styles['c-media-card__header--list'],
+						styles['c-media-card__header--no-content']
+					)}
+				>
+					{renderNoContentIcon()}
+					{renderNumberOfChildren()}
+					{renderLocallyAvailablePill()}
+				</div>
+			);
 		}
 
 		return (
 			<div
 				className={clsx(
-					styles['c-media-card__header-wrapper'],
-					styles[`c-media-card__header-wrapper--${view}`]
+					styles['c-media-card__header'],
+					view === 'grid' && styles['c-media-card__header--grid'],
+					view === 'list' && styles['c-media-card__header--list']
 				)}
 			>
 				<Image src={imgPath} alt={''} unoptimized={true} layout="fill" priority />
@@ -304,9 +311,10 @@ const MediaCard: FC<MediaCardProps> = ({
 						<div className={clsx(styles['c-media-card__header-icon'])}>
 							<Icon name={icon} />
 						</div>
-						{showLocallyAvailable && renderLocallyAvailablePill()}
+						{renderLocallyAvailablePill()}
 					</>
 				)}
+				{renderNumberOfChildren()}
 				{duration && renderDuration()}
 			</div>
 		);
