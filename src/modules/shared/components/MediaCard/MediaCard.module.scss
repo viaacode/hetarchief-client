@@ -3,6 +3,7 @@
 
 $component: "c-media-card";
 $c-media-card-no-video-intended-spacing: 0.9rem;
+$media-card-list-view-height: 13rem;
 
 .#{$component} {
 	a {
@@ -114,7 +115,7 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		}
 
 		&--list {
-			min-height: 13rem;
+			min-height: $media-card-list-view-height;
 
 			span > img {
 				max-height: unset !important;
@@ -145,7 +146,7 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		}
 
 		&--no-content {
-			min-height: 3rem;
+			min-height: $spacer-lg;
 			place-content: initial;
 			justify-content: space-between;
 			background-color: transparent;
@@ -156,7 +157,7 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 
 			&.c-media-card__header--list {
 				background-color: $silver;
-				min-height: 13rem;
+				min-height: $media-card-list-view-height;
 				display: flex;
 				place-content: center;
 			}
