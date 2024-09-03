@@ -1,8 +1,13 @@
 import { isEmpty } from 'lodash-es';
 import { parseUrl, stringifyUrl } from 'query-string';
 
-import { type IeObject, type IeObjectSimilar } from '@ie-objects/ie-objects.types';
+import {
+	type IeObject,
+	type IeObjectSimilar,
+	type RelatedIeObjects,
+} from '@ie-objects/ie-objects.types';
 import { type SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
+import { type SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
 import { ApiService } from '@shared/services/api-service';
 import { type SortObject } from '@shared/types';
 import { type GetIeObjectsResponse } from '@shared/types/api';
@@ -19,6 +24,7 @@ import {
 	IE_OBJECT_SERVICE_TICKET_URL,
 	IE_OBJECTS_SERVICE_BASE_URL,
 	IE_OBJECTS_SERVICE_SIMILAR,
+	IO_OBJECTS_SERVICE_DOWNLOAD_ALTO_JSON,
 	IO_OBJECTS_SERVICE_RELATED,
 } from './ie-objects.service.const';
 
@@ -113,6 +119,7 @@ export class IeObjectsService {
 		});
 	}
 
+	// Used for "ook interessant" on the detail page
 	public static async getSimilar(id: string, maintainerId: string): Promise<IeObjectSimilar> {
 		return await ApiService.getApi()
 			.get(
@@ -126,14 +133,37 @@ export class IeObjectsService {
 			.json();
 	}
 
-	public static async getRelated(id: string, maintainerId: string): Promise<IeObjectSimilar> {
+	// Used for "gerelateerde objecten" blade on the detail page
+	public static async getRelated(
+		ieObjectIri: string,
+		parentIeObjectIri: string | null
+	): Promise<RelatedIeObjects> {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IO_OBJECTS_SERVICE_RELATED}/${id}`, // TODO replace this endpoint with endpoint that only uses the schemaIdentifier and the maintainerId, and no meemooId is used anymore
-					query: maintainerId ? { maintainerId } : {},
+					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IO_OBJECTS_SERVICE_RELATED}`,
+					query: { ieObjectIri, parentIeObjectIri },
 				})
 			)
+			.json();
+	}
+
+	public static async getAltoJsonFile(altoJsonUrl: string): Promise<SimplifiedAlto> {
+		return await ApiService.getApi()
+			.get(
+				stringifyUrl({
+					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IO_OBJECTS_SERVICE_DOWNLOAD_ALTO_JSON}`,
+					query: { altoJsonUrl },
+				})
+			)
+			.json();
+	}
+
+	public static async schemaIdentifierLookup(
+		schemaIdentifierV2: string
+	): Promise<{ schemaIdentifierV3: string }> {
+		return await ApiService.getApi()
+			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/schemaIdentifierLookup/${schemaIdentifierV2}`)
 			.json();
 	}
 }

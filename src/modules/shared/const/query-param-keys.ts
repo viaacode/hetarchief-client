@@ -14,10 +14,8 @@ export enum QUERY_PARAM_KEY {
 	IIIF_VIEWER_FOCUS_Y = 'focusY',
 	IIIF_VIEWER_ZOOM_LEVEL = 'zoomLevel',
 	ACTIVE_PAGE = 'activePage',
-	ACTIVE_REPRESENTATION = 'activeRepresentation',
 	EXPAND_SIDEBAR = 'expandSidebar',
-	ACTIVE_SEARCH_RESULT_INDEX = 'activeSearchResult',
-	IIIF_VIEWER_OCR_OVERLAY_ENABLED = 'ocrEnabled',
+	IIIF_VIEWER_TEXT_OVERLAY_ENABLED = 'textOverlay',
 }
 
 export const HIGHLIGHTED_SEARCH_TERMS_SEPARATOR = ',';

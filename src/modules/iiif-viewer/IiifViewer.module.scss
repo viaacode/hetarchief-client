@@ -20,17 +20,14 @@ $controls-margin-bottom: $spacer-sm;
 		}
 
 		:global(.c-iiif-viewer__iiif__alto__text) {
-			color: $black;
-			background-color: $newspaper-ocr-overlay-background;
-			text-align: center;
-
-			&:global(--active) {
-				background-color: $white;
+			&:global(--highlighted) {
+				border: solid 2px $teal;
+				background-color: rgba($teal, 0.5);
 			}
 
-			> :global(svg) {
-				width: 100%;
-				height: 100%;
+			&:global(--selected) {
+				border: solid 4px $teal;
+				background-color: rgba($teal, 0.2);
 			}
 		}
 

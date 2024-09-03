@@ -1,21 +1,34 @@
-import { type OcrSearchResult } from '@ie-objects/ie-objects.types';
+import { type AltoTextLine, type OcrSearchResult } from '@ie-objects/ie-objects.types';
 
 export type ImageInfo = {
 	thumbnailUrl: string;
 	imageUrl: string;
 };
 
+export interface ImageSize {
+	width: number;
+	height: number;
+}
+
+export interface Rect {
+	x: number;
+	y: number;
+	width: number;
+	height: number;
+}
+
 export interface IiifViewerProps {
 	id: string;
 	imageInfos: ImageInfo[];
-	altoJsonCurrentPage: SimplifiedAlto | null | undefined;
-	isOcrEnabled: boolean;
-	setIsOcrEnabled: (isOcrEnabled: boolean) => void;
+	isTextOverlayVisible: boolean;
+	setIsTextOverlayVisible: (isOcrEnabled: boolean) => void;
 	activeImageIndex: number;
 	setActiveImageIndex: (newActiveImageIndex: number) => void;
 	initialFocusX?: number;
 	initialFocusY?: number;
 	initialZoomLevel?: number;
+	isLoading: boolean;
+	setIsLoading: (isLoading: boolean) => void;
 
 	// Search through pages
 	isSearchEnabled: boolean;
@@ -26,18 +39,24 @@ export interface IiifViewerProps {
 	currentSearchIndex: number;
 	searchResults: OcrSearchResult[] | null;
 	setSearchResultIndex: (newSearchIndex: number) => void;
+
+	// Selection + download
+	onSelection?: (rect: Rect) => void;
+	enableSelection?: boolean;
 }
 
 export interface IiifViewerFunctions {
-	iiifZoomToRect: (rect: { x: number; y: number; width: number; height: number }) => void;
+	iiifZoomToRect: (rect: Rect) => void;
 	iiifZoomTo: (x: number, y: number) => void;
-	setActiveWordIndex: (wordIndex: number) => void;
-	clearActiveWordIndex: () => void;
 	iiifRotate: (rotateRight: boolean) => void;
 	iiifFullscreen: (expand: boolean) => void;
 	iiifZoom: (multiplier: number) => void;
 	iiifGoToHome: () => void;
 	waitForReadyState: () => Promise<void>;
+	updateHighlightedAltoTexts: (
+		highlightedAltoTexts: AltoTextLine[],
+		selectedAltoText: AltoTextLine | null
+	) => void;
 }
 
 export interface TextLine {
@@ -56,6 +75,8 @@ export interface SimplifiedAlto {
 		softwareCreator: string | undefined;
 		softwareName: string | undefined;
 		softwareVersion: string | undefined;
+		width: string | undefined;
+		height: string | undefined;
 	};
 	text: TextLine[] | undefined;
 }

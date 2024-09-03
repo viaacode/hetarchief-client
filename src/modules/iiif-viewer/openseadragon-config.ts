@@ -14,7 +14,7 @@ export function getOpenSeadragonConfig(
 		// preserveViewport: true,
 		defaultZoomLevel: isMobile ? 0.9 : 0.5,
 		minZoomLevel: 0.3,
-		maxZoomLevel: 5,
+		maxZoomLevel: 100,
 
 		// Panning
 		visibilityRatio: 0.5,

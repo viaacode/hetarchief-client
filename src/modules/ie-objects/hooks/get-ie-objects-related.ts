@@ -1,34 +1,34 @@
-import type { IPagination } from '@studiohyperdrive/pagination';
 import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react-query';
 
-import { type IeObject, type IeObjectSimilar } from '@ie-objects/ie-objects.types';
+import { type RelatedIeObjects } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const';
 
-export function getIeObjectsRelated(id: string, maintainerId?: string): Promise<IeObjectSimilar> {
-	if (!maintainerId || !id) {
-		return Promise.resolve({
-			items: [],
-			page: 1,
-			size: 0,
-			pages: 1,
-			total: 0,
-		} as IPagination<IeObject>);
+export async function getIeObjectsRelated(
+	ieObjectIri: string,
+	parentIeObjectIri: string | null
+): Promise<RelatedIeObjects> {
+	if (!ieObjectIri) {
+		return {
+			parent: null,
+			children: [],
+		};
 	}
-	return IeObjectsService.getRelated(id, maintainerId);
+	return IeObjectsService.getRelated(ieObjectIri, parentIeObjectIri);
 }
 
 export const useGetIeObjectsRelated = (
-	id: string,
-	maintainerId?: string,
+	ieObjectIri: string,
+	parentIeObjectIri: string | null,
 	options: { enabled?: boolean } = {}
-): UseQueryResult<IPagination<IeObject>> => {
+): UseQueryResult<RelatedIeObjects> => {
 	return useQuery(
-		[QUERY_KEYS.getIeObjectsRelated, id, maintainerId],
-		() => getIeObjectsRelated(id, maintainerId),
+		[QUERY_KEYS.getIeObjectsRelated, ieObjectIri, parentIeObjectIri],
+		() => getIeObjectsRelated(ieObjectIri, parentIeObjectIri),
 		{
 			keepPreviousData: true,
 			enabled: true,
+			cacheTime: 5 * 60 * 1000,
 			...options,
 		}
 	);
@@ -42,6 +42,6 @@ export async function makeServerSideRequestGetIeObjectsRelated(
 ): Promise<void> {
 	await queryClient.prefetchQuery(
 		[QUERY_KEYS.getIeObjectsRelated, id, maintainerId, meemooId],
-		() => getIeObjectsRelated('')
+		() => getIeObjectsRelated('', null)
 	);
 }

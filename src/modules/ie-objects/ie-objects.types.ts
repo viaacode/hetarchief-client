@@ -46,6 +46,7 @@ export interface IeObject {
 	description: string;
 	duration: string;
 	genre: string[];
+	iri: string;
 	schemaIdentifier: string; // Unique id per object
 	inLanguage: string[];
 	keywords: string[];
@@ -55,6 +56,7 @@ export interface IeObject {
 	maintainerSlug: string;
 	maintainerLogo: string | null;
 	maintainerOverlay: boolean | null;
+	maintainerIiifAgreement?: boolean | null;
 	name: string;
 	publisher: any;
 	spatial: string[];
@@ -64,11 +66,12 @@ export interface IeObject {
 	accessThrough?: IeObjectAccessThrough[];
 	ebucoreObjectType?: string | null;
 	meemoofilmContainsEmbeddedCaption?: boolean;
-	premisIsPartOf?: string;
 	contributor?: any;
 	copyrightHolder?: string;
+	premisIsPartOf?: string | null;
 	isPartOf?: IsPartOfCollection[];
 	numberOfPages?: number;
+	pageNumber?: number;
 	meemooDescriptionCast?: string;
 	maintainerFormUrl?: string | null;
 	maintainerDescription?: string;
@@ -93,12 +96,15 @@ export interface IeObject {
 	succeededBy?: string[];
 	width?: string;
 	height?: string;
+	bibframeProductionMethod?: string | null;
+	bibframeEdition?: string | null;
 	locationCreated?: string;
 	startDate?: string;
 	endDate?: string;
 	carrierDate?: string;
 	newspaperPublisher?: string;
 	alternativeTitle?: string[];
+	children?: number;
 
 	pageRepresentations?: IeObjectRepresentation[][];
 }
@@ -164,7 +170,9 @@ export interface IeObjectRepresentation {
 	isMediaFragmentOf: string;
 	schemaInLanguage: string;
 	schemaStartTime: string;
+	schemaEndTime: string;
 	schemaTranscript: string;
+	schemaTranscriptUrl: string | null;
 	edmIsNextInSequence: string;
 	updatedAt: string;
 	files: IeObjectFile[];
@@ -183,6 +191,33 @@ export interface IeObjectSearchAggregation<T> {
 
 // TODO: change Partial<IeObject> to IeObject with optional fields to prevent unknown values such as id and type
 export type IeObjectSimilar = IPagination<Partial<IeObject>>;
+
+export type RelatedIeObject = Pick<
+	IeObject,
+	| 'dctermsAvailable'
+	| 'dctermsFormat'
+	| 'dateCreated'
+	| 'datePublished'
+	| 'description'
+	| 'duration'
+	| 'schemaIdentifier'
+	| 'licenses'
+	| 'maintainerId'
+	| 'maintainerName'
+	| 'maintainerSlug'
+	| 'name'
+	| 'thumbnailUrl'
+	| 'sector'
+	| 'accessThrough'
+	| 'transcript'
+	| 'iri'
+	| 'premisIsPartOf'
+>;
+
+export interface RelatedIeObjects {
+	parent: Partial<RelatedIeObject> | null;
+	children: Partial<RelatedIeObject>[];
+}
 
 export interface IeObjectSimilarShards {
 	failed: number;

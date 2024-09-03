@@ -255,6 +255,10 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		align-self: center;
 		inset: 0;
 
+		@include respond-to(md) {
+			width: 100%;
+		}
+
 		&--with-slider {
 			// ARC-1290: space for FragmentSlider
 			bottom: 135px;
@@ -750,5 +754,15 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		:global(span) {
 			word-break: break-word !important;
 		}
+	}
+
+	.c-loading__iiif-viewer {
+		background-color: rgb(255 255 255 / 60%);
+		padding: $spacer-lg;
+		z-index: 3;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
 	}
 }

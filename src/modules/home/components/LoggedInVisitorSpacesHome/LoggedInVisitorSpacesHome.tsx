@@ -16,6 +16,7 @@ import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Loading } from '@shared/components/Loading';
 import { SpacePreview } from '@shared/components/SpacePreview';
+import type { VisitSummaryType } from '@shared/components/VisitSummary';
 import {
 	VisitorSpaceCard,
 	type VisitorSpaceCardProps,
@@ -27,19 +28,17 @@ import { tHtml } from '@shared/helpers/translate';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
-import { type Visit, VisitStatus } from '@shared/types/visit';
+import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
 import { asDate } from '@shared/utils/dates';
 import { scrollTo } from '@shared/utils/scroll-to-top';
-import { useGetVisits } from '@visit-requests/hooks/get-visits';
+import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitTimeframe } from '@visit-requests/types';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 
-import { ProcessVisitBlade, type ProcessVisitBladeProps } from '../ProcessVisitBlade';
+import { ProcessVisitBlade } from '../ProcessVisitBlade';
 
 import styles from './LoggedInVisitiorSpacesHome.module.scss';
-
-type SelectedVisit = ProcessVisitBladeProps['selected'];
 
 const LoggedInVisitorSpacesHome: FC = () => {
 	const router = useRouter();
@@ -57,7 +56,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 
 	const user = useSelector(selectUser);
 
-	const [selected, setSelected] = useState<SelectedVisit | undefined>();
+	const [selected, setSelected] = useState<VisitRequest | undefined>();
 	const [isVisitorSpaceNotAvailable, setIsVisitorSpaceNotAvailable] = useState(false);
 
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
@@ -81,7 +80,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 		data: active,
 		refetch: refetchActive,
 		isLoading: isLoadingActive,
-	} = useGetVisits({
+	} = useGetVisitRequests({
 		...defaultGetVisitsParams,
 		status: VisitStatus.APPROVED,
 		timeframe: VisitTimeframe.ACTIVE,
@@ -91,7 +90,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 		data: future,
 		refetch: refetchFuture,
 		isLoading: isLoadingFuture,
-	} = useGetVisits({
+	} = useGetVisitRequests({
 		...defaultGetVisitsParams,
 		status: VisitStatus.APPROVED,
 		timeframe: VisitTimeframe.FUTURE,
@@ -101,7 +100,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 		data: pending,
 		refetch: refetchPending,
 		isLoading: isLoadingPending,
-	} = useGetVisits({
+	} = useGetVisitRequests({
 		...defaultGetVisitsParams,
 		status: VisitStatus.PENDING,
 	});
@@ -115,7 +114,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 	);
 
 	// ARC-1650: Do not show all visit accesses for admin users
-	const filterOutPermanentIds = (items?: Visit[]): Visit[] => {
+	const filterOutPermanentIds = (items?: VisitRequest[]): VisitRequest[] => {
 		if (items === undefined) {
 			return [];
 		}
@@ -246,12 +245,12 @@ const LoggedInVisitorSpacesHome: FC = () => {
 		setIsRequestAccessBladeOpen(true);
 	};
 
-	const onProcessVisit = (visit: SelectedVisit) => {
+	const onProcessVisit = (visit: VisitRequest) => {
 		setSelected(visit);
 		setIsProcessVisitBladeOpen(true);
 	};
 
-	const mapVisitToRoom = (visit: Visit): VisitorSpaceCardProps['room'] => ({
+	const mapVisitToRoom = (visit: VisitRequest): VisitorSpaceCardProps['room'] => ({
 		image: visit.spaceImage || null,
 		logo: visit.spaceLogo || '',
 		color: visit.spaceColor || null,
@@ -431,7 +430,9 @@ const LoggedInVisitorSpacesHome: FC = () => {
 				/>
 				{renderVisitorSpaceNotAvailableBlade()}
 				<ProcessVisitBlade
-					selected={selected}
+					selected={
+						selected as (VisitSummaryType & Pick<VisitRequest, 'status'>) | undefined
+					}
 					isOpen={!!selected && isProcessVisitBladeOpen}
 					onClose={onCloseProcessVisitBlade}
 					onFinish={() => {

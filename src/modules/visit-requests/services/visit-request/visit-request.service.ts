@@ -3,11 +3,15 @@ import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
 import { ApiService } from '@shared/services/api-service';
-import { type Visit, type VisitAccessStatus, VisitStatus } from '@shared/types/visit';
+import {
+	type VisitAccessStatus,
+	type VisitRequest,
+	VisitStatus,
+} from '@shared/types/visit-request';
 import {
 	type GetAllActiveVisitsProps,
-	type GetVisitsProps,
-} from '@visit-requests/services/visits/visits.service.types';
+	type GetVisitRequestsProps,
+} from '@visit-requests/services/visit-request/visit-request.service.types';
 import { type PatchVisit } from '@visit-requests/types';
 import { type CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 
@@ -17,9 +21,9 @@ import {
 	VISITS_SERVICE_BASE_URL,
 	VISITS_SERVICE_PENDING_COUNT_URL,
 	VISITS_SERVICE_SPACE_URL,
-} from './visits.service.const';
+} from './visit-request.service.const';
 
-export class VisitsService {
+export class VisitRequestService {
 	public static async getAll({
 		searchInput = '',
 		status,
@@ -31,7 +35,7 @@ export class VisitsService {
 		orderProp,
 		orderDirection = OrderDirection.desc,
 		personal,
-	}: GetVisitsProps): Promise<IPagination<Visit>> {
+	}: GetVisitRequestsProps): Promise<IPagination<VisitRequest>> {
 		const parsed = await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -50,14 +54,14 @@ export class VisitsService {
 				})
 			)
 			.json();
-		return parsed as IPagination<Visit>;
+		return parsed as IPagination<VisitRequest>;
 	}
 
-	public static async getById(id: string): Promise<Visit> {
+	public static async getById(id: string): Promise<VisitRequest> {
 		return await ApiService.getApi().get(`${VISITS_SERVICE_BASE_URL}/${id}`).json();
 	}
 
-	public static async patchById(id: string, visit: PatchVisit): Promise<Visit> {
+	public static async patchById(id: string, visit: PatchVisit): Promise<VisitRequest> {
 		const { status, startAt, endAt, note, accessType, accessFolderIds } = visit;
 		const json: PatchVisit = {
 			status,
@@ -75,7 +79,7 @@ export class VisitsService {
 			.json();
 	}
 
-	public static async create(visitRequest: CreateVisitRequest): Promise<Visit> {
+	public static async create(visitRequest: CreateVisitRequest): Promise<VisitRequest> {
 		return await ApiService.getApi()
 			.post(VISITS_SERVICE_BASE_URL, { body: JSON.stringify(visitRequest) })
 			.json();
@@ -83,7 +87,7 @@ export class VisitsService {
 
 	public static async getActiveVisitForUserAndSpace(
 		visitorSpaceSlug: string
-	): Promise<Visit | null> {
+	): Promise<VisitRequest | null> {
 		if (!visitorSpaceSlug) {
 			return null;
 		}
@@ -94,7 +98,9 @@ export class VisitsService {
 			.json();
 	}
 
-	public static async getPendingVisitCountForUserBySlug(slug: string): Promise<Visit | null> {
+	public static async getPendingVisitCountForUserBySlug(
+		slug: string
+	): Promise<VisitRequest | null> {
 		if (!slug) {
 			return null;
 		}
@@ -122,7 +128,7 @@ export class VisitsService {
 		orderDirection = OrderDirection.asc,
 		page = 0,
 		size = 20,
-	}: GetAllActiveVisitsProps): Promise<IPagination<Visit>> {
+	}: GetAllActiveVisitsProps): Promise<IPagination<VisitRequest>> {
 		const parsed = await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -139,6 +145,6 @@ export class VisitsService {
 				})
 			)
 			.json();
-		return parsed as IPagination<Visit>;
+		return parsed as IPagination<VisitRequest>;
 	}
 }

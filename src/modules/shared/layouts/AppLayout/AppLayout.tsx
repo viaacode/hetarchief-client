@@ -3,6 +3,7 @@ import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import getConfig from 'next/config';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react';
@@ -68,7 +69,7 @@ import {
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
 import { Breakpoints } from '@shared/types';
-import { type Visit } from '@shared/types/visit';
+import { type VisitRequest } from '@shared/types/visit-request';
 import { type Locale } from '@shared/utils/i18n';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visits';
@@ -129,7 +130,7 @@ const AppLayout: FC<any> = ({ children }) => {
 		'{}'
 	);
 
-	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
+	const [visitorSpaces, setVisitorSpaces] = useState<VisitRequest[]>([]);
 
 	useEffect(() => {
 		if (showNotificationsCenter) {
@@ -154,7 +155,7 @@ const AppLayout: FC<any> = ({ children }) => {
 		[dispatch]
 	);
 
-	const getVisitorSpaces = useCallback((): Visit[] => {
+	const getVisitorSpaces = useCallback((): VisitRequest[] => {
 		if (!user || isKioskOrAnonymous) {
 			setVisitorSpaces([]);
 			return [];
@@ -330,16 +331,14 @@ const AppLayout: FC<any> = ({ children }) => {
 				// Otherwise you get an infinite loading state because no api calls will work
 				// https://github.com/vercel/next.js/issues/37005
 				node: (
-					<div
-						onClick={() => {
-							window.open(window.location.origin, '_self');
-						}}
-					>
-						<HetArchiefLogo
-							className="c-navigation__logo c-navigation__logo--list"
-							type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
-						/>
-					</div>
+					<Link href={'/' + locale} passHref>
+						<a>
+							<HetArchiefLogo
+								className="c-navigation__logo c-navigation__logo--list"
+								type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
+							/>
+						</a>
+					</Link>
 				),
 				id: 'logo',
 				path: '/',

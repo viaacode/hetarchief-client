@@ -96,7 +96,6 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 		? defaultFolder
 		: (folders || []).find((folder) => isActive(folder)) || defaultFolder;
 
-	console.log({ folders });
 	const sidebarLinks: ListNavigationFolderItem[] = useMemo(
 		() =>
 			(folders || []).map((folder) => {
@@ -104,7 +103,6 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				const href = myFoldersPath + '/' + slug;
 				const active = isActive(folder);
 
-				console.log({ folder });
 				return {
 					...folder,
 					node: ({ linkClassName }) => (

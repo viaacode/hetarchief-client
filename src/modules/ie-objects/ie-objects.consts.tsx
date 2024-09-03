@@ -54,8 +54,8 @@ export const FLOWPLAYER_VIDEO_FORMATS: string[] = [
 	'application/vnd.apple.mpegurl',
 ];
 export const FLOWPLAYER_AUDIO_FORMATS: string[] = [
-	// 'audio/mpeg', // We want to play the audio file, not the mp4 video with the ugly speaker
-	'audio/mp4',
+	// 'audio/mpeg', // ignore the actual audio file, since we already use the audio encoded into a view file
+	'audio/mp4', // We want to play the mp4 video file with the ugly speaker (decided by team archief)
 	'audio/m4a',
 	'audio/aac',
 ];
@@ -73,16 +73,10 @@ export const IMAGE_FORMATS: string[] = [
 export const IMAGE_API_FORMATS: string[] = ['image/jph'];
 export const IMAGE_BROWSE_COPY_FORMATS: string[] = ['image/jpeg'];
 export const XML_FORMATS: string[] = ['application/xml'];
+export const JSON_FORMATS: string[] = ['application/json'];
+export const MIN_LENGTH_SCHEMA_IDENTIFIER_V2 = 36;
 
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
-	{
-		label: tText('modules/ie-objects/ie-objects___download-alle-paginas-zip'),
-		id: MetadataExportFormats.fullNewspaperZip,
-	},
-	{
-		label: tText('modules/ie-objects/ie-objects___download-deze-pagina-zip'),
-		id: MetadataExportFormats.onePageNewspaperZip,
-	},
 	{
 		label: tText(
 			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-XML'
@@ -94,6 +88,17 @@ export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
 			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-CSV'
 		),
 		id: MetadataExportFormats.csv,
+	},
+];
+
+export const GET_NEWSPAPER_DOWNLOAD_OPTIONS = (): MenuItemInfo[] => [
+	{
+		label: tText('modules/ie-objects/ie-objects___download-alle-paginas-zip'),
+		id: MetadataExportFormats.fullNewspaperZip,
+	},
+	{
+		label: tText('modules/ie-objects/ie-objects___download-deze-pagina-zip'),
+		id: MetadataExportFormats.onePageNewspaperZip,
 	},
 ];
 
@@ -198,38 +203,30 @@ export const ANONYMOUS_ACTION_SORT_MAP = (): MetadataSortMap[] => [
 	{ id: MediaActions.Report },
 ];
 
-export const VISITOR_ACTION_SORT_MAP = (
-	hasAccessToVisitorSpaceOfObject: boolean
-): MetadataSortMap[] => [
-	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export, isPrimary: true }] : []),
-	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
+export const VISITOR_ACTION_SORT_MAP = (canExport: boolean): MetadataSortMap[] => [
+	...(canExport ? [{ id: MediaActions.Export, isPrimary: true }] : []),
+	{ id: MediaActions.RequestMaterial, isPrimary: !canExport },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];
 
-export const KEY_USER_ACTION_SORT_MAP = (
-	hasAccessToVisitorSpaceOfObject: boolean
-): MetadataSortMap[] => [
-	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export, isPrimary: true }] : []),
-	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
+export const KEY_USER_ACTION_SORT_MAP = (canExport: boolean): MetadataSortMap[] => [
+	...(canExport ? [{ id: MediaActions.Export, isPrimary: true }] : []),
+	{ id: MediaActions.RequestMaterial, isPrimary: !canExport },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];
 
-export const MEEMOO_ADMIN_ACTION_SORT_MAP = (
-	hasAccessToVisitorSpaceOfObject: boolean
-): MetadataSortMap[] => [
-	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export, isPrimary: true }] : []),
-	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
+export const MEEMOO_ADMIN_ACTION_SORT_MAP = (canExport: boolean): MetadataSortMap[] => [
+	...(canExport ? [{ id: MediaActions.Export, isPrimary: true }] : []),
+	{ id: MediaActions.RequestMaterial, isPrimary: !canExport },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];
 
-export const CP_ADMIN_ACTION_SORT_MAP = (
-	hasAccessToVisitorSpaceOfObject: boolean
-): MetadataSortMap[] => [
+export const CP_ADMIN_ACTION_SORT_MAP = (canExport: boolean): MetadataSortMap[] => [
 	{ id: MediaActions.RequestMaterial, isPrimary: true },
-	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export }] : []),
+	...(canExport ? [{ id: MediaActions.Export }] : []),
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];
@@ -394,6 +391,12 @@ const getOcrMetadataFields = (simplifiedAlto: SimplifiedAlto | null): MetadataIt
 				data: simplifiedAlto.description.processingStepSettings,
 			});
 		}
+		if (simplifiedAlto.description.width && simplifiedAlto.description.height) {
+			metadataFields.push({
+				title: tText('modules/ie-objects/ie-objects___scanresolutie'),
+				data: simplifiedAlto.description.width + ' x ' + simplifiedAlto.description.height,
+			});
+		}
 	}
 	return metadataFields;
 };
@@ -440,7 +443,7 @@ function renderDate(date: string | null | undefined): string | null {
 
 export const GET_METADATA_FIELDS = (
 	mediaInfo: IeObject,
-	activeFile: IeObjectFile | undefined,
+	activeFile: IeObjectFile | null,
 	simplifiedAlto: SimplifiedAlto | null,
 	locale: Locale,
 	clientUrl: string
@@ -550,35 +553,28 @@ export const GET_METADATA_FIELDS = (
 		},
 		{
 			title: tText('modules/ie-objects/ie-objects___paginanummer'),
-			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
+			data: mediaInfo?.pageNumber,
 		},
 		{
 			title: tText('modules/ie-objects/ie-objects___publicatietype'),
-			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
+			data: mediaInfo.bibframeEdition,
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___teksttype'),
+			data: mediaInfo.bibframeProductionMethod,
 		},
 		{
 			title: tText('modules/ie-objects/ie-objects___afmetingen-in-cm'),
 			data:
 				(mediaInfo?.width
-					? tText('modules/ie-objects/ie-objects___breedte') + mediaInfo?.width + 'cm'
+					? tText('modules/ie-objects/ie-objects___breedte') + mediaInfo?.width
 					: '') +
 					(mediaInfo?.height
-						? ' ' +
-						  tText('modules/ie-objects/ie-objects___hoogte') +
-						  mediaInfo?.height +
-						  'cm'
+						? ' ' + tText('modules/ie-objects/ie-objects___hoogte') + mediaInfo?.height
 						: '') || null,
 		},
 		{
 			title: tText('modules/ie-objects/ie-objects___digitaliseringsdatum'),
-			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
-		},
-		{
-			title: tText('modules/ie-objects/ie-objects___scanresolutie'),
-			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
-		},
-		{
-			title: tText('modules/ie-objects/ie-objects___scanmethoden'),
 			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
 		},
 		{
@@ -690,5 +686,13 @@ export const GET_METADATA_FIELDS = (
 			data: mediaInfo.meemooDescriptionCast,
 		},
 		...getOcrMetadataFields(simplifiedAlto),
+		{
+			title: tHtml('IIIF manifest'),
+			data: mediaInfo?.maintainerIiifAgreement && activeFile?.storedAt && (
+				<a href={activeFile?.storedAt} target="_blank" rel="noreferrer">
+					{tText('manifest link')}
+				</a>
+			),
+		},
 	];
 };

@@ -13,6 +13,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 	id,
 	isOpen,
 	items,
+	renderedItems,
 	trigger,
 	lockScroll = false,
 	className,
@@ -62,7 +63,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 			onClose={() => onClose?.(id)}
 		>
 			<DropdownButton>{trigger}</DropdownButton>
-			<DropdownContent>{renderChildrenRecursively(items)}</DropdownContent>
+			<DropdownContent>{renderedItems ?? renderChildrenRecursively(items!)}</DropdownContent>
 		</Dropdown>
 	);
 };

@@ -8,8 +8,8 @@ import { VisitSummary } from '@shared/components/VisitSummary';
 import { OPTIONAL_LABEL } from '@shared/const';
 import { tHtml } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
-import { VisitStatus } from '@shared/types/visit';
-import { VisitsService } from '@visit-requests/services/visits/visits.service';
+import { VisitStatus } from '@shared/types/visit-request';
+import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
 
 import { DECLINE_REQUEST_FORM_SCHEMA } from './DeclineRequestBlade.const';
 import {
@@ -39,7 +39,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 
 	const onFormSubmit = (values: DeclineRequestFormState) => {
 		selected &&
-			VisitsService.patchById(selected.id, {
+			VisitRequestService.patchById(selected.id, {
 				...selected,
 				status: VisitStatus.DENIED,
 				note: values.reasonForDenial, // TODO check throughput

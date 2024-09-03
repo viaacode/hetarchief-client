@@ -1,6 +1,6 @@
 @use "src/styles/abstracts" as *;
 
-$component: "createdFilterForm";
+$component: "releaseDateFilterForm";
 
 .#{$component} {
 	&__operatorSelect {
