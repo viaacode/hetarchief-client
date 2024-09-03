@@ -73,6 +73,7 @@ export const IMAGE_FORMATS: string[] = [
 export const IMAGE_API_FORMATS: string[] = ['image/jph'];
 export const IMAGE_BROWSE_COPY_FORMATS: string[] = ['image/jpeg'];
 export const XML_FORMATS: string[] = ['application/xml'];
+export const JSON_FORMATS: string[] = ['application/json'];
 export const MIN_LENGTH_SCHEMA_IDENTIFIER_V2 = 36;
 
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
@@ -392,7 +393,7 @@ const getOcrMetadataFields = (simplifiedAlto: SimplifiedAlto | null): MetadataIt
 		}
 		if (simplifiedAlto.description.width && simplifiedAlto.description.height) {
 			metadataFields.push({
-				title: tText('Scanresolutie'),
+				title: tText('modules/ie-objects/ie-objects___scanresolutie'),
 				data: simplifiedAlto.description.width + ' x ' + simplifiedAlto.description.height,
 			});
 		}
@@ -442,7 +443,7 @@ function renderDate(date: string | null | undefined): string | null {
 
 export const GET_METADATA_FIELDS = (
 	mediaInfo: IeObject,
-	activeFile: IeObjectFile | undefined,
+	activeFile: IeObjectFile | null,
 	simplifiedAlto: SimplifiedAlto | null,
 	locale: Locale,
 	clientUrl: string
@@ -559,7 +560,7 @@ export const GET_METADATA_FIELDS = (
 			data: mediaInfo.bibframeEdition,
 		},
 		{
-			title: tText('Teksttype'),
+			title: tText('modules/ie-objects/ie-objects___teksttype'),
 			data: mediaInfo.bibframeProductionMethod,
 		},
 		{
@@ -685,5 +686,13 @@ export const GET_METADATA_FIELDS = (
 			data: mediaInfo.meemooDescriptionCast,
 		},
 		...getOcrMetadataFields(simplifiedAlto),
+		{
+			title: tHtml('IIIF manifest'),
+			data: mediaInfo?.maintainerIiifAgreement && activeFile?.storedAt && (
+				<a href={activeFile?.storedAt} target="_blank" rel="noreferrer">
+					{tText('manifest link')}
+				</a>
+			),
+		},
 	];
 };

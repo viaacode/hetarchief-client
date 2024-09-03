@@ -750,6 +750,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				}),
 				link,
 				previousPage: ROUTES_BY_LOCALE[locale].search,
+				numOfChildren: item.children || 0,
 			};
 		});
 	}, [isKioskUser, isPublicCollection, locale, searchResults?.items, searchResults?.searchTerms]);
