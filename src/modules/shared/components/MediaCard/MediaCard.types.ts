@@ -32,6 +32,7 @@ export interface MediaCardProps {
 	maintainerSlug?: string;
 	hasTempAccess?: boolean;
 	previousPage?: string;
+	numOfChildren?: number;
 }
 
 export type IdentifiableMediaCard = MediaCardProps & {

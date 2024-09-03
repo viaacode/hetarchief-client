@@ -393,7 +393,7 @@ const getOcrMetadataFields = (simplifiedAlto: SimplifiedAlto | null): MetadataIt
 		}
 		if (simplifiedAlto.description.width && simplifiedAlto.description.height) {
 			metadataFields.push({
-				title: tText('Scanresolutie'),
+				title: tText('modules/ie-objects/ie-objects___scanresolutie'),
 				data: simplifiedAlto.description.width + ' x ' + simplifiedAlto.description.height,
 			});
 		}
@@ -560,7 +560,7 @@ export const GET_METADATA_FIELDS = (
 			data: mediaInfo.bibframeEdition,
 		},
 		{
-			title: tText('Teksttype'),
+			title: tText('modules/ie-objects/ie-objects___teksttype'),
 			data: mediaInfo.bibframeProductionMethod,
 		},
 		{
