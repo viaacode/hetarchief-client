@@ -88,6 +88,7 @@ import {
 	GET_NEWSPAPER_DOWNLOAD_OPTIONS,
 	IMAGE_API_FORMATS,
 	IMAGE_FORMATS,
+	JSON_FORMATS,
 	KEY_USER_ACTION_SORT_MAP,
 	KIOSK_ACTION_SORT_MAP,
 	MEDIA_ACTIONS,
@@ -353,12 +354,32 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const currentPage: IeObjectRepresentation[] | undefined =
 		mediaInfo?.pageRepresentations?.[currentPageIndex];
-	const currentRepresentation: IeObjectRepresentation | undefined = currentPage?.[0];
+
+	const getRepresentationByType = useCallback(
+		(mimeTypes: string[]): IeObjectRepresentation | null => {
+			return (
+				currentPage?.find(
+					(representation) =>
+						representation?.files?.find((file) => mimeTypes.includes(file.mimeType))
+				) || null
+			);
+		},
+		[currentPage]
+	);
+
+	const getFileByType = useCallback(
+		(mimeTypes: string[]): IeObjectFile | null => {
+			return (
+				getRepresentationByType(mimeTypes)?.files?.find((file) =>
+					mimeTypes.includes(file.mimeType)
+				) || null
+			);
+		},
+		[getRepresentationByType]
+	);
 
 	// peak file
-	const peakFileStoredAt: string | null =
-		currentRepresentation?.files?.find((file) => file.mimeType === 'application/json')
-			?.storedAt || null;
+	const peakFileStoredAt: string | null = getFileByType(JSON_FORMATS)?.storedAt || null;
 
 	// media info
 	const { data: peakJson } = useGetPeakFile(peakFileStoredAt, {
@@ -375,15 +396,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			)
 		) || [];
 
-	// File containing the consumable media. This can be video, audio, newspaper.
-	const currentViewableFile: IeObjectFile | undefined = currentRepresentation?.files?.find(
-		(file) => [...FLOWPLAYER_FORMATS, ...IMAGE_API_FORMATS].includes(file.mimeType)
-	);
-
 	// Playable url for flowplayer
-	const currentPlayableFile: IeObjectFile | undefined = currentRepresentation?.files?.find(
-		(file) => FLOWPLAYER_FORMATS.includes(file?.mimeType)
-	);
+	const currentPlayableFile: IeObjectFile | null = getFileByType(FLOWPLAYER_FORMATS);
 	const fileStoredAt: string | null = currentPlayableFile?.storedAt ?? null;
 	const {
 		data: playableUrl,
@@ -517,7 +531,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const handleSearch = useCallback(
 		(newSearchTerms: string): void => {
-			console.log('handleSearch', { newSearchTerms });
 			if (newSearchTerms === '') {
 				// Reset search
 				// Zoom to whole page
@@ -1081,7 +1094,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const handleChangeSearchIndex = useCallback(
 		async (searchResultIndex: number) => {
-			console.log('handleChangeSearchIndex');
 			if (!searchResults) {
 				return;
 			}
@@ -1092,7 +1104,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				return;
 			}
 			if (searchResult.pageIndex !== currentPageIndex) {
-				console.log('setCurrentPageIndex', searchResult.pageIndex);
 				setIsLoadingPageImage(true);
 				setCurrentPageIndex(searchResult.pageIndex, 'replaceIn');
 			}
@@ -1101,7 +1112,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	);
 
 	const handleClearSearch = () => {
-		console.log('handleClearSearch');
 		setSearchTermsTemp('');
 		setSearchTerms('');
 		setHighlightedSearchTerms('');
@@ -1263,20 +1273,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				return !isErrorPlayableUrl && !!playableUrl && !!currentPlayableFile;
 
 			case IeObjectType.Newspaper: {
-				return !!currentRepresentation?.files?.find((file) =>
-					IMAGE_API_FORMATS.includes(file.mimeType)
-				);
+				return !!getFileByType(IMAGE_API_FORMATS)?.storedAt;
 			}
 
 			default:
 				return false;
 		}
 	}, [
-		currentPlayableFile,
-		currentRepresentation?.files,
-		isErrorPlayableUrl,
 		mediaInfo?.dctermsFormat,
+		isErrorPlayableUrl,
 		playableUrl,
+		currentPlayableFile,
+		getFileByType,
 	]);
 
 	const tabs: TabProps[] = useMemo(() => {
@@ -1428,7 +1436,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				handleOnPlay();
 				setHasNewsPaperBeenRendered(true);
 			}
-			console.log('rendering iiif viewer with ', { isTextOverlayVisible });
 			return (
 				<>
 					{isLoadingPageImage && (
@@ -1485,6 +1492,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			);
 		}
 
+		const playableRepresentation = getRepresentationByType(FLOWPLAYER_FORMATS);
 		const shared: Partial<FlowPlayerProps> = {
 			className: clsx('p-object-detail__flowplayer', {
 				'p-object-detail__flowplayer--with-slider': showFragmentSlider,
@@ -1501,11 +1509,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			peakColorInactive: '#adadad', // zinc
 			peakColorActive: '#00857d', // $teal
 			peakHeightFactor: 0.6,
-			start: currentRepresentation?.schemaStartTime
-				? convertDurationStringToSeconds(currentRepresentation?.schemaStartTime)
+			start: playableRepresentation?.schemaStartTime
+				? convertDurationStringToSeconds(playableRepresentation?.schemaStartTime)
 				: undefined,
-			end: currentRepresentation?.schemaEndTime
-				? convertDurationStringToSeconds(currentRepresentation?.schemaEndTime)
+			end: playableRepresentation?.schemaEndTime
+				? convertDurationStringToSeconds(playableRepresentation?.schemaEndTime)
 				: undefined,
 		};
 
@@ -1781,7 +1789,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		const showAlert = !mediaInfo.description;
 		const metaDataFields = GET_METADATA_FIELDS(
 			mediaInfo,
-			currentViewableFile,
+			getFileByType([...FLOWPLAYER_FORMATS, ...IMAGE_API_FORMATS]),
 			simplifiedAltoInfo || null,
 			locale,
 			publicRuntimeConfig.CLIENT_URL
@@ -2107,7 +2115,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						label={tText('modules/ie-objects/object-detail-page___vorige')}
 						variants={['text']}
 						onClick={() => {
-							console.log('setCurrentPageIndex', currentPageIndex - 1);
 							setCurrentPageIndex(currentPageIndex - 1, 'replaceIn');
 						}}
 						disabled={currentPageIndex === 0}
@@ -2133,7 +2140,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						label={tText('modules/ie-objects/object-detail-page___volgende')}
 						variants={['text']}
 						onClick={() => {
-							console.log('setCurrentPageIndex', currentPageIndex + 1);
 							setCurrentPageIndex(currentPageIndex + 1, 'replaceIn');
 						}}
 						disabled={currentPageIndex === iiifViewerImageInfos.length - 1}
@@ -2154,7 +2160,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							fileRepresentations={representationsToDisplay}
 							activeIndex={currentPageIndex}
 							setActiveIndex={(index) => {
-								console.log('setCurrentPageIndex', index);
 								setCurrentPageIndex(index, 'replaceIn');
 							}}
 						/>

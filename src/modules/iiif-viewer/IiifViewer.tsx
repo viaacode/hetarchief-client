@@ -176,10 +176,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				highlightedAltoTexts: AltoTextLine[],
 				selectedHighlightedAltoText: AltoTextLine | null
 			) => {
-				console.log('updateHighlightedAltoTexts: ', {
-					highlightedAltoTexts,
-					selectedHighlightedAltoText,
-				});
 				if (isServerSideRendering()) {
 					return;
 				}
@@ -252,7 +248,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 		const applyInitialZoomAndPan = useCallback(
 			(openSeadragonViewerTemp: Viewer, openSeadragonLibTemp: any) => {
-				console.log('applyInitialZoomAndPan');
 				openSeadragonViewerTemp.addHandler('open', () => {
 					// When the viewer is initialized, set the desired zoom and pan
 					if (
@@ -309,8 +304,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		}, [id, openSeaDragonViewer, router]);
 
 		const addEventListeners = useCallback((openSeadragonViewerTemp: Viewer) => {
-			console.log('addEventListeners');
-
 			// Keep track of the current zoom and location in the url
 			openSeadragonViewerTemp.addHandler('viewport-change', handleViewportChanged);
 
@@ -389,7 +382,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		 */
 
 		const iiifZoom = (multiplier: number): void => {
-			console.log('iiifZoom');
 			if (!openSeaDragonViewer) {
 				return;
 			}
@@ -407,7 +399,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		};
 
 		const iiifGoToHome = (): void => {
-			console.log('iiifGoToHome');
 			openSeaDragonViewer?.viewport.goHome(false);
 		};
 
@@ -447,7 +438,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		};
 
 		const iiifZoomTo = (x: number, y: number): void => {
-			console.log('iiifZoomTo');
 			if (!openSeaDragonViewer) {
 				console.error('iiifZoomToRect failed because openSeaDragonViewer is undefined');
 				return;
@@ -491,7 +481,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			width: number;
 			height: number;
 		}): void => {
-			console.log('iiifZoomToRect', { x, y, width, height });
 			if (isNil(x) || isNil(y) || isNil(width) || isNil(height)) {
 				throw new Error('Invalid rect provided to iiifZoomToRect');
 			}
@@ -528,7 +517,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		 */
 
 		const renderIiifViewerButtons = () => {
-			console.log('render iiif buttons', { isTextOverlayVisible });
 			return (
 				<div className={styles['c-iiif-viewer__iiif__controls']}>
 					{!iiifGridViewEnabled && (
