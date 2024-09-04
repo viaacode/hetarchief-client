@@ -17,8 +17,6 @@ RUN adduser -S nextjs -u 1001
 RUN chown -R nextjs:nodejs /app &&\
   chmod -R g+x /app
 
-RUN cp ./scripts/next-config-to-env-file.js ./
-
 USER nextjs
 
 EXPOSE 3000

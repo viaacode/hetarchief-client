@@ -107,13 +107,10 @@ module.exports = withBundleAnalyzer(
 			FLOW_PLAYER_TOKEN: process.env.FLOW_PLAYER_TOKEN,
 			FLOW_PLAYER_ID: process.env.FLOW_PLAYER_ID,
 			GOOGLE_TAG_MANAGER_ID: process.env.GOOGLE_TAG_MANAGER_ID,
+			ENABLE_GOOGLE_INDEXING: process.env.ENABLE_GOOGLE_INDEXING,
 		},
 		async headers() {
-			if (
-				process.env.PROXY_URL?.includes('-qas.') ||
-				process.env.PROXY_URL?.includes('-qas-') ||
-				process.env.PROXY_URL?.includes('localhost:3200')
-			) {
+			if (process.env.ENABLE_GOOGLE_INDEXING === 'false') {
 				return [
 					{
 						source: '/',
