@@ -1,0 +1,12 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-autocomplete-field-input";
+
+.#{$component} {
+	width: 100%;
+
+	&__label {
+		display: block;
+		margin-bottom: $spacer-sm;
+	}
+}

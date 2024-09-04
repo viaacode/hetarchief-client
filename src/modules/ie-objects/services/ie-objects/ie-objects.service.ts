@@ -166,4 +166,18 @@ export class IeObjectsService {
 			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/schemaIdentifierLookup/${schemaIdentifierV2}`)
 			.json();
 	}
+
+	static getAutocompleteFieldOptions(field: string, query: string): Promise<string[]> {
+		return ApiService.getApi()
+			.get(
+				stringifyUrl({
+					url: `${IE_OBJECTS_SERVICE_BASE_URL}/metadata/autocomplete`,
+					query: {
+						field,
+						query,
+					},
+				})
+			)
+			.json();
+	}
 }
