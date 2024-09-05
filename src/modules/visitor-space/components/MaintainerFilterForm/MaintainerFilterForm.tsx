@@ -121,7 +121,7 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 					onSearch={noop}
 				/>
 
-				<div className="u-my-32">
+				<div className="c-filter-form__body--scrollable">
 					{filteredBuckets.length === 0 && (
 						<p className="u-color-neutral u-text-center">
 							{tHtml(

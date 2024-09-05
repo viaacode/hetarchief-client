@@ -116,7 +116,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 					onSearch={noop}
 				/>
 
-				<div className="u-my-32">
+				<div className="c-filter-form__body--scrollable">
 					{filterOptions.length === 0 && (
 						<p className="u-color-neutral u-text-center">
 							{tHtml(
