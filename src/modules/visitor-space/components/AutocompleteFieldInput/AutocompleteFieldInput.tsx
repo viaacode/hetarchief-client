@@ -1,5 +1,6 @@
 import { type SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { debounce } from 'lodash-es';
 import { type FC } from 'react';
 import { type ActionMeta, type SingleValue } from 'react-select';
 import AsyncSelect from 'react-select/async';
@@ -25,12 +26,20 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps> = ({
 	fieldName,
 	label,
 }) => {
-	const handleLoadOptions = async (
-		inputValue: string
-	): Promise<{ label: string; value: string }[]> => {
-		const options = await IeObjectsService.getAutocompleteFieldOptions(fieldName, inputValue);
-		return options.map((option) => ({ label: option, value: option }));
-	};
+	const handleLoadOptions = debounce(
+		async (inputValue: string): Promise<{ label: string; value: string }[]> => {
+			if (inputValue.length < 3) {
+				return [];
+			}
+			const options = await IeObjectsService.getAutocompleteFieldOptions(
+				fieldName,
+				inputValue
+			);
+			return options.map((option) => ({ label: option, value: option }));
+		},
+		300,
+		{ leading: true, trailing: true }
+	);
 
 	function handleChange(
 		newValue: SingleValue<SelectOption>,
