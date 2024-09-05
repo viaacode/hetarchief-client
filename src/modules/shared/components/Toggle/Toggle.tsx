@@ -30,8 +30,8 @@ const Toggle: FC<ToggleProps> = ({ className, options, onChange, bordered, dark 
 						icon={renderIcon(option.iconName)}
 						variants="text"
 						onClick={() => onChange(option.id)}
-						title={option.title}
-						aria-label={option.title}
+						title={option?.title}
+						aria-label={option?.title}
 					/>
 				);
 			})}
