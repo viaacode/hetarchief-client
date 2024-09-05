@@ -8,6 +8,7 @@ export interface ToggleOption {
 	id: string;
 	iconName: IconName;
 	active: boolean;
+	title?: string;
 }
 
 export interface ToggleProps extends DefaultComponentProps {
