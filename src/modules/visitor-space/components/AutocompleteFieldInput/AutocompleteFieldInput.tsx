@@ -1,7 +1,6 @@
 import { type SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { debounce } from 'lodash-es';
-import { type FC } from 'react';
+import { type FC, useCallback } from 'react';
 import { type ActionMeta, type SingleValue } from 'react-select';
 import AsyncSelect from 'react-select/async';
 
@@ -26,19 +25,17 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps> = ({
 	fieldName,
 	label,
 }) => {
-	const handleLoadOptions = debounce(
-		async (inputValue: string): Promise<{ label: string; value: string }[]> => {
+	const handleLoadOptions = useCallback(
+		(inputValue: string, callback: (newOptions: SelectOption[]) => void): void => {
 			if (inputValue.length < 3) {
-				return [];
+				callback([]);
+				return;
 			}
-			const options = await IeObjectsService.getAutocompleteFieldOptions(
-				fieldName,
-				inputValue
-			);
-			return options.map((option) => ({ label: option, value: option }));
+			IeObjectsService.getAutocompleteFieldOptions(fieldName, inputValue).then((options) => {
+				callback(options.map((option) => ({ label: option, value: option })));
+			});
 		},
-		300,
-		{ leading: true, trailing: true }
+		[fieldName]
 	);
 
 	function handleChange(
@@ -61,9 +58,7 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps> = ({
 			loadOptions={handleLoadOptions}
 			value={value ? { label: value, value: value } : undefined}
 			placeholder={label}
-			noOptionsMessage={() =>
-				!value ? tText('Begin met typen...') : tText('Geen resultaten gevonden')
-			}
+			noOptionsMessage={() => tText('Geen resultaten gevonden')}
 			loadingMessage={() => tText('Laden...')}
 		/>
 	);
