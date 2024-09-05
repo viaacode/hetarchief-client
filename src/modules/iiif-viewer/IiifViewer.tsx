@@ -273,42 +273,46 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			[]
 		);
 
-		const handleViewportChanged = useCallback(() => {
-			if (!openSeaDragonViewer) {
-				return;
-			}
-			if (!window.location.href.includes(id)) {
-				// Do not update query params if we're not on the detail page anymore
-				// since the update viewport event still fires when navigating away from the detail page
-				// https://meemoo.atlassian.net/browse/ARC-2228
-				return;
-			}
-			const zoomLevel = openSeaDragonViewer.viewport.getZoom();
-			const centerPoint = openSeaDragonViewer.viewport.getCenter();
-			// Use window to parse query params, since this native event listener doesn't have access to the update-to-date router.query query params
-			// We also include ...router.query since route params (eg: slug and ieObjectId) are also part of the router.query object
-			const parsedUrl = parseUrl(window.location.href);
-			router.replace(
-				{
-					query: {
-						...router.query,
-						...parsedUrl.query,
-						zoomLevel: round(zoomLevel, 3),
-						focusX: round(centerPoint.x, 3),
-						focusY: round(centerPoint.y, 3),
+		const handleViewportChanged = useCallback(
+			(openSeadragonViewerTemp: Viewer) => {
+				if (!openSeadragonViewerTemp) {
+					return;
+				}
+				if (!window.location.href.includes(id)) {
+					// Do not update query params if we're not on the detail page anymore
+					// since the update viewport event still fires when navigating away from the detail page
+					// https://meemoo.atlassian.net/browse/ARC-2228
+					return;
+				}
+				const zoomLevel = openSeadragonViewerTemp.viewport.getZoom();
+				const centerPoint = openSeadragonViewerTemp.viewport.getCenter();
+				// Use window to parse query params, since this native event listener doesn't have access to the update-to-date router.query query params
+				// We also include ...router.query since route params (eg: slug and ieObjectId) are also part of the router.query object
+				const parsedUrl = parseUrl(window.location.href);
+				router.replace(
+					{
+						query: {
+							...router.query,
+							...parsedUrl.query,
+							zoomLevel: round(zoomLevel, 3),
+							focusX: round(centerPoint.x, 3),
+							focusY: round(centerPoint.y, 3),
+						},
 					},
-				},
-				undefined,
-				{ shallow: true }
-			);
-		}, [id, openSeaDragonViewer, router]);
+					undefined,
+					{ shallow: true }
+				);
+			},
+			[id, router]
+		);
 
 		const addEventListeners = useCallback((openSeadragonViewerTemp: Viewer) => {
 			// Keep track of the current zoom and location in the url
-			openSeadragonViewerTemp.addHandler('viewport-change', handleViewportChanged);
+			const handleViewportChangeTemp = () => handleViewportChanged(openSeadragonViewerTemp);
+			openSeadragonViewerTemp.addHandler('viewport-change', handleViewportChangeTemp);
 
 			// Keep track of the loading state of the viewer page
-			openSeadragonViewerTemp.addHandler('open', () => {
+			const handleOpenTemp = () => {
 				setIsLoading(true);
 				const tiledImage = openSeadragonViewerTemp.world.getItemAt(0);
 				if (tiledImage.getFullyLoaded()) {
@@ -316,7 +320,13 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				} else {
 					tiledImage.addOnceHandler('fully-loaded-change', () => setIsLoading(false));
 				}
-			});
+			};
+			openSeadragonViewerTemp.addHandler('open', handleOpenTemp);
+
+			return () => {
+				openSeadragonViewerTemp.removeHandler('viewport-change', handleViewportChangeTemp);
+				openSeadragonViewerTemp.removeHandler('open', handleOpenTemp);
+			};
 
 			// Only register the viewport-change event once when loading the iiif viewer
 			// eslint-disable-next-line react-hooks/exhaustive-deps
