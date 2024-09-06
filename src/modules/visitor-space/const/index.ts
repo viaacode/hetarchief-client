@@ -21,7 +21,7 @@ import { SearchFilterId, SearchSortProp, VisitorSpaceStatus } from '../types';
 
 import { AdvancedFilterArrayParam } from './query-params';
 
-export const PUBLIC_COLLECTION = ''; // No maintainer query param means the public collection should be selected
+export const GLOBAL_ARCHIVE = ''; // No maintainer query param means the public collection should be selected
 
 export const DEFAULT_VISITOR_SPACE_COLOR = '#00c8aa';
 
@@ -42,6 +42,7 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
 	[SearchFilterId.Created]: undefined,
 	[SearchFilterId.Published]: undefined,
 	[SearchFilterId.Creator]: undefined,
+	[SearchFilterId.NewspaperSeriesName]: undefined,
 	[SearchFilterId.Genre]: undefined,
 	[SearchFilterId.Keywords]: undefined,
 	[SearchFilterId.Language]: undefined,
@@ -73,6 +74,7 @@ export const SEARCH_PAGE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<any
 	[SearchFilterId.Published]: AdvancedFilterArrayParam,
 	[SearchFilterId.ReleaseDate]: AdvancedFilterArrayParam,
 	[SearchFilterId.Creator]: StringParam,
+	[SearchFilterId.NewspaperSeriesName]: StringParam,
 	[SearchFilterId.Genre]: ArrayParam,
 	[SearchFilterId.Keywords]: ArrayParam,
 	[SearchFilterId.Language]: ArrayParam,

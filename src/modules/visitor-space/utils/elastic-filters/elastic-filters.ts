@@ -101,6 +101,12 @@ export const mapFiltersToElastic = (query: SearchPageQueryParams): IeObjectsSear
 			operator: IeObjectsSearchOperator.CONTAINS,
 			value: (query[SearchFilterId.Creator] as string) || '',
 		},
+		// Newspaper Series Name
+		{
+			field: IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME,
+			operator: IeObjectsSearchOperator.IS,
+			value: (query[SearchFilterId.NewspaperSeriesName] as string) || '',
+		},
 		// Genre
 		{
 			field: IeObjectsSearchFilterField.GENRE,

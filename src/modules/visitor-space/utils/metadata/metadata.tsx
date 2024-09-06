@@ -69,6 +69,7 @@ export const getFilterLabel = (prop: MetadataProp): string => {
 				'modules/visitor-space/utils/metadata/metadata___uitgavedatum'
 			),
 			[MetadataProp.Creator]: tText('modules/visitor-space/utils/metadata/metadata___maker'),
+			[MetadataProp.NewspaperSeriesName]: tText('Krant reeks'),
 			[MetadataProp.Description]: tText(
 				'modules/visitor-space/utils/metadata/metadata___beschrijving'
 			),

@@ -13,6 +13,7 @@ import {
 } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import MaintainerFilterForm from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm';
 import { MediumFilterForm } from '@visitor-space/components/MediumFilterForm';
+import { NewspaperSeriesNameFilterForm } from '@visitor-space/components/NewspaperSeriesNameFilterForm/NewspaperSeriesNameFilterForm';
 import { ReleaseDateFilterForm } from '@visitor-space/components/ReleaseDateFilterForm';
 import { SearchFilterId } from '@visitor-space/types';
 
@@ -23,8 +24,16 @@ const ALL_TABS: SearchPageMediaType[] = [
 	SearchPageMediaType.Newspaper,
 ];
 
+/**
+ * Filters for the search page
+ * @param isGlobalArchive is the user currently looking in the global archive or in one specific archive of one maintainer
+ * @param isKioskUser
+ * @param isKeyUser
+ * @param activeTab
+ * @constructor
+ */
 export const SEARCH_PAGE_FILTERS = (
-	isPublicCollection: boolean,
+	isGlobalArchive: boolean,
 	isKioskUser: boolean,
 	isKeyUser: boolean,
 	activeTab: SearchPageMediaType
@@ -49,7 +58,7 @@ export const SEARCH_PAGE_FILTERS = (
 		type: FilterMenuType.Checkbox,
 		tabs: ALL_TABS,
 		isDisabled: () => {
-			return !isPublicCollection || !isKeyUser;
+			return !isGlobalArchive || !isKeyUser;
 		},
 	},
 	{
@@ -72,7 +81,7 @@ export const SEARCH_PAGE_FILTERS = (
 		type: FilterMenuType.Checkbox,
 		tabs: ALL_TABS,
 		isDisabled: () => {
-			return !isPublicCollection || isKioskUser;
+			return !isGlobalArchive || isKioskUser;
 		},
 	},
 	{
@@ -92,16 +101,16 @@ export const SEARCH_PAGE_FILTERS = (
 		type: FilterMenuType.Modal,
 		tabs: ALL_TABS,
 		isDisabled: () => {
-			return !isPublicCollection || isKioskUser;
+			return !isGlobalArchive || isKioskUser;
 		},
 	},
-	// {
-	// 	id: SearchFilterId.NewspaperSeriesName,
-	// 	label: tText('modules/visitor-space/const/visitor-space-filters___reeks'),
-	// 	form: NewspaperSeriesTitleFilterForm,
-	// 	type: FilterMenuType.Modal,
-	// 	tabs: [SearchPageMediaType.Newspaper],
-	// },
+	{
+		id: SearchFilterId.NewspaperSeriesName,
+		label: tText('Krant reeks'),
+		form: NewspaperSeriesNameFilterForm,
+		type: FilterMenuType.Modal,
+		tabs: [SearchPageMediaType.Newspaper],
+	},
 	{
 		id: SearchFilterId.ReleaseDate,
 		label: tText('modules/visitor-space/const/visitor-space-filters___uitgavedatum'),

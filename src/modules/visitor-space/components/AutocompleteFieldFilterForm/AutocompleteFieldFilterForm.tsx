@@ -8,10 +8,7 @@ import { StringParam, useQueryParam } from 'use-query-params';
 import { object as yupObject, string as yupString } from 'yup';
 
 import AutocompleteFieldInput from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
-import {
-	AutocompleteField,
-	type OnFilterMenuFormSubmit,
-} from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { type DefaultFilterFormChildrenParams, type SearchFilterId } from '@visitor-space/types';
 
 import styles from './AutocompleteFieldFilterForm.module.scss';
@@ -22,11 +19,12 @@ const AutocompleteFieldFilterForm: FC<{
 	searchFilterId: SearchFilterId;
 	filterTitle: string;
 	fieldLabel: string;
-	onFormSubmit: OnFilterMenuFormSubmit;
-}> = ({ children, className, searchFilterId, filterTitle, fieldLabel, onFormSubmit }) => {
+}> = ({ children, className, searchFilterId, filterTitle, fieldLabel }) => {
 	const [initial] = useQueryParam(searchFilterId, StringParam);
 
-	const [form, setForm] = useState<{ value: string }>({ value: initial || '' });
+	const [form, setForm] = useState<{ value: string }>({
+		value: initial || '',
+	});
 	const {
 		clearErrors,
 		control,
@@ -93,7 +91,7 @@ const AutocompleteFieldFilterForm: FC<{
 			</div>
 
 			{children({
-				values: form,
+				values: { [searchFilterId]: form.value },
 				reset: () => {
 					setForm({ value: '' });
 					clearErrors();

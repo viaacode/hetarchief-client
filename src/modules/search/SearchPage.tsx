@@ -93,7 +93,6 @@ import { type AdvancedFilterFormState } from '@visitor-space/components/Advanced
 import { type ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
 import { type ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
 import { type ConsultablePublicDomainFilterFormState } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm.types';
-import { type CreatorFilterFormState } from '@visitor-space/components/CreatorFilterForm';
 import { type DurationFilterFormState } from '@visitor-space/components/DurationFilterForm';
 import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
 import { type FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
@@ -104,7 +103,7 @@ import { type MaintainerFilterFormState } from '@visitor-space/components/Mainta
 import { type MediumFilterFormState } from '@visitor-space/components/MediumFilterForm';
 import { type ReleaseDateFilterFormState } from '@visitor-space/components/ReleaseDateFilterForm';
 import {
-	PUBLIC_COLLECTION,
+	GLOBAL_ARCHIVE,
 	SEARCH_PAGE_QUERY_PARAM_CONFIG,
 	SEARCH_RESULTS_PAGE_SIZE,
 	VISITOR_SPACE_QUERY_PARAM_INIT,
@@ -123,7 +122,7 @@ const labelKeys = {
 
 const getDefaultOption = (): VisitorSpaceDropdownOption => {
 	return {
-		slug: PUBLIC_COLLECTION,
+		slug: GLOBAL_ARCHIVE,
 		label: tText(
 			'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-publieke-catalogus'
 		),
@@ -228,12 +227,13 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			...query,
 			[SearchFilterId.Maintainer]: undefined,
 		});
-		return PUBLIC_COLLECTION;
+		return GLOBAL_ARCHIVE;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [queryParamMaintainer, accessibleVisitorSpaceRequests]);
 
-	const isPublicCollection =
-		activeVisitorSpaceSlug === undefined || activeVisitorSpaceSlug === PUBLIC_COLLECTION;
+	// Global archive as opposed to the archive of one visitor space
+	const isGlobalArchive =
+		activeVisitorSpaceSlug === undefined || activeVisitorSpaceSlug === GLOBAL_ARCHIVE;
 
 	/**
 	 * Data
@@ -294,7 +294,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	useEffect(() => {
 		// Filter out all disabled query param keys/ids
 		const disabledFilterKeys: SearchFilterId[] = SEARCH_PAGE_FILTERS(
-			isPublicCollection,
+			isGlobalArchive,
 			isKioskUser,
 			isKeyUser,
 			format
@@ -325,7 +325,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		setQuery(strippedQuery);
 		// Make sure the dependency array contains the same items as passed to VISITOR_SPACE_FILTERS
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isKeyUser, isPublicCollection]);
+	}, [isKeyUser, isGlobalArchive]);
 
 	useEffect(() => {
 		// Ward: wait until items are rendered on the screen before scrolling
@@ -425,10 +425,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const filters = useMemo(
 		() =>
-			SEARCH_PAGE_FILTERS(isPublicCollection, isKioskUser, isKeyUser, format).filter(
+			SEARCH_PAGE_FILTERS(isGlobalArchive, isKioskUser, isKeyUser, format).filter(
 				({ isDisabled, tabs }) => !isDisabled?.() && tabs.includes(format)
 			),
-		[isPublicCollection, isKioskUser, isKeyUser, format]
+		[isGlobalArchive, isKioskUser, isKeyUser, format]
 	);
 
 	/**
@@ -532,7 +532,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				break;
 
 			case SearchFilterId.Creator:
-				data = (values as CreatorFilterFormState).creator;
+				data = (values as { creator: string }).creator;
+				break;
+
+			case SearchFilterId.NewspaperSeriesName:
+				data = (values as { newspaperSeriesName: string }).newspaperSeriesName;
 				break;
 
 			case SearchFilterId.Genre:
@@ -630,6 +634,12 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 						`${tag.value}`.replace(tagPrefix(tag.key), ''),
 					];
 					break;
+				case SearchFilterId.NewspaperSeriesName:
+					updatedQuery[tag.key] = [
+						...((updatedQuery[tag.key] as Array<unknown>) || []),
+						`${tag.value}`.replace(tagPrefix(tag.key), ''),
+					];
+					break;
 
 				case SearchFilterId.Advanced:
 				case SearchFilterId.ReleaseDate:
@@ -686,7 +696,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		setQuery({
 			...query,
 			page: undefined,
-			[SearchFilterId.Maintainer]: id === PUBLIC_COLLECTION ? undefined : id,
+			[SearchFilterId.Maintainer]: id === GLOBAL_ARCHIVE ? undefined : id,
 		});
 	};
 
@@ -712,7 +722,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 			// Only show pill when the public collection is selected (https://meemoo.atlassian.net/browse/ARC-1210?focusedCommentId=39708)
 			const hasTempAccess =
-				!isKioskUser && isPublicCollection && hasAccessToVisitorSpaceOfObject;
+				!isKioskUser && isGlobalArchive && hasAccessToVisitorSpaceOfObject;
 
 			const link: string | undefined = stringifyUrl({
 				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${item.maintainerSlug}/${
@@ -753,7 +763,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				numOfChildren: item.children || 0,
 			};
 		});
-	}, [isKioskUser, isPublicCollection, locale, searchResults?.items, searchResults?.searchTerms]);
+	}, [isKioskUser, isGlobalArchive, locale, searchResults?.items, searchResults?.searchTerms]);
 
 	const openAndScrollToAdvancedFilters = () => {
 		setQuery({ filter: SearchFilterId.Advanced });
@@ -806,7 +816,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		];
 
 		const dynamicBreadcrumbs: Breadcrumb[] =
-			!isNil(activeVisitRequest) && activeVisitRequest.spaceMaintainerId !== PUBLIC_COLLECTION
+			!isNil(activeVisitRequest) && activeVisitRequest.spaceMaintainerId !== GLOBAL_ARCHIVE
 				? [
 						{
 							label: activeVisitRequest?.spaceName || '',
@@ -885,7 +895,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	};
 
 	const renderTempAccessLabel = () => {
-		if (isMeemooAdmin || !isPublicCollection || isKioskUser || !isLoggedIn) {
+		if (isMeemooAdmin || !isGlobalArchive || isKioskUser || !isLoggedIn) {
 			// Don't show the temporary access label for:
 			// - MEEMOO admins, since they have access to all visitor spaces
 			// - when a visitor space is selected (https://meemoo.atlassian.net/browse/ARC-1210?focusedCommentId=39708)
@@ -897,7 +907,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		// Strip out public collection and own visitor space (cp)
 		let visitorSpaces: VisitorSpaceDropdownOption[] = visitorSpaceDropdownOptions.filter(
 			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
-				const isPublicCollection = visitorSpace.slug == PUBLIC_COLLECTION;
+				const isPublicCollection = visitorSpace.slug == GLOBAL_ARCHIVE;
 				const isOwnVisitorSpace = isCPAdmin && visitorSpace.slug === user?.organisationId;
 
 				return !isPublicCollection && !isOwnVisitorSpace;
@@ -1030,8 +1040,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 												selectedOptionId={
 													isKioskUser
 														? user?.visitorSpaceSlug ?? ''
-														: activeVisitorSpaceSlug ||
-														  PUBLIC_COLLECTION
+														: activeVisitorSpaceSlug || GLOBAL_ARCHIVE
 												}
 												onSelected={onVisitorSpaceSelected}
 											/>

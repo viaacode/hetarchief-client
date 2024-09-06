@@ -84,7 +84,6 @@ export interface DefaultFilterFormProps<Values extends FieldValues>
 	}: DefaultFilterFormChildrenParams<Values>) => ReactNode;
 	disabled?: boolean;
 	values?: Values;
-	onFormSubmit: OnFilterMenuFormSubmit;
 }
 
 export interface InlineFilterFormProps<Values = unknown> extends DefaultComponentProps {

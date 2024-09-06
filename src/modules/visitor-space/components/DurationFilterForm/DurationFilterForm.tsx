@@ -20,7 +20,7 @@ import {
 } from '@visitor-space/components/DurationFilterForm/DurationFilterForm.types';
 import { getOperators } from '@visitor-space/utils/metadata';
 
-import { MetadataProp } from '../../types';
+import { MetadataProp, SearchFilterId } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import { DurationInput } from '../DurationInput';
 import { defaultValue } from '../DurationInput/DurationInput';
@@ -39,7 +39,7 @@ const defaultValues: DurationFilterFormState = {
 const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, disabled }) => {
 	const [query] = useQueryParams(DURATION_FILTER_FORM_QUERY_PARAM_CONFIG);
 
-	const initial = query?.duration?.[0];
+	const initial = query?.[SearchFilterId.Duration]?.[0];
 
 	const [showRange, setShowRange] = useState(isRange(initial?.op));
 	const [form, setForm] = useState<DurationFilterFormState>(defaultValues);
@@ -61,7 +61,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 	// Effects
 
 	useEffect(() => {
-		setValue('duration', form.duration);
+		setValue(SearchFilterId.Duration, form[SearchFilterId.Duration]);
 		setValue('operator', form.operator);
 
 		setShowRange(isRange(form.operator));
@@ -71,7 +71,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 		if (initial) {
 			const { val, op } = initial;
 
-			val && setForm((oldForm) => ({ ...oldForm, duration: val }));
+			val && setForm((oldForm) => ({ ...oldForm, [SearchFilterId.Duration]: val }));
 			op && setForm((oldForm) => ({ ...oldForm, operator: op as Operator }));
 		}
 	}, [initial]);
@@ -79,7 +79,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 	// Events
 
 	const onChangeDuration = (e: ChangeEvent<HTMLInputElement>) => {
-		setForm((oldForm) => ({ ...oldForm, duration: e.target.value }));
+		setForm((oldForm) => ({ ...oldForm, [SearchFilterId.Duration]: e.target.value }));
 	};
 
 	return (
@@ -114,7 +114,8 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 
 											if (value !== form.operator) {
 												setForm({
-													duration: defaultValues.duration,
+													[SearchFilterId.Duration]:
+														defaultValues.duration,
 													operator: value,
 												});
 											}
@@ -131,9 +132,11 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 				<FormControl
 					className="c-form-control--label-hidden"
 					errors={
-						!isNil(errors.duration?.message) ? [errors.duration?.message] : undefined
+						!isNil(errors[SearchFilterId.Duration]?.message)
+							? [errors[SearchFilterId.Duration]?.message]
+							: undefined
 					}
-					id={labelKeys.duration}
+					id={labelKeys[SearchFilterId.Duration]}
 					label={tHtml(
 						'modules/visitor-space/components/duration-filter-form/duration-filter-form___waarde'
 					)}
@@ -155,14 +158,14 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 												`${defaultValue}${SEPARATOR}${defaultValue}`
 											}
 											onChange={onChangeDuration}
-											placeholder={form.duration}
+											placeholder={form[SearchFilterId.Duration]}
 										/>
 									) : (
 										<DurationInput
 											{...refless}
-											value={form.duration || defaultValue}
+											value={form[SearchFilterId.Duration] || defaultValue}
 											onChange={onChangeDuration}
-											placeholder={form.duration}
+											placeholder={form[SearchFilterId.Duration]}
 										/>
 									)}
 								</div>
