@@ -1431,7 +1431,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 
 		// IIIF viewer
-		if (isNewspaper && !!mediaInfo) {
+		if (isNewspaper && !!mediaInfo && mediaInfo.pageRepresentations?.length) {
 			if (!hasNewsPaperBeenRendered) {
 				handleOnPlay();
 				setHasNewsPaperBeenRendered(true);
@@ -1482,7 +1482,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			);
 		}
 
-		if (!playableUrl || !currentPlayableFile) {
+		if (!playableUrl || !currentPlayableFile || !mediaInfo?.pageRepresentations?.length) {
 			return (
 				<ObjectPlaceholder
 					{...noLicensePlaceholder()}
@@ -1886,28 +1886,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							);
 						}
 					})}
-				</MetadataList>
-
-				<MetadataList disableContainerQuery={true}>
-					{isNewspaper && !!fallenNames?.length && (
-						<Metadata
-							title={tText('modules/ie-objects/object-detail-page___namenlijst')}
-							key="metadata-fallen-names-list"
-							renderTitleRight={
-								<div className="u-color-neutral u-font-size-14 u-font-weight-400">
-									{tHtml(
-										'modules/ie-objects/object-detail-page___a-href-namenlijst-gesneuvelden-wat-is-dit-a'
-									)}
-								</div>
-							}
-						>
-							<NamesList
-								names={fallenNames}
-								onZoomToLocation={iiifViewerReference.current?.iiifZoomTo}
-							/>
-						</Metadata>
-					)}
-
 					{!!rightsAttributionText && (
 						<>
 							<Alert
@@ -1948,6 +1926,27 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								{rightsStatusInfo?.label}
 								{rightsStatusInfo?.moreInfo}
 							</span>
+						</Metadata>
+					)}
+				</MetadataList>
+
+				<MetadataList disableContainerQuery={true}>
+					{isNewspaper && !!fallenNames?.length && (
+						<Metadata
+							title={tText('modules/ie-objects/object-detail-page___namenlijst')}
+							key="metadata-fallen-names-list"
+							renderTitleRight={
+								<div className="u-color-neutral u-font-size-14 u-font-weight-400">
+									{tHtml(
+										'modules/ie-objects/object-detail-page___a-href-namenlijst-gesneuvelden-wat-is-dit-a'
+									)}
+								</div>
+							}
+						>
+							<NamesList
+								names={fallenNames}
+								onZoomToLocation={iiifViewerReference.current?.iiifZoomTo}
+							/>
 						</Metadata>
 					)}
 

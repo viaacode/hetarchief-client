@@ -32,6 +32,8 @@
 .c-filter-form__body {
 	max-height: 45vh;
 	overflow-y: visible;
+	display: flex;
+	flex-direction: column;
 
 	// Allow "overflowing" effects on input fields
 	padding-top: $spacer-xs;
@@ -51,6 +53,12 @@
 
 	&--overflow {
 		overflow: visible;
+	}
+
+	:global(.c-filter-form__body--scrollable) {
+		overflow: auto;
+		margin-top: $spacer-lg !important;
+		margin-bottom: $spacer-lg !important;
 	}
 }
 
