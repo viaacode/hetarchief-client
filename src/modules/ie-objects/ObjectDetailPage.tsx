@@ -1431,7 +1431,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 
 		// IIIF viewer
-		if (isNewspaper && !!mediaInfo) {
+		if (isNewspaper && !!mediaInfo && mediaInfo.pageRepresentations?.length) {
 			if (!hasNewsPaperBeenRendered) {
 				handleOnPlay();
 				setHasNewsPaperBeenRendered(true);
@@ -1482,7 +1482,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			);
 		}
 
-		if (!playableUrl || !currentPlayableFile) {
+		if (!playableUrl || !currentPlayableFile || !mediaInfo?.pageRepresentations?.length) {
 			return (
 				<ObjectPlaceholder
 					{...noLicensePlaceholder()}
