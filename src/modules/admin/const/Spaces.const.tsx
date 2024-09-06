@@ -25,7 +25,7 @@ export const ADMIN_VISITOR_SPACES_OVERVIEW_QUERY_PARAM_CONFIG = {
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	status: withDefault(StringParam, 'ALL'),
 	page: withDefault(NumberParam, 1),
-	orderProp: withDefault(StringParam, VisitorSpaceOrderProps.ContentPartnerName),
+	orderProp: withDefault(StringParam, VisitorSpaceOrderProps.OrganisationName),
 	orderDirection: withDefault(SortDirectionParam, OrderDirection.asc),
 };
 
@@ -37,7 +37,7 @@ export const VisitorSpacesOverviewTableColumns = (
 ): Column<VisitorSpaceInfo>[] => [
 	{
 		Header: tText('modules/admin/const/spaces___bezoekersruimte'),
-		id: VisitorSpaceOrderProps.ContentPartnerName,
+		id: VisitorSpaceOrderProps.OrganisationName,
 		accessor: 'name',
 	},
 	{

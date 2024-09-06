@@ -64,8 +64,8 @@ export enum VisitorSpaceOrderProps {
 	PublishedAt = 'published_at',
 	CreatedAt = 'created_at',
 	UpdatedAt = 'updated_at',
-	ContentPartnerName = 'content_partner.schema_name',
-	ContentPartnerId = 'content_partner.schema_identifier',
+	OrganisationName = 'organisation.skos_pref_label',
+	OrganisationOrgId = 'organisation.org_identifier',
 }
 
 export interface DefaultFilterFormChildrenParams<Values extends FieldValues> {
@@ -112,11 +112,6 @@ export interface VisitorSpaceInfo {
 	contactInfo: {
 		email: string | null;
 		telephone: string | null;
-		address?: {
-			street: string;
-			postalCode: string;
-			locality: string;
-		};
 	};
 	status: VisitorSpaceStatus;
 	publishedAt: string | null;
