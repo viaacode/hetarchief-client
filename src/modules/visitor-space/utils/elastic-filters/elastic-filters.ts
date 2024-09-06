@@ -113,6 +113,12 @@ export const mapFiltersToElastic = (query: SearchPageQueryParams): IeObjectsSear
 			operator: IeObjectsSearchOperator.IS,
 			value: (query[SearchFilterId.LocationCreated] as string) || '',
 		},
+		// Mentions fallen soldiers
+		{
+			field: IeObjectsSearchFilterField.MENTIONS,
+			operator: IeObjectsSearchOperator.IS,
+			value: (query[SearchFilterId.Mentions] as string) || '',
+		},
 		// Genre
 		{
 			field: IeObjectsSearchFilterField.GENRE,

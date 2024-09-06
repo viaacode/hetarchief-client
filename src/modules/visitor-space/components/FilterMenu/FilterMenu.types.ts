@@ -61,5 +61,5 @@ export enum AutocompleteField {
 	creator = 'creator',
 	locationCreated = 'locationCreated',
 	newspaperSeriesTitle = 'newspaperSeriesTitle',
-	mentionName = 'mentionName',
+	mentions = 'mentions',
 }

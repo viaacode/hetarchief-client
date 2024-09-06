@@ -14,6 +14,7 @@ import {
 import { LocationCreatedFilterForm } from '@visitor-space/components/LocationCreatedFilterForm/LocationCreatedFilterForm';
 import MaintainerFilterForm from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm';
 import { MediumFilterForm } from '@visitor-space/components/MediumFilterForm';
+import { MentionsFilterForm } from '@visitor-space/components/MentionsFilterForm/MentionsFilterForm';
 import { NewspaperSeriesNameFilterForm } from '@visitor-space/components/NewspaperSeriesNameFilterForm/NewspaperSeriesNameFilterForm';
 import { ReleaseDateFilterForm } from '@visitor-space/components/ReleaseDateFilterForm';
 import { SearchFilterId } from '@visitor-space/types';
@@ -140,7 +141,13 @@ export const SEARCH_PAGE_FILTERS = (
 		type: FilterMenuType.Modal,
 		tabs: ALL_TABS,
 	},
-	// TODO list of names of fallen soldiers (newspaper only)
+	{
+		id: SearchFilterId.Mentions,
+		label: tText('Namenlijst gesneuvelden'),
+		form: MentionsFilterForm,
+		type: FilterMenuType.Modal,
+		tabs: [SearchPageMediaType.Newspaper],
+	},
 	{
 		id: SearchFilterId.Advanced,
 		icon: IconNamesLight.DotsHorizontal,

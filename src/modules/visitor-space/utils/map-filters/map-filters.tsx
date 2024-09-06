@@ -183,6 +183,11 @@ export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] =>
 			SearchFilterId.LocationCreated
 		),
 		...mapArrayParamToTags(
+			query[SearchFilterId.Mentions] || [],
+			getFilterLabel(MetadataProp.Mentions),
+			SearchFilterId.Mentions
+		),
+		...mapArrayParamToTags(
 			query[SearchFilterId.Genre] || [],
 			getFilterLabel(MetadataProp.Genre),
 			SearchFilterId.Genre

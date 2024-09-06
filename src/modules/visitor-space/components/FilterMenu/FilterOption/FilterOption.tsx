@@ -78,6 +78,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 		[SearchFilterId.Creator]: '33.5rem',
 		[SearchFilterId.NewspaperSeriesName]: '33.5rem',
 		[SearchFilterId.LocationCreated]: '33.5rem',
+		[SearchFilterId.Mentions]: '33.5rem',
 		[SearchFilterId.Language]: '53.7rem',
 		[SearchFilterId.Maintainers]: '63.7rem',
 		[SearchFilterId.Advanced]: '60.1rem',

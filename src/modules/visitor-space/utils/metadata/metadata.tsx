@@ -71,6 +71,7 @@ export const getFilterLabel = (prop: MetadataProp): string => {
 			[MetadataProp.Creator]: tText('modules/visitor-space/utils/metadata/metadata___maker'),
 			[MetadataProp.NewspaperSeriesName]: tText('Reeks'),
 			[MetadataProp.LocationCreated]: tText('Plaats van uitgave'),
+			[MetadataProp.Mentions]: tText('Namenlijst gesneuvelden'),
 			[MetadataProp.Description]: tText(
 				'modules/visitor-space/utils/metadata/metadata___beschrijving'
 			),

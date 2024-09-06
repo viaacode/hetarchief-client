@@ -32,6 +32,7 @@ export enum IeObjectsSearchFilterField {
 	PUBLISHER = 'publisher',
 	NEWSPAPER_SERIES_NAME = 'newspaperSeriesName',
 	LOCATION_CREATED = 'locationCreated',
+	MENTIONS = 'mentions',
 	QUERY = 'query',
 	// TODO future: rename maintainer to maintainerId and maintainers to maintainerName and also change this in the client
 	MAINTAINER_ID = 'maintainer', // Contains the OR-id of the maintainer
