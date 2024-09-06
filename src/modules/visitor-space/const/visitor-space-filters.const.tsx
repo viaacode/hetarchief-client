@@ -11,6 +11,7 @@ import {
 	type FilterMenuFilterOption,
 	FilterMenuType,
 } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import { LocationCreatedFilterForm } from '@visitor-space/components/LocationCreatedFilterForm/LocationCreatedFilterForm';
 import MaintainerFilterForm from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm';
 import { MediumFilterForm } from '@visitor-space/components/MediumFilterForm';
 import { NewspaperSeriesNameFilterForm } from '@visitor-space/components/NewspaperSeriesNameFilterForm/NewspaperSeriesNameFilterForm';
@@ -106,7 +107,7 @@ export const SEARCH_PAGE_FILTERS = (
 	},
 	{
 		id: SearchFilterId.NewspaperSeriesName,
-		label: tText('Krant reeks'),
+		label: tText('Reeks'),
 		form: NewspaperSeriesNameFilterForm,
 		type: FilterMenuType.Modal,
 		tabs: [SearchPageMediaType.Newspaper],
@@ -118,7 +119,13 @@ export const SEARCH_PAGE_FILTERS = (
 		type: FilterMenuType.Modal,
 		tabs: ALL_TABS,
 	},
-	// TODO Location of publication (newspaper only)
+	{
+		id: SearchFilterId.LocationCreated,
+		label: tText('Plaats van uitgave'),
+		form: LocationCreatedFilterForm,
+		type: FilterMenuType.Modal,
+		tabs: [SearchPageMediaType.Newspaper],
+	},
 	{
 		id: SearchFilterId.Medium,
 		label: tText('modules/visitor-space/const/index___analoge-drager'),

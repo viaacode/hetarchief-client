@@ -107,6 +107,12 @@ export const mapFiltersToElastic = (query: SearchPageQueryParams): IeObjectsSear
 			operator: IeObjectsSearchOperator.IS,
 			value: (query[SearchFilterId.NewspaperSeriesName] as string) || '',
 		},
+		// Location created
+		{
+			field: IeObjectsSearchFilterField.LOCATION_CREATED,
+			operator: IeObjectsSearchOperator.IS,
+			value: (query[SearchFilterId.LocationCreated] as string) || '',
+		},
 		// Genre
 		{
 			field: IeObjectsSearchFilterField.GENRE,

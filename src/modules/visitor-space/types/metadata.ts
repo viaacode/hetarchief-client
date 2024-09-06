@@ -21,6 +21,7 @@ export enum MetadataProp {
 	TemporalCoverage = 'tc',
 	Title = 'ti',
 	NewspaperSeriesName = 'ns',
+	LocationCreated = 'lc',
 }
 
 export const FILTER_LABEL_VALUE_DELIMITER = '---';

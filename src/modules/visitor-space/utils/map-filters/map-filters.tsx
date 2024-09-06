@@ -178,6 +178,11 @@ export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] =>
 			SearchFilterId.NewspaperSeriesName
 		),
 		...mapArrayParamToTags(
+			query[SearchFilterId.LocationCreated] || [],
+			getFilterLabel(MetadataProp.LocationCreated),
+			SearchFilterId.LocationCreated
+		),
+		...mapArrayParamToTags(
 			query[SearchFilterId.Genre] || [],
 			getFilterLabel(MetadataProp.Genre),
 			SearchFilterId.Genre

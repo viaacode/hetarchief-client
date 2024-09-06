@@ -31,6 +31,7 @@ export enum SearchFilterId {
 	Keywords = 'keywords',
 	Language = 'language',
 	NewspaperSeriesName = 'newspaperSeriesName',
+	LocationCreated = 'locationCreated',
 	Medium = 'medium',
 	Maintainer = 'aanbieder',
 	Maintainers = 'aanbieders',

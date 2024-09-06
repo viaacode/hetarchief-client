@@ -539,6 +539,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				data = (values as { newspaperSeriesName: string }).newspaperSeriesName;
 				break;
 
+			case SearchFilterId.LocationCreated:
+				data = (values as { locationCreated: string }).locationCreated;
+				break;
+
 			case SearchFilterId.Genre:
 				data = (values as GenreFilterFormState).genres;
 				break;
@@ -629,11 +633,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				case SearchFilterId.Maintainers:
 				case QUERY_PARAM_KEY.SEARCH_QUERY_KEY:
 				case SearchFilterId.Creator:
-					updatedQuery[tag.key] = [
-						...((updatedQuery[tag.key] as Array<unknown>) || []),
-						`${tag.value}`.replace(tagPrefix(tag.key), ''),
-					];
-					break;
+				case SearchFilterId.LocationCreated:
 				case SearchFilterId.NewspaperSeriesName:
 					updatedQuery[tag.key] = [
 						...((updatedQuery[tag.key] as Array<unknown>) || []),
