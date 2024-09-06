@@ -6,7 +6,7 @@ import { AdvancedFilterForm } from '@visitor-space/components/AdvancedFilterForm
 import { ConsultableMediaFilterForm } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm';
 import { ConsultableOnlyOnLocationFilterForm } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm';
 import { ConsultablePublicDomainFilterForm } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm';
-import { CreatorFilterForm } from '@visitor-space/components/CreatorFilterForm';
+import { CreatorFilterForm } from '@visitor-space/components/CreatorFilterForm/CreatorFilterForm';
 import {
 	type FilterMenuFilterOption,
 	FilterMenuType,
@@ -95,7 +95,13 @@ export const SEARCH_PAGE_FILTERS = (
 			return !isPublicCollection || isKioskUser;
 		},
 	},
-	// TODO Reeks (newspaper only)
+	// {
+	// 	id: SearchFilterId.NewspaperSeriesName,
+	// 	label: tText('modules/visitor-space/const/visitor-space-filters___reeks'),
+	// 	form: NewspaperSeriesTitleFilterForm,
+	// 	type: FilterMenuType.Modal,
+	// 	tabs: [SearchPageMediaType.Newspaper],
+	// },
 	{
 		id: SearchFilterId.ReleaseDate,
 		label: tText('modules/visitor-space/const/visitor-space-filters___uitgavedatum'),

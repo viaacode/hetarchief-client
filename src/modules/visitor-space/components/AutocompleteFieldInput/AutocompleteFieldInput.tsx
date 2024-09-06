@@ -38,14 +38,14 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps> = ({
 		[fieldName]
 	);
 
-	function handleChange(
+	const handleChange = (
 		newValue: SingleValue<SelectOption>,
 		actionMeta: ActionMeta<SelectOption>
-	): void {
+	): void => {
 		if (actionMeta.action === 'select-option') {
 			onChange(newValue?.value || null);
 		}
-	}
+	};
 
 	return (
 		<AsyncSelect<SelectOption>
@@ -58,8 +58,16 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps> = ({
 			loadOptions={handleLoadOptions}
 			value={value ? { label: value, value: value } : undefined}
 			placeholder={label}
-			noOptionsMessage={() => tText('Geen resultaten gevonden')}
-			loadingMessage={() => tText('Laden...')}
+			noOptionsMessage={() =>
+				tText(
+					'modules/visitor-space/components/autocomplete-field-input/autocomplete-field-input___geen-resultaten-gevonden'
+				)
+			}
+			loadingMessage={() =>
+				tText(
+					'modules/visitor-space/components/autocomplete-field-input/autocomplete-field-input___laden'
+				)
+			}
 		/>
 	);
 };

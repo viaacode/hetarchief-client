@@ -30,6 +30,7 @@ export enum SearchFilterId {
 	Genre = 'genre',
 	Keywords = 'keywords',
 	Language = 'language',
+	NewspaperSeriesName = 'newspaperSeriesName',
 	Medium = 'medium',
 	Maintainer = 'aanbieder',
 	Maintainers = 'aanbieders',
@@ -83,6 +84,7 @@ export interface DefaultFilterFormProps<Values extends FieldValues>
 	}: DefaultFilterFormChildrenParams<Values>) => ReactNode;
 	disabled?: boolean;
 	values?: Values;
+	onFormSubmit: OnFilterMenuFormSubmit;
 }
 
 export interface InlineFilterFormProps<Values = unknown> extends DefaultComponentProps {
