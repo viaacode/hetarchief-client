@@ -5,17 +5,16 @@ import { type DefaultFilterFormProps, SearchFilterId } from '@visitor-space/type
 
 import { AutocompleteFieldFilterForm } from '../AutocompleteFieldFilterForm/AutocompleteFieldFilterForm';
 
-export const CreatorFilterForm: FC<DefaultFilterFormProps<any>> = ({ children, className }) => {
+export const LocationCreatedFilterForm: FC<DefaultFilterFormProps<any>> = ({
+	children,
+	className,
+}) => {
 	return (
 		<AutocompleteFieldFilterForm
 			className={className}
-			searchFilterId={SearchFilterId.Creator}
-			filterTitle={tText(
-				'modules/visitor-space/components/creator-filter-form/creator-filter-form___maker'
-			)}
-			fieldLabel={tText(
-				'modules/visitor-space/components/creator-filter-form/creator-filter-form___naam-van-de-maker'
-			)}
+			searchFilterId={SearchFilterId.LocationCreated}
+			filterTitle={tText('Plaats van uitgave')}
+			fieldLabel={tText('Plaatsnaam')}
 		>
 			{children}
 		</AutocompleteFieldFilterForm>

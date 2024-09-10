@@ -6,13 +6,16 @@ import { AdvancedFilterForm } from '@visitor-space/components/AdvancedFilterForm
 import { ConsultableMediaFilterForm } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm';
 import { ConsultableOnlyOnLocationFilterForm } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm';
 import { ConsultablePublicDomainFilterForm } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm';
-import { CreatorFilterForm } from '@visitor-space/components/CreatorFilterForm';
+import { CreatorFilterForm } from '@visitor-space/components/CreatorFilterForm/CreatorFilterForm';
 import {
 	type FilterMenuFilterOption,
 	FilterMenuType,
 } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import { LocationCreatedFilterForm } from '@visitor-space/components/LocationCreatedFilterForm/LocationCreatedFilterForm';
 import MaintainerFilterForm from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm';
 import { MediumFilterForm } from '@visitor-space/components/MediumFilterForm';
+import { MentionsFilterForm } from '@visitor-space/components/MentionsFilterForm/MentionsFilterForm';
+import { NewspaperSeriesNameFilterForm } from '@visitor-space/components/NewspaperSeriesNameFilterForm/NewspaperSeriesNameFilterForm';
 import { ReleaseDateFilterForm } from '@visitor-space/components/ReleaseDateFilterForm';
 import { SearchFilterId } from '@visitor-space/types';
 
@@ -23,8 +26,16 @@ const ALL_TABS: SearchPageMediaType[] = [
 	SearchPageMediaType.Newspaper,
 ];
 
+/**
+ * Filters for the search page
+ * @param isGlobalArchive is the user currently looking in the global archive or in one specific archive of one maintainer
+ * @param isKioskUser
+ * @param isKeyUser
+ * @param activeTab
+ * @constructor
+ */
 export const SEARCH_PAGE_FILTERS = (
-	isPublicCollection: boolean,
+	isGlobalArchive: boolean,
 	isKioskUser: boolean,
 	isKeyUser: boolean,
 	activeTab: SearchPageMediaType
@@ -49,7 +60,7 @@ export const SEARCH_PAGE_FILTERS = (
 		type: FilterMenuType.Checkbox,
 		tabs: ALL_TABS,
 		isDisabled: () => {
-			return !isPublicCollection || !isKeyUser;
+			return !isGlobalArchive || !isKeyUser;
 		},
 	},
 	{
@@ -72,7 +83,7 @@ export const SEARCH_PAGE_FILTERS = (
 		type: FilterMenuType.Checkbox,
 		tabs: ALL_TABS,
 		isDisabled: () => {
-			return !isPublicCollection || isKioskUser;
+			return !isGlobalArchive || isKioskUser;
 		},
 	},
 	{
@@ -92,10 +103,16 @@ export const SEARCH_PAGE_FILTERS = (
 		type: FilterMenuType.Modal,
 		tabs: ALL_TABS,
 		isDisabled: () => {
-			return !isPublicCollection || isKioskUser;
+			return !isGlobalArchive || isKioskUser;
 		},
 	},
-	// TODO Reeks (newspaper only)
+	{
+		id: SearchFilterId.NewspaperSeriesName,
+		label: tText('Reeks'),
+		form: NewspaperSeriesNameFilterForm,
+		type: FilterMenuType.Modal,
+		tabs: [SearchPageMediaType.Newspaper],
+	},
 	{
 		id: SearchFilterId.ReleaseDate,
 		label: tText('modules/visitor-space/const/visitor-space-filters___uitgavedatum'),
@@ -103,7 +120,13 @@ export const SEARCH_PAGE_FILTERS = (
 		type: FilterMenuType.Modal,
 		tabs: ALL_TABS,
 	},
-	// TODO Location of publication (newspaper only)
+	{
+		id: SearchFilterId.LocationCreated,
+		label: tText('Plaats van uitgave'),
+		form: LocationCreatedFilterForm,
+		type: FilterMenuType.Modal,
+		tabs: [SearchPageMediaType.Newspaper],
+	},
 	{
 		id: SearchFilterId.Medium,
 		label: tText('modules/visitor-space/const/index___analoge-drager'),
@@ -118,7 +141,13 @@ export const SEARCH_PAGE_FILTERS = (
 		type: FilterMenuType.Modal,
 		tabs: ALL_TABS,
 	},
-	// TODO list of names of fallen soldiers (newspaper only)
+	{
+		id: SearchFilterId.Mentions,
+		label: tText('Namenlijst gesneuvelden'),
+		form: MentionsFilterForm,
+		type: FilterMenuType.Modal,
+		tabs: [SearchPageMediaType.Newspaper],
+	},
 	{
 		id: SearchFilterId.Advanced,
 		icon: IconNamesLight.DotsHorizontal,

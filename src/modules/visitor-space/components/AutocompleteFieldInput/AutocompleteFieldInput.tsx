@@ -2,7 +2,7 @@ import { type SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { type FC, useCallback } from 'react';
 import { type ActionMeta, type SingleValue } from 'react-select';
-import AsyncSelect from 'react-select/async';
+import AsyncCreatableSelect from 'react-select/async-creatable';
 
 import { IeObjectsService } from '@ie-objects/services';
 import { tText } from '@shared/helpers/translate';
@@ -38,28 +38,38 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps> = ({
 		[fieldName]
 	);
 
-	function handleChange(
+	const handleChange = (
 		newValue: SingleValue<SelectOption>,
 		actionMeta: ActionMeta<SelectOption>
-	): void {
-		if (actionMeta.action === 'select-option') {
+	): void => {
+		if (actionMeta.action === 'select-option' || actionMeta.action === 'create-option') {
 			onChange(newValue?.value || null);
 		}
-	}
+	};
 
 	return (
-		<AsyncSelect<SelectOption>
+		<AsyncCreatableSelect<SelectOption>
 			aria-label={label}
 			className={clsx(styles['c-autocomplete-field-input'], 'c-react-select')}
 			classNamePrefix={'c-react-select'}
-			cacheOptions
+			createOptionPosition="first"
+			allowCreateWhileLoading
+			formatCreateLabel={(inputValue) => inputValue}
 			defaultOptions={false}
 			onChange={handleChange}
 			loadOptions={handleLoadOptions}
 			value={value ? { label: value, value: value } : undefined}
 			placeholder={label}
-			noOptionsMessage={() => tText('Geen resultaten gevonden')}
-			loadingMessage={() => tText('Laden...')}
+			noOptionsMessage={() =>
+				tText(
+					'modules/visitor-space/components/autocomplete-field-input/autocomplete-field-input___geen-resultaten-gevonden'
+				)
+			}
+			loadingMessage={() =>
+				tText(
+					'modules/visitor-space/components/autocomplete-field-input/autocomplete-field-input___laden'
+				)
+			}
 		/>
 	);
 };

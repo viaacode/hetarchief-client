@@ -203,11 +203,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				}
 
 				highlightedAltoTexts?.forEach((altoTextLocation) => {
-					const multiplier = 2.5;
-					const x = (altoTextLocation.x * multiplier - 110) / imageWidth;
-					const y = (altoTextLocation.y * multiplier + 20) / imageHeight;
-					const width = (altoTextLocation.width * multiplier) / imageWidth;
-					const height = (altoTextLocation.height * multiplier) / imageHeight;
+					const x = altoTextLocation.x / imageWidth;
+					const y = altoTextLocation.y / imageHeight;
+					const width = altoTextLocation.width / imageWidth;
+					const height = altoTextLocation.height / imageHeight;
 					const isSymbols = /^[^a-zA-Z0-9]$/g.test(altoTextLocation.text);
 					if (
 						!x ||

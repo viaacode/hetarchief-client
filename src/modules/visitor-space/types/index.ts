@@ -30,6 +30,9 @@ export enum SearchFilterId {
 	Genre = 'genre',
 	Keywords = 'keywords',
 	Language = 'language',
+	NewspaperSeriesName = 'newspaperSeriesName',
+	LocationCreated = 'locationCreated',
+	Mentions = 'mentions', // Fallen soldiers named in newspapers
 	Medium = 'medium',
 	Maintainer = 'aanbieder',
 	Maintainers = 'aanbieders',
