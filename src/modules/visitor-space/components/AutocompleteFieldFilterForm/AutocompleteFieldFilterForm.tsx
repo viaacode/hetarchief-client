@@ -13,7 +13,7 @@ import { type DefaultFilterFormChildrenParams, type SearchFilterId } from '@visi
 
 import styles from './AutocompleteFieldFilterForm.module.scss';
 
-const AutocompleteFieldFilterForm: FC<{
+export const AutocompleteFieldFilterForm: FC<{
 	children: ({ values, reset, handleSubmit }: DefaultFilterFormChildrenParams<any>) => ReactNode;
 	className?: string;
 	searchFilterId: SearchFilterId;
@@ -101,5 +101,3 @@ const AutocompleteFieldFilterForm: FC<{
 		</>
 	);
 };
-
-export default AutocompleteFieldFilterForm;
