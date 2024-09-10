@@ -19,6 +19,8 @@ export interface AutocompleteFieldInputProps {
 	className?: string;
 }
 
+const MIN_WORD_LENGTH_FOR_AUTOCOMPLETE = 3;
+
 const AutocompleteFieldInput: FC<AutocompleteFieldInputProps> = ({
 	onChange,
 	value,
@@ -27,7 +29,7 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps> = ({
 }) => {
 	const handleLoadOptions = useCallback(
 		(inputValue: string, callback: (newOptions: SelectOption[]) => void): void => {
-			if (inputValue.length < 3) {
+			if (inputValue.length < MIN_WORD_LENGTH_FOR_AUTOCOMPLETE) {
 				callback([]);
 				return;
 			}
