@@ -56,3 +56,10 @@ export interface FilterMenuFilterOption {
 export type OnFilterMenuSortClick = (key: SearchSortProp, order?: OrderDirection) => void;
 export type OnFilterMenuFormSubmit = <Values>(id: SearchFilterId, values: Values) => void;
 export type OnFilterMenuFormReset = (id: SearchFilterId) => void;
+
+export enum AutocompleteField {
+	creator = 'creator',
+	locationCreated = 'locationCreated',
+	newspaperSeriesTitle = 'newspaperSeriesTitle',
+	mentionName = 'mentionName',
+}

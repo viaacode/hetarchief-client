@@ -1,12 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FormControl, TextInput } from '@meemoo/react-components';
+import { FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
-import { type ChangeEvent, type FC, useEffect, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useQueryParams } from 'use-query-params';
 
 import { tText } from '@shared/helpers/translate';
+import AutocompleteFieldInput from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
+import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { SearchFilterId } from '@visitor-space/types';
 
 import {
@@ -56,8 +58,8 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 
 	// Events
 
-	const onChangeCreator = (evt: ChangeEvent<HTMLInputElement>) => {
-		setForm((oldForm) => ({ ...oldForm, creator: evt.target.value }));
+	const onChangeCreator = (newCreator: string | null) => {
+		setForm((oldForm) => ({ ...oldForm, creator: newCreator || '' }));
 	};
 
 	return (
@@ -81,11 +83,12 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 						control={control}
 						name="creator"
 						render={({ field }) => (
-							<TextInput
-								{...field}
-								value={form.creator || defaultValues.creator || ''}
+							<AutocompleteFieldInput
+								fieldName={AutocompleteField.creator}
 								onChange={onChangeCreator}
-								placeholder={tText(
+								value={field.value}
+								id={AutocompleteField.creator}
+								label={tText(
 									'modules/visitor-space/components/creator-filter-form/creator-filter-form___naam-van-de-maker'
 								)}
 							/>
