@@ -58,12 +58,14 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const locale = useLocale();
 
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestType | undefined>(type);
+	const [noTypeSelectedOnSave, setNoTypeSelectedOnSave] = useState(false);
 
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
 
 	const onCloseModal = () => {
 		onClose();
 		setReasonInputValue('');
+		setNoTypeSelectedOnSave(false);
 		setTypeSelected(undefined);
 		refetchMaterialRequests?.();
 	};
@@ -77,24 +79,13 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		dispatch(setMaterialRequestCount(response.items.length));
 	};
 
-	const onNoTypeSelected = () => {
-		toastService.notify({
-			maxLines: 3,
-			title: tText(
-				'modules/visitor-space/components/material-request-blade/material-request-blade___type-ontbreekt'
-			),
-			description: tText(
-				'modules/visitor-space/components/material-request-blade/material-request-blade___selecteer-een-type-voor-je-aanvraag'
-			),
-		});
-	};
-
 	const onAddToList = async () => {
 		try {
 			if (!typeSelected) {
-				onNoTypeSelected();
+				setNoTypeSelectedOnSave(true);
 				return;
 			}
+			setNoTypeSelectedOnSave(false);
 			const response = await MaterialRequestsService.create({
 				objectId,
 				type: typeSelected,
@@ -127,9 +118,10 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		} else {
 			try {
 				if (!typeSelected) {
-					onNoTypeSelected();
+					setNoTypeSelectedOnSave(true);
 					return;
 				}
+				setNoTypeSelectedOnSave(false);
 				const response = await MaterialRequestsService.update(materialRequestId, {
 					type: typeSelected,
 					reason: reasonInputValue,
@@ -215,6 +207,13 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					onClick={onCloseModal}
 					className={styles['c-request-material__verstuur-button']}
 				/> */}
+				{noTypeSelectedOnSave ? (
+					<span className={styles['c-request-material__reason-error']}>
+						{tText(
+							'Er staan fouten in dit formulier. Corrigeer deze en probeer het opnieuw.'
+						)}
+					</span>
+				) : null}
 				{renderMobileDesktop({
 					mobile: (
 						<Button
@@ -332,6 +331,11 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 								checked={typeSelected === MaterialRequestType.MORE_INFO}
 								onClick={() => setTypeSelected(MaterialRequestType.MORE_INFO)}
 							/>
+							{noTypeSelectedOnSave ? (
+								<span className="c-form-control__errors">
+									{tText('type verplicht error')}
+								</span>
+							) : null}
 						</dd>
 						<dt className={styles['c-request-material__content-label']}>
 							{tText(
