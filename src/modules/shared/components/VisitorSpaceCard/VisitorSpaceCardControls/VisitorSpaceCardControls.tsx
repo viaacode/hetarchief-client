@@ -79,7 +79,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 			);
 		}
 		return (
-			<div>
+			<div title={'hover contact informatie'}>
 				<DropdownMenu
 					placement="bottom-end"
 					triggerButtonProps={{
