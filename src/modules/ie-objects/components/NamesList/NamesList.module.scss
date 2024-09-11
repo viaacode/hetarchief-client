@@ -1,7 +1,7 @@
 @use "sass:math";
 @use "src/styles/abstracts" as *;
 
-$names-list-scrollable-height: 25rem;
+$names-list-scrollable-height: 29rem;
 
 .c-names-list {
 	container-type: inline-size;
@@ -68,5 +68,10 @@ $names-list-scrollable-height: 25rem;
 	:global(.c-button__icon) span {
 		font-size: $font-size-1xl;
 		color: $neutral;
+	}
+
+	:global(.ps__rail-x),
+	:global(.ps__rail-y) {
+		opacity: 0.6;
 	}
 }

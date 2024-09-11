@@ -104,10 +104,9 @@ export interface IeObject {
 	carrierDate?: string;
 	newspaperPublisher?: string;
 	alternativeTitle?: string[];
-	mentions?: string[];
 	children?: number;
 
-	pageRepresentations?: IeObjectRepresentation[][];
+	pageRepresentations?: IeObjectPageRepresentation[];
 }
 
 export enum IeObjectAccessThrough {
@@ -150,6 +149,11 @@ export interface IeObjectFile {
 	duration: string;
 	edmIsNextInSequence: string;
 	createdAt: string;
+}
+
+export interface IeObjectPageRepresentation {
+	representations: IeObjectRepresentation[];
+	mentions: Mention[];
 }
 
 export interface IeObjectRepresentation {
@@ -263,4 +267,19 @@ export interface OcrSearchResult {
 	searchTerm: string;
 	searchTermCharacterOffset: number;
 	searchTermIndexOnPage: number;
+}
+
+export interface Mention {
+	iri: string;
+	name: string;
+	x: number;
+	y: number;
+	width: number;
+	height: number;
+	confidence: number;
+	birthDate: number;
+	birthPlace: string;
+	deathDate: number;
+	deathPlace: string;
+	link?: string;
 }
