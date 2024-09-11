@@ -2,6 +2,7 @@ import {
 	MultiSelect,
 	type MultiSelectOption,
 	OrderDirection,
+	PaginationBar,
 	Table,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
@@ -31,7 +32,7 @@ import {
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
-import { PaginationBar } from '@shared/components/PaginationBar';
+import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
@@ -141,7 +142,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const renderPagination = ({ gotoPage }: { gotoPage: (i: number) => void }): ReactNode => (
 		<PaginationBar
-			className="u-mt-16 u-mb-16"
+			{...getDefaultPaginationBarProps()}
 			start={Math.max(0, filters.page - 1) * CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}
 			total={materialRequests?.total || 0}
 			count={CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}

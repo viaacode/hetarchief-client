@@ -2251,8 +2251,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						}
 						onClick={handleExpandButtonClicked}
 						variants="white"
-						title={tText('hover expand knop')}
-						aria-label={tText('expand knop')}
+						title={tText('modules/ie-objects/object-detail-page___hover-expand-knop')}
+						aria-label={tText('modules/ie-objects/object-detail-page___expand-knop')}
 					/>
 				)}
 

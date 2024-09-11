@@ -113,7 +113,9 @@ const MaterialRequestCenterButton: FC = () => {
 					</div>
 				}
 				aria-label={tText('modules/navigation/const/index___notificaties')}
-				title={tText('hover materiaal aanvragen')}
+				title={tText(
+					'modules/navigation/components/material-request-center/material-request-center-button___hover-materiaal-aanvragen'
+				)}
 			/>
 			<MaterialRequestCenterBlade
 				isOpen={showMaterialRequestCenter}

@@ -10,8 +10,12 @@ export const MentionsFilterForm: FC<DefaultFilterFormProps<any>> = ({ children, 
 		<AutocompleteFieldFilterForm
 			className={className}
 			searchFilterId={SearchFilterId.Mentions}
-			filterTitle={tText('Namenlijst gesneuvelden')}
-			fieldLabel={tText('Naam')}
+			filterTitle={tText(
+				'modules/visitor-space/components/mentions-filter-form/mentions-filter-form___namenlijst-gesneuvelden'
+			)}
+			fieldLabel={tText(
+				'modules/visitor-space/components/mentions-filter-form/mentions-filter-form___naam'
+			)}
 		>
 			{children}
 		</AutocompleteFieldFilterForm>
