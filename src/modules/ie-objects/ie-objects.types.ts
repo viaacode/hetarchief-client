@@ -281,5 +281,4 @@ export interface Mention {
 	birthPlace: string;
 	deathDate: number;
 	deathPlace: string;
-	link?: string;
 }

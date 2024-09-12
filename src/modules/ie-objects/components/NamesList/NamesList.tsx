@@ -150,11 +150,11 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToLoc
 						)}
 
 						<a
-							href={nameInfo.link}
+							href={nameInfo.iri}
 							target="_blank"
 							rel="noreferrer noopener"
 							// Hide if no link, so it does take up space and all links/zoom buttons are nicely below each-other
-							style={{ visibility: nameInfo.link ? 'visible' : 'hidden' }}
+							style={{ visibility: nameInfo.iri ? 'visible' : 'hidden' }}
 						>
 							<Button
 								icon={
