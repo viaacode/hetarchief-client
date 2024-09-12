@@ -586,10 +586,6 @@ export const GET_METADATA_FIELDS = (
 			data: mediaInfo.locationCreated,
 		},
 		{
-			title: tText('Namenlijst gesneuvelden'),
-			data: mediaInfo.mentions,
-		},
-		{
 			title: tText('modules/ie-objects/ie-objects___periode-van-uitgave'),
 			data: compact([mediaInfo.startDate, mediaInfo.endDate]).join(' - '),
 		},

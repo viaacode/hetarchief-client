@@ -122,7 +122,6 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 				video: { name: IconNamesLight.Video },
 				noAudio: { name: IconNamesLight.NoAudio },
 				noVideo: { name: IconNamesLight.NoVideo },
-				noFilm: { name: IconNamesLight.NoVideo },
 				newspaper: { name: IconNamesLight.Newspaper },
 			},
 			list: GET_ICON_LIST_CONFIG,

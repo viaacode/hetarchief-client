@@ -70,7 +70,6 @@ import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
 import { Metadata, type MetadataItem } from '@ie-objects/components/Metadata';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import { NamesList } from '@ie-objects/components/NamesList/NamesList';
-import { type NameInfo } from '@ie-objects/components/NamesList/NamesList.types';
 import { ObjectPlaceholder } from '@ie-objects/components/ObjectPlaceholder';
 import { type MediaObject, RelatedObject } from '@ie-objects/components/RelatedObject';
 import { useGetAltoJsonFileContent } from '@ie-objects/hooks/get-alto-json-file-content';
@@ -107,6 +106,7 @@ import {
 	IeObjectAccessThrough,
 	type IeObjectFile,
 	IeObjectLicense,
+	type IeObjectPageRepresentation,
 	type IeObjectRepresentation,
 	IsPartOfKey,
 	MediaActions,
@@ -228,63 +228,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [hasNewsPaperBeenRendered, setHasNewsPaperBeenRendered] = useState(false);
 	const [hasAppliedUrlSearchTerms, setHasAppliedUrlSearchTerms] = useState<boolean>(false);
 
-	// TODO get these names from the backend: https://meemoo.atlassian.net/browse/ARC-2219
-	const [fallenNames] = useState<NameInfo[]>([
-		{
-			name: 'Jozef van de Kerke',
-			bornYear: '1902',
-			diedYear: '1917',
-			bornLocation: 'Gent',
-			diedLocation: 'Antwerpen',
-			ocrLocationX: 500,
-			ocrLocationY: 500,
-			ocrConfidence: 96,
-			link: 'https://namenlijst.org/publicsearch/#/person/_id=bc05cd33-673c-40c1-bb4a-d8d356d838ed',
-		},
-		{
-			name: 'Jef Van Hove',
-			bornYear: '1900',
-			diedYear: '1918',
-			bornLocation: 'Brussel',
-			diedLocation: 'Duinkerke',
-			ocrLocationX: 300,
-			ocrLocationY: 700,
-			ocrConfidence: 64,
-			link: 'https://namenlijst.org/publicsearch/#/person/_id=bc05cd33-673c-40c1-bb4a-d8d356d838ed',
-		},
-		{
-			name: 'Emiel De Hertogh',
-			bornYear: '1889',
-			diedYear: '1919',
-			bornLocation: 'Kortrijk',
-			diedLocation: 'Verdun',
-			ocrLocationX: 100,
-			ocrLocationY: 900,
-			ocrConfidence: 12,
-		},
-		{
-			name: 'Ludwig Vanckeerberghen',
-			bornYear: '1910',
-			diedYear: '1918',
-			bornLocation: 'Brugge',
-			diedLocation: 'Passendeale',
-			ocrLocationX: 900,
-			ocrLocationY: 100,
-			ocrConfidence: 9,
-			link: 'https://namenlijst.org/publicsearch/#/person/_id=bc05cd33-673c-40c1-bb4a-d8d356d838ed',
-		},
-		{
-			name: 'Gerard Vanelsberghe',
-			bornYear: '1898',
-			diedYear: '1917',
-			bornLocation: 'Oostende',
-			diedLocation: 'Ieper',
-			ocrLocationX: 200,
-			ocrLocationY: 200,
-			ocrConfidence: 3,
-		},
-	]);
-
 	// Layout
 	useStickyLayout();
 	useHideFooter();
@@ -352,13 +295,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
-	const currentPage: IeObjectRepresentation[] | undefined =
+	const currentPage: IeObjectPageRepresentation | undefined =
 		mediaInfo?.pageRepresentations?.[currentPageIndex];
 
 	const getRepresentationByType = useCallback(
 		(mimeTypes: string[]): IeObjectRepresentation | null => {
 			return (
-				currentPage?.find(
+				currentPage?.representations?.find(
 					(representation) =>
 						representation?.files?.find((file) => mimeTypes.includes(file.mimeType))
 				) || null
@@ -390,8 +333,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		useRef<IiifViewerFunctions>() as MutableRefObject<IiifViewerFunctions>;
 
 	const representationsToDisplay =
-		(mediaInfo?.pageRepresentations || []).flatMap((reps) =>
-			reps.flatMap((rep) =>
+		(mediaInfo?.pageRepresentations || []).flatMap((pageRepresentation) =>
+			pageRepresentation.representations.flatMap((rep) =>
 				rep.files.filter((file) => FLOWPLAYER_FORMATS.includes(file.mimeType))
 			)
 		) || [];
@@ -450,7 +393,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	// ocr alto info
 	const currentPageAltoUrl = useMemo((): string | null => {
 		let altoFileUrl: string | null = null;
-		currentPage?.some((representation: IeObjectRepresentation) => {
+		currentPage?.representations?.some((representation: IeObjectRepresentation) => {
 			if (representation.schemaTranscriptUrl) {
 				altoFileUrl = representation.schemaTranscriptUrl;
 				return true; // Found the alto.json file
@@ -506,9 +449,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const pageOcrTexts: (string | null)[] = useMemo(() => {
 		const pageOcrTextsTemp: (string | null)[] = [];
-		mediaInfo?.pageRepresentations?.forEach((representations) => {
+		mediaInfo?.pageRepresentations?.forEach((pageRepresentation) => {
 			const pageTranscripts = compact(
-				representations.map((representation) => {
+				pageRepresentation?.representations?.map((representation) => {
 					return representation.schemaTranscript;
 				})
 			);
@@ -1392,8 +1335,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const iiifViewerImageInfos = useMemo((): ImageInfo[] => {
 		return compact(
-			mediaInfo?.pageRepresentations?.flatMap((pageReps) => {
-				const files = pageReps.flatMap((pageRep) => pageRep.files);
+			mediaInfo?.pageRepresentations?.flatMap((pageRepresentation) => {
+				const files = pageRepresentation?.representations?.flatMap(
+					(representation) => representation.files
+				);
 				const imageApiFile = files.find((file) =>
 					IMAGE_API_FORMATS.includes(file.mimeType)
 				);
@@ -1931,7 +1876,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				</MetadataList>
 
 				<MetadataList disableContainerQuery={true}>
-					{isNewspaper && !!fallenNames?.length && (
+					{isNewspaper && !!currentPage?.mentions?.length && (
 						<Metadata
 							title={tText('modules/ie-objects/object-detail-page___namenlijst')}
 							key="metadata-fallen-names-list"
@@ -1944,7 +1889,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							}
 						>
 							<NamesList
-								names={fallenNames}
+								mentions={currentPage?.mentions || []}
 								onZoomToLocation={iiifViewerReference.current?.iiifZoomTo}
 							/>
 						</Metadata>
@@ -2073,6 +2018,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		ieObjectId,
 		currentPageIndex,
 		handleIsTextOverlayVisibleChange,
+		isTextOverlayVisible,
 	]);
 
 	const renderOcrContent = () => {
@@ -2251,8 +2197,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						}
 						onClick={handleExpandButtonClicked}
 						variants="white"
-						title={tText('hover expand knop')}
-						aria-label={tText('expand knop')}
+						title={tText('modules/ie-objects/object-detail-page___hover-expand-knop')}
+						aria-label={tText('modules/ie-objects/object-detail-page___expand-knop')}
 					/>
 				)}
 

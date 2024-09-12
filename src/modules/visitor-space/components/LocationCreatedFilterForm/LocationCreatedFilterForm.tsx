@@ -13,8 +13,12 @@ export const LocationCreatedFilterForm: FC<DefaultFilterFormProps<any>> = ({
 		<AutocompleteFieldFilterForm
 			className={className}
 			searchFilterId={SearchFilterId.LocationCreated}
-			filterTitle={tText('Plaats van uitgave')}
-			fieldLabel={tText('Plaatsnaam')}
+			filterTitle={tText(
+				'modules/visitor-space/components/location-created-filter-form/location-created-filter-form___plaats-van-uitgave'
+			)}
+			fieldLabel={tText(
+				'modules/visitor-space/components/location-created-filter-form/location-created-filter-form___plaatsnaam'
+			)}
 		>
 			{children}
 		</AutocompleteFieldFilterForm>

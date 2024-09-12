@@ -1,17 +1,20 @@
 import { Button, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { sortBy } from 'lodash-es';
 import React, {
 	type ChangeEvent,
 	type FC,
 	type KeyboardEvent,
 	useCallback,
 	useEffect,
+	useRef,
 	useState,
 } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import { ConfidenceIndicator } from '@ie-objects/components/ConfidenceIndicator/ConfidenceIndicator';
 import { type NamesListProps } from '@ie-objects/components/NamesList/NamesList.types';
+import { type Mention } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
@@ -19,10 +22,11 @@ import { tText } from '@shared/helpers/translate';
 import styles from './NamesList.module.scss';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 
-export const NamesList: FC<NamesListProps> = ({ className, names, onZoomToLocation }) => {
+export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToLocation }) => {
 	const [searchTermsTemp, setSearchTermsTemp] = useState('');
 	const [searchTerms, setSearchTerms] = useState('');
-	const [filteredNames, setFilteredNames] = useState(names);
+	const [filteredNames, setFilteredNames] = useState<Mention[]>(mentions);
+	const ref = useRef<HTMLDivElement | null>(null);
 
 	const handleOnChange = (evt: ChangeEvent<HTMLInputElement>): void => {
 		setSearchTermsTemp(evt.target.value);
@@ -36,29 +40,45 @@ export const NamesList: FC<NamesListProps> = ({ className, names, onZoomToLocati
 
 	const searchNames = useCallback(() => {
 		if (searchTerms === '') {
-			setFilteredNames(names);
+			setFilteredNames(sortBy(mentions, (mention) => 1 - mention.confidence));
 		} else {
 			const searchTermsLower = searchTerms.toLowerCase();
 			setFilteredNames(
-				names.filter((nameInfo) => {
-					return (
-						nameInfo.name.toLowerCase().includes(searchTermsLower) ||
-						nameInfo.bornLocation.toLowerCase().includes(searchTermsLower) ||
-						nameInfo.diedLocation.toLowerCase().includes(searchTermsLower) ||
-						nameInfo.bornYear.includes(searchTerms) ||
-						nameInfo.diedYear.includes(searchTerms)
-					);
-				})
+				sortBy(
+					mentions.filter((mention) => {
+						return (
+							mention.name.toLowerCase().includes(searchTermsLower) ||
+							mention.birthPlace.toLowerCase().includes(searchTermsLower) ||
+							mention.deathPlace.toLowerCase().includes(searchTermsLower) ||
+							String(mention.birthDate).includes(searchTerms) ||
+							String(mention.deathDate).includes(searchTerms)
+						);
+					}),
+					(mention) => 1 - mention.confidence
+				)
 			);
 		}
-	}, [searchTerms, names]);
+	}, [searchTerms, mentions]);
+
+	function handleScrollEvent(evt: Event) {
+		evt.preventDefault();
+	}
 
 	useEffect(() => {
 		searchNames();
 	}, [searchNames]);
 
+	useEffect(() => {
+		const namesListDiv = ref?.current;
+		namesListDiv?.addEventListener('wheel', handleScrollEvent);
+
+		return () => {
+			namesListDiv?.removeEventListener('wheel', handleScrollEvent);
+		};
+	}, [mentions]);
+
 	return (
-		<div className={clsx(className, styles['c-names-list'])}>
+		<div className={clsx(className, styles['c-names-list'])} ref={ref}>
 			<TextInput
 				type="search"
 				className={styles['c-names-list__search']}
@@ -78,12 +98,12 @@ export const NamesList: FC<NamesListProps> = ({ className, names, onZoomToLocati
 						)}
 					</div>
 				)}
-				{filteredNames.map((nameInfo, index) => (
+				{filteredNames.map((nameInfo: Mention, index: number) => (
 					<div key={index} className={styles['c-names-list__person']}>
 						<div className={styles['c-names-list__person__occurrence-confidence']}>
 							<ConfidenceIndicator
 								className={styles['c-names-list__person__confidence-indicator']}
-								confidence={nameInfo.ocrConfidence}
+								confidence={nameInfo.confidence}
 							/>
 						</div>
 						<div className={clsx(styles['c-names-list__person__info'], 'u-flex-grow')}>
@@ -96,7 +116,7 @@ export const NamesList: FC<NamesListProps> = ({ className, names, onZoomToLocati
 								}
 							>
 								<span>
-									° {nameInfo.bornYear} {nameInfo.bornLocation}
+									° {nameInfo.birthDate} {nameInfo.birthPlace}
 								</span>
 								<span
 									className={
@@ -108,11 +128,11 @@ export const NamesList: FC<NamesListProps> = ({ className, names, onZoomToLocati
 									,{' '}
 								</span>
 								<span>
-									† {nameInfo.diedYear} {nameInfo.diedLocation}
+									† {nameInfo.deathDate} {nameInfo.deathPlace}
 								</span>
 							</div>
 						</div>
-						{nameInfo.ocrLocationX && nameInfo.ocrLocationY && (
+						{nameInfo.x && nameInfo.x && nameInfo.width && nameInfo.height && (
 							<Button
 								icon={<Icon name={IconNamesLight.SearchText} />}
 								variants={['white']}
@@ -121,16 +141,20 @@ export const NamesList: FC<NamesListProps> = ({ className, names, onZoomToLocati
 								)}
 								tooltipPosition="left"
 								onClick={() =>
-									onZoomToLocation(nameInfo.ocrLocationX, nameInfo.ocrLocationY)
+									onZoomToLocation(
+										nameInfo.x + nameInfo.width / 2,
+										nameInfo.y + nameInfo.height / 2
+									)
 								}
 							/>
 						)}
 
 						<a
-							href={nameInfo.link}
+							href={nameInfo.iri}
 							target="_blank"
 							rel="noreferrer noopener"
-							style={{ visibility: nameInfo.link ? 'visible' : 'hidden' }}
+							// Hide if no link, so it does take up space and all links/zoom buttons are nicely below each-other
+							style={{ visibility: nameInfo.iri ? 'visible' : 'hidden' }}
 						>
 							<Button
 								icon={
@@ -141,9 +165,6 @@ export const NamesList: FC<NamesListProps> = ({ className, names, onZoomToLocati
 									'modules/ie-objects/components/names-list/names-list___meer-info-over-deze-persoon'
 								)}
 								tooltipPosition="left"
-								onClick={() =>
-									onZoomToLocation(nameInfo.ocrLocationX, nameInfo.ocrLocationY)
-								}
 							/>
 						</a>
 					</div>
@@ -152,5 +173,3 @@ export const NamesList: FC<NamesListProps> = ({ className, names, onZoomToLocati
 		</div>
 	);
 };
-
-export default NamesList;

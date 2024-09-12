@@ -1,4 +1,4 @@
-import { OrderDirection, Table } from '@meemoo/react-components';
+import { OrderDirection, PaginationBar, Table } from '@meemoo/react-components';
 import { useRouter } from 'next/router';
 import { type FC, type MouseEvent, type ReactNode, useMemo, useState } from 'react';
 import { type Row, type TableState } from 'react-table';
@@ -15,7 +15,7 @@ import {
 import { AccountLayout } from '@account/layouts';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { Loading } from '@shared/components/Loading';
-import { PaginationBar } from '@shared/components/PaginationBar';
+import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table';
@@ -170,11 +170,11 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 							pagination={({ gotoPage }) => {
 								return (
 									<PaginationBar
-										className="u-mt-16 u-mb-16"
+										{...getDefaultPaginationBarProps()}
 										count={HistoryItemListSize}
 										start={Math.max(0, filters.page - 1) * HistoryItemListSize}
 										total={visits.data?.total || 0}
-										onPageChange={(pageZeroBased) => {
+										onPageChange={(pageZeroBased: number) => {
 											gotoPage(pageZeroBased);
 											setFilters({
 												...filters,

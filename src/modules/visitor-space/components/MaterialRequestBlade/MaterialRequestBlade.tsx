@@ -212,7 +212,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					<span className={styles['c-request-material__reason-error']}>
 						<Icon className="u-mr-8" name={IconNamesLight.Exclamation} />
 						{tText(
-							'Er staan fouten in dit formulier. Corrigeer deze en probeer het opnieuw.'
+							'modules/visitor-space/components/material-request-blade/material-request-blade___er-staan-fouten-in-dit-formulier-corrigeer-deze-en-probeer-het-opnieuw'
 						)}
 					</span>
 				) : null}
@@ -336,7 +336,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							{noTypeSelectedOnSave ? (
 								<span className="c-form-control__errors">
 									<Icon className="u-mr-8 " name={IconNamesLight.Exclamation} />
-									{tText('type verplicht error')}
+									{tText(
+										'modules/visitor-space/components/material-request-blade/material-request-blade___type-verplicht-error'
+									)}
 								</span>
 							) : null}
 						</dd>

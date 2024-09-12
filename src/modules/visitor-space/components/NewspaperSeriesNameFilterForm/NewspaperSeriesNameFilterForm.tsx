@@ -13,8 +13,12 @@ export const NewspaperSeriesNameFilterForm: FC<DefaultFilterFormProps<any>> = ({
 		<AutocompleteFieldFilterForm
 			className={className}
 			searchFilterId={SearchFilterId.NewspaperSeriesName}
-			filterTitle={tText('Krant serie')}
-			fieldLabel={tText('Naam van de krant serie')}
+			filterTitle={tText(
+				'modules/visitor-space/components/newspaper-series-name-filter-form/newspaper-series-name-filter-form___krant-serie'
+			)}
+			fieldLabel={tText(
+				'modules/visitor-space/components/newspaper-series-name-filter-form/newspaper-series-name-filter-form___naam-van-de-krant-serie'
+			)}
 		>
 			{children}
 		</AutocompleteFieldFilterForm>
