@@ -42,6 +42,10 @@ module.exports = withBundleAnalyzer(
 			 * https://meemoo.atlassian.net/browse/ARC-1932
 			 */
 			largePageDataBytes: 300 * 1000,
+			/**
+			 * Limit the size of the cache used by the Server side rendering cache
+			 */
+			isrMemoryCacheSize: 2 * 1024 * 1024 * 1024, // 2GB in bytes
 		},
 		webpack: (config, options) => {
 			// Required for ky-universal top level await used in admin core inside the api service

@@ -7,9 +7,11 @@ export const VIEW_TOGGLE_OPTIONS = [
 	{
 		id: 'grid',
 		iconName: IconNamesLight.GridView,
+		title: tText('hover gridweergave'),
 	},
 	{
 		id: 'list',
 		iconName: IconNamesLight.ListView,
+		title: tText('hover lijstweergave'),
 	},
 ];

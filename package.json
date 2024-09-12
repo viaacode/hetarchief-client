@@ -1,6 +1,6 @@
 {
   "name": "hetarchief-client",
-  "version": "3.0.12",
+  "version": "3.0.13",
   "private": true,
   "contributors": [
     "Bert Verhelst <bert.verhelst@studiohyperdrive.be>",
@@ -38,7 +38,7 @@
     "@emotion/cache": "11.11.0",
     "@flowplayer/player": "3.3.0",
     "@hookform/resolvers": "2.9.11",
-    "@meemoo/admin-core-ui": "4.0.45",
+    "@meemoo/admin-core-ui": "4.0.48",
     "@meemoo/react-components": "4.0.12",
     "@react-hook/resize-observer": "1.2.5",
     "@reduxjs/toolkit": "1.9.6",
@@ -97,6 +97,7 @@
     "react-toastify": "9.1.3",
     "react-zendesk": "0.1.13",
     "sharp": "0.32.6",
+    "use-debouncy": "5.0.1",
     "use-query-params": "1.2.3",
     "xml2js": "0.6.2",
     "yup": "1.4.0"

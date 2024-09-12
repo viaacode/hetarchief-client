@@ -101,6 +101,24 @@ export const mapFiltersToElastic = (query: SearchPageQueryParams): IeObjectsSear
 			operator: IeObjectsSearchOperator.CONTAINS,
 			value: (query[SearchFilterId.Creator] as string) || '',
 		},
+		// Newspaper Series Name
+		{
+			field: IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME,
+			operator: IeObjectsSearchOperator.IS,
+			value: (query[SearchFilterId.NewspaperSeriesName] as string) || '',
+		},
+		// Location created
+		{
+			field: IeObjectsSearchFilterField.LOCATION_CREATED,
+			operator: IeObjectsSearchOperator.IS,
+			value: (query[SearchFilterId.LocationCreated] as string) || '',
+		},
+		// Mentions fallen soldiers
+		{
+			field: IeObjectsSearchFilterField.MENTIONS,
+			operator: IeObjectsSearchOperator.IS,
+			value: (query[SearchFilterId.Mentions] as string) || '',
+		},
 		// Genre
 		{
 			field: IeObjectsSearchFilterField.GENRE,

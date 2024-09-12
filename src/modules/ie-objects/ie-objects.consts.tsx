@@ -586,6 +586,10 @@ export const GET_METADATA_FIELDS = (
 			data: mediaInfo.locationCreated,
 		},
 		{
+			title: tText('Namenlijst gesneuvelden'),
+			data: mediaInfo.mentions,
+		},
+		{
 			title: tText('modules/ie-objects/ie-objects___periode-van-uitgave'),
 			data: compact([mediaInfo.startDate, mediaInfo.endDate]).join(' - '),
 		},
@@ -687,10 +691,10 @@ export const GET_METADATA_FIELDS = (
 		},
 		...getOcrMetadataFields(simplifiedAlto),
 		{
-			title: tHtml('IIIF manifest'),
+			title: tHtml('modules/ie-objects/ie-objects___iiif-manifest'),
 			data: mediaInfo?.maintainerIiifAgreement && activeFile?.storedAt && (
 				<a href={activeFile?.storedAt} target="_blank" rel="noreferrer">
-					{tText('manifest link')}
+					{tText('modules/ie-objects/ie-objects___manifest-link')}
 				</a>
 			),
 		},
