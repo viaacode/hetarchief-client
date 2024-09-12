@@ -1,4 +1,4 @@
-import { OrderDirection, type Row, Table } from '@meemoo/react-components';
+import { OrderDirection, PaginationBar, type Row, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil } from 'lodash-es';
 import { type FC, type MouseEvent, type ReactNode, useMemo, useState } from 'react';
@@ -18,7 +18,7 @@ import { useGetMaterialRequests } from '@material-requests/hooks/get-material-re
 import { type MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { Loading } from '@shared/components/Loading';
-import { PaginationBar } from '@shared/components/PaginationBar';
+import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table';
@@ -91,7 +91,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const renderPagination = ({ gotoPage }: { gotoPage: (i: number) => void }): ReactNode => (
 		<PaginationBar
-			className="u-mt-16 u-mb-16"
+			{...getDefaultPaginationBarProps()}
 			start={Math.max(0, filters.page - 1) * ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}
 			total={materialRequests?.total || 0}
 			count={ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}

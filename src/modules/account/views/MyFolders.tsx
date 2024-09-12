@@ -1,4 +1,4 @@
-import { Button, FormControl } from '@meemoo/react-components';
+import { Button, FormControl, PaginationBar } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil, kebabCase } from 'lodash-es';
 import Link from 'next/link';
@@ -25,7 +25,8 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { type ListNavigationItem } from '@shared/components/ListNavigation';
 import { type IdentifiableMediaCard, TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
 import { MediaCardList } from '@shared/components/MediaCardList';
-import { PaginationBar } from '@shared/components/PaginationBar';
+import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
+import paginationBarStyles from '@shared/components/PaginationBar/PaginationBar.module.scss';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
@@ -625,12 +626,16 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 									{folderMedia.data &&
 										folderMedia.data?.total > FolderItemListSize && (
 											<PaginationBar
-												className="u-mb-48"
+												{...getDefaultPaginationBarProps()}
+												className={clsx(
+													paginationBarStyles['c-pagination-bar'],
+													'u-mb-48'
+												)}
 												start={(filters.page - 1) * FolderItemListSize}
 												count={FolderItemListSize}
 												showBackToTop
 												total={folderMedia.data?.total || 0}
-												onPageChange={(page) =>
+												onPageChange={(page: number) =>
 													setFilters({
 														...filters,
 														page: page + 1,

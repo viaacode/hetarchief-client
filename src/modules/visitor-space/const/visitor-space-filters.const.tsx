@@ -108,7 +108,7 @@ export const SEARCH_PAGE_FILTERS = (
 	},
 	{
 		id: SearchFilterId.NewspaperSeriesName,
-		label: tText('Reeks'),
+		label: tText('modules/visitor-space/const/visitor-space-filters___reeks'),
 		form: NewspaperSeriesNameFilterForm,
 		type: FilterMenuType.Modal,
 		tabs: [SearchPageMediaType.Newspaper],
@@ -122,7 +122,7 @@ export const SEARCH_PAGE_FILTERS = (
 	},
 	{
 		id: SearchFilterId.LocationCreated,
-		label: tText('Plaats van uitgave'),
+		label: tText('modules/visitor-space/const/visitor-space-filters___plaats-van-uitgave'),
 		form: LocationCreatedFilterForm,
 		type: FilterMenuType.Modal,
 		tabs: [SearchPageMediaType.Newspaper],
@@ -143,7 +143,7 @@ export const SEARCH_PAGE_FILTERS = (
 	},
 	{
 		id: SearchFilterId.Mentions,
-		label: tText('Namenlijst gesneuvelden'),
+		label: tText('modules/visitor-space/const/visitor-space-filters___namenlijst-gesneuvelden'),
 		form: MentionsFilterForm,
 		type: FilterMenuType.Modal,
 		tabs: [SearchPageMediaType.Newspaper],

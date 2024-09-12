@@ -1,4 +1,4 @@
-import { OrderDirection, type Row, Table } from '@meemoo/react-components';
+import { OrderDirection, PaginationBar, type Row, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
 import { type TableState } from 'react-table';
@@ -12,7 +12,7 @@ import {
 	VISIT_REQUEST_ID_QUERY_KEY,
 } from '@cp/const/requests.const';
 import { Loading } from '@shared/components/Loading';
-import { PaginationBar } from '@shared/components/PaginationBar';
+import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
 import ProcessRequestBlade from '@shared/components/ProcessRequestBlade/ProcessRequestBlade';
 import { SearchBar } from '@shared/components/SearchBar';
 import { sortingIcons } from '@shared/components/Table';
@@ -202,7 +202,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 						pagination={({ gotoPage }) => {
 							return (
 								<PaginationBar
-									className="u-mt-16 u-mb-16"
+									{...getDefaultPaginationBarProps()}
 									count={RequestTablePageSize}
 									start={Math.max(0, filters.page - 1) * RequestTablePageSize}
 									total={visits?.total || 0}
