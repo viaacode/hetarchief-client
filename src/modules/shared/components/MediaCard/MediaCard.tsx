@@ -232,17 +232,6 @@ const MediaCard: FC<MediaCardProps> = ({
 		<div className={clsx(styles['c-media-card__header-duration'])}>{duration}</div>
 	);
 
-	const renderHeader = () => {
-		if (type === IeObjectType.Audio) {
-			// Only render the waveform if the thumbnail is available
-			// The thumbnail is an ugly speaker icon that we never want to show
-			// But if that thumbnail is not available it most likely means this object does not have the BEZOEKERTOOL-CONTENT license
-			return renderImage('/images/waveform.svg');
-		}
-
-		return renderImage(preview);
-	};
-
 	const renderTags = () => {
 		return hasRelated && <Badge variants="small" text={<Icon name={IconNamesLight.Link} />} />;
 	};
@@ -280,7 +269,8 @@ const MediaCard: FC<MediaCardProps> = ({
 	};
 
 	const renderImage = (imgPath: string | undefined) => {
-		if (!imgPath) {
+		let imagePath: string | undefined = imgPath;
+		if (!imagePath) {
 			return (
 				<div
 					className={clsx(
@@ -297,6 +287,13 @@ const MediaCard: FC<MediaCardProps> = ({
 			);
 		}
 
+		if (type === IeObjectType.Audio) {
+			// Only render the waveform if the thumbnail is available
+			// The thumbnail is an ugly speaker icon that we never want to show
+			// But if that thumbnail is not available it most likely means this object does not have the BEZOEKERTOOL-CONTENT license
+			imagePath = '/images/waveform.svg';
+		}
+
 		return (
 			<div
 				className={clsx(
@@ -305,7 +302,7 @@ const MediaCard: FC<MediaCardProps> = ({
 					view === 'list' && styles['c-media-card__header--list']
 				)}
 			>
-				<Image src={imgPath} alt={''} unoptimized={true} layout="fill" priority />
+				<Image src={imagePath} alt={''} unoptimized={true} layout="fill" priority />
 				{!isNil(icon) && (
 					<>
 						<div className={clsx(styles['c-media-card__header-icon'])}>
@@ -385,7 +382,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				className={classNames}
 				orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
 				title={renderTitle()}
-				image={renderHeader()}
+				image={renderImage(preview)}
 				subtitle={objectId}
 				caption={renderCaption()}
 				toolbar={renderToolbar()}
