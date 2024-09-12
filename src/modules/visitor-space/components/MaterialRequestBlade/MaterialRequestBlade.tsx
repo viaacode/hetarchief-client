@@ -210,7 +210,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				{noTypeSelectedOnSave ? (
 					<span className={styles['c-request-material__reason-error']}>
 						{tText(
-							'Er staan fouten in dit formulier. Corrigeer deze en probeer het opnieuw.'
+							'modules/visitor-space/components/material-request-blade/material-request-blade___er-staan-fouten-in-dit-formulier-corrigeer-deze-en-probeer-het-opnieuw'
 						)}
 					</span>
 				) : null}
@@ -333,7 +333,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							/>
 							{noTypeSelectedOnSave ? (
 								<span className="c-form-control__errors">
-									{tText('type verplicht error')}
+									{tText(
+										'modules/visitor-space/components/material-request-blade/material-request-blade___type-verplicht-error'
+									)}
 								</span>
 							) : null}
 						</dd>

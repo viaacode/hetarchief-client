@@ -1,11 +1,10 @@
-import { Table } from '@meemoo/react-components';
+import { PaginationBar, Table } from '@meemoo/react-components';
 import { type ComponentMeta, type ComponentStory } from '@storybook/react';
 import React from 'react';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-
-import { PaginationBar } from '../PaginationBar';
+import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
 
 import { mockColumns, mockData } from './__mocks__/table';
 
@@ -39,6 +38,8 @@ Default.args = {
 	pagination: ({ gotoPage }) => {
 		return (
 			<PaginationBar
+				{...getDefaultPaginationBarProps()}
+				className=""
 				count={8}
 				start={0}
 				total={123}

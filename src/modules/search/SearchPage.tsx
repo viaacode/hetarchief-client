@@ -4,6 +4,7 @@ import {
 	Button,
 	FormControl,
 	OrderDirection,
+	PaginationBar,
 	type TabProps,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
@@ -43,7 +44,8 @@ import {
 	PAGE_NUMBER_OF_MANY_RESULTS_TILE,
 } from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
-import { PaginationBar } from '@shared/components/PaginationBar';
+import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
+import paginationBarStyles from '@shared/components/PaginationBar/PaginationBar.module.scss';
 import { Placeholder } from '@shared/components/Placeholder';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ScrollableTabs, TabLabel } from '@shared/components/Tabs';
@@ -981,7 +983,8 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				showManyResultsTile={showManyResultsTile}
 			/>
 			<PaginationBar
-				className="u-mb-48"
+				{...getDefaultPaginationBarProps()}
+				className={clsx(paginationBarStyles['c-pagination-bar'], 'u-mb-48')}
 				start={(page - 1) * SEARCH_RESULTS_PAGE_SIZE}
 				count={SEARCH_RESULTS_PAGE_SIZE}
 				showBackToTop

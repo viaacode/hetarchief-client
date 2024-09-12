@@ -586,7 +586,7 @@ export const GET_METADATA_FIELDS = (
 			data: mediaInfo.locationCreated,
 		},
 		{
-			title: tText('Namenlijst gesneuvelden'),
+			title: tText('modules/ie-objects/ie-objects___namenlijst-gesneuvelden'),
 			data: mediaInfo.mentions,
 		},
 		{

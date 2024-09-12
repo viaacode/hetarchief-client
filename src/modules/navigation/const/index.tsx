@@ -87,7 +87,7 @@ export const GET_NAV_ITEMS_RIGHT_LOGGED_IN = (
 					)}
 					icon={<Icon name={IconNamesSolid.Notification} aria-hidden />}
 					aria-label={tText('modules/navigation/const/index___notificaties')}
-					title={tText('hover notificaties')}
+					title={tText('modules/navigation/const/index___hover-notificaties')}
 				/>
 			),
 		},

@@ -1,4 +1,4 @@
-import { OrderDirection, Table } from '@meemoo/react-components';
+import { OrderDirection, PaginationBar, Table } from '@meemoo/react-components';
 import { type FC, type ReactNode, useMemo, useState } from 'react';
 import { type TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
@@ -14,7 +14,7 @@ import { CPAdminLayout } from '@cp/layouts';
 import { ApproveRequestBlade } from '@shared/components/ApproveRequestBlade';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Loading } from '@shared/components/Loading';
-import { PaginationBar } from '@shared/components/PaginationBar';
+import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
@@ -199,7 +199,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 					pagination={({ gotoPage }) => {
 						return (
 							<PaginationBar
-								className="u-mt-16 u-mb-16"
+								{...getDefaultPaginationBarProps()}
 								count={RequestTablePageSize}
 								start={Math.max(0, filters.page - 1) * RequestTablePageSize}
 								total={visits?.total || 0}

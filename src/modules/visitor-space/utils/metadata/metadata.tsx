@@ -69,9 +69,15 @@ export const getFilterLabel = (prop: MetadataProp): string => {
 				'modules/visitor-space/utils/metadata/metadata___uitgavedatum'
 			),
 			[MetadataProp.Creator]: tText('modules/visitor-space/utils/metadata/metadata___maker'),
-			[MetadataProp.NewspaperSeriesName]: tText('Reeks'),
-			[MetadataProp.LocationCreated]: tText('Plaats van uitgave'),
-			[MetadataProp.Mentions]: tText('Namenlijst gesneuvelden'),
+			[MetadataProp.NewspaperSeriesName]: tText(
+				'modules/visitor-space/utils/metadata/metadata___reeks'
+			),
+			[MetadataProp.LocationCreated]: tText(
+				'modules/visitor-space/utils/metadata/metadata___plaats-van-uitgave'
+			),
+			[MetadataProp.Mentions]: tText(
+				'modules/visitor-space/utils/metadata/metadata___namenlijst-gesneuvelden'
+			),
 			[MetadataProp.Description]: tText(
 				'modules/visitor-space/utils/metadata/metadata___beschrijving'
 			),
