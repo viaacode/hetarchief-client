@@ -341,12 +341,15 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							) : null}
 						</dd>
 						<dt className={styles['c-request-material__content-label']}>
-							{tText(
-								'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
-							)}
+							<label htmlFor="reason-input">
+								{tText(
+									'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
+								)}
+							</label>
 						</dt>
 						<dd className={styles['c-request-material__content-value']}>
 							<TextArea
+								id="reason-input"
 								className={styles['c-request-material__reason-input']}
 								onChange={(e) => setReasonInputValue(e.target.value)}
 								value={reasonInputValue}
