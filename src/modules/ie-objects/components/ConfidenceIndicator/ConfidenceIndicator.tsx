@@ -18,7 +18,7 @@ export const ConfidenceIndicator: FC<ConfidenceIndicatorProps> = ({ className, c
 						<span className={confidence > 25 ? 'active' : undefined} />
 					</div>
 
-					<span>{confidence}%</span>
+					<span>{Math.ceil(confidence * 100)}%</span>
 				</div>
 			</TooltipTrigger>
 			<TooltipContent>
