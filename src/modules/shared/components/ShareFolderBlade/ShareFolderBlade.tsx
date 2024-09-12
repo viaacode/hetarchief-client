@@ -12,6 +12,7 @@ import { Blade } from '@shared/components/Blade/Blade';
 import { CopyButton } from '@shared/components/CopyButton';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -157,7 +158,11 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 						<FormControl
 							className="u-mb-8 u-mb-24:md"
 							id={labelKeys.email}
-							errors={[errors.email?.message]}
+							errors={[
+								<>
+									<RedFormWarning error={errors.email?.message} />
+								</>,
+							]}
 						>
 							<Controller
 								name="email"

@@ -19,6 +19,7 @@ import {
 	type ApproveRequestFormState,
 } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.types';
 import { Blade } from '@shared/components/Blade/Blade';
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import {
 	RefinableRadioButton,
 	type RefinableRadioButtonOption,
@@ -451,8 +452,17 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					<FormControl
 						className={clsx(styles['c-approve-request-blade__access-type'], 'u-mb-32')}
 						errors={[
-							errors.accessType?.message,
-							(errors.accessType?.folderIds as FieldError | undefined)?.message,
+							<>
+								<RedFormWarning error={errors.accessType?.message} />
+							</>,
+							<>
+								<RedFormWarning
+									error={
+										(errors.accessType?.folderIds as FieldError | undefined)
+											?.message
+									}
+								/>
+							</>,
 						]}
 						id={labelKeys.accessType}
 						label={tHtml(
@@ -464,7 +474,11 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 					<FormControl
 						className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
-						errors={[errors.accessFrom?.message]}
+						errors={[
+							<>
+								<RedFormWarning error={errors.accessFrom?.message} />
+							</>,
+						]}
 						id={labelKeys.accessFrom}
 						label={tHtml(
 							'modules/cp/components/approve-request-blade/approve-request-blade___van'
@@ -475,7 +489,11 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 					<FormControl
 						className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
-						errors={[errors.accessTo?.message]}
+						errors={[
+							<>
+								<RedFormWarning error={errors.accessTo?.message} />
+							</>,
+						]}
 						id={labelKeys.accessTo}
 						label={tHtml(
 							'modules/cp/components/approve-request-blade/approve-request-blade___tot'

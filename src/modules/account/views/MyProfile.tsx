@@ -40,6 +40,7 @@ import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-cont
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { changeApplicationLocale } from '@shared/helpers/change-application-locale';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -250,7 +251,14 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 	};
 
 	const renderNewsletterForm = (): ReactNode => (
-		<FormControl id={labelKeys.acceptNewsletter} errors={[errors.acceptNewsletter?.message]}>
+		<FormControl
+			id={labelKeys.acceptNewsletter}
+			errors={[
+				<>
+					<RedFormWarning error={errors.acceptNewsletter?.message} />
+				</>,
+			]}
+		>
 			<Controller
 				name="acceptNewsletter"
 				control={control}

@@ -1,12 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, type SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil } from 'lodash-es';
 import { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { type SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SEPARATOR } from '@shared/const';
 import { tHtml } from '@shared/helpers/translate';
 import { isRange, Operator } from '@shared/types';
@@ -87,9 +87,11 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 			<div className={clsx(className)}>
 				<FormControl
 					className="u-mb-24 c-form-control--label-hidden"
-					errors={
-						!isNil(errors.operator?.message) ? [errors.operator?.message] : undefined
-					}
+					errors={[
+						<>
+							<RedFormWarning error={errors.operator?.message} />
+						</>,
+					]}
 					id={labelKeys.operator}
 					label={tHtml(
 						'modules/visitor-space/components/duration-filter-form/duration-filter-form___operator'
@@ -130,9 +132,11 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 
 				<FormControl
 					className="c-form-control--label-hidden"
-					errors={
-						!isNil(errors.duration?.message) ? [errors.duration?.message] : undefined
-					}
+					errors={[
+						<>
+							<RedFormWarning error={errors.duration?.message} />
+						</>,
+					]}
 					id={labelKeys.duration}
 					label={tHtml(
 						'modules/visitor-space/components/duration-filter-form/duration-filter-form___waarde'

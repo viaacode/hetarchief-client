@@ -10,6 +10,7 @@ import { foldersService } from '@account/services/folders';
 import { type CreateFolderFormState } from '@account/types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 
@@ -85,7 +86,11 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 				'u-px-24',
 				'c-form-control--label-hidden'
 			)}
-			errors={[errors.name?.message]}
+			errors={[
+				<>
+					<RedFormWarning error={errors.name?.message} />
+				</>,
+			]}
 			id={labelKeys.name}
 			label={defaultName}
 		>

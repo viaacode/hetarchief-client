@@ -6,6 +6,7 @@ import { type FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Blade } from '@shared/components/Blade/Blade';
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tHtml } from '@shared/helpers/translate';
 import { useZendesk } from '@shared/hooks/use-zendesk';
 import { toastService } from '@shared/services/toast-service';
@@ -169,7 +170,11 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 				{props.isOpen && (
 					<FormControl
 						className="u-mb-24"
-						errors={[errors.report?.message]}
+						errors={[
+							<>
+								<RedFormWarning error={errors.report?.message} />
+							</>,
+						]}
 						id="report"
 						label={tHtml(
 							'modules/visitor-space/components/report-blade/report-blade___beschrijf-het-probleem'
@@ -199,7 +204,11 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 						className={clsx('u-mb-24', {
 							[styles['c-report-blade__input--disabled']]: !!user?.email,
 						})}
-						errors={[errors.email?.message]}
+						errors={[
+							<>
+								<RedFormWarning error={errors.email?.message} />{' '}
+							</>,
+						]}
 						id="email"
 						label={tHtml(
 							'modules/visitor-space/components/report-blade/report-blade___email-adres'

@@ -14,6 +14,7 @@ import {
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SpacePreview } from '@shared/components/SpacePreview';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -101,7 +102,11 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 				<FormControl
 					className="u-mx-8 u-mb-24"
 					id={labelKeys.acceptTerms}
-					errors={[errors.acceptTerms?.message]}
+					errors={[
+						<>
+							<RedFormWarning error={errors.acceptTerms?.message} />
+						</>,
+					]}
 				>
 					<Controller
 						name="acceptTerms"
@@ -124,6 +129,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 
 				{isError && (
 					<p className={styles['c-request-access-blade__error']}>
+						<Icon name={IconNamesLight.Exclamation} />
 						{tHtml(
 							'modules/home/components/request-access-blade/request-access-blade___error'
 						)}
@@ -171,7 +177,11 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 
 				<FormControl
 					className="u-mb-24"
-					errors={[errors.requestReason?.message]}
+					errors={[
+						<>
+							<RedFormWarning error={errors.acceptTerms?.message} />
+						</>,
+					]}
 					id={labelKeys.requestReason}
 					label={tHtml(
 						'modules/home/components/request-access-blade/request-access-blade___reden-van-aanvraag'

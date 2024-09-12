@@ -1,11 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil } from 'lodash-es';
 import { type ChangeEvent, type FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useQueryParams } from 'use-query-params';
 
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tText } from '@shared/helpers/translate';
 import { SearchFilterId } from '@visitor-space/types';
 
@@ -71,7 +71,11 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 			>
 				<FormControl
 					className="c-form-control--label-hidden"
-					errors={!isNil(errors.creator?.message) ? [errors.creator?.message] : undefined}
+					errors={[
+						<>
+							<RedFormWarning error={errors.creator?.message} />
+						</>,
+					]}
 					id="CreatorFilterForm__creator"
 					label={tText(
 						'modules/visitor-space/components/creator-filter-form/creator-filter-form___maker'

@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { COMMUNICATION_SECTION_ID } from '@account/const/MyProfile.consts';
 import { selectHasCheckedLogin, selectIsLoggedIn } from '@auth/store/user';
 import { Loading } from '@shared/components/Loading';
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { labelKeys, NEWSLETTER_FORM_SCHEMA } from '@shared/const/newsletter';
@@ -91,7 +92,11 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 			<FormControl
 				className="u-mb-24"
 				id={labelKeys.firstName}
-				errors={[errors.firstName?.message]}
+				errors={[
+					<>
+						<RedFormWarning error={errors.firstName?.message} />
+					</>,
+				]}
 				label={tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-voornaam')}
 			>
 				<Controller
@@ -104,7 +109,11 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 			<FormControl
 				className="u-mb-24"
 				id={labelKeys.lastName}
-				errors={[errors.lastName?.message]}
+				errors={[
+					<>
+						<RedFormWarning error={errors.lastName?.message} />
+					</>,
+				]}
 				label={tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-achternaam')}
 			>
 				<Controller
@@ -117,7 +126,11 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 			<FormControl
 				className="u-mb-24"
 				id={labelKeys.mail}
-				errors={[errors.mail?.message]}
+				errors={[
+					<>
+						<RedFormWarning error={errors.mail?.message} />
+					</>,
+				]}
 				label={tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-emailadres')}
 			>
 				<Controller

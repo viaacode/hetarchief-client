@@ -8,6 +8,7 @@ import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestRequesterCapacity, MaterialRequestType } from '@material-requests/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
@@ -209,6 +210,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				/> */}
 				{noTypeSelectedOnSave ? (
 					<span className={styles['c-request-material__reason-error']}>
+						<Icon className="u-mr-8" name={IconNamesLight.Exclamation} />
 						{tText(
 							'Er staan fouten in dit formulier. Corrigeer deze en probeer het opnieuw.'
 						)}
@@ -333,6 +335,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							/>
 							{noTypeSelectedOnSave ? (
 								<span className="c-form-control__errors">
+									<Icon className="u-mr-8 " name={IconNamesLight.Exclamation} />
 									{tText('type verplicht error')}
 								</span>
 							) : null}
