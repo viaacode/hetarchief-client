@@ -225,9 +225,10 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 				<FormControl
 					className={clsx('u-mb-24 c-form-control--label-hidden')}
 					errors={[
-						<>
-							<RedFormWarning error={errors.operator?.message} />
-						</>,
+						<RedFormWarning
+							error={errors.operator?.message}
+							key="form-error--operator"
+						/>,
 					]}
 					id={labelKeys.operator}
 					label={tHtml(
@@ -261,9 +262,10 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 				<FormControl
 					className="u-mb-24 c-form-control--label-hidden"
 					errors={[
-						<>
-							<RedFormWarning error={errors.releaseDate?.message} />
-						</>,
+						<RedFormWarning
+							error={errors.releaseDate?.message}
+							key="form-error--release-date"
+						/>,
 					]}
 					id={labelKeys.releaseDate}
 					label={tHtml(

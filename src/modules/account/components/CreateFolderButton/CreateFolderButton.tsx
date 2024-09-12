@@ -86,11 +86,7 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 				'u-px-24',
 				'c-form-control--label-hidden'
 			)}
-			errors={[
-				<>
-					<RedFormWarning error={errors.name?.message} />
-				</>,
-			]}
+			errors={[<RedFormWarning error={errors.name?.message} key="form-error--name" />]}
 			id={labelKeys.name}
 			label={defaultName}
 		>

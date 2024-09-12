@@ -171,9 +171,10 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 					<FormControl
 						className="u-mb-24"
 						errors={[
-							<>
-								<RedFormWarning error={errors.report?.message} />
-							</>,
+							<RedFormWarning
+								error={errors.report?.message}
+								key="form-error--report"
+							/>,
 						]}
 						id="report"
 						label={tHtml(
@@ -205,9 +206,10 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 							[styles['c-report-blade__input--disabled']]: !!user?.email,
 						})}
 						errors={[
-							<>
-								<RedFormWarning error={errors.email?.message} />{' '}
-							</>,
+							<RedFormWarning
+								error={errors.email?.message}
+								key="form-error--email"
+							/>,
 						]}
 						id="email"
 						label={tHtml(

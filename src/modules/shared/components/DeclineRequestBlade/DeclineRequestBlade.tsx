@@ -105,9 +105,10 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 					<FormControl
 						className="u-mb-24"
 						errors={[
-							<>
-								<RedFormWarning error={errors.reasonForDenial?.message} />
-							</>,
+							<RedFormWarning
+								error={errors.reasonForDenial?.message}
+								key="form-error--reason-for-denial"
+							/>,
 						]}
 						id={labelKeys.reasonForDenial}
 						label={tHtml(

@@ -93,9 +93,10 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 				className="u-mb-24"
 				id={labelKeys.firstName}
 				errors={[
-					<>
-						<RedFormWarning error={errors.firstName?.message} />
-					</>,
+					<RedFormWarning
+						error={errors.firstName?.message}
+						key="form-error--first-name"
+					/>,
 				]}
 				label={tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-voornaam')}
 			>
@@ -110,9 +111,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 				className="u-mb-24"
 				id={labelKeys.lastName}
 				errors={[
-					<>
-						<RedFormWarning error={errors.lastName?.message} />
-					</>,
+					<RedFormWarning error={errors.lastName?.message} key="form-error--last-name" />,
 				]}
 				label={tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-achternaam')}
 			>
