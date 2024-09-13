@@ -242,7 +242,9 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<>
 			<SeoTags
-				title={tText('pages/beheer/materiaalaanvragen/index___materiaalaanvragen')}
+				title={`${tText(
+					'pages/beheer/materiaalaanvragen/index___materiaalaanvragen'
+				)} | ${tText('Beheer')} `}
 				description={tText(
 					'pages/beheer/materiaalaanvragen/index___materiaalaanvragen-meta-omschrijving'
 				)}

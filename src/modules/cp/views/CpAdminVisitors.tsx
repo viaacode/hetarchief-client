@@ -293,7 +293,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<>
 			<SeoTags
-				title={tText('pages/beheer/bezoekers/index___bezoekers')}
+				title={`${tText('pages/beheer/bezoekers/index___bezoekers')} | ${tText('Beheer')}`}
 				description={tText(
 					'pages/beheer/bezoekers/index___beheer-bezoekers-meta-omschrijving'
 				)}

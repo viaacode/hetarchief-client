@@ -24,7 +24,9 @@ export const CpAdminVisitRequestsPage: FC<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<>
 			<SeoTags
-				title={tText('pages/beheer/toegangsaanvragen/index___toegangsaanvragen')}
+				title={`${tText(
+					'pages/beheer/toegangsaanvragen/index___toegangsaanvragen'
+				)} | ${tText('Beheer')}`}
 				description={tText(
 					'pages/beheer/toegangsaanvragen/index___toegangsaanvragen-meta-omschrijving'
 				)}
