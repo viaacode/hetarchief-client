@@ -466,6 +466,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		return (
 			simplifiedAltoInfo?.text?.filter((altoText) =>
 				searchTerms
+					.toLowerCase()
 					.split(' ')
 					.some((searchTermWord) => altoText.text.toLowerCase().includes(searchTermWord))
 			) || []
@@ -496,32 +497,35 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			}
 
 			const searchResultsTemp: OcrSearchResult[] = [];
-			newSearchTerms.split(' ').forEach((searchTerm) => {
-				pageOcrTexts.forEach((pageOcrText, pageIndex) => {
-					if (!pageOcrText) {
-						return; // Skip this page since it doesn't have an ocr transcript
-					}
-					let searchTermCharacterOffset: number = pageOcrText.indexOf(searchTerm);
-					let searchTermIndexOnPage: number = 0;
-					while (searchTermCharacterOffset !== -1) {
-						const searchResult: OcrSearchResult = {
-							pageIndex,
-							searchTerm,
-							searchTermCharacterOffset,
-							searchTermIndexOnPage,
-						};
-						searchResultsTemp.push(searchResult);
-						searchTermCharacterOffset = pageOcrText?.indexOf(
-							searchTerm,
-							searchTermCharacterOffset + 1
-						);
-						searchTermIndexOnPage += 1;
-					}
+			newSearchTerms
+				.toLowerCase()
+				.split(' ')
+				.forEach((searchTerm) => {
+					pageOcrTexts.forEach((pageOcrText, pageIndex) => {
+						if (!pageOcrText) {
+							return; // Skip this page since it doesn't have an ocr transcript
+						}
+						let searchTermCharacterOffset: number = pageOcrText.indexOf(searchTerm);
+						let searchTermIndexOnPage: number = 0;
+						while (searchTermCharacterOffset !== -1) {
+							const searchResult: OcrSearchResult = {
+								pageIndex,
+								searchTerm,
+								searchTermCharacterOffset,
+								searchTermIndexOnPage,
+							};
+							searchResultsTemp.push(searchResult);
+							searchTermCharacterOffset = pageOcrText?.indexOf(
+								searchTerm,
+								searchTermCharacterOffset + 1
+							);
+							searchTermIndexOnPage += 1;
+						}
+					});
 				});
-			});
 
 			setSearchResults(searchResultsTemp);
-			setSearchTerms(newSearchTerms);
+			setSearchTerms(newSearchTerms.toLowerCase());
 
 			const parsedUrl = parseUrl(window.location.href);
 			const newUrl = stringifyUrl({
