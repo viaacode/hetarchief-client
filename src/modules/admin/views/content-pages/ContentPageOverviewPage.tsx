@@ -1,11 +1,11 @@
-import { ContentPageOverview } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import { type Avo } from '@viaa/avo2-types';
 import Link from 'next/link';
-import React, { type FC } from 'react';
+import React, { type FC, lazy, Suspense } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
+import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ADMIN_CORE_ROUTES_BY_LOCALE } from '@shared/const';
@@ -13,6 +13,12 @@ import { tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { type DefaultSeoInfo } from '@shared/types/seo';
+
+const ContentPageOverview = lazy(() =>
+	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({
+		default: adminCoreModule.ContentPageOverview,
+	}))
+);
 
 export const ContentPageOverviewPage: FC<
 	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined }
@@ -54,7 +60,9 @@ export const ContentPageOverviewPage: FC<
 				</AdminLayout.Actions>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-content">
-						<ContentPageOverview commonUser={commonUser} />
+						<Suspense fallback={<Loading fullscreen owner="ContentPageOverviewPage" />}>
+							<ContentPageOverview commonUser={commonUser} />
+						</Suspense>
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>

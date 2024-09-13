@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
+import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/dist/client.mjs';
 import {
 	Alert,
 	Box,

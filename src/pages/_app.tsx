@@ -1,4 +1,4 @@
-import { AdminConfigManager } from '@meemoo/admin-core-ui';
+import { AdminConfigManager } from '@meemoo/admin-core-ui/dist/client.mjs';
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import nlBE from 'date-fns/locale/nl-BE/index.js';
 import setDefaultOptions from 'date-fns/setDefaultOptions';
@@ -19,7 +19,7 @@ import { isServerSideRendering } from '@shared/utils/is-browser';
 import getI18n from '../../next-i18next.config.js';
 import pkg from '../../package.json';
 
-import '../styles/main.scss';
+import '../styles/main.scss'; // Set global locale:
 
 // Set global locale:
 setDefaultOptions({ locale: nlBE });

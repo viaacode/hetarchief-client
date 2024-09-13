@@ -1,4 +1,4 @@
-import { type ContentPageInfo } from '@meemoo/admin-core-ui';
+import { type ContentPageInfo } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import { type QueryClient } from '@tanstack/react-query';
 import { reverse, sortBy } from 'lodash-es';
 import { type NextRouter } from 'next/router';

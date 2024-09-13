@@ -1,4 +1,4 @@
-import { type DefaultComponentProps } from '@meemoo/admin-core-ui';
+import { type DefaultComponentProps } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import { isString } from 'lodash-es';
 import { type FC, type ReactNode } from 'react';
 

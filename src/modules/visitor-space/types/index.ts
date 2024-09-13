@@ -1,4 +1,4 @@
-import { type DefaultComponentProps } from '@meemoo/admin-core-ui';
+import { type DefaultComponentProps } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import { type SelectOption, type TagInfo } from '@meemoo/react-components';
 import { type ReactNode } from 'react';
 import { type UseFormHandleSubmit } from 'react-hook-form';

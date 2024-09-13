@@ -1,4 +1,4 @@
-import { ContentPageService, type DbContentPage } from '@meemoo/admin-core-ui';
+import { ContentPageService, type DbContentPage } from '@meemoo/admin-core-ui/dist/client.mjs';
 import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { startsWith } from 'lodash-es';
 
