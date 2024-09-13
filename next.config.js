@@ -75,6 +75,7 @@ module.exports = withBundleAnalyzer(
 				['react-table']: path.resolve('./node_modules/react-table'),
 				['react-datepicker']: path.resolve('./node_modules/react-datepicker'),
 				['react-page-split']: path.resolve('./node_modules/react-page-split'),
+				['lodash$']: path.resolve('./node_modules/lodash-es'),
 			};
 
 			return config;
