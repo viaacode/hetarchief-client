@@ -10,7 +10,6 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { ApiService } from '@shared/services/api-service';
 import { TranslationService } from '@shared/services/translation-service/translation.service';
 import { Locale } from '@shared/utils/i18n';
-import { SearchFilterId } from '@visitor-space/types';
 
 import { type CheckLoginResponse } from './auth.service.types';
 
@@ -27,7 +26,7 @@ export class AuthService {
 		router: NextRouter
 	): Promise<void> {
 		const ROUTE_PARTS = ROUTE_PARTS_BY_LOCALE[(router.locale || Locale.nl) as Locale];
-		const { redirectTo, slug, ie, ...otherQueryParams } = query;
+		const { redirectTo, ...otherQueryParams } = query;
 		let originalPath: string = (redirectTo as string) || router.asPath || '';
 
 		// Don't redirect the user back to logout, after they logged in
@@ -35,11 +34,6 @@ export class AuthService {
 			originalPath = '/';
 		}
 
-		// Redirect /slug to the search page with filter
-		if (slug && !ie) {
-			// TODO split backend filter names (VisitorSpaceFilterId) from filter names in the url (create a new enum for those)
-			originalPath = `/${ROUTE_PARTS.search}?${SearchFilterId.Maintainer}=${slug}`;
-		}
 		if (
 			(originalPath || '') === ROUTES_BY_LOCALE[(router.locale || Locale.nl) as Locale].home
 		) {
@@ -64,7 +58,7 @@ export class AuthService {
 			url: parsedRedirectUrl.url,
 			query: {
 				...parsedRedirectUrl.query,
-				...otherQueryParams,
+				...omit(otherQueryParams, 'slug'),
 			},
 		});
 
