@@ -71,9 +71,7 @@ export const AutocompleteFieldFilterForm: FC<{
 				<FormControl
 					className="c-form-control--label-hidden"
 					errors={[
-						<>
-							<RedFormWarning error={errors?.value?.message} />
-						</>,
+						<RedFormWarning error={errors?.value?.message} key="form-error--value" />,
 					]}
 					id={'AutocompleteFieldFilterForm__' + searchFilterId}
 					label={filterTitle}

@@ -159,9 +159,10 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 							className="u-mb-8 u-mb-24:md"
 							id={labelKeys.email}
 							errors={[
-								<>
-									<RedFormWarning error={errors.email?.message} />
-								</>,
+								<RedFormWarning
+									error={errors.email?.message}
+									key="form-error--email"
+								/>,
 							]}
 						>
 							<Controller

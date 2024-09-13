@@ -131,10 +131,11 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 					<FormControl
 						className="u-mb-24 c-form-control--label-hidden"
 						errors={
-							(errors?.values || []).map?.((value) => (
-								<>
-									<RedFormWarning error={value?.message} />
-								</>
+							(errors?.values || []).map?.((errorValue) => (
+								<RedFormWarning
+									error={errorValue?.message}
+									key="form-error--value"
+								/>
 							)) || []
 						}
 						id={labelKeys.values}

@@ -456,9 +456,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 						<FormControl
 							className={styles['c-cp-settings__site-settings-input']}
 							errors={[
-								<>
-									<RedFormWarning error={formErrors.orId} />
-								</>,
+								<RedFormWarning error={formErrors.orId} key="form-error--or-id" />,
 							]}
 							id={labelKeys.orId}
 							label={tHtml(
@@ -491,15 +489,9 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 
 						<FormControl
 							className={styles['c-cp-settings__site-settings-input']}
-							errors={
-								formErrors.slug
-									? [
-											<>
-												<RedFormWarning error={formErrors.slug} />
-											</>,
-									  ]
-									: []
-							}
+							errors={[
+								<RedFormWarning error={formErrors.slug} key="form-error--slug" />,
+							]}
 							id={labelKeys.slug}
 							label={tHtml(
 								'modules/cp/components/site-settings-form/site-settings-form___slug'
@@ -591,9 +583,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 						<FormControl
 							className={styles['c-cp-settings__logo-and-color__color-control']}
 							errors={[
-								<>
-									<RedFormWarning error={formErrors.color} />
-								</>,
+								<RedFormWarning error={formErrors.color} key="form-error--color" />,
 							]}
 							id={labelKeys.color}
 							label={tHtml(
@@ -611,9 +601,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 
 						<FormControl
 							errors={[
-								<>
-									<RedFormWarning error={formErrors.file} />
-								</>,
+								<RedFormWarning error={formErrors.file} key="form-error--file" />,
 							]}
 							id={labelKeys.file}
 							label={tHtml(

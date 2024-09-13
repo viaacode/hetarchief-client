@@ -254,9 +254,10 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 		<FormControl
 			id={labelKeys.acceptNewsletter}
 			errors={[
-				<>
-					<RedFormWarning error={errors.acceptNewsletter?.message} />
-				</>,
+				<RedFormWarning
+					error={errors.acceptNewsletter?.message}
+					key="form-error--accept-newsletter"
+				/>,
 			]}
 		>
 			<Controller

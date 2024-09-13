@@ -133,9 +133,10 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 				<FormControl
 					className="c-form-control--label-hidden"
 					errors={[
-						<>
-							<RedFormWarning error={errors[SearchFilterId.Duration]?.message} />
-						</>,
+						<RedFormWarning
+							error={errors[SearchFilterId.Duration]?.message}
+							key="form-error--duration"
+						/>,
 					]}
 					id={labelKeys[SearchFilterId.Duration]}
 					label={tHtml(

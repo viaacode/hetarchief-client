@@ -452,17 +452,17 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					<FormControl
 						className={clsx(styles['c-approve-request-blade__access-type'], 'u-mb-32')}
 						errors={[
-							<>
-								<RedFormWarning error={errors.accessType?.message} />
-							</>,
-							<>
-								<RedFormWarning
-									error={
-										(errors.accessType?.folderIds as FieldError | undefined)
-											?.message
-									}
-								/>
-							</>,
+							<RedFormWarning
+								error={errors.accessType?.message}
+								key="form-error--access-type"
+							/>,
+							<RedFormWarning
+								error={
+									(errors.accessType?.folderIds as FieldError | undefined)
+										?.message
+								}
+								key="form-error--access-type-folder-ids"
+							/>,
 						]}
 						id={labelKeys.accessType}
 						label={tHtml(
@@ -475,9 +475,10 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					<FormControl
 						className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
 						errors={[
-							<>
-								<RedFormWarning error={errors.accessFrom?.message} />
-							</>,
+							<RedFormWarning
+								error={errors.accessFrom?.message}
+								key="form-error--access-from"
+							/>,
 						]}
 						id={labelKeys.accessFrom}
 						label={tHtml(
@@ -490,9 +491,10 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					<FormControl
 						className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
 						errors={[
-							<>
-								<RedFormWarning error={errors.accessTo?.message} />
-							</>,
+							<RedFormWarning
+								error={errors.accessTo?.message}
+								key="form-error--access-to"
+							/>,
 						]}
 						id={labelKeys.accessTo}
 						label={tHtml(

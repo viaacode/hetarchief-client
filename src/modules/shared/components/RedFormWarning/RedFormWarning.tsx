@@ -12,5 +12,7 @@ export const RedFormWarning: FC<RedFormWarningProps> = ({ error }) => {
 			<Icon name={IconNamesLight.Exclamation} />
 			{error}
 		</div>
-	) : null;
+	) : (
+		<></>
+	);
 };

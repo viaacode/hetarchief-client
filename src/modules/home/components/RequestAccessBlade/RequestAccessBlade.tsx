@@ -103,9 +103,10 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 					className="u-mx-8 u-mb-24"
 					id={labelKeys.acceptTerms}
 					errors={[
-						<>
-							<RedFormWarning error={errors.acceptTerms?.message} />
-						</>,
+						<RedFormWarning
+							error={errors.acceptTerms?.message}
+							key="form-error--accept-terms"
+						/>,
 					]}
 				>
 					<Controller
@@ -178,9 +179,10 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 				<FormControl
 					className="u-mb-24"
 					errors={[
-						<>
-							<RedFormWarning error={errors.acceptTerms?.message} />
-						</>,
+						<RedFormWarning
+							error={errors.acceptTerms?.message}
+							key="form-error--accept-terms"
+						/>,
 					]}
 					id={labelKeys.requestReason}
 					label={tHtml(
