@@ -8,7 +8,7 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 	&__list {
 		@extend %reset-list;
 
-		margin-top: $spacer-lg;
+		margin-bottom: $spacer-lg;
 
 		// CreateFolderButton
 		&-button {

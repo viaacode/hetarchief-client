@@ -363,7 +363,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			</div>
 
 			{isOpen && (
-				<div className="u-px-32 u-bg-platinum">
+				<div className="u-px-32 u-bg-platinum u-mt-32">
 					<ul className={clsx(styles['c-add-to-folder-blade__list'])}>
 						{renderFolderCheckboxes()}
 
