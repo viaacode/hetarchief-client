@@ -59,7 +59,7 @@
     "html-entities": "2.3.3",
     "i": "^0.3.7",
     "i18next-http-backend": "^1.4.1",
-    "immer": "9.0.12",
+    "immer": "9.0.21",
     "isomorphic-dompurify": "2.11.0",
     "ky": "^0.33.3",
     "ky-universal": "^0.12.0",
