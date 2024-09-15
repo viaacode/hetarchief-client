@@ -40,21 +40,18 @@ export const ContentPageOverviewPage: FC<
 									.ADMIN_CONTENT_PAGE_CREATE as string
 							}
 							passHref
+							aria-label={tText(
+								'admin/content/views/content-overview___maak-een-nieuwe-content-pagina-aan'
+							)}
 						>
-							<a
-								aria-label={tText(
+							<Button
+								label={tText(
+									'admin/content/views/content-overview___content-toevoegen'
+								)}
+								title={tText(
 									'admin/content/views/content-overview___maak-een-nieuwe-content-pagina-aan'
 								)}
-							>
-								<Button
-									label={tText(
-										'admin/content/views/content-overview___content-toevoegen'
-									)}
-									title={tText(
-										'admin/content/views/content-overview___maak-een-nieuwe-content-pagina-aan'
-									)}
-								/>
-							</a>
+							/>
 						</Link>
 					)}
 				</AdminLayout.Actions>

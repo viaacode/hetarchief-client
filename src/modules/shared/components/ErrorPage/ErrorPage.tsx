@@ -49,15 +49,15 @@ const ErrorPage: FC<ErrorPageProps> = ({
 				)}
 
 				{link?.to && (
-					<Link href={link.to} passHref>
-						<a
-							className={styles['c-error-page__button']}
-							aria-label={tText(
-								'modules/shared/components/error-page/error-page___navigeer-naar-een-veilige-pagina'
-							)}
-						>
-							{link.component}
-						</a>
+					<Link
+						href={link.to}
+						passHref
+						className={styles['c-error-page__button']}
+						aria-label={tText(
+							'modules/shared/components/error-page/error-page___navigeer-naar-een-veilige-pagina'
+						)}
+					>
+						{link.component}
 					</Link>
 				)}
 				{link && !link?.to && link.component}

@@ -82,10 +82,11 @@ const LoggedOutVisitorSpacesHome: FC = () => {
 							{tHtml('pages/index___logged-out-home-description')}
 						</p>
 						<b>
-							<Link href={KNOWN_STATIC_ROUTES.aboutTheVisitorTool}>
-								<a className={styles['c-hero__link']}>
-									{tHtml('pages/index___hier-kom-je-er-alles-over-te-weten')}
-								</a>
+							<Link
+								href={KNOWN_STATIC_ROUTES.aboutTheVisitorTool}
+								className={styles['c-hero__link']}
+							>
+								{tHtml('pages/index___hier-kom-je-er-alles-over-te-weten')}
 							</Link>
 						</b>
 

@@ -793,14 +793,16 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 			)}
 			action={
-				<Link passHref href={`/${ROUTE_PARTS_BY_LOCALE[locale].kioskConditions}`}>
-					<a aria-label={tText('pages/slug/index___meer-info')}>
-						<Button
-							className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
-							label={tHtml('pages/slug/index___meer-info')}
-							variants={['text', 'underline']}
-						/>
-					</a>
+				<Link
+					passHref
+					href={`/${ROUTE_PARTS_BY_LOCALE[locale].kioskConditions}`}
+					aria-label={tText('pages/slug/index___meer-info')}
+				>
+					<Button
+						className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
+						label={tHtml('pages/slug/index___meer-info')}
+						variants={['text', 'underline']}
+					/>
 				</Link>
 			}
 		/>
@@ -936,8 +938,9 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				<Link
 					key={visitorSpace.slug}
 					href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${visitorSpace?.slug}`}
+					aria-label={visitorSpace?.label}
 				>
-					<a aria-label={visitorSpace?.label}>{visitorSpace?.label}</a>
+					{visitorSpace?.label}
 				</Link>
 			)
 		);

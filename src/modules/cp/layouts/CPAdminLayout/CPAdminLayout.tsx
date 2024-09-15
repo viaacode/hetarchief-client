@@ -44,11 +44,9 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 				return {
 					id,
 					node: ({ linkClassName }) => (
-						<Link href={url}>
-							<a className={linkClassName} aria-label={label}>
-								{!isNil(iconName) && <Icon className="u-mr-4" name={iconName} />}
-								<span>{label}</span>
-							</a>
+						<Link href={url} className={linkClassName} aria-label={label}>
+							{!isNil(iconName) && <Icon className="u-mr-4" name={iconName} />}
+							<span>{label}</span>
 						</Link>
 					),
 					active: asPath.includes(url),

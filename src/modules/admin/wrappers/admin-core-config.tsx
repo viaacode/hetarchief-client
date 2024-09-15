@@ -37,11 +37,7 @@ const InternalLink = (linkInfo: LinkInfo) => {
 		return <p {...rest} />;
 	}
 
-	return (
-		<Link href={to} passHref>
-			<a {...rest} />
-		</Link>
-	);
+	return <Link href={to} passHref {...rest} />;
 };
 
 // When a content page is saved, for clear the Next.js cache

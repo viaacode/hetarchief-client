@@ -20,10 +20,8 @@ const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle 
 		({ id, label, href }) => ({
 			id,
 			node: ({ linkClassName }) => (
-				<Link href={href}>
-					<a className={linkClassName} aria-label={label}>
-						{label}
-					</a>
+				<Link href={href} className={linkClassName} aria-label={label}>
+					{label}
 				</Link>
 			),
 			active: asPath.includes(href),

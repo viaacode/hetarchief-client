@@ -332,12 +332,10 @@ const AppLayout: FC<any> = ({ children }) => {
 				// https://github.com/vercel/next.js/issues/37005
 				node: (
 					<Link href={'/' + locale} passHref>
-						<a>
-							<HetArchiefLogo
-								className="c-navigation__logo c-navigation__logo--list"
-								type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
-							/>
-						</a>
+						<HetArchiefLogo
+							className="c-navigation__logo c-navigation__logo--list"
+							type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
+						/>
 					</Link>
 				),
 				id: 'logo',
