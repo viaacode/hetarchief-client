@@ -1113,6 +1113,9 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 									<Placeholder
 										className="p-visitor-space__placeholder"
 										img="/images/looking-glass.svg"
+										imgAlt={tText(
+											'Vergroot glas geen reusltaten icoon alt tekst'
+										)}
 										title={tHtml(
 											'pages/bezoekersruimte/visitor-space-slug/index___geen-resultaten'
 										)}

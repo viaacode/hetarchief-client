@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import Link from 'next/link';
 import { type FC } from 'react';
 
@@ -30,8 +30,9 @@ const ErrorPage: FC<ErrorPageProps> = ({
 						<Image
 							src={image.image}
 							alt=""
-							layout="fill"
 							objectPosition={image.left ? 'left' : undefined}
+							fill
+							sizes="100vw"
 						/>
 					</div>
 				</div>

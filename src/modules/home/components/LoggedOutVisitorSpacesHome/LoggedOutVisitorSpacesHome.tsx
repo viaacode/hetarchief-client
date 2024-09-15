@@ -1,4 +1,4 @@
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringify } from 'query-string';
@@ -63,12 +63,15 @@ const LoggedOutVisitorSpacesHome: FC = () => {
 					<div className={styles['c-hero__image']}>
 						<Image
 							src="/images/hero.jpg"
-							layout="fill"
 							alt={tText(
 								'modules/home/components/logged-out-home/logged-out-home___hero-alt'
 							)}
-							objectFit="contain"
 							priority
+							fill
+							sizes="100vw"
+							style={{
+								objectFit: 'contain',
+							}}
 						/>
 					</div>
 					<div className={styles['c-hero__content']}>

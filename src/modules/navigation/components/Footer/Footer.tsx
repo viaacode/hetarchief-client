@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import Link from 'next/link';
 import { type FC } from 'react';
 
@@ -47,8 +47,12 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 							)}
 							width={178}
 							height={65}
-							objectFit="contain"
-							objectPosition="center"
+							style={{
+								maxWidth: '100%',
+								height: 'auto',
+								objectFit: 'contain',
+								objectPosition: 'center',
+							}}
 						/>
 					</a>
 				</Link>
@@ -75,8 +79,12 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 							)}
 							width={89}
 							height={44}
-							objectFit="contain"
-							objectPosition="center"
+							style={{
+								maxWidth: '100%',
+								height: 'auto',
+								objectFit: 'contain',
+								objectPosition: 'center',
+							}}
 						/>
 					</a>
 				</Link>
@@ -97,8 +105,12 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 							alt={tText('modules/navigation/components/footer/footer___meemoo-logo')}
 							width={104}
 							height={44}
-							objectFit="contain"
-							objectPosition="center"
+							style={{
+								maxWidth: '100%',
+								height: 'auto',
+								objectFit: 'contain',
+								objectPosition: 'center',
+							}}
 						/>
 					</a>
 				</Link>

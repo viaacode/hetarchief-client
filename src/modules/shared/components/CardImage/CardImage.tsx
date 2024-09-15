@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import React, { type FC } from 'react';
 
 import styles from './CardImage.module.scss';
@@ -38,8 +38,11 @@ const CardImage: FC<CardImageProps> = ({
 						unoptimized={unoptimized}
 						src={image}
 						alt={name || id || 'background'}
-						layout="fill"
-						objectFit="cover"
+						fill
+						sizes="100vw"
+						style={{
+							objectFit: 'cover',
+						}}
 					/>
 				</div>
 			)}
@@ -51,8 +54,11 @@ const CardImage: FC<CardImageProps> = ({
 						className={styles['c-card-image__logo-image']}
 						src={logo}
 						alt={name || id || 'logo'}
-						layout="fill"
-						objectFit="contain"
+						fill
+						sizes="100vw"
+						style={{
+							objectFit: 'contain',
+						}}
 					/>
 				</div>
 			)}
