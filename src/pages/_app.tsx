@@ -2,6 +2,8 @@ import { AdminConfigManager } from '@meemoo/admin-core-ui/dist/client.mjs';
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import nlBE from 'date-fns/locale/nl-BE/index.js';
 import setDefaultOptions from 'date-fns/setDefaultOptions';
+import HttpApi from 'i18next-http-backend';
+import _ from 'lodash'; // Set global locale:
 import { type AppProps } from 'next/app';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
@@ -16,15 +18,22 @@ import { wrapper } from '@shared/store';
 import { Locale } from '@shared/utils/i18n';
 import { isServerSideRendering } from '@shared/utils/is-browser';
 
-import getI18n from '../../next-i18next.config.js';
+import i18nConfig from '../../next-i18next.config.js';
 import pkg from '../../package.json';
 
-import '../styles/main.scss'; // Set global locale:
+import '../styles/main.scss';
 
 // Set global locale:
 setDefaultOptions({ locale: nlBE });
 
 const { publicRuntimeConfig } = getConfig();
+const i18nConfigWithProxyUrl = {
+	...i18nConfig,
+	backend: {
+		loadPath: `${publicRuntimeConfig.PROXY_URL}/admin/translations/{{lng}}.json`,
+	},
+};
+console.log(i18nConfigWithProxyUrl);
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -65,5 +74,24 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 }
 
 export default wrapper.withRedux(
-	appWithTranslation(MyApp, getI18n(publicRuntimeConfig.PROXY_URL) as any)
+	appWithTranslation(MyApp, {
+		i18n: {
+			locales: ['nl', 'en'],
+			defaultLocale: 'nl',
+			localeDetection: false,
+		},
+		backend: {
+			loadPath: `${process.env.PROXY_URL}/admin/translations/{{lng}}.json`,
+		},
+		use: [HttpApi],
+		ns: ['common'],
+		serializeConfig: false,
+		parseMissingKeyHandler: (key) => {
+			if (key.includes('___')) {
+				return `${_.upperFirst(_.lowerCase(key.split('___').pop()))} ***`;
+			}
+			return `${key} ***`;
+		},
+		debug: false,
+	})
 );

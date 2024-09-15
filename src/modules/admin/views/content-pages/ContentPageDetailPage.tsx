@@ -1,3 +1,6 @@
+'use client';
+// https://github.com/vercel/next.js/issues/47232
+
 import { type Avo } from '@viaa/avo2-types';
 import React, { type FC, lazy, Suspense } from 'react';
 
@@ -8,9 +11,6 @@ import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsChe
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import { type DefaultSeoInfo } from '@shared/types/seo';
-
-('use client');
-// https://github.com/vercel/next.js/issues/47232
 
 const ContentPageDetail = lazy(() =>
 	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({

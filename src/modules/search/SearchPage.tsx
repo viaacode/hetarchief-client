@@ -49,7 +49,7 @@ import paginationBarStyles from '@shared/components/PaginationBar/PaginationBar.
 import { Placeholder } from '@shared/components/Placeholder';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ScrollableTabs, TabLabel } from '@shared/components/Tabs';
-import TagSearchBar from '@shared/components/TagSearchBar/TagSearchBar';
+import { TagSearchBar } from '@shared/components/TagSearchBar';
 import { TagSearchBarInfo } from '@shared/components/TagSearchBar/TagSearchBarInfo';
 import { type ToggleOption } from '@shared/components/Toggle';
 import {
