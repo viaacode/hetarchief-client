@@ -1,6 +1,6 @@
 import { Button, RadioButton, TextArea } from '@meemoo/react-components';
 import clsx from 'clsx';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import React, { type FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
 

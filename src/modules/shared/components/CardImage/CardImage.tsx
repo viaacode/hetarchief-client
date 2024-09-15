@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import React, { type FC } from 'react';
 
 import styles from './CardImage.module.scss';

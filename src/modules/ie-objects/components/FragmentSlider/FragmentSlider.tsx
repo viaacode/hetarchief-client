@@ -1,6 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import { type FC, useEffect, useRef, useState } from 'react';
 
 import { FLOWPLAYER_AUDIO_FORMATS } from '@ie-objects/ie-objects.consts';

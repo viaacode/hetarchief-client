@@ -1,4 +1,4 @@
-import * as NextImage from 'next/image';
+import * as NextImage from "next/legacy/image";
 
 import './styleguide.scss';
 

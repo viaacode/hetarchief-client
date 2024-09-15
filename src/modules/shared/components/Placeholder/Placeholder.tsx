@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import { type FC } from 'react';
 
 import { Icon, type IconTypes } from '../Icon';

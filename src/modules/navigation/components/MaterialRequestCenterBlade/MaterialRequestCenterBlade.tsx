@@ -1,5 +1,5 @@
 import { Button, type OrderDirection } from '@meemoo/react-components';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import { type FC, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
