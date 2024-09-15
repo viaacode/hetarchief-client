@@ -9,13 +9,14 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
-const AdminNavigationItemCreatePageDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
+const AdminNavigationItemCreatePageDutch: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
 	const router = useRouter();
 
 	return (
 		<AdminNavigationItemCreatePage
 			navigationBarId={router.query.navigationBarId as string}
 			url={url}
+			locale={locale}
 		/>
 	);
 };

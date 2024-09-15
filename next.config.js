@@ -18,6 +18,11 @@ const withTM = nextTranspileModules(['ky-universal']);
 /** @type {import("next").NextConfig} */
 module.exports = withBundleAnalyzer(
 	withTM({
+		i18n: {
+			locales: ['nl', 'en'],
+			defaultLocale: 'nl',
+			localeDetection: false,
+		},
 		// https://stackoverflow.com/questions/71847778/why-my-nextjs-component-is-rendering-twice
 		// Disabling react 18 strict mode, otherwise the zendesk widget is rendered twice
 		reactStrictMode: false,

@@ -10,10 +10,21 @@ import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-p
 import withUser, { type UserProps } from '@shared/hooks/with-user';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
-const ContentPageEditPageDutch: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
+const ContentPageEditPageDutch: NextPage<DefaultSeoInfo & UserProps> = ({
+	url,
+	locale,
+	commonUser,
+}) => {
 	const router = useRouter();
 
-	return <ContentPageEditPage url={url} commonUser={commonUser} id={router.query.id as string} />;
+	return (
+		<ContentPageEditPage
+			url={url}
+			locale={locale}
+			commonUser={commonUser}
+			id={router.query.id as string}
+		/>
+	);
 };
 
 export async function getServerSideProps(

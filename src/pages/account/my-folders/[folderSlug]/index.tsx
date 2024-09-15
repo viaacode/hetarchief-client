@@ -8,11 +8,11 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
-const AccountMyFoldersEnglish: NextPage<DefaultSeoInfo> = ({ url }) => {
+const AccountMyFoldersEnglish: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
 	const router = useRouter();
 	const folderSlug = router.query.folderSlug as string | undefined;
 
-	return <AccountMyFolders folderSlug={folderSlug} url={url} />;
+	return <AccountMyFolders folderSlug={folderSlug} url={url} locale={locale} />;
 };
 
 export async function getServerSideProps(

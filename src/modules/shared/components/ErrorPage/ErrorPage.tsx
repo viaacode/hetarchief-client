@@ -30,9 +30,11 @@ const ErrorPage: FC<ErrorPageProps> = ({
 						<Image
 							src={image.image}
 							alt=""
-							objectPosition={image.left ? 'left' : undefined}
 							fill
 							sizes="100vw"
+							style={{
+								objectPosition: image.left ? 'left' : undefined,
+							}}
 						/>
 					</div>
 				</div>

@@ -5,7 +5,7 @@ import { type NextRouter } from 'next/router';
 
 import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/LanguageSwitcher.exceptions';
 import { QUERY_KEYS, type RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
-import { type Locale } from '@shared/utils/i18n';
+import { Locale } from '@shared/utils/i18n';
 
 export const changeApplicationLocale = (
 	oldLocale: Locale,
@@ -17,7 +17,16 @@ export const changeApplicationLocale = (
 	if (oldLocale === newLocale) {
 		return; // Already viewing the correct language
 	}
-	const oldFullPath = router.asPath;
+	let oldFullPath = router.asPath;
+	if (
+		Object.values(Locale)
+			.map((locale) => '/' + locale + '/')
+			.includes(oldFullPath.substring(0, '/en/'.length))
+	) {
+		// Remove the old locale from the path
+		// eg: /en/search => /search
+		oldFullPath = oldFullPath.substring('/en'.length);
+	}
 	const routeEntries = Object.entries(ROUTES_BY_LOCALE[oldLocale]);
 	// We'll go in reverse order, so we'll match on the longest paths first
 	const routeEntryInOldLocale = reverse(sortBy(routeEntries, (entry) => entry[1])).find(
@@ -38,7 +47,7 @@ export const changeApplicationLocale = (
 	newFullPath = handleRouteExceptions(routeKey, newFullPath);
 
 	// exception for content pages
-	if (router.route === '/[slug]') {
+	if (router.route === '/[lang]/[slug]') {
 		// const contentPage ContentPageService.getContentPageByLanguageAndPath(language as any, path);
 		const translatedContentPageInfo = (contentPageInfo?.translatedPages || []).find(
 			(translatedPage) =>

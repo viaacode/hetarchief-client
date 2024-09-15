@@ -2,6 +2,7 @@ const HttpApi = require('i18next-http-backend');
 const _ = require('lodash');
 
 module.exports = {
+	supportedLngs: ['nl', 'en'],
 	i18n: {
 		locales: ['nl', 'en'],
 		defaultLocale: 'nl',
@@ -12,7 +13,6 @@ module.exports = {
 	},
 	use: [HttpApi],
 	ns: ['common'],
-	serializeConfig: false,
 	parseMissingKeyHandler: (key) => {
 		if (key.includes('___')) {
 			return `${_.upperFirst(_.lowerCase(key.split('___').pop()))} ***`;

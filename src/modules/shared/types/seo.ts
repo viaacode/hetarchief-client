@@ -4,6 +4,7 @@ import { type Locale } from '@shared/utils/i18n';
 
 export interface DefaultSeoInfo {
 	url: string;
+	locale: Locale;
 	title?: string | null;
 	description?: string | null;
 	image?: string | null;

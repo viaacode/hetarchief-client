@@ -9,10 +9,10 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
-const ContentPageLabelsEditPageDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
+const ContentPageLabelsEditPageDutch: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
 	const router = useRouter();
 
-	return <ContentPageLabelsEditPage url={url} id={router.query.id as string} />;
+	return <ContentPageLabelsEditPage url={url} locale={locale} id={router.query.id as string} />;
 };
 
 export async function getServerSideProps(
