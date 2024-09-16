@@ -2,67 +2,82 @@ import { type ReactSelectProps, TextInput, type TextInputProps } from '@meemoo/r
 import { type FC } from 'react';
 
 import { tText } from '@shared/helpers/translate';
-import { Operator } from '@shared/types';
 import {
 	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
 } from '@shared/types/ie-objects';
+import AutocompleteFieldInput, {
+	type AutocompleteFieldInputProps,
+} from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
 import { DateInput } from '@visitor-space/components/DateInput';
 import { type DateInputProps } from '@visitor-space/components/DateInput/DateInput';
 import { DateRangeInput } from '@visitor-space/components/DateRangeInput';
 import { type DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
-import { GenreSelect } from '@visitor-space/components/GenreSelect';
+import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import { getFilterLabel } from '@visitor-space/utils/advanced-filters';
 
-import { MetadataProp } from '../types';
+import { FilterProperty, Operator } from '../types';
 
-export type MetadataFields =
+export type FilterInputComponent =
 	| FC<TextInputProps>
 	| FC<ReactSelectProps>
 	| FC<DateInputProps>
-	| FC<DateRangeInputProps>;
-export type MetadataFieldProps = TextInputProps | ReactSelectProps | DateInputProps;
+	| FC<DateRangeInputProps>
+	| FC<AutocompleteField>;
+export type FilterInputComponentProps =
+	| TextInputProps
+	| ReactSelectProps
+	| DateInputProps
+	| DateRangeInputProps
+	| AutocompleteFieldInputProps;
 
-export type MetadataConfig = {
-	[key in MetadataProp]?: {
-		[key in Operator]?: {
-			label: string;
-			field: MetadataFields;
-			filters?: IeObjectsSearchFilter[];
-		};
-	};
+export type FilterConfig = {
+	label: string;
+	inputComponent: FilterInputComponent;
+	inputComponentProps?: FilterInputComponentProps;
+	filters?: IeObjectsSearchFilter[];
 };
 
-export const ADVANCED_FILTERS: MetadataProp[] = [
+export type OperatorAndFilterConfig = {
+	[key in Operator]?: FilterConfig;
+};
+
+export type AdvancedFiltersConfig = {
+	[key in FilterProperty]?: OperatorAndFilterConfig;
+};
+
+export const ADVANCED_FILTERS: FilterProperty[] = [
 	// MetadataProp.Maintainers, // These are handled separately in VisitorSpaceFilterId
-	MetadataProp.Description,
-	MetadataProp.Cast,
-	MetadataProp.CreatedAt,
-	MetadataProp.TemporalCoverage,
-	MetadataProp.Duration,
-	MetadataProp.Medium,
-	MetadataProp.Genre,
-	MetadataProp.Identifier,
-	MetadataProp.SpacialCoverage,
-	MetadataProp.Creator,
-	// TODO add Names of fallen soldiers list here
-	MetadataProp.ObjectType,
-	// TODO Location of publication
-	MetadataProp.PublishedAt,
-	MetadataProp.Language,
-	MetadataProp.Title,
-	MetadataProp.Keywords,
-	MetadataProp.Publisher,
+	FilterProperty.DESCRIPTION,
+	FilterProperty.CAST,
+	FilterProperty.CREATED_AT,
+	FilterProperty.TEMPORAL_COVERAGE,
+	FilterProperty.DURATION,
+	FilterProperty.MEDIUM,
+	FilterProperty.GENRE,
+	FilterProperty.IDENTIFIER,
+	FilterProperty.SPACIAL_COVERAGE,
+	FilterProperty.CREATOR,
+	FilterProperty.MENTIONS,
+	FilterProperty.OBJECT_TYPE,
+	FilterProperty.LOCATION_CREATED,
+	FilterProperty.NEWSPAPER_SERIES_NAME,
+	FilterProperty.PUBLISHED_AT,
+	FilterProperty.LANGUAGE,
+	FilterProperty.TITLE,
+	FilterProperty.KEYWORDS,
+	FilterProperty.PUBLISHER,
 ];
 
-export const REGULAR_FILTERS: MetadataProp[] = [
+export const REGULAR_FILTERS: FilterProperty[] = [
 	// MetadataProp.Maintainers, // These are handled separately in VisitorSpaceFilterId
 	// MetadataProp.ConsultableMedia,
 	// MetadataProp.ConsultableOnlyOnLocation,
 	// MetadataProp.ConsultablePublicDomain,
-	MetadataProp.ReleaseDate,
-	MetadataProp.Medium,
-	MetadataProp.Creator,
+	FilterProperty.RELEASE_DATE,
+	FilterProperty.MEDIUM,
+	FilterProperty.CREATOR,
 	// TODO Location of publication
 ];
 
@@ -102,11 +117,11 @@ export const GET_OPERATOR_LABELS = (): Record<string, string> => ({
 const DATE_GREATER_THAN_EQUALS = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField
-) => {
+): OperatorAndFilterConfig => {
 	return {
-		[Operator.GreaterThanOrEqual]: {
+		[Operator.GREATER_THAN_OR_EQUAL]: {
 			label: operatorLabels.from,
-			field: DateInput,
+			inputComponent: DateInput,
 			filters: [
 				{
 					field,
@@ -120,11 +135,11 @@ const DATE_GREATER_THAN_EQUALS = (
 const DATE_LESS_THAN_OR_EQUALS = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField
-) => {
+): OperatorAndFilterConfig => {
 	return {
-		[Operator.LessThanOrEqual]: {
+		[Operator.LESS_THAN_OR_EQUAL]: {
 			label: operatorLabels.until,
-			field: DateInput,
+			inputComponent: DateInput,
 			filters: [
 				{
 					field,
@@ -138,11 +153,11 @@ const DATE_LESS_THAN_OR_EQUALS = (
 const DATE_BETWEEN = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField
-) => {
+): OperatorAndFilterConfig => {
 	return {
-		[Operator.Between]: {
+		[Operator.BETWEEN]: {
 			label: operatorLabels.between,
-			field: DateRangeInput,
+			inputComponent: DateRangeInput,
 			filters: [
 				{
 					field,
@@ -157,11 +172,14 @@ const DATE_BETWEEN = (
 	};
 };
 
-const DATE_EQUALS = (operatorLabels: Record<string, string>, field: IeObjectsSearchFilterField) => {
+const DATE_EQUALS = (
+	operatorLabels: Record<string, string>,
+	field: IeObjectsSearchFilterField
+): OperatorAndFilterConfig => {
 	return {
-		[Operator.Equals]: {
+		[Operator.EQUALS]: {
 			label: operatorLabels.exact,
-			field: DateInput,
+			inputComponent: DateInput,
 			filters: [
 				{
 					field,
@@ -176,11 +194,17 @@ const DATE_EQUALS = (operatorLabels: Record<string, string>, field: IeObjectsSea
 	};
 };
 
-const CONTAINS = (operatorLabels: Record<string, string>, field: IeObjectsSearchFilterField) => {
+const CONTAINS = (
+	operatorLabels: Record<string, string>,
+	field: IeObjectsSearchFilterField,
+	inputComponent?: FC<any>,
+	inputComponentProps?: any
+): OperatorAndFilterConfig => {
 	return {
-		[Operator.Contains]: {
+		[Operator.CONTAINS]: {
 			label: operatorLabels.contains,
-			field: TextInput,
+			inputComponent: inputComponent || TextInput,
+			inputComponentProps: inputComponentProps,
 			filters: [
 				{
 					field,
@@ -193,12 +217,15 @@ const CONTAINS = (operatorLabels: Record<string, string>, field: IeObjectsSearch
 
 const CONTAINS_NOT = (
 	operatorLabels: Record<string, string>,
-	field: IeObjectsSearchFilterField
-) => {
+	field: IeObjectsSearchFilterField,
+	inputComponent?: FC<any>,
+	inputComponentProps?: any
+): OperatorAndFilterConfig => {
 	return {
-		[Operator.ContainsNot]: {
+		[Operator.CONTAINS_NOT]: {
 			label: operatorLabels.excludes,
-			field: TextInput,
+			inputComponent: inputComponent || TextInput,
+			inputComponentProps: inputComponentProps,
 			filters: [
 				{
 					field,
@@ -209,11 +236,17 @@ const CONTAINS_NOT = (
 	};
 };
 
-const EQUALS = (operatorLabels: Record<string, string>, field: IeObjectsSearchFilterField) => {
+const EQUALS = (
+	operatorLabels: Record<string, string>,
+	field: IeObjectsSearchFilterField,
+	inputComponent?: FC<any>,
+	inputComponentProps?: any
+): OperatorAndFilterConfig => {
 	return {
-		[Operator.Equals]: {
+		[Operator.EQUALS]: {
 			label: operatorLabels.equals,
-			field: GenreSelect,
+			inputComponent: inputComponent || TextInput,
+			inputComponentProps: inputComponentProps,
 			filters: [
 				{
 					field,
@@ -224,11 +257,17 @@ const EQUALS = (operatorLabels: Record<string, string>, field: IeObjectsSearchFi
 	};
 };
 
-const EQUALS_NOT = (operatorLabels: Record<string, string>, field: IeObjectsSearchFilterField) => {
+const EQUALS_NOT = (
+	operatorLabels: Record<string, string>,
+	field: IeObjectsSearchFilterField,
+	inputComponent?: FC<any>,
+	inputComponentProps?: any
+): OperatorAndFilterConfig => {
 	return {
-		[Operator.EqualsNot]: {
+		[Operator.EQUALS_NOT]: {
 			label: operatorLabels.differs,
-			field: GenreSelect,
+			inputComponent: inputComponent || TextInput,
+			inputComponentProps: inputComponentProps,
 			filters: [
 				{
 					field,
@@ -239,106 +278,150 @@ const EQUALS_NOT = (operatorLabels: Record<string, string>, field: IeObjectsSear
 	};
 };
 
-export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
+const CONTAINS_AND_EQUALS = (
+	operatorLabels: Record<string, string>,
+	field: IeObjectsSearchFilterField,
+	inputComponent?: FC<any>,
+	inputComponentProps?: any
+): OperatorAndFilterConfig => {
+	return {
+		...CONTAINS(operatorLabels, field, inputComponent, inputComponentProps),
+		...CONTAINS_NOT(operatorLabels, field, inputComponent, inputComponentProps),
+		...EQUALS(operatorLabels, field, inputComponent, inputComponentProps),
+		...EQUALS_NOT(operatorLabels, field, inputComponent, inputComponentProps),
+	};
+};
+
+export const FILTERS_OPTIONS_CONFIG = (): AdvancedFiltersConfig => {
 	const operatorLabels = GET_OPERATOR_LABELS();
 
 	return {
-		[MetadataProp.ReleaseDate]: {
+		[FilterProperty.RELEASE_DATE]: {
 			...DATE_GREATER_THAN_EQUALS(operatorLabels, IeObjectsSearchFilterField.RELEASE_DATE),
 			...DATE_LESS_THAN_OR_EQUALS(operatorLabels, IeObjectsSearchFilterField.RELEASE_DATE),
 			...DATE_BETWEEN(operatorLabels, IeObjectsSearchFilterField.RELEASE_DATE),
 			...DATE_EQUALS(operatorLabels, IeObjectsSearchFilterField.RELEASE_DATE),
 		},
 
-		[MetadataProp.CreatedAt]: {
+		[FilterProperty.CREATED_AT]: {
 			...DATE_GREATER_THAN_EQUALS(operatorLabels, IeObjectsSearchFilterField.CREATED),
 			...DATE_LESS_THAN_OR_EQUALS(operatorLabels, IeObjectsSearchFilterField.CREATED),
 			...DATE_BETWEEN(operatorLabels, IeObjectsSearchFilterField.CREATED),
 			...DATE_EQUALS(operatorLabels, IeObjectsSearchFilterField.CREATED),
 		},
 
-		[MetadataProp.Duration]: {
+		[FilterProperty.DURATION]: {
 			...DATE_GREATER_THAN_EQUALS(operatorLabels, IeObjectsSearchFilterField.DURATION),
 			...DATE_LESS_THAN_OR_EQUALS(operatorLabels, IeObjectsSearchFilterField.DURATION),
 			...DATE_BETWEEN(operatorLabels, IeObjectsSearchFilterField.DURATION),
 			...DATE_EQUALS(operatorLabels, IeObjectsSearchFilterField.DURATION),
 		},
 
-		[MetadataProp.PublishedAt]: {
+		[FilterProperty.PUBLISHED_AT]: {
 			...DATE_GREATER_THAN_EQUALS(operatorLabels, IeObjectsSearchFilterField.PUBLISHED),
 			...DATE_LESS_THAN_OR_EQUALS(operatorLabels, IeObjectsSearchFilterField.PUBLISHED),
 			...DATE_BETWEEN(operatorLabels, IeObjectsSearchFilterField.PUBLISHED),
 			...DATE_EQUALS(operatorLabels, IeObjectsSearchFilterField.PUBLISHED),
 		},
 
-		[MetadataProp.Description]: {
+		[FilterProperty.DESCRIPTION]: {
 			...CONTAINS(operatorLabels, IeObjectsSearchFilterField.DESCRIPTION),
 			...CONTAINS_NOT(operatorLabels, IeObjectsSearchFilterField.DESCRIPTION),
 		},
 
-		[MetadataProp.Genre]: {
+		[FilterProperty.GENRE]: {
 			...EQUALS(operatorLabels, IeObjectsSearchFilterField.GENRE),
 			...EQUALS_NOT(operatorLabels, IeObjectsSearchFilterField.GENRE),
 		},
 
-		[MetadataProp.SpacialCoverage]: {
+		[FilterProperty.SPACIAL_COVERAGE]: {
 			...CONTAINS(operatorLabels, IeObjectsSearchFilterField.SPACIAL_COVERAGE),
 			...CONTAINS_NOT(operatorLabels, IeObjectsSearchFilterField.SPACIAL_COVERAGE),
 			...EQUALS(operatorLabels, IeObjectsSearchFilterField.SPACIAL_COVERAGE),
 			...EQUALS_NOT(operatorLabels, IeObjectsSearchFilterField.SPACIAL_COVERAGE),
 		},
 
-		[MetadataProp.TemporalCoverage]: {
-			...CONTAINS(operatorLabels, IeObjectsSearchFilterField.TEMPORAL_COVERAGE),
-			...CONTAINS_NOT(operatorLabels, IeObjectsSearchFilterField.TEMPORAL_COVERAGE),
-			...EQUALS(operatorLabels, IeObjectsSearchFilterField.TEMPORAL_COVERAGE),
-			...EQUALS_NOT(operatorLabels, IeObjectsSearchFilterField.TEMPORAL_COVERAGE),
+		[FilterProperty.TEMPORAL_COVERAGE]: {
+			...CONTAINS_AND_EQUALS(operatorLabels, IeObjectsSearchFilterField.TEMPORAL_COVERAGE),
 		},
 
-		[MetadataProp.ObjectType]: {
-			...CONTAINS(operatorLabels, IeObjectsSearchFilterField.OBJECT_TYPE),
-			...CONTAINS_NOT(operatorLabels, IeObjectsSearchFilterField.OBJECT_TYPE),
-			...EQUALS(operatorLabels, IeObjectsSearchFilterField.OBJECT_TYPE),
-			...CONTAINS_NOT(operatorLabels, IeObjectsSearchFilterField.OBJECT_TYPE),
+		[FilterProperty.OBJECT_TYPE]: {
+			...CONTAINS_AND_EQUALS(operatorLabels, IeObjectsSearchFilterField.OBJECT_TYPE),
 		},
 
-		[MetadataProp.Publisher]: {
-			...CONTAINS(operatorLabels, IeObjectsSearchFilterField.PUBLISHER),
-			...CONTAINS_NOT(operatorLabels, IeObjectsSearchFilterField.PUBLISHER),
-			...EQUALS(operatorLabels, IeObjectsSearchFilterField.PUBLISHER),
-			...CONTAINS_NOT(operatorLabels, IeObjectsSearchFilterField.PUBLISHER),
+		[FilterProperty.PUBLISHER]: {
+			...CONTAINS_AND_EQUALS(operatorLabels, IeObjectsSearchFilterField.PUBLISHER),
 		},
 
-		[MetadataProp.Title]: {
-			...CONTAINS(operatorLabels, IeObjectsSearchFilterField.NAME),
-			...CONTAINS_NOT(operatorLabels, IeObjectsSearchFilterField.NAME),
-			...EQUALS(operatorLabels, IeObjectsSearchFilterField.NAME),
-			...CONTAINS_NOT(operatorLabels, IeObjectsSearchFilterField.NAME),
+		[FilterProperty.TITLE]: {
+			...CONTAINS_AND_EQUALS(operatorLabels, IeObjectsSearchFilterField.NAME),
 		},
 
-		[MetadataProp.Cast]: {
-			...CONTAINS(operatorLabels, IeObjectsSearchFilterField.CAST),
-			...CONTAINS_NOT(operatorLabels, IeObjectsSearchFilterField.CAST),
-			...EQUALS(operatorLabels, IeObjectsSearchFilterField.CAST),
-			...CONTAINS_NOT(operatorLabels, IeObjectsSearchFilterField.CAST),
+		[FilterProperty.CAST]: {
+			...CONTAINS_AND_EQUALS(operatorLabels, IeObjectsSearchFilterField.CAST),
 		},
 
-		[MetadataProp.Identifier]: {
+		[FilterProperty.IDENTIFIER]: {
 			...EQUALS(operatorLabels, IeObjectsSearchFilterField.IDENTIFIER),
-			...CONTAINS_NOT(operatorLabels, IeObjectsSearchFilterField.IDENTIFIER),
+			...EQUALS_NOT(operatorLabels, IeObjectsSearchFilterField.IDENTIFIER),
 		},
 
-		[MetadataProp.Keywords]: {
-			...CONTAINS(operatorLabels, IeObjectsSearchFilterField.KEYWORD),
-			...CONTAINS_NOT(operatorLabels, IeObjectsSearchFilterField.KEYWORD),
-			...EQUALS(operatorLabels, IeObjectsSearchFilterField.KEYWORD),
-			...CONTAINS_NOT(operatorLabels, IeObjectsSearchFilterField.KEYWORD),
+		[FilterProperty.KEYWORDS]: {
+			...CONTAINS_AND_EQUALS(operatorLabels, IeObjectsSearchFilterField.KEYWORD),
+		},
+
+		[FilterProperty.CREATOR]: {
+			...CONTAINS_AND_EQUALS(
+				operatorLabels,
+				IeObjectsSearchFilterField.CREATOR,
+				AutocompleteFieldInput,
+				{
+					fieldName: AutocompleteField.creator,
+					label: getFilterLabel(FilterProperty.CREATOR),
+				}
+			),
+		},
+
+		[FilterProperty.LOCATION_CREATED]: {
+			...CONTAINS_AND_EQUALS(
+				operatorLabels,
+				IeObjectsSearchFilterField.LOCATION_CREATED,
+				AutocompleteFieldInput,
+				{
+					fieldName: AutocompleteField.locationCreated,
+					label: getFilterLabel(FilterProperty.LOCATION_CREATED),
+				}
+			),
+		},
+
+		[FilterProperty.NEWSPAPER_SERIES_NAME]: {
+			...CONTAINS_AND_EQUALS(
+				operatorLabels,
+				IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME,
+				AutocompleteFieldInput,
+				{
+					fieldName: AutocompleteField.newspaperSeriesName,
+					label: getFilterLabel(FilterProperty.NEWSPAPER_SERIES_NAME),
+				}
+			),
+		},
+
+		[FilterProperty.MENTIONS]: {
+			...CONTAINS_AND_EQUALS(
+				operatorLabels,
+				IeObjectsSearchFilterField.MENTIONS,
+				AutocompleteFieldInput,
+				{
+					fieldName: AutocompleteField.mentions,
+					label: getFilterLabel(FilterProperty.MENTIONS),
+				}
+			),
 		},
 	};
 };
 
 export const getMetadataSearchFilters = (
-	prop: MetadataProp,
+	prop: FilterProperty,
 	operator: Operator
 ): IeObjectsSearchFilter[] => {
 	return FILTERS_OPTIONS_CONFIG()[prop]?.[operator]?.filters || [];

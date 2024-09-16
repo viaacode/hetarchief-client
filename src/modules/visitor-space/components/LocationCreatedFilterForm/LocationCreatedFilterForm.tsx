@@ -1,7 +1,8 @@
 import { type FC } from 'react';
 
 import { tText } from '@shared/helpers/translate';
-import { type DefaultFilterFormProps, SearchFilterId } from '@visitor-space/types';
+import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import { type DefaultFilterFormProps } from '@visitor-space/types';
 
 import { AutocompleteFieldFilterForm } from '../AutocompleteFieldFilterForm/AutocompleteFieldFilterForm';
 
@@ -12,7 +13,7 @@ export const LocationCreatedFilterForm: FC<DefaultFilterFormProps<any>> = ({
 	return (
 		<AutocompleteFieldFilterForm
 			className={className}
-			searchFilterId={SearchFilterId.LocationCreated}
+			autocompleteField={AutocompleteField.locationCreated}
 			filterTitle={tText(
 				'modules/visitor-space/components/location-created-filter-form/location-created-filter-form___plaats-van-uitgave'
 			)}

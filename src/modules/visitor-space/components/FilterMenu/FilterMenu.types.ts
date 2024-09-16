@@ -60,6 +60,6 @@ export type OnFilterMenuFormReset = (id: SearchFilterId) => void;
 export enum AutocompleteField {
 	creator = 'creator',
 	locationCreated = 'locationCreated',
-	newspaperSeriesTitle = 'newspaperSeriesTitle',
+	newspaperSeriesName = 'newspaperSeriesName',
 	mentions = 'mentions',
 }

@@ -41,7 +41,7 @@ const MetaDataFieldWithHighlightingAndMaxLength: FC<
 						className={styles['c-metadata__field__blade__read-more']}
 						onClick={() => onReadMoreClicked({ title, data })}
 					>
-						{tText('modules/visitor-space/utils/metadata/metadata___lees-meer')}
+						{tText('modules/visitor-space/utils/advanced-filters/metadata___lees-meer')}
 					</div>
 				)}
 			</div>
