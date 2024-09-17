@@ -36,7 +36,7 @@
     "@flowplayer/player": "3.3.0",
     "@hookform/resolvers": "2.9.11",
     "@meemoo/admin-core-ui": "4.0.50",
-    "@meemoo/react-components": "4.0.13",
+    "@meemoo/react-components": "4.0.14",
     "@react-hook/resize-observer": "1.2.5",
     "@reduxjs/toolkit": "1.9.6",
     "@studiohyperdrive/pagination": "1.0.0",
@@ -193,7 +193,8 @@
     "stylelint": "15.10.3",
     "typescript": "5.1.6",
     "i18next": "^22.0.6",
-    "i18next-http-backend": "2.6.1"
+    "i18next-http-backend": "2.6.1",
+    "@meemoo/react-components": "4.0.14"
   },
   "browserslist": [
     ">0.3%",

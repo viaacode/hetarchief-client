@@ -16,6 +16,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { SEPARATOR } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { type AdvancedFilterFieldsProps } from '@visitor-space/components/AdvancedFilterFields/AdvancedFilterFields.types';
 import AutocompleteFieldInput, {
 	type AutocompleteFieldInputProps,
@@ -26,8 +27,13 @@ import { DateRangeInput } from '@visitor-space/components/DateRangeInput';
 import { type DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
 import { DurationRangeInput } from '@visitor-space/components/DurationRangeInput';
 import { GenreSelect } from '@visitor-space/components/GenreSelect';
+import {
+	type LanguageCode,
+	LANGUAGES,
+} from '@visitor-space/components/LanguageFilterForm/languages';
+import { LanguageSelect } from '@visitor-space/components/LanguageSelect/LanguageSelect';
 import { MediaTypeSelect } from '@visitor-space/components/MediaTypeSelect';
-import { MediumSelect } from '@visitor-space/components/MediumSelect';
+import { MediumSelect } from '@visitor-space/components/MediumSelect/MediumSelect';
 import { ObjectTypeSelect } from '@visitor-space/components/ObjectTypeSelect';
 import {
 	type FilterConfig,
@@ -59,6 +65,8 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	onChange,
 	onRemove,
 }) => {
+	const locale = useLocale();
+
 	// Computed
 
 	const operators = getOperators(state.prop as FilterProperty);
@@ -174,14 +182,49 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			case ObjectTypeSelect: {
 				const SelectComponent = filterConfig.inputComponent as FC<ReactSelectProps>;
 				const selectComponentProps = filterConfig.inputComponentProps as ReactSelectProps;
-				value = getSelectValue(
-					((props as ReactSelectProps).options || []) as SelectOption[],
-					state.val
-				);
+				value =
+					getSelectValue(
+						((props as ReactSelectProps).options || []) as SelectOption[],
+						state.val
+					) || state.val
+						? { label: state.val as string, value: state.val as string }
+						: undefined;
 
 				return (
 					<SelectComponent
-						{...selectComponentProps}
+						{...(selectComponentProps || {})}
+						{...(props as ReactSelectProps)}
+						className={clsx(
+							styles['c-advanced-filter-fields__dynamic-field'],
+							styles['c-advanced-filter-fields__dynamic-field--select']
+						)}
+						value={value}
+						onChange={(e: any) =>
+							onFieldChange({
+								val: (e as SingleValue<SelectOption>)?.value ?? undefined,
+							})
+						}
+					/>
+				);
+			}
+
+			// Separate case, since we also need to translate the selected value from nl => Nederlands
+			case LanguageSelect: {
+				const selectComponentProps = filterConfig.inputComponentProps as ReactSelectProps;
+				value =
+					getSelectValue(
+						((props as ReactSelectProps).options || []) as SelectOption[],
+						state.val
+					) || state.val
+						? {
+								label: LANGUAGES[locale][state.val as LanguageCode],
+								value: state.val as string,
+						  }
+						: undefined;
+
+				return (
+					<LanguageSelect
+						{...(selectComponentProps || {})}
 						{...(props as ReactSelectProps)}
 						className={clsx(
 							styles['c-advanced-filter-fields__dynamic-field'],
