@@ -578,6 +578,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Effects
 	 */
 
+	useEffect(() => {
+		console.log(`[PERFORMANCE] ${new Date().toISOString()} detail page loading`);
+	}, []);
+
+	useEffect(() => {
+		if (mediaInfo) {
+			console.log(`[PERFORMANCE] ${new Date().toISOString()} ie object loaded`);
+		}
+	}, [mediaInfo]);
+
 	/**
 	 * Update the highlighted alto texts in the iiif viewer when
 	 * - the search terms change

@@ -88,6 +88,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			return ((window as any).isSelectionActive = newIsSelectionActive);
 		};
 
+		useEffect(() => {
+			console.log(`[PERFORMANCE] ${new Date().toISOString()} init iiif viewer`);
+		}, []);
+
 		// Layout
 		useStickyLayout();
 		useHideFooter();
@@ -504,6 +508,9 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					(openSeaDragonViewer as any).id = Math.random();
 
 					openSeaDragonViewer?.addHandler('fully-loaded-change', () => {
+						console.log(
+							`[PERFORMANCE] ${new Date().toISOString()} iiif viewer fully-loaded image tiles`
+						);
 						resolve();
 					});
 				}
