@@ -25,17 +25,18 @@
 		"test:e2e:debug:t14": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t14-meemoo-beheer-basis-beheersfunctionaliteiten.spec.ts",
 		"test:e2e:debug:t13": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t13-test-mappen-profielpagina-basisgebruiker.spec.ts",
 		"test:e2e:debug:t15": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t15-test-instellingen-cp-beheer.spec.ts",
-		"test:e2e:debug:t17": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/T17-test-gedeeltelijke-toegang-bezoekersruimte.spec.ts"
+		"test:e2e:debug:t17": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t17-test-gedeeltelijke-toegang-bezoekersruimte.spec.ts",
+		"test:e2e:debug:t18": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t18-test-iiif-viewer-fullscreen.spec.ts"
 	},
 	"devDependencies": {
-		"@playwright/test": "^1.36.1",
-		"@types/uuid": "^9.0.1",
+		"@playwright/test": "^1.47.1",
+		"@types/uuid": "^10.0.0",
 		"cross-env": "7.0.3",
-		"date-fns": "2.28.0",
-		"dotenv-cli": "5.0.0",
+		"date-fns": "4.1.0",
+		"dotenv-cli": "7.4.2",
 		"lodash": "^4.17.21",
-		"ts-node": "10.4.0",
 		"typescript": "4.5.2",
-		"uuid": "^9.0.0"
+    "npx": "^10.2.2",
+		"uuid": "^10.0.0"
 	}
 }

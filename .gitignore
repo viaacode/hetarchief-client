@@ -41,6 +41,7 @@ translation-changes.txt
 *.iml
 
 # Ignore jest junit compatible test results file: ARC-523
+tests/test_results
 tests/test_results/junit.xml
 
 # End to end testing folders
