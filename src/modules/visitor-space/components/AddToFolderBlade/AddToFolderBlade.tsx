@@ -300,8 +300,12 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			const others = (folder?.objects || []).filter(
 				(object) => object.schemaIdentifier !== objectToAdd?.schemaIdentifier
 			);
+			const isObjectAlreadyInFolder = !!folder?.objects?.find(
+				(object) => object.schemaIdentifier === objectToAdd?.schemaIdentifier
+			);
 
-			const isFolderSelected = (selectedFolderIds || []).includes(folder.id);
+			const isFolderSelected =
+				isObjectAlreadyInFolder || (selectedFolderIds || []).includes(folder.id);
 			const count = others.length + (isFolderSelected ? 1 : 0);
 
 			return (
