@@ -16,8 +16,8 @@
 		"test:e2e:debug:t03": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t03-test-inloggen-meemoo-admin-toegang-aanvragen-tot-bezoekersruimte.spec.ts",
 		"test:e2e:debug:t04": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t04-test-inloggen-bestaande-basisgebruiker-toegang-aanvragen.spec.ts",
 		"test:e2e:debug:t05": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t05-test-zoeken-naar-toegang-aanvragen-tot-een-bezoekersruimte.spec.ts",
-		"test:e2e:debug:t06": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t06-test-feedbackbutton-niet-ingelogd.spec.ts",
-		"test:e2e:debug:t07": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t07-test-faq-raadplegen-niet-ingelogd.spec.ts",
+		"test:e2e:debug:t06": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t07-test-feedbackbutton-niet-ingelogd.spec.ts",
+		"test:e2e:debug:t07": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t08-test-faq-raadplegen-niet-ingelogd.spec.ts",
 		"test:e2e:debug:t09": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t09-test-toegangsaanvraag-accepteren-weigeren-door-cp-admin.spec.ts",
 		"test:e2e:debug:t10": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t10-test-actieve-toegang-basisgebruiker.spec.ts",
 		"test:e2e:debug:t11": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t11-test-detailpagina-object.spec.ts",
@@ -26,7 +26,8 @@
 		"test:e2e:debug:t13": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t13-test-mappen-profielpagina-basisgebruiker.spec.ts",
 		"test:e2e:debug:t15": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t15-test-instellingen-cp-beheer.spec.ts",
 		"test:e2e:debug:t17": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t17-test-gedeeltelijke-toegang-bezoekersruimte.spec.ts",
-		"test:e2e:debug:t18": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t18-test-iiif-viewer-fullscreen.spec.ts"
+		"test:e2e:debug:t18": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t18-test-iiif-viewer-fullscreen.spec.ts",
+		"test:e2e:debug:t19": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t19-test-ocr-raadplegen.spec.ts"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.47.1",
