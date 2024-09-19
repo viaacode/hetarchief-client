@@ -303,6 +303,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			<div className={styles['c-request-material__content']}>
 				<dl>
 					<>
+						<dt className={styles['c-request-material__content-label']}>
+							<label id="radio-group-label">{tText('Selecteer een type')}</label>
+						</dt>
 						<dd
 							className={clsx(
 								styles['c-request-material__content-value'],
@@ -310,6 +313,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							)}
 						>
 							<RadioButton
+								aria-labelledby="radio-group-label"
 								className={styles['c-request-material__radio-button']}
 								label={tText(
 									'modules/visitor-space/components/material-request-blade/material-request-blade___view'
@@ -318,6 +322,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 								onClick={() => setTypeSelected(MaterialRequestType.VIEW)}
 							/>
 							<RadioButton
+								aria-labelledby="radio-group-label"
 								className={styles['c-request-material__radio-button']}
 								label={tText(
 									'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
@@ -326,6 +331,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 								onClick={() => setTypeSelected(MaterialRequestType.REUSE)}
 							/>
 							<RadioButton
+								aria-labelledby="radio-group-label"
 								className={styles['c-request-material__radio-button']}
 								label={tText(
 									'modules/visitor-space/components/material-request-blade/material-request-blade___more-info'
