@@ -12,10 +12,8 @@ import { SEPARATOR } from '@shared/const';
 import { YEAR_LENGTH } from '@shared/const/date';
 import { convertYearToDate } from '@shared/helpers/convert-year-to-date';
 import { tHtml } from '@shared/helpers/translate';
-import { isRange, Operator } from '@shared/types';
-import { getOperators } from '@visitor-space/utils/metadata';
 
-import { MetadataProp } from '../../types';
+import { FilterProperty, isRange, Operator } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import { DateInput } from '../DateInput';
 import { DateRangeInput } from '../DateRangeInput';
@@ -33,6 +31,8 @@ import {
 	type ReleaseDateFilterFormState,
 } from './ReleaseDateFilterForm.types';
 
+import { getOperators } from 'modules/visitor-space/utils/advanced-filters';
+
 const labelKeys: Record<keyof ReleaseDateFilterFormState, string> = {
 	releaseDate: 'ReleaseDateFilterForm__releaseDate',
 	operator: 'ReleaseDateFilterForm__operator',
@@ -40,7 +40,7 @@ const labelKeys: Record<keyof ReleaseDateFilterFormState, string> = {
 
 const defaultValues: ReleaseDateFilterFormState = {
 	releaseDate: undefined,
-	operator: Operator.GreaterThanOrEqual,
+	operator: Operator.GREATER_THAN_OR_EQUAL,
 };
 
 const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
@@ -70,7 +70,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 		defaultValues,
 	});
 
-	const operators = useMemo(() => getOperators(MetadataProp.ReleaseDate), []);
+	const operators = useMemo(() => getOperators(FilterProperty.RELEASE_DATE), []);
 
 	// Effects
 
@@ -120,7 +120,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 			setForm((oldForm) => ({ ...oldForm, releaseDate: undefined }));
 			return;
 		}
-		if (form.operator === Operator.Equals) {
+		if (form.operator === Operator.EQUALS) {
 			convertToRange(newDate);
 			return;
 		}

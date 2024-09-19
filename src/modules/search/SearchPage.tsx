@@ -114,7 +114,7 @@ import {
 } from '@visitor-space/const';
 import { SEARCH_PAGE_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
 import { SEARCH_PAGE_IE_OBJECT_TABS } from '@visitor-space/const/visitor-space-tabs.const';
-import { MetadataProp, SearchFilterId, type TagIdentity } from '@visitor-space/types';
+import { FilterProperty, SearchFilterId, type TagIdentity } from '@visitor-space/types';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
 
@@ -512,7 +512,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				data = data.duration
 					? [
 							{
-								prop: MetadataProp.Duration,
+								prop: FilterProperty.DURATION,
 								op: data.operator,
 								val: data.duration,
 							},
@@ -525,7 +525,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				data = data.releaseDate
 					? [
 							{
-								prop: MetadataProp.ReleaseDate,
+								prop: FilterProperty.RELEASE_DATE,
 								op: data.operator,
 								val: data.releaseDate,
 							},

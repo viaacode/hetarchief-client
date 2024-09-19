@@ -6,12 +6,13 @@ import AsyncCreatableSelect from 'react-select/async-creatable';
 
 import { IeObjectsService } from '@ie-objects/services';
 import { tText } from '@shared/helpers/translate';
+import { type AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 
 import styles from './AutocompleteFieldInput.module.scss';
 
 export interface AutocompleteFieldInputProps {
 	label?: string;
-	fieldName: string;
+	fieldName: AutocompleteField;
 	disabled?: boolean;
 	id?: string;
 	onChange: (value: string | null) => void;

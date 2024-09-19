@@ -1,5 +1,5 @@
 import { SEPARATOR } from '@shared/const';
-import { Operator } from '@shared/types';
+import { Operator } from '@visitor-space/types';
 
 export function convertYearToDate(yearString: string, operator: Operator): string {
 	// No trailing Z since we can't these dates to be interpreted as belgian time, not utc time
@@ -8,11 +8,11 @@ export function convertYearToDate(yearString: string, operator: Operator): strin
 	const startOfYear = `${yearString}-01-01T00:00:00`;
 	const endOfYear = `${yearString}-12-31T23:59:59`;
 
-	if (operator === Operator.Equals) {
+	if (operator === Operator.EQUALS) {
 		return `${startOfYear}${SEPARATOR}${endOfYear}`;
 	}
 
-	if (operator === Operator.LessThanOrEqual) {
+	if (operator === Operator.LESS_THAN_OR_EQUAL) {
 		return endOfYear;
 	}
 

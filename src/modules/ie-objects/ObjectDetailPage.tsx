@@ -692,7 +692,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Hide the zendesk button for
 	 * - kiosk users
 	 * - users with access to the visitor space of the object
-	 * - when the metadata tab is not active (otherwise it overlaps with the ocr next page button)
+	 * - when the advanced-filters tab is not active (otherwise it overlaps with the ocr next page button)
 	 */
 	useEffect(() => {
 		dispatch(
@@ -727,7 +727,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	}, [hasAccessToVisitorSpaceOfObject, mediaInfo, user?.groupName]);
 
 	/**
-	 * Pause media if metadata tab is shown on mobile
+	 * Pause media if advanced-filters tab is shown on mobile
 	 */
 	useEffect(() => {
 		if (isMobile && activeTab === ObjectDetailTabs.Metadata) {
@@ -743,7 +743,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 		// Set default view
 		if (isMobile) {
-			// Default to metadata tab on mobile
+			// Default to advanced-filters tab on mobile
 			setActiveTab(ObjectDetailTabs.Metadata, 'replaceIn');
 		} else {
 			// Check media content and license for default tab on desktop
@@ -1149,10 +1149,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 			const buttonLabelDesktop = isPublicNewspaper
 				? tText('modules/ie-objects/object-detail-page___download-deze-krant-desktop')
-				: tText('modules/ie-objects/object-detail-page___export-metadata-desktop');
+				: tText('modules/ie-objects/object-detail-page___export-advanced-filters-desktop');
 			const buttonLabelMobile = isPublicNewspaper
 				? tText('modules/ie-objects/object-detail-page___download-deze-krant-mobile')
-				: tText('modules/ie-objects/object-detail-page___export-metadata-mobile');
+				: tText('modules/ie-objects/object-detail-page___export-advanced-filters-mobile');
 
 			const exportOptions = [];
 
@@ -1685,7 +1685,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const renderVisitButton = (): ReactNode => (
 		<Button
-			label={tText('modules/ie-objects/components/metadata/metadata___plan-een-bezoek')}
+			label={tText(
+				'modules/ie-objects/components/advanced-filters/metadata___plan-een-bezoek'
+			)}
 			variants={['dark', 'sm']}
 			className={styles['p-object-detail__visit-button']}
 			onClick={openRequestAccessBlade}
@@ -1792,7 +1794,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 					<MetaDataFieldWithHighlightingAndMaxLength
 						title={tText(
-							'modules/visitor-space/utils/metadata/metadata___beschrijving'
+							'modules/visitor-space/utils/advanced-filters/metadata___beschrijving'
 						)}
 						data={mediaInfo.description}
 						className="u-pb-24 u-line-height-1-4 u-font-size-14"
@@ -1818,7 +1820,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					>
 						{renderMaintainerMetaData(mediaInfo)}
 					</Metadata>
-					{/* other metadata fields */}
+					{/* other advanced-filters fields */}
 					{metaDataFields.map((item: MetadataItem, index: number) => {
 						if (isString(item.data)) {
 							return (
@@ -2178,7 +2180,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					[styles['p-object-detail--hidden']]: mediaInfoIsLoading || mediaInfoIsError,
 					[styles['p-object-detail__wrapper--collapsed']]: !expandSidebar,
 					[styles['p-object-detail__wrapper--expanded']]: expandSidebar,
-					[styles['p-object-detail__wrapper--metadata']]:
+					[styles['p-object-detail__wrapper--advanced-filters']]:
 						activeTab === ObjectDetailTabs.Metadata,
 					[styles['p-object-detail__wrapper--video']]:
 						activeTab === ObjectDetailTabs.Media,
@@ -2282,7 +2284,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				onSubmit={onRequestAccessSubmit}
 				id="object-detail-page__request-access-blade"
 			/>
-			{/* Read more metadata field blade */}
+			{/* Read more advanced-filters field blade */}
 			<Blade
 				className={clsx(
 					'u-pb-24 u-line-height-1-4 u-font-size-14',

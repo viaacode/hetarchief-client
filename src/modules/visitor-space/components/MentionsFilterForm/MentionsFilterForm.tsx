@@ -1,7 +1,8 @@
 import { type FC } from 'react';
 
 import { tText } from '@shared/helpers/translate';
-import { type DefaultFilterFormProps, SearchFilterId } from '@visitor-space/types';
+import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import { type DefaultFilterFormProps } from '@visitor-space/types';
 
 import { AutocompleteFieldFilterForm } from '../AutocompleteFieldFilterForm/AutocompleteFieldFilterForm';
 
@@ -9,7 +10,7 @@ export const MentionsFilterForm: FC<DefaultFilterFormProps<any>> = ({ children, 
 	return (
 		<AutocompleteFieldFilterForm
 			className={className}
-			searchFilterId={SearchFilterId.Mentions}
+			autocompleteField={AutocompleteField.mentions}
 			filterTitle={tText(
 				'modules/visitor-space/components/mentions-filter-form/mentions-filter-form___namenlijst-gesneuvelden'
 			)}

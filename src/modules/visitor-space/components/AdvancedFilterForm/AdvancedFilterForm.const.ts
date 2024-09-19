@@ -1,14 +1,12 @@
 import { array, object, type Schema, string } from 'yup';
 
-import { Operator } from '@shared/types';
-
-import { type AdvancedFilter, MetadataProp } from '../../types';
+import { type AdvancedFilter, FilterProperty, Operator } from '../../types';
 
 import { type AdvancedFilterFormState } from './AdvancedFilterForm.types';
 
 export const initialFields = (): AdvancedFilter => ({
-	prop: MetadataProp.Everything,
-	op: Operator.Contains,
+	prop: FilterProperty.EVERYTHING,
+	op: Operator.CONTAINS,
 	val: '',
 });
 

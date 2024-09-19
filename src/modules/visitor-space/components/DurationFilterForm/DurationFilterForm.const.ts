@@ -2,11 +2,10 @@ import { mixed, object, type Schema, string } from 'yup';
 
 import { SEPARATOR } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
-import { Operator } from '@shared/types';
 
 import { durationRegex } from '../../components/DurationInput/DurationInput.consts';
-import { AdvancedFilterArrayParam } from '../../const/query-params';
-import { SearchFilterId } from '../../types';
+import { AdvancedFilterArrayParam } from '../../const/advanced-filter-array-param';
+import { Operator, SearchFilterId } from '../../types';
 
 import { type DurationFilterFormState } from './DurationFilterForm.types';
 
