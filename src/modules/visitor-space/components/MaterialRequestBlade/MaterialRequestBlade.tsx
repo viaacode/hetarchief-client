@@ -302,7 +302,11 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				<dl>
 					<>
 						<dt className={styles['c-request-material__content-label']}>
-							<label id="radio-group-label">{tText('Selecteer een type')}</label>
+							<label id="radio-group-label">
+								{tText(
+									'modules/visitor-space/components/material-request-blade/material-request-blade___selecteer-een-type'
+								)}
+							</label>
 						</dt>
 						<dd
 							className={clsx(

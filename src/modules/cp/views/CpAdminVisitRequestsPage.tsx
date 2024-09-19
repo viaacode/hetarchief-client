@@ -26,7 +26,7 @@ export const CpAdminVisitRequestsPage: FC<DefaultSeoInfo> = ({ url }) => {
 			<SeoTags
 				title={`${tText(
 					'pages/beheer/toegangsaanvragen/index___toegangsaanvragen'
-				)} | ${tText('Beheer')}`}
+				)} | ${tText('modules/cp/views/cp-admin-visit-requests-page___beheer')}`}
 				description={tText(
 					'pages/beheer/toegangsaanvragen/index___toegangsaanvragen-meta-omschrijving'
 				)}
