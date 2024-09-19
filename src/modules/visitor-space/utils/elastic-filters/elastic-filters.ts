@@ -182,7 +182,7 @@ export const mapRefineFilterToElastic = (
 			field: IeObjectsSearchFilterField;
 			value: string;
 		}): IeObjectsSearchFilter => ({
-			field: field,
+			field,
 			operator: IeObjectsSearchOperator.CONTAINS,
 			value: value,
 		})

@@ -28,10 +28,7 @@ const MediaTypeSelect: FC<ReactSelectProps> = (props) => {
 		},
 	];
 
-	// Bind to defaultProps to access externally
-	MediaTypeSelect.defaultProps = { options };
-
-	return <ReactSelect {...props} options={MediaTypeSelect.defaultProps.options} />;
+	return <ReactSelect {...props} options={options} />;
 };
 
 export default MediaTypeSelect;

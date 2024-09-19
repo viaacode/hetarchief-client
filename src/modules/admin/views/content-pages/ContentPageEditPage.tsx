@@ -1,13 +1,19 @@
-import { ContentPageEdit } from '@meemoo/admin-core-ui';
 import { type Avo } from '@viaa/avo2-types';
-import React, { type FC } from 'react';
+import React, { type FC, lazy, Suspense } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
+import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import { type DefaultSeoInfo } from '@shared/types/seo';
+
+const ContentPageEdit = lazy(() =>
+	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({
+		default: adminCoreModule.ContentPageEdit,
+	}))
+);
 
 interface ContentPageEditPageProps {
 	id: string | undefined;
@@ -21,7 +27,12 @@ export const ContentPageEditPage: FC<
 			<AdminLayout bottomPadding={false} className="p-admin-content-page-create">
 				<AdminLayout.Content>
 					<div className="p-admin-content__edit">
-						<ContentPageEdit id={id} commonUser={commonUser as Avo.User.CommonUser} />
+						<Suspense fallback={<Loading fullscreen owner="ContentPageEditPage" />}>
+							<ContentPageEdit
+								id={id}
+								commonUser={commonUser as Avo.User.CommonUser}
+							/>
+						</Suspense>
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>

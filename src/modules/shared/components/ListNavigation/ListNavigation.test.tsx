@@ -47,10 +47,8 @@ describe('Component: <ListNavigation /> (default)', () => {
 	it('Should render nested children', () => {
 		const nestedChild = mockListNavigationItem({
 			node: ({ linkClassName }) => (
-				<Link href={'link'}>
-					<a className={linkClassName} aria-label={'test a tag'}>
-						{'test a tag'}
-					</a>
+				<Link href={'link'} className={linkClassName} aria-label={'test a tag'}>
+					{'test a tag'}
 				</Link>
 			),
 		});

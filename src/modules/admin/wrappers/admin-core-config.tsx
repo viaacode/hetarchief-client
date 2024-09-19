@@ -5,7 +5,7 @@ import {
 	ContentWidth,
 	type LinkInfo,
 	type ToastInfo,
-} from '@meemoo/admin-core-ui';
+} from '@meemoo/admin-core-ui/dist/client.mjs';
 import { DatabaseType } from '@viaa/avo2-types';
 import getConfig from 'next/config';
 import Link from 'next/link';
@@ -37,11 +37,7 @@ const InternalLink = (linkInfo: LinkInfo) => {
 		return <p {...rest} />;
 	}
 
-	return (
-		<Link href={to} passHref>
-			<a {...rest} />
-		</Link>
-	);
+	return <Link href={to} passHref {...rest} />;
 };
 
 // When a content page is saved, for clear the Next.js cache

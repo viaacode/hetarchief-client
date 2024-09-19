@@ -9,8 +9,8 @@ import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
-const AdminMaintenanceAlertsOverviewDutch: FC<DefaultSeoInfo> = ({ url }) => {
-	return <AdminMaintenanceAlertsOverview url={url} />;
+const AdminMaintenanceAlertsOverviewDutch: FC<DefaultSeoInfo> = ({ url, locale }) => {
+	return <AdminMaintenanceAlertsOverview url={url} locale={locale} />;
 };
 
 export async function getStaticProps(

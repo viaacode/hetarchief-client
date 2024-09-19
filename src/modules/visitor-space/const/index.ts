@@ -1,5 +1,5 @@
 // TODO move these files to a search page module
-// metadata => advanced filters
+// advanced-filters => advanced filters
 // visitor space search page => search page
 import { OrderDirection, type TabProps } from '@meemoo/react-components';
 import {
@@ -19,7 +19,7 @@ import { type FilterMenuSortOption } from '@visitor-space/components/FilterMenu/
 
 import { SearchFilterId, SearchSortProp, VisitorSpaceStatus } from '../types';
 
-import { AdvancedFilterArrayParam } from './query-params';
+import { AdvancedFilterArrayParam } from './advanced-filter-array-param';
 
 export const GLOBAL_ARCHIVE = ''; // No maintainer query param means the public collection should be selected
 

@@ -14,9 +14,9 @@ const Metadata: FC<MetadataListProps> = ({
 			className={clsx(
 				className,
 				'p-object-detail__metadata-component',
-				styles['c-metadata'],
+				styles['c-advanced-filters'],
 				{
-					[styles['c-metadata--container-query']]: !disableContainerQuery,
+					[styles['c-advanced-filters--container-query']]: !disableContainerQuery,
 				}
 			)}
 		>

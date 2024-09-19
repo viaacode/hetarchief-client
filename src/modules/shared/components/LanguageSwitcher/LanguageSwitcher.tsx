@@ -1,4 +1,4 @@
-import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
+import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/dist/client.mjs';
 import { Button } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';

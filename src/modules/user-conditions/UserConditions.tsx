@@ -3,7 +3,7 @@ import {
 	type ContentPageInfo,
 	ContentPageRenderer,
 	convertDbContentPageToContentPageInfo,
-} from '@meemoo/admin-core-ui';
+} from '@meemoo/admin-core-ui/dist/client.mjs';
 import { Button } from '@meemoo/react-components';
 import { type Avo } from '@viaa/avo2-types';
 import clsx from 'clsx';

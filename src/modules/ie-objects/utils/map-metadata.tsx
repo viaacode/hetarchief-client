@@ -90,6 +90,6 @@ export const mapBooleanToMetadataData = (data: boolean | undefined): string | nu
 	if (data === undefined || data === null) return null;
 
 	return data
-		? tText('modules/ie-objects/utils/map-metadata/map-metadata___ja')
-		: tText('modules/ie-objects/utils/map-metadata/map-metadata___nee');
+		? tText('modules/ie-objects/utils/map-advanced-filters/map-metadata___ja')
+		: tText('modules/ie-objects/utils/map-advanced-filters/map-metadata___nee');
 };

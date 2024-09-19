@@ -10,8 +10,12 @@ import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-p
 import withUser, { type UserProps } from '@shared/hooks/with-user';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
-const ContentPageEditPageDutch: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
-	return <ContentPageEditPage url={url} commonUser={commonUser} id={undefined} />;
+const ContentPageEditPageDutch: NextPage<DefaultSeoInfo & UserProps> = ({
+	url,
+	locale,
+	commonUser,
+}) => {
+	return <ContentPageEditPage url={url} locale={locale} commonUser={commonUser} id={undefined} />;
 };
 
 export async function getStaticProps(

@@ -107,27 +107,26 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				return {
 					...folder,
 					node: ({ linkClassName }) => (
-						<Link href={href}>
-							<a
-								className={clsx(linkClassName, 'p-account-my-folders__link')}
-								aria-label={folder.name}
-							>
-								{folder.name}
-								<Icon
-									className={clsx(
-										'p-account-my-folders__link__hide-icon',
-										'u-font-size-24 u-text-left'
-									)}
-									name={IconNamesLight.AngleRight}
-									aria-hidden
-								/>
-								{folder.usedForLimitedAccessUntil && (
-									<Icon
-										name={IconNamesLight.OpenDoor}
-										className="p-account-my-folders__link__limited-access-icon"
-									/>
+						<Link
+							href={href}
+							className={clsx(linkClassName, 'p-account-my-folders__link')}
+							aria-label={folder.name}
+						>
+							{folder.name}
+							<Icon
+								className={clsx(
+									'p-account-my-folders__link__hide-icon',
+									'u-font-size-24 u-text-left'
 								)}
-							</a>
+								name={IconNamesLight.AngleRight}
+								aria-hidden
+							/>
+							{folder.usedForLimitedAccessUntil && (
+								<Icon
+									name={IconNamesLight.OpenDoor}
+									className="p-account-my-folders__link__limited-access-icon"
+								/>
+							)}
 						</Link>
 					),
 					active,
@@ -551,6 +550,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 											</div>
 										)}
 										<SearchBar
+											aria-label={tText('zoekveld aria label')}
 											id={`${labelKeys.search}--${activeFolder.id}`}
 											value={search}
 											className="p-account-my-folders__search"

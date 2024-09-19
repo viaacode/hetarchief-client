@@ -8,6 +8,7 @@ import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestRequesterCapacity, MaterialRequestType } from '@material-requests/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
@@ -209,6 +210,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				/> */}
 				{noTypeSelectedOnSave ? (
 					<span className={styles['c-request-material__reason-error']}>
+						<Icon className="u-mr-8" name={IconNamesLight.Exclamation} />
 						{tText(
 							'modules/visitor-space/components/material-request-blade/material-request-blade___er-staan-fouten-in-dit-formulier-corrigeer-deze-en-probeer-het-opnieuw'
 						)}
@@ -266,8 +268,11 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						<Image
 							alt="maintainer logo"
 							src={maintainerLogo}
-							layout="fill"
-							objectFit="contain"
+							fill
+							sizes="100vw"
+							style={{
+								objectFit: 'contain',
+							}}
 						/>
 					</div>
 				)}
@@ -301,6 +306,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			<div className={styles['c-request-material__content']}>
 				<dl>
 					<>
+						<dt className={styles['c-request-material__content-label']}>
+							<label id="radio-group-label">{tText('Selecteer een type')}</label>
+						</dt>
 						<dd
 							className={clsx(
 								styles['c-request-material__content-value'],
@@ -308,6 +316,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							)}
 						>
 							<RadioButton
+								aria-labelledby="radio-group-label"
 								className={styles['c-request-material__radio-button']}
 								label={tText(
 									'modules/visitor-space/components/material-request-blade/material-request-blade___view'
@@ -316,6 +325,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 								onClick={() => setTypeSelected(MaterialRequestType.VIEW)}
 							/>
 							<RadioButton
+								aria-labelledby="radio-group-label"
 								className={styles['c-request-material__radio-button']}
 								label={tText(
 									'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
@@ -324,6 +334,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 								onClick={() => setTypeSelected(MaterialRequestType.REUSE)}
 							/>
 							<RadioButton
+								aria-labelledby="radio-group-label"
 								className={styles['c-request-material__radio-button']}
 								label={tText(
 									'modules/visitor-space/components/material-request-blade/material-request-blade___more-info'
@@ -333,6 +344,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							/>
 							{noTypeSelectedOnSave ? (
 								<span className="c-form-control__errors">
+									<Icon className="u-mr-8 " name={IconNamesLight.Exclamation} />
 									{tText(
 										'modules/visitor-space/components/material-request-blade/material-request-blade___type-verplicht-error'
 									)}
@@ -340,12 +352,15 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							) : null}
 						</dd>
 						<dt className={styles['c-request-material__content-label']}>
-							{tText(
-								'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
-							)}
+							<label htmlFor="reason-input">
+								{tText(
+									'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
+								)}
+							</label>
 						</dt>
 						<dd className={styles['c-request-material__content-value']}>
 							<TextArea
+								id="reason-input"
 								className={styles['c-request-material__reason-input']}
 								onChange={(e) => setReasonInputValue(e.target.value)}
 								value={reasonInputValue}

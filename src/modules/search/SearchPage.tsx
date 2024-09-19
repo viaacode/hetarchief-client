@@ -49,7 +49,7 @@ import paginationBarStyles from '@shared/components/PaginationBar/PaginationBar.
 import { Placeholder } from '@shared/components/Placeholder';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ScrollableTabs, TabLabel } from '@shared/components/Tabs';
-import TagSearchBar from '@shared/components/TagSearchBar/TagSearchBar';
+import { TagSearchBar } from '@shared/components/TagSearchBar';
 import { TagSearchBarInfo } from '@shared/components/TagSearchBar/TagSearchBarInfo';
 import { type ToggleOption } from '@shared/components/Toggle';
 import {
@@ -114,7 +114,7 @@ import {
 } from '@visitor-space/const';
 import { SEARCH_PAGE_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
 import { SEARCH_PAGE_IE_OBJECT_TABS } from '@visitor-space/const/visitor-space-tabs.const';
-import { MetadataProp, SearchFilterId, type TagIdentity } from '@visitor-space/types';
+import { FilterProperty, SearchFilterId, type TagIdentity } from '@visitor-space/types';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
 
@@ -512,7 +512,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				data = data.duration
 					? [
 							{
-								prop: MetadataProp.Duration,
+								prop: FilterProperty.DURATION,
 								op: data.operator,
 								val: data.duration,
 							},
@@ -525,7 +525,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				data = data.releaseDate
 					? [
 							{
-								prop: MetadataProp.ReleaseDate,
+								prop: FilterProperty.RELEASE_DATE,
 								op: data.operator,
 								val: data.releaseDate,
 							},
@@ -793,14 +793,16 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 			)}
 			action={
-				<Link passHref href={`/${ROUTE_PARTS_BY_LOCALE[locale].kioskConditions}`}>
-					<a aria-label={tText('pages/slug/index___meer-info')}>
-						<Button
-							className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
-							label={tHtml('pages/slug/index___meer-info')}
-							variants={['text', 'underline']}
-						/>
-					</a>
+				<Link
+					passHref
+					href={`/${ROUTE_PARTS_BY_LOCALE[locale].kioskConditions}`}
+					aria-label={tText('pages/slug/index___meer-info')}
+				>
+					<Button
+						className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
+						label={tHtml('pages/slug/index___meer-info')}
+						variants={['text', 'underline']}
+					/>
 				</Link>
 			}
 		/>
@@ -936,8 +938,9 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				<Link
 					key={visitorSpace.slug}
 					href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${visitorSpace?.slug}`}
+					aria-label={visitorSpace?.label}
 				>
-					<a aria-label={visitorSpace?.label}>{visitorSpace?.label}</a>
+					{visitorSpace?.label}
 				</Link>
 			)
 		);
@@ -1113,6 +1116,9 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 									<Placeholder
 										className="p-visitor-space__placeholder"
 										img="/images/looking-glass.svg"
+										imgAlt={tText(
+											'modules/search/search-page___vergroot-glas-geen-reusltaten-icoon-alt-tekst'
+										)}
 										title={tHtml(
 											'pages/bezoekersruimte/visitor-space-slug/index___geen-resultaten'
 										)}

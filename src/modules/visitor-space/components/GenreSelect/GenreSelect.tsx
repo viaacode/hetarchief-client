@@ -21,9 +21,6 @@ const GenreSelect: FC<ReactSelectProps> = (props) => {
 		[]
 	);
 
-	// Bind to defaultProps to access externally
-	GenreSelect.defaultProps = { options };
-
 	const getPlaceholder = (): string | undefined => {
 		return options.length === 0
 			? tText(
@@ -32,13 +29,7 @@ const GenreSelect: FC<ReactSelectProps> = (props) => {
 			: tText('modules/visitor-space/components/genre-select/genre-select___kies-een-genre');
 	};
 
-	return (
-		<ReactSelect
-			{...props}
-			placeholder={getPlaceholder()}
-			options={GenreSelect.defaultProps.options}
-		/>
-	);
+	return <ReactSelect {...props} placeholder={getPlaceholder()} options={options} />;
 };
 
 export default GenreSelect;

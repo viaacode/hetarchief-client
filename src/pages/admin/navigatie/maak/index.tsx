@@ -10,12 +10,13 @@ import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
-const AdminNavigationItemCreatePageDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
+const AdminNavigationItemCreatePageDutch: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
 	const router = useRouter();
 
 	return (
 		<AdminNavigationItemCreatePage
 			url={url}
+			locale={locale}
 			navigationBarId={router.query.navigationBarId as string}
 		/>
 	);

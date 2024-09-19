@@ -16,25 +16,41 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { SEPARATOR } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { type Operator } from '@shared/types';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { type AdvancedFilterFieldsProps } from '@visitor-space/components/AdvancedFilterFields/AdvancedFilterFields.types';
+import AutocompleteFieldInput, {
+	type AutocompleteFieldInputProps,
+} from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
 import { DateInput } from '@visitor-space/components/DateInput';
 import { type DateInputProps } from '@visitor-space/components/DateInput/DateInput';
 import { DateRangeInput } from '@visitor-space/components/DateRangeInput';
 import { type DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
 import { DurationRangeInput } from '@visitor-space/components/DurationRangeInput';
 import { GenreSelect } from '@visitor-space/components/GenreSelect';
+import {
+	type LanguageCode,
+	LANGUAGES,
+} from '@visitor-space/components/LanguageFilterForm/languages';
+import { LanguageSelect } from '@visitor-space/components/LanguageSelect/LanguageSelect';
 import { MediaTypeSelect } from '@visitor-space/components/MediaTypeSelect';
-import { MediumSelect } from '@visitor-space/components/MediumSelect';
+import { MediumSelect } from '@visitor-space/components/MediumSelect/MediumSelect';
 import { ObjectTypeSelect } from '@visitor-space/components/ObjectTypeSelect';
-import { type MetadataFieldProps } from '@visitor-space/const/metadata';
-import { getAdvancedProperties, getField, getOperators } from '@visitor-space/utils/metadata';
+import {
+	type FilterConfig,
+	type FilterInputComponentProps,
+} from '@visitor-space/const/advanced-filters.consts';
 
-import { type AdvancedFilter, type MetadataProp } from '../../types';
+import { type AdvancedFilter, type FilterProperty, type Operator } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import DurationInput, { defaultValue } from '../DurationInput/DurationInput';
 
 import styles from './AdvancedFilterFields.module.scss';
+
+import {
+	getAdvancedProperties,
+	getFilterConfig,
+	getOperators,
+} from 'modules/visitor-space/utils/advanced-filters';
 
 const labelKeys = {
 	prefix: 'AdvancedFilterFields',
@@ -49,9 +65,11 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	onChange,
 	onRemove,
 }) => {
+	const locale = useLocale();
+
 	// Computed
 
-	const operators = getOperators(state.prop as MetadataProp);
+	const operators = getOperators(state.prop as FilterProperty);
 	const operator = state.op || operators?.[0]?.value || null;
 
 	// Events
@@ -82,26 +100,30 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 		/>
 	);
 
-	const renderField = (config?: MetadataFieldProps) => {
-		let Component: any = operator
-			? getField(state.prop as MetadataProp, operator as Operator)
+	const renderField = (config?: FilterInputComponentProps) => {
+		const filterConfig: FilterConfig | null = operator
+			? getFilterConfig(state.prop as FilterProperty, operator as Operator)
 			: null;
+		if (!filterConfig) {
+			console.error('Unknown filter config', state.prop, operator);
+			return null;
+		}
 
 		let value;
-		let props =
-			Component &&
-			({
-				...Component.defaultProps,
-				...config,
-			} as MetadataFieldProps);
+		const props: FilterInputComponentProps = {
+			...(filterConfig?.inputComponentProps || {}),
+			...config,
+		} as FilterInputComponentProps;
 
-		switch (Component) {
-			case TextInput:
-				value = state.val;
-				Component = Component as FC<TextInputProps>;
-				props = props as TextInputProps;
-
-				return renderTextField(Component, value, props);
+		switch (filterConfig.inputComponent) {
+			case TextInput: {
+				const TextInputComponent = filterConfig.inputComponent as FC<TextInputProps>;
+				const textInputComponentProps = filterConfig.inputComponentProps as TextInputProps;
+				return renderTextField(TextInputComponent, state.val, {
+					...textInputComponentProps,
+					...(props as TextInputProps),
+				});
+			}
 
 			case DateRangeInput: {
 				const split = ((state.val || '') as string).split(SEPARATOR, 2);
@@ -109,19 +131,21 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				const from: Date = split[0] ? parseISO(split[0]) : new Date();
 				const to: Date = split[1] ? parseISO(split[1]) : new Date();
 
-				Component = Component as unknown as FC<DateRangeInputProps>;
+				const DateRangeInput = filterConfig.inputComponent as FC<DateRangeInputProps>;
+				const dateRangeInputProps = filterConfig.inputComponentProps as DateRangeInputProps;
 				return (
-					<Component
+					<DateRangeInput
+						{...dateRangeInputProps}
 						className={clsx(
 							styles['c-advanced-filter-fields__dynamic-field'],
 							styles['c-advanced-filter-fields__dynamic-field--select']
 						)}
 						from={from}
 						to={to}
-						onChange={(newFromDate: Date, newToDate: Date) =>
+						onChange={(newFromDate: Date | undefined, newToDate: Date | undefined) =>
 							onFieldChange({
 								val:
-									`${newFromDate.toISOString()}${SEPARATOR}${newToDate.toISOString()}` ??
+									`${newFromDate?.toISOString()}${SEPARATOR}${newToDate?.toISOString()}` ??
 									undefined,
 							})
 						}
@@ -129,31 +153,47 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				);
 			}
 
-			case DurationInput:
+			case DurationInput: {
 				value = state.val || defaultValue; // Ensure initial value is hh:mm:ss
-				Component = Component as FC<TextInputProps>;
-				props = props as TextInputProps;
+				const TextInputComponent = filterConfig.inputComponent as FC<TextInputProps>;
+				const textInputComponent = filterConfig.inputComponentProps as TextInputProps;
 
-				return renderTextField(Component, value, props);
+				return renderTextField(TextInputComponent, value, {
+					...textInputComponent,
+					...(props as TextInputProps),
+				});
+			}
 
-			case DurationRangeInput:
+			case DurationRangeInput: {
 				value = state.val || `${defaultValue}${SEPARATOR}${defaultValue}`; // Ensure initial value is hh:mm:ss for both fields
-				Component = Component as FC<TextInputProps>;
-				props = props as TextInputProps;
+				const TextInputComponent = filterConfig.inputComponent as FC<TextInputProps>;
+				const textInputComponentProps = filterConfig.inputComponentProps as TextInputProps;
 
-				return renderTextField(Component, value, props);
+				return renderTextField(TextInputComponent, value, {
+					...textInputComponentProps,
+					...(props as TextInputProps),
+				});
+			}
 
 			case ReactSelect:
 			case MediaTypeSelect:
 			case GenreSelect:
 			case MediumSelect:
-			case ObjectTypeSelect:
-				Component = Component as FC<ReactSelectProps>;
-				props = props as ReactSelectProps;
-				value = getSelectValue((props.options || []) as SelectOption[], state.val);
+			case ObjectTypeSelect: {
+				const SelectComponent = filterConfig.inputComponent as FC<ReactSelectProps>;
+				const selectComponentProps = filterConfig.inputComponentProps as ReactSelectProps;
+				value =
+					getSelectValue(
+						((props as ReactSelectProps).options || []) as SelectOption[],
+						state.val
+					) || state.val
+						? { label: state.val as string, value: state.val as string }
+						: undefined;
 
 				return (
-					<Component
+					<SelectComponent
+						{...(selectComponentProps || {})}
+						{...(props as ReactSelectProps)}
 						className={clsx(
 							styles['c-advanced-filter-fields__dynamic-field'],
 							styles['c-advanced-filter-fields__dynamic-field--select']
@@ -166,13 +206,48 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						}
 					/>
 				);
+			}
 
-			case DateInput:
-				Component = Component as FC<DateInputProps>;
+			// Separate case, since we also need to translate the selected value from nl => Nederlands
+			case LanguageSelect: {
+				const selectComponentProps = filterConfig.inputComponentProps as ReactSelectProps;
+				value =
+					getSelectValue(
+						((props as ReactSelectProps).options || []) as SelectOption[],
+						state.val
+					) || state.val
+						? {
+								label: LANGUAGES[locale][state.val as LanguageCode],
+								value: state.val as string,
+						  }
+						: undefined;
+
+				return (
+					<LanguageSelect
+						{...(selectComponentProps || {})}
+						{...(props as ReactSelectProps)}
+						className={clsx(
+							styles['c-advanced-filter-fields__dynamic-field'],
+							styles['c-advanced-filter-fields__dynamic-field--select']
+						)}
+						value={value}
+						onChange={(e: any) =>
+							onFieldChange({
+								val: (e as SingleValue<SelectOption>)?.value ?? undefined,
+							})
+						}
+					/>
+				);
+			}
+
+			case DateInput: {
+				const DateInputComponent = filterConfig.inputComponent as FC<DateInputProps>;
+				const DateInputComponentProps = filterConfig.inputComponentProps as DateInputProps;
 				value = state.val ? parseISO(state.val) : new Date();
 
 				return (
-					<Component
+					<DateInputComponent
+						{...DateInputComponentProps}
 						className={clsx(
 							styles['c-advanced-filter-fields__dynamic-field'],
 							styles['c-advanced-filter-fields__dynamic-field--datepicker']
@@ -185,6 +260,30 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						}}
 					/>
 				);
+			}
+
+			case AutocompleteFieldInput: {
+				const AutocompleteFieldInput =
+					filterConfig.inputComponent as FC<AutocompleteFieldInputProps>;
+				const AutocompleteFieldInputProps =
+					filterConfig.inputComponentProps as AutocompleteFieldInputProps;
+
+				return (
+					<AutocompleteFieldInput
+						{...AutocompleteFieldInputProps}
+						className={clsx(
+							styles['c-advanced-filter-fields__dynamic-field'],
+							styles['c-advanced-filter-fields__dynamic-field--datepicker']
+						)}
+						value={state.val}
+						onChange={(newValue: string | null) =>
+							onFieldChange({
+								val: newValue || undefined,
+							})
+						}
+					/>
+				);
+			}
 
 			default:
 				console.warn(
@@ -208,7 +307,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 					inputId={`${labelKeys.property}__${index}`}
 					onChange={(newValue) => {
 						const prop = (newValue as SingleValue<SelectOption>)?.value;
-						const operators = prop ? getOperators(prop as MetadataProp) : [];
+						const operators = prop ? getOperators(prop as FilterProperty) : [];
 
 						onFieldChange({
 							prop,
@@ -221,26 +320,28 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				/>
 			</FormControl>
 
-			<FormControl
-				className="c-form-control--label-hidden"
-				id={`${labelKeys.operator}__${index}`}
-				label={tHtml(
-					'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___operator'
-				)}
-			>
-				<ReactSelect
-					components={{ IndicatorSeparator: () => null }}
-					inputId={`${labelKeys.operator}__${index}`}
-					onChange={(newValue) =>
-						onFieldChange({
-							op: (newValue as SingleValue<SelectOption>)?.value,
-							val: undefined,
-						})
-					}
-					options={operators}
-					value={getSelectValue(operators, state.op)}
-				/>
-			</FormControl>
+			{operators.length > 0 && (
+				<FormControl
+					className="c-form-control--label-hidden"
+					id={`${labelKeys.operator}__${index}`}
+					label={tHtml(
+						'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___operator'
+					)}
+				>
+					<ReactSelect
+						components={{ IndicatorSeparator: () => null }}
+						inputId={`${labelKeys.operator}__${index}`}
+						onChange={(newValue) =>
+							onFieldChange({
+								op: (newValue as SingleValue<SelectOption>)?.value,
+								val: undefined,
+							})
+						}
+						options={operators}
+						value={getSelectValue(operators, state.op)}
+					/>
+				</FormControl>
+			)}
 
 			<FormControl
 				className={clsx(

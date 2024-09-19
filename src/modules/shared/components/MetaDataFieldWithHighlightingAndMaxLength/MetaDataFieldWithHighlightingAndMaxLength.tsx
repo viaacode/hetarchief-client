@@ -1,4 +1,4 @@
-import { type DefaultComponentProps } from '@meemoo/admin-core-ui';
+import { type DefaultComponentProps } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import { isString } from 'lodash-es';
 import { type FC, type ReactNode } from 'react';
 
@@ -41,7 +41,7 @@ const MetaDataFieldWithHighlightingAndMaxLength: FC<
 						className={styles['c-metadata__field__blade__read-more']}
 						onClick={() => onReadMoreClicked({ title, data })}
 					>
-						{tText('modules/visitor-space/utils/metadata/metadata___lees-meer')}
+						{tText('modules/visitor-space/utils/advanced-filters/metadata___lees-meer')}
 					</div>
 				)}
 			</div>

@@ -75,20 +75,19 @@ const renderLink = (
 		return isDropdown ? (
 			<NavigationLink href={href} label={label} isDropdownItem />
 		) : (
-			<Link href={href}>
-				<a
-					aria-label={tooltip}
-					className={cn}
-					onClick={onClick}
-					tabIndex={0}
-					target={target}
-					title={tooltip}
-				>
-					{iconStart && iconStart}
-					{label}
-					{badge && badge}
-					{iconEnd && iconEnd}
-				</a>
+			<Link
+				href={href}
+				aria-label={tooltip}
+				className={cn}
+				onClick={onClick}
+				tabIndex={0}
+				target={target}
+				title={tooltip}
+			>
+				{iconStart && iconStart}
+				{label}
+				{badge && badge}
+				{iconEnd && iconEnd}
 			</Link>
 		);
 	}

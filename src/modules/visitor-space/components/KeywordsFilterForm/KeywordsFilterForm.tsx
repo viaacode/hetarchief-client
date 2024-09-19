@@ -11,6 +11,7 @@ import {
 } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { TAGS_INPUT_COMPONENTS } from '@shared/components/TagsInput';
 import { tHtml } from '@shared/helpers/translate';
 import {
@@ -129,7 +130,14 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 				<div className="u-mb-32">
 					<FormControl
 						className="u-mb-24 c-form-control--label-hidden"
-						errors={(errors?.values || []).map?.((value) => value?.message) || []}
+						errors={
+							(errors?.values || []).map?.((errorValue) => (
+								<RedFormWarning
+									error={errorValue?.message}
+									key="form-error--value"
+								/>
+							)) || []
+						}
 						id={labelKeys.values}
 						label={tHtml(
 							'modules/visitor-space/components/keywords-filter-form/keywords-filter-form___waardes'

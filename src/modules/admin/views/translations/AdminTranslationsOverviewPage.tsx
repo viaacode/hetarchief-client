@@ -1,17 +1,26 @@
-import { TranslationsOverview } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import React, { type FC, type ReactNode } from 'react';
+import React, { type FC, lazy, type ReactNode, Suspense } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { Blade } from '@shared/components/Blade/Blade';
+import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './AdminTranslationsOverviewPage.module.scss';
+
+const TranslationsOverview = lazy(() =>
+	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => {
+		console.log('lazy loaded admin-core admin.mjs', adminCoreModule);
+		return {
+			default: adminCoreModule.TranslationsOverview,
+		};
+	})
+);
 
 export const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const renderPopup = ({
@@ -69,10 +78,14 @@ export const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 			<AdminLayout pageTitle={tText('pages/admin/vertalingen/index___vertalingen')}>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40 p-admin-vertalingen">
-						<TranslationsOverview
-							className={styles['c-translations-overview']}
-							renderPopup={renderPopup}
-						/>
+						<Suspense
+							fallback={<Loading fullscreen owner="AdminTranslationsOverviewPage" />}
+						>
+							<TranslationsOverview
+								className={styles['c-translations-overview']}
+								renderPopup={renderPopup}
+							/>
+						</Suspense>
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>

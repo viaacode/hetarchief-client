@@ -67,7 +67,7 @@ $component: "c-request-material";
 
 		&-label {
 			font-weight: $font-weight-bold;
-			margin-bottom: $spacer-xs;
+			margin-bottom: $spacer-sm;
 		}
 
 		&-value {
@@ -134,7 +134,8 @@ $component: "c-request-material";
 
 	&__reason-error {
 		color: $cherry;
-		display: block;
+		display: flex;
+		align-items: center;
 		margin-bottom: 1rem;
 	}
 }

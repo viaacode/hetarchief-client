@@ -36,13 +36,11 @@ const renderLink = (
 	} = {}
 ): ReactNode => {
 	return href ? (
-		<Link href={href}>
-			<a className={className} role="menuitem" tabIndex={0}>
-				{iconStart && iconStart}
-				{label}
-				{badge && badge}
-				{iconEnd && iconEnd}
-			</a>
+		<Link href={href} className={className} role="menuitem" tabIndex={0}>
+			{iconStart && iconStart}
+			{label}
+			{badge && badge}
+			{iconEnd && iconEnd}
 		</Link>
 	) : (
 		<a className={className} role="menuitem" tabIndex={0}>

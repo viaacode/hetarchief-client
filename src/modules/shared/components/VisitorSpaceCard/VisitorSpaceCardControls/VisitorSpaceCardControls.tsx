@@ -135,18 +135,15 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 				<Link
 					href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}?aanbieder=${room.slug}`}
 					passHref
+					aria-label={tText(
+						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'
+					)}
 				>
-					<a
-						aria-label={tText(
+					<Button variants={['lg', 'white']}>
+						{tHtml(
 							'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'
 						)}
-					>
-						<Button variants={['lg', 'white']}>
-							{tHtml(
-								'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'
-							)}
-						</Button>
-					</a>
+					</Button>
 				</Link>
 			</>
 		);

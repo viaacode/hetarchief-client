@@ -12,9 +12,10 @@ import { type DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageOverviewPageEnglish: NextPage<DefaultSeoInfo & UserProps> = ({
 	url,
+	locale,
 	commonUser,
 }) => {
-	return <ContentPageOverviewPage url={url} commonUser={commonUser} />;
+	return <ContentPageOverviewPage url={url} locale={locale} commonUser={commonUser} />;
 };
 
 export async function getStaticProps(
