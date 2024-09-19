@@ -28,7 +28,8 @@
 		"test:e2e:debug:t17": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t17-test-gedeeltelijke-toegang-bezoekersruimte.spec.ts",
 		"test:e2e:debug:t18": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t18-test-iiif-viewer-fullscreen.spec.ts",
 		"test:e2e:debug:t19": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t19-test-ocr-raadplegen.spec.ts",
-		"test:e2e:debug:t20": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t20-test-iiif-viewer-zoomen.spec.ts"
+		"test:e2e:debug:t20": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t20-test-iiif-viewer-zoomen.spec.ts",
+		"test:e2e:debug:t21": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t21-test-iiif-viewer-bladeren-paginas.spec.ts"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.47.1",
