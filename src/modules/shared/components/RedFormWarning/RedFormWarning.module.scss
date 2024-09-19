@@ -1,0 +1,7 @@
+@use "src/styles/abstracts" as *;
+
+.c-red-form-warning {
+	display: flex;
+	gap: $spacer-xs;
+	align-items: center;
+}

@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { type MultiValue, type SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SEPARATOR } from '@shared/const';
 import { YEAR_LENGTH } from '@shared/const/date';
 import { convertYearToDate } from '@shared/helpers/convert-year-to-date';
@@ -223,7 +224,12 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 			<div className={clsx(className, styles['releaseDate'], 'u-px-20 u-px-32:md')}>
 				<FormControl
 					className={clsx('u-mb-24 c-form-control--label-hidden')}
-					errors={[errors.operator?.message]}
+					errors={[
+						<RedFormWarning
+							error={errors.operator?.message}
+							key="form-error--operator"
+						/>,
+					]}
 					id={labelKeys.operator}
 					label={tHtml(
 						'modules/visitor-space/components/releaseDate-filter-form/releaseDate-filter-form___operator'
@@ -255,7 +261,12 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 			<div className={clsx(styles['releaseDate'], 'u-px-20 u-px-32:md')}>
 				<FormControl
 					className="u-mb-24 c-form-control--label-hidden"
-					errors={[errors.releaseDate?.message]}
+					errors={[
+						<RedFormWarning
+							error={errors.releaseDate?.message}
+							key="form-error--release-date"
+						/>,
+					]}
 					id={labelKeys.releaseDate}
 					label={tHtml(
 						'modules/visitor-space/components/releaseDate-filter-form/releaseDate-filter-form___waarde'

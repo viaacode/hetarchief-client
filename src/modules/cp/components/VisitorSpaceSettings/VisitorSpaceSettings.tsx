@@ -30,6 +30,7 @@ import FileInput from '@shared/components/FileInput/FileInput';
 import Icon from '@shared/components/Icon/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { globalLabelKeys, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -454,7 +455,9 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 					>
 						<FormControl
 							className={styles['c-cp-settings__site-settings-input']}
-							errors={formErrors.orId ? [formErrors.orId] : undefined}
+							errors={[
+								<RedFormWarning error={formErrors.orId} key="form-error--or-id" />,
+							]}
 							id={labelKeys.orId}
 							label={tHtml(
 								'modules/cp/components/site-settings-form/site-settings-form___content-partner'
@@ -486,7 +489,9 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 
 						<FormControl
 							className={styles['c-cp-settings__site-settings-input']}
-							errors={formErrors.slug ? [formErrors.slug] : []}
+							errors={[
+								<RedFormWarning error={formErrors.slug} key="form-error--slug" />,
+							]}
 							id={labelKeys.slug}
 							label={tHtml(
 								'modules/cp/components/site-settings-form/site-settings-form___slug'
@@ -577,7 +582,9 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 
 						<FormControl
 							className={styles['c-cp-settings__logo-and-color__color-control']}
-							errors={formErrors.color ? [formErrors.color] : []}
+							errors={[
+								<RedFormWarning error={formErrors.color} key="form-error--color" />,
+							]}
 							id={labelKeys.color}
 							label={tHtml(
 								'modules/cp/components/visitor-space-image-form/visitor-space-image-form___achtergrondkleur'
@@ -593,7 +600,9 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 						</FormControl>
 
 						<FormControl
-							errors={[formErrors.file]}
+							errors={[
+								<RedFormWarning error={formErrors.file} key="form-error--file" />,
+							]}
 							id={labelKeys.file}
 							label={tHtml(
 								'modules/cp/components/visitor-space-image-form/visitor-space-image-form___achtergrond-afbeelding'
