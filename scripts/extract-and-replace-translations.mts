@@ -26,7 +26,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import glob from 'glob';
-import { intersection, kebabCase, keys, without } from 'lodash';
+import { intersection, kebabCase, keys, without } from 'lodash-es';
 import fetch from 'node-fetch';
 
 import localTranslations from '../public/locales/nl/common.json';

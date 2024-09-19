@@ -1,19 +1,25 @@
-import { UserGroupOverview } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import React, { type FC, useRef, useState } from 'react';
+import React, { type FC, lazy, Suspense, useRef, useState } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { type UserGroupOverviewRef } from '@admin/types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './PermissionsOverviewPage.module.scss';
+
+const UserGroupOverview = lazy(() =>
+	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({
+		default: adminCoreModule.UserGroupOverview,
+	}))
+);
 
 export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	// Access child functions
@@ -49,12 +55,14 @@ export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const renderPermissions = () => (
 		<>
-			<UserGroupOverview
-				className="p-admin-permissions u-mb-40"
-				ref={permissionsRef}
-				onChangePermissions={(value: boolean) => setHasChanges(value)}
-				renderSearchButtons={renderSearchButtons}
-			/>
+			<Suspense fallback={<Loading fullscreen owner="PermissionsOverview" />}>
+				<UserGroupOverview
+					className="p-admin-permissions u-mb-40"
+					ref={permissionsRef}
+					onChangePermissions={(value: boolean) => setHasChanges(value)}
+					renderSearchButtons={renderSearchButtons}
+				/>
+			</Suspense>
 		</>
 	);
 

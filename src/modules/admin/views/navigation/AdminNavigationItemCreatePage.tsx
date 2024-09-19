@@ -1,12 +1,18 @@
-import { NavigationEdit } from '@meemoo/admin-core-ui';
-import React, { type FC } from 'react';
+import React, { type FC, lazy, Suspense } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
+import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import { type DefaultSeoInfo } from '@shared/types/seo';
+
+const NavigationEdit = lazy(() =>
+	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({
+		default: adminCoreModule.NavigationEdit,
+	}))
+);
 
 interface AdminNavigationItemCreatePage {
 	navigationBarId: string;
@@ -21,10 +27,14 @@ export const AdminNavigationItemCreatePage: FC<DefaultSeoInfo & AdminNavigationI
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-navigation__create">
-						<NavigationEdit
-							navigationBarId={navigationBarId}
-							navigationItemId={undefined}
-						/>
+						<Suspense
+							fallback={<Loading fullscreen owner="AdminNavigationItemCreatePage" />}
+						>
+							<NavigationEdit
+								navigationBarId={navigationBarId}
+								navigationItemId={undefined}
+							/>
+						</Suspense>
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>

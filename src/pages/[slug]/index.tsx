@@ -1,4 +1,7 @@
-import { ContentPageRenderer, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
+import {
+	ContentPageRenderer,
+	convertDbContentPageToContentPageInfo,
+} from '@meemoo/admin-core-ui/dist/admin.mjs';
 import { QueryClient } from '@tanstack/react-query';
 import { type HTTPError } from 'ky';
 import { kebabCase } from 'lodash-es';

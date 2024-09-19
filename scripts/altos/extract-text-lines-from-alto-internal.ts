@@ -1,4 +1,4 @@
-import { compact, isArray } from 'lodash';
+import { compact, isArray } from 'lodash-es';
 import { Parser } from 'xml2js';
 
 import {
