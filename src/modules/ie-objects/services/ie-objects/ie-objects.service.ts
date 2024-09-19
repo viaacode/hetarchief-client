@@ -78,7 +78,12 @@ export class IeObjectsService {
 	}
 
 	public static async getById(id: string): Promise<IeObject> {
-		return await ApiService.getApi().get(`${IE_OBJECTS_SERVICE_BASE_URL}/${id}`).json();
+		console.log(`[PERFORMANCE] ${new Date().toISOString()} start fetch ie object`);
+		const ieObject: IeObject = await ApiService.getApi()
+			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${id}`)
+			.json();
+		console.log(`[PERFORMANCE] ${new Date().toISOString()} finished fetch ie object`, id);
+		return ieObject;
 	}
 
 	public static async getSeoById(id: string): Promise<SeoInfo> {

@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { type SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SEPARATOR } from '@shared/const';
 import { tHtml } from '@shared/helpers/translate';
 import {
@@ -131,11 +132,12 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 
 				<FormControl
 					className="c-form-control--label-hidden"
-					errors={
-						!isNil(errors[SearchFilterId.Duration]?.message)
-							? [errors[SearchFilterId.Duration]?.message]
-							: undefined
-					}
+					errors={[
+						<RedFormWarning
+							error={errors[SearchFilterId.Duration]?.message}
+							key="form-error--duration"
+						/>,
+					]}
 					id={labelKeys[SearchFilterId.Duration]}
 					label={tHtml(
 						'modules/visitor-space/components/duration-filter-form/duration-filter-form___waarde'

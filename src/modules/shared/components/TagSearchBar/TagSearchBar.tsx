@@ -9,6 +9,7 @@ import {
 	type TagSearchBarProps,
 	type TagSearchBarValue,
 } from '@shared/components/TagSearchBar/TagSearchBar.types';
+import { tText } from '@shared/helpers/translate';
 
 import { TAGS_INPUT_COMPONENTS } from '../TagsInput';
 
@@ -118,6 +119,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 	return (
 		<div className="u-flex u-align-center u-justify-between">
 			<CreatableSelect
+				aria-label={tText('zoekbalk aria label')}
 				classNamePrefix={'c-tags-input'}
 				{...tagsInputProps}
 				className={rootCls}

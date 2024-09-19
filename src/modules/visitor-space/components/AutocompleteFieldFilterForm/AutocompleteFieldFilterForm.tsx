@@ -1,12 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil } from 'lodash-es';
 import { type FC, type ReactNode, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { StringParam, useQueryParam } from 'use-query-params';
 import { object as yupObject, string as yupString } from 'yup';
 
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import AutocompleteFieldInput from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
 import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { type DefaultFilterFormChildrenParams } from '@visitor-space/types';
@@ -70,7 +70,9 @@ export const AutocompleteFieldFilterForm: FC<{
 			>
 				<FormControl
 					className="c-form-control--label-hidden"
-					errors={!isNil(errors?.value?.message) ? [errors?.value?.message] : undefined}
+					errors={[
+						<RedFormWarning error={errors?.value?.message} key="form-error--value" />,
+					]}
 					id={'AutocompleteFieldFilterForm__' + autocompleteField}
 					label={filterTitle}
 				>

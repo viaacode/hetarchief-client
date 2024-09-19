@@ -4,6 +4,7 @@ import { type FC, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Blade } from '@shared/components/Blade/Blade';
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { VisitSummary } from '@shared/components/VisitSummary';
 import { OPTIONAL_LABEL } from '@shared/const';
 import { tHtml } from '@shared/helpers/translate';
@@ -103,7 +104,12 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 				<div className="u-px-32">
 					<FormControl
 						className="u-mb-24"
-						errors={[errors.reasonForDenial?.message]}
+						errors={[
+							<RedFormWarning
+								error={errors.reasonForDenial?.message}
+								key="form-error--reason-for-denial"
+							/>,
+						]}
 						id={labelKeys.reasonForDenial}
 						label={tHtml(
 							'modules/cp/components/decline-request-blade/decline-request-blade___reden-voor-afkeuring'

@@ -47,6 +47,10 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 	const { store, props } = wrapper.useWrappedStore(pageProps);
 
 	useEffect(() => {
+		console.log(`[PERFORMANCE] ${new Date().toISOString()} init hetarchief client`);
+	}, []);
+
+	useEffect(() => {
 		AdminConfigManager.setConfig(getAdminCoreConfig(router, locale || Locale.nl));
 	}, [locale, router]);
 
