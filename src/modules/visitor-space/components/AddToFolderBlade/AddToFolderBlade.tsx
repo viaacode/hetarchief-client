@@ -11,7 +11,7 @@ import { type Folder } from '@account/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { tHtml } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
 
@@ -323,6 +323,9 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 						checkIcon={<Icon name={IconNamesLight.Check} />}
 						onClick={(e) => e.stopPropagation()}
 						variants={['no-label']}
+						aria-label={tText('voeg {{ folder }} toe aan map', {
+							folder: folder?.name,
+						})}
 					/>
 
 					<span className={styles['c-add-to-folder-blade__list-item__label']}>

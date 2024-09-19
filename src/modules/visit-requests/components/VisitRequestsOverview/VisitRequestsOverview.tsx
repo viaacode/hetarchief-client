@@ -229,6 +229,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 			<div className="l-container">
 				<div className="p-cp-requests__header">
 					<SearchBar
+						aria-label={tText('zoekbalk aria label')}
 						id={globalLabelKeys.adminLayout.title}
 						value={search}
 						className="p-cp-requests__search"

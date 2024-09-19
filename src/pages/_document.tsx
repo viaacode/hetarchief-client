@@ -2,6 +2,8 @@ import getConfig from 'next/config';
 import { type DocumentProps, Head, Html, Main, NextScript } from 'next/document';
 import React, { type ReactElement } from 'react';
 
+import { TranslationService } from '@shared/services/translation-service/translation.service';
+
 declare type DocumentFiles = {
 	sharedFiles: readonly string[];
 	pageFiles: readonly string[];
@@ -22,8 +24,10 @@ class CustomHead extends Head {
 const { publicRuntimeConfig } = getConfig();
 
 const Document = (props: DocumentProps): ReactElement => {
+	const locale = TranslationService.getLocale();
+
 	return (
-		<Html>
+		<Html lang={locale}>
 			<CustomHead>
 				{/*eslint-disable-next-line*/}
 				<script

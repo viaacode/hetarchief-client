@@ -551,6 +551,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 											</div>
 										)}
 										<SearchBar
+											aria-label={tText('zoekveld aria label')}
 											id={`${labelKeys.search}--${activeFolder.id}`}
 											value={search}
 											className="p-account-my-folders__search"
