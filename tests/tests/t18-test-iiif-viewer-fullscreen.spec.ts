@@ -13,6 +13,9 @@ test('T17: Test iiif viewer fullscreen', async ({ page, context }) => {
 		'Wet- en verordeningsblad voor de bezette streke... | hetarchief.be'
 	);
 
+	// Go to page again to fix non-loading newspaper in incognito browser
+	await page.goto((process.env.TEST_CLIENT_ENDPOINT as string) + '/pid/h98z893q54');
+
 	// Check fullscreen button exists
 	await expect(page.locator('.c-iiif-viewer__iiif__controls__fullscreen')).toBeVisible();
 
