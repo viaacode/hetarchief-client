@@ -233,11 +233,11 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 							styles['c-advanced-filter-fields__dynamic-field--datepicker']
 						)}
 						value={state.val}
-						onChange={(newValue: string | null) => {
+						onChange={(newValue: string | null) =>
 							onFieldChange({
 								val: newValue || undefined,
-							});
-						}}
+							})
+						}
 					/>
 				);
 			}
