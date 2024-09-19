@@ -15,6 +15,9 @@ import { type DateInputProps } from '@visitor-space/components/DateInput/DateInp
 import { DateRangeInput } from '@visitor-space/components/DateRangeInput';
 import { type DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
 import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import { GenreSelect } from '@visitor-space/components/GenreSelect';
+import { LanguageSelect } from '@visitor-space/components/LanguageSelect/LanguageSelect';
+import { MediumSelect } from '@visitor-space/components/MediumSelect/MediumSelect';
 import { getFilterLabel } from '@visitor-space/utils/advanced-filters';
 
 import { FilterProperty, Operator } from '../types';
@@ -330,8 +333,18 @@ export const FILTERS_OPTIONS_CONFIG = (): AdvancedFiltersConfig => {
 		},
 
 		[FilterProperty.GENRE]: {
-			...EQUALS(operatorLabels, IeObjectsSearchFilterField.GENRE),
-			...EQUALS_NOT(operatorLabels, IeObjectsSearchFilterField.GENRE),
+			...EQUALS(operatorLabels, IeObjectsSearchFilterField.GENRE, GenreSelect),
+			...EQUALS_NOT(operatorLabels, IeObjectsSearchFilterField.GENRE, GenreSelect),
+		},
+
+		[FilterProperty.LANGUAGE]: {
+			...EQUALS(operatorLabels, IeObjectsSearchFilterField.LANGUAGE, LanguageSelect),
+			...EQUALS_NOT(operatorLabels, IeObjectsSearchFilterField.LANGUAGE, LanguageSelect),
+		},
+
+		[FilterProperty.MEDIUM]: {
+			...EQUALS(operatorLabels, IeObjectsSearchFilterField.MEDIUM, MediumSelect),
+			...EQUALS_NOT(operatorLabels, IeObjectsSearchFilterField.MEDIUM, MediumSelect),
 		},
 
 		[FilterProperty.SPACIAL_COVERAGE]: {
