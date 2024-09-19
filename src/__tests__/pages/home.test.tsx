@@ -15,6 +15,7 @@ const renderHome = () => {
 				<Provider store={mockStore}>
 					<Home
 						url="http://localhost:3200"
+						locale={Locale.nl}
 						_nextI18Next={{
 							initialI18nStore: {
 								nl: { common: {} },

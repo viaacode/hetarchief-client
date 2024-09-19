@@ -24,7 +24,15 @@ const Placeholder: FC<PlaceholderProps> = ({
 			{iconProps && <Icon className={styles['c-placeholder__icon']} {...iconProps} />}
 			{!icon && img && (
 				<div className={styles['c-placeholder__img']}>
-					<Image src={img} alt={imgAlt} layout="fill" objectFit="contain" />
+					<Image
+						src={img}
+						alt={imgAlt as string}
+						fill
+						sizes="100vw"
+						style={{
+							objectFit: 'contain',
+						}}
+					/>
 				</div>
 			)}
 			<h3 className={styles['c-placeholder__title']}>{title}</h3>

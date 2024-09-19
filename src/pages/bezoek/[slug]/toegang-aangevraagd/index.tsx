@@ -9,8 +9,8 @@ import { VisitorSpaceService } from '@visitor-space/services';
 import { type VisitorSpaceInfo } from '@visitor-space/types';
 import { VisitRequestedPage } from '@visitor-space/views/VisitRequestedPage';
 
-const VisitRequestedPageDutch: NextPage<DefaultSeoInfo> = ({ title, description, url }) => {
-	return <VisitRequestedPage title={title} description={description} url={url} />;
+const VisitRequestedPageDutch: NextPage<DefaultSeoInfo> = ({ title, description, url, locale }) => {
+	return <VisitRequestedPage title={title} description={description} url={url} locale={locale} />;
 };
 
 export async function getServerSideProps(

@@ -8,12 +8,12 @@ import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
-const AccountSharedFolderDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
+const AccountSharedFolderDutch: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
 	const router = useRouter();
 
 	const folderId = router.asPath.split('/').pop();
 
-	return <AccountSharedFolder url={url} folderId={folderId} />;
+	return <AccountSharedFolder url={url} locale={locale} folderId={folderId} />;
 };
 
 export async function getServerSideProps(

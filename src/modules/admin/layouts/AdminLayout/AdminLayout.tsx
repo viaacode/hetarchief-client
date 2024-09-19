@@ -57,20 +57,16 @@ const AdminLayout: AdminLayoutComponent = ({
 			ADMIN_NAVIGATION_LINKS(locale).map(({ id, label, href, children }) => ({
 				id,
 				node: ({ linkClassName }) => (
-					<Link href={href}>
-						<a className={linkClassName} aria-label={label}>
-							{label}
-						</a>
+					<Link href={href} className={linkClassName} aria-label={label}>
+						{label}
 					</Link>
 				),
 				active: shouldBeActive(asPath, href),
 				children: children?.(locale).map(({ id, label, href }) => ({
 					id,
 					node: ({ linkClassName }) => (
-						<Link href={href}>
-							<a className={linkClassName} aria-label={label}>
-								{label}
-							</a>
+						<Link href={href} className={linkClassName} aria-label={label}>
+							{label}
 						</Link>
 					),
 					active: shouldBeActive(asPath, href),

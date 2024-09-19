@@ -528,17 +528,14 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 										: `/${ROUTE_PARTS.cpAdmin}/${ROUTE_PARTS.visitRequests}?${ROUTE_PARTS.visitRequest}=${overlappingRequests[0].id}`
 								}
 								passHref
+								onClick={onClose}
+								aria-label={tText(
+									'modules/shared/components/approve-request-blade/approve-request-blade___navigeer-naar-de-reeds-goedgekeurde-aanvraag-voor-deze-periode'
+								)}
 							>
-								<a
-									onClick={onClose}
-									aria-label={tText(
-										'modules/shared/components/approve-request-blade/approve-request-blade___navigeer-naar-de-reeds-goedgekeurde-aanvraag-voor-deze-periode'
-									)}
-								>
-									{tHtml(
-										'modules/shared/components/approve-request-blade/approve-request-blade___bekijk-deze-aanvraag'
-									)}
-								</a>
+								{tHtml(
+									'modules/shared/components/approve-request-blade/approve-request-blade___bekijk-deze-aanvraag'
+								)}
 							</Link>
 						</p>
 					)}

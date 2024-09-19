@@ -1520,17 +1520,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			<Link
 				passHref
 				href={`${ROUTES_BY_LOCALE[locale].search}/${router.query.slug}/${item.id}`}
+				tabIndex={isHidden ? -1 : 0}
+				className={clsx(
+					styles['p-object-detail__metadata-card-link'],
+					'u-text-no-decoration'
+				)}
+				aria-label={item.title}
 			>
-				<a
-					tabIndex={isHidden ? -1 : 0}
-					className={clsx(
-						styles['p-object-detail__metadata-card-link'],
-						'u-text-no-decoration'
-					)}
-					aria-label={item.title}
-				>
-					<RelatedObject object={item} />
-				</a>
+				<RelatedObject object={item} />
 			</Link>
 		</li>
 	);
@@ -1592,14 +1589,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 			)}
 			action={
-				<Link passHref href={KNOWN_STATIC_ROUTES.kioskConditions}>
-					<a aria-label={tText('pages/slug/index___meer-info')}>
-						<Button
-							className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
-							label={tHtml('pages/slug/index___meer-info')}
-							variants={['text', 'underline']}
-						/>
-					</a>
+				<Link
+					passHref
+					href={KNOWN_STATIC_ROUTES.kioskConditions}
+					aria-label={tText('pages/slug/index___meer-info')}
+				>
+					<Button
+						className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
+						label={tHtml('pages/slug/index___meer-info')}
+						variants={['text', 'underline']}
+					/>
 				</Link>
 			}
 		/>

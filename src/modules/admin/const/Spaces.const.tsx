@@ -123,13 +123,10 @@ export const VisitorSpacesOverviewTableColumns = (
 								row.original.slug
 							)}`}
 							passHref={true}
+							className="u-color-neutral u-font-size-24"
+							aria-label={tText('modules/admin/const/spaces___aanpassen')}
 						>
-							<a
-								className="u-color-neutral u-font-size-24"
-								aria-label={tText('modules/admin/const/spaces___aanpassen')}
-							>
-								<Icon name={IconNamesLight.Edit} />
-							</a>
+							<Icon name={IconNamesLight.Edit} />
 						</Link>
 					)}
 					{showStatusDropdown && (

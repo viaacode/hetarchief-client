@@ -7,12 +7,12 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
-const AccountSharedFolderEnglish: NextPage<DefaultSeoInfo> = ({ url }) => {
+const AccountSharedFolderEnglish: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
 	const router = useRouter();
 
 	const folderId = router.asPath.split('/').pop();
 
-	return <AccountSharedFolder url={url} folderId={folderId} />;
+	return <AccountSharedFolder url={url} locale={locale} folderId={folderId} />;
 };
 
 export async function getServerSideProps(

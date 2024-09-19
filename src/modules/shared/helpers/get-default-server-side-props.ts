@@ -31,6 +31,7 @@ export async function getDefaultStaticProps(
 	return {
 		props: {
 			url,
+			locale,
 			title: options?.title || null,
 			description: options?.description || null,
 			image: options?.image || null,

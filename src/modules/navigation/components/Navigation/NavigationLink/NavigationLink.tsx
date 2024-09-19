@@ -54,15 +54,15 @@ const NavigationLink: FC<NavigationLinkProps> = ({
 	);
 
 	return href ? (
-		<Link href={href} passHref>
-			<a
-				className={rootCls}
-				aria-label={tText(
-					'modules/navigation/components/navigation/navigation-link/navigation-link___navigeer-naar-een-pagina'
-				)}
-			>
-				{renderLabelWithIcons()}
-			</a>
+		<Link
+			href={href}
+			passHref
+			className={rootCls}
+			aria-label={tText(
+				'modules/navigation/components/navigation/navigation-link/navigation-link___navigeer-naar-een-pagina'
+			)}
+		>
+			{renderLabelWithIcons()}
 		</Link>
 	) : (
 		<span className={rootCls} {...clickProps}>

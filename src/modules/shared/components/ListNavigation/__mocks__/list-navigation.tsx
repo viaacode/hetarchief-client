@@ -10,14 +10,13 @@ import { type ListNavigationItem, type ListNavigationProps } from '../ListNaviga
 
 const renderLink = ({ to = '#', label = 'link', external = false }) => {
 	return (
-		<Link href={to}>
-			<a
-				className={clsx(styles['c-list-navigation__link'])}
-				target={external ? '_blank' : '_self'}
-				role="link"
-			>
-				{label}
-			</a>
+		<Link
+			href={to}
+			className={clsx(styles['c-list-navigation__link'])}
+			target={external ? '_blank' : '_self'}
+			role="link"
+		>
+			{label}
 		</Link>
 	);
 };

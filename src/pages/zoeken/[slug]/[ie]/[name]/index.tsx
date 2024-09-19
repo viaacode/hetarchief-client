@@ -21,8 +21,17 @@ const ObjectDetailPageDutch: NextPage<ObjectDetailPageProps> = ({
 	description,
 	image,
 	url,
+	locale,
 }) => {
-	return <ObjectDetailPage title={title} description={description} image={image} url={url} />;
+	return (
+		<ObjectDetailPage
+			title={title}
+			description={description}
+			image={image}
+			url={url}
+			locale={locale}
+		/>
+	);
 };
 
 export async function getServerSideProps(

@@ -221,15 +221,14 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 					},
 				})}
 				passHref
+				aria-label={tText('pages/account/mijn-profiel/index___wijzig-mijn-gegevens')}
 			>
-				<a aria-label={tText('pages/account/mijn-profiel/index___wijzig-mijn-gegevens')}>
-					<Button
-						className="u-p-0"
-						iconStart={<Icon name={IconNamesLight.Edit} />}
-						label={tHtml('pages/account/mijn-profiel/index___wijzig-mijn-gegevens')}
-						variants="text"
-					/>
-				</a>
+				<Button
+					className="u-p-0"
+					iconStart={<Icon name={IconNamesLight.Edit} />}
+					label={tHtml('pages/account/mijn-profiel/index___wijzig-mijn-gegevens')}
+					variants="text"
+				/>
 			</Link>
 		</div>
 	);

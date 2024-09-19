@@ -9,8 +9,8 @@ import { type DefaultSeoInfo } from '@shared/types/seo';
  * Redirect page for urls of the form: /zoeken/:maintainerSlug/:ieObjectId => redirects to: /zoeken/:maintainerSlug/:ieObjectId/:ieObjectName
  * @constructor
  */
-const IeObjectWithoutObjectNamePageDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
-	return <IeObjectWithoutObjectNamePage url={url} />;
+const IeObjectWithoutObjectNamePageDutch: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
+	return <IeObjectWithoutObjectNamePage url={url} locale={locale} />;
 };
 
 export async function getServerSideProps(

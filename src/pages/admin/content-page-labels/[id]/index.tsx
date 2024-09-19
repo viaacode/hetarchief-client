@@ -8,8 +8,8 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
-const ContentPageLabelsDetailPageEnglish: NextPage<DefaultSeoInfo> = ({ url }) => {
-	return <ContentPageLabelsDetailPage url={url} />;
+const ContentPageLabelsDetailPageEnglish: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
+	return <ContentPageLabelsDetailPage url={url} locale={locale} />;
 };
 
 export async function getServerSideProps(

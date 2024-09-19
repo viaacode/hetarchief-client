@@ -16,6 +16,7 @@ import { type DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageDetailPageEnglish: NextPage<DefaultSeoInfo & UserProps> = ({
 	url,
+	locale,
 	commonUser,
 }) => {
 	const router = useRouter();
@@ -23,6 +24,7 @@ const ContentPageDetailPageEnglish: NextPage<DefaultSeoInfo & UserProps> = ({
 	return (
 		<ContentPageDetailPage
 			url={url}
+			locale={locale}
 			commonUser={commonUser as Avo.User.CommonUser}
 			id={router.query.id as string}
 		/>

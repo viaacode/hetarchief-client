@@ -5,8 +5,8 @@ import { MaintainerSearchPage } from '@search/MaintainerSearchPage';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
-const MaintainerSearchPageDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
-	return <MaintainerSearchPage url={url} />;
+const MaintainerSearchPageDutch: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
+	return <MaintainerSearchPage url={url} locale={locale} />;
 };
 
 export async function getServerSideProps(

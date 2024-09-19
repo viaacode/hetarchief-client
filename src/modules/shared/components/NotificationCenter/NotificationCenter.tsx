@@ -153,15 +153,15 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 		}
 
 		return (
-			<Link passHref href={path}>
-				<a
-					className="u-text-no-decoration"
-					onClick={() => onClickNotificationLink(notification)}
-					aria-label={notification.title}
-					target="_self"
-				>
-					{content}
-				</a>
+			<Link
+				passHref
+				href={path}
+				className="u-text-no-decoration"
+				onClick={() => onClickNotificationLink(notification)}
+				aria-label={notification.title}
+				target="_self"
+			>
+				{content}
 			</Link>
 		);
 	};

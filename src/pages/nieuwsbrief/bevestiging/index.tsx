@@ -6,8 +6,8 @@ import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
-const NewsletterConfirmationDutch: NextPage<DefaultSeoInfo> = ({ url }) => {
-	return <NewsletterConfirmation url={url} />;
+const NewsletterConfirmationDutch: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
+	return <NewsletterConfirmation url={url} locale={locale} />;
 };
 
 export async function getStaticProps(

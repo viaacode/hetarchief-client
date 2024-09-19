@@ -18,13 +18,13 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 			<div className={styles['c-footer__links__section']} key={key}>
 				{links.map((link, index) => {
 					return (
-						<Link key={link.to + '-' + index} href={link.to}>
-							<a
-								className={styles['c-footer__link']}
-								target={link.external ? '_blank' : '_self'}
-							>
-								{link.label}
-							</a>
+						<Link
+							key={link.to + '-' + index}
+							href={link.to}
+							className={styles['c-footer__link']}
+							target={link.external ? '_blank' : '_self'}
+						>
+							{link.label}
 						</Link>
 					);
 				})}
@@ -35,22 +35,23 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 	const renderFooterLeft = () => {
 		return (
 			<div className={styles['c-footer__links__left']}>
-				<Link href="/">
-					<a
-						className={clsx(styles['c-footer__image-link'])}
-						aria-label={'Link naar hetarchief.be'}
-					>
-						<Image
-							src={`/images/logo_hetarchief_${locale}.svg`}
-							alt={tText(
-								'modules/navigation/components/footer/footer___hetarchief-logo'
-							)}
-							width={178}
-							height={65}
-							objectFit="contain"
-							objectPosition="center"
-						/>
-					</a>
+				<Link
+					href="/"
+					className={clsx(styles['c-footer__image-link'])}
+					aria-label={'Link naar hetarchief.be'}
+				>
+					<Image
+						src={`/images/logo_hetarchief_${locale}.svg`}
+						alt={tText('modules/navigation/components/footer/footer___hetarchief-logo')}
+						width={178}
+						height={65}
+						style={{
+							maxWidth: '100%',
+							height: 'auto',
+							objectFit: 'contain',
+							objectPosition: 'center',
+						}}
+					/>
 				</Link>
 			</div>
 		);
@@ -60,47 +61,51 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 		return (
 			<div className={styles['c-footer__links__right']}>
 				<div>{tText('modules/navigation/components/footer/footer___gesteund-door')}</div>
-				<Link href="https://www.vlaanderen.be">
-					<a
-						className={styles['c-footer__image-link']}
-						target="_blank"
-						aria-label={tText(
-							'modules/navigation/components/footer/footer___link-naar-vlaanderen-be'
-						)}
-					>
-						<Image
-							src={`/images/logo_vlaanderen_${locale}.svg`}
-							alt={tText(
-								'modules/navigation/components/footer/footer___vlaanderen-logo'
-							)}
-							width={89}
-							height={44}
-							objectFit="contain"
-							objectPosition="center"
-						/>
-					</a>
+				<Link
+					href="https://www.vlaanderen.be"
+					className={styles['c-footer__image-link']}
+					target="_blank"
+					aria-label={tText(
+						'modules/navigation/components/footer/footer___link-naar-vlaanderen-be'
+					)}
+				>
+					<Image
+						src={`/images/logo_vlaanderen_${locale}.svg`}
+						alt={tText('modules/navigation/components/footer/footer___vlaanderen-logo')}
+						width={89}
+						height={44}
+						style={{
+							maxWidth: '100%',
+							height: 'auto',
+							objectFit: 'contain',
+							objectPosition: 'center',
+						}}
+					/>
 				</Link>
 
 				<div>
 					{tText('modules/navigation/components/footer/footer___een-initiatief-van')}
 				</div>
-				<Link href="https://meemoo.be">
-					<a
-						className={styles['c-footer__image-link']}
-						target="_blank"
-						aria-label={tText(
-							'modules/navigation/components/footer/footer___link-naar-meemoo-be'
-						)}
-					>
-						<Image
-							src={`/images/logo_meemoo_${locale}.svg`}
-							alt={tText('modules/navigation/components/footer/footer___meemoo-logo')}
-							width={104}
-							height={44}
-							objectFit="contain"
-							objectPosition="center"
-						/>
-					</a>
+				<Link
+					href="https://meemoo.be"
+					className={styles['c-footer__image-link']}
+					target="_blank"
+					aria-label={tText(
+						'modules/navigation/components/footer/footer___link-naar-meemoo-be'
+					)}
+				>
+					<Image
+						src={`/images/logo_meemoo_${locale}.svg`}
+						alt={tText('modules/navigation/components/footer/footer___meemoo-logo')}
+						width={104}
+						height={44}
+						style={{
+							maxWidth: '100%',
+							height: 'auto',
+							objectFit: 'contain',
+							objectPosition: 'center',
+						}}
+					/>
 				</Link>
 			</div>
 		);

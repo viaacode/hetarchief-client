@@ -8,7 +8,6 @@ const bundleAnalyser = require('@next/bundle-analyzer');
  */
 const nextTranspileModules = require('next-transpile-modules');
 const path = require('path');
-const getI18n = require('./next-i18next.config.js');
 
 const withBundleAnalyzer = bundleAnalyser({
 	enabled: process.env.ANALYZE === 'true',
@@ -16,12 +15,14 @@ const withBundleAnalyzer = bundleAnalyser({
 
 const withTM = nextTranspileModules(['ky-universal']);
 
-const proxyUrl = process.env.PROXY_URL;
-
 /** @type {import("next").NextConfig} */
 module.exports = withBundleAnalyzer(
 	withTM({
-		i18n: getI18n(proxyUrl),
+		i18n: {
+			locales: ['nl', 'en'],
+			defaultLocale: 'nl',
+			localeDetection: false,
+		},
 		// https://stackoverflow.com/questions/71847778/why-my-nextjs-component-is-rendering-twice
 		// Disabling react 18 strict mode, otherwise the zendesk widget is rendered twice
 		reactStrictMode: false,
@@ -34,18 +35,10 @@ module.exports = withBundleAnalyzer(
 			 */
 			esmExternals: 'loose',
 			/**
-			 * https://stackoverflow.com/questions/72567320/typeerror-cannot-read-properties-of-null-reading-useref
-			 */
-			appDir: false,
-			/**
 			 * Ignore warnings about big page data, since we load translations like that
 			 * https://meemoo.atlassian.net/browse/ARC-1932
 			 */
 			largePageDataBytes: 300 * 1000,
-			/**
-			 * Limit the size of the cache used by the Server side rendering cache
-			 */
-			isrMemoryCacheSize: 2 * 1024 * 1024 * 1024, // 2GB in bytes
 		},
 		webpack: (config, options) => {
 			// Required for ky-universal top level await used in admin core inside the api service

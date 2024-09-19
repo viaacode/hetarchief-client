@@ -11,8 +11,22 @@ import { type SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
-const ObjectDetailPageEnglish: NextPage<DefaultSeoInfo> = ({ title, description, image, url }) => {
-	return <ObjectDetailPage title={title} description={description} image={image} url={url} />;
+const ObjectDetailPageEnglish: NextPage<DefaultSeoInfo> = ({
+	title,
+	description,
+	image,
+	url,
+	locale,
+}) => {
+	return (
+		<ObjectDetailPage
+			title={title}
+			description={description}
+			image={image}
+			url={url}
+			locale={locale}
+		/>
+	);
 };
 
 export async function getServerSideProps(
