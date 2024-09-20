@@ -89,7 +89,7 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 				</h2>
 			)}
 		>
-			<div className="u-px-16 u-px-32:md u-pr-56:md">
+			<div className="u-px-16 u-px-32-md u-pr-56-md">
 				<strong>
 					{tHtml(
 						'modules/home/components/cancel-visit-blade/cancel-visit-blade___ben-je-zeker-dat-je-je-bezoek-wil-annuleren'

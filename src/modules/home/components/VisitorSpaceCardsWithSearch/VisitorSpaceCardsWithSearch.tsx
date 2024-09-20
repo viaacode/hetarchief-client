@@ -79,9 +79,9 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 	 */
 
 	return (
-		<div className="l-container u-pt-32 u-pt-80:md u-pb-48 u-pb-80:md">
+		<div className="l-container u-pt-32 u-pt-80-md u-pb-48 u-pb-80-md">
 			<div id="p-home__results-anchor" ref={resultsAnchor} />
-			<div className="u-flex u-flex-col u-flex-row:md u-align-center u-justify-between:md u-mb-32 u-mb-80:md">
+			<div className="u-flex u-flex-col u-flex-row-md u-align-center u-justify-between-md u-mb-32 u-mb-80-md">
 				<h3 className="p-home__subtitle">
 					<label htmlFor={labelKeys.search}>
 						{tHtml('pages/index___vind-een-bezoekersruimte')}

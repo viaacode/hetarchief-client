@@ -178,7 +178,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 			}
 		}
 
-		&\:md {
+		&-md {
 			@media (max-width: $breakpoint-xxl) {
 				margin-bottom: 0;
 

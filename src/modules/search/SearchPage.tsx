@@ -850,7 +850,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const renderFilterMenu = () => {
 		const filterMenuCls = clsx('p-visitor-space__filter-menu', {
-			'u-mr-32:md': viewMode === 'list' && isLoadedWithResults,
+			'u-mr-32-md': viewMode === 'list' && isLoadedWithResults,
 		});
 
 		return (

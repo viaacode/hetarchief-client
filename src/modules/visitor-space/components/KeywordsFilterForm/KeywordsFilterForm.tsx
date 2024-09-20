@@ -126,7 +126,7 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 
 	return (
 		<>
-			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
+			<div className={clsx(className, 'u-px-20 u-px-32-md')}>
 				<div className="u-mb-32">
 					<FormControl
 						className="u-mb-24 c-form-control--label-hidden"

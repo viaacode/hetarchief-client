@@ -521,7 +521,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 									</p>
 								</div>
 
-								<div className="l-container u-mb-24:md u-mb-32">
+								<div className="l-container u-mb-24-md u-mb-32">
 									<FormControl
 										className="c-form-control--label-hidden"
 										id={`${labelKeys.search}--${activeFolder.id}`}
