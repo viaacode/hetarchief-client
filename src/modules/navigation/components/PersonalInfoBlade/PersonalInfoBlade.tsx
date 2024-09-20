@@ -60,11 +60,15 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 				organisation: organisationInputValue,
 			});
 
-			await CampaignMonitorService.setPreferences({
-				preferences: {
-					newsletter: isSubscribedToNewsletter,
-				},
-			});
+			// Only subscribe to newsletter if the user is not already subscribed and indicated that he wants to be subscribed
+			if (isSubscribedToNewsletter && !preferences?.newsletter) {
+				// Do not wait for this call, since it takes to long and the user does not need to wait for this
+				CampaignMonitorService.setPreferences({
+					preferences: {
+						newsletter: isSubscribedToNewsletter,
+					},
+				});
+			}
 
 			toastService.notify({
 				maxLines: 3,
