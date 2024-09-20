@@ -66,7 +66,7 @@ $c-hero-access-card-min-width: 57.2rem;
 		animation: pulse 1.5s infinite alternate ease-in;
 	}
 
-	@include respond-to(xl) {
+	@media (max-width: $breakpoint-xl) {
 		padding: 0 $spacer-2xl;
 
 		&__content {
@@ -79,7 +79,7 @@ $c-hero-access-card-min-width: 57.2rem;
 		}
 	}
 
-	@include respond-to(lg) {
+	@media (max-width: $breakpoint-lg) {
 		grid-template-rows: $spacer-lg calc(54rem - #{$spacer-lg});
 		padding: 0 $spacer-lg;
 
@@ -92,7 +92,7 @@ $c-hero-access-card-min-width: 57.2rem;
 		}
 	}
 
-	@include respond-to(md) {
+	@media (max-width: $breakpoint-md) {
 		grid-template-columns: auto;
 		grid-template-rows: 2fr 1fr 1fr;
 		padding: $spacer-lg $spacer-md;

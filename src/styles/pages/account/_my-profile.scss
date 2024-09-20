@@ -5,7 +5,7 @@
 
 	.p-account-my-profile__general-info-header,
 	.p-account-my-profile__general-info-items {
-		@include respond-at(md) {
+		@media (min-width: $breakpoint-md) {
 			display: grid;
 			grid-auto-flow: column;
 			grid-template-columns: 3fr 1fr;
@@ -18,7 +18,7 @@
 		row-gap: 1.2rem;
 		margin: 0;
 
-		@include respond-to(sm) {
+		@media (max-width: $breakpoint-sm) {
 			grid-template-columns: 15rem 1fr;
 		}
 	}
@@ -31,7 +31,7 @@
 	.c-button {
 		margin-top: 1.2rem;
 
-		@include respond-at(md) {
+		@media (min-width: $breakpoint-md) {
 			margin-top: -1.2rem;
 		}
 	}

@@ -6,7 +6,7 @@
 	padding-top: 6.4rem;
 	padding-bottom: $spacer-1xl;
 
-	@include respond-to(md) {
+	@media (max-width: $breakpoint-md) {
 		flex-direction: column;
 	}
 }
@@ -22,7 +22,7 @@
 }
 
 .c-admin__actions {
-	@include respond-to(md) {
+	@media (max-width: $breakpoint-md) {
 		margin-top: $spacer-md;
 	}
 

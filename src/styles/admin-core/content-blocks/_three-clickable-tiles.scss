@@ -9,7 +9,7 @@ $img-size: 33%;
 	grid-template-columns: repeat(3, 1fr);
 	gap: 3.3rem;
 
-	@include respond-to(sm) {
+	@media (max-width: $breakpoint-sm) {
 		grid-template-columns: 1fr;
 	}
 

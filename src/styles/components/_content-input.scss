@@ -65,7 +65,7 @@ $component: "c-content-input";
 			.c-button {
 				margin-left: $spacer-xs;
 
-				@include respond-at("md") {
+				@media (min-width: $breakpoint-md) {
 					margin-left: $spacer-sm;
 				}
 			}

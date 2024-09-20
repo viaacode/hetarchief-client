@@ -10,7 +10,7 @@ $page: "p-cp-visitor-spaces";
 		height: 5.6rem;
 		display: flex;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			display: flex;
 			flex-flow: row-reverse nowrap;
 
@@ -24,7 +24,7 @@ $page: "p-cp-visitor-spaces";
 	&__search {
 		margin-bottom: $spacer-md;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			flex-basis: 34.1rem;
 			margin-bottom: 0;
 			margin-left: $spacer-sm;
@@ -38,7 +38,7 @@ $page: "p-cp-visitor-spaces";
 	}
 
 	tr {
-		@include respond-to("lg") {
+		@media (max-width: $breakpoint-lg) {
 			td,
 			th {
 				&:nth-child(2),

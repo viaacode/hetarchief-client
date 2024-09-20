@@ -4,14 +4,30 @@
  * Color
  */
 
-$bg: (
-	"black": $black,
-	"platinum": $platinum,
-	"white": $white,
-	"silver": $silver,
-	"mustard": $mustard,
-	"lila": $lila,
-	"shade": $shade,
-);
+.u-bg-black {
+	background-color: $black;
+}
 
-@include generate-utils("bg", "background-color", $bg);
+.u-bg-platinum {
+	background-color: $platinum;
+}
+
+.u-bg-white {
+	background-color: $white;
+}
+
+.u-bg-silver {
+	background-color: $silver;
+}
+
+.u-bg-mustard {
+	background-color: $mustard;
+}
+
+.u-bg-lila {
+	background-color: $lila;
+}
+
+.u-bg-shade {
+	background-color: $shade;
+}

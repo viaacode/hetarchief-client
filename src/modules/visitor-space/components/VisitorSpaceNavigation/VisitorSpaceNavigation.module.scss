@@ -9,7 +9,7 @@ $c-visitor-space-navigation-transform-amount: math.div($spacer-md, 2); // Equal 
 		&-button {
 			transform: translateX($c-visitor-space-navigation-transform-amount);
 
-			@include respond-to(md) {
+			@media (max-width: $breakpoint-md) {
 				:global(.c-button__icon) {
 					margin: 0;
 				}

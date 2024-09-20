@@ -23,7 +23,7 @@ $component: "c-list-navigation";
 		&:hover {
 			cursor: pointer;
 
-			@include respond-at(xxl) {
+			@media (min-width: $breakpoint-xxl) {
 				background-color: $silver;
 			}
 		}

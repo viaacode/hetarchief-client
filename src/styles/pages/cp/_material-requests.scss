@@ -6,7 +6,7 @@ $page: "p-material-requests";
 
 .#{$page} {
 	&__header {
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			display: flex;
 			justify-content: space-between;
 		}
@@ -17,7 +17,7 @@ $page: "p-material-requests";
 		width: 100%;
 		margin: $spacer-xs 0;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			max-width: 28rem;
 		}
 

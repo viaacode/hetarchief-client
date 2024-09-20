@@ -54,7 +54,7 @@
 
 	.c-input--date-time {
 		.c-form-control__input {
-			@include respond-at("lg") {
+			@media (min-width: $breakpoint-lg) {
 				display: flex;
 				flex-flow: row nowrap;
 			}
@@ -62,11 +62,11 @@
 
 		.react-datepicker-wrapper.c-datepicker {
 			&:not(.react-datepicker-wrapper.c-datepicker--time) {
-				@include respond-to("lg") {
+				@media (max-width: $breakpoint-lg) {
 					margin-bottom: $spacer-sm;
 				}
 
-				@include respond-at("lg") {
+				@media (min-width: $breakpoint-lg) {
 					margin-right: $spacer-md;
 					flex-grow: 1;
 				}
@@ -74,7 +74,7 @@
 		}
 
 		.react-datepicker-wrapper.c-datepicker--time {
-			@include respond-at("lg") {
+			@media (min-width: $breakpoint-lg) {
 				flex: 0 0 14rem;
 			}
 		}

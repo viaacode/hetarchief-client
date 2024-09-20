@@ -10,7 +10,7 @@
 	text-align: center;
 	line-height: 3rem;
 
-	@include respond-at(md) {
+	@media (min-width: $breakpoint-md) {
 		height: calc(100vh - #{$c-navigation-height});
 	}
 }
