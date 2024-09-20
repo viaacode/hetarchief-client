@@ -46,7 +46,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	background-color: $black;
 	color: $white;
 
-	@include respond-at(xxl) {
+	@media (min-width: $breakpoint-xxl) {
 		min-height: $c-navigation-height;
 		padding: 0 3.2rem;
 	}
@@ -56,7 +56,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		white-space: nowrap;
 		height: $button-height;
 
-		@include respond-to(xxl) {
+		@media (max-width: $breakpoint-xxl) {
 			padding-left: 0 !important;
 			padding-right: 0 !important;
 		}
@@ -93,12 +93,12 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 			padding: 1.2rem 0 0.65rem;
 		}
 
-		@include respond-at(xxl) {
+		@media (min-width: $breakpoint-xxl) {
 			z-index: get-z-layer("nav-dropdown"); // above overlay
 		}
 
 		&--open {
-			@include respond-to(xxl) {
+			@media (max-width: $breakpoint-xxl) {
 				z-index: get-z-layer("nav-dropdown"); // under overlay
 			}
 		}
@@ -110,12 +110,12 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 			line-height: $line-height-xxl !important;
 		}
 
-		@include respond-at(xxl) {
+		@media (min-width: $breakpoint-xxl) {
 			z-index: get-z-layer("nav-hamburger"); // above all
 		}
 
 		&--open {
-			@include respond-to(xxl) {
+			@media (max-width: $breakpoint-xxl) {
 				z-index: get-z-layer("nav-dropdown"); // under overlay
 			}
 		}
@@ -172,14 +172,14 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 			right: $spacer-md;
 			background-color: $silver;
 
-			@include respond-at(xxl) {
+			@media (min-width: $breakpoint-xxl) {
 				left: 0;
 				right: 0;
 			}
 		}
 
 		&\:md {
-			@include respond-to(xxl) {
+			@media (max-width: $breakpoint-xxl) {
 				margin-bottom: 0;
 
 				&::before {
@@ -194,7 +194,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		position: absolute;
 		margin-top: $c-navigation-height-md;
 
-		@include respond-at(xxl) {
+		@media (min-width: $breakpoint-xxl) {
 			margin-top: $c-navigation-height;
 		}
 	}
@@ -238,12 +238,12 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		z-index: get-z-layer("nav-dropdown") + 1;
 
 		// Overwrite popper element styles
-		@include respond-to(xxl) {
+		@media (max-width: $breakpoint-xxl) {
 			inset: $c-navigation-height-md 0 0 0 !important;
 			transform: translate(0) !important;
 		}
 
-		@include respond-at(xxl) {
+		@media (min-width: $breakpoint-xxl) {
 			min-width: 26.6rem !important;
 		}
 
@@ -260,18 +260,18 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	text-decoration: none;
 	border-bottom: $c-navigation-border-height solid transparent;
 
-	@include respond-to(xxl) {
+	@media (max-width: $breakpoint-xxl) {
 		border-bottom: none;
 		font-size: $font-size-sm;
 	}
 
-	@include respond-at(xxl) {
+	@media (min-width: $breakpoint-xxl) {
 		display: inline-block;
 		padding: 1.2rem 0 0.95rem;
 	}
 
 	&--dropdown:hover {
-		@include respond-to(xxl) {
+		@media (max-width: $breakpoint-xxl) {
 			background-color: $silver;
 		}
 	}
@@ -319,7 +319,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		padding-right: 0;
 	}
 
-	@include respond-at(xxl) {
+	@media (min-width: $breakpoint-xxl) {
 		position: relative;
 		height: $c-navigation-height;
 	}
@@ -344,14 +344,14 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	&--divider {
 		margin-left: $c-navigation-item-spacing;
 
-		@include respond-at(xxl) {
+		@media (min-width: $breakpoint-xxl) {
 			margin-right: 0;
 		}
 
 		&:not(:last-child) {
 			margin-right: 0;
 
-			@include respond-at(xxl) {
+			@media (min-width: $breakpoint-xxl) {
 				margin-right: 0;
 			}
 		}
@@ -372,7 +372,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		z-index: get-z-layer("nav-dropdown") + 1;
 		font-weight: $font-weight-bold;
 
-		@include respond-to(xxl) {
+		@media (max-width: $breakpoint-xxl) {
 			> :global(.c-dropdown-menu__item) {
 				font-weight: $font-weight-bold;
 			}
@@ -443,12 +443,12 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		content: none;
 	}
 
-	@include respond-to(xxl) {
+	@media (max-width: $breakpoint-xxl) {
 		min-height: $c-navigation-height-contextual-md;
 	}
 
 	.c-navigation__title {
-		@include respond-to(xxl) {
+		@media (max-width: $breakpoint-xxl) {
 			font-size: $font-size-base;
 		}
 	}
@@ -460,7 +460,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 }
 
 .c-navigation--responsive {
-	@include respond-to(xxl) {
+	@media (max-width: $breakpoint-xxl) {
 		grid-template-columns: 1fr 1fr;
 	}
 
@@ -472,19 +472,19 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		}
 
 		:global(.c-badge) {
-			@include respond-to(xxl) {
+			@media (max-width: $breakpoint-xxl) {
 				margin-left: $spacer-xs;
 			}
 		}
 
 		&--responsive-desktop {
-			@include respond-to(xxl) {
+			@media (max-width: $breakpoint-xxl) {
 				display: none;
 			}
 		}
 
 		&--responsive-mobile {
-			@include respond-to(xxl) {
+			@media (max-width: $breakpoint-xxl) {
 				display: flex;
 				justify-self: center;
 				margin-left: auto;
@@ -497,7 +497,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		grid-template-columns: 1fr min-content;
 		column-gap: $spacer-lg;
 
-		@include respond-to(xxl) {
+		@media (max-width: $breakpoint-xxl) {
 			column-gap: 0 !important;
 			row-gap: $spacer-sm;
 		}

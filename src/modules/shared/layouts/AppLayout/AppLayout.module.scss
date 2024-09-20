@@ -14,7 +14,7 @@
 
 .c-navigation--logged-in {
 	:global(.c-navigation__hamburger__language-switcher) {
-		@include respond-to(xxl) {
+		@media (max-width: $breakpoint-xxl) {
 			display: none;
 		}
 	}
@@ -22,7 +22,7 @@
 
 .c-navigation--logged-out {
 	:global(.c-navigation__section-right__language-switcher) {
-		@include respond-to(xxl) {
+		@media (max-width: $breakpoint-xxl) {
 			display: none;
 		}
 	}

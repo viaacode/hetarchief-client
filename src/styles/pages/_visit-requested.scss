@@ -2,7 +2,6 @@
 @use "sass:math";
 
 $page: "p-visit-requested";
-$page-breakpoint: "md";
 $page-padding: $spacer-md + $spacer-lg;
 $image-size: 16rem;
 $image-size-md: 56.1rem;
@@ -38,12 +37,12 @@ $image-size-md: 56.1rem;
 	}
 
 	&__description {
-		@include respond-at($page-breakpoint) {
+		@media (min-width: $breakpoint-md) {
 			min-height: 23rem; // magic value; minimum height required for __image to reach its max-height;
 		}
 	}
 
-	@include respond-to($page-breakpoint) {
+	@media (max-width: $breakpoint-md) {
 		&__grid {
 			grid-template-rows: minmax($page-padding, auto) min-content min-content min-content minmax($page-padding, auto);
 			grid-template-columns: 1fr;
@@ -72,7 +71,7 @@ $image-size-md: 56.1rem;
 		}
 	}
 
-	@include respond-at($page-breakpoint) {
+	@media (min-width: $breakpoint-md) {
 		&__grid {
 			grid-template-rows: minmax($page-padding, auto) min-content auto minmax($page-padding, auto);
 			grid-template-columns: 38.4rem 1fr;
@@ -112,7 +111,7 @@ $image-size-md: 56.1rem;
 		line-height: $line-height-lg;
 		text-align: center;
 
-		@include respond-at($page-breakpoint) {
+		@media (min-width: $breakpoint-md) {
 			font-size: $font-size-3xl;
 			line-height: $line-height-lg;
 			text-align: initial;
@@ -124,7 +123,7 @@ $image-size-md: 56.1rem;
 		line-height: $line-height-3xl;
 		text-align: center;
 
-		@include respond-at($page-breakpoint) {
+		@media (min-width: $breakpoint-md) {
 			font-size: $font-size-base;
 			line-height: $line-height-1xl;
 			text-align: initial;
@@ -135,7 +134,7 @@ $image-size-md: 56.1rem;
 		font-size: $font-size-base;
 		line-height: $line-height-3xl;
 
-		@include respond-at($page-breakpoint) {
+		@media (min-width: $breakpoint-md) {
 			font-size: $font-size-md;
 			line-height: $line-height-md;
 		}

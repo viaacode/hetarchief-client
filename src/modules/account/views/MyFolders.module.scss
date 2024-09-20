@@ -2,7 +2,7 @@
 
 .p-my-folders {
 	&__folder-edit {
-		@include respond-to("md") {
+		@media (max-width: $breakpoint-md) {
 			display: none;
 		}
 	}

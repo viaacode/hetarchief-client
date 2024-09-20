@@ -16,7 +16,7 @@ $component: "c-visitor-space-card";
 			height: initial;
 			justify-content: initial;
 
-			@include respond-at("md") {
+			@media (min-width: $breakpoint-md) {
 				flex-direction: row;
 			}
 		}
@@ -28,7 +28,7 @@ $component: "c-visitor-space-card";
 			min-width: 0;
 			position: relative;
 
-			@include respond-at("md") {
+			@media (min-width: $breakpoint-md) {
 				padding-right: $spacer-md;
 
 				&::after {
@@ -43,7 +43,7 @@ $component: "c-visitor-space-card";
 				}
 			}
 
-			@include respond-at("lg") {
+			@media (min-width: $breakpoint-lg) {
 				padding-right: $spacer-2xl;
 			}
 		}
@@ -58,7 +58,7 @@ $component: "c-visitor-space-card";
 		&--large {
 			font-size: $font-size-base;
 
-			@include respond-at("md") {
+			@media (min-width: $breakpoint-md) {
 				font-size: $font-size-1xl;
 				line-height: $line-height-lg;
 			}
@@ -102,7 +102,7 @@ $component: "c-visitor-space-card";
 		font-size: $font-size-xs;
 		line-height: $line-height-lg;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			font-size: $font-size-sm;
 			line-height: math.div($font-size-md, 9) * 10; // 2rem;
 
@@ -127,7 +127,7 @@ $component: "c-visitor-space-card";
 	&--granted {
 		:global(.c-card__title-wrapper),
 		:global(.c-card__children-wrapper) {
-			@include respond-at(md) {
+			@media (min-width: $breakpoint-md) {
 				// Overwrite card styles
 				margin-left: 0 !important;
 				margin-right: $spacer-md !important;

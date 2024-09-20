@@ -7,62 +7,6 @@
 @use "variables" as *;
 @use "functions" as *;
 
-/**
- * Media queries
- */
-
-@mixin respond-at($_min) {
-	$min-bp: map.get($breakpoints, $_min);
-
-	@if not $min-bp {
-		/* stylelint-disable-next-line block-no-empty */
-		@if map-property-not-found($_min, $breakpoints) {
-		}
-	}
-
-	@media screen and (min-width: $min-bp) {
-		@content;
-	}
-}
-
-@mixin respond-to($_max) {
-	$max-bp: map.get($breakpoints, $_max);
-
-	@if not $max-bp {
-		/* stylelint-disable-next-line block-no-empty */
-		@if map-property-not-found($_max, $breakpoints) {
-		}
-	}
-
-	@media screen and (width <= calc(#{$max-bp} - 1px)) {
-		@content;
-	}
-}
-
-@mixin respond-between($_min, $_max) {
-	$min-bp: map.get($breakpoints, $_min);
-	$max-bp: map.get($breakpoints, $_max);
-
-	@if not $min-bp {
-		/* stylelint-disable-next-line block-no-empty */
-		@if map-property-not-found($_min, $breakpoints) {
-		}
-	}
-
-	@if not $max-bp {
-		/* stylelint-disable-next-line block-no-empty */
-		@if map-property-not-found($_max, $breakpoints) {
-		}
-	}
-
-	@if $min-bp >= $max-bp {
-		@error "Min width can not be higher than or equal to max width.";
-	}
-
-	@media screen and (min-width: $min-bp) and (width <= calc(#{$max-bp} - 1px)) {
-		@content;
-	}
-}
 
 /**
  * Generators
@@ -128,7 +72,7 @@
 		@if $bps and list.length($bps) > 0 {
 			@each $_bp-key in $_bps {
 				.u-#{$_name}-#{$key}\:#{$_bp-key} {
-					@include respond-at($_bp-key) {
+					@media (min-width: $_bp-key) {
 						@include generate-properties($_properties, $value);
 					}
 				}
@@ -438,7 +382,7 @@
 @mixin tabs-border-radius() {
 	border-radius: math.div(math.max($tab-line-size + ($tab-vertical-padding * 2), $tab-min-height), 2);
 
-	@include respond-at("md") {
+	@media (min-width: $breakpoint-md) {
 		border-radius: math.div(math.max($tab-line-size-md + ($tab-vertical-padding-md * 2), $tab-min-height-md), 2);
 	}
 }
@@ -463,7 +407,7 @@
 		color: $neutral;
 		margin-bottom: $spacer-1xl;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			font-size: $font-size-base;
 			line-height: $font-size-2xm;
 		}

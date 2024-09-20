@@ -17,7 +17,7 @@ $c-hero-access-card-min-width: 57.2rem;
 		column-gap: $spacer-lg;
 		align-items: center;
 
-		@include respond-at(md) {
+		@media (min-width: $breakpoint-md) {
 			grid-template-columns: repeat(2, 1fr);
 		}
 	}
@@ -36,7 +36,7 @@ $c-hero-access-card-min-width: 57.2rem;
 
 	&__section {
 		&-title {
-			@include respond-to(md) {
+			@media (max-width: $breakpoint-md) {
 				font-size: $font-size-sm;
 			}
 		}
@@ -49,7 +49,7 @@ $c-hero-access-card-min-width: 57.2rem;
 			&:not(:last-child) {
 				margin-bottom: $spacer-lg;
 
-				@include respond-at(md) {
+				@media (min-width: $breakpoint-md) {
 					margin-bottom: $spacer-lg * 2;
 				}
 			}
@@ -61,7 +61,7 @@ $c-hero-access-card-min-width: 57.2rem;
 		grid-template-columns: 1fr;
 		grid-gap: $spacer-md $spacer-lg;
 
-		@include respond-at(md) {
+		@media (min-width: $breakpoint-md) {
 			grid-template-columns: repeat(auto-fill, minmax($c-hero-access-card-min-width, 1fr));
 		}
 	}
@@ -76,7 +76,7 @@ $c-hero-access-card-min-width: 57.2rem;
 		}
 	}
 
-	@include respond-to(xl) {
+	@media (max-width: $breakpoint-xl) {
 		padding: 0 $spacer-2xl;
 
 		&__content {
@@ -89,7 +89,7 @@ $c-hero-access-card-min-width: 57.2rem;
 		}
 	}
 
-	@include respond-to(lg) {
+	@media (max-width: $breakpoint-lg) {
 		grid-template-rows: $spacer-lg calc(54rem - #{$spacer-lg});
 		padding: 0 $spacer-lg;
 
@@ -102,7 +102,7 @@ $c-hero-access-card-min-width: 57.2rem;
 		}
 	}
 
-	@include respond-to(md) {
+	@media (max-width: $breakpoint-md) {
 		grid-template-columns: auto;
 		grid-template-rows: 2fr 1fr 1fr;
 		padding: $spacer-lg $spacer-md;
@@ -134,7 +134,7 @@ $c-hero-access-card-min-width: 57.2rem;
 		background-color: $platinum;
 		color: $black;
 
-		@include respond-at(md) {
+		@media (min-width: $breakpoint-md) {
 			padding: $spacer-2xl 0;
 		}
 
@@ -143,7 +143,7 @@ $c-hero-access-card-min-width: 57.2rem;
 			padding-bottom: 0;
 			padding-right: $spacer-md;
 
-			@include respond-to(md) {
+			@media (max-width: $breakpoint-md) {
 				margin-bottom: $spacer-md;
 				font-size: $font-size-3xl;
 				text-align: left;
@@ -151,7 +151,7 @@ $c-hero-access-card-min-width: 57.2rem;
 		}
 
 		.c-hero__description {
-			@include respond-at(md) {
+			@media (min-width: $breakpoint-md) {
 				max-width: 48.8rem;
 			}
 		}

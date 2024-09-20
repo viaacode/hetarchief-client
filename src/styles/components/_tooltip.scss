@@ -52,7 +52,7 @@ $component: "c-tooltip-component";
 		transition-delay: 0s;
 	}
 
-	@include respond-to("md") {
+	@media (max-width: $breakpoint-md) {
 		// Hide tooltips on mobile since there isn't a hover state
 		// https://github.com/viaacode/hetarchief-client/pull/1090
 		display: none;

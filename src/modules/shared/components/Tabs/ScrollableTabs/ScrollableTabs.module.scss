@@ -99,7 +99,7 @@ $scrollable-tabs-gradient-width-lg: $spacer-md + $scrollable-tabs-gradient-width
 
 		&.#{$component} {
 			&--medium {
-				@include respond-to("md") {
+				@media (max-width: $breakpoint-md) {
 					border-radius: math.div($tab-min-height-medium, 2);
 				}
 			}

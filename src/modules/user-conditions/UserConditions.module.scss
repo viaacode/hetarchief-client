@@ -23,11 +23,11 @@ $header-and-buttons-height-mobile: 21.8rem;
 		grid-column: 1 / 2;
 		grid-row: 1 / 2; // Ensure no overlap with 192px gradient
 
-		@include respond-at("sm") {
+		@media (min-width: $breakpoint-sm) {
 			background-size: 150%;
 		}
 
-		@include respond-at("lg") {
+		@media (min-width: $breakpoint-lg) {
 			background-size: 125%;
 		}
 	}
@@ -63,7 +63,7 @@ $header-and-buttons-height-mobile: 21.8rem;
 		line-height: $line-height-3xl;
 		text-align: center;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			margin-top: $spacer-lg * 3;
 			font-size: $font-size-3xl;
 			line-height: $line-height-lg;
@@ -76,7 +76,7 @@ $header-and-buttons-height-mobile: 21.8rem;
 		overflow-y: auto;
 		max-height: calc(100vh - $top-navigation-bar-height - $header-and-buttons-height-mobile);
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			margin-top: $spacer-lg * 2;
 			max-height: calc(100vh - $top-navigation-bar-height - $header-and-buttons-height);
 		}

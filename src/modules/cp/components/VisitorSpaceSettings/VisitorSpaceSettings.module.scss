@@ -36,7 +36,7 @@ $component: "c-cp-settings";
 		padding: $spacer-sm;
 		background-color: white;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			padding: $spacer-lg;
 		}
 	}
@@ -120,7 +120,7 @@ $component: "c-cp-settings";
 			gap: $spacer-sm;
 		}
 
-		@include respond-at("lg") {
+		@media (min-width: $breakpoint-lg) {
 			&__controls {
 				grid-template-columns: 2fr 3fr;
 			}
@@ -168,7 +168,7 @@ $component: "c-cp-settings";
 		}
 	}
 
-	@include respond-at("lg") {
+	@media (min-width: $breakpoint-lg) {
 		&__cancel-save {
 			grid-column: 1 / 3;
 		}

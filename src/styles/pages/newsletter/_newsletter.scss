@@ -12,7 +12,7 @@ $page: "p-newsletter";
 		column-gap: $spacer-3xl;
 		margin-top: 14.4rem;
 
-		@include respond-to(lg) {
+		@media (max-width: $breakpoint-lg) {
 			display: block;
 			margin-top: calc(50vw + 4.7rem);
 			padding: 0;
@@ -52,7 +52,7 @@ $page: "p-newsletter";
 		overflow-y: auto;
 		padding-bottom: 10rem;
 
-		@include respond-to(lg) {
+		@media (max-width: $breakpoint-lg) {
 			background-position: left top;
 			background-size: 100% auto;
 			background-image: url("/images/bg-newsletter-mobile.jpg");

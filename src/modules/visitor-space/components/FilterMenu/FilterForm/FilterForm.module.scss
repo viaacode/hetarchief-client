@@ -14,7 +14,7 @@
 .c-filter-form__header {
 	padding: $spacer-sm 2rem;
 
-	@include respond-at(md) {
+	@media (min-width: $breakpoint-md) {
 		padding: 0 $spacer-lg $spacer-1xl;
 	}
 }
@@ -22,7 +22,7 @@
 .c-filter-form__title {
 	margin-top: 6.4rem;
 
-	@include respond-to(md) {
+	@media (max-width: $breakpoint-md) {
 		margin-top: unset;
 		font-size: 2.8rem;
 		text-align: center;
@@ -41,7 +41,7 @@
 	// Allow three-option dropdowns to not be cut off
 	padding-bottom: $spacer-xs;
 
-	@include respond-to(md) {
+	@media (max-width: $breakpoint-md) {
 		flex-grow: 1;
 	}
 
@@ -67,7 +67,7 @@
 	padding: $spacer-md 2rem;
 	width: 100%;
 
-	@include respond-at(md) {
+	@media (min-width: $breakpoint-md) {
 		padding: $spacer-md $spacer-lg;
 	}
 }

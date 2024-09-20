@@ -50,7 +50,7 @@
 			min-height: $button-height;
 			border-radius: $button-radius;
 
-			@include respond-at(md) {
+			@media (min-width: $breakpoint-md) {
 				min-height: 6.4rem;
 				border-radius: 3.2rem;
 			}
@@ -59,12 +59,12 @@
 		.c-tags-input__value-container {
 			padding-left: $spacer-sm;
 
-			@include respond-at(md) {
+			@media (min-width: $breakpoint-md) {
 				padding-left: 1.2rem;
 			}
 
 			&--is-multi.c-tags-input__value-container--has-value {
-				@include respond-to(md) {
+				@media (max-width: $breakpoint-md) {
 					padding-left: $spacer-xs;
 				}
 			}
@@ -73,7 +73,7 @@
 		.c-tags-input__indicators {
 			padding-right: math.div($spacer-md, 2);
 
-			@include respond-at(md) {
+			@media (min-width: $breakpoint-md) {
 				padding-right: $spacer-md;
 			}
 		}
@@ -97,7 +97,7 @@
 			min-height: 6.4rem;
 			border-radius: 0 0 2.4rem 2.4rem;
 
-			@include respond-at("md") {
+			@media (min-width: $breakpoint-md) {
 				border-radius: 0 4.6rem 4.6rem 0;
 				border-right: none;
 			}
@@ -109,7 +109,7 @@
 	color: $neutral;
 	margin-right: 1.4rem;
 
-	@include respond-to(md) {
+	@media (max-width: $breakpoint-md) {
 		display: none;
 	}
 }

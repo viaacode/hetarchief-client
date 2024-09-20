@@ -18,7 +18,7 @@ $component: "c-error-page";
 		font-size: $font-size-1xl;
 		line-height: $line-height-2xl;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			font-size: $font-size-4xl;
 		}
 	}
@@ -32,7 +32,7 @@ $component: "c-error-page";
 		justify-content: center;
 		padding-bottom: $spacer-2xl;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			grid-template-rows: 1fr 15rem 2fr;
 		}
 	}
@@ -56,7 +56,7 @@ $component: "c-error-page";
 		row-gap: $spacer-md;
 		padding: $spacer-sm 0;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			grid-template-rows: 1fr auto auto 2fr;
 		}
 	}
@@ -67,20 +67,20 @@ $component: "c-error-page";
 		color: $neutral;
 		line-height: $line-height-4xl;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			grid-row: 2;
 			max-width: 53rem;
 		}
 	}
 
 	&__button-component {
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			grid-row: 3;
 		}
 	}
 
 	&__button {
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			grid-row: 4;
 		}
 	}
