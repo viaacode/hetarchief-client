@@ -457,23 +457,25 @@ export const GET_METADATA_FIELDS = (
 ): MetadataItem[] => {
 	return [
 		{
-			title: tText('modules/ie-objects/ie-objects___titel-van-de-reeks'),
-			data: mediaInfo.collectionName,
-		},
-		{
-			title: tText('modules/ie-objects/ie-objects___editie-nummer'),
-			data: mediaInfo.issueNumber,
+			title: tText('modules/ie-objects/ie-objects___bestandstype'),
+			data: activeFile?.mimeType,
 		},
 		{
 			title: tText('modules/ie-objects/const/index___pid'),
 			data: mediaInfo.schemaIdentifier,
 		},
-		...mapObjectsToMetadata(
-			mediaInfo.premisIdentifier?.filter(
-				(premisEntry) =>
-					!['abraham_id', 'abraham_uri'].includes(Object.keys(premisEntry)[0])
-			)
-		),
+		{
+			title: tText('modules/ie-objects/ie-objects___titel-van-de-reeks'),
+			data: mediaInfo.collectionName,
+		},
+		{
+			title: tText('modules/ie-objects/const/index___publicatiedatum'),
+			data: renderDate(mediaInfo.datePublished),
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___rechtenstatus'),
+			data: mediaInfo?.copyrightNotice,
+		},
 		{
 			title: tText('modules/ie-objects/ie-objects___abraham-id'),
 			data: renderAbrahamLink(mediaInfo?.abrahamInfo),
@@ -483,51 +485,24 @@ export const GET_METADATA_FIELDS = (
 			data: mediaInfo.meemooLocalId,
 		},
 		{
-			title: tText('modules/ie-objects/ie-objects___permanente-url'),
-			data:
-				clientUrl +
-				ROUTES_BY_LOCALE[locale].permalink.replace(':pid', mediaInfo.schemaIdentifier),
+			title: tText('modules/ie-objects/ie-objects___editie-nummer'),
+			data: mediaInfo.issueNumber,
 		},
 		{
-			title: tText('modules/ie-objects/const/index___creatiedatum'),
-			data: mediaInfo.dateCreated,
+			title: tText('modules/ie-objects/ie-objects___plaats-van-uitgave'),
+			data: mediaInfo.locationCreated,
 		},
 		{
-			title: tText('modules/ie-objects/const/index___publicatiedatum'),
-			data: renderDate(mediaInfo.datePublished),
+			title: tText('modules/ie-objects/ie-objects___fysieke-drager'),
+			data: mapArrayToMetadataData(mediaInfo.dctermsMedium),
 		},
 		{
-			title: tText('modules/ie-objects/ie-objects___datum-toegevoegd-aan-platform'),
-			data: renderDate(activeFile?.createdAt),
+			title: tText('modules/ie-objects/ie-objects___bestandsnaam'),
+			data: activeFile?.name,
 		},
 		{
-			title: tText('modules/ie-objects/ie-objects___datum-drager'),
-			data: mediaInfo.carrierDate,
-		},
-		{
-			title: tText('modules/ie-objects/ie-objects___aantal-paginas'),
-			data: isNil(mediaInfo?.numberOfPages) ? null : String(mediaInfo.numberOfPages),
-		},
-		{
-			title: tText('modules/ie-objects/const/index___taal'),
-			data: mapArrayToMetadataData(
-				mediaInfo.inLanguage?.map(
-					(languageCode) =>
-						LANGUAGES[locale][languageCode as LanguageCode] || languageCode
-				)
-			),
-		},
-		{
-			title: tText('modules/ie-objects/ie-objects___bronvermelding'),
-			data: mediaInfo?.creditText,
-		},
-		{
-			title: tText('modules/ie-objects/ie-objects___rechtenstatus'),
-			data: mediaInfo?.copyrightNotice,
-		},
-		{
-			title: tText('modules/ie-objects/ie-objects___categorie'),
-			data: mapArrayToMetadataData(mediaInfo.genre),
+			title: tText('modules/ie-objects/const/index___uitgebreide-beschrijving'),
+			data: mediaInfo?.abstract ? mediaInfo?.abstract : null,
 		},
 		{
 			title: tText('modules/ie-objects/const/index___locatie-van-de-inhoud'),
@@ -537,15 +512,30 @@ export const GET_METADATA_FIELDS = (
 			title: tText('modules/ie-objects/const/index___tijdsperiode-van-de-inhoud'),
 			data: mapArrayToMetadataData(mediaInfo.temporal),
 		},
-		...mapObjectToMetadata(mediaInfo.creator),
-		...mapObjectToMetadata(mediaInfo.publisher),
 		{
-			title: tText('modules/ie-objects/const/index___uitgebreide-beschrijving'),
-			data: mediaInfo?.abstract ? mediaInfo?.abstract : null,
+			title: tText('modules/ie-objects/ie-objects___categorie'),
+			data: mapArrayToMetadataData(mediaInfo.genre),
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___programmabeschrijving'),
+			data: mediaInfo.synopsis,
+		},
+		{
+			title: tText('modules/ie-objects/ie-objects___publicatietype'),
+			data: mediaInfo.bibframeEdition,
 		},
 		{
 			title: tText('modules/ie-objects/ie-objects___transcriptie'),
 			data: mediaInfo?.transcript,
+		},
+		{
+			title: tText('modules/ie-objects/const/index___taal'),
+			data: mapArrayToMetadataData(
+				mediaInfo.inLanguage?.map(
+					(languageCode) =>
+						LANGUAGES[locale][languageCode as LanguageCode] || languageCode
+				)
+			),
 		},
 		{
 			title: tText('modules/ie-objects/ie-objects___alternatieve-titels'),
@@ -559,16 +549,16 @@ export const GET_METADATA_FIELDS = (
 			]),
 		},
 		{
-			title: tText('modules/ie-objects/ie-objects___paginanummer'),
-			data: mediaInfo?.pageNumber,
+			title: tText('modules/ie-objects/ie-objects___periode-van-uitgave'),
+			data: compact([mediaInfo.startDate, mediaInfo.endDate]).join(' - '),
 		},
 		{
-			title: tText('modules/ie-objects/ie-objects___publicatietype'),
-			data: mediaInfo.bibframeEdition,
+			title: tText('modules/ie-objects/ie-objects___uitgevers-van-krant'),
+			data: mediaInfo?.newspaperPublisher,
 		},
 		{
-			title: tText('modules/ie-objects/ie-objects___teksttype'),
-			data: mediaInfo.bibframeProductionMethod,
+			title: tText('modules/ie-objects/ie-objects___aantal-paginas'),
+			data: isNil(mediaInfo?.numberOfPages) ? null : String(mediaInfo.numberOfPages),
 		},
 		{
 			title: tText('modules/ie-objects/ie-objects___afmetingen-in-cm'),
@@ -584,22 +574,50 @@ export const GET_METADATA_FIELDS = (
 			title: tText('modules/ie-objects/ie-objects___digitaliseringsdatum'),
 			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
 		},
+		...getOcrMetadataFields(simplifiedAlto),
 		{
-			title: tText('modules/ie-objects/ie-objects___programmabeschrijving'),
-			data: mediaInfo.synopsis,
+			title: tText('modules/ie-objects/ie-objects___teksttype'),
+			data: mediaInfo.bibframeProductionMethod,
+		},
+		...mapObjectToMetadata(mediaInfo.creator),
+		...mapObjectToMetadata(mediaInfo.publisher),
+		{
+			title: tText('modules/ie-objects/ie-objects___datum-toegevoegd-aan-platform'),
+			data: renderDate(activeFile?.createdAt),
 		},
 		{
-			title: tText('modules/ie-objects/ie-objects___plaats-van-uitgave'),
-			data: mediaInfo.locationCreated,
+			title: tText('modules/ie-objects/ie-objects___permanente-url'),
+			data:
+				clientUrl +
+				ROUTES_BY_LOCALE[locale].permalink.replace(':pid', mediaInfo.schemaIdentifier),
 		},
+
+		...mapObjectsToMetadata(
+			mediaInfo.premisIdentifier?.filter(
+				(premisEntry) =>
+					!['abraham_id', 'abraham_uri'].includes(Object.keys(premisEntry)[0])
+			)
+		),
 		{
-			title: tText('modules/ie-objects/ie-objects___periode-van-uitgave'),
-			data: compact([mediaInfo.startDate, mediaInfo.endDate]).join(' - '),
+			title: tText('modules/ie-objects/const/index___creatiedatum'),
+			data: mediaInfo.dateCreated,
 		},
+
 		{
-			title: tText('modules/ie-objects/ie-objects___uitgevers-van-krant'),
-			data: mediaInfo?.newspaperPublisher,
+			title: tText('modules/ie-objects/ie-objects___datum-drager'),
+			data: mediaInfo.carrierDate,
 		},
+
+		{
+			title: tText('modules/ie-objects/ie-objects___bronvermelding'),
+			data: mediaInfo?.creditText,
+		},
+
+		{
+			title: tText('modules/ie-objects/ie-objects___paginanummer'),
+			data: mediaInfo?.pageNumber,
+		},
+
 		{
 			title: tText('modules/ie-objects/ie-objects___auteursrechthouder'),
 			data: mediaInfo?.copyrightHolder,
@@ -664,22 +682,12 @@ export const GET_METADATA_FIELDS = (
 			title: tText('modules/ie-objects/const/index___seizoennummer'),
 			data: renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.seizoennummer),
 		},
-		{
-			title: tText('modules/ie-objects/ie-objects___fysieke-drager'),
-			data: mapArrayToMetadataData(mediaInfo.dctermsMedium),
-		},
+
 		{
 			title: tText('modules/ie-objects/ie-objects___media-type'),
 			data: mediaInfo.dctermsFormat,
 		},
-		{
-			title: tText('modules/ie-objects/ie-objects___bestandstype'),
-			data: activeFile?.mimeType,
-		},
-		{
-			title: tText('modules/ie-objects/ie-objects___bestandsnaam'),
-			data: activeFile?.name,
-		},
+
 		{
 			title: tText('modules/ie-objects/const/index___objecttype'),
 			data: mediaInfo.ebucoreObjectType,
@@ -692,7 +700,6 @@ export const GET_METADATA_FIELDS = (
 			title: tText('modules/ie-objects/const/index___cast'),
 			data: mediaInfo.meemooDescriptionCast,
 		},
-		...getOcrMetadataFields(simplifiedAlto),
 		{
 			title: tHtml('modules/ie-objects/ie-objects___iiif-manifest'),
 			data: mediaInfo?.maintainerIiifAgreement && activeFile?.storedAt && (
