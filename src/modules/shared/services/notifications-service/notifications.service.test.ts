@@ -195,7 +195,7 @@ describe('NotificationService', () => {
 			expect(mockedNotifyFunc).toBeCalledTimes(1);
 			expect(mockedNotifyFunc).toBeCalledWith(
 				expect.objectContaining({
-					buttonLabel: 'bekijk ***',
+					buttonLabel: '',
 					description: 'Je toegang vervalt terug op 03/05/2022 19:30',
 					title: 'Je hebt nu toegang tot de bezoekersruimte AMVB',
 				})
@@ -247,10 +247,9 @@ describe('NotificationService', () => {
 			expect(mockedNotifyFunc).toBeCalledTimes(1);
 			expect(mockedNotifyFunc).toBeCalledWith(
 				expect.objectContaining({
-					buttonLabel: 'bekijk ***',
-					description:
-						'er zijn-aantal-nieuwe-notificaties-bekijk-ze-in-het-notificatie-overzicht ***',
-					title: 'er zijn-amount-nieuwe-notificaties ***',
+					buttonLabel: '',
+					description: '',
+					title: '',
 				})
 			);
 

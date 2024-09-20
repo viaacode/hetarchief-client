@@ -94,7 +94,7 @@ describe('Component: <MetadataList /> (default)', () => {
 
 		const list = getByRole('list').parentElement;
 
-		expect(list).toHaveClass(`c-metadata--container-query`);
+		expect(list).toHaveClass(`c-advanced-filters--container-query`);
 	});
 
 	it('Should display a single column when given', () => {
@@ -102,6 +102,6 @@ describe('Component: <MetadataList /> (default)', () => {
 
 		const list = getByRole('list').parentElement;
 
-		expect(list).not.toHaveClass(`c-metadata--container-query`);
+		expect(list).not.toHaveClass(`c-advanced-filters--container-query`);
 	});
 });
