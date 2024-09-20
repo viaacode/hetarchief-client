@@ -816,15 +816,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const renderBreadcrumbs = (): ReactNode => {
 		const staticBreadcrumbs: Breadcrumb[] = [
 			{
-				label: `${tHtml(
-					'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs-home'
-				)}`,
+				label: tText('pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs-home'),
 				to: ROUTES_BY_LOCALE[locale].home,
 			},
 			{
-				label: `${tHtml(
-					'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs-search'
-				)}`,
+				label: tText('pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs-search'),
 				to: ROUTES_BY_LOCALE[locale].search,
 			},
 		];
