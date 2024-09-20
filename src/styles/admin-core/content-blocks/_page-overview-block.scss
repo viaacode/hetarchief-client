@@ -1,6 +1,10 @@
 @use "src/styles/abstracts" as *;
 
 .c-content-page-overview-block {
+	h3 {
+	 color: $teal !important;
+	}
+
 	.c-content-page-overview-block__accordion--first-level {
 		.c-accordion__header {
 			background-color: $seagreen;
