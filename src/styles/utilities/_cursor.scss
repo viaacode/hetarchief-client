@@ -1,11 +1,7 @@
-@use "../abstracts" as *;
-
 /**
- * Color
+ * Cursor
  */
 
-$cursor: (
-	"pointer": pointer,
-);
-
-@include generate-utils("cursor", "cursor", $cursor);
+.u-cursor-pointer {
+	cursor: pointer;
+}

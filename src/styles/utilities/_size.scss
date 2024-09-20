@@ -4,19 +4,18 @@
  * height
  */
 
-$height: (
-	"auto": auto,
-	"24": 2.4rem,
-);
+.u-height-auto {
+	height: auto;
+}
 
-@include generate-utils("height", "height", $height);
+.u-height-24 {
+	height: 2.4rem;
+}
 
 /**
  * width
  */
 
-$width: (
-	"24": 2.4rem,
-);
-
-@include generate-utils("width", "width", $width);
+.u-width-24 {
+	width: 2.4rem;
+}
