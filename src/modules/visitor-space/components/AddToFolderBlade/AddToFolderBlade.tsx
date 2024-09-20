@@ -323,9 +323,12 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 						checkIcon={<Icon name={IconNamesLight.Check} />}
 						onClick={(e) => e.stopPropagation()}
 						variants={['no-label']}
-						aria-label={tText('voeg {{ folder }} toe aan map', {
-							folder: folder?.name,
-						})}
+						aria-label={tText(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-folder-toe-aan-map',
+							{
+								folder: folder?.name,
+							}
+						)}
 					/>
 
 					<span className={styles['c-add-to-folder-blade__list-item__label']}>
