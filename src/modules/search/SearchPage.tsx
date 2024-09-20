@@ -773,14 +773,19 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	}, [isKioskUser, isGlobalArchive, locale, searchResults?.items, searchResults?.searchTerms]);
 
 	const openAndScrollToAdvancedFilters = () => {
+		setFilterMenuOpen(true);
 		setQuery({ filter: SearchFilterId.Advanced });
-		document
-			.getElementById(`c-filter-menu__option__${SearchFilterId.Advanced}`)
-			?.scrollIntoView({
-				behavior: 'smooth',
-				block: 'center',
-				inline: 'center',
-			});
+
+		// Wait for filter menu to open before scrolling to the advanced filters
+		setTimeout(() => {
+			document
+				.getElementById(`c-filter-menu__option__${SearchFilterId.Advanced}`)
+				?.scrollIntoView({
+					behavior: 'smooth',
+					block: 'center',
+					inline: 'center',
+				});
+		}, 0);
 	};
 
 	/**
