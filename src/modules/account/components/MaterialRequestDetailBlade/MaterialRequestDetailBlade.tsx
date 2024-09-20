@@ -69,8 +69,11 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						<Image
 							alt="maintainer logo"
 							src={currentMaterialRequestDetail.maintainerLogo}
-							layout="fill"
-							objectFit="contain"
+							fill
+							sizes="100vw"
+							style={{
+								objectFit: 'contain',
+							}}
 						/>
 					</div>
 				)}

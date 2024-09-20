@@ -9,7 +9,7 @@
 	border-bottom: 1px solid color.adjust($black, $alpha: -0.8);
 	background-color: $platinum;
 
-	@include respond-at(md) {
+	@media (min-width: $breakpoint-md) {
 		padding: $spacer-lg;
 	}
 }

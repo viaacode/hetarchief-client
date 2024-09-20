@@ -1,33 +1,23 @@
-const I18NextHttpBackend = require('i18next-http-backend');
+const HttpApi = require('i18next-http-backend');
 const _ = require('lodash');
 
-function getI18n(proxyUrl) {
-	return {
+module.exports = {
+	supportedLngs: ['nl', 'en'],
+	i18n: {
 		locales: ['nl', 'en'],
 		defaultLocale: 'nl',
 		localeDetection: false,
-		backend: {
-			loadPath: `${proxyUrl}/admin/translations/{{lng}}.json`,
-		},
-		i18n: {
-			locales: ['nl', 'en'],
-			defaultLocale: 'nl',
-			localeDetection: false,
-			backend: {
-				loadPath: `${proxyUrl}/admin/translations/{{lng}}.json`,
-			},
-		},
-		use: [I18NextHttpBackend],
-		ns: ['common'],
-		serializeConfig: false,
-		parseMissingKeyHandler: (key) => {
-			if (key.includes('___')) {
-				return `${_.upperFirst(_.lowerCase(key.split('___').pop()))} ***`;
-			}
-			return `${key} ***`;
-		},
-		debug: false,
-	};
-}
-
-module.exports = getI18n;
+	},
+	backend: {
+		loadPath: `${process.env.PROXY_URL}/admin/translations/{{lng}}.json`,
+	},
+	use: [HttpApi],
+	ns: ['common'],
+	parseMissingKeyHandler: (key) => {
+		if (key.includes('___')) {
+			return `${_.upperFirst(_.lowerCase(key.split('___').pop()))} ***`;
+		}
+		return `${key} ***`;
+	},
+	debug: false,
+};

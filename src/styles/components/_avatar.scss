@@ -12,7 +12,7 @@ $component: "c-avatar";
 		justify-content: center;
 		align-items: center;
 
-		@include respond-at(md) {
+		@media (min-width: $breakpoint-md) {
 			margin-right: math.div($font-size-lg, 2);
 		}
 
@@ -22,7 +22,7 @@ $component: "c-avatar";
 			margin: 0.6rem;
 			font-size: 2rem;
 
-			@include respond-at(md) {
+			@media (min-width: $breakpoint-md) {
 				margin: $spacer-xs;
 				font-size: $font-size-lg;
 			}
@@ -33,7 +33,7 @@ $component: "c-avatar";
 		font-size: $font-size-base;
 		line-height: $line-height-1xl;
 
-		@include respond-to(md) {
+		@media (max-width: $breakpoint-md) {
 			display: none;
 		}
 	}

@@ -36,13 +36,11 @@ const renderLink = (
 	} = {}
 ): ReactNode => {
 	return href ? (
-		<Link href={href}>
-			<a className={className} role="menuitem" tabIndex={0}>
-				{iconStart && iconStart}
-				{label}
-				{badge && badge}
-				{iconEnd && iconEnd}
-			</a>
+		<Link href={href} className={className} role="menuitem" tabIndex={0}>
+			{iconStart && iconStart}
+			{label}
+			{badge && badge}
+			{iconEnd && iconEnd}
 		</Link>
 	) : (
 		<a className={className} role="menuitem" tabIndex={0}>
@@ -67,7 +65,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 			badge: <Badge text="2" />,
 			className: linkCls(
 				'u-color-black',
-				'u-color-white:xxl',
+				'u-color-white-xxl',
 				'u-whitespace-nowrap',
 				styles['c-navigation__link--dropdown']
 			),
@@ -78,7 +76,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 		children: [
 			{
 				node: renderLink('Alle bezoekersruimtes', '/', {
-					className: dropdownCls('u-display-none', 'u-display-block:xxl'),
+					className: dropdownCls('u-display-none', 'u-display-block-xxl'),
 				}),
 				id: 'alle bezoekersruimtes',
 				isDivider: 'md',
@@ -92,7 +90,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 								'u-font-size-24',
 								'u-text-left',
 								'u-visibility-hidden',
-								'u-visibility-visible:xxl',
+								'u-visibility-visible-xxl',
 								styles['c-navigation__dropdown-icon--end']
 							)}
 							name={IconNamesLight.AngleRight}
@@ -111,7 +109,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 								'u-font-size-24',
 								'u-text-left',
 								'u-visibility-hidden',
-								'u-visibility-visible:xxl',
+								'u-visibility-visible-xxl',
 								styles['c-navigation__dropdown-icon--end']
 							)}
 							name={IconNamesLight.AngleRight}
@@ -128,7 +126,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 		node: renderLink('Over de bezoekersruimtes', '#', {
 			className: linkCls(
 				'u-color-black',
-				'u-color-white:xxl',
+				'u-color-white-xxl',
 				styles['c-navigation__link--dropdown']
 			),
 		}),
@@ -139,7 +137,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 		node: renderLink('Vaak gestelde vragen', '#', {
 			className: linkCls(
 				'u-color-black',
-				'u-color-white:xxl',
+				'u-color-white-xxl',
 				styles['c-navigation__link--dropdown']
 			),
 		}),
@@ -150,7 +148,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 		node: renderLink('Beheer', '', {
 			className: linkCls(
 				'u-color-black',
-				'u-color-white:xxl',
+				'u-color-white-xxl',
 				styles['c-navigation__link--dropdown']
 			),
 		}),

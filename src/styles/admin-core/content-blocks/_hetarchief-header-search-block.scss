@@ -7,7 +7,7 @@ $component: "c-block-het-archief-header-search";
 	flex-direction: row;
 	gap: $spacer-1xl;
 
-	@include respond-to("md") {
+	@media (max-width: $breakpoint-md) {
 		flex-direction: column;
 	}
 
@@ -17,7 +17,7 @@ $component: "c-block-het-archief-header-search";
 			font-size: $font-size-3xl;
 			font-weight: $font-weight-bold;
 
-			@include respond-to("md") {
+			@media (max-width: $breakpoint-md) {
 				font-size: $font-size-2xl;
 			}
 		}

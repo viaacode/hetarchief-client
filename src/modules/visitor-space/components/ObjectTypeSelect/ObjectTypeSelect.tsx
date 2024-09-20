@@ -21,9 +21,6 @@ const ObjectTypeSelect: FC<ReactSelectProps> = (props) => {
 		[]
 	);
 
-	// Bind to defaultProps to access externally
-	ObjectTypeSelect.defaultProps = { options: selectOptions };
-
 	const getPlaceholder = (): string | undefined => {
 		return selectOptions.length === 0
 			? tText(
@@ -34,13 +31,7 @@ const ObjectTypeSelect: FC<ReactSelectProps> = (props) => {
 			  );
 	};
 
-	return (
-		<ReactSelect
-			{...props}
-			placeholder={getPlaceholder()}
-			options={ObjectTypeSelect.defaultProps.options}
-		/>
-	);
+	return <ReactSelect {...props} placeholder={getPlaceholder()} options={selectOptions} />;
 };
 
 export default ObjectTypeSelect;

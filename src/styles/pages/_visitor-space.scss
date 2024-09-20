@@ -30,7 +30,7 @@
 			display: flex;
 			flex: 1 1 auto;
 
-			@include respond-to("md") {
+			@media (max-width: $breakpoint-md) {
 				flex-direction: column;
 			}
 		}
@@ -41,13 +41,13 @@
 	margin: $spacer-lg * 2 0 $spacer-lg * 4;
 	width: 100%;
 
-	@include respond-at("md") {
+	@media (min-width: $breakpoint-md) {
 		margin: $spacer-lg * 2 0 0;
 		margin-left: $spacer-md;
 		width: calc(100% / 3 * 2);
 	}
 
-	@include respond-at("lg") {
+	@media (min-width: $breakpoint-lg) {
 		margin: $spacer-lg * 2 0 0;
 		margin-left: $spacer-md;
 		width: calc(75%);
@@ -55,11 +55,11 @@
 }
 
 .p-visitor-space__filter-menu {
-	@include respond-at("md") {
+	@media (min-width: $breakpoint-md) {
 		width: calc(100% / 3 - 2rem);
 	}
 
-	@include respond-at("lg") {
+	@media (min-width: $breakpoint-lg) {
 		width: calc(25% - 2.4rem);
 	}
 }
@@ -78,7 +78,7 @@
 	&--has-dropdown {
 		display: block;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			display: grid;
 			grid-template-columns: 26.5rem auto;
 		}

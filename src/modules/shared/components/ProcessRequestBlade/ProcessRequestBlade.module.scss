@@ -9,11 +9,11 @@ $component: "c-process-request-blade";
 		margin-bottom: $spacer-md;
 		padding: $spacer-md $spacer-sm;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			padding: $spacer-md $spacer-lg;
 		}
 
-		@include respond-at("lg") {
+		@media (min-width: $breakpoint-lg) {
 			display: none;
 		}
 
@@ -37,7 +37,7 @@ $component: "c-process-request-blade";
 	&__details {
 		padding: 0 $spacer-sm;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			padding: 0 $spacer-lg;
 		}
 

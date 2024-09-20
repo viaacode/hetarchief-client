@@ -25,7 +25,7 @@ $border-width: 0.2rem;
 		border-radius: $border-radius-sm $border-radius-sm 0 0;
 		border-bottom: none;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			border-radius: $border-radius 0 0 $border-radius;
 			border: $border-width solid $silver;
 			border-right: none;
@@ -69,7 +69,7 @@ $border-width: 0.2rem;
 		pointer-events: none;
 		z-index: get-z-layer("foreground");
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			width: 26.5rem;
 		}
 	}
@@ -102,7 +102,7 @@ $border-width: 0.2rem;
 			}
 
 			&__active {
-				@include respond-at("md") {
+				@media (min-width: $breakpoint-md) {
 					border-radius: $border-radius 0 0 0;
 				}
 

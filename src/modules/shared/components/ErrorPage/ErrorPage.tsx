@@ -30,8 +30,11 @@ const ErrorPage: FC<ErrorPageProps> = ({
 						<Image
 							src={image.image}
 							alt=""
-							layout="fill"
-							objectPosition={image.left ? 'left' : undefined}
+							fill
+							sizes="100vw"
+							style={{
+								objectPosition: image.left ? 'left' : undefined,
+							}}
 						/>
 					</div>
 				</div>
@@ -48,15 +51,15 @@ const ErrorPage: FC<ErrorPageProps> = ({
 				)}
 
 				{link?.to && (
-					<Link href={link.to} passHref>
-						<a
-							className={styles['c-error-page__button']}
-							aria-label={tText(
-								'modules/shared/components/error-page/error-page___navigeer-naar-een-veilige-pagina'
-							)}
-						>
-							{link.component}
-						</a>
+					<Link
+						href={link.to}
+						passHref
+						className={styles['c-error-page__button']}
+						aria-label={tText(
+							'modules/shared/components/error-page/error-page___navigeer-naar-een-veilige-pagina'
+						)}
+					>
+						{link.component}
 					</Link>
 				)}
 				{link && !link?.to && link.component}

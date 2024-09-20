@@ -266,6 +266,9 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 						<SearchBar
 							id={globalLabelKeys.adminLayout.title}
 							value={search}
+							aria-label={tText(
+								'modules/admin/views/admin-material-requests___zoekbalk-aria-label'
+							)}
 							placeholder={tText('pages/admin/materiaalaanvragen/index___zoek')}
 							onChange={setSearch}
 							onSearch={(newValue) =>

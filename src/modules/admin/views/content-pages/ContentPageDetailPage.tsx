@@ -1,16 +1,22 @@
 'use client';
 // https://github.com/vercel/next.js/issues/47232
 
-import { ContentPageDetail } from '@meemoo/admin-core-ui';
 import { type Avo } from '@viaa/avo2-types';
-import React, { type FC } from 'react';
+import React, { type FC, lazy, Suspense } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
+import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import { type DefaultSeoInfo } from '@shared/types/seo';
+
+const ContentPageDetail = lazy(() =>
+	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({
+		default: adminCoreModule.ContentPageDetail,
+	}))
+);
 
 interface ContentPageDetailPageProps {
 	id: string;
@@ -23,7 +29,9 @@ export const ContentPageDetailPage: FC<
 		return (
 			<AdminLayout className="p-admin-content-page-detail">
 				<AdminLayout.Content>
-					<ContentPageDetail id={id} commonUser={commonUser as Avo.User.CommonUser} />
+					<Suspense fallback={<Loading fullscreen owner="ContentPageDetailPage" />}>
+						<ContentPageDetail id={id} commonUser={commonUser as Avo.User.CommonUser} />
+					</Suspense>
 				</AdminLayout.Content>
 			</AdminLayout>
 		);

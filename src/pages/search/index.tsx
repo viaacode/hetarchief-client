@@ -13,8 +13,22 @@ import { makeServerSideRequestGetVisitRequests } from '@visit-requests/hooks/get
 
 type SearchPageProps = DefaultSeoInfo;
 
-const SearchPageEnglish: NextPage<SearchPageProps> = ({ url, title, description, image }) => {
-	return <SearchPage url={url} title={title} description={description} image={image} />;
+const SearchPageEnglish: NextPage<SearchPageProps> = ({
+	url,
+	title,
+	description,
+	image,
+	locale,
+}) => {
+	return (
+		<SearchPage
+			url={url}
+			title={title}
+			description={description}
+			image={image}
+			locale={locale}
+		/>
+	);
 };
 
 export async function getServerSideProps(

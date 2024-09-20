@@ -9,8 +9,12 @@ import withUser, { type UserProps } from '@shared/hooks/with-user';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 import { UserConditions } from '@user-conditions/UserConditions';
 
-const UserConditionsEnglish: NextPage<DefaultSeoInfo & UserProps> = ({ commonUser, url }) => {
-	return <UserConditions commonUser={commonUser} url={url} />;
+const UserConditionsEnglish: NextPage<DefaultSeoInfo & UserProps> = ({
+	commonUser,
+	url,
+	locale,
+}) => {
+	return <UserConditions commonUser={commonUser} url={url} locale={locale} />;
 };
 
 export async function getStaticProps(

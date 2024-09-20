@@ -1,4 +1,4 @@
-import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
+import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/dist/client.mjs';
 import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
@@ -76,7 +76,7 @@ import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visi
 
 import packageJson from '../../../../../package.json';
 
-import styles from './AppLayout.module.scss';
+import styles from './AppLayout.module.scss'; // We want to make sure config gets fetched here, no sure why anymore
 
 // We want to make sure config gets fetched here, no sure why anymore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -332,12 +332,10 @@ const AppLayout: FC<any> = ({ children }) => {
 				// https://github.com/vercel/next.js/issues/37005
 				node: (
 					<Link href={'/' + locale} passHref>
-						<a>
-							<HetArchiefLogo
-								className="c-navigation__logo c-navigation__logo--list"
-								type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
-							/>
-						</a>
+						<HetArchiefLogo
+							className="c-navigation__logo c-navigation__logo--list"
+							type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
+						/>
 					</Link>
 				),
 				id: 'logo',

@@ -466,6 +466,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		return (
 			simplifiedAltoInfo?.text?.filter((altoText) =>
 				searchTerms
+					.toLowerCase()
 					.split(' ')
 					.some((searchTermWord) => altoText.text.toLowerCase().includes(searchTermWord))
 			) || []
@@ -496,32 +497,35 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			}
 
 			const searchResultsTemp: OcrSearchResult[] = [];
-			newSearchTerms.split(' ').forEach((searchTerm) => {
-				pageOcrTexts.forEach((pageOcrText, pageIndex) => {
-					if (!pageOcrText) {
-						return; // Skip this page since it doesn't have an ocr transcript
-					}
-					let searchTermCharacterOffset: number = pageOcrText.indexOf(searchTerm);
-					let searchTermIndexOnPage: number = 0;
-					while (searchTermCharacterOffset !== -1) {
-						const searchResult: OcrSearchResult = {
-							pageIndex,
-							searchTerm,
-							searchTermCharacterOffset,
-							searchTermIndexOnPage,
-						};
-						searchResultsTemp.push(searchResult);
-						searchTermCharacterOffset = pageOcrText?.indexOf(
-							searchTerm,
-							searchTermCharacterOffset + 1
-						);
-						searchTermIndexOnPage += 1;
-					}
+			newSearchTerms
+				.toLowerCase()
+				.split(' ')
+				.forEach((searchTerm) => {
+					pageOcrTexts.forEach((pageOcrText, pageIndex) => {
+						if (!pageOcrText) {
+							return; // Skip this page since it doesn't have an ocr transcript
+						}
+						let searchTermCharacterOffset: number = pageOcrText.indexOf(searchTerm);
+						let searchTermIndexOnPage: number = 0;
+						while (searchTermCharacterOffset !== -1) {
+							const searchResult: OcrSearchResult = {
+								pageIndex,
+								searchTerm,
+								searchTermCharacterOffset,
+								searchTermIndexOnPage,
+							};
+							searchResultsTemp.push(searchResult);
+							searchTermCharacterOffset = pageOcrText?.indexOf(
+								searchTerm,
+								searchTermCharacterOffset + 1
+							);
+							searchTermIndexOnPage += 1;
+						}
+					});
 				});
-			});
 
 			setSearchResults(searchResultsTemp);
-			setSearchTerms(newSearchTerms);
+			setSearchTerms(newSearchTerms.toLowerCase());
 
 			const parsedUrl = parseUrl(window.location.href);
 			const newUrl = stringifyUrl({
@@ -573,6 +577,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	/**
 	 * Effects
 	 */
+
+	useEffect(() => {
+		console.log(`[PERFORMANCE] ${new Date().toISOString()} detail page loading`);
+	}, []);
+
+	useEffect(() => {
+		if (mediaInfo) {
+			console.log(`[PERFORMANCE] ${new Date().toISOString()} ie object loaded`);
+		}
+	}, [mediaInfo]);
 
 	/**
 	 * Update the highlighted alto texts in the iiif viewer when
@@ -678,7 +692,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Hide the zendesk button for
 	 * - kiosk users
 	 * - users with access to the visitor space of the object
-	 * - when the metadata tab is not active (otherwise it overlaps with the ocr next page button)
+	 * - when the advanced-filters tab is not active (otherwise it overlaps with the ocr next page button)
 	 */
 	useEffect(() => {
 		dispatch(
@@ -713,7 +727,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	}, [hasAccessToVisitorSpaceOfObject, mediaInfo, user?.groupName]);
 
 	/**
-	 * Pause media if metadata tab is shown on mobile
+	 * Pause media if advanced-filters tab is shown on mobile
 	 */
 	useEffect(() => {
 		if (isMobile && activeTab === ObjectDetailTabs.Metadata) {
@@ -729,7 +743,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 		// Set default view
 		if (isMobile) {
-			// Default to metadata tab on mobile
+			// Default to advanced-filters tab on mobile
 			setActiveTab(ObjectDetailTabs.Metadata, 'replaceIn');
 		} else {
 			// Check media content and license for default tab on desktop
@@ -1135,10 +1149,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 			const buttonLabelDesktop = isPublicNewspaper
 				? tText('modules/ie-objects/object-detail-page___download-deze-krant-desktop')
-				: tText('modules/ie-objects/object-detail-page___export-metadata-desktop');
+				: tText('modules/ie-objects/object-detail-page___export-advanced-filters-desktop');
 			const buttonLabelMobile = isPublicNewspaper
 				? tText('modules/ie-objects/object-detail-page___download-deze-krant-mobile')
-				: tText('modules/ie-objects/object-detail-page___export-metadata-mobile');
+				: tText('modules/ie-objects/object-detail-page___export-advanced-filters-mobile');
 
 			const exportOptions = [];
 
@@ -1506,17 +1520,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			<Link
 				passHref
 				href={`${ROUTES_BY_LOCALE[locale].search}/${router.query.slug}/${item.id}`}
+				tabIndex={isHidden ? -1 : 0}
+				className={clsx(
+					styles['p-object-detail__metadata-card-link'],
+					'u-text-no-decoration'
+				)}
+				aria-label={item.title}
 			>
-				<a
-					tabIndex={isHidden ? -1 : 0}
-					className={clsx(
-						styles['p-object-detail__metadata-card-link'],
-						'u-text-no-decoration'
-					)}
-					aria-label={item.title}
-				>
-					<RelatedObject object={item} />
-				</a>
+				<RelatedObject object={item} />
 			</Link>
 		</li>
 	);
@@ -1578,14 +1589,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 			)}
 			action={
-				<Link passHref href={KNOWN_STATIC_ROUTES.kioskConditions}>
-					<a aria-label={tText('pages/slug/index___meer-info')}>
-						<Button
-							className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
-							label={tHtml('pages/slug/index___meer-info')}
-							variants={['text', 'underline']}
-						/>
-					</a>
+				<Link
+					passHref
+					href={KNOWN_STATIC_ROUTES.kioskConditions}
+					aria-label={tText('pages/slug/index___meer-info')}
+				>
+					<Button
+						className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
+						label={tHtml('pages/slug/index___meer-info')}
+						variants={['text', 'underline']}
+					/>
 				</Link>
 			}
 		/>
@@ -1672,7 +1685,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const renderVisitButton = (): ReactNode => (
 		<Button
-			label={tText('modules/ie-objects/components/metadata/metadata___plan-een-bezoek')}
+			label={tText(
+				'modules/ie-objects/components/advanced-filters/metadata___plan-een-bezoek'
+			)}
 			variants={['dark', 'sm']}
 			className={styles['p-object-detail__visit-button']}
 			onClick={openRequestAccessBlade}
@@ -1779,7 +1794,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 					<MetaDataFieldWithHighlightingAndMaxLength
 						title={tText(
-							'modules/visitor-space/utils/metadata/metadata___beschrijving'
+							'modules/visitor-space/utils/advanced-filters/metadata___beschrijving'
 						)}
 						data={mediaInfo.description}
 						className="u-pb-24 u-line-height-1-4 u-font-size-14"
@@ -1805,7 +1820,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					>
 						{renderMaintainerMetaData(mediaInfo)}
 					</Metadata>
-					{/* other metadata fields */}
+					{/* other advanced-filters fields */}
 					{metaDataFields.map((item: MetadataItem, index: number) => {
 						if (isString(item.data)) {
 							return (
@@ -2165,7 +2180,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					[styles['p-object-detail--hidden']]: mediaInfoIsLoading || mediaInfoIsError,
 					[styles['p-object-detail__wrapper--collapsed']]: !expandSidebar,
 					[styles['p-object-detail__wrapper--expanded']]: expandSidebar,
-					[styles['p-object-detail__wrapper--metadata']]:
+					[styles['p-object-detail__wrapper--advanced-filters']]:
 						activeTab === ObjectDetailTabs.Metadata,
 					[styles['p-object-detail__wrapper--video']]:
 						activeTab === ObjectDetailTabs.Media,
@@ -2269,7 +2284,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				onSubmit={onRequestAccessSubmit}
 				id="object-detail-page__request-access-blade"
 			/>
-			{/* Read more metadata field blade */}
+			{/* Read more advanced-filters field blade */}
 			<Blade
 				className={clsx(
 					'u-pb-24 u-line-height-1-4 u-font-size-14',

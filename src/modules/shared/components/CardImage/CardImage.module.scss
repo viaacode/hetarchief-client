@@ -26,14 +26,14 @@ $component: "c-card-image";
 			min-height: 205px;
 
 			// desktop-first to avoid reset properties
-			@include respond-to("md") {
+			@media (max-width: $breakpoint-md) {
 				min-height: 160px;
 				min-width: 120px;
 				margin-right: 2rem;
 				height: 100%;
 			}
 
-			@include respond-to("xs") {
+			@media (max-width: $breakpoint-xs) {
 				min-width: 100px;
 				margin-right: $spacer-sm;
 			}
@@ -44,12 +44,12 @@ $component: "c-card-image";
 			min-width: 100px;
 			width: 100px;
 
-			@include respond-at("xs") {
+			@media (min-width: $breakpoint-xs) {
 				min-width: 120px;
 				width: 120px;
 			}
 
-			@include respond-at("md") {
+			@media (min-width: $breakpoint-md) {
 				min-height: 276px;
 				min-width: 146px;
 				width: 146px;
@@ -68,7 +68,7 @@ $component: "c-card-image";
 				}
 			}
 
-			@include respond-at("md") {
+			@media (min-width: $breakpoint-md) {
 				min-width: $card-image-small-width-md;
 				width: $card-image-small-width-md;
 

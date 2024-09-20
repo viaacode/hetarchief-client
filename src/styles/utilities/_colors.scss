@@ -4,17 +4,20 @@
  * Color
  */
 
-$color: (
-	"black": $black,
-	"white": $white,
-	"neutral": $neutral,
-	"teal": $teal,
-);
+.u-color-black {
+	color: $black;
+}
 
-@include generate-utils("color", "color", $color, ("md", "lg", "xxl"));
+.u-color-white {
+	color: $white;
+}
 
 .u-color-neutral {
 	color: $neutral;
+}
+
+.u-color-teal {
+	color: $teal;
 }
 
 .u-color-zinc {
@@ -23,4 +26,58 @@ $color: (
 
 .u-color-silver {
 	color: $neutral;
+}
+
+@media (min-width: $breakpoint-md) {
+	.u-color-black-md {
+		color: $black;
+	}
+
+	.u-color-white-md {
+		color: $white;
+	}
+
+	.u-color-neutral-md {
+		color: $neutral;
+	}
+
+	.u-color-teal-md {
+		color: $teal;
+	}
+}
+
+@media (min-width: $breakpoint-lg) {
+	.u-color-black-lg {
+		color: $black;
+	}
+
+	.u-color-white-lg {
+		color: $white;
+	}
+
+	.u-color-neutral-lg {
+		color: $neutral;
+	}
+
+	.u-color-teal-lg {
+		color: $teal;
+	}
+}
+
+@media (min-width: $breakpoint-xxl) {
+	.u-color-black-xxl {
+		color: $black;
+	}
+
+	.u-color-white-xxl {
+		color: $white;
+	}
+
+	.u-color-neutral-xxl {
+		color: $neutral;
+	}
+
+	.u-color-teal-xxl {
+		color: $teal;
+	}
 }

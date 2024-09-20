@@ -46,7 +46,7 @@ $component: "c-object-placeholder";
 		width: 100%;
 		height: 6.4rem;
 
-		@include respond-at(md) {
+		@media (min-width: $breakpoint-md) {
 			height: 9.2rem;
 		}
 	}
@@ -87,7 +87,7 @@ $component: "c-object-placeholder";
 			transform: scale(0.334);
 		}
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			width: $card-image-small-width-md;
 			min-width: $card-image-small-width-md;
 		}

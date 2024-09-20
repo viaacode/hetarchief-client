@@ -76,7 +76,16 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 
 		// No renderer
 		return imageUrl ? (
-			<Image unoptimized src={imageUrl} alt={file.name} layout="fill" objectFit="cover" />
+			<Image
+				unoptimized
+				src={imageUrl}
+				alt={file.name}
+				fill
+				sizes="100vw"
+				style={{
+					objectFit: 'cover',
+				}}
+			/>
 		) : (
 			<ObjectPlaceholder className={styles['c-fragment-slider__item-image']} small />
 		);

@@ -27,11 +27,11 @@ $component: "c-block-enclosed-content";
 		flex-wrap: wrap;
 		margin: $spacer-md 0 0;
 
-		@include respond-at("sm") {
+		@media (min-width: $breakpoint-sm) {
 			gap: $spacer-lg;
 		}
 
-		@include respond-at("xl") {
+		@media (min-width: $breakpoint-xl) {
 			grid-template-columns: repeat(4, 1fr);
 		}
 
@@ -48,15 +48,15 @@ $component: "c-block-enclosed-content";
 			flex-direction: row;
 			width: 100%;
 
-			@include respond-at("sm") {
+			@media (min-width: $breakpoint-sm) {
 				width: calc(50% - #{$spacer-md});
 			}
 
-			@include respond-at("md") {
+			@media (min-width: $breakpoint-md) {
 				width: calc(33.3% - #{$spacer-md});
 			}
 
-			@include respond-at("lg") {
+			@media (min-width: $breakpoint-lg) {
 				width: calc(25% - #{$spacer-md});
 			}
 
@@ -111,7 +111,7 @@ $component: "c-block-enclosed-content";
 				margin: $title-spacer 0 $title-spacer 0;
 				font-weight: $font-weight-bold;
 
-				@include respond-at("md") {
+				@media (min-width: $breakpoint-md) {
 					-webkit-line-clamp: 2;
 				}
 			}
@@ -128,7 +128,7 @@ $component: "c-block-enclosed-content";
 				-webkit-box-orient: vertical;
 				display: -webkit-box;
 
-				@include respond-at("md") {
+				@media (min-width: $breakpoint-md) {
 					-webkit-line-clamp: 2;
 				}
 			}
@@ -138,7 +138,7 @@ $component: "c-block-enclosed-content";
 				font-size: $font-size-xs;
 				line-height: $line-height-lg;
 
-				@include respond-at("md") {
+				@media (min-width: $breakpoint-md) {
 					font-size: $font-size-sm;
 					line-height: math.div($font-size-md, 9) * 10; // 2rem;
 				}
@@ -148,7 +148,7 @@ $component: "c-block-enclosed-content";
 					font-size: $font-size-xs;
 					line-height: $line-height-lg;
 
-					@include respond-at("md") {
+					@media (min-width: $breakpoint-md) {
 						font-size: $font-size-sm;
 						line-height: math.div($font-size-md, 9) * 10; // 2rem;
 					}

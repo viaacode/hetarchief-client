@@ -37,7 +37,7 @@ const dropdownCls = (...classNames: string[]) => {
 
 const linkClasses = linkCls(
 	'u-color-black',
-	'u-color-white:xxl',
+	'u-color-white-xxl',
 	'u-whitespace-nowrap',
 	styles['c-navigation__link--dropdown']
 );
@@ -75,20 +75,19 @@ const renderLink = (
 		return isDropdown ? (
 			<NavigationLink href={href} label={label} isDropdownItem />
 		) : (
-			<Link href={href}>
-				<a
-					aria-label={tooltip}
-					className={cn}
-					onClick={onClick}
-					tabIndex={0}
-					target={target}
-					title={tooltip}
-				>
-					{iconStart && iconStart}
-					{label}
-					{badge && badge}
-					{iconEnd && iconEnd}
-				</a>
+			<Link
+				href={href}
+				aria-label={tooltip}
+				className={cn}
+				onClick={onClick}
+				tabIndex={0}
+				target={target}
+				title={tooltip}
+			>
+				{iconStart && iconStart}
+				{label}
+				{badge && badge}
+				{iconEnd && iconEnd}
 			</Link>
 		);
 	}
@@ -164,7 +163,7 @@ const getVisitorSpacesDropdown = (
 						),
 						visitPath,
 						{
-							className: dropdownCls('u-display-none', 'u-display-block:xxl'),
+							className: dropdownCls('u-display-none', 'u-display-block-xxl'),
 						}
 					),
 					id: 'all-visitor-spaces',
@@ -188,7 +187,7 @@ const getVisitorSpacesDropdown = (
 												'u-font-size-24',
 												'u-text-left',
 												'u-visibility-hidden',
-												'u-visibility-visible:xxl',
+												'u-visibility-visible-xxl',
 												styles['c-navigation__dropdown-icon--end']
 											)}
 											name={IconNamesLight.AngleRight}

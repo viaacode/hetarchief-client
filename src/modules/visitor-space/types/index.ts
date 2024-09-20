@@ -1,16 +1,14 @@
-import { type DefaultComponentProps } from '@meemoo/admin-core-ui';
+import { type DefaultComponentProps } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import { type SelectOption, type TagInfo } from '@meemoo/react-components';
 import { type ReactNode } from 'react';
-import { type UseFormHandleSubmit } from 'react-hook-form';
-import { type FieldValues } from 'react-hook-form/dist/types/fields';
+import { type FieldValues, type UseFormHandleSubmit } from 'react-hook-form';
 
-import { type Operator } from '@shared/types';
 import { type IeObjectType } from '@shared/types/ie-objects';
 import { type OnFilterMenuFormSubmit } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 
-import { type MetadataProp } from './metadata';
+import { type FilterProperty, type Operator } from './filter-properties';
 
-export * from './metadata';
+export * from './filter-properties';
 
 export enum SearchSortProp {
 	Date = 'created',
@@ -145,7 +143,7 @@ export type OperatorOptions = Array<
 export type PropertyOptions = Array<
 	SelectOption & {
 		label: string;
-		value: MetadataProp;
+		value: FilterProperty;
 	}
 >;
 

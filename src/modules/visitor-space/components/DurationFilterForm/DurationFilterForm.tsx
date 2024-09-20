@@ -7,9 +7,9 @@ import { Controller, useForm } from 'react-hook-form';
 import { type SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SEPARATOR } from '@shared/const';
 import { tHtml } from '@shared/helpers/translate';
-import { isRange, Operator } from '@shared/types';
 import {
 	DURATION_FILTER_FORM_QUERY_PARAM_CONFIG,
 	DURATION_FILTER_FORM_SCHEMA,
@@ -18,13 +18,14 @@ import {
 	type DurationFilterFormProps,
 	type DurationFilterFormState,
 } from '@visitor-space/components/DurationFilterForm/DurationFilterForm.types';
-import { getOperators } from '@visitor-space/utils/metadata';
 
-import { MetadataProp, SearchFilterId } from '../../types';
+import { FilterProperty, isRange, Operator, SearchFilterId } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import { DurationInput } from '../DurationInput';
 import { defaultValue } from '../DurationInput/DurationInput';
 import { DurationRangeInput } from '../DurationRangeInput';
+
+import { getOperators } from 'modules/visitor-space/utils/advanced-filters';
 
 const labelKeys: Record<keyof DurationFilterFormState, string> = {
 	duration: 'DurationFilterForm__duration',
@@ -33,7 +34,7 @@ const labelKeys: Record<keyof DurationFilterFormState, string> = {
 
 const defaultValues: DurationFilterFormState = {
 	duration: undefined,
-	operator: Operator.LessThanOrEqual,
+	operator: Operator.LESS_THAN_OR_EQUAL,
 };
 
 const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, disabled }) => {
@@ -56,7 +57,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 		reValidateMode: 'onChange',
 	});
 
-	const operators = useMemo(() => getOperators(MetadataProp.Duration), []);
+	const operators = useMemo(() => getOperators(FilterProperty.DURATION), []);
 
 	// Effects
 
@@ -131,11 +132,12 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 
 				<FormControl
 					className="c-form-control--label-hidden"
-					errors={
-						!isNil(errors[SearchFilterId.Duration]?.message)
-							? [errors[SearchFilterId.Duration]?.message]
-							: undefined
-					}
+					errors={[
+						<RedFormWarning
+							error={errors[SearchFilterId.Duration]?.message}
+							key="form-error--duration"
+						/>,
+					]}
 					id={labelKeys[SearchFilterId.Duration]}
 					label={tHtml(
 						'modules/visitor-space/components/duration-filter-form/duration-filter-form___waarde'

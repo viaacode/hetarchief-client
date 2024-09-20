@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
+import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 declare const document: any;
 
@@ -43,24 +44,11 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	});
 	await vrtCard.click();
 
-	// Login
-	// Click the login button
-	await page.locator('.c-button.c-button--black', { hasText: 'Inloggen' }).click();
-
-	// Fill in credentials
-	await page.fill('#emailId', process.env.TEST_VISITOR_ACCOUNT_USERNAME as string);
-	await page.fill('#passwordId', process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string);
-
-	// Click the login button
-	await page.click('button[type="submit"]');
-
-	// Wait for site to load after login
-	await page.waitForFunction(
-		(titleAfterLogin: string) => document.title === titleAfterLogin,
-		'Home | hetarchief.be',
-		{
-			timeout: 10000,
-		}
+	// Login basic visitor
+	await loginUserHetArchiefIdp(
+		page,
+		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
+		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
 	);
 
 	// Fill in 'Reden van aanvraag'

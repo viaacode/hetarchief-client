@@ -142,8 +142,11 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						<Image
 							alt="maintainer logo"
 							src={item.maintainerLogo}
-							layout="fill"
-							objectFit="contain"
+							fill
+							sizes="100vw"
+							style={{
+								objectFit: 'contain',
+							}}
 						/>
 					</div>
 				) : (

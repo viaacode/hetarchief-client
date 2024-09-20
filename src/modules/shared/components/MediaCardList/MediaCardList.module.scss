@@ -54,7 +54,7 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 			}
 		}
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			@include media-card-list-gutters($media-card-list-two-columns-gutter-md);
 
 			margin-bottom: $media-card-list-two-columns-gutter-md;
@@ -87,7 +87,7 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 			}
 		}
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			@include media-card-list-gutters($media-card-list-masonry-gutter-md);
 
 			margin: 0 (0 - $media-card-list-masonry-gutter-md / 2);

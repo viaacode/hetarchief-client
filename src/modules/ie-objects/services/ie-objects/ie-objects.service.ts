@@ -17,6 +17,7 @@ import {
 	IeObjectsSearchOperator,
 	SearchPageMediaType,
 } from '@shared/types/ie-objects';
+import { type AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { SearchSortProp } from '@visitor-space/types';
 
 import {
@@ -56,7 +57,7 @@ export class IeObjectsService {
 			}),
 		];
 
-		const parsed = (await ApiService.getApi(true)
+		return (await ApiService.getApi(true)
 			.post(`${IE_OBJECTS_SERVICE_BASE_URL}`, {
 				body: JSON.stringify({
 					filters: filtered,
@@ -74,12 +75,15 @@ export class IeObjectsService {
 				}),
 			})
 			.json()) as GetIeObjectsResponse;
-
-		return parsed;
 	}
 
 	public static async getById(id: string): Promise<IeObject> {
-		return await ApiService.getApi().get(`${IE_OBJECTS_SERVICE_BASE_URL}/${id}`).json();
+		console.log(`[PERFORMANCE] ${new Date().toISOString()} start fetch ie object`);
+		const ieObject: IeObject = await ApiService.getApi()
+			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${id}`)
+			.json();
+		console.log(`[PERFORMANCE] ${new Date().toISOString()} finished fetch ie object`, id);
+		return ieObject;
 	}
 
 	public static async getSeoById(id: string): Promise<SeoInfo> {
@@ -167,7 +171,7 @@ export class IeObjectsService {
 			.json();
 	}
 
-	static getAutocompleteFieldOptions(field: string, query: string): Promise<string[]> {
+	static getAutocompleteFieldOptions(field: AutocompleteField, query: string): Promise<string[]> {
 		return ApiService.getApi()
 			.get(
 				stringifyUrl({

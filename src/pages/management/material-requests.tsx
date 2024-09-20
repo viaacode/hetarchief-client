@@ -8,8 +8,8 @@ import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
-const CpAdminMaterialRequestsPageEnglish: NextPage<DefaultSeoInfo> = ({ url }) => {
-	return <CpAdminMaterialRequests url={url} />;
+const CpAdminMaterialRequestsPageEnglish: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
+	return <CpAdminMaterialRequests url={url} locale={locale} />;
 };
 
 export async function getStaticProps(

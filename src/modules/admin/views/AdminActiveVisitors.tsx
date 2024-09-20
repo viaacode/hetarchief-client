@@ -148,6 +148,9 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
 					<div className="p-admin-visitors l-container">
 						<div className="p-admin-visitors__header">
 							<SearchBar
+								aria-label={tText(
+									'modules/admin/views/admin-active-visitors___zoekveld-aria-label'
+								)}
 								id={globalLabelKeys.adminLayout.title}
 								value={search}
 								className="p-admin-visitors__search"

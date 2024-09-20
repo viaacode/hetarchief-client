@@ -6,7 +6,7 @@ $page: "p-admin-requests";
 
 .#{$page} {
 	&__header {
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			display: flex;
 			flex-flow: row-reverse nowrap;
 
@@ -20,7 +20,7 @@ $page: "p-admin-requests";
 	&__search {
 		margin-bottom: $spacer-md;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			flex-basis: 34.1rem;
 			margin-bottom: 0;
 			margin-left: $spacer-sm;
@@ -34,7 +34,7 @@ $page: "p-admin-requests";
 	}
 
 	tr {
-		@include respond-to("lg") {
+		@media (max-width: $breakpoint-lg) {
 			td,
 			th {
 				&:nth-child(2),

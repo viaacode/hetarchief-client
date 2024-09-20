@@ -11,7 +11,7 @@ import { type Folder } from '@account/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { tHtml } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
 
@@ -300,8 +300,12 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			const others = (folder?.objects || []).filter(
 				(object) => object.schemaIdentifier !== objectToAdd?.schemaIdentifier
 			);
+			const isObjectAlreadyInFolder = !!folder?.objects?.find(
+				(object) => object.schemaIdentifier === objectToAdd?.schemaIdentifier
+			);
 
-			const isFolderSelected = (selectedFolderIds || []).includes(folder.id);
+			const isFolderSelected =
+				isObjectAlreadyInFolder || (selectedFolderIds || []).includes(folder.id);
 			const count = others.length + (isFolderSelected ? 1 : 0);
 
 			return (
@@ -319,6 +323,12 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 						checkIcon={<Icon name={IconNamesLight.Check} />}
 						onClick={(e) => e.stopPropagation()}
 						variants={['no-label']}
+						aria-label={tText(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-folder-toe-aan-map',
+							{
+								folder: folder?.name,
+							}
+						)}
 					/>
 
 					<span className={styles['c-add-to-folder-blade__list-item__label']}>

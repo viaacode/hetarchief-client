@@ -1,26 +1,26 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil } from 'lodash-es';
 import { type FC, type ReactNode, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { StringParam, useQueryParam } from 'use-query-params';
 import { object as yupObject, string as yupString } from 'yup';
 
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import AutocompleteFieldInput from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
 import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
-import { type DefaultFilterFormChildrenParams, type SearchFilterId } from '@visitor-space/types';
+import { type DefaultFilterFormChildrenParams } from '@visitor-space/types';
 
 import styles from './AutocompleteFieldFilterForm.module.scss';
 
 export const AutocompleteFieldFilterForm: FC<{
 	children: ({ values, reset, handleSubmit }: DefaultFilterFormChildrenParams<any>) => ReactNode;
 	className?: string;
-	searchFilterId: SearchFilterId;
+	autocompleteField: AutocompleteField;
 	filterTitle: string;
 	fieldLabel: string;
-}> = ({ children, className, searchFilterId, filterTitle, fieldLabel }) => {
-	const [initial] = useQueryParam(searchFilterId, StringParam);
+}> = ({ children, className, autocompleteField, filterTitle, fieldLabel }) => {
+	const [initial] = useQueryParam(autocompleteField, StringParam);
 
 	const [form, setForm] = useState<{ value: string }>({
 		value: initial || '',
@@ -70,8 +70,10 @@ export const AutocompleteFieldFilterForm: FC<{
 			>
 				<FormControl
 					className="c-form-control--label-hidden"
-					errors={!isNil(errors?.value?.message) ? [errors?.value?.message] : undefined}
-					id={'AutocompleteFieldFilterForm__' + searchFilterId}
+					errors={[
+						<RedFormWarning error={errors?.value?.message} key="form-error--value" />,
+					]}
+					id={'AutocompleteFieldFilterForm__' + autocompleteField}
 					label={filterTitle}
 				>
 					<Controller
@@ -79,7 +81,7 @@ export const AutocompleteFieldFilterForm: FC<{
 						name="value"
 						render={({ field }) => (
 							<AutocompleteFieldInput
-								fieldName={searchFilterId}
+								fieldName={autocompleteField}
 								onChange={onChangeValue}
 								value={field.value}
 								id={AutocompleteField.creator}
@@ -91,7 +93,7 @@ export const AutocompleteFieldFilterForm: FC<{
 			</div>
 
 			{children({
-				values: { [searchFilterId]: form.value },
+				values: { [autocompleteField]: form.value },
 				reset: () => {
 					setForm({ value: '' });
 					clearErrors();

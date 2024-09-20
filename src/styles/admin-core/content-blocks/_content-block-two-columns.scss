@@ -18,7 +18,7 @@ $component: "c-content-block__rich-text-two-columns";
 		}
 
 		/* https://meemoo.atlassian.net/browse/ARC-1960 */
-		@include respond-to("md") {
+		@media (max-width: $breakpoint-md) {
 			grid-template-columns: repeat(auto-fill, 1fr);
 
 			.o-grid-col-bp2-6 {

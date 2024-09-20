@@ -35,7 +35,7 @@ describe('Component: <MetadataList /> (default)', () => {
 		expect(container.firstChild).toHaveClass(className);
 	});
 
-	it('Should display metadata items', () => {
+	it('Should display advanced-filters items', () => {
 		const { getAllByRole } = renderMetadataList({ disableContainerQuery: false }, metadataMock);
 
 		const items = getAllByRole('listitem');
@@ -43,7 +43,7 @@ describe('Component: <MetadataList /> (default)', () => {
 		expect(items.length).toBe(metadataMock.length);
 	});
 
-	it('Should display metadata title', () => {
+	it('Should display advanced-filters title', () => {
 		const titleMock = 'some title';
 		const metadata = [
 			{
@@ -58,7 +58,7 @@ describe('Component: <MetadataList /> (default)', () => {
 		expect(title).toBeInTheDocument();
 	});
 
-	it('Should display metadata string data', () => {
+	it('Should display advanced-filters string data', () => {
 		const dataMock = 'some data';
 		const metadata = [
 			{
@@ -73,7 +73,7 @@ describe('Component: <MetadataList /> (default)', () => {
 		expect(data).toBeInTheDocument();
 	});
 
-	it('Should display metadata ReactNode data', () => {
+	it('Should display advanced-filters ReactNode data', () => {
 		const dataMock = 'some-data';
 		const metadata = [
 			{
@@ -94,7 +94,7 @@ describe('Component: <MetadataList /> (default)', () => {
 
 		const list = getByRole('list').parentElement;
 
-		expect(list).toHaveClass(`c-metadata--container-query`);
+		expect(list).toHaveClass(`c-advanced-filters--container-query`);
 	});
 
 	it('Should display a single column when given', () => {
@@ -102,6 +102,6 @@ describe('Component: <MetadataList /> (default)', () => {
 
 		const list = getByRole('list').parentElement;
 
-		expect(list).not.toHaveClass(`c-metadata--container-query`);
+		expect(list).not.toHaveClass(`c-advanced-filters--container-query`);
 	});
 });

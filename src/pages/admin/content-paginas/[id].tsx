@@ -14,12 +14,17 @@ import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-p
 import withUser, { type UserProps } from '@shared/hooks/with-user';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
-const ContentPageDetailPageDutch: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
+const ContentPageDetailPageDutch: NextPage<DefaultSeoInfo & UserProps> = ({
+	url,
+	locale,
+	commonUser,
+}) => {
 	const router = useRouter();
 
 	return (
 		<ContentPageDetailPage
 			url={url}
+			locale={locale}
 			commonUser={commonUser as Avo.User.CommonUser}
 			id={router.query.id as string}
 		/>

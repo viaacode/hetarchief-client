@@ -80,7 +80,7 @@ $controls-margin-bottom: $spacer-sm;
 		height: calc(100vh - 10rem);
 		padding-bottom: $spacer-1xl * 4;
 
-		@include respond-to(md) {
+		@media (max-width: $breakpoint-md) {
 			padding: $spacer-1xl;
 			padding-bottom: $spacer-1xl * 4;
 			gap: 2rem;
@@ -92,7 +92,7 @@ $controls-margin-bottom: $spacer-sm;
 			border: 0.4rem solid #222;
 			width: 25%;
 
-			@include respond-to(md) {
+			@media (max-width: $breakpoint-md) {
 				width: 40%;
 			}
 
@@ -235,7 +235,7 @@ $controls-margin-bottom: $spacer-sm;
 	overflow-y: auto;
 	padding-right: $spacer-sm;
 
-	@include respond-to(md) {
+	@media (max-width: $breakpoint-md) {
 		display: none;
 	}
 

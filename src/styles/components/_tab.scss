@@ -13,7 +13,7 @@ $component: "c-tab";
 		background-color $animate-default,
 		color $animate-default;
 
-	@include respond-to("md") {
+	@media (max-width: $breakpoint-md) {
 		font-size: $font-size-sm;
 	}
 
@@ -33,7 +33,7 @@ $component: "c-tab";
 		font-size: $font-size-base;
 		margin-right: $spacer-xs;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			font-size: $font-size-lg;
 		}
 	}
@@ -46,7 +46,7 @@ $component: "c-tab";
 		background-color: $black;
 		color: $white;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			min-height: $tab-min-height-md;
 			padding: $tab-vertical-padding-md $spacer-md;
 		}
@@ -63,7 +63,7 @@ $component: "c-tab";
 		position: relative;
 		color: $neutral;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			min-height: $tab-min-height-md;
 			padding: $tab-vertical-padding-md $spacer-sm;
 		}

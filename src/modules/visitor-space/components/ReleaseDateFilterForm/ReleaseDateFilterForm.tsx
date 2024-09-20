@@ -7,14 +7,13 @@ import { Controller, useForm } from 'react-hook-form';
 import { type MultiValue, type SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SEPARATOR } from '@shared/const';
 import { YEAR_LENGTH } from '@shared/const/date';
 import { convertYearToDate } from '@shared/helpers/convert-year-to-date';
 import { tHtml } from '@shared/helpers/translate';
-import { isRange, Operator } from '@shared/types';
-import { getOperators } from '@visitor-space/utils/metadata';
 
-import { MetadataProp } from '../../types';
+import { FilterProperty, isRange, Operator } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import { DateInput } from '../DateInput';
 import { DateRangeInput } from '../DateRangeInput';
@@ -32,6 +31,8 @@ import {
 	type ReleaseDateFilterFormState,
 } from './ReleaseDateFilterForm.types';
 
+import { getOperators } from 'modules/visitor-space/utils/advanced-filters';
+
 const labelKeys: Record<keyof ReleaseDateFilterFormState, string> = {
 	releaseDate: 'ReleaseDateFilterForm__releaseDate',
 	operator: 'ReleaseDateFilterForm__operator',
@@ -39,7 +40,7 @@ const labelKeys: Record<keyof ReleaseDateFilterFormState, string> = {
 
 const defaultValues: ReleaseDateFilterFormState = {
 	releaseDate: undefined,
-	operator: Operator.GreaterThanOrEqual,
+	operator: Operator.GREATER_THAN_OR_EQUAL,
 };
 
 const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
@@ -69,7 +70,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 		defaultValues,
 	});
 
-	const operators = useMemo(() => getOperators(MetadataProp.ReleaseDate), []);
+	const operators = useMemo(() => getOperators(FilterProperty.RELEASE_DATE), []);
 
 	// Effects
 
@@ -119,7 +120,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 			setForm((oldForm) => ({ ...oldForm, releaseDate: undefined }));
 			return;
 		}
-		if (form.operator === Operator.Equals) {
+		if (form.operator === Operator.EQUALS) {
 			convertToRange(newDate);
 			return;
 		}
@@ -223,7 +224,12 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 			<div className={clsx(className, styles['releaseDate'], 'u-px-20 u-px-32:md')}>
 				<FormControl
 					className={clsx('u-mb-24 c-form-control--label-hidden')}
-					errors={[errors.operator?.message]}
+					errors={[
+						<RedFormWarning
+							error={errors.operator?.message}
+							key="form-error--operator"
+						/>,
+					]}
 					id={labelKeys.operator}
 					label={tHtml(
 						'modules/visitor-space/components/releaseDate-filter-form/releaseDate-filter-form___operator'
@@ -255,7 +261,12 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 			<div className={clsx(styles['releaseDate'], 'u-px-20 u-px-32:md')}>
 				<FormControl
 					className="u-mb-24 c-form-control--label-hidden"
-					errors={[errors.releaseDate?.message]}
+					errors={[
+						<RedFormWarning
+							error={errors.releaseDate?.message}
+							key="form-error--release-date"
+						/>,
+					]}
 					id={labelKeys.releaseDate}
 					label={tHtml(
 						'modules/visitor-space/components/releaseDate-filter-form/releaseDate-filter-form___waarde'

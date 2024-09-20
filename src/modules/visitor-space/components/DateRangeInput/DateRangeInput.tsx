@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { type FC } from 'react';
 
 import { tText } from '@shared/helpers/translate';
@@ -13,6 +14,7 @@ export interface DateRangeInputProps {
 	onChange: (from: Date | undefined, to: Date | undefined) => void;
 	disabled?: boolean;
 	id?: string;
+	className?: string;
 }
 
 const DateRangeInput: FC<DateRangeInputProps> = ({
@@ -22,9 +24,10 @@ const DateRangeInput: FC<DateRangeInputProps> = ({
 	showLabels,
 	disabled = false,
 	id = undefined,
+	className,
 }) => {
 	return (
-		<div className={styles['c-date-range-input']} id={id}>
+		<div className={clsx(className, styles['c-date-range-input'])} id={id}>
 			<DateInput
 				label={
 					showLabels
