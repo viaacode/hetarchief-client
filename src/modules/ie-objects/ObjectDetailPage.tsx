@@ -1792,6 +1792,27 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 					{renderMetaDataActions()}
 
+					{!!rightsAttributionText && (
+						<>
+							<Alert
+								content={tHtml(
+									'modules/ie-objects/object-detail-page___deze-bronvermelding-is-automatisch-gegenereerd-en-kan-fouten-bevatten-a-href-bronvermelding-fouten-meer-info-a'
+								)}
+							/>
+							<Metadata
+								title={tHtml(
+									'modules/ie-objects/object-detail-page___bronvermelding'
+								)}
+								key="metadata-source-attribution"
+								renderRight={
+									<CopyButton text={rightsAttributionText} variants={['white']} />
+								}
+							>
+								<span>{rightsAttributionText}</span>
+							</Metadata>
+						</>
+					)}
+
 					<MetaDataFieldWithHighlightingAndMaxLength
 						title={tText(
 							'modules/visitor-space/utils/advanced-filters/metadata___beschrijving'
@@ -1846,26 +1867,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							);
 						}
 					})}
-					{!!rightsAttributionText && (
-						<>
-							<Alert
-								content={tHtml(
-									'modules/ie-objects/object-detail-page___deze-bronvermelding-is-automatisch-gegenereerd-en-kan-fouten-bevatten-a-href-bronvermelding-fouten-meer-info-a'
-								)}
-							/>
-							<Metadata
-								title={tHtml(
-									'modules/ie-objects/object-detail-page___bronvermelding'
-								)}
-								key="metadata-source-attribution"
-								renderRight={
-									<CopyButton text={rightsAttributionText} variants={['white']} />
-								}
-							>
-								<span>{rightsAttributionText}</span>
-							</Metadata>
-						</>
-					)}
 
 					{!!rightsStatusInfo && (
 						<Metadata
