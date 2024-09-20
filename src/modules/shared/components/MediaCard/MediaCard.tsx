@@ -220,9 +220,13 @@ const MediaCard: FC<MediaCardProps> = ({
 	const renderNoContentIcon = () => {
 		return (
 			<Icon
-				className={clsx(styles['c-media-card__no-content'], styles['c-media-card__icon'], {
-					[styles['c-media-card__no-content-icon']]: !link,
-				})}
+				className={clsx(
+					styles['c-media-card__no-content-icon'],
+					styles['c-media-card__icon'],
+					{
+						[styles['c-media-card__no-content-icon']]: !link,
+					}
+				)}
 				name={TYPE_TO_NO_ICON_MAP[type as IeObjectType]}
 			/>
 		);
