@@ -210,7 +210,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 			{/* Which will redirect to the client homepage => after user logs in, redirect to client profile page */}
 			<Link
 				href={stringifyUrl({
-					url: publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL,
+					url: publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL.replace('{locale}', locale),
 					query: {
 						redirect_to: stringifyUrl({
 							url: publicRuntimeConfig.PROXY_URL + '/auth/global-logout',
