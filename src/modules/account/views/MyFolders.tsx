@@ -488,7 +488,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 					<SidebarLayout
 						color="platinum"
 						responsiveTo={Breakpoints.md}
-						sidebarTitle={tHtml(
+						sidebarTitle={tText(
 							'pages/account/mijn-mappen/folder-slug/index___mijn-mappen'
 						)}
 						sidebarLinks={[
