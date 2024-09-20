@@ -4,21 +4,88 @@
  * Visibility
  */
 
-$visibility: (
-	"hidden": hidden,
-	"visible": visible,
-);
+.u-visibility-hidden {
+	visibility: hidden;
+}
 
-@include generate-utils("visibility", "visibility", $visibility, ("md", "xxl"));
+.u-visibility-visible {
+	visibility: visible;
+}
+
+@media (min-width: $breakpoint-md) {
+	.u-visibility-md-hidden {
+		visibility: hidden;
+	}
+
+	.u-visibility-md-visible {
+		visibility: visible;
+	}
+}
+
+@media (min-width: $breakpoint-xxl) {
+	.u-visibility-xxl-hidden {
+		visibility: hidden;
+	}
+
+	.u-visibility-xxl-visible {
+		visibility: visible;
+	}
+}
 
 /**
  * Display
  */
 
-$display: (
-	"none": none,
-	"block": block,
-	"inline-block": inline-block,
-);
+.u-display-none {
+	display: none;
+}
 
-@include generate-utils("display", "display", $display, ("md", "lg", "xxl"));
+.u-display-block {
+	display: block;
+}
+
+.u-display-inline-block {
+	display: inline-block;
+}
+
+@media (min-width: $breakpoint-md) {
+	.u-display-md-none {
+		display: none;
+	}
+
+	.u-display-md-block {
+		display: block;
+	}
+
+	.u-display-md-inline-block {
+		display: inline-block;
+	}
+}
+
+@media (min-width: $breakpoint-lg) {
+	.u-display-lg-none {
+		display: none;
+	}
+
+	.u-display-lg-block {
+		display: block;
+	}
+
+	.u-display-lg-inline-block {
+		display: inline-block;
+	}
+}
+
+@media (min-width: $breakpoint-xxl) {
+	.u-display-xxl-none {
+		display: none;
+	}
+
+	.u-display-xxl-block {
+		display: block;
+	}
+
+	.u-display-xxl-inline-block {
+		display: inline-block;
+	}
+}
