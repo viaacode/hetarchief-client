@@ -27,7 +27,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
  *        │                                                                                                                               │
  *    2───┼───────────────────────────────────────────────────────────────────────────────────┬───────────────────────────────────────────┤
  *        │                                                                                   │                                           │
- *        │                                                                                   │          tabs for advanced-filters, media, ocr    │
+ *        │                                                                                   │     tabs for metadata, media, ocr         │
  *        │                                                                                   │                                           │
  *    3───┤                                                                                   ├───────────────────────────────────────────┤
  *        │                                                                                   │                                           │
@@ -42,7 +42,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
  *    4───┼───────────────────────────────────────────────────────────────────────────────────┤                                           │
  *        │                                                                                   │                                           │
  *        │                                                                                   │                                           │
- *        │                     grey bar with prepresentations (video/audio)                  │                                           │
+ *        │                      grey bar with presentations (video/audio)                    │                                           │
  *        │                                                                                   │                                           │
  *        │                                                                                   │                                           │
  *    5───┴───────────────────────────────────────────────────────────────────────────────────┴───────────────────────────────────────────┘
@@ -65,7 +65,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
  *     │                    │
  *     │                    │
  *     │       media        │
- *     │      advanced-filters      │
+ *     │     metadata       │
  *     │       ocr          │
  *     │                    │
  *     │                    │
@@ -105,6 +105,22 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		@media (max-width: $breakpoint-md) {
 			grid-template-rows: minmax(0, max-content) max-content 1fr minmax(0, max-content);
 			grid-template-columns: max-content 1fr;
+		}
+
+		&--no-ocr-available {
+			:global(.c-tabs) {
+				@media (min-width: $breakpoint-md) {
+					// On desktop if no ocr is available, we don't need to show the tabs, since only one tab will be visible
+					display: none !important;
+				}
+			}
+
+			:global([class*="ObjectDetailPage_p-object-detail__sidebar__"]) {
+				// Sidebar can take the space of the tabs if there is no media, since only one tab would be visible or desktop
+				@media (min-width: $breakpoint-md) {
+					grid-row: 2 / 5 !important;
+				}
+			}
 		}
 	}
 
@@ -197,10 +213,12 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		}
 
 		.p-object-detail__tabs {
+			// Desktop
 			grid-row: 2;
 			grid-column: 3;
 
 			@media (max-width: $breakpoint-md) {
+				// Phone
 				grid-row: 2;
 				grid-column: 2;
 			}
@@ -211,12 +229,14 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		display: none;
 
 		@media (min-width: $breakpoint-md) {
+			// Desktop
 			:global(.c-tab--media) {
 				display: none !important;
 			}
 		}
 
 		@media (max-width: $breakpoint-md) {
+			// Mobile
 			grid-column: 1 / 4;
 			width: 100%;
 			display: flex;

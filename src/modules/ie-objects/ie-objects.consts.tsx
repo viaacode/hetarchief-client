@@ -152,7 +152,8 @@ export const noLicensePlaceholder = (): ObjectPlaceholderProps => ({
 export const OBJECT_DETAIL_TABS = (
 	mediaType: IeObjectType | null,
 	activeTab?: ObjectDetailTabs,
-	mediaAvailable = true
+	mediaAvailable = true,
+	ocrAvailable = true
 ): TabProps[] => {
 	const typeWithDefault = mediaType || IeObjectType.Video;
 	return [
@@ -177,7 +178,7 @@ export const OBJECT_DETAIL_TABS = (
 			),
 			active: ObjectDetailTabs.Media === activeTab,
 		},
-		...(typeWithDefault === IeObjectType.Newspaper
+		...(ocrAvailable
 			? [
 					{
 						id: ObjectDetailTabs.Ocr,
