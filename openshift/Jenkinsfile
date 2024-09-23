@@ -290,7 +290,7 @@ void startOpenShiftBuild(String environment, String dockerTag) {
 		oc project $OC_PROJECT
 		oc start-build --follow=true --wait=true $APP_NAME-${environment}
 		# Check the status of the rollout
-		oc rollout status deployment/$APP_NAME-${environment} --watch=true --timeout=10m
+		oc rollout status deployment/$APP_NAME-${environment} --watch=true --timeout=20m
 
 		# Tag with the revision for rollback purposes
 		oc tag $APP_NAME:${environment} $APP_NAME:${dockerTag}
