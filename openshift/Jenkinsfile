@@ -108,7 +108,7 @@ pipeline {
 							oc -n $OC_PROJECT patch "bc/${APP_NAME}-int" -p "{\\"metadata\\":{\\"annotations\\":{\\"shortcommit\\":\\"${GIT_SHORT_COMMIT}\\"}}}"
                         '''
 					}
-					startOpenShiftBuild('int', '$APP_NAME:${BRANCH_NAME}')
+					startOpenShiftBuild('int', '${BRANCH_NAME}')
 				}
 			}
 			post {
@@ -126,7 +126,7 @@ pipeline {
 			}
 			steps {
 				container('oc') {
-					startOpenShiftBuild('tst', '$APP_NAME:$GIT_SHORT_COMMIT')
+					startOpenShiftBuild('tst', '$GIT_SHORT_COMMIT')
 				}
 			}
 			post {
@@ -200,7 +200,7 @@ pipeline {
 			}
 			steps {
 				container('oc') {
-					startOpenShiftBuild('qas', '$APP_NAME:$GIT_SHORT_COMMIT')
+					startOpenShiftBuild('qas', '$GIT_SHORT_COMMIT')
 				}
 			}
 			post {
