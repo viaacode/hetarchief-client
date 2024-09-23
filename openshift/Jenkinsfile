@@ -104,7 +104,7 @@ pipeline {
 					script {
 						sh '''#!/bin/bash
 							oc -n $OC_PROJECT patch "bc/${APP_NAME}-int" -p "{\\"spec\\":{\\"source\\":{\\"git\\":{\\"ref\\":\\"${GIT_SHORT_COMMIT}\\"}}}}"
-							oc -n $OC_PROJECT patch "bc/${APP_NAME}-int" -p "{\\"metadata\\":{\\"annotations\\":{\\"ref\\":{\\"PR-${GITHUB_PR_NUMBER}\\"}}}"
+							oc -n $OC_PROJECT patch "bc/${APP_NAME}-int" -p "{\\"metadata\\":{\\"annotations\\":{\\"ref\\":\\"PR-${GITHUB_PR_NUMBER}\\"}}}"
                         '''
 					}
 					startOpenShiftBuild('int', '$APP_NAME:PR-${GITHUB_PR_NUMBER}')
@@ -217,7 +217,7 @@ pipeline {
 					script {
 						sh '''#!/bin/bash
 							oc -n $OC_PROJECT patch "bc/${APP_NAME}-prd" -p "{\\"spec\\":{\\"source\\":{\\"git\\":{\\"ref\\":\\"${IMAGE_TAG}\\"}}}}"
-							oc -n $OC_PROJECT patch "bc/${APP_NAME}-prd" -p "{\\"metadata\\":{\\"annotations\\":{\\"ref\\":{\\"${IMAGE_TAG}\\"}}}"							
+							oc -n $OC_PROJECT patch "bc/${APP_NAME}-prd" -p "{\\"metadata\\":{\\"annotations\\":{\\"ref\\":\\"${IMAGE_TAG}\\"}}}"							
                         '''
 					}
 					startOpenShiftBuild('prd', '${IMAGE_TAG}')
