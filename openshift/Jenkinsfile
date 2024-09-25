@@ -74,44 +74,23 @@ pipeline {
 				}
 			}
 		}
-		stage('Build code') {
-			when {
-				anyOf {
-					buildingTag()
-					changeRequest target: 'main'
-					changeRequest target: 'master'
-					changeRequest target: 'develop'
-					changeRequest target: 'development'
-				}
-			}
+		stage('Import images') {
+
 			steps {
 				container('oc') {
-					script {
-						if(buildingTag()){
-							env.ENVIRON = "prd"
-						}
-						else if(anyOf {changeRequest target: 'main' changeRequest target: 'master' changeRequest target: 'develop' changeRequest target: 'development'}){
-							env.ENVIRON = "int"
-						}
-					}
 					script {
 						sh '''#!/bin/bash
                             oc project $OC_PROJECT
                             oc import-image $BASE_IMG --confirm
                             oc set image-lookup $BASE_IMG_NAME
                             sleep 3
-                            oc annotate --overwrite "buildconfig/${APP_NAME}-${ENVIRON}"  ref=$BRANCH_NAME shortcommit=$GIT_SHORT_COMMIT
-							echo "enviroment: ${ENVIRON}"
-							export IST=${APP_NAME}:${GIT_SHORT_COMMIT}
-							echo setting ImageStreamTag ${IST} git ref
-							oc -n $OC_PROJECT patch "bc/${APP_NAME}-${ENVIRON}" -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"name\\":\\"${IST}\\"}}}}"
-                            oc start-build --follow=true --wait=true --from-dir=. ${APP_NAME}-${ENVIRON}
                         '''
 					}
 				}
 			}
 		}
-		stage('Deploy INT') {
+
+		stage('Build and Deploy INT') {
 			when {
 				anyOf {
 					changeRequest target: 'main'
@@ -122,7 +101,14 @@ pipeline {
 			}
 			steps {
 				container('oc') {
-					tagNewImage('int')
+					script {
+						sh '''#!/bin/bash
+							oc -n $OC_PROJECT patch "bc/${APP_NAME}-int" -p "{\\"spec\\":{\\"source\\":{\\"git\\":{\\"ref\\":\\"${GIT_SHORT_COMMIT}\\"}}}}"
+							oc -n $OC_PROJECT patch "bc/${APP_NAME}-int" -p "{\\"metadata\\":{\\"annotations\\":{\\"ref\\":\\"${BRANCH_NAME}\\"}}}"
+							oc -n $OC_PROJECT patch "bc/${APP_NAME}-int" -p "{\\"metadata\\":{\\"annotations\\":{\\"shortcommit\\":\\"${GIT_SHORT_COMMIT}\\"}}}"
+                        '''
+					}
+					startOpenShiftBuild('int', '${BRANCH_NAME}')
 				}
 			}
 			post {
@@ -140,13 +126,7 @@ pipeline {
 			}
 			steps {
 				container('oc') {
-					// tagNewImage('tst')
-					script {
-						sh """#!/bin/bash
-                            oc project $OC_PROJECT
-                            oc start-build --follow=true --wait=true client-tst
-                        """
-					}
+					startOpenShiftBuild('tst', '$GIT_SHORT_COMMIT')
 				}
 			}
 			post {
@@ -220,12 +200,7 @@ pipeline {
 			}
 			steps {
 				container('oc') {
-					script {
-						sh """#!/bin/bash
-                            oc project $OC_PROJECT
-                            oc start-build --follow=true --wait=true client-qas
-                        """
-					}
+					startOpenShiftBuild('qas', '$GIT_SHORT_COMMIT')
 				}
 			}
 			post {
@@ -234,13 +209,20 @@ pipeline {
 				}
 			}
 		}
-		stage('Deploy PRD') {
+		stage('Build and Deploy PRD') {
 			when {
 				buildingTag()
 			}
 			steps {
 				container('oc') {
-					tagNewImage('prd')
+					script {
+						sh '''#!/bin/bash
+							oc -n $OC_PROJECT patch "bc/${APP_NAME}-prd" -p "{\\"spec\\":{\\"source\\":{\\"git\\":{\\"ref\\":\\"${IMAGE_TAG}\\"}}}}"
+							oc -n $OC_PROJECT patch "bc/${APP_NAME}-prd" -p "{\\"metadata\\":{\\"annotations\\":{\\"ref\\":\\"${IMAGE_TAG}\\"}}}"
+							oc -n $OC_PROJECT patch "bc/${APP_NAME}-prd" -p "{\\"metadata\\":{\\"annotations\\":{\\"shortcommit\\":\\"${GIT_SHORT_COMMIT}\\"}}}"
+                        '''
+					}
+					startOpenShiftBuild('prd', '${IMAGE_TAG}')
 				}
 			}
 			post {
@@ -305,13 +287,15 @@ String getAllCommitsBetweenTags(String from, String to) {
 	return commit_messages
 }
 
-void tagNewImage(String environment) {
-	echo "Deploying to ${environment}"
-	sh """#!/bin/bash
+void startOpenShiftBuild(String environment, String dockerTag) {
+		sh """#!/bin/bash
 		oc project $OC_PROJECT
-		oc tag $APP_NAME:$GIT_SHORT_COMMIT $APP_NAME:${environment}
+		oc start-build --follow=true --wait=true $APP_NAME-${environment}
 		# Check the status of the rollout
-		oc rollout status deployment/$APP_NAME-${environment} --watch=true --timeout=10m
+		oc rollout status deployment/$APP_NAME-${environment} --watch=true --timeout=20m
+
+		# Tag with the revision for rollback purposes
+		oc tag $APP_NAME:${environment} $APP_NAME:${dockerTag}
 	"""
 }
 
