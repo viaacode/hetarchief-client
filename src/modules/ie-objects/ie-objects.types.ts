@@ -104,6 +104,7 @@ export interface IeObject {
 	carrierDate?: string;
 	newspaperPublisher?: string;
 	alternativeTitle?: string[];
+	digitizationDate?: string;
 	children?: number;
 
 	pageRepresentations?: IeObjectPageRepresentation[];

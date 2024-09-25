@@ -572,7 +572,7 @@ export const GET_METADATA_FIELDS = (
 		},
 		{
 			title: tText('modules/ie-objects/ie-objects___digitaliseringsdatum'),
-			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
+			data: mediaInfo.digitizationDate,
 		},
 		...getOcrMetadataFields(simplifiedAlto),
 		{
