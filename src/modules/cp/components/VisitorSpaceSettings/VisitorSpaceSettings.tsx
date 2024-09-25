@@ -25,6 +25,7 @@ import { type ValidationError } from 'yup';
 
 import { Permission } from '@account/const';
 import { VISITOR_SPACE_VALIDATION_SCHEMA } from '@cp/components/VisitorSpaceSettings/VisitorSpaceSettings.const';
+import { validateFile } from '@cp/components/VisitorSpaceSettings/VisitorSpaceSettings.utils';
 import CardImage from '@shared/components/CardImage/CardImage';
 import FileInput from '@shared/components/FileInput/FileInput';
 import Icon from '@shared/components/Icon/Icon';
@@ -187,6 +188,9 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 				await VISITOR_SPACE_VALIDATION_SCHEMA().validate(newFormValues, {
 					strict: true,
 				});
+
+				validateFile(newFormValues.file);
+
 				setFormErrors({});
 				return true;
 			} catch (err) {
@@ -609,9 +613,11 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 							)}
 							suffix={
 								<span className={styles['c-cp-settings__logo-and-color__hint']}>
-									{`(${tHtml(
+									(
+									{tHtml(
 										'modules/cp/components/visitor-space-image-form/visitor-space-image-form___max-500-kb'
-									)})`}
+									)}
+									)
 								</span>
 							}
 						>

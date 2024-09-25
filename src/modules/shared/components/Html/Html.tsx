@@ -17,7 +17,7 @@ const Html: FunctionComponent<HtmlProps> = ({
 	sanitizePreset = RICH_TEXT_SANITIZATION,
 	type = 'div',
 	className,
-}) => {
+}): ReactNode => {
 	const Type = type;
 
 	return (

@@ -10,12 +10,9 @@ import Html from '@shared/components/Html/Html';
  * @param params
  */
 export function tHtml(key: string, params?: TOptions): ReactNode | string {
-	const translatedValue: string = tText(key, {
-		...params,
-		defaultValue: (key.split('___')[1] || key).replace('-', ' ') + ' ***',
-	});
+	const translatedValue: string = tText(key, params);
 
-	return <Html content={translatedValue} />;
+	return <Html content={translatedValue} type="span" />;
 }
 
 /**

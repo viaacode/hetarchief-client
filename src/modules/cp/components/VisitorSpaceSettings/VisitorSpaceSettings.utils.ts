@@ -1,3 +1,7 @@
+import { ValidationError } from 'yup';
+
+import { tText } from '@shared/helpers/translate';
+
 export const checkFileSize = (file?: File): boolean => {
 	let valid = true;
 
@@ -21,3 +25,19 @@ export const checkFileType = (file?: File): boolean => {
 	}
 	return valid;
 };
+
+export function validateFile(file: File | null | undefined): void {
+	if (!file) {
+		return;
+	}
+	if (!checkFileSize(file)) {
+		throw new ValidationError(tText('Bestand is te groot (max 500kb)'), undefined, 'file');
+	}
+	if (!checkFileType(file)) {
+		throw new ValidationError(
+			tText('Bestandstype is niet toegestaan (jpg, png)'),
+			undefined,
+			'file'
+		);
+	}
+}
