@@ -166,7 +166,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 				</h2>
 			)}
 		>
-			<div className="u-px-16 u-px-32:md">
+			<div className="u-px-16 u-px-32-md">
 				{props.isOpen && (
 					<FormControl
 						className="u-mb-24"

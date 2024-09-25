@@ -7,158 +7,6 @@
 @use "variables" as *;
 @use "functions" as *;
 
-/**
- * Media queries
- */
-
-@mixin respond-at($_min) {
-	$min-bp: map.get($breakpoints, $_min);
-
-	@if not $min-bp {
-		/* stylelint-disable-next-line block-no-empty */
-		@if map-property-not-found($_min, $breakpoints) {
-		}
-	}
-
-	@media screen and (min-width: $min-bp) {
-		@content;
-	}
-}
-
-@mixin respond-to($_max) {
-	$max-bp: map.get($breakpoints, $_max);
-
-	@if not $max-bp {
-		/* stylelint-disable-next-line block-no-empty */
-		@if map-property-not-found($_max, $breakpoints) {
-		}
-	}
-
-	@media screen and (width <= calc(#{$max-bp} - 1px)) {
-		@content;
-	}
-}
-
-@mixin respond-between($_min, $_max) {
-	$min-bp: map.get($breakpoints, $_min);
-	$max-bp: map.get($breakpoints, $_max);
-
-	@if not $min-bp {
-		/* stylelint-disable-next-line block-no-empty */
-		@if map-property-not-found($_min, $breakpoints) {
-		}
-	}
-
-	@if not $max-bp {
-		/* stylelint-disable-next-line block-no-empty */
-		@if map-property-not-found($_max, $breakpoints) {
-		}
-	}
-
-	@if $min-bp >= $max-bp {
-		@error "Min width can not be higher than or equal to max width.";
-	}
-
-	@media screen and (min-width: $min-bp) and (width <= calc(#{$max-bp} - 1px)) {
-		@content;
-	}
-}
-
-/**
- * Generators
- */
-
-@mixin generate-properties($_properties, $_value) {
-	@if meta.type-of($_properties) == string {
-		#{$_properties}: $_value !important;
-	} @else {
-		@each $_prop in $_properties {
-			#{$_prop}: $_value !important;
-		}
-	}
-}
-
-/**
- * Utility class generator
- *
- * usage:
-	// Value list
-	$align: ('left', 'right', 'center');
-	@include generate-utils('text', 'text-align', $align);
-	// output: u-text-left, u-text-right, u-text-center
-
-	// Value map
-	$spacers: (
-		'8': $spacer-xs,
-		'16': $spacer-sm,
-	);
-	$mx-props: ('margin-left', 'margin-right');
-	@include generate-utils('mx', $mx-props, $spacers);
-	// output: u-mx-8, u-mx-16
-
-	// With responsive utils
-	// Important! add breakpoints from small to large for mobile-first approach
-	// The keys are the same as used for the respond- mixins
-	$align: ('left');
-	@include generate-utils('text', 'text-align', $align, ("sm", "xl"));
-	// output: u-text-left, u-text-left:sm, u-text-left:xl
- */
-
-@mixin generate-utils($_name, $_properties, $_values, $_bps: null) {
-	@each $_key, $_value in $_values {
-		$key: $_key;
-		$value: $_value;
-		$bps: $_bps;
-
-		// If $_values is a list and not a map the key is also the value
-		@if not $value {
-			$value: $_key;
-		}
-
-		.u-#{$_name}-#{$key} {
-			@include generate-properties($_properties, $value);
-		}
-
-		// A single item in a list returns string with type-of for some reason
-		// This way we support a single string
-		@if meta.type-of($_bps) == string {
-			$bps: ($_bps);
-		}
-
-		@if $bps and list.length($bps) > 0 {
-			@each $_bp-key in $_bps {
-				.u-#{$_name}-#{$key}\:#{$_bp-key} {
-					@include respond-at($_bp-key) {
-						@include generate-properties($_properties, $value);
-					}
-				}
-			}
-		}
-	}
-}
-
-/**
- * Others
- */
-
-@mixin aspect-ratio($width, $height) {
-	&::before {
-		content: "";
-		width: 1px;
-		margin-left: -1px;
-		float: left;
-		height: 0;
-		padding-top: $height / $width * 100%;
-	}
-
-	&::after {
-		/* to clear float */
-		content: "";
-		display: table;
-		clear: both;
-	}
-}
-
 @mixin text-ellipsis($block: false) {
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -438,7 +286,7 @@
 @mixin tabs-border-radius() {
 	border-radius: math.div(math.max($tab-line-size + ($tab-vertical-padding * 2), $tab-min-height), 2);
 
-	@include respond-at("md") {
+	@media (min-width: $breakpoint-md) {
 		border-radius: math.div(math.max($tab-line-size-md + ($tab-vertical-padding-md * 2), $tab-min-height-md), 2);
 	}
 }
@@ -463,7 +311,7 @@
 		color: $neutral;
 		margin-bottom: $spacer-1xl;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			font-size: $font-size-base;
 			line-height: $font-size-2xm;
 		}

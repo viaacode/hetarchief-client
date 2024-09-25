@@ -29,13 +29,13 @@ const WaitingPage: FC<WaitingPageProps> = ({ visitorSpace, backLink }) => {
 					<div className="l-container p-visit-requested__content">
 						<section className="p-visit-requested__grid">
 							<div className="p-visit-requested__top">
-								<h1 className="p-visit-requested__title u-mt-32:md">
+								<h1 className="p-visit-requested__title u-mt-32-md">
 									{tHtml(
 										'pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen'
 									)}
 								</h1>
 
-								<p className="p-visit-requested__instructions u-color-neutral u-mt-24 u-mt-32:md u-mb-56:md">
+								<p className="p-visit-requested__instructions u-color-neutral u-mt-24 u-mt-32-md u-mb-56-md">
 									{tHtml(
 										'pages/slug/toegang-aangevraagd/index___je-kan-de-status-van-je-aanvraag-volgen-op-de-bezoekersruimtes-pagina-je-ontvangt-ook-meteen-een-e-mailmelding-als-je-aanvraag-behandeld-werd'
 									)}
@@ -51,7 +51,7 @@ const WaitingPage: FC<WaitingPageProps> = ({ visitorSpace, backLink }) => {
 								/>
 							</div>
 
-							<div className="p-visit-requested__bottom u-pt-56:md">
+							<div className="p-visit-requested__bottom u-pt-56-md">
 								{visitorSpace.info && (
 									<p className="p-visit-requested__info">
 										<b>{visitorSpace.info}</b>

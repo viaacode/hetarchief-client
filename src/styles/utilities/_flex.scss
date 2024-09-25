@@ -36,30 +36,56 @@
  * Direction
  */
 
-$direction: (
-	"col": column,
-	"row": row,
-);
+.u-flex-col {
+	flex-direction: column;
+}
 
-@include generate-utils("flex", "flex-direction", $direction, ("md"));
+.u-flex-row {
+	flex-direction: row;
+}
+
+@media (min-width: $breakpoint-md) {
+	.u-flex-col-md {
+		flex-direction: column;
+	}
+
+	.u-flex-row-md {
+		flex-direction: row;
+	}
+}
 
 /**
  * Align
  */
 
-$align: (
-	"center": center,
-);
+.u-align-center {
+	align-items: center;
+}
 
-@include generate-utils("align", "align-items", $align, ("md"));
+@media (min-width: $breakpoint-md) {
+	.u-align-center-md {
+		align-items: center;
+	}
+}
 
 /**
  * Justify
  */
 
-$justify: (
-	"center": center,
-	"between": space-between,
-);
+.u-justify-center {
+	justify-content: center;
+}
 
-@include generate-utils("justify", "justify-content", $justify, ("md"));
+.u-justify-between {
+	justify-content: space-between;
+}
+
+@media (min-width: $breakpoint-md) {
+	.u-justify-center-md {
+		justify-content: center;
+	}
+
+	.u-justify-between-md {
+		justify-content: space-between;
+	}
+}

@@ -37,7 +37,7 @@
 	}
 
 	// Desktop
-	@include respond-at(md) {
+	@media (min-width: $breakpoint-md) {
 		&__wrapper {
 			grid-template-columns: 400fr 270fr 310fr 400fr 310fr;
 			grid-template-rows: 1fr;
@@ -92,7 +92,7 @@
 	}
 
 	// Mobile
-	@include respond-to(md) {
+	@media (max-width: $breakpoint-md) {
 		&__wrapper {
 			grid-template-columns: 2fr 1fr;
 			grid-template-rows: 1fr 1fr 0.6fr 1fr;

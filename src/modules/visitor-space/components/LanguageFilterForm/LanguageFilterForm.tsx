@@ -104,7 +104,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 
 	return (
 		<>
-			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
+			<div className={clsx(className, 'u-px-20 u-px-32-md')}>
 				<SearchBar
 					id={`${visitorSpaceLabelKeys.filters.title}--${SearchFilterId.Language}`}
 					value={search}

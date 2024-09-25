@@ -60,7 +60,7 @@ $component: "c-pagination-bar";
 	}
 
 	&--back-to-top {
-		@include respond-to("md") {
+		@media (max-width: $breakpoint-md) {
 			@include c-pagination-bar-two-item-justify;
 
 			.#{$component}__back-to-top {
@@ -68,13 +68,13 @@ $component: "c-pagination-bar";
 			}
 		}
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			@include c-pagination-bar-three-item-justify;
 		}
 
 		.#{$component} {
 			&__back-to-top-wrapper {
-				@include respond-at("md") {
+				@media (min-width: $breakpoint-md) {
 					grid-column: 3 / 4;
 					border-bottom: none;
 				}

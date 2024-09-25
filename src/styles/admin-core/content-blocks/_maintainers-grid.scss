@@ -32,7 +32,7 @@ $component: "c-block-maintainers-grid";
 		}
 	}
 
-	@include respond-to("md") {
+	@media (max-width: $breakpoint-md) {
 		&__header {
 			display: block;
 

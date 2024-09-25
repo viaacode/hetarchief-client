@@ -6,7 +6,11 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 import { Navigation } from './Navigation';
-import { MOCK_HAMBURGER_PROPS, MOCK_ITEMS_LEFT, MOCK_ITEMS_RIGHT } from './__mocks__/navigation';
+import {
+	MOCK_HAMBURGER_PROPS,
+	MOCK_ITEMS_LEFT,
+	MOCK_ITEMS_RIGHT,
+} from './__mocks__/navigation.mocks';
 
 export default {
 	title: 'Components/Navigation',

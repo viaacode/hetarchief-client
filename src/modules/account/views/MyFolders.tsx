@@ -488,7 +488,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 					<SidebarLayout
 						color="platinum"
 						responsiveTo={Breakpoints.md}
-						sidebarTitle={tHtml(
+						sidebarTitle={tText(
 							'pages/account/mijn-mappen/folder-slug/index___mijn-mappen'
 						)}
 						sidebarLinks={[
@@ -521,7 +521,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 									</p>
 								</div>
 
-								<div className="l-container u-mb-24:md u-mb-32">
+								<div className="l-container u-mb-24-md u-mb-32">
 									<FormControl
 										className="c-form-control--label-hidden"
 										id={`${labelKeys.search}--${activeFolder.id}`}
@@ -550,7 +550,9 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 											</div>
 										)}
 										<SearchBar
-											aria-label={tText('zoekveld aria label')}
+											aria-label={tText(
+												'modules/account/views/my-folders___zoekveld-aria-label'
+											)}
 											id={`${labelKeys.search}--${activeFolder.id}`}
 											value={search}
 											className="p-account-my-folders__search"

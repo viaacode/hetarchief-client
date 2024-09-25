@@ -23,7 +23,7 @@ $component: "c-tabs";
 		.#{$component} {
 			&__item {
 				&:not(:last-child) {
-					@include respond-at("md") {
+					@media (min-width: $breakpoint-md) {
 						margin-right: $spacer-md;
 					}
 				}
@@ -40,7 +40,7 @@ $component: "c-tabs";
 
 		padding: 0 $tabs-rounded-size;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			padding: 0 $tabs-rounded-size-md;
 		}
 
@@ -48,7 +48,7 @@ $component: "c-tabs";
 			&--medium {
 				padding: 0 math.div($tab-min-height-medium, 2);
 
-				@include respond-to("md") {
+				@media (max-width: $breakpoint-md) {
 					border-radius: math.div($tab-min-height-medium, 2);
 				}
 			}

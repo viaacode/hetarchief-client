@@ -66,7 +66,7 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 		<Modal {...props} heading={renderHeading()} footer={renderFooter()}>
 			<div className={clsx(styles['c-auth-modal__content'], 'u-text-center', 'u-pt-24')}>
 				<Html
-					className="u-mb-24 u-mb-40:md u-font-size-14 u-color-neutral"
+					className="u-mb-24 u-mb-40-md u-font-size-14 u-color-neutral"
 					content={tText(
 						'modules/auth/components/auth-modal/auth-modal___klaar-om-een-bezoek-te-plannen-aan-een-van-de-bezoekersruimtes-log-dan-meteen-in-met-jouw-het-archief-account'
 					)}

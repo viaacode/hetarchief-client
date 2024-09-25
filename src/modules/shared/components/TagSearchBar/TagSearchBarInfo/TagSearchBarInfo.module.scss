@@ -12,7 +12,7 @@
 	margin-left: 0;
 	color: $neutral;
 
-	@include respond-at("md") {
+	@media (min-width: $breakpoint-md) {
 		position: relative;
 		right: unset;
 		color: $white;
@@ -54,7 +54,7 @@
 		z-index: get-z-layer("foreground");
 		transition: opacity $animate-default;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			width: 38.4rem;
 		}
 	}

@@ -10,7 +10,7 @@ $component: "c-visitor-space-card-list";
 	padding: 0;
 	row-gap: $spacer-md;
 
-	@include respond-at("md") {
+	@media (min-width: $breakpoint-md) {
 		column-gap: $spacer-lg;
 		grid-template-columns: repeat(3, 1fr);
 		grid-template-rows: max-content;

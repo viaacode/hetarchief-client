@@ -20,7 +20,7 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 			:global(.c-content-input) {
 				padding-top: $spacer-sm;
 
-				@include respond-at("md") {
+				@media (min-width: $breakpoint-md) {
 					padding-top: $spacer-md;
 				}
 			}
@@ -28,7 +28,7 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 			:global(.c-form-control__errors) {
 				padding-bottom: $spacer-sm;
 
-				@include respond-at("md") {
+				@media (min-width: $breakpoint-md) {
 					padding-bottom: $spacer-md;
 				}
 			}
@@ -67,7 +67,7 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 				flex-shrink: 1;
 				padding: $spacer-sm;
 
-				@include respond-at("md") {
+				@media (min-width: $breakpoint-md) {
 					padding-top: $spacer-md;
 					padding-bottom: $spacer-md;
 				}

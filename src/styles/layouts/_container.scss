@@ -9,14 +9,14 @@ $l-container-padding-xs: 2rem;
 	padding: 0 $l-container-padding;
 	margin: 0 auto;
 
-	@include respond-at(xs) {
+	@media (min-width: $breakpoint-xs) {
 		max-width: $max-page-width;
 		padding: 0 $l-container-padding-xs;
 	}
 
 	&--edgeless {
 		&-to-lg {
-			@include respond-to("lg") {
+			@media (max-width: $breakpoint-lg) {
 				padding-left: 0;
 				padding-right: 0;
 			}

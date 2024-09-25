@@ -60,11 +60,11 @@
 		line-height: $line-height-lg;
 		padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-sm;
 
-		@include respond-to(md) {
+		@media (max-width: $breakpoint-md) {
 			text-align: center;
 		}
 
-		@include respond-at(md) {
+		@media (min-width: $breakpoint-md) {
 			font-size: $font-size-lg;
 			padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-lg;
 

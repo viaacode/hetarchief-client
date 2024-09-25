@@ -60,7 +60,7 @@
 			margin-right: 0;
 			overflow: hidden;
 
-			@include respond-at("md") {
+			@media (min-width: $breakpoint-md) {
 				margin-left: $modal-title-margin-left-md;
 			}
 		}
@@ -76,7 +76,7 @@
 		width: $modal-close-size;
 		max-width: $modal-close-size;
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			margin: $modal-close-margin-md;
 		}
 
@@ -86,7 +86,7 @@
 			margin-left: 0;
 			max-width: $modal-title-margin-left;
 
-			@include respond-at("md") {
+			@media (min-width: $breakpoint-md) {
 				max-width: $modal-title-margin-left-md;
 			}
 		}

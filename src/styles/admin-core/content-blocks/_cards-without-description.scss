@@ -14,7 +14,7 @@ $img-size-mobile: 10.2rem;
 		grid-gap: $spacer-lg;
 		grid-template-columns: 1fr 1fr 1fr;
 
-		@include respond-to("md") {
+		@media (max-width: $breakpoint-md) {
 			grid-gap: $spacer-sm;
 		}
 	}
@@ -38,7 +38,7 @@ $img-size-mobile: 10.2rem;
 		display: grid;
 		grid-template-columns: repeat(2, 7.6rem) 1fr;
 
-		@include respond-to("sm") {
+		@media (max-width: $breakpoint-sm) {
 			height: $img-size-mobile;
 		}
 	}
@@ -56,7 +56,7 @@ $img-size-mobile: 10.2rem;
 		font-weight: $font-weight-bold;
 		font-size: 2rem;
 
-		@include respond-to("sm") {
+		@media (max-width: $breakpoint-sm) {
 			grid-column: 1/4;
 			margin-left: 5rem;
 		}
@@ -79,7 +79,7 @@ $img-size-mobile: 10.2rem;
 			border-radius: $img-size;
 		}
 
-		@include respond-to("sm") {
+		@media (max-width: $breakpoint-sm) {
 			width: $img-size-mobile;
 			height: $img-size-mobile;
 		}

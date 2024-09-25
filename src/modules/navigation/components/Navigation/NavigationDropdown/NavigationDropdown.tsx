@@ -35,7 +35,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 							key={`nav-dropdown-item-${item.id}`}
 							className={clsx({
 								[styles['c-navigation__dropdown-item--divider']]: item.isDivider,
-								[styles['c-navigation__dropdown-item--divider:md']]:
+								[styles['c-navigation__dropdown-item--divider-md']]:
 									item.isDivider === 'md',
 								[styles['c-navigation__item--active']]: item.activeMobile,
 							})}

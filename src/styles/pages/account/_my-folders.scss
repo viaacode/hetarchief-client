@@ -4,19 +4,19 @@ $component: "p-account-my-folders";
 
 .#{$component} {
 	&__export--label {
-		@include respond-to("xl") {
+		@media (max-width: $breakpoint-xl) {
 			display: none;
 		}
 	}
 
 	&__export--icon {
-		@include respond-at("xl") {
+		@media (min-width: $breakpoint-xl) {
 			display: none;
 		}
 	}
 
 	&__toggle {
-		@include respond-to("md") {
+		@media (max-width: $breakpoint-md) {
 			display: none;
 		}
 	}
@@ -93,7 +93,7 @@ $component: "p-account-my-folders";
 			font-size: x-large;
 		}
 
-		@include respond-to("md") {
+		@media (max-width: $breakpoint-md) {
 			background-color: $platinum;
 			color: $black;
 			font-weight: $font-weight-normal;
@@ -107,7 +107,7 @@ $component: "p-account-my-folders";
 		}
 	}
 
-	@include respond-to("lg") {
+	@media (max-width: $breakpoint-lg) {
 		// Hide top-level sidebar a bit earlier
 		// > :global(.l-sidebar__navigation) {
 		> div:first-child {

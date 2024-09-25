@@ -156,7 +156,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 					</label>
 					<div className={styles['c-share-folder-blade__content-value']}>
 						<FormControl
-							className="u-mb-8 u-mb-24:md"
+							className="u-mb-8 u-mb-24-md"
 							id={labelKeys.email}
 							errors={[
 								<RedFormWarning

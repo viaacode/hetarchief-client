@@ -119,7 +119,9 @@ const TagSearchBar = <IsMulti extends boolean>({
 	return (
 		<div className="u-flex u-align-center u-justify-between">
 			<CreatableSelect
-				aria-label={tText('zoekbalk aria label')}
+				aria-label={tText(
+					'modules/shared/components/tag-search-bar/tag-search-bar___zoekbalk-aria-label'
+				)}
 				classNamePrefix={'c-tags-input'}
 				{...tagsInputProps}
 				className={rootCls}

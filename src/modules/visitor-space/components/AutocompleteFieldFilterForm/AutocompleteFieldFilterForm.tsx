@@ -65,7 +65,7 @@ export const AutocompleteFieldFilterForm: FC<{
 				className={clsx(
 					className,
 					styles['c-creator-filter-form__input'],
-					'u-px-20 u-px-32:md'
+					'u-px-20 u-px-32-md'
 				)}
 			>
 				<FormControl

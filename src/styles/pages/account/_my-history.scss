@@ -4,7 +4,7 @@ $component: "p-account-my-history";
 
 .#{$component} {
 	tr {
-		@include respond-to("lg") {
+		@media (max-width: $breakpoint-lg) {
 			td,
 			th {
 				&:nth-child(2),
@@ -15,7 +15,7 @@ $component: "p-account-my-history";
 			}
 		}
 
-		@include respond-at("lg") {
+		@media (min-width: $breakpoint-lg) {
 			td,
 			th {
 				&:nth-child(4) {

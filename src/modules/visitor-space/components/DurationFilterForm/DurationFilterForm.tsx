@@ -103,7 +103,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 							// eslint-disable-next-line @typescript-eslint/no-unused-vars
 							const { ref, ...rest } = field;
 							return (
-								<div className="u-px-20 u-px-32:md">
+								<div className="u-px-20 u-px-32-md">
 									<ReactSelect
 										{...rest}
 										isDisabled={disabled}
@@ -151,7 +151,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 							const { ref, ...refless } = field;
 
 							return (
-								<div className="u-py-32 u-px-20 u-px-32:md u-bg-platinum">
+								<div className="u-py-32 u-px-20 u-px-32-md u-bg-platinum">
 									{showRange ? (
 										<DurationRangeInput
 											{...refless}

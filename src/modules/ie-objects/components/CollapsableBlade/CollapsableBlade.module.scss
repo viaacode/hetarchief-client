@@ -15,7 +15,7 @@ $max-drawer-height: min($max-drawer-height-desired, $max-drawer-height-available
 	transition: max-height $animate-default;
 	height: max-content;
 
-	@include respond-at("md") {
+	@media (min-width: $breakpoint-md) {
 		max-height: $expand-button-height-desktop;
 	}
 
@@ -50,7 +50,7 @@ $max-drawer-height: min($max-drawer-height-desired, $max-drawer-height-available
 			margin-right: 1rem;
 		}
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			padding: $spacer-lg;
 		}
 	}
@@ -84,7 +84,7 @@ $max-drawer-height: min($max-drawer-height-desired, $max-drawer-height-available
 		height: max-content;
 		max-height: calc($max-drawer-height - $expand-button-height-mobile);
 
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			max-height: calc($max-drawer-height - $expand-button-height-desktop);
 		}
 	}

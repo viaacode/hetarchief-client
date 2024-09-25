@@ -33,7 +33,7 @@ export const CopyrightConfirmationModal: FC<CopyrightConfirmationModalProps> = (
 					'u-px-24'
 				)}
 			>
-				<div className="u-mb-24 u-mb-40:md u-font-size-14 u-color-neutral">
+				<div className="u-mb-24 u-mb-40-md u-font-size-14 u-color-neutral">
 					{tHtml(
 						'modules/ie-objects/components/copyright-confirmation-modal/copyright-confirmation-modal___opgelet-je-gaat-deze-krant-downloaden-ga-zelf-grondig-na-of-er-nog-auteursrechten-rusten-op-dit-object-als-gebruiker-ben-je-zelf-verantwoordelijk'
 					)}

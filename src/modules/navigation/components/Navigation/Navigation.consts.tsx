@@ -37,7 +37,7 @@ const dropdownCls = (...classNames: string[]) => {
 
 const linkClasses = linkCls(
 	'u-color-black',
-	'u-color-white:xxl',
+	'u-color-white-xxl',
 	'u-whitespace-nowrap',
 	styles['c-navigation__link--dropdown']
 );
@@ -163,7 +163,7 @@ const getVisitorSpacesDropdown = (
 						),
 						visitPath,
 						{
-							className: dropdownCls('u-display-none', 'u-display-block:xxl'),
+							className: dropdownCls('u-display-none', 'u-display-block-xxl'),
 						}
 					),
 					id: 'all-visitor-spaces',
@@ -187,7 +187,7 @@ const getVisitorSpacesDropdown = (
 												'u-font-size-24',
 												'u-text-left',
 												'u-visibility-hidden',
-												'u-visibility-visible:xxl',
+												'u-visibility-visible-xxl',
 												styles['c-navigation__dropdown-icon--end']
 											)}
 											name={IconNamesLight.AngleRight}

@@ -4,14 +4,14 @@ $component: "c-approve-request-blade";
 
 .#{$component} {
 	&__date-time {
-		@include respond-at("md") {
+		@media (min-width: $breakpoint-md) {
 			:global(.c-datepicker:not(.c-datepicker--time)) :global(.c-input__field) {
 				border-right-width: 0;
 			}
 		}
 
 		:global(.c-form-control__input) {
-			@include respond-at("lg") {
+			@media (min-width: $breakpoint-lg) {
 				display: flex;
 				flex-flow: row nowrap;
 			}
@@ -19,11 +19,11 @@ $component: "c-approve-request-blade";
 
 		:global(.react-datepicker-wrapper.c-datepicker) {
 			&:not(:global(.react-datepicker-wrapper.c-datepicker--time)) {
-				@include respond-to("lg") {
+				@media (max-width: $breakpoint-lg) {
 					margin-bottom: $spacer-sm;
 				}
 
-				@include respond-at("lg") {
+				@media (min-width: $breakpoint-lg) {
 					margin-right: $spacer-md;
 					flex-grow: 1;
 				}
@@ -31,7 +31,7 @@ $component: "c-approve-request-blade";
 		}
 
 		:global(.react-datepicker-wrapper.c-datepicker--time) {
-			@include respond-at("lg") {
+			@media (min-width: $breakpoint-lg) {
 				flex: 0 0 14rem;
 			}
 		}

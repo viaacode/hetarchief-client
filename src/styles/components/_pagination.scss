@@ -70,7 +70,7 @@
 		font-size: $font-size-md !important; // overwrite default icon style
 	}
 
-	@include respond-to(sm) {
+	@media (max-width: $breakpoint-sm) {
 		&__pages,
 		&__btn:first-of-type span:nth-child(2) {
 			display: none;

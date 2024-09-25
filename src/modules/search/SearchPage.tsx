@@ -773,14 +773,19 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	}, [isKioskUser, isGlobalArchive, locale, searchResults?.items, searchResults?.searchTerms]);
 
 	const openAndScrollToAdvancedFilters = () => {
+		setFilterMenuOpen(true);
 		setQuery({ filter: SearchFilterId.Advanced });
-		document
-			.getElementById(`c-filter-menu__option__${SearchFilterId.Advanced}`)
-			?.scrollIntoView({
-				behavior: 'smooth',
-				block: 'center',
-				inline: 'center',
-			});
+
+		// Wait for filter menu to open before scrolling to the advanced filters
+		setTimeout(() => {
+			document
+				.getElementById(`c-filter-menu__option__${SearchFilterId.Advanced}`)
+				?.scrollIntoView({
+					behavior: 'smooth',
+					block: 'center',
+					inline: 'center',
+				});
+		}, 0);
 	};
 
 	/**
@@ -811,15 +816,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const renderBreadcrumbs = (): ReactNode => {
 		const staticBreadcrumbs: Breadcrumb[] = [
 			{
-				label: `${tHtml(
-					'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs-home'
-				)}`,
+				label: tText('pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs-home'),
 				to: ROUTES_BY_LOCALE[locale].home,
 			},
 			{
-				label: `${tHtml(
-					'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs-search'
-				)}`,
+				label: tText('pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs-search'),
 				to: ROUTES_BY_LOCALE[locale].search,
 			},
 		];
@@ -845,7 +846,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const renderFilterMenu = () => {
 		const filterMenuCls = clsx('p-visitor-space__filter-menu', {
-			'u-mr-32:md': viewMode === 'list' && isLoadedWithResults,
+			'u-mr-32-md': viewMode === 'list' && isLoadedWithResults,
 		});
 
 		return (

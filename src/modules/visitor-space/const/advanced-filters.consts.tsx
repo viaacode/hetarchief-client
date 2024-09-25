@@ -52,6 +52,7 @@ export type AdvancedFiltersConfig = {
 
 export const ADVANCED_FILTERS: FilterProperty[] = [
 	// MetadataProp.Maintainers, // These are handled separately in VisitorSpaceFilterId
+	FilterProperty.EVERYTHING,
 	FilterProperty.DESCRIPTION,
 	FilterProperty.CAST,
 	FilterProperty.CREATED_AT,
@@ -299,6 +300,13 @@ export const FILTERS_OPTIONS_CONFIG = (): AdvancedFiltersConfig => {
 	const operatorLabels = GET_OPERATOR_LABELS();
 
 	return {
+		[FilterProperty.EVERYTHING]: {
+			...CONTAINS(operatorLabels, IeObjectsSearchFilterField.ADVANCED_QUERY),
+			...CONTAINS_NOT(operatorLabels, IeObjectsSearchFilterField.ADVANCED_QUERY),
+			...EQUALS(operatorLabels, IeObjectsSearchFilterField.ADVANCED_QUERY),
+			...EQUALS_NOT(operatorLabels, IeObjectsSearchFilterField.ADVANCED_QUERY),
+		},
+
 		[FilterProperty.RELEASE_DATE]: {
 			...DATE_GREATER_THAN_EQUALS(operatorLabels, IeObjectsSearchFilterField.RELEASE_DATE),
 			...DATE_LESS_THAN_OR_EQUALS(operatorLabels, IeObjectsSearchFilterField.RELEASE_DATE),

@@ -28,7 +28,7 @@
 	.o-container {
 		background-color: $white;
 
-		@include respond-at("lg") {
+		@media (min-width: $breakpoint-lg) {
 			box-shadow: $shadow-24-black-08;
 		}
 
