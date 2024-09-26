@@ -1,5 +1,5 @@
 import { TagList, type TagOption } from '@meemoo/react-components';
-import { capitalize, isArray, isString, lowerCase } from 'lodash-es';
+import { capitalize, isArray, isEmpty, isString, lowerCase } from 'lodash-es';
 import { type NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { type ReactNode } from 'react';
@@ -7,7 +7,6 @@ import { type ReactNode } from 'react';
 import { type MetadataItem } from '@ie-objects/components/Metadata';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { tText } from '@shared/helpers/translate';
 import { type Locale } from '@shared/utils/i18n';
 import { SearchFilterId } from '@visitor-space/types';
 
@@ -45,9 +44,21 @@ export const renderKeywordsAsTags = (
 		/>
 	) : null;
 
-export const mapObjectToMetadata = (data: Record<string, string | string[]>): MetadataItem[] => {
-	if (!data) {
+export const mapObjectOrArrayToMetadata = (
+	data: Record<string, string | string[]> | string[],
+	arrayLabel: string
+): MetadataItem[] => {
+	if (!data || isEmpty(data)) {
 		return [];
+	}
+
+	if (isArray(data)) {
+		return [
+			{
+				title: arrayLabel,
+				data: mapArrayToMetadataData(data),
+			},
+		];
 	}
 
 	return Object.keys(data).map((key): MetadataItem => {
@@ -72,24 +83,19 @@ export const mapObjectToMetadata = (data: Record<string, string | string[]>): Me
 	});
 };
 
-export const mapObjectsToMetadata = (data: Record<string, string>[]): MetadataItem[] => {
-	if (!data) {
+export const mapObjectsToMetadata = (
+	datas: (Record<string, string> | string[])[],
+	arrayLabel: string
+): MetadataItem[] => {
+	if (!datas) {
 		return [];
 	}
 
-	return data.flatMap(mapObjectToMetadata);
+	return datas.flatMap((data) => mapObjectOrArrayToMetadata(data, arrayLabel));
 };
 
 export const mapArrayToMetadataData = (data: string[] | undefined): string | null => {
 	if (!data || !data.length) return null;
 
 	return data.join(', ');
-};
-
-export const mapBooleanToMetadataData = (data: boolean | undefined): string | null => {
-	if (data === undefined || data === null) return null;
-
-	return data
-		? tText('modules/ie-objects/utils/map-advanced-filters/map-metadata___ja')
-		: tText('modules/ie-objects/utils/map-advanced-filters/map-metadata___nee');
 };

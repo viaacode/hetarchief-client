@@ -4,19 +4,15 @@ import { type FC } from 'react';
 import styles from './Metadata.module.scss';
 import { type MetadataListProps } from './Metadata.types';
 
-const Metadata: FC<MetadataListProps> = ({
-	className,
-	children,
-	disableContainerQuery = false,
-}) => {
+const Metadata: FC<MetadataListProps> = ({ className, children, allowTwoColumns = true }) => {
 	return (
 		<div
 			className={clsx(
 				className,
 				'p-object-detail__metadata-component',
-				styles['c-advanced-filters'],
+				styles['c-metadata'],
 				{
-					[styles['c-advanced-filters--container-query']]: !disableContainerQuery,
+					[styles['c-metadata--container-query']]: allowTwoColumns,
 				}
 			)}
 		>

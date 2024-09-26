@@ -1837,7 +1837,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					)}
 				</div>
 
-				<MetadataList disableContainerQuery={false}>
+				<MetadataList allowTwoColumns={true}>
 					<Metadata
 						title={renderMaintainerMetaTitle(mediaInfo)}
 						key={`metadata-maintainer`}
@@ -1894,7 +1894,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					)}
 				</MetadataList>
 
-				<MetadataList disableContainerQuery={true}>
+				<MetadataList allowTwoColumns={false}>
 					{isNewspaper && !!currentPage?.mentions?.length && (
 						<Metadata
 							title={tText('modules/ie-objects/object-detail-page___namenlijst')}

@@ -21,8 +21,8 @@ import {
 } from '@ie-objects/ie-objects.types';
 import {
 	mapArrayToMetadataData,
+	mapObjectOrArrayToMetadata,
 	mapObjectsToMetadata,
-	mapObjectToMetadata,
 } from '@ie-objects/utils/map-metadata';
 import type { SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
 import { Icon } from '@shared/components/Icon';
@@ -79,13 +79,13 @@ export const MIN_LENGTH_SCHEMA_IDENTIFIER_V2 = 36;
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
 	{
 		label: tText(
-			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-advanced-filters-als-XML'
+			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-XML'
 		),
 		id: MetadataExportFormats.xml,
 	},
 	{
 		label: tText(
-			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-advanced-filters-als-CSV'
+			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-CSV'
 		),
 		id: MetadataExportFormats.csv,
 	},
@@ -267,16 +267,10 @@ export const MEDIA_ACTIONS = ({
 			...((canExport
 				? [
 						{
-							label: tText(
-								'modules/ie-objects/const/index___exporteer-advanced-filters'
-							),
+							label: tText('modules/ie-objects/const/index___exporteer-metadata'),
 							id: MediaActions.Export,
-							ariaLabel: tText(
-								'modules/ie-objects/const/index___exporteer-advanced-filters'
-							),
-							tooltip: tText(
-								'modules/ie-objects/const/index___exporteer-advanced-filters'
-							),
+							ariaLabel: tText('modules/ie-objects/const/index___exporteer-metadata'),
+							tooltip: tText('modules/ie-objects/const/index___exporteer-metadata'),
 						},
 				  ]
 				: []) as ActionItem[]),
@@ -572,15 +566,21 @@ export const GET_METADATA_FIELDS = (
 		},
 		{
 			title: tText('modules/ie-objects/ie-objects___digitaliseringsdatum'),
-			data: '', // TODO https://meemoo.atlassian.net/browse/ARC-2163
+			data: mediaInfo.digitizationDate,
 		},
 		...getOcrMetadataFields(simplifiedAlto),
 		{
 			title: tText('modules/ie-objects/ie-objects___teksttype'),
 			data: mediaInfo.bibframeProductionMethod,
 		},
-		...mapObjectToMetadata(mediaInfo.creator),
-		...mapObjectToMetadata(mediaInfo.publisher),
+		...mapObjectOrArrayToMetadata(
+			mediaInfo.creator,
+			tText('modules/ie-objects/ie-objects___maker')
+		),
+		...mapObjectOrArrayToMetadata(
+			mediaInfo.publisher,
+			tText('modules/ie-objects/ie-objects___uitgever')
+		),
 		{
 			title: tText('modules/ie-objects/ie-objects___datum-toegevoegd-aan-platform'),
 			data: renderDate(activeFile?.createdAt),
@@ -596,7 +596,8 @@ export const GET_METADATA_FIELDS = (
 			mediaInfo.premisIdentifier?.filter(
 				(premisEntry) =>
 					!['abraham_id', 'abraham_uri'].includes(Object.keys(premisEntry)[0])
-			)
+			),
+			tText('modules/ie-objects/ie-objects___premis-identifier')
 		),
 		{
 			title: tText('modules/ie-objects/const/index___creatiedatum'),

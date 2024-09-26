@@ -11,7 +11,7 @@
 		/* stylelint-disable-next-line scss/at-rule-no-unknown */
 		@container (min-width: 75rem) {
 			.c-metadata__list {
-				columns: 2;
+				column-count: 2;
 			}
 		}
 	}

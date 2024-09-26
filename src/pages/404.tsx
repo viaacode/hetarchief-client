@@ -5,14 +5,12 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { tText } from '@shared/helpers/translate';
-import useHideNavigationHeaderRight from '@shared/hooks/use-hide-navigation-header-right/use-hide-navigation-header-right';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
 import useHideFooter from '../modules/shared/hooks/use-hide-footer/use-hide-footer';
 
 const NotFound: NextPage<DefaultSeoInfo> = ({ url }) => {
 	useHideFooter();
-	useHideNavigationHeaderRight();
 
 	return (
 		<>

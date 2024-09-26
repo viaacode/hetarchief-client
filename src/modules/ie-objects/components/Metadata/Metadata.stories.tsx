@@ -24,7 +24,7 @@ const Template: ComponentStory<typeof MetadataList> = (args) => (
 );
 
 export const Default = Template.bind({});
-Default.args = { disableContainerQuery: true };
+Default.args = { allowTwoColumns: true };
 
 export const Wide = Template.bind({});
-Wide.args = { disableContainerQuery: false };
+Wide.args = { allowTwoColumns: false };

@@ -217,10 +217,10 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	// Download advanced-filters
 	const [download] = await Promise.all([
 		page.waitForEvent('download'),
-		page.locator('[aria-label="Exporteer advanced-filters"]').click(),
+		page.locator('[aria-label="Exporteer metadata"]').click(),
 		page
 			.locator('.p-object-detail__wrapper')
-			.locator('button:has-text("Exporteer advanced-filters als CSV")')
+			.locator('button:has-text("Exporteer metadata als CSV")')
 			.click(),
 	]);
 	const path = await download.path();
