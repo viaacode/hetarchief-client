@@ -1036,7 +1036,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 								<FormControl
 									className="c-form-control--label-hidden u-mb-24"
 									id={`react-select-${labelKeys.search}-input`}
-									label={tHtml(
+									label={tText(
 										'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
 									)}
 								>
