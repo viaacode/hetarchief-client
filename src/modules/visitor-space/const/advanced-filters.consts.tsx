@@ -20,6 +20,7 @@ import { LanguageSelect } from '@visitor-space/components/LanguageSelect/Languag
 import { MediumSelect } from '@visitor-space/components/MediumSelect/MediumSelect';
 import { getFilterLabel } from '@visitor-space/utils/advanced-filters';
 
+import DurationInput from '../components/DurationInput/DurationInput';
 import { FilterProperty, Operator } from '../types';
 
 export type FilterInputComponent =
@@ -198,6 +199,42 @@ const DATE_EQUALS = (
 	};
 };
 
+const DURATION_GREATER_THAN_EQUALS = (
+	operatorLabels: Record<string, string>,
+	field: IeObjectsSearchFilterField
+): OperatorAndFilterConfig => {
+	return {
+		[Operator.GREATER_THAN_OR_EQUAL]: {
+			label: operatorLabels.longer,
+			inputComponent: DurationInput,
+			filters: [
+				{
+					field,
+					operator: IeObjectsSearchOperator.GTE,
+				},
+			],
+		},
+	};
+};
+
+const DURATION_LESS_THAN_OR_EQUALS = (
+	operatorLabels: Record<string, string>,
+	field: IeObjectsSearchFilterField
+): OperatorAndFilterConfig => {
+	return {
+		[Operator.LESS_THAN_OR_EQUAL]: {
+			label: operatorLabels.shorter,
+			inputComponent: DurationInput,
+			filters: [
+				{
+					field,
+					operator: IeObjectsSearchOperator.LTE,
+				},
+			],
+		},
+	};
+};
+
 const CONTAINS = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField,
@@ -322,10 +359,8 @@ export const FILTERS_OPTIONS_CONFIG = (): AdvancedFiltersConfig => {
 		},
 
 		[FilterProperty.DURATION]: {
-			...DATE_GREATER_THAN_EQUALS(operatorLabels, IeObjectsSearchFilterField.DURATION),
-			...DATE_LESS_THAN_OR_EQUALS(operatorLabels, IeObjectsSearchFilterField.DURATION),
-			...DATE_BETWEEN(operatorLabels, IeObjectsSearchFilterField.DURATION),
-			...DATE_EQUALS(operatorLabels, IeObjectsSearchFilterField.DURATION),
+			...DURATION_GREATER_THAN_EQUALS(operatorLabels, IeObjectsSearchFilterField.DURATION),
+			...DURATION_LESS_THAN_OR_EQUALS(operatorLabels, IeObjectsSearchFilterField.DURATION),
 		},
 
 		[FilterProperty.PUBLISHED_AT]: {

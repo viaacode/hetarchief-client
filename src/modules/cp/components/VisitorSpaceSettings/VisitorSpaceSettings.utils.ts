@@ -31,11 +31,19 @@ export function validateFile(file: File | null | undefined): void {
 		return;
 	}
 	if (!checkFileSize(file)) {
-		throw new ValidationError(tText('Bestand is te groot (max 500kb)'), undefined, 'file');
+		throw new ValidationError(
+			tText(
+				'modules/cp/components/visitor-space-settings/visitor-space-settings___bestand-is-te-groot-max-500-kb'
+			),
+			undefined,
+			'file'
+		);
 	}
 	if (!checkFileType(file)) {
 		throw new ValidationError(
-			tText('Bestandstype is niet toegestaan (jpg, png)'),
+			tText(
+				'modules/cp/components/visitor-space-settings/visitor-space-settings___bestandstype-is-niet-toegestaan-jpg-png'
+			),
 			undefined,
 			'file'
 		);
