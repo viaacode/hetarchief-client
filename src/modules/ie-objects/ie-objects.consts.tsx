@@ -21,8 +21,8 @@ import {
 } from '@ie-objects/ie-objects.types';
 import {
 	mapArrayToMetadataData,
+	mapObjectOrArrayToMetadata,
 	mapObjectsToMetadata,
-	mapObjectToMetadata,
 } from '@ie-objects/utils/map-metadata';
 import type { SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
 import { Icon } from '@shared/components/Icon';
@@ -573,8 +573,14 @@ export const GET_METADATA_FIELDS = (
 			title: tText('modules/ie-objects/ie-objects___teksttype'),
 			data: mediaInfo.bibframeProductionMethod,
 		},
-		...mapObjectToMetadata(mediaInfo.creator),
-		...mapObjectToMetadata(mediaInfo.publisher),
+		...mapObjectOrArrayToMetadata(
+			mediaInfo.creator,
+			tText('modules/ie-objects/ie-objects___maker')
+		),
+		...mapObjectOrArrayToMetadata(
+			mediaInfo.publisher,
+			tText('modules/ie-objects/ie-objects___uitgever')
+		),
 		{
 			title: tText('modules/ie-objects/ie-objects___datum-toegevoegd-aan-platform'),
 			data: renderDate(activeFile?.createdAt),
@@ -590,7 +596,8 @@ export const GET_METADATA_FIELDS = (
 			mediaInfo.premisIdentifier?.filter(
 				(premisEntry) =>
 					!['abraham_id', 'abraham_uri'].includes(Object.keys(premisEntry)[0])
-			)
+			),
+			tText('modules/ie-objects/ie-objects___premis-identifier')
 		),
 		{
 			title: tText('modules/ie-objects/const/index___creatiedatum'),
