@@ -79,13 +79,13 @@ export const MIN_LENGTH_SCHEMA_IDENTIFIER_V2 = 36;
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
 	{
 		label: tText(
-			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-advanced-filters-als-XML'
+			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-XML'
 		),
 		id: MetadataExportFormats.xml,
 	},
 	{
 		label: tText(
-			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-advanced-filters-als-CSV'
+			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-CSV'
 		),
 		id: MetadataExportFormats.csv,
 	},
@@ -267,16 +267,10 @@ export const MEDIA_ACTIONS = ({
 			...((canExport
 				? [
 						{
-							label: tText(
-								'modules/ie-objects/const/index___exporteer-advanced-filters'
-							),
+							label: tText('modules/ie-objects/const/index___exporteer-metadata'),
 							id: MediaActions.Export,
-							ariaLabel: tText(
-								'modules/ie-objects/const/index___exporteer-advanced-filters'
-							),
-							tooltip: tText(
-								'modules/ie-objects/const/index___exporteer-advanced-filters'
-							),
+							ariaLabel: tText('modules/ie-objects/const/index___exporteer-metadata'),
+							tooltip: tText('modules/ie-objects/const/index___exporteer-metadata'),
 						},
 				  ]
 				: []) as ActionItem[]),

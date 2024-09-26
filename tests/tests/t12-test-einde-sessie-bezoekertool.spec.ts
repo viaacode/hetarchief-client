@@ -201,7 +201,7 @@ export {};
 // 	).toBeVisible();
 //
 // 	/**
-// 	 * Check bookmarked object advanced-filters access
+// 	 * Check bookmarked object metadata access
 // 	 */
 //
 // 	// Go to user folders page
@@ -218,7 +218,7 @@ export {};
 // 		.locator('[class*="MediaCardList_c-media-card-list--"] .c-card')
 // 		.last();
 //
-// 	// Check advanced-filters is visible
+// 	// Check metadata is visible
 // 	await expect(await lastCard.locator('text=Aanbieder: ' + spaceName)).toBeVisible();
 // 	await expect(await lastCard.locator('text=Type')).toBeVisible();
 // 	await expect(await lastCard.locator('text=Creatiedatum')).toBeVisible();

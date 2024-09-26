@@ -12,7 +12,7 @@ export interface MetadataProps extends DefaultComponentProps {
 
 export interface MetadataListProps extends DefaultComponentProps {
 	children: ReactNode;
-	disableContainerQuery: boolean;
+	allowTwoColumns: boolean;
 }
 
 export interface MetadataItem {
