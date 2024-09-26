@@ -90,7 +90,7 @@ describe('Component: <MetadataList /> (default)', () => {
 	});
 
 	it('Should display a multiple columns by default', () => {
-		const { getByRole } = renderMetadataList({ allowTwoColumns: false }, metadataMock);
+		const { getByRole } = renderMetadataList({ allowTwoColumns: true }, metadataMock);
 
 		const list = getByRole('list').parentElement;
 
@@ -98,7 +98,7 @@ describe('Component: <MetadataList /> (default)', () => {
 	});
 
 	it('Should display a single column when given', () => {
-		const { getByRole } = renderMetadataList({ allowTwoColumns: true }, metadataMock);
+		const { getByRole } = renderMetadataList({ allowTwoColumns: false }, metadataMock);
 
 		const list = getByRole('list').parentElement;
 

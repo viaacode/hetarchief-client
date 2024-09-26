@@ -10,7 +10,7 @@ const Metadata: FC<MetadataListProps> = ({ className, children, allowTwoColumns 
 			className={clsx(
 				className,
 				'p-object-detail__metadata-component',
-				styles['c-c-metadata'],
+				styles['c-metadata'],
 				{
 					[styles['c-metadata--container-query']]: allowTwoColumns,
 				}
