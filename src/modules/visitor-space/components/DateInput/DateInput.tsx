@@ -4,9 +4,10 @@ import { noop } from 'lodash-es';
 import { type FC } from 'react';
 import ReactDatePicker from 'react-datepicker';
 
-import { datePickerDefaultProps } from '@shared/components/DatePicker/DatePicker.consts';
+import { getDatePickerDefaultProps } from '@shared/components/DatePicker/DatePicker.consts';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 
 import styles from './DateInput.module.scss';
 
@@ -39,11 +40,13 @@ const DateInput: FC<DateInputProps> = ({
 	className,
 	defaultValue,
 }) => {
+	const locale = useLocale();
+
 	return (
 		<div className={styles['c-date-input']}>
 			{!!label && <p className={styles['c-date-input__label']}>{label}</p>}
 			<DatePicker
-				{...datePickerDefaultProps}
+				{...getDatePickerDefaultProps(locale)}
 				id={id}
 				onChange={onChange}
 				onBlur={onBlur}
