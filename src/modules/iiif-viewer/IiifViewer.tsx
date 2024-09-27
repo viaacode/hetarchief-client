@@ -1,6 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { clamp, isNil, round } from 'lodash-es';
+import { clamp, compact, isNil, round } from 'lodash-es';
 import { useRouter } from 'next/router';
 import { type TileSource, type Viewer } from 'openseadragon';
 import { parseUrl } from 'query-string';
@@ -351,15 +351,20 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				// and otherwise the setState thinks this is a setter function
 				setOpenSeaDragonLib(() => openSeadragonLibTemp);
 
-				const imageSources = imageInfos.map((imageInfo) => {
-					if (imageInfo.imageUrl.endsWith('.jph')) {
-						return imageInfo.imageUrl;
-					}
-					return {
-						type: 'image' as const,
-						url: imageInfo.imageUrl,
-					};
-				});
+				const imageSources = compact(
+					imageInfos.map((imageInfo) => {
+						if (imageInfo.imageUrl.endsWith('.jph')) {
+							return imageInfo.imageUrl;
+						}
+						return null;
+
+						// Skip images for now
+						// return {
+						// 	type: 'image' as const,
+						// 	url: imageInfo.imageUrl,
+						// };
+					})
+				);
 
 				// Init Open Seadragon viewer
 				const openSeadragonViewerTemp: OpenSeadragon.Viewer =
