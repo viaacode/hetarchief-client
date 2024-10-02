@@ -188,12 +188,12 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
 										return (
 											<PaginationBar
 												{...getDefaultPaginationBarProps()}
-												count={VisitorsTablePageSize}
-												start={
+												itemsPerPage={VisitorsTablePageSize}
+												startItem={
 													Math.max(0, filters.page - 1) *
 													VisitorsTablePageSize
 												}
-												total={visitRequests?.total || 0}
+												totalItems={visitRequests?.total || 0}
 												onPageChange={(pageZeroBased) => {
 													gotoPage(pageZeroBased);
 													// setSelected(null);

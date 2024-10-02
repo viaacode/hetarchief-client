@@ -989,10 +989,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			<PaginationBar
 				{...getDefaultPaginationBarProps()}
 				className={clsx(paginationBarStyles['c-pagination-bar'], 'u-mb-48')}
-				start={(page - 1) * SEARCH_RESULTS_PAGE_SIZE}
-				count={SEARCH_RESULTS_PAGE_SIZE}
+				startItem={(page - 1) * SEARCH_RESULTS_PAGE_SIZE}
+				itemsPerPage={SEARCH_RESULTS_PAGE_SIZE}
+				totalItems={limitToMaxResults(getItemCounts(format))}
 				showBackToTop
-				total={limitToMaxResults(getItemCounts(format))}
 				onPageChange={(zeroBasedPage) => {
 					scrollTo(0, 'instant');
 					setQuery({

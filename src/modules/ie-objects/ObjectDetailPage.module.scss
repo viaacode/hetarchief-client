@@ -516,55 +516,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		}
 	}
 
-	&__metadata-content {
-		padding: 0 2rem;
-
-		:global(p) {
-			:global(span) {
-				white-space: pre-line;
-			}
-		}
-
-		@media (min-width: $breakpoint-md) {
-			padding: 0 $spacer-lg;
-		}
-
-		& > {
-			:global(h1),
-			:global(h2),
-			:global(h3),
-			:global(h4),
-			:global(h5),
-			:global(h6),
-			:global(p),
-			:global(span) {
-				@media (min-width: $breakpoint-md) {
-					word-break: break-all;
-				}
-
-				@media (min-width: $breakpoint-lg) {
-					word-break: initial;
-				}
-			}
-		}
-
-		&__rights-status {
-			:global([class*="c-icon"]) {
-				font-size: $font-size-lg;
-			}
-
-			:global(a) {
-				margin-left: $spacer-sm;
-			}
-		}
-
-		&__names-list {
-			&__more-info {
-				color: $neutral !important;
-			}
-		}
-	}
-
 	:global(.p-object-detail__metadata-component) {
 		padding: 0 2rem;
 

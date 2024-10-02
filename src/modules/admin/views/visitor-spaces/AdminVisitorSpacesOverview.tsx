@@ -212,11 +212,11 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 					return (
 						<PaginationBar
 							{...getDefaultPaginationBarProps()}
-							count={VisitorSpacesOverviewTablePageSize}
-							start={
+							itemsPerPage={VisitorSpacesOverviewTablePageSize}
+							startItem={
 								Math.max(0, filters.page - 1) * VisitorSpacesOverviewTablePageSize
 							}
-							total={visitorSpaces?.total || 0}
+							totalItems={visitorSpaces?.total || 0}
 							onPageChange={(pageZeroBased) => {
 								gotoPage(pageZeroBased);
 								setFilters({

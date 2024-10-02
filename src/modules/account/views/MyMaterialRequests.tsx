@@ -92,9 +92,9 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 	const renderPagination = ({ gotoPage }: { gotoPage: (i: number) => void }): ReactNode => (
 		<PaginationBar
 			{...getDefaultPaginationBarProps()}
-			start={Math.max(0, filters.page - 1) * ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}
-			total={materialRequests?.total || 0}
-			count={ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}
+			startItem={Math.max(0, filters.page - 1) * ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}
+			totalItems={materialRequests?.total || 0}
+			itemsPerPage={ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}
 			onPageChange={(pageZeroBased: number) => onPageChange(pageZeroBased, gotoPage)}
 		/>
 	);

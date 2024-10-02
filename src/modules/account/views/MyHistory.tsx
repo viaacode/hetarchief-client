@@ -171,9 +171,11 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 								return (
 									<PaginationBar
 										{...getDefaultPaginationBarProps()}
-										count={HistoryItemListSize}
-										start={Math.max(0, filters.page - 1) * HistoryItemListSize}
-										total={visits.data?.total || 0}
+										itemsPerPage={HistoryItemListSize}
+										startItem={
+											Math.max(0, filters.page - 1) * HistoryItemListSize
+										}
+										totalItems={visits.data?.total || 0}
 										onPageChange={(pageZeroBased: number) => {
 											gotoPage(pageZeroBased);
 											setFilters({

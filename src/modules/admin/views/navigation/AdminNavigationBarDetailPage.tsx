@@ -8,9 +8,9 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
-const NavigationDetail = lazy(() =>
+const NavigationBarDetail = lazy(() =>
 	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({
-		default: adminCoreModule.NavigationDetail,
+		default: adminCoreModule.NavigationBarDetail,
 	}))
 );
 
@@ -30,7 +30,7 @@ export const AdminNavigationBarDetailPage: FC<DefaultSeoInfo & AdminNavigationBa
 						<Suspense
 							fallback={<Loading fullscreen owner="AdminNavigationBarDetailPage" />}
 						>
-							<NavigationDetail navigationBarId={navigationBarId} />
+							<NavigationBarDetail navigationBarId={navigationBarId} />
 						</Suspense>
 					</div>
 				</AdminLayout.Content>
