@@ -131,11 +131,4 @@ $component: "c-request-material";
 			resize: none;
 		}
 	}
-
-	&__reason-error {
-		color: $cherry;
-		display: flex;
-		align-items: center;
-		margin-bottom: 1rem;
-	}
 }

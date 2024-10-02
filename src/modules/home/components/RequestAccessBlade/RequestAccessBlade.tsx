@@ -129,12 +129,11 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 				</FormControl>
 
 				{isError && (
-					<p className={styles['c-request-access-blade__error']}>
-						<Icon name={IconNamesLight.Exclamation} />
-						{tHtml(
+					<RedFormWarning
+						error={tHtml(
 							'modules/home/components/request-access-blade/request-access-blade___error'
 						)}
-					</p>
+					/>
 				)}
 
 				<Button

@@ -691,14 +691,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		}
 	}
 
-	&__error {
-		height: 100%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		color: $neutral;
-	}
-
 	// Modifiers
 
 	&--hidden {

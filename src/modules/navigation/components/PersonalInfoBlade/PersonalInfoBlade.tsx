@@ -1,5 +1,6 @@
 import { Button, Checkbox, RadioButton, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { noop } from 'lodash-es';
 import React, { type FC, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -8,6 +9,7 @@ import { selectUser } from '@auth/store/user';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestRequesterCapacity } from '@material-requests/types';
 import { Blade } from '@shared/components/Blade/Blade';
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
@@ -40,20 +42,20 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 	const [organisationInputValue, setOrganisationInputValue] = useState<string>(
 		personalInfo.organisation || ''
 	);
+	const [noTypeSelectedOnSave, setNoTypeSelectedOnSave] = useState(false);
+
+	const handleClose = () => {
+		setNoTypeSelectedOnSave(false);
+		onClose();
+	};
 
 	const onSendRequests = async () => {
 		try {
 			if (!typeSelected) {
-				toastService.notify({
-					maxLines: 3,
-					title: tText(
-						'modules/navigation/components/personal-info-blade/personal-info-blade___verzenden-mislukt'
-					),
-					description: tText(
-						'modules/navigation/components/personal-info-blade/personal-info-blade___selecteer-hoedanigheid'
-					),
-				});
+				setNoTypeSelectedOnSave(true);
 				return;
+			} else {
+				setNoTypeSelectedOnSave(false);
 			}
 			await MaterialRequestsService.sendAll({
 				type: typeSelected,
@@ -67,7 +69,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 					preferences: {
 						newsletter: isSubscribedToNewsletter,
 					},
-				});
+				}).then(noop);
 			}
 
 			toastService.notify({
@@ -80,7 +82,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 				),
 			});
 			refetch();
-			onClose();
+			handleClose();
 			dispatch(setShowMaterialRequestCenter(false));
 		} catch (err) {
 			console.error({ err });
@@ -153,7 +155,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 						'modules/navigation/components/personal-info-blade/personal-info-blade___annuleer'
 					)}
 					variants={['block', 'text', 'light']}
-					onClick={onClose}
+					onClick={handleClose}
 				/>
 			</div>
 		);
@@ -171,7 +173,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 				</h2>
 			)}
 			footer={isOpen && renderFooter()}
-			onClose={onClose}
+			onClose={handleClose}
 			showBackButton
 			layer={layer}
 			currentLayer={currentLayer}
@@ -280,6 +282,9 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 						/>
 					</dd>
 				</dl>
+				{noTypeSelectedOnSave ? (
+					<RedFormWarning error={tText('De hoedanigheid is verplicht')} />
+				) : null}
 			</div>
 		</Blade>
 	);

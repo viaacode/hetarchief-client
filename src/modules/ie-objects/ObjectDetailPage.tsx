@@ -143,6 +143,7 @@ import { Loading } from '@shared/components/Loading';
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { Pill } from '@shared/components/Pill';
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
 import {
@@ -2174,11 +2175,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				/>
 			)}
 			{mediaInfoIsError && !isNoAccessError && (
-				<p className={'p-object-detail__error'}>
-					{tHtml(
+				<RedFormWarning
+					error={tHtml(
 						'pages/bezoekersruimte/visitor-space-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data'
 					)}
-				</p>
+				/>
 			)}
 			<article
 				className={clsx(styles['p-object-detail__wrapper'], {
