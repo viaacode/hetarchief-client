@@ -11,7 +11,6 @@ import {
 	StringParam,
 } from 'use-query-params';
 
-import { VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import { SearchPageMediaType } from '@shared/types/ie-objects';
@@ -97,8 +96,6 @@ export const SEARCH_PAGE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<any
 };
 
 export type SearchPageQueryParams = Partial<DecodedValueMap<typeof SEARCH_PAGE_QUERY_PARAM_CONFIG>>;
-
-export const VISITOR_SPACE_VIEW_TOGGLE_OPTIONS = VIEW_TOGGLE_OPTIONS;
 
 export const VISITOR_SPACE_ACTIVE_SORT_MAP = (): { [key in SearchSortProp]: string } => ({
 	[SearchSortProp.Date]: tText('modules/visitor-space/const/index___sorteer-op-datum'),

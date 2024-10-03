@@ -66,6 +66,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	);
 	const { data: folderResponse } = useGetFolders();
 	const folders = useMemo(() => folderResponse?.items || [], [folderResponse?.items]);
+	const [noFoldersSelectedOnSubmit, setNoFoldersSelectedOnSubmit] = useState(false);
 
 	const {
 		selected: visitRequest,
@@ -233,6 +234,14 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			return;
 		}
 
+		if (
+			values.accessType?.type === AccessType.FOLDERS &&
+			!values.accessType?.folderIds?.length
+		) {
+			setNoFoldersSelectedOnSubmit(true);
+			return;
+		}
+
 		visitRequest &&
 			VisitRequestService.patchById(visitRequest.id, {
 				...visitRequest,
@@ -287,12 +296,22 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const renderFooter = () => {
 		return (
 			<div className="u-px-32 u-py-24">
+				<RedFormWarning
+					error={
+						noFoldersSelectedOnSubmit
+							? tHtml(
+									'modules/shared/components/approve-request-blade/approve-request-blade___selecteer-een-of-meerdere-mappen'
+							  )
+							: null
+					}
+					key="form-error--no-folder-selected"
+				/>
 				{isError && (
-					<p className={styles['c-approve-request-blade__error']}>
-						{tHtml(
+					<RedFormWarning
+						error={tHtml(
 							'modules/shared/components/approve-request-blade/approve-request-blade___bepaalde-invoer-velden-zijn-niet-geldig'
 						)}
-					</p>
+					/>
 				)}
 
 				<Button
@@ -462,6 +481,16 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 										?.message
 								}
 								key="form-error--access-type-folder-ids"
+							/>,
+							<RedFormWarning
+								error={
+									noFoldersSelectedOnSubmit
+										? tHtml(
+												'modules/shared/components/approve-request-blade/approve-request-blade___selecteer-een-of-meerdere-mappen'
+										  )
+										: null
+								}
+								key="form-error--no-folder-selected"
 							/>,
 						]}
 						id={labelKeys.accessType}

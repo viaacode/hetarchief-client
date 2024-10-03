@@ -9,9 +9,9 @@ import { tText } from '@shared/helpers/translate';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 
-const NavigationEdit = lazy(() =>
+const NavigationItemEdit = lazy(() =>
 	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({
-		default: adminCoreModule.NavigationEdit,
+		default: adminCoreModule.NavigationItemEdit,
 	}))
 );
 
@@ -36,7 +36,7 @@ export const AdminNavigationItemEditPage: FC<DefaultSeoInfo & NavigationPageCrea
 									<Loading fullscreen owner="AdminNavigationItemEditPage" />
 								}
 							>
-								<NavigationEdit
+								<NavigationItemEdit
 									navigationBarId={navigationBarId}
 									navigationItemId={navigationItemId}
 								/>

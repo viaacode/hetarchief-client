@@ -56,7 +56,11 @@ import {
 	VisitorSpaceDropdown,
 	type VisitorSpaceDropdownOption,
 } from '@shared/components/VisitorSpaceDropdown';
-import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
+import {
+	GET_VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
+	ROUTE_PARTS_BY_LOCALE,
+	ROUTES_BY_LOCALE,
+} from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
@@ -110,7 +114,6 @@ import {
 	SEARCH_RESULTS_PAGE_SIZE,
 	VISITOR_SPACE_QUERY_PARAM_INIT,
 	VISITOR_SPACE_SORT_OPTIONS,
-	VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
 } from '@visitor-space/const';
 import { SEARCH_PAGE_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
 import { SEARCH_PAGE_IE_OBJECT_TABS } from '@visitor-space/const/visitor-space-tabs.const';
@@ -388,7 +391,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const toggleOptions: ToggleOption[] = useMemo(
 		() =>
-			VISITOR_SPACE_VIEW_TOGGLE_OPTIONS.map((option) => ({
+			GET_VISITOR_SPACE_VIEW_TOGGLE_OPTIONS().map((option) => ({
 				...option,
 				active: option.id === viewMode,
 			})),
@@ -989,10 +992,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			<PaginationBar
 				{...getDefaultPaginationBarProps()}
 				className={clsx(paginationBarStyles['c-pagination-bar'], 'u-mb-48')}
-				start={(page - 1) * SEARCH_RESULTS_PAGE_SIZE}
-				count={SEARCH_RESULTS_PAGE_SIZE}
+				startItem={(page - 1) * SEARCH_RESULTS_PAGE_SIZE}
+				itemsPerPage={SEARCH_RESULTS_PAGE_SIZE}
+				totalItems={limitToMaxResults(getItemCounts(format))}
 				showBackToTop
-				total={limitToMaxResults(getItemCounts(format))}
 				onPageChange={(zeroBasedPage) => {
 					scrollTo(0, 'instant');
 					setQuery({

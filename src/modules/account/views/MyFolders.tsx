@@ -633,10 +633,10 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 													paginationBarStyles['c-pagination-bar'],
 													'u-mb-48'
 												)}
-												start={(filters.page - 1) * FolderItemListSize}
-												count={FolderItemListSize}
+												startItem={(filters.page - 1) * FolderItemListSize}
+												itemsPerPage={FolderItemListSize}
+												totalItems={folderMedia.data?.total || 0}
 												showBackToTop
-												total={folderMedia.data?.total || 0}
 												onPageChange={(page: number) =>
 													setFilters({
 														...filters,

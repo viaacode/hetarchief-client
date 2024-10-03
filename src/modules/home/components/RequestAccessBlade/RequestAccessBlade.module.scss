@@ -8,14 +8,6 @@
 		}
 	}
 
-	&__error {
-		color: $cherry;
-		margin-bottom: $spacer-xs;
-		display: flex;
-		gap: $spacer-xs;
-		align-items: center;
-	}
-
 	&__checkbox {
 		margin-bottom: $spacer-xs;
 	}

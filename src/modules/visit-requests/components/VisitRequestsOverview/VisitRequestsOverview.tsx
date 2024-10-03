@@ -203,9 +203,9 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 							return (
 								<PaginationBar
 									{...getDefaultPaginationBarProps()}
-									count={RequestTablePageSize}
-									start={Math.max(0, filters.page - 1) * RequestTablePageSize}
-									total={visits?.total || 0}
+									itemsPerPage={RequestTablePageSize}
+									startItem={Math.max(0, filters.page - 1) * RequestTablePageSize}
+									totalItems={visits?.total || 0}
 									onPageChange={(pageZeroBased) => {
 										gotoPage(pageZeroBased);
 										setFilters({

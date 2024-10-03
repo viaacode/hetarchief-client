@@ -1,5 +1,3 @@
-import { ValidationError } from 'yup';
-
 import { tText } from '@shared/helpers/translate';
 
 export const checkFileSize = (file?: File): boolean => {
@@ -26,26 +24,23 @@ export const checkFileType = (file?: File): boolean => {
 	return valid;
 };
 
-export function validateFile(file: File | null | undefined): void {
+export function validateFile(file: File | null | undefined): null | Record<string, string> {
 	if (!file) {
-		return;
+		return null;
 	}
 	if (!checkFileSize(file)) {
-		throw new ValidationError(
-			tText(
+		return {
+			file: tText(
 				'modules/cp/components/visitor-space-settings/visitor-space-settings___bestand-is-te-groot-max-500-kb'
 			),
-			undefined,
-			'file'
-		);
+		};
 	}
 	if (!checkFileType(file)) {
-		throw new ValidationError(
-			tText(
+		return {
+			file: tText(
 				'modules/cp/components/visitor-space-settings/visitor-space-settings___bestandstype-is-niet-toegestaan-jpg-png'
 			),
-			undefined,
-			'file'
-		);
+		};
 	}
+	return null;
 }

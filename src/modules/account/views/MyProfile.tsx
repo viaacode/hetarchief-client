@@ -6,7 +6,6 @@ import {
 	Button,
 	Checkbox,
 	CheckboxList,
-	FormControl,
 	keysEnter,
 	keysSpacebar,
 	onKey,
@@ -18,7 +17,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { type ComponentType, type FC, type ReactNode, useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 import {
@@ -144,9 +143,9 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 		}
 	};
 
-	const onUpdateAcceptNewsletter = (v: boolean): void => {
+	const onUpdateAcceptNewsletter = async (newSubscribeNewsletter: boolean): Promise<void> => {
 		setIsFormSubmitting(true);
-		onFormSubmit(!v);
+		await onFormSubmit(!newSubscribeNewsletter);
 	};
 
 	const renderEditAlert = (): ReactNode => (
@@ -250,44 +249,32 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 	};
 
 	const renderNewsletterForm = (): ReactNode => (
-		<FormControl
-			id={labelKeys.acceptNewsletter}
-			errors={[
-				<RedFormWarning
-					error={errors.acceptNewsletter?.message}
-					key="form-error--accept-newsletter"
-				/>,
-			]}
-		>
-			<Controller
-				name="acceptNewsletter"
-				control={control}
-				render={({ field }) => (
-					<Checkbox
-						{...field}
-						checked={acceptNewsletter}
-						checkIcon={<Icon name={IconNamesLight.Check} />}
-						id={labelKeys.acceptNewsletter}
-						value="accept-newsletter"
-						label={tHtml(
-							'pages/account/mijn-profiel/index___ik-ontvang-graag-de-nieuwsbrief'
-						)}
-						disabled={isFormSubmitting}
-						showSpinner={isFormSubmitting}
-						onClick={() => onUpdateAcceptNewsletter(acceptNewsletter)}
-						onKeyDown={(e) => {
-							onKey(e, [...keysEnter, ...keysSpacebar], () => {
-								if (keysSpacebar.includes(e.key)) {
-									e.preventDefault();
-								}
+		<>
+			<Checkbox
+				checked={acceptNewsletter}
+				checkIcon={<Icon name={IconNamesLight.Check} />}
+				id={labelKeys.acceptNewsletter}
+				value="accept-newsletter"
+				label={tHtml('pages/account/mijn-profiel/index___ik-ontvang-graag-de-nieuwsbrief')}
+				disabled={isFormSubmitting}
+				showSpinner={isFormSubmitting}
+				onClick={() => onUpdateAcceptNewsletter(acceptNewsletter)}
+				onKeyDown={(e) => {
+					onKey(e, [...keysEnter, ...keysSpacebar], () => {
+						if (keysSpacebar.includes(e.key)) {
+							e.preventDefault();
+						}
 
-								onUpdateAcceptNewsletter(acceptNewsletter);
-							});
-						}}
-					/>
-				)}
+						onUpdateAcceptNewsletter(acceptNewsletter);
+					});
+				}}
 			/>
-		</FormControl>
+			<RedFormWarning
+				error={errors.acceptNewsletter?.message}
+				key="form-error--accept-newsletter"
+				className="u-mt-8"
+			/>
+		</>
 	);
 
 	const renderLanguagePreferencesForm = () => (

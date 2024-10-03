@@ -40,9 +40,9 @@ Default.args = {
 			<PaginationBar
 				{...getDefaultPaginationBarProps()}
 				className=""
-				count={8}
-				start={0}
-				total={123}
+				itemsPerPage={8}
+				startItem={0}
+				totalItems={123}
 				onPageChange={(page) => {
 					gotoPage(page);
 				}}

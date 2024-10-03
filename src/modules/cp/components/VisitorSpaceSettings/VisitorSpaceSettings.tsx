@@ -21,7 +21,6 @@ import React, {
 	useState,
 } from 'react';
 import { type SingleValue } from 'react-select';
-import { type ValidationError } from 'yup';
 
 import { Permission } from '@account/const';
 import { VISITOR_SPACE_VALIDATION_SCHEMA } from '@cp/components/VisitorSpaceSettings/VisitorSpaceSettings.const';
@@ -34,6 +33,7 @@ import { Loading } from '@shared/components/Loading';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { globalLabelKeys, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
+import { validateForm } from '@shared/helpers/validate-form';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
@@ -176,39 +176,36 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 			});
 	}, [contentPartners, isErrorContentPartners]);
 
-	const validateForm = useCallback(
+	const validateFormValues = useCallback(
 		async (
 			newFormValues: VisitorSpaceSettingsFormValues | undefined,
 			showToasts: boolean
 		): Promise<boolean> => {
-			try {
-				if (!newFormValues) {
-					return false;
-				}
-				await VISITOR_SPACE_VALIDATION_SCHEMA().validate(newFormValues, {
-					strict: true,
-				});
-
-				validateFile(newFormValues.file);
-
-				setFormErrors({});
-				return true;
-			} catch (err) {
-				const validationError = err as ValidationError;
+			const formErrors = (await validateForm(
+				newFormValues,
+				VISITOR_SPACE_VALIDATION_SCHEMA()
+			)) as Partial<Record<keyof CreateVisitorSpaceSettings, string | undefined>>;
+			const fileErrors = validateFile(newFormValues?.file) as Partial<
+				Record<keyof CreateVisitorSpaceSettings, string | undefined>
+			>;
+			if (formErrors || fileErrors) {
 				setFormErrors({
-					[validationError.path as string]: validationError.message,
+					...(formErrors || {}),
+					...(fileErrors || {}),
 				});
-
 				if (showToasts) {
 					toastService.notify({
 						title: tHtml(
 							'modules/cp/components/visitor-space-settings/visitor-space-settings___het-formulier-bevat-nog-errors'
 						),
-						description: validationError.message,
+						description: tHtml('Bekijk de errors in het formulier'),
 					});
 				}
 				return false;
 			}
+
+			setFormErrors({});
+			return true;
 		},
 		[]
 	);
@@ -224,15 +221,15 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 				...values,
 			} as VisitorSpaceSettingsFormValues;
 			setFormValues(newFormValues);
-			await validateForm(newFormValues, false);
+			await validateFormValues(newFormValues, false);
 		},
-		[formValues, validateForm]
+		[formValues, validateFormValues]
 	);
 
 	const createSpace = useCallback(async () => {
 		try {
 			// Show errors
-			const isFormValid = await validateForm(formValues, true);
+			const isFormValid = await validateFormValues(formValues, true);
 			if (isFormValid && !!formValues) {
 				const response = await VisitorSpaceService.create(formValues);
 				if (response === undefined) {
@@ -265,12 +262,12 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 				),
 			});
 		}
-	}, [formValues, locale, refetchVisitorSpace, router, validateForm]);
+	}, [formValues, locale, refetchVisitorSpace, router, validateFormValues]);
 
 	const updateSpace = useCallback(
 		async (values: Partial<UpdateVisitorSpaceSettings>, afterSubmit?: () => void) => {
 			try {
-				if (visitorSpace?.id && (await validateForm(formValues, true))) {
+				if (visitorSpace?.id && (await validateFormValues(formValues, true))) {
 					const response = await VisitorSpaceService.update(visitorSpace.id, {
 						...values,
 					});
@@ -289,7 +286,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 					});
 
 					await refetchVisitorSpace();
-					if (!!values.slug && values.slug !== visitorSpace.slug) {
+					if (!!values.slug && values.slug !== visitorSpace?.slug) {
 						// Slug was changed, redirect to the new url
 						await router.replace(
 							`/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaceManagement}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaces}/${values.slug}`
@@ -314,8 +311,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 			locale,
 			refetchVisitorSpace,
 			router,
-
-			validateForm,
+			validateFormValues,
 			visitorSpace?.id,
 			visitorSpace?.slug,
 		]

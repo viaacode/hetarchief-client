@@ -1,5 +1,5 @@
+import { type PaginationBarProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { type ReactNode } from 'react';
 
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
@@ -8,23 +8,30 @@ import Icon from '../Icon/Icon';
 
 import styles from './PaginationBar.module.scss';
 
-export interface DefaultPaginationBarProps {
-	nextLabel: string;
-	nextIcon: ReactNode;
-	previousLabel: string;
-	previousIcon: ReactNode;
-	backToTopLabel: string;
-	backToTopIcon: ReactNode;
-	labelBetweenPageStartAndEnd?: string;
-	labelBetweenPageEndAndTotal?: string;
-	className: string;
-}
-
-export const getDefaultPaginationBarProps = (): DefaultPaginationBarProps => ({
+export const getDefaultPaginationBarProps = (): Pick<
+	PaginationBarProps,
+	| 'nextLabel'
+	| 'nextIcon'
+	| 'previousLabel'
+	| 'previousIcon'
+	| 'firstLabel'
+	| 'firstIcon'
+	| 'lastLabel'
+	| 'lastIcon'
+	| 'backToTopLabel'
+	| 'backToTopIcon'
+	| 'labelBetweenPageStartAndEnd'
+	| 'labelBetweenPageEndAndTotal'
+	| 'className'
+> => ({
 	nextLabel: tText('modules/shared/components/pagination-bar/pagination-bar___volgende'),
 	nextIcon: <Icon name={IconNamesLight.AngleRight} />,
 	previousLabel: tText('modules/shared/components/pagination-bar/pagination-bar___vorige'),
 	previousIcon: <Icon name={IconNamesLight.AngleLeft} />,
+	firstLabel: tText('Eerste'),
+	firstIcon: <Icon name={IconNamesLight.Rewind} />,
+	lastLabel: tText('Laatste'),
+	lastIcon: <Icon name={IconNamesLight.FastForward} />,
 	backToTopLabel: tText(
 		'modules/shared/components/pagination-bar/pagination-bar___terug-naar-boven'
 	),

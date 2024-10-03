@@ -1,0 +1,64 @@
+@use "src/styles/abstracts" as *;
+
+$maintainer-logo-height: 7rem;
+
+.p-object-detail__metadata-content {
+	padding: 0 2rem;
+
+	:global(p) {
+		:global(span) {
+			white-space: pre-line;
+		}
+	}
+
+	@media (min-width: $breakpoint-md) {
+		padding: 0 $spacer-lg;
+	}
+
+	& > {
+		:global(h1),
+		:global(h2),
+		:global(h3),
+		:global(h4),
+		:global(h5),
+		:global(h6),
+		:global(p),
+		:global(span) {
+			@media (min-width: $breakpoint-md) {
+				word-break: break-all;
+			}
+
+			@media (min-width: $breakpoint-lg) {
+				word-break: initial;
+			}
+		}
+	}
+
+	&__rights-status {
+		:global([class*="c-icon"]) {
+			font-size: $font-size-lg;
+		}
+
+		:global(a) {
+			margin-left: $spacer-sm;
+		}
+	}
+
+	&__names-list {
+		&__more-info {
+			color: $neutral !important;
+		}
+	}
+}
+
+.p-object-detail__metadata-maintainer-title {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: flex-start;
+
+	// maintainer logo
+	img {
+		max-height: $maintainer-logo-height;
+	}
+}

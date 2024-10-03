@@ -1,3 +1,6 @@
+import { type ReactNode } from 'react';
+
 export interface RedFormWarningProps {
-	error: string | undefined;
+	error: ReactNode | string | undefined;
+	className?: string;
 }

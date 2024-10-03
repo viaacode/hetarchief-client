@@ -96,6 +96,8 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 				angleLeft: { name: IconNamesLight.AngleLeft },
 				angleRight: { name: IconNamesLight.AngleRight },
 				angleUp: { name: IconNamesLight.AngleUp },
+				anglesLeft: { name: IconNamesLight.Rewind },
+				anglesRight: { name: IconNamesLight.FastForward },
 				arrowDown: { name: IconNamesLight.ArrowDown },
 				arrowRight: { name: IconNamesLight.ArrowRight },
 				arrowUp: { name: IconNamesLight.ArrowUp },

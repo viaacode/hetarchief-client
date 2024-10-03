@@ -50,7 +50,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 				)
 				.map((folder) => folder.id);
 			setSelectedFolderIds(tempOriginalSelectedFolderIds);
-			setOriginalSelectedFolderIds(tempOriginalSelectedFolderIds);
+			setOriginalSelectedFolderIds([...tempOriginalSelectedFolderIds]);
 		}
 	}, [folders, objectToAdd, selectedFolderIds]);
 
@@ -300,12 +300,8 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			const others = (folder?.objects || []).filter(
 				(object) => object.schemaIdentifier !== objectToAdd?.schemaIdentifier
 			);
-			const isObjectAlreadyInFolder = !!folder?.objects?.find(
-				(object) => object.schemaIdentifier === objectToAdd?.schemaIdentifier
-			);
 
-			const isFolderSelected =
-				isObjectAlreadyInFolder || (selectedFolderIds || []).includes(folder.id);
+			const isFolderSelected = (selectedFolderIds || []).includes(folder.id);
 			const count = others.length + (isFolderSelected ? 1 : 0);
 
 			return (
