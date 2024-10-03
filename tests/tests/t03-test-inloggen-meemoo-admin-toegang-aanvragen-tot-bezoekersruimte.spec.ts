@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { fillRequestVisitBlade } from '../helpers/fill-request-visit-blade';
+import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
@@ -11,6 +12,8 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	page,
 	context,
 }) => {
+	const SITE_TRANSLATIONS = await getSiteTranslations();
+
 	// Go to the hetarchief homepage
 	await goToPageAndAcceptCookies(page);
 
@@ -22,7 +25,7 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	);
 
 	// Check logged in status
-	await expect(page.locator('.c-avatar__text')).toHaveText('Meemoo admin');
+	await expect(page.locator('.c-avatar__text')).toHaveText('Admin Meemoo');
 
 	// Admin should be visible and beheer should not be visible
 	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Admin' })).toHaveCount(1);
@@ -42,10 +45,22 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	await page.locator('a.c-dropdown-menu__item[href="/bezoek"]').first().click();
 
 	// Check page title is the home page
-	// TODO this title probably has to change to Bezoek | hetarchief.be
-	await page.waitForFunction(() => document.title === 'Home | hetarchief.be', null, {
-		timeout: 10000,
-	});
+	const expectedSitePageTitle =
+		SITE_TRANSLATIONS.nl[
+			'modules/visitor-space/views/visitor-spaces-home-page___bezoek-pagina-titel'
+		];
+	const excpectedSiteTitle =
+		SITE_TRANSLATIONS.nl[
+			'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
+		];
+	const expectedTitle = expectedSitePageTitle + ' | ' + excpectedSiteTitle;
+	await page.waitForFunction(
+		(expectedTitle: string) => document.title === expectedTitle,
+		expectedTitle,
+		{
+			timeout: 10000,
+		}
+	);
 
 	// Click on request access button for VRT
 	const vrtCard = page.locator('.p-home__results .c-visitor-space-card--name--vrt');
@@ -57,8 +72,16 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	await fillRequestVisitBlade(page, 'vrt', 'Een geldige reden', undefined, true);
 
 	// Check that we were redirected to the request pending page
-	await expect(page.locator('text=We hebben je aanvraag goed ontvangen')).toBeVisible();
-	await expect(page.locator('.p-visit-requested__content').innerHTML()).toContain('VRT');
+	await expect(
+		page.locator(
+			'text=' +
+				SITE_TRANSLATIONS.nl[
+					'pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen'
+				]
+		)
+	).toBeVisible();
+	const accessRequestedBody = await page.locator('.p-visit-requested__content').innerHTML();
+	expect(accessRequestedBody).toContain('VRT');
 
 	// Click on 'Bezoek een aanbieder'
 	await page

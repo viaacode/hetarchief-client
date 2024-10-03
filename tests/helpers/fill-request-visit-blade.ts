@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 
 import { checkBladeTitle } from './check-blade-title';
 
@@ -26,7 +26,9 @@ export async function fillRequestVisitBlade(
 	await expect(page.url()).toContain(`?bezoekersruimte=${visitorSpaceSlug}`);
 
 	// Fill the form
-	const checkboxElem = await page.locator('.c-blade--active .c-checkbox__check-icon');
+	const checkboxElem = page.locator(
+		'.c-blade--active #RequestAccessBlade__acceptTerms + .c-checkbox__check-icon'
+	);
 	await checkboxElem.waitFor({
 		timeout: 10000,
 		state: 'visible',
