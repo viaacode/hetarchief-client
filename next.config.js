@@ -73,19 +73,15 @@ module.exports = withTM({
 		tsconfigPath: './tsconfig.build.json',
 	},
 	images: {
-		domains: [
-			'assets-int.viaa.be',
-			'assets-tst.viaa.be',
-			'assets-qas.viaa.be',
-			'assets.viaa.be',
-			'assets-int.hetarchief.be',
-			'assets-tst.hetarchief.be',
-			'assets-qas.hetarchief.be',
-			'assets.hetarchief.be',
-			'media-int.viaa.be',
-			'media-tst.viaa.be',
-			'media-qas.viaa.be',
-			'media.viaa.be',
+		remotePatterns: [
+			{
+				protocol: 'https',
+				hostname: '**.viaa.be',
+			},
+			{
+				protocol: 'https',
+				hostname: '**.hetarchief.be',
+			},
 		],
 	},
 	productionBrowserSourceMaps: true, // process.env.DEBUG_TOOLS === 'true',

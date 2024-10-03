@@ -1361,16 +1361,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				const imageApiFile = files.find((file) =>
 					IMAGE_API_FORMATS.includes(file.mimeType)
 				);
+				if (!imageApiFile?.storedAt) {
+					return null;
+				}
 				const imageFile = files.find((file) => IMAGE_FORMATS.includes(file.mimeType));
 				const altoFile = files.find((file) => XML_FORMATS.includes(file.mimeType));
 				if (!imageFile?.storedAt) {
 					return null;
 				}
 				return {
-					imageUrl: imageApiFile?.storedAt || imageFile?.storedAt,
-					thumbnailUrl: imageFile?.thumbnailUrl || imageFile?.storedAt,
-					width: 2000, // TODO remove these dimensions and get them from the iiif viewer api
-					height: 3000,
+					imageUrl: imageApiFile.storedAt,
+					thumbnailUrl: imageFile?.thumbnailUrl,
 					altoUrl: altoFile?.storedAt,
 				};
 			})

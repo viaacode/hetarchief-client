@@ -1,7 +1,6 @@
 import { Badge, Button, Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { type FC, type MouseEvent, type ReactNode, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -306,7 +305,7 @@ const MediaCard: FC<MediaCardProps> = ({
 					view === 'list' && styles['c-media-card__header--list']
 				)}
 			>
-				<Image src={imagePath} alt={''} unoptimized={true} priority fill sizes="100vw" />
+				<img src={imagePath} alt={''} width="100" />
 				{!isNil(icon) && (
 					<>
 						<div className={clsx(styles['c-media-card__header-icon'])}>
@@ -377,6 +376,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const classNames = clsx(
 		styles['c-media-card'],
+		'c-media-card--' + type,
 		!link && 'c-media-card--no-link',
 		showKeyUserLabel && styles['c-media-card--key-user']
 	);
