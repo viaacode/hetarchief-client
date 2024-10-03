@@ -1,12 +1,10 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Checkbox, FormControl, TextArea, TextInput } from '@meemoo/react-components';
-import { type FC, useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Button, Checkbox, TextArea } from '@meemoo/react-components';
+import { type FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
-import { selectUser } from '@auth/store/user';
+import { selectCommonUser } from '@auth/store/user';
 import {
 	type RequestAccessBladeProps,
 	type RequestAccessFormState,
@@ -18,6 +16,7 @@ import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning
 import { SpacePreview } from '@shared/components/SpacePreview';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
+import { validateForm } from '@shared/helpers/validate-form';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
@@ -32,7 +31,7 @@ const labelKeys: Record<keyof RequestAccessFormState, string> = {
 };
 
 const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...bladeProps }) => {
-	const user = useSelector(selectUser);
+	const commonUser = useSelector(selectCommonUser);
 
 	const [query] = useQueryParams({
 		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
@@ -40,28 +39,50 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 	const { data: visitorSpace } = useGetVisitorSpace(
 		query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] || null
 	);
-	const { data: preferences } = useGetNewsletterPreferences(user?.email);
+	const { data: preferences } = useGetNewsletterPreferences(commonUser?.email);
 
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
 	const [isSubscribedToNewsletter, setIsSubscribedToNewsletter] = useState<boolean>(
 		preferences?.newsletter || false
 	);
-
-	const {
-		control,
-		formState: { errors },
-		handleSubmit,
-		reset,
-	} = useForm<RequestAccessFormState>({
-		resolver: yupResolver(REQUEST_ACCESS_FORM_SCHEMA()),
+	const [formValues, setFormValues] = useState<RequestAccessFormState>({
+		acceptTerms: false,
+		requestReason: '',
+		visitTime: '',
 	});
+	const [errors, setFormErrors] = useState<Partial<Record<keyof RequestAccessFormState, string>>>(
+		{}
+	);
 
 	const isError = !!(errors.acceptTerms || errors.requestReason || errors.visitTime);
 
-	const onFormSubmit = async (values: RequestAccessFormState) => {
+	const reset = useCallback(() => {
+		setFormValues({
+			acceptTerms: false,
+			requestReason: '',
+			visitTime: '',
+		});
+		setFormErrors({});
+	}, []);
+
+	const setFormValue = (key: keyof RequestAccessFormState, value: string | boolean) => {
+		setFormValues((prevState) => ({
+			...prevState,
+			[key]: value,
+		}));
+	};
+
+	const handleFormSubmit = async () => {
+		const errors = await validateForm(formValues, REQUEST_ACCESS_FORM_SCHEMA());
+		if (errors) {
+			setFormErrors(errors);
+			return;
+		} else {
+			setFormErrors({});
+		}
 		setIsSubmitting(true);
-		await onSubmit?.(values);
+		await onSubmit?.(formValues);
 		if (isSubscribedToNewsletter) {
 			CampaignMonitorService.setPreferences({
 				preferences: {
@@ -87,7 +108,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 
 	const renderFooter = () => {
 		return (
-			<div className="u-px-16 u-py-16 u-px-32-md u-py-24-md">
+			<div className="u-px-16 u-py-16 u-px-32-md u-py-24-md u-flex u-flex-col u-gap-xs">
 				{!(preferences?.newsletter || false) ? (
 					<Checkbox
 						className={styles['c-request-access-blade__checkbox']}
@@ -99,34 +120,19 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 						onClick={() => setIsSubscribedToNewsletter((prevState) => !prevState)}
 					/>
 				) : null}
-				<FormControl
-					className="u-mx-8 u-mb-24"
+
+				<Checkbox
+					checked={formValues.acceptTerms}
+					checkIcon={<Icon name={IconNamesLight.Check} />}
+					disabled={!isOpen}
 					id={labelKeys.acceptTerms}
-					errors={[
-						<RedFormWarning
-							error={errors.acceptTerms?.message}
-							key="form-error--accept-terms"
-						/>,
-					]}
-				>
-					<Controller
-						name="acceptTerms"
-						control={control}
-						render={({ field }) => (
-							<Checkbox
-								{...field}
-								checked={field.value}
-								checkIcon={<Icon name={IconNamesLight.Check} />}
-								disabled={!isOpen}
-								id={labelKeys.acceptTerms}
-								label={tHtml(
-									'modules/home/components/request-access-blade/request-access-blade___ik-verklaar-deze-toegang-aan-te-vragen-met-het-oog-op-onderzoeksdoeleinden-of-prive-studie'
-								)}
-								value="accept-terms"
-							/>
-						)}
-					/>
-				</FormControl>
+					label={tHtml(
+						'modules/home/components/request-access-blade/request-access-blade___ik-verklaar-deze-toegang-aan-te-vragen-met-het-oog-op-onderzoeksdoeleinden-of-prive-studie'
+					)}
+					value="accept-terms"
+					onChange={(evt) => setFormValue('acceptTerms', evt.target.checked)}
+				/>
+				<RedFormWarning error={errors.acceptTerms} />
 
 				{isError && (
 					<RedFormWarning
@@ -142,7 +148,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 						'modules/home/components/request-access-blade/request-access-blade___verstuur'
 					)}
 					variants={['block', 'black']}
-					onClick={handleSubmit(onFormSubmit)}
+					onClick={() => handleFormSubmit()}
 					disabled={!isOpen || isSubmitting}
 				/>
 
@@ -175,42 +181,34 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 			<div className="u-px-16 u-px-32-md">
 				{visitorSpace && <SpacePreview visitorSpace={visitorSpace} />}
 
-				<FormControl
-					className="u-mb-24"
-					errors={[
-						<RedFormWarning
-							error={errors.acceptTerms?.message}
-							key="form-error--accept-terms"
-						/>,
-					]}
-					id={labelKeys.requestReason}
-					label={tHtml(
+				<label className="u-mb-8 u-display-block" htmlFor={labelKeys.requestReason}>
+					{tHtml(
 						'modules/home/components/request-access-blade/request-access-blade___reden-van-aanvraag'
 					)}
-				>
-					<Controller
-						name="requestReason"
-						control={control}
-						render={({ field }) => (
-							<TextArea {...field} id={labelKeys.requestReason} disabled={!isOpen} />
-						)}
-					/>
-				</FormControl>
+				</label>
+				<TextArea
+					value={formValues.requestReason}
+					onChange={(evt) => setFormValue('requestReason', evt.target.value)}
+					id={labelKeys.requestReason}
+					disabled={!isOpen}
+				/>
+				<RedFormWarning
+					error={errors.requestReason}
+					key="form-error--request-reason"
+					className="u-mt-8"
+				/>
 
-				<FormControl
-					id={labelKeys.visitTime}
-					label={tHtml(
+				<label className="u-mb-8 u-display-block u-mt-24" htmlFor={labelKeys.visitTime}>
+					{tHtml(
 						'modules/home/components/request-access-blade/request-access-blade___wanneer-wil-je-de-bezoekersruimte-bezoeken'
 					)}
-				>
-					<Controller
-						name="visitTime"
-						control={control}
-						render={({ field }) => (
-							<TextInput {...field} id={labelKeys.visitTime} disabled={!isOpen} />
-						)}
-					/>
-				</FormControl>
+				</label>
+				<TextArea
+					value={formValues.visitTime}
+					onChange={(evt) => setFormValue('visitTime', evt.target.value)}
+					id={labelKeys.visitTime}
+					disabled={!isOpen}
+				/>
 			</div>
 		</Blade>
 	);
