@@ -2,19 +2,20 @@ import { expect, test } from '@playwright/test';
 
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
-
-declare const document: any;
+import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) => {
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(page);
 
 	// Check navbar exists
-	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
+	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
 
 	// Click on 'Bezoek een aanbieder'
 	await page
-		.locator('a[class^=Navigation_c-navigation__link]', { hasText: 'Bezoek een aanbieder' })
+		.locator(`a${moduleClassSelector('c-navigation__link')}`, {
+			hasText: 'Bezoek een aanbieder',
+		})
 		.first()
 		.click();
 
@@ -33,13 +34,15 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	// Check if email and phone number of VRT are visible
 	const visitorSpaceInfo = await page
 		.locator(
-			'.c-visitor-space-card--name--vrt [class^=VisitorSpaceCardControls_c-visitor-space-card-controls__contact-list] p'
+			`.c-visitor-space-card--name--vrt ${moduleClassSelector(
+				'VisitorSpaceCardControls_c-visitor-space-card-controls__contact-list'
+			)} p`
 		)
 		.allInnerTexts();
-	await expect(visitorSpaceInfo).toEqual(['vrtarchief@vrt.be', '+32 2 741 37 20']);
+	expect(visitorSpaceInfo).toEqual(['vrtarchief@vrt.be', '+32 2 741 37 20']);
 
 	// Click on 'Vraag toegang aan' van VRT
-	const vrtCard = await page.locator('.c-visitor-space-card--name--vrt .c-button__content', {
+	const vrtCard = page.locator('.c-visitor-space-card--name--vrt .c-button__content', {
 		hasText: 'Vraag toegang aan',
 	});
 	await vrtCard.click();
@@ -55,11 +58,11 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	await page.fill('#RequestAccessBlade__requestReason', `Een geldige reden`);
 
 	// Enable checkbox 'Ik vraag deze toegang aan voor onderzoeksdoeleinden of privéstudie'
-	await page.locator('[class^=RequestAccessBlade_c-request-access-blade] .c-checkbox').click();
+	await page.locator(`${moduleClassSelector('c-request-access-blade')} .c-checkbox`).click();
 
 	// Click on 'Verstuur'
 	await page
-		.locator('[class^=RequestAccessBlade_c-request-access-blade] .c-button__label', {
+		.locator(`${moduleClassSelector('c-request-access-blade')} .c-button__label`, {
 			hasText: 'Verstuur',
 		})
 		.click();
@@ -71,18 +74,20 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	await page.locator('a[href="/"]').first().click();
 
 	// Check navbar exists
-	await expect(page.locator('nav[class^=Navigation_c-navigation]').first()).toBeVisible();
+	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`).first()).toBeVisible();
 
 	// Click on 'Bezoek een aanbieder'
 	await page
-		.locator('a[class^=Navigation_c-navigation__link]', { hasText: 'Bezoek een aanbieder' })
+		.locator(`a${moduleClassSelector('c-navigation__link')}`, {
+			hasText: 'Bezoek een aanbieder',
+		})
 		.first()
 		.click();
 
 	await new Promise((resolve) => setTimeout(resolve, 1 * 1000));
 
 	const visitorSpaceCards = await page.locator('#aangevraagde-bezoeken b').allInnerTexts();
-	await expect(visitorSpaceCards).toContain('VRT');
+	expect(visitorSpaceCards).toContain('VRT');
 
 	// Wait for close to save the videos
 	await context.close();

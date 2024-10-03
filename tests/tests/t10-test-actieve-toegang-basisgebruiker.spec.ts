@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
+import { moduleClassSelector } from '../helpers/module-class-locator';
 
 declare const document: any;
 
@@ -30,18 +31,20 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	 * Go to search page VRT --------------------------------------------------------------------
 	 */
 	// Check navbar exists
-	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
-	await expect(page.locator('a[href="/bezoek"] div[class^="c-badge"]').first()).toContainText(
-		'1'
-	);
+	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
+	await expect(
+		page.locator(`a[href="/bezoek"] div${moduleClassSelector('c-badge')}`).first()
+	).toContainText('1');
 	// Click on "Bezoek een aanbieder" navigation item
 	await page.click('text=Bezoek een aanbieder');
 
 	// Check dropdown menu is visible
 	await expect(
-		await page
+		page
 			.locator(
-				'[class*="Navigation_c-navigation__list-flyout"] div[class*="c-menu--default"]'
+				`${moduleClassSelector(
+					'Navigation_c-navigation__list-flyout'
+				)} div[class*="c-menu--default"]`
 			)
 			.first()
 	).toBeVisible();
@@ -50,26 +53,24 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 
 	// Check entries in dropdown match expected entries
 	const subNavItems = await page
-		.locator('div[class^="c-menu c-menu--default"]')
+		.locator(`div${moduleClassSelector('c-menu c-menu--default')}`)
 		.first()
 		.locator('a')
 		.allInnerTexts();
-	await expect(subNavItems[0]).toContain('Zoeken naar aanbieders');
-	await expect(subNavItems[1]).toContain('VRT');
+	expect(subNavItems[0]).toContain('Zoeken naar aanbieders');
+	expect(subNavItems[1]).toContain('VRT');
 	await page.click('text=Zoeken naar aanbieders');
 	// Wait for search page to be ready
 	// await waitForSearchResults(page);
 	await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
 
 	// Expect approved visitor space card to be visible
-	await expect(
-		await page.locator('div[class^="LoggedInHome_c-hero__access-cards"] ')
-	).toBeVisible();
+	await expect(page.locator(`div${moduleClassSelector('c-hero__access-cards')} `)).toBeVisible();
 
 	// Check VRT in actieve aanbieders
-	await expect(
-		await page
-			.locator('div[class^="LoggedInHome_c-hero__access-cards"]  h2')
+	expect(
+		page
+			.locator(`div${moduleClassSelector('c-hero__access-cards')}  h2`)
 			.first()
 			.allInnerTexts()
 	).toContain('VRT');
@@ -77,9 +78,13 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await page.locator('text=Start je zoekopdracht').click();
 
 	// Check VRT is the active space
-	await expect(
-		await page
-			.locator('p[class^=VisitorSpaceDropdown_c-visitor-spaces-dropdown__active-label]')
+	expect(
+		page
+			.locator(
+				`p${moduleClassSelector(
+					'VisitorSpaceDropdown_c-visitor-spaces-dropdown__active-label'
+				)}`
+			)
 			.innerText()
 	).toEqual('VRT');
 
@@ -91,16 +96,18 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 
 	await Promise.all(
 		maintainers.map(async (maintainer) => {
-			await expect(maintainer).toEqual('VRT');
+			expect(maintainer).toEqual('VRT');
 		})
 	);
 	const countsBeforePublic = await getSearchTabBarCounts(page);
 	// Go to the public catalog
-	await page.locator('li[class^=VisitorSpaceDropdown_c-visitor-spaces-dropdown__active]').click();
+	await page.locator(`li${moduleClassSelector('c-visitor-spaces-dropdown__active')}`).click();
 
 	await page
 		.locator(
-			'ul[class^="u-list-reset VisitorSpaceDropdown_c-visitor-spaces-dropdown__list"] li',
+			`ul${moduleClassSelector(
+				'u-list-reset VisitorSpaceDropdown_c-visitor-spaces-dropdown__list'
+			)} li`,
 			{ hasText: 'Publieke catalogus' } // TODO: we might have to change the text
 		)
 		.click();
@@ -111,9 +118,9 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 		.not.toEqual(countsBeforePublic);
 
 	// Check the purple banner
-	await expect(
-		await page.locator('span.p-visitor-space__temp-access-label').allInnerTexts()
-	).toEqual(['Je hebt tijdelijke toegang tot het materiaal van VRT.']);
+	expect(page.locator('span.p-visitor-space__temp-access-label').allInnerTexts()).toEqual([
+		'Je hebt tijdelijke toegang tot het materiaal van VRT.',
+	]);
 	/**
 	 * Search on search page --------------------------------------------------------------------
 	 */
@@ -123,13 +130,13 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 
 	// Enter search term
 	const SEARCH_TERM = 'brugge';
-	const searchField = await page.locator('.c-tags-input__input-container').first();
+	const searchField = page.locator('.c-tags-input__input-container').first();
 	await searchField.click();
 	await searchField.type(SEARCH_TERM);
 	await searchField.press('Enter');
 
 	// Check green pill exists with search term inside
-	let pill = await page.locator('.c-tags-input__multi-value .c-tag__label');
+	let pill = page.locator('.c-tags-input__multi-value .c-tag__label');
 	await expect(pill).toBeVisible();
 	await expect(pill).toContainText(SEARCH_TERM);
 
@@ -154,7 +161,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 		.locator("[class^='MediaCardList_c-media-card-list__content__'] article mark")
 		.first()
 		.innerText();
-	await expect(markedWord.toLowerCase()).toEqual(SEARCH_TERM);
+	expect(markedWord.toLowerCase()).toEqual(SEARCH_TERM);
 
 	// Remove search term
 	await page.click('.c-tags-input__multi-value .c-tag__close');
@@ -165,15 +172,15 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 		.not.toEqual(countsAfterSearchByText);
 
 	// Check search term is removed
-	const searchInput = await page.locator('.c-tags-input__input-container').first();
-	await expect(await searchInput.innerHTML()).not.toContain(SEARCH_TERM);
+	const searchInput = page.locator('.c-tags-input__input-container').first();
+	expect(await searchInput.innerHTML()).not.toContain(SEARCH_TERM);
 
 	// Check counts are back to all
 	const countsAfterClearSearchTerm = await getSearchTabBarCounts(page);
-	await expect(countsAfterClearSearchTerm.all).not.toBeNaN();
-	await expect(countsAfterClearSearchTerm.all).toEqual(countsBeforeSearch.all);
-	await expect(countsAfterClearSearchTerm.video).toEqual(countsBeforeSearch.video);
-	await expect(countsAfterClearSearchTerm.audio).toEqual(countsBeforeSearch.audio);
+	expect(countsAfterClearSearchTerm.all).not.toBeNaN();
+	expect(countsAfterClearSearchTerm.all).toEqual(countsBeforeSearch.all);
+	expect(countsAfterClearSearchTerm.video).toEqual(countsBeforeSearch.video);
+	expect(countsAfterClearSearchTerm.audio).toEqual(countsBeforeSearch.audio);
 
 	/**
 	 * Filter using isConsultable on location
@@ -187,7 +194,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 		.click(); //TODO: we might have to change this text
 
 	// Check green pill exists with filter inside
-	pill = await page.locator('.c-tags-input__multi-value .c-tag__label');
+	pill = page.locator('.c-tags-input__multi-value .c-tag__label');
 	await expect(pill).toBeVisible();
 	await expect(pill).toContainText('Ter plaatste kijken & luisteren'); //TODO: we might have to change this text
 
@@ -202,9 +209,9 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// Expect counts to have gone down, or stay the same
 	if (countsBeforeSearch.all > 0) {
 		// Only check counts if there are at least a few items
-		await expect(countsBeforeSearch.all > countsAfterSearchByText.all).toBeTruthy();
-		await expect(countsBeforeSearch.video >= countsAfterSearchByText.video).toBeTruthy();
-		await expect(countsBeforeSearch.audio >= countsAfterSearchByText.audio).toBeTruthy();
+		expect(countsBeforeSearch.all > countsAfterSearchByText.all).toBeTruthy();
+		expect(countsBeforeSearch.video >= countsAfterSearchByText.video).toBeTruthy();
+		expect(countsBeforeSearch.audio >= countsAfterSearchByText.audio).toBeTruthy();
 	}
 
 	/**
@@ -215,7 +222,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await page.click('text=Creatiedatum');
 	await page.fill('.c-menu--visible--default .c-input__field', '1 jan. 2020');
 	await page
-		.locator('.c-menu--visible--default [class*="FilterForm_c-filter-form__submit"]', {
+		.locator(`.c-menu--visible--default ${moduleClassSelector('c-filter-form__submit')}`, {
 			hasText: 'Pas toe',
 		})
 		.click();
@@ -225,9 +232,9 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// Expect counts to have gone down, or stay the same
 	if (countsBeforeSearch.all > 0) {
 		// Only check counts if there are at least a few items
-		await expect(countsBeforeSearch.all > countsAfterSearchByDate.all).toBeTruthy();
-		await expect(countsBeforeSearch.video >= countsAfterSearchByDate.video).toBeTruthy();
-		await expect(countsBeforeSearch.audio >= countsAfterSearchByDate.audio).toBeTruthy();
+		expect(countsBeforeSearch.all > countsAfterSearchByDate.all).toBeTruthy();
+		expect(countsBeforeSearch.video >= countsAfterSearchByDate.video).toBeTruthy();
+		expect(countsBeforeSearch.audio >= countsAfterSearchByDate.audio).toBeTruthy();
 	}
 
 	// Search by language
@@ -238,15 +245,15 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 
 	// Check filter tags are removed
 	const searchInput1 = await page.locator('.c-tags-input__input-container').first();
-	await expect(await searchInput1.innerHTML()).not.toContain('.c-tag__label');
-	await expect(await searchInput1.innerHTML()).not.toContain('2020');
+	expect(await searchInput1.innerHTML()).not.toContain('.c-tag__label');
+	expect(await searchInput1.innerHTML()).not.toContain('2020');
 
 	// Check search result counts are equal to before the search
 	const countsAfterClearAll = await getSearchTabBarCounts(page);
-	await expect(countsAfterClearAll.all).not.toBeNaN();
-	await expect(countsAfterClearAll.all).toEqual(countsBeforeSearch.all);
-	await expect(countsAfterClearAll.video).toEqual(countsBeforeSearch.video);
-	await expect(countsAfterClearAll.audio).toEqual(countsBeforeSearch.audio);
+	expect(countsAfterClearAll.all).not.toBeNaN();
+	expect(countsAfterClearAll.all).toEqual(countsBeforeSearch.all);
+	expect(countsAfterClearAll.video).toEqual(countsBeforeSearch.video);
+	expect(countsAfterClearAll.audio).toEqual(countsBeforeSearch.audio);
 
 	// /**
 	//  * Advanced filter
@@ -258,26 +265,34 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 			hasText: 'Geavanceerd',
 		})
 		.click();
-	const filter1TypeSelect = await page
-		.locator('[class^=AdvancedFilterFields_c-advanced-filter-fields] [class^=c-react-select]')
+	const filter1TypeSelect = page
+		.locator(
+			`${moduleClassSelector(
+				'AdvancedFilterFields_c-advanced-filter-fields'
+			)} [class^=c-react-select]`
+		)
 		.first();
-	await filter1TypeSelect.locator('[class^=c-react-select__control]').click();
+	await filter1TypeSelect.locator(moduleClassSelector('c-react-select__control')).click();
 	await filter1TypeSelect.locator('text=Titel').click();
 	await page.fill(
-		'[class^=AdvancedFilterFields_c-advanced-filter-fields__dynamic-field] #AdvancedFilterFields__value__0',
+		`${moduleClassSelector(
+			'AdvancedFilterFields_c-advanced-filter-fields__dynamic-field'
+		)} #AdvancedFilterFields__value__0`,
 		'Eerste'
 	);
 
 	// Set description filter
 	await page.click('text=Voeg filter toe');
-	const filter2TypeSelect = await page.locator(
+	const filter2TypeSelect = page.locator(
 		'div[class*=AdvancedFilterForm_advancedFilterForm] > div:nth-child(3) > div:nth-child(1) > div > div'
 	);
-	await filter2TypeSelect.locator('[class^=c-react-select__control]').click();
+	await filter2TypeSelect.locator(moduleClassSelector('c-react-select__control')).click();
 	// Click 'Beschrijving'
 	await filter2TypeSelect.locator('#react-select-14-option-0').click();
 	await page.fill(
-		'[class^=AdvancedFilterFields_c-advanced-filter-fields__dynamic-field] #AdvancedFilterFields__value__1',
+		`${moduleClassSelector(
+			'AdvancedFilterFields_c-advanced-filter-fields__dynamic-field'
+		)} #AdvancedFilterFields__value__1`,
 		'Schoen'
 	);
 
@@ -287,13 +302,13 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await page.locator('.c-menu--visible--default').locator('text=Pas toe').click();
 
 	// Check advanced filters are added
-	const searchInput3 = await page.locator('.c-tag-search-bar .c-tags-input__control');
-	await expect(await searchInput3.innerHTML()).toContain('Titel');
-	await expect(await searchInput3.innerHTML()).toContain('bevat');
-	await expect(await searchInput3.innerHTML()).toContain('Eerste');
-	await expect(await searchInput3.innerHTML()).toContain('Beschrijving');
-	await expect(await searchInput3.innerHTML()).toContain('bevat');
-	await expect(await searchInput3.innerHTML()).toContain('Schoen');
+	const searchInput3 = page.locator('.c-tag-search-bar .c-tags-input__control');
+	expect(await searchInput3.innerHTML()).toContain('Titel');
+	expect(await searchInput3.innerHTML()).toContain('bevat');
+	expect(await searchInput3.innerHTML()).toContain('Eerste');
+	expect(await searchInput3.innerHTML()).toContain('Beschrijving');
+	expect(await searchInput3.innerHTML()).toContain('bevat');
+	expect(await searchInput3.innerHTML()).toContain('Schoen');
 
 	// Expect counts to have gone down, or stay the same
 	const countsAfterAdvancedSearch = await getSearchTabBarCounts(page);
@@ -322,19 +337,19 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// TODO go to next page => not enough search results
 
 	// Switch to list view
-	await page.locator('[class^="Toggle_c-toggle__option__"]').locator('text=list-view').click();
+	await page.locator(moduleClassSelector('c-toggle__option__')).locator('text=list-view').click();
 
 	// Check view changed
-	const searchResults = await page.locator('.p-visitor-space__results');
-	await expect(await searchResults.innerHTML()).toContain(
+	const searchResults = page.locator('.p-visitor-space__results');
+	expect(await searchResults.innerHTML()).toContain(
 		'MediaCardList_c-media-card-list--two-columns__'
 	);
-	await expect(await searchResults.innerHTML()).not.toContain(
+	expect(await searchResults.innerHTML()).not.toContain(
 		'MediaCardList_c-media-card-list--masonry__'
 	);
 
 	// Click first search result
-	const firstResult = await page.locator('.c-card a').first();
+	const firstResult = page.locator('.c-card a').first();
 	await firstResult.click();
 
 	// Wait for detail page to load

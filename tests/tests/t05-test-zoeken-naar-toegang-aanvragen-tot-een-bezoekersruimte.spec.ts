@@ -34,7 +34,7 @@ export {};
 
 // 	// Check all maintainer titles contain the letter "v"
 // 	const maintainerTitles = await page
-// 		.locator('.p-home__results [class*="VisitorSpaceCard_c-visitor-space-card__title"]')
+// 		.locator(`.p-home__results ${moduleClassSelector('c-visitor-space-card__title')}`)
 // 		.allInnerTexts();
 // 	await Promise.all(
 // 		maintainerTitles.map((maintainerTitle) =>
@@ -47,7 +47,7 @@ export {};
 
 // 	// Check telephone and email is shown in popup
 // 	const contactPopup = await page.locator(
-// 		'.c-visitor-space-card--name--vrt [class*="VisitorSpaceCardControls_c-visitor-space-card-controls__contact-list"]'
+// 		`.c-visitor-space-card--name--vrt ${moduleClassSelector('c-visitor-space-card-controls__contact-list')}`
 // 	);
 // 	await expect(await contactPopup.innerHTML()).toContain('@vrt.be');
 // 	// await expect(await contactPopup.innerHTML()).toContain('+32'); // TODO re-enable when VRT has telephone in the INT org api v2
@@ -87,13 +87,13 @@ export {};
 
 // 	// Check request section is present
 // 	await expect(
-// 		await page.locator('.p-home [class*="LoggedInHome_c-hero__section-title"]')
+// 		await page.locator(`.p-home ${moduleClassSelector('c-hero__section-title')}`)
 // 	).toContainText('Aanvragen');
 
 // 	// Check pending request is visible
 // 	await expect(
 // 		await page.locator(
-// 			'[class*="LoggedInHome_c-hero__requests"] [class*="VisitorSpaceCard_c-visitor-space-card__title"]'
+// 			`${moduleClassSelector('c-hero__requests')} [class*="VisitorSpaceCard_c-visitor-space-card__title"]`
 // 		)
 // 	).toContainText('VRT');
 

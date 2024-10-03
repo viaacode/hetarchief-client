@@ -6,6 +6,7 @@ import { acceptTos } from '../helpers/accept-tos';
 import { acmConfirmEmail } from '../helpers/acm-confirm-email';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
+import { moduleClassSelector } from '../helpers/module-class-locator';
 
 /**
  * New: https://docs.google.com/spreadsheets/d/1EI8MZjFlE-gkzE1YGXFabtTGURRz6fWk-0fQa8OCv4k/edit#gid=95954947
@@ -23,15 +24,13 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	);
 
 	// Check navbar exists
-	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
+	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
 
 	// Click on login or register
 	await page.locator('text=Inloggen of registreren').first().click();
 
 	// Check auth modal opens up
-	const authModalHeading = await page
-		.locator('[class*="AuthModal_c-auth-modal__heading"]')
-		.first();
+	const authModalHeading = page.locator(moduleClassSelector('c-auth-modal__heading')).first();
 	expect(authModalHeading).toBeDefined();
 
 	// Click the register button and wait for captcha to load
@@ -51,12 +50,12 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await page.fill('#password_confirmation_field', USER_PASSWORD);
 
 	// Captcha
-	const recapchaFrame = await page.frameLocator('iframe[title="reCAPTCHA"]');
+	const recapchaFrame = page.frameLocator('iframe[title="reCAPTCHA"]');
 	const recaptcha = recapchaFrame.locator('#recaptcha-anchor');
 	await recaptcha.click();
 
 	// Wait for recaptcha to show green checkmark
-	const greenCheckmark = await recapchaFrame.locator('.recaptcha-checkbox-checked');
+	const greenCheckmark = recapchaFrame.locator('.recaptcha-checkbox-checked');
 	await greenCheckmark.waitFor({
 		timeout: 10000,
 		state: 'visible',
@@ -97,7 +96,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Beheer' })).toHaveCount(0);
 
 	// Check navbar exists
-	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
+	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
 
 	// Wait for close to save the videos
 	await context.close();

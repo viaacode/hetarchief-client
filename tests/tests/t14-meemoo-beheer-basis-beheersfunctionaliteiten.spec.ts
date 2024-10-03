@@ -34,10 +34,10 @@ export {};
 
 // 	// Go to settings page
 // 	const desktopNavigation = await page.locator(
-// 		'[class*="Navigation_c-navigation__section--responsive-desktop__"]'
+// 		moduleClassSelector('c-navigation__section--responsive-desktop__')
 // 	);
 // 	await desktopNavigation
-// 		.locator('[class*="Navigation_c-navigation__link--dropdown__"]', { hasText: 'Admin' })
+// 		.locator(moduleClassSelector('c-navigation__link--dropdown__'), { hasText: 'Admin' })
 // 		.click();
 
 // 	// Wait for title of page to be set
@@ -47,7 +47,7 @@ export {};
 
 // 	// Check page title
 // 	await expect(
-// 		await page.locator('[class*="AdminLayout_c-admin__page-title__"]', {
+// 		await page.locator(moduleClassSelector('c-admin__page-title__'), {
 // 			hasText: 'Alle organisaties',
 // 		})
 // 	).toBeVisible();
@@ -138,12 +138,12 @@ export {};
 
 // 	// Click the users sidebar nav
 // 	await page.click(
-// 		'[class*="SidebarLayout_l-sidebar__navigation__"] [href="/admin/gebruikersbeheer/gebruikers"]'
+// 		`${moduleClassSelector('SidebarLayout_l-sidebar__navigation')} [href="/admin/gebruikersbeheer/gebruikers"]`
 // 	);
 
 // 	// Check title
 // 	await expect(
-// 		await page.locator('[class*="AdminLayout_c-admin__page-title__"]', {
+// 		await page.locator(moduleClassSelector('c-admin__page-title__'), {
 // 			hasText: 'Gebruikers',
 // 		})
 // 	).toBeVisible();
@@ -195,7 +195,7 @@ export {};
 
 // 	// Click the users sidebar nav
 // 	await page.click(
-// 		'[class*="SidebarLayout_l-sidebar__navigation__"] [href="/admin/gebruikersbeheer/permissies"]'
+// 		`${moduleClassSelector('SidebarLayout_l-sidebar__navigation')} [href="/admin/gebruikersbeheer/permissies"]`
 // 	);
 
 // 	// Wait for title of page to be set
@@ -209,7 +209,7 @@ export {};
 
 // 	// Check title
 // 	await expect(
-// 		await page.locator('[class*="AdminLayout_c-admin__page-title__"]', {
+// 		await page.locator(moduleClassSelector('c-admin__page-title__'), {
 // 			hasText: 'Groepen en permissies',
 // 		})
 // 	).toBeVisible();
@@ -305,7 +305,7 @@ export {};
 // 	 */
 
 // 	// Click the navigations in the sidebar
-// 	await page.click('[class*="SidebarLayout_l-sidebar__navigation__"] [href="/admin/navigatie"]');
+// 	await page.click(`${moduleClassSelector('SidebarLayout_l-sidebar__navigation')} [href="/admin/navigatie"]`);
 
 // 	// Wait for title of page to be set
 // 	await page.waitForFunction(() => document.title === 'Navigatie | bezoekertool', null, {
@@ -314,7 +314,7 @@ export {};
 
 // 	// Check title
 // 	await expect(
-// 		await page.locator('[class*="AdminLayout_c-admin__page-title__"]', {
+// 		await page.locator(moduleClassSelector('c-admin__page-title__'), {
 // 			hasText: 'Navigatie',
 // 		})
 // 	).toBeVisible();
@@ -354,7 +354,7 @@ export {};
 
 // 	// Confirm the modal
 // 	await page
-// 		.locator('.c-modal-context--visible button[class*="Button-module_c-button__"]', {
+// 		.locator(`.c-modal-context--visible button${moduleClassSelector('c-button')}`, {
 // 			hasText: 'Verwijder',
 // 		})
 // 		.click();
@@ -373,7 +373,7 @@ export {};
 
 // 	// Check privacy link in footer is not present
 // 	await expect(
-// 		await page.locator('[class*="Footer_c-footer__link__"]', { hasText: 'Privacy' })
+// 		await page.locator(moduleClassSelector('c-footer__link__'), { hasText: 'Privacy' })
 // 	).not.toBeVisible();
 
 // 	// Go back to the navigations footer center page
@@ -385,7 +385,7 @@ export {};
 
 // 	// Click the add an item button
 // 	await page
-// 		.locator('button[class*="Button-module_c-button__"]', { hasText: 'Voeg een item toe' })
+// 		.locator(`button${moduleClassSelector('c-button')}`, { hasText: 'Voeg een item toe' })
 // 		.click();
 
 // 	// Check title
@@ -425,7 +425,7 @@ export {};
 // 		.click();
 
 // 	// Click the save button
-// 	await page.locator('button[class*="Button-module_c-button__"]', { hasText: 'Opslaan' }).click();
+// 	await page.locator(`button${moduleClassSelector('c-button')}`, { hasText: 'Opslaan' }).click();
 
 // 	// Check success toast
 // 	await checkToastMessage(page, 'Gelukt');
@@ -446,7 +446,7 @@ export {};
 
 // 	// Check privacy link in footer is not present
 // 	await expect(
-// 		await page.locator('[class*="Footer_c-footer__link__"]', { hasText: 'Privacy' })
+// 		await page.locator(moduleClassSelector('c-footer__link__'), { hasText: 'Privacy' })
 // 	).toBeVisible();
 
 // 	// Go back to the navigations footer center page
@@ -458,7 +458,7 @@ export {};
 
 // 	// Click the translations in the sidebar
 // 	await page.click(
-// 		'[class*="SidebarLayout_l-sidebar__navigation__"] [href="/admin/vertalingen"]'
+// 		`${moduleClassSelector('SidebarLayout_l-sidebar__navigation')} [href="/admin/vertalingen"]`
 // 	);
 
 // 	// Wait for title of page to be set
@@ -468,7 +468,7 @@ export {};
 
 // 	// Check title
 // 	await expect(
-// 		await page.locator('[class*="AdminLayout_c-admin__page-title__"]', {
+// 		await page.locator(moduleClassSelector('c-admin__page-title__'), {
 // 			hasText: 'Vertalingen',
 // 		})
 // 	).toBeVisible();
@@ -518,7 +518,7 @@ export {};
 // 	 */
 
 // 	// Click the content pages in the sidebar
-// 	await page.click('[class*="SidebarLayout_l-sidebar__navigation__"] [href="/admin/content"]');
+// 	await page.click(`${moduleClassSelector('SidebarLayout_l-sidebar__navigation')} [href="/admin/content"]`);
 
 // 	// Wait for title of page to be set
 // 	await page.waitForFunction(() => document.title === 'Contentpaginas | bezoekertool', null, {
@@ -527,7 +527,7 @@ export {};
 
 // 	// Check title
 // 	await expect(
-// 		await page.locator('[class*="AdminLayout_c-admin__page-title__"]', {
+// 		await page.locator(moduleClassSelector('c-admin__page-title__'), {
 // 			hasText: 'Content overzicht',
 // 		})
 // 	).toBeVisible();
@@ -676,24 +676,24 @@ export {};
 // 	await pageTitleField.locator('.c-input').fill(pageTitle);
 
 // 	// Click on save
-// 	await page.locator('button[class*="Button-module_c-button__"]', { hasText: 'Opslaan' }).click();
+// 	await page.locator(`button${moduleClassSelector('c-button')}`, { hasText: 'Opslaan' }).click();
 
 // 	// Check success toast
 // 	await checkToastMessage(page, 'Gelukt');
 
 // 	// Check buttons are visible
 // 	await expect(
-// 		page.locator('button[class*="Button-module_c-button__"]', {
+// 		page.locator(`button${moduleClassSelector('c-button')}`, {
 // 			hasText: 'Publicatiestatus',
 // 		})
 // 	).toBeVisible();
 // 	await expect(
-// 		page.locator('button[class*="Button-module_c-button__"]', {
+// 		page.locator(`button${moduleClassSelector('c-button')}`, {
 // 			hasText: 'Preview',
 // 		})
 // 	).toBeVisible();
 // 	await expect(
-// 		page.locator('button[class*="Button-module_c-button__"]', {
+// 		page.locator(`button${moduleClassSelector('c-button')}`, {
 // 			hasText: 'Bewerken',
 // 		})
 // 	).toBeVisible();
@@ -703,11 +703,11 @@ export {};
 // 	 * Verify created page exists
 // 	 */
 // 	// Click the content pages in the sidebar
-// 	await page.click('[class*="SidebarLayout_l-sidebar__navigation__"] [href="/admin/content"]');
+// 	await page.click(`${moduleClassSelector('SidebarLayout_l-sidebar__navigation')} [href="/admin/content"]`);
 
 // 	// Check title
 // 	await expect(
-// 		await page.locator('[class*="AdminLayout_c-admin__page-title__"]', {
+// 		await page.locator(moduleClassSelector('c-admin__page-title__'), {
 // 			hasText: 'Content overzicht',
 // 		})
 // 	).toBeVisible();
@@ -735,36 +735,36 @@ export {};
 
 // 	// Check buttons are visible
 // 	await expect(
-// 		page.locator('button[class*="Button-module_c-button__"]', {
+// 		page.locator(`button${moduleClassSelector('c-button')}`, {
 // 			hasText: 'Publicatiestatus',
 // 		})
 // 	).toBeVisible();
 // 	await expect(
-// 		page.locator('button[class*="Button-module_c-button__"]', {
+// 		page.locator(`button${moduleClassSelector('c-button')}`, {
 // 			hasText: 'Preview',
 // 		})
 // 	).toBeVisible();
 // 	await expect(
-// 		page.locator('button[class*="Button-module_c-button__"]', {
+// 		page.locator(`button${moduleClassSelector('c-button')}`, {
 // 			hasText: 'Bewerken',
 // 		})
 // 	).toBeVisible();
 
 // 	// Click on edit button
 // 	await page
-// 		.locator('button[class*="Button-module_c-button__"]', {
+// 		.locator(`button${moduleClassSelector('c-button')}`, {
 // 			hasText: 'Bewerken',
 // 		})
 // 		.click();
 
 // 	// Check buttons are visible
 // 	await expect(
-// 		page.locator('.c-admin__actions button[class*="Button-module_c-button__"]', {
+// 		page.locator(`.c-admin__actions button${moduleClassSelector('c-button')}`, {
 // 			hasText: 'Annuleer',
 // 		})
 // 	).toBeVisible();
 // 	await expect(
-// 		page.locator('.c-admin__actions button[class*="Button-module_c-button__"]', {
+// 		page.locator(`.c-admin__actions button${moduleClassSelector('c-button')}`, {
 // 			hasText: 'Opslaan',
 // 		})
 // 	).toBeVisible();
@@ -799,24 +799,24 @@ export {};
 // 	).toBeVisible();
 
 // 	// Click on save
-// 	await page.locator('button[class*="Button-module_c-button__"]', { hasText: 'Opslaan' }).click();
+// 	await page.locator(`button${moduleClassSelector('c-button')}`, { hasText: 'Opslaan' }).click();
 
 // 	// Check success toast
 // 	await checkToastMessage(page, 'Gelukt');
 
 // 	// Check buttons are visible
 // 	await expect(
-// 		page.locator('button[class*="Button-module_c-button__"]', {
+// 		page.locator(`button${moduleClassSelector('c-button')}`, {
 // 			hasText: 'Publicatiestatus',
 // 		})
 // 	).toBeVisible();
 // 	await expect(
-// 		page.locator('button[class*="Button-module_c-button__"]', {
+// 		page.locator(`button${moduleClassSelector('c-button')}`, {
 // 			hasText: 'Preview',
 // 		})
 // 	).toBeVisible();
 // 	await expect(
-// 		page.locator('button[class*="Button-module_c-button__"]', {
+// 		page.locator(`button${moduleClassSelector('c-button')}`, {
 // 			hasText: 'Bewerken',
 // 		})
 // 	).toBeVisible();
@@ -827,7 +827,7 @@ export {};
 
 // 	// Click the publication status button
 // 	await page
-// 		.locator('button[class*="Button-module_c-button__"]', {
+// 		.locator(`button${moduleClassSelector('c-button')}`, {
 // 			hasText: 'Publicatiestatus',
 // 		})
 // 		.click();
@@ -843,7 +843,7 @@ export {};
 
 // 	// Click the save button in the modal
 // 	await modal
-// 		.locator('button[class*="Button-module_c-button__"]', { hasText: 'Opslaan' })
+// 		.locator(`button${moduleClassSelector('c-button')}`, { hasText: 'Opslaan' })
 // 		.click();
 
 // 	// Check success toast
@@ -852,7 +852,7 @@ export {};
 // 	// Check unlock icon in publish status button
 // 	await expect(
 // 		page
-// 			.locator('[class*="Button-module_c-button__"]', { hasText: 'Publicatiestatus' })
+// 			.locator(moduleClassSelector('c-button__'), { hasText: 'Publicatiestatus' })
 // 			.locator('.o-svg-icon--unlock-3')
 // 	).toBeVisible();
 
@@ -860,11 +860,11 @@ export {};
 // 	 * Verify publication status in overview
 // 	 */
 // 	// Click the content pages in the sidebar
-// 	await page.click('[class*="SidebarLayout_l-sidebar__navigation__"] [href="/admin/content"]');
+// 	await page.click(`${moduleClassSelector('SidebarLayout_l-sidebar__navigation')} [href="/admin/content"]`);
 
 // 	// Check title
 // 	await expect(
-// 		await page.locator('[class*="AdminLayout_c-admin__page-title__"]', {
+// 		await page.locator(moduleClassSelector('c-admin__page-title__'), {
 // 			hasText: 'Content overzicht',
 // 		})
 // 	).toBeVisible();
@@ -883,7 +883,7 @@ export {};
 
 // 	// Click delete to confirm
 // 	await page
-// 		.locator('.c-modal-context--visible button[class*="Button-module_c-button__"]', {
+// 		.locator(`.c-modal-context--visible button${moduleClassSelector('c-button')}`, {
 // 			hasText: 'Verwijder',
 // 		})
 // 		.click();

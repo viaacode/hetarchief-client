@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
+import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T21: iiif viewer bladeren paginas', async ({ page, context }) => {
 	/**
@@ -19,7 +20,7 @@ test('T21: iiif viewer bladeren paginas', async ({ page, context }) => {
 
 	// Check second page thumbnail button is visible
 	const secondPageThumbnail = page.locator(
-		'[class*="IiifViewer_c-iiif-viewer__iiif__reference-strip__"] [alt="page 2"]'
+		`${moduleClassSelector('c-iiif-viewer__iiif__reference-strip')} [alt="page 2"]`
 	);
 	await expect(secondPageThumbnail).toBeVisible();
 
@@ -31,7 +32,7 @@ test('T21: iiif viewer bladeren paginas', async ({ page, context }) => {
 
 	// Check first page thumbnail button is visible
 	const firstPageThumbnail = page.locator(
-		'[class*="IiifViewer_c-iiif-viewer__iiif__reference-strip__"] [alt="page 1"]'
+		`${moduleClassSelector('c-iiif-viewer__iiif__reference-strip')} [alt="page 1"]`
 	);
 	await expect(firstPageThumbnail).toBeVisible();
 

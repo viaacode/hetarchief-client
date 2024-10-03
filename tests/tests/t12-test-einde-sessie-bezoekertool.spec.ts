@@ -119,7 +119,7 @@ export {};
 //
 // 	// Check Vlaams Parlement in sub navigation
 // 	const subNavigationTitle1 = await page.locator(
-// 		'.p-visitor-space [class*="Navigation_c-navigation"] h1'
+// 		`.p-visitor-space ${moduleClassSelector('c-navigation')} h1`
 // 	);
 // 	await expect(subNavigationTitle1).toBeVisible();
 // 	await expect(subNavigationTitle1).toContainText(spaceName);
@@ -141,7 +141,7 @@ export {};
 //
 // 	// Add object to Favorites folder
 // 	const folderList = await page.locator(
-// 		'.c-blade--active [class*="AddToFolderBlade_c-add-to-folder-blade__list__"]'
+// 		`.c-blade--active ${moduleClassSelector('c-add-to-folder-blade__list')}`
 // 	);
 // 	const checkboxes = await folderList.locator('.c-checkbox__input');
 // 	await checkboxes.first().check();
@@ -205,7 +205,7 @@ export {};
 // 	 */
 //
 // 	// Go to user folders page
-// 	await page.locator('[class*="Navigation_c-navigation__list__"] .c-avatar').click();
+// 	await page.locator(`${moduleClassSelector('c-navigation__list')} .c-avatar`).click();
 // 	await page.locator('.c-dropdown-menu__item', { hasText: 'Mijn mappen' }).click();
 //
 // 	// Check favorite folder is selected
@@ -215,7 +215,7 @@ export {};
 //
 // 	// Click on last saved object
 // 	const lastCard = await page
-// 		.locator('[class*="MediaCardList_c-media-card-list--"] .c-card')
+// 		.locator(`${moduleClassSelector('c-media-card-list--')} .c-card`)
 // 		.last();
 //
 // 	// Check metadata is visible

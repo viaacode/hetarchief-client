@@ -23,7 +23,7 @@ test('T17: Test iiif viewer fullscreen', async ({ page, context }) => {
 	await page.locator('.c-iiif-viewer__iiif__controls__fullscreen').click();
 
 	// Check iif viewer is fullscreen
-	const iiifViewerElementFullscreen = await page.locator('.fullpage > .openseadragon-container');
+	const iiifViewerElementFullscreen = page.locator('.fullpage > .openseadragon-container');
 	expect(await isElementFullscreen(page, iiifViewerElementFullscreen)).toEqual(true);
 
 	// Close fullscreen by clicking the close button

@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 import { fillRequestVisitBlade } from '../helpers/fill-request-visit-blade';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
+import { moduleClassSelector } from '../helpers/module-class-locator';
 
 declare const document: any;
 
@@ -32,14 +33,12 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 
 	// Click Bezoek een aanbieder
 	await page
-		.locator('a[class*="Navigation_c-navigation__link--dropdown"]', {
+		.locator(`a${moduleClassSelector('c-navigation__link--dropdown')}`, {
 			hasText: 'Bezoek een aanbieder',
 		})
 		.first()
 		.click();
-	await expect(
-		await page.locator('a.c-dropdown-menu__item[href="/bezoek"]').first()
-	).toBeVisible();
+	await expect(page.locator('a.c-dropdown-menu__item[href="/bezoek"]').first()).toBeVisible();
 	await page.locator('a.c-dropdown-menu__item[href="/bezoek"]').first().click();
 
 	// Check page title is the home page
@@ -49,7 +48,7 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	});
 
 	// Click on request access button for VRT
-	const vrtCard = await page.locator('.p-home__results .c-visitor-space-card--name--vrt');
+	const vrtCard = page.locator('.p-home__results .c-visitor-space-card--name--vrt');
 	await vrtCard.scrollIntoViewIfNeeded();
 	await expect(vrtCard).toBeVisible();
 	await vrtCard.locator('.c-button--black').click();
@@ -59,11 +58,13 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 
 	// Check that we were redirected to the request pending page
 	await expect(page.locator('text=We hebben je aanvraag goed ontvangen')).toBeVisible();
-	await expect(await page.locator('.p-visit-requested__content').innerHTML()).toContain('VRT');
+	await expect(page.locator('.p-visit-requested__content').innerHTML()).toContain('VRT');
 
 	// Click on 'Bezoek een aanbieder'
 	await page
-		.locator('a[class^=Navigation_c-navigation__link]', { hasText: 'Bezoek een aanbieder' })
+		.locator(`a${moduleClassSelector('c-navigation__link')}`, {
+			hasText: 'Bezoek een aanbieder',
+		})
 		.first()
 		.click();
 	await new Promise((resolve) => setTimeout(resolve, 2 * 1000));

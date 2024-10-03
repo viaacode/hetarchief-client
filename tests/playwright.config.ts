@@ -34,6 +34,8 @@ const config: PlaywrightTestConfig = {
 	/* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
 	use: {
 		headless: true,
+		// Ignore errors around https certificates on INT: https://ssum-int-iam.private.cloud.meemoo.be/account/nieuw
+		ignoreHTTPSErrors: true,
 		launchOptions: {
 			// slowMo: 100 /* TODO disable after recording all videos */,
 		},

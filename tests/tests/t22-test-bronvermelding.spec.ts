@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 import { getClipboardValue } from '../helpers/get-clipboard-value';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
+import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T22: bronvermelding', async ({ page, context }) => {
 	await context.grantPermissions(['clipboard-read', 'clipboard-write']);
@@ -17,7 +18,7 @@ test('T22: bronvermelding', async ({ page, context }) => {
 
 	// Scroll into view attribution metadata
 	const attributionMetadata = page
-		.locator('[class*="Metadata_c-metadata__item"]', {
+		.locator(moduleClassSelector('c-metadata__item'), {
 			hasText: 'Bronvermelding',
 		})
 		.first();
@@ -27,17 +28,17 @@ test('T22: bronvermelding', async ({ page, context }) => {
 	await expect(attributionMetadata).toBeVisible();
 
 	// Check that the text contains all required parts
-	const attributuonText = `onbekend, Wet- en verordeningsblad voor de bezette streken van België, KU Leuven Universiteitsbibliotheek, Public domein, ${
+	const attributionText = `onbekend, Wet- en verordeningsblad voor de bezette streken van België, KU Leuven Universiteitsbibliotheek, Public domein, ${
 		process.env.TEST_CLIENT_ENDPOINT as string
 	}/pid/h98z893q54`;
-	await expect(attributionMetadata).toContainText(attributuonText);
+	await expect(attributionMetadata).toContainText(attributionText);
 
 	// Click the copy button
 	await attributionMetadata.locator('.c-button').click();
 
 	// Check the clipboard contains the attribution text
 	const clipboardText = getClipboardValue(page, context);
-	await expect(clipboardText).resolves.toEqual(attributuonText);
+	await expect(clipboardText).resolves.toEqual(attributionText);
 
 	// Wait for close to save the videos
 	await context.close();

@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 import { checkToastMessage } from '../helpers/check-toast-message';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
+import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 	/**
@@ -44,7 +45,7 @@ test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 
 	// Check the checkbox next to favorites
 	let folderList = page.locator(
-		'.c-blade--active [class*="AddToFolderBlade_c-add-to-folder-blade__list__"]'
+		`.c-blade--active ${moduleClassSelector('c-add-to-folder-blade__list')}`
 	);
 	let checkboxes = folderList.locator('.c-checkbox__check-icon');
 	expect(await checkboxes.count()).toEqual(1);
@@ -52,7 +53,7 @@ test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 
 	// Save the changes
 	const saveButton = page.locator(
-		'.c-blade--active [class*="Blade_c-blade__footer__"] .c-button--black'
+		`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button--black`
 	);
 	await expect(saveButton).toBeVisible();
 	await saveButton.click();
@@ -82,7 +83,7 @@ test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 
 	// Check the checkbox next to favorites
 	folderList = page.locator(
-		'.c-blade--active [class*="AddToFolderBlade_c-add-to-folder-blade__list__"]'
+		`.c-blade--active ${moduleClassSelector('c-add-to-folder-blade__list')}`
 	);
 	checkboxes = folderList.locator('.c-checkbox__check-icon');
 	expect(await checkboxes.count()).toEqual(1);

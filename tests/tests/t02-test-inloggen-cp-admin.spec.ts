@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
+import { moduleClassSelector } from '../helpers/module-class-locator';
 
 declare const document: any;
 
@@ -16,7 +17,7 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_PASSWORD as string
 	);
 	// Check navbar is visible
-	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
+	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
 
 	// Check logged in status
 	await expect(page.locator('.c-avatar__text')).toContainText('VRT');
