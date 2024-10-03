@@ -7,6 +7,7 @@ import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
 import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
+import { moduleClassSelector } from '../helpers/module-class-locator';
 
 declare const document: any;
 
@@ -34,10 +35,10 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	 * Go to search page VRT --------------------------------------------------------------------
 	 */
 	// Check navbar exists
-	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
-	await expect(page.locator('a[href="/bezoek"] div[class^="c-badge"]').first()).toContainText(
-		'1'
-	);
+	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
+	await expect(
+		page.locator(`a[href="/bezoek"] div${moduleClassSelector('c-badge')}`).first()
+	).toContainText('1');
 	// Click on "Bezoek een aanbieder" navigation item
 	await page.click('text=Bezoek een aanbieder');
 
@@ -45,12 +46,12 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	await page.waitForTimeout(1000);
 
 	const subNavItems = await page
-		.locator('div[class^="c-menu c-menu--default"]')
+		.locator(`div${moduleClassSelector('c-menu c-menu--default')}`)
 		.first()
 		.locator('a')
 		.allInnerTexts();
-	await expect(subNavItems[0]).toContain('Zoeken naar aanbieders');
-	await expect(subNavItems[1]).toContain('VRT');
+	expect(subNavItems[0]).toContain('Zoeken naar aanbieders');
+	expect(subNavItems[1]).toContain('VRT');
 	await page.click('text=VRT');
 
 	// Get tab counts before search
@@ -58,13 +59,13 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 
 	// Enter search term
 	const SEARCH_TERM = 'betfred'; // TODO: change this to 'betfred British Masters golf' when the int environment is not changing qs251fjp7m
-	const searchField = await page.locator('.c-tags-input__input-container').first();
+	const searchField = page.locator('.c-tags-input__input-container').first();
 	await searchField.click();
 	await searchField.type(SEARCH_TERM);
 	await searchField.press('Enter');
 
 	// Check green pill exists with search term inside
-	const pill = await page.locator('.c-tags-input__multi-value .c-tag__label');
+	const pill = page.locator('.c-tags-input__multi-value .c-tag__label');
 	await expect(pill).toBeVisible();
 	await expect(pill).toContainText(SEARCH_TERM);
 
@@ -84,7 +85,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 		.locator("[class^='MediaCardList_c-media-card-list__content__'] article mark")
 		.first()
 		.innerText();
-	await expect(markedWord.toLowerCase()).toEqual(SEARCH_TERM);
+	expect(markedWord.toLowerCase()).toEqual(SEARCH_TERM);
 
 	// Bookmark this item
 	// Click bookmark button
@@ -99,10 +100,10 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	expect(bookmarkFolderCounts1['Bestaande map, nieuwe naam']).toBeUndefined();
 
 	// Add object to Favorites folder
-	let folderList = await page.locator(
-		'.c-blade--active [class*="AddToFolderBlade_c-add-to-folder-blade__list__"]'
+	let folderList = page.locator(
+		`.c-blade--active ${moduleClassSelector('c-add-to-folder-blade__list')}`
 	);
-	let checkboxes = await folderList.locator('.c-checkbox__check-icon');
+	let checkboxes = folderList.locator('.c-checkbox__check-icon');
 	expect(await checkboxes.count()).toEqual(1);
 	await checkboxes.first().click();
 
@@ -158,10 +159,10 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	expect(bookmarkFolderCounts1['Bestaande map, nieuwe naam']).toBeUndefined();
 
 	// Add object to Favorites folder
-	folderList = await page.locator(
-		'.c-blade--active [class*="AddToFolderBlade_c-add-to-folder-blade__list__"]'
+	folderList = page.locator(
+		`.c-blade--active ${moduleClassSelector('c-add-to-folder-blade__list')}`
 	);
-	checkboxes = await folderList.locator('.c-checkbox__check-icon');
+	checkboxes = folderList.locator('.c-checkbox__check-icon');
 	expect(await checkboxes.count()).toEqual(1);
 	await checkboxes.first().click();
 
@@ -299,7 +300,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 
 	await page.locator('[aria-label="Toevoegen aan aanvraaglijst"]').click();
 
-	await page.locator('text=Voeg toe aan aanvragen'); // TODO: This should be 'Voeg toe aan aanvraaglijst'
+	page.locator('text=Voeg toe aan aanvragen'); // TODO: This should be 'Voeg toe aan aanvraaglijst'
 
 	// Click 'Ik wil dit materiaal hergebruiken'
 	await page.locator('text=Ik wil dit object hergebruiken').click(); // TODO: This should be 'Ik wil dit materiaal hergebruiken'
@@ -313,7 +314,9 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 
 	// Click request list icon
 	await page
-		.locator('nav span[class^=MaterialRequestCenterButton]', { hasText: 'request' })
+		.locator(`nav span${moduleClassSelector('MaterialRequestCenterButton')}`, {
+			hasText: 'request',
+		})
 		.click();
 	// await checkBladeTitle(page, 'Aanvraaglijst');
 
@@ -324,14 +327,14 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	// Check if the title of the blade is now 'Persoonlijke gegevens'
 	// await expect(page.locator('.c-blade--active')).toBeVisible({ timeout: 10000 });
 	// const bladeTitle = await page.locator(
-	// 	'.c-blade--active [class*=" PersonalInfoBlade_c-personal-info-blade__title"]'
+	// 	`.c-blade--active ${moduleClassSelector('c-personal-info-blade__title')}`
 	// );
 	// await expect(bladeTitle).toContainText('Persoonlijke gegevens');
 	// await expect(bladeTitle).toBeVisible();
 
 	// Expect firstname, lastname and email address to be filled in, organisation to be empty
 	const prefilledData = await page
-		.locator('[class^=PersonalInfoBlade_c-personal-info-blade__content-value]')
+		.locator(moduleClassSelector('c-personal-info-blade__content-value'))
 		.allInnerTexts();
 	expect(prefilledData).toContain('BezoekerVoornaam-auto-2 BezoekerAchternaam');
 	expect(prefilledData).toContain('hetarchief2.0+ateindgebruikerbzt@meemoo.be');
@@ -360,8 +363,8 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	// Check blade title
 	await checkBladeTitle(page, 'Rapporteren'); // This should be 'Een probleem melden'
 
-	const emailInputField = await page.locator('input#field');
-	await expect(await emailInputField.inputValue()).toEqual(
+	const emailInputField = page.locator('input#field');
+	expect(await emailInputField.inputValue()).toEqual(
 		'hetarchief2.0+ateindgebruikerbzt@meemoo.be'
 	);
 	await expect(emailInputField).toBeDisabled();
@@ -377,7 +380,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	 */
 
 	// Click on keyword
-	// await page.locator('[class^="Metadata_c-metadata__list__"] .c-tag-list__item').first().click();
+	// await page.locator(`${moduleClassSelector('c-metadata__list')} .c-tag-list__item`).first().click();
 
 	// Check page url changes:
 	// await expect.poll(() => page.url(), { timeout: 10000 }).toContain('/vrt?search=');

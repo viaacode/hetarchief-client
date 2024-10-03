@@ -58,7 +58,7 @@ export {};
 
 // 	// Check VRT in sub navigation
 // 	const subNavigationTitle = await page.locator(
-// 		'.p-visitor-space [class*="Navigation_c-navigation"] h1'
+// 		`.p-visitor-space ${moduleClassSelector('c-navigation')} h1`
 // 	);
 // 	await expect(subNavigationTitle).toBeVisible();
 // 	await expect(subNavigationTitle).toContainText('VRT');
@@ -105,7 +105,7 @@ export {};
 
 // 	// Get folder list container
 // 	const folderList = await page.locator(
-// 		'.c-blade--active [class*="AddToFolderBlade_c-add-to-folder-blade__list__"]'
+// 		`.c-blade--active ${moduleClassSelector('c-add-to-folder-blade__list')}`
 // 	);
 
 // 	// Check folder favorites already exists
@@ -180,7 +180,7 @@ export {};
 
 // 	// Check one object is visible
 // 	let objectCard = await page.locator(
-// 		'[class*="MediaCardList_c-media-card-list--two-columns__"]'
+// 		moduleClassSelector('c-media-card-list--two-columns__')
 // 	);
 // 	await expect.poll(() => objectCard.count()).toEqual(1);
 // 	await expect(objectCard).toBeVisible();
@@ -188,7 +188,7 @@ export {};
 // 	// Click on the automated test folder
 // 	await automatedTestFolderNavItem.click();
 
-// 	objectCard = await page.locator('[class*="MediaCardList_c-media-card-list--two-columns__"]');
+// 	objectCard = await page.locator(moduleClassSelector('c-media-card-list--two-columns__'));
 // 	await expect.poll(() => objectCard.count()).toEqual(1);
 // 	await expect(objectCard).toBeVisible();
 
@@ -204,7 +204,7 @@ export {};
 // 	await checkToastMessage(page, 'Item verwijderd uit map');
 
 // 	// Check object card is no longer visible
-// 	objectCard = await page.locator('[class*="MediaCardList_c-media-card-list--two-columns__"]');
+// 	objectCard = await page.locator(moduleClassSelector('c-media-card-list--two-columns__'));
 // 	await expect.poll(() => objectCard.count()).toEqual(0);
 // 	await expect(objectCard).not.toBeVisible();
 
@@ -216,7 +216,7 @@ export {};
 // 	await page.click('[name="Map aanpassen"]');
 
 // 	// Check folder name input field appears
-// 	const pageContent = page.locator('[class*="SidebarLayout_l-sidebar__main"]').last();
+// 	const pageContent = page.locator(moduleClassSelector('SidebarLayout_l-sidebar__main')).last();
 // 	let folderNameEdit = await pageContent.locator('.c-content-input');
 // 	let folderNameInput = await folderNameEdit.locator('input[name="name"]');
 // 	await expect(folderNameInput).toBeVisible();
@@ -243,7 +243,7 @@ export {};
 
 // 	// Check folder page title
 // 	let folderTitle = await page.locator(
-// 		'[class*="EditCollectionTitle_c-edit-folder-title__"] .c-content-input__value'
+// 		`${moduleClassSelector('c-edit-folder-title')} .c-content-input__value`
 // 	);
 // 	await expect(folderTitle).toBeVisible();
 // 	await expect(folderTitle).toContainText('Bestaande map, nieuwe naam');
@@ -278,7 +278,7 @@ export {};
 
 // 	// Check folder page title
 // 	folderTitle = await page.locator(
-// 		'[class*="EditCollectionTitle_c-edit-folder-title__"] .c-content-input__value'
+// 		`${moduleClassSelector('c-edit-folder-title')} .c-content-input__value`
 // 	);
 // 	await expect(folderTitle).toBeVisible();
 // 	await expect(folderTitle).toContainText('Nieuwe map automated test');
@@ -335,7 +335,7 @@ export {};
 // 	await checkActiveSidebarNavigationItem(page, 0, 'Mijn profiel', '/account/mijn-profiel');
 
 // 	// Check page title to say: my profile
-// 	const getPageContent = () => page.locator('[class*="SidebarLayout_l-sidebar__main"]').last();
+// 	const getPageContent = () => page.locator(moduleClassSelector('SidebarLayout_l-sidebar__main')).last();
 // 	const pageTitle = await getPageContent().locator('h2');
 // 	await expect(pageTitle).toBeVisible();
 // 	await expect(pageTitle).toContainText('Mijn profiel');

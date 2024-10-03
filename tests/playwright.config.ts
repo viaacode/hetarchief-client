@@ -34,12 +34,20 @@ const config: PlaywrightTestConfig = {
 	/* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
 	use: {
 		headless: true,
+		// Ignore errors around https certificates on INT: https://ssum-int-iam.private.cloud.meemoo.be/account/nieuw
+		ignoreHTTPSErrors: true,
 		launchOptions: {
 			// slowMo: 100 /* TODO disable after recording all videos */,
 		},
-		// contextOptions: {
-		// 	recordVideo: { dir: 'videos/' } /* TODO disable in production */,
-		// },
+		contextOptions: {
+			// recordVideo: { dir: 'videos/' } /* TODO disable in production */,
+			// Ignore errors around https certificates on INT: https://ssum-int-iam.private.cloud.meemoo.be/account/nieuw
+			ignoreHTTPSErrors: true,
+			// Ignore security header on the page to allow javascript to be evaluated
+			// Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script
+			// in the following Content Security Policy directive: "script-src 'self' 'unsafe-inline'".
+			bypassCSP: true,
+		},
 		/* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
 		actionTimeout: 0,
 		/* Base URL to use in actions like `await page.goto('/')`. */

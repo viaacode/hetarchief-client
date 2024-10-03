@@ -6,6 +6,7 @@ import { checkToastMessage } from '../helpers/check-toast-message';
 import { checkVisitRequestStatuses } from '../helpers/check-visit-request-statuses';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
+import { moduleClassSelector } from '../helpers/module-class-locator';
 
 declare const document: any;
 
@@ -24,7 +25,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	);
 
 	// Check navbar exists
-	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
+	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
 
 	// Admin should not be visible and beheer should be visible
 	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Admin' })).toHaveCount(0);
@@ -69,16 +70,14 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await page.press('.p-cp-requests__header [placeholder="Zoek"]', 'Enter');
 
 	// The number of requests should be 3
-	await expect(
-		await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
-	).toContainText(`1-3 van 3`);
+	await expect(page.locator(moduleClassSelector('c-pagination-progress'))).toContainText(
+		`1-3 van 3`
+	);
 	// Clear search term with x button
 	await page.locator('[aria-label="Opnieuw instellen"]').first().click();
 
 	// Number of results should be equal tot total results from before
-	await expect(
-		await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
-	).toContainText(
+	await expect(page.locator(moduleClassSelector('c-pagination-progress'))).toContainText(
 		`1-${countsBeforeApproveDeny.totalNumberOfRequests} van ${countsBeforeApproveDeny.totalNumberOfRequests}`
 	);
 
@@ -89,7 +88,9 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Click the pending visit request
 	await page
 		.locator(
-			'[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row .c-table__cell:first-child',
+			`${moduleClassSelector(
+				'SidebarLayout_l-sidebar__main'
+			)} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
 			{ hasText: 'BezoekerVoornaam' }
 		)
 		.first()
@@ -100,20 +101,20 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Check request summary contains requester name
 	let summaryHtml = await page
-		.locator('.c-blade--active [class*="VisitSummary_c-visit-summary"]')
+		.locator(`.c-blade--active ${moduleClassSelector('c-visit-summary')}`)
 		.innerHTML();
-	await expect(summaryHtml).toContain('BezoekerVoornaam');
-	await expect(summaryHtml).toContain('BezoekerAchternaam');
-	await expect(summaryHtml).toContain('Een geldige reden');
+	expect(summaryHtml).toContain('BezoekerVoornaam');
+	expect(summaryHtml).toContain('BezoekerAchternaam');
+	expect(summaryHtml).toContain('Een geldige reden');
 
 	// Check buttons for approve and deny are visible
-	let approveButton = await page.locator(
-		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button',
+	let approveButton = page.locator(
+		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
 		{ hasText: 'Goedkeuren' }
 	);
 	await expect(approveButton).toBeVisible();
-	let denyButton = await page.locator(
-		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button',
+	let denyButton = page.locator(
+		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
 		{ hasText: 'Weigeren' }
 	);
 	await expect(denyButton).toBeVisible();
@@ -126,7 +127,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Expect 'toegang tot de volledige collectie' to be checked
 	await expect(
-		page.locator('[class^="c-radio-button"] span', {
+		page.locator(`${moduleClassSelector('c-radio-button')} span`, {
 			hasText: 'Toegang tot de volledige collectie',
 		})
 	).toBeChecked();
@@ -136,7 +137,9 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await page.click('.react-datepicker__time-list-item:has-text("00:00")');
 
 	// Click the approve button
-	await page.click('.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button--black');
+	await page.click(
+		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button--black`
+	);
 
 	// Blade closes
 	await expect(page.locator('.c-blade--active')).not.toBeVisible();
@@ -146,9 +149,11 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Check first row is approved
 	await expect(
-		await page
+		page
 			.locator(
-				'[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row'
+				`${moduleClassSelector(
+					'SidebarLayout_l-sidebar__main'
+				)} .c-table__wrapper--body .c-table__row`
 			)
 			.first()
 			.locator('text=Goedgekeurd')
@@ -158,18 +163,16 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	const countsAfterOneApprove = await checkVisitRequestStatuses(page);
 
 	// Verify that the numbers changes before and after the approved request
-	await expect(countsBeforeApproveDeny.totalNumberOfRequests).toEqual(
+	expect(countsBeforeApproveDeny.totalNumberOfRequests).toEqual(
 		countsAfterOneApprove.totalNumberOfRequests
 	);
-	await expect(countsBeforeApproveDeny.numberOfPending).toEqual(
+	expect(countsBeforeApproveDeny.numberOfPending).toEqual(
 		countsAfterOneApprove.numberOfPending + 1
 	);
-	await expect(countsBeforeApproveDeny.numberOfApproved).toEqual(
+	expect(countsBeforeApproveDeny.numberOfApproved).toEqual(
 		countsAfterOneApprove.numberOfApproved - 1
 	);
-	await expect(countsBeforeApproveDeny.numberOfDenied).toEqual(
-		countsAfterOneApprove.numberOfDenied
-	);
+	expect(countsBeforeApproveDeny.numberOfDenied).toEqual(countsAfterOneApprove.numberOfDenied);
 
 	/**
 	 * Deny request --------------------------------------------------------
@@ -178,7 +181,9 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Click the pending visit request
 	await page
 		.locator(
-			'[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row .c-table__cell:first-child',
+			`${moduleClassSelector(
+				'SidebarLayout_l-sidebar__main'
+			)} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
 			{ hasText: 'Meemoo admin' }
 		)
 		.first()
@@ -189,20 +194,20 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Check request summary contains requester name
 	summaryHtml = await page
-		.locator('.c-blade--active [class*="VisitSummary_c-visit-summary"]')
+		.locator(`.c-blade--active ${moduleClassSelector('c-visit-summary')}`)
 		.innerHTML();
-	await expect(summaryHtml).toContain('Meemoo');
-	await expect(summaryHtml).toContain('admin');
-	await expect(summaryHtml).toContain('Een geldige reden');
+	expect(summaryHtml).toContain('Meemoo');
+	expect(summaryHtml).toContain('admin');
+	expect(summaryHtml).toContain('Een geldige reden');
 
 	// Check buttons for approve and deny are visible
-	approveButton = await page.locator(
-		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button',
+	approveButton = page.locator(
+		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
 		{ hasText: 'Goedkeuren' }
 	);
 	await expect(approveButton).toBeVisible();
-	denyButton = await page.locator(
-		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button',
+	denyButton = page.locator(
+		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
 		{ hasText: 'Weigeren' }
 	);
 	await expect(denyButton).toBeVisible();
@@ -215,7 +220,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Click the deny button on the second blade
 	await page
-		.locator('.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button', {
+		.locator(`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`, {
 			hasText: 'Weigeren',
 		})
 		.click();
@@ -230,16 +235,16 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	const countsAfterOneApproveAndOneDeny = await checkVisitRequestStatuses(page);
 
 	// Verify that the numbers changes before and after the deny request
-	await expect(countsAfterOneApprove.totalNumberOfRequests).toEqual(
+	expect(countsAfterOneApprove.totalNumberOfRequests).toEqual(
 		countsAfterOneApproveAndOneDeny.totalNumberOfRequests
 	);
-	await expect(countsAfterOneApprove.numberOfPending).toEqual(
+	expect(countsAfterOneApprove.numberOfPending).toEqual(
 		countsAfterOneApproveAndOneDeny.numberOfPending + 1
 	);
-	await expect(countsAfterOneApprove.numberOfApproved).toEqual(
+	expect(countsAfterOneApprove.numberOfApproved).toEqual(
 		countsAfterOneApproveAndOneDeny.numberOfApproved
 	);
-	await expect(countsAfterOneApprove.numberOfDenied).toEqual(
+	expect(countsAfterOneApprove.numberOfDenied).toEqual(
 		countsAfterOneApproveAndOneDeny.numberOfDenied - 1
 	);
 
@@ -250,7 +255,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Check denied count
 	await page.click('.c-tab__label:has-text("Geweigerd")');
-	await expect(await page.locator('text=meemoo Admin').first()).toBeVisible();
+	await expect(page.locator('text=meemoo Admin').first()).toBeVisible();
 
 	// Wait for close to save the videos
 	await context.close();

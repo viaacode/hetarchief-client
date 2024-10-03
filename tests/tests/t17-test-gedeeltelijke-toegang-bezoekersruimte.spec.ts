@@ -7,6 +7,7 @@ import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { logout } from '../helpers/log-out';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
+import { moduleClassSelector } from '../helpers/module-class-locator';
 import { waitForSearchResults } from '../helpers/wait-for-search-results';
 
 declare const document: any;
@@ -26,19 +27,19 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	);
 
 	// Check navbar exists
-	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
+	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
 
 	/**
 	 * Go to 'Bezoek een aanbieder'
 	 */
 	// Click on "Bezoek een aanbieder" navigation item
-	await page.click('[class*="Navigation_c-navigation__link--dropdown"][href="/bezoek"]');
+	await page.click(`${moduleClassSelector('c-navigation__link--dropdown')}[href="/bezoek"]`);
 
 	// Click on "Zoeken naar aanbieders" navigation option
 	await page.click('text=Zoeken naar aanbieders');
 
 	// Click on request access button for Amsab-ISG
-	const amsabCard = await page.locator('.p-home__results .c-visitor-space-card--name--amsab-isg');
+	const amsabCard = page.locator('.p-home__results .c-visitor-space-card--name--amsab-isg');
 	await expect(amsabCard).toContainText('Amsab-ISG');
 	await amsabCard.locator('.c-button--black').click();
 	// await new Promise((resolve) => setTimeout(resolve, 10 * 1000));
@@ -47,16 +48,16 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await page.fill('#RequestAccessBlade__requestReason', `Een geldige reden`);
 
 	// Enable checkbox 'Ik vraag deze toegang aan voor onderzoeksdoeleinden of privéstudie'
-	await page.locator('[class^=RequestAccessBlade_c-request-access-blade] .c-checkbox').click();
+	await page.locator(`${moduleClassSelector('c-request-access-blade')} .c-checkbox`).click();
 
 	// Click on 'Verstuur'
 	await page
-		.locator('[class^=RequestAccessBlade_c-request-access-blade] .c-button__label', {
+		.locator(`${moduleClassSelector('c-request-access-blade')} .c-button__label`, {
 			hasText: 'Verstuur',
 		})
 		.click();
 
-	await expect(await page.locator('text=We hebben je aanvraag goed ontvangen')).toBeVisible({
+	await expect(page.locator('text=We hebben je aanvraag goed ontvangen')).toBeVisible({
 		timeout: 10000,
 	});
 
@@ -69,7 +70,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	//await new Promise((resolve) => setTimeout(resolve, 1 * 1000)); // TODO: replace this
 
 	// Check navbar exists
-	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
+	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
 
 	// Login cp admin amsab isg
 	await loginUserHetArchiefIdp(
@@ -103,7 +104,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	);
 
 	// Check active tab: All
-	await expect(await page.locator('.c-tab--active').innerHTML()).toContain('Alle');
+	expect(await page.locator('.c-tab--active').innerHTML()).toContain('Alle');
 
 	/**
 	 * Approve request
@@ -111,7 +112,9 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Click the pending visit request
 	await page
 		.locator(
-			'[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row .c-table__cell:first-child',
+			`${moduleClassSelector(
+				'SidebarLayout_l-sidebar__main'
+			)} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
 			{ hasText: 'BezoekerVoornaam' }
 		)
 		.first()
@@ -122,20 +125,20 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Check request summary contains requester name
 	let summaryHtml = await page
-		.locator('.c-blade--active [class*="VisitSummary_c-visit-summary"]')
+		.locator(`.c-blade--active ${moduleClassSelector('c-visit-summary')}`)
 		.innerHTML();
-	await expect(summaryHtml).toContain('BezoekerVoornaam');
-	await expect(summaryHtml).toContain('BezoekerAchternaam');
-	await expect(summaryHtml).toContain('Een geldige reden');
+	expect(summaryHtml).toContain('BezoekerVoornaam');
+	expect(summaryHtml).toContain('BezoekerAchternaam');
+	expect(summaryHtml).toContain('Een geldige reden');
 
 	// Check buttons for approve and deny are visible
-	let approveButton = await page.locator(
-		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button',
+	let approveButton = page.locator(
+		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
 		{ hasText: 'Goedkeuren' }
 	);
 	await expect(approveButton).toBeVisible();
-	let denyButton = await page.locator(
-		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button',
+	let denyButton = page.locator(
+		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
 		{ hasText: 'Weigeren' }
 	);
 	await expect(denyButton).toBeVisible();
@@ -148,7 +151,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Click 'Toegang tot een deel van collectie'
 	await page
-		.locator('[class^="c-radio-button"] span', {
+		.locator(`${moduleClassSelector('c-radio-button')} span`, {
 			hasText: 'Toegang tot een deel van collectie',
 		})
 		.click();
@@ -159,15 +162,15 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// There should be 1 folder: 'Favorieten'
 	let existingfolders = await page.locator('ul .c-checkbox-list li > span');
 	await expect(existingfolders).toHaveCount(1);
-	await expect(await existingfolders.nth(0).innerText()).toContain('Favorieten');
+	expect(await existingfolders.nth(0).innerText()).toContain('Favorieten');
 
 	// Click next to the blade to close it, need to click it two times
-	const notBlade = await page.locator('[class*=Overlay_c-overlay--visible__]').first();
+	const notBlade = page.locator('[class*=Overlay_c-overlay--visible__]').first();
 	await notBlade.click();
 	await notBlade.click();
 
 	// expect the blade to not be visible
-	await expect(await page.locator('[class*=Overlay_c-overlay--visible]')).toHaveCount(0);
+	await expect(page.locator('[class*=Overlay_c-overlay--visible]')).toHaveCount(0);
 	await new Promise((resolve) => setTimeout(resolve, 1000)); // TODO: replace this
 
 	// Click on 'Naar mijn bezoekertool'
@@ -178,7 +181,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Check user is in correct space
 	// await expect(
 	// 	await page
-	// 		.locator('[class^=VisitorSpaceDropdown_c-visitor-spaces-dropdown__active-label]')
+	// 		.locator(moduleClassSelector('c-visitor-spaces-dropdown__active-label'))
 	// 		.allInnerTexts()
 	// ).toEqual(['Amsab-ISG']);
 	// Go to the hetarchief homepage
@@ -212,10 +215,10 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	expect(bookmarkFolderCounts['Favorieten']).toEqual(0);
 	expect(bookmarkFolderCounts['Map automated test']).toEqual(0);
 
-	const folderList = await page.locator(
-		'.c-blade--active [class*="AddToFolderBlade_c-add-to-folder-blade__list__"]'
+	const folderList = page.locator(
+		`.c-blade--active ${moduleClassSelector('c-add-to-folder-blade__list')}`
 	);
-	const checkboxes = await folderList.locator('.c-checkbox__check-icon');
+	const checkboxes = folderList.locator('.c-checkbox__check-icon');
 	await checkboxes.first().click();
 	await checkboxes.nth(1).click();
 
@@ -247,7 +250,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	);
 
 	// Check active tab: All
-	await expect(await page.locator('.c-tab--active').innerHTML()).toContain('Alle');
+	expect(await page.locator('.c-tab--active').innerHTML()).toContain('Alle');
 
 	/**
 	 * Approve request
@@ -255,7 +258,9 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Click the pending visit request
 	await page
 		.locator(
-			'[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row .c-table__cell:first-child',
+			`${moduleClassSelector(
+				'SidebarLayout_l-sidebar__main'
+			)} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
 			{ hasText: 'BezoekerVoornaam' }
 		)
 		.first()
@@ -266,20 +271,20 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Check request summary contains requester name
 	summaryHtml = await page
-		.locator('.c-blade--active [class*="VisitSummary_c-visit-summary"]')
+		.locator(`.c-blade--active ${moduleClassSelector('c-visit-summary')}`)
 		.innerHTML();
-	await expect(summaryHtml).toContain('BezoekerVoornaam');
-	await expect(summaryHtml).toContain('BezoekerAchternaam');
-	await expect(summaryHtml).toContain('Een geldige reden');
+	expect(summaryHtml).toContain('BezoekerVoornaam');
+	expect(summaryHtml).toContain('BezoekerAchternaam');
+	expect(summaryHtml).toContain('Een geldige reden');
 
 	// Check buttons for approve and deny are visible
-	approveButton = await page.locator(
-		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button',
+	approveButton = page.locator(
+		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
 		{ hasText: 'Goedkeuren' }
 	);
 	await expect(approveButton).toBeVisible();
-	denyButton = await page.locator(
-		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button',
+	denyButton = page.locator(
+		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
 		{ hasText: 'Weigeren' }
 	);
 	await expect(denyButton).toBeVisible();
@@ -292,7 +297,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Click 'Toegang tot een deel van collectie'
 	await page
-		.locator('[class^="c-radio-button"] span', {
+		.locator(`${moduleClassSelector('c-radio-button')} span`, {
 			hasText: 'Toegang tot een deel van collectie',
 		})
 		.click();
@@ -301,10 +306,10 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await page.locator('text=Kies een map').click();
 
 	// There should be 1 folder: 'Favorieten'
-	existingfolders = await page.locator('ul .c-checkbox-list li > span');
+	existingfolders = page.locator('ul .c-checkbox-list li > span');
 	await expect(existingfolders).toHaveCount(2);
-	await expect(await existingfolders.allInnerTexts()).toContain('Favorieten');
-	await expect(await existingfolders.allInnerTexts()).toContain('Map automated test');
+	expect(await existingfolders.allInnerTexts()).toContain('Favorieten');
+	expect(await existingfolders.allInnerTexts()).toContain('Map automated test');
 
 	// Click 'Map automated test'
 	await page.locator('ul .c-checkbox-list li > span', { hasText: 'Map automated test' }).click();
@@ -314,7 +319,9 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await page.click('.react-datepicker__time-list-item:has-text("00:00")');
 
 	// Click the approve button
-	await page.click('.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button--black');
+	await page.click(
+		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button--black`
+	);
 
 	// Blade closes
 	await expect(page.locator('.c-blade--active')).not.toBeVisible();
@@ -323,21 +330,22 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await checkToastMessage(page, 'De aanvraag is goedgekeurd.');
 
 	await new Promise((resolve) => setTimeout(resolve, 3 * 1000)); // TODO: temp
-	const approvedRequest = await page
-		.locator('[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row', {
-			hasText: 'BezoekerVoornaam',
-		})
+	const approvedRequest = page
+		.locator(
+			`${moduleClassSelector(
+				'SidebarLayout_l-sidebar__main'
+			)} .c-table__wrapper--body .c-table__row`,
+			{
+				hasText: 'BezoekerVoornaam',
+			}
+		)
 		.first();
 
-	await expect(
-		await approvedRequest
-			.locator('[class^=RequestStatusBadge_c-request-status-badge]')
-			.innerText()
+	expect(
+		await approvedRequest.locator(moduleClassSelector('c-request-status-badge')).innerText()
 	).toContain('Goedgekeurd');
 
-	await expect(await approvedRequest.locator('td').nth(4).allInnerTexts()).toContain(
-		'Gedeeltelijke'
-	);
+	expect(await approvedRequest.locator('td').nth(4).allInnerTexts()).toContain('Gedeeltelijke');
 
 	await page.locator('.c-avatar__text').click();
 	// Click visit requests navigation item
@@ -367,17 +375,19 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	const newFolder = await page.locator('[aria-label="Map automated test"]');
 	await expect(await newFolder.innerText()).toContain('Map automated test');
 	await expect(
-		newFolder.locator('[class^=p-account-my-folders__link__limited-access-icon]')
+		newFolder.locator(moduleClassSelector('p-account-my-folders__link__limited-access-icon'))
 	).toBeVisible();
 
 	// Click on the newly created folder and check if it contains the added object
 	await newFolder.click();
 
-	const folderObject = await page.locator(
-		'[class^=MediaCardList_c-media-card-list] [class^=MediaCardList_c-media-card-list__content]'
+	const folderObject = page.locator(
+		`${moduleClassSelector(
+			'MediaCardList_c-media-card-list'
+		)} [class^=MediaCardList_c-media-card-list__content]`
 	);
 	await expect(folderObject).toHaveCount(1);
-	await expect(
+	expect(
 		await folderObject
 			.locator('.p-account-my-folders__card-description p')
 			.first()
@@ -389,7 +399,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	const bannerText = await page
 		.locator('div.p-account-my-folders__limited-access-wrapper')
 		.allInnerTexts();
-	await expect(bannerText[0]).toMatch(
+	expect(bannerText[0]).toMatch(
 		/Deze map wordt gebruikt om bezoekers beperkte toegang te geven t.e.m..*/
 	);
 	await logout(page);
@@ -402,22 +412,22 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	);
 
 	// Check navbar exists and user has access to one visitor space
-	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
-	await expect(page.locator('a[href="/bezoek"] div[class^="c-badge"]').first()).toContainText(
-		'2'
-	);
+	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
+	await expect(
+		page.locator(`a[href="/bezoek"] div${moduleClassSelector('c-badge')}`).first()
+	).toContainText('2');
 
 	// Go to the Amsab-ISG visitor space
 	await page.click('text=Bezoek een aanbieder');
 	await page
-		.locator('div[class^="c-menu c-menu--default"]')
+		.locator(`div${moduleClassSelector('c-menu c-menu--default')}`)
 		.first()
 		.locator('a', { hasText: 'Amsab-ISG' })
 		.click();
 
 	await waitForSearchResults(page);
 
-	await expect(
+	expect(
 		await page
 			.locator('button.c-tabs__item.c-tab.c-tab--dark.c-tab--all.c-tab--active')
 			.allInnerTexts()
@@ -430,27 +440,29 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 		.innerText();
 
 	// Go to the public catalogue
-	await page.locator('li[class^=VisitorSpaceDropdown_c-visitor-spaces-dropdown__active]').click();
+	await page.locator(`li${moduleClassSelector('c-visitor-spaces-dropdown__active')}`).click();
 
 	await page
 		.locator(
-			'ul[class^="u-list-reset VisitorSpaceDropdown_c-visitor-spaces-dropdown__list"] li',
+			`ul${moduleClassSelector(
+				'u-list-reset VisitorSpaceDropdown_c-visitor-spaces-dropdown__list'
+			)} li`,
 			{ hasText: 'Publieke catalogus' }
 		)
 		.click();
 
 	// Check there is maximum one thumbnail available
-	await expect(
-		await page.locator('[class^=MediaCard_c-media-card__header-wrapper]').count()
+	expect(
+		await page.locator(moduleClassSelector('c-media-card__header-wrapper')).count()
 	).toBeLessThanOrEqual(1);
 
 	// Check the purple banner
-	await expect(
-		await page.locator('span.p-visitor-space__temp-access-label').allInnerTexts()
-	).toEqual(['Je hebt tijdelijke toegang tot het materiaal van Amsab-ISG en VRT.']);
+	expect(await page.locator('span.p-visitor-space__temp-access-label').allInnerTexts()).toEqual([
+		'Je hebt tijdelijke toegang tot het materiaal van Amsab-ISG en VRT.',
+	]);
 
 	// Enter pid
-	const searchField = await page.locator('.c-tags-input__input-container').first();
+	const searchField = page.locator('.c-tags-input__input-container').first();
 	await searchField.click();
 	await searchField.type(objectPid);
 	await searchField.press('Enter');
@@ -458,7 +470,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await waitForSearchResults(page);
 
 	await expect(
-		await page
+		page
 			.locator('[class*=Pill_c-pill--expanded] span', { hasText: 'Tijdelijke toegang' })
 			.first()
 	).toBeVisible();

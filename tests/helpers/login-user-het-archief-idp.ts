@@ -6,7 +6,7 @@ export async function loginUserHetArchiefIdp(
 	password: string,
 	titleAfterLogin = 'Homepagina hetarchief | hetarchief.be'
 ): Promise<void> {
-	await expect(await page.locator('text=Inloggen of registreren').first()).toBeVisible();
+	await expect(page.locator('text=Inloggen of registreren').first()).toBeVisible();
 
 	// Check auth modal is open
 	const authModalHeading = page.locator('[class*="AuthModal_c-auth-modal__heading"]').first();

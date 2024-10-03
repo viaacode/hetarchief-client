@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
+import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T19: Test OCR raadplegen', async ({ page, context }) => {
 	/**
@@ -12,7 +13,7 @@ test('T19: Test OCR raadplegen', async ({ page, context }) => {
 		'Wet- en verordeningsblad voor de bezette streke... | hetarchief.be'
 	);
 
-	// Go to page again to fix non loading newspaper in incognito browser
+	// Go to page again to fix non-loading newspaper in incognito browser
 	await page.goto((process.env.TEST_CLIENT_ENDPOINT as string) + '/pid/h98z893q54');
 
 	// Check ocr tab exists
@@ -23,26 +24,34 @@ test('T19: Test OCR raadplegen', async ({ page, context }) => {
 
 	// Wait for ocr to load
 	await page.waitForSelector(
-		'[class^="ObjectDetailPage_p-object-detail__ocr__words-container__"] > [class^="ObjectDetailPage_p-object-detail__ocr__word__"]'
+		`${moduleClassSelector(
+			'ObjectDetailPage_p-object-detail__ocr__words-container'
+		)} > ${moduleClassSelector('ObjectDetailPage_p-object-detail__ocr__word')}`
 	);
 
 	// Check if ocr text is visible in the tab
 	const ocrWords = page.locator(
-		'[class^="ObjectDetailPage_p-object-detail__ocr__words-container__"] > [class^="ObjectDetailPage_p-object-detail__ocr__word__"]'
+		`${moduleClassSelector(
+			'ObjectDetailPage_p-object-detail__ocr__words-container'
+		)} > ${moduleClassSelector('ObjectDetailPage_p-object-detail__ocr__word')}`
 	);
 	expect(await ocrWords.count()).toBeGreaterThan(100);
 
 	// Search some words in the ocr text
 	await page
 		.locator(
-			'[class*="ObjectDetailPage_p-object-detail__ocr__"] [class*="SearchInputWithResultsPagination_c-search-with-results-pagination__"] .c-input__field'
+			`${moduleClassSelector(
+				'ObjectDetailPage_p-object-detail__ocr__'
+			)} [class*="SearchInputWithResultsPagination_c-search-with-results-pagination__"] .c-input__field`
 		)
 		.fill('Brussel');
 	await page.keyboard.press('Enter');
 
 	// Check keyword is active
 	const brusselOcrWords = page.locator(
-		'[class^="ObjectDetailPage_p-object-detail__ocr__words-container__"] > [class^="ObjectDetailPage_p-object-detail__ocr__word__"]',
+		`${moduleClassSelector(
+			'ObjectDetailPage_p-object-detail__ocr__words-container'
+		)} > ${moduleClassSelector('ObjectDetailPage_p-object-detail__ocr__word')}`,
 		{ hasText: 'Brussel' }
 	);
 	await expect(brusselOcrWords.first()).toBeVisible();

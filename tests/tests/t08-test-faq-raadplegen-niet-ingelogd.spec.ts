@@ -13,7 +13,7 @@ export {};
 // 	// Click on FAQ button the navbar
 // 	await page
 // 		.locator(
-// 			'[class*="Navigation_c-navigation__section--responsive-desktop"] a[href="/vragen"]'
+// 			`${moduleClassSelector('c-navigation__section--responsive-desktop')} a[href="/vragen"]`
 // 		)
 // 		.click();
 

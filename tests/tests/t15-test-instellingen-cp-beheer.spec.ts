@@ -25,17 +25,17 @@ export {};
 
 // 	// Admin should not be visible and beheer should be visible
 // 	const navigationItemTexts = await page
-// 		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
+// 		.locator(`.l-app a${moduleClassSelector('c-navigation__link')}`)
 // 		.allInnerTexts();
 // 	await expect(navigationItemTexts).not.toContain('Admin');
 // 	await expect(navigationItemTexts).toContain('Beheer');
 
 // 	// Go to settings page
 // 	const desktopNavigation = await page.locator(
-// 		'[class*="Navigation_c-navigation__section--responsive-desktop__"]'
+// 		moduleClassSelector('c-navigation__section--responsive-desktop__')
 // 	);
 // 	await desktopNavigation
-// 		.locator('[class*="Navigation_c-navigation__link--dropdown__"]', { hasText: 'Beheer' })
+// 		.locator(moduleClassSelector('c-navigation__link--dropdown__'), { hasText: 'Beheer' })
 // 		.click();
 // 	await desktopNavigation.locator('[href="/beheer/instellingen"]').click();
 
@@ -44,7 +44,7 @@ export {};
 
 // 	// Check page title
 // 	await expect(
-// 		await page.locator('[class*="CPAdminLayout_c-cp-admin__page-title__"]')
+// 		await page.locator(moduleClassSelector('c-cp-admin__page-title__'))
 // 	).toContainText('Instellingen');
 
 // 	/**
@@ -52,7 +52,7 @@ export {};
 // 	 */
 
 // 	// Upload file
-// 	const uploadFileSection = page.locator('[class*="VisitorSpaceSettings_c-cp-settings__box__"]', {
+// 	const uploadFileSection = page.locator(moduleClassSelector('c-cp-settings__box__'), {
 // 		hasText: 'Achtergrondafbeelding',
 // 	});
 // 	const fileUploadField = await uploadFileSection.locator('input[type="file"]');
@@ -61,7 +61,7 @@ export {};
 
 // 	// Check background image is displayed
 // 	await expect(
-// 		await uploadFileSection.locator('[class*="CardImage_c-card-image__background--image__"]')
+// 		await uploadFileSection.locator(moduleClassSelector('c-card-image__background--image__'))
 // 	).toBeVisible();
 
 // 	// Check upload button changed
@@ -91,7 +91,7 @@ export {};
 
 // 	// Description during visit request
 // 	const descriptionDuringRequestSection = await page.locator(
-// 		'[class*="VisitorSpaceSettings_c-cp-settings__content-block__"]',
+// 		moduleClassSelector('c-cp-settings__content-block__'),
 // 		{ hasText: 'Omschrijving aanvraag' }
 // 	);
 // 	await expect(descriptionDuringRequestSection).toBeVisible();
@@ -158,7 +158,7 @@ export {};
 
 // 	// Description during visit request
 // 	const descriptionOnWaitingForAccessSection = await page.locator(
-// 		'[class*="VisitorSpaceSettings_c-cp-settings__content-block__"]',
+// 		moduleClassSelector('c-cp-settings__content-block__'),
 // 		{ hasText: 'Omschrijving bij het wachten op toegang' }
 // 	);
 // 	await expect(descriptionOnWaitingForAccessSection).toBeVisible();
@@ -214,7 +214,7 @@ export {};
 // 	const vrtCard = await page.locator('.p-home__results .c-card', { hasText: 'VRT' });
 // 	await vrtCard.scrollIntoViewIfNeeded();
 // 	const vrtCardBackground = await vrtCard.locator(
-// 		'[class*="CardImage_c-card-image__background--image__"] img'
+// 		`${moduleClassSelector('c-card-image__background--image')} img`
 // 	);
 // 	await expect(vrtCardBackground).toBeVisible();
 
