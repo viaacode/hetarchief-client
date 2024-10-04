@@ -1184,7 +1184,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 									<span className="u-text-ellipsis u-display-none u-display-block-md">
 										{buttonLabelDesktop}
 									</span>
-									<span className="u-text-ellipsis u-display-none-md">
+									<span className="u-text-ellipsis u-display-block u-display-none-md">
 										{buttonLabelMobile}
 									</span>
 								</Button>
