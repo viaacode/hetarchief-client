@@ -85,7 +85,7 @@ test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 	folderList = page.locator(
 		`.c-blade--active ${moduleClassSelector('c-add-to-folder-blade__list')}`
 	);
-	checkboxes = folderList.locator('.c-checkbox__check-icon');
+	checkboxes = folderList.locator('[type="checkbox"]');
 	expect(await checkboxes.count()).toEqual(1);
 	await expect(checkboxes.first()).toBeChecked();
 

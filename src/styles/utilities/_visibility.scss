@@ -13,11 +13,11 @@
 }
 
 @media (min-width: $breakpoint-md) {
-	.u-visibility-md-hidden {
+	.u-visibility-hidden-md {
 		visibility: hidden;
 	}
 
-	.u-visibility-md-visible {
+	.u-visibility-visible-md {
 		visibility: visible;
 	}
 }
@@ -49,15 +49,15 @@
 }
 
 @media (min-width: $breakpoint-md) {
-	.u-display-md-none {
+	.u-display-none-md {
 		display: none;
 	}
 
-	.u-display-md-block {
+	.u-display-block-md {
 		display: block;
 	}
 
-	.u-display-md-inline-block {
+	.u-display-inline-block-md {
 		display: inline-block;
 	}
 }

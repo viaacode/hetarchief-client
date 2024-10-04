@@ -11,10 +11,10 @@
 		outline: 0.1rem solid $teal;
 		outline-offset: 0.2rem;
 	}
+}
 
-	.c-dropdown__content-open {
-		box-shadow: 0 0 12px -2px rgb(0 0 0 / 30%);
-	}
+.c-dropdown__content-open {
+	box-shadow: 0 0 12px -2px rgb(0 0 0 / 30%);
 }
 
 .c-dropdown--filter {
