@@ -130,19 +130,22 @@ They are provided through the `env_file` property in the `docker-compose.yml` fi
 
 ## Team
 
-This project has been created by:
-
-- Andry Charlier: andry.charlier@studiohyperdrive.be
-- Bart Naessens: bart.naessens@studiohyperdrive.be
-- Ian Emsens: ian.emsens@studiohyperdrive.be
-
 It is currently maintained by:
 
+- Bert Verhelst: bert.verhelst@studiohyperdrive.be
+- Ian Emsens: ian.emsens@studiohyperdrive.be
+
+
+This project has been worked on by:
+
+- Robbe Bierebeeck: robbe.bierebeeck@studiohyperdrive.be
+- Bart Naessens: bart.naessens@studiohyperdrive.be
 - Andry Charlier: andry.charlier@studiohyperdrive.be
 - Bavo Vanderghote: bavo.vanderghote@studiohyperdrive.be
-- Bert Verhelst: bert.verhelst@studiohyperdrive.be
+- Andry Charlier: andry.charlier@studiohyperdrive.be
 - Silke Derudder: silke.derudder@studiohyperdrive.be
 - Ward Vercruyssen: ward.vercruyssen@studiohyperdrive.be
+
 
 ## Deployment
 
