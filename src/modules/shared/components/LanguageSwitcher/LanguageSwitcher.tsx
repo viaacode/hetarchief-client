@@ -12,6 +12,7 @@ import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-cont
 import { NavigationDropdown } from '@navigation/components/Navigation/NavigationDropdown';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { GET_LANGUAGE_NAMES } from '@shared/const/language-names';
 import { changeApplicationLocale } from '@shared/helpers/change-application-locale';
 import { tText } from '@shared/helpers/translate';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
@@ -45,10 +46,13 @@ export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 		? convertDbContentPageToContentPageInfo(dbContentPage)
 		: null;
 
-	const languageOptions = (allLanguages || []).map((languageInfo) => ({
-		label: languageInfo.languageLabel,
-		value: languageInfo.languageCode.toLowerCase(),
-	}));
+	const languageOptions = (allLanguages || []).map((languageInfo) => {
+		const langCode = languageInfo.languageCode.toLowerCase() as Locale;
+		return {
+			label: GET_LANGUAGE_NAMES()[langCode],
+			value: langCode,
+		};
+	});
 
 	const handleOpen = () => {
 		dispatch(setShowMaterialRequestCenter(false));

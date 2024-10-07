@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-import { getSiteTranslations } from '../helpers/get-site-translations';
+import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
@@ -27,7 +27,9 @@ test('T25: Krant metadata', async ({ page, context }) => {
 		page,
 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
 		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
-		NEWSPAPER_PAGE_TITLE
+		NEWSPAPER_PAGE_TITLE,
+		Locale.Nl,
+		SITE_TRANSLATIONS
 	);
 
 	// Check if metadata field "Fysieke drager" is "newspaper"
@@ -67,7 +69,9 @@ test('T25: Krant metadata', async ({ page, context }) => {
 		page,
 		process.env.TEST_KEY_VISITOR_ACCOUNT_USERNAME as string,
 		process.env.TEST_KEY_VISITOR_ACCOUNT_PASSWORD as string,
-		NEWSPAPER_PAGE_TITLE
+		NEWSPAPER_PAGE_TITLE,
+		Locale.Nl,
+		SITE_TRANSLATIONS
 	);
 
 	// Check if metadata field "Fysieke drager" is "newspaper"

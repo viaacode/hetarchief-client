@@ -4,6 +4,7 @@ import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sideba
 import { checkBladeTitle } from '../helpers/check-blade-title';
 import { checkToastMessage } from '../helpers/check-toast-message';
 import { checkVisitRequestStatuses } from '../helpers/check-visit-request-statuses';
+import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
@@ -14,6 +15,8 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	page,
 	context,
 }) => {
+	const SITE_TRANSLATIONS = await getSiteTranslations();
+
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(page);
 
@@ -21,7 +24,10 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_USERNAME as string,
-		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_PASSWORD as string
+		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_PASSWORD as string,
+		undefined,
+		Locale.Nl,
+		SITE_TRANSLATIONS
 	);
 
 	// Check navbar exists
