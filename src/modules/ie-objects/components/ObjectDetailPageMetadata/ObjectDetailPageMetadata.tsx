@@ -18,6 +18,7 @@ import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useSta
 import { useSelector } from 'react-redux';
 
 import { GroupName, Permission } from '@account/const';
+import { useGetFolders } from '@account/hooks/get-folders';
 import { selectUser } from '@auth/store/user';
 import type { User } from '@auth/types';
 import { CopyrightConfirmationModal } from '@ie-objects/components/CopyrightConfirmationModal';
@@ -87,7 +88,6 @@ import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
-import { selectFolders } from '@shared/store/ie-objects';
 import { selectBreadcrumbs } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
@@ -178,7 +178,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 
 	const windowSize = useWindowSizeContext();
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
-	const folders = useSelector(selectFolders);
+	const { data: folders } = useGetFolders();
 
 	/**
 	 * State

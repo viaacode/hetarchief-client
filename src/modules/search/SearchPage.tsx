@@ -73,7 +73,6 @@ import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { selectFolders } from '@shared/store/ie-objects';
 import {
 	selectLastScrollPosition,
 	setBreadcrumbs,
@@ -139,8 +138,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const dispatch = useDispatch();
 	const locale = useLocale();
 
-	// Get folders, to correctly show the bookmark icon statuses on the search results
-	useGetFolders();
+	const { data: folders } = useGetFolders();
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
@@ -153,7 +151,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	 */
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const user = useSelector(selectUser);
-	const folders = useSelector(selectFolders);
 	const isKeyUser = useIsKeyUser();
 	const lastScrollPosition = useSelector(selectLastScrollPosition);
 

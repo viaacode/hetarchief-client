@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { addHours, areIntervalsOverlapping, endOfDay, startOfDay } from 'date-fns';
 import { isEmpty } from 'lodash-es';
 import Link from 'next/link';
-import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type FC, useCallback, useEffect, useState } from 'react';
 import { Controller, type ControllerRenderProps, type FieldError, useForm } from 'react-hook-form';
 
 import { Permission } from '@account/const';
@@ -64,8 +64,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const canViewAddVisitRequests: boolean = useHasAnyPermission(
 		Permission.MANAGE_ALL_VISIT_REQUESTS
 	);
-	const { data: folderResponse } = useGetFolders();
-	const folders = useMemo(() => folderResponse?.items || [], [folderResponse?.items]);
+	const { data: folders } = useGetFolders();
 	const [noFoldersSelectedOnSubmit, setNoFoldersSelectedOnSubmit] = useState(false);
 
 	const {
@@ -128,7 +127,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const getAccessTypeLabel = useCallback(
 		(accessType: ApproveRequestFormState['accessType']) => {
-			const selectedFolders = folders.filter((item) =>
+			const selectedFolders = (folders || []).filter((item) =>
 				(accessType?.folderIds || []).includes(item.id)
 			);
 			const selectedFoldersNames = selectedFolders?.map((folder) => folder.name).join(', ');
@@ -160,7 +159,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					info: tText(
 						'modules/cp/components/approve-request-blade/approve-request-blade___mappen-dienen-op-voorhand-gemaakt-te-worden'
 					),
-					options: folders.map(
+					options: (folders || []).map(
 						({ id, name }): RefinableRadioButtonOption => ({
 							id,
 							label: name,
