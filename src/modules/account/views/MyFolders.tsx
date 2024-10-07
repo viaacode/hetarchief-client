@@ -41,7 +41,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
-import { selectFolders, setFolders } from '@shared/store/ie-objects';
+import { setFolders } from '@shared/store/ie-objects';
 import { selectLastScrollPosition, setBreadcrumbs, setLastScrollPosition } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
 import { type DefaultSeoInfo } from '@shared/types/seo';
@@ -83,8 +83,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 	const [editMode, setEditMode] = useState(false);
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 	const lastScrollPosition = useSelector(selectLastScrollPosition);
-	const getFolders = useGetFolders();
-	const folders = useSelector(selectFolders);
+	const { data: folders, refetch: refetchFolders } = useGetFolders();
 	const defaultFolder = (folders || []).find((folder) => folder.isDefault);
 
 	const isActive = useCallback(
@@ -217,7 +216,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 		}
 
 		// Fetch folders from the network
-		await getFolders.refetch();
+		await refetchFolders();
 		await router.push(createFolderSlug(newFolder));
 	};
 
@@ -496,9 +495,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 							{
 								id: 'p-account-my-folders__new-folder',
 								variants: ['c-list-navigation__item--no-interaction'],
-								node: (
-									<CreateFolderButton afterSubmit={() => getFolders.refetch()} />
-								),
+								node: <CreateFolderButton afterSubmit={() => refetchFolders()} />,
 								hasDivider: true,
 							},
 						]}
@@ -664,7 +661,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 
 						activeFolder &&
 							foldersService.delete(activeFolder.id).then(() => {
-								getFolders.refetch();
+								refetchFolders();
 							});
 					}}
 				/>

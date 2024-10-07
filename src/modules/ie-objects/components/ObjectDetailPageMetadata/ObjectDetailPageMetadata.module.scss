@@ -59,6 +59,9 @@ $maintainer-logo-height: 7rem;
 
 	// maintainer logo
 	img {
-		max-height: $maintainer-logo-height;
+		max-height: 7rem;
+		max-width: 50%;
+		margin-left: auto;
+		margin-right: 0;
 	}
 }

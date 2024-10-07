@@ -2,7 +2,6 @@ import { Button, Checkbox } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { compact, isNil } from 'lodash-es';
 import { type FC, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { CreateFolderButton } from '@account/components';
 import { useGetFolders } from '@account/hooks/get-folders';
@@ -13,7 +12,6 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
-import { selectFolders } from '@shared/store/ie-objects';
 
 import styles from './AddToFolderBlade.module.scss';
 import { type AddToFolderBladeProps } from './AddToFolderBlade.types';
@@ -26,8 +24,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	className,
 	...bladeProps
 }) => {
-	const getFolders = useGetFolders();
-	const folders = useSelector(selectFolders);
+	const { data: folders, refetch: refetchFolders } = useGetFolders();
 	const [originalSelectedFolderIds, setOriginalSelectedFolderIds] = useState<string[] | null>(
 		null
 	);
@@ -59,7 +56,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	 */
 
 	const onFailedRequest = async () => {
-		await getFolders.refetch();
+		await refetchFolders();
 		setIsSubmitting(false);
 
 		toastService.notify({
@@ -224,7 +221,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 
 			// Placing this refetch after the toast messages, otherwise you get this error where the toast message disappears instantly:
 			// https://meemoo.atlassian.net/browse/ARC-2048
-			await getFolders.refetch();
+			await refetchFolders();
 
 			onSubmit?.(selectedFolderIds || []);
 			resetForm();
@@ -255,7 +252,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 
 	const afterCreateFolderSubmit = async (folder: Folder) => {
 		setSelectedFolderIds([...(selectedFolderIds || []), folder.id]);
-		await getFolders.refetch();
+		await refetchFolders();
 	};
 
 	const resetForm = () => {
