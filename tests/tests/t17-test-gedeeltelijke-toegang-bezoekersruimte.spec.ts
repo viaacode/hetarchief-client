@@ -4,6 +4,7 @@ import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sideba
 import { checkBladeTitle } from '../helpers/check-blade-title';
 import { checkToastMessage } from '../helpers/check-toast-message';
 import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
+import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { logout } from '../helpers/log-out';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
@@ -16,6 +17,8 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	page,
 	context,
 }) => {
+	const SITE_TRANSLATIONS = await getSiteTranslations();
+
 	// Go to the hetarchief homepage
 	await goToPageAndAcceptCookies(page);
 
@@ -23,7 +26,10 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
-		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
+		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
+		undefined,
+		Locale.Nl,
+		SITE_TRANSLATIONS
 	);
 
 	// Check navbar exists
@@ -76,7 +82,10 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_CP_ADMIN_AMSAB_ACCOUNT_USERNAME as string,
-		process.env.TEST_CP_ADMIN_AMSAB_ACCOUNT_PASSWORD as string
+		process.env.TEST_CP_ADMIN_AMSAB_ACCOUNT_PASSWORD as string,
+		undefined,
+		Locale.Nl,
+		SITE_TRANSLATIONS
 	);
 
 	// Click "beheer" navigation item
@@ -408,7 +417,10 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
-		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
+		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
+		undefined,
+		Locale.Nl,
+		SITE_TRANSLATIONS
 	);
 
 	// Check navbar exists and user has access to one visitor space

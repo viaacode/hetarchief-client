@@ -283,7 +283,11 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 					</dd>
 				</dl>
 				{noTypeSelectedOnSave ? (
-					<RedFormWarning error={tText('De hoedanigheid is verplicht')} />
+					<RedFormWarning
+						error={tText(
+							'modules/navigation/components/personal-info-blade/personal-info-blade___de-hoedanigheid-is-verplicht'
+						)}
+					/>
 				) : null}
 			</div>
 		</Blade>

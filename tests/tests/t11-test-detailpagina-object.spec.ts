@@ -5,6 +5,7 @@ import { checkToastMessage } from '../helpers/check-toast-message';
 import { clickToastMessageButton } from '../helpers/click-toast-message-button';
 import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
 import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
+import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
@@ -12,6 +13,8 @@ import { moduleClassSelector } from '../helpers/module-class-locator';
 declare const document: any;
 
 test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, context }) => {
+	const SITE_TRANSLATIONS = await getSiteTranslations();
+
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(page);
 
@@ -19,7 +22,10 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
-		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
+		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
+		undefined,
+		Locale.Nl,
+		SITE_TRANSLATIONS
 	);
 
 	// Check homepage title

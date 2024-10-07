@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
+import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
@@ -8,6 +9,8 @@ import { moduleClassSelector } from '../helpers/module-class-locator';
 declare const document: any;
 
 test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
+	const SITE_TRANSLATIONS = await getSiteTranslations();
+
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(page);
 
@@ -15,7 +18,10 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
-		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
+		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
+		undefined,
+		Locale.Nl,
+		SITE_TRANSLATIONS
 	);
 
 	// Check homepage title

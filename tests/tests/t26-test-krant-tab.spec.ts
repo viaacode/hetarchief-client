@@ -4,7 +4,7 @@ import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { moduleClassSelector } from '../helpers/module-class-locator';
 
-test('T25: Krant metadata', async ({ page, context }) => {
+test('T26: kranten tab en zoekresultaten', async ({ page, context }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();
 
 	/**
@@ -29,14 +29,41 @@ test('T25: Krant metadata', async ({ page, context }) => {
 
 	// Check all search results are newspapers
 	const searchResults = page.locator(
-		`${moduleClassSelector('c-media-card-list--masonry')} ${moduleClassSelector(
-			'c-media-card__header--grid'
+		`${moduleClassSelector('c-media-card-list--masonry')} article${moduleClassSelector(
+			'c-media-card'
 		)}`
 	);
-	for (const searchResult of await searchResults.all()) {
-		await expect(searchResult).toBeVisible();
-		await expect(searchResult).toContainText('newspaper');
-	}
+
+	// First newspaper
+	const firstNewspaperSearchResult = searchResults.nth(0);
+	await expect(firstNewspaperSearchResult).toBeVisible();
+	await expect(firstNewspaperSearchResult).toContainText('no-newspaper'); // Icon
+	await expect(firstNewspaperSearchResult).toContainText(
+		'De volksmacht: weekblad van de christelijke arbeidersbeweging [ed. Leuven] 1972-07-08'
+	);
+	await expect(firstNewspaperSearchResult).toContainText('KU Leuven KADOC');
+
+	// Second newspaper
+	const secondNewspaperSearchResult = searchResults.nth(1);
+	await expect(secondNewspaperSearchResult).toBeVisible();
+	await expect(secondNewspaperSearchResult).toContainText('newspaper'); // Icon
+	const imageHtml = await secondNewspaperSearchResult.locator('img').getAttribute('src');
+	expect(imageHtml).toContain(
+		'KULEUVENUNIVERSITEITSBIBLIOTHEEK/47db5019e10d430c821469edcb0773af549acd538a214bfea94986486cabf546/browse.jpg'
+	); // Browse image
+	await expect(secondNewspaperSearchResult).toContainText(
+		'Wet- en verordeningsblad voor de bezette streken van België'
+	);
+	await expect(secondNewspaperSearchResult).toContainText('KU Leuven Universiteitsbibliotheek');
+
+	// Third newspaper
+	const thirdNewspaperSearchResult = searchResults.nth(2);
+	await expect(thirdNewspaperSearchResult).toBeVisible();
+	await expect(thirdNewspaperSearchResult).toContainText('no-newspaper'); // Icon
+	await expect(thirdNewspaperSearchResult).toContainText(
+		'Het Annoncenblad van Mol en omliggende dorpen'
+	);
+	await expect(thirdNewspaperSearchResult).toContainText('Stuifzand');
 
 	// Wait for close to save the videos
 	await context.close();

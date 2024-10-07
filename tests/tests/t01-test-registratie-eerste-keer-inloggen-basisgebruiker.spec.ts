@@ -4,6 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { USER_PASSWORD } from '../consts/tests.consts';
 import { acceptTos } from '../helpers/accept-tos';
 import { acmConfirmEmail } from '../helpers/acm-confirm-email';
+import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
@@ -13,6 +14,8 @@ import { moduleClassSelector } from '../helpers/module-class-locator';
  */
 
 test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ page, context }) => {
+	const SITE_TRANSLATIONS = await getSiteTranslations();
+
 	const userId = uuid().replace(/-/g, '');
 	const userEmail = `hetarchief2.0+atbasisgebruiker${userId}@meemoo.be`;
 
@@ -80,7 +83,14 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible(); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT
 
 	// Login user
-	await loginUserHetArchiefIdp(page, userEmail, USER_PASSWORD);
+	await loginUserHetArchiefIdp(
+		page,
+		userEmail,
+		USER_PASSWORD,
+		undefined,
+		Locale.Nl,
+		SITE_TRANSLATIONS
+	);
 
 	// Check tos is displayed, scroll down and click accept button
 	await acceptTos(page);

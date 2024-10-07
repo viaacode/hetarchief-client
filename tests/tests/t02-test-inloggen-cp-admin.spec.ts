@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
@@ -7,6 +8,8 @@ import { moduleClassSelector } from '../helpers/module-class-locator';
 declare const document: any;
 
 test('T02: Test inloggen CP-admin', async ({ page, context }) => {
+	const SITE_TRANSLATIONS = await getSiteTranslations();
+
 	// Go to the hetarchief homepage
 	await goToPageAndAcceptCookies(page);
 
@@ -14,7 +17,10 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_USERNAME as string,
-		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_PASSWORD as string
+		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_PASSWORD as string,
+		undefined,
+		Locale.Nl,
+		SITE_TRANSLATIONS
 	);
 	// Check navbar is visible
 	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
@@ -27,7 +33,12 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Beheer' })).toHaveCount(1);
 
 	await page.waitForFunction(
-		() => document.title === 'Homepagina hetarchief | hetarchief.be',
+		() =>
+			document.title ===
+			'Homepagina hetarchief | ' +
+				SITE_TRANSLATIONS.nl[
+					'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
+				],
 		null,
 		{
 			timeout: 10000,

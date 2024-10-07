@@ -34,7 +34,10 @@
 		"test:e2e:debug:t23": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t23-test-krant-toevoegen-aan-map.spec.ts",
 		"test:e2e:debug:t24": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t24-test-download-krant-in-verschillende-formaten.spec.ts",
 		"test:e2e:debug:t25": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t25-test-krant-metadata.spec.ts",
-		"test:e2e:debug:t26": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t26-test-krant-tab.spec.ts"
+		"test:e2e:debug:t26": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t26-test-krant-tab.spec.ts",
+		"test:e2e:debug:t27": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t27-test-filteren-krantenmetadata.spec.ts",
+		"test:e2e:debug:t28": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t28-test-login-engels.spec.ts",
+		"test:e2e:debug:t29": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t29-test-materiaal-aanvraag-engels.spec.ts"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.47.1",

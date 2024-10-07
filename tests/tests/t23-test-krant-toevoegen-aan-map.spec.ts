@@ -1,11 +1,14 @@
 import { expect, test } from '@playwright/test';
 
 import { checkToastMessage } from '../helpers/check-toast-message';
+import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T23: Krant toevoegen aan map', async ({ page, context }) => {
+	const SITE_TRANSLATIONS = await getSiteTranslations();
+
 	/**
 	 * Go to a newspaper detail page ---------------------------------------------------------------
 	 */
@@ -22,7 +25,9 @@ test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 		page,
 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
 		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
-		NEWSPAPER_PAGE_TITLE
+		NEWSPAPER_PAGE_TITLE,
+		Locale.Nl,
+		SITE_TRANSLATIONS
 	);
 
 	// Open the button overflow menu

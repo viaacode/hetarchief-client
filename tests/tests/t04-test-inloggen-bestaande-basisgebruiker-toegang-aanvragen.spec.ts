@@ -1,10 +1,13 @@
 import { expect, test } from '@playwright/test';
 
+import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) => {
+	const SITE_TRANSLATIONS = await getSiteTranslations();
+
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(page);
 
@@ -20,7 +23,9 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 		.click();
 
 	// Check the page to contain 'Vind een aanbieder'
-	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
+	await expect(
+		page.locator(`text=${SITE_TRANSLATIONS.nl['pages/index___vind-een-bezoekersruimte']}`)
+	).toBeVisible();
 
 	// Scroll down and enter 'V' in the searchbar
 	await page.fill('#VisitorSpaceCardsWithSearch__search', 'V');
@@ -51,7 +56,10 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
-		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
+		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
+		undefined,
+		Locale.Nl,
+		SITE_TRANSLATIONS
 	);
 
 	// Fill in 'Reden van aanvraag'

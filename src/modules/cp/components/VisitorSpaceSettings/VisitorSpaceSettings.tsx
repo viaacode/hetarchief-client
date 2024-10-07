@@ -198,7 +198,9 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 						title: tHtml(
 							'modules/cp/components/visitor-space-settings/visitor-space-settings___het-formulier-bevat-nog-errors'
 						),
-						description: tHtml('Bekijk de errors in het formulier'),
+						description: tHtml(
+							'modules/cp/components/visitor-space-settings/visitor-space-settings___bekijk-de-errors-in-het-formulier'
+						),
 					});
 				}
 				return false;

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { fillRequestVisitBlade } from '../helpers/fill-request-visit-blade';
-import { getSiteTranslations } from '../helpers/get-site-translations';
+import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
@@ -21,7 +21,10 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_MEEMOO_ADMIN_ACCOUNT_USERNAME as string,
-		process.env.TEST_MEEMOO_ADMIN_ACCOUNT_PASSWORD as string
+		process.env.TEST_MEEMOO_ADMIN_ACCOUNT_PASSWORD as string,
+		undefined,
+		Locale.Nl,
+		SITE_TRANSLATIONS
 	);
 
 	// Check logged in status
@@ -49,11 +52,11 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 		SITE_TRANSLATIONS.nl[
 			'modules/visitor-space/views/visitor-spaces-home-page___bezoek-pagina-titel'
 		];
-	const excpectedSiteTitle =
+	const expectedSiteTitle =
 		SITE_TRANSLATIONS.nl[
 			'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
 		];
-	const expectedTitle = expectedSitePageTitle + ' | ' + excpectedSiteTitle;
+	const expectedTitle = expectedSitePageTitle + ' | ' + expectedSiteTitle;
 	await page.waitForFunction(
 		(expectedTitle: string) => document.title === expectedTitle,
 		expectedTitle,
