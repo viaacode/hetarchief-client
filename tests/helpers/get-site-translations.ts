@@ -90,7 +90,16 @@ async function getOnlineTranslations(): Promise<TranslationEntry[]> {
 	return response.data.app_translations.map((t: TranslationEntry) => ({ ...t }));
 }
 
+let SITE_TRANSLATIONS: Record<'nl' | 'en', Record<string, string>> | null = null;
+
+/**
+ * Fetches the translations from the QAS database and returns them in a format that can be used in the tests.
+ * Also caches the translations so they don't have to be fetched again within the same test
+ */
 export async function getSiteTranslations() {
+	if (SITE_TRANSLATIONS) {
+		return SITE_TRANSLATIONS;
+	}
 	const translations = await getOnlineTranslations();
 	const translationsByLocale: Record<'nl' | 'en', Record<string, string>> = {
 		nl: {},
@@ -100,5 +109,6 @@ export async function getSiteTranslations() {
 		translationsByLocale[translationEntry.language][getFullKey(translationEntry)] =
 			translationEntry.value;
 	});
+	SITE_TRANSLATIONS = translationsByLocale;
 	return translationsByLocale;
 }

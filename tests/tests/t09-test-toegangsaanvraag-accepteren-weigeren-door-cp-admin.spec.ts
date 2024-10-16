@@ -4,30 +4,35 @@ import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sideba
 import { checkBladeTitle } from '../helpers/check-blade-title';
 import { checkToastMessage } from '../helpers/check-toast-message';
 import { checkVisitRequestStatuses } from '../helpers/check-visit-request-statuses';
-import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
+import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
-
-declare const document: any;
+import { waitForPageTitle } from '../helpers/wait-for-page-title';
 
 test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	page,
 	context,
 }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();
+	const VISIT_REQUEST_REASON = 'Een geldige reden';
+	const paginationLabelBetween =
+		SITE_TRANSLATIONS.nl[
+			'modules/shared/components/filter-table/filter-table___label-between-start-and-end-page-in-pagination-bar'
+		];
+	const paginationLabelOf =
+		SITE_TRANSLATIONS.nl[
+			'modules/shared/components/filter-table/filter-table___label-between-end-page-and-total-in-pagination-bar'
+		];
 
 	// GO to the hetarchief homepage
-	await goToPageAndAcceptCookies(page);
+	await goToPageAndAcceptCookies(page, process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Login as CP admin
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_USERNAME as string,
-		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_PASSWORD as string,
-		undefined,
-		Locale.Nl,
-		SITE_TRANSLATIONS
+		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_PASSWORD as string
 	);
 
 	// Check navbar exists
@@ -43,15 +48,14 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await page.click('a[href="/beheer/toegangsaanvragen"]');
 
 	// Check page title matches visitor requests page title
-	await page.waitForFunction(() => document.title === 'Toegangsaanvragen | hetarchief.be', null, {
-		timeout: 10000,
-	});
+	const visitRequestsTitle = `${SITE_TRANSLATIONS.nl['pages/beheer/toegangsaanvragen/index___toegangsaanvragen']} | ${SITE_TRANSLATIONS.nl['modules/cp/views/cp-admin-visit-requests-page___beheer']}`;
+	await waitForPageTitle(page, visitRequestsTitle);
 
 	// Check Visit Requests is active in the sidebar
 	await checkActiveSidebarNavigationItem(
 		page,
 		0,
-		'Toegangsaanvragen',
+		SITE_TRANSLATIONS.nl['modules/navigation/components/navigation/navigation___aanvragen'],
 		'/beheer/toegangsaanvragen'
 	);
 
@@ -60,31 +64,44 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); //temp bcs waitForLoading doesnt work
 
 	// Check active tab: All
-	await expect(await page.locator('.c-tab--active').innerHTML()).toContain('Alle');
+	expect(await page.locator('.c-tab--active').innerHTML()).toContain(
+		SITE_TRANSLATIONS.nl['modules/cp/const/requests___alle']
+	);
 
 	const countsBeforeApproveDeny = await checkVisitRequestStatuses(page);
 
 	// Search for visit requests by name
-	await page.fill('.p-cp-requests__header [placeholder="Zoek"]', 'Martine Tanghe');
-	await page.press('.p-cp-requests__header [placeholder="Zoek"]', 'Enter');
+	const searchPlaceholder = SITE_TRANSLATIONS.nl['pages/beheer/toegangsaanvragen/index___zoek'];
+	const searchInput = page.locator(`.p-cp-requests__header [placeholder="${searchPlaceholder}"]`);
+	await searchInput.fill('Martine Tanghe');
+	await searchInput.press('Enter');
 
 	// There should be zero requests with this name
-	await expect(page.locator('text=Er zijn geen openstaande aanvragen.')).toBeVisible();
+	await expect(
+		page.locator(
+			'text=' +
+				SITE_TRANSLATIONS.nl[
+					'pages/beheer/toegangsaanvragen/index___er-zijn-geen-openstaande-aanvragen'
+				]
+		)
+	).toBeVisible();
 
 	// Search for marie.odhiambo@example.com
-	await page.fill('.p-cp-requests__header [placeholder="Zoek"]', 'marie.odhiambo@example.com');
-	await page.press('.p-cp-requests__header [placeholder="Zoek"]', 'Enter');
+	await searchInput.fill('marie.odhiambo@example.com');
+	await searchInput.press('Enter');
 
 	// The number of requests should be 3
 	await expect(page.locator(moduleClassSelector('c-pagination-progress'))).toContainText(
-		`1-3 van 3`
+		`1${paginationLabelBetween}3${paginationLabelOf}3`
 	);
 	// Clear search term with x button
-	await page.locator('[aria-label="Opnieuw instellen"]').first().click();
+	const clearSearchAriaLabel =
+		SITE_TRANSLATIONS.nl['modules/shared/components/search-bar/search-bar___opnieuw-instellen'];
+	await page.locator(`[aria-label="${clearSearchAriaLabel}"]`).first().click();
 
 	// Number of results should be equal tot total results from before
 	await expect(page.locator(moduleClassSelector('c-pagination-progress'))).toContainText(
-		`1-${countsBeforeApproveDeny.totalNumberOfRequests} van ${countsBeforeApproveDeny.totalNumberOfRequests}`
+		`1${paginationLabelBetween}${countsBeforeApproveDeny.totalNumberOfRequests}${paginationLabelOf}${countsBeforeApproveDeny.totalNumberOfRequests}`
 	);
 
 	/**
@@ -103,7 +120,12 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		.click();
 
 	// Check the blade title
-	await checkBladeTitle(page, 'Open aanvraag');
+	await checkBladeTitle(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/cp/components/process-request-blade/process-request-blade___open-aanvraag'
+		]
+	);
 
 	// Check request summary contains requester name
 	let summaryHtml = await page
@@ -111,17 +133,27 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		.innerHTML();
 	expect(summaryHtml).toContain('BezoekerVoornaam');
 	expect(summaryHtml).toContain('BezoekerAchternaam');
-	expect(summaryHtml).toContain('Een geldige reden');
+	expect(summaryHtml).toContain(VISIT_REQUEST_REASON);
 
 	// Check buttons for approve and deny are visible
 	let approveButton = page.locator(
 		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
-		{ hasText: 'Goedkeuren' }
+		{
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/cp/components/approve-request-blade/approve-request-blade___keur-goed'
+				],
+		}
 	);
 	await expect(approveButton).toBeVisible();
 	let denyButton = page.locator(
 		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
-		{ hasText: 'Weigeren' }
+		{
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/cp/components/decline-request-blade/decline-request-blade___keur-af'
+				],
+		}
 	);
 	await expect(denyButton).toBeVisible();
 
@@ -129,12 +161,20 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await approveButton.click();
 
 	// Check blade title
-	await checkBladeTitle(page, 'Aanvraag goedkeuren');
+	await checkBladeTitle(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/cp/components/approve-request-blade/approve-request-blade___aanvraag-goedkeuren'
+		]
+	);
 
 	// Expect 'toegang tot de volledige collectie' to be checked
 	await expect(
 		page.locator(`${moduleClassSelector('c-radio-button')} span`, {
-			hasText: 'Toegang tot de volledige collectie',
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/cp/components/approve-request-blade/approve-request-blade___toegang-tot-de-volledige-collectie'
+				],
 		})
 	).toBeChecked();
 
@@ -151,7 +191,12 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await expect(page.locator('.c-blade--active')).not.toBeVisible();
 
 	// Toast message
-	await checkToastMessage(page, 'De aanvraag is goedgekeurd.');
+	await checkToastMessage(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/cp/components/approve-request-blade/approve-request-blade___de-aanvraag-is-goedgekeurd'
+		]
+	);
 
 	// Check first row is approved
 	await expect(
@@ -162,9 +207,14 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 				)} .c-table__wrapper--body .c-table__row`
 			)
 			.first()
-			.locator('text=Goedgekeurd')
+			.locator(
+				'text=' +
+					SITE_TRANSLATIONS.nl[
+						'modules/cp/components/request-status-chip/request-status-chip___goedgekeurd'
+					]
+			)
 	).toBeVisible();
-	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); //temp bcs waitForLoading doesnt work
+	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); //temp bcs waitForLoading doesn't work
 	// Check number of requests for each status
 	const countsAfterOneApprove = await checkVisitRequestStatuses(page);
 
@@ -196,7 +246,12 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		.click();
 
 	// Check the blade title
-	await checkBladeTitle(page, 'Open aanvraag');
+	await checkBladeTitle(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/cp/components/process-request-blade/process-request-blade___open-aanvraag'
+		]
+	);
 
 	// Check request summary contains requester name
 	summaryHtml = await page
@@ -204,17 +259,27 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		.innerHTML();
 	expect(summaryHtml).toContain('Meemoo');
 	expect(summaryHtml).toContain('admin');
-	expect(summaryHtml).toContain('Een geldige reden');
+	expect(summaryHtml).toContain(VISIT_REQUEST_REASON);
 
 	// Check buttons for approve and deny are visible
 	approveButton = page.locator(
 		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
-		{ hasText: 'Goedkeuren' }
+		{
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/cp/components/approve-request-blade/approve-request-blade___keur-goed'
+				],
+		}
 	);
 	await expect(approveButton).toBeVisible();
 	denyButton = page.locator(
 		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
-		{ hasText: 'Weigeren' }
+		{
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/cp/components/decline-request-blade/decline-request-blade___keur-af'
+				],
+		}
 	);
 	await expect(denyButton).toBeVisible();
 
@@ -222,12 +287,20 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await denyButton.click();
 
 	// Check blade title
-	await checkBladeTitle(page, 'Aanvraag weigeren');
+	await checkBladeTitle(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/cp/components/decline-request-blade/decline-request-blade___aanvraag-afkeuren'
+		]
+	);
 
 	// Click the deny button on the second blade
 	await page
 		.locator(`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`, {
-			hasText: 'Weigeren',
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/cp/components/decline-request-blade/decline-request-blade___keur-af'
+				],
 		})
 		.click();
 
@@ -235,7 +308,12 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await expect(page.locator('.c-blade--active')).not.toBeVisible();
 
 	// Toast message
-	await checkToastMessage(page, 'De aanvraag is geweigerd.');
+	await checkToastMessage(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/cp/components/decline-request-blade/decline-request-blade___de-aanvraag-is-afgekeurd'
+		]
+	);
 	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); // TODO: temp bcs waitForLoading doesnt work
 	// Check number of requests for each status
 	const countsAfterOneApproveAndOneDeny = await checkVisitRequestStatuses(page);
@@ -256,11 +334,13 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Check approved and denied requests are visible under their respective tabs
 	// Check approved count
-	await page.click('.c-tab__label:has-text("Goedgekeurd")');
+	const approvedLabel = SITE_TRANSLATIONS.nl['modules/cp/const/requests___goedgekeurd'];
+	await page.click(`.c-tab__label:has-text("${approvedLabel}")`);
 	await expect(page.locator('text=BezoekerVoornaam').first()).toBeVisible();
 
 	// Check denied count
-	await page.click('.c-tab__label:has-text("Geweigerd")');
+	const deniedLabel = SITE_TRANSLATIONS.nl['modules/cp/const/requests___geweigerd'];
+	await page.click(`.c-tab__label:has-text("${deniedLabel}")`);
 	await expect(page.locator('text=meemoo Admin').first()).toBeVisible();
 
 	// Wait for close to save the videos

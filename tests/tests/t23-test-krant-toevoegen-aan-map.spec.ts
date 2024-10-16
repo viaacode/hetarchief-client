@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { checkToastMessage } from '../helpers/check-toast-message';
-import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
+import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
@@ -12,8 +12,7 @@ test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 	/**
 	 * Go to a newspaper detail page ---------------------------------------------------------------
 	 */
-	const NEWSPAPER_PAGE_TITLE =
-		'Wet- en verordeningsblad voor de bezette streke... | hetarchief.be';
+	const NEWSPAPER_PAGE_TITLE = `Wet- en verordeningsblad voor de bezette streke...`;
 	await goToPageAndAcceptCookies(
 		page,
 		(process.env.TEST_CLIENT_ENDPOINT as string) + '/pid/h98z893q54?showAuth=1',
@@ -25,9 +24,7 @@ test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 		page,
 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
 		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
-		NEWSPAPER_PAGE_TITLE,
-		Locale.Nl,
-		SITE_TRANSLATIONS
+		NEWSPAPER_PAGE_TITLE
 	);
 
 	// Open the button overflow menu
@@ -64,7 +61,12 @@ test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 	await saveButton.click();
 
 	// Check toast message appears
-	await checkToastMessage(page, 'Item toegevoegd aan map');
+	await checkToastMessage(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-toegevoegd-aan-map-titel'
+		]
+	);
 
 	await page.reload();
 

@@ -11,8 +11,17 @@ export {};
 // import { waitForSearchResults } from '../helpers/wait-for-search-results';
 
 // test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }) => {
+// 	const SITE_TRANSLATIONS = await getSiteTranslations();
+// 	const MAIN_SITE_TITLE =
+// 		SITE_TRANSLATIONS.nl[
+// 			'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
+// 			];
 // 	// GO to the hetarchief homepage
-// await goToPageAndAcceptCookies(page);
+// await goToPageAndAcceptCookies(
+// 		page,
+// 		process.env.TEST_CLIENT_ENDPOINT as string,
+// 		await getHomepageTitle()
+// 	);
 
 // 	// Check the homepage show the correct title for searching maintainers
 // 	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
@@ -21,13 +30,8 @@ export {};
 // 	await loginUserHetArchiefIdp(
 // 		page,
 // 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
-// 		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
+// 		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
 // 	);
-
-// 	// Check homepage title
-// 	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
-// 		timeout: 10000,
-// 	});
 
 // 	// Check toast message is shown for visitor space access
 // 	// await checkToastMessage(page, 'Je hebt nu toegang tot VRT', 200000);
@@ -74,7 +78,7 @@ export {};
 // 	const SEARCH_TERM = 'dublin';
 // 	const searchField = await page.locator('.c-tags-input__input-container');
 // 	await searchField.click();
-// 	await searchField.type(SEARCH_TERM);
+// 	await searchField.fill(SEARCH_TERM);
 // 	await searchField.press('Enter');
 
 // 	// Check green pill exists with search term inside
@@ -121,7 +125,7 @@ export {};
 // 	await expect(await folderList.locator('.c-button', { hasText: 'times' })).toBeVisible();
 
 // 	// Enter a folder name
-// 	await folderList.locator('input[placeholder="Nieuwe map"]').type('Map automated test');
+// 	await folderList.locator('input[placeholder="Nieuwe map"]').fill('Map automated test');
 // 	await acceptButton.click();
 
 // 	// Check folder created toast message
@@ -364,15 +368,13 @@ export {};
 // 	await page.fill('#person_first_name', newFirstName);
 
 // 	// Enter password
-// 	await page.type('#password_field', process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string);
+// 	await page.fill('#password_field', process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string);
 
 // 	// Click save button
 // 	await page.locator('[type="submit"]').click();
 
 // 	// Wait for redirect to homepage
-// 	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
-// 		timeout: 10000,
-// 	});
+// 	await waitForPageTitle(page, 'Homepagina hetarchief');
 
 // 	// Login with existing user
 // 	await loginUserHetArchiefIdp(

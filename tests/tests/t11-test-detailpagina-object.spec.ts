@@ -5,36 +5,25 @@ import { checkToastMessage } from '../helpers/check-toast-message';
 import { clickToastMessageButton } from '../helpers/click-toast-message-button';
 import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
 import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
-import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
+import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
 
-declare const document: any;
-
 test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, context }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();
+	const FAVORITES_FOLDER_NAME =
+		SITE_TRANSLATIONS.nl['modules/folders/controllers___default-collection-name'];
+	const EXISTING_FOLDER_NEW_NAME = 'Bestaande map, nieuwe naam';
 
 	// GO to the hetarchief homepage
-	await goToPageAndAcceptCookies(page);
+	await goToPageAndAcceptCookies(page, process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
-		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
-		undefined,
-		Locale.Nl,
-		SITE_TRANSLATIONS
-	);
-
-	// Check homepage title
-	await page.waitForFunction(
-		() => document.title === 'Homepagina hetarchief | hetarchief.be',
-		null,
-		{
-			timeout: 10000,
-		}
+		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
 	);
 
 	/**
@@ -56,7 +45,11 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 		.first()
 		.locator('a')
 		.allInnerTexts();
-	expect(subNavItems[0]).toContain('Zoeken naar aanbieders');
+	expect(subNavItems[0]).toContain(
+		SITE_TRANSLATIONS.nl[
+			'modules/navigation/components/navigation/navigation___alle-bezoekersruimtes'
+		]
+	);
 	expect(subNavItems[1]).toContain('VRT');
 	await page.click('text=VRT');
 
@@ -67,7 +60,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	const SEARCH_TERM = 'betfred'; // TODO: change this to 'betfred British Masters golf' when the int environment is not changing qs251fjp7m
 	const searchField = page.locator('.c-tags-input__input-container').first();
 	await searchField.click();
-	await searchField.type(SEARCH_TERM);
+	await searchField.fill(SEARCH_TERM);
 	await searchField.press('Enter');
 
 	// Check green pill exists with search term inside
@@ -95,15 +88,19 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 
 	// Bookmark this item
 	// Click bookmark button
-	await page.locator('[title="Sla dit item op"]', { hasText: 'bookmark' }).first().click();
+	const saveThisItemLabel =
+		SITE_TRANSLATIONS.nl[
+			'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op'
+		];
+	await page.locator(`[title="${saveThisItemLabel}"]`, { hasText: 'bookmark' }).first().click();
 
 	// Check blade opens
 	await expect(page.locator('.c-blade--active')).toBeVisible();
 
 	// Check bookmark folder counts
 	let bookmarkFolderCounts1 = await getFolderObjectCounts(page);
-	expect(bookmarkFolderCounts1['Favorieten']).toEqual(0);
-	expect(bookmarkFolderCounts1['Bestaande map, nieuwe naam']).toBeUndefined();
+	expect(bookmarkFolderCounts1[FAVORITES_FOLDER_NAME]).toEqual(0);
+	expect(bookmarkFolderCounts1[EXISTING_FOLDER_NEW_NAME]).toBeUndefined();
 
 	// Add object to Favorites folder
 	let folderList = page.locator(
@@ -115,8 +112,8 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 
 	// Check count changes to 1
 	let bookmarkFolderCounts2 = await getFolderObjectCounts(page);
-	expect(bookmarkFolderCounts2['Favorieten']).toEqual(1);
-	expect(bookmarkFolderCounts2['Bestaande map, nieuwe naam']).toBeUndefined();
+	expect(bookmarkFolderCounts2[FAVORITES_FOLDER_NAME]).toEqual(1);
+	expect(bookmarkFolderCounts2[EXISTING_FOLDER_NEW_NAME]).toBeUndefined();
 
 	// Click the add button
 	await page.locator('.c-blade--active').locator('.c-button', { hasText: 'Voeg toe' }).click();
@@ -125,7 +122,12 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	await expect(page.locator('.c-blade--active')).not.toBeVisible();
 
 	// Toast message
-	await checkToastMessage(page, 'Item toegevoegd aan map');
+	await checkToastMessage(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-toegevoegd-aan-map-titel'
+		]
+	);
 	await clickToastMessageButton(page);
 
 	// Go to the following url
@@ -161,8 +163,8 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 
 	// Check bookmark folder counts
 	bookmarkFolderCounts1 = await getFolderObjectCounts(page);
-	expect(bookmarkFolderCounts1['Favorieten']).toEqual(1);
-	expect(bookmarkFolderCounts1['Bestaande map, nieuwe naam']).toBeUndefined();
+	expect(bookmarkFolderCounts1[FAVORITES_FOLDER_NAME]).toEqual(1);
+	expect(bookmarkFolderCounts1[EXISTING_FOLDER_NEW_NAME]).toBeUndefined();
 
 	// Add object to Favorites folder
 	folderList = page.locator(
@@ -174,17 +176,30 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 
 	// Check count changes to 1
 	bookmarkFolderCounts2 = await getFolderObjectCounts(page);
-	expect(bookmarkFolderCounts2['Favorieten']).toEqual(2);
-	expect(bookmarkFolderCounts2['Bestaande map, nieuwe naam']).toBeUndefined();
+	expect(bookmarkFolderCounts2[FAVORITES_FOLDER_NAME]).toEqual(2);
+	expect(bookmarkFolderCounts2[EXISTING_FOLDER_NEW_NAME]).toBeUndefined();
 
 	// Click the add button
-	await page.locator('.c-blade--active').locator('.c-button', { hasText: 'Voeg toe' }).click();
+	await page
+		.locator('.c-blade--active')
+		.locator('.c-button', {
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe'
+				],
+		})
+		.click();
 
 	// Blade closes
 	await expect(page.locator('.c-blade--active')).not.toBeVisible();
 
 	// Toast message
-	await checkToastMessage(page, 'Item toegevoegd aan map');
+	await checkToastMessage(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-toegevoegd-aan-map-titel'
+		]
+	);
 	await clickToastMessageButton(page);
 
 	// TODO: step 19-21 // no data now to test
@@ -222,16 +237,22 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	 */
 
 	// Download advanced-filters
+	const downloadAsCsvLabel =
+		SITE_TRANSLATIONS.nl[
+			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-CSV'
+		];
+	const exportMetadataLabel =
+		SITE_TRANSLATIONS.nl['modules/ie-objects/const/index___exporteer-metadata'];
 	const [download] = await Promise.all([
 		page.waitForEvent('download'),
-		page.locator('[aria-label="Exporteer metadata"]').click(),
+		page.locator(`[aria-label="${exportMetadataLabel}"]`).click(),
 		page
 			.locator('.p-object-detail__wrapper')
-			.locator('button:has-text("Exporteer metadata als CSV")')
+			.locator(`button:has-text("${downloadAsCsvLabel}")`)
 			.click(),
 	]);
 	const path = await download.path();
-	await expect(path).toBeDefined();
+	expect(path).toBeDefined();
 
 	// /**
 	//  * Video player //TODO: video player does not work on int
@@ -304,18 +325,39 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 			(process.env.TEST_OBJECT_DETAIL_PAGE_AMSAB as string)) as string
 	);
 
-	await page.locator('[aria-label="Toevoegen aan aanvraaglijst"]').click();
+	const addToListLabel =
+		SITE_TRANSLATIONS.nl[
+			'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst-desktop'
+		];
+	await page.locator(`[aria-label="${addToListLabel}"]`).click();
 
-	page.locator('text=Voeg toe aan aanvragen'); // TODO: This should be 'Voeg toe aan aanvraaglijst'
+	const addToRequestsLabel =
+		SITE_TRANSLATIONS.nl[
+			'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
+		];
+	page.locator('text=' + addToRequestsLabel);
 
 	// Click 'Ik wil dit materiaal hergebruiken'
-	await page.locator('text=Ik wil dit object hergebruiken').click(); // TODO: This should be 'Ik wil dit materiaal hergebruiken'
+	const reuseLabel =
+		SITE_TRANSLATIONS.nl[
+			'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
+		];
+	await page.locator('text=' + reuseLabel).click();
 
 	// Click 'Voeg toe aan aanvraaglijst en zoek verder'
-	await page.locator('text=Voeg toe aan aanvraag & zoek verder').click();
+	const addToRequestListAndSearchLabel =
+		SITE_TRANSLATIONS.nl[
+			'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek'
+		];
+	await page.locator('text=' + addToRequestListAndSearchLabel).click();
 
 	// Toast message
-	await checkToastMessage(page, 'Toegevoegd aan aanvraaglijst');
+	await checkToastMessage(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/visitor-space/components/material-request-blade/material-request-blade___succes'
+		]
+	);
 	await clickToastMessageButton(page);
 
 	// Click request list icon
@@ -327,8 +369,11 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	// await checkBladeTitle(page, 'Aanvraaglijst');
 
 	// Click 'Vul gegevens aan en verstuur'
-
-	await page.locator('text=Bevestig je gegevens').click();
+	const confirmYourInfoLabel =
+		SITE_TRANSLATIONS.nl[
+			'modules/navigation/components/material-request-center-blade/material-request-center-blade___vul-gegevens-aan'
+		];
+	await page.locator('text=' + confirmYourInfoLabel).click();
 
 	// Check if the title of the blade is now 'Persoonlijke gegevens'
 	// await expect(page.locator('.c-blade--active')).toBeVisible({ timeout: 10000 });
@@ -349,25 +394,46 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	// Click 'ik vraag het materiaal op in het kader van mijn beroep (uitgezonderd onderwijs)'
 	await page
 		.locator(
-			'text=Ik vraag de fragmenten op in het kader van mijn beroep (uitgezonderd onderwijs)'
+			'text=' +
+				SITE_TRANSLATIONS.nl[
+					'modules/navigation/components/personal-info-blade/personal-info-blade___requester-capacity-work'
+				]
 		)
-		.click(); // TODO: this should be: 'ik vraag het materiaal op in het kader van mijn beroep (uitgezonderd onderwijs)'
+		.click();
 
 	// Click 'Verstuur aanvraag'
-	await page.locator('text=Verstuur aanvraag naar aanbieder(s)').click(); // TODO: this should be: 'Verstuur aanvraag'
+	await page
+		.locator(
+			'text=' +
+				SITE_TRANSLATIONS.nl[
+					'modules/navigation/components/personal-info-blade/personal-info-blade___verstuur'
+				]
+		)
+		.click();
 
 	// Toast message
-	await checkToastMessage(page, 'Verzenden gelukt'); //TODO: this should be: 'Aanvraag verstuurd'
+	await checkToastMessage(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/navigation/components/personal-info-blade/personal-info-blade___verzenden-succes'
+		]
+	);
 	await clickToastMessageButton(page);
 
 	// Check blade is closed
 	await expect(page.locator('.c-blade--active')).not.toBeVisible();
 
-	// Click rapporteer
-	await page.locator('[aria-label=Rapporteer]').click();
+	// Click report
+	const reportButtonLabel = SITE_TRANSLATIONS.nl['modules/ie-objects/const/index___rapporteer'];
+	await page.locator(`[aria-label=${reportButtonLabel}]`).click();
 
 	// Check blade title
-	await checkBladeTitle(page, 'Rapporteren'); // This should be 'Een probleem melden'
+	await checkBladeTitle(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/visitor-space/components/report-blade/report-blade___rapporteren'
+		]
+	);
 
 	const emailInputField = page.locator('input#field');
 	expect(await emailInputField.inputValue()).toEqual(
@@ -377,9 +443,21 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 
 	await page.fill('textarea#field', 'Dit is een automated test');
 
-	await page.locator('button > div > span', { hasText: 'Rapporteer' }).click();
+	await page
+		.locator('button > div > span', {
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/visitor-space/components/report-blade/report-blade___rapporteer'
+				],
+		})
+		.click();
 
-	await checkToastMessage(page, 'Gerapporteerd'); // TODO: might have to change to 'Melding verstuurd'
+	await checkToastMessage(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/visitor-space/components/report-blade/report-blade___gerapporteerd'
+		]
+	);
 
 	/**
 	 * Keyword links
@@ -393,7 +471,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 
 	// Check the search by keyword tag is present in the search input field
 	// const searchInput = await page.locator('.c-tags-input__control');
-	// await expect(await searchInput.innerHTML()).toContain('Trefwoord');
+	// await expect(await searchInput.innerHTML()).toContain(SITE_TRANSLATIONS.nl['modules/visitor-space/utils/map-filters/map-filters___trefwoord']);
 
 	// Wait for close to save the videos
 	await context.close();

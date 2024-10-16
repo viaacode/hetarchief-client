@@ -77,7 +77,7 @@
   "modules/admin/const/requests___tijdstip": "tijdstip",
   "modules/admin/const/routing___aanvragen": "Aanvragen",
   "modules/admin/const/routing___actieve-bezoekers": "Actieve bezoekers",
-  "modules/admin/const/routing___alle-bezoekersruimtes": "aanbieders",
+  "modules/admin/const/routing___alle-bezoekersruimtes": "Aanbieders",
   "modules/admin/const/routing___bezoekersruimtesbeheer": "Beheer bezoekersruimtes",
   "modules/admin/const/routing___content-pagina-labels": "Contentpagina labels",
   "modules/admin/const/routing___content-paginas": "Contentpaginas",

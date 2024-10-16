@@ -1,30 +1,27 @@
 import { expect, test } from '@playwright/test';
 
 import { fillRequestVisitBlade } from '../helpers/fill-request-visit-blade';
-import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
+import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
-
-declare const document: any;
+import { waitForPageTitle } from '../helpers/wait-for-page-title';
 
 test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', async ({
 	page,
 	context,
 }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();
+	const VISIT_REQUEST_REASON = 'Een geldige reden';
 
 	// Go to the hetarchief homepage
-	await goToPageAndAcceptCookies(page);
+	await goToPageAndAcceptCookies(page, process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Login cp admin using the meemoo idp
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_MEEMOO_ADMIN_ACCOUNT_USERNAME as string,
-		process.env.TEST_MEEMOO_ADMIN_ACCOUNT_PASSWORD as string,
-		undefined,
-		Locale.Nl,
-		SITE_TRANSLATIONS
+		process.env.TEST_MEEMOO_ADMIN_ACCOUNT_PASSWORD as string
 	);
 
 	// Check logged in status
@@ -52,18 +49,7 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 		SITE_TRANSLATIONS.nl[
 			'modules/visitor-space/views/visitor-spaces-home-page___bezoek-pagina-titel'
 		];
-	const expectedSiteTitle =
-		SITE_TRANSLATIONS.nl[
-			'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
-		];
-	const expectedTitle = expectedSitePageTitle + ' | ' + expectedSiteTitle;
-	await page.waitForFunction(
-		(expectedTitle: string) => document.title === expectedTitle,
-		expectedTitle,
-		{
-			timeout: 10000,
-		}
-	);
+	await waitForPageTitle(page, expectedSitePageTitle);
 
 	// Click on request access button for VRT
 	const vrtCard = page.locator('.p-home__results .c-visitor-space-card--name--vrt');
@@ -72,7 +58,7 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	await vrtCard.locator('.c-button--black').click();
 
 	// Fill in request blade and send
-	await fillRequestVisitBlade(page, 'vrt', 'Een geldige reden', undefined, true);
+	await fillRequestVisitBlade(page, 'vrt', VISIT_REQUEST_REASON, undefined, true);
 
 	// Check that we were redirected to the request pending page
 	await expect(

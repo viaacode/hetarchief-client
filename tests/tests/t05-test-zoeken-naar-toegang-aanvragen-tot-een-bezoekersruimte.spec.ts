@@ -11,8 +11,17 @@ export {};
 // 	page,
 // 	context,
 // }) => {
+// const SITE_TRANSLATIONS = await getSiteTranslations();
+// const MAIN_SITE_TITLE =
+// 	SITE_TRANSLATIONS.nl[
+// 		'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
+// 		];
+
 // 	// GO to the hetarchief homepage
-// await goToPageAndAcceptCookies(page);
+// await goToPageAndAcceptCookies(
+// 		page,
+// 		process.env.TEST_CLIENT_ENDPOINT as string,
+// 	);
 
 // 	// Check the homepage show the correct title for searching maintainers
 // 	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();

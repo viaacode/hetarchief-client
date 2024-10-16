@@ -1,15 +1,27 @@
-import { expect, Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
+
+import { getSiteTranslations } from './get-site-translations';
+import { moduleClassSelector } from './module-class-locator';
 
 async function checkTotal(page: Page, total: number): Promise<void> {
+	const SITE_TRANSLATIONS = await getSiteTranslations();
+	const paginationLabelBetween =
+		SITE_TRANSLATIONS.nl[
+			'modules/shared/components/filter-table/filter-table___label-between-start-and-end-page-in-pagination-bar'
+		];
+	const paginationLabelOf =
+		SITE_TRANSLATIONS.nl[
+			'modules/shared/components/filter-table/filter-table___label-between-end-page-and-total-in-pagination-bar'
+		];
+
+	const paginationProgress = page.locator('c-pagination-progress');
 	if (total) {
-		await expect(
-			await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
-		).toContainText(`1-${total} van ${total}`);
+		await expect(paginationProgress).toContainText(
+			`1${paginationLabelBetween}${total}${paginationLabelOf}${total}`
+		);
 	} else {
 		// If there are no entries, no table is shown and no footer with the total is present
-		await expect(
-			await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
-		).not.toBeVisible();
+		await expect(paginationProgress).not.toBeVisible();
 	}
 }
 
@@ -19,9 +31,16 @@ export async function checkVisitRequestStatuses(page: Page): Promise<{
 	numberOfDenied: number;
 	totalNumberOfRequests: number;
 }> {
+	const SITE_TRANSLATIONS = await getSiteTranslations();
+
 	// Check number of pending on the "all" tab
 	const numberOfPending = await page
-		.locator('[class*="RequestStatusBadge_c-request-status-badge"]:has-text("Open aanvraag")')
+		.locator(moduleClassSelector('c-request-status-badge'), {
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/cp/components/request-status-chip/request-status-chip___open-aanvraag'
+				],
+		})
 		.count();
 
 	// Check number of approved on the "all" tab
@@ -32,26 +51,38 @@ export async function checkVisitRequestStatuses(page: Page): Promise<{
 
 	// Check the total number of visit requests on the "all" tab
 	const totalNumberOfRequests = await page
-		.locator('[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row')
+		.locator(moduleClassSelector('l-sidebar__main') + ' .c-table__wrapper--body .c-table__row')
 		.count();
 
 	// Check total number of requests
 	await checkTotal(page, totalNumberOfRequests);
 
 	// Check pending count
-	await page.click('.c-tab__label:has-text("Open")');
+	const openLabel = SITE_TRANSLATIONS.nl['modules/cp/const/requests___open'];
+	const approvedLabel = SITE_TRANSLATIONS.nl['modules/cp/const/requests___goedgekeurd'];
+	const deniedLabel = SITE_TRANSLATIONS.nl['modules/cp/const/requests___geweigerd'];
+	const allLabel = SITE_TRANSLATIONS.nl['modules/cp/const/requests___alle'];
+	await page
+		.locator('.c-tab__label', {
+			hasText: openLabel,
+		})
+		.click();
 	await checkTotal(page, numberOfPending);
 
 	// Check approved count
-	await page.click('.c-tab__label:has-text("Goedgekeurd")');
+	await page
+		.locator('.c-tab__label', {
+			hasText: approvedLabel,
+		})
+		.click();
 	await checkTotal(page, numberOfApproved);
 
 	// Check denied count
-	await page.click('.c-tab__label:has-text("Geweigerd")');
+	await page.locator('.c-tab__label', { hasText: deniedLabel }).click();
 	await checkTotal(page, numberOfDenied);
 
 	// Go back to the "All" tab
-	await page.click('.c-tab__label:has-text("Alle")');
+	await page.locator('.c-tab__label', { hasText: allLabel }).click();
 
 	return {
 		numberOfPending,

@@ -6,11 +6,15 @@ import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T28: Test login flow engels', async ({ page, context }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();
+	const MAIN_SITE_TITLE =
+		SITE_TRANSLATIONS.nl[
+			'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
+		];
 
 	/**
 	 * Go to the search page ---------------------------------------------------------------
 	 */
-	const HOME_PAGE_TITLE = `Homepagina hetarchief | ${SITE_TRANSLATIONS.nl['modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool']}`;
+	const HOME_PAGE_TITLE = await getHomepageTitle();
 	await goToPageAndAcceptCookies(
 		page,
 		process.env.TEST_CLIENT_ENDPOINT as string,
@@ -25,8 +29,7 @@ test('T28: Test login flow engels', async ({ page, context }) => {
 	await languageSwitcher.click();
 	await page
 		.locator('.c-dropdown__content-open .c-button', {
-			// hasText: SITE_TRANSLATIONS.nl['modules/shared/const/language-names___engels'],
-			hasText: 'English',
+			hasText: SITE_TRANSLATIONS.nl['modules/shared/const/language-names___engels'],
 		})
 		.click();
 

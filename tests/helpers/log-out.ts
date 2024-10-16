@@ -1,4 +1,6 @@
-import { Page } from '@playwright/test';
+import { type Page } from '@playwright/test';
+
+import { waitForPageTitle } from './wait-for-page-title';
 
 export async function logout(page: Page): Promise<void> {
 	// Click the avatar
@@ -8,11 +10,5 @@ export async function logout(page: Page): Promise<void> {
 	await page.locator('.c-dropdown-menu__item', { hasText: 'Log uit' }).click();
 
 	// Wait for homepage to load
-	await page.waitForFunction(
-		() => document.title === 'Homepagina hetarchief | hetarchief.be',
-		null,
-		{
-			timeout: 10000,
-		}
-	);
+	await waitForPageTitle(page, 'Homepagina hetarchief');
 }

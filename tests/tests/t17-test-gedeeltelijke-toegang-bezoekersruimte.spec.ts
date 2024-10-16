@@ -4,32 +4,35 @@ import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sideba
 import { checkBladeTitle } from '../helpers/check-blade-title';
 import { checkToastMessage } from '../helpers/check-toast-message';
 import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
-import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
+import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { logout } from '../helpers/log-out';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
+import { waitForPageTitle } from '../helpers/wait-for-page-title';
 import { waitForSearchResults } from '../helpers/wait-for-search-results';
-
-declare const document: any;
 
 test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct kan worden toegekend', async ({
 	page,
 	context,
 }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();
+	const FOLDER_NAME = 'Map automated test';
+	const FAVORITES_FOLDER_NAME =
+		SITE_TRANSLATIONS.nl['modules/folders/controllers___default-collection-name'];
+	const MY_FOLDERS =
+		SITE_TRANSLATIONS.nl['pages/account/mijn-mappen/folder-slug/index___mijn-mappen'];
+	const REASON = 'Een geldige reden';
+	const VISIT_REQUESTS_PAGE_TITLE = `${SITE_TRANSLATIONS.nl['pages/admin/bezoekersruimtesbeheer/toegangsaanvragen/index___toegangsaanvragen']} | ${SITE_TRANSLATIONS.nl['modules/cp/views/cp-admin-visit-requests-page___beheer']}`;
 
 	// Go to the hetarchief homepage
-	await goToPageAndAcceptCookies(page);
+	await goToPageAndAcceptCookies(page, process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Login visitor
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
-		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
-		undefined,
-		Locale.Nl,
-		SITE_TRANSLATIONS
+		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
 	);
 
 	// Check navbar exists
@@ -42,7 +45,11 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await page.click(`${moduleClassSelector('c-navigation__link--dropdown')}[href="/bezoek"]`);
 
 	// Click on "Zoeken naar aanbieders" navigation option
-	await page.click('text=Zoeken naar aanbieders');
+	const findAnOrganisationLabel =
+		SITE_TRANSLATIONS.nl[
+			'modules/navigation/components/navigation/navigation___alle-bezoekersruimtes'
+		];
+	await page.click(`text=${findAnOrganisationLabel}`);
 
 	// Click on request access button for Amsab-ISG
 	const amsabCard = page.locator('.p-home__results .c-visitor-space-card--name--amsab-isg');
@@ -51,7 +58,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// await new Promise((resolve) => setTimeout(resolve, 10 * 1000));
 
 	// Fill in 'Reden van aanvraag'
-	await page.fill('#RequestAccessBlade__requestReason', `Een geldige reden`);
+	await page.fill('#RequestAccessBlade__requestReason', REASON);
 
 	// Enable checkbox 'Ik vraag deze toegang aan voor onderzoeksdoeleinden of privéstudie'
 	await page.locator(`${moduleClassSelector('c-request-access-blade')} .c-checkbox`).click();
@@ -59,11 +66,18 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Click on 'Verstuur'
 	await page
 		.locator(`${moduleClassSelector('c-request-access-blade')} .c-button__label`, {
-			hasText: 'Verstuur',
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/home/components/request-access-blade/request-access-blade___verstuur'
+				],
 		})
 		.click();
 
-	await expect(page.locator('text=We hebben je aanvraag goed ontvangen')).toBeVisible({
+	const receivedYourRequestLabel =
+		SITE_TRANSLATIONS.nl[
+			'pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen'
+		];
+	await expect(page.locator(`text=${receivedYourRequestLabel}`)).toBeVisible({
 		timeout: 10000,
 	});
 
@@ -82,10 +96,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_CP_ADMIN_AMSAB_ACCOUNT_USERNAME as string,
-		process.env.TEST_CP_ADMIN_AMSAB_ACCOUNT_PASSWORD as string,
-		undefined,
-		Locale.Nl,
-		SITE_TRANSLATIONS
+		process.env.TEST_CP_ADMIN_AMSAB_ACCOUNT_PASSWORD as string
 	);
 
 	// Click "beheer" navigation item
@@ -100,15 +111,13 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	]);
 
 	// Check page title matches visitor requests page title
-	await page.waitForFunction(() => document.title === 'Toegangsaanvragen | hetarchief.be', null, {
-		timeout: 10000,
-	});
+	await waitForPageTitle(page, VISIT_REQUESTS_PAGE_TITLE);
 
 	// Check Visit Requests is active in the sidebar
 	await checkActiveSidebarNavigationItem(
 		page,
 		0,
-		'Toegangsaanvragen',
+		VISIT_REQUESTS_PAGE_TITLE,
 		'/beheer/toegangsaanvragen'
 	);
 
@@ -130,7 +139,12 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 		.click();
 
 	// Check the blade title
-	await checkBladeTitle(page, 'Open aanvraag');
+	await checkBladeTitle(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/cp/components/process-request-blade/process-request-blade___open-aanvraag'
+		]
+	);
 
 	// Check request summary contains requester name
 	let summaryHtml = await page
@@ -138,17 +152,27 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 		.innerHTML();
 	expect(summaryHtml).toContain('BezoekerVoornaam');
 	expect(summaryHtml).toContain('BezoekerAchternaam');
-	expect(summaryHtml).toContain('Een geldige reden');
+	expect(summaryHtml).toContain(REASON);
 
 	// Check buttons for approve and deny are visible
 	let approveButton = page.locator(
 		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
-		{ hasText: 'Goedkeuren' }
+		{
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/cp/components/approve-request-blade/approve-request-blade___keur-goed'
+				],
+		}
 	);
 	await expect(approveButton).toBeVisible();
 	let denyButton = page.locator(
 		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
-		{ hasText: 'Weigeren' }
+		{
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/cp/components/decline-request-blade/decline-request-blade___keur-af'
+				],
+		}
 	);
 	await expect(denyButton).toBeVisible();
 
@@ -156,22 +180,34 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await approveButton.click();
 
 	// Check blade title
-	await checkBladeTitle(page, 'Aanvraag goedkeuren');
+	await checkBladeTitle(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/cp/components/approve-request-blade/approve-request-blade___aanvraag-goedkeuren'
+		]
+	);
 
 	// Click 'Toegang tot een deel van collectie'
 	await page
 		.locator(`${moduleClassSelector('c-radio-button')} span`, {
-			hasText: 'Toegang tot een deel van collectie',
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/cp/components/approve-request-blade/approve-request-blade___toegang-tot-een-deel-van-collectie'
+				],
 		})
 		.click();
 
 	// Open the dropdown
-	await page.locator('text=Kies een map').click();
+	const chooseAFolderLabel =
+		SITE_TRANSLATIONS.nl[
+			'modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map'
+		];
+	await page.locator(`text=${chooseAFolderLabel}`).click();
 
-	// There should be 1 folder: 'Favorieten'
-	let existingfolders = await page.locator('ul .c-checkbox-list li > span');
-	await expect(existingfolders).toHaveCount(1);
-	expect(await existingfolders.nth(0).innerText()).toContain('Favorieten');
+	// There should be 1 folder: FAVORITES_FOLDER_NAME
+	let existingFolders = page.locator('ul .c-checkbox-list li > span');
+	await expect(existingFolders).toHaveCount(1);
+	expect(await existingFolders.nth(0).innerText()).toContain(FAVORITES_FOLDER_NAME);
 
 	// Click next to the blade to close it, need to click it two times
 	const notBlade = page.locator('[class*=Overlay_c-overlay--visible__]').first();
@@ -196,33 +232,50 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Go to the hetarchief homepage
 
 	// Click bookmark button
-	await page.locator('[title="Sla dit item op"]', { hasText: 'bookmark' }).first().click();
+	const saveThisItemLabel = SITE_TRANSLATIONS.nl['modules/ie-objects/const/index___bookmark'];
+	await page.locator(`[title="${saveThisItemLabel}"]`, { hasText: 'bookmark' }).first().click();
 
 	// Check blade opens
 	await expect(page.locator('.c-blade--active')).toBeVisible();
 
 	// Check bookmark folder counts
 	let bookmarkFolderCounts = await getFolderObjectCounts(page);
-	expect(bookmarkFolderCounts['Favorieten']).toEqual(0);
-	expect(bookmarkFolderCounts['Map automated test']).toBeUndefined();
+	expect(bookmarkFolderCounts[FAVORITES_FOLDER_NAME]).toEqual(0);
+	expect(bookmarkFolderCounts[FOLDER_NAME]).toBeUndefined();
 
 	// Create new folder
 	// Click 'Nieuwe map aanmaken'
-	await page.locator('span[role="button"]:has-text("Nieuwe map aanmaken")').click();
+	const createNewFolderLabel =
+		SITE_TRANSLATIONS.nl[
+			'modules/account/components/create-collection-button/create-collection-button___nieuwe-map-aanmaken'
+		];
+	await page.locator('span[role="button"]', { hasText: createNewFolderLabel }).click();
 	// check accept and cancel button to be visible
-	await expect(await page.locator('[aria-label="Nieuwe map aanmaken annuleren"]')).toBeVisible();
-	await expect(await page.locator('[aria-label="Nieuwe map opslaan"]')).toBeVisible();
+	const abortCreatingNewFolderLabel =
+		SITE_TRANSLATIONS.nl[
+			'modules/account/components/create-collection-button/create-collection-button___nieuwe-map-aanmaken-annuleren'
+		];
+	const saveNewFolderLabel =
+		SITE_TRANSLATIONS.nl[
+			'modules/account/components/create-collection-button/create-collection-button___nieuwe-map-opslaan'
+		];
+	await expect(page.locator(`[aria-label="${abortCreatingNewFolderLabel}"]`)).toBeVisible();
+	await expect(page.locator(`[aria-label="${saveNewFolderLabel}"]`)).toBeVisible();
 
 	// Create folder
-	await page.fill('#CreateFolderButton__name', 'Map automated test');
-	await page.locator('[aria-label="Nieuwe map opslaan"]').click();
+	await page.fill('#CreateFolderButton__name', FOLDER_NAME);
 
-	await checkToastMessage(page, '"Map automated test" is aangemaakt.');
+	await page.locator(`[aria-label="${saveNewFolderLabel}"]`).click();
+
+	const folderHasBeenCreated = SITE_TRANSLATIONS.nl[
+		'modules/account/components/create-folder-button/create-folder-button___name-is-aangemaakt'
+	].replace('{{name}}', FOLDER_NAME);
+	await checkToastMessage(page, folderHasBeenCreated);
 
 	// Check folder is added
 	bookmarkFolderCounts = await getFolderObjectCounts(page);
-	expect(bookmarkFolderCounts['Favorieten']).toEqual(0);
-	expect(bookmarkFolderCounts['Map automated test']).toEqual(0);
+	expect(bookmarkFolderCounts[FAVORITES_FOLDER_NAME]).toEqual(0);
+	expect(bookmarkFolderCounts[FOLDER_NAME]).toEqual(0);
 
 	const folderList = page.locator(
 		`.c-blade--active ${moduleClassSelector('c-add-to-folder-blade__list')}`
@@ -233,11 +286,18 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Check folder counts have gone up by 1
 	bookmarkFolderCounts = await getFolderObjectCounts(page);
-	expect(bookmarkFolderCounts['Favorieten']).toEqual(1);
-	expect(bookmarkFolderCounts['Map automated test']).toEqual(1);
+	expect(bookmarkFolderCounts[FAVORITES_FOLDER_NAME]).toEqual(1);
+	expect(bookmarkFolderCounts[FOLDER_NAME]).toEqual(1);
 
 	// Click on 'Voeg toe'
-	await page.locator('button', { hasText: 'Voeg toe' }).click();
+	await page
+		.locator('button', {
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe'
+				],
+		})
+		.click();
 
 	// Go to visit requests page and wait for page to load
 	await Promise.all([
@@ -246,20 +306,20 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	]);
 
 	// Check page title matches visitor requests page title
-	await page.waitForFunction(() => document.title === 'Toegangsaanvragen | hetarchief.be', null, {
-		timeout: 10000,
-	});
+	await waitForPageTitle(page, VISIT_REQUESTS_PAGE_TITLE);
 
 	// Check Visit Requests is active in the sidebar
 	await checkActiveSidebarNavigationItem(
 		page,
 		0,
-		'Toegangsaanvragen',
+		VISIT_REQUESTS_PAGE_TITLE,
 		'/beheer/toegangsaanvragen'
 	);
 
 	// Check active tab: All
-	expect(await page.locator('.c-tab--active').innerHTML()).toContain('Alle');
+	expect(await page.locator('.c-tab--active').innerHTML()).toContain(
+		SITE_TRANSLATIONS.nl['modules/cp/const/requests___alle']
+	);
 
 	/**
 	 * Approve request
@@ -276,7 +336,12 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 		.click();
 
 	// Check the blade title
-	await checkBladeTitle(page, 'Open aanvraag');
+	await checkBladeTitle(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/cp/components/process-request-blade/process-request-blade___open-aanvraag'
+		]
+	);
 
 	// Check request summary contains requester name
 	summaryHtml = await page
@@ -284,17 +349,27 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 		.innerHTML();
 	expect(summaryHtml).toContain('BezoekerVoornaam');
 	expect(summaryHtml).toContain('BezoekerAchternaam');
-	expect(summaryHtml).toContain('Een geldige reden');
+	expect(summaryHtml).toContain(REASON);
 
 	// Check buttons for approve and deny are visible
 	approveButton = page.locator(
 		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
-		{ hasText: 'Goedkeuren' }
+		{
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/cp/components/approve-request-blade/approve-request-blade___keur-goed'
+				],
+		}
 	);
 	await expect(approveButton).toBeVisible();
 	denyButton = page.locator(
 		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
-		{ hasText: 'Weigeren' }
+		{
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/cp/components/decline-request-blade/decline-request-blade___keur-af'
+				],
+		}
 	);
 	await expect(denyButton).toBeVisible();
 
@@ -302,26 +377,34 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await approveButton.click();
 
 	// Check blade title
-	await checkBladeTitle(page, 'Aanvraag goedkeuren');
+	await checkBladeTitle(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/cp/components/approve-request-blade/approve-request-blade___aanvraag-goedkeuren'
+		]
+	);
 
 	// Click 'Toegang tot een deel van collectie'
 	await page
 		.locator(`${moduleClassSelector('c-radio-button')} span`, {
-			hasText: 'Toegang tot een deel van collectie',
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/cp/components/approve-request-blade/approve-request-blade___toegang-tot-een-deel-van-collectie'
+				],
 		})
 		.click();
 
 	// Open the dropdown
-	await page.locator('text=Kies een map').click();
+	await page.locator(`text=${chooseAFolderLabel}`).click();
 
-	// There should be 1 folder: 'Favorieten'
-	existingfolders = page.locator('ul .c-checkbox-list li > span');
-	await expect(existingfolders).toHaveCount(2);
-	expect(await existingfolders.allInnerTexts()).toContain('Favorieten');
-	expect(await existingfolders.allInnerTexts()).toContain('Map automated test');
+	// There should be 1 folder: FAVORITES_FOLDER_NAME
+	existingFolders = page.locator('ul .c-checkbox-list li > span');
+	await expect(existingFolders).toHaveCount(2);
+	expect(await existingFolders.allInnerTexts()).toContain(FAVORITES_FOLDER_NAME);
+	expect(await existingFolders.allInnerTexts()).toContain(FOLDER_NAME);
 
-	// Click 'Map automated test'
-	await page.locator('ul .c-checkbox-list li > span', { hasText: 'Map automated test' }).click();
+	// Click FOLDER_NAME
+	await page.locator('ul .c-checkbox-list li > span', { hasText: FOLDER_NAME }).click();
 
 	// Enter time from: 00:00
 	await page.click('.c-datepicker--time input[name="accessFrom"]');
@@ -336,7 +419,12 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await expect(page.locator('.c-blade--active')).not.toBeVisible();
 
 	// Toast message
-	await checkToastMessage(page, 'De aanvraag is goedgekeurd.');
+	await checkToastMessage(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/cp/components/approve-request-blade/approve-request-blade___de-aanvraag-is-goedgekeurd'
+		]
+	);
 
 	await new Promise((resolve) => setTimeout(resolve, 3 * 1000)); // TODO: temp
 	const approvedRequest = page
@@ -352,37 +440,37 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	expect(
 		await approvedRequest.locator(moduleClassSelector('c-request-status-badge')).innerText()
-	).toContain('Goedgekeurd');
+	).toContain(
+		SITE_TRANSLATIONS.nl[
+			'modules/cp/components/request-status-chip/request-status-chip___goedgekeurd'
+		]
+	);
 
-	expect(await approvedRequest.locator('td').nth(4).allInnerTexts()).toContain('Gedeeltelijke');
+	expect(await approvedRequest.locator('td').nth(4).allInnerTexts()).toContain(
+		SITE_TRANSLATIONS.nl['modules/cp/const/requests___gedeeltelijke-toegang']
+	);
 
 	await page.locator('.c-avatar__text').click();
 	// Click visit requests navigation item
 	await page.click('a[href="/account/mijn-mappen"]');
 
 	// Check page title to check page is loaded
-	await page.waitForFunction(
-		() => document.title === 'Mijn mappen | Favorieten | hetarchief.be',
-		null,
-		{
-			timeout: 10000,
-		}
-	);
+	await waitForPageTitle(page, `${MY_FOLDERS} | ${FAVORITES_FOLDER_NAME}`);
 
-	// Check 'Mijn mappen' is active in the sidebar
-	await checkActiveSidebarNavigationItem(page, 0, 'Mijn mappen', '/account/mijn-mappen');
+	// Check MY_FOLDERS is active in the sidebar
+	await checkActiveSidebarNavigationItem(page, 0, MY_FOLDERS, '/account/mijn-mappen');
 
-	// Check the first folder is selecten in the second sidebar
+	// Check the first folder is selected in the second sidebar
 	await checkActiveSidebarNavigationItem(
 		page,
 		1,
-		'Favorieten',
-		'/account/mijn-mappen/favorieten'
+		FAVORITES_FOLDER_NAME,
+		`/account/mijn-mappen/${FAVORITES_FOLDER_NAME.toLowerCase()}`
 	);
 
 	// Check for an icon to be displayed next to the newly created folder
-	const newFolder = await page.locator('[aria-label="Map automated test"]');
-	await expect(await newFolder.innerText()).toContain('Map automated test');
+	const newFolder = page.locator(`[aria-label="${FOLDER_NAME}"]`);
+	expect(await newFolder.innerText()).toContain(FOLDER_NAME);
 	await expect(
 		newFolder.locator(moduleClassSelector('p-account-my-folders__link__limited-access-icon'))
 	).toBeVisible();
@@ -396,20 +484,22 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 		)} [class^=MediaCardList_c-media-card-list__content]`
 	);
 	await expect(folderObject).toHaveCount(1);
+	const organisationLabel =
+		SITE_TRANSLATIONS.nl['pages/account/mijn-mappen/folder-slug/index___aanbieder'];
 	expect(
 		await folderObject
 			.locator('.p-account-my-folders__card-description p')
 			.first()
 			.allInnerTexts()
-	).toEqual(['Aanbieder: Amsab-ISG']);
+	).toEqual([`${organisationLabel}: Amsab-ISG`]);
 
-	await new Promise((resolve) => setTimeout(resolve, 1 * 1000)); // TODO: replace this
+	await new Promise((resolve) => setTimeout(resolve, 1000)); // TODO: replace this
 
 	const bannerText = await page
 		.locator('div.p-account-my-folders__limited-access-wrapper')
 		.allInnerTexts();
-	expect(bannerText[0]).toMatch(
-		/Deze map wordt gebruikt om bezoekers beperkte toegang te geven t.e.m..*/
+	expect(bannerText[0]).toContain(
+		SITE_TRANSLATIONS.nl['pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang']
 	);
 	await logout(page);
 
@@ -417,10 +507,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
-		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
-		undefined,
-		Locale.Nl,
-		SITE_TRANSLATIONS
+		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
 	);
 
 	// Check navbar exists and user has access to one visitor space
@@ -430,7 +517,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	).toContainText('2');
 
 	// Go to the Amsab-ISG visitor space
-	await page.click('text=Bezoek een aanbieder');
+	await page.click('text=Bezoek een aanbieder'); // This text comes from the navigation entries, so we cannot use SITE_TRANSLATIONS
 	await page
 		.locator(`div${moduleClassSelector('c-menu c-menu--default')}`)
 		.first()
@@ -439,11 +526,12 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	await waitForSearchResults(page);
 
+	const ALL_TAB = SITE_TRANSLATIONS.nl['modules/visitor-space/const/index___alles'];
 	expect(
 		await page
 			.locator('button.c-tabs__item.c-tab.c-tab--dark.c-tab--all.c-tab--active')
 			.allInnerTexts()
-	).toEqual(['Alles(1)']);
+	).toEqual([`${ALL_TAB}(1)`]);
 
 	// Get the pid of the first object
 	const objectPid = await page
@@ -459,7 +547,12 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 			`ul${moduleClassSelector(
 				'u-list-reset VisitorSpaceDropdown_c-visitor-spaces-dropdown__list'
 			)} li`,
-			{ hasText: 'Publieke catalogus' }
+			{
+				hasText:
+					SITE_TRANSLATIONS.nl[
+						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-publieke-catalogus'
+					],
+			}
 		)
 		.click();
 
@@ -469,21 +562,30 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	).toBeLessThanOrEqual(1);
 
 	// Check the purple banner
+	const tempAccessLabel =
+		SITE_TRANSLATIONS.nl[
+			'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___tijdelijke-toegang'
+		];
 	expect(await page.locator('span.p-visitor-space__temp-access-label').allInnerTexts()).toEqual([
-		'Je hebt tijdelijke toegang tot het materiaal van Amsab-ISG en VRT.',
+		`${tempAccessLabel} Amsab-ISG en VRT.`,
 	]);
 
 	// Enter pid
 	const searchField = page.locator('.c-tags-input__input-container').first();
 	await searchField.click();
-	await searchField.type(objectPid);
+	await searchField.fill(objectPid);
 	await searchField.press('Enter');
 
 	await waitForSearchResults(page);
 
 	await expect(
 		page
-			.locator('[class*=Pill_c-pill--expanded] span', { hasText: 'Tijdelijke toegang' })
+			.locator('[class*=Pill_c-pill--expanded] span', {
+				hasText:
+					SITE_TRANSLATIONS.nl[
+						'modules/shared/components/media-card/media-card___tijdelijke-toegang'
+					],
+			})
 			.first()
 	).toBeVisible();
 	// Wait for close to save the videos

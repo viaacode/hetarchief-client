@@ -11,8 +11,17 @@ export {};
 // import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 // test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, context }) => {
+// 	const SITE_TRANSLATIONS = await getSiteTranslations();
+// 	const MAIN_SITE_TITLE =
+// 		SITE_TRANSLATIONS.nl[
+// 			'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
+// 			];
 // 	// Go to the hetarchief homepage
-// await goToPageAndAcceptCookies(page);
+// await goToPageAndAcceptCookies(
+// 		page,
+// 		process.env.TEST_CLIENT_ENDPOINT as string,
+// 		await getHomepageTitle()
+// 	);
 
 // 	/**
 // 	 * Set amsab space to status pending
@@ -41,9 +50,7 @@ export {};
 // 		.click();
 
 // 	// Wait for title of page to be set
-// 	await page.waitForFunction(() => document.title === 'Alle organisaties | bezoekertool', null, {
-// 		timeout: 10000,
-// 	});
+// await waitForPageTitle(page, 'Alle organisaties');
 
 // 	// Check page title
 // 	await expect(
@@ -199,13 +206,7 @@ export {};
 // 	);
 
 // 	// Wait for title of page to be set
-// 	await page.waitForFunction(
-// 		() => document.title === 'Groepen en permissies | bezoekertool',
-// 		null,
-// 		{
-// 			timeout: 10000,
-// 		}
-// 	);
+// await waitForPageTitle(page, 'Groepen en permissies');
 
 // 	// Check title
 // 	await expect(
@@ -258,8 +259,8 @@ export {};
 
 // 	// Wait for title of page to be set
 // 	await page.waitForFunction(
-// 		() => document.title === 'Groepen en permissies | bezoekertool',
-// 		null,
+// 		(title) => document.title === title,
+// 		`Groepen en permissies | ${MAIN_SITE_TITLE}`,
 // 		{
 // 			timeout: 10000,
 // 		}
@@ -285,13 +286,7 @@ export {};
 // 	await page.reload();
 
 // 	// Wait for title of page to be set
-// 	await page.waitForFunction(
-// 		() => document.title === 'Groepen en permissies | bezoekertool',
-// 		null,
-// 		{
-// 			timeout: 10000,
-// 		}
-// 	);
+// await waitForPageTitle(page, 'Groepen en permissies');
 
 // 	// Check permission is still checked
 // 	const checkbox2 = await page
@@ -308,9 +303,7 @@ export {};
 // 	await page.click(`${moduleClassSelector('SidebarLayout_l-sidebar__navigation')} [href="/admin/navigatie"]`);
 
 // 	// Wait for title of page to be set
-// 	await page.waitForFunction(() => document.title === 'Navigatie | bezoekertool', null, {
-// 		timeout: 10000,
-// 	});
+// await waitForPageTitle(page, 'Navigatie');
 
 // 	// Check title
 // 	await expect(
@@ -369,7 +362,11 @@ export {};
 // 	// await expect(navItemPrivacy2).not.toBeVisible(); // TODO does not work without a reload => waiting for https://github.com/viaacode/react-admin-core-module/pull/40
 
 // 	// Go to the hetarchief homepage
-// await goToPageAndAcceptCookies(page);
+// await goToPageAndAcceptCookies(
+// 		page,
+// 		process.env.TEST_CLIENT_ENDPOINT as string,
+// 		await getHomepageTitle()
+// 	);
 
 // 	// Check privacy link in footer is not present
 // 	await expect(
@@ -440,9 +437,7 @@ export {};
 // 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 // 	// Check page title is the home page
-// 	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
-// 		timeout: 10000,
-// 	});
+// await waitForPageTitle(page, 'Homepagina hetarchief');
 
 // 	// Check privacy link in footer is not present
 // 	await expect(
@@ -462,9 +457,7 @@ export {};
 // 	);
 
 // 	// Wait for title of page to be set
-// 	await page.waitForFunction(() => document.title === 'Vertalingen | bezoekertool', null, {
-// 		timeout: 10000,
-// 	});
+// await waitForPageTitle(page, 'Vertalingen');
 
 // 	// Check title
 // 	await expect(
@@ -521,9 +514,7 @@ export {};
 // 	await page.click(`${moduleClassSelector('SidebarLayout_l-sidebar__navigation')} [href="/admin/content"]`);
 
 // 	// Wait for title of page to be set
-// 	await page.waitForFunction(() => document.title === 'Contentpaginas | bezoekertool', null, {
-// 		timeout: 10000,
-// 	});
+// await waitForPageTitle(page, 'Contentpaginas');
 
 // 	// Check title
 // 	await expect(
@@ -636,7 +627,7 @@ export {};
 // 	// Set text to "Automated test"
 // 	const descriptionEditor = await contentBlockForm2.locator('.DraftEditor-editorContainer');
 // 	await descriptionEditor.click();
-// 	await descriptionEditor.type('Automated test');
+// 	await descriptionEditor.fill('Automated test');
 
 // 	// Select the text
 // 	await page.keyboard.press('Control+a');
@@ -784,7 +775,7 @@ export {};
 // 	// Enter the text "Automated test 2"
 // 	const editor3 = await contentBlockForm3.locator('.DraftEditor-editorContainer');
 // 	await editor3.click();
-// 	await editor3.type('Automated test 2');
+// 	await editor3.fill('Automated test 2');
 
 // 	// Select the text
 // 	await page.keyboard.press('Control+a');

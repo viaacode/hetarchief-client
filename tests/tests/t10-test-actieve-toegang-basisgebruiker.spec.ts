@@ -1,36 +1,22 @@
 import { expect, test } from '@playwright/test';
 
 import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
-import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
+import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
-
-declare const document: any;
 
 test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();
 
 	// GO to the hetarchief homepage
-	await goToPageAndAcceptCookies(page);
+	await goToPageAndAcceptCookies(page, process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
-		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
-		undefined,
-		Locale.Nl,
-		SITE_TRANSLATIONS
-	);
-
-	// Check homepage title
-	await page.waitForFunction(
-		() => document.title === 'Homepagina hetarchief | hetarchief.be',
-		null,
-		{
-			timeout: 10000,
-		}
+		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
 	);
 
 	/**
@@ -41,8 +27,9 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await expect(
 		page.locator(`a[href="/bezoek"] div${moduleClassSelector('c-badge')}`).first()
 	).toContainText('1');
+
 	// Click on "Bezoek een aanbieder" navigation item
-	await page.click('text=Bezoek een aanbieder');
+	await page.click('text=Bezoek een aanbieder'); // This text comes from the navigation item from the database, so we can't use the SITE_TRANSLATIONS
 
 	// Check dropdown menu is visible
 	await expect(
@@ -63,9 +50,9 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 		.first()
 		.locator('a')
 		.allInnerTexts();
-	expect(subNavItems[0]).toContain('Zoeken naar aanbieders');
+	expect(subNavItems[0]).toContain('Zoeken naar aanbieders'); // This text comes from the navigation item from the database, so we can't use the SITE_TRANSLATIONS
 	expect(subNavItems[1]).toContain('VRT');
-	await page.click('text=Zoeken naar aanbieders');
+	await page.click('text=Zoeken naar aanbieders'); // This text comes from the navigation item from the database, so we can't use the SITE_TRANSLATIONS
 	// Wait for search page to be ready
 	// await waitForSearchResults(page);
 	await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
@@ -73,7 +60,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// Expect approved visitor space card to be visible
 	await expect(page.locator(`div${moduleClassSelector('c-hero__access-cards')} `)).toBeVisible();
 
-	// Check VRT in actieve aanbieders
+	// Check VRT in active organisations
 	expect(
 		page
 			.locator(`div${moduleClassSelector('c-hero__access-cards')}  h2`)
@@ -81,7 +68,11 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 			.allInnerTexts()
 	).toContain('VRT');
 
-	await page.locator('text=Start je zoekopdracht').click();
+	const startSearchLabel =
+		SITE_TRANSLATIONS.nl[
+			'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'
+		];
+	await page.locator(`text=${startSearchLabel}`).click();
 
 	// Check VRT is the active space
 	expect(
@@ -114,7 +105,12 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 			`ul${moduleClassSelector(
 				'u-list-reset VisitorSpaceDropdown_c-visitor-spaces-dropdown__list'
 			)} li`,
-			{ hasText: 'Publieke catalogus' } // TODO: we might have to change the text
+			{
+				hasText:
+					SITE_TRANSLATIONS.nl[
+						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-publieke-catalogus'
+					],
+			}
 		)
 		.click();
 
@@ -124,8 +120,12 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 		.not.toEqual(countsBeforePublic);
 
 	// Check the purple banner
+	const tempAccessLabel =
+		SITE_TRANSLATIONS.nl[
+			'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___tijdelijke-toegang'
+		];
 	expect(page.locator('span.p-visitor-space__temp-access-label').allInnerTexts()).toEqual([
-		'Je hebt tijdelijke toegang tot het materiaal van VRT.',
+		`${tempAccessLabel} VRT.`,
 	]);
 	/**
 	 * Search on search page --------------------------------------------------------------------
@@ -138,7 +138,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	const SEARCH_TERM = 'brugge';
 	const searchField = page.locator('.c-tags-input__input-container').first();
 	await searchField.click();
-	await searchField.type(SEARCH_TERM);
+	await searchField.fill(SEARCH_TERM);
 	await searchField.press('Enter');
 
 	// Check green pill exists with search term inside
@@ -196,13 +196,20 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	countsBeforeSearch = await getSearchTabBarCounts(page);
 
 	await page
-		.locator('span.c-checkbox__label', { hasText: 'Ter plaatste kijken & luisteren' })
-		.click(); //TODO: we might have to change this text
+		.locator('span.c-checkbox__label', {
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/visitor-space/const/index___enkel-ter-plaatse-beschikbaar'
+				],
+		})
+		.click();
 
 	// Check green pill exists with filter inside
 	pill = page.locator('.c-tags-input__multi-value .c-tag__label');
 	await expect(pill).toBeVisible();
-	await expect(pill).toContainText('Ter plaatste kijken & luisteren'); //TODO: we might have to change this text
+	await expect(pill).toContainText(
+		SITE_TRANSLATIONS.nl['modules/visitor-space/const/index___enkel-ter-plaatse-beschikbaar']
+	);
 
 	// Wait for filtered search results
 	await expect

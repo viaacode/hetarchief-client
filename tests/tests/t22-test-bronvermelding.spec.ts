@@ -1,10 +1,16 @@
 import { expect, test } from '@playwright/test';
 
 import { getClipboardValue } from '../helpers/get-clipboard-value';
+import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T22: bronvermelding', async ({ page, context }) => {
+	const SITE_TRANSLATIONS = await getSiteTranslations();
+	const MAIN_SITE_TITLE =
+		SITE_TRANSLATIONS.nl[
+			'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
+		];
 	await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 
 	/**
@@ -13,13 +19,13 @@ test('T22: bronvermelding', async ({ page, context }) => {
 	await goToPageAndAcceptCookies(
 		page,
 		(process.env.TEST_CLIENT_ENDPOINT as string) + '/pid/h98z893q54',
-		'Wet- en verordeningsblad voor de bezette streke... | hetarchief.be'
+		`Wet- en verordeningsblad voor de bezette streke... | ${MAIN_SITE_TITLE}`
 	);
 
 	// Scroll into view attribution metadata
 	const attributionMetadata = page
 		.locator(moduleClassSelector('c-metadata__item'), {
-			hasText: 'Bronvermelding',
+			hasText: SITE_TRANSLATIONS.nl['modules/ie-objects/ie-objects___bronvermelding'],
 		})
 		.first();
 	await attributionMetadata.scrollIntoViewIfNeeded();

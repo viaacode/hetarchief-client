@@ -1,10 +1,19 @@
-import { expect, Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
+
+import { getSiteTranslations } from './get-site-translations';
+import { moduleClassSelector } from './module-class-locator';
 
 export async function acceptTos(page: Page): Promise<void> {
+	const SITE_TRANSLATIONS = await getSiteTranslations();
+
 	// Check title, content page content and disabled button
-	await expect(page.locator('.p-terms-of-service__title')).toContainText('Gebruiksvoorwaarden');
-	await expect(page.locator('.c-content-page-preview')).toContainText('Deze gebruiksvoorwaarden');
-	const acceptTosButton = await page.locator('.p-terms-of-service__buttons .c-button--black');
+	await expect(page.locator(moduleClassSelector('p-terms-of-service__title'))).toContainText(
+		SITE_TRANSLATIONS.nl['pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden']
+	);
+	await expect(page.locator('.c-content-page-preview')).toContainText('Deze gebruiksvoorwaarden'); // This text is from the content page, so we can't use SITE_TRANSLATIONS
+	const acceptTosButton = page.locator(
+		moduleClassSelector('p-terms-of-service__buttons') + ' .c-button--black'
+	);
 	await expect(acceptTosButton).toHaveClass(/c-button--disabled/);
 
 	// Scroll down

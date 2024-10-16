@@ -1,15 +1,19 @@
 import { expect, type Page } from '@playwright/test';
 
-import { type Locale } from './get-site-translations';
+import { HOMEPAGE_TITLE } from '../consts/tests.consts';
+
+import { getSiteTranslations, Locale } from './get-site-translations';
+import { waitForPageTitle } from './wait-for-page-title';
 
 export async function loginUserHetArchiefIdp(
 	page: Page,
 	username: string,
 	password: string,
-	titleAfterLogin = 'Homepagina hetarchief | hetarchief.be',
-	locale: Locale,
-	SITE_TRANSLATIONS: Record<Locale, Record<string, string>>
+	titleAfterLogin?: string,
+	locale: Locale = Locale.Nl
 ): Promise<void> {
+	const SITE_TRANSLATIONS = await getSiteTranslations();
+
 	const loginOrRegisterLabel =
 		SITE_TRANSLATIONS[locale][
 			'modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren'
@@ -43,11 +47,5 @@ export async function loginUserHetArchiefIdp(
 	await page.click('button[type="submit"]');
 
 	// Wait for site to load after login
-	await page.waitForFunction(
-		(titleAfterLogin: string) => document.title === titleAfterLogin,
-		titleAfterLogin,
-		{
-			timeout: 10000,
-		}
-	);
+	await waitForPageTitle(page, titleAfterLogin || HOMEPAGE_TITLE);
 }

@@ -6,11 +6,15 @@ import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T27: Filteren op krant metadata', async ({ page, context }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();
+	const MAIN_SITE_TITLE =
+		SITE_TRANSLATIONS.nl[
+			'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
+		];
 
 	/**
 	 * Go to the search page ---------------------------------------------------------------
 	 */
-	const SEARCH_PAGE_TITLE = `${SITE_TRANSLATIONS.nl['pages/zoeken/index___zoeken-pagina-titel']} | ${SITE_TRANSLATIONS.nl['modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool']}`;
+	const SEARCH_PAGE_TITLE = `${SITE_TRANSLATIONS.nl['pages/zoeken/index___zoeken-pagina-titel']} | ${MAIN_SITE_TITLE}`;
 	await goToPageAndAcceptCookies(
 		page,
 		`${

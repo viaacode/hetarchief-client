@@ -1,20 +1,20 @@
 import { type Page } from '@playwright/test';
 
-declare const document: any;
+import { HOMEPAGE_TITLE } from '../consts/tests.consts';
+
+import { waitForPageTitle } from './wait-for-page-title';
 
 export async function goToPageAndAcceptCookies(
 	page: Page,
-	url: string = process.env.TEST_CLIENT_ENDPOINT as string,
-	title = 'Homepagina hetarchief | hetarchief.be',
+	url: string,
+	title?: string = HOMEPAGE_TITLE,
 	whichCookies: 'all' | 'selection' = 'all'
 ): Promise<void> {
 	// Go to the hetarchief homepage and wait for results to load
 	await page.goto(url);
 
 	// Check page title is the home page
-	await page.waitForFunction((title: string) => document.title === title, title, {
-		timeout: 10000,
-	});
+	await waitForPageTitle(page, title);
 
 	// Check if cookiebot opens
 	const cookiebotDialog = page.locator('#CybotCookiebotDialogBody');
