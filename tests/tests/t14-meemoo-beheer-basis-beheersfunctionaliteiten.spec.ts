@@ -80,7 +80,7 @@ export {};
 // 	const amsabRow1 = await page.locator('.c-admin__content tbody tr', { hasText: 'Amsab-ISG' });
 
 // 	// Click the three dots
-// 	await amsabRow1.locator('.c-button', { hasText: 'dots-vertical' }).click();
+// 	await amsabRow1.locator('.c-button', { hasText: IconName.DotsVertical }).click();
 
 // 	// Check the "back to pending" option
 // 	await amsabRow1.locator('.c-button[name="set-status-pending-space"]').click();
@@ -115,7 +115,7 @@ export {};
 // 	await expect(await amsabRow2.locator('td', { hasText: 'in aanvraag' })).toBeVisible();
 
 // 	// Click the three dots
-// 	await amsabRow2.locator('.c-button', { hasText: 'dots-vertical' }).click();
+// 	await amsabRow2.locator('.c-button', { hasText: IconName.DotsVertical }).click();
 
 // 	// Check correct options are shown:
 // 	await expect(
@@ -145,7 +145,7 @@ export {};
 
 // 	// Click the users sidebar nav
 // 	await page.click(
-// 		`${moduleClassSelector('SidebarLayout_l-sidebar__navigation')} [href="/admin/gebruikersbeheer/gebruikers"]`
+// 		`${moduleClassSelector('l-sidebar__navigation')} [href="/admin/gebruikersbeheer/gebruikers"]`
 // 	);
 
 // 	// Check title
@@ -202,7 +202,7 @@ export {};
 
 // 	// Click the users sidebar nav
 // 	await page.click(
-// 		`${moduleClassSelector('SidebarLayout_l-sidebar__navigation')} [href="/admin/gebruikersbeheer/permissies"]`
+// 		`${moduleClassSelector('l-sidebar__navigation')} [href="/admin/gebruikersbeheer/permissies"]`
 // 	);
 
 // 	// Wait for title of page to be set
@@ -300,7 +300,7 @@ export {};
 // 	 */
 
 // 	// Click the navigations in the sidebar
-// 	await page.click(`${moduleClassSelector('SidebarLayout_l-sidebar__navigation')} [href="/admin/navigatie"]`);
+// 	await page.click(`${moduleClassSelector('l-sidebar__navigation')} [href="/admin/navigatie"]`);
 
 // 	// Wait for title of page to be set
 // await waitForPageTitle(page, 'Navigatie');
@@ -388,7 +388,7 @@ export {};
 // 	// Check title
 // 	await expect(
 // 		await page.locator('.c-admin__page-title', {
-// 			hasText: 'item Toevoegen',
+// 			hasText: SITE_TRANSLATIONS.nl[],
 // 		})
 // 	).toBeVisible();
 
@@ -437,7 +437,7 @@ export {};
 // 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 // 	// Check page title is the home page
-// await waitForPageTitle(page, 'Homepagina hetarchief');
+// await waitForPageTitle(page, HOMEPAGE_TITLE);
 
 // 	// Check privacy link in footer is not present
 // 	await expect(
@@ -453,7 +453,7 @@ export {};
 
 // 	// Click the translations in the sidebar
 // 	await page.click(
-// 		`${moduleClassSelector('SidebarLayout_l-sidebar__navigation')} [href="/admin/vertalingen"]`
+// 		`${moduleClassSelector('l-sidebar__navigation')} [href="/admin/vertalingen"]`
 // 	);
 
 // 	// Wait for title of page to be set
@@ -511,7 +511,7 @@ export {};
 // 	 */
 
 // 	// Click the content pages in the sidebar
-// 	await page.click(`${moduleClassSelector('SidebarLayout_l-sidebar__navigation')} [href="/admin/content"]`);
+// 	await page.click(`${moduleClassSelector('l-sidebar__navigation')} [href="/admin/content"]`);
 
 // 	// Wait for title of page to be set
 // await waitForPageTitle(page, 'Contentpaginas');
@@ -694,7 +694,7 @@ export {};
 // 	 * Verify created page exists
 // 	 */
 // 	// Click the content pages in the sidebar
-// 	await page.click(`${moduleClassSelector('SidebarLayout_l-sidebar__navigation')} [href="/admin/content"]`);
+// 	await page.click(`${moduleClassSelector('l-sidebar__navigation')} [href="/admin/content"]`);
 
 // 	// Check title
 // 	await expect(
@@ -851,7 +851,7 @@ export {};
 // 	 * Verify publication status in overview
 // 	 */
 // 	// Click the content pages in the sidebar
-// 	await page.click(`${moduleClassSelector('SidebarLayout_l-sidebar__navigation')} [href="/admin/content"]`);
+// 	await page.click(`${moduleClassSelector('l-sidebar__navigation')} [href="/admin/content"]`);
 
 // 	// Check title
 // 	await expect(

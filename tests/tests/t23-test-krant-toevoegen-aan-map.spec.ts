@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+import { IconName } from '../consts/icon-names';
 import { checkToastMessage } from '../helpers/check-toast-message';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
@@ -29,7 +30,7 @@ test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 
 	// Open the button overflow menu
 	let buttonOverflowMenu = page.locator('.p-object-detail__primary-actions .c-button', {
-		hasText: 'dots-horizontal',
+		hasText: IconName.DotsHorizontal,
 	});
 	await expect(buttonOverflowMenu).toBeVisible();
 
@@ -38,7 +39,7 @@ test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 
 	// Bookmark button should be visible
 	let bookmarkButton = page.locator('.p-object-detail__primary-actions .c-dropdown-menu__item', {
-		hasText: 'bookmark',
+		hasText: IconName.Bookmark,
 	});
 	await expect(bookmarkButton).toBeVisible();
 
@@ -72,7 +73,7 @@ test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 
 	// Open the button overflow menu
 	buttonOverflowMenu = page.locator('.p-object-detail__primary-actions .c-button', {
-		hasText: 'dots-horizontal',
+		hasText: IconName.DotsHorizontal,
 	});
 	await expect(buttonOverflowMenu).toBeVisible();
 
@@ -81,7 +82,7 @@ test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 
 	// Bookmark button should be visible
 	bookmarkButton = page.locator('.p-object-detail__primary-actions .c-dropdown-menu__item', {
-		hasText: 'bookmark',
+		hasText: IconName.Bookmark,
 	});
 	await expect(bookmarkButton).toBeVisible();
 

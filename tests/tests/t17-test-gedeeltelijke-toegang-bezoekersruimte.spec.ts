@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+import { IconName } from '../consts/icon-names';
 import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sidebar-navigation-item';
 import { checkBladeTitle } from '../helpers/check-blade-title';
 import { checkToastMessage } from '../helpers/check-toast-message';
@@ -131,7 +132,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await page
 		.locator(
 			`${moduleClassSelector(
-				'SidebarLayout_l-sidebar__main'
+				'l-sidebar__main'
 			)} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
 			{ hasText: 'BezoekerVoornaam' }
 		)
@@ -156,7 +157,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Check buttons for approve and deny are visible
 	let approveButton = page.locator(
-		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
+		`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button`,
 		{
 			hasText:
 				SITE_TRANSLATIONS.nl[
@@ -166,7 +167,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	);
 	await expect(approveButton).toBeVisible();
 	let denyButton = page.locator(
-		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
+		`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button`,
 		{
 			hasText:
 				SITE_TRANSLATIONS.nl[
@@ -189,7 +190,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Click 'Toegang tot een deel van collectie'
 	await page
-		.locator(`${moduleClassSelector('c-radio-button')} span`, {
+		.locator('.c-radio-button span', {
 			hasText:
 				SITE_TRANSLATIONS.nl[
 					'modules/cp/components/approve-request-blade/approve-request-blade___toegang-tot-een-deel-van-collectie'
@@ -219,7 +220,9 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await new Promise((resolve) => setTimeout(resolve, 1000)); // TODO: replace this
 
 	// Click on 'Naar mijn bezoekertool'
-	await page.locator('a[href="/zoeken?aanbieder=amsab-isg"] span', { hasText: 'search' }).click(); // TODO: this is really inconsistent
+	await page
+		.locator('a[href="/zoeken?aanbieder=amsab-isg"] span', { hasText: IconName.Search })
+		.click(); // TODO: this is really inconsistent
 	await page.goto(`${process.env.TEST_CLIENT_ENDPOINT as string}/zoeken?aanbieder=amsab-isg`); //TODO: remove this, it is added because it is really inconsistent
 
 	// await new Promise((resolve) => setTimeout(resolve, 3 * 1000)); // TODO: replace this
@@ -233,7 +236,10 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Click bookmark button
 	const saveThisItemLabel = SITE_TRANSLATIONS.nl['modules/ie-objects/const/index___bookmark'];
-	await page.locator(`[title="${saveThisItemLabel}"]`, { hasText: 'bookmark' }).first().click();
+	await page
+		.locator(`[title="${saveThisItemLabel}"]`, { hasText: IconName.Bookmark })
+		.first()
+		.click();
 
 	// Check blade opens
 	await expect(page.locator('.c-blade--active')).toBeVisible();
@@ -328,7 +334,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await page
 		.locator(
 			`${moduleClassSelector(
-				'SidebarLayout_l-sidebar__main'
+				'l-sidebar__main'
 			)} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
 			{ hasText: 'BezoekerVoornaam' }
 		)
@@ -353,7 +359,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Check buttons for approve and deny are visible
 	approveButton = page.locator(
-		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
+		`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button`,
 		{
 			hasText:
 				SITE_TRANSLATIONS.nl[
@@ -363,7 +369,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	);
 	await expect(approveButton).toBeVisible();
 	denyButton = page.locator(
-		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
+		`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button`,
 		{
 			hasText:
 				SITE_TRANSLATIONS.nl[
@@ -386,7 +392,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Click 'Toegang tot een deel van collectie'
 	await page
-		.locator(`${moduleClassSelector('c-radio-button')} span`, {
+		.locator('.c-radio-button span', {
 			hasText:
 				SITE_TRANSLATIONS.nl[
 					'modules/cp/components/approve-request-blade/approve-request-blade___toegang-tot-een-deel-van-collectie'
@@ -411,9 +417,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await page.click('.react-datepicker__time-list-item:has-text("00:00")');
 
 	// Click the approve button
-	await page.click(
-		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button--black`
-	);
+	await page.click(`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button--black`);
 
 	// Blade closes
 	await expect(page.locator('.c-blade--active')).not.toBeVisible();
@@ -429,9 +433,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await new Promise((resolve) => setTimeout(resolve, 3 * 1000)); // TODO: temp
 	const approvedRequest = page
 		.locator(
-			`${moduleClassSelector(
-				'SidebarLayout_l-sidebar__main'
-			)} .c-table__wrapper--body .c-table__row`,
+			`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row`,
 			{
 				hasText: 'BezoekerVoornaam',
 			}

@@ -108,7 +108,7 @@ export {};
 // 	);
 //
 // 	// Go to the search page of vlaams parlement
-// 	const visitorSpaceLink = `[class*="VisitorSpaceCard_c-visitor-space-card--granted__"] a[href="/${kebabCase(
+// 	const visitorSpaceLink = moduleClassSelector('c-visitor-space-card--granted') + ' a[href="/${kebabCase(
 // 		spaceName
 // 	)}"]`;
 // 	await page.locator(visitorSpaceLink).first().click();
@@ -133,7 +133,7 @@ export {};
 // 	await page.locator('.c-menu--visible--default').locator('text=Pas toe').click();
 //
 // 	// Click bookmark button of the first search result
-// 	await page.locator('.c-card .c-button', { hasText: 'bookmark' }).click();
+// 	await page.locator('.c-card .c-button', { hasText: IconName.Bookmark }).click();
 //
 // 	// Check blade opens
 // 	await expect(page.locator('.c-blade--active')).toBeVisible();
@@ -209,7 +209,7 @@ export {};
 //
 // 	// Check favorite folder is selected
 // 	await expect(
-// 		await page.locator('.c-content-input__value', { hasText: 'Favorieten' })
+// 		await page.locator('.c-content-input__value', { hasText: FAVORITES_FOLDER_NAME })
 // 	).toBeVisible();
 //
 // 	// Click on last saved object

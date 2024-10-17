@@ -1,14 +1,24 @@
 import { type Page } from '@playwright/test';
 
+import { HOMEPAGE_TITLE } from '../consts/tests.consts';
+
+import { getSiteTranslations } from './get-site-translations';
+import { moduleClassSelector } from './module-class-locator';
 import { waitForPageTitle } from './wait-for-page-title';
 
 export async function logout(page: Page): Promise<void> {
+	const SITE_TRANSLATIONS = await getSiteTranslations();
+
 	// Click the avatar
-	await page.locator('[class*="Navigation_c-navigation__list__"] .c-avatar').click();
+	await page.locator(moduleClassSelector('c-navigation__list') + ' .c-avatar').click();
 
 	// Click the logout option
-	await page.locator('.c-dropdown-menu__item', { hasText: 'Log uit' }).click();
+	await page
+		.locator('.c-dropdown-menu__item', {
+			hasText: SITE_TRANSLATIONS.nl['modules/navigation/const/index___log-uit'],
+		})
+		.click();
 
 	// Wait for homepage to load
-	await waitForPageTitle(page, 'Homepagina hetarchief');
+	await waitForPageTitle(page, HOMEPAGE_TITLE);
 }

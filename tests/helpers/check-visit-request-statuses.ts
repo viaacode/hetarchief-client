@@ -14,7 +14,7 @@ async function checkTotal(page: Page, total: number): Promise<void> {
 			'modules/shared/components/filter-table/filter-table___label-between-end-page-and-total-in-pagination-bar'
 		];
 
-	const paginationProgress = page.locator('c-pagination-progress');
+	const paginationProgress = page.locator('.c-pagination-progress');
 	if (total) {
 		await expect(paginationProgress).toContainText(
 			`1${paginationLabelBetween}${total}${paginationLabelOf}${total}`

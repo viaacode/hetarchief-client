@@ -219,7 +219,7 @@ export {};
 // 	await page.reload();
 
 // 	// Check page title is the home page
-// await waitForPageTitle(page, 'Homepagina hetarchief');
+// await waitForPageTitle(page, HOMEPAGE_TITLE);
 
 // 	// Check new background image is visible
 // 	const vrtCard = await page.locator('.p-home__results .c-card', { hasText: 'VRT' });

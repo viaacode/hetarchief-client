@@ -1,5 +1,8 @@
 import { expect, type Page } from '@playwright/test';
 
+import { IconName } from '../consts/icon-names';
+import { HOMEPAGE_TITLE } from '../consts/tests.consts';
+
 import { getSiteTranslations } from './get-site-translations';
 import { waitForPageTitle } from './wait-for-page-title';
 
@@ -14,12 +17,12 @@ export async function checkSpaceVisibilityHomepage(
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check page title is the home page
-	await waitForPageTitle(page, 'Homepagina hetarchief');
+	await waitForPageTitle(page, HOMEPAGE_TITLE);
 
 	// Search for "searchTerm"
 	const searchFieldHomePage = page.locator('[placeholder="zoek"]');
 	await searchFieldHomePage.fill(searchTerm);
-	await page.locator('.c-input .c-button', { hasText: 'search' }).click();
+	await page.locator('.c-input .c-button', { hasText: IconName.Search }).click();
 
 	if (shouldBeVisible) {
 		// Check searchTerm is shown

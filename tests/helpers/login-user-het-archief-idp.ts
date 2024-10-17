@@ -3,6 +3,7 @@ import { expect, type Page } from '@playwright/test';
 import { HOMEPAGE_TITLE } from '../consts/tests.consts';
 
 import { getSiteTranslations, Locale } from './get-site-translations';
+import { moduleClassSelector } from './module-class-locator';
 import { waitForPageTitle } from './wait-for-page-title';
 
 export async function loginUserHetArchiefIdp(
@@ -22,12 +23,12 @@ export async function loginUserHetArchiefIdp(
 	await expect(loginOrRegisterButton).toBeVisible();
 
 	// Check auth modal is open
-	const authModalHeading = page.locator('[class*="AuthModal_c-auth-modal__heading"]').first();
+	const authModalHeading = page.locator(moduleClassSelector('c-auth-modal__heading')).first();
 	if (!(await authModalHeading.isVisible())) {
 		// Click on login or register
 		await loginOrRegisterButton.click();
 	}
-	await expect(page.locator('[class*="AuthModal_c-auth-modal__heading"]').first()).toBeVisible();
+	await expect(authModalHeading).toBeVisible();
 
 	// Click the login button
 	await page

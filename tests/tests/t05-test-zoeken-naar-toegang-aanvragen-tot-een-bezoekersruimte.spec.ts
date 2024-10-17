@@ -102,7 +102,7 @@ export {};
 // 	// Check pending request is visible
 // 	await expect(
 // 		await page.locator(
-// 			`${moduleClassSelector('c-hero__requests')} [class*="VisitorSpaceCard_c-visitor-space-card__title"]`
+// 			`${moduleClassSelector('c-hero__requests')} ${moduleClassSelector('c-visitor-space-card__title')}`
 // 		)
 // 	).toContainText('VRT');
 

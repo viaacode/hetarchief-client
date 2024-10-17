@@ -31,56 +31,51 @@ test('T19: Test OCR raadplegen', async ({ page, context }) => {
 
 	// Wait for ocr to load
 	await page.waitForSelector(
-		`${moduleClassSelector(
-			'ObjectDetailPage_p-object-detail__ocr__words-container'
-		)} > ${moduleClassSelector('ObjectDetailPage_p-object-detail__ocr__word')}`
+		`${moduleClassSelector('p-object-detail__ocr__words-container')} > ${moduleClassSelector(
+			'p-object-detail__ocr__word'
+		)}`
 	);
 
 	// Check if ocr text is visible in the tab
 	const ocrWords = page.locator(
-		`${moduleClassSelector(
-			'ObjectDetailPage_p-object-detail__ocr__words-container'
-		)} > ${moduleClassSelector('ObjectDetailPage_p-object-detail__ocr__word')}`
+		`${moduleClassSelector('p-object-detail__ocr__words-container')} > ${moduleClassSelector(
+			'p-object-detail__ocr__word'
+		)}`
 	);
 	expect(await ocrWords.count()).toBeGreaterThan(100);
 
 	// Search some words in the ocr text
 	await page
 		.locator(
-			`${moduleClassSelector(
-				'ObjectDetailPage_p-object-detail__ocr__'
-			)} [class*="SearchInputWithResultsPagination_c-search-with-results-pagination__"] .c-input__field`
+			moduleClassSelector('p-object-detail__ocr__') +
+				' ' +
+				moduleClassSelector('c-search-with-results-pagination') +
+				' .c-input__field'
 		)
 		.fill('Brussel');
 	await page.keyboard.press('Enter');
 
 	// Check keyword is active
 	const brusselOcrWords = page.locator(
-		`${moduleClassSelector(
-			'ObjectDetailPage_p-object-detail__ocr__words-container'
-		)} > ${moduleClassSelector('ObjectDetailPage_p-object-detail__ocr__word')}`,
+		`${moduleClassSelector('p-object-detail__ocr__words-container')} > ${moduleClassSelector(
+			'p-object-detail__ocr__word'
+		)}`,
 		{ hasText: 'Brussel' }
 	);
 	await expect(brusselOcrWords.first()).toBeVisible();
-	await expect(brusselOcrWords.first()).toHaveClass(
-		/ObjectDetailPage_p-object-detail__ocr__word--marked--active/
-	);
+	await expect(brusselOcrWords.first()).toHaveClass(/p-object-detail__ocr__word--marked--active/);
 
 	// Check other words are marked but not active
 	await expect(brusselOcrWords.nth(1)).toBeVisible();
-	await expect(brusselOcrWords.nth(1)).toHaveClass(
-		/ObjectDetailPage_p-object-detail__ocr__word--marked/
-	);
+	await expect(brusselOcrWords.nth(1)).toHaveClass(/p-object-detail__ocr__word--marked/);
 	await expect(brusselOcrWords.nth(1)).not.toHaveClass(
-		/ObjectDetailPage_p-object-detail__ocr__word--marked--active/
+		/p-object-detail__ocr__word--marked--active/
 	);
 
 	await expect(brusselOcrWords.nth(2)).toBeVisible();
-	await expect(brusselOcrWords.nth(2)).toHaveClass(
-		/ObjectDetailPage_p-object-detail__ocr__word--marked/
-	);
+	await expect(brusselOcrWords.nth(2)).toHaveClass(/p-object-detail__ocr__word--marked/);
 	await expect(brusselOcrWords.nth(2)).not.toHaveClass(
-		/ObjectDetailPage_p-object-detail__ocr__word--marked--active/
+		/p-object-detail__ocr__word--marked--active/
 	);
 
 	// Check highlight toggle button is not active

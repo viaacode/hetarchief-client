@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+import { IconName } from '../consts/icon-names';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
@@ -30,7 +31,7 @@ test('T24: Download krant in verschillende formaten', async ({ page, context }) 
 
 	// Open the button overflow menu
 	const exportNewspaperButton = page.locator('.p-object-detail__primary-actions .c-button', {
-		hasText: 'export',
+		hasText: IconName.Export,
 	});
 	await expect(exportNewspaperButton).toBeVisible();
 

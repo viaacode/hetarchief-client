@@ -90,12 +90,7 @@ export {};
 // 	const countsAfterSearch = await getSearchTabBarCounts(page);
 
 // 	// Expect counts to have gone down, or stay the same
-// 	if (countsBeforeSearch.all > 0) {
-// 		// Only check counts if there are at least a few items
-// 		expect(countsBeforeSearch.all > countsAfterSearch.all).toBeTruthy();
-// 		expect(countsBeforeSearch.video >= countsAfterSearch.video).toBeTruthy();
-// 		expect(countsBeforeSearch.audio >= countsAfterSearch.audio).toBeTruthy();
-// 	}
+// compareSearchTabCountsLessThen(countsBeforeSearch, countsAfterSearch);
 
 // 	/**
 // 	 * Add object to folder --------------------------------------------------------------------
@@ -120,9 +115,9 @@ export {};
 
 // 	// Check input field  and accept and abort buttons are visible
 // 	await expect(await folderList.locator('input[placeholder="Nieuwe map"]')).toBeVisible();
-// 	let acceptButton = await folderList.locator('.c-button', { hasText: 'check' });
+// 	let acceptButton = await folderList.locator('.c-button', { hasText: IconName.Check });
 // 	await expect(acceptButton).toBeVisible();
-// 	await expect(await folderList.locator('.c-button', { hasText: 'times' })).toBeVisible();
+// 	await expect(await folderList.locator('.c-button', { hasText: IconName.Times })).toBeVisible();
 
 // 	// Enter a folder name
 // 	await folderList.locator('input[placeholder="Nieuwe map"]').fill('Map automated test');
@@ -136,7 +131,7 @@ export {};
 
 // 	// Get folder count before adding objects
 // 	const countsBeforeAdding = await getFolderObjectCounts(page);
-// 	expect(countsBeforeAdding['Favorieten']).toEqual(0);
+// 	expect(countsBeforeAdding[FAVORITES_FOLDER_NAME]).toEqual(0);
 // 	expect(countsBeforeAdding['Map automated test']).toEqual(0);
 
 // 	// Check box folder checkboxes
@@ -146,7 +141,7 @@ export {};
 // 	await checkboxes.last().check();
 
 // 	const countsAfterAdding = await getFolderObjectCounts(page);
-// 	expect(countsAfterAdding['Favorieten']).toEqual(1);
+// 	expect(countsAfterAdding[FAVORITES_FOLDER_NAME]).toEqual(1);
 // 	expect(countsAfterAdding['Map automated test']).toEqual(1);
 
 // 	// Click the add button
@@ -172,7 +167,7 @@ export {};
 // 	let secondaryNav = await checkActiveSidebarNavigationItem(
 // 		page,
 // 		1,
-// 		'Favorieten',
+// 		FAVORITES_FOLDER_NAME,
 // 		'/account/mijn-mappen/favorieten'
 // 	);
 
@@ -220,13 +215,13 @@ export {};
 // 	await page.click('[name="Map aanpassen"]');
 
 // 	// Check folder name input field appears
-// 	const pageContent = page.locator(moduleClassSelector('SidebarLayout_l-sidebar__main')).last();
+// 	const pageContent = page.locator(moduleClassSelector('l-sidebar__main')).last();
 // 	let folderNameEdit = await pageContent.locator('.c-content-input');
 // 	let folderNameInput = await folderNameEdit.locator('input[name="name"]');
 // 	await expect(folderNameInput).toBeVisible();
-// 	acceptButton = await folderNameEdit.locator('.c-button', { hasText: 'check' });
+// 	acceptButton = await folderNameEdit.locator('.c-button', { hasText: IconName.Check });
 // 	await expect(acceptButton).toBeVisible();
-// 	await expect(await folderNameEdit.locator('.c-button', { hasText: 'times' })).toBeVisible();
+// 	await expect(await folderNameEdit.locator('.c-button', { hasText: IconName.Times })).toBeVisible();
 
 // 	// Type new name in input field
 // 	await folderNameInput.fill('Bestaande map, nieuwe naam');
@@ -265,14 +260,14 @@ export {};
 // 	folderNameEdit = await secondaryNav.locator('.c-content-input');
 // 	folderNameInput = await folderNameEdit.locator('input[name="name"]');
 // 	await expect(folderNameInput).toBeVisible();
-// 	await expect(await folderNameEdit.locator('.c-button', { hasText: 'check' })).toBeVisible();
-// 	await expect(await folderNameEdit.locator('.c-button', { hasText: 'times' })).toBeVisible();
+// 	await expect(await folderNameEdit.locator('.c-button', { hasText: IconName.Check })).toBeVisible();
+// 	await expect(await folderNameEdit.locator('.c-button', { hasText: IconName.Times })).toBeVisible();
 
 // 	// Type in new folder name
 // 	await folderNameInput.fill('Nieuwe map automated test');
 
 // 	// Click accept button
-// 	await folderNameEdit.locator('.c-button', { hasText: 'check' }).click();
+// 	await folderNameEdit.locator('.c-button', { hasText: IconName.Check }).click();
 
 // 	// Check toast
 // 	await checkToastMessage(page, '"Nieuwe map automated test" is aangemaakt.');
@@ -306,7 +301,7 @@ export {};
 // 	await checkActiveSidebarNavigationItem(
 // 		page,
 // 		1,
-// 		'Favorieten',
+// 		FAVORITES_FOLDER_NAME,
 // 		'/account/mijn-mappen/favorieten'
 // 	);
 
@@ -339,7 +334,7 @@ export {};
 // 	await checkActiveSidebarNavigationItem(page, 0, 'Mijn profiel', '/account/mijn-profiel');
 
 // 	// Check page title to say: my profile
-// 	const getPageContent = () => page.locator(moduleClassSelector('SidebarLayout_l-sidebar__main')).last();
+// 	const getPageContent = () => page.locator(moduleClassSelector('l-sidebar__main')).last();
 // 	const pageTitle = await getPageContent().locator('h2');
 // 	await expect(pageTitle).toBeVisible();
 // 	await expect(pageTitle).toContainText('Mijn profiel');
@@ -374,7 +369,7 @@ export {};
 // 	await page.locator('[type="submit"]').click();
 
 // 	// Wait for redirect to homepage
-// 	await waitForPageTitle(page, 'Homepagina hetarchief');
+// 	await waitForPageTitle(page, HOMEPAGE_TITLE);
 
 // 	// Login with existing user
 // 	await loginUserHetArchiefIdp(

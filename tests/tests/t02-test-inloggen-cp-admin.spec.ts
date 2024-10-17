@@ -25,7 +25,7 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Admin' })).toHaveCount(0);
 	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Beheer' })).toHaveCount(1);
 
-	await waitForPageTitle(page, 'Homepagina hetarchief');
+	await waitForPageTitle(page, HOMEPAGE_TITLE);
 
 	// Wait for close to save the videos
 	await context.close();

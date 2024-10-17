@@ -1,24 +1,20 @@
 import { expect, test } from '@playwright/test';
 
+import { HOMEPAGE_TITLE } from '../consts/tests.consts';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T28: Test login flow engels', async ({ page, context }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();
-	const MAIN_SITE_TITLE =
-		SITE_TRANSLATIONS.nl[
-			'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
-		];
 
 	/**
 	 * Go to the search page ---------------------------------------------------------------
 	 */
-	const HOME_PAGE_TITLE = await getHomepageTitle();
 	await goToPageAndAcceptCookies(
 		page,
 		process.env.TEST_CLIENT_ENDPOINT as string,
-		HOME_PAGE_TITLE
+		HOMEPAGE_TITLE
 	);
 
 	// Language switcher should be visible

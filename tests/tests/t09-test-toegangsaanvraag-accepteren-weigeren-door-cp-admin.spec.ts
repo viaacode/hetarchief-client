@@ -91,7 +91,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await searchInput.press('Enter');
 
 	// The number of requests should be 3
-	await expect(page.locator(moduleClassSelector('c-pagination-progress'))).toContainText(
+	await expect(page.locator('.c-pagination-progress')).toContainText(
 		`1${paginationLabelBetween}3${paginationLabelOf}3`
 	);
 	// Clear search term with x button
@@ -100,7 +100,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await page.locator(`[aria-label="${clearSearchAriaLabel}"]`).first().click();
 
 	// Number of results should be equal tot total results from before
-	await expect(page.locator(moduleClassSelector('c-pagination-progress'))).toContainText(
+	await expect(page.locator('.c-pagination-progress')).toContainText(
 		`1${paginationLabelBetween}${countsBeforeApproveDeny.totalNumberOfRequests}${paginationLabelOf}${countsBeforeApproveDeny.totalNumberOfRequests}`
 	);
 
@@ -109,15 +109,12 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	 */
 
 	// Click the pending visit request
-	await page
-		.locator(
-			`${moduleClassSelector(
-				'SidebarLayout_l-sidebar__main'
-			)} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
-			{ hasText: 'BezoekerVoornaam' }
-		)
-		.first()
-		.click();
+	const rowSelector = `${moduleClassSelector(
+		'l-sidebar__main'
+	)} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`;
+	const pendingVisitRow = page.locator(rowSelector, { hasText: 'Sleutelgebruiker Test' }).first();
+	await expect(pendingVisitRow).toBeVisible();
+	await pendingVisitRow.click();
 
 	// Check the blade title
 	await checkBladeTitle(
@@ -131,30 +128,27 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	let summaryHtml = await page
 		.locator(`.c-blade--active ${moduleClassSelector('c-visit-summary')}`)
 		.innerHTML();
-	expect(summaryHtml).toContain('BezoekerVoornaam');
-	expect(summaryHtml).toContain('BezoekerAchternaam');
-	expect(summaryHtml).toContain(VISIT_REQUEST_REASON);
+	expect(summaryHtml).toContain('Sleutelgebruiker Test');
+	expect(summaryHtml).toContain('test with second account');
+	expect(summaryHtml).toContain('next monday');
 
 	// Check buttons for approve and deny are visible
-	let approveButton = page.locator(
-		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
-		{
-			hasText:
-				SITE_TRANSLATIONS.nl[
-					'modules/cp/components/approve-request-blade/approve-request-blade___keur-goed'
-				],
-		}
-	);
+	const bladeButtonsSelector = `.c-blade--active ${moduleClassSelector(
+		'c-blade__footer'
+	)} .c-button`;
+	let approveButton = page.locator(bladeButtonsSelector, {
+		hasText:
+			SITE_TRANSLATIONS.nl[
+				'modules/cp/components/approve-request-blade/approve-request-blade___keur-goed'
+			],
+	});
 	await expect(approveButton).toBeVisible();
-	let denyButton = page.locator(
-		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
-		{
-			hasText:
-				SITE_TRANSLATIONS.nl[
-					'modules/cp/components/decline-request-blade/decline-request-blade___keur-af'
-				],
-		}
-	);
+	let denyButton = page.locator(bladeButtonsSelector, {
+		hasText:
+			SITE_TRANSLATIONS.nl[
+				'modules/cp/components/decline-request-blade/decline-request-blade___keur-af'
+			],
+	});
 	await expect(denyButton).toBeVisible();
 
 	// Click the approve button
@@ -169,12 +163,14 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	);
 
 	// Expect 'toegang tot de volledige collectie' to be checked
+	const radioButtonSelector = '.c-radio-button span';
+	const radioButtonLabel =
+		SITE_TRANSLATIONS.nl[
+			'modules/cp/components/approve-request-blade/approve-request-blade___toegang-tot-de-volledige-collectie'
+		];
 	await expect(
-		page.locator(`${moduleClassSelector('c-radio-button')} span`, {
-			hasText:
-				SITE_TRANSLATIONS.nl[
-					'modules/cp/components/approve-request-blade/approve-request-blade___toegang-tot-de-volledige-collectie'
-				],
+		page.locator(radioButtonSelector, {
+			hasText: radioButtonLabel,
 		})
 	).toBeChecked();
 
@@ -183,9 +179,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await page.click('.react-datepicker__time-list-item:has-text("00:00")');
 
 	// Click the approve button
-	await page.click(
-		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button--black`
-	);
+	await page.click(`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button--black`);
 
 	// Blade closes
 	await expect(page.locator('.c-blade--active')).not.toBeVisible();
@@ -202,9 +196,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await expect(
 		page
 			.locator(
-				`${moduleClassSelector(
-					'SidebarLayout_l-sidebar__main'
-				)} .c-table__wrapper--body .c-table__row`
+				`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row`
 			)
 			.first()
 			.locator(
@@ -235,15 +227,16 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	 */
 
 	// Click the pending visit request
-	await page
+	const pendingVisitRequestCel = page
 		.locator(
 			`${moduleClassSelector(
-				'SidebarLayout_l-sidebar__main'
+				'l-sidebar__main'
 			)} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
 			{ hasText: 'Meemoo admin' }
 		)
-		.first()
-		.click();
+		.first();
+	await expect(pendingVisitRequestCel).toBeVisible();
+	await pendingVisitRequestCel.click();
 
 	// Check the blade title
 	await checkBladeTitle(
@@ -263,7 +256,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Check buttons for approve and deny are visible
 	approveButton = page.locator(
-		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
+		`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button`,
 		{
 			hasText:
 				SITE_TRANSLATIONS.nl[
@@ -273,7 +266,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	);
 	await expect(approveButton).toBeVisible();
 	denyButton = page.locator(
-		`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`,
+		`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button`,
 		{
 			hasText:
 				SITE_TRANSLATIONS.nl[
@@ -296,7 +289,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Click the deny button on the second blade
 	await page
-		.locator(`.c-blade--active ${moduleClassSelector('c-blade__footer-wrapper')} .c-button`, {
+		.locator(`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button`, {
 			hasText:
 				SITE_TRANSLATIONS.nl[
 					'modules/cp/components/decline-request-blade/decline-request-blade___keur-af'
@@ -336,7 +329,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Check approved count
 	const approvedLabel = SITE_TRANSLATIONS.nl['modules/cp/const/requests___goedgekeurd'];
 	await page.click(`.c-tab__label:has-text("${approvedLabel}")`);
-	await expect(page.locator('text=BezoekerVoornaam').first()).toBeVisible();
+	await expect(page.locator('text=Sleutelgebruiker Test').first()).toBeVisible();
 
 	// Check denied count
 	const deniedLabel = SITE_TRANSLATIONS.nl['modules/cp/const/requests___geweigerd'];

@@ -29,7 +29,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	).toBeVisible();
 
 	// Scroll down and enter 'V' in the searchbar
-	await page.fill('#VisitorSpaceCardsWithSearch__search', 'V');
+	await page.fill('#VisitorSpaceCardsWithSearch__search', 'VR');
 
 	// Press the contact button
 	await page
