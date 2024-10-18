@@ -1,16 +1,23 @@
 import { expect, test } from '@playwright/test';
 
+import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { scrollWheelOverElement } from '../helpers/scroll-wheel-over-element';
 
 test('T20: Test iiif viewer zoomen', async ({ page, context }) => {
+	const SITE_TRANSLATIONS = await getSiteTranslations();
+	const MAIN_SITE_TITLE =
+		SITE_TRANSLATIONS.nl[
+			'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
+		];
+
 	/**
 	 * Go to a newspaper detail page ---------------------------------------------------------------
 	 */
 	await goToPageAndAcceptCookies(
 		page,
 		(process.env.TEST_CLIENT_ENDPOINT as string) + '/pid/h98z893q54',
-		'Wet- en verordeningsblad voor de bezette streke... | hetarchief.be'
+		`Wet- en verordeningsblad voor de bezette streke... | ${MAIN_SITE_TITLE}`
 	);
 
 	// Go to page again to fix non-loading newspaper in incognito browser

@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { USER_PASSWORD } from '../consts/tests.consts';
 import { acceptTos } from '../helpers/accept-tos';
 import { acmConfirmEmail } from '../helpers/acm-confirm-email';
-import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
+import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
@@ -22,7 +22,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await goToPageAndAcceptCookies(
 		page,
 		process.env.TEST_CLIENT_ENDPOINT as string,
-		'Homepagina hetarchief | hetarchief.be',
+		undefined,
 		'selection'
 	);
 
@@ -30,15 +30,21 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
 
 	// Click on login or register
-	await page.locator('text=Inloggen of registreren').first().click();
+	const loginOrRegisterLabel =
+		SITE_TRANSLATIONS.nl[
+			'modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren'
+		];
+	await page.locator(`text=${loginOrRegisterLabel}`).first().click();
 
 	// Check auth modal opens up
 	const authModalHeading = page.locator(moduleClassSelector('c-auth-modal__heading')).first();
 	expect(authModalHeading).toBeDefined();
 
 	// Click the register button and wait for captcha to load
+	const registerHereLabel =
+		SITE_TRANSLATIONS.nl['modules/auth/components/auth-modal/auth-modal___registreer-je-hier'];
 	await Promise.all([
-		page.locator('text=Registreer je hier').click(),
+		page.locator(`text=${registerHereLabel}`).click(),
 		page.waitForLoadState('networkidle'),
 	]);
 
@@ -51,10 +57,12 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await page.fill('#person_last_name', 'Testers-at');
 	await page.fill('#password_field', USER_PASSWORD);
 	await page.fill('#password_confirmation_field', USER_PASSWORD);
+	await page.click('#person_email'); // Click the first field, to trigger validation and the loading of the captcha
 
 	// Captcha
 	const recapchaFrame = page.frameLocator('iframe[title="reCAPTCHA"]');
 	const recaptcha = recapchaFrame.locator('#recaptcha-anchor');
+	await expect(recaptcha).toBeVisible();
 	await recaptcha.click();
 
 	// Wait for recaptcha to show green checkmark
@@ -71,26 +79,19 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await Promise.all([page.click('#register_button'), page.waitForLoadState('networkidle')]);
 
 	// Check the confirmation page has loaded
-	await expect(page.locator('text=Je account werd aangemaakt')).toBeVisible();
+	await expect(page.locator('text=Je account werd aangemaakt')).toBeVisible(); // This text is from the IDP screen, so we cannot use SITE_TRANSLATIONS
 
 	// Confirm email in ACM
 	await acmConfirmEmail(page, userEmail);
 
 	// Go to the hetarchief homepage
-	await goToPageAndAcceptCookies(page);
+	await goToPageAndAcceptCookies(page, process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Cookie bot should not open again
 	await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible(); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT
 
 	// Login user
-	await loginUserHetArchiefIdp(
-		page,
-		userEmail,
-		USER_PASSWORD,
-		undefined,
-		Locale.Nl,
-		SITE_TRANSLATIONS
-	);
+	await loginUserHetArchiefIdp(page, userEmail, USER_PASSWORD);
 
 	// Check tos is displayed, scroll down and click accept button
 	await acceptTos(page);

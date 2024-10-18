@@ -13,11 +13,20 @@ export {};
 // declare const document: any;
 //
 // test('T12: Test einde sessie bezoekertool', async ({ page, context }) => {
+// const SITE_TRANSLATIONS = await getSiteTranslations();
+// const MAIN_SITE_TITLE =
+// 	SITE_TRANSLATIONS.nl[
+// 		'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
+// 		];
 // 	// We need to wait for multiple notifications that are only checked every minute
 // 	test.setTimeout(300 * 1000);
 //
 // 	// GO to the hetarchief homepage
-// 	await goToPageAndAcceptCookies(page);
+// 	await goToPageAndAcceptCookies(
+// 		page,
+// 		process.env.TEST_CLIENT_ENDPOINT as string,
+// 		await getHomepageTitle()
+// 	);
 //
 // 	// Check the homepage show the correct title for searching maintainers
 // 	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
@@ -26,13 +35,8 @@ export {};
 // 	await loginUserHetArchiefIdp(
 // 		page,
 // 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
-// 		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
+// 		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
 // 	);
-//
-// 	// Check homepage title
-// 	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
-// 		timeout: 10000,
-// 	});
 //
 // 	/**
 // 	 * Make a visit request as end user
@@ -100,16 +104,11 @@ export {};
 // 	await loginUserHetArchiefIdp(
 // 		page,
 // 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
-// 		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
+// 		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
 // 	);
 //
-// 	// Check homepage title
-// 	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
-// 		timeout: 10000,
-// 	});
-//
 // 	// Go to the search page of vlaams parlement
-// 	const visitorSpaceLink = `[class*="VisitorSpaceCard_c-visitor-space-card--granted__"] a[href="/${kebabCase(
+// 	const visitorSpaceLink = moduleClassSelector('c-visitor-space-card--granted') + ' a[href="/${kebabCase(
 // 		spaceName
 // 	)}"]`;
 // 	await page.locator(visitorSpaceLink).first().click();
@@ -134,7 +133,7 @@ export {};
 // 	await page.locator('.c-menu--visible--default').locator('text=Pas toe').click();
 //
 // 	// Click bookmark button of the first search result
-// 	await page.locator('.c-card .c-button', { hasText: 'bookmark' }).click();
+// 	await page.locator('.c-card .c-button', { hasText: IconName.Bookmark }).click();
 //
 // 	// Check blade opens
 // 	await expect(page.locator('.c-blade--active')).toBeVisible();
@@ -210,7 +209,7 @@ export {};
 //
 // 	// Check favorite folder is selected
 // 	await expect(
-// 		await page.locator('.c-content-input__value', { hasText: 'Favorieten' })
+// 		await page.locator('.c-content-input__value', { hasText: FAVORITES_FOLDER_NAME })
 // 	).toBeVisible();
 //
 // 	// Click on last saved object

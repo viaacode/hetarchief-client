@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+import { HOMEPAGE_TITLE } from '../consts/tests.consts';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { moduleClassSelector } from '../helpers/module-class-locator';
@@ -10,11 +11,10 @@ test('T28: Test login flow engels', async ({ page, context }) => {
 	/**
 	 * Go to the search page ---------------------------------------------------------------
 	 */
-	const HOME_PAGE_TITLE = `Homepagina hetarchief | ${SITE_TRANSLATIONS.nl['modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool']}`;
 	await goToPageAndAcceptCookies(
 		page,
 		process.env.TEST_CLIENT_ENDPOINT as string,
-		HOME_PAGE_TITLE
+		HOMEPAGE_TITLE
 	);
 
 	// Language switcher should be visible
@@ -25,8 +25,7 @@ test('T28: Test login flow engels', async ({ page, context }) => {
 	await languageSwitcher.click();
 	await page
 		.locator('.c-dropdown__content-open .c-button', {
-			// hasText: SITE_TRANSLATIONS.nl['modules/shared/const/language-names___engels'],
-			hasText: 'English',
+			hasText: SITE_TRANSLATIONS.nl['modules/shared/const/language-names___engels'],
 		})
 		.click();
 

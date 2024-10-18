@@ -1,84 +1,59 @@
 @use "src/styles/abstracts" as *;
 
-.c-pagination {
-	display: flex;
+.c-pagination-bar.c-pagination-bar--back-to-top {
+	flex-direction: row;
+	align-content: center;
 	align-items: center;
-	font-size: $font-size-sm;
-	color: $neutral;
 
-	&-bar {
-		display: flex;
-		flex-direction: row;
+	@media (max-width: $breakpoint-md) {
+		justify-content: center !important;
+	}
+
+	@media (min-width: $breakpoint-sm) {
 		justify-content: space-between !important;
-		align-items: center;
 	}
 
-	&-progress {
-		color: $zinc;
-		font-size: $font-size-sm;
-	}
-
-	&__btn {
-		display: flex;
-		justify-content: center;
-		min-width: 3.2rem;
-		min-height: 3.2rem;
-		margin: 0 calc(#{$spacer-xs} / 4);
-		cursor: pointer;
-
-		&:focus-visible {
-			outline-offset: 0.2rem;
-			outline-color: $teal;
-			outline-style: solid;
+	.c-pagination-bar__progress {
+		.c-pagination-progress {
+			color: $neutral;
 		}
 
-		&--active {
-			background-color: $seagreen;
-			color: $white;
-			font-weight: $font-weight-bold;
-			border-radius: 50%;
-		}
-
-		&--disabled {
-			color: $zinc;
-			cursor: default;
-		}
-
-		&--long {
-			padding: 2.5rem;
-		}
-	}
-
-	&__pages {
-		display: flex;
-		align-items: baseline;
-
-		.c-pagination__btn {
-			align-items: center;
-			width: 3.2rem;
-			height: 3.2rem;
-		}
-	}
-
-	&__ellipsis {
-		color: $zinc;
-		margin: 0 calc(#{$spacer-xs} / 4);
-	}
-
-	&__icon {
-		margin-top: 0.2rem;
-		font-size: $font-size-md !important; // overwrite default icon style
-	}
-
-	@media (max-width: $breakpoint-sm) {
-		&__pages,
-		&__btn:first-of-type span:nth-child(2) {
+		@media (max-width: $breakpoint-md) {
 			display: none;
 		}
+	}
 
-		&__btn:first-of-type {
-			// lower left chevron to align it centered in mobile view
-			padding: 0.2rem 0 0;
+	.c-pagination {
+		gap: $spacer-xs;
+		align-items: center;
+
+		.c-pagination__pages {
+			gap: $spacer-xs;
+		}
+
+		.c-button {
+			width: 3.2rem;
+			height: 3.2rem;
+			padding: 0;
+			background-color: transparent;
+			color: $neutral;
+			font-weight: normal;
+			border: 0;
+
+			&.c-pagination__page-button--active {
+				background-color: $teal-dark;
+				color: $white;
+			}
+
+			&.c-pagination-bar__back-to-top {
+				color: $neutral;
+			}
+		}
+	}
+
+	.c-pagination-bar__back-to-top-wrapper {
+		@media (max-width: $breakpoint-md) {
+			display: none;
 		}
 	}
 }

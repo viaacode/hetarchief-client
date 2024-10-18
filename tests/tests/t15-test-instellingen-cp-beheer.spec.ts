@@ -10,8 +10,17 @@ export {};
 // import { selectText } from '../helpers/select-text';
 
 // test('T15: Test instellingen CP-beheer', async ({ page, context }) => {
+// 	const SITE_TRANSLATIONS = await getSiteTranslations();
+// 	const MAIN_SITE_TITLE =
+// 		SITE_TRANSLATIONS.nl[
+// 			'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
+// 			];
 // 	// Go to the hetarchief homepage
-// await goToPageAndAcceptCookies(page);
+// await goToPageAndAcceptCookies(
+// 		page,
+// 		process.env.TEST_CLIENT_ENDPOINT as string,
+// 		await getHomepageTitle()
+// 	);
 
 // 	// Login cp admin using the meemoo idp
 // 	await loginUserMeemooIdp(
@@ -40,7 +49,7 @@ export {};
 // 	await desktopNavigation.locator('[href="/beheer/instellingen"]').click();
 
 // 	// Check active navigation is settings
-// 	await checkActiveSidebarNavigationItem(page, 0, 'Instellingen', '/beheer/instellingen');
+// 	await checkActiveSidebarNavigationItem(page, 0, 'Instellingen | Beheer', '/beheer/instellingen');
 
 // 	// Check page title
 // 	await expect(
@@ -99,7 +108,7 @@ export {};
 // 	// Type some text
 // 	const editor1 = await descriptionDuringRequestSection.locator('.public-DraftEditor-content');
 
-// 	await editor1.type(
+// 	await editor1.fill(
 // 		'bold\nitalic\nitem1\nitem2\nitem3\nAnd a link to google\nDit is een automated test. Verschijnt dit in de blade?'
 // 	);
 
@@ -168,7 +177,7 @@ export {};
 // 		'.public-DraftEditor-content'
 // 	);
 
-// 	await editor2.type('Dit is een automated test. Verschijnt dit op de wachtpagina?');
+// 	await editor2.fill('Dit is een automated test. Verschijnt dit op de wachtpagina?');
 
 // 	// Save buttons appear:
 // 	await expect(
@@ -201,14 +210,16 @@ export {};
 // 	 */
 
 // 	// Go to the hetarchief homepage
-// await goToPageAndAcceptCookies(page);
+// await goToPageAndAcceptCookies(
+// 		page,
+// 		process.env.TEST_CLIENT_ENDPOINT as string,
+// 		await getHomepageTitle()
+// 	);
 
 // 	await page.reload();
 
 // 	// Check page title is the home page
-// 	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
-// 		timeout: 10000,
-// 	});
+// await waitForPageTitle(page, HOMEPAGE_TITLE);
 
 // 	// Check new background image is visible
 // 	const vrtCard = await page.locator('.p-home__results .c-card', { hasText: 'VRT' });

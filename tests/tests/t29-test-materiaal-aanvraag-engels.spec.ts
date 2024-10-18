@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { checkToastMessage } from '../helpers/check-toast-message';
-import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
+import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
@@ -12,7 +12,7 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 	/**
 	 * Go to a detail page
 	 */
-	const NEWSPAPER_PAGE_TITLE = `Wet- en verordeningsblad voor de bezette streke... | ${SITE_TRANSLATIONS.en['modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool']}`;
+	const NEWSPAPER_PAGE_TITLE = 'Wet- en verordeningsblad voor de bezette streke...';
 	await goToPageAndAcceptCookies(
 		page,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/en/pid/h98z893q54?showAuth=1`,
@@ -24,9 +24,7 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 		page,
 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
 		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
-		NEWSPAPER_PAGE_TITLE,
-		Locale.En,
-		SITE_TRANSLATIONS
+		NEWSPAPER_PAGE_TITLE
 	);
 
 	// Click on the "add to material request list" button

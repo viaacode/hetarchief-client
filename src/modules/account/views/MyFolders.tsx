@@ -26,7 +26,6 @@ import { type ListNavigationItem } from '@shared/components/ListNavigation';
 import { type IdentifiableMediaCard, TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
 import { MediaCardList } from '@shared/components/MediaCardList';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
-import paginationBarStyles from '@shared/components/PaginationBar/PaginationBar.module.scss';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
@@ -88,9 +87,16 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 
 	const isActive = useCallback(
 		(folder: Folder): boolean => {
-			return decodeURIComponent(createFolderSlug(folder)) === folderSlug;
+			if (
+				folder.isDefault &&
+				(folderSlug === ROUTE_PARTS_BY_LOCALE.nl.favorites ||
+					folderSlug === ROUTE_PARTS_BY_LOCALE.en.favorites)
+			) {
+				return true;
+			}
+			return decodeURIComponent(createFolderSlug(folder, locale)) === folderSlug;
 		},
-		[folderSlug]
+		[folderSlug, locale]
 	);
 	const activeFolder = isSlugDefaultFolder
 		? defaultFolder
@@ -99,7 +105,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 	const sidebarLinks: ListNavigationFolderItem[] = useMemo(
 		() =>
 			(folders || []).map((folder) => {
-				const slug = createFolderSlug(folder);
+				const slug = createFolderSlug(folder, locale);
 				const href = myFoldersPath + '/' + slug;
 				const active = isActive(folder);
 
@@ -131,7 +137,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 					active,
 				};
 			}),
-		[folders, myFoldersPath, isActive]
+		[folders, locale, myFoldersPath, isActive]
 	);
 
 	const folderMedia = useGetFolderMedia(
@@ -170,7 +176,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				},
 				{
 					label: activeFolder.name,
-					to: `${myFoldersPath}/${createFolderSlug(activeFolder)}`,
+					to: `${myFoldersPath}/${createFolderSlug(activeFolder, locale)}`,
 				},
 			])
 		);
@@ -217,7 +223,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 
 		// Fetch folders from the network
 		await refetchFolders();
-		await router.push(createFolderSlug(newFolder));
+		await router.push(createFolderSlug(newFolder, locale));
 	};
 
 	const onMoveFolder = (item: IdentifiableMediaCard) => {
@@ -626,10 +632,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 										folderMedia.data?.total > FolderItemListSize && (
 											<PaginationBar
 												{...getDefaultPaginationBarProps()}
-												className={clsx(
-													paginationBarStyles['c-pagination-bar'],
-													'u-mb-48'
-												)}
+												className="u-mb-48"
 												startItem={(filters.page - 1) * FolderItemListSize}
 												itemsPerPage={FolderItemListSize}
 												totalItems={folderMedia.data?.total || 0}

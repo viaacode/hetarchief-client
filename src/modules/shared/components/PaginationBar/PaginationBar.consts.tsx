@@ -1,12 +1,9 @@
 import { type PaginationBarProps } from '@meemoo/react-components';
-import clsx from 'clsx';
 
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 
 import Icon from '../Icon/Icon';
-
-import styles from './PaginationBar.module.scss';
 
 export const getDefaultPaginationBarProps = (): Pick<
 	PaginationBarProps,
@@ -42,5 +39,5 @@ export const getDefaultPaginationBarProps = (): Pick<
 	labelBetweenPageEndAndTotal: tText(
 		'modules/shared/components/filter-table/filter-table___label-between-end-page-and-total-in-pagination-bar'
 	),
-	className: clsx(styles['c-pagination-bar'], 'u-mt-16 u-mb-16'),
+	className: 'u-mt-16 u-mb-16',
 });

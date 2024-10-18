@@ -1,5 +1,7 @@
-import { expect, Page } from '@playwright/test';
-import { Locator } from 'playwright-core';
+import { expect, type Page } from '@playwright/test';
+import { type Locator } from 'playwright-core';
+
+import { moduleClassSelector } from './module-class-locator';
 
 export async function checkActiveSidebarNavigationItem(
 	page: Page,
@@ -7,8 +9,12 @@ export async function checkActiveSidebarNavigationItem(
 	label: string,
 	linkUrlPrefix: string
 ): Promise<Locator> {
-	const sidebarSelector = `[class*="SidebarLayout_l-sidebar__navigation__"] >> nth=${navigationListIndex}`;
-	const activeSelector = `${sidebarSelector} >> [class*="ListNavigation_c-list-navigation__item--active"]`;
+	const sidebarSelector = `${moduleClassSelector(
+		'l-sidebar__navigation'
+	)} >> nth=${navigationListIndex}`;
+	const activeSelector = `${sidebarSelector} >> ${moduleClassSelector(
+		'c-list-navigation__item--active'
+	)}`;
 	const activeNavigationItem = await page.locator(activeSelector);
 	await expect(await activeNavigationItem).toBeVisible();
 	await expect(await activeNavigationItem.innerHTML()).toContain(label);

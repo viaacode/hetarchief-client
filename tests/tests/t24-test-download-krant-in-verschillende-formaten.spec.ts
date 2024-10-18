@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
-import { getSiteTranslations, Locale } from '../helpers/get-site-translations';
+import { IconName } from '../consts/icon-names';
+import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
@@ -13,8 +14,7 @@ test('T24: Download krant in verschillende formaten', async ({ page, context }) 
 	/**
 	 * Go to a newspaper detail page ---------------------------------------------------------------
 	 */
-	const NEWSPAPER_PAGE_TITLE =
-		'Wet- en verordeningsblad voor de bezette streke... | hetarchief.be';
+	const NEWSPAPER_PAGE_TITLE = `Wet- en verordeningsblad voor de bezette streke...`;
 	await goToPageAndAcceptCookies(
 		page,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${IE_OBJECT_ID}?showAuth=1`,
@@ -26,14 +26,12 @@ test('T24: Download krant in verschillende formaten', async ({ page, context }) 
 		page,
 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
 		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
-		NEWSPAPER_PAGE_TITLE,
-		Locale.Nl,
-		SITE_TRANSLATIONS
+		NEWSPAPER_PAGE_TITLE
 	);
 
 	// Open the button overflow menu
 	const exportNewspaperButton = page.locator('.p-object-detail__primary-actions .c-button', {
-		hasText: 'export',
+		hasText: IconName.Export,
 	});
 	await expect(exportNewspaperButton).toBeVisible();
 

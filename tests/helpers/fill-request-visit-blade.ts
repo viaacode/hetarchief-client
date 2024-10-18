@@ -1,6 +1,7 @@
 import { expect, type Page } from '@playwright/test';
 
 import { checkBladeTitle } from './check-blade-title';
+import { getSiteTranslations } from './get-site-translations';
 
 /**
  * Creates a new visit request for the current logged-in user and returns the visit request id
@@ -18,9 +19,15 @@ export async function fillRequestVisitBlade(
 	whenText?: string,
 	checkbox = true
 ): Promise<string | null> {
-	// Check the request visit blade title is visible
+	const SITE_TRANSLATIONS = await getSiteTranslations();
 
-	await checkBladeTitle(page, 'Vraag toegang aan');
+	// Check the request visit blade title is visible
+	await checkBladeTitle(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___vraag-toegang-aan'
+		]
+	);
 
 	// Check the blade is for VRT
 	await expect(page.url()).toContain(`?bezoekersruimte=${visitorSpaceSlug}`);
@@ -33,9 +40,9 @@ export async function fillRequestVisitBlade(
 		timeout: 10000,
 		state: 'visible',
 	});
-	await page.fill('[name="requestReason"]', reasonText);
+	await page.fill('#RequestAccessBlade__requestReason', reasonText);
 	if (whenText) {
-		await page.fill('[name="visitTime"]', whenText);
+		await page.fill('#RequestAccessBlade__visitTime', whenText);
 	}
 	if (checkbox) {
 		await checkboxElem.click();
@@ -49,13 +56,23 @@ export async function fillRequestVisitBlade(
 					resp.status() >= 200 &&
 					resp.status() < 400
 			),
-			page.click('text=Verstuur'),
+			page.click(
+				'text=' +
+					SITE_TRANSLATIONS.nl[
+						'modules/home/components/request-access-blade/request-access-blade___verstuur'
+					]
+			),
 		]);
 		const responseBody = (await response.json()) as { id: string };
 		expect(responseBody.id).toBeDefined();
 		return responseBody.id;
 	} else {
-		await page.click('text=Verstuur');
+		await page.click(
+			'text=' +
+				SITE_TRANSLATIONS.nl[
+					'modules/home/components/request-access-blade/request-access-blade___verstuur'
+				]
+		);
 		return null;
 	}
 }
