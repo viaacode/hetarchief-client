@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
 
 import { checkNumberOfVisitorSpacesBadge } from '../helpers/check-number-of-visitor-spaces-badge';
-import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
+import { goToPublicCatalogOnSearchPage } from '../helpers/go-to-public-catalog-on-search-page';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
 
@@ -93,27 +93,9 @@ test('T10.1: Test actieve toegang basisgebruiker: Bezoekersruimte toegang', asyn
 			expect(maintainer).toEqual('VRT');
 		})
 	);
-	const countsBeforePublic = await getSearchTabBarCounts(page);
 
 	// Go to the public catalog
-	await page.locator(`li${moduleClassSelector('c-visitor-spaces-dropdown__active')}`).click();
-
-	const publicCatalogLabel =
-		SITE_TRANSLATIONS.nl[
-			'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-publieke-catalogus'
-		];
-	const dropdownOptionsSelector = `${moduleClassSelector(
-		'c-visitor-spaces-dropdown--open'
-	)} ${moduleClassSelector('c-visitor-spaces-dropdown__list')} li`;
-	const publicCatalogOption = page.locator(dropdownOptionsSelector).first();
-	await expect(publicCatalogOption).toBeVisible();
-	await expect(publicCatalogOption).toContainText(publicCatalogLabel);
-	await publicCatalogOption.click();
-
-	// Wait for user to be in the public catalog
-	await expect
-		.poll(async () => await getSearchTabBarCounts(page))
-		.not.toEqual(countsBeforePublic);
+	await goToPublicCatalogOnSearchPage(page);
 
 	// Check the purple banner
 	const tempAccessLabel =

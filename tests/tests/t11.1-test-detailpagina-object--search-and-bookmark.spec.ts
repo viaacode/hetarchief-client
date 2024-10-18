@@ -62,7 +62,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmar
 
 	// Check item contains search term
 	const markedWord = await page
-		.locator("[class^='MediaCardList_c-media-card-list__content__'] article mark")
+		.locator(moduleClassSelector('c-media-card-list__content') + ' article mark')
 		.first()
 		.innerText();
 	expect(markedWord.toLowerCase()).toEqual(SEARCH_TERM.split(' ')[0].toLowerCase());

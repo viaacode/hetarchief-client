@@ -9,6 +9,7 @@ import { fillRequestVisitVisitorSpaceBlade } from '../helpers/fill-request-visit
 import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
+import { goToPublicCatalogOnSearchPage } from '../helpers/go-to-public-catalog-on-search-page';
 import { logout } from '../helpers/log-out';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';
@@ -453,16 +454,16 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	const newFolder = page.locator(`[aria-label="${FOLDER_NAME}"]`);
 	expect(await newFolder.innerText()).toContain(FOLDER_NAME);
 	await expect(
-		newFolder.locator(moduleClassSelector('p-account-my-folders__link__limited-access-icon'))
+		newFolder.locator('.p-account-my-folders__link__limited-access-icon')
 	).toBeVisible();
 
 	// Click on the newly created folder and check if it contains the added object
 	await newFolder.click();
 
 	const folderObject = page.locator(
-		`${moduleClassSelector(
-			'MediaCardList_c-media-card-list'
-		)} [class^=MediaCardList_c-media-card-list__content]`
+		`${moduleClassSelector('c-media-card-list')} ${moduleClassSelector(
+			'c-media-card-list__content'
+		)}`
 	);
 	await expect(folderObject).toHaveCount(1);
 	const organisationLabel =
@@ -492,20 +493,18 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	);
 
 	// Check navbar exists and user has access to one visitor space
-	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
-	await expect(
-		page.locator(`a[href="/bezoek"] div${moduleClassSelector('c-badge')}`).first()
-	).toContainText('2');
+	await checkNumberOfVisitorSpacesBadge(page, 2);
 
 	// Go to the Amsab-ISG visitor space
 	await page.click('text=Bezoek een aanbieder'); // This text comes from the navigation entries, so we cannot use SITE_TRANSLATIONS
 	await page
-		.locator(`div${moduleClassSelector('c-menu c-menu--default')}`)
+		.locator('.c-menu--visible--default')
 		.first()
 		.locator('a', { hasText: 'Amsab-ISG' })
 		.click();
 
-	await waitForSearchResults(page);
+	// await waitForSearchResults(page);
+	await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
 
 	const ALL_TAB = SITE_TRANSLATIONS.nl['modules/visitor-space/const/index___alles'];
 	expect(
@@ -521,21 +520,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 		.innerText();
 
 	// Go to the public catalogue
-	await page.locator(`li${moduleClassSelector('c-visitor-spaces-dropdown__active')}`).click();
-
-	await page
-		.locator(
-			`ul${moduleClassSelector(
-				'u-list-reset VisitorSpaceDropdown_c-visitor-spaces-dropdown__list'
-			)} li`,
-			{
-				hasText:
-					SITE_TRANSLATIONS.nl[
-						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-publieke-catalogus'
-					],
-			}
-		)
-		.click();
+	await goToPublicCatalogOnSearchPage(page);
 
 	// Check there is maximum one thumbnail available
 	expect(
@@ -554,7 +539,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Enter pid
 	const searchField = page.locator('.c-tags-input__input-container').first();
 	await searchField.click();
-	await searchField.fill(objectPid);
+	await searchField.pressSequentially(objectPid);
 	await searchField.press('Enter');
 
 	await waitForSearchResults(page);
