@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+import { HOMEPAGE_TITLE } from '../consts/tests.consts';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { moduleClassSelector } from '../helpers/module-class-locator';

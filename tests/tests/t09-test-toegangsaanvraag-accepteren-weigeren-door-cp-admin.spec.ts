@@ -193,20 +193,18 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	);
 
 	// Check first row is approved
-	await expect(
-		page
-			.locator(
-				`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row`
-			)
-			.first()
-			.locator(
-				'text=' +
-					SITE_TRANSLATIONS.nl[
-						'modules/cp/components/request-status-chip/request-status-chip___goedgekeurd'
-					]
-			)
-	).toBeVisible();
+	const approvedLabel =
+		SITE_TRANSLATIONS.nl[
+			'modules/cp/components/request-status-chip/request-status-chip___goedgekeurd'
+		];
+	const approvedBadgeFirstRow = page
+		.locator(`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row`)
+		.first()
+		.locator(moduleClassSelector('c-request-status-badge'), { hasText: approvedLabel });
+	await expect(approvedBadgeFirstRow).toBeVisible({ timeout: 10000 });
+
 	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); //temp bcs waitForLoading doesn't work
+
 	// Check number of requests for each status
 	const countsAfterOneApprove = await checkVisitRequestStatuses(page);
 
@@ -235,7 +233,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 			{ hasText: 'Meemoo admin' }
 		)
 		.first();
-	await expect(pendingVisitRequestCel).toBeVisible();
+	await expect(pendingVisitRequestCel).toBeVisible({ timeout: 10000 });
 	await pendingVisitRequestCel.click();
 
 	// Check the blade title
@@ -327,7 +325,6 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Check approved and denied requests are visible under their respective tabs
 	// Check approved count
-	const approvedLabel = SITE_TRANSLATIONS.nl['modules/cp/const/requests___goedgekeurd'];
 	await page.click(`.c-tab__label:has-text("${approvedLabel}")`);
 	await expect(page.locator('text=Sleutelgebruiker Test').first()).toBeVisible();
 

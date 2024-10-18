@@ -17,9 +17,10 @@ export async function acceptTos(page: Page): Promise<void> {
 	await expect(acceptTosButton).toHaveClass(/c-button--disabled/);
 
 	// Scroll down
-	await page.evaluate(() => {
-		document.querySelector('.p-terms-of-service__content')?.scrollTo(0, 50000);
-	});
+	const tosScrollableSelector = moduleClassSelector('p-terms-of-service__content');
+	await page.evaluate((tosScrollableSelector) => {
+		document.querySelector(tosScrollableSelector)?.scrollTo(0, 50000);
+	}, tosScrollableSelector);
 
 	// Wait for button to be available, otherwise this sometimes doesn't trigger the redirect to the homepage
 	await new Promise((resolve) => setTimeout(resolve, 1000));

@@ -102,6 +102,9 @@ test('T10.5: Test actieve toegang basisgebruiker: Geavanceerde filters', async (
 	await expect(applyButton).toBeVisible();
 	await applyButton.click();
 
+	// Wait for the filters to be applied to the search field
+	await new Promise((resolve) => setTimeout(resolve, 1000));
+
 	// Check advanced filters are added
 	const searchInput3 = page.locator('.c-tag-search-bar .c-tags-input__control');
 	const containsLabel =

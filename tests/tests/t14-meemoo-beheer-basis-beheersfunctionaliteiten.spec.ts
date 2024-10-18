@@ -12,10 +12,7 @@ export {};
 
 // test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, context }) => {
 // 	const SITE_TRANSLATIONS = await getSiteTranslations();
-// 	const MAIN_SITE_TITLE =
-// 		SITE_TRANSLATIONS.nl[
-// 			'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
-// 			];
+
 // 	// Go to the hetarchief homepage
 // await goToPageAndAcceptCookies(
 // 		page,

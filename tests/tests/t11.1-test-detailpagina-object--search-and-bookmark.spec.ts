@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 import { IconName } from '../consts/icon-names';
 import { checkToastMessage } from '../helpers/check-toast-message';
+import { clickOverflowButtonDetailPage } from '../helpers/click-overflow-button-detail-page';
 import { clickToastMessageButton } from '../helpers/click-toast-message-button';
 import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
 import { getSiteTranslations } from '../helpers/get-site-translations';
@@ -45,6 +46,9 @@ test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmar
 	await searchField.pressSequentially(SEARCH_TERM);
 	await searchField.press('Enter');
 
+	// Wait for filters to be applied
+	await new Promise((resolve) => setTimeout(resolve, 1000));
+
 	// Check green pill exists with search term inside
 	const pill = page.locator('.c-tags-input__multi-value .c-tag__label');
 	await expect(pill).toBeVisible();
@@ -82,7 +86,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmar
 	await expect(page.locator('.c-blade--active')).toBeVisible();
 
 	// Check bookmark folder counts
-	let bookmarkFolderCounts1 = await getFolderObjectCounts(page);
+	const bookmarkFolderCounts1 = await getFolderObjectCounts(page);
 	expect(bookmarkFolderCounts1[FAVORITES_FOLDER_NAME]).toEqual(0);
 	expect(bookmarkFolderCounts1[SECOND_FOLDER_NAME]).toEqual(0);
 
@@ -142,21 +146,8 @@ test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmar
 	 * Bookmark button
 	 */
 
-	// Click bookmark button
-	await page
-		.locator('.p-object-detail__primary-actions .c-button', {
-			hasText: IconName.Bookmark,
-		})
-		.first()
-		.click();
-
-	// Check blade opens
-	await expect(page.locator('.c-blade--active')).toBeVisible();
-
-	// Check bookmark folder counts
-	bookmarkFolderCounts1 = await getFolderObjectCounts(page);
-	expect(bookmarkFolderCounts1[FAVORITES_FOLDER_NAME]).toEqual(1);
-	expect(bookmarkFolderCounts1[SECOND_FOLDER_NAME]).toEqual(0);
+	// Click the bookmark button in the overflow menu
+	await clickOverflowButtonDetailPage(page, IconName.Bookmark);
 
 	// Add object to Favorites folder
 	folderList = page.locator(

@@ -1,8 +1,9 @@
 import { expect, type Page } from '@playwright/test';
+import { Locale } from '@shared/utils/i18n';
 
 import { HOMEPAGE_TITLE } from '../consts/tests.consts';
 
-import { getSiteTranslations, Locale } from './get-site-translations';
+import { getSiteTranslations } from './get-site-translations';
 import { moduleClassSelector } from './module-class-locator';
 import { waitForPageTitle } from './wait-for-page-title';
 
@@ -11,7 +12,7 @@ export async function loginUserHetArchiefIdp(
 	username: string,
 	password: string,
 	titleAfterLogin?: string,
-	locale: Locale = Locale.Nl
+	locale: Locale = Locale.nl
 ): Promise<void> {
 	const SITE_TRANSLATIONS = await getSiteTranslations();
 

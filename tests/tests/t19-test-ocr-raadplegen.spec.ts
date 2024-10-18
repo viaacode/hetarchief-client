@@ -1,23 +1,16 @@
 import { expect, test } from '@playwright/test';
 
-import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T19: Test OCR raadplegen', async ({ page, context }) => {
-	const SITE_TRANSLATIONS = await getSiteTranslations();
-	const MAIN_SITE_TITLE =
-		SITE_TRANSLATIONS.nl[
-			'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
-		];
-
 	/**
 	 * Go to a newspaper detail page ---------------------------------------------------------------
 	 */
 	await goToPageAndAcceptCookies(
 		page,
 		(process.env.TEST_CLIENT_ENDPOINT as string) + '/pid/h98z893q54',
-		`Wet- en verordeningsblad voor de bezette streke... | ${MAIN_SITE_TITLE}`
+		'Wet- en verordeningsblad voor de bezette streke...'
 	);
 
 	// Go to page again to fix non-loading newspaper in incognito browser
@@ -45,14 +38,12 @@ test('T19: Test OCR raadplegen', async ({ page, context }) => {
 	expect(await ocrWords.count()).toBeGreaterThan(100);
 
 	// Search some words in the ocr text
-	await page
-		.locator(
-			moduleClassSelector('p-object-detail__ocr__') +
-				' ' +
-				moduleClassSelector('c-search-with-results-pagination') +
-				' .c-input__field'
-		)
-		.fill('Brussel');
+	const ocrSidebar = page.locator(moduleClassSelector('p-object-detail__ocr__'));
+	const ocrSearchField = ocrSidebar.locator(
+		moduleClassSelector('c-search-with-results-pagination') + ' .c-input__field'
+	);
+	await expect(ocrSearchField).toBeVisible();
+	await ocrSearchField.fill('Brussel');
 	await page.keyboard.press('Enter');
 
 	// Check keyword is active

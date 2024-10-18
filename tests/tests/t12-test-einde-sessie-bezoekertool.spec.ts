@@ -14,10 +14,7 @@ export {};
 //
 // test('T12: Test einde sessie bezoekertool', async ({ page, context }) => {
 // const SITE_TRANSLATIONS = await getSiteTranslations();
-// const MAIN_SITE_TITLE =
-// 	SITE_TRANSLATIONS.nl[
-// 		'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
-// 		];
+
 // 	// We need to wait for multiple notifications that are only checked every minute
 // 	test.setTimeout(300 * 1000);
 //

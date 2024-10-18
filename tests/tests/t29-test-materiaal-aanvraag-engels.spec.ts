@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { Locale } from '@shared/utils/i18n';
 
 import { checkToastMessage } from '../helpers/check-toast-message';
 import { getSiteTranslations } from '../helpers/get-site-translations';
@@ -16,15 +17,18 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 	await goToPageAndAcceptCookies(
 		page,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/en/pid/h98z893q54?showAuth=1`,
-		NEWSPAPER_PAGE_TITLE
+		NEWSPAPER_PAGE_TITLE,
+		'all',
+		Locale.en
 	);
 
 	// Login visitor
 	await loginUserHetArchiefIdp(
 		page,
-		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
-		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
-		NEWSPAPER_PAGE_TITLE
+		process.env.TEST_VISITOR_ACCOUNT_3_USERNAME as string,
+		process.env.TEST_VISITOR_ACCOUNT_3_PASSWORD as string,
+		NEWSPAPER_PAGE_TITLE,
+		Locale.en
 	);
 
 	// Click on the "add to material request list" button

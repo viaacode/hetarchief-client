@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 import { IconName } from '../consts/icon-names';
 import { checkToastMessage } from '../helpers/check-toast-message';
+import { clickOverflowButtonDetailPage } from '../helpers/click-overflow-button-detail-page';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
@@ -28,23 +29,7 @@ test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 		NEWSPAPER_PAGE_TITLE
 	);
 
-	// Open the button overflow menu
-	let buttonOverflowMenu = page.locator('.p-object-detail__primary-actions .c-button', {
-		hasText: IconName.DotsHorizontal,
-	});
-	await expect(buttonOverflowMenu).toBeVisible();
-
-	// Click the button overflow menu
-	await buttonOverflowMenu.click();
-
-	// Bookmark button should be visible
-	let bookmarkButton = page.locator('.p-object-detail__primary-actions .c-dropdown-menu__item', {
-		hasText: IconName.Bookmark,
-	});
-	await expect(bookmarkButton).toBeVisible();
-
-	// Click the bookmark button
-	await bookmarkButton.click();
+	await clickOverflowButtonDetailPage(page, IconName.Bookmark);
 
 	// Check the checkbox next to favorites
 	let folderList = page.locator(
@@ -71,23 +56,8 @@ test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 
 	await page.reload();
 
-	// Open the button overflow menu
-	buttonOverflowMenu = page.locator('.p-object-detail__primary-actions .c-button', {
-		hasText: IconName.DotsHorizontal,
-	});
-	await expect(buttonOverflowMenu).toBeVisible();
-
-	// Click the button overflow menu
-	await buttonOverflowMenu.click();
-
-	// Bookmark button should be visible
-	bookmarkButton = page.locator('.p-object-detail__primary-actions .c-dropdown-menu__item', {
-		hasText: IconName.Bookmark,
-	});
-	await expect(bookmarkButton).toBeVisible();
-
-	// Click the bookmark button
-	await bookmarkButton.click();
+	// Click the bookmark button in the overflow menu
+	await clickOverflowButtonDetailPage(page, IconName.Bookmark);
 
 	// Check the checkbox next to favorites
 	folderList = page.locator(

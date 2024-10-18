@@ -46,6 +46,6 @@
     "esm": true,
     "experimentalSpecifierResolution": "node"
   },
-  "include": ["next-env.d.ts", "jest/**/*.js", "src/**/*.ts", "src/**/*.tsx"],
+  "include": ["next-env.d.ts", "jest/**/*.js", "src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts"],
   "exclude": ["node_modules"]
 }
