@@ -22,8 +22,10 @@ export async function waitForPageTitle(page: Page, partialTitle: string): Promis
 				timeout: 10000,
 			}
 		);
-	} catch (err) {
-		err.message = `The page title was not the expected value after 10 seconds. Expected: ${partialTitle} | ${MAIN_SITE_TITLE}, received: ${await page.title()}`;
+	} catch (err: any) {
+		(
+			err as Error
+		).message = `The page title was not the expected value after 10 seconds. Expected: ${partialTitle} | ${MAIN_SITE_TITLE}, received: ${await page.title()}`;
 		throw err;
 	}
 }

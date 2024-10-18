@@ -235,7 +235,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 			{ hasText: 'Meemoo admin' }
 		)
 		.first();
-	await expect(pendingVisitRequestCel).toBeVisible();
+	await expect(pendingVisitRequestCel).toBeVisible({ timeout: 10000 });
 	await pendingVisitRequestCel.click();
 
 	// Check the blade title

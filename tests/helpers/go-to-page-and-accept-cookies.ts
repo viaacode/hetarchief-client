@@ -7,7 +7,7 @@ import { waitForPageTitle } from './wait-for-page-title';
 export async function goToPageAndAcceptCookies(
 	page: Page,
 	url: string,
-	title?: string = HOMEPAGE_TITLE,
+	title: string = HOMEPAGE_TITLE,
 	whichCookies: 'all' | 'selection' = 'all'
 ): Promise<void> {
 	// Go to the hetarchief homepage and wait for results to load

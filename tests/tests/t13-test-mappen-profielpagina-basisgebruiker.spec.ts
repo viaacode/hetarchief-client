@@ -196,7 +196,7 @@ export {};
 // 	 */
 
 // 	// Click 3dots button on object card
-// 	await objectCard.locator('text=dots-vertical').click();
+// 	await objectCard.locator('text=' + ' + IconName.DotsVertical).click();
 // 	await objectCard.locator('text=Verwijderen').click();
 
 // 	// Check toast message

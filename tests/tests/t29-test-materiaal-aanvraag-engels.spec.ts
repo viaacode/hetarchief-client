@@ -22,8 +22,8 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 	// Login visitor
 	await loginUserHetArchiefIdp(
 		page,
-		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
-		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string,
+		process.env.TEST_VISITOR_ACCOUNT_3_USERNAME as string,
+		process.env.TEST_VISITOR_ACCOUNT_3_PASSWORD as string,
 		NEWSPAPER_PAGE_TITLE
 	);
 

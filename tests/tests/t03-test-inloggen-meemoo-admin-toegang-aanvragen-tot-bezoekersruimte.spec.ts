@@ -53,8 +53,8 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 
 	// Click on request access button for VRT
 	const vrtCard = page.locator('.p-home__results .c-visitor-space-card--name--vrt');
+	await expect(vrtCard).toBeVisible({ timeout: 10000 });
 	await vrtCard.scrollIntoViewIfNeeded();
-	await expect(vrtCard).toBeVisible();
 	await vrtCard.locator('.c-button--black').click();
 
 	// Fill in request blade and send
