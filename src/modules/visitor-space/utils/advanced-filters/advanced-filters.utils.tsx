@@ -90,9 +90,6 @@ export const getFilterLabel = (prop: FilterProperty): string => {
 			[FilterProperty.DURATION]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___duurtijd'
 			),
-			[FilterProperty.EVERYTHING]: tText(
-				'modules/visitor-space/utils/advanced-filters/metadata___alles'
-			),
 			[FilterProperty.GENRE]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___genre'
 			),

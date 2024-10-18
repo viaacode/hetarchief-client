@@ -42,7 +42,6 @@ const FILTER_NAME_WITH_ACRONYM: [FilterProperty, string][] = [
 	[FilterProperty.CREATOR, 'ct'],
 	[FilterProperty.DESCRIPTION, 'de'],
 	[FilterProperty.DURATION, 'du'],
-	[FilterProperty.EVERYTHING, 'al'],
 	[FilterProperty.GENRE, 'ge'],
 	[FilterProperty.IDENTIFIER, 'id'],
 	[FilterProperty.KEYWORDS, 'kw'],
