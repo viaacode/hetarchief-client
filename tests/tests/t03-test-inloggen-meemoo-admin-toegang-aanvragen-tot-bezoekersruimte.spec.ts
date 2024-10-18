@@ -51,6 +51,11 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 		];
 	await waitForPageTitle(page, expectedSitePageTitle);
 
+	// Show all visitor spaces
+	const showAllButton = page.locator('.c-button--outline', { hasText: 'Toon alles' });
+	await expect(showAllButton).toBeVisible();
+	await showAllButton.click();
+
 	// Click on request access button for VRT
 	const vrtCard = page.locator('.p-home__results .c-visitor-space-card--name--vrt');
 	await expect(vrtCard).toBeVisible({ timeout: 10000 });

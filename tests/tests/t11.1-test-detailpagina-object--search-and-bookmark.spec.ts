@@ -91,10 +91,10 @@ test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmar
 	expect(bookmarkFolderCounts1[SECOND_FOLDER_NAME]).toEqual(0);
 
 	// Add object to Favorites folder
-	const folderList = page.locator(
+	let folderList = page.locator(
 		`.c-blade--active ${moduleClassSelector('c-add-to-folder-blade__list')}`
 	);
-	const checkboxes = folderList.locator('.c-checkbox__check-icon');
+	let checkboxes = folderList.locator('.c-checkbox__check-icon');
 	expect(await checkboxes.count()).toEqual(2);
 	await checkboxes.first().click();
 
@@ -148,6 +148,14 @@ test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmar
 
 	// Click the bookmark button in the overflow menu
 	await clickOverflowButtonDetailPage(page, IconName.Bookmark);
+
+	// Add object to Favorites folder
+	folderList = page.locator(
+		`.c-blade--active ${moduleClassSelector('c-add-to-folder-blade__list')}`
+	);
+	checkboxes = folderList.locator('.c-checkbox__check-icon');
+	expect(await checkboxes.count()).toEqual(2);
+	await checkboxes.first().click();
 
 	// Check count changes to 1
 	bookmarkFolderCounts2 = await getFolderObjectCounts(page);

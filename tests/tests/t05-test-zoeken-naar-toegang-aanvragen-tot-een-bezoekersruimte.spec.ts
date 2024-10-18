@@ -12,10 +12,6 @@ export {};
 // 	context,
 // }) => {
 // const SITE_TRANSLATIONS = await getSiteTranslations();
-// const MAIN_SITE_TITLE =
-// 	SITE_TRANSLATIONS.nl[
-// 		'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
-// 		];
 
 // 	// GO to the hetarchief homepage
 // await goToPageAndAcceptCookies(
