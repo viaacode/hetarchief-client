@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+import { fillRequestVisitVisitorSpaceBlade } from '../helpers/fill-request-visit-visitor-space-blade';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
@@ -65,38 +66,8 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 		]
 	);
 
-	// Get active blade
-	const activeBlade = page.locator(moduleClassSelector('c-blade--visible'));
-
-	// Fill in 'Reden van aanvraag'
-	await activeBlade.locator('#RequestAccessBlade__requestReason').fill(REASON);
-
-	// Enable checkbox 'Ik vraag deze toegang aan voor onderzoeksdoeleinden of privéstudie'
-	const researchCheckboxLabel =
-		SITE_TRANSLATIONS.nl[
-			'modules/home/components/request-access-blade/request-access-blade___ik-verklaar-deze-toegang-aan-te-vragen-met-het-oog-op-onderzoeksdoeleinden-of-prive-studie'
-		];
-	await activeBlade
-		.locator('.c-checkbox', {
-			hasText: researchCheckboxLabel,
-		})
-		.click();
-
-	// Click on 'Verstuur'
-	await page
-		.locator(`${moduleClassSelector('c-request-access-blade')} .c-button__label`, {
-			hasText:
-				SITE_TRANSLATIONS.nl[
-					'modules/home/components/request-access-blade/request-access-blade___verstuur'
-				],
-		})
-		.click();
-
-	const receivedYourRequestText =
-		SITE_TRANSLATIONS.nl[
-			'pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen'
-		];
-	await expect(page.locator('text=' + receivedYourRequestText)).toBeVisible();
+	// Fill in request visit blade:
+	await fillRequestVisitVisitorSpaceBlade(page, REASON, null);
 
 	// Go back to the homescreen using the navigation bar
 	// Click on the meemoo icon

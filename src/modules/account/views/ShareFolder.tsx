@@ -44,11 +44,14 @@ export const AccountSharedFolder: FC<DefaultSeoInfo & AccountSharedFolderProps> 
 					});
 				}
 				// Navigate to shared folder
-				const slug = createFolderSlug({
-					id: response.folderId,
-					name: response.folderName,
-					isDefault: false,
-				});
+				const slug = createFolderSlug(
+					{
+						id: response.folderId,
+						name: response.folderName,
+						isDefault: false,
+					},
+					locale
+				);
 				const folderUrl = `${ROUTES_BY_LOCALE[locale].accountMyFolders}/${slug}`;
 
 				await router.replace(folderUrl);

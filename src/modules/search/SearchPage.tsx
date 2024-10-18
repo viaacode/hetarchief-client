@@ -45,7 +45,6 @@ import {
 } from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
-import paginationBarStyles from '@shared/components/PaginationBar/PaginationBar.module.scss';
 import { Placeholder } from '@shared/components/Placeholder';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ScrollableTabs, TabLabel } from '@shared/components/Tabs';
@@ -988,7 +987,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			/>
 			<PaginationBar
 				{...getDefaultPaginationBarProps()}
-				className={clsx(paginationBarStyles['c-pagination-bar'], 'u-mb-48')}
+				className="u-mb-48"
 				startItem={(page - 1) * SEARCH_RESULTS_PAGE_SIZE}
 				itemsPerPage={SEARCH_RESULTS_PAGE_SIZE}
 				totalItems={limitToMaxResults(getItemCounts(format))}

@@ -3,7 +3,9 @@ import { expect, test } from '@playwright/test';
 import { IconName } from '../consts/icon-names';
 import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sidebar-navigation-item';
 import { checkBladeTitle } from '../helpers/check-blade-title';
+import { checkNumberOfVisitorSpacesBadge } from '../helpers/check-number-of-visitor-spaces-badge';
 import { checkToastMessage } from '../helpers/check-toast-message';
+import { fillRequestVisitVisitorSpaceBlade } from '../helpers/fill-request-visit-visitor-space-blade';
 import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
@@ -32,12 +34,12 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Login visitor
 	await loginUserHetArchiefIdp(
 		page,
-		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
-		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
+		process.env.TEST_VISITOR_ACCOUNT_2_USERNAME as string,
+		process.env.TEST_VISITOR_ACCOUNT_2_PASSWORD as string
 	);
 
 	// Check navbar exists
-	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
+	await checkNumberOfVisitorSpacesBadge(page, 1);
 
 	/**
 	 * Go to 'Bezoek een aanbieder'
@@ -56,31 +58,9 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	const amsabCard = page.locator('.p-home__results .c-visitor-space-card--name--amsab-isg');
 	await expect(amsabCard).toContainText('Amsab-ISG');
 	await amsabCard.locator('.c-button--black').click();
-	// await new Promise((resolve) => setTimeout(resolve, 10 * 1000));
 
-	// Fill in 'Reden van aanvraag'
-	await page.fill('#RequestAccessBlade__requestReason', REASON);
-
-	// Enable checkbox 'Ik vraag deze toegang aan voor onderzoeksdoeleinden of privéstudie'
-	await page.locator(`${moduleClassSelector('c-request-access-blade')} .c-checkbox`).click();
-
-	// Click on 'Verstuur'
-	await page
-		.locator(`${moduleClassSelector('c-request-access-blade')} .c-button__label`, {
-			hasText:
-				SITE_TRANSLATIONS.nl[
-					'modules/home/components/request-access-blade/request-access-blade___verstuur'
-				],
-		})
-		.click();
-
-	const receivedYourRequestLabel =
-		SITE_TRANSLATIONS.nl[
-			'pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen'
-		];
-	await expect(page.locator(`text=${receivedYourRequestLabel}`)).toBeVisible({
-		timeout: 10000,
-	});
+	// Fill in request visit to visitor space blade
+	await fillRequestVisitVisitorSpaceBlade(page, REASON, null);
 
 	// Go back to the homescreen using the navigation bar
 	// Click on the meemoo icon
@@ -118,7 +98,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await checkActiveSidebarNavigationItem(
 		page,
 		0,
-		VISIT_REQUESTS_PAGE_TITLE,
+		SITE_TRANSLATIONS.nl['modules/navigation/components/navigation/navigation___aanvragen'],
 		'/beheer/toegangsaanvragen'
 	);
 
@@ -134,7 +114,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 			`${moduleClassSelector(
 				'l-sidebar__main'
 			)} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
-			{ hasText: 'BezoekerVoornaam' }
+			{ hasText: 'Basis Gebruiker 2' }
 		)
 		.first()
 		.click();
@@ -151,8 +131,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	let summaryHtml = await page
 		.locator(`.c-blade--active ${moduleClassSelector('c-visit-summary')}`)
 		.innerHTML();
-	expect(summaryHtml).toContain('BezoekerVoornaam');
-	expect(summaryHtml).toContain('BezoekerAchternaam');
+	expect(summaryHtml).toContain('Basis Gebruiker 2');
 	expect(summaryHtml).toContain(REASON);
 
 	// Check buttons for approve and deny are visible
@@ -278,17 +257,18 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	].replace('{{name}}', FOLDER_NAME);
 	await checkToastMessage(page, folderHasBeenCreated);
 
-	// Check folder is added
+	// Check folder is added and checked
 	bookmarkFolderCounts = await getFolderObjectCounts(page);
 	expect(bookmarkFolderCounts[FAVORITES_FOLDER_NAME]).toEqual(0);
-	expect(bookmarkFolderCounts[FOLDER_NAME]).toEqual(0);
+	expect(bookmarkFolderCounts[FOLDER_NAME]).toEqual(1);
 
 	const folderList = page.locator(
 		`.c-blade--active ${moduleClassSelector('c-add-to-folder-blade__list')}`
 	);
+
+	// Check favorites folder
 	const checkboxes = folderList.locator('.c-checkbox__check-icon');
 	await checkboxes.first().click();
-	await checkboxes.nth(1).click();
 
 	// Check folder counts have gone up by 1
 	bookmarkFolderCounts = await getFolderObjectCounts(page);
@@ -318,7 +298,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await checkActiveSidebarNavigationItem(
 		page,
 		0,
-		VISIT_REQUESTS_PAGE_TITLE,
+		SITE_TRANSLATIONS.nl['modules/navigation/components/navigation/navigation___aanvragen'],
 		'/beheer/toegangsaanvragen'
 	);
 
@@ -336,7 +316,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 			`${moduleClassSelector(
 				'l-sidebar__main'
 			)} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
-			{ hasText: 'BezoekerVoornaam' }
+			{ hasText: 'Basis Gebruiker 2' }
 		)
 		.first()
 		.click();
@@ -353,8 +333,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	summaryHtml = await page
 		.locator(`.c-blade--active ${moduleClassSelector('c-visit-summary')}`)
 		.innerHTML();
-	expect(summaryHtml).toContain('BezoekerVoornaam');
-	expect(summaryHtml).toContain('BezoekerAchternaam');
+	expect(summaryHtml).toContain('Basis Gebruiker 2');
 	expect(summaryHtml).toContain(REASON);
 
 	// Check buttons for approve and deny are visible
@@ -435,7 +414,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 		.locator(
 			`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row`,
 			{
-				hasText: 'BezoekerVoornaam',
+				hasText: 'Basis Gebruiker 2',
 			}
 		)
 		.first();
@@ -508,8 +487,8 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Login visitor
 	await loginUserHetArchiefIdp(
 		page,
-		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
-		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
+		process.env.TEST_VISITOR_ACCOUNT_2_USERNAME as string,
+		process.env.TEST_VISITOR_ACCOUNT_2_PASSWORD as string
 	);
 
 	// Check navbar exists and user has access to one visitor space
