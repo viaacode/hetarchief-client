@@ -13,27 +13,28 @@ test('T11.3: Test detailpagina object + materiaal aanvraag doen: materiaal aanvr
 	context,
 }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();
+	const PAGE_TITLE = 'Planning for a saner world';
 
 	// GO to the hetarchief homepage
-	await goToPageAndAcceptCookies(page, process.env.TEST_CLIENT_ENDPOINT as string);
+	await goToPageAndAcceptCookies(
+		page,
+		(process.env.TEST_CLIENT_ENDPOINT as string) +
+			'/pid/' +
+			(process.env.TEST_OBJECT_DETAIL_PAGE_AMSAB as string),
+		PAGE_TITLE
+	);
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_VISITOR_ACCOUNT_2_USERNAME as string,
-		process.env.TEST_VISITOR_ACCOUNT_2_PASSWORD as string
+		process.env.TEST_VISITOR_ACCOUNT_2_PASSWORD as string,
+		PAGE_TITLE
 	);
 
 	/**
 	 * Request item
 	 */
-
-	// First we go to a non VRT object
-	await page.goto(
-		((process.env.TEST_CLIENT_ENDPOINT as string) +
-			'/zoeken' +
-			(process.env.TEST_OBJECT_DETAIL_PAGE_AMSAB as string)) as string
-	);
 
 	const addToListLabel =
 		SITE_TRANSLATIONS.nl[
@@ -97,8 +98,8 @@ test('T11.3: Test detailpagina object + materiaal aanvraag doen: materiaal aanvr
 	const prefilledData = await page
 		.locator(moduleClassSelector('c-personal-info-blade__content-value'))
 		.allInnerTexts();
-	expect(prefilledData).toContain('BezoekerVoornaam-auto-2 BezoekerAchternaam');
-	expect(prefilledData).toContain('hetarchief2.0+ateindgebruikerbzt@meemoo.be');
+	expect(prefilledData).toContain('Basis Gebruiker 2');
+	expect(prefilledData).toContain('hetarchief2.0+basisgebruiker2@meemoo.be');
 	expect(prefilledData[2]).toEqual('');
 
 	// Click 'ik vraag het materiaal op in het kader van mijn beroep (uitgezonderd onderwijs)'

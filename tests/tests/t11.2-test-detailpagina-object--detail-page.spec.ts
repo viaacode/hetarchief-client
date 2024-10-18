@@ -5,6 +5,7 @@ import { checkToastMessage } from '../helpers/check-toast-message';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
+import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina', async ({
 	page,
@@ -18,7 +19,7 @@ test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina',
 		page,
 		(process.env.TEST_CLIENT_ENDPOINT as string) +
 			'/pid/' +
-			(process.env.TEST_OBJECT_DETAIL_PAGE_ID as string),
+			(process.env.TEST_OBJECT_DETAIL_PAGE_VRT as string),
 		DETAIL_PAGE_TITLE
 	);
 
@@ -36,19 +37,21 @@ test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina',
 	 */
 
 	// Get advanced-filters sidebar width
+	const pageDetailWrapper = page.locator(moduleClassSelector('p-object-detail__wrapper'));
+	const sidebarSelector = ' > ' + moduleClassSelector('p-object-detail__sidebar');
 	const sidebarWidthBeforeExpand =
-		(await (await page.$('.p-object-detail__metadata'))?.boundingBox())?.width || 0;
+		(await pageDetailWrapper.locator(sidebarSelector)?.boundingBox())?.width || 0;
 	expect(sidebarWidthBeforeExpand).toBeGreaterThan(0);
 
 	// Change advanced-filters sidebar size
-	await page.locator('.p-object-detail__wrapper').locator('text=expand-left').click();
+	await pageDetailWrapper.locator('text=expand-left').click();
 
 	// Wait for animation
 	await page.waitForTimeout(2000);
 
 	// Get sidebar width after expand
 	const sidebarWidthAfterExpand =
-		(await (await page.$('.p-object-detail__metadata'))?.boundingBox())?.width || 0;
+		(await pageDetailWrapper.locator(sidebarSelector)?.boundingBox())?.width || 0;
 	expect(sidebarWidthAfterExpand).toBeGreaterThan(0);
 
 	// Check sidebar got wider
