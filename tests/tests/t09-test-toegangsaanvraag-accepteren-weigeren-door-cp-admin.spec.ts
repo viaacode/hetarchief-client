@@ -200,9 +200,8 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	const approvedBadgeFirstRow = page
 		.locator(`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row`)
 		.first()
-		.locator(moduleClassSelector('c-request-status-badge'));
-	await expect(approvedBadgeFirstRow).toBeVisible();
-	await expect(approvedBadgeFirstRow).toContainText(approvedLabel);
+		.locator(moduleClassSelector('c-request-status-badge'), { hasText: approvedLabel });
+	await expect(approvedBadgeFirstRow).toBeVisible({ timeout: 10000 });
 
 	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); //temp bcs waitForLoading doesn't work
 

@@ -1,4 +1,5 @@
 import { type Page } from '@playwright/test';
+import { Locale } from '@shared/utils/i18n';
 
 import { HOMEPAGE_TITLE } from '../consts/tests.consts';
 
@@ -8,13 +9,14 @@ export async function goToPageAndAcceptCookies(
 	page: Page,
 	url: string,
 	title: string = HOMEPAGE_TITLE,
-	whichCookies: 'all' | 'selection' = 'all'
+	whichCookies: 'all' | 'selection' = 'all',
+	locale: Locale = Locale.nl
 ): Promise<void> {
 	// Go to the hetarchief homepage and wait for results to load
 	await page.goto(url);
 
 	// Check page title is the home page
-	await waitForPageTitle(page, title);
+	await waitForPageTitle(page, title, locale);
 
 	// Check if cookiebot opens
 	const cookiebotDialog = page.locator('#CybotCookiebotDialogBody');
