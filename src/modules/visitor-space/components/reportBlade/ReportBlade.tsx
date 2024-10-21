@@ -1,61 +1,51 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, FormControl, TextArea, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { type Requests } from 'node-zendesk';
-import { type FC, useEffect, useMemo, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { type FC, useCallback, useEffect, useState } from 'react';
 
 import { Blade } from '@shared/components/Blade/Blade';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tHtml } from '@shared/helpers/translate';
+import { validateForm } from '@shared/helpers/validate-form';
 import { useZendesk } from '@shared/hooks/use-zendesk';
 import { toastService } from '@shared/services/toast-service';
+import { REPORT_FORM_SCHEMA } from '@visitor-space/components/reportBlade/ReportBlade.const';
 
-import { REPORT_FORM_SCHEMA } from './ReportBlade.const';
 import styles from './ReportBlade.module.scss';
-import { type ReportBladeProps, type ReportFormState } from './ReportBlade.types';
+import { type ReportBladeProps } from './ReportBlade.types';
 
 const ReportBlade: FC<ReportBladeProps> = (props) => {
 	const { user } = props;
 	const { mutateAsync: createZendeskTicket } = useZendesk();
-	const [report, setReport] = useState<string>();
-	const [email, setEmail] = useState<string>();
-	const {
-		control,
-		handleSubmit,
-		setValue,
-		reset,
-		formState: { errors, isSubmitting },
-	} = useForm<ReportFormState>({
-		resolver: yupResolver(REPORT_FORM_SCHEMA()),
-		defaultValues: useMemo(() => ({ report, email }), [report, email]),
-	});
+	const [reportMessage, setReportMessage] = useState<string>('');
+	const [email, setEmail] = useState<string>('');
+	const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+	const [formErrors, setFormErrors] = useState<{ reportMessage?: string; email?: string }>({});
 
 	/**
 	 * Methods
 	 */
+
+	const resetForm = useCallback(() => {
+		setReportMessage('');
+		setEmail('');
+	}, []);
 
 	/**
 	 * Effects
 	 */
 
 	useEffect(() => {
-		setValue('report', report || '');
-	}, [setValue, report]);
-
-	useEffect(() => {
-		setValue('email', email || '');
-	}, [setValue, email]);
-
-	useEffect(() => {
 		if (user?.email) {
-			setValue('email', user.email);
+			setEmail(user.email);
 		}
-	}, [setValue, user?.email]);
+	}, [user?.email]);
 
 	useEffect(() => {
-		props.isOpen && reset();
-	}, [props.isOpen, reset]);
+		if (props.isOpen) {
+			resetForm();
+		}
+	}, [props.isOpen, resetForm]);
 
 	/**
 	 * Events
@@ -84,43 +74,56 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 		onCloseBlade();
 	};
 
-	const onFormSubmit = async () => {
-		const ticket: Requests.CreateModel = {
-			comment: {
-				url: window.location.href,
-				body: report,
-				html_body: `<dl><dt>${tHtml(
-					'modules/visitor-space/components/report-blade/report-blade___reden-van-rapporteren'
-				)}</dt><dd>${report}</dd><dt>${tHtml(
-					'modules/visitor-space/components/report-blade/report-blade___pagina-url'
-				)}</dt><dd>${window.location.href}</dd></dl>`,
-				public: false,
-			},
-
-			subject: `${tHtml(
-				'modules/visitor-space/components/report-blade/report-blade___media-item-gerapporteerd-door-gebruiker-op-het-archief'
-			)}`,
-			requester: {
-				email: user?.email || email,
-				name:
-					user?.fullName ||
-					`${tHtml(
-						'modules/visitor-space/components/report-blade/report-blade___niet-ingelogde-gebruiker'
-					)}`,
-			},
-		};
-
+	const handleFormSubmit = async () => {
 		try {
+			setIsSubmittingForm(true);
+			const errors = await validateForm(
+				{
+					reportMessage,
+					email,
+				},
+				REPORT_FORM_SCHEMA()
+			);
+			if (errors) {
+				setFormErrors(errors);
+				setIsSubmittingForm(false);
+				return;
+			}
+			const ticket: Requests.CreateModel = {
+				comment: {
+					url: window.location.href,
+					body: reportMessage,
+					html_body: `<dl><dt>${tHtml(
+						'modules/visitor-space/components/report-blade/report-blade___reden-van-rapporteren'
+					)}</dt><dd>${reportMessage}</dd><dt>${tHtml(
+						'modules/visitor-space/components/report-blade/report-blade___pagina-url'
+					)}</dt><dd>${window.location.href}</dd></dl>`,
+					public: false,
+				},
+
+				subject: `${tHtml(
+					'modules/visitor-space/components/report-blade/report-blade___media-item-gerapporteerd-door-gebruiker-op-het-archief'
+				)}`,
+				requester: {
+					email: user?.email || email,
+					name:
+						user?.fullName ||
+						`${tHtml(
+							'modules/visitor-space/components/report-blade/report-blade___niet-ingelogde-gebruiker'
+						)}`,
+				},
+			};
 			await createZendeskTicket(ticket);
 			onSuccessfulRequest();
 		} catch (err) {
 			onFailedRequest();
+		} finally {
+			setIsSubmittingForm(false);
 		}
 	};
 
 	const onCloseBlade = () => {
-		setReport(undefined);
-		setEmail(undefined);
+		resetForm();
 		props.onClose?.();
 	};
 
@@ -137,8 +140,8 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 						'modules/visitor-space/components/report-blade/report-blade___rapporteer'
 					)}
 					variants={['block', 'black']}
-					onClick={handleSubmit(onFormSubmit, () => console.error(errors))}
-					disabled={isSubmitting}
+					onClick={handleFormSubmit}
+					disabled={isSubmittingForm}
 				/>
 
 				<Button
@@ -172,30 +175,24 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 						className="u-mb-24"
 						errors={[
 							<RedFormWarning
-								error={errors.report?.message}
+								error={formErrors.reportMessage}
 								key="form-error--report"
 							/>,
 						]}
-						id="report"
+						id="reportMessage"
 						label={tHtml(
 							'modules/visitor-space/components/report-blade/report-blade___beschrijf-het-probleem'
 						)}
 					>
-						<Controller
-							name="report"
-							control={control}
-							render={(field) => (
-								<TextArea
-									{...field}
-									id="field"
-									disabled={!props.isOpen}
-									value={report}
-									onChange={(e) => {
-										const report = e.currentTarget.value;
-										setReport(report);
-									}}
-								/>
-							)}
+						<TextArea
+							id="reportMessage"
+							name="reportMessage"
+							disabled={!props.isOpen}
+							value={reportMessage}
+							onChange={(evt) => {
+								const report = evt.target.value;
+								setReportMessage(report);
+							}}
 						/>
 					</FormControl>
 				)}
@@ -206,36 +203,28 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 							[styles['c-report-blade__input--disabled']]: !!user?.email,
 						})}
 						errors={[
-							<RedFormWarning
-								error={errors.email?.message}
-								key="form-error--email"
-							/>,
+							<RedFormWarning error={formErrors.email} key="form-error--email" />,
 						]}
 						id="email"
 						label={tHtml(
 							'modules/visitor-space/components/report-blade/report-blade___email-adres'
 						)}
 					>
-						<Controller
+						<TextInput
+							type="email"
+							id="email"
 							name="email"
-							control={control}
-							render={(field) => (
-								<TextInput
-									{...field}
-									type="email"
-									id="field"
-									disabled={!props.isOpen || !!user?.email}
-									value={user?.email || email}
-									onChange={(e) => {
-										if (user?.email) {
-											return;
-										}
+							autoComplete="email"
+							disabled={!props.isOpen || !!user?.email}
+							value={user?.email || email}
+							onChange={(evt) => {
+								if (user?.email) {
+									return;
+								}
 
-										const email = e.currentTarget.value;
-										setEmail(email);
-									}}
-								/>
-							)}
+								const email = evt.currentTarget.value;
+								setEmail(email);
+							}}
 						/>
 					</FormControl>
 				)}
