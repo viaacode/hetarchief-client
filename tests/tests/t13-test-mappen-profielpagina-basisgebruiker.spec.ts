@@ -12,10 +12,7 @@ export {};
 
 // test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }) => {
 // 	const SITE_TRANSLATIONS = await getSiteTranslations();
-// 	const MAIN_SITE_TITLE =
-// 		SITE_TRANSLATIONS.nl[
-// 			'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
-// 			];
+
 // 	// GO to the hetarchief homepage
 // await goToPageAndAcceptCookies(
 // 		page,
@@ -196,7 +193,7 @@ export {};
 // 	 */
 
 // 	// Click 3dots button on object card
-// 	await objectCard.locator('text=dots-vertical').click();
+// 	await objectCard.locator('text=' + ' + IconName.DotsVertical).click();
 // 	await objectCard.locator('text=Verwijderen').click();
 
 // 	// Check toast message

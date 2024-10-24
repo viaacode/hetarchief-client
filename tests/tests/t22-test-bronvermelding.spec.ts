@@ -7,10 +7,6 @@ import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T22: bronvermelding', async ({ page, context }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();
-	const MAIN_SITE_TITLE =
-		SITE_TRANSLATIONS.nl[
-			'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
-		];
 	await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 
 	/**
@@ -19,7 +15,7 @@ test('T22: bronvermelding', async ({ page, context }) => {
 	await goToPageAndAcceptCookies(
 		page,
 		(process.env.TEST_CLIENT_ENDPOINT as string) + '/pid/h98z893q54',
-		`Wet- en verordeningsblad voor de bezette streke... | ${MAIN_SITE_TITLE}`
+		'Wet- en verordeningsblad voor de bezette streke...'
 	);
 
 	// Scroll into view attribution metadata

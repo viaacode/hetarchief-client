@@ -808,17 +808,19 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___categorie'),
-						(mediaInfo.genre || []).map((genre) => (
-							<SearchLinkTag
-								key={genre}
-								label={genre}
-								link={`${
-									ROUTES_BY_LOCALE[locale].search
-								}?advanced=${filterNameToAcronym(
-									FilterProperty.GENRE
-								)}${operatorToAcronym(Operator.EQUALS)}${genre}`}
-							/>
-						))
+						mediaInfo.genre
+							? mediaInfo.genre.map((genre) => (
+									<SearchLinkTag
+										key={genre}
+										label={genre}
+										link={`${
+											ROUTES_BY_LOCALE[locale].search
+										}?advanced=${filterNameToAcronym(
+											FilterProperty.GENRE
+										)}${operatorToAcronym(Operator.EQUALS)}${genre}`}
+									/>
+							  ))
+							: null
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___programmabeschrijving'),

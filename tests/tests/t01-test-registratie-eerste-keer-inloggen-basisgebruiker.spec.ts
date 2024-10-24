@@ -49,7 +49,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	]);
 
 	// Check the SSUM page is loaded
-	expect(page.url()).toContain('https://ssum-int-iam.private.cloud.meemoo.be/account/nieuw');
+	expect(page.url()).toContain('https://ssum-int-iam.private.cloud.meemoo.be/nl/account/nieuw');
 
 	// Enter account info
 	await page.fill('#person_email', userEmail);

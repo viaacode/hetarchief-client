@@ -1,13 +1,8 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Alert, Button, FormControl, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil } from 'lodash-es';
 import React, { type FC, type ReactNode, useState } from 'react';
-import { Controller, type ControllerRenderProps, useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
 
 import { foldersService } from '@account/services/folders';
-import { selectUser } from '@auth/store/user';
 import { Blade } from '@shared/components/Blade/Blade';
 import { CopyButton } from '@shared/components/CopyButton';
 import { Icon } from '@shared/components/Icon';
@@ -15,63 +10,48 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
+import { validateForm } from '@shared/helpers/validate-form';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 
 import { labelKeys, SHARE_FOLDER_FORM_SCHEMA } from './ShareFolderBlade.consts';
 import styles from './ShareFolderBlade.module.scss';
-import {
-	type ShareFolderBladeFormState,
-	type ShareFolderBladeProps,
-} from './ShareFolderBlade.types';
+import { type ShareFolderBladeProps } from './ShareFolderBlade.types';
 
 const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId }) => {
 	const locale = useLocale();
 
-	const user = useSelector(selectUser);
-	const [emailInputValue, setEmailInputValue] = useState('');
+	const [email, setEmail] = useState('');
+	const [formErrors, setFormErrors] = useState<{ email?: string }>({});
 
 	const link = `${window.location.origin}${ROUTES_BY_LOCALE[locale].accountShareFolder.replace(
 		':id',
 		folderId
 	)}`;
 
-	const {
-		handleSubmit,
-		formState: { errors },
-		control,
-		resetField,
-	} = useForm<ShareFolderBladeFormState>({
-		resolver: yupResolver(SHARE_FOLDER_FORM_SCHEMA()),
-	});
-
 	const handleClose = () => {
-		setEmailInputValue('');
-		resetField('email');
+		setEmail('');
 		onClose();
 	};
 
 	const handleSend = async () => {
 		try {
-			if (user) {
-				await foldersService.shareFolder(folderId, emailInputValue);
-				toastService.notify({
-					maxLines: 3,
-					title: tText('pages/account/map-delen/folder-id/index___map-is-gedeeld'),
-					description: `${tText(
-						'pages/account/map-delen/folder-id/index___map-is-verstuurd-naar'
-					)} ${emailInputValue}`,
-				});
-				handleClose();
-			} else {
-				toastService.notify({
-					maxLines: 3,
-					title: tText('pages/account/map-delen/folder-id/index___error'),
-					description: tText(
-						'pages/account/map-delen/folder-id/index___error-er-is-iets-misgelopen'
-					),
-				});
+			const errors = await validateForm({ email: email }, SHARE_FOLDER_FORM_SCHEMA());
+			setFormErrors(errors || {});
+			if (errors) {
+				setFormErrors(errors);
+				return;
 			}
+
+			await foldersService.shareFolder(folderId, email);
+			toastService.notify({
+				maxLines: 3,
+				title: tText('pages/account/map-delen/folder-id/index___map-is-gedeeld'),
+				description: `${tText(
+					'pages/account/map-delen/folder-id/index___map-is-verstuurd-naar'
+				)} ${email}`,
+			});
+			handleClose();
 		} catch (err) {
 			console.error(err);
 			toastService.notify({
@@ -82,11 +62,6 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 				),
 			});
 		}
-	};
-
-	const renderTextInput = (field: ControllerRenderProps<ShareFolderBladeFormState, 'email'>) => {
-		setEmailInputValue(field.value);
-		return <TextInput {...field} id={labelKeys.email} />;
 	};
 
 	const renderFooter = () => {
@@ -159,16 +134,15 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 							className="u-mb-8 u-mb-24-md"
 							id={labelKeys.email}
 							errors={[
-								<RedFormWarning
-									error={errors.email?.message}
-									key="form-error--email"
-								/>,
+								<RedFormWarning error={formErrors.email} key="form-error--email" />,
 							]}
 						>
-							<Controller
+							<TextInput
 								name="email"
-								control={control}
-								render={({ field }) => renderTextInput(field)}
+								id={labelKeys.email}
+								autoComplete={'email'}
+								value={email}
+								onChange={(evt) => setEmail(evt.target.value)}
 							/>
 						</FormControl>
 					</div>
@@ -177,8 +151,8 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 						label={tText('pages/account/map-delen/folder-id/index___verstuur')}
 						variants={['block', 'text']}
 						className={styles['c-share-folder-blade__send-button']}
-						onClick={handleSubmit(handleSend)}
-						disabled={!isNil(errors.email?.message)}
+						onClick={handleSend}
+						disabled={!!formErrors.email}
 					/>
 				</>
 			</div>

@@ -5,7 +5,7 @@ import { type AdvancedFilter, FilterProperty, Operator } from '../../types';
 import { type AdvancedFilterFormState } from './AdvancedFilterForm.types';
 
 export const initialFields = (): AdvancedFilter => ({
-	prop: FilterProperty.EVERYTHING,
+	prop: FilterProperty.TITLE,
 	op: Operator.CONTAINS,
 	val: '',
 });

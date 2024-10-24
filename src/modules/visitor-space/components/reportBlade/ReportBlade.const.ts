@@ -6,7 +6,7 @@ import { type ReportFormState } from './ReportBlade.types';
 
 export const REPORT_FORM_SCHEMA = (): Schema<ReportFormState> => {
 	return object({
-		report: string().required(
+		reportMessage: string().required(
 			tText(
 				'modules/visitor-space/components/report-blade/report-blade___probleem-is-verplicht'
 			)

@@ -227,6 +227,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 								<TextInput
 									value={organisationInputValue}
 									onChange={(e) => setOrganisationInputValue(e.target.value)}
+									autoComplete="organization"
 								/>
 							</dd>
 						</>
