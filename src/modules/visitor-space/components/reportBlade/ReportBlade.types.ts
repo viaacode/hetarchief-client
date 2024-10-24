@@ -7,7 +7,7 @@ export type ReportBladeProps = FormBladeProps<ReportFormState> & {
 };
 
 export interface ReportFormState {
-	report: string;
+	reportMessage: string;
 	email: string;
 }
 
