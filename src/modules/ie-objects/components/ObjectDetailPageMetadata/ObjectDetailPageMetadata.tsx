@@ -751,7 +751,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							className={styles['p-object-detail__metadata-content__rights-status']}
 							key="metadata-rights-status"
 							renderRight={
-								<a target="_blank" href={rightsStatusInfo.link} rel="noreferrer">
+								<a
+									target="_blank"
+									href={rightsStatusInfo.internalLink}
+									rel="noreferrer"
+								>
 									<Button
 										variants={['white']}
 										icon={<Icon name={IconNamesLight.Extern} />}
@@ -760,9 +764,16 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							}
 						>
 							<span className="u-flex u-flex-items-center u-gap-xs">
-								{rightsStatusInfo.icon}
-								{rightsStatusInfo?.label}
-								{rightsStatusInfo?.moreInfo}
+								<a
+									href={rightsStatusInfo.externalLink}
+									className="u-text-no-decoration"
+									target="_blank"
+								>
+									{rightsStatusInfo.icon}
+								</a>
+								<a href={rightsStatusInfo.externalLink} target="_blank">
+									{rightsStatusInfo?.label}
+								</a>
 							</span>
 						</Metadata>
 					)}

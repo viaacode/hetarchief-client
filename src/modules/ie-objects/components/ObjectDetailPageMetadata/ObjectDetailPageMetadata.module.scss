@@ -38,10 +38,6 @@ $maintainer-logo-height: 7rem;
 		:global([class*="c-icon"]) {
 			font-size: $font-size-lg;
 		}
-
-		:global(a) {
-			margin-left: $spacer-sm;
-		}
 	}
 
 	&__names-list {
