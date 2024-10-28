@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { IconName } from '../consts/icon-names';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
-import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T24: Download krant in verschillende formaten', async ({ page, context }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();

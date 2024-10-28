@@ -1,6 +1,5 @@
 import { expect, type Page } from '@playwright/test';
-
-import { moduleClassSelector } from './module-class-locator';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 export async function checkNumberOfVisitorSpacesBadge(
 	page: Page,

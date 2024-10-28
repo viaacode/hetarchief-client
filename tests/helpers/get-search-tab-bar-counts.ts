@@ -1,6 +1,5 @@
 import { type Page } from '@playwright/test';
-
-import { moduleClassSelector } from './module-class-locator';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 export interface SearchTabCounts {
 	all: number;

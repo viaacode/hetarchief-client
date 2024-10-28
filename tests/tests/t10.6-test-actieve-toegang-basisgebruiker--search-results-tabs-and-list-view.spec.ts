@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { IconName } from '../consts/icon-names';
 import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
-import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T10.6: Test actieve toegang basisgebruiker: zoek resultaten tabs en lijst weergave', async ({
 	page,

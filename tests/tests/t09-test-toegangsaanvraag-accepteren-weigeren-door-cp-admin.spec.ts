@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sidebar-navigation-item';
 import { checkBladeTitle } from '../helpers/check-blade-title';
@@ -7,7 +8,6 @@ import { checkVisitRequestStatuses } from '../helpers/check-visit-request-status
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
-import { moduleClassSelector } from '../helpers/module-class-locator';
 import { waitForPageTitle } from '../helpers/wait-for-page-title';
 
 test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({

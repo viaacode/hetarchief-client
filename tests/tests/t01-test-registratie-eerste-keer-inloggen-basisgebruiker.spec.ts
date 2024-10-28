@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { v4 as uuid } from 'uuid';
 
 import { USER_PASSWORD } from '../consts/tests.consts';
@@ -7,7 +8,6 @@ import { acmConfirmEmail } from '../helpers/acm-confirm-email';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
-import { moduleClassSelector } from '../helpers/module-class-locator';
 
 /**
  * New: https://docs.google.com/spreadsheets/d/1EI8MZjFlE-gkzE1YGXFabtTGURRz6fWk-0fQa8OCv4k/edit#gid=95954947

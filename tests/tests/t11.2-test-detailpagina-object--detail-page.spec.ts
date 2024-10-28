@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { IconName } from '../consts/icon-names';
 import { checkBladeTitle } from '../helpers/check-blade-title';
@@ -7,7 +8,6 @@ import { clickOverflowButtonDetailPage } from '../helpers/click-overflow-button-
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
-import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina', async ({
 	page,

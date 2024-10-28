@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { HOMEPAGE_TITLE } from '../consts/tests.consts';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
-import { moduleClassSelector } from '../helpers/module-class-locator';
 import { waitForPageTitle } from '../helpers/wait-for-page-title';
 
 test('T02: Test inloggen CP-admin', async ({ page, context }) => {

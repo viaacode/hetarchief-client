@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
-import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T26: kranten tab en zoekresultaten', async ({ page, context }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
-import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T21: iiif viewer bladeren paginas', async ({ page, context }) => {
 	/**

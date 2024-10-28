@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { HOMEPAGE_TITLE } from '../consts/tests.consts';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
-import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T28: Test login flow engels', async ({ page, context }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();

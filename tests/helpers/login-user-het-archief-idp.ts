@@ -1,10 +1,10 @@
 import { expect, type Page } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { Locale } from '@shared/utils/i18n';
 
 import { HOMEPAGE_TITLE } from '../consts/tests.consts';
 
 import { getSiteTranslations } from './get-site-translations';
-import { moduleClassSelector } from './module-class-locator';
 import { waitForPageTitle } from './wait-for-page-title';
 
 export async function loginUserHetArchiefIdp(

@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { Locale } from '@shared/utils/i18n';
 
 import { checkToastMessage } from '../helpers/check-toast-message';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
-import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();

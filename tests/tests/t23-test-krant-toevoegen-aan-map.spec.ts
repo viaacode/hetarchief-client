@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { IconName } from '../consts/icon-names';
 import { checkToastMessage } from '../helpers/check-toast-message';
@@ -6,7 +7,6 @@ import { clickOverflowButtonDetailPage } from '../helpers/click-overflow-button-
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
-import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();

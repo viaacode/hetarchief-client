@@ -1,7 +1,7 @@
 import { expect, type Page } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { getSiteTranslations } from './get-site-translations';
-import { moduleClassSelector } from './module-class-locator';
 
 export async function fillRequestVisitVisitorSpaceBlade(
 	page: Page,

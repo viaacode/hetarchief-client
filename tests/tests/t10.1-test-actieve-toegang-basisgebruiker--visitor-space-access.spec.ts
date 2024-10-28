@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { checkNumberOfVisitorSpacesBadge } from '../helpers/check-number-of-visitor-spaces-badge';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { goToPublicCatalogOnSearchPage } from '../helpers/go-to-public-catalog-on-search-page';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
-import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T10.1: Test actieve toegang basisgebruiker: Bezoekersruimte toegang', async ({
 	page,

@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { fillRequestVisitBlade } from '../helpers/fill-request-visit-blade';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
-import { moduleClassSelector } from '../helpers/module-class-locator';
 import { waitForPageTitle } from '../helpers/wait-for-page-title';
 
 test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', async ({

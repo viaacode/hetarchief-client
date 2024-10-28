@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { IconName } from '../consts/icon-names';
 import { compareSearchTabCountsLessThen } from '../helpers/compareSearchTabCountsLessThen';
@@ -6,7 +7,6 @@ import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
-import { moduleClassSelector } from '../helpers/module-class-locator';
 
 test('T10.4: Test actieve toegang basisgebruiker: Release date filter', async ({
 	page,

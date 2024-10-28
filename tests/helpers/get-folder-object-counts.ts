@@ -1,7 +1,7 @@
 import { expect, type Page } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { getSiteTranslations } from './get-site-translations';
-import { moduleClassSelector } from './module-class-locator';
 
 export async function getFolderObjectCounts(page: Page): Promise<Record<string, number>> {
 	const SITE_TRANSLATIONS = await getSiteTranslations();
