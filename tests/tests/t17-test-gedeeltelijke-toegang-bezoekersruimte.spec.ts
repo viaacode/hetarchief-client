@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { IconName } from '../consts/icon-names';
 import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sidebar-navigation-item';
@@ -12,7 +13,6 @@ import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cooki
 import { goToPublicCatalogOnSearchPage } from '../helpers/go-to-public-catalog-on-search-page';
 import { logout } from '../helpers/log-out';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
-import { moduleClassSelector } from '../helpers/module-class-locator';
 import { waitForPageTitle } from '../helpers/wait-for-page-title';
 import { waitForSearchResults } from '../helpers/wait-for-search-results';
 
@@ -191,12 +191,12 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	expect(await existingFolders.nth(0).innerText()).toContain(FAVORITES_FOLDER_NAME);
 
 	// Click next to the blade to close it, need to click it two times
-	const notBlade = page.locator('[class*=Overlay_c-overlay--visible__]').first();
+	const notBlade = page.locator(moduleClassSelector('c-overlay--visible')).first();
 	await notBlade.click();
 	await notBlade.click();
 
 	// expect the blade to not be visible
-	await expect(page.locator('[class*=Overlay_c-overlay--visible]')).toHaveCount(0);
+	await expect(page.locator(moduleClassSelector('c-overlay--visible'))).toHaveCount(0);
 	await new Promise((resolve) => setTimeout(resolve, 1000)); // TODO: replace this
 
 	// Click on 'Naar mijn bezoekertool'
@@ -546,7 +546,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	await expect(
 		page
-			.locator('[class*=Pill_c-pill--expanded] span', {
+			.locator(moduleClassSelector('c-pill--expanded') + ' span', {
 				hasText:
 					SITE_TRANSLATIONS.nl[
 						'modules/shared/components/media-card/media-card___tijdelijke-toegang'

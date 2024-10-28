@@ -104,6 +104,7 @@ import {
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
 import { convertDurationStringToSeconds } from '@shared/helpers/convert-duration-string-to-seconds';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -196,7 +197,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		withDefault(NumberParam, 0)
 	);
 
-	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number>(0);
+	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number | null>(null);
 	const [expandSidebar, setExpandSidebar] = useQueryParam(
 		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
 		withDefault(BooleanParam, false)
@@ -389,7 +390,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	}, [searchTerms, simplifiedAltoInfo?.text]);
 
 	const handleSearch = useCallback(
-		(newSearchTerms: string): void => {
+		async (newSearchTerms: string): Promise<void> => {
 			if (newSearchTerms === '') {
 				// Reset search
 				// Zoom to whole page
@@ -451,7 +452,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					[QUERY_PARAM_KEY.IIIF_VIEWER_TEXT_OVERLAY_ENABLED]: true,
 				},
 			});
-			router.replace(newUrl, undefined, { shallow: true });
+			await router.replace(newUrl, undefined, { shallow: true });
 
 			const firstSearchResultOnCurrentPage = searchResultsTemp.findIndex(
 				(result) => result.pageIndex === currentPageIndex
@@ -522,7 +523,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 		const highlightedAltoTexts = getHighlightedAltoTexts();
 		const currentHighlightedAltoText =
-			highlightedAltoTexts[searchResults[currentSearchResultIndex]?.searchTermIndexOnPage];
+			highlightedAltoTexts[
+				searchResults[currentSearchResultIndex || 0]?.searchTermIndexOnPage
+			];
 
 		if (currentHighlightedAltoText) {
 			iiifViewerReference.current?.iiifZoomToRect(currentHighlightedAltoText);
@@ -578,23 +581,26 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Scroll to active search result in ocr tab when the current search result index changes
 	 */
 	useEffect(() => {
-		const activeSearchResultElem = document.querySelector(
-			'[class*="p-object-detail__ocr__word--marked--active"]'
-		);
-		const scrollable = document.querySelector(
-			'[class*="p-object-detail__ocr__words-container"]'
-		);
+		// Wait for active word to be rendered before starting scroll
+		window.setTimeout(() => {
+			const activeSearchResultElem = document.querySelector(
+				moduleClassSelector('p-object-detail__ocr__word--marked--active')
+			);
+			const scrollable = document.querySelector(
+				moduleClassSelector('p-object-detail__ocr__words-container')
+			);
 
-		const scrollTopWord = activeSearchResultElem?.scrollTop || 0;
-		scrollable?.scrollTo({
-			top: scrollTopWord,
-		});
-		activeSearchResultElem?.scrollIntoView({
-			behavior: 'instant',
-			block: 'nearest',
-			inline: 'start',
-		});
-	}, [currentSearchResultIndex]);
+			const scrollTopWord = activeSearchResultElem?.scrollTop || 0;
+			scrollable?.scrollTo({
+				top: scrollTopWord,
+			});
+			activeSearchResultElem?.scrollIntoView({
+				behavior: 'instant',
+				block: 'nearest',
+				inline: 'start',
+			});
+		}, 100);
+	}, [currentSearchResultIndex, searchTerms]);
 
 	/**
 	 * Hide the zendesk button for
@@ -930,6 +936,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		setSearchTerms('');
 		setHighlightedSearchTerms('');
 		setSearchResults(null);
+		setCurrentSearchResultIndex(null);
 		iiifViewerReference.current?.iiifGoToHome();
 	};
 
@@ -1081,7 +1088,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						setSearchTerms={setSearchTermsTemp}
 						onSearch={handleSearch}
 						onClearSearch={handleClearSearch}
-						currentSearchIndex={currentSearchResultIndex}
+						currentSearchIndex={currentSearchResultIndex || 0}
 						searchResults={searchResults}
 						setSearchResultIndex={handleChangeSearchIndex}
 						onSelection={handleIiifViewerSelection}
@@ -1273,7 +1280,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						searchResults?.filter((result) => result.pageIndex < currentPageIndex)
 							.length || 0;
 					const searchResultIndexWithinCurrentPage: number =
-						currentSearchResultIndex - searchResultsOnPreviousPages;
+						(currentSearchResultIndex || 0) - searchResultsOnPreviousPages;
 					const isActive: boolean =
 						!!searchTerms &&
 						isMarked &&
@@ -1335,7 +1342,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						onSearch={(newSearchTerms) => handleSearch(newSearchTerms)}
 						onClearSearch={handleClearSearch}
 						searchResults={searchResults}
-						currentSearchIndex={currentSearchResultIndex}
+						currentSearchIndex={currentSearchResultIndex || 0}
 						onChangeSearchIndex={handleChangeSearchIndex}
 					/>
 				)}
@@ -1364,7 +1371,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							'modules/ie-objects/object-detail-page___pagina-current-page-van-total-pages',
 							{
 								currentPage: currentPageIndex + 1,
-								totalPages: iiifViewerImageInfos?.length || 0,
+								totalPages: iiifViewerImageInfos?.length || 1,
 							}
 						)}
 					</span>

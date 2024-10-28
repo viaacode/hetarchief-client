@@ -1,10 +1,10 @@
-import { get } from 'lodash-es';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import React, { type FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Zendesk, { type IZendeskProps } from 'react-zendesk';
 
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { selectShowZendesk } from '@shared/store/ui';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 
@@ -31,11 +31,7 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 
 	const updateFooterHeight = useCallback(() => {
 		setFooterHeight(
-			get(
-				document.querySelector('[class*="Footer_c-footer"]'),
-				'clientHeight',
-				0 // 0 when no footer is found
-			)
+			document.querySelector(moduleClassSelector('c-footer'))?.clientHeight || 0 // 0 when no footer is found
 		);
 	}, [setFooterHeight]);
 

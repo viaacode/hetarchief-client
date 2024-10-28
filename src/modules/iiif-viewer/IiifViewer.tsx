@@ -588,7 +588,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 										'modules/iiif-viewer/iiif-viewer___current-image-van-total-images',
 										{
 											currentImage: activeImageIndex + 1,
-											totalImages: imageInfos?.length || 0,
+											totalImages: imageInfos?.length || 1,
 										}
 									)}
 								</span>
