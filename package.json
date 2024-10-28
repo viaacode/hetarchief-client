@@ -5,7 +5,8 @@
   "contributors": [
     "Bert Verhelst <bert.verhelst@studiohyperdrive.be>",
     "Andry Charlier <andry.charlier@studiohyperdrive.be>",
-    "Robbe Bierebeeck <robbe.bierebeeck@studiohyperdrive.be>"
+    "Robbe Bierebeeck <robbe.bierebeeck@studiohyperdrive.be>",
+    "Ian Emsens <ian.emsens@studiohyperdrive.be>"
   ],
   "scripts": {
     "install-local": "npm i ../react-admin-core-module/ui ../react-components ../avo2-components",
