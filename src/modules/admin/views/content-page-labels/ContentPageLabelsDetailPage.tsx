@@ -6,7 +6,10 @@ import { AdminLayout } from '@admin/layouts';
 import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { ROUTES_BY_LOCALE } from '@shared/const';
+import { goBrowserBackWithFallback } from '@shared/helpers/go-browser-back-with-fallback';
 import { tText } from '@shared/helpers/translate';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageLabelDetail = lazy(() =>
@@ -16,6 +19,7 @@ const ContentPageLabelDetail = lazy(() =>
 );
 
 export const ContentPageLabelsDetailPage: FC<DefaultSeoInfo> = ({ url }) => {
+	const locale = useLocale();
 	const router = useRouter();
 
 	const renderPageContent = () => {
@@ -28,6 +32,12 @@ export const ContentPageLabelsDetailPage: FC<DefaultSeoInfo> = ({ url }) => {
 						>
 							<ContentPageLabelDetail
 								contentPageLabelId={router.query.id as string}
+								onGoBack={() =>
+									goBrowserBackWithFallback(
+										ROUTES_BY_LOCALE[locale].adminContentPageLabels,
+										router
+									)
+								}
 							/>
 						</Suspense>
 					</div>

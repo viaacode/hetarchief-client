@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React, { type FC, lazy, Suspense } from 'react';
 
 import { Permission } from '@account/const';
@@ -5,7 +6,11 @@ import { AdminLayout } from '@admin/layouts';
 import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { ROUTES_BY_LOCALE } from '@shared/const';
+import { buildLink } from '@shared/helpers/build-link';
+import { goBrowserBackWithFallback } from '@shared/helpers/go-browser-back-with-fallback';
 import { tText } from '@shared/helpers/translate';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageLabelEdit = lazy(() =>
@@ -22,6 +27,9 @@ export const ContentPageLabelsEditPage: FC<DefaultSeoInfo & ContentPageLabelsEdi
 	url,
 	id,
 }) => {
+	const locale = useLocale();
+	const router = useRouter();
+
 	const renderPageContent = () => {
 		return (
 			<AdminLayout>
@@ -30,7 +38,18 @@ export const ContentPageLabelsEditPage: FC<DefaultSeoInfo & ContentPageLabelsEdi
 						<Suspense
 							fallback={<Loading fullscreen owner="ContentPageLabelsEditPage" />}
 						>
-							<ContentPageLabelEdit contentPageLabelId={id} />
+							<ContentPageLabelEdit
+								contentPageLabelId={id}
+								onGoBack={() =>
+									goBrowserBackWithFallback(
+										buildLink(
+											ROUTES_BY_LOCALE[locale].adminContentPageLabelDetail,
+											{ id }
+										),
+										router
+									)
+								}
+							/>
 						</Suspense>
 					</div>
 				</AdminLayout.Content>

@@ -16,7 +16,7 @@ const AdminNavigationOverviewDutch: NextPage<DefaultSeoInfo> = ({ url, locale })
 export async function getStaticProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.adminNavigation);
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.adminNavigationBarOverview);
 }
 
 export default withAuth(withAdminCoreConfig(AdminNavigationOverviewDutch as ComponentType), true);

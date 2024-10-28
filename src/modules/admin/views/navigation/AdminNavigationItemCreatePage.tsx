@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React, { type FC, lazy, Suspense } from 'react';
 
 import { Permission } from '@account/const';
@@ -5,7 +6,11 @@ import { AdminLayout } from '@admin/layouts';
 import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { ROUTES_BY_LOCALE } from '@shared/const';
+import { buildLink } from '@shared/helpers/build-link';
+import { goBrowserBackWithFallback } from '@shared/helpers/go-browser-back-with-fallback';
 import { tText } from '@shared/helpers/translate';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { type DefaultSeoInfo } from '@shared/types/seo';
 
 const NavigationItemEdit = lazy(() =>
@@ -22,6 +27,9 @@ export const AdminNavigationItemCreatePage: FC<DefaultSeoInfo & AdminNavigationI
 	url,
 	navigationBarId,
 }) => {
+	const locale = useLocale();
+	const router = useRouter();
+
 	const renderPageContent = () => {
 		return (
 			<AdminLayout>
@@ -33,6 +41,15 @@ export const AdminNavigationItemCreatePage: FC<DefaultSeoInfo & AdminNavigationI
 							<NavigationItemEdit
 								navigationBarId={navigationBarId}
 								navigationItemId={undefined}
+								onGoBack={() =>
+									goBrowserBackWithFallback(
+										buildLink(
+											ROUTES_BY_LOCALE[locale].adminNavigationBarDetail,
+											{ navigationBarId }
+										),
+										router
+									)
+								}
 							/>
 						</Suspense>
 					</div>
