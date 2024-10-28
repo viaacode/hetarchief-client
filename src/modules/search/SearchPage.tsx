@@ -773,6 +773,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const openAndScrollToAdvancedFilters = () => {
 		setFilterMenuOpen(true);
+		setMobileFilterMenuOpen(true);
 		setQuery({ filter: SearchFilterId.Advanced });
 
 		// Wait for filter menu to open before scrolling to the advanced filters
