@@ -1,0 +1,15 @@
+@import "../../styles/abstracts";
+
+.p-admin-permissions {
+	.c-table__scroller {
+		margin-top: $spacer-md;
+	}
+
+	.c-table__wrapper--header {
+		position: sticky;
+		top: 0;
+		background-color: #fff;
+		z-index: 2;
+		box-shadow: 0 0 24px rgba(0, 0, 0, 0.08);
+	}
+}
