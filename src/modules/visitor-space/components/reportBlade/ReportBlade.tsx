@@ -28,8 +28,9 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 
 	const resetForm = useCallback(() => {
 		setReportMessage('');
-		setEmail('');
-	}, []);
+		setEmail(user?.email || '');
+		setFormErrors({});
+	}, [user?.email]);
 
 	/**
 	 * Effects
@@ -80,7 +81,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 			const errors = await validateForm(
 				{
 					reportMessage,
-					email,
+					email: email,
 				},
 				REPORT_FORM_SCHEMA()
 			);
@@ -123,8 +124,9 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 	};
 
 	const onCloseBlade = () => {
-		resetForm();
 		props.onClose?.();
+		// Wait for the blade to close before resetting the form
+		setTimeout(resetForm, 500);
 	};
 
 	/**
