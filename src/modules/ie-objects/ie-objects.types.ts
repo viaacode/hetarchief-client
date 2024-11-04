@@ -6,20 +6,16 @@ import { type ElasticsearchFieldNames } from '@visitor-space/types';
 // Mapped intellectual entity object
 
 export enum IsPartOfKey {
-	alternatief = 'alternatief',
-	archief = 'archief',
-	deelarchief = 'deelarchief',
-	deelreeks = 'deelreeks',
-	programma = 'programma',
-	reeks = 'reeks',
-	seizoen = 'seizoen',
-	serie = 'serie',
-	stuk = 'stuk',
-	episode = 'episode',
-	aflevering = 'aflevering',
+	archief = 'https://schema.org/ArchiveComponent',
+	deelarchief = 'https://schema.org/ArchiveComponent',
+	deelreeks = 'https://schema.org/CreativeWorkSeries',
+	programma = 'https://schema.org/BroadcastEvent',
+	reeks = 'https://schema.org/CreativeWorkSeries',
+	seizoen = 'https://schema.org/CreativeWorkSeason',
+	serie = 'https://schema.org/CreativeWorkSeries',
+	episode = 'https://schema.org/Episode',
+	aflevering = 'https://schema.org/Episode',
 	bestanddeel = 'bestanddeel',
-	registratie = 'registratie',
-	serienummer = 'serienummer',
 	seizoennummer = 'seizoennummer',
 }
 
@@ -89,6 +85,7 @@ export interface IeObject {
 	};
 	synopsis: string;
 	collectionName?: string;
+	collectionSeasonNumber?: string;
 	issueNumber?: string;
 	fragmentId?: string;
 	creditText?: string;

@@ -8,4 +8,5 @@
 @use "content-pages-overview" as *;
 @use "content-pages" as *;
 @use "maintenance-alerts-overview" as *;
-@use "./content-blocks/index" as *;
+@use "user-group-permissions" as *;
+@use "content-blocks/index" as *;
