@@ -92,12 +92,7 @@ pipeline {
 
 		stage('Build and Deploy INT') {
 			when {
-				anyOf {
-					changeRequest target: 'main'
-					changeRequest target: 'master'
-					changeRequest target: 'develop'
-					changeRequest target: 'development'
-				}
+				branch 'develop'
 			}
 			steps {
 				container('oc') {
@@ -122,7 +117,7 @@ pipeline {
 		}
 		stage('Build and Deploy TST') {
 			when {
-				anyOf { branch 'develop'; branch 'development' }
+				branch 'develop'
 			}
 			steps {
 				container('oc') {
@@ -137,7 +132,7 @@ pipeline {
 		}
 		// stage('e2e-prepare') {
 		// 	when {
-		// 		anyOf { branch 'develop'; branch 'development' }
+		// 		branch 'develop'
 		// 	}
 		// 	steps {
 		// 		container('hasura-cli') {
@@ -160,7 +155,7 @@ pipeline {
 		// stage('e2e') {
 		// 	agent { label 'node' }
 		// 	when {
-		// 		anyOf { branch 'develop'; branch 'development' }
+		// 		branch 'develop'
 		// 	}
 		// 	steps {
 		// 		script {
