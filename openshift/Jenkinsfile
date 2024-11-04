@@ -90,7 +90,7 @@ pipeline {
 			}
 		}
 
-		stage('Build and Deploy INT') {
+		stage('Build and Deploy INT and TST') {
 			when {
 				anyOf { branch 'develop'; branch 'development' }
 			}
@@ -104,6 +104,7 @@ pipeline {
                         '''
 					}
 					startOpenShiftBuild('int', '${BRANCH_NAME}')
+					startOpenShiftBuild('tst', '$GIT_SHORT_COMMIT')
 				}
 			}
 			post {
@@ -112,24 +113,25 @@ pipeline {
 						env.BRANCH_NAME = env.CHANGE_BRANCH
 					}
 					jiraSendDeploymentInfo site: "${JIRA_URL}", environmentId: 'int', environmentName: 'int', environmentType: 'testing'
-				}
-			}
-		}
-		stage('Build and Deploy TST') {
-			when {
-				anyOf { branch 'develop'; branch 'development' }
-			}
-			steps {
-				container('oc') {
-					startOpenShiftBuild('tst', '$GIT_SHORT_COMMIT')
-				}
-			}
-			post {
-				always {
 					jiraSendDeploymentInfo site: "${JIRA_URL}", environmentId: 'tst', environmentName: 'tst', environmentType: 'staging'
 				}
 			}
 		}
+// 		stage('Build and Deploy TST') {
+// 			when {
+// 				anyOf { branch 'develop'; branch 'development' }
+// 			}
+// 			steps {
+// 				container('oc') {
+// 					startOpenShiftBuild('tst', '$GIT_SHORT_COMMIT')
+// 				}
+// 			}
+// 			post {
+// 				always {
+// 					jiraSendDeploymentInfo site: "${JIRA_URL}", environmentId: 'tst', environmentName: 'tst', environmentType: 'staging'
+// 				}
+// 			}
+// 		}
 		// stage('e2e-prepare') {
 		// 	when {
 		// 		branch 'develop'
