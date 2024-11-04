@@ -92,7 +92,7 @@ pipeline {
 
 		stage('Build and Deploy INT') {
 			when {
-				branch 'develop'
+				anyOf { branch 'develop'; branch 'development' }
 			}
 			steps {
 				container('oc') {
@@ -103,12 +103,29 @@ pipeline {
 							oc -n $OC_PROJECT patch "bc/${APP_NAME}-int" -p "{\\"metadata\\":{\\"annotations\\":{\\"shortcommit\\":\\"${GIT_SHORT_COMMIT}\\"}}}"
                         '''
 					}
+					startOpenShiftBuild('int', '${BRANCH_NAME}')
+				}
+			}
+			post {
+				always {
+					script {
+						env.BRANCH_NAME = env.CHANGE_BRANCH
+					}
+					jiraSendDeploymentInfo site: "${JIRA_URL}", environmentId: 'int', environmentName: 'int', environmentType: 'testing'
+				}
+			}
+		}
+		stage('Build and Deploy TST') {
+			when {
+				anyOf { branch 'develop'; branch 'development' }
+			}
+			steps {
+				container('oc') {
 					startOpenShiftBuild('tst', '$GIT_SHORT_COMMIT')
 				}
 			}
 			post {
 				always {
-					jiraSendDeploymentInfo site: "${JIRA_URL}", environmentId: 'int', environmentName: 'int', environmentType: 'testing'
 					jiraSendDeploymentInfo site: "${JIRA_URL}", environmentId: 'tst', environmentName: 'tst', environmentType: 'staging'
 				}
 			}
