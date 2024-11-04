@@ -1,11 +1,19 @@
-import { Page } from '@playwright/test';
+import { type Page } from '@playwright/test';
 
-export async function waitForSearchResults(page: Page): Promise<void> {
-	await page.waitForFunction(
-		() => document.querySelectorAll('.p-visitor-space__results .c-card').length > 0,
-		null,
-		{
-			timeout: 10000,
-		}
-	);
+/**
+ * Waits for the search network call to complete
+ * @param page
+ * @param actionTriggerFunc A function that triggers the search operation
+ */
+export async function waitForSearchResults(
+	page: Page,
+	actionTriggerFunc: () => Promise<void>
+): Promise<void> {
+	await Promise.all([
+		actionTriggerFunc(),
+		page.waitForRequest(
+			(request) => request.method() === 'POST' && request.url().includes('/ie-objects'),
+			{ timeout: 10000 }
+		),
+	]);
 }

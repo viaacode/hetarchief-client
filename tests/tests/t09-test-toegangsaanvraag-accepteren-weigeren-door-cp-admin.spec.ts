@@ -5,6 +5,7 @@ import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sideba
 import { checkBladeTitle } from '../helpers/check-blade-title';
 import { checkToastMessage } from '../helpers/check-toast-message';
 import { checkVisitRequestStatuses } from '../helpers/check-visit-request-statuses';
+import { closeActiveBlade } from '../helpers/close-active-blade';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
@@ -116,6 +117,12 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await expect(pendingVisitRow).toBeVisible();
 	await pendingVisitRow.click();
 
+	// Wait for url to contain the request id:
+	await page.waitForURL(/aanvraag=/);
+
+	// Store the request blade url
+	const requestBladeUrl = page.url();
+
 	// Check the blade title
 	await checkBladeTitle(
 		page,
@@ -192,16 +199,22 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		]
 	);
 
-	// Check first row is approved
-	const approvedLabel =
+	// Wait 2 seconds
+	await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
+
+	// Check request is approved
+	await page.goto(requestBladeUrl);
+
+	// Check blade title is approved
+	await checkBladeTitle(
+		page,
 		SITE_TRANSLATIONS.nl[
-			'modules/cp/components/request-status-chip/request-status-chip___goedgekeurd'
-		];
-	const approvedBadgeFirstRow = page
-		.locator(`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row`)
-		.first()
-		.locator(moduleClassSelector('c-request-status-badge'), { hasText: approvedLabel });
-	await expect(approvedBadgeFirstRow).toBeVisible({ timeout: 10000 });
+			'modules/cp/components/process-request-blade/process-request-blade___goedgekeurde-aanvraag'
+		]
+	);
+
+	// Close the blade
+	await closeActiveBlade(page);
 
 	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); //temp bcs waitForLoading doesn't work
 
@@ -235,6 +248,12 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		.first();
 	await expect(pendingVisitRequestCel).toBeVisible({ timeout: 10000 });
 	await pendingVisitRequestCel.click();
+
+	// Wait for url to contain the request id:
+	await page.waitForURL(/aanvraag=/);
+
+	// Store the request blade url
+	const requestBladeUrl2 = page.url();
 
 	// Check the blade title
 	await checkBladeTitle(
@@ -323,10 +342,19 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		countsAfterOneApproveAndOneDeny.numberOfDenied - 1
 	);
 
-	// Check approved and denied requests are visible under their respective tabs
-	// Check approved count
-	await page.click(`.c-tab__label:has-text("${approvedLabel}")`);
-	await expect(page.locator('text=Sleutelgebruiker Test').first()).toBeVisible();
+	// Check request is denied
+	await page.goto(requestBladeUrl2);
+
+	// Check blade title is denied
+	await checkBladeTitle(
+		page,
+		SITE_TRANSLATIONS.nl[
+			'modules/cp/components/process-request-blade/process-request-blade___geweigerde-aanvraag'
+		]
+	);
+
+	// Close the blade
+	await closeActiveBlade(page);
 
 	// Check denied count
 	const deniedLabel = SITE_TRANSLATIONS.nl['modules/cp/const/requests___geweigerd'];

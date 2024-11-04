@@ -36,11 +36,11 @@ const config: PlaywrightTestConfig = {
 		headless: true,
 		// Ignore errors around https certificates on INT: https://ssum-int-iam.private.cloud.meemoo.be/account/nieuw
 		ignoreHTTPSErrors: true,
-		launchOptions: {
-			slowMo: 500 /* TODO disable after recording all videos */,
-		},
+		// launchOptions: {
+		// 	slowMo: 500 /* TODO disable after recording all videos */,
+		// },
 		contextOptions: {
-			recordVideo: { dir: 'videos/' } /* TODO disable in production */,
+			// recordVideo: { dir: 'videos/' } /* TODO disable in production */,
 			// Ignore errors around https certificates on INT: https://ssum-int-iam.private.cloud.meemoo.be/account/nieuw
 			ignoreHTTPSErrors: true,
 			// Ignore security header on the page to allow javascript to be evaluated

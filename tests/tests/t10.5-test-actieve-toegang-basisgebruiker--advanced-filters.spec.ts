@@ -53,12 +53,6 @@ test('T10.5: Test actieve toegang basisgebruiker: Geavanceerde filters', async (
 		.locator(moduleClassSelector('c-advanced-filter-fields__p', '_'))
 		.nth(0);
 	await expect(firstAdvancedEntry).toBeVisible();
-	const filter1TypeSelect = firstAdvancedEntry.locator('.c-form-control .c-react-select').first();
-	await expect(filter1TypeSelect).toBeVisible();
-	await filter1TypeSelect.click();
-	const filterTitleLabel =
-		SITE_TRANSLATIONS.nl['modules/visitor-space/utils/advanced-filters/metadata___titel'];
-	await filter1TypeSelect.locator('text=' + filterTitleLabel).click();
 
 	// Set title filter value: Eerste
 	await firstAdvancedEntry.locator('#AdvancedFilterFields__value__0').fill(TITLE_FILTER_VALUE);
@@ -111,6 +105,8 @@ test('T10.5: Test actieve toegang basisgebruiker: Geavanceerde filters', async (
 		SITE_TRANSLATIONS.nl[
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat'
 		];
+	const filterTitleLabel =
+		SITE_TRANSLATIONS.nl['modules/visitor-space/utils/advanced-filters/metadata___titel'];
 	expect(await searchInput3.innerHTML()).toContain(filterTitleLabel);
 	expect(await searchInput3.innerHTML()).toContain(containsLabel.toLowerCase());
 	expect(await searchInput3.innerHTML()).toContain(TITLE_FILTER_VALUE);

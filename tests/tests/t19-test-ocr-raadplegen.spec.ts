@@ -38,7 +38,7 @@ test('T19: Test OCR raadplegen', async ({ page, context }) => {
 	expect(await ocrWords.count()).toBeGreaterThan(100);
 
 	// Search some words in the ocr text
-	const ocrSidebar = page.locator(moduleClassSelector('p-object-detail__ocr__'));
+	const ocrSidebar = page.locator(moduleClassSelector('p-object-detail__ocr'));
 	const ocrSearchField = ocrSidebar.locator(
 		moduleClassSelector('c-search-with-results-pagination') + ' .c-input__field'
 	);

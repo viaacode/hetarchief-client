@@ -6,6 +6,7 @@ import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { goToPublicCatalogOnSearchPage } from '../helpers/go-to-public-catalog-on-search-page';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
+import { waitForSearchResults } from '../helpers/wait-for-search-results';
 
 test('T10.1: Test actieve toegang basisgebruiker: Bezoekersruimte toegang', async ({
 	page,
@@ -54,11 +55,9 @@ test('T10.1: Test actieve toegang basisgebruiker: Bezoekersruimte toegang', asyn
 		hasText: searchForOrganisationsLabel,
 	});
 	await expect(searchForOrganisationsLink).toBeVisible();
-	await searchForOrganisationsLink.click();
 
 	// Wait for search page to be ready
-	// await waitForSearchResults(page);
-	await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
+	await waitForSearchResults(page, () => searchForOrganisationsLink.click());
 
 	// Expect approved visitor space card to be visible
 	const visitorSpaceCards = page.locator(moduleClassSelector('c-hero__access-cards'));

@@ -28,6 +28,9 @@ test('T10.3: Test actieve toegang basisgebruiker: Raadpleegbaar op locatie filte
 		SEARCH_PAGE_TITLE
 	);
 
+	// Wait for the search bar to be visible
+	await expect(page.locator('.c-tag-search-bar')).toBeVisible();
+
 	/**
 	 * Filter using isConsultable on location
 	 */

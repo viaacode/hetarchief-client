@@ -5,10 +5,13 @@ import { IconName } from '../consts/icon-names';
 import { checkToastMessage } from '../helpers/check-toast-message';
 import { clickOverflowButtonDetailPage } from '../helpers/click-overflow-button-detail-page';
 import { clickToastMessageButton } from '../helpers/click-toast-message-button';
+import { compareSearchTabCountsLessThen } from '../helpers/compareSearchTabCountsLessThen';
 import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
+import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
+import { waitForSearchResults } from '../helpers/wait-for-search-results';
 
 test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmark item', async ({
 	page,
@@ -35,34 +38,28 @@ test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmar
 		SEARCH_PAGE_TITLE
 	);
 
-	// TODO this test fails because there is only one item in the visitor space of VRT. Once more items are added to INT we can uncomment this
 	// Get tab counts before search
-	// const countsBeforeSearch = await getSearchTabBarCounts(page);
+	const countsBeforeSearch = await getSearchTabBarCounts(page);
 
 	// Enter search term
 	const SEARCH_TERM = 'J19 QUOTE SABINE'; // t43hx4m77d
 	const searchField = page.locator('.c-tags-input__input-container').first();
 	await searchField.click();
 	await searchField.pressSequentially(SEARCH_TERM);
-	await searchField.press('Enter');
 
 	// Wait for filters to be applied
-	await new Promise((resolve) => setTimeout(resolve, 1000));
+	await waitForSearchResults(page, () => searchField.press('Enter'));
 
 	// Check green pill exists with search term inside
 	const pill = page.locator('.c-tags-input__multi-value .c-tag__label');
-	await expect(pill).toBeVisible();
+	await expect(pill).toBeVisible({ timeout: 10000 });
 	await expect(pill).toContainText(SEARCH_TERM);
 
-	// Wait for filtered search results
-	await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
-
-	// TODO this test fails because there is only one item in the visitor space of VRT. Once more items are added to INT we can uncomment this
 	// Check tab counts decreased
-	// const countsAfterSearchByText = await getSearchTabBarCounts(page);
+	const countsAfterSearchByText = await getSearchTabBarCounts(page);
 
 	// Expect counts to have gone down, or stay the same
-	// compareSearchTabCountsLessThen(countsBeforeSearch, countsAfterSearchByText);
+	compareSearchTabCountsLessThen(countsBeforeSearch, countsAfterSearchByText);
 
 	// Check item contains search term
 	const markedWord = await page
