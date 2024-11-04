@@ -1010,10 +1010,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.serie)
 					)}
 					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___stuk'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.stuk)
-					)}
-					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___episode'),
 						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.episode)
 					)}
@@ -1025,17 +1021,14 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						tText('modules/ie-objects/const/index___bestanddeel'),
 						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.bestanddeel)
 					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___registratie'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.registratie)
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___serienummer'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.serienummer)
-					)}
+					{/* https://meemoo.atlassian.net/browse/ARC-2606 */}
+					{/*{renderSimpleMetadataField(*/}
+					{/*	tText('modules/ie-objects/const/index___serienummer'),*/}
+					{/*	mediaInfo.collectionSeasonNumber,*/}
+					{/*)}*/}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___seizoennummer'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.seizoennummer)
+						mediaInfo.collectionSeasonNumber
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___objecttype'),
