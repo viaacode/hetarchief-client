@@ -59,7 +59,7 @@ test('T10.6: Test actieve toegang basisgebruiker: zoek resultaten tabs en lijst 
 	await firstResult.click();
 
 	// Wait for detail page to load
-	await expect.poll(() => page.url()).toContain('/stadsarchief-ieper/');
+	await expect.poll(() => page.url(), { timeout: 10000 }).toContain('/stadsarchief-ieper/');
 
 	// Wait for close to save the videos
 	await context.close();

@@ -30,9 +30,9 @@ test('T25: Krant metadata', async ({ page, context }) => {
 		NEWSPAPER_PAGE_TITLE
 	);
 
-	// Check if metadata field "Fysieke drager" is "newspaper"
+	// Check if metadata field "Media type" is "newspaper"
 	let metadataField1 = page.locator(moduleClassSelector('c-metadata__item'), {
-		hasText: SITE_TRANSLATIONS.nl['modules/ie-objects/ie-objects___fysieke-drager'],
+		hasText: SITE_TRANSLATIONS.nl['modules/ie-objects/ie-objects___media-type'],
 	});
 	await expect(metadataField1).toBeVisible();
 	await expect(metadataField1.locator('text=' + IconName.Newspaper)).toBeVisible();

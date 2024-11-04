@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
+import { IconName } from '../consts/icon-names';
 import { fillRequestVisitVisitorSpaceBlade } from '../helpers/fill-request-visit-visitor-space-blade';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
@@ -33,17 +34,22 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	await page.fill('#VisitorSpaceCardsWithSearch__search', 'VR');
 
 	// Press the contact button
-	await page
-		.locator('.c-visitor-space-card--name--vrt .c-button__content .c-button__icon')
-		.first()
-		.click();
+	const contactButton = page.locator(
+		'.p-home__results .c-visitor-space-card--name--vrt .c-button__content .c-button__icon',
+		{ hasText: IconName.Contact }
+	);
+	await expect(contactButton).toBeVisible();
+	await contactButton.click();
 
 	// Check if email and phone number of VRT are visible
 	const vrtCard = page.locator('.c-visitor-space-card--name--vrt');
+	await expect(vrtCard).toBeVisible();
 	const selector = `.c-menu--visible--default ${moduleClassSelector(
 		'c-visitor-space-card-controls__contact-list'
 	)} p`;
 	const visitorSpaceInfos = vrtCard.locator(selector);
+	await expect(visitorSpaceInfos.nth(0)).toBeVisible();
+	await expect(visitorSpaceInfos.nth(1)).toBeVisible();
 	const visitorSpaceInfoTexts = await visitorSpaceInfos.allInnerTexts();
 	expect(visitorSpaceInfoTexts).toEqual(['vrtarchief@vrt.be', '+32 2 741 37 20']);
 
@@ -55,6 +61,18 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 			],
 	});
 	await vrtCardButton.click();
+
+	// Expect login modal to be visible
+	const loginModalTitle = page.locator(
+		moduleClassSelector('c-hetarchief-modal') + ' .ReactModal__Content--after-open',
+		{
+			hasText:
+				SITE_TRANSLATIONS.nl[
+					'modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren'
+				],
+		}
+	);
+	await expect(loginModalTitle).toBeVisible();
 
 	// Login basic visitor
 	await loginUserHetArchiefIdp(

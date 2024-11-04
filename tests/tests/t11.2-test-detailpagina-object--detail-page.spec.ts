@@ -169,11 +169,11 @@ test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina',
 		]
 	);
 
-	const emailInputField = page.locator('input#field');
+	const emailInputField = page.locator('input#email');
 	expect(await emailInputField.inputValue()).toEqual('hetarchief2.0+basisgebruiker2@meemoo.be');
 	await expect(emailInputField).toBeDisabled();
 
-	await page.fill('textarea#field', 'Dit is een automated test');
+	await page.fill('textarea#reportMessage', 'Dit is een automated test');
 
 	await page
 		.locator('button > div > span', {

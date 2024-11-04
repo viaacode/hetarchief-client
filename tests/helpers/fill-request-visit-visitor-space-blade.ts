@@ -12,9 +12,12 @@ export async function fillRequestVisitVisitorSpaceBlade(
 
 	// Get active blade
 	const activeBlade = page.locator(moduleClassSelector('c-blade--visible'));
+	await expect(activeBlade).toBeVisible();
 
 	// Fill in 'reason'
-	await activeBlade.locator('#RequestAccessBlade__requestReason').fill(reason);
+	const reasonInputField = activeBlade.locator('#RequestAccessBlade__requestReason');
+	await expect(reasonInputField).toBeVisible();
+	await reasonInputField.fill(reason);
 
 	// Fill in 'when' if it is provided
 	if (visitTime) {

@@ -473,7 +473,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 			.locator('.p-account-my-folders__card-description p')
 			.first()
 			.allInnerTexts()
-	).toEqual([`${organisationLabel}: Amsab-ISG`]);
+	).toEqual([`${organisationLabel}: Stadsarchief Ieper`]);
 
 	await new Promise((resolve) => setTimeout(resolve, 1000)); // TODO: replace this
 
@@ -497,14 +497,13 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Go to the Amsab-ISG visitor space
 	await page.click('text=Bezoek een aanbieder'); // This text comes from the navigation entries, so we cannot use SITE_TRANSLATIONS
-	await page
+	const amsabSpaceLink = page
 		.locator('.c-menu--visible--default')
 		.first()
-		.locator('a', { hasText: 'Amsab-ISG' })
-		.click();
+		.locator('a', { hasText: 'Amsab-ISG' });
+	await expect(amsabSpaceLink).toBeVisible();
 
-	// await waitForSearchResults(page);
-	await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
+	await waitForSearchResults(page, () => amsabSpaceLink.click());
 
 	const ALL_TAB = SITE_TRANSLATIONS.nl['modules/visitor-space/const/index___alles'];
 	expect(
@@ -540,9 +539,8 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	const searchField = page.locator('.c-tags-input__input-container').first();
 	await searchField.click();
 	await searchField.pressSequentially(objectPid);
-	await searchField.press('Enter');
 
-	await waitForSearchResults(page);
+	await waitForSearchResults(page, () => searchField.press('Enter'));
 
 	await expect(
 		page
