@@ -8,7 +8,7 @@ It is built with:
 
 - node: `v20.x.x`
 - npm: `v9.x.x`
-- Next: `v9.5.0`
+- Next: `v14.x.x`
 
 For a complete list of packages and versions check out the `package.json` file.
 
