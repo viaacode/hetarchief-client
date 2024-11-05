@@ -18,7 +18,7 @@ import { AccountLayout } from '@account/layouts';
 import { foldersService } from '@account/services/folders';
 import { type Folder, type FolderIeObject } from '@account/types';
 import { createFolderSlug } from '@account/utils';
-import { IeObjectAccessThrough, IeObjectLicense } from '@ie-objects/ie-objects.types';
+import { IeObjectAccessThrough, IeObjectLicense, IsPartOfKey } from '@ie-objects/ie-objects.types';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -428,11 +428,11 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___programma'),
-				value: folderIeObject?.isPartOf?.programma?.join(', ') || '',
+				value: folderIeObject?.isPartOf?.[IsPartOfKey.programma]?.join(', ') || '',
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___serie'),
-				value: folderIeObject?.isPartOf?.serie?.join(', ') || '',
+				value: folderIeObject?.isPartOf?.[IsPartOfKey.serie]?.join(', ') || '',
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___type'),
