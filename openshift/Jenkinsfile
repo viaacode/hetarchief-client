@@ -92,7 +92,12 @@ pipeline {
 
 		stage('Build and Deploy INT') {
 			when {
-				anyOf { branch 'develop'; branch 'development' }
+				anyOf {
+					changeRequest target: 'main'
+					changeRequest target: 'master'
+					changeRequest target: 'develop'
+					changeRequest target: 'development'
+				}
 			}
 			steps {
 				container('oc') {
@@ -115,39 +120,24 @@ pipeline {
 				}
 			}
 		}
-// 		stage('Build and Deploy TST') {
-// 			when {
-// 				anyOf { branch 'develop'; branch 'development' }
-// 			}
-// 			steps {
-// 				container('oc') {
-// 					startOpenShiftBuild('tst', '$GIT_SHORT_COMMIT')
-// 				}
-// 			}
-// 			post {
-// 				always {
-// 					jiraSendDeploymentInfo site: "${JIRA_URL}", environmentId: 'tst', environmentName: 'tst', environmentType: 'staging'
-// 				}
-// 			}
-// 		}
-// 		stage('Build and Deploy TST') {
-// 			when {
-// 				anyOf { branch 'develop'; branch 'development' }
-// 			}
-// 			steps {
-// 				container('oc') {
-// 					startOpenShiftBuild('tst', '$GIT_SHORT_COMMIT')
-// 				}
-// 			}
-// 			post {
-// 				always {
-// 					jiraSendDeploymentInfo site: "${JIRA_URL}", environmentId: 'tst', environmentName: 'tst', environmentType: 'staging'
-// 				}
-// 			}
-// 		}
+		stage('Build and Deploy TST') {
+			when {
+				anyOf { branch 'develop'; branch 'development' }
+			}
+			steps {
+				container('oc') {
+					startOpenShiftBuild('tst', '$GIT_SHORT_COMMIT')
+				}
+			}
+			post {
+				always {
+					jiraSendDeploymentInfo site: "${JIRA_URL}", environmentId: 'tst', environmentName: 'tst', environmentType: 'staging'
+				}
+			}
+		}
 		// stage('e2e-prepare') {
 		// 	when {
-		// 		branch 'develop'
+		// 		anyOf { branch 'develop'; branch 'development' }
 		// 	}
 		// 	steps {
 		// 		container('hasura-cli') {
@@ -170,7 +160,7 @@ pipeline {
 		// stage('e2e') {
 		// 	agent { label 'node' }
 		// 	when {
-		// 		branch 'develop'
+		// 		anyOf { branch 'develop'; branch 'development' }
 		// 	}
 		// 	steps {
 		// 		script {
