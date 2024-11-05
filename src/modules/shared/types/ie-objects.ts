@@ -14,7 +14,6 @@ export enum SearchPageMediaType {
 }
 
 export enum IeObjectsSearchFilterField {
-	ADVANCED_QUERY = 'advancedQuery',
 	RELEASE_DATE = 'releaseDate',
 	CREATED = 'created',
 	CREATOR = 'creator',
@@ -43,9 +42,6 @@ export enum IeObjectsSearchFilterField {
 	IDENTIFIER = 'identifier',
 	OBJECT_TYPE = 'objectType',
 	LICENSES = 'license', // Used to filter objects that are in a visitor space
-	CAPTION = 'caption', // Not available in database: https://docs.google.com/spreadsheets/d/1xAtHfkpDi4keSsBol7pw0cQAvCmg2hWRz8oxM6cP7zo/edit#gid=0
-	TRANSCRIPT = 'transcript', // Not available in database: https://docs.google.com/spreadsheets/d/1xAtHfkpDi4keSsBol7pw0cQAvCmg2hWRz8oxM6cP7zo/edit#gid=0
-	CATEGORIE = 'categorie', // Not available in database: https://docs.google.com/spreadsheets/d/1xAtHfkpDi4keSsBol7pw0cQAvCmg2hWRz8oxM6cP7zo/edit#gid=0
 }
 
 export enum IeObjectsSearchOperator {

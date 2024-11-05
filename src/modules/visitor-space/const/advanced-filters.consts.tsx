@@ -66,7 +66,6 @@ export const ADVANCED_FILTERS: FilterProperty[] = [
 	FilterProperty.MENTIONS,
 	FilterProperty.OBJECT_TYPE,
 	FilterProperty.LOCATION_CREATED,
-	FilterProperty.NEWSPAPER_SERIES_NAME,
 	FilterProperty.PUBLISHED_AT,
 	FilterProperty.LANGUAGE,
 	FilterProperty.TITLE,
