@@ -8,7 +8,6 @@
     "Robbe Bierebeeck <robbe.bierebeeck@studiohyperdrive.be>"
   ],
   "scripts": {
-    "install-local": "npm i ../react-admin-core-module/ui ../react-components ../avo2-components",
     "dev": "next dev -p 3200",
     "build-with-analyse": "cross-env ANALYZE=true next build",
     "build": "next build",
