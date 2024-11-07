@@ -11,7 +11,7 @@ import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
 import { getSiteTranslations } from '../helpers/get-site-translations';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
-import { waitForSearchResults } from '../helpers/wait-for-search-results';
+import { waitForSearchPage } from '../helpers/wait-for-search-page';
 
 test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmark item', async ({
 	page,
@@ -48,7 +48,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmar
 	await searchField.pressSequentially(SEARCH_TERM);
 
 	// Wait for filters to be applied
-	await waitForSearchResults(page, () => searchField.press('Enter'));
+	await waitForSearchPage(page, () => searchField.press('Enter'));
 
 	// Check green pill exists with search term inside
 	const pill = page.locator('.c-tags-input__multi-value .c-tag__label');

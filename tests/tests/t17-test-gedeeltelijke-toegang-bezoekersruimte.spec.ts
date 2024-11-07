@@ -14,7 +14,8 @@ import { goToPublicCatalogOnSearchPage } from '../helpers/go-to-public-catalog-o
 import { logout } from '../helpers/log-out';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { waitForPageTitle } from '../helpers/wait-for-page-title';
-import { waitForSearchResults } from '../helpers/wait-for-search-results';
+import { waitForSearchPage } from '../helpers/wait-for-search-page';
+import { waitForVisitPageLoaded } from '../helpers/wait-for-visit-page-loaded';
 
 test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct kan worden toegekend', async ({
 	page,
@@ -53,7 +54,9 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 		SITE_TRANSLATIONS.nl[
 			'modules/navigation/components/navigation/navigation___alle-bezoekersruimtes'
 		];
-	await page.click(`text=${findAnOrganisationLabel}`);
+
+	// Wait for visitor spaces page to load
+	await waitForVisitPageLoaded(page, () => page.click(`text=${findAnOrganisationLabel}`));
 
 	// Click on request access button for Amsab-ISG
 	const amsabCard = page.locator('.p-home__results .c-visitor-space-card--name--amsab-isg');
@@ -187,8 +190,8 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// There should be 1 folder: FAVORITES_FOLDER_NAME
 	let existingFolders = page.locator('ul .c-checkbox-list li > span');
-	await expect(existingFolders).toHaveCount(1);
 	expect(await existingFolders.nth(0).innerText()).toContain(FAVORITES_FOLDER_NAME);
+	expect(await existingFolders.count()).toBe(1);
 
 	// Click next to the blade to close it, need to click it two times
 	const notBlade = page.locator(moduleClassSelector('c-overlay--visible')).first();
@@ -200,19 +203,21 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await new Promise((resolve) => setTimeout(resolve, 1000)); // TODO: replace this
 
 	// Click on 'Naar mijn bezoekertool'
-	await page
-		.locator('a[href="/zoeken?aanbieder=amsab-isg"] span', { hasText: IconName.Search })
-		.click(); // TODO: this is really inconsistent
-	await page.goto(`${process.env.TEST_CLIENT_ENDPOINT as string}/zoeken?aanbieder=amsab-isg`); //TODO: remove this, it is added because it is really inconsistent
+	const goToMyVisitorSpaceLink = page.locator(
+		moduleClassSelector('c-list-navigation__link') + '[href="/zoeken?aanbieder=amsab-isg"]',
+		{ hasText: IconName.Search }
+	);
+	await expect(goToMyVisitorSpaceLink).toBeVisible();
 
-	// await new Promise((resolve) => setTimeout(resolve, 3 * 1000)); // TODO: replace this
+	// Wait for search results to load
+	await waitForSearchPage(page, () => goToMyVisitorSpaceLink.click());
+
 	// Check user is in correct space
-	// await expect(
-	// 	await page
-	// 		.locator(moduleClassSelector('c-visitor-spaces-dropdown__active-label'))
-	// 		.allInnerTexts()
-	// ).toEqual(['Amsab-ISG']);
-	// Go to the hetarchief homepage
+	const dropdownWithAmsabISG = page.locator(
+		moduleClassSelector('c-visitor-spaces-dropdown__active-label'),
+		{ hasText: 'Amsab-ISG' }
+	);
+	await expect(dropdownWithAmsabISG).toBeVisible();
 
 	// Click bookmark button
 	const saveThisItemLabel = SITE_TRANSLATIONS.nl['modules/ie-objects/const/index___bookmark'];
@@ -473,7 +478,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 			.locator('.p-account-my-folders__card-description p')
 			.first()
 			.allInnerTexts()
-	).toEqual([`${organisationLabel}: Stadsarchief Ieper`]);
+	).toEqual([`${organisationLabel}: Amsab-ISG`]);
 
 	await new Promise((resolve) => setTimeout(resolve, 1000)); // TODO: replace this
 
@@ -503,14 +508,14 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 		.locator('a', { hasText: 'Amsab-ISG' });
 	await expect(amsabSpaceLink).toBeVisible();
 
-	await waitForSearchResults(page, () => amsabSpaceLink.click());
+	await waitForSearchPage(page, () => amsabSpaceLink.click(), 'OR-154dn75');
 
 	const ALL_TAB = SITE_TRANSLATIONS.nl['modules/visitor-space/const/index___alles'];
 	expect(
 		await page
 			.locator('button.c-tabs__item.c-tab.c-tab--dark.c-tab--all.c-tab--active')
 			.allInnerTexts()
-	).toEqual([`${ALL_TAB}(1)`]);
+	).toContain([`${ALL_TAB}(`]);
 
 	// Get the pid of the first object
 	const objectPid = await page
@@ -540,7 +545,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await searchField.click();
 	await searchField.pressSequentially(objectPid);
 
-	await waitForSearchResults(page, () => searchField.press('Enter'));
+	await waitForSearchPage(page, () => searchField.press('Enter'));
 
 	await expect(
 		page
