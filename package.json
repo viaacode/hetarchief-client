@@ -11,6 +11,7 @@
     "dev": "next dev -p 3200",
     "build-with-analyse": "cross-env ANALYZE=true next build",
     "build": "next build",
+    "build-production": "cross-env NODE_ENV=production next build",
     "start": "next start",
     "docker-start": "node ./scripts/next-config-to-env-file.js && node ./scripts/copy-robots-txt-file.js && next start",
     "lint": "npm run lint:ts && npm run lint:scss",
