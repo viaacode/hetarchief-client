@@ -14,7 +14,7 @@ RUN npm run build
 FROM node:20.4-alpine AS runner
 WORKDIR /app
 COPY --from=builder /app/package*.json ./
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 
