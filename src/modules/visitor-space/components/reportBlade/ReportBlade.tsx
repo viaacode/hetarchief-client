@@ -5,7 +5,7 @@ import { type FC, useCallback, useEffect, useState } from 'react';
 
 import { Blade } from '@shared/components/Blade/Blade';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
-import { tHtml } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { validateForm } from '@shared/helpers/validate-form';
 import { useZendesk } from '@shared/hooks/use-zendesk';
 import { toastService } from '@shared/services/toast-service';
@@ -94,22 +94,22 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 				comment: {
 					url: window.location.href,
 					body: reportMessage,
-					html_body: `<dl><dt>${tHtml(
+					html_body: `<dl><dt>${tText(
 						'modules/visitor-space/components/report-blade/report-blade___reden-van-rapporteren'
-					)}</dt><dd>${reportMessage}</dd><dt>${tHtml(
+					)}</dt><dd>${reportMessage}</dd><dt>${tText(
 						'modules/visitor-space/components/report-blade/report-blade___pagina-url'
 					)}</dt><dd>${window.location.href}</dd></dl>`,
 					public: false,
 				},
 
-				subject: `${tHtml(
+				subject: `${tText(
 					'modules/visitor-space/components/report-blade/report-blade___media-item-gerapporteerd-door-gebruiker-op-het-archief'
 				)}`,
 				requester: {
 					email: user?.email || email,
 					name:
 						user?.fullName ||
-						`${tHtml(
+						`${tText(
 							'modules/visitor-space/components/report-blade/report-blade___niet-ingelogde-gebruiker'
 						)}`,
 				},
