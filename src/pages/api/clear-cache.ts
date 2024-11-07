@@ -1,7 +1,37 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
 import Cors from 'cors';
 import { type NextApiRequest, type NextApiResponse } from 'next';
 
-import { Locale } from '@shared/utils/i18n';
+async function fileExists(filename: string): Promise<boolean> {
+	try {
+		await fs.access(filename);
+		return true;
+	} catch (err: any) {
+		if (err.code === 'ENOENT') {
+			return false;
+		} else {
+			throw err;
+		}
+	}
+}
+
+async function deleteFolderRecursive(folderPath: string) {
+	if (await fileExists(folderPath)) {
+		await fs.rm(folderPath, { recursive: true, force: true });
+	}
+}
+
+async function clearNextCache() {
+	const nextCachePath = path.join(__dirname, '.next', 'cache');
+	const nextServerPagesPath = path.join(__dirname, '.next', 'server', 'pages');
+
+	await Promise.all([
+		deleteFolderRecursive(nextCachePath),
+		deleteFolderRecursive(nextServerPagesPath),
+	]);
+}
 
 // Initializing the cors middleware
 const cors = Cors({
@@ -39,33 +69,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
-	if (!req.query.path) {
-		res.status(400).json({
-			message:
-				'You must provide a valid path in the query param "path", containing the path of the page for which you want to clear the cache',
-			query: req.query,
-		});
-		return;
-	}
-
-	if (!req.query.language) {
-		res.status(400).json({
-			message:
-				'You must provide a valid path in the query param "language", containing the language code of the page for which you want to clear the cache',
-			query: req.query,
-		});
-		return;
-	}
-
-	const language = req.query.language as string;
-	const path = req.query.path as string;
-
 	try {
-		await res.revalidate(`/${language.toLowerCase()}${path}`);
-		if (language === Locale.nl) {
-			await res.revalidate(path);
-		}
-		res.json({ message: 'cache for route has been cleared' });
+		await clearNextCache();
+		res.json({ message: 'The NextJS cache has been cleared' });
 	} catch (err) {
 		res.status(500).json({
 			message: 'Failed to clear the cache',

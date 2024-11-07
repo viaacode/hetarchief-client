@@ -7,14 +7,9 @@ import { type ElasticsearchFieldNames } from '@visitor-space/types';
 
 export enum IsPartOfKey {
 	archief = 'https://schema.org/ArchiveComponent',
-	deelarchief = 'https://schema.org/ArchiveComponent',
-	deelreeks = 'https://schema.org/CreativeWorkSeries',
 	programma = 'https://schema.org/BroadcastEvent',
-	reeks = 'https://schema.org/CreativeWorkSeries',
-	seizoen = 'https://schema.org/CreativeWorkSeason',
 	serie = 'https://schema.org/CreativeWorkSeries',
 	episode = 'https://schema.org/Episode',
-	aflevering = 'https://schema.org/Episode',
 	bestanddeel = 'bestanddeel',
 	seizoennummer = 'seizoennummer',
 }
