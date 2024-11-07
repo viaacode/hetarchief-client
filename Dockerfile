@@ -14,8 +14,9 @@ ENV NODE_ENV production
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
 
-RUN chown -R nextjs:nodejs /app &&\
-  chmod -R g+x /app
+# Exclude node_modules from chown and chmod
+RUN find /app -not -path "/app/node_modules/*" -exec chown nextjs:nodejs {} + && \
+    find /app -not -path "/app/node_modules/*" -exec chmod g+x {} +
 
 USER nextjs
 
