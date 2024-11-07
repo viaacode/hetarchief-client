@@ -6,7 +6,6 @@ WORKDIR /app
 COPY package*.json ./
 ARG DEBUG_TOOLS=false
 RUN echo debug is set $DEBUG_TOOLS
-RUN npm pkg delete scripts.prepare
 RUN npm ci
 COPY . .
 RUN npm run build
