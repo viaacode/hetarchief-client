@@ -94,7 +94,6 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 	}, [selectedLanguage, mutateLanguagePreference]);
 
 	const {
-		control,
 		formState: { errors },
 	} = useForm<CommunicationFormState>({
 		resolver: yupResolver(COMMUNICATION_FORM_SCHEMA()),

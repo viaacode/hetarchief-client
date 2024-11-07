@@ -986,24 +986,8 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.archief)
 					)}
 					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___deelarchief'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.deelarchief)
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___deelreeks'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.deelreeks)
-					)}
-					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___programma'),
 						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.programma)
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___reeks'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.reeks)
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___seizoenen'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.seizoen)
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___serie'),
@@ -1012,10 +996,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___episode'),
 						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.episode)
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___aflevering'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.aflevering)
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___bestanddeel'),
