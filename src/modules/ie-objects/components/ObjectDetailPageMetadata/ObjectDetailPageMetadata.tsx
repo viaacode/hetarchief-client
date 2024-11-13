@@ -81,6 +81,7 @@ import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDa
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { Pill } from '@shared/components/Pill';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
@@ -623,6 +624,32 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		);
 	};
 
+	function renderSeriesTitle(mediaInfo: IeObject) {
+		if (!mediaInfo.collectionName) {
+			return null;
+		}
+		if (mediaInfo.dctermsFormat === IeObjectType.Newspaper) {
+			// Use the series filter
+			return (
+				<SearchLinkTag
+					label={mediaInfo.collectionName}
+					link={`${ROUTES_BY_LOCALE[locale].search}?format=${IeObjectType.Newspaper}&${
+						SearchFilterId.NewspaperSeriesName
+					}=${encodeURIComponent(mediaInfo.collectionName)}`}
+				/>
+			);
+		} else {
+			// Use the generic text filter
+			const searchLink = stringifyUrl({
+				url: ROUTES_BY_LOCALE[locale].search,
+				query: {
+					[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: mediaInfo.collectionName,
+				},
+			});
+			return <SearchLinkTag label={mediaInfo.collectionName} link={searchLink} />;
+		}
+	}
+
 	const renderMetaData = () => {
 		if (isNil(mediaInfo)) {
 			return;
@@ -730,16 +757,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___titel-van-de-reeks'),
-						mediaInfo.collectionName ? (
-							<SearchLinkTag
-								label={mediaInfo.collectionName}
-								link={`${ROUTES_BY_LOCALE[locale].search}?format=${
-									IeObjectType.Newspaper
-								}&${SearchFilterId.NewspaperSeriesName}=${encodeURIComponent(
-									mediaInfo.collectionName
-								)}`}
-							/>
-						) : null
+						renderSeriesTitle(mediaInfo)
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___publicatiedatum'),
