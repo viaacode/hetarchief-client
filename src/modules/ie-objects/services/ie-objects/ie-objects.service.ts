@@ -6,7 +6,10 @@ import {
 	type IeObjectSimilar,
 	type RelatedIeObjects,
 } from '@ie-objects/ie-objects.types';
-import { type SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
+import {
+	type IeObjectPreviousNextIds,
+	type SeoInfo,
+} from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import { type SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
 import { ApiService } from '@shared/services/api-service';
 import { type SortObject } from '@shared/types';
@@ -179,6 +182,22 @@ export class IeObjectsService {
 					query: {
 						field,
 						query,
+					},
+				})
+			)
+			.json();
+	}
+
+	static getIeObjectPreviousNextIds(
+		collectionId: string,
+		ieObjectId: string
+	): Promise<IeObjectPreviousNextIds> {
+		return ApiService.getApi()
+			.get(
+				stringifyUrl({
+					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${ieObjectId}/previous-next-ids`,
+					query: {
+						collectionId,
 					},
 				})
 			)

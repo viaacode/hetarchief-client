@@ -80,6 +80,7 @@ export interface IeObject {
 	};
 	synopsis: string;
 	collectionName?: string;
+	collectionId?: string;
 	collectionSeasonNumber?: string;
 	issueNumber?: string;
 	fragmentId?: string;

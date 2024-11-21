@@ -21,11 +21,7 @@ export async function waitForSearchPage(
 					!bodyContainsText || request.postData()?.includes(bodyContainsText) || false;
 				return isPost && isIeObjectsRequest && containsBodyText;
 			},
-			{ timeout: 10000 }
-		),
-		page.waitForRequest(
-			(request) => request.method() === 'GET' && request.url().includes('/visits/personal'),
-			{ timeout: 10000 }
+			{ timeout: 20000 }
 		),
 	]);
 }

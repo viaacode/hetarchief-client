@@ -31,11 +31,14 @@ test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmar
 	);
 
 	// Login with existing user
-	await loginUserHetArchiefIdp(
-		page,
-		process.env.TEST_VISITOR_ACCOUNT_2_USERNAME as string,
-		process.env.TEST_VISITOR_ACCOUNT_2_PASSWORD as string,
-		SEARCH_PAGE_TITLE
+
+	await waitForSearchPage(page, async () =>
+		loginUserHetArchiefIdp(
+			page,
+			process.env.TEST_VISITOR_ACCOUNT_2_USERNAME as string,
+			process.env.TEST_VISITOR_ACCOUNT_2_PASSWORD as string,
+			SEARCH_PAGE_TITLE
+		)
 	);
 
 	// Get tab counts before search
