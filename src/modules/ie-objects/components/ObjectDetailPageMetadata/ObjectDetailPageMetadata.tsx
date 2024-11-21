@@ -32,6 +32,7 @@ import Metadata from '@ie-objects/components/Metadata/Metadata';
 import { NamesList } from '@ie-objects/components/NamesList/NamesList';
 import { type ObjectDetailPageMetadataProps } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata.types';
 import { SearchLinkTag } from '@ie-objects/components/SearchLinkTag/SearchLinkTag';
+import { useGetIeObjectPreviousNextIds } from '@ie-objects/hooks/get-ie-objects-previous-next';
 import {
 	ANONYMOUS_ACTION_SORT_MAP,
 	CP_ADMIN_ACTION_SORT_MAP,
@@ -140,6 +141,16 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		!!mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) && isNewspaper;
 	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
 	const breadcrumbs = useSelector(selectBreadcrumbs);
+	const { data: ieObjectPreviousNextIds } = useGetIeObjectPreviousNextIds(
+		mediaInfo?.collectionId,
+		mediaInfo?.schemaIdentifier,
+		{
+			enabled:
+				mediaInfo?.dctermsFormat === IeObjectType.Newspaper &&
+				!!mediaInfo?.collectionId &&
+				!!mediaInfo?.schemaIdentifier,
+		}
+	);
 
 	/**
 	 * User
@@ -650,6 +661,55 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		}
 	}
 
+	function renderPreviousAndNextButtons(): ReactNode | null {
+		if (
+			!mediaInfo ||
+			(!ieObjectPreviousNextIds?.previousIeObjectId &&
+				!ieObjectPreviousNextIds?.nextIeObjectId)
+		) {
+			return null;
+		}
+		const previousButton = (
+			<Button
+				variants={['text']}
+				iconStart={<Icon name={IconNamesLight.ArrowLeft} />}
+				label={tText(
+					'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___vorige'
+				)}
+				disabled={!ieObjectPreviousNextIds?.previousIeObjectId}
+			/>
+		);
+		const nextButton = (
+			<Button
+				variants={['text']}
+				iconEnd={<Icon name={IconNamesLight.ArrowRight} />}
+				label={tText(
+					'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___volgende'
+				)}
+				disabled={!ieObjectPreviousNextIds?.nextIeObjectId}
+			/>
+		);
+		return (
+			<div className={styles['p-object-detail__metadata-content__previous-next']}>
+				{ieObjectPreviousNextIds?.previousIeObjectId ? (
+					<Link href={'/pid/' + ieObjectPreviousNextIds?.previousIeObjectId}>
+						{previousButton}
+					</Link>
+				) : (
+					previousButton
+				)}
+
+				<span>{mediaInfo?.datePublished || mediaInfo?.dateCreated || '-'}</span>
+
+				{ieObjectPreviousNextIds?.nextIeObjectId ? (
+					<Link href={'/pid/' + ieObjectPreviousNextIds?.nextIeObjectId}>nextButton</Link>
+				) : (
+					nextButton
+				)}
+			</div>
+		);
+	}
+
 	const renderMetaData = () => {
 		if (isNil(mediaInfo)) {
 			return;
@@ -736,6 +796,19 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 				</div>
 
+				<MetadataList allowTwoColumns={false}>
+					<Metadata
+						title={tText(
+							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___editie-newspaper-series-title',
+							{
+								newspaperSeriesTitle: mediaInfo.collectionName,
+							}
+						)}
+						key={'collectionNamePreviousNext'}
+					>
+						{renderPreviousAndNextButtons()}
+					</Metadata>
+				</MetadataList>
 				<MetadataList allowTwoColumns={true}>
 					<Metadata
 						title={renderMaintainerMetaTitle(mediaInfo)}

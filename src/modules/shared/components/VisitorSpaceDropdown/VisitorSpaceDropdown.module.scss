@@ -4,8 +4,6 @@
 @use "src/styles/abstracts" as *;
 
 $component: "c-visitor-spaces-dropdown";
-$border-radius: 4.6rem;
-$border-radius-sm: 2.4rem;
 $border-width: 0.2rem;
 
 .#{$component} {

@@ -11,6 +11,9 @@ const Metadata: FC<MetadataProps> = ({
 	renderRight,
 	renderTitleRight,
 }) => {
+	if (!children) {
+		return null;
+	}
 	return (
 		<div className={clsx(styles['c-metadata__item'], className, 'u-flex')} role="listitem">
 			<div className="u-flex-grow">

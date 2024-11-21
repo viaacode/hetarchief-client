@@ -45,6 +45,15 @@ $maintainer-logo-height: 7rem;
 			color: $neutral !important;
 		}
 	}
+
+	&__previous-next {
+		background-color: $silver;
+		border-radius: $border-radius;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
 }
 
 .p-object-detail__metadata-maintainer-title {
