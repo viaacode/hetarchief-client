@@ -8,19 +8,8 @@
 	&__content {
 		padding: $spacer-lg;
 		color: $black;
-
-		dl {
-			margin-top: 0;
-		}
-
-		&-value {
-			margin-left: 0;
-			margin-bottom: $spacer-md;
-		}
-
-		&-label {
-			font-weight: $font-weight-bold;
-			margin-bottom: $spacer-xs;
-		}
+		display: flex;
+		flex-direction: column;
+		gap: $spacer-lg;
 	}
 }
