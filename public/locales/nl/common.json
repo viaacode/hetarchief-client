@@ -13,6 +13,8 @@
   "modules/account/components/edit-folder-blade/edit-folder-blade___deze-map-is-successvol-aangepast": "deze map is successvol aangepast",
   "modules/account/components/edit-folder-blade/edit-folder-blade___er-is-een-fout-opgetreden": "Er is een fout opgetreden",
   "modules/account/components/edit-folder-blade/edit-folder-blade___er-is-een-fout-opgetreden-bij-het-aanpassen-van-de-map": "Er is een fout opgetreden bij het aanpassen van de map",
+  "modules/account/components/edit-folder-blade/edit-folder-blade___je-mapnaam-is-te-lang-de-naam-mag-niet-langer-dan-90-tekens-zijn": "Je mapnaam is te lang. De naam mag niet langer dan 90 tekens zijn.",
+  "modules/account/components/edit-folder-blade/edit-folder-blade___je-moet-je-map-een-naam-geven": "Je moet je map een naam geven.",
   "modules/account/components/edit-folder-blade/edit-folder-blade___map-aanpassen": "Map aanpassen",
   "modules/account/components/edit-folder-blade/edit-folder-blade___naam": "Naam",
   "modules/account/components/edit-folder-blade/edit-folder-blade___sluit": "Sluit",
