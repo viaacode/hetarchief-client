@@ -1115,13 +1115,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 					{renderSimpleMetadataField(
 						tHtml('modules/ie-objects/ie-objects___iiif-manifest'),
-						mediaInfo?.maintainerIiifAgreement &&
-							activeFile?.storedAt &&
-							mediaInfo.dctermsFormat === IeObjectType.Newspaper && (
-								<a href={activeFile?.storedAt} target="_blank" rel="noreferrer">
-									{tText('modules/ie-objects/ie-objects___manifest-link')}
-								</a>
-							)
+						mediaInfo?.iiifManifestUrl && (
+							<a href={mediaInfo?.iiifManifestUrl} target="_blank" rel="noreferrer">
+								{tText('modules/ie-objects/ie-objects___manifest-link')}
+							</a>
+						)
 					)}
 				</MetadataList>
 
