@@ -186,8 +186,6 @@ const getVisitorSpacesDropdown = (
 											className={clsx(
 												'u-font-size-24',
 												'u-text-left',
-												'u-visibility-hidden',
-												'u-visibility-visible-xxl',
 												styles['c-navigation__dropdown-icon--end']
 											)}
 											name={IconNamesLight.AngleRight}
