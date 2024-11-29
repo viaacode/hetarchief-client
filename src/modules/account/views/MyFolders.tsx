@@ -671,7 +671,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				<EditFolderBlade
 					isOpen={editMode}
 					onClose={() => setEditMode((prevState) => !prevState)}
-					currentFolder={activeFolder}
+					currentFolder={activeFolder as Folder}
 					onSave={onFolderDataEdited}
 				/>
 				<AddToFolderBlade

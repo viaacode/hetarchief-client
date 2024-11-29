@@ -975,34 +975,36 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		);
 	};
 
-	const renderResults = () => (
-		<>
-			<MediaCardList
-				items={searchResultCardData}
-				keywords={searchResults?.searchTerms}
-				sidebar={renderFilterMenu()}
-				view={viewMode === 'grid' ? 'grid' : 'list'}
-				renderButtons={renderCardButtons}
-				className="p-media-card-list"
-				showManyResultsTile={showManyResultsTile}
-			/>
-			<PaginationBar
-				{...getDefaultPaginationBarProps()}
-				className="u-mb-48"
-				startItem={(page - 1) * SEARCH_RESULTS_PAGE_SIZE}
-				itemsPerPage={SEARCH_RESULTS_PAGE_SIZE}
-				totalItems={limitToMaxResults(getItemCounts(format))}
-				showBackToTop
-				onPageChange={(zeroBasedPage) => {
-					scrollTo(0, 'instant');
-					setQuery({
-						...query,
-						page: zeroBasedPage + 1,
-					});
-				}}
-			/>
-		</>
-	);
+	const renderResults = () => {
+		return (
+			<>
+				<MediaCardList
+					items={searchResultCardData}
+					keywords={searchResults?.searchTerms}
+					sidebar={renderFilterMenu()}
+					view={viewMode === 'grid' ? 'grid' : 'list'}
+					renderButtons={renderCardButtons}
+					className="p-media-card-list"
+					showManyResultsTile={showManyResultsTile}
+				/>
+				<PaginationBar
+					{...getDefaultPaginationBarProps()}
+					className="u-mb-48"
+					startItem={(page - 1) * SEARCH_RESULTS_PAGE_SIZE}
+					itemsPerPage={SEARCH_RESULTS_PAGE_SIZE}
+					totalItems={limitToMaxResults(getItemCounts(format))}
+					showBackToTop
+					onPageChange={(zeroBasedPage) => {
+						scrollTo(0, 'instant');
+						setQuery({
+							...query,
+							page: zeroBasedPage + 1,
+						});
+					}}
+				/>
+			</>
+		);
+	};
 
 	const renderSearchInputRightControls = () => {
 		return (

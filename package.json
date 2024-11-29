@@ -96,6 +96,7 @@
     "react-zendesk": "0.1.13",
     "sharp": "0.32.6",
     "string-strip-html": "13.4.8",
+    "ts-retry-promise": "0.8.1",
     "use-debouncy": "5.0.1",
     "use-query-params": "1.2.3",
     "xml2js": "0.6.2",
