@@ -14,6 +14,7 @@ import React, {
 } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
+import { IMAGE_API_FORMATS } from '@ie-objects/ie-objects.consts';
 import { type AltoTextLine } from '@ie-objects/ie-objects.types';
 import {
 	type IiifViewerFunctions,
@@ -353,7 +354,11 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 				const imageSources = compact(
 					imageInfos.map((imageInfo) => {
-						if (imageInfo.imageUrl.endsWith('.jph')) {
+						const validExtensions = IMAGE_API_FORMATS.map((mimeType) =>
+							mimeType.split('/').pop()
+						);
+						const extension = imageInfo.imageUrl.split('.').pop() as string;
+						if (validExtensions?.includes(extension)) {
 							return imageInfo.imageUrl;
 						}
 						return null;

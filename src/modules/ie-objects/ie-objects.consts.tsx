@@ -54,7 +54,7 @@ export const IMAGE_FORMATS: string[] = [
 	'image/tiff',
 	'image/bmp',
 ];
-export const IMAGE_API_FORMATS: string[] = ['image/jph'];
+export const IMAGE_API_FORMATS: string[] = ['image/jph', 'image/jp2'];
 export const IMAGE_BROWSE_COPY_FORMATS: string[] = ['image/jpeg'];
 export const XML_FORMATS: string[] = ['application/xml'];
 export const JSON_FORMATS: string[] = ['application/json'];
