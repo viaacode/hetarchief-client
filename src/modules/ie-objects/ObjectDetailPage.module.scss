@@ -658,6 +658,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		border-radius: $button-radius-sm;
 		transform: translate(-50%, $expand-button-vertical-position);
 		transition: right $animate-default;
+		box-shadow: $shadow-12-black-16;
 
 		:global(.c-button__icon span) {
 			font-size: $font-size-2xm;
