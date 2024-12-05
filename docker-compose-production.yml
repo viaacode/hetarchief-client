@@ -8,6 +8,8 @@ services:
     container_name: hetarchief-client
     ports:
       - 3200:3200
+    environment:
+      - NODE_ENV=production
     env_file:
       - .env.local
     volumes:

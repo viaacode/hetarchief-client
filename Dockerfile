@@ -1,25 +1,14 @@
-# First stage: Build the application
-FROM node:20.4-alpine AS builder
+FROM node:20.4-alpine AS runner
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package*.json ./
+ENV NODE_ENV production
+COPY . .
 ARG DEBUG_TOOLS=false
 RUN echo debug is set $DEBUG_TOOLS
+RUN npm pkg delete scripts.prepare
 RUN npm ci
-COPY . .
 RUN npm run build
-
-# Second stage: Create the final image
-FROM node:20.4-alpine AS runner
-WORKDIR /app
-COPY --from=builder /app/package*.json ./
-RUN npm ci --omit=dev
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/scripts ./scripts
-
-ENV NODE_ENV=production
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
