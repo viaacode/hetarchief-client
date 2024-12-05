@@ -7,7 +7,7 @@ This repository contains the `Het Archief` Next.js app for the end user.
 It is built with:
 
 - node: `v20.x.x`
-- npm: `v9.x.x`
+- npm: `v10.x.x`
 - Next: `v14.x.x`
 
 For a complete list of packages and versions check out the `package.json` file.
