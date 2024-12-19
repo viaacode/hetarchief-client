@@ -122,11 +122,11 @@ export function extractTextLinesFromAlto(altoJson: AltoFormat): SimplifiedAlto {
 				(altoJson as unknown as AltoFormatV3).alto.Layout.flatMap((layout: Alto3Layout) => {
 					return layout.Page?.flatMap((page: Alto3Page) => {
 						return [
-							...page.TopMargin,
-							...page.LeftMargin,
-							...page.PrintSpace,
-							...page.RightMargin,
-							...page.BottomMargin,
+							...(page.TopMargin || []),
+							...(page.LeftMargin || []),
+							...(page.PrintSpace || []),
+							...(page.RightMargin || []),
+							...(page.BottomMargin || []),
 						]?.flatMap((pageLocation: Alto3PageTextArea) => {
 							return pageLocation.TextBlock?.flatMap((textBlock: Alto3TextBlock) => {
 								return textBlock?.TextLine?.flatMap((textLine: Alto3TextLine) => {
