@@ -6834,9 +6834,15 @@ function extractTextLinesFromAlto(altoJson) {
             // Alto v3
             const altoV3 = altoJson;
             const textLines = lodash_es_compact(altoJson.alto.Layout.flatMap((layout) => {
-                return layout.Page.flatMap((page) => {
-                    return page.PrintSpace.flatMap((printSpace) => {
-                        return printSpace.TextBlock.flatMap((textBlock) => {
+                return layout.Page?.flatMap((page) => {
+                    return [
+                        ...page.TopMargin,
+                        ...page.LeftMargin,
+                        ...page.PrintSpace,
+                        ...page.RightMargin,
+                        ...page.BottomMargin,
+                    ]?.flatMap((pageLocation) => {
+                        return pageLocation.TextBlock?.flatMap((textBlock) => {
                             return textBlock?.TextLine?.flatMap((textLine) => {
                                 return textLine.String.flatMap((altoString) => {
                                     return {

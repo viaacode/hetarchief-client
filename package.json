@@ -28,7 +28,8 @@
     "storybook": "start-storybook -p 6006",
     "build:storybook": "build-storybook",
     "bump": "bump-package-versions --part=patch --strategy=highest ./package.json",
-    "run-alto-conversion-script-ts": "tsx ./scripts/altos/extract-text-lines-from-alto.ts https://archief-media.viaa.be/viaa/MOB/ERFGOEDCELKERF/f59dc5eb0f574234ad61ecf10e4757da1f969028f25e4cc9bec8d70e4fb478ef/f59dc5eb0f574234ad61ecf10e4757da1f969028f25e4cc9bec8d70e4fb478ef.xml",
+    "run-alto-conversion-script-ts-1": "tsx ./scripts/altos/extract-text-lines-from-alto.ts https://archief-media.viaa.be/viaa/MOB/ERFGOEDCELKERF/f59dc5eb0f574234ad61ecf10e4757da1f969028f25e4cc9bec8d70e4fb478ef/f59dc5eb0f574234ad61ecf10e4757da1f969028f25e4cc9bec8d70e4fb478ef.xml",
+    "run-alto-conversion-script-ts-2": "tsx ./scripts/altos/extract-text-lines-from-alto.ts https://archief-media.meemoo.be/viaa/MOB/AMSAB/98daf5cd2d904204a0fb77b7bbb21e16005a4f0f1eb9457c934b2b54b65126e0/98daf5cd2d904204a0fb77b7bbb21e16005a4f0f1eb9457c934b2b54b65126e0.xml",
     "build-alto-conversion-script": "ncc build scripts/altos/extract-text-lines-from-alto.ts -o ./scripts/altos/dist && mv ./scripts/altos/dist/index.js ./scripts/altos/extract-text-lines-from-alto.js && rm -r ./scripts/altos/dist",
     "run-alto-conversion-script-js": "node ./scripts/altos/extract-text-lines-from-alto.js https://archief-media.meemoo.be/viaa/MOB/KULEUVENKADOC/2669f95bbf604172942ca92642c4e9bff7d174898b21481e979ae27119f41a23/2669f95bbf604172942ca92642c4e9bff7d174898b21481e979ae27119f41a23.xml"
   },

@@ -13,7 +13,7 @@ import {
 import {
 	type Alto3Layout,
 	type Alto3Page,
-	type Alto3PrintSpace,
+	type Alto3PageTextArea,
 	type Alto3String,
 	type Alto3TextBlock,
 	type Alto3TextLine,
@@ -120,9 +120,15 @@ export function extractTextLinesFromAlto(altoJson: AltoFormat): SimplifiedAlto {
 			const altoV3 = altoJson as unknown as AltoFormatV3;
 			const textLines: TextLine[] = compact(
 				(altoJson as unknown as AltoFormatV3).alto.Layout.flatMap((layout: Alto3Layout) => {
-					return layout.Page.flatMap((page: Alto3Page) => {
-						return page.PrintSpace.flatMap((printSpace: Alto3PrintSpace) => {
-							return printSpace.TextBlock.flatMap((textBlock: Alto3TextBlock) => {
+					return layout.Page?.flatMap((page: Alto3Page) => {
+						return [
+							...page.TopMargin,
+							...page.LeftMargin,
+							...page.PrintSpace,
+							...page.RightMargin,
+							...page.BottomMargin,
+						]?.flatMap((pageLocation: Alto3PageTextArea) => {
+							return pageLocation.TextBlock?.flatMap((textBlock: Alto3TextBlock) => {
 								return textBlock?.TextLine?.flatMap((textLine: Alto3TextLine) => {
 									return textLine.String.flatMap((altoString: Alto3String) => {
 										return {
