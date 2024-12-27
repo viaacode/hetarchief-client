@@ -457,12 +457,12 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					<p className={styles['p-object-detail__metadata-label']}>
 						{tText('modules/ie-objects/const/index___aanbieder')}
 					</p>
-					{!isKiosk && !hasAccessToVisitorSpaceOfObject && (
+					{!isKiosk && (
 						<SearchLinkTag label={maintainerName} link={maintainerSearchLink} />
 					)}
 				</div>
 
-				{!isKiosk && !hasAccessToVisitorSpaceOfObject && maintainerLogo && (
+				{!isKiosk && maintainerLogo && (
 					<div className={styles['p-object-detail__sidebar__content-logo']}>
 						{/* TODO remove this hack once we fully switched to the new graph.organisations table */}
 						{/* eslint-disable-next-line @next/next/no-img-element */}
@@ -493,9 +493,8 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	const renderMaintainerMetaData = ({
 		maintainerDescription,
 		maintainerSiteUrl,
-		maintainerName,
 	}: IeObject): ReactNode => {
-		if (!isKiosk && !hasAccessToVisitorSpaceOfObject) {
+		if (!isKiosk) {
 			return (
 				<div className={styles['p-object-detail__sidebar__content-maintainer-data']}>
 					{maintainerDescription && (
@@ -511,13 +510,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							<Icon className="u-ml-8" name={IconNamesLight.Extern} />
 						</p>
 					)}
-					{showVisitButton && isMobile && renderVisitButton()}
-				</div>
-			);
-		} else {
-			return (
-				<div className={styles['p-object-detail__sidebar__content-maintainer-data']}>
-					{maintainerName}
 					{showVisitButton && isMobile && renderVisitButton()}
 				</div>
 			);
