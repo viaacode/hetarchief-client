@@ -190,14 +190,15 @@ export class IeObjectsService {
 
 	static getIeObjectPreviousNextIds(
 		collectionId: string,
-		ieObjectId: string
+		ieObjectIri: string
 	): Promise<IeObjectPreviousNextIds> {
 		return ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${ieObjectId}/previous-next-ids`,
+					url: `${IE_OBJECTS_SERVICE_BASE_URL}/previous-next-ids`,
 					query: {
 						collectionId,
+						ieObjectIri,
 					},
 				})
 			)

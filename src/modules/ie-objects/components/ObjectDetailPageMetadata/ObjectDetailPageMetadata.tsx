@@ -143,7 +143,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	const breadcrumbs = useSelector(selectBreadcrumbs);
 	const { data: ieObjectPreviousNextIds } = useGetIeObjectPreviousNextIds(
 		mediaInfo?.collectionId,
-		mediaInfo?.schemaIdentifier,
+		mediaInfo?.iri,
 		{
 			enabled:
 				mediaInfo?.dctermsFormat === IeObjectType.Newspaper &&
@@ -702,7 +702,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				<span>{mediaInfo?.datePublished || mediaInfo?.dateCreated || '-'}</span>
 
 				{ieObjectPreviousNextIds?.nextIeObjectId ? (
-					<Link href={'/pid/' + ieObjectPreviousNextIds?.nextIeObjectId}>nextButton</Link>
+					<Link href={'/pid/' + ieObjectPreviousNextIds?.nextIeObjectId}>
+						{nextButton}
+					</Link>
 				) : (
 					nextButton
 				)}
