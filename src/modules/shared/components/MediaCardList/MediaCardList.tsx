@@ -130,7 +130,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 					key="manyResultsTile"
 					id="manyResultsTileId"
 					type={null}
-					preview="/images/more.png"
+					thumbnail="/images/more.png"
 					title={tText(
 						'modules/shared/components/media-card-list/media-card-list___teveel-resultaten'
 					)}

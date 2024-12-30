@@ -17,7 +17,7 @@ export interface MediaCardProps {
 	name?: string;
 	id?: string;
 	objectId?: string;
-	preview?: string;
+	thumbnail?: string;
 	publishedOrCreatedDate?: Date;
 	publishedBy?: string;
 	title?: string | ReactNode;

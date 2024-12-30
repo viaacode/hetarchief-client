@@ -1,3 +1,4 @@
+import { AdminConfigManager } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import { Badge, Button, Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
@@ -39,7 +40,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	description,
 	duration,
 	keywords,
-	preview,
+	thumbnail,
 	publishedOrCreatedDate,
 	publishedBy,
 	title,
@@ -290,11 +291,11 @@ const MediaCard: FC<MediaCardProps> = ({
 			);
 		}
 
-		if (type === IeObjectType.Audio) {
+		if (type === IeObjectType.Audio || type === IeObjectType.AudioFragment) {
 			// Only render the waveform if the thumbnail is available
 			// The thumbnail is an ugly speaker icon that we never want to show
 			// But if that thumbnail is not available it most likely means this object does not have the BEZOEKERTOOL-CONTENT license
-			imagePath = '/images/waveform.svg';
+			imagePath = AdminConfigManager.getConfig().components.defaultAudioStill;
 		}
 
 		return (
@@ -386,7 +387,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				className={classNames}
 				orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
 				title={renderTitle()}
-				image={renderImage(preview)}
+				image={renderImage(thumbnail)}
 				subtitle={objectId}
 				caption={renderCaption()}
 				toolbar={renderToolbar()}

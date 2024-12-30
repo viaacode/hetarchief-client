@@ -2,6 +2,7 @@ export enum IeObjectType {
 	Video = 'video',
 	VideoFragment = 'videofragment',
 	Audio = 'audio',
+	AudioFragment = 'audiofragment',
 	Film = 'film',
 	Newspaper = 'newspaper',
 }
