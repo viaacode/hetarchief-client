@@ -1,3 +1,4 @@
+import { AdminConfigManager } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import {
 	Alert,
 	Button,
@@ -954,7 +955,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const isMediaAvailable = useCallback((): boolean => {
 		switch (mediaInfo?.dctermsFormat) {
 			case IeObjectType.Audio:
+			case IeObjectType.AudioFragment:
 			case IeObjectType.Video:
+			case IeObjectType.VideoFragment:
 			case IeObjectType.Film:
 				return !isErrorPlayableUrl && !!playableUrl && !!currentPlayableFile;
 
@@ -1178,7 +1181,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								type: currentPlayableFile.mimeType,
 							},
 						]}
-						poster={'/images/waveform.svg'}
+						poster={AdminConfigManager.getConfig().components.defaultAudioStill}
 						waveformData={peakJson?.data || undefined}
 						{...shared}
 					/>

@@ -172,19 +172,16 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const orderDirection = (query.orderDirection ||
 		VISITOR_SPACE_QUERY_PARAM_INIT.orderDirection) as OrderDirection;
 
-	const isUserWithAccount = isLoggedIn && !!user && !isKioskUser && !isAnonymousUser;
-	const { data: visitRequestsPaginated } = useGetVisitRequests(
-		{
-			page: 1,
-			size: 10,
-			orderProp: 'startAt',
-			orderDirection: OrderDirection.desc,
-			status: VisitStatus.APPROVED,
-			timeframe: VisitTimeframe.ACTIVE,
-			personal: true,
-		},
-		{ enabled: isUserWithAccount }
-	);
+	const isUserWithAccount = isLoggedIn && !!user && !isAnonymousUser;
+	const { data: visitRequestsPaginated } = useGetVisitRequests({
+		page: 1,
+		size: 10,
+		orderProp: 'startAt',
+		orderDirection: OrderDirection.desc,
+		status: VisitStatus.APPROVED,
+		timeframe: VisitTimeframe.ACTIVE,
+		personal: true,
+	});
 	const accessibleVisitorSpaceRequests: VisitRequest[] = useMemo(
 		() =>
 			isUserWithAccount
@@ -756,7 +753,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				publishedOrCreatedDate: asDate(item.datePublished ?? item.dateCreated ?? null),
 				publishedBy: item.maintainerName || '',
 				type,
-				preview: item.thumbnailUrl || undefined,
+				thumbnail: item.thumbnailUrl || undefined,
 				name: item.name,
 				hasRelated: (item.related_count || 0) > 0,
 				hasTempAccess,

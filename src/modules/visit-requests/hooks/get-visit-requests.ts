@@ -17,9 +17,13 @@ export function useGetVisitRequests(
 	options: {
 		keepPreviousData?: boolean;
 		enabled?: boolean;
-	} = { keepPreviousData: true }
+	} = {}
 ): UseQueryResult<IPagination<VisitRequest>> {
-	return useQuery([QUERY_KEYS.getVisitRequests, props], () => getVisitRequests(props), options);
+	return useQuery([QUERY_KEYS.getVisitRequests, props], () => getVisitRequests(props), {
+		keepPreviousData: true,
+		enabled: true,
+		...options,
+	});
 }
 
 export function makeServerSideRequestGetVisitRequests(
