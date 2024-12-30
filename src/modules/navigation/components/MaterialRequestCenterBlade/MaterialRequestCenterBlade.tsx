@@ -62,6 +62,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 
 	const user = useSelector(selectUser);
 
+	// Never fetch material requests for kiosk visitors
+	const shouldFetchMaterialRequests = !!user && user.groupName !== GroupName.KIOSK_VISITOR;
+
 	const {
 		data: materialRequests,
 		isFetching,
@@ -71,7 +74,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			orderProp: MaterialRequestKeys.maintainer,
 			orderDirection: 'asc' as OrderDirection,
 		},
-		{ enabled: !!user && user.groupName !== GroupName.KIOSK_VISITOR }
+		{ enabled: shouldFetchMaterialRequests }
 	);
 
 	const noContent =

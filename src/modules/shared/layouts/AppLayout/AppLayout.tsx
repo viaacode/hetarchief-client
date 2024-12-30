@@ -88,8 +88,9 @@ const AppLayout: FC<any> = ({ children }) => {
 	const router = useRouter();
 	const locale = useLocale();
 	const isLoggedIn = useSelector(selectIsLoggedIn);
-	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const user = useSelector(selectUser);
+	const shouldFetchMaterialRequests =
+		!!user?.groupName && user?.groupName !== GroupName.KIOSK_VISITOR;
 	const sticky = useSelector(selectIsStickyLayout);
 	const showNavigationHeaderRight = useSelector(selectShowNavigationHeaderRight);
 	const showFooter = useSelector(selectShowFooter);
@@ -102,7 +103,10 @@ const AppLayout: FC<any> = ({ children }) => {
 	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces({
 		canViewAllSpaces,
 	});
-	const { data: materialRequests } = useGetPendingMaterialRequests({}, { enabled: isKioskUser });
+	const { data: materialRequests } = useGetPendingMaterialRequests(
+		{},
+		{ enabled: shouldFetchMaterialRequests }
+	);
 	const { data: navigationItems } = useGetNavigationItems(locale);
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
@@ -115,7 +119,10 @@ const AppLayout: FC<any> = ({ children }) => {
 	});
 	const { data: maintenanceAlerts } = useGetActiveMaintenanceAlerts(
 		{},
-		{ keepPreviousData: true, enabled: !isKioskUser }
+		{
+			keepPreviousData: true,
+			enabled: shouldFetchMaterialRequests,
+		}
 	);
 	const { mutateAsync: dismissMaintenanceAlert } = useDismissMaintenanceAlert();
 	const isKioskOrAnonymous = useHasAnyGroup(GroupName.KIOSK_VISITOR, GroupName.ANONYMOUS);

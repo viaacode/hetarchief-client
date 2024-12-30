@@ -16,5 +16,9 @@ export const useGetActiveMaintenanceAlerts = (
 	useQuery(
 		[QUERY_KEYS.getMaintenanceAlerts, props],
 		() => MaintenanceAlertsService.getAllActive(props),
-		options
+		{
+			keepPreviousData: true,
+			enabled: true,
+			...options,
+		}
 	);
