@@ -55,6 +55,7 @@ import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
 import { useGetIeObjectsAlsoInteresting } from '@ie-objects/hooks/get-ie-objects-similar';
 import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-ticket-url';
+import { useIsPublicNewspaper } from '@ie-objects/hooks/get-is-public-newspaper';
 import {
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_FORMATS,
@@ -107,7 +108,7 @@ import { convertDurationStringToSeconds } from '@shared/helpers/convert-duration
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
-import { useHasAllPermission } from '@shared/hooks/has-permission';
+import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -377,6 +378,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	}, [mediaInfo?.pageRepresentations]);
 
 	const arePagesOcrTextsAvailable = compact(pageOcrTexts).length !== 0;
+
+	const isPublicNewspaper: boolean = useIsPublicNewspaper(mediaInfo);
+	// You need the permission or not to be logged in to download the newspaper
+	// https://meemoo.atlassian.net/browse/ARC-2617
+	const canDownloadNewspaper: boolean =
+		(useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user) && isPublicNewspaper;
 
 	const getHighlightedAltoTexts = useCallback((): AltoTextLine[] => {
 		return (
@@ -1092,9 +1099,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						searchResults={searchResults}
 						setSearchResultIndex={handleChangeSearchIndex}
 						onSelection={handleIiifViewerSelection}
-						enableSelection={
-							!!user && user.permissions.includes(Permission.DOWNLOAD_OBJECT)
-						}
+						enableSelection={canDownloadNewspaper}
 					/>
 				</>
 			);

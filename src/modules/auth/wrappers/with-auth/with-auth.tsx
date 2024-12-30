@@ -35,7 +35,7 @@ export const withAuth = (
 			const tos = await TosService.getTos();
 
 			const params = {
-				[QUERY_PARAM_KEY.REDIRECT_TO_QUERY_KEY]: router.asPath,
+				[QUERY_PARAM_KEY.REDIRECT_TO_QUERY_KEY]: router.asPath.replace(/^\/nl/, ''),
 			};
 
 			const toTermsOfService = async () => {

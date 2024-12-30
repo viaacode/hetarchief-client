@@ -116,7 +116,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 						<Button
 							label={`${tHtml(
 								'modules/shared/components/error-no-access-to-object/error-no-access-to-object___plan-een-bezoek-bij'
-							)}${visitorSpaceName}`}
+							)} ${visitorSpaceName}`}
 							variants="black"
 							className={styles['p-error-no-access-to-object__button']}
 							onClick={() => onOpenRequestAccess()}

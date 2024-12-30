@@ -199,7 +199,6 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 			getContentPageByLanguageAndPathEndpoint: null,
 		},
 		database: {
-			databaseApplicationType: DatabaseType.hetArchief,
 			proxyUrl: publicRuntimeConfig.PROXY_URL,
 		},
 		flowplayer: {
@@ -215,6 +214,7 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 		locale: locale as any,
 		env: {
 			CLIENT_URL: publicRuntimeConfig.CLIENT_URL,
+			DATABASE_APPLICATION_TYPE: DatabaseType.hetArchief,
 		},
 	};
 }

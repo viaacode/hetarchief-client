@@ -56,3 +56,4 @@ tests/node_modules
 dist/
 
 tests/end2end.xml
+tmp/

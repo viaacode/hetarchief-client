@@ -182,8 +182,9 @@ export const OBJECT_DETAIL_TABS = (
 
 export const KIOSK_ACTION_SORT_MAP = (): MetadataSortMap[] => [];
 
-export const ANONYMOUS_ACTION_SORT_MAP = (): MetadataSortMap[] => [
-	{ id: MediaActions.RequestMaterial, isPrimary: true },
+export const ANONYMOUS_ACTION_SORT_MAP = (canExport: boolean): MetadataSortMap[] => [
+	...(canExport ? [{ id: MediaActions.Export, isPrimary: true }] : []),
+	{ id: MediaActions.RequestMaterial },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];

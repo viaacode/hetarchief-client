@@ -7,16 +7,16 @@ import { IeObjectsService } from './../services';
 
 export const useGetIeObjectPreviousNextIds = (
 	collectionId: string | undefined,
-	ieObjectId: string | undefined,
+	ieObjectIri: string | undefined,
 	options: { enabled: boolean } = { enabled: true }
 ): UseQueryResult<IeObjectPreviousNextIds> => {
 	return useQuery(
-		[QUERY_KEYS.getIeObjectsResults, collectionId, ieObjectId, options],
+		[QUERY_KEYS.getIeObjectsResults, collectionId, ieObjectIri, options],
 		async () => {
-			if (!collectionId || !ieObjectId) {
+			if (!collectionId || !ieObjectIri) {
 				return { previousIeObjectId: null, nextIeObjectId: null };
 			}
-			return IeObjectsService.getIeObjectPreviousNextIds(collectionId, ieObjectId);
+			return IeObjectsService.getIeObjectPreviousNextIds(collectionId, ieObjectIri);
 		},
 		{
 			keepPreviousData: true,

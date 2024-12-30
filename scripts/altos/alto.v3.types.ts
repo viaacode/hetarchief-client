@@ -50,8 +50,10 @@ export interface Alto3Layout {
 
 export interface Alto3Page {
 	$: Alto3GeneratedType3;
-	TopMargin: Alto3TopMargin[];
-	BottomMargin: Alto3BottomMargin[];
+	TopMargin: Alto3PageTextArea[];
+	RightMargin: Alto3PageTextArea[];
+	BottomMargin: Alto3PageTextArea[];
+	LeftMargin: Alto3PageTextArea[];
 	PrintSpace: Alto3PrintSpace[];
 }
 
@@ -62,8 +64,9 @@ export interface Alto3GeneratedType3 {
 	WIDTH: string;
 }
 
-export interface Alto3TopMargin {
+export interface Alto3PageTextArea {
 	$: Alto3GeneratedType4;
+	TextBlock: Alto3TextBlock[];
 }
 
 export interface Alto3GeneratedType4 {
@@ -73,10 +76,6 @@ export interface Alto3GeneratedType4 {
 	HPOS: string;
 }
 
-export interface Alto3BottomMargin {
-	$: Alto3GeneratedType5;
-}
-
 export interface Alto3GeneratedType5 {
 	HEIGHT: string;
 	WIDTH: string;
@@ -84,19 +83,10 @@ export interface Alto3GeneratedType5 {
 	HPOS: string;
 }
 
-export interface Alto3PrintSpace {
-	$: Alto3GeneratedType6;
-	TextBlock: Alto3TextBlock[];
+export interface Alto3PrintSpace extends Alto3PageTextArea {
 	Illustration: Alto3Illustration[];
 	ComposedBlock: Alto3ComposedBlock[];
 	GraphicalElement: Alto3GraphicalElement2[];
-}
-
-export interface Alto3GeneratedType6 {
-	HEIGHT: string;
-	WIDTH: string;
-	VPOS: string;
-	HPOS: string;
 }
 
 export interface Alto3TextBlock {
