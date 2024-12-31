@@ -15,7 +15,6 @@ import styles from './AdminTranslationsOverviewPage.module.scss';
 
 const TranslationsOverview = lazy(() =>
 	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => {
-		console.log('lazy loaded admin-core admin.mjs', adminCoreModule);
 		return {
 			default: adminCoreModule.TranslationsOverview,
 		};

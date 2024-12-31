@@ -20,12 +20,13 @@ export const VISITOR_SPACE_LICENSES = [
 
 export const mapMaintainerToElastic = (
 	query: SearchPageQueryParams,
-	activeVisitorSpace: VisitRequest | undefined
+	activeVisitorSpace: VisitRequest | undefined,
+	accessibleVisitorSpaceRequests: VisitRequest[] | undefined
 ): IeObjectsSearchFilter[] => {
-	const maintainerId =
-		activeVisitorSpace?.spaceSlug === query?.[SearchFilterId.Maintainer]
-			? activeVisitorSpace?.spaceMaintainerId
-			: '';
+	const filterMaintainerSlug = query?.[SearchFilterId.Maintainer];
+	const maintainerId = accessibleVisitorSpaceRequests?.find(
+		(visitRequest) => visitRequest.spaceSlug === filterMaintainerSlug
+	)?.spaceMaintainerId;
 
 	if (!maintainerId) {
 		return [];

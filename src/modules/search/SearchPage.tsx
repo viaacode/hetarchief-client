@@ -176,7 +176,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const { data: visitRequestsPaginated } = useGetVisitRequests(
 		{
 			page: 1,
-			size: 10,
+			size: 100,
 			orderProp: 'startAt',
 			orderDirection: OrderDirection.desc,
 			status: VisitStatus.APPROVED,
@@ -248,7 +248,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	} = useGetIeObjects(
 		{
 			filters: [
-				...mapMaintainerToElastic(query, activeVisitRequest),
+				...mapMaintainerToElastic(
+					query,
+					activeVisitRequest,
+					accessibleVisitorSpaceRequests
+				),
 				...mapFiltersToElastic(query),
 			],
 			page,
@@ -259,7 +263,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	);
 	const { data: formatCounts } = useGetIeObjectFormatCounts(
 		[
-			...mapMaintainerToElastic(query, activeVisitRequest),
+			...mapMaintainerToElastic(query, activeVisitRequest, accessibleVisitorSpaceRequests),
 			...mapFiltersToElastic(query),
 		].filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
 
