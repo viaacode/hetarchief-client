@@ -114,7 +114,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 				buttonsComponent={
 					<div className={styles['p-error-no-access-to-object__buttons-container']}>
 						<Button
-							label={`${tHtml(
+							label={`${tText(
 								'modules/shared/components/error-no-access-to-object/error-no-access-to-object___plan-een-bezoek-bij'
 							)} ${visitorSpaceName}`}
 							variants="black"
