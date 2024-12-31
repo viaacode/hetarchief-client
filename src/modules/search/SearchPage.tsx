@@ -173,15 +173,18 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		VISITOR_SPACE_QUERY_PARAM_INIT.orderDirection) as OrderDirection;
 
 	const isUserWithAccount = isLoggedIn && !!user && !isAnonymousUser;
-	const { data: visitRequestsPaginated } = useGetVisitRequests({
-		page: 1,
-		size: 10,
-		orderProp: 'startAt',
-		orderDirection: OrderDirection.desc,
-		status: VisitStatus.APPROVED,
-		timeframe: VisitTimeframe.ACTIVE,
-		personal: true,
-	});
+	const { data: visitRequestsPaginated } = useGetVisitRequests(
+		{
+			page: 1,
+			size: 100,
+			orderProp: 'startAt',
+			orderDirection: OrderDirection.desc,
+			status: VisitStatus.APPROVED,
+			timeframe: VisitTimeframe.ACTIVE,
+			personal: true,
+		},
+		{ enabled: !!user }
+	);
 	const accessibleVisitorSpaceRequests: VisitRequest[] = useMemo(
 		() =>
 			isUserWithAccount
@@ -245,7 +248,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	} = useGetIeObjects(
 		{
 			filters: [
-				...mapMaintainerToElastic(query, activeVisitRequest),
+				...mapMaintainerToElastic(
+					query,
+					activeVisitRequest,
+					accessibleVisitorSpaceRequests
+				),
 				...mapFiltersToElastic(query),
 			],
 			page,
@@ -256,7 +263,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	);
 	const { data: formatCounts } = useGetIeObjectFormatCounts(
 		[
-			...mapMaintainerToElastic(query, activeVisitRequest),
+			...mapMaintainerToElastic(query, activeVisitRequest, accessibleVisitorSpaceRequests),
 			...mapFiltersToElastic(query),
 		].filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
 

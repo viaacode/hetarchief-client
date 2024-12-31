@@ -73,7 +73,6 @@ test('T24: Download krant in verschillende formaten', async ({ page, context }) 
 	await expect(continueDownloadButton).toBeVisible();
 	await expect(continueDownloadButton).toHaveText(continueDownloadLabel);
 	const html = await continueDownloadButton.innerHTML();
-	console.log(html);
 
 	// register a download event listener
 	let downloadPromise = page.waitForEvent('download');

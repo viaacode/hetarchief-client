@@ -246,6 +246,10 @@ $media-card-list-view-height: 13rem;
 			background-color: #f8f8f8;
 			position: relative;
 
+			&:global([class*="c-media-card__header--no-content"]) {
+				background-color: transparent;
+			}
+
 			img {
 				width: 100%;
 				height: auto;

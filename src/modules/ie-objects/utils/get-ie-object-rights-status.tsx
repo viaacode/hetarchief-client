@@ -27,7 +27,7 @@ export function getIeObjectRightsStatusInfo(
 	}
 	if (
 		ieObject.licenses.includes(IeObjectLicense.COPYRIGHT_UNDETERMINED) &&
-		!ieObject.licenses.includes(IeObjectLicense.PUBLIEK_CONTENT)
+		!ieObject.licenses.includes(IeObjectLicense.PUBLIC_DOMAIN)
 	) {
 		return {
 			label: tText(

@@ -17,6 +17,7 @@ export interface GetVisitRequestsProps {
 	orderDirection?: OrderDirection;
 	userProfileId?: string;
 	personal?: boolean;
+	ignoreAuthError?: boolean;
 }
 
 export interface GetAllActiveVisitsProps {

@@ -35,25 +35,23 @@ export class VisitRequestService {
 		orderProp,
 		orderDirection = OrderDirection.desc,
 		personal,
+		ignoreAuthError = false,
 	}: GetVisitRequestsProps): Promise<IPagination<VisitRequest>> {
-		const parsed = await ApiService.getApi()
-			.get(
-				stringifyUrl({
-					url: personal ? `${VISITS_SERVICE_BASE_URL}/personal` : VISITS_SERVICE_BASE_URL,
-					query: {
-						...(searchInput?.trim() ? { query: `%${searchInput}%` } : {}),
-						status,
-						timeframe,
-						requesterId,
-						visitorSpaceSlug,
-						page,
-						size,
-						orderProp,
-						orderDirection,
-					},
-				})
-			)
-			.json();
+		const url = stringifyUrl({
+			url: personal ? `${VISITS_SERVICE_BASE_URL}/personal` : VISITS_SERVICE_BASE_URL,
+			query: {
+				...(searchInput?.trim() ? { query: `%${searchInput}%` } : {}),
+				status,
+				timeframe,
+				requesterId,
+				visitorSpaceSlug,
+				page,
+				size,
+				orderProp,
+				orderDirection,
+			},
+		});
+		const parsed = await ApiService.getApi(ignoreAuthError).get(url).json();
 		return parsed as IPagination<VisitRequest>;
 	}
 

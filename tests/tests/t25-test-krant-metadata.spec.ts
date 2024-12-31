@@ -81,7 +81,6 @@ test('T25: Krant metadata', async ({ page, context }) => {
 	metadataField2 = page.locator(moduleClassSelector('c-metadata__item'), {
 		hasText: SITE_TRANSLATIONS.nl['modules/ie-objects/ie-objects___ocr-software-version'],
 	});
-	console.log(await metadataField2.innerHTML());
 	await expect(metadataField2).toBeVisible();
 	await expect(metadataField2.locator('text=12')).toBeVisible();
 
