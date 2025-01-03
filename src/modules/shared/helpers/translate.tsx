@@ -10,7 +10,11 @@ import Html from '@shared/components/Html/Html';
  * @param params
  */
 export function tHtml(key: string, params?: TOptions): ReactNode | string {
-	const translatedValue: string = tText(key, params);
+	const translatedValue: string = tText(
+		/* IGNORE_ADMIN_CORE_TRANSLATIONS_EXTRACTION */
+		key,
+		params
+	);
 
 	return <Html content={translatedValue} type="span" />;
 }
