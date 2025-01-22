@@ -4,6 +4,8 @@ import { kebabCase } from 'lodash-es';
 import { type FC, useLayoutEffect, useRef, useState } from 'react';
 
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { Locale } from '@shared/utils/i18n';
 
 import { CardImage } from '../CardImage';
 
@@ -14,6 +16,7 @@ import { VisitorSpaceCardControls } from './VisitorSpaceCardControls';
 
 const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 	const { room, type } = props;
+	const locale = useLocale();
 	const [expandDescription, setExpandDescription] = useState(false);
 	const descriptionElement = useRef<HTMLDivElement | null>(null);
 	const [hasOverflowingChildren, setHasOverflowingChildren] = useState(false);
@@ -148,22 +151,28 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 					)}
 				>
 					{flat && renderTitle()}
-					<div
-						className={clsx(styles['c-visitor-space-card__description__container'], {
-							[styles['c-visitor-space-card__description__container--expanded']]:
-								expandDescription,
-						})}
-						onClick={() => setExpandDescription(!expandDescription)}
-					>
-						{renderDescription()}
-						{hasOverflowingChildren && (
-							<div
-								className={
-									styles['c-visitor-space-card__description__container__icon']
+					{locale === Locale.nl && (
+						<div
+							className={clsx(
+								styles['c-visitor-space-card__description__container'],
+								{
+									[styles[
+										'c-visitor-space-card__description__container--expanded'
+									]]: expandDescription,
 								}
-							/>
-						)}
-					</div>
+							)}
+							onClick={() => setExpandDescription(!expandDescription)}
+						>
+							{renderDescription()}
+							{hasOverflowingChildren && (
+								<div
+									className={
+										styles['c-visitor-space-card__description__container__icon']
+									}
+								/>
+							)}
+						</div>
+					)}
 				</div>
 
 				<VisitorSpaceCardControls {...props} />

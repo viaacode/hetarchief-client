@@ -94,6 +94,7 @@ import { EventsService, LogEventType } from '@shared/services/events-service';
 import { selectBreadcrumbs } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
+import { Locale } from '@shared/utils/i18n';
 import {
 	type LanguageCode,
 	LANGUAGES,
@@ -507,12 +508,12 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		if (!isKiosk) {
 			return (
 				<div className={styles['p-object-detail__sidebar__content-maintainer-data']}>
-					{maintainerDescription && (
+					{maintainerDescription && locale === Locale.nl && (
 						<p className={styles['p-object-detail__sidebar__content-description']}>
 							{maintainerDescription}
 						</p>
 					)}
-					{maintainerSiteUrl && (
+					{maintainerSiteUrl && locale === Locale.nl && (
 						<p className={styles['p-object-detail__sidebar__content-link']}>
 							<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
 								{maintainerSiteUrl}
