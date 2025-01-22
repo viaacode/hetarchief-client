@@ -19,6 +19,7 @@ export interface Rect {
 
 export interface IiifViewerProps {
 	id: string;
+	ticketServiceToken: string;
 	imageInfos: ImageInfo[];
 	isTextOverlayVisible: boolean;
 	setIsTextOverlayVisible: (isOcrEnabled: boolean) => void;

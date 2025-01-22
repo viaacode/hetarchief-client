@@ -52,6 +52,7 @@ import Metadata, {
 import { ObjectPlaceholder } from '@ie-objects/components/ObjectPlaceholder';
 import { type MediaObject, RelatedObject } from '@ie-objects/components/RelatedObject';
 import { useGetAltoJsonFileContent } from '@ie-objects/hooks/get-alto-json-file-content';
+import { useGetIeObjectTicketServiceToken } from '@ie-objects/hooks/get-ie-object-ticket-service-token';
 import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
 import { useGetIeObjectsAlsoInteresting } from '@ie-objects/hooks/get-ie-objects-similar';
@@ -274,6 +275,35 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			)
 		) || [];
 
+	const iiifViewerImageInfos = useMemo((): ImageInfo[] => {
+		return compact(
+			mediaInfo?.pageRepresentations?.flatMap((pageRepresentation) => {
+				const files = pageRepresentation?.representations?.flatMap(
+					(representation) => representation.files
+				);
+				const imageApiFile = files.find((file) =>
+					IMAGE_API_FORMATS.includes(file.mimeType)
+				);
+				if (!imageApiFile?.storedAt) {
+					return null;
+				}
+				const imageFile = files.find((file) => IMAGE_FORMATS.includes(file.mimeType));
+				const altoFile = files.find((file) => XML_FORMATS.includes(file.mimeType));
+				if (!imageFile?.storedAt) {
+					return null;
+				}
+				return {
+					imageUrl: imageApiFile.storedAt.replace(
+						'https://iiif-qas.meemoo.be/image/3/public',
+						'https://iiif-qas.meemoo.be/image/3/hetarchief'
+					),
+					thumbnailUrl: imageFile?.thumbnailUrl,
+					altoUrl: altoFile?.storedAt,
+				};
+			})
+		);
+	}, [mediaInfo]);
+
 	// Playable url for flowplayer
 	const currentPlayableFile: IeObjectFile | null = getFileByType(FLOWPLAYER_FORMATS);
 	const fileStoredAt: string | null = currentPlayableFile?.storedAt ?? null;
@@ -284,6 +314,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	} = useGetIeObjectsTicketInfo(
 		fileStoredAt,
 		() => setFlowPlayerKey(fileStoredAt) // Force flowplayer rerender after successful fetch
+	);
+	const { data: ticketServiceToken } = useGetIeObjectTicketServiceToken(
+		iiifViewerImageInfos?.[0]?.imageUrl,
+		{
+			enabled: !!iiifViewerImageInfos?.[0]?.imageUrl,
+		}
 	);
 
 	// also interesting
@@ -1024,32 +1060,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		);
 	};
 
-	const iiifViewerImageInfos = useMemo((): ImageInfo[] => {
-		return compact(
-			mediaInfo?.pageRepresentations?.flatMap((pageRepresentation) => {
-				const files = pageRepresentation?.representations?.flatMap(
-					(representation) => representation.files
-				);
-				const imageApiFile = files.find((file) =>
-					IMAGE_API_FORMATS.includes(file.mimeType)
-				);
-				if (!imageApiFile?.storedAt) {
-					return null;
-				}
-				const imageFile = files.find((file) => IMAGE_FORMATS.includes(file.mimeType));
-				const altoFile = files.find((file) => XML_FORMATS.includes(file.mimeType));
-				if (!imageFile?.storedAt) {
-					return null;
-				}
-				return {
-					imageUrl: imageApiFile.storedAt,
-					thumbnailUrl: imageFile?.thumbnailUrl,
-					altoUrl: altoFile?.storedAt,
-				};
-			})
-		);
-	}, [mediaInfo]);
-
 	const handleActiveImageIndexChange = (index: number) => {
 		setCurrentPageIndex(index, 'replaceIn');
 		setIsLoadingPageImage(true);
@@ -1084,6 +1094,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						imageInfos={iiifViewerImageInfos}
 						ref={iiifViewerReference}
 						id={mediaInfo?.schemaIdentifier as string}
+						ticketServiceToken={ticketServiceToken as string}
 						isTextOverlayVisible={isTextOverlayVisible || false}
 						setIsTextOverlayVisible={handleIsTextOverlayVisibleChange}
 						activeImageIndex={currentPageIndex}

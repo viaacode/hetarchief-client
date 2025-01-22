@@ -45,6 +45,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		{
 			imageInfos,
 			id,
+			ticketServiceToken,
 			isTextOverlayVisible,
 			setIsTextOverlayVisible,
 			activeImageIndex,
@@ -374,7 +375,12 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				// Init Open Seadragon viewer
 				const openSeadragonViewerTemp: OpenSeadragon.Viewer =
 					new openSeadragonLibTemp.Viewer(
-						getOpenSeadragonConfig(imageSources, isMobile, iiifViewerId)
+						getOpenSeadragonConfig(
+							imageSources,
+							isMobile,
+							iiifViewerId,
+							ticketServiceToken
+						)
 					);
 
 				addFullscreenCloseButton(openSeadragonViewerTemp);
