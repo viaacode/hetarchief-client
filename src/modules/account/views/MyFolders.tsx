@@ -7,8 +7,8 @@ import { stringifyUrl } from 'query-string';
 import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
-import { useQueryParams } from 'use-query-params';
 
+import { useQueryParams } from 'use-query-params';
 import { CreateFolderButton } from '@account/components';
 import { EditFolderBlade } from '@account/components/EditFolderBlade';
 import { ACCOUNT_FOLDERS_QUERY_PARAM_CONFIG, FolderItemListSize, Permission } from '@account/const';
@@ -719,7 +719,9 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				translatedPages={[]}
 				relativeUrl={url}
 			/>
-			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT]}>
+			<PermissionsCheck
+				allPermissions={[Permission.MANAGE_ACCOUNT, Permission.MANAGE_FOLDERS]}
+			>
 				{renderPageContent()}
 			</PermissionsCheck>
 		</VisitorLayout>

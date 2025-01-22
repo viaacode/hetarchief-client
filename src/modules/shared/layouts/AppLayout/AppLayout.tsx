@@ -1,16 +1,14 @@
 import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/dist/client.mjs';
 import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
+import type { Avo } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Slide, ToastContainer } from 'react-toastify';
-import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 
+import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { GroupName, Permission } from '@account/const';
 import { AuthModal } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
@@ -19,13 +17,14 @@ import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-cont
 import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
 import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
+
 import { Footer } from '@navigation/components/Footer';
 import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';
 import { Navigation } from '@navigation/components/Navigation/Navigation';
 import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
-import { type NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
+import { type NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
 import {
 	GET_NAV_HAMBURGER_PROPS,
 	GET_NAV_ITEMS_RIGHT,
@@ -72,7 +71,12 @@ import { Breakpoints } from '@shared/types';
 import { type VisitRequest } from '@shared/types/visit-request';
 import { type Locale } from '@shared/utils/i18n';
 import { scrollTo } from '@shared/utils/scroll-to-top';
+
 import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visits';
+
+import { useSelector } from 'react-redux';
+import { Slide, ToastContainer } from 'react-toastify';
+import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 
 import packageJson from '../../../../../package.json';
 
@@ -290,6 +294,7 @@ const AppLayout: FC<any> = ({ children }) => {
 				accessibleVisitorSpaces || [],
 				showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
 				locale,
+				user as Avo.User.CommonUser | null,
 				{
 					hasUnreadNotifications,
 					notificationsOpen: showNotificationsCenter,

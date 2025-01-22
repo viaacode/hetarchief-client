@@ -1,4 +1,5 @@
 import { Badge } from '@meemoo/react-components';
+import type { Avo } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import { groupBy, intersection, isNil } from 'lodash-es';
 import Link from 'next/link';
@@ -513,7 +514,8 @@ export const getNavigationItemsProfileDropdown = (
 	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
 	linkedSpaceOrId: string | null,
-	locale: Locale
+	locale: Locale,
+	user: Avo.User.CommonUser | null
 ): NavigationItem[] => {
 	const profileDropdown = getDynamicHeaderLinks(
 		currentPath,
@@ -542,8 +544,15 @@ export const getNavigationItemsProfileDropdown = (
 		}
 	);
 
+	const filteredDefaultRoutes = defaultRoutes?.filter((navItem: NavigationItem) => {
+		return !(
+			navItem.path.trim() === ROUTES_BY_LOCALE[locale].accountMyFolders.trim() &&
+			!user?.permissions?.includes(Permission.MANAGE_FOLDERS)
+		);
+	});
+
 	return [
-		...(defaultRoutes || []),
+		...(filteredDefaultRoutes || []),
 		...((adminRoutes || [])?.length > 0
 			? [getDivider('divider-before-admin-routes'), ...adminRoutes]
 			: []),
