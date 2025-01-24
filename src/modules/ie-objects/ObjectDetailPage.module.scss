@@ -18,7 +18,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
  *
  * DESKTOP:
  *
- *        1                                                                                   2                                           3
+ *        3                                                                                   2                                           3
  *        │                                                                                   │                                           │
  *    1───┼───────────────────────────────────────────────────────────────────────────────────┴───────────────────────────────────────────┤
  *        │                                                                                                                               │
@@ -487,6 +487,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			border-radius: $button-radius;
 			text-align: center;
 
+
 			:global(.pagination-info) {
 				flex-grow: 1;
 			}
@@ -499,6 +500,12 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			@media (max-width: $breakpoint-md) {
 				:global(.c-button__label) {
 					display: none;
+				}
+			}
+
+			&__button {
+				&--active {
+					color: $black !important;
 				}
 			}
 		}
