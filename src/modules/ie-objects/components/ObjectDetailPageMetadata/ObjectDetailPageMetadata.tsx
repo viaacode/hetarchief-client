@@ -513,7 +513,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							{maintainerDescription}
 						</p>
 					)}
-					{maintainerSiteUrl && locale === Locale.nl && (
+					{maintainerSiteUrl && (
 						<p className={styles['p-object-detail__sidebar__content-link']}>
 							<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
 								{maintainerSiteUrl}
