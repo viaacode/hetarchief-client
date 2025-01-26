@@ -545,10 +545,13 @@ export const getNavigationItemsProfileDropdown = (
 	);
 
 	const filteredDefaultRoutes = defaultRoutes?.filter((navItem: NavigationItem) => {
-		return !(
-			navItem.path.trim() === ROUTES_BY_LOCALE[locale].accountMyFolders.trim() &&
-			!user?.permissions?.includes(Permission.MANAGE_FOLDERS)
-		);
+		if (navItem.path.trim() === ROUTES_BY_LOCALE[locale].accountMyFolders.trim()) {
+			// Check managed folders permission
+			return user?.permissions?.includes(Permission.MANAGE_FOLDERS);
+		}
+
+		// All other nav items can be shown
+		return true;
 	});
 
 	return [
