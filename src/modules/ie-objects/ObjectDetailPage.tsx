@@ -90,7 +90,12 @@ import {
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import IiifViewer from '@iiif-viewer/IiifViewer';
-import { type IiifViewerFunctions, type ImageInfo, type Rect } from '@iiif-viewer/IiifViewer.types';
+import {
+	type IiifViewerFunctions,
+	type ImageInfo,
+	type ImageInfoWithToken,
+	type Rect,
+} from '@iiif-viewer/IiifViewer.types';
 import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
@@ -274,7 +279,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				rep.files.filter((file) => FLOWPLAYER_FORMATS.includes(file.mimeType))
 			)
 		) || [];
-
 	const iiifViewerImageInfos = useMemo((): ImageInfo[] => {
 		return compact(
 			mediaInfo?.pageRepresentations?.flatMap((pageRepresentation) => {
@@ -302,7 +306,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				};
 			})
 		);
-	}, [mediaInfo]);
+	}, [mediaInfo?.pageRepresentations]);
 
 	// Playable url for flowplayer
 	const currentPlayableFile: IeObjectFile | null = getFileByType(FLOWPLAYER_FORMATS);
@@ -316,10 +320,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		() => setFlowPlayerKey(fileStoredAt) // Force flowplayer rerender after successful fetch
 	);
 	const { data: ticketServiceToken } = useGetIeObjectTicketServiceToken(
-		iiifViewerImageInfos?.[0]?.imageUrl,
+		// iiifViewerImageInfos?.[0]?.imageUrl,
+		'image/3/hetarchief%2FOR-1c1tf48%2F96%2F962c02c6af294354b24054266be5a5f6a7d3eed979e44b32a32c14bcdb439a9dd1903bb796db485d899602eceee19224.jp2',
 		{
 			enabled: !!iiifViewerImageInfos?.[0]?.imageUrl,
 		}
+	);
+	const imageInfosWithTokens = iiifViewerImageInfos.map(
+		(imageInfo): ImageInfoWithToken => ({
+			...imageInfo,
+			token: ticketServiceToken as string, // TODO fetch one token per newspaper page
+		})
 	);
 
 	// also interesting
@@ -1073,7 +1084,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 */
 
 	const renderMedia = (): ReactNode => {
-		if ((isLoadingPlayableUrl && !isNewspaper) || !mediaInfo) {
+		if ((isLoadingPlayableUrl && !isNewspaper) || !mediaInfo || !ticketServiceToken) {
 			return <Loading fullscreen owner="object detail page: render media" />;
 		}
 
@@ -1091,10 +1102,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						</div>
 					)}
 					<IiifViewer
-						imageInfos={iiifViewerImageInfos}
+						imageInfosWithTokens={imageInfosWithTokens}
 						ref={iiifViewerReference}
 						id={mediaInfo?.schemaIdentifier as string}
-						ticketServiceToken={ticketServiceToken as string}
 						isTextOverlayVisible={isTextOverlayVisible || false}
 						setIsTextOverlayVisible={handleIsTextOverlayVisibleChange}
 						activeImageIndex={currentPageIndex}

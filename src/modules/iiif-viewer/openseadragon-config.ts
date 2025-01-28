@@ -1,21 +1,14 @@
-import { type Options } from 'openseadragon';
+import { type Options, type TiledImageOptions } from 'openseadragon';
 
 export function getOpenSeadragonConfig(
-	tileSources: (string | { type: 'image'; url: string })[],
+	tileSources: TiledImageOptions[],
 	isMobile: boolean,
-	id: string,
-	token: string
+	id: string
 ): Options {
 	return {
 		id,
 
 		tileSources,
-		loadTilesWithAjax: true,
-		// https://openseadragon.github.io/docs/OpenSeadragon.html#:~:text=A%20set%20of%20headers%20to%20include%20when%20making%20AJAX%20requests%20for%20tile%20sources%20or%20tiles.
-		ajaxHeaders: {
-			Authorization: 'Bearer ' + token,
-		},
-
 		// preserveViewport: true,
 		defaultZoomLevel: isMobile ? 0.9 : 0.5,
 		minZoomLevel: 0.3,
