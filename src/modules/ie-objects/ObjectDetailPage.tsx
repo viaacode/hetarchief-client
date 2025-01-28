@@ -1380,10 +1380,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 				<div className={styles['p-object-detail__ocr__pagination']}>
 					<Button
-						className={clsx(
-							styles['c-iiif-viewer__iiif__controls__button'],
-							'c-iiif-viewer__iiif__controls__grid-view__previous-image'
-						)}
+						className={clsx(styles['p-object-detail__ocr__pagination__button'], {
+							[styles['p-object-detail__ocr__pagination__button--active']]:
+								currentPageIndex > 0,
+						})}
 						iconStart={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
 						aria-label={tText(
 							'modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding'
@@ -1405,10 +1405,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						)}
 					</span>
 					<Button
-						className={clsx(
-							styles['c-iiif-viewer__iiif__controls__button'],
-							'c-iiif-viewer__iiif__controls__grid-view__next-image'
-						)}
+						className={clsx(styles['p-object-detail__ocr__pagination__button'], {
+							[styles['p-object-detail__ocr__pagination__button--active']]:
+								currentPageIndex < iiifViewerImageInfos.length - 1,
+						})}
 						iconEnd={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
 						aria-label={tText(
 							'modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding'

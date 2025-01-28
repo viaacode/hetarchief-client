@@ -1,6 +1,7 @@
 import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/dist/client.mjs';
 import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
+import type { Avo } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import getConfig from 'next/config';
 import Link from 'next/link';
@@ -290,6 +291,7 @@ const AppLayout: FC<any> = ({ children }) => {
 				accessibleVisitorSpaces || [],
 				showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
 				locale,
+				user as Avo.User.CommonUser | null,
 				{
 					hasUnreadNotifications,
 					notificationsOpen: showNotificationsCenter,

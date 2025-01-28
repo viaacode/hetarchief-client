@@ -132,14 +132,14 @@ export const SEARCH_PAGE_FILTERS = (
 		label: tText('modules/visitor-space/const/index___analoge-drager'),
 		form: MediumFilterForm,
 		type: FilterMenuType.Modal,
-		tabs: ALL_TABS,
+		tabs: [SearchPageMediaType.All, SearchPageMediaType.Video, SearchPageMediaType.Audio],
 	},
 	{
 		id: SearchFilterId.Creator,
 		label: tText('modules/visitor-space/const/index___maker'),
 		form: CreatorFilterForm,
 		type: FilterMenuType.Modal,
-		tabs: ALL_TABS,
+		tabs: [SearchPageMediaType.All, SearchPageMediaType.Video, SearchPageMediaType.Audio],
 	},
 	{
 		id: SearchFilterId.Mentions,
