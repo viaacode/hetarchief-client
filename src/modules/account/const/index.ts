@@ -30,6 +30,7 @@ export const GET_ACCOUNT_NAVIGATION_LINKS = (locale: Locale): NavigationLinkInfo
 		Permission.READ_PERSONAL_APPROVED_VISIT_REQUESTS
 	);
 	const hasMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
+	const hasPersonalFolderPerm = useHasAnyPermission(Permission.MANAGE_FOLDERS);
 
 	const links: NavigationLinkInfo[] = [
 		{
@@ -37,12 +38,15 @@ export const GET_ACCOUNT_NAVIGATION_LINKS = (locale: Locale): NavigationLinkInfo
 			label: tText('modules/account/const/index___mijn-profiel'),
 			href: ROUTES_BY_LOCALE[locale].accountMyProfile,
 		},
-		{
+	];
+
+	if (hasPersonalFolderPerm) {
+		links.push({
 			id: 'account-folders',
 			label: tText('modules/account/const/index___mijn-mappen'),
 			href: ROUTES_BY_LOCALE[locale].accountMyFolders,
-		},
-	];
+		});
+	}
 
 	if (hasAccountHistoryPerm) {
 		links.push({
