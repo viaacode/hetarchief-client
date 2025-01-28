@@ -1,4 +1,5 @@
 import { Avatar, Button } from '@meemoo/react-components';
+import type { Avo } from '@viaa/avo2-types';
 import clsx from 'clsx';
 
 import { MaterialRequestCenterButton } from '@navigation/components/MaterialRequestCenter';
@@ -53,6 +54,7 @@ export const GET_NAV_ITEMS_RIGHT_LOGGED_IN = (
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
 	linkedSpaceSlug: string | null,
 	locale: Locale,
+	user: Avo.User.CommonUser | null,
 	{
 		hasUnreadNotifications,
 		notificationsOpen,
@@ -105,7 +107,8 @@ export const GET_NAV_ITEMS_RIGHT_LOGGED_IN = (
 					navigationItems,
 					accessibleVisitorSpaces,
 					linkedSpaceSlug,
-					locale
+					locale,
+					user
 				),
 				{
 					id: 'log-out',

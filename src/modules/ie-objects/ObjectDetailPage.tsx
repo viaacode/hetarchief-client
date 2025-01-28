@@ -14,27 +14,8 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { parseUrl, stringifyUrl } from 'query-string';
-import React, {
-	type FC,
-	Fragment,
-	type MutableRefObject,
-	type ReactNode,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-	BooleanParam,
-	NumberParam,
-	StringParam,
-	useQueryParam,
-	withDefault,
-} from 'use-query-params';
 
+import { parseUrl, stringifyUrl } from 'query-string';
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { type User } from '@auth/types';
@@ -88,10 +69,11 @@ import {
 	NEWSPAPERS_SERVICE_BASE_URL,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
+import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import IiifViewer from '@iiif-viewer/IiifViewer';
 import { type IiifViewerFunctions, type ImageInfo, type Rect } from '@iiif-viewer/IiifViewer.types';
-import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
+
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
@@ -130,6 +112,26 @@ import { VisitorSpaceNavigation } from '@visitor-space/components/VisitorSpaceNa
 import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
+
+import React, {
+	type FC,
+	Fragment,
+	type MutableRefObject,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	BooleanParam,
+	NumberParam,
+	StringParam,
+	useQueryParam,
+	withDefault,
+} from 'use-query-params';
 
 import styles from './ObjectDetailPage.module.scss';
 
@@ -1359,10 +1361,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 				<div className={styles['p-object-detail__ocr__pagination']}>
 					<Button
-						className={clsx(
-							styles['c-iiif-viewer__iiif__controls__button'],
-							'c-iiif-viewer__iiif__controls__grid-view__previous-image'
-						)}
+						className={clsx(styles['p-object-detail__ocr__pagination__button'], {
+							[styles['p-object-detail__ocr__pagination__button--active']]:
+								currentPageIndex > 0,
+						})}
 						iconStart={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
 						aria-label={tText(
 							'modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding'
@@ -1384,10 +1386,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						)}
 					</span>
 					<Button
-						className={clsx(
-							styles['c-iiif-viewer__iiif__controls__button'],
-							'c-iiif-viewer__iiif__controls__grid-view__next-image'
-						)}
+						className={clsx(styles['p-object-detail__ocr__pagination__button'], {
+							[styles['p-object-detail__ocr__pagination__button--active']]:
+								currentPageIndex < iiifViewerImageInfos.length - 1,
+						})}
 						iconEnd={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
 						aria-label={tText(
 							'modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding'

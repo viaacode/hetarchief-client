@@ -719,7 +719,9 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				translatedPages={[]}
 				relativeUrl={url}
 			/>
-			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT]}>
+			<PermissionsCheck
+				allPermissions={[Permission.MANAGE_ACCOUNT, Permission.MANAGE_FOLDERS]}
+			>
 				{renderPageContent()}
 			</PermissionsCheck>
 		</VisitorLayout>

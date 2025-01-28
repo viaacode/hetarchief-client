@@ -52,7 +52,7 @@ const WaitingPage: FC<WaitingPageProps> = ({ visitorSpace, backLink }) => {
 							</div>
 
 							<div className="p-visit-requested__bottom u-pt-56-md">
-								{visitorSpace.info && (
+								{visitorSpace.info && locale === Locale.nl && (
 									<p className="p-visit-requested__info">
 										<b>{visitorSpace.info}</b>
 									</p>
