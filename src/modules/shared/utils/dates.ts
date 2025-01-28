@@ -32,6 +32,10 @@ export const localisedOptions = {
 
 // Do not export to contain all user-facing formatters here
 const formatWithLocale = (formatString: string, date?: Date): string => {
+	if (!date || isNaN(date.getTime())) {
+		return '';
+	}
+
 	return date ? format(date, formatString, { ...localisedOptions }) : '';
 };
 
