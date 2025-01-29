@@ -52,6 +52,14 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 			&__sidebar {
 				margin-bottom: $media-card-list-two-columns-gutter;
 			}
+
+			&__content {
+				:global(.c-card__image-wrapper) {
+					// Ensure c-media-cards in listview on search page all have the same width
+					// https://meemoo.atlassian.net/browse/ARC-2661
+					width: 24.8rem;
+				}
+			}
 		}
 
 		@media (min-width: $breakpoint-md) {
