@@ -364,7 +364,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 								loadTilesWithAjax: true,
 								ajaxHeaders: {
 									Authorization: 'Bearer ' + imageInfo.token,
-									'Referrer-Policy': 'origin',
 								},
 							};
 						}
