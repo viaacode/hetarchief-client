@@ -317,13 +317,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 			// Keep track of the loading state of the viewer page
 			const handleOpenTemp = () => {
-				setIsLoading(true);
-				const tiledImage = openSeadragonViewerTemp.world.getItemAt(0);
-				if (tiledImage.getFullyLoaded()) {
-					setIsLoading(false);
-				} else {
-					tiledImage.addOnceHandler('fully-loaded-change', () => setIsLoading(false));
-				}
+				setIsLoading(false);
 			};
 			openSeadragonViewerTemp.addHandler('open', handleOpenTemp);
 
