@@ -157,7 +157,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 
 	// Internal state
-	const [mediaType, setMediaType] = useState<IeObjectType | null>(null);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | null>(null);
@@ -412,13 +411,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			}
 
 			if (!pageOcrTexts.length) {
-				toastService.notify({
-					maxLines: 3,
-					title: tText('modules/ie-objects/object-detail-page___error'),
-					description: tText(
-						'modules/ie-objects/object-detail-page___deze-krant-heeft-geen-ocr-tekst'
-					),
-				});
+				// Only show the error if the user has access to the essence of the newspaper
+				// https://meemoo.atlassian.net/browse/ARC-2556
+				if (mediaInfo?.thumbnailUrl) {
+					toastService.notify({
+						maxLines: 3,
+						title: tText('modules/ie-objects/object-detail-page___error'),
+						description: tText(
+							'modules/ie-objects/object-detail-page___deze-krant-heeft-geen-ocr-tekst'
+						),
+					});
+				}
 				return;
 			}
 
@@ -663,8 +666,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Set the media type and default tab when the media info is loaded
 	 */
 	useEffect(() => {
-		setMediaType(mediaInfo?.dctermsFormat || null);
-
 		// Set default view
 		if (isMobile) {
 			// Default to metadata tab on mobile
@@ -980,12 +981,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const tabs: TabProps[] = useMemo(() => {
 		return OBJECT_DETAIL_TABS(
-			mediaType,
+			mediaInfo?.dctermsFormat || null,
 			activeTab as ObjectDetailTabs,
 			isMediaAvailable(),
 			arePagesOcrTextsAvailable
 		);
-	}, [mediaType, activeTab, isMediaAvailable, arePagesOcrTextsAvailable]);
+	}, [mediaInfo?.dctermsFormat, activeTab, isMediaAvailable, arePagesOcrTextsAvailable]);
 
 	const accessEndDate = useMemo(() => {
 		const dateDesktop = formatMediumDateWithTime(asDate(visitRequest?.endAt));
@@ -1237,6 +1238,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		</div>
 	);
 
+	const renderCollapsableBladeTitle = (mappedRelatedIeObjects: MediaObject[]) => {
+		if (relatedIeObjects?.parent) {
+			return tHtml(
+				'modules/ie-objects/object-detail-page___dit-object-is-onderdeel-van-dit-hoofdobject'
+			);
+		}
+		if (mappedRelatedIeObjects.length === 1) {
+			return tHtml('Dit object heeft 1 fragment');
+		} else {
+			return tHtml(
+				'modules/ie-objects/object-detail-page___dit-object-heeft-amount-fragmenten',
+				{
+					amount: mappedRelatedIeObjects.length,
+				}
+			);
+		}
+	};
+
 	const renderRelatedObjectsBlade = () => {
 		const mappedRelatedIeObjects = getMappedRelatedIeObjects();
 		if (!mappedRelatedIeObjects.length || (!expandSidebar && isMobile)) {
@@ -1254,18 +1273,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						aria-hidden
 					/>
 				}
-				title={
-					relatedIeObjects?.parent
-						? tHtml(
-								'modules/ie-objects/object-detail-page___dit-object-is-onderdeel-van-dit-hoofdobject'
-						  )
-						: tHtml(
-								'modules/ie-objects/object-detail-page___dit-object-heeft-amount-fragmenten',
-								{
-									amount: mappedRelatedIeObjects.length,
-								}
-						  )
-				}
+				title={renderCollapsableBladeTitle(mappedRelatedIeObjects)}
 				renderContent={(hidden: boolean) =>
 					renderIeObjectCards('related', mappedRelatedIeObjects, hidden)
 				}
@@ -1407,9 +1415,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	};
 
 	const renderObjectMedia = () => {
-		if (mediaType) {
+		if (mediaInfo?.thumbnailUrl) {
 			return (
-				<>
+				<div>
 					<div className={styles['p-object-detail__media']}>{renderMedia()}</div>
 					{showFragmentSlider && (
 						<FragmentSlider
@@ -1421,10 +1429,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							}}
 						/>
 					)}
-				</>
+				</div>
 			);
 		}
-		return <ObjectPlaceholder {...objectPlaceholder()} />;
+		return (
+			<ObjectPlaceholder
+				{...objectPlaceholder()}
+				reasonDescription={tText(
+					'Je hebt enkel toegang tot de metadata van dit object omdat dit object niet publiek beschikbaar is volgens de licenties van de auteur'
+				)}
+				className={styles['p-object-detail__media--not-available']}
+			/>
+		);
 	};
 
 	const renderVisitorSpaceNavigationBar = (): ReactNode => {
@@ -1493,10 +1509,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				{renderVisitorSpaceNavigationBar()}
 
 				{/* Video audio or newspaper */}
-				{renderObjectMedia()}
+				{!isMobile && renderObjectMedia()}
 
 				{/* Expand button */}
-				{mediaType && hasMedia && (
+				{mediaInfo?.dctermsFormat && hasMedia && (
 					<Button
 						className={clsx(styles['p-object-detail__expand-button'], {
 							[styles['p-object-detail__expand-button--collapsed']]: !expandSidebar,
@@ -1534,7 +1550,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							styles['p-object-detail__sidebar__content'],
 							styles['p-object-detail__sidebar__content__tab-' + activeTab],
 							{
-								[styles['p-object-detail__sidebar__content--no-media']]: !mediaType,
+								[styles['p-object-detail__sidebar__content--no-media']]:
+									!mediaInfo?.dctermsFormat,
 							}
 						)}
 					>
@@ -1570,6 +1587,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								</Metadata>
 							</MetadataList>
 						)}
+
+						{activeTab === ObjectDetailTabs.Media && isMobile && renderObjectMedia()}
 						{activeTab === ObjectDetailTabs.Ocr && renderOcrContent()}
 					</div>
 					{renderRelatedObjectsBlade()}

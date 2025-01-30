@@ -6,7 +6,6 @@ import {
 	type DynamicActionMenuProps,
 } from '@ie-objects/components/DynamicActionMenu';
 import { type ObjectPlaceholderProps } from '@ie-objects/components/ObjectPlaceholder';
-import { objectPlaceholderMock } from '@ie-objects/components/ObjectPlaceholder/__mocks__/object-placeholder';
 import {
 	type IsPartOfCollection,
 	type IsPartOfKey,
@@ -89,6 +88,15 @@ export const GET_NEWSPAPER_DOWNLOAD_OPTIONS = (): MenuItemInfo[] => [
 /**
  * Object placeholders
  */
+const getDefaultPlaceholderValues = () => ({
+	description: tText(
+		'Je kan dit object enkel bekijken tijdens een fysiek bezoek aan de bezoekersruimte.'
+	),
+	reasonTitle: tText('Waarom kan ik dit object niet bekijken?'),
+	openModalButtonLabel: tText('Meer info'),
+	closeModalButtonLabel: tText('Sluit'),
+});
+
 export const ticketErrorPlaceholder = (): ObjectPlaceholderProps => ({
 	description: tHtml('modules/ie-objects/const/index___ophalen-van-afspeel-token-mislukt'),
 	reasonTitle: tText('modules/ie-objects/const/index___waarom-kan-ik-dit-object-niet-bekijken'),
@@ -104,7 +112,7 @@ export const ticketErrorPlaceholder = (): ObjectPlaceholderProps => ({
 });
 
 export const objectPlaceholder = (): ObjectPlaceholderProps => ({
-	...objectPlaceholderMock,
+	...getDefaultPlaceholderValues(),
 	openModalButtonLabel: tText(
 		'pages/bezoekersruimte/visitor-space-slug/object-id/index___meer-info'
 	),
