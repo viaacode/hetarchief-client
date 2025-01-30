@@ -52,7 +52,7 @@ import Metadata, {
 import { ObjectPlaceholder } from '@ie-objects/components/ObjectPlaceholder';
 import { type MediaObject, RelatedObject } from '@ie-objects/components/RelatedObject';
 import { useGetAltoJsonFileContent } from '@ie-objects/hooks/get-alto-json-file-content';
-import { useGetIeObjectTicketServiceToken } from '@ie-objects/hooks/get-ie-object-ticket-service-token';
+import { useGetIeObjectTicketServiceTokens } from '@ie-objects/hooks/get-ie-object-ticket-service-tokens';
 import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
 import { useGetIeObjectsAlsoInteresting } from '@ie-objects/hooks/get-ie-objects-similar';
@@ -320,11 +320,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		fileStoredAt,
 		() => setFlowPlayerKey(fileStoredAt) // Force flowplayer rerender after successful fetch
 	);
-	const { data: ticketServiceToken } = useGetIeObjectTicketServiceToken(
-		// iiifViewerImageInfos?.[0]?.imageUrl,
-		'image/3/hetarchief%2FOR-1c1tf48%2F96%2F962c02c6af294354b24054266be5a5f6a7d3eed979e44b32a32c14bcdb439a9dd1903bb796db485d899602eceee19224.jp2',
+	const { data: ticketServiceTokensByPath } = useGetIeObjectTicketServiceTokens(
+		iiifViewerImageInfos.map((imageInfo) => imageInfo.imageUrl),
 		{
-			enabled: !!iiifViewerImageInfos?.[0]?.imageUrl,
+			enabled: iiifViewerImageInfos.length > 0,
 		}
 	);
 	const imageInfosWithTokens = useMemo(
@@ -332,10 +331,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			iiifViewerImageInfos.map(
 				(imageInfo): ImageInfoWithToken => ({
 					...imageInfo,
-					token: ticketServiceToken as string, // TODO fetch one token per newspaper page
+					token: ticketServiceTokensByPath?.[imageInfo.imageUrl] || null,
 				})
 			),
-		[iiifViewerImageInfos, ticketServiceToken]
+		[iiifViewerImageInfos, ticketServiceTokensByPath]
 	);
 
 	// also interesting
@@ -1089,7 +1088,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 */
 
 	const renderMedia = (): ReactNode => {
-		if ((isLoadingPlayableUrl && !isNewspaper) || !mediaInfo || !ticketServiceToken) {
+		if (
+			(isLoadingPlayableUrl && !isNewspaper) ||
+			!mediaInfo ||
+			Object.keys(imageInfosWithTokens).length === 0
+		) {
 			return <Loading fullscreen owner="object detail page: render media" />;
 		}
 

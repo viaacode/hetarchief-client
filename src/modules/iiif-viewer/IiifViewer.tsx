@@ -363,12 +363,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					})
 				);
 
-				// TODO remove this temp hack to test images
-				if (imageSources.length > 0) {
-					imageSources[0].tileSource =
-						'https://iiif-qas.meemoo.be/image/3/hetarchief%2FOR-1c1tf48%2F96%2F962c02c6af294354b24054266be5a5f6a7d3eed979e44b32a32c14bcdb439a9dd1903bb796db485d899602eceee19224.jp2/info.json';
-				}
-
 				// Init Open Seadragon viewer
 				const openSeadragonViewerTemp: OpenSeadragon.Viewer =
 					new openSeadragonLibTemp.Viewer(

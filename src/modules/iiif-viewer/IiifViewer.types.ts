@@ -7,7 +7,7 @@ export interface ImageInfo {
 }
 
 export interface ImageInfoWithToken extends ImageInfo {
-	token: string;
+	token: string | null;
 }
 
 export interface ImageSize {
