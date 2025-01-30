@@ -297,10 +297,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					return null;
 				}
 				return {
-					imageUrl: imageApiFile.storedAt.replace(
-						'https://iiif-qas.meemoo.be/image/3/public',
-						'https://iiif-qas.meemoo.be/image/3/hetarchief'
-					),
+					imageUrl:
+						imageApiFile.storedAt.replace(
+							'https://iiif-qas.meemoo.be/image/3/public',
+							'https://iiif-qas.meemoo.be/image/3/hetarchief'
+						) + '/info.json', // Adding info.json avoids an extra redirect 303
 					thumbnailUrl: imageFile?.thumbnailUrl,
 					altoUrl: altoFile?.storedAt,
 				};
@@ -326,11 +327,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			enabled: !!iiifViewerImageInfos?.[0]?.imageUrl,
 		}
 	);
-	const imageInfosWithTokens = iiifViewerImageInfos.map(
-		(imageInfo): ImageInfoWithToken => ({
-			...imageInfo,
-			token: ticketServiceToken as string, // TODO fetch one token per newspaper page
-		})
+	const imageInfosWithTokens = useMemo(
+		() =>
+			iiifViewerImageInfos.map(
+				(imageInfo): ImageInfoWithToken => ({
+					...imageInfo,
+					token: ticketServiceToken as string, // TODO fetch one token per newspaper page
+				})
+			),
+		[iiifViewerImageInfos, ticketServiceToken]
 	);
 
 	// also interesting

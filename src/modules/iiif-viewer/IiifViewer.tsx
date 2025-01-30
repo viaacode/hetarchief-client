@@ -14,7 +14,6 @@ import React, {
 } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
-import { IMAGE_API_FORMATS } from '@ie-objects/ie-objects.consts';
 import { type AltoTextLine } from '@ie-objects/ie-objects.types';
 import {
 	type IiifViewerFunctions,
@@ -354,32 +353,21 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 				const imageSources: TiledImageOptions[] = compact(
 					imageInfosWithTokens.map((imageInfo): TiledImageOptions | null => {
-						const validExtensions = IMAGE_API_FORMATS.map((mimeType) =>
-							mimeType.split('/').pop()
-						);
-						const extension = imageInfo.imageUrl.split('.').pop() as string;
-						if (validExtensions?.includes(extension)) {
-							return {
-								tileSource: imageInfo.imageUrl,
-								loadTilesWithAjax: true,
-								ajaxHeaders: {
-									Authorization: 'Bearer ' + imageInfo.token,
-								},
-							};
-						}
-						return null;
-
-						// Skip images for now
-						// return {
-						// 	type: 'image' as const,
-						// 	url: imageInfo.imageUrl,
-						// };
+						return {
+							tileSource: imageInfo.imageUrl,
+							loadTilesWithAjax: true,
+							ajaxHeaders: {
+								Authorization: 'Bearer ' + imageInfo.token,
+							},
+						};
 					})
 				);
 
 				// TODO remove this temp hack to test images
-				imageSources[0].tileSource =
-					'https://iiif-qas.meemoo.be/image/3/hetarchief%2FOR-1c1tf48%2F96%2F962c02c6af294354b24054266be5a5f6a7d3eed979e44b32a32c14bcdb439a9dd1903bb796db485d899602eceee19224.jp2';
+				if (imageSources.length > 0) {
+					imageSources[0].tileSource =
+						'https://iiif-qas.meemoo.be/image/3/hetarchief%2FOR-1c1tf48%2F96%2F962c02c6af294354b24054266be5a5f6a7d3eed979e44b32a32c14bcdb439a9dd1903bb796db485d899602eceee19224.jp2/info.json';
+				}
 
 				// Init Open Seadragon viewer
 				const openSeadragonViewerTemp: OpenSeadragon.Viewer =
