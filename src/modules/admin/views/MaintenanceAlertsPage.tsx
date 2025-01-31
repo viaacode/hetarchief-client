@@ -67,13 +67,8 @@ export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40">
-						<Suspense
-							fallback={<Loading fullscreen owner="AdminMaintenanceAlertsOverview" />}
-						>
-							<MaintenanceAlertsOverview
-								className="p-admin-alerts"
-								renderPopup={renderPopup}
-							/>
+						<Suspense fallback={<Loading fullscreen owner="AdminMaintenanceAlertsOverview" />}>
+							<MaintenanceAlertsOverview className="p-admin-alerts" renderPopup={renderPopup} />
 						</Suspense>
 					</div>
 				</AdminLayout.Content>

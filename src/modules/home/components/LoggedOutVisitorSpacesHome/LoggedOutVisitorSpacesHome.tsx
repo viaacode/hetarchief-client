@@ -63,9 +63,7 @@ const LoggedOutVisitorSpacesHome: FC = () => {
 					<div className={styles['c-hero__image']}>
 						<Image
 							src="/images/hero.jpg"
-							alt={tText(
-								'modules/home/components/logged-out-home/logged-out-home___hero-alt'
-							)}
+							alt={tText('modules/home/components/logged-out-home/logged-out-home___hero-alt')}
 							priority
 							fill
 							sizes="100vw"
@@ -90,10 +88,7 @@ const LoggedOutVisitorSpacesHome: FC = () => {
 							</Link>
 						</b>
 
-						<Icon
-							name={IconNamesLight.ArrowDown}
-							className={styles['c-hero__arrow-down']}
-						/>
+						<Icon name={IconNamesLight.ArrowDown} className={styles['c-hero__arrow-down']} />
 					</div>
 				</div>
 				<VisitorSpaceCardsWithSearch onRequestAccess={onRequestAccess} />

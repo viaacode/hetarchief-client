@@ -24,8 +24,7 @@ export namespace NotificationsService {
 	let _lastNotifications: Notification[] | null = null;
 	let _router: NextRouter | null = null;
 	let _showNotificationsCenter: ((show: boolean) => void) | null = null;
-	let _setHasUnreadNotifications: ((hasUnreadNotifications: boolean) => void) | null =
-		null;
+	let _setHasUnreadNotifications: ((hasUnreadNotifications: boolean) => void) | null = null;
 
 	let _queryClient = new QueryClient();
 
@@ -87,8 +86,7 @@ export namespace NotificationsService {
 		) {
 			// A more recent notification exists, we should notify the user of the new notifications
 			const newNotifications = unreadNotifications.filter(
-				(notification) =>
-					new Date(notification.createdAt).getTime() > lastCheckNotificationTime
+				(notification) => new Date(notification.createdAt).getTime() > lastCheckNotificationTime
 			);
 
 			// Refetch spaces on notification
@@ -102,9 +100,7 @@ export namespace NotificationsService {
 				});
 
 				hasSpaceNotification &&
-					(await _queryClient.invalidateQueries([
-						QUERY_KEYS.getAccessibleVisitorSpaces,
-					]));
+					(await _queryClient.invalidateQueries([QUERY_KEYS.getAccessibleVisitorSpaces]));
 
 				if (
 					newNotifications.find(

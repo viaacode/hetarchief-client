@@ -104,9 +104,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 					);
 					break;
 				case AccessStatus.PENDING:
-					router.push(
-						ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', visit.spaceSlug)
-					);
+					router.push(ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', visit.spaceSlug));
 					break;
 				default:
 					router.push(createVisitorSpacesWithFilterUrl(visit, locale));
@@ -150,9 +148,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 		return (
 			<AccountLayout
 				className="p-account-my-history"
-				pageTitle={tText(
-					'pages/account/mijn-bezoek-historiek/index___mijn-bezoek-historiek'
-				)}
+				pageTitle={tText('pages/account/mijn-bezoek-historiek/index___mijn-bezoek-historiek')}
 			>
 				{(filteredVisits?.length || 0) > 0 ? (
 					<div className="l-container l-container--edgeless-to-lg">
@@ -175,9 +171,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 									<PaginationBar
 										{...getDefaultPaginationBarProps()}
 										itemsPerPage={HistoryItemListSize}
-										startItem={
-											Math.max(0, filters.page - 1) * HistoryItemListSize
-										}
+										startItem={Math.max(0, filters.page - 1) * HistoryItemListSize}
 										totalItems={visits.data?.total || 0}
 										onPageChange={(pageZeroBased: number) => {
 											gotoPage(pageZeroBased);

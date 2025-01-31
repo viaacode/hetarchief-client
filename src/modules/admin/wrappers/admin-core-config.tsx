@@ -15,7 +15,12 @@ import type { FunctionComponent } from 'react';
 
 import { BlockContentEnclose } from '@content-page/components/blocks/BlockContentEnclose/BlockContentEnclose';
 import { NAVIGATION_DROPDOWN } from '@navigation/components/Navigation/Navigation.types';
-import { GET_ALERT_ICON_LIST_CONFIG, GET_ICON_LIST_CONFIG, Icon, type IconName } from '@shared/components/Icon';
+import {
+	GET_ALERT_ICON_LIST_CONFIG,
+	GET_ICON_LIST_CONFIG,
+	Icon,
+	type IconName,
+} from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import Loading from '@shared/components/Loading/Loading';
 import { ADMIN_CORE_ROUTES_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';

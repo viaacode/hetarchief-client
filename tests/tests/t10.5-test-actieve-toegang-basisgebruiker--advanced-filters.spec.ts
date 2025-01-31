@@ -73,17 +73,13 @@ test('T10.5: Test actieve toegang basisgebruiker: Geavanceerde filters', async (
 		.locator(moduleClassSelector('c-advanced-filter-fields__p', '_'))
 		.nth(1);
 	await expect(secondAdvancedEntry).toBeVisible();
-	const filter2TypeSelect = secondAdvancedEntry
-		.locator('.c-form-control .c-react-select')
-		.first();
+	const filter2TypeSelect = secondAdvancedEntry.locator('.c-form-control .c-react-select').first();
 	await expect(filter2TypeSelect).toBeVisible();
 	await filter2TypeSelect.click();
 
 	// Click 'Beschrijving'
 	const filterDescriptionLabel =
-		SITE_TRANSLATIONS.nl[
-			'modules/visitor-space/utils/advanced-filters/metadata___beschrijving'
-		];
+		SITE_TRANSLATIONS.nl['modules/visitor-space/utils/advanced-filters/metadata___beschrijving'];
 	await filter2TypeSelect.locator(`text=${filterDescriptionLabel}`).click();
 	await secondAdvancedEntry
 		.locator('#AdvancedFilterFields__value__1')

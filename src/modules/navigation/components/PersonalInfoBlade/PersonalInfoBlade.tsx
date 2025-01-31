@@ -55,7 +55,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 				setNoTypeSelectedOnSave(true);
 				return;
 			}
-				setNoTypeSelectedOnSave(false);
+			setNoTypeSelectedOnSave(false);
 			await MaterialRequestsService.sendAll({
 				type: typeSelected,
 				organisation: organisationInputValue,
@@ -191,13 +191,9 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 					</dd>
 
 					<dt className={styles['c-personal-info-blade__content-label']}>
-						{tText(
-							'modules/navigation/components/personal-info-blade/personal-info-blade___email'
-						)}
+						{tText('modules/navigation/components/personal-info-blade/personal-info-blade___email')}
 					</dt>
-					<dd className={styles['c-personal-info-blade__content-value']}>
-						{personalInfo.email}
-					</dd>
+					<dd className={styles['c-personal-info-blade__content-value']}>{personalInfo.email}</dd>
 
 					{personalInfo.organisation && (
 						<>
@@ -248,9 +244,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 								'modules/navigation/components/personal-info-blade/personal-info-blade___requester-capacity-education'
 							)}
 							checked={typeSelected === MaterialRequestRequesterCapacity.EDUCATION}
-							onClick={() =>
-								setTypeSelected(MaterialRequestRequesterCapacity.EDUCATION)
-							}
+							onClick={() => setTypeSelected(MaterialRequestRequesterCapacity.EDUCATION)}
 						/>
 						<RadioButton
 							className={styles['c-personal-info-blade__radio-button']}
@@ -265,12 +259,8 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 							label={tText(
 								'modules/navigation/components/personal-info-blade/personal-info-blade___requester-capacity-private-researcher'
 							)}
-							checked={
-								typeSelected === MaterialRequestRequesterCapacity.PRIVATE_RESEARCH
-							}
-							onClick={() =>
-								setTypeSelected(MaterialRequestRequesterCapacity.PRIVATE_RESEARCH)
-							}
+							checked={typeSelected === MaterialRequestRequesterCapacity.PRIVATE_RESEARCH}
+							onClick={() => setTypeSelected(MaterialRequestRequesterCapacity.PRIVATE_RESEARCH)}
 						/>
 						<RadioButton
 							className={styles['c-personal-info-blade__radio-button']}

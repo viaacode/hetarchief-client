@@ -3,7 +3,11 @@ import type { FC, ReactNode } from 'react';
 import type { DefaultComponentProps } from '@shared/types';
 
 import type { DefaultFilterFormProps, InlineFilterFormProps, SearchFilterId } from '../../../types';
-import type { FilterMenuType, OnFilterMenuFormReset, OnFilterMenuFormSubmit } from '../FilterMenu.types';
+import type {
+	FilterMenuType,
+	OnFilterMenuFormReset,
+	OnFilterMenuFormSubmit,
+} from '../FilterMenu.types';
 
 export interface FilterFormProps extends DefaultComponentProps {
 	children?: ReactNode;

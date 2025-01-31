@@ -26,7 +26,10 @@ import {
 	RELEASE_DATE_FILTER_FORM_SCHEMA,
 } from './ReleaseDateFilterForm.const';
 import styles from './ReleaseDateFilterForm.module.scss';
-import type { ReleaseDateFilterFormProps, ReleaseDateFilterFormState } from './ReleaseDateFilterForm.types';
+import type {
+	ReleaseDateFilterFormProps,
+	ReleaseDateFilterFormState,
+} from './ReleaseDateFilterForm.types';
 
 import { getOperators } from 'modules/visitor-space/utils/advanced-filters';
 
@@ -181,9 +184,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 					id="releaseDate"
 					onChange={(newFromDate: Date | undefined, newToDate: Date | undefined) => {
 						onChangeReleaseDate(
-							`${newFromDate ? newFromDate.toISOString() : ''}${SEPARATOR}${
-								newToDate ? newToDate.toISOString() : ''
-							}`
+							`${newFromDate ? newFromDate.toISOString() : ''}${SEPARATOR}${newToDate ? newToDate.toISOString() : ''}`
 						);
 					}}
 					from={from}
@@ -221,12 +222,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 			<div className={clsx(className, styles.releaseDate, 'u-px-20 u-px-32-md')}>
 				<FormControl
 					className={clsx('u-mb-24 c-form-control--label-hidden')}
-					errors={[
-						<RedFormWarning
-							error={errors.operator?.message}
-							key="form-error--operator"
-						/>,
-					]}
+					errors={[<RedFormWarning error={errors.operator?.message} key="form-error--operator" />]}
 					id={labelKeys.operator}
 					label={tHtml(
 						'modules/visitor-space/components/releaseDate-filter-form/releaseDate-filter-form___operator'
@@ -259,10 +255,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 				<FormControl
 					className="u-mb-24 c-form-control--label-hidden"
 					errors={[
-						<RedFormWarning
-							error={errors.releaseDate?.message}
-							key="form-error--release-date"
-						/>,
+						<RedFormWarning error={errors.releaseDate?.message} key="form-error--release-date" />,
 					]}
 					id={labelKeys.releaseDate}
 					label={tHtml(

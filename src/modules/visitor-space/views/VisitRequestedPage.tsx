@@ -95,9 +95,7 @@ export const VisitRequestedPage: FC<DefaultSeoInfo> = ({ title, description, url
 				title={title}
 				description={
 					description ||
-					tText(
-						'pages/slug/toegang-aangevraagd/index___beschrijving-van-een-bezoekersruimte'
-					)
+					tText('pages/slug/toegang-aangevraagd/index___beschrijving-van-een-bezoekersruimte')
 				}
 				imgUrl={undefined}
 				translatedPages={[]}

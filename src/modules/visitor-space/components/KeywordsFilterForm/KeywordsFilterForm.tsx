@@ -3,12 +3,7 @@ import { FormControl, keysEnter, onKey, type TagInfo, TagsInput } from '@meemoo/
 import clsx from 'clsx';
 import { type FC, type KeyboardEvent, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import type {
-	ActionMeta,
-	InputActionMeta,
-	MultiValue,
-	SingleValue,
-} from 'react-select';
+import type { ActionMeta, InputActionMeta, MultiValue, SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
@@ -132,10 +127,7 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 						className="u-mb-24 c-form-control--label-hidden"
 						errors={
 							(errors?.values || []).map?.((errorValue) => (
-								<RedFormWarning
-									error={errorValue?.message}
-									key="form-error--value"
-								/>
+								<RedFormWarning error={errorValue?.message} key="form-error--value" />
 							)) || []
 						}
 						id={labelKeys.values}

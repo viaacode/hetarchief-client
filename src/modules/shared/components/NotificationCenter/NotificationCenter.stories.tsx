@@ -26,12 +26,7 @@ const NotificationCenterStoryComponent = ({ args }: { args: NotificationCenterPr
 				<h1>Notifications</h1>
 				<Button label="Open" onClick={open} />
 			</div>
-			<NotificationCenter
-				{...notificationCenterMock}
-				{...args}
-				onClose={close}
-				isOpen={isOpen}
-			/>
+			<NotificationCenter {...notificationCenterMock} {...args} onClose={close} isOpen={isOpen} />
 		</>
 	);
 };

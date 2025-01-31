@@ -27,16 +27,15 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 	const typeAccessRequested = type === VisitorSpaceCardType.futureRequested;
 
 	const rootCls = clsx(
-		styles["c-visitor-space-card"],
+		styles['c-visitor-space-card'],
 		`c-visitor-space-card--name--${kebabCase(room?.name || room?.id).toLowerCase()}`,
 		{
-			[styles["c-visitor-space-card--granted"]]: typeAccessGranted,
-		},
+			[styles['c-visitor-space-card--granted']]: typeAccessGranted,
+		}
 	);
 
 	const flat = typeAccessAccepted || typeAccessRequested;
-	const hasRequested =
-		typeAccessGranted || typeAccessAccepted || typeAccessRequested;
+	const hasRequested = typeAccessGranted || typeAccessAccepted || typeAccessRequested;
 
 	useLayoutEffect(() => {
 		if (!window) {
@@ -46,26 +45,24 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 		setHasOverflowingChildren(
 			!!(
 				descriptionElement.current &&
-				descriptionElement.current.offsetHeight <
-					descriptionElement.current.scrollHeight
+				descriptionElement.current.offsetHeight < descriptionElement.current.scrollHeight
 			) ||
 				!!(
 					descriptionElement.current &&
-					descriptionElement.current.offsetWidth <
-						descriptionElement.current.scrollWidth
-				),
+					descriptionElement.current.offsetWidth < descriptionElement.current.scrollWidth
+				)
 		);
 	}, []);
 
 	const renderImage = () => {
-		let size: "small" | "short" | "tall" | null = null;
+		let size: 'small' | 'short' | 'tall' | null = null;
 
 		if (typeNoAccess) {
-			size = "short";
+			size = 'short';
 		} else if (typeAccessGranted) {
-			size = "tall";
+			size = 'tall';
 		} else if (flat) {
-			size = "small";
+			size = 'small';
 		}
 
 		return (
@@ -75,7 +72,7 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 				name={room.name}
 				id={room.id}
 				image={room.image}
-				size={size || "short"}
+				size={size || 'short'}
 				shadow={typeNoAccess}
 			/>
 		);
@@ -86,8 +83,8 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 			return (
 				<h2
 					className={clsx(
-						styles["c-visitor-space-card__title"],
-						styles["c-visitor-space-card__title--large"],
+						styles['c-visitor-space-card__title'],
+						styles['c-visitor-space-card__title--large']
 					)}
 				>
 					{room?.name || room?.id}
@@ -98,8 +95,8 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 		return (
 			<b
 				className={clsx(
-					styles["c-visitor-space-card__title"],
-					flat && styles["c-visitor-space-card__title--flat"],
+					styles['c-visitor-space-card__title'],
+					flat && styles['c-visitor-space-card__title--flat']
 				)}
 			>
 				{room?.name || room?.id}
@@ -110,12 +107,12 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 	const renderDescription = () => (
 		<div
 			ref={descriptionElement}
-			className={expandDescription ? "" : `u-text-ellipsis--${flat ? 2 : 3}`}
+			className={expandDescription ? '' : `u-text-ellipsis--${flat ? 2 : 3}`}
 		>
 			<p
 				className={clsx(
-					styles["c-visitor-space-card__description"],
-					flat && styles["c-visitor-space-card__description--flat"],
+					styles['c-visitor-space-card__description'],
+					flat && styles['c-visitor-space-card__description--flat']
 				)}
 			>
 				{room?.info}
@@ -123,13 +120,9 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 		</div>
 	);
 
-	const mode = typeAccessGranted ? "dark" : "light";
-	const orientation = hasRequested
-		? "horizontal"
-		: typeNoAccess
-			? "vertical--at-md"
-			: "vertical";
-	const padding = hasRequested ? "content" : "vertical";
+	const mode = typeAccessGranted ? 'dark' : 'light';
+	const orientation = hasRequested ? 'horizontal' : typeNoAccess ? 'vertical--at-md' : 'vertical';
+	const padding = hasRequested ? 'content' : 'vertical';
 
 	return (
 		<Card
@@ -147,41 +140,33 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 		>
 			<div
 				className={clsx(
-					styles["c-visitor-space-card__wrapper"],
-					flat && styles["c-visitor-space-card__wrapper--flat"],
+					styles['c-visitor-space-card__wrapper'],
+					flat && styles['c-visitor-space-card__wrapper--flat']
 				)}
 			>
 				<div
 					className={clsx(
-						styles["c-visitor-space-card__content"],
-						flat && styles["c-visitor-space-card__content--flat"],
+						styles['c-visitor-space-card__content'],
+						flat && styles['c-visitor-space-card__content--flat']
 					)}
 				>
 					{flat && renderTitle()}
 					{locale === Locale.nl && (
 						<div
-							className={clsx(
-								styles["c-visitor-space-card__description__container"],
-								{
-									[styles[
-										"c-visitor-space-card__description__container--expanded"
-									]]: expandDescription,
-								},
-							)}
+							className={clsx(styles['c-visitor-space-card__description__container'], {
+								[styles['c-visitor-space-card__description__container--expanded']]:
+									expandDescription,
+							})}
 							onClick={() => setExpandDescription(!expandDescription)}
 							onKeyUp={(evt) => {
-								if (evt.key === "Enter") {
+								if (evt.key === 'Enter') {
 									setExpandDescription(!expandDescription);
 								}
 							}}
 						>
 							{renderDescription()}
 							{hasOverflowingChildren && (
-								<div
-									className={
-										styles["c-visitor-space-card__description__container__icon"]
-									}
-								/>
+								<div className={styles['c-visitor-space-card__description__container__icon']} />
 							)}
 						</div>
 					)}

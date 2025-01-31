@@ -33,7 +33,7 @@ const DateRangeInput: FC<DateRangeInputProps> = ({
 					showLabels
 						? tText(
 								'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___van'
-						  )
+							)
 						: ''
 				}
 				value={from}
@@ -46,7 +46,7 @@ const DateRangeInput: FC<DateRangeInputProps> = ({
 					showLabels
 						? tText(
 								'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tot'
-						  )
+							)
 						: ''
 				}
 				value={to}

@@ -109,10 +109,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 					<SeoTags
 						title={title}
 						description={
-							description ||
-							contentPageInfo?.seoDescription ||
-							contentPageInfo?.description ||
-							null
+							description || contentPageInfo?.seoDescription || contentPageInfo?.description || null
 						}
 						imgUrl={image || contentPageInfo?.thumbnailPath || null}
 						translatedPages={contentPageInfo.translatedPages.map(
@@ -169,10 +166,7 @@ export async function getServerSideProps(
 			description = contentPage?.seoDescription || contentPage?.description || null;
 			image = contentPage?.thumbnailPath || null;
 		} catch (err) {
-			console.error(
-				`Failed to fetch content page seo info by slug: ${pathOrIeObjectId}`,
-				err
-			);
+			console.error(`Failed to fetch content page seo info by slug: ${pathOrIeObjectId}`, err);
 		}
 	} else {
 		title = 'Home - Het Archief';

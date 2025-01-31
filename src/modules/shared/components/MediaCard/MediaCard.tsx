@@ -87,9 +87,7 @@ const MediaCard: FC<MediaCardProps> = ({
 		try {
 			if (!user || !maintainerSlug) {
 				toastService.notify({
-					title: tText(
-						'modules/shared/components/media-card/media-card___je-bent-niet-ingelogd'
-					),
+					title: tText('modules/shared/components/media-card/media-card___je-bent-niet-ingelogd'),
 					description: tText(
 						'modules/shared/components/media-card/media-card___je-bent-niet-ingelogd-log-opnieuw-in-en-probeer-opnieuw'
 					),
@@ -106,10 +104,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 			setIsRequestAccessBladeOpen(false);
 			await router.push(
-				ROUTES_BY_LOCALE[locale].visitRequested.replace(
-					':slug',
-					createdVisitRequest.spaceSlug
-				)
+				ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
 			);
 		} catch (err) {
 			console.error({
@@ -127,7 +122,9 @@ const MediaCard: FC<MediaCardProps> = ({
 	};
 
 	const onOpenRequestAccess = () => {
-		setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: maintainerSlug });
+		setQuery({
+			[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: maintainerSlug,
+		});
 		setIsRequestAccessBladeOpen(true);
 	};
 
@@ -227,13 +224,9 @@ const MediaCard: FC<MediaCardProps> = ({
 	const renderNoContentIcon = () => {
 		return (
 			<Icon
-				className={clsx(
-					styles['c-media-card__no-content-icon'],
-					styles['c-media-card__icon'],
-					{
-						[styles['c-media-card__no-content-icon']]: !link,
-					}
-				)}
+				className={clsx(styles['c-media-card__no-content-icon'], styles['c-media-card__icon'], {
+					[styles['c-media-card__no-content-icon']]: !link,
+				})}
 				name={TYPE_TO_NO_ICON_MAP[type as IeObjectType]}
 			/>
 		);
@@ -373,9 +366,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				<Pill
 					isExpanded
 					icon={IconNamesLight.Clock}
-					label={tText(
-						'modules/shared/components/media-card/media-card___tijdelijke-toegang'
-					)}
+					label={tText('modules/shared/components/media-card/media-card___tijdelijke-toegang')}
 					className="u-color-black u-bg-lila"
 				/>
 			</div>

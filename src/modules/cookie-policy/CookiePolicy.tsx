@@ -12,18 +12,15 @@ import styles from './CookiePolicy.module.scss';
 
 export const CookiePolicy: FC<DefaultSeoInfo> = ({ url }) => {
 	const locale = useLocale();
-	const [cookieDeclarationHtml, setCookieDeclarationHtml] =
-		useState<string>("");
+	const [cookieDeclarationHtml, setCookieDeclarationHtml] = useState<string>('');
 
 	useEffect(() => {
 		// Clear previous html and script
-		for (const item of document.querySelectorAll("#CookieDeclaration")) {
+		for (const item of document.querySelectorAll('#CookieDeclaration')) {
 			item.remove();
 		}
-		for (const item of document.querySelectorAll(
-			".p-cookie-policy__wrapper > div",
-		)) {
-			item.innerHTML = "";
+		for (const item of document.querySelectorAll('.p-cookie-policy__wrapper > div')) {
+			item.innerHTML = '';
 		}
 
 		// Fool cookiebot to inject the html into our react useState
@@ -31,26 +28,26 @@ export const CookiePolicy: FC<DefaultSeoInfo> = ({ url }) => {
 		(window as any).CookieDeclaration = {
 			InjectCookieDeclaration: (declarationHtml: string) => {
 				const declarationHtmlWithCrawlDate = declarationHtml.replace(
-					"[#LOCALIZED_CRAWLDATE#]",
+					'[#LOCALIZED_CRAWLDATE#]',
 					format(
 						// biome-ignore lint/suspicious/noExplicitAny: This is a hack to inject the html into the cookie declaration html
 						new Date((window as any).CookieDeclaration.lastUpdatedDate),
-						"dd MMM yyyy",
-					),
+						'dd MMM yyyy'
+					)
 				);
 				setCookieDeclarationHtml(declarationHtmlWithCrawlDate);
 			},
 		};
 
 		// Load cookiebot script that has the cookie declaration html baked in
-		const script = document.createElement("script");
+		const script = document.createElement('script');
 		// script.onload = moveCookieDeclaration;
-		script.id = "CookieDeclaration";
-		script.setAttribute("data-culture", locale);
+		script.id = 'CookieDeclaration';
+		script.setAttribute('data-culture', locale);
 		script.src = stringifyUrl({
-			url: "https://consent.cookiebot.com/e17bca33-78a0-484e-a204-e05274a65598/cdreport.js",
+			url: 'https://consent.cookiebot.com/e17bca33-78a0-484e-a204-e05274a65598/cdreport.js',
 			query: {
-				referer: "hetarchief.be",
+				referer: 'hetarchief.be',
 				culture: locale,
 			},
 		});
@@ -60,22 +57,15 @@ export const CookiePolicy: FC<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<>
 			<SeoTags
-				title={tText(
-					"pages/cookiebeleid/index___cookiebeleid-seo-en-pagina-titel",
-				)}
+				title={tText('pages/cookiebeleid/index___cookiebeleid-seo-en-pagina-titel')}
 				description={tText(
-					"pages/cookiebeleid/index___cookiebeleid-seo-en-pagina-titel-seo-beschrijving",
+					'pages/cookiebeleid/index___cookiebeleid-seo-en-pagina-titel-seo-beschrijving'
 				)}
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
 			/>
-			<div
-				className={clsx(
-					"p-cookie-policy__wrapper",
-					styles["p-cookie-policy__wrapper"],
-				)}
-			>
+			<div className={clsx('p-cookie-policy__wrapper', styles['p-cookie-policy__wrapper'])}>
 				{/* biome-ignore lint/security/noDangerouslySetInnerHtml: This is a hack to inject the html into the cookie declaration html */}
 				<div dangerouslySetInnerHTML={{ __html: cookieDeclarationHtml }} />
 			</div>

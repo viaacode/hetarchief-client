@@ -1,4 +1,10 @@
-import { MultiSelect, type MultiSelectOption, OrderDirection, PaginationBar, Table } from '@meemoo/react-components';
+import {
+	MultiSelect,
+	type MultiSelectOption,
+	OrderDirection,
+	PaginationBar,
+	Table,
+} from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil, without } from 'lodash-es';
 import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
@@ -18,7 +24,11 @@ import {
 import { CPAdminLayout } from '@cp/layouts';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
-import { type MaterialRequest, MaterialRequestKeys, type MaterialRequestType } from '@material-requests/types';
+import {
+	type MaterialRequest,
+	MaterialRequestKeys,
+	type MaterialRequestType,
+} from '@material-requests/types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -46,8 +56,12 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 			search: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
 		}),
 		...(!isNil(filters.page) && { page: filters.page }),
-		...(!isNil(filters.type) && { type: filters.type as MaterialRequestType[] }),
-		...(!isNil(filters.orderProp) && { orderProp: filters.orderProp as MaterialRequestKeys }),
+		...(!isNil(filters.type) && {
+			type: filters.type as MaterialRequestType[],
+		}),
+		...(!isNil(filters.orderProp) && {
+			orderProp: filters.orderProp as MaterialRequestKeys,
+		}),
 		...(!isNil(filters.orderDirection) && {
 			orderDirection: filters.orderDirection as OrderDirection,
 		}),
@@ -58,7 +72,10 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 		currentMaterialRequest?.id || null
 	);
 
-	const noData = useMemo((): boolean => isEmpty(materialRequests?.items), [materialRequests?.items]);
+	const noData = useMemo(
+		(): boolean => isEmpty(materialRequests?.items),
+		[materialRequests?.items]
+	);
 
 	const typesList = useMemo(() => {
 		return [
@@ -102,7 +119,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 		if (filters.orderProp === MaterialRequestKeys.createdAt && orderDirection === undefined) {
 			setFilters({
 				...filters,
-				orderProp : orderProp || 'createdAt',
+				orderProp: orderProp || 'createdAt',
 				orderDirection: OrderDirection.asc,
 				page: 1,
 			});
@@ -226,9 +243,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<>
 			<SeoTags
-				title={`${tText(
-					'pages/beheer/materiaalaanvragen/index___materiaalaanvragen'
-				)} | ${tText('modules/cp/views/cp-admin-material-requests___beheer')} `}
+				title={`${tText('pages/beheer/materiaalaanvragen/index___materiaalaanvragen')} | ${tText('modules/cp/views/cp-admin-material-requests___beheer')} `}
 				description={tText(
 					'pages/beheer/materiaalaanvragen/index___materiaalaanvragen-meta-omschrijving'
 				)}

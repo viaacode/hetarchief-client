@@ -44,9 +44,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	// Check if email and phone number of VRT are visible
 	const vrtCard = page.locator('.c-visitor-space-card--name--vrt');
 	await expect(vrtCard).toBeVisible();
-	const selector = `.c-menu--visible--default ${moduleClassSelector(
-		'c-visitor-space-card-controls__contact-list'
-	)} p`;
+	const selector = `.c-menu--visible--default ${moduleClassSelector('c-visitor-space-card-controls__contact-list')} p`;
 	const visitorSpaceInfos = vrtCard.locator(selector);
 	await expect(visitorSpaceInfos.nth(0)).toBeVisible();
 	await expect(visitorSpaceInfos.nth(1)).toBeVisible();

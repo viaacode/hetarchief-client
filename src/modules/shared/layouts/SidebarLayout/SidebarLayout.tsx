@@ -33,11 +33,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({
 					[`u-bg-${color}`]: !!color,
 				})}
 			>
-				<Sidebar
-					color={color}
-					className={styles['l-sidebar__sidebar']}
-					title={sidebarTitle}
-				>
+				<Sidebar color={color} className={styles['l-sidebar__sidebar']} title={sidebarTitle}>
 					<ListNavigation
 						className={styles['l-sidebar__sidebar--top']}
 						color={color}

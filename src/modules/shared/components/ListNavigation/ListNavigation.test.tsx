@@ -22,7 +22,9 @@ describe('Component: <ListNavigation /> (default)', () => {
 		expect(container.firstChild).toHaveClass(className);
 	});
 	it('Should render primary color by default', () => {
-		const { container } = renderListNavigation({ items: mockListNavigationItem() });
+		const { container } = renderListNavigation({
+			items: mockListNavigationItem(),
+		});
 
 		expect(container.firstChild).toHaveClass('c-list-navigation--white');
 	});
@@ -37,7 +39,9 @@ describe('Component: <ListNavigation /> (default)', () => {
 	});
 
 	it('Should render children', () => {
-		const { getByText } = renderListNavigation({ items: mockListNavigationItem() });
+		const { getByText } = renderListNavigation({
+			items: mockListNavigationItem(),
+		});
 
 		const child = getByText(mockListNavigationItem()[0].node as string);
 
@@ -85,7 +89,10 @@ describe('Component: <ListNavigation /> (default)', () => {
 
 	it('Should call onClick handler', () => {
 		const onClick = jest.fn();
-		const { getByText } = renderListNavigation({ items: mockListNavigationItem(), onClick });
+		const { getByText } = renderListNavigation({
+			items: mockListNavigationItem(),
+			onClick,
+		});
 		const listNavigationItems = mockListNavigationItem();
 		const child = getByText(listNavigationItems[0].node as string);
 

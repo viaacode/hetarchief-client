@@ -134,9 +134,7 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
 	const renderPageContent = () => {
 		return (
 			<AdminLayout
-				pageTitle={tText(
-					'pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers'
-				)}
+				pageTitle={tText('pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers')}
 			>
 				<AdminLayout.Content>
 					<div className="p-admin-visitors l-container">
@@ -148,9 +146,7 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
 								id={globalLabelKeys.adminLayout.title}
 								value={search}
 								className="p-admin-visitors__search"
-								placeholder={tText(
-									'pages/admin/bezoekersruimtesbeheer/bezoekers/index___zoek'
-								)}
+								placeholder={tText('pages/admin/bezoekersruimtesbeheer/bezoekers/index___zoek')}
 								onChange={setSearch}
 								onSearch={(value) =>
 									setFilters({
@@ -166,10 +162,7 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
 								<Table<VisitRequest>
 									className="u-mt-24 c-table--no-padding-last-column"
 									options={{
-										columns: VisitorsTableColumns(
-											denyVisitRequest,
-											editVisitRequest
-										),
+										columns: VisitorsTableColumns(denyVisitRequest, editVisitRequest),
 										data: visitRequests?.items || [],
 										initialState: {
 											pageSize: VisitorsTablePageSize,
@@ -183,10 +176,7 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
 											<PaginationBar
 												{...getDefaultPaginationBarProps()}
 												itemsPerPage={VisitorsTablePageSize}
-												startItem={
-													Math.max(0, filters.page - 1) *
-													VisitorsTablePageSize
-												}
+												startItem={Math.max(0, filters.page - 1) * VisitorsTablePageSize}
 												totalItems={visitRequests?.total || 0}
 												onPageChange={(pageZeroBased) => {
 													gotoPage(pageZeroBased);
@@ -204,9 +194,7 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
 						) : (
 							<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
 								{isFetching
-									? tHtml(
-											'modules/admin/visitor-spaces/pages/visitors/visitors___laden'
-									  )
+									? tHtml('modules/admin/visitor-spaces/pages/visitors/visitors___laden')
 									: renderEmptyMessage()}
 							</div>
 						)}
@@ -225,9 +213,7 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
 						<ApproveRequestBlade
 							title={tHtml('pages/beheer/bezoekers/index___aanvraag-aanpassen')}
 							approveButtonLabel={tText('pages/beheer/bezoekers/index___aanpassen')}
-							successTitle={tHtml(
-								'pages/beheer/bezoekers/index___de-aanpassingen-zijn-opgeslagen'
-							)}
+							successTitle={tHtml('pages/beheer/bezoekers/index___de-aanpassingen-zijn-opgeslagen')}
 							successDescription={tHtml(
 								'pages/beheer/bezoekers/index___de-aanpassingen-aan-de-bezoekersaanvraag-zijn-opgeslagen'
 							)}
@@ -249,9 +235,7 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<>
 			<SeoTags
-				title={tText(
-					'pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers'
-				)}
+				title={tText('pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers')}
 				description={tText(
 					'pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers-meta-omschrijving'
 				)}

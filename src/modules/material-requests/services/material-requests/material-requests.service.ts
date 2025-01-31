@@ -83,8 +83,6 @@ export namespace MaterialRequestsService {
 	}
 
 	export async function sendAll(json: MaterialRequestSendAll): Promise<void> {
-		return ApiService.getApi()
-			.post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/send`, { json })
-			.json();
+		return ApiService.getApi().post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/send`, { json }).json();
 	}
 }

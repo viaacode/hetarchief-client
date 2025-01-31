@@ -14,7 +14,7 @@ const Template: ComponentStory<typeof ConfirmationModal> = (args) => {
 	return (
 		<div>
 			{/* biome-ignore lint/a11y/useKeyWithClickEvents: storybook */}
-<pre style={{ margin: 0 }} onClick={() => setOpen(true)}>
+			<pre style={{ margin: 0 }} onClick={() => setOpen(true)}>
 				{JSON.stringify({ clickHereToToggle: isOpen }, null, 2)}
 			</pre>
 

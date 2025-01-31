@@ -11,8 +11,8 @@ export function useLocalStorage(
 			if (value) {
 				return JSON.parse(value);
 			}
-				window.localStorage.setItem(keyName, JSON.stringify(defaultValue));
-				return defaultValue;
+			window.localStorage.setItem(keyName, JSON.stringify(defaultValue));
+			return defaultValue;
 		} catch (err) {
 			return defaultValue;
 		}

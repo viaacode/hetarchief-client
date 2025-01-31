@@ -5,17 +5,14 @@ import { HetArchiefLogoType } from '@shared/components/HetArchiefLogo/HetArchief
 import type { HetArchiefLogoProps } from '@shared/components/HetArchiefLogo/HetArchiefLogo.types';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 
-const HetArchiefLogo: FC<HetArchiefLogoProps> = ({
-	className,
-	type = HetArchiefLogoType.Dark,
-}) => {
+const HetArchiefLogo: FC<HetArchiefLogoProps> = ({ className, type = HetArchiefLogoType.Dark }) => {
 	const locale = useLocale();
 
-	if (locale === "en") {
+	if (locale === 'en') {
 		return (
 			// biome-ignore lint/a11y/noSvgWithoutTitle: can't seem to add a title without typescript complaining
 			<svg
-				className={clsx("c-logo", className)}
+				className={clsx('c-logo', className)}
 				width={200}
 				height={65}
 				fill="none"
@@ -38,7 +35,7 @@ const HetArchiefLogo: FC<HetArchiefLogoProps> = ({
 	}
 	return (
 		<svg
-			className={clsx("c-logo", className)}
+			className={clsx('c-logo', className)}
 			width={200}
 			height={65}
 			fill="none"

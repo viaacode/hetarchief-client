@@ -17,7 +17,7 @@ const { publicRuntimeConfig } = getConfig();
 
 export namespace AuthService {
 	export async function checkLogin(options: Options = {}): Promise<CheckLoginResponse> {
-		const test = await ApiService.getApi().get("auth/check-login", options).json();
+		const test = await ApiService.getApi().get('auth/check-login', options).json();
 		return test as CheckLoginResponse;
 	}
 
@@ -34,9 +34,7 @@ export namespace AuthService {
 			originalPath = '/';
 		}
 
-		if (
-			(originalPath || '') === ROUTES_BY_LOCALE[(router.locale || Locale.nl) as Locale].home
-		) {
+		if ((originalPath || '') === ROUTES_BY_LOCALE[(router.locale || Locale.nl) as Locale].home) {
 			originalPath = `/${ROUTE_PARTS.visit}`;
 		}
 
@@ -98,9 +96,7 @@ export namespace AuthService {
 		const locale = TranslationService.getLocale();
 		let returnToUrl = `${publicRuntimeConfig.CLIENT_URL}/${locale}`;
 		if (shouldRedirectToOriginalPage) {
-			let originalPath = window.location.href.substring(
-				publicRuntimeConfig.CLIENT_URL.length
-			);
+			let originalPath = window.location.href.substring(publicRuntimeConfig.CLIENT_URL.length);
 			const originalPathIsLogoutPath = !!Object.values(ROUTE_PARTS_BY_LOCALE)
 				.map((value) => value.logout)
 				.find((logoutPart) => originalPath.startsWith(`/${logoutPart}`));

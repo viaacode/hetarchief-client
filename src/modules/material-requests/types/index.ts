@@ -77,9 +77,7 @@ export const GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_ARRAY = (): {
 	},
 	{
 		id: MaterialRequestRequesterCapacity.PRIVATE_RESEARCH,
-		label: tText(
-			'modules/admin/const/material-requests___requester-capacity-private-researcher'
-		),
+		label: tText('modules/admin/const/material-requests___requester-capacity-private-researcher'),
 	},
 	{
 		id: MaterialRequestRequesterCapacity.EDUCATION,

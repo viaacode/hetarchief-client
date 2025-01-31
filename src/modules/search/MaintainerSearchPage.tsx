@@ -46,9 +46,7 @@ export const MaintainerSearchPage: FC<MaintainerSearchPageProps> = () => {
 	useEffect(() => {
 		if (ieObjectInfo) {
 			const searchUrl = stringifyUrl({
-				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${ieObjectInfo.maintainerSlug}/${
-					ieObjectInfo.schemaIdentifier
-				}/${kebabCase(ieObjectInfo.name)}`,
+				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${ieObjectInfo.maintainerSlug}/${ieObjectInfo.schemaIdentifier}/${kebabCase(ieObjectInfo.name)}`,
 			});
 			router.replace(searchUrl, undefined, { shallow: true });
 		}

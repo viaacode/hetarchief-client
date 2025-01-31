@@ -19,7 +19,12 @@ import {
 	SearchFilterId,
 	type TagIdentity,
 } from '../../types';
-import { getAdvancedProperties, getFilterLabel, getOperators, getRegularProperties } from '../advanced-filters';
+import {
+	getAdvancedProperties,
+	getFilterLabel,
+	getOperators,
+	getRegularProperties,
+} from '../advanced-filters';
 
 const getSelectLabel = (
 	options: SelectOption[],
@@ -68,9 +73,7 @@ export const mapArrayParamToTags = (
 				label: (
 					<span>
 						{`${label}: `}
-						<strong>
-							{keyword?.split(FILTER_LABEL_VALUE_DELIMITER).pop() as string}
-						</strong>
+						<strong>{keyword?.split(FILTER_LABEL_VALUE_DELIMITER).pop() as string}</strong>
 					</span>
 				),
 				value: unique,
@@ -199,16 +202,12 @@ export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] =>
 		),
 		...mapBooleanParamToTag(
 			query[SearchFilterId.ConsultableOnlyOnLocation] || false,
-			tText(
-				'modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse'
-			),
+			tText('modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse'),
 			SearchFilterId.ConsultableOnlyOnLocation
 		),
 		...mapBooleanParamToTag(
 			query[SearchFilterId.ConsultableMedia] || false,
-			tText(
-				'modules/visitor-space/utils/map-filters/map-filters___alles-wat-raadpleegbaar-is'
-			),
+			tText('modules/visitor-space/utils/map-filters/map-filters___alles-wat-raadpleegbaar-is'),
 			SearchFilterId.ConsultableMedia
 		),
 		...mapBooleanParamToTag(

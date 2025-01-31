@@ -76,9 +76,7 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 						onItemClick={onCheckboxClick}
 					/>
 				</Dropdown>
-				{info && (
-					<p className={styles['c-refinable-radio-button__dropdown-info']}>{info}</p>
-				)}
+				{info && <p className={styles['c-refinable-radio-button__dropdown-info']}>{info}</p>}
 			</div>
 		);
 	};

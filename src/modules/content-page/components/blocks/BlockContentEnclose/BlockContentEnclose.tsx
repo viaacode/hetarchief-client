@@ -41,8 +41,10 @@ export const BlockContentEnclose: FC<BlockContentEncloseProps> = ({
 		[elements]
 	);
 
-	const elementInfos: GetContentBlockEncloseContentReturnType[] =
-		useGetContentBlockEncloseContent(elementTypeAndIds as MappedElement[], elements);
+	const elementInfos: GetContentBlockEncloseContentReturnType[] = useGetContentBlockEncloseContent(
+		elementTypeAndIds as MappedElement[],
+		elements
+	);
 
 	const getKey = (item: GetContentBlockEncloseContentReturnType, i: number) => {
 		let key: string | undefined = item.pid;
@@ -72,9 +74,7 @@ export const BlockContentEnclose: FC<BlockContentEncloseProps> = ({
 							label={buttonAltTitle || buttonLabel}
 							type={buttonType}
 							renderIcon={
-								buttonIcon
-									? () => <Icon name={buttonIcon as unknown as IconName} />
-									: undefined
+								buttonIcon ? () => <Icon name={buttonIcon as unknown as IconName} /> : undefined
 							}
 						/>
 					</SmartLink>
@@ -96,14 +96,10 @@ export const BlockContentEnclose: FC<BlockContentEncloseProps> = ({
 							publishedBy={elementInfo.maintainerName}
 							name={elementInfo.name}
 							description={elementInfo.description}
-							publishedOrCreatedDate={
-								elementInfo.datePublished || elementInfo.dateCreated
-							}
+							publishedOrCreatedDate={elementInfo.datePublished || elementInfo.dateCreated}
 							thumbnail={elementInfo.thumbnail}
 							icon={
-								elementInfo.objectType
-									? GET_TYPE_TO_ICON_MAP()[elementInfo.objectType]
-									: undefined
+								elementInfo.objectType ? GET_TYPE_TO_ICON_MAP()[elementInfo.objectType] : undefined
 							}
 						/>
 					);

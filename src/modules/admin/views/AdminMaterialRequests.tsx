@@ -1,7 +1,20 @@
-import { MultiSelect, type MultiSelectOption, OrderDirection, PaginationBar, Table } from '@meemoo/react-components';
+import {
+	MultiSelect,
+	type MultiSelectOption,
+	OrderDirection,
+	PaginationBar,
+	Table,
+} from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil, without } from 'lodash-es';
-import React, { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
+import React, {
+	type FC,
+	type MouseEvent,
+	type ReactNode,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import type { Row, SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -17,7 +30,11 @@ import { AdminLayout } from '@admin/layouts';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
 import { useGetMaterialRequestsMaintainers } from '@material-requests/hooks/get-material-requests-maintainers';
-import { type MaterialRequest, MaterialRequestKeys, type MaterialRequestType } from '@material-requests/types';
+import {
+	type MaterialRequest,
+	MaterialRequestKeys,
+	type MaterialRequestType,
+} from '@material-requests/types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -38,23 +55,21 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 	const [filters, setFilters] = useQueryParams(ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 
-	const { data: materialRequests, isLoading: isLoadingMaterialRequests } = useGetMaterialRequests(
-		{
-			isPersonal: false,
-			isPending: false,
-			size: ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
-			...(!isNil(filters.page) && { page: filters.page }),
-			...(!isNil(filters.orderProp) && {
-				orderProp: filters.orderProp as MaterialRequestKeys,
-			}),
-			...(!isNil(filters.orderDirection) && {
-				orderDirection: filters.orderDirection as OrderDirection,
-			}),
-			search: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
-			type: filters.type as MaterialRequestType[],
-			maintainerIds: filters.maintainerIds as string[],
-		}
-	);
+	const { data: materialRequests, isLoading: isLoadingMaterialRequests } = useGetMaterialRequests({
+		isPersonal: false,
+		isPending: false,
+		size: ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
+		...(!isNil(filters.page) && { page: filters.page }),
+		...(!isNil(filters.orderProp) && {
+			orderProp: filters.orderProp as MaterialRequestKeys,
+		}),
+		...(!isNil(filters.orderDirection) && {
+			orderDirection: filters.orderDirection as OrderDirection,
+		}),
+		search: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
+		type: filters.type as MaterialRequestType[],
+		maintainerIds: filters.maintainerIds as string[],
+	});
 
 	const { data: maintainers } = useGetMaterialRequestsMaintainers();
 
@@ -88,7 +103,10 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 		currentMaterialRequest?.id || null
 	);
 
-	const noData = useMemo((): boolean => isEmpty(materialRequests?.items), [materialRequests?.items]);
+	const noData = useMemo(
+		(): boolean => isEmpty(materialRequests?.items),
+		[materialRequests?.items]
+	);
 
 	const sortFilters = useMemo(
 		(): SortingRule<{ id: MaterialRequestKeys; desc: boolean }>[] => [
@@ -202,9 +220,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const renderPageContent = () => {
 		return (
-			<AdminLayout
-				pageTitle={tText('pages/admin/materiaalaanvragen/index___materiaalaanvragen')}
-			>
+			<AdminLayout pageTitle={tText('pages/admin/materiaalaanvragen/index___materiaalaanvragen')}>
 				<AdminLayout.Content>
 					<div
 						className={clsx(
@@ -225,16 +241,12 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 							{maintainerList && (
 								<MultiSelect
 									variant="rounded"
-									label={tText(
-										'pages/admin/materiaalaanvragen/index___aanbieder'
-									)}
+									label={tText('pages/admin/materiaalaanvragen/index___aanbieder')}
 									options={maintainerList}
 									onChange={onMultiMaintainersChange}
 									className="p-admin-material-requests__dropdown c-multi-select"
 									iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
-									iconClosed={
-										<Icon name={IconNamesLight.AngleDown} aria-hidden />
-									}
+									iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 									iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
 								/>
 							)}
@@ -258,13 +270,10 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 					</div>
 					<div
 						className={clsx('l-container l-container--edgeless-to-lg', {
-							'u-text-center u-color-neutral u-py-48':
-								isLoadingMaterialRequests || noData,
+							'u-text-center u-color-neutral u-py-48': isLoadingMaterialRequests || noData,
 						})}
 					>
-						{isLoadingMaterialRequests && (
-							<Loading owner="Material requests overview" />
-						)}
+						{isLoadingMaterialRequests && <Loading owner="Material requests overview" />}
 						{noData && renderEmptyMessage()}
 						{!noData && !isLoadingMaterialRequests && renderContent()}
 					</div>

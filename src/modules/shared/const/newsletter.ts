@@ -12,14 +12,8 @@ export const NEWSLETTER_FORM_SCHEMA = (): Schema<NewsletterFormState> => {
 			tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-achternaam-moet-ingevuld-zijn')
 		),
 		mail: string()
-			.email(
-				tText(
-					'pages/nieuwsbrief/index___nieuwsbrief-formulier-dit-is-geen-geldig-emailadres'
-				)
-			)
-			.required(
-				tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-email-moet-ingevuld-zijn')
-			),
+			.email(tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-dit-is-geen-geldig-emailadres'))
+			.required(tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-email-moet-ingevuld-zijn')),
 	});
 };
 

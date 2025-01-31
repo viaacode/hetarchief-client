@@ -17,7 +17,7 @@ const renderBlade = (
 ) => {
 	// Focus trap needs at least one focusable element inside it to be able to lock the focus
 	// biome-ignore lint/a11y/useValidAnchor: this is a test file, not actual production code
-		const mockInteractiveElement = <a href="#">test</a>;
+	const mockInteractiveElement = <a href="#">test</a>;
 
 	return render(
 		<Provider store={mockStore}>
@@ -38,7 +38,10 @@ describe('Component: <Blade /> (default)', () => {
 
 	it('Should render a title', () => {
 		const title = 'new title';
-		const { getByText } = renderBlade({ ...mockBladeProps, renderTitle: () => title });
+		const { getByText } = renderBlade({
+			...mockBladeProps,
+			renderTitle: () => title,
+		});
 
 		const bladeTitle = getByText(title);
 
@@ -82,7 +85,11 @@ describe('Component: <Blade /> (default)', () => {
 
 	it('Should call onClose when the close button is clicked', () => {
 		const onClose = jest.fn();
-		const { getByRole } = renderBlade({ ...mockBladeProps, onClose, isOpen: true }); // Buttons inside blades are only enabled when the blade is open
+		const { getByRole } = renderBlade({
+			...mockBladeProps,
+			onClose,
+			isOpen: true,
+		}); // Buttons inside blades are only enabled when the blade is open
 
 		const closeButton = getByRole('dialog').querySelector('.c-blade__close-button');
 

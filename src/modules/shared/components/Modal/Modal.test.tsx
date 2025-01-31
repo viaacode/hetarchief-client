@@ -78,9 +78,7 @@ describe('Component: <Modal />', () => {
 		renderModal({ title });
 
 		const modalTitle = screen.getByText(title).parentElement;
-		const modalClose = screen
-			.getByText(closeIcon)
-			.closest('.c-hetarchief-modal__close-wrapper');
+		const modalClose = screen.getByText(closeIcon).closest('.c-hetarchief-modal__close-wrapper');
 
 		expect(modalTitle).toHaveClass('c-hetarchief-modal__title-wrapper');
 		expect(modalClose).toBeInTheDocument();

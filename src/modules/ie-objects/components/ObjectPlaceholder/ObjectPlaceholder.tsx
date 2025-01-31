@@ -33,9 +33,7 @@ const ObjectPlaceholder: FC<ObjectPlaceholderProps> = ({
 			<div className={styles['c-object-placeholder__page']}>
 				<Icon className={styles['c-object-placeholder__icon']} name={IconNamesLight.Hide} />
 			</div>
-			{description && (
-				<p className={styles['c-object-placeholder__description']}>{description}</p>
-			)}
+			{description && <p className={styles['c-object-placeholder__description']}>{description}</p>}
 			{openModalButtonLabel && (
 				<>
 					<Button
@@ -56,11 +54,7 @@ const ObjectPlaceholder: FC<ObjectPlaceholderProps> = ({
 					)}
 
 					{(reasonTitle || reasonDescription) && (
-						<Modal
-							isOpen={isModalOpen}
-							title={reasonTitle}
-							onClose={() => setIsModalOpen(false)}
-						>
+						<Modal isOpen={isModalOpen} title={reasonTitle} onClose={() => setIsModalOpen(false)}>
 							<p className={styles['c-object-placeholder__modal-description']}>
 								{reasonDescription}
 							</p>

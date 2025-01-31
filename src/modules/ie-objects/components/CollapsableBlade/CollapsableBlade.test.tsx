@@ -58,7 +58,11 @@ describe('Components', () => {
 
 		it('Should pass props to content function', () => {
 			const renderContent = jest.fn() as (hidden: boolean) => ReactNode;
-			renderCollapsableBlade({ renderContent, isOpen: false, setIsOpen: () => {} });
+			renderCollapsableBlade({
+				renderContent,
+				isOpen: false,
+				setIsOpen: () => {},
+			});
 
 			expect(renderContent).toHaveBeenCalled();
 			expect(renderContent).toHaveBeenCalledTimes(1);

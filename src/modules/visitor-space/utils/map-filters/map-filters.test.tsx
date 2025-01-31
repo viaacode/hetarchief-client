@@ -14,8 +14,7 @@ describe('Utils', () => {
 
 			expect(filters).toHaveLength(query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY].length);
 			expect(filters[0].value).toBe(
-				tagPrefix(QUERY_PARAM_KEY.SEARCH_QUERY_KEY) +
-					query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY][0]
+				tagPrefix(QUERY_PARAM_KEY.SEARCH_QUERY_KEY) + query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY][0]
 			);
 		});
 

@@ -25,9 +25,7 @@ export const mock = async (
 
 				return {
 					// Capitalize title
-					title: `#${i + 1} - ${
-						item.title?.charAt(0).toUpperCase() + item.title?.slice(1)
-					}`,
+					title: `#${i + 1} - ${item.title?.charAt(0).toUpperCase() + item.title?.slice(1)}`,
 					description: Array(20)
 						.join(` ${item.title}`)
 						.split(' ')

@@ -29,10 +29,7 @@ describe('getAccessToDate', () => {
 
 	it('should return null for next date 13:00', () => {
 		expect(
-			getAccessToDate(
-				parseISO('2023-03-08T17:31:00+00:00'),
-				parseISO('2023-03-09T13:00:00+00:00')
-			)
+			getAccessToDate(parseISO('2023-03-08T17:31:00+00:00'), parseISO('2023-03-09T13:00:00+00:00'))
 		).toEqual(null);
 	});
 

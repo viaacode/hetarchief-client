@@ -27,9 +27,7 @@ export async function addContentBlock(page: Page, blockName: BlockName): Promise
 	await blockSelect
 		.locator('.c-select__placeholder', {
 			hasText:
-				SITE_TRANSLATIONS.nl[
-					'admin/content-block/content-block___voeg-een-content-blok-toe'
-				],
+				SITE_TRANSLATIONS.nl['admin/content-block/content-block___voeg-een-content-blok-toe'],
 		})
 		.click();
 

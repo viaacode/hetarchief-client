@@ -47,11 +47,7 @@ export const NavigationSection: FC<NavigationSectionProps> = ({
 					flyoutClassName={clsx(styles['c-navigation__dropdown-flyout'])}
 					trigger={
 						<Button
-							label={
-								isHamburgerMenuOpen
-									? hamburgerProps?.openLabel
-									: hamburgerProps?.closedLabel
-							}
+							label={isHamburgerMenuOpen ? hamburgerProps?.openLabel : hamburgerProps?.closedLabel}
 							variants="text"
 							className="u-color-white u-px-0 u-py-0 u-ml--12 u-line-height-1-25"
 							iconStart={
@@ -84,9 +80,7 @@ export const NavigationSection: FC<NavigationSectionProps> = ({
 
 	const renderDesktop = () => {
 		const Wrapper = renderHamburger ? 'div' : Fragment;
-		const wrapperCls = clsx(
-			renderHamburger && styles['c-navigation__section--responsive-desktop']
-		);
+		const wrapperCls = clsx(renderHamburger && styles['c-navigation__section--responsive-desktop']);
 
 		return (
 			<Wrapper {...(wrapperCls && { className: wrapperCls })}>

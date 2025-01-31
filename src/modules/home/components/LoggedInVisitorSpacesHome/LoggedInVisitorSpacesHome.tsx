@@ -7,7 +7,10 @@ import { StringParam, useQueryParams } from 'use-query-params';
 
 import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { RequestAccessBlade, type RequestAccessFormState } from '@home/components/RequestAccessBlade';
+import {
+	RequestAccessBlade,
+	type RequestAccessFormState,
+} from '@home/components/RequestAccessBlade';
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { Blade } from '@shared/components/Blade/Blade';
@@ -107,7 +110,9 @@ const LoggedInVisitorSpacesHome: FC = () => {
 	const { data: visitorSpaceInfo, isError: isErrorGetVisitorSpace } = useGetVisitorSpace(
 		query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] as string,
 		false,
-		{ enabled: !!query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] }
+		{
+			enabled: !!query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY],
+		}
 	);
 
 	// ARC-1650: Do not show all visit accesses for admin users
@@ -217,10 +222,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 			setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: undefined });
 			onCloseRequestBlade();
 			await router.push(
-				ROUTES_BY_LOCALE[locale].visitRequested.replace(
-					':slug',
-					createdVisitRequest.spaceSlug
-				)
+				ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
 			);
 		} catch (err) {
 			console.error({
@@ -238,7 +240,9 @@ const LoggedInVisitorSpacesHome: FC = () => {
 	};
 
 	const onRequestAccess = (visitorSpaceSlug: string) => {
-		setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug });
+		setQuery({
+			[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug,
+		});
 		setIsRequestAccessBladeOpen(true);
 	};
 
@@ -284,12 +288,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 					</section>
 
 					{actualActiveVisitRequests.length > 0 && (
-						<section
-							className={clsx(
-								styles['c-hero__section'],
-								styles['c-hero__section--access']
-							)}
-						>
+						<section className={clsx(styles['c-hero__section'], styles['c-hero__section--access'])}>
 							<div className={styles['c-hero__access-cards']}>
 								{actualActiveVisitRequests.map((visit, i) => (
 									<VisitorSpaceCard
@@ -308,14 +307,8 @@ const LoggedInVisitorSpacesHome: FC = () => {
 					)}
 
 					{actualFutureVisitRequests.length > 0 && (
-						<section
-							className={clsx(styles['c-hero__section'])}
-							id="toekomstige-bezoeken"
-						>
-							<h5
-								className={clsx(styles['c-hero__section-title'], 'u-mb-16')}
-								id="planned-visits"
-							>
+						<section className={clsx(styles['c-hero__section'])} id="toekomstige-bezoeken">
+							<h5 className={clsx(styles['c-hero__section-title'], 'u-mb-16')} id="planned-visits">
 								{tHtml('modules/shared/components/hero/hero___geplande-bezoeken')}
 							</h5>
 							<div className={styles['c-hero__requests']}>
@@ -337,10 +330,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 					)}
 
 					{actualPendingVisitRequests.length > 0 && (
-						<section
-							className={clsx(styles['c-hero__section'])}
-							id="aangevraagde-bezoeken"
-						>
+						<section className={clsx(styles['c-hero__section'])} id="aangevraagde-bezoeken">
 							<h5 className={clsx(styles['c-hero__section-title'], 'u-mb-16')}>
 								{tHtml('modules/shared/components/hero/hero___aanvragen')}
 							</h5>
@@ -375,10 +365,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 					<h2
 						{...props}
-						className={clsx(
-							props.className,
-							styles['c-visitor-space-not-available-blade__title']
-						)}
+						className={clsx(props.className, styles['c-visitor-space-not-available-blade__title'])}
 					>
 						{tHtml(
 							'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
@@ -401,7 +388,9 @@ const LoggedInVisitorSpacesHome: FC = () => {
 						variants="black"
 						onClick={() => {
 							setIsVisitorSpaceNotAvailable(false);
-							setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: undefined });
+							setQuery({
+								[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: undefined,
+							});
 						}}
 					/>
 				</div>
@@ -427,9 +416,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 				/>
 				{renderVisitorSpaceNotAvailableBlade()}
 				<ProcessVisitBlade
-					selected={
-						selected as (VisitSummaryType & Pick<VisitRequest, 'status'>) | undefined
-					}
+					selected={selected as (VisitSummaryType & Pick<VisitRequest, 'status'>) | undefined}
 					isOpen={!!selected && isProcessVisitBladeOpen}
 					onClose={onCloseProcessVisitBlade}
 					onFinish={() => {

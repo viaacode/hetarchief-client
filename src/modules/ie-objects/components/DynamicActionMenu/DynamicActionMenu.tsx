@@ -54,7 +54,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 		? Math.ceil(
 				(totalWidth - size.width) /
 					(size.width < totalWidth ? DYNAMIC_ACTION_BOX : DYNAMIC_ACTION_WIDTH)
-		  )
+			)
 		: 0;
 
 	// Clamp items to hide at limit
@@ -97,25 +97,20 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 					className={styles['c-dynamic-action-menu__primary-item']}
 					key={`media-action-${action.id}`}
 				>
-					<a
-						href={action.url}
-						target="_blank"
-						referrerPolicy="no-referrer"
-						rel="noreferrer"
-					>
+					<a href={action.url} target="_blank" referrerPolicy="no-referrer" rel="noreferrer">
 						{$element}
 					</a>
 				</li>
 			);
 		}
-			return (
-				<li
-					className={styles['c-dynamic-action-menu__primary-item']}
-					key={`media-action-${action.id}`}
-				>
-					{$element}
-				</li>
-			);
+		return (
+			<li
+				className={styles['c-dynamic-action-menu__primary-item']}
+				key={`media-action-${action.id}`}
+			>
+				{$element}
+			</li>
+		);
 	};
 
 	const renderSecondaryButton = (action: ActionItem) => {
@@ -137,29 +132,20 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 					className={styles['c-dynamic-action-menu__secondary-item']}
 					key={`media-action-${action.id}`}
 				>
-					<a
-						href={action.url}
-						target="_blank"
-						referrerPolicy="no-referrer"
-						rel="noreferrer"
-					>
-						{action.tooltip && !isMobile
-							? renderInTooltip($element, action.tooltip)
-							: $element}
+					<a href={action.url} target="_blank" referrerPolicy="no-referrer" rel="noreferrer">
+						{action.tooltip && !isMobile ? renderInTooltip($element, action.tooltip) : $element}
 					</a>
 				</li>
 			);
 		}
-			return (
-				<li
-					className={styles['c-dynamic-action-menu__secondary-item']}
-					key={`media-action-${action.id}`}
-				>
-					{action.tooltip && !isMobile
-						? renderInTooltip($element, action.tooltip)
-						: $element}
-				</li>
-			);
+		return (
+			<li
+				className={styles['c-dynamic-action-menu__secondary-item']}
+				key={`media-action-${action.id}`}
+			>
+				{action.tooltip && !isMobile ? renderInTooltip($element, action.tooltip) : $element}
+			</li>
+		);
 	};
 
 	const renderDropdown = (dropdownActions: ActionItem[]) => {
@@ -200,15 +186,13 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 
 	return (
 		<>
-			<ul className={clsx(className, styles['c-dynamic-action-menu'])} >
+			<ul className={clsx(className, styles['c-dynamic-action-menu'])}>
 				{primaryActions.map(renderPrimaryButton)}
 				<div
 					className={styles['c-dynamic-action-menu__secondary']}
 					ref={listRef}
 					style={{
-						minWidth: `${
-							(limit + 1) * DYNAMIC_ACTION_WIDTH + limit * DYNAMIC_ACTION_SPACER
-						}px`,
+						minWidth: `${(limit + 1) * DYNAMIC_ACTION_WIDTH + limit * DYNAMIC_ACTION_SPACER}px`,
 					}}
 				>
 					{visibleActions.map(renderSecondaryButton)}

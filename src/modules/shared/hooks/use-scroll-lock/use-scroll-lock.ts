@@ -91,7 +91,7 @@ const useScrollLock: UseScrollLock = (lock, id) => {
 			el.style.overflowY = '';
 			el.style.marginRight = '';
 			el.style.position = 'relative';
-			el.style.top = "0";
+			el.style.top = '0';
 			window.onwheel = null;
 
 			scroll();

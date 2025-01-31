@@ -128,7 +128,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmar
 
 	// Go to the following url
 	await page.goto(
-		(`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${process.env.TEST_OBJECT_DETAIL_PAGE_STUIFZAND as string}`) as string
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${process.env.TEST_OBJECT_DETAIL_PAGE_STUIFZAND as string}` as string
 	);
 
 	/**

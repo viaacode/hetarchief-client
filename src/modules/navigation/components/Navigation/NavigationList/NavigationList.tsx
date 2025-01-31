@@ -72,8 +72,7 @@ const NavigationList: FC<NavigationListProps> = ({ items, onOpenDropdowns }) => 
 						styles['c-navigation__link--border'],
 						styles[`c-navigation__link--variant-${index + 1}`],
 						{
-							[styles['c-navigation__item--active']]:
-								item.activeDesktop || item.activeMobile,
+							[styles['c-navigation__item--active']]: item.activeDesktop || item.activeMobile,
 							[styles['c-navigation__item--divider']]: item.isDivider,
 						}
 					);
@@ -89,9 +88,7 @@ const NavigationList: FC<NavigationListProps> = ({ items, onOpenDropdowns }) => 
 									items={item.children}
 									trigger={renderTrigger(
 										item,
-										openDropdownId === item.id
-											? IconNamesLight.AngleUp
-											: IconNamesLight.AngleDown
+										openDropdownId === item.id ? IconNamesLight.AngleUp : IconNamesLight.AngleDown
 									)}
 									onClose={closeDropdowns}
 									onOpen={openDropdowns}

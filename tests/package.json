@@ -2,9 +2,7 @@
 	"name": "hetarchief-client-end-2-end-tests",
 	"version": "1.1.0",
 	"private": true,
-	"contributors": [
-		"Bert Verhelst <bert.verhelst@studiohyperdrive.be>"
-	],
+	"contributors": ["Bert Verhelst <bert.verhelst@studiohyperdrive.be>"],
 	"scripts": {
 		"test:e2e:install-chrome": "playwright install chrome",
 		"test:e2e": "npx playwright test",
@@ -20,15 +18,15 @@
 		"test:e2e:debug:t07--disabled": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t07-test-feedbackbutton-niet-ingelogd.spec.ts",
 		"test:e2e:debug:t08--disabled": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t08-test-faq-raadplegen-niet-ingelogd.spec.ts",
 		"test:e2e:debug:t09": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t09-test-toegangsaanvraag-accepteren-weigeren-door-cp-admin.spec.ts",
-    "test:e2e:debug:t10.1": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/tests/t10.1-test-actieve-toegang-basisgebruiker--visitor-space-access.spec.ts",
-    "test:e2e:debug:t10.2": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/tests/t10.2-test-actieve-toegang-basisgebruiker--search-term.spec.ts",
-    "test:e2e:debug:t10.3": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/tests/t10.3-test-actieve-toegang-basisgebruiker--is-consultable-filter.spec.ts",
-    "test:e2e:debug:t10.4": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/tests/t10.4-test-actieve-toegang-basisgebruiker--release-date-filter.spec.ts",
-    "test:e2e:debug:t10.5": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/tests/t10.5-test-actieve-toegang-basisgebruiker--advanced-filters.spec.ts",
-    "test:e2e:debug:t10.6": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/tests/t10.6-test-actieve-toegang-basisgebruiker--search-results-tabs-and-list-view.spec.ts",
-    "test:e2e:debug:t11.1": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t11.1-test-detailpagina-object--search-and-bookmark.spec.ts",
-    "test:e2e:debug:t11.2": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t11.2-test-detailpagina-object--detail-page.spec.ts",
-    "test:e2e:debug:t11.3": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t11.3-test-detailpagina-object--material-request.spec.ts",
+		"test:e2e:debug:t10.1": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/tests/t10.1-test-actieve-toegang-basisgebruiker--visitor-space-access.spec.ts",
+		"test:e2e:debug:t10.2": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/tests/t10.2-test-actieve-toegang-basisgebruiker--search-term.spec.ts",
+		"test:e2e:debug:t10.3": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/tests/t10.3-test-actieve-toegang-basisgebruiker--is-consultable-filter.spec.ts",
+		"test:e2e:debug:t10.4": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/tests/t10.4-test-actieve-toegang-basisgebruiker--release-date-filter.spec.ts",
+		"test:e2e:debug:t10.5": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/tests/t10.5-test-actieve-toegang-basisgebruiker--advanced-filters.spec.ts",
+		"test:e2e:debug:t10.6": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/tests/t10.6-test-actieve-toegang-basisgebruiker--search-results-tabs-and-list-view.spec.ts",
+		"test:e2e:debug:t11.1": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t11.1-test-detailpagina-object--search-and-bookmark.spec.ts",
+		"test:e2e:debug:t11.2": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t11.2-test-detailpagina-object--detail-page.spec.ts",
+		"test:e2e:debug:t11.3": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t11.3-test-detailpagina-object--material-request.spec.ts",
 		"test:e2e:debug:t12--disabled": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t12-test-einde-sessie-bezoekertool.spec.ts",
 		"test:e2e:debug:t13--disabled": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t13-test-mappen-profielpagina-basisgebruiker.spec.ts",
 		"test:e2e:debug:t14--disabled": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t14-meemoo-beheer-basis-beheersfunctionaliteiten.spec.ts",
@@ -55,7 +53,7 @@
 		"dotenv-cli": "7.4.2",
 		"lodash": "^4.17.21",
 		"typescript": "4.5.2",
-    "npx": "^10.2.2",
+		"npx": "^10.2.2",
 		"uuid": "^10.0.0"
 	}
 }

@@ -34,9 +34,7 @@ export const AdminNavigationBarDetailPage: FC<DefaultSeoInfo & AdminNavigationBa
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-navigation__detail">
-						<Suspense
-							fallback={<Loading fullscreen owner="AdminNavigationBarDetailPage" />}
-						>
+						<Suspense fallback={<Loading fullscreen owner="AdminNavigationBarDetailPage" />}>
 							<NavigationBarDetail
 								navigationBarId={navigationBarId}
 								onGoBack={() =>
@@ -55,9 +53,7 @@ export const AdminNavigationBarDetailPage: FC<DefaultSeoInfo & AdminNavigationBa
 	return (
 		<>
 			<SeoTags
-				title={tText(
-					'pages/admin/navigatie/navigation-bar-id/index___navigatie-balk-detail'
-				)}
+				title={tText('pages/admin/navigatie/navigation-bar-id/index___navigatie-balk-detail')}
 				description={tText(
 					'pages/admin/navigatie/navigation-bar-id/index___de-detail-pagina-van-een-navigatie-balk-met-de-navigatie-items'
 				)}

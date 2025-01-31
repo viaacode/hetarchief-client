@@ -72,9 +72,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 				/>
 
 				<Button
-					label={tHtml(
-						'modules/home/components/process-visit-blade/process-visit-blade___sluit'
-					)}
+					label={tHtml('modules/home/components/process-visit-blade/process-visit-blade___sluit')}
 					variants={['block', 'text']}
 					onClick={() => props.onClose?.()}
 					disabled={!props.isOpen}
@@ -99,7 +97,9 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 				footer={renderFooter()}
 				isOpen={getCurrentLayer() === 1}
 				layer={1}
-				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => <h2 {...props}>{getTitle()}</h2>}
+				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
+					<h2 {...props}>{getTitle()}</h2>
+				)}
 				id="process-visit-blade__visit-summary"
 			>
 				{selected && <VisitSummary preview {...selected} />}

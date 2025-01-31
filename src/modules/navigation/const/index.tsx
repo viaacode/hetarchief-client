@@ -9,10 +9,7 @@ import type {
 	NavigationHamburgerProps,
 	NavigationItem,
 } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
-import type {
-	NavigationInfo,
-	NavigationPlacement,
-} from '@navigation/services/navigation-service';
+import type { NavigationInfo, NavigationPlacement } from '@navigation/services/navigation-service';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
@@ -37,9 +34,7 @@ export const GET_NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): Navigatio
 				<Button
 					className={styles['c-navigation__auth']}
 					key="nav-auth-button"
-					label={tText(
-						'modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren'
-					)}
+					label={tText('modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren')}
 					variants={['white', 'text']}
 					onClick={onLoginRegisterClick}
 				/>

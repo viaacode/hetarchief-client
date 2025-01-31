@@ -20,10 +20,7 @@ export const AdminVisitorSpaceEdit: FC<DefaultSeoInfo> = ({ url }) => {
 				)}
 			>
 				<AdminLayout.Content>
-					<VisitorSpaceSettings
-						action="edit"
-						visitorSpaceSlug={router.query.slug as string}
-					/>
+					<VisitorSpaceSettings action="edit" visitorSpaceSlug={router.query.slug as string} />
 				</AdminLayout.Content>
 			</AdminLayout>
 		);

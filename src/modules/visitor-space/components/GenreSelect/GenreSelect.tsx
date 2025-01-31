@@ -23,9 +23,7 @@ const GenreSelect: FC<ReactSelectProps> = (props) => {
 
 	const getPlaceholder = (): string | undefined => {
 		return options.length === 0
-			? tText(
-					'modules/visitor-space/components/genre-select/genre-select___geen-genres-gevonden'
-			  )
+			? tText('modules/visitor-space/components/genre-select/genre-select___geen-genres-gevonden')
 			: tText('modules/visitor-space/components/genre-select/genre-select___kies-een-genre');
 	};
 

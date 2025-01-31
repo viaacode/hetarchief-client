@@ -82,7 +82,10 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	const noContent = !materialRequests || materialRequests?.length === 0;
 
 	// Create an object containing all the distinct maintainerId's as properties
-	const materialRequestsByMaintainer = useMemo(() => groupBy(materialRequests, (materialRequest) => materialRequest.maintainerId), [materialRequests]);
+	const materialRequestsByMaintainer = useMemo(
+		() => groupBy(materialRequests, (materialRequest) => materialRequest.maintainerId),
+		[materialRequests]
+	);
 
 	useEffect(() => {
 		materialRequests && dispatch(setMaterialRequestCount(materialRequests.length));
@@ -164,14 +167,10 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					href={`/zoeken/${materialRequest.maintainerSlug}/${materialRequest.objectSchemaIdentifier}`}
 					className={styles['c-material-request-center-blade__material-link']}
 				>
-					<div
-						className={styles['c-material-request-center-blade__material']}
-					>
+					<div className={styles['c-material-request-center-blade__material']}>
 						<p className={styles['c-material-request-center-blade__material-label']}>
 							<Icon
-								className={
-									styles['c-material-request-center-blade__material-label-icon']
-								}
+								className={styles['c-material-request-center-blade__material-label-icon']}
 								name={TYPE_TO_ICON_MAP[materialRequest.objectDctermsFormat]}
 							/>
 							<span>{materialRequest.objectSchemaName}</span>
@@ -184,9 +183,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				<div className={styles['c-material-request-center-blade__material-actions']}>
 					<Button
 						key={'edit-material-request'}
-						className={
-							styles['c-material-request-center-blade__material-actions-button']
-						}
+						className={styles['c-material-request-center-blade__material-actions-button']}
 						onClick={() => {
 							setSelectedMaterialRequest(materialRequest);
 							setActiveBlade(MaterialRequestBladeId.EditMaterialRequest);
@@ -234,7 +231,10 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			// Ward: render each unique maintainer
 			Object.keys(materialRequestsByMaintainer).map((key) => (
 				<div key={key}>
-					{renderMaintainer(materialRequestsByMaintainer[key][0], materialRequestsByMaintainer[key].length)}
+					{renderMaintainer(
+						materialRequestsByMaintainer[key][0],
+						materialRequestsByMaintainer[key].length
+					)}
 
 					{/* Ward: render all materialRequests of current maintainer, sorted by objectSchemaName */}
 					{materialRequestsByMaintainer[key]
@@ -340,9 +340,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					isEditMode
 					layer={activeBlade === MaterialRequestBladeId.EditMaterialRequest ? 2 : 99}
 					currentLayer={
-						activeBlade === MaterialRequestBladeId.EditMaterialRequest
-							? getCurrentLayer()
-							: 9999
+						activeBlade === MaterialRequestBladeId.EditMaterialRequest ? getCurrentLayer() : 9999
 					}
 				/>
 			)}
@@ -361,9 +359,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					}}
 					layer={activeBlade === MaterialRequestBladeId.PersonalDetails ? 2 : 99}
 					currentLayer={
-						activeBlade === MaterialRequestBladeId.PersonalDetails
-							? getCurrentLayer()
-							: 9999
+						activeBlade === MaterialRequestBladeId.PersonalDetails ? getCurrentLayer() : 9999
 					}
 					refetch={refetchMaterialRequests}
 				/>

@@ -66,10 +66,7 @@ export const uiSlice = toolkitRaw.createSlice({
 		setMaterialRequestCount(state, action: toolkitRaw.PayloadAction<number>) {
 			state.materialRequestCount = action.payload;
 		},
-		setLastScrollPosition(
-			state,
-			action: toolkitRaw.PayloadAction<LastScrollPositionType | null>
-		) {
+		setLastScrollPosition(state, action: toolkitRaw.PayloadAction<LastScrollPositionType | null>) {
 			state.lastScrollPosition = action.payload;
 		},
 		setBreadcrumbs(state, action: toolkitRaw.PayloadAction<Breadcrumb[]>) {

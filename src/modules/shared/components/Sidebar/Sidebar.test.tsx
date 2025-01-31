@@ -38,7 +38,10 @@ describe('Component: <Sidebar /> (default)', () => {
 		const mockTitle = 'mock title';
 		const mockHeadingTitle = 'mock heading';
 		const mockHeading = <h3>{mockHeadingTitle}</h3>;
-		const { container } = renderSidebar({ heading: mockHeading, title: mockTitle });
+		const { container } = renderSidebar({
+			heading: mockHeading,
+			title: mockTitle,
+		});
 
 		const heading = container.firstChild?.firstChild;
 

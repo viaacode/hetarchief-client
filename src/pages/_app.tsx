@@ -47,15 +47,11 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 	const { store, props } = wrapper.useWrappedStore(pageProps);
 
 	useEffect(() => {
-		console.log(
-			`[PERFORMANCE] ${new Date().toISOString()} init hetarchief client`,
-		);
+		console.log(`[PERFORMANCE] ${new Date().toISOString()} init hetarchief client`);
 	}, []);
 
 	useEffect(() => {
-		AdminConfigManager.setConfig(
-			getAdminCoreConfig(router, locale || Locale.nl),
-		);
+		AdminConfigManager.setConfig(getAdminCoreConfig(router, locale || Locale.nl));
 	}, [locale, router]);
 
 	if (!isServerSideRendering()) {
@@ -79,20 +75,20 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 }
 
 export default appWithTranslation(MyApp, {
-	supportedLngs: ["nl", "en"],
+	supportedLngs: ['nl', 'en'],
 	i18n: {
-		locales: ["nl", "en"],
-		defaultLocale: "nl",
+		locales: ['nl', 'en'],
+		defaultLocale: 'nl',
 		localeDetection: false,
 	},
 	backend: {
 		loadPath: `${publicRuntimeConfig.PROXY_URL}/admin/translations/{{lng}}.json`,
 	},
 	use: [HttpApi],
-	ns: ["common"],
+	ns: ['common'],
 	parseMissingKeyHandler: (key) => {
-		if (key.includes("___")) {
-			return `${upperFirst(lowerCase(key.split("___").pop()))} ***`;
+		if (key.includes('___')) {
+			return `${upperFirst(lowerCase(key.split('___').pop()))} ***`;
 		}
 		return `${key} ***`;
 	},

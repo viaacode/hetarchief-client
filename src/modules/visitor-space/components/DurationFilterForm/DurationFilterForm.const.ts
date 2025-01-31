@@ -20,9 +20,7 @@ export const DURATION_FILTER_FORM_SCHEMA = (): Schema<DurationFilterFormState> =
 					'modules/visitor-space/components/duration-filter-form/duration-filter-form___invoer-is-ongeldig-dit-moet-een-geldige-tijd-zijn-bv-00-15-30'
 				),
 				(value: string | undefined) =>
-					new RegExp(`^$|^${durationRegex}(${SEPARATOR}${durationRegex})?$`, 'g').test(
-						value || ''
-					)
+					new RegExp(`^$|^${durationRegex}(${SEPARATOR}${durationRegex})?$`, 'g').test(value || '')
 			),
 	});
 

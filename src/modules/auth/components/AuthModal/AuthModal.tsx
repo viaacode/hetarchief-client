@@ -86,9 +86,7 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 				</p>
 				<Button
 					className="u-mb-48"
-					label={tHtml(
-						'modules/auth/components/auth-modal/auth-modal___registreer-je-hier'
-					)}
+					label={tHtml('modules/auth/components/auth-modal/auth-modal___registreer-je-hier')}
 					variants="outline"
 					onClick={onRegisterHetArchief}
 				/>

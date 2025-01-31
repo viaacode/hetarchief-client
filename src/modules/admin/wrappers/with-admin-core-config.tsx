@@ -16,7 +16,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 		const locale = useLocale();
 
 		// biome-ignore lint/correctness/useExhaustiveDependencies: router changes too ofter and this causes a render loop if we add it to the deps array
-				const initConfigValue = useCallback(() => {
+		const initConfigValue = useCallback(() => {
 			const config = getAdminCoreConfig(router, locale);
 			AdminConfigManager.setConfig(config);
 			setAdminCoreConfig(config);

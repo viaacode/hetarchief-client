@@ -35,17 +35,12 @@ export const ContentPageLabelsEditPage: FC<DefaultSeoInfo & ContentPageLabelsEdi
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-content-page-labels__create">
-						<Suspense
-							fallback={<Loading fullscreen owner="ContentPageLabelsEditPage" />}
-						>
+						<Suspense fallback={<Loading fullscreen owner="ContentPageLabelsEditPage" />}>
 							<ContentPageLabelEdit
 								contentPageLabelId={id}
 								onGoBack={() =>
 									goBrowserBackWithFallback(
-										buildLink(
-											ROUTES_BY_LOCALE[locale].adminContentPageLabelDetail,
-											{ id }
-										),
+										buildLink(ROUTES_BY_LOCALE[locale].adminContentPageLabelDetail, { id }),
 										router
 									)
 								}
@@ -60,17 +55,15 @@ export const ContentPageLabelsEditPage: FC<DefaultSeoInfo & ContentPageLabelsEdi
 	const title = id
 		? tText(
 				'pages/admin/content-pagina-labels/id/bewerk/index___content-pagina-label-bewerk-pagina'
-		  )
-		: tText(
-				'pages/admin/content-pagina-labels/maak/index___content-pagina-label-aanmaak-pagina'
-		  );
+			)
+		: tText('pages/admin/content-pagina-labels/maak/index___content-pagina-label-aanmaak-pagina');
 	const description = id
 		? tText(
 				'pages/admin/content-pagina-labels/id/bewerk/index___laat-de-gebruik-de-details-van-een-content-pagina-label-aanpassen'
-		  )
+			)
 		: tText(
 				'pages/admin/content-pagina-labels/maak/index___laat-de-gebruiker-een-content-pagina-label-aanmaken'
-		  );
+			);
 	return (
 		<>
 			<SeoTags

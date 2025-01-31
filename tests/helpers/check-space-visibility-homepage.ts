@@ -26,7 +26,9 @@ export async function checkSpaceVisibilityHomepage(
 
 	if (shouldBeVisible) {
 		// Check searchTerm is shown
-		const card = page.locator('.p-home__results .c-card', { hasText: searchTerm });
+		const card = page.locator('.p-home__results .c-card', {
+			hasText: searchTerm,
+		});
 		await expect(card).toBeVisible();
 		await expect(
 			card.locator('.c-button', {
@@ -41,7 +43,9 @@ export async function checkSpaceVisibilityHomepage(
 		const noResultsForSelectedFiltersLabel =
 			SITE_TRANSLATIONS.nl['pages/index___geen-resultaten-voor-de-geselecteerde-filters'];
 		await expect(page.locator(`text=${noResultsForSelectedFiltersLabel}`)).toBeVisible();
-		const card = page.locator('.p-home__results .c-card', { hasText: searchTerm });
+		const card = page.locator('.p-home__results .c-card', {
+			hasText: searchTerm,
+		});
 		await expect(card).not.toBeVisible();
 		await expect(
 			card.locator('.c-button', {

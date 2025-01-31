@@ -64,7 +64,7 @@ module.exports = withTM({
 			'react-table': path.resolve('./node_modules/react-table'),
 			'react-datepicker': path.resolve('./node_modules/react-datepicker'),
 			'react-page-split': path.resolve('./node_modules/react-page-split'),
-			'lodash$': path.resolve('./node_modules/lodash-es'),
+			lodash$: path.resolve('./node_modules/lodash-es'),
 		};
 
 		return config;
@@ -214,7 +214,8 @@ module.exports = withTM({
 				permanent: true,
 			},
 			{
-				source: '/catalog\\?utf8=\\%E2\\%9C\\%93&q=&search_field=all_fields&search_field=advanced&all_fields=hond',
+				source:
+					'/catalog\\?utf8=\\%E2\\%9C\\%93&q=&search_field=all_fields&search_field=advanced&all_fields=hond',
 				destination: '/zoeken',
 				permanent: true,
 			},

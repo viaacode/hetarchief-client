@@ -32,7 +32,10 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ShareFolderBlade } from '@shared/components/ShareFolderBlade';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
-import { HIGHLIGHTED_SEARCH_TERMS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import {
+	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
+	QUERY_PARAM_KEY,
+} from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
@@ -156,9 +159,8 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 	 * Effects
 	 */
 
-
-// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
-useEffect(() => {
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+	useEffect(() => {
 		if (!activeFolder) {
 			return;
 		}
@@ -190,9 +192,7 @@ useEffect(() => {
 			folderMedia?.data?.items
 		) {
 			setTimeout(() => {
-				const item = document.getElementById(
-					`${lastScrollPosition.itemId}`
-				) as HTMLElement | null;
+				const item = document.getElementById(`${lastScrollPosition.itemId}`) as HTMLElement | null;
 
 				item?.scrollIntoView({ block: 'center', behavior: 'smooth' });
 				dispatch(setLastScrollPosition(null));
@@ -213,7 +213,7 @@ useEffect(() => {
 						if (folder.id === newFolder.id) {
 							return newFolder;
 						}
-							return folder;
+						return folder;
 					})
 				)
 			);
@@ -239,15 +239,12 @@ useEffect(() => {
 
 			const descriptionVariables = {
 				item: item.name,
-				folder:
-					folder?.name || tText('pages/account/mijn-mappen/folder-slug/index___onbekend'),
+				folder: folder?.name || tText('pages/account/mijn-mappen/folder-slug/index___onbekend'),
 			};
 
 			toastService.notify({
 				maxLines: 3,
-				title: tHtml(
-					'pages/account/mijn-mappen/folder-slug/index___item-verwijderd-uit-map-titel'
-				),
+				title: tHtml('pages/account/mijn-mappen/folder-slug/index___item-verwijderd-uit-map-titel'),
 				description: tHtml(
 					'pages/account/mijn-mappen/folder-slug/index___item-is-verwijderd-uit-map-beschrijving',
 					descriptionVariables
@@ -308,23 +305,17 @@ useEffect(() => {
 								<Button
 									variants={['silver']}
 									icon={<Icon name={IconNamesLight.Share} aria-hidden />}
-									aria-label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-delen'
-									)}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-delen'
-									)}
+									aria-label={tText('pages/account/mijn-mappen/folder-slug/index___map-delen')}
+									name={tText('pages/account/mijn-mappen/folder-slug/index___map-delen')}
 									onClick={(e) => {
 										e.stopPropagation();
 										setShowShareMapBlade(true);
 									}}
-									tooltipText={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-delen'
-									)}
+									tooltipText={tText('pages/account/mijn-mappen/folder-slug/index___map-delen')}
 								/>
 							),
 						},
-				  ]
+					]
 				: []),
 			...(activeFolder && !activeFolder.isDefault
 				? [
@@ -340,9 +331,7 @@ useEffect(() => {
 									aria-label={tText(
 										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
 									)}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
-									)}
+									name={tText('pages/account/mijn-mappen/folder-slug/index___map-verwijderen')}
 									onClick={(e) => {
 										e.stopPropagation();
 										setShowConfirmDelete(true);
@@ -351,15 +340,13 @@ useEffect(() => {
 										activeFolder.usedForLimitedAccessUntil
 											? tText(
 													'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen'
-											  )
-											: tText(
-													'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
-											  )
+												)
+											: tText('pages/account/mijn-mappen/folder-slug/index___map-verwijderen')
 									}
 								/>
 							),
 						},
-				  ]
+					]
 				: []),
 		];
 	}, [activeFolder]);
@@ -449,9 +436,7 @@ useEffect(() => {
 				value: folderIeObject.schemaIdentifier || '',
 			},
 			{
-				label: tHtml(
-					'pages/account/mijn-mappen/folder-slug/index___identifier-bij-aanbieder'
-				),
+				label: tHtml('pages/account/mijn-mappen/folder-slug/index___identifier-bij-aanbieder'),
 				value: folderIeObject.meemooLocalId || '',
 			},
 		];
@@ -460,7 +445,10 @@ useEffect(() => {
 			<div className="p-account-my-folders__card-description">
 				{metadataEntries.map((metadataEntry, i) => {
 					return metadataEntry.value ? (
-						<p key={`metadata-entry--${metadataEntry.label}--${metadataEntry.value}`} className="u-pr-24 u-text-break">
+						<p
+							key={`metadata-entry--${metadataEntry.label}--${metadataEntry.value}`}
+							className="u-pr-24 u-text-break"
+						>
 							<b>{metadataEntry.label}: </b>
 							<Highlighter
 								searchWords={keywords}
@@ -474,9 +462,7 @@ useEffect(() => {
 					<p className="p-account-my-folders__card-description-access">
 						<Icon name={IconNamesLight.Clock} />
 						<span className="u-ml-4">
-							{tText(
-								'pages/account/mijn-mappen/folder-slug/index___tijdelijke-toegang'
-							)}
+							{tText('pages/account/mijn-mappen/folder-slug/index___tijdelijke-toegang')}
 						</span>
 					</p>
 				)}
@@ -491,9 +477,7 @@ useEffect(() => {
 					<SidebarLayout
 						color="platinum"
 						responsiveTo={Breakpoints.md}
-						sidebarTitle={tText(
-							'pages/account/mijn-mappen/folder-slug/index___mijn-mappen'
-						)}
+						sidebarTitle={tText('pages/account/mijn-mappen/folder-slug/index___mijn-mappen')}
 						sidebarLinks={[
 							...sidebarLinks,
 							{
@@ -508,9 +492,7 @@ useEffect(() => {
 							<>
 								<div className="l-container u-mt-64 u-mb-48">
 									<div className="p-account-my-folders__active-card">
-										<SidebarLayoutTitle
-											className={'p-account-my-folders__active-card__title'}
-										>
+										<SidebarLayoutTitle className={'p-account-my-folders__active-card__title'}>
 											{activeFolder.name}
 										</SidebarLayoutTitle>
 										<div className="p-account-my-folders__active-card__buttons">
@@ -533,38 +515,26 @@ useEffect(() => {
 										{activeFolder.usedForLimitedAccessUntil && (
 											<div className="p-account-my-folders__limited-access-wrapper">
 												<div>
-													<Icon
-														className="u-mr-4 u-font-size-18"
-														name={IconNamesLight.OpenDoor}
-													/>
+													<Icon className="u-mr-4 u-font-size-18" name={IconNamesLight.OpenDoor} />
 												</div>
 												<p>
 													{tText(
 														'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang'
 													)}
-													{` ${formatMediumDate(
-														new Date(
-															activeFolder?.usedForLimitedAccessUntil
-														)
-													)}`}
+													{` ${formatMediumDate(new Date(activeFolder?.usedForLimitedAccessUntil))}`}
 												</p>
 											</div>
 										)}
 										<SearchBar
-											aria-label={tText(
-												'modules/account/views/my-folders___zoekveld-aria-label'
-											)}
+											aria-label={tText('modules/account/views/my-folders___zoekveld-aria-label')}
 											id={`${labelKeys.search}--${activeFolder.id}`}
 											value={search}
 											className="p-account-my-folders__search"
-											placeholder={tText(
-												'pages/account/mijn-mappen/folder-slug/index___zoek'
-											)}
+											placeholder={tText('pages/account/mijn-mappen/folder-slug/index___zoek')}
 											onChange={setSearch}
 											onSearch={(newValue) =>
 												setFilters({
-													[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]:
-														newValue || undefined,
+													[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: newValue || undefined,
 												})
 											}
 										/>
@@ -577,16 +547,11 @@ useEffect(() => {
 											keywords={keywords}
 											items={folderMedia?.data?.items.map((media) => {
 												let link: string | undefined = stringifyUrl({
-													url: `/${
-														ROUTE_PARTS_BY_LOCALE[locale].search
-													}/${media.maintainerSlug}/${
-														media.schemaIdentifier
-													}/${kebabCase(media.name) || 'titel'}`,
+													url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${media.maintainerSlug}/${media.schemaIdentifier}/${kebabCase(media.name) || 'titel'}`,
 													query: {
-														[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]:
-															(keywords || []).join(
-																HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
-															),
+														[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: (keywords || []).join(
+															HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
+														),
 													},
 												});
 												if (isEmpty(media.accessThrough)) {
@@ -606,10 +571,8 @@ useEffect(() => {
 													showKeyUserLabel: media.accessThrough.includes(
 														IeObjectAccessThrough.SECTOR
 													),
-													showLocallyAvailable:
-														getShowLocallyAvailableLabel(media),
-													showPlanVisitButtons:
-														getShowPlanVisitButtons(media),
+													showLocallyAvailable: getShowLocallyAvailableLabel(media),
+													showPlanVisitButtons: getShowPlanVisitButtons(media),
 													previousPage: myFoldersPath,
 													link: link,
 												};
@@ -626,23 +589,22 @@ useEffect(() => {
 										/>
 									)}
 
-									{folderMedia.data &&
-										folderMedia.data?.total > FolderItemListSize && (
-											<PaginationBar
-												{...getDefaultPaginationBarProps()}
-												className="u-mb-48"
-												startItem={(filters.page - 1) * FolderItemListSize}
-												itemsPerPage={FolderItemListSize}
-												totalItems={folderMedia.data?.total || 0}
-												showBackToTop
-												onPageChange={(page: number) =>
-													setFilters({
-														...filters,
-														page: page + 1,
-													})
-												}
-											/>
-										)}
+									{folderMedia.data && folderMedia.data?.total > FolderItemListSize && (
+										<PaginationBar
+											{...getDefaultPaginationBarProps()}
+											className="u-mb-48"
+											startItem={(filters.page - 1) * FolderItemListSize}
+											itemsPerPage={FolderItemListSize}
+											totalItems={folderMedia.data?.total || 0}
+											showBackToTop
+											onPageChange={(page: number) =>
+												setFilters({
+													...filters,
+													page: page + 1,
+												})
+											}
+										/>
+									)}
 								</div>
 							</>
 						)}
@@ -679,7 +641,7 @@ useEffect(() => {
 							? {
 									schemaIdentifier: selected.schemaIdentifier,
 									title: selected.name,
-							  }
+								}
 							: undefined
 					}
 					onClose={() => {
@@ -706,9 +668,7 @@ useEffect(() => {
 	return (
 		<VisitorLayout>
 			<SeoTags
-				title={
-					`${tText('pages/account/mijn-mappen/folder-slug/index___mijn-mappen')} | ${activeFolder?.name || folderSlug}`
-				}
+				title={`${tText('pages/account/mijn-mappen/folder-slug/index___mijn-mappen')} | ${activeFolder?.name || folderSlug}`}
 				description={tText(
 					'pages/account/mijn-mappen/folder-slug/index___mijn-mappen-meta-omschrijving'
 				)}
@@ -716,9 +676,7 @@ useEffect(() => {
 				translatedPages={[]}
 				relativeUrl={url}
 			/>
-			<PermissionsCheck
-				allPermissions={[Permission.MANAGE_ACCOUNT, Permission.MANAGE_FOLDERS]}
-			>
+			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT, Permission.MANAGE_FOLDERS]}>
 				{renderPageContent()}
 			</PermissionsCheck>
 		</VisitorLayout>

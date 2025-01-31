@@ -29,9 +29,7 @@ export const AccountSharedFolder: FC<DefaultSeoInfo & AccountSharedFolderProps> 
 					toastService.notify({
 						maxLines: 3,
 						title: tText('pages/account/map-delen/folder-id/index___gelukt'),
-						description: tText(
-							'pages/account/map-delen/folder-id/index___gelukt-beschrijving'
-						),
+						description: tText('pages/account/map-delen/folder-id/index___gelukt-beschrijving'),
 					});
 				}
 				if (response.status === SharedFolderStatus.ALREADY_OWNER) {

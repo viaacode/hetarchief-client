@@ -12,12 +12,9 @@ export async function clickOverflowButtonDetailPage(page: Page, icon: IconName):
 	await buttonOverflowMenu.click();
 
 	// Bookmark button should be visible
-	const bookmarkButton = page.locator(
-		'.p-object-detail__primary-actions .c-dropdown-menu__item',
-		{
-			hasText: icon,
-		}
-	);
+	const bookmarkButton = page.locator('.p-object-detail__primary-actions .c-dropdown-menu__item', {
+		hasText: icon,
+	});
 	await expect(bookmarkButton).toBeVisible();
 
 	// Click the bookmark button

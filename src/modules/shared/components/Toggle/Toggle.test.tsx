@@ -55,7 +55,10 @@ describe('Component: <Toggle /> (default)', () => {
 				active: true,
 			},
 		];
-		const { getByRole } = renderToggle({ options: options, onChange: () => null });
+		const { getByRole } = renderToggle({
+			options: options,
+			onChange: () => null,
+		});
 
 		const button = getByRole('button');
 
@@ -79,7 +82,10 @@ describe('Component: <Toggle /> (default)', () => {
 
 	it('Should call onChange when an option is clicked', () => {
 		const onChangeHandler = jest.fn();
-		const { getAllByRole } = renderToggle({ ...toggleMock, onChange: onChangeHandler });
+		const { getAllByRole } = renderToggle({
+			...toggleMock,
+			onChange: onChangeHandler,
+		});
 
 		const button = getAllByRole('button')[1];
 

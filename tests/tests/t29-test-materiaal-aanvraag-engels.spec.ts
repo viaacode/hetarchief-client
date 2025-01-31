@@ -119,7 +119,9 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 			'modules/navigation/components/personal-info-blade/personal-info-blade___persoonlijke-gegevens'
 		];
 	await expect(
-		page.locator(moduleClassSelector('c-blade__title'), { hasText: bladeTitle })
+		page.locator(moduleClassSelector('c-blade__title'), {
+			hasText: bladeTitle,
+		})
 	).toBeVisible();
 	const personalDetailsBlade = page.locator('.c-blade--active');
 	await expect(personalDetailsBlade).toBeVisible();
@@ -148,9 +150,7 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 		.nth(1);
 	await expect(emailLabel).toBeVisible();
 	await expect(emailLabel).toContainText(
-		SITE_TRANSLATIONS.en[
-			'modules/visitor-space/components/report-blade/report-blade___email-adres'
-		]
+		SITE_TRANSLATIONS.en['modules/visitor-space/components/report-blade/report-blade___email-adres']
 	);
 
 	const emailValue = personalDetailsBlade

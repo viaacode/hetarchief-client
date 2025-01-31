@@ -40,7 +40,7 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 
 	// Debounce blur event to avoid rubberbanding
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
-		useEffect(() => {
+	useEffect(() => {
 		if (isBlurred) {
 			blurTimerRef.current && clearTimeout(blurTimerRef.current);
 			blurTimerRef.current = setTimeout(() => needsScrolling && setOffset(activeIndex), 150);
@@ -51,7 +51,7 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 
 	// Control reflow between scrollable/non-scrollable slider
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
-		useEffect(() => {
+	useEffect(() => {
 		if (fragmentsSize) {
 			const updatedNeedsScrolling =
 				fragmentsSize.width / 10 <
@@ -119,8 +119,8 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 						transform: `translateX(${
 							needsScrolling
 								? -offset * (fragmentSize + fragmentSpacing) +
-								  (fragmentsSize ? fragmentsSize?.width / 20 : 0) -
-								  fragmentSize / 2
+									(fragmentsSize ? fragmentsSize?.width / 20 : 0) -
+									fragmentSize / 2
 								: -offset * (fragmentSize + fragmentSpacing)
 						}rem)`,
 					}}
@@ -140,9 +140,7 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 							key={`fragment-${file.id}--${file.name}`}
 							data-index={index}
 							onClick={(e) => {
-								const index = Number.parseInt(
-									e.currentTarget.getAttribute('data-index') as string
-								);
+								const index = Number.parseInt(e.currentTarget.getAttribute('data-index') as string);
 								needsScrolling && setOffset(index);
 								setActiveIndex(index);
 							}}

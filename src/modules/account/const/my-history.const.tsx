@@ -38,9 +38,7 @@ export const HistoryTableColumns = (
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
 			return (
-				<span className="u-color-neutral">
-					{formatSameDayRange(visit.startAt, undefined)}
-				</span>
+				<span className="u-color-neutral">{formatSameDayRange(visit.startAt, undefined)}</span>
 			);
 		},
 	},
@@ -49,11 +47,7 @@ export const HistoryTableColumns = (
 		accessor: 'endAt',
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
-			return (
-				<span className="u-color-neutral">
-					{formatSameDayRange(undefined, visit.endAt)}
-				</span>
-			);
+			return <span className="u-color-neutral">{formatSameDayRange(undefined, visit.endAt)}</span>;
 		},
 	},
 	{
@@ -63,9 +57,7 @@ export const HistoryTableColumns = (
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
 			return (
-				<span className="u-color-neutral">
-					{formatSameDayRange(visit.startAt, visit.endAt)}
-				</span>
+				<span className="u-color-neutral">{formatSameDayRange(visit.startAt, visit.endAt)}</span>
 			);
 		},
 	},

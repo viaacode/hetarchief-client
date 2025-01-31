@@ -63,17 +63,11 @@ export const AutocompleteFieldFilterForm: FC<{
 	return (
 		<>
 			<div
-				className={clsx(
-					className,
-					styles['c-creator-filter-form__input'],
-					'u-px-20 u-px-32-md'
-				)}
+				className={clsx(className, styles['c-creator-filter-form__input'], 'u-px-20 u-px-32-md')}
 			>
 				<FormControl
 					className="c-form-control--label-hidden"
-					errors={[
-						<RedFormWarning error={errors?.value?.message} key="form-error--value" />,
-					]}
+					errors={[<RedFormWarning error={errors?.value?.message} key="form-error--value" />]}
 					id={`AutocompleteFieldFilterForm__${autocompleteField}`}
 					label={filterTitle}
 				>

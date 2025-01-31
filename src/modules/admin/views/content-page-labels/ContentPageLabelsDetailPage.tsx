@@ -27,16 +27,11 @@ export const ContentPageLabelsDetailPage: FC<DefaultSeoInfo> = ({ url }) => {
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-content-page-labels__detail">
-						<Suspense
-							fallback={<Loading fullscreen owner="ContentPageLabelsDetailPage" />}
-						>
+						<Suspense fallback={<Loading fullscreen owner="ContentPageLabelsDetailPage" />}>
 							<ContentPageLabelDetail
 								contentPageLabelId={router.query.id as string}
 								onGoBack={() =>
-									goBrowserBackWithFallback(
-										ROUTES_BY_LOCALE[locale].adminContentPageLabels,
-										router
-									)
+									goBrowserBackWithFallback(ROUTES_BY_LOCALE[locale].adminContentPageLabels, router)
 								}
 							/>
 						</Suspense>

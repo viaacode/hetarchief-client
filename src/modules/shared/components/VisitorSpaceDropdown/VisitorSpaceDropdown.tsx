@@ -39,12 +39,12 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 			? {
 					tabIndex: 0,
 					role: 'button',
-					"aria-expanded": isOpen,
-					"aria-controls": 'list-controls',
+					'aria-expanded': isOpen,
+					'aria-controls': 'list-controls',
 					onClick: onClickDropdown,
 					// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 					onKeyDown: (evt: any) => onKey(evt, [...keysEnter], onClickDropdown),
-			  }
+				}
 			: {};
 
 		return (
@@ -55,10 +55,7 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 					</p>
 					{selected?.extraInfo && (
 						<p
-							className={clsx(
-								'u-text-ellipsis',
-								styles['c-visitor-spaces-dropdown__active-info']
-							)}
+							className={clsx('u-text-ellipsis', styles['c-visitor-spaces-dropdown__active-info'])}
 						>
 							{selected?.extraInfo}
 						</p>
@@ -91,10 +88,7 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 						className={clsx(styles['c-visitor-spaces-dropdown__option'])}
 					>
 						<p
-							className={clsx(
-								styles['c-visitor-spaces-dropdown__option-label'],
-								'u-text-ellipsis'
-							)}
+							className={clsx(styles['c-visitor-spaces-dropdown__option-label'], 'u-text-ellipsis')}
 						>
 							{option.label}
 						</p>

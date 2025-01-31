@@ -20,9 +20,7 @@ export const ContentPageLabelsOverviewPage: FC<DefaultSeoInfo> = ({ url }) => {
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-content-page-labels">
-						<Suspense
-							fallback={<Loading fullscreen owner="ContentPageLabelsOverviewPage" />}
-						>
+						<Suspense fallback={<Loading fullscreen owner="ContentPageLabelsOverviewPage" />}>
 							<ContentPageLabelOverview />
 						</Suspense>
 					</div>

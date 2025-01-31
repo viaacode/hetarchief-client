@@ -12,7 +12,10 @@ import { Locale } from '@shared/utils/i18n';
 
 import type { MappedElement } from '../BlockContentEnclose.types';
 
-import type { ContentPage, GetContentBlockEncloseContentReturnType } from './useGetContentBlockEncloseContent.types';
+import type {
+	ContentPage,
+	GetContentBlockEncloseContentReturnType,
+} from './useGetContentBlockEncloseContent.types';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -70,27 +73,23 @@ export const useGetContentBlockEncloseContent = (
 				}
 				if (Array.isArray(result.data)) {
 					const ieObjects = result.data as IeObject[];
-					return ieObjects.map(
-						(item: IeObject): GetContentBlockEncloseContentReturnType => {
-							return {
-								id: item.maintainerId,
-								name: item.name,
-								description: item.description,
-								thumbnail: item.thumbnailUrl,
-								dateCreated: item.dateCreated || undefined,
-								datePublished: item.datePublished,
-								maintainerName: item.maintainerName,
-								maintainerSlug: item.maintainerSlug,
-								objectType: item.dctermsFormat,
-								identifier: item.schemaIdentifier,
-								pid: item.schemaIdentifier,
-								link: `/zoeken/${item.maintainerSlug}/${
-									item.schemaIdentifier
-								}/${kebabCase(item.name)}`,
-								type: 'IE_OBJECT' as const,
-							};
-						}
-					);
+					return ieObjects.map((item: IeObject): GetContentBlockEncloseContentReturnType => {
+						return {
+							id: item.maintainerId,
+							name: item.name,
+							description: item.description,
+							thumbnail: item.thumbnailUrl,
+							dateCreated: item.dateCreated || undefined,
+							datePublished: item.datePublished,
+							maintainerName: item.maintainerName,
+							maintainerSlug: item.maintainerSlug,
+							objectType: item.dctermsFormat,
+							identifier: item.schemaIdentifier,
+							pid: item.schemaIdentifier,
+							link: `/zoeken/${item.maintainerSlug}/${item.schemaIdentifier}/${kebabCase(item.name)}`,
+							type: 'IE_OBJECT' as const,
+						};
+					});
 				}
 
 				const contentPage = result.data as ContentPage;

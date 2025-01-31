@@ -35,9 +35,7 @@ const CollapsableBlade: FC<CollapsableBladeProps> = ({
 				}
 				label={title}
 			/>
-			<div className={styles['c-collapsable-blade__scrollable']}>
-				{renderContent(!isOpen)}
-			</div>
+			<div className={styles['c-collapsable-blade__scrollable']}>{renderContent(!isOpen)}</div>
 		</div>
 	);
 };

@@ -50,7 +50,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 }): ReactElement => {
 	const selectValue = useMemo(
 		() => (inputValue ? { label: inputValue, value: inputValue } : null),
-		[inputValue],
+		[inputValue]
 	);
 
 	/**
@@ -59,42 +59,39 @@ const TagSearchBar = <IsMulti extends boolean>({
 
 	const onSearchChange = (
 		newValue: TagSearchBarValue<IsMulti>,
-		actionMeta: TagSearchBarMeta,
+		actionMeta: TagSearchBarMeta
 	): void => {
-		if (["pop-value", "remove-value"].includes(actionMeta.action)) {
+		if (['pop-value', 'remove-value'].includes(actionMeta.action)) {
 			onRemoveValue?.(newValue);
 		}
-		if (actionMeta.action === "clear") {
+		if (actionMeta.action === 'clear') {
 			onClear?.();
-			setInputValue("");
+			setInputValue('');
 		}
 		onChange?.(newValue, actionMeta);
 	};
 
-	const onSearchInputChange = (
-		newValue: string,
-		actionMeta: InputActionMeta,
-	): void => {
-		if (actionMeta.action === "input-change") {
+	const onSearchInputChange = (newValue: string, actionMeta: InputActionMeta): void => {
+		if (actionMeta.action === 'input-change') {
 			setInputValue(newValue);
 		}
 	};
 
 	const onSafeSearchSingle = () => {
 		if (onSearch) {
-			(onSearch as OnSearchSingle)(inputValue ?? "");
-			setInputValue("");
+			(onSearch as OnSearchSingle)(inputValue ?? '');
+			setInputValue('');
 		}
 	};
 
 	const onSearchKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-		if (e.key === "Enter") {
+		if (e.key === 'Enter') {
 			if (!inputValue) {
 				return;
 			}
 
 			onCreate?.(inputValue);
-			setInputValue("");
+			setInputValue('');
 			e.preventDefault();
 
 			onSafeSearchSingle();
@@ -105,21 +102,14 @@ const TagSearchBar = <IsMulti extends boolean>({
 	 * Computed
 	 */
 
-	const rootCls = clsx(
-		className,
-		"c-tag-search-bar",
-		"c-tags-input",
-		"c-tags-input__creatable",
-		{
-			[`c-tag-search-bar--${size}`]: size,
-			"c-tag-search-bar--has-value-placeholder": !!valuePlaceholder,
-			"c-tag-search-bar--light": light,
-			"c-tag-search-bar--has-dropdown": hasDropdown,
-			"c-tag-search-bar--has-rendered-right": renderedRight,
-		},
-	);
-	const showMenu =
-		typeof menuIsOpen !== "undefined" ? menuIsOpen : (options?.length ?? 0) > 0;
+	const rootCls = clsx(className, 'c-tag-search-bar', 'c-tags-input', 'c-tags-input__creatable', {
+		[`c-tag-search-bar--${size}`]: size,
+		'c-tag-search-bar--has-value-placeholder': !!valuePlaceholder,
+		'c-tag-search-bar--light': light,
+		'c-tag-search-bar--has-dropdown': hasDropdown,
+		'c-tag-search-bar--has-rendered-right': renderedRight,
+	});
+	const showMenu = typeof menuIsOpen !== 'undefined' ? menuIsOpen : (options?.length ?? 0) > 0;
 	const value = isMulti ? tagsInputProps.value : selectValue;
 
 	/**
@@ -130,9 +120,9 @@ const TagSearchBar = <IsMulti extends boolean>({
 		<div className="u-flex u-align-center u-justify-between">
 			<CreatableSelect
 				aria-label={tText(
-					"modules/shared/components/tag-search-bar/tag-search-bar___zoekbalk-aria-label",
+					'modules/shared/components/tag-search-bar/tag-search-bar___zoekbalk-aria-label'
 				)}
-				classNamePrefix={"c-tags-input"}
+				classNamePrefix={'c-tags-input'}
 				{...tagsInputProps}
 				className={rootCls}
 				// biome-ignore lint/suspicious/noExplicitAny: <explanation>

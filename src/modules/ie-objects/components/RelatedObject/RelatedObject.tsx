@@ -29,9 +29,9 @@ const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 					/>
 				);
 			}
-				return thumbnail;
+			return thumbnail;
 		}
-			return <ObjectPlaceholder className={styles['c-related-object__placeholder']} small />;
+		return <ObjectPlaceholder className={styles['c-related-object__placeholder']} small />;
 	};
 
 	return (

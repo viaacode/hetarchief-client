@@ -35,9 +35,7 @@ export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 					<Button
 						variants={['text', 'icon', 'xxs']}
 						icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-						aria-label={tText(
-							'pages/admin/gebruikersbeheer/permissies/index___opnieuw-instellen'
-						)}
+						aria-label={tText('pages/admin/gebruikersbeheer/permissies/index___opnieuw-instellen')}
 						onClick={() => {
 							permissionsRef.current?.onSearch(undefined);
 						}}
@@ -75,9 +73,7 @@ export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 				/>
 				<Button
 					onClick={() => permissionsRef.current?.onSave()}
-					label={tHtml(
-						'pages/admin/gebruikersbeheer/permissies/index___wijzigingen-opslaan'
-					)}
+					label={tHtml('pages/admin/gebruikersbeheer/permissies/index___wijzigingen-opslaan')}
 				/>
 			</>
 		);
@@ -86,13 +82,9 @@ export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const renderPageContent = () => {
 		return (
 			<AdminLayout
-				pageTitle={tText(
-					'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies'
-				)}
+				pageTitle={tText('pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies')}
 			>
-				<AdminLayout.Actions>
-					{hasChanges && <>{renderActionButtons()}</>}
-				</AdminLayout.Actions>
+				<AdminLayout.Actions>{hasChanges && <>{renderActionButtons()}</>}</AdminLayout.Actions>
 				<AdminLayout.Content>
 					<div className={clsx('l-container', styles['p-permissions-page'])}>
 						{renderPermissions()}
@@ -108,9 +100,7 @@ export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<>
 			<SeoTags
-				title={tText(
-					'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies'
-				)}
+				title={tText('pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies')}
 				description={tText(
 					'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies-omschrijving'
 				)}

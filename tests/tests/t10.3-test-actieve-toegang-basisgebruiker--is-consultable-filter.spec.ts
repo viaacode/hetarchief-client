@@ -41,9 +41,7 @@ test('T10.3: Test actieve toegang basisgebruiker: Raadpleegbaar op locatie filte
 	await page
 		.locator('span.c-checkbox__label', {
 			hasText:
-				SITE_TRANSLATIONS.nl[
-					'modules/visitor-space/const/index___enkel-ter-plaatse-beschikbaar'
-				],
+				SITE_TRANSLATIONS.nl['modules/visitor-space/const/index___enkel-ter-plaatse-beschikbaar'],
 		})
 		.click();
 
@@ -55,9 +53,7 @@ test('T10.3: Test actieve toegang basisgebruiker: Raadpleegbaar op locatie filte
 	);
 
 	// Wait for filtered search results
-	await expect
-		.poll(async () => await getSearchTabBarCounts(page))
-		.not.toEqual(countsBeforeSearch);
+	await expect.poll(async () => await getSearchTabBarCounts(page)).not.toEqual(countsBeforeSearch);
 
 	// Check tab counts decreased
 	const countsAfterSearchByText = await getSearchTabBarCounts(page);

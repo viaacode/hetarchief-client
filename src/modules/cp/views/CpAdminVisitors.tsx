@@ -265,9 +265,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 				<ApproveRequestBlade
 					title={tHtml('pages/beheer/bezoekers/index___aanvraag-aanpassen')}
 					approveButtonLabel={tText('pages/beheer/bezoekers/index___aanpassen')}
-					successTitle={tHtml(
-						'pages/beheer/bezoekers/index___de-aanpassingen-zijn-opgeslagen'
-					)}
+					successTitle={tHtml('pages/beheer/bezoekers/index___de-aanpassingen-zijn-opgeslagen')}
 					successDescription={tHtml(
 						'pages/beheer/bezoekers/index___de-aanpassingen-aan-de-bezoekersaanvraag-zijn-opgeslagen'
 					)}
@@ -287,12 +285,8 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<>
 			<SeoTags
-				title={`${tText('pages/beheer/bezoekers/index___bezoekers')} | ${tText(
-					'modules/cp/views/cp-admin-visitors___beheer'
-				)}`}
-				description={tText(
-					'pages/beheer/bezoekers/index___beheer-bezoekers-meta-omschrijving'
-				)}
+				title={`${tText('pages/beheer/bezoekers/index___bezoekers')} | ${tText('modules/cp/views/cp-admin-visitors___beheer')}`}
+				description={tText('pages/beheer/bezoekers/index___beheer-bezoekers-meta-omschrijving')}
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}

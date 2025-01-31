@@ -21,9 +21,7 @@ export const NewsletterConfirmation: FC<DefaultSeoInfo> = ({ url }) => {
 	useEffect(() => {
 		toastService.notify({
 			maxLines: 3,
-			title: tHtml(
-				'pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging-bevestiging'
-			),
+			title: tHtml('pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging-bevestiging'),
 			description: tHtml(
 				'pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging-inschrijving-op-de-nieuwsbrief-is-gelukt'
 			),

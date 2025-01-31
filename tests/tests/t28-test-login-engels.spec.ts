@@ -11,11 +11,7 @@ test('T28: Test login flow engels', async ({ page, context }) => {
 	/**
 	 * Go to the search page ---------------------------------------------------------------
 	 */
-	await goToPageAndAcceptCookies(
-		page,
-		process.env.TEST_CLIENT_ENDPOINT as string,
-		HOMEPAGE_TITLE
-	);
+	await goToPageAndAcceptCookies(page, process.env.TEST_CLIENT_ENDPOINT as string, HOMEPAGE_TITLE);
 
 	// Language switcher should be visible
 	const languageSwitcher = page.locator(moduleClassSelector('c-language-switcher__select'));
@@ -32,9 +28,7 @@ test('T28: Test login flow engels', async ({ page, context }) => {
 	// Check the login and register button changes language
 	let loginButton = page.locator(moduleClassSelector('c-navigation__auth'));
 	await expect(loginButton).toHaveText(
-		SITE_TRANSLATIONS.en[
-			'modules/auth/components/auth-modal/auth-modal___inloggen-of-registreren'
-		]
+		SITE_TRANSLATIONS.en['modules/auth/components/auth-modal/auth-modal___inloggen-of-registreren']
 	);
 
 	// Check that the url changes to /en
@@ -47,9 +41,7 @@ test('T28: Test login flow engels', async ({ page, context }) => {
 	// Check the login and register button is still in english
 	loginButton = page.locator(moduleClassSelector('c-navigation__auth'));
 	await expect(loginButton).toHaveText(
-		SITE_TRANSLATIONS.en[
-			'modules/auth/components/auth-modal/auth-modal___inloggen-of-registreren'
-		]
+		SITE_TRANSLATIONS.en['modules/auth/components/auth-modal/auth-modal___inloggen-of-registreren']
 	);
 
 	// Check that the url is still /en
@@ -65,7 +57,9 @@ test('T28: Test login flow engels', async ({ page, context }) => {
 		SITE_TRANSLATIONS.en[
 			'modules/auth/components/auth-modal/auth-modal___inloggen-met-het-archief-account'
 		];
-	await expect(loginModal).toContainText(loginButtonLabelEnglish, { timeout: 5000 });
+	await expect(loginModal).toContainText(loginButtonLabelEnglish, {
+		timeout: 5000,
+	});
 	const registerButtonLabelEnglish =
 		SITE_TRANSLATIONS.en['modules/auth/components/auth-modal/auth-modal___registreer-je-hier'];
 	await expect(loginModal).toContainText(registerButtonLabelEnglish);

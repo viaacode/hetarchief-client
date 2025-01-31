@@ -3,7 +3,11 @@ import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
 import { ApiService } from '@shared/services/api-service';
-import { type VisitAccessStatus, type VisitRequest, VisitStatus } from '@shared/types/visit-request';
+import {
+	type VisitAccessStatus,
+	type VisitRequest,
+	VisitStatus,
+} from '@shared/types/visit-request';
 import type {
 	GetAllActiveVisitsProps,
 	GetVisitRequestsProps,
@@ -86,9 +90,7 @@ export namespace VisitRequestService {
 			return null;
 		}
 		return await ApiService.getApi()
-			.get(
-				`${VISITS_SERVICE_BASE_URL}/${VISITS_SERVICE_ACTIVE_SPACE_URL}/${visitorSpaceSlug}`
-			)
+			.get(`${VISITS_SERVICE_BASE_URL}/${VISITS_SERVICE_ACTIVE_SPACE_URL}/${visitorSpaceSlug}`)
 			.json();
 	}
 

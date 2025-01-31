@@ -21,10 +21,7 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 			<div className="u-text-center u-mb-48">
 				<Button
 					label={
-						no ||
-						tHtml(
-							'modules/shared/components/confirmation-modal/confirmation-modal___nee'
-						)
+						no || tHtml('modules/shared/components/confirmation-modal/confirmation-modal___nee')
 					}
 					className="u-mx-4"
 					name={'cancel'}
@@ -33,10 +30,7 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 				/>
 				<Button
 					label={
-						yes ||
-						tHtml(
-							'modules/shared/components/confirmation-modal/confirmation-modal___ja'
-						)
+						yes || tHtml('modules/shared/components/confirmation-modal/confirmation-modal___ja')
 					}
 					className="u-mx-4"
 					name={'confirm'}
@@ -54,9 +48,7 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 			isOpen={isOpen}
 			title={
 				title ||
-				tHtml(
-					'modules/shared/components/confirmation-modal/confirmation-modal___ben-je-zeker'
-				)
+				tHtml('modules/shared/components/confirmation-modal/confirmation-modal___ben-je-zeker')
 			}
 			footer={renderButtons()}
 		>

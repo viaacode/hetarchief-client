@@ -41,7 +41,7 @@ export const APPROVE_REQUEST_FORM_SCHEMA = (): Schema<ApproveRequestFormState> =
 						.of(string().required())
 						.required('Selecting folders is required when access type is FOLDERS');
 				}
-					return array().of(string().required()).optional();
+				return array().of(string().required()).optional();
 			}),
 		}).required(),
 	}) as Schema<ApproveRequestFormState>;

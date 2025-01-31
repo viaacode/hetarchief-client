@@ -62,10 +62,7 @@ const Homepage: NextPage<DefaultSeoInfo & UserProps> = ({
 		if (contentPageInfo) {
 			return (
 				<>
-					<ContentPageRenderer
-						contentPageInfo={contentPageInfo}
-						commonUser={commonUser}
-					/>
+					<ContentPageRenderer contentPageInfo={contentPageInfo} commonUser={commonUser} />
 				</>
 			);
 		}
@@ -76,10 +73,7 @@ const Homepage: NextPage<DefaultSeoInfo & UserProps> = ({
 			<SeoTags
 				title={title || null}
 				description={
-					description ||
-					contentPageInfo?.seoDescription ||
-					contentPageInfo?.description ||
-					null
+					description || contentPageInfo?.seoDescription || contentPageInfo?.description || null
 				}
 				imgUrl={image || contentPageInfo?.thumbnailPath || null}
 				translatedPages={[]}

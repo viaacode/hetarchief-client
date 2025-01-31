@@ -24,16 +24,12 @@ test('T19: Test OCR raadplegen', async ({ page, context }) => {
 
 	// Wait for ocr to load
 	await page.waitForSelector(
-		`${moduleClassSelector('p-object-detail__ocr__words-container')} > ${moduleClassSelector(
-			'p-object-detail__ocr__word'
-		)}`
+		`${moduleClassSelector('p-object-detail__ocr__words-container')} > ${moduleClassSelector('p-object-detail__ocr__word')}`
 	);
 
 	// Check if ocr text is visible in the tab
 	const ocrWords = page.locator(
-		`${moduleClassSelector('p-object-detail__ocr__words-container')} > ${moduleClassSelector(
-			'p-object-detail__ocr__word'
-		)}`
+		`${moduleClassSelector('p-object-detail__ocr__words-container')} > ${moduleClassSelector('p-object-detail__ocr__word')}`
 	);
 	expect(await ocrWords.count()).toBeGreaterThan(100);
 
@@ -48,9 +44,7 @@ test('T19: Test OCR raadplegen', async ({ page, context }) => {
 
 	// Check keyword is active
 	const brusselOcrWords = page.locator(
-		`${moduleClassSelector('p-object-detail__ocr__words-container')} > ${moduleClassSelector(
-			'p-object-detail__ocr__word'
-		)}`,
+		`${moduleClassSelector('p-object-detail__ocr__words-container')} > ${moduleClassSelector('p-object-detail__ocr__word')}`,
 		{ hasText: 'Brussel' }
 	);
 	await expect(brusselOcrWords.first()).toBeVisible();

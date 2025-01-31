@@ -25,7 +25,9 @@ interface ContentPageEditPageProps {
 }
 
 export const ContentPageEditPage: FC<
-	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined } & ContentPageEditPageProps
+	DefaultSeoInfo & {
+		commonUser: Avo.User.CommonUser | undefined;
+	} & ContentPageEditPageProps
 > = ({ url, commonUser, id }) => {
 	const locale = useLocale();
 	const router = useRouter();
@@ -72,10 +74,7 @@ export const ContentPageEditPage: FC<
 			/>
 
 			<PermissionsCheck
-				anyPermissions={[
-					Permission.CREATE_CONTENT_PAGES,
-					Permission.EDIT_ANY_CONTENT_PAGES,
-				]}
+				anyPermissions={[Permission.CREATE_CONTENT_PAGES, Permission.EDIT_ANY_CONTENT_PAGES]}
 			>
 				{renderPageContent()}
 			</PermissionsCheck>

@@ -42,9 +42,7 @@ export const NewsletterFailed: FC<DefaultSeoInfo> = ({ url }) => {
 		<div className="p-newsletter-failed">
 			<SeoTags
 				title={tText('pages/nieuwsbrief-mislukt/index___nieuwsbrief-mislukt')}
-				description={tText(
-					'pages/nieuwsbrief-mislukt/index___nieuwsbrief-mislukt-omschrijving'
-				)}
+				description={tText('pages/nieuwsbrief-mislukt/index___nieuwsbrief-mislukt-omschrijving')}
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}

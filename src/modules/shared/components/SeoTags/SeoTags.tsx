@@ -47,12 +47,13 @@ export const SeoTags: FC<SeoTagsProps> = ({
 	const getResolvedUrl = (url: string): string => {
 		if (!url) {
 			return publicRuntimeConfig.CLIENT_URL;
-		}if (url.startsWith('http')) {
+		}
+		if (url.startsWith('http')) {
 			// Absolute url
 			return url;
 		}
-			// relative url
-			return `${publicRuntimeConfig.CLIENT_URL}/${locale}${url || ''}`;
+		// relative url
+		return `${publicRuntimeConfig.CLIENT_URL}/${locale}${url || ''}`;
 	};
 
 	const getTranslatedPages = (): PageInfo[] => {
@@ -87,13 +88,13 @@ export const SeoTags: FC<SeoTagsProps> = ({
 			// This is just NextJS rendering dutch paths with the english locale or vice versa, we can ignore this
 			return [];
 		}
-			if (
-				!relativeUrl.startsWith(`/${ROUTE_PARTS_BY_LOCALE.nl.search}/`) &&
-				!relativeUrl.startsWith(`/${ROUTE_PARTS_BY_LOCALE.en.search}/`)
-			) {
-				console.warn(`No translated pages/routes found for route: ${relativeUrl}`);
-			}
-			return [];
+		if (
+			!relativeUrl.startsWith(`/${ROUTE_PARTS_BY_LOCALE.nl.search}/`) &&
+			!relativeUrl.startsWith(`/${ROUTE_PARTS_BY_LOCALE.en.search}/`)
+		) {
+			console.warn(`No translated pages/routes found for route: ${relativeUrl}`);
+		}
+		return [];
 	};
 
 	const url = getResolvedUrl(relativeUrl);

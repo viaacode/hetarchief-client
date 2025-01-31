@@ -70,9 +70,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 			toastService.notify({
 				maxLines: 3,
 				title: tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-succes'),
-				description: tText(
-					'pages/nieuwsbrief/index___nieuwsbrief-formulier-versturen-is-gelukt'
-				),
+				description: tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-versturen-is-gelukt'),
 			});
 		} catch (err) {
 			console.error(err);
@@ -80,9 +78,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 			toastService.notify({
 				maxLines: 3,
 				title: tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-error'),
-				description: tText(
-					'pages/nieuwsbrief/index___nieuwsbrief-formulier-versturen-is-mislukt'
-				),
+				description: tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-versturen-is-mislukt'),
 			});
 		}
 	};
@@ -92,12 +88,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 			<FormControl
 				className="u-mb-24"
 				id={labelKeys.firstName}
-				errors={[
-					<RedFormWarning
-						error={errors.firstName?.message}
-						key="form-error--first-name"
-					/>,
-				]}
+				errors={[<RedFormWarning error={errors.firstName?.message} key="form-error--first-name" />]}
 				label={tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-voornaam')}
 			>
 				<Controller
@@ -110,9 +101,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 			<FormControl
 				className="u-mb-24"
 				id={labelKeys.lastName}
-				errors={[
-					<RedFormWarning error={errors.lastName?.message} key="form-error--last-name" />,
-				]}
+				errors={[<RedFormWarning error={errors.lastName?.message} key="form-error--last-name" />]}
 				label={tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-achternaam')}
 			>
 				<Controller
@@ -125,9 +114,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 			<FormControl
 				className="u-mb-24"
 				id={labelKeys.mail}
-				errors={[
-					<RedFormWarning key="email-error--" error={errors.mail?.message} />,
-				]}
+				errors={[<RedFormWarning key="email-error--" error={errors.mail?.message} />]}
 				label={tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-emailadres')}
 			>
 				<Controller
@@ -149,7 +136,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 				className="p-newsletter__form-button u-ml-8"
 				label={tText('pages/nieuwsbrief/index___naar-de-startpagina')}
 				onClick={async () => {
-					await router.push("/");
+					await router.push('/');
 				}}
 			/>
 		</div>

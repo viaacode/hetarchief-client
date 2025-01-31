@@ -39,7 +39,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	// re-render form to ensure correct state
 	// e.g. open -> reset -> close -> open === values in url, in form
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-			useEffect(() => {
+	useEffect(() => {
 		setOpenedAt(new Date().valueOf());
 	}, [isOpen]);
 
@@ -71,7 +71,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 				className={clsx(styles['c-filter-menu-mobile__option'], {
 					[styles['c-filter-menu-mobile__option--operative']]: !isNil(filterValues?.[id]),
 				})}
-				icon={filterIsActive ? IconNamesLight.AngleLeft : icon ?? IconNamesLight.AngleRight}
+				icon={filterIsActive ? IconNamesLight.AngleLeft : (icon ?? IconNamesLight.AngleRight)}
 				isActive={filterIsActive}
 				label={label}
 				onClick={() => onFilterClick(id)}
@@ -151,8 +151,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 			className={clsx(styles['c-filter-menu-mobile__form'], {
 				[styles['c-filter-menu-mobile--inline']]: isInline,
 				[styles['c-filter-menu-mobile__option']]: isInline,
-				[styles['c-filter-menu-mobile__option--operative']]:
-					!isNil(filterValues?.[id]) && isInline,
+				[styles['c-filter-menu-mobile__option--operative']]: !isNil(filterValues?.[id]) && isInline,
 			})}
 			form={form}
 			id={id}

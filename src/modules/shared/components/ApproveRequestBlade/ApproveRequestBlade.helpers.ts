@@ -47,17 +47,17 @@ export const getAccessToDate = (
 			// before => update the accessTo to 6pm
 			return sixPm;
 		}
-			// after => update the accessTo to newAccessFrom + MINIMUM_VISIT_DURATION
-			const newAccessToDate = addMinutes(newAccessFromDate, MINIMUM_VISIT_DURATION);
-			const nextQuarterAccessToDate = roundToNextQuarter(newAccessToDate);
-			return nextQuarterAccessToDate;
+		// after => update the accessTo to newAccessFrom + MINIMUM_VISIT_DURATION
+		const newAccessToDate = addMinutes(newAccessFromDate, MINIMUM_VISIT_DURATION);
+		const nextQuarterAccessToDate = roundToNextQuarter(newAccessToDate);
+		return nextQuarterAccessToDate;
 	}
-		// if accessTo is a later day than the accessFrom date
-		// differance between from and to dates is less than MINIMUM_VISIT_DURATION
-		if (differenceInMinutes(newAccessFromDate, currentAccessToDate) < MINIMUM_VISIT_DURATION) {
-			// less => update the accessTo to newAccessFrom + MINIMUM_VISIT_DURATION
-			return roundToNextQuarter(addMinutes(newAccessFromDate, MINIMUM_VISIT_DURATION));
-		}
-			// more => return null (do nothing to the accessTo field)
-			return null;
+	// if accessTo is a later day than the accessFrom date
+	// differance between from and to dates is less than MINIMUM_VISIT_DURATION
+	if (differenceInMinutes(newAccessFromDate, currentAccessToDate) < MINIMUM_VISIT_DURATION) {
+		// less => update the accessTo to newAccessFrom + MINIMUM_VISIT_DURATION
+		return roundToNextQuarter(addMinutes(newAccessFromDate, MINIMUM_VISIT_DURATION));
+	}
+	// more => return null (do nothing to the accessTo field)
+	return null;
 };

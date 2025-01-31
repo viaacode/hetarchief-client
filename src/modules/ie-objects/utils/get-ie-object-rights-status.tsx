@@ -9,7 +9,12 @@ import type { Locale } from '@shared/utils/i18n';
 export function getIeObjectRightsStatusInfo(
 	ieObject: IeObject,
 	locale: Locale
-): { label: string; icon: ReactNode; externalLink: string; internalLink: string } | null {
+): {
+	label: string;
+	icon: ReactNode;
+	externalLink: string;
+	internalLink: string;
+} | null {
 	if (ieObject.licenses.includes(IeObjectLicense.PUBLIC_DOMAIN)) {
 		return {
 			label: tText('modules/ie-objects/utils/get-ie-object-rights-status___public-domein'),
@@ -30,9 +35,7 @@ export function getIeObjectRightsStatusInfo(
 		!ieObject.licenses.includes(IeObjectLicense.PUBLIC_DOMAIN)
 	) {
 		return {
-			label: tText(
-				'modules/ie-objects/utils/get-ie-object-rights-status___copyright-undetermined'
-			),
+			label: tText('modules/ie-objects/utils/get-ie-object-rights-status___copyright-undetermined'),
 			icon: <Icon name={IconNamesLight.CopyrightUndetermined} />,
 			externalLink: tText(
 				'modules/ie-objects/utils/get-ie-object-rights-status___https-rightsstatements-org-page-und-1-0-language-language-code',

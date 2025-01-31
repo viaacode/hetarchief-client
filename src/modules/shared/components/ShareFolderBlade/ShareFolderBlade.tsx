@@ -24,10 +24,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 	const [email, setEmail] = useState('');
 	const [formErrors, setFormErrors] = useState<{ email?: string }>({});
 
-	const link = `${window.location.origin}${ROUTES_BY_LOCALE[locale].accountShareFolder.replace(
-		':id',
-		folderId
-	)}`;
+	const link = `${window.location.origin}${ROUTES_BY_LOCALE[locale].accountShareFolder.replace(':id', folderId)}`;
 
 	const handleClose = () => {
 		setEmail('');
@@ -47,9 +44,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 			toastService.notify({
 				maxLines: 3,
 				title: tText('pages/account/map-delen/folder-id/index___map-is-gedeeld'),
-				description: `${tText(
-					'pages/account/map-delen/folder-id/index___map-is-verstuurd-naar'
-				)} ${email}`,
+				description: `${tText('pages/account/map-delen/folder-id/index___map-is-verstuurd-naar')} ${email}`,
 			});
 			handleClose();
 		} catch (err) {
@@ -57,9 +52,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 			toastService.notify({
 				maxLines: 3,
 				title: tText('pages/account/map-delen/folder-id/index___error'),
-				description: tText(
-					'pages/account/map-delen/folder-id/index___error-er-is-iets-misgelopen'
-				),
+				description: tText('pages/account/map-delen/folder-id/index___error-er-is-iets-misgelopen'),
 			});
 		}
 	};
@@ -116,27 +109,29 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 						<CopyButton
 							text={link}
 							iconStart={<Icon name={IconNamesLight.Copy} aria-hidden />}
-							label={tText(
-								'modules/shared/components/copy-button/copy-button___kopieer'
-							)}
+							label={tText('modules/shared/components/copy-button/copy-button___kopieer')}
 							variants={['inputCopy']}
 						/>
 					</div>
-					<label className={styles['c-share-folder-blade__content-label']} htmlFor={labelKeys.email}>
+					<label
+						className={styles['c-share-folder-blade__content-label']}
+						htmlFor={labelKeys.email}
+					>
 						<h5 className={styles['c-share-folder-blade__content-label--margin-top']}>
 							{tText('pages/account/map-delen/folder-id/index___via-email')}
 						</h5>
 					</label>
-					<label className={styles['c-share-folder-blade__content-label--email']} htmlFor={labelKeys.email}>
+					<label
+						className={styles['c-share-folder-blade__content-label--email']}
+						htmlFor={labelKeys.email}
+					>
 						{tText('pages/account/map-delen/folder-id/index___email')}
 					</label>
 					<div className={styles['c-share-folder-blade__content-value']}>
 						<FormControl
 							className="u-mb-8 u-mb-24-md"
 							id={labelKeys.email}
-							errors={[
-								<RedFormWarning error={formErrors.email} key="form-error--email" />,
-							]}
+							errors={[<RedFormWarning error={formErrors.email} key="form-error--email" />]}
 						>
 							<TextInput
 								name="email"

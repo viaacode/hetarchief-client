@@ -12,7 +12,11 @@ import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { Locale } from '@shared/utils/i18n';
-import { type VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
+import {
+	type VisitorSpaceInfo,
+	VisitorSpaceOrderProps,
+	VisitorSpaceStatus,
+} from '@visitor-space/types';
 import type { Column } from 'react-table';
 
 export const VisitorSpacesOverviewTablePageSize = 20;
@@ -30,7 +34,7 @@ export const VisitorSpacesOverviewTableColumns = (
 	showEditButton = false,
 	showStatusDropdown = false,
 	locale: Locale = Locale.nl
-): (Column<VisitorSpaceInfo> & {disableSortBy?: boolean})[] => [
+): (Column<VisitorSpaceInfo> & { disableSortBy?: boolean })[] => [
 	{
 		Header: tText('modules/admin/const/spaces___bezoekersruimte'),
 		id: VisitorSpaceOrderProps.OrganisationName,
@@ -112,10 +116,7 @@ export const VisitorSpacesOverviewTableColumns = (
 				<>
 					{showEditButton && (
 						<Link
-							href={`${ROUTES_BY_LOCALE[locale].adminVisitorSpaceEdit.replace(
-								':slug',
-								row.original.slug
-							)}`}
+							href={`${ROUTES_BY_LOCALE[locale].adminVisitorSpaceEdit.replace(':slug', row.original.slug)}`}
 							passHref={true}
 							className="u-color-neutral u-font-size-24"
 							aria-label={tText('modules/admin/const/spaces___aanpassen')}
@@ -130,53 +131,36 @@ export const VisitorSpacesOverviewTableColumns = (
 								className: 'u-color-neutral u-width-24 u-height-24 u-ml-20',
 							}}
 						>
-							{[VisitorSpaceStatus.Inactive, VisitorSpaceStatus.Requested].includes(
-								status
-							) && (
+							{[VisitorSpaceStatus.Inactive, VisitorSpaceStatus.Requested].includes(status) && (
 								<Button
 									className="u-text-left"
 									variants="text"
 									name="set-status-activated-space"
 									label={tText('modules/admin/const/spaces___activeren')}
 									onClick={() =>
-										updateVisitorSpaceState(
-											row.original.id,
-											VisitorSpaceStatus.Active
-										)
+										updateVisitorSpaceState(row.original.id, VisitorSpaceStatus.Active)
 									}
 								/>
 							)}
-							{[VisitorSpaceStatus.Active, VisitorSpaceStatus.Requested].includes(
-								status
-							) && (
+							{[VisitorSpaceStatus.Active, VisitorSpaceStatus.Requested].includes(status) && (
 								<Button
 									className="u-text-left"
 									variants="text"
 									name="set-status-deactivated-space"
 									label={tText('modules/admin/const/spaces___deactiveren')}
 									onClick={() =>
-										updateVisitorSpaceState(
-											row.original.id,
-											VisitorSpaceStatus.Inactive
-										)
+										updateVisitorSpaceState(row.original.id, VisitorSpaceStatus.Inactive)
 									}
 								/>
 							)}
-							{[VisitorSpaceStatus.Inactive, VisitorSpaceStatus.Active].includes(
-								status
-							) && (
+							{[VisitorSpaceStatus.Inactive, VisitorSpaceStatus.Active].includes(status) && (
 								<Button
 									className="u-text-left"
 									variants="text"
 									name="set-status-pending-space"
-									label={tText(
-										'modules/admin/const/spaces___terug-naar-in-aanvraag'
-									)}
+									label={tText('modules/admin/const/spaces___terug-naar-in-aanvraag')}
 									onClick={() =>
-										updateVisitorSpaceState(
-											row.original.id,
-											VisitorSpaceStatus.Requested
-										)
+										updateVisitorSpaceState(row.original.id, VisitorSpaceStatus.Requested)
 									}
 								/>
 							)}

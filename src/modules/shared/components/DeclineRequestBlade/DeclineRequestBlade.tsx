@@ -119,9 +119,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 						<Controller
 							name="reasonForDenial"
 							control={control}
-							render={({ field }) => (
-								<TextArea {...field} id={labelKeys.reasonForDenial} />
-							)}
+							render={({ field }) => <TextArea {...field} id={labelKeys.reasonForDenial} />}
 						/>
 					</FormControl>
 				</div>

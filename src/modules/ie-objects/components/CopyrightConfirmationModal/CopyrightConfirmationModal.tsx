@@ -38,12 +38,7 @@ export const CopyrightConfirmationModal: FC<CopyrightConfirmationModalProps> = (
 						'modules/ie-objects/components/copyright-confirmation-modal/copyright-confirmation-modal___opgelet-je-gaat-deze-krant-downloaden-ga-zelf-grondig-na-of-er-nog-auteursrechten-rusten-op-dit-object-als-gebruiker-ben-je-zelf-verantwoordelijk'
 					)}
 				</div>
-				<div
-					className={clsx(
-						styles['c-copyright-modal__content__button-wrapper'],
-						'u-mb-40'
-					)}
-				>
+				<div className={clsx(styles['c-copyright-modal__content__button-wrapper'], 'u-mb-40')}>
 					<Button
 						label={tText(
 							'modules/ie-objects/components/copyright-confirmation-modal/copyright-confirmation-modal___annuleren'

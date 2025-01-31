@@ -42,9 +42,7 @@ export const CpAdminSettingsPage: FC<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<>
 			<SeoTags
-				title={`${tText(
-					'pages/beheer/instellingen/index___beheer-instellingen-title'
-				)} | ${tText('modules/cp/views/cp-admin-settings-page___beheer')}`}
+				title={`${tText('pages/beheer/instellingen/index___beheer-instellingen-title')} | ${tText('modules/cp/views/cp-admin-settings-page___beheer')}`}
 				description={tText(
 					'pages/beheer/instellingen/index___beheer-instellingen-meta-omschrijving'
 				)}

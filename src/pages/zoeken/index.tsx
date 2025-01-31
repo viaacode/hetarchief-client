@@ -15,13 +15,7 @@ type SearchPageProps = DefaultSeoInfo;
 
 const SearchPageDutch: NextPage<SearchPageProps> = ({ url, locale, title, description, image }) => {
 	return (
-		<SearchPage
-			url={url}
-			locale={locale}
-			title={title}
-			description={description}
-			image={image}
-		/>
+		<SearchPage url={url} locale={locale} title={title} description={description} image={image} />
 	);
 };
 
@@ -31,9 +25,14 @@ export async function getServerSideProps(
 	const queryClient = new QueryClient();
 	await makeServerSideRequestGetIeObjects(queryClient);
 	await makeServerSideRequestGetIeObjectFormatCounts(queryClient);
-	await makeServerSideRequestGetVisitRequests(queryClient, { page: 0, size: 20 });
+	await makeServerSideRequestGetVisitRequests(queryClient, {
+		page: 0,
+		size: 20,
+	});
 
-	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.search, { queryClient });
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.search, {
+		queryClient,
+	});
 }
 
 export default withAuth(SearchPageDutch as ComponentType, false);

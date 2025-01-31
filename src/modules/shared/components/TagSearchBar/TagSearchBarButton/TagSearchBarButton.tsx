@@ -22,7 +22,7 @@ const TagSearchBarButton: FC<TagSearchBarButtonProps> = ({
 			// @ts-ignore
 			onClick={selectProps.onSearch}
 			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-						onTouchEnd={() => (selectProps as any).onSearch?.()} // Make search button clickable on touch devices
+			onTouchEnd={() => (selectProps as any).onSearch?.()} // Make search button clickable on touch devices
 			onKeyDown={(e) => {
 				if (e.key === 'Enter') {
 					// @ts-ignore

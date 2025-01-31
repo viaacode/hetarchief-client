@@ -32,10 +32,8 @@ export const LanguageSelect: FC<ReactSelectProps> = (props) => {
 		return options.length === 0
 			? tText(
 					'modules/visitor-space/components/language-select/language-select___geen-talen-gevonden'
-			  )
-			: tText(
-					'modules/visitor-space/components/language-select/language-select___kies-een-taal'
-			  );
+				)
+			: tText('modules/visitor-space/components/language-select/language-select___kies-een-taal');
 	};
 
 	return <ReactSelect {...props} placeholder={getPlaceholder()} options={options} />;

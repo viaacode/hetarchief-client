@@ -49,18 +49,10 @@ const Template: ComponentStory<typeof MediaCard> = (args) => {
 				/>
 			</div>
 			<div style={column}>
-				<MediaCard
-					{...args}
-					title="Something you can read about"
-					type={IeObjectType.Newspaper}
-				/>
+				<MediaCard {...args} title="Something you can read about" type={IeObjectType.Newspaper} />
 			</div>
 			<div style={column}>
-				<MediaCard
-					{...args}
-					title="Something you can see nothing of"
-					type={IeObjectType.Video}
-				/>
+				<MediaCard {...args} title="Something you can see nothing of" type={IeObjectType.Video} />
 			</div>
 		</section>
 	);

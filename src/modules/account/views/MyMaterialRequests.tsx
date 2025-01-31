@@ -42,7 +42,9 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 		isPending: false,
 		size: ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
 		...(!isNil(filters.page) && { page: filters.page }),
-		...(!isNil(filters.orderProp) && { orderProp: filters.orderProp as MaterialRequestKeys }),
+		...(!isNil(filters.orderProp) && {
+			orderProp: filters.orderProp as MaterialRequestKeys,
+		}),
 		...(!isNil(filters.orderDirection) && {
 			orderDirection: filters.orderDirection as OrderDirection,
 		}),

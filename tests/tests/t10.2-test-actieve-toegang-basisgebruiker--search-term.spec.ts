@@ -46,9 +46,7 @@ test('T10.2: Test actieve toegang basisgebruiker: Zoek term', async ({ page, con
 	await expect(pill).toContainText(SEARCH_TERM);
 
 	// Wait for filtered search results
-	await expect
-		.poll(async () => await getSearchTabBarCounts(page))
-		.not.toEqual(countsBeforeSearch);
+	await expect.poll(async () => await getSearchTabBarCounts(page)).not.toEqual(countsBeforeSearch);
 
 	// Check tab counts decreased
 	const countsAfterSearchByText = await getSearchTabBarCounts(page);

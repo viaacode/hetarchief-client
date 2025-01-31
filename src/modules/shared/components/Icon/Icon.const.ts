@@ -5,7 +5,10 @@ import { tText } from '@shared/helpers/translate';
 
 import type { IconName } from './Icon.types';
 
-export const GET_ICON_LIST_CONFIG = (): { value: IconName; label: string }[] => {
+export const GET_ICON_LIST_CONFIG = (): {
+	value: IconName;
+	label: string;
+}[] => {
 	return [...Object.values(IconNamesLight), ...Object.values(IconNamesSolid)].map(
 		(IconName: IconName) => ({
 			value: IconName,

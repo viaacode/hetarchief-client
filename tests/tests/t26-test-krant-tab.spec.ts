@@ -29,9 +29,7 @@ test('T26: kranten tab en zoekresultaten', async ({ page, context }) => {
 
 	// Check all search results are newspapers
 	const searchResults = page.locator(
-		`${moduleClassSelector('c-media-card-list--masonry')} article${moduleClassSelector(
-			'c-media-card'
-		)}`
+		`${moduleClassSelector('c-media-card-list--masonry')} article${moduleClassSelector('c-media-card')}`
 	);
 
 	// First newspaper

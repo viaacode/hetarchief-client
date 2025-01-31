@@ -14,36 +14,28 @@ const HighlightedMetadata: FC<HighlightedMetadataProps> = ({ title, data, enable
 		// Split text on new lines and highlight each part separately + put each part in its own paragraph to show new lines
 		return (
 			<>
-				{compact(data.split(/(\\\\r|\\r)?\\\\n|\\n|<\/?br\/?>/)).map(
-					(fieldTextPart): ReactNode => {
-						// ARC-1936: if url make it clickable
-						if (data.startsWith('https://') || data.startsWith('http://')) {
-							return (
-								<p key={`${title}-${fieldTextPart}`}>
-									<a href={fieldTextPart} target="_blank" rel="noreferrer">
-										<HighlightSearchTerms toHighlight={fieldTextPart} />
-									</a>
-								</p>
-							);
-						}
+				{compact(data.split(/(\\\\r|\\r)?\\\\n|\\n|<\/?br\/?>/)).map((fieldTextPart): ReactNode => {
+					// ARC-1936: if url make it clickable
+					if (data.startsWith('https://') || data.startsWith('http://')) {
 						return (
-							<p
-								className="u-line-height-1-4 u-font-size-14"
-								key={`${title}-${fieldTextPart}`}
-							>
-								<HighlightSearchTerms
-									toHighlight={fieldTextPart}
-									enabled={enabled}
-								/>
+							<p key={`${title}-${fieldTextPart}`}>
+								<a href={fieldTextPart} target="_blank" rel="noreferrer">
+									<HighlightSearchTerms toHighlight={fieldTextPart} />
+								</a>
 							</p>
 						);
 					}
-				)}
+					return (
+						<p className="u-line-height-1-4 u-font-size-14" key={`${title}-${fieldTextPart}`}>
+							<HighlightSearchTerms toHighlight={fieldTextPart} enabled={enabled} />
+						</p>
+					);
+				})}
 			</>
 		);
 	}
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		return (data || null) as ReactElement<any, any> | null;
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	return (data || null) as ReactElement<any, any> | null;
 };
 
 export default HighlightedMetadata;

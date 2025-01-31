@@ -2,7 +2,10 @@ import { stringifyUrl } from 'query-string';
 
 import type { EmailTemplate } from '@shared/components/ShareFolderBlade/ShareFolderBlade.consts';
 import { ApiService } from '@shared/services/api-service';
-import type { GetNewsletterPreferencesResponse, SetNewsletterPreferencesBody } from '@shared/types/newsletter';
+import type {
+	GetNewsletterPreferencesResponse,
+	SetNewsletterPreferencesBody,
+} from '@shared/types/newsletter';
 
 import {
 	CAMPAIGN_MONITOR_SERVICE_BASE_URL,

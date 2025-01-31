@@ -82,63 +82,61 @@ export const VisitPage: FC<DefaultSeoInfo> = ({ title, description, url }) => {
 		if (!isLoggedIn) {
 			return renderNoAccess();
 		}
-			if (isErrorSpaceNotActive) {
-				// Visitor space no longer active
-				return <ErrorSpaceNoLongerActive />;
-			}if (visitorSpaceInfo) {
-				if (hasPendingRequest) {
-					// Redirect to the waiting page
-					return (
-						<>
-							{renderLoading()}
-							<NextRedirect
-								to={ROUTES_BY_LOCALE[locale].visitRequested.replace(
-									':slug',
-									slug as string
-								)}
-								method="replace"
-							/>
-						</>
-					);
-				}if (!hasAccess) {
-					// No access to visitor space
-					return renderNoAccess();
-				}
-					// Has access => redirect to search page for visitor space
-					return (
-						<>
-							{renderLoading()}
-							<NextRedirect
-								to={stringifyUrl({
-									url: ROUTES_BY_LOCALE[locale].search,
-									query: { [SearchFilterId.Maintainer]: slug },
-								})}
-								method="replace"
-							/>
-						</>
-					);
+		if (isErrorSpaceNotActive) {
+			// Visitor space no longer active
+			return <ErrorSpaceNoLongerActive />;
+		}
+		if (visitorSpaceInfo) {
+			if (hasPendingRequest) {
+				// Redirect to the waiting page
+				return (
+					<>
+						{renderLoading()}
+						<NextRedirect
+							to={ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', slug as string)}
+							method="replace"
+						/>
+					</>
+				);
 			}
-				// Visitor space does not exist
-				if (organisation) {
-					// Maintainer does exist => redirect to search page with filter on maintainer
-					return (
-						<>
-							{renderLoading()}
-							<NextRedirect
-								to={stringifyUrl({
-									url: ROUTES_BY_LOCALE[locale].search,
-									query: {
-										[SearchFilterId.Maintainers]:
-											`${organisation?.schemaIdentifier}---${organisation?.schemaName}`,
-									},
-								})}
-								method="replace"
-							/>
-						</>
-					);
-				}
-					// Maintainer also doesn't exist
-					return <ErrorNotFound />;
+			if (!hasAccess) {
+				// No access to visitor space
+				return renderNoAccess();
+			}
+			// Has access => redirect to search page for visitor space
+			return (
+				<>
+					{renderLoading()}
+					<NextRedirect
+						to={stringifyUrl({
+							url: ROUTES_BY_LOCALE[locale].search,
+							query: { [SearchFilterId.Maintainer]: slug },
+						})}
+						method="replace"
+					/>
+				</>
+			);
+		}
+		// Visitor space does not exist
+		if (organisation) {
+			// Maintainer does exist => redirect to search page with filter on maintainer
+			return (
+				<>
+					{renderLoading()}
+					<NextRedirect
+						to={stringifyUrl({
+							url: ROUTES_BY_LOCALE[locale].search,
+							query: {
+								[SearchFilterId.Maintainers]: `${organisation?.schemaIdentifier}---${organisation?.schemaName}`,
+							},
+						})}
+						method="replace"
+					/>
+				</>
+			);
+		}
+		// Maintainer also doesn't exist
+		return <ErrorNotFound />;
 	};
 
 	return (

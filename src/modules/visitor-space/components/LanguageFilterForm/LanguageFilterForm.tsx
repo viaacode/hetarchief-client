@@ -65,9 +65,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 	const filteredOptions = filterOptions.filter(
 		(filterOption) =>
 			filterOption.toLowerCase().includes(search.toLowerCase()) ||
-			LANGUAGES.nl?.[filterOption as LanguageCode]
-				?.toLowerCase()
-				?.includes(search.toLowerCase())
+			LANGUAGES.nl?.[filterOption as LanguageCode]?.toLowerCase()?.includes(search.toLowerCase())
 	);
 
 	// Make sure applied values are sorted at the top of the list
@@ -135,7 +133,9 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 			</div>
 
 			{children({
-				values: { languages: selectedLanguageCodes.map(idToIdAndNameConcatinated) },
+				values: {
+					languages: selectedLanguageCodes.map(idToIdAndNameConcatinated),
+				},
 				reset: () => {
 					reset();
 					setSelectedLanguageCodes(defaultValues.languages);

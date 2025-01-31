@@ -77,11 +77,7 @@ export interface DefaultFilterFormChildrenParams<Values extends FieldValues> {
 
 export interface DefaultFilterFormProps<Values extends FieldValues>
 	extends Omit<DefaultComponentProps, 'children'> {
-	children: ({
-		values,
-		reset,
-		handleSubmit,
-	}: DefaultFilterFormChildrenParams<Values>) => ReactNode;
+	children: ({ values, reset, handleSubmit }: DefaultFilterFormChildrenParams<Values>) => ReactNode;
 	disabled?: boolean;
 	values?: Values;
 }

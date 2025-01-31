@@ -37,12 +37,7 @@ export const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	}) => {
 		const renderFooter = () => {
 			return (
-				<div
-					className={clsx(
-						'u-px-32 u-py-24',
-						styles['c-translations-overview__blade-footer']
-					)}
-				>
+				<div className={clsx('u-px-32 u-py-24', styles['c-translations-overview__blade-footer'])}>
 					<Button
 						variants={['block', 'black']}
 						onClick={onSave}
@@ -77,9 +72,7 @@ export const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 			<AdminLayout pageTitle={tText('pages/admin/vertalingen/index___vertalingen')}>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40 p-admin-vertalingen">
-						<Suspense
-							fallback={<Loading fullscreen owner="AdminTranslationsOverviewPage" />}
-						>
+						<Suspense fallback={<Loading fullscreen owner="AdminTranslationsOverviewPage" />}>
 							<TranslationsOverview
 								className={styles['c-translations-overview']}
 								renderPopup={renderPopup}

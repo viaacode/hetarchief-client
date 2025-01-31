@@ -26,19 +26,19 @@ export function extractSnippetBySearchTerm(
 		// search term is larger than snippet => show beginning of search term
 		return `...${truncate(firstSearchTermFound, { length: snippetLength, omission: '...' })}`;
 	}
-		// Search term is less than the snippet length => cut around the search term with leading and trailing ...
-		const extraCharacters = snippetLength - firstSearchTermFound.length;
-		// const startOfCut = Math.max(firstOccurrenceIndex - Math.floor(extraCharacters / 2), 0);
-		const endOfCut = Math.min(
-			firstOccurrenceIndex + firstSearchTermFound.length + Math.ceil(extraCharacters / 2),
-			fullText.length
-		);
-		const startOfCut = endOfCut - snippetLength;
-		return (
-			(startOfCut > 0 ? '...' : '') +
-			truncate(fullText.substring(endOfCut - snippetLength), {
-				length: snippetLength,
-				omission: '...',
-			})
-		);
+	// Search term is less than the snippet length => cut around the search term with leading and trailing ...
+	const extraCharacters = snippetLength - firstSearchTermFound.length;
+	// const startOfCut = Math.max(firstOccurrenceIndex - Math.floor(extraCharacters / 2), 0);
+	const endOfCut = Math.min(
+		firstOccurrenceIndex + firstSearchTermFound.length + Math.ceil(extraCharacters / 2),
+		fullText.length
+	);
+	const startOfCut = endOfCut - snippetLength;
+	return (
+		(startOfCut > 0 ? '...' : '') +
+		truncate(fullText.substring(endOfCut - snippetLength), {
+			length: snippetLength,
+			omission: '...',
+		})
+	);
 }

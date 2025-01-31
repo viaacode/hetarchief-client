@@ -114,9 +114,7 @@ export const RequestTableColumns = (): Column<VisitRequest>[] => [
 				<span className="u-color-neutral">
 					{row.original.status === VisitStatus.PENDING
 						? '-'
-						: GET_CP_ADMIN_REQUESTS_ACCESS_TYPE_TRANSLATION_KEYS()[
-								row.original.accessType
-						  ]}
+						: GET_CP_ADMIN_REQUESTS_ACCESS_TYPE_TRANSLATION_KEYS()[row.original.accessType]}
 				</span>
 			);
 		},

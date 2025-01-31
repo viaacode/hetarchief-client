@@ -30,9 +30,7 @@ export const IeObjectWithoutObjectNamePage: FC<MaintainerSearchPageProps> = () =
 		if (ieObjectInfo || isError) {
 			const objectTitleSlug = kebabCase(ieObjectInfo?.name || '');
 			const searchUrl = stringifyUrl({
-				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${
-					ieObjectInfo?.maintainerSlug || slug
-				}/${objectId}/${objectTitleSlug || 'titel'}`,
+				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${ieObjectInfo?.maintainerSlug || slug}/${objectId}/${objectTitleSlug || 'titel'}`,
 			});
 			router.replace(searchUrl, undefined, { shallow: true });
 		}

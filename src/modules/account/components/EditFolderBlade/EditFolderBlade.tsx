@@ -28,7 +28,10 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 	const [name, setName] = useState(currentFolder?.name || '');
 	const [description, setDescription] = useState(currentFolder?.description || '');
 
-	const [formErrors, setFormErrors] = useState<{ name?: string; description?: string }>({});
+	const [formErrors, setFormErrors] = useState<{
+		name?: string;
+		description?: string;
+	}>({});
 
 	useEffect(() => {
 		if (isOpen) {
@@ -98,17 +101,13 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 				<Button
 					variants={['block', 'black']}
 					onClick={() => submitData()}
-					label={tText(
-						'modules/account/components/edit-folder-blade/edit-folder-blade___bewaar'
-					)}
+					label={tText('modules/account/components/edit-folder-blade/edit-folder-blade___bewaar')}
 				/>
 
 				<Button
 					variants={['block', 'text']}
 					onClick={() => handleClose()}
-					label={tText(
-						'modules/account/components/edit-folder-blade/edit-folder-blade___sluit'
-					)}
+					label={tText('modules/account/components/edit-folder-blade/edit-folder-blade___sluit')}
 				/>
 			</div>
 		);
@@ -119,9 +118,7 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 			isOpen={isOpen}
 			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 				<h1 {...props} className={clsx(props.className, styles['p-folder-editor__title'])}>
-					{tText(
-						'modules/account/components/edit-folder-blade/edit-folder-blade___map-aanpassen'
-					)}
+					{tText('modules/account/components/edit-folder-blade/edit-folder-blade___map-aanpassen')}
 				</h1>
 			)}
 			footer={isOpen && renderFooter()}
@@ -130,9 +127,7 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 		>
 			<div className={styles['p-folder-editor__content']}>
 				<FormControl
-					label={tText(
-						'modules/account/components/edit-folder-blade/edit-folder-blade___naam'
-					)}
+					label={tText('modules/account/components/edit-folder-blade/edit-folder-blade___naam')}
 					errors={[formErrors.name]}
 				>
 					<TextInput value={name} onChange={(e) => setName(e.target.value)} />

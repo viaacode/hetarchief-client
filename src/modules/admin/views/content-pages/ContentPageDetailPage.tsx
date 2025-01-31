@@ -27,7 +27,9 @@ interface ContentPageDetailPageProps {
 }
 
 export const ContentPageDetailPage: FC<
-	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined } & ContentPageDetailPageProps
+	DefaultSeoInfo & {
+		commonUser: Avo.User.CommonUser | undefined;
+	} & ContentPageDetailPageProps
 > = ({ url, commonUser, id }) => {
 	const locale = useLocale();
 	const router = useRouter();
@@ -41,10 +43,7 @@ export const ContentPageDetailPage: FC<
 							id={id}
 							commonUser={commonUser as Avo.User.CommonUser}
 							onGoBack={() =>
-								goBrowserBackWithFallback(
-									ROUTES_BY_LOCALE[locale].adminContentPages,
-									router
-								)
+								goBrowserBackWithFallback(ROUTES_BY_LOCALE[locale].adminContentPages, router)
 							}
 						/>
 					</Suspense>
@@ -56,18 +55,13 @@ export const ContentPageDetailPage: FC<
 		<>
 			<SeoTags
 				title={tText('pages/admin/content/id/index___content-pagina-detail')}
-				description={tText(
-					'pages/admin/content/id/index___detail-pagina-van-een-content-pagina'
-				)}
+				description={tText('pages/admin/content/id/index___detail-pagina-van-een-content-pagina')}
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
 			/>
 			<PermissionsCheck
-				anyPermissions={[
-					Permission.EDIT_ANY_CONTENT_PAGES,
-					Permission.EDIT_OWN_CONTENT_PAGES,
-				]}
+				anyPermissions={[Permission.EDIT_ANY_CONTENT_PAGES, Permission.EDIT_OWN_CONTENT_PAGES]}
 			>
 				{renderPageContent()}
 			</PermissionsCheck>

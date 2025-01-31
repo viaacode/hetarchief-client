@@ -61,10 +61,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 
 			setIsRequestAccessBladeOpen(false);
 			await router.push(
-				ROUTES_BY_LOCALE[locale].visitRequested.replace(
-					':slug',
-					createdVisitRequest.spaceSlug
-				)
+				ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
 			);
 		} catch (err) {
 			console.error({
@@ -84,7 +81,9 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 	};
 
 	const onOpenRequestAccess = () => {
-		setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visit.spaceSlug });
+		setQuery({
+			[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visit.spaceSlug,
+		});
 		setIsRequestAccessBladeOpen(true);
 	};
 
@@ -100,9 +99,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 					onClick={() => onOpenRequestAccess()}
 				/>
 				<Button
-					label={tText(
-						'modules/shared/components/visit-detail-blade/visit-detail-blade___sluit'
-					)}
+					label={tText('modules/shared/components/visit-detail-blade/visit-detail-blade___sluit')}
 					variants={['block', 'text', 'light']}
 					onClick={onCloseVisitDetailBlade}
 				/>
@@ -114,13 +111,8 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 		<Blade
 			isOpen={isOpen}
 			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-				<h2
-					{...props}
-					className={clsx(styles['c-visit-detail-blade__title'], props.className)}
-				>
-					{tText(
-						'modules/shared/components/visit-detail-blade/visit-detail-blade___bezoekdetail'
-					)}
+				<h2 {...props} className={clsx(styles['c-visit-detail-blade__title'], props.className)}>
+					{tText('modules/shared/components/visit-detail-blade/visit-detail-blade___bezoekdetail')}
 				</h2>
 			)}
 			footer={isOpen && renderFooter()}
@@ -130,9 +122,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 			<div className={styles['c-visit-detail-blade__content']}>
 				<div className={styles['c-visit-detail-blade__content-element']}>
 					<span className={styles['c-visit-detail-blade__content-element-label']}>
-						{tText(
-							'modules/shared/components/visit-detail-blade/visit-detail-blade___toegang-van'
-						)}
+						{tText('modules/shared/components/visit-detail-blade/visit-detail-blade___toegang-van')}
 					</span>
 					<span className={styles['c-visit-detail-blade__content-element-value']}>
 						{formatMediumDateWithTime(asDate(visit.startAt))}
@@ -140,9 +130,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 				</div>
 				<div className={styles['c-visit-detail-blade__content-element']}>
 					<span className={styles['c-visit-detail-blade__content-element-label']}>
-						{tText(
-							'modules/shared/components/visit-detail-blade/visit-detail-blade___toegang-tot'
-						)}
+						{tText('modules/shared/components/visit-detail-blade/visit-detail-blade___toegang-tot')}
 					</span>
 					<span className={styles['c-visit-detail-blade__content-element-value']}>
 						{formatMediumDateWithTime(asDate(visit.endAt))}

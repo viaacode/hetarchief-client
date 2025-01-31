@@ -23,9 +23,7 @@ export const VISITOR_SPACE_VALIDATION_SCHEMA = (): Schema<
 				),
 			})
 			.required(
-				tText(
-					'modules/cp/components/site-settings-form/site-settings-form___slug-is-verplicht'
-				)
+				tText('modules/cp/components/site-settings-form/site-settings-form___slug-is-verplicht')
 			),
 		color: string().matches(/^$|^#([0-9A-F]{3}){1,2}$/i, {
 			message: tText(

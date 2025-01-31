@@ -16,16 +16,12 @@ const ErrorNoAccess: FC<ErrorSpaceNoAccessProps> = ({ visitorSpaceSlug, descript
 				visitorSpaceSlug
 					? tHtml(
 							'modules/shared/components/error-space-no-access/error-space-no-access___geen-toegang-bezoekersruimte'
-					  )
-					: tHtml(
-							'modules/shared/components/error-no-access/error-no-access___geen-toegang'
-					  )
+						)
+					: tHtml('modules/shared/components/error-no-access/error-no-access___geen-toegang')
 			}
 			description={description}
 			link={{
-				component: (
-					<Button label={tHtml('pages/404___ga-naar-de-homepage')} variants="black" />
-				),
+				component: <Button label={tHtml('pages/404___ga-naar-de-homepage')} variants="black" />,
 				to: '/',
 			}}
 			image={{ image: '/images/no-access.svg', left: true }}

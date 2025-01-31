@@ -114,9 +114,7 @@ export const getFilterLabel = (prop: FilterProperty): string => {
 			[FilterProperty.IDENTIFIER]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___identifier'
 			),
-			[FilterProperty.CAST]: tText(
-				'modules/visitor-space/utils/advanced-filters/metadata___cast'
-			),
+			[FilterProperty.CAST]: tText('modules/visitor-space/utils/advanced-filters/metadata___cast'),
 			[FilterProperty.SPACIAL_COVERAGE]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___locatie-van-de-inhoud'
 			),

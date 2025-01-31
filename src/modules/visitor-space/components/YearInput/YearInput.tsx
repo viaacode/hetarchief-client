@@ -15,8 +15,8 @@ const YearInput: FC<YearInputProps> = (props) => {
 	const classname = props.value
 		? styles['c-year-input__placeholder-hidden']
 		: props.isYearInputRange
-		? styles['c-year-input__placeholder-wide']
-		: styles['c-year-input__placeholder'];
+			? styles['c-year-input__placeholder-wide']
+			: styles['c-year-input__placeholder'];
 	return (
 		<div className={styles['c-year-input']}>
 			<div className={styles['c-year-input__label']}>

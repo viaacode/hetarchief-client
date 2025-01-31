@@ -1,10 +1,7 @@
 import type { MenuItemInfo, TabProps } from '@meemoo/react-components';
 import React, { type ReactNode } from 'react';
 
-import type {
-	ActionItem,
-	DynamicActionMenuProps,
-} from '@ie-objects/components/DynamicActionMenu';
+import type { ActionItem, DynamicActionMenuProps } from '@ie-objects/components/DynamicActionMenu';
 import type { ObjectPlaceholderProps } from '@ie-objects/components/ObjectPlaceholder';
 import {
 	type IsPartOfCollection,
@@ -103,9 +100,7 @@ export const ticketErrorPlaceholder = (): ObjectPlaceholderProps => ({
 	openModalButtonLabel: tText(
 		'pages/bezoekersruimte/visitor-space-slug/object-id/index___meer-info'
 	),
-	closeModalButtonLabel: tText(
-		'pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'
-	),
+	closeModalButtonLabel: tText('pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'),
 });
 
 export const objectPlaceholder = (): ObjectPlaceholderProps => ({
@@ -113,9 +108,7 @@ export const objectPlaceholder = (): ObjectPlaceholderProps => ({
 	openModalButtonLabel: tText(
 		'pages/bezoekersruimte/visitor-space-slug/object-id/index___meer-info'
 	),
-	closeModalButtonLabel: tText(
-		'pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'
-	),
+	closeModalButtonLabel: tText('pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'),
 });
 
 export const noLicensePlaceholder = (): ObjectPlaceholderProps => ({
@@ -129,9 +122,7 @@ export const noLicensePlaceholder = (): ObjectPlaceholderProps => ({
 	openModalButtonLabel: tText(
 		'pages/bezoekersruimte/visitor-space-slug/object-id/index___meer-info'
 	),
-	closeModalButtonLabel: tText(
-		'pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'
-	),
+	closeModalButtonLabel: tText('pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'),
 });
 
 /**
@@ -175,7 +166,7 @@ export const OBJECT_DETAIL_TABS = (
 						icon: <Icon name={IconNamesLight.Ocr} aria-hidden />,
 						active: ObjectDetailTabs.Ocr === activeTab,
 					},
-			  ]
+				]
 			: []),
 	];
 };
@@ -262,7 +253,7 @@ export const MEDIA_ACTIONS = ({
 							ariaLabel: tText('modules/ie-objects/const/index___exporteer-metadata'),
 							tooltip: tText('modules/ie-objects/const/index___exporteer-metadata'),
 						},
-				  ]
+					]
 				: []) as ActionItem[]),
 			...((canRequestMaterial
 				? [
@@ -280,7 +271,7 @@ export const MEDIA_ACTIONS = ({
 							tooltip: addToMaterialRequestsListButtonLabel,
 							url: externalFormUrl,
 						},
-				  ]
+					]
 				: []) as ActionItem[]),
 			...((canRequestAccess
 				? [
@@ -297,7 +288,7 @@ export const MEDIA_ACTIONS = ({
 							ariaLabel: tText('modules/ie-objects/const/index___plan-een-bezoek'),
 							tooltip: tText('modules/ie-objects/const/index___plan-een-bezoek'),
 						},
-				  ]
+					]
 				: []) as ActionItem[]),
 			...((canManageFolders
 				? [
@@ -314,7 +305,7 @@ export const MEDIA_ACTIONS = ({
 							ariaLabel: tText('modules/ie-objects/const/index___bookmark'),
 							tooltip: tText('modules/ie-objects/const/index___bookmark'),
 						},
-				  ]
+					]
 				: []) as ActionItem[]),
 			...((canReport
 				? [
@@ -331,7 +322,7 @@ export const MEDIA_ACTIONS = ({
 							ariaLabel: tText('modules/ie-objects/const/index___rapporteer'),
 							tooltip: tText('modules/ie-objects/const/index___rapporteer'),
 						},
-				  ]
+					]
 				: []) as ActionItem[]),
 		],
 		limit: 1,

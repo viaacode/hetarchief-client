@@ -1,8 +1,5 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
-import type {
-	InfiniteQueryObserverSuccessResult,
-	UseMutationResult,
-} from '@tanstack/react-query';
+import type { InfiniteQueryObserverSuccessResult, UseMutationResult } from '@tanstack/react-query';
 
 import {
 	type MarkAllAsReadResult,

@@ -7,9 +7,7 @@ import type { ReportFormState } from './ReportBlade.types';
 export const REPORT_FORM_SCHEMA = (): Schema<ReportFormState> => {
 	return object({
 		reportMessage: string().required(
-			tText(
-				'modules/visitor-space/components/report-blade/report-blade___probleem-is-verplicht'
-			)
+			tText('modules/visitor-space/components/report-blade/report-blade___probleem-is-verplicht')
 		),
 		email: string()
 			.email(
@@ -18,9 +16,7 @@ export const REPORT_FORM_SCHEMA = (): Schema<ReportFormState> => {
 				)
 			)
 			.required(
-				tText(
-					'modules/visitor-space/components/report-blade/report-blade___e-mail-is-verplicht'
-				)
+				tText('modules/visitor-space/components/report-blade/report-blade___e-mail-is-verplicht')
 			),
 	});
 };

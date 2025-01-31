@@ -45,9 +45,7 @@ const SearchBar: FC<SearchBarProps> = ({
 					<Button
 						variants={['text', 'icon', 'xxs']}
 						icon={<Icon name={IconNamesLight.Search} aria-hidden />}
-						aria-label={tText(
-							'modules/shared/components/search-bar/search-bar___uitvoeren'
-						)}
+						aria-label={tText('modules/shared/components/search-bar/search-bar___uitvoeren')}
 						onClick={() => onSearch(value)}
 					/>
 				</>

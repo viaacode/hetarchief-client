@@ -54,11 +54,7 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 			) {
 				// Collided with footer
 				// Show zendesk button on the edge of the footer
-				widget.style.marginBottom = `${
-					footerHeight -
-					feedbackButtonHeight / 2 -
-					(scrollHeight - screenHeight - scrollTop)
-				}px`;
+				widget.style.marginBottom = `${footerHeight - feedbackButtonHeight / 2 - (scrollHeight - screenHeight - scrollTop)}px`;
 			} else {
 				// Still scrolling, not yet collided with the footer
 				// Or there is no footer on the page

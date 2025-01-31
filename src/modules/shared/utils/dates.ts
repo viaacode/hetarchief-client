@@ -7,8 +7,7 @@ import { getLocaleFromI18nLanguage, Locale } from './i18n';
 export const asDate = (input: Date | string | undefined | null): Date | undefined => {
 	const isEmpty = !input;
 	const isNumber = !Number.isNaN(Number(input));
-	const isInvalidString =
-		typeof input === 'string' && (input.length <= 0 || input === 'undefined');
+	const isInvalidString = typeof input === 'string' && (input.length <= 0 || input === 'undefined');
 
 	if (isEmpty || isInvalidString) {
 		return undefined;
@@ -16,9 +15,7 @@ export const asDate = (input: Date | string | undefined | null): Date | undefine
 
 	const lowercased = typeof input === 'string' && input.toLowerCase();
 	const timezoned =
-		lowercased?.includes('t') &&
-		!lowercased.endsWith('z') &&
-		!lowercased.includes('+')
+		lowercased?.includes('t') && !lowercased.endsWith('z') && !lowercased.includes('+')
 			? `${input}Z`
 			: input;
 

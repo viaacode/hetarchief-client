@@ -21,13 +21,7 @@ const SearchPageEnglish: NextPage<SearchPageProps> = ({
 	locale,
 }) => {
 	return (
-		<SearchPage
-			url={url}
-			title={title}
-			description={description}
-			image={image}
-			locale={locale}
-		/>
+		<SearchPage url={url} title={title} description={description} image={image} locale={locale} />
 	);
 };
 
@@ -37,9 +31,14 @@ export async function getServerSideProps(
 	const queryClient = new QueryClient();
 	await makeServerSideRequestGetIeObjects(queryClient);
 	await makeServerSideRequestGetIeObjectFormatCounts(queryClient);
-	await makeServerSideRequestGetVisitRequests(queryClient, { page: 0, size: 20 });
+	await makeServerSideRequestGetVisitRequests(queryClient, {
+		page: 0,
+		size: 20,
+	});
 
-	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.en.search, { queryClient });
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.en.search, {
+		queryClient,
+	});
 }
 
 export default withAuth(SearchPageEnglish as ComponentType, false);

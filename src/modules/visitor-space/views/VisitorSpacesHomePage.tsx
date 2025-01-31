@@ -43,9 +43,7 @@ export const VisitorSpacesHomePage: FC<DefaultSeoInfo> = (props) => {
 	return (
 		<VisitorLayout>
 			<SeoTags
-				title={tText(
-					'modules/visitor-space/views/visitor-spaces-home-page___bezoek-pagina-titel'
-				)}
+				title={tText('modules/visitor-space/views/visitor-spaces-home-page___bezoek-pagina-titel')}
 				description={tText(
 					'modules/visitor-space/views/visitor-spaces-home-page___bezoek-pagina-beschrijving'
 				)}

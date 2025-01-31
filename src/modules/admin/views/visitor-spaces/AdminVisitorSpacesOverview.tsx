@@ -32,7 +32,11 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorSpaceStatusOptions } from '@visitor-space/const';
 import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
 import { VisitorSpaceService } from '@visitor-space/services';
-import { type VisitorSpaceInfo, type VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
+import {
+	type VisitorSpaceInfo,
+	type VisitorSpaceOrderProps,
+	VisitorSpaceStatus,
+} from '@visitor-space/types';
 
 export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const router = useRouter();
@@ -95,9 +99,7 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 
 		toastService.notify({
 			maxLines: 3,
-			title: tHtml(
-				'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-ging-iets-mis'
-			),
+			title: tHtml('pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-ging-iets-mis'),
 			description: tHtml(
 				'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-is-een-fout-opgetreden-tijdens-het-aanpassen-van-de-status'
 			),
@@ -118,9 +120,7 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 
 				toastService.notify({
 					maxLines: 3,
-					title: tHtml(
-						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___succes'
-					),
+					title: tHtml('pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___succes'),
 					description: tHtml(
 						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___de-status-werd-succesvol-aangepast'
 					),
@@ -203,9 +203,7 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 						<PaginationBar
 							{...getDefaultPaginationBarProps()}
 							itemsPerPage={VisitorSpacesOverviewTablePageSize}
-							startItem={
-								Math.max(0, filters.page - 1) * VisitorSpacesOverviewTablePageSize
-							}
+							startItem={Math.max(0, filters.page - 1) * VisitorSpacesOverviewTablePageSize}
 							totalItems={visitorSpaces?.total || 0}
 							onPageChange={(pageZeroBased) => {
 								gotoPage(pageZeroBased);
@@ -255,9 +253,7 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 						id={globalLabelKeys.adminLayout.title}
 						value={search}
 						className="p-cp-visitor-spaces__search"
-						placeholder={tText(
-							'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___zoek'
-						)}
+						placeholder={tText('pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___zoek')}
 						onChange={setSearch}
 						onSearch={(newValue) =>
 							setFilters({

@@ -99,7 +99,7 @@ const AdminLayout: AdminLayoutComponent = ({
 
 			<div
 				className={clsx('c-admin__content', {
-					"c-admin__content-bottom-padding": bottomPadding,
+					'c-admin__content-bottom-padding': bottomPadding,
 				})}
 			>
 				{content}

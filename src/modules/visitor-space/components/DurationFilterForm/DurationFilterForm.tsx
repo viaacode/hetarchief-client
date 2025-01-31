@@ -80,7 +80,10 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 	// Events
 
 	const onChangeDuration = (e: ChangeEvent<HTMLInputElement>) => {
-		setForm((oldForm) => ({ ...oldForm, [SearchFilterId.Duration]: e.target.value }));
+		setForm((oldForm) => ({
+			...oldForm,
+			[SearchFilterId.Duration]: e.target.value,
+		}));
 	};
 
 	return (
@@ -88,9 +91,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 			<div className={clsx(className)}>
 				<FormControl
 					className="u-mb-24 c-form-control--label-hidden"
-					errors={
-						!isNil(errors.operator?.message) ? [errors.operator?.message] : undefined
-					}
+					errors={!isNil(errors.operator?.message) ? [errors.operator?.message] : undefined}
 					id={labelKeys.operator}
 					label={tHtml(
 						'modules/visitor-space/components/duration-filter-form/duration-filter-form___operator'
@@ -110,13 +111,11 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 										components={{ IndicatorSeparator: () => null }}
 										inputId={labelKeys.operator}
 										onChange={(newValue) => {
-											const value = (newValue as SingleValue<SelectOption>)
-												?.value as Operator;
+											const value = (newValue as SingleValue<SelectOption>)?.value as Operator;
 
 											if (value !== form.operator) {
 												setForm({
-													[SearchFilterId.Duration]:
-														defaultValues.duration,
+													[SearchFilterId.Duration]: defaultValues.duration,
 													operator: value,
 												});
 											}
@@ -155,10 +154,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 									{showRange ? (
 										<DurationRangeInput
 											{...refless}
-											value={
-												form.duration ||
-												`${defaultValue}${SEPARATOR}${defaultValue}`
-											}
+											value={form.duration || `${defaultValue}${SEPARATOR}${defaultValue}`}
 											onChange={onChangeDuration}
 											placeholder={form[SearchFilterId.Duration]}
 										/>

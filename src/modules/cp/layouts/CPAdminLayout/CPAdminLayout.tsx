@@ -39,7 +39,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 								query: {
 									[SearchFilterId.Maintainer]: user?.visitorSpaceSlug,
 								},
-						  });
+							});
 
 				return {
 					id,

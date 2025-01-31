@@ -125,7 +125,7 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 							if (target.clientHeight !== tabsHeight) {
 								setHeight(target);
 							}
-						};
+						}
 					});
 
 					observer.observe(tabsEl);
@@ -144,7 +144,7 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 
 	// Set initial values
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-		useEffect(() => {
+	useEffect(() => {
 		if (!hasInitialised.current && tabsRef.current) {
 			setGradients(tabsRef.current);
 			hasInitialised.current = true;
@@ -171,9 +171,7 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 					[styles['c-scrollable-tabs--gradient-left']]: showLeftGradient,
 					[styles['c-scrollable-tabs--gradient-right']]: showRightGradient,
 				},
-				getVariantsArray(props.variants).map(
-					(variant) => styles[`c-scrollable-tabs--${variant}`]
-				)
+				getVariantsArray(props.variants).map((variant) => styles[`c-scrollable-tabs--${variant}`])
 			)}
 			style={{ height: `${tabsHeight}px` }}
 		>

@@ -86,7 +86,9 @@ async function getOnlineTranslations(): Promise<TranslationEntry[]> {
 		`,
 		{}
 	);
-	return response.data.app_translations.map((t: TranslationEntry) => ({ ...t }));
+	return response.data.app_translations.map((t: TranslationEntry) => ({
+		...t,
+	}));
 }
 
 let SITE_TRANSLATIONS: Record<'nl' | 'en', Record<string, string>> | null = null;

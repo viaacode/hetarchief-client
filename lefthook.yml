@@ -1,0 +1,12 @@
+pre-commit:
+    parallel: true
+    jobs:
+      - name: stylelint
+        glob: "*.{css,scss}"
+        run: npx stylelint --fix {staged_files}
+        stage_fixed: true
+
+      - name: biome
+        glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
+        run: npx @biomejs/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
+        stage_fixed: true

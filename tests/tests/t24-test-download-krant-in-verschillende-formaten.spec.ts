@@ -14,7 +14,7 @@ test('T24: Download krant in verschillende formaten', async ({ page, context }) 
 	/**
 	 * Go to a newspaper detail page ---------------------------------------------------------------
 	 */
-	const NEWSPAPER_PAGE_TITLE = "Wet- en verordeningsblad voor de bezette streke...";
+	const NEWSPAPER_PAGE_TITLE = 'Wet- en verordeningsblad voor de bezette streke...';
 	await goToPageAndAcceptCookies(
 		page,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${IE_OBJECT_ID}?showAuth=1`,
@@ -104,7 +104,7 @@ test('T24: Download krant in verschillende formaten', async ({ page, context }) 
 
 	// Check if the browser downloaded a zip file with name: newspaper-h98z893q54.zip
 	expect(download.suggestedFilename()).toBe(
-		"wet-en-verordeningsblad-voor-de-bezette-streken-van-belgie.xml"
+		'wet-en-verordeningsblad-voor-de-bezette-streken-van-belgie.xml'
 	);
 
 	// Wait for close to save the videos

@@ -21,9 +21,7 @@ export const UsersOverviewPage: FC<
 > = ({ url, commonUser }) => {
 	const renderPageContent = () => {
 		return (
-			<AdminLayout
-				pageTitle={tText('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')}
-			>
+			<AdminLayout pageTitle={tText('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')}>
 				<AdminLayout.Content>
 					<div className="l-container">
 						<Suspense fallback={<Loading fullscreen owner="UsersOverviewPage" />}>

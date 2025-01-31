@@ -37,9 +37,7 @@ const NavigationLink: FC<NavigationLinkProps> = ({
 						styles['c-navigation__dropdown-icon'],
 						styles[`c-navigation__dropdown-icon--${side}`]
 					)}
-					{...(typeof iconStart === 'string'
-						? { name: iconStart }
-						: (iconStart as IconProps))}
+					{...(typeof iconStart === 'string' ? { name: iconStart } : (iconStart as IconProps))}
 				/>
 			)
 		);

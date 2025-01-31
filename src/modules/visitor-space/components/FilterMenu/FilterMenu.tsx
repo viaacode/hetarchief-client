@@ -51,8 +51,8 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	const openIcon = isMobile
 		? IconNamesLight.Filter
 		: isOpen
-		? IconNamesLight.AngleUp
-		: IconNamesLight.AngleDown;
+			? IconNamesLight.AngleUp
+			: IconNamesLight.AngleDown;
 
 	useScrollLock(lockScroll, 'FilterMenu');
 
@@ -127,9 +127,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 					{...option}
 					key={`filter-menu-option-${option.id}`}
 					className={clsx({
-						[styles['c-filter-menu__option--operative']]: !isNil(
-							filterValues?.[option?.id]
-						),
+						[styles['c-filter-menu__option--operative']]: !isNil(filterValues?.[option?.id]),
 					})}
 					activeFilter={query.filter}
 					values={filterValues?.[option.id]}

@@ -4,7 +4,11 @@ import { stringifyUrl } from 'query-string';
 import type { Folder, FolderIeObject, SharedFolderResponse } from '@account/types';
 import { ApiService } from '@shared/services/api-service';
 
-import { FOLDERS_SERVICE_BASE_URL, FOLDERS_SERVICE_EXPORT_URL, FOLDERS_SERVICE_OBJECTS_URL } from './folders.const';
+import {
+	FOLDERS_SERVICE_BASE_URL,
+	FOLDERS_SERVICE_EXPORT_URL,
+	FOLDERS_SERVICE_OBJECTS_URL,
+} from './folders.const';
 
 class FoldersService extends ApiService {
 	public async getAll(): Promise<IPagination<Folder>> {
@@ -12,12 +16,7 @@ class FoldersService extends ApiService {
 		return parsed as IPagination<Folder>;
 	}
 
-	public async getById(
-		id: string,
-		searchInput = '',
-		page = 0,
-		size = 20
-	): Promise<FolderIeObject> {
+	public async getById(id: string, searchInput = '', page = 0, size = 20): Promise<FolderIeObject> {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -40,9 +39,7 @@ class FoldersService extends ApiService {
 		id: string,
 		json: Partial<Pick<Folder, 'name' | 'description'>>
 	): Promise<Folder> {
-		return await ApiService.getApi()
-			.patch(`${FOLDERS_SERVICE_BASE_URL}/${id}`, { json })
-			.json();
+		return await ApiService.getApi().patch(`${FOLDERS_SERVICE_BASE_URL}/${id}`, { json }).json();
 	}
 
 	public async delete(id: string): Promise<number> {
@@ -51,17 +48,13 @@ class FoldersService extends ApiService {
 
 	public async addToFolder(collection: string, item: string): Promise<unknown> {
 		return await ApiService.getApi()
-			.post(
-				`${FOLDERS_SERVICE_BASE_URL}/${collection}/${FOLDERS_SERVICE_OBJECTS_URL}/${item}`
-			)
+			.post(`${FOLDERS_SERVICE_BASE_URL}/${collection}/${FOLDERS_SERVICE_OBJECTS_URL}/${item}`)
 			.json();
 	}
 
 	public async removeFromFolder(collection: string, item: string): Promise<unknown> {
 		return await ApiService.getApi()
-			.delete(
-				`${FOLDERS_SERVICE_BASE_URL}/${collection}/${FOLDERS_SERVICE_OBJECTS_URL}/${item}`
-			)
+			.delete(`${FOLDERS_SERVICE_BASE_URL}/${collection}/${FOLDERS_SERVICE_OBJECTS_URL}/${item}`)
 			.json();
 	}
 
@@ -82,7 +75,9 @@ class FoldersService extends ApiService {
 
 	public async shareFolder(folderId: string, to: string): Promise<{ message: 'success' }> {
 		return await ApiService.getApi()
-			.post(`${FOLDERS_SERVICE_BASE_URL}/share/${folderId}/create`, { json: { to } })
+			.post(`${FOLDERS_SERVICE_BASE_URL}/share/${folderId}/create`, {
+				json: { to },
+			})
 			.json();
 	}
 }

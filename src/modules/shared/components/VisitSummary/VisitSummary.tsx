@@ -39,9 +39,7 @@ const VisitSummary: FC<VisitSummaryProps> = ({
 			{visitorName && (
 				<>
 					<strong>
-						{tHtml(
-							'modules/cp/components/process-request-blade/process-request-blade___aanvrager'
-						)}
+						{tHtml('modules/cp/components/process-request-blade/process-request-blade___aanvrager')}
 					</strong>
 					<p>{visitorName}</p>
 				</>

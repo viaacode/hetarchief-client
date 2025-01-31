@@ -20,7 +20,10 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 	const [reportMessage, setReportMessage] = useState<string>('');
 	const [email, setEmail] = useState<string>('');
 	const [isSubmittingForm, setIsSubmittingForm] = useState(false);
-	const [formErrors, setFormErrors] = useState<{ reportMessage?: string; email?: string }>({});
+	const [formErrors, setFormErrors] = useState<{
+		reportMessage?: string;
+		email?: string;
+	}>({});
 
 	/**
 	 * Methods
@@ -54,9 +57,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 
 	const onFailedRequest = () => {
 		toastService.notify({
-			title: tHtml(
-				'modules/visitor-space/components/report-blade/report-blade___er-ging-iets-mis'
-			),
+			title: tHtml('modules/visitor-space/components/report-blade/report-blade___er-ging-iets-mis'),
 			description: tHtml(
 				'modules/visitor-space/components/report-blade/report-blade___er-is-een-fout-opgetreden-tijdens-het-opslaan-probeer-later-opnieuw'
 			),
@@ -65,9 +66,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 
 	const onSuccessfulRequest = () => {
 		toastService.notify({
-			title: tHtml(
-				'modules/visitor-space/components/report-blade/report-blade___gerapporteerd'
-			),
+			title: tHtml('modules/visitor-space/components/report-blade/report-blade___gerapporteerd'),
 			description: tHtml(
 				'modules/visitor-space/components/report-blade/report-blade___uw-bericht-werd-succesvol-verstuurd'
 			),
@@ -102,16 +101,12 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 					public: false,
 				},
 
-				subject: `${tText(
-					'modules/visitor-space/components/report-blade/report-blade___media-item-gerapporteerd-door-gebruiker-op-het-archief'
-				)}`,
+				subject: `${tText('modules/visitor-space/components/report-blade/report-blade___media-item-gerapporteerd-door-gebruiker-op-het-archief')}`,
 				requester: {
 					email: user?.email || email,
 					name:
 						user?.fullName ||
-						`${tText(
-							'modules/visitor-space/components/report-blade/report-blade___niet-ingelogde-gebruiker'
-						)}`,
+						`${tText('modules/visitor-space/components/report-blade/report-blade___niet-ingelogde-gebruiker')}`,
 				},
 			};
 			await createZendeskTicket(ticket);
@@ -138,18 +133,14 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 			<div className="u-px-32 u-py-24">
 				<Button
 					className="u-mb-16"
-					label={tHtml(
-						'modules/visitor-space/components/report-blade/report-blade___rapporteer'
-					)}
+					label={tHtml('modules/visitor-space/components/report-blade/report-blade___rapporteer')}
 					variants={['block', 'black']}
 					onClick={handleFormSubmit}
 					disabled={isSubmittingForm}
 				/>
 
 				<Button
-					label={tHtml(
-						'modules/visitor-space/components/report-blade/report-blade___annuleer'
-					)}
+					label={tHtml('modules/visitor-space/components/report-blade/report-blade___annuleer')}
 					variants={['block', 'text']}
 					onClick={onCloseBlade}
 				/>
@@ -165,9 +156,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 			onClose={onCloseBlade}
 			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 				<h2 {...props}>
-					{tHtml(
-						'modules/visitor-space/components/report-blade/report-blade___rapporteren'
-					)}
+					{tHtml('modules/visitor-space/components/report-blade/report-blade___rapporteren')}
 				</h2>
 			)}
 		>
@@ -175,12 +164,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 				{props.isOpen && (
 					<FormControl
 						className="u-mb-24"
-						errors={[
-							<RedFormWarning
-								error={formErrors.reportMessage}
-								key="form-error--report"
-							/>,
-						]}
+						errors={[<RedFormWarning error={formErrors.reportMessage} key="form-error--report" />]}
 						id="reportMessage"
 						label={tHtml(
 							'modules/visitor-space/components/report-blade/report-blade___beschrijf-het-probleem'
@@ -204,9 +188,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 						className={clsx('u-mb-24', {
 							[styles['c-report-blade__input--disabled']]: !!user?.email,
 						})}
-						errors={[
-							<RedFormWarning error={formErrors.email} key="form-error--email" />,
-						]}
+						errors={[<RedFormWarning error={formErrors.email} key="form-error--email" />]}
 						id="email"
 						label={tHtml(
 							'modules/visitor-space/components/report-blade/report-blade___email-adres'

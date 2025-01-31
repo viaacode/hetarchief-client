@@ -1,7 +1,15 @@
 import { Button, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { sortBy } from 'lodash-es';
-import React, { type ChangeEvent, type FC, type KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+	type ChangeEvent,
+	type FC,
+	type KeyboardEvent,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import { ConfidenceIndicator } from '@ie-objects/components/ConfidenceIndicator/ConfidenceIndicator';
@@ -90,77 +98,67 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToLoc
 						)}
 					</div>
 				)}
-				{filteredNames.map((nameInfo, index) => ({...nameInfo, index})).map((nameInfo: Mention & {index: number}) => (
-					<div key={nameInfo.index} className={styles['c-names-list__person']}>
-						<div className={styles['c-names-list__person__occurrence-confidence']}>
-							<ConfidenceIndicator
-								className={styles['c-names-list__person__confidence-indicator']}
-								confidence={nameInfo.confidence}
-							/>
-						</div>
-						<div className={clsx(styles['c-names-list__person__info'], 'u-flex-grow')}>
-							<div className={styles['c-names-list__person__info__name']}>
-								{nameInfo.name}
+				{filteredNames
+					.map((nameInfo, index) => ({ ...nameInfo, index }))
+					.map((nameInfo: Mention & { index: number }) => (
+						<div key={nameInfo.index} className={styles['c-names-list__person']}>
+							<div className={styles['c-names-list__person__occurrence-confidence']}>
+								<ConfidenceIndicator
+									className={styles['c-names-list__person__confidence-indicator']}
+									confidence={nameInfo.confidence}
+								/>
 							</div>
-							<div
-								className={
-									styles['c-names-list__person__info__dates-and-locations']
-								}
-							>
-								<span>
-									° {nameInfo.birthDate} {nameInfo.birthPlace}
-								</span>
-								<span
-									className={
-										styles[
-											'c-names-list__person__info__dates-and-locations__comma'
-										]
+							<div className={clsx(styles['c-names-list__person__info'], 'u-flex-grow')}>
+								<div className={styles['c-names-list__person__info__name']}>{nameInfo.name}</div>
+								<div className={styles['c-names-list__person__info__dates-and-locations']}>
+									<span>
+										° {nameInfo.birthDate} {nameInfo.birthPlace}
+									</span>
+									<span
+										className={styles['c-names-list__person__info__dates-and-locations__comma']}
+									>
+										,{' '}
+									</span>
+									<span>
+										† {nameInfo.deathDate} {nameInfo.deathPlace}
+									</span>
+								</div>
+							</div>
+							{nameInfo.x && nameInfo.x && nameInfo.width && nameInfo.height && (
+								<Button
+									icon={<Icon name={IconNamesLight.SearchText} />}
+									variants={['white']}
+									tooltipText={tText(
+										'modules/ie-objects/components/names-list/names-list___spring-naar-de-locatie-van-deze-naam'
+									)}
+									tooltipPosition="left"
+									onClick={() =>
+										onZoomToLocation(
+											nameInfo.x + nameInfo.width / 2,
+											nameInfo.y + nameInfo.height / 2
+										)
 									}
-								>
-									,{' '}
-								</span>
-								<span>
-									† {nameInfo.deathDate} {nameInfo.deathPlace}
-								</span>
-							</div>
-						</div>
-						{nameInfo.x && nameInfo.x && nameInfo.width && nameInfo.height && (
-							<Button
-								icon={<Icon name={IconNamesLight.SearchText} />}
-								variants={['white']}
-								tooltipText={tText(
-									'modules/ie-objects/components/names-list/names-list___spring-naar-de-locatie-van-deze-naam'
-								)}
-								tooltipPosition="left"
-								onClick={() =>
-									onZoomToLocation(
-										nameInfo.x + nameInfo.width / 2,
-										nameInfo.y + nameInfo.height / 2
-									)
-								}
-							/>
-						)}
+								/>
+							)}
 
-						<a
-							href={nameInfo.iri}
-							target="_blank"
-							rel="noreferrer noopener"
-							// Hide if no link, so it does take up space and all links/zoom buttons are nicely below each-other
-							style={{ visibility: nameInfo.iri ? 'visible' : 'hidden' }}
-						>
-							<Button
-								icon={
-									<Icon name={IconNamesLight.Extern} className="u-font-size-28" />
-								}
-								variants={['white']}
-								tooltipText={tText(
-									'modules/ie-objects/components/names-list/names-list___meer-info-over-deze-persoon'
-								)}
-								tooltipPosition="left"
-							/>
-						</a>
-					</div>
-				))}
+							<a
+								href={nameInfo.iri}
+								target="_blank"
+								rel="noreferrer noopener"
+								// Hide if no link, so it does take up space and all links/zoom buttons are nicely below each-other
+								style={{ visibility: nameInfo.iri ? 'visible' : 'hidden' }}
+							>
+								<Button
+									icon={<Icon name={IconNamesLight.Extern} className="u-font-size-28" />}
+									variants={['white']}
+									tooltipText={tText(
+										'modules/ie-objects/components/names-list/names-list___meer-info-over-deze-persoon'
+									)}
+									tooltipPosition="left"
+								/>
+							</a>
+						</div>
+					))}
 			</PerfectScrollbar>
 		</div>
 	);

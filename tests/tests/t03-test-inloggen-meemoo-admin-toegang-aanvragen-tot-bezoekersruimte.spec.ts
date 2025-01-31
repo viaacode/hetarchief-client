@@ -52,7 +52,9 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	await waitForPageTitle(page, expectedSitePageTitle);
 
 	// Show all visitor spaces
-	const showAllButton = page.locator('.c-button--outline', { hasText: 'Toon alles' });
+	const showAllButton = page.locator('.c-button--outline', {
+		hasText: 'Toon alles',
+	});
 	await expect(showAllButton).toBeVisible();
 	await showAllButton.click();
 
@@ -68,9 +70,7 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	// Check that we were redirected to the request pending page
 	await expect(
 		page.locator(
-			`text=${SITE_TRANSLATIONS.nl[
-					'pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen'
-				]}`
+			`text=${SITE_TRANSLATIONS.nl['pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen']}`
 		)
 	).toBeVisible();
 	const accessRequestedBody = await page.locator('.p-visit-requested__content').innerHTML();

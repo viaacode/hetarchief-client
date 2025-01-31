@@ -47,8 +47,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		isLoading: isLoadingVisitRequests,
 	} = useGetVisitRequests({
 		searchInput: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
-		status:
-			filters.status === RequestStatusAll.ALL ? undefined : (filters.status as VisitStatus),
+		status: filters.status === RequestStatusAll.ALL ? undefined : (filters.status as VisitStatus),
 		page: filters.page,
 		size: RequestTablePageSize,
 		orderProp: filters.orderProp as keyof VisitRequest,
@@ -84,9 +83,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 					setSelectedNotOnCurrentPage(undefined);
 					toastService.notify({
 						title: tHtml('pages/beheer/toegangsaanvragen/index___error'),
-						description: tHtml(
-							'pages/beheer/toegangsaanvragen/index___deze-aanvraag-bestaat-niet'
-						),
+						description: tHtml('pages/beheer/toegangsaanvragen/index___deze-aanvraag-bestaat-niet'),
 					});
 				});
 		}
@@ -149,23 +146,15 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 	const renderEmptyMessage = (): string | ReactNode => {
 		switch (filters.status) {
 			case VisitStatus.APPROVED:
-				return tHtml(
-					'pages/beheer/toegangsaanvragen/index___er-zijn-geen-goedgekeurde-aanvragen'
-				);
+				return tHtml('pages/beheer/toegangsaanvragen/index___er-zijn-geen-goedgekeurde-aanvragen');
 
 			case VisitStatus.DENIED:
-				return tHtml(
-					'pages/beheer/toegangsaanvragen/index___er-zijn-geen-geweigerde-aanvragen'
-				);
+				return tHtml('pages/beheer/toegangsaanvragen/index___er-zijn-geen-geweigerde-aanvragen');
 
 			case VisitStatus.CANCELLED_BY_VISITOR:
-				return tHtml(
-					'pages/beheer/toegangsaanvragen/index___er-zijn-geen-geannuleerde-aanvragen'
-				);
+				return tHtml('pages/beheer/toegangsaanvragen/index___er-zijn-geen-geannuleerde-aanvragen');
 			default:
-				return tHtml(
-					'pages/beheer/toegangsaanvragen/index___er-zijn-geen-openstaande-aanvragen'
-				);
+				return tHtml('pages/beheer/toegangsaanvragen/index___er-zijn-geen-openstaande-aanvragen');
 		}
 	};
 
@@ -176,43 +165,43 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		if ((filteredVisits?.length || 0) <= 0) {
 			return renderEmptyMessage();
 		}
-			return (
-				<div className="l-container l-container--edgeless-to-lg">
-					<Table<VisitRequest>
-						className="u-mt-24"
-						options={{
-							columns: columns,
-							data: filteredVisits || [],
-							initialState: {
-								pageSize: RequestTablePageSize,
-								sortBy: sortFilters,
-							} as TableState<VisitRequest>,
-						}}
-						onRowClick={onRowClick}
-						onSortChange={onSortChange}
-						sortingIcons={sortingIcons}
-						pagination={({ gotoPage }) => {
-							return (
-								<PaginationBar
-									{...getDefaultPaginationBarProps()}
-									itemsPerPage={RequestTablePageSize}
-									startItem={Math.max(0, filters.page - 1) * RequestTablePageSize}
-									totalItems={visits?.total || 0}
-									onPageChange={(pageZeroBased) => {
-										gotoPage(pageZeroBased);
-										setFilters({
-											...filters,
-											page: pageZeroBased + 1,
-											[VISIT_REQUEST_ID_QUERY_KEY]: undefined,
-										});
-										setSelectedNotOnCurrentPage(undefined);
-									}}
-								/>
-							);
-						}}
-					/>
-				</div>
-			);
+		return (
+			<div className="l-container l-container--edgeless-to-lg">
+				<Table<VisitRequest>
+					className="u-mt-24"
+					options={{
+						columns: columns,
+						data: filteredVisits || [],
+						initialState: {
+							pageSize: RequestTablePageSize,
+							sortBy: sortFilters,
+						} as TableState<VisitRequest>,
+					}}
+					onRowClick={onRowClick}
+					onSortChange={onSortChange}
+					sortingIcons={sortingIcons}
+					pagination={({ gotoPage }) => {
+						return (
+							<PaginationBar
+								{...getDefaultPaginationBarProps()}
+								itemsPerPage={RequestTablePageSize}
+								startItem={Math.max(0, filters.page - 1) * RequestTablePageSize}
+								totalItems={visits?.total || 0}
+								onPageChange={(pageZeroBased) => {
+									gotoPage(pageZeroBased);
+									setFilters({
+										...filters,
+										page: pageZeroBased + 1,
+										[VISIT_REQUEST_ID_QUERY_KEY]: undefined,
+									});
+									setSelectedNotOnCurrentPage(undefined);
+								}}
+							/>
+						);
+					}}
+				/>
+			</div>
+		);
 	};
 
 	return (
@@ -228,9 +217,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 						className="p-cp-requests__search"
 						placeholder={tText('pages/beheer/toegangsaanvragen/index___zoek')}
 						onChange={setSearch}
-						onSearch={(value) =>
-							setFilters({ [QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: value, page: 1 })
-						}
+						onSearch={(value) => setFilters({ [QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: value, page: 1 })}
 					/>
 
 					<ScrollableTabs

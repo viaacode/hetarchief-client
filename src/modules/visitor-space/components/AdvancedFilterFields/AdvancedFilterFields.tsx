@@ -17,9 +17,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { SEPARATOR } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import type {
-	AdvancedFilterFieldsProps,
-} from '@visitor-space/components/AdvancedFilterFields/AdvancedFilterFields.types';
+import type { AdvancedFilterFieldsProps } from '@visitor-space/components/AdvancedFilterFields/AdvancedFilterFields.types';
 import AutocompleteFieldInput, {
 	type AutocompleteFieldInputProps,
 } from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
@@ -29,12 +27,18 @@ import { DateRangeInput } from '@visitor-space/components/DateRangeInput';
 import type { DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
 import { DurationRangeInput } from '@visitor-space/components/DurationRangeInput';
 import { GenreSelect } from '@visitor-space/components/GenreSelect';
-import { type LanguageCode, LANGUAGES } from '@visitor-space/components/LanguageFilterForm/languages';
+import {
+	type LanguageCode,
+	LANGUAGES,
+} from '@visitor-space/components/LanguageFilterForm/languages';
 import { LanguageSelect } from '@visitor-space/components/LanguageSelect/LanguageSelect';
 import { MediaTypeSelect } from '@visitor-space/components/MediaTypeSelect';
 import { MediumSelect } from '@visitor-space/components/MediumSelect/MediumSelect';
 import { ObjectTypeSelect } from '@visitor-space/components/ObjectTypeSelect';
-import type { FilterConfig, FilterInputComponentProps } from '@visitor-space/const/advanced-filters.consts';
+import type {
+	FilterConfig,
+	FilterInputComponentProps,
+} from '@visitor-space/const/advanced-filters.consts';
 
 import type { AdvancedFilter, FilterProperty, Operator } from '../../types';
 import { getSelectValue } from '../../utils/select';
@@ -42,7 +46,11 @@ import DurationInput, { defaultValue } from '../DurationInput/DurationInput';
 
 import styles from './AdvancedFilterFields.module.scss';
 
-import { getAdvancedProperties, getFilterConfig, getOperators } from 'modules/visitor-space/utils/advanced-filters';
+import {
+	getAdvancedProperties,
+	getFilterConfig,
+	getOperators,
+} from 'modules/visitor-space/utils/advanced-filters';
 
 const labelKeys = {
 	prefix: 'AdvancedFilterFields',
@@ -211,7 +219,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						? {
 								label: LANGUAGES[locale][state.val as LanguageCode],
 								value: state.val as string,
-						  }
+							}
 						: undefined;
 
 				return (
@@ -279,9 +287,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			}
 
 			default:
-				console.warn(
-					`[WARN][AdvancedFilterFields] No render definition found for ${state.prop}`
-				);
+				console.warn(`[WARN][AdvancedFilterFields] No render definition found for ${state.prop}`);
 				return null;
 		}
 	};

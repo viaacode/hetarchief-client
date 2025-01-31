@@ -49,7 +49,9 @@ const TemplateCustomButton: ComponentStory<typeof Dropdown> = (args) => (
 	<DropdownStoryComponent>
 		<Dropdown {...args}>
 			<DropdownButton>
-				<button tabIndex={0} type="button">Click me!</button>
+				<button tabIndex={0} type="button">
+					Click me!
+				</button>
 			</DropdownButton>
 			<DropdownContent>
 				<MenuContent

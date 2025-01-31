@@ -9,21 +9,15 @@ import type { MediaTypeOptions } from '../../types';
 const MediaTypeSelect: FC<ReactSelectProps> = (props) => {
 	const options: MediaTypeOptions = [
 		{
-			label: tText(
-				'modules/visitor-space/components/media-type-select/media-type-select___audio'
-			),
+			label: tText('modules/visitor-space/components/media-type-select/media-type-select___audio'),
 			value: IeObjectType.Audio,
 		},
 		{
-			label: tText(
-				'modules/visitor-space/components/media-type-select/media-type-select___video'
-			),
+			label: tText('modules/visitor-space/components/media-type-select/media-type-select___video'),
 			value: IeObjectType.Video,
 		},
 		{
-			label: tText(
-				'modules/visitor-space/components/media-type-select/media-type-select___krant'
-			),
+			label: tText('modules/visitor-space/components/media-type-select/media-type-select___krant'),
 			value: IeObjectType.Newspaper,
 		},
 	];

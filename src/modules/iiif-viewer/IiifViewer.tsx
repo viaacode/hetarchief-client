@@ -4,14 +4,24 @@ import { clamp, compact, isNil, round } from 'lodash-es';
 import { useRouter } from 'next/router';
 import type { TiledImageOptions, TileSource, Viewer } from 'openseadragon';
 import { parseUrl } from 'query-string';
-import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import React, {
+	forwardRef,
+	useCallback,
+	useEffect,
+	useImperativeHandle,
+	useMemo,
+	useState,
+} from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import type { AltoTextLine } from '@ie-objects/ie-objects.types';
-import type { IiifViewerFunctions, IiifViewerProps, ImageSize, Rect } from '@iiif-viewer/IiifViewer.types';
-import {
-	SearchInputWithResultsPagination,
-} from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
+import type {
+	IiifViewerFunctions,
+	IiifViewerProps,
+	ImageSize,
+	Rect,
+} from '@iiif-viewer/IiifViewer.types';
+import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import {
 	destroyOpenSeadragonViewerMouseTracker,
 	initOpenSeadragonViewerMouseTracker,
@@ -79,7 +89,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		const handleIsSelectionActiveChange = (newIsSelectionActive: boolean) => {
 			setIsSelectionActive(newIsSelectionActive);
 			// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
-			((window as any).isSelectionActive = newIsSelectionActive);
+			(window as any).isSelectionActive = newIsSelectionActive;
 			return newIsSelectionActive;
 		};
 
@@ -119,39 +129,36 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			// Do not include activeImageTileSource since it causes a rerender loop since this can change in js world without react knowing about it
 		}, [openSeaDragonViewer, activeImageIndex]);
 
-		const addFullscreenCloseButton = useCallback(
-			(openSeadragonViewer: OpenSeadragon.Viewer) => {
-				if (!openSeadragonViewer.container) {
-					return;
-				}
-				const bottomLeftContainer = openSeadragonViewer.container.querySelector(
-					'.openseadragon-canvas + div + div + div'
-				);
-				if (!bottomLeftContainer) {
-					return;
-				}
-				bottomLeftContainer.innerHTML = '';
-				const closeFullscreenButton = document.createElement('button');
-				closeFullscreenButton.className =
-					'c-iiif-viewer__iiif__close-fullscreen c-button c-button--icon c-button--white';
-				closeFullscreenButton.innerHTML = 'times';
-				closeFullscreenButton.title = tText(
-					'modules/iiif-viewer/iiif-viewer___sluit-volledig-scherm'
-				);
-				closeFullscreenButton.addEventListener('click', () => {
-					openSeadragonViewer.setFullScreen(false);
-				});
-				bottomLeftContainer?.append(closeFullscreenButton);
-			},
-			[]
-		);
+		const addFullscreenCloseButton = useCallback((openSeadragonViewer: OpenSeadragon.Viewer) => {
+			if (!openSeadragonViewer.container) {
+				return;
+			}
+			const bottomLeftContainer = openSeadragonViewer.container.querySelector(
+				'.openseadragon-canvas + div + div + div'
+			);
+			if (!bottomLeftContainer) {
+				return;
+			}
+			bottomLeftContainer.innerHTML = '';
+			const closeFullscreenButton = document.createElement('button');
+			closeFullscreenButton.className =
+				'c-iiif-viewer__iiif__close-fullscreen c-button c-button--icon c-button--white';
+			closeFullscreenButton.innerHTML = 'times';
+			closeFullscreenButton.title = tText(
+				'modules/iiif-viewer/iiif-viewer___sluit-volledig-scherm'
+			);
+			closeFullscreenButton.addEventListener('click', () => {
+				openSeadragonViewer.setFullScreen(false);
+			});
+			bottomLeftContainer?.append(closeFullscreenButton);
+		}, []);
 
 		const getCurrentImageSize = (): ImageSize => {
 			const imageSize = {
 				// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
 				width: (activeImageTileSource as any)?.width || activeImageTileSource?.dimensions.x,
 				height:
-				// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
+					// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
 					(activeImageTileSource as any)?.height || activeImageTileSource?.dimensions.y,
 			};
 			if (!imageSize.width || !imageSize.height) {
@@ -174,10 +181,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 		// biome-ignore lint/correctness/useExhaustiveDependencies: We don't include the tile source since it causes a rerender loop
 		const updateHighlightedAltoTexts = useCallback(
-			(
-				highlightedAltoTexts: AltoTextLine[],
-				selectedHighlightedAltoText: AltoTextLine | null
-			) => {
+			(highlightedAltoTexts: AltoTextLine[], selectedHighlightedAltoText: AltoTextLine | null) => {
 				if (isServerSideRendering()) {
 					return;
 				}
@@ -232,10 +236,11 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 						return;
 					}
 					const span = document.createElement('SPAN');
-					span.className =
-						`c-iiif-viewer__iiif__alto__text${altoTextLocation === selectedHighlightedAltoText
+					span.className = `c-iiif-viewer__iiif__alto__text${
+						altoTextLocation === selectedHighlightedAltoText
 							? ' c-iiif-viewer__iiif__alto__text--selected'
-							: ' c-iiif-viewer__iiif__alto__text--highlighted'}`;
+							: ' c-iiif-viewer__iiif__alto__text--highlighted'
+					}`;
 					openSeaDragonViewer.addOverlay(
 						span,
 						new openSeaDragonLib.Rect(x, y, width, height, 0),
@@ -252,21 +257,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			(openSeadragonViewerTemp: Viewer, openSeadragonLibTemp: any) => {
 				openSeadragonViewerTemp.addHandler('open', () => {
 					// When the viewer is initialized, set the desired zoom and pan
-					if (
-						!isNil(initialFocusX) &&
-						!isNil(initialFocusY) &&
-						!isNil(initialZoomLevel)
-					) {
-						const centerPoint = new openSeadragonLibTemp.Point(
-							initialFocusX,
-							initialFocusY
-						);
+					if (!isNil(initialFocusX) && !isNil(initialFocusY) && !isNil(initialZoomLevel)) {
+						const centerPoint = new openSeadragonLibTemp.Point(initialFocusX, initialFocusY);
 						openSeadragonViewerTemp.viewport.panTo(centerPoint, true);
-						openSeadragonViewerTemp.viewport.zoomTo(
-							initialZoomLevel,
-							centerPoint,
-							true
-						);
+						openSeadragonViewerTemp.viewport.zoomTo(initialZoomLevel, centerPoint, true);
 					}
 				});
 			},
@@ -354,10 +348,9 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				);
 
 				// Init Open Seadragon viewer
-				const openSeadragonViewerTemp: OpenSeadragon.Viewer =
-					new openSeadragonLibTemp.Viewer(
-						getOpenSeadragonConfig(imageSources, isMobile, iiifViewerId)
-					);
+				const openSeadragonViewerTemp: OpenSeadragon.Viewer = new openSeadragonLibTemp.Viewer(
+					getOpenSeadragonConfig(imageSources, isMobile, iiifViewerId)
+				);
 
 				addFullscreenCloseButton(openSeadragonViewerTemp);
 
@@ -532,9 +525,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 							<div
 								className={clsx(
 									styles['c-iiif-viewer__iiif__controls__button-group'],
-									styles[
-										'c-iiif-viewer__iiif__controls__button-group__pagination'
-									],
+									styles['c-iiif-viewer__iiif__controls__button-group__pagination'],
 									'u-flex-shrink'
 								)}
 							>
@@ -550,13 +541,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 									variants={['white', 'sm']}
 									onClick={() => setIiifGridViewEnabled(true)}
 								/>
-								<div
-									className={
-										styles[
-											'c-iiif-viewer__iiif__controls__button-group__divider'
-										]
-									}
-								/>
+								<div className={styles['c-iiif-viewer__iiif__controls__button-group__divider']} />
 								<Button
 									className={clsx(
 										styles['c-iiif-viewer__iiif__controls__button'],
@@ -571,13 +556,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 									disabled={activeImageIndex === 0}
 								/>
 								<span className="pagination-info">
-									{tText(
-										'modules/iiif-viewer/iiif-viewer___current-image-van-total-images',
-										{
-											currentImage: activeImageIndex + 1,
-											totalImages: imageInfosWithTokens?.length || 1,
-										}
-									)}
+									{tText('modules/iiif-viewer/iiif-viewer___current-image-van-total-images', {
+										currentImage: activeImageIndex + 1,
+										totalImages: imageInfosWithTokens?.length || 1,
+									})}
 								</span>
 								<Button
 									className={clsx(
@@ -599,12 +581,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 									styles['c-iiif-viewer__iiif__controls__button-group'],
 									styles['c-iiif-viewer__iiif__controls__button-group__search'],
 									{
-										[styles[
-											'c-iiif-viewer__iiif__controls__button-group__search--enabled'
-										]]: isSearchEnabled,
-										[styles[
-											'c-iiif-viewer__iiif__controls__button-group__search--disabled'
-										]]: !isSearchEnabled,
+										[styles['c-iiif-viewer__iiif__controls__button-group__search--enabled']]:
+											isSearchEnabled,
+										[styles['c-iiif-viewer__iiif__controls__button-group__search--disabled']]:
+											!isSearchEnabled,
 									},
 									'u-flex-shrink'
 								)}
@@ -634,9 +614,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 										'c-iiif-viewer__iiif__controls__toggle-ocr'
 									)}
 									icon={<Icon name={IconNamesLight.Ocr} aria-hidden />}
-									aria-label={tText(
-										'pages/openseadragon/index___tekst-boven-de-afbeelding-tonen'
-									)}
+									aria-label={tText('pages/openseadragon/index___tekst-boven-de-afbeelding-tonen')}
 									variants={[isTextOverlayVisible ? 'green' : 'white', 'sm']}
 									onClick={() => setIsTextOverlayVisible(!isTextOverlayVisible)}
 								/>
@@ -646,15 +624,9 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 											styles['c-iiif-viewer__iiif__controls__button'],
 											'c-iiif-viewer__iiif__controls__selection'
 										)}
-										icon={
-											<Icon name={IconNamesLight.ScissorsClip} aria-hidden />
-										}
-										aria-label={tText(
-											'modules/iiif-viewer/iiif-viewer___selectie-downloaden'
-										)}
-										title={tText(
-											'modules/iiif-viewer/iiif-viewer___selectie-downloaden'
-										)}
+										icon={<Icon name={IconNamesLight.ScissorsClip} aria-hidden />}
+										aria-label={tText('modules/iiif-viewer/iiif-viewer___selectie-downloaden')}
+										title={tText('modules/iiif-viewer/iiif-viewer___selectie-downloaden')}
 										variants={[isSelectionActive ? 'green' : 'white', 'sm']}
 										onClick={() => iiifToggleSelection()}
 									/>
@@ -665,9 +637,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 										'c-iiif-viewer__iiif__controls__zoom-in'
 									)}
 									icon={<Icon name={IconNamesLight.ZoomIn} aria-hidden />}
-									aria-label={tText(
-										'pages/openseadragon/index___afbeelding-inzoemen'
-									)}
+									aria-label={tText('pages/openseadragon/index___afbeelding-inzoemen')}
 									variants={['white', 'sm']}
 									onClick={() => iiifZoom(1.3)}
 								/>
@@ -677,9 +647,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 										'c-iiif-viewer__iiif__controls__zoom-out'
 									)}
 									icon={<Icon name={IconNamesLight.ZoomOut} aria-hidden />}
-									aria-label={tText(
-										'pages/openseadragon/index___afbeelding-uitzoemen'
-									)}
+									aria-label={tText('pages/openseadragon/index___afbeelding-uitzoemen')}
 									variants={['white', 'sm']}
 									onClick={() => iiifZoom(0.7)}
 								/>
@@ -701,9 +669,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 										'c-iiif-viewer__iiif__controls__rotate-right'
 									)}
 									icon={<Icon name={IconNamesLight.Redo} aria-hidden />}
-									aria-label={tText(
-										'pages/openseadragon/index___afbeelding-rechts-draaien'
-									)}
+									aria-label={tText('pages/openseadragon/index___afbeelding-rechts-draaien')}
 									variants={['white', 'sm']}
 									onClick={() => iiifRotate(true)}
 								/>
@@ -775,9 +741,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 		const iiifViewerContainer = useMemo(() => {
 			console.log('rerender iiifviewer--------------------');
-			return (
-				<div className={clsx(styles['c-iiif-viewer__iiif-container'])} id={iiifViewerId} />
-			);
+			return <div className={clsx(styles['c-iiif-viewer__iiif-container'])} id={iiifViewerId} />;
 		}, [iiifViewerId]);
 
 		return (

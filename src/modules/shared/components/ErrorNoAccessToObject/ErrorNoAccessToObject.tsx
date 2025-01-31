@@ -5,7 +5,10 @@ import { useDispatch } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName } from '@account/const';
-import { RequestAccessBlade, type RequestAccessFormState } from '@home/components/RequestAccessBlade';
+import {
+	RequestAccessBlade,
+	type RequestAccessFormState,
+} from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { ErrorPage } from '@shared/components/ErrorPage';
 import { ROUTES_BY_LOCALE } from '@shared/const';
@@ -53,10 +56,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 
 			setIsRequestAccessBladeOpen(false);
 			await router.push(
-				ROUTES_BY_LOCALE[locale].visitRequested.replace(
-					':slug',
-					createdVisitRequest.spaceSlug
-				)
+				ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
 			);
 		} catch (err) {
 			console.error({
@@ -81,7 +81,9 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 	}, []);
 
 	const onOpenRequestAccess = () => {
-		setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug });
+		setQuery({
+			[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug,
+		});
 		if (isAnonymous) {
 			dispatch(setShowAuthModal(true));
 			return;
@@ -111,9 +113,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 				buttonsComponent={
 					<div className={styles['p-error-no-access-to-object__buttons-container']}>
 						<Button
-							label={`${tText(
-								'modules/shared/components/error-no-access-to-object/error-no-access-to-object___plan-een-bezoek-bij'
-							)} ${visitorSpaceName}`}
+							label={`${tText('modules/shared/components/error-no-access-to-object/error-no-access-to-object___plan-een-bezoek-bij')} ${visitorSpaceName}`}
 							variants="black"
 							className={styles['p-error-no-access-to-object__button']}
 							onClick={() => onOpenRequestAccess()}

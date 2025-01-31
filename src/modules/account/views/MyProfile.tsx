@@ -1,6 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/dist/client.mjs';
-import { Alert, Box, Button, Checkbox, CheckboxList, keysEnter, keysSpacebar, onKey } from '@meemoo/react-components';
+import {
+	Alert,
+	Box,
+	Button,
+	Checkbox,
+	CheckboxList,
+	keysEnter,
+	keysSpacebar,
+	onKey,
+} from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import { isNil } from 'lodash-es';
 import getConfig from 'next/config';
@@ -167,9 +176,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 		isKeyUser && (
 			<>
 				<dt className="u-mt-32">
-					{tText(
-						'pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-titel'
-					)}
+					{tText('pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-titel')}
 				</dt>
 				<dd className="u-color-neutral u-mt-8">
 					{tHtml(
@@ -304,11 +311,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 						<Box className="u-mb-32">
 							<section className="u-p-24 p-account-my-profile__permissions">
 								<header className="p-account-my-profile__permissions-header u-mb-24">
-									<h6>
-										{tText(
-											'pages/account/mijn-profiel/index___gebruikersrechten'
-										)}
-									</h6>
+									<h6>{tText('pages/account/mijn-profiel/index___gebruikersrechten')}</h6>
 								</header>
 								<dl className="p-account-my-profile__permissions-list u-mb-24">
 									{renderUserGroup()}
@@ -334,9 +337,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 					<Box className={'u-mb-32'}>
 						<section className="u-p-24 p-account-my-profile__language-preferences">
 							<header className="p-account-my-profile__language-preferences-header u-mb-24">
-								<h6>
-									{tText('modules/account/views/my-profile___taalvoorkeuren')}
-								</h6>
+								<h6>{tText('modules/account/views/my-profile___taalvoorkeuren')}</h6>
 							</header>
 							<div className="p-account-my-profile__language-preferences-list u-mb-24">
 								{renderLanguagePreferencesForm()}
@@ -351,9 +352,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 		<VisitorLayout>
 			<SeoTags
 				title={tText('pages/account/mijn-profiel/index___mijn-profiel')}
-				description={tText(
-					'pages/account/mijn-profiel/index___mijn-profiel-meta-omschrijving'
-				)}
+				description={tText('pages/account/mijn-profiel/index___mijn-profiel-meta-omschrijving')}
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}

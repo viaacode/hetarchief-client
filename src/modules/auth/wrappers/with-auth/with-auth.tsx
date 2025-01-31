@@ -40,9 +40,7 @@ export const withAuth = (
 			};
 
 			const toTermsOfService = async () => {
-				return router.replace(
-					`${ROUTES_BY_LOCALE[locale].userPolicy}?${stringify(params)}`
-				);
+				return router.replace(`${ROUTES_BY_LOCALE[locale].userPolicy}?${stringify(params)}`);
 			};
 
 			const toHome = async () => {

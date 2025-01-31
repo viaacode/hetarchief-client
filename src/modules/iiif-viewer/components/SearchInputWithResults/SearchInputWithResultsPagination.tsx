@@ -30,9 +30,7 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 		<div
 			className={clsx(
 				styles['c-search-with-results-pagination'],
-				...variants.map(
-					(variant) => styles[`c-search-with-results-pagination__${variant}`]
-				),
+				...variants.map((variant) => styles[`c-search-with-results-pagination__${variant}`]),
 				className
 			)}
 		>

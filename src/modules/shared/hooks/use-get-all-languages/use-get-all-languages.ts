@@ -17,7 +17,5 @@ export const useGetAllLanguages = (): UseQueryResult<LanguageInfo[]> => {
 };
 
 export async function makeServerSideRequestGetAllLanguages(queryClient: QueryClient) {
-	await queryClient.prefetchQuery([QUERY_KEYS.getAllLanguages], () =>
-		TranslationService.getAll()
-	);
+	await queryClient.prefetchQuery([QUERY_KEYS.getAllLanguages], () => TranslationService.getAll());
 }

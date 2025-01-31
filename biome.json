@@ -7,11 +7,12 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-    "ignore": [".next", ".vscode"]
+		"ignore": [".next", ".vscode"]
 	},
 	"formatter": {
 		"enabled": true,
-		"indentStyle": "tab"
+		"indentStyle": "tab",
+		"lineWidth": 100
 	},
 	"organizeImports": {
 		"enabled": true
@@ -24,7 +25,8 @@
 	},
 	"javascript": {
 		"formatter": {
-			"quoteStyle": "double"
+			"quoteStyle": "single",
+			"trailingCommas": "es5"
 		}
 	}
 }

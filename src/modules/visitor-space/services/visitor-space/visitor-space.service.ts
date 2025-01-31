@@ -7,7 +7,11 @@ import { stringifyUrl } from 'query-string';
 import { QUERY_KEYS } from '@shared/const';
 import { ApiService } from '@shared/services/api-service';
 
-import { type VisitorSpaceInfo, type VisitorSpaceOrderProps, VisitorSpaceStatus } from '../../types';
+import {
+	type VisitorSpaceInfo,
+	type VisitorSpaceOrderProps,
+	VisitorSpaceStatus,
+} from '../../types';
 
 import { VISITOR_SPACE_SERVICE_BASE_URL } from './visitor-space.service.const';
 import {
@@ -62,7 +66,7 @@ export namespace VisitorSpaceService {
 									VisitorSpaceStatus.Requested,
 									VisitorSpaceStatus.Active,
 									VisitorSpaceStatus.Inactive,
-							  ]
+								]
 							: undefined,
 						page,
 						size,
@@ -142,7 +146,10 @@ export namespace VisitorSpaceService {
 		};
 
 		return await ApiService.getApi()
-			.patch(`${VISITOR_SPACE_SERVICE_BASE_URL}/${roomId}`, { body: formData, headers })
+			.patch(`${VISITOR_SPACE_SERVICE_BASE_URL}/${roomId}`, {
+				body: formData,
+				headers,
+			})
 			.json();
 	}
 }

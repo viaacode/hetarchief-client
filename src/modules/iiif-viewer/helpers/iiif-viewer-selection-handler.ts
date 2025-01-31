@@ -8,19 +8,19 @@ import { getRectFromPointerEventDrag } from '@iiif-viewer/helpers/rect-from-poin
 // so we cannot access the actual react state
 const setSelectionStartPoint = (newSelectionStartPoint: Point | null) => {
 	// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
-	((window as any).selectionStartPoint = newSelectionStartPoint);
+	(window as any).selectionStartPoint = newSelectionStartPoint;
 	return newSelectionStartPoint;
 };
 
 const setSelectionOverlayElement = (newSelectionOverlayElement: HTMLDivElement | null) => {
 	// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
-	((window as any).selectionOverlayElement = newSelectionOverlayElement);
+	(window as any).selectionOverlayElement = newSelectionOverlayElement;
 	return newSelectionOverlayElement;
 };
 
 const setMouseTracker = (newMouseTracker: MouseTracker | null) => {
 	// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
-	((window as any).mouseTracker = newMouseTracker);
+	(window as any).mouseTracker = newMouseTracker;
 	return newMouseTracker;
 };
 

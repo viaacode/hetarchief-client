@@ -51,8 +51,7 @@ export const changeApplicationLocale = (
 		// const contentPage ContentPageService.getContentPageByLanguageAndPath(language as any, path);
 		const translatedContentPageInfo = (contentPageInfo?.translatedPages || []).find(
 			(translatedPage) =>
-				(translatedPage.language as unknown as Locale) === newLocale &&
-				translatedPage.isPublic
+				(translatedPage.language as unknown as Locale) === newLocale && translatedPage.isPublic
 		);
 		newFullPath = translatedContentPageInfo?.path || ROUTES_BY_LOCALE[newLocale].home;
 	}

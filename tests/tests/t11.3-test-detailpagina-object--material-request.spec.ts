@@ -35,9 +35,7 @@ test('T11.3: Test detailpagina object + materiaal aanvraag doen: materiaal aanvr
 	 */
 
 	const addToListLabel =
-		SITE_TRANSLATIONS.nl[
-			'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst-desktop'
-		];
+		SITE_TRANSLATIONS.nl['modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst-desktop'];
 	await page.locator(`[aria-label="${addToListLabel}"]`).click();
 
 	const addToRequestsLabel =
@@ -103,18 +101,14 @@ test('T11.3: Test detailpagina object + materiaal aanvraag doen: materiaal aanvr
 	// Click 'ik vraag het materiaal op in het kader van mijn beroep (uitgezonderd onderwijs)'
 	await page
 		.locator(
-			`text=${SITE_TRANSLATIONS.nl[
-					'modules/navigation/components/personal-info-blade/personal-info-blade___requester-capacity-work'
-				]}`
+			`text=${SITE_TRANSLATIONS.nl['modules/navigation/components/personal-info-blade/personal-info-blade___requester-capacity-work']}`
 		)
 		.click();
 
 	// Click 'Verstuur aanvraag'
 	await page
 		.locator(
-			`text=${SITE_TRANSLATIONS.nl[
-					'modules/navigation/components/personal-info-blade/personal-info-blade___verstuur'
-				]}`
+			`text=${SITE_TRANSLATIONS.nl['modules/navigation/components/personal-info-blade/personal-info-blade___verstuur']}`
 		)
 		.click();
 

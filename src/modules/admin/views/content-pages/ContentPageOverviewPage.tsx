@@ -35,19 +35,14 @@ export const ContentPageOverviewPage: FC<
 				<AdminLayout.Actions>
 					{canCreateContentPages && (
 						<Link
-							href={
-								ADMIN_CORE_ROUTES_BY_LOCALE[locale]
-									.ADMIN_CONTENT_PAGE_CREATE as string
-							}
+							href={ADMIN_CORE_ROUTES_BY_LOCALE[locale].ADMIN_CONTENT_PAGE_CREATE as string}
 							passHref
 							aria-label={tText(
 								'admin/content/views/content-overview___maak-een-nieuwe-content-pagina-aan'
 							)}
 						>
 							<Button
-								label={tText(
-									'admin/content/views/content-overview___content-toevoegen'
-								)}
+								label={tText('admin/content/views/content-overview___content-toevoegen')}
 								title={tText(
 									'admin/content/views/content-overview___maak-een-nieuwe-content-pagina-aan'
 								)}
@@ -78,10 +73,7 @@ export const ContentPageOverviewPage: FC<
 				relativeUrl={url}
 			/>
 			<PermissionsCheck
-				anyPermissions={[
-					Permission.EDIT_ANY_CONTENT_PAGES,
-					Permission.EDIT_OWN_CONTENT_PAGES,
-				]}
+				anyPermissions={[Permission.EDIT_ANY_CONTENT_PAGES, Permission.EDIT_OWN_CONTENT_PAGES]}
 			>
 				{renderPageContent()}
 			</PermissionsCheck>
