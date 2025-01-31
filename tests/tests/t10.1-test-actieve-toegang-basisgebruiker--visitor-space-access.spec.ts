@@ -35,7 +35,7 @@ test('T10.1: Test actieve toegang basisgebruiker: Bezoekersruimte toegang', asyn
 
 	// Check dropdown menu is visible
 	const visitorSpaceDropdown =
-		moduleClassSelector('c-navigation__list-flyout') + ' div.c-menu--visible--default';
+		`${moduleClassSelector('c-navigation__list-flyout')} div.c-menu--visible--default`;
 	await expect(page.locator(visitorSpaceDropdown).first()).toBeVisible();
 
 	await new Promise((resolve) => setTimeout(resolve, 1000));

@@ -23,7 +23,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 	const [showDecline, setShowDecline] = useState(false);
 
 	const finish = (setShowBlade?: typeof setShowApprove | typeof setShowDecline) => {
-		setShowBlade && setShowBlade(false);
+		setShowBlade?.(false);
 
 		// Needs a little delay, not sure about the amount.
 		// 300ms is default duration to hide a blade
@@ -133,7 +133,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 				footer={footer}
 				isOpen={getCurrentLayer() === 1}
 				layer={1}
-				renderTitle={(props: any) => <h2 {...props}>{getTitle()}</h2>}
+				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => <h2 {...props}>{getTitle()}</h2>}
 			>
 				{selected && (
 					<>

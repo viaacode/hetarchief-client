@@ -15,7 +15,7 @@ const Template: ComponentStory<typeof MetadataList> = (args) => (
 	<MetadataList {...args}>
 		{metadataMock.map((item, index) => {
 			return (
-				<Metadata title={item.title} key={`metadata-item-${index}`}>
+				<Metadata title={item.title} key={`metadata-item-${typeof item.title === 'string' ? item.title : index}`}>
 					{item.data}
 				</Metadata>
 			);

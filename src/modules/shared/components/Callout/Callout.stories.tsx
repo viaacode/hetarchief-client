@@ -18,5 +18,6 @@ export const Default = Template.bind({});
 Default.args = {
 	icon: <Icon name={IconNamesLight.Info} />,
 	text: 'Door gebruik te maken van deze applicatie bevestigt u dat u het beschikbare materiaal enkel raadpleegt voor wetenschappelijk- of privé onderzoek.',
+	// biome-ignore lint/a11y/useKeyWithClickEvents: this is a storybook file, not actual production code
 	action: <span onClick={() => action('click')()}>Meer info</span>,
 };

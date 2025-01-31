@@ -64,7 +64,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 
 	// Expect login modal to be visible
 	const loginModalTitle = page.locator(
-		moduleClassSelector('c-hetarchief-modal') + ' .ReactModal__Content--after-open',
+		`${moduleClassSelector('c-hetarchief-modal')} .ReactModal__Content--after-open`,
 		{
 			hasText:
 				SITE_TRANSLATIONS.nl[

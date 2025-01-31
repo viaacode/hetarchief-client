@@ -19,9 +19,7 @@ test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina',
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(
 		page,
-		(process.env.TEST_CLIENT_ENDPOINT as string) +
-			'/pid/' +
-			(process.env.TEST_OBJECT_DETAIL_PAGE_VRT as string),
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${process.env.TEST_OBJECT_DETAIL_PAGE_VRT as string}`,
 		DETAIL_PAGE_TITLE
 	);
 
@@ -40,7 +38,7 @@ test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina',
 
 	// Get metadata sidebar width
 	const pageDetailWrapper = page.locator(moduleClassSelector('p-object-detail__wrapper'));
-	const sidebarSelector = ' > ' + moduleClassSelector('p-object-detail__sidebar');
+	const sidebarSelector = ` > ${moduleClassSelector('p-object-detail__sidebar')}`;
 	const sidebarWidthBeforeExpand =
 		(await pageDetailWrapper.locator(sidebarSelector)?.boundingBox())?.width || 0;
 	expect(sidebarWidthBeforeExpand).toBeGreaterThan(0);
@@ -119,6 +117,7 @@ test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina',
 	// Make video fullscreen
 	await page.hover('.flowplayer'); // Hover video so controls become visible
 	await page.evaluate(() => {
+		// biome-ignore lint/suspicious/noExplicitAny: test file
 		(document?.querySelector('.fp-fullscreen') as any)?.click();
 	});
 
@@ -139,6 +138,7 @@ test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina',
 	// Press escape key
 	await page.hover('.flowplayer'); // Hover video so controls become visible
 	await page.evaluate(() => {
+		// biome-ignore lint/suspicious/noExplicitAny: test file
 		(document?.querySelector('.fp-fullscreen-exit') as any)?.click();
 	});
 

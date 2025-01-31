@@ -11,9 +11,8 @@ async function fileExists(filename: string): Promise<boolean> {
 	} catch (err: any) {
 		if (err.code === 'ENOENT') {
 			return false;
-		} else {
-			throw err;
 		}
+			throw err;
 	}
 }
 

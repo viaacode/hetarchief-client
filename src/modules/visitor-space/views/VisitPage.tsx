@@ -81,11 +81,11 @@ export const VisitPage: FC<DefaultSeoInfo> = ({ title, description, url }) => {
 		// https://meemoo.atlassian.net/browse/ARC-1965
 		if (!isLoggedIn) {
 			return renderNoAccess();
-		} else {
+		}
 			if (isErrorSpaceNotActive) {
 				// Visitor space no longer active
 				return <ErrorSpaceNoLongerActive />;
-			} else if (visitorSpaceInfo) {
+			}if (visitorSpaceInfo) {
 				if (hasPendingRequest) {
 					// Redirect to the waiting page
 					return (
@@ -100,10 +100,10 @@ export const VisitPage: FC<DefaultSeoInfo> = ({ title, description, url }) => {
 							/>
 						</>
 					);
-				} else if (!hasAccess) {
+				}if (!hasAccess) {
 					// No access to visitor space
 					return renderNoAccess();
-				} else {
+				}
 					// Has access => redirect to search page for visitor space
 					return (
 						<>
@@ -117,8 +117,7 @@ export const VisitPage: FC<DefaultSeoInfo> = ({ title, description, url }) => {
 							/>
 						</>
 					);
-				}
-			} else {
+			}
 				// Visitor space does not exist
 				if (organisation) {
 					// Maintainer does exist => redirect to search page with filter on maintainer
@@ -130,21 +129,16 @@ export const VisitPage: FC<DefaultSeoInfo> = ({ title, description, url }) => {
 									url: ROUTES_BY_LOCALE[locale].search,
 									query: {
 										[SearchFilterId.Maintainers]:
-											organisation?.schemaIdentifier +
-											'---' +
-											organisation?.schemaName,
+											`${organisation?.schemaIdentifier}---${organisation?.schemaName}`,
 									},
 								})}
 								method="replace"
 							/>
 						</>
 					);
-				} else {
+				}
 					// Maintainer also doesn't exist
 					return <ErrorNotFound />;
-				}
-			}
-		}
 	};
 
 	return (

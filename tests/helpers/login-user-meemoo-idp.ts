@@ -13,10 +13,9 @@ export async function loginUserMeemooIdp(
 	// Click on login or register
 	await page
 		.locator(
-			'text=' +
-				SITE_TRANSLATIONS.nl[
+			`text=${SITE_TRANSLATIONS.nl[
 					'modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren'
-				]
+				]}`
 		)
 		.first()
 		.click();

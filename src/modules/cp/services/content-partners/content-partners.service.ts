@@ -10,8 +10,9 @@ export interface ContentPartnerParams {
 	orIds?: string[];
 }
 
-export class ContentPartnersService {
-	public static async getAll({
+// TODO convert to react-query
+export namespace ContentPartnersService {
+	export async function getAll({
 		hasSpace,
 		orIds,
 	}: ContentPartnerParams): Promise<ContentPartnerResponse> {

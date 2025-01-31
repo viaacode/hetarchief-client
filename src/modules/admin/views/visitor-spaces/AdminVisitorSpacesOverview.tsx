@@ -32,11 +32,7 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorSpaceStatusOptions } from '@visitor-space/const';
 import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
 import { VisitorSpaceService } from '@visitor-space/services';
-import {
-	type VisitorSpaceInfo,
-	type VisitorSpaceOrderProps,
-	VisitorSpaceStatus,
-} from '@visitor-space/types';
+import { type VisitorSpaceInfo, type VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
 
 export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const router = useRouter();
@@ -83,17 +79,11 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	) => {
-		if (!orderProp) {
-			orderProp = 'created_at';
-		}
-		if (!orderDirection) {
-			orderDirection = OrderDirection.desc;
-		}
 		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
-				orderProp,
-				orderDirection,
+				orderProp: orderProp || 'created_at',
+				orderDirection: orderDirection || OrderDirection.desc,
 				page: 1,
 			});
 		}

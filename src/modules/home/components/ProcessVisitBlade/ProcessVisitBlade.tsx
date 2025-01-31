@@ -19,7 +19,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 	const [showCancel, setShowCancel] = useState(false);
 
 	const finish = (setShowBlade?: typeof setShowCancel) => {
-		setShowBlade && setShowBlade(false);
+		setShowBlade?.(false);
 
 		// Needs a little delay, not sure about the amount.
 		// 300ms is default duration to hide a blade
@@ -99,7 +99,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 				footer={renderFooter()}
 				isOpen={getCurrentLayer() === 1}
 				layer={1}
-				renderTitle={(props: any) => <h2 {...props}>{getTitle()}</h2>}
+				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => <h2 {...props}>{getTitle()}</h2>}
 				id="process-visit-blade__visit-summary"
 			>
 				{selected && <VisitSummary preview {...selected} />}

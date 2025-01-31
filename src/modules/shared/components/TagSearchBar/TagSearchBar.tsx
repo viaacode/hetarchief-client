@@ -104,10 +104,10 @@ const TagSearchBar = <IsMulti extends boolean>({
 
 	const rootCls = clsx(className, 'c-tag-search-bar', 'c-tags-input', 'c-tags-input__creatable', {
 		[`c-tag-search-bar--${size}`]: size,
-		['c-tag-search-bar--has-value-placeholder']: !!valuePlaceholder,
-		['c-tag-search-bar--light']: light,
-		['c-tag-search-bar--has-dropdown']: hasDropdown,
-		['c-tag-search-bar--has-rendered-right']: renderedRight,
+		"c-tag-search-bar--has-value-placeholder": !!valuePlaceholder,
+		"c-tag-search-bar--light": light,
+		"c-tag-search-bar--has-dropdown": hasDropdown,
+		"c-tag-search-bar--has-rendered-right": renderedRight,
 	});
 	const showMenu = typeof menuIsOpen !== 'undefined' ? menuIsOpen : (options?.length ?? 0) > 0;
 	const value = isMulti ? tagsInputProps.value : selectValue;

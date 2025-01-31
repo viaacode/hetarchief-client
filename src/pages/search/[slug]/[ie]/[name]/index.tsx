@@ -45,7 +45,7 @@ export async function getServerSideProps(
 	try {
 		seoInfo = await IeObjectsService.getSeoById(ieObjectId);
 	} catch (err) {
-		console.error('Failed to fetch media info by id: ' + context.query.ie, err);
+		console.error(`Failed to fetch media info by id: ${context.query.ie}`, err);
 	}
 
 	return getDefaultStaticProps(context, context.resolvedUrl, {

@@ -21,6 +21,7 @@ import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestB
 import bladeStyles from '../../../shared/components/Blade/Blade.module.scss';
 import PersonalInfoBlade from '../PersonalInfoBlade/PersonalInfoBlade';
 
+import { groupBy } from 'lodash-es';
 import styles from './MaterialRequestCenterBlade.module.scss';
 
 export enum MaterialRequestBladeId {
@@ -66,7 +67,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	const shouldFetchMaterialRequests = !!user && user.groupName !== GroupName.KIOSK_VISITOR;
 
 	const {
-		data: materialRequests,
+		data: materialRequestsResponse,
 		isFetching,
 		refetch: refetchMaterialRequests,
 	} = useGetPendingMaterialRequests(
@@ -76,36 +77,15 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		},
 		{ enabled: shouldFetchMaterialRequests }
 	);
+	const materialRequests = materialRequestsResponse?.items as MaterialRequest[];
 
-	const noContent =
-		!materialRequests?.items || (materialRequests?.items && materialRequests?.items.length < 1);
+	const noContent = !materialRequests || materialRequests?.length === 0;
 
-	// Ward: create an object containing all the distinct maintainerId's as properties
-	// with per property an array of materialRequests, that has the same maintainerId as the property, as value
-	const mappedRequests = useMemo(() => {
-		return materialRequests?.items.reduce(
-			(acc, curr) => {
-				// Ward: check if maintainerId is not added yet to object
-				if (!acc[curr.maintainerId]) {
-					return {
-						...acc,
-						// Ward: add new property to object and add array, with current item, as value
-						[curr.maintainerId]: [curr],
-					};
-				}
-
-				return {
-					...acc,
-					// Ward: property already exists, so push item to array as value
-					[curr.maintainerId]: [...acc[curr.maintainerId], curr],
-				};
-			},
-			{} as { [key: string]: MaterialRequest[] }
-		);
-	}, [materialRequests]);
+	// Create an object containing all the distinct maintainerId's as properties
+	const materialRequestsByMaintainer = useMemo(() => groupBy(materialRequests, (materialRequest) => materialRequest.maintainerId), [materialRequests]);
 
 	useEffect(() => {
-		materialRequests && dispatch(setMaterialRequestCount(materialRequests.items.length));
+		materialRequests && dispatch(setMaterialRequestCount(materialRequests.length));
 	}, [materialRequests, dispatch]);
 
 	useEffect(() => {
@@ -117,7 +97,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		deleteResponse && (await refetchMaterialRequests());
 	};
 
-	const renderTitle = (props: any) => {
+	const renderTitle = (props: Pick<HTMLElement, 'id' | 'className'>) => {
 		return (
 			<div className={styles['c-material-request-center-blade__title-container']}>
 				<h2 {...props}>
@@ -126,7 +106,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					)}
 				</h2>
 				{/* Ward: add label when there is more than 1 maintainer */}
-				{mappedRequests && Object.keys(mappedRequests).length > 1 && (
+				{materialRequestsByMaintainer && Object.keys(materialRequestsByMaintainer).length > 1 && (
 					<p className={styles['c-material-request-center-blade__subtitle']}>
 						{tHtml(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___meerdere-aanbieders'
@@ -186,7 +166,6 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				>
 					<div
 						className={styles['c-material-request-center-blade__material']}
-						tabIndex={0}
 					>
 						<p className={styles['c-material-request-center-blade__material-label']}>
 							<Icon
@@ -251,14 +230,14 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			);
 		}
 		return (
-			mappedRequests &&
+			materialRequestsByMaintainer &&
 			// Ward: render each unique maintainer
-			Object.keys(mappedRequests).map((key) => (
+			Object.keys(materialRequestsByMaintainer).map((key) => (
 				<div key={key}>
-					{renderMaintainer(mappedRequests[key][0], mappedRequests[key].length)}
+					{renderMaintainer(materialRequestsByMaintainer[key][0], materialRequestsByMaintainer[key].length)}
 
 					{/* Ward: render all materialRequests of current maintainer, sorted by objectSchemaName */}
-					{mappedRequests[key]
+					{materialRequestsByMaintainer[key]
 						.sort((a, b) => a.objectSchemaName.localeCompare(b.objectSchemaName))
 						.map((item) => renderMaterialRequest(item))}
 				</div>

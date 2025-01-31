@@ -15,12 +15,7 @@ import type { FunctionComponent } from 'react';
 
 import { BlockContentEnclose } from '@content-page/components/blocks/BlockContentEnclose/BlockContentEnclose';
 import { NAVIGATION_DROPDOWN } from '@navigation/components/Navigation/Navigation.types';
-import {
-	GET_ALERT_ICON_LIST_CONFIG,
-	GET_ICON_LIST_CONFIG,
-	Icon,
-	type IconName,
-} from '@shared/components/Icon';
+import { GET_ALERT_ICON_LIST_CONFIG, GET_ICON_LIST_CONFIG, Icon, type IconName } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import Loading from '@shared/components/Loading/Loading';
 import { ADMIN_CORE_ROUTES_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
@@ -191,7 +186,9 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 			router: {
 				Link: InternalLink as FunctionComponent<LinkInfo>,
 				useHistory: () => ({
+					// biome-ignore lint/suspicious/noExplicitAny: We want a simple interface, not a very specific one for one specific router (next or react-router)
 					push: router?.push as any,
+					// biome-ignore lint/suspicious/noExplicitAny: We want a simple interface, not a very specific one for one specific router (next or react-router)
 					replace: router?.replace as any,
 				}),
 			},
@@ -214,6 +211,7 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 			},
 		},
 		routes: ADMIN_CORE_ROUTES_BY_LOCALE[locale],
+		// biome-ignore lint/suspicious/noExplicitAny: The Locale types between the admin-core and the client differ slightly, so they never match
 		locale: locale as any,
 		env: {
 			CLIENT_URL: publicRuntimeConfig.CLIENT_URL,

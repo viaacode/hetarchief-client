@@ -20,10 +20,7 @@ import type {
 } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
-import {
-	RefinableRadioButton,
-	type RefinableRadioButtonOption,
-} from '@shared/components/RefinableRadioButton';
+import { RefinableRadioButton, type RefinableRadioButtonOption } from '@shared/components/RefinableRadioButton';
 import { OPTIONAL_LABEL, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
@@ -462,7 +459,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		<Blade
 			{...props}
 			footer={props.isOpen && renderFooter()}
-			renderTitle={(props: any) => <h2 {...props}>{title}</h2>}
+			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => <h2 {...props}>{title}</h2>}
 			className={styles['c-approve-request-blade']}
 		>
 			{props.isOpen && !!visitRequest && (

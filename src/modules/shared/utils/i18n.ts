@@ -3,7 +3,6 @@ import nlBE from 'date-fns/locale/nl-BE/index.js';
 
 export function getLocaleFromI18nLanguage(language: string): DateFnsLocale {
 	switch (language) {
-		case Locale.nl:
 		default:
 			return nlBE;
 	}

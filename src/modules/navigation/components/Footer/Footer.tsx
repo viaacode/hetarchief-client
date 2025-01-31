@@ -19,7 +19,7 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 				{links.map((link, index) => {
 					return (
 						<Link
-							key={link.to + '-' + index}
+							key={`${link.to}-${index}`}
 							href={link.to}
 							className={styles['c-footer__link']}
 							target={link.external ? '_blank' : '_self'}

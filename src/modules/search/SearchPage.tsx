@@ -51,19 +51,9 @@ import { ScrollableTabs, TabLabel } from '@shared/components/Tabs';
 import { TagSearchBar } from '@shared/components/TagSearchBar';
 import { TagSearchBarInfo } from '@shared/components/TagSearchBar/TagSearchBarInfo';
 import type { ToggleOption } from '@shared/components/Toggle';
-import {
-	VisitorSpaceDropdown,
-	type VisitorSpaceDropdownOption,
-} from '@shared/components/VisitorSpaceDropdown';
-import {
-	GET_VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
-	ROUTE_PARTS_BY_LOCALE,
-	ROUTES_BY_LOCALE,
-} from '@shared/const';
-import {
-	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
-	QUERY_PARAM_KEY,
-} from '@shared/const/query-param-keys';
+import { VisitorSpaceDropdown, type VisitorSpaceDropdownOption } from '@shared/components/VisitorSpaceDropdown';
+import { GET_VISITOR_SPACE_VIEW_TOGGLE_OPTIONS, ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
+import { HIGHLIGHTED_SEARCH_TERMS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { numberWithCommas } from '@shared/helpers';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -72,38 +62,39 @@ import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import {
-	selectLastScrollPosition,
-	setBreadcrumbs,
-	setLastScrollPosition,
-	setShowZendesk,
-} from '@shared/store/ui';
+import { selectLastScrollPosition, setBreadcrumbs, setLastScrollPosition, setShowZendesk } from '@shared/store/ui';
 import { Breakpoints, type SortObject } from '@shared/types';
-import {
-	IeObjectsSearchFilterField,
-	IeObjectType,
-	SearchPageMediaType,
-} from '@shared/types/ie-objects';
+import { IeObjectsSearchFilterField, IeObjectType, SearchPageMediaType } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
 import { scrollTo } from '@shared/utils/scroll-to-top';
-import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
+import {
+	useGetActiveVisitRequestForUserAndSpace,
+} from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitTimeframe } from '@visit-requests/types';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import { initialFields } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import type { AdvancedFilterFormState } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.types';
-import type { ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
-import type { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
-import type { ConsultablePublicDomainFilterFormState } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm.types';
+import type {
+	ConsultableMediaFilterFormState,
+} from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
+import type {
+	ConsultableOnlyOnLocationFilterFormState,
+} from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
+import type {
+	ConsultablePublicDomainFilterFormState,
+} from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm.types';
 import type { DurationFilterFormState } from '@visitor-space/components/DurationFilterForm';
 import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
 import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import type { GenreFilterFormState } from '@visitor-space/components/GenreFilterForm';
 import type { KeywordsFilterFormState } from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.types';
 import type { LanguageFilterFormState } from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
-import type { MaintainerFilterFormState } from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
+import type {
+	MaintainerFilterFormState,
+} from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
 import type { MediumFilterFormState } from '@visitor-space/components/MediumFilterForm';
 import type { ReleaseDateFilterFormState } from '@visitor-space/components/ReleaseDateFilterForm';
 import {
@@ -115,7 +106,7 @@ import {
 } from '@visitor-space/const';
 import { SEARCH_PAGE_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
 import { SEARCH_PAGE_IE_OBJECT_TABS } from '@visitor-space/const/visitor-space-tabs.const';
-import { FilterProperty, SearchFilterId, type TagIdentity } from '@visitor-space/types';
+import { type AdvancedFilter, FilterProperty, SearchFilterId, type TagIdentity } from '@visitor-space/types';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
 
@@ -208,6 +199,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	};
 
 	const queryParamMaintainer = query?.[SearchFilterId.Maintainer];
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	const activeVisitorSpaceSlug: string | undefined = useMemo(() => {
 		if (!accessibleVisitorSpaceRequests.length) {
 			// Until visitor spaces is loaded, we cannot know which option to select
@@ -229,7 +221,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			[SearchFilterId.Maintainer]: undefined,
 		});
 		return GLOBAL_ARCHIVE;
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [queryParamMaintainer, accessibleVisitorSpaceRequests]);
 
 	// Global archive as opposed to the archive of one visitor space
@@ -296,6 +287,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		dispatch(setShowZendesk(!isKioskUser && !query[SearchFilterId.Maintainer]));
 	}, [dispatch, isKioskUser, query]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Make sure the dependency array contains the same items as passed to VISITOR_SPACE_FILTERS
 	useEffect(() => {
 		// Filter out all disabled query param keys/ids
 		const disabledFilterKeys: SearchFilterId[] = SEARCH_PAGE_FILTERS(
@@ -310,26 +302,19 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			)
 			.map(({ id }: FilterMenuFilterOption): SearchFilterId => id as SearchFilterId);
 
-		// Loop over all existing query params and strip out the disabled filters if they exist
+		// Loop over all existing query params and replace the disabled filters with their initial value if they exist
 		const disabledKeysSet: Set<SearchFilterId> = new Set(disabledFilterKeys);
-		const strippedQuery = Object.keys(query).reduce((result, current) => {
-			const id = current as SearchFilterId;
-			if (disabledKeysSet.has(id)) {
-				return {
-					...result,
-					[id]: VISITOR_SPACE_QUERY_PARAM_INIT[id],
-				};
-			}
-
-			return {
-				...result,
-				[id]: (query as any)[id],
-			};
-		}, {});
+		const queryKeys = Object.keys(query) as SearchFilterId[];
+		const strippedQuery = Object.fromEntries(
+			queryKeys.map((key) => {
+				return [
+					key,
+					disabledKeysSet.has(key) ? VISITOR_SPACE_QUERY_PARAM_INIT[key] : (query)[key],
+				];
+			})
+		);
 
 		setQuery(strippedQuery);
-		// Make sure the dependency array contains the same items as passed to VISITOR_SPACE_FILTERS
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isKeyUser, isGlobalArchive]);
 
 	useEffect(() => {
@@ -367,9 +352,8 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		(type: SearchPageMediaType): number => {
 			if (type === SearchPageMediaType.All) {
 				return sum(Object.values(formatCounts || {})) || 0;
-			} else {
-				return formatCounts?.[type] || 0;
 			}
+				return formatCounts?.[type] || 0;
 		},
 		[formatCounts]
 	);
@@ -503,38 +487,40 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	 */
 	const onSubmitFilter = (id: SearchFilterId, values: unknown) => {
 		const searchValue = prepareSearchValue(searchBarInputValue);
-		let data;
+		let data: string[] |  string | boolean | AdvancedFilter[] | undefined;
 
 		switch (id) {
 			case SearchFilterId.Medium:
 				data = (values as MediumFilterFormState).mediums;
 				break;
 
-			case SearchFilterId.Duration:
-				data = values as DurationFilterFormState;
-				data = data.duration
+			case SearchFilterId.Duration: {
+				const state = values as DurationFilterFormState;
+				data = state.duration
 					? [
-							{
-								prop: FilterProperty.DURATION,
-								op: data.operator,
-								val: data.duration,
-							},
-					  ]
+						{
+							prop: FilterProperty.DURATION,
+							op: state.operator,
+							val: state.duration,
+						},
+					]
 					: undefined;
 				break;
+			}
 
-			case SearchFilterId.ReleaseDate:
-				data = values as ReleaseDateFilterFormState;
-				data = data.releaseDate
+			case SearchFilterId.ReleaseDate: {
+				const state = values as ReleaseDateFilterFormState;
+				data = state.releaseDate
 					? [
-							{
-								prop: FilterProperty.RELEASE_DATE,
-								op: data.operator,
-								val: data.releaseDate,
-							},
-					  ]
+						{
+							prop: FilterProperty.RELEASE_DATE,
+							op: state.operator,
+							val: state.releaseDate,
+						},
+					]
 					: undefined;
 				break;
+			}
 
 			case SearchFilterId.Creator:
 				data = (values as { creator: string }).creator;
@@ -572,11 +558,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				// Info: remove query param if false (= set to undefined)
 				data = (values as ConsultableOnlyOnLocationFilterFormState)[
 					IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
-				]
-					? (values as ConsultableOnlyOnLocationFilterFormState)[
-							IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
-					  ]
-					: undefined;
+				] || undefined;
 				break;
 
 			case SearchFilterId.ConsultableMedia:
@@ -594,11 +576,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				// Info: remove query param if false (= set to undefined)
 				data = (values as ConsultablePublicDomainFilterFormState)[
 					IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN
-				]
-					? (values as ConsultablePublicDomainFilterFormState)[
-							IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN
-					  ]
-					: undefined;
+				] || undefined;
 				break;
 
 			case SearchFilterId.Advanced:
@@ -633,7 +611,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
 		const updatedQuery: Record<string, unknown> = {};
 
-		tags.forEach((tag) => {
+		for (const tag of tags) {
 			switch (tag.key) {
 				case SearchFilterId.Genre:
 				case SearchFilterId.Keywords:
@@ -662,17 +640,18 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 				case SearchFilterId.ConsultableOnlyOnLocation:
 				case SearchFilterId.ConsultableMedia:
-				case SearchFilterId.ConsultablePublicDomain:
+				case SearchFilterId.ConsultablePublicDomain: {
 					// eslint-disable-next-line no-case-declarations
 					const newValue = `${tag.value ?? 'false'}`.replace(tagPrefix(tag.key), '');
 					updatedQuery[tag.key] = newValue === 'true' ? 'false' : 'true';
 					break;
+				}
 
 				default:
 					updatedQuery[tag.key] = tag.value;
 					break;
 			}
-		});
+		}
 
 		// Destructure to keyword-able filters
 		/* eslint-disable @typescript-eslint/no-unused-vars */
@@ -773,7 +752,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				numOfChildren: item.children || 0,
 			};
 		});
-	}, [isKioskUser, isGlobalArchive, locale, searchResults?.items, searchResults?.searchTerms]);
+	}, [isKioskUser, locale, searchResults?.items, searchResults?.searchTerms, isGlobalArchive]);
 
 	const openAndScrollToAdvancedFilters = () => {
 		setFilterMenuOpen(true);
@@ -921,7 +900,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		// Strip out public collection and own visitor space (cp)
 		let visitorSpaces: VisitorSpaceDropdownOption[] = visitorSpaceDropdownOptions.filter(
 			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
-				const isPublicCollection = visitorSpace.slug == GLOBAL_ARCHIVE;
+				const isPublicCollection = visitorSpace.slug === GLOBAL_ARCHIVE;
 				const isOwnVisitorSpace = isCPAdmin && visitorSpace.slug === user?.organisationId;
 
 				return !isPublicCollection && !isOwnVisitorSpace;
@@ -965,11 +944,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 								const isSecondLast = i === visitorSpaceLinks.length - 2;
 
 								return (
-									<>
+									<div key={`visitor-space-link--${visitorSpaceLink}`}>
 										{visitorSpaceLink}
 										{!isLast && !isSecondLast && ', '}
 										{isSecondLast && ' en '}
-									</>
+									</div>
 								);
 							}
 						)}

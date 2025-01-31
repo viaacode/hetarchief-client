@@ -76,12 +76,12 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 		? convertDbContentPageToContentPageInfo(dbContentPage)
 		: null;
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop router
 	useEffect(() => {
 		if (user) {
 			mutateLanguagePreference(selectedLanguage);
 		}
 		changeApplicationLocale(locale, selectedLanguage, router, queryClient, contentPageInfo);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedLanguage, mutateLanguagePreference]);
 
 	const {
@@ -202,7 +202,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 					url: publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL.replace('{locale}', locale),
 					query: {
 						redirect_to: stringifyUrl({
-							url: publicRuntimeConfig.PROXY_URL + '/auth/global-logout',
+							url: `${publicRuntimeConfig.PROXY_URL}/auth/global-logout`,
 							query: {
 								returnToUrl: window.location.href,
 							},

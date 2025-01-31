@@ -17,11 +17,17 @@ export enum IsPartOfKey {
 export interface IsPartOfCollection {
 	name: string;
 	collectionType: IsPartOfKey;
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	isPreceededBy?: any[];
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	isSucceededBy?: any[];
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	locationCreated?: any;
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	startDate?: any;
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	endDate?: any;
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	publisher?: any;
 }
 
@@ -31,6 +37,7 @@ export interface IeObject {
 	dctermsMedium: string[];
 	premisIdentifier: Record<string, string>[];
 	abstract: string;
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	creator: any;
 	dateCreated: string | null;
 	datePublished: string;
@@ -49,6 +56,7 @@ export interface IeObject {
 	maintainerOverlay: boolean | null;
 	maintainerIiifAgreement?: boolean | null;
 	name: string;
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	publisher: any;
 	spatial: string[];
 	temporal: string[];
@@ -57,6 +65,7 @@ export interface IeObject {
 	accessThrough?: IeObjectAccessThrough[];
 	ebucoreObjectType?: string | null;
 	meemoofilmContainsEmbeddedCaption?: boolean;
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	contributor?: any;
 	copyrightHolder?: string;
 	premisIsPartOf?: string | null;

@@ -17,6 +17,7 @@ export async function getContentPageByLanguageAndPath(
 		throw new Error(`Given path doesn't start with a slash. Received path: ${path}`);
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: Locale type exists in both the client and the admin-core, but they are not identical
 	return ContentPageService.getContentPageByLanguageAndPath(language as any, path);
 }
 

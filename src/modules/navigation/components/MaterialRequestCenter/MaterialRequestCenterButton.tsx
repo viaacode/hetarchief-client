@@ -67,10 +67,10 @@ const MaterialRequestCenterButton: FC = () => {
 	useEffect(() => {
 		const badgeElement = animationRef.current;
 
-		badgeElement && badgeElement.addEventListener('animationend', handleAnimationEnd);
+		badgeElement?.addEventListener('animationend', handleAnimationEnd);
 
 		return () => {
-			badgeElement && badgeElement.removeEventListener('animationend', handleAnimationEnd);
+			badgeElement?.removeEventListener('animationend', handleAnimationEnd);
 		};
 	}, []);
 

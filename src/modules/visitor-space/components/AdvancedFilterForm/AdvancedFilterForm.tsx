@@ -46,7 +46,7 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 
 	return (
 		<>
-			<div className={clsx(className, styles['advancedFilterForm'], 'u-overflow-auto')}>
+			<div className={clsx(className, styles.advancedFilterForm, 'u-overflow-auto')}>
 				<p className="u-px-20 u-px-32-md u-mt-40 u-mb-32">
 					{tHtml(
 						'modules/visitor-space/components/forms/advanced-filter-form/advanced-filter-form___stel-je-eigen-geavanceerde-filter-samen-aan-de-hand-van-deze-advanced-filters-velden-en-waarden'

@@ -126,9 +126,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 				className="u-mb-24"
 				id={labelKeys.mail}
 				errors={[
-					<>
-						<RedFormWarning error={errors.mail?.message} />
-					</>,
+					<RedFormWarning key="email-error--" error={errors.mail?.message} />,
 				]}
 				label={tText('pages/nieuwsbrief/index___nieuwsbrief-formulier-emailadres')}
 			>
@@ -151,7 +149,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 				className="p-newsletter__form-button u-ml-8"
 				label={tText('pages/nieuwsbrief/index___naar-de-startpagina')}
 				onClick={async () => {
-					await router.push(`/`);
+					await router.push("/");
 				}}
 			/>
 		</div>

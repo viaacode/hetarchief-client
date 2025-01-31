@@ -58,7 +58,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const { mutateAsync: updateVisitRequest } = useUpdateVisitRequest();
 	const selectedItem = useMemo(
 		() => visits?.items.find((item) => item.id === selected),
-		[visits, selected]
+		[selected, visits?.items]
 	);
 
 	// Filters
@@ -81,7 +81,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 				desc: filters.orderDirection !== OrderDirection.asc,
 			},
 		];
-	}, [filters]);
+	}, [filters.orderProp, filters.orderDirection]);
 
 	// Events
 
@@ -89,17 +89,11 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	) => {
-		if (!orderProp) {
-			orderProp = 'startAt';
-		}
-		if (!orderDirection) {
-			orderDirection = OrderDirection.desc;
-		}
 		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
-				orderProp,
-				orderDirection,
+				orderProp: orderProp || 'startAt',
+				orderDirection: orderDirection || OrderDirection.desc,
 				page: 1,
 			});
 		}
@@ -159,7 +153,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 			case VisitTimeframe.ACTIVE:
 				return tHtml('pages/beheer/bezoekers/index___er-zijn-geen-actieve-bezoekers');
 
-			case VisitTimeframe.PAST:
+			// case VisitTimeframe.PAST:
 			default:
 				return tHtml(
 					'pages/beheer/bezoekers/index___er-zijn-nog-geen-bezoekers-in-de-bezoek-historiek'

@@ -161,7 +161,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		});
 	};
 
-	const renderTitle = (props: any) => {
+	const renderTitle = (props: Pick<HTMLElement, 'id' | 'className'>) => {
 		const title = isEditMode
 			? tText(
 					'modules/visitor-space/components/material-request-blade/material-request-blade___pas-je-aanvraag-aan'
@@ -292,7 +292,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectId}`}
 				className={styles['c-request-material__material-link']}
 			>
-				<div className={styles['c-request-material__material']} tabIndex={0}>
+				<div className={styles['c-request-material__material']} >
 					<p className={styles['c-request-material__material-label']}>
 						<Icon
 							className={styles['c-request-material__material-label-icon']}

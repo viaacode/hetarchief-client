@@ -15,13 +15,13 @@ import type { CheckLoginResponse } from './auth.service.types';
 
 const { publicRuntimeConfig } = getConfig();
 
-export class AuthService {
-	public static async checkLogin(options: Options = {}): Promise<CheckLoginResponse> {
-		const test = await ApiService.getApi().get(`auth/check-login`, options).json();
+export namespace AuthService {
+	export async function checkLogin(options: Options = {}): Promise<CheckLoginResponse> {
+		const test = await ApiService.getApi().get("auth/check-login", options).json();
 		return test as CheckLoginResponse;
 	}
 
-	public static async redirectToLoginHetArchief(
+	export async function redirectToLoginHetArchief(
 		query: StringifiableRecord,
 		router: NextRouter
 	): Promise<void> {
@@ -30,7 +30,7 @@ export class AuthService {
 		let originalPath: string = (redirectTo as string) || router.asPath || '';
 
 		// Don't redirect the user back to logout, after they logged in
-		if ((originalPath || '').endsWith('/' + ROUTE_PARTS.logout)) {
+		if ((originalPath || '').endsWith(`/${ROUTE_PARTS.logout}`)) {
 			originalPath = '/';
 		}
 
@@ -73,7 +73,7 @@ export class AuthService {
 		);
 	}
 
-	public static async redirectToRegisterHetArchief(
+	export async function redirectToRegisterHetArchief(
 		query: StringifiableRecord,
 		router: NextRouter
 	): Promise<void> {
@@ -94,9 +94,9 @@ export class AuthService {
 		);
 	}
 
-	public static async logout(shouldRedirectToOriginalPage = false): Promise<void> {
+	export async function logout(shouldRedirectToOriginalPage = false): Promise<void> {
 		const locale = TranslationService.getLocale();
-		let returnToUrl = publicRuntimeConfig.CLIENT_URL + '/' + locale;
+		let returnToUrl = `${publicRuntimeConfig.CLIENT_URL}/${locale}`;
 		if (shouldRedirectToOriginalPage) {
 			let originalPath = window.location.href.substring(
 				publicRuntimeConfig.CLIENT_URL.length
@@ -108,9 +108,9 @@ export class AuthService {
 				originalPath = '/';
 			}
 			returnToUrl = stringifyUrl({
-				url: publicRuntimeConfig.CLIENT_URL + '/' + locale,
+				url: `${publicRuntimeConfig.CLIENT_URL}/${locale}`,
 				query: {
-					redirectTo: '/' + locale + originalPath,
+					redirectTo: `/${locale}${originalPath}`,
 					showAuth: 1,
 				},
 			});

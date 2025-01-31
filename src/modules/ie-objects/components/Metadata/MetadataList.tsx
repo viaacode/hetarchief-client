@@ -16,9 +16,9 @@ const Metadata: FC<MetadataListProps> = ({ className, children, allowTwoColumns 
 				}
 			)}
 		>
-			<dl className={styles['c-metadata__list']} role="list">
+			<ul className={styles['c-metadata__list']}>
 				{children}
-			</dl>
+			</ul>
 		</div>
 	);
 };

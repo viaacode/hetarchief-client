@@ -115,7 +115,7 @@ export class VisitorSpaceService {
 		const response: VisitorSpaceInfo = await ApiService.getApi()
 			.post(VISITOR_SPACE_SERVICE_BASE_URL, { body: formData, headers })
 			.json();
-		await this.queryClient.invalidateQueries([QUERY_KEYS.getContentPartners]);
+		await VisitorSpaceService.queryClient.invalidateQueries([QUERY_KEYS.getContentPartners]);
 
 		return response;
 	}

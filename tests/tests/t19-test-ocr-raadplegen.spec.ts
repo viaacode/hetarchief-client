@@ -9,12 +9,12 @@ test('T19: Test OCR raadplegen', async ({ page, context }) => {
 	 */
 	await goToPageAndAcceptCookies(
 		page,
-		(process.env.TEST_CLIENT_ENDPOINT as string) + '/pid/h98z893q54',
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/h98z893q54`,
 		'Wet- en verordeningsblad voor de bezette streke...'
 	);
 
 	// Go to page again to fix non-loading newspaper in incognito browser
-	await page.goto((process.env.TEST_CLIENT_ENDPOINT as string) + '/pid/h98z893q54');
+	await page.goto(`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/h98z893q54`);
 
 	// Check ocr tab exists
 	await expect(page.locator('.c-tab--ocr')).toBeVisible();
@@ -40,7 +40,7 @@ test('T19: Test OCR raadplegen', async ({ page, context }) => {
 	// Search some words in the ocr text
 	const ocrSidebar = page.locator(moduleClassSelector('p-object-detail__ocr'));
 	const ocrSearchField = ocrSidebar.locator(
-		moduleClassSelector('c-search-with-results-pagination') + ' .c-input__field'
+		`${moduleClassSelector('c-search-with-results-pagination')} .c-input__field`
 	);
 	await expect(ocrSearchField).toBeVisible();
 	await ocrSearchField.fill('Brussel');

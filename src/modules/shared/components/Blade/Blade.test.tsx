@@ -16,7 +16,8 @@ const renderBlade = (
 	children: ReactNode = <p>some child</p>
 ) => {
 	// Focus trap needs at least one focusable element inside it to be able to lock the focus
-	const mockInteractiveElement = <a href="#">test</a>;
+	// biome-ignore lint/a11y/useValidAnchor: this is a test file, not actual production code
+		const mockInteractiveElement = <a href="#">test</a>;
 
 	return render(
 		<Provider store={mockStore}>

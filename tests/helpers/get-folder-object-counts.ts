@@ -10,7 +10,7 @@ export async function getFolderObjectCounts(page: Page): Promise<Record<string, 
 
 	// Wait until the favorites folder link is loaded
 	const favoritesListItem = page.locator(
-		'li' + moduleClassSelector('c-add-to-folder-blade__list-item'),
+		`li${moduleClassSelector('c-add-to-folder-blade__list-item')}`,
 		{
 			hasText: FAVORITES_FOLDER_NAME,
 		}

@@ -11,15 +11,7 @@ import {
 import clsx from 'clsx';
 import { isEqual, kebabCase } from 'lodash-es';
 import { useRouter } from 'next/router';
-import React, {
-	type FC,
-	type ReactNode,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { SingleValue } from 'react-select';
 
 import { Permission } from '@account/const';
@@ -52,10 +44,7 @@ import { VisitorSpaceStatus } from '@visitor-space/types';
 import adminLayoutStyles from '../../../admin/layouts/AdminLayout/AdminLayout.module.scss';
 
 import styles from './VisitorSpaceSettings.module.scss';
-import type {
-	VisitorSpaceSettingsFormValues,
-	VisitorSpaceSettingsProps,
-} from './VisitorSpaceSettings.types';
+import type { VisitorSpaceSettingsFormValues, VisitorSpaceSettingsProps } from './VisitorSpaceSettings.types';
 
 const labelKeys: Record<keyof CreateVisitorSpaceSettings, string> = {
 	color: 'VisitorSpaceSettings__color',
@@ -174,7 +163,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 					'modules/cp/components/site-settings-form/site-settings-form___er-ging-iets-mis-bij-het-ophalen-van-de-content-partners'
 				),
 			});
-	}, [contentPartners, isErrorContentPartners]);
+	}, [isErrorContentPartners]);
 
 	const validateFormValues = useCallback(
 		async (
@@ -873,11 +862,11 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 
 	if (isLoading) {
 		return <Loading owner="admin visitor spaces slug page" fullscreen />;
-	} else if (visitorSpaceError) {
+	}if (visitorSpaceError) {
 		return tHtml(
 			'pages/beheer/instellingen/index___er-ging-iets-mis-bij-het-ophalen-van-de-instellingen'
 		);
-	} else {
+	}
 		return (
 			<div className="l-container">
 				{renderedHeader}
@@ -888,7 +877,6 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 				{renderedFooter}
 			</div>
 		);
-	}
 };
 
 export default VisitorSpaceSettings;

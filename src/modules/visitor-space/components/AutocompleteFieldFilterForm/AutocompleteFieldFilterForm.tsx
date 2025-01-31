@@ -73,7 +73,7 @@ export const AutocompleteFieldFilterForm: FC<{
 					errors={[
 						<RedFormWarning error={errors?.value?.message} key="form-error--value" />,
 					]}
-					id={'AutocompleteFieldFilterForm__' + autocompleteField}
+					id={`AutocompleteFieldFilterForm__${autocompleteField}`}
 					label={filterTitle}
 				>
 					<Controller

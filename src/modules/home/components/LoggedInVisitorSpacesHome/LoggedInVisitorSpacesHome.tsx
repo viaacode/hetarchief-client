@@ -7,10 +7,7 @@ import { StringParam, useQueryParams } from 'use-query-params';
 
 import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
-import {
-	RequestAccessBlade,
-	type RequestAccessFormState,
-} from '@home/components/RequestAccessBlade';
+import { RequestAccessBlade, type RequestAccessFormState } from '@home/components/RequestAccessBlade';
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { Blade } from '@shared/components/Blade/Blade';
@@ -296,7 +293,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 							<div className={styles['c-hero__access-cards']}>
 								{actualActiveVisitRequests.map((visit, i) => (
 									<VisitorSpaceCard
-										key={`hero-access-${i}`}
+										key={`hero-access-${visit.id}`}
 										access={{
 											granted: true,
 											until: asDate(visit.endAt),
@@ -325,7 +322,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 								{actualFutureVisitRequests.map((visit, i) => (
 									<VisitorSpaceCard
 										onClick={() => onProcessVisit(visit)}
-										key={`hero-planned-${i}`}
+										key={`hero-planned-${visit.id}`}
 										access={{
 											granted: true,
 											until: asDate(visit.endAt),
@@ -351,7 +348,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 								{actualPendingVisitRequests.map((visit, i) => (
 									<VisitorSpaceCard
 										onClick={() => onProcessVisit(visit)}
-										key={`hero-requested-${i}`}
+										key={`hero-requested-${visit.id}`}
 										access={{
 											granted: false,
 											pending: true,

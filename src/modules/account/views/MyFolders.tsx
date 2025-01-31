@@ -32,10 +32,7 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ShareFolderBlade } from '@shared/components/ShareFolderBlade';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
-import {
-	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
-	QUERY_PARAM_KEY,
-} from '@shared/const/query-param-keys';
+import { HIGHLIGHTED_SEARCH_TERMS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
@@ -106,7 +103,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 		() =>
 			(folders || []).map((folder) => {
 				const slug = createFolderSlug(folder, locale);
-				const href = myFoldersPath + '/' + slug;
+				const href = `${myFoldersPath}/${slug}`;
 				const active = isActive(folder);
 
 				return {
@@ -159,7 +156,9 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 	 * Effects
 	 */
 
-	useEffect(() => {
+
+// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+useEffect(() => {
 		if (!activeFolder) {
 			return;
 		}
@@ -180,8 +179,9 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				},
 			])
 		);
-	}, [activeFolder]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [activeFolder]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		// Ward: wait until items are rendered on the screen before scrolling
 		if (
@@ -198,7 +198,6 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				dispatch(setLastScrollPosition(null));
 			}, 100);
 		}
-		// eslint-disable-next-line
 	}, [folderMedia?.data?.items, dispatch]);
 
 	/**
@@ -213,9 +212,8 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 					folders.map((folder): Folder => {
 						if (folder.id === newFolder.id) {
 							return newFolder;
-						} else {
-							return folder;
 						}
+							return folder;
 					})
 				)
 			);
@@ -462,7 +460,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 			<div className="p-account-my-folders__card-description">
 				{metadataEntries.map((metadataEntry, i) => {
 					return metadataEntry.value ? (
-						<p key={i} className="u-pr-24 u-text-break">
+						<p key={`metadata-entry--${metadataEntry.label}--${metadataEntry.value}`} className="u-pr-24 u-text-break">
 							<b>{metadataEntry.label}: </b>
 							<Highlighter
 								searchWords={keywords}
@@ -602,7 +600,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 													title: renderTitle(media),
 													name: media.name,
 													type: media.dctermsFormat,
-													preview: media.thumbnailUrl,
+													thumbnail: media.thumbnailUrl,
 													duration: media.duration,
 													licenses: media.licenses,
 													showKeyUserLabel: media.accessThrough.includes(
@@ -614,7 +612,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 														getShowPlanVisitButtons(media),
 													previousPage: myFoldersPath,
 													link: link,
-												} as any;
+												};
 
 												return {
 													...base,
@@ -709,8 +707,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 		<VisitorLayout>
 			<SeoTags
 				title={
-					tText('pages/account/mijn-mappen/folder-slug/index___mijn-mappen') +
-					` | ${activeFolder?.name || folderSlug}`
+					`${tText('pages/account/mijn-mappen/folder-slug/index___mijn-mappen')} | ${activeFolder?.name || folderSlug}`
 				}
 				description={tText(
 					'pages/account/mijn-mappen/folder-slug/index___mijn-mappen-meta-omschrijving'

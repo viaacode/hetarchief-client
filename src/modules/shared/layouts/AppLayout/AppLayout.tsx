@@ -27,11 +27,7 @@ import { getNavigationItemsLeft } from '@navigation/components/Navigation/Naviga
 import type { NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
-import {
-	GET_NAV_HAMBURGER_PROPS,
-	GET_NAV_ITEMS_RIGHT,
-	GET_NAV_ITEMS_RIGHT_LOGGED_IN,
-} from '@navigation/const';
+import { GET_NAV_HAMBURGER_PROPS, GET_NAV_ITEMS_RIGHT, GET_NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
 import { NavigationPlacement } from '@navigation/services/navigation-service';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { HetArchiefLogo, HetArchiefLogoType } from '@shared/components/HetArchiefLogo';
@@ -41,8 +37,12 @@ import { type AlertIconNames, IconNamesLight } from '@shared/components/Icon/Ico
 import { LanguageSwitcher } from '@shared/components/LanguageSwitcher/LanguageSwitcher';
 import { NotificationCenter } from '@shared/components/NotificationCenter';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
-import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
-import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
+import {
+	useMarkAllNotificationsAsRead,
+} from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
+import {
+	useMarkOneNotificationsAsRead,
+} from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
 import { ZendeskWrapper } from '@shared/components/ZendeskWrapper';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
@@ -196,7 +196,6 @@ const AppLayout: FC<any> = ({ children }) => {
 				contentPageInfo
 			);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user]);
 
 	useEffect(() => {
@@ -228,7 +227,8 @@ const AppLayout: FC<any> = ({ children }) => {
 	}, [dispatch]);
 
 	// Sync showAuth query param with store value
-	useEffect(() => {
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+			useEffect(() => {
 		if (user && typeof query.showAuth === 'boolean') {
 			setQuery({
 				...query,
@@ -238,7 +238,6 @@ const AppLayout: FC<any> = ({ children }) => {
 		} else if (typeof query.showAuth === 'boolean') {
 			dispatch(setShowAuthModal(query.showAuth));
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, query.showAuth, user]);
 
 	useEffect(() => {
@@ -341,7 +340,7 @@ const AppLayout: FC<any> = ({ children }) => {
 				// Otherwise you get an infinite loading state because no api calls will work
 				// https://github.com/vercel/next.js/issues/37005
 				node: (
-					<Link href={'/' + locale} passHref>
+					<Link href={`/${locale}`} passHref>
 						<HetArchiefLogo
 							className="c-navigation__logo c-navigation__logo--list"
 							type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}

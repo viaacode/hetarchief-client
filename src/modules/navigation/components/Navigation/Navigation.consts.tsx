@@ -11,17 +11,10 @@ import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import { NAVIGATION_DROPDOWN } from '@navigation/components/Navigation/Navigation.types';
 import { NavigationLink } from '@navigation/components/Navigation/NavigationLink';
 import type { NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
-import {
-	type NavigationInfo,
-	NavigationPlacement,
-} from '@navigation/services/navigation-service/navigation.types';
+import { type NavigationInfo, NavigationPlacement } from '@navigation/services/navigation-service/navigation.types';
 import { Icon, type IconName } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import {
-	ROUTE_PARTS_BY_LOCALE,
-	ROUTE_PREFIXES_BY_LOCALE,
-	ROUTES_BY_LOCALE,
-} from '@shared/const/routes';
+import { ROUTE_PARTS_BY_LOCALE, ROUTE_PREFIXES_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const/routes';
 import { tText } from '@shared/helpers/translate';
 import { Breakpoints } from '@shared/types';
 import type { VisitRequest } from '@shared/types/visit-request';
@@ -94,12 +87,12 @@ const renderLink = (
 	}
 
 	return (
-		<a aria-label={tooltip} className={cn} tabIndex={0} target={target} title={tooltip}>
+		<span aria-label={tooltip} className={cn} title={tooltip}>
 			{iconStart && iconStart}
 			{label}
 			{badge && badge}
 			{iconEnd && iconEnd}
-		</a>
+		</span>
 	);
 };
 
@@ -128,7 +121,7 @@ const getVisitorSpacesDropdown = (
 			activeDesktop: currentPath.startsWith(searchRouteForSpace),
 			activeMobile: currentPath.startsWith(searchRouteForSpace),
 		};
-	} else if (accessibleVisitorSpaces.length === 0) {
+	}if (accessibleVisitorSpaces.length === 0) {
 		// No visitor spaces available => show link to /visit page without dropdown
 		return {
 			node: renderLink(navigationLabel, visitPath, {
@@ -139,7 +132,7 @@ const getVisitorSpacesDropdown = (
 			activeMobile: currentPath === visitPath,
 			path: currentPath,
 		};
-	} else {
+	}
 		// Show dropdown list with bezoek page and accessible visitor spaces
 		return {
 			node: renderLink(navigationLabel, visitPath, {
@@ -208,7 +201,6 @@ const getVisitorSpacesDropdown = (
 				}),
 			],
 		};
-	}
 };
 
 const getDynamicHeaderLinks = (
@@ -218,7 +210,7 @@ const getDynamicHeaderLinks = (
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
 	linkedSpaceOrId: string | null,
 	activeVisits: VisitRequest[] | null,
-	isMeemooAdmin = false,
+	isMeemooAdmin: boolean | undefined,
 	locale: Locale
 ) => {
 	const itemsByPlacement = navigationItems[placement];
@@ -532,11 +524,11 @@ export const getNavigationItemsProfileDropdown = (
 	const { defaultRoutes, adminRoutes, cpRoutes } = groupBy(
 		profileDropdown,
 		(navItem: NavigationItem) => {
-			if (navItem.path?.startsWith('/' + ROUTE_PARTS_BY_LOCALE[locale].admin)) {
+			if (navItem.path?.startsWith(`/${ROUTE_PARTS_BY_LOCALE[locale].admin}`)) {
 				return 'adminRoutes';
 			}
 
-			if (navItem.path?.startsWith('/' + ROUTE_PARTS_BY_LOCALE[locale].cpAdmin)) {
+			if (navItem.path?.startsWith(`/${ROUTE_PARTS_BY_LOCALE[locale].cpAdmin}`)) {
 				return 'cpRoutes';
 			}
 

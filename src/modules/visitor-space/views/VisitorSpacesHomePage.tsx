@@ -22,7 +22,7 @@ export const VisitorSpacesHomePage: FC<DefaultSeoInfo> = (props) => {
 
 	useEffect(() => {
 		if (showLinkedSpaceAsHomepage && linkedSpaceSlug) {
-			router.replace('/' + linkedSpaceSlug);
+			router.replace(`/${linkedSpaceSlug}`);
 		}
 	}, [showLinkedSpaceAsHomepage, linkedSpaceSlug, router]);
 

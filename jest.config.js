@@ -32,7 +32,7 @@ module.exports = {
 		[
 			'jest-junit',
 			{
-				outputDirectory: `tests/test_results`,
+				outputDirectory: "tests/test_results",
 			},
 		],
 	],

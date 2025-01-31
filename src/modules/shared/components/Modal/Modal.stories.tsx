@@ -20,7 +20,7 @@ const Template: ComponentStory<typeof Modal> = (args) => {
 			<Modal
 				{...args}
 				onClose={() => {
-					args.onClose && args.onClose();
+					args.onClose?.();
 					setOpen(false);
 				}}
 				isOpen={isOpen}

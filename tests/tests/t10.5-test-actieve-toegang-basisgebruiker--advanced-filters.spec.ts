@@ -17,7 +17,7 @@ test('T10.5: Test actieve toegang basisgebruiker: Geavanceerde filters', async (
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(
 		page,
-		(process.env.TEST_CLIENT_ENDPOINT as string) + '/zoeken',
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/zoeken`,
 		SEARCH_PAGE_TITLE
 	);
 
@@ -84,7 +84,7 @@ test('T10.5: Test actieve toegang basisgebruiker: Geavanceerde filters', async (
 		SITE_TRANSLATIONS.nl[
 			'modules/visitor-space/utils/advanced-filters/metadata___beschrijving'
 		];
-	await filter2TypeSelect.locator('text=' + filterDescriptionLabel).click();
+	await filter2TypeSelect.locator(`text=${filterDescriptionLabel}`).click();
 	await secondAdvancedEntry
 		.locator('#AdvancedFilterFields__value__1')
 		.fill(DESCRIPTION_FILTER_VALUE);

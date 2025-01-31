@@ -39,18 +39,19 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 	const buttonSize = 3.6; // rem
 
 	// Debounce blur event to avoid rubberbanding
-	useEffect(() => {
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+		useEffect(() => {
 		if (isBlurred) {
 			blurTimerRef.current && clearTimeout(blurTimerRef.current);
 			blurTimerRef.current = setTimeout(() => needsScrolling && setOffset(activeIndex), 150);
 		} else {
 			blurTimerRef.current && clearTimeout(blurTimerRef.current);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isBlurred]);
 
 	// Control reflow between scrollable/non-scrollable slider
-	useEffect(() => {
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+		useEffect(() => {
 		if (fragmentsSize) {
 			const updatedNeedsScrolling =
 				fragmentsSize.width / 10 <
@@ -63,7 +64,6 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 				setOffset(activeIndex);
 			}
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fragmentsSize, totalFragments]);
 
 	const renderThumbnail = (file: IeObjectFile) => {
@@ -111,7 +111,6 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 			/>
 			<div ref={fragmentsRef} className={styles['c-fragment-slider__items']}>
 				<ul
-					role="list"
 					className={clsx(
 						styles['c-fragment-slider__track'],
 						!needsScrolling && styles['c-fragment-slider__track--centered']
@@ -134,13 +133,11 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 				>
 					{fileRepresentations.map((file, index) => (
 						<li
-							role="listitem"
 							className={clsx(
 								styles['c-fragment-slider__item'],
 								index === activeIndex && styles['c-fragment-slider__item--active']
 							)}
-							key={`fragment-${index}`}
-							tabIndex={0}
+							key={`fragment-${file.id}--${file.name}`}
 							data-index={index}
 							onClick={(e) => {
 								const index = Number.parseInt(

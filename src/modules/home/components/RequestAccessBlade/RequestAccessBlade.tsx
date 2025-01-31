@@ -78,9 +78,8 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 		if (errors) {
 			setFormErrors(errors);
 			return;
-		} else {
-			setFormErrors({});
 		}
+			setFormErrors({});
 		setIsSubmitting(true);
 		await onSubmit?.(formValues);
 		if (isSubscribedToNewsletter) {

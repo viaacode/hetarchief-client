@@ -20,7 +20,7 @@ export const changeApplicationLocale = (
 	let oldFullPath = router.asPath;
 	if (
 		Object.values(Locale)
-			.map((locale) => '/' + locale + '/')
+			.map((locale) => `/${locale}/`)
 			.includes(oldFullPath.substring(0, '/en/'.length))
 	) {
 		// Remove the old locale from the path

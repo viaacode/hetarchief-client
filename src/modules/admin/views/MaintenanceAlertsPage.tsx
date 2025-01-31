@@ -54,7 +54,7 @@ export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 				footer={renderPopupFooter(onSave, onClose)}
 				isOpen={isOpen}
 				onClose={onClose}
-				renderTitle={(props: any) => <h2 {...props}>{title}</h2>}
+				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => <h2 {...props}>{title}</h2>}
 				id="alerts-blade"
 			>
 				<div className="u-px-32">{body}</div>

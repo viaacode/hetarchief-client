@@ -17,7 +17,7 @@ export class MaintenanceAlertsService {
 		const parsed = await ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: MAINTENANCE_ALERTS_SERVICE_BASE_URL + '/personal',
+					url: `${MAINTENANCE_ALERTS_SERVICE_BASE_URL}/personal`,
 					query: {
 						orderProp,
 						orderDirection,

@@ -35,7 +35,7 @@ test('T25: Krant metadata', async ({ page, context }) => {
 		hasText: SITE_TRANSLATIONS.nl['modules/ie-objects/ie-objects___media-type'],
 	});
 	await expect(metadataField1).toBeVisible();
-	await expect(metadataField1.locator('text=' + IconName.Newspaper)).toBeVisible();
+	await expect(metadataField1.locator(`text=${IconName.Newspaper}`)).toBeVisible();
 
 	// Check if the metadata field "OCR Software" is hidden
 	let metadataField2 = page.locator(moduleClassSelector('c-metadata__item'), {
@@ -75,7 +75,7 @@ test('T25: Krant metadata', async ({ page, context }) => {
 		hasText: SITE_TRANSLATIONS.nl['modules/ie-objects/ie-objects___fysieke-drager'],
 	});
 	await expect(metadataField1).toBeVisible();
-	await expect(metadataField1.locator('text=' + IconName.Newspaper)).toBeVisible();
+	await expect(metadataField1.locator(`text=${IconName.Newspaper}`)).toBeVisible();
 
 	// Check if the metadata field "OCR Software" is "ABBYY FineReader Engine"
 	metadataField2 = page.locator(moduleClassSelector('c-metadata__item'), {

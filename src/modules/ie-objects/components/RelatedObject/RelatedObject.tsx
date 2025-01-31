@@ -28,12 +28,10 @@ const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 						image={type === 'audio' ? '/images/waveform--white.svg' : thumbnail}
 					/>
 				);
-			} else {
-				return thumbnail;
 			}
-		} else {
-			return <ObjectPlaceholder className={styles['c-related-object__placeholder']} small />;
+				return thumbnail;
 		}
+			return <ObjectPlaceholder className={styles['c-related-object__placeholder']} small />;
 	};
 
 	return (

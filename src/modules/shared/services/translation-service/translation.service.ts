@@ -12,7 +12,7 @@ export class TranslationService {
 	private static baseUrl = 'admin/translations/languages';
 
 	public static async getAll(): Promise<LanguageInfo[]> {
-		const response: LanguageInfo[] = await ApiService.getApi().get(this.baseUrl).json();
+		const response: LanguageInfo[] = await ApiService.getApi().get(TranslationService.baseUrl).json();
 
 		return response ?? {};
 	}
@@ -30,8 +30,8 @@ export class TranslationService {
 		return (
 			Object.values(Locale).find((languageCode) => {
 				return (
-					pageUrl.includes(publicRuntimeConfig.CLIENT_URL + '/' + languageCode + '/') ||
-					pageUrl === publicRuntimeConfig.CLIENT_URL + '/' + languageCode
+					pageUrl.includes(`${publicRuntimeConfig.CLIENT_URL}/${languageCode}/`) ||
+					pageUrl === `${publicRuntimeConfig.CLIENT_URL}/${languageCode}`
 				);
 			}) || Locale.nl
 		);

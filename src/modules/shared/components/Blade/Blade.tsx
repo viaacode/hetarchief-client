@@ -29,9 +29,10 @@ export const Blade: FC<BladeProps> = ({
 	renderTitle,
 	id,
 }) => {
-	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
+	const { isManaged, currentLayer, opacityStep, onCloseBlade } =
+		useBladeManagerContext();
 
-	useScrollLock(!isManaged && isOpen, 'Blade');
+	useScrollLock(!isManaged && isOpen, "Blade");
 
 	const isLayered = isManaged && !!layer;
 	const isBladeOpen = isLayered ? layer <= currentLayer : isOpen;
@@ -55,35 +56,50 @@ export const Blade: FC<BladeProps> = ({
 				handleClose();
 			}
 		},
-		[handleClose]
+		[handleClose],
 	);
 
 	useEffect(() => {
-		document.addEventListener('keydown', escFunction, false);
+		document.addEventListener("keydown", escFunction, false);
 
 		return () => {
-			document.removeEventListener('keydown', escFunction, false);
+			document.removeEventListener("keydown", escFunction, false);
 		};
 	}, [escFunction]);
 
 	const renderTopBar = () => {
 		return showBackButton ? (
-			<div className={styles['c-blade__top-bar-container']}>
+			<div className={styles["c-blade__top-bar-container"]}>
+				{/* biome-ignore lint/a11y/useKeyWithClickEvents: onKeyUp is added to the inner button */}
 				<div
-					className={styles['c-blade__back-container']}
+					className={styles["c-blade__back-container"]}
 					onClick={() => {
 						handleClose();
 					}}
 				>
-					<Button variants="text" icon={<Icon name={IconNamesLight.ArrowLeft} />} />
-					<span>{tText('modules/shared/components/blade/blade___vorige-stap')}</span>
+					<Button
+						variants="text"
+						icon={
+							<Icon
+								name={IconNamesLight.ArrowLeft}
+								onKeyUp={(evt) => {
+									if (evt.key === "Enter") {
+										handleClose();
+									}
+								}}
+							/>
+						}
+					/>
+					<span>
+						{tText("modules/shared/components/blade/blade___vorige-stap")}
+					</span>
 				</div>
 				<Button
-					className={clsx(styles['c-blade__close-button'], {
-						[styles['c-blade__close-button--absolute']]: showCloseButtonOnTop,
+					className={clsx(styles["c-blade__close-button"], {
+						[styles["c-blade__close-button--absolute"]]: showCloseButtonOnTop,
 					})}
 					icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-					aria-label={tText('modules/shared/components/blade/blade___sluiten')}
+					aria-label={tText("modules/shared/components/blade/blade___sluiten")}
 					variants="text"
 					onClick={() => handleClose()}
 					disabled={!isOpen}
@@ -91,11 +107,11 @@ export const Blade: FC<BladeProps> = ({
 			</div>
 		) : (
 			<Button
-				className={clsx(styles['c-blade__close-button'], {
-					[styles['c-blade__close-button--absolute']]: showCloseButtonOnTop,
+				className={clsx(styles["c-blade__close-button"], {
+					[styles["c-blade__close-button--absolute"]]: showCloseButtonOnTop,
 				})}
 				icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-				aria-label={tText('modules/shared/components/blade/blade___sluiten')}
+				aria-label={tText("modules/shared/components/blade/blade___sluiten")}
 				variants="text"
 				onClick={() => handleClose()}
 				disabled={!isOpen}
@@ -106,35 +122,37 @@ export const Blade: FC<BladeProps> = ({
 	const renderContent = (hide: boolean) => {
 		return (
 			<div
+				// biome-ignore lint/a11y/useSemanticElements: dialog has other effects that a div, and we cannot rework how blades work right now
 				role="dialog"
 				aria-modal
 				aria-labelledby={id}
 				className={clsx(
 					className,
-					styles['c-blade'],
-					isBladeOpen && styles['c-blade--visible'],
+					styles["c-blade"],
+					isBladeOpen && styles["c-blade--visible"],
 					isBladeOpen &&
-						(layer === currentLayer || (currentLayer === 0 && isUndefined(layer))) &&
-						'c-blade--active',
-					isLayered && [styles['c-blade--managed']]
+						(layer === currentLayer ||
+							(currentLayer === 0 && isUndefined(layer))) &&
+						"c-blade--active",
+					isLayered && [styles["c-blade--managed"]],
 				)}
 				// offset underlying blades
 				style={
 					isLayered && layer < currentLayer
 						? {
 								transform: `translateX(-${(currentLayer - layer) * 5.6}rem)`,
-								visibility: hide ? 'hidden' : 'visible',
-						  }
-						: { visibility: hide ? 'hidden' : 'visible' }
+								visibility: hide ? "hidden" : "visible",
+							}
+						: { visibility: hide ? "hidden" : "visible" }
 				}
 			>
 				{!hideCloseButton && renderTopBar()}
 
-				<div className={styles['c-blade__body-wrapper']}>
-					{renderTitle && renderTitle?.({ id, className: styles['c-blade__title'] })}
+				<div className={styles["c-blade__body-wrapper"]}>
+					{renderTitle?.({ id, className: styles["c-blade__title"] })}
 					{children}
-					<div className={styles['c-blade__flex-grow']} />
-					{footer && <div className={styles['c-blade__footer']}>{footer}</div>}
+					<div className={styles["c-blade__flex-grow"]} />
+					{footer && <div className={styles["c-blade__footer"]}>{footer}</div>}
 				</div>
 			</div>
 		);
@@ -147,8 +165,8 @@ export const Blade: FC<BladeProps> = ({
 					visible={isBladeOpen}
 					onClick={() => handleClose()}
 					animate="animate-default"
-					className={clsx(className, styles['c-blade__overlay'], {
-						[styles['c-blade__overlay--managed']]: isLayered && layer > 1,
+					className={clsx(className, styles["c-blade__overlay"], {
+						[styles["c-blade__overlay--managed"]]: isLayered && layer > 1,
 					})}
 					style={
 						isLayered && layer > 1 && layer <= currentLayer
@@ -157,14 +175,14 @@ export const Blade: FC<BladeProps> = ({
 									opacity: isBladeOpen
 										? (0.4 - (layer - 2) * opacityStep).toFixed(2)
 										: 0,
-							  }
+								}
 							: {}
 					}
-					type={isLayered && layer > 1 ? 'light' : 'dark'}
+					type={isLayered && layer > 1 ? "light" : "dark"}
 				/>
 			)}
 			<FocusTrap
-				active={isBladeOpen && process.env.NODE_ENV !== 'test'}
+				active={isBladeOpen && process.env.NODE_ENV !== "test"}
 				focusTrapOptions={{ clickOutsideDeactivates: true }}
 			>
 				{renderContent(false)}

@@ -39,8 +39,8 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 			? {
 					tabIndex: 0,
 					role: 'button',
-					['aria-expanded']: isOpen,
-					['aria-controls']: 'list-controls',
+					"aria-expanded": isOpen,
+					"aria-controls": 'list-controls',
 					onClick: onClickDropdown,
 					onKeyDown: (e: any) => onKey(e, [...keysEnter], onClickDropdown),
 			  }
@@ -84,7 +84,6 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 					<li
 						tabIndex={isOpen ? 0 : 1}
 						key={option.slug}
-						role="option"
 						aria-selected={selectedOptionId === option.slug}
 						onClick={() => onSelectOption(option)}
 						onKeyDown={(e) => onKey(e, [...keysEnter], () => onSelectOption(option))}

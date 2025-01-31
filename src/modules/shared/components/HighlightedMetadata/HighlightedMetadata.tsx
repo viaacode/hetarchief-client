@@ -15,11 +15,11 @@ const HighlightedMetadata: FC<HighlightedMetadataProps> = ({ title, data, enable
 		return (
 			<>
 				{compact(data.split(/(\\\\r|\\r)?\\\\n|\\n|<\/?br\/?>/)).map(
-					(fieldTextPart, fieldTextPartIndex): ReactNode => {
+					(fieldTextPart): ReactNode => {
 						// ARC-1936: if url make it clickable
 						if (data.startsWith('https://') || data.startsWith('http://')) {
 							return (
-								<p key={title + '-' + fieldTextPartIndex}>
+								<p key={`${title}-${fieldTextPart}`}>
 									<a href={fieldTextPart} target="_blank" rel="noreferrer">
 										<HighlightSearchTerms toHighlight={fieldTextPart} />
 									</a>
@@ -29,7 +29,7 @@ const HighlightedMetadata: FC<HighlightedMetadataProps> = ({ title, data, enable
 						return (
 							<p
 								className="u-line-height-1-4 u-font-size-14"
-								key={title + '-' + fieldTextPartIndex}
+								key={`${title}-${fieldTextPart}`}
 							>
 								<HighlightSearchTerms
 									toHighlight={fieldTextPart}
@@ -41,9 +41,9 @@ const HighlightedMetadata: FC<HighlightedMetadataProps> = ({ title, data, enable
 				)}
 			</>
 		);
-	} else {
-		return (data || null) as ReactElement<any, any> | null;
 	}
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		return (data || null) as ReactElement<any, any> | null;
 };
 
 export default HighlightedMetadata;

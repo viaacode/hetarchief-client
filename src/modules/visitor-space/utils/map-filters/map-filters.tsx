@@ -251,7 +251,7 @@ export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilte
 			case FilterProperty.DURATION:
 				// Manually create a range of equal values
 				// Add milliseconds since elasticsearch requires it: https://meemoo.atlassian.net/browse/ARC-2549
-				values[i] = values[0] + '.00';
+				values[i] = `${values[0]}.00`;
 				break;
 			default:
 				break;

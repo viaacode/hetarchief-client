@@ -43,7 +43,8 @@ const renderLink = (
 			{iconEnd && iconEnd}
 		</Link>
 	) : (
-		<a className={className} role="menuitem" tabIndex={0}>
+		// biome-ignore lint/a11y/useValidAnchor: mock file
+<a className={className} role="menuitem" tabIndex={0}>
 			{iconStart && iconStart}
 			{label}
 			{badge && badge}
@@ -83,7 +84,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 				path: '',
 			},
 			{
-				node: renderLink('VRT', `/OR-vrt123`, {
+				node: renderLink('VRT', "/OR-vrt123", {
 					iconEnd: (
 						<Icon
 							className={clsx(
@@ -102,7 +103,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 				path: '',
 			},
 			{
-				node: renderLink('Huis van Alijn', `/OR-huisvanalijn456`, {
+				node: renderLink('Huis van Alijn', "/OR-huisvanalijn456", {
 					iconEnd: (
 						<Icon
 							className={clsx(

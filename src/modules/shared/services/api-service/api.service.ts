@@ -11,7 +11,7 @@ export abstract class ApiService {
 
 	public static getApi(ignoreAuthError = false): KyInstance {
 		if (!ApiService.api) {
-			this.api = ky.create({
+			ApiService.api = ky.create({
 				prefixUrl: publicRuntimeConfig.PROXY_URL,
 				timeout: 30000,
 				headers: {
@@ -31,6 +31,6 @@ export abstract class ApiService {
 				},
 			});
 		}
-		return this.api as KyInstance;
+		return ApiService.api as KyInstance;
 	}
 }

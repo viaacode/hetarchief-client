@@ -96,7 +96,6 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				<li
 					className={styles['c-dynamic-action-menu__primary-item']}
 					key={`media-action-${action.id}`}
-					role="listitem"
 				>
 					<a
 						href={action.url}
@@ -108,17 +107,15 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 					</a>
 				</li>
 			);
-		} else {
+		}
 			return (
 				<li
 					className={styles['c-dynamic-action-menu__primary-item']}
 					key={`media-action-${action.id}`}
-					role="listitem"
 				>
 					{$element}
 				</li>
 			);
-		}
 	};
 
 	const renderSecondaryButton = (action: ActionItem) => {
@@ -139,7 +136,6 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				<li
 					className={styles['c-dynamic-action-menu__secondary-item']}
 					key={`media-action-${action.id}`}
-					role="listitem"
 				>
 					<a
 						href={action.url}
@@ -153,19 +149,17 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 					</a>
 				</li>
 			);
-		} else {
+		}
 			return (
 				<li
 					className={styles['c-dynamic-action-menu__secondary-item']}
 					key={`media-action-${action.id}`}
-					role="listitem"
 				>
 					{action.tooltip && !isMobile
 						? renderInTooltip($element, action.tooltip)
 						: $element}
 				</li>
 			);
-		}
 	};
 
 	const renderDropdown = (dropdownActions: ActionItem[]) => {
@@ -206,7 +200,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 
 	return (
 		<>
-			<ul className={clsx(className, styles['c-dynamic-action-menu'])} role="list">
+			<ul className={clsx(className, styles['c-dynamic-action-menu'])} >
 				{primaryActions.map(renderPrimaryButton)}
 				<div
 					className={styles['c-dynamic-action-menu__secondary']}

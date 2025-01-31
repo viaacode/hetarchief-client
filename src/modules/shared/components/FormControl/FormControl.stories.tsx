@@ -38,7 +38,8 @@ Errors.args = {
 		<span key={1}>
 			Something went wrong while validating your email.
 			<br />
-			If the issue persists, please contact <a href="#">support</a>.
+			If the issue persists, please contact {/* biome-ignore lint/a11y/useValidAnchor: this is a storybook */}
+      <a href="#">support</a>.
 		</span>,
 		'Try again.',
 	],

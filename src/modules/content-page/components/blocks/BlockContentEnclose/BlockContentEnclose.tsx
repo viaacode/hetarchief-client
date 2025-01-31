@@ -45,7 +45,7 @@ export const BlockContentEnclose: FC<BlockContentEncloseProps> = ({
 		useGetContentBlockEncloseContent(elementTypeAndIds as MappedElement[], elements);
 
 	const getKey = (item: GetContentBlockEncloseContentReturnType, i: number) => {
-		let key: string = (item as any).schemaIdentifier;
+		let key: string | undefined = item.pid;
 
 		if (key === undefined) {
 			if (typeof item.name === 'string') {

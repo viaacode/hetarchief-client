@@ -18,7 +18,7 @@ export const mock = async (
 			const data = json as Array<{ id: number; title: string; url: string }>;
 
 			return data.map((item, i): IdentifiableMediaCard => {
-				const preview = Math.floor(Math.random() * 2) == 0;
+				const preview = Math.floor(Math.random() * 2) === 0;
 
 				const start = new Date();
 				const end = new Date(1990, 0, 1);

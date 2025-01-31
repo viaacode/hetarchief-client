@@ -170,7 +170,7 @@ export async function getServerSideProps(
 			image = contentPage?.thumbnailPath || null;
 		} catch (err) {
 			console.error(
-				'Failed to fetch content page seo info by slug: ' + pathOrIeObjectId,
+				`Failed to fetch content page seo info by slug: ${pathOrIeObjectId}`,
 				err
 			);
 		}
@@ -182,7 +182,7 @@ export async function getServerSideProps(
 	await Promise.all([
 		makeServerSideRequestGetContentPageByLanguageAndPath(
 			queryClient,
-			pathOrIeObjectId ? '/' + pathOrIeObjectId : undefined,
+			pathOrIeObjectId ? `/${pathOrIeObjectId}` : undefined,
 			locale
 		),
 		makeServerSideRequestGetIeObjectInfo(queryClient, pathOrIeObjectId),

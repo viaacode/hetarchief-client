@@ -68,10 +68,9 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	// Check that we were redirected to the request pending page
 	await expect(
 		page.locator(
-			'text=' +
-				SITE_TRANSLATIONS.nl[
+			`text=${SITE_TRANSLATIONS.nl[
 					'pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen'
-				]
+				]}`
 		)
 	).toBeVisible();
 	const accessRequestedBody = await page.locator('.p-visit-requested__content').innerHTML();

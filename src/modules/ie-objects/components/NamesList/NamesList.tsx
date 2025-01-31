@@ -1,15 +1,7 @@
 import { Button, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { sortBy } from 'lodash-es';
-import React, {
-	type ChangeEvent,
-	type FC,
-	type KeyboardEvent,
-	useCallback,
-	useEffect,
-	useRef,
-	useState,
-} from 'react';
+import React, { type ChangeEvent, type FC, type KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import { ConfidenceIndicator } from '@ie-objects/components/ConfidenceIndicator/ConfidenceIndicator';
@@ -60,22 +52,22 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToLoc
 		}
 	}, [searchTerms, mentions]);
 
-	function handleScrollEvent(evt: Event) {
-		evt.preventDefault();
-	}
-
 	useEffect(() => {
 		searchNames();
 	}, [searchNames]);
 
 	useEffect(() => {
+		const handleScrollEvent = (evt: Event) => {
+			evt.preventDefault();
+		};
+
 		const namesListDiv = ref?.current;
 		namesListDiv?.addEventListener('wheel', handleScrollEvent);
 
 		return () => {
 			namesListDiv?.removeEventListener('wheel', handleScrollEvent);
 		};
-	}, [mentions]);
+	}, []);
 
 	return (
 		<div className={clsx(className, styles['c-names-list'])} ref={ref}>
@@ -98,8 +90,8 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToLoc
 						)}
 					</div>
 				)}
-				{filteredNames.map((nameInfo: Mention, index: number) => (
-					<div key={index} className={styles['c-names-list__person']}>
+				{filteredNames.map((nameInfo, index) => ({...nameInfo, index})).map((nameInfo: Mention & {index: number}) => (
+					<div key={nameInfo.index} className={styles['c-names-list__person']}>
 						<div className={styles['c-names-list__person__occurrence-confidence']}>
 							<ConfidenceIndicator
 								className={styles['c-names-list__person__confidence-indicator']}

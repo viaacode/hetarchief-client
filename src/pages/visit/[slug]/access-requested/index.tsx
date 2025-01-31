@@ -25,7 +25,7 @@ export async function getServerSideProps(
 	try {
 		space = await VisitorSpaceService.getBySlug(context.query.slug as string, true);
 	} catch (err) {
-		console.error('Failed to fetch media info by id: ' + context.query.ie, err);
+		console.error(`Failed to fetch media info by id: ${context.query.ie}`, err);
 	}
 
 	return getDefaultStaticProps(context, context.resolvedUrl, {

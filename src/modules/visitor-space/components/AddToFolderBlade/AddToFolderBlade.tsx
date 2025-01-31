@@ -306,8 +306,6 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 					key={`item--${folder.id}`}
 					className={styles['c-add-to-folder-blade__list-item']}
 					onClick={() => onCheckboxClick(folder.id)}
-					tabIndex={0}
-					role="button"
 				>
 					<Checkbox
 						value={`add-to--${folder.id}`}

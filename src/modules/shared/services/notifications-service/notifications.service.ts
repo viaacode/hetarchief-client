@@ -30,7 +30,7 @@ export abstract class NotificationsService {
 	private static queryClient = new QueryClient();
 
 	public static async setQueryClient(queryClient: QueryClient): Promise<void> {
-		this.queryClient = queryClient;
+		NotificationsService.queryClient = queryClient;
 	}
 
 	public static async initPolling(
@@ -38,27 +38,27 @@ export abstract class NotificationsService {
 		showNotificationsCenter: (show: boolean) => void,
 		setHasUnreadNotifications: (hasUnreadNotifications: boolean) => void
 	): Promise<void> {
-		this.router = router;
-		this.showNotificationsCenter = showNotificationsCenter;
-		this.setHasUnreadNotifications = setHasUnreadNotifications;
-		if (!this.pollingTimer && process.env.NODE_ENV !== 'test') {
-			NotificationsService.pollingTimer = window.setInterval(this.checkNotifications, 15000);
-			await this.checkNotifications();
+		NotificationsService.router = router;
+		NotificationsService.showNotificationsCenter = showNotificationsCenter;
+		NotificationsService.setHasUnreadNotifications = setHasUnreadNotifications;
+		if (!NotificationsService.pollingTimer && process.env.NODE_ENV !== 'test') {
+			NotificationsService.pollingTimer = window.setInterval(NotificationsService.checkNotifications, 15000);
+			await NotificationsService.checkNotifications();
 		}
 	}
 
 	public static stopPolling(): void {
-		if (this.pollingTimer) {
-			clearInterval(this.pollingTimer);
+		if (NotificationsService.pollingTimer) {
+			clearInterval(NotificationsService.pollingTimer);
 		}
 	}
 
 	public static resetService(): void {
-		this.pollingTimer = null;
-		this.lastNotifications = null;
-		this.router = null;
-		this.showNotificationsCenter = null;
-		this.setHasUnreadNotifications = null;
+		NotificationsService.pollingTimer = null;
+		NotificationsService.lastNotifications = null;
+		NotificationsService.router = null;
+		NotificationsService.showNotificationsCenter = null;
+		NotificationsService.setHasUnreadNotifications = null;
 	}
 
 	public static getPath(notification: Notification): string | null {

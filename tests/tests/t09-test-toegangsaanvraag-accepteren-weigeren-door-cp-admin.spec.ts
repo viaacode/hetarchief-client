@@ -80,10 +80,9 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// There should be zero requests with this name
 	await expect(
 		page.locator(
-			'text=' +
-				SITE_TRANSLATIONS.nl[
+			`text=${SITE_TRANSLATIONS.nl[
 					'pages/beheer/toegangsaanvragen/index___er-zijn-geen-openstaande-aanvragen'
-				]
+				]}`
 		)
 	).toBeVisible();
 

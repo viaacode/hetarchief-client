@@ -54,9 +54,8 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 			if (!typeSelected) {
 				setNoTypeSelectedOnSave(true);
 				return;
-			} else {
-				setNoTypeSelectedOnSave(false);
 			}
+				setNoTypeSelectedOnSave(false);
 			await MaterialRequestsService.sendAll({
 				type: typeSelected,
 				organisation: organisationInputValue,

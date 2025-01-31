@@ -1,20 +1,7 @@
-import {
-	MultiSelect,
-	type MultiSelectOption,
-	OrderDirection,
-	PaginationBar,
-	Table,
-} from '@meemoo/react-components';
+import { MultiSelect, type MultiSelectOption, OrderDirection, PaginationBar, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil, without } from 'lodash-es';
-import React, {
-	type FC,
-	type MouseEvent,
-	type ReactNode,
-	useEffect,
-	useMemo,
-	useState,
-} from 'react';
+import React, { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
 import type { Row, SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -30,11 +17,7 @@ import { AdminLayout } from '@admin/layouts';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
 import { useGetMaterialRequestsMaintainers } from '@material-requests/hooks/get-material-requests-maintainers';
-import {
-	type MaterialRequest,
-	MaterialRequestKeys,
-	type MaterialRequestType,
-} from '@material-requests/types';
+import { type MaterialRequest, MaterialRequestKeys, type MaterialRequestType } from '@material-requests/types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -99,13 +82,13 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 				})
 			),
 		];
-	}, [filters]);
+	}, [filters.type]);
 
 	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
 		currentMaterialRequest?.id || null
 	);
 
-	const noData = useMemo((): boolean => isEmpty(materialRequests?.items), [materialRequests]);
+	const noData = useMemo((): boolean => isEmpty(materialRequests?.items), [materialRequests?.items]);
 
 	const sortFilters = useMemo(
 		(): SortingRule<{ id: MaterialRequestKeys; desc: boolean }>[] => [
@@ -114,31 +97,25 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 				desc: filters.orderDirection !== OrderDirection.asc,
 			},
 		],
-		[filters]
+		[filters.orderProp, filters.orderDirection]
 	);
 
 	const onSortChange = (
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	): void => {
-		if (!orderProp) {
-			orderProp = 'createdAt';
-		}
-		if (!orderDirection) {
-			orderDirection = OrderDirection.desc;
-		}
 		if (filters.orderProp === MaterialRequestKeys.createdAt && orderDirection === undefined) {
 			setFilters({
 				...filters,
-				orderProp,
+				orderProp: orderProp || 'createdAt',
 				orderDirection: OrderDirection.asc,
 				page: 1,
 			});
 		} else if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
-				orderProp,
-				orderDirection,
+				orderProp: orderProp || 'createdAt',
+				orderDirection: orderDirection || OrderDirection.desc,
 				page: 1,
 			});
 		}
@@ -214,13 +191,13 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 		setSelectedMaintainers((prev) => (!checked ? [...prev, id] : without(prev, id)));
 	};
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: we want to set the filters if selectedMaintainers changes, but we cannot set it as a dependency or we get a loop
 	useEffect(() => {
 		setFilters({
 			...filters,
 			maintainerIds: selectedMaintainers,
 			page: 1,
 		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedMaintainers]);
 
 	const renderPageContent = () => {

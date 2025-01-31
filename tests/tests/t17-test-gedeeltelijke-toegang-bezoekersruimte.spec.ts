@@ -204,7 +204,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Click on 'Naar mijn bezoekertool'
 	const goToMyVisitorSpaceLink = page.locator(
-		moduleClassSelector('c-list-navigation__link') + '[href="/zoeken?aanbieder=amsab-isg"]',
+		`${moduleClassSelector('c-list-navigation__link')}[href="/zoeken?aanbieder=amsab-isg"]`,
 		{ hasText: IconName.Search }
 	);
 	await expect(goToMyVisitorSpaceLink).toBeVisible();
@@ -549,7 +549,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	await expect(
 		page
-			.locator(moduleClassSelector('c-pill--expanded') + ' span', {
+			.locator(`${moduleClassSelector('c-pill--expanded')} span`, {
 				hasText:
 					SITE_TRANSLATIONS.nl[
 						'modules/shared/components/media-card/media-card___tijdelijke-toegang'

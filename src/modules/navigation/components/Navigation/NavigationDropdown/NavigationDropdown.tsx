@@ -28,6 +28,11 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 			<div
 				className={clsx(layer > 0 && styles['c-navigation__dropdown-submenu'])}
 				onClick={() => onClose?.()} // Close dropdown on item click
+				onKeyUp={(evt) => {
+					if (evt.key === 'Enter') {
+						onClose?.();
+					}
+				}}
 			>
 				{items.map((item) => {
 					return (

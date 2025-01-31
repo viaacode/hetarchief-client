@@ -1,10 +1,5 @@
 import { noop } from 'lodash-es';
-import type {
-	MouseTracker,
-	Point,
-	PointerMouseTrackerEvent,
-	Viewer,
-} from 'openseadragon';
+import type { MouseTracker, Point, PointerMouseTrackerEvent, Viewer } from 'openseadragon';
 
 import type { ImageSize, Rect } from '@iiif-viewer/IiifViewer.types';
 import { getRectFromPointerEventDrag } from '@iiif-viewer/helpers/rect-from-pointer-event-drag';
@@ -12,20 +7,27 @@ import { getRectFromPointerEventDrag } from '@iiif-viewer/helpers/rect-from-poin
 // We need to track some state on the window object because the open sea dragon viewer isn't being reloaded by react
 // so we cannot access the actual react state
 const setSelectionStartPoint = (newSelectionStartPoint: Point | null) => {
-	return ((window as any).selectionStartPoint = newSelectionStartPoint);
+	// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
+	((window as any).selectionStartPoint = newSelectionStartPoint);
+	return newSelectionStartPoint;
 };
 
 const setSelectionOverlayElement = (newSelectionOverlayElement: HTMLDivElement | null) => {
-	return ((window as any).selectionOverlayElement = newSelectionOverlayElement);
+	// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
+	((window as any).selectionOverlayElement = newSelectionOverlayElement);
+	return newSelectionOverlayElement;
 };
 
 const setMouseTracker = (newMouseTracker: MouseTracker | null) => {
-	return ((window as any).mouseTracker = newMouseTracker);
+	// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
+	((window as any).mouseTracker = newMouseTracker);
+	return newMouseTracker;
 };
 
 export function initOpenSeadragonViewerMouseTracker(
 	imageSize: ImageSize,
 	onSelection: (rect: Rect) => void,
+	// biome-ignore lint/suspicious/noExplicitAny: open sea dragon lib isn't typed yet
 	openSeaDragonLib: any,
 	openSeaDragonViewer: Viewer
 ) {
@@ -52,6 +54,7 @@ export function destroyOpenSeadragonViewerMouseTracker() {
 
 export function handlePress(
 	event: PointerMouseTrackerEvent,
+	// biome-ignore lint/suspicious/noExplicitAny: open sea dragon lib isn't typed yet
 	openSeaDragonLib: any,
 	openSeaDragonViewer: Viewer
 ) {
@@ -59,6 +62,7 @@ export function handlePress(
 		return;
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 	if (!(window as any).isSelectionActive) {
 		resetDragState(openSeaDragonViewer);
 		return;
@@ -81,6 +85,7 @@ export function handlePress(
 
 export function handleDrag(
 	event: PointerMouseTrackerEvent,
+	// biome-ignore lint/suspicious/noExplicitAny: open sea dragon lib isn't typed yet
 	openSeaDragonLib: any,
 	openSeaDragonViewer: Viewer
 ) {
@@ -90,14 +95,18 @@ export function handleDrag(
 	}
 
 	if (
+		// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 		!(window as any).isSelectionActive ||
+		// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 		!((window as any).selectionStartPoint as Point | null) ||
+		// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 		!((window as any).selectionOverlayElement as HTMLDivElement | null)
 	) {
 		return;
 	}
 
 	const rect = getRectFromPointerEventDrag(
+		// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 		(window as any).selectionStartPoint as Point,
 		(event as PointerMouseTrackerEvent).position,
 		openSeaDragonViewer,
@@ -105,6 +114,7 @@ export function handleDrag(
 	);
 
 	openSeaDragonViewer.updateOverlay(
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		(window as any).selectionOverlayElement as HTMLDivElement,
 		rect
 	);
@@ -114,6 +124,7 @@ export function handleRelease(
 	event: PointerMouseTrackerEvent,
 	imageSize: ImageSize,
 	onSelection: (rect: Rect) => void,
+	// biome-ignore lint/suspicious/noExplicitAny: open sea dragon lib isn't typed yet
 	openSeaDragonLib: any,
 	openSeaDragonViewer: Viewer
 ) {
@@ -121,14 +132,18 @@ export function handleRelease(
 		return;
 	}
 	if (
+		// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 		!(window as any).isSelectionActive ||
+		// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 		!((window as any).selectionStartPoint as Point | null) ||
+		// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 		!((window as any).selectionOverlayElement as HTMLDivElement | null)
 	) {
 		resetDragState(openSeaDragonViewer);
 		return;
 	}
 	const rect = getRectFromPointerEventDrag(
+		// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 		(window as any).selectionStartPoint as Point,
 		(event as PointerMouseTrackerEvent).position,
 		openSeaDragonViewer,
@@ -147,8 +162,10 @@ export function handleRelease(
 }
 
 export function resetDragState(openSeaDragonViewer: Viewer | null) {
+	// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 	if ((window as any).selectionOverlayElement as HTMLDivElement | null) {
 		openSeaDragonViewer?.removeOverlay(
+			// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 			(window as any).selectionOverlayElement as HTMLDivElement
 		);
 	}

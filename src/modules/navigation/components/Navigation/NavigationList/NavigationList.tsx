@@ -45,6 +45,7 @@ const NavigationList: FC<NavigationListProps> = ({ items, onOpenDropdowns }) => 
 			<div
 				className={clsx(styles['c-navigation__link--wrapper'], 'u-cursor-pointer')}
 				onKeyDown={(e) => onKey(e, keysSpacebar, () => e.preventDefault())}
+				// biome-ignore lint/a11y/useSemanticElements: <explanation>
 				role="button"
 				tabIndex={0}
 			>

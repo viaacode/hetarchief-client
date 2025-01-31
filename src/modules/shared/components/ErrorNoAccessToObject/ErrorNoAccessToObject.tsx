@@ -5,10 +5,7 @@ import { useDispatch } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName } from '@account/const';
-import {
-	RequestAccessBlade,
-	type RequestAccessFormState,
-} from '@home/components/RequestAccessBlade';
+import { RequestAccessBlade, type RequestAccessFormState } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { ErrorPage } from '@shared/components/ErrorPage';
 import { ROUTES_BY_LOCALE } from '@shared/const';
@@ -76,11 +73,11 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 		}
 	};
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		if (query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]) {
 			setIsRequestAccessBladeOpen(true);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const onOpenRequestAccess = () => {

@@ -189,7 +189,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 			<>
 				<Button
 					variants={['sm', 'black']}
-					onClick={() => onAccessRequest && onAccessRequest(room)}
+					onClick={() => onAccessRequest?.(room)}
 				>
 					{tHtml(
 						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___vraag-toegang-aan'
@@ -224,9 +224,8 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 			case VisitorSpaceCardType.noAccess:
 				if (!access?.pending) {
 					return renderNoAccessControls();
-				} else {
-					return renderDefaultControls();
 				}
+					return renderDefaultControls();
 
 			case VisitorSpaceCardType.futureApproved:
 				return renderFutureApprovedControls();

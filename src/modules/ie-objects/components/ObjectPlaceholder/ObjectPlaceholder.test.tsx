@@ -53,8 +53,7 @@ describe('Components', () => {
 			fireEvent.click(button);
 
 			const overlay =
-				container.parentElement &&
-				container.parentElement.querySelector('.c-hetarchief-modal__overlay');
+				container.parentElement?.querySelector('.c-hetarchief-modal__overlay');
 
 			expect(overlay).toBeInTheDocument();
 		});
@@ -106,8 +105,7 @@ describe('Components', () => {
 			fireEvent.click(openButton);
 
 			const overlay =
-				container.parentElement &&
-				container.parentElement.querySelector('.c-hetarchief-modal__overlay');
+				container.parentElement?.querySelector('.c-hetarchief-modal__overlay');
 
 			expect(overlay).toBeInTheDocument();
 
@@ -129,8 +127,7 @@ describe('Components', () => {
 			fireEvent.click(openButton);
 
 			const overlay =
-				container.parentElement &&
-				container.parentElement.querySelector('.c-hetarchief-modal__overlay');
+				container.parentElement?.querySelector('.c-hetarchief-modal__overlay');
 
 			expect(overlay).toBeInTheDocument();
 

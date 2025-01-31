@@ -90,7 +90,7 @@ export const NavigationSection: FC<NavigationSectionProps> = ({
 
 		return (
 			<Wrapper {...(wrapperCls && { className: wrapperCls })}>
-				{items && items.length ? (
+				{items?.length ? (
 					<NavigationList
 						currentPath={currentPath}
 						items={items}

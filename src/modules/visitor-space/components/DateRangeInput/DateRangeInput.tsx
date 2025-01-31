@@ -39,7 +39,7 @@ const DateRangeInput: FC<DateRangeInputProps> = ({
 				value={from}
 				onChange={(newDate) => newDate && onChange(newDate, to)}
 				disabled={disabled}
-				id={id + '__from'}
+				id={`${id}__from`}
 			/>
 			<DateInput
 				label={
@@ -52,7 +52,7 @@ const DateRangeInput: FC<DateRangeInputProps> = ({
 				value={to}
 				onChange={(newDate) => newDate && onChange(from, newDate)}
 				disabled={disabled}
-				id={id + '__to'}
+				id={`${id}__to`}
 			/>
 		</div>
 	);

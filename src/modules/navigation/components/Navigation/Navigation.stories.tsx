@@ -6,11 +6,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 import { Navigation } from './Navigation';
-import {
-	MOCK_HAMBURGER_PROPS,
-	MOCK_ITEMS_LEFT,
-	MOCK_ITEMS_RIGHT,
-} from './__mocks__/navigation.mocks';
+import { MOCK_HAMBURGER_PROPS, MOCK_ITEMS_LEFT, MOCK_ITEMS_RIGHT } from './__mocks__/navigation.mocks';
 
 export default {
 	title: 'Components/Navigation',
@@ -32,7 +28,8 @@ const Template: ComponentStory<typeof Navigation> = (args) => (
 const ContextualTemplate: ComponentStory<typeof Navigation> = (args) => (
 	<Navigation {...args}>
 		<Navigation.Left placement="left">
-			<a className="u-font-size-24" href="#">
+			{/* biome-ignore lint/a11y/useValidAnchor: storybook */}
+<a className="u-font-size-24" href="#">
 				<Icon name={IconNamesLight.AngleLeft} />
 			</a>
 		</Navigation.Left>

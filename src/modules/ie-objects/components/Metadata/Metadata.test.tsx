@@ -1,9 +1,6 @@
 import { render } from '@testing-library/react';
 
-import type {
-	MetadataItem,
-	MetadataListProps,
-} from '@ie-objects/components/Metadata/Metadata.types';
+import type { MetadataItem, MetadataListProps } from '@ie-objects/components/Metadata/Metadata.types';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 
 import '@testing-library/jest-dom';
@@ -15,7 +12,7 @@ const renderMetadataList = ({ ...args }: Partial<MetadataListProps>, metadata: M
 		<MetadataList {...(args as MetadataListProps)}>
 			{metadata.map((item, index) => {
 				return (
-					<Metadata title={item.title} key={`metadata-item-${index}`}>
+					<Metadata title={item.title} key={`metadata-item-${typeof item.title === 'string' ? item.title : index}`}>
 						{item.data}
 					</Metadata>
 				);
@@ -94,7 +91,7 @@ describe('Component: <MetadataList /> (default)', () => {
 
 		const list = getByRole('list').parentElement;
 
-		expect(list).toHaveClass(`c-metadata--container-query`);
+		expect(list).toHaveClass("c-metadata--container-query");
 	});
 
 	it('Should display a single column when given', () => {
@@ -102,6 +99,6 @@ describe('Component: <MetadataList /> (default)', () => {
 
 		const list = getByRole('list').parentElement;
 
-		expect(list).not.toHaveClass(`c-metadata--container-query`);
+		expect(list).not.toHaveClass("c-metadata--container-query");
 	});
 });

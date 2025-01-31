@@ -56,7 +56,7 @@ export const getOperators = (prop: FilterProperty): OperatorOptions => {
 export const getFilterConfig = (prop: FilterProperty, op: Operator): FilterConfig | null => {
 	const property = FILTERS_OPTIONS_CONFIG()[prop];
 
-	if (property && property[op]) {
+	if (property?.[op]) {
 		return property[op] || null;
 	}
 

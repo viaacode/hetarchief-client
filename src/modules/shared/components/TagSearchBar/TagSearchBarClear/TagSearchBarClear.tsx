@@ -28,7 +28,6 @@ const TagSearchBarClear: FC<TagSearchBarClearProps> = ({
 				e.stopPropagation();
 			}}
 			className={cx(dropdownIndicatorCxState, className)}
-			tabIndex={0}
 		>
 			{clearLabel ? (
 				<>

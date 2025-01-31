@@ -46,7 +46,7 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 
 			widget.style.zIndex = '3'; // Ensure the zendesk widget doesn't show on top of blades
 			widget.style.width = 'auto';
-			widget.style.marginRight = zendeskMarginRight + 'px';
+			widget.style.marginRight = `${zendeskMarginRight}px`;
 
 			if (
 				scrollHeight - screenHeight - scrollTop < footerHeight + zendeskMarginBottom &&
@@ -62,7 +62,7 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 			} else {
 				// Still scrolling, not yet collided with the footer
 				// Or there is no footer on the page
-				widget.style.marginBottom = zendeskMarginBottom + 'px';
+				widget.style.marginBottom = `${zendeskMarginBottom}px`;
 			}
 		}
 	}, [footerHeight, widget]);

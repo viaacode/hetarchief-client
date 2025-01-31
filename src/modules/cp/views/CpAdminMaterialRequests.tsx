@@ -1,10 +1,4 @@
-import {
-	MultiSelect,
-	type MultiSelectOption,
-	OrderDirection,
-	PaginationBar,
-	Table,
-} from '@meemoo/react-components';
+import { MultiSelect, type MultiSelectOption, OrderDirection, PaginationBar, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil, without } from 'lodash-es';
 import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
@@ -24,11 +18,7 @@ import {
 import { CPAdminLayout } from '@cp/layouts';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
-import {
-	type MaterialRequest,
-	MaterialRequestKeys,
-	type MaterialRequestType,
-} from '@material-requests/types';
+import { type MaterialRequest, MaterialRequestKeys, type MaterialRequestType } from '@material-requests/types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -68,7 +58,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 		currentMaterialRequest?.id || null
 	);
 
-	const noData = useMemo((): boolean => isEmpty(materialRequests?.items), [materialRequests]);
+	const noData = useMemo((): boolean => isEmpty(materialRequests?.items), [materialRequests?.items]);
 
 	const typesList = useMemo(() => {
 		return [
@@ -89,44 +79,38 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 				desc: filters.orderDirection !== OrderDirection.asc,
 			},
 		],
-		[filters]
+		[filters.orderProp, filters.orderDirection]
 	);
 
 	const onMultiTypeChange = (checked: boolean, id: string) => {
 		setSelectedTypes((prev) => (!checked ? [...prev, id] : without(prev, id)));
 	};
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		setFilters({
 			...filters,
 			type: selectedTypes,
 			page: 1,
 		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedTypes]);
 
 	const onSortChange = (
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	): void => {
-		if (!orderProp) {
-			orderProp = 'createdAt';
-		}
-		if (!orderDirection) {
-			orderDirection = OrderDirection.desc;
-		}
 		if (filters.orderProp === MaterialRequestKeys.createdAt && orderDirection === undefined) {
 			setFilters({
 				...filters,
-				orderProp,
+				orderProp : orderProp || 'createdAt',
 				orderDirection: OrderDirection.asc,
 				page: 1,
 			});
 		} else if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
-				orderProp,
-				orderDirection,
+				orderProp: orderProp || 'createdAt',
+				orderDirection: orderDirection || OrderDirection.desc,
 				page: 1,
 			});
 		}

@@ -14,7 +14,7 @@ test('T22: bronvermelding', async ({ page, context }) => {
 	 */
 	await goToPageAndAcceptCookies(
 		page,
-		(process.env.TEST_CLIENT_ENDPOINT as string) + '/pid/h98z893q54',
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/h98z893q54`,
 		'Wet- en verordeningsblad voor de bezette streke...'
 	);
 

@@ -12,7 +12,7 @@ export async function acceptTos(page: Page): Promise<void> {
 	);
 	await expect(page.locator('.c-content-page-preview')).toContainText('Deze gebruiksvoorwaarden'); // This text is from the content page, so we can't use SITE_TRANSLATIONS
 	const acceptTosButton = page.locator(
-		moduleClassSelector('p-terms-of-service__buttons') + ' .c-button--black'
+		`${moduleClassSelector('p-terms-of-service__buttons')} .c-button--black`
 	);
 	await expect(acceptTosButton).toHaveClass(/c-button--disabled/);
 

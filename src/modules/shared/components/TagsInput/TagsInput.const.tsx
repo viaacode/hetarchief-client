@@ -20,7 +20,7 @@ export const multiValueCxState = {
 export const TAGS_INPUT_COMPONENTS: TagsInputProps<boolean>['components'] = {
 	ClearIndicator: ({ className, cx, innerProps }) => {
 		return (
-			<span {...innerProps} className={cx(clearIndicatorCxState, className)} tabIndex={1}>
+			<span {...innerProps} className={cx(clearIndicatorCxState, className)} >
 				<Icon className={cx({ 'indicator-icon': true })} name={IconNamesLight.Times} />
 			</span>
 		);
@@ -34,7 +34,6 @@ export const TAGS_INPUT_COMPONENTS: TagsInputProps<boolean>['components'] = {
 					e.preventDefault();
 				}}
 				className={cx(dropdownIndicatorCxState, className)}
-				tabIndex={1}
 			>
 				<Icon className={cx({ 'indicator-icon': true })} name={IconNamesLight.AngleDown} />
 			</span>

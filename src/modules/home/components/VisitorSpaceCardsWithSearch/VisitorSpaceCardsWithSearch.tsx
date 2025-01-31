@@ -5,10 +5,7 @@ import { StringParam, useQueryParams } from 'use-query-params';
 
 import { Loading } from '@shared/components/Loading';
 import { SearchBar } from '@shared/components/SearchBar';
-import {
-	type VisitorSpaceCardProps,
-	VisitorSpaceCardType,
-} from '@shared/components/VisitorSpaceCard';
+import { type VisitorSpaceCardProps, VisitorSpaceCardType } from '@shared/components/VisitorSpaceCard';
 import { VisitorSpaceCardList } from '@shared/components/VisitorSpaceCardList';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -50,11 +47,12 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 	const windowSize = useWindowSizeContext();
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: only execute the scroll down one time
 	useEffect(() => {
 		if (query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] && resultsAnchor) {
 			document.body.scrollTo({ top: resultsAnchor.current?.offsetTop, behavior: 'smooth' });
 		}
-	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+	}, []);
 
 	/**
 	 * Methods

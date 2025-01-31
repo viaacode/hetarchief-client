@@ -22,6 +22,7 @@ const Html: FunctionComponent<HtmlProps> = ({
 
 	return (
 		<Type
+			// biome-ignore lint/security/noDangerouslySetInnerHtml: This component is used to render HTML content that has been sanatized
 			dangerouslySetInnerHTML={{
 				__html: DOMPurify.sanitize(content, sanitizePreset) as string,
 			}}

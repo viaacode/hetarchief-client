@@ -42,6 +42,7 @@ export const ConsultableOnlyOnLocationFilterForm: FC<ConsultableOnlyOnLocationFi
 		[onFormSubmit]
 	);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		if (isInitialRender) {
 			// Avoid this filter submitting results when loading the form for the first time
@@ -57,7 +58,6 @@ export const ConsultableOnlyOnLocationFilterForm: FC<ConsultableOnlyOnLocationFi
 				}),
 			(...args) => console.error(args)
 		)();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [setValue, isChecked]);
 
 	return (

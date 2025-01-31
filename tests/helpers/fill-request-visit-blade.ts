@@ -57,22 +57,19 @@ export async function fillRequestVisitBlade(
 					resp.status() < 400
 			),
 			page.click(
-				'text=' +
-					SITE_TRANSLATIONS.nl[
+				`text=${SITE_TRANSLATIONS.nl[
 						'modules/home/components/request-access-blade/request-access-blade___verstuur'
-					]
+					]}`
 			),
 		]);
 		const responseBody = (await response.json()) as { id: string };
 		expect(responseBody.id).toBeDefined();
 		return responseBody.id;
-	} else {
+	}
 		await page.click(
-			'text=' +
-				SITE_TRANSLATIONS.nl[
+			`text=${SITE_TRANSLATIONS.nl[
 					'modules/home/components/request-access-blade/request-access-blade___verstuur'
-				]
+				]}`
 		);
 		return null;
-	}
 }

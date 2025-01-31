@@ -2,7 +2,7 @@ import { useSlot } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { ADMIN_NAVIGATION_LINKS } from '@admin/const/Routing.const';
@@ -44,13 +44,13 @@ const AdminLayout: AdminLayoutComponent = ({
 		dispatch(setShowZendesk(false));
 	}, [dispatch]);
 
-	const shouldBeActive = (currentPath: string, parentPath: string) => {
+	const shouldBeActive = useCallback((currentPath: string, parentPath: string) => {
 		if (!parentPath) {
 			return false;
 		}
 		const basePath = currentPath.split('?')[0].split('#')[0];
-		return basePath === parentPath || currentPath.startsWith(parentPath + '/');
-	};
+		return basePath === parentPath || currentPath.startsWith(`${parentPath}/`);
+	}, []);
 
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
@@ -72,7 +72,7 @@ const AdminLayout: AdminLayoutComponent = ({
 					active: shouldBeActive(asPath, href),
 				})),
 			})),
-		[asPath, locale]
+		[asPath, locale, shouldBeActive]
 	);
 
 	return (
@@ -99,7 +99,7 @@ const AdminLayout: AdminLayoutComponent = ({
 
 			<div
 				className={clsx('c-admin__content', {
-					['c-admin__content-bottom-padding']: bottomPadding,
+					"c-admin__content-bottom-padding": bottomPadding,
 				})}
 			>
 				{content}

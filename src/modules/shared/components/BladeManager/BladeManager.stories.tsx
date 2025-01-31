@@ -11,7 +11,7 @@ const BladeManagerStoryComponent = () => {
 	const [currentBlade, setCurrentBlade] = useState(0);
 
 	const close = (layer: number) => {
-		action('close layer ' + layer)();
+		action(`close layer ${layer}`)();
 		setCurrentBlade(layer - 1);
 	};
 

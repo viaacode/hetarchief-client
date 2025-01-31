@@ -168,8 +168,6 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 				return tHtml(
 					'pages/beheer/toegangsaanvragen/index___er-zijn-geen-geannuleerde-aanvragen'
 				);
-
-			case VisitStatus.PENDING:
 			default:
 				return tHtml(
 					'pages/beheer/toegangsaanvragen/index___er-zijn-geen-openstaande-aanvragen'
@@ -183,7 +181,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		}
 		if ((filteredVisits?.length || 0) <= 0) {
 			return renderEmptyMessage();
-		} else {
+		}
 			return (
 				<div className="l-container l-container--edgeless-to-lg">
 					<Table<VisitRequest>
@@ -221,7 +219,6 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 					/>
 				</div>
 			);
-		}
 	};
 
 	return (

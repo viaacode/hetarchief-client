@@ -7,8 +7,8 @@ import type { Locale } from '@shared/utils/i18n';
 
 const { publicRuntimeConfig } = getConfig();
 
-export class ContentPageClientService {
-	public static async getByLanguageAndPath(
+export namespace ContentPageClientService {
+	export async function getByLanguageAndPath(
 		language: Locale,
 		path?: string | null
 	): Promise<ContentPageInfo | null> {

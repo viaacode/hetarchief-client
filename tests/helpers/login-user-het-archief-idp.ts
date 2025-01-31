@@ -20,7 +20,7 @@ export async function loginUserHetArchiefIdp(
 		SITE_TRANSLATIONS[locale][
 			'modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren'
 		];
-	const loginOrRegisterButton = page.locator('text=' + loginOrRegisterLabel).first();
+	const loginOrRegisterButton = page.locator(`text=${loginOrRegisterLabel}`).first();
 	await expect(loginOrRegisterButton).toBeVisible();
 
 	// Check auth modal is open

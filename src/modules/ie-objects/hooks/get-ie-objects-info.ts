@@ -20,7 +20,7 @@ export const useGetIeObjectInfo = (
 	return useQuery(
 		[QUERY_KEYS.getIeObjectsInfo, id],
 		async () => {
-			let newId;
+			let newId: string;
 			if (id.length > MIN_LENGTH_SCHEMA_IDENTIFIER_V2) {
 				const v3IdentifierResponse = await IeObjectsService.schemaIdentifierLookup(id);
 				newId = v3IdentifierResponse.schemaIdentifierV3;

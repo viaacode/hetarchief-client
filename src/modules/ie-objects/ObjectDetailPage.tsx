@@ -1,11 +1,4 @@
-import {
-	Alert,
-	Button,
-	FlowPlayer,
-	type FlowPlayerProps,
-	type TabProps,
-	Tabs,
-} from '@meemoo/react-components';
+import { Alert, Button, FlowPlayer, type FlowPlayerProps, type TabProps, Tabs } from '@meemoo/react-components';
 import clsx from 'clsx';
 import type { HTTPError } from 'ky';
 import { capitalize, compact, intersection, isNil, lowerCase, noop } from 'lodash-es';
@@ -26,21 +19,12 @@ import React, {
 	useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-	BooleanParam,
-	NumberParam,
-	StringParam,
-	useQueryParam,
-	withDefault,
-} from 'use-query-params';
+import { BooleanParam, NumberParam, StringParam, useQueryParam, withDefault } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import type { User } from '@auth/types';
-import {
-	RequestAccessBlade,
-	type RequestAccessFormState,
-} from '@home/components/RequestAccessBlade';
+import { RequestAccessBlade, type RequestAccessFormState } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { CollapsableBlade } from '@ie-objects/components/CollapsableBlade';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
@@ -89,13 +73,10 @@ import {
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import IiifViewer from '@iiif-viewer/IiifViewer';
-import type {
-	IiifViewerFunctions,
-	ImageInfo,
-	ImageInfoWithToken,
-	Rect,
-} from '@iiif-viewer/IiifViewer.types';
-import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
+import type { IiifViewerFunctions, ImageInfo, ImageInfoWithToken, Rect } from '@iiif-viewer/IiifViewer.types';
+import {
+	SearchInputWithResultsPagination,
+} from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
@@ -106,10 +87,7 @@ import { Loading } from '@shared/components/Loading';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
-import {
-	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
-	QUERY_PARAM_KEY,
-} from '@shared/const/query-param-keys';
+import { HIGHLIGHTED_SEARCH_TERMS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { convertDurationStringToSeconds } from '@shared/helpers/convert-duration-string-to-seconds';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -127,7 +105,9 @@ import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
-import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
+import {
+	useGetActiveVisitRequestForUserAndSpace,
+} from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
@@ -140,7 +120,12 @@ import styles from './ObjectDetailPage.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
 
-export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image, url }) => {
+export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
+	title,
+	description,
+	image,
+	url,
+}) => {
 	/**
 	 * Hooks
 	 */
@@ -156,17 +141,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const isKiosk = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 
 	// Permissions
-	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
-	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
+	const showLinkedSpaceAsHomepage = useHasAllPermission(
+		Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE,
+	);
+	const canManageFolders: boolean | null = useHasAllPermission(
+		Permission.MANAGE_FOLDERS,
+	);
 
 	// Internal state
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | null>(null);
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
-	const [isRelatedObjectsBladeOpen, setIsRelatedObjectsBladeOpen] = useState(false);
-	const [hasNewsPaperBeenRendered, setHasNewsPaperBeenRendered] = useState(false);
-	const [hasAppliedUrlSearchTerms, setHasAppliedUrlSearchTerms] = useState<boolean>(false);
+	const [isRelatedObjectsBladeOpen, setIsRelatedObjectsBladeOpen] =
+		useState(false);
+	const [hasNewsPaperBeenRendered, setHasNewsPaperBeenRendered] =
+		useState(false);
+	const [hasAppliedUrlSearchTerms, setHasAppliedUrlSearchTerms] =
+		useState<boolean>(false);
 
 	// Layout
 	useStickyLayout();
@@ -180,50 +172,57 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	// Search terms that are coming from the global search page
 	const [highlightedSearchTerms, setHighlightedSearchTerms] = useQueryParam(
 		QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS,
-		withDefault(StringParam, '')
+		withDefault(StringParam, ""),
 	);
 	// Temp search terms are used to store the search terms while the user is typing
-	const [searchTermsTemp, setSearchTermsTemp] = useState<string>('');
+	const [searchTermsTemp, setSearchTermsTemp] = useState<string>("");
 	// Search terms are used to store the search terms after the user has confirmed the search
-	const [searchTerms, setSearchTerms] = useState<string>('');
+	const [searchTerms, setSearchTerms] = useState<string>("");
 
-	const [, setShowAuthQueryKey] = useQueryParam(QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY, StringParam);
+	const [, setShowAuthQueryKey] = useQueryParam(
+		QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY,
+		StringParam,
+	);
 	const [activeBlade, setActiveBlade] = useQueryParam(
 		QUERY_PARAM_KEY.ACTIVE_BLADE,
-		withDefault(StringParam, undefined)
+		withDefault(StringParam, undefined),
 	);
 	const [activeTab, setActiveTab] = useQueryParam(
 		QUERY_PARAM_KEY.ACTIVE_TAB,
-		withDefault(StringParam, ObjectDetailTabs.Metadata)
+		withDefault(StringParam, ObjectDetailTabs.Metadata),
 	);
 
 	// Used for going through the pages of a newspaper (iiif viewer reference strip)
 	const [currentPageIndex, setCurrentPageIndex] = useQueryParam(
 		QUERY_PARAM_KEY.ACTIVE_PAGE,
-		withDefault(NumberParam, 0)
+		withDefault(NumberParam, 0),
 	);
 
-	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number | null>(null);
+	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<
+		number | null
+	>(null);
 	const [expandSidebar, setExpandSidebar] = useQueryParam(
 		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
-		withDefault(BooleanParam, false)
+		withDefault(BooleanParam, false),
 	);
 	const [iiifViewerFocusX] = useQueryParam(
 		QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_X,
-		withDefault(NumberParam, undefined)
+		withDefault(NumberParam, undefined),
 	);
 	const [iiifViewerFocusY] = useQueryParam(
 		QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_Y,
-		withDefault(NumberParam, undefined)
+		withDefault(NumberParam, undefined),
 	);
 	const [iiifViewerZoomLevel] = useQueryParam(
 		QUERY_PARAM_KEY.IIIF_VIEWER_ZOOM_LEVEL,
-		withDefault(NumberParam, undefined)
+		withDefault(NumberParam, undefined),
 	);
 	const [isTextOverlayVisible, setIsTextOverlayVisible] = useState(false);
 
 	const [isLoadingPageImage, setIsLoadingPageImage] = useState(true);
-	const [searchResults, setSearchResults] = useState<OcrSearchResult[] | null>(null);
+	const [searchResults, setSearchResults] = useState<OcrSearchResult[] | null>(
+		null,
+	);
 
 	const {
 		data: mediaInfo,
@@ -232,7 +231,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		error: mediaInfoError,
 	} = useGetIeObjectInfo(ieObjectId);
 
-	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
+	const isNoAccessError =
+		(mediaInfoError as HTTPError)?.response?.status === 403;
 
 	const currentPage: IeObjectPageRepresentation | undefined =
 		mediaInfo?.pageRepresentations?.[currentPageIndex];
@@ -240,32 +240,34 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const getRepresentationByType = useCallback(
 		(mimeTypes: string[]): IeObjectRepresentation | null => {
 			return (
-				currentPage?.representations?.find(
-					(representation) =>
-						representation?.files?.find((file) => mimeTypes.includes(file.mimeType))
+				currentPage?.representations?.find((representation) =>
+					representation?.files?.find((file) =>
+						mimeTypes.includes(file.mimeType),
+					),
 				) || null
 			);
 		},
-		[currentPage]
+		[currentPage],
 	);
 
 	const getFileByType = useCallback(
 		(mimeTypes: string[]): IeObjectFile | null => {
 			return (
 				getRepresentationByType(mimeTypes)?.files?.find((file) =>
-					mimeTypes.includes(file.mimeType)
+					mimeTypes.includes(file.mimeType),
 				) || null
 			);
 		},
-		[getRepresentationByType]
+		[getRepresentationByType],
 	);
 
 	// peak file
-	const peakFileStoredAt: string | null = getFileByType(JSON_FORMATS)?.storedAt || null;
+	const peakFileStoredAt: string | null =
+		getFileByType(JSON_FORMATS)?.storedAt || null;
 
 	// media info
 	const { data: peakJson } = useGetPeakFile(peakFileStoredAt, {
-		enabled: mediaInfo?.dctermsFormat === 'audio',
+		enabled: mediaInfo?.dctermsFormat === "audio",
 	});
 
 	const iiifViewerReference =
@@ -274,41 +276,45 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const representationsToDisplay =
 		(mediaInfo?.pageRepresentations || []).flatMap((pageRepresentation) =>
 			pageRepresentation.representations.flatMap((rep) =>
-				rep.files.filter((file) => FLOWPLAYER_FORMATS.includes(file.mimeType))
-			)
+				rep.files.filter((file) => FLOWPLAYER_FORMATS.includes(file.mimeType)),
+			),
 		) || [];
 	const iiifViewerImageInfos = useMemo((): ImageInfo[] => {
 		return compact(
 			mediaInfo?.pageRepresentations?.flatMap((pageRepresentation) => {
 				const files = pageRepresentation?.representations?.flatMap(
-					(representation) => representation.files
+					(representation) => representation.files,
 				);
 				const imageApiFile = files.find((file) =>
-					IMAGE_API_FORMATS.includes(file.mimeType)
+					IMAGE_API_FORMATS.includes(file.mimeType),
 				);
 				if (!imageApiFile?.storedAt) {
 					return null;
 				}
-				const imageFile = files.find((file) => IMAGE_FORMATS.includes(file.mimeType));
-				const altoFile = files.find((file) => XML_FORMATS.includes(file.mimeType));
+				const imageFile = files.find((file) =>
+					IMAGE_FORMATS.includes(file.mimeType),
+				);
+				const altoFile = files.find((file) =>
+					XML_FORMATS.includes(file.mimeType),
+				);
 				if (!imageFile?.storedAt) {
 					return null;
 				}
 				return {
-					imageUrl:
-						imageApiFile.storedAt.replace(
-							'https://iiif-qas.meemoo.be/image/3/public',
-							'https://iiif-qas.meemoo.be/image/3/hetarchief'
-						) + '/info.json', // Adding info.json avoids an extra redirect 303
+					imageUrl: `${imageApiFile.storedAt.replace(
+						"https://iiif-qas.meemoo.be/image/3/public",
+						"https://iiif-qas.meemoo.be/image/3/hetarchief",
+					)}/info.json`, // Adding info.json avoids an extra redirect 303
 					thumbnailUrl: imageFile?.thumbnailUrl,
 					altoUrl: altoFile?.storedAt,
 				};
-			})
+			}),
 		);
 	}, [mediaInfo?.pageRepresentations]);
 
 	// Playable url for flowplayer
-	const currentPlayableFile: IeObjectFile | null = getFileByType(FLOWPLAYER_FORMATS);
+	const currentPlayableFile: IeObjectFile | null =
+		getFileByType(FLOWPLAYER_FORMATS);
 	const fileStoredAt: string | null = currentPlayableFile?.storedAt ?? null;
 	const {
 		data: playableUrl,
@@ -316,13 +322,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		isError: isErrorPlayableUrl,
 	} = useGetIeObjectsTicketInfo(
 		fileStoredAt,
-		() => setFlowPlayerKey(fileStoredAt) // Force flowplayer rerender after successful fetch
+		() => setFlowPlayerKey(fileStoredAt), // Force flowplayer rerender after successful fetch
 	);
 	const { data: ticketServiceTokensByPath } = useGetIeObjectTicketServiceTokens(
 		iiifViewerImageInfos.map((imageInfo) => imageInfo.imageUrl),
 		{
 			enabled: iiifViewerImageInfos.length > 0,
-		}
+		},
 	);
 	const imageInfosWithTokens = useMemo(
 		() =>
@@ -330,19 +336,23 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				(imageInfo): ImageInfoWithToken => ({
 					...imageInfo,
 					token: ticketServiceTokensByPath?.[imageInfo.imageUrl] || null,
-				})
+				}),
 			),
-		[iiifViewerImageInfos, ticketServiceTokensByPath]
+		[iiifViewerImageInfos, ticketServiceTokensByPath],
 	);
 
 	// also interesting
 	const userHasAccessToMaintainer =
-		mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS) ||
-		mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL);
+		mediaInfo?.accessThrough?.includes(
+			IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
+		) ||
+		mediaInfo?.accessThrough?.includes(
+			IeObjectAccessThrough.VISITOR_SPACE_FULL,
+		);
 	const { data: similarData } = useGetIeObjectsAlsoInteresting(
 		ieObjectId,
-		isKiosk || userHasAccessToMaintainer ? mediaInfo?.maintainerId ?? '' : '',
-		{ enabled: !!mediaInfo }
+		isKiosk || userHasAccessToMaintainer ? (mediaInfo?.maintainerId ?? "") : "",
+		{ enabled: !!mediaInfo },
 	);
 
 	// related
@@ -351,7 +361,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		mediaInfo?.premisIsPartOf || null,
 		{
 			enabled: !!mediaInfo,
-		}
+		},
 	);
 
 	// visit info
@@ -359,7 +369,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		data: visitRequest,
 		error: visitRequestError,
 		isLoading: visitRequestIsLoading,
-	} = useGetActiveVisitRequestForUserAndSpace(router.query.slug as string, user);
+	} = useGetActiveVisitRequestForUserAndSpace(
+		router.query.slug as string,
+		user,
+	);
 
 	// get visitor space info, used to display contact information
 	const {
@@ -371,36 +384,44 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	// ocr alto info
 	const currentPageAltoUrl = useMemo((): string | null => {
 		let altoFileUrl: string | null = null;
-		currentPage?.representations?.some((representation: IeObjectRepresentation) => {
-			if (representation.schemaTranscriptUrl) {
-				altoFileUrl = representation.schemaTranscriptUrl;
-				return true; // Found the alto.json file
-			}
-			return representation?.files?.some((file) => {
-				if (XML_FORMATS.includes(file.mimeType)) {
-					altoFileUrl = file.storedAt;
-					return true; // Found the fallback alto.xml file
+		currentPage?.representations?.some(
+			(representation: IeObjectRepresentation) => {
+				if (representation.schemaTranscriptUrl) {
+					altoFileUrl = representation.schemaTranscriptUrl;
+					return true; // Found the alto.json file
 				}
-				return false; // Did not find any alto files
-			});
-		});
+				return representation?.files?.some((file) => {
+					if (XML_FORMATS.includes(file.mimeType)) {
+						altoFileUrl = file.storedAt;
+						return true; // Found the fallback alto.xml file
+					}
+					return false; // Did not find any alto files
+				});
+			},
+		);
 		return altoFileUrl;
 	}, [currentPage]);
-	const { data: simplifiedAltoInfo } = useGetAltoJsonFileContent(currentPageAltoUrl);
+	const { data: simplifiedAltoInfo } =
+		useGetAltoJsonFileContent(currentPageAltoUrl);
 
 	/**
 	 * Computed
 	 */
-	const hasMedia = mediaInfo?.pageRepresentations?.length || 0 > 0;
-	const isMediaInfoErrorNotFound = (mediaInfoError as HTTPError)?.response?.status === 404;
-	const isMediaInfoErrorNoAccess = (mediaInfoError as HTTPError)?.response?.status === 403;
+	const hasMedia = (mediaInfo?.pageRepresentations?.length || 0) > 0;
+	const isMediaInfoErrorNotFound =
+		(mediaInfoError as HTTPError)?.response?.status === 404;
+	const isMediaInfoErrorNoAccess =
+		(mediaInfoError as HTTPError)?.response?.status === 403;
 	const isVisitRequestErrorNotFound =
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
 		(visitRequestError as HTTPError)?.response?.status === 403;
-	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
-	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
+	const isErrorSpaceNotFound =
+		(visitorSpaceError as HTTPError)?.response?.status === 404;
+	const isErrorSpaceNotActive =
+		(visitorSpaceError as HTTPError)?.response?.status === 410;
 	const isNewspaper = mediaInfo?.dctermsFormat === IeObjectType.Newspaper;
-	const showFragmentSlider = representationsToDisplay.length > 1 && !isNewspaper;
+	const showFragmentSlider =
+		representationsToDisplay.length > 1 && !isNewspaper;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const hasAccessToVisitorSpaceOfObject =
 		intersection(mediaInfo?.accessThrough, [
@@ -416,14 +437,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const pageOcrTexts: (string | null)[] = useMemo(() => {
 		const pageOcrTextsTemp: (string | null)[] = [];
-		mediaInfo?.pageRepresentations?.forEach((pageRepresentation) => {
+		for (const pageRepresentation of mediaInfo?.pageRepresentations || []) {
 			const pageTranscripts = compact(
 				pageRepresentation?.representations?.map((representation) => {
 					return representation.schemaTranscript;
-				})
+				}),
 			);
 			pageOcrTextsTemp.push(pageTranscripts[0]?.toLowerCase() || null);
-		});
+		}
 		return pageOcrTextsTemp;
 	}, [mediaInfo?.pageRepresentations]);
 
@@ -433,27 +454,31 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	// You need the permission or not to be logged in to download the newspaper
 	// https://meemoo.atlassian.net/browse/ARC-2617
 	const canDownloadNewspaper: boolean =
-		(useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user) && isPublicNewspaper;
+		(useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user) &&
+		isPublicNewspaper;
 
 	const getHighlightedAltoTexts = useCallback((): AltoTextLine[] => {
 		return (
 			simplifiedAltoInfo?.text?.filter((altoText) =>
 				searchTerms
 					.toLowerCase()
-					.split(' ')
-					.some((searchTermWord) => altoText.text.toLowerCase().includes(searchTermWord))
+					.split(" ")
+					.some((searchTermWord) =>
+						altoText.text.toLowerCase().includes(searchTermWord),
+					),
 			) || []
 		);
 	}, [searchTerms, simplifiedAltoInfo?.text]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	const handleSearch = useCallback(
 		async (newSearchTerms: string): Promise<void> => {
-			if (newSearchTerms === '') {
+			if (newSearchTerms === "") {
 				// Reset search
 				// Zoom to whole page
 				iiifViewerReference.current?.iiifGoToHome();
 				setSearchResults([]);
-				setSearchTerms('');
+				setSearchTerms("");
 				setCurrentSearchResultIndex(0);
 				return;
 			}
@@ -464,9 +489,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				if (mediaInfo?.thumbnailUrl) {
 					toastService.notify({
 						maxLines: 3,
-						title: tText('modules/ie-objects/object-detail-page___error'),
+						title: tText("modules/ie-objects/object-detail-page___error"),
 						description: tText(
-							'modules/ie-objects/object-detail-page___deze-krant-heeft-geen-ocr-tekst'
+							"modules/ie-objects/object-detail-page___deze-krant-heeft-geen-ocr-tekst",
 						),
 					});
 				}
@@ -474,32 +499,30 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			}
 
 			const searchResultsTemp: OcrSearchResult[] = [];
-			newSearchTerms
-				.toLowerCase()
-				.split(' ')
-				.forEach((searchTerm) => {
-					pageOcrTexts.forEach((pageOcrText, pageIndex) => {
-						if (!pageOcrText) {
-							return; // Skip this page since it doesn't have an ocr transcript
-						}
-						let searchTermCharacterOffset: number = pageOcrText.indexOf(searchTerm);
-						let searchTermIndexOnPage = 0;
-						while (searchTermCharacterOffset !== -1) {
-							const searchResult: OcrSearchResult = {
-								pageIndex,
-								searchTerm,
-								searchTermCharacterOffset,
-								searchTermIndexOnPage,
-							};
-							searchResultsTemp.push(searchResult);
-							searchTermCharacterOffset = pageOcrText?.indexOf(
-								searchTerm,
-								searchTermCharacterOffset + 1
-							);
-							searchTermIndexOnPage += 1;
-						}
-					});
+			for (const searchTerm of newSearchTerms.toLowerCase().split(" ")) {
+				pageOcrTexts.forEach((pageOcrText, pageIndex) => {
+					if (!pageOcrText) {
+						return; // Skip this page since it doesn't have an ocr transcript
+					}
+					let searchTermCharacterOffset: number =
+						pageOcrText.indexOf(searchTerm);
+					let searchTermIndexOnPage = 0;
+					while (searchTermCharacterOffset !== -1) {
+						const searchResult: OcrSearchResult = {
+							pageIndex,
+							searchTerm,
+							searchTermCharacterOffset,
+							searchTermIndexOnPage,
+						};
+						searchResultsTemp.push(searchResult);
+						searchTermCharacterOffset = pageOcrText?.indexOf(
+							searchTerm,
+							searchTermCharacterOffset + 1,
+						);
+						searchTermIndexOnPage += 1;
+					}
 				});
+			}
 
 			setSearchResults(searchResultsTemp);
 			setSearchTerms(newSearchTerms.toLowerCase());
@@ -516,7 +539,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			await router.replace(newUrl, undefined, { shallow: true });
 
 			const firstSearchResultOnCurrentPage = searchResultsTemp.findIndex(
-				(result) => result.pageIndex === currentPageIndex
+				(result) => result.pageIndex === currentPageIndex,
 			);
 			if (firstSearchResultOnCurrentPage === -1) {
 				setCurrentSearchResultIndex(0);
@@ -524,7 +547,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				setCurrentSearchResultIndex(firstSearchResultOnCurrentPage);
 			}
 		},
-		[currentPageIndex, mediaInfo?.thumbnailUrl, pageOcrTexts, router]
+		[currentPageIndex, mediaInfo?.thumbnailUrl, pageOcrTexts, router],
 	);
 
 	const handleIsTextOverlayVisibleChange = useCallback(
@@ -548,7 +571,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			});
 			router.replace(newUrl, undefined, { shallow: true });
 		},
-		[router]
+		[router],
 	);
 
 	/**
@@ -556,7 +579,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 */
 
 	useEffect(() => {
-		console.log(`[PERFORMANCE] ${new Date().toISOString()} detail page loading`);
+		console.log(
+			`[PERFORMANCE] ${new Date().toISOString()} detail page loading`,
+		);
 	}, []);
 
 	useEffect(() => {
@@ -573,6 +598,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * - the current search result index changes
 	 * - the current page index changes
 	 */
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		if (isLoadingPageImage) {
 			return; // Wait for the page to load before changing overlays or zoom
@@ -591,7 +618,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		if (currentHighlightedAltoText) {
 			iiifViewerReference.current?.iiifZoomToRect(currentHighlightedAltoText);
 		} else {
-			console.error('Could not find currentHighlightedAltoText', {
+			console.error("Could not find currentHighlightedAltoText", {
 				searchResults,
 				highlightedAltoTexts,
 			});
@@ -600,7 +627,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		if (isTextOverlayVisible) {
 			iiifViewerReference.current?.updateHighlightedAltoTexts(
 				highlightedAltoTexts,
-				currentHighlightedAltoText
+				currentHighlightedAltoText,
 			);
 		} else {
 			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
@@ -623,7 +650,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		if (highlightedSearchTerms && isNewspaper && !hasAppliedUrlSearchTerms) {
 			const newSearchTerms: string = highlightedSearchTerms
 				.split(HIGHLIGHTED_SEARCH_TERMS_SEPARATOR)
-				.join(' ');
+				.join(" ");
 			setSearchTermsTemp(newSearchTerms);
 			setSearchTerms(newSearchTerms);
 			handleSearch(newSearchTerms);
@@ -641,14 +668,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	/**
 	 * Scroll to active search result in ocr tab when the current search result index changes
 	 */
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		// Wait for active word to be rendered before starting scroll
 		window.setTimeout(() => {
 			const activeSearchResultElem = document.querySelector(
-				moduleClassSelector('p-object-detail__ocr__word--marked--active')
+				moduleClassSelector("p-object-detail__ocr__word--marked--active"),
 			);
 			const scrollable = document.querySelector(
-				moduleClassSelector('p-object-detail__ocr__words-container')
+				moduleClassSelector("p-object-detail__ocr__words-container"),
 			);
 
 			const scrollTopWord = activeSearchResultElem?.scrollTop || 0;
@@ -656,9 +684,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				top: scrollTopWord,
 			});
 			activeSearchResultElem?.scrollIntoView({
-				behavior: 'instant',
-				block: 'nearest',
-				inline: 'start',
+				behavior: "instant",
+				block: "nearest",
+				inline: "start",
 			});
 		}, 100);
 	}, [currentSearchResultIndex, searchTerms]);
@@ -674,8 +702,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			setShowZendesk(
 				!isKiosk &&
 					!hasAccessToVisitorSpaceOfObject &&
-					activeTab === ObjectDetailTabs.Metadata
-			)
+					activeTab === ObjectDetailTabs.Metadata,
+			),
 		);
 	}, [dispatch, hasAccessToVisitorSpaceOfObject, isKiosk, activeTab]);
 
@@ -694,7 +722,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			};
 
 			if (hasAccessToVisitorSpaceOfObject) {
-				EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_VIEW, path, eventData);
+				EventsService.triggerEvent(
+					LogEventType.BEZOEK_ITEM_VIEW,
+					path,
+					eventData,
+				);
 			} else {
 				EventsService.triggerEvent(LogEventType.ITEM_VIEW, path, eventData);
 			}
@@ -713,16 +745,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	/**
 	 * Set the media type and default tab when the media info is loaded
 	 */
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		// Set default view
 		if (isMobile) {
 			// Default to metadata tab on mobile
-			setActiveTab(ObjectDetailTabs.Metadata, 'replaceIn');
+			setActiveTab(ObjectDetailTabs.Metadata, "replaceIn");
 		} else {
 			// Check media content and license for default tab on desktop
-			setExpandSidebar(!mediaInfo?.dctermsFormat || !hasMedia, 'replaceIn');
+			setExpandSidebar(!mediaInfo?.dctermsFormat || !hasMedia, "replaceIn");
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mediaInfo]);
 
 	/**
@@ -741,20 +773,20 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 			return {
 				type: ieObject?.dctermsFormat || null,
-				title: ieObject?.name || '',
+				title: ieObject?.name || "",
 				subtitle: isNil(date)
-					? `${ieObject?.maintainerName ?? ''}`
-					: `${ieObject?.maintainerName ?? ''} (${date})`,
-				description: ieObject?.description || '',
+					? `${ieObject?.maintainerName ?? ""}`
+					: `${ieObject?.maintainerName ?? ""} (${date})`,
+				description: ieObject?.description || "",
 				thumbnail: ieObject?.thumbnailUrl,
-				id: ieObject?.schemaIdentifier || '',
-				maintainer_id: ieObject?.maintainerId || '',
+				id: ieObject?.schemaIdentifier || "",
+				maintainer_id: ieObject?.maintainerId || "",
 			};
 		});
 	};
 
 	const mapRelatedIeObject = (
-		ieObject: Partial<RelatedIeObject> | undefined | null
+		ieObject: Partial<RelatedIeObject> | undefined | null,
 	): MediaObject | null => {
 		if (!ieObject) {
 			return null;
@@ -765,8 +797,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			type: ieObject.dctermsFormat as IeObjectType,
 			title: ieObject.name as string,
 			subtitle: isNil(date)
-				? `${ieObject?.maintainerName ?? ''}`
-				: `${ieObject?.maintainerName ?? ''} (${date})`,
+				? `${ieObject?.maintainerName ?? ""}`
+				: `${ieObject?.maintainerName ?? ""} (${date})`,
 			description: ieObject.description as string,
 			id: ieObject.schemaIdentifier as string,
 			maintainer_id: ieObject.maintainerId,
@@ -777,30 +809,29 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const getMappedRelatedIeObjects = (): MediaObject[] => {
 		if (relatedIeObjects?.parent) {
 			return [mapRelatedIeObject(relatedIeObjects.parent) as MediaObject];
-		} else {
-			return compact(relatedIeObjects?.children?.map(mapRelatedIeObject) || []);
 		}
+		return compact(relatedIeObjects?.children?.map(mapRelatedIeObject) || []);
 	};
 
 	/**
 	 * Callbacks
 	 */
 	const handleExpandButtonClicked = () => {
-		setExpandSidebar(!expandSidebar, 'replaceIn');
+		setExpandSidebar(!expandSidebar, "replaceIn");
 	};
 
 	const onCloseBlade = () => {
-		setActiveBlade(null, 'replaceIn');
+		setActiveBlade(null, "replaceIn");
 	};
 
 	const onDuplicateRequest = () => {
 		toastService.notify({
 			maxLines: 3,
 			title: tText(
-				'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst'
+				"modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst",
 			),
 			description: tText(
-				'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst-beschrijving'
+				"modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst-beschrijving",
 			),
 		});
 	};
@@ -808,11 +839,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const openRequestAccessBlade = () => {
 		if (user) {
 			// Open the request access blade
-			setActiveBlade(MediaActions.RequestAccess, 'replaceIn');
+			setActiveBlade(MediaActions.RequestAccess, "replaceIn");
 		} else {
 			// Open the login blade first
-			setShowAuthQueryKey('1', 'replaceIn');
-			setActiveBlade(MediaActions.RequestAccess, 'replaceIn');
+			setShowAuthQueryKey("1", "replaceIn");
+			setActiveBlade(MediaActions.RequestAccess, "replaceIn");
 		}
 	};
 
@@ -820,7 +851,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		switch (id) {
 			case MediaActions.Bookmark:
 				if (canManageFolders) {
-					setActiveBlade(MediaActions.Bookmark, 'replaceIn');
+					setActiveBlade(MediaActions.Bookmark, "replaceIn");
 				}
 
 				if (isAnonymous) {
@@ -828,7 +859,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				}
 				break;
 			case MediaActions.Report:
-				setActiveBlade(MediaActions.Report, 'replaceIn');
+				setActiveBlade(MediaActions.Report, "replaceIn");
 				break;
 			case MediaActions.RequestAccess:
 				openRequestAccessBlade();
@@ -852,9 +883,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		});
 
 		if (
-			materialRequests?.items &&
-			materialRequests.items.find(
-				(request) => request.objectSchemaIdentifier === mediaInfo?.schemaIdentifier
+			materialRequests?.items?.find(
+				(request) =>
+					request.objectSchemaIdentifier === mediaInfo?.schemaIdentifier,
 			)
 		) {
 			onDuplicateRequest();
@@ -864,20 +895,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		const externalFormUrl = getExternalMaterialRequestUrlIfAvailable(
 			mediaInfo,
 			isAnonymous,
-			user
+			user,
 		);
 		if (externalFormUrl) {
-			EventsService.triggerEvent(LogEventType.ITEM_REQUEST, window.location.href, {
-				fragment_id: mediaInfo?.schemaIdentifier,
-				pid: mediaInfo?.schemaIdentifier,
-				user_group_name: user?.groupName,
-				or_id: mediaInfo?.maintainerId,
-				type: mediaInfo?.dctermsFormat,
-			});
+			EventsService.triggerEvent(
+				LogEventType.ITEM_REQUEST,
+				window.location.href,
+				{
+					fragment_id: mediaInfo?.schemaIdentifier,
+					pid: mediaInfo?.schemaIdentifier,
+					user_group_name: user?.groupName,
+					or_id: mediaInfo?.maintainerId,
+					type: mediaInfo?.dctermsFormat,
+				},
+			);
 
 			// The external url is opened with an actual link, so safari doesn't block the popup
 		} else {
-			setActiveBlade(MediaActions.RequestMaterial, 'replaceIn');
+			setActiveBlade(MediaActions.RequestMaterial, "replaceIn");
 		}
 	};
 
@@ -903,12 +938,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						EventsService.triggerEvent(
 							LogEventType.BEZOEK_ITEM_PLAY,
 							path,
-							eventData
+							eventData,
 						).then(noop);
 					} else {
-						EventsService.triggerEvent(LogEventType.ITEM_PLAY, path, eventData).then(
-							noop
-						);
+						EventsService.triggerEvent(
+							LogEventType.ITEM_PLAY,
+							path,
+							eventData,
+						).then(noop);
 					}
 				}
 
@@ -925,9 +962,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		try {
 			if (!user) {
 				toastService.notify({
-					title: tHtml('pages/slug/ie/index___je-bent-niet-ingelogd'),
+					title: tHtml("pages/slug/ie/index___je-bent-niet-ingelogd"),
 					description: tHtml(
-						'pages/slug/ie/index___je-bent-niet-ingelogd-log-opnieuw-in-en-probeer-opnieuw'
+						"pages/slug/ie/index___je-bent-niet-ingelogd-log-opnieuw-in-en-probeer-opnieuw",
 					),
 				});
 				return;
@@ -935,9 +972,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 			if (!mediaInfo?.maintainerSlug) {
 				toastService.notify({
-					title: tHtml('pages/slug/ie/index___bezoekersruimte-bestaat-niet'),
+					title: tHtml("pages/slug/ie/index___bezoekersruimte-bestaat-niet"),
 					description: tHtml(
-						'pages/slug/ie/index___de-bezoekersruimte-waarvoor-je-een-aanvraag-wil-indienen-bestaat-niet'
+						"pages/slug/ie/index___de-bezoekersruimte-waarvoor-je-een-aanvraag-wil-indienen-bestaat-niet",
 					),
 				});
 				return;
@@ -952,20 +989,20 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			onCloseBlade();
 			await router.push(
 				ROUTES_BY_LOCALE[locale].visitRequested.replace(
-					':slug',
-					createdVisitRequest.spaceSlug
-				)
+					":slug",
+					createdVisitRequest.spaceSlug,
+				),
 			);
 		} catch (err) {
 			console.error({
-				message: 'Failed to create visit request',
+				message: "Failed to create visit request",
 				error: err,
 				info: values,
 			});
 			toastService.notify({
-				title: tHtml('pages/slug/ie/index___error'),
+				title: tHtml("pages/slug/ie/index___error"),
 				description: tHtml(
-					'pages/slug/ie/index___er-ging-iets-mis-bij-het-versturen-van-je-aanvraag-probeer-het-later-opnieuw-of-contacteer-de-support'
+					"pages/slug/ie/index___er-ging-iets-mis-bij-het-versturen-van-je-aanvraag-probeer-het-later-opnieuw-of-contacteer-de-support",
 				),
 			});
 		}
@@ -984,16 +1021,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			}
 			if (searchResult.pageIndex !== currentPageIndex) {
 				setIsLoadingPageImage(true);
-				setCurrentPageIndex(searchResult.pageIndex, 'replaceIn');
+				setCurrentPageIndex(searchResult.pageIndex, "replaceIn");
 			}
 		},
-		[searchResults, currentPageIndex, setCurrentPageIndex]
+		[searchResults, currentPageIndex, setCurrentPageIndex],
 	);
 
 	const handleClearSearch = () => {
-		setSearchTermsTemp('');
-		setSearchTerms('');
-		setHighlightedSearchTerms('');
+		setSearchTermsTemp("");
+		setSearchTerms("");
+		setHighlightedSearchTerms("");
 		setSearchResults(null);
 		setCurrentSearchResultIndex(null);
 		iiifViewerReference.current?.iiifGoToHome();
@@ -1032,9 +1069,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			mediaInfo?.dctermsFormat || null,
 			activeTab as ObjectDetailTabs,
 			isMediaAvailable(),
-			arePagesOcrTextsAvailable
+			arePagesOcrTextsAvailable,
 		);
-	}, [mediaInfo?.dctermsFormat, activeTab, isMediaAvailable, arePagesOcrTextsAvailable]);
+	}, [
+		mediaInfo?.dctermsFormat,
+		activeTab,
+		isMediaAvailable,
+		arePagesOcrTextsAvailable,
+	]);
 
 	const accessEndDate = useMemo(() => {
 		const dateDesktop = formatMediumDateWithTime(asDate(visitRequest?.endAt));
@@ -1045,16 +1087,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 
 		if (isMobile) {
-			return tHtml('pages/slug/index___tot-access-end-date-mobile', {
+			return tHtml("pages/slug/index___tot-access-end-date-mobile", {
 				accessEndDateMobile: dateMobile,
 			});
 		}
 
 		return tHtml(
-			'pages/bezoekersruimte/visitor-space-slug/object-id/index___toegang-tot-access-end-date',
+			"pages/bezoekersruimte/visitor-space-slug/object-id/index___toegang-tot-access-end-date",
 			{
 				accessEndDate: dateDesktop,
-			}
+			},
 		);
 	}, [isMobile, showLinkedSpaceAsHomepage, visitRequest?.endAt]);
 
@@ -1071,15 +1113,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					width: Math.ceil(rect.width),
 					height: Math.ceil(rect.height),
 				},
-			})
+			}),
 		);
 	};
 
 	const handleActiveImageIndexChange = (index: number) => {
-		setCurrentPageIndex(index, 'replaceIn');
+		setCurrentPageIndex(index, "replaceIn");
 		setIsLoadingPageImage(true);
 		setCurrentSearchResultIndex(
-			searchResults?.findIndex((result) => result.pageIndex === index) || 0
+			searchResults?.findIndex((result) => result.pageIndex === index) || 0,
 		);
 	};
 
@@ -1105,7 +1147,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			return (
 				<>
 					{isLoadingPageImage && (
-						<div className={styles['c-loading__iiif-viewer']}>
+						<div className={styles["c-loading__iiif-viewer"]}>
 							<Loading owner="iiif viewer" />
 						</div>
 					)}
@@ -1146,11 +1188,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			);
 		}
 
-		if (!playableUrl || !currentPlayableFile || !mediaInfo?.pageRepresentations?.length) {
+		if (
+			!playableUrl ||
+			!currentPlayableFile ||
+			!mediaInfo?.pageRepresentations?.length
+		) {
 			return (
 				<ObjectPlaceholder
 					{...noLicensePlaceholder()}
-					onOpenRequestAccess={showVisitButton ? openRequestAccessBlade : undefined}
+					onOpenRequestAccess={
+						showVisitButton ? openRequestAccessBlade : undefined
+					}
 					addSliderPadding={showFragmentSlider}
 				/>
 			);
@@ -1158,23 +1206,35 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 		const playableRepresentation = getRepresentationByType(FLOWPLAYER_FORMATS);
 		const shared: Partial<FlowPlayerProps> = {
-			className: clsx('p-object-detail__flowplayer', {
-				'p-object-detail__flowplayer--with-slider': showFragmentSlider,
+			className: clsx("p-object-detail__flowplayer", {
+				"p-object-detail__flowplayer--with-slider": showFragmentSlider,
 			}),
 			title: currentPlayableFile?.name,
-			logo: mediaInfo?.maintainerOverlay ? mediaInfo?.maintainerLogo || undefined : undefined,
+			logo: mediaInfo?.maintainerOverlay
+				? mediaInfo?.maintainerLogo || undefined
+				: undefined,
 			pause: isMediaPaused,
 			onPlay: handleOnPlay,
 			onPause: handleOnPause,
 			token: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
 			dataPlayerId: publicRuntimeConfig.FLOW_PLAYER_ID,
-			plugins: ['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio', 'keyboard'],
-			peakColorBackground: '#303030', // $shade-darker
-			peakColorInactive: '#adadad', // zinc
-			peakColorActive: '#00857d', // $teal
+			plugins: [
+				"speed",
+				"subtitles",
+				"cuepoints",
+				"hls",
+				"ga",
+				"audio",
+				"keyboard",
+			],
+			peakColorBackground: "#303030", // $shade-darker
+			peakColorInactive: "#adadad", // zinc
+			peakColorActive: "#00857d", // $teal
 			peakHeightFactor: 0.6,
 			start: playableRepresentation?.schemaStartTime
-				? convertDurationStringToSeconds(playableRepresentation?.schemaStartTime)
+				? convertDurationStringToSeconds(
+						playableRepresentation?.schemaStartTime,
+					)
 				: undefined,
 			end: playableRepresentation?.schemaEndTime
 				? convertDurationStringToSeconds(playableRepresentation?.schemaEndTime)
@@ -1182,7 +1242,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		};
 
 		// Flowplayer
-		if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(currentPlayableFile.mimeType)) {
+		if (
+			playableUrl &&
+			FLOWPLAYER_VIDEO_FORMATS.includes(currentPlayableFile.mimeType)
+		) {
 			return (
 				<FlowPlayer
 					key={flowPlayerKey}
@@ -1194,27 +1257,32 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			);
 		}
 		// Audio player
-		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(currentPlayableFile.mimeType)) {
+		if (
+			playableUrl &&
+			FLOWPLAYER_AUDIO_FORMATS.includes(currentPlayableFile.mimeType)
+		) {
 			if (peakFileStoredAt && !peakJson) {
 				return (
-					<Loading fullscreen owner="object detail page: render media audio peak file" />
-				);
-			} else {
-				return (
-					<FlowPlayer
-						key={flowPlayerKey}
-						type="audio"
-						src={[
-							{
-								src: playableUrl as string,
-								type: currentPlayableFile.mimeType,
-							},
-						]}
-						waveformData={peakJson?.data || undefined}
-						{...shared}
+					<Loading
+						fullscreen
+						owner="object detail page: render media audio peak file"
 					/>
 				);
 			}
+			return (
+				<FlowPlayer
+					key={flowPlayerKey}
+					type="audio"
+					src={[
+						{
+							src: playableUrl as string,
+							type: currentPlayableFile.mimeType,
+						},
+					]}
+					waveformData={peakJson?.data || undefined}
+					{...shared}
+				/>
+			);
 		}
 	};
 
@@ -1226,8 +1294,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				href={`${ROUTES_BY_LOCALE[locale].search}/${router.query.slug}/${item.id}`}
 				tabIndex={isHidden ? -1 : 0}
 				className={clsx(
-					styles['p-object-detail__metadata-card-link'],
-					'u-text-no-decoration'
+					styles["p-object-detail__metadata-card-link"],
+					"u-text-no-decoration",
 				)}
 				aria-label={item.title}
 			>
@@ -1237,18 +1305,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	);
 
 	const renderIeObjectCards = (
-		type: 'similar' | 'related',
+		type: "similar" | "related",
 		items: MediaObject[],
-		isHidden = false
+		isHidden = false,
 	): ReactNode => (
 		<div className="u-m-0">
 			{
 				<ul
 					className={clsx(
-						'u-bg-platinum',
-						'u-list-reset',
-						styles['p-object-detail__metadata-list'],
-						`p-object-detail__metadata-list--${type}`
+						"u-bg-platinum",
+						"u-list-reset",
+						styles["p-object-detail__metadata-list"],
+						`p-object-detail__metadata-list--${type}`,
 					)}
 				>
 					{items.map((item, index) => {
@@ -1263,22 +1331,25 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		</div>
 	);
 
-	const renderCollapsableBladeTitle = (mappedRelatedIeObjects: MediaObject[]) => {
+	const renderCollapsableBladeTitle = (
+		mappedRelatedIeObjects: MediaObject[],
+	) => {
 		if (relatedIeObjects?.parent) {
 			return tHtml(
-				'modules/ie-objects/object-detail-page___dit-object-is-onderdeel-van-dit-hoofdobject'
+				"modules/ie-objects/object-detail-page___dit-object-is-onderdeel-van-dit-hoofdobject",
 			);
 		}
 		if (mappedRelatedIeObjects.length === 1) {
-			return tHtml('modules/ie-objects/object-detail-page___dit-object-heeft-1-fragment');
-		} else {
 			return tHtml(
-				'modules/ie-objects/object-detail-page___dit-object-heeft-amount-fragmenten',
-				{
-					amount: mappedRelatedIeObjects.length,
-				}
+				"modules/ie-objects/object-detail-page___dit-object-heeft-1-fragment",
 			);
 		}
+		return tHtml(
+			"modules/ie-objects/object-detail-page___dit-object-heeft-amount-fragmenten",
+			{
+				amount: mappedRelatedIeObjects.length,
+			},
+		);
 	};
 
 	const renderRelatedObjectsBlade = () => {
@@ -1288,7 +1359,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 		return (
 			<CollapsableBlade
-				className={clsx('p-object-detail__related')}
+				className={clsx("p-object-detail__related")}
 				isOpen={isRelatedObjectsBladeOpen}
 				setIsOpen={setIsRelatedObjectsBladeOpen}
 				icon={
@@ -1300,28 +1371,29 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				}
 				title={renderCollapsableBladeTitle(mappedRelatedIeObjects)}
 				renderContent={(hidden: boolean) =>
-					renderIeObjectCards('related', mappedRelatedIeObjects, hidden)
+					renderIeObjectCards("related", mappedRelatedIeObjects, hidden)
 				}
 			/>
 		);
 	};
 
 	const renderedOcrText = useMemo(() => {
-		const searchTermWords = compact(searchTerms.split(' '));
+		const searchTermWords = compact(searchTerms.split(" "));
 		let searchTermIndex = 0;
 		return (
-			<div className={styles['p-object-detail__ocr__words-container']}>
+			<div className={styles["p-object-detail__ocr__words-container"]}>
 				{simplifiedAltoInfo?.text?.map((textLocation, index) => {
 					const isMarked: boolean =
 						!!searchTerms &&
 						searchTermWords.some((searchWord) =>
-							textLocation.text.toLowerCase().includes(searchWord)
+							textLocation.text.toLowerCase().includes(searchWord),
 						);
 
 					// Search results are counted per page, so we need to subtract the amount of results in previous page
 					const searchResultsOnPreviousPages: number =
-						searchResults?.filter((result) => result.pageIndex < currentPageIndex)
-							.length || 0;
+						searchResults?.filter(
+							(result) => result.pageIndex < currentPageIndex,
+						).length || 0;
 					const searchResultIndexWithinCurrentPage: number =
 						(currentSearchResultIndex || 0) - searchResultsOnPreviousPages;
 					const isActive: boolean =
@@ -1331,19 +1403,20 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 					const wordElement = (
 						<span
-							key={'ocr-text--' + ieObjectId + '--' + index}
+							key={`ocr-text--${ieObjectId}--${index}`}
 							onClick={() =>
 								iiifViewerReference.current?.iiifZoomToRect(textLocation)
 							}
 							onDoubleClick={() =>
 								handleIsTextOverlayVisibleChange(!isTextOverlayVisible)
 							}
-							className={clsx(styles['p-object-detail__ocr__word'], {
-								[styles['p-object-detail__ocr__word--marked']]: isMarked,
-								[styles['p-object-detail__ocr__word--marked--active']]: isActive,
+							className={clsx(styles["p-object-detail__ocr__word"], {
+								[styles["p-object-detail__ocr__word--marked"]]: isMarked,
+								[styles["p-object-detail__ocr__word--marked--active"]]:
+									isActive,
 							})}
 						>
-							{textLocation.text}{' '}
+							{textLocation.text}{" "}
 						</span>
 					);
 
@@ -1368,18 +1441,20 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const renderOcrContent = () => {
 		return (
-			<div className={clsx(styles['p-object-detail__ocr'])}>
+			<div className={clsx(styles["p-object-detail__ocr"])}>
 				<Alert
 					icon={<Icon name={IconNamesLight.Info} aria-hidden />}
-					title={tText('modules/ie-objects/object-detail-page___ocr-betrouwbaarheid')}
+					title={tText(
+						"modules/ie-objects/object-detail-page___ocr-betrouwbaarheid",
+					)}
 					content={tHtml(
-						'modules/ie-objects/object-detail-page___deze-ocr-kan-fouten-bevatten-a-href-ocr-betrouwbaarheid-info-meer-info-vind-je-hier-a'
+						"modules/ie-objects/object-detail-page___deze-ocr-kan-fouten-bevatten-a-href-ocr-betrouwbaarheid-info-meer-info-vind-je-hier-a",
 					)}
 				/>
 
 				{arePagesOcrTextsAvailable && (
 					<SearchInputWithResultsPagination
-						className={styles['p-object-detail__ocr__search']}
+						className={styles["p-object-detail__ocr__search"]}
 						value={searchTermsTemp}
 						onChange={setSearchTermsTemp}
 						onSearch={(newSearchTerms) => handleSearch(newSearchTerms)}
@@ -1392,45 +1467,51 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 				{renderedOcrText}
 
-				<div className={styles['p-object-detail__ocr__pagination']}>
+				<div className={styles["p-object-detail__ocr__pagination"]}>
 					<Button
-						className={clsx(styles['p-object-detail__ocr__pagination__button'], {
-							[styles['p-object-detail__ocr__pagination__button--active']]:
-								currentPageIndex > 0,
-						})}
+						className={clsx(
+							styles["p-object-detail__ocr__pagination__button"],
+							{
+								[styles["p-object-detail__ocr__pagination__button--active"]]:
+									currentPageIndex > 0,
+							},
+						)}
 						iconStart={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
 						aria-label={tText(
-							'modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding'
+							"modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding",
 						)}
-						label={tText('modules/ie-objects/object-detail-page___vorige')}
-						variants={['text']}
+						label={tText("modules/ie-objects/object-detail-page___vorige")}
+						variants={["text"]}
 						onClick={() => {
-							setCurrentPageIndex(currentPageIndex - 1, 'replaceIn');
+							setCurrentPageIndex(currentPageIndex - 1, "replaceIn");
 						}}
 						disabled={currentPageIndex === 0}
 					/>
 					<span className="pagination-info">
 						{tText(
-							'modules/ie-objects/object-detail-page___pagina-current-page-van-total-pages',
+							"modules/ie-objects/object-detail-page___pagina-current-page-van-total-pages",
 							{
 								currentPage: currentPageIndex + 1,
 								totalPages: iiifViewerImageInfos?.length || 1,
-							}
+							},
 						)}
 					</span>
 					<Button
-						className={clsx(styles['p-object-detail__ocr__pagination__button'], {
-							[styles['p-object-detail__ocr__pagination__button--active']]:
-								currentPageIndex < iiifViewerImageInfos.length - 1,
-						})}
+						className={clsx(
+							styles["p-object-detail__ocr__pagination__button"],
+							{
+								[styles["p-object-detail__ocr__pagination__button--active"]]:
+									currentPageIndex < iiifViewerImageInfos.length - 1,
+							},
+						)}
 						iconEnd={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
 						aria-label={tText(
-							'modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding'
+							"modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding",
 						)}
-						label={tText('modules/ie-objects/object-detail-page___volgende')}
-						variants={['text']}
+						label={tText("modules/ie-objects/object-detail-page___volgende")}
+						variants={["text"]}
 						onClick={() => {
-							setCurrentPageIndex(currentPageIndex + 1, 'replaceIn');
+							setCurrentPageIndex(currentPageIndex + 1, "replaceIn");
 						}}
 						disabled={currentPageIndex === iiifViewerImageInfos.length - 1}
 					/>
@@ -1443,14 +1524,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		if (mediaInfo?.thumbnailUrl) {
 			return (
 				<>
-					<div className={styles['p-object-detail__media']}>{renderMedia()}</div>
+					<div className={styles["p-object-detail__media"]}>
+						{renderMedia()}
+					</div>
 					{showFragmentSlider && (
 						<FragmentSlider
-							className={styles['p-object-detail__grey-slider-bar']}
+							className={styles["p-object-detail__grey-slider-bar"]}
 							fileRepresentations={representationsToDisplay}
 							activeIndex={currentPageIndex}
 							setActiveIndex={(index) => {
-								setCurrentPageIndex(index, 'replaceIn');
+								setCurrentPageIndex(index, "replaceIn");
 							}}
 						/>
 					)}
@@ -1461,9 +1544,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			<ObjectPlaceholder
 				{...objectPlaceholder()}
 				reasonDescription={tText(
-					'modules/ie-objects/object-detail-page___je-hebt-enkel-toegang-tot-de-metadata-van-dit-object-omdat-dit-object-niet-publiek-beschikbaar-is-volgens-de-licenties-van-de-auteur'
+					"modules/ie-objects/object-detail-page___je-hebt-enkel-toegang-tot-de-metadata-van-dit-object-omdat-dit-object-niet-publiek-beschikbaar-is-volgens-de-licenties-van-de-auteur",
 				)}
-				className={styles['p-object-detail__media--not-available']}
+				className={styles["p-object-detail__media--not-available"]}
 			/>
 		);
 	};
@@ -1472,8 +1555,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		if (showVisitorSpaceNavigationBar) {
 			return (
 				<VisitorSpaceNavigation
-					className={styles['p-object-detail__visitor-space-navigation-bar']}
-					title={mediaInfo?.maintainerName ?? ''}
+					className={styles["p-object-detail__visitor-space-navigation-bar"]}
+					title={mediaInfo?.maintainerName ?? ""}
 					accessEndDate={accessEndDate}
 				/>
 			);
@@ -1481,12 +1564,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 		return (
 			<Button
-				className={styles['p-object-detail__back']}
+				className={styles["p-object-detail__back"]}
 				icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
 				onClick={() => {
 					router.back();
 				}}
-				variants={['black']}
+				variants={["black"]}
 			/>
 		);
 	};
@@ -1494,7 +1577,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const renderObjectDetail = () => (
 		<>
 			<Head>
-				<link rel="canonical" href={`https://hetarchief.be/zoeken/${ieObjectId}`} />
+				<link
+					rel="canonical"
+					href={`https://hetarchief.be/zoeken/${ieObjectId}`}
+				/>
 			</Head>
 
 			{isNoAccessError && (
@@ -1502,32 +1588,37 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					visitorSpaceName={visitorSpace?.name as string}
 					visitorSpaceSlug={visitorSpace?.slug as string}
 					description={tHtml(
-						'pages/bezoekersruimte/visitor-space-slug/object-id/index___tot-het-materiaal-geen-toegang-dien-aanvraag-in'
+						"pages/bezoekersruimte/visitor-space-slug/object-id/index___tot-het-materiaal-geen-toegang-dien-aanvraag-in",
 					)}
 				/>
 			)}
 			{mediaInfoIsError && !isNoAccessError && (
 				<RedFormWarning
 					error={tHtml(
-						'pages/bezoekersruimte/visitor-space-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data'
+						"pages/bezoekersruimte/visitor-space-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data",
 					)}
 				/>
 			)}
 			<article
-				className={clsx(styles['p-object-detail__wrapper'], {
-					[styles['p-object-detail--hidden']]: mediaInfoIsLoading || mediaInfoIsError,
-					[styles['p-object-detail__wrapper--collapsed']]: !expandSidebar,
-					[styles['p-object-detail__wrapper--expanded']]: expandSidebar,
-					[styles['p-object-detail__wrapper--no-media-available']]: !isMediaAvailable(),
-					[styles['p-object-detail__wrapper--media-available']]: isMediaAvailable(),
-					[styles['p-object-detail__wrapper--no-ocr-available']]:
+				className={clsx(styles["p-object-detail__wrapper"], {
+					[styles["p-object-detail--hidden"]]:
+						mediaInfoIsLoading || mediaInfoIsError,
+					[styles["p-object-detail__wrapper--collapsed"]]: !expandSidebar,
+					[styles["p-object-detail__wrapper--expanded"]]: expandSidebar,
+					[styles["p-object-detail__wrapper--no-media-available"]]:
+						!isMediaAvailable(),
+					[styles["p-object-detail__wrapper--media-available"]]:
+						isMediaAvailable(),
+					[styles["p-object-detail__wrapper--no-ocr-available"]]:
 						!arePagesOcrTextsAvailable,
-					[styles['p-object-detail__wrapper--ocr-available']]: arePagesOcrTextsAvailable,
-					[styles['p-object-detail__wrapper--metadata']]:
+					[styles["p-object-detail__wrapper--ocr-available"]]:
+						arePagesOcrTextsAvailable,
+					[styles["p-object-detail__wrapper--metadata"]]:
 						activeTab === ObjectDetailTabs.Metadata,
-					[styles['p-object-detail__wrapper--video']]:
+					[styles["p-object-detail__wrapper--video"]]:
 						activeTab === ObjectDetailTabs.Media,
-					[styles['p-object-detail__wrapper--ocr']]: activeTab === ObjectDetailTabs.Ocr,
+					[styles["p-object-detail__wrapper--ocr"]]:
+						activeTab === ObjectDetailTabs.Ocr,
 				})}
 			>
 				{/* Visitor space navigation bar */}
@@ -1539,9 +1630,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				{/* Expand button */}
 				{mediaInfo?.dctermsFormat && hasMedia && (
 					<Button
-						className={clsx(styles['p-object-detail__expand-button'], {
-							[styles['p-object-detail__expand-button--collapsed']]: !expandSidebar,
-							[styles['p-object-detail__expand-button--expanded']]: expandSidebar,
+						className={clsx(styles["p-object-detail__expand-button"], {
+							[styles["p-object-detail__expand-button--collapsed"]]:
+								!expandSidebar,
+							[styles["p-object-detail__expand-button--expanded"]]:
+								expandSidebar,
 						})}
 						icon={
 							<Icon
@@ -1555,29 +1648,35 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						}
 						onClick={handleExpandButtonClicked}
 						variants="white"
-						title={tText('modules/ie-objects/object-detail-page___hover-expand-knop')}
-						aria-label={tText('modules/ie-objects/object-detail-page___expand-knop')}
+						title={tText(
+							"modules/ie-objects/object-detail-page___hover-expand-knop",
+						)}
+						aria-label={tText(
+							"modules/ie-objects/object-detail-page___expand-knop",
+						)}
 					/>
 				)}
 
 				{/* Tabs */}
 				<Tabs
-					className={clsx(styles['p-object-detail__tabs'])}
-					variants={['dark']}
+					className={clsx(styles["p-object-detail__tabs"])}
+					variants={["dark"]}
 					tabs={tabs}
-					onClick={(tabId) => setActiveTab(tabId as ObjectDetailTabs | null, 'replaceIn')}
+					onClick={(tabId) =>
+						setActiveTab(tabId as ObjectDetailTabs | null, "replaceIn")
+					}
 				/>
 
 				{/* Sidebar */}
-				<div className={clsx(styles['p-object-detail__sidebar'])}>
+				<div className={clsx(styles["p-object-detail__sidebar"])}>
 					<div
 						className={clsx(
-							styles['p-object-detail__sidebar__content'],
-							styles['p-object-detail__sidebar__content__tab-' + activeTab],
+							styles["p-object-detail__sidebar__content"],
+							styles[`p-object-detail__sidebar__content__tab-${activeTab}`],
 							{
-								[styles['p-object-detail__sidebar__content--no-media']]:
+								[styles["p-object-detail__sidebar__content--no-media"]]:
 									!mediaInfo?.dctermsFormat,
-							}
+							},
 						)}
 					>
 						{/*
@@ -1590,7 +1689,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								openRequestAccessBlade={openRequestAccessBlade}
 								visitRequest={visitRequest || null}
 								showVisitButton={showVisitButton || false}
-								hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
+								hasAccessToVisitorSpaceOfObject={
+									hasAccessToVisitorSpaceOfObject
+								}
 								currentPageIndex={currentPageIndex}
 								currentPage={currentPage || null}
 								activeFile={getFileByType([
@@ -1604,16 +1705,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						{!!similar.length && (
 							<MetadataList allowTwoColumns={false}>
 								<Metadata
-									title={tHtml('pages/slug/ie/index___ook-interessant')}
+									title={tHtml("pages/slug/ie/index___ook-interessant")}
 									key="metadata-keywords"
 									className="u-pb-0"
 								>
-									{renderIeObjectCards('similar', similar)}
+									{renderIeObjectCards("similar", similar)}
 								</Metadata>
 							</MetadataList>
 						)}
 
-						{activeTab === ObjectDetailTabs.Media && isMobile && renderObjectMedia()}
+						{activeTab === ObjectDetailTabs.Media &&
+							isMobile &&
+							renderObjectMedia()}
 						{activeTab === ObjectDetailTabs.Ocr && renderOcrContent()}
 					</div>
 					{renderRelatedObjectsBlade()}
@@ -1627,7 +1730,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							? {
 									schemaIdentifier: mediaInfo.schemaIdentifier,
 									title: mediaInfo.name,
-							  }
+								}
 							: undefined
 					}
 					onClose={onCloseBlade}
@@ -1657,7 +1760,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			/>
 			<RequestAccessBlade
 				isOpen={activeBlade === MediaActions.RequestAccess && !!user}
-				onClose={() => setActiveBlade(null, 'replaceIn')}
+				onClose={() => setActiveBlade(null, "replaceIn")}
 				onSubmit={onRequestAccessSubmit}
 				id="object-detail-page__request-access-blade"
 			/>
@@ -1676,23 +1779,26 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const renderPageContent = () => {
 		if (mediaInfoIsLoading || visitRequestIsLoading || visitorSpaceIsLoading) {
-			return <Loading fullscreen owner="object detail page: render page content" />;
+			return (
+				<Loading fullscreen owner="object detail page: render page content" />
+			);
 		}
 
 		if (mediaInfo) {
 			return (
 				<div
 					className={clsx(
-						styles['p-object-detail'],
-						'p-object-detail--' + mediaInfo.dctermsFormat,
+						styles["p-object-detail"],
+						`p-object-detail--${mediaInfo.dctermsFormat}`,
 						{
-							[styles['p-object-detail__visitor-space-navigation-bar--visible']]:
-								showVisitorSpaceNavigationBar,
-							[styles['p-object-detail__visitor-space-navigation-bar--hidden']]:
+							[styles[
+								"p-object-detail__visitor-space-navigation-bar--visible"
+							]]: showVisitorSpaceNavigationBar,
+							[styles["p-object-detail__visitor-space-navigation-bar--hidden"]]:
 								!showVisitorSpaceNavigationBar,
-							[styles['p-object-detail__sidebar--expanded']]: expandSidebar,
-							[styles['p-object-detail__sidebar--collapsed']]: !expandSidebar,
-						}
+							[styles["p-object-detail__sidebar--expanded"]]: expandSidebar,
+							[styles["p-object-detail__sidebar--collapsed"]]: !expandSidebar,
+						},
 					)}
 				>
 					{renderObjectDetail()}
@@ -1707,7 +1813,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						visitorSpaceName={visitorSpace?.name as string}
 						visitorSpaceSlug={visitorSpace?.slug as string}
 						description={tHtml(
-							'pages/bezoekersruimte/visitor-space-slug/object-id/index___tot-het-materiaal-geen-toegang-dien-aanvraag-in'
+							"pages/bezoekersruimte/visitor-space-slug/object-id/index___tot-het-materiaal-geen-toegang-dien-aanvraag-in",
 						)}
 					/>
 				);
@@ -1717,7 +1823,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				return <ErrorNotFound />;
 			}
 
-			if (isErrorSpaceNotActive || visitorSpace?.status === VisitorSpaceStatus.Inactive) {
+			if (
+				isErrorSpaceNotActive ||
+				visitorSpace?.status === VisitorSpaceStatus.Inactive
+			) {
 				return <ErrorSpaceNoLongerActive />;
 			}
 
@@ -1731,7 +1840,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						visitorSpaceName={visitorSpace?.name as string}
 						visitorSpaceSlug={visitorSpace?.slug as string}
 						description={tHtml(
-							'pages/bezoekersruimte/visitor-space-slug/object-id/index___tot-het-materiaal-geen-toegang-dien-aanvraag-in'
+							"pages/bezoekersruimte/visitor-space-slug/object-id/index___tot-het-materiaal-geen-toegang-dien-aanvraag-in",
 						)}
 					/>
 				);
@@ -1742,7 +1851,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	};
 
 	const seoDescription =
-		description || capitalize(lowerCase((router.query.slug as string) || ''));
+		description || capitalize(lowerCase((router.query.slug as string) || ""));
 	return (
 		<>
 			<VisitorLayout>

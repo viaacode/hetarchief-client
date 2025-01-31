@@ -18,7 +18,6 @@ const TagSearchBarButton: FC<TagSearchBarButtonProps> = ({
 		<span
 			{...innerProps}
 			className={clsx(dropdownIndicatorCxState, className, styles['c-tag-search-bar-button'])}
-			tabIndex={0}
 			/* eslint-disable @typescript-eslint/ban-ts-comment */
 			// @ts-ignore
 			onClick={selectProps.onSearch}

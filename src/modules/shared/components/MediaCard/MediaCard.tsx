@@ -384,7 +384,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const classNames = clsx(
 		styles['c-media-card'],
-		'c-media-card--' + type,
+		`c-media-card--${type}`,
 		!link && 'c-media-card--no-link',
 		showKeyUserLabel && styles['c-media-card--key-user']
 	);

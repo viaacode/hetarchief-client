@@ -4,24 +4,14 @@ import { clamp, compact, isNil, round } from 'lodash-es';
 import { useRouter } from 'next/router';
 import type { TiledImageOptions, TileSource, Viewer } from 'openseadragon';
 import { parseUrl } from 'query-string';
-import React, {
-	forwardRef,
-	useCallback,
-	useEffect,
-	useImperativeHandle,
-	useMemo,
-	useState,
-} from 'react';
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import type { AltoTextLine } from '@ie-objects/ie-objects.types';
-import type {
-	IiifViewerFunctions,
-	IiifViewerProps,
-	ImageSize,
-	Rect,
-} from '@iiif-viewer/IiifViewer.types';
-import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
+import type { IiifViewerFunctions, IiifViewerProps, ImageSize, Rect } from '@iiif-viewer/IiifViewer.types';
+import {
+	SearchInputWithResultsPagination,
+} from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import {
 	destroyOpenSeadragonViewerMouseTracker,
 	initOpenSeadragonViewerMouseTracker,
@@ -73,9 +63,12 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 		// Internal state
 		const [iiifGridViewEnabled, setIiifGridViewEnabled] = useState<boolean>(false);
+		// biome-ignore lint/suspicious/noExplicitAny: open sea dragon lib isn't typed yet
 		const [openSeaDragonLib, setOpenSeaDragonLib] = useState<any | null>(null);
+		// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 		const openSeaDragonViewer = (window as any).meemoo__iiifViewer || null;
 		const setOpenSeadragonViewer = (newOpenSeaDragonViewer: Viewer) => {
+			// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 			(window as any).meemoo__iiifViewer = newOpenSeaDragonViewer;
 		};
 		const activeImageTileSource: TileSource | undefined =
@@ -85,7 +78,9 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 		const handleIsSelectionActiveChange = (newIsSelectionActive: boolean) => {
 			setIsSelectionActive(newIsSelectionActive);
-			return ((window as any).isSelectionActive = newIsSelectionActive);
+			// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
+			((window as any).isSelectionActive = newIsSelectionActive);
+			return newIsSelectionActive;
 		};
 
 		useEffect(() => {
@@ -112,6 +107,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		 * Effects
 		 */
 
+		// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 		useEffect(() => {
 			if (!openSeaDragonViewer) {
 				return;
@@ -121,7 +117,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				openSeaDragonViewer.goToPage(activeImageIndex);
 			}
 			// Do not include activeImageTileSource since it causes a rerender loop since this can change in js world without react knowing about it
-			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, [openSeaDragonViewer, activeImageIndex]);
 
 		const addFullscreenCloseButton = useCallback(
@@ -153,8 +148,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 		const getCurrentImageSize = (): ImageSize => {
 			const imageSize = {
+				// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
 				width: (activeImageTileSource as any)?.width || activeImageTileSource?.dimensions.x,
 				height:
+				// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
 					(activeImageTileSource as any)?.height || activeImageTileSource?.dimensions.y,
 			};
 			if (!imageSize.width || !imageSize.height) {
@@ -175,6 +172,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			return imageSize;
 		};
 
+		// biome-ignore lint/correctness/useExhaustiveDependencies: We don't include the tile source since it causes a rerender loop
 		const updateHighlightedAltoTexts = useCallback(
 			(
 				highlightedAltoTexts: AltoTextLine[],
@@ -198,15 +196,17 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					return;
 				}
 				const imageWidth: number | undefined =
+					// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
 					(activeImageTileSource as any).width || activeImageTileSource.dimensions.x;
 				const imageHeight: number | undefined =
+					// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
 					(activeImageTileSource as any).height || activeImageTileSource.dimensions.y;
 
 				if (!imageWidth || !imageHeight) {
 					throw new Error('Failed to find current page width/height');
 				}
 
-				highlightedAltoTexts?.forEach((altoTextLocation) => {
+				for (const altoTextLocation of highlightedAltoTexts || []) {
 					const x = altoTextLocation.x / imageWidth;
 					const y = altoTextLocation.y / imageHeight;
 					const width = altoTextLocation.width / imageWidth;
@@ -233,23 +233,22 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					}
 					const span = document.createElement('SPAN');
 					span.className =
-						'c-iiif-viewer__iiif__alto__text' +
-						(altoTextLocation === selectedHighlightedAltoText
+						`c-iiif-viewer__iiif__alto__text${altoTextLocation === selectedHighlightedAltoText
 							? ' c-iiif-viewer__iiif__alto__text--selected'
-							: ' c-iiif-viewer__iiif__alto__text--highlighted');
+							: ' c-iiif-viewer__iiif__alto__text--highlighted'}`;
 					openSeaDragonViewer.addOverlay(
 						span,
 						new openSeaDragonLib.Rect(x, y, width, height, 0),
 						openSeaDragonLib.Placement.CENTER
 					);
-				});
-				// We don't include the tile source since it causes a rerender loop
-				// eslint-disable-next-line react-hooks/exhaustive-deps
+				}
 			},
-			[openSeaDragonViewer, openSeaDragonLib, activeImageTileSource]
+			[openSeaDragonLib, activeImageTileSource]
 		);
 
+		// biome-ignore lint/correctness/useExhaustiveDependencies: Only update the pan and zoom once when loading the iiif viewer
 		const applyInitialZoomAndPan = useCallback(
+			// biome-ignore lint/suspicious/noExplicitAny: open sea dragon lib isn't typed yet
 			(openSeadragonViewerTemp: Viewer, openSeadragonLibTemp: any) => {
 				openSeadragonViewerTemp.addHandler('open', () => {
 					// When the viewer is initialized, set the desired zoom and pan
@@ -271,8 +270,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					}
 				});
 			},
-			// Only update the pan and zoom once when loading the iiif viewer
-			// eslint-disable-next-line react-hooks/exhaustive-deps
 			[]
 		);
 
@@ -309,6 +306,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			[id, router]
 		);
 
+		// biome-ignore lint/correctness/useExhaustiveDependencies: Only register the viewport-change event once when loading the iiif viewer
 		const addEventListeners = useCallback((openSeadragonViewerTemp: Viewer) => {
 			// Keep track of the current zoom and location in the url
 			const handleViewportChangeTemp = () => handleViewportChanged(openSeadragonViewerTemp);
@@ -324,11 +322,9 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				openSeadragonViewerTemp.removeHandler('viewport-change', handleViewportChangeTemp);
 				openSeadragonViewerTemp.removeHandler('open', handleOpenTemp);
 			};
-
-			// Only register the viewport-change event once when loading the iiif viewer
-			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, []);
 
+		// biome-ignore lint/correctness/useExhaustiveDependencies: Do not rerun this function when the queryParams change, since we only want apply the zoom and pan from the query params once to the iiif viewer
 		const initIiifViewer = useCallback(async () => {
 			console.log('init iiif viewer js lib------------------------');
 			if (!!iiifViewerId && isBrowser()) {
@@ -351,7 +347,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 							tileSource: imageInfo.imageUrl,
 							loadTilesWithAjax: true,
 							ajaxHeaders: {
-								Authorization: 'Bearer ' + imageInfo.token,
+								Authorization: `Bearer ${imageInfo.token}`,
 							},
 						};
 					})
@@ -377,9 +373,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 				setOpenSeadragonViewer(openSeadragonViewerTemp);
 			}
-			// Do not rerun this function when the queryParams change,
-			// since we only want apply the zoom and pan from the query params once to the iiif viewer
-			// eslint-disable-next-line
 		}, [imageInfosWithTokens, iiifViewerId, isMobile]);
 
 		useEffect(() => {
@@ -458,8 +451,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				return;
 			}
 			const imageWidth: number | undefined =
+				// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
 				(activeImageTileSource as any).width || activeImageTileSource.dimensions.x;
 			const imageHeight: number | undefined =
+				// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
 				(activeImageTileSource as any).height || activeImageTileSource.dimensions.y;
 
 			if (!imageWidth || !imageHeight) {
@@ -501,6 +496,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				if (!isLoading) {
 					resolve();
 				} else {
+					// biome-ignore lint/suspicious/noExplicitAny: open sea dragon lib isn't typed yet
 					(openSeaDragonViewer as any).id = Math.random();
 
 					openSeaDragonViewer?.addHandler('fully-loaded-change', () => {
@@ -737,10 +733,10 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				<PerfectScrollbar className={styles['c-iiif-viewer__iiif__reference-strip']}>
 					{imageInfosWithTokens.map((imageInfo, index) => {
 						return (
-							<div key={'c-iiif-viewer__iiif__reference-strip__' + index}>
-								<button onClick={() => setActiveImageIndex(index)}>
+							<div key={`c-iiif-viewer__iiif__reference-strip__${imageInfo.imageUrl}`}>
+								<button onClick={() => setActiveImageIndex(index)} type="button">
 									{/* eslint-disable-next-line @next/next/no-img-element */}
-									<img src={imageInfo.thumbnailUrl} alt={'page ' + (index + 1)} />
+									<img src={imageInfo.thumbnailUrl} alt={`page ${index + 1}`} />
 								</button>
 							</div>
 						);
@@ -759,15 +755,16 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 						{imageInfosWithTokens.map((imageInfo, index) => {
 							return (
 								<button
-									key={'c-iiif-viewer__grid-view__' + index}
+									key={`c-iiif-viewer__grid-view__${imageInfo.imageUrl}`}
 									onClick={() => {
 										setIiifGridViewEnabled(false);
 										setActiveImageIndex(index);
 										openSeaDragonViewer?.forceRedraw();
 									}}
+									type="button"
 								>
 									{/* eslint-disable-next-line @next/next/no-img-element */}
-									<img src={imageInfo.thumbnailUrl} alt={'page ' + (index + 1)} />
+									<img src={imageInfo.thumbnailUrl} alt={`page ${index + 1}`} />
 								</button>
 							);
 						})}

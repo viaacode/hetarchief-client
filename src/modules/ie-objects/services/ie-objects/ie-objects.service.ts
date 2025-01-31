@@ -122,7 +122,7 @@ export class IeObjectsService {
 		const timeCodes = fileSchemaIdentifier.split('#')[1];
 		const parsedUrl = parseUrl(fullVideoPlayableUrl);
 		return stringifyUrl({
-			url: parsedUrl.url + (timeCodes ? '#' + timeCodes : ''),
+			url: parsedUrl.url + (timeCodes ? `#${timeCodes}` : ''),
 			query: parsedUrl.query,
 		});
 	}

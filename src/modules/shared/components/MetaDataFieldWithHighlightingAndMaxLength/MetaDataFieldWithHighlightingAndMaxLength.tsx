@@ -22,7 +22,7 @@ const MetaDataFieldWithHighlightingAndMaxLength: FC<
 	const isLongFieldData: boolean = isString(data) && data.length > METADATA_FIELD_MAX_LENGTH;
 
 	const parsedFieldData: string | ReactNode = isLongFieldData
-		? (data as string).substring(0, METADATA_FIELD_MAX_LENGTH) + '...'
+		? `${(data as string).substring(0, METADATA_FIELD_MAX_LENGTH)}...`
 		: data;
 
 	return (

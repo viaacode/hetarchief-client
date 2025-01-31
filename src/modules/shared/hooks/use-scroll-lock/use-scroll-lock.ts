@@ -91,7 +91,7 @@ const useScrollLock: UseScrollLock = (lock, id) => {
 			el.style.overflowY = '';
 			el.style.marginRight = '';
 			el.style.position = 'relative';
-			el.style.top = `0`;
+			el.style.top = "0";
 			window.onwheel = null;
 
 			scroll();
@@ -99,7 +99,7 @@ const useScrollLock: UseScrollLock = (lock, id) => {
 			// Wipe our state asynchronously once every hook instance is done
 			// Known issue: when rapidly (<50ms) toggling blades, the scrollDepth is lost
 			setTimeout(() => {
-				delete (document as unknown as scrollState).__scrollDepth;
+				(document as unknown as scrollState).__scrollDepth = undefined;
 			}, 50);
 		},
 		[scroll]
