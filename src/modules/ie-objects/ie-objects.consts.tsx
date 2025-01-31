@@ -37,10 +37,7 @@ export const FLOWPLAYER_VIDEO_FORMATS: string[] = [
 	'application/vnd.apple.mpegurl',
 ];
 export const FLOWPLAYER_AUDIO_FORMATS: string[] = [
-	// 'audio/mpeg', // ignore the actual audio file, since we already use the audio encoded into a view file
 	'audio/mp4', // We want to play the mp4 video file with the ugly speaker (decided by team archief)
-	'audio/m4a',
-	'audio/aac',
 ];
 export const FLOWPLAYER_FORMATS: string[] = [
 	...FLOWPLAYER_VIDEO_FORMATS,

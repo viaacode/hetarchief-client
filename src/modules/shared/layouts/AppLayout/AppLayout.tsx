@@ -313,6 +313,7 @@ const AppLayout: FC<any> = ({ children }) => {
 		showLinkedSpaceAsHomepage,
 		linkedSpaceSlug,
 		locale,
+		user,
 		hasUnreadNotifications,
 		showNotificationsCenter,
 		userName,

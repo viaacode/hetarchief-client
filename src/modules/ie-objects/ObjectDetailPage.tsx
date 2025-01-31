@@ -1,4 +1,3 @@
-import { AdminConfigManager } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import {
 	Alert,
 	Button,
@@ -525,7 +524,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				setCurrentSearchResultIndex(firstSearchResultOnCurrentPage);
 			}
 		},
-		[currentPageIndex, pageOcrTexts, router]
+		[currentPageIndex, mediaInfo?.thumbnailUrl, pageOcrTexts, router]
 	);
 
 	const handleIsTextOverlayVisibleChange = useCallback(
@@ -1090,9 +1089,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const renderMedia = (): ReactNode => {
 		if (
-			(isLoadingPlayableUrl && !isNewspaper) ||
-			!mediaInfo ||
-			Object.keys(imageInfosWithTokens).length === 0
+			(!isNewspaper && isLoadingPlayableUrl) ||
+			(isNewspaper && Object.keys(imageInfosWithTokens).length === 0) ||
+			!mediaInfo
 		) {
 			return <Loading fullscreen owner="object detail page: render media" />;
 		}
@@ -1211,7 +1210,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								type: currentPlayableFile.mimeType,
 							},
 						]}
-						poster={AdminConfigManager.getConfig().components.defaultAudioStill}
 						waveformData={peakJson?.data || undefined}
 						{...shared}
 					/>
@@ -1444,7 +1442,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const renderObjectMedia = () => {
 		if (mediaInfo?.thumbnailUrl) {
 			return (
-				<div>
+				<>
 					<div className={styles['p-object-detail__media']}>{renderMedia()}</div>
 					{showFragmentSlider && (
 						<FragmentSlider
@@ -1456,7 +1454,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							}}
 						/>
 					)}
-				</div>
+				</>
 			);
 		}
 		return (
