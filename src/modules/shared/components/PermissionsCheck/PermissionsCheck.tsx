@@ -32,8 +32,10 @@ const PermissionsCheck: FC<PermissionsCheckProps> = ({
 
 	const hasRequiredPermissions = hasAllRequiredPermissions && hasAnyRequiredPermissions;
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (!checkLoginLoading && !hasCheckedLogin) {
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			dispatch(checkLoginAction() as any);
 		}
 	}, [router, hasRequiredPermissions, hasCheckedLogin, checkLoginLoading, dispatch]);

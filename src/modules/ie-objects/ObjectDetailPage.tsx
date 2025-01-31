@@ -1377,6 +1377,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		);
 	};
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: avoid rerendering ocr text since it's heavy
 	const renderedOcrText = useMemo(() => {
 		const searchTermWords = compact(searchTerms.split(" "));
 		let searchTermIndex = 0;
@@ -1403,10 +1404,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 
 					const wordElement = (
 						<span
-							key={`ocr-text--${ieObjectId}--${index}`}
+							key={`ocr-text--${ieObjectId}--${textLocation.x}-${textLocation.y}`}
 							onClick={() =>
 								iiifViewerReference.current?.iiifZoomToRect(textLocation)
 							}
+							onKeyUp={(evt) => {
+								if (evt.key === "Enter") {
+									iiifViewerReference.current?.iiifZoomToRect(textLocation);
+								}
+							}}
 							onDoubleClick={() =>
 								handleIsTextOverlayVisibleChange(!isTextOverlayVisible)
 							}

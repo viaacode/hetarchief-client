@@ -12,10 +12,7 @@ import { Locale } from '@shared/utils/i18n';
 
 import type { MappedElement } from '../BlockContentEnclose.types';
 
-import type {
-	ContentPage,
-	GetContentBlockEncloseContentReturnType,
-} from './useGetContentBlockEncloseContent.types';
+import type { ContentPage, GetContentBlockEncloseContentReturnType } from './useGetContentBlockEncloseContent.types';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -35,7 +32,7 @@ export const useGetContentBlockEncloseContent = (
 	const ieObjectQuery = {
 		queryKey: [QUERY_KEYS.GET_IE_OBJECT_FOR_CONTENT_ENCLOSE_BLOCK],
 		queryFn: () =>
-			fetchWithLogoutJson<any[]>(url, {
+			fetchWithLogoutJson<IeObject[]>(url, {
 				headers: { referer: AdminConfigManager.getConfig().env.CLIENT_URL },
 			}),
 		keepPreviousData: true,

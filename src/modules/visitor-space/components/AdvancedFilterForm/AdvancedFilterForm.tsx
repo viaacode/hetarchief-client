@@ -13,10 +13,7 @@ import { AdvancedFilterFields } from '../AdvancedFilterFields/AdvancedFilterFiel
 
 import { ADVANCED_FILTER_FORM_SCHEMA, initialFields } from './AdvancedFilterForm.const';
 import styles from './AdvancedFilterForm.module.scss';
-import type {
-	AdvancedFilterFormProps,
-	AdvancedFilterFormState,
-} from './AdvancedFilterForm.types';
+import type { AdvancedFilterFormProps, AdvancedFilterFormState } from './AdvancedFilterForm.types';
 
 export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 	children,
@@ -56,7 +53,7 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 				{!disabled &&
 					fields.map(({ id, ...value }, index) => (
 						<AdvancedFilterFields
-							key={`advanced-filter-${index}`}
+							key={`advanced-filter-${id}-${value.prop}--${value.op}--${value.val}`}
 							id={id}
 							index={index}
 							value={value}

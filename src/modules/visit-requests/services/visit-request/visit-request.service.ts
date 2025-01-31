@@ -3,11 +3,7 @@ import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
 import { ApiService } from '@shared/services/api-service';
-import {
-	type VisitAccessStatus,
-	type VisitRequest,
-	VisitStatus,
-} from '@shared/types/visit-request';
+import { type VisitAccessStatus, type VisitRequest, VisitStatus } from '@shared/types/visit-request';
 import type {
 	GetAllActiveVisitsProps,
 	GetVisitRequestsProps,
@@ -23,8 +19,8 @@ import {
 	VISITS_SERVICE_SPACE_URL,
 } from './visit-request.service.const';
 
-export class VisitRequestService {
-	public static async getAll({
+export namespace VisitRequestService {
+	export async function getAll({
 		searchInput = '',
 		status,
 		timeframe,
@@ -55,11 +51,11 @@ export class VisitRequestService {
 		return parsed as IPagination<VisitRequest>;
 	}
 
-	public static async getById(id: string): Promise<VisitRequest> {
+	export async function getById(id: string): Promise<VisitRequest> {
 		return await ApiService.getApi().get(`${VISITS_SERVICE_BASE_URL}/${id}`).json();
 	}
 
-	public static async patchById(id: string, visit: PatchVisit): Promise<VisitRequest> {
+	export async function patchById(id: string, visit: PatchVisit): Promise<VisitRequest> {
 		const { status, startAt, endAt, note, accessType, accessFolderIds } = visit;
 		const json: PatchVisit = {
 			status,
@@ -77,13 +73,13 @@ export class VisitRequestService {
 			.json();
 	}
 
-	public static async create(visitRequest: CreateVisitRequest): Promise<VisitRequest> {
+	export async function create(visitRequest: CreateVisitRequest): Promise<VisitRequest> {
 		return await ApiService.getApi()
 			.post(VISITS_SERVICE_BASE_URL, { body: JSON.stringify(visitRequest) })
 			.json();
 	}
 
-	public static async getActiveVisitForUserAndSpace(
+	export async function getActiveVisitForUserAndSpace(
 		visitorSpaceSlug: string
 	): Promise<VisitRequest | null> {
 		if (!visitorSpaceSlug) {
@@ -96,7 +92,7 @@ export class VisitRequestService {
 			.json();
 	}
 
-	public static async getPendingVisitCountForUserBySlug(
+	export async function getPendingVisitCountForUserBySlug(
 		slug: string
 	): Promise<VisitRequest | null> {
 		if (!slug) {
@@ -107,7 +103,7 @@ export class VisitRequestService {
 			.json();
 	}
 
-	public static async getAccessStatusBySpaceSlug(
+	export async function getAccessStatusBySpaceSlug(
 		slug: string
 	): Promise<VisitAccessStatus | null> {
 		if (slug.length === 0) {
@@ -120,7 +116,7 @@ export class VisitRequestService {
 			.json();
 	}
 
-	public static async getAllActiveVisits({
+	export async function getAllActiveVisits({
 		requesterId,
 		orderProp = 'endAt',
 		orderDirection = OrderDirection.asc,

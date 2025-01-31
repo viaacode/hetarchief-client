@@ -2,10 +2,7 @@ import { stringifyUrl } from 'query-string';
 
 import type { EmailTemplate } from '@shared/components/ShareFolderBlade/ShareFolderBlade.consts';
 import { ApiService } from '@shared/services/api-service';
-import type {
-	GetNewsletterPreferencesResponse,
-	SetNewsletterPreferencesBody,
-} from '@shared/types/newsletter';
+import type { GetNewsletterPreferencesResponse, SetNewsletterPreferencesBody } from '@shared/types/newsletter';
 
 import {
 	CAMPAIGN_MONITOR_SERVICE_BASE_URL,
@@ -13,8 +10,8 @@ import {
 	CAMPAIGN_MONITOR_SERVICE_SEND,
 } from './campaign-monitor.consts';
 
-export class CampaignMonitorService {
-	public static async getPreferences(email: string): Promise<GetNewsletterPreferencesResponse> {
+export namespace CampaignMonitorService {
+	export async function getPreferences(email: string): Promise<GetNewsletterPreferencesResponse> {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -27,7 +24,7 @@ export class CampaignMonitorService {
 			.json();
 	}
 
-	public static async setPreferences(preferences: SetNewsletterPreferencesBody): Promise<void> {
+	export async function setPreferences(preferences: SetNewsletterPreferencesBody): Promise<void> {
 		await ApiService.getApi()
 			.post(`${CAMPAIGN_MONITOR_SERVICE_BASE_URL}/${CAMPAIGN_MONITOR_SERVICE_PREFERENCES}`, {
 				body: JSON.stringify(preferences),
@@ -35,7 +32,7 @@ export class CampaignMonitorService {
 			.json();
 	}
 
-	public static async send(json: EmailTemplate): Promise<void> {
+	export async function send(json: EmailTemplate): Promise<void> {
 		await ApiService.getApi()
 			.post(`${CAMPAIGN_MONITOR_SERVICE_BASE_URL}/${CAMPAIGN_MONITOR_SERVICE_SEND}`, { json })
 			.json();

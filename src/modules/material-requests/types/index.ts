@@ -88,12 +88,8 @@ export const GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_ARRAY = (): {
 ];
 
 export const GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD = (): Record<string, string> =>
-	GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_ARRAY().reduce(
-		(
-			acc: Record<string, string>,
-			curr: { id: string | number; label: string }
-		): Record<string, string> => ({ ...acc, [curr.id]: curr.label }),
-		{}
+	Object.fromEntries(
+		GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_ARRAY().map(({ id, label }) => [id, label])
 	);
 
 export interface MaterialRequestMaintainer {

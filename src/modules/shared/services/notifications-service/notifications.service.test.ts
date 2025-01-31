@@ -54,11 +54,14 @@ describe('NotificationService', () => {
 		it('Should not show any toasts when the first notifications are fetched and the response is empty', async () => {
 			const mockSetHasUnreadNotifications = jest.fn();
 			await NotificationsService.initPolling(
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				null as any,
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				null as any,
 				mockSetHasUnreadNotifications
 			);
 			const mockGetNotifications = jest.fn();
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [],
 				total: 0,
@@ -66,8 +69,10 @@ describe('NotificationService', () => {
 				page: 1,
 				size: 20,
 			});
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			NotificationsService.getNotifications = mockGetNotifications as any;
 			const mockedNotifyFunc = jest.fn();
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			toastService.notify = mockedNotifyFunc as any;
 
 			await NotificationsService.checkNotifications();
@@ -80,11 +85,14 @@ describe('NotificationService', () => {
 		it('Should not show any toasts when the first notifications are fetched and the response contains only READ notifications', async () => {
 			const mockSetHasUnreadNotifications = jest.fn();
 			await NotificationsService.initPolling(
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				null as any,
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				null as any,
 				mockSetHasUnreadNotifications
 			);
 			const mockGetNotifications = jest.fn();
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockReadNotification, mockReadNotification],
 				total: 2,
@@ -92,7 +100,9 @@ describe('NotificationService', () => {
 				page: 1,
 				size: 20,
 			});
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			NotificationsService.getNotifications = mockGetNotifications as any;
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			const mockedNotifyFunc = jest.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
@@ -106,12 +116,15 @@ describe('NotificationService', () => {
 		it('Should not show any toasts when the first notifications are fetched and the response contains only UNREAD notifications', async () => {
 			const mockSetHasUnreadNotifications = jest.fn();
 			await NotificationsService.initPolling(
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				null as any,
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				null as any,
 				mockSetHasUnreadNotifications
 			);
 
 			const mockGetNotifications = jest.fn();
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockUnreadNotification, mockUnreadNotification],
 				total: 2,
@@ -119,7 +132,9 @@ describe('NotificationService', () => {
 				page: 1,
 				size: 20,
 			});
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			NotificationsService.getNotifications = mockGetNotifications as any;
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			const mockedNotifyFunc = jest.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
@@ -133,12 +148,15 @@ describe('NotificationService', () => {
 		it('Should not show any toasts when the first notifications are fetched and the response contains both UNREAD and READ notifications', async () => {
 			const mockSetHasUnreadNotifications = jest.fn();
 			await NotificationsService.initPolling(
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				null as any,
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				null as any,
 				mockSetHasUnreadNotifications
 			);
 
 			const mockGetNotifications = jest.fn();
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockUnreadNotification, mockReadNotification],
 				total: 2,
@@ -146,7 +164,9 @@ describe('NotificationService', () => {
 				page: 1,
 				size: 20,
 			});
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			NotificationsService.getNotifications = mockGetNotifications as any;
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			const mockedNotifyFunc = jest.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
@@ -160,12 +180,15 @@ describe('NotificationService', () => {
 		it('Should show a single toasts when a new UNREAD notification is fetched', async () => {
 			const mockSetHasUnreadNotifications = jest.fn();
 			await NotificationsService.initPolling(
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				null as any,
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				null as any,
 				mockSetHasUnreadNotifications
 			);
 
 			const mockGetNotifications = jest.fn();
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockUnreadNotification, mockReadNotification],
 				total: 2,
@@ -173,6 +196,7 @@ describe('NotificationService', () => {
 				page: 1,
 				size: 20,
 			});
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockNewUnreadNotification, mockUnreadNotification, mockReadNotification],
 				total: 3,
@@ -180,7 +204,9 @@ describe('NotificationService', () => {
 				page: 1,
 				size: 20,
 			});
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			NotificationsService.getNotifications = mockGetNotifications as any;
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			const mockedNotifyFunc = jest.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
@@ -207,12 +233,15 @@ describe('NotificationService', () => {
 		it('Should show a single toasts when multiple new UNREAD notifications are fetched', async () => {
 			const mockSetHasUnreadNotifications = jest.fn();
 			await NotificationsService.initPolling(
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				null as any,
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				null as any,
 				mockSetHasUnreadNotifications
 			);
 
 			const mockGetNotifications = jest.fn();
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockUnreadNotification, mockReadNotification],
 				total: 2,
@@ -220,6 +249,7 @@ describe('NotificationService', () => {
 				page: 1,
 				size: 20,
 			});
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [
 					mockNewUnreadNotification,
@@ -232,7 +262,9 @@ describe('NotificationService', () => {
 				page: 1,
 				size: 20,
 			});
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			NotificationsService.getNotifications = mockGetNotifications as any;
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			const mockedNotifyFunc = jest.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
@@ -259,12 +291,15 @@ describe('NotificationService', () => {
 		it('Should not show a new toast when the same notifications are fetched', async () => {
 			const mockSetHasUnreadNotifications = jest.fn();
 			await NotificationsService.initPolling(
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				null as any,
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				null as any,
 				mockSetHasUnreadNotifications
 			);
 
 			const mockGetNotifications = jest.fn();
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockUnreadNotification, mockReadNotification],
 				total: 2,
@@ -272,6 +307,7 @@ describe('NotificationService', () => {
 				page: 1,
 				size: 20,
 			});
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockUnreadNotification, mockReadNotification],
 				total: 2,
@@ -279,7 +315,9 @@ describe('NotificationService', () => {
 				page: 1,
 				size: 20,
 			});
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			NotificationsService.getNotifications = mockGetNotifications as any;
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			const mockedNotifyFunc = jest.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
@@ -299,12 +337,15 @@ describe('NotificationService', () => {
 		it('Should not show a new toast when a new READ notification is fetched', async () => {
 			const mockSetHasUnreadNotifications = jest.fn();
 			await NotificationsService.initPolling(
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				null as any,
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				null as any,
 				mockSetHasUnreadNotifications
 			);
 
 			const mockGetNotifications = jest.fn();
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockUnreadNotification, mockReadNotification],
 				total: 2,
@@ -312,6 +353,7 @@ describe('NotificationService', () => {
 				page: 1,
 				size: 20,
 			});
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [
 					mockUnreadNotification,
@@ -327,7 +369,9 @@ describe('NotificationService', () => {
 				page: 1,
 				size: 20,
 			});
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			NotificationsService.getNotifications = mockGetNotifications as any;
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			const mockedNotifyFunc = jest.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 

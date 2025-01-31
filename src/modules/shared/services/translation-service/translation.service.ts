@@ -8,11 +8,11 @@ import { isServerSideRendering } from '@shared/utils/is-browser';
 
 const { publicRuntimeConfig } = getConfig();
 
-export class TranslationService {
-	private static baseUrl = 'admin/translations/languages';
+export namespace TranslationService {
+	const baseUrl = 'admin/translations/languages';
 
-	public static async getAll(): Promise<LanguageInfo[]> {
-		const response: LanguageInfo[] = await ApiService.getApi().get(TranslationService.baseUrl).json();
+	export async function getAll(): Promise<LanguageInfo[]> {
+		const response: LanguageInfo[] = await ApiService.getApi().get(baseUrl).json();
 
 		return response ?? {};
 	}
@@ -22,7 +22,7 @@ export class TranslationService {
 	 * Since this function doesn't work in server side rendering and should only be used if the useLocale hook cannot work
 	 * For instance if you're not working inside a react component context, eg polling service
 	 */
-	public static getLocale(): Locale {
+	export function getLocale(): Locale {
 		if (isServerSideRendering()) {
 			return Locale.nl; // Window not available in server side rendering
 		}

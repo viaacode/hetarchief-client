@@ -59,6 +59,7 @@ export const UserConditions: FC<
 		dispatch(setShowZendesk(false));
 	}, [dispatch]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	const onContentScroll = useCallback(() => {
 		const el = scrollable.current;
 

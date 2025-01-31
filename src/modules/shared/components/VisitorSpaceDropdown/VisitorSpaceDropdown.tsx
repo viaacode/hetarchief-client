@@ -19,7 +19,7 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 }: VisitorSpaceDropdownProps) => {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 
-	const hasMultipleOptions = useMemo(() => options.length > 1, [options]);
+	const hasMultipleOptions = useMemo(() => options.length > 1, [options.length]);
 
 	const onClickDropdown = (): void => {
 		setIsOpen((prevIsOpen: boolean) => !prevIsOpen);
@@ -42,7 +42,8 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 					"aria-expanded": isOpen,
 					"aria-controls": 'list-controls',
 					onClick: onClickDropdown,
-					onKeyDown: (e: any) => onKey(e, [...keysEnter], onClickDropdown),
+					// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+					onKeyDown: (evt: any) => onKey(evt, [...keysEnter], onClickDropdown),
 			  }
 			: {};
 

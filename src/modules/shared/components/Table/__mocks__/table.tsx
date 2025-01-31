@@ -51,6 +51,7 @@ export const mockColumns: Column<TableData>[] = [
 	{
 		Header: 'Timestamp',
 		accessor: 'created_at',
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		Cell: ({ value }: { value: number }): ReactElement<any, any> => (
 			<>{formatDateTime(new Date(value))}</>
 		),
@@ -58,6 +59,7 @@ export const mockColumns: Column<TableData>[] = [
 	{
 		Header: 'Status',
 		accessor: 'approved',
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		Cell: ({ value }: { value: boolean }): ReactElement<any, any> => (
 			<div style={{ display: 'flex', alignItems: 'center' }}>
 				<Badge

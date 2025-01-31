@@ -21,8 +21,8 @@ const TagSearchBarButton: FC<TagSearchBarButtonProps> = ({
 			/* eslint-disable @typescript-eslint/ban-ts-comment */
 			// @ts-ignore
 			onClick={selectProps.onSearch}
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			onTouchEnd={() => (selectProps as any).onSearch?.()} // Make search button clickable on touch devices
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+						onTouchEnd={() => (selectProps as any).onSearch?.()} // Make search button clickable on touch devices
 			onKeyDown={(e) => {
 				if (e.key === 'Enter') {
 					// @ts-ignore

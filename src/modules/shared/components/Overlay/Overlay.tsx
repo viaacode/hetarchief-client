@@ -41,6 +41,11 @@ const Overlay: FC<OverlayProps> = ({
 				...getWidth(),
 			}}
 			onClick={onClick}
+			onKeyUp={(evt) => {
+				if (evt.key === 'Enter') {
+					onClick();
+				}
+			}}
 		/>
 	);
 };

@@ -99,7 +99,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 			<div className={styles['c-share-folder-blade__content']}>
 				<>
 					{renderEditAlert()}
-					<label className={styles['c-share-folder-blade__content-label']}>
+					<label className={styles['c-share-folder-blade__content-label']} htmlFor="link">
 						<h5>{tText('pages/account/map-delen/folder-id/index___via-deellink')}</h5>
 					</label>
 					<div
@@ -109,6 +109,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 						)}
 					>
 						<TextInput
+							id="link"
 							value={link}
 							className={styles['c-share-folder-blade__content-copy-input']}
 						/>
@@ -121,12 +122,12 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 							variants={['inputCopy']}
 						/>
 					</div>
-					<label className={styles['c-share-folder-blade__content-label']}>
+					<label className={styles['c-share-folder-blade__content-label']} htmlFor={labelKeys.email}>
 						<h5 className={styles['c-share-folder-blade__content-label--margin-top']}>
 							{tText('pages/account/map-delen/folder-id/index___via-email')}
 						</h5>
 					</label>
-					<label className={styles['c-share-folder-blade__content-label--email']}>
+					<label className={styles['c-share-folder-blade__content-label--email']} htmlFor={labelKeys.email}>
 						{tText('pages/account/map-delen/folder-id/index___email')}
 					</label>
 					<div className={styles['c-share-folder-blade__content-value']}>

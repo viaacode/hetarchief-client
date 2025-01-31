@@ -56,15 +56,15 @@ const MaterialRequestCenterButton: FC = () => {
 		}
 	}, [materialRequestCount, previousMaterialCount]);
 
-	const handleAnimationEnd = () => {
-		setIsAnimated(false);
-	};
-
 	const onCloseMaterialRequestCenter = () => {
 		dispatch(setShowMaterialRequestCenter(false));
 	};
 
 	useEffect(() => {
+		const handleAnimationEnd = () => {
+			setIsAnimated(false);
+		};
+
 		const badgeElement = animationRef.current;
 
 		badgeElement?.addEventListener('animationend', handleAnimationEnd);

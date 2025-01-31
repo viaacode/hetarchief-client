@@ -9,7 +9,8 @@ import { tText } from '@shared/helpers/translate';
 import { METADATA_FIELD_MAX_LENGTH } from './MetaDataFieldWithHighlightingAndMaxLength.const';
 import styles from './MetaDataFieldWithHighlightingAndMaxLength.module.scss';
 
-interface MetaDataFieldWithHighlightingAndMaxLengthProps extends DefaultComponentProps {
+interface MetaDataFieldWithHighlightingAndMaxLengthProps
+	extends DefaultComponentProps {
 	title: string | ReactNode;
 	data: string;
 	onReadMoreClicked: (item: MetadataItem) => void;
@@ -18,8 +19,15 @@ interface MetaDataFieldWithHighlightingAndMaxLengthProps extends DefaultComponen
 
 const MetaDataFieldWithHighlightingAndMaxLength: FC<
 	MetaDataFieldWithHighlightingAndMaxLengthProps
-> = ({ title, data, className, onReadMoreClicked, enableHighlighting = true }) => {
-	const isLongFieldData: boolean = isString(data) && data.length > METADATA_FIELD_MAX_LENGTH;
+> = ({
+	title,
+	data,
+	className,
+	onReadMoreClicked,
+	enableHighlighting = true,
+}) => {
+	const isLongFieldData: boolean =
+		isString(data) && data.length > METADATA_FIELD_MAX_LENGTH;
 
 	const parsedFieldData: string | ReactNode = isLongFieldData
 		? `${(data as string).substring(0, METADATA_FIELD_MAX_LENGTH)}...`
@@ -38,10 +46,15 @@ const MetaDataFieldWithHighlightingAndMaxLength: FC<
 
 				{isLongFieldData && (
 					<div
-						className={styles['c-metadata__field__blade__read-more']}
+						className={styles["c-metadata__field__blade__read-more"]}
 						onClick={() => onReadMoreClicked({ title, data })}
+						onKeyUp={(evt) => {
+							if (evt.key === "Enter") {
+								onReadMoreClicked({ title, data });
+							}
+						}}
 					>
-						{tText('modules/visitor-space/utils/metadata/metadata___lees-meer')}
+						{tText("modules/visitor-space/utils/metadata/metadata___lees-meer")}
 					</div>
 				)}
 			</div>

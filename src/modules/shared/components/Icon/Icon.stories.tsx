@@ -10,6 +10,7 @@ export default {
 	component: Icon,
 } as ComponentMeta<typeof Icon>;
 
+// biome-ignore lint/suspicious/noExplicitAny: storybook
 const AllIconsTemplate: ComponentStory<any> = () => (
 	<>
 		{[...Object.values(IconNamesLight), ...Object.values(IconNamesSolid)].map(

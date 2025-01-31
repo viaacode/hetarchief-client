@@ -4,8 +4,8 @@ import { ApiService } from '../api-service';
 
 import { ZENDESK_SERVICE_BASE_URL, ZENDESK_SERVICE_SUPPORT_URL } from './zendesk.const';
 
-export class ZendeskService {
-	public static async createTicket(
+export namespace ZendeskService {
+	export async function createTicket(
 		request: Requests.CreateModel
 	): Promise<Requests.ResponseModel> {
 		return ApiService.getApi()

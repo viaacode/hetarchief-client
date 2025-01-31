@@ -4,6 +4,7 @@ export function getRectFromPointerEventDrag(
 	startPoint: Point,
 	mousePosition: Point,
 	viewer: Viewer,
+	// biome-ignore lint/suspicious/noExplicitAny: OpenSeaDragon Rect class
 	rectClass: any
 ): Rect {
 	const viewportPos = viewer.viewport.pointFromPixel(mousePosition);

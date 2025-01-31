@@ -33,7 +33,7 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 		setFooterHeight(
 			document.querySelector(moduleClassSelector('c-footer'))?.clientHeight || 0 // 0 when no footer is found
 		);
-	}, [setFooterHeight]);
+	}, []);
 
 	/**
 	 * Change the bottom margin of the zendesk widget, so it doesn't overlap with the footer
@@ -76,7 +76,7 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 		} else {
 			setWidget(zendeskWidget);
 		}
-	}, [setWidget]);
+	}, []);
 
 	const onResize = useCallback(() => {
 		updateFooterHeight();
@@ -102,6 +102,7 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 		};
 	}, [onResize, updateFooterHeight, getZendeskWidget, updateMargin]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		setTimeout(() => {
 			initListeners();

@@ -13,7 +13,11 @@ const Template: ComponentStory<typeof Modal> = (args) => {
 
 	return (
 		<div>
-			<pre style={{ margin: 0 }} onClick={() => setOpen(true)}>
+			<pre style={{ margin: 0 }} onClick={() => setOpen(true)} onKeyUp={(evt) => {
+				if (evt.key === 'Enter') {
+					setOpen(true);
+				}
+			}}>
 				{JSON.stringify({ clickHereToToggle: isOpen }, null, 2)}
 			</pre>
 
@@ -58,7 +62,7 @@ Primary.args = {
 					nascetur ridiculus mus.
 				</p>
 
-				<button>A dynamic button</button>
+				<button type="button">A dynamic button</button>
 			</div>
 		</>
 	),

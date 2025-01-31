@@ -9,7 +9,7 @@ import { SPACE_PREVIEW_PROPS_MOCK } from './__mocks__/spacePreview';
 const renderSpacePreview = ({ ...args }: SpacePreviewSpace, className = '') => {
 	return render(
 		<SpacePreview
-			visitorSpace={(SPACE_PREVIEW_PROPS_MOCK.visitorSpace, args)}
+			visitorSpace={{...SPACE_PREVIEW_PROPS_MOCK.visitorSpace, ...args}}
 			className={className}
 		/>
 	);

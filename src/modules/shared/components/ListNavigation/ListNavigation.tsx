@@ -3,11 +3,7 @@ import { isEmpty, isNil } from 'lodash-es';
 import React, { type FC, type ReactNode } from 'react';
 
 import styles from './ListNavigation.module.scss';
-import {
-	type ListNavigationItem,
-	type ListNavigationProps,
-	ListNavigationType,
-} from './ListNavigation.types';
+import { type ListNavigationItem, type ListNavigationProps, ListNavigationType } from './ListNavigation.types';
 
 const ListNavigation: FC<ListNavigationProps> = ({
 	listItems,
@@ -32,7 +28,11 @@ const ListNavigation: FC<ListNavigationProps> = ({
 			<ul className={clsx(styles['c-list-navigation__list'])}>
 				{items.map((item) => {
 					return (
-						<li key={`list-nav-item-${item.id}`} onClick={() => onClick?.(item.id)}>
+						<li key={`list-nav-item-${item.id}`} onClick={() => onClick?.(item.id)} onKeyUp={(evt) => {
+							if (evt.key === 'Enter') {
+								onClick?.(item.id);
+							}
+						}}>
 							{item.hasDivider && (
 								<div className={styles['c-list-navigation__divider']} />
 							)}

@@ -7,11 +7,7 @@ import { stringifyUrl } from 'query-string';
 import { QUERY_KEYS } from '@shared/const';
 import { ApiService } from '@shared/services/api-service';
 
-import {
-	type VisitorSpaceInfo,
-	type VisitorSpaceOrderProps,
-	VisitorSpaceStatus,
-} from '../../types';
+import { type VisitorSpaceInfo, type VisitorSpaceOrderProps, VisitorSpaceStatus } from '../../types';
 
 import { VISITOR_SPACE_SERVICE_BASE_URL } from './visitor-space.service.const';
 import {
@@ -20,10 +16,10 @@ import {
 	type UpdateVisitorSpaceSettings,
 } from './visitor-space.service.types';
 
-export class VisitorSpaceService {
-	private static queryClient = new QueryClient();
+export namespace VisitorSpaceService {
+	const queryClient = new QueryClient();
 
-	public static async getAll(
+	export async function getAll(
 		searchInput = '',
 		status: VisitorSpaceStatus[] | undefined = undefined,
 		page = 0,
@@ -50,7 +46,7 @@ export class VisitorSpaceService {
 		return parsed as IPagination<VisitorSpaceInfo>;
 	}
 
-	public static async getAllAccessible(
+	export async function getAllAccessible(
 		canViewAllSpaces: boolean,
 		page = 0,
 		size = 20
@@ -77,7 +73,7 @@ export class VisitorSpaceService {
 		return sortBy(parsed.items, (space) => space.name?.toLowerCase());
 	}
 
-	public static async getBySlug(
+	export async function getBySlug(
 		slug: string | null,
 		ignoreAuthError: boolean
 	): Promise<VisitorSpaceInfo | null> {
@@ -89,7 +85,7 @@ export class VisitorSpaceService {
 			.json();
 	}
 
-	public static async create(
+	export async function create(
 		values: Partial<CreateVisitorSpaceSettings>
 	): Promise<VisitorSpaceInfo> {
 		const formData = new FormData();
@@ -115,12 +111,12 @@ export class VisitorSpaceService {
 		const response: VisitorSpaceInfo = await ApiService.getApi()
 			.post(VISITOR_SPACE_SERVICE_BASE_URL, { body: formData, headers })
 			.json();
-		await VisitorSpaceService.queryClient.invalidateQueries([QUERY_KEYS.getContentPartners]);
+		await queryClient.invalidateQueries([QUERY_KEYS.getContentPartners]);
 
 		return response;
 	}
 
-	public static async update(
+	export async function update(
 		roomId: string,
 		values: Partial<UpdateVisitorSpaceSettings>
 	): Promise<VisitorSpaceInfo> {

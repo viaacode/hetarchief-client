@@ -142,7 +142,8 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 	}, [tabsHeight, setGradients]);
 
 	// Set initial values
-	useEffect(() => {
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+		useEffect(() => {
 		if (!hasInitialised.current && tabsRef.current) {
 			setGradients(tabsRef.current);
 			hasInitialised.current = true;

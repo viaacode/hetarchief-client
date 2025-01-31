@@ -14,7 +14,6 @@ const renderLink = ({ to = '#', label = 'link', external = false }) => {
 			href={to}
 			className={clsx(styles['c-list-navigation__link'])}
 			target={external ? '_blank' : '_self'}
-			role="link"
 		>
 			{label}
 		</Link>

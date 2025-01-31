@@ -15,8 +15,9 @@ import { ApiService } from '@shared/services/api-service';
 import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from './material-requests.service.const';
 import type { GetMaterialRequestsProps } from './material-requests.service.types';
 
-export class MaterialRequestsService {
-	public static async getAll({
+// TODO convert functions to react-query hooks
+export namespace MaterialRequestsService {
+	export async function getAll({
 		search,
 		type,
 		maintainerIds,
@@ -50,22 +51,22 @@ export class MaterialRequestsService {
 		return result as IPagination<MaterialRequest>;
 	}
 
-	public static async getById(id: string | null): Promise<MaterialRequestDetail | null> {
+	export async function getById(id: string | null): Promise<MaterialRequestDetail | null> {
 		if (!id) {
 			return null;
 		}
 		return ApiService.getApi().get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}`).json();
 	}
 
-	public static async getMaintainers(): Promise<MaterialRequestMaintainer[] | null> {
+	export async function getMaintainers(): Promise<MaterialRequestMaintainer[] | null> {
 		return ApiService.getApi().get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/maintainers`).json();
 	}
 
-	public static async create(json: MaterialRequestCreation): Promise<void> {
+	export async function create(json: MaterialRequestCreation): Promise<void> {
 		return ApiService.getApi().put(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}`, { json }).json();
 	}
 
-	public static async update(
+	export async function update(
 		id: string,
 		json: MaterialRequestUpdate
 	): Promise<MaterialRequestDetail | null> {
@@ -74,14 +75,14 @@ export class MaterialRequestsService {
 			.json();
 	}
 
-	public static async delete(id: string | null): Promise<MaterialRequestDetail | null> {
+	export async function remove(id: string | null): Promise<MaterialRequestDetail | null> {
 		if (!id) {
 			return null;
 		}
 		return ApiService.getApi().delete(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}`).json();
 	}
 
-	public static async sendAll(json: MaterialRequestSendAll): Promise<void> {
+	export async function sendAll(json: MaterialRequestSendAll): Promise<void> {
 		return ApiService.getApi()
 			.post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/send`, { json })
 			.json();
