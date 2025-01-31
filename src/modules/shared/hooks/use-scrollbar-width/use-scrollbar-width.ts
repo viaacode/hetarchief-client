@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 const useScrollbarWidth = (trigger: boolean): number => {
 	const [scrollbarWidth, setScrollbarWidth] = useState(0);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		setScrollbarWidth(window.innerWidth - document.documentElement.clientWidth);
 	}, [trigger]);

@@ -28,6 +28,7 @@ export async function waitForPageTitle(
 				timeout: 10000,
 			}
 		);
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	} catch (err: any) {
 		(
 			err as Error

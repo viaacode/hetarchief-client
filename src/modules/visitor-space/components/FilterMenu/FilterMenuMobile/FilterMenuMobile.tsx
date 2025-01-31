@@ -38,7 +38,8 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 
 	// re-render form to ensure correct state
 	// e.g. open -> reset -> close -> open === values in url, in form
-	useEffect(() => {
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+			useEffect(() => {
 		setOpenedAt(new Date().valueOf());
 	}, [isOpen]);
 

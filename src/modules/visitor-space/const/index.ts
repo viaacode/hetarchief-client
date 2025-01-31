@@ -64,6 +64,7 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
 	orderDirection: OrderDirection.desc,
 };
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export const SEARCH_PAGE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<any>> = {
 	// Filters
 	format: StringParam,

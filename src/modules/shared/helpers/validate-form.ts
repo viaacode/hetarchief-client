@@ -6,7 +6,9 @@ import type { Schema, ValidationError } from 'yup';
  * @param formSchema
  */
 export async function validateForm(
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	formValues: any,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	formSchema: Schema<any>
 ): Promise<null | Record<string, string>> {
 	try {

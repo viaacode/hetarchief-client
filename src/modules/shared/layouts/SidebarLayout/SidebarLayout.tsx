@@ -49,9 +49,15 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({
 			<div className={styles['l-sidebar__main']}>
 				{isResponsive && (
 					<div
+						// biome-ignore lint/a11y/useSemanticElements: <explanation>
 						role="button"
 						tabIndex={0}
 						onClick={() => setExpanded(true)}
+						onKeyUp={(evt) => {
+							if (evt.key === 'Enter') {
+								setExpanded(true);
+							}
+						}}
 						className={clsx(
 							styles['l-sidebar__content-header'],
 							'u-bg-white',

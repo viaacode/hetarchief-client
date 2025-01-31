@@ -47,6 +47,7 @@ export interface FilterMenuFilterOption {
 	id: SearchFilterId;
 	icon?: IconName;
 	label: string;
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	form: FC<DefaultFilterFormProps<any>> | FC<InlineFilterFormProps<any>> | null; // eslint-disable-line @typescript-eslint/no-explicit-any
 	type: FilterMenuType;
 	isDisabled?: () => boolean;

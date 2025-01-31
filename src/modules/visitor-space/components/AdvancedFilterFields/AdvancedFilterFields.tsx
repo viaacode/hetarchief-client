@@ -17,7 +17,9 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { SEPARATOR } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import type { AdvancedFilterFieldsProps } from '@visitor-space/components/AdvancedFilterFields/AdvancedFilterFields.types';
+import type {
+	AdvancedFilterFieldsProps,
+} from '@visitor-space/components/AdvancedFilterFields/AdvancedFilterFields.types';
 import AutocompleteFieldInput, {
 	type AutocompleteFieldInputProps,
 } from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
@@ -27,18 +29,12 @@ import { DateRangeInput } from '@visitor-space/components/DateRangeInput';
 import type { DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
 import { DurationRangeInput } from '@visitor-space/components/DurationRangeInput';
 import { GenreSelect } from '@visitor-space/components/GenreSelect';
-import {
-	type LanguageCode,
-	LANGUAGES,
-} from '@visitor-space/components/LanguageFilterForm/languages';
+import { type LanguageCode, LANGUAGES } from '@visitor-space/components/LanguageFilterForm/languages';
 import { LanguageSelect } from '@visitor-space/components/LanguageSelect/LanguageSelect';
 import { MediaTypeSelect } from '@visitor-space/components/MediaTypeSelect';
 import { MediumSelect } from '@visitor-space/components/MediumSelect/MediumSelect';
 import { ObjectTypeSelect } from '@visitor-space/components/ObjectTypeSelect';
-import type {
-	FilterConfig,
-	FilterInputComponentProps,
-} from '@visitor-space/const/advanced-filters.consts';
+import type { FilterConfig, FilterInputComponentProps } from '@visitor-space/const/advanced-filters.consts';
 
 import type { AdvancedFilter, FilterProperty, Operator } from '../../types';
 import { getSelectValue } from '../../utils/select';
@@ -46,11 +42,7 @@ import DurationInput, { defaultValue } from '../DurationInput/DurationInput';
 
 import styles from './AdvancedFilterFields.module.scss';
 
-import {
-	getAdvancedProperties,
-	getFilterConfig,
-	getOperators,
-} from 'modules/visitor-space/utils/advanced-filters';
+import { getAdvancedProperties, getFilterConfig, getOperators } from 'modules/visitor-space/utils/advanced-filters';
 
 const labelKeys = {
 	prefix: 'AdvancedFilterFields',
@@ -109,7 +101,6 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			return null;
 		}
 
-		let value;
 		const props: FilterInputComponentProps = {
 			...(filterConfig?.inputComponentProps || {}),
 			...config,
@@ -154,7 +145,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			}
 
 			case DurationInput: {
-				value = state.val || defaultValue; // Ensure initial value is hh:mm:ss
+				const value = state.val || defaultValue; // Ensure initial value is hh:mm:ss
 				const TextInputComponent = filterConfig.inputComponent as FC<TextInputProps>;
 				const textInputComponent = filterConfig.inputComponentProps as TextInputProps;
 
@@ -165,7 +156,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			}
 
 			case DurationRangeInput: {
-				value = state.val || `${defaultValue}${SEPARATOR}${defaultValue}`; // Ensure initial value is hh:mm:ss for both fields
+				const value = state.val || `${defaultValue}${SEPARATOR}${defaultValue}`; // Ensure initial value is hh:mm:ss for both fields
 				const TextInputComponent = filterConfig.inputComponent as FC<TextInputProps>;
 				const textInputComponentProps = filterConfig.inputComponentProps as TextInputProps;
 
@@ -182,7 +173,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			case ObjectTypeSelect: {
 				const SelectComponent = filterConfig.inputComponent as FC<ReactSelectProps>;
 				const selectComponentProps = filterConfig.inputComponentProps as ReactSelectProps;
-				value =
+				const value =
 					getSelectValue(
 						((props as ReactSelectProps).options || []) as SelectOption[],
 						state.val
@@ -199,6 +190,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 							styles['c-advanced-filter-fields__dynamic-field--select']
 						)}
 						value={value}
+						// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 						onChange={(e: any) =>
 							onFieldChange({
 								val: (e as SingleValue<SelectOption>)?.value ?? undefined,
@@ -211,7 +203,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			// Separate case, since we also need to translate the selected value from nl => Nederlands
 			case LanguageSelect: {
 				const selectComponentProps = filterConfig.inputComponentProps as ReactSelectProps;
-				value =
+				const value =
 					getSelectValue(
 						((props as ReactSelectProps).options || []) as SelectOption[],
 						state.val
@@ -231,6 +223,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 							styles['c-advanced-filter-fields__dynamic-field--select']
 						)}
 						value={value}
+						// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 						onChange={(e: any) =>
 							onFieldChange({
 								val: (e as SingleValue<SelectOption>)?.value ?? undefined,
@@ -243,7 +236,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			case DateInput: {
 				const DateInputComponent = filterConfig.inputComponent as FC<DateInputProps>;
 				const DateInputComponentProps = filterConfig.inputComponentProps as DateInputProps;
-				value = state.val ? parseISO(state.val) : new Date();
+				const value = state.val ? parseISO(state.val) : new Date();
 
 				return (
 					<DateInputComponent

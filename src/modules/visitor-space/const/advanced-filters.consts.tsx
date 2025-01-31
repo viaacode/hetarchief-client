@@ -236,7 +236,9 @@ const DURATION_LESS_THAN_OR_EQUALS = (
 const CONTAINS = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponent?: FC<any>,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {
@@ -257,7 +259,9 @@ const CONTAINS = (
 const CONTAINS_NOT = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponent?: FC<any>,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {
@@ -278,7 +282,9 @@ const CONTAINS_NOT = (
 const EQUALS = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponent?: FC<any>,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {
@@ -299,7 +305,9 @@ const EQUALS = (
 const EQUALS_NOT = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponent?: FC<any>,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {
@@ -320,7 +328,9 @@ const EQUALS_NOT = (
 const CONTAINS_AND_EQUALS = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponent?: FC<any>,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {

@@ -58,14 +58,16 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const dispatch = useDispatch();
 	const locale = useLocale();
 
-	const [typeSelected, setTypeSelected] = useState<MaterialRequestType | undefined>(type);
+	const [typeSelected, setTypeSelected] = useState<
+		MaterialRequestType | undefined
+	>(type);
 	const [noTypeSelectedOnSave, setNoTypeSelectedOnSave] = useState(false);
 
-	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
+	const [reasonInputValue, setReasonInputValue] = useState(reason || "");
 
 	const onCloseModal = () => {
 		onClose();
-		setReasonInputValue('');
+		setReasonInputValue("");
 		setNoTypeSelectedOnSave(false);
 		setTypeSelected(undefined);
 		refetchMaterialRequests?.();
@@ -100,10 +102,10 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			toastService.notify({
 				maxLines: 3,
 				title: tText(
-					'modules/visitor-space/components/material-request-blade/material-request-blade___succes'
+					"modules/visitor-space/components/material-request-blade/material-request-blade___succes",
 				),
 				description: tText(
-					'modules/visitor-space/components/material-request-blade/material-request-blade___rond-je-aanvragenlijst-af'
+					"modules/visitor-space/components/material-request-blade/material-request-blade___rond-je-aanvragenlijst-af",
 				),
 			});
 			await onSuccessCreated();
@@ -123,11 +125,14 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					return;
 				}
 				setNoTypeSelectedOnSave(false);
-				const response = await MaterialRequestsService.update(materialRequestId, {
-					type: typeSelected,
-					reason: reasonInputValue,
-					requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
-				});
+				const response = await MaterialRequestsService.update(
+					materialRequestId,
+					{
+						type: typeSelected,
+						reason: reasonInputValue,
+						requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
+					},
+				);
 				if (response === undefined) {
 					onFailedRequest();
 					return;
@@ -135,10 +140,10 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				toastService.notify({
 					maxLines: 3,
 					title: tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-succes'
+						"modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-succes",
 					),
 					description: tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-toegepast'
+						"modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-toegepast",
 					),
 				});
 				await onSuccessCreated();
@@ -153,22 +158,22 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		toastService.notify({
 			maxLines: 3,
 			title: tText(
-				'modules/visitor-space/components/material-request-blade/material-request-blade___er-ging-iets-mis'
+				"modules/visitor-space/components/material-request-blade/material-request-blade___er-ging-iets-mis",
 			),
 			description: tText(
-				'modules/visitor-space/components/material-request-blade/material-request-blade___er-ging-iets-mis-tijdens-het-opslaan'
+				"modules/visitor-space/components/material-request-blade/material-request-blade___er-ging-iets-mis-tijdens-het-opslaan",
 			),
 		});
 	};
 
-	const renderTitle = (props: Pick<HTMLElement, 'id' | 'className'>) => {
+	const renderTitle = (props: Pick<HTMLElement, "id" | "className">) => {
 		const title = isEditMode
 			? tText(
-					'modules/visitor-space/components/material-request-blade/material-request-blade___pas-je-aanvraag-aan'
-			  )
+					"modules/visitor-space/components/material-request-blade/material-request-blade___pas-je-aanvraag-aan",
+				)
 			: tText(
-					'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
-			  );
+					"modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe",
+				);
 
 		return <h2 {...props}>{title}</h2>;
 	};
@@ -176,29 +181,29 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const renderFooter = () => {
 		if (isEditMode) {
 			return (
-				<div className={styles['c-request-material__footer-container']}>
+				<div className={styles["c-request-material__footer-container"]}>
 					<Button
 						label={tText(
-							'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-opslaan'
+							"modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-opslaan",
 						)}
-						variants={['block', 'text']}
+						variants={["block", "text"]}
 						onClick={onEditRequest}
-						className={styles['c-request-material__verstuur-button']}
+						className={styles["c-request-material__verstuur-button"]}
 					/>
 
 					<Button
 						label={tText(
-							'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
+							"modules/visitor-space/components/material-request-blade/material-request-blade___annuleer",
 						)}
-						variants={['block', 'text']}
+						variants={["block", "text"]}
 						onClick={onCloseModal}
-						className={styles['c-request-material__annuleer-button']}
+						className={styles["c-request-material__annuleer-button"]}
 					/>
 				</div>
 			);
 		}
 		return (
-			<div className={styles['c-request-material__footer-container']}>
+			<div className={styles["c-request-material__footer-container"]}>
 				{/* ARC-1188: requested to hide single material request button
 				<Button
 					label={tText(
@@ -209,10 +214,10 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					className={styles['c-request-material__verstuur-button']}
 				/> */}
 				{noTypeSelectedOnSave ? (
-					<span className={styles['c-request-material__reason-error']}>
+					<span className={styles["c-request-material__reason-error"]}>
 						<Icon className="u-mr-8" name={IconNamesLight.Exclamation} />
 						{tText(
-							'modules/visitor-space/components/material-request-blade/material-request-blade___er-staan-fouten-in-dit-formulier-corrigeer-deze-en-probeer-het-opnieuw'
+							"modules/visitor-space/components/material-request-blade/material-request-blade___er-staan-fouten-in-dit-formulier-corrigeer-deze-en-probeer-het-opnieuw",
 						)}
 					</span>
 				) : null}
@@ -220,31 +225,31 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					mobile: (
 						<Button
 							label={tText(
-								'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek-mobile'
+								"modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek-mobile",
 							)}
-							variants={['block', 'text', 'dark']}
+							variants={["block", "text", "dark"]}
 							onClick={onAddToList}
-							className={styles['c-request-material__voeg-toe-button']}
+							className={styles["c-request-material__voeg-toe-button"]}
 						/>
 					),
 					desktop: (
 						<Button
 							label={tText(
-								'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek'
+								"modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek",
 							)}
-							variants={['block', 'text', 'dark']}
+							variants={["block", "text", "dark"]}
 							onClick={onAddToList}
-							className={styles['c-request-material__voeg-toe-button']}
+							className={styles["c-request-material__voeg-toe-button"]}
 						/>
 					),
 				})}
 				<Button
 					label={tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
+						"modules/visitor-space/components/material-request-blade/material-request-blade___annuleer",
 					)}
-					variants={['block', 'text']}
+					variants={["block", "text"]}
 					onClick={onCloseModal}
-					className={styles['c-request-material__annuleer-button']}
+					className={styles["c-request-material__annuleer-button"]}
 				/>
 			</div>
 		);
@@ -258,31 +263,31 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			onClose={onCloseModal}
 			layer={layer}
 			currentLayer={currentLayer}
-			className={styles['c-request-material']}
+			className={styles["c-request-material"]}
 			isManaged
 			id="material-request-blade"
 		>
-			<div className={styles['c-request-material__maintainer']}>
+			<div className={styles["c-request-material__maintainer"]}>
 				{maintainerLogo && (
-					<div className={styles['c-request-material__maintainer-logo']}>
+					<div className={styles["c-request-material__maintainer-logo"]}>
 						<Image
 							alt="maintainer logo"
 							src={maintainerLogo}
 							fill
 							sizes="100vw"
 							style={{
-								objectFit: 'contain',
+								objectFit: "contain",
 							}}
 						/>
 					</div>
 				)}
 				<div>
-					<p className={styles['c-request-material__maintainer-details']}>
+					<p className={styles["c-request-material__maintainer-details"]}>
 						{tHtml(
-							'modules/visitor-space/components/material-request-blade/material-request-blade___item-van'
+							"modules/visitor-space/components/material-request-blade/material-request-blade___item-van",
 						)}
 					</p>
-					<p className={styles['c-request-material__maintainer-details']}>
+					<p className={styles["c-request-material__maintainer-details"]}>
 						{maintainerName}
 					</p>
 				</div>
@@ -290,58 +295,61 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			<a
 				tabIndex={-1}
 				href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectId}`}
-				className={styles['c-request-material__material-link']}
+				className={styles["c-request-material__material-link"]}
 			>
-				<div className={styles['c-request-material__material']} >
-					<p className={styles['c-request-material__material-label']}>
+				<div className={styles["c-request-material__material"]}>
+					<p className={styles["c-request-material__material-label"]}>
 						<Icon
-							className={styles['c-request-material__material-label-icon']}
+							className={styles["c-request-material__material-label-icon"]}
 							name={TYPE_TO_ICON_MAP[objectDctermsFormat]}
 						/>
 						<span>{objectName}</span>
 					</p>
-					<p className={styles['c-request-material__material-id']}>{objectId}</p>
+					<p className={styles["c-request-material__material-id"]}>
+						{objectId}
+					</p>
 				</div>
 			</a>
-			<div className={styles['c-request-material__content']}>
+			<div className={styles["c-request-material__content"]}>
 				<dl>
 					<>
-						<dt className={styles['c-request-material__content-label']}>
+						<dt className={styles["c-request-material__content-label"]}>
+							{/* biome-ignore lint/a11y/noLabelWithoutControl: radio buttons reference this label */}
 							<label id="radio-group-label">
 								{tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___selecteer-een-type'
+									"modules/visitor-space/components/material-request-blade/material-request-blade___selecteer-een-type",
 								)}
 							</label>
 						</dt>
 						<dd
 							className={clsx(
-								styles['c-request-material__content-value'],
-								styles['c-request-material__radio-buttons-container']
+								styles["c-request-material__content-value"],
+								styles["c-request-material__radio-buttons-container"],
 							)}
 						>
 							<RadioButton
 								aria-labelledby="radio-group-label"
-								className={styles['c-request-material__radio-button']}
+								className={styles["c-request-material__radio-button"]}
 								label={tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___view'
+									"modules/visitor-space/components/material-request-blade/material-request-blade___view",
 								)}
 								checked={typeSelected === MaterialRequestType.VIEW}
 								onClick={() => setTypeSelected(MaterialRequestType.VIEW)}
 							/>
 							<RadioButton
 								aria-labelledby="radio-group-label"
-								className={styles['c-request-material__radio-button']}
+								className={styles["c-request-material__radio-button"]}
 								label={tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
+									"modules/visitor-space/components/material-request-blade/material-request-blade___reuse",
 								)}
 								checked={typeSelected === MaterialRequestType.REUSE}
 								onClick={() => setTypeSelected(MaterialRequestType.REUSE)}
 							/>
 							<RadioButton
 								aria-labelledby="radio-group-label"
-								className={styles['c-request-material__radio-button']}
+								className={styles["c-request-material__radio-button"]}
 								label={tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___more-info'
+									"modules/visitor-space/components/material-request-blade/material-request-blade___more-info",
 								)}
 								checked={typeSelected === MaterialRequestType.MORE_INFO}
 								onClick={() => setTypeSelected(MaterialRequestType.MORE_INFO)}
@@ -350,22 +358,22 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 								<span className="c-form-control__errors">
 									<Icon className="u-mr-8 " name={IconNamesLight.Exclamation} />
 									{tText(
-										'modules/visitor-space/components/material-request-blade/material-request-blade___type-verplicht-error'
+										"modules/visitor-space/components/material-request-blade/material-request-blade___type-verplicht-error",
 									)}
 								</span>
 							) : null}
 						</dd>
-						<dt className={styles['c-request-material__content-label']}>
+						<dt className={styles["c-request-material__content-label"]}>
 							<label htmlFor="reason-input">
 								{tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
+									"modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag",
 								)}
 							</label>
 						</dt>
-						<dd className={styles['c-request-material__content-value']}>
+						<dd className={styles["c-request-material__content-value"]}>
 							<TextArea
 								id="reason-input"
-								className={styles['c-request-material__reason-input']}
+								className={styles["c-request-material__reason-input"]}
 								onChange={(e) => setReasonInputValue(e.target.value)}
 								value={reasonInputValue}
 							/>

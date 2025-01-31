@@ -26,10 +26,7 @@ import {
 	RELEASE_DATE_FILTER_FORM_SCHEMA,
 } from './ReleaseDateFilterForm.const';
 import styles from './ReleaseDateFilterForm.module.scss';
-import type {
-	ReleaseDateFilterFormProps,
-	ReleaseDateFilterFormState,
-} from './ReleaseDateFilterForm.types';
+import type { ReleaseDateFilterFormProps, ReleaseDateFilterFormState } from './ReleaseDateFilterForm.types';
 
 import { getOperators } from 'modules/visitor-space/utils/advanced-filters';
 
@@ -89,7 +86,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 
 			setShowRange(isRange(op)); // Not covered by other useEffects in time
 		}
-	}, [initialValue, setForm]);
+	}, [initialValue]);
 
 	// Events
 
@@ -136,13 +133,13 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 			const yearDate = convertYearToDate(year, form.operator)?.toString();
 			setForm((oldForm) => ({ ...oldForm, releaseDate: yearDate }));
 		}
-	}, [year, setForm, form.operator]);
+	}, [year, form.operator]);
 
 	useEffect(() => {
 		if (yearRange) {
 			setForm((oldForm) => ({ ...oldForm, releaseDate: yearRange }));
 		}
-	}, [setForm, yearRange]);
+	}, [yearRange]);
 
 	const onChangeOperatorSelect = (
 		operator: SingleValue<SelectOption> | MultiValue<SelectOption>

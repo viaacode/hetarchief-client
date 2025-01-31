@@ -6,11 +6,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml } from '@shared/helpers/translate';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
-import type {
-	DefaultFilterFormProps,
-	InlineFilterFormProps,
-	SearchFilterId,
-} from '@visitor-space/types';
+import type { DefaultFilterFormProps, InlineFilterFormProps, SearchFilterId } from '@visitor-space/types';
 
 import { FilterMenuType } from '../FilterMenu.types';
 
@@ -73,6 +69,7 @@ const FilterForm: FC<FilterFormProps> = ({
 	};
 
 	const renderModal = (): ReactElement => {
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		const FormComponent = (form as FC<DefaultFilterFormProps<any>>) ?? (() => null);
 
 		return (

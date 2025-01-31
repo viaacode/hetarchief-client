@@ -19,12 +19,7 @@ import {
 	SearchFilterId,
 	type TagIdentity,
 } from '../../types';
-import {
-	getAdvancedProperties,
-	getFilterLabel,
-	getOperators,
-	getRegularProperties,
-} from '../advanced-filters';
+import { getAdvancedProperties, getFilterLabel, getOperators, getRegularProperties } from '../advanced-filters';
 
 const getSelectLabel = (
 	options: SelectOption[],
@@ -239,7 +234,7 @@ export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilte
 
 	// Format data for Elastic
 	return filters.map((filter: IeObjectsSearchFilter, i: number) => {
-		let parsed;
+		let parsed: Date;
 
 		switch (item.prop) {
 			case FilterProperty.CREATED_AT:

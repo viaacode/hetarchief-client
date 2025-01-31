@@ -14,6 +14,7 @@ import type { DefaultFilterFormChildrenParams } from '@visitor-space/types';
 import styles from './AutocompleteFieldFilterForm.module.scss';
 
 export const AutocompleteFieldFilterForm: FC<{
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	children: ({ values, reset, handleSubmit }: DefaultFilterFormChildrenParams<any>) => ReactNode;
 	className?: string;
 	autocompleteField: AutocompleteField;

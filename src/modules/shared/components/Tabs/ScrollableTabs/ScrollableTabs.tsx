@@ -117,14 +117,15 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 			if (tabsEl) {
 				if (isBrowser() && window.ResizeObserver) {
 					observer = new ResizeObserver((entries) => {
-						entries.forEach(({ target }) => {
+						for (const entry of entries) {
+							const target = entry.target as HTMLElement;
 							if (window.innerWidth < target.scrollWidth + 40) {
 								setGradients(target);
 							}
 							if (target.clientHeight !== tabsHeight) {
 								setHeight(target);
 							}
-						});
+						};
 					});
 
 					observer.observe(tabsEl);

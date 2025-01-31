@@ -6,6 +6,7 @@ import type { DefaultFilterFormProps } from '@visitor-space/types';
 
 import { AutocompleteFieldFilterForm } from '../AutocompleteFieldFilterForm/AutocompleteFieldFilterForm';
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export const MentionsFilterForm: FC<DefaultFilterFormProps<any>> = ({ children, className }) => {
 	return (
 		<AutocompleteFieldFilterForm
