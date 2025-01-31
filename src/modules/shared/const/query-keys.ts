@@ -31,6 +31,7 @@ export enum QUERY_KEYS {
 	getMaintenanceAlerts = 'getMaintenanceAlerts',
 	getNewsletterPreferences = 'getNewsletterPreferences',
 	getIeObjectPlayerTicket = 'getIeObjectPlayerTicket',
+	getIeObjectPlayerTicketToken = 'getIeObjectPlayerTicketToken',
 	getAllLanguages = 'getAllLanguages',
 	getAltoJsonFileContent = 'getAltoJsonFileContent',
 }

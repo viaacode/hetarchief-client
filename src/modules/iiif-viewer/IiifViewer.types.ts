@@ -1,9 +1,14 @@
 import { type AltoTextLine, type OcrSearchResult } from '@ie-objects/ie-objects.types';
 
-export type ImageInfo = {
+export interface ImageInfo {
 	thumbnailUrl: string;
 	imageUrl: string;
-};
+	altoUrl?: string;
+}
+
+export interface ImageInfoWithToken extends ImageInfo {
+	token: string | null;
+}
 
 export interface ImageSize {
 	width: number;
@@ -19,7 +24,7 @@ export interface Rect {
 
 export interface IiifViewerProps {
 	id: string;
-	imageInfos: ImageInfo[];
+	imageInfosWithTokens: ImageInfoWithToken[];
 	isTextOverlayVisible: boolean;
 	setIsTextOverlayVisible: (isOcrEnabled: boolean) => void;
 	activeImageIndex: number;

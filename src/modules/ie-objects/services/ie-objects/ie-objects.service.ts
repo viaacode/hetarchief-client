@@ -26,6 +26,7 @@ import { SearchSortProp } from '@visitor-space/types';
 import {
 	IE_OBJECT_SERVICE_SEO_URL,
 	IE_OBJECT_SERVICE_TICKET_URL,
+	IE_OBJECT_TICKET_SERVICE_URL,
 	IE_OBJECTS_SERVICE_BASE_URL,
 	IE_OBJECTS_SERVICE_SIMILAR,
 	IO_OBJECTS_SERVICE_DOWNLOAD_ALTO_JSON,
@@ -124,6 +125,21 @@ export class IeObjectsService {
 			url: parsedUrl.url + (timeCodes ? '#' + timeCodes : ''),
 			query: parsedUrl.query,
 		});
+	}
+
+	public static async getTicketServiceToken(filePath: string): Promise<string | null> {
+		const token = await ApiService.getApi()
+			.get(
+				stringifyUrl({
+					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_TICKET_SERVICE_URL}`,
+					query: {
+						filePath: filePath.replace('https://iiif-qas.meemoo.be/', ''),
+					},
+				})
+			)
+			.text();
+
+		return token || null;
 	}
 
 	// Used for "ook interessant" on the detail page

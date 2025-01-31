@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { clamp, compact, isNil, round } from 'lodash-es';
 import { useRouter } from 'next/router';
-import { type TileSource, type Viewer } from 'openseadragon';
+import { type TiledImageOptions, type TileSource, type Viewer } from 'openseadragon';
 import { parseUrl } from 'query-string';
 import React, {
 	forwardRef,
@@ -14,7 +14,6 @@ import React, {
 } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
-import { IMAGE_API_FORMATS } from '@ie-objects/ie-objects.consts';
 import { type AltoTextLine } from '@ie-objects/ie-objects.types';
 import {
 	type IiifViewerFunctions,
@@ -43,7 +42,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 	(
 		{
-			imageInfos,
+			imageInfosWithTokens,
 			id,
 			isTextOverlayVisible,
 			setIsTextOverlayVisible,
@@ -346,22 +345,15 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				// and otherwise the setState thinks this is a setter function
 				setOpenSeaDragonLib(() => openSeadragonLibTemp);
 
-				const imageSources = compact(
-					imageInfos.map((imageInfo) => {
-						const validExtensions = IMAGE_API_FORMATS.map((mimeType) =>
-							mimeType.split('/').pop()
-						);
-						const extension = imageInfo.imageUrl.split('.').pop() as string;
-						if (validExtensions?.includes(extension)) {
-							return imageInfo.imageUrl;
-						}
-						return null;
-
-						// Skip images for now
-						// return {
-						// 	type: 'image' as const,
-						// 	url: imageInfo.imageUrl,
-						// };
+				const imageSources: TiledImageOptions[] = compact(
+					imageInfosWithTokens.map((imageInfo): TiledImageOptions | null => {
+						return {
+							tileSource: imageInfo.imageUrl,
+							loadTilesWithAjax: true,
+							ajaxHeaders: {
+								Authorization: 'Bearer ' + imageInfo.token,
+							},
+						};
 					})
 				);
 
@@ -388,7 +380,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			// Do not rerun this function when the queryParams change,
 			// since we only want apply the zoom and pan from the query params once to the iiif viewer
 			// eslint-disable-next-line
-		}, [imageInfos, iiifViewerId, isMobile]);
+		}, [imageInfosWithTokens, iiifViewerId, isMobile]);
 
 		useEffect(() => {
 			initIiifViewer();
@@ -587,7 +579,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 										'modules/iiif-viewer/iiif-viewer___current-image-van-total-images',
 										{
 											currentImage: activeImageIndex + 1,
-											totalImages: imageInfos?.length || 1,
+											totalImages: imageInfosWithTokens?.length || 1,
 										}
 									)}
 								</span>
@@ -602,7 +594,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 									)}
 									variants={['white', 'sm']}
 									onClick={() => setActiveImageIndex(activeImageIndex + 1)}
-									disabled={activeImageIndex === imageInfos.length - 1}
+									disabled={activeImageIndex === imageInfosWithTokens.length - 1}
 								/>
 							</div>
 
@@ -743,7 +735,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			// and here it shows up on the right side of the reference strip, so it extra noticeable
 			return (
 				<PerfectScrollbar className={styles['c-iiif-viewer__iiif__reference-strip']}>
-					{imageInfos.map((imageInfo, index) => {
+					{imageInfosWithTokens.map((imageInfo, index) => {
 						return (
 							<div key={'c-iiif-viewer__iiif__reference-strip__' + index}>
 								<button onClick={() => setActiveImageIndex(index)}>
@@ -764,7 +756,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					style={{ display: iiifGridViewEnabled ? 'block' : 'none' }}
 				>
 					<div className={styles['c-iiif-viewer__grid-view']}>
-						{imageInfos.map((imageInfo, index) => {
+						{imageInfosWithTokens.map((imageInfo, index) => {
 							return (
 								<button
 									key={'c-iiif-viewer__grid-view__' + index}

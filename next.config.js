@@ -98,6 +98,7 @@ module.exports = withTM({
 		FLOW_PLAYER_ID: process.env.FLOW_PLAYER_ID,
 		GOOGLE_TAG_MANAGER_ID: process.env.GOOGLE_TAG_MANAGER_ID,
 		ENABLE_GOOGLE_INDEXING: process.env.ENABLE_GOOGLE_INDEXING,
+		IIIF_IMAGE_API: process.env.IIIF_IMAGE_API,
 	},
 	async headers() {
 		if (process.env.ENABLE_GOOGLE_INDEXING === 'false') {
