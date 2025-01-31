@@ -14,8 +14,27 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
 import { parseUrl, stringifyUrl } from 'query-string';
+import React, {
+	type FC,
+	Fragment,
+	type MutableRefObject,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	BooleanParam,
+	NumberParam,
+	StringParam,
+	useQueryParam,
+	withDefault,
+} from 'use-query-params';
+
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { type User } from '@auth/types';
@@ -69,11 +88,10 @@ import {
 	NEWSPAPERS_SERVICE_BASE_URL,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
-import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import IiifViewer from '@iiif-viewer/IiifViewer';
 import { type IiifViewerFunctions, type ImageInfo, type Rect } from '@iiif-viewer/IiifViewer.types';
+import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
-
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
@@ -112,26 +130,6 @@ import { VisitorSpaceNavigation } from '@visitor-space/components/VisitorSpaceNa
 import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
-
-import React, {
-	type FC,
-	Fragment,
-	type MutableRefObject,
-	type ReactNode,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-	BooleanParam,
-	NumberParam,
-	StringParam,
-	useQueryParam,
-	withDefault,
-} from 'use-query-params';
 
 import styles from './ObjectDetailPage.module.scss';
 
@@ -1245,7 +1243,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			);
 		}
 		if (mappedRelatedIeObjects.length === 1) {
-			return tHtml('Dit object heeft 1 fragment');
+			return tHtml('modules/ie-objects/object-detail-page___dit-object-heeft-1-fragment');
 		} else {
 			return tHtml(
 				'modules/ie-objects/object-detail-page___dit-object-heeft-amount-fragmenten',
@@ -1436,7 +1434,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			<ObjectPlaceholder
 				{...objectPlaceholder()}
 				reasonDescription={tText(
-					'Je hebt enkel toegang tot de metadata van dit object omdat dit object niet publiek beschikbaar is volgens de licenties van de auteur'
+					'modules/ie-objects/object-detail-page___je-hebt-enkel-toegang-tot-de-metadata-van-dit-object-omdat-dit-object-niet-publiek-beschikbaar-is-volgens-de-licenties-van-de-auteur'
 				)}
 				className={styles['p-object-detail__media--not-available']}
 			/>

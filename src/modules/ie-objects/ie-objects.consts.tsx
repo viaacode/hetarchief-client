@@ -90,11 +90,11 @@ export const GET_NEWSPAPER_DOWNLOAD_OPTIONS = (): MenuItemInfo[] => [
  */
 const getDefaultPlaceholderValues = () => ({
 	description: tText(
-		'Je kan dit object enkel bekijken tijdens een fysiek bezoek aan de bezoekersruimte.'
+		'modules/ie-objects/ie-objects___je-kan-dit-object-enkel-bekijken-tijdens-een-fysiek-bezoek-aan-de-bezoekersruimte'
 	),
-	reasonTitle: tText('Waarom kan ik dit object niet bekijken?'),
-	openModalButtonLabel: tText('Meer info'),
-	closeModalButtonLabel: tText('Sluit'),
+	reasonTitle: tText('modules/ie-objects/ie-objects___waarom-kan-ik-dit-object-niet-bekijken'),
+	openModalButtonLabel: tText('modules/ie-objects/ie-objects___meer-info'),
+	closeModalButtonLabel: tText('modules/ie-objects/ie-objects___sluit'),
 });
 
 export const ticketErrorPlaceholder = (): ObjectPlaceholderProps => ({
