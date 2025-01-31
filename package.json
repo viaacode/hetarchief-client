@@ -14,6 +14,7 @@
 		"build-production": "cross-env NODE_ENV=production next build",
 		"start": "next start",
 		"docker-start": "node ./scripts/next-config-to-env-file.js && node ./scripts/copy-robots-txt-file.js && next start",
+		"install-pre-commit-hook": "lefthook install",
 		"lint": "biome lint --write",
 		"lint:scss": "stylelint 'src/**/*.{css,scss}' --allow-empty-input --fix",
 		"format": "biome format --write",
@@ -197,10 +198,5 @@
 		"i18next": "^22.0.6",
 		"i18next-http-backend": "2.6.1"
 	},
-	"browserslist": [
-		">0.3%",
-		"not ie 11",
-		"not dead",
-		"not op_mini all"
-	]
+	"browserslist": [">0.3%", "not ie 11", "not dead", "not op_mini all"]
 }
