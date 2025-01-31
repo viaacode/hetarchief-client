@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { type FC } from 'react';
+import type { FC } from 'react';
 import Highlighter from 'react-highlight-words';
 import { StringParam, useQueryParam, withDefault } from 'use-query-params';
 

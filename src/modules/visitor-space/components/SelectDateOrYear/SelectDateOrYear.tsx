@@ -1,5 +1,5 @@
 import { RadioButton } from '@meemoo/react-components';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { tText } from '@shared/helpers/translate';
 

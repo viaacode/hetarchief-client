@@ -1,4 +1,4 @@
-import { type User } from '@auth/types';
+import type { User } from '@auth/types';
 
 type AcceptTermsOfService = User;
 

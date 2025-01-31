@@ -4,7 +4,7 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
 import { type GetMaterialRequestsProps, MaterialRequestsService } from '../services';
-import { type MaterialRequest } from '../types';
+import type { MaterialRequest } from '../types';
 
 export const useGetMaterialRequests = (
 	props: GetMaterialRequestsProps,

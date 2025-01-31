@@ -4,13 +4,13 @@ import clsx from 'clsx';
 import { groupBy, intersection, isNil } from 'lodash-es';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
-import { type MouseEventHandler, type ReactNode } from 'react';
+import type { MouseEventHandler, ReactNode } from 'react';
 
 import { Permission } from '@account/const';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import { NAVIGATION_DROPDOWN } from '@navigation/components/Navigation/Navigation.types';
 import { NavigationLink } from '@navigation/components/Navigation/NavigationLink';
-import { type NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
+import type { NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
 import {
 	type NavigationInfo,
 	NavigationPlacement,
@@ -24,8 +24,8 @@ import {
 } from '@shared/const/routes';
 import { tText } from '@shared/helpers/translate';
 import { Breakpoints } from '@shared/types';
-import { type VisitRequest } from '@shared/types/visit-request';
-import { type Locale } from '@shared/utils/i18n';
+import type { VisitRequest } from '@shared/types/visit-request';
+import type { Locale } from '@shared/utils/i18n';
 import { SearchFilterId, type VisitorSpaceInfo } from '@visitor-space/types';
 
 const linkCls = (...classNames: string[]) => {

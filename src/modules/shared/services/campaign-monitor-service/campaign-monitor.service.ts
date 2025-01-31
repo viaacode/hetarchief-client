@@ -1,10 +1,10 @@
 import { stringifyUrl } from 'query-string';
 
-import { type EmailTemplate } from '@shared/components/ShareFolderBlade/ShareFolderBlade.consts';
+import type { EmailTemplate } from '@shared/components/ShareFolderBlade/ShareFolderBlade.consts';
 import { ApiService } from '@shared/services/api-service';
-import {
-	type GetNewsletterPreferencesResponse,
-	type SetNewsletterPreferencesBody,
+import type {
+	GetNewsletterPreferencesResponse,
+	SetNewsletterPreferencesBody,
 } from '@shared/types/newsletter';
 
 import {

@@ -1,6 +1,6 @@
 import { Button, FormControl, TextArea, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { type Requests } from 'node-zendesk';
+import type { Requests } from 'node-zendesk';
 import { type FC, useCallback, useEffect, useState } from 'react';
 
 import { Blade } from '@shared/components/Blade/Blade';
@@ -12,7 +12,7 @@ import { toastService } from '@shared/services/toast-service';
 import { REPORT_FORM_SCHEMA } from '@visitor-space/components/reportBlade/ReportBlade.const';
 
 import styles from './ReportBlade.module.scss';
-import { type ReportBladeProps } from './ReportBlade.types';
+import type { ReportBladeProps } from './ReportBlade.types';
 
 const ReportBlade: FC<ReportBladeProps> = (props) => {
 	const { user } = props;

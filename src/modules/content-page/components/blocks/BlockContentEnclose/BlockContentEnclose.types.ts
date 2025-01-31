@@ -1,6 +1,6 @@
 import type { ButtonAction, ButtonType } from '@viaa/avo2-components';
 import type { IconNameSchema } from '@viaa/avo2-components/dist/components/Icon/Icon.types';
-import { type Avo } from '@viaa/avo2-types';
+import type { Avo } from '@viaa/avo2-types';
 import type { ContentPickerTypeSchema } from '@viaa/avo2-types/types/core';
 
 export type BlockContentEncloseProps = {

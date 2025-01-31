@@ -17,10 +17,10 @@ import {
 	VISITOR_SPACE_ACTIVE_SORT_MAP,
 } from '@visitor-space/const';
 
-import { type SearchFilterId, type SearchSortProp } from '../../types';
+import type { SearchFilterId, SearchSortProp } from '../../types';
 
 import styles from './FilterMenu.module.scss';
-import { type FilterMenuFilterOption, type FilterMenuProps } from './FilterMenu.types';
+import type { FilterMenuFilterOption, FilterMenuProps } from './FilterMenu.types';
 import { FilterOption } from './FilterOption';
 import { FilterSort } from './FilterSort';
 

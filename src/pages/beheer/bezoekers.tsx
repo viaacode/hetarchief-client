@@ -1,12 +1,12 @@
-import { type GetServerSidePropsResult, type NextPage } from 'next';
-import { type GetServerSidePropsContext } from 'next/types';
-import { type ComponentType } from 'react';
+import type { GetServerSidePropsResult, NextPage } from 'next';
+import type { GetServerSidePropsContext } from 'next/types';
+import type { ComponentType } from 'react';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { CpAdminVisitorsPage } from '@cp/views/CpAdminVisitors';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 const CpAdminVisitorsPageDutch: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
 	return <CpAdminVisitorsPage url={url} locale={locale} />;

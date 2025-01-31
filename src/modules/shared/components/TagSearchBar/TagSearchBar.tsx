@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import { type KeyboardEvent, type ReactElement, useMemo } from 'react';
-import { type InputActionMeta } from 'react-select';
+import type { InputActionMeta } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 
-import {
-	type OnSearchSingle,
-	type TagSearchBarMeta,
-	type TagSearchBarProps,
-	type TagSearchBarValue,
+import type {
+	OnSearchSingle,
+	TagSearchBarMeta,
+	TagSearchBarProps,
+	TagSearchBarValue,
 } from '@shared/components/TagSearchBar/TagSearchBar.types';
 import { tText } from '@shared/helpers/translate';
 

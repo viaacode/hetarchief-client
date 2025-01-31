@@ -13,9 +13,9 @@ import { VisitStatus } from '@shared/types/visit-request';
 import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
 
 import { DECLINE_REQUEST_FORM_SCHEMA } from './DeclineRequestBlade.const';
-import {
-	type DeclineRequestBladeProps,
-	type DeclineRequestFormState,
+import type {
+	DeclineRequestBladeProps,
+	DeclineRequestFormState,
 } from './DeclineRequestBlade.types';
 
 const labelKeys: Record<keyof DeclineRequestFormState, string> = {

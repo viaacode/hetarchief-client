@@ -1,5 +1,5 @@
-import { type ComponentMeta, type ComponentStory } from '@storybook/react';
-import { type CSSProperties } from 'react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { CSSProperties } from 'react';
 
 import { IeObjectType } from '@shared/types/ie-objects';
 

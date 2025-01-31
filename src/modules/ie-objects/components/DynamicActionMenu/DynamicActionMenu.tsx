@@ -11,7 +11,7 @@ import {
 import clsx from 'clsx';
 import { type FC, type ReactElement, type ReactNode, useRef, useState } from 'react';
 
-import { type MediaActions } from '@ie-objects/ie-objects.types';
+import type { MediaActions } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
@@ -26,7 +26,7 @@ import {
 	DYNAMIC_ACTION_WIDTH,
 } from './DynamicActionMenu.const';
 import styles from './DynamicActionMenu.module.scss';
-import { type ActionItem, type DynamicActionMenuProps } from './DynamicActionMenu.types';
+import type { ActionItem, DynamicActionMenuProps } from './DynamicActionMenu.types';
 
 const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	className,

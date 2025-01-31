@@ -16,7 +16,7 @@ import { toastService } from '@shared/services/toast-service';
 
 import { labelKeys, SHARE_FOLDER_FORM_SCHEMA } from './ShareFolderBlade.consts';
 import styles from './ShareFolderBlade.module.scss';
-import { type ShareFolderBladeProps } from './ShareFolderBlade.types';
+import type { ShareFolderBladeProps } from './ShareFolderBlade.types';
 
 const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId }) => {
 	const locale = useLocale();

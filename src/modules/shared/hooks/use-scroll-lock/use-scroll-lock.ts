@@ -6,7 +6,7 @@ import { findParentByClass } from '@shared/utils/find-parent-by-class';
 
 import { useScrollbarWidth } from '../use-scrollbar-width';
 
-import { type UseScrollLock } from './use-scroll-lock.types';
+import type { UseScrollLock } from './use-scroll-lock.types';
 
 type scrollState = { __scrollDepth?: number };
 

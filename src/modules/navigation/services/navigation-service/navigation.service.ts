@@ -1,9 +1,9 @@
 import { stringifyUrl } from 'query-string';
 
 import { ApiService } from '@shared/services/api-service';
-import { type Locale } from '@shared/utils/i18n';
+import type { Locale } from '@shared/utils/i18n';
 
-import { type NavigationInfo, type NavigationPlacement } from './navigation.types';
+import type { NavigationInfo, NavigationPlacement } from './navigation.types';
 
 export class NavigationService {
 	private static baseUrl = 'admin/navigations/items';

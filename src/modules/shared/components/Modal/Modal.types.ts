@@ -1,5 +1,5 @@
-import { type ReactNode } from 'react';
-import { type OnAfterOpenCallback } from 'react-modal';
+import type { ReactNode } from 'react';
+import type { OnAfterOpenCallback } from 'react-modal';
 
 export interface ModalProps {
 	children?: ReactNode;

@@ -1,3 +1,3 @@
-import { type WindowSizeContextValue } from '@shared/context/WindowSizeContext';
+import type { WindowSizeContextValue } from '@shared/context/WindowSizeContext';
 
 export type UseWindowSizeContext = () => WindowSizeContextValue;

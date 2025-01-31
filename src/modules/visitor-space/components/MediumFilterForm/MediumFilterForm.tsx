@@ -18,7 +18,7 @@ import {
 	MEDIUM_FILTER_FORM_QUERY_PARAM_CONFIG,
 	MEDIUM_FILTER_FORM_SCHEMA,
 } from './MediumFilterForm.const';
-import { type MediumFilterFormProps, type MediumFilterFormState } from './MediumFilterForm.types';
+import type { MediumFilterFormProps, MediumFilterFormState } from './MediumFilterForm.types';
 
 const defaultValues = {
 	mediums: [],

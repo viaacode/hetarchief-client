@@ -1,11 +1,11 @@
 import { Button } from '@meemoo/react-components';
 import { action } from '@storybook/addon-actions';
-import { type ComponentMeta, type ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { useState } from 'react';
 
 import { Blade } from '@shared/components/Blade/Blade';
 
-import { type BladeProps } from './Blade.types';
+import type { BladeProps } from './Blade.types';
 import { mockBladeProps } from './__mocks__/blade';
 
 const BladeStoryComponent = ({ args }: { args: BladeProps }) => {

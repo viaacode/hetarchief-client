@@ -1,7 +1,7 @@
 import { OrderDirection, PaginationBar, type Row, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
-import { type TableState } from 'react-table';
+import type { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
@@ -27,7 +27,7 @@ import { useGetVisitRequest } from '@visit-requests/hooks/get-visit-request';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { RequestStatusAll } from '@visit-requests/types';
 
-import { type VisitRequestOverviewProps } from './VisitRequestsOverview.types';
+import type { VisitRequestOverviewProps } from './VisitRequestsOverview.types';
 
 const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);

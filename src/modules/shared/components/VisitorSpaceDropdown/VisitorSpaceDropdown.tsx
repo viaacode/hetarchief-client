@@ -3,9 +3,9 @@ import clsx from 'clsx';
 import { type FC, useMemo, useState } from 'react';
 
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import {
-	type VisitorSpaceDropdownOption,
-	type VisitorSpaceDropdownProps,
+import type {
+	VisitorSpaceDropdownOption,
+	VisitorSpaceDropdownProps,
 } from '@shared/components/VisitorSpaceDropdown/VisitorSpaceDropdown.types';
 
 import { Icon } from '../Icon';

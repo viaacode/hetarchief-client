@@ -1,6 +1,6 @@
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import { type AnimationTypes, type DefaultComponentProps } from '@shared/types';
+import type { AnimationTypes, DefaultComponentProps } from '@shared/types';
 
 export interface OverlayProps extends DefaultComponentProps {
 	children?: ReactNode;

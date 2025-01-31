@@ -4,10 +4,10 @@ import clsx from 'clsx';
 import { type FC, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { type CreateFolderButtonProps } from '@account/components';
+import type { CreateFolderButtonProps } from '@account/components';
 import { COLLECTION_FORM_SCHEMA } from '@account/const';
 import { foldersService } from '@account/services/folders';
-import { type CreateFolderFormState } from '@account/types';
+import type { CreateFolderFormState } from '@account/types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';

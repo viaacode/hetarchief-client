@@ -1,8 +1,8 @@
 import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react-query';
 
-import { type User } from '@auth/types';
+import type { User } from '@auth/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { type VisitRequest } from '@shared/types/visit-request';
+import type { VisitRequest } from '@shared/types/visit-request';
 import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
 
 export async function getActiveVisitRequestForUserAndSpace(

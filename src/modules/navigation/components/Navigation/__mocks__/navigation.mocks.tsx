@@ -1,11 +1,11 @@
 import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import {
-	type NavigationHamburgerProps,
-	type NavigationItem,
+import type {
+	NavigationHamburgerProps,
+	NavigationItem,
 } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';

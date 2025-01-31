@@ -30,7 +30,7 @@ import {
 import type { MetadataItem } from '@ie-objects/components/Metadata';
 import Metadata from '@ie-objects/components/Metadata/Metadata';
 import { NamesList } from '@ie-objects/components/NamesList/NamesList';
-import { type ObjectDetailPageMetadataProps } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata.types';
+import type { ObjectDetailPageMetadataProps } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata.types';
 import { SearchLinkTag } from '@ie-objects/components/SearchLinkTag/SearchLinkTag';
 import { useGetIeObjectPreviousNextIds } from '@ie-objects/hooks/get-ie-objects-previous-next';
 import { useIsPublicNewspaper } from '@ie-objects/hooks/get-is-public-newspaper';
@@ -863,11 +863,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 								<a
 									href={rightsStatusInfo.externalLink}
 									className="u-text-no-decoration"
-									target="_blank"
+									target="_blank" rel="noreferrer"
 								>
 									{rightsStatusInfo.icon}
 								</a>
-								<a href={rightsStatusInfo.externalLink} target="_blank">
+								<a href={rightsStatusInfo.externalLink} target="_blank" rel="noreferrer">
 									{rightsStatusInfo?.label}
 								</a>
 							</span>

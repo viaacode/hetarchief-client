@@ -3,11 +3,11 @@ import { FormControl, keysEnter, onKey, type TagInfo, TagsInput } from '@meemoo/
 import clsx from 'clsx';
 import { type FC, type KeyboardEvent, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import {
-	type ActionMeta,
-	type InputActionMeta,
-	type MultiValue,
-	type SingleValue,
+import type {
+	ActionMeta,
+	InputActionMeta,
+	MultiValue,
+	SingleValue,
 } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
@@ -18,9 +18,9 @@ import {
 	KEYWORDS_FILTER_FORM_QUERY_PARAM_CONFIG,
 	KEYWORDS_FILTER_FORM_SCHEMA,
 } from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.const';
-import {
-	type KeywordsFilterFormProps,
-	type KeywordsFilterFormState,
+import type {
+	KeywordsFilterFormProps,
+	KeywordsFilterFormState,
 } from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.types';
 
 type multi = MultiValue<TagInfo>;

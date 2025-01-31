@@ -1,9 +1,9 @@
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { BladeManagerContext } from '@shared/context/BladeManagerContext';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 
-import { type BladeManagerProps } from './BladeManager.types';
+import type { BladeManagerProps } from './BladeManager.types';
 
 const BladeManager: FC<BladeManagerProps> = ({
 	children,

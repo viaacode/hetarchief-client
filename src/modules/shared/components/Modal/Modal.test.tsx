@@ -1,13 +1,13 @@
 import { jest } from '@jest/globals';
 import { fireEvent, render, type RenderOptions, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { type PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
 
 import { mockStore } from '../../../../__mocks__/store';
 
 import Modal from './Modal';
-import { type ModalProps } from './Modal.types';
+import type { ModalProps } from './Modal.types';
 
 const text = 'Title of the Modal';
 const noPadding = { padding: '' };

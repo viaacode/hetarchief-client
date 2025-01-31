@@ -3,7 +3,7 @@ import { useInfiniteQuery, type UseInfiniteQueryResult } from '@tanstack/react-q
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
-import { type Notification } from '@shared/services/notifications-service/notifications.types';
+import type { Notification } from '@shared/services/notifications-service/notifications.types';
 
 export function useGetNotifications(
 	enabled: boolean

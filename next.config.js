@@ -7,7 +7,7 @@
  *   RFC: https://github.com/vercel/next.js/discussions/27953
  */
 const nextTranspileModules = require('next-transpile-modules');
-const path = require('path');
+const path = require('node:path');
 
 // const withBundleAnalyzer = bundleAnalyser({
 // 	enabled: process.env.ANALYZE === 'true',
@@ -54,17 +54,17 @@ module.exports = withTM({
 		}
 		config.resolve.alias = {
 			...config.resolve.alias,
-			['@tanstack/react-query']: path.resolve('./node_modules/@tanstack/react-query'),
-			['use-query-params']: path.resolve('./node_modules/use-query-params'),
-			['react-select']: path.resolve('./node_modules/react-select'),
-			['react-select/creatable']: path.resolve('./node_modules/react-select/creatable'),
-			['react-select/async']: path.resolve('./node_modules/react-select/async'),
-			['react-popper']: path.resolve('./node_modules/react-popper'),
-			['react-hook-form']: path.resolve('./node_modules/react-hook-form'),
-			['react-table']: path.resolve('./node_modules/react-table'),
-			['react-datepicker']: path.resolve('./node_modules/react-datepicker'),
-			['react-page-split']: path.resolve('./node_modules/react-page-split'),
-			['lodash$']: path.resolve('./node_modules/lodash-es'),
+			'@tanstack/react-query': path.resolve('./node_modules/@tanstack/react-query'),
+			'use-query-params': path.resolve('./node_modules/use-query-params'),
+			'react-select': path.resolve('./node_modules/react-select'),
+			'react-select/creatable': path.resolve('./node_modules/react-select/creatable'),
+			'react-select/async': path.resolve('./node_modules/react-select/async'),
+			'react-popper': path.resolve('./node_modules/react-popper'),
+			'react-hook-form': path.resolve('./node_modules/react-hook-form'),
+			'react-table': path.resolve('./node_modules/react-table'),
+			'react-datepicker': path.resolve('./node_modules/react-datepicker'),
+			'react-page-split': path.resolve('./node_modules/react-page-split'),
+			'lodash$': path.resolve('./node_modules/lodash-es'),
 		};
 
 		return config;
@@ -137,17 +137,17 @@ module.exports = withTM({
 			{
 				// Only the dutch redirect, since that was the only language that existed at the time
 				source: '/admin/bezoekersruimtesbeheer/aanvragen',
-				destination: `/beheer/toegangsaanvragen`,
+				destination: '/beheer/toegangsaanvragen',
 				permanent: true,
 			},
 			{
 				source: '/admin/content',
-				destination: `/admin/content-paginas`,
+				destination: '/admin/content-paginas',
 				permanent: true,
 			},
 			{
 				source: '/admin/content/:path*',
-				destination: `/admin/content-paginas/:path*`,
+				destination: '/admin/content-paginas/:path*',
 				permanent: true,
 			},
 			// Account redirects

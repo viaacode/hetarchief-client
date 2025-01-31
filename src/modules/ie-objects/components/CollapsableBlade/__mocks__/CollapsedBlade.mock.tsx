@@ -1,4 +1,4 @@
-import { type CollapsableBladeProps } from '@ie-objects/components/CollapsableBlade';
+import type { CollapsableBladeProps } from '@ie-objects/components/CollapsableBlade';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 

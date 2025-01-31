@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { type FC, useEffect, useRef, useState } from 'react';
 
 import { FLOWPLAYER_AUDIO_FORMATS } from '@ie-objects/ie-objects.consts';
-import { type IeObjectFile } from '@ie-objects/ie-objects.types';
+import type { IeObjectFile } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { soundwave } from '@shared/components/MediaCard/__mocks__/media-card';
@@ -14,7 +14,7 @@ import { useElementSize } from '@shared/hooks/use-element-size';
 import { ObjectPlaceholder } from '../ObjectPlaceholder';
 
 import styles from './FragmentSlider.module.scss';
-import { type FragmentSliderProps } from './FragmentSlider.types';
+import type { FragmentSliderProps } from './FragmentSlider.types';
 
 export const FragmentSlider: FC<FragmentSliderProps> = ({
 	className,
@@ -143,7 +143,7 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 							tabIndex={0}
 							data-index={index}
 							onClick={(e) => {
-								const index = parseInt(
+								const index = Number.parseInt(
 									e.currentTarget.getAttribute('data-index') as string
 								);
 								needsScrolling && setOffset(index);
@@ -152,14 +152,14 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 							onKeyUp={(e) => {
 								if (e.key === 'Tab') {
 									// Scroll through fragments
-									const offsetIndex = parseInt(
+									const offsetIndex = Number.parseInt(
 										e.currentTarget.getAttribute('data-index') as string
 									);
 									needsScrolling && setOffset(offsetIndex);
 								}
 								if (e.key === 'Enter') {
 									// Select fragment
-									const activeIndex = parseInt(
+									const activeIndex = Number.parseInt(
 										e.currentTarget.getAttribute('data-index') as string
 									);
 									setActiveIndex(activeIndex);

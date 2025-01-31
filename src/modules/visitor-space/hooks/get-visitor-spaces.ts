@@ -1,14 +1,14 @@
-import { type OrderDirection } from '@meemoo/react-components';
+import type { OrderDirection } from '@meemoo/react-components';
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
 import { VisitorSpaceService } from '../services';
-import {
-	type VisitorSpaceInfo,
-	type VisitorSpaceOrderProps,
-	type VisitorSpaceStatus,
+import type {
+	VisitorSpaceInfo,
+	VisitorSpaceOrderProps,
+	VisitorSpaceStatus,
 } from '../types';
 
 export function useGetVisitorSpaces(

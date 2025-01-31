@@ -1,8 +1,8 @@
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import { type DefaultComponentProps, type SortObject } from '@shared/types';
+import type { DefaultComponentProps, SortObject } from '@shared/types';
 
-import { type FilterMenuSortOption, type OnFilterMenuSortClick } from '../FilterMenu.types';
+import type { FilterMenuSortOption, OnFilterMenuSortClick } from '../FilterMenu.types';
 
 export interface FilterSortListProps extends DefaultComponentProps {
 	children?: ReactNode;

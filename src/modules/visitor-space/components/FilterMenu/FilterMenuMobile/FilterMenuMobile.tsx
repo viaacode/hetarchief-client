@@ -9,14 +9,14 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml } from '@shared/helpers/translate';
 import { mapFiltersToTags } from '@visitor-space/utils/map-filters';
 
-import { type SearchSortProp } from '../../../types';
+import type { SearchSortProp } from '../../../types';
 import { FilterButton } from '../FilterButton';
 import FilterForm from '../FilterForm/FilterForm';
 import { type FilterMenuFilterOption, FilterMenuType } from '../FilterMenu.types';
 import { FilterSortList } from '../FilterSortList';
 
 import styles from './FilterMenuMobile.module.scss';
-import { type FilterMenuMobileProps } from './FilterMenuMobile.types';
+import type { FilterMenuMobileProps } from './FilterMenuMobile.types';
 
 const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	activeFilter,

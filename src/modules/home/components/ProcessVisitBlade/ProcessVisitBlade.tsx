@@ -11,7 +11,7 @@ import { VisitStatus } from '@shared/types/visit-request';
 
 import { CancelVisitBlade } from '../CancelVisitBlade';
 
-import { type ProcessVisitBladeProps } from './ProcessVisitBlade.types';
+import type { ProcessVisitBladeProps } from './ProcessVisitBlade.types';
 
 const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 	const { selected, onFinish } = props;

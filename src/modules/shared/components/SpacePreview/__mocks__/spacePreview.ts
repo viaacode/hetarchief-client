@@ -1,4 +1,4 @@
-import { type SpacePreviewProps } from '@shared/components/SpacePreview';
+import type { SpacePreviewProps } from '@shared/components/SpacePreview';
 
 export const SPACE_PREVIEW_PROPS_MOCK: SpacePreviewProps = {
 	visitorSpace: {

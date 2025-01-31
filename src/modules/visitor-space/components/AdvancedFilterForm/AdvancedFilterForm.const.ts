@@ -2,7 +2,7 @@ import { array, object, type Schema, string } from 'yup';
 
 import { type AdvancedFilter, FilterProperty, Operator } from '../../types';
 
-import { type AdvancedFilterFormState } from './AdvancedFilterForm.types';
+import type { AdvancedFilterFormState } from './AdvancedFilterForm.types';
 
 export const initialFields = (): AdvancedFilter => ({
 	prop: FilterProperty.TITLE,

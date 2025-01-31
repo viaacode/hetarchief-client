@@ -7,7 +7,7 @@ import { ListNavigation } from '@shared/components/ListNavigation';
 import { Sidebar } from '@shared/components/Sidebar';
 
 import styles from './SidebarLayout.module.scss';
-import { type SidebarLayoutProps } from './SidebarLayout.types';
+import type { SidebarLayoutProps } from './SidebarLayout.types';
 
 const SidebarLayout: FC<SidebarLayoutProps> = ({
 	children,

@@ -19,7 +19,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { asDate, formatMediumDateWithTime } from '@shared/utils/dates';
 
-import { type VisitDetailBladeProps } from './VisitDetail.types';
+import type { VisitDetailBladeProps } from './VisitDetail.types';
 import styles from './VisitDetailBlade.module.scss';
 
 const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit }) => {

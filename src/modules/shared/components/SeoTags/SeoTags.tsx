@@ -1,11 +1,11 @@
 import getConfig from 'next/config';
 import Head from 'next/head';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { ROUTE_PARTS_BY_LOCALE, type RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { type LanguageInfo } from '@shared/services/translation-service/translation.types';
+import type { LanguageInfo } from '@shared/services/translation-service/translation.types';
 import { Locale } from '@shared/utils/i18n';
 import { createPageTitle } from '@shared/utils/seo';
 

@@ -35,7 +35,7 @@ import { asDate, formatMediumDate } from '@shared/utils/dates';
 import Icon from '../Icon/Icon';
 
 import styles from './MediaCard.module.scss';
-import { type MediaCardProps } from './MediaCard.types';
+import type { MediaCardProps } from './MediaCard.types';
 
 const MediaCard: FC<MediaCardProps> = ({
 	description,

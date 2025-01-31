@@ -4,7 +4,7 @@ import React, { type FC, useEffect, useState } from 'react';
 import VisitorSpaceCard from '../VisitorSpaceCard/VisitorSpaceCard';
 
 import styles from './VisitorSpaceCardList.module.scss';
-import { type VisitorSpaceCardListProps } from './VisitorSpaceCardList.types';
+import type { VisitorSpaceCardListProps } from './VisitorSpaceCardList.types';
 
 const VisitorSpaceCardList: FC<VisitorSpaceCardListProps> = ({
 	className,

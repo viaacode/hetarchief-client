@@ -7,7 +7,7 @@ import {
 	Tabs,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { type HTTPError } from 'ky';
+import type { HTTPError } from 'ky';
 import { capitalize, compact, intersection, isNil, lowerCase, noop } from 'lodash-es';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -36,7 +36,7 @@ import {
 
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
-import { type User } from '@auth/types';
+import type { User } from '@auth/types';
 import {
 	RequestAccessBlade,
 	type RequestAccessFormState,
@@ -89,11 +89,11 @@ import {
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import IiifViewer from '@iiif-viewer/IiifViewer';
-import {
-	type IiifViewerFunctions,
-	type ImageInfo,
-	type ImageInfoWithToken,
-	type Rect,
+import type {
+	IiifViewerFunctions,
+	ImageInfo,
+	ImageInfoWithToken,
+	Rect,
 } from '@iiif-viewer/IiifViewer.types';
 import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
@@ -125,7 +125,7 @@ import { toastService } from '@shared/services/toast-service';
 import { setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
 import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
@@ -483,7 +483,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							return; // Skip this page since it doesn't have an ocr transcript
 						}
 						let searchTermCharacterOffset: number = pageOcrText.indexOf(searchTerm);
-						let searchTermIndexOnPage: number = 0;
+						let searchTermIndexOnPage = 0;
 						while (searchTermCharacterOffset !== -1) {
 							const searchResult: OcrSearchResult = {
 								pageIndex,

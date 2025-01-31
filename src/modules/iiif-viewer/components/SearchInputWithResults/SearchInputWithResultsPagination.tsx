@@ -1,8 +1,8 @@
 import { Button, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { type FC, type KeyboardEvent } from 'react';
+import type { FC, KeyboardEvent } from 'react';
 
-import { type SearchInputWithResultsPaginationProps } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination.types';
+import type { SearchInputWithResultsPaginationProps } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';

@@ -11,7 +11,7 @@ import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { useScrollbarWidth } from '@shared/hooks/use-scrollbar-width';
 
 import styles from './Modal.module.scss';
-import { type ModalProps } from './Modal.types';
+import type { ModalProps } from './Modal.types';
 
 const Modal: FC<ModalProps> = ({
 	children,

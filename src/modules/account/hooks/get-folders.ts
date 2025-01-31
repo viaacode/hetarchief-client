@@ -2,7 +2,7 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 
 import { foldersService } from '@account/services/folders';
-import { type Folder } from '@account/types';
+import type { Folder } from '@account/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { setFolders } from '@shared/store/ie-objects';
 

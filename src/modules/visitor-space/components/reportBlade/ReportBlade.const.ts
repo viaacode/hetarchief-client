@@ -2,7 +2,7 @@ import { object, type Schema, string } from 'yup';
 
 import { tText } from '@shared/helpers/translate';
 
-import { type ReportFormState } from './ReportBlade.types';
+import type { ReportFormState } from './ReportBlade.types';
 
 export const REPORT_FORM_SCHEMA = (): Schema<ReportFormState> => {
 	return object({

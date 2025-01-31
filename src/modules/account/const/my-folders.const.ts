@@ -1,7 +1,7 @@
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 import { object, type Schema, string } from 'yup';
 
-import { type CreateFolderFormState } from '@account/types';
+import type { CreateFolderFormState } from '@account/types';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 

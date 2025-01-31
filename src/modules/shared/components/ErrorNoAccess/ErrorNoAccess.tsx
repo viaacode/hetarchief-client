@@ -1,5 +1,5 @@
 import { Button } from '@meemoo/react-components';
-import { type FC, type ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
 import { ErrorPage } from '@shared/components/ErrorPage';
 import { tHtml } from '@shared/helpers/translate';

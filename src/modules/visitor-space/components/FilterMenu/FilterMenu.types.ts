@@ -1,17 +1,17 @@
-import { type OrderDirection } from '@meemoo/react-components';
-import { type FC, type ReactNode } from 'react';
+import type { OrderDirection } from '@meemoo/react-components';
+import type { FC, ReactNode } from 'react';
 
-import { type IconName } from '@shared/components/Icon';
-import { type ToggleOption } from '@shared/components/Toggle';
-import { type DefaultComponentProps, type SortObject } from '@shared/types';
-import { type SearchPageMediaType } from '@shared/types/ie-objects';
+import type { IconName } from '@shared/components/Icon';
+import type { ToggleOption } from '@shared/components/Toggle';
+import type { DefaultComponentProps, SortObject } from '@shared/types';
+import type { SearchPageMediaType } from '@shared/types/ie-objects';
 
-import {
-	type DefaultFilterFormProps,
-	type InlineFilterFormProps,
-	type SearchFilterId,
-	type SearchSortProp,
-	type TagIdentity,
+import type {
+	DefaultFilterFormProps,
+	InlineFilterFormProps,
+	SearchFilterId,
+	SearchSortProp,
+	TagIdentity,
 } from '../../types';
 
 export interface FilterMenuProps extends DefaultComponentProps {
@@ -39,8 +39,8 @@ export interface FilterMenuSortOption {
 }
 
 export enum FilterMenuType {
-	Modal,
-	Checkbox,
+	Modal = 0,
+	Checkbox = 1,
 }
 
 export interface FilterMenuFilterOption {

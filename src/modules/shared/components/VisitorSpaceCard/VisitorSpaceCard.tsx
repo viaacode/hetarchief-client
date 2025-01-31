@@ -11,7 +11,7 @@ import { CardImage } from '../CardImage';
 
 import { VisitorSpaceCardType } from './VisitorSpaceCard.const';
 import styles from './VisitorSpaceCard.module.scss';
-import { type VisitorSpaceCardProps } from './VisitorSpaceCard.types';
+import type { VisitorSpaceCardProps } from './VisitorSpaceCard.types';
 import { VisitorSpaceCardControls } from './VisitorSpaceCardControls';
 
 const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {

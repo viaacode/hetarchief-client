@@ -1,8 +1,8 @@
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import { type DefaultComponentProps } from '@shared/types';
+import type { DefaultComponentProps } from '@shared/types';
 
-import { type HetArchiefLogoType } from './HetArchiefLogo.const';
+import type { HetArchiefLogoType } from './HetArchiefLogo.const';
 
 export interface HetArchiefLogoProps extends DefaultComponentProps {
 	children?: ReactNode;

@@ -49,7 +49,7 @@ export async function getFolderObjectCounts(page: Page): Promise<Record<string, 
 		) {
 			counts[name] = 1;
 		} else {
-			counts[name] = parseInt(count.replace(/[^0-9]/g, ''));
+			counts[name] = Number.parseInt(count.replace(/[^0-9]/g, ''));
 		}
 	}
 	return counts;

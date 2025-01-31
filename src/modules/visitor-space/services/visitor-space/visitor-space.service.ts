@@ -1,4 +1,4 @@
-import { type OrderDirection } from '@meemoo/react-components';
+import type { OrderDirection } from '@meemoo/react-components';
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { QueryClient } from '@tanstack/react-query';
 import { sortBy } from 'lodash-es';

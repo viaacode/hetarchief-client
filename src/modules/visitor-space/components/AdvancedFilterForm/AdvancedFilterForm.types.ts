@@ -1,4 +1,4 @@
-import { type AdvancedFilter, type DefaultFilterFormProps } from '../../types';
+import type { AdvancedFilter, DefaultFilterFormProps } from '../../types';
 
 export type AdvancedFilterFormProps = DefaultFilterFormProps<AdvancedFilterFormState>;
 

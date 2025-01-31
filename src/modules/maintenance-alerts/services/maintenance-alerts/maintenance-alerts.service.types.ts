@@ -1,5 +1,5 @@
-import { type OrderDirection } from '@meemoo/react-components';
-import { type ReactNode } from 'react';
+import type { OrderDirection } from '@meemoo/react-components';
+import type { ReactNode } from 'react';
 
 export enum MaintenanceAlertsOrderProps {
 	Id = 'id',

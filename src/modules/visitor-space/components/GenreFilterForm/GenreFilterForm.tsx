@@ -18,7 +18,7 @@ import {
 	GENRE_FILTER_FORM_QUERY_PARAM_CONFIG,
 	GENRE_FILTER_FORM_SCHEMA,
 } from './GenreFilterForm.const';
-import { type GenreFilterFormProps, type GenreFilterFormState } from './GenreFilterForm.types';
+import type { GenreFilterFormProps, GenreFilterFormState } from './GenreFilterForm.types';
 
 const defaultValues = {
 	genres: [],

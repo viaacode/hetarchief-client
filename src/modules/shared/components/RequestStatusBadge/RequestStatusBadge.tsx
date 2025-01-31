@@ -8,7 +8,7 @@ import { tHtml } from '@shared/helpers/translate';
 import { VisitStatus } from '@shared/types/visit-request';
 
 import styles from './RequestStatusBadge.module.scss';
-import { type RequestStatusBadgeProps } from './RequestStatusBadge.types';
+import type { RequestStatusBadgeProps } from './RequestStatusBadge.types';
 
 const RequestStatusBadge: FC<RequestStatusBadgeProps> = ({ className, style, status }) => {
 	const renderBadge = () => {

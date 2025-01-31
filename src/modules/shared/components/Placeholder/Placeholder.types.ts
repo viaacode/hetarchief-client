@@ -1,8 +1,8 @@
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import { type DefaultComponentProps } from '@shared/types';
+import type { DefaultComponentProps } from '@shared/types';
 
-import { type IconName, type IconTypes } from '../Icon';
+import type { IconName, IconTypes } from '../Icon';
 
 export type PlaceholderProps = DefaultComponentProps &
 	PlaceholderCommonProps &

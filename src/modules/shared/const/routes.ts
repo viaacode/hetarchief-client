@@ -1,6 +1,6 @@
-import { type AdminConfig } from '@meemoo/admin-core-ui/dist/client.mjs';
+import type { AdminConfig } from '@meemoo/admin-core-ui/dist/client.mjs';
 
-import { type Locale } from '@shared/utils/i18n';
+import type { Locale } from '@shared/utils/i18n';
 
 export enum RoutePart {
 	accessRequested = 'accessRequested',

@@ -11,9 +11,9 @@ import {
 	CONSULTABLE_PUBLIC_DOMAIN_FILTER_FORM_QUERY_PARAM_CONFIG,
 	CONSULTABLE_PUBLIC_DOMAIN_FILTER_FORM_SCHEMA,
 } from './ConsultablePublicDomainFilterForm.const';
-import {
-	type ConsultablePublicDomainFilterFormProps,
-	type ConsultablePublicDomainFilterFormState,
+import type {
+	ConsultablePublicDomainFilterFormProps,
+	ConsultablePublicDomainFilterFormState,
 } from './ConsultablePublicDomainFilterForm.types';
 
 const defaultValues = {

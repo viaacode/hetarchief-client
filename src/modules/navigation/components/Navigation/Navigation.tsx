@@ -1,13 +1,13 @@
 import clsx from 'clsx';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { NavigationSection } from '@navigation/components/Navigation/NavigationSection/NavigationSection';
 
 import styles from './Navigation.module.scss';
-import {
-	type NavigationCenterProps,
-	type NavigationFC,
-	type NavigationProps,
+import type {
+	NavigationCenterProps,
+	NavigationFC,
+	NavigationProps,
 } from './Navigation.types';
 
 const NavigationCenter: FC<NavigationCenterProps> = ({ children, title }) => (

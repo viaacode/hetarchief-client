@@ -3,12 +3,12 @@ import {
 	convertDbContentPageToContentPageInfo,
 } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import { QueryClient } from '@tanstack/react-query';
-import { type HTTPError } from 'ky';
+import type { HTTPError } from 'ky';
 import { kebabCase } from 'lodash-es';
-import { type GetServerSidePropsResult, type NextPage } from 'next';
+import type { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import { type GetServerSidePropsContext } from 'next/types';
+import type { GetServerSidePropsContext } from 'next/types';
 import { type ComponentType, type FC, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -33,7 +33,7 @@ import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import withUser, { type UserProps } from '@shared/hooks/with-user';
 import { setShowZendesk } from '@shared/store/ui';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
 import { VisitorLayout } from '@visitor-layout/index';
 

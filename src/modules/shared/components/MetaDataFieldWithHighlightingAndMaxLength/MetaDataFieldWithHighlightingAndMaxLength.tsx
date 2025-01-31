@@ -1,8 +1,8 @@
-import { type DefaultComponentProps } from '@meemoo/admin-core-ui/dist/admin.mjs';
+import type { DefaultComponentProps } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import { isString } from 'lodash-es';
-import { type FC, type ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
-import { type MetadataItem } from '@ie-objects/components/Metadata';
+import type { MetadataItem } from '@ie-objects/components/Metadata';
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import { tText } from '@shared/helpers/translate';
 

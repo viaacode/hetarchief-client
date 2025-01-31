@@ -10,9 +10,9 @@ import { useQueryParams } from 'use-query-params';
 import { SearchBar } from '@shared/components/SearchBar';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
-import {
-	type MaintainerFilterFormProps,
-	type MaintainerFilterFormState,
+import type {
+	MaintainerFilterFormProps,
+	MaintainerFilterFormState,
 } from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner';

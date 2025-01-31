@@ -1,6 +1,6 @@
 import { Dropdown, DropdownButton, DropdownContent, MenuContent } from '@meemoo/react-components';
 import { action } from '@storybook/addon-actions';
-import { type ComponentMeta, type ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { cloneElement, type ReactElement, useState } from 'react';
 
 import { Icon } from '@shared/components/Icon';

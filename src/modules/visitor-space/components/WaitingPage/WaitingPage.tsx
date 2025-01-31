@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { CardImage } from '@shared/components/CardImage';
 import Html from '@shared/components/Html/Html';
@@ -8,7 +8,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { Locale } from '@shared/utils/i18n';
 import { VisitorSpaceNavigation } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation';
 
-import { type WaitingPageProps } from './WaitingPage.types';
+import type { WaitingPageProps } from './WaitingPage.types';
 
 const WaitingPage: FC<WaitingPageProps> = ({ visitorSpace, backLink }) => {
 	const locale = useLocale();

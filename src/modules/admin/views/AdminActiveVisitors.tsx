@@ -1,6 +1,6 @@
 import { OrderDirection, PaginationBar, Table } from '@meemoo/react-components';
 import React, { type FC, type ReactNode, useMemo, useState } from 'react';
-import { type TableState } from 'react-table';
+import type { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
@@ -21,7 +21,7 @@ import { globalLabelKeys } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { useUpdateVisitRequest } from '@visit-requests/hooks/update-visit';

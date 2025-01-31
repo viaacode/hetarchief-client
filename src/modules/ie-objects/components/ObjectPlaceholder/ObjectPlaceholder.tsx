@@ -8,7 +8,7 @@ import { Modal } from '@shared/components/Modal';
 import { tText } from '@shared/helpers/translate';
 
 import styles from './ObjectPlaceholder.module.scss';
-import { type ObjectPlaceholderProps } from './ObjectPlaceholder.types';
+import type { ObjectPlaceholderProps } from './ObjectPlaceholder.types';
 
 const ObjectPlaceholder: FC<ObjectPlaceholderProps> = ({
 	className,

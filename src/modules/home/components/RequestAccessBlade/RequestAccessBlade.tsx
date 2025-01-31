@@ -5,9 +5,9 @@ import { StringParam, useQueryParams } from 'use-query-params';
 
 import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
 import { selectCommonUser } from '@auth/store/user';
-import {
-	type RequestAccessBladeProps,
-	type RequestAccessFormState,
+import type {
+	RequestAccessBladeProps,
+	RequestAccessFormState,
 } from '@home/components/RequestAccessBlade/RequestAccessBlade.types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';

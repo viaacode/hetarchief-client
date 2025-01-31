@@ -20,7 +20,7 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import { type SingleValue } from 'react-select';
+import type { SingleValue } from 'react-select';
 
 import { Permission } from '@account/const';
 import { VISITOR_SPACE_VALIDATION_SCHEMA } from '@cp/components/VisitorSpaceSettings/VisitorSpaceSettings.const';
@@ -43,18 +43,18 @@ import { DEFAULT_VISITOR_SPACE_COLOR } from '@visitor-space/const';
 import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceService } from '@visitor-space/services';
-import {
-	type CreateVisitorSpaceSettings,
-	type UpdateVisitorSpaceSettings,
+import type {
+	CreateVisitorSpaceSettings,
+	UpdateVisitorSpaceSettings,
 } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 
 import adminLayoutStyles from '../../../admin/layouts/AdminLayout/AdminLayout.module.scss';
 
 import styles from './VisitorSpaceSettings.module.scss';
-import {
-	type VisitorSpaceSettingsFormValues,
-	type VisitorSpaceSettingsProps,
+import type {
+	VisitorSpaceSettingsFormValues,
+	VisitorSpaceSettingsProps,
 } from './VisitorSpaceSettings.types';
 
 const labelKeys: Record<keyof CreateVisitorSpaceSettings, string> = {

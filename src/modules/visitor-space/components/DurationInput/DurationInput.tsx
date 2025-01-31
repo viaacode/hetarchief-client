@@ -1,5 +1,5 @@
 import { TextInput, type TextInputProps } from '@meemoo/react-components';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';

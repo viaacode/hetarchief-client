@@ -11,9 +11,9 @@ import {
 	CONSULTABLE_MEDIA_FILTER_FORM_QUERY_PARAM_CONFIG,
 	CONSULTABLE_MEDIA_FILTER_FORM_SCHEMA,
 } from './ConsultableMediaFilterForm.const';
-import {
-	type ConsultableMediaFilterFormProps,
-	type ConsultableMediaFilterFormState,
+import type {
+	ConsultableMediaFilterFormProps,
+	ConsultableMediaFilterFormState,
 } from './ConsultableMediaFilterForm.types';
 
 const defaultValues = {

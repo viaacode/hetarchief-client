@@ -8,7 +8,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 export const NewsletterFailed: FC<DefaultSeoInfo> = ({ url }) => {
 	useHideFooter();

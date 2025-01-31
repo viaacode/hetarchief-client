@@ -1,4 +1,4 @@
-import { type Point, type Rect, type Viewer } from 'openseadragon';
+import type { Point, Rect, Viewer } from 'openseadragon';
 
 export function getRectFromPointerEventDrag(
 	startPoint: Point,

@@ -1,4 +1,4 @@
-import { type Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 export async function checkToastMessage(page: Page, title: string, timeout = 10000): Promise<void> {
 	await page.waitForFunction(

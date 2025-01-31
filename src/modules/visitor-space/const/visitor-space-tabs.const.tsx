@@ -1,4 +1,4 @@
-import { type TabProps } from '@meemoo/react-components';
+import type { TabProps } from '@meemoo/react-components';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';

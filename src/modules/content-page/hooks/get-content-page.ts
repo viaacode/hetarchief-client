@@ -3,7 +3,7 @@ import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react
 import { startsWith } from 'lodash-es';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { type Locale } from '@shared/utils/i18n';
+import type { Locale } from '@shared/utils/i18n';
 
 export async function getContentPageByLanguageAndPath(
 	language: Locale,

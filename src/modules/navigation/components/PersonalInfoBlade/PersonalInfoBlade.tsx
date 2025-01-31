@@ -17,7 +17,7 @@ import { toastService } from '@shared/services/toast-service';
 import { useAppDispatch } from '@shared/store';
 import { setShowMaterialRequestCenter } from '@shared/store/ui';
 
-import { type PersonalInfoBladeBladeProps } from './PersonalInfo.types';
+import type { PersonalInfoBladeBladeProps } from './PersonalInfo.types';
 import styles from './PersonalInfoBlade.module.scss';
 
 const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({

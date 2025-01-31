@@ -6,7 +6,7 @@ import React, { type FC, useEffect, useState } from 'react';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './CookiePolicy.module.scss';
 

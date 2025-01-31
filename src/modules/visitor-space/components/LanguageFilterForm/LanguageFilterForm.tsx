@@ -14,9 +14,9 @@ import {
 	LANGUAGE_FILTER_FORM_QUERY_PARAM_CONFIG,
 	LANGUAGE_FILTER_FORM_SCHEMA,
 } from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.const';
-import {
-	type LanguageFilterFormProps,
-	type LanguageFilterFormState,
+import type {
+	LanguageFilterFormProps,
+	LanguageFilterFormState,
 } from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
 import {
 	type LanguageCode,

@@ -1,5 +1,5 @@
 import { tText } from '@shared/helpers/translate';
-import { type IeObjectType } from '@shared/types/ie-objects';
+import type { IeObjectType } from '@shared/types/ie-objects';
 
 export interface MaterialRequest {
 	createdAt: string;

@@ -1,9 +1,9 @@
-import {
-	type IeObjectAccessThrough,
-	type IeObjectLicense,
-	type IsPartOfKey,
+import type {
+	IeObjectAccessThrough,
+	IeObjectLicense,
+	IsPartOfKey,
 } from '@ie-objects/ie-objects.types';
-import { type IeObjectType } from '@shared/types/ie-objects';
+import type { IeObjectType } from '@shared/types/ie-objects';
 
 export interface Folder {
 	createdAt: string;

@@ -1,4 +1,4 @@
-import { type VisitorSpaceInfo } from '@visitor-space/types';
+import type { VisitorSpaceInfo } from '@visitor-space/types';
 
 export type AdminVisitorSpaceInfoRow = { row: { original: VisitorSpaceInfo } };
 

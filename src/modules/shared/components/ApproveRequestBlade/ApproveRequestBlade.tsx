@@ -14,9 +14,9 @@ import {
 	getAccessToDate,
 	roundToNextQuarter,
 } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.helpers';
-import {
-	type ApproveRequestBladeProps,
-	type ApproveRequestFormState,
+import type {
+	ApproveRequestBladeProps,
+	ApproveRequestFormState,
 } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';

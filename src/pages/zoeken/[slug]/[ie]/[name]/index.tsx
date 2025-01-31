@@ -1,15 +1,15 @@
-import { type NextPage } from 'next';
-import { type GetServerSidePropsContext, type GetServerSidePropsResult } from 'next/types';
+import type { NextPage } from 'next';
+import type { GetServerSidePropsContext, GetServerSidePropsResult } from 'next/types';
 import React from 'react';
 
 import { ObjectDetailPage } from '@ie-objects/ObjectDetailPage';
 import { prefetchDetailPageQueries } from '@ie-objects/ObjectDetailPage.helpers';
 import { getIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
-import { type IeObject } from '@ie-objects/ie-objects.types';
+import type { IeObject } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
-import { type SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
+import type { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 type ObjectDetailPageProps = {
 	title: string | null;

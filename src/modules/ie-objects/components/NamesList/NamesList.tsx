@@ -13,8 +13,8 @@ import React, {
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import { ConfidenceIndicator } from '@ie-objects/components/ConfidenceIndicator/ConfidenceIndicator';
-import { type NamesListProps } from '@ie-objects/components/NamesList/NamesList.types';
-import { type Mention } from '@ie-objects/ie-objects.types';
+import type { NamesListProps } from '@ie-objects/components/NamesList/NamesList.types';
+import type { Mention } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';

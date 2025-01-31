@@ -1,4 +1,4 @@
-import { type Breadcrumb } from '@meemoo/react-components';
+import type { Breadcrumb } from '@meemoo/react-components';
 
 export interface LastScrollPositionType {
 	itemId: string;

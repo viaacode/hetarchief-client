@@ -1,4 +1,4 @@
-import { type FragmentSliderProps } from '../FragmentSlider.types';
+import type { FragmentSliderProps } from '../FragmentSlider.types';
 
 export const fragmentSliderMock: FragmentSliderProps = {
 	activeIndex: 0,

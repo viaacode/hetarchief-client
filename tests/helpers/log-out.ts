@@ -1,4 +1,4 @@
-import { type Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { HOMEPAGE_TITLE } from '../consts/tests.consts';

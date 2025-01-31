@@ -1,11 +1,11 @@
-import { type Options } from 'ky/distribution/types/options';
+import type { Options } from 'ky/distribution/types/options';
 
-import { type User } from '@auth/types';
+import type { User } from '@auth/types';
 
 import { ApiService } from '../api-service';
 
 import { TOS_BASE_URL, USERS_BASE_URL } from './tos.service.const';
-import { type GetTermsOfServiceResponse } from './tos.service.types';
+import type { GetTermsOfServiceResponse } from './tos.service.types';
 
 export class TosService {
 	public static async getTos(options: Options = {}): Promise<GetTermsOfServiceResponse> {

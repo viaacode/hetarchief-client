@@ -1,7 +1,7 @@
 import { object, type Schema, string } from 'yup';
 
 import { tText } from '@shared/helpers/translate';
-import { type CreateVisitorSpaceSettings } from '@visitor-space/services/visitor-space/visitor-space.service.types';
+import type { CreateVisitorSpaceSettings } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 
 export const VISITOR_SPACE_VALIDATION_SCHEMA = (): Schema<
 	Pick<Partial<CreateVisitorSpaceSettings>, 'orId' | 'slug' | 'color' | 'file' | 'image'>

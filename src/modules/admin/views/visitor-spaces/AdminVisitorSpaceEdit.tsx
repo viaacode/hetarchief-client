@@ -7,7 +7,7 @@ import { VisitorSpaceSettings } from '@cp/components/VisitorSpaceSettings';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 export const AdminVisitorSpaceEdit: FC<DefaultSeoInfo> = ({ url }) => {
 	const router = useRouter();

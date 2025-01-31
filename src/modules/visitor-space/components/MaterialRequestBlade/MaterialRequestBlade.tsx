@@ -16,7 +16,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount } from '@shared/store/ui';
-import { type IeObjectType } from '@shared/types/ie-objects';
+import type { IeObjectType } from '@shared/types/ie-objects';
 
 import styles from './MaterialRequestBlade.module.scss';
 

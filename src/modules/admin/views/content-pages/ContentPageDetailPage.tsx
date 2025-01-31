@@ -1,7 +1,7 @@
 'use client';
 // https://github.com/vercel/next.js/issues/47232
 
-import { type Avo } from '@viaa/avo2-types';
+import type { Avo } from '@viaa/avo2-types';
 import { useRouter } from 'next/router';
 import React, { type FC, lazy, Suspense } from 'react';
 
@@ -14,7 +14,7 @@ import { ROUTES_BY_LOCALE } from '@shared/const';
 import { goBrowserBackWithFallback } from '@shared/helpers/go-browser-back-with-fallback';
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageDetail = lazy(() =>
 	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({

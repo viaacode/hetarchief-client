@@ -1,4 +1,4 @@
-import { type BrowserContext, type Page } from '@playwright/test';
+import type { BrowserContext, Page } from '@playwright/test';
 
 export async function getClipboardValue(page: Page, context: BrowserContext): Promise<string> {
 	await context.grantPermissions(['clipboard-read']);

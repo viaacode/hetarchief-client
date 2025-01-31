@@ -1,6 +1,6 @@
 import { array, date, mixed, object, ref, type Schema, string } from 'yup';
 
-import { type ApproveRequestFormState } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.types';
+import type { ApproveRequestFormState } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.types';
 import { tText } from '@shared/helpers/translate';
 import { AccessType } from '@shared/types/visit-request';
 

@@ -24,7 +24,7 @@ import { Footer } from '@navigation/components/Footer';
 import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';
 import { Navigation } from '@navigation/components/Navigation/Navigation';
 import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
-import { type NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
+import type { NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
 import {
@@ -70,8 +70,8 @@ import {
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
 import { Breakpoints } from '@shared/types';
-import { type VisitRequest } from '@shared/types/visit-request';
-import { type Locale } from '@shared/utils/i18n';
+import type { VisitRequest } from '@shared/types/visit-request';
+import type { Locale } from '@shared/utils/i18n';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visits';
 

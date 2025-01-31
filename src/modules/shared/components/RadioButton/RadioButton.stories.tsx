@@ -1,5 +1,5 @@
 import { RadioButton } from '@meemoo/react-components';
-import { type ComponentMeta, type ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
 export default {

@@ -8,7 +8,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Blade } from '@shared/components/Blade/Blade';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
-import { type NotificationCenterProps } from '@shared/components/NotificationCenter/NotificationCenter.types';
+import type { NotificationCenterProps } from '@shared/components/NotificationCenter/NotificationCenter.types';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import {

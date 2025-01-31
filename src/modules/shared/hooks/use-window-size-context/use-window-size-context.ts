@@ -2,7 +2,7 @@ import { useContext } from 'react';
 
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 
-import { type UseWindowSizeContext } from './use-window-size-context.types';
+import type { UseWindowSizeContext } from './use-window-size-context.types';
 
 const useWindowSizeContext: UseWindowSizeContext = () => {
 	const windowSizeContext = useContext(WindowSizeContext);

@@ -9,7 +9,7 @@ import clsx from 'clsx';
 import { isEmpty, isNil, without } from 'lodash-es';
 import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { type Row, type SortingRule, type TableState } from 'react-table';
+import type { Row, SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
@@ -39,7 +39,7 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 	const [filters, setFilters] = useQueryParams(CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);

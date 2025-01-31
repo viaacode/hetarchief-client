@@ -5,7 +5,7 @@ import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 
 import { SearchFilterId } from '../../types';
 
-import { type ConsultableMediaFilterFormState } from './ConsultableMediaFilterForm.types';
+import type { ConsultableMediaFilterFormState } from './ConsultableMediaFilterForm.types';
 
 export const CONSULTABLE_MEDIA_FILTER_FORM_SCHEMA = (): Schema<ConsultableMediaFilterFormState> =>
 	object({

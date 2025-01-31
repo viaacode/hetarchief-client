@@ -13,7 +13,7 @@ import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { Overlay } from '../Overlay';
 
 import styles from './Blade.module.scss';
-import { type BladeProps } from './Blade.types';
+import type { BladeProps } from './Blade.types';
 
 export const Blade: FC<BladeProps> = ({
 	className,

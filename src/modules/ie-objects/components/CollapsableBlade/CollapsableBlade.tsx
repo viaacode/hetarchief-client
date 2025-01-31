@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import React, { type FC } from 'react';
 
-import { type CollapsableBladeProps } from '@ie-objects/components/CollapsableBlade/CollapsableBlade.types';
+import type { CollapsableBladeProps } from '@ie-objects/components/CollapsableBlade/CollapsableBlade.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 

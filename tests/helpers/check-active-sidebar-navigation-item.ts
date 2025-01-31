@@ -1,6 +1,6 @@
 import { expect, type Page } from '@playwright/test';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
-import { type Locator } from 'playwright-core';
+import type { Locator } from 'playwright-core';
 
 export async function checkActiveSidebarNavigationItem(
 	page: Page,

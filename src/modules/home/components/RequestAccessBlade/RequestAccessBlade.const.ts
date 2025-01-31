@@ -2,7 +2,7 @@ import { boolean, object, type Schema, string } from 'yup';
 
 import { tText } from '@shared/helpers/translate';
 
-import { type RequestAccessFormState } from './RequestAccessBlade.types';
+import type { RequestAccessFormState } from './RequestAccessBlade.types';
 
 export const REQUEST_ACCESS_FORM_SCHEMA = (): Schema<RequestAccessFormState> =>
 	object({

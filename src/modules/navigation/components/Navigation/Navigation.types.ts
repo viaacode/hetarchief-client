@@ -1,8 +1,8 @@
-import { type FC, type ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
-import { type DefaultComponentProps } from '@shared/types';
+import type { DefaultComponentProps } from '@shared/types';
 
-import { type NavigationSectionProps } from './NavigationSection/NavigationSection.types';
+import type { NavigationSectionProps } from './NavigationSection/NavigationSection.types';
 
 export type NavigationFC<P = unknown> = FC<P> & {
 	Left: FC<NavigationSectionProps>;

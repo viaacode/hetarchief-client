@@ -2,7 +2,7 @@ import { Button, OrderDirection, PaginationBar, Table } from '@meemoo/react-comp
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import React, { type FC, type ReactNode, useMemo, useState } from 'react';
-import { type TableState } from 'react-table';
+import type { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
@@ -28,7 +28,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorSpaceStatusOptions } from '@visitor-space/const';
 import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
 import { VisitorSpaceService } from '@visitor-space/services';

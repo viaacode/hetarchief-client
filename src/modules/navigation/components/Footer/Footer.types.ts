@@ -1,6 +1,6 @@
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import { type ComponentLink } from '@shared/types';
+import type { ComponentLink } from '@shared/types';
 
 export interface FooterProps {
 	children?: ReactNode;

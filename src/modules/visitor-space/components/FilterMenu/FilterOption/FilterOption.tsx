@@ -14,7 +14,7 @@ import FilterForm from '../FilterForm/FilterForm';
 import styles from '../FilterMenu.module.scss';
 import { FilterMenuType } from '../FilterMenu.types';
 
-import { type FilterOptionProps } from './FilterOption.types';
+import type { FilterOptionProps } from './FilterOption.types';
 
 const FilterOption: FC<FilterOptionProps> = ({
 	activeFilter,

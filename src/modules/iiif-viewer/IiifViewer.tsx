@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { clamp, compact, isNil, round } from 'lodash-es';
 import { useRouter } from 'next/router';
-import { type TiledImageOptions, type TileSource, type Viewer } from 'openseadragon';
+import type { TiledImageOptions, TileSource, Viewer } from 'openseadragon';
 import { parseUrl } from 'query-string';
 import React, {
 	forwardRef,
@@ -14,12 +14,12 @@ import React, {
 } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
-import { type AltoTextLine } from '@ie-objects/ie-objects.types';
-import {
-	type IiifViewerFunctions,
-	type IiifViewerProps,
-	type ImageSize,
-	type Rect,
+import type { AltoTextLine } from '@ie-objects/ie-objects.types';
+import type {
+	IiifViewerFunctions,
+	IiifViewerProps,
+	ImageSize,
+	Rect,
 } from '@iiif-viewer/IiifViewer.types';
 import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import {

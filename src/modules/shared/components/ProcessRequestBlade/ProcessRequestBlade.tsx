@@ -14,7 +14,7 @@ import { ApproveRequestBlade } from '../ApproveRequestBlade';
 import { DeclineRequestBlade } from '../DeclineRequestBlade';
 
 import styles from './ProcessRequestBlade.module.scss';
-import { type ProcessRequestBladeProps } from './ProcessRequestBlade.types';
+import type { ProcessRequestBladeProps } from './ProcessRequestBlade.types';
 
 const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 	const { selected, onFinish } = props;

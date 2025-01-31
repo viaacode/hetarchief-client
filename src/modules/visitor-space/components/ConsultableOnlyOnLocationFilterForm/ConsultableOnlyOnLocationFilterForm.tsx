@@ -5,9 +5,9 @@ import { useQueryParams } from 'use-query-params';
 
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import CheckboxFilterForm from '@visitor-space/components/CheckboxFilterForm/CheckboxFilterForm';
-import {
-	type ConsultableOnlyOnLocationFilterFormProps,
-	type ConsultableOnlyOnLocationFilterFormState,
+import type {
+	ConsultableOnlyOnLocationFilterFormProps,
+	ConsultableOnlyOnLocationFilterFormState,
 } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
 import { SearchFilterId } from '@visitor-space/types';
 

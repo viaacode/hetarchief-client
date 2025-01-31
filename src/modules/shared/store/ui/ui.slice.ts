@@ -1,7 +1,7 @@
-import { type Breadcrumb } from '@meemoo/react-components';
+import type { Breadcrumb } from '@meemoo/react-components';
 import * as toolkitRaw from '@reduxjs/toolkit';
 
-import { type LastScrollPositionType, type UIState } from './ui.types';
+import type { LastScrollPositionType, UIState } from './ui.types';
 
 const initialState: UIState = {
 	showAuthModal: false,

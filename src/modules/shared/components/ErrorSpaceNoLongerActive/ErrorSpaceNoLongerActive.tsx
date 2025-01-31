@@ -1,5 +1,5 @@
 import { Button } from '@meemoo/react-components';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { ErrorPage } from '@shared/components/ErrorPage';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';

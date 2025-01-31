@@ -1,6 +1,6 @@
 import { IeObjectType } from '@shared/types/ie-objects';
 
-import { type RelatedObjectProps } from '../RelatedObject.types';
+import type { RelatedObjectProps } from '../RelatedObject.types';
 
 export const relatedObjectVideoMock: RelatedObjectProps = {
 	object: {

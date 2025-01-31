@@ -1,9 +1,9 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
-import { type AuthModalProps } from '@auth/components';
+import type { AuthModalProps } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
 import Html from '@shared/components/Html/Html';
 import { Icon } from '@shared/components/Icon';

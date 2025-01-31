@@ -5,7 +5,7 @@ import {
 	convertDbContentPageToContentPageInfo,
 } from '@meemoo/admin-core-ui/dist/client.mjs';
 import { Button } from '@meemoo/react-components';
-import { type Avo } from '@viaa/avo2-types';
+import type { Avo } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { type FC, useCallback, useEffect, useRef, useState } from 'react';
@@ -26,7 +26,7 @@ import { useTermsOfService } from '@shared/hooks/use-terms-of-service';
 import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './UserConditions.module.scss';
 

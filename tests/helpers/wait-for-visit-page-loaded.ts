@@ -1,4 +1,4 @@
-import { type Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 /**
  * Waits for the /visit page to be loaded with spaces and existing visit requests

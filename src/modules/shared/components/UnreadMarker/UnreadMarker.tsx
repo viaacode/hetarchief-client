@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import styles from './UnreadMarker.module.scss';
-import { type UnreadMarkerProps } from './UnreadMarker.types';
+import type { UnreadMarkerProps } from './UnreadMarker.types';
 
 const UnreadMarker: FC<UnreadMarkerProps> = ({ className, active }) => {
 	return (

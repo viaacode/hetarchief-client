@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { type FC } from 'react';
+import type { FC } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 import { Icon } from '@shared/components/Icon';
@@ -13,9 +13,9 @@ import { AdvancedFilterFields } from '../AdvancedFilterFields/AdvancedFilterFiel
 
 import { ADVANCED_FILTER_FORM_SCHEMA, initialFields } from './AdvancedFilterForm.const';
 import styles from './AdvancedFilterForm.module.scss';
-import {
-	type AdvancedFilterFormProps,
-	type AdvancedFilterFormState,
+import type {
+	AdvancedFilterFormProps,
+	AdvancedFilterFormState,
 } from './AdvancedFilterForm.types';
 
 export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({

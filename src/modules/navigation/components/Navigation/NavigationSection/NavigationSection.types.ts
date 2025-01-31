@@ -1,6 +1,6 @@
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import { type IconName } from '@shared/components/Icon';
+import type { IconName } from '@shared/components/Icon';
 
 export interface NavigationItemNodeProps {
 	children?: ReactNode;

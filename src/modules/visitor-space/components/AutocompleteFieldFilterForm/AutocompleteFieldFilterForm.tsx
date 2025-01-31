@@ -9,7 +9,7 @@ import { object as yupObject, string as yupString } from 'yup';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import AutocompleteFieldInput from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
 import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
-import { type DefaultFilterFormChildrenParams } from '@visitor-space/types';
+import type { DefaultFilterFormChildrenParams } from '@visitor-space/types';
 
 import styles from './AutocompleteFieldFilterForm.module.scss';
 

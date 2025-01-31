@@ -1,11 +1,11 @@
-import { type GetServerSidePropsResult, type NextPage } from 'next';
-import { type GetServerSidePropsContext } from 'next/types';
-import { type ComponentType } from 'react';
+import type { GetServerSidePropsResult, NextPage } from 'next';
+import type { GetServerSidePropsContext } from 'next/types';
+import type { ComponentType } from 'react';
 
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorSpaceService } from '@visitor-space/services';
-import { type VisitorSpaceInfo } from '@visitor-space/types';
+import type { VisitorSpaceInfo } from '@visitor-space/types';
 import { VisitPage } from '@visitor-space/views/VisitPage';
 
 const VisitPageEnglish: NextPage<DefaultSeoInfo> = (seo) => {

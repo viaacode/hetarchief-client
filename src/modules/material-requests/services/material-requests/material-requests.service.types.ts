@@ -1,7 +1,7 @@
-import { type OrderDirection } from '@meemoo/react-components';
-import { type ReactNode } from 'react';
+import type { OrderDirection } from '@meemoo/react-components';
+import type { ReactNode } from 'react';
 
-import { type MaterialRequest, type MaterialRequestType } from '@material-requests/types';
+import type { MaterialRequest, MaterialRequestType } from '@material-requests/types';
 
 export interface GetMaterialRequestsProps {
 	children?: ReactNode;

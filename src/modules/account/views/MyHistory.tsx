@@ -1,7 +1,7 @@
 import { OrderDirection, PaginationBar, Table } from '@meemoo/react-components';
 import { useRouter } from 'next/router';
 import { type FC, type MouseEvent, type ReactNode, useMemo, useState } from 'react';
-import { type Row, type TableState } from 'react-table';
+import type { Row, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import {
@@ -25,7 +25,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { AccessStatus, type VisitRequest } from '@shared/types/visit-request';
 import { createVisitorSpacesWithFilterUrl } from '@shared/utils/create-url';
 import { useGetVisitAccessStatusMutation } from '@visit-requests/hooks/get-visit-access-status';
@@ -73,15 +73,18 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	) => {
-		const orderPropResolved =
-			orderProp === HistoryTableAccessComboId ? HistoryTableAccessFrom : orderProp;
-		if (!orderProp) {
-			orderProp = 'startAt';
+		let orderPropResolved: string | undefined = orderProp;
+		let orderDirectionResolved: OrderDirection | undefined = orderDirection;
+		if (orderPropResolved === HistoryTableAccessComboId) {
+			orderPropResolved = HistoryTableAccessFrom;
 		}
-		if (!orderDirection) {
-			orderDirection = OrderDirection.desc;
+		if (!orderPropResolved) {
+			orderPropResolved = 'startAt';
 		}
-		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
+		if (!orderDirectionResolved) {
+			orderDirectionResolved = OrderDirection.desc;
+		}
+		if (filters.orderProp !== orderDirectionResolved || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
 				orderProp: orderPropResolved,

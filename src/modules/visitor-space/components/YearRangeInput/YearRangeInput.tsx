@@ -1,4 +1,4 @@
-import { type TextInputProps } from '@meemoo/react-components';
+import type { TextInputProps } from '@meemoo/react-components';
 import { endOfDay } from 'date-fns';
 import { type ChangeEvent, type FC, useState } from 'react';
 

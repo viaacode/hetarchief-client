@@ -1,4 +1,4 @@
-import { type CreateVisitorSpaceSettings } from '@visitor-space/services/visitor-space/visitor-space.service.types';
+import type { CreateVisitorSpaceSettings } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 
 export interface VisitorSpaceSettingsProps {
 	visitorSpaceSlug: string | null;

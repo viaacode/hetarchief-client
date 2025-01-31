@@ -1,11 +1,11 @@
 import { Button } from '@meemoo/react-components';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { tHtml } from '@shared/helpers/translate';
 
 import { Modal } from '../Modal';
 
-import { type ConfirmationModalProps } from './ConfirmationModal.types';
+import type { ConfirmationModalProps } from './ConfirmationModal.types';
 
 const ConfirmationModal: FC<ConfirmationModalProps> = ({
 	text = {},

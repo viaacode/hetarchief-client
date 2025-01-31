@@ -1,4 +1,4 @@
-import { type QueryParamConfig } from 'use-query-params';
+import type { QueryParamConfig } from 'use-query-params';
 
 import { type AdvancedFilter, FilterProperty, Operator } from '../types';
 

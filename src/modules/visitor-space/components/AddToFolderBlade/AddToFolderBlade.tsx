@@ -6,7 +6,7 @@ import { type FC, useEffect, useState } from 'react';
 import { CreateFolderButton } from '@account/components';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { foldersService } from '@account/services/folders';
-import { type Folder } from '@account/types';
+import type { Folder } from '@account/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -14,7 +14,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 
 import styles from './AddToFolderBlade.module.scss';
-import { type AddToFolderBladeProps } from './AddToFolderBlade.types';
+import type { AddToFolderBladeProps } from './AddToFolderBlade.types';
 
 const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	objectToAdd,

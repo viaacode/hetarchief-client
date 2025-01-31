@@ -4,7 +4,7 @@ import nlBE from 'date-fns/locale/nl-BE/index.js';
 import setDefaultOptions from 'date-fns/setDefaultOptions';
 import HttpApi from 'i18next-http-backend';
 import { lowerCase, upperFirst } from 'lodash-es';
-import { type AppProps } from 'next/app';
+import type { AppProps } from 'next/app';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { appWithTranslation } from 'next-i18next';

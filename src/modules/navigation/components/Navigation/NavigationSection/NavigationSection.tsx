@@ -11,7 +11,7 @@ import styles from '../Navigation.module.scss';
 import { NavigationDropdown } from '../NavigationDropdown';
 import { NavigationList } from '../NavigationList';
 
-import { type NavigationSectionProps } from './NavigationSection.types';
+import type { NavigationSectionProps } from './NavigationSection.types';
 
 export const NavigationSection: FC<NavigationSectionProps> = ({
 	children,

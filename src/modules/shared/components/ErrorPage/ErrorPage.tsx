@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { tText } from '@shared/helpers/translate';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 
 import styles from './ErrorPage.module.scss';
-import { type ErrorPageProps } from './ErrorPage.types';
+import type { ErrorPageProps } from './ErrorPage.types';
 
 const ErrorPage: FC<ErrorPageProps> = ({
 	className,

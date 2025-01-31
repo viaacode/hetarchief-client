@@ -8,11 +8,11 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Icon } from '../Icon';
 
 import styles from './RefinableRadioButton.module.scss';
-import {
-	type RefinableRadioButtonOption,
-	type RefinableRadioButtonProps,
-	type RefinableRadioButtonRefine,
-	type RefinableRadioButtonRefineOption,
+import type {
+	RefinableRadioButtonOption,
+	RefinableRadioButtonProps,
+	RefinableRadioButtonRefine,
+	RefinableRadioButtonRefineOption,
 } from './RefinableRadioButton.types';
 
 export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({

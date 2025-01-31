@@ -10,21 +10,21 @@ import {
 import clsx from 'clsx';
 import { parseISO } from 'date-fns';
 import React, { type FC } from 'react';
-import { type SingleValue } from 'react-select';
+import type { SingleValue } from 'react-select';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { SEPARATOR } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { type AdvancedFilterFieldsProps } from '@visitor-space/components/AdvancedFilterFields/AdvancedFilterFields.types';
+import type { AdvancedFilterFieldsProps } from '@visitor-space/components/AdvancedFilterFields/AdvancedFilterFields.types';
 import AutocompleteFieldInput, {
 	type AutocompleteFieldInputProps,
 } from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
 import { DateInput } from '@visitor-space/components/DateInput';
-import { type DateInputProps } from '@visitor-space/components/DateInput/DateInput';
+import type { DateInputProps } from '@visitor-space/components/DateInput/DateInput';
 import { DateRangeInput } from '@visitor-space/components/DateRangeInput';
-import { type DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
+import type { DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
 import { DurationRangeInput } from '@visitor-space/components/DurationRangeInput';
 import { GenreSelect } from '@visitor-space/components/GenreSelect';
 import {
@@ -35,12 +35,12 @@ import { LanguageSelect } from '@visitor-space/components/LanguageSelect/Languag
 import { MediaTypeSelect } from '@visitor-space/components/MediaTypeSelect';
 import { MediumSelect } from '@visitor-space/components/MediumSelect/MediumSelect';
 import { ObjectTypeSelect } from '@visitor-space/components/ObjectTypeSelect';
-import {
-	type FilterConfig,
-	type FilterInputComponentProps,
+import type {
+	FilterConfig,
+	FilterInputComponentProps,
 } from '@visitor-space/const/advanced-filters.consts';
 
-import { type AdvancedFilter, type FilterProperty, type Operator } from '../../types';
+import type { AdvancedFilter, FilterProperty, Operator } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import DurationInput, { defaultValue } from '../DurationInput/DurationInput';
 

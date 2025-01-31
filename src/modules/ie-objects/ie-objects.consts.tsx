@@ -1,11 +1,11 @@
-import { type MenuItemInfo, type TabProps } from '@meemoo/react-components';
+import type { MenuItemInfo, TabProps } from '@meemoo/react-components';
 import React, { type ReactNode } from 'react';
 
-import {
-	type ActionItem,
-	type DynamicActionMenuProps,
+import type {
+	ActionItem,
+	DynamicActionMenuProps,
 } from '@ie-objects/components/DynamicActionMenu';
-import { type ObjectPlaceholderProps } from '@ie-objects/components/ObjectPlaceholder';
+import type { ObjectPlaceholderProps } from '@ie-objects/components/ObjectPlaceholder';
 import {
 	type IsPartOfCollection,
 	type IsPartOfKey,

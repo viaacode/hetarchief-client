@@ -9,9 +9,9 @@ import {
 import { DatabaseType } from '@viaa/avo2-types';
 import getConfig from 'next/config';
 import Link from 'next/link';
-import { type NextRouter } from 'next/router';
+import type { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { type FunctionComponent } from 'react';
+import type { FunctionComponent } from 'react';
 
 import { BlockContentEnclose } from '@content-page/components/blocks/BlockContentEnclose/BlockContentEnclose';
 import { NAVIGATION_DROPDOWN } from '@navigation/components/Navigation/Navigation.types';
@@ -27,7 +27,7 @@ import { ADMIN_CORE_ROUTES_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
-import { type Locale } from '@shared/utils/i18n';
+import type { Locale } from '@shared/utils/i18n';
 
 const { publicRuntimeConfig } = getConfig();
 

@@ -1,13 +1,13 @@
 import { Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { type FC, type ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
-import { type NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
+import type { NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 
 import styles from '../Navigation.module.scss';
 
-import { type NavigationDropdownProps } from './NavigationDropdown.types';
+import type { NavigationDropdownProps } from './NavigationDropdown.types';
 
 const NavigationDropdown: FC<NavigationDropdownProps> = ({
 	id,

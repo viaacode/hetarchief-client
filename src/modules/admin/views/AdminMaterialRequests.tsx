@@ -15,7 +15,7 @@ import React, {
 	useMemo,
 	useState,
 } from 'react';
-import { type Row, type SortingRule, type TableState } from 'react-table';
+import type { Row, SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
@@ -46,7 +46,7 @@ import { sortingIcons } from '@shared/components/Table';
 import { globalLabelKeys } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);

@@ -1,5 +1,5 @@
-import { type NavigationInfo } from '@navigation/services/navigation-service';
-import { type ComponentLink } from '@shared/types';
+import type { NavigationInfo } from '@navigation/services/navigation-service';
+import type { ComponentLink } from '@shared/types';
 
 export const footerTestLinks: ComponentLink[][] = [
 	[

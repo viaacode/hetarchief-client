@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { endOfDay, parseISO, startOfDay } from 'date-fns';
 import React, { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { type MultiValue, type SingleValue } from 'react-select';
+import type { MultiValue, SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
@@ -26,9 +26,9 @@ import {
 	RELEASE_DATE_FILTER_FORM_SCHEMA,
 } from './ReleaseDateFilterForm.const';
 import styles from './ReleaseDateFilterForm.module.scss';
-import {
-	type ReleaseDateFilterFormProps,
-	type ReleaseDateFilterFormState,
+import type {
+	ReleaseDateFilterFormProps,
+	ReleaseDateFilterFormState,
 } from './ReleaseDateFilterForm.types';
 
 import { getOperators } from 'modules/visitor-space/utils/advanced-filters';

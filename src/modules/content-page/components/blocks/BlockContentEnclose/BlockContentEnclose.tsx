@@ -10,9 +10,9 @@ import { Icon, type IconName } from '@shared/components/Icon';
 import MediaCard from '../../../../shared/components/MediaCard/MediaCard';
 
 import styles from './BlockContentEnclose.module.scss';
-import { type BlockContentEncloseProps, type MappedElement } from './BlockContentEnclose.types';
+import type { BlockContentEncloseProps, MappedElement } from './BlockContentEnclose.types';
 import { useGetContentBlockEncloseContent } from './hooks/useGetContentBlockEncloseContent';
-import { type GetContentBlockEncloseContentReturnType } from './hooks/useGetContentBlockEncloseContent.types';
+import type { GetContentBlockEncloseContentReturnType } from './hooks/useGetContentBlockEncloseContent.types';
 
 export const BlockContentEnclose: FC<BlockContentEncloseProps> = ({
 	title,

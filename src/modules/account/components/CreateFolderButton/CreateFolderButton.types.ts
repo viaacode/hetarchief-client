@@ -1,6 +1,6 @@
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import { type Folder } from '@account/types';
+import type { Folder } from '@account/types';
 
 export interface CreateFolderButtonProps {
 	children?: ReactNode;

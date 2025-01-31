@@ -1,9 +1,9 @@
 import { action } from '@storybook/addon-actions';
-import { type ComponentMeta, type ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { cloneElement, type ReactElement, useState } from 'react';
 
 import Toggle from './Toggle';
-import { type ToggleOption } from './Toggle.types';
+import type { ToggleOption } from './Toggle.types';
 import { toggleMock } from './__mocks__/toggle';
 
 const ToggleStoryComponent = ({

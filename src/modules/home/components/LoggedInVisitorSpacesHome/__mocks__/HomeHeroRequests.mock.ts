@@ -1,4 +1,4 @@
-import { type VisitorSpaceInfo } from '@visitor-space/types';
+import type { VisitorSpaceInfo } from '@visitor-space/types';
 
 export interface HeroRequest extends Partial<Omit<VisitorSpaceInfo, 'status'>> {
 	status: 'access' | 'planned' | 'requested';

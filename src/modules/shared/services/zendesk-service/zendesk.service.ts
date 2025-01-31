@@ -1,4 +1,4 @@
-import { type Requests } from 'node-zendesk';
+import type { Requests } from 'node-zendesk';
 
 import { ApiService } from '../api-service';
 

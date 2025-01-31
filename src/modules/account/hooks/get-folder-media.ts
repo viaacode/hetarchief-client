@@ -2,7 +2,7 @@ import type { IPagination } from '@studiohyperdrive/pagination';
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import { foldersService } from '@account/services/folders';
-import { type FolderIeObject } from '@account/types';
+import type { FolderIeObject } from '@account/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
 export function useGetFolderMedia(

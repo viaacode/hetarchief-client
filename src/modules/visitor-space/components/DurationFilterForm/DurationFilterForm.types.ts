@@ -1,4 +1,4 @@
-import { type DefaultFilterFormProps, type Operator } from '../../types';
+import type { DefaultFilterFormProps, Operator } from '../../types';
 
 export type DurationFilterFormProps = DefaultFilterFormProps<DurationFilterFormState>;
 

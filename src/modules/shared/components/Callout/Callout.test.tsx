@@ -7,7 +7,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 import Callout from './Callout';
-import { type CalloutProps } from './Callout.types';
+import type { CalloutProps } from './Callout.types';
 import { calloutMock } from './__mocks__/callout';
 
 const renderCallout = (mock: CalloutProps = calloutMock) => {

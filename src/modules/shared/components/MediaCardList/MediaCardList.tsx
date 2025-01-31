@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { type FC, memo, type ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
 
-import { type MediaCardListProps } from '@shared/components/MediaCardList/MediaCardList.types';
+import type { MediaCardListProps } from '@shared/components/MediaCardList/MediaCardList.types';
 import { tText } from '@shared/helpers/translate';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';

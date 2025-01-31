@@ -8,12 +8,12 @@ import {
 	type VisitRequest,
 	VisitStatus,
 } from '@shared/types/visit-request';
-import {
-	type GetAllActiveVisitsProps,
-	type GetVisitRequestsProps,
+import type {
+	GetAllActiveVisitsProps,
+	GetVisitRequestsProps,
 } from '@visit-requests/services/visit-request/visit-request.service.types';
-import { type PatchVisit } from '@visit-requests/types';
-import { type CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
+import type { PatchVisit } from '@visit-requests/types';
+import type { CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 
 import {
 	VISITS_SERVICE_ACCESS_STATUS_URL,

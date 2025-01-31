@@ -3,7 +3,7 @@ import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react
 import { MIN_LENGTH_SCHEMA_IDENTIFIER_V2 } from '@ie-objects/ie-objects.consts';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
-import { type IeObject } from './../ie-objects.types';
+import type { IeObject } from './../ie-objects.types';
 import { IeObjectsService } from './../services';
 
 export async function getIeObjectInfo(id: string): Promise<IeObject | null> {

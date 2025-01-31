@@ -6,17 +6,17 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml } from '@shared/helpers/translate';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
-import {
-	type DefaultFilterFormProps,
-	type InlineFilterFormProps,
-	type SearchFilterId,
+import type {
+	DefaultFilterFormProps,
+	InlineFilterFormProps,
+	SearchFilterId,
 } from '@visitor-space/types';
 
 import { FilterMenuType } from '../FilterMenu.types';
 
 import { HAS_SHOW_OVERFLOW } from './FilterForm.const';
 import styles from './FilterForm.module.scss';
-import { type FilterFormProps } from './FilterForm.types';
+import type { FilterFormProps } from './FilterForm.types';
 
 const FilterForm: FC<FilterFormProps> = ({
 	className,

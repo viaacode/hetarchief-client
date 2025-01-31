@@ -1,6 +1,6 @@
 import { isString } from 'lodash-es';
 
-import { type IeObject } from '@ie-objects/ie-objects.types';
+import type { IeObject } from '@ie-objects/ie-objects.types';
 import { tText } from '@shared/helpers/translate';
 
 export function getIeObjectRightsOwnerAsText(ieObject: IeObject): string {

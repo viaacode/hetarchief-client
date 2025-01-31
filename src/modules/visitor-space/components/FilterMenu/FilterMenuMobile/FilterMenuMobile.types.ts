@@ -1,10 +1,10 @@
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import { type TagIdentity } from '../../../types';
-import {
-	type FilterMenuProps,
-	type OnFilterMenuFormReset,
-	type OnFilterMenuFormSubmit,
+import type { TagIdentity } from '../../../types';
+import type {
+	FilterMenuProps,
+	OnFilterMenuFormReset,
+	OnFilterMenuFormSubmit,
 } from '../FilterMenu.types';
 
 export interface FilterMenuMobileProps

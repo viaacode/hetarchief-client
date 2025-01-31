@@ -6,7 +6,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 import styles from '../ListNavigation.module.scss';
-import { type ListNavigationItem, type ListNavigationProps } from '../ListNavigation.types';
+import type { ListNavigationItem, ListNavigationProps } from '../ListNavigation.types';
 
 const renderLink = ({ to = '#', label = 'link', external = false }) => {
 	return (

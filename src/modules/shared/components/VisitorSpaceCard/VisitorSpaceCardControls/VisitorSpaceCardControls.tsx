@@ -1,7 +1,7 @@
 import { Button, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { type FC, type MouseEvent, type ReactNode } from 'react';
+import type { FC, MouseEvent, ReactNode } from 'react';
 
 import { CopyButton } from '@shared/components/CopyButton';
 import { DropdownMenu } from '@shared/components/DropdownMenu';

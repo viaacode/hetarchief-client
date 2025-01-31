@@ -9,7 +9,7 @@ import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 interface AccountSharedFolderProps {
 	folderId: string | undefined;

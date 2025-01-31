@@ -1,12 +1,12 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
-import { type UseInfiniteQueryResult, type UseMutationResult } from '@tanstack/react-query';
-import { type ReactNode } from 'react';
+import type { UseInfiniteQueryResult, UseMutationResult } from '@tanstack/react-query';
+import type { ReactNode } from 'react';
 
-import {
-	type MarkAllAsReadResult,
-	type Notification,
+import type {
+	MarkAllAsReadResult,
+	Notification,
 } from '@shared/services/notifications-service/notifications.types';
-import { type DefaultComponentProps } from '@shared/types';
+import type { DefaultComponentProps } from '@shared/types';
 
 export interface NotificationCenterProps extends DefaultComponentProps {
 	children?: ReactNode;

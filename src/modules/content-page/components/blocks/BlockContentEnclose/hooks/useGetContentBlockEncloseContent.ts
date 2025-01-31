@@ -6,15 +6,15 @@ import getConfig from 'next/config';
 import { stringifyUrl } from 'query-string';
 import { stripHtml } from 'string-strip-html';
 
-import { type IeObject } from '@ie-objects/ie-objects.types';
+import type { IeObject } from '@ie-objects/ie-objects.types';
 import { QUERY_KEYS } from '@shared/const';
 import { Locale } from '@shared/utils/i18n';
 
-import { type MappedElement } from '../BlockContentEnclose.types';
+import type { MappedElement } from '../BlockContentEnclose.types';
 
-import {
-	type ContentPage,
-	type GetContentBlockEncloseContentReturnType,
+import type {
+	ContentPage,
+	GetContentBlockEncloseContentReturnType,
 } from './useGetContentBlockEncloseContent.types';
 
 const { publicRuntimeConfig } = getConfig();

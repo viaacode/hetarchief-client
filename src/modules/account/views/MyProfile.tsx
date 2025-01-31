@@ -1,15 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/dist/client.mjs';
-import {
-	Alert,
-	Box,
-	Button,
-	Checkbox,
-	CheckboxList,
-	keysEnter,
-	keysSpacebar,
-	onKey,
-} from '@meemoo/react-components';
+import { Alert, Box, Button, Checkbox, CheckboxList, keysEnter, keysSpacebar, onKey } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import { isNil } from 'lodash-es';
 import getConfig from 'next/config';
@@ -31,7 +22,7 @@ import { COMMUNICATION_SECTION_ID } from '@account/const/MyProfile.consts';
 import { useChangeLanguagePreference } from '@account/hooks/change-language-preference';
 import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
 import { AccountLayout } from '@account/layouts';
-import { type CommunicationFormState } from '@account/types';
+import type { CommunicationFormState } from '@account/types';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
@@ -50,8 +41,8 @@ import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
-import { type DefaultSeoInfo } from '@shared/types/seo';
-import { type Locale } from '@shared/utils/i18n';
+import type { DefaultSeoInfo } from '@shared/types/seo';
+import type { Locale } from '@shared/utils/i18n';
 import { VisitorLayout } from '@visitor-layout/index';
 
 const { publicRuntimeConfig } = getConfig();
@@ -107,7 +98,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 		}
 
 		setAcceptNewsletter(preferences.newsletter);
-		if (window.location.href.endsWith('#' + COMMUNICATION_SECTION_ID)) {
+		if (window.location.href.endsWith(`#${COMMUNICATION_SECTION_ID}`)) {
 			const section = document.getElementById(COMMUNICATION_SECTION_ID);
 			section?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 		}

@@ -9,7 +9,7 @@ import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
 import { ObjectPlaceholder } from '../ObjectPlaceholder';
 
 import styles from './RelatedObject.module.scss';
-import { type RelatedObjectProps } from './RelatedObject.types';
+import type { RelatedObjectProps } from './RelatedObject.types';
 
 const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 	const { thumbnail, type } = object;

@@ -1,4 +1,4 @@
-import { type Avo } from '@viaa/avo2-types';
+import type { Avo } from '@viaa/avo2-types';
 import { useRouter } from 'next/router';
 import React, { type FC, lazy, Suspense } from 'react';
 
@@ -12,7 +12,7 @@ import { buildLink } from '@shared/helpers/build-link';
 import { goBrowserBackWithFallback } from '@shared/helpers/go-browser-back-with-fallback';
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageEdit = lazy(() =>
 	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({

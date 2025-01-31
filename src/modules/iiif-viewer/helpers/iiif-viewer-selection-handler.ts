@@ -1,12 +1,12 @@
 import { noop } from 'lodash-es';
-import {
-	type MouseTracker,
-	type Point,
-	type PointerMouseTrackerEvent,
-	type Viewer,
+import type {
+	MouseTracker,
+	Point,
+	PointerMouseTrackerEvent,
+	Viewer,
 } from 'openseadragon';
 
-import { type ImageSize, type Rect } from '@iiif-viewer/IiifViewer.types';
+import type { ImageSize, Rect } from '@iiif-viewer/IiifViewer.types';
 import { getRectFromPointerEventDrag } from '@iiif-viewer/helpers/rect-from-pointer-event-drag';
 
 // We need to track some state on the window object because the open sea dragon viewer isn't being reloaded by react

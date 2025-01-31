@@ -1,5 +1,5 @@
-import { type OrderDirection } from '@meemoo/react-components';
-import { type CSSProperties, type ReactNode } from 'react';
+import type { OrderDirection } from '@meemoo/react-components';
+import type { CSSProperties, ReactNode } from 'react';
 
 /**
  * Generic components

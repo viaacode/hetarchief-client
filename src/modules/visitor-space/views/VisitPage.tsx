@@ -1,7 +1,7 @@
-import { type HTTPError } from 'ky';
+import type { HTTPError } from 'ky';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { type FC } from 'react';
+import type { FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import { selectIsLoggedIn } from '@auth/store/user';
@@ -14,7 +14,7 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { AccessStatus } from '@shared/types/visit-request';
 import { useGetVisitAccessStatus } from '@visit-requests/hooks/get-visit-access-status';
 import { useGetOrganisationBySlug } from '@visitor-space/hooks/get-organisation-by-slug';

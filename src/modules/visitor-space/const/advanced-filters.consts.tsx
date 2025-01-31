@@ -1,5 +1,5 @@
 import { type ReactSelectProps, TextInput, type TextInputProps } from '@meemoo/react-components';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { tText } from '@shared/helpers/translate';
 import {
@@ -11,9 +11,9 @@ import AutocompleteFieldInput, {
 	type AutocompleteFieldInputProps,
 } from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
 import { DateInput } from '@visitor-space/components/DateInput';
-import { type DateInputProps } from '@visitor-space/components/DateInput/DateInput';
+import type { DateInputProps } from '@visitor-space/components/DateInput/DateInput';
 import { DateRangeInput } from '@visitor-space/components/DateRangeInput';
-import { type DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
+import type { DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
 import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { GenreSelect } from '@visitor-space/components/GenreSelect';
 import { LanguageSelect } from '@visitor-space/components/LanguageSelect/LanguageSelect';

@@ -4,14 +4,14 @@ import React, { type FC, lazy, Suspense, useRef, useState } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
-import { type UserGroupOverviewRef } from '@admin/types';
+import type { UserGroupOverviewRef } from '@admin/types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './PermissionsOverviewPage.module.scss';
 

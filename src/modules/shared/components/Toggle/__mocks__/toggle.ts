@@ -1,6 +1,6 @@
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
-import { type ToggleProps } from '../Toggle.types';
+import type { ToggleProps } from '../Toggle.types';
 
 export const toggleMock: ToggleProps = {
 	options: [

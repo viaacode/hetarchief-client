@@ -1,6 +1,6 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { QueryClient } from '@tanstack/react-query';
-import { type NextRouter } from 'next/router';
+import type { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 
 import { ROUTES_BY_LOCALE } from '@shared/const';

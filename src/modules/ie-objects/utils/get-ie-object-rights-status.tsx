@@ -1,10 +1,10 @@
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { type IeObject, IeObjectLicense } from '@ie-objects/ie-objects.types';
 import Icon from '@shared/components/Icon/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
-import { type Locale } from '@shared/utils/i18n';
+import type { Locale } from '@shared/utils/i18n';
 
 export function getIeObjectRightsStatusInfo(
 	ieObject: IeObject,

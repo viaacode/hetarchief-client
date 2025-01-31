@@ -1,8 +1,8 @@
 import { render } from '@testing-library/react';
 
-import {
-	type MetadataItem,
-	type MetadataListProps,
+import type {
+	MetadataItem,
+	MetadataListProps,
 } from '@ie-objects/components/Metadata/Metadata.types';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 

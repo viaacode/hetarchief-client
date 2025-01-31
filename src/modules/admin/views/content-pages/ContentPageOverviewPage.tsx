@@ -1,5 +1,5 @@
 import { Button } from '@meemoo/react-components';
-import { type Avo } from '@viaa/avo2-types';
+import type { Avo } from '@viaa/avo2-types';
 import Link from 'next/link';
 import React, { type FC, lazy, Suspense } from 'react';
 
@@ -12,7 +12,7 @@ import { ADMIN_CORE_ROUTES_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageOverview = lazy(() =>
 	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({

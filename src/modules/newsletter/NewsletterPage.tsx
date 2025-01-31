@@ -19,8 +19,8 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
-import { type NewsletterFormState } from '@shared/types/newsletter';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { NewsletterFormState } from '@shared/types/newsletter';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 	useHideFooter();

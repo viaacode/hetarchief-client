@@ -1,26 +1,26 @@
 import { isEmpty } from 'lodash-es';
 import { parseUrl, stringifyUrl } from 'query-string';
 
-import {
-	type IeObject,
-	type IeObjectSimilar,
-	type RelatedIeObjects,
+import type {
+	IeObject,
+	IeObjectSimilar,
+	RelatedIeObjects,
 } from '@ie-objects/ie-objects.types';
-import {
-	type IeObjectPreviousNextIds,
-	type SeoInfo,
+import type {
+	IeObjectPreviousNextIds,
+	SeoInfo,
 } from '@ie-objects/services/ie-objects/ie-objects.service.types';
-import { type SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
+import type { SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
 import { ApiService } from '@shared/services/api-service';
-import { type SortObject } from '@shared/types';
-import { type GetIeObjectsResponse } from '@shared/types/api';
+import type { SortObject } from '@shared/types';
+import type { GetIeObjectsResponse } from '@shared/types/api';
 import {
 	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
 	SearchPageMediaType,
 } from '@shared/types/ie-objects';
-import { type AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import type { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { SearchSortProp } from '@visitor-space/types';
 
 import {

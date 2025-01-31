@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import { type FC, type ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
 import { tHtml } from '@shared/helpers/translate';
-import { type DefaultComponentProps } from '@shared/types';
+import type { DefaultComponentProps } from '@shared/types';
 
 import styles from './Loading.module.scss';
 

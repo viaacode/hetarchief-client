@@ -1,7 +1,7 @@
 import { Button, OrderDirection, type TabProps } from '@meemoo/react-components';
 import { truncate } from 'lodash-es';
 import React from 'react';
-import { type Column } from 'react-table';
+import type { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { CopyButton } from '@shared/components/CopyButton';

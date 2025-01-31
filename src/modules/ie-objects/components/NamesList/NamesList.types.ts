@@ -1,4 +1,4 @@
-import { type DefaultComponentProps } from '@shared/types';
+import type { DefaultComponentProps } from '@shared/types';
 
 export interface Mention {
 	iri: string;

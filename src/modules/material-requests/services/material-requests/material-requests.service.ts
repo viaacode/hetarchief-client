@@ -2,18 +2,18 @@ import type { IPagination } from '@studiohyperdrive/pagination';
 import { isNil } from 'lodash-es';
 import { stringifyUrl } from 'query-string';
 
-import {
-	type MaterialRequest,
-	type MaterialRequestCreation,
-	type MaterialRequestDetail,
-	type MaterialRequestMaintainer,
-	type MaterialRequestSendAll,
-	type MaterialRequestUpdate,
+import type {
+	MaterialRequest,
+	MaterialRequestCreation,
+	MaterialRequestDetail,
+	MaterialRequestMaintainer,
+	MaterialRequestSendAll,
+	MaterialRequestUpdate,
 } from '@material-requests/types';
 import { ApiService } from '@shared/services/api-service';
 
 import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from './material-requests.service.const';
-import { type GetMaterialRequestsProps } from './material-requests.service.types';
+import type { GetMaterialRequestsProps } from './material-requests.service.types';
 
 export class MaterialRequestsService {
 	public static async getAll({

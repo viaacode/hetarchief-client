@@ -2,7 +2,7 @@ import { OrderDirection, PaginationBar, type Row, Table } from '@meemoo/react-co
 import clsx from 'clsx';
 import { isEmpty, isNil } from 'lodash-es';
 import { type FC, type MouseEvent, type ReactNode, useMemo, useState } from 'react';
-import { type SortingRule, type TableState } from 'react-table';
+import type { SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
@@ -24,7 +24,7 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorLayout } from '@visitor-layout/index';
 
 export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {

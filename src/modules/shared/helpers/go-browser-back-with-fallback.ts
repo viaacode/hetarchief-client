@@ -1,4 +1,4 @@
-import { type NextRouter } from 'next/router';
+import type { NextRouter } from 'next/router';
 
 /**
  * Go back in browser history, or navigate to a fallback path if the previous page is not from the same domain

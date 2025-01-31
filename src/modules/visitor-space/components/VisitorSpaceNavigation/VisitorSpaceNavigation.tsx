@@ -12,7 +12,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
-import { type VisitorSpaceNavigationProps } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation.types';
+import type { VisitorSpaceNavigationProps } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation.types';
 
 import styles from './VisitorSpaceNavigation.module.scss';
 

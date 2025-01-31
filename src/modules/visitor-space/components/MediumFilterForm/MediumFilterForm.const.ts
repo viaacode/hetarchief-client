@@ -3,7 +3,7 @@ import { array, object, type Schema, string } from 'yup';
 
 import { SearchFilterId } from '../../types';
 
-import { type MediumFilterFormState } from './MediumFilterForm.types';
+import type { MediumFilterFormState } from './MediumFilterForm.types';
 
 export const MEDIUM_FILTER_FORM_SCHEMA = (): Schema<MediumFilterFormState> =>
 	object({

@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { isNil } from 'lodash-es';
 import { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { type SingleValue } from 'react-select';
+import type { SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
@@ -14,9 +14,9 @@ import {
 	DURATION_FILTER_FORM_QUERY_PARAM_CONFIG,
 	DURATION_FILTER_FORM_SCHEMA,
 } from '@visitor-space/components/DurationFilterForm/DurationFilterForm.const';
-import {
-	type DurationFilterFormProps,
-	type DurationFilterFormState,
+import type {
+	DurationFilterFormProps,
+	DurationFilterFormState,
 } from '@visitor-space/components/DurationFilterForm/DurationFilterForm.types';
 
 import { FilterProperty, isRange, Operator, SearchFilterId } from '../../types';

@@ -1,5 +1,5 @@
-import { type Page } from '@playwright/test';
-import { type Locator } from 'playwright-core';
+import type { Page } from '@playwright/test';
+import type { Locator } from 'playwright-core';
 
 export async function isElementFullscreen(page: Page, element: Locator): Promise<boolean> {
 	const viewportSize = page.viewportSize();

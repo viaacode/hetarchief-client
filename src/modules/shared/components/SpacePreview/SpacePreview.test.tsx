@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import { type SpacePreviewSpace } from '@shared/components/SpacePreview/SpacePreview.types';
+import type { SpacePreviewSpace } from '@shared/components/SpacePreview/SpacePreview.types';
 
 import '@testing-library/jest-dom';
 import SpacePreview from './SpacePreview';

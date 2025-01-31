@@ -3,7 +3,7 @@ import { array, object, type Schema, string } from 'yup';
 
 import { SearchFilterId } from '../../types';
 
-import { type LanguageFilterFormState } from './LanguageFilterForm.types';
+import type { LanguageFilterFormState } from './LanguageFilterForm.types';
 
 export const LANGUAGE_FILTER_FORM_SCHEMA = (): Schema<LanguageFilterFormState> =>
 	object({

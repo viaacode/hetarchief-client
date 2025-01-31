@@ -7,7 +7,7 @@ import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types/visit-request';
 import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
 
-import { type CancelVisitBladeProps } from './CancelVisitBlade.types';
+import type { CancelVisitBladeProps } from './CancelVisitBlade.types';
 
 const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 	const { selected } = props;

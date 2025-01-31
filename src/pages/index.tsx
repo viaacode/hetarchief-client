@@ -3,7 +3,7 @@ import {
 	convertDbContentPageToContentPageInfo,
 } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import { QueryClient } from '@tanstack/react-query';
-import { type GetServerSidePropsContext, type GetServerSidePropsResult, type NextPage } from 'next';
+import type { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { type ComponentType, type FC, useEffect } from 'react';
 
@@ -20,7 +20,7 @@ import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-p
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import withUser, { type UserProps } from '@shared/hooks/with-user';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
 import { VisitorLayout } from '@visitor-layout/index';
 

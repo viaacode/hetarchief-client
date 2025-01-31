@@ -3,7 +3,7 @@ import { isEmpty, isNil } from 'lodash-es';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
-import { type GetNewsletterPreferencesResponse } from '@shared/types/newsletter';
+import type { GetNewsletterPreferencesResponse } from '@shared/types/newsletter';
 
 export const useGetNewsletterPreferences = (
 	email: string | undefined

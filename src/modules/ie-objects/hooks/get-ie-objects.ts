@@ -8,8 +8,8 @@ import { selectUser } from '@auth/store/user';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { setFilterOptions, setResults } from '@shared/store/ie-objects';
-import { type SortObject } from '@shared/types';
-import { type GetIeObjectsResponse } from '@shared/types/api';
+import type { SortObject } from '@shared/types';
+import type { GetIeObjectsResponse } from '@shared/types/api';
 import {
 	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,

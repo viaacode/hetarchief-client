@@ -10,12 +10,12 @@ import { type FC, useState } from 'react';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Overlay } from '@shared/components/Overlay';
 
-import { type SearchSortProp } from '../../../types';
+import type { SearchSortProp } from '../../../types';
 import { FilterButton } from '../FilterButton';
 import styles from '../FilterMenu.module.scss';
 import { FilterSortList } from '../FilterSortList';
 
-import { type FilterSortProps } from './FilterSort.types';
+import type { FilterSortProps } from './FilterSort.types';
 
 const FilterSort: FC<FilterSortProps> = ({
 	activeSort,

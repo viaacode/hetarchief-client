@@ -1,7 +1,7 @@
-import { type ContentPageInfo } from '@meemoo/admin-core-ui/dist/admin.mjs';
-import { type QueryClient } from '@tanstack/react-query';
+import type { ContentPageInfo } from '@meemoo/admin-core-ui/dist/admin.mjs';
+import type { QueryClient } from '@tanstack/react-query';
 import { reverse, sortBy } from 'lodash-es';
-import { type NextRouter } from 'next/router';
+import type { NextRouter } from 'next/router';
 
 import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/LanguageSwitcher.exceptions';
 import { QUERY_KEYS, type RouteKey, ROUTES_BY_LOCALE } from '@shared/const';

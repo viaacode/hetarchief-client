@@ -7,7 +7,7 @@ import { durationRegex } from '../../components/DurationInput/DurationInput.cons
 import { AdvancedFilterArrayParam } from '../../const/advanced-filter-array-param';
 import { Operator, SearchFilterId } from '../../types';
 
-import { type DurationFilterFormState } from './DurationFilterForm.types';
+import type { DurationFilterFormState } from './DurationFilterForm.types';
 
 export const DURATION_FILTER_FORM_SCHEMA = (): Schema<DurationFilterFormState> =>
 	object({

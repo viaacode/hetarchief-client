@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { setIsStickyLayout } from '@shared/store/ui';
 
-import { type UseStickyLayout } from './use-sticky-layout.types';
+import type { UseStickyLayout } from './use-sticky-layout.types';
 
 const useStickyLayout: UseStickyLayout = (isSticky = true) => {
 	const dispatch = useDispatch();

@@ -9,14 +9,14 @@ import {
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
-import { type HTTPError } from 'ky';
+import type { HTTPError } from 'ky';
 import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
 import Head from 'next/head';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { type MultiValue } from 'react-select';
+import type { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
@@ -50,7 +50,7 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ScrollableTabs, TabLabel } from '@shared/components/Tabs';
 import { TagSearchBar } from '@shared/components/TagSearchBar';
 import { TagSearchBarInfo } from '@shared/components/TagSearchBar/TagSearchBarInfo';
-import { type ToggleOption } from '@shared/components/Toggle';
+import type { ToggleOption } from '@shared/components/Toggle';
 import {
 	VisitorSpaceDropdown,
 	type VisitorSpaceDropdownOption,
@@ -84,7 +84,7 @@ import {
 	IeObjectType,
 	SearchPageMediaType,
 } from '@shared/types/ie-objects';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
 import { scrollTo } from '@shared/utils/scroll-to-top';
@@ -93,19 +93,19 @@ import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitTimeframe } from '@visit-requests/types';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import { initialFields } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
-import { type AdvancedFilterFormState } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.types';
-import { type ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
-import { type ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
-import { type ConsultablePublicDomainFilterFormState } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm.types';
-import { type DurationFilterFormState } from '@visitor-space/components/DurationFilterForm';
+import type { AdvancedFilterFormState } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.types';
+import type { ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
+import type { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
+import type { ConsultablePublicDomainFilterFormState } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm.types';
+import type { DurationFilterFormState } from '@visitor-space/components/DurationFilterForm';
 import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
-import { type FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
-import { type GenreFilterFormState } from '@visitor-space/components/GenreFilterForm';
-import { type KeywordsFilterFormState } from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.types';
-import { type LanguageFilterFormState } from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
-import { type MaintainerFilterFormState } from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
-import { type MediumFilterFormState } from '@visitor-space/components/MediumFilterForm';
-import { type ReleaseDateFilterFormState } from '@visitor-space/components/ReleaseDateFilterForm';
+import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import type { GenreFilterFormState } from '@visitor-space/components/GenreFilterForm';
+import type { KeywordsFilterFormState } from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.types';
+import type { LanguageFilterFormState } from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
+import type { MaintainerFilterFormState } from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
+import type { MediumFilterFormState } from '@visitor-space/components/MediumFilterForm';
+import type { ReleaseDateFilterFormState } from '@visitor-space/components/ReleaseDateFilterForm';
 import {
 	GLOBAL_ARCHIVE,
 	SEARCH_PAGE_QUERY_PARAM_CONFIG,

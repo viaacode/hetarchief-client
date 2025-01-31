@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 
 export async function acmConfirmEmail(page: Page, userEmail: string): Promise<void> {
 	// Load the INT acm dashboard

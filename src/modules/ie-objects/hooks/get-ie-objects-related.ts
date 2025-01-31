@@ -1,6 +1,6 @@
 import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react-query';
 
-import { type RelatedIeObjects } from '@ie-objects/ie-objects.types';
+import type { RelatedIeObjects } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const';
 

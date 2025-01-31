@@ -1,14 +1,14 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { type ComponentLink } from '@shared/types';
+import type { ComponentLink } from '@shared/types';
 
 import styles from './Footer.module.scss';
-import { type FooterProps } from './Footer.types';
+import type { FooterProps } from './Footer.types';
 
 const Footer: FC<FooterProps> = ({ linkSections }) => {
 	const locale = useLocale();

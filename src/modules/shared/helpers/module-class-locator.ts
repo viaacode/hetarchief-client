@@ -5,6 +5,6 @@
  * @param className
  * @param suffix
  */
-export function moduleClassSelector(className: string, suffix: string = '__'): string {
+export function moduleClassSelector(className: string, suffix = '__'): string {
 	return `[class*="_${className}${suffix}"]`;
 }

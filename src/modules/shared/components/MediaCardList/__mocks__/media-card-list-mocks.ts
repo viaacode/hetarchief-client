@@ -1,9 +1,9 @@
 import { shuffle } from 'lodash-es';
 
-import { type IdentifiableMediaCard, type MediaCardProps } from '@shared/components/MediaCard';
+import type { IdentifiableMediaCard, MediaCardProps } from '@shared/components/MediaCard';
 import { IeObjectType } from '@shared/types/ie-objects';
 
-import { type MediaCardListProps } from '../MediaCardList.types';
+import type { MediaCardListProps } from '../MediaCardList.types';
 
 export const mock = async (
 	args: Pick<MediaCardProps, 'view'>,
@@ -31,9 +31,7 @@ export const mock = async (
 					description: Array(20)
 						.join(` ${item.title}`)
 						.split(' ')
-						.sort(function () {
-							return 0.5 - Math.random();
-						})
+						.sort(() => 0.5 - Math.random())
 						.join(' '),
 					publishedOrCreatedDate: new Date(
 						start.getTime() + Math.random() * (end.getTime() - start.getTime())

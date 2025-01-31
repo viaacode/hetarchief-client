@@ -1,6 +1,6 @@
 import { AdminConfigManager } from '@meemoo/admin-core-ui/dist/client.mjs';
 
-import { type IconName } from '@shared/components/Icon';
+import type { IconName } from '@shared/components/Icon';
 
 export function GET_TYPE_TO_ICON_MAP(): Record<string, IconName> {
 	return {

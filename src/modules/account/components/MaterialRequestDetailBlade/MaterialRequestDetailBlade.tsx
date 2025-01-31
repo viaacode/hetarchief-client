@@ -4,10 +4,7 @@ import Image from 'next/image';
 import React, { type FC } from 'react';
 
 import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
-import {
-	GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD,
-	type MaterialRequestDetail,
-} from '@material-requests/types';
+import { GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD, type MaterialRequestDetail } from '@material-requests/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
 import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
@@ -93,7 +90,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				href={`/zoeken/${currentMaterialRequestDetail?.maintainerSlug}/${currentMaterialRequestDetail?.objectSchemaIdentifier}`}
 				className={styles['p-account-my-material-requests__material-link']}
 			>
-				<div className={styles['p-account-my-material-requests__material']} tabIndex={0}>
+				<div className={styles['p-account-my-material-requests__material']}>
 					<p className={styles['p-account-my-material-requests__material-label']}>
 						<Icon
 							className={
