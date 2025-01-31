@@ -34,4 +34,6 @@ export enum QUERY_KEYS {
 	getIeObjectPlayerTicketToken = 'getIeObjectPlayerTicketToken',
 	getAllLanguages = 'getAllLanguages',
 	getAltoJsonFileContent = 'getAltoJsonFileContent',
+	GET_IE_OBJECT_FOR_CONTENT_ENCLOSE_BLOCK = 'GET_IE_OBJECT_FOR_CONTENT_ENCLOSE_BLOCK',
+	GET_CONTENT_PAGE_BY_PATH = 'GET_CONTENT_PAGE_BY_PATH',
 }

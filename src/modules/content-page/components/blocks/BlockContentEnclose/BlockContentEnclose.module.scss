@@ -1,0 +1,54 @@
+@use "sass:map";
+@use "sass:math";
+@use "sass:color";
+@use "../../../../../styles/abstracts" as *;
+
+$component: "c-block-enclosed-content";
+
+.#{$component} {
+	&__header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: $spacer-sm;
+
+		p {
+			margin-top: $spacer-xs;
+			padding: 0 !important;
+			color: $neutral;
+		}
+	}
+
+	&__cards {
+		display: flex;
+		flex-flow: row wrap;
+		list-style: none;
+		padding: 0;
+		row-gap: $spacer-md;
+		margin: $spacer-md 0 0;
+
+		@media (min-width: $breakpoint-sm) {
+			gap: $spacer-lg;
+		}
+
+		@media (min-width: $breakpoint-xl) {
+			grid-template-columns: repeat(4, 1fr);
+		}
+
+		> * {
+			width: 100%;
+
+			@media (min-width: $breakpoint-sm) {
+				width: calc(50% - #{$spacer-md});
+			}
+
+			@media (min-width: $breakpoint-md) {
+				width: calc(33.3% - #{$spacer-md});
+			}
+
+			@media (min-width: $breakpoint-lg) {
+				width: calc(25% - #{$spacer-md});
+			}
+		}
+	}
+}

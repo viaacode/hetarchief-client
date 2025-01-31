@@ -1,6 +1,7 @@
 import { AdminConfigManager } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import { Badge, Button, Card } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { isValid } from 'date-fns';
 import { isNil } from 'lodash-es';
 import { useRouter } from 'next/router';
 import { type FC, type MouseEvent, type ReactNode, useState } from 'react';
@@ -29,7 +30,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setLastScrollPosition } from '@shared/store/ui';
 import { IeObjectType } from '@shared/types/ie-objects';
-import { formatMediumDate } from '@shared/utils/dates';
+import { asDate, formatMediumDate } from '@shared/utils/dates';
 
 import Icon from '../Icon/Icon';
 
@@ -60,6 +61,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	hasTempAccess,
 	previousPage,
 	numOfChildren = 0,
+	className,
 }) => {
 	const router = useRouter();
 	const locale = useLocale();
@@ -201,9 +203,14 @@ const MediaCard: FC<MediaCardProps> = ({
 		}
 
 		if (publishedOrCreatedDate) {
-			const formatted = formatMediumDate(publishedOrCreatedDate);
+			const date = asDate(publishedOrCreatedDate);
+			if (isValid(date)) {
+				const formatted = formatMediumDate(date);
 
-			subtitle += ` (${formatted})`;
+				subtitle += ` (${formatted})`;
+			} else {
+				subtitle += ` (${publishedOrCreatedDate})`;
+			}
 		}
 
 		subtitle = subtitle.trim();
@@ -412,7 +419,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	};
 
 	return (
-		<div id={id}>
+		<div id={id} className={className}>
 			{renderCard()}
 			<Modal
 				title={tText(

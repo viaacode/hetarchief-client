@@ -18,7 +18,7 @@ export interface MediaCardProps {
 	id?: string;
 	objectId?: string;
 	thumbnail?: string;
-	publishedOrCreatedDate?: Date;
+	publishedOrCreatedDate?: string;
 	publishedBy?: string;
 	title?: string | ReactNode;
 	type: IeObjectType | null;
@@ -33,6 +33,7 @@ export interface MediaCardProps {
 	hasTempAccess?: boolean;
 	previousPage?: string;
 	numOfChildren?: number;
+	className?: string;
 }
 
 export type IdentifiableMediaCard = MediaCardProps & {

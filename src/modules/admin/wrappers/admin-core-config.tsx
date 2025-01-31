@@ -13,6 +13,7 @@ import { type NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { type FunctionComponent } from 'react';
 
+import { BlockContentEnclose } from '@content-page/components/blocks/BlockContentEnclose/BlockContentEnclose';
 import { NAVIGATION_DROPDOWN } from '@navigation/components/Navigation/Navigation.types';
 import {
 	GET_ALERT_ICON_LIST_CONFIG,
@@ -166,7 +167,9 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 				},
 			],
 		},
-		content_blocks: {},
+		content_blocks: {
+			CONTENT_ENCLOSE_GRID: BlockContentEnclose,
+		},
 		services: {
 			toastService: {
 				showToast: (toastInfo: ToastInfo): string => {

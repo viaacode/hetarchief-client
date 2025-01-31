@@ -757,7 +757,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				duration: item.duration,
 				description,
 				title: item.name,
-				publishedOrCreatedDate: asDate(item.datePublished ?? item.dateCreated ?? null),
+				publishedOrCreatedDate: item.datePublished ?? item.dateCreated ?? null,
 				publishedBy: item.maintainerName || '',
 				type,
 				thumbnail: item.thumbnailUrl || undefined,
