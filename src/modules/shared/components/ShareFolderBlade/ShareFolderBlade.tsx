@@ -2,7 +2,7 @@ import { Alert, Button, FormControl, TextInput } from '@meemoo/react-components'
 import clsx from 'clsx';
 import React, { type FC, type ReactNode, useState } from 'react';
 
-import { foldersService } from '@account/services/folders';
+import { FoldersService } from '@account/services/folders';
 import { Blade } from '@shared/components/Blade/Blade';
 import { CopyButton } from '@shared/components/CopyButton';
 import { Icon } from '@shared/components/Icon';
@@ -14,7 +14,7 @@ import { validateForm } from '@shared/helpers/validate-form';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 
-import { labelKeys, SHARE_FOLDER_FORM_SCHEMA } from './ShareFolderBlade.consts';
+import { SHARE_FOLDER_FORM_SCHEMA, labelKeys } from './ShareFolderBlade.consts';
 import styles from './ShareFolderBlade.module.scss';
 import type { ShareFolderBladeProps } from './ShareFolderBlade.types';
 
@@ -40,7 +40,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 				return;
 			}
 
-			await foldersService.shareFolder(folderId, email);
+			await FoldersService.shareFolder(folderId, email);
 			toastService.notify({
 				maxLines: 3,
 				title: tText('pages/account/map-delen/folder-id/index___map-is-gedeeld'),

@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 
 import type { CreateFolderButtonProps } from '@account/components';
 import { COLLECTION_FORM_SCHEMA } from '@account/const';
-import { foldersService } from '@account/services/folders';
+import { FoldersService } from '@account/services/folders';
 import type { CreateFolderFormState } from '@account/types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -62,7 +62,7 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 	const onFormSubmit = async () => {
 		return new Promise<void>((resolve, reject) => {
 			handleSubmit(async (values) => {
-				const folder = await foldersService.create(values);
+				const folder = await FoldersService.create(values);
 				afterSubmit(folder);
 
 				toastService.notify({

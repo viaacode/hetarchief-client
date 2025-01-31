@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { type FC, useEffect, useState } from 'react';
 
 import { EDIT_FOLDER_VALIDATION_SCHEMA } from '@account/components/EditFolderBlade/EditFolderBlade.consts';
-import { foldersService } from '@account/services/folders';
+import { FoldersService } from '@account/services/folders';
 import type { Folder } from '@account/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -69,7 +69,7 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 				name,
 				description,
 			};
-			await foldersService.update(currentFolder.id, { name, description });
+			await FoldersService.update(currentFolder.id, { name, description });
 
 			toastService.notify({
 				title: tHtml(

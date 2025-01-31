@@ -5,7 +5,7 @@ import { type FC, useEffect, useState } from 'react';
 
 import { CreateFolderButton } from '@account/components';
 import { useGetFolders } from '@account/hooks/get-folders';
-import { foldersService } from '@account/services/folders';
+import { FoldersService } from '@account/services/folders';
 import type { Folder } from '@account/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
@@ -94,8 +94,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			// Define our promises
 			const updatePromises = [
 				...objectAddedToFolderIds.map((folderId) =>
-					foldersService
-						.addToFolder(folderId, objectToAdd.schemaIdentifier)
+					FoldersService.addToFolder(folderId, objectToAdd.schemaIdentifier)
 						.catch(onFailedRequest)
 						.then((response) => {
 							if (response === undefined) {
@@ -106,8 +105,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 						})
 				),
 				...objectRemovedFromFolderIds.map((folderId) =>
-					foldersService
-						.removeFromFolder(folderId, objectToAdd.schemaIdentifier)
+					FoldersService.removeFromFolder(folderId, objectToAdd.schemaIdentifier)
 						.catch(onFailedRequest)
 						.then((response) => {
 							if (response === undefined) {

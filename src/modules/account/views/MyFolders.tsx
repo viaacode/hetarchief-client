@@ -15,7 +15,7 @@ import { ACCOUNT_FOLDERS_QUERY_PARAM_CONFIG, FolderItemListSize, Permission } fr
 import { useGetFolderMedia } from '@account/hooks/get-folder-media';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { AccountLayout } from '@account/layouts';
-import { foldersService } from '@account/services/folders';
+import { FoldersService } from '@account/services/folders';
 import type { Folder, FolderIeObject } from '@account/types';
 import { createFolderSlug } from '@account/utils';
 import { IeObjectAccessThrough, IeObjectLicense, IsPartOfKey } from '@ie-objects/ie-objects.types';
@@ -31,7 +31,7 @@ import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ShareFolderBlade } from '@shared/components/ShareFolderBlade';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
-import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
+import { ROUTES_BY_LOCALE, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
@@ -230,7 +230,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 	};
 
 	const onRemoveFromFolder = (item: IdentifiableMediaCard, folder: Folder) => {
-		foldersService.removeFromFolder(folder.id, item.schemaIdentifier).then((response) => {
+		FoldersService.removeFromFolder(folder.id, item.schemaIdentifier).then((response) => {
 			if (response === undefined) {
 				return;
 			}
@@ -623,7 +623,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 						setShowConfirmDelete(false);
 
 						activeFolder &&
-							foldersService.delete(activeFolder.id).then(() => {
+							FoldersService.remove(activeFolder.id).then(() => {
 								refetchFolders();
 							});
 					}}

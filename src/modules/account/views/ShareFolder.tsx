@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { type FC, useCallback, useEffect } from 'react';
 
-import { foldersService } from '@account/services/folders';
+import { FoldersService } from '@account/services/folders';
 import { SharedFolderStatus } from '@account/types';
 import { createFolderSlug } from '@account/utils';
 import { Loading } from '@shared/components/Loading';
@@ -24,7 +24,7 @@ export const AccountSharedFolder: FC<DefaultSeoInfo & AccountSharedFolderProps> 
 	const shareFolder = useCallback(async () => {
 		if (folderId) {
 			try {
-				const response = await foldersService.shareCollection(folderId);
+				const response = await FoldersService.shareCollection(folderId);
 				if (response.status === SharedFolderStatus.ADDED) {
 					toastService.notify({
 						maxLines: 3,
