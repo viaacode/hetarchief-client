@@ -15,8 +15,10 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-
 import { useDispatch, useSelector } from 'react-redux';
+import { type MultiValue } from 'react-select';
+import { useQueryParams } from 'use-query-params';
+
 import { GroupName, Permission } from '@account/const';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
@@ -116,9 +118,6 @@ import { SEARCH_PAGE_IE_OBJECT_TABS } from '@visitor-space/const/visitor-space-t
 import { FilterProperty, SearchFilterId, type TagIdentity } from '@visitor-space/types';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
-
-import { type MultiValue } from 'react-select';
-import { useQueryParams } from 'use-query-params';
 
 const labelKeys = {
 	search: 'SearchPage__search',

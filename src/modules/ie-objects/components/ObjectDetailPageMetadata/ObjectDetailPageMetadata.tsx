@@ -742,7 +742,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		}
 
 		return (
-			<>
+			<div className={styles['p-object-detail__metadata-wrapper']}>
 				<div className={styles['p-object-detail__metadata-content']}>
 					{showResearchWarning && renderResearchWarning()}
 					{renderBreadcrumbs()}
@@ -1195,7 +1195,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						setCopyrightModalOpen((prevState) => !prevState);
 					}}
 				/>
-			</>
+			</div>
 		);
 	};
 

@@ -1,7 +1,7 @@
-import { type Options } from 'openseadragon';
+import { type Options, type TiledImageOptions } from 'openseadragon';
 
 export function getOpenSeadragonConfig(
-	tileSources: (string | { type: 'image'; url: string })[],
+	tileSources: TiledImageOptions[],
 	isMobile: boolean,
 	id: string
 ): Options {
@@ -9,8 +9,6 @@ export function getOpenSeadragonConfig(
 		id,
 
 		tileSources,
-		loadTilesWithAjax: true,
-
 		// preserveViewport: true,
 		defaultZoomLevel: isMobile ? 0.9 : 0.5,
 		minZoomLevel: 0.3,

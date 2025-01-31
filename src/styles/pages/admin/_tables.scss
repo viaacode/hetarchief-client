@@ -20,8 +20,8 @@
 		}
 
 		.c-button:last-child {
-			border: 1px solid $zinc;
-			border-width: 0 0 0 1px;
+			border: 1px solid $zinc !important;
+			border-width: 0 0 0 1px !important;
 			border-radius: 0 50% 50% 0;
 		}
 	}

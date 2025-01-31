@@ -14,8 +14,27 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
 import { parseUrl, stringifyUrl } from 'query-string';
+import React, {
+	type FC,
+	Fragment,
+	type MutableRefObject,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	BooleanParam,
+	NumberParam,
+	StringParam,
+	useQueryParam,
+	withDefault,
+} from 'use-query-params';
+
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { type User } from '@auth/types';
@@ -33,6 +52,7 @@ import Metadata, {
 import { ObjectPlaceholder } from '@ie-objects/components/ObjectPlaceholder';
 import { type MediaObject, RelatedObject } from '@ie-objects/components/RelatedObject';
 import { useGetAltoJsonFileContent } from '@ie-objects/hooks/get-alto-json-file-content';
+import { useGetIeObjectTicketServiceTokens } from '@ie-objects/hooks/get-ie-object-ticket-service-tokens';
 import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
 import { useGetIeObjectsAlsoInteresting } from '@ie-objects/hooks/get-ie-objects-similar';
@@ -69,11 +89,15 @@ import {
 	NEWSPAPERS_SERVICE_BASE_URL,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
-import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import IiifViewer from '@iiif-viewer/IiifViewer';
-import { type IiifViewerFunctions, type ImageInfo, type Rect } from '@iiif-viewer/IiifViewer.types';
+import {
+	type IiifViewerFunctions,
+	type ImageInfo,
+	type ImageInfoWithToken,
+	type Rect,
+} from '@iiif-viewer/IiifViewer.types';
+import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
-
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
@@ -113,26 +137,6 @@ import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 
-import React, {
-	type FC,
-	Fragment,
-	type MutableRefObject,
-	type ReactNode,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-	BooleanParam,
-	NumberParam,
-	StringParam,
-	useQueryParam,
-	withDefault,
-} from 'use-query-params';
-
 import styles from './ObjectDetailPage.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
@@ -157,7 +161,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 
 	// Internal state
-	const [mediaType, setMediaType] = useState<IeObjectType | null>(null);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | null>(null);
@@ -275,6 +278,35 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				rep.files.filter((file) => FLOWPLAYER_FORMATS.includes(file.mimeType))
 			)
 		) || [];
+	const iiifViewerImageInfos = useMemo((): ImageInfo[] => {
+		return compact(
+			mediaInfo?.pageRepresentations?.flatMap((pageRepresentation) => {
+				const files = pageRepresentation?.representations?.flatMap(
+					(representation) => representation.files
+				);
+				const imageApiFile = files.find((file) =>
+					IMAGE_API_FORMATS.includes(file.mimeType)
+				);
+				if (!imageApiFile?.storedAt) {
+					return null;
+				}
+				const imageFile = files.find((file) => IMAGE_FORMATS.includes(file.mimeType));
+				const altoFile = files.find((file) => XML_FORMATS.includes(file.mimeType));
+				if (!imageFile?.storedAt) {
+					return null;
+				}
+				return {
+					imageUrl:
+						imageApiFile.storedAt.replace(
+							'https://iiif-qas.meemoo.be/image/3/public',
+							'https://iiif-qas.meemoo.be/image/3/hetarchief'
+						) + '/info.json', // Adding info.json avoids an extra redirect 303
+					thumbnailUrl: imageFile?.thumbnailUrl,
+					altoUrl: altoFile?.storedAt,
+				};
+			})
+		);
+	}, [mediaInfo?.pageRepresentations]);
 
 	// Playable url for flowplayer
 	const currentPlayableFile: IeObjectFile | null = getFileByType(FLOWPLAYER_FORMATS);
@@ -286,6 +318,22 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	} = useGetIeObjectsTicketInfo(
 		fileStoredAt,
 		() => setFlowPlayerKey(fileStoredAt) // Force flowplayer rerender after successful fetch
+	);
+	const { data: ticketServiceTokensByPath } = useGetIeObjectTicketServiceTokens(
+		iiifViewerImageInfos.map((imageInfo) => imageInfo.imageUrl),
+		{
+			enabled: iiifViewerImageInfos.length > 0,
+		}
+	);
+	const imageInfosWithTokens = useMemo(
+		() =>
+			iiifViewerImageInfos.map(
+				(imageInfo): ImageInfoWithToken => ({
+					...imageInfo,
+					token: ticketServiceTokensByPath?.[imageInfo.imageUrl] || null,
+				})
+			),
+		[iiifViewerImageInfos, ticketServiceTokensByPath]
 	);
 
 	// also interesting
@@ -412,13 +460,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			}
 
 			if (!pageOcrTexts.length) {
-				toastService.notify({
-					maxLines: 3,
-					title: tText('modules/ie-objects/object-detail-page___error'),
-					description: tText(
-						'modules/ie-objects/object-detail-page___deze-krant-heeft-geen-ocr-tekst'
-					),
-				});
+				// Only show the error if the user has access to the essence of the newspaper
+				// https://meemoo.atlassian.net/browse/ARC-2556
+				if (mediaInfo?.thumbnailUrl) {
+					toastService.notify({
+						maxLines: 3,
+						title: tText('modules/ie-objects/object-detail-page___error'),
+						description: tText(
+							'modules/ie-objects/object-detail-page___deze-krant-heeft-geen-ocr-tekst'
+						),
+					});
+				}
 				return;
 			}
 
@@ -663,8 +715,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Set the media type and default tab when the media info is loaded
 	 */
 	useEffect(() => {
-		setMediaType(mediaInfo?.dctermsFormat || null);
-
 		// Set default view
 		if (isMobile) {
 			// Default to metadata tab on mobile
@@ -980,12 +1030,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const tabs: TabProps[] = useMemo(() => {
 		return OBJECT_DETAIL_TABS(
-			mediaType,
+			mediaInfo?.dctermsFormat || null,
 			activeTab as ObjectDetailTabs,
 			isMediaAvailable(),
 			arePagesOcrTextsAvailable
 		);
-	}, [mediaType, activeTab, isMediaAvailable, arePagesOcrTextsAvailable]);
+	}, [mediaInfo?.dctermsFormat, activeTab, isMediaAvailable, arePagesOcrTextsAvailable]);
 
 	const accessEndDate = useMemo(() => {
 		const dateDesktop = formatMediumDateWithTime(asDate(visitRequest?.endAt));
@@ -1026,32 +1076,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		);
 	};
 
-	const iiifViewerImageInfos = useMemo((): ImageInfo[] => {
-		return compact(
-			mediaInfo?.pageRepresentations?.flatMap((pageRepresentation) => {
-				const files = pageRepresentation?.representations?.flatMap(
-					(representation) => representation.files
-				);
-				const imageApiFile = files.find((file) =>
-					IMAGE_API_FORMATS.includes(file.mimeType)
-				);
-				if (!imageApiFile?.storedAt) {
-					return null;
-				}
-				const imageFile = files.find((file) => IMAGE_FORMATS.includes(file.mimeType));
-				const altoFile = files.find((file) => XML_FORMATS.includes(file.mimeType));
-				if (!imageFile?.storedAt) {
-					return null;
-				}
-				return {
-					imageUrl: imageApiFile.storedAt,
-					thumbnailUrl: imageFile?.thumbnailUrl,
-					altoUrl: altoFile?.storedAt,
-				};
-			})
-		);
-	}, [mediaInfo]);
-
 	const handleActiveImageIndexChange = (index: number) => {
 		setCurrentPageIndex(index, 'replaceIn');
 		setIsLoadingPageImage(true);
@@ -1065,7 +1089,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 */
 
 	const renderMedia = (): ReactNode => {
-		if ((isLoadingPlayableUrl && !isNewspaper) || !mediaInfo) {
+		if (
+			(isLoadingPlayableUrl && !isNewspaper) ||
+			!mediaInfo ||
+			Object.keys(imageInfosWithTokens).length === 0
+		) {
 			return <Loading fullscreen owner="object detail page: render media" />;
 		}
 
@@ -1083,7 +1111,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						</div>
 					)}
 					<IiifViewer
-						imageInfos={iiifViewerImageInfos}
+						imageInfosWithTokens={imageInfosWithTokens}
 						ref={iiifViewerReference}
 						id={mediaInfo?.schemaIdentifier as string}
 						isTextOverlayVisible={isTextOverlayVisible || false}
@@ -1237,6 +1265,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		</div>
 	);
 
+	const renderCollapsableBladeTitle = (mappedRelatedIeObjects: MediaObject[]) => {
+		if (relatedIeObjects?.parent) {
+			return tHtml(
+				'modules/ie-objects/object-detail-page___dit-object-is-onderdeel-van-dit-hoofdobject'
+			);
+		}
+		if (mappedRelatedIeObjects.length === 1) {
+			return tHtml('modules/ie-objects/object-detail-page___dit-object-heeft-1-fragment');
+		} else {
+			return tHtml(
+				'modules/ie-objects/object-detail-page___dit-object-heeft-amount-fragmenten',
+				{
+					amount: mappedRelatedIeObjects.length,
+				}
+			);
+		}
+	};
+
 	const renderRelatedObjectsBlade = () => {
 		const mappedRelatedIeObjects = getMappedRelatedIeObjects();
 		if (!mappedRelatedIeObjects.length || (!expandSidebar && isMobile)) {
@@ -1254,18 +1300,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						aria-hidden
 					/>
 				}
-				title={
-					relatedIeObjects?.parent
-						? tHtml(
-								'modules/ie-objects/object-detail-page___dit-object-is-onderdeel-van-dit-hoofdobject'
-						  )
-						: tHtml(
-								'modules/ie-objects/object-detail-page___dit-object-heeft-amount-fragmenten',
-								{
-									amount: mappedRelatedIeObjects.length,
-								}
-						  )
-				}
+				title={renderCollapsableBladeTitle(mappedRelatedIeObjects)}
 				renderContent={(hidden: boolean) =>
 					renderIeObjectCards('related', mappedRelatedIeObjects, hidden)
 				}
@@ -1407,9 +1442,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	};
 
 	const renderObjectMedia = () => {
-		if (mediaType) {
+		if (mediaInfo?.thumbnailUrl) {
 			return (
-				<>
+				<div>
 					<div className={styles['p-object-detail__media']}>{renderMedia()}</div>
 					{showFragmentSlider && (
 						<FragmentSlider
@@ -1421,10 +1456,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							}}
 						/>
 					)}
-				</>
+				</div>
 			);
 		}
-		return <ObjectPlaceholder {...objectPlaceholder()} />;
+		return (
+			<ObjectPlaceholder
+				{...objectPlaceholder()}
+				reasonDescription={tText(
+					'modules/ie-objects/object-detail-page___je-hebt-enkel-toegang-tot-de-metadata-van-dit-object-omdat-dit-object-niet-publiek-beschikbaar-is-volgens-de-licenties-van-de-auteur'
+				)}
+				className={styles['p-object-detail__media--not-available']}
+			/>
+		);
 	};
 
 	const renderVisitorSpaceNavigationBar = (): ReactNode => {
@@ -1493,10 +1536,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				{renderVisitorSpaceNavigationBar()}
 
 				{/* Video audio or newspaper */}
-				{renderObjectMedia()}
+				{!isMobile && renderObjectMedia()}
 
 				{/* Expand button */}
-				{mediaType && hasMedia && (
+				{mediaInfo?.dctermsFormat && hasMedia && (
 					<Button
 						className={clsx(styles['p-object-detail__expand-button'], {
 							[styles['p-object-detail__expand-button--collapsed']]: !expandSidebar,
@@ -1534,7 +1577,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							styles['p-object-detail__sidebar__content'],
 							styles['p-object-detail__sidebar__content__tab-' + activeTab],
 							{
-								[styles['p-object-detail__sidebar__content--no-media']]: !mediaType,
+								[styles['p-object-detail__sidebar__content--no-media']]:
+									!mediaInfo?.dctermsFormat,
 							}
 						)}
 					>
@@ -1570,6 +1614,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								</Metadata>
 							</MetadataList>
 						)}
+
+						{activeTab === ObjectDetailTabs.Media && isMobile && renderObjectMedia()}
 						{activeTab === ObjectDetailTabs.Ocr && renderOcrContent()}
 					</div>
 					{renderRelatedObjectsBlade()}
