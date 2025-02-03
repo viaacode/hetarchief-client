@@ -96,7 +96,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	}, [isOpen, refetchMaterialRequests]);
 
 	const deleteMaterialRequest = async (id: string) => {
-		const deleteResponse = await MaterialRequestsService.remove(id);
+		const deleteResponse = await MaterialRequestsService.delete(id);
 		deleteResponse && (await refetchMaterialRequests());
 	};
 

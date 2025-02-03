@@ -17,8 +17,4 @@ export const metadataMock: MetadataItem[] = [
 		title: 'Genre',
 		data: 'Documentaire',
 	},
-	{
-		title: 'Licentie',
-		data: 'Creative Commons 0',
-	},
 ];

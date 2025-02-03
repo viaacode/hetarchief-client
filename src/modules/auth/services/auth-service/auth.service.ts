@@ -3,9 +3,9 @@ import type { Options } from 'ky/distribution/types/options';
 import { omit, trimEnd } from 'lodash-es';
 import getConfig from 'next/config';
 import type { NextRouter } from 'next/router';
-import { parseUrl, type StringifiableRecord, stringifyUrl } from 'query-string';
+import { type StringifiableRecord, parseUrl, stringifyUrl } from 'query-string';
 
-import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
+import { ROUTES_BY_LOCALE, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { ApiService } from '@shared/services/api-service';
 import { TranslationService } from '@shared/services/translation-service/translation.service';
@@ -15,13 +15,13 @@ import type { CheckLoginResponse } from './auth.service.types';
 
 const { publicRuntimeConfig } = getConfig();
 
-export namespace AuthService {
-	export async function checkLogin(options: Options = {}): Promise<CheckLoginResponse> {
+export class AuthService {
+	public static async checkLogin(options: Options = {}): Promise<CheckLoginResponse> {
 		const test = await ApiService.getApi().get('auth/check-login', options).json();
 		return test as CheckLoginResponse;
 	}
 
-	export async function redirectToLoginHetArchief(
+	public static async redirectToLoginHetArchief(
 		query: StringifiableRecord,
 		router: NextRouter
 	): Promise<void> {
@@ -71,7 +71,7 @@ export namespace AuthService {
 		);
 	}
 
-	export async function redirectToRegisterHetArchief(
+	public static async redirectToRegisterHetArchief(
 		query: StringifiableRecord,
 		router: NextRouter
 	): Promise<void> {
@@ -92,7 +92,7 @@ export namespace AuthService {
 		);
 	}
 
-	export async function logout(shouldRedirectToOriginalPage = false): Promise<void> {
+	public static async logout(shouldRedirectToOriginalPage = false): Promise<void> {
 		const locale = TranslationService.getLocale();
 		let returnToUrl = `${publicRuntimeConfig.CLIENT_URL}/${locale}`;
 		if (shouldRedirectToOriginalPage) {

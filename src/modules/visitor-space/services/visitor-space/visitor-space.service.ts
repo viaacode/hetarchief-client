@@ -20,10 +20,10 @@ import {
 	type UpdateVisitorSpaceSettings,
 } from './visitor-space.service.types';
 
-export namespace VisitorSpaceService {
-	const queryClient = new QueryClient();
+export class VisitorSpaceService {
+	private static queryClient = new QueryClient();
 
-	export async function getAll(
+	public static async getAll(
 		searchInput = '',
 		status: VisitorSpaceStatus[] | undefined = undefined,
 		page = 0,
@@ -50,7 +50,7 @@ export namespace VisitorSpaceService {
 		return parsed as IPagination<VisitorSpaceInfo>;
 	}
 
-	export async function getAllAccessible(
+	public static async getAllAccessible(
 		canViewAllSpaces: boolean,
 		page = 0,
 		size = 20
@@ -77,7 +77,7 @@ export namespace VisitorSpaceService {
 		return sortBy(parsed.items, (space) => space.name?.toLowerCase());
 	}
 
-	export async function getBySlug(
+	public static async getBySlug(
 		slug: string | null,
 		ignoreAuthError: boolean
 	): Promise<VisitorSpaceInfo | null> {
@@ -89,7 +89,7 @@ export namespace VisitorSpaceService {
 			.json();
 	}
 
-	export async function create(
+	public static async create(
 		values: Partial<CreateVisitorSpaceSettings>
 	): Promise<VisitorSpaceInfo> {
 		const formData = new FormData();
@@ -115,12 +115,12 @@ export namespace VisitorSpaceService {
 		const response: VisitorSpaceInfo = await ApiService.getApi()
 			.post(VISITOR_SPACE_SERVICE_BASE_URL, { body: formData, headers })
 			.json();
-		await queryClient.invalidateQueries([QUERY_KEYS.getContentPartners]);
+		await VisitorSpaceService.queryClient.invalidateQueries([QUERY_KEYS.getContentPartners]);
 
 		return response;
 	}
 
-	export async function update(
+	public static async update(
 		roomId: string,
 		values: Partial<UpdateVisitorSpaceSettings>
 	): Promise<VisitorSpaceInfo> {
@@ -146,10 +146,7 @@ export namespace VisitorSpaceService {
 		};
 
 		return await ApiService.getApi()
-			.patch(`${VISITOR_SPACE_SERVICE_BASE_URL}/${roomId}`, {
-				body: formData,
-				headers,
-			})
+			.patch(`${VISITOR_SPACE_SERVICE_BASE_URL}/${roomId}`, { body: formData, headers })
 			.json();
 	}
 }

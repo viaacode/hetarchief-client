@@ -20,17 +20,17 @@ import type { AutocompleteField } from '@visitor-space/components/FilterMenu/Fil
 import { SearchSortProp } from '@visitor-space/types';
 
 import {
+	IE_OBJECTS_SERVICE_BASE_URL,
+	IE_OBJECTS_SERVICE_SIMILAR,
 	IE_OBJECT_SERVICE_SEO_URL,
 	IE_OBJECT_SERVICE_TICKET_URL,
 	IE_OBJECT_TICKET_SERVICE_URL,
-	IE_OBJECTS_SERVICE_BASE_URL,
-	IE_OBJECTS_SERVICE_SIMILAR,
 	IO_OBJECTS_SERVICE_DOWNLOAD_ALTO_JSON,
 	IO_OBJECTS_SERVICE_RELATED,
 } from './ie-objects.service.const';
 
-export namespace IeObjectsService {
-	export async function getSearchResults(
+export class IeObjectsService {
+	public static async getSearchResults(
 		filters: IeObjectsSearchFilter[] = [],
 		page = 1,
 		size = 20,
@@ -77,7 +77,7 @@ export namespace IeObjectsService {
 			.json()) as GetIeObjectsResponse;
 	}
 
-	export async function getById(id: string): Promise<IeObject> {
+	public static async getById(id: string): Promise<IeObject> {
 		console.log(`[PERFORMANCE] ${new Date().toISOString()} start fetch ie object`);
 		const ieObject: IeObject = await ApiService.getApi()
 			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${id}`)
@@ -86,15 +86,13 @@ export namespace IeObjectsService {
 		return ieObject;
 	}
 
-	export async function getSeoById(id: string): Promise<SeoInfo> {
+	public static async getSeoById(id: string): Promise<SeoInfo> {
 		return await ApiService.getApi()
 			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_SEO_URL}/${id}`)
 			.json();
 	}
 
-	export async function getPlayableUrl(
-		fileSchemaIdentifier: string | null
-	): Promise<string | null> {
+	public static async getPlayableUrl(fileSchemaIdentifier: string | null): Promise<string | null> {
 		if (!fileSchemaIdentifier) {
 			return null;
 		}
@@ -123,7 +121,7 @@ export namespace IeObjectsService {
 		});
 	}
 
-	export async function getTicketServiceToken(filePath: string): Promise<string | null> {
+	public static async getTicketServiceToken(filePath: string): Promise<string | null> {
 		const token = await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -139,7 +137,7 @@ export namespace IeObjectsService {
 	}
 
 	// Used for "ook interessant" on the detail page
-	export async function getSimilar(id: string, maintainerId: string): Promise<IeObjectSimilar> {
+	public static async getSimilar(id: string, maintainerId: string): Promise<IeObjectSimilar> {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -153,7 +151,7 @@ export namespace IeObjectsService {
 	}
 
 	// Used for "gerelateerde objecten" blade on the detail page
-	export async function getRelated(
+	public static async getRelated(
 		ieObjectIri: string,
 		parentIeObjectIri: string | null
 	): Promise<RelatedIeObjects> {
@@ -167,7 +165,7 @@ export namespace IeObjectsService {
 			.json();
 	}
 
-	export async function getAltoJsonFile(altoJsonUrl: string): Promise<SimplifiedAlto> {
+	public static async getAltoJsonFile(altoJsonUrl: string): Promise<SimplifiedAlto> {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -178,7 +176,7 @@ export namespace IeObjectsService {
 			.json();
 	}
 
-	export async function schemaIdentifierLookup(
+	public static async schemaIdentifierLookup(
 		schemaIdentifierV2: string
 	): Promise<{ schemaIdentifierV3: string }> {
 		return await ApiService.getApi()
@@ -186,10 +184,7 @@ export namespace IeObjectsService {
 			.json();
 	}
 
-	export function getAutocompleteFieldOptions(
-		field: AutocompleteField,
-		query: string
-	): Promise<string[]> {
+	static getAutocompleteFieldOptions(field: AutocompleteField, query: string): Promise<string[]> {
 		return ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -203,7 +198,7 @@ export namespace IeObjectsService {
 			.json();
 	}
 
-	export function getIeObjectPreviousNextIds(
+	static getIeObjectPreviousNextIds(
 		collectionId: string,
 		ieObjectIri: string
 	): Promise<IeObjectPreviousNextIds> {
