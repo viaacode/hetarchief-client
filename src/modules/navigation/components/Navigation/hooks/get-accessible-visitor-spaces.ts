@@ -2,7 +2,7 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { VisitorSpaceService } from '@visitor-space/services';
-import { type VisitorSpaceInfo } from '@visitor-space/types';
+import type { VisitorSpaceInfo } from '@visitor-space/types';
 
 export function useGetAccessibleVisitorSpaces({
 	canViewAllSpaces,

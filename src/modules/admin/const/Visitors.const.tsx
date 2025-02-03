@@ -1,6 +1,6 @@
 import { Button, OrderDirection } from '@meemoo/react-components';
 import { isWithinInterval } from 'date-fns';
-import { type Column } from 'react-table';
+import type { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { DropdownMenu } from '@shared/components/DropdownMenu';
@@ -8,7 +8,7 @@ import { UnreadMarker } from '@shared/components/UnreadMarker';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { type VisitRequest, type VisitRow } from '@shared/types/visit-request';
+import type { VisitRequest, VisitRow } from '@shared/types/visit-request';
 import { asDate, formatSameDayRange } from '@shared/utils/dates';
 
 export const VisitorsTablePageSize = 20;

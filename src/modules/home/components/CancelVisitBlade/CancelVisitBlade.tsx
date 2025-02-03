@@ -7,7 +7,7 @@ import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types/visit-request';
 import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
 
-import { type CancelVisitBladeProps } from './CancelVisitBlade.types';
+import type { CancelVisitBladeProps } from './CancelVisitBlade.types';
 
 const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 	const { selected } = props;
@@ -39,9 +39,7 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 		} catch (err) {
 			console.error(err);
 			toastService.notify({
-				title: tHtml(
-					'modules/home/components/cancel-visit-blade/cancel-visit-blade___error'
-				),
+				title: tHtml('modules/home/components/cancel-visit-blade/cancel-visit-blade___error'),
 				description: tHtml(
 					'modules/home/components/cancel-visit-blade/cancel-visit-blade___het-annuleren-van-de-aanvraag-is-mislukt'
 				),
@@ -66,9 +64,7 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 				/>
 
 				<Button
-					label={tHtml(
-						'modules/home/components/cancel-visit-blade/cancel-visit-blade___sluit'
-					)}
+					label={tHtml('modules/home/components/cancel-visit-blade/cancel-visit-blade___sluit')}
 					variants={['block', 'text']}
 					onClick={props.onClose}
 					disabled={!props.isOpen}

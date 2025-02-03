@@ -15,12 +15,12 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		const locale = useLocale();
 
-		// eslint-disable-next-line react-hooks/rules-of-hooks
+		// biome-ignore lint/correctness/useExhaustiveDependencies: router changes too ofter and this causes a render loop if we add it to the deps array
 		const initConfigValue = useCallback(() => {
 			const config = getAdminCoreConfig(router, locale);
 			AdminConfigManager.setConfig(config);
 			setAdminCoreConfig(config);
-		}, [locale]); // eslint-disable-line react-hooks/exhaustive-deps
+		}, [locale]);
 
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		useEffect(() => {

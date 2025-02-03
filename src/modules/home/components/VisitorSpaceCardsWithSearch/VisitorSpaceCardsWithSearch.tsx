@@ -50,11 +50,15 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 	const windowSize = useWindowSizeContext();
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: only execute the scroll down one time
 	useEffect(() => {
 		if (query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] && resultsAnchor) {
-			document.body.scrollTo({ top: resultsAnchor.current?.offsetTop, behavior: 'smooth' });
+			document.body.scrollTo({
+				top: resultsAnchor.current?.offsetTop,
+				behavior: 'smooth',
+			});
 		}
-	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+	}, []);
 
 	/**
 	 * Methods
@@ -104,9 +108,7 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 				/>
 			</div>
 
-			{isLoadingVisitorSpaces && (
-				<Loading owner="visitor space cards with search" fullscreen />
-			)}
+			{isLoadingVisitorSpaces && <Loading owner="visitor space cards with search" fullscreen />}
 			{!isLoadingVisitorSpaces && visitorSpaces?.items?.length === 0 && (
 				<p>{tHtml('pages/index___geen-resultaten-voor-de-geselecteerde-filters')}</p>
 			)}

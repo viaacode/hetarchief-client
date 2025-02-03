@@ -4,7 +4,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 import Toggle from './Toggle';
-import { type ToggleOption, type ToggleProps } from './Toggle.types';
+import type { ToggleOption, ToggleProps } from './Toggle.types';
 import { toggleMock } from './__mocks__/toggle';
 
 const renderToggle = (mock: ToggleProps = toggleMock) => {
@@ -55,7 +55,10 @@ describe('Component: <Toggle /> (default)', () => {
 				active: true,
 			},
 		];
-		const { getByRole } = renderToggle({ options: options, onChange: () => null });
+		const { getByRole } = renderToggle({
+			options: options,
+			onChange: () => null,
+		});
 
 		const button = getByRole('button');
 
@@ -79,7 +82,10 @@ describe('Component: <Toggle /> (default)', () => {
 
 	it('Should call onChange when an option is clicked', () => {
 		const onChangeHandler = jest.fn();
-		const { getAllByRole } = renderToggle({ ...toggleMock, onChange: onChangeHandler });
+		const { getAllByRole } = renderToggle({
+			...toggleMock,
+			onChange: onChangeHandler,
+		});
 
 		const button = getAllByRole('button')[1];
 

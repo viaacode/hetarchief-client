@@ -1,4 +1,4 @@
-import { type PaginationBarProps } from '@meemoo/react-components';
+import type { PaginationBarProps } from '@meemoo/react-components';
 
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';

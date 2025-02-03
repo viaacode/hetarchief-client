@@ -9,12 +9,12 @@ test('T19: Test OCR raadplegen', async ({ page, context }) => {
 	 */
 	await goToPageAndAcceptCookies(
 		page,
-		(process.env.TEST_CLIENT_ENDPOINT as string) + '/pid/h98z893q54',
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/h98z893q54`,
 		'Wet- en verordeningsblad voor de bezette streke...'
 	);
 
 	// Go to page again to fix non-loading newspaper in incognito browser
-	await page.goto((process.env.TEST_CLIENT_ENDPOINT as string) + '/pid/h98z893q54');
+	await page.goto(`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/h98z893q54`);
 
 	// Check ocr tab exists
 	await expect(page.locator('.c-tab--ocr')).toBeVisible();
@@ -24,23 +24,19 @@ test('T19: Test OCR raadplegen', async ({ page, context }) => {
 
 	// Wait for ocr to load
 	await page.waitForSelector(
-		`${moduleClassSelector('p-object-detail__ocr__words-container')} > ${moduleClassSelector(
-			'p-object-detail__ocr__word'
-		)}`
+		`${moduleClassSelector('p-object-detail__ocr__words-container')} > ${moduleClassSelector('p-object-detail__ocr__word')}`
 	);
 
 	// Check if ocr text is visible in the tab
 	const ocrWords = page.locator(
-		`${moduleClassSelector('p-object-detail__ocr__words-container')} > ${moduleClassSelector(
-			'p-object-detail__ocr__word'
-		)}`
+		`${moduleClassSelector('p-object-detail__ocr__words-container')} > ${moduleClassSelector('p-object-detail__ocr__word')}`
 	);
 	expect(await ocrWords.count()).toBeGreaterThan(100);
 
 	// Search some words in the ocr text
 	const ocrSidebar = page.locator(moduleClassSelector('p-object-detail__ocr'));
 	const ocrSearchField = ocrSidebar.locator(
-		moduleClassSelector('c-search-with-results-pagination') + ' .c-input__field'
+		`${moduleClassSelector('c-search-with-results-pagination')} .c-input__field`
 	);
 	await expect(ocrSearchField).toBeVisible();
 	await ocrSearchField.fill('Brussel');
@@ -48,9 +44,7 @@ test('T19: Test OCR raadplegen', async ({ page, context }) => {
 
 	// Check keyword is active
 	const brusselOcrWords = page.locator(
-		`${moduleClassSelector('p-object-detail__ocr__words-container')} > ${moduleClassSelector(
-			'p-object-detail__ocr__word'
-		)}`,
+		`${moduleClassSelector('p-object-detail__ocr__words-container')} > ${moduleClassSelector('p-object-detail__ocr__word')}`,
 		{ hasText: 'Brussel' }
 	);
 	await expect(brusselOcrWords.first()).toBeVisible();

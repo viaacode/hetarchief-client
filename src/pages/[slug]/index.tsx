@@ -3,12 +3,12 @@ import {
 	convertDbContentPageToContentPageInfo,
 } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import { QueryClient } from '@tanstack/react-query';
-import { type HTTPError } from 'ky';
+import type { HTTPError } from 'ky';
 import { kebabCase } from 'lodash-es';
-import { type GetServerSidePropsResult, type NextPage } from 'next';
+import type { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import { type GetServerSidePropsContext } from 'next/types';
+import type { GetServerSidePropsContext } from 'next/types';
 import { type ComponentType, type FC, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -33,7 +33,7 @@ import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import withUser, { type UserProps } from '@shared/hooks/with-user';
 import { setShowZendesk } from '@shared/store/ui';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
 import { VisitorLayout } from '@visitor-layout/index';
 
@@ -109,10 +109,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 					<SeoTags
 						title={title}
 						description={
-							description ||
-							contentPageInfo?.seoDescription ||
-							contentPageInfo?.description ||
-							null
+							description || contentPageInfo?.seoDescription || contentPageInfo?.description || null
 						}
 						imgUrl={image || contentPageInfo?.thumbnailPath || null}
 						translatedPages={contentPageInfo.translatedPages.map(
@@ -169,10 +166,7 @@ export async function getServerSideProps(
 			description = contentPage?.seoDescription || contentPage?.description || null;
 			image = contentPage?.thumbnailPath || null;
 		} catch (err) {
-			console.error(
-				'Failed to fetch content page seo info by slug: ' + pathOrIeObjectId,
-				err
-			);
+			console.error(`Failed to fetch content page seo info by slug: ${pathOrIeObjectId}`, err);
 		}
 	} else {
 		title = 'Home - Het Archief';
@@ -182,7 +176,7 @@ export async function getServerSideProps(
 	await Promise.all([
 		makeServerSideRequestGetContentPageByLanguageAndPath(
 			queryClient,
-			pathOrIeObjectId ? '/' + pathOrIeObjectId : undefined,
+			pathOrIeObjectId ? `/${pathOrIeObjectId}` : undefined,
 			locale
 		),
 		makeServerSideRequestGetIeObjectInfo(queryClient, pathOrIeObjectId),

@@ -1,11 +1,11 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { useHover } from '../../hooks/use-hover';
 
 import styles from './Toast.module.scss';
-import { type ToastProps } from './Toast.types';
+import type { ToastProps } from './Toast.types';
 
 const Toast: FC<ToastProps> = ({
 	className,

@@ -1,6 +1,6 @@
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import { type DefaultComponentProps } from '@shared/types';
+import type { DefaultComponentProps } from '@shared/types';
 
 export interface VisitorSpaceDropdownProps extends DefaultComponentProps {
 	children?: ReactNode;

@@ -1,12 +1,12 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { Icon } from '@shared/components/Icon';
 
 import styles from '../FilterMenu.module.scss';
 
-import { type FilterButtonProps } from './FilterButton.types';
+import type { FilterButtonProps } from './FilterButton.types';
 
 const FilterButton: FC<FilterButtonProps> = ({
 	className,

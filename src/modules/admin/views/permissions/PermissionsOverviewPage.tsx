@@ -4,14 +4,14 @@ import React, { type FC, lazy, Suspense, useRef, useState } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
-import { type UserGroupOverviewRef } from '@admin/types';
+import type { UserGroupOverviewRef } from '@admin/types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './PermissionsOverviewPage.module.scss';
 
@@ -35,9 +35,7 @@ export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 					<Button
 						variants={['text', 'icon', 'xxs']}
 						icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-						aria-label={tText(
-							'pages/admin/gebruikersbeheer/permissies/index___opnieuw-instellen'
-						)}
+						aria-label={tText('pages/admin/gebruikersbeheer/permissies/index___opnieuw-instellen')}
 						onClick={() => {
 							permissionsRef.current?.onSearch(undefined);
 						}}
@@ -75,9 +73,7 @@ export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 				/>
 				<Button
 					onClick={() => permissionsRef.current?.onSave()}
-					label={tHtml(
-						'pages/admin/gebruikersbeheer/permissies/index___wijzigingen-opslaan'
-					)}
+					label={tHtml('pages/admin/gebruikersbeheer/permissies/index___wijzigingen-opslaan')}
 				/>
 			</>
 		);
@@ -86,13 +82,9 @@ export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const renderPageContent = () => {
 		return (
 			<AdminLayout
-				pageTitle={tText(
-					'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies'
-				)}
+				pageTitle={tText('pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies')}
 			>
-				<AdminLayout.Actions>
-					{hasChanges && <>{renderActionButtons()}</>}
-				</AdminLayout.Actions>
+				<AdminLayout.Actions>{hasChanges && <>{renderActionButtons()}</>}</AdminLayout.Actions>
 				<AdminLayout.Content>
 					<div className={clsx('l-container', styles['p-permissions-page'])}>
 						{renderPermissions()}
@@ -108,9 +100,7 @@ export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<>
 			<SeoTags
-				title={tText(
-					'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies'
-				)}
+				title={tText('pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies')}
 				description={tText(
 					'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies-omschrijving'
 				)}

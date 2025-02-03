@@ -1,7 +1,7 @@
 import { OrderDirection, PaginationBar, Table } from '@meemoo/react-components';
 import { useRouter } from 'next/router';
 import { type FC, type MouseEvent, type ReactNode, useMemo, useState } from 'react';
-import { type Row, type TableState } from 'react-table';
+import type { Row, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import {
@@ -25,7 +25,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { AccessStatus, type VisitRequest } from '@shared/types/visit-request';
 import { createVisitorSpacesWithFilterUrl } from '@shared/utils/create-url';
 import { useGetVisitAccessStatusMutation } from '@visit-requests/hooks/get-visit-access-status';
@@ -73,15 +73,18 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	) => {
-		const orderPropResolved =
-			orderProp === HistoryTableAccessComboId ? HistoryTableAccessFrom : orderProp;
-		if (!orderProp) {
-			orderProp = 'startAt';
+		let orderPropResolved: string | undefined = orderProp;
+		let orderDirectionResolved: OrderDirection | undefined = orderDirection;
+		if (orderPropResolved === HistoryTableAccessComboId) {
+			orderPropResolved = HistoryTableAccessFrom;
 		}
-		if (!orderDirection) {
-			orderDirection = OrderDirection.desc;
+		if (!orderPropResolved) {
+			orderPropResolved = 'startAt';
 		}
-		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
+		if (!orderDirectionResolved) {
+			orderDirectionResolved = OrderDirection.desc;
+		}
+		if (filters.orderProp !== orderDirectionResolved || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
 				orderProp: orderPropResolved,
@@ -101,9 +104,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 					);
 					break;
 				case AccessStatus.PENDING:
-					router.push(
-						ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', visit.spaceSlug)
-					);
+					router.push(ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', visit.spaceSlug));
 					break;
 				default:
 					router.push(createVisitorSpacesWithFilterUrl(visit, locale));
@@ -147,9 +148,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 		return (
 			<AccountLayout
 				className="p-account-my-history"
-				pageTitle={tText(
-					'pages/account/mijn-bezoek-historiek/index___mijn-bezoek-historiek'
-				)}
+				pageTitle={tText('pages/account/mijn-bezoek-historiek/index___mijn-bezoek-historiek')}
 			>
 				{(filteredVisits?.length || 0) > 0 ? (
 					<div className="l-container l-container--edgeless-to-lg">
@@ -172,9 +171,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 									<PaginationBar
 										{...getDefaultPaginationBarProps()}
 										itemsPerPage={HistoryItemListSize}
-										startItem={
-											Math.max(0, filters.page - 1) * HistoryItemListSize
-										}
+										startItem={Math.max(0, filters.page - 1) * HistoryItemListSize}
 										totalItems={visits.data?.total || 0}
 										onPageChange={(pageZeroBased: number) => {
 											gotoPage(pageZeroBased);

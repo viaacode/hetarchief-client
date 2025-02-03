@@ -6,17 +6,17 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml } from '@shared/helpers/translate';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
-import {
-	type DefaultFilterFormProps,
-	type InlineFilterFormProps,
-	type SearchFilterId,
+import type {
+	DefaultFilterFormProps,
+	InlineFilterFormProps,
+	SearchFilterId,
 } from '@visitor-space/types';
 
 import { FilterMenuType } from '../FilterMenu.types';
 
 import { HAS_SHOW_OVERFLOW } from './FilterForm.const';
 import styles from './FilterForm.module.scss';
-import { type FilterFormProps } from './FilterForm.types';
+import type { FilterFormProps } from './FilterForm.types';
 
 const FilterForm: FC<FilterFormProps> = ({
 	className,
@@ -73,15 +73,14 @@ const FilterForm: FC<FilterFormProps> = ({
 	};
 
 	const renderModal = (): ReactElement => {
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		const FormComponent = (form as FC<DefaultFilterFormProps<any>>) ?? (() => null);
 
 		return (
 			<div className={clsx(className, styles['c-filter-form'])} id={`c-filter-form--${id}`}>
 				<div className={styles['c-filter-form__header']}>
 					<h2 className={styles['c-filter-form__title']}>
-						<label htmlFor={`${visitorSpaceLabelKeys.filters.title}--${id}`}>
-							{title}
-						</label>
+						<label htmlFor={`${visitorSpaceLabelKeys.filters.title}--${id}`}>{title}</label>
 					</h2>
 				</div>
 
@@ -96,9 +95,7 @@ const FilterForm: FC<FilterFormProps> = ({
 						<div className={styles['c-filter-form__footer']}>
 							<Button
 								className={clsx(styles['c-filter-form__reset'], 'u-p-0 u-mr-40')}
-								iconStart={
-									<Icon className="u-font-size-22" name={IconNamesLight.Redo} />
-								}
+								iconStart={<Icon className="u-font-size-22" name={IconNamesLight.Redo} />}
 								label={tHtml(
 									'modules/visitor-space/components/filter-menu/filter-form/filter-form___reset'
 								)}

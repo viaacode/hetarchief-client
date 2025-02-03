@@ -8,7 +8,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 export const NewsletterConfirmation: FC<DefaultSeoInfo> = ({ url }) => {
 	useHideFooter();
@@ -21,9 +21,7 @@ export const NewsletterConfirmation: FC<DefaultSeoInfo> = ({ url }) => {
 	useEffect(() => {
 		toastService.notify({
 			maxLines: 3,
-			title: tHtml(
-				'pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging-bevestiging'
-			),
+			title: tHtml('pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging-bevestiging'),
 			description: tHtml(
 				'pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging-inschrijving-op-de-nieuwsbrief-is-gelukt'
 			),

@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { GET_ACCOUNT_NAVIGATION_LINKS } from '@account/const';
-import { type AccountLayoutProps } from '@account/layouts';
-import { type ListNavigationItem } from '@shared/components/ListNavigation';
+import type { AccountLayoutProps } from '@account/layouts';
+import type { ListNavigationItem } from '@shared/components/ListNavigation';
 import { tHtml } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';

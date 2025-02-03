@@ -3,9 +3,9 @@ import clsx from 'clsx';
 import { type FC, useMemo, useState } from 'react';
 
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import {
-	type VisitorSpaceDropdownOption,
-	type VisitorSpaceDropdownProps,
+import type {
+	VisitorSpaceDropdownOption,
+	VisitorSpaceDropdownProps,
 } from '@shared/components/VisitorSpaceDropdown/VisitorSpaceDropdown.types';
 
 import { Icon } from '../Icon';
@@ -19,7 +19,7 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 }: VisitorSpaceDropdownProps) => {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 
-	const hasMultipleOptions = useMemo(() => options.length > 1, [options]);
+	const hasMultipleOptions = useMemo(() => options.length > 1, [options.length]);
 
 	const onClickDropdown = (): void => {
 		setIsOpen((prevIsOpen: boolean) => !prevIsOpen);
@@ -39,11 +39,12 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 			? {
 					tabIndex: 0,
 					role: 'button',
-					['aria-expanded']: isOpen,
-					['aria-controls']: 'list-controls',
+					'aria-expanded': isOpen,
+					'aria-controls': 'list-controls',
 					onClick: onClickDropdown,
-					onKeyDown: (e: any) => onKey(e, [...keysEnter], onClickDropdown),
-			  }
+					// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+					onKeyDown: (evt: any) => onKey(evt, [...keysEnter], onClickDropdown),
+				}
 			: {};
 
 		return (
@@ -54,10 +55,7 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 					</p>
 					{selected?.extraInfo && (
 						<p
-							className={clsx(
-								'u-text-ellipsis',
-								styles['c-visitor-spaces-dropdown__active-info']
-							)}
+							className={clsx('u-text-ellipsis', styles['c-visitor-spaces-dropdown__active-info'])}
 						>
 							{selected?.extraInfo}
 						</p>
@@ -84,17 +82,13 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 					<li
 						tabIndex={isOpen ? 0 : 1}
 						key={option.slug}
-						role="option"
 						aria-selected={selectedOptionId === option.slug}
 						onClick={() => onSelectOption(option)}
 						onKeyDown={(e) => onKey(e, [...keysEnter], () => onSelectOption(option))}
 						className={clsx(styles['c-visitor-spaces-dropdown__option'])}
 					>
 						<p
-							className={clsx(
-								styles['c-visitor-spaces-dropdown__option-label'],
-								'u-text-ellipsis'
-							)}
+							className={clsx(styles['c-visitor-spaces-dropdown__option-label'], 'u-text-ellipsis')}
 						>
 							{option.label}
 						</p>

@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { type FC } from 'react';
+import type { FC } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 import { Icon } from '@shared/components/Icon';
@@ -13,10 +13,7 @@ import { AdvancedFilterFields } from '../AdvancedFilterFields/AdvancedFilterFiel
 
 import { ADVANCED_FILTER_FORM_SCHEMA, initialFields } from './AdvancedFilterForm.const';
 import styles from './AdvancedFilterForm.module.scss';
-import {
-	type AdvancedFilterFormProps,
-	type AdvancedFilterFormState,
-} from './AdvancedFilterForm.types';
+import type { AdvancedFilterFormProps, AdvancedFilterFormState } from './AdvancedFilterForm.types';
 
 export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 	children,
@@ -46,7 +43,7 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 
 	return (
 		<>
-			<div className={clsx(className, styles['advancedFilterForm'], 'u-overflow-auto')}>
+			<div className={clsx(className, styles.advancedFilterForm, 'u-overflow-auto')}>
 				<p className="u-px-20 u-px-32-md u-mt-40 u-mb-32">
 					{tHtml(
 						'modules/visitor-space/components/forms/advanced-filter-form/advanced-filter-form___stel-je-eigen-geavanceerde-filter-samen-aan-de-hand-van-deze-advanced-filters-velden-en-waarden'
@@ -56,7 +53,7 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 				{!disabled &&
 					fields.map(({ id, ...value }, index) => (
 						<AdvancedFilterFields
-							key={`advanced-filter-${index}`}
+							key={`advanced-filter-${id}-${value.prop}--${value.op}--${value.val}`}
 							id={id}
 							index={index}
 							value={value}

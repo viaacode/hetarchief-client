@@ -1,8 +1,8 @@
-import { type OrderDirection } from '@meemoo/react-components';
-import { type ReactNode } from 'react';
+import type { OrderDirection } from '@meemoo/react-components';
+import type { ReactNode } from 'react';
 
-import { type VisitRequest, type VisitStatus } from '@shared/types/visit-request';
-import { type VisitTimeframe } from '@visit-requests/types';
+import type { VisitRequest, VisitStatus } from '@shared/types/visit-request';
+import type { VisitTimeframe } from '@visit-requests/types';
 
 export interface GetVisitRequestsProps {
 	children?: ReactNode;

@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import { selectCommonUser, selectUser } from '@auth/store/user';
-import { type AppState } from '@shared/store';
+import type { AppState } from '@shared/store';
 
 const withUser = (WrappedComponent: FunctionComponent) => {
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	return React.memo(function withUser(props: any) {
 		return <WrappedComponent {...props} />;
 	});

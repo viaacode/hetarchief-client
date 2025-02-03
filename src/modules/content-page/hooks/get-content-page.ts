@@ -3,7 +3,7 @@ import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react
 import { startsWith } from 'lodash-es';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { type Locale } from '@shared/utils/i18n';
+import type { Locale } from '@shared/utils/i18n';
 
 export async function getContentPageByLanguageAndPath(
 	language: Locale,
@@ -17,6 +17,7 @@ export async function getContentPageByLanguageAndPath(
 		throw new Error(`Given path doesn't start with a slash. Received path: ${path}`);
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: Locale type exists in both the client and the admin-core, but they are not identical
 	return ContentPageService.getContentPageByLanguageAndPath(language as any, path);
 }
 

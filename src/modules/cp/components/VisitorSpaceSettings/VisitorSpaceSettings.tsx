@@ -20,7 +20,7 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import { type SingleValue } from 'react-select';
+import type { SingleValue } from 'react-select';
 
 import { Permission } from '@account/const';
 import { VISITOR_SPACE_VALIDATION_SCHEMA } from '@cp/components/VisitorSpaceSettings/VisitorSpaceSettings.const';
@@ -43,18 +43,18 @@ import { DEFAULT_VISITOR_SPACE_COLOR } from '@visitor-space/const';
 import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceService } from '@visitor-space/services';
-import {
-	type CreateVisitorSpaceSettings,
-	type UpdateVisitorSpaceSettings,
+import type {
+	CreateVisitorSpaceSettings,
+	UpdateVisitorSpaceSettings,
 } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 
 import adminLayoutStyles from '../../../admin/layouts/AdminLayout/AdminLayout.module.scss';
 
 import styles from './VisitorSpaceSettings.module.scss';
-import {
-	type VisitorSpaceSettingsFormValues,
-	type VisitorSpaceSettingsProps,
+import type {
+	VisitorSpaceSettingsFormValues,
+	VisitorSpaceSettingsProps,
 } from './VisitorSpaceSettings.types';
 
 const labelKeys: Record<keyof CreateVisitorSpaceSettings, string> = {
@@ -174,7 +174,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 					'modules/cp/components/site-settings-form/site-settings-form___er-ging-iets-mis-bij-het-ophalen-van-de-content-partners'
 				),
 			});
-	}, [contentPartners, isErrorContentPartners]);
+	}, [isErrorContentPartners]);
 
 	const validateFormValues = useCallback(
 		async (
@@ -383,10 +383,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 		}
 		return (
 			<div
-				className={clsx(
-					adminLayoutStyles['c-admin__actions'],
-					styles['c-cp-settings__actions']
-				)}
+				className={clsx(adminLayoutStyles['c-admin__actions'], styles['c-cp-settings__actions'])}
 			>
 				<Button
 					label={tHtml(
@@ -400,9 +397,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 					}
 				/>
 				<Button
-					label={tHtml(
-						'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___opslaan'
-					)}
+					label={tHtml('pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___opslaan')}
 					variants="black"
 					onClick={createSpace}
 				/>
@@ -451,15 +446,12 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 					</p>
 					<div
 						className={clsx(styles['c-cp-settings__site-settings-controls'], {
-							[styles['c-cp-settings__site-settings-controls--create']]:
-								action === 'create',
+							[styles['c-cp-settings__site-settings-controls--create']]: action === 'create',
 						})}
 					>
 						<FormControl
 							className={styles['c-cp-settings__site-settings-input']}
-							errors={[
-								<RedFormWarning error={formErrors.orId} key="form-error--or-id" />,
-							]}
+							errors={[<RedFormWarning error={formErrors.orId} key="form-error--or-id" />]}
 							id={labelKeys.orId}
 							label={tHtml(
 								'modules/cp/components/site-settings-form/site-settings-form___content-partner'
@@ -473,11 +465,8 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 								options={maintainerOptions}
 								value={selectedMaintainerOption}
 								onChange={async (newValue) => {
-									const value = (newValue as SingleValue<SelectOption>)
-										?.value as string;
-									const slug = kebabCase(
-										(newValue as SingleValue<SelectOption>)?.label as string
-									);
+									const value = (newValue as SingleValue<SelectOption>)?.value as string;
+									const slug = kebabCase((newValue as SingleValue<SelectOption>)?.label as string);
 
 									if (value !== formValues?.orId || '') {
 										updateValues?.({
@@ -491,13 +480,9 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 
 						<FormControl
 							className={styles['c-cp-settings__site-settings-input']}
-							errors={[
-								<RedFormWarning error={formErrors.slug} key="form-error--slug" />,
-							]}
+							errors={[<RedFormWarning error={formErrors.slug} key="form-error--slug" />]}
 							id={labelKeys.slug}
-							label={tHtml(
-								'modules/cp/components/site-settings-form/site-settings-form___slug'
-							)}
+							label={tHtml('modules/cp/components/site-settings-form/site-settings-form___slug')}
 						>
 							<TextInput
 								id={labelKeys.slug}
@@ -510,8 +495,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 							/>
 						</FormControl>
 
-						{(formValues?.orId !== visitorSpace?.orId ||
-							formValues?.slug !== visitorSpace?.slug) &&
+						{(formValues?.orId !== visitorSpace?.orId || formValues?.slug !== visitorSpace?.slug) &&
 							renderCancelSaveButtons(
 								() =>
 									updateValues({
@@ -523,7 +507,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 										? createSpace()
 										: updateSpace({
 												slug: formValues?.slug,
-										  })
+											})
 							)}
 					</div>
 				</Box>
@@ -584,9 +568,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 
 						<FormControl
 							className={styles['c-cp-settings__logo-and-color__color-control']}
-							errors={[
-								<RedFormWarning error={formErrors.color} key="form-error--color" />,
-							]}
+							errors={[<RedFormWarning error={formErrors.color} key="form-error--color" />]}
 							id={labelKeys.color}
 							label={tHtml(
 								'modules/cp/components/visitor-space-image-form/visitor-space-image-form___achtergrondkleur'
@@ -602,9 +584,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 						</FormControl>
 
 						<FormControl
-							errors={[
-								<RedFormWarning error={formErrors.file} key="form-error--file" />,
-							]}
+							errors={[<RedFormWarning error={formErrors.file} key="form-error--file" />]}
 							id={labelKeys.file}
 							label={tHtml(
 								'modules/cp/components/visitor-space-image-form/visitor-space-image-form___achtergrond-afbeelding'
@@ -624,9 +604,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 								id={labelKeys.file}
 								onChange={async (e) => {
 									const file = e.currentTarget?.files?.[0] || undefined;
-									const image = file
-										? URL.createObjectURL(file)
-										: formValues?.image;
+									const image = file ? URL.createObjectURL(file) : formValues?.image;
 									await updateValues({ file, image });
 								}}
 								ref={fileInputRef}
@@ -666,7 +644,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 											color: formValues?.color,
 											file: formValues?.file,
 											image: formValues?.image,
-									  });
+										});
 							}
 						)}
 				</Box>
@@ -690,9 +668,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 			return null;
 		}
 		const descriptionKey =
-			descriptionEditLanguage === Locale.nl
-				? labelKeys.descriptionNl
-				: labelKeys.descriptionEn;
+			descriptionEditLanguage === Locale.nl ? labelKeys.descriptionNl : labelKeys.descriptionEn;
 		return (
 			<article className={styles['c-cp-settings__setting-block']}>
 				<label htmlFor={descriptionKey} id={`${descriptionKey}__label`}>
@@ -702,10 +678,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 				</label>
 
 				<Box className={styles['c-cp-settings__box']}>
-					<p
-						className={styles['c-cp-settings__description']}
-						id={`${descriptionKey}__description`}
-					>
+					<p className={styles['c-cp-settings__description']} id={`${descriptionKey}__description`}>
 						{tHtml(
 							'pages/beheer/instellingen/index___dit-is-de-wachtzaalomschrijving-die-bezoekers-kunnen-lezen-op-de-detailpagina-van-je-bezoekersruimte-leg-uit-waar-je-bezoekersruimte-om-gaat-welke-info-men-er-kan-vinden-vertel-de-bezoeker-over-je-collectie'
 						)}
@@ -734,14 +707,8 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 							})}
 							onClick={() => setDescriptionEditLanguage(Locale.en)}
 						/>
-						{renderRichTextEditorForField(
-							'descriptionNl',
-							descriptionEditLanguage === Locale.nl
-						)}
-						{renderRichTextEditorForField(
-							'descriptionEn',
-							descriptionEditLanguage === Locale.en
-						)}
+						{renderRichTextEditorForField('descriptionNl', descriptionEditLanguage === Locale.nl)}
+						{renderRichTextEditorForField('descriptionEn', descriptionEditLanguage === Locale.en)}
 
 						{(!isEqual(formValues?.descriptionNl, visitorSpace.descriptionNl) ||
 							!isEqual(formValues?.descriptionEn, visitorSpace.descriptionEn)) &&
@@ -787,9 +754,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 			<article className={styles['c-cp-settings__setting-block']}>
 				<label htmlFor={serviceDescriptionKey} id={`${serviceDescriptionKey}__label`}>
 					<h2 className={styles['c-cp-settings__title']}>
-						{tHtml(
-							'pages/beheer/instellingen/index___omschrijving-bezoekersruimte-aanvraag'
-						)}
+						{tHtml('pages/beheer/instellingen/index___omschrijving-bezoekersruimte-aanvraag')}
 					</h2>
 				</label>
 
@@ -833,14 +798,8 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 							serviceDescriptionEditLanguage === Locale.en
 						)}
 
-						{(!isEqual(
-							formValues?.serviceDescriptionNl,
-							visitorSpace.serviceDescriptionNl
-						) ||
-							!isEqual(
-								formValues?.serviceDescriptionEn,
-								visitorSpace.serviceDescriptionEn
-							)) &&
+						{(!isEqual(formValues?.serviceDescriptionNl, visitorSpace.serviceDescriptionNl) ||
+							!isEqual(formValues?.serviceDescriptionEn, visitorSpace.serviceDescriptionEn)) &&
 							renderCancelSaveButtons(
 								() => {
 									updateValues({
@@ -873,22 +832,22 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 
 	if (isLoading) {
 		return <Loading owner="admin visitor spaces slug page" fullscreen />;
-	} else if (visitorSpaceError) {
+	}
+	if (visitorSpaceError) {
 		return tHtml(
 			'pages/beheer/instellingen/index___er-ging-iets-mis-bij-het-ophalen-van-de-instellingen'
 		);
-	} else {
-		return (
-			<div className="l-container">
-				{renderedHeader}
-				{renderedMaintainerSelectAndSlug}
-				{renderedImageAndColor}
-				{renderedDescriptionWaitingForAccess}
-				{renderedServiceDescriptionForDuringVisitRequest}
-				{renderedFooter}
-			</div>
-		);
 	}
+	return (
+		<div className="l-container">
+			{renderedHeader}
+			{renderedMaintainerSelectAndSlug}
+			{renderedImageAndColor}
+			{renderedDescriptionWaitingForAccess}
+			{renderedServiceDescriptionForDuringVisitRequest}
+			{renderedFooter}
+		</div>
+	);
 };
 
 export default VisitorSpaceSettings;

@@ -18,9 +18,9 @@ export const buildLink = (
 	let builtLink = route;
 
 	// Replace url with given params
-	Object.keys(params).forEach((param: string) => {
+	for (const param of Object.keys(params)) {
 		builtLink = builtLink.replace(`:${param}`, String(get(params, [param], '')));
-	});
+	}
 
 	const missingParams = getMissingParams(builtLink);
 

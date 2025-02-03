@@ -7,7 +7,7 @@ import { VisitorSpaceSettings } from '@cp/components/VisitorSpaceSettings';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 export const AdminVisitorSpaceEdit: FC<DefaultSeoInfo> = ({ url }) => {
 	const router = useRouter();
@@ -20,10 +20,7 @@ export const AdminVisitorSpaceEdit: FC<DefaultSeoInfo> = ({ url }) => {
 				)}
 			>
 				<AdminLayout.Content>
-					<VisitorSpaceSettings
-						action="edit"
-						visitorSpaceSlug={router.query.slug as string}
-					/>
+					<VisitorSpaceSettings action="edit" visitorSpaceSlug={router.query.slug as string} />
 				</AdminLayout.Content>
 			</AdminLayout>
 		);

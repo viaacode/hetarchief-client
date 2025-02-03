@@ -30,7 +30,7 @@ import {
 import type { MetadataItem } from '@ie-objects/components/Metadata';
 import Metadata from '@ie-objects/components/Metadata/Metadata';
 import { NamesList } from '@ie-objects/components/NamesList/NamesList';
-import { type ObjectDetailPageMetadataProps } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata.types';
+import type { ObjectDetailPageMetadataProps } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata.types';
 import { SearchLinkTag } from '@ie-objects/components/SearchLinkTag/SearchLinkTag';
 import { useGetIeObjectPreviousNextIds } from '@ie-objects/hooks/get-ie-objects-previous-next';
 import { useIsPublicNewspaper } from '@ie-objects/hooks/get-is-public-newspaper';
@@ -211,6 +211,8 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	/**
 	 * Close dropdown while resizing
 	 */
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: always close when the window is resized
 	useEffect(() => {
 		setMetadataExportDropdownOpen(false);
 	}, [windowSize]);
@@ -262,9 +264,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						handleOnDownloadEvent();
 					});
 					break;
-
-				case MetadataExportFormats.xml:
-				case MetadataExportFormats.csv:
 				default:
 					window.open(
 						`${publicRuntimeConfig.PROXY_URL}/${IE_OBJECTS_SERVICE_BASE_URL}/${mediaInfo.schemaIdentifier}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`
@@ -415,17 +414,15 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							isPrimary,
 							customElement: renderExportDropdown(isPrimary),
 						};
-					} else {
-						// Render button
-						return {
-							...action,
-							isPrimary,
-						};
 					}
-				} else {
-					// Button is not present in action order map, so we hide it
-					return null;
+					// Render button
+					return {
+						...action,
+						isPrimary,
+					};
 				}
+				// Button is not present in action order map, so we hide it
+				return null;
 			}
 		);
 
@@ -468,9 +465,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					<p className={styles['p-object-detail__metadata-label']}>
 						{tText('modules/ie-objects/const/index___aanbieder')}
 					</p>
-					{!isKiosk && (
-						<SearchLinkTag label={maintainerName} link={maintainerSearchLink} />
-					)}
+					{!isKiosk && <SearchLinkTag label={maintainerName} link={maintainerSearchLink} />}
 				</div>
 
 				{!isKiosk && maintainerLogo && (
@@ -557,13 +552,12 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					/>
 				</Metadata>
 			);
-		} else {
-			return (
-				<Metadata title={title} key={`metadata-${title}`}>
-					{data}
-				</Metadata>
-			);
 		}
+		return (
+			<Metadata title={title} key={`metadata-${title}`}>
+				{data}
+			</Metadata>
+		);
 	};
 
 	const renderResearchWarning = (): ReactNode => (
@@ -598,7 +592,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							label: tText('modules/ie-objects/object-detail-page___home'),
 							to: ROUTES_BY_LOCALE[locale].home,
 						},
-				  ]),
+					]),
 			{
 				label: tText('modules/ie-objects/object-detail-page___zoeken'),
 				to: ROUTES_BY_LOCALE[locale].search,
@@ -619,13 +613,13 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 										? ROUTES_BY_LOCALE[locale].search
 										: `${ROUTES_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${mediaInfo?.maintainerSlug}`,
 								},
-						  ]
+							]
 						: []),
 					{
 						label: mediaInfo?.name,
 						to: `${ROUTES_BY_LOCALE[locale].search}/${mediaInfo?.maintainerSlug}/${mediaInfo?.schemaIdentifier}`,
 					},
-			  ]
+				]
 			: [];
 
 		return (
@@ -652,23 +646,21 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					}=${encodeURIComponent(mediaInfo.collectionName)}`}
 				/>
 			);
-		} else {
-			// Use the generic text filter
-			const searchLink = stringifyUrl({
-				url: ROUTES_BY_LOCALE[locale].search,
-				query: {
-					[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: mediaInfo.collectionName,
-				},
-			});
-			return <SearchLinkTag label={mediaInfo.collectionName} link={searchLink} />;
 		}
+		// Use the generic text filter
+		const searchLink = stringifyUrl({
+			url: ROUTES_BY_LOCALE[locale].search,
+			query: {
+				[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: mediaInfo.collectionName,
+			},
+		});
+		return <SearchLinkTag label={mediaInfo.collectionName} link={searchLink} />;
 	}
 
 	function renderPreviousAndNextButtons(): ReactNode | null {
 		if (
 			!mediaInfo ||
-			(!ieObjectPreviousNextIds?.previousIeObjectId &&
-				!ieObjectPreviousNextIds?.nextIeObjectId)
+			(!ieObjectPreviousNextIds?.previousIeObjectId && !ieObjectPreviousNextIds?.nextIeObjectId)
 		) {
 			return null;
 		}
@@ -695,9 +687,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		return (
 			<div className={styles['p-object-detail__metadata-content__previous-next']}>
 				{ieObjectPreviousNextIds?.previousIeObjectId ? (
-					<Link href={'/pid/' + ieObjectPreviousNextIds?.previousIeObjectId}>
-						{previousButton}
-					</Link>
+					<Link href={`/pid/${ieObjectPreviousNextIds?.previousIeObjectId}`}>{previousButton}</Link>
 				) : (
 					previousButton
 				)}
@@ -705,9 +695,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				<span>{mediaInfo?.datePublished || mediaInfo?.dateCreated || '-'}</span>
 
 				{ieObjectPreviousNextIds?.nextIeObjectId ? (
-					<Link href={'/pid/' + ieObjectPreviousNextIds?.nextIeObjectId}>
-						{nextButton}
-					</Link>
+					<Link href={`/pid/${ieObjectPreviousNextIds?.nextIeObjectId}`}>{nextButton}</Link>
 				) : (
 					nextButton
 				)}
@@ -721,9 +709,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		}
 
 		const showAlert = !mediaInfo.description;
-		const rightsStatusInfo = isNewspaper
-			? getIeObjectRightsStatusInfo(mediaInfo, locale)
-			: null;
+		const rightsStatusInfo = isNewspaper ? getIeObjectRightsStatusInfo(mediaInfo, locale) : null;
 		let rightsAttributionText: string | null = null;
 		if (
 			isNewspaper &&
@@ -767,13 +753,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 								)}
 							/>
 							<Metadata
-								title={tHtml(
-									'modules/ie-objects/object-detail-page___bronvermelding'
-								)}
+								title={tHtml('modules/ie-objects/object-detail-page___bronvermelding')}
 								key="metadata-source-attribution"
-								renderRight={
-									<CopyButton text={rightsAttributionText} variants={['white']} />
-								}
+								renderRight={<CopyButton text={rightsAttributionText} variants={['white']} />}
 							>
 								<span>{rightsAttributionText}</span>
 							</Metadata>
@@ -781,9 +763,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 
 					<MetaDataFieldWithHighlightingAndMaxLength
-						title={tText(
-							'modules/visitor-space/utils/metadata/metadata___beschrijving'
-						)}
+						title={tText('modules/visitor-space/utils/metadata/metadata___beschrijving')}
 						data={mediaInfo.description}
 						className="u-pb-24 u-line-height-1-4 u-font-size-14"
 						onReadMoreClicked={setSelectedMetadataField}
@@ -815,10 +795,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					</Metadata>
 				</MetadataList>
 				<MetadataList allowTwoColumns={true}>
-					<Metadata
-						title={renderMaintainerMetaTitle(mediaInfo)}
-						key={`metadata-maintainer`}
-					>
+					<Metadata title={renderMaintainerMetaTitle(mediaInfo)} key={'metadata-maintainer'}>
 						{renderMaintainerMetaData(mediaInfo)}
 					</Metadata>
 					{renderSimpleMetadataField(
@@ -847,15 +824,8 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							className={styles['p-object-detail__metadata-content__rights-status']}
 							key="metadata-rights-status"
 							renderRight={
-								<a
-									target="_blank"
-									href={rightsStatusInfo.internalLink}
-									rel="noreferrer"
-								>
-									<Button
-										variants={['white']}
-										icon={<Icon name={IconNamesLight.Extern} />}
-									/>
+								<a target="_blank" href={rightsStatusInfo.internalLink} rel="noreferrer">
+									<Button variants={['white']} icon={<Icon name={IconNamesLight.Extern} />} />
 								</a>
 							}
 						>
@@ -864,10 +834,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									href={rightsStatusInfo.externalLink}
 									className="u-text-no-decoration"
 									target="_blank"
+									rel="noreferrer"
 								>
 									{rightsStatusInfo.icon}
 								</a>
-								<a href={rightsStatusInfo.externalLink} target="_blank">
+								<a href={rightsStatusInfo.externalLink} target="_blank" rel="noreferrer">
 									{rightsStatusInfo?.label}
 								</a>
 							</span>
@@ -920,13 +891,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									<SearchLinkTag
 										key={genre}
 										label={genre}
-										link={`${
-											ROUTES_BY_LOCALE[locale].search
-										}?advanced=${filterNameToAcronym(
+										link={`${ROUTES_BY_LOCALE[locale].search}?advanced=${filterNameToAcronym(
 											FilterProperty.GENRE
 										)}${operatorToAcronym(Operator.EQUALS)}${genre}`}
 									/>
-							  ))
+								))
 							: null
 					)}
 					{renderSimpleMetadataField(
@@ -945,8 +914,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						tText('modules/ie-objects/const/index___taal'),
 						mapArrayToMetadataData(
 							mediaInfo.inLanguage?.map(
-								(languageCode) =>
-									LANGUAGES[locale][languageCode as LanguageCode] || languageCode
+								(languageCode) => LANGUAGES[locale][languageCode as LanguageCode] || languageCode
 							)
 						)
 					)}
@@ -979,9 +947,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							? tText('modules/ie-objects/ie-objects___breedte') + mediaInfo?.width
 							: '') +
 							(mediaInfo?.height
-								? ' ' +
-								  tText('modules/ie-objects/ie-objects___hoogte') +
-								  mediaInfo?.height
+								? ` ${tText('modules/ie-objects/ie-objects___hoogte')}${mediaInfo?.height}`
 								: '') || null
 					)}
 					{renderSimpleMetadataField(
@@ -1014,12 +980,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___scanresolutie'),
-						simplifiedAltoInfo?.description.width ||
-							simplifiedAltoInfo?.description.height
+						simplifiedAltoInfo?.description.width || simplifiedAltoInfo?.description.height
 							? [
 									simplifiedAltoInfo?.description.width,
 									simplifiedAltoInfo?.description.height,
-							  ].join(' x ')
+								].join(' x ')
 							: null
 					)}
 					{renderSimpleMetadataField(
@@ -1041,15 +1006,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___permanente-url'),
 						publicRuntimeConfig.CLIENT_URL +
-							ROUTES_BY_LOCALE[locale].permalink.replace(
-								':pid',
-								mediaInfo.schemaIdentifier
-							)
+							ROUTES_BY_LOCALE[locale].permalink.replace(':pid', mediaInfo.schemaIdentifier)
 					)}
 					{mapObjectsToMetadata(
 						mediaInfo.premisIdentifier?.filter(
-							(premisEntry) =>
-								!['abraham_id', 'abraham_uri'].includes(Object.keys(premisEntry)[0])
+							(premisEntry) => !['abraham_id', 'abraham_uri'].includes(Object.keys(premisEntry)[0])
 						),
 						tText('modules/ie-objects/ie-objects___premis-identifier')
 					).map((info) => renderSimpleMetadataField(info.title, info.data))}
@@ -1141,10 +1102,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 								</div>
 							}
 						>
-							<NamesList
-								mentions={currentPage?.mentions || []}
-								onZoomToLocation={iiifZoomTo}
-							/>
+							<NamesList mentions={currentPage?.mentions || []} onZoomToLocation={iiifZoomTo} />
 						</Metadata>
 					)}
 

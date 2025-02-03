@@ -1,7 +1,7 @@
-import { type Breadcrumb } from '@meemoo/react-components';
+import type { Breadcrumb } from '@meemoo/react-components';
 import * as toolkitRaw from '@reduxjs/toolkit';
 
-import { type LastScrollPositionType, type UIState } from './ui.types';
+import type { LastScrollPositionType, UIState } from './ui.types';
 
 const initialState: UIState = {
 	showAuthModal: false,
@@ -66,10 +66,7 @@ export const uiSlice = toolkitRaw.createSlice({
 		setMaterialRequestCount(state, action: toolkitRaw.PayloadAction<number>) {
 			state.materialRequestCount = action.payload;
 		},
-		setLastScrollPosition(
-			state,
-			action: toolkitRaw.PayloadAction<LastScrollPositionType | null>
-		) {
+		setLastScrollPosition(state, action: toolkitRaw.PayloadAction<LastScrollPositionType | null>) {
 			state.lastScrollPosition = action.payload;
 		},
 		setBreadcrumbs(state, action: toolkitRaw.PayloadAction<Breadcrumb[]>) {

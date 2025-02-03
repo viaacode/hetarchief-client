@@ -1,8 +1,8 @@
 import { render } from '@testing-library/react';
 
-import {
-	type MetadataItem,
-	type MetadataListProps,
+import type {
+	MetadataItem,
+	MetadataListProps,
 } from '@ie-objects/components/Metadata/Metadata.types';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 
@@ -15,7 +15,10 @@ const renderMetadataList = ({ ...args }: Partial<MetadataListProps>, metadata: M
 		<MetadataList {...(args as MetadataListProps)}>
 			{metadata.map((item, index) => {
 				return (
-					<Metadata title={item.title} key={`metadata-item-${index}`}>
+					<Metadata
+						title={item.title}
+						key={`metadata-item-${typeof item.title === 'string' ? item.title : index}`}
+					>
 						{item.data}
 					</Metadata>
 				);
@@ -27,10 +30,7 @@ const renderMetadataList = ({ ...args }: Partial<MetadataListProps>, metadata: M
 describe('Component: <MetadataList /> (default)', () => {
 	it('Should set the correct class name', () => {
 		const className = 'custom class';
-		const { container } = renderMetadataList(
-			{ className, allowTwoColumns: false },
-			metadataMock
-		);
+		const { container } = renderMetadataList({ className, allowTwoColumns: false }, metadataMock);
 
 		expect(container.firstChild).toHaveClass(className);
 	});
@@ -94,7 +94,7 @@ describe('Component: <MetadataList /> (default)', () => {
 
 		const list = getByRole('list').parentElement;
 
-		expect(list).toHaveClass(`c-metadata--container-query`);
+		expect(list).toHaveClass('c-metadata--container-query');
 	});
 
 	it('Should display a single column when given', () => {
@@ -102,6 +102,6 @@ describe('Component: <MetadataList /> (default)', () => {
 
 		const list = getByRole('list').parentElement;
 
-		expect(list).not.toHaveClass(`c-metadata--container-query`);
+		expect(list).not.toHaveClass('c-metadata--container-query');
 	});
 });

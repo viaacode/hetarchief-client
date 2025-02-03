@@ -1,5 +1,5 @@
 import { VisitorSpaceCardType } from '../VisitorSpaceCard.const';
-import { type VisitorSpaceAccess, type VisitorSpaceCardProps } from '../VisitorSpaceCard.types';
+import type { VisitorSpaceAccess, VisitorSpaceCardProps } from '../VisitorSpaceCard.types';
 
 export const mockVisitorSpaceCardProps: VisitorSpaceCardProps = {
 	room: {

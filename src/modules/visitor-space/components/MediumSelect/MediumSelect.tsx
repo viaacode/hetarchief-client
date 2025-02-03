@@ -1,5 +1,5 @@
 import { ReactSelect, type ReactSelectProps } from '@meemoo/react-components';
-import { type FC } from 'react';
+import type { FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import { tText } from '@shared/helpers/translate';
@@ -25,10 +25,10 @@ export const MediumSelect: FC<ReactSelectProps> = (props) => {
 		return selectOptions.length === 0
 			? tText(
 					'modules/visitor-space/components/medium-select/medium-select___geen-analoge-dragers-gevonden'
-			  )
+				)
 			: tText(
 					'modules/visitor-space/components/medium-select/medium-select___kies-een-analoge-drager'
-			  );
+				);
 	};
 
 	return <ReactSelect {...props} placeholder={getPlaceholder()} options={selectOptions} />;

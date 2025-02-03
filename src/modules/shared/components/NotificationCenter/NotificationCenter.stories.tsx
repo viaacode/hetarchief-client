@@ -1,10 +1,10 @@
 import { Button } from '@meemoo/react-components';
 import { action } from '@storybook/addon-actions';
-import { type ComponentMeta, type ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { useState } from 'react';
 
 import NotificationCenter from './NotificationCenter';
-import { type NotificationCenterProps } from './NotificationCenter.types';
+import type { NotificationCenterProps } from './NotificationCenter.types';
 import { notificationCenterMock } from './__mocks__/notification-center';
 
 const NotificationCenterStoryComponent = ({ args }: { args: NotificationCenterProps }) => {
@@ -26,12 +26,7 @@ const NotificationCenterStoryComponent = ({ args }: { args: NotificationCenterPr
 				<h1>Notifications</h1>
 				<Button label="Open" onClick={open} />
 			</div>
-			<NotificationCenter
-				{...notificationCenterMock}
-				{...args}
-				onClose={close}
-				isOpen={isOpen}
-			/>
+			<NotificationCenter {...notificationCenterMock} {...args} onClose={close} isOpen={isOpen} />
 		</>
 	);
 };

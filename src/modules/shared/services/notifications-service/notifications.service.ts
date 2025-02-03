@@ -1,6 +1,6 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { QueryClient } from '@tanstack/react-query';
-import { type NextRouter } from 'next/router';
+import type { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 
 import { ROUTES_BY_LOCALE } from '@shared/const';
@@ -19,49 +19,48 @@ import {
 	NotificationType,
 } from './notifications.types';
 
-export abstract class NotificationsService {
-	private static pollingTimer: number | null = null;
-	private static lastNotifications: Notification[] | null = null;
-	private static router: NextRouter | null = null;
-	private static showNotificationsCenter: ((show: boolean) => void) | null = null;
-	private static setHasUnreadNotifications: ((hasUnreadNotifications: boolean) => void) | null =
-		null;
+export namespace NotificationsService {
+	let _pollingTimer: number | null = null;
+	let _lastNotifications: Notification[] | null = null;
+	let _router: NextRouter | null = null;
+	let _showNotificationsCenter: ((show: boolean) => void) | null = null;
+	let _setHasUnreadNotifications: ((hasUnreadNotifications: boolean) => void) | null = null;
 
-	private static queryClient = new QueryClient();
+	let _queryClient = new QueryClient();
 
-	public static async setQueryClient(queryClient: QueryClient): Promise<void> {
-		this.queryClient = queryClient;
+	export async function setQueryClient(queryClient: QueryClient): Promise<void> {
+		_queryClient = queryClient;
 	}
 
-	public static async initPolling(
+	export async function initPolling(
 		router: NextRouter,
 		showNotificationsCenter: (show: boolean) => void,
 		setHasUnreadNotifications: (hasUnreadNotifications: boolean) => void
 	): Promise<void> {
-		this.router = router;
-		this.showNotificationsCenter = showNotificationsCenter;
-		this.setHasUnreadNotifications = setHasUnreadNotifications;
-		if (!this.pollingTimer && process.env.NODE_ENV !== 'test') {
-			NotificationsService.pollingTimer = window.setInterval(this.checkNotifications, 15000);
-			await this.checkNotifications();
+		_router = router;
+		_showNotificationsCenter = showNotificationsCenter;
+		_setHasUnreadNotifications = setHasUnreadNotifications;
+		if (!_pollingTimer && process.env.NODE_ENV !== 'test') {
+			_pollingTimer = window.setInterval(checkNotifications, 15000);
+			await checkNotifications();
 		}
 	}
 
-	public static stopPolling(): void {
-		if (this.pollingTimer) {
-			clearInterval(this.pollingTimer);
+	export function stopPolling(): void {
+		if (_pollingTimer) {
+			clearInterval(_pollingTimer);
 		}
 	}
 
-	public static resetService(): void {
-		this.pollingTimer = null;
-		this.lastNotifications = null;
-		this.router = null;
-		this.showNotificationsCenter = null;
-		this.setHasUnreadNotifications = null;
+	export function resetService(): void {
+		_pollingTimer = null;
+		_lastNotifications = null;
+		_router = null;
+		_showNotificationsCenter = null;
+		_setHasUnreadNotifications = null;
 	}
 
-	public static getPath(notification: Notification): string | null {
+	export function getPath(notification: Notification): string | null {
 		return (
 			GET_PATH_FROM_NOTIFICATION_TYPE()
 				[notification.type]?.replace('{visitRequestId}', notification.visitId)
@@ -69,11 +68,11 @@ export abstract class NotificationsService {
 		);
 	}
 
-	public static async checkNotifications(): Promise<void> {
+	export async function checkNotifications(): Promise<void> {
 		const locale = TranslationService.getLocale();
-		const mostRecent = asDate(NotificationsService.lastNotifications?.[0]?.createdAt);
+		const mostRecent = asDate(_lastNotifications?.[0]?.createdAt);
 		const lastCheckNotificationTime = mostRecent ? mostRecent.getTime() : 0;
-		const notificationResponse = await NotificationsService.getNotifications(1, 20);
+		const notificationResponse = await getNotifications(1, 20);
 		const notifications = notificationResponse.items;
 		const unreadNotifications = notifications.filter(
 			(notification) => notification.status === NotificationStatus.UNREAD
@@ -81,14 +80,13 @@ export abstract class NotificationsService {
 		const firstUnread = asDate(unreadNotifications?.[0]?.createdAt);
 
 		if (
-			!!NotificationsService.lastNotifications && // Do not show notifications if this is the first time we check since loading the site
+			!!_lastNotifications && // Do not show notifications if this is the first time we check since loading the site
 			firstUnread && // There is at least one unread notification
 			(!mostRecent || lastCheckNotificationTime < firstUnread.getTime()) // The most recent unread notification was added since the last time we checked
 		) {
 			// A more recent notification exists, we should notify the user of the new notifications
 			const newNotifications = unreadNotifications.filter(
-				(notification) =>
-					new Date(notification.createdAt).getTime() > lastCheckNotificationTime
+				(notification) => new Date(notification.createdAt).getTime() > lastCheckNotificationTime
 			);
 
 			// Refetch spaces on notification
@@ -102,9 +100,7 @@ export abstract class NotificationsService {
 				});
 
 				hasSpaceNotification &&
-					(await NotificationsService.queryClient.invalidateQueries([
-						QUERY_KEYS.getAccessibleVisitorSpaces,
-					]));
+					(await _queryClient.invalidateQueries([QUERY_KEYS.getAccessibleVisitorSpaces]));
 
 				if (
 					newNotifications.find(
@@ -113,7 +109,7 @@ export abstract class NotificationsService {
 					)
 				) {
 					// Redirect the user to the homepage
-					NotificationsService?.router?.push?.(ROUTES_BY_LOCALE[locale].home);
+					_router?.push?.(ROUTES_BY_LOCALE[locale].home);
 				}
 			}
 
@@ -126,19 +122,19 @@ export abstract class NotificationsService {
 						'modules/shared/services/notifications-service/notifications___bekijk'
 					),
 					onClose: async () => {
-						const url = NotificationsService.getPath(newNotifications[0]);
+						const url = getPath(newNotifications[0]);
 						if (url) {
 							// Go to page
-							await NotificationsService.markOneAsRead(newNotifications[0].id);
+							await markOneAsRead(newNotifications[0].id);
 							if (url.includes('//')) {
 								// If absolute url, we want to reload the whole page, so ensure all visitor spaces are reloaded
 								window.open(url, '_self');
 							} else {
-								NotificationsService?.router?.push?.(url);
+								_router?.push?.(url);
 							}
 						} else {
 							// Notification not clickable => open notification center
-							NotificationsService.showNotificationsCenter?.(true);
+							_showNotificationsCenter?.(true);
 						}
 					},
 				});
@@ -159,19 +155,19 @@ export abstract class NotificationsService {
 						'modules/shared/services/notifications-service/notifications___bekijk'
 					),
 					onClose: () => {
-						NotificationsService.showNotificationsCenter?.(true);
+						_showNotificationsCenter?.(true);
 					},
 				});
 			}
 		}
-		NotificationsService.lastNotifications = notifications;
+		_lastNotifications = notifications;
 		if (unreadNotifications.length > 0) {
-			NotificationsService.setHasUnreadNotifications?.(true);
-			await NotificationsService.queryClient.invalidateQueries([QUERY_KEYS.getNotifications]);
+			_setHasUnreadNotifications?.(true);
+			await _queryClient.invalidateQueries([QUERY_KEYS.getNotifications]);
 		}
 	}
 
-	public static async getNotifications(
+	export async function getNotifications(
 		page: number,
 		size: number
 	): Promise<IPagination<Notification>> {
@@ -180,25 +176,25 @@ export abstract class NotificationsService {
 			.json();
 	}
 
-	public static async markOneAsRead(notificationId: string): Promise<Notification> {
+	export async function markOneAsRead(notificationId: string): Promise<Notification> {
 		const response: Notification = await ApiService.getApi()
 			.patch(`notifications/${notificationId}/mark-as-read`)
 			.json();
 		if (
-			(NotificationsService.lastNotifications?.filter(
+			(_lastNotifications?.filter(
 				(notif) => notif.id !== notificationId && notif.status === NotificationStatus.UNREAD
 			)?.length || 0) === 0
 		) {
-			NotificationsService.setHasUnreadNotifications?.(false);
+			_setHasUnreadNotifications?.(false);
 		}
 		return response;
 	}
 
-	public static async markAllAsRead(): Promise<MarkAllAsReadResult> {
+	export async function markAllAsRead(): Promise<MarkAllAsReadResult> {
 		const response: MarkAllAsReadResult = await ApiService.getApi()
 			.patch('notifications/mark-as-read')
 			.json();
-		NotificationsService.setHasUnreadNotifications?.(false);
+		_setHasUnreadNotifications?.(false);
 		return response;
 	}
 }

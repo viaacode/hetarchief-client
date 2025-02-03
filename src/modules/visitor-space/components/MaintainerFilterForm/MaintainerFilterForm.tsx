@@ -10,9 +10,9 @@ import { useQueryParams } from 'use-query-params';
 import { SearchBar } from '@shared/components/SearchBar';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
-import {
-	type MaintainerFilterFormProps,
-	type MaintainerFilterFormState,
+import type {
+	MaintainerFilterFormProps,
+	MaintainerFilterFormState,
 } from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
@@ -61,12 +61,12 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 	);
 
 	const filterOptions: { id: string; name: string }[] =
-		useSelector(selectIeObjectsFilterOptions)?.[
-			ElasticsearchFieldNames.Maintainer
-		]?.buckets?.map((bucket) => ({
-			id: bucket.key,
-			name: maintainerNames?.[bucket.key] || bucket.key,
-		})) || [];
+		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Maintainer]?.buckets?.map(
+			(bucket) => ({
+				id: bucket.key,
+				name: maintainerNames?.[bucket.key] || bucket.key,
+			})
+		) || [];
 
 	const filteredBuckets = filterOptions.filter((filterOption) =>
 		filterOption.name.toLowerCase().includes(search.toLowerCase())
@@ -130,9 +130,7 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 						</p>
 					)}
 
-					{maintainers && (
-						<CheckboxList items={checkboxOptions} onItemClick={onItemClick} />
-					)}
+					{maintainers && <CheckboxList items={checkboxOptions} onItemClick={onItemClick} />}
 				</div>
 			</div>
 

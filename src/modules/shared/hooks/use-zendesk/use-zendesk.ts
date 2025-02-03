@@ -1,5 +1,5 @@
 import { useMutation, type UseMutationResult } from '@tanstack/react-query';
-import { type Requests } from 'node-zendesk';
+import type { Requests } from 'node-zendesk';
 
 import { ZendeskService } from '@shared/services/zendesk-service';
 

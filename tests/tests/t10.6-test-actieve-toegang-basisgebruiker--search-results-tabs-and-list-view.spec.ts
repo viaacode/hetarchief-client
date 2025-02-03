@@ -16,8 +16,7 @@ test('T10.6: Test actieve toegang basisgebruiker: zoek resultaten tabs en lijst 
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(
 		page,
-		(process.env.TEST_CLIENT_ENDPOINT as string) +
-			'/zoeken?format=all&zoekterm=bewegend%20beeld',
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/zoeken?format=all&zoekterm=bewegend%20beeld`,
 		SEARCH_PAGE_TITLE
 	);
 

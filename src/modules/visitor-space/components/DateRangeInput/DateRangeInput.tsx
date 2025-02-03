@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { tText } from '@shared/helpers/translate';
 
@@ -33,26 +33,26 @@ const DateRangeInput: FC<DateRangeInputProps> = ({
 					showLabels
 						? tText(
 								'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___van'
-						  )
+							)
 						: ''
 				}
 				value={from}
 				onChange={(newDate) => newDate && onChange(newDate, to)}
 				disabled={disabled}
-				id={id + '__from'}
+				id={`${id}__from`}
 			/>
 			<DateInput
 				label={
 					showLabels
 						? tText(
 								'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tot'
-						  )
+							)
 						: ''
 				}
 				value={to}
 				onChange={(newDate) => newDate && onChange(from, newDate)}
 				disabled={disabled}
-				id={id + '__to'}
+				id={`${id}__to`}
 			/>
 		</div>
 	);

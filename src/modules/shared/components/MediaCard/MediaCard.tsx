@@ -1,6 +1,7 @@
 import { AdminConfigManager } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import { Badge, Button, Card } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { isValid } from 'date-fns';
 import { isNil } from 'lodash-es';
 import { useRouter } from 'next/router';
 import { type FC, type MouseEvent, type ReactNode, useState } from 'react';
@@ -29,12 +30,12 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setLastScrollPosition } from '@shared/store/ui';
 import { IeObjectType } from '@shared/types/ie-objects';
-import { formatMediumDate } from '@shared/utils/dates';
+import { asDate, formatMediumDate } from '@shared/utils/dates';
 
 import Icon from '../Icon/Icon';
 
 import styles from './MediaCard.module.scss';
-import { type MediaCardProps } from './MediaCard.types';
+import type { MediaCardProps } from './MediaCard.types';
 
 const MediaCard: FC<MediaCardProps> = ({
 	description,
@@ -60,6 +61,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	hasTempAccess,
 	previousPage,
 	numOfChildren = 0,
+	className,
 }) => {
 	const router = useRouter();
 	const locale = useLocale();
@@ -85,9 +87,7 @@ const MediaCard: FC<MediaCardProps> = ({
 		try {
 			if (!user || !maintainerSlug) {
 				toastService.notify({
-					title: tText(
-						'modules/shared/components/media-card/media-card___je-bent-niet-ingelogd'
-					),
+					title: tText('modules/shared/components/media-card/media-card___je-bent-niet-ingelogd'),
 					description: tText(
 						'modules/shared/components/media-card/media-card___je-bent-niet-ingelogd-log-opnieuw-in-en-probeer-opnieuw'
 					),
@@ -104,10 +104,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 			setIsRequestAccessBladeOpen(false);
 			await router.push(
-				ROUTES_BY_LOCALE[locale].visitRequested.replace(
-					':slug',
-					createdVisitRequest.spaceSlug
-				)
+				ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
 			);
 		} catch (err) {
 			console.error({
@@ -125,7 +122,9 @@ const MediaCard: FC<MediaCardProps> = ({
 	};
 
 	const onOpenRequestAccess = () => {
-		setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: maintainerSlug });
+		setQuery({
+			[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: maintainerSlug,
+		});
 		setIsRequestAccessBladeOpen(true);
 	};
 
@@ -201,9 +200,14 @@ const MediaCard: FC<MediaCardProps> = ({
 		}
 
 		if (publishedOrCreatedDate) {
-			const formatted = formatMediumDate(publishedOrCreatedDate);
+			const date = asDate(publishedOrCreatedDate);
+			if (isValid(date)) {
+				const formatted = formatMediumDate(date);
 
-			subtitle += ` (${formatted})`;
+				subtitle += ` (${formatted})`;
+			} else {
+				subtitle += ` (${publishedOrCreatedDate})`;
+			}
 		}
 
 		subtitle = subtitle.trim();
@@ -220,13 +224,9 @@ const MediaCard: FC<MediaCardProps> = ({
 	const renderNoContentIcon = () => {
 		return (
 			<Icon
-				className={clsx(
-					styles['c-media-card__no-content-icon'],
-					styles['c-media-card__icon'],
-					{
-						[styles['c-media-card__no-content-icon']]: !link,
-					}
-				)}
+				className={clsx(styles['c-media-card__no-content-icon'], styles['c-media-card__icon'], {
+					[styles['c-media-card__no-content-icon']]: !link,
+				})}
 				name={TYPE_TO_NO_ICON_MAP[type as IeObjectType]}
 			/>
 		);
@@ -366,9 +366,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				<Pill
 					isExpanded
 					icon={IconNamesLight.Clock}
-					label={tText(
-						'modules/shared/components/media-card/media-card___tijdelijke-toegang'
-					)}
+					label={tText('modules/shared/components/media-card/media-card___tijdelijke-toegang')}
 					className="u-color-black u-bg-lila"
 				/>
 			</div>
@@ -377,7 +375,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const classNames = clsx(
 		styles['c-media-card'],
-		'c-media-card--' + type,
+		`c-media-card--${type}`,
 		!link && 'c-media-card--no-link',
 		showKeyUserLabel && styles['c-media-card--key-user']
 	);
@@ -412,7 +410,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	};
 
 	return (
-		<div id={id}>
+		<div id={id} className={className}>
 			{renderCard()}
 			<Modal
 				title={tText(

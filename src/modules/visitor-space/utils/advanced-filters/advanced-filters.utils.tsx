@@ -56,7 +56,7 @@ export const getOperators = (prop: FilterProperty): OperatorOptions => {
 export const getFilterConfig = (prop: FilterProperty, op: Operator): FilterConfig | null => {
 	const property = FILTERS_OPTIONS_CONFIG()[prop];
 
-	if (property && property[op]) {
+	if (property?.[op]) {
 		return property[op] || null;
 	}
 
@@ -114,9 +114,7 @@ export const getFilterLabel = (prop: FilterProperty): string => {
 			[FilterProperty.IDENTIFIER]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___identifier'
 			),
-			[FilterProperty.CAST]: tText(
-				'modules/visitor-space/utils/advanced-filters/metadata___cast'
-			),
+			[FilterProperty.CAST]: tText('modules/visitor-space/utils/advanced-filters/metadata___cast'),
 			[FilterProperty.SPACIAL_COVERAGE]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___locatie-van-de-inhoud'
 			),

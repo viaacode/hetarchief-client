@@ -1,13 +1,13 @@
 import { Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { type FC, type ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
-import { type NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
+import type { NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 
 import styles from '../Navigation.module.scss';
 
-import { type NavigationDropdownProps } from './NavigationDropdown.types';
+import type { NavigationDropdownProps } from './NavigationDropdown.types';
 
 const NavigationDropdown: FC<NavigationDropdownProps> = ({
 	id,
@@ -28,6 +28,11 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 			<div
 				className={clsx(layer > 0 && styles['c-navigation__dropdown-submenu'])}
 				onClick={() => onClose?.()} // Close dropdown on item click
+				onKeyUp={(evt) => {
+					if (evt.key === 'Enter') {
+						onClose?.();
+					}
+				}}
 			>
 				{items.map((item) => {
 					return (
@@ -35,8 +40,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 							key={`nav-dropdown-item-${item.id}`}
 							className={clsx({
 								[styles['c-navigation__dropdown-item--divider']]: item.isDivider,
-								[styles['c-navigation__dropdown-item--divider-md']]:
-									item.isDivider === 'md',
+								[styles['c-navigation__dropdown-item--divider-md']]: item.isDivider === 'md',
 								[styles['c-navigation__item--active']]: item.activeMobile,
 							})}
 						>
@@ -63,7 +67,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 			onClose={() => onClose?.(id)}
 		>
 			<DropdownButton>{trigger}</DropdownButton>
-			<DropdownContent>{renderedItems ?? renderChildrenRecursively(items!)}</DropdownContent>
+			<DropdownContent>{renderedItems ?? renderChildrenRecursively(items || [])}</DropdownContent>
 		</Dropdown>
 	);
 };

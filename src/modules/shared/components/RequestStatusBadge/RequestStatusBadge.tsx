@@ -8,7 +8,7 @@ import { tHtml } from '@shared/helpers/translate';
 import { VisitStatus } from '@shared/types/visit-request';
 
 import styles from './RequestStatusBadge.module.scss';
-import { type RequestStatusBadgeProps } from './RequestStatusBadge.types';
+import type { RequestStatusBadgeProps } from './RequestStatusBadge.types';
 
 const RequestStatusBadge: FC<RequestStatusBadgeProps> = ({ className, style, status }) => {
 	const renderBadge = () => {
@@ -21,42 +21,24 @@ const RequestStatusBadge: FC<RequestStatusBadgeProps> = ({ className, style, sta
 			case VisitStatus.APPROVED:
 				return (
 					<>
-						<Badge
-							type="success"
-							text={<Icon name={IconNamesLight.Check} />}
-							variants="icon"
-						/>
-						{tHtml(
-							'modules/cp/components/request-status-chip/request-status-chip___goedgekeurd'
-						)}
+						<Badge type="success" text={<Icon name={IconNamesLight.Check} />} variants="icon" />
+						{tHtml('modules/cp/components/request-status-chip/request-status-chip___goedgekeurd')}
 					</>
 				);
 
 			case VisitStatus.DENIED:
 				return (
 					<>
-						<Badge
-							type="error"
-							text={<Icon name={IconNamesLight.Forbidden} />}
-							variants="icon"
-						/>
-						{tHtml(
-							'modules/cp/components/request-status-chip/request-status-chip___geweigerd'
-						)}
+						<Badge type="error" text={<Icon name={IconNamesLight.Forbidden} />} variants="icon" />
+						{tHtml('modules/cp/components/request-status-chip/request-status-chip___geweigerd')}
 					</>
 				);
 
 			case VisitStatus.CANCELLED_BY_VISITOR:
 				return (
 					<>
-						<Badge
-							type="error"
-							text={<Icon name={IconNamesLight.Trash} />}
-							variants="icon"
-						/>
-						{tHtml(
-							'modules/cp/components/request-status-badge/request-status-badge___geannuleerd'
-						)}
+						<Badge type="error" text={<Icon name={IconNamesLight.Trash} />} variants="icon" />
+						{tHtml('modules/cp/components/request-status-badge/request-status-badge___geannuleerd')}
 					</>
 				);
 

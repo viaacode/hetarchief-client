@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import styles from './Sidebar.module.scss';
-import { type SidebarProps } from './Sidebar.types';
+import type { SidebarProps } from './Sidebar.types';
 
 const Sidebar: FC<SidebarProps> = ({ className, children, title, heading, color = 'white' }) => {
 	return (

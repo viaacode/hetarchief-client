@@ -1,13 +1,13 @@
-import { type SelectOption } from '@meemoo/react-components';
+import type { SelectOption } from '@meemoo/react-components';
 import { format, parseISO } from 'date-fns';
 import { isString } from 'lodash-es';
 
 import { SEPARATOR } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
-import { type IeObjectsSearchFilter } from '@shared/types/ie-objects';
+import type { IeObjectsSearchFilter } from '@shared/types/ie-objects';
 import { formatDate } from '@shared/utils/dates';
-import { type SearchPageQueryParams } from '@visitor-space/const';
+import type { SearchPageQueryParams } from '@visitor-space/const';
 
 import { AdvancedFilterArrayParam } from '../../const/advanced-filter-array-param';
 import { getMetadataSearchFilters } from '../../const/advanced-filters.consts';
@@ -73,9 +73,7 @@ export const mapArrayParamToTags = (
 				label: (
 					<span>
 						{`${label}: `}
-						<strong>
-							{keyword?.split(FILTER_LABEL_VALUE_DELIMITER).pop() as string}
-						</strong>
+						<strong>{keyword?.split(FILTER_LABEL_VALUE_DELIMITER).pop() as string}</strong>
 					</span>
 				),
 				value: unique,
@@ -204,16 +202,12 @@ export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] =>
 		),
 		...mapBooleanParamToTag(
 			query[SearchFilterId.ConsultableOnlyOnLocation] || false,
-			tText(
-				'modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse'
-			),
+			tText('modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse'),
 			SearchFilterId.ConsultableOnlyOnLocation
 		),
 		...mapBooleanParamToTag(
 			query[SearchFilterId.ConsultableMedia] || false,
-			tText(
-				'modules/visitor-space/utils/map-filters/map-filters___alles-wat-raadpleegbaar-is'
-			),
+			tText('modules/visitor-space/utils/map-filters/map-filters___alles-wat-raadpleegbaar-is'),
 			SearchFilterId.ConsultableMedia
 		),
 		...mapBooleanParamToTag(
@@ -239,7 +233,7 @@ export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilte
 
 	// Format data for Elastic
 	return filters.map((filter: IeObjectsSearchFilter, i: number) => {
-		let parsed;
+		let parsed: Date;
 
 		switch (item.prop) {
 			case FilterProperty.CREATED_AT:
@@ -251,7 +245,7 @@ export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilte
 			case FilterProperty.DURATION:
 				// Manually create a range of equal values
 				// Add milliseconds since elasticsearch requires it: https://meemoo.atlassian.net/browse/ARC-2549
-				values[i] = values[0] + '.00';
+				values[i] = `${values[0]}.00`;
 				break;
 			default:
 				break;

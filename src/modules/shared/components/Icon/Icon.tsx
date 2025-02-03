@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import styles from './Icon.module.scss';
-import { type IconProps } from './Icon.types';
+import type { IconProps } from './Icon.types';
 
 const Icon: FC<IconProps> = ({ className, name, ...rest }) => {
 	const [iconName, type] = (name || '').split('--');

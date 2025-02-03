@@ -1,9 +1,8 @@
 import { Button, OrderDirection } from '@meemoo/react-components';
 import Link from 'next/link';
-import { type Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { type AdminVisitorSpaceInfoRow } from '@admin/types';
+import type { AdminVisitorSpaceInfoRow } from '@admin/types';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -12,12 +11,13 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
-import { type Locale } from '@shared/utils/i18n';
+import { Locale } from '@shared/utils/i18n';
 import {
 	type VisitorSpaceInfo,
 	VisitorSpaceOrderProps,
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
+import type { Column } from 'react-table';
 
 export const VisitorSpacesOverviewTablePageSize = 20;
 
@@ -33,8 +33,8 @@ export const VisitorSpacesOverviewTableColumns = (
 	updateVisitorSpaceState: (roomId: string, state: VisitorSpaceStatus) => void,
 	showEditButton = false,
 	showStatusDropdown = false,
-	locale: Locale
-): Column<VisitorSpaceInfo>[] => [
+	locale: Locale = Locale.nl
+): (Column<VisitorSpaceInfo> & { disableSortBy?: boolean })[] => [
 	{
 		Header: tText('modules/admin/const/spaces___bezoekersruimte'),
 		id: VisitorSpaceOrderProps.OrganisationName,
@@ -56,7 +56,7 @@ export const VisitorSpacesOverviewTableColumns = (
 	{
 		Header: tText('modules/admin/const/spaces___emailadres'),
 		id: 'email',
-		accessor: 'contactInfo.email',
+		accessor: 'contactInfo.email' as keyof VisitorSpaceInfo,
 		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
 			return (
 				<span className="u-color-neutral" title={row.original.contactInfo.email || ''}>
@@ -65,12 +65,11 @@ export const VisitorSpacesOverviewTableColumns = (
 			);
 		},
 		disableSortBy: true,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	} as any,
+	},
 	{
 		Header: tText('modules/admin/const/spaces___telefoonnummer'),
 		id: 'telephone',
-		accessor: 'contactInfo.telephone',
+		accessor: 'contactInfo.telephone' as keyof VisitorSpaceInfo,
 		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
 			return (
 				<span className="u-color-neutral" title={row.original.contactInfo.telephone || ''}>
@@ -79,8 +78,7 @@ export const VisitorSpacesOverviewTableColumns = (
 			);
 		},
 		disableSortBy: true,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	} as any,
+	},
 	{
 		Header: tText('modules/admin/const/spaces___publicatiestatus'),
 		id: VisitorSpaceOrderProps.Status,
@@ -118,10 +116,7 @@ export const VisitorSpacesOverviewTableColumns = (
 				<>
 					{showEditButton && (
 						<Link
-							href={`${ROUTES_BY_LOCALE[locale].adminVisitorSpaceEdit.replace(
-								':slug',
-								row.original.slug
-							)}`}
+							href={`${ROUTES_BY_LOCALE[locale].adminVisitorSpaceEdit.replace(':slug', row.original.slug)}`}
 							passHref={true}
 							className="u-color-neutral u-font-size-24"
 							aria-label={tText('modules/admin/const/spaces___aanpassen')}
@@ -136,53 +131,36 @@ export const VisitorSpacesOverviewTableColumns = (
 								className: 'u-color-neutral u-width-24 u-height-24 u-ml-20',
 							}}
 						>
-							{[VisitorSpaceStatus.Inactive, VisitorSpaceStatus.Requested].includes(
-								status
-							) && (
+							{[VisitorSpaceStatus.Inactive, VisitorSpaceStatus.Requested].includes(status) && (
 								<Button
 									className="u-text-left"
 									variants="text"
 									name="set-status-activated-space"
 									label={tText('modules/admin/const/spaces___activeren')}
 									onClick={() =>
-										updateVisitorSpaceState(
-											row.original.id,
-											VisitorSpaceStatus.Active
-										)
+										updateVisitorSpaceState(row.original.id, VisitorSpaceStatus.Active)
 									}
 								/>
 							)}
-							{[VisitorSpaceStatus.Active, VisitorSpaceStatus.Requested].includes(
-								status
-							) && (
+							{[VisitorSpaceStatus.Active, VisitorSpaceStatus.Requested].includes(status) && (
 								<Button
 									className="u-text-left"
 									variants="text"
 									name="set-status-deactivated-space"
 									label={tText('modules/admin/const/spaces___deactiveren')}
 									onClick={() =>
-										updateVisitorSpaceState(
-											row.original.id,
-											VisitorSpaceStatus.Inactive
-										)
+										updateVisitorSpaceState(row.original.id, VisitorSpaceStatus.Inactive)
 									}
 								/>
 							)}
-							{[VisitorSpaceStatus.Inactive, VisitorSpaceStatus.Active].includes(
-								status
-							) && (
+							{[VisitorSpaceStatus.Inactive, VisitorSpaceStatus.Active].includes(status) && (
 								<Button
 									className="u-text-left"
 									variants="text"
 									name="set-status-pending-space"
-									label={tText(
-										'modules/admin/const/spaces___terug-naar-in-aanvraag'
-									)}
+									label={tText('modules/admin/const/spaces___terug-naar-in-aanvraag')}
 									onClick={() =>
-										updateVisitorSpaceState(
-											row.original.id,
-											VisitorSpaceStatus.Requested
-										)
+										updateVisitorSpaceState(row.original.id, VisitorSpaceStatus.Requested)
 									}
 								/>
 							)}

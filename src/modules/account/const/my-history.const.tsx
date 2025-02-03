@@ -1,11 +1,11 @@
 import { Button, OrderDirection } from '@meemoo/react-components';
-import { type MouseEvent } from 'react';
-import { type Column, type UseSortByColumnOptions } from 'react-table';
+import type { MouseEvent } from 'react';
+import type { Column, UseSortByColumnOptions } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { type VisitRequest, type VisitRow } from '@shared/types/visit-request';
+import type { VisitRequest, VisitRow } from '@shared/types/visit-request';
 import { formatSameDayRange } from '@shared/utils/dates';
 
 export const HistoryItemListSize = 20;
@@ -38,9 +38,7 @@ export const HistoryTableColumns = (
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
 			return (
-				<span className="u-color-neutral">
-					{formatSameDayRange(visit.startAt, undefined)}
-				</span>
+				<span className="u-color-neutral">{formatSameDayRange(visit.startAt, undefined)}</span>
 			);
 		},
 	},
@@ -49,11 +47,7 @@ export const HistoryTableColumns = (
 		accessor: 'endAt',
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
-			return (
-				<span className="u-color-neutral">
-					{formatSameDayRange(undefined, visit.endAt)}
-				</span>
-			);
+			return <span className="u-color-neutral">{formatSameDayRange(undefined, visit.endAt)}</span>;
 		},
 	},
 	{
@@ -63,9 +57,7 @@ export const HistoryTableColumns = (
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
 			return (
-				<span className="u-color-neutral">
-					{formatSameDayRange(visit.startAt, visit.endAt)}
-				</span>
+				<span className="u-color-neutral">{formatSameDayRange(visit.startAt, visit.endAt)}</span>
 			);
 		},
 	},

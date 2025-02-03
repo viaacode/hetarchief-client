@@ -1,4 +1,4 @@
-import { type VisitRequest } from '@shared/types/visit-request';
+import type { VisitRequest } from '@shared/types/visit-request';
 
 export type VisitSummaryType = Pick<
 	VisitRequest,

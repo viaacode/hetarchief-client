@@ -15,14 +15,14 @@ import { ACCOUNT_FOLDERS_QUERY_PARAM_CONFIG, FolderItemListSize, Permission } fr
 import { useGetFolderMedia } from '@account/hooks/get-folder-media';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { AccountLayout } from '@account/layouts';
-import { foldersService } from '@account/services/folders';
-import { type Folder, type FolderIeObject } from '@account/types';
+import { FoldersService } from '@account/services/folders';
+import type { Folder, FolderIeObject } from '@account/types';
 import { createFolderSlug } from '@account/utils';
 import { IeObjectAccessThrough, IeObjectLicense, IsPartOfKey } from '@ie-objects/ie-objects.types';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { type ListNavigationItem } from '@shared/components/ListNavigation';
+import type { ListNavigationItem } from '@shared/components/ListNavigation';
 import { type IdentifiableMediaCard, TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
 import { MediaCardList } from '@shared/components/MediaCardList';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
@@ -31,7 +31,7 @@ import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ShareFolderBlade } from '@shared/components/ShareFolderBlade';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
-import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
+import { ROUTES_BY_LOCALE, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
@@ -43,7 +43,7 @@ import { toastService } from '@shared/services/toast-service';
 import { setFolders } from '@shared/store/ie-objects';
 import { selectLastScrollPosition, setBreadcrumbs, setLastScrollPosition } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
@@ -106,7 +106,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 		() =>
 			(folders || []).map((folder) => {
 				const slug = createFolderSlug(folder, locale);
-				const href = myFoldersPath + '/' + slug;
+				const href = `${myFoldersPath}/${slug}`;
 				const active = isActive(folder);
 
 				return {
@@ -159,6 +159,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 	 * Effects
 	 */
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		if (!activeFolder) {
 			return;
@@ -180,8 +181,9 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				},
 			])
 		);
-	}, [activeFolder]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [activeFolder]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		// Ward: wait until items are rendered on the screen before scrolling
 		if (
@@ -190,15 +192,12 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 			folderMedia?.data?.items
 		) {
 			setTimeout(() => {
-				const item = document.getElementById(
-					`${lastScrollPosition.itemId}`
-				) as HTMLElement | null;
+				const item = document.getElementById(`${lastScrollPosition.itemId}`) as HTMLElement | null;
 
 				item?.scrollIntoView({ block: 'center', behavior: 'smooth' });
 				dispatch(setLastScrollPosition(null));
 			}, 100);
 		}
-		// eslint-disable-next-line
 	}, [folderMedia?.data?.items, dispatch]);
 
 	/**
@@ -213,9 +212,8 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 					folders.map((folder): Folder => {
 						if (folder.id === newFolder.id) {
 							return newFolder;
-						} else {
-							return folder;
 						}
+						return folder;
 					})
 				)
 			);
@@ -232,7 +230,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 	};
 
 	const onRemoveFromFolder = (item: IdentifiableMediaCard, folder: Folder) => {
-		foldersService.removeFromFolder(folder.id, item.schemaIdentifier).then((response) => {
+		FoldersService.removeFromFolder(folder.id, item.schemaIdentifier).then((response) => {
 			if (response === undefined) {
 				return;
 			}
@@ -241,15 +239,12 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 
 			const descriptionVariables = {
 				item: item.name,
-				folder:
-					folder?.name || tText('pages/account/mijn-mappen/folder-slug/index___onbekend'),
+				folder: folder?.name || tText('pages/account/mijn-mappen/folder-slug/index___onbekend'),
 			};
 
 			toastService.notify({
 				maxLines: 3,
-				title: tHtml(
-					'pages/account/mijn-mappen/folder-slug/index___item-verwijderd-uit-map-titel'
-				),
+				title: tHtml('pages/account/mijn-mappen/folder-slug/index___item-verwijderd-uit-map-titel'),
 				description: tHtml(
 					'pages/account/mijn-mappen/folder-slug/index___item-is-verwijderd-uit-map-beschrijving',
 					descriptionVariables
@@ -310,23 +305,17 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 								<Button
 									variants={['silver']}
 									icon={<Icon name={IconNamesLight.Share} aria-hidden />}
-									aria-label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-delen'
-									)}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-delen'
-									)}
+									aria-label={tText('pages/account/mijn-mappen/folder-slug/index___map-delen')}
+									name={tText('pages/account/mijn-mappen/folder-slug/index___map-delen')}
 									onClick={(e) => {
 										e.stopPropagation();
 										setShowShareMapBlade(true);
 									}}
-									tooltipText={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-delen'
-									)}
+									tooltipText={tText('pages/account/mijn-mappen/folder-slug/index___map-delen')}
 								/>
 							),
 						},
-				  ]
+					]
 				: []),
 			...(activeFolder && !activeFolder.isDefault
 				? [
@@ -342,9 +331,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 									aria-label={tText(
 										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
 									)}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
-									)}
+									name={tText('pages/account/mijn-mappen/folder-slug/index___map-verwijderen')}
 									onClick={(e) => {
 										e.stopPropagation();
 										setShowConfirmDelete(true);
@@ -353,15 +340,13 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 										activeFolder.usedForLimitedAccessUntil
 											? tText(
 													'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen'
-											  )
-											: tText(
-													'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
-											  )
+												)
+											: tText('pages/account/mijn-mappen/folder-slug/index___map-verwijderen')
 									}
 								/>
 							),
 						},
-				  ]
+					]
 				: []),
 		];
 	}, [activeFolder]);
@@ -451,9 +436,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				value: folderIeObject.schemaIdentifier || '',
 			},
 			{
-				label: tHtml(
-					'pages/account/mijn-mappen/folder-slug/index___identifier-bij-aanbieder'
-				),
+				label: tHtml('pages/account/mijn-mappen/folder-slug/index___identifier-bij-aanbieder'),
 				value: folderIeObject.meemooLocalId || '',
 			},
 		];
@@ -462,7 +445,10 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 			<div className="p-account-my-folders__card-description">
 				{metadataEntries.map((metadataEntry, i) => {
 					return metadataEntry.value ? (
-						<p key={i} className="u-pr-24 u-text-break">
+						<p
+							key={`metadata-entry--${metadataEntry.label}--${metadataEntry.value}`}
+							className="u-pr-24 u-text-break"
+						>
 							<b>{metadataEntry.label}: </b>
 							<Highlighter
 								searchWords={keywords}
@@ -476,9 +462,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 					<p className="p-account-my-folders__card-description-access">
 						<Icon name={IconNamesLight.Clock} />
 						<span className="u-ml-4">
-							{tText(
-								'pages/account/mijn-mappen/folder-slug/index___tijdelijke-toegang'
-							)}
+							{tText('pages/account/mijn-mappen/folder-slug/index___tijdelijke-toegang')}
 						</span>
 					</p>
 				)}
@@ -493,9 +477,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 					<SidebarLayout
 						color="platinum"
 						responsiveTo={Breakpoints.md}
-						sidebarTitle={tText(
-							'pages/account/mijn-mappen/folder-slug/index___mijn-mappen'
-						)}
+						sidebarTitle={tText('pages/account/mijn-mappen/folder-slug/index___mijn-mappen')}
 						sidebarLinks={[
 							...sidebarLinks,
 							{
@@ -510,9 +492,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 							<>
 								<div className="l-container u-mt-64 u-mb-48">
 									<div className="p-account-my-folders__active-card">
-										<SidebarLayoutTitle
-											className={'p-account-my-folders__active-card__title'}
-										>
+										<SidebarLayoutTitle className={'p-account-my-folders__active-card__title'}>
 											{activeFolder.name}
 										</SidebarLayoutTitle>
 										<div className="p-account-my-folders__active-card__buttons">
@@ -535,38 +515,26 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 										{activeFolder.usedForLimitedAccessUntil && (
 											<div className="p-account-my-folders__limited-access-wrapper">
 												<div>
-													<Icon
-														className="u-mr-4 u-font-size-18"
-														name={IconNamesLight.OpenDoor}
-													/>
+													<Icon className="u-mr-4 u-font-size-18" name={IconNamesLight.OpenDoor} />
 												</div>
 												<p>
 													{tText(
 														'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang'
 													)}
-													{` ${formatMediumDate(
-														new Date(
-															activeFolder?.usedForLimitedAccessUntil
-														)
-													)}`}
+													{` ${formatMediumDate(new Date(activeFolder?.usedForLimitedAccessUntil))}`}
 												</p>
 											</div>
 										)}
 										<SearchBar
-											aria-label={tText(
-												'modules/account/views/my-folders___zoekveld-aria-label'
-											)}
+											aria-label={tText('modules/account/views/my-folders___zoekveld-aria-label')}
 											id={`${labelKeys.search}--${activeFolder.id}`}
 											value={search}
 											className="p-account-my-folders__search"
-											placeholder={tText(
-												'pages/account/mijn-mappen/folder-slug/index___zoek'
-											)}
+											placeholder={tText('pages/account/mijn-mappen/folder-slug/index___zoek')}
 											onChange={setSearch}
 											onSearch={(newValue) =>
 												setFilters({
-													[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]:
-														newValue || undefined,
+													[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: newValue || undefined,
 												})
 											}
 										/>
@@ -579,16 +547,11 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 											keywords={keywords}
 											items={folderMedia?.data?.items.map((media) => {
 												let link: string | undefined = stringifyUrl({
-													url: `/${
-														ROUTE_PARTS_BY_LOCALE[locale].search
-													}/${media.maintainerSlug}/${
-														media.schemaIdentifier
-													}/${kebabCase(media.name) || 'titel'}`,
+													url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${media.maintainerSlug}/${media.schemaIdentifier}/${kebabCase(media.name) || 'titel'}`,
 													query: {
-														[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]:
-															(keywords || []).join(
-																HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
-															),
+														[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: (keywords || []).join(
+															HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
+														),
 													},
 												});
 												if (isEmpty(media.accessThrough)) {
@@ -602,19 +565,17 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 													title: renderTitle(media),
 													name: media.name,
 													type: media.dctermsFormat,
-													preview: media.thumbnailUrl,
+													thumbnail: media.thumbnailUrl,
 													duration: media.duration,
 													licenses: media.licenses,
 													showKeyUserLabel: media.accessThrough.includes(
 														IeObjectAccessThrough.SECTOR
 													),
-													showLocallyAvailable:
-														getShowLocallyAvailableLabel(media),
-													showPlanVisitButtons:
-														getShowPlanVisitButtons(media),
+													showLocallyAvailable: getShowLocallyAvailableLabel(media),
+													showPlanVisitButtons: getShowPlanVisitButtons(media),
 													previousPage: myFoldersPath,
 													link: link,
-												} as any;
+												};
 
 												return {
 													...base,
@@ -628,23 +589,22 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 										/>
 									)}
 
-									{folderMedia.data &&
-										folderMedia.data?.total > FolderItemListSize && (
-											<PaginationBar
-												{...getDefaultPaginationBarProps()}
-												className="u-mb-48"
-												startItem={(filters.page - 1) * FolderItemListSize}
-												itemsPerPage={FolderItemListSize}
-												totalItems={folderMedia.data?.total || 0}
-												showBackToTop
-												onPageChange={(page: number) =>
-													setFilters({
-														...filters,
-														page: page + 1,
-													})
-												}
-											/>
-										)}
+									{folderMedia.data && folderMedia.data?.total > FolderItemListSize && (
+										<PaginationBar
+											{...getDefaultPaginationBarProps()}
+											className="u-mb-48"
+											startItem={(filters.page - 1) * FolderItemListSize}
+											itemsPerPage={FolderItemListSize}
+											totalItems={folderMedia.data?.total || 0}
+											showBackToTop
+											onPageChange={(page: number) =>
+												setFilters({
+													...filters,
+													page: page + 1,
+												})
+											}
+										/>
+									)}
 								</div>
 							</>
 						)}
@@ -663,7 +623,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 						setShowConfirmDelete(false);
 
 						activeFolder &&
-							foldersService.delete(activeFolder.id).then(() => {
+							FoldersService.remove(activeFolder.id).then(() => {
 								refetchFolders();
 							});
 					}}
@@ -681,7 +641,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 							? {
 									schemaIdentifier: selected.schemaIdentifier,
 									title: selected.name,
-							  }
+								}
 							: undefined
 					}
 					onClose={() => {
@@ -708,10 +668,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 	return (
 		<VisitorLayout>
 			<SeoTags
-				title={
-					tText('pages/account/mijn-mappen/folder-slug/index___mijn-mappen') +
-					` | ${activeFolder?.name || folderSlug}`
-				}
+				title={`${tText('pages/account/mijn-mappen/folder-slug/index___mijn-mappen')} | ${activeFolder?.name || folderSlug}`}
 				description={tText(
 					'pages/account/mijn-mappen/folder-slug/index___mijn-mappen-meta-omschrijving'
 				)}
@@ -719,9 +676,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				translatedPages={[]}
 				relativeUrl={url}
 			/>
-			<PermissionsCheck
-				allPermissions={[Permission.MANAGE_ACCOUNT, Permission.MANAGE_FOLDERS]}
-			>
+			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT, Permission.MANAGE_FOLDERS]}>
 				{renderPageContent()}
 			</PermissionsCheck>
 		</VisitorLayout>

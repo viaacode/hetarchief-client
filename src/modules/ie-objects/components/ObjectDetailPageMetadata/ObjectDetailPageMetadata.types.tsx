@@ -1,11 +1,11 @@
-import {
-	type IeObject,
-	type IeObjectFile,
-	type IeObjectPageRepresentation,
-	type MediaActions,
+import type {
+	IeObject,
+	IeObjectFile,
+	IeObjectPageRepresentation,
+	MediaActions,
 } from '@ie-objects/ie-objects.types';
-import { type SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
-import { type VisitRequest } from '@shared/types/visit-request';
+import type { SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
+import type { VisitRequest } from '@shared/types/visit-request';
 
 export interface ObjectDetailPageMetadataProps {
 	mediaInfo: IeObject | null | undefined;

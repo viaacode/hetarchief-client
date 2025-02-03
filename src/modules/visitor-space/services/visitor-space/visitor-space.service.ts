@@ -1,4 +1,4 @@
-import { type OrderDirection } from '@meemoo/react-components';
+import type { OrderDirection } from '@meemoo/react-components';
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { QueryClient } from '@tanstack/react-query';
 import { sortBy } from 'lodash-es';
@@ -20,10 +20,10 @@ import {
 	type UpdateVisitorSpaceSettings,
 } from './visitor-space.service.types';
 
-export class VisitorSpaceService {
-	private static queryClient = new QueryClient();
+export namespace VisitorSpaceService {
+	const queryClient = new QueryClient();
 
-	public static async getAll(
+	export async function getAll(
 		searchInput = '',
 		status: VisitorSpaceStatus[] | undefined = undefined,
 		page = 0,
@@ -50,7 +50,7 @@ export class VisitorSpaceService {
 		return parsed as IPagination<VisitorSpaceInfo>;
 	}
 
-	public static async getAllAccessible(
+	export async function getAllAccessible(
 		canViewAllSpaces: boolean,
 		page = 0,
 		size = 20
@@ -66,7 +66,7 @@ export class VisitorSpaceService {
 									VisitorSpaceStatus.Requested,
 									VisitorSpaceStatus.Active,
 									VisitorSpaceStatus.Inactive,
-							  ]
+								]
 							: undefined,
 						page,
 						size,
@@ -77,7 +77,7 @@ export class VisitorSpaceService {
 		return sortBy(parsed.items, (space) => space.name?.toLowerCase());
 	}
 
-	public static async getBySlug(
+	export async function getBySlug(
 		slug: string | null,
 		ignoreAuthError: boolean
 	): Promise<VisitorSpaceInfo | null> {
@@ -89,7 +89,7 @@ export class VisitorSpaceService {
 			.json();
 	}
 
-	public static async create(
+	export async function create(
 		values: Partial<CreateVisitorSpaceSettings>
 	): Promise<VisitorSpaceInfo> {
 		const formData = new FormData();
@@ -115,12 +115,12 @@ export class VisitorSpaceService {
 		const response: VisitorSpaceInfo = await ApiService.getApi()
 			.post(VISITOR_SPACE_SERVICE_BASE_URL, { body: formData, headers })
 			.json();
-		await this.queryClient.invalidateQueries([QUERY_KEYS.getContentPartners]);
+		await queryClient.invalidateQueries([QUERY_KEYS.getContentPartners]);
 
 		return response;
 	}
 
-	public static async update(
+	export async function update(
 		roomId: string,
 		values: Partial<UpdateVisitorSpaceSettings>
 	): Promise<VisitorSpaceInfo> {
@@ -146,7 +146,10 @@ export class VisitorSpaceService {
 		};
 
 		return await ApiService.getApi()
-			.patch(`${VISITOR_SPACE_SERVICE_BASE_URL}/${roomId}`, { body: formData, headers })
+			.patch(`${VISITOR_SPACE_SERVICE_BASE_URL}/${roomId}`, {
+				body: formData,
+				headers,
+			})
 			.json();
 	}
 }

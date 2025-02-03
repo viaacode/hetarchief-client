@@ -80,7 +80,7 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 
 	// Click the material list icon
 	const materialListIcon = page.locator(
-		'.c-button' + moduleClassSelector('c-material-request-center')
+		`.c-button${moduleClassSelector('c-material-request-center')}`
 	);
 	await materialListIcon.click();
 
@@ -119,7 +119,9 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 			'modules/navigation/components/personal-info-blade/personal-info-blade___persoonlijke-gegevens'
 		];
 	await expect(
-		page.locator(moduleClassSelector('c-blade__title'), { hasText: bladeTitle })
+		page.locator(moduleClassSelector('c-blade__title'), {
+			hasText: bladeTitle,
+		})
 	).toBeVisible();
 	const personalDetailsBlade = page.locator('.c-blade--active');
 	await expect(personalDetailsBlade).toBeVisible();
@@ -148,9 +150,7 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 		.nth(1);
 	await expect(emailLabel).toBeVisible();
 	await expect(emailLabel).toContainText(
-		SITE_TRANSLATIONS.en[
-			'modules/visitor-space/components/report-blade/report-blade___email-adres'
-		]
+		SITE_TRANSLATIONS.en['modules/visitor-space/components/report-blade/report-blade___email-adres']
 	);
 
 	const emailValue = personalDetailsBlade
@@ -161,15 +161,14 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 
 	// Check organisation is empty
 	const orgInputField = page.locator(
-		moduleClassSelector('c-personal-info-blade__requester-capacity') +
-			' .c-input__field[type="text"]'
+		`${moduleClassSelector('c-personal-info-blade__requester-capacity')} .c-input__field[type="text"]`
 	);
 	await expect(orgInputField).toBeVisible();
 	expect(await orgInputField.inputValue()).toEqual('');
 
 	// Check checkbox for subscribe newsletter is visible (desktop)
 	const subscribeNewsletterCheckbox = page.locator(
-		'.u-hide-lt-bp2 ' + moduleClassSelector('c-personal-info-blade__checkbox')
+		`.u-hide-lt-bp2 ${moduleClassSelector('c-personal-info-blade__checkbox')}`
 	);
 	await expect(subscribeNewsletterCheckbox).toContainText(
 		SITE_TRANSLATIONS.en[
@@ -193,7 +192,7 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 
 	// Click the submit button
 	const submitButton = personalDetailsBlade.locator(
-		'.u-hide-lt-bp2 ' + moduleClassSelector('c-personal-info-blade__send-button')
+		`.u-hide-lt-bp2 ${moduleClassSelector('c-personal-info-blade__send-button')}`
 	);
 	await expect(submitButton).toBeVisible();
 	await submitButton.click();

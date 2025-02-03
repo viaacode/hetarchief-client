@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 
-import { type SearchTabCounts } from './get-search-tab-bar-counts';
+import type { SearchTabCounts } from './get-search-tab-bar-counts';
 
 export function compareSearchTabCountsLessThen(
 	countsBeforeSearch: SearchTabCounts,

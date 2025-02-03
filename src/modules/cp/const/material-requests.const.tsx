@@ -1,4 +1,4 @@
-import { type Column } from 'react-table';
+import type { Column } from 'react-table';
 import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
@@ -15,8 +15,6 @@ import { tText } from '@shared/helpers/translate';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils/dates';
 
 export const CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE = 20;
-
-export const CP_MATERIAL_REQUESTS_FILTER_ALL_ID = 'ALL';
 
 export const CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
@@ -43,15 +41,6 @@ export const GET_CP_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = (): {
 		label: tText('modules/cp/const/material-requests___filter-type-view'),
 	},
 ];
-
-export const GET_CP_MATERIAL_REQUEST_TYPE_FILTER_RECORD = (): Record<string, string> =>
-	GET_CP_MATERIAL_REQUEST_TYPE_FILTER_ARRAY().reduce(
-		(
-			acc: Record<string, string>,
-			curr: { id: string | number; label: string }
-		): Record<string, string> => ({ ...acc, [curr.id]: curr.label }),
-		{}
-	);
 
 export const getMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 	{

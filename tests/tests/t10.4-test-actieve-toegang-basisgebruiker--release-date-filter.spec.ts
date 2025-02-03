@@ -18,7 +18,7 @@ test('T10.4: Test actieve toegang basisgebruiker: Release date filter', async ({
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(
 		page,
-		(process.env.TEST_CLIENT_ENDPOINT as string) + '/zoeken',
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/zoeken`,
 		SEARCH_PAGE_TITLE
 	);
 
@@ -39,14 +39,13 @@ test('T10.4: Test actieve toegang basisgebruiker: Release date filter', async ({
 
 	// Enter a date
 	await page.click(
-		'text=' +
-			SITE_TRANSLATIONS.nl['modules/visitor-space/const/visitor-space-filters___uitgavedatum']
+		`text=${SITE_TRANSLATIONS.nl['modules/visitor-space/const/visitor-space-filters___uitgavedatum']}`
 	);
 	await page.fill('#c-filter-form--releaseDate #releaseDate', '01/01/2020');
 
 	// Click the submit button for the filter
 	const submitFilterButton = page.locator(
-		'#c-filter-form--releaseDate ' + moduleClassSelector('c-filter-form__submit')
+		`#c-filter-form--releaseDate ${moduleClassSelector('c-filter-form__submit')}`
 	);
 	await submitFilterButton.scrollIntoViewIfNeeded();
 	await expect(submitFilterButton).toBeVisible();

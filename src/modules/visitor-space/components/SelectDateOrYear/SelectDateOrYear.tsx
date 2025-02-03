@@ -1,5 +1,5 @@
 import { RadioButton } from '@meemoo/react-components';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { tText } from '@shared/helpers/translate';
 
@@ -25,10 +25,10 @@ const SelectDateOrYear: FC<SelectDateOrYearProps> = ({
 					showPluralLabel
 						? tText(
 								'modules/visitor-space/components/created-filter-form/created-filter-form___datums'
-						  )
+							)
 						: tText(
 								'modules/visitor-space/components/created-filter-form/created-filter-form___datum'
-						  )
+							)
 				}
 				onClick={() => setYearsSelected(false)}
 			/>
@@ -39,10 +39,10 @@ const SelectDateOrYear: FC<SelectDateOrYearProps> = ({
 					showPluralLabel
 						? tText(
 								'modules/visitor-space/components/created-filter-form/created-filter-form___jaartallen'
-						  )
+							)
 						: tText(
 								'modules/visitor-space/components/created-filter-form/created-filter-form___jaartal'
-						  )
+							)
 				}
 				onClick={() => setYearsSelected(true)}
 			/>

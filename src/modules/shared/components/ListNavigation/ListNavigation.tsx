@@ -23,7 +23,7 @@ const ListNavigation: FC<ListNavigationProps> = ({
 				? clsx(
 						styles['c-list-navigation__link'],
 						styles[`c-list-navigation__link--indent--${layer}`]
-				  )
+					)
 				: styles['c-list-navigation__link--simple'],
 	});
 
@@ -32,10 +32,16 @@ const ListNavigation: FC<ListNavigationProps> = ({
 			<ul className={clsx(styles['c-list-navigation__list'])}>
 				{items.map((item) => {
 					return (
-						<li key={`list-nav-item-${item.id}`} onClick={() => onClick?.(item.id)}>
-							{item.hasDivider && (
-								<div className={styles['c-list-navigation__divider']} />
-							)}
+						<li
+							key={`list-nav-item-${item.id}`}
+							onClick={() => onClick?.(item.id)}
+							onKeyUp={(evt) => {
+								if (evt.key === 'Enter') {
+									onClick?.(item.id);
+								}
+							}}
+						>
+							{item.hasDivider && <div className={styles['c-list-navigation__divider']} />}
 							<div
 								className={clsx(
 									styles['c-list-navigation__item'],
@@ -47,9 +53,7 @@ const ListNavigation: FC<ListNavigationProps> = ({
 								)}
 							>
 								<div>
-									{typeof item.node === 'function'
-										? item.node(nodeProps(layer))
-										: item.node}
+									{typeof item.node === 'function' ? item.node(nodeProps(layer)) : item.node}
 								</div>
 							</div>
 							{!isEmpty(item.children) &&

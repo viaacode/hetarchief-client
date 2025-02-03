@@ -9,11 +9,12 @@ import { object as yupObject, string as yupString } from 'yup';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import AutocompleteFieldInput from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
 import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
-import { type DefaultFilterFormChildrenParams } from '@visitor-space/types';
+import type { DefaultFilterFormChildrenParams } from '@visitor-space/types';
 
 import styles from './AutocompleteFieldFilterForm.module.scss';
 
 export const AutocompleteFieldFilterForm: FC<{
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	children: ({ values, reset, handleSubmit }: DefaultFilterFormChildrenParams<any>) => ReactNode;
 	className?: string;
 	autocompleteField: AutocompleteField;
@@ -62,18 +63,12 @@ export const AutocompleteFieldFilterForm: FC<{
 	return (
 		<>
 			<div
-				className={clsx(
-					className,
-					styles['c-creator-filter-form__input'],
-					'u-px-20 u-px-32-md'
-				)}
+				className={clsx(className, styles['c-creator-filter-form__input'], 'u-px-20 u-px-32-md')}
 			>
 				<FormControl
 					className="c-form-control--label-hidden"
-					errors={[
-						<RedFormWarning error={errors?.value?.message} key="form-error--value" />,
-					]}
-					id={'AutocompleteFieldFilterForm__' + autocompleteField}
+					errors={[<RedFormWarning error={errors?.value?.message} key="form-error--value" />]}
+					id={`AutocompleteFieldFilterForm__${autocompleteField}`}
 					label={filterTitle}
 				>
 					<Controller

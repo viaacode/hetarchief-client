@@ -33,7 +33,7 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 		setFooterHeight(
 			document.querySelector(moduleClassSelector('c-footer'))?.clientHeight || 0 // 0 when no footer is found
 		);
-	}, [setFooterHeight]);
+	}, []);
 
 	/**
 	 * Change the bottom margin of the zendesk widget, so it doesn't overlap with the footer
@@ -46,7 +46,7 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 
 			widget.style.zIndex = '3'; // Ensure the zendesk widget doesn't show on top of blades
 			widget.style.width = 'auto';
-			widget.style.marginRight = zendeskMarginRight + 'px';
+			widget.style.marginRight = `${zendeskMarginRight}px`;
 
 			if (
 				scrollHeight - screenHeight - scrollTop < footerHeight + zendeskMarginBottom &&
@@ -54,15 +54,11 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 			) {
 				// Collided with footer
 				// Show zendesk button on the edge of the footer
-				widget.style.marginBottom = `${
-					footerHeight -
-					feedbackButtonHeight / 2 -
-					(scrollHeight - screenHeight - scrollTop)
-				}px`;
+				widget.style.marginBottom = `${footerHeight - feedbackButtonHeight / 2 - (scrollHeight - screenHeight - scrollTop)}px`;
 			} else {
 				// Still scrolling, not yet collided with the footer
 				// Or there is no footer on the page
-				widget.style.marginBottom = zendeskMarginBottom + 'px';
+				widget.style.marginBottom = `${zendeskMarginBottom}px`;
 			}
 		}
 	}, [footerHeight, widget]);
@@ -76,7 +72,7 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 		} else {
 			setWidget(zendeskWidget);
 		}
-	}, [setWidget]);
+	}, []);
 
 	const onResize = useCallback(() => {
 		updateFooterHeight();
@@ -102,6 +98,7 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 		};
 	}, [onResize, updateFooterHeight, getZendeskWidget, updateMargin]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		setTimeout(() => {
 			initListeners();

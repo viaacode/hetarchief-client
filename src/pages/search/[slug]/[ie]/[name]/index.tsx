@@ -1,15 +1,15 @@
-import { type GetServerSidePropsResult, type NextPage } from 'next';
-import { type GetServerSidePropsContext } from 'next/types';
+import type { GetServerSidePropsResult, NextPage } from 'next';
+import type { GetServerSidePropsContext } from 'next/types';
 import React from 'react';
 
 import { ObjectDetailPage } from '@ie-objects/ObjectDetailPage';
 import { prefetchDetailPageQueries } from '@ie-objects/ObjectDetailPage.helpers';
 import { getIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
-import { type IeObject } from '@ie-objects/ie-objects.types';
+import type { IeObject } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
-import { type SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
+import type { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 const ObjectDetailPageEnglish: NextPage<DefaultSeoInfo> = ({
 	title,
@@ -45,7 +45,7 @@ export async function getServerSideProps(
 	try {
 		seoInfo = await IeObjectsService.getSeoById(ieObjectId);
 	} catch (err) {
-		console.error('Failed to fetch media info by id: ' + context.query.ie, err);
+		console.error(`Failed to fetch media info by id: ${context.query.ie}`, err);
 	}
 
 	return getDefaultStaticProps(context, context.resolvedUrl, {

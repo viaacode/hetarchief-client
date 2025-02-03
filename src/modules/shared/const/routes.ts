@@ -1,6 +1,6 @@
-import { type AdminConfig } from '@meemoo/admin-core-ui/dist/client.mjs';
+import type { AdminConfig } from '@meemoo/admin-core-ui/dist/client.mjs';
 
-import { type Locale } from '@shared/utils/i18n';
+import type { Locale } from '@shared/utils/i18n';
 
 export enum RoutePart {
 	accessRequested = 'accessRequested',
@@ -247,7 +247,7 @@ const ROUTES_NL: Record<RouteKey, string> = {
 	adminVisitorSpaceCreate: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.visitorSpaceManagement}/${ROUTE_PARTS_NL.visitorSpaces}/${ROUTE_PARTS_NL.create}`,
 	adminVisitorSpaceEdit: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.visitorSpaceManagement}/${ROUTE_PARTS_NL.visitorSpaces}/:slug`,
 	adminVisitorSpaces: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.visitorSpaceManagement}/${ROUTE_PARTS_NL.visitorSpaces}`,
-	cookiePolicy: '/' + ROUTE_PARTS_NL.cookiePolicy,
+	cookiePolicy: `/${ROUTE_PARTS_NL.cookiePolicy}`,
 	cpAdmin: `/${ROUTE_PARTS_NL.cpAdmin}`,
 	cpAdminMaterialRequests: `/${ROUTE_PARTS_NL.cpAdmin}/${ROUTE_PARTS_NL.materialRequests}`,
 	cpAdminSettings: `/${ROUTE_PARTS_NL.cpAdmin}/${ROUTE_PARTS_NL.settings}`,
@@ -299,7 +299,7 @@ const ROUTES_EN: Record<RouteKey, string> = {
 	adminVisitorSpaceCreate: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.visitorSpaceManagement}/${ROUTE_PARTS_EN.visitorSpaces}/${ROUTE_PARTS_EN.create}`,
 	adminVisitorSpaceEdit: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.visitorSpaceManagement}/${ROUTE_PARTS_EN.visitorSpaces}/:slug`,
 	adminVisitorSpaces: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.visitorSpaceManagement}/${ROUTE_PARTS_EN.visitorSpaces}`,
-	cookiePolicy: '/' + ROUTE_PARTS_EN.cookiePolicy,
+	cookiePolicy: `/${ROUTE_PARTS_EN.cookiePolicy}`,
 	cpAdmin: `/${ROUTE_PARTS_EN.cpAdmin}`,
 	cpAdminMaterialRequests: `/${ROUTE_PARTS_EN.cpAdmin}/${ROUTE_PARTS_EN.materialRequests}`,
 	cpAdminSettings: `/${ROUTE_PARTS_EN.cpAdmin}/${ROUTE_PARTS_EN.settings}`,

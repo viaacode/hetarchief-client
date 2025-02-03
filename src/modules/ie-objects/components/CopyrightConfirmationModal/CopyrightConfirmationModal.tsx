@@ -1,8 +1,8 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
-import { type CopyrightConfirmationModalProps } from '@ie-objects/components/CopyrightConfirmationModal/CopyrightConfirmationModal.types';
+import type { CopyrightConfirmationModalProps } from '@ie-objects/components/CopyrightConfirmationModal/CopyrightConfirmationModal.types';
 import { Modal } from '@shared/components/Modal';
 import { globalLabelKeys } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -38,12 +38,7 @@ export const CopyrightConfirmationModal: FC<CopyrightConfirmationModalProps> = (
 						'modules/ie-objects/components/copyright-confirmation-modal/copyright-confirmation-modal___opgelet-je-gaat-deze-krant-downloaden-ga-zelf-grondig-na-of-er-nog-auteursrechten-rusten-op-dit-object-als-gebruiker-ben-je-zelf-verantwoordelijk'
 					)}
 				</div>
-				<div
-					className={clsx(
-						styles['c-copyright-modal__content__button-wrapper'],
-						'u-mb-40'
-					)}
-				>
+				<div className={clsx(styles['c-copyright-modal__content__button-wrapper'], 'u-mb-40')}>
 					<Button
 						label={tText(
 							'modules/ie-objects/components/copyright-confirmation-modal/copyright-confirmation-modal___annuleren'

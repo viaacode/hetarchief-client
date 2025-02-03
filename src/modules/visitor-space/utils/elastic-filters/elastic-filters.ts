@@ -7,7 +7,7 @@ import {
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
 } from '@shared/types/ie-objects';
-import { type VisitRequest } from '@shared/types/visit-request';
+import type { VisitRequest } from '@shared/types/visit-request';
 
 import { type SearchPageQueryParams, VISITOR_SPACE_QUERY_PARAM_INIT } from '../../const';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '../../types';
@@ -38,7 +38,7 @@ export const mapMaintainerToElastic = (
 					field: IeObjectsSearchFilterField.IDENTIFIER,
 					operator: IeObjectsSearchOperator.IS,
 					multiValue: activeVisitorSpace?.accessibleObjectIds,
-			  }
+				}
 			: null;
 
 	return compact([
@@ -145,8 +145,7 @@ export const mapFiltersToElastic = (query: SearchPageQueryParams): IeObjectsSear
 			field: IeObjectsSearchFilterField.MAINTAINER_ID,
 			operator: IeObjectsSearchOperator.IS,
 			multiValue: (compact(query[SearchFilterId.Maintainers] || []) as string[]).map(
-				(maintainerId: string) =>
-					maintainerId.split(FILTER_LABEL_VALUE_DELIMITER)[0] as string
+				(maintainerId: string) => maintainerId.split(FILTER_LABEL_VALUE_DELIMITER)[0] as string
 			),
 		},
 		// Consultable Remote

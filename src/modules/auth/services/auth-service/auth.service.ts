@@ -1,8 +1,8 @@
 import { QueryClient } from '@tanstack/react-query';
-import { type Options } from 'ky/distribution/types/options';
+import type { Options } from 'ky/distribution/types/options';
 import { omit, trimEnd } from 'lodash-es';
 import getConfig from 'next/config';
-import { type NextRouter } from 'next/router';
+import type { NextRouter } from 'next/router';
 import { parseUrl, type StringifiableRecord, stringifyUrl } from 'query-string';
 
 import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
@@ -11,17 +11,17 @@ import { ApiService } from '@shared/services/api-service';
 import { TranslationService } from '@shared/services/translation-service/translation.service';
 import { Locale } from '@shared/utils/i18n';
 
-import { type CheckLoginResponse } from './auth.service.types';
+import type { CheckLoginResponse } from './auth.service.types';
 
 const { publicRuntimeConfig } = getConfig();
 
-export class AuthService {
-	public static async checkLogin(options: Options = {}): Promise<CheckLoginResponse> {
-		const test = await ApiService.getApi().get(`auth/check-login`, options).json();
+export namespace AuthService {
+	export async function checkLogin(options: Options = {}): Promise<CheckLoginResponse> {
+		const test = await ApiService.getApi().get('auth/check-login', options).json();
 		return test as CheckLoginResponse;
 	}
 
-	public static async redirectToLoginHetArchief(
+	export async function redirectToLoginHetArchief(
 		query: StringifiableRecord,
 		router: NextRouter
 	): Promise<void> {
@@ -30,13 +30,11 @@ export class AuthService {
 		let originalPath: string = (redirectTo as string) || router.asPath || '';
 
 		// Don't redirect the user back to logout, after they logged in
-		if ((originalPath || '').endsWith('/' + ROUTE_PARTS.logout)) {
+		if ((originalPath || '').endsWith(`/${ROUTE_PARTS.logout}`)) {
 			originalPath = '/';
 		}
 
-		if (
-			(originalPath || '') === ROUTES_BY_LOCALE[(router.locale || Locale.nl) as Locale].home
-		) {
+		if ((originalPath || '') === ROUTES_BY_LOCALE[(router.locale || Locale.nl) as Locale].home) {
 			originalPath = `/${ROUTE_PARTS.visit}`;
 		}
 
@@ -73,7 +71,7 @@ export class AuthService {
 		);
 	}
 
-	public static async redirectToRegisterHetArchief(
+	export async function redirectToRegisterHetArchief(
 		query: StringifiableRecord,
 		router: NextRouter
 	): Promise<void> {
@@ -94,13 +92,11 @@ export class AuthService {
 		);
 	}
 
-	public static async logout(shouldRedirectToOriginalPage = false): Promise<void> {
+	export async function logout(shouldRedirectToOriginalPage = false): Promise<void> {
 		const locale = TranslationService.getLocale();
-		let returnToUrl = publicRuntimeConfig.CLIENT_URL + '/' + locale;
+		let returnToUrl = `${publicRuntimeConfig.CLIENT_URL}/${locale}`;
 		if (shouldRedirectToOriginalPage) {
-			let originalPath = window.location.href.substring(
-				publicRuntimeConfig.CLIENT_URL.length
-			);
+			let originalPath = window.location.href.substring(publicRuntimeConfig.CLIENT_URL.length);
 			const originalPathIsLogoutPath = !!Object.values(ROUTE_PARTS_BY_LOCALE)
 				.map((value) => value.logout)
 				.find((logoutPart) => originalPath.startsWith(`/${logoutPart}`));
@@ -108,9 +104,9 @@ export class AuthService {
 				originalPath = '/';
 			}
 			returnToUrl = stringifyUrl({
-				url: publicRuntimeConfig.CLIENT_URL + '/' + locale,
+				url: `${publicRuntimeConfig.CLIENT_URL}/${locale}`,
 				query: {
-					redirectTo: '/' + locale + originalPath,
+					redirectTo: `/${locale}${originalPath}`,
 					showAuth: 1,
 				},
 			});

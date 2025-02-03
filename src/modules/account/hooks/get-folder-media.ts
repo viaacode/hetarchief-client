@@ -1,8 +1,8 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
-import { useQuery, type UseQueryResult } from '@tanstack/react-query';
+import { type UseQueryResult, useQuery } from '@tanstack/react-query';
 
-import { foldersService } from '@account/services/folders';
-import { type FolderIeObject } from '@account/types';
+import { FoldersService } from '@account/services/folders';
+import type { FolderIeObject } from '@account/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
 export function useGetFolderMedia(
@@ -15,7 +15,7 @@ export function useGetFolderMedia(
 		[QUERY_KEYS.getCollectionMedia, searchInput, page, size],
 		() => {
 			if (id) {
-				return foldersService.getById(id, searchInput, page, size);
+				return FoldersService.getById(id, searchInput, page, size);
 			}
 		},
 		{

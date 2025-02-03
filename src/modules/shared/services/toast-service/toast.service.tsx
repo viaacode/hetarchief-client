@@ -2,7 +2,7 @@ import { toast, type ToastOptions } from 'react-toastify';
 
 import { Toast, type ToastProps } from '@shared/components/Toast';
 import { tText } from '@shared/helpers/translate';
-import { type Optional } from '@shared/types/utils';
+import type { Optional } from '@shared/types/utils';
 
 class ToastService {
 	public notify(
@@ -29,7 +29,10 @@ class ToastService {
 					onClose={() => onToastClose(closeToast)}
 				/>
 			),
-			{ autoClose: 10000, ...toastOptions }
+			{
+				autoClose: 10000,
+				...toastOptions,
+			}
 		) as string;
 	}
 

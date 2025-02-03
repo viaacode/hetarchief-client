@@ -1,7 +1,7 @@
-import { type FC } from 'react';
+import type { FC } from 'react';
 import { components } from 'react-select';
 
-import { type TagSearchBarValueContainerProps } from './TagSearchBarValueContainer.types';
+import type { TagSearchBarValueContainerProps } from './TagSearchBarValueContainer.types';
 
 const { ValueContainer } = components;
 

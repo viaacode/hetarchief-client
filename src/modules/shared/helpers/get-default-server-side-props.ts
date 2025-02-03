@@ -1,10 +1,10 @@
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { type GetServerSidePropsContext, type GetStaticPropsResult } from 'next/types';
+import type { GetServerSidePropsContext, GetStaticPropsResult } from 'next/types';
 import { i18n } from 'next-i18next';
 
 import { getTranslations } from '@i18n/helpers/get-translations';
 import { makeServerSideRequestGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
 
 export async function getDefaultStaticProps(

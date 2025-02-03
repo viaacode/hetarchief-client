@@ -8,7 +8,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Blade } from '@shared/components/Blade/Blade';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
-import { type NotificationCenterProps } from '@shared/components/NotificationCenter/NotificationCenter.types';
+import type { NotificationCenterProps } from '@shared/components/NotificationCenter/NotificationCenter.types';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import {
@@ -77,9 +77,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 			});
 
 			toastService.notify({
-				title: tHtml(
-					'modules/shared/components/notification-center/notification-center___error'
-				),
+				title: tHtml('modules/shared/components/notification-center/notification-center___error'),
 				description: tHtml(
 					'modules/shared/components/notification-center/notification-center___het-markeren-van-alle-notificaties-al-gelezen-is-mislukt'
 				),
@@ -95,9 +93,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 			setNotificationReadStatus({});
 
 			toastService.notify({
-				title: tHtml(
-					'modules/shared/components/notification-center/notification-center___success'
-				),
+				title: tHtml('modules/shared/components/notification-center/notification-center___success'),
 				description: tHtml(
 					'modules/shared/components/notification-center/notification-center___alle-notificaties-zijn-gemarkeerd-als-gelezen'
 				),
@@ -109,9 +105,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 			});
 
 			toastService.notify({
-				title: tHtml(
-					'modules/shared/components/notification-center/notification-center___error'
-				),
+				title: tHtml('modules/shared/components/notification-center/notification-center___error'),
 				description: tHtml(
 					'modules/shared/components/notification-center/notification-center___het-markeren-van-alle-notificaties-al-gelezen-is-mislukt'
 				),
@@ -180,10 +174,10 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 				unread.length > 0
 					? tText(
 							'modules/shared/components/notification-center/notification-center___markeer-alle-notificaties-als-gelezen'
-					  )
+						)
 					: tText(
 							'modules/shared/components/notification-center/notification-center___alle-notificaties-zijn-reeds-gelezen'
-					  )
+						)
 			}
 			label={tHtml(
 				'modules/shared/components/notification-center/notification-center___markeer-alles-als-gelezen'
@@ -269,9 +263,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 				{!!read.length && (
 					<div className={styles['c-notification-center__read']}>
 						<h4 className={styles['c-notification-center__header']}>
-							{tHtml(
-								'modules/shared/components/notification-center/notification-center___gelezen'
-							)}
+							{tHtml('modules/shared/components/notification-center/notification-center___gelezen')}
 						</h4>
 
 						{read.map((notification) => (

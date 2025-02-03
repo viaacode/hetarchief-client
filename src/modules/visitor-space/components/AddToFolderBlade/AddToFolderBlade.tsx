@@ -5,8 +5,8 @@ import { type FC, useEffect, useState } from 'react';
 
 import { CreateFolderButton } from '@account/components';
 import { useGetFolders } from '@account/hooks/get-folders';
-import { foldersService } from '@account/services/folders';
-import { type Folder } from '@account/types';
+import { FoldersService } from '@account/services/folders';
+import type { Folder } from '@account/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -14,7 +14,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 
 import styles from './AddToFolderBlade.module.scss';
-import { type AddToFolderBladeProps } from './AddToFolderBlade.types';
+import type { AddToFolderBladeProps } from './AddToFolderBlade.types';
 
 const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	objectToAdd,
@@ -25,9 +25,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	...bladeProps
 }) => {
 	const { data: folders, refetch: refetchFolders } = useGetFolders();
-	const [originalSelectedFolderIds, setOriginalSelectedFolderIds] = useState<string[] | null>(
-		null
-	);
+	const [originalSelectedFolderIds, setOriginalSelectedFolderIds] = useState<string[] | null>(null);
 	const [selectedFolderIds, setSelectedFolderIds] = useState<string[] | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -41,8 +39,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			const tempOriginalSelectedFolderIds = folders
 				.filter((folder) =>
 					(folder.objects || []).find(
-						(obj) =>
-							!!objectToAdd && obj.schemaIdentifier === objectToAdd?.schemaIdentifier
+						(obj) => !!objectToAdd && obj.schemaIdentifier === objectToAdd?.schemaIdentifier
 					)
 				)
 				.map((folder) => folder.id);
@@ -97,8 +94,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			// Define our promises
 			const updatePromises = [
 				...objectAddedToFolderIds.map((folderId) =>
-					foldersService
-						.addToFolder(folderId, objectToAdd.schemaIdentifier)
+					FoldersService.addToFolder(folderId, objectToAdd.schemaIdentifier)
 						.catch(onFailedRequest)
 						.then((response) => {
 							if (response === undefined) {
@@ -109,8 +105,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 						})
 				),
 				...objectRemovedFromFolderIds.map((folderId) =>
-					foldersService
-						.removeFromFolder(folderId, objectToAdd.schemaIdentifier)
+					FoldersService.removeFromFolder(folderId, objectToAdd.schemaIdentifier)
 						.catch(onFailedRequest)
 						.then((response) => {
 							if (response === undefined) {
@@ -127,10 +122,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 
 			// Show ONE correct toast message
 			if (addedToFolderIds.length > 0 && removedFromFolderIds.length > 0) {
-				const folderTitles = folderIdsToTitles([
-					...addedToFolderIds,
-					...removedFromFolderIds,
-				]);
+				const folderTitles = folderIdsToTitles([...addedToFolderIds, ...removedFromFolderIds]);
 				toastService.notify({
 					maxLines: 3,
 					title: tHtml(
@@ -306,8 +298,11 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 					key={`item--${folder.id}`}
 					className={styles['c-add-to-folder-blade__list-item']}
 					onClick={() => onCheckboxClick(folder.id)}
-					tabIndex={0}
-					role="button"
+					onKeyUp={(evt) => {
+						if (evt.key === 'Enter') {
+							onCheckboxClick(folder.id);
+						}
+					}}
 				>
 					<Checkbox
 						value={`add-to--${folder.id}`}
@@ -324,19 +319,17 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 						)}
 					/>
 
-					<span className={styles['c-add-to-folder-blade__list-item__label']}>
-						{folder?.name}
-					</span>
+					<span className={styles['c-add-to-folder-blade__list-item__label']}>{folder?.name}</span>
 
 					<span className={styles['c-add-to-folder-blade__list-item__count']}>
 						{count === 1
 							? tHtml(
 									'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___1-item'
-							  )
+								)
 							: tHtml(
 									'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___count-items',
 									{ count }
-							  )}
+								)}
 					</span>
 				</li>
 			);
@@ -361,7 +354,9 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			<div className="u-px-32">
 				{tHtml(
 					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___kies-de-map-waaraan-je-strong-title-strong-wil-toevoegen',
-					{ title: objectToAdd?.title || '' }
+					{
+						title: objectToAdd?.title || '',
+					}
 				)}
 			</div>
 

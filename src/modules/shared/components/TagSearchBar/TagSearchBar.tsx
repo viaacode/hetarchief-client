@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import { type KeyboardEvent, type ReactElement, useMemo } from 'react';
-import { type InputActionMeta } from 'react-select';
+import type { InputActionMeta } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 
-import {
-	type OnSearchSingle,
-	type TagSearchBarMeta,
-	type TagSearchBarProps,
-	type TagSearchBarValue,
+import type {
+	OnSearchSingle,
+	TagSearchBarMeta,
+	TagSearchBarProps,
+	TagSearchBarValue,
 } from '@shared/components/TagSearchBar/TagSearchBar.types';
 import { tText } from '@shared/helpers/translate';
 
@@ -104,10 +104,10 @@ const TagSearchBar = <IsMulti extends boolean>({
 
 	const rootCls = clsx(className, 'c-tag-search-bar', 'c-tags-input', 'c-tags-input__creatable', {
 		[`c-tag-search-bar--${size}`]: size,
-		['c-tag-search-bar--has-value-placeholder']: !!valuePlaceholder,
-		['c-tag-search-bar--light']: light,
-		['c-tag-search-bar--has-dropdown']: hasDropdown,
-		['c-tag-search-bar--has-rendered-right']: renderedRight,
+		'c-tag-search-bar--has-value-placeholder': !!valuePlaceholder,
+		'c-tag-search-bar--light': light,
+		'c-tag-search-bar--has-dropdown': hasDropdown,
+		'c-tag-search-bar--has-rendered-right': renderedRight,
 	});
 	const showMenu = typeof menuIsOpen !== 'undefined' ? menuIsOpen : (options?.length ?? 0) > 0;
 	const value = isMulti ? tagsInputProps.value : selectValue;
@@ -125,7 +125,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 				classNamePrefix={'c-tags-input'}
 				{...tagsInputProps}
 				className={rootCls}
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				components={components as any}
 				inputValue={inputValue}
 				isClearable={isClearable}

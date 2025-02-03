@@ -1,6 +1,6 @@
 import { OrderDirection, PaginationBar, Table } from '@meemoo/react-components';
 import { type FC, type ReactNode, useMemo, useState } from 'react';
-import { type TableState } from 'react-table';
+import type { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
@@ -24,7 +24,7 @@ import { globalLabelKeys } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { useUpdateVisitRequest } from '@visit-requests/hooks/update-visit';
@@ -58,7 +58,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const { mutateAsync: updateVisitRequest } = useUpdateVisitRequest();
 	const selectedItem = useMemo(
 		() => visits?.items.find((item) => item.id === selected),
-		[visits, selected]
+		[selected, visits?.items]
 	);
 
 	// Filters
@@ -81,7 +81,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 				desc: filters.orderDirection !== OrderDirection.asc,
 			},
 		];
-	}, [filters]);
+	}, [filters.orderProp, filters.orderDirection]);
 
 	// Events
 
@@ -89,17 +89,11 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	) => {
-		if (!orderProp) {
-			orderProp = 'startAt';
-		}
-		if (!orderDirection) {
-			orderDirection = OrderDirection.desc;
-		}
 		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
-				orderProp,
-				orderDirection,
+				orderProp: orderProp || 'startAt',
+				orderDirection: orderDirection || OrderDirection.desc,
 				page: 1,
 			});
 		}
@@ -159,7 +153,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 			case VisitTimeframe.ACTIVE:
 				return tHtml('pages/beheer/bezoekers/index___er-zijn-geen-actieve-bezoekers');
 
-			case VisitTimeframe.PAST:
+			// case VisitTimeframe.PAST:
 			default:
 				return tHtml(
 					'pages/beheer/bezoekers/index___er-zijn-nog-geen-bezoekers-in-de-bezoek-historiek'
@@ -271,9 +265,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 				<ApproveRequestBlade
 					title={tHtml('pages/beheer/bezoekers/index___aanvraag-aanpassen')}
 					approveButtonLabel={tText('pages/beheer/bezoekers/index___aanpassen')}
-					successTitle={tHtml(
-						'pages/beheer/bezoekers/index___de-aanpassingen-zijn-opgeslagen'
-					)}
+					successTitle={tHtml('pages/beheer/bezoekers/index___de-aanpassingen-zijn-opgeslagen')}
 					successDescription={tHtml(
 						'pages/beheer/bezoekers/index___de-aanpassingen-aan-de-bezoekersaanvraag-zijn-opgeslagen'
 					)}
@@ -293,12 +285,8 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<>
 			<SeoTags
-				title={`${tText('pages/beheer/bezoekers/index___bezoekers')} | ${tText(
-					'modules/cp/views/cp-admin-visitors___beheer'
-				)}`}
-				description={tText(
-					'pages/beheer/bezoekers/index___beheer-bezoekers-meta-omschrijving'
-				)}
+				title={`${tText('pages/beheer/bezoekers/index___bezoekers')} | ${tText('modules/cp/views/cp-admin-visitors___beheer')}`}
+				description={tText('pages/beheer/bezoekers/index___beheer-bezoekers-meta-omschrijving')}
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}

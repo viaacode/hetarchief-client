@@ -1,6 +1,6 @@
 import { array, date, mixed, object, ref, type Schema, string } from 'yup';
 
-import { type ApproveRequestFormState } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.types';
+import type { ApproveRequestFormState } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.types';
 import { tText } from '@shared/helpers/translate';
 import { AccessType } from '@shared/types/visit-request';
 
@@ -40,9 +40,8 @@ export const APPROVE_REQUEST_FORM_SCHEMA = (): Schema<ApproveRequestFormState> =
 					return array()
 						.of(string().required())
 						.required('Selecting folders is required when access type is FOLDERS');
-				} else {
-					return array().of(string().required()).optional();
 				}
+				return array().of(string().required()).optional();
 			}),
 		}).required(),
 	}) as Schema<ApproveRequestFormState>;

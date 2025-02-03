@@ -4,10 +4,10 @@ import clsx from 'clsx';
 import { type FC, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { type CreateFolderButtonProps } from '@account/components';
+import type { CreateFolderButtonProps } from '@account/components';
 import { COLLECTION_FORM_SCHEMA } from '@account/const';
-import { foldersService } from '@account/services/folders';
-import { type CreateFolderFormState } from '@account/types';
+import { FoldersService } from '@account/services/folders';
+import type { CreateFolderFormState } from '@account/types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
@@ -62,7 +62,7 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 	const onFormSubmit = async () => {
 		return new Promise<void>((resolve, reject) => {
 			handleSubmit(async (values) => {
-				const folder = await foldersService.create(values);
+				const folder = await FoldersService.create(values);
 				afterSubmit(folder);
 
 				toastService.notify({
@@ -81,11 +81,7 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 
 	return (
 		<FormControl
-			className={clsx(
-				styles['c-create-folder-button'],
-				'u-px-24',
-				'c-form-control--label-hidden'
-			)}
+			className={clsx(styles['c-create-folder-button'], 'u-px-24', 'c-form-control--label-hidden')}
 			errors={[<RedFormWarning error={errors.name?.message} key="form-error--name" />]}
 			id={labelKeys.name}
 			label={defaultName}

@@ -25,9 +25,7 @@ describe('Components', () => {
 		it('Should set the correct logo type - light', () => {
 			const type = HetArchiefLogoType.Light;
 			const customClass = 'c-custom-logo-class';
-			const { container: logo } = render(
-				<HetArchiefLogo type={type} className={customClass} />
-			);
+			const { container: logo } = render(<HetArchiefLogo type={type} className={customClass} />);
 
 			expect(logo.querySelector('#type-1')?.getAttribute('fill')).toEqual(type);
 			expect(logo.querySelector('#type-2')?.getAttribute('fill')).toEqual(type);
@@ -36,9 +34,7 @@ describe('Components', () => {
 		it('Should set the correct logo type - dark', () => {
 			const type = HetArchiefLogoType.Dark;
 			const customClass = 'c-custom-logo-class';
-			const { container: logo } = render(
-				<HetArchiefLogo type={type} className={customClass} />
-			);
+			const { container: logo } = render(<HetArchiefLogo type={type} className={customClass} />);
 
 			expect(logo.querySelector('#type-1')?.getAttribute('fill')).toEqual(type);
 			expect(logo.querySelector('#type-2')?.getAttribute('fill')).toEqual(type);

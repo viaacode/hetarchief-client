@@ -1,9 +1,9 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
-import { type AuthModalProps } from '@auth/components';
+import type { AuthModalProps } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
 import Html from '@shared/components/Html/Html';
 import { Icon } from '@shared/components/Icon';
@@ -86,9 +86,7 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 				</p>
 				<Button
 					className="u-mb-48"
-					label={tHtml(
-						'modules/auth/components/auth-modal/auth-modal___registreer-je-hier'
-					)}
+					label={tHtml('modules/auth/components/auth-modal/auth-modal___registreer-je-hier')}
 					variants="outline"
 					onClick={onRegisterHetArchief}
 				/>

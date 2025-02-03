@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import styles from './Metadata.module.scss';
-import { type MetadataProps } from './Metadata.types';
+import type { MetadataProps } from './Metadata.types';
 
 const Metadata: FC<MetadataProps> = ({
 	className,
@@ -15,7 +15,7 @@ const Metadata: FC<MetadataProps> = ({
 		return null;
 	}
 	return (
-		<div className={clsx(styles['c-metadata__item'], className, 'u-flex')} role="listitem">
+		<div className={clsx(styles['c-metadata__item'], className, 'u-flex')}>
 			<div className="u-flex-grow">
 				<dt className={styles['c-metadata__item-title']}>
 					<span className="u-flex-grow">{title}</span>

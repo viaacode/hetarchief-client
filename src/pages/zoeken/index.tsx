@@ -1,6 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
-import { type GetServerSidePropsContext, type GetServerSidePropsResult, type NextPage } from 'next';
-import { type ComponentType } from 'react';
+import type { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
+import type { ComponentType } from 'react';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { makeServerSideRequestGetIeObjectFormatCounts } from '@ie-objects/hooks/get-ie-object-format-counts';
@@ -8,20 +8,14 @@ import { makeServerSideRequestGetIeObjects } from '@ie-objects/hooks/get-ie-obje
 import SearchPage from '@search/SearchPage';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { makeServerSideRequestGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 
 type SearchPageProps = DefaultSeoInfo;
 
 const SearchPageDutch: NextPage<SearchPageProps> = ({ url, locale, title, description, image }) => {
 	return (
-		<SearchPage
-			url={url}
-			locale={locale}
-			title={title}
-			description={description}
-			image={image}
-		/>
+		<SearchPage url={url} locale={locale} title={title} description={description} image={image} />
 	);
 };
 
@@ -31,9 +25,14 @@ export async function getServerSideProps(
 	const queryClient = new QueryClient();
 	await makeServerSideRequestGetIeObjects(queryClient);
 	await makeServerSideRequestGetIeObjectFormatCounts(queryClient);
-	await makeServerSideRequestGetVisitRequests(queryClient, { page: 0, size: 20 });
+	await makeServerSideRequestGetVisitRequests(queryClient, {
+		page: 0,
+		size: 20,
+	});
 
-	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.search, { queryClient });
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.nl.search, {
+		queryClient,
+	});
 }
 
 export default withAuth(SearchPageDutch as ComponentType, false);

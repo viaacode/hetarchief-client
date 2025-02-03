@@ -1,14 +1,14 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { type ComponentLink } from '@shared/types';
+import type { ComponentLink } from '@shared/types';
 
 import styles from './Footer.module.scss';
-import { type FooterProps } from './Footer.types';
+import type { FooterProps } from './Footer.types';
 
 const Footer: FC<FooterProps> = ({ linkSections }) => {
 	const locale = useLocale();
@@ -19,7 +19,7 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 				{links.map((link, index) => {
 					return (
 						<Link
-							key={link.to + '-' + index}
+							key={`${link.to}-${index}`}
 							href={link.to}
 							className={styles['c-footer__link']}
 							target={link.external ? '_blank' : '_self'}
@@ -83,16 +83,12 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 					/>
 				</Link>
 
-				<div>
-					{tText('modules/navigation/components/footer/footer___een-initiatief-van')}
-				</div>
+				<div>{tText('modules/navigation/components/footer/footer___een-initiatief-van')}</div>
 				<Link
 					href="https://meemoo.be"
 					className={styles['c-footer__image-link']}
 					target="_blank"
-					aria-label={tText(
-						'modules/navigation/components/footer/footer___link-naar-meemoo-be'
-					)}
+					aria-label={tText('modules/navigation/components/footer/footer___link-naar-meemoo-be')}
 				>
 					<Image
 						src={`/images/logo_meemoo_${locale}.svg`}
@@ -121,17 +117,13 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 				{renderFooterLeft()}
 				<div className={styles['c-footer__links__section1']}>
 					{sectionTitle1 && (
-						<div className={styles['c-footer__links__section-title']}>
-							{sectionTitle1}
-						</div>
+						<div className={styles['c-footer__links__section-title']}>{sectionTitle1}</div>
 					)}
 					{renderLinks(linkSections?.[0] || [], 'footer-section-1')}
 				</div>
 				<div className={styles['c-footer__links__section2']}>
 					{sectionTitle2 && (
-						<div className={styles['c-footer__links__section-title']}>
-							{sectionTitle2}
-						</div>
+						<div className={styles['c-footer__links__section-title']}>{sectionTitle2}</div>
 					)}
 					{renderLinks(linkSections?.[1] || [], 'footer-section-2')}
 				</div>

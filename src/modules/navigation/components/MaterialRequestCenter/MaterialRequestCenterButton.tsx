@@ -56,21 +56,21 @@ const MaterialRequestCenterButton: FC = () => {
 		}
 	}, [materialRequestCount, previousMaterialCount]);
 
-	const handleAnimationEnd = () => {
-		setIsAnimated(false);
-	};
-
 	const onCloseMaterialRequestCenter = () => {
 		dispatch(setShowMaterialRequestCenter(false));
 	};
 
 	useEffect(() => {
+		const handleAnimationEnd = () => {
+			setIsAnimated(false);
+		};
+
 		const badgeElement = animationRef.current;
 
-		badgeElement && badgeElement.addEventListener('animationend', handleAnimationEnd);
+		badgeElement?.addEventListener('animationend', handleAnimationEnd);
 
 		return () => {
-			badgeElement && badgeElement.removeEventListener('animationend', handleAnimationEnd);
+			badgeElement?.removeEventListener('animationend', handleAnimationEnd);
 		};
 	}, []);
 
@@ -101,10 +101,7 @@ const MaterialRequestCenterButton: FC = () => {
 								ref={animationRef}
 								className={clsx(
 									styles['c-material-request-center__icon-container-badge'],
-									isAnimated &&
-										styles[
-											'c-material-request-center__icon-container-badge--animated'
-										]
+									isAnimated && styles['c-material-request-center__icon-container-badge--animated']
 								)}
 							>
 								{materialRequestCount}

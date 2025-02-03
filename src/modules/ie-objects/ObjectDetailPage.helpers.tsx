@@ -33,9 +33,7 @@ export async function prefetchDetailPageQueries(
 		);
 	}
 	if (maintainerSlug) {
-		promises.push(
-			makeServerSideRequestGetIeObjectsSimilar(queryClient, ieObjectId, maintainerId)
-		);
+		promises.push(makeServerSideRequestGetIeObjectsSimilar(queryClient, ieObjectId, maintainerId));
 	}
 	await Promise.all(promises);
 	return queryClient;

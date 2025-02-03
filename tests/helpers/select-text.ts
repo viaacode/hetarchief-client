@@ -1,5 +1,5 @@
-import { Page } from '@playwright/test';
-import { Locator } from 'playwright-core';
+import type { Page } from '@playwright/test';
+import type { Locator } from 'playwright-core';
 
 /**
  * Selects the text (blue highlight) in the editor specified by the editor locator

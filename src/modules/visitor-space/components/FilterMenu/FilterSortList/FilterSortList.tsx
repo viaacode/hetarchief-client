@@ -1,11 +1,11 @@
 import { Button, OrderDirection } from '@meemoo/react-components';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { ListNavigation, type ListNavigationItem } from '@shared/components/ListNavigation';
 
-import { type FilterMenuSortOption } from '../FilterMenu.types';
+import type { FilterMenuSortOption } from '../FilterMenu.types';
 
-import { type FilterSortListProps } from './FilterSortList.types';
+import type { FilterSortListProps } from './FilterSortList.types';
 
 const FilterSortList: FC<FilterSortListProps> = ({ activeSort, options, onOptionClick }) => {
 	const checkActiveSort = ({ orderProp, orderDirection }: FilterMenuSortOption) => {

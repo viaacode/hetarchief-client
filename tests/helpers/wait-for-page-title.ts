@@ -1,4 +1,4 @@
-import { type Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { Locale } from '@shared/utils/i18n';
 
 import { getSiteTranslations } from './get-site-translations';
@@ -28,10 +28,10 @@ export async function waitForPageTitle(
 				timeout: 10000,
 			}
 		);
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	} catch (err: any) {
-		(
-			err as Error
-		).message = `The page title was not the expected value after 10 seconds. Expected: ${partialTitle} | ${MAIN_SITE_TITLE}, received: ${await page.title()}`;
+		(err as Error).message =
+			`The page title was not the expected value after 10 seconds. Expected: ${partialTitle} | ${MAIN_SITE_TITLE}, received: ${await page.title()}`;
 		throw err;
 	}
 }

@@ -1,6 +1,6 @@
 import { stringifyUrl } from 'query-string';
 
-import { type ContentPartnerResponse } from '@admin/types';
+import type { ContentPartnerResponse } from '@admin/types';
 import { ApiService } from '@shared/services/api-service';
 
 import { CONTENT_PARTNERS_SERVICE_BASE_URL } from './content-partners.const';
@@ -10,8 +10,9 @@ export interface ContentPartnerParams {
 	orIds?: string[];
 }
 
-export class ContentPartnersService {
-	public static async getAll({
+// TODO convert to react-query
+export namespace ContentPartnersService {
+	export async function getAll({
 		hasSpace,
 		orIds,
 	}: ContentPartnerParams): Promise<ContentPartnerResponse> {

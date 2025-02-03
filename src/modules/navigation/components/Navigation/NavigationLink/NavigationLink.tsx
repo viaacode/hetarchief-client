@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import Link from 'next/link';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { Icon, type IconProps } from '@shared/components/Icon';
 import { tText } from '@shared/helpers/translate';
 
 import styles from '../Navigation.module.scss';
 
-import { type NavigationLinkIcon, type NavigationLinkProps } from './NavigationLink.types';
+import type { NavigationLinkIcon, NavigationLinkProps } from './NavigationLink.types';
 
 const NavigationLink: FC<NavigationLinkProps> = ({
 	className,
@@ -37,9 +37,7 @@ const NavigationLink: FC<NavigationLinkProps> = ({
 						styles['c-navigation__dropdown-icon'],
 						styles[`c-navigation__dropdown-icon--${side}`]
 					)}
-					{...(typeof iconStart === 'string'
-						? { name: iconStart }
-						: (iconStart as IconProps))}
+					{...(typeof iconStart === 'string' ? { name: iconStart } : (iconStart as IconProps))}
 				/>
 			)
 		);

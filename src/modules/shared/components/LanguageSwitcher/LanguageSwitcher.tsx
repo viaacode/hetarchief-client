@@ -74,13 +74,7 @@ export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 					if (user) {
 						mutateLanguagePreference(selectedLanguage);
 					}
-					changeApplicationLocale(
-						locale,
-						selectedLanguage,
-						router,
-						queryClient,
-						contentPageInfo
-					);
+					changeApplicationLocale(locale, selectedLanguage, router, queryClient, contentPageInfo);
 					setIsOpen(false);
 				}}
 			/>

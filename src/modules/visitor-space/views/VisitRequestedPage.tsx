@@ -1,4 +1,4 @@
-import { type HTTPError } from 'ky';
+import type { HTTPError } from 'ky';
 import { useRouter } from 'next/router';
 import { type FC, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -10,7 +10,7 @@ import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { setShowZendesk } from '@shared/store/ui';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { AccessStatus } from '@shared/types/visit-request';
 import { useGetVisitAccessStatus } from '@visit-requests/hooks/get-visit-access-status';
 import { VisitorLayout } from '@visitor-layout/index';
@@ -95,9 +95,7 @@ export const VisitRequestedPage: FC<DefaultSeoInfo> = ({ title, description, url
 				title={title}
 				description={
 					description ||
-					tText(
-						'pages/slug/toegang-aangevraagd/index___beschrijving-van-een-bezoekersruimte'
-					)
+					tText('pages/slug/toegang-aangevraagd/index___beschrijving-van-een-bezoekersruimte')
 				}
 				imgUrl={undefined}
 				translatedPages={[]}

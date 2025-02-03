@@ -9,14 +9,14 @@ import {
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
-import { type HTTPError } from 'ky';
+import type { HTTPError } from 'ky';
 import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
 import Head from 'next/head';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { type MultiValue } from 'react-select';
+import type { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
@@ -50,7 +50,7 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ScrollableTabs, TabLabel } from '@shared/components/Tabs';
 import { TagSearchBar } from '@shared/components/TagSearchBar';
 import { TagSearchBarInfo } from '@shared/components/TagSearchBar/TagSearchBarInfo';
-import { type ToggleOption } from '@shared/components/Toggle';
+import type { ToggleOption } from '@shared/components/Toggle';
 import {
 	VisitorSpaceDropdown,
 	type VisitorSpaceDropdownOption,
@@ -84,7 +84,7 @@ import {
 	IeObjectType,
 	SearchPageMediaType,
 } from '@shared/types/ie-objects';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
 import { scrollTo } from '@shared/utils/scroll-to-top';
@@ -93,19 +93,19 @@ import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitTimeframe } from '@visit-requests/types';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import { initialFields } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
-import { type AdvancedFilterFormState } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.types';
-import { type ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
-import { type ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
-import { type ConsultablePublicDomainFilterFormState } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm.types';
-import { type DurationFilterFormState } from '@visitor-space/components/DurationFilterForm';
+import type { AdvancedFilterFormState } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.types';
+import type { ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
+import type { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
+import type { ConsultablePublicDomainFilterFormState } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm.types';
+import type { DurationFilterFormState } from '@visitor-space/components/DurationFilterForm';
 import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
-import { type FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
-import { type GenreFilterFormState } from '@visitor-space/components/GenreFilterForm';
-import { type KeywordsFilterFormState } from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.types';
-import { type LanguageFilterFormState } from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
-import { type MaintainerFilterFormState } from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
-import { type MediumFilterFormState } from '@visitor-space/components/MediumFilterForm';
-import { type ReleaseDateFilterFormState } from '@visitor-space/components/ReleaseDateFilterForm';
+import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import type { GenreFilterFormState } from '@visitor-space/components/GenreFilterForm';
+import type { KeywordsFilterFormState } from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.types';
+import type { LanguageFilterFormState } from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
+import type { MaintainerFilterFormState } from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
+import type { MediumFilterFormState } from '@visitor-space/components/MediumFilterForm';
+import type { ReleaseDateFilterFormState } from '@visitor-space/components/ReleaseDateFilterForm';
 import {
 	GLOBAL_ARCHIVE,
 	SEARCH_PAGE_QUERY_PARAM_CONFIG,
@@ -115,7 +115,12 @@ import {
 } from '@visitor-space/const';
 import { SEARCH_PAGE_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
 import { SEARCH_PAGE_IE_OBJECT_TABS } from '@visitor-space/const/visitor-space-tabs.const';
-import { FilterProperty, SearchFilterId, type TagIdentity } from '@visitor-space/types';
+import {
+	type AdvancedFilter,
+	FilterProperty,
+	SearchFilterId,
+	type TagIdentity,
+} from '@visitor-space/types';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
 
@@ -188,10 +193,9 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const accessibleVisitorSpaceRequests: VisitRequest[] = useMemo(
 		() =>
 			isUserWithAccount
-				? sortBy(
-						visitRequestsPaginated?.items || [],
-						(visitRequest) => visitRequest.spaceName?.toLowerCase()
-				  )
+				? sortBy(visitRequestsPaginated?.items || [], (visitRequest) =>
+						visitRequest.spaceName?.toLowerCase()
+					)
 				: [],
 		[isUserWithAccount, visitRequestsPaginated?.items]
 	);
@@ -208,6 +212,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	};
 
 	const queryParamMaintainer = query?.[SearchFilterId.Maintainer];
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	const activeVisitorSpaceSlug: string | undefined = useMemo(() => {
 		if (!accessibleVisitorSpaceRequests.length) {
 			// Until visitor spaces is loaded, we cannot know which option to select
@@ -229,7 +234,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			[SearchFilterId.Maintainer]: undefined,
 		});
 		return GLOBAL_ARCHIVE;
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [queryParamMaintainer, accessibleVisitorSpaceRequests]);
 
 	// Global archive as opposed to the archive of one visitor space
@@ -248,11 +252,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	} = useGetIeObjects(
 		{
 			filters: [
-				...mapMaintainerToElastic(
-					query,
-					activeVisitRequest,
-					accessibleVisitorSpaceRequests
-				),
+				...mapMaintainerToElastic(query, activeVisitRequest, accessibleVisitorSpaceRequests),
 				...mapFiltersToElastic(query),
 			],
 			page,
@@ -296,6 +296,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		dispatch(setShowZendesk(!isKioskUser && !query[SearchFilterId.Maintainer]));
 	}, [dispatch, isKioskUser, query]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Make sure the dependency array contains the same items as passed to VISITOR_SPACE_FILTERS
 	useEffect(() => {
 		// Filter out all disabled query param keys/ids
 		const disabledFilterKeys: SearchFilterId[] = SEARCH_PAGE_FILTERS(
@@ -310,26 +311,16 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			)
 			.map(({ id }: FilterMenuFilterOption): SearchFilterId => id as SearchFilterId);
 
-		// Loop over all existing query params and strip out the disabled filters if they exist
+		// Loop over all existing query params and replace the disabled filters with their initial value if they exist
 		const disabledKeysSet: Set<SearchFilterId> = new Set(disabledFilterKeys);
-		const strippedQuery = Object.keys(query).reduce((result, current) => {
-			const id = current as SearchFilterId;
-			if (disabledKeysSet.has(id)) {
-				return {
-					...result,
-					[id]: VISITOR_SPACE_QUERY_PARAM_INIT[id],
-				};
-			}
-
-			return {
-				...result,
-				[id]: (query as any)[id],
-			};
-		}, {});
+		const queryKeys = Object.keys(query) as SearchFilterId[];
+		const strippedQuery = Object.fromEntries(
+			queryKeys.map((key) => {
+				return [key, disabledKeysSet.has(key) ? VISITOR_SPACE_QUERY_PARAM_INIT[key] : query[key]];
+			})
+		);
 
 		setQuery(strippedQuery);
-		// Make sure the dependency array contains the same items as passed to VISITOR_SPACE_FILTERS
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isKeyUser, isGlobalArchive]);
 
 	useEffect(() => {
@@ -341,9 +332,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			window.scrollY === 0
 		) {
 			setTimeout(() => {
-				const item = document.getElementById(
-					`${lastScrollPosition.itemId}`
-				) as HTMLElement | null;
+				const item = document.getElementById(`${lastScrollPosition.itemId}`) as HTMLElement | null;
 
 				item?.scrollIntoView({ block: 'center', behavior: 'smooth' });
 				dispatch(setLastScrollPosition(null));
@@ -367,9 +356,8 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		(type: SearchPageMediaType): number => {
 			if (type === SearchPageMediaType.All) {
 				return sum(Object.values(formatCounts || {})) || 0;
-			} else {
-				return formatCounts?.[type] || 0;
 			}
+			return formatCounts?.[type] || 0;
 		},
 		[formatCounts]
 	);
@@ -418,7 +406,12 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		);
 
 		return isKioskUser
-			? [{ slug: user?.visitorSpaceSlug || '', label: user?.organisationName || '' }]
+			? [
+					{
+						slug: user?.visitorSpaceSlug || '',
+						label: user?.organisationName || '',
+					},
+				]
 			: [getDefaultOption(), ...dynamicOptions];
 	}, [
 		accessibleVisitorSpaceRequests,
@@ -447,9 +440,9 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 		if (trimmed && !query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]?.includes(trimmed)) {
 			return {
-				[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: (
-					query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] ?? []
-				).concat(trimmed),
+				[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: (query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] ?? []).concat(
+					trimmed
+				),
 			};
 		}
 
@@ -503,38 +496,40 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	 */
 	const onSubmitFilter = (id: SearchFilterId, values: unknown) => {
 		const searchValue = prepareSearchValue(searchBarInputValue);
-		let data;
+		let data: string[] | string | boolean | AdvancedFilter[] | undefined;
 
 		switch (id) {
 			case SearchFilterId.Medium:
 				data = (values as MediumFilterFormState).mediums;
 				break;
 
-			case SearchFilterId.Duration:
-				data = values as DurationFilterFormState;
-				data = data.duration
+			case SearchFilterId.Duration: {
+				const state = values as DurationFilterFormState;
+				data = state.duration
 					? [
 							{
 								prop: FilterProperty.DURATION,
-								op: data.operator,
-								val: data.duration,
+								op: state.operator,
+								val: state.duration,
 							},
-					  ]
+						]
 					: undefined;
 				break;
+			}
 
-			case SearchFilterId.ReleaseDate:
-				data = values as ReleaseDateFilterFormState;
-				data = data.releaseDate
+			case SearchFilterId.ReleaseDate: {
+				const state = values as ReleaseDateFilterFormState;
+				data = state.releaseDate
 					? [
 							{
 								prop: FilterProperty.RELEASE_DATE,
-								op: data.operator,
-								val: data.releaseDate,
+								op: state.operator,
+								val: state.releaseDate,
 							},
-					  ]
+						]
 					: undefined;
 				break;
+			}
 
 			case SearchFilterId.Creator:
 				data = (values as { creator: string }).creator;
@@ -570,13 +565,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 			case SearchFilterId.ConsultableOnlyOnLocation:
 				// Info: remove query param if false (= set to undefined)
-				data = (values as ConsultableOnlyOnLocationFilterFormState)[
-					IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
-				]
-					? (values as ConsultableOnlyOnLocationFilterFormState)[
-							IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
-					  ]
-					: undefined;
+				data =
+					(values as ConsultableOnlyOnLocationFilterFormState)[
+						IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
+					] || undefined;
 				break;
 
 			case SearchFilterId.ConsultableMedia:
@@ -586,19 +578,16 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				]
 					? (values as ConsultableMediaFilterFormState)[
 							IeObjectsSearchFilterField.CONSULTABLE_MEDIA
-					  ]
+						]
 					: undefined;
 				break;
 
 			case SearchFilterId.ConsultablePublicDomain:
 				// Info: remove query param if false (= set to undefined)
-				data = (values as ConsultablePublicDomainFilterFormState)[
-					IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN
-				]
-					? (values as ConsultablePublicDomainFilterFormState)[
-							IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN
-					  ]
-					: undefined;
+				data =
+					(values as ConsultablePublicDomainFilterFormState)[
+						IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN
+					] || undefined;
 				break;
 
 			case SearchFilterId.Advanced:
@@ -633,7 +622,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
 		const updatedQuery: Record<string, unknown> = {};
 
-		tags.forEach((tag) => {
+		for (const tag of tags) {
 			switch (tag.key) {
 				case SearchFilterId.Genre:
 				case SearchFilterId.Keywords:
@@ -654,25 +643,23 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				case SearchFilterId.Advanced:
 				case SearchFilterId.ReleaseDate:
 				case SearchFilterId.Duration:
-					updatedQuery[tag.key] = [
-						...((updatedQuery[tag.key] as Array<unknown>) || []),
-						tag,
-					];
+					updatedQuery[tag.key] = [...((updatedQuery[tag.key] as Array<unknown>) || []), tag];
 					break;
 
 				case SearchFilterId.ConsultableOnlyOnLocation:
 				case SearchFilterId.ConsultableMedia:
-				case SearchFilterId.ConsultablePublicDomain:
+				case SearchFilterId.ConsultablePublicDomain: {
 					// eslint-disable-next-line no-case-declarations
 					const newValue = `${tag.value ?? 'false'}`.replace(tagPrefix(tag.key), '');
 					updatedQuery[tag.key] = newValue === 'true' ? 'false' : 'true';
 					break;
+				}
 
 				default:
 					updatedQuery[tag.key] = tag.value;
 					break;
 			}
-		});
+		}
 
 		// Destructure to keyword-able filters
 		/* eslint-disable @typescript-eslint/no-unused-vars */
@@ -717,8 +704,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const isLoadedWithoutResults = !!searchResults && searchResults?.items?.length === 0;
 	const isLoadedWithResults = !!searchResults && searchResults?.items?.length > 0;
 	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
-	const showVisitorSpacesDropdown =
-		isUserWithAccount && accessibleVisitorSpaceRequests.length > 0;
+	const showVisitorSpacesDropdown = isUserWithAccount && accessibleVisitorSpaceRequests.length > 0;
 	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
 
 	const searchResultCardData = useMemo((): IdentifiableMediaCard[] => {
@@ -731,13 +717,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			]).length;
 
 			// Only show pill when the public collection is selected (https://meemoo.atlassian.net/browse/ARC-1210?focusedCommentId=39708)
-			const hasTempAccess =
-				!isKioskUser && isGlobalArchive && hasAccessToVisitorSpaceOfObject;
+			const hasTempAccess = !isKioskUser && isGlobalArchive && hasAccessToVisitorSpaceOfObject;
 
 			const link: string | undefined = stringifyUrl({
-				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${item.maintainerSlug}/${
-					item.schemaIdentifier
-				}/${kebabCase(item.name) || 'titel'}`,
+				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${item.maintainerSlug}/${item.schemaIdentifier}/${kebabCase(item.name) || 'titel'}`,
 				query: {
 					[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: searchResults?.searchTerms.join(
 						HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
@@ -747,9 +730,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 			// Newspapers should use transcript text instead of the description
 			const description =
-				type === IeObjectType.Newspaper
-					? item.transcript || item.description
-					: item.description;
+				type === IeObjectType.Newspaper ? item.transcript || item.description : item.description;
 
 			return {
 				schemaIdentifier: item.schemaIdentifier,
@@ -757,7 +738,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				duration: item.duration,
 				description,
 				title: item.name,
-				publishedOrCreatedDate: asDate(item.datePublished ?? item.dateCreated ?? null),
+				publishedOrCreatedDate: item.datePublished ?? item.dateCreated ?? null,
 				publishedBy: item.maintainerName || '',
 				type,
 				thumbnail: item.thumbnailUrl || undefined,
@@ -773,7 +754,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				numOfChildren: item.children || 0,
 			};
 		});
-	}, [isKioskUser, isGlobalArchive, locale, searchResults?.items, searchResults?.searchTerms]);
+	}, [isKioskUser, locale, searchResults?.items, searchResults?.searchTerms, isGlobalArchive]);
 
 	const openAndScrollToAdvancedFilters = () => {
 		setFilterMenuOpen(true);
@@ -782,13 +763,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 		// Wait for filter menu to open before scrolling to the advanced filters
 		setTimeout(() => {
-			document
-				.getElementById(`c-filter-menu__option__${SearchFilterId.Advanced}`)
-				?.scrollIntoView({
-					behavior: 'smooth',
-					block: 'center',
-					inline: 'center',
-				});
+			document.getElementById(`c-filter-menu__option__${SearchFilterId.Advanced}`)?.scrollIntoView({
+				behavior: 'smooth',
+				block: 'center',
+				inline: 'center',
+			});
 		}, 0);
 	};
 
@@ -835,7 +814,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 						{
 							label: activeVisitRequest?.spaceName || '',
 						} as Breadcrumb, // Last breadcrumb doesn't need a link, since you are on that page
-				  ]
+					]
 				: [];
 
 		return (
@@ -880,10 +859,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			return null;
 		}
 
-		const itemIsInAFolder = isInAFolder(
-			folders,
-			(item as IdentifiableMediaCard).schemaIdentifier
-		);
+		const itemIsInAFolder = isInAFolder(folders, (item as IdentifiableMediaCard).schemaIdentifier);
 
 		return (
 			<Button
@@ -921,7 +897,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		// Strip out public collection and own visitor space (cp)
 		let visitorSpaces: VisitorSpaceDropdownOption[] = visitorSpaceDropdownOptions.filter(
 			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
-				const isPublicCollection = visitorSpace.slug == GLOBAL_ARCHIVE;
+				const isPublicCollection = visitorSpace.slug === GLOBAL_ARCHIVE;
 				const isOwnVisitorSpace = isCPAdmin && visitorSpace.slug === user?.organisationId;
 
 				return !isPublicCollection && !isOwnVisitorSpace;
@@ -959,20 +935,18 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 					)}{' '}
 					{visitorSpaceLinks.length === 1 && visitorSpaceLinks[0]}
 					{visitorSpaceLinks.length > 1 &&
-						visitorSpaceLinks.map(
-							(visitorSpaceLink: ReactNode, i: number): ReactNode => {
-								const isLast = i === visitorSpaceLinks.length - 1;
-								const isSecondLast = i === visitorSpaceLinks.length - 2;
+						visitorSpaceLinks.map((visitorSpaceLink: ReactNode, i: number): ReactNode => {
+							const isLast = i === visitorSpaceLinks.length - 1;
+							const isSecondLast = i === visitorSpaceLinks.length - 2;
 
-								return (
-									<>
-										{visitorSpaceLink}
-										{!isLast && !isSecondLast && ', '}
-										{isSecondLast && ' en '}
-									</>
-								);
-							}
-						)}
+							return (
+								<div key={`visitor-space-link--${visitorSpaceLink}`}>
+									{visitorSpaceLink}
+									{!isLast && !isSecondLast && ', '}
+									{isSecondLast && ' en '}
+								</div>
+							);
+						})}
 					{'.'}
 				</span>
 			</div>
@@ -1042,14 +1016,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 								<FormControl
 									className="c-form-control--label-hidden u-mb-24"
 									id={`react-select-${labelKeys.search}-input`}
-									label={tText(
-										'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
-									)}
+									label={tText('pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder')}
 								>
 									<div
 										className={clsx('p-visitor-space__searchbar', {
-											'p-visitor-space__searchbar--has-dropdown':
-												showVisitorSpacesDropdown,
+											'p-visitor-space__searchbar--has-dropdown': showVisitorSpacesDropdown,
 										})}
 									>
 										{showVisitorSpacesDropdown && (
@@ -1057,7 +1028,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 												options={visitorSpaceDropdownOptions}
 												selectedOptionId={
 													isKioskUser
-														? user?.visitorSpaceSlug ?? ''
+														? (user?.visitorSpaceSlug ?? '')
 														: activeVisitorSpaceSlug || GLOBAL_ARCHIVE
 												}
 												onSelected={onVisitorSpaceSelected}
@@ -1066,9 +1037,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 										<TagSearchBar
 											allowCreate
 											hasDropdown={showVisitorSpacesDropdown}
-											clearLabel={tHtml(
-												'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
-											)}
+											clearLabel={tHtml('pages/bezoekersruimte/slug___wis-volledige-zoekopdracht')}
 											inputValue={searchBarInputValue}
 											setInputValue={setSearchBarInputValue}
 											instanceId={labelKeys.search}
@@ -1085,11 +1054,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 										/>
 									</div>
 								</FormControl>
-								<ScrollableTabs
-									variants={['dark']}
-									tabs={tabs}
-									onClick={onTabClick}
-								/>
+								<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
 							</div>
 						</section>
 
@@ -1099,22 +1064,17 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 									'u-py-32': showResearchWarning,
 								})}
 							>
-								{showResearchWarning
-									? renderResearchWarning()
-									: renderBreadcrumbs()}
+								{showResearchWarning ? renderResearchWarning() : renderBreadcrumbs()}
 
 								{renderTempAccessLabel()}
 							</div>
 						</aside>
 
 						<section
-							className={clsx(
-								'p-visitor-space__results u-page-bottom-margin u-bg-platinum',
-								{
-									'p-visitor-space__results--placeholder': isLoadedWithoutResults,
-									'u-pt-0': showResearchWarning,
-								}
-							)}
+							className={clsx('p-visitor-space__results u-page-bottom-margin u-bg-platinum', {
+								'p-visitor-space__results--placeholder': isLoadedWithoutResults,
+								'u-pt-0': showResearchWarning,
+							})}
 						>
 							<div className="l-container">
 								{/* Only render filters when there are no results yet, when the results are loaded we render the filter menu using MediaCardList */}
@@ -1147,7 +1107,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 								? {
 										schemaIdentifier: selectedCard.schemaIdentifier,
 										title: selectedCard.name,
-								  }
+									}
 								: undefined
 						}
 						onClose={() => {

@@ -1,4 +1,4 @@
-import { type FormBladeProps } from '@shared/types/blade';
+import type { FormBladeProps } from '@shared/types/blade';
 
 export type AddToFolderBladeProps = FormBladeProps<string[]> & {
 	objectToAdd: AddToFolderSelected | undefined;

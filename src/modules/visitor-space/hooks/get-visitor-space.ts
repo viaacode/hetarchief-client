@@ -3,7 +3,7 @@ import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
 import { VisitorSpaceService } from '../services';
-import { type VisitorSpaceInfo } from '../types';
+import type { VisitorSpaceInfo } from '../types';
 
 export function useGetVisitorSpace(
 	maintainerSlug: string | null,

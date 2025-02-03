@@ -1,13 +1,13 @@
-import { type GetServerSidePropsResult } from 'next';
+import type { GetServerSidePropsResult } from 'next';
 import { useRouter } from 'next/router';
-import { type GetServerSidePropsContext, type NextPage } from 'next/types';
+import type { GetServerSidePropsContext, NextPage } from 'next/types';
 import React, { type ComponentType } from 'react';
 
 import { AdminNavigationItemCreatePage } from '@admin/views/navigation/AdminNavigationItemCreatePage';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 const AdminNavigationItemCreatePageEnglish: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
 	const router = useRouter();

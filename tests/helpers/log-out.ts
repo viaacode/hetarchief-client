@@ -1,4 +1,4 @@
-import { type Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { HOMEPAGE_TITLE } from '../consts/tests.consts';
@@ -10,7 +10,7 @@ export async function logout(page: Page): Promise<void> {
 	const SITE_TRANSLATIONS = await getSiteTranslations();
 
 	// Click the avatar
-	await page.locator(moduleClassSelector('c-navigation__list') + ' .c-avatar').click();
+	await page.locator(`${moduleClassSelector('c-navigation__list')} .c-avatar`).click();
 
 	// Click the logout option
 	await page

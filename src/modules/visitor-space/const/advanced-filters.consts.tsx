@@ -1,5 +1,5 @@
 import { type ReactSelectProps, TextInput, type TextInputProps } from '@meemoo/react-components';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { tText } from '@shared/helpers/translate';
 import {
@@ -11,9 +11,9 @@ import AutocompleteFieldInput, {
 	type AutocompleteFieldInputProps,
 } from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
 import { DateInput } from '@visitor-space/components/DateInput';
-import { type DateInputProps } from '@visitor-space/components/DateInput/DateInput';
+import type { DateInputProps } from '@visitor-space/components/DateInput/DateInput';
 import { DateRangeInput } from '@visitor-space/components/DateRangeInput';
-import { type DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
+import type { DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
 import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { GenreSelect } from '@visitor-space/components/GenreSelect';
 import { LanguageSelect } from '@visitor-space/components/LanguageSelect/LanguageSelect';
@@ -236,7 +236,9 @@ const DURATION_LESS_THAN_OR_EQUALS = (
 const CONTAINS = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponent?: FC<any>,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {
@@ -257,7 +259,9 @@ const CONTAINS = (
 const CONTAINS_NOT = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponent?: FC<any>,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {
@@ -278,7 +282,9 @@ const CONTAINS_NOT = (
 const EQUALS = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponent?: FC<any>,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {
@@ -299,7 +305,9 @@ const EQUALS = (
 const EQUALS_NOT = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponent?: FC<any>,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {
@@ -320,7 +328,9 @@ const EQUALS_NOT = (
 const CONTAINS_AND_EQUALS = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponent?: FC<any>,
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {

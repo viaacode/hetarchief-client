@@ -117,14 +117,15 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 			if (tabsEl) {
 				if (isBrowser() && window.ResizeObserver) {
 					observer = new ResizeObserver((entries) => {
-						entries.forEach(({ target }) => {
+						for (const entry of entries) {
+							const target = entry.target as HTMLElement;
 							if (window.innerWidth < target.scrollWidth + 40) {
 								setGradients(target);
 							}
 							if (target.clientHeight !== tabsHeight) {
 								setHeight(target);
 							}
-						});
+						}
 					});
 
 					observer.observe(tabsEl);
@@ -142,6 +143,7 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 	}, [tabsHeight, setGradients]);
 
 	// Set initial values
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (!hasInitialised.current && tabsRef.current) {
 			setGradients(tabsRef.current);
@@ -169,9 +171,7 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 					[styles['c-scrollable-tabs--gradient-left']]: showLeftGradient,
 					[styles['c-scrollable-tabs--gradient-right']]: showRightGradient,
 				},
-				getVariantsArray(props.variants).map(
-					(variant) => styles[`c-scrollable-tabs--${variant}`]
-				)
+				getVariantsArray(props.variants).map((variant) => styles[`c-scrollable-tabs--${variant}`])
 			)}
 			style={{ height: `${tabsHeight}px` }}
 		>

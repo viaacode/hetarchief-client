@@ -1,7 +1,7 @@
 import { object, type Schema, string } from 'yup';
 
 import { tText } from '@shared/helpers/translate';
-import { type CreateVisitorSpaceSettings } from '@visitor-space/services/visitor-space/visitor-space.service.types';
+import type { CreateVisitorSpaceSettings } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 
 export const VISITOR_SPACE_VALIDATION_SCHEMA = (): Schema<
 	Pick<Partial<CreateVisitorSpaceSettings>, 'orId' | 'slug' | 'color' | 'file' | 'image'>
@@ -23,9 +23,7 @@ export const VISITOR_SPACE_VALIDATION_SCHEMA = (): Schema<
 				),
 			})
 			.required(
-				tText(
-					'modules/cp/components/site-settings-form/site-settings-form___slug-is-verplicht'
-				)
+				tText('modules/cp/components/site-settings-form/site-settings-form___slug-is-verplicht')
 			),
 		color: string().matches(/^$|^#([0-9A-F]{3}){1,2}$/i, {
 			message: tText(

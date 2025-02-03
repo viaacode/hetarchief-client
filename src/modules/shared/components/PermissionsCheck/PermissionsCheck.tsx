@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { type FC, type ReactElement, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import { type Permission } from '@account/const';
+import type { Permission } from '@account/const';
 import { checkLoginAction, selectCheckLoginLoading, selectHasCheckedLogin } from '@auth/store/user';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { tHtml } from '@shared/helpers/translate';
@@ -32,8 +32,10 @@ const PermissionsCheck: FC<PermissionsCheckProps> = ({
 
 	const hasRequiredPermissions = hasAllRequiredPermissions && hasAnyRequiredPermissions;
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (!checkLoginLoading && !hasCheckedLogin) {
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			dispatch(checkLoginAction() as any);
 		}
 	}, [router, hasRequiredPermissions, hasCheckedLogin, checkLoginLoading, dispatch]);

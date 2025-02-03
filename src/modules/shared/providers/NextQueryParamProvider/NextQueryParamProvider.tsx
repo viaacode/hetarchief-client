@@ -32,15 +32,13 @@ const NextQueryParamProvider = ({ children, ...rest }: Props) => {
 			// and therefore there's no two-part render in this case.
 			if (router.isReady) {
 				return window.location;
-			} else {
-				return { search: '' } as Location;
 			}
-		} else {
-			// On the server side we only need a subset of the available
-			// properties of `Location`. The other ones are only necessary
-			// for interactive features on the client.
-			return { search: router.asPath.replace(pathnameRegex, '') } as Location;
+			return { search: '' } as Location;
 		}
+		// On the server side we only need a subset of the available
+		// properties of `Location`. The other ones are only necessary
+		// for interactive features on the client.
+		return { search: router.asPath.replace(pathnameRegex, '') } as Location;
 	}, [router.asPath, router.isReady]);
 
 	const history = useMemo(() => {

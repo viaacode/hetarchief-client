@@ -1,4 +1,4 @@
-import { type Options, type TiledImageOptions } from 'openseadragon';
+import type { Options, TiledImageOptions } from 'openseadragon';
 
 export function getOpenSeadragonConfig(
 	tileSources: TiledImageOptions[],

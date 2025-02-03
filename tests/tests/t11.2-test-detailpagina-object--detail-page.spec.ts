@@ -19,9 +19,7 @@ test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina',
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(
 		page,
-		(process.env.TEST_CLIENT_ENDPOINT as string) +
-			'/pid/' +
-			(process.env.TEST_OBJECT_DETAIL_PAGE_VRT as string),
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${process.env.TEST_OBJECT_DETAIL_PAGE_VRT as string}`,
 		DETAIL_PAGE_TITLE
 	);
 
@@ -40,7 +38,7 @@ test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina',
 
 	// Get metadata sidebar width
 	const pageDetailWrapper = page.locator(moduleClassSelector('p-object-detail__wrapper'));
-	const sidebarSelector = ' > ' + moduleClassSelector('p-object-detail__sidebar');
+	const sidebarSelector = ` > ${moduleClassSelector('p-object-detail__sidebar')}`;
 	const sidebarWidthBeforeExpand =
 		(await pageDetailWrapper.locator(sidebarSelector)?.boundingBox())?.width || 0;
 	expect(sidebarWidthBeforeExpand).toBeGreaterThan(0);
@@ -91,10 +89,7 @@ test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina',
 	await expect(downloadCsvOption).toBeVisible();
 
 	// Wait for download events while clicking on the download csv button
-	const [download] = await Promise.all([
-		page.waitForEvent('download'),
-		downloadCsvOption.click(),
-	]);
+	const [download] = await Promise.all([page.waitForEvent('download'), downloadCsvOption.click()]);
 	const path = await download.path();
 	expect(path).toBeDefined();
 
@@ -119,6 +114,7 @@ test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina',
 	// Make video fullscreen
 	await page.hover('.flowplayer'); // Hover video so controls become visible
 	await page.evaluate(() => {
+		// biome-ignore lint/suspicious/noExplicitAny: test file
 		(document?.querySelector('.fp-fullscreen') as any)?.click();
 	});
 
@@ -139,6 +135,7 @@ test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina',
 	// Press escape key
 	await page.hover('.flowplayer'); // Hover video so controls become visible
 	await page.evaluate(() => {
+		// biome-ignore lint/suspicious/noExplicitAny: test file
 		(document?.querySelector('.fp-fullscreen-exit') as any)?.click();
 	});
 
@@ -164,9 +161,7 @@ test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina',
 	// Check blade title
 	await checkBladeTitle(
 		page,
-		SITE_TRANSLATIONS.nl[
-			'modules/visitor-space/components/report-blade/report-blade___rapporteren'
-		]
+		SITE_TRANSLATIONS.nl['modules/visitor-space/components/report-blade/report-blade___rapporteren']
 	);
 
 	const emailInputField = page.locator('input#email');
@@ -197,9 +192,7 @@ test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina',
 
 	// Click on keyword
 	const keywordLabel =
-		SITE_TRANSLATIONS.nl[
-			'pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden'
-		];
+		SITE_TRANSLATIONS.nl['pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden'];
 	const keywordSection = page.locator('.p-object-detail__metadata-component', {
 		hasText: keywordLabel,
 	});

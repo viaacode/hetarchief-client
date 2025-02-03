@@ -16,7 +16,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount } from '@shared/store/ui';
-import { type IeObjectType } from '@shared/types/ie-objects';
+import type { IeObjectType } from '@shared/types/ie-objects';
 
 import styles from './MaterialRequestBlade.module.scss';
 
@@ -161,14 +161,14 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		});
 	};
 
-	const renderTitle = (props: any) => {
+	const renderTitle = (props: Pick<HTMLElement, 'id' | 'className'>) => {
 		const title = isEditMode
 			? tText(
 					'modules/visitor-space/components/material-request-blade/material-request-blade___pas-je-aanvraag-aan'
-			  )
+				)
 			: tText(
 					'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
-			  );
+				);
 
 		return <h2 {...props}>{title}</h2>;
 	};
@@ -282,9 +282,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							'modules/visitor-space/components/material-request-blade/material-request-blade___item-van'
 						)}
 					</p>
-					<p className={styles['c-request-material__maintainer-details']}>
-						{maintainerName}
-					</p>
+					<p className={styles['c-request-material__maintainer-details']}>{maintainerName}</p>
 				</div>
 			</div>
 			<a
@@ -292,7 +290,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectId}`}
 				className={styles['c-request-material__material-link']}
 			>
-				<div className={styles['c-request-material__material']} tabIndex={0}>
+				<div className={styles['c-request-material__material']}>
 					<p className={styles['c-request-material__material-label']}>
 						<Icon
 							className={styles['c-request-material__material-label-icon']}
@@ -307,6 +305,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				<dl>
 					<>
 						<dt className={styles['c-request-material__content-label']}>
+							{/* biome-ignore lint/a11y/noLabelWithoutControl: radio buttons reference this label */}
 							<label id="radio-group-label">
 								{tText(
 									'modules/visitor-space/components/material-request-blade/material-request-blade___selecteer-een-type'

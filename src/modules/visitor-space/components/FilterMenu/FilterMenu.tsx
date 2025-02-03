@@ -17,10 +17,10 @@ import {
 	VISITOR_SPACE_ACTIVE_SORT_MAP,
 } from '@visitor-space/const';
 
-import { type SearchFilterId, type SearchSortProp } from '../../types';
+import type { SearchFilterId, SearchSortProp } from '../../types';
 
 import styles from './FilterMenu.module.scss';
-import { type FilterMenuFilterOption, type FilterMenuProps } from './FilterMenu.types';
+import type { FilterMenuFilterOption, FilterMenuProps } from './FilterMenu.types';
 import { FilterOption } from './FilterOption';
 import { FilterSort } from './FilterSort';
 
@@ -51,8 +51,8 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	const openIcon = isMobile
 		? IconNamesLight.Filter
 		: isOpen
-		? IconNamesLight.AngleUp
-		: IconNamesLight.AngleDown;
+			? IconNamesLight.AngleUp
+			: IconNamesLight.AngleDown;
 
 	useScrollLock(lockScroll, 'FilterMenu');
 
@@ -127,9 +127,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 					{...option}
 					key={`filter-menu-option-${option.id}`}
 					className={clsx({
-						[styles['c-filter-menu__option--operative']]: !isNil(
-							filterValues?.[option?.id]
-						),
+						[styles['c-filter-menu__option--operative']]: !isNil(filterValues?.[option?.id]),
 					})}
 					activeFilter={query.filter}
 					values={filterValues?.[option.id]}

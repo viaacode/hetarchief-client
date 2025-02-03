@@ -2,7 +2,7 @@ import { Button, OrderDirection, PaginationBar, Table } from '@meemoo/react-comp
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import React, { type FC, type ReactNode, useMemo, useState } from 'react';
-import { type TableState } from 'react-table';
+import type { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
@@ -28,7 +28,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorSpaceStatusOptions } from '@visitor-space/const';
 import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
 import { VisitorSpaceService } from '@visitor-space/services';
@@ -83,17 +83,11 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	) => {
-		if (!orderProp) {
-			orderProp = 'created_at';
-		}
-		if (!orderDirection) {
-			orderDirection = OrderDirection.desc;
-		}
 		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
-				orderProp,
-				orderDirection,
+				orderProp: orderProp || 'created_at',
+				orderDirection: orderDirection || OrderDirection.desc,
 				page: 1,
 			});
 		}
@@ -105,9 +99,7 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 
 		toastService.notify({
 			maxLines: 3,
-			title: tHtml(
-				'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-ging-iets-mis'
-			),
+			title: tHtml('pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-ging-iets-mis'),
 			description: tHtml(
 				'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-is-een-fout-opgetreden-tijdens-het-aanpassen-van-de-status'
 			),
@@ -128,9 +120,7 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 
 				toastService.notify({
 					maxLines: 3,
-					title: tHtml(
-						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___succes'
-					),
+					title: tHtml('pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___succes'),
 					description: tHtml(
 						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___de-status-werd-succesvol-aangepast'
 					),
@@ -213,9 +203,7 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 						<PaginationBar
 							{...getDefaultPaginationBarProps()}
 							itemsPerPage={VisitorSpacesOverviewTablePageSize}
-							startItem={
-								Math.max(0, filters.page - 1) * VisitorSpacesOverviewTablePageSize
-							}
+							startItem={Math.max(0, filters.page - 1) * VisitorSpacesOverviewTablePageSize}
 							totalItems={visitorSpaces?.total || 0}
 							onPageChange={(pageZeroBased) => {
 								gotoPage(pageZeroBased);
@@ -265,9 +253,7 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 						id={globalLabelKeys.adminLayout.title}
 						value={search}
 						className="p-cp-visitor-spaces__search"
-						placeholder={tText(
-							'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___zoek'
-						)}
+						placeholder={tText('pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___zoek')}
 						onChange={setSearch}
 						onSearch={(newValue) =>
 							setFilters({

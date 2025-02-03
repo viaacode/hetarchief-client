@@ -11,9 +11,9 @@ import {
 	CONSULTABLE_MEDIA_FILTER_FORM_QUERY_PARAM_CONFIG,
 	CONSULTABLE_MEDIA_FILTER_FORM_SCHEMA,
 } from './ConsultableMediaFilterForm.const';
-import {
-	type ConsultableMediaFilterFormProps,
-	type ConsultableMediaFilterFormState,
+import type {
+	ConsultableMediaFilterFormProps,
+	ConsultableMediaFilterFormState,
 } from './ConsultableMediaFilterForm.types';
 
 const defaultValues = {
@@ -42,6 +42,7 @@ export const ConsultableMediaFilterForm: FC<ConsultableMediaFilterFormProps> = (
 		[onFormSubmit]
 	);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		if (isInitialRender) {
 			// Avoid this filter submitting results when loading the form for the first time
@@ -57,7 +58,6 @@ export const ConsultableMediaFilterForm: FC<ConsultableMediaFilterFormProps> = (
 				}),
 			(...args) => console.error(args)
 		)();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [setValue, isChecked]);
 
 	return (

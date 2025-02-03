@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { type FC, useEffect, useRef, useState } from 'react';
 
 import { FLOWPLAYER_AUDIO_FORMATS } from '@ie-objects/ie-objects.consts';
-import { type IeObjectFile } from '@ie-objects/ie-objects.types';
+import type { IeObjectFile } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { soundwave } from '@shared/components/MediaCard/__mocks__/media-card';
@@ -14,7 +14,7 @@ import { useElementSize } from '@shared/hooks/use-element-size';
 import { ObjectPlaceholder } from '../ObjectPlaceholder';
 
 import styles from './FragmentSlider.module.scss';
-import { type FragmentSliderProps } from './FragmentSlider.types';
+import type { FragmentSliderProps } from './FragmentSlider.types';
 
 export const FragmentSlider: FC<FragmentSliderProps> = ({
 	className,
@@ -39,6 +39,7 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 	const buttonSize = 3.6; // rem
 
 	// Debounce blur event to avoid rubberbanding
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		if (isBlurred) {
 			blurTimerRef.current && clearTimeout(blurTimerRef.current);
@@ -46,10 +47,10 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 		} else {
 			blurTimerRef.current && clearTimeout(blurTimerRef.current);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isBlurred]);
 
 	// Control reflow between scrollable/non-scrollable slider
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		if (fragmentsSize) {
 			const updatedNeedsScrolling =
@@ -63,7 +64,6 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 				setOffset(activeIndex);
 			}
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fragmentsSize, totalFragments]);
 
 	const renderThumbnail = (file: IeObjectFile) => {
@@ -111,7 +111,6 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 			/>
 			<div ref={fragmentsRef} className={styles['c-fragment-slider__items']}>
 				<ul
-					role="list"
 					className={clsx(
 						styles['c-fragment-slider__track'],
 						!needsScrolling && styles['c-fragment-slider__track--centered']
@@ -120,8 +119,8 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 						transform: `translateX(${
 							needsScrolling
 								? -offset * (fragmentSize + fragmentSpacing) +
-								  (fragmentsSize ? fragmentsSize?.width / 20 : 0) -
-								  fragmentSize / 2
+									(fragmentsSize ? fragmentsSize?.width / 20 : 0) -
+									fragmentSize / 2
 								: -offset * (fragmentSize + fragmentSpacing)
 						}rem)`,
 					}}
@@ -134,32 +133,28 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 				>
 					{fileRepresentations.map((file, index) => (
 						<li
-							role="listitem"
 							className={clsx(
 								styles['c-fragment-slider__item'],
 								index === activeIndex && styles['c-fragment-slider__item--active']
 							)}
-							key={`fragment-${index}`}
-							tabIndex={0}
+							key={`fragment-${file.id}--${file.name}`}
 							data-index={index}
 							onClick={(e) => {
-								const index = parseInt(
-									e.currentTarget.getAttribute('data-index') as string
-								);
+								const index = Number.parseInt(e.currentTarget.getAttribute('data-index') as string);
 								needsScrolling && setOffset(index);
 								setActiveIndex(index);
 							}}
 							onKeyUp={(e) => {
 								if (e.key === 'Tab') {
 									// Scroll through fragments
-									const offsetIndex = parseInt(
+									const offsetIndex = Number.parseInt(
 										e.currentTarget.getAttribute('data-index') as string
 									);
 									needsScrolling && setOffset(offsetIndex);
 								}
 								if (e.key === 'Enter') {
 									// Select fragment
-									const activeIndex = parseInt(
+									const activeIndex = Number.parseInt(
 										e.currentTarget.getAttribute('data-index') as string
 									);
 									setActiveIndex(activeIndex);

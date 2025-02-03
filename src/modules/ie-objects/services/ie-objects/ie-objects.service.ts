@@ -1,26 +1,22 @@
 import { isEmpty } from 'lodash-es';
 import { parseUrl, stringifyUrl } from 'query-string';
 
-import {
-	type IeObject,
-	type IeObjectSimilar,
-	type RelatedIeObjects,
-} from '@ie-objects/ie-objects.types';
-import {
-	type IeObjectPreviousNextIds,
-	type SeoInfo,
+import type { IeObject, IeObjectSimilar, RelatedIeObjects } from '@ie-objects/ie-objects.types';
+import type {
+	IeObjectPreviousNextIds,
+	SeoInfo,
 } from '@ie-objects/services/ie-objects/ie-objects.service.types';
-import { type SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
+import type { SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
 import { ApiService } from '@shared/services/api-service';
-import { type SortObject } from '@shared/types';
-import { type GetIeObjectsResponse } from '@shared/types/api';
+import type { SortObject } from '@shared/types';
+import type { GetIeObjectsResponse } from '@shared/types/api';
 import {
 	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
 	SearchPageMediaType,
 } from '@shared/types/ie-objects';
-import { type AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import type { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { SearchSortProp } from '@visitor-space/types';
 
 import {
@@ -33,8 +29,8 @@ import {
 	IO_OBJECTS_SERVICE_RELATED,
 } from './ie-objects.service.const';
 
-export class IeObjectsService {
-	public static async getSearchResults(
+export namespace IeObjectsService {
+	export async function getSearchResults(
 		filters: IeObjectsSearchFilter[] = [],
 		page = 1,
 		size = 20,
@@ -81,7 +77,7 @@ export class IeObjectsService {
 			.json()) as GetIeObjectsResponse;
 	}
 
-	public static async getById(id: string): Promise<IeObject> {
+	export async function getById(id: string): Promise<IeObject> {
 		console.log(`[PERFORMANCE] ${new Date().toISOString()} start fetch ie object`);
 		const ieObject: IeObject = await ApiService.getApi()
 			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${id}`)
@@ -90,13 +86,13 @@ export class IeObjectsService {
 		return ieObject;
 	}
 
-	public static async getSeoById(id: string): Promise<SeoInfo> {
+	export async function getSeoById(id: string): Promise<SeoInfo> {
 		return await ApiService.getApi()
 			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_SEO_URL}/${id}`)
 			.json();
 	}
 
-	public static async getPlayableUrl(
+	export async function getPlayableUrl(
 		fileSchemaIdentifier: string | null
 	): Promise<string | null> {
 		if (!fileSchemaIdentifier) {
@@ -122,12 +118,12 @@ export class IeObjectsService {
 		const timeCodes = fileSchemaIdentifier.split('#')[1];
 		const parsedUrl = parseUrl(fullVideoPlayableUrl);
 		return stringifyUrl({
-			url: parsedUrl.url + (timeCodes ? '#' + timeCodes : ''),
+			url: parsedUrl.url + (timeCodes ? `#${timeCodes}` : ''),
 			query: parsedUrl.query,
 		});
 	}
 
-	public static async getTicketServiceToken(filePath: string): Promise<string | null> {
+	export async function getTicketServiceToken(filePath: string): Promise<string | null> {
 		const token = await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -143,7 +139,7 @@ export class IeObjectsService {
 	}
 
 	// Used for "ook interessant" on the detail page
-	public static async getSimilar(id: string, maintainerId: string): Promise<IeObjectSimilar> {
+	export async function getSimilar(id: string, maintainerId: string): Promise<IeObjectSimilar> {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -157,7 +153,7 @@ export class IeObjectsService {
 	}
 
 	// Used for "gerelateerde objecten" blade on the detail page
-	public static async getRelated(
+	export async function getRelated(
 		ieObjectIri: string,
 		parentIeObjectIri: string | null
 	): Promise<RelatedIeObjects> {
@@ -171,7 +167,7 @@ export class IeObjectsService {
 			.json();
 	}
 
-	public static async getAltoJsonFile(altoJsonUrl: string): Promise<SimplifiedAlto> {
+	export async function getAltoJsonFile(altoJsonUrl: string): Promise<SimplifiedAlto> {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -182,7 +178,7 @@ export class IeObjectsService {
 			.json();
 	}
 
-	public static async schemaIdentifierLookup(
+	export async function schemaIdentifierLookup(
 		schemaIdentifierV2: string
 	): Promise<{ schemaIdentifierV3: string }> {
 		return await ApiService.getApi()
@@ -190,7 +186,10 @@ export class IeObjectsService {
 			.json();
 	}
 
-	static getAutocompleteFieldOptions(field: AutocompleteField, query: string): Promise<string[]> {
+	export function getAutocompleteFieldOptions(
+		field: AutocompleteField,
+		query: string
+	): Promise<string[]> {
 		return ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -204,7 +203,7 @@ export class IeObjectsService {
 			.json();
 	}
 
-	static getIeObjectPreviousNextIds(
+	export function getIeObjectPreviousNextIds(
 		collectionId: string,
 		ieObjectIri: string
 	): Promise<IeObjectPreviousNextIds> {

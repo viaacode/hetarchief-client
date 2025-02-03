@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import type { FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
@@ -8,7 +8,7 @@ import { CPAdminLayout } from '@cp/layouts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 
 export const CpAdminSettingsPage: FC<DefaultSeoInfo> = ({ url }) => {
@@ -42,9 +42,7 @@ export const CpAdminSettingsPage: FC<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<>
 			<SeoTags
-				title={`${tText(
-					'pages/beheer/instellingen/index___beheer-instellingen-title'
-				)} | ${tText('modules/cp/views/cp-admin-settings-page___beheer')}`}
+				title={`${tText('pages/beheer/instellingen/index___beheer-instellingen-title')} | ${tText('modules/cp/views/cp-admin-settings-page___beheer')}`}
 				description={tText(
 					'pages/beheer/instellingen/index___beheer-instellingen-meta-omschrijving'
 				)}

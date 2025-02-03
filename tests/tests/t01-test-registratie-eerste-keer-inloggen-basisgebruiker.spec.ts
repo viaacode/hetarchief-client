@@ -31,9 +31,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 
 	// Click on login or register
 	const loginOrRegisterLabel =
-		SITE_TRANSLATIONS.nl[
-			'modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren'
-		];
+		SITE_TRANSLATIONS.nl['modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren'];
 	await page.locator(`text=${loginOrRegisterLabel}`).first().click();
 
 	// Check auth modal opens up

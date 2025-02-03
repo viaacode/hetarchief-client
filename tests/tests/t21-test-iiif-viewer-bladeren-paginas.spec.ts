@@ -9,12 +9,12 @@ test('T21: iiif viewer bladeren paginas', async ({ page, context }) => {
 	 */
 	await goToPageAndAcceptCookies(
 		page,
-		(process.env.TEST_CLIENT_ENDPOINT as string) + '/pid/h98z893q54',
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/h98z893q54`,
 		'Wet- en verordeningsblad voor de bezette streke...'
 	);
 
 	// Go to page again to fix non-loading newspaper in incognito browser
-	await page.goto((process.env.TEST_CLIENT_ENDPOINT as string) + '/pid/h98z893q54');
+	await page.goto(`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/h98z893q54`);
 
 	// Navigation with thumbnail buttons ---------------------------------------------------------------
 

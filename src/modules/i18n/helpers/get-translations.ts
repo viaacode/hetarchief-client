@@ -1,5 +1,5 @@
 import { ApiService } from '@shared/services/api-service';
-import { type Locale } from '@shared/utils/i18n';
+import type { Locale } from '@shared/utils/i18n';
 
 export async function getTranslations(locale: Locale): Promise<Record<string, string>> {
 	try {

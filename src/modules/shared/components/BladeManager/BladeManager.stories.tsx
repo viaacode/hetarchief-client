@@ -1,6 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import { action } from '@storybook/addon-actions';
-import { type ComponentMeta, type ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { useState } from 'react';
 
 import { Blade } from '@shared/components/Blade/Blade';
@@ -11,7 +11,7 @@ const BladeManagerStoryComponent = () => {
 	const [currentBlade, setCurrentBlade] = useState(0);
 
 	const close = (layer: number) => {
-		action('close layer ' + layer)();
+		action(`close layer ${layer}`)();
 		setCurrentBlade(layer - 1);
 	};
 

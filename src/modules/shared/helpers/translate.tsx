@@ -1,4 +1,4 @@
-import { type TOptions } from 'i18next';
+import type { TOptions } from 'i18next';
 import { i18n } from 'next-i18next';
 import React, { type ReactNode } from 'react';
 
@@ -28,7 +28,7 @@ export function tText(key: string, params?: TOptions): string {
 	return (
 		i18n?.t(key, {
 			...params,
-			defaultValue: (key.split('___')[1] || key).replace('-', ' ') + ' ***',
+			defaultValue: `${(key.split('___')[1] || key).replace('-', ' ')} ***`,
 		}) || ''
 	);
 }

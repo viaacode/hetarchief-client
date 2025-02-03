@@ -1,5 +1,5 @@
-import { type Page } from '@playwright/test';
-import { type Locator } from 'playwright-core';
+import type { Page } from '@playwright/test';
+import type { Locator } from 'playwright-core';
 
 export async function scrollWheelOverElement(
 	page: Page,

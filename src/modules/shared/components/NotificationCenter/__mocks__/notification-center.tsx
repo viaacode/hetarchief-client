@@ -1,8 +1,5 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
-import {
-	type InfiniteQueryObserverSuccessResult,
-	type UseMutationResult,
-} from '@tanstack/react-query';
+import type { InfiniteQueryObserverSuccessResult, UseMutationResult } from '@tanstack/react-query';
 
 import {
 	type MarkAllAsReadResult,
@@ -11,7 +8,7 @@ import {
 	NotificationType,
 } from '@shared/services/notifications-service/notifications.types';
 
-import { type NotificationCenterProps } from '../NotificationCenter.types';
+import type { NotificationCenterProps } from '../NotificationCenter.types';
 
 const mockTitle = 'Je bezoek aanvraag is goedgekeurd';
 const mockDescription =
@@ -22,7 +19,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: '0274356c-249b-4337-ac07-649dfefbbe2f',
 			description: mockDescription,
-			title: mockTitle + ' 0',
+			title: `${mockTitle} 0`,
 			status: NotificationStatus.UNREAD,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -33,7 +30,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: 'e1c4c9e3-3e6e-4783-8324-0b6d78b5bd14',
 			description: mockDescription,
-			title: mockTitle + ' 1',
+			title: `${mockTitle} 1`,
 			status: NotificationStatus.UNREAD,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -44,7 +41,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: 'c19e9e7e-047a-4be7-8d06-4e71fae6f747',
 			description: mockDescription,
-			title: mockTitle + ' 2',
+			title: `${mockTitle} 2`,
 			status: NotificationStatus.UNREAD,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -55,7 +52,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: 'e3b87067-4001-4c3b-b73f-d496e3494a62',
 			description: mockDescription,
-			title: mockTitle + ' 3',
+			title: `${mockTitle} 3`,
 			status: NotificationStatus.UNREAD,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -66,7 +63,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: 'b1a40094-c31f-471d-9239-4f4d54578062',
 			description: mockDescription,
-			title: mockTitle + ' 4',
+			title: `${mockTitle} 4`,
 			status: NotificationStatus.UNREAD,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -77,7 +74,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: '4b1e9195-ee7d-4676-ba84-28091fc1473d',
 			description: mockDescription,
-			title: mockTitle + ' 5',
+			title: `${mockTitle} 5`,
 			status: NotificationStatus.UNREAD,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -88,7 +85,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: '6a045f7a-33c0-444d-beb6-98ff10610980',
 			description: mockDescription,
-			title: mockTitle + ' 6',
+			title: `${mockTitle} 6`,
 			status: NotificationStatus.READ,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -99,7 +96,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: 'b9b44488-9b5a-4ee3-a231-6ee263230b11',
 			description: mockDescription,
-			title: mockTitle + ' 7',
+			title: `${mockTitle} 7`,
 			status: NotificationStatus.READ,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -110,7 +107,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: '08d6a4ee-8ea0-4a0d-b0da-5557837f8f94',
 			description: mockDescription,
-			title: mockTitle + ' 8',
+			title: `${mockTitle} 8`,
 			status: NotificationStatus.READ,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -121,7 +118,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: 'e861235a-a95e-44ed-a48d-192762378532',
 			description: mockDescription,
-			title: mockTitle + ' 9',
+			title: `${mockTitle} 9`,
 			status: NotificationStatus.READ,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -132,7 +129,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: 'bfcae082-2370-4a2b-9f66-a55c869addfb',
 			description: mockDescription,
-			title: mockTitle + ' 10',
+			title: `${mockTitle} 10`,
 			status: NotificationStatus.READ,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -143,7 +140,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: 'c609a045-fbe8-463f-8c41-ce4dfd8858f9',
 			description: mockDescription,
-			title: mockTitle + ' 11',
+			title: `${mockTitle} 11`,
 			status: NotificationStatus.READ,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -154,7 +151,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: '2945d515-0378-46a5-b102-c34d6c1e650d',
 			description: mockDescription,
-			title: mockTitle + ' 12',
+			title: `${mockTitle} 12`,
 			status: NotificationStatus.READ,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -165,7 +162,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: '972ef654-9ba5-40cf-8db5-bec713f5a6fc',
 			description: mockDescription,
-			title: mockTitle + ' 13',
+			title: `${mockTitle} 13`,
 			status: NotificationStatus.READ,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -176,7 +173,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: '3665d1b7-1762-4939-9a47-1c1765b02576',
 			description: mockDescription,
-			title: mockTitle + ' 14',
+			title: `${mockTitle} 14`,
 			status: NotificationStatus.READ,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -187,7 +184,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: 'af0d1847-0404-481f-83af-e53df2bfb750',
 			description: mockDescription,
-			title: mockTitle + ' 15',
+			title: `${mockTitle} 15`,
 			status: NotificationStatus.READ,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -198,7 +195,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: '888fbe32-703c-4717-b622-c1d65e4ceb1c',
 			description: mockDescription,
-			title: mockTitle + ' 16',
+			title: `${mockTitle} 16`,
 			status: NotificationStatus.READ,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -209,7 +206,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: 'e2db281b-7c99-4337-8d71-610f3c4efff6',
 			description: mockDescription,
-			title: mockTitle + ' 17',
+			title: `${mockTitle} 17`,
 			status: NotificationStatus.READ,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -220,7 +217,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: '631fd24f-52cb-4004-afd3-6bd1deb0b6ea',
 			description: mockDescription,
-			title: mockTitle + ' 18',
+			title: `${mockTitle} 18`,
 			status: NotificationStatus.READ,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
@@ -231,7 +228,7 @@ export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 		{
 			id: 'e69f9ec9-21ec-4310-9a8c-5180c48fe6a7',
 			description: mockDescription,
-			title: mockTitle + ' 19',
+			title: `${mockTitle} 19`,
 			status: NotificationStatus.READ,
 			visitId: '0fb12a25-a882-42f7-9c79-9d77839c7237',
 			createdAt: '2022-02-25T17:21:58.937169+00:00',

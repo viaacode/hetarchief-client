@@ -11,7 +11,7 @@ import { buildLink } from '@shared/helpers/build-link';
 import { goBrowserBackWithFallback } from '@shared/helpers/go-browser-back-with-fallback';
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 const NavigationItemEdit = lazy(() =>
 	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({
@@ -35,18 +35,15 @@ export const AdminNavigationItemCreatePage: FC<DefaultSeoInfo & AdminNavigationI
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-navigation__create">
-						<Suspense
-							fallback={<Loading fullscreen owner="AdminNavigationItemCreatePage" />}
-						>
+						<Suspense fallback={<Loading fullscreen owner="AdminNavigationItemCreatePage" />}>
 							<NavigationItemEdit
 								navigationBarId={navigationBarId}
 								navigationItemId={undefined}
 								onGoBack={() =>
 									goBrowserBackWithFallback(
-										buildLink(
-											ROUTES_BY_LOCALE[locale].adminNavigationBarDetail,
-											{ navigationBarId }
-										),
+										buildLink(ROUTES_BY_LOCALE[locale].adminNavigationBarDetail, {
+											navigationBarId,
+										}),
 										router
 									)
 								}
@@ -61,9 +58,7 @@ export const AdminNavigationItemCreatePage: FC<DefaultSeoInfo & AdminNavigationI
 		<>
 			<SeoTags
 				title={tText('pages/admin/content/maak/index___content-pagina-bewerken')}
-				description={tText(
-					'pages/admin/content/maak/index___bewerk-pagina-van-een-content-pagina'
-				)}
+				description={tText('pages/admin/content/maak/index___bewerk-pagina-van-een-content-pagina')}
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}

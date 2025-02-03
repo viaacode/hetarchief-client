@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { CardImage } from '@shared/components/CardImage';
 import Html from '@shared/components/Html/Html';
@@ -8,7 +8,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { Locale } from '@shared/utils/i18n';
 import { VisitorSpaceNavigation } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation';
 
-import { type WaitingPageProps } from './WaitingPage.types';
+import type { WaitingPageProps } from './WaitingPage.types';
 
 const WaitingPage: FC<WaitingPageProps> = ({ visitorSpace, backLink }) => {
 	const locale = useLocale();
@@ -30,9 +30,7 @@ const WaitingPage: FC<WaitingPageProps> = ({ visitorSpace, backLink }) => {
 						<section className="p-visit-requested__grid">
 							<div className="p-visit-requested__top">
 								<h1 className="p-visit-requested__title u-mt-32-md">
-									{tHtml(
-										'pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen'
-									)}
+									{tHtml('pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen')}
 								</h1>
 
 								<p className="p-visit-requested__instructions u-color-neutral u-mt-24 u-mt-32-md u-mb-56-md">

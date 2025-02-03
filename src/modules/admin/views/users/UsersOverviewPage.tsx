@@ -1,4 +1,4 @@
-import { type Avo } from '@viaa/avo2-types';
+import type { Avo } from '@viaa/avo2-types';
 import React, { type FC, lazy, Suspense } from 'react';
 
 import { Permission } from '@account/const';
@@ -7,7 +7,7 @@ import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { formatDistanceTodayWithoutTime } from '@shared/utils/dates';
 
 const UserOverview = lazy(() =>
@@ -21,9 +21,7 @@ export const UsersOverviewPage: FC<
 > = ({ url, commonUser }) => {
 	const renderPageContent = () => {
 		return (
-			<AdminLayout
-				pageTitle={tText('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')}
-			>
+			<AdminLayout pageTitle={tText('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')}>
 				<AdminLayout.Content>
 					<div className="l-container">
 						<Suspense fallback={<Loading fullscreen owner="UsersOverviewPage" />}>

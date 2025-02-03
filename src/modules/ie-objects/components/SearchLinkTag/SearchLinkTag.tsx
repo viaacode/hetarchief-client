@@ -1,8 +1,8 @@
 import { TagList } from '@meemoo/react-components';
 import Link from 'next/link';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
-import { type SearchLinkTagProps } from '@ie-objects/components/SearchLinkTag/SearchLinkTag.types';
+import type { SearchLinkTagProps } from '@ie-objects/components/SearchLinkTag/SearchLinkTag.types';
 import { mapKeywordsToTags } from '@ie-objects/utils/map-metadata';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 

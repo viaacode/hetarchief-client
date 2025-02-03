@@ -51,7 +51,7 @@ export async function checkVisitRequestStatuses(page: Page): Promise<{
 
 	// Check the total number of visit requests on the "all" tab
 	const totalNumberOfRequests = await page
-		.locator(moduleClassSelector('l-sidebar__main') + ' .c-table__wrapper--body .c-table__row')
+		.locator(`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row`)
 		.count();
 
 	// Check total number of requests

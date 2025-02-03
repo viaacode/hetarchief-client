@@ -26,7 +26,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmar
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(
 		page,
-		(process.env.TEST_CLIENT_ENDPOINT as string) + '/zoeken?aanbieder=vrt',
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/zoeken?aanbieder=vrt`,
 		SEARCH_PAGE_TITLE
 	);
 
@@ -66,7 +66,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmar
 
 	// Check item contains search term
 	const markedWord = await page
-		.locator(moduleClassSelector('c-media-card-list__content') + ' article mark')
+		.locator(`${moduleClassSelector('c-media-card-list__content')} article mark`)
 		.first()
 		.innerText();
 	expect(markedWord.toLowerCase()).toEqual(SEARCH_TERM.split(' ')[0].toLowerCase());
@@ -128,9 +128,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmar
 
 	// Go to the following url
 	await page.goto(
-		((process.env.TEST_CLIENT_ENDPOINT as string) +
-			'/pid/' +
-			(process.env.TEST_OBJECT_DETAIL_PAGE_STUIFZAND as string)) as string
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${process.env.TEST_OBJECT_DETAIL_PAGE_STUIFZAND as string}` as string
 	);
 
 	/**
@@ -139,7 +137,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmar
 
 	// Check page title
 	await expect(
-		page.locator(moduleClassSelector('p-object-detail__metadata-content') + ' h3').first()
+		page.locator(`${moduleClassSelector('p-object-detail__metadata-content')} h3`).first()
 	).toContainText('Het Annoncenblad van Mol en omliggende dorpen'); // w950g5230s
 
 	/**

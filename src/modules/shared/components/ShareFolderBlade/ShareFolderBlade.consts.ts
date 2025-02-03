@@ -2,7 +2,7 @@ import { object, type Schema, string } from 'yup';
 
 import { tText } from '@shared/helpers/translate';
 
-import { type ShareFolderBladeFormState } from './ShareFolderBlade.types';
+import type { ShareFolderBladeFormState } from './ShareFolderBlade.types';
 
 export const SHARE_FOLDER_FORM_SCHEMA = (): Schema<ShareFolderBladeFormState> => {
 	return object({

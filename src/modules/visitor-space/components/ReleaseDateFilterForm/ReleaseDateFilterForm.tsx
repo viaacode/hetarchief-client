@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { endOfDay, parseISO, startOfDay } from 'date-fns';
 import React, { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { type MultiValue, type SingleValue } from 'react-select';
+import type { MultiValue, SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
@@ -26,9 +26,9 @@ import {
 	RELEASE_DATE_FILTER_FORM_SCHEMA,
 } from './ReleaseDateFilterForm.const';
 import styles from './ReleaseDateFilterForm.module.scss';
-import {
-	type ReleaseDateFilterFormProps,
-	type ReleaseDateFilterFormState,
+import type {
+	ReleaseDateFilterFormProps,
+	ReleaseDateFilterFormState,
 } from './ReleaseDateFilterForm.types';
 
 import { getOperators } from 'modules/visitor-space/utils/advanced-filters';
@@ -89,7 +89,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 
 			setShowRange(isRange(op)); // Not covered by other useEffects in time
 		}
-	}, [initialValue, setForm]);
+	}, [initialValue]);
 
 	// Events
 
@@ -136,13 +136,13 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 			const yearDate = convertYearToDate(year, form.operator)?.toString();
 			setForm((oldForm) => ({ ...oldForm, releaseDate: yearDate }));
 		}
-	}, [year, setForm, form.operator]);
+	}, [year, form.operator]);
 
 	useEffect(() => {
 		if (yearRange) {
 			setForm((oldForm) => ({ ...oldForm, releaseDate: yearRange }));
 		}
-	}, [setForm, yearRange]);
+	}, [yearRange]);
 
 	const onChangeOperatorSelect = (
 		operator: SingleValue<SelectOption> | MultiValue<SelectOption>
@@ -184,9 +184,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 					id="releaseDate"
 					onChange={(newFromDate: Date | undefined, newToDate: Date | undefined) => {
 						onChangeReleaseDate(
-							`${newFromDate ? newFromDate.toISOString() : ''}${SEPARATOR}${
-								newToDate ? newToDate.toISOString() : ''
-							}`
+							`${newFromDate ? newFromDate.toISOString() : ''}${SEPARATOR}${newToDate ? newToDate.toISOString() : ''}`
 						);
 					}}
 					from={from}
@@ -221,15 +219,10 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 
 	return (
 		<>
-			<div className={clsx(className, styles['releaseDate'], 'u-px-20 u-px-32-md')}>
+			<div className={clsx(className, styles.releaseDate, 'u-px-20 u-px-32-md')}>
 				<FormControl
 					className={clsx('u-mb-24 c-form-control--label-hidden')}
-					errors={[
-						<RedFormWarning
-							error={errors.operator?.message}
-							key="form-error--operator"
-						/>,
-					]}
+					errors={[<RedFormWarning error={errors.operator?.message} key="form-error--operator" />]}
 					id={labelKeys.operator}
 					label={tHtml(
 						'modules/visitor-space/components/releaseDate-filter-form/releaseDate-filter-form___operator'
@@ -258,14 +251,11 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 					/>
 				</FormControl>
 			</div>
-			<div className={clsx(styles['releaseDate'], 'u-px-20 u-px-32-md')}>
+			<div className={clsx(styles.releaseDate, 'u-px-20 u-px-32-md')}>
 				<FormControl
 					className="u-mb-24 c-form-control--label-hidden"
 					errors={[
-						<RedFormWarning
-							error={errors.releaseDate?.message}
-							key="form-error--release-date"
-						/>,
+						<RedFormWarning error={errors.releaseDate?.message} key="form-error--release-date" />,
 					]}
 					id={labelKeys.releaseDate}
 					label={tHtml(

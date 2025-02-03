@@ -1,12 +1,12 @@
 import { Button, keysEnter, onKey, TextInput } from '@meemoo/react-components';
 import { isString } from 'lodash-es';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 
-import { type SearchBarProps } from './SearchBar.types';
+import type { SearchBarProps } from './SearchBar.types';
 
 const SearchBar: FC<SearchBarProps> = ({
 	onSearch,
@@ -45,9 +45,7 @@ const SearchBar: FC<SearchBarProps> = ({
 					<Button
 						variants={['text', 'icon', 'xxs']}
 						icon={<Icon name={IconNamesLight.Search} aria-hidden />}
-						aria-label={tText(
-							'modules/shared/components/search-bar/search-bar___uitvoeren'
-						)}
+						aria-label={tText('modules/shared/components/search-bar/search-bar___uitvoeren')}
 						onClick={() => onSearch(value)}
 					/>
 				</>

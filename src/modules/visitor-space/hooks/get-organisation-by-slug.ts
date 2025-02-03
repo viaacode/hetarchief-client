@@ -2,7 +2,7 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { OrganisationService } from '@shared/services/organisation-service/organisation.service';
-import { type Organisation } from '@shared/services/organisation-service/organisation.types';
+import type { Organisation } from '@shared/services/organisation-service/organisation.types';
 
 export function useGetOrganisationBySlug(
 	slug: string | null,

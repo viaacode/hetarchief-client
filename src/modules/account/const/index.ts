@@ -1,11 +1,11 @@
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { boolean, object, type Schema } from 'yup';
 
-import { type CommunicationFormState } from '@account/types';
+import type { CommunicationFormState } from '@account/types';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
-import { type Locale } from '@shared/utils/i18n';
+import type { Locale } from '@shared/utils/i18n';
 
 export * from './my-folders.const';
 export * from './my-history.const';

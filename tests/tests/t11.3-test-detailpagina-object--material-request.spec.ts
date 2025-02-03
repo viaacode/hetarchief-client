@@ -18,9 +18,7 @@ test('T11.3: Test detailpagina object + materiaal aanvraag doen: materiaal aanvr
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(
 		page,
-		(process.env.TEST_CLIENT_ENDPOINT as string) +
-			'/pid/' +
-			(process.env.TEST_OBJECT_DETAIL_PAGE_AMSAB as string),
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${process.env.TEST_OBJECT_DETAIL_PAGE_AMSAB as string}`,
 		PAGE_TITLE
 	);
 
@@ -37,30 +35,28 @@ test('T11.3: Test detailpagina object + materiaal aanvraag doen: materiaal aanvr
 	 */
 
 	const addToListLabel =
-		SITE_TRANSLATIONS.nl[
-			'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst-desktop'
-		];
+		SITE_TRANSLATIONS.nl['modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst-desktop'];
 	await page.locator(`[aria-label="${addToListLabel}"]`).click();
 
 	const addToRequestsLabel =
 		SITE_TRANSLATIONS.nl[
 			'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
 		];
-	page.locator('text=' + addToRequestsLabel);
+	page.locator(`text=${addToRequestsLabel}`);
 
 	// Click 'Ik wil dit materiaal hergebruiken'
 	const reuseLabel =
 		SITE_TRANSLATIONS.nl[
 			'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
 		];
-	await page.locator('text=' + reuseLabel).click();
+	await page.locator(`text=${reuseLabel}`).click();
 
 	// Click 'Voeg toe aan aanvraaglijst en zoek verder'
 	const addToRequestListAndSearchLabel =
 		SITE_TRANSLATIONS.nl[
 			'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek'
 		];
-	await page.locator('text=' + addToRequestListAndSearchLabel).click();
+	await page.locator(`text=${addToRequestListAndSearchLabel}`).click();
 
 	// Toast message
 	await checkToastMessage(
@@ -84,7 +80,7 @@ test('T11.3: Test detailpagina object + materiaal aanvraag doen: materiaal aanvr
 		SITE_TRANSLATIONS.nl[
 			'modules/navigation/components/material-request-center-blade/material-request-center-blade___vul-gegevens-aan'
 		];
-	await page.locator('text=' + confirmYourInfoLabel).click();
+	await page.locator(`text=${confirmYourInfoLabel}`).click();
 
 	// Check if the title of the blade is now 'Persoonlijke gegevens'
 	// await expect(page.locator('.c-blade--active')).toBeVisible({ timeout: 10000 });
@@ -105,20 +101,14 @@ test('T11.3: Test detailpagina object + materiaal aanvraag doen: materiaal aanvr
 	// Click 'ik vraag het materiaal op in het kader van mijn beroep (uitgezonderd onderwijs)'
 	await page
 		.locator(
-			'text=' +
-				SITE_TRANSLATIONS.nl[
-					'modules/navigation/components/personal-info-blade/personal-info-blade___requester-capacity-work'
-				]
+			`text=${SITE_TRANSLATIONS.nl['modules/navigation/components/personal-info-blade/personal-info-blade___requester-capacity-work']}`
 		)
 		.click();
 
 	// Click 'Verstuur aanvraag'
 	await page
 		.locator(
-			'text=' +
-				SITE_TRANSLATIONS.nl[
-					'modules/navigation/components/personal-info-blade/personal-info-blade___verstuur'
-				]
+			`text=${SITE_TRANSLATIONS.nl['modules/navigation/components/personal-info-blade/personal-info-blade___verstuur']}`
 		)
 		.click();
 

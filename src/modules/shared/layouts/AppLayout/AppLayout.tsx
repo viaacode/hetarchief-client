@@ -24,7 +24,7 @@ import { Footer } from '@navigation/components/Footer';
 import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';
 import { Navigation } from '@navigation/components/Navigation/Navigation';
 import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
-import { type NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
+import type { NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
 import {
@@ -70,8 +70,8 @@ import {
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
 import { Breakpoints } from '@shared/types';
-import { type VisitRequest } from '@shared/types/visit-request';
-import { type Locale } from '@shared/utils/i18n';
+import type { VisitRequest } from '@shared/types/visit-request';
+import type { Locale } from '@shared/utils/i18n';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visits';
 
@@ -83,6 +83,7 @@ import styles from './AppLayout.module.scss'; // We want to make sure config get
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { publicRuntimeConfig } = getConfig();
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const AppLayout: FC<any> = ({ children }) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
@@ -186,6 +187,7 @@ const AppLayout: FC<any> = ({ children }) => {
 		? convertDbContentPageToContentPageInfo(dbContentPage)
 		: null;
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (user?.language) {
 			changeApplicationLocale(
@@ -196,7 +198,6 @@ const AppLayout: FC<any> = ({ children }) => {
 				contentPageInfo
 			);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user]);
 
 	useEffect(() => {
@@ -220,14 +221,17 @@ const AppLayout: FC<any> = ({ children }) => {
 		} else {
 			NotificationsService.stopPolling();
 		}
-	}, [queryClient, router, user, setNotificationsOpen, setUnreadNotifications, locale]);
+	}, [queryClient, router, user, setNotificationsOpen, setUnreadNotifications]);
 
 	useEffect(() => {
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		dispatch(checkLoginAction() as any);
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		dispatch(getTosAction() as any);
 	}, [dispatch]);
 
 	// Sync showAuth query param with store value
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		if (user && typeof query.showAuth === 'boolean') {
 			setQuery({
@@ -238,7 +242,6 @@ const AppLayout: FC<any> = ({ children }) => {
 		} else if (typeof query.showAuth === 'boolean') {
 			dispatch(setShowAuthModal(query.showAuth));
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, query.showAuth, user]);
 
 	useEffect(() => {
@@ -313,6 +316,7 @@ const AppLayout: FC<any> = ({ children }) => {
 		showLinkedSpaceAsHomepage,
 		linkedSpaceSlug,
 		locale,
+		user,
 		hasUnreadNotifications,
 		showNotificationsCenter,
 		userName,
@@ -340,7 +344,7 @@ const AppLayout: FC<any> = ({ children }) => {
 				// Otherwise you get an infinite loading state because no api calls will work
 				// https://github.com/vercel/next.js/issues/37005
 				node: (
-					<Link href={'/' + locale} passHref>
+					<Link href={`/${locale}`} passHref>
 						<HetArchiefLogo
 							className="c-navigation__logo c-navigation__logo--list"
 							type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
@@ -422,11 +426,7 @@ const AppLayout: FC<any> = ({ children }) => {
 							title={alert.title}
 							content={<Html content={alert.message} type="div" />}
 							variants="blue"
-							icon={
-								<Icon
-									name={IconNamesLight[alert.type as keyof typeof AlertIconNames]}
-								/>
-							}
+							icon={<Icon name={IconNamesLight[alert.type as keyof typeof AlertIconNames]} />}
 							closeIcon={<Icon name={IconNamesLight.Times} />}
 							onClose={onCloseAlert}
 						/>
@@ -454,6 +454,11 @@ const AppLayout: FC<any> = ({ children }) => {
 						className="c-navigation__logo--hamburger"
 						onClick={() => {
 							window.open(window.location.origin, '_self');
+						}}
+						onKeyUp={(evt) => {
+							if (evt.key === 'Enter') {
+								window.open(window.location.origin, '_self');
+							}
 						}}
 					>
 						{/* Hard reload the page when going to the homepage because of NextJS issues with the static 404 page not loading env variables */}

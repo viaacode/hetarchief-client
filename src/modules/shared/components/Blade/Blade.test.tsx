@@ -1,12 +1,12 @@
 import { jest } from '@jest/globals';
 import { fireEvent, render } from '@testing-library/react';
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Provider } from 'react-redux';
 
 import { mockStore } from '../../../../__mocks__/store';
 
 import { Blade } from './Blade';
-import { type BladeProps } from './Blade.types';
+import type { BladeProps } from './Blade.types';
 import { mockBladeProps } from './__mocks__/blade';
 
 import '@testing-library/jest-dom';
@@ -16,6 +16,7 @@ const renderBlade = (
 	children: ReactNode = <p>some child</p>
 ) => {
 	// Focus trap needs at least one focusable element inside it to be able to lock the focus
+	// biome-ignore lint/a11y/useValidAnchor: this is a test file, not actual production code
 	const mockInteractiveElement = <a href="#">test</a>;
 
 	return render(
@@ -37,7 +38,10 @@ describe('Component: <Blade /> (default)', () => {
 
 	it('Should render a title', () => {
 		const title = 'new title';
-		const { getByText } = renderBlade({ ...mockBladeProps, renderTitle: () => title });
+		const { getByText } = renderBlade({
+			...mockBladeProps,
+			renderTitle: () => title,
+		});
 
 		const bladeTitle = getByText(title);
 
@@ -81,7 +85,11 @@ describe('Component: <Blade /> (default)', () => {
 
 	it('Should call onClose when the close button is clicked', () => {
 		const onClose = jest.fn();
-		const { getByRole } = renderBlade({ ...mockBladeProps, onClose, isOpen: true }); // Buttons inside blades are only enabled when the blade is open
+		const { getByRole } = renderBlade({
+			...mockBladeProps,
+			onClose,
+			isOpen: true,
+		}); // Buttons inside blades are only enabled when the blade is open
 
 		const closeButton = getByRole('dialog').querySelector('.c-blade__close-button');
 

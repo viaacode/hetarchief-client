@@ -1,4 +1,4 @@
-import { type Locale } from '@shared/utils/i18n';
+import type { Locale } from '@shared/utils/i18n';
 
 export interface LanguageInfo {
 	languageCode: Locale;

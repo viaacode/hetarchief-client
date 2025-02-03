@@ -7,7 +7,7 @@ import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { Loading } from '@shared/components/Loading';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 type MaintainerSearchPageProps = DefaultSeoInfo;
 
@@ -30,9 +30,7 @@ export const IeObjectWithoutObjectNamePage: FC<MaintainerSearchPageProps> = () =
 		if (ieObjectInfo || isError) {
 			const objectTitleSlug = kebabCase(ieObjectInfo?.name || '');
 			const searchUrl = stringifyUrl({
-				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${
-					ieObjectInfo?.maintainerSlug || slug
-				}/${objectId}/${objectTitleSlug || 'titel'}`,
+				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${ieObjectInfo?.maintainerSlug || slug}/${objectId}/${objectTitleSlug || 'titel'}`,
 			});
 			router.replace(searchUrl, undefined, { shallow: true });
 		}

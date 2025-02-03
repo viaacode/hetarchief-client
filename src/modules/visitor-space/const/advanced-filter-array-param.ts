@@ -1,4 +1,4 @@
-import { type QueryParamConfig } from 'use-query-params';
+import type { QueryParamConfig } from 'use-query-params';
 
 import { type AdvancedFilter, FilterProperty, Operator } from '../types';
 
@@ -12,9 +12,7 @@ export const AdvancedFilterArrayParam: QueryParamConfig<AdvancedFilter[] | undef
 						const propertyAcronym = filterNameToAcronym(prop as FilterProperty);
 						const operatorAcronym = operatorToAcronym(op as Operator);
 
-						return `${propertyAcronym}${operatorAcronym}${encodeURIComponent(
-							val || ''
-						)}`;
+						return `${propertyAcronym}${operatorAcronym}${encodeURIComponent(val || '')}`;
 					})
 					.join(divider)
 			: undefined;
@@ -31,7 +29,7 @@ export const AdvancedFilterArrayParam: QueryParamConfig<AdvancedFilter[] | undef
 					const val = decodeURIComponent(filter.slice(4));
 
 					return { prop: filterProperty, op: filterOperator, val };
-			  })
+				})
 			: undefined;
 	},
 };

@@ -1,4 +1,3 @@
-import { AdminConfigManager } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import {
 	Alert,
 	Button,
@@ -8,7 +7,7 @@ import {
 	Tabs,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { type HTTPError } from 'ky';
+import type { HTTPError } from 'ky';
 import { capitalize, compact, intersection, isNil, lowerCase, noop } from 'lodash-es';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -37,7 +36,7 @@ import {
 
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
-import { type User } from '@auth/types';
+import type { User } from '@auth/types';
 import {
 	RequestAccessBlade,
 	type RequestAccessFormState,
@@ -90,11 +89,11 @@ import {
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import IiifViewer from '@iiif-viewer/IiifViewer';
-import {
-	type IiifViewerFunctions,
-	type ImageInfo,
-	type ImageInfoWithToken,
-	type Rect,
+import type {
+	IiifViewerFunctions,
+	ImageInfo,
+	ImageInfoWithToken,
+	Rect,
 } from '@iiif-viewer/IiifViewer.types';
 import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
@@ -126,7 +125,7 @@ import { toastService } from '@shared/services/toast-service';
 import { setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
 import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
@@ -241,9 +240,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const getRepresentationByType = useCallback(
 		(mimeTypes: string[]): IeObjectRepresentation | null => {
 			return (
-				currentPage?.representations?.find(
-					(representation) =>
-						representation?.files?.find((file) => mimeTypes.includes(file.mimeType))
+				currentPage?.representations?.find((representation) =>
+					representation?.files?.find((file) => mimeTypes.includes(file.mimeType))
 				) || null
 			);
 		},
@@ -284,9 +282,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				const files = pageRepresentation?.representations?.flatMap(
 					(representation) => representation.files
 				);
-				const imageApiFile = files.find((file) =>
-					IMAGE_API_FORMATS.includes(file.mimeType)
-				);
+				const imageApiFile = files.find((file) => IMAGE_API_FORMATS.includes(file.mimeType));
 				if (!imageApiFile?.storedAt) {
 					return null;
 				}
@@ -296,11 +292,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					return null;
 				}
 				return {
-					imageUrl:
-						imageApiFile.storedAt.replace(
-							'https://iiif-qas.meemoo.be/image/3/public',
-							'https://iiif-qas.meemoo.be/image/3/hetarchief'
-						) + '/info.json', // Adding info.json avoids an extra redirect 303
+					imageUrl: `${imageApiFile.storedAt.replace('https://iiif-qas.meemoo.be/image/3/public', 'https://iiif-qas.meemoo.be/image/3/hetarchief')}/info.json`, // Adding info.json avoids an extra redirect 303
 					thumbnailUrl: imageFile?.thumbnailUrl,
 					altoUrl: altoFile?.storedAt,
 				};
@@ -342,8 +334,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL);
 	const { data: similarData } = useGetIeObjectsAlsoInteresting(
 		ieObjectId,
-		isKiosk || userHasAccessToMaintainer ? mediaInfo?.maintainerId ?? '' : '',
-		{ enabled: !!mediaInfo }
+		isKiosk || userHasAccessToMaintainer ? (mediaInfo?.maintainerId ?? '') : '',
+		{
+			enabled: !!mediaInfo,
+		}
 	);
 
 	// related
@@ -392,7 +386,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	/**
 	 * Computed
 	 */
-	const hasMedia = mediaInfo?.pageRepresentations?.length || 0 > 0;
+	const hasMedia = (mediaInfo?.pageRepresentations?.length || 0) > 0;
 	const isMediaInfoErrorNotFound = (mediaInfoError as HTTPError)?.response?.status === 404;
 	const isMediaInfoErrorNoAccess = (mediaInfoError as HTTPError)?.response?.status === 403;
 	const isVisitRequestErrorNotFound =
@@ -417,14 +411,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const pageOcrTexts: (string | null)[] = useMemo(() => {
 		const pageOcrTextsTemp: (string | null)[] = [];
-		mediaInfo?.pageRepresentations?.forEach((pageRepresentation) => {
+		for (const pageRepresentation of mediaInfo?.pageRepresentations || []) {
 			const pageTranscripts = compact(
 				pageRepresentation?.representations?.map((representation) => {
 					return representation.schemaTranscript;
 				})
 			);
 			pageOcrTextsTemp.push(pageTranscripts[0]?.toLowerCase() || null);
-		});
+		}
 		return pageOcrTextsTemp;
 	}, [mediaInfo?.pageRepresentations]);
 
@@ -447,6 +441,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		);
 	}, [searchTerms, simplifiedAltoInfo?.text]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	const handleSearch = useCallback(
 		async (newSearchTerms: string): Promise<void> => {
 			if (newSearchTerms === '') {
@@ -475,32 +470,29 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			}
 
 			const searchResultsTemp: OcrSearchResult[] = [];
-			newSearchTerms
-				.toLowerCase()
-				.split(' ')
-				.forEach((searchTerm) => {
-					pageOcrTexts.forEach((pageOcrText, pageIndex) => {
-						if (!pageOcrText) {
-							return; // Skip this page since it doesn't have an ocr transcript
-						}
-						let searchTermCharacterOffset: number = pageOcrText.indexOf(searchTerm);
-						let searchTermIndexOnPage: number = 0;
-						while (searchTermCharacterOffset !== -1) {
-							const searchResult: OcrSearchResult = {
-								pageIndex,
-								searchTerm,
-								searchTermCharacterOffset,
-								searchTermIndexOnPage,
-							};
-							searchResultsTemp.push(searchResult);
-							searchTermCharacterOffset = pageOcrText?.indexOf(
-								searchTerm,
-								searchTermCharacterOffset + 1
-							);
-							searchTermIndexOnPage += 1;
-						}
-					});
+			for (const searchTerm of newSearchTerms.toLowerCase().split(' ')) {
+				pageOcrTexts.forEach((pageOcrText, pageIndex) => {
+					if (!pageOcrText) {
+						return; // Skip this page since it doesn't have an ocr transcript
+					}
+					let searchTermCharacterOffset: number = pageOcrText.indexOf(searchTerm);
+					let searchTermIndexOnPage = 0;
+					while (searchTermCharacterOffset !== -1) {
+						const searchResult: OcrSearchResult = {
+							pageIndex,
+							searchTerm,
+							searchTermCharacterOffset,
+							searchTermIndexOnPage,
+						};
+						searchResultsTemp.push(searchResult);
+						searchTermCharacterOffset = pageOcrText?.indexOf(
+							searchTerm,
+							searchTermCharacterOffset + 1
+						);
+						searchTermIndexOnPage += 1;
+					}
 				});
+			}
 
 			setSearchResults(searchResultsTemp);
 			setSearchTerms(newSearchTerms.toLowerCase());
@@ -525,7 +517,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				setCurrentSearchResultIndex(firstSearchResultOnCurrentPage);
 			}
 		},
-		[currentPageIndex, pageOcrTexts, router]
+		[currentPageIndex, mediaInfo?.thumbnailUrl, pageOcrTexts, router]
 	);
 
 	const handleIsTextOverlayVisibleChange = useCallback(
@@ -574,6 +566,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * - the current search result index changes
 	 * - the current page index changes
 	 */
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		if (isLoadingPageImage) {
 			return; // Wait for the page to load before changing overlays or zoom
@@ -585,9 +579,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 		const highlightedAltoTexts = getHighlightedAltoTexts();
 		const currentHighlightedAltoText =
-			highlightedAltoTexts[
-				searchResults[currentSearchResultIndex || 0]?.searchTermIndexOnPage
-			];
+			highlightedAltoTexts[searchResults[currentSearchResultIndex || 0]?.searchTermIndexOnPage];
 
 		if (currentHighlightedAltoText) {
 			iiifViewerReference.current?.iiifZoomToRect(currentHighlightedAltoText);
@@ -642,6 +634,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	/**
 	 * Scroll to active search result in ocr tab when the current search result index changes
 	 */
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		// Wait for active word to be rendered before starting scroll
 		window.setTimeout(() => {
@@ -673,9 +666,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	useEffect(() => {
 		dispatch(
 			setShowZendesk(
-				!isKiosk &&
-					!hasAccessToVisitorSpaceOfObject &&
-					activeTab === ObjectDetailTabs.Metadata
+				!isKiosk && !hasAccessToVisitorSpaceOfObject && activeTab === ObjectDetailTabs.Metadata
 			)
 		);
 	}, [dispatch, hasAccessToVisitorSpaceOfObject, isKiosk, activeTab]);
@@ -714,6 +705,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	/**
 	 * Set the media type and default tab when the media info is loaded
 	 */
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		// Set default view
 		if (isMobile) {
@@ -723,7 +715,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			// Check media content and license for default tab on desktop
 			setExpandSidebar(!mediaInfo?.dctermsFormat || !hasMedia, 'replaceIn');
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mediaInfo]);
 
 	/**
@@ -778,9 +769,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const getMappedRelatedIeObjects = (): MediaObject[] => {
 		if (relatedIeObjects?.parent) {
 			return [mapRelatedIeObject(relatedIeObjects.parent) as MediaObject];
-		} else {
-			return compact(relatedIeObjects?.children?.map(mapRelatedIeObject) || []);
 		}
+		return compact(relatedIeObjects?.children?.map(mapRelatedIeObject) || []);
 	};
 
 	/**
@@ -853,8 +843,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		});
 
 		if (
-			materialRequests?.items &&
-			materialRequests.items.find(
+			materialRequests?.items?.find(
 				(request) => request.objectSchemaIdentifier === mediaInfo?.schemaIdentifier
 			)
 		) {
@@ -862,11 +851,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			return;
 		}
 
-		const externalFormUrl = getExternalMaterialRequestUrlIfAvailable(
-			mediaInfo,
-			isAnonymous,
-			user
-		);
+		const externalFormUrl = getExternalMaterialRequestUrlIfAvailable(mediaInfo, isAnonymous, user);
 		if (externalFormUrl) {
 			EventsService.triggerEvent(LogEventType.ITEM_REQUEST, window.location.href, {
 				fragment_id: mediaInfo?.schemaIdentifier,
@@ -901,15 +886,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					};
 
 					if (hasAccessToVisitorSpaceOfObject) {
-						EventsService.triggerEvent(
-							LogEventType.BEZOEK_ITEM_PLAY,
-							path,
-							eventData
-						).then(noop);
+						EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_PLAY, path, eventData).then(noop);
 					} else {
-						EventsService.triggerEvent(LogEventType.ITEM_PLAY, path, eventData).then(
-							noop
-						);
+						EventsService.triggerEvent(LogEventType.ITEM_PLAY, path, eventData).then(noop);
 					}
 				}
 
@@ -952,10 +931,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			});
 			onCloseBlade();
 			await router.push(
-				ROUTES_BY_LOCALE[locale].visitRequested.replace(
-					':slug',
-					createdVisitRequest.spaceSlug
-				)
+				ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
 			);
 		} catch (err) {
 			console.error({
@@ -1090,9 +1066,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const renderMedia = (): ReactNode => {
 		if (
-			(isLoadingPlayableUrl && !isNewspaper) ||
-			!mediaInfo ||
-			Object.keys(imageInfosWithTokens).length === 0
+			(!isNewspaper && isLoadingPlayableUrl) ||
+			(isNewspaper && Object.keys(imageInfosWithTokens).length === 0) ||
+			!mediaInfo
 		) {
 			return <Loading fullscreen owner="object detail page: render media" />;
 		}
@@ -1140,10 +1116,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 		if (isErrorPlayableUrl) {
 			return (
-				<ObjectPlaceholder
-					{...ticketErrorPlaceholder()}
-					addSliderPadding={showFragmentSlider}
-				/>
+				<ObjectPlaceholder {...ticketErrorPlaceholder()} addSliderPadding={showFragmentSlider} />
 			);
 		}
 
@@ -1197,26 +1170,22 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		// Audio player
 		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(currentPlayableFile.mimeType)) {
 			if (peakFileStoredAt && !peakJson) {
-				return (
-					<Loading fullscreen owner="object detail page: render media audio peak file" />
-				);
-			} else {
-				return (
-					<FlowPlayer
-						key={flowPlayerKey}
-						type="audio"
-						src={[
-							{
-								src: playableUrl as string,
-								type: currentPlayableFile.mimeType,
-							},
-						]}
-						poster={AdminConfigManager.getConfig().components.defaultAudioStill}
-						waveformData={peakJson?.data || undefined}
-						{...shared}
-					/>
-				);
+				return <Loading fullscreen owner="object detail page: render media audio peak file" />;
 			}
+			return (
+				<FlowPlayer
+					key={flowPlayerKey}
+					type="audio"
+					src={[
+						{
+							src: playableUrl as string,
+							type: currentPlayableFile.mimeType,
+						},
+					]}
+					waveformData={peakJson?.data || undefined}
+					{...shared}
+				/>
+			);
 		}
 	};
 
@@ -1227,10 +1196,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				passHref
 				href={`${ROUTES_BY_LOCALE[locale].search}/${router.query.slug}/${item.id}`}
 				tabIndex={isHidden ? -1 : 0}
-				className={clsx(
-					styles['p-object-detail__metadata-card-link'],
-					'u-text-no-decoration'
-				)}
+				className={clsx(styles['p-object-detail__metadata-card-link'], 'u-text-no-decoration')}
 				aria-label={item.title}
 			>
 				<RelatedObject object={item} />
@@ -1273,14 +1239,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 		if (mappedRelatedIeObjects.length === 1) {
 			return tHtml('modules/ie-objects/object-detail-page___dit-object-heeft-1-fragment');
-		} else {
-			return tHtml(
-				'modules/ie-objects/object-detail-page___dit-object-heeft-amount-fragmenten',
-				{
-					amount: mappedRelatedIeObjects.length,
-				}
-			);
 		}
+		return tHtml('modules/ie-objects/object-detail-page___dit-object-heeft-amount-fragmenten', {
+			amount: mappedRelatedIeObjects.length,
+		});
 	};
 
 	const renderRelatedObjectsBlade = () => {
@@ -1308,6 +1270,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		);
 	};
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: avoid rerendering ocr text since it's heavy
 	const renderedOcrText = useMemo(() => {
 		const searchTermWords = compact(searchTerms.split(' '));
 		let searchTermIndex = 0;
@@ -1322,24 +1285,22 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 					// Search results are counted per page, so we need to subtract the amount of results in previous page
 					const searchResultsOnPreviousPages: number =
-						searchResults?.filter((result) => result.pageIndex < currentPageIndex)
-							.length || 0;
+						searchResults?.filter((result) => result.pageIndex < currentPageIndex).length || 0;
 					const searchResultIndexWithinCurrentPage: number =
 						(currentSearchResultIndex || 0) - searchResultsOnPreviousPages;
 					const isActive: boolean =
-						!!searchTerms &&
-						isMarked &&
-						searchTermIndex === searchResultIndexWithinCurrentPage;
+						!!searchTerms && isMarked && searchTermIndex === searchResultIndexWithinCurrentPage;
 
 					const wordElement = (
 						<span
-							key={'ocr-text--' + ieObjectId + '--' + index}
-							onClick={() =>
-								iiifViewerReference.current?.iiifZoomToRect(textLocation)
-							}
-							onDoubleClick={() =>
-								handleIsTextOverlayVisibleChange(!isTextOverlayVisible)
-							}
+							key={`ocr-text--${ieObjectId}--${textLocation.x}-${textLocation.y}`}
+							onClick={() => iiifViewerReference.current?.iiifZoomToRect(textLocation)}
+							onKeyUp={(evt) => {
+								if (evt.key === 'Enter') {
+									iiifViewerReference.current?.iiifZoomToRect(textLocation);
+								}
+							}}
+							onDoubleClick={() => handleIsTextOverlayVisibleChange(!isTextOverlayVisible)}
 							className={clsx(styles['p-object-detail__ocr__word'], {
 								[styles['p-object-detail__ocr__word--marked']]: isMarked,
 								[styles['p-object-detail__ocr__word--marked--active']]: isActive,
@@ -1397,13 +1358,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				<div className={styles['p-object-detail__ocr__pagination']}>
 					<Button
 						className={clsx(styles['p-object-detail__ocr__pagination__button'], {
-							[styles['p-object-detail__ocr__pagination__button--active']]:
-								currentPageIndex > 0,
+							[styles['p-object-detail__ocr__pagination__button--active']]: currentPageIndex > 0,
 						})}
 						iconStart={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
-						aria-label={tText(
-							'modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding'
-						)}
+						aria-label={tText('modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding')}
 						label={tText('modules/ie-objects/object-detail-page___vorige')}
 						variants={['text']}
 						onClick={() => {
@@ -1412,13 +1370,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						disabled={currentPageIndex === 0}
 					/>
 					<span className="pagination-info">
-						{tText(
-							'modules/ie-objects/object-detail-page___pagina-current-page-van-total-pages',
-							{
-								currentPage: currentPageIndex + 1,
-								totalPages: iiifViewerImageInfos?.length || 1,
-							}
-						)}
+						{tText('modules/ie-objects/object-detail-page___pagina-current-page-van-total-pages', {
+							currentPage: currentPageIndex + 1,
+							totalPages: iiifViewerImageInfos?.length || 1,
+						})}
 					</span>
 					<Button
 						className={clsx(styles['p-object-detail__ocr__pagination__button'], {
@@ -1426,9 +1381,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								currentPageIndex < iiifViewerImageInfos.length - 1,
 						})}
 						iconEnd={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
-						aria-label={tText(
-							'modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding'
-						)}
+						aria-label={tText('modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding')}
 						label={tText('modules/ie-objects/object-detail-page___volgende')}
 						variants={['text']}
 						onClick={() => {
@@ -1444,7 +1397,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const renderObjectMedia = () => {
 		if (mediaInfo?.thumbnailUrl) {
 			return (
-				<div>
+				<>
 					<div className={styles['p-object-detail__media']}>{renderMedia()}</div>
 					{showFragmentSlider && (
 						<FragmentSlider
@@ -1456,7 +1409,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							}}
 						/>
 					)}
-				</div>
+				</>
 			);
 		}
 		return (
@@ -1522,13 +1475,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					[styles['p-object-detail__wrapper--expanded']]: expandSidebar,
 					[styles['p-object-detail__wrapper--no-media-available']]: !isMediaAvailable(),
 					[styles['p-object-detail__wrapper--media-available']]: isMediaAvailable(),
-					[styles['p-object-detail__wrapper--no-ocr-available']]:
-						!arePagesOcrTextsAvailable,
+					[styles['p-object-detail__wrapper--no-ocr-available']]: !arePagesOcrTextsAvailable,
 					[styles['p-object-detail__wrapper--ocr-available']]: arePagesOcrTextsAvailable,
-					[styles['p-object-detail__wrapper--metadata']]:
-						activeTab === ObjectDetailTabs.Metadata,
-					[styles['p-object-detail__wrapper--video']]:
-						activeTab === ObjectDetailTabs.Media,
+					[styles['p-object-detail__wrapper--metadata']]: activeTab === ObjectDetailTabs.Metadata,
+					[styles['p-object-detail__wrapper--video']]: activeTab === ObjectDetailTabs.Media,
 					[styles['p-object-detail__wrapper--ocr']]: activeTab === ObjectDetailTabs.Ocr,
 				})}
 			>
@@ -1547,11 +1497,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						})}
 						icon={
 							<Icon
-								name={
-									expandSidebar
-										? IconNamesLight.ExpandRight
-										: IconNamesLight.ExpandLeft
-								}
+								name={expandSidebar ? IconNamesLight.ExpandRight : IconNamesLight.ExpandLeft}
 								aria-hidden
 							/>
 						}
@@ -1575,10 +1521,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					<div
 						className={clsx(
 							styles['p-object-detail__sidebar__content'],
-							styles['p-object-detail__sidebar__content__tab-' + activeTab],
+							styles[`p-object-detail__sidebar__content__tab-${activeTab}`],
 							{
-								[styles['p-object-detail__sidebar__content--no-media']]:
-									!mediaInfo?.dctermsFormat,
+								[styles['p-object-detail__sidebar__content--no-media']]: !mediaInfo?.dctermsFormat,
 							}
 						)}
 					>
@@ -1595,10 +1540,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
 								currentPageIndex={currentPageIndex}
 								currentPage={currentPage || null}
-								activeFile={getFileByType([
-									...FLOWPLAYER_FORMATS,
-									...IMAGE_API_FORMATS,
-								])}
+								activeFile={getFileByType([...FLOWPLAYER_FORMATS, ...IMAGE_API_FORMATS])}
 								simplifiedAltoInfo={simplifiedAltoInfo || null}
 								iiifZoomTo={iiifViewerReference.current?.iiifZoomTo}
 							/>
@@ -1629,7 +1571,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							? {
 									schemaIdentifier: mediaInfo.schemaIdentifier,
 									title: mediaInfo.name,
-							  }
+								}
 							: undefined
 					}
 					onClose={onCloseBlade}
@@ -1686,7 +1628,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				<div
 					className={clsx(
 						styles['p-object-detail'],
-						'p-object-detail--' + mediaInfo.dctermsFormat,
+						`p-object-detail--${mediaInfo.dctermsFormat}`,
 						{
 							[styles['p-object-detail__visitor-space-navigation-bar--visible']]:
 								showVisitorSpaceNavigationBar,
@@ -1743,8 +1685,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		return <ErrorNotFound />;
 	};
 
-	const seoDescription =
-		description || capitalize(lowerCase((router.query.slug as string) || ''));
+	const seoDescription = description || capitalize(lowerCase((router.query.slug as string) || ''));
 	return (
 		<>
 			<VisitorLayout>

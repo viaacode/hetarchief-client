@@ -1,11 +1,11 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { type FC, type ReactElement } from 'react';
+import type { FC, ReactElement } from 'react';
 
 import { Icon } from '@shared/components/Icon';
 
 import styles from './Pill.module.scss';
-import { type PillProps } from './Pill.types';
+import type { PillProps } from './Pill.types';
 
 const Pill: FC<PillProps> = ({ className, icon, label, isExpanded }: PillProps): ReactElement => {
 	const rootCls = clsx(className, styles['c-pill'], {

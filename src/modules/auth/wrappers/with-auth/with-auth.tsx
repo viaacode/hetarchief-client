@@ -30,6 +30,7 @@ export const withAuth = (
 		const router = useRouter();
 		const locale = useLocale();
 
+		// biome-ignore lint/correctness/useExhaustiveDependencies: render loop if we add router to the dep array
 		const checkLoginStatus = useCallback(async (): Promise<void> => {
 			const login = await AuthService.checkLogin();
 			const tos = await TosService.getTos();
@@ -39,9 +40,7 @@ export const withAuth = (
 			};
 
 			const toTermsOfService = async () => {
-				return router.replace(
-					`${ROUTES_BY_LOCALE[locale].userPolicy}?${stringify(params)}`
-				);
+				return router.replace(`${ROUTES_BY_LOCALE[locale].userPolicy}?${stringify(params)}`);
 			};
 
 			const toHome = async () => {
@@ -74,7 +73,7 @@ export const withAuth = (
 					await toTermsOfService();
 				}
 			}
-		}, []); // eslint-disable-line react-hooks/exhaustive-deps
+		}, []);
 
 		useEffect(() => {
 			checkLoginStatus();

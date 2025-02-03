@@ -11,7 +11,7 @@ import {
 import clsx from 'clsx';
 import { type FC, type ReactElement, type ReactNode, useRef, useState } from 'react';
 
-import { type MediaActions } from '@ie-objects/ie-objects.types';
+import type { MediaActions } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
@@ -26,7 +26,7 @@ import {
 	DYNAMIC_ACTION_WIDTH,
 } from './DynamicActionMenu.const';
 import styles from './DynamicActionMenu.module.scss';
-import { type ActionItem, type DynamicActionMenuProps } from './DynamicActionMenu.types';
+import type { ActionItem, DynamicActionMenuProps } from './DynamicActionMenu.types';
 
 const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	className,
@@ -54,7 +54,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 		? Math.ceil(
 				(totalWidth - size.width) /
 					(size.width < totalWidth ? DYNAMIC_ACTION_BOX : DYNAMIC_ACTION_WIDTH)
-		  )
+			)
 		: 0;
 
 	// Clamp items to hide at limit
@@ -96,29 +96,21 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				<li
 					className={styles['c-dynamic-action-menu__primary-item']}
 					key={`media-action-${action.id}`}
-					role="listitem"
 				>
-					<a
-						href={action.url}
-						target="_blank"
-						referrerPolicy="no-referrer"
-						rel="noreferrer"
-					>
+					<a href={action.url} target="_blank" referrerPolicy="no-referrer" rel="noreferrer">
 						{$element}
 					</a>
 				</li>
 			);
-		} else {
-			return (
-				<li
-					className={styles['c-dynamic-action-menu__primary-item']}
-					key={`media-action-${action.id}`}
-					role="listitem"
-				>
-					{$element}
-				</li>
-			);
 		}
+		return (
+			<li
+				className={styles['c-dynamic-action-menu__primary-item']}
+				key={`media-action-${action.id}`}
+			>
+				{$element}
+			</li>
+		);
 	};
 
 	const renderSecondaryButton = (action: ActionItem) => {
@@ -139,33 +131,21 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				<li
 					className={styles['c-dynamic-action-menu__secondary-item']}
 					key={`media-action-${action.id}`}
-					role="listitem"
 				>
-					<a
-						href={action.url}
-						target="_blank"
-						referrerPolicy="no-referrer"
-						rel="noreferrer"
-					>
-						{action.tooltip && !isMobile
-							? renderInTooltip($element, action.tooltip)
-							: $element}
+					<a href={action.url} target="_blank" referrerPolicy="no-referrer" rel="noreferrer">
+						{action.tooltip && !isMobile ? renderInTooltip($element, action.tooltip) : $element}
 					</a>
 				</li>
 			);
-		} else {
-			return (
-				<li
-					className={styles['c-dynamic-action-menu__secondary-item']}
-					key={`media-action-${action.id}`}
-					role="listitem"
-				>
-					{action.tooltip && !isMobile
-						? renderInTooltip($element, action.tooltip)
-						: $element}
-				</li>
-			);
 		}
+		return (
+			<li
+				className={styles['c-dynamic-action-menu__secondary-item']}
+				key={`media-action-${action.id}`}
+			>
+				{action.tooltip && !isMobile ? renderInTooltip($element, action.tooltip) : $element}
+			</li>
+		);
 	};
 
 	const renderDropdown = (dropdownActions: ActionItem[]) => {
@@ -206,15 +186,13 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 
 	return (
 		<>
-			<ul className={clsx(className, styles['c-dynamic-action-menu'])} role="list">
+			<ul className={clsx(className, styles['c-dynamic-action-menu'])}>
 				{primaryActions.map(renderPrimaryButton)}
 				<div
 					className={styles['c-dynamic-action-menu__secondary']}
 					ref={listRef}
 					style={{
-						minWidth: `${
-							(limit + 1) * DYNAMIC_ACTION_WIDTH + limit * DYNAMIC_ACTION_SPACER
-						}px`,
+						minWidth: `${(limit + 1) * DYNAMIC_ACTION_WIDTH + limit * DYNAMIC_ACTION_SPACER}px`,
 					}}
 				>
 					{visibleActions.map(renderSecondaryButton)}

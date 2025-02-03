@@ -1,4 +1,4 @@
-import { type ComponentMeta, type ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { useState } from 'react';
 
 import ConfirmationModal from './ConfirmationModal';
@@ -13,6 +13,7 @@ const Template: ComponentStory<typeof ConfirmationModal> = (args) => {
 
 	return (
 		<div>
+			{/* biome-ignore lint/a11y/useKeyWithClickEvents: storybook */}
 			<pre style={{ margin: 0 }} onClick={() => setOpen(true)}>
 				{JSON.stringify({ clickHereToToggle: isOpen }, null, 2)}
 			</pre>

@@ -1,4 +1,4 @@
-import { type TextInputProps } from '@meemoo/react-components';
+import type { TextInputProps } from '@meemoo/react-components';
 import { endOfDay } from 'date-fns';
 import { type ChangeEvent, type FC, useState } from 'react';
 
@@ -80,7 +80,7 @@ const YearRangeInput: FC<Omit<YearRangeInputProps, 'onSelect'>> = (props) => {
 					props.showLabels
 						? tText(
 								'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___van'
-						  )
+							)
 						: ''
 				}
 				value={yearFrom}
@@ -96,7 +96,7 @@ const YearRangeInput: FC<Omit<YearRangeInputProps, 'onSelect'>> = (props) => {
 					props.showLabels
 						? tText(
 								'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tot'
-						  )
+							)
 						: ''
 				}
 				value={yearTo}

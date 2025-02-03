@@ -1,4 +1,4 @@
-import { type Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { Locale } from '@shared/utils/i18n';
 
 import { HOMEPAGE_TITLE } from '../consts/tests.consts';
@@ -24,9 +24,7 @@ export async function goToPageAndAcceptCookies(
 	if ((await cookiebotDialog.count()) > 0) {
 		if (whichCookies === 'selection') {
 			// Accept selected cookies
-			await page
-				.locator('#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowallSelection')
-				.click();
+			await page.locator('#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowallSelection').click();
 		} else {
 			// Accept selected cookies
 			await page.locator('#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll').click();

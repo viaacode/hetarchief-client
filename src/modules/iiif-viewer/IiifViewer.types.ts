@@ -1,4 +1,4 @@
-import { type AltoTextLine, type OcrSearchResult } from '@ie-objects/ie-objects.types';
+import type { AltoTextLine, OcrSearchResult } from '@ie-objects/ie-objects.types';
 
 export interface ImageInfo {
 	thumbnailUrl: string;

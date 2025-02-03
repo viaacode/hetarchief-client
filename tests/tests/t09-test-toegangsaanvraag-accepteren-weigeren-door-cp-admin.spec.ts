@@ -80,10 +80,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// There should be zero requests with this name
 	await expect(
 		page.locator(
-			'text=' +
-				SITE_TRANSLATIONS.nl[
-					'pages/beheer/toegangsaanvragen/index___er-zijn-geen-openstaande-aanvragen'
-				]
+			`text=${SITE_TRANSLATIONS.nl['pages/beheer/toegangsaanvragen/index___er-zijn-geen-openstaande-aanvragen']}`
 		)
 	).toBeVisible();
 
@@ -110,9 +107,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	 */
 
 	// Click the pending visit request
-	const rowSelector = `${moduleClassSelector(
-		'l-sidebar__main'
-	)} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`;
+	const rowSelector = `${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`;
 	const pendingVisitRow = page.locator(rowSelector, { hasText: 'Sleutelgebruiker Test' }).first();
 	await expect(pendingVisitRow).toBeVisible();
 	await pendingVisitRow.click();
@@ -140,9 +135,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	expect(summaryHtml).toContain('next monday');
 
 	// Check buttons for approve and deny are visible
-	const bladeButtonsSelector = `.c-blade--active ${moduleClassSelector(
-		'c-blade__footer'
-	)} .c-button`;
+	const bladeButtonsSelector = `.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button`;
 	let approveButton = page.locator(bladeButtonsSelector, {
 		hasText:
 			SITE_TRANSLATIONS.nl[
@@ -240,9 +233,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Click the pending visit request
 	const pendingVisitRequestCel = page
 		.locator(
-			`${moduleClassSelector(
-				'l-sidebar__main'
-			)} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
+			`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
 			{ hasText: 'Meemoo admin' }
 		)
 		.first();

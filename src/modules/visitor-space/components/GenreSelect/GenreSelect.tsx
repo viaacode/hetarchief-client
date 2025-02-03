@@ -1,5 +1,5 @@
 import { ReactSelect, type ReactSelectProps } from '@meemoo/react-components';
-import { type FC } from 'react';
+import type { FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import { tText } from '@shared/helpers/translate';
@@ -23,9 +23,7 @@ const GenreSelect: FC<ReactSelectProps> = (props) => {
 
 	const getPlaceholder = (): string | undefined => {
 		return options.length === 0
-			? tText(
-					'modules/visitor-space/components/genre-select/genre-select___geen-genres-gevonden'
-			  )
+			? tText('modules/visitor-space/components/genre-select/genre-select___geen-genres-gevonden')
 			: tText('modules/visitor-space/components/genre-select/genre-select___kies-een-genre');
 	};
 

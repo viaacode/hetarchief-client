@@ -9,7 +9,7 @@ import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
 import { ObjectPlaceholder } from '../ObjectPlaceholder';
 
 import styles from './RelatedObject.module.scss';
-import { type RelatedObjectProps } from './RelatedObject.types';
+import type { RelatedObjectProps } from './RelatedObject.types';
 
 const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 	const { thumbnail, type } = object;
@@ -28,12 +28,10 @@ const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 						image={type === 'audio' ? '/images/waveform--white.svg' : thumbnail}
 					/>
 				);
-			} else {
-				return thumbnail;
 			}
-		} else {
-			return <ObjectPlaceholder className={styles['c-related-object__placeholder']} small />;
+			return thumbnail;
 		}
+		return <ObjectPlaceholder className={styles['c-related-object__placeholder']} small />;
 	};
 
 	return (

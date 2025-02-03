@@ -1,4 +1,4 @@
-import { type ComponentMeta, type ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
 import Toast from './Toast';
@@ -19,7 +19,8 @@ Default.args = {
 export const LongLabels = Template.bind({});
 LongLabels.args = {
 	...toastMock,
-	title: 'De aanvraag die de bezoeker via de bezoekersruimte heeft aangevraagd werd goedgekeurd door de bezoekersruimte waar de bezoeker een aanvraag gedaan heeft',
+	title:
+		'De aanvraag die de bezoeker via de bezoekersruimte heeft aangevraagd werd goedgekeurd door de bezoekersruimte waar de bezoeker een aanvraag gedaan heeft',
 	description:
 		'Bevestiging van de aanvraag die de bezoeker via de bezoekersruimte heeft aangevraagd is verzonden naar de bezoeker die de aanvraag bij de bezoekersruimte gedaan heeft',
 };

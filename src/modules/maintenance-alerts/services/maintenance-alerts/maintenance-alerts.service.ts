@@ -1,15 +1,16 @@
-import { type IPagination } from '@studiohyperdrive/pagination';
+import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
 import { ApiService } from '@shared/services/api-service';
 
-import { type Alert } from '../../types';
+import type { Alert } from '../../types';
 
 import { MAINTENANCE_ALERTS_SERVICE_BASE_URL } from './maintenance-alerts.service.const';
-import { type GetMaterialRequestsProps } from './maintenance-alerts.service.types';
+import type { GetMaterialRequestsProps } from './maintenance-alerts.service.types';
 
-export class MaintenanceAlertsService {
-	public static async getAllActive(
+// TODO convert to react-query hooks
+export namespace MaintenanceAlertsService {
+	export async function getAllActive(
 		{ orderProp, orderDirection, page }: GetMaterialRequestsProps = {
 			page: 0,
 		}
@@ -17,7 +18,7 @@ export class MaintenanceAlertsService {
 		const parsed = await ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: MAINTENANCE_ALERTS_SERVICE_BASE_URL + '/personal',
+					url: `${MAINTENANCE_ALERTS_SERVICE_BASE_URL}/personal`,
 					query: {
 						orderProp,
 						orderDirection,
@@ -29,7 +30,7 @@ export class MaintenanceAlertsService {
 		return parsed as IPagination<Alert>;
 	}
 
-	public static async dismissMaintenanceAlert(maintenanceAlertId: string): Promise<void> {
+	export async function dismissMaintenanceAlert(maintenanceAlertId: string): Promise<void> {
 		await ApiService.getApi().post(
 			stringifyUrl({
 				url: 'notifications/create-from-maintenance-alert',

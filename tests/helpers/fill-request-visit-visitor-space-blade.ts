@@ -47,9 +47,7 @@ export async function fillRequestVisitVisitorSpaceBlade(
 
 	// Check success message on success page
 	const receivedYourRequestText =
-		SITE_TRANSLATIONS.nl[
-			'pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen'
-		];
+		SITE_TRANSLATIONS.nl['pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen'];
 	await expect(page.locator(`text=${receivedYourRequestText}`)).toBeVisible({
 		timeout: 10000,
 	});

@@ -1,8 +1,8 @@
 import { ApiService } from '@shared/services/api-service';
-import { type Organisation } from '@shared/services/organisation-service/organisation.types';
+import type { Organisation } from '@shared/services/organisation-service/organisation.types';
 
-export class OrganisationService {
-	public static async getBySlug(
+export namespace OrganisationService {
+	export async function getBySlug(
 		slug: string | null,
 		ignoreAuthError: boolean
 	): Promise<Organisation | null> {

@@ -1,6 +1,6 @@
-import { type Folder } from '@account/types';
+import type { Folder } from '@account/types';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
-import { type Locale } from '@shared/utils/i18n';
+import type { Locale } from '@shared/utils/i18n';
 
 export function createFolderSlug(
 	folder: Pick<Folder, 'id' | 'name' | 'isDefault'>,
@@ -17,7 +17,6 @@ export function createFolderSlug(
 	const uuidPart = folder.id.split('-', 1)[0];
 
 	return encodeURIComponent(
-		`${folder.name.toLowerCase().replaceAll(' ', '-')}` +
-			(!folder.isDefault && uuidPart.length >= 1 ? `--${uuidPart}` : ``)
+		`${folder.name.toLowerCase().replaceAll(' ', '-')}${!folder.isDefault && uuidPart.length >= 1 ? `--${uuidPart}` : ''}`
 	);
 }

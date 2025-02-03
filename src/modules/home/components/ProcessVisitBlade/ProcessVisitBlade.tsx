@@ -11,7 +11,7 @@ import { VisitStatus } from '@shared/types/visit-request';
 
 import { CancelVisitBlade } from '../CancelVisitBlade';
 
-import { type ProcessVisitBladeProps } from './ProcessVisitBlade.types';
+import type { ProcessVisitBladeProps } from './ProcessVisitBlade.types';
 
 const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 	const { selected, onFinish } = props;
@@ -19,7 +19,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 	const [showCancel, setShowCancel] = useState(false);
 
 	const finish = (setShowBlade?: typeof setShowCancel) => {
-		setShowBlade && setShowBlade(false);
+		setShowBlade?.(false);
 
 		// Needs a little delay, not sure about the amount.
 		// 300ms is default duration to hide a blade
@@ -72,9 +72,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 				/>
 
 				<Button
-					label={tHtml(
-						'modules/home/components/process-visit-blade/process-visit-blade___sluit'
-					)}
+					label={tHtml('modules/home/components/process-visit-blade/process-visit-blade___sluit')}
 					variants={['block', 'text']}
 					onClick={() => props.onClose?.()}
 					disabled={!props.isOpen}
@@ -99,7 +97,9 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 				footer={renderFooter()}
 				isOpen={getCurrentLayer() === 1}
 				layer={1}
-				renderTitle={(props: any) => <h2 {...props}>{getTitle()}</h2>}
+				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
+					<h2 {...props}>{getTitle()}</h2>
+				)}
 				id="process-visit-blade__visit-summary"
 			>
 				{selected && <VisitSummary preview {...selected} />}

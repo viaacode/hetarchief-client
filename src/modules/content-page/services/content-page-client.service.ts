@@ -1,14 +1,14 @@
-import { type ContentPageInfo } from '@meemoo/admin-core-ui/dist/client.mjs';
+import type { ContentPageInfo } from '@meemoo/admin-core-ui/dist/client.mjs';
 import { startsWith } from 'lodash-es';
 import getConfig from 'next/config';
 import { stringifyUrl } from 'query-string';
 
-import { type Locale } from '@shared/utils/i18n';
+import type { Locale } from '@shared/utils/i18n';
 
 const { publicRuntimeConfig } = getConfig();
 
-export class ContentPageClientService {
-	public static async getByLanguageAndPath(
+export namespace ContentPageClientService {
+	export async function getByLanguageAndPath(
 		language: Locale,
 		path?: string | null
 	): Promise<ContentPageInfo | null> {

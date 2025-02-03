@@ -1,6 +1,6 @@
-import {
-	type SitemapPrioritiesParseResult,
-	type SitemapPriorityEntry,
+import type {
+	SitemapPrioritiesParseResult,
+	SitemapPriorityEntry,
 } from './parse-sitemap-priorities.types';
 
 const sitemapPriorityLineRegexp = /^\s*([0-9](\.[0-9])?)\s*(\/.*)\s*$/;
@@ -19,11 +19,11 @@ export function parseSitemapPriorities(
 			const priority = line.split(/\s/g)[0].trim();
 			const path = line.substring(priority.length).trim();
 			sitemapPriorities.push({
-				priority: parseFloat(priority),
+				priority: Number.parseFloat(priority),
 				path,
 			});
 		} else {
-			errors.push('Error op regel ' + (lineIndex + 1));
+			errors.push(`Error op regel ${lineIndex + 1}`);
 		}
 	});
 
@@ -35,5 +35,5 @@ export function parseSitemapPriorities(
 }
 
 export function stringifySitemapPriorities(sitemapPriorities: SitemapPriorityEntry[]): string {
-	return sitemapPriorities.map((entry) => entry.priority + ' ' + entry.path).join('\n');
+	return sitemapPriorities.map((entry) => `${entry.priority} ${entry.path}`).join('\n');
 }

@@ -4,7 +4,7 @@ import React, { type FC, useEffect, useState } from 'react';
 import VisitorSpaceCard from '../VisitorSpaceCard/VisitorSpaceCard';
 
 import styles from './VisitorSpaceCardList.module.scss';
-import { type VisitorSpaceCardListProps } from './VisitorSpaceCardList.types';
+import type { VisitorSpaceCardListProps } from './VisitorSpaceCardList.types';
 
 const VisitorSpaceCardList: FC<VisitorSpaceCardListProps> = ({
 	className,
@@ -36,7 +36,10 @@ const VisitorSpaceCardList: FC<VisitorSpaceCardListProps> = ({
 	return (
 		<ul style={style} className={clsx(className, styles['c-visitor-space-card-list'])}>
 			{getItems().map((item, i) => (
-				<li className={styles['c-visitor-space-card-list__item']} key={i}>
+				<li
+					className={styles['c-visitor-space-card-list__item']}
+					key={`visitor-space-card-item--${item.title}--${item.to}`}
+				>
 					<VisitorSpaceCard {...item} />
 				</li>
 			))}

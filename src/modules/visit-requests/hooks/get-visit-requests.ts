@@ -2,9 +2,9 @@ import type { IPagination } from '@studiohyperdrive/pagination';
 import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { type VisitRequest } from '@shared/types/visit-request';
+import type { VisitRequest } from '@shared/types/visit-request';
 import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
-import { type GetVisitRequestsProps } from '@visit-requests/services/visit-request/visit-request.service.types';
+import type { GetVisitRequestsProps } from '@visit-requests/services/visit-request/visit-request.service.types';
 
 export async function getVisitRequests(
 	props: GetVisitRequestsProps

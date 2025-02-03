@@ -8,7 +8,7 @@ export function useScrollToId(id: string | null): void {
 	const scrollDownToFocusedItem = () => {
 		if (id) {
 			const item = document.getElementById(id);
-			if (item && item.offsetTop) {
+			if (item?.offsetTop) {
 				window.scrollTo(0, item.offsetTop - 0.3 * window.innerHeight);
 			} else {
 				setTimeout(() => {
@@ -18,8 +18,8 @@ export function useScrollToId(id: string | null): void {
 		}
 	};
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: only execute once
 	useEffect(() => {
 		scrollDownToFocusedItem();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 }

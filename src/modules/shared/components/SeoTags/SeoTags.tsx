@@ -1,11 +1,11 @@
 import getConfig from 'next/config';
 import Head from 'next/head';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { ROUTE_PARTS_BY_LOCALE, type RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { type LanguageInfo } from '@shared/services/translation-service/translation.types';
+import type { LanguageInfo } from '@shared/services/translation-service/translation.types';
 import { Locale } from '@shared/utils/i18n';
 import { createPageTitle } from '@shared/utils/seo';
 
@@ -47,13 +47,13 @@ export const SeoTags: FC<SeoTagsProps> = ({
 	const getResolvedUrl = (url: string): string => {
 		if (!url) {
 			return publicRuntimeConfig.CLIENT_URL;
-		} else if (url.startsWith('http')) {
+		}
+		if (url.startsWith('http')) {
 			// Absolute url
 			return url;
-		} else {
-			// relative url
-			return publicRuntimeConfig.CLIENT_URL + '/' + locale + (url || '');
 		}
+		// relative url
+		return `${publicRuntimeConfig.CLIENT_URL}/${locale}${url || ''}`;
 	};
 
 	const getTranslatedPages = (): PageInfo[] => {
@@ -71,7 +71,7 @@ export const SeoTags: FC<SeoTagsProps> = ({
 			// Output routes for other languages
 			return otherLanguages.map((lang: LanguageInfo): PageInfo => {
 				return {
-					url: '/' + lang.languageCode + ROUTES_BY_LOCALE[lang.languageCode][routeKey],
+					url: `/${lang.languageCode}${ROUTES_BY_LOCALE[lang.languageCode][routeKey]}`,
 					languageCode: lang.languageCode,
 				};
 			});
@@ -87,15 +87,14 @@ export const SeoTags: FC<SeoTagsProps> = ({
 		if (knownRoutePairForOtherLocale) {
 			// This is just NextJS rendering dutch paths with the english locale or vice versa, we can ignore this
 			return [];
-		} else {
-			if (
-				!relativeUrl.startsWith(`/${ROUTE_PARTS_BY_LOCALE.nl.search}/`) &&
-				!relativeUrl.startsWith(`/${ROUTE_PARTS_BY_LOCALE.en.search}/`)
-			) {
-				console.warn('No translated pages/routes found for route: ' + relativeUrl);
-			}
-			return [];
 		}
+		if (
+			!relativeUrl.startsWith(`/${ROUTE_PARTS_BY_LOCALE.nl.search}/`) &&
+			!relativeUrl.startsWith(`/${ROUTE_PARTS_BY_LOCALE.en.search}/`)
+		) {
+			console.warn(`No translated pages/routes found for route: ${relativeUrl}`);
+		}
+		return [];
 	};
 
 	const url = getResolvedUrl(relativeUrl);
@@ -118,7 +117,7 @@ export const SeoTags: FC<SeoTagsProps> = ({
 			{getTranslatedPages().map((translatedPage) => {
 				return (
 					<link
-						key={'translated-page__' + translatedPage.languageCode}
+						key={`translated-page__${translatedPage.languageCode}`}
 						rel="alternate"
 						hrefLang={translatedPage.languageCode}
 						href={translatedPage.url}

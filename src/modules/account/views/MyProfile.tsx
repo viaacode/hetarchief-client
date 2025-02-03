@@ -31,7 +31,7 @@ import { COMMUNICATION_SECTION_ID } from '@account/const/MyProfile.consts';
 import { useChangeLanguagePreference } from '@account/hooks/change-language-preference';
 import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
 import { AccountLayout } from '@account/layouts';
-import { type CommunicationFormState } from '@account/types';
+import type { CommunicationFormState } from '@account/types';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
@@ -50,8 +50,8 @@ import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
-import { type DefaultSeoInfo } from '@shared/types/seo';
-import { type Locale } from '@shared/utils/i18n';
+import type { DefaultSeoInfo } from '@shared/types/seo';
+import type { Locale } from '@shared/utils/i18n';
 import { VisitorLayout } from '@visitor-layout/index';
 
 const { publicRuntimeConfig } = getConfig();
@@ -85,12 +85,12 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 		? convertDbContentPageToContentPageInfo(dbContentPage)
 		: null;
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop router
 	useEffect(() => {
 		if (user) {
 			mutateLanguagePreference(selectedLanguage);
 		}
 		changeApplicationLocale(locale, selectedLanguage, router, queryClient, contentPageInfo);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedLanguage, mutateLanguagePreference]);
 
 	const {
@@ -107,7 +107,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 		}
 
 		setAcceptNewsletter(preferences.newsletter);
-		if (window.location.href.endsWith('#' + COMMUNICATION_SECTION_ID)) {
+		if (window.location.href.endsWith(`#${COMMUNICATION_SECTION_ID}`)) {
 			const section = document.getElementById(COMMUNICATION_SECTION_ID);
 			section?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 		}
@@ -176,9 +176,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 		isKeyUser && (
 			<>
 				<dt className="u-mt-32">
-					{tText(
-						'pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-titel'
-					)}
+					{tText('pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-titel')}
 				</dt>
 				<dd className="u-color-neutral u-mt-8">
 					{tHtml(
@@ -211,7 +209,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 					url: publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL.replace('{locale}', locale),
 					query: {
 						redirect_to: stringifyUrl({
-							url: publicRuntimeConfig.PROXY_URL + '/auth/global-logout',
+							url: `${publicRuntimeConfig.PROXY_URL}/auth/global-logout`,
 							query: {
 								returnToUrl: window.location.href,
 							},
@@ -313,11 +311,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 						<Box className="u-mb-32">
 							<section className="u-p-24 p-account-my-profile__permissions">
 								<header className="p-account-my-profile__permissions-header u-mb-24">
-									<h6>
-										{tText(
-											'pages/account/mijn-profiel/index___gebruikersrechten'
-										)}
-									</h6>
+									<h6>{tText('pages/account/mijn-profiel/index___gebruikersrechten')}</h6>
 								</header>
 								<dl className="p-account-my-profile__permissions-list u-mb-24">
 									{renderUserGroup()}
@@ -343,9 +337,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 					<Box className={'u-mb-32'}>
 						<section className="u-p-24 p-account-my-profile__language-preferences">
 							<header className="p-account-my-profile__language-preferences-header u-mb-24">
-								<h6>
-									{tText('modules/account/views/my-profile___taalvoorkeuren')}
-								</h6>
+								<h6>{tText('modules/account/views/my-profile___taalvoorkeuren')}</h6>
 							</header>
 							<div className="p-account-my-profile__language-preferences-list u-mb-24">
 								{renderLanguagePreferencesForm()}
@@ -360,9 +352,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 		<VisitorLayout>
 			<SeoTags
 				title={tText('pages/account/mijn-profiel/index___mijn-profiel')}
-				description={tText(
-					'pages/account/mijn-profiel/index___mijn-profiel-meta-omschrijving'
-				)}
+				description={tText('pages/account/mijn-profiel/index___mijn-profiel-meta-omschrijving')}
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}

@@ -1,8 +1,8 @@
-import { type Breadcrumb } from '@meemoo/react-components';
+import type { Breadcrumb } from '@meemoo/react-components';
 
-import { type AppState } from '@shared/store';
+import type { AppState } from '@shared/store';
 
-import { type LastScrollPositionType } from './ui.types';
+import type { LastScrollPositionType } from './ui.types';
 
 export const selectShowAuthModal = (state: AppState): boolean => state.ui.showAuthModal;
 export const selectIsStickyLayout = (state: AppState): boolean => state.ui.isStickyLayout;

@@ -7,7 +7,7 @@ import { ListNavigation } from '@shared/components/ListNavigation';
 import { Sidebar } from '@shared/components/Sidebar';
 
 import styles from './SidebarLayout.module.scss';
-import { type SidebarLayoutProps } from './SidebarLayout.types';
+import type { SidebarLayoutProps } from './SidebarLayout.types';
 
 const SidebarLayout: FC<SidebarLayoutProps> = ({
 	children,
@@ -33,11 +33,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({
 					[`u-bg-${color}`]: !!color,
 				})}
 			>
-				<Sidebar
-					color={color}
-					className={styles['l-sidebar__sidebar']}
-					title={sidebarTitle}
-				>
+				<Sidebar color={color} className={styles['l-sidebar__sidebar']} title={sidebarTitle}>
 					<ListNavigation
 						className={styles['l-sidebar__sidebar--top']}
 						color={color}
@@ -49,9 +45,15 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({
 			<div className={styles['l-sidebar__main']}>
 				{isResponsive && (
 					<div
+						// biome-ignore lint/a11y/useSemanticElements: <explanation>
 						role="button"
 						tabIndex={0}
 						onClick={() => setExpanded(true)}
+						onKeyUp={(evt) => {
+							if (evt.key === 'Enter') {
+								setExpanded(true);
+							}
+						}}
 						className={clsx(
 							styles['l-sidebar__content-header'],
 							'u-bg-white',

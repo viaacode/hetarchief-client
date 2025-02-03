@@ -1,4 +1,4 @@
-import { type OcrSearchResult } from '@ie-objects/ie-objects.types';
+import type { OcrSearchResult } from '@ie-objects/ie-objects.types';
 
 export interface SearchInputWithResultsPaginationProps {
 	value: string;

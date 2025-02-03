@@ -1,9 +1,9 @@
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import { type FormBladeProps } from '@shared/types/blade';
-import { type AccessType } from '@shared/types/visit-request';
+import type { FormBladeProps } from '@shared/types/blade';
+import type { AccessType } from '@shared/types/visit-request';
 
-import { type ProcessRequestBladeProps } from '../ProcessRequestBlade/ProcessRequestBlade.types';
+import type { ProcessRequestBladeProps } from '../ProcessRequestBlade/ProcessRequestBlade.types';
 
 export type ApproveRequestBladeProps = FormBladeProps<ApproveRequestFormState> &
 	ProcessRequestBladeProps & {

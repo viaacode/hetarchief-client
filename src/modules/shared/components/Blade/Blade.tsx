@@ -13,7 +13,7 @@ import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { Overlay } from '../Overlay';
 
 import styles from './Blade.module.scss';
-import { type BladeProps } from './Blade.types';
+import type { BladeProps } from './Blade.types';
 
 export const Blade: FC<BladeProps> = ({
 	className,
@@ -69,13 +69,26 @@ export const Blade: FC<BladeProps> = ({
 	const renderTopBar = () => {
 		return showBackButton ? (
 			<div className={styles['c-blade__top-bar-container']}>
+				{/* biome-ignore lint/a11y/useKeyWithClickEvents: onKeyUp is added to the inner button */}
 				<div
 					className={styles['c-blade__back-container']}
 					onClick={() => {
 						handleClose();
 					}}
 				>
-					<Button variants="text" icon={<Icon name={IconNamesLight.ArrowLeft} />} />
+					<Button
+						variants="text"
+						icon={
+							<Icon
+								name={IconNamesLight.ArrowLeft}
+								onKeyUp={(evt) => {
+									if (evt.key === 'Enter') {
+										handleClose();
+									}
+								}}
+							/>
+						}
+					/>
 					<span>{tText('modules/shared/components/blade/blade___vorige-stap')}</span>
 				</div>
 				<Button
@@ -106,6 +119,7 @@ export const Blade: FC<BladeProps> = ({
 	const renderContent = (hide: boolean) => {
 		return (
 			<div
+				// biome-ignore lint/a11y/useSemanticElements: dialog has other effects that a div, and we cannot rework how blades work right now
 				role="dialog"
 				aria-modal
 				aria-labelledby={id}
@@ -124,14 +138,14 @@ export const Blade: FC<BladeProps> = ({
 						? {
 								transform: `translateX(-${(currentLayer - layer) * 5.6}rem)`,
 								visibility: hide ? 'hidden' : 'visible',
-						  }
+							}
 						: { visibility: hide ? 'hidden' : 'visible' }
 				}
 			>
 				{!hideCloseButton && renderTopBar()}
 
 				<div className={styles['c-blade__body-wrapper']}>
-					{renderTitle && renderTitle?.({ id, className: styles['c-blade__title'] })}
+					{renderTitle?.({ id, className: styles['c-blade__title'] })}
 					{children}
 					<div className={styles['c-blade__flex-grow']} />
 					{footer && <div className={styles['c-blade__footer']}>{footer}</div>}
@@ -154,10 +168,8 @@ export const Blade: FC<BladeProps> = ({
 						isLayered && layer > 1 && layer <= currentLayer
 							? {
 									transform: `translateX(-${(currentLayer - layer) * 5.6}rem)`,
-									opacity: isBladeOpen
-										? (0.4 - (layer - 2) * opacityStep).toFixed(2)
-										: 0,
-							  }
+									opacity: isBladeOpen ? (0.4 - (layer - 2) * opacityStep).toFixed(2) : 0,
+								}
 							: {}
 					}
 					type={isLayered && layer > 1 ? 'light' : 'dark'}

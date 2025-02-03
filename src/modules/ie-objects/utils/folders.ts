@@ -1,4 +1,4 @@
-import { type Folder } from '@account/types';
+import type { Folder } from '@account/types';
 
 export const isInAFolder = (folders: Folder[] | undefined, schemaIdentifier?: string): boolean => {
 	if (!schemaIdentifier) {

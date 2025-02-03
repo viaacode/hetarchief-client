@@ -115,9 +115,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Click the pending visit request
 	await page
 		.locator(
-			`${moduleClassSelector(
-				'l-sidebar__main'
-			)} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
+			`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
 			{ hasText: 'Basis Gebruiker 2' }
 		)
 		.first()
@@ -204,8 +202,10 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Click on 'Naar mijn bezoekertool'
 	const goToMyVisitorSpaceLink = page.locator(
-		moduleClassSelector('c-list-navigation__link') + '[href="/zoeken?aanbieder=amsab-isg"]',
-		{ hasText: IconName.Search }
+		`${moduleClassSelector('c-list-navigation__link')}[href="/zoeken?aanbieder=amsab-isg"]`,
+		{
+			hasText: IconName.Search,
+		}
 	);
 	await expect(goToMyVisitorSpaceLink).toBeVisible();
 
@@ -319,9 +319,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Click the pending visit request
 	await page
 		.locator(
-			`${moduleClassSelector(
-				'l-sidebar__main'
-			)} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
+			`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
 			{ hasText: 'Basis Gebruiker 2' }
 		)
 		.first()
@@ -417,12 +415,9 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	await new Promise((resolve) => setTimeout(resolve, 3 * 1000)); // TODO: temp
 	const approvedRequest = page
-		.locator(
-			`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row`,
-			{
-				hasText: 'Basis Gebruiker 2',
-			}
-		)
+		.locator(`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row`, {
+			hasText: 'Basis Gebruiker 2',
+		})
 		.first();
 
 	expect(
@@ -458,26 +453,19 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Check for an icon to be displayed next to the newly created folder
 	const newFolder = page.locator(`[aria-label="${FOLDER_NAME}"]`);
 	expect(await newFolder.innerText()).toContain(FOLDER_NAME);
-	await expect(
-		newFolder.locator('.p-account-my-folders__link__limited-access-icon')
-	).toBeVisible();
+	await expect(newFolder.locator('.p-account-my-folders__link__limited-access-icon')).toBeVisible();
 
 	// Click on the newly created folder and check if it contains the added object
 	await newFolder.click();
 
 	const folderObject = page.locator(
-		`${moduleClassSelector('c-media-card-list')} ${moduleClassSelector(
-			'c-media-card-list__content'
-		)}`
+		`${moduleClassSelector('c-media-card-list')} ${moduleClassSelector('c-media-card-list__content')}`
 	);
 	await expect(folderObject).toHaveCount(1);
 	const organisationLabel =
 		SITE_TRANSLATIONS.nl['pages/account/mijn-mappen/folder-slug/index___aanbieder'];
 	expect(
-		await folderObject
-			.locator('.p-account-my-folders__card-description p')
-			.first()
-			.allInnerTexts()
+		await folderObject.locator('.p-account-my-folders__card-description p').first().allInnerTexts()
 	).toEqual([`${organisationLabel}: Amsab-ISG`]);
 
 	await new Promise((resolve) => setTimeout(resolve, 1000)); // TODO: replace this
@@ -549,7 +537,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	await expect(
 		page
-			.locator(moduleClassSelector('c-pill--expanded') + ' span', {
+			.locator(`${moduleClassSelector('c-pill--expanded')} span`, {
 				hasText:
 					SITE_TRANSLATIONS.nl[
 						'modules/shared/components/media-card/media-card___tijdelijke-toegang'

@@ -1,6 +1,6 @@
-import { type IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import type { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 
-import { type InlineFilterFormProps } from '../../types';
+import type { InlineFilterFormProps } from '../../types';
 
 export type ConsultableMediaFilterFormProps =
 	InlineFilterFormProps<ConsultableMediaFilterFormState>;

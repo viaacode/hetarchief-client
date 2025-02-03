@@ -1,5 +1,5 @@
 import { Button } from '@meemoo/react-components';
-import { type Avo } from '@viaa/avo2-types';
+import type { Avo } from '@viaa/avo2-types';
 import Link from 'next/link';
 import React, { type FC, lazy, Suspense } from 'react';
 
@@ -12,7 +12,7 @@ import { ADMIN_CORE_ROUTES_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageOverview = lazy(() =>
 	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({
@@ -35,19 +35,14 @@ export const ContentPageOverviewPage: FC<
 				<AdminLayout.Actions>
 					{canCreateContentPages && (
 						<Link
-							href={
-								ADMIN_CORE_ROUTES_BY_LOCALE[locale]
-									.ADMIN_CONTENT_PAGE_CREATE as string
-							}
+							href={ADMIN_CORE_ROUTES_BY_LOCALE[locale].ADMIN_CONTENT_PAGE_CREATE as string}
 							passHref
 							aria-label={tText(
 								'admin/content/views/content-overview___maak-een-nieuwe-content-pagina-aan'
 							)}
 						>
 							<Button
-								label={tText(
-									'admin/content/views/content-overview___content-toevoegen'
-								)}
+								label={tText('admin/content/views/content-overview___content-toevoegen')}
 								title={tText(
 									'admin/content/views/content-overview___maak-een-nieuwe-content-pagina-aan'
 								)}
@@ -78,10 +73,7 @@ export const ContentPageOverviewPage: FC<
 				relativeUrl={url}
 			/>
 			<PermissionsCheck
-				anyPermissions={[
-					Permission.EDIT_ANY_CONTENT_PAGES,
-					Permission.EDIT_OWN_CONTENT_PAGES,
-				]}
+				anyPermissions={[Permission.EDIT_ANY_CONTENT_PAGES, Permission.EDIT_OWN_CONTENT_PAGES]}
 			>
 				{renderPageContent()}
 			</PermissionsCheck>

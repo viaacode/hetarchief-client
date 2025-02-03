@@ -2,18 +2,18 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 import Cors from 'cors';
-import { type NextApiRequest, type NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 async function fileExists(filename: string): Promise<boolean> {
 	try {
 		await fs.access(filename);
 		return true;
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	} catch (err: any) {
 		if (err.code === 'ENOENT') {
 			return false;
-		} else {
-			throw err;
 		}
+		throw err;
 	}
 }
 

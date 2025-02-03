@@ -10,7 +10,7 @@ export async function getFolderObjectCounts(page: Page): Promise<Record<string, 
 
 	// Wait until the favorites folder link is loaded
 	const favoritesListItem = page.locator(
-		'li' + moduleClassSelector('c-add-to-folder-blade__list-item'),
+		`li${moduleClassSelector('c-add-to-folder-blade__list-item')}`,
 		{
 			hasText: FAVORITES_FOLDER_NAME,
 		}
@@ -49,7 +49,7 @@ export async function getFolderObjectCounts(page: Page): Promise<Record<string, 
 		) {
 			counts[name] = 1;
 		} else {
-			counts[name] = parseInt(count.replace(/[^0-9]/g, ''));
+			counts[name] = Number.parseInt(count.replace(/[^0-9]/g, ''));
 		}
 	}
 	return counts;

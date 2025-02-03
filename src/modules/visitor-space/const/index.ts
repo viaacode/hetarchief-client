@@ -14,7 +14,7 @@ import {
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import { SearchPageMediaType } from '@shared/types/ie-objects';
-import { type FilterMenuSortOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import type { FilterMenuSortOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 
 import { SearchFilterId, SearchSortProp, VisitorSpaceStatus } from '../types';
 
@@ -29,7 +29,11 @@ export const SEARCH_RESULTS_PAGE_SIZE = 24;
 export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
 	SearchFilterId | QUERY_PARAM_KEY.SEARCH_QUERY_KEY,
 	string | undefined
-> & { page: number; orderProp: SearchSortProp; orderDirection: OrderDirection } = {
+> & {
+	page: number;
+	orderProp: SearchSortProp;
+	orderDirection: OrderDirection;
+} = {
 	// Filters
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: undefined,
 	[SearchFilterId.Format]: SearchPageMediaType.All,
@@ -64,6 +68,7 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
 	orderDirection: OrderDirection.desc,
 };
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export const SEARCH_PAGE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<any>> = {
 	// Filters
 	format: StringParam,
@@ -97,7 +102,9 @@ export const SEARCH_PAGE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<any
 
 export type SearchPageQueryParams = Partial<DecodedValueMap<typeof SEARCH_PAGE_QUERY_PARAM_CONFIG>>;
 
-export const VISITOR_SPACE_ACTIVE_SORT_MAP = (): { [key in SearchSortProp]: string } => ({
+export const VISITOR_SPACE_ACTIVE_SORT_MAP = (): {
+	[key in SearchSortProp]: string;
+} => ({
 	[SearchSortProp.Date]: tText('modules/visitor-space/const/index___sorteer-op-datum'),
 	[SearchSortProp.Relevance]: tText('modules/visitor-space/const/index___sorteer-op-relevantie'),
 	[SearchSortProp.Title]: tText('modules/visitor-space/const/index___sorteer-op-titel'),

@@ -24,9 +24,7 @@ export function useGetPeakFile(
 			if (!filePath) {
 				return null;
 			}
-			const jsonFileUrl: string | null = await IeObjectsService.getPlayableUrl(
-				filePath as string
-			);
+			const jsonFileUrl: string | null = await IeObjectsService.getPlayableUrl(filePath as string);
 			if (!jsonFileUrl) {
 				throw new Error('Failed to get peak file url with token');
 			}

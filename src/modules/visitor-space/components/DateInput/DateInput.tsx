@@ -1,7 +1,7 @@
 import { TextInput } from '@meemoo/react-components';
 import { isValid } from 'date-fns';
 import { noop } from 'lodash-es';
-import { type FC } from 'react';
+import type { FC } from 'react';
 import ReactDatePicker from 'react-datepicker';
 
 import { getDatePickerDefaultProps } from '@shared/components/DatePicker/DatePicker.consts';

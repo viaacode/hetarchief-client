@@ -56,10 +56,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 
 			setIsRequestAccessBladeOpen(false);
 			await router.push(
-				ROUTES_BY_LOCALE[locale].visitRequested.replace(
-					':slug',
-					createdVisitRequest.spaceSlug
-				)
+				ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
 			);
 		} catch (err) {
 			console.error({
@@ -76,15 +73,17 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 		}
 	};
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		if (query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]) {
 			setIsRequestAccessBladeOpen(true);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const onOpenRequestAccess = () => {
-		setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug });
+		setQuery({
+			[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug,
+		});
 		if (isAnonymous) {
 			dispatch(setShowAuthModal(true));
 			return;
@@ -114,9 +113,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 				buttonsComponent={
 					<div className={styles['p-error-no-access-to-object__buttons-container']}>
 						<Button
-							label={`${tText(
-								'modules/shared/components/error-no-access-to-object/error-no-access-to-object___plan-een-bezoek-bij'
-							)} ${visitorSpaceName}`}
+							label={`${tText('modules/shared/components/error-no-access-to-object/error-no-access-to-object___plan-een-bezoek-bij')} ${visitorSpaceName}`}
 							variants="black"
 							className={styles['p-error-no-access-to-object__button']}
 							onClick={() => onOpenRequestAccess()}

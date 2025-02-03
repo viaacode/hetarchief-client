@@ -1,29 +1,34 @@
 import { format, formatDistanceToNow, isSameDay, isToday } from 'date-fns';
 
-import { getLocaleFromI18nLanguage, Locale } from './i18n';
+import { Locale, getLocaleFromI18nLanguage } from './i18n';
 
 // Shared
 
 export const asDate = (input: Date | string | undefined | null): Date | undefined => {
 	const isEmpty = !input;
-	const isNumber = !isNaN(Number(input));
-	const isInvalidString =
-		typeof input === 'string' && (input.length <= 0 || input === 'undefined');
+	const isNumber = !Number.isNaN(Number(input));
+	const isInvalidString = typeof input === 'string' && (input.length <= 0 || input === 'undefined');
 
 	if (isEmpty || isInvalidString) {
 		return undefined;
 	}
 
-	const lowercased = typeof input === 'string' && input.toLowerCase();
-	const timezoned =
-		lowercased &&
-		lowercased.includes('t') &&
-		!lowercased.endsWith('z') &&
-		!lowercased.includes('+')
-			? `${input}Z`
-			: input;
+	if (input instanceof Date) {
+		return input;
+	}
+	if (isNumber) {
+		return new Date(Number(input));
+	}
+	if (typeof input === 'string') {
+		const lowercased = input.toLowerCase();
+		const timezoned =
+			lowercased?.includes('t') && !lowercased.endsWith('z') && !lowercased.includes('+')
+				? `${input}Z`
+				: input;
 
-	return new Date(isNumber ? Number(timezoned) : timezoned);
+		return new Date(timezoned);
+	}
+	return undefined;
 };
 
 export const localisedOptions = {
@@ -32,7 +37,7 @@ export const localisedOptions = {
 
 // Do not export to contain all user-facing formatters here
 const formatWithLocale = (formatString: string, date?: Date): string => {
-	if (!date || isNaN(date.getTime())) {
+	if (!date || Number.isNaN(date.getTime())) {
 		return '';
 	}
 

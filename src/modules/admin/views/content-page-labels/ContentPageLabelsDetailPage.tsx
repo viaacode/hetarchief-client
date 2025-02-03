@@ -10,7 +10,7 @@ import { ROUTES_BY_LOCALE } from '@shared/const';
 import { goBrowserBackWithFallback } from '@shared/helpers/go-browser-back-with-fallback';
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageLabelDetail = lazy(() =>
 	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({
@@ -27,16 +27,11 @@ export const ContentPageLabelsDetailPage: FC<DefaultSeoInfo> = ({ url }) => {
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-content-page-labels__detail">
-						<Suspense
-							fallback={<Loading fullscreen owner="ContentPageLabelsDetailPage" />}
-						>
+						<Suspense fallback={<Loading fullscreen owner="ContentPageLabelsDetailPage" />}>
 							<ContentPageLabelDetail
 								contentPageLabelId={router.query.id as string}
 								onGoBack={() =>
-									goBrowserBackWithFallback(
-										ROUTES_BY_LOCALE[locale].adminContentPageLabels,
-										router
-									)
+									goBrowserBackWithFallback(ROUTES_BY_LOCALE[locale].adminContentPageLabels, router)
 								}
 							/>
 						</Suspense>

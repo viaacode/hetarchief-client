@@ -10,7 +10,7 @@ import { Loading } from '@shared/components/Loading';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorLayout } from '@visitor-layout/index';
 
 export const VisitorSpacesHomePage: FC<DefaultSeoInfo> = (props) => {
@@ -22,7 +22,7 @@ export const VisitorSpacesHomePage: FC<DefaultSeoInfo> = (props) => {
 
 	useEffect(() => {
 		if (showLinkedSpaceAsHomepage && linkedSpaceSlug) {
-			router.replace('/' + linkedSpaceSlug);
+			router.replace(`/${linkedSpaceSlug}`);
 		}
 	}, [showLinkedSpaceAsHomepage, linkedSpaceSlug, router]);
 
@@ -43,9 +43,7 @@ export const VisitorSpacesHomePage: FC<DefaultSeoInfo> = (props) => {
 	return (
 		<VisitorLayout>
 			<SeoTags
-				title={tText(
-					'modules/visitor-space/views/visitor-spaces-home-page___bezoek-pagina-titel'
-				)}
+				title={tText('modules/visitor-space/views/visitor-spaces-home-page___bezoek-pagina-titel')}
 				description={tText(
 					'modules/visitor-space/views/visitor-spaces-home-page___bezoek-pagina-beschrijving'
 				)}

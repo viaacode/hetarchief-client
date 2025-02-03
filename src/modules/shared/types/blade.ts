@@ -1,6 +1,6 @@
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import { type BladeProps } from '@shared/components/Blade/Blade.types';
+import type { BladeProps } from '@shared/components/Blade/Blade.types';
 
 export interface FormBladeProps<T> extends BladeProps {
 	children?: ReactNode;

@@ -14,7 +14,7 @@ import FilterForm from '../FilterForm/FilterForm';
 import styles from '../FilterMenu.module.scss';
 import { FilterMenuType } from '../FilterMenu.types';
 
-import { type FilterOptionProps } from './FilterOption.types';
+import type { FilterOptionProps } from './FilterOption.types';
 
 const FilterOption: FC<FilterOptionProps> = ({
 	activeFilter,
@@ -36,6 +36,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 
 	// re-render form to ensure correct state
 	// e.g. open -> reset -> close -> open === values in url, in form
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		setOpenedAt(new Date().valueOf());
 	}, [filterIsActive]);
@@ -68,8 +69,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 		/>
 	);
 
-	const renderCheckbox = (): ReactElement =>
-		renderFilterForm('c-filter-menu__form--inline', true);
+	const renderCheckbox = (): ReactElement => renderFilterForm('c-filter-menu__form--inline', true);
 
 	const FILTER_MENU_HEIGHTS: Partial<Record<SearchFilterId, string>> = {
 		[SearchFilterId.Medium]: '63.7rem',
@@ -95,11 +95,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 					}}
 				>
 					<FilterButton
-						icon={
-							filterIsActive
-								? IconNamesLight.AngleLeft
-								: icon ?? IconNamesLight.AngleRight
-						}
+						icon={filterIsActive ? IconNamesLight.AngleLeft : (icon ?? IconNamesLight.AngleRight)}
 						isActive={filterIsActive}
 						label={label}
 						onClick={() => onClick?.(id)}

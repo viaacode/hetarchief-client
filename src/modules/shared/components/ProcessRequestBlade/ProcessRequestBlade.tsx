@@ -14,7 +14,7 @@ import { ApproveRequestBlade } from '../ApproveRequestBlade';
 import { DeclineRequestBlade } from '../DeclineRequestBlade';
 
 import styles from './ProcessRequestBlade.module.scss';
-import { type ProcessRequestBladeProps } from './ProcessRequestBlade.types';
+import type { ProcessRequestBladeProps } from './ProcessRequestBlade.types';
 
 const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 	const { selected, onFinish } = props;
@@ -23,7 +23,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 	const [showDecline, setShowDecline] = useState(false);
 
 	const finish = (setShowBlade?: typeof setShowApprove | typeof setShowDecline) => {
-		setShowBlade && setShowBlade(false);
+		setShowBlade?.(false);
 
 		// Needs a little delay, not sure about the amount.
 		// 300ms is default duration to hide a blade
@@ -80,10 +80,10 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 						selected && selected?.status === VisitStatus.APPROVED
 							? tHtml(
 									'modules/cp/components/process-request-blade/process-request-blade___aanpassen'
-							  )
+								)
 							: tHtml(
 									'modules/cp/components/process-request-blade/process-request-blade___goedkeuren'
-							  )
+								)
 					}
 					iconStart={<Icon name={IconNamesLight.Check} />}
 					variants={['block', 'black']}
@@ -95,10 +95,10 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 						selected && selected?.status === VisitStatus.DENIED
 							? tHtml(
 									'modules/cp/components/process-request-blade/process-request-blade___aanpassen'
-							  )
+								)
 							: tHtml(
 									'modules/cp/components/process-request-blade/process-request-blade___weigeren'
-							  )
+								)
 					}
 					iconStart={<Icon name={IconNamesLight.Forbidden} />}
 					variants={['block', 'text']}
@@ -133,7 +133,9 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 				footer={footer}
 				isOpen={getCurrentLayer() === 1}
 				layer={1}
-				renderTitle={(props: any) => <h2 {...props}>{getTitle()}</h2>}
+				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
+					<h2 {...props}>{getTitle()}</h2>
+				)}
 			>
 				{selected && (
 					<>

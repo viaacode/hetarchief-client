@@ -9,7 +9,7 @@ import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 const MaintenanceAlertsOverview = lazy(() =>
 	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({
@@ -54,7 +54,7 @@ export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 				footer={renderPopupFooter(onSave, onClose)}
 				isOpen={isOpen}
 				onClose={onClose}
-				renderTitle={(props: any) => <h2 {...props}>{title}</h2>}
+				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => <h2 {...props}>{title}</h2>}
 				id="alerts-blade"
 			>
 				<div className="u-px-32">{body}</div>
@@ -67,13 +67,8 @@ export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40">
-						<Suspense
-							fallback={<Loading fullscreen owner="AdminMaintenanceAlertsOverview" />}
-						>
-							<MaintenanceAlertsOverview
-								className="p-admin-alerts"
-								renderPopup={renderPopup}
-							/>
+						<Suspense fallback={<Loading fullscreen owner="AdminMaintenanceAlertsOverview" />}>
+							<MaintenanceAlertsOverview className="p-admin-alerts" renderPopup={renderPopup} />
 						</Suspense>
 					</div>
 				</AdminLayout.Content>

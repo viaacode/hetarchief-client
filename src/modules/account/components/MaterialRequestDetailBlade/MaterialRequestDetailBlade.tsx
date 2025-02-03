@@ -49,10 +49,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 				<h2
 					{...props}
-					className={clsx(
-						props.className,
-						styles['p-account-my-material-requests__title']
-					)}
+					className={clsx(props.className, styles['p-account-my-material-requests__title'])}
 				>
 					{tText(
 						'modules/account/components/material-request-detail-blade/material-requests___detail'
@@ -93,16 +90,13 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				href={`/zoeken/${currentMaterialRequestDetail?.maintainerSlug}/${currentMaterialRequestDetail?.objectSchemaIdentifier}`}
 				className={styles['p-account-my-material-requests__material-link']}
 			>
-				<div className={styles['p-account-my-material-requests__material']} tabIndex={0}>
+				<div className={styles['p-account-my-material-requests__material']}>
 					<p className={styles['p-account-my-material-requests__material-label']}>
 						<Icon
-							className={
-								styles['p-account-my-material-requests__material-label-icon']
-							}
+							className={styles['p-account-my-material-requests__material-label-icon']}
 							name={
 								TYPE_TO_ICON_MAP[
-									currentMaterialRequestDetail?.objectDctermsFormat ||
-										IeObjectType.Video
+									currentMaterialRequestDetail?.objectDctermsFormat || IeObjectType.Video
 								]
 							}
 						/>
@@ -212,11 +206,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 								)}
 							</dt>
 							<dd className={styles['p-account-my-material-requests__content-value']}>
-								{
-									GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[
-										currentMaterialRequestDetail.type
-									]
-								}
+								{GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[currentMaterialRequestDetail.type]}
 							</dd>
 						</>
 					)}

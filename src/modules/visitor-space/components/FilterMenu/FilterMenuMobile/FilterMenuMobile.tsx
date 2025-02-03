@@ -9,14 +9,14 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml } from '@shared/helpers/translate';
 import { mapFiltersToTags } from '@visitor-space/utils/map-filters';
 
-import { type SearchSortProp } from '../../../types';
+import type { SearchSortProp } from '../../../types';
 import { FilterButton } from '../FilterButton';
 import FilterForm from '../FilterForm/FilterForm';
 import { type FilterMenuFilterOption, FilterMenuType } from '../FilterMenu.types';
 import { FilterSortList } from '../FilterSortList';
 
 import styles from './FilterMenuMobile.module.scss';
-import { type FilterMenuMobileProps } from './FilterMenuMobile.types';
+import type { FilterMenuMobileProps } from './FilterMenuMobile.types';
 
 const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	activeFilter,
@@ -38,6 +38,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 
 	// re-render form to ensure correct state
 	// e.g. open -> reset -> close -> open === values in url, in form
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		setOpenedAt(new Date().valueOf());
 	}, [isOpen]);
@@ -70,7 +71,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 				className={clsx(styles['c-filter-menu-mobile__option'], {
 					[styles['c-filter-menu-mobile__option--operative']]: !isNil(filterValues?.[id]),
 				})}
-				icon={filterIsActive ? IconNamesLight.AngleLeft : icon ?? IconNamesLight.AngleRight}
+				icon={filterIsActive ? IconNamesLight.AngleLeft : (icon ?? IconNamesLight.AngleRight)}
 				isActive={filterIsActive}
 				label={label}
 				onClick={() => onFilterClick(id)}
@@ -150,8 +151,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 			className={clsx(styles['c-filter-menu-mobile__form'], {
 				[styles['c-filter-menu-mobile--inline']]: isInline,
 				[styles['c-filter-menu-mobile__option']]: isInline,
-				[styles['c-filter-menu-mobile__option--operative']]:
-					!isNil(filterValues?.[id]) && isInline,
+				[styles['c-filter-menu-mobile__option--operative']]: !isNil(filterValues?.[id]) && isInline,
 			})}
 			form={form}
 			id={id}

@@ -1,5 +1,5 @@
 import { Button } from '@meemoo/react-components';
-import { type ComponentMeta, type ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
 import { Icon } from '@shared/components/Icon';
@@ -32,6 +32,7 @@ const Template: ComponentStory<typeof Navigation> = (args) => (
 const ContextualTemplate: ComponentStory<typeof Navigation> = (args) => (
 	<Navigation {...args}>
 		<Navigation.Left placement="left">
+			{/* biome-ignore lint/a11y/useValidAnchor: storybook */}
 			<a className="u-font-size-24" href="#">
 				<Icon name={IconNamesLight.AngleLeft} />
 			</a>

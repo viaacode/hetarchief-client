@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import React, { type FC } from 'react';
 
-import { type CollapsableBladeProps } from '@ie-objects/components/CollapsableBlade/CollapsableBlade.types';
+import type { CollapsableBladeProps } from '@ie-objects/components/CollapsableBlade/CollapsableBlade.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
@@ -35,9 +35,7 @@ const CollapsableBlade: FC<CollapsableBladeProps> = ({
 				}
 				label={title}
 			/>
-			<div className={styles['c-collapsable-blade__scrollable']}>
-				{renderContent(!isOpen)}
-			</div>
+			<div className={styles['c-collapsable-blade__scrollable']}>{renderContent(!isOpen)}</div>
 		</div>
 	);
 };

@@ -5,7 +5,7 @@ import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 
 import { SearchFilterId } from '../../types';
 
-import { type ConsultablePublicDomainFilterFormState } from './ConsultablePublicDomainFilterForm.types';
+import type { ConsultablePublicDomainFilterFormState } from './ConsultablePublicDomainFilterForm.types';
 
 export const CONSULTABLE_PUBLIC_DOMAIN_FILTER_FORM_SCHEMA =
 	(): Schema<ConsultablePublicDomainFilterFormState> =>

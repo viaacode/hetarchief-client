@@ -11,9 +11,9 @@ import {
 	CONSULTABLE_PUBLIC_DOMAIN_FILTER_FORM_QUERY_PARAM_CONFIG,
 	CONSULTABLE_PUBLIC_DOMAIN_FILTER_FORM_SCHEMA,
 } from './ConsultablePublicDomainFilterForm.const';
-import {
-	type ConsultablePublicDomainFilterFormProps,
-	type ConsultablePublicDomainFilterFormState,
+import type {
+	ConsultablePublicDomainFilterFormProps,
+	ConsultablePublicDomainFilterFormState,
 } from './ConsultablePublicDomainFilterForm.types';
 
 const defaultValues = {
@@ -42,6 +42,7 @@ export const ConsultablePublicDomainFilterForm: FC<ConsultablePublicDomainFilter
 		[onFormSubmit]
 	);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		if (isInitialRender) {
 			// Avoid this filter submitting results when loading the form for the first time
@@ -57,7 +58,6 @@ export const ConsultablePublicDomainFilterForm: FC<ConsultablePublicDomainFilter
 				}),
 			(...args) => console.error(args)
 		)();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [setValue, isChecked]);
 
 	return (

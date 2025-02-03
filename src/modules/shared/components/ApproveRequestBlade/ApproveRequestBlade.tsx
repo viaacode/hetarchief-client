@@ -14,9 +14,9 @@ import {
 	getAccessToDate,
 	roundToNextQuarter,
 } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.helpers';
-import {
-	type ApproveRequestBladeProps,
-	type ApproveRequestFormState,
+import type {
+	ApproveRequestBladeProps,
+	ApproveRequestFormState,
 } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
@@ -134,9 +134,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 			return (
 				selectedFoldersNames ||
-				tText(
-					'modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map'
-				)
+				tText('modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map')
 			);
 		},
 		[folders]
@@ -233,10 +231,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			return;
 		}
 
-		if (
-			values.accessType?.type === AccessType.FOLDERS &&
-			!values.accessType?.folderIds?.length
-		) {
+		if (values.accessType?.type === AccessType.FOLDERS && !values.accessType?.folderIds?.length) {
 			setNoFoldersSelectedOnSubmit(true);
 			return;
 		}
@@ -300,7 +295,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						noFoldersSelectedOnSubmit
 							? tHtml(
 									'modules/shared/components/approve-request-blade/approve-request-blade___selecteer-een-of-meerdere-mappen'
-							  )
+								)
 							: null
 					}
 					key="form-error--no-folder-selected"
@@ -333,7 +328,11 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	};
 
 	const renderAccessFrom = useCallback(
-		({ field }: { field: ControllerRenderProps<ApproveRequestFormState, 'accessFrom'> }) => {
+		({
+			field,
+		}: {
+			field: ControllerRenderProps<ApproveRequestFormState, 'accessFrom'>;
+		}) => {
 			const now = new Date();
 
 			const onFromDateChange = (
@@ -343,10 +342,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				onSimpleDateChange(newAccessFromDate, field);
 
 				if (newAccessFromDate) {
-					const newAccessToDate = getAccessToDate(
-						newAccessFromDate,
-						getValues().accessTo
-					);
+					const newAccessToDate = getAccessToDate(newAccessFromDate, getValues().accessTo);
 					if (newAccessToDate) {
 						setValue('accessTo', newAccessToDate);
 					}
@@ -386,7 +382,11 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	);
 
 	const renderAccessTo = useCallback(
-		({ field }: { field: ControllerRenderProps<ApproveRequestFormState, 'accessTo'> }) => {
+		({
+			field,
+		}: {
+			field: ControllerRenderProps<ApproveRequestFormState, 'accessTo'>;
+		}) => {
 			const now = new Date();
 
 			// Disabled by request of Ineke, 21/03/2022
@@ -434,7 +434,11 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	);
 
 	const renderAccessType = useCallback(
-		({ field }: { field: ControllerRenderProps<ApproveRequestFormState, 'accessType'> }) => {
+		({
+			field,
+		}: {
+			field: ControllerRenderProps<ApproveRequestFormState, 'accessType'>;
+		}) => {
 			const refinableRadioButtonValue = {
 				selectedOption: field.value?.type ?? AccessType.FULL,
 				refinedSelection: field.value?.folderIds ?? [],
@@ -445,11 +449,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					value={refinableRadioButtonValue}
 					options={getAccessTypeOptions(field.value)}
 					onChange={(selectedOption: string, selectedRefineOptions: string[]) => {
-						onChangeAccessType(
-							field,
-							selectedOption as AccessType,
-							selectedRefineOptions
-						);
+						onChangeAccessType(field, selectedOption as AccessType, selectedRefineOptions);
 					}}
 				/>
 			);
@@ -462,7 +462,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		<Blade
 			{...props}
 			footer={props.isOpen && renderFooter()}
-			renderTitle={(props: any) => <h2 {...props}>{title}</h2>}
+			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => <h2 {...props}>{title}</h2>}
 			className={styles['c-approve-request-blade']}
 		>
 			{props.isOpen && !!visitRequest && (
@@ -470,15 +470,9 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					<FormControl
 						className={clsx(styles['c-approve-request-blade__access-type'], 'u-mb-32')}
 						errors={[
+							<RedFormWarning error={errors.accessType?.message} key="form-error--access-type" />,
 							<RedFormWarning
-								error={errors.accessType?.message}
-								key="form-error--access-type"
-							/>,
-							<RedFormWarning
-								error={
-									(errors.accessType?.folderIds as FieldError | undefined)
-										?.message
-								}
+								error={(errors.accessType?.folderIds as FieldError | undefined)?.message}
 								key="form-error--access-type-folder-ids"
 							/>,
 							<RedFormWarning
@@ -486,7 +480,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 									noFoldersSelectedOnSubmit
 										? tHtml(
 												'modules/shared/components/approve-request-blade/approve-request-blade___selecteer-een-of-meerdere-mappen'
-										  )
+											)
 										: null
 								}
 								key="form-error--no-folder-selected"
@@ -503,15 +497,10 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					<FormControl
 						className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
 						errors={[
-							<RedFormWarning
-								error={errors.accessFrom?.message}
-								key="form-error--access-from"
-							/>,
+							<RedFormWarning error={errors.accessFrom?.message} key="form-error--access-from" />,
 						]}
 						id={labelKeys.accessFrom}
-						label={tHtml(
-							'modules/cp/components/approve-request-blade/approve-request-blade___van'
-						)}
+						label={tHtml('modules/cp/components/approve-request-blade/approve-request-blade___van')}
 					>
 						<Controller name="accessFrom" control={control} render={renderAccessFrom} />
 					</FormControl>
@@ -519,26 +508,16 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					<FormControl
 						className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
 						errors={[
-							<RedFormWarning
-								error={errors.accessTo?.message}
-								key="form-error--access-to"
-							/>,
+							<RedFormWarning error={errors.accessTo?.message} key="form-error--access-to" />,
 						]}
 						id={labelKeys.accessTo}
-						label={tHtml(
-							'modules/cp/components/approve-request-blade/approve-request-blade___tot'
-						)}
+						label={tHtml('modules/cp/components/approve-request-blade/approve-request-blade___tot')}
 					>
 						<Controller name="accessTo" control={control} render={renderAccessTo} />
 					</FormControl>
 
 					{!!overlappingRequests.length && (
-						<p
-							className={clsx(
-								'c-form-control__errors',
-								styles['c-form-control__errors']
-							)}
-						>
+						<p className={clsx('c-form-control__errors', styles['c-form-control__errors'])}>
 							{tHtml(
 								'modules/shared/components/approve-request-blade/approve-request-blade___er-is-reeds-een-goedgekeurde-aanvraag-voor-deze-periode'
 							)}
@@ -575,11 +554,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						)}
 						suffix={OPTIONAL_LABEL()}
 					>
-						<Controller
-							name="accessRemark"
-							control={control}
-							render={renderAccessRemark}
-						/>
+						<Controller name="accessRemark" control={control} render={renderAccessRemark} />
 					</FormControl>
 				</div>
 			)}

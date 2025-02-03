@@ -4,13 +4,13 @@ import clsx from 'clsx';
 import { groupBy, intersection, isNil } from 'lodash-es';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
-import { type MouseEventHandler, type ReactNode } from 'react';
+import type { MouseEventHandler, ReactNode } from 'react';
 
 import { Permission } from '@account/const';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import { NAVIGATION_DROPDOWN } from '@navigation/components/Navigation/Navigation.types';
 import { NavigationLink } from '@navigation/components/Navigation/NavigationLink';
-import { type NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
+import type { NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
 import {
 	type NavigationInfo,
 	NavigationPlacement,
@@ -24,8 +24,8 @@ import {
 } from '@shared/const/routes';
 import { tText } from '@shared/helpers/translate';
 import { Breakpoints } from '@shared/types';
-import { type VisitRequest } from '@shared/types/visit-request';
-import { type Locale } from '@shared/utils/i18n';
+import type { VisitRequest } from '@shared/types/visit-request';
+import type { Locale } from '@shared/utils/i18n';
 import { SearchFilterId, type VisitorSpaceInfo } from '@visitor-space/types';
 
 const linkCls = (...classNames: string[]) => {
@@ -94,12 +94,12 @@ const renderLink = (
 	}
 
 	return (
-		<a aria-label={tooltip} className={cn} tabIndex={0} target={target} title={tooltip}>
+		<span aria-label={tooltip} className={cn} title={tooltip}>
 			{iconStart && iconStart}
 			{label}
 			{badge && badge}
 			{iconEnd && iconEnd}
-		</a>
+		</span>
 	);
 };
 
@@ -128,7 +128,8 @@ const getVisitorSpacesDropdown = (
 			activeDesktop: currentPath.startsWith(searchRouteForSpace),
 			activeMobile: currentPath.startsWith(searchRouteForSpace),
 		};
-	} else if (accessibleVisitorSpaces.length === 0) {
+	}
+	if (accessibleVisitorSpaces.length === 0) {
 		// No visitor spaces available => show link to /visit page without dropdown
 		return {
 			node: renderLink(navigationLabel, visitPath, {
@@ -139,76 +140,71 @@ const getVisitorSpacesDropdown = (
 			activeMobile: currentPath === visitPath,
 			path: currentPath,
 		};
-	} else {
-		// Show dropdown list with bezoek page and accessible visitor spaces
-		return {
-			node: renderLink(navigationLabel, visitPath, {
-				badge: <Badge text={accessibleVisitorSpaces.length} />,
-				className: linkClasses,
-				// Make link clickable in hamburger menu
-				onClick: (e) => {
-					if (window.innerWidth > Breakpoints.xxl) {
-						e.preventDefault();
-					}
-				},
-			}),
-			id: 'visitor-spaces',
-			path: currentPath,
-			activeDesktop: currentPath === visitPath,
-			activeMobile: currentPath === visitPath,
-			children: [
-				{
-					node: renderLink(
-						tText(
-							'modules/navigation/components/navigation/navigation___alle-bezoekersruimtes'
-						),
-						visitPath,
-						{
-							className: dropdownCls('u-display-none', 'u-display-block-xxl'),
-						}
-					),
-					id: 'all-visitor-spaces',
-					path: currentPath,
-					isDivider: accessibleVisitorSpaces.length > 0 ? 'md' : undefined,
-				},
-				...accessibleVisitorSpaces.map((visitorSpace: VisitorSpaceInfo): NavigationItem => {
-					const searchRouteForSpace = `/${ROUTE_PARTS_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${visitorSpace.slug}`;
-					return {
-						node: ({ closeDropdowns }) =>
-							renderLink(
-								visitorSpace.name ||
-									tText(
-										'modules/navigation/components/navigation/navigation___bezoekersruimte'
-									),
-								searchRouteForSpace,
-								{
-									iconEnd: (
-										<Icon
-											className={clsx(
-												'u-font-size-24',
-												'u-text-left',
-												styles['c-navigation__dropdown-icon--end']
-											)}
-											name={IconNamesLight.AngleRight}
-										/>
-									),
-									className: dropdownCls(),
-									onClick: () => {
-										if (currentPath === searchRouteForSpace) {
-											closeDropdowns?.();
-										}
-									},
-								}
-							),
-						id: visitorSpace.id,
-						activeDesktop: currentPath.startsWith(searchRouteForSpace),
-						activeMobile: currentPath.startsWith(searchRouteForSpace),
-						path: currentPath,
-					};
-				}),
-			],
-		};
 	}
+	// Show dropdown list with bezoek page and accessible visitor spaces
+	return {
+		node: renderLink(navigationLabel, visitPath, {
+			badge: <Badge text={accessibleVisitorSpaces.length} />,
+			className: linkClasses,
+			// Make link clickable in hamburger menu
+			onClick: (e) => {
+				if (window.innerWidth > Breakpoints.xxl) {
+					e.preventDefault();
+				}
+			},
+		}),
+		id: 'visitor-spaces',
+		path: currentPath,
+		activeDesktop: currentPath === visitPath,
+		activeMobile: currentPath === visitPath,
+		children: [
+			{
+				node: renderLink(
+					tText('modules/navigation/components/navigation/navigation___alle-bezoekersruimtes'),
+					visitPath,
+					{
+						className: dropdownCls('u-display-none', 'u-display-block-xxl'),
+					}
+				),
+				id: 'all-visitor-spaces',
+				path: currentPath,
+				isDivider: accessibleVisitorSpaces.length > 0 ? 'md' : undefined,
+			},
+			...accessibleVisitorSpaces.map((visitorSpace: VisitorSpaceInfo): NavigationItem => {
+				const searchRouteForSpace = `/${ROUTE_PARTS_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${visitorSpace.slug}`;
+				return {
+					node: ({ closeDropdowns }) =>
+						renderLink(
+							visitorSpace.name ||
+								tText('modules/navigation/components/navigation/navigation___bezoekersruimte'),
+							searchRouteForSpace,
+							{
+								iconEnd: (
+									<Icon
+										className={clsx(
+											'u-font-size-24',
+											'u-text-left',
+											styles['c-navigation__dropdown-icon--end']
+										)}
+										name={IconNamesLight.AngleRight}
+									/>
+								),
+								className: dropdownCls(),
+								onClick: () => {
+									if (currentPath === searchRouteForSpace) {
+										closeDropdowns?.();
+									}
+								},
+							}
+						),
+					id: visitorSpace.id,
+					activeDesktop: currentPath.startsWith(searchRouteForSpace),
+					activeMobile: currentPath.startsWith(searchRouteForSpace),
+					path: currentPath,
+				};
+			}),
+		],
+	};
 };
 
 const getDynamicHeaderLinks = (
@@ -218,7 +214,7 @@ const getDynamicHeaderLinks = (
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
 	linkedSpaceOrId: string | null,
 	activeVisits: VisitRequest[] | null,
-	isMeemooAdmin = false,
+	isMeemooAdmin: boolean | undefined,
 	locale: Locale
 ) => {
 	const itemsByPlacement = navigationItems[placement];
@@ -228,14 +224,7 @@ const getDynamicHeaderLinks = (
 	}
 
 	return itemsByPlacement.map(
-		({
-			contentPath,
-			id,
-			label,
-			linkTarget,
-			iconName,
-			tooltip,
-		}: NavigationInfo): NavigationItem => {
+		({ contentPath, id, label, linkTarget, iconName, tooltip }: NavigationInfo): NavigationItem => {
 			const hasActiveVisits = activeVisits && activeVisits.length > 0;
 			const isSearchNavItem = contentPath === ROUTES_BY_LOCALE[locale].search;
 			const searchUrl =
@@ -308,9 +297,7 @@ const getCpAdminManagementDropdown = (
 					? [
 							{
 								node: renderLink(
-									tText(
-										'modules/navigation/components/navigation/navigation___aanvragen'
-									),
+									tText('modules/navigation/components/navigation/navigation___aanvragen'),
 									ROUTES_BY_LOCALE[locale].cpAdminVisitRequests,
 									{
 										className: dropdownCls(),
@@ -318,19 +305,15 @@ const getCpAdminManagementDropdown = (
 								),
 								id: 'nav__beheer--aanvragen',
 								path: currentPath,
-								activeMobile: currentPath.startsWith(
-									ROUTES_BY_LOCALE[locale].cpAdminVisitRequests
-								),
+								activeMobile: currentPath.startsWith(ROUTES_BY_LOCALE[locale].cpAdminVisitRequests),
 							},
-					  ]
+						]
 					: []),
 				...(permissions.includes(Permission.VIEW_ANY_MATERIAL_REQUESTS)
 					? [
 							{
 								node: renderLink(
-									tText(
-										'modules/navigation/components/navigation/navigation___materiaalaanvragen'
-									),
+									tText('modules/navigation/components/navigation/navigation___materiaalaanvragen'),
 									ROUTES_BY_LOCALE[locale].cpAdminMaterialRequests,
 									{
 										className: dropdownCls(),
@@ -342,15 +325,13 @@ const getCpAdminManagementDropdown = (
 									ROUTES_BY_LOCALE[locale].cpAdminMaterialRequests
 								),
 							},
-					  ]
+						]
 					: []),
 				...(permissions.includes(Permission.MANAGE_CP_VISIT_REQUESTS)
 					? [
 							{
 								node: renderLink(
-									tText(
-										'modules/navigation/components/navigation/navigation___bezoekers'
-									),
+									tText('modules/navigation/components/navigation/navigation___bezoekers'),
 									ROUTES_BY_LOCALE[locale].cpAdminVisitors,
 									{
 										className: dropdownCls(),
@@ -358,19 +339,15 @@ const getCpAdminManagementDropdown = (
 								),
 								id: 'nav__beheer--bezoekers',
 								path: currentPath,
-								activeMobile: currentPath.startsWith(
-									ROUTES_BY_LOCALE[locale].cpAdminVisitors
-								),
+								activeMobile: currentPath.startsWith(ROUTES_BY_LOCALE[locale].cpAdminVisitors),
 							},
-					  ]
+						]
 					: []),
 				...(permissions.includes(Permission.UPDATE_OWN_SPACE)
 					? [
 							{
 								node: renderLink(
-									tText(
-										'modules/navigation/components/navigation/navigation___instellingen'
-									),
+									tText('modules/navigation/components/navigation/navigation___instellingen'),
 									ROUTES_BY_LOCALE[locale].cpAdminSettings,
 									{
 										className: dropdownCls(),
@@ -378,11 +355,9 @@ const getCpAdminManagementDropdown = (
 								),
 								id: 'nav__beheer--instellingen',
 								path: currentPath,
-								activeMobile: currentPath.startsWith(
-									ROUTES_BY_LOCALE[locale].cpAdminSettings
-								),
+								activeMobile: currentPath.startsWith(ROUTES_BY_LOCALE[locale].cpAdminSettings),
 							},
-					  ]
+						]
 					: []),
 
 				...(!isNil(maintainerSlug)
@@ -405,7 +380,7 @@ const getCpAdminManagementDropdown = (
 								id: 'nav__beheer--mijn-bezoekerstool',
 								path: currentPath,
 							},
-					  ]
+						]
 					: []),
 			],
 		},
@@ -532,11 +507,11 @@ export const getNavigationItemsProfileDropdown = (
 	const { defaultRoutes, adminRoutes, cpRoutes } = groupBy(
 		profileDropdown,
 		(navItem: NavigationItem) => {
-			if (navItem.path?.startsWith('/' + ROUTE_PARTS_BY_LOCALE[locale].admin)) {
+			if (navItem.path?.startsWith(`/${ROUTE_PARTS_BY_LOCALE[locale].admin}`)) {
 				return 'adminRoutes';
 			}
 
-			if (navItem.path?.startsWith('/' + ROUTE_PARTS_BY_LOCALE[locale].cpAdmin)) {
+			if (navItem.path?.startsWith(`/${ROUTE_PARTS_BY_LOCALE[locale].cpAdmin}`)) {
 				return 'cpRoutes';
 			}
 
@@ -559,9 +534,7 @@ export const getNavigationItemsProfileDropdown = (
 		...((adminRoutes || [])?.length > 0
 			? [getDivider('divider-before-admin-routes'), ...adminRoutes]
 			: []),
-		...((cpRoutes || [])?.length > 0
-			? [getDivider('divider-before-cp-routes'), ...cpRoutes]
-			: []),
+		...((cpRoutes || [])?.length > 0 ? [getDivider('divider-before-cp-routes'), ...cpRoutes] : []),
 		getDivider('divider-before-logout'),
 	];
 };

@@ -1,6 +1,6 @@
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import { type ModalProps } from '../Modal';
+import type { ModalProps } from '../Modal';
 
 export interface ConfirmationModalProps extends Pick<ModalProps, 'isOpen' | 'onClose'> {
 	children?: ReactNode;

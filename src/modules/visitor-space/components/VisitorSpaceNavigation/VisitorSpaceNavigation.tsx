@@ -12,7 +12,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
-import { type VisitorSpaceNavigationProps } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation.types';
+import type { VisitorSpaceNavigationProps } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation.types';
 
 import styles from './VisitorSpaceNavigation.module.scss';
 
@@ -49,13 +49,7 @@ export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 						styles['c-visitor-space-navigation__contact-button']
 					),
 					icon: undefined,
-					iconStart: (
-						<Icon
-							className="u-font-size-24"
-							name={IconNamesLight.Contact}
-							aria-hidden
-						/>
-					),
+					iconStart: <Icon className="u-font-size-24" name={IconNamesLight.Contact} aria-hidden />,
 					label: tHtml(
 						'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___contacteer'
 					),
@@ -68,11 +62,7 @@ export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 				<ul className={styles['c-visitor-space-navigation__contact-list']}>
 					{email && (
 						<li className={styles['c-visitor-space-navigation__contact-item']}>
-							<Button
-								className="u-text-left"
-								variants={['text', 'block', 'sm']}
-								label={email}
-							/>
+							<Button className="u-text-left" variants={['text', 'block', 'sm']} label={email} />
 
 							<CopyButton text={email} variants={['sm', 'text']} />
 						</li>
@@ -80,11 +70,7 @@ export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 
 					{phone && (
 						<li className={styles['c-visitor-space-navigation__contact-item']}>
-							<Button
-								className="u-text-left"
-								variants={['text', 'block', 'sm']}
-								label={phone}
-							/>
+							<Button className="u-text-left" variants={['text', 'block', 'sm']} label={phone} />
 
 							<CopyButton text={phone} variants={['sm', 'text']} />
 						</li>
@@ -110,9 +96,7 @@ export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 			<Navigation.Center title={title} />
 
 			<Navigation.Right placement="right">
-				{!isNil(accessEndDate) && (
-					<span className="u-py-8 u-text-right">{accessEndDate}</span>
-				)}
+				{!isNil(accessEndDate) && <span className="u-py-8 u-text-right">{accessEndDate}</span>}
 				{showContactInfo && renderContact()}
 			</Navigation.Right>
 		</Navigation>

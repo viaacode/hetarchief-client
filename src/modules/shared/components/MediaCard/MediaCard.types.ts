@@ -1,9 +1,9 @@
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import { type IeObjectLicense } from '@ie-objects/ie-objects.types';
-import { type IeObjectType } from '@shared/types/ie-objects';
+import type { IeObjectLicense } from '@ie-objects/ie-objects.types';
+import type { IeObjectType } from '@shared/types/ie-objects';
 
-import { type IconName } from '../Icon';
+import type { IconName } from '../Icon';
 
 export type MediaCardViewMode = 'list' | 'grid';
 
@@ -18,7 +18,7 @@ export interface MediaCardProps {
 	id?: string;
 	objectId?: string;
 	thumbnail?: string;
-	publishedOrCreatedDate?: Date;
+	publishedOrCreatedDate?: string;
 	publishedBy?: string;
 	title?: string | ReactNode;
 	type: IeObjectType | null;
@@ -33,6 +33,7 @@ export interface MediaCardProps {
 	hasTempAccess?: boolean;
 	previousPage?: string;
 	numOfChildren?: number;
+	className?: string;
 }
 
 export type IdentifiableMediaCard = MediaCardProps & {

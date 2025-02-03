@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { mockStore } from '../../../../__mocks__/store';
 
 import NotificationCenter from './NotificationCenter';
-import { type NotificationCenterProps } from './NotificationCenter.types';
+import type { NotificationCenterProps } from './NotificationCenter.types';
 import { notificationCenterMock, NOTIFICATIONS_FIRST_PAGE } from './__mocks__/notification-center';
 
 const renderNotificationCenter = (args: Partial<NotificationCenterProps>) => {

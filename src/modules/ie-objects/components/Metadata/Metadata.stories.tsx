@@ -1,4 +1,4 @@
-import { type ComponentMeta, type ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
@@ -15,7 +15,10 @@ const Template: ComponentStory<typeof MetadataList> = (args) => (
 	<MetadataList {...args}>
 		{metadataMock.map((item, index) => {
 			return (
-				<Metadata title={item.title} key={`metadata-item-${index}`}>
+				<Metadata
+					title={item.title}
+					key={`metadata-item-${typeof item.title === 'string' ? item.title : index}`}
+				>
 					{item.data}
 				</Metadata>
 			);

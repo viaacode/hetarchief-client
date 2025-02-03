@@ -26,17 +26,11 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({ triggerButtonProps, childr
 	useClickOutside(menuContentRef as Element, () => setIsOpen(false));
 
 	return (
-		<Dropdown
-			{...rest}
-			isOpen={isOpen}
-			flyoutClassName={styles['c-dropdown-menu--menu-content']}
-		>
+		<Dropdown {...rest} isOpen={isOpen} flyoutClassName={styles['c-dropdown-menu--menu-content']}>
 			<DropdownButton>
 				<Button
 					icon={<Icon name={IconNamesLight.DotsVertical} aria-hidden />}
-					aria-label={tText(
-						'modules/shared/components/dropdown-menu/dropdown-menu___meer-acties'
-					)}
+					aria-label={tText('modules/shared/components/dropdown-menu/dropdown-menu___meer-acties')}
 					variants="text"
 					{...triggerButtonProps}
 					onClick={(evt: MouseEvent) => {
@@ -47,10 +41,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({ triggerButtonProps, childr
 				/>
 			</DropdownButton>
 			<DropdownContent>
-				<div
-					className={styles['c-dropdown-menu--menu-content-wrapper']}
-					ref={setMenuContentRef}
-				>
+				<div className={styles['c-dropdown-menu--menu-content-wrapper']} ref={setMenuContentRef}>
 					{children}
 				</div>
 			</DropdownContent>

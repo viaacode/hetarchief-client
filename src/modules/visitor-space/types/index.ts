@@ -1,12 +1,12 @@
-import { type DefaultComponentProps } from '@meemoo/admin-core-ui/dist/admin.mjs';
-import { type SelectOption, type TagInfo } from '@meemoo/react-components';
-import { type ReactNode } from 'react';
-import { type FieldValues, type UseFormHandleSubmit } from 'react-hook-form';
+import type { DefaultComponentProps } from '@meemoo/admin-core-ui/dist/admin.mjs';
+import type { SelectOption, TagInfo } from '@meemoo/react-components';
+import type { ReactNode } from 'react';
+import type { FieldValues, UseFormHandleSubmit } from 'react-hook-form';
 
-import { type IeObjectType } from '@shared/types/ie-objects';
-import { type OnFilterMenuFormSubmit } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import type { IeObjectType } from '@shared/types/ie-objects';
+import type { OnFilterMenuFormSubmit } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 
-import { type FilterProperty, type Operator } from './filter-properties';
+import type { FilterProperty, Operator } from './filter-properties';
 
 export * from './filter-properties';
 
@@ -77,11 +77,7 @@ export interface DefaultFilterFormChildrenParams<Values extends FieldValues> {
 
 export interface DefaultFilterFormProps<Values extends FieldValues>
 	extends Omit<DefaultComponentProps, 'children'> {
-	children: ({
-		values,
-		reset,
-		handleSubmit,
-	}: DefaultFilterFormChildrenParams<Values>) => ReactNode;
+	children: ({ values, reset, handleSubmit }: DefaultFilterFormChildrenParams<Values>) => ReactNode;
 	disabled?: boolean;
 	values?: Values;
 }

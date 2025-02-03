@@ -1,4 +1,4 @@
-import { type AccessType, type VisitStatus } from '@shared/types/visit-request';
+import type { AccessType, VisitStatus } from '@shared/types/visit-request';
 
 export * from './requests.types';
 

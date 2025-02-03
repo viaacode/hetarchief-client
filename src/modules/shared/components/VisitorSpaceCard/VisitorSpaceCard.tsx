@@ -11,7 +11,7 @@ import { CardImage } from '../CardImage';
 
 import { VisitorSpaceCardType } from './VisitorSpaceCard.const';
 import styles from './VisitorSpaceCard.module.scss';
-import { type VisitorSpaceCardProps } from './VisitorSpaceCard.types';
+import type { VisitorSpaceCardProps } from './VisitorSpaceCard.types';
 import { VisitorSpaceCardControls } from './VisitorSpaceCardControls';
 
 const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
@@ -153,23 +153,20 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 					{flat && renderTitle()}
 					{locale === Locale.nl && (
 						<div
-							className={clsx(
-								styles['c-visitor-space-card__description__container'],
-								{
-									[styles[
-										'c-visitor-space-card__description__container--expanded'
-									]]: expandDescription,
-								}
-							)}
+							className={clsx(styles['c-visitor-space-card__description__container'], {
+								[styles['c-visitor-space-card__description__container--expanded']]:
+									expandDescription,
+							})}
 							onClick={() => setExpandDescription(!expandDescription)}
+							onKeyUp={(evt) => {
+								if (evt.key === 'Enter') {
+									setExpandDescription(!expandDescription);
+								}
+							}}
 						>
 							{renderDescription()}
 							{hasOverflowingChildren && (
-								<div
-									className={
-										styles['c-visitor-space-card__description__container__icon']
-									}
-								/>
+								<div className={styles['c-visitor-space-card__description__container__icon']} />
 							)}
 						</div>
 					)}

@@ -8,12 +8,12 @@ import {
 	type VisitRequest,
 	VisitStatus,
 } from '@shared/types/visit-request';
-import {
-	type GetAllActiveVisitsProps,
-	type GetVisitRequestsProps,
+import type {
+	GetAllActiveVisitsProps,
+	GetVisitRequestsProps,
 } from '@visit-requests/services/visit-request/visit-request.service.types';
-import { type PatchVisit } from '@visit-requests/types';
-import { type CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
+import type { PatchVisit } from '@visit-requests/types';
+import type { CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 
 import {
 	VISITS_SERVICE_ACCESS_STATUS_URL,
@@ -23,8 +23,8 @@ import {
 	VISITS_SERVICE_SPACE_URL,
 } from './visit-request.service.const';
 
-export class VisitRequestService {
-	public static async getAll({
+export namespace VisitRequestService {
+	export async function getAll({
 		searchInput = '',
 		status,
 		timeframe,
@@ -55,11 +55,11 @@ export class VisitRequestService {
 		return parsed as IPagination<VisitRequest>;
 	}
 
-	public static async getById(id: string): Promise<VisitRequest> {
+	export async function getById(id: string): Promise<VisitRequest> {
 		return await ApiService.getApi().get(`${VISITS_SERVICE_BASE_URL}/${id}`).json();
 	}
 
-	public static async patchById(id: string, visit: PatchVisit): Promise<VisitRequest> {
+	export async function patchById(id: string, visit: PatchVisit): Promise<VisitRequest> {
 		const { status, startAt, endAt, note, accessType, accessFolderIds } = visit;
 		const json: PatchVisit = {
 			status,
@@ -77,26 +77,24 @@ export class VisitRequestService {
 			.json();
 	}
 
-	public static async create(visitRequest: CreateVisitRequest): Promise<VisitRequest> {
+	export async function create(visitRequest: CreateVisitRequest): Promise<VisitRequest> {
 		return await ApiService.getApi()
 			.post(VISITS_SERVICE_BASE_URL, { body: JSON.stringify(visitRequest) })
 			.json();
 	}
 
-	public static async getActiveVisitForUserAndSpace(
+	export async function getActiveVisitForUserAndSpace(
 		visitorSpaceSlug: string
 	): Promise<VisitRequest | null> {
 		if (!visitorSpaceSlug) {
 			return null;
 		}
 		return await ApiService.getApi()
-			.get(
-				`${VISITS_SERVICE_BASE_URL}/${VISITS_SERVICE_ACTIVE_SPACE_URL}/${visitorSpaceSlug}`
-			)
+			.get(`${VISITS_SERVICE_BASE_URL}/${VISITS_SERVICE_ACTIVE_SPACE_URL}/${visitorSpaceSlug}`)
 			.json();
 	}
 
-	public static async getPendingVisitCountForUserBySlug(
+	export async function getPendingVisitCountForUserBySlug(
 		slug: string
 	): Promise<VisitRequest | null> {
 		if (!slug) {
@@ -107,7 +105,7 @@ export class VisitRequestService {
 			.json();
 	}
 
-	public static async getAccessStatusBySpaceSlug(
+	export async function getAccessStatusBySpaceSlug(
 		slug: string
 	): Promise<VisitAccessStatus | null> {
 		if (slug.length === 0) {
@@ -120,7 +118,7 @@ export class VisitRequestService {
 			.json();
 	}
 
-	public static async getAllActiveVisits({
+	export async function getAllActiveVisits({
 		requesterId,
 		orderProp = 'endAt',
 		orderDirection = OrderDirection.asc,

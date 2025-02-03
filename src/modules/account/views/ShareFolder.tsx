@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { type FC, useCallback, useEffect } from 'react';
 
-import { foldersService } from '@account/services/folders';
+import { FoldersService } from '@account/services/folders';
 import { SharedFolderStatus } from '@account/types';
 import { createFolderSlug } from '@account/utils';
 import { Loading } from '@shared/components/Loading';
@@ -9,7 +9,7 @@ import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 interface AccountSharedFolderProps {
 	folderId: string | undefined;
@@ -24,14 +24,12 @@ export const AccountSharedFolder: FC<DefaultSeoInfo & AccountSharedFolderProps> 
 	const shareFolder = useCallback(async () => {
 		if (folderId) {
 			try {
-				const response = await foldersService.shareCollection(folderId);
+				const response = await FoldersService.shareCollection(folderId);
 				if (response.status === SharedFolderStatus.ADDED) {
 					toastService.notify({
 						maxLines: 3,
 						title: tText('pages/account/map-delen/folder-id/index___gelukt'),
-						description: tText(
-							'pages/account/map-delen/folder-id/index___gelukt-beschrijving'
-						),
+						description: tText('pages/account/map-delen/folder-id/index___gelukt-beschrijving'),
 					});
 				}
 				if (response.status === SharedFolderStatus.ALREADY_OWNER) {

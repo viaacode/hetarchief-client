@@ -1,6 +1,6 @@
-import { type FC } from 'react';
+import type { FC } from 'react';
 
-import { type VisitSummaryProps } from '@shared/components/VisitSummary';
+import type { VisitSummaryProps } from '@shared/components/VisitSummary';
 import { tHtml } from '@shared/helpers/translate';
 
 import SpacePreview from '../SpacePreview/SpacePreview';
@@ -39,9 +39,7 @@ const VisitSummary: FC<VisitSummaryProps> = ({
 			{visitorName && (
 				<>
 					<strong>
-						{tHtml(
-							'modules/cp/components/process-request-blade/process-request-blade___aanvrager'
-						)}
+						{tHtml('modules/cp/components/process-request-blade/process-request-blade___aanvrager')}
 					</strong>
 					<p>{visitorName}</p>
 				</>

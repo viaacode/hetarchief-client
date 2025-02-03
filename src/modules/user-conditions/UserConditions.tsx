@@ -5,7 +5,7 @@ import {
 	convertDbContentPageToContentPageInfo,
 } from '@meemoo/admin-core-ui/dist/client.mjs';
 import { Button } from '@meemoo/react-components';
-import { type Avo } from '@viaa/avo2-types';
+import type { Avo } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { type FC, useCallback, useEffect, useRef, useState } from 'react';
@@ -26,7 +26,7 @@ import { useTermsOfService } from '@shared/hooks/use-terms-of-service';
 import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './UserConditions.module.scss';
 
@@ -59,6 +59,7 @@ export const UserConditions: FC<
 		dispatch(setShowZendesk(false));
 	}, [dispatch]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	const onContentScroll = useCallback(() => {
 		const el = scrollable.current;
 
@@ -124,20 +125,14 @@ export const UserConditions: FC<
 				/>
 
 				{user && !tosAccepted && (
-					<section
-						className={clsx('u-pt-96', styles['p-terms-of-service__buttons-wrapper'])}
-					>
+					<section className={clsx('u-pt-96', styles['p-terms-of-service__buttons-wrapper'])}>
 						<div className="l-container">
 							<div className={styles['p-terms-of-service__buttons']}>
 								<Button className="u-mr-8" variants="text" onClick={onCancelClick}>
 									{tHtml('pages/gebruiksvoorwaarden/index___annuleer')}
 								</Button>
 
-								<Button
-									variants="black"
-									disabled={!hasFinished}
-									onClick={onConfirmClick}
-								>
+								<Button variants="black" disabled={!hasFinished} onClick={onConfirmClick}>
 									{tHtml('pages/gebruiksvoorwaarden/index___aanvaarden')}
 								</Button>
 							</div>
@@ -152,9 +147,7 @@ export const UserConditions: FC<
 		<div className={styles['p-terms-of-service']}>
 			<SeoTags
 				title={tText('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden')}
-				description={tText(
-					'pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-omschrijving'
-				)}
+				description={tText('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-omschrijving')}
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}

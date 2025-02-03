@@ -1,9 +1,9 @@
-import { type CardProps } from '@meemoo/react-components';
-import { type ReactNode } from 'react';
+import type { CardProps } from '@meemoo/react-components';
+import type { ReactNode } from 'react';
 
-import { type VisitorSpaceInfo } from '@visitor-space/types';
+import type { VisitorSpaceInfo } from '@visitor-space/types';
 
-import { type VisitorSpaceCardType } from './VisitorSpaceCard.const';
+import type { VisitorSpaceCardType } from './VisitorSpaceCard.const';
 
 export interface VisitorSpaceAccess {
 	granted?: boolean;

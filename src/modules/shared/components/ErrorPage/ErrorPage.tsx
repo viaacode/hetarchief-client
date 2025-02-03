@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { tText } from '@shared/helpers/translate';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 
 import styles from './ErrorPage.module.scss';
-import { type ErrorPageProps } from './ErrorPage.types';
+import type { ErrorPageProps } from './ErrorPage.types';
 
 const ErrorPage: FC<ErrorPageProps> = ({
 	className,
@@ -41,13 +41,9 @@ const ErrorPage: FC<ErrorPageProps> = ({
 			)}
 
 			<div className={styles['c-error-page__info']}>
-				{description && (
-					<p className={styles['c-error-page__description']}>{description}</p>
-				)}
+				{description && <p className={styles['c-error-page__description']}>{description}</p>}
 				{buttonsComponent && (
-					<div className={styles['c-error-page__button-component']}>
-						{buttonsComponent}
-					</div>
+					<div className={styles['c-error-page__button-component']}>{buttonsComponent}</div>
 				)}
 
 				{link?.to && (

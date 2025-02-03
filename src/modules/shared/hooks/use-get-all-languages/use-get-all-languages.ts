@@ -2,7 +2,7 @@ import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react
 
 import { QUERY_KEYS } from '@shared/const';
 import { TranslationService } from '@shared/services/translation-service/translation.service';
-import { type LanguageInfo } from '@shared/services/translation-service/translation.types';
+import type { LanguageInfo } from '@shared/services/translation-service/translation.types';
 
 export const useGetAllLanguages = (): UseQueryResult<LanguageInfo[]> => {
 	return useQuery(
@@ -17,7 +17,5 @@ export const useGetAllLanguages = (): UseQueryResult<LanguageInfo[]> => {
 };
 
 export async function makeServerSideRequestGetAllLanguages(queryClient: QueryClient) {
-	await queryClient.prefetchQuery([QUERY_KEYS.getAllLanguages], () =>
-		TranslationService.getAll()
-	);
+	await queryClient.prefetchQuery([QUERY_KEYS.getAllLanguages], () => TranslationService.getAll());
 }

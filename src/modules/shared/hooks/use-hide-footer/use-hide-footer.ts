@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { setShowFooter } from '@shared/store/ui';
 
-import { type UseHideFooter } from './use-hide-footer.types';
+import type { UseHideFooter } from './use-hide-footer.types';
 
 const useHideFooter: UseHideFooter = (showFooter = false) => {
 	const dispatch = useDispatch();

@@ -1,13 +1,13 @@
 import { render, screen } from '@testing-library/react';
-import { type PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 import '@testing-library/jest-dom';
 
 import SidebarLayout from './SidebarLayout';
-import { type SidebarLayoutProps } from './SidebarLayout.types';
+import type { SidebarLayoutProps } from './SidebarLayout.types';
 
 const renderSidebarLayout = ({
 	children,
-	sidebarLinks: sidebarLinks = [],
+	sidebarLinks = [],
 	sidebarTitle = '',
 	...rest
 }: PropsWithChildren<Partial<SidebarLayoutProps>> = {}) => {

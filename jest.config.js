@@ -19,8 +19,7 @@ module.exports = {
 
 		/* Handle deps */
 		'^lodash-es$': '<rootDir>/node_modules/lodash/index.js',
-		'^@meemoo/react-components$':
-			'<rootDir>/node_modules/@meemoo/react-components/dist/index.js',
+		'^@meemoo/react-components$': '<rootDir>/node_modules/@meemoo/react-components/dist/index.js',
 		'^@viaa/avo2-components$': '<rootDir>/node_modules/@viaa/avo2-components/dist/index.js',
 
 		/* Handle custom path aliases */
@@ -32,7 +31,7 @@ module.exports = {
 		[
 			'jest-junit',
 			{
-				outputDirectory: `tests/test_results`,
+				outputDirectory: 'tests/test_results',
 			},
 		],
 	],

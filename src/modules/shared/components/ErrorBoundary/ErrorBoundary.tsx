@@ -12,10 +12,6 @@ class ErrorBoundary extends Component<ErrorBoundaryProps> {
 		eventId: undefined,
 	};
 
-	constructor(props: ErrorBoundaryProps) {
-		super(props);
-	}
-
 	static getDerivedStateFromError(error: unknown): { error?: unknown } {
 		if (error) {
 			return { error };

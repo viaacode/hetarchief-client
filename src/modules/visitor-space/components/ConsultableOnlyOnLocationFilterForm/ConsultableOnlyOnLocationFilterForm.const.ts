@@ -2,7 +2,7 @@ import { BooleanParam } from 'use-query-params';
 import { boolean, object, type Schema } from 'yup';
 
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
-import { type ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
+import type { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
 
 import { SearchFilterId } from '../../types';
 

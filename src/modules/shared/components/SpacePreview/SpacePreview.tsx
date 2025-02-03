@@ -1,7 +1,7 @@
 import clsx from 'clsx';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
-import { type SpacePreviewProps } from '@shared/components/SpacePreview/SpacePreview.types';
+import type { SpacePreviewProps } from '@shared/components/SpacePreview/SpacePreview.types';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { Locale } from '@shared/utils/i18n';
 

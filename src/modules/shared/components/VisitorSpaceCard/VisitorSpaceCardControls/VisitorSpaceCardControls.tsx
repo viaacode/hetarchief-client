@@ -1,7 +1,7 @@
 import { Button, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { type FC, type MouseEvent, type ReactNode } from 'react';
+import type { FC, MouseEvent, ReactNode } from 'react';
 
 import { CopyButton } from '@shared/components/CopyButton';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
@@ -87,6 +87,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 						variants: ['silver', 'sm'],
 					}}
 				>
+					{/* biome-ignore lint/a11y/useKeyWithClickEvents: only prevents the click event propagation */}
 					<ul
 						onClick={(e) => e.stopPropagation()}
 						className={styles['c-visitor-space-card-controls__contact-list']}
@@ -95,10 +96,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 							<li className={styles['c-visitor-space-card-controls__contact-item']}>
 								<p>{room.contactInfo.email}</p>
 
-								<CopyButton
-									text={room.contactInfo.email}
-									variants={['sm', 'text']}
-								/>
+								<CopyButton text={room.contactInfo.email} variants={['sm', 'text']} />
 							</li>
 						)}
 
@@ -106,10 +104,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 							<li className={styles['c-visitor-space-card-controls__contact-item']}>
 								<p>{room.contactInfo.telephone}</p>
 
-								<CopyButton
-									text={room.contactInfo.telephone}
-									variants={['sm', 'text']}
-								/>
+								<CopyButton text={room.contactInfo.telephone} variants={['sm', 'text']} />
 							</li>
 						)}
 					</ul>
@@ -187,10 +182,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 	const renderNoAccessControls = () => {
 		return (
 			<>
-				<Button
-					variants={['sm', 'black']}
-					onClick={() => onAccessRequest && onAccessRequest(room)}
-				>
+				<Button variants={['sm', 'black']} onClick={() => onAccessRequest?.(room)}>
 					{tHtml(
 						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___vraag-toegang-aan'
 					)}
@@ -224,9 +216,8 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 			case VisitorSpaceCardType.noAccess:
 				if (!access?.pending) {
 					return renderNoAccessControls();
-				} else {
-					return renderDefaultControls();
 				}
+				return renderDefaultControls();
 
 			case VisitorSpaceCardType.futureApproved:
 				return renderFutureApprovedControls();
@@ -250,14 +241,14 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 							styles['c-visitor-space-card-controls--flat'],
 							styles['c-visitor-space-card-controls--near'],
 							typeAccessAccepted && styles['c-visitor-space-card-controls--neutral'],
-					  ]
+						]
 					: []),
 				...(typeAccessGranted
 					? [
 							styles['c-visitor-space-card-controls--far'],
 							styles['c-visitor-space-card-controls--light'],
 							styles['c-visitor-space-card-controls--thinner'],
-					  ]
+						]
 					: [])
 			)}
 		>

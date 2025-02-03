@@ -40,17 +40,16 @@ export function getFullKey(
 	return `${translationEntry.location}${TRANSLATION_SEPARATOR}${translationEntry.key}`;
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: variables are too many types to define
 export async function executeDatabaseQuery(query: string, variables: any = {}): Promise<any> {
 	if (!process.env.GRAPHQL_URL || !process.env.GRAPHQL_SECRET) {
 		throw new Error(
 			'Missing environment variables. One or more of these are missing: GRAPHQL_URL, GRAPHQL_SECRET'
 		);
 	}
-	let graphQlUrl = '';
-	let graphQlPassword = '';
 	// We need the QAS database environment variables to fetch the latest translations and QAS is the "master" of all translations
-	graphQlUrl = process.env.GRAPHQL_URL as string;
-	graphQlPassword = process.env.GRAPHQL_SECRET as string;
+	const graphQlUrl = process.env.GRAPHQL_URL as string;
+	const graphQlPassword = process.env.GRAPHQL_SECRET as string;
 
 	const requestHeaders = new Headers();
 	requestHeaders.append('Content-Type', 'application/json');
@@ -87,7 +86,9 @@ async function getOnlineTranslations(): Promise<TranslationEntry[]> {
 		`,
 		{}
 	);
-	return response.data.app_translations.map((t: TranslationEntry) => ({ ...t }));
+	return response.data.app_translations.map((t: TranslationEntry) => ({
+		...t,
+	}));
 }
 
 let SITE_TRANSLATIONS: Record<'nl' | 'en', Record<string, string>> | null = null;

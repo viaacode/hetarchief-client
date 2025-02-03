@@ -9,7 +9,7 @@ import clsx from 'clsx';
 import { isEmpty, isNil, without } from 'lodash-es';
 import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { type Row, type SortingRule, type TableState } from 'react-table';
+import type { Row, SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
@@ -39,7 +39,7 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 	const [filters, setFilters] = useQueryParams(CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
@@ -56,8 +56,12 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 			search: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
 		}),
 		...(!isNil(filters.page) && { page: filters.page }),
-		...(!isNil(filters.type) && { type: filters.type as MaterialRequestType[] }),
-		...(!isNil(filters.orderProp) && { orderProp: filters.orderProp as MaterialRequestKeys }),
+		...(!isNil(filters.type) && {
+			type: filters.type as MaterialRequestType[],
+		}),
+		...(!isNil(filters.orderProp) && {
+			orderProp: filters.orderProp as MaterialRequestKeys,
+		}),
 		...(!isNil(filters.orderDirection) && {
 			orderDirection: filters.orderDirection as OrderDirection,
 		}),
@@ -68,7 +72,10 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 		currentMaterialRequest?.id || null
 	);
 
-	const noData = useMemo((): boolean => isEmpty(materialRequests?.items), [materialRequests]);
+	const noData = useMemo(
+		(): boolean => isEmpty(materialRequests?.items),
+		[materialRequests?.items]
+	);
 
 	const typesList = useMemo(() => {
 		return [
@@ -89,44 +96,38 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 				desc: filters.orderDirection !== OrderDirection.asc,
 			},
 		],
-		[filters]
+		[filters.orderProp, filters.orderDirection]
 	);
 
 	const onMultiTypeChange = (checked: boolean, id: string) => {
 		setSelectedTypes((prev) => (!checked ? [...prev, id] : without(prev, id)));
 	};
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		setFilters({
 			...filters,
 			type: selectedTypes,
 			page: 1,
 		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedTypes]);
 
 	const onSortChange = (
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	): void => {
-		if (!orderProp) {
-			orderProp = 'createdAt';
-		}
-		if (!orderDirection) {
-			orderDirection = OrderDirection.desc;
-		}
 		if (filters.orderProp === MaterialRequestKeys.createdAt && orderDirection === undefined) {
 			setFilters({
 				...filters,
-				orderProp,
+				orderProp: orderProp || 'createdAt',
 				orderDirection: OrderDirection.asc,
 				page: 1,
 			});
 		} else if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
-				orderProp,
-				orderDirection,
+				orderProp: orderProp || 'createdAt',
+				orderDirection: orderDirection || OrderDirection.desc,
 				page: 1,
 			});
 		}
@@ -242,9 +243,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<>
 			<SeoTags
-				title={`${tText(
-					'pages/beheer/materiaalaanvragen/index___materiaalaanvragen'
-				)} | ${tText('modules/cp/views/cp-admin-material-requests___beheer')} `}
+				title={`${tText('pages/beheer/materiaalaanvragen/index___materiaalaanvragen')} | ${tText('modules/cp/views/cp-admin-material-requests___beheer')} `}
 				description={tText(
 					'pages/beheer/materiaalaanvragen/index___materiaalaanvragen-meta-omschrijving'
 				)}

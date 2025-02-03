@@ -8,7 +8,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 export const NewsletterFailed: FC<DefaultSeoInfo> = ({ url }) => {
 	useHideFooter();
@@ -42,9 +42,7 @@ export const NewsletterFailed: FC<DefaultSeoInfo> = ({ url }) => {
 		<div className="p-newsletter-failed">
 			<SeoTags
 				title={tText('pages/nieuwsbrief-mislukt/index___nieuwsbrief-mislukt')}
-				description={tText(
-					'pages/nieuwsbrief-mislukt/index___nieuwsbrief-mislukt-omschrijving'
-				)}
+				description={tText('pages/nieuwsbrief-mislukt/index___nieuwsbrief-mislukt-omschrijving')}
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}

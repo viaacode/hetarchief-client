@@ -1,7 +1,7 @@
-import { type ContentPageInfo } from '@meemoo/admin-core-ui/dist/admin.mjs';
-import { type QueryClient } from '@tanstack/react-query';
+import type { ContentPageInfo } from '@meemoo/admin-core-ui/dist/admin.mjs';
+import type { QueryClient } from '@tanstack/react-query';
 import { reverse, sortBy } from 'lodash-es';
-import { type NextRouter } from 'next/router';
+import type { NextRouter } from 'next/router';
 
 import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/LanguageSwitcher.exceptions';
 import { QUERY_KEYS, type RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
@@ -20,7 +20,7 @@ export const changeApplicationLocale = (
 	let oldFullPath = router.asPath;
 	if (
 		Object.values(Locale)
-			.map((locale) => '/' + locale + '/')
+			.map((locale) => `/${locale}/`)
 			.includes(oldFullPath.substring(0, '/en/'.length))
 	) {
 		// Remove the old locale from the path
@@ -51,8 +51,7 @@ export const changeApplicationLocale = (
 		// const contentPage ContentPageService.getContentPageByLanguageAndPath(language as any, path);
 		const translatedContentPageInfo = (contentPageInfo?.translatedPages || []).find(
 			(translatedPage) =>
-				(translatedPage.language as unknown as Locale) === newLocale &&
-				translatedPage.isPublic
+				(translatedPage.language as unknown as Locale) === newLocale && translatedPage.isPublic
 		);
 		newFullPath = translatedContentPageInfo?.path || ROUTES_BY_LOCALE[newLocale].home;
 	}

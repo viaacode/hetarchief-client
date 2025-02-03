@@ -1,4 +1,4 @@
-import { type User } from '@auth/types';
+import type { User } from '@auth/types';
 import { type IeObject, IsPartOfKey } from '@ie-objects/ie-objects.types';
 
 /**

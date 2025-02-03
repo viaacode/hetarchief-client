@@ -6,7 +6,7 @@ import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageLabelOverview = lazy(() =>
 	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({
@@ -20,9 +20,7 @@ export const ContentPageLabelsOverviewPage: FC<DefaultSeoInfo> = ({ url }) => {
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-content-page-labels">
-						<Suspense
-							fallback={<Loading fullscreen owner="ContentPageLabelsOverviewPage" />}
-						>
+						<Suspense fallback={<Loading fullscreen owner="ContentPageLabelsOverviewPage" />}>
 							<ContentPageLabelOverview />
 						</Suspense>
 					</div>

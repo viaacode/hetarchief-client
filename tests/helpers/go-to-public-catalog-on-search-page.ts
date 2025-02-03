@@ -15,16 +15,12 @@ export async function goToPublicCatalogOnSearchPage(page: Page) {
 		SITE_TRANSLATIONS.nl[
 			'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-publieke-catalogus'
 		];
-	const dropdownOptionsSelector = `${moduleClassSelector(
-		'c-visitor-spaces-dropdown--open'
-	)} ${moduleClassSelector('c-visitor-spaces-dropdown__list')} li`;
+	const dropdownOptionsSelector = `${moduleClassSelector('c-visitor-spaces-dropdown--open')} ${moduleClassSelector('c-visitor-spaces-dropdown__list')} li`;
 	const publicCatalogOption = page.locator(dropdownOptionsSelector).first();
 	await expect(publicCatalogOption).toBeVisible();
 	await expect(publicCatalogOption).toContainText(publicCatalogLabel);
 	await publicCatalogOption.click();
 
 	// Wait for user to be in the public catalog
-	await expect
-		.poll(async () => await getSearchTabBarCounts(page))
-		.not.toEqual(countsBeforePublic);
+	await expect.poll(async () => await getSearchTabBarCounts(page)).not.toEqual(countsBeforePublic);
 }

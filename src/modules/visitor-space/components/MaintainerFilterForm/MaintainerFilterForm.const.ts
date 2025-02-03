@@ -3,7 +3,7 @@ import { array, object, type Schema, string } from 'yup';
 
 import { SearchFilterId } from '../../types';
 
-import { type MaintainerFilterFormState } from './MaintainerFilterForm.types';
+import type { MaintainerFilterFormState } from './MaintainerFilterForm.types';
 
 export const MAINTAINER_FILTER_FORM_SCHEMA = (): Schema<MaintainerFilterFormState> =>
 	object({

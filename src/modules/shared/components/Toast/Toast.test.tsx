@@ -3,7 +3,7 @@ import { fireEvent, render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import Toast from './Toast';
-import { type ToastProps } from './Toast.types';
+import type { ToastProps } from './Toast.types';
 import { toastMock } from './__mocks__/toast';
 
 const renderToast = (mock: ToastProps, { ...rest }) => {

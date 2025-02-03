@@ -8,10 +8,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { selectUser } from '@auth/store/user';
 import { CP_ADMIN_NAVIGATION_LINKS, CP_ADMIN_SEARCH_VISITOR_SPACE_KEY } from '@cp/const';
-import { type CPAdminLayoutProps } from '@cp/layouts';
+import type { CPAdminLayoutProps } from '@cp/layouts';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { Icon } from '@shared/components/Icon';
-import { type ListNavigationItem } from '@shared/components/ListNavigation';
+import type { ListNavigationItem } from '@shared/components/ListNavigation';
 import { globalLabelKeys } from '@shared/const';
 import { tHtml } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -39,7 +39,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 								query: {
 									[SearchFilterId.Maintainer]: user?.visitorSpaceSlug,
 								},
-						  });
+							});
 
 				return {
 					id,

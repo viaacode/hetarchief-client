@@ -11,7 +11,7 @@ import { buildLink } from '@shared/helpers/build-link';
 import { goBrowserBackWithFallback } from '@shared/helpers/go-browser-back-with-fallback';
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { type DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 
 const NavigationItemEdit = lazy(() =>
@@ -39,20 +39,15 @@ export const AdminNavigationItemEditPage: FC<DefaultSeoInfo & NavigationPageCrea
 				<AdminLayout.Content>
 					<div className="l-container p-admin-navigation__create">
 						<NoServerSideRendering>
-							<Suspense
-								fallback={
-									<Loading fullscreen owner="AdminNavigationItemEditPage" />
-								}
-							>
+							<Suspense fallback={<Loading fullscreen owner="AdminNavigationItemEditPage" />}>
 								<NavigationItemEdit
 									navigationBarId={navigationBarId}
 									navigationItemId={navigationItemId}
 									onGoBack={() =>
 										goBrowserBackWithFallback(
-											buildLink(
-												ROUTES_BY_LOCALE[locale].adminNavigationBarDetail,
-												{ navigationBarId }
-											),
+											buildLink(ROUTES_BY_LOCALE[locale].adminNavigationBarDetail, {
+												navigationBarId,
+											}),
 											router
 										)
 									}
@@ -68,9 +63,7 @@ export const AdminNavigationItemEditPage: FC<DefaultSeoInfo & NavigationPageCrea
 		<>
 			<SeoTags
 				title={tText('pages/admin/navigatie/maak/index___navigatie-pagina-aanmaken')}
-				description={tText(
-					'pages/admin/navigatie/maak/index___aanmaken-van-een-navigatie-item'
-				)}
+				description={tText('pages/admin/navigatie/maak/index___aanmaken-van-een-navigatie-item')}
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}

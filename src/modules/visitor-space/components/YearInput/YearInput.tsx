@@ -1,5 +1,5 @@
 import { TextInput, type TextInputProps } from '@meemoo/react-components';
-import { type FC } from 'react';
+import type { FC } from 'react';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -15,8 +15,8 @@ const YearInput: FC<YearInputProps> = (props) => {
 	const classname = props.value
 		? styles['c-year-input__placeholder-hidden']
 		: props.isYearInputRange
-		? styles['c-year-input__placeholder-wide']
-		: styles['c-year-input__placeholder'];
+			? styles['c-year-input__placeholder-wide']
+			: styles['c-year-input__placeholder'];
 	return (
 		<div className={styles['c-year-input']}>
 			<div className={styles['c-year-input__label']}>
