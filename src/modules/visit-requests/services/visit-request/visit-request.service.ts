@@ -23,8 +23,8 @@ import {
 	VISITS_SERVICE_SPACE_URL,
 } from './visit-request.service.const';
 
-export namespace VisitRequestService {
-	export async function getAll({
+export class VisitRequestService {
+	public static async getAll({
 		searchInput = '',
 		status,
 		timeframe,
@@ -55,11 +55,11 @@ export namespace VisitRequestService {
 		return parsed as IPagination<VisitRequest>;
 	}
 
-	export async function getById(id: string): Promise<VisitRequest> {
+	public static async getById(id: string): Promise<VisitRequest> {
 		return await ApiService.getApi().get(`${VISITS_SERVICE_BASE_URL}/${id}`).json();
 	}
 
-	export async function patchById(id: string, visit: PatchVisit): Promise<VisitRequest> {
+	public static async patchById(id: string, visit: PatchVisit): Promise<VisitRequest> {
 		const { status, startAt, endAt, note, accessType, accessFolderIds } = visit;
 		const json: PatchVisit = {
 			status,
@@ -77,13 +77,13 @@ export namespace VisitRequestService {
 			.json();
 	}
 
-	export async function create(visitRequest: CreateVisitRequest): Promise<VisitRequest> {
+	public static async create(visitRequest: CreateVisitRequest): Promise<VisitRequest> {
 		return await ApiService.getApi()
 			.post(VISITS_SERVICE_BASE_URL, { body: JSON.stringify(visitRequest) })
 			.json();
 	}
 
-	export async function getActiveVisitForUserAndSpace(
+	public static async getActiveVisitForUserAndSpace(
 		visitorSpaceSlug: string
 	): Promise<VisitRequest | null> {
 		if (!visitorSpaceSlug) {
@@ -94,7 +94,7 @@ export namespace VisitRequestService {
 			.json();
 	}
 
-	export async function getPendingVisitCountForUserBySlug(
+	public static async getPendingVisitCountForUserBySlug(
 		slug: string
 	): Promise<VisitRequest | null> {
 		if (!slug) {
@@ -105,9 +105,7 @@ export namespace VisitRequestService {
 			.json();
 	}
 
-	export async function getAccessStatusBySpaceSlug(
-		slug: string
-	): Promise<VisitAccessStatus | null> {
+	public static async getAccessStatusBySpaceSlug(slug: string): Promise<VisitAccessStatus | null> {
 		if (slug.length === 0) {
 			return null;
 		}
@@ -118,7 +116,7 @@ export namespace VisitRequestService {
 			.json();
 	}
 
-	export async function getAllActiveVisits({
+	public static async getAllActiveVisits({
 		requesterId,
 		orderProp = 'endAt',
 		orderDirection = OrderDirection.asc,

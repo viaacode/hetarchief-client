@@ -13,8 +13,8 @@ import {
 	CAMPAIGN_MONITOR_SERVICE_SEND,
 } from './campaign-monitor.consts';
 
-export namespace CampaignMonitorService {
-	export async function getPreferences(email: string): Promise<GetNewsletterPreferencesResponse> {
+export class CampaignMonitorService {
+	public static async getPreferences(email: string): Promise<GetNewsletterPreferencesResponse> {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -27,7 +27,7 @@ export namespace CampaignMonitorService {
 			.json();
 	}
 
-	export async function setPreferences(preferences: SetNewsletterPreferencesBody): Promise<void> {
+	public static async setPreferences(preferences: SetNewsletterPreferencesBody): Promise<void> {
 		await ApiService.getApi()
 			.post(`${CAMPAIGN_MONITOR_SERVICE_BASE_URL}/${CAMPAIGN_MONITOR_SERVICE_PREFERENCES}`, {
 				body: JSON.stringify(preferences),
@@ -35,7 +35,7 @@ export namespace CampaignMonitorService {
 			.json();
 	}
 
-	export async function send(json: EmailTemplate): Promise<void> {
+	public static async send(json: EmailTemplate): Promise<void> {
 		await ApiService.getApi()
 			.post(`${CAMPAIGN_MONITOR_SERVICE_BASE_URL}/${CAMPAIGN_MONITOR_SERVICE_SEND}`, { json })
 			.json();

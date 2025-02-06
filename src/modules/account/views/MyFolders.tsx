@@ -623,7 +623,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 						setShowConfirmDelete(false);
 
 						activeFolder &&
-							FoldersService.remove(activeFolder.id).then(() => {
+							FoldersService.delete(activeFolder.id).then(() => {
 								refetchFolders();
 							});
 					}}
