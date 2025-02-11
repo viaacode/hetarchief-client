@@ -1,4 +1,4 @@
-import { useQuery, type UseQueryResult } from '@tanstack/react-query';
+import { type UseQueryResult, useQuery } from '@tanstack/react-query';
 
 import { type ContentPartnerParams, ContentPartnersService } from '@cp/services/content-partners';
 import { QUERY_KEYS } from '@shared/const/query-keys';
@@ -13,7 +13,7 @@ export function useGetContentPartners(
 	options: { enabled?: boolean } = {}
 ): UseQueryResult<MaintainerInfo[]> {
 	return useQuery(
-		[QUERY_KEYS.getIeObjectsInfo, params],
+		[QUERY_KEYS.getContentPartners, params],
 		async () => {
 			const response = await ContentPartnersService.getAll(params);
 			return response?.items ?? [];
