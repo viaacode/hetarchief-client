@@ -43,10 +43,10 @@ import {
 	MEDIA_ACTIONS,
 	MEEMOO_ADMIN_ACTION_SORT_MAP,
 	METADATA_EXPORT_OPTIONS,
+	VISITOR_ACTION_SORT_MAP,
 	renderAbrahamLink,
 	renderDate,
 	renderIsPartOfValue,
-	VISITOR_ACTION_SORT_MAP,
 } from '@ie-objects/ie-objects.consts';
 import {
 	type IeObject,
@@ -96,8 +96,8 @@ import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { Locale } from '@shared/utils/i18n';
 import {
-	type LanguageCode,
 	LANGUAGES,
+	type LanguageCode,
 } from '@visitor-space/components/LanguageFilterForm/languages';
 import {
 	filterNameToAcronym,
@@ -1078,14 +1078,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___cast'),
 						mediaInfo.meemooDescriptionCast
-					)}
-					{renderSimpleMetadataField(
-						tHtml('modules/ie-objects/ie-objects___iiif-manifest'),
-						mediaInfo?.iiifManifestUrl && (
-							<a href={mediaInfo?.iiifManifestUrl} target="_blank" rel="noreferrer">
-								{tText('modules/ie-objects/ie-objects___manifest-link')}
-							</a>
-						)
 					)}
 				</MetadataList>
 
