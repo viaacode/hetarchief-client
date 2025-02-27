@@ -3,6 +3,7 @@ FROM node:20.4-alpine AS runner
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY . .
+COPY ./scripts/next-config-to-env-file.js ./
 ARG DEBUG_TOOLS=false
 RUN echo debug is set $DEBUG_TOOLS
 RUN npm pkg delete scripts.prepare
@@ -14,9 +15,9 @@ ENV NODE_ENV production
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
 
-RUN chown nextjs:nodejs /app
-
-RUN cp ./scripts/next-config-to-env-file.js ./
+# Exclude node_modules from chown and chmod
+RUN find /app -not -path "/app/node_modules/*" -exec chown nextjs:nodejs {} + && \
+    find /app -not -path "/app/node_modules/*" -exec chmod g+x {} +
 
 USER nextjs
 
