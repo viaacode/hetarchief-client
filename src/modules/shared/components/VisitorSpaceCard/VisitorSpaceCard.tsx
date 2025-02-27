@@ -107,7 +107,9 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 	const renderDescription = () => (
 		<div
 			ref={descriptionElement}
-			className={expandDescription ? '' : `u-text-ellipsis--${flat ? 2 : 3}`}
+			className={clsx(styles['c-visitor-space-card__description_wrapper'], {
+				[`u-text-ellipsis--${flat ? 2 : 3}`]: expandDescription,
+			})}
 		>
 			<p
 				className={clsx(
