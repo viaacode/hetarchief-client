@@ -12,7 +12,7 @@
     "build-with-analyse": "cross-env ANALYZE=true next build",
     "build": "next build",
     "start": "next start",
-    "docker-start": "node ./next-config-to-env-file.js && next start",
+    "docker-start": "node ./next-config-to-env-file.js && node ./scripts/copy-robots-txt-file.js && next start",
     "lint": "npm run lint:ts && npm run lint:scss",
     "lint:ts": "next lint --dir src --fix",
     "lint:scss": "stylelint 'src/**/*.{css,scss}' --allow-empty-input --fix",
