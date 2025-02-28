@@ -96,8 +96,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		width: 100vw;
 		min-height: calc(100vh - $top-navigation-bar-height);
 		max-height: calc(100vh - $top-navigation-bar-height);
-		align-items: stretch;
-		justify-items: stretch;
+		place-items: stretch stretch;
 		align-content: stretch;
 		transition: 100ms ease-out;
 		overflow: clip;
@@ -191,6 +190,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			display: none;
 
 			@media (max-width: $breakpoint-md) {
+				display: flex;
 				grid-row: 2 !important;
 				grid-column: 1 / 3 !important;
 			}
@@ -473,7 +473,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			margin: 0;
 
 			@media (max-width: $breakpoint-md) {
-				padding: 0 $spacer-sm $spacer-1xl $spacer-sm;
+				padding: 0 $spacer-sm $spacer-1xl;
 				width: 100vw;
 			}
 		}
