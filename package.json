@@ -21,7 +21,7 @@
     "lint:scss:fix": "stylelint 'src/**/*.{css,scss}' --allow-empty-input --fix",
     "lint:ts": "biome lint --write",
     "lint:scss": "stylelint 'src/**/*.{css,scss}' --allow-empty-input --fix",
-    "format": "biome format",
+    "format": "biome format --write",
     "format:fix": "biome format --write",
     "test": "jest --cache",
     "test:ci": "npx jest --maxWorkers=1",
