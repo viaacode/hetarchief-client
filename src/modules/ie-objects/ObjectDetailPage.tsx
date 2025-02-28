@@ -56,7 +56,6 @@ import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
 import { useGetIeObjectsAlsoInteresting } from '@ie-objects/hooks/get-ie-objects-similar';
 import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-ticket-url';
-import { useIsPublicNewspaper } from '@ie-objects/hooks/get-is-public-newspaper';
 import {
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_FORMATS,
@@ -64,11 +63,11 @@ import {
 	IMAGE_API_FORMATS,
 	IMAGE_FORMATS,
 	JSON_FORMATS,
-	noLicensePlaceholder,
 	OBJECT_DETAIL_TABS,
+	XML_FORMATS,
+	noLicensePlaceholder,
 	objectPlaceholder,
 	ticketErrorPlaceholder,
-	XML_FORMATS,
 } from '@ie-objects/ie-objects.consts';
 import {
 	type AltoTextLine,
@@ -136,6 +135,7 @@ import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 
+import { useIsPublicDomainNewspaper } from '@ie-objects/hooks/get-is-public-domain-newspaper';
 import styles from './ObjectDetailPage.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
@@ -424,11 +424,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const arePagesOcrTextsAvailable = compact(pageOcrTexts).length !== 0;
 
-	const isPublicNewspaper: boolean = useIsPublicNewspaper(mediaInfo);
+	const isPublicDomainNewspaper: boolean = useIsPublicDomainNewspaper(mediaInfo);
 	// You need the permission or not to be logged in to download the newspaper
 	// https://meemoo.atlassian.net/browse/ARC-2617
 	const canDownloadNewspaper: boolean =
-		(useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user) && isPublicNewspaper;
+		(useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user) && isPublicDomainNewspaper;
 
 	const getHighlightedAltoTexts = useCallback((): AltoTextLine[] => {
 		return (
