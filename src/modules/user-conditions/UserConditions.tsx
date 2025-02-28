@@ -47,7 +47,7 @@ export const UserConditions: FC<
 	const tosAccepted = useTermsOfService();
 	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
 		locale,
-		KNOWN_STATIC_ROUTES.TermsOfService
+		KNOWN_STATIC_ROUTES[locale].TermsOfService
 	);
 	const contentPageInfo = dbContentPage
 		? convertDbContentPageToContentPageInfo(dbContentPage)

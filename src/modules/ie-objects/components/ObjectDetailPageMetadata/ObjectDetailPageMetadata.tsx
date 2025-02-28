@@ -570,7 +570,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			action={
 				<Link
 					passHref
-					href={KNOWN_STATIC_ROUTES.kioskConditions}
+					href={KNOWN_STATIC_ROUTES[locale].kioskConditions}
 					aria-label={tText('pages/slug/index___meer-info')}
 				>
 					<Button
