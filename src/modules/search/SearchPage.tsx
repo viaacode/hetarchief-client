@@ -57,8 +57,8 @@ import {
 } from '@shared/components/VisitorSpaceDropdown';
 import {
 	GET_VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
-	ROUTE_PARTS_BY_LOCALE,
 	ROUTES_BY_LOCALE,
+	ROUTE_PARTS_BY_LOCALE,
 } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
@@ -80,8 +80,8 @@ import {
 } from '@shared/store/ui';
 import { Breakpoints, type SortObject } from '@shared/types';
 import {
-	IeObjectsSearchFilterField,
 	IeObjectType,
+	IeObjectsSearchFilterField,
 	SearchPageMediaType,
 } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
@@ -92,20 +92,8 @@ import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/g
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitTimeframe } from '@visit-requests/types';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
-import { initialFields } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
-import type { AdvancedFilterFormState } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.types';
-import type { ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
-import type { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
-import type { ConsultablePublicDomainFilterFormState } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm.types';
-import type { DurationFilterFormState } from '@visitor-space/components/DurationFilterForm';
 import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
 import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
-import type { GenreFilterFormState } from '@visitor-space/components/GenreFilterForm';
-import type { KeywordsFilterFormState } from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.types';
-import type { LanguageFilterFormState } from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
-import type { MaintainerFilterFormState } from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
-import type { MediumFilterFormState } from '@visitor-space/components/MediumFilterForm';
-import type { ReleaseDateFilterFormState } from '@visitor-space/components/ReleaseDateFilterForm';
 import {
 	GLOBAL_ARCHIVE,
 	SEARCH_PAGE_QUERY_PARAM_CONFIG,
@@ -115,12 +103,7 @@ import {
 } from '@visitor-space/const';
 import { SEARCH_PAGE_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
 import { SEARCH_PAGE_IE_OBJECT_TABS } from '@visitor-space/const/visitor-space-tabs.const';
-import {
-	type AdvancedFilter,
-	FilterProperty,
-	SearchFilterId,
-	type TagIdentity,
-} from '@visitor-space/types';
+import { type FilterValue, SearchFilterId, type TagIdentity } from '@visitor-space/types';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
 
@@ -491,126 +474,14 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	/**
 	 * Set one filter with its values
-	 * @param id
-	 * @param values
+	 * @param value
 	 */
-	const onSubmitFilter = (id: SearchFilterId, values: unknown) => {
+	const onSubmitFilter = (value: FilterValue) => {
 		const searchValue = prepareSearchValue(searchBarInputValue);
-		let data: string[] | string | boolean | AdvancedFilter[] | undefined;
-
-		switch (id) {
-			case SearchFilterId.Medium:
-				data = (values as MediumFilterFormState).mediums;
-				break;
-
-			case SearchFilterId.Duration: {
-				const state = values as DurationFilterFormState;
-				data = state.duration
-					? [
-							{
-								prop: FilterProperty.DURATION,
-								op: state.operator,
-								val: state.duration,
-							},
-						]
-					: undefined;
-				break;
-			}
-
-			case SearchFilterId.ReleaseDate: {
-				const state = values as ReleaseDateFilterFormState;
-				data = state.releaseDate
-					? [
-							{
-								prop: FilterProperty.RELEASE_DATE,
-								op: state.operator,
-								val: state.releaseDate,
-							},
-						]
-					: undefined;
-				break;
-			}
-
-			case SearchFilterId.Creator:
-				data = (values as { creator: string }).creator;
-				break;
-
-			case SearchFilterId.NewspaperSeriesName:
-				data = (values as { newspaperSeriesName: string }).newspaperSeriesName;
-				break;
-
-			case SearchFilterId.LocationCreated:
-				data = (values as { locationCreated: string }).locationCreated;
-				break;
-
-			case SearchFilterId.Mentions:
-				data = (values as { mentions: string }).mentions;
-				break;
-
-			case SearchFilterId.Genre:
-				data = (values as GenreFilterFormState).genres;
-				break;
-
-			case SearchFilterId.Keywords:
-				data = (values as KeywordsFilterFormState).values;
-				break;
-
-			case SearchFilterId.Language:
-				data = (values as LanguageFilterFormState).languages;
-				break;
-
-			case SearchFilterId.Maintainers:
-				data = (values as MaintainerFilterFormState).maintainers;
-				break;
-
-			case SearchFilterId.ConsultableOnlyOnLocation:
-				// Info: remove query param if false (= set to undefined)
-				data =
-					(values as ConsultableOnlyOnLocationFilterFormState)[
-						IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
-					] || undefined;
-				break;
-
-			case SearchFilterId.ConsultableMedia:
-				// Info: remove query param if false (= set to undefined)
-				data = (values as ConsultableMediaFilterFormState)[
-					IeObjectsSearchFilterField.CONSULTABLE_MEDIA
-				]
-					? (values as ConsultableMediaFilterFormState)[
-							IeObjectsSearchFilterField.CONSULTABLE_MEDIA
-						]
-					: undefined;
-				break;
-
-			case SearchFilterId.ConsultablePublicDomain:
-				// Info: remove query param if false (= set to undefined)
-				data =
-					(values as ConsultablePublicDomainFilterFormState)[
-						IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN
-					] || undefined;
-				break;
-
-			case SearchFilterId.Advanced:
-				data = (values as AdvancedFilterFormState).advanced.filter((advanced) => {
-					return !isNil(advanced.val) && advanced.val !== initialFields().val;
-				});
-
-				if (data.length === 0) {
-					setQuery({ [id]: undefined, filter: undefined, page: undefined });
-					return;
-				}
-
-				break;
-
-			default:
-				console.warn(`[WARN][VisitorSpacePage] No submit handler for ${id}`);
-				break;
-		}
-
 		const currentPage = isInitialPageLoad ? page : undefined;
 
 		setQuery({
-			[id]: data,
+			[value.prop as SearchFilterId]: value,
 			filter: undefined,
 			page: currentPage,
 			...(searchValue ? searchValue : {}),

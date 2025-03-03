@@ -17,11 +17,11 @@ import {
 	VISITOR_SPACE_ACTIVE_SORT_MAP,
 } from '@visitor-space/const';
 
-import type { SearchFilterId, SearchSortProp } from '../../types';
+import type { FilterValue, SearchFilterId, SearchSortProp } from '../../types';
 
 import styles from './FilterMenu.module.scss';
 import type { FilterMenuFilterOption, FilterMenuProps } from './FilterMenu.types';
-import { FilterOption } from './FilterOption';
+import { FilterOption } from './FilterOption/FilterOption';
 import { FilterSort } from './FilterSort';
 
 const FilterMenu: FC<FilterMenuProps> = ({
@@ -78,8 +78,8 @@ const FilterMenu: FC<FilterMenuProps> = ({
 		onFilterReset(id);
 	};
 
-	const onFilterFormSubmit = (id: SearchFilterId, values: unknown) => {
-		onFilterSubmit(id, values);
+	const onFilterFormSubmit = (value: FilterValue) => {
+		onFilterSubmit(value);
 	};
 
 	const onToggleClick = (nextOpen?: boolean) => {
@@ -130,7 +130,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 						[styles['c-filter-menu__option--operative']]: !isNil(filterValues?.[option?.id]),
 					})}
 					activeFilter={query.filter}
-					values={filterValues?.[option.id]}
+					initialValue={filterValues?.[option.id]}
 					onClick={onFilterClick}
 					onFormReset={onFilterFormReset}
 					onFormSubmit={onFilterFormSubmit}
@@ -167,21 +167,23 @@ const FilterMenu: FC<FilterMenuProps> = ({
 				</div>
 			)}
 
-			<FilterMenuMobile
-				activeFilter={query.filter}
-				activeSort={activeSort}
-				activeSortLabel={renderActiveSortLabel()}
-				filters={filters}
-				isOpen={isMobile && isMobileOpen}
-				sortOptions={sortOptions}
-				onClose={() => onToggleClick(false)}
-				onFilterClick={onFilterClick}
-				onSortClick={onSortClick}
-				onFilterReset={onFilterFormReset}
-				onFilterSubmit={onFilterFormSubmit}
-				filterValues={filterValues}
-				onRemoveValue={onRemoveValue}
-			/>
+			{isMobile && (
+				<FilterMenuMobile
+					activeFilter={query.filter}
+					activeSort={activeSort}
+					activeSortLabel={renderActiveSortLabel()}
+					filters={filters}
+					isOpen={isMobile && isMobileOpen}
+					sortOptions={sortOptions}
+					onClose={() => onToggleClick(false)}
+					onFilterClick={onFilterClick}
+					onSortClick={onSortClick}
+					onFilterReset={onFilterFormReset}
+					onFilterSubmit={onFilterFormSubmit}
+					filterValues={filterValues}
+					onRemoveValue={onRemoveValue}
+				/>
+			)}
 		</div>
 	);
 };

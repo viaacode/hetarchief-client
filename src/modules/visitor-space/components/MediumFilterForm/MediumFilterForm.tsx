@@ -1,45 +1,45 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { compact, noop, without } from 'lodash-es';
-import { type FC, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { noop, without } from 'lodash-es';
+import { type FC, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useQueryParams } from 'use-query-params';
+import { ArrayParam, useQueryParam } from 'use-query-params';
 
 import { SearchBar } from '@shared/components/SearchBar';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
+import { initialFilterValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
-import { ElasticsearchFieldNames, SearchFilterId } from '@visitor-space/types';
+import {
+	type DefaultFilterFormProps,
+	ElasticsearchFieldNames,
+	type FilterValue,
+	Operator,
+	SearchFilterId,
+} from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
-import {
-	MEDIUM_FILTER_FORM_QUERY_PARAM_CONFIG,
-	MEDIUM_FILTER_FORM_SCHEMA,
-} from './MediumFilterForm.const';
-import type { MediumFilterFormProps, MediumFilterFormState } from './MediumFilterForm.types';
-
-const defaultValues = {
-	mediums: [],
-};
-
-const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) => {
-	// State
-
-	const [query] = useQueryParams(MEDIUM_FILTER_FORM_QUERY_PARAM_CONFIG);
+export const MediumFilterForm: FC<DefaultFilterFormProps> = ({
+	className,
+	id,
+	initialValue,
+	onSubmit,
+	onReset,
+}) => {
+	const [valueFromQueryParams] = useQueryParam(SearchFilterId.Medium, ArrayParam);
 	const [search, setSearch] = useState<string>('');
+	const [value, setValue] = useState<FilterValue>(
+		(valueFromQueryParams?.length || 0) > 0
+			? {
+					prop: SearchFilterId.Medium,
+					op: Operator.EQUALS,
+					multiValue: valueFromQueryParams as string[],
+				}
+			: initialValue || initialFilterValue()
+	);
 
-	// Contains the options that have already been applied and are present in the url
-	const appliedSelectedMediums = compact(query.medium || []);
-
-	// Contains the options the user currently has selected, but are not necessarily applied yet
-	const [selectedMediums, setSelectedMediums] = useState<string[]>(appliedSelectedMediums);
-
-	const { setValue, reset, handleSubmit } = useForm<MediumFilterFormState>({
-		resolver: yupResolver(MEDIUM_FILTER_FORM_SCHEMA()),
-		defaultValues,
-	});
+	const selectedMediums = value.multiValue || [];
 
 	const filterOptions: string[] =
 		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Medium]?.buckets?.map(
@@ -58,25 +58,29 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 			value: filterOption,
 			checked: selectedMediums.includes(filterOption),
 		})),
-		appliedSelectedMediums
+		initialValue?.multiValue || []
 	);
 
-	// Effects
+	const handleSubmit = async () => {
+		onSubmit(value);
+	};
 
-	useEffect(() => {
-		setValue('mediums', selectedMediums);
-	}, [selectedMediums, setValue]);
+	const handleReset = () => {
+		setValue(initialFilterValue());
+		onReset();
+	};
 
-	// Events
-
-	const onItemClick = (add: boolean, value: string) => {
-		const selected = add ? [...selectedMediums, value] : without(selectedMediums, value);
-		setSelectedMediums(selected);
+	const onItemClick = (add: boolean, newValue: string) => {
+		const selected = add ? [...selectedMediums, newValue] : without(selectedMediums, newValue);
+		setValue({
+			...value,
+			multiValue: selected,
+		});
 	};
 
 	return (
 		<>
-			<div className={clsx(className, 'u-px-20 u-px-32-md')}>
+			<div className={clsx(className, 'u-px-20 u-px-32-md')} key={`filter--${id}`}>
 				<SearchBar
 					id={`${visitorSpaceLabelKeys.filters.title}--${SearchFilterId.Medium}`}
 					value={search}
@@ -106,17 +110,7 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 				</div>
 			</div>
 
-			{children({
-				values: { mediums: selectedMediums },
-				reset: () => {
-					reset();
-					setSelectedMediums(defaultValues.mediums);
-					setSearch('');
-				},
-				handleSubmit,
-			})}
+			<FilterFormButtons onSubmit={handleSubmit} onReset={handleReset} />
 		</>
 	);
 };
-
-export default MediumFilterForm;

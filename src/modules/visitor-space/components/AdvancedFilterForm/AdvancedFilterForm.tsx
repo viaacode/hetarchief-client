@@ -1,44 +1,57 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import type { FC } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { type FC, useState } from 'react';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml } from '@shared/helpers/translate';
 
-import { SearchFilterId } from '../../types';
+import type { FilterValue } from '../../types';
 import { AdvancedFilterFields } from '../AdvancedFilterFields/AdvancedFilterFields';
 
-import { ADVANCED_FILTER_FORM_SCHEMA, initialFields } from './AdvancedFilterForm.const';
+import { validateForm } from '@shared/helpers/validate-form';
+import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
+import { ADVANCED_FILTERS_FORM_SCHEMA, initialFilterValue } from './AdvancedFilterForm.const';
 import styles from './AdvancedFilterForm.module.scss';
-import type { AdvancedFilterFormProps, AdvancedFilterFormState } from './AdvancedFilterForm.types';
+import type { AdvancedFilterFormProps } from './AdvancedFilterForm.types';
 
 export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
-	children,
 	className,
-	disabled,
-	values,
+	disabled = false,
+	onSubmit,
+	onReset,
+	initialValues,
 }) => {
-	const { control, getValues, setValue, handleSubmit } = useForm<AdvancedFilterFormState>({
-		defaultValues: {
-			advanced: values?.advanced ? values.advanced : [initialFields()],
-		},
-		resolver: yupResolver(ADVANCED_FILTER_FORM_SCHEMA()),
-	});
-	const { append, fields, remove, update } = useFieldArray({
-		name: SearchFilterId.Advanced,
-		control,
-	});
+	const [formErrors, setFormErrors] = useState<Record<string, string> | null>(null);
+	const [values, setValues] = useState<FilterValue[]>(initialValues || [initialFilterValue()]);
 
-	const resetFields = () => {
-		setValue('advanced', [initialFields()]);
-		update(0, {
-			prop: undefined,
-			op: undefined,
-			val: undefined,
-		});
+	const handleChange = (index: number, value: FilterValue) => {
+		const newValues = [...values];
+		newValues[index] = value;
+		setValues(newValues);
+	};
+
+	const handleRemove = (index: number) => {
+		const newValues = [...values];
+		newValues.splice(index, 1);
+		setValues(newValues);
+	};
+
+	const appendValue = (value: FilterValue) => {
+		setValues([...values, value]);
+	};
+
+	const handleSubmit = async () => {
+		const errors = await validateForm(values, ADVANCED_FILTERS_FORM_SCHEMA());
+		setFormErrors(errors);
+		if (!errors) {
+			onSubmit(values);
+		}
+	};
+
+	const handleReset = () => {
+		setValues([initialFilterValue()]);
+		onReset();
 	};
 
 	return (
@@ -51,14 +64,14 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 				</p>
 
 				{!disabled &&
-					fields.map(({ id, ...value }, index) => (
+					values.map((value, index) => (
 						<AdvancedFilterFields
-							key={`advanced-filter-${id}-${value.prop}--${value.op}--${value.val}`}
-							id={id}
+							key={`advanced-filter-${value.prop}--${value.op}--${value.val}`}
+							id={`advanced-filter-${value.prop}--${value.op}--${value.val}`}
 							index={index}
 							value={value}
-							onChange={update}
-							onRemove={remove}
+							onChange={handleChange}
+							onRemove={handleRemove}
 						/>
 					))}
 
@@ -71,16 +84,12 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 							'modules/visitor-space/components/forms/advanced-filter-form/advanced-filter-form___nieuwe-stelling'
 						)}
 						variants="text"
-						onClick={() => append(initialFields())}
+						onClick={() => appendValue(initialFilterValue())}
 					/>
 				</div>
 			</div>
 
-			{children({
-				values: getValues(),
-				reset: () => resetFields(),
-				handleSubmit,
-			})}
+			<FilterFormButtons onSubmit={handleSubmit} onReset={handleReset} />
 		</>
 	);
 };

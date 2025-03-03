@@ -103,12 +103,7 @@ import {
 	filterNameToAcronym,
 	operatorToAcronym,
 } from '@visitor-space/const/advanced-filter-array-param';
-import {
-	FILTER_LABEL_VALUE_DELIMITER,
-	FilterProperty,
-	Operator,
-	SearchFilterId,
-} from '@visitor-space/types';
+import { FILTER_LABEL_VALUE_DELIMITER, Operator, SearchFilterId } from '@visitor-space/types';
 
 import Callout from '../../../shared/components/Callout/Callout';
 import MetadataList from '../Metadata/MetadataList';
@@ -892,7 +887,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 										key={genre}
 										label={genre}
 										link={`${ROUTES_BY_LOCALE[locale].search}?advanced=${filterNameToAcronym(
-											FilterProperty.GENRE
+											SearchFilterId.Genre
 										)}${operatorToAcronym(Operator.EQUALS)}${genre}`}
 									/>
 								))

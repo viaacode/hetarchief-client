@@ -6,7 +6,7 @@ import type { Schema, ValidationError } from 'yup';
  * @param formSchema
  */
 export async function validateForm(
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: this is a generic function to validate any form, we could use generics<T> to make it more explicit in the future
 	formValues: any,
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	formSchema: Schema<any>

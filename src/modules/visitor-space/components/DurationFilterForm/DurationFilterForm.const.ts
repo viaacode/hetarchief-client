@@ -1,18 +1,16 @@
-import { mixed, object, type Schema, string } from 'yup';
+import { type Schema, mixed, object, string } from 'yup';
 
 import { SEPARATOR } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 
 import { durationRegex } from '../../components/DurationInput/DurationInput.consts';
-import { AdvancedFilterArrayParam } from '../../const/advanced-filter-array-param';
-import { Operator, SearchFilterId } from '../../types';
+import { type FilterValue, Operator, SearchFilterId } from '../../types';
 
-import type { DurationFilterFormState } from './DurationFilterForm.types';
-
-export const DURATION_FILTER_FORM_SCHEMA = (): Schema<DurationFilterFormState> =>
+export const DURATION_FILTER_FORM_SCHEMA = (): Schema<FilterValue> =>
 	object({
-		operator: mixed<Operator>().required().oneOf(Object.values(Operator)),
-		duration: string()
+		prop: mixed<SearchFilterId>().required().oneOf(Object.values(SearchFilterId)),
+		op: mixed<Operator>().required().oneOf(Object.values(Operator)),
+		val: string()
 			.optional()
 			.test(
 				'duration',
@@ -23,7 +21,3 @@ export const DURATION_FILTER_FORM_SCHEMA = (): Schema<DurationFilterFormState> =
 					new RegExp(`^$|^${durationRegex}(${SEPARATOR}${durationRegex})?$`, 'g').test(value || '')
 			),
 	});
-
-export const DURATION_FILTER_FORM_QUERY_PARAM_CONFIG = {
-	[SearchFilterId.Duration]: AdvancedFilterArrayParam,
-};

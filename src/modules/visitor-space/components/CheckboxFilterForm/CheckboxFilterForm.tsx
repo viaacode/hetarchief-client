@@ -6,15 +6,22 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 export interface CheckboxFilterFormProps {
+	id: string;
 	label: string;
 	value: boolean;
 	onChange: (isChecked: boolean) => void;
 	className?: string;
 }
 
-const CheckboxFilterForm: FC<CheckboxFilterFormProps> = ({ label, value, onChange, className }) => {
+const CheckboxFilterForm: FC<CheckboxFilterFormProps> = ({
+	id,
+	label,
+	value,
+	onChange,
+	className,
+}) => {
 	return (
-		<div className={clsx('u-color-white', className)}>
+		<div className={clsx('u-color-white', className)} key={`checkbox-filter-form--${id}`}>
 			<Checkbox
 				variants={['light', 'reverse']}
 				label={label}

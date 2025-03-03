@@ -7,8 +7,9 @@ import type { DefaultComponentProps, SortObject } from '@shared/types';
 import type { SearchPageMediaType } from '@shared/types/ie-objects';
 
 import type {
+	DefaultFilterArrayFormProps,
 	DefaultFilterFormProps,
-	InlineFilterFormProps,
+	FilterValue,
 	SearchFilterId,
 	SearchSortProp,
 	TagIdentity,
@@ -18,7 +19,7 @@ export interface FilterMenuProps extends DefaultComponentProps {
 	children?: ReactNode;
 	activeSort?: SortObject;
 	filters?: FilterMenuFilterOption[];
-	filterValues?: Record<string, unknown>;
+	filterValues?: Record<string, FilterValue>;
 	label?: string;
 	isOpen?: boolean;
 	isMobileOpen?: boolean;
@@ -47,20 +48,19 @@ export interface FilterMenuFilterOption {
 	id: SearchFilterId;
 	icon?: IconName;
 	label: string;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	form: FC<DefaultFilterFormProps<any>> | FC<InlineFilterFormProps<any>> | null; // eslint-disable-line @typescript-eslint/no-explicit-any
+	form: FC<DefaultFilterFormProps> | FC<DefaultFilterArrayFormProps> | null;
 	type: FilterMenuType;
 	isDisabled?: () => boolean;
 	tabs: SearchPageMediaType[];
 }
 
 export type OnFilterMenuSortClick = (key: SearchSortProp, order?: OrderDirection) => void;
-export type OnFilterMenuFormSubmit = <Values>(id: SearchFilterId, values: Values) => void;
+export type OnFilterMenuFormSubmit = (newValue: FilterValue) => void;
 export type OnFilterMenuFormReset = (id: SearchFilterId) => void;
 
 export enum AutocompleteField {
-	creator = 'creator',
-	locationCreated = 'locationCreated',
-	newspaperSeriesName = 'newspaperSeriesName',
-	mentions = 'mentions',
+	Creator = 'creator',
+	LocationCreated = 'locationCreated',
+	NewspaperSeriesName = 'newspaperSeriesName',
+	Mentions = 'mentions',
 }

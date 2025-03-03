@@ -36,7 +36,10 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
 } = {
 	// Filters
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: undefined,
+	[SearchFilterId.Query]: undefined,
 	[SearchFilterId.Format]: SearchPageMediaType.All,
+	[SearchFilterId.Title]: undefined,
+	[SearchFilterId.Description]: undefined,
 	[SearchFilterId.Maintainer]: undefined,
 	[SearchFilterId.Maintainers]: undefined,
 	[SearchFilterId.Medium]: undefined,
@@ -45,6 +48,7 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
 	[SearchFilterId.Created]: undefined,
 	[SearchFilterId.Published]: undefined,
 	[SearchFilterId.Creator]: undefined,
+	[SearchFilterId.Publisher]: undefined,
 	[SearchFilterId.NewspaperSeriesName]: undefined,
 	[SearchFilterId.LocationCreated]: undefined,
 	[SearchFilterId.Mentions]: undefined,

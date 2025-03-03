@@ -3,24 +3,24 @@ import { sortBy } from 'lodash-es';
 import { tText } from '@shared/helpers/translate';
 import {
 	ADVANCED_FILTERS,
-	type FilterConfig,
 	FILTERS_OPTIONS_CONFIG,
+	type FilterConfig,
 	REGULAR_FILTERS,
 } from '@visitor-space/const/advanced-filters.consts';
 
 import {
-	FilterProperty,
 	type Operator,
 	type OperatorOptions,
 	type PropertyOptions,
+	SearchFilterId,
 } from '../../types';
 
 export const getRegularProperties = (): PropertyOptions => {
 	return sortBy(
 		REGULAR_FILTERS.map((key) => {
 			return {
-				label: getFilterLabel(key as FilterProperty),
-				value: key as FilterProperty,
+				label: getFilterLabel(key as SearchFilterId),
+				value: key as SearchFilterId,
 			};
 		}),
 		(option) => option.label
@@ -30,15 +30,15 @@ export const getAdvancedProperties = (): PropertyOptions => {
 	return sortBy(
 		ADVANCED_FILTERS.map((key) => {
 			return {
-				label: getFilterLabel(key as FilterProperty),
-				value: key as FilterProperty,
+				label: getFilterLabel(key as SearchFilterId),
+				value: key as SearchFilterId,
 			};
 		}),
 		(option) => option.label
 	);
 };
 
-export const getOperators = (prop: FilterProperty): OperatorOptions => {
+export const getOperators = (prop: SearchFilterId): OperatorOptions => {
 	const property = FILTERS_OPTIONS_CONFIG()[prop];
 
 	if (property) {
@@ -53,7 +53,7 @@ export const getOperators = (prop: FilterProperty): OperatorOptions => {
 	return [];
 };
 
-export const getFilterConfig = (prop: FilterProperty, op: Operator): FilterConfig | null => {
+export const getFilterConfig = (prop: SearchFilterId, op: Operator): FilterConfig | null => {
 	const property = FILTERS_OPTIONS_CONFIG()[prop];
 
 	if (property?.[op]) {
@@ -63,69 +63,84 @@ export const getFilterConfig = (prop: FilterProperty, op: Operator): FilterConfi
 	return null;
 };
 
-export const getFilterLabel = (prop: FilterProperty): string => {
+export const getFilterLabel = (prop: SearchFilterId): string => {
 	return (
 		{
-			[FilterProperty.CREATED_AT]: tText(
+			[SearchFilterId.Query]: tText(
+				'modules/visitor-space/utils/advanced-filters/metadata___zoekterm'
+			),
+			[SearchFilterId.Advanced]: tText('Geavanceerd'),
+			[SearchFilterId.Created]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___creatiedatum'
 			),
-			[FilterProperty.RELEASE_DATE]: tText(
+			[SearchFilterId.ReleaseDate]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___uitgavedatum'
 			),
-			[FilterProperty.CREATOR]: tText(
+			[SearchFilterId.Creator]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___maker'
 			),
-			[FilterProperty.NEWSPAPER_SERIES_NAME]: tText(
+			[SearchFilterId.NewspaperSeriesName]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___reeks'
 			),
-			[FilterProperty.LOCATION_CREATED]: tText(
+			[SearchFilterId.LocationCreated]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___plaats-van-uitgave'
 			),
-			[FilterProperty.MENTIONS]: tText(
+			[SearchFilterId.Mentions]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___namenlijst-gesneuvelden'
 			),
-			[FilterProperty.DESCRIPTION]: tText(
+			[SearchFilterId.Description]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___beschrijving'
 			),
-			[FilterProperty.DURATION]: tText(
+			[SearchFilterId.Duration]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___duurtijd'
 			),
-			[FilterProperty.GENRE]: tText(
+			[SearchFilterId.Genre]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___genre'
 			),
-			[FilterProperty.LANGUAGE]: tText(
+			[SearchFilterId.Language]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___taal'
 			),
-			[FilterProperty.MEDIA_TYPE]: tText(
+			[SearchFilterId.Format]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___bestandstype'
 			),
-			[FilterProperty.MEDIUM]: tText(
+			[SearchFilterId.Medium]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___analoge-drager'
 			),
-			[FilterProperty.PUBLISHED_AT]: tText(
+			[SearchFilterId.Published]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___publicatiedatum'
 			),
-			[FilterProperty.PUBLISHER]: tText(
+			[SearchFilterId.Publisher]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___publisher'
 			),
-			[FilterProperty.TITLE]: tText(
+			[SearchFilterId.Title]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___titel'
 			),
-			[FilterProperty.IDENTIFIER]: tText(
+			[SearchFilterId.Identifier]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___identifier'
 			),
-			[FilterProperty.CAST]: tText('modules/visitor-space/utils/advanced-filters/metadata___cast'),
-			[FilterProperty.SPACIAL_COVERAGE]: tText(
+			[SearchFilterId.Cast]: tText('modules/visitor-space/utils/advanced-filters/metadata___cast'),
+			[SearchFilterId.SpacialCoverage]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___locatie-van-de-inhoud'
 			),
-			[FilterProperty.TEMPORAL_COVERAGE]: tText(
+			[SearchFilterId.TemporalCoverage]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___tijdsperiode-van-de-inhoud'
 			),
-			[FilterProperty.OBJECT_TYPE]: tText(
+			[SearchFilterId.ObjectType]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___object-type'
 			),
-			[FilterProperty.KEYWORDS]: tText(
+			[SearchFilterId.Keywords]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___trefwoord'
+			),
+			[SearchFilterId.Maintainer]: tText('Aanbieder'),
+			[SearchFilterId.Maintainers]: tText('Aanbieders'),
+			[SearchFilterId.ConsultableMedia]: tText(
+				'modules/visitor-space/const/index___alles-wat-raadpleegbaar-is'
+			),
+			[SearchFilterId.ConsultableOnlyOnLocation]: tText(
+				'modules/visitor-space/const/index___enkel-ter-plaatse-beschikbaar'
+			),
+			[SearchFilterId.ConsultablePublicDomain]: tText(
+				'modules/visitor-space/const/visitor-space-filters___publiek-domain'
 			),
 		}[prop] || ''
 	);

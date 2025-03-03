@@ -6,20 +6,31 @@ import type { DefaultFilterFormProps } from '@visitor-space/types';
 
 import { AutocompleteFieldFilterForm } from '../AutocompleteFieldFilterForm/AutocompleteFieldFilterForm';
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export const CreatorFilterForm: FC<DefaultFilterFormProps<any>> = ({ children, className }) => {
+export const CreatorFilterForm: FC<DefaultFilterFormProps> = ({
+	className,
+	onSubmit,
+	onReset,
+	initialValue,
+	disabled,
+	id,
+	label,
+}) => {
 	return (
 		<AutocompleteFieldFilterForm
 			className={className}
-			autocompleteField={AutocompleteField.creator}
+			autocompleteField={AutocompleteField.Creator}
 			filterTitle={tText(
 				'modules/visitor-space/components/creator-filter-form/creator-filter-form___maker'
 			)}
 			fieldLabel={tText(
 				'modules/visitor-space/components/creator-filter-form/creator-filter-form___naam-van-de-maker'
 			)}
-		>
-			{children}
-		</AutocompleteFieldFilterForm>
+			onSubmit={onSubmit}
+			onReset={onReset}
+			initialValue={initialValue}
+			disabled={disabled}
+			id={id}
+			label={label}
+		/>
 	);
 };

@@ -1,22 +1,26 @@
-import { array, object, type Schema, string } from 'yup';
+import { type Schema, array, object, string } from 'yup';
 
-import { type AdvancedFilter, FilterProperty, Operator } from '../../types';
+import { type FilterValue, Operator, SearchFilterId } from '../../types';
 
-import type { AdvancedFilterFormState } from './AdvancedFilterForm.types';
-
-export const initialFields = (): AdvancedFilter => ({
-	prop: FilterProperty.TITLE,
-	op: Operator.CONTAINS,
+export const initialFilterValue = (operator?: Operator): FilterValue => ({
+	prop: SearchFilterId.Query,
+	op: operator || Operator.CONTAINS,
 	val: '',
 });
 
-export const ADVANCED_FILTER_FORM_SCHEMA = (): Schema<AdvancedFilterFormState> =>
+export const initialFilterMultiValue = (operator?: Operator): FilterValue => ({
+	prop: SearchFilterId.Query,
+	op: operator || Operator.CONTAINS,
+	multiValue: [],
+});
+
+export const ADVANCED_FILTERS_FORM_SCHEMA = (): Schema<FilterValue[]> =>
+	array(FILTER_FORM_SCHEMA()).required();
+
+export const FILTER_FORM_SCHEMA = (): Schema<FilterValue> =>
 	object({
-		advanced: array(
-			object({
-				prop: string(),
-				op: string(),
-				val: string(),
-			})
-		).required(),
-	});
+		prop: string().oneOf(Object.values(SearchFilterId)),
+		op: string().oneOf(Object.values(Operator)),
+		val: string(),
+		multiValue: array(string().required()),
+	}).required();

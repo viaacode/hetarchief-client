@@ -1,21 +1,23 @@
 import type { QueryParamConfig } from 'use-query-params';
 
-import { type AdvancedFilter, FilterProperty, Operator } from '../types';
+import { type FilterValue, Operator, SearchFilterId } from '../types';
 
 const divider = ',';
-export const AdvancedFilterArrayParam: QueryParamConfig<AdvancedFilter[] | undefined> = {
+export const AdvancedFilterArrayParam: QueryParamConfig<FilterValue[] | undefined> = {
 	encode(filters) {
+		if (!filters || filters.length === 0) {
+			return undefined;
+		}
 		return filters
-			? filters
-					.map((filter) => {
-						const { prop, op, val } = filter;
-						const propertyAcronym = filterNameToAcronym(prop as FilterProperty);
-						const operatorAcronym = operatorToAcronym(op as Operator);
+			.filter((filter) => filter.prop)
+			.map((filter) => {
+				const { prop, op, val } = filter;
+				const propertyAcronym = filterNameToAcronym(prop as SearchFilterId);
+				const operatorAcronym = operatorToAcronym(op as Operator);
 
-						return `${propertyAcronym}${operatorAcronym}${encodeURIComponent(val || '')}`;
-					})
-					.join(divider)
-			: undefined;
+				return `${propertyAcronym}${operatorAcronym}${encodeURIComponent(val || '')}`;
+			})
+			.join(divider);
 	},
 
 	decode(stringified) {
@@ -34,31 +36,31 @@ export const AdvancedFilterArrayParam: QueryParamConfig<AdvancedFilter[] | undef
 	},
 };
 
-const FILTER_NAME_WITH_ACRONYM: [FilterProperty, string][] = [
-	[FilterProperty.CAST, 'cs'],
-	[FilterProperty.CREATED_AT, 'ca'],
-	[FilterProperty.CREATOR, 'ct'],
-	[FilterProperty.DESCRIPTION, 'de'],
-	[FilterProperty.DURATION, 'du'],
-	[FilterProperty.GENRE, 'ge'],
-	[FilterProperty.IDENTIFIER, 'id'],
-	[FilterProperty.KEYWORDS, 'kw'],
-	[FilterProperty.LANGUAGE, 'la'],
-	[FilterProperty.MEDIA_TYPE, 'ty'],
-	[FilterProperty.MEDIUM, 'me'],
-	[FilterProperty.OBJECT_TYPE, 'ot'],
-	[FilterProperty.PUBLISHED_AT, 'pa'],
-	[FilterProperty.PUBLISHER, 'pu'],
-	[FilterProperty.RELEASE_DATE, 'rd'],
-	[FilterProperty.SPACIAL_COVERAGE, 'sc'],
-	[FilterProperty.TEMPORAL_COVERAGE, 'tc'],
-	[FilterProperty.TITLE, 'ti'],
-	[FilterProperty.NEWSPAPER_SERIES_NAME, 'ns'],
-	[FilterProperty.LOCATION_CREATED, 'lc'],
-	[FilterProperty.MENTIONS, 'mn'],
+const FILTER_NAME_WITH_ACRONYM: [SearchFilterId, string][] = [
+	[SearchFilterId.Cast, 'cs'],
+	[SearchFilterId.Created, 'ca'],
+	[SearchFilterId.Creator, 'ct'],
+	[SearchFilterId.Description, 'de'],
+	[SearchFilterId.Duration, 'du'],
+	[SearchFilterId.Genre, 'ge'],
+	[SearchFilterId.Identifier, 'id'],
+	[SearchFilterId.Keywords, 'kw'],
+	[SearchFilterId.Language, 'la'],
+	[SearchFilterId.Format, 'ty'],
+	[SearchFilterId.Medium, 'me'],
+	[SearchFilterId.ObjectType, 'ot'],
+	[SearchFilterId.Published, 'pa'],
+	[SearchFilterId.Publisher, 'pu'],
+	[SearchFilterId.ReleaseDate, 'rd'],
+	[SearchFilterId.SpacialCoverage, 'sc'],
+	[SearchFilterId.TemporalCoverage, 'tc'],
+	[SearchFilterId.Title, 'ti'],
+	[SearchFilterId.NewspaperSeriesName, 'ns'],
+	[SearchFilterId.LocationCreated, 'lc'],
+	[SearchFilterId.Mentions, 'mn'],
 ];
 
-export function filterNameToAcronym(filterName: FilterProperty): string {
+export function filterNameToAcronym(filterName: SearchFilterId): string {
 	const filter = FILTER_NAME_WITH_ACRONYM.find(([name]) => name === filterName);
 
 	if (!filter) {
@@ -68,7 +70,7 @@ export function filterNameToAcronym(filterName: FilterProperty): string {
 	return filter[1];
 }
 
-export function filterAcronymToName(acronym: string | undefined): FilterProperty {
+export function filterAcronymToName(acronym: string | undefined): SearchFilterId {
 	if (!acronym) {
 		throw new Error(`Filter name acronym was undefined: ${acronym}`);
 	}

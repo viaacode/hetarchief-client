@@ -1,48 +1,51 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { compact, noop, without } from 'lodash-es';
-import { type FC, useCallback, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { type FC, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useQueryParams } from 'use-query-params';
+import { ArrayParam, useQueryParam } from 'use-query-params';
 
 import { SearchBar } from '@shared/components/SearchBar';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import {
-	LANGUAGE_FILTER_FORM_QUERY_PARAM_CONFIG,
-	LANGUAGE_FILTER_FORM_SCHEMA,
-} from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.const';
-import type {
-	LanguageFilterFormProps,
-	LanguageFilterFormState,
-} from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
+	initialFilterMultiValue,
+	initialFilterValue,
+} from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
 import {
-	type LanguageCode,
 	LANGUAGES,
+	type LanguageCode,
 } from '@visitor-space/components/LanguageFilterForm/languages';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import {
+	type DefaultFilterFormProps,
 	ElasticsearchFieldNames,
 	FILTER_LABEL_VALUE_DELIMITER,
+	type FilterValue,
+	Operator,
 	SearchFilterId,
 } from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
-const defaultValues = {
-	languages: [],
-};
-
-const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }) => {
-	// State
-
-	const [query] = useQueryParams(LANGUAGE_FILTER_FORM_QUERY_PARAM_CONFIG);
+const LanguageFilterForm: FC<DefaultFilterFormProps> = ({
+	className,
+	id,
+	initialValue,
+	onSubmit,
+	onReset,
+}) => {
+	const [initialValueFromQueryParams] = useQueryParam(SearchFilterId.Language, ArrayParam);
+	const [value, setValue] = useState<FilterValue>(
+		initialValueFromQueryParams
+			? { prop: id, op: Operator.EQUALS, multiValue: compact(initialValueFromQueryParams) }
+			: initialValue || initialFilterMultiValue(Operator.EQUALS)
+	);
 	const [search, setSearch] = useState<string>('');
 
 	// Contains the options that have already been applied and are present in the url
 	const appliedSelectedLanguageCodes = compact(
-		(query[SearchFilterId.Language] || []).map(
+		(initialValueFromQueryParams || []).map(
 			(languageCodeAndName) => languageCodeAndName?.split(FILTER_LABEL_VALUE_DELIMITER)?.[0]
 		)
 	);
@@ -51,11 +54,6 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 	const [selectedLanguageCodes, setSelectedLanguageCodes] = useState<string[]>(
 		() => appliedSelectedLanguageCodes
 	);
-
-	const { setValue, reset, handleSubmit } = useForm<LanguageFilterFormState>({
-		resolver: yupResolver(LANGUAGE_FILTER_FORM_SCHEMA()),
-		defaultValues,
-	});
 
 	const filterOptions: string[] =
 		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Language]?.buckets?.map(
@@ -84,13 +82,6 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 		return `${id}${FILTER_LABEL_VALUE_DELIMITER}${LANGUAGES.nl?.[id as LanguageCode] || ''}`;
 	}, []);
 
-	// Effects
-
-	useEffect(() => {
-		const newValue = selectedLanguageCodes.map(idToIdAndNameConcatinated);
-		setValue('languages', newValue);
-	}, [selectedLanguageCodes, setValue, idToIdAndNameConcatinated]);
-
 	// Events
 
 	const onItemClick = (add: boolean, value: string) => {
@@ -98,6 +89,18 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 			? [...selectedLanguageCodes, value]
 			: without(selectedLanguageCodes, value);
 		setSelectedLanguageCodes(selected);
+	};
+
+	const handleSubmit = () => {
+		onSubmit({
+			...value,
+			multiValue: (value.multiValue || []).map(idToIdAndNameConcatinated),
+		});
+	};
+
+	const handleReset = () => {
+		setValue(initialFilterValue(Operator.EQUALS));
+		onReset();
 	};
 
 	return (
@@ -132,17 +135,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 				</div>
 			</div>
 
-			{children({
-				values: {
-					languages: selectedLanguageCodes.map(idToIdAndNameConcatinated),
-				},
-				reset: () => {
-					reset();
-					setSelectedLanguageCodes(defaultValues.languages);
-					setSearch('');
-				},
-				handleSubmit,
-			})}
+			<FilterFormButtons onSubmit={handleSubmit} onReset={handleReset} />
 		</>
 	);
 };

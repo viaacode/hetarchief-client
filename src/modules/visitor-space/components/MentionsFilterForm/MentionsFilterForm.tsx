@@ -6,20 +6,31 @@ import type { DefaultFilterFormProps } from '@visitor-space/types';
 
 import { AutocompleteFieldFilterForm } from '../AutocompleteFieldFilterForm/AutocompleteFieldFilterForm';
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export const MentionsFilterForm: FC<DefaultFilterFormProps<any>> = ({ children, className }) => {
+export const MentionsFilterForm: FC<DefaultFilterFormProps> = ({
+	className,
+	initialValue,
+	onReset,
+	onSubmit,
+	disabled,
+	id,
+	label,
+}) => {
 	return (
 		<AutocompleteFieldFilterForm
 			className={className}
-			autocompleteField={AutocompleteField.mentions}
+			autocompleteField={AutocompleteField.Mentions}
 			filterTitle={tText(
 				'modules/visitor-space/components/mentions-filter-form/mentions-filter-form___namenlijst-gesneuvelden'
 			)}
 			fieldLabel={tText(
 				'modules/visitor-space/components/mentions-filter-form/mentions-filter-form___naam'
 			)}
-		>
-			{children}
-		</AutocompleteFieldFilterForm>
+			onSubmit={onSubmit}
+			onReset={onReset}
+			id={id}
+			initialValue={initialValue}
+			disabled={disabled}
+			label={label}
+		/>
 	);
 };

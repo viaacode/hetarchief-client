@@ -1,89 +1,74 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, type SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil } from 'lodash-es';
-import { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { type ChangeEvent, type FC, useMemo, useState } from 'react';
 import type { SingleValue } from 'react-select';
-import { useQueryParams } from 'use-query-params';
+import { useQueryParam } from 'use-query-params';
 
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SEPARATOR } from '@shared/const';
 import { tHtml } from '@shared/helpers/translate';
-import {
-	DURATION_FILTER_FORM_QUERY_PARAM_CONFIG,
-	DURATION_FILTER_FORM_SCHEMA,
-} from '@visitor-space/components/DurationFilterForm/DurationFilterForm.const';
-import type {
-	DurationFilterFormProps,
-	DurationFilterFormState,
-} from '@visitor-space/components/DurationFilterForm/DurationFilterForm.types';
 
-import { FilterProperty, isRange, Operator, SearchFilterId } from '../../types';
+import {
+	type DefaultFilterFormProps,
+	type FilterValue,
+	Operator,
+	SearchFilterId,
+} from '../../types';
 import { getSelectValue } from '../../utils/select';
 import { DurationInput } from '../DurationInput';
 import { defaultValue } from '../DurationInput/DurationInput';
 import { DurationRangeInput } from '../DurationRangeInput';
 
+import { validateForm } from '@shared/helpers/validate-form';
+import { initialFilterValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import { DURATION_FILTER_FORM_SCHEMA } from '@visitor-space/components/DurationFilterForm/DurationFilterForm.const';
+import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
+import { AdvancedFilterArrayParam } from '@visitor-space/const/advanced-filter-array-param';
 import { getOperators } from 'modules/visitor-space/utils/advanced-filters';
 
-const labelKeys: Record<keyof DurationFilterFormState, string> = {
-	duration: 'DurationFilterForm__duration',
-	operator: 'DurationFilterForm__operator',
-};
+enum DurationField {
+	duration = 'DurationFilterForm__duration',
+	operator = 'DurationFilterForm__operator',
+}
 
-const defaultValues: DurationFilterFormState = {
-	duration: undefined,
-	operator: Operator.LESS_THAN_OR_EQUAL,
-};
+const DurationFilterForm: FC<DefaultFilterFormProps> = ({
+	className,
+	disabled,
+	initialValue,
+	onSubmit,
+	onReset,
+}) => {
+	const [initialValueFromQueryParams] = useQueryParam(
+		SearchFilterId.Duration,
+		AdvancedFilterArrayParam
+	);
+	const [value, setValue] = useState<FilterValue>(
+		initialValueFromQueryParams?.[0] || initialValue || initialFilterValue(Operator.EQUALS)
+	);
+	const [formErrors, setFormErrors] = useState<Record<DurationField, string> | null>();
 
-const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, disabled }) => {
-	const [query] = useQueryParams(DURATION_FILTER_FORM_QUERY_PARAM_CONFIG);
-
-	const initial = query?.[SearchFilterId.Duration]?.[0];
-
-	const [showRange, setShowRange] = useState(isRange(initial?.op));
-	const [form, setForm] = useState<DurationFilterFormState>(defaultValues);
-
-	const {
-		clearErrors,
-		control,
-		formState: { errors },
-		handleSubmit,
-		setValue,
-	} = useForm<DurationFilterFormState>({
-		resolver: yupResolver(DURATION_FILTER_FORM_SCHEMA()),
-		defaultValues,
-		reValidateMode: 'onChange',
-	});
-
-	const operators = useMemo(() => getOperators(FilterProperty.DURATION), []);
-
-	// Effects
-
-	useEffect(() => {
-		setValue(SearchFilterId.Duration, form[SearchFilterId.Duration]);
-		setValue('operator', form.operator);
-
-		setShowRange(isRange(form.operator));
-	}, [form, setValue]);
-
-	useEffect(() => {
-		if (initial) {
-			const { val, op } = initial;
-
-			val && setForm((oldForm) => ({ ...oldForm, [SearchFilterId.Duration]: val }));
-			op && setForm((oldForm) => ({ ...oldForm, operator: op as Operator }));
-		}
-	}, [initial]);
+	const operators = useMemo(() => getOperators(SearchFilterId.Duration), []);
 
 	// Events
 
 	const onChangeDuration = (e: ChangeEvent<HTMLInputElement>) => {
-		setForm((oldForm) => ({
-			...oldForm,
+		setValue((oldValue) => ({
+			...oldValue,
 			[SearchFilterId.Duration]: e.target.value,
 		}));
+	};
+
+	const handleSubmit = async () => {
+		const errors = await validateForm(value, DURATION_FILTER_FORM_SCHEMA());
+		setFormErrors(errors);
+		if (!errors) {
+			onSubmit(value);
+		}
+	};
+
+	const handleReset = () => {
+		setValue(initialFilterValue());
+		onReset();
 	};
 
 	return (
@@ -91,96 +76,75 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 			<div className={clsx(className)}>
 				<FormControl
 					className="u-mb-24 c-form-control--label-hidden"
-					errors={!isNil(errors.operator?.message) ? [errors.operator?.message] : undefined}
-					id={labelKeys.operator}
+					errors={[
+						<RedFormWarning
+							error={formErrors?.[DurationField.operator]}
+							key="form-error--operator"
+						/>,
+					]}
+					id={DurationField.operator}
 					label={tHtml(
 						'modules/visitor-space/components/duration-filter-form/duration-filter-form___operator'
 					)}
 				>
-					<Controller
-						control={control}
-						name="operator"
-						render={({ field }) => {
-							// eslint-disable-next-line @typescript-eslint/no-unused-vars
-							const { ref, ...rest } = field;
-							return (
-								<div className="u-px-20 u-px-32-md">
-									<ReactSelect
-										{...rest}
-										isDisabled={disabled}
-										components={{ IndicatorSeparator: () => null }}
-										inputId={labelKeys.operator}
-										onChange={(newValue) => {
-											const value = (newValue as SingleValue<SelectOption>)?.value as Operator;
+					<div className="u-px-20 u-px-32-md">
+						<ReactSelect
+							isDisabled={disabled}
+							components={{ IndicatorSeparator: () => null }}
+							inputId={DurationField.operator}
+							onChange={(newValue) => {
+								const selectedOperator = (newValue as SingleValue<SelectOption>)?.value as Operator;
 
-											if (value !== form.operator) {
-												setForm({
-													[SearchFilterId.Duration]: defaultValues.duration,
-													operator: value,
-												});
-											}
-										}}
-										options={operators}
-										value={getSelectValue(operators, field.value)}
-									/>
-								</div>
-							);
-						}}
-					/>
+								if (selectedOperator !== value.op) {
+									setValue({
+										...value,
+										op: selectedOperator,
+									});
+								}
+							}}
+							options={operators}
+							value={getSelectValue(operators, value.op)}
+						/>
+					</div>
 				</FormControl>
 
 				<FormControl
 					className="c-form-control--label-hidden"
 					errors={[
 						<RedFormWarning
-							error={errors[SearchFilterId.Duration]?.message}
+							error={[
+								<RedFormWarning
+									error={formErrors?.[DurationField.duration]}
+									key="form-error--duration"
+								/>,
+							]}
 							key="form-error--duration"
 						/>,
 					]}
-					id={labelKeys[SearchFilterId.Duration]}
+					id={DurationField.duration}
 					label={tHtml(
 						'modules/visitor-space/components/duration-filter-form/duration-filter-form___waarde'
 					)}
 				>
-					<Controller
-						control={control}
-						name="duration"
-						render={({ field }) => {
-							// eslint-disable-next-line @typescript-eslint/no-unused-vars
-							const { ref, ...refless } = field;
-
-							return (
-								<div className="u-py-32 u-px-20 u-px-32-md u-bg-platinum">
-									{showRange ? (
-										<DurationRangeInput
-											{...refless}
-											value={form.duration || `${defaultValue}${SEPARATOR}${defaultValue}`}
-											onChange={onChangeDuration}
-											placeholder={form[SearchFilterId.Duration]}
-										/>
-									) : (
-										<DurationInput
-											{...refless}
-											value={form[SearchFilterId.Duration] || defaultValue}
-											onChange={onChangeDuration}
-											placeholder={form[SearchFilterId.Duration]}
-										/>
-									)}
-								</div>
-							);
-						}}
-					/>
+					<div className="u-py-32 u-px-20 u-px-32-md u-bg-platinum">
+						{value?.op === Operator.BETWEEN ? (
+							<DurationRangeInput
+								value={value.val || `${defaultValue}${SEPARATOR}${defaultValue}`}
+								onChange={onChangeDuration}
+								placeholder={value.val}
+							/>
+						) : (
+							<DurationInput
+								value={value.val || defaultValue}
+								onChange={onChangeDuration}
+								placeholder={value.val}
+							/>
+						)}
+					</div>
 				</FormControl>
 			</div>
 
-			{children({
-				values: form,
-				reset: () => {
-					setForm(defaultValues);
-					clearErrors();
-				},
-				handleSubmit,
-			})}
+			<FilterFormButtons onSubmit={handleSubmit} onReset={handleReset} />
 		</>
 	);
 };

@@ -1,57 +1,50 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { compact, keyBy, mapValues, noop, without } from 'lodash-es';
-import { type FC, useCallback, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { type FC, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useQueryParams } from 'use-query-params';
+import { ArrayParam, useQueryParam } from 'use-query-params';
 
 import { SearchBar } from '@shared/components/SearchBar';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
-import type {
-	MaintainerFilterFormProps,
-	MaintainerFilterFormState,
-} from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
-import {
-	ElasticsearchFieldNames,
-	FILTER_LABEL_VALUE_DELIMITER,
-	SearchFilterId,
-} from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
+import { initialFilterValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
 import {
-	MAINTAINER_FILTER_FORM_QUERY_PARAM_CONFIG,
-	MAINTAINER_FILTER_FORM_SCHEMA,
-} from './MaintainerFilterForm.const';
+	type DefaultFilterFormProps,
+	ElasticsearchFieldNames,
+	FILTER_LABEL_VALUE_DELIMITER,
+	type FilterValue,
+	Operator,
+	SearchFilterId,
+} from '@visitor-space/types';
 
-const defaultValues = {
-	maintainers: [],
-};
-
-const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, className }) => {
-	const [query] = useQueryParams(MAINTAINER_FILTER_FORM_QUERY_PARAM_CONFIG);
+const MaintainerFilterForm: FC<DefaultFilterFormProps> = ({
+	className,
+	id,
+	label,
+	initialValue,
+	onSubmit,
+	onReset,
+}) => {
+	const [initialValueFromQueryParams] = useQueryParam(SearchFilterId.Maintainers, ArrayParam);
+	const [value, setValue] = useState<FilterValue>(
+		initialValueFromQueryParams
+			? { prop: id, op: Operator.EQUALS, multiValue: initialValueFromQueryParams as string[] }
+			: initialValue || initialFilterValue()
+	);
 	const [search, setSearch] = useState<string>('');
 
 	// Contains the filters that have already been applied and are present in the url
 	const appliedSelectedMaintainerIds = compact(
-		(query[SearchFilterId.Maintainers] || []).map(
+		(initialValueFromQueryParams || []).map(
 			(maintainerIdAndName) => maintainerIdAndName?.split(FILTER_LABEL_VALUE_DELIMITER)?.[0]
 		)
 	);
-
-	// Contains the options that have already been applied and are present in the url
-	const [selectedMaintainerIds, setSelectedMaintainerIds] = useState<string[]>(
-		() => appliedSelectedMaintainerIds
-	);
-
-	const { setValue, reset, handleSubmit } = useForm<MaintainerFilterFormState>({
-		resolver: yupResolver(MAINTAINER_FILTER_FORM_SCHEMA()),
-		defaultValues,
-	});
 
 	// Get all maintainer names
 	const { data: maintainers } = useGetContentPartners({});
@@ -80,7 +73,7 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 			return {
 				label: filterOption.name,
 				value: filterOption.id,
-				checked: selectedMaintainerIds.includes(filterOption.id),
+				checked: appliedSelectedMaintainerIds.includes(filterOption.id),
 			};
 		}),
 		appliedSelectedMaintainerIds
@@ -96,15 +89,24 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 		[maintainers, maintainerNames]
 	);
 
-	useEffect(() => {
-		setValue('maintainers', selectedMaintainerIds.map(idToIdAndNameConcatinated));
-	}, [selectedMaintainerIds, setValue, idToIdAndNameConcatinated]);
+	const handleSubmit = () => {
+		onSubmit(value);
+	};
 
-	const onItemClick = (checked: boolean, value: unknown): void => {
+	const handleReset = () => {
+		setValue(initialFilterValue());
+		onReset();
+	};
+
+	const onItemClick = (checked: boolean, newMaintainer: unknown): void => {
+		const oldSelectedMaintainers: string[] = value?.multiValue || [];
 		const newSelectedMaintainers = !checked
-			? [...selectedMaintainerIds, value as string]
-			: without(selectedMaintainerIds, value as string);
-		setSelectedMaintainerIds(newSelectedMaintainers);
+			? [...oldSelectedMaintainers, newMaintainer as string]
+			: without(oldSelectedMaintainers, newMaintainer as string);
+		setValue({
+			...value,
+			multiValue: newSelectedMaintainers.map(idToIdAndNameConcatinated),
+		});
 	};
 
 	return (
@@ -134,17 +136,7 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 				</div>
 			</div>
 
-			{children({
-				values: {
-					maintainers: selectedMaintainerIds.map(idToIdAndNameConcatinated),
-				},
-				reset: () => {
-					reset();
-					setSelectedMaintainerIds(defaultValues.maintainers);
-					setSearch('');
-				},
-				handleSubmit,
-			})}
+			<FilterFormButtons onSubmit={handleSubmit} onReset={handleReset} />
 		</>
 	);
 };

@@ -6,23 +6,31 @@ import type { DefaultFilterFormProps } from '@visitor-space/types';
 
 import { AutocompleteFieldFilterForm } from '../AutocompleteFieldFilterForm/AutocompleteFieldFilterForm';
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export const NewspaperSeriesNameFilterForm: FC<DefaultFilterFormProps<any>> = ({
-	children,
+export const NewspaperSeriesNameFilterForm: FC<DefaultFilterFormProps> = ({
 	className,
+	onSubmit,
+	onReset,
+	id,
+	disabled,
+	initialValue,
+	label,
 }) => {
 	return (
 		<AutocompleteFieldFilterForm
 			className={className}
-			autocompleteField={AutocompleteField.newspaperSeriesName}
+			autocompleteField={AutocompleteField.NewspaperSeriesName}
 			filterTitle={tText(
 				'modules/visitor-space/components/newspaper-series-name-filter-form/newspaper-series-name-filter-form___krant-serie'
 			)}
 			fieldLabel={tText(
 				'modules/visitor-space/components/newspaper-series-name-filter-form/newspaper-series-name-filter-form___naam-van-de-krant-serie'
 			)}
-		>
-			{children}
-		</AutocompleteFieldFilterForm>
+			id={id}
+			onSubmit={onSubmit}
+			onReset={onReset}
+			initialValue={initialValue}
+			disabled={disabled}
+			label={label}
+		/>
 	);
 };

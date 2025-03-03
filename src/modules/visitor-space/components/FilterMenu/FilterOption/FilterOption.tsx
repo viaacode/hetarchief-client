@@ -16,7 +16,7 @@ import { FilterMenuType } from '../FilterMenu.types';
 
 import type { FilterOptionProps } from './FilterOption.types';
 
-const FilterOption: FC<FilterOptionProps> = ({
+export const FilterOption: FC<FilterOptionProps> = ({
 	activeFilter,
 	form,
 	icon,
@@ -26,7 +26,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 	onClick,
 	onFormReset,
 	onFormSubmit,
-	values,
+	initialValue,
 	className,
 }) => {
 	const filterIsActive = id === activeFilter;
@@ -63,7 +63,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 			onFormReset={onFormReset}
 			onFormSubmit={onFormSubmit}
 			title={label}
-			values={values}
+			initialValue={initialValue}
 			disabled={!filterIsActive}
 			type={type}
 		/>
@@ -137,5 +137,3 @@ const FilterOption: FC<FilterOptionProps> = ({
 
 	return renderFilterOptionByType();
 };
-
-export default FilterOption;

@@ -160,7 +160,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 			onFormReset={onFilterReset}
 			onFormSubmit={onFilterSubmit}
 			title={label}
-			values={filterValues?.[id]}
+			initialValue={filterValues?.[id]}
 			type={type}
 		/>
 	);

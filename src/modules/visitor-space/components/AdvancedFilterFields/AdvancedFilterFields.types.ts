@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 
-import type { AdvancedFilter } from '../../types';
+import type { FilterValue } from '../../types';
 
 export interface AdvancedFilterFieldsProps {
 	children?: ReactNode;
 	id: string;
 	index: number;
-	value: AdvancedFilter;
-	onChange: (index: number, values: Partial<AdvancedFilter>) => void;
+	value: FilterValue;
+	onChange: (index: number, values: Partial<FilterValue>) => void;
 	onRemove: (index: number) => void;
 }

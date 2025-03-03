@@ -13,7 +13,7 @@ import {
 } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { LocationCreatedFilterForm } from '@visitor-space/components/LocationCreatedFilterForm/LocationCreatedFilterForm';
 import MaintainerFilterForm from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm';
-import { MediumFilterForm } from '@visitor-space/components/MediumFilterForm';
+import { MediumFilterForm } from '@visitor-space/components/MediumFilterForm/MediumFilterForm';
 import { MentionsFilterForm } from '@visitor-space/components/MentionsFilterForm/MentionsFilterForm';
 import { NewspaperSeriesNameFilterForm } from '@visitor-space/components/NewspaperSeriesNameFilterForm/NewspaperSeriesNameFilterForm';
 import { ReleaseDateFilterForm } from '@visitor-space/components/ReleaseDateFilterForm';

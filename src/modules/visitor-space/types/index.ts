@@ -1,12 +1,8 @@
-import type { DefaultComponentProps } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import type { SelectOption, TagInfo } from '@meemoo/react-components';
-import type { ReactNode } from 'react';
-import type { FieldValues, UseFormHandleSubmit } from 'react-hook-form';
 
 import type { IeObjectType } from '@shared/types/ie-objects';
-import type { OnFilterMenuFormSubmit } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 
-import type { FilterProperty, Operator } from './filter-properties';
+import type { Operator } from './filter-properties';
 
 export * from './filter-properties';
 
@@ -18,12 +14,16 @@ export enum SearchSortProp {
 }
 
 export enum SearchFilterId {
+	Query = 'query',
+	Title = 'title',
+	Description = 'description',
 	Format = 'format',
 	Advanced = 'advanced',
 	Created = 'created',
 	Published = 'published',
 	ReleaseDate = 'releaseDate',
 	Creator = 'creator',
+	Publisher = 'publisher',
 	Duration = 'duration',
 	Genre = 'genre',
 	Keywords = 'keywords',
@@ -69,26 +69,23 @@ export enum VisitorSpaceOrderProps {
 	OrganisationOrgId = 'organisation.org_identifier',
 }
 
-export interface DefaultFilterFormChildrenParams<Values extends FieldValues> {
-	values: Values;
-	reset: () => void;
-	handleSubmit: UseFormHandleSubmit<Values>;
-}
-
-export interface DefaultFilterFormProps<Values extends FieldValues>
-	extends Omit<DefaultComponentProps, 'children'> {
-	children: ({ values, reset, handleSubmit }: DefaultFilterFormChildrenParams<Values>) => ReactNode;
-	disabled?: boolean;
-	values?: Values;
-}
-
-export interface InlineFilterFormProps<Values = unknown> extends DefaultComponentProps {
-	children?: ReactNode;
+export interface DefaultFilterFormProps {
 	id: SearchFilterId;
 	label: string;
-	onFormSubmit: OnFilterMenuFormSubmit;
+	className?: string;
 	disabled?: boolean;
-	values?: Values;
+	onSubmit: (newFormValue: FilterValue) => void;
+	onReset: () => void;
+	initialValue?: FilterValue;
+}
+
+export interface DefaultFilterArrayFormProps {
+	id: SearchFilterId;
+	className?: string;
+	disabled?: boolean;
+	onSubmit: (newFormValues: FilterValue[]) => void;
+	onReset: () => void;
+	initialValues?: FilterValue[];
 }
 
 export interface VisitorSpaceInfo {
@@ -139,17 +136,18 @@ export type OperatorOptions = Array<
 export type PropertyOptions = Array<
 	SelectOption & {
 		label: string;
-		value: FilterProperty;
+		value: SearchFilterId;
 	}
 >;
 
-export interface AdvancedFilter {
-	prop?: string; // Which property/field is being filtered on
-	op?: string; // Which operator, see Operator enum
+export interface FilterValue {
+	prop?: SearchFilterId; // Which property/field is being filtered on
+	op?: Operator; // Which operator, see Operator enum
 	val?: string; // stringified value, potentially character-separated
+	multiValue?: string[];
 }
 
-export interface TagIdentity extends Partial<AdvancedFilter>, TagInfo {
+export interface TagIdentity extends Partial<FilterValue>, TagInfo {
 	key: string;
 	id: string | number;
 }

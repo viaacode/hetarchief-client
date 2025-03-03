@@ -12,9 +12,8 @@ import type { SearchPageQueryParams } from '@visitor-space/const';
 import { AdvancedFilterArrayParam } from '../../const/advanced-filter-array-param';
 import { getMetadataSearchFilters } from '../../const/advanced-filters.consts';
 import {
-	type AdvancedFilter,
 	FILTER_LABEL_VALUE_DELIMITER,
-	FilterProperty,
+	type FilterValue,
 	Operator,
 	SearchFilterId,
 	type TagIdentity,
@@ -84,11 +83,11 @@ export const mapArrayParamToTags = (
 };
 
 export const mapAdvancedToTags = (
-	advanced: Array<AdvancedFilter>,
+	advanced: Array<FilterValue>,
 	key: SearchFilterId = SearchFilterId.Advanced
 ): TagIdentity[] => {
-	return advanced.map((advanced: AdvancedFilter) => {
-		const filterProp = advanced.prop as FilterProperty;
+	return advanced.map((advanced: FilterValue) => {
+		const filterProp = advanced.prop as SearchFilterId;
 		const filterOp = advanced.op as Operator;
 
 		const split = (advanced.val || '').split(SEPARATOR);
@@ -102,9 +101,9 @@ export const mapAdvancedToTags = (
 		// Convert certain values to be legible
 
 		switch (filterProp) {
-			case FilterProperty.CREATED_AT:
-			case FilterProperty.PUBLISHED_AT:
-			case FilterProperty.RELEASE_DATE:
+			case SearchFilterId.Created:
+			case SearchFilterId.Published:
+			case SearchFilterId.ReleaseDate:
 				if (filterOp === Operator.BETWEEN || filterOp === Operator.EQUALS) {
 					value = `${formatDate(parseISO(split[0]))} - ${formatDate(parseISO(split[1]))}`;
 					filterOperatorLabel = undefined;
@@ -113,7 +112,7 @@ export const mapAdvancedToTags = (
 				}
 				break;
 
-			case FilterProperty.DURATION:
+			case SearchFilterId.Duration:
 				if (filterOp === Operator.BETWEEN) {
 					value = `${split[0]} - ${split[1]}`;
 					filterOperatorLabel = undefined;
@@ -154,7 +153,7 @@ export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] =>
 		),
 		...mapArrayParamToTags(
 			query[SearchFilterId.Medium] || [],
-			getFilterLabel(FilterProperty.MEDIUM),
+			getFilterLabel(SearchFilterId.Medium),
 			SearchFilterId.Medium
 		),
 		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
@@ -167,37 +166,37 @@ export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] =>
 		...mapAdvancedToTags(query[SearchFilterId.ReleaseDate] || [], SearchFilterId.ReleaseDate),
 		...mapArrayParamToTags(
 			query[SearchFilterId.Creator] || [],
-			getFilterLabel(FilterProperty.CREATOR),
+			getFilterLabel(SearchFilterId.Creator),
 			SearchFilterId.Creator
 		),
 		...mapArrayParamToTags(
 			query[SearchFilterId.NewspaperSeriesName] || [],
-			getFilterLabel(FilterProperty.NEWSPAPER_SERIES_NAME),
+			getFilterLabel(SearchFilterId.NewspaperSeriesName),
 			SearchFilterId.NewspaperSeriesName
 		),
 		...mapArrayParamToTags(
 			query[SearchFilterId.LocationCreated] || [],
-			getFilterLabel(FilterProperty.LOCATION_CREATED),
+			getFilterLabel(SearchFilterId.LocationCreated),
 			SearchFilterId.LocationCreated
 		),
 		...mapArrayParamToTags(
 			query[SearchFilterId.Mentions] || [],
-			getFilterLabel(FilterProperty.MENTIONS),
+			getFilterLabel(SearchFilterId.Mentions),
 			SearchFilterId.Mentions
 		),
 		...mapArrayParamToTags(
 			query[SearchFilterId.Genre] || [],
-			getFilterLabel(FilterProperty.GENRE),
+			getFilterLabel(SearchFilterId.Genre),
 			SearchFilterId.Genre
 		),
 		...mapArrayParamToTags(
 			query[SearchFilterId.Keywords] || [],
-			getFilterLabel(FilterProperty.KEYWORDS),
+			getFilterLabel(SearchFilterId.Keywords),
 			SearchFilterId.Keywords
 		),
 		...mapArrayParamToTags(
 			query[SearchFilterId.Language] || [],
-			getFilterLabel(FilterProperty.LANGUAGE),
+			getFilterLabel(SearchFilterId.Language),
 			SearchFilterId.Language
 		),
 		...mapBooleanParamToTag(
@@ -224,9 +223,9 @@ export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] =>
 	];
 };
 
-export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilter[] => {
+export const mapAdvancedToElastic = (item: FilterValue): IeObjectsSearchFilter[] => {
 	const values = (item.val || '').split(SEPARATOR);
-	const filterProp = item.prop as FilterProperty;
+	const filterProp = item.prop as SearchFilterId;
 	const filterOperator = item.op as Operator;
 	const filters =
 		filterProp && filterOperator ? getMetadataSearchFilters(filterProp, filterOperator) : [];
@@ -236,13 +235,13 @@ export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilte
 		let parsed: Date;
 
 		switch (item.prop) {
-			case FilterProperty.CREATED_AT:
-			case FilterProperty.PUBLISHED_AT:
-			case FilterProperty.RELEASE_DATE:
+			case SearchFilterId.Created:
+			case SearchFilterId.Published:
+			case SearchFilterId.ReleaseDate:
 				parsed = parseISO(values[i]);
 				values[i] = (parsed && format(parsed, 'yyyy-MM-dd')) || values[i];
 				break;
-			case FilterProperty.DURATION:
+			case SearchFilterId.Duration:
 				// Manually create a range of equal values
 				// Add milliseconds since elasticsearch requires it: https://meemoo.atlassian.net/browse/ARC-2549
 				values[i] = `${values[0]}.00`;

@@ -1,16 +1,9 @@
-import { mixed, object, type Schema, string } from 'yup';
+import { type Schema, mixed, object, string } from 'yup';
+import { type FilterValue, Operator, SearchFilterId } from '../../types';
 
-import { AdvancedFilterArrayParam } from '../../const/advanced-filter-array-param';
-import { Operator, SearchFilterId } from '../../types';
-
-import type { ReleaseDateFilterFormState } from './ReleaseDateFilterForm.types';
-
-export const RELEASE_DATE_FILTER_FORM_SCHEMA = (): Schema<ReleaseDateFilterFormState> =>
+export const RELEASE_DATE_FILTER_FORM_SCHEMA = (): Schema<FilterValue> =>
 	object({
+		prop: mixed<SearchFilterId>().required().oneOf(Object.values(SearchFilterId)),
 		operator: mixed<Operator>().required().oneOf(Object.values(Operator)),
-		releaseDate: string().optional(),
+		val: string().optional(),
 	});
-
-export const RELEASE_DATE_FILTER_FORM_QUERY_PARAM_CONFIG = {
-	[SearchFilterId.ReleaseDate]: AdvancedFilterArrayParam,
-};
