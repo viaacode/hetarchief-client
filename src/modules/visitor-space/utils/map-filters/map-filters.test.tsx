@@ -13,7 +13,7 @@ describe('Utils', () => {
 			const filters = mapFiltersToTags(query);
 
 			expect(filters).toHaveLength(query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY].length);
-			expect(filters[0].val).toBe(
+			expect(filters[0].multiValue?.[0]).toBe(
 				tagPrefix(QUERY_PARAM_KEY.SEARCH_QUERY_KEY) + query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY][0]
 			);
 		});
@@ -28,7 +28,7 @@ describe('Utils', () => {
 			const filters = mapFiltersToTags(query);
 
 			expect(filters).toHaveLength(1);
-			expect(filters[0].val).toBe(tagPrefix(QUERY_PARAM_KEY.SEARCH_QUERY_KEY) + value);
+			expect(filters[0].multiValue?.[0]).toBe(tagPrefix(QUERY_PARAM_KEY.SEARCH_QUERY_KEY) + value);
 		});
 	});
 });

@@ -1,12 +1,10 @@
 import type { SelectOption } from '@meemoo/react-components';
-import { format, parseISO } from 'date-fns';
-import { isString } from 'lodash-es';
-
-import { SEPARATOR } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import { formatDate } from '@shared/utils/dates';
 import type { SearchPageQueryParams } from '@visitor-space/const';
+import { format, parseISO } from 'date-fns';
+import { isString } from 'lodash-es';
 
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import { AdvancedFilterArrayParam } from '../../const/advanced-filter-array-param';
@@ -89,13 +87,13 @@ export const mapAdvancedToTags = (
 		const filterProp = advanced.field as IeObjectsSearchFilterField;
 		const filterOp = advanced.operator as Operator;
 
-		const split = (advanced.val || '').split(SEPARATOR);
+		const values = advanced.multiValue || [];
 
 		const filterPropLabel =
 			getSelectLabel(getRegularProperties(), filterProp) ||
 			getSelectLabel(getAdvancedProperties(), filterProp);
 		let filterOperatorLabel = getSelectLabel(getOperators(filterProp), filterOp);
-		let value = advanced.val;
+		let value = advanced.multiValue?.[0];
 
 		// Convert certain values to be legible
 
@@ -104,7 +102,7 @@ export const mapAdvancedToTags = (
 			case IeObjectsSearchFilterField.PUBLISHED:
 			case IeObjectsSearchFilterField.RELEASE_DATE:
 				if (filterOp === Operator.BETWEEN || filterOp === Operator.IS) {
-					value = `${formatDate(parseISO(split[0]))} - ${formatDate(parseISO(split[1]))}`;
+					value = `${formatDate(parseISO(values[0]))} - ${formatDate(parseISO(values[1]))}`;
 					filterOperatorLabel = undefined;
 				} else {
 					value = value ? formatDate(parseISO(value)) : '';
@@ -113,7 +111,7 @@ export const mapAdvancedToTags = (
 
 			case IeObjectsSearchFilterField.DURATION:
 				if (filterOp === Operator.BETWEEN) {
-					value = `${split[0]} - ${split[1]}`;
+					value = `${values[0]} - ${values[1]}`;
 					filterOperatorLabel = undefined;
 				}
 				break;
@@ -235,7 +233,7 @@ export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] =>
 };
 
 export const mapAdvancedToElastic = (item: FilterValue): FilterValue[] => {
-	const values = (item.val || '').split(SEPARATOR);
+	const values = item.multiValue || [];
 	const filterProp = item.field as IeObjectsSearchFilterField;
 	const filterOperator = item.operator as Operator;
 	const filters =
@@ -265,6 +263,6 @@ export const mapAdvancedToElastic = (item: FilterValue): FilterValue[] => {
 				break;
 		}
 
-		return { ...filter, val: values[i] };
+		return { ...filter, multiValue: values };
 	});
 };

@@ -5,7 +5,6 @@ import type { SingleValue } from 'react-select';
 import { StringParam, useQueryParam } from 'use-query-params';
 
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
-import { SEPARATOR } from '@shared/const';
 import { tHtml } from '@shared/helpers/translate';
 
 import { type DefaultFilterFormProps, type FilterValue, Operator } from '../../types';
@@ -126,15 +125,15 @@ const DurationFilterForm: FC<DefaultFilterFormProps> = ({
 					<div className="u-py-32 u-px-20 u-px-32-md u-bg-platinum">
 						{value?.operator === Operator.BETWEEN ? (
 							<DurationRangeInput
-								value={value.val || `${defaultValue}${SEPARATOR}${defaultValue}`}
+								value={value.multiValue?.[0] || [defaultValue, defaultValue]}
 								onChange={onChangeDuration}
-								placeholder={value.val}
+								placeholder={value.multiValue?.[0]}
 							/>
 						) : (
 							<DurationInput
-								value={value.val || defaultValue}
+								value={value.multiValue?.[0] || defaultValue}
 								onChange={onChangeDuration}
-								placeholder={value.val}
+								placeholder={value.multiValue?.[0]}
 							/>
 						)}
 					</div>

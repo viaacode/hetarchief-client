@@ -59,8 +59,8 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 				{!disabled &&
 					values.map((value, index) => (
 						<AdvancedFilterFields
-							key={`advanced-filter-${value.field}--${value.operator}--${value.val}`}
-							id={`advanced-filter-${value.field}--${value.operator}--${value.val}`}
+							key={`advanced-filter-${value.field}--${value.operator}--${value.multiValue?.[0]}`}
+							id={`advanced-filter-${value.field}--${value.operator}--${value.multiValue?.[0]}`}
 							index={index}
 							value={value}
 							onChange={handleChange}

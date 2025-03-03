@@ -23,14 +23,14 @@ export const ConsultableMediaFilterForm: FC<DefaultFilterFormProps> = ({
 	const handleInputChange = (newValue: boolean | null) => {
 		onSubmit({
 			...value,
-			val: newValue ? 'true' : 'false',
+			multiValue: [newValue ? 'true' : 'false'],
 		});
 	};
 
 	return (
 		<CheckboxFilterForm
 			id={id}
-			value={value.val === 'true'}
+			value={value.multiValue?.[0] === 'true'}
 			onChange={handleInputChange}
 			label={label}
 			className={className}

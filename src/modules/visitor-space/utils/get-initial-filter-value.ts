@@ -37,13 +37,13 @@ export function getInitialFilterValue(
 			return {
 				field: id,
 				operator: operator,
-				val: initialValueFromQueryParams ? 'true' : 'false',
+				multiValue: [initialValueFromQueryParams ? 'true' : 'false'],
 			};
 		}
 		return {
 			field: id,
 			operator: operator,
-			val: initialValueFromQueryParams as string,
+			multiValue: [initialValueFromQueryParams as string],
 		};
 	}
 	if (initialValue) {
@@ -52,6 +52,6 @@ export function getInitialFilterValue(
 	return {
 		field: id,
 		operator: operator,
-		val: BOOLEAN_FILTERS.includes(id) ? 'false' : '',
+		multiValue: [BOOLEAN_FILTERS.includes(id) ? 'false' : ''],
 	};
 }

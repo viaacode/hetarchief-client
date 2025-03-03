@@ -110,7 +110,6 @@ export type PropertyOptions = Array<
 export interface FilterValue {
 	field?: IeObjectsSearchFilterField; // Which property/field is being filtered on
 	operator?: Operator; // Which operator, see Operator enum
-	val?: string; // stringified value, potentially character-separated. val instead of value to not create a conflict with TagInfo
 	multiValue?: string[];
 }
 

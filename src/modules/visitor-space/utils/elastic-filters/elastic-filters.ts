@@ -92,7 +92,7 @@ export const mapFiltersToElastic = (query: SearchPageQueryParams): FilterValue[]
 		// Duration
 		...(query[IeObjectsSearchFilterField.DURATION] || []).flatMap(mapAdvancedToElastic),
 		// ReleaseDate
-		...(query[IeObjectsSearchFilterField.RELEASE_DATE] || []).flatMap(mapAdvancedToElastic),
+		...compact([query[IeObjectsSearchFilterField.RELEASE_DATE]]).flatMap(mapAdvancedToElastic),
 		// Creator
 		{
 			field: IeObjectsSearchFilterField.CREATOR,
@@ -167,20 +167,3 @@ export const mapFiltersToElastic = (query: SearchPageQueryParams): FilterValue[]
 		...(query.advanced || []).flatMap(mapAdvancedToElastic),
 	].filter((filterField) => filterField.value || filterField.multiValue?.length);
 };
-
-export const mapRefineFilterToElastic = (
-	refineFilters: { field: IeObjectsSearchFilterField; value: string }[]
-): FilterValue[] =>
-	refineFilters.map(
-		({
-			field,
-			value,
-		}: {
-			field: IeObjectsSearchFilterField;
-			value: string;
-		}): FilterValue => ({
-			field,
-			operator: Operator.CONTAINS,
-			val: value,
-		})
-	);

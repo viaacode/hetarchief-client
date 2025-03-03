@@ -36,8 +36,8 @@ export class IeObjectsService {
 		const filtered = [
 			...filters.filter((item) => {
 				// Don't send filters with no value(s)
-				const hasValue = !!item.val || !!item.multiValue;
-				const eitherValue = item.multiValue || item.val;
+				const hasValue = !!item.multiValue?.[0] || !!item.multiValue;
+				const eitherValue = item.multiValue || item.multiValue?.[0];
 
 				// Don't send filters with an empty array/string
 				const hasLength = eitherValue && eitherValue.length > 0;
@@ -46,7 +46,7 @@ export class IeObjectsService {
 				const isFormatAllFilter =
 					item.field === IeObjectsSearchFilterField.FORMAT &&
 					item.operator === Operator.IS &&
-					item.val === SearchPageMediaType.All;
+					item.multiValue?.[0] === SearchPageMediaType.All;
 
 				return hasValue && hasLength && !isFormatAllFilter;
 			}),

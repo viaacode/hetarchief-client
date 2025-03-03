@@ -23,14 +23,14 @@ export const ConsultableOnlyOnLocationFilterForm: FC<DefaultFilterFormProps> = (
 	const handleInputChange = (newValue: boolean) => {
 		onSubmit({
 			...value,
-			val: newValue.toString(),
+			multiValue: [newValue.toString()],
 		});
 	};
 
 	return (
 		<CheckboxFilterForm
 			id={`consultable-only-on-location-filter-form--${id}`}
-			value={value.val === 'true'}
+			value={value.multiValue?.[0] === 'true'}
 			onChange={handleInputChange}
 			label={label}
 			className={className}

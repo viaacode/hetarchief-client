@@ -518,7 +518,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				if (BOOLEAN_FILTERS.includes(value.field)) {
 					// Boolean filter
 					setQuery({
-						[value.field]: value.val === 'true' || undefined,
+						[value.field]: value.multiValue?.[0] === 'true' || undefined,
 						filter: undefined,
 						page: currentPage,
 						...(searchValue ? searchValue : {}),
@@ -526,7 +526,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				} else {
 					// String filter
 					setQuery({
-						[value.field]: value.val || undefined,
+						[value.field]: value.multiValue?.[0] || undefined,
 						filter: undefined,
 						page: currentPage,
 						...(searchValue ? searchValue : {}),
@@ -555,7 +555,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				case IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME:
 					updatedQuery[tag.key] = [
 						...((updatedQuery[tag.key] as Array<unknown>) || []),
-						`${tag.val}`.replace(tagPrefix(tag.key), ''),
+						`${tag.multiValue?.[0]}`.replace(tagPrefix(tag.key), ''),
 					];
 					break;
 
@@ -569,13 +569,13 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				case IeObjectsSearchFilterField.CONSULTABLE_MEDIA:
 				case IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN: {
 					// eslint-disable-next-line no-case-declarations
-					const newValue = `${tag.val ?? 'false'}`.replace(tagPrefix(tag.key), '');
+					const newValue = `${tag.multiValue?.[0] ?? 'false'}`.replace(tagPrefix(tag.key), '');
 					updatedQuery[tag.key] = newValue === 'true' ? 'false' : 'true';
 					break;
 				}
 
 				default:
-					updatedQuery[tag.key] = tag.val;
+					updatedQuery[tag.key] = tag.multiValue?.[0];
 					break;
 			}
 		}

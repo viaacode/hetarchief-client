@@ -95,7 +95,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			value={textValue}
 			onChange={(e) =>
 				onFieldChange({
-					val: e.target.value,
+					multiValue: [e.target.value],
 				})
 			}
 		/>
@@ -118,17 +118,17 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			case TextInput: {
 				const TextInputComponent = filterConfig.inputComponent as FC<TextInputProps>;
 				const textInputComponentProps = (filterConfig.inputComponentProps || {}) as TextInputProps;
-				return renderTextField(TextInputComponent, value.val, {
+				return renderTextField(TextInputComponent, value.multiValue?.[0], {
 					...textInputComponentProps,
 					...(props as TextInputProps),
 				});
 			}
 
 			case DateRangeInput: {
-				const split = ((value.val || '') as string).split(SEPARATOR, 2);
+				const values = value.multiValue || [];
 
-				const from: Date = split[0] ? parseISO(split[0]) : new Date();
-				const to: Date = split[1] ? parseISO(split[1]) : new Date();
+				const from: Date = values[0] ? parseISO(values[0]) : new Date();
+				const to: Date = values[1] ? parseISO(values[1]) : new Date();
 
 				const DateRangeInput = filterConfig.inputComponent as FC<DateRangeInputProps>;
 				const dateRangeInputProps = filterConfig.inputComponentProps as DateRangeInputProps;
@@ -141,19 +141,17 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						)}
 						from={from}
 						to={to}
-						onChange={(newFromDate: Date | undefined, newToDate: Date | undefined) =>
+						onChange={(newFromDate: Date | undefined, newToDate: Date | undefined) => {
 							onFieldChange({
-								val:
-									`${newFromDate?.toISOString()}${SEPARATOR}${newToDate?.toISOString()}` ??
-									undefined,
-							})
-						}
+								multiValue: [newFromDate?.toISOString() || '', newToDate?.toISOString() || ''],
+							});
+						}}
 					/>
 				);
 			}
 
 			case DurationInput: {
-				const selectedDuration = value.val || defaultValue; // Ensure initial value is hh:mm:ss
+				const selectedDuration = value.multiValue?.[0] || defaultValue; // Ensure initial value is hh:mm:ss
 				const TextInputComponent = filterConfig.inputComponent as FC<TextInputProps>;
 				const textInputComponentProps = (filterConfig.inputComponentProps || {}) as TextInputProps;
 
@@ -164,7 +162,8 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			}
 
 			case DurationRangeInput: {
-				const selectedDurationRange = value.val || `${defaultValue}${SEPARATOR}${defaultValue}`; // Ensure initial value is hh:mm:ss for both fields
+				const selectedDurationRange =
+					value.multiValue?.[0] || `${defaultValue}${SEPARATOR}${defaultValue}`; // Ensure initial value is hh:mm:ss for both fields
 				const TextInputComponent = filterConfig.inputComponent as FC<TextInputProps>;
 				const textInputComponentProps = (filterConfig.inputComponentProps || {}) as TextInputProps;
 
@@ -184,9 +183,9 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				const selectedOption =
 					getSelectValue(
 						((props as ReactSelectProps).options || []) as SelectOption[],
-						value.val
-					) || value.val
-						? { label: value.val as string, value: value.val as string }
+						value.multiValue?.[0]
+					) || value.multiValue?.[0]
+						? { label: value.multiValue?.[0] as string, value: value.multiValue?.[0] as string }
 						: undefined;
 
 				return (
@@ -199,11 +198,12 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						)}
 						value={selectedOption}
 						// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-						onChange={(e: any) =>
+						onChange={(e: any) => {
+							const val = (e as SingleValue<SelectOption>)?.value;
 							onFieldChange({
-								val: (e as SingleValue<SelectOption>)?.value ?? undefined,
-							})
-						}
+								multiValue: val ? [val] : [],
+							});
+						}}
 					/>
 				);
 			}
@@ -214,11 +214,11 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				const selectedOption =
 					getSelectValue(
 						((props as ReactSelectProps).options || []) as SelectOption[],
-						value.val
-					) || value.val
+						value.multiValue?.[0]
+					) || value.multiValue?.[0]
 						? {
-								label: LANGUAGES[locale][value.val as LanguageCode],
-								value: value.val as string,
+								label: LANGUAGES[locale][value.multiValue?.[0] as LanguageCode],
+								value: value.multiValue?.[0] as string,
 							}
 						: undefined;
 
@@ -232,11 +232,12 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						)}
 						value={selectedOption}
 						// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-						onChange={(e: any) =>
+						onChange={(e: any) => {
+							const val = (e as SingleValue<SelectOption>)?.value;
 							onFieldChange({
-								val: (e as SingleValue<SelectOption>)?.value ?? undefined,
-							})
-						}
+								multiValue: val ? [val] : [],
+							});
+						}}
 					/>
 				);
 			}
@@ -244,7 +245,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			case DateInput: {
 				const DateInputComponent = filterConfig.inputComponent as FC<DateInputProps>;
 				const DateInputComponentProps = filterConfig.inputComponentProps as DateInputProps;
-				const selectedDate = value.val ? parseISO(value.val) : new Date();
+				const selectedDate = value.multiValue?.[0] ? parseISO(value.multiValue?.[0]) : new Date();
 
 				return (
 					<DateInputComponent
@@ -255,8 +256,9 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						)}
 						value={selectedDate}
 						onChange={(newDate: Date) => {
+							const val = newDate ? newDate.toISOString() : null;
 							onFieldChange({
-								val: newDate ? newDate.toISOString() : undefined,
+								multiValue: val ? [val] : [],
 							});
 						}}
 					/>
@@ -276,12 +278,13 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 							styles['c-advanced-filter-fields__dynamic-field'],
 							styles['c-advanced-filter-fields__dynamic-field--datepicker']
 						)}
-						value={value.val}
-						onChange={(newValue: string | null) =>
+						value={value.multiValue?.[0]}
+						onChange={(newValue: string | null) => {
+							const val = newValue || undefined;
 							onFieldChange({
-								val: newValue || undefined,
-							})
-						}
+								multiValue: val ? [val] : [],
+							});
+						}}
 					/>
 				);
 			}
@@ -312,7 +315,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						onFieldChange({
 							field: value.field,
 							operator: operators.length > 0 ? operators[0].value : undefined,
-							val: undefined,
+							multiValue: [],
 						});
 					}}
 					options={getAdvancedProperties()}
@@ -334,7 +337,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						onChange={(newValue) =>
 							onFieldChange({
 								operator: (newValue as SingleValue<SelectOption>)?.value as Operator,
-								val: undefined,
+								multiValue: [],
 							})
 						}
 						options={operators}

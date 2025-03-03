@@ -16,6 +16,7 @@ import {
 } from '../AdvancedFilterForm/AdvancedFilterForm.const';
 
 import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
+import { compact } from 'lodash-es';
 import styles from './AutocompleteFieldFilterForm.module.scss';
 
 interface AutocompleteFieldFilterFormProps extends DefaultFilterFormProps {
@@ -56,7 +57,7 @@ export const AutocompleteFieldFilterForm: FC<AutocompleteFieldFilterFormProps> =
 	const handleInputChange = (newValue: string | null) => {
 		setValue({
 			...value,
-			val: newValue || undefined,
+			multiValue: compact([newValue || undefined]),
 		});
 	};
 
@@ -76,7 +77,7 @@ export const AutocompleteFieldFilterForm: FC<AutocompleteFieldFilterFormProps> =
 					<AutocompleteFieldInput
 						fieldName={autocompleteField}
 						onChange={handleInputChange}
-						value={value.val}
+						value={value.multiValue?.[0]}
 						id={AutocompleteField.Creator}
 						label={fieldLabel}
 					/>

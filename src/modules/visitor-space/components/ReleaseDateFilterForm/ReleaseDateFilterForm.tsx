@@ -145,10 +145,10 @@ const ReleaseDateFilterForm: FC<DefaultFilterFormProps> = ({
 					/>
 				);
 			}
-			const split = ((value.val || '') as string).split(SEPARATOR, 2);
+			const values = value.multiValue || [];
 
-			const from: Date | undefined = split[0] ? parseISO(split[0]) : undefined;
-			const to: Date | undefined = split[1] ? parseISO(split[1]) : undefined;
+			const from: Date | undefined = values[0] ? parseISO(values[0]) : undefined;
+			const to: Date | undefined = values[1] ? parseISO(values[1]) : undefined;
 
 			return (
 				<DateRangeInput
@@ -176,7 +176,7 @@ const ReleaseDateFilterForm: FC<DefaultFilterFormProps> = ({
 				/>
 			);
 		}
-		const releaseDate = value.val?.split(SEPARATOR, 2)[0];
+		const releaseDate = value.multiValue?.[0];
 		return (
 			<DateInput
 				label={getSelectValue(operators, value.operator)?.label}
@@ -216,7 +216,9 @@ const ReleaseDateFilterForm: FC<DefaultFilterFormProps> = ({
 			<div className={clsx(styles.releaseDate, 'u-px-20 u-px-32-md')}>
 				<FormControl
 					className="u-mb-24 c-form-control--label-hidden"
-					errors={[<RedFormWarning error={formErrors?.val} key="form-error--release-date" />]}
+					errors={[
+						<RedFormWarning error={formErrors?.multiValue} key="form-error--release-date" />,
+					]}
 					id={'release-date-filter-form--release-date'}
 					label={tHtml(
 						'modules/visitor-space/components/releaseDate-filter-form/releaseDate-filter-form___waarde'

@@ -1,6 +1,7 @@
 import type { QueryParamConfig } from 'use-query-params';
 
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import { compact } from 'lodash-es';
 import { type FilterValue, Operator } from '../types';
 
 const divider = ',';
@@ -12,11 +13,11 @@ export const AdvancedFilterArrayParam: QueryParamConfig<FilterValue[] | undefine
 		return filters
 			.filter((filter) => filter.field)
 			.map((filter) => {
-				const { field, operator, val } = filter;
+				const { field, operator, multiValue } = filter;
 				const propertyAcronym = filterNameToAcronym(field as IeObjectsSearchFilterField);
 				const operatorAcronym = operatorToAcronym(operator as Operator);
 
-				return `${propertyAcronym}${operatorAcronym}${encodeURIComponent(val || '')}`;
+				return `${propertyAcronym}${operatorAcronym}${encodeURIComponent(multiValue?.[0] || '')}`;
 			})
 			.join(divider);
 	},
@@ -31,7 +32,7 @@ export const AdvancedFilterArrayParam: QueryParamConfig<FilterValue[] | undefine
 
 					const val = decodeURIComponent(filter.slice(4));
 
-					return { prop: filterProperty, op: filterOperator, val };
+					return { prop: filterProperty, op: filterOperator, multiValue: compact([val]) };
 				})
 			: undefined;
 	},

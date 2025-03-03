@@ -24,14 +24,14 @@ export const ConsultablePublicDomainFilterForm: FC<DefaultFilterFormProps> = ({
 	const handleChange = (newValue: boolean) => {
 		onSubmit({
 			...value,
-			val: newValue ? 'true' : 'false',
+			multiValue: [newValue ? 'true' : 'false'],
 		});
 	};
 
 	return (
 		<CheckboxFilterForm
 			id={`consultable-public-domain-filter-form--${id}`}
-			value={value.val === 'true'}
+			value={value.multiValue?.[0] === 'true'}
 			onChange={handleChange}
 			label={label}
 			className={className}

@@ -6,7 +6,7 @@ import { type FilterValue, Operator } from '../../types';
 export const initialFilterValue = (operator?: Operator): FilterValue => ({
 	field: IeObjectsSearchFilterField.QUERY,
 	operator: operator || Operator.IS,
-	val: '',
+	multiValue: [''],
 });
 
 export const initialFilterMultiValue = (operator?: Operator): FilterValue => ({
@@ -15,13 +15,10 @@ export const initialFilterMultiValue = (operator?: Operator): FilterValue => ({
 	multiValue: [],
 });
 
-export const ADVANCED_FILTERS_FORM_SCHEMA = (): Schema<FilterValue[]> =>
-	array(FILTER_FORM_SCHEMA()).required();
-
 export const FILTER_FORM_SCHEMA = (): Schema<FilterValue> =>
 	object({
-		prop: string().oneOf(Object.values(IeObjectsSearchFilterField)),
-		op: string().oneOf(Object.values(Operator)),
+		field: string().oneOf(Object.values(IeObjectsSearchFilterField)),
+		operator: string().oneOf(Object.values(Operator)),
 		val: string(),
 		multiValue: array(string().required()),
 	}).required();
