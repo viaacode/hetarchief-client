@@ -1,5 +1,5 @@
 import { OrderDirection } from '@meemoo/react-components';
-import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react-query';
+import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
 import { isEmpty, isNil, noop } from 'lodash-es';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -10,20 +10,15 @@ import { EventsService, LogEventType } from '@shared/services/events-service';
 import { setFilterOptions, setResults } from '@shared/store/ie-objects';
 import type { SortObject } from '@shared/types';
 import type { GetIeObjectsResponse } from '@shared/types/api';
-import {
-	type IeObjectsSearchFilter,
-	IeObjectsSearchFilterField,
-	IeObjectsSearchOperator,
-	SearchPageMediaType,
-} from '@shared/types/ie-objects';
+import { IeObjectsSearchFilterField, SearchPageMediaType } from '@shared/types/ie-objects';
 import { SEARCH_RESULTS_PAGE_SIZE } from '@visitor-space/const';
-import { SearchSortProp } from '@visitor-space/types';
+import { type FilterValue, Operator, SearchSortProp } from '@visitor-space/types';
 import { VISITOR_SPACE_LICENSES } from '@visitor-space/utils/elastic-filters';
 
 import { IeObjectsService } from './../services';
 
 export async function getIeObjects(
-	filters: IeObjectsSearchFilter[],
+	filters: FilterValue[],
 	page: number,
 	size: number,
 	sort: SortObject | undefined
@@ -35,7 +30,7 @@ export async function getIeObjects(
 
 export const useGetIeObjects = (
 	args: {
-		filters: IeObjectsSearchFilter[];
+		filters: FilterValue[];
 		page: number;
 		size: number;
 		sort?: SortObject;
@@ -87,7 +82,7 @@ export async function makeServerSideRequestGetIeObjects(queryClient: QueryClient
 		filters: [
 			{
 				field: IeObjectsSearchFilterField.FORMAT,
-				operator: IeObjectsSearchOperator.IS,
+				operator: Operator.IS,
 				value: SearchPageMediaType.All,
 			},
 		],

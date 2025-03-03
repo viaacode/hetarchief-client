@@ -10,14 +10,9 @@ import type { SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
 import { ApiService } from '@shared/services/api-service';
 import type { SortObject } from '@shared/types';
 import type { GetIeObjectsResponse } from '@shared/types/api';
-import {
-	type IeObjectsSearchFilter,
-	IeObjectsSearchFilterField,
-	IeObjectsSearchOperator,
-	SearchPageMediaType,
-} from '@shared/types/ie-objects';
+import { IeObjectsSearchFilterField, SearchPageMediaType } from '@shared/types/ie-objects';
 import type { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
-import { SearchSortProp } from '@visitor-space/types';
+import { type FilterValue, Operator, SearchSortProp } from '@visitor-space/types';
 
 import {
 	IE_OBJECTS_SERVICE_BASE_URL,
@@ -31,7 +26,7 @@ import {
 
 export class IeObjectsService {
 	public static async getSearchResults(
-		filters: IeObjectsSearchFilter[] = [],
+		filters: FilterValue[] = [],
 		page = 1,
 		size = 20,
 		sort?: SortObject,
@@ -41,8 +36,8 @@ export class IeObjectsService {
 		const filtered = [
 			...filters.filter((item) => {
 				// Don't send filters with no value(s)
-				const hasValue = !!item.value || !!item.multiValue;
-				const eitherValue = item.multiValue || item.value;
+				const hasValue = !!item.val || !!item.multiValue;
+				const eitherValue = item.multiValue || item.val;
 
 				// Don't send filters with an empty array/string
 				const hasLength = eitherValue && eitherValue.length > 0;
@@ -50,8 +45,8 @@ export class IeObjectsService {
 				// Don't send the "All" filter for FORMAT.IS
 				const isFormatAllFilter =
 					item.field === IeObjectsSearchFilterField.FORMAT &&
-					item.operator === IeObjectsSearchOperator.IS &&
-					item.value === SearchPageMediaType.All;
+					item.operator === Operator.IS &&
+					item.val === SearchPageMediaType.All;
 
 				return hasValue && hasLength && !isFormatAllFilter;
 			}),

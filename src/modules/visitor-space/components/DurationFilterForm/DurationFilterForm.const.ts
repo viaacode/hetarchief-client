@@ -3,12 +3,15 @@ import { type Schema, mixed, object, string } from 'yup';
 import { SEPARATOR } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import { durationRegex } from '../../components/DurationInput/DurationInput.consts';
-import { type FilterValue, Operator, SearchFilterId } from '../../types';
+import { type FilterValue, Operator } from '../../types';
 
 export const DURATION_FILTER_FORM_SCHEMA = (): Schema<FilterValue> =>
 	object({
-		prop: mixed<SearchFilterId>().required().oneOf(Object.values(SearchFilterId)),
+		prop: mixed<IeObjectsSearchFilterField>()
+			.required()
+			.oneOf(Object.values(IeObjectsSearchFilterField)),
 		op: mixed<Operator>().required().oneOf(Object.values(Operator)),
 		val: string()
 			.optional()

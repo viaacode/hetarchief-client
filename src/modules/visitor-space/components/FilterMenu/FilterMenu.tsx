@@ -17,8 +17,9 @@ import {
 	VISITOR_SPACE_ACTIVE_SORT_MAP,
 } from '@visitor-space/const';
 
-import type { FilterValue, SearchFilterId, SearchSortProp } from '../../types';
+import type { FilterValue, SearchSortProp } from '../../types';
 
+import type { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import styles from './FilterMenu.module.scss';
 import type { FilterMenuFilterOption, FilterMenuProps } from './FilterMenu.types';
 import { FilterOption } from './FilterOption/FilterOption';
@@ -74,7 +75,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 		setQuery({ filter });
 	};
 
-	const onFilterFormReset = (id: SearchFilterId) => {
+	const onFilterFormReset = (id: IeObjectsSearchFilterField) => {
 		onFilterReset(id);
 	};
 

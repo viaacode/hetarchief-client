@@ -6,12 +6,10 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml } from '@shared/helpers/translate';
 
+import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
 import type { FilterValue } from '../../types';
 import { AdvancedFilterFields } from '../AdvancedFilterFields/AdvancedFilterFields';
-
-import { validateForm } from '@shared/helpers/validate-form';
-import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
-import { ADVANCED_FILTERS_FORM_SCHEMA, initialFilterValue } from './AdvancedFilterForm.const';
+import { initialFilterValue } from './AdvancedFilterForm.const';
 import styles from './AdvancedFilterForm.module.scss';
 import type { AdvancedFilterFormProps } from './AdvancedFilterForm.types';
 
@@ -22,7 +20,6 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 	onReset,
 	initialValues,
 }) => {
-	const [formErrors, setFormErrors] = useState<Record<string, string> | null>(null);
 	const [values, setValues] = useState<FilterValue[]>(initialValues || [initialFilterValue()]);
 
 	const handleChange = (index: number, value: FilterValue) => {
@@ -42,11 +39,7 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 	};
 
 	const handleSubmit = async () => {
-		const errors = await validateForm(values, ADVANCED_FILTERS_FORM_SCHEMA());
-		setFormErrors(errors);
-		if (!errors) {
-			onSubmit(values);
-		}
+		onSubmit(values);
 	};
 
 	const handleReset = () => {
@@ -66,8 +59,8 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 				{!disabled &&
 					values.map((value, index) => (
 						<AdvancedFilterFields
-							key={`advanced-filter-${value.prop}--${value.op}--${value.val}`}
-							id={`advanced-filter-${value.prop}--${value.op}--${value.val}`}
+							key={`advanced-filter-${value.field}--${value.operator}--${value.val}`}
+							id={`advanced-filter-${value.field}--${value.operator}--${value.val}`}
 							index={index}
 							value={value}
 							onChange={handleChange}

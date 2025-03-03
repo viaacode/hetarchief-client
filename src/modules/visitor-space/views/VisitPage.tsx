@@ -19,8 +19,8 @@ import { AccessStatus } from '@shared/types/visit-request';
 import { useGetVisitAccessStatus } from '@visit-requests/hooks/get-visit-access-status';
 import { useGetOrganisationBySlug } from '@visitor-space/hooks/get-organisation-by-slug';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
-import { SearchFilterId } from '@visitor-space/types';
 
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import { VisitorLayout } from '../../visitor-layout';
 
 export const VisitPage: FC<DefaultSeoInfo> = ({ title, description, url }) => {
@@ -110,7 +110,7 @@ export const VisitPage: FC<DefaultSeoInfo> = ({ title, description, url }) => {
 					<NextRedirect
 						to={stringifyUrl({
 							url: ROUTES_BY_LOCALE[locale].search,
-							query: { [SearchFilterId.Maintainer]: slug },
+							query: { [IeObjectsSearchFilterField.MAINTAINER_SLUG]: slug },
 						})}
 						method="replace"
 					/>
@@ -127,7 +127,7 @@ export const VisitPage: FC<DefaultSeoInfo> = ({ title, description, url }) => {
 						to={stringifyUrl({
 							url: ROUTES_BY_LOCALE[locale].search,
 							query: {
-								[SearchFilterId.Maintainers]: `${organisation?.schemaIdentifier}---${organisation?.schemaName}`,
+								[IeObjectsSearchFilterField.MAINTAINER_ID]: `${organisation?.schemaIdentifier}---${organisation?.schemaName}`,
 							},
 						})}
 						method="replace"

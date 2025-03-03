@@ -2,11 +2,11 @@ import type { FC, ReactNode } from 'react';
 
 import type { DefaultComponentProps } from '@shared/types';
 
+import type { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import type {
 	DefaultFilterArrayFormProps,
 	DefaultFilterFormProps,
 	FilterValue,
-	SearchFilterId,
 } from '../../../types';
 import type {
 	FilterMenuType,
@@ -17,7 +17,7 @@ import type {
 export interface FilterFormProps extends DefaultComponentProps {
 	children?: ReactNode;
 	form: FC<DefaultFilterFormProps> | FC<DefaultFilterArrayFormProps> | null;
-	id: SearchFilterId;
+	id: IeObjectsSearchFilterField;
 	onFormReset: OnFilterMenuFormReset;
 	onFormSubmit: OnFilterMenuFormSubmit;
 	title: string;

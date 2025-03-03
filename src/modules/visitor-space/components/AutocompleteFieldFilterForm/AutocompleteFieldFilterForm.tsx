@@ -9,17 +9,13 @@ import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMe
 
 import { validateForm } from '@shared/helpers/validate-form';
 import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
-import {
-	type DefaultFilterFormProps,
-	type FilterValue,
-	Operator,
-	type SearchFilterId,
-} from '@visitor-space/types';
+import type { DefaultFilterFormProps, FilterValue } from '@visitor-space/types';
 import {
 	FILTER_FORM_SCHEMA,
 	initialFilterValue,
 } from '../AdvancedFilterForm/AdvancedFilterForm.const';
 
+import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
 import styles from './AutocompleteFieldFilterForm.module.scss';
 
 interface AutocompleteFieldFilterFormProps extends DefaultFilterFormProps {
@@ -29,6 +25,7 @@ interface AutocompleteFieldFilterFormProps extends DefaultFilterFormProps {
 }
 
 export const AutocompleteFieldFilterForm: FC<AutocompleteFieldFilterFormProps> = ({
+	id,
 	className,
 	autocompleteField,
 	filterTitle,
@@ -39,13 +36,7 @@ export const AutocompleteFieldFilterForm: FC<AutocompleteFieldFilterFormProps> =
 }) => {
 	const [initialValueFromQueryParams] = useQueryParam(autocompleteField, StringParam);
 	const [value, setValue] = useState<FilterValue>(
-		initialValueFromQueryParams
-			? {
-					prop: autocompleteField as unknown as SearchFilterId,
-					op: Operator.EQUALS,
-					val: initialValueFromQueryParams,
-				}
-			: initialValue || initialFilterValue()
+		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
 	);
 	const [formErrors, setFormErrors] = useState<Record<string, string> | null>(null);
 

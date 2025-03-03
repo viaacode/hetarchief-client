@@ -1,40 +1,18 @@
 // 2-letter for url parsing
 
-export enum FilterProperty {
-	CAST = 'CAST',
-	CREATED_AT = 'CREATED_AT',
-	CREATOR = 'CREATOR',
-	DESCRIPTION = 'DESCRIPTION',
-	DURATION = 'DURATION',
-	GENRE = 'GENRE',
-	IDENTIFIER = 'IDENTIFIER',
-	KEYWORDS = 'KEYWORDS',
-	LANGUAGE = 'LANGUAGE',
-	MEDIA_TYPE = 'MEDIA_TYPE',
-	MEDIUM = 'MEDIUM',
-	OBJECT_TYPE = 'OBJECT_TYPE',
-	PUBLISHED_AT = 'PUBLISHED_AT',
-	PUBLISHER = 'PUBLISHER',
-	RELEASE_DATE = 'RELEASE_DATE',
-	SPACIAL_COVERAGE = 'SPACIAL_COVERAGE',
-	TEMPORAL_COVERAGE = 'TEMPORAL_COVERAGE',
-	TITLE = 'TITLE',
-	NEWSPAPER_SERIES_NAME = 'NEWSPAPER_SERIES_NAME',
-	LOCATION_CREATED = 'LOCATION_CREATED',
-	MENTIONS = 'MENTIONS',
-}
-
 export const FILTER_LABEL_VALUE_DELIMITER = '---';
 
+/**
+ * Inside the client this enum is used for the operator values
+ * But these are converted to simpler values for the backend: ServerOperator
+ */
 export enum Operator {
-	CONTAINS = 'CONTAINS',
-	CONTAINS_NOT = 'CONTAINS_NOT',
-	EQUALS = 'EQUALS',
-	EQUALS_NOT = 'EQUALS_NOT',
-	LESS_THAN_OR_EQUAL = 'LESS_THAN_OR_EQUAL', // shorter (duration) or until (date)
-	GREATER_THAN_OR_EQUAL = 'GREATER_THAN_OR_EQUAL', // longer (duration) or after (date)
-	BETWEEN = 'BETWEEN', // duration & date
-	EXACT = 'EXACT', // duration
+	CONTAINS = 'contains',
+	CONTAINS_NOT = 'containsNot',
+	IS = 'is',
+	IS_NOT = 'isNot',
+	LTE = 'lte', // shorter (duration) or until (date)
+	GTE = 'gte', // longer (duration) or after (date)
+	BETWEEN = 'between', // duration & date, between 2 dates, is converted on the backend to GTE and LTE
+	EXACT = 'exact', // duration & date: exactly on one day, but is stored as start and end date
 }
-
-export const isRange = (op?: string): boolean => op === Operator.BETWEEN;

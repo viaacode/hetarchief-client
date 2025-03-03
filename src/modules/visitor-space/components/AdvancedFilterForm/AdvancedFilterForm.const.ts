@@ -1,16 +1,17 @@
 import { type Schema, array, object, string } from 'yup';
 
-import { type FilterValue, Operator, SearchFilterId } from '../../types';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import { type FilterValue, Operator } from '../../types';
 
 export const initialFilterValue = (operator?: Operator): FilterValue => ({
-	prop: SearchFilterId.Query,
-	op: operator || Operator.CONTAINS,
+	field: IeObjectsSearchFilterField.QUERY,
+	operator: operator || Operator.IS,
 	val: '',
 });
 
 export const initialFilterMultiValue = (operator?: Operator): FilterValue => ({
-	prop: SearchFilterId.Query,
-	op: operator || Operator.CONTAINS,
+	field: IeObjectsSearchFilterField.QUERY,
+	operator: operator || Operator.IS,
 	multiValue: [],
 });
 
@@ -19,7 +20,7 @@ export const ADVANCED_FILTERS_FORM_SCHEMA = (): Schema<FilterValue[]> =>
 
 export const FILTER_FORM_SCHEMA = (): Schema<FilterValue> =>
 	object({
-		prop: string().oneOf(Object.values(SearchFilterId)),
+		prop: string().oneOf(Object.values(IeObjectsSearchFilterField)),
 		op: string().oneOf(Object.values(Operator)),
 		val: string(),
 		multiValue: array(string().required()),

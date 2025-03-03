@@ -1,3 +1,5 @@
-import { SearchFilterId } from '@visitor-space/types';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 
-export const HAS_SHOW_OVERFLOW: SearchFilterId[] = [SearchFilterId.Duration];
+export const HAS_SHOW_OVERFLOW: IeObjectsSearchFilterField[] = [
+	IeObjectsSearchFilterField.DURATION,
+];

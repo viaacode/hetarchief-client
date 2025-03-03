@@ -4,13 +4,12 @@ import type { FC, ReactNode } from 'react';
 import type { IconName } from '@shared/components/Icon';
 import type { ToggleOption } from '@shared/components/Toggle';
 import type { DefaultComponentProps, SortObject } from '@shared/types';
-import type { SearchPageMediaType } from '@shared/types/ie-objects';
+import type { IeObjectsSearchFilterField, SearchPageMediaType } from '@shared/types/ie-objects';
 
 import type {
 	DefaultFilterArrayFormProps,
 	DefaultFilterFormProps,
 	FilterValue,
-	SearchFilterId,
 	SearchSortProp,
 	TagIdentity,
 } from '../../types';
@@ -45,7 +44,7 @@ export enum FilterMenuType {
 }
 
 export interface FilterMenuFilterOption {
-	id: SearchFilterId;
+	id: IeObjectsSearchFilterField;
 	icon?: IconName;
 	label: string;
 	form: FC<DefaultFilterFormProps> | FC<DefaultFilterArrayFormProps> | null;
@@ -56,7 +55,7 @@ export interface FilterMenuFilterOption {
 
 export type OnFilterMenuSortClick = (key: SearchSortProp, order?: OrderDirection) => void;
 export type OnFilterMenuFormSubmit = (newValue: FilterValue) => void;
-export type OnFilterMenuFormReset = (id: SearchFilterId) => void;
+export type OnFilterMenuFormReset = (id: IeObjectsSearchFilterField) => void;
 
 export enum AutocompleteField {
 	Creator = 'creator',

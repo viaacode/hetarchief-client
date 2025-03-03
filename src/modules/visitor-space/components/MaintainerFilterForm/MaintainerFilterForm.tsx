@@ -10,38 +10,37 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
-import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
-import { initialFilterValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import { initialFilterMultiValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
 import {
 	type DefaultFilterFormProps,
 	ElasticsearchFieldNames,
 	FILTER_LABEL_VALUE_DELIMITER,
 	type FilterValue,
-	Operator,
-	SearchFilterId,
 } from '@visitor-space/types';
+import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
 
 const MaintainerFilterForm: FC<DefaultFilterFormProps> = ({
 	className,
 	id,
-	label,
 	initialValue,
 	onSubmit,
 	onReset,
 }) => {
-	const [initialValueFromQueryParams] = useQueryParam(SearchFilterId.Maintainers, ArrayParam);
+	const [initialValueFromQueryParams] = useQueryParam(
+		IeObjectsSearchFilterField.MAINTAINER_ID,
+		ArrayParam
+	);
 	const [value, setValue] = useState<FilterValue>(
-		initialValueFromQueryParams
-			? { prop: id, op: Operator.EQUALS, multiValue: initialValueFromQueryParams as string[] }
-			: initialValue || initialFilterValue()
+		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
 	);
 	const [search, setSearch] = useState<string>('');
 
 	// Contains the filters that have already been applied and are present in the url
 	const appliedSelectedMaintainerIds = compact(
-		(initialValueFromQueryParams || []).map(
+		(value.multiValue || []).map(
 			(maintainerIdAndName) => maintainerIdAndName?.split(FILTER_LABEL_VALUE_DELIMITER)?.[0]
 		)
 	);
@@ -68,16 +67,13 @@ const MaintainerFilterForm: FC<DefaultFilterFormProps> = ({
 	// Make sure applied values are sorted at the top of the list
 	// Options selected by the user should remain in their alphabetical order until the filter is applied
 	// https://meemoo.atlassian.net/browse/ARC-1882
-	const checkboxOptions = sortFilterOptions(
-		filteredBuckets.map((filterOption) => {
-			return {
-				label: filterOption.name,
-				value: filterOption.id,
-				checked: appliedSelectedMaintainerIds.includes(filterOption.id),
-			};
-		}),
-		appliedSelectedMaintainerIds
-	);
+	const checkboxOptions = filteredBuckets.map((filterOption) => {
+		return {
+			label: filterOption.name,
+			value: filterOption.id,
+			checked: appliedSelectedMaintainerIds.includes(filterOption.id),
+		};
+	});
 
 	const idToIdAndNameConcatinated = useCallback(
 		(id: string) => {
@@ -90,22 +86,25 @@ const MaintainerFilterForm: FC<DefaultFilterFormProps> = ({
 	);
 
 	const handleSubmit = () => {
-		onSubmit(value);
+		onSubmit({
+			...value,
+			multiValue: (value.multiValue || []).map(idToIdAndNameConcatinated),
+		});
 	};
 
 	const handleReset = () => {
-		setValue(initialFilterValue());
+		setValue(initialFilterMultiValue());
 		onReset();
 	};
 
 	const onItemClick = (checked: boolean, newMaintainer: unknown): void => {
-		const oldSelectedMaintainers: string[] = value?.multiValue || [];
+		const oldSelectedMaintainers: string[] = (value?.multiValue || []).map((val) => val);
 		const newSelectedMaintainers = !checked
 			? [...oldSelectedMaintainers, newMaintainer as string]
 			: without(oldSelectedMaintainers, newMaintainer as string);
 		setValue({
 			...value,
-			multiValue: newSelectedMaintainers.map(idToIdAndNameConcatinated),
+			multiValue: newSelectedMaintainers,
 		});
 	};
 
@@ -113,7 +112,7 @@ const MaintainerFilterForm: FC<DefaultFilterFormProps> = ({
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32-md')}>
 				<SearchBar
-					id={`${visitorSpaceLabelKeys.filters.title}--${SearchFilterId.Maintainers}`}
+					id={`${visitorSpaceLabelKeys.filters.title}--${IeObjectsSearchFilterField.MAINTAINER_ID}`}
 					value={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
 					placeholder={tText(

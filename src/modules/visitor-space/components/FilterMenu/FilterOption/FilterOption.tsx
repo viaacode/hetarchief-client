@@ -7,13 +7,13 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Overlay } from '@shared/components/Overlay';
 import { tText } from '@shared/helpers/translate';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
-import { SearchFilterId } from '@visitor-space/types';
 
 import { FilterButton } from '../FilterButton';
 import FilterForm from '../FilterForm/FilterForm';
 import styles from '../FilterMenu.module.scss';
 import { FilterMenuType } from '../FilterMenu.types';
 
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import type { FilterOptionProps } from './FilterOption.types';
 
 export const FilterOption: FC<FilterOptionProps> = ({
@@ -71,17 +71,17 @@ export const FilterOption: FC<FilterOptionProps> = ({
 
 	const renderCheckbox = (): ReactElement => renderFilterForm('c-filter-menu__form--inline', true);
 
-	const FILTER_MENU_HEIGHTS: Partial<Record<SearchFilterId, string>> = {
-		[SearchFilterId.Medium]: '63.7rem',
-		[SearchFilterId.Duration]: '48.1rem',
-		[SearchFilterId.ReleaseDate]: '61.3rem',
-		[SearchFilterId.Creator]: '33.5rem',
-		[SearchFilterId.NewspaperSeriesName]: '33.5rem',
-		[SearchFilterId.LocationCreated]: '33.5rem',
-		[SearchFilterId.Mentions]: '33.5rem',
-		[SearchFilterId.Language]: '53.7rem',
-		[SearchFilterId.Maintainers]: '63.7rem',
-		[SearchFilterId.Advanced]: '60.1rem',
+	const FILTER_MENU_HEIGHTS: Partial<Record<IeObjectsSearchFilterField, string>> = {
+		[IeObjectsSearchFilterField.MEDIUM]: '63.7rem',
+		[IeObjectsSearchFilterField.DURATION]: '48.1rem',
+		[IeObjectsSearchFilterField.RELEASE_DATE]: '61.3rem',
+		[IeObjectsSearchFilterField.CREATOR]: '33.5rem',
+		[IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME]: '33.5rem',
+		[IeObjectsSearchFilterField.LOCATION_CREATED]: '33.5rem',
+		[IeObjectsSearchFilterField.MENTIONS]: '33.5rem',
+		[IeObjectsSearchFilterField.LANGUAGE]: '53.7rem',
+		[IeObjectsSearchFilterField.MAINTAINER_ID]: '63.7rem',
+		[IeObjectsSearchFilterField.ADVANCED]: '60.1rem',
 	};
 	const renderModal = (): ReactElement => {
 		return (
@@ -107,7 +107,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
 								position: 'absolute',
 								left: '100%',
 								width: '46.4rem',
-								top: `calc(-${FILTER_MENU_HEIGHTS[id]} / 2 + 2rem)`,
+								top: `calc(-${FILTER_MENU_HEIGHTS[id as IeObjectsSearchFilterField]} / 2 + 2rem)`,
 								backgroundColor: 'white',
 								zIndex: 5,
 								display: filterIsActive ? 'block' : 'none',

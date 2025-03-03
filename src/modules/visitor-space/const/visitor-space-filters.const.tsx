@@ -1,7 +1,7 @@
 // TODO rename this to SEARCH_FILTERS since these are not specific to a visitor space anymore in fase2
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
-import { SearchPageMediaType } from '@shared/types/ie-objects';
+import { IeObjectsSearchFilterField, SearchPageMediaType } from '@shared/types/ie-objects';
 import { AdvancedFilterForm } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm';
 import { ConsultableMediaFilterForm } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm';
 import { ConsultableOnlyOnLocationFilterForm } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm';
@@ -17,7 +17,6 @@ import { MediumFilterForm } from '@visitor-space/components/MediumFilterForm/Med
 import { MentionsFilterForm } from '@visitor-space/components/MentionsFilterForm/MentionsFilterForm';
 import { NewspaperSeriesNameFilterForm } from '@visitor-space/components/NewspaperSeriesNameFilterForm/NewspaperSeriesNameFilterForm';
 import { ReleaseDateFilterForm } from '@visitor-space/components/ReleaseDateFilterForm';
-import { SearchFilterId } from '@visitor-space/types';
 
 const ALL_TABS: SearchPageMediaType[] = [
 	SearchPageMediaType.All,
@@ -41,7 +40,7 @@ export const SEARCH_PAGE_FILTERS = (
 	activeTab: SearchPageMediaType
 ): FilterMenuFilterOption[] => [
 	{
-		id: SearchFilterId.ConsultableMedia,
+		id: IeObjectsSearchFilterField.CONSULTABLE_MEDIA,
 		label: {
 			[SearchPageMediaType.All]: tText(
 				'modules/visitor-space/const/index___alles-wat-raadpleegbaar-is'
@@ -64,7 +63,7 @@ export const SEARCH_PAGE_FILTERS = (
 		},
 	},
 	{
-		id: SearchFilterId.ConsultableOnlyOnLocation,
+		id: IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION,
 		label: {
 			[SearchPageMediaType.All]: tText(
 				'modules/visitor-space/const/index___enkel-ter-plaatse-beschikbaar'
@@ -87,7 +86,7 @@ export const SEARCH_PAGE_FILTERS = (
 		},
 	},
 	{
-		id: SearchFilterId.ConsultablePublicDomain,
+		id: IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN,
 		label: tText('modules/visitor-space/const/visitor-space-filters___publiek-domain'),
 		form: ConsultablePublicDomainFilterForm,
 		type: FilterMenuType.Checkbox,
@@ -97,7 +96,7 @@ export const SEARCH_PAGE_FILTERS = (
 		},
 	},
 	{
-		id: SearchFilterId.Maintainers,
+		id: IeObjectsSearchFilterField.MAINTAINER_ID,
 		label: tText('modules/visitor-space/const/index___aanbieder'),
 		form: MaintainerFilterForm,
 		type: FilterMenuType.Modal,
@@ -107,49 +106,49 @@ export const SEARCH_PAGE_FILTERS = (
 		},
 	},
 	{
-		id: SearchFilterId.NewspaperSeriesName,
+		id: IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME,
 		label: tText('modules/visitor-space/const/visitor-space-filters___reeks'),
 		form: NewspaperSeriesNameFilterForm,
 		type: FilterMenuType.Modal,
 		tabs: [SearchPageMediaType.Newspaper],
 	},
 	{
-		id: SearchFilterId.ReleaseDate,
+		id: IeObjectsSearchFilterField.RELEASE_DATE,
 		label: tText('modules/visitor-space/const/visitor-space-filters___uitgavedatum'),
 		form: ReleaseDateFilterForm,
 		type: FilterMenuType.Modal,
 		tabs: ALL_TABS,
 	},
 	{
-		id: SearchFilterId.LocationCreated,
+		id: IeObjectsSearchFilterField.LOCATION_CREATED,
 		label: tText('modules/visitor-space/const/visitor-space-filters___plaats-van-uitgave'),
 		form: LocationCreatedFilterForm,
 		type: FilterMenuType.Modal,
 		tabs: [SearchPageMediaType.Newspaper],
 	},
 	{
-		id: SearchFilterId.Medium,
+		id: IeObjectsSearchFilterField.MEDIUM,
 		label: tText('modules/visitor-space/const/index___analoge-drager'),
 		form: MediumFilterForm,
 		type: FilterMenuType.Modal,
 		tabs: [SearchPageMediaType.All, SearchPageMediaType.Video, SearchPageMediaType.Audio],
 	},
 	{
-		id: SearchFilterId.Creator,
+		id: IeObjectsSearchFilterField.CREATOR,
 		label: tText('modules/visitor-space/const/index___maker'),
 		form: CreatorFilterForm,
 		type: FilterMenuType.Modal,
 		tabs: [SearchPageMediaType.All, SearchPageMediaType.Video, SearchPageMediaType.Audio],
 	},
 	{
-		id: SearchFilterId.Mentions,
+		id: IeObjectsSearchFilterField.MENTIONS,
 		label: tText('modules/visitor-space/const/visitor-space-filters___namenlijst-gesneuvelden'),
 		form: MentionsFilterForm,
 		type: FilterMenuType.Modal,
 		tabs: [SearchPageMediaType.Newspaper],
 	},
 	{
-		id: SearchFilterId.Advanced,
+		id: IeObjectsSearchFilterField.ADVANCED,
 		icon: IconNamesLight.DotsHorizontal,
 		label: tText('modules/visitor-space/const/index___geavanceerd'),
 		form: AdvancedFilterForm,

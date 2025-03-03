@@ -9,16 +9,13 @@ import { SearchBar } from '@shared/components/SearchBar';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
-import {
-	type DefaultFilterFormProps,
-	ElasticsearchFieldNames,
-	Operator,
-	SearchFilterId,
-} from '@visitor-space/types';
+import { type DefaultFilterFormProps, ElasticsearchFieldNames } from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import { initialFilterMultiValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
+import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
 
 const defaultValues = {
 	genres: [],
@@ -35,16 +32,14 @@ const GenreFilterForm: FC<DefaultFilterFormProps> = ({
 }) => {
 	// State
 
-	const [initialValueFromQueryParams] = useQueryParam(SearchFilterId.Genre, ArrayParam);
+	const [initialValueFromQueryParams] = useQueryParam(IeObjectsSearchFilterField.GENRE, ArrayParam);
 	const [value, setValue] = useState(
-		initialValueFromQueryParams
-			? { prop: id, op: Operator.EQUALS, multiValue: initialValueFromQueryParams as string[] }
-			: initialValue || initialFilterMultiValue()
+		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
 	);
 	const [search, setSearch] = useState<string>('');
 
 	// Contains the options that have already been applied and are present in the url
-	const appliedSelectedGenres = compact(value.val || []);
+	const appliedSelectedGenres = compact(value.multiValue || []);
 
 	const filterOptions: string[] =
 		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Genre]?.buckets?.map(
@@ -92,7 +87,7 @@ const GenreFilterForm: FC<DefaultFilterFormProps> = ({
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32-md')}>
 				<SearchBar
-					id={`${visitorSpaceLabelKeys.filters.title}--${SearchFilterId.Genre}`}
+					id={`${visitorSpaceLabelKeys.filters.title}--${IeObjectsSearchFilterField.GENRE}`}
 					value={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
 					placeholder={tText(

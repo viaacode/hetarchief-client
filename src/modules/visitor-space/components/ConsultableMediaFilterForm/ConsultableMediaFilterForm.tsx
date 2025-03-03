@@ -1,13 +1,9 @@
-import { initialFilterValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import CheckboxFilterForm from '@visitor-space/components/CheckboxFilterForm/CheckboxFilterForm';
-import {
-	type DefaultFilterFormProps,
-	type FilterValue,
-	Operator,
-	SearchFilterId,
-} from '@visitor-space/types';
+import type { DefaultFilterFormProps, FilterValue } from '@visitor-space/types';
+import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
 import { type FC, useState } from 'react';
-import { StringParam, useQueryParam } from 'use-query-params';
+import { BooleanParam, useQueryParam } from 'use-query-params';
 
 export const ConsultableMediaFilterForm: FC<DefaultFilterFormProps> = ({
 	id,
@@ -16,15 +12,12 @@ export const ConsultableMediaFilterForm: FC<DefaultFilterFormProps> = ({
 	initialValue,
 	label,
 }) => {
-	const [initialValueFromQueryParams] = useQueryParam(SearchFilterId.ConsultableMedia, StringParam);
+	const [initialValueFromQueryParams] = useQueryParam(
+		IeObjectsSearchFilterField.CONSULTABLE_MEDIA,
+		BooleanParam
+	);
 	const [value] = useState<FilterValue>(
-		initialValueFromQueryParams
-			? {
-					prop: SearchFilterId.ConsultableMedia,
-					op: Operator.EQUALS,
-					val: initialValueFromQueryParams,
-				}
-			: initialValue || initialFilterValue()
+		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
 	);
 
 	const handleInputChange = (newValue: boolean | null) => {

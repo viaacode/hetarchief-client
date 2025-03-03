@@ -5,17 +5,16 @@ import { isString } from 'lodash-es';
 import { SEPARATOR } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
-import type { IeObjectsSearchFilter } from '@shared/types/ie-objects';
 import { formatDate } from '@shared/utils/dates';
 import type { SearchPageQueryParams } from '@visitor-space/const';
 
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import { AdvancedFilterArrayParam } from '../../const/advanced-filter-array-param';
 import { getMetadataSearchFilters } from '../../const/advanced-filters.consts';
 import {
 	FILTER_LABEL_VALUE_DELIMITER,
 	type FilterValue,
 	Operator,
-	SearchFilterId,
 	type TagIdentity,
 } from '../../types';
 import {
@@ -84,11 +83,11 @@ export const mapArrayParamToTags = (
 
 export const mapAdvancedToTags = (
 	advanced: Array<FilterValue>,
-	key: SearchFilterId = SearchFilterId.Advanced
+	key: IeObjectsSearchFilterField = IeObjectsSearchFilterField.ADVANCED
 ): TagIdentity[] => {
 	return advanced.map((advanced: FilterValue) => {
-		const filterProp = advanced.prop as SearchFilterId;
-		const filterOp = advanced.op as Operator;
+		const filterProp = advanced.field as IeObjectsSearchFilterField;
+		const filterOp = advanced.operator as Operator;
 
 		const split = (advanced.val || '').split(SEPARATOR);
 
@@ -101,10 +100,10 @@ export const mapAdvancedToTags = (
 		// Convert certain values to be legible
 
 		switch (filterProp) {
-			case SearchFilterId.Created:
-			case SearchFilterId.Published:
-			case SearchFilterId.ReleaseDate:
-				if (filterOp === Operator.BETWEEN || filterOp === Operator.EQUALS) {
+			case IeObjectsSearchFilterField.CREATED:
+			case IeObjectsSearchFilterField.PUBLISHED:
+			case IeObjectsSearchFilterField.RELEASE_DATE:
+				if (filterOp === Operator.BETWEEN || filterOp === Operator.IS) {
 					value = `${formatDate(parseISO(split[0]))} - ${formatDate(parseISO(split[1]))}`;
 					filterOperatorLabel = undefined;
 				} else {
@@ -112,7 +111,7 @@ export const mapAdvancedToTags = (
 				}
 				break;
 
-			case SearchFilterId.Duration:
+			case IeObjectsSearchFilterField.DURATION:
 				if (filterOp === Operator.BETWEEN) {
 					value = `${split[0]} - ${split[1]}`;
 					filterOperatorLabel = undefined;
@@ -152,96 +151,112 @@ export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] =>
 			QUERY_PARAM_KEY.SEARCH_QUERY_KEY
 		),
 		...mapArrayParamToTags(
-			query[SearchFilterId.Medium] || [],
-			getFilterLabel(SearchFilterId.Medium),
-			SearchFilterId.Medium
+			query[IeObjectsSearchFilterField.MEDIUM] || [],
+			getFilterLabel(IeObjectsSearchFilterField.MEDIUM),
+			IeObjectsSearchFilterField.MEDIUM
 		),
 		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
-		...mapAdvancedToTags(query[SearchFilterId.Duration] || [], SearchFilterId.Duration),
+		...mapAdvancedToTags(
+			query[IeObjectsSearchFilterField.DURATION] || [],
+			IeObjectsSearchFilterField.DURATION
+		),
 		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
-		...mapAdvancedToTags(query[SearchFilterId.Created] || [], SearchFilterId.Created),
+		...mapAdvancedToTags(
+			query[IeObjectsSearchFilterField.CREATED] || [],
+			IeObjectsSearchFilterField.CREATED
+		),
 		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
-		...mapAdvancedToTags(query[SearchFilterId.Published] || [], SearchFilterId.Published),
+		...mapAdvancedToTags(
+			query[IeObjectsSearchFilterField.PUBLISHED] || [],
+			IeObjectsSearchFilterField.PUBLISHED
+		),
 		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
-		...mapAdvancedToTags(query[SearchFilterId.ReleaseDate] || [], SearchFilterId.ReleaseDate),
-		...mapArrayParamToTags(
-			query[SearchFilterId.Creator] || [],
-			getFilterLabel(SearchFilterId.Creator),
-			SearchFilterId.Creator
+		...mapAdvancedToTags(
+			query[IeObjectsSearchFilterField.RELEASE_DATE] || [],
+			IeObjectsSearchFilterField.RELEASE_DATE
 		),
 		...mapArrayParamToTags(
-			query[SearchFilterId.NewspaperSeriesName] || [],
-			getFilterLabel(SearchFilterId.NewspaperSeriesName),
-			SearchFilterId.NewspaperSeriesName
+			query[IeObjectsSearchFilterField.CREATOR] || [],
+			getFilterLabel(IeObjectsSearchFilterField.CREATOR),
+			IeObjectsSearchFilterField.CREATOR
 		),
 		...mapArrayParamToTags(
-			query[SearchFilterId.LocationCreated] || [],
-			getFilterLabel(SearchFilterId.LocationCreated),
-			SearchFilterId.LocationCreated
+			query[IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME] || [],
+			getFilterLabel(IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME),
+			IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME
 		),
 		...mapArrayParamToTags(
-			query[SearchFilterId.Mentions] || [],
-			getFilterLabel(SearchFilterId.Mentions),
-			SearchFilterId.Mentions
+			query[IeObjectsSearchFilterField.LOCATION_CREATED] || [],
+			getFilterLabel(IeObjectsSearchFilterField.LOCATION_CREATED),
+			IeObjectsSearchFilterField.LOCATION_CREATED
 		),
 		...mapArrayParamToTags(
-			query[SearchFilterId.Genre] || [],
-			getFilterLabel(SearchFilterId.Genre),
-			SearchFilterId.Genre
+			query[IeObjectsSearchFilterField.MENTIONS] || [],
+			getFilterLabel(IeObjectsSearchFilterField.MENTIONS),
+			IeObjectsSearchFilterField.MENTIONS
 		),
 		...mapArrayParamToTags(
-			query[SearchFilterId.Keywords] || [],
-			getFilterLabel(SearchFilterId.Keywords),
-			SearchFilterId.Keywords
+			query[IeObjectsSearchFilterField.GENRE] || [],
+			getFilterLabel(IeObjectsSearchFilterField.GENRE),
+			IeObjectsSearchFilterField.GENRE
 		),
 		...mapArrayParamToTags(
-			query[SearchFilterId.Language] || [],
-			getFilterLabel(SearchFilterId.Language),
-			SearchFilterId.Language
+			query[IeObjectsSearchFilterField.KEYWORD] || [],
+			getFilterLabel(IeObjectsSearchFilterField.KEYWORD),
+			IeObjectsSearchFilterField.KEYWORD
+		),
+		...mapArrayParamToTags(
+			query[IeObjectsSearchFilterField.LANGUAGE] || [],
+			getFilterLabel(IeObjectsSearchFilterField.LANGUAGE),
+			IeObjectsSearchFilterField.LANGUAGE
 		),
 		...mapBooleanParamToTag(
-			query[SearchFilterId.ConsultableOnlyOnLocation] || false,
+			query[IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION] || false,
 			tText('modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse'),
-			SearchFilterId.ConsultableOnlyOnLocation
+			IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
 		),
 		...mapBooleanParamToTag(
-			query[SearchFilterId.ConsultableMedia] || false,
+			query[IeObjectsSearchFilterField.CONSULTABLE_MEDIA] || false,
 			tText('modules/visitor-space/utils/map-filters/map-filters___alles-wat-raadpleegbaar-is'),
-			SearchFilterId.ConsultableMedia
+			IeObjectsSearchFilterField.CONSULTABLE_MEDIA
 		),
 		...mapBooleanParamToTag(
-			query[SearchFilterId.ConsultablePublicDomain] || false,
+			query[IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN] || false,
 			tText('modules/visitor-space/utils/map-filters/map-filters___publiek-domain'),
-			SearchFilterId.ConsultablePublicDomain
+			IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN
 		),
 		...mapArrayParamToTags(
-			query[SearchFilterId.Maintainers] || [],
+			query[IeObjectsSearchFilterField.MAINTAINER_ID] || [],
 			tText('modules/visitor-space/utils/map-filters/map-filters___aanbieders'),
-			SearchFilterId.Maintainers
+			IeObjectsSearchFilterField.MAINTAINER_ID
 		),
-		...mapAdvancedToTags(query[SearchFilterId.Advanced] || []),
+		...mapAdvancedToTags(query[IeObjectsSearchFilterField.ADVANCED] || []),
 	];
 };
 
-export const mapAdvancedToElastic = (item: FilterValue): IeObjectsSearchFilter[] => {
+export const mapAdvancedToElastic = (item: FilterValue): FilterValue[] => {
 	const values = (item.val || '').split(SEPARATOR);
-	const filterProp = item.prop as SearchFilterId;
-	const filterOperator = item.op as Operator;
+	const filterProp = item.field as IeObjectsSearchFilterField;
+	const filterOperator = item.operator as Operator;
 	const filters =
 		filterProp && filterOperator ? getMetadataSearchFilters(filterProp, filterOperator) : [];
 
 	// Format data for Elastic
-	return filters.map((filter: IeObjectsSearchFilter, i: number) => {
+	return filters.map((filter: FilterValue, i: number): FilterValue => {
 		let parsed: Date;
+		let operator: Operator = Operator.IS;
 
-		switch (item.prop) {
-			case SearchFilterId.Created:
-			case SearchFilterId.Published:
-			case SearchFilterId.ReleaseDate:
+		switch (item.field) {
+			case IeObjectsSearchFilterField.CREATED:
+			case IeObjectsSearchFilterField.PUBLISHED:
+			case IeObjectsSearchFilterField.RELEASE_DATE:
 				parsed = parseISO(values[i]);
 				values[i] = (parsed && format(parsed, 'yyyy-MM-dd')) || values[i];
+				if (filterOperator === Operator.BETWEEN) {
+					operator = i === 0 ? Operator.GTE : Operator.LTE;
+				}
 				break;
-			case SearchFilterId.Duration:
+			case IeObjectsSearchFilterField.DURATION:
 				// Manually create a range of equal values
 				// Add milliseconds since elasticsearch requires it: https://meemoo.atlassian.net/browse/ARC-2549
 				values[i] = `${values[0]}.00`;
@@ -250,6 +265,6 @@ export const mapAdvancedToElastic = (item: FilterValue): IeObjectsSearchFilter[]
 				break;
 		}
 
-		return { ...filter, value: values[i] };
+		return { ...filter, val: values[i] };
 	});
 };

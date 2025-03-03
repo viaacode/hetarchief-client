@@ -40,12 +40,13 @@ import type {
 	FilterInputComponentProps,
 } from '@visitor-space/const/advanced-filters.consts';
 
-import type { FilterValue, Operator, SearchFilterId } from '../../types';
+import type { FilterValue, Operator } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import DurationInput, { defaultValue } from '../DurationInput/DurationInput';
 
 import styles from './AdvancedFilterFields.module.scss';
 
+import type { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import {
 	getAdvancedProperties,
 	getFilterConfig,
@@ -69,8 +70,8 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 	// Computed
 
-	const operators = getOperators(value.prop as SearchFilterId);
-	const operator = value.op || operators?.[0]?.value || null;
+	const operators = getOperators(value.field as IeObjectsSearchFilterField);
+	const operator = value.operator || operators?.[0]?.value || null;
 
 	// Events
 
@@ -101,11 +102,10 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	);
 
 	const renderField = (config?: FilterInputComponentProps) => {
-		const filterConfig: FilterConfig | null = operator
-			? getFilterConfig(value.prop as SearchFilterId, operator as Operator)
-			: null;
+		const filterConfig: FilterConfig | null =
+			operator && value.field ? getFilterConfig(value.field, operator as Operator) : null;
 		if (!filterConfig) {
-			console.error('Unknown filter config', value.prop, operator);
+			console.error('Unknown filter config', { field: value.field, operator });
 			return null;
 		}
 
@@ -287,7 +287,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			}
 
 			default:
-				console.warn(`[WARN][AdvancedFilterFields] No render definition found for ${value.prop}`);
+				console.warn(`[WARN][AdvancedFilterFields] No render definition found for ${value.field}`);
 				return null;
 		}
 	};
@@ -305,17 +305,18 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 					components={{ IndicatorSeparator: () => null }}
 					inputId={`${labelKeys.property}__${index}`}
 					onChange={(newValue) => {
-						const prop = (newValue as SingleValue<SelectOption>)?.value as SearchFilterId;
+						const prop = (newValue as SingleValue<SelectOption>)
+							?.value as IeObjectsSearchFilterField;
 						const operators = prop ? getOperators(prop) : [];
 
 						onFieldChange({
-							prop: value.prop,
-							op: operators.length > 0 ? operators[0].value : undefined,
+							field: value.field,
+							operator: operators.length > 0 ? operators[0].value : undefined,
 							val: undefined,
 						});
 					}}
 					options={getAdvancedProperties()}
-					value={getSelectValue(getAdvancedProperties(), value.prop)}
+					value={getSelectValue(getAdvancedProperties(), value.field)}
 				/>
 			</FormControl>
 
@@ -332,12 +333,12 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						inputId={`${labelKeys.operator}__${index}`}
 						onChange={(newValue) =>
 							onFieldChange({
-								op: (newValue as SingleValue<SelectOption>)?.value as Operator,
+								operator: (newValue as SingleValue<SelectOption>)?.value as Operator,
 								val: undefined,
 							})
 						}
 						options={operators}
-						value={getSelectValue(operators, value.op)}
+						value={getSelectValue(operators, value.operator)}
 					/>
 				</FormControl>
 			)}

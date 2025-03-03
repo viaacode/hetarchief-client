@@ -1,17 +1,13 @@
-import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react-query';
+import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
 import { isEmpty, isNil } from 'lodash-es';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import {
-	type IeObjectsSearchFilter,
-	IeObjectsSearchFilterField,
-	type SearchPageMediaType,
-} from '@shared/types/ie-objects';
-import { ElasticsearchFieldNames } from '@visitor-space/types';
+import { IeObjectsSearchFilterField, type SearchPageMediaType } from '@shared/types/ie-objects';
+import { ElasticsearchFieldNames, type FilterValue } from '@visitor-space/types';
 
 import { IeObjectsService } from './../services';
 
-export async function getIeObjectFormatCounts(filters: IeObjectsSearchFilter[]) {
+export async function getIeObjectFormatCounts(filters: FilterValue[]) {
 	const filterQuery = !isNil(filters) && !isEmpty(filters) ? filters : [];
 
 	const results = await IeObjectsService.getSearchResults(filterQuery, 0, 0, undefined, [
@@ -27,7 +23,7 @@ export async function getIeObjectFormatCounts(filters: IeObjectsSearchFilter[]) 
 }
 
 export const useGetIeObjectFormatCounts = (
-	filters: IeObjectsSearchFilter[],
+	filters: FilterValue[],
 	options: { enabled?: boolean } = {}
 ): UseQueryResult<Record<SearchPageMediaType, number>> => {
 	return useQuery(

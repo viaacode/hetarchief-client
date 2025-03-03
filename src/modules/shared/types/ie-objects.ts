@@ -43,20 +43,8 @@ export enum IeObjectsSearchFilterField {
 	IDENTIFIER = 'identifier',
 	OBJECT_TYPE = 'objectType',
 	LICENSES = 'license', // Used to filter objects that are in a visitor space
-}
 
-export enum IeObjectsSearchOperator {
-	CONTAINS = 'contains',
-	CONTAINS_NOT = 'containsNot',
-	GTE = 'gte',
-	IS = 'is',
-	IS_NOT = 'isNot',
-	LTE = 'lte',
-}
-
-export interface IeObjectsSearchFilter {
-	field: IeObjectsSearchFilterField;
-	multiValue?: string[];
-	operator: IeObjectsSearchOperator;
-	value?: string;
+	// These filters only have a meaning in the client, not in the proxy
+	ADVANCED = 'advanced',
+	MAINTAINER_SLUG = 'maintainers',
 }

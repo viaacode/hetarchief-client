@@ -1,15 +1,9 @@
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import CheckboxFilterForm from '@visitor-space/components/CheckboxFilterForm/CheckboxFilterForm';
+import type { DefaultFilterFormProps, FilterValue } from '@visitor-space/types';
+import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
 import { type FC, useState } from 'react';
 import { BooleanParam, useQueryParam } from 'use-query-params';
-
-import { initialFilterValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
-import CheckboxFilterForm from '@visitor-space/components/CheckboxFilterForm/CheckboxFilterForm';
-import {
-	type DefaultFilterFormProps,
-	type FilterValue,
-	Operator,
-	SearchFilterId,
-} from '@visitor-space/types';
-import { isNil } from 'lodash-es';
 
 export const ConsultableOnlyOnLocationFilterForm: FC<DefaultFilterFormProps> = ({
 	id,
@@ -19,13 +13,11 @@ export const ConsultableOnlyOnLocationFilterForm: FC<DefaultFilterFormProps> = (
 	onSubmit,
 }) => {
 	const [initialValueFromQueryParams] = useQueryParam(
-		SearchFilterId.ConsultableOnlyOnLocation,
+		IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION,
 		BooleanParam
 	);
 	const [value] = useState<FilterValue>(
-		!isNil(initialValueFromQueryParams)
-			? { prop: id, op: Operator.EQUALS, val: initialValueFromQueryParams ? 'true' : 'false' }
-			: initialValue || initialFilterValue()
+		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
 	);
 
 	const handleInputChange = (newValue: boolean) => {

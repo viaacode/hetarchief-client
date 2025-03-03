@@ -8,16 +8,16 @@ import { ArrayParam, useQueryParam } from 'use-query-params';
 import { SearchBar } from '@shared/components/SearchBar';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
-import { initialFilterValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import { initialFilterMultiValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import {
 	type DefaultFilterFormProps,
 	ElasticsearchFieldNames,
 	type FilterValue,
-	Operator,
-	SearchFilterId,
 } from '@visitor-space/types';
+import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 export const MediumFilterForm: FC<DefaultFilterFormProps> = ({
@@ -27,16 +27,13 @@ export const MediumFilterForm: FC<DefaultFilterFormProps> = ({
 	onSubmit,
 	onReset,
 }) => {
-	const [valueFromQueryParams] = useQueryParam(SearchFilterId.Medium, ArrayParam);
+	const [initialValueFromQueryParams] = useQueryParam(
+		IeObjectsSearchFilterField.MEDIUM,
+		ArrayParam
+	);
 	const [search, setSearch] = useState<string>('');
 	const [value, setValue] = useState<FilterValue>(
-		(valueFromQueryParams?.length || 0) > 0
-			? {
-					prop: SearchFilterId.Medium,
-					op: Operator.EQUALS,
-					multiValue: valueFromQueryParams as string[],
-				}
-			: initialValue || initialFilterValue()
+		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
 	);
 
 	const selectedMediums = value.multiValue || [];
@@ -66,7 +63,7 @@ export const MediumFilterForm: FC<DefaultFilterFormProps> = ({
 	};
 
 	const handleReset = () => {
-		setValue(initialFilterValue());
+		setValue(initialFilterMultiValue());
 		onReset();
 	};
 
@@ -82,7 +79,7 @@ export const MediumFilterForm: FC<DefaultFilterFormProps> = ({
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32-md')} key={`filter--${id}`}>
 				<SearchBar
-					id={`${visitorSpaceLabelKeys.filters.title}--${SearchFilterId.Medium}`}
+					id={`${visitorSpaceLabelKeys.filters.title}--${IeObjectsSearchFilterField.MEDIUM}`}
 					value={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
 					placeholder={tText(

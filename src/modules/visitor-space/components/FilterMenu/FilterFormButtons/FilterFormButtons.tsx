@@ -6,7 +6,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml } from '@shared/helpers/translate';
 import type { FilterFormButtonsProps } from '../FilterFormButtons/FilterFormButtons.types';
-import styles from './FilterForm.module.scss';
+import styles from './FilterFormButtons.module.scss';
 
 const FilterFormButtons: FC<FilterFormButtonsProps> = ({ onSubmit, onReset }) => {
 	return (

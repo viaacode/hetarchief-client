@@ -2,28 +2,24 @@ import { FormControl, ReactSelect, type SelectOption } from '@meemoo/react-compo
 import clsx from 'clsx';
 import { type ChangeEvent, type FC, useMemo, useState } from 'react';
 import type { SingleValue } from 'react-select';
-import { useQueryParam } from 'use-query-params';
+import { StringParam, useQueryParam } from 'use-query-params';
 
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SEPARATOR } from '@shared/const';
 import { tHtml } from '@shared/helpers/translate';
 
-import {
-	type DefaultFilterFormProps,
-	type FilterValue,
-	Operator,
-	SearchFilterId,
-} from '../../types';
+import { type DefaultFilterFormProps, type FilterValue, Operator } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import { DurationInput } from '../DurationInput';
 import { defaultValue } from '../DurationInput/DurationInput';
 import { DurationRangeInput } from '../DurationRangeInput';
 
 import { validateForm } from '@shared/helpers/validate-form';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import { initialFilterValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import { DURATION_FILTER_FORM_SCHEMA } from '@visitor-space/components/DurationFilterForm/DurationFilterForm.const';
 import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
-import { AdvancedFilterArrayParam } from '@visitor-space/const/advanced-filter-array-param';
+import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
 import { getOperators } from 'modules/visitor-space/utils/advanced-filters';
 
 enum DurationField {
@@ -32,6 +28,7 @@ enum DurationField {
 }
 
 const DurationFilterForm: FC<DefaultFilterFormProps> = ({
+	id,
 	className,
 	disabled,
 	initialValue,
@@ -39,22 +36,22 @@ const DurationFilterForm: FC<DefaultFilterFormProps> = ({
 	onReset,
 }) => {
 	const [initialValueFromQueryParams] = useQueryParam(
-		SearchFilterId.Duration,
-		AdvancedFilterArrayParam
+		IeObjectsSearchFilterField.DURATION,
+		StringParam
 	);
 	const [value, setValue] = useState<FilterValue>(
-		initialValueFromQueryParams?.[0] || initialValue || initialFilterValue(Operator.EQUALS)
+		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
 	);
 	const [formErrors, setFormErrors] = useState<Record<DurationField, string> | null>();
 
-	const operators = useMemo(() => getOperators(SearchFilterId.Duration), []);
+	const operators = useMemo(() => getOperators(IeObjectsSearchFilterField.DURATION), []);
 
 	// Events
 
 	const onChangeDuration = (e: ChangeEvent<HTMLInputElement>) => {
 		setValue((oldValue) => ({
 			...oldValue,
-			[SearchFilterId.Duration]: e.target.value,
+			[IeObjectsSearchFilterField.DURATION]: e.target.value,
 		}));
 	};
 
@@ -95,15 +92,15 @@ const DurationFilterForm: FC<DefaultFilterFormProps> = ({
 							onChange={(newValue) => {
 								const selectedOperator = (newValue as SingleValue<SelectOption>)?.value as Operator;
 
-								if (selectedOperator !== value.op) {
+								if (selectedOperator !== value.operator) {
 									setValue({
 										...value,
-										op: selectedOperator,
+										operator: selectedOperator,
 									});
 								}
 							}}
 							options={operators}
-							value={getSelectValue(operators, value.op)}
+							value={getSelectValue(operators, value.operator)}
 						/>
 					</div>
 				</FormControl>
@@ -127,7 +124,7 @@ const DurationFilterForm: FC<DefaultFilterFormProps> = ({
 					)}
 				>
 					<div className="u-py-32 u-px-20 u-px-32-md u-bg-platinum">
-						{value?.op === Operator.BETWEEN ? (
+						{value?.operator === Operator.BETWEEN ? (
 							<DurationRangeInput
 								value={value.val || `${defaultValue}${SEPARATOR}${defaultValue}`}
 								onChange={onChangeDuration}

@@ -1,8 +1,9 @@
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
-import type { DefaultFilterFormProps, SearchFilterId } from '@visitor-space/types';
+import type { DefaultFilterFormProps } from '@visitor-space/types';
 import clsx from 'clsx';
 import { type FC, type ReactElement, useMemo } from 'react';
 
+import type { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import { FilterMenuType } from '../FilterMenu.types';
 
 import { HAS_SHOW_OVERFLOW } from './FilterForm.const';
@@ -21,7 +22,7 @@ const FilterForm: FC<FilterFormProps> = ({
 	type,
 }) => {
 	const showOverflow = useMemo(
-		(): boolean => HAS_SHOW_OVERFLOW.includes(id as SearchFilterId),
+		(): boolean => HAS_SHOW_OVERFLOW.includes(id as IeObjectsSearchFilterField),
 		[id]
 	);
 

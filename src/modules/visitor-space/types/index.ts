@@ -1,8 +1,6 @@
 import type { SelectOption, TagInfo } from '@meemoo/react-components';
-
-import type { IeObjectType } from '@shared/types/ie-objects';
-
-import type { Operator } from './filter-properties';
+import type { IeObjectType, IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import type { Operator } from '@visitor-space/types/filter-properties';
 
 export * from './filter-properties';
 
@@ -11,37 +9,6 @@ export enum SearchSortProp {
 	Relevance = 'relevance',
 	Title = 'name',
 	Archived = 'archived',
-}
-
-export enum SearchFilterId {
-	Query = 'query',
-	Title = 'title',
-	Description = 'description',
-	Format = 'format',
-	Advanced = 'advanced',
-	Created = 'created',
-	Published = 'published',
-	ReleaseDate = 'releaseDate',
-	Creator = 'creator',
-	Publisher = 'publisher',
-	Duration = 'duration',
-	Genre = 'genre',
-	Keywords = 'keywords',
-	Language = 'language',
-	NewspaperSeriesName = 'newspaperSeriesName',
-	LocationCreated = 'locationCreated',
-	Mentions = 'mentions', // Fallen soldiers named in newspapers
-	Medium = 'medium',
-	Maintainer = 'aanbieder',
-	Maintainers = 'aanbieders',
-	ConsultableOnlyOnLocation = 'onLocation',
-	ConsultableMedia = 'media',
-	ConsultablePublicDomain = 'publicDomain',
-	ObjectType = 'objectType',
-	Cast = 'cast',
-	SpacialCoverage = 'spacialCoverage',
-	TemporalCoverage = 'temporalCoverage',
-	Identifier = 'identifier',
 }
 
 export enum ElasticsearchFieldNames {
@@ -70,7 +37,7 @@ export enum VisitorSpaceOrderProps {
 }
 
 export interface DefaultFilterFormProps {
-	id: SearchFilterId;
+	id: IeObjectsSearchFilterField;
 	label: string;
 	className?: string;
 	disabled?: boolean;
@@ -80,7 +47,7 @@ export interface DefaultFilterFormProps {
 }
 
 export interface DefaultFilterArrayFormProps {
-	id: SearchFilterId;
+	id: IeObjectsSearchFilterField;
 	className?: string;
 	disabled?: boolean;
 	onSubmit: (newFormValues: FilterValue[]) => void;
@@ -136,14 +103,14 @@ export type OperatorOptions = Array<
 export type PropertyOptions = Array<
 	SelectOption & {
 		label: string;
-		value: SearchFilterId;
+		value: IeObjectsSearchFilterField;
 	}
 >;
 
 export interface FilterValue {
-	prop?: SearchFilterId; // Which property/field is being filtered on
-	op?: Operator; // Which operator, see Operator enum
-	val?: string; // stringified value, potentially character-separated
+	field?: IeObjectsSearchFilterField; // Which property/field is being filtered on
+	operator?: Operator; // Which operator, see Operator enum
+	val?: string; // stringified value, potentially character-separated. val instead of value to not create a conflict with TagInfo
 	multiValue?: string[];
 }
 

@@ -1,6 +1,7 @@
 import type { QueryParamConfig } from 'use-query-params';
 
-import { type FilterValue, Operator, SearchFilterId } from '../types';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import { type FilterValue, Operator } from '../types';
 
 const divider = ',';
 export const AdvancedFilterArrayParam: QueryParamConfig<FilterValue[] | undefined> = {
@@ -9,11 +10,11 @@ export const AdvancedFilterArrayParam: QueryParamConfig<FilterValue[] | undefine
 			return undefined;
 		}
 		return filters
-			.filter((filter) => filter.prop)
+			.filter((filter) => filter.field)
 			.map((filter) => {
-				const { prop, op, val } = filter;
-				const propertyAcronym = filterNameToAcronym(prop as SearchFilterId);
-				const operatorAcronym = operatorToAcronym(op as Operator);
+				const { field, operator, val } = filter;
+				const propertyAcronym = filterNameToAcronym(field as IeObjectsSearchFilterField);
+				const operatorAcronym = operatorToAcronym(operator as Operator);
 
 				return `${propertyAcronym}${operatorAcronym}${encodeURIComponent(val || '')}`;
 			})
@@ -36,31 +37,31 @@ export const AdvancedFilterArrayParam: QueryParamConfig<FilterValue[] | undefine
 	},
 };
 
-const FILTER_NAME_WITH_ACRONYM: [SearchFilterId, string][] = [
-	[SearchFilterId.Cast, 'cs'],
-	[SearchFilterId.Created, 'ca'],
-	[SearchFilterId.Creator, 'ct'],
-	[SearchFilterId.Description, 'de'],
-	[SearchFilterId.Duration, 'du'],
-	[SearchFilterId.Genre, 'ge'],
-	[SearchFilterId.Identifier, 'id'],
-	[SearchFilterId.Keywords, 'kw'],
-	[SearchFilterId.Language, 'la'],
-	[SearchFilterId.Format, 'ty'],
-	[SearchFilterId.Medium, 'me'],
-	[SearchFilterId.ObjectType, 'ot'],
-	[SearchFilterId.Published, 'pa'],
-	[SearchFilterId.Publisher, 'pu'],
-	[SearchFilterId.ReleaseDate, 'rd'],
-	[SearchFilterId.SpacialCoverage, 'sc'],
-	[SearchFilterId.TemporalCoverage, 'tc'],
-	[SearchFilterId.Title, 'ti'],
-	[SearchFilterId.NewspaperSeriesName, 'ns'],
-	[SearchFilterId.LocationCreated, 'lc'],
-	[SearchFilterId.Mentions, 'mn'],
+const FILTER_NAME_WITH_ACRONYM: [IeObjectsSearchFilterField, string][] = [
+	[IeObjectsSearchFilterField.CAST, 'cs'],
+	[IeObjectsSearchFilterField.CREATED, 'ca'],
+	[IeObjectsSearchFilterField.CREATOR, 'ct'],
+	[IeObjectsSearchFilterField.DESCRIPTION, 'de'],
+	[IeObjectsSearchFilterField.DURATION, 'du'],
+	[IeObjectsSearchFilterField.GENRE, 'ge'],
+	[IeObjectsSearchFilterField.IDENTIFIER, 'id'],
+	[IeObjectsSearchFilterField.KEYWORD, 'kw'],
+	[IeObjectsSearchFilterField.LANGUAGE, 'la'],
+	[IeObjectsSearchFilterField.FORMAT, 'ty'],
+	[IeObjectsSearchFilterField.MEDIUM, 'me'],
+	[IeObjectsSearchFilterField.OBJECT_TYPE, 'ot'],
+	[IeObjectsSearchFilterField.PUBLISHED, 'pa'],
+	[IeObjectsSearchFilterField.PUBLISHER, 'pu'],
+	[IeObjectsSearchFilterField.RELEASE_DATE, 'rd'],
+	[IeObjectsSearchFilterField.SPACIAL_COVERAGE, 'sc'],
+	[IeObjectsSearchFilterField.TEMPORAL_COVERAGE, 'tc'],
+	[IeObjectsSearchFilterField.NAME, 'ti'],
+	[IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME, 'ns'],
+	[IeObjectsSearchFilterField.LOCATION_CREATED, 'lc'],
+	[IeObjectsSearchFilterField.MENTIONS, 'mn'],
 ];
 
-export function filterNameToAcronym(filterName: SearchFilterId): string {
+export function filterNameToAcronym(filterName: IeObjectsSearchFilterField): string {
 	const filter = FILTER_NAME_WITH_ACRONYM.find(([name]) => name === filterName);
 
 	if (!filter) {
@@ -70,7 +71,7 @@ export function filterNameToAcronym(filterName: SearchFilterId): string {
 	return filter[1];
 }
 
-export function filterAcronymToName(acronym: string | undefined): SearchFilterId {
+export function filterAcronymToName(acronym: string | undefined): IeObjectsSearchFilterField {
 	if (!acronym) {
 		throw new Error(`Filter name acronym was undefined: ${acronym}`);
 	}
@@ -87,10 +88,10 @@ export function filterAcronymToName(acronym: string | undefined): SearchFilterId
 const FILTER_OPERATOR_WITH_ACRONYM: [Operator, string][] = [
 	[Operator.CONTAINS, 'co'],
 	[Operator.CONTAINS_NOT, 'nc'],
-	[Operator.EQUALS, 'eq'],
-	[Operator.EQUALS_NOT, 'ne'],
-	[Operator.LESS_THAN_OR_EQUAL, 'lt'], // shorter (duration) or until (date)
-	[Operator.GREATER_THAN_OR_EQUAL, 'gt'], // longer (duration) or after (date)
+	[Operator.IS, 'eq'],
+	[Operator.IS_NOT, 'ne'],
+	[Operator.LTE, 'lt'], // shorter (duration) or until (date)
+	[Operator.GTE, 'gt'], // longer (duration) or after (date)
 	[Operator.BETWEEN, 'bt'], // duration & date
 	[Operator.EXACT, 'ex'], // duration
 ];

@@ -1,14 +1,11 @@
 import { FormControl, type TagInfo, TagsInput, keysEnter, onKey } from '@meemoo/react-components';
 import { TAGS_INPUT_COMPONENTS } from '@shared/components/TagsInput';
 import { tHtml } from '@shared/helpers/translate';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import { initialFilterValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
-import {
-	type DefaultFilterFormProps,
-	type FilterValue,
-	Operator,
-	SearchFilterId,
-} from '@visitor-space/types';
+import type { DefaultFilterFormProps, FilterValue } from '@visitor-space/types';
+import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
 import clsx from 'clsx';
 import { type FC, type KeyboardEvent, useMemo, useState } from 'react';
 import type { ActionMeta, InputActionMeta, MultiValue, SingleValue } from 'react-select';
@@ -27,11 +24,12 @@ const KeywordsFilterForm: FC<DefaultFilterFormProps> = ({
 	onSubmit,
 	onReset,
 }) => {
-	const [initialValueFromQueryParams] = useQueryParam(SearchFilterId.Keywords, ArrayParam);
+	const [initialValueFromQueryParams] = useQueryParam(
+		IeObjectsSearchFilterField.KEYWORD,
+		ArrayParam
+	);
 	const [value, setValue] = useState<FilterValue>(
-		initialValueFromQueryParams
-			? { prop: id, op: Operator.EQUALS, multiValue: initialValueFromQueryParams as string[] }
-			: initialValue || initialFilterValue()
+		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
 	);
 	const [input, setInput] = useState<string | undefined>(undefined);
 

@@ -8,10 +8,8 @@ import { ArrayParam, useQueryParam } from 'use-query-params';
 import { SearchBar } from '@shared/components/SearchBar';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
-import {
-	initialFilterMultiValue,
-	initialFilterValue,
-} from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import { initialFilterValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
 import {
 	LANGUAGES,
@@ -23,9 +21,8 @@ import {
 	ElasticsearchFieldNames,
 	FILTER_LABEL_VALUE_DELIMITER,
 	type FilterValue,
-	Operator,
-	SearchFilterId,
 } from '@visitor-space/types';
+import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 const LanguageFilterForm: FC<DefaultFilterFormProps> = ({
@@ -35,11 +32,12 @@ const LanguageFilterForm: FC<DefaultFilterFormProps> = ({
 	onSubmit,
 	onReset,
 }) => {
-	const [initialValueFromQueryParams] = useQueryParam(SearchFilterId.Language, ArrayParam);
+	const [initialValueFromQueryParams] = useQueryParam(
+		IeObjectsSearchFilterField.LANGUAGE,
+		ArrayParam
+	);
 	const [value, setValue] = useState<FilterValue>(
-		initialValueFromQueryParams
-			? { prop: id, op: Operator.EQUALS, multiValue: compact(initialValueFromQueryParams) }
-			: initialValue || initialFilterMultiValue(Operator.EQUALS)
+		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
 	);
 	const [search, setSearch] = useState<string>('');
 
@@ -99,7 +97,7 @@ const LanguageFilterForm: FC<DefaultFilterFormProps> = ({
 	};
 
 	const handleReset = () => {
-		setValue(initialFilterValue(Operator.EQUALS));
+		setValue(initialFilterValue());
 		onReset();
 	};
 
@@ -107,7 +105,7 @@ const LanguageFilterForm: FC<DefaultFilterFormProps> = ({
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32-md')}>
 				<SearchBar
-					id={`${visitorSpaceLabelKeys.filters.title}--${SearchFilterId.Language}`}
+					id={`${visitorSpaceLabelKeys.filters.title}--${IeObjectsSearchFilterField.LANGUAGE}`}
 					value={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
 					placeholder={tText(

@@ -7,9 +7,10 @@ import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { Loading } from '@shared/components/Loading';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { useGetOrganisationBySlug } from '@visitor-space/hooks/get-organisation-by-slug';
-import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
+import { FILTER_LABEL_VALUE_DELIMITER } from '@visitor-space/types';
 
 type MaintainerSearchPageProps = DefaultSeoInfo;
 
@@ -35,7 +36,7 @@ export const MaintainerSearchPage: FC<MaintainerSearchPageProps> = () => {
 			const searchUrl = stringifyUrl({
 				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 				query: {
-					[SearchFilterId.Maintainers]: `${organisation.schemaIdentifier}${FILTER_LABEL_VALUE_DELIMITER}${organisation.schemaName}`,
+					[IeObjectsSearchFilterField.MAINTAINER_ID]: `${organisation.schemaIdentifier}${FILTER_LABEL_VALUE_DELIMITER}${organisation.schemaName}`,
 				},
 			});
 			router.replace(searchUrl, undefined, { shallow: true });

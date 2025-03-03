@@ -18,15 +18,16 @@ import {
 import { Icon, type IconName } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import {
+	ROUTES_BY_LOCALE,
 	ROUTE_PARTS_BY_LOCALE,
 	ROUTE_PREFIXES_BY_LOCALE,
-	ROUTES_BY_LOCALE,
 } from '@shared/const/routes';
 import { tText } from '@shared/helpers/translate';
 import { Breakpoints } from '@shared/types';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import type { VisitRequest } from '@shared/types/visit-request';
 import type { Locale } from '@shared/utils/i18n';
-import { SearchFilterId, type VisitorSpaceInfo } from '@visitor-space/types';
+import type { VisitorSpaceInfo } from '@visitor-space/types';
 
 const linkCls = (...classNames: string[]) => {
 	return clsx(styles['c-navigation__link'], ...classNames);
@@ -113,7 +114,7 @@ const getVisitorSpacesDropdown = (
 	const visitPath = ROUTES_BY_LOCALE[locale].visit;
 	if (linkedSpaceOrId) {
 		// Single link to go to linked visitor space (kiosk visitor)
-		const searchRouteForSpace = `/${ROUTE_PARTS_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${linkedSpaceOrId}`;
+		const searchRouteForSpace = `/${ROUTE_PARTS_BY_LOCALE[locale].search}?${IeObjectsSearchFilterField.MAINTAINER_SLUG}=${linkedSpaceOrId}`;
 		return {
 			node: renderLink(
 				tText('modules/navigation/components/navigation/navigation___bezoekersruimte'),
@@ -171,7 +172,7 @@ const getVisitorSpacesDropdown = (
 				isDivider: accessibleVisitorSpaces.length > 0 ? 'md' : undefined,
 			},
 			...accessibleVisitorSpaces.map((visitorSpace: VisitorSpaceInfo): NavigationItem => {
-				const searchRouteForSpace = `/${ROUTE_PARTS_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${visitorSpace.slug}`;
+				const searchRouteForSpace = `/${ROUTE_PARTS_BY_LOCALE[locale].search}?${IeObjectsSearchFilterField.MAINTAINER_SLUG}=${visitorSpace.slug}`;
 				return {
 					node: ({ closeDropdowns }) =>
 						renderLink(
@@ -370,7 +371,7 @@ const getCpAdminManagementDropdown = (
 									stringifyUrl({
 										url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 										query: {
-											[SearchFilterId.Maintainer]: maintainerSlug,
+											[IeObjectsSearchFilterField.MAINTAINER_SLUG]: maintainerSlug,
 										},
 									}),
 									{
