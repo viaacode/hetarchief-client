@@ -12,7 +12,7 @@ export const LocationCreatedFilterForm: FC<DefaultFilterFormProps> = ({
 	onReset,
 	id,
 	disabled,
-	initialValue,
+	initialValues,
 	label,
 }) => {
 	return (
@@ -28,7 +28,7 @@ export const LocationCreatedFilterForm: FC<DefaultFilterFormProps> = ({
 			id={id}
 			onSubmit={onSubmit}
 			onReset={onReset}
-			initialValue={initialValue}
+			initialValues={initialValues}
 			disabled={disabled}
 			label={label}
 		/>

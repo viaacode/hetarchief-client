@@ -9,7 +9,7 @@ export const ConsultableOnlyOnLocationFilterForm: FC<DefaultFilterFormProps> = (
 	id,
 	label,
 	className,
-	initialValue,
+	initialValues,
 	onSubmit,
 }) => {
 	const [initialValueFromQueryParams] = useQueryParam(
@@ -17,14 +17,16 @@ export const ConsultableOnlyOnLocationFilterForm: FC<DefaultFilterFormProps> = (
 		BooleanParam
 	);
 	const [value] = useState<FilterValue>(
-		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
+		getInitialFilterValue(id, initialValues?.[0], initialValueFromQueryParams)
 	);
 
 	const handleInputChange = (newValue: boolean) => {
-		onSubmit({
-			...value,
-			multiValue: [newValue.toString()],
-		});
+		onSubmit([
+			{
+				...value,
+				multiValue: [newValue.toString()],
+			},
+		]);
 	};
 
 	return (

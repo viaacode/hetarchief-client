@@ -63,7 +63,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
 			onFormReset={onFormReset}
 			onFormSubmit={onFormSubmit}
 			title={label}
-			initialValue={initialValue}
+			initialValues={initialValue}
 			disabled={!filterIsActive}
 			type={type}
 		/>

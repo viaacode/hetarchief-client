@@ -6,19 +6,13 @@ import type { ToggleOption } from '@shared/components/Toggle';
 import type { DefaultComponentProps, SortObject } from '@shared/types';
 import type { IeObjectsSearchFilterField, SearchPageMediaType } from '@shared/types/ie-objects';
 
-import type {
-	DefaultFilterArrayFormProps,
-	DefaultFilterFormProps,
-	FilterValue,
-	SearchSortProp,
-	TagIdentity,
-} from '../../types';
+import type { DefaultFilterFormProps, FilterValue, SearchSortProp, TagIdentity } from '../../types';
 
 export interface FilterMenuProps extends DefaultComponentProps {
 	children?: ReactNode;
 	activeSort?: SortObject;
 	filters?: FilterMenuFilterOption[];
-	filterValues?: Record<string, FilterValue>;
+	filterValues?: Record<string, FilterValue[]>;
 	label?: string;
 	isOpen?: boolean;
 	isMobileOpen?: boolean;
@@ -47,14 +41,14 @@ export interface FilterMenuFilterOption {
 	id: IeObjectsSearchFilterField;
 	icon?: IconName;
 	label: string;
-	form: FC<DefaultFilterFormProps> | FC<DefaultFilterArrayFormProps> | null;
+	form: FC<DefaultFilterFormProps> | null;
 	type: FilterMenuType;
 	isDisabled?: () => boolean;
 	tabs: SearchPageMediaType[];
 }
 
 export type OnFilterMenuSortClick = (key: SearchSortProp, order?: OrderDirection) => void;
-export type OnFilterMenuFormSubmit = (newValue: FilterValue) => void;
+export type OnFilterMenuFormSubmit = (newValues: FilterValue[]) => void;
 export type OnFilterMenuFormReset = (id: IeObjectsSearchFilterField) => void;
 
 export enum AutocompleteField {

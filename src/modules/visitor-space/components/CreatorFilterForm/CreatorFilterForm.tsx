@@ -10,7 +10,7 @@ export const CreatorFilterForm: FC<DefaultFilterFormProps> = ({
 	className,
 	onSubmit,
 	onReset,
-	initialValue,
+	initialValues,
 	disabled,
 	id,
 	label,
@@ -27,7 +27,7 @@ export const CreatorFilterForm: FC<DefaultFilterFormProps> = ({
 			)}
 			onSubmit={onSubmit}
 			onReset={onReset}
-			initialValue={initialValue}
+			initialValues={initialValues}
 			disabled={disabled}
 			id={id}
 			label={label}

@@ -28,7 +28,7 @@ import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 const LanguageFilterForm: FC<DefaultFilterFormProps> = ({
 	className,
 	id,
-	initialValue,
+	initialValues,
 	onSubmit,
 	onReset,
 }) => {
@@ -37,7 +37,7 @@ const LanguageFilterForm: FC<DefaultFilterFormProps> = ({
 		ArrayParam
 	);
 	const [value, setValue] = useState<FilterValue>(
-		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
+		getInitialFilterValue(id, initialValues?.[0], initialValueFromQueryParams)
 	);
 	const [search, setSearch] = useState<string>('');
 
@@ -90,10 +90,12 @@ const LanguageFilterForm: FC<DefaultFilterFormProps> = ({
 	};
 
 	const handleSubmit = () => {
-		onSubmit({
-			...value,
-			multiValue: (value.multiValue || []).map(idToIdAndNameConcatinated),
-		});
+		onSubmit([
+			{
+				...value,
+				multiValue: (value.multiValue || []).map(idToIdAndNameConcatinated),
+			},
+		]);
 	};
 
 	const handleReset = () => {

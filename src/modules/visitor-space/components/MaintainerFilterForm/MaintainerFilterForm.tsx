@@ -25,7 +25,7 @@ import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-v
 const MaintainerFilterForm: FC<DefaultFilterFormProps> = ({
 	className,
 	id,
-	initialValue,
+	initialValues,
 	onSubmit,
 	onReset,
 }) => {
@@ -34,7 +34,7 @@ const MaintainerFilterForm: FC<DefaultFilterFormProps> = ({
 		ArrayParam
 	);
 	const [value, setValue] = useState<FilterValue>(
-		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
+		getInitialFilterValue(id, initialValues?.[0], initialValueFromQueryParams)
 	);
 	const [search, setSearch] = useState<string>('');
 
@@ -86,10 +86,12 @@ const MaintainerFilterForm: FC<DefaultFilterFormProps> = ({
 	);
 
 	const handleSubmit = () => {
-		onSubmit({
-			...value,
-			multiValue: (value.multiValue || []).map(idToIdAndNameConcatinated),
-		});
+		onSubmit([
+			{
+				...value,
+				multiValue: (value.multiValue || []).map(idToIdAndNameConcatinated),
+			},
+		]);
 	};
 
 	const handleReset = () => {

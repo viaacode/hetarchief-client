@@ -9,7 +9,7 @@ export const ConsultableMediaFilterForm: FC<DefaultFilterFormProps> = ({
 	id,
 	className,
 	onSubmit,
-	initialValue,
+	initialValues,
 	label,
 }) => {
 	const [initialValueFromQueryParams] = useQueryParam(
@@ -17,14 +17,16 @@ export const ConsultableMediaFilterForm: FC<DefaultFilterFormProps> = ({
 		BooleanParam
 	);
 	const [value] = useState<FilterValue>(
-		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
+		getInitialFilterValue(id, initialValues?.[0], initialValueFromQueryParams)
 	);
 
 	const handleInputChange = (newValue: boolean | null) => {
-		onSubmit({
-			...value,
-			multiValue: [newValue ? 'true' : 'false'],
-		});
+		onSubmit([
+			{
+				...value,
+				multiValue: [newValue ? 'true' : 'false'],
+			},
+		]);
 	};
 
 	return (

@@ -8,7 +8,7 @@ import { AutocompleteFieldFilterForm } from '../AutocompleteFieldFilterForm/Auto
 
 export const MentionsFilterForm: FC<DefaultFilterFormProps> = ({
 	className,
-	initialValue,
+	initialValues,
 	onReset,
 	onSubmit,
 	disabled,
@@ -28,7 +28,7 @@ export const MentionsFilterForm: FC<DefaultFilterFormProps> = ({
 			onSubmit={onSubmit}
 			onReset={onReset}
 			id={id}
-			initialValue={initialValue}
+			initialValues={initialValues}
 			disabled={disabled}
 			label={label}
 		/>

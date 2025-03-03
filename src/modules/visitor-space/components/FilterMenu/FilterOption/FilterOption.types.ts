@@ -11,7 +11,7 @@ import type { FilterValue } from '@visitor-space/types';
 export interface FilterOptionProps extends DefaultComponentProps, FilterMenuFilterOption {
 	children?: ReactNode;
 	activeFilter: string | null | undefined;
-	initialValue?: FilterValue;
+	initialValue?: FilterValue[];
 	onClick?: (filterId: string) => void;
 	onFormSubmit: OnFilterMenuFormSubmit;
 	onFormReset: OnFilterMenuFormReset;

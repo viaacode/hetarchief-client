@@ -30,7 +30,7 @@ const DurationFilterForm: FC<DefaultFilterFormProps> = ({
 	id,
 	className,
 	disabled,
-	initialValue,
+	initialValues,
 	onSubmit,
 	onReset,
 }) => {
@@ -39,7 +39,7 @@ const DurationFilterForm: FC<DefaultFilterFormProps> = ({
 		StringParam
 	);
 	const [value, setValue] = useState<FilterValue>(
-		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
+		getInitialFilterValue(id, initialValues?.[0], initialValueFromQueryParams)
 	);
 	const [formErrors, setFormErrors] = useState<Record<DurationField, string> | null>();
 
@@ -58,7 +58,7 @@ const DurationFilterForm: FC<DefaultFilterFormProps> = ({
 		const errors = await validateForm(value, DURATION_FILTER_FORM_SCHEMA());
 		setFormErrors(errors);
 		if (!errors) {
-			onSubmit(value);
+			onSubmit([value]);
 		}
 	};
 

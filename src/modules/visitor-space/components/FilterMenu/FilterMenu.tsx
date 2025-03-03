@@ -79,8 +79,8 @@ const FilterMenu: FC<FilterMenuProps> = ({
 		onFilterReset(id);
 	};
 
-	const onFilterFormSubmit = (value: FilterValue) => {
-		onFilterSubmit(value);
+	const onFilterFormSubmit = (values: FilterValue[]) => {
+		onFilterSubmit(values);
 	};
 
 	const onToggleClick = (nextOpen?: boolean) => {

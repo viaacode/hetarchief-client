@@ -10,7 +10,7 @@ import {
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
 import type { HTTPError } from 'ky';
-import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
+import { compact, intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
 import Head from 'next/head';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
@@ -59,6 +59,7 @@ import {
 	GET_VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
 	ROUTES_BY_LOCALE,
 	ROUTE_PARTS_BY_LOCALE,
+	SEPARATOR,
 } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
@@ -428,17 +429,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	 * Methods
 	 */
 
-	const prepareSearchValue = (
-		value = ''
-	): { [QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: (string | null)[] } | undefined => {
+	const prepareSearchValue = (value = ''): string[] | undefined => {
 		const trimmed = value.trim();
 
 		if (trimmed && !query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]?.includes(trimmed)) {
-			return {
-				[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: (query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] ?? []).concat(
-					trimmed
-				),
-			};
+			return compact((query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] ?? []).concat(trimmed));
 		}
 
 		return undefined;
@@ -487,53 +482,51 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	/**
 	 * Set one filter with its values
-	 * @param value
+	 * @param values
 	 */
-	const onSubmitFilter = (value: FilterValue) => {
-		if (!value.field) {
-			return;
-		}
+	const onSubmitFilter = (values: FilterValue[]) => {
+		const newQueryParams: Partial<
+			Record<
+				IeObjectsSearchFilterField | 'page' | QUERY_PARAM_KEY.SEARCH_QUERY_KEY | 'filter',
+				string
+			>
+		> = {};
 
-		const searchValue = prepareSearchValue(searchBarInputValue);
-		const currentPage = isInitialPageLoad ? page : undefined;
+		for (const value of values) {
+			if (!value.field || !compact(value.multiValue || [])?.[0]) {
+				continue;
+			}
 
-		if (ADVANCED_FILTERS.includes(value.field)) {
 			// Advanced filters
-			setQuery({
-				[value.field]: value,
-				filter: undefined,
-				page: currentPage,
-				...(searchValue ? searchValue : {}),
-			});
-		} else {
+			if (ADVANCED_FILTERS.includes(value.field)) {
+				newQueryParams[value.field] = (value.multiValue || []).join(SEPARATOR);
+				continue;
+			}
 			// Dedicated filter
 			if (ARRAY_FILTERS.includes(value.field)) {
-				setQuery({
-					[value.field]: value.multiValue,
-					filter: undefined,
-					page: currentPage,
-					...(searchValue ? searchValue : {}),
-				});
-			} else {
-				if (BOOLEAN_FILTERS.includes(value.field)) {
-					// Boolean filter
-					setQuery({
-						[value.field]: value.multiValue?.[0] === 'true' || undefined,
-						filter: undefined,
-						page: currentPage,
-						...(searchValue ? searchValue : {}),
-					});
-				} else {
-					// String filter
-					setQuery({
-						[value.field]: value.multiValue?.[0] || undefined,
-						filter: undefined,
-						page: currentPage,
-						...(searchValue ? searchValue : {}),
-					});
-				}
+				newQueryParams[value.field] = (value.multiValue || []).join(SEPARATOR);
+				continue;
 			}
+			// Boolean filter
+			if (BOOLEAN_FILTERS.includes(value.field)) {
+				newQueryParams[value.field] = (value.multiValue || [])[0];
+				continue;
+			}
+			// String filter
+			newQueryParams[value.field] = (value.multiValue || [])[0];
 		}
+
+		const searchValue: string[] | undefined = prepareSearchValue(searchBarInputValue);
+		const currentPage = isInitialPageLoad ? page : undefined;
+
+		newQueryParams.filter = undefined;
+		newQueryParams.page = currentPage;
+		if (searchValue) {
+			newQueryParams[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] = searchValue?.join(SEPARATOR);
+		}
+
+		setQuery(newQueryParams);
+
 		setSearchBarInputValue('');
 		isInitialPageLoad && setIsInitialPageLoad(false);
 	};

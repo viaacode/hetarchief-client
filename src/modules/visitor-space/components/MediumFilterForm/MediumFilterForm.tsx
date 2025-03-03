@@ -23,7 +23,7 @@ import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 export const MediumFilterForm: FC<DefaultFilterFormProps> = ({
 	className,
 	id,
-	initialValue,
+	initialValues,
 	onSubmit,
 	onReset,
 }) => {
@@ -33,7 +33,7 @@ export const MediumFilterForm: FC<DefaultFilterFormProps> = ({
 	);
 	const [search, setSearch] = useState<string>('');
 	const [value, setValue] = useState<FilterValue>(
-		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
+		getInitialFilterValue(id, initialValues?.[0], initialValueFromQueryParams)
 	);
 
 	const selectedMediums = value.multiValue || [];
@@ -55,11 +55,11 @@ export const MediumFilterForm: FC<DefaultFilterFormProps> = ({
 			value: filterOption,
 			checked: selectedMediums.includes(filterOption),
 		})),
-		initialValue?.multiValue || []
+		initialValues?.[0]?.multiValue || []
 	);
 
 	const handleSubmit = async () => {
-		onSubmit(value);
+		onSubmit([value]);
 	};
 
 	const handleReset = () => {

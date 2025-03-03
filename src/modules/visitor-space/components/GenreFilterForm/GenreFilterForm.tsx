@@ -26,7 +26,7 @@ const GenreFilterForm: FC<DefaultFilterFormProps> = ({
 	id,
 	label,
 	disabled,
-	initialValue,
+	initialValues,
 	onSubmit,
 	onReset,
 }) => {
@@ -34,7 +34,7 @@ const GenreFilterForm: FC<DefaultFilterFormProps> = ({
 
 	const [initialValueFromQueryParams] = useQueryParam(IeObjectsSearchFilterField.GENRE, ArrayParam);
 	const [value, setValue] = useState(
-		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
+		getInitialFilterValue(id, initialValues?.[0], initialValueFromQueryParams)
 	);
 	const [search, setSearch] = useState<string>('');
 
@@ -75,7 +75,7 @@ const GenreFilterForm: FC<DefaultFilterFormProps> = ({
 	};
 
 	const handleSubmit = () => {
-		onSubmit(value);
+		onSubmit([value]);
 	};
 
 	const handleReset = () => {

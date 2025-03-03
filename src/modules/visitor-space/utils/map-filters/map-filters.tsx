@@ -83,62 +83,64 @@ export const mapAdvancedToTags = (
 	advanced: Array<FilterValue>,
 	key: IeObjectsSearchFilterField = IeObjectsSearchFilterField.ADVANCED
 ): TagIdentity[] => {
-	return advanced.map((advanced: FilterValue) => {
-		const filterProp = advanced.field as IeObjectsSearchFilterField;
-		const filterOp = advanced.operator as Operator;
+	return (
+		advanced.map?.((advanced: FilterValue) => {
+			const filterProp = advanced.field as IeObjectsSearchFilterField;
+			const filterOp = advanced.operator as Operator;
 
-		const values = advanced.multiValue || [];
+			const values = advanced.multiValue || [];
 
-		const filterPropLabel =
-			getSelectLabel(getRegularProperties(), filterProp) ||
-			getSelectLabel(getAdvancedProperties(), filterProp);
-		let filterOperatorLabel = getSelectLabel(getOperators(filterProp), filterOp);
-		let value = advanced.multiValue?.[0];
+			const filterPropLabel =
+				getSelectLabel(getRegularProperties(), filterProp) ||
+				getSelectLabel(getAdvancedProperties(), filterProp);
+			let filterOperatorLabel = getSelectLabel(getOperators(filterProp), filterOp);
+			let value = advanced.multiValue?.[0];
 
-		// Convert certain values to be legible
+			// Convert certain values to be legible
 
-		switch (filterProp) {
-			case IeObjectsSearchFilterField.CREATED:
-			case IeObjectsSearchFilterField.PUBLISHED:
-			case IeObjectsSearchFilterField.RELEASE_DATE:
-				if (filterOp === Operator.BETWEEN || filterOp === Operator.IS) {
-					value = `${formatDate(parseISO(values[0]))} - ${formatDate(parseISO(values[1]))}`;
-					filterOperatorLabel = undefined;
-				} else {
-					value = value ? formatDate(parseISO(value)) : '';
-				}
-				break;
+			switch (filterProp) {
+				case IeObjectsSearchFilterField.CREATED:
+				case IeObjectsSearchFilterField.PUBLISHED:
+				case IeObjectsSearchFilterField.RELEASE_DATE:
+					if (filterOp === Operator.BETWEEN || filterOp === Operator.IS) {
+						value = `${formatDate(parseISO(values[0]))} - ${formatDate(parseISO(values[1]))}`;
+						filterOperatorLabel = undefined;
+					} else {
+						value = value ? formatDate(parseISO(value)) : '';
+					}
+					break;
 
-			case IeObjectsSearchFilterField.DURATION:
-				if (filterOp === Operator.BETWEEN) {
-					value = `${values[0]} - ${values[1]}`;
-					filterOperatorLabel = undefined;
-				}
-				break;
+				case IeObjectsSearchFilterField.DURATION:
+					if (filterOp === Operator.BETWEEN) {
+						value = `${values[0]} - ${values[1]}`;
+						filterOperatorLabel = undefined;
+					}
+					break;
 
-			default:
-				break;
-		}
+				default:
+					break;
+			}
 
-		// Define render structure
-		const unique = `${tagPrefix(key)}${AdvancedFilterArrayParam.encode([advanced])}`;
+			// Define render structure
+			const unique = `${tagPrefix(key)}${AdvancedFilterArrayParam.encode([advanced])}`;
 
-		return {
-			label: (
-				<span>
-					{`${filterPropLabel}:`}
-					<strong>
-						{filterOperatorLabel && ` ${filterOperatorLabel?.toLowerCase()}`}
-						{` ${value}`}
-					</strong>
-				</span>
-			),
-			value: unique,
-			key,
-			id: unique,
-			...advanced,
-		};
-	});
+			return {
+				label: (
+					<span>
+						{`${filterPropLabel}:`}
+						<strong>
+							{filterOperatorLabel && ` ${filterOperatorLabel?.toLowerCase()}`}
+							{` ${value}`}
+						</strong>
+					</span>
+				),
+				value: unique,
+				key,
+				id: unique,
+				...advanced,
+			};
+		}) || []
+	);
 };
 
 export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] => {

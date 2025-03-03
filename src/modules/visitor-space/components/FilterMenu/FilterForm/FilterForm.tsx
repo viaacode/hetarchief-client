@@ -18,7 +18,7 @@ const FilterForm: FC<FilterFormProps> = ({
 	onFormReset,
 	onFormSubmit,
 	title,
-	initialValue,
+	initialValues,
 	type,
 }) => {
 	const showOverflow = useMemo(
@@ -44,13 +44,13 @@ const FilterForm: FC<FilterFormProps> = ({
 			<div className={clsx(className, styles['c-filter-form--inline'])}>
 				<FormComponent
 					// Make sure to force a rerender the form by setting a key
-					key={`${id}-${JSON.stringify(initialValue)}`}
+					key={`${id}-${JSON.stringify(initialValues)}`}
 					id={id}
 					label={title}
 					onSubmit={onFormSubmit}
 					onReset={() => onFormReset(id)}
 					disabled={disabled}
-					initialValue={initialValue}
+					initialValues={initialValues}
 				/>
 			</div>
 		);
@@ -73,7 +73,7 @@ const FilterForm: FC<FilterFormProps> = ({
 						[styles['c-filter-form__body--overflow']]: showOverflow,
 					})}
 					label={title}
-					initialValue={initialValue}
+					initialValues={initialValues}
 					id={id}
 					onSubmit={onFormSubmit}
 					onReset={() => onFormReset(id)}

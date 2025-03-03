@@ -33,11 +33,11 @@ export const AutocompleteFieldFilterForm: FC<AutocompleteFieldFilterFormProps> =
 	fieldLabel,
 	onSubmit,
 	onReset,
-	initialValue,
+	initialValues,
 }) => {
 	const [initialValueFromQueryParams] = useQueryParam(autocompleteField, StringParam);
 	const [value, setValue] = useState<FilterValue>(
-		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
+		getInitialFilterValue(id, initialValues?.[0], initialValueFromQueryParams)
 	);
 	const [formErrors, setFormErrors] = useState<Record<string, string> | null>(null);
 
@@ -45,7 +45,7 @@ export const AutocompleteFieldFilterForm: FC<AutocompleteFieldFilterFormProps> =
 		const errors = await validateForm(value, FILTER_FORM_SCHEMA());
 		setFormErrors(errors);
 		if (!errors) {
-			onSubmit(value);
+			onSubmit([value]);
 		}
 	};
 

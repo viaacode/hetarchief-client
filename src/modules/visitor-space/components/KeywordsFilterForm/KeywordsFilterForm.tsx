@@ -20,7 +20,7 @@ enum KeywordField {
 const KeywordsFilterForm: FC<DefaultFilterFormProps> = ({
 	className,
 	id,
-	initialValue,
+	initialValues,
 	onSubmit,
 	onReset,
 }) => {
@@ -29,7 +29,7 @@ const KeywordsFilterForm: FC<DefaultFilterFormProps> = ({
 		ArrayParam
 	);
 	const [value, setValue] = useState<FilterValue>(
-		getInitialFilterValue(id, initialValue, initialValueFromQueryParams)
+		getInitialFilterValue(id, initialValues?.[0], initialValueFromQueryParams)
 	);
 	const [input, setInput] = useState<string | undefined>(undefined);
 
@@ -96,7 +96,7 @@ const KeywordsFilterForm: FC<DefaultFilterFormProps> = ({
 	const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => onKey(e, [...keysEnter], saveInput);
 
 	const handleSubmit = () => {
-		onSubmit(value);
+		onSubmit([value]);
 	};
 
 	const handleReset = () => {

@@ -41,16 +41,7 @@ export interface DefaultFilterFormProps {
 	label: string;
 	className?: string;
 	disabled?: boolean;
-	onSubmit: (newFormValue: FilterValue) => void;
-	onReset: () => void;
-	initialValue?: FilterValue;
-}
-
-export interface DefaultFilterArrayFormProps {
-	id: IeObjectsSearchFilterField;
-	className?: string;
-	disabled?: boolean;
-	onSubmit: (newFormValues: FilterValue[]) => void;
+	onSubmit: (newFormValue: FilterValue[]) => void;
 	onReset: () => void;
 	initialValues?: FilterValue[];
 }
