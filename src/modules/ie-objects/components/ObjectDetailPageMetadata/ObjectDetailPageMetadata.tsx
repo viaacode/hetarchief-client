@@ -297,13 +297,13 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 
 		return VISITOR_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
 	}, [
+		canDownloadMetadata,
 		isKeyUser,
 		isMeemooAdmin,
 		isKiosk,
 		user,
 		isCPAdmin,
 		canDownloadNewspaper,
-		canDownloadMetadata,
 	]);
 
 	const renderExportDropdown = useCallback(
