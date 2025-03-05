@@ -99,12 +99,9 @@ export type PropertyOptions = Array<
 >;
 
 export interface FilterValue {
-	field?: IeObjectsSearchFilterField; // Which property/field is being filtered on
-	operator?: Operator; // Which operator, see Operator enum
-	multiValue?: string[];
+	field: IeObjectsSearchFilterField; // Which property/field is being filtered on
+	operator: Operator; // Which operator, see Operator enum
+	multiValue: string[];
 }
 
-export interface TagIdentity extends Partial<FilterValue>, TagInfo {
-	key: string;
-	id: string | number;
-}
+export type FilterValueTag = TagInfo & { id: string; filterValue: FilterValue };

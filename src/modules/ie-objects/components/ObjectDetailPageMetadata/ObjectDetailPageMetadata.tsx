@@ -100,10 +100,11 @@ import {
 	type LanguageCode,
 } from '@visitor-space/components/LanguageFilterForm/languages';
 import {
+	AdvancedFilterArrayParam,
 	filterNameToAcronym,
 	operatorToAcronym,
 } from '@visitor-space/const/advanced-filter-array-param';
-import { FILTER_LABEL_VALUE_DELIMITER, Operator } from '@visitor-space/types';
+import { type FilterValue, Operator } from '@visitor-space/types';
 
 import Callout from '../../../shared/components/Callout/Callout';
 import MetadataList from '../Metadata/MetadataList';
@@ -446,12 +447,15 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		maintainerLogo,
 		maintainerId,
 	}: IeObject): ReactNode => {
+		const filterValue: FilterValue = {
+			field: IeObjectsSearchFilterField.MAINTAINER_ID,
+			operator: Operator.IS,
+			multiValue: [],
+		};
 		const maintainerSearchLink = stringifyUrl({
 			url: ROUTES_BY_LOCALE[locale].search,
 			query: {
-				[IeObjectsSearchFilterField.MAINTAINER_ID]: [
-					`${maintainerId}${FILTER_LABEL_VALUE_DELIMITER}${maintainerName}`,
-				],
+				[IeObjectsSearchFilterField.MAINTAINER_ID]: AdvancedFilterArrayParam.encode([filterValue]),
 			},
 		});
 		return (

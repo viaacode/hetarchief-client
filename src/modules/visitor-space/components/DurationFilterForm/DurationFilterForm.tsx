@@ -41,7 +41,7 @@ const DurationFilterForm: FC<DefaultFilterFormProps> = ({
 		AdvancedFilterArrayParam
 	);
 	const [values, setValues] = useState<FilterValue[]>(
-		initialValues || initialValueFromQueryParams || initialFilterValues(id, Operator.GTE)
+		initialFilterValues(id, initialValues, initialValueFromQueryParams, Operator.GTE)
 	);
 	const [formErrors, setFormErrors] = useState<Record<DurationField, string> | null>();
 
@@ -67,7 +67,7 @@ const DurationFilterForm: FC<DefaultFilterFormProps> = ({
 	};
 
 	const handleReset = () => {
-		setValues(initialFilterValues(id, Operator.GTE));
+		setValues(initialFilterValues(id, undefined, undefined, Operator.GTE));
 		onReset();
 	};
 
@@ -95,7 +95,7 @@ const DurationFilterForm: FC<DefaultFilterFormProps> = ({
 							onChange={(newValue) => {
 								const selectedOperator = (newValue as SingleValue<SelectOption>)?.value as Operator;
 
-								if (selectedOperator !== values[0].operator) {
+								if (selectedOperator !== values[0]?.operator) {
 									setValues([
 										{
 											...values[0],
@@ -105,7 +105,7 @@ const DurationFilterForm: FC<DefaultFilterFormProps> = ({
 								}
 							}}
 							options={operators}
-							value={getSelectValue(operators, values[0].operator)}
+							value={getSelectValue(operators, values[0]?.operator)}
 						/>
 					</div>
 				</FormControl>
@@ -131,15 +131,15 @@ const DurationFilterForm: FC<DefaultFilterFormProps> = ({
 					<div className="u-py-32 u-px-20 u-px-32-md u-bg-platinum">
 						{values[0]?.operator === Operator.BETWEEN ? (
 							<DurationRangeInput
-								value={values[0].multiValue?.[0] || [defaultValue, defaultValue]}
+								value={values[0]?.multiValue?.[0] || [defaultValue, defaultValue]}
 								onChange={onChangeDuration}
-								placeholder={values[0].multiValue?.[0]}
+								placeholder={values[0]?.multiValue?.[0]}
 							/>
 						) : (
 							<DurationInput
-								value={values[0].multiValue?.[0] || defaultValue}
+								value={values[0]?.multiValue?.[0] || defaultValue}
 								onChange={onChangeDuration}
-								placeholder={values[0].multiValue?.[0]}
+								placeholder={values[0]?.multiValue?.[0]}
 							/>
 						)}
 					</div>

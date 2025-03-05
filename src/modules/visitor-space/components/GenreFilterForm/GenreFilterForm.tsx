@@ -33,12 +33,12 @@ const GenreFilterForm: FC<DefaultFilterFormProps> = ({
 		AdvancedFilterArrayParam
 	);
 	const [values, setValues] = useState<FilterValue[]>(
-		initialValues || initialValueFromQueryParams || initialFilterValues(id)
+		initialFilterValues(id, initialValues, initialValueFromQueryParams)
 	);
 	const [search, setSearch] = useState<string>('');
 
 	// Contains the options that have already been applied and are present in the url
-	const appliedSelectedGenres = compact(values[0].multiValue || []);
+	const appliedSelectedGenres = compact(values[0]?.multiValue || []);
 
 	const filterOptions: string[] =
 		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Genre]?.buckets?.map(

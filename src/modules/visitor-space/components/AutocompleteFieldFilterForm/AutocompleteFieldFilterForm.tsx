@@ -37,7 +37,7 @@ export const AutocompleteFieldFilterForm: FC<AutocompleteFieldFilterFormProps> =
 }) => {
 	const [initialValueFromQueryParams] = useQueryParam(autocompleteField, AdvancedFilterArrayParam);
 	const [values, setValues] = useState<FilterValue[]>(
-		initialValues || initialValueFromQueryParams || initialFilterValues(id)
+		initialFilterValues(id, initialValues, initialValueFromQueryParams)
 	);
 	const [formErrors, setFormErrors] = useState<Record<string, string> | null>(null);
 

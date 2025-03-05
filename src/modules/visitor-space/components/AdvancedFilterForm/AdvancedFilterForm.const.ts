@@ -9,26 +9,30 @@ export const initialFilterValue = (operator?: Operator): FilterValue => ({
 	multiValue: [''],
 });
 
-export const initialFilterMultiValue = (operator?: Operator): FilterValue => ({
-	field: IeObjectsSearchFilterField.QUERY,
-	operator: operator || Operator.IS,
-	multiValue: [],
-});
-
 export const initialFilterValues = (
 	field: IeObjectsSearchFilterField,
+	initialValues?: FilterValue[],
+	initialValuesFromQueryParams?: FilterValue[],
 	operator?: Operator
-): FilterValue[] => [
-	{
-		field: field,
-		operator: operator || Operator.IS,
-		multiValue: [],
-	},
-];
+): FilterValue[] => {
+	if (initialValues?.length) {
+		return initialValues;
+	}
+	if (initialValuesFromQueryParams?.length) {
+		return initialValuesFromQueryParams;
+	}
+	return [
+		{
+			field: field,
+			operator: operator || Operator.IS,
+			multiValue: [],
+		},
+	];
+};
 
 export const FILTER_FORM_SCHEMA = (): Schema<FilterValue> =>
 	object({
-		field: string().oneOf(Object.values(IeObjectsSearchFilterField)),
-		operator: string().oneOf(Object.values(Operator)),
-		multiValue: array(string().required()),
+		field: string().oneOf(Object.values(IeObjectsSearchFilterField)).required(),
+		operator: string().oneOf(Object.values(Operator)).required(),
+		multiValue: array(string().required()).required(),
 	}).required();

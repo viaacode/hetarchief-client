@@ -34,13 +34,13 @@ const MaintainerFilterForm: FC<DefaultFilterFormProps> = ({
 		AdvancedFilterArrayParam
 	);
 	const [values, setValues] = useState<FilterValue[]>(
-		initialValues || initialValueFromQueryParams || initialFilterValues(id)
+		initialFilterValues(id, initialValues, initialValueFromQueryParams)
 	);
 	const [search, setSearch] = useState<string>('');
 
 	// Contains the filters that have already been applied and are present in the url
 	const appliedSelectedMaintainerIds = compact(
-		(values[0].multiValue || []).map(
+		(values[0]?.multiValue || []).map(
 			(maintainerIdAndName) => maintainerIdAndName?.split(FILTER_LABEL_VALUE_DELIMITER)?.[0]
 		)
 	);
@@ -89,7 +89,7 @@ const MaintainerFilterForm: FC<DefaultFilterFormProps> = ({
 		onSubmit([
 			{
 				...values[0],
-				multiValue: (values[0].multiValue || []).map(idToIdAndNameConcatinated),
+				multiValue: (values[0]?.multiValue || []).map(idToIdAndNameConcatinated),
 			},
 		]);
 	};

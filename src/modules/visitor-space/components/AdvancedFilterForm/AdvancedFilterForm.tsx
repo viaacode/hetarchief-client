@@ -7,20 +7,25 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml } from '@shared/helpers/translate';
 
 import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
-import type { FilterValue } from '../../types';
-import { AdvancedFilterFields } from '../AdvancedFilterFields/AdvancedFilterFields';
-import { initialFilterValue } from './AdvancedFilterForm.const';
+import { AdvancedFilterArrayParam } from '@visitor-space/const/advanced-filter-array-param';
+import { useQueryParam } from 'use-query-params';
+import type { DefaultFilterFormProps, FilterValue } from '../../types';
+import { AdvancedFilterField } from '../AdvancedFilterFields/AdvancedFilterField';
+import { initialFilterValue, initialFilterValues } from './AdvancedFilterForm.const';
 import styles from './AdvancedFilterForm.module.scss';
-import type { AdvancedFilterFormProps } from './AdvancedFilterForm.types';
 
-export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
+export const AdvancedFilterForm: FC<DefaultFilterFormProps> = ({
+	id,
 	className,
 	disabled = false,
 	onSubmit,
 	onReset,
 	initialValues,
 }) => {
-	const [values, setValues] = useState<FilterValue[]>(initialValues || [initialFilterValue()]);
+	const [initialValueFromQueryParams] = useQueryParam(id, AdvancedFilterArrayParam);
+	const [values, setValues] = useState<FilterValue[]>(
+		initialFilterValues(id, initialValues, initialValueFromQueryParams)
+	);
 
 	const handleChange = (index: number, value: FilterValue) => {
 		const newValues = [...values];
@@ -43,7 +48,7 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 	};
 
 	const handleReset = () => {
-		setValues([initialFilterValue()]);
+		setValues(initialFilterValues(id));
 		onReset();
 	};
 
@@ -58,7 +63,7 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 
 				{!disabled &&
 					values.map((value, index) => (
-						<AdvancedFilterFields
+						<AdvancedFilterField
 							key={`advanced-filter-${value.field}--${value.operator}--${value.multiValue?.[0]}`}
 							id={`advanced-filter-${value.field}--${value.operator}--${value.multiValue?.[0]}`}
 							index={index}

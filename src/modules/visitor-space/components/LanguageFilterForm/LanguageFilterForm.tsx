@@ -37,7 +37,7 @@ const LanguageFilterForm: FC<DefaultFilterFormProps> = ({
 		AdvancedFilterArrayParam
 	);
 	const [values, setValues] = useState<FilterValue[]>(
-		initialValues || initialValueFromQueryParams || initialFilterValues(id)
+		initialFilterValues(id, initialValues, initialValueFromQueryParams)
 	);
 	const [search, setSearch] = useState<string>('');
 
@@ -97,7 +97,7 @@ const LanguageFilterForm: FC<DefaultFilterFormProps> = ({
 		onSubmit([
 			{
 				...values[0],
-				multiValue: compact(values[0].multiValue || []).map(idToIdAndNameConcatinated),
+				multiValue: compact(values[0]?.multiValue || []).map(idToIdAndNameConcatinated),
 			},
 		]);
 	};

@@ -18,7 +18,7 @@ export const ConsultableOnlyOnLocationFilterForm: FC<DefaultFilterFormProps> = (
 		AdvancedFilterArrayParam
 	);
 	const [values] = useState<FilterValue[]>(
-		initialValues || initialValueFromQueryParams || initialFilterValues(id)
+		initialFilterValues(id, initialValues, initialValueFromQueryParams)
 	);
 
 	const handleInputChange = (newValue: boolean) => {

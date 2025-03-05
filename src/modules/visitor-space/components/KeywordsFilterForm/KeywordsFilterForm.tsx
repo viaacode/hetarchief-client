@@ -30,13 +30,13 @@ const KeywordsFilterForm: FC<DefaultFilterFormProps> = ({
 		AdvancedFilterArrayParam
 	);
 	const [values, setValues] = useState<FilterValue[]>(
-		initialValues || initialValueFromQueryParams || initialFilterValues(id)
+		initialFilterValues(id, initialValues, initialValueFromQueryParams)
 	);
 	const [input, setInput] = useState<string | undefined>(undefined);
 
 	// Computed
 
-	const tags: TagInfo[] = compact(values[0].multiValue)?.map((value) => ({
+	const tags: TagInfo[] = compact(values[0]?.multiValue)?.map((value) => ({
 		label: value,
 		value,
 	}));
@@ -48,7 +48,7 @@ const KeywordsFilterForm: FC<DefaultFilterFormProps> = ({
 			setValues((oldValues): FilterValue[] => [
 				{
 					...oldValues[0],
-					multiValue: [...(oldValues[0].multiValue || []), input.toLowerCase()],
+					multiValue: [...(oldValues[0]?.multiValue || []), input.toLowerCase()],
 				},
 			]);
 

@@ -4,10 +4,8 @@ import { IeObjectLicense } from '@ie-objects/ie-objects.types';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import type { VisitRequest } from '@shared/types/visit-request';
-
-import { type SearchPageQueryParams, VISITOR_SPACE_QUERY_PARAM_INIT } from '../../const';
-import { FILTER_LABEL_VALUE_DELIMITER, type FilterValue, Operator } from '../../types';
-import { mapAdvancedToElastic } from '../map-filters';
+import type { SearchPageQueryParams } from '../../const';
+import { type FilterValue, Operator } from '../../types';
 
 export const VISITOR_SPACE_LICENSES = [
 	IeObjectLicense.BEZOEKERTOOL_METADATA_ALL,
@@ -33,7 +31,7 @@ export const mapMaintainerToElastic = (
 			? {
 					field: IeObjectsSearchFilterField.IDENTIFIER,
 					operator: Operator.IS,
-					multiValue: activeVisitorSpace?.accessibleObjectIds,
+					multiValue: activeVisitorSpace?.accessibleObjectIds || [],
 				}
 			: null;
 
@@ -73,97 +71,26 @@ const getFiltersForSearchTerms = (query: SearchPageQueryParams): FilterValue[] =
 	});
 };
 
-export const mapFiltersToElastic = (query: SearchPageQueryParams): FilterValue[] => {
-	return [
-		// Searchbar
-		...getFiltersForSearchTerms(query),
-		// Tabs
-		{
-			field: IeObjectsSearchFilterField.FORMAT,
-			operator: Operator.IS,
-			value: query.format || VISITOR_SPACE_QUERY_PARAM_INIT.format,
-		},
-		// Medium
-		{
-			field: IeObjectsSearchFilterField.MEDIUM,
-			operator: Operator.IS,
-			multiValue: compact(query[IeObjectsSearchFilterField.MEDIUM] || []) as string[],
-		},
-		// Duration
-		...(query[IeObjectsSearchFilterField.DURATION] || []).flatMap(mapAdvancedToElastic),
-		// ReleaseDate
-		...(query[IeObjectsSearchFilterField.RELEASE_DATE] || []).flatMap(mapAdvancedToElastic),
-		// Creator
-		{
-			field: IeObjectsSearchFilterField.CREATOR,
-			operator: Operator.CONTAINS,
-			value: (query[IeObjectsSearchFilterField.CREATOR] as string) || '',
-		},
-		// Newspaper Series Name
-		{
-			field: IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME,
-			operator: Operator.IS,
-			value: (query[IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME] as string) || '',
-		},
-		// Location created
-		{
-			field: IeObjectsSearchFilterField.LOCATION_CREATED,
-			operator: Operator.IS,
-			value: (query[IeObjectsSearchFilterField.LOCATION_CREATED] as string) || '',
-		},
-		// Mentions fallen soldiers
-		{
-			field: IeObjectsSearchFilterField.MENTIONS,
-			operator: Operator.IS,
-			value: (query[IeObjectsSearchFilterField.MENTIONS] as string) || '',
-		},
-		// Genre
-		{
-			field: IeObjectsSearchFilterField.GENRE,
-			operator: Operator.IS,
-			multiValue: compact(query[IeObjectsSearchFilterField.GENRE] || []) as string[],
-		},
-		// Keywords
-		{
-			field: IeObjectsSearchFilterField.KEYWORD,
-			operator: Operator.IS,
-			multiValue: compact(query[IeObjectsSearchFilterField.KEYWORD] || []) as string[],
-		},
-		// Language
-		{
-			field: IeObjectsSearchFilterField.LANGUAGE,
-			operator: Operator.IS,
-			multiValue: (compact(query[IeObjectsSearchFilterField.LANGUAGE] || []) as string[]).map(
-				(language) => language?.split(FILTER_LABEL_VALUE_DELIMITER)[0]
-			) as string[],
-		},
-		// Maintainers
-		{
-			field: IeObjectsSearchFilterField.MAINTAINER_ID,
-			operator: Operator.IS,
-			multiValue: (compact(query[IeObjectsSearchFilterField.MAINTAINER_ID] || []) as string[]).map(
-				(maintainerId: string) => maintainerId.split(FILTER_LABEL_VALUE_DELIMITER)[0] as string
-			),
-		},
-		// Consultable Remote
-		{
-			field: IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION,
-			operator: Operator.IS,
-			value: query[IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION] ? 'true' : '',
-		},
-		// Consultable Media
-		{
-			field: IeObjectsSearchFilterField.CONSULTABLE_MEDIA,
-			operator: Operator.IS,
-			value: query[IeObjectsSearchFilterField.CONSULTABLE_MEDIA] ? 'true' : '',
-		},
-		// Consultable Public Domain
-		{
-			field: IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN,
-			operator: Operator.IS,
-			value: query[IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN] ? 'true' : '',
-		},
-		// Advanced
-		...(query.advanced || []).flatMap(mapAdvancedToElastic),
-	].filter((filterField) => filterField.value || filterField.multiValue?.length);
+export const mapQueryParamsToFilterValues = (query: SearchPageQueryParams): FilterValue[] => {
+	const allFilterValues = [
+		// 	// Searchbar
+		// 	...getFiltersForSearchTerms(query),
+		// 	// Format
+		// 	{
+		// 		field: IeObjectsSearchFilterField.FORMAT,
+		// 		operator: Operator.IS,
+		// 		multiValue: [query.format || VISITOR_SPACE_QUERY_PARAM_INIT.format],
+		// 	},
+	];
+
+	const fields = Object.values(IeObjectsSearchFilterField);
+	for (const field of fields) {
+		const filterValues: FilterValue[] = query[field] || [];
+		allFilterValues.push(...filterValues);
+	}
+
+	const nonEmptyFilterValues = allFilterValues.filter(
+		(filterField) => filterField?.multiValue?.[0]
+	);
+	return nonEmptyFilterValues;
 };

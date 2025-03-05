@@ -6,13 +6,18 @@ import type { ToggleOption } from '@shared/components/Toggle';
 import type { DefaultComponentProps, SortObject } from '@shared/types';
 import type { IeObjectsSearchFilterField, SearchPageMediaType } from '@shared/types/ie-objects';
 
-import type { DefaultFilterFormProps, FilterValue, SearchSortProp, TagIdentity } from '../../types';
+import type {
+	DefaultFilterFormProps,
+	FilterValue,
+	FilterValueTag,
+	SearchSortProp,
+} from '../../types';
 
 export interface FilterMenuProps extends DefaultComponentProps {
 	children?: ReactNode;
 	activeSort?: SortObject;
 	filters?: FilterMenuFilterOption[];
-	filterValues?: Record<string, FilterValue[]>;
+	filterValues?: FilterValue[];
 	label?: string;
 	isOpen?: boolean;
 	isMobileOpen?: boolean;
@@ -23,7 +28,7 @@ export interface FilterMenuProps extends DefaultComponentProps {
 	onFilterReset?: OnFilterMenuFormReset;
 	onFilterSubmit?: OnFilterMenuFormSubmit;
 	onViewToggle?: (viewMode: string) => void;
-	onRemoveValue?: (tag: TagIdentity) => void;
+	onRemoveValue?: (tag: FilterValueTag) => void;
 }
 
 export interface FilterMenuSortOption {

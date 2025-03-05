@@ -26,5 +26,5 @@ export const DURATION_FILTER_FORM_SCHEMA = (): Schema<FilterValue> =>
 							value || ''
 						)
 				)
-		),
+		).required(),
 	});

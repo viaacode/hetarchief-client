@@ -33,10 +33,10 @@ export const MediumFilterForm: FC<DefaultFilterFormProps> = ({
 	);
 	const [search, setSearch] = useState<string>('');
 	const [values, setValues] = useState<FilterValue[]>(
-		initialValues || initialValueFromQueryParams || initialFilterValues(id)
+		initialFilterValues(id, initialValues, initialValueFromQueryParams)
 	);
 
-	const selectedMediums = values[0].multiValue || [];
+	const selectedMediums = values[0]?.multiValue || [];
 
 	const filterOptions: string[] =
 		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Medium]?.buckets?.map(

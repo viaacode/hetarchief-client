@@ -3,7 +3,7 @@ import type { Dispatch, ReactNode, SetStateAction } from 'react';
 import type { ActionMeta, InputActionMeta, OnChangeValue } from 'react-select';
 
 import type { DefaultComponentProps } from '@shared/types';
-import type { TagIdentity } from '@visitor-space/types';
+import type { FilterValueTag } from '@visitor-space/types';
 
 export type TagSearchBarProps<IsMulti extends boolean = false> = DefaultComponentProps &
 	Omit<TagsInputProps<IsMulti>, 'rootClassName' | 'classNamePrefix' | 'variants'> & {
@@ -14,7 +14,7 @@ export type TagSearchBarProps<IsMulti extends boolean = false> = DefaultComponen
 		renderedRight?: ReactNode | string;
 		onClear?: () => void;
 		onCreate?: (newValue: string) => void;
-		onRemoveValue?: (removedValue: TagIdentity) => void;
+		onRemoveValue?: (removedValue: FilterValueTag) => void;
 		onSearch?: (newValue: string) => void;
 		searchValue?: string;
 		size?: 'lg' | 'md';
@@ -25,8 +25,8 @@ export type TagSearchBarProps<IsMulti extends boolean = false> = DefaultComponen
 export type TagSearchBarClearLabel = string | ReactNode;
 export type TagSearchBarValuePlaceholder = string | ReactNode;
 
-export type TagSearchBarValue<IsMulti extends boolean> = OnChangeValue<TagIdentity, IsMulti>;
-export type TagSearchBarMeta<Value = TagIdentity> = ActionMeta<Value>;
+export type TagSearchBarValue<IsMulti extends boolean> = OnChangeValue<FilterValueTag, IsMulti>;
+export type TagSearchBarMeta<Value = FilterValueTag> = ActionMeta<Value>;
 
 export type OnSearchSingle = (newValue: string, meta?: InputActionMeta) => void;
 export type OnSearchMulti = (newValue: TagSearchBarValue<true>, meta?: TagSearchBarMeta) => void;

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import type { TagIdentity } from '../../../types';
+import type { FilterValueTag } from '../../../types';
 import type {
 	FilterMenuProps,
 	OnFilterMenuFormReset,
@@ -20,5 +20,5 @@ export interface FilterMenuMobileProps
 	onFilterClick?: (id: string) => void;
 	onFilterReset: OnFilterMenuFormReset;
 	onFilterSubmit: OnFilterMenuFormSubmit;
-	onRemoveValue?: (removedValue: TagIdentity) => void;
+	onRemoveValue?: (removedValue: FilterValueTag) => void;
 }

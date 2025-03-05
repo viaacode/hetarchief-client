@@ -7,7 +7,6 @@ import { Navigation } from '@navigation/components/Navigation/Navigation';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml } from '@shared/helpers/translate';
-import { mapFiltersToTags } from '@visitor-space/utils/map-filters';
 
 import type { SearchSortProp } from '../../../types';
 import { FilterButton } from '../FilterButton';
@@ -15,6 +14,7 @@ import FilterForm from '../FilterForm/FilterForm';
 import { type FilterMenuFilterOption, FilterMenuType } from '../FilterMenu.types';
 import { FilterSortList } from '../FilterSortList';
 
+import { mapAdvancedToTags } from '@visitor-space/utils/map-filters/map-filters';
 import styles from './FilterMenuMobile.module.scss';
 import type { FilterMenuMobileProps } from './FilterMenuMobile.types';
 
@@ -54,7 +54,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	const goBackToInitial = activeFilter
 		? () => onFilterClick(activeFilter)
 		: () => setIsSortActive(false);
-	const tags = filterValues ? mapFiltersToTags(filterValues) : [];
+	const tags = filterValues ? mapAdvancedToTags(filterValues) : [];
 
 	const handleSortClick = (key: SearchSortProp, order?: OrderDirection) => {
 		onSortClick?.(key, order);
@@ -76,7 +76,9 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 			<FilterButton
 				key={`filter-menu-mobile-btn-${id}`}
 				className={clsx(styles['c-filter-menu-mobile__option'], {
-					[styles['c-filter-menu-mobile__option--operative']]: !isNil(filterValues?.[id]),
+					[styles['c-filter-menu-mobile__option--operative']]: !isNil(
+						filterValues?.find((filterValue) => filterValue.field === id)
+					),
 				})}
 				icon={filterIsActive ? IconNamesLight.AngleLeft : (icon ?? IconNamesLight.AngleRight)}
 				isActive={filterIsActive}
@@ -158,7 +160,8 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 			className={clsx(styles['c-filter-menu-mobile__form'], {
 				[styles['c-filter-menu-mobile--inline']]: isInline,
 				[styles['c-filter-menu-mobile__option']]: isInline,
-				[styles['c-filter-menu-mobile__option--operative']]: !isNil(filterValues?.[id]) && isInline,
+				[styles['c-filter-menu-mobile__option--operative']]:
+					filterValues?.some((filterValue) => filterValue.field === id) && isInline,
 			})}
 			form={form}
 			id={id}
@@ -167,7 +170,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 			onFormReset={onFilterReset}
 			onFormSubmit={onFilterSubmit}
 			title={label}
-			initialValues={filterValues?.[id]}
+			initialValues={filterValues?.filter((filterValue) => filterValue.field === id)}
 			type={type}
 		/>
 	);

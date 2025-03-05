@@ -16,7 +16,7 @@ import MaintainerFilterForm from '@visitor-space/components/MaintainerFilterForm
 import { MediumFilterForm } from '@visitor-space/components/MediumFilterForm/MediumFilterForm';
 import { MentionsFilterForm } from '@visitor-space/components/MentionsFilterForm/MentionsFilterForm';
 import { NewspaperSeriesNameFilterForm } from '@visitor-space/components/NewspaperSeriesNameFilterForm/NewspaperSeriesNameFilterForm';
-import { ReleaseDateFilterForm } from '@visitor-space/components/ReleaseDateFilterForm';
+import { ReleaseDateFilterForm } from '@visitor-space/components/ReleaseDateFilterForm/ReleaseDateFilterForm';
 
 const ALL_TABS: SearchPageMediaType[] = [
 	SearchPageMediaType.All,

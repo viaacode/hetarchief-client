@@ -18,7 +18,7 @@ export const ConsultableMediaFilterForm: FC<DefaultFilterFormProps> = ({
 		AdvancedFilterArrayParam
 	);
 	const [values] = useState<FilterValue[]>(
-		initialValues || initialValueFromQueryParams || initialFilterValues(id)
+		initialFilterValues(id, initialValues, initialValueFromQueryParams)
 	);
 
 	const handleInputChange = (newValue: boolean | null) => {
@@ -33,7 +33,7 @@ export const ConsultableMediaFilterForm: FC<DefaultFilterFormProps> = ({
 	return (
 		<CheckboxFilterForm
 			id={id}
-			value={values[0].multiValue?.[0] === 'true'}
+			value={values[0]?.multiValue?.[0] === 'true'}
 			onChange={handleInputChange}
 			label={label}
 			className={className}

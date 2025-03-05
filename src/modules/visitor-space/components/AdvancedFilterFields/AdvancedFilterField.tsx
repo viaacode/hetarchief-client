@@ -60,7 +60,7 @@ const labelKeys = {
 	value: 'AdvancedFilterFields__value',
 };
 
-export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
+export const AdvancedFilterField: FC<AdvancedFilterFieldsProps> = ({
 	index,
 	value,
 	onChange,
@@ -319,7 +319,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						});
 					}}
 					options={getAdvancedProperties()}
-					value={getSelectValue(getAdvancedProperties(), value.field)}
+					value={getAdvancedProperties().find((option) => option.value === value.field)}
 				/>
 			</FormControl>
 

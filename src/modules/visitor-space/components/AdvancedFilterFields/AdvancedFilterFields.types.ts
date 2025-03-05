@@ -7,6 +7,6 @@ export interface AdvancedFilterFieldsProps {
 	id: string;
 	index: number;
 	value: FilterValue;
-	onChange: (index: number, values: Partial<FilterValue>) => void;
+	onChange: (index: number, value: FilterValue) => void;
 	onRemove: (index: number) => void;
 }

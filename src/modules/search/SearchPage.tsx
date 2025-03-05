@@ -10,7 +10,7 @@ import {
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
 import type { HTTPError } from 'ky';
-import { compact, intersection, isEmpty, isNil, kebabCase, sortBy, sum, without } from 'lodash-es';
+import { compact, intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
 import Head from 'next/head';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
@@ -101,16 +101,14 @@ import {
 	VISITOR_SPACE_QUERY_PARAM_INIT,
 	VISITOR_SPACE_SORT_OPTIONS,
 } from '@visitor-space/const';
-import {
-	ADVANCED_FILTERS,
-	ARRAY_FILTERS,
-	BOOLEAN_FILTERS,
-} from '@visitor-space/const/advanced-filters.consts';
 import { SEARCH_PAGE_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
 import { SEARCH_PAGE_IE_OBJECT_TABS } from '@visitor-space/const/visitor-space-tabs.const';
-import type { FilterValue, TagIdentity } from '@visitor-space/types';
-import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
-import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
+import type { FilterValue, FilterValueTag } from '@visitor-space/types';
+import {
+	mapMaintainerToElastic,
+	mapQueryParamsToFilterValues,
+} from '@visitor-space/utils/elastic-filters';
+import { mapAdvancedToTags } from '@visitor-space/utils/map-filters/map-filters';
 
 const labelKeys = {
 	search: 'SearchPage__search',
@@ -236,10 +234,16 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	 * Data
 	 */
 
-	const filterValues: FilterValue[] = [
-		...mapMaintainerToElastic(query, activeVisitRequest, accessibleVisitorSpaceRequests),
-		...(mapFiltersToElastic(query) || []),
-	];
+	const filterValues: FilterValue[] = useMemo(
+		() => [
+			...mapMaintainerToElastic(query, activeVisitRequest, accessibleVisitorSpaceRequests),
+			...(mapQueryParamsToFilterValues(query) || []),
+		],
+		[query, activeVisitRequest, accessibleVisitorSpaceRequests]
+	);
+	const filterValuesWithoutFormat = filterValues.filter(
+		(filterValue) => filterValue.field !== IeObjectsSearchFilterField.FORMAT
+	);
 	const {
 		data: searchResults,
 		isLoading: searchResultsLoading,
@@ -499,25 +503,27 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			if (!value.field || !compact(value.multiValue || [])?.[0]) {
 				continue;
 			}
-
-			// Advanced filters
-			if (ADVANCED_FILTERS.includes(value.field)) {
-				const existingValue = (newQueryParams[value.field] as FilterValue[] | undefined) || [];
-				newQueryParams[value.field] = [...existingValue, value];
-				continue;
-			}
-			// Dedicated filter
-			if (ARRAY_FILTERS.includes(value.field)) {
-				newQueryParams[value.field] = value.multiValue || [];
-				continue;
-			}
-			// Boolean filter
-			if (BOOLEAN_FILTERS.includes(value.field)) {
-				newQueryParams[value.field] = (value.multiValue || [])[0];
-				continue;
-			}
-			// String filter
-			newQueryParams[value.field] = (value.multiValue || [])[0];
+			const existingValue = (newQueryParams[value.field] as FilterValue[] | undefined) || [];
+			newQueryParams[value.field] = [...existingValue, value];
+			//
+			// 	// Advanced filters
+			// 	if (ADVANCED_FILTERS.includes(value.field)) {
+			// 		const existingValue = (newQueryParams[value.field] as FilterValue[] | undefined) || [];
+			// 		newQueryParams[value.field] = [...existingValue, value];
+			// 		continue;
+			// 	}
+			// 	// Dedicated filter
+			// 	if (ARRAY_FILTERS.includes(value.field)) {
+			// 		newQueryParams[value.field] = value.multiValue || [];
+			// 		continue;
+			// 	}
+			// 	// Boolean filter
+			// 	if (BOOLEAN_FILTERS.includes(value.field)) {
+			// 		newQueryParams[value.field] = (value.multiValue || [])[0];
+			// 		continue;
+			// 	}
+			// 	// String filter
+			// 	newQueryParams[value.field] = (value.multiValue || [])[0];
 		}
 
 		const searchValue: string[] | undefined = prepareSearchValue(searchBarInputValue);
@@ -535,50 +541,38 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		isInitialPageLoad && setIsInitialPageLoad(false);
 	};
 
-	const onRemoveTag = (tag: TagIdentity) => {
-		const updatedQuery: Record<string, unknown> = { ...query };
-
-		switch (tag.key) {
-			case IeObjectsSearchFilterField.GENRE:
-			case IeObjectsSearchFilterField.KEYWORD:
-			case IeObjectsSearchFilterField.LANGUAGE:
-			case IeObjectsSearchFilterField.MEDIUM:
-			case IeObjectsSearchFilterField.MAINTAINER_ID:
-			case QUERY_PARAM_KEY.SEARCH_QUERY_KEY:
-			case IeObjectsSearchFilterField.CREATOR:
-			case IeObjectsSearchFilterField.LOCATION_CREATED:
-			case IeObjectsSearchFilterField.MENTIONS:
-			case IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME: {
-				const currentValues = updatedQuery[tag.key] as string[];
-				const tagValue = (tag.value as string)?.replace(tagPrefix(tag.key), '');
-				updatedQuery[tag.key] = without(currentValues, tagValue);
-				break;
-			}
-
-			case IeObjectsSearchFilterField.ADVANCED:
-			case IeObjectsSearchFilterField.RELEASE_DATE:
-			case IeObjectsSearchFilterField.CREATED:
-			case IeObjectsSearchFilterField.PUBLISHED:
-			case IeObjectsSearchFilterField.DURATION: {
-				const currentValues = (updatedQuery[tag.key] || []) as unknown[];
-				const tagValue = (tag.value as string)?.replace(tagPrefix(tag.key), '');
-				updatedQuery[tag.key] = without(currentValues, tagValue);
-				break;
-			}
-
-			case IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION:
-			case IeObjectsSearchFilterField.CONSULTABLE_MEDIA:
-			case IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN: {
-				updatedQuery[tag.key] = undefined;
-				break;
-			}
-
-			default:
-				updatedQuery[tag.key] = undefined;
-				break;
+	/**
+	 * When a user clicks the x next to a search filter tag in the tag search bar
+	 * @param tag
+	 */
+	const onRemoveTag = (tag: FilterValueTag) => {
+		if (!tag.filterValue.field) {
+			return;
 		}
 
-		setQuery({ ...updatedQuery, page: undefined });
+		if (
+			[
+				IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION,
+				IeObjectsSearchFilterField.CONSULTABLE_MEDIA,
+				IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN,
+			].includes(tag.filterValue.field)
+		) {
+			// Boolean filters that are removed, should be set to undefined
+			setQuery({ ...query, [tag.filterValue.field]: undefined, page: undefined });
+			return;
+		}
+
+		// For all other filters, remove the value from the list
+		const currentValues = query[tag.filterValue.field] as FilterValue[];
+		const tagValue = tag.filterValue;
+		const newValues = currentValues.filter(
+			(filterValue) => filterValue.multiValue !== tagValue.multiValue
+		);
+		setQuery({
+			...query,
+			[tag.filterValue.field]: newValues?.length ? newValues : undefined,
+			page: undefined,
+		});
 	};
 
 	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) => {
@@ -607,7 +601,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const isLoadedWithResults = !!searchResults && searchResults?.items?.length > 0;
 	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
 	const showVisitorSpacesDropdown = isUserWithAccount && accessibleVisitorSpaceRequests.length > 0;
-	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
+	const filterValueTags = useMemo(
+		() => mapAdvancedToTags(filterValuesWithoutFormat),
+		[filterValuesWithoutFormat]
+	);
 
 	const searchResultCardData = useMemo((): IdentifiableMediaCard[] => {
 		return (searchResults?.items || []).map((item): IdentifiableMediaCard => {
@@ -741,7 +738,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				<FilterMenu
 					activeSort={activeSort}
 					filters={filters}
-					filterValues={query}
+					filterValues={filterValues}
 					label={tText('pages/bezoekersruimte/visitor-space-slug/index___filters')}
 					isOpen={filterMenuOpen}
 					isMobileOpen={mobileFilterMenuOpen}
@@ -954,7 +951,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 											)}
 											renderedRight={renderSearchInputRightControls()}
 											size="lg"
-											value={activeFilters}
+											value={filterValueTags}
 										/>
 									</div>
 								</FormControl>

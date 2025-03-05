@@ -9,8 +9,9 @@ import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { AdvancedFilterArrayParam } from '@visitor-space/const/advanced-filter-array-param';
 import { useGetOrganisationBySlug } from '@visitor-space/hooks/get-organisation-by-slug';
-import { FILTER_LABEL_VALUE_DELIMITER } from '@visitor-space/types';
+import { FILTER_LABEL_VALUE_DELIMITER, type FilterValue, Operator } from '@visitor-space/types';
 
 type MaintainerSearchPageProps = DefaultSeoInfo;
 
@@ -33,10 +34,19 @@ export const MaintainerSearchPage: FC<MaintainerSearchPageProps> = () => {
 	// If url is: /zoeken/slug/:object-id => redirect to /zoeken/:slug/:object-id/:object-name
 	useEffect(() => {
 		if (organisation) {
+			const filterValue: FilterValue = {
+				field: IeObjectsSearchFilterField.MAINTAINER_ID,
+				operator: Operator.IS,
+				multiValue: [
+					`${organisation.schemaIdentifier}${FILTER_LABEL_VALUE_DELIMITER}${organisation.schemaName}`,
+				],
+			};
 			const searchUrl = stringifyUrl({
 				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 				query: {
-					[IeObjectsSearchFilterField.MAINTAINER_ID]: `${organisation.schemaIdentifier}${FILTER_LABEL_VALUE_DELIMITER}${organisation.schemaName}`,
+					[IeObjectsSearchFilterField.MAINTAINER_ID]: AdvancedFilterArrayParam.encode([
+						filterValue,
+					]),
 				},
 			});
 			router.replace(searchUrl, undefined, { shallow: true });

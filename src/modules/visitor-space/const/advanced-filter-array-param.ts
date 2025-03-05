@@ -1,50 +1,46 @@
-import type { QueryParamConfig } from 'use-query-params';
-
-import { SEPARATOR } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import {
 	ADVANCED_FILTERS,
 	FILTERS_OPTIONS_CONFIG,
 	type FilterConfig,
-	REGULAR_FILTERS,
 } from '@visitor-space/const/advanced-filters.consts';
-import { sortBy } from 'lodash-es';
+import { compact, isArray, sortBy } from 'lodash-es';
+import type { QueryParamConfig } from 'use-query-params';
 import { type FilterValue, Operator, type OperatorOptions, type PropertyOptions } from '../types';
 
-const divider = ',';
+const FILTER_VALUE_DELIMITER = '~~~';
+
+function stringifyFilterValue(value: FilterValue): string {
+	return [value.field, value.operator, ...value.multiValue]?.join(FILTER_VALUE_DELIMITER);
+}
+
+function parseFilterValue(value: string): FilterValue {
+	const [field, operator, ...multiValue] = value.split(FILTER_VALUE_DELIMITER);
+	return {
+		field: field as IeObjectsSearchFilterField,
+		operator: operator as Operator,
+		multiValue,
+	};
+}
+
 export const AdvancedFilterArrayParam: QueryParamConfig<FilterValue[] | undefined> = {
-	encode(filters: FilterValue[] | undefined): string | undefined {
+	encode(filters: FilterValue[] | undefined): string[] | undefined {
 		if (!filters || filters.length === 0) {
 			return undefined;
 		}
-		return filters
-			.filter((filter) => filter.field)
-			.map((filter) => {
-				const { field, operator, multiValue } = filter;
-				const propertyAcronym = filterNameToAcronym(field as IeObjectsSearchFilterField);
-				const operatorAcronym = operatorToAcronym(operator as Operator);
-
-				return `${propertyAcronym}${operatorAcronym}${encodeURIComponent((multiValue || []).join(SEPARATOR))}`;
-			})
-			.join(divider);
+		const value = filters.map(stringifyFilterValue);
+		return value;
 	},
 
 	decode(stringified): FilterValue[] | undefined {
-		return typeof stringified === 'string'
-			? stringified.split(divider).map((filter: string): FilterValue => {
-					const filterPropAcronym = filter.slice(0, 2);
-					const filterOperatorAcronym = filter.slice(2, 4);
-					const filterProperty = filterAcronymToName(filterPropAcronym);
-					const filterOperator = operatorAcronymToName(filterOperatorAcronym);
-
-					const values = decodeURIComponent(filter.slice(4))
-						.split(SEPARATOR)
-						.map((val) => val?.trim());
-
-					return { field: filterProperty, operator: filterOperator, multiValue: values };
-				})
-			: undefined;
+		if (isArray(stringified)) {
+			return compact(stringified).map(parseFilterValue);
+		}
+		if (typeof stringified === 'string') {
+			return [parseFilterValue(stringified) as FilterValue];
+		}
+		return undefined;
 	},
 };
 
@@ -224,18 +220,6 @@ export const getFilterLabel = (prop: IeObjectsSearchFilterField): string => {
 	};
 	return labels[prop] || '';
 };
-
-export function getRegularProperties(): PropertyOptions {
-	return sortBy(
-		REGULAR_FILTERS.map((key) => {
-			return {
-				label: getFilterLabel(key as IeObjectsSearchFilterField),
-				value: key as IeObjectsSearchFilterField,
-			};
-		}),
-		(option) => option.label
-	);
-}
 
 export function getAdvancedProperties(): PropertyOptions {
 	return sortBy(

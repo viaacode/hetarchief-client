@@ -83,7 +83,7 @@ export async function makeServerSideRequestGetIeObjects(queryClient: QueryClient
 			{
 				field: IeObjectsSearchFilterField.FORMAT,
 				operator: Operator.IS,
-				value: SearchPageMediaType.All,
+				multiValue: [SearchPageMediaType.All],
 			},
 		],
 		page: 1,

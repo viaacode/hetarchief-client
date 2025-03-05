@@ -68,33 +68,6 @@ export const ADVANCED_FILTERS: IeObjectsSearchFilterField[] = [
 	IeObjectsSearchFilterField.CREATED,
 ];
 
-export const REGULAR_FILTERS: IeObjectsSearchFilterField[] = [
-	// MetadataProp.Maintainers, // These are handled separately in VisitorSpaceFilterId
-	// MetadataProp.ConsultableMedia,
-	// MetadataProp.ConsultableOnlyOnLocation,
-	// MetadataProp.ConsultablePublicDomain,
-	IeObjectsSearchFilterField.MEDIUM,
-	IeObjectsSearchFilterField.CREATOR,
-	// TODO Location of publication
-];
-
-export const ARRAY_FILTERS: IeObjectsSearchFilterField[] = [
-	IeObjectsSearchFilterField.GENRE,
-	IeObjectsSearchFilterField.LANGUAGE,
-	IeObjectsSearchFilterField.MEDIUM,
-	IeObjectsSearchFilterField.OBJECT_TYPE,
-	IeObjectsSearchFilterField.KEYWORD,
-	IeObjectsSearchFilterField.MAINTAINER_SLUG,
-	IeObjectsSearchFilterField.MAINTAINER_ID,
-	IeObjectsSearchFilterField.MENTIONS,
-];
-
-export const BOOLEAN_FILTERS: IeObjectsSearchFilterField[] = [
-	IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION,
-	IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN,
-	IeObjectsSearchFilterField.CONSULTABLE_MEDIA,
-];
-
 export const GET_OPERATOR_LABELS = (): Record<string, string> => ({
 	from: tText(
 		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___vanaf'
@@ -140,6 +113,7 @@ const DATE_GREATER_THAN_EQUALS = (
 				{
 					field,
 					operator: Operator.GTE,
+					multiValue: [],
 				},
 			],
 		},
@@ -158,6 +132,7 @@ const DATE_LESS_THAN_OR_EQUALS = (
 				{
 					field,
 					operator: Operator.LTE,
+					multiValue: [],
 				},
 			],
 		},
@@ -176,10 +151,12 @@ const DATE_BETWEEN = (
 				{
 					field,
 					operator: Operator.GTE,
+					multiValue: [],
 				},
 				{
 					field,
 					operator: Operator.LTE,
+					multiValue: [],
 				},
 			],
 		},
@@ -198,10 +175,12 @@ const DATE_EQUALS = (
 				{
 					field,
 					operator: Operator.GTE,
+					multiValue: [],
 				},
 				{
 					field,
 					operator: Operator.LTE,
+					multiValue: [],
 				},
 			],
 		},
@@ -220,6 +199,7 @@ const DURATION_GREATER_THAN_EQUALS = (
 				{
 					field,
 					operator: Operator.GTE,
+					multiValue: [],
 				},
 			],
 		},
@@ -238,6 +218,7 @@ const DURATION_LESS_THAN_OR_EQUALS = (
 				{
 					field,
 					operator: Operator.LTE,
+					multiValue: [],
 				},
 			],
 		},
@@ -261,6 +242,7 @@ const CONTAINS = (
 				{
 					field,
 					operator: Operator.CONTAINS,
+					multiValue: [],
 				},
 			],
 		},
@@ -284,6 +266,7 @@ const CONTAINS_NOT = (
 				{
 					field,
 					operator: Operator.CONTAINS_NOT,
+					multiValue: [],
 				},
 			],
 		},
@@ -307,6 +290,7 @@ const EQUALS = (
 				{
 					field,
 					operator: Operator.IS,
+					multiValue: [],
 				},
 			],
 		},
@@ -330,6 +314,7 @@ const EQUALS_NOT = (
 				{
 					field,
 					operator: Operator.IS_NOT,
+					multiValue: [],
 				},
 			],
 		},

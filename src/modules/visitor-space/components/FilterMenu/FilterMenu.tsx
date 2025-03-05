@@ -1,6 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isEmpty, isNil } from 'lodash-es';
+import { isEmpty } from 'lodash-es';
 import { type FC, type ReactNode, useEffect, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
@@ -128,10 +128,12 @@ const FilterMenu: FC<FilterMenuProps> = ({
 					{...option}
 					key={`filter-menu-option-${option.id}`}
 					className={clsx({
-						[styles['c-filter-menu__option--operative']]: !isNil(filterValues?.[option?.id]),
+						[styles['c-filter-menu__option--operative']]: filterValues?.some(
+							(filterValue) => filterValue.field === option?.id
+						),
 					})}
 					activeFilter={query.filter}
-					initialValue={filterValues?.[option.id]}
+					initialValues={filterValues?.filter((filterValue) => filterValue.field === option.id)}
 					onClick={onFilterClick}
 					onFormReset={onFilterFormReset}
 					onFormSubmit={onFilterFormSubmit}
