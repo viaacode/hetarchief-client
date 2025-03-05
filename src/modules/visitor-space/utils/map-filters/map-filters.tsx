@@ -7,7 +7,13 @@ import { format, parseISO } from 'date-fns';
 import { isString } from 'lodash-es';
 
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
-import { AdvancedFilterArrayParam } from '../../const/advanced-filter-array-param';
+import {
+	AdvancedFilterArrayParam,
+	getAdvancedProperties,
+	getFilterLabel,
+	getOperators,
+	getRegularProperties,
+} from '../../const/advanced-filter-array-param';
 import { getMetadataSearchFilters } from '../../const/advanced-filters.consts';
 import {
 	FILTER_LABEL_VALUE_DELIMITER,
@@ -15,12 +21,6 @@ import {
 	Operator,
 	type TagIdentity,
 } from '../../types';
-import {
-	getAdvancedProperties,
-	getFilterLabel,
-	getOperators,
-	getRegularProperties,
-} from '../advanced-filters';
 
 const getSelectLabel = (
 	options: SelectOption[],

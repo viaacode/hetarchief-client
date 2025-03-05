@@ -1,9 +1,10 @@
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import CheckboxFilterForm from '@visitor-space/components/CheckboxFilterForm/CheckboxFilterForm';
+import { AdvancedFilterArrayParam } from '@visitor-space/const/advanced-filter-array-param';
 import type { DefaultFilterFormProps, FilterValue } from '@visitor-space/types';
-import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
 import { type FC, useState } from 'react';
-import { BooleanParam, useQueryParam } from 'use-query-params';
+import { useQueryParam } from 'use-query-params';
+import { initialFilterValues } from '../AdvancedFilterForm/AdvancedFilterForm.const';
 
 export const ConsultableMediaFilterForm: FC<DefaultFilterFormProps> = ({
 	id,
@@ -14,16 +15,16 @@ export const ConsultableMediaFilterForm: FC<DefaultFilterFormProps> = ({
 }) => {
 	const [initialValueFromQueryParams] = useQueryParam(
 		IeObjectsSearchFilterField.CONSULTABLE_MEDIA,
-		BooleanParam
+		AdvancedFilterArrayParam
 	);
-	const [value] = useState<FilterValue>(
-		getInitialFilterValue(id, initialValues?.[0], initialValueFromQueryParams)
+	const [values] = useState<FilterValue[]>(
+		initialValues || initialValueFromQueryParams || initialFilterValues(id)
 	);
 
 	const handleInputChange = (newValue: boolean | null) => {
 		onSubmit([
 			{
-				...value,
+				...values[0],
 				multiValue: [newValue ? 'true' : 'false'],
 			},
 		]);
@@ -32,7 +33,7 @@ export const ConsultableMediaFilterForm: FC<DefaultFilterFormProps> = ({
 	return (
 		<CheckboxFilterForm
 			id={id}
-			value={value.multiValue?.[0] === 'true'}
+			value={values[0].multiValue?.[0] === 'true'}
 			onChange={handleInputChange}
 			label={label}
 			className={className}

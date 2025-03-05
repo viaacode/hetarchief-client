@@ -15,10 +15,20 @@ export const initialFilterMultiValue = (operator?: Operator): FilterValue => ({
 	multiValue: [],
 });
 
+export const initialFilterValues = (
+	field: IeObjectsSearchFilterField,
+	operator?: Operator
+): FilterValue[] => [
+	{
+		field: field,
+		operator: operator || Operator.IS,
+		multiValue: [],
+	},
+];
+
 export const FILTER_FORM_SCHEMA = (): Schema<FilterValue> =>
 	object({
 		field: string().oneOf(Object.values(IeObjectsSearchFilterField)),
 		operator: string().oneOf(Object.values(Operator)),
-		val: string(),
 		multiValue: array(string().required()),
 	}).required();

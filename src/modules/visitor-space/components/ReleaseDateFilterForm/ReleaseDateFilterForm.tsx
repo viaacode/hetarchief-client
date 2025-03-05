@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { endOfDay, parseISO, startOfDay } from 'date-fns';
 import React, { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
 import type { MultiValue, SingleValue } from 'react-select';
-import { StringParam, useQueryParam } from 'use-query-params';
+import { useQueryParam } from 'use-query-params';
 
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SEPARATOR } from '@shared/const';
@@ -22,11 +22,13 @@ import styles from './ReleaseDateFilterForm.module.scss';
 
 import { validateForm } from '@shared/helpers/validate-form';
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
-import { initialFilterValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import { initialFilterValues } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
 import { RELEASE_DATE_FILTER_FORM_SCHEMA } from '@visitor-space/components/ReleaseDateFilterForm/ReleaseDateFilterForm.const';
-import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
-import { getOperators } from 'modules/visitor-space/utils/advanced-filters';
+import {
+	AdvancedFilterArrayParam,
+	getOperators,
+} from '@visitor-space/const/advanced-filter-array-param';
 
 const ReleaseDateFilterForm: FC<DefaultFilterFormProps> = ({
 	id,
@@ -38,10 +40,10 @@ const ReleaseDateFilterForm: FC<DefaultFilterFormProps> = ({
 }) => {
 	const [initialValueFromQueryParams] = useQueryParam(
 		IeObjectsSearchFilterField.RELEASE_DATE,
-		StringParam
+		AdvancedFilterArrayParam
 	);
-	const [value, setValue] = useState<FilterValue>(
-		getInitialFilterValue(id, initialValues?.[0], initialValueFromQueryParams)
+	const [values, setValues] = useState<FilterValue[]>(
+		initialValues || initialValueFromQueryParams || initialFilterValues(id, Operator.GTE)
 	);
 	const [formErrors, setFormErrors] = useState<Record<keyof FilterValue, string> | null>(null);
 
@@ -60,7 +62,7 @@ const ReleaseDateFilterForm: FC<DefaultFilterFormProps> = ({
 
 			const value = `${parsedFrom}${SEPARATOR}${parsedTo}`;
 
-			setValue((oldValue) => ({ ...oldValue, val: value }));
+			setValues((oldValues): FilterValue[] => [{ ...oldValues[0], multiValue: [value] }]);
 		} catch (err) {
 			// ignore invalid dates since the user can still be typing something
 		}
@@ -77,30 +79,30 @@ const ReleaseDateFilterForm: FC<DefaultFilterFormProps> = ({
 
 	const onChangeDateInput = (newDate: Date | null) => {
 		if (!newDate) {
-			setValue((oldValue) => ({ ...oldValue, val: undefined }));
+			setValues((oldValues): FilterValue[] => [{ ...oldValues[0], multiValue: [] }]);
 			return;
 		}
-		if (value.operator === Operator.IS) {
+		if (values[0].operator === Operator.IS) {
 			convertToRange(newDate);
 			return;
 		}
-		onChangeReleaseDate((newDate || new Date()).toISOString());
+		onChangeReleaseDate([(newDate || new Date()).toISOString()]);
 	};
 
-	const onChangeReleaseDate = (releaseDate: string) => {
-		setValue((oldValue) => ({ ...oldValue, val: releaseDate }));
+	const onChangeReleaseDate = (releaseDates: [string, string] | [string]) => {
+		setValues((oldValues): FilterValue[] => [{ ...oldValues[0], multiValue: releaseDates }]);
 	};
 
 	useEffect(() => {
 		if (year) {
-			const yearDate = convertYearToDate(year, value.operator || Operator.GTE)?.toString();
-			setValue((oldValue) => ({ ...oldValue, val: yearDate }));
+			const yearDate = convertYearToDate(year, values[0].operator || Operator.GTE)?.toString();
+			setValues((oldValues): FilterValue[] => [{ ...oldValues[0], multiValue: [yearDate] }]);
 		}
-	}, [year, value.operator]);
+	}, [year, values[0].operator]);
 
 	useEffect(() => {
 		if (yearRange) {
-			setValue((oldValue) => ({ ...oldValue, val: yearRange }));
+			setValues((oldValues): FilterValue[] => [{ ...oldValues[0], multiValue: [yearRange] }]);
 		}
 	}, [yearRange]);
 
@@ -109,29 +111,26 @@ const ReleaseDateFilterForm: FC<DefaultFilterFormProps> = ({
 	) => {
 		const selectedOperator = (operator as SingleValue<SelectOption>)?.value as Operator;
 
-		if (selectedOperator !== value.operator) {
-			setValue((oldValue) => ({
-				...oldValue,
-				operator: selectedOperator,
-			}));
+		if (selectedOperator !== values[0].operator) {
+			setValues((oldValues): FilterValue[] => [{ ...oldValues[0], operator: selectedOperator }]);
 		}
 	};
 
 	const handleSubmit = async () => {
-		const errors = await validateForm(value, RELEASE_DATE_FILTER_FORM_SCHEMA());
+		const errors = await validateForm(values[0], RELEASE_DATE_FILTER_FORM_SCHEMA());
 		setFormErrors(errors);
 		if (!errors) {
-			onSubmit([value]);
+			onSubmit(values);
 		}
 	};
 
 	const handleReset = () => {
-		setValue(initialFilterValue(Operator.GTE));
+		setValues(initialFilterValues(id, Operator.GTE));
 		onReset();
 	};
 
 	const renderInputField = () => {
-		if (value.operator === Operator.BETWEEN) {
+		if (values[0].operator === Operator.BETWEEN) {
 			if (yearsSelected) {
 				return (
 					<YearRangeInput
@@ -145,10 +144,10 @@ const ReleaseDateFilterForm: FC<DefaultFilterFormProps> = ({
 					/>
 				);
 			}
-			const values = value.multiValue || [];
+			const dates = values[0].multiValue || [];
 
-			const from: Date | undefined = values[0] ? parseISO(values[0]) : undefined;
-			const to: Date | undefined = values[1] ? parseISO(values[1]) : undefined;
+			const from: Date | undefined = dates[0] ? parseISO(dates[0]) : undefined;
+			const to: Date | undefined = dates[1] ? parseISO(dates[1]) : undefined;
 
 			return (
 				<DateRangeInput
@@ -156,9 +155,7 @@ const ReleaseDateFilterForm: FC<DefaultFilterFormProps> = ({
 					showLabels
 					id="releaseDate"
 					onChange={(newFromDate: Date | undefined, newToDate: Date | undefined) => {
-						onChangeReleaseDate(
-							`${newFromDate ? newFromDate.toISOString() : ''}${SEPARATOR}${newToDate ? newToDate.toISOString() : ''}`
-						);
+						onChangeReleaseDate([newFromDate?.toISOString() || '', newToDate?.toISOString() || '']);
 					}}
 					from={from}
 					to={to}
@@ -168,7 +165,7 @@ const ReleaseDateFilterForm: FC<DefaultFilterFormProps> = ({
 		if (yearsSelected) {
 			return (
 				<YearInput
-					label={getSelectValue(operators, value.operator)?.label}
+					label={getSelectValue(operators, values[0].operator)?.label}
 					disabled={disabled}
 					id="releaseDate"
 					onChange={(e) => onChangeYear(e)}
@@ -176,10 +173,10 @@ const ReleaseDateFilterForm: FC<DefaultFilterFormProps> = ({
 				/>
 			);
 		}
-		const releaseDate = value.multiValue?.[0];
+		const releaseDate = values[0].multiValue?.[0];
 		return (
 			<DateInput
-				label={getSelectValue(operators, value.operator)?.label}
+				label={getSelectValue(operators, values[0].operator)?.label}
 				disabled={disabled}
 				id="releaseDate"
 				onChange={(date) => {
@@ -209,7 +206,7 @@ const ReleaseDateFilterForm: FC<DefaultFilterFormProps> = ({
 							onChangeOperatorSelect(newValue);
 						}}
 						options={operators}
-						value={getSelectValue(operators, value.operator)}
+						value={getSelectValue(operators, values[0].operator)}
 					/>
 				</FormControl>
 			</div>
@@ -227,7 +224,7 @@ const ReleaseDateFilterForm: FC<DefaultFilterFormProps> = ({
 					<SelectDateOrYear
 						yearsSelected={yearsSelected}
 						setYearsSelected={setYearsSelected}
-						showPluralLabel={value.operator === Operator.BETWEEN}
+						showPluralLabel={values[0].operator === Operator.BETWEEN}
 					/>
 					{renderInputField()}
 				</FormControl>

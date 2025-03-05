@@ -13,9 +13,9 @@ import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMe
 import { GenreSelect } from '@visitor-space/components/GenreSelect';
 import { LanguageSelect } from '@visitor-space/components/LanguageSelect/LanguageSelect';
 import { MediumSelect } from '@visitor-space/components/MediumSelect/MediumSelect';
-import { getFilterLabel } from '@visitor-space/utils/advanced-filters';
 
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import { getFilterLabel } from '@visitor-space/const/advanced-filter-array-param';
 import { type FilterValue, Operator } from '@visitor-space/types';
 import DurationInput from '../components/DurationInput/DurationInput';
 
@@ -49,7 +49,6 @@ export const ADVANCED_FILTERS: IeObjectsSearchFilterField[] = [
 	// MetadataProp.Maintainers, // These are handled separately in VisitorSpaceFilterId
 	IeObjectsSearchFilterField.DESCRIPTION,
 	IeObjectsSearchFilterField.CAST,
-	IeObjectsSearchFilterField.CREATED,
 	IeObjectsSearchFilterField.TEMPORAL_COVERAGE,
 	IeObjectsSearchFilterField.DURATION,
 	IeObjectsSearchFilterField.MEDIUM,
@@ -60,11 +59,13 @@ export const ADVANCED_FILTERS: IeObjectsSearchFilterField[] = [
 	IeObjectsSearchFilterField.MENTIONS,
 	IeObjectsSearchFilterField.OBJECT_TYPE,
 	IeObjectsSearchFilterField.LOCATION_CREATED,
-	IeObjectsSearchFilterField.PUBLISHED,
 	IeObjectsSearchFilterField.LANGUAGE,
 	IeObjectsSearchFilterField.NAME,
 	IeObjectsSearchFilterField.KEYWORD,
 	IeObjectsSearchFilterField.PUBLISHER,
+	IeObjectsSearchFilterField.RELEASE_DATE,
+	IeObjectsSearchFilterField.PUBLISHED,
+	IeObjectsSearchFilterField.CREATED,
 ];
 
 export const REGULAR_FILTERS: IeObjectsSearchFilterField[] = [
@@ -72,7 +73,6 @@ export const REGULAR_FILTERS: IeObjectsSearchFilterField[] = [
 	// MetadataProp.ConsultableMedia,
 	// MetadataProp.ConsultableOnlyOnLocation,
 	// MetadataProp.ConsultablePublicDomain,
-	IeObjectsSearchFilterField.RELEASE_DATE,
 	IeObjectsSearchFilterField.MEDIUM,
 	IeObjectsSearchFilterField.CREATOR,
 	// TODO Location of publication

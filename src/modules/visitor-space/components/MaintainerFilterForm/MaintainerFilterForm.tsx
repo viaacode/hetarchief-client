@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { compact, keyBy, mapValues, noop, without } from 'lodash-es';
 import { type FC, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { ArrayParam, useQueryParam } from 'use-query-params';
+import { useQueryParam } from 'use-query-params';
 
 import { SearchBar } from '@shared/components/SearchBar';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -12,15 +12,15 @@ import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
 
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
-import { initialFilterMultiValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
+import { AdvancedFilterArrayParam } from '@visitor-space/const/advanced-filter-array-param';
 import {
 	type DefaultFilterFormProps,
 	ElasticsearchFieldNames,
 	FILTER_LABEL_VALUE_DELIMITER,
 	type FilterValue,
 } from '@visitor-space/types';
-import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
+import { initialFilterValues } from '../AdvancedFilterForm/AdvancedFilterForm.const';
 
 const MaintainerFilterForm: FC<DefaultFilterFormProps> = ({
 	className,
@@ -31,16 +31,16 @@ const MaintainerFilterForm: FC<DefaultFilterFormProps> = ({
 }) => {
 	const [initialValueFromQueryParams] = useQueryParam(
 		IeObjectsSearchFilterField.MAINTAINER_ID,
-		ArrayParam
+		AdvancedFilterArrayParam
 	);
-	const [value, setValue] = useState<FilterValue>(
-		getInitialFilterValue(id, initialValues?.[0], initialValueFromQueryParams)
+	const [values, setValues] = useState<FilterValue[]>(
+		initialValues || initialValueFromQueryParams || initialFilterValues(id)
 	);
 	const [search, setSearch] = useState<string>('');
 
 	// Contains the filters that have already been applied and are present in the url
 	const appliedSelectedMaintainerIds = compact(
-		(value.multiValue || []).map(
+		(values[0].multiValue || []).map(
 			(maintainerIdAndName) => maintainerIdAndName?.split(FILTER_LABEL_VALUE_DELIMITER)?.[0]
 		)
 	);
@@ -88,26 +88,28 @@ const MaintainerFilterForm: FC<DefaultFilterFormProps> = ({
 	const handleSubmit = () => {
 		onSubmit([
 			{
-				...value,
-				multiValue: (value.multiValue || []).map(idToIdAndNameConcatinated),
+				...values[0],
+				multiValue: (values[0].multiValue || []).map(idToIdAndNameConcatinated),
 			},
 		]);
 	};
 
 	const handleReset = () => {
-		setValue(initialFilterMultiValue());
+		setValues(initialFilterValues(id));
 		onReset();
 	};
 
 	const onItemClick = (checked: boolean, newMaintainer: unknown): void => {
-		const oldSelectedMaintainers: string[] = (value?.multiValue || []).map((val) => val);
+		const oldSelectedMaintainers: string[] = (values[0]?.multiValue || []).map((val) => val);
 		const newSelectedMaintainers = !checked
 			? [...oldSelectedMaintainers, newMaintainer as string]
 			: without(oldSelectedMaintainers, newMaintainer as string);
-		setValue({
-			...value,
-			multiValue: newSelectedMaintainers,
-		});
+		setValues([
+			{
+				...values[0],
+				multiValue: newSelectedMaintainers,
+			},
+		]);
 	};
 
 	return (

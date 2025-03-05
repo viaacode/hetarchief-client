@@ -2,14 +2,15 @@ import { FormControl, type TagInfo, TagsInput, keysEnter, onKey } from '@meemoo/
 import { TAGS_INPUT_COMPONENTS } from '@shared/components/TagsInput';
 import { tHtml } from '@shared/helpers/translate';
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
-import { initialFilterValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import { initialFilterValues } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
+import { AdvancedFilterArrayParam } from '@visitor-space/const/advanced-filter-array-param';
 import type { DefaultFilterFormProps, FilterValue } from '@visitor-space/types';
-import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
 import clsx from 'clsx';
+import { compact } from 'lodash-es';
 import { type FC, type KeyboardEvent, useMemo, useState } from 'react';
 import type { ActionMeta, InputActionMeta, MultiValue, SingleValue } from 'react-select';
-import { ArrayParam, useQueryParam } from 'use-query-params';
+import { useQueryParam } from 'use-query-params';
 
 type multi = MultiValue<TagInfo>;
 
@@ -26,16 +27,16 @@ const KeywordsFilterForm: FC<DefaultFilterFormProps> = ({
 }) => {
 	const [initialValueFromQueryParams] = useQueryParam(
 		IeObjectsSearchFilterField.KEYWORD,
-		ArrayParam
+		AdvancedFilterArrayParam
 	);
-	const [value, setValue] = useState<FilterValue>(
-		getInitialFilterValue(id, initialValues?.[0], initialValueFromQueryParams)
+	const [values, setValues] = useState<FilterValue[]>(
+		initialValues || initialValueFromQueryParams || initialFilterValues(id)
 	);
 	const [input, setInput] = useState<string | undefined>(undefined);
 
 	// Computed
 
-	const getTags = value.multiValue?.map((value) => ({
+	const tags: TagInfo[] = compact(values[0].multiValue)?.map((value) => ({
 		label: value,
 		value,
 	}));
@@ -44,10 +45,12 @@ const KeywordsFilterForm: FC<DefaultFilterFormProps> = ({
 
 	const saveInput = () => {
 		if (input && input.length > 0) {
-			setValue((oldValue) => ({
-				...oldValue,
-				multiValue: [...(oldValue.multiValue || []), input.toLowerCase()],
-			}));
+			setValues((oldValues): FilterValue[] => [
+				{
+					...oldValues[0],
+					multiValue: [...(oldValues[0].multiValue || []), input.toLowerCase()],
+				},
+			]);
 
 			setInput('');
 		}
@@ -60,10 +63,12 @@ const KeywordsFilterForm: FC<DefaultFilterFormProps> = ({
 			if (newValue && (newValue as multi).length >= 0) {
 				const cast = newValue as multi;
 
-				setValue((oldValue) => ({
-					...oldValue,
-					multiValue: cast.map((item) => item.value.toString()),
-				}));
+				setValues((oldValues): FilterValue[] => [
+					{
+						...oldValues[0],
+						multiValue: cast.map((item) => item.value.toString()),
+					},
+				]);
 			}
 		};
 
@@ -96,11 +101,11 @@ const KeywordsFilterForm: FC<DefaultFilterFormProps> = ({
 	const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => onKey(e, [...keysEnter], saveInput);
 
 	const handleSubmit = () => {
-		onSubmit([value]);
+		onSubmit(values);
 	};
 
 	const handleReset = () => {
-		setValue(initialFilterValue());
+		setValues(initialFilterValues(id));
 		onReset();
 	};
 
@@ -140,7 +145,7 @@ const KeywordsFilterForm: FC<DefaultFilterFormProps> = ({
 							onChange={onTagsChange}
 							onInputChange={onInputChange}
 							onKeyDown={onKeyDown}
-							value={getTags}
+							value={tags}
 						/>
 					</FormControl>
 				</div>

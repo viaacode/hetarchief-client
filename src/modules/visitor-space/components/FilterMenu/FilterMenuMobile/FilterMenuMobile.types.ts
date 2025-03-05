@@ -20,5 +20,5 @@ export interface FilterMenuMobileProps
 	onFilterClick?: (id: string) => void;
 	onFilterReset: OnFilterMenuFormReset;
 	onFilterSubmit: OnFilterMenuFormSubmit;
-	onRemoveValue?: (removedValue: TagIdentity[]) => void;
+	onRemoveValue?: (removedValue: TagIdentity) => void;
 }

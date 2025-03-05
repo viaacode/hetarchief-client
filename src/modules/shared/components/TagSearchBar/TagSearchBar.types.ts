@@ -14,7 +14,7 @@ export type TagSearchBarProps<IsMulti extends boolean = false> = DefaultComponen
 		renderedRight?: ReactNode | string;
 		onClear?: () => void;
 		onCreate?: (newValue: string) => void;
-		onRemoveValue?: (removedValue: TagSearchBarValue<IsMulti>) => void;
+		onRemoveValue?: (removedValue: TagIdentity) => void;
 		onSearch?: (newValue: string) => void;
 		searchValue?: string;
 		size?: 'lg' | 'md';

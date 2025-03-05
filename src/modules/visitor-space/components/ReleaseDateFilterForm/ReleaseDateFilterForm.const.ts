@@ -1,5 +1,5 @@
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
-import { type Schema, mixed, object, string } from 'yup';
+import { type Schema, array, mixed, object, string } from 'yup';
 import { type FilterValue, Operator } from '../../types';
 
 export const RELEASE_DATE_FILTER_FORM_SCHEMA = (): Schema<FilterValue> =>
@@ -8,5 +8,5 @@ export const RELEASE_DATE_FILTER_FORM_SCHEMA = (): Schema<FilterValue> =>
 			.required()
 			.oneOf(Object.values(IeObjectsSearchFilterField)),
 		operator: mixed<Operator>().required().oneOf(Object.values(Operator)),
-		val: string().optional(),
+		multiValue: array(string().required()),
 	});

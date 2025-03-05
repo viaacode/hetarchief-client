@@ -83,7 +83,7 @@ export const SEARCH_PAGE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<any
 	[IeObjectsSearchFilterField.DURATION]: AdvancedFilterArrayParam,
 	[IeObjectsSearchFilterField.CREATED]: AdvancedFilterArrayParam,
 	[IeObjectsSearchFilterField.PUBLISHED]: AdvancedFilterArrayParam,
-	[IeObjectsSearchFilterField.RELEASE_DATE]: StringParam,
+	[IeObjectsSearchFilterField.RELEASE_DATE]: AdvancedFilterArrayParam,
 	[IeObjectsSearchFilterField.CREATOR]: StringParam,
 	[IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME]: StringParam,
 	[IeObjectsSearchFilterField.LOCATION_CREATED]: StringParam,

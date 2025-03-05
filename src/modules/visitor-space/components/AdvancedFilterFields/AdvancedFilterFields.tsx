@@ -51,7 +51,7 @@ import {
 	getAdvancedProperties,
 	getFilterConfig,
 	getOperators,
-} from 'modules/visitor-space/utils/advanced-filters';
+} from '@visitor-space/const/advanced-filter-array-param';
 
 const labelKeys = {
 	prefix: 'AdvancedFilterFields',

@@ -10,13 +10,12 @@ import {
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
 import type { HTTPError } from 'ky';
-import { compact, intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
+import { compact, intersection, isEmpty, isNil, kebabCase, sortBy, sum, without } from 'lodash-es';
 import Head from 'next/head';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import type { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
@@ -237,6 +236,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	 * Data
 	 */
 
+	const filterValues: FilterValue[] = [
+		...mapMaintainerToElastic(query, activeVisitRequest, accessibleVisitorSpaceRequests),
+		...(mapFiltersToElastic(query) || []),
+	];
 	const {
 		data: searchResults,
 		isLoading: searchResultsLoading,
@@ -244,10 +247,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		error: searchResultsError,
 	} = useGetIeObjects(
 		{
-			filters: [
-				...mapMaintainerToElastic(query, activeVisitRequest, accessibleVisitorSpaceRequests),
-				...mapFiltersToElastic(query),
-			],
+			filters: filterValues,
 			page,
 			size: SEARCH_RESULTS_PAGE_SIZE,
 			sort: activeSort,
@@ -255,10 +255,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		{ enabled: !isLoadingActiveVisitRequest }
 	);
 	const { data: formatCounts } = useGetIeObjectFormatCounts(
-		[
-			...mapMaintainerToElastic(query, activeVisitRequest, accessibleVisitorSpaceRequests),
-			...mapFiltersToElastic(query),
-		].filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
+		filterValues.filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
 
 		// Enabled when search query is finished, so it loads the tab counts after the initial results
 		{ enabled: !searchResultsRefetching }
@@ -487,10 +484,16 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const onSubmitFilter = (values: FilterValue[]) => {
 		const newQueryParams: Partial<
 			Record<
-				IeObjectsSearchFilterField | 'page' | QUERY_PARAM_KEY.SEARCH_QUERY_KEY | 'filter',
-				string
+				| IeObjectsSearchFilterField
+				| 'page'
+				| QUERY_PARAM_KEY.SEARCH_QUERY_KEY
+				| 'filter'
+				| 'filters',
+				string | string[] | FilterValue | FilterValue[]
 			>
 		> = {};
+
+		// newQueryParams.filters = values;
 
 		for (const value of values) {
 			if (!value.field || !compact(value.multiValue || [])?.[0]) {
@@ -499,12 +502,13 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 			// Advanced filters
 			if (ADVANCED_FILTERS.includes(value.field)) {
-				newQueryParams[value.field] = (value.multiValue || []).join(SEPARATOR);
+				const existingValue = (newQueryParams[value.field] as FilterValue[] | undefined) || [];
+				newQueryParams[value.field] = [...existingValue, value];
 				continue;
 			}
 			// Dedicated filter
 			if (ARRAY_FILTERS.includes(value.field)) {
-				newQueryParams[value.field] = (value.multiValue || []).join(SEPARATOR);
+				newQueryParams[value.field] = value.multiValue || [];
 				continue;
 			}
 			// Boolean filter
@@ -531,60 +535,50 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		isInitialPageLoad && setIsInitialPageLoad(false);
 	};
 
-	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
-		const updatedQuery: Record<string, unknown> = {};
+	const onRemoveTag = (tag: TagIdentity) => {
+		const updatedQuery: Record<string, unknown> = { ...query };
 
-		for (const tag of tags) {
-			switch (tag.key) {
-				case IeObjectsSearchFilterField.GENRE:
-				case IeObjectsSearchFilterField.KEYWORD:
-				case IeObjectsSearchFilterField.LANGUAGE:
-				case IeObjectsSearchFilterField.MEDIUM:
-				case IeObjectsSearchFilterField.MAINTAINER_ID:
-				case QUERY_PARAM_KEY.SEARCH_QUERY_KEY:
-				case IeObjectsSearchFilterField.CREATOR:
-				case IeObjectsSearchFilterField.LOCATION_CREATED:
-				case IeObjectsSearchFilterField.MENTIONS:
-				case IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME:
-					updatedQuery[tag.key] = [
-						...((updatedQuery[tag.key] as Array<unknown>) || []),
-						`${tag.multiValue?.[0]}`.replace(tagPrefix(tag.key), ''),
-					];
-					break;
-
-				case IeObjectsSearchFilterField.ADVANCED:
-				case IeObjectsSearchFilterField.RELEASE_DATE:
-				case IeObjectsSearchFilterField.DURATION:
-					updatedQuery[tag.key] = [...((updatedQuery[tag.key] as Array<unknown>) || []), tag];
-					break;
-
-				case IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION:
-				case IeObjectsSearchFilterField.CONSULTABLE_MEDIA:
-				case IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN: {
-					// eslint-disable-next-line no-case-declarations
-					const newValue = `${tag.multiValue?.[0] ?? 'false'}`.replace(tagPrefix(tag.key), '');
-					updatedQuery[tag.key] = newValue === 'true' ? 'false' : 'true';
-					break;
-				}
-
-				default:
-					updatedQuery[tag.key] = tag.multiValue?.[0];
-					break;
+		switch (tag.key) {
+			case IeObjectsSearchFilterField.GENRE:
+			case IeObjectsSearchFilterField.KEYWORD:
+			case IeObjectsSearchFilterField.LANGUAGE:
+			case IeObjectsSearchFilterField.MEDIUM:
+			case IeObjectsSearchFilterField.MAINTAINER_ID:
+			case QUERY_PARAM_KEY.SEARCH_QUERY_KEY:
+			case IeObjectsSearchFilterField.CREATOR:
+			case IeObjectsSearchFilterField.LOCATION_CREATED:
+			case IeObjectsSearchFilterField.MENTIONS:
+			case IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME: {
+				const currentValues = updatedQuery[tag.key] as string[];
+				const tagValue = (tag.value as string)?.replace(tagPrefix(tag.key), '');
+				updatedQuery[tag.key] = without(currentValues, tagValue);
+				break;
 			}
+
+			case IeObjectsSearchFilterField.ADVANCED:
+			case IeObjectsSearchFilterField.RELEASE_DATE:
+			case IeObjectsSearchFilterField.CREATED:
+			case IeObjectsSearchFilterField.PUBLISHED:
+			case IeObjectsSearchFilterField.DURATION: {
+				const currentValues = (updatedQuery[tag.key] || []) as unknown[];
+				const tagValue = (tag.value as string)?.replace(tagPrefix(tag.key), '');
+				updatedQuery[tag.key] = without(currentValues, tagValue);
+				break;
+			}
+
+			case IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION:
+			case IeObjectsSearchFilterField.CONSULTABLE_MEDIA:
+			case IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN: {
+				updatedQuery[tag.key] = undefined;
+				break;
+			}
+
+			default:
+				updatedQuery[tag.key] = undefined;
+				break;
 		}
 
-		// Destructure to keyword-able filters
-		const {
-			format,
-			orderProp,
-			orderDirection,
-			page,
-			// Dynamically destructure the maintainer qp using our enum so we don't need to change it every time the qp value changes
-			[IeObjectsSearchFilterField.MAINTAINER_SLUG]: maintainerSlug,
-			...rest
-		} = VISITOR_SPACE_QUERY_PARAM_INIT;
-
-		setQuery({ ...rest, ...updatedQuery, page: undefined });
+		setQuery({ ...updatedQuery, page: undefined });
 	};
 
 	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) => {

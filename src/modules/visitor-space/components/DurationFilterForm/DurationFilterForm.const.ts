@@ -1,4 +1,4 @@
-import { type Schema, mixed, object, string } from 'yup';
+import { type Schema, array, mixed, object, string } from 'yup';
 
 import { SEPARATOR } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
@@ -13,14 +13,18 @@ export const DURATION_FILTER_FORM_SCHEMA = (): Schema<FilterValue> =>
 			.required()
 			.oneOf(Object.values(IeObjectsSearchFilterField)),
 		operator: mixed<Operator>().required().oneOf(Object.values(Operator)),
-		val: string()
-			.optional()
-			.test(
-				'duration',
-				tText(
-					'modules/visitor-space/components/duration-filter-form/duration-filter-form___invoer-is-ongeldig-dit-moet-een-geldige-tijd-zijn-bv-00-15-30'
-				),
-				(value: string | undefined) =>
-					new RegExp(`^$|^${durationRegex}(${SEPARATOR}${durationRegex})?$`, 'g').test(value || '')
-			),
+		multiValue: array(
+			string()
+				.required()
+				.test(
+					'duration',
+					tText(
+						'modules/visitor-space/components/duration-filter-form/duration-filter-form___invoer-is-ongeldig-dit-moet-een-geldige-tijd-zijn-bv-00-15-30'
+					),
+					(value: string | undefined) =>
+						new RegExp(`^$|^${durationRegex}(${SEPARATOR}${durationRegex})?$`, 'g').test(
+							value || ''
+						)
+				)
+		),
 	});

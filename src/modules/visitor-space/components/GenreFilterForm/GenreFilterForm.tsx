@@ -3,43 +3,42 @@ import clsx from 'clsx';
 import { compact, noop, without } from 'lodash-es';
 import { type FC, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { ArrayParam, useQueryParam } from 'use-query-params';
+import { useQueryParam } from 'use-query-params';
 
 import { SearchBar } from '@shared/components/SearchBar';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
-import { type DefaultFilterFormProps, ElasticsearchFieldNames } from '@visitor-space/types';
+import {
+	type DefaultFilterFormProps,
+	ElasticsearchFieldNames,
+	type FilterValue,
+} from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
-import { initialFilterMultiValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import { initialFilterValues } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
-import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
-
-const defaultValues = {
-	genres: [],
-};
+import { AdvancedFilterArrayParam } from '@visitor-space/const/advanced-filter-array-param';
 
 const GenreFilterForm: FC<DefaultFilterFormProps> = ({
 	className,
 	id,
-	label,
-	disabled,
 	initialValues,
 	onSubmit,
 	onReset,
 }) => {
-	// State
-
-	const [initialValueFromQueryParams] = useQueryParam(IeObjectsSearchFilterField.GENRE, ArrayParam);
-	const [value, setValue] = useState(
-		getInitialFilterValue(id, initialValues?.[0], initialValueFromQueryParams)
+	const [initialValueFromQueryParams] = useQueryParam(
+		IeObjectsSearchFilterField.GENRE,
+		AdvancedFilterArrayParam
+	);
+	const [values, setValues] = useState<FilterValue[]>(
+		initialValues || initialValueFromQueryParams || initialFilterValues(id)
 	);
 	const [search, setSearch] = useState<string>('');
 
 	// Contains the options that have already been applied and are present in the url
-	const appliedSelectedGenres = compact(value.multiValue || []);
+	const appliedSelectedGenres = compact(values[0].multiValue || []);
 
 	const filterOptions: string[] =
 		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Genre]?.buckets?.map(
@@ -68,18 +67,20 @@ const GenreFilterForm: FC<DefaultFilterFormProps> = ({
 		const selected = add
 			? [...appliedSelectedGenres, newValue]
 			: without(appliedSelectedGenres, newValue);
-		setValue({
-			...value,
-			multiValue: selected,
-		});
+		setValues([
+			{
+				...values[0],
+				multiValue: selected,
+			},
+		]);
 	};
 
 	const handleSubmit = () => {
-		onSubmit([value]);
+		onSubmit(values);
 	};
 
 	const handleReset = () => {
-		setValue(initialFilterMultiValue());
+		setValues(initialFilterValues(id));
 		onReset();
 	};
 

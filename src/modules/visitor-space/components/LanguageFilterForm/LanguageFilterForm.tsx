@@ -3,18 +3,19 @@ import clsx from 'clsx';
 import { compact, noop, without } from 'lodash-es';
 import { type FC, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { ArrayParam, useQueryParam } from 'use-query-params';
+import { useQueryParam } from 'use-query-params';
 
 import { SearchBar } from '@shared/components/SearchBar';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
-import { initialFilterValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import { initialFilterValues } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
 import {
 	LANGUAGES,
 	type LanguageCode,
 } from '@visitor-space/components/LanguageFilterForm/languages';
+import { AdvancedFilterArrayParam } from '@visitor-space/const/advanced-filter-array-param';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import {
 	type DefaultFilterFormProps,
@@ -22,7 +23,6 @@ import {
 	FILTER_LABEL_VALUE_DELIMITER,
 	type FilterValue,
 } from '@visitor-space/types';
-import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 const LanguageFilterForm: FC<DefaultFilterFormProps> = ({
@@ -34,18 +34,22 @@ const LanguageFilterForm: FC<DefaultFilterFormProps> = ({
 }) => {
 	const [initialValueFromQueryParams] = useQueryParam(
 		IeObjectsSearchFilterField.LANGUAGE,
-		ArrayParam
+		AdvancedFilterArrayParam
 	);
-	const [value, setValue] = useState<FilterValue>(
-		getInitialFilterValue(id, initialValues?.[0], initialValueFromQueryParams)
+	const [values, setValues] = useState<FilterValue[]>(
+		initialValues || initialValueFromQueryParams || initialFilterValues(id)
 	);
 	const [search, setSearch] = useState<string>('');
 
 	// Contains the options that have already been applied and are present in the url
 	const appliedSelectedLanguageCodes = compact(
-		(initialValueFromQueryParams || []).map(
-			(languageCodeAndName) => languageCodeAndName?.split(FILTER_LABEL_VALUE_DELIMITER)?.[0]
-		)
+		(initialValueFromQueryParams || []).flatMap((filterValue) => {
+			return (
+				filterValue.multiValue?.map((languageAndCode) => {
+					return languageAndCode?.split(FILTER_LABEL_VALUE_DELIMITER)?.[0];
+				}) || []
+			);
+		})
 	);
 
 	// Contains the options the user currently has selected, but are not necessarily applied yet
@@ -92,14 +96,14 @@ const LanguageFilterForm: FC<DefaultFilterFormProps> = ({
 	const handleSubmit = () => {
 		onSubmit([
 			{
-				...value,
-				multiValue: (value.multiValue || []).map(idToIdAndNameConcatinated),
+				...values[0],
+				multiValue: compact(values[0].multiValue || []).map(idToIdAndNameConcatinated),
 			},
 		]);
 	};
 
 	const handleReset = () => {
-		setValue(initialFilterValue());
+		setValues(initialFilterValues(id));
 		onReset();
 	};
 

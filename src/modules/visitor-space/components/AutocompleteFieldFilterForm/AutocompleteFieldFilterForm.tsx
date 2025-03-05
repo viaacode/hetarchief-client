@@ -1,7 +1,7 @@
 import { FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { type FC, useState } from 'react';
-import { StringParam, useQueryParam } from 'use-query-params';
+import { useQueryParam } from 'use-query-params';
 
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import AutocompleteFieldInput from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
@@ -12,10 +12,10 @@ import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormBu
 import type { DefaultFilterFormProps, FilterValue } from '@visitor-space/types';
 import {
 	FILTER_FORM_SCHEMA,
-	initialFilterValue,
+	initialFilterValues,
 } from '../AdvancedFilterForm/AdvancedFilterForm.const';
 
-import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
+import { AdvancedFilterArrayParam } from '@visitor-space/const/advanced-filter-array-param';
 import { compact } from 'lodash-es';
 import styles from './AutocompleteFieldFilterForm.module.scss';
 
@@ -35,30 +35,32 @@ export const AutocompleteFieldFilterForm: FC<AutocompleteFieldFilterFormProps> =
 	onReset,
 	initialValues,
 }) => {
-	const [initialValueFromQueryParams] = useQueryParam(autocompleteField, StringParam);
-	const [value, setValue] = useState<FilterValue>(
-		getInitialFilterValue(id, initialValues?.[0], initialValueFromQueryParams)
+	const [initialValueFromQueryParams] = useQueryParam(autocompleteField, AdvancedFilterArrayParam);
+	const [values, setValues] = useState<FilterValue[]>(
+		initialValues || initialValueFromQueryParams || initialFilterValues(id)
 	);
 	const [formErrors, setFormErrors] = useState<Record<string, string> | null>(null);
 
 	const handleSubmit = async () => {
-		const errors = await validateForm(value, FILTER_FORM_SCHEMA());
+		const errors = await validateForm(values, FILTER_FORM_SCHEMA());
 		setFormErrors(errors);
 		if (!errors) {
-			onSubmit([value]);
+			onSubmit(values);
 		}
 	};
 
 	const handleReset = () => {
-		setValue(initialFilterValue());
+		setValues(initialFilterValues(id));
 		onReset();
 	};
 
 	const handleInputChange = (newValue: string | null) => {
-		setValue({
-			...value,
-			multiValue: compact([newValue || undefined]),
-		});
+		setValues([
+			{
+				...values[0],
+				multiValue: compact([newValue || undefined]),
+			},
+		]);
 	};
 
 	return (
@@ -77,7 +79,7 @@ export const AutocompleteFieldFilterForm: FC<AutocompleteFieldFilterFormProps> =
 					<AutocompleteFieldInput
 						fieldName={autocompleteField}
 						onChange={handleInputChange}
-						value={value.multiValue?.[0]}
+						value={values?.[0]?.multiValue?.[0]}
 						id={AutocompleteField.Creator}
 						label={fieldLabel}
 					/>

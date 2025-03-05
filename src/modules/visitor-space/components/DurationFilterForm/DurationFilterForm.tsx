@@ -2,7 +2,7 @@ import { FormControl, ReactSelect, type SelectOption } from '@meemoo/react-compo
 import clsx from 'clsx';
 import { type ChangeEvent, type FC, useMemo, useState } from 'react';
 import type { SingleValue } from 'react-select';
-import { StringParam, useQueryParam } from 'use-query-params';
+import { useQueryParam } from 'use-query-params';
 
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tHtml } from '@shared/helpers/translate';
@@ -15,11 +15,13 @@ import { DurationRangeInput } from '../DurationRangeInput';
 
 import { validateForm } from '@shared/helpers/validate-form';
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
-import { initialFilterValue } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import { initialFilterValues } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import { DURATION_FILTER_FORM_SCHEMA } from '@visitor-space/components/DurationFilterForm/DurationFilterForm.const';
 import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
-import { getInitialFilterValue } from '@visitor-space/utils/get-initial-filter-value';
-import { getOperators } from 'modules/visitor-space/utils/advanced-filters';
+import {
+	AdvancedFilterArrayParam,
+	getOperators,
+} from '@visitor-space/const/advanced-filter-array-param';
 
 enum DurationField {
 	duration = 'DurationFilterForm__duration',
@@ -36,10 +38,10 @@ const DurationFilterForm: FC<DefaultFilterFormProps> = ({
 }) => {
 	const [initialValueFromQueryParams] = useQueryParam(
 		IeObjectsSearchFilterField.DURATION,
-		StringParam
+		AdvancedFilterArrayParam
 	);
-	const [value, setValue] = useState<FilterValue>(
-		getInitialFilterValue(id, initialValues?.[0], initialValueFromQueryParams)
+	const [values, setValues] = useState<FilterValue[]>(
+		initialValues || initialValueFromQueryParams || initialFilterValues(id, Operator.GTE)
 	);
 	const [formErrors, setFormErrors] = useState<Record<DurationField, string> | null>();
 
@@ -48,22 +50,24 @@ const DurationFilterForm: FC<DefaultFilterFormProps> = ({
 	// Events
 
 	const onChangeDuration = (e: ChangeEvent<HTMLInputElement>) => {
-		setValue((oldValue) => ({
-			...oldValue,
-			[IeObjectsSearchFilterField.DURATION]: e.target.value,
-		}));
+		setValues((oldValues): FilterValue[] => [
+			{
+				...oldValues[0],
+				multiValue: [e.target.value],
+			},
+		]);
 	};
 
 	const handleSubmit = async () => {
-		const errors = await validateForm(value, DURATION_FILTER_FORM_SCHEMA());
+		const errors = await validateForm(values[0], DURATION_FILTER_FORM_SCHEMA());
 		setFormErrors(errors);
 		if (!errors) {
-			onSubmit([value]);
+			onSubmit(values);
 		}
 	};
 
 	const handleReset = () => {
-		setValue(initialFilterValue());
+		setValues(initialFilterValues(id, Operator.GTE));
 		onReset();
 	};
 
@@ -91,15 +95,17 @@ const DurationFilterForm: FC<DefaultFilterFormProps> = ({
 							onChange={(newValue) => {
 								const selectedOperator = (newValue as SingleValue<SelectOption>)?.value as Operator;
 
-								if (selectedOperator !== value.operator) {
-									setValue({
-										...value,
-										operator: selectedOperator,
-									});
+								if (selectedOperator !== values[0].operator) {
+									setValues([
+										{
+											...values[0],
+											operator: selectedOperator,
+										},
+									]);
 								}
 							}}
 							options={operators}
-							value={getSelectValue(operators, value.operator)}
+							value={getSelectValue(operators, values[0].operator)}
 						/>
 					</div>
 				</FormControl>
@@ -123,17 +129,17 @@ const DurationFilterForm: FC<DefaultFilterFormProps> = ({
 					)}
 				>
 					<div className="u-py-32 u-px-20 u-px-32-md u-bg-platinum">
-						{value?.operator === Operator.BETWEEN ? (
+						{values[0]?.operator === Operator.BETWEEN ? (
 							<DurationRangeInput
-								value={value.multiValue?.[0] || [defaultValue, defaultValue]}
+								value={values[0].multiValue?.[0] || [defaultValue, defaultValue]}
 								onChange={onChangeDuration}
-								placeholder={value.multiValue?.[0]}
+								placeholder={values[0].multiValue?.[0]}
 							/>
 						) : (
 							<DurationInput
-								value={value.multiValue?.[0] || defaultValue}
+								value={values[0].multiValue?.[0] || defaultValue}
 								onChange={onChangeDuration}
-								placeholder={value.multiValue?.[0]}
+								placeholder={values[0].multiValue?.[0]}
 							/>
 						)}
 					</div>

@@ -61,6 +61,13 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 		setIsSortActive(false);
 	};
 
+	const handleTagClose = (id: string | number) => {
+		const removedTag = tags.find((tag) => tag.id === id);
+		if (removedTag) {
+			onRemoveValue?.(removedTag);
+		}
+	};
+
 	// Render
 	const renderModalButton = ({ icon, id, label }: FilterMenuFilterOption): ReactElement => {
 		const filterIsActive = id === activeFilter;
@@ -120,7 +127,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 			<TagList
 				className={clsx(styles['c-filter-menu-mobile__tags'], 'u-mb-0')}
 				closeIcon={<Icon className="u-text-left" name={IconNamesLight.Times} />}
-				onTagClosed={(id) => onRemoveValue?.(tags.filter((tag) => tag.id !== id))}
+				onTagClosed={handleTagClose}
 				tags={tags}
 				variants="large"
 			/>

@@ -92,7 +92,7 @@ export const mapFiltersToElastic = (query: SearchPageQueryParams): FilterValue[]
 		// Duration
 		...(query[IeObjectsSearchFilterField.DURATION] || []).flatMap(mapAdvancedToElastic),
 		// ReleaseDate
-		...compact([query[IeObjectsSearchFilterField.RELEASE_DATE]]).flatMap(mapAdvancedToElastic),
+		...(query[IeObjectsSearchFilterField.RELEASE_DATE] || []).flatMap(mapAdvancedToElastic),
 		// Creator
 		{
 			field: IeObjectsSearchFilterField.CREATOR,
