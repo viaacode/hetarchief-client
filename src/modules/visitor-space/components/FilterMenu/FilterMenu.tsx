@@ -1,6 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isEmpty, isNil } from 'lodash-es';
+import { isEmpty } from 'lodash-es';
 import { type FC, type ReactNode, useEffect, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
@@ -17,11 +17,12 @@ import {
 	VISITOR_SPACE_ACTIVE_SORT_MAP,
 } from '@visitor-space/const';
 
-import type { SearchFilterId, SearchSortProp } from '../../types';
+import type { FilterValue, SearchSortProp } from '../../types';
 
+import type { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import styles from './FilterMenu.module.scss';
 import type { FilterMenuFilterOption, FilterMenuProps } from './FilterMenu.types';
-import { FilterOption } from './FilterOption';
+import { FilterOption } from './FilterOption/FilterOption';
 import { FilterSort } from './FilterSort';
 
 const FilterMenu: FC<FilterMenuProps> = ({
@@ -74,12 +75,12 @@ const FilterMenu: FC<FilterMenuProps> = ({
 		setQuery({ filter });
 	};
 
-	const onFilterFormReset = (id: SearchFilterId) => {
+	const onFilterFormReset = (id: IeObjectsSearchFilterField) => {
 		onFilterReset(id);
 	};
 
-	const onFilterFormSubmit = (id: SearchFilterId, values: unknown) => {
-		onFilterSubmit(id, values);
+	const onFilterFormSubmit = (values: FilterValue[]) => {
+		onFilterSubmit(values);
 	};
 
 	const onToggleClick = (nextOpen?: boolean) => {
@@ -127,10 +128,12 @@ const FilterMenu: FC<FilterMenuProps> = ({
 					{...option}
 					key={`filter-menu-option-${option.id}`}
 					className={clsx({
-						[styles['c-filter-menu__option--operative']]: !isNil(filterValues?.[option?.id]),
+						[styles['c-filter-menu__option--operative']]: filterValues?.some(
+							(filterValue) => filterValue.field === option?.id
+						),
 					})}
 					activeFilter={query.filter}
-					values={filterValues?.[option.id]}
+					initialValues={filterValues?.filter((filterValue) => filterValue.field === option.id)}
 					onClick={onFilterClick}
 					onFormReset={onFilterFormReset}
 					onFormSubmit={onFilterFormSubmit}
@@ -167,21 +170,23 @@ const FilterMenu: FC<FilterMenuProps> = ({
 				</div>
 			)}
 
-			<FilterMenuMobile
-				activeFilter={query.filter}
-				activeSort={activeSort}
-				activeSortLabel={renderActiveSortLabel()}
-				filters={filters}
-				isOpen={isMobile && isMobileOpen}
-				sortOptions={sortOptions}
-				onClose={() => onToggleClick(false)}
-				onFilterClick={onFilterClick}
-				onSortClick={onSortClick}
-				onFilterReset={onFilterFormReset}
-				onFilterSubmit={onFilterFormSubmit}
-				filterValues={filterValues}
-				onRemoveValue={onRemoveValue}
-			/>
+			{isMobile && (
+				<FilterMenuMobile
+					activeFilter={query.filter}
+					activeSort={activeSort}
+					activeSortLabel={renderActiveSortLabel()}
+					filters={filters}
+					isOpen={isMobile && isMobileOpen}
+					sortOptions={sortOptions}
+					onClose={() => onToggleClick(false)}
+					onFilterClick={onFilterClick}
+					onSortClick={onSortClick}
+					onFilterReset={onFilterFormReset}
+					onFilterSubmit={onFilterFormSubmit}
+					filterValues={filterValues}
+					onRemoveValue={onRemoveValue}
+				/>
+			)}
 		</div>
 	);
 };

@@ -7,8 +7,8 @@ import type { ReactNode } from 'react';
 import type { MetadataItem } from '@ie-objects/components/Metadata';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import type { Locale } from '@shared/utils/i18n';
-import { SearchFilterId } from '@visitor-space/types';
 
 export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
 	return keywords.map((item) => {
@@ -34,7 +34,7 @@ export const renderKeywordsAsTags = (
 					stringifyUrl({
 						url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 						query: {
-							[SearchFilterId.Maintainer]: slug,
+							[IeObjectsSearchFilterField.MAINTAINER_SLUG]: slug,
 							[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: keyword,
 						},
 					})

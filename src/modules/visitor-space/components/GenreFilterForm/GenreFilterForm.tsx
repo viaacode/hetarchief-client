@@ -1,45 +1,44 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { compact, noop, without } from 'lodash-es';
-import { type FC, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { type FC, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useQueryParams } from 'use-query-params';
+import { useQueryParam } from 'use-query-params';
 
 import { SearchBar } from '@shared/components/SearchBar';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
-import { ElasticsearchFieldNames, SearchFilterId } from '@visitor-space/types';
+import {
+	type DefaultFilterFormProps,
+	ElasticsearchFieldNames,
+	type FilterValue,
+} from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
-import {
-	GENRE_FILTER_FORM_QUERY_PARAM_CONFIG,
-	GENRE_FILTER_FORM_SCHEMA,
-} from './GenreFilterForm.const';
-import type { GenreFilterFormProps, GenreFilterFormState } from './GenreFilterForm.types';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import { initialFilterValues } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
+import { AdvancedFilterArrayParam } from '@visitor-space/const/advanced-filter-array-param';
 
-const defaultValues = {
-	genres: [],
-};
-
-const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
-	// State
-
-	const [query] = useQueryParams(GENRE_FILTER_FORM_QUERY_PARAM_CONFIG);
+const GenreFilterForm: FC<DefaultFilterFormProps> = ({
+	className,
+	id,
+	initialValues,
+	onSubmit,
+	onReset,
+}) => {
+	const [initialValueFromQueryParams] = useQueryParam(
+		IeObjectsSearchFilterField.GENRE,
+		AdvancedFilterArrayParam
+	);
+	const [values, setValues] = useState<FilterValue[]>(
+		initialFilterValues(id, initialValues, initialValueFromQueryParams)
+	);
 	const [search, setSearch] = useState<string>('');
 
 	// Contains the options that have already been applied and are present in the url
-	const appliedSelectedGenres = compact(query.genre || []);
-
-	// Contains the options the user currently has selected, but are not necessarily applied yet
-	const [selectedGenres, setSelectedGenres] = useState<string[]>(appliedSelectedGenres);
-
-	const { setValue, reset, handleSubmit } = useForm<GenreFilterFormState>({
-		resolver: yupResolver(GENRE_FILTER_FORM_SCHEMA()),
-		defaultValues,
-	});
+	const appliedSelectedGenres = compact(values[0]?.multiValue || []);
 
 	const filterOptions: string[] =
 		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Genre]?.buckets?.map(
@@ -57,29 +56,39 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 		filteredOptions.map((filterOption) => ({
 			label: filterOption,
 			value: filterOption,
-			checked: selectedGenres.includes(filterOption),
+			checked: appliedSelectedGenres.includes(filterOption),
 		})),
 		appliedSelectedGenres
 	);
 
-	// Effects
-
-	useEffect(() => {
-		setValue('genres', selectedGenres);
-	}, [selectedGenres, setValue]);
-
 	// Events
 
-	const onItemClick = (add: boolean, value: string) => {
-		const selected = add ? [...selectedGenres, value] : without(selectedGenres, value);
-		setSelectedGenres(selected);
+	const onItemClick = (add: boolean, newValue: string) => {
+		const selected = add
+			? [...appliedSelectedGenres, newValue]
+			: without(appliedSelectedGenres, newValue);
+		setValues([
+			{
+				...values[0],
+				multiValue: selected,
+			},
+		]);
+	};
+
+	const handleSubmit = () => {
+		onSubmit(values);
+	};
+
+	const handleReset = () => {
+		setValues(initialFilterValues(id));
+		onReset();
 	};
 
 	return (
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32-md')}>
 				<SearchBar
-					id={`${visitorSpaceLabelKeys.filters.title}--${SearchFilterId.Genre}`}
+					id={`${visitorSpaceLabelKeys.filters.title}--${IeObjectsSearchFilterField.GENRE}`}
 					value={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
 					placeholder={tText(
@@ -108,14 +117,7 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 				</div>
 			</div>
 
-			{children({
-				values: { genres: selectedGenres },
-				reset: () => {
-					reset();
-					setSelectedGenres(defaultValues.genres);
-				},
-				handleSubmit,
-			})}
+			<FilterFormButtons onSubmit={handleSubmit} onReset={handleReset} />
 		</>
 	);
 };

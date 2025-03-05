@@ -4,21 +4,20 @@ import type { FC, ReactNode } from 'react';
 import type { IconName } from '@shared/components/Icon';
 import type { ToggleOption } from '@shared/components/Toggle';
 import type { DefaultComponentProps, SortObject } from '@shared/types';
-import type { SearchPageMediaType } from '@shared/types/ie-objects';
+import type { IeObjectsSearchFilterField, SearchPageMediaType } from '@shared/types/ie-objects';
 
 import type {
 	DefaultFilterFormProps,
-	InlineFilterFormProps,
-	SearchFilterId,
+	FilterValue,
+	FilterValueTag,
 	SearchSortProp,
-	TagIdentity,
 } from '../../types';
 
 export interface FilterMenuProps extends DefaultComponentProps {
 	children?: ReactNode;
 	activeSort?: SortObject;
 	filters?: FilterMenuFilterOption[];
-	filterValues?: Record<string, unknown>;
+	filterValues?: FilterValue[];
 	label?: string;
 	isOpen?: boolean;
 	isMobileOpen?: boolean;
@@ -29,7 +28,7 @@ export interface FilterMenuProps extends DefaultComponentProps {
 	onFilterReset?: OnFilterMenuFormReset;
 	onFilterSubmit?: OnFilterMenuFormSubmit;
 	onViewToggle?: (viewMode: string) => void;
-	onRemoveValue?: (tags: TagIdentity[]) => void;
+	onRemoveValue?: (tag: FilterValueTag) => void;
 }
 
 export interface FilterMenuSortOption {
@@ -44,23 +43,22 @@ export enum FilterMenuType {
 }
 
 export interface FilterMenuFilterOption {
-	id: SearchFilterId;
+	id: IeObjectsSearchFilterField;
 	icon?: IconName;
 	label: string;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	form: FC<DefaultFilterFormProps<any>> | FC<InlineFilterFormProps<any>> | null; // eslint-disable-line @typescript-eslint/no-explicit-any
+	form: FC<DefaultFilterFormProps> | null;
 	type: FilterMenuType;
 	isDisabled?: () => boolean;
 	tabs: SearchPageMediaType[];
 }
 
 export type OnFilterMenuSortClick = (key: SearchSortProp, order?: OrderDirection) => void;
-export type OnFilterMenuFormSubmit = <Values>(id: SearchFilterId, values: Values) => void;
-export type OnFilterMenuFormReset = (id: SearchFilterId) => void;
+export type OnFilterMenuFormSubmit = (newValues: FilterValue[]) => void;
+export type OnFilterMenuFormReset = (id: IeObjectsSearchFilterField) => void;
 
 export enum AutocompleteField {
-	creator = 'creator',
-	locationCreated = 'locationCreated',
-	newspaperSeriesName = 'newspaperSeriesName',
-	mentions = 'mentions',
+	Creator = 'creator',
+	LocationCreated = 'locationCreated',
+	NewspaperSeriesName = 'newspaperSeriesName',
+	Mentions = 'mentions',
 }

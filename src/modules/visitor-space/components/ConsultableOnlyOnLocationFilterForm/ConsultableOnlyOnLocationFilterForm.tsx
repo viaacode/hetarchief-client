@@ -1,69 +1,40 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { type FC, useCallback, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useQueryParams } from 'use-query-params';
-
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import { initialFilterValues } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import CheckboxFilterForm from '@visitor-space/components/CheckboxFilterForm/CheckboxFilterForm';
-import type {
-	ConsultableOnlyOnLocationFilterFormProps,
-	ConsultableOnlyOnLocationFilterFormState,
-} from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
-import { SearchFilterId } from '@visitor-space/types';
+import { AdvancedFilterArrayParam } from '@visitor-space/const/advanced-filter-array-param';
+import type { DefaultFilterFormProps, FilterValue } from '@visitor-space/types';
+import { type FC, useState } from 'react';
+import { useQueryParam } from 'use-query-params';
 
-import {
-	CONSULTABLE_ONLY_ON_LOCATION_FILTER_FORM_SCHEMA,
-	REMOTE_FILTER_FORM_QUERY_PARAM_CONFIG,
-} from './ConsultableOnlyOnLocationFilterForm.const';
-
-const defaultValues = {
-	[IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION]: false,
-};
-
-export const ConsultableOnlyOnLocationFilterForm: FC<ConsultableOnlyOnLocationFilterFormProps> = ({
+export const ConsultableOnlyOnLocationFilterForm: FC<DefaultFilterFormProps> = ({
 	id,
 	label,
-	onFormSubmit,
 	className,
+	initialValues,
+	onSubmit,
 }) => {
-	const [isInitialRender, setIsInitialRender] = useState(true);
-	const [query] = useQueryParams(REMOTE_FILTER_FORM_QUERY_PARAM_CONFIG);
-	const [isChecked, setIsChecked] = useState<boolean>(
-		() => query[SearchFilterId.ConsultableOnlyOnLocation] || false
+	const [initialValueFromQueryParams] = useQueryParam(
+		IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION,
+		AdvancedFilterArrayParam
+	);
+	const [values] = useState<FilterValue[]>(
+		initialFilterValues(id, initialValues, initialValueFromQueryParams)
 	);
 
-	const { setValue, handleSubmit } = useForm<ConsultableOnlyOnLocationFilterFormState>({
-		resolver: yupResolver(CONSULTABLE_ONLY_ON_LOCATION_FILTER_FORM_SCHEMA()),
-		defaultValues,
-	});
-
-	const onFilterFormSubmit = useCallback(
-		(id: SearchFilterId, values: unknown) => onFormSubmit(id, values),
-		[onFormSubmit]
-	);
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
-	useEffect(() => {
-		if (isInitialRender) {
-			// Avoid this filter submitting results when loading the form for the first time
-			setIsInitialRender(false);
-			return;
-		}
-		setValue(IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION, isChecked);
-
-		handleSubmit(
-			() =>
-				onFilterFormSubmit(id, {
-					[IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION]: isChecked,
-				}),
-			(...args) => console.error(args)
-		)();
-	}, [setValue, isChecked]);
+	const handleInputChange = (newValue: boolean) => {
+		onSubmit([
+			{
+				...values[0],
+				multiValue: [newValue.toString()],
+			},
+		]);
+	};
 
 	return (
 		<CheckboxFilterForm
-			value={isChecked}
-			onChange={setIsChecked}
+			id={`consultable-only-on-location-filter-form--${id}`}
+			value={values?.[0]?.multiValue?.[0] === 'true'}
+			onChange={handleInputChange}
 			label={label}
 			className={className}
 		/>

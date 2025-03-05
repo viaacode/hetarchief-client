@@ -93,22 +93,18 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { selectBreadcrumbs } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
-import { IeObjectType } from '@shared/types/ie-objects';
+import { IeObjectType, IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import { Locale } from '@shared/utils/i18n';
 import {
 	LANGUAGES,
 	type LanguageCode,
 } from '@visitor-space/components/LanguageFilterForm/languages';
 import {
+	AdvancedFilterArrayParam,
 	filterNameToAcronym,
 	operatorToAcronym,
 } from '@visitor-space/const/advanced-filter-array-param';
-import {
-	FILTER_LABEL_VALUE_DELIMITER,
-	FilterProperty,
-	Operator,
-	SearchFilterId,
-} from '@visitor-space/types';
+import { type FilterValue, Operator } from '@visitor-space/types';
 
 import Callout from '../../../shared/components/Callout/Callout';
 import MetadataList from '../Metadata/MetadataList';
@@ -451,12 +447,15 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		maintainerLogo,
 		maintainerId,
 	}: IeObject): ReactNode => {
+		const filterValue: FilterValue = {
+			field: IeObjectsSearchFilterField.MAINTAINER_ID,
+			operator: Operator.IS,
+			multiValue: [],
+		};
 		const maintainerSearchLink = stringifyUrl({
 			url: ROUTES_BY_LOCALE[locale].search,
 			query: {
-				[SearchFilterId.Maintainers]: [
-					`${maintainerId}${FILTER_LABEL_VALUE_DELIMITER}${maintainerName}`,
-				],
+				[IeObjectsSearchFilterField.MAINTAINER_ID]: AdvancedFilterArrayParam.encode([filterValue]),
 			},
 		});
 		return (
@@ -611,7 +610,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									label: mediaInfo?.maintainerName,
 									to: isKiosk
 										? ROUTES_BY_LOCALE[locale].search
-										: `${ROUTES_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${mediaInfo?.maintainerSlug}`,
+										: `${ROUTES_BY_LOCALE[locale].search}?${IeObjectsSearchFilterField.MAINTAINER_SLUG}=${mediaInfo?.maintainerSlug}`,
 								},
 							]
 						: []),
@@ -642,7 +641,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				<SearchLinkTag
 					label={mediaInfo.collectionName}
 					link={`${ROUTES_BY_LOCALE[locale].search}?format=${IeObjectType.Newspaper}&${
-						SearchFilterId.NewspaperSeriesName
+						IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME
 					}=${encodeURIComponent(mediaInfo.collectionName)}`}
 				/>
 			);
@@ -892,8 +891,8 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 										key={genre}
 										label={genre}
 										link={`${ROUTES_BY_LOCALE[locale].search}?advanced=${filterNameToAcronym(
-											FilterProperty.GENRE
-										)}${operatorToAcronym(Operator.EQUALS)}${genre}`}
+											IeObjectsSearchFilterField.GENRE
+										)}${operatorToAcronym(Operator.IS)}${genre}`}
 									/>
 								))
 							: null

@@ -17,7 +17,7 @@ import { tHtml } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
-import { SearchFilterId } from '@visitor-space/types';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 
 import styles from './CPAdminLayout.module.scss';
 
@@ -37,7 +37,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 						: stringifyUrl({
 								url: href,
 								query: {
-									[SearchFilterId.Maintainer]: user?.visitorSpaceSlug,
+									[IeObjectsSearchFilterField.MAINTAINER_SLUG]: user?.visitorSpaceSlug,
 								},
 							});
 

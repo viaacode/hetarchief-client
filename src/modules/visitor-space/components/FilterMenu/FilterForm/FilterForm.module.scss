@@ -1,5 +1,5 @@
 @use "sass:color";
-@use "src/styles/abstracts" as *;
+@use "../../../../../styles/abstracts" as *;
 
 .c-filter-form {
 	display: flex;
@@ -60,24 +60,6 @@
 		margin-top: $spacer-lg !important;
 		margin-bottom: $spacer-lg !important;
 	}
-}
-
-.c-filter-form__footer {
-	display: flex;
-	padding: $spacer-md 2rem;
-	width: 100%;
-
-	@media (min-width: $breakpoint-md) {
-		padding: $spacer-md $spacer-lg;
-	}
-}
-
-.c-filter-form__reset {
-	margin-right: 4rem;
-}
-
-.c-filter-form__submit {
-	flex-grow: 1;
 }
 
 /**

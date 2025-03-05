@@ -25,13 +25,13 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { AccessStatus, type VisitRequest } from '@shared/types/visit-request';
 import { createVisitorSpacesWithFilterUrl } from '@shared/utils/create-url';
 import { useGetVisitAccessStatusMutation } from '@visit-requests/hooks/get-visit-access-status';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitorLayout } from '@visitor-layout/index';
-import { SearchFilterId } from '@visitor-space/types';
 
 export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 	const router = useRouter();
@@ -100,7 +100,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 			switch (response?.status) {
 				case AccessStatus.ACCESS:
 					router.push(
-						`${ROUTES_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${visit.spaceSlug}`
+						`${ROUTES_BY_LOCALE[locale].search}?${IeObjectsSearchFilterField.MAINTAINER_ID}=${visit.spaceSlug}`
 					);
 					break;
 				case AccessStatus.PENDING:

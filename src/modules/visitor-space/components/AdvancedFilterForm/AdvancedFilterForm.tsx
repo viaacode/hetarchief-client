@@ -1,44 +1,55 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import type { FC } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { type FC, useState } from 'react';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml } from '@shared/helpers/translate';
 
-import { SearchFilterId } from '../../types';
-import { AdvancedFilterFields } from '../AdvancedFilterFields/AdvancedFilterFields';
-
-import { ADVANCED_FILTER_FORM_SCHEMA, initialFields } from './AdvancedFilterForm.const';
+import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
+import { AdvancedFilterArrayParam } from '@visitor-space/const/advanced-filter-array-param';
+import { useQueryParam } from 'use-query-params';
+import type { DefaultFilterFormProps, FilterValue } from '../../types';
+import { AdvancedFilterField } from '../AdvancedFilterFields/AdvancedFilterField';
+import { initialFilterValue, initialFilterValues } from './AdvancedFilterForm.const';
 import styles from './AdvancedFilterForm.module.scss';
-import type { AdvancedFilterFormProps, AdvancedFilterFormState } from './AdvancedFilterForm.types';
 
-export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
-	children,
+export const AdvancedFilterForm: FC<DefaultFilterFormProps> = ({
+	id,
 	className,
-	disabled,
-	values,
+	disabled = false,
+	onSubmit,
+	onReset,
+	initialValues,
 }) => {
-	const { control, getValues, setValue, handleSubmit } = useForm<AdvancedFilterFormState>({
-		defaultValues: {
-			advanced: values?.advanced ? values.advanced : [initialFields()],
-		},
-		resolver: yupResolver(ADVANCED_FILTER_FORM_SCHEMA()),
-	});
-	const { append, fields, remove, update } = useFieldArray({
-		name: SearchFilterId.Advanced,
-		control,
-	});
+	const [initialValueFromQueryParams] = useQueryParam(id, AdvancedFilterArrayParam);
+	const [values, setValues] = useState<FilterValue[]>(
+		initialFilterValues(id, initialValues, initialValueFromQueryParams)
+	);
 
-	const resetFields = () => {
-		setValue('advanced', [initialFields()]);
-		update(0, {
-			prop: undefined,
-			op: undefined,
-			val: undefined,
-		});
+	const handleChange = (index: number, value: FilterValue) => {
+		const newValues = [...values];
+		newValues[index] = value;
+		setValues(newValues);
+	};
+
+	const handleRemove = (index: number) => {
+		const newValues = [...values];
+		newValues.splice(index, 1);
+		setValues(newValues);
+	};
+
+	const appendValue = (value: FilterValue) => {
+		setValues([...values, value]);
+	};
+
+	const handleSubmit = async () => {
+		onSubmit(values);
+	};
+
+	const handleReset = () => {
+		setValues(initialFilterValues(id));
+		onReset();
 	};
 
 	return (
@@ -51,14 +62,14 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 				</p>
 
 				{!disabled &&
-					fields.map(({ id, ...value }, index) => (
-						<AdvancedFilterFields
-							key={`advanced-filter-${id}-${value.prop}--${value.op}--${value.val}`}
-							id={id}
+					values.map((value, index) => (
+						<AdvancedFilterField
+							key={`advanced-filter-${value.field}--${value.operator}--${value.multiValue?.[0]}`}
+							id={`advanced-filter-${value.field}--${value.operator}--${value.multiValue?.[0]}`}
 							index={index}
 							value={value}
-							onChange={update}
-							onRemove={remove}
+							onChange={handleChange}
+							onRemove={handleRemove}
 						/>
 					))}
 
@@ -71,16 +82,12 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 							'modules/visitor-space/components/forms/advanced-filter-form/advanced-filter-form___nieuwe-stelling'
 						)}
 						variants="text"
-						onClick={() => append(initialFields())}
+						onClick={() => appendValue(initialFilterValue())}
 					/>
 				</div>
 			</div>
 
-			{children({
-				values: getValues(),
-				reset: () => resetFields(),
-				handleSubmit,
-			})}
+			<FilterFormButtons onSubmit={handleSubmit} onReset={handleReset} />
 		</>
 	);
 };

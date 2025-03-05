@@ -2,7 +2,8 @@ import type { FC, ReactNode } from 'react';
 
 import type { DefaultComponentProps } from '@shared/types';
 
-import type { DefaultFilterFormProps, InlineFilterFormProps, SearchFilterId } from '../../../types';
+import type { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import type { DefaultFilterFormProps, FilterValue } from '../../../types';
 import type {
 	FilterMenuType,
 	OnFilterMenuFormReset,
@@ -11,13 +12,12 @@ import type {
 
 export interface FilterFormProps extends DefaultComponentProps {
 	children?: ReactNode;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	form: FC<DefaultFilterFormProps<any>> | FC<InlineFilterFormProps> | null;
-	id: SearchFilterId;
+	form: FC<DefaultFilterFormProps> | null;
+	id: IeObjectsSearchFilterField;
 	onFormReset: OnFilterMenuFormReset;
 	onFormSubmit: OnFilterMenuFormSubmit;
 	title: string;
 	type: FilterMenuType;
-	values?: unknown;
+	initialValues?: FilterValue[];
 	disabled?: boolean;
 }

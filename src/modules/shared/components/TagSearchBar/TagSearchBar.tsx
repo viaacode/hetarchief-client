@@ -61,8 +61,8 @@ const TagSearchBar = <IsMulti extends boolean>({
 		newValue: TagSearchBarValue<IsMulti>,
 		actionMeta: TagSearchBarMeta
 	): void => {
-		if (['pop-value', 'remove-value'].includes(actionMeta.action)) {
-			onRemoveValue?.(newValue);
+		if (['pop-value', 'remove-value'].includes(actionMeta.action) && actionMeta.removedValue) {
+			onRemoveValue?.(actionMeta.removedValue);
 		}
 		if (actionMeta.action === 'clear') {
 			onClear?.();

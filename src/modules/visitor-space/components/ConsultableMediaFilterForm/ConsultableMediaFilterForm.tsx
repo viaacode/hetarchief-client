@@ -1,69 +1,40 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { type FC, useCallback, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useQueryParams } from 'use-query-params';
-
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import CheckboxFilterForm from '@visitor-space/components/CheckboxFilterForm/CheckboxFilterForm';
-import { SearchFilterId } from '@visitor-space/types';
+import { AdvancedFilterArrayParam } from '@visitor-space/const/advanced-filter-array-param';
+import type { DefaultFilterFormProps, FilterValue } from '@visitor-space/types';
+import { type FC, useState } from 'react';
+import { useQueryParam } from 'use-query-params';
+import { initialFilterValues } from '../AdvancedFilterForm/AdvancedFilterForm.const';
 
-import {
-	CONSULTABLE_MEDIA_FILTER_FORM_QUERY_PARAM_CONFIG,
-	CONSULTABLE_MEDIA_FILTER_FORM_SCHEMA,
-} from './ConsultableMediaFilterForm.const';
-import type {
-	ConsultableMediaFilterFormProps,
-	ConsultableMediaFilterFormState,
-} from './ConsultableMediaFilterForm.types';
-
-const defaultValues = {
-	[IeObjectsSearchFilterField.CONSULTABLE_MEDIA]: false,
-};
-
-export const ConsultableMediaFilterForm: FC<ConsultableMediaFilterFormProps> = ({
+export const ConsultableMediaFilterForm: FC<DefaultFilterFormProps> = ({
 	id,
-	label,
-	onFormSubmit,
 	className,
+	onSubmit,
+	initialValues,
+	label,
 }) => {
-	const [isInitialRender, setIsInitialRender] = useState(true);
-	const [query] = useQueryParams(CONSULTABLE_MEDIA_FILTER_FORM_QUERY_PARAM_CONFIG);
-	const [isChecked, setIsChecked] = useState<boolean>(
-		() => query[SearchFilterId.ConsultableMedia] || false
+	const [initialValueFromQueryParams] = useQueryParam(
+		IeObjectsSearchFilterField.CONSULTABLE_MEDIA,
+		AdvancedFilterArrayParam
+	);
+	const [values] = useState<FilterValue[]>(
+		initialFilterValues(id, initialValues, initialValueFromQueryParams)
 	);
 
-	const { setValue, handleSubmit } = useForm<ConsultableMediaFilterFormState>({
-		resolver: yupResolver(CONSULTABLE_MEDIA_FILTER_FORM_SCHEMA()),
-		defaultValues,
-	});
-
-	const onFilterFormSubmit = useCallback(
-		(id: SearchFilterId, values: unknown) => onFormSubmit(id, values),
-		[onFormSubmit]
-	);
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
-	useEffect(() => {
-		if (isInitialRender) {
-			// Avoid this filter submitting results when loading the form for the first time
-			setIsInitialRender(false);
-			return;
-		}
-		setValue(IeObjectsSearchFilterField.CONSULTABLE_MEDIA, isChecked);
-
-		handleSubmit(
-			() =>
-				onFilterFormSubmit(id, {
-					[IeObjectsSearchFilterField.CONSULTABLE_MEDIA]: isChecked,
-				}),
-			(...args) => console.error(args)
-		)();
-	}, [setValue, isChecked]);
+	const handleInputChange = (newValue: boolean | null) => {
+		onSubmit([
+			{
+				...values[0],
+				multiValue: [newValue ? 'true' : 'false'],
+			},
+		]);
+	};
 
 	return (
 		<CheckboxFilterForm
-			value={isChecked}
-			onChange={setIsChecked}
+			id={id}
+			value={values[0]?.multiValue?.[0] === 'true'}
+			onChange={handleInputChange}
 			label={label}
 			className={className}
 		/>

@@ -1,63 +1,66 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { type FC, type ReactNode, useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { StringParam, useQueryParam } from 'use-query-params';
-import { object as yupObject, string as yupString } from 'yup';
+import { type FC, useState } from 'react';
+import { useQueryParam } from 'use-query-params';
 
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import AutocompleteFieldInput from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
 import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
-import type { DefaultFilterFormChildrenParams } from '@visitor-space/types';
 
+import { validateForm } from '@shared/helpers/validate-form';
+import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
+import type { DefaultFilterFormProps, FilterValue } from '@visitor-space/types';
+import {
+	FILTER_FORM_SCHEMA,
+	initialFilterValues,
+} from '../AdvancedFilterForm/AdvancedFilterForm.const';
+
+import { AdvancedFilterArrayParam } from '@visitor-space/const/advanced-filter-array-param';
+import { compact } from 'lodash-es';
 import styles from './AutocompleteFieldFilterForm.module.scss';
 
-export const AutocompleteFieldFilterForm: FC<{
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	children: ({ values, reset, handleSubmit }: DefaultFilterFormChildrenParams<any>) => ReactNode;
-	className?: string;
+interface AutocompleteFieldFilterFormProps extends DefaultFilterFormProps {
 	autocompleteField: AutocompleteField;
 	filterTitle: string;
 	fieldLabel: string;
-}> = ({ children, className, autocompleteField, filterTitle, fieldLabel }) => {
-	const [initial] = useQueryParam(autocompleteField, StringParam);
+}
 
-	const [form, setForm] = useState<{ value: string }>({
-		value: initial || '',
-	});
-	const {
-		clearErrors,
-		control,
-		formState: { errors },
-		handleSubmit,
-		setValue,
-	} = useForm<{ value: string }>({
-		resolver: yupResolver(
-			yupObject({
-				value: yupString().required(),
-			})
-		),
-		defaultValues: { value: '' },
-		reValidateMode: 'onChange',
-	});
+export const AutocompleteFieldFilterForm: FC<AutocompleteFieldFilterFormProps> = ({
+	id,
+	className,
+	autocompleteField,
+	filterTitle,
+	fieldLabel,
+	onSubmit,
+	onReset,
+	initialValues,
+}) => {
+	const [initialValueFromQueryParams] = useQueryParam(autocompleteField, AdvancedFilterArrayParam);
+	const [values, setValues] = useState<FilterValue[]>(
+		initialFilterValues(id, initialValues, initialValueFromQueryParams)
+	);
+	const [formErrors, setFormErrors] = useState<Record<string, string> | null>(null);
 
-	// Effects
-
-	useEffect(() => {
-		setValue('value', form.value);
-	}, [form, setValue]);
-
-	useEffect(() => {
-		if (initial) {
-			setForm((oldForm) => ({ ...oldForm, value: initial }));
+	const handleSubmit = async () => {
+		const errors = await validateForm(values, FILTER_FORM_SCHEMA());
+		setFormErrors(errors);
+		if (!errors) {
+			onSubmit(values);
 		}
-	}, [initial]);
+	};
 
-	// Events
+	const handleReset = () => {
+		setValues(initialFilterValues(id));
+		onReset();
+	};
 
-	const onChangeValue = (newCreator: string | null) => {
-		setForm((oldForm) => ({ ...oldForm, value: newCreator || '' }));
+	const handleInputChange = (newValue: string | null) => {
+		setValues([
+			{
+				...values[0],
+				multiValue: compact([newValue || undefined]),
+			},
+		]);
 	};
 
 	return (
@@ -67,34 +70,23 @@ export const AutocompleteFieldFilterForm: FC<{
 			>
 				<FormControl
 					className="c-form-control--label-hidden"
-					errors={[<RedFormWarning error={errors?.value?.message} key="form-error--value" />]}
+					errors={[
+						<RedFormWarning error={formErrors?.[autocompleteField]} key="form-error--value" />,
+					]}
 					id={`AutocompleteFieldFilterForm__${autocompleteField}`}
 					label={filterTitle}
 				>
-					<Controller
-						control={control}
-						name="value"
-						render={({ field }) => (
-							<AutocompleteFieldInput
-								fieldName={autocompleteField}
-								onChange={onChangeValue}
-								value={field.value}
-								id={AutocompleteField.creator}
-								label={fieldLabel}
-							/>
-						)}
+					<AutocompleteFieldInput
+						fieldName={autocompleteField}
+						onChange={handleInputChange}
+						value={values?.[0]?.multiValue?.[0]}
+						id={AutocompleteField.Creator}
+						label={fieldLabel}
 					/>
 				</FormControl>
 			</div>
 
-			{children({
-				values: { [autocompleteField]: form.value },
-				reset: () => {
-					setForm({ value: '' });
-					clearErrors();
-				},
-				handleSubmit,
-			})}
+			<FilterFormButtons onSubmit={handleSubmit} onReset={handleReset} />
 		</>
 	);
 };

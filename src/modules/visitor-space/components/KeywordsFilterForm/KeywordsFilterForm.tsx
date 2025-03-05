@@ -1,53 +1,42 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { FormControl, keysEnter, onKey, type TagInfo, TagsInput } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { type FC, type KeyboardEvent, useMemo, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import type { ActionMeta, InputActionMeta, MultiValue, SingleValue } from 'react-select';
-import { useQueryParams } from 'use-query-params';
-
-import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
+import { FormControl, type TagInfo, TagsInput, keysEnter, onKey } from '@meemoo/react-components';
 import { TAGS_INPUT_COMPONENTS } from '@shared/components/TagsInput';
 import { tHtml } from '@shared/helpers/translate';
-import {
-	KEYWORDS_FILTER_FORM_QUERY_PARAM_CONFIG,
-	KEYWORDS_FILTER_FORM_SCHEMA,
-} from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.const';
-import type {
-	KeywordsFilterFormProps,
-	KeywordsFilterFormState,
-} from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.types';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import { initialFilterValues } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
+import { AdvancedFilterArrayParam } from '@visitor-space/const/advanced-filter-array-param';
+import type { DefaultFilterFormProps, FilterValue } from '@visitor-space/types';
+import clsx from 'clsx';
+import { compact } from 'lodash-es';
+import { type FC, type KeyboardEvent, useMemo, useState } from 'react';
+import type { ActionMeta, InputActionMeta, MultiValue, SingleValue } from 'react-select';
+import { useQueryParam } from 'use-query-params';
 
 type multi = MultiValue<TagInfo>;
 
-const labelKeys: Record<keyof KeywordsFilterFormState, string> = {
-	values: 'KeywordsFilterForm__values',
-};
+enum KeywordField {
+	keywords = 'KeywordsFilterForm__keywords',
+}
 
-const defaultValues: KeywordsFilterFormState = {
-	values: [],
-};
-
-const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }) => {
-	const [query] = useQueryParams(KEYWORDS_FILTER_FORM_QUERY_PARAM_CONFIG);
+const KeywordsFilterForm: FC<DefaultFilterFormProps> = ({
+	className,
+	id,
+	initialValues,
+	onSubmit,
+	onReset,
+}) => {
+	const [initialValueFromQueryParams] = useQueryParam(
+		IeObjectsSearchFilterField.KEYWORD,
+		AdvancedFilterArrayParam
+	);
+	const [values, setValues] = useState<FilterValue[]>(
+		initialFilterValues(id, initialValues, initialValueFromQueryParams)
+	);
 	const [input, setInput] = useState<string | undefined>(undefined);
-
-	const [form, setForm] = useState<KeywordsFilterFormState>({
-		values: (query.keywords?.filter((k) => k !== null) as string[]) || [],
-	});
-	const {
-		control,
-		reset,
-		formState: { errors },
-		handleSubmit,
-	} = useForm<KeywordsFilterFormState>({
-		resolver: yupResolver(KEYWORDS_FILTER_FORM_SCHEMA()),
-		defaultValues,
-	});
 
 	// Computed
 
-	const getTags = form.values?.map((value) => ({
+	const tags: TagInfo[] = compact(values[0]?.multiValue)?.map((value) => ({
 		label: value,
 		value,
 	}));
@@ -56,9 +45,12 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 
 	const saveInput = () => {
 		if (input && input.length > 0) {
-			setForm((oldForm) => ({
-				values: [...(oldForm.values || []), input.toLowerCase()],
-			}));
+			setValues((oldValues): FilterValue[] => [
+				{
+					...oldValues[0],
+					multiValue: [...(oldValues[0]?.multiValue || []), input.toLowerCase()],
+				},
+			]);
 
 			setInput('');
 		}
@@ -66,14 +58,17 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 
 	// Events
 
-	const onTagsChange = (value: multi | SingleValue<TagInfo>, meta: ActionMeta<TagInfo>) => {
+	const onTagsChange = (newValue: multi | SingleValue<TagInfo>, meta: ActionMeta<TagInfo>) => {
 		const mapValues = () => {
-			if (value && (value as multi).length >= 0) {
-				const cast = value as multi;
+			if (newValue && (newValue as multi).length >= 0) {
+				const cast = newValue as multi;
 
-				setForm({
-					values: cast.map((item) => item.value.toString()),
-				});
+				setValues((oldValues): FilterValue[] => [
+					{
+						...oldValues[0],
+						multiValue: cast.map((item) => item.value.toString()),
+					},
+				]);
 			}
 		};
 
@@ -105,6 +100,15 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 
 	const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => onKey(e, [...keysEnter], saveInput);
 
+	const handleSubmit = () => {
+		onSubmit(values);
+	};
+
+	const handleReset = () => {
+		setValues(initialFilterValues(id));
+		onReset();
+	};
+
 	// Must be inside component otherwise we get this error:
 	//	index.js:456 ReferenceError: Cannot access '$r' before initialization
 	//     at Object.TAGS_INPUT_COMPONENTS (_app-adc1b2d2d2ee133a.js:1:550587)
@@ -125,47 +129,29 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 				<div className="u-mb-32">
 					<FormControl
 						className="u-mb-24 c-form-control--label-hidden"
-						errors={
-							(errors?.values || []).map?.((errorValue) => (
-								<RedFormWarning error={errorValue?.message} key="form-error--value" />
-							)) || []
-						}
-						id={labelKeys.values}
+						id={KeywordField.keywords}
 						label={tHtml(
 							'modules/visitor-space/components/keywords-filter-form/keywords-filter-form___waardes'
 						)}
 					>
-						<Controller
-							name="values"
-							control={control}
-							render={() => (
-								<TagsInput
-									components={components}
-									inputId={labelKeys.values}
-									inputValue={input}
-									isClearable={true}
-									isMulti={true} // always `multi`
-									menuIsOpen={false}
-									onBlur={saveInput}
-									onChange={onTagsChange}
-									onInputChange={onInputChange}
-									onKeyDown={onKeyDown}
-									value={getTags}
-								/>
-							)}
+						<TagsInput
+							components={components}
+							inputId={KeywordField.keywords}
+							inputValue={input}
+							isClearable={true}
+							isMulti={true} // always `multi`
+							menuIsOpen={false}
+							onBlur={saveInput}
+							onChange={onTagsChange}
+							onInputChange={onInputChange}
+							onKeyDown={onKeyDown}
+							value={tags}
 						/>
 					</FormControl>
 				</div>
 			</div>
 
-			{children({
-				values: form,
-				reset: () => {
-					reset();
-					setForm(defaultValues);
-				},
-				handleSubmit,
-			})}
+			<FilterFormButtons onSubmit={handleSubmit} onReset={handleReset} />
 		</>
 	);
 };

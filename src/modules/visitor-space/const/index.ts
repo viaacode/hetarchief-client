@@ -3,8 +3,6 @@
 // visitor space search page => search page
 import { OrderDirection, type TabProps } from '@meemoo/react-components';
 import {
-	ArrayParam,
-	BooleanParam,
 	type DecodedValueMap,
 	NumberParam,
 	type QueryParamConfig,
@@ -13,10 +11,10 @@ import {
 
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
-import { SearchPageMediaType } from '@shared/types/ie-objects';
+import { IeObjectsSearchFilterField, SearchPageMediaType } from '@shared/types/ie-objects';
 import type { FilterMenuSortOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 
-import { SearchFilterId, SearchSortProp, VisitorSpaceStatus } from '../types';
+import { SearchSortProp, VisitorSpaceStatus } from '../types';
 
 import { AdvancedFilterArrayParam } from './advanced-filter-array-param';
 
@@ -27,70 +25,76 @@ export const DEFAULT_VISITOR_SPACE_COLOR = '#00c8aa';
 export const SEARCH_RESULTS_PAGE_SIZE = 24;
 
 export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
-	SearchFilterId | QUERY_PARAM_KEY.SEARCH_QUERY_KEY,
-	string | undefined
-> & {
-	page: number;
-	orderProp: SearchSortProp;
-	orderDirection: OrderDirection;
-} = {
+	| IeObjectsSearchFilterField
+	| QUERY_PARAM_KEY.SEARCH_QUERY_KEY
+	| 'page'
+	| 'orderProp'
+	| 'orderDirection',
+	string | number | undefined
+> = {
 	// Filters
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: undefined,
-	[SearchFilterId.Format]: SearchPageMediaType.All,
-	[SearchFilterId.Maintainer]: undefined,
-	[SearchFilterId.Maintainers]: undefined,
-	[SearchFilterId.Medium]: undefined,
-	[SearchFilterId.Duration]: undefined,
-	[SearchFilterId.ReleaseDate]: undefined,
-	[SearchFilterId.Created]: undefined,
-	[SearchFilterId.Published]: undefined,
-	[SearchFilterId.Creator]: undefined,
-	[SearchFilterId.NewspaperSeriesName]: undefined,
-	[SearchFilterId.LocationCreated]: undefined,
-	[SearchFilterId.Mentions]: undefined,
-	[SearchFilterId.Genre]: undefined,
-	[SearchFilterId.Keywords]: undefined,
-	[SearchFilterId.Language]: undefined,
-	[SearchFilterId.ConsultableOnlyOnLocation]: undefined,
-	[SearchFilterId.ConsultableMedia]: undefined,
-	[SearchFilterId.ConsultablePublicDomain]: undefined,
-	[SearchFilterId.Cast]: undefined,
-	[SearchFilterId.Identifier]: undefined,
-	[SearchFilterId.ObjectType]: undefined,
-	[SearchFilterId.SpacialCoverage]: undefined,
-	[SearchFilterId.TemporalCoverage]: undefined,
-	[SearchFilterId.Advanced]: undefined,
+	[IeObjectsSearchFilterField.QUERY]: undefined,
+	[IeObjectsSearchFilterField.FORMAT]: SearchPageMediaType.All,
+	[IeObjectsSearchFilterField.NAME]: undefined,
+	[IeObjectsSearchFilterField.DESCRIPTION]: undefined,
+	[IeObjectsSearchFilterField.MAINTAINER_SLUG]: undefined,
+	[IeObjectsSearchFilterField.MAINTAINER_ID]: undefined,
+	[IeObjectsSearchFilterField.MEDIUM]: undefined,
+	[IeObjectsSearchFilterField.DURATION]: undefined,
+	[IeObjectsSearchFilterField.RELEASE_DATE]: undefined,
+	[IeObjectsSearchFilterField.CREATED]: undefined,
+	[IeObjectsSearchFilterField.PUBLISHED]: undefined,
+	[IeObjectsSearchFilterField.CREATOR]: undefined,
+	[IeObjectsSearchFilterField.PUBLISHER]: undefined,
+	[IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME]: undefined,
+	[IeObjectsSearchFilterField.LOCATION_CREATED]: undefined,
+	[IeObjectsSearchFilterField.MENTIONS]: undefined,
+	[IeObjectsSearchFilterField.GENRE]: undefined,
+	[IeObjectsSearchFilterField.KEYWORD]: undefined,
+	[IeObjectsSearchFilterField.LANGUAGE]: undefined,
+	[IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION]: undefined,
+	[IeObjectsSearchFilterField.CONSULTABLE_MEDIA]: undefined,
+	[IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN]: undefined,
+	[IeObjectsSearchFilterField.CAST]: undefined,
+	[IeObjectsSearchFilterField.IDENTIFIER]: undefined,
+	[IeObjectsSearchFilterField.OBJECT_TYPE]: undefined,
+	[IeObjectsSearchFilterField.SPACIAL_COVERAGE]: undefined,
+	[IeObjectsSearchFilterField.TEMPORAL_COVERAGE]: undefined,
+	[IeObjectsSearchFilterField.ADVANCED]: undefined,
+	[IeObjectsSearchFilterField.LICENSES]: undefined,
 
 	// Pagination
 	page: 1,
 	// Sorting
 	orderProp: SearchSortProp.Relevance,
 	orderDirection: OrderDirection.desc,
-};
+} as const;
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export const SEARCH_PAGE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<any>> = {
 	// Filters
 	format: StringParam,
-	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: ArrayParam,
-	[SearchFilterId.Maintainer]: StringParam,
-	[SearchFilterId.Medium]: ArrayParam,
-	[SearchFilterId.Duration]: AdvancedFilterArrayParam,
-	[SearchFilterId.Created]: AdvancedFilterArrayParam,
-	[SearchFilterId.Published]: AdvancedFilterArrayParam,
-	[SearchFilterId.ReleaseDate]: AdvancedFilterArrayParam,
-	[SearchFilterId.Creator]: StringParam,
-	[SearchFilterId.NewspaperSeriesName]: StringParam,
-	[SearchFilterId.LocationCreated]: StringParam,
-	[SearchFilterId.Mentions]: StringParam,
-	[SearchFilterId.Genre]: ArrayParam,
-	[SearchFilterId.Keywords]: ArrayParam,
-	[SearchFilterId.Language]: ArrayParam,
-	[SearchFilterId.Maintainers]: ArrayParam,
-	[SearchFilterId.Advanced]: AdvancedFilterArrayParam,
-	[SearchFilterId.ConsultableOnlyOnLocation]: BooleanParam,
-	[SearchFilterId.ConsultableMedia]: BooleanParam,
-	[SearchFilterId.ConsultablePublicDomain]: BooleanParam,
+	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.QUERY]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.MAINTAINER_ID]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.MAINTAINER_SLUG]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.MEDIUM]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.DURATION]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.CREATED]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.PUBLISHED]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.RELEASE_DATE]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.CREATOR]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.LOCATION_CREATED]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.MENTIONS]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.GENRE]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.KEYWORD]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.LANGUAGE]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.ADVANCED]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.CONSULTABLE_MEDIA]: AdvancedFilterArrayParam,
+	[IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN]: AdvancedFilterArrayParam,
 	// Pagination
 	page: NumberParam,
 	// Sorting

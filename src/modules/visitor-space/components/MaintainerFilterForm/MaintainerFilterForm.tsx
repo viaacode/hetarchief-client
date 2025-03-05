@@ -1,57 +1,49 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { compact, keyBy, mapValues, noop, without } from 'lodash-es';
-import { type FC, useCallback, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { type FC, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useQueryParams } from 'use-query-params';
+import { useQueryParam } from 'use-query-params';
 
 import { SearchBar } from '@shared/components/SearchBar';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
-import type {
-	MaintainerFilterFormProps,
-	MaintainerFilterFormState,
-} from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
+
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import FilterFormButtons from '@visitor-space/components/FilterMenu/FilterFormButtons/FilterFormButtons';
+import { AdvancedFilterArrayParam } from '@visitor-space/const/advanced-filter-array-param';
 import {
+	type DefaultFilterFormProps,
 	ElasticsearchFieldNames,
 	FILTER_LABEL_VALUE_DELIMITER,
-	SearchFilterId,
+	type FilterValue,
 } from '@visitor-space/types';
-import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
+import { initialFilterValues } from '../AdvancedFilterForm/AdvancedFilterForm.const';
 
-import {
-	MAINTAINER_FILTER_FORM_QUERY_PARAM_CONFIG,
-	MAINTAINER_FILTER_FORM_SCHEMA,
-} from './MaintainerFilterForm.const';
-
-const defaultValues = {
-	maintainers: [],
-};
-
-const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, className }) => {
-	const [query] = useQueryParams(MAINTAINER_FILTER_FORM_QUERY_PARAM_CONFIG);
+const MaintainerFilterForm: FC<DefaultFilterFormProps> = ({
+	className,
+	id,
+	initialValues,
+	onSubmit,
+	onReset,
+}) => {
+	const [initialValueFromQueryParams] = useQueryParam(
+		IeObjectsSearchFilterField.MAINTAINER_ID,
+		AdvancedFilterArrayParam
+	);
+	const [values, setValues] = useState<FilterValue[]>(
+		initialFilterValues(id, initialValues, initialValueFromQueryParams)
+	);
 	const [search, setSearch] = useState<string>('');
 
 	// Contains the filters that have already been applied and are present in the url
 	const appliedSelectedMaintainerIds = compact(
-		(query[SearchFilterId.Maintainers] || []).map(
+		(values[0]?.multiValue || []).map(
 			(maintainerIdAndName) => maintainerIdAndName?.split(FILTER_LABEL_VALUE_DELIMITER)?.[0]
 		)
 	);
-
-	// Contains the options that have already been applied and are present in the url
-	const [selectedMaintainerIds, setSelectedMaintainerIds] = useState<string[]>(
-		() => appliedSelectedMaintainerIds
-	);
-
-	const { setValue, reset, handleSubmit } = useForm<MaintainerFilterFormState>({
-		resolver: yupResolver(MAINTAINER_FILTER_FORM_SCHEMA()),
-		defaultValues,
-	});
 
 	// Get all maintainer names
 	const { data: maintainers } = useGetContentPartners({});
@@ -75,16 +67,13 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 	// Make sure applied values are sorted at the top of the list
 	// Options selected by the user should remain in their alphabetical order until the filter is applied
 	// https://meemoo.atlassian.net/browse/ARC-1882
-	const checkboxOptions = sortFilterOptions(
-		filteredBuckets.map((filterOption) => {
-			return {
-				label: filterOption.name,
-				value: filterOption.id,
-				checked: selectedMaintainerIds.includes(filterOption.id),
-			};
-		}),
-		appliedSelectedMaintainerIds
-	);
+	const checkboxOptions = filteredBuckets.map((filterOption) => {
+		return {
+			label: filterOption.name,
+			value: filterOption.id,
+			checked: appliedSelectedMaintainerIds.includes(filterOption.id),
+		};
+	});
 
 	const idToIdAndNameConcatinated = useCallback(
 		(id: string) => {
@@ -96,22 +85,38 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 		[maintainers, maintainerNames]
 	);
 
-	useEffect(() => {
-		setValue('maintainers', selectedMaintainerIds.map(idToIdAndNameConcatinated));
-	}, [selectedMaintainerIds, setValue, idToIdAndNameConcatinated]);
+	const handleSubmit = () => {
+		onSubmit([
+			{
+				...values[0],
+				multiValue: (values[0]?.multiValue || []).map(idToIdAndNameConcatinated),
+			},
+		]);
+	};
 
-	const onItemClick = (checked: boolean, value: unknown): void => {
+	const handleReset = () => {
+		setValues(initialFilterValues(id));
+		onReset();
+	};
+
+	const onItemClick = (checked: boolean, newMaintainer: unknown): void => {
+		const oldSelectedMaintainers: string[] = (values[0]?.multiValue || []).map((val) => val);
 		const newSelectedMaintainers = !checked
-			? [...selectedMaintainerIds, value as string]
-			: without(selectedMaintainerIds, value as string);
-		setSelectedMaintainerIds(newSelectedMaintainers);
+			? [...oldSelectedMaintainers, newMaintainer as string]
+			: without(oldSelectedMaintainers, newMaintainer as string);
+		setValues([
+			{
+				...values[0],
+				multiValue: newSelectedMaintainers,
+			},
+		]);
 	};
 
 	return (
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32-md')}>
 				<SearchBar
-					id={`${visitorSpaceLabelKeys.filters.title}--${SearchFilterId.Maintainers}`}
+					id={`${visitorSpaceLabelKeys.filters.title}--${IeObjectsSearchFilterField.MAINTAINER_ID}`}
 					value={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
 					placeholder={tText(
@@ -134,17 +139,7 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 				</div>
 			</div>
 
-			{children({
-				values: {
-					maintainers: selectedMaintainerIds.map(idToIdAndNameConcatinated),
-				},
-				reset: () => {
-					reset();
-					setSelectedMaintainerIds(defaultValues.maintainers);
-					setSearch('');
-				},
-				handleSubmit,
-			})}
+			<FilterFormButtons onSubmit={handleSubmit} onReset={handleReset} />
 		</>
 	);
 };

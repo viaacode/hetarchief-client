@@ -10,13 +10,12 @@ import {
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
 import type { HTTPError } from 'ky';
-import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
+import { compact, intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
 import Head from 'next/head';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import type { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
@@ -57,8 +56,9 @@ import {
 } from '@shared/components/VisitorSpaceDropdown';
 import {
 	GET_VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
-	ROUTE_PARTS_BY_LOCALE,
 	ROUTES_BY_LOCALE,
+	ROUTE_PARTS_BY_LOCALE,
+	SEPARATOR,
 } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
@@ -80,8 +80,8 @@ import {
 } from '@shared/store/ui';
 import { Breakpoints, type SortObject } from '@shared/types';
 import {
-	IeObjectsSearchFilterField,
 	IeObjectType,
+	IeObjectsSearchFilterField,
 	SearchPageMediaType,
 } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
@@ -92,20 +92,8 @@ import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/g
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitTimeframe } from '@visit-requests/types';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
-import { initialFields } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
-import type { AdvancedFilterFormState } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.types';
-import type { ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
-import type { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
-import type { ConsultablePublicDomainFilterFormState } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm.types';
-import type { DurationFilterFormState } from '@visitor-space/components/DurationFilterForm';
 import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
 import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
-import type { GenreFilterFormState } from '@visitor-space/components/GenreFilterForm';
-import type { KeywordsFilterFormState } from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.types';
-import type { LanguageFilterFormState } from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
-import type { MaintainerFilterFormState } from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
-import type { MediumFilterFormState } from '@visitor-space/components/MediumFilterForm';
-import type { ReleaseDateFilterFormState } from '@visitor-space/components/ReleaseDateFilterForm';
 import {
 	GLOBAL_ARCHIVE,
 	SEARCH_PAGE_QUERY_PARAM_CONFIG,
@@ -115,14 +103,12 @@ import {
 } from '@visitor-space/const';
 import { SEARCH_PAGE_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
 import { SEARCH_PAGE_IE_OBJECT_TABS } from '@visitor-space/const/visitor-space-tabs.const';
+import type { FilterValue, FilterValueTag } from '@visitor-space/types';
 import {
-	type AdvancedFilter,
-	FilterProperty,
-	SearchFilterId,
-	type TagIdentity,
-} from '@visitor-space/types';
-import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
-import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
+	mapMaintainerToElastic,
+	mapQueryParamsToFilterValues,
+} from '@visitor-space/utils/elastic-filters';
+import { mapAdvancedToTags } from '@visitor-space/utils/map-filters/map-filters';
 
 const labelKeys = {
 	search: 'SearchPage__search',
@@ -172,7 +158,8 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	// Keep defaults only in code, not in the query params in the url
 	const page = query.page || VISITOR_SPACE_QUERY_PARAM_INIT.page;
-	const format = (query.format || VISITOR_SPACE_QUERY_PARAM_INIT.format) as SearchPageMediaType;
+	const format: SearchPageMediaType = (query.format ||
+		VISITOR_SPACE_QUERY_PARAM_INIT.format) as SearchPageMediaType;
 	const orderProp = query.orderProp || VISITOR_SPACE_QUERY_PARAM_INIT.orderProp;
 	const orderDirection = (query.orderDirection ||
 		VISITOR_SPACE_QUERY_PARAM_INIT.orderDirection) as OrderDirection;
@@ -201,7 +188,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	);
 
 	const { data: activeVisitRequest, isLoading: isLoadingActiveVisitRequest } =
-		useGetActiveVisitRequestForUserAndSpace(query[SearchFilterId.Maintainer], user);
+		useGetActiveVisitRequestForUserAndSpace(
+			query[IeObjectsSearchFilterField.MAINTAINER_SLUG],
+			user
+		);
 
 	const [isInitialPageLoad, setIsInitialPageLoad] = useState(false);
 
@@ -211,7 +201,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		orderDirection,
 	};
 
-	const queryParamMaintainer = query?.[SearchFilterId.Maintainer];
+	const queryParamMaintainer = query?.[IeObjectsSearchFilterField.MAINTAINER_SLUG];
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	const activeVisitorSpaceSlug: string | undefined = useMemo(() => {
 		if (!accessibleVisitorSpaceRequests.length) {
@@ -231,7 +221,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		// No visitor space set in query params or the visitor space is not recognized
 		setQuery({
 			...query,
-			[SearchFilterId.Maintainer]: undefined,
+			[IeObjectsSearchFilterField.MAINTAINER_SLUG]: undefined,
 		});
 		return GLOBAL_ARCHIVE;
 	}, [queryParamMaintainer, accessibleVisitorSpaceRequests]);
@@ -244,6 +234,16 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	 * Data
 	 */
 
+	const filterValues: FilterValue[] = useMemo(
+		() => [
+			...mapMaintainerToElastic(query, activeVisitRequest, accessibleVisitorSpaceRequests),
+			...(mapQueryParamsToFilterValues(query) || []),
+		],
+		[query, activeVisitRequest, accessibleVisitorSpaceRequests]
+	);
+	const filterValuesWithoutFormat = filterValues.filter(
+		(filterValue) => filterValue.field !== IeObjectsSearchFilterField.FORMAT
+	);
 	const {
 		data: searchResults,
 		isLoading: searchResultsLoading,
@@ -251,10 +251,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		error: searchResultsError,
 	} = useGetIeObjects(
 		{
-			filters: [
-				...mapMaintainerToElastic(query, activeVisitRequest, accessibleVisitorSpaceRequests),
-				...mapFiltersToElastic(query),
-			],
+			filters: filterValues,
 			page,
 			size: SEARCH_RESULTS_PAGE_SIZE,
 			sort: activeSort,
@@ -262,10 +259,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		{ enabled: !isLoadingActiveVisitRequest }
 	);
 	const { data: formatCounts } = useGetIeObjectFormatCounts(
-		[
-			...mapMaintainerToElastic(query, activeVisitRequest, accessibleVisitorSpaceRequests),
-			...mapFiltersToElastic(query),
-		].filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
+		filterValues.filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
 
 		// Enabled when search query is finished, so it loads the tab counts after the initial results
 		{ enabled: !searchResultsRefetching }
@@ -293,13 +287,13 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	}, [dispatch, locale]);
 
 	useEffect(() => {
-		dispatch(setShowZendesk(!isKioskUser && !query[SearchFilterId.Maintainer]));
+		dispatch(setShowZendesk(!isKioskUser && !query[IeObjectsSearchFilterField.MAINTAINER_SLUG]));
 	}, [dispatch, isKioskUser, query]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: Make sure the dependency array contains the same items as passed to VISITOR_SPACE_FILTERS
 	useEffect(() => {
 		// Filter out all disabled query param keys/ids
-		const disabledFilterKeys: SearchFilterId[] = SEARCH_PAGE_FILTERS(
+		const disabledFilterKeys: IeObjectsSearchFilterField[] = SEARCH_PAGE_FILTERS(
 			isGlobalArchive,
 			isKioskUser,
 			isKeyUser,
@@ -309,11 +303,14 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				({ isDisabled, tabs }: FilterMenuFilterOption): boolean =>
 					isDisabled?.() || !tabs.includes(format)
 			)
-			.map(({ id }: FilterMenuFilterOption): SearchFilterId => id as SearchFilterId);
+			.map(
+				({ id }: FilterMenuFilterOption): IeObjectsSearchFilterField =>
+					id as IeObjectsSearchFilterField
+			);
 
 		// Loop over all existing query params and replace the disabled filters with their initial value if they exist
-		const disabledKeysSet: Set<SearchFilterId> = new Set(disabledFilterKeys);
-		const queryKeys = Object.keys(query) as SearchFilterId[];
+		const disabledKeysSet: Set<IeObjectsSearchFilterField> = new Set(disabledFilterKeys);
+		const queryKeys = Object.keys(query) as IeObjectsSearchFilterField[];
 		const strippedQuery = Object.fromEntries(
 			queryKeys.map((key) => {
 				return [key, disabledKeysSet.has(key) ? VISITOR_SPACE_QUERY_PARAM_INIT[key] : query[key]];
@@ -433,17 +430,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	 * Methods
 	 */
 
-	const prepareSearchValue = (
-		value = ''
-	): { [QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: (string | null)[] } | undefined => {
+	const prepareSearchValue = (value = ''): string[] | undefined => {
 		const trimmed = value.trim();
 
 		if (trimmed && !query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]?.includes(trimmed)) {
-			return {
-				[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: (query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] ?? []).concat(
-					trimmed
-				),
-			};
+			return compact((query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] ?? []).concat(trimmed));
 		}
 
 		return undefined;
@@ -475,7 +466,8 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const onResetFilters = () => {
 		setQuery({
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
-			[SearchFilterId.Maintainer]: query[SearchFilterId.Maintainer],
+			[IeObjectsSearchFilterField.MAINTAINER_SLUG]:
+				query[IeObjectsSearchFilterField.MAINTAINER_SLUG],
 		});
 	};
 
@@ -483,7 +475,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	 * Reset one filter by id
 	 * @param id
 	 */
-	const onResetFilter = (id: SearchFilterId) => {
+	const onResetFilter = (id: IeObjectsSearchFilterField) => {
 		const newQueryParams = { ...query };
 		newQueryParams[id] = undefined;
 		setQuery(newQueryParams);
@@ -491,192 +483,96 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	/**
 	 * Set one filter with its values
-	 * @param id
 	 * @param values
 	 */
-	const onSubmitFilter = (id: SearchFilterId, values: unknown) => {
-		const searchValue = prepareSearchValue(searchBarInputValue);
-		let data: string[] | string | boolean | AdvancedFilter[] | undefined;
+	const onSubmitFilter = (values: FilterValue[]) => {
+		const newQueryParams: Partial<
+			Record<
+				| IeObjectsSearchFilterField
+				| 'page'
+				| QUERY_PARAM_KEY.SEARCH_QUERY_KEY
+				| 'filter'
+				| 'filters',
+				string | string[] | FilterValue | FilterValue[]
+			>
+		> = {};
 
-		switch (id) {
-			case SearchFilterId.Medium:
-				data = (values as MediumFilterFormState).mediums;
-				break;
+		// newQueryParams.filters = values;
 
-			case SearchFilterId.Duration: {
-				const state = values as DurationFilterFormState;
-				data = state.duration
-					? [
-							{
-								prop: FilterProperty.DURATION,
-								op: state.operator,
-								val: state.duration,
-							},
-						]
-					: undefined;
-				break;
+		for (const value of values) {
+			if (!value.field || !compact(value.multiValue || [])?.[0]) {
+				continue;
 			}
-
-			case SearchFilterId.ReleaseDate: {
-				const state = values as ReleaseDateFilterFormState;
-				data = state.releaseDate
-					? [
-							{
-								prop: FilterProperty.RELEASE_DATE,
-								op: state.operator,
-								val: state.releaseDate,
-							},
-						]
-					: undefined;
-				break;
-			}
-
-			case SearchFilterId.Creator:
-				data = (values as { creator: string }).creator;
-				break;
-
-			case SearchFilterId.NewspaperSeriesName:
-				data = (values as { newspaperSeriesName: string }).newspaperSeriesName;
-				break;
-
-			case SearchFilterId.LocationCreated:
-				data = (values as { locationCreated: string }).locationCreated;
-				break;
-
-			case SearchFilterId.Mentions:
-				data = (values as { mentions: string }).mentions;
-				break;
-
-			case SearchFilterId.Genre:
-				data = (values as GenreFilterFormState).genres;
-				break;
-
-			case SearchFilterId.Keywords:
-				data = (values as KeywordsFilterFormState).values;
-				break;
-
-			case SearchFilterId.Language:
-				data = (values as LanguageFilterFormState).languages;
-				break;
-
-			case SearchFilterId.Maintainers:
-				data = (values as MaintainerFilterFormState).maintainers;
-				break;
-
-			case SearchFilterId.ConsultableOnlyOnLocation:
-				// Info: remove query param if false (= set to undefined)
-				data =
-					(values as ConsultableOnlyOnLocationFilterFormState)[
-						IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
-					] || undefined;
-				break;
-
-			case SearchFilterId.ConsultableMedia:
-				// Info: remove query param if false (= set to undefined)
-				data = (values as ConsultableMediaFilterFormState)[
-					IeObjectsSearchFilterField.CONSULTABLE_MEDIA
-				]
-					? (values as ConsultableMediaFilterFormState)[
-							IeObjectsSearchFilterField.CONSULTABLE_MEDIA
-						]
-					: undefined;
-				break;
-
-			case SearchFilterId.ConsultablePublicDomain:
-				// Info: remove query param if false (= set to undefined)
-				data =
-					(values as ConsultablePublicDomainFilterFormState)[
-						IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN
-					] || undefined;
-				break;
-
-			case SearchFilterId.Advanced:
-				data = (values as AdvancedFilterFormState).advanced.filter((advanced) => {
-					return !isNil(advanced.val) && advanced.val !== initialFields().val;
-				});
-
-				if (data.length === 0) {
-					setQuery({ [id]: undefined, filter: undefined, page: undefined });
-					return;
-				}
-
-				break;
-
-			default:
-				console.warn(`[WARN][VisitorSpacePage] No submit handler for ${id}`);
-				break;
+			const existingValue = (newQueryParams[value.field] as FilterValue[] | undefined) || [];
+			newQueryParams[value.field] = [...existingValue, value];
+			//
+			// 	// Advanced filters
+			// 	if (ADVANCED_FILTERS.includes(value.field)) {
+			// 		const existingValue = (newQueryParams[value.field] as FilterValue[] | undefined) || [];
+			// 		newQueryParams[value.field] = [...existingValue, value];
+			// 		continue;
+			// 	}
+			// 	// Dedicated filter
+			// 	if (ARRAY_FILTERS.includes(value.field)) {
+			// 		newQueryParams[value.field] = value.multiValue || [];
+			// 		continue;
+			// 	}
+			// 	// Boolean filter
+			// 	if (BOOLEAN_FILTERS.includes(value.field)) {
+			// 		newQueryParams[value.field] = (value.multiValue || [])[0];
+			// 		continue;
+			// 	}
+			// 	// String filter
+			// 	newQueryParams[value.field] = (value.multiValue || [])[0];
 		}
 
+		const searchValue: string[] | undefined = prepareSearchValue(searchBarInputValue);
 		const currentPage = isInitialPageLoad ? page : undefined;
 
-		setQuery({
-			[id]: data,
-			filter: undefined,
-			page: currentPage,
-			...(searchValue ? searchValue : {}),
-		});
+		newQueryParams.filter = undefined;
+		newQueryParams.page = currentPage;
+		if (searchValue) {
+			newQueryParams[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] = searchValue?.join(SEPARATOR);
+		}
+
+		setQuery(newQueryParams);
+
 		setSearchBarInputValue('');
 		isInitialPageLoad && setIsInitialPageLoad(false);
 	};
 
-	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
-		const updatedQuery: Record<string, unknown> = {};
-
-		for (const tag of tags) {
-			switch (tag.key) {
-				case SearchFilterId.Genre:
-				case SearchFilterId.Keywords:
-				case SearchFilterId.Language:
-				case SearchFilterId.Medium:
-				case SearchFilterId.Maintainers:
-				case QUERY_PARAM_KEY.SEARCH_QUERY_KEY:
-				case SearchFilterId.Creator:
-				case SearchFilterId.LocationCreated:
-				case SearchFilterId.Mentions:
-				case SearchFilterId.NewspaperSeriesName:
-					updatedQuery[tag.key] = [
-						...((updatedQuery[tag.key] as Array<unknown>) || []),
-						`${tag.value}`.replace(tagPrefix(tag.key), ''),
-					];
-					break;
-
-				case SearchFilterId.Advanced:
-				case SearchFilterId.ReleaseDate:
-				case SearchFilterId.Duration:
-					updatedQuery[tag.key] = [...((updatedQuery[tag.key] as Array<unknown>) || []), tag];
-					break;
-
-				case SearchFilterId.ConsultableOnlyOnLocation:
-				case SearchFilterId.ConsultableMedia:
-				case SearchFilterId.ConsultablePublicDomain: {
-					// eslint-disable-next-line no-case-declarations
-					const newValue = `${tag.value ?? 'false'}`.replace(tagPrefix(tag.key), '');
-					updatedQuery[tag.key] = newValue === 'true' ? 'false' : 'true';
-					break;
-				}
-
-				default:
-					updatedQuery[tag.key] = tag.value;
-					break;
-			}
+	/**
+	 * When a user clicks the x next to a search filter tag in the tag search bar
+	 * @param tag
+	 */
+	const onRemoveTag = (tag: FilterValueTag) => {
+		if (!tag.filterValue.field) {
+			return;
 		}
 
-		// Destructure to keyword-able filters
-		/* eslint-disable @typescript-eslint/no-unused-vars */
-		const {
-			format,
-			orderProp,
-			orderDirection,
-			page,
-			// Dynamically destructure the maintainer qp using our enum so we don't need to change it every time the qp value changes
-			[SearchFilterId.Maintainer]: maintainer,
-			...rest
-		} = {
-			...VISITOR_SPACE_QUERY_PARAM_INIT,
-		};
-		/* eslint-disable @typescript-eslint/no-unused-vars */
+		if (
+			[
+				IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION,
+				IeObjectsSearchFilterField.CONSULTABLE_MEDIA,
+				IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN,
+			].includes(tag.filterValue.field)
+		) {
+			// Boolean filters that are removed, should be set to undefined
+			setQuery({ ...query, [tag.filterValue.field]: undefined, page: undefined });
+			return;
+		}
 
-		setQuery({ ...rest, ...updatedQuery, page: undefined });
+		// For all other filters, remove the value from the list
+		const currentValues = query[tag.filterValue.field] as FilterValue[];
+		const tagValue = tag.filterValue;
+		const newValues = currentValues.filter(
+			(filterValue) => filterValue.multiValue !== tagValue.multiValue
+		);
+		setQuery({
+			...query,
+			[tag.filterValue.field]: newValues?.length ? newValues : undefined,
+			page: undefined,
+		});
 	};
 
 	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) => {
@@ -693,7 +589,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		setQuery({
 			...query,
 			page: undefined,
-			[SearchFilterId.Maintainer]: id === GLOBAL_ARCHIVE ? undefined : id,
+			[IeObjectsSearchFilterField.MAINTAINER_SLUG]: id === GLOBAL_ARCHIVE ? undefined : id,
 		});
 	};
 
@@ -705,7 +601,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const isLoadedWithResults = !!searchResults && searchResults?.items?.length > 0;
 	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
 	const showVisitorSpacesDropdown = isUserWithAccount && accessibleVisitorSpaceRequests.length > 0;
-	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
+	const filterValueTags = useMemo(
+		() => mapAdvancedToTags(filterValuesWithoutFormat),
+		[filterValuesWithoutFormat]
+	);
 
 	const searchResultCardData = useMemo((): IdentifiableMediaCard[] => {
 		return (searchResults?.items || []).map((item): IdentifiableMediaCard => {
@@ -759,15 +658,17 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const openAndScrollToAdvancedFilters = () => {
 		setFilterMenuOpen(true);
 		setMobileFilterMenuOpen(true);
-		setQuery({ filter: SearchFilterId.Advanced });
+		setQuery({ filter: IeObjectsSearchFilterField.ADVANCED });
 
 		// Wait for filter menu to open before scrolling to the advanced filters
 		setTimeout(() => {
-			document.getElementById(`c-filter-menu__option__${SearchFilterId.Advanced}`)?.scrollIntoView({
-				behavior: 'smooth',
-				block: 'center',
-				inline: 'center',
-			});
+			document
+				.getElementById(`c-filter-menu__option__${IeObjectsSearchFilterField.ADVANCED}`)
+				?.scrollIntoView({
+					behavior: 'smooth',
+					block: 'center',
+					inline: 'center',
+				});
 		}, 0);
 	};
 
@@ -837,7 +738,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				<FilterMenu
 					activeSort={activeSort}
 					filters={filters}
-					filterValues={query}
+					filterValues={filterValues}
 					label={tText('pages/bezoekersruimte/visitor-space-slug/index___filters')}
 					isOpen={filterMenuOpen}
 					isMobileOpen={mobileFilterMenuOpen}
@@ -918,7 +819,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			(visitorSpace: VisitorSpaceDropdownOption): ReactNode => (
 				<Link
 					key={visitorSpace.slug}
-					href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${visitorSpace?.slug}`}
+					href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}?${IeObjectsSearchFilterField.MAINTAINER_SLUG}=${visitorSpace?.slug}`}
 					aria-label={visitorSpace?.label}
 				>
 					{visitorSpace?.label}
@@ -1050,7 +951,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 											)}
 											renderedRight={renderSearchInputRightControls()}
 											size="lg"
-											value={activeFilters}
+											value={filterValueTags}
 										/>
 									</div>
 								</FormControl>

@@ -8,11 +8,11 @@ export function convertYearToDate(yearString: string, operator: Operator): strin
 	const startOfYear = `${yearString}-01-01T00:00:00`;
 	const endOfYear = `${yearString}-12-31T23:59:59`;
 
-	if (operator === Operator.EQUALS) {
+	if (operator === Operator.IS) {
 		return `${startOfYear}${SEPARATOR}${endOfYear}`;
 	}
 
-	if (operator === Operator.LESS_THAN_OR_EQUAL) {
+	if (operator === Operator.LTE) {
 		return endOfYear;
 	}
 

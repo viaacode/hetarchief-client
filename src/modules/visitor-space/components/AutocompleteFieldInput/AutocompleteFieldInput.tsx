@@ -16,7 +16,7 @@ export interface AutocompleteFieldInputProps {
 	disabled?: boolean;
 	id?: string;
 	onChange: (value: string | null) => void;
-	value?: string;
+	value?: string | null;
 	className?: string;
 }
 
