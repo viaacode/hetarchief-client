@@ -4,10 +4,10 @@ import nlBE from 'date-fns/locale/nl-BE/index.js';
 import setDefaultOptions from 'date-fns/setDefaultOptions';
 import HttpApi from 'i18next-http-backend';
 import { lowerCase, upperFirst } from 'lodash-es';
+import { appWithTranslation } from 'next-i18next';
 import type { AppProps } from 'next/app';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import { appWithTranslation } from 'next-i18next';
 import React, { type ReactElement, useEffect } from 'react';
 import { Provider } from 'react-redux';
 
@@ -18,6 +18,7 @@ import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider
 import { wrapper } from '@shared/store';
 import { Locale } from '@shared/utils/i18n';
 import { isServerSideRendering } from '@shared/utils/is-browser';
+import Head from 'next/head';
 
 import pkg from '../../package.json';
 
@@ -60,17 +61,23 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 		(window as any).APP_VERSION = { version: pkg.version };
 	}
 	return (
-		<NextQueryParamProvider>
-			<QueryClientProvider client={queryClient}>
-				<Hydrate state={pageProps.dehydratedState}>
-					<Provider store={store}>
-						<AppLayout>
-							<Component {...props} />
-						</AppLayout>
-					</Provider>
-				</Hydrate>
-			</QueryClientProvider>
-		</NextQueryParamProvider>
+		<>
+			<Head>
+				{/* https://meemoo.atlassian.net/browse/ARC-2704 */}
+				<meta name="viewport" content="width=device-width, initial-scale=0.9" />
+			</Head>
+			<NextQueryParamProvider>
+				<QueryClientProvider client={queryClient}>
+					<Hydrate state={pageProps.dehydratedState}>
+						<Provider store={store}>
+							<AppLayout>
+								<Component {...props} />
+							</AppLayout>
+						</Provider>
+					</Hydrate>
+				</QueryClientProvider>
+			</NextQueryParamProvider>
+		</>
 	);
 }
 
