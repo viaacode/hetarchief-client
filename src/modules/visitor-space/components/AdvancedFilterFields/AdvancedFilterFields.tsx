@@ -28,8 +28,8 @@ import type { DateRangeInputProps } from '@visitor-space/components/DateRangeInp
 import { DurationRangeInput } from '@visitor-space/components/DurationRangeInput';
 import { GenreSelect } from '@visitor-space/components/GenreSelect';
 import {
-	type LanguageCode,
 	LANGUAGES,
+	type LanguageCode,
 } from '@visitor-space/components/LanguageFilterForm/languages';
 import { LanguageSelect } from '@visitor-space/components/LanguageSelect/LanguageSelect';
 import { MediaTypeSelect } from '@visitor-space/components/MediaTypeSelect';
@@ -40,17 +40,16 @@ import type {
 	FilterInputComponentProps,
 } from '@visitor-space/const/advanced-filters.consts';
 
-import type { AdvancedFilter, FilterProperty, Operator } from '../../types';
+import type { FilterProperty, IdentityAdvancedFilter, Operator } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import DurationInput, { defaultValue } from '../DurationInput/DurationInput';
-
-import styles from './AdvancedFilterFields.module.scss';
 
 import {
 	getAdvancedProperties,
 	getFilterConfig,
 	getOperators,
 } from 'modules/visitor-space/utils/advanced-filters';
+import styles from './AdvancedFilterFields.module.scss';
 
 const labelKeys = {
 	prefix: 'AdvancedFilterFields',
@@ -61,7 +60,7 @@ const labelKeys = {
 
 export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	index,
-	value: state,
+	filterValue,
 	onChange,
 	onRemove,
 }) => {
@@ -69,13 +68,13 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 	// Computed
 
-	const operators = getOperators(state.prop as FilterProperty);
-	const operator = state.op || operators?.[0]?.value || null;
+	const operators = getOperators(filterValue.prop as FilterProperty);
+	const operator = filterValue.op || operators?.[0]?.value || null;
 
 	// Events
 
-	const onFieldChange = (data: Partial<AdvancedFilter>) => {
-		onChange(index, { ...state, ...data });
+	const onFieldChange = (data: Partial<IdentityAdvancedFilter>) => {
+		onChange(index, { ...filterValue, ...data });
 	};
 
 	// Render
@@ -102,10 +101,10 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 	const renderField = (config?: FilterInputComponentProps) => {
 		const filterConfig: FilterConfig | null = operator
-			? getFilterConfig(state.prop as FilterProperty, operator as Operator)
+			? getFilterConfig(filterValue.prop as FilterProperty, operator as Operator)
 			: null;
 		if (!filterConfig) {
-			console.error('Unknown filter config', state.prop, operator);
+			console.error('Unknown filter config', filterValue.prop, operator);
 			return null;
 		}
 
@@ -118,14 +117,14 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			case TextInput: {
 				const TextInputComponent = filterConfig.inputComponent as FC<TextInputProps>;
 				const textInputComponentProps = filterConfig.inputComponentProps as TextInputProps;
-				return renderTextField(TextInputComponent, state.val, {
+				return renderTextField(TextInputComponent, filterValue.val, {
 					...textInputComponentProps,
 					...(props as TextInputProps),
 				});
 			}
 
 			case DateRangeInput: {
-				const split = ((state.val || '') as string).split(SEPARATOR, 2);
+				const split = ((filterValue.val || '') as string).split(SEPARATOR, 2);
 
 				const from: Date = split[0] ? parseISO(split[0]) : new Date();
 				const to: Date = split[1] ? parseISO(split[1]) : new Date();
@@ -153,7 +152,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			}
 
 			case DurationInput: {
-				const value = state.val || defaultValue; // Ensure initial value is hh:mm:ss
+				const value = filterValue.val || defaultValue; // Ensure initial value is hh:mm:ss
 				const TextInputComponent = filterConfig.inputComponent as FC<TextInputProps>;
 				const textInputComponent = filterConfig.inputComponentProps as TextInputProps;
 
@@ -164,7 +163,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			}
 
 			case DurationRangeInput: {
-				const value = state.val || `${defaultValue}${SEPARATOR}${defaultValue}`; // Ensure initial value is hh:mm:ss for both fields
+				const value = filterValue.val || `${defaultValue}${SEPARATOR}${defaultValue}`; // Ensure initial value is hh:mm:ss for both fields
 				const TextInputComponent = filterConfig.inputComponent as FC<TextInputProps>;
 				const textInputComponentProps = filterConfig.inputComponentProps as TextInputProps;
 
@@ -184,9 +183,9 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				const value =
 					getSelectValue(
 						((props as ReactSelectProps).options || []) as SelectOption[],
-						state.val
-					) || state.val
-						? { label: state.val as string, value: state.val as string }
+						filterValue.val
+					) || filterValue.val
+						? { label: filterValue.val as string, value: filterValue.val as string }
 						: undefined;
 
 				return (
@@ -214,11 +213,11 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				const value =
 					getSelectValue(
 						((props as ReactSelectProps).options || []) as SelectOption[],
-						state.val
-					) || state.val
+						filterValue.val
+					) || filterValue.val
 						? {
-								label: LANGUAGES[locale][state.val as LanguageCode],
-								value: state.val as string,
+								label: LANGUAGES[locale][filterValue.val as LanguageCode],
+								value: filterValue.val as string,
 							}
 						: undefined;
 
@@ -244,7 +243,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			case DateInput: {
 				const DateInputComponent = filterConfig.inputComponent as FC<DateInputProps>;
 				const DateInputComponentProps = filterConfig.inputComponentProps as DateInputProps;
-				const value = state.val ? parseISO(state.val) : new Date();
+				const value = filterValue.val ? parseISO(filterValue.val) : new Date();
 
 				return (
 					<DateInputComponent
@@ -276,7 +275,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 							styles['c-advanced-filter-fields__dynamic-field'],
 							styles['c-advanced-filter-fields__dynamic-field--datepicker']
 						)}
-						value={state.val}
+						value={filterValue.val}
 						onChange={(newValue: string | null) =>
 							onFieldChange({
 								val: newValue || undefined,
@@ -287,7 +286,9 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			}
 
 			default:
-				console.warn(`[WARN][AdvancedFilterFields] No render definition found for ${state.prop}`);
+				console.warn(
+					`[WARN][AdvancedFilterFields] No render definition found for ${filterValue.prop}`
+				);
 				return null;
 		}
 	};
@@ -315,7 +316,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						});
 					}}
 					options={getAdvancedProperties()}
-					value={getSelectValue(getAdvancedProperties(), state.prop)}
+					value={getSelectValue(getAdvancedProperties(), filterValue.prop)}
 				/>
 			</FormControl>
 
@@ -337,7 +338,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 							})
 						}
 						options={operators}
-						value={getSelectValue(operators, state.op)}
+						value={getSelectValue(operators, filterValue.op)}
 					/>
 				</FormControl>
 			)}

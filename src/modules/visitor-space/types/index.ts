@@ -149,6 +149,10 @@ export interface AdvancedFilter {
 	val?: string; // stringified value, potentially character-separated
 }
 
+export interface IdentityAdvancedFilter extends AdvancedFilter {
+	id: string;
+}
+
 export interface TagIdentity extends Partial<AdvancedFilter>, TagInfo {
 	key: string;
 	id: string | number;
