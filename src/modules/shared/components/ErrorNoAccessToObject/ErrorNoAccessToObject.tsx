@@ -1,10 +1,11 @@
 import { Button } from '@meemoo/react-components';
 import { useRouter } from 'next/router';
 import { type FC, type ReactNode, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName } from '@account/const';
+import { selectCommonUser } from '@auth/store/user';
 import {
 	RequestAccessBlade,
 	type RequestAccessFormState,
@@ -18,7 +19,7 @@ import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setShowAuthModal } from '@shared/store/ui';
-
+import Link from 'next/link';
 import styles from './ErrorNoAccessToObject.module.scss';
 
 interface ErrorNoAccessToObjectProps {
@@ -34,6 +35,8 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 }) => {
 	const router = useRouter();
 	const locale = useLocale();
+	const commonUser = useSelector(selectCommonUser);
+	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const dispatch = useDispatch();
 	const isAnonymous = useHasAnyGroup(GroupName.ANONYMOUS);
 
@@ -91,6 +94,8 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 		setIsRequestAccessBladeOpen(true);
 	};
 
+	const canRequestVisitorSpaceAccess = !isAnonymous && !!visitorSpaceSlug && !isKioskUser;
+	const canViewPublicCatalog = !isKioskUser;
 	return (
 		<>
 			<ErrorPage
@@ -99,25 +104,39 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 				)}
 				description={description}
 				image={{ image: '/images/no-access.svg', left: true }}
-				link={{
-					component: (
-						<Button
-							label={tHtml(
-								'modules/shared/components/error-no-access-to-object/error-no-access-to-object___verken-de-publieke-catalogus'
-							)}
-							variants={['white', 'outline']}
-						/>
-					),
-					to: ROUTES_BY_LOCALE[locale].search,
-				}}
 				buttonsComponent={
 					<div className={styles['p-error-no-access-to-object__buttons-container']}>
-						<Button
-							label={`${tText('modules/shared/components/error-no-access-to-object/error-no-access-to-object___plan-een-bezoek-bij')} ${visitorSpaceName}`}
-							variants="black"
-							className={styles['p-error-no-access-to-object__button']}
-							onClick={() => onOpenRequestAccess()}
-						/>
+						{canRequestVisitorSpaceAccess && (
+							<Button
+								label={`${tText('modules/shared/components/error-no-access-to-object/error-no-access-to-object___plan-een-bezoek-bij')} ${visitorSpaceName}`}
+								variants="black"
+								className={styles['p-error-no-access-to-object__button']}
+								onClick={() => onOpenRequestAccess()}
+							/>
+						)}
+						{canViewPublicCatalog && (
+							<Link href={ROUTES_BY_LOCALE[locale].search} className="u-mt-16">
+								<Button
+									label={tHtml(
+										'modules/shared/components/error-no-access-to-object/error-no-access-to-object___verken-de-publieke-catalogus'
+									)}
+									variants={['white', 'outline']}
+								/>
+							</Link>
+						)}
+						{!canViewPublicCatalog && (
+							<Link href={ROUTES_BY_LOCALE[locale].search} className="u-mt-16">
+								<Button
+									label={tHtml(
+										'modules/shared/components/error-no-access-to-object/error-no-access-to-object___zoek-verder-in-het-archief-van-organisation-name',
+										{
+											organisationName: commonUser?.organisation?.name,
+										}
+									)}
+									variants={['white', 'outline']}
+								/>
+							</Link>
+						)}
 					</div>
 				}
 			/>

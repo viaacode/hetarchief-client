@@ -372,12 +372,24 @@ const ADMIN_CORE_ROUTES_EN: AdminConfig['routes'] = {
 	SEARCH: `/${ROUTE_PARTS_EN.search}`,
 } as const;
 
-export enum KNOWN_STATIC_ROUTES {
+export enum KNOWN_STATIC_ROUTES_NL {
 	TermsOfService = '/gebruikersvoorwaarden-tekst',
 	aboutTheVisitorTool = '/over-de-bezoekertool',
 	Home = '/',
 	kioskConditions = '/kiosk-voorwaarden',
 }
+
+export enum KNOWN_STATIC_ROUTES_EN {
+	TermsOfService = '/user-conditions-text',
+	aboutTheVisitorTool = '/about-on-site-access',
+	Home = '/',
+	kioskConditions = '/kiosk-conditions',
+}
+
+export const KNOWN_STATIC_ROUTES: Record<Locale, Record<string, string>> = {
+	nl: KNOWN_STATIC_ROUTES_NL,
+	en: KNOWN_STATIC_ROUTES_EN,
+};
 
 export const ROUTE_PARTS_BY_LOCALE: Record<Locale, Record<RoutePart, string>> = {
 	nl: ROUTE_PARTS_NL,

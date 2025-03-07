@@ -40,6 +40,9 @@ module.exports = withTM({
 		 */
 		largePageDataBytes: 300 * 1000,
 	},
+	eslint: {
+		ignoreDuringBuilds: true, // We're using biome instead of eslint
+	},
 	webpack: (config, options) => {
 		// Required for ky-universal top level await used in admin core inside the api service
 		config.experiments = { topLevelAwait: true, layers: true };
@@ -52,6 +55,14 @@ module.exports = withTM({
 		if (options.isServer) {
 			config.externals = ['@tanstack/react-query', 'use-query-params', ...config.externals];
 		}
+
+		// Use biome linting instead of eslint for the build
+		config.plugins.push(
+			new (require('webpack').DefinePlugin)({
+				'process.env.BIOME_LINT': JSON.stringify(true),
+			})
+		);
+
 		config.resolve.alias = {
 			...config.resolve.alias,
 			'@tanstack/react-query': path.resolve('./node_modules/@tanstack/react-query'),

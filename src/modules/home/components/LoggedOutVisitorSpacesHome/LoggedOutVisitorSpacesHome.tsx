@@ -81,7 +81,7 @@ const LoggedOutVisitorSpacesHome: FC = () => {
 						</p>
 						<b>
 							<Link
-								href={KNOWN_STATIC_ROUTES.aboutTheVisitorTool}
+								href={KNOWN_STATIC_ROUTES[locale].aboutTheVisitorTool}
 								className={styles['c-hero__link']}
 							>
 								{tHtml('pages/index___hier-kom-je-er-alles-over-te-weten')}

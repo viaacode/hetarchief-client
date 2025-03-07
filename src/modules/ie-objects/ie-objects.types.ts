@@ -107,7 +107,6 @@ export interface IeObject {
 	newspaperPublisher?: string;
 	alternativeTitle?: string[];
 	digitizationDate?: string;
-	iiifManifestUrl?: string;
 	children?: number;
 
 	pageRepresentations?: IeObjectPageRepresentation[];

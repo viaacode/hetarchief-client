@@ -107,8 +107,8 @@ export async function getStaticProps(
 
 	const queryClient = new QueryClient();
 
-	const path = KNOWN_STATIC_ROUTES.Home;
 	const language = (context.locale || Locale.nl) as Locale;
+	const path = KNOWN_STATIC_ROUTES[language].Home;
 	await queryClient.prefetchQuery({
 		queryKey: [QUERY_KEYS.getContentPage, path, language],
 		queryFn: () => getContentPageByLanguageAndPath(language, path),

@@ -1,19 +1,20 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import type { FC } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { type FC, useState } from 'react';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml } from '@shared/helpers/translate';
-
-import { SearchFilterId } from '../../types';
 import { AdvancedFilterFields } from '../AdvancedFilterFields/AdvancedFilterFields';
-
-import { ADVANCED_FILTER_FORM_SCHEMA, initialFields } from './AdvancedFilterForm.const';
+import { initialFields } from './AdvancedFilterForm.const';
 import styles from './AdvancedFilterForm.module.scss';
 import type { AdvancedFilterFormProps, AdvancedFilterFormState } from './AdvancedFilterForm.types';
+
+import { getRandomId } from '@shared/helpers/get-random-id';
+import type { AdvancedFilter, IdentityAdvancedFilter } from '@visitor-space/types';
+import { omit } from 'lodash-es';
+import type { UseFormHandleSubmit } from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form/dist/types/form';
 
 export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 	children,
@@ -21,24 +22,53 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 	disabled,
 	values,
 }) => {
-	const { control, getValues, setValue, handleSubmit } = useForm<AdvancedFilterFormState>({
-		defaultValues: {
-			advanced: values?.advanced ? values.advanced : [initialFields()],
-		},
-		resolver: yupResolver(ADVANCED_FILTER_FORM_SCHEMA()),
-	});
-	const { append, fields, remove, update } = useFieldArray({
-		name: SearchFilterId.Advanced,
-		control,
-	});
+	const initialFilterValues = values?.advanced ? values.advanced : [initialFields()];
+	const [filterValues, setFilterValues] = useState<IdentityAdvancedFilter[]>(
+		initialFilterValues.map((value) => ({ ...value, id: getRandomId() }))
+	);
 
-	const resetFields = () => {
-		setValue('advanced', [initialFields()]);
-		update(0, {
-			prop: undefined,
-			op: undefined,
-			val: undefined,
-		});
+	const handleChange = (index: number, newValue: IdentityAdvancedFilter) => {
+		const newFilterValues = [...filterValues];
+		newFilterValues[index] = newValue;
+		setFilterValues(newFilterValues);
+	};
+
+	const handleSubmit = ((onValid: SubmitHandler<AdvancedFilterFormState>) => {
+		return () => {
+			const validFilterValues = filterValues
+				.map((value): AdvancedFilter => {
+					return omit(value, ['id']);
+				})
+				.filter((value) => value.prop && value.op && value.val);
+			return onValid({
+				advanced: validFilterValues,
+			});
+		};
+	}) as UseFormHandleSubmit<AdvancedFilterFormState>;
+
+	const handleReset = () => {
+		setFilterValues([
+			{
+				...initialFields(),
+				id: getRandomId(),
+			},
+		]);
+	};
+
+	const handleRemove = (index: number) => {
+		const newFilterValues = [...filterValues];
+		newFilterValues.splice(index, 1);
+		setFilterValues(newFilterValues);
+	};
+
+	const handleAppend = () => {
+		setFilterValues([
+			...filterValues,
+			{
+				...initialFields(),
+				id: getRandomId(),
+			},
+		]);
 	};
 
 	return (
@@ -51,16 +81,20 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 				</p>
 
 				{!disabled &&
-					fields.map(({ id, ...value }, index) => (
-						<AdvancedFilterFields
-							key={`advanced-filter-${id}-${value.prop}--${value.op}--${value.val}`}
-							id={id}
-							index={index}
-							value={value}
-							onChange={update}
-							onRemove={remove}
-						/>
-					))}
+					filterValues.map((filterValue, index) => {
+						const key = `advanced-filter-${filterValue.prop}--${filterValue.op}`;
+						console.log(`rerender key: ${filterValue.id}`, { value: filterValue.val });
+						return (
+							<AdvancedFilterFields
+								key={key}
+								id={filterValue.id}
+								index={index}
+								filterValue={filterValue}
+								onChange={handleChange}
+								onRemove={handleRemove}
+							/>
+						);
+					})}
 
 				<div className="u-p-20 u-p-32-md u-bg-platinum">
 					<Button
@@ -71,14 +105,16 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 							'modules/visitor-space/components/forms/advanced-filter-form/advanced-filter-form___nieuwe-stelling'
 						)}
 						variants="text"
-						onClick={() => append(initialFields())}
+						onClick={handleAppend}
 					/>
 				</div>
 			</div>
 
 			{children({
-				values: getValues(),
-				reset: () => resetFields(),
+				values: {
+					advanced: filterValues,
+				},
+				reset: () => handleReset(),
 				handleSubmit,
 			})}
 		</>
