@@ -16,17 +16,23 @@ type MaintainerSearchPageProps = DefaultSeoInfo;
 export const MaintainerSearchPage: FC<MaintainerSearchPageProps> = () => {
 	const router = useRouter();
 	const locale = useLocale();
-	const { slug: slugOrObjectId } = router.query;
+
+	/**
+	 * url format is either
+	 *  /zoeken/slug/:object-id
+	 *  /zoeken/:object-id (deprecated, use /pid/object-id instead)
+	 */
+	const { slug: orgSlugOrObjectSchemaIdentifier } = router.query;
 	const { data: organisation } = useGetOrganisationBySlug(
-		(slugOrObjectId || null) as string | null,
+		(orgSlugOrObjectSchemaIdentifier || null) as string | null,
 		true,
 		{
-			enabled: !!slugOrObjectId,
+			enabled: !!orgSlugOrObjectSchemaIdentifier,
 		}
 	);
-	const { data: ieObjectInfo } = useGetIeObjectInfo(slugOrObjectId as string, {
+	const { data: ieObjectInfo } = useGetIeObjectInfo(orgSlugOrObjectSchemaIdentifier as string, {
 		keepPreviousData: true,
-		enabled: !!slugOrObjectId,
+		enabled: !!orgSlugOrObjectSchemaIdentifier,
 	});
 
 	// If url is: /zoeken/slug/:object-id => redirect to /zoeken/:slug/:object-id/:object-name

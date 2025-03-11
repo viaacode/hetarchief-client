@@ -1,4 +1,4 @@
-import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react-query';
+import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
 
 import { MIN_LENGTH_SCHEMA_IDENTIFIER_V2 } from '@ie-objects/ie-objects.consts';
 import { QUERY_KEYS } from '@shared/const/query-keys';
@@ -6,28 +6,37 @@ import { QUERY_KEYS } from '@shared/const/query-keys';
 import type { IeObject } from './../ie-objects.types';
 import { IeObjectsService } from './../services';
 
-export async function getIeObjectInfo(id: string): Promise<IeObject | null> {
-	return IeObjectsService.getById(id);
+/**
+ * Get an IE object by its schemaIdentifier
+ * @param schemaIdentifier The ie object schemaIdentifier, eg: 086348mc8s
+ */
+export async function getIeObjectInfoBySchemaIdentifier(
+	schemaIdentifier: string
+): Promise<IeObject | null> {
+	return IeObjectsService.getBySchemaIdentifier(schemaIdentifier);
 }
 
 export const useGetIeObjectInfo = (
-	id: string,
+	schemaIdentifier: string,
 	options: {
 		keepPreviousData?: boolean;
 		enabled?: boolean;
 	} = {}
 ): UseQueryResult<IeObject | null> => {
 	return useQuery(
-		[QUERY_KEYS.getIeObjectsInfo, id],
+		[QUERY_KEYS.getIeObjectsInfo, schemaIdentifier],
 		async () => {
-			let newId: string;
-			if (id.length > MIN_LENGTH_SCHEMA_IDENTIFIER_V2) {
-				const v3IdentifierResponse = await IeObjectsService.schemaIdentifierLookup(id);
-				newId = v3IdentifierResponse.schemaIdentifierV3;
+			let newSchemaIdentifier: string;
+			if (schemaIdentifier.length > MIN_LENGTH_SCHEMA_IDENTIFIER_V2) {
+				// This is an old schema identifier (v2), we need to convert it to a new one (v3)
+				const v3IdentifierResponse =
+					await IeObjectsService.schemaIdentifierLookup(schemaIdentifier);
+				newSchemaIdentifier = v3IdentifierResponse.id;
 			} else {
-				newId = id;
+				// This is already a new schema identifier (v3)
+				newSchemaIdentifier = schemaIdentifier;
 			}
-			return getIeObjectInfo(newId);
+			return getIeObjectInfoBySchemaIdentifier(newSchemaIdentifier);
 		},
 		{
 			keepPreviousData: true,
@@ -39,10 +48,10 @@ export const useGetIeObjectInfo = (
 
 export function makeServerSideRequestGetIeObjectInfo(
 	queryClient: QueryClient,
-	id: string
+	schemaIdentifier: string
 ): Promise<void> {
 	return queryClient.prefetchQuery({
-		queryKey: [QUERY_KEYS.getIeObjectsInfo, id],
-		queryFn: () => getIeObjectInfo(id),
+		queryKey: [QUERY_KEYS.getIeObjectsInfo, schemaIdentifier],
+		queryFn: () => getIeObjectInfoBySchemaIdentifier(schemaIdentifier),
 	});
 }

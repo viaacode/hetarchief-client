@@ -8,10 +8,7 @@ import { useDispatch } from 'react-redux';
 
 import { GroupName } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
-import {
-	makeServerSideRequestGetIeObjectInfo,
-	useGetIeObjectInfo,
-} from '@ie-objects/hooks/get-ie-objects-info';
+import { makeServerSideRequestGetIeObjectInfo, useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
@@ -30,7 +27,7 @@ import styles from './index.module.scss';
 const IeObjectLinkResolver: NextPage<DefaultSeoInfo & UserProps> = ({ url }) => {
 	const router = useRouter();
 	const locale = useLocale();
-	const { slug } = router.query;
+	const { slug: schemaIdentifier } = router.query;
 	const dispatch = useDispatch();
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 
@@ -38,7 +35,9 @@ const IeObjectLinkResolver: NextPage<DefaultSeoInfo & UserProps> = ({ url }) => 
 	 * Data
 	 */
 
-	const { data: ieObjectInfo, isError: isIeObjectError } = useGetIeObjectInfo(slug as string);
+	const { data: ieObjectInfo, isError: isIeObjectError } = useGetIeObjectInfo(
+		schemaIdentifier as string
+	);
 
 	/**
 	 * Effects
@@ -95,10 +94,10 @@ export async function getServerSideProps(
 	const title: string | null = 'Home - Het Archief';
 	const description: string | null = null;
 	const image: string | null = null;
-	const ieObjectId = context.query.slug as string;
+	const schemaIdentifier = context.query.schemaIdentifier as string;
 
 	const queryClient = new QueryClient();
-	await makeServerSideRequestGetIeObjectInfo(queryClient, ieObjectId);
+	await makeServerSideRequestGetIeObjectInfo(queryClient, schemaIdentifier);
 
 	return getDefaultStaticProps(context, context.resolvedUrl, {
 		queryClient,

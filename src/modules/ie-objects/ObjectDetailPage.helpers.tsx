@@ -7,33 +7,35 @@ import { makeServerSideRequestGetActiveVisitRequestForUserAndSpace } from '@visi
 import { makeServerSideRequestGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
 export async function prefetchDetailPageQueries(
-	ieObjectId: string,
+	schemaIdentifier: string,
 	maintainerId: string | undefined,
 	maintainerSlug: string | undefined
 ): Promise<QueryClient> {
-	if (ieObjectId) {
+	if (schemaIdentifier) {
 		return new QueryClient();
 	}
 	const queryClient = new QueryClient();
 	const promises = [];
 	promises.push(
-		makeServerSideRequestGetIeObjectInfo(queryClient, ieObjectId),
+		makeServerSideRequestGetIeObjectInfo(queryClient, schemaIdentifier),
 		makeServerSideRequestGetIeObjectsRelated(
 			queryClient,
-			ieObjectId,
-			ieObjectId, // TODO replace with new query to find related objects using the 'is part of' relationship
+			schemaIdentifier,
+			schemaIdentifier, // TODO replace with new query to find related objects using the 'is part of' relationship
 			maintainerId
 		)
 	);
 	if (maintainerSlug) {
 		promises.push(
-			makeServerSideRequestGetIeObjectsSimilar(queryClient, ieObjectId, maintainerId),
+			makeServerSideRequestGetIeObjectsSimilar(queryClient, schemaIdentifier, maintainerId),
 			makeServerSideRequestGetActiveVisitRequestForUserAndSpace(queryClient, maintainerSlug),
 			makeServerSideRequestGetVisitorSpace(queryClient, maintainerSlug, false)
 		);
 	}
 	if (maintainerSlug) {
-		promises.push(makeServerSideRequestGetIeObjectsSimilar(queryClient, ieObjectId, maintainerId));
+		promises.push(
+			makeServerSideRequestGetIeObjectsSimilar(queryClient, schemaIdentifier, maintainerId)
+		);
 	}
 	await Promise.all(promises);
 	return queryClient;
