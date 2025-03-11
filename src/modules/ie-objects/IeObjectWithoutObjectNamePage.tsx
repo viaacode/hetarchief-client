@@ -18,11 +18,11 @@ type MaintainerSearchPageProps = DefaultSeoInfo;
 export const IeObjectWithoutObjectNamePage: FC<MaintainerSearchPageProps> = () => {
 	const router = useRouter();
 	const locale = useLocale();
-	const { ie: objectId, slug } = router.query;
+	const { ie: schemaIdentifier, slug } = router.query;
 
-	const { data: ieObjectInfo, isError } = useGetIeObjectInfo(objectId as string, {
+	const { data: ieObjectInfo, isError } = useGetIeObjectInfo(schemaIdentifier as string, {
 		keepPreviousData: true,
-		enabled: !!objectId,
+		enabled: !!schemaIdentifier,
 	});
 
 	// If the url is: /zoeken/:slug/:object-id => redirect to /zoeken/:slug/:object-id/:object-name
@@ -30,11 +30,11 @@ export const IeObjectWithoutObjectNamePage: FC<MaintainerSearchPageProps> = () =
 		if (ieObjectInfo || isError) {
 			const objectTitleSlug = kebabCase(ieObjectInfo?.name || '');
 			const searchUrl = stringifyUrl({
-				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${ieObjectInfo?.maintainerSlug || slug}/${objectId}/${objectTitleSlug || 'titel'}`,
+				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${ieObjectInfo?.maintainerSlug || slug}/${schemaIdentifier}/${objectTitleSlug || 'titel'}`,
 			});
 			router.replace(searchUrl, undefined, { shallow: true });
 		}
-	}, [router, ieObjectInfo, isError, slug, objectId, locale]);
+	}, [router, ieObjectInfo, isError, slug, schemaIdentifier, locale]);
 
 	return <Loading owner="IeObjectWithoutObjectNamePage" fullscreen />;
 };

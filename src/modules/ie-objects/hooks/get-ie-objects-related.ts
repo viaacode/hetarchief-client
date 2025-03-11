@@ -1,11 +1,11 @@
-import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react-query';
+import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
 
 import type { RelatedIeObjects } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const';
 
 export async function getIeObjectsRelated(
-	ieObjectIri: string,
+	ieObjectIri: string | undefined,
 	parentIeObjectIri: string | null
 ): Promise<RelatedIeObjects> {
 	if (!ieObjectIri) {
@@ -18,7 +18,7 @@ export async function getIeObjectsRelated(
 }
 
 export const useGetIeObjectsRelated = (
-	ieObjectIri: string,
+	ieObjectIri: string | undefined,
 	parentIeObjectIri: string | null,
 	options: { enabled?: boolean } = {}
 ): UseQueryResult<RelatedIeObjects> => {

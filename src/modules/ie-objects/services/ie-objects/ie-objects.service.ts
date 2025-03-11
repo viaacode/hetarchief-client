@@ -77,18 +77,25 @@ export class IeObjectsService {
 			.json()) as GetIeObjectsResponse;
 	}
 
-	public static async getById(id: string): Promise<IeObject> {
+	/**
+	 * Get an IE object by its schemaIdentifier
+	 * @param schemaIdentifier The ie object schemaIdentifier, eg: 086348mc8s
+	 */
+	public static async getBySchemaIdentifier(schemaIdentifier: string): Promise<IeObject> {
 		console.log(`[PERFORMANCE] ${new Date().toISOString()} start fetch ie object`);
 		const ieObject: IeObject = await ApiService.getApi()
-			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${id}`)
+			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${schemaIdentifier}`)
 			.json();
-		console.log(`[PERFORMANCE] ${new Date().toISOString()} finished fetch ie object`, id);
+		console.log(
+			`[PERFORMANCE] ${new Date().toISOString()} finished fetch ie object`,
+			schemaIdentifier
+		);
 		return ieObject;
 	}
 
-	public static async getSeoById(id: string): Promise<SeoInfo> {
+	public static async getSeoBySchemaIdentifier(schemaIdentifier: string): Promise<SeoInfo> {
 		return await ApiService.getApi()
-			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_SEO_URL}/${id}`)
+			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_SEO_URL}/${schemaIdentifier}`)
 			.json();
 	}
 
@@ -137,11 +144,14 @@ export class IeObjectsService {
 	}
 
 	// Used for "ook interessant" on the detail page
-	public static async getSimilar(id: string, maintainerId: string): Promise<IeObjectSimilar> {
+	public static async getSimilar(
+		schemaIdentifier: string,
+		maintainerId: string
+	): Promise<IeObjectSimilar> {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IE_OBJECTS_SERVICE_SIMILAR}`,
+					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${schemaIdentifier}/${IE_OBJECTS_SERVICE_SIMILAR}`,
 					query: {
 						...(!isEmpty(maintainerId) && { maintainerId }),
 					},
@@ -178,7 +188,7 @@ export class IeObjectsService {
 
 	public static async schemaIdentifierLookup(
 		schemaIdentifierV2: string
-	): Promise<{ schemaIdentifierV3: string }> {
+	): Promise<{ schemaIdentifierV3: string; id: string }> {
 		return await ApiService.getApi()
 			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/schemaIdentifierLookup/${schemaIdentifierV2}`)
 			.json();

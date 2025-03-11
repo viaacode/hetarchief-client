@@ -4,7 +4,7 @@ import React from 'react';
 
 import { ObjectDetailPage } from '@ie-objects/ObjectDetailPage';
 import { prefetchDetailPageQueries } from '@ie-objects/ObjectDetailPage.helpers';
-import { getIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
+import { getIeObjectInfoBySchemaIdentifier } from '@ie-objects/hooks/get-ie-objects-info';
 import type { IeObject } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
 import type { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
@@ -37,25 +37,25 @@ const ObjectDetailPageDutch: NextPage<ObjectDetailPageProps> = ({
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	const ieObjectId = context.query.ie as string;
+	const schemaIdentifier = context.query.ie as string;
 
 	let ieObject: IeObject | null = null;
 	try {
-		ieObject = await getIeObjectInfo(ieObjectId);
+		ieObject = await getIeObjectInfoBySchemaIdentifier(schemaIdentifier);
 	} catch (err) {
 		// TODO see what we should do with objects that are not publicly available during server side rendering
 	}
 
 	let seoInfo: SeoInfo | null = null;
 	try {
-		seoInfo = await IeObjectsService.getSeoById(ieObjectId);
+		seoInfo = await IeObjectsService.getSeoBySchemaIdentifier(schemaIdentifier);
 	} catch (err) {
 		console.error(`Failed to fetch media info by id: ${context.query.ie}`, err);
 	}
 
 	return getDefaultStaticProps(context, context.resolvedUrl, {
 		queryClient: await prefetchDetailPageQueries(
-			ieObjectId,
+			schemaIdentifier,
 			ieObject?.maintainerId,
 			ieObject?.maintainerSlug
 		),

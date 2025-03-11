@@ -64,11 +64,11 @@ import {
 	IMAGE_API_FORMATS,
 	IMAGE_FORMATS,
 	JSON_FORMATS,
-	noLicensePlaceholder,
 	OBJECT_DETAIL_TABS,
+	XML_FORMATS,
+	noLicensePlaceholder,
 	objectPlaceholder,
 	ticketErrorPlaceholder,
-	XML_FORMATS,
 } from '@ie-objects/ie-objects.consts';
 import {
 	type AltoTextLine,
@@ -333,7 +333,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS) ||
 		mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL);
 	const { data: similarData } = useGetIeObjectsAlsoInteresting(
-		ieObjectId,
+		mediaInfo?.iri,
 		isKiosk || userHasAccessToMaintainer ? (mediaInfo?.maintainerId ?? '') : '',
 		{
 			enabled: !!mediaInfo,
@@ -342,7 +342,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	// related
 	const { data: relatedIeObjects } = useGetIeObjectsRelated(
-		mediaInfo?.iri as string,
+		mediaInfo?.iri,
 		mediaInfo?.premisIsPartOf || null,
 		{
 			enabled: !!mediaInfo,

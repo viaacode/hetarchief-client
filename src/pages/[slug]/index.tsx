@@ -1,7 +1,4 @@
-import {
-	ContentPageRenderer,
-	convertDbContentPageToContentPageInfo,
-} from '@meemoo/admin-core-ui/dist/admin.mjs';
+import { ContentPageRenderer, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import { QueryClient } from '@tanstack/react-query';
 import type { HTTPError } from 'ky';
 import { kebabCase } from 'lodash-es';
@@ -19,10 +16,7 @@ import {
 	useGetContentPageByLanguageAndPath,
 } from '@content-page/hooks/get-content-page';
 import { ContentPageClientService } from '@content-page/services/content-page-client.service';
-import {
-	makeServerSideRequestGetIeObjectInfo,
-	useGetIeObjectInfo,
-} from '@ie-objects/hooks/get-ie-objects-info';
+import { makeServerSideRequestGetIeObjectInfo, useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';
 import { type PageInfo, SeoTags } from '@shared/components/SeoTags/SeoTags';
@@ -48,7 +42,13 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 }) => {
 	const router = useRouter();
 	const locale = useLocale();
-	const { slug } = router.query;
+
+	/**
+	 * slug can contain multiple things
+	 * * content page path
+	 * * ie object schema identifier
+	 */
+	const { slug: contentPageSlugOrObjectSchemaIdentifier } = router.query;
 	const dispatch = useDispatch();
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 
@@ -59,12 +59,14 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 		error: contentPageError,
 		isLoading: isContentPageLoading,
 		data: dbContentPage,
-	} = useGetContentPageByLanguageAndPath(locale, `/${slug}`);
+	} = useGetContentPageByLanguageAndPath(locale, `/${contentPageSlugOrObjectSchemaIdentifier}`);
 	const contentPageInfo = dbContentPage
 		? convertDbContentPageToContentPageInfo(dbContentPage)
 		: null;
 
-	const { isLoading: isIeObjectLoading, data: ieObjectInfo } = useGetIeObjectInfo(slug as string);
+	const { isLoading: isIeObjectLoading, data: ieObjectInfo } = useGetIeObjectInfo(
+		contentPageSlugOrObjectSchemaIdentifier as string
+	);
 
 	/**
 	 * Computed
