@@ -2,7 +2,7 @@ import {
 	type AdminConfig,
 	ContentBlockType,
 	type ContentPageInfo,
-	ContentWidth,
+	ContentPageWidth,
 	type LinkInfo,
 	type ToastInfo,
 } from '@meemoo/admin-core-ui/dist/client.mjs';
@@ -68,7 +68,7 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 				ContentBlockType.IFrame,
 				ContentBlockType.Image,
 				ContentBlockType.ImageGrid,
-				ContentBlockType.ImageTextBackground,
+				ContentBlockType.HetArchiefImageTextBackground,
 				ContentBlockType.Intro,
 				ContentBlockType.MaintainersGrid,
 				ContentBlockType.PageOverview,
@@ -82,7 +82,7 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 				ContentBlockType.ContentEncloseGrid,
 				ContentBlockType.Breadcrumbs,
 			],
-			defaultPageWidth: ContentWidth.LARGE,
+			defaultPageWidth: ContentPageWidth.LARGE,
 			onSaveContentPage,
 		},
 		navigationBars: {
