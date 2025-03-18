@@ -1,6 +1,6 @@
 {
   "name": "hetarchief-client",
-  "version": "3.2.8",
+  "version": "3.2.9",
   "private": true,
   "contributors": [
     "Bert Verhelst <bert.verhelst@studiohyperdrive.be>",
@@ -67,6 +67,7 @@
     "ky": "^0.33.3",
     "ky-universal": "^0.12.0",
     "lodash-es": "^4.17.21",
+    "lru-cache": "11.0.2",
     "marked": "4.0.15",
     "next": "14.2.23",
     "next-i18next": "13.3.0",

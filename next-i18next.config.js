@@ -10,6 +10,9 @@ module.exports = {
 	},
 	backend: {
 		loadPath: `${process.env.PROXY_URL}/admin/translations/{{lng}}.json`,
+		backendOptions: {
+			expirationTime: 60 * 60 * 1000, // 1 hour
+		},
 	},
 	use: [HttpApi],
 	ns: ['common'],

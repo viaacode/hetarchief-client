@@ -13,11 +13,11 @@ test('T10.6: Test actieve toegang basisgebruiker: zoek resultaten tabs en lijst 
 	const SITE_TRANSLATIONS = await getSiteTranslations();
 	const SEARCH_PAGE_TITLE = SITE_TRANSLATIONS.nl['pages/zoeken/index___zoeken-pagina-titel'];
 
-	// GO to the hetarchief homepage
+	// Go to the hetarchief search page
 	await goToPageAndAcceptCookies(
 		page,
 		context,
-		`${process.env.TEST_CLIENT_ENDPOINT as string}/zoeken?format=all&zoekterm=bewegend%20beeld`,
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/zoeken?format=all&zoekterm=Bellewaerde%20Autocaristen`,
 		SEARCH_PAGE_TITLE
 	);
 
@@ -59,7 +59,7 @@ test('T10.6: Test actieve toegang basisgebruiker: zoek resultaten tabs en lijst 
 	await firstResult.click();
 
 	// Wait for detail page to load
-	await expect.poll(() => page.url(), { timeout: 10000 }).toContain('/stadsarchief-ieper/');
+	await expect.poll(() => page.url(), { timeout: 30000 }).toContain('/stadsarchief-ieper/');
 
 	// Wait for close to save the videos
 	await context.close();

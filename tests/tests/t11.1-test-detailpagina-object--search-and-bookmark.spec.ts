@@ -3,7 +3,6 @@ import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 
 import { IconName } from '../consts/icon-names';
 import { checkToastMessage } from '../helpers/check-toast-message';
-import { clickOverflowButtonDetailPage } from '../helpers/click-overflow-button-detail-page';
 import { clickToastMessageButton } from '../helpers/click-toast-message-button';
 import { compareSearchTabCountsLessThen } from '../helpers/compareSearchTabCountsLessThen';
 import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
@@ -13,7 +12,7 @@ import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cooki
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { waitForSearchPage } from '../helpers/wait-for-search-page';
 
-test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmark item', async ({
+test('T11.1: Test detailpagina object + materiaal aanvraag doen: search en bookmark item', async ({
 	page,
 	context,
 }) => {
@@ -145,8 +144,12 @@ test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmar
 	 * Bookmark button
 	 */
 
-	// Click the bookmark button in the overflow menu
-	await clickOverflowButtonDetailPage(page, IconName.Bookmark);
+	// Click the bookmark button
+	const bookmarkButton = page.locator('.p-object-detail__primary-actions .c-button--silver', {
+		hasText: IconName.Bookmark,
+	});
+	await expect(bookmarkButton).toBeVisible();
+	await bookmarkButton.click();
 
 	// Add object to Favorites folder
 	folderList = page.locator(

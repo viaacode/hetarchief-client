@@ -44,6 +44,8 @@ module.exports = withTM({
 		ignoreDuringBuilds: true, // We're using biome instead of eslint
 	},
 	webpack: (config, options) => {
+		config.mode = 'production';
+
 		// Required for ky-universal top level await used in admin core inside the api service
 		config.experiments = { topLevelAwait: true, layers: true };
 
