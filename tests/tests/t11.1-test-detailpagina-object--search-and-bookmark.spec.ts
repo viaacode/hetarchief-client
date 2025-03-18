@@ -26,6 +26,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen: search en bookmar
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(
 		page,
+		context,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/zoeken?aanbieder=vrt`,
 		SEARCH_PAGE_TITLE
 	);

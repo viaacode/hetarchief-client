@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import type { BrowserContext, Page } from '@playwright/test';
 import { Locale } from '@shared/utils/i18n';
 
 import { HOMEPAGE_TITLE } from '../consts/tests.consts';
@@ -7,6 +7,7 @@ import { waitForPageTitle } from './wait-for-page-title';
 
 export async function goToPageAndAcceptCookies(
 	page: Page,
+	context: BrowserContext,
 	url: string,
 	title: string = HOMEPAGE_TITLE,
 	whichCookies: 'all' | 'selection' = 'all',
@@ -18,16 +19,19 @@ export async function goToPageAndAcceptCookies(
 	// Check page title is the home page
 	await waitForPageTitle(page, title, locale);
 
-	// Check if cookiebot opens
-	const cookiebotDialog = page.locator('#CybotCookiebotDialogBody');
+	const cookies = await context.cookies();
+	if (cookies.find((cookie) => cookie.name === 'CookieConsent')) {
+		// If cookies have been accepted already, return
+		return;
+	}
 
-	if ((await cookiebotDialog.count()) > 0) {
-		if (whichCookies === 'selection') {
-			// Accept selected cookies
-			await page.locator('#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowallSelection').click();
-		} else {
-			// Accept selected cookies
-			await page.locator('#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll').click();
-		}
+	if (whichCookies === 'selection') {
+		// Accept selected cookies
+		await page.locator('#CybotCookiebotDialogBodyButtonDecline').click({ timeout: 20000 });
+	} else {
+		// Accept selected cookies
+		await page
+			.locator('#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll')
+			.click({ timeout: 20000 });
 	}
 }

@@ -9,6 +9,7 @@ test('T20: Test iiif viewer zoomen', async ({ page, context }) => {
 	 */
 	await goToPageAndAcceptCookies(
 		page,
+		context,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/h98z893q54`,
 		'Wet- en verordeningsblad voor de bezette streke...'
 	);

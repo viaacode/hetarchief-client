@@ -9,6 +9,7 @@ test('T19: Test OCR raadplegen', async ({ page, context }) => {
 	 */
 	await goToPageAndAcceptCookies(
 		page,
+		context,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/h98z893q54`,
 		'Wet- en verordeningsblad voor de bezette streke...'
 	);

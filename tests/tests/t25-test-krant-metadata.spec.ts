@@ -17,6 +17,7 @@ test('T25: Krant metadata', async ({ page, context }) => {
 	const NEWSPAPER_PAGE_TITLE = 'De volksmacht: weekblad van de christelijke arb...';
 	await goToPageAndAcceptCookies(
 		page,
+		context,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${IE_OBJECT_ID}?showAuth=1`,
 		NEWSPAPER_PAGE_TITLE
 	);
@@ -58,6 +59,7 @@ test('T25: Krant metadata', async ({ page, context }) => {
 	// Go to a newspaper detail page
 	await goToPageAndAcceptCookies(
 		page,
+		context,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${IE_OBJECT_ID}?showAuth=1`,
 		NEWSPAPER_PAGE_TITLE
 	);

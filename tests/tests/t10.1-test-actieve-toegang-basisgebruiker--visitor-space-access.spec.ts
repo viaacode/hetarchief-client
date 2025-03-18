@@ -15,7 +15,7 @@ test('T10.1: Test actieve toegang basisgebruiker: Bezoekersruimte toegang', asyn
 	const SITE_TRANSLATIONS = await getSiteTranslations();
 
 	// GO to the hetarchief homepage
-	await goToPageAndAcceptCookies(page, process.env.TEST_CLIENT_ENDPOINT as string);
+	await goToPageAndAcceptCookies(page, context, process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(

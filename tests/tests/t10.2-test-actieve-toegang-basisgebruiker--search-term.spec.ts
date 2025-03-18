@@ -14,6 +14,7 @@ test('T10.2: Test actieve toegang basisgebruiker: Zoek term', async ({ page, con
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(
 		page,
+		context,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/zoeken`,
 		SEARCH_PAGE_TITLE
 	);

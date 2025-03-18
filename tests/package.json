@@ -4,7 +4,7 @@
   "private": true,
   "contributors": ["Bert Verhelst <bert.verhelst@studiohyperdrive.be>"],
   "scripts": {
-    "test:e2e:install-chrome": "playwright install chrome",
+    "test:e2e:install-chrome": "playwright install --force chrome",
     "test:e2e": "npx playwright test",
     "test:e2e:trace": "npx playwright test --trace on",
     "test:e2e:ui": "dotenv -e ../.env.local npx playwright test -- --ui",
@@ -46,7 +46,7 @@
     "test:e2e:debug:t29": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t29-test-materiaal-aanvraag-engels.spec.ts"
   },
   "devDependencies": {
-    "@playwright/test": "^1.47.1",
+    "@playwright/test": "^1.51.1",
     "@types/uuid": "^10.0.0",
     "cross-env": "7.0.3",
     "date-fns": "4.1.0",

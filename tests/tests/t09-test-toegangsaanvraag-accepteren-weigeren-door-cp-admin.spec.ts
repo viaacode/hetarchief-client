@@ -27,7 +27,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		];
 
 	// GO to the hetarchief homepage
-	await goToPageAndAcceptCookies(page, process.env.TEST_CLIENT_ENDPOINT as string);
+	await goToPageAndAcceptCookies(page, context, process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Login as CP admin
 	await loginUserHetArchiefIdp(
@@ -234,7 +234,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	const pendingVisitRequestCel = page
 		.locator(
 			`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
-			{ hasText: 'Meemoo admin' }
+			{ hasText: 'Meemoo admin Test' }
 		)
 		.first();
 	await expect(pendingVisitRequestCel).toBeVisible({ timeout: 10000 });

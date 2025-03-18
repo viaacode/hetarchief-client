@@ -18,6 +18,7 @@ test('T11.3: Test detailpagina object + materiaal aanvraag doen: materiaal aanvr
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(
 		page,
+		context,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${process.env.TEST_OBJECT_DETAIL_PAGE_AMSAB as string}`,
 		PAGE_TITLE
 	);
