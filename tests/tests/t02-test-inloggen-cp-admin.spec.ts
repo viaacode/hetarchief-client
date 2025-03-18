@@ -8,7 +8,7 @@ import { waitForPageTitle } from '../helpers/wait-for-page-title';
 
 test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 	// Go to the hetarchief homepage
-	await goToPageAndAcceptCookies(page, process.env.TEST_CLIENT_ENDPOINT as string);
+	await goToPageAndAcceptCookies(page, context, process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Login cp admin using the meemoo idp
 	await loginUserHetArchiefIdp(

@@ -31,7 +31,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	const VISIT_REQUESTS_PAGE_TITLE = `${SITE_TRANSLATIONS.nl['pages/admin/bezoekersruimtesbeheer/toegangsaanvragen/index___toegangsaanvragen']} | ${SITE_TRANSLATIONS.nl['modules/cp/views/cp-admin-visit-requests-page___beheer']}`;
 
 	// Go to the hetarchief homepage
-	await goToPageAndAcceptCookies(page, process.env.TEST_CLIENT_ENDPOINT as string);
+	await goToPageAndAcceptCookies(page, context, process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Login visitor
 	await loginUserHetArchiefIdp(

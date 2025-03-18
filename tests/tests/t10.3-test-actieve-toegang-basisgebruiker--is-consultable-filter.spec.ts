@@ -16,6 +16,7 @@ test('T10.3: Test actieve toegang basisgebruiker: Raadpleegbaar op locatie filte
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(
 		page,
+		context,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/zoeken`,
 		SEARCH_PAGE_TITLE
 	);

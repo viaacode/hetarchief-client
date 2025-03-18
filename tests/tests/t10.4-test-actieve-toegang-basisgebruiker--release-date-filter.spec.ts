@@ -18,6 +18,7 @@ test('T10.4: Test actieve toegang basisgebruiker: Release date filter', async ({
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(
 		page,
+		context,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/zoeken`,
 		SEARCH_PAGE_TITLE
 	);

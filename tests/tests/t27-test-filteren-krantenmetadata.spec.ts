@@ -13,6 +13,7 @@ test('T27: Filteren op krant metadata', async ({ page, context }) => {
 	const SEARCH_PAGE_TITLE = SITE_TRANSLATIONS.nl['pages/zoeken/index___zoeken-pagina-titel'];
 	await goToPageAndAcceptCookies(
 		page,
+		context,
 		`${
 			process.env.TEST_CLIENT_ENDPOINT as string
 		}/zoeken?format=newspaper&newspaperSeriesName=Wet-%20en%20verordeningsblad%20voor%20de%20bezette%20streken%20van%20België`,

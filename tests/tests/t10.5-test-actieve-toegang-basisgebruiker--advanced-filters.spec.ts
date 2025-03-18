@@ -17,6 +17,7 @@ test('T10.5: Test actieve toegang basisgebruiker: Geavanceerde filters', async (
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(
 		page,
+		context,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/zoeken`,
 		SEARCH_PAGE_TITLE
 	);

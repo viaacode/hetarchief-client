@@ -21,6 +21,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 
 	await goToPageAndAcceptCookies(
 		page,
+		context,
 		process.env.TEST_CLIENT_ENDPOINT as string,
 		undefined,
 		'selection'
@@ -59,7 +60,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 
 	// Captcha
 	const recapchaFrame = page.frameLocator('iframe[title="reCAPTCHA"]');
-	const recaptcha = recapchaFrame.locator('#recaptcha-anchor');
+	const recaptcha = recapchaFrame.locator('.recaptcha-checkbox');
 	await expect(recaptcha).toBeVisible();
 	await recaptcha.click();
 
@@ -83,7 +84,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await acmConfirmEmail(page, userEmail);
 
 	// Go to the hetarchief homepage
-	await goToPageAndAcceptCookies(page, process.env.TEST_CLIENT_ENDPOINT as string);
+	await goToPageAndAcceptCookies(page, context, process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Cookie bot should not open again
 	await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible(); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT

@@ -15,7 +15,7 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	const VISIT_REQUEST_REASON = 'Een geldige reden';
 
 	// Go to the hetarchief homepage
-	await goToPageAndAcceptCookies(page, process.env.TEST_CLIENT_ENDPOINT as string);
+	await goToPageAndAcceptCookies(page, context, process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Login cp admin using the meemoo idp
 	await loginUserHetArchiefIdp(

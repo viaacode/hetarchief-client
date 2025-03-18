@@ -13,6 +13,7 @@ test('T26: kranten tab en zoekresultaten', async ({ page, context }) => {
 	const SEARCH_PAGE_TITLE = SITE_TRANSLATIONS.nl['pages/zoeken/index___zoeken-pagina-titel'];
 	await goToPageAndAcceptCookies(
 		page,
+		context,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/zoeken`,
 		SEARCH_PAGE_TITLE
 	);

@@ -17,6 +17,7 @@ test('T24: Download krant in verschillende formaten', async ({ page, context }) 
 	const NEWSPAPER_PAGE_TITLE = 'Wet- en verordeningsblad voor de bezette streke...';
 	await goToPageAndAcceptCookies(
 		page,
+		context,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${IE_OBJECT_ID}?showAuth=1`,
 		NEWSPAPER_PAGE_TITLE
 	);

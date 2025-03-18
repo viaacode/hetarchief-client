@@ -12,7 +12,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	const REASON = 'Een geldige reden';
 
 	// GO to the hetarchief homepage
-	await goToPageAndAcceptCookies(page, process.env.TEST_CLIENT_ENDPOINT as string);
+	await goToPageAndAcceptCookies(page, context, process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check navbar exists
 	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();

@@ -19,6 +19,7 @@ test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina',
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(
 		page,
+		context,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${process.env.TEST_OBJECT_DETAIL_PAGE_VRT as string}`,
 		DETAIL_PAGE_TITLE
 	);

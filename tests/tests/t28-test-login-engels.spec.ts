@@ -11,7 +11,12 @@ test('T28: Test login flow engels', async ({ page, context }) => {
 	/**
 	 * Go to the search page ---------------------------------------------------------------
 	 */
-	await goToPageAndAcceptCookies(page, process.env.TEST_CLIENT_ENDPOINT as string, HOMEPAGE_TITLE);
+	await goToPageAndAcceptCookies(
+		page,
+		context,
+		process.env.TEST_CLIENT_ENDPOINT as string,
+		HOMEPAGE_TITLE
+	);
 
 	// Language switcher should be visible
 	const languageSwitcher = page.locator(moduleClassSelector('c-language-switcher__select'));

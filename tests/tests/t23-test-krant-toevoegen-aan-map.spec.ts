@@ -17,6 +17,7 @@ test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 	const NEWSPAPER_PAGE_TITLE = 'Wet- en verordeningsblad voor de bezette streke...';
 	await goToPageAndAcceptCookies(
 		page,
+		context,
 		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/h98z893q54?showAuth=1`,
 		NEWSPAPER_PAGE_TITLE
 	);
