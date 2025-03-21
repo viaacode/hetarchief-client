@@ -94,7 +94,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 		setIsRequestAccessBladeOpen(true);
 	};
 
-	const canRequestVisitorSpaceAccess = !isAnonymous && !!visitorSpaceSlug && !isKioskUser;
+	const canRequestVisitorSpaceAccess = isAnonymous || (!!visitorSpaceSlug && !isKioskUser);
 	const canViewPublicCatalog = !isKioskUser;
 	return (
 		<>
