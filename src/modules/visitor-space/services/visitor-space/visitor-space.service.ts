@@ -63,9 +63,10 @@ export class VisitorSpaceService {
 						accessType: canViewAllSpaces ? undefined : AccessType.ACTIVE,
 						status: canViewAllSpaces
 							? [
+									// only show requested and active spaces for admins
+									// https://meemoo.atlassian.net/browse/ARC-2707
 									VisitorSpaceStatus.Requested,
 									VisitorSpaceStatus.Active,
-									VisitorSpaceStatus.Inactive,
 								]
 							: undefined,
 						page,
