@@ -134,77 +134,6 @@ module.exports = withTM({
 						},
 					],
 				},
-				// Keep the redirects below until 01/01/2026: https://meemoo.atlassian.net/browse/ARC-2659
-				// de-wereld-van-kina => kina
-				{
-					source: '/bezoek/de-wereld-van-kina/:path*',
-					destination: '/bezoek/kina/:path*',
-					permanent: true,
-				},
-				{
-					source: '/zoeken/de-wereld-van-kina/:path*',
-					destination: '/zoeken/kina/:path*',
-					permanent: true,
-				},
-				{
-					source: '/zoeken',
-					has: [
-						{
-							type: 'query',
-							key: 'aanbieder',
-							value: 'de-wereld-van-kina',
-						},
-					],
-					destination: '/zoeken?aanbieder=kina',
-					permanent: true,
-				},
-				// ring-tv => ring
-				{
-					source: '/bezoek/ring-tv/:path*',
-					destination: '/bezoek/ring/:path*',
-					permanent: true,
-				},
-				{
-					source: '/zoeken/ring-tv/:path*',
-					destination: '/zoeken/ring/:path*',
-					permanent: true,
-				},
-				{
-					source: '/zoeken',
-					has: [
-						{
-							type: 'query',
-							key: 'aanbieder',
-							value: 'ring-tv',
-						},
-					],
-					destination: '/zoeken?aanbieder=ring',
-					permanent: true,
-				},
-				// ku-leuven-limel => ku-leuven-dienst-onderwijs
-				{
-					source: '/bezoek/ku-leuven-limel/:path*',
-					destination: '/bezoek/ku-leuven-dienst-onderwijs/:path*',
-					permanent: true,
-				},
-				{
-					source: '/zoeken/ku-leuven-limel/:path*',
-					destination: '/zoeken/ku-leuven-dienst-onderwijs/:path*',
-					permanent: true,
-				},
-				{
-					source: '/zoeken',
-					has: [
-						{
-							type: 'query',
-							key: 'aanbieder',
-							value: 'ku-leuven-limel',
-						},
-					],
-					destination: '/zoeken?aanbieder=ku-leuven-dienst-onderwijs',
-					permanent: true,
-				},
-				// Keep the redirects above  until 01/01/2026: https://meemoo.atlassian.net/browse/ARC-2659
 			];
 		}
 		return [];
@@ -381,6 +310,19 @@ module.exports = withTM({
 				destination: '/zoeken/ku-leuven-dienst-onderwijs/:path*',
 				permanent: true,
 			},
+			{
+				source: '/zoeken',
+				has: [
+					{
+						type: 'query',
+						key: 'aanbieder',
+						value: 'ku-leuven-limel',
+					},
+				],
+				destination: '/zoeken?aanbieder=ku-leuven-dienst-onderwijs',
+				permanent: true,
+			},
+			// Keep the redirects above  until 01/01/2026: https://meemoo.atlassian.net/browse/ARC-2659
 			{
 				source: '/zoeken',
 				has: [
