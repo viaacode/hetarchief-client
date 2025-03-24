@@ -32,8 +32,8 @@ import Metadata from '@ie-objects/components/Metadata/Metadata';
 import { NamesList } from '@ie-objects/components/NamesList/NamesList';
 import type { ObjectDetailPageMetadataProps } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata.types';
 import { SearchLinkTag } from '@ie-objects/components/SearchLinkTag/SearchLinkTag';
-import { useGetIeObjectPreviousNextIds } from '@ie-objects/hooks/get-ie-objects-previous-next';
 import { useIsPublicNewspaper } from '@ie-objects/hooks/get-is-public-newspaper';
+import { useGetIeObjectPreviousNextIds } from '@ie-objects/hooks/use-get-ie-object-previous-next-ids';
 import {
 	ANONYMOUS_ACTION_SORT_MAP,
 	CP_ADMIN_ACTION_SORT_MAP,
@@ -249,7 +249,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					setCopyrightModalOpen(true);
 					setOnConfirmCopyright(() => () => {
 						window.open(
-							`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.iri)}/${IE_OBJECTS_SERVICE_EXPORT}/zip`
+							`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo?.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/zip`
 						);
 						handleOnDownloadEvent();
 					});
@@ -259,14 +259,14 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					setCopyrightModalOpen(true);
 					setOnConfirmCopyright(() => () => {
 						window.open(
-							`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.iri)}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`
+							`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`
 						);
 						handleOnDownloadEvent();
 					});
 					break;
 				default:
 					window.open(
-						`${publicRuntimeConfig.PROXY_URL}/${IE_OBJECTS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.iri)}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`
+						`${publicRuntimeConfig.PROXY_URL}/${IE_OBJECTS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`
 					);
 			}
 			setMetadataExportDropdownOpen(false);
