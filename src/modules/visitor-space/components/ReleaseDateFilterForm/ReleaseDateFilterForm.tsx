@@ -175,11 +175,17 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 					return handleSubmit(onValid, onInvalid);
 				}
 				setError('releaseDate', {
-					message: tText('De startdatum moet kleiner zijn dan de einddatum'),
+					message: tText(
+						'modules/visitor-space/components/release-date-filter-form/release-date-filter-form___de-startdatum-moet-kleiner-zijn-dan-de-einddatum'
+					),
 				});
 				return;
 			}
-			setError('releaseDate', { message: tText('Je moet zowel een start als eind datum opgeven') });
+			setError('releaseDate', {
+				message: tText(
+					'modules/visitor-space/components/release-date-filter-form/release-date-filter-form___je-moet-zowel-een-start-als-eind-datum-opgeven'
+				),
+			});
 			return;
 		}
 		// Single date input
@@ -189,9 +195,17 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 			return handleSubmit(onValid, onInvalid);
 		}
 		if (yearsSelected) {
-			setError('releaseDate', { message: tText('Een geldig jaar moet 4 cijfers bevatten') });
+			setError('releaseDate', {
+				message: tText(
+					'modules/visitor-space/components/release-date-filter-form/release-date-filter-form___een-geldig-jaar-moet-4-cijfers-bevatten'
+				),
+			});
 		} else {
-			setError('releaseDate', { message: tText('Gelieve een geldige datum in te vullen') });
+			setError('releaseDate', {
+				message: tText(
+					'modules/visitor-space/components/release-date-filter-form/release-date-filter-form___gelieve-een-geldige-datum-in-te-vullen'
+				),
+			});
 		}
 	};
 
