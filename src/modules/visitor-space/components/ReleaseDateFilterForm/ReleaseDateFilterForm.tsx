@@ -1,9 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, type SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { endOfDay, parseISO, startOfDay } from 'date-fns';
+import { endOfDay, isValid, parseISO, startOfDay } from 'date-fns';
 import React, { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, type UseFormHandleSubmit, useForm } from 'react-hook-form';
 import type { MultiValue, SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
@@ -11,9 +11,9 @@ import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning
 import { SEPARATOR } from '@shared/const';
 import { YEAR_LENGTH } from '@shared/const/date';
 import { convertYearToDate } from '@shared/helpers/convert-year-to-date';
-import { tHtml } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 
-import { FilterProperty, isRange, Operator } from '../../types';
+import { FilterProperty, Operator, isRange } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import { DateInput } from '../DateInput';
 import { DateRangeInput } from '../DateRangeInput';
@@ -21,6 +21,8 @@ import { SelectDateOrYear } from '../SelectDateOrYear';
 import { YearInput } from '../YearInput';
 import YearRangeInput from '../YearRangeInput/YearRangeInput';
 
+import { getOperators } from 'modules/visitor-space/utils/advanced-filters';
+import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form/dist/types/form';
 import {
 	RELEASE_DATE_FILTER_FORM_QUERY_PARAM_CONFIG,
 	RELEASE_DATE_FILTER_FORM_SCHEMA,
@@ -31,8 +33,6 @@ import type {
 	ReleaseDateFilterFormState,
 } from './ReleaseDateFilterForm.types';
 
-import { getOperators } from 'modules/visitor-space/utils/advanced-filters';
-
 const labelKeys: Record<keyof ReleaseDateFilterFormState, string> = {
 	releaseDate: 'ReleaseDateFilterForm__releaseDate',
 	operator: 'ReleaseDateFilterForm__operator',
@@ -42,6 +42,8 @@ const defaultValues: ReleaseDateFilterFormState = {
 	releaseDate: undefined,
 	operator: Operator.GREATER_THAN_OR_EQUAL,
 };
+
+const VALID_YEAR_REGEX = /[1-9][0-9]{3}/g;
 
 const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 	children,
@@ -65,6 +67,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 		formState: { errors },
 		handleSubmit,
 		setValue,
+		setError,
 	} = useForm<ReleaseDateFilterFormState>({
 		resolver: yupResolver(RELEASE_DATE_FILTER_FORM_SCHEMA()),
 		defaultValues,
@@ -153,6 +156,55 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 			setForm({
 				operator: value,
 				releaseDate: defaultValues.releaseDate,
+			});
+		}
+	};
+
+	const validateForm = (
+		onValid: SubmitHandler<ReleaseDateFilterFormState>,
+		onInvalid?: SubmitErrorHandler<ReleaseDateFilterFormState>
+	) => {
+		if (showRange) {
+			// Date range
+			const dates = form.releaseDate?.split(SEPARATOR, 2);
+			if (dates && dates.length === 2) {
+				const from = parseISO(dates[0]);
+				const to = parseISO(dates[1]);
+				if (from && to && from <= to) {
+					clearErrors('releaseDate');
+					return handleSubmit(onValid, onInvalid);
+				}
+				setError('releaseDate', {
+					message: tText(
+						'modules/visitor-space/components/release-date-filter-form/release-date-filter-form___de-startdatum-moet-kleiner-zijn-dan-de-einddatum'
+					),
+				});
+				return;
+			}
+			setError('releaseDate', {
+				message: tText(
+					'modules/visitor-space/components/release-date-filter-form/release-date-filter-form___je-moet-zowel-een-start-als-eind-datum-opgeven'
+				),
+			});
+			return;
+		}
+		// Single date input
+		const date = parseISO(form.releaseDate || '');
+		if (date && isValid(date)) {
+			clearErrors('releaseDate');
+			return handleSubmit(onValid, onInvalid);
+		}
+		if (yearsSelected) {
+			setError('releaseDate', {
+				message: tText(
+					'modules/visitor-space/components/release-date-filter-form/release-date-filter-form___een-geldig-jaar-moet-4-cijfers-bevatten'
+				),
+			});
+		} else {
+			setError('releaseDate', {
+				message: tText(
+					'modules/visitor-space/components/release-date-filter-form/release-date-filter-form___gelieve-een-geldige-datum-in-te-vullen'
+				),
 			});
 		}
 	};
@@ -279,7 +331,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 					setYearRange(undefined);
 					clearErrors();
 				},
-				handleSubmit,
+				handleSubmit: validateForm as UseFormHandleSubmit<ReleaseDateFilterFormState>,
 			})}
 		</>
 	);

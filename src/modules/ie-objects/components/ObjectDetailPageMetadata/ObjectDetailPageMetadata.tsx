@@ -756,6 +756,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 								title={tHtml('modules/ie-objects/object-detail-page___bronvermelding')}
 								key="metadata-source-attribution"
 								renderRight={<CopyButton text={rightsAttributionText} variants={['white']} />}
+								className="u-bt-0"
 							>
 								<span>{rightsAttributionText}</span>
 							</Metadata>
