@@ -90,7 +90,6 @@ import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-perm
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { EventsService, LogEventType } from '@shared/services/events-service';
 import { selectBreadcrumbs } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
@@ -221,23 +220,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	 * Event handlers
 	 */
 
-	const handleOnDownloadEvent = useCallback(() => {
-		const path = window.location.href;
-		const eventData = {
-			type: mediaInfo?.dctermsFormat,
-			fragment_id: mediaInfo?.schemaIdentifier,
-			pid: mediaInfo?.schemaIdentifier,
-			user_group_name: user?.groupName,
-			or_id: mediaInfo?.maintainerId,
-		};
-		EventsService.triggerEvent(LogEventType.DOWNLOAD, path, eventData).then(noop);
-	}, [
-		mediaInfo?.dctermsFormat,
-		mediaInfo?.maintainerId,
-		mediaInfo?.schemaIdentifier,
-		user?.groupName,
-	]);
-
 	const onExportClick = useCallback(
 		(format: MetadataExportFormats) => {
 			if (!mediaInfo) {
@@ -251,7 +233,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						window.open(
 							`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo?.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/zip`
 						);
-						handleOnDownloadEvent();
 					});
 					break;
 
@@ -261,7 +242,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						window.open(
 							`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`
 						);
-						handleOnDownloadEvent();
 					});
 					break;
 				default:
@@ -271,7 +251,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			}
 			setMetadataExportDropdownOpen(false);
 		},
-		[currentPageIndex, handleOnDownloadEvent, mediaInfo]
+		[currentPageIndex, mediaInfo]
 	);
 
 	const getActionButtonSortMapByUserType = useCallback((): MetadataSortMap[] => {
