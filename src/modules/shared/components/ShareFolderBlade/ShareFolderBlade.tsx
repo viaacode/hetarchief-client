@@ -40,7 +40,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 				return;
 			}
 
-			await FoldersService.shareFolder(folderId, email);
+			await FoldersService.shareFolderCreate(folderId, email);
 			toastService.notify({
 				maxLines: 3,
 				title: tText('pages/account/map-delen/folder-id/index___map-is-gedeeld'),

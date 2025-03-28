@@ -9,13 +9,24 @@ import styles from './Loading.module.scss';
 export interface LoadingProps extends DefaultComponentProps {
 	children?: ReactNode;
 	fullscreen?: boolean;
+	centeredHorizontally?: boolean;
 	owner: string; // Used to identify which loader is shown
 }
 
-const Loading: FC<LoadingProps> = ({ fullscreen = false, className, style = {} }) => {
+const Loading: FC<LoadingProps> = ({
+	fullscreen = false,
+	centeredHorizontally = false,
+	className,
+	style = {},
+}) => {
 	return (
 		<div
-			className={clsx(className, 'c-loading', fullscreen ? styles['c-loading--fullscreen'] : {})}
+			className={clsx(
+				className,
+				'c-loading',
+				fullscreen ? styles['c-loading--fullscreen'] : {},
+				centeredHorizontally ? styles['c-loading--centered-horizontally'] : {}
+			)}
 			style={style}
 		>
 			{/* enable if you want to figure out which loader is misbehaving */}
