@@ -311,12 +311,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		fileStoredAt,
 		() => setFlowPlayerKey(fileStoredAt) // Force flowplayer rerender after successful fetch
 	);
-	const { data: ticketServiceTokensByPath } = useGetIeObjectTicketServiceTokens(
-		iiifViewerImageInfos.map((imageInfo) => imageInfo.imageUrl),
-		{
-			enabled: iiifViewerImageInfos.length > 0,
-		}
-	);
+	const { data: ticketServiceTokensByPath, isLoading: isLoadingTickets } =
+		useGetIeObjectTicketServiceTokens(
+			iiifViewerImageInfos.map((imageInfo) => imageInfo.imageUrl),
+			{
+				enabled: iiifViewerImageInfos.length > 0,
+			}
+		);
 	const imageInfosWithTokens = useMemo(
 		() =>
 			iiifViewerImageInfos.map(
@@ -1079,38 +1080,34 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				handleOnPlay();
 				setHasNewsPaperBeenRendered(true);
 			}
+			if (isLoadingTickets) {
+				return <Loading owner="iiifviewer-tickets" fullscreen={true} />;
+			}
 			return (
-				<>
-					{isLoadingPageImage && (
-						<div className={styles['c-loading__iiif-viewer']}>
-							<Loading owner="iiif viewer" />
-						</div>
-					)}
-					<IiifViewer
-						imageInfosWithTokens={imageInfosWithTokens}
-						ref={iiifViewerReference}
-						id={mediaInfo?.schemaIdentifier as string}
-						isTextOverlayVisible={isTextOverlayVisible || false}
-						setIsTextOverlayVisible={handleIsTextOverlayVisibleChange}
-						activeImageIndex={currentPageIndex}
-						setActiveImageIndex={handleActiveImageIndexChange}
-						initialFocusX={iiifViewerFocusX}
-						initialFocusY={iiifViewerFocusY}
-						initialZoomLevel={iiifViewerZoomLevel}
-						isLoading={isLoadingPageImage}
-						setIsLoading={setIsLoadingPageImage}
-						isSearchEnabled={arePagesOcrTextsAvailable}
-						searchTerms={searchTermsTemp}
-						setSearchTerms={setSearchTermsTemp}
-						onSearch={handleSearch}
-						onClearSearch={handleClearSearch}
-						currentSearchIndex={currentSearchResultIndex || 0}
-						searchResults={searchResults}
-						setSearchResultIndex={handleChangeSearchIndex}
-						onSelection={handleIiifViewerSelection}
-						enableSelection={canDownloadNewspaper}
-					/>
-				</>
+				<IiifViewer
+					imageInfosWithTokens={imageInfosWithTokens}
+					ref={iiifViewerReference}
+					id={mediaInfo?.schemaIdentifier as string}
+					isTextOverlayVisible={isTextOverlayVisible || false}
+					setIsTextOverlayVisible={handleIsTextOverlayVisibleChange}
+					activeImageIndex={currentPageIndex}
+					setActiveImageIndex={handleActiveImageIndexChange}
+					initialFocusX={iiifViewerFocusX}
+					initialFocusY={iiifViewerFocusY}
+					initialZoomLevel={iiifViewerZoomLevel}
+					isLoading={isLoadingPageImage}
+					setIsLoading={setIsLoadingPageImage}
+					isSearchEnabled={arePagesOcrTextsAvailable}
+					searchTerms={searchTermsTemp}
+					setSearchTerms={setSearchTermsTemp}
+					onSearch={handleSearch}
+					onClearSearch={handleClearSearch}
+					currentSearchIndex={currentSearchResultIndex || 0}
+					searchResults={searchResults}
+					setSearchResultIndex={handleChangeSearchIndex}
+					onSelection={handleIiifViewerSelection}
+					enableSelection={canDownloadNewspaper}
+				/>
 			);
 		}
 

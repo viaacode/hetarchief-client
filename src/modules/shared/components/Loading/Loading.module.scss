@@ -11,3 +11,10 @@
 		height: calc(100vh - #{$c-navigation-height});
 	}
 }
+
+.c-loading--centered-horizontally {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

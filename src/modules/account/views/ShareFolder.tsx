@@ -24,7 +24,7 @@ export const AccountSharedFolder: FC<DefaultSeoInfo & AccountSharedFolderProps> 
 	const shareFolder = useCallback(async () => {
 		if (folderId) {
 			try {
-				const response = await FoldersService.shareCollection(folderId);
+				const response = await FoldersService.shareFolder(folderId);
 				if (response.status === SharedFolderStatus.ADDED) {
 					toastService.notify({
 						maxLines: 3,

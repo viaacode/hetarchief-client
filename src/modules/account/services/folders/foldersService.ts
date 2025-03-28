@@ -17,7 +17,7 @@ export abstract class FoldersService {
 	}
 
 	public static async getById(
-		id: string,
+		folderUuid: string,
 		searchInput = '',
 		page = 0,
 		size = 20
@@ -25,7 +25,7 @@ export abstract class FoldersService {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: `${FOLDERS_SERVICE_BASE_URL}/${id}`,
+					url: `${FOLDERS_SERVICE_BASE_URL}/${folderUuid}`,
 					query: {
 						...(searchInput ? { query: `%${searchInput}%` } : {}),
 						page,
@@ -41,48 +41,70 @@ export abstract class FoldersService {
 	}
 
 	public static async update(
-		id: string,
+		folderUuid: string,
 		json: Partial<Pick<Folder, 'name' | 'description'>>
 	): Promise<Folder> {
-		return await ApiService.getApi().patch(`${FOLDERS_SERVICE_BASE_URL}/${id}`, { json }).json();
-	}
-
-	public static async delete(id: string): Promise<number> {
-		return await ApiService.getApi().delete(`${FOLDERS_SERVICE_BASE_URL}/${id}`).json();
-	}
-
-	public static async addToFolder(collection: string, item: string): Promise<unknown> {
 		return await ApiService.getApi()
-			.post(`${FOLDERS_SERVICE_BASE_URL}/${collection}/${FOLDERS_SERVICE_OBJECTS_URL}/${item}`)
+			.patch(`${FOLDERS_SERVICE_BASE_URL}/${folderUuid}`, { json })
 			.json();
 	}
 
-	public static async removeFromFolder(collection: string, item: string): Promise<unknown> {
+	public static async delete(folderUuid: string): Promise<number> {
+		return await ApiService.getApi().delete(`${FOLDERS_SERVICE_BASE_URL}/${folderUuid}`).json();
+	}
+
+	public static async addToFolder(
+		folderUuid: string,
+		objectSchemaIdentifier: string
+	): Promise<unknown> {
 		return await ApiService.getApi()
-			.delete(`${FOLDERS_SERVICE_BASE_URL}/${collection}/${FOLDERS_SERVICE_OBJECTS_URL}/${item}`)
+			.post(
+				`${FOLDERS_SERVICE_BASE_URL}/${folderUuid}/${FOLDERS_SERVICE_OBJECTS_URL}/${objectSchemaIdentifier}`
+			)
 			.json();
 	}
 
-	public static async getExport(id?: string): Promise<Blob | null> {
-		if (!id) {
+	public static async removeFromFolder(
+		folderUuid: string,
+		objectSchemaIdentifier: string
+	): Promise<unknown> {
+		return await ApiService.getApi()
+			.delete(
+				`${FOLDERS_SERVICE_BASE_URL}/${folderUuid}/${FOLDERS_SERVICE_OBJECTS_URL}/${objectSchemaIdentifier}`
+			)
+			.json();
+	}
+
+	public static async getExport(folderUuid?: string): Promise<Blob | null> {
+		if (!folderUuid) {
 			return null;
 		}
 		return await ApiService.getApi()
-			.get(`${FOLDERS_SERVICE_BASE_URL}/${id}/${FOLDERS_SERVICE_EXPORT_URL}`)
+			.get(`${FOLDERS_SERVICE_BASE_URL}/${folderUuid}/${FOLDERS_SERVICE_EXPORT_URL}`)
 			.then((r) => r.blob());
 	}
 
-	public static async shareCollection(collectionId: string): Promise<SharedFolderResponse> {
+	/**
+	 * Create an invite to share a folder
+	 * @param folderUuid
+	 * @param toEmail
+	 */
+	public static async shareFolderCreate(
+		folderUuid: string,
+		toEmail: string
+	): Promise<{ message: 'success' }> {
 		return await ApiService.getApi()
-			.post(`${FOLDERS_SERVICE_BASE_URL}/share/${collectionId}`)
+			.post(`${FOLDERS_SERVICE_BASE_URL}/share/${folderUuid}/create`, {
+				json: { to: toEmail },
+			})
 			.json();
 	}
 
-	public static async shareFolder(folderId: string, to: string): Promise<{ message: 'success' }> {
-		return await ApiService.getApi()
-			.post(`${FOLDERS_SERVICE_BASE_URL}/share/${folderId}/create`, {
-				json: { to },
-			})
-			.json();
+	/**
+	 * Accept a folder invite and copy the shared folder to the current user
+	 * @param folderUuid
+	 */
+	public static async shareFolder(folderUuid: string): Promise<SharedFolderResponse> {
+		return await ApiService.getApi().post(`${FOLDERS_SERVICE_BASE_URL}/share/${folderUuid}`).json();
 	}
 }

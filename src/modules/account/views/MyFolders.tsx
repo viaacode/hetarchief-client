@@ -48,6 +48,7 @@ import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 
+import { Loading } from '@shared/components/Loading';
 import styles from './MyFolders.module.scss';
 
 type ListNavigationFolderItem = ListNavigationItem & Folder;
@@ -377,20 +378,25 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 		);
 	};
 
-	const renderActions = (item: IdentifiableMediaCard, folder: Folder) => (
-		<>
-			<Button
-				variants={['text']}
-				label={tHtml('pages/account/mijn-mappen/folder-slug/index___verwijderen')}
-				onClick={() => onRemoveFromFolder(item, folder)}
-			/>
-			<Button
-				variants={['text']}
-				label={tHtml('pages/account/mijn-mappen/folder-slug/index___verplaatsen')}
-				onClick={() => onMoveFolder(item)}
-			/>
-		</>
-	);
+	const renderActions = (item: IdentifiableMediaCard, folder: Folder | undefined) => {
+		if (!folder) {
+			return null;
+		}
+		return (
+			<>
+				<Button
+					variants={['text']}
+					label={tHtml('pages/account/mijn-mappen/folder-slug/index___verwijderen')}
+					onClick={() => onRemoveFromFolder(item, folder)}
+				/>
+				<Button
+					variants={['text']}
+					label={tHtml('pages/account/mijn-mappen/folder-slug/index___verplaatsen')}
+					onClick={() => onMoveFolder(item)}
+				/>
+			</>
+		);
+	};
 
 	// We need to use Highlighter because we're passing a Link, MediaCard needs a string to auto-highlight
 	const renderTitle = (item: FolderIeObject): ReactNode => {
@@ -470,6 +476,97 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 		);
 	};
 
+	const renderObjectsInFolder = () => {
+		if (folderMedia?.isError) {
+			return (
+				<div className="l-container">
+					<p>{tHtml('Het laden van de objecten in deze folder is mislukt')}</p>
+				</div>
+			);
+		}
+		if (folderMedia?.isLoading) {
+			return (
+				<div className="l-container u-color-neutral">
+					<Loading owner="my folders load objects" />
+				</div>
+			);
+		}
+		if ((folderMedia?.data?.total || 0) === 0) {
+			return (
+				<div className="l-container u-color-neutral">
+					<p>
+						{tHtml(
+							'Er zitten nog geen objecten in deze folder.<br/>Voeg er toe via het bookmark icoon op de zoek of detail paginas'
+						)}
+					</p>
+				</div>
+			);
+		}
+		return (
+			<div className="l-container">
+				<MediaCardList
+					keywords={keywords}
+					items={folderMedia?.data?.items.map((media) => {
+						let link: string | undefined = stringifyUrl({
+							url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${media.maintainerSlug}/${media.schemaIdentifier}/${kebabCase(media.name) || 'titel'}`,
+							query: {
+								[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: (keywords || []).join(
+									HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
+								),
+							},
+						});
+						if (isEmpty(media.accessThrough)) {
+							// If the user has no access to the object, do not make the card clickable
+							link = undefined;
+						}
+						const base: IdentifiableMediaCard = {
+							schemaIdentifier: media.schemaIdentifier,
+							maintainerSlug: media.maintainerSlug,
+							description: renderDescription(media),
+							title: renderTitle(media),
+							name: media.name,
+							type: media.dctermsFormat,
+							thumbnail: media.thumbnailUrl,
+							duration: media.duration,
+							licenses: media.licenses,
+							showKeyUserLabel: media.accessThrough.includes(IeObjectAccessThrough.SECTOR),
+							showLocallyAvailable: getShowLocallyAvailableLabel(media),
+							showPlanVisitButtons: getShowPlanVisitButtons(media),
+							previousPage: myFoldersPath,
+							link: link,
+						};
+
+						return {
+							...base,
+							actions: renderActions(base, activeFolder),
+							...(!isNil(media.dctermsFormat) && {
+								icon: TYPE_TO_ICON_MAP[media.dctermsFormat],
+							}),
+						};
+					})}
+					view={'list'}
+				/>
+
+				{(folderMedia?.data?.total || 0) > FolderItemListSize && (
+					<PaginationBar
+						{...getDefaultPaginationBarProps()}
+						className="u-mb-48"
+						startItem={(filters.page - 1) * FolderItemListSize}
+						itemsPerPage={FolderItemListSize}
+						totalItems={folderMedia.data?.total || 0}
+						showBackToTop
+						onPageChange={(page: number) =>
+							setFilters({
+								...filters,
+								page: page + 1,
+							})
+						}
+					/>
+				)}
+			</div>
+		);
+	};
+
 	const renderPageContent = () => {
 		return (
 			<>
@@ -541,71 +638,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 									</FormControl>
 								</div>
 
-								<div className="l-container">
-									{!folderMedia?.isError && (
-										<MediaCardList
-											keywords={keywords}
-											items={folderMedia?.data?.items.map((media) => {
-												let link: string | undefined = stringifyUrl({
-													url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${media.maintainerSlug}/${media.schemaIdentifier}/${kebabCase(media.name) || 'titel'}`,
-													query: {
-														[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: (keywords || []).join(
-															HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
-														),
-													},
-												});
-												if (isEmpty(media.accessThrough)) {
-													// If the user has no access to the object, do not make the card clickable
-													link = undefined;
-												}
-												const base: IdentifiableMediaCard = {
-													schemaIdentifier: media.schemaIdentifier,
-													maintainerSlug: media.maintainerSlug,
-													description: renderDescription(media),
-													title: renderTitle(media),
-													name: media.name,
-													type: media.dctermsFormat,
-													thumbnail: media.thumbnailUrl,
-													duration: media.duration,
-													licenses: media.licenses,
-													showKeyUserLabel: media.accessThrough.includes(
-														IeObjectAccessThrough.SECTOR
-													),
-													showLocallyAvailable: getShowLocallyAvailableLabel(media),
-													showPlanVisitButtons: getShowPlanVisitButtons(media),
-													previousPage: myFoldersPath,
-													link: link,
-												};
-
-												return {
-													...base,
-													actions: renderActions(base, activeFolder),
-													...(!isNil(media.dctermsFormat) && {
-														icon: TYPE_TO_ICON_MAP[media.dctermsFormat],
-													}),
-												};
-											})}
-											view={'list'}
-										/>
-									)}
-
-									{folderMedia.data && folderMedia.data?.total > FolderItemListSize && (
-										<PaginationBar
-											{...getDefaultPaginationBarProps()}
-											className="u-mb-48"
-											startItem={(filters.page - 1) * FolderItemListSize}
-											itemsPerPage={FolderItemListSize}
-											totalItems={folderMedia.data?.total || 0}
-											showBackToTop
-											onPageChange={(page: number) =>
-												setFilters({
-													...filters,
-													page: page + 1,
-												})
-											}
-										/>
-									)}
-								</div>
+								{renderObjectsInFolder()}
 							</>
 						)}
 					</SidebarLayout>
