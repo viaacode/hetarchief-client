@@ -74,7 +74,7 @@
     "next-redux-wrapper": "8.1.0",
     "next-transpile-modules": "10.0.1",
     "node-zendesk": "2.2.0",
-    "openseadragon": "4.1.1",
+    "openseadragon": "5.0.1",
     "query-string": "7.1.1",
     "raf": "3.4.1",
     "react": "18.3.1",

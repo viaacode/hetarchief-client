@@ -9,6 +9,10 @@ export function getOpenSeadragonConfig(
 		id,
 
 		tileSources,
+
+		// Reduce loading time by loading less detailed tiles for a certain zoom level
+		minPixelRatio: 1.5,
+
 		// preserveViewport: true,
 		defaultZoomLevel: isMobile ? 0.9 : 0.5,
 		minZoomLevel: 0.3,

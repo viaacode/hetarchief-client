@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { clamp, compact, isNil, round } from 'lodash-es';
 import { useRouter } from 'next/router';
-import type { TiledImageOptions, TileSource, Viewer } from 'openseadragon';
+import type { TileSource, TiledImageOptions, Viewer } from 'openseadragon';
 import { parseUrl } from 'query-string';
 import React, {
 	forwardRef,
@@ -15,11 +15,12 @@ import React, {
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import type { AltoTextLine } from '@ie-objects/ie-objects.types';
-import type {
-	IiifViewerFunctions,
-	IiifViewerProps,
-	ImageSize,
-	Rect,
+import {
+	HIGHLIGHT_MARGIN,
+	type IiifViewerFunctions,
+	type IiifViewerProps,
+	type ImageSize,
+	type Rect,
 } from '@iiif-viewer/IiifViewer.types';
 import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import {
@@ -211,10 +212,12 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 				}
 
 				for (const altoTextLocation of highlightedAltoTexts || []) {
-					const x = altoTextLocation.x / imageWidth;
-					const y = altoTextLocation.y / imageHeight;
-					const width = altoTextLocation.width / imageWidth;
-					const height = altoTextLocation.height / imageHeight;
+					const x = altoTextLocation.x / imageWidth - HIGHLIGHT_MARGIN;
+					// All coordinates are relative to the image width even the y coordinates
+					const y = altoTextLocation.y / imageWidth - HIGHLIGHT_MARGIN;
+					const width = altoTextLocation.width / imageWidth + HIGHLIGHT_MARGIN * 2;
+					// All coordinates are relative to the image width even the height
+					const height = altoTextLocation.height / imageWidth + HIGHLIGHT_MARGIN * 2;
 					const isSymbols = /^[^a-zA-Z0-9]$/g.test(altoTextLocation.text);
 					if (
 						!x ||
@@ -223,12 +226,8 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 						!height ||
 						x < 0 ||
 						y < 0 ||
-						x > 1 ||
-						y > 1 ||
 						x + width < 0 ||
 						y + height < 0 ||
-						x + width > 1 ||
-						y + height > 1 ||
 						isSymbols
 					) {
 						// This text overlay doesn't make sense,
@@ -244,7 +243,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					openSeaDragonViewer.addOverlay(
 						span,
 						new openSeaDragonLib.Rect(x, y, width, height, 0),
-						openSeaDragonLib.Placement.CENTER
+						openSeaDragonLib.Placement.TOP_LEFT
 					);
 				}
 			},
