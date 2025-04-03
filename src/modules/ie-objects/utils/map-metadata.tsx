@@ -1,5 +1,5 @@
 import { TagList, type TagOption } from '@meemoo/react-components';
-import { capitalize, isArray, isEmpty, isString, lowerCase } from 'lodash-es';
+import { capitalize, isArray, isEmpty, isString, lowerCase, uniq } from 'lodash-es';
 import type { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import type { ReactNode } from 'react';
@@ -56,7 +56,7 @@ export const mapObjectOrArrayToMetadata = (
 		return [
 			{
 				title: arrayLabel,
-				data: mapArrayToMetadataData(data),
+				data: mapArrayToMetadataData(uniq(data)),
 			},
 		];
 	}
@@ -72,7 +72,7 @@ export const mapObjectOrArrayToMetadata = (
 		if (isString(data[key])) {
 			value = data[key] as string;
 		} else if (isArray(data[key])) {
-			value = [...data[key]].join(', ');
+			value = uniq([...data[key]]).join(', ');
 		} else {
 			value = JSON.stringify(data[key]);
 		}
