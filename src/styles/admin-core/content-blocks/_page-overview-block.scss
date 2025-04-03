@@ -1,8 +1,213 @@
 @use "src/styles/abstracts" as *;
 
 .c-content-page-overview-block {
-	h3 {
-		color: $teal !important;
+	/**
+	 * Design: https://www.figma.com/design/ECgwXqNIqSX9h7ijN0IVlh/meemoo---Het-Archief---Blog
+	 */
+	.c-content-page-overview-block__header {
+		/**
+		  * TODO remove those helper divs and replace them with css classes
+		  * and compensate in the avo and hetarchief css
+		 */
+		.u-spacer-left {
+			margin-left: 0 !important;
+		}
+
+		.u-spacer-bottom {
+			margin-bottom: 0 !important;
+		}
+
+		.u-spacer-right {
+			margin-right: 0 !important;
+		}
+
+		.c-tab-item {
+			color: $black;
+
+			&:hover {
+				color: $teal-light;
+			}
+
+			&.c-tab-item__active {
+				box-shadow: inset 0 -.2rem $teal;
+				margin-bottom: -.1rem;
+				color: $black;
+				font-weight: 500;
+				position: relative;
+				z-index: 10;
+			}
+		}
+
+		.c-tag {
+			background-color: #fff;
+			border: 1px solid $silver;
+			border-radius: 2.4rem;
+			display: flex;
+			align-items: center;
+			color: $black;
+			text-decoration: none;
+			font-weight: 800;
+			font-size: $font-size-base;
+			padding: 0.8rem 1.6rem;
+
+			&:hover {
+				background-color: $silver;
+			}
+
+			&.c-tag__active {
+				background-color: $teal-medium;
+				color: $black;
+			}
+		}
+
+	}
+
+	.u-spacer-top-xl {
+		margin-top: 0 !important;
+	}
+
+	.u-spacer-left-s {
+		margin-left: 0 !important;
+	}
+
+	.c-heading.c-h2 {
+		font-size: 4.8rem;
+		font-weight: 800;
+		line-height: 5.6rem;
+		margin-top: 4.8rem !important;
+		margin-bottom: 1.6rem;
+	}
+
+	.c-block-grid {
+		justify-content: flex-start;
+		gap: 1.6rem;
+
+		@media (max-width: $breakpoint-md) {
+			max-width: 100%;
+			gap: 6.4rem;
+		}
+
+		.c-block-grid__item {
+			width: 100%;
+			max-width: 30%;
+			margin: 0;
+			padding: 0;
+
+			@media (max-width: $breakpoint-md) {
+				max-width: 100%;
+				width: 100% !important;
+
+				>a {
+					max-width: 100%;
+				}
+
+				.c-block-grid__image {
+					width: 100% !important;
+					height: 30rem !important;
+				}
+			}
+
+			h3 strong {
+				font-weight: 800;
+				font-size: $font-size-md;
+				color: $black;
+				margin-top: 1.6rem;
+				margin-bottom: 1.6rem;
+			}
+		}
+	}
+
+	.c-pagination {
+		margin-top: 3.6rem;
+	}
+
+	.c-page-overview-news-list,
+	.c-page-overview-project-list {
+		.o-grid-col-bp2-5,
+		.o-grid-col-bp2-4,
+		.o-grid-col-bp2-7 {
+			width: 47% !important;
+
+			@media (max-width: $breakpoint-md) {
+				width: 100% !important;
+			}
+
+			.c-aspect-ratio-wrapper {
+				aspect-ratio: 16 / 9;
+				width: 100%;
+				height: auto;
+			}
+		}
+
+		.o-grid-col-bp2-7 {
+			a {
+				color: $black !important;
+				text-decoration: none !important;
+				position: relative;
+
+				h2, h3 {
+					font-size: $font-size-lg;
+					color: $black !important;
+					font-weight: $font-weight-bold !important;
+					display: inline-block;
+					z-index: 2;
+					position: relative;
+					text-decoration: none !important;
+					margin-bottom: 0.8rem;
+
+					&::before {
+						content: '';
+						position: absolute;
+						bottom: 0;
+						left: 0;
+						width: 100%;
+						height: 0.8rem;
+						background-color: $teal-medium;
+						z-index: -1; // Behind the text
+						opacity: 0;
+					}
+
+					&:hover::before {
+						opacity: 1;
+					}
+
+					&:hover {
+						text-decoration: none !important;
+					}
+				}
+			}
+
+			.a-subtitle {
+				font-size: $font-size-sm !important;
+				color: $neutral !important;
+
+				.c-content-page__label {
+					text-decoration: underline !important;
+				}
+			}
+
+			.a-content-page__description {
+				font-size: $font-size-base !important;
+				color: $neutral !important;
+			}
+
+			// read more
+			.a-content-page__description + .u-spacer-top a {
+				.c-button {
+					background-color: $black !important;
+					color: $white !important;
+					padding: 0.4rem 3.6rem 0.4rem 1.8rem !important;
+					border: 0 !important;
+
+					// Arrow right icon
+					background-image: url('data:image/svg+xml,%3Csvg%20width%3D%2213%22%20height%3D%2212%22%20viewBox%3D%220%200%2013%2012%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M0.716797%206.75586L9.41797%206.75586L5.44531%2010.7109L6.5%2011.7832L12.2832%206L6.5%200.216796L5.44531%201.28906L9.41797%205.24414L0.716797%205.24414L0.716797%206.75586Z%22%20fill%3D%22white%22%2F%3E%3C%2Fsvg%3E');
+					background-repeat: no-repeat;
+					background-position: 88% center;
+					font-size: $font-size-sm;
+
+				}
+			}
+		}
 	}
 
 	.c-content-page-overview-block__accordion--first-level {
