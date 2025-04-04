@@ -66,10 +66,30 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 				<link rel="preconnect" href="https://meemoo.zendesk.com" />
 				<link rel="preconnect" href="https://static.zdassets.com" />
 				<link rel="preconnect" href="https://ekr.zdassets.com" />
-				<link rel="preconnect" href="https://www.googletagmanager.com/" />
-				<link rel="preconnect" href="https://consent.cookiebot.com/" />
-				<link rel="preconnect" href="https://consentcdn.cookiebot.com/" />
-				<link rel="preconnect" href="https://imgsct.cookiebot.com/" />
+				<link rel="preconnect" href="https://www.googletagmanager.com" />
+				<link rel="preconnect" href="https://consent.cookiebot.com" />
+				<link rel="preconnect" href="https://consentcdn.cookiebot.com" />
+				<link rel="preconnect" href="https://imgsct.cookiebot.com" />
+
+				{/* Preload fonts for faster loading of fonts and icons */}
+				<link
+					rel="preload"
+					href="/fonts/sofia-pro/sofia-pro-bold.woff"
+					as="font"
+					type="font/woff"
+				/>
+				<link
+					rel="preload"
+					href="/fonts/sofia-pro/sofia-pro-regular.woff"
+					as="font"
+					type="font/woff"
+				/>
+				<link
+					rel="preload"
+					href="/fonts/meemoo-icons-light/meemoo-icons-light.woff"
+					as="font"
+					type="font/woff"
+				/>
 			</CustomHead>
 			<body>
 				<Main />
