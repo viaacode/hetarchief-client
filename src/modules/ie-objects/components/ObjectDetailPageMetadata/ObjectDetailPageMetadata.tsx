@@ -867,7 +867,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___categorie'),
-						mediaInfo.genre
+						!isEmpty(mediaInfo.genre)
 							? mediaInfo.genre.map((genre) => (
 									<SearchLinkTag
 										key={genre}
@@ -977,7 +977,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						tText('modules/ie-objects/ie-objects___maker')
 					).map((info) => renderSimpleMetadataField(info.title, info.data))}
 					{mapObjectOrArrayToMetadata(
-						mediaInfo.publisher,
+						Array.isArray(mediaInfo.publisher?.[0])
+							? mediaInfo.publisher?.[0]
+							: mediaInfo.publisher,
 						tText('modules/ie-objects/ie-objects___uitgever')
 					).map((info) => renderSimpleMetadataField(info.title, info.data))}
 					{renderSimpleMetadataField(

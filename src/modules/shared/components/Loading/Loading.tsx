@@ -9,6 +9,7 @@ import styles from './Loading.module.scss';
 export interface LoadingProps extends DefaultComponentProps {
 	children?: ReactNode;
 	fullscreen?: boolean;
+	mode?: 'light' | 'dark';
 	centeredHorizontally?: boolean;
 	owner: string; // Used to identify which loader is shown
 }
@@ -16,6 +17,7 @@ export interface LoadingProps extends DefaultComponentProps {
 const Loading: FC<LoadingProps> = ({
 	fullscreen = false,
 	centeredHorizontally = false,
+	mode = 'dark',
 	className,
 	style = {},
 }) => {
@@ -25,7 +27,8 @@ const Loading: FC<LoadingProps> = ({
 				className,
 				'c-loading',
 				fullscreen ? styles['c-loading--fullscreen'] : {},
-				centeredHorizontally ? styles['c-loading--centered-horizontally'] : {}
+				centeredHorizontally ? styles['c-loading--centered-horizontally'] : {},
+				mode === 'light' ? styles['c-loading--light'] : {}
 			)}
 			style={style}
 		>

@@ -83,7 +83,6 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 				{!disabled &&
 					filterValues.map((filterValue, index) => {
 						const key = `advanced-filter-${filterValue.prop}--${filterValue.op}`;
-						console.log(`rerender key: ${filterValue.id}`, { value: filterValue.val });
 						return (
 							<AdvancedFilterFields
 								key={key}

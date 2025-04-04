@@ -85,3 +85,5 @@ export interface SimplifiedAlto {
 	};
 	text: TextLine[] | undefined;
 }
+
+export const HIGHLIGHT_MARGIN = 0.003;
