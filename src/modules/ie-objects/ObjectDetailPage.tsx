@@ -309,7 +309,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		isError: isErrorPlayableUrl,
 	} = useGetIeObjectsTicketInfo(
 		fileStoredAt,
+		!!fileStoredAt,
 		() => setFlowPlayerKey(fileStoredAt) // Force flowplayer rerender after successful fetch
+	);
+	const { data: viewableThumbnailUrl } = useGetIeObjectsTicketInfo(
+		mediaInfo?.thumbnailUrl,
+		!!mediaInfo?.thumbnailUrl,
+		() => setFlowPlayerKey(mediaInfo?.thumbnailUrl as string) // Force flowplayer rerender after successful fetch
 	);
 	const { data: ticketServiceTokensByPath, isLoading: isLoadingTickets } =
 		useGetIeObjectTicketServiceTokens(
@@ -1071,7 +1077,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			(isNewspaper && Object.keys(imageInfosWithTokens).length === 0) ||
 			!mediaInfo
 		) {
-			return <Loading fullscreen owner="object detail page: render media" />;
+			return <Loading fullscreen owner="object detail page: render media" mode="light" />;
 		}
 
 		// IIIF viewer
@@ -1081,7 +1087,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				setHasNewsPaperBeenRendered(true);
 			}
 			if (isLoadingTickets) {
-				return <Loading owner="iiifviewer-tickets" fullscreen={true} />;
+				return <Loading owner="iiifviewer-tickets" fullscreen={true} mode="light" />;
 			}
 			return (
 				<IiifViewer
@@ -1159,7 +1165,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					key={flowPlayerKey}
 					type="video"
 					src={playableUrl as string}
-					poster={mediaInfo?.thumbnailUrl || undefined}
+					poster={viewableThumbnailUrl || undefined}
+					renderLoader={() => <Loading owner="flowplayer suspense" fullscreen mode="light" />}
 					{...shared}
 				/>
 			);
@@ -1167,7 +1174,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		// Audio player
 		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(currentPlayableFile.mimeType)) {
 			if (peakFileStoredAt && !peakJson) {
-				return <Loading fullscreen owner="object detail page: render media audio peak file" />;
+				return (
+					<Loading
+						fullscreen
+						owner="object detail page: render media audio peak file"
+						mode="light"
+					/>
+				);
 			}
 			return (
 				<FlowPlayer

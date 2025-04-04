@@ -99,19 +99,19 @@ export class IeObjectsService {
 			.json();
 	}
 
-	public static async getPlayableUrl(fileSchemaIdentifier: string | null): Promise<string | null> {
-		if (!fileSchemaIdentifier) {
+	public static async getPlayableUrl(fileStoredAt: string | null): Promise<string | null> {
+		if (!fileStoredAt) {
 			return null;
 		}
 
-		const fileSchemaIdentifierWithoutTimeCodes = fileSchemaIdentifier.split('#')[0];
+		const fileStoredAtWithoutTimeCodes = fileStoredAt.split('#')[0];
 
 		const fullVideoPlayableUrl = await ApiService.getApi()
 			.get(
 				stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_TICKET_URL}`,
 					query: {
-						schemaIdentifier: fileSchemaIdentifierWithoutTimeCodes,
+						browsePath: fileStoredAtWithoutTimeCodes,
 					},
 				})
 			)
@@ -120,7 +120,7 @@ export class IeObjectsService {
 		// Add timecodes if the file.schemaIdentifier contains a #t=x,x suffix
 		// eg: https://archief-media-qas.viaa.be/viaa/ERFGOEDCELKERF/b21722686aa34b239f77068d131c6155d72b5454df734b2690b42de537f753a0/browse.mp4#t=151,242
 		// https://meemoo.atlassian.net/browse/ARC-1856
-		const timeCodes = fileSchemaIdentifier.split('#')[1];
+		const timeCodes = fileStoredAt.split('#')[1];
 		const parsedUrl = parseUrl(fullVideoPlayableUrl);
 		return stringifyUrl({
 			url: parsedUrl.url + (timeCodes ? `#${timeCodes}` : ''),
