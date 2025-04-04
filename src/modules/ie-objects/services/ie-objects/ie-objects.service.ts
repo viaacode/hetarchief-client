@@ -128,19 +128,19 @@ export class IeObjectsService {
 		});
 	}
 
-	public static async getTicketServiceToken(filePath: string): Promise<string | null> {
-		const token = await ApiService.getApi()
+	public static async getTicketServiceTokens(filePaths: string[]): Promise<string[]> {
+		const tokens = await ApiService.getApi()
 			.get(
 				stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_TICKET_SERVICE_URL}`,
 					query: {
-						filePath: filePath.replace('https://iiif-qas.meemoo.be/', ''),
+						filePaths,
 					},
 				})
 			)
-			.text();
+			.json<string[]>();
 
-		return token || null;
+		return tokens || [];
 	}
 
 	// Used for "ook interessant" on the detail page

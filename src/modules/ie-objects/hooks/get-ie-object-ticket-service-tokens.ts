@@ -1,4 +1,4 @@
-import { useQuery, type UseQueryResult } from '@tanstack/react-query';
+import { type UseQueryResult, useQuery } from '@tanstack/react-query';
 
 import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const/query-keys';
@@ -13,11 +13,9 @@ export const useGetIeObjectTicketServiceTokens = (
 			if (!filePaths || filePaths.length === 0) {
 				return {};
 			}
-			const responses = await Promise.all(
-				filePaths.map((filePath) => IeObjectsService.getTicketServiceToken(filePath))
-			);
+			const tokens = await IeObjectsService.getTicketServiceTokens(filePaths);
 			return Object.fromEntries(
-				filePaths.map((filePath, index) => [filePath, responses[index] || null])
+				filePaths.map((filePath, index) => [filePath, tokens[index] || null])
 			);
 		},
 		{
