@@ -480,7 +480,11 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 		if (folderMedia?.isError) {
 			return (
 				<div className="l-container">
-					<p>{tHtml('Het laden van de objecten in deze folder is mislukt')}</p>
+					<p>
+						{tHtml(
+							'modules/account/views/my-folders___het-laden-van-de-objecten-in-deze-folder-is-mislukt'
+						)}
+					</p>
 				</div>
 			);
 		}
@@ -496,7 +500,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				<div className="l-container u-color-neutral">
 					<p>
 						{tHtml(
-							'Er zitten nog geen objecten in deze folder.<br/>Voeg er toe via het bookmark icoon op de zoek of detail paginas'
+							'modules/account/views/my-folders___er-zitten-nog-geen-objecten-in-deze-folder-br-voeg-er-toe-via-het-bookmark-icoon-op-de-zoek-of-detail-paginas'
 						)}
 					</p>
 				</div>

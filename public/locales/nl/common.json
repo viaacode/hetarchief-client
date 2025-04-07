@@ -57,6 +57,8 @@
   "modules/account/const/my-history___toegang-tot": "toegang tot",
   "modules/account/const/my-history___toegang-van": "toegang van",
   "modules/account/layouts/account-layout/account-layout___account": "Account",
+  "modules/account/views/my-folders___er-zitten-nog-geen-objecten-in-deze-folder-br-voeg-er-toe-via-het-bookmark-icoon-op-de-zoek-of-detail-paginas": "Er zitten nog geen objecten in deze folder.<br/>Voeg er toe via het bookmark icoon op de zoek of detail paginas",
+  "modules/account/views/my-folders___het-laden-van-de-objecten-in-deze-folder-is-mislukt": "Het laden van de objecten in deze folder is mislukt",
   "modules/account/views/my-folders___zoekveld-aria-label": "Doorzoek deze map",
   "modules/account/views/my-profile___taalvoorkeuren": "Taalvoorkeuren",
   "modules/admin/const/material-requests___aanbieder": "aanbieder",
