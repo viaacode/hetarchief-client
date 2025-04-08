@@ -312,11 +312,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		!!fileStoredAt,
 		() => setFlowPlayerKey(fileStoredAt) // Force flowplayer rerender after successful fetch
 	);
-	const { data: viewableThumbnailUrl } = useGetIeObjectsTicketInfo(
-		mediaInfo?.thumbnailUrl,
-		!!mediaInfo?.thumbnailUrl,
-		() => setFlowPlayerKey(mediaInfo?.thumbnailUrl as string) // Force flowplayer rerender after successful fetch
-	);
 	const { data: ticketServiceTokensByPath, isLoading: isLoadingTickets } =
 		useGetIeObjectTicketServiceTokens(
 			iiifViewerImageInfos.map((imageInfo) => imageInfo.imageUrl),
@@ -1165,7 +1160,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					key={flowPlayerKey}
 					type="video"
 					src={playableUrl as string}
-					poster={viewableThumbnailUrl || undefined}
+					poster={mediaInfo?.thumbnailUrl || undefined}
 					renderLoader={() => <Loading owner="flowplayer suspense" fullscreen mode="light" />}
 					{...shared}
 				/>

@@ -450,7 +450,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 
 				{!isKiosk && maintainerLogo && (
 					<div className={styles['p-object-detail__sidebar__content-logo']}>
-						{/* TODO remove this hack once we fully switched to the new graph.organisations table */}
 						{/* eslint-disable-next-line @next/next/no-img-element */}
 						<img src={maintainerLogo} alt={`Logo ${maintainerName}`} />
 					</div>

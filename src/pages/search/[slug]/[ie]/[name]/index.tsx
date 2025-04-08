@@ -4,7 +4,6 @@ import React from 'react';
 
 import { ObjectDetailPage } from '@ie-objects/ObjectDetailPage';
 import { prefetchDetailPageQueries } from '@ie-objects/ObjectDetailPage.helpers';
-import { getIeObjectInfoBySchemaIdentifier } from '@ie-objects/hooks/get-ie-objects-info';
 import type { IeObject } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
 import type { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
@@ -36,7 +35,7 @@ export async function getServerSideProps(
 
 	let ieObject: IeObject | null = null;
 	try {
-		ieObject = await getIeObjectInfoBySchemaIdentifier(schemaIdentifier);
+		ieObject = (await IeObjectsService.getBySchemaIdentifiers([schemaIdentifier]))?.[0];
 	} catch (err) {
 		// TODO see what we should do with objects that are not publicly available during server side rendering
 	}

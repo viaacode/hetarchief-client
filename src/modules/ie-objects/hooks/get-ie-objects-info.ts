@@ -6,16 +6,6 @@ import { QUERY_KEYS } from '@shared/const/query-keys';
 import type { IeObject } from './../ie-objects.types';
 import { IeObjectsService } from './../services';
 
-/**
- * Get an IE object by its schemaIdentifier
- * @param schemaIdentifier The ie object schemaIdentifier, eg: 086348mc8s
- */
-export async function getIeObjectInfoBySchemaIdentifier(
-	schemaIdentifier: string
-): Promise<IeObject | null> {
-	return IeObjectsService.getBySchemaIdentifier(schemaIdentifier);
-}
-
 export const useGetIeObjectInfo = (
 	schemaIdentifier: string,
 	options: {
@@ -36,7 +26,7 @@ export const useGetIeObjectInfo = (
 				// This is already a new schema identifier (v3)
 				newSchemaIdentifier = schemaIdentifier;
 			}
-			return getIeObjectInfoBySchemaIdentifier(newSchemaIdentifier);
+			return IeObjectsService.getBySchemaIdentifiers([newSchemaIdentifier]);
 		},
 		{
 			keepPreviousData: true,
@@ -52,6 +42,6 @@ export function makeServerSideRequestGetIeObjectInfo(
 ): Promise<void> {
 	return queryClient.prefetchQuery({
 		queryKey: [QUERY_KEYS.getIeObjectsInfo, schemaIdentifier],
-		queryFn: () => getIeObjectInfoBySchemaIdentifier(schemaIdentifier),
+		queryFn: () => IeObjectsService.getBySchemaIdentifiers([schemaIdentifier]),
 	});
 }
