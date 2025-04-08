@@ -54,7 +54,8 @@ pipeline {
 				container('oc') {
 					script {
 						env.GIT_SHORT_COMMIT = sh(script: "printf \$(git rev-parse --short ${GIT_COMMIT})", returnStdout: true)
-						env.IMAGE_TAG = sh(script: 'git describe --tags || echo latest', returnStdout: true)
+						env.IMAGE_TAG = sh(script: 'git describe --tags || echo latest', returnStdout: true).trim()
+
 						// The name used for the build config based on the image tag
 						// Replace '.' with '_' as '.' is not allowed.
 						// env.BUILD_CONFIG_NAME = sh(script: 'echo "${IMAGE_TAG}" | sed -r "s/\\./\\-/g"', returnStdout: true)
