@@ -1,4 +1,5 @@
 import { TagList } from '@meemoo/react-components';
+import { compact } from 'lodash-es';
 import Link from 'next/link';
 import type { FC } from 'react';
 
@@ -16,7 +17,7 @@ export const SearchLinkTag: FC<SearchLinkTagProps> = ({ label, link }) => {
 				<Link href={link}>
 					<TagList
 						className="u-pt-12"
-						tags={mapKeywordsToTags([label])}
+						tags={mapKeywordsToTags(compact([label]))}
 						variants={['clickable', 'silver', 'medium']}
 					/>
 				</Link>
