@@ -10,7 +10,7 @@ import {
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
 import type { HTTPError } from 'ky';
-import { compact, intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
+import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
 import Head from 'next/head';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
@@ -23,7 +23,6 @@ import { GroupName, Permission } from '@account/const';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
 import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/get-ie-object-format-counts';
-import { useGetIeObjectTicketServiceTokens } from '@ie-objects/hooks/get-ie-object-ticket-service-tokens';
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
 import { IeObjectAccessThrough } from '@ie-objects/ie-objects.types';
 import { isInAFolder } from '@ie-objects/utils/folders';
@@ -270,9 +269,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 		// Enabled when search query is finished, so it loads the tab counts after the initial results
 		{ enabled: !searchResultsRefetching }
-	);
-	const { data: thumbnailTickets } = useGetIeObjectTicketServiceTokens(
-		compact(searchResults?.items?.map((item) => item.thumbnailUrl) || [])
 	);
 
 	const showManyResultsTile = page === PAGE_NUMBER_OF_MANY_RESULTS_TILE;
@@ -736,15 +732,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			const description =
 				type === IeObjectType.Newspaper ? item.transcript || item.description : item.description;
 
-			const thumbnailUrlToken = thumbnailTickets?.[item.thumbnailUrl];
-			const thumbnailUrlWithToken =
-				thumbnailUrlToken && item.thumbnailUrl
-					? stringifyUrl({
-							url: item.thumbnailUrl,
-							query: { token: thumbnailUrlToken },
-						})
-					: undefined;
-
 			return {
 				schemaIdentifier: item.schemaIdentifier,
 				maintainerSlug: item.maintainerSlug,
@@ -754,7 +741,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				publishedOrCreatedDate: item.datePublished ?? item.dateCreated ?? null,
 				publishedBy: item.maintainerName || '',
 				type,
-				thumbnail: thumbnailUrlWithToken || undefined,
+				thumbnail: item.thumbnailUrl || undefined,
 				name: item.name,
 				hasRelated: (item.related_count || 0) > 0,
 				hasTempAccess,
@@ -767,14 +754,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				numOfChildren: item.children || 0,
 			};
 		});
-	}, [
-		isKioskUser,
-		locale,
-		searchResults?.items,
-		thumbnailTickets,
-		searchResults?.searchTerms,
-		isGlobalArchive,
-	]);
+	}, [isKioskUser, locale, searchResults?.items, searchResults?.searchTerms, isGlobalArchive]);
 
 	const openAndScrollToAdvancedFilters = () => {
 		setFilterMenuOpen(true);
