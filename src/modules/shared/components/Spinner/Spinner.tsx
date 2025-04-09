@@ -22,9 +22,9 @@ export const Spinner: FC<SpinnerProps> = ({ style = {} }) => {
 					cy="12"
 					r="9"
 					stroke="#00857d"
-					stroke-width="3"
-					stroke-linecap="round"
-					stroke-dasharray="45.6 11.4"
+					strokeWidth="3"
+					strokeLinecap="round"
+					strokeDasharray="45.6 11.4"
 					transform="rotate(-90 12 12)"
 				/>
 			</svg>
