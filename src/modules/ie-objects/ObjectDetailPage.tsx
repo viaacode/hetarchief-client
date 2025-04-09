@@ -8,7 +8,7 @@ import {
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import type { HTTPError } from 'ky';
-import { capitalize, compact, intersection, isNil, lowerCase, noop } from 'lodash-es';
+import { capitalize, compact, intersection, isNil, kebabCase, lowerCase, noop } from 'lodash-es';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -150,6 +150,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const user: User | null = useSelector(selectUser);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const ieObjectId = router.query.ie as string;
+	const maintainerSlug = router.query.slug as string;
+	const ieObjectNameSlug = router.query.name as string;
 
 	// User types
 	const isAnonymous = useHasAnyGroup(GroupName.ANONYMOUS);
@@ -559,6 +561,22 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			console.log(`[PERFORMANCE] ${new Date().toISOString()} ie object loaded`);
 		}
 	}, [mediaInfo]);
+
+	useEffect(() => {
+		if (
+			mediaInfo?.maintainerSlug &&
+			maintainerSlug &&
+			mediaInfo?.maintainerSlug !== maintainerSlug
+		) {
+			// Maintainer was renamed and the user is loading an url with the old maintainer slug
+			// Redirect to the new maintainer slug
+			// https://meemoo.atlassian.net/browse/ARC-2678
+			const newPath = router.asPath
+				.replace(`/${maintainerSlug}/`, `/${mediaInfo?.maintainerSlug}/`)
+				.replace(`/${ieObjectNameSlug}`, `/${kebabCase(mediaInfo?.name || '')}`);
+			router.replace(newPath, undefined, { shallow: true });
+		}
+	}, [mediaInfo, maintainerSlug, ieObjectNameSlug, router.replace, router.asPath.replace]);
 
 	/**
 	 * Update the highlighted alto texts in the iiif viewer when
