@@ -99,7 +99,6 @@ import type { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/co
 import type { ConsultablePublicDomainFilterFormState } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm.types';
 import type { DurationFilterFormState } from '@visitor-space/components/DurationFilterForm';
 import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
-import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import type { GenreFilterFormState } from '@visitor-space/components/GenreFilterForm';
 import type { KeywordsFilterFormState } from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.types';
 import type { LanguageFilterFormState } from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
@@ -295,33 +294,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	useEffect(() => {
 		dispatch(setShowZendesk(!isKioskUser && !query[SearchFilterId.Maintainer]));
 	}, [dispatch, isKioskUser, query]);
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: Make sure the dependency array contains the same items as passed to VISITOR_SPACE_FILTERS
-	useEffect(() => {
-		// Filter out all disabled query param keys/ids
-		const disabledFilterKeys: SearchFilterId[] = SEARCH_PAGE_FILTERS(
-			isGlobalArchive,
-			isKioskUser,
-			isKeyUser,
-			format
-		)
-			.filter(
-				({ isDisabled, tabs }: FilterMenuFilterOption): boolean =>
-					isDisabled?.() || !tabs.includes(format)
-			)
-			.map(({ id }: FilterMenuFilterOption): SearchFilterId => id as SearchFilterId);
-
-		// Loop over all existing query params and replace the disabled filters with their initial value if they exist
-		const disabledKeysSet: Set<SearchFilterId> = new Set(disabledFilterKeys);
-		const queryKeys = Object.keys(query) as SearchFilterId[];
-		const strippedQuery = Object.fromEntries(
-			queryKeys.map((key) => {
-				return [key, disabledKeysSet.has(key) ? VISITOR_SPACE_QUERY_PARAM_INIT[key] : query[key]];
-			})
-		);
-
-		setQuery(strippedQuery);
-	}, [isKeyUser, isGlobalArchive]);
 
 	useEffect(() => {
 		// Ward: wait until items are rendered on the screen before scrolling
@@ -563,24 +535,23 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				data = (values as MaintainerFilterFormState).maintainers;
 				break;
 
-			case SearchFilterId.ConsultableOnlyOnLocation:
+			case SearchFilterId.ConsultableOnlyOnLocation: {
 				// Info: remove query param if false (= set to undefined)
-				data =
-					(values as ConsultableOnlyOnLocationFilterFormState)[
-						IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
-					] || undefined;
+				const filterValue = (values as ConsultableOnlyOnLocationFilterFormState)[
+					IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
+				];
+				data = filterValue || undefined;
 				break;
+			}
 
-			case SearchFilterId.ConsultableMedia:
+			case SearchFilterId.ConsultableMedia: {
 				// Info: remove query param if false (= set to undefined)
-				data = (values as ConsultableMediaFilterFormState)[
+				const filterValue = (values as ConsultableMediaFilterFormState)[
 					IeObjectsSearchFilterField.CONSULTABLE_MEDIA
-				]
-					? (values as ConsultableMediaFilterFormState)[
-							IeObjectsSearchFilterField.CONSULTABLE_MEDIA
-						]
-					: undefined;
+				];
+				data = filterValue || undefined;
 				break;
+			}
 
 			case SearchFilterId.ConsultablePublicDomain:
 				// Info: remove query param if false (= set to undefined)
@@ -1051,6 +1022,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 											renderedRight={renderSearchInputRightControls()}
 											size="lg"
 											value={activeFilters}
+											isLoading={searchResultsLoading || searchResultsRefetching}
 										/>
 									</div>
 								</FormControl>

@@ -1,11 +1,10 @@
-import { Button, keysEnter, onKey, TextInput } from '@meemoo/react-components';
+import { Button, TextInput, keysEnter, onKey } from '@meemoo/react-components';
 import { isString } from 'lodash-es';
 import type { FC } from 'react';
 
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
-
 import type { SearchBarProps } from './SearchBar.types';
 
 const SearchBar: FC<SearchBarProps> = ({

@@ -77,7 +77,7 @@ const getFiltersForSearchTerms = (query: SearchPageQueryParams): IeObjectsSearch
 };
 
 export const mapFiltersToElastic = (query: SearchPageQueryParams): IeObjectsSearchFilter[] => {
-	return [
+	const allFilters = [
 		// Searchbar
 		...getFiltersForSearchTerms(query),
 		// Tabs
@@ -168,7 +168,11 @@ export const mapFiltersToElastic = (query: SearchPageQueryParams): IeObjectsSear
 		},
 		// Advanced
 		...(query.advanced || []).flatMap(mapAdvancedToElastic),
-	].filter((filterField) => filterField.value || filterField.multiValue?.length);
+	];
+	const nonEmptyFilters = allFilters.filter(
+		(filterField) => filterField.value || filterField.multiValue?.length
+	);
+	return nonEmptyFilters;
 };
 
 export const mapRefineFilterToElastic = (
