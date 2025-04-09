@@ -1,0 +1,12 @@
+@use "src/styles/abstracts" as *;
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+.c-spinner {
+	width: 2.4rem;
+	height: 2.4rem;
+	animation: spin 1s linear infinite;
+}

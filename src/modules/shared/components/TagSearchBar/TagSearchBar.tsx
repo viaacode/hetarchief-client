@@ -1,28 +1,19 @@
-import clsx from 'clsx';
-import { type KeyboardEvent, type ReactElement, useMemo } from 'react';
-import type { InputActionMeta } from 'react-select';
-import CreatableSelect from 'react-select/creatable';
-
 import type {
 	OnSearchSingle,
 	TagSearchBarMeta,
 	TagSearchBarProps,
 	TagSearchBarValue,
 } from '@shared/components/TagSearchBar/TagSearchBar.types';
+import { TagSearchBarButton } from '@shared/components/TagSearchBar/TagSearchBarButton';
 import { tText } from '@shared/helpers/translate';
-
+import clsx from 'clsx';
+import { type KeyboardEvent, type ReactElement, useMemo } from 'react';
+import type { InputActionMeta } from 'react-select';
+import CreatableSelect from 'react-select/creatable';
+import { Spinner } from '../Spinner/Spinner';
 import { TAGS_INPUT_COMPONENTS } from '../TagsInput';
-
-import { TagSearchBarButton } from './TagSearchBarButton';
 import { TagSearchBarClear } from './TagSearchBarClear';
 import { TagSearchBarValueContainer } from './TagSearchBarValueContainer';
-
-const components = {
-	...TAGS_INPUT_COMPONENTS,
-	ClearIndicator: TagSearchBarClear,
-	DropdownIndicator: TagSearchBarButton,
-	ValueContainer: TagSearchBarValueContainer,
-};
 
 // Wrap TagsInput with default props and custom search button
 const TagSearchBar = <IsMulti extends boolean>({
@@ -36,6 +27,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 	hasDropdown = false,
 	renderedRight,
 	menuIsOpen,
+	isLoading,
 	onChange,
 	onClear,
 	onCreate,
@@ -47,6 +39,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 	...tagsInputProps
 }: Partial<TagSearchBarProps<IsMulti>> & {
 	setInputValue: (newInputValue: string) => void;
+	isLoading: boolean;
 }): ReactElement => {
 	const selectValue = useMemo(
 		() => (inputValue ? { label: inputValue, value: inputValue } : null),
@@ -116,6 +109,12 @@ const TagSearchBar = <IsMulti extends boolean>({
 	 * Render
 	 */
 
+	const components = {
+		...TAGS_INPUT_COMPONENTS,
+		ClearIndicator: TagSearchBarClear,
+		DropdownIndicator: isLoading ? Spinner : TagSearchBarButton,
+		ValueContainer: TagSearchBarValueContainer,
+	};
 	return (
 		<div className="u-flex u-align-center u-justify-between">
 			<CreatableSelect
