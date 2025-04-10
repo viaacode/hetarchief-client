@@ -445,23 +445,19 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			const imageWidth: number | undefined =
 				// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
 				(activeImageTileSource as any).width || activeImageTileSource.dimensions.x;
-			const imageHeight: number | undefined =
-				// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
-				(activeImageTileSource as any).height || activeImageTileSource.dimensions.y;
 
-			if (!imageWidth || !imageHeight) {
+			if (!imageWidth) {
 				console.error('aborting zoom to rect because activeImageTileSource is undefined', {
 					item: activeImageTileSource,
 					openSeaDragonViewer,
 					imageWidth,
-					imageHeight,
 					activeImageTileSource,
 				});
 				return;
 			}
 			openSeaDragonViewer.viewport.zoomTo(1.5, undefined, true);
 			openSeaDragonViewer.viewport.panTo(
-				new openSeaDragonLib.Point(x / imageWidth, y / imageHeight),
+				new openSeaDragonLib.Point(x / imageWidth, y / imageWidth), // All relative coordinates are relative to the image width
 				false
 			);
 		};
