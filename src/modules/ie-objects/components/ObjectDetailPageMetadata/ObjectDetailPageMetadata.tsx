@@ -231,7 +231,12 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					setCopyrightModalOpen(true);
 					setOnConfirmCopyright(() => () => {
 						window.open(
-							`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo?.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/zip`
+							stringifyUrl({
+								url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo?.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/zip`,
+								query: {
+									currentPageUrl: window.origin + router.asPath,
+								},
+							})
 						);
 					});
 					break;
@@ -240,18 +245,28 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					setCopyrightModalOpen(true);
 					setOnConfirmCopyright(() => () => {
 						window.open(
-							`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`
+							stringifyUrl({
+								url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`,
+								query: {
+									currentPageUrl: window.origin + router.asPath,
+								},
+							})
 						);
 					});
 					break;
 				default:
 					window.open(
-						`${publicRuntimeConfig.PROXY_URL}/${IE_OBJECTS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`
+						stringifyUrl({
+							url: `${publicRuntimeConfig.PROXY_URL}/${IE_OBJECTS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`,
+							query: {
+								currentPageUrl: window.origin + router.asPath,
+							},
+						})
 					);
 			}
 			setMetadataExportDropdownOpen(false);
 		},
-		[currentPageIndex, mediaInfo]
+		[currentPageIndex, mediaInfo, router.asPath]
 	);
 
 	const getActionButtonSortMapByUserType = useCallback((): MetadataSortMap[] => {
