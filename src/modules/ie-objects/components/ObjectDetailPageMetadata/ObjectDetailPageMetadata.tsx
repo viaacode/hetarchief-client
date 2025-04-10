@@ -324,10 +324,10 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									aria-label={buttonLabelDesktop}
 									title={buttonLabelDesktop}
 								>
-									<span className="u-text-ellipsis u-display-none u-display-block-md">
+									<span className="u-text-ellipsis u-display-none u-display-block-lg">
 										{buttonLabelDesktop}
 									</span>
-									<span className="u-text-ellipsis u-display-block u-display-none-md">
+									<span className="u-text-ellipsis u-display-block u-display-none-lg">
 										{buttonLabelMobile}
 									</span>
 								</Button>
