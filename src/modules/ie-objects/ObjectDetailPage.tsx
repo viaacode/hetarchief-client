@@ -294,7 +294,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					return null;
 				}
 				return {
-					imageUrl: `${imageApiFile.storedAt.replace('https://iiif-qas.meemoo.be/image/3/public', 'https://iiif-qas.meemoo.be/image/3/hetarchief')}/info.json`, // Adding info.json avoids an extra redirect 303
+					imageUrl: `${imageApiFile.storedAt.replace('https://iiif-qas.meemoo.be/image/3/public', 'https://iiif-qas.meemoo.be/image/3/hetarchief')}`,
 					thumbnailUrl: imageFile?.thumbnailUrl,
 					altoUrl: altoFile?.storedAt,
 				};
@@ -326,6 +326,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			iiifViewerImageInfos.map(
 				(imageInfo): ImageInfoWithToken => ({
 					...imageInfo,
+					// Adding info.json avoids an extra redirect 303
+					// But we cannot add it before the ticket was requested
+					// The url in the ticket must be a substring of the final image url, otherwise the ticket isn't valid
+					imageUrl: `${imageInfo.imageUrl}/info.json`,
 					token: ticketServiceTokensByPath?.[imageInfo.imageUrl] || null,
 				})
 			),
@@ -1299,7 +1303,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		let searchTermIndex = 0;
 		return (
 			<div className={styles['p-object-detail__ocr__words-container']}>
-				{simplifiedAltoInfo?.text?.map((textLocation, index) => {
+				{simplifiedAltoInfo?.text?.map((textLocation) => {
 					const isMarked: boolean =
 						!!searchTerms &&
 						searchTermWords.some((searchWord) =>
