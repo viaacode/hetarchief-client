@@ -303,7 +303,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 					/>
 				</FormControl>
 			</div>
-			<div className={clsx(styles.releaseDate, 'u-px-20 u-px-32-md')}>
+			<div className={clsx(styles.releaseDateFilterForm__date, 'u-px-20 u-px-32-md')}>
 				<FormControl
 					className="u-mb-24 c-form-control--label-hidden"
 					errors={[
