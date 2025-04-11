@@ -47,11 +47,11 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToLoc
 				sortBy(
 					mentions.filter((mention) => {
 						return (
-							mention.name.toLowerCase().includes(searchTermsLower) ||
-							mention.birthPlace.toLowerCase().includes(searchTermsLower) ||
-							mention.deathPlace.toLowerCase().includes(searchTermsLower) ||
-							String(mention.birthDate).includes(searchTerms) ||
-							String(mention.deathDate).includes(searchTerms)
+							mention.name?.toLowerCase().includes(searchTermsLower) ||
+							mention.birthPlace?.toLowerCase().includes(searchTermsLower) ||
+							mention.deathPlace?.toLowerCase().includes(searchTermsLower) ||
+							String(mention.birthDate)?.includes(searchTerms) ||
+							String(mention.deathDate)?.includes(searchTerms)
 						);
 					}),
 					(mention) => 1 - mention.confidence
