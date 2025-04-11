@@ -27,7 +27,10 @@ export const useGetIeObjectInfo = (
 				newSchemaIdentifier = schemaIdentifier;
 			}
 			const ieObjects = await IeObjectsService.getBySchemaIdentifiers([newSchemaIdentifier]);
-			return ieObjects[0];
+			if (ieObjects[0]) {
+				return ieObjects[0];
+			}
+			throw new Error(`404: IeObject not found: ${newSchemaIdentifier}`);
 		},
 		{
 			keepPreviousData: true,
