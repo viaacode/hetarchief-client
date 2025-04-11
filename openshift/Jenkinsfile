@@ -54,7 +54,8 @@ pipeline {
 				container('oc') {
 					script {
 						env.GIT_SHORT_COMMIT = sh(script: "printf \$(git rev-parse --short ${GIT_COMMIT})", returnStdout: true)
-						env.IMAGE_TAG = sh(script: 'git describe --tags || echo latest', returnStdout: true)
+						env.IMAGE_TAG = sh(script: 'git describe --tags || echo latest', returnStdout: true).trim()
+
 						// The name used for the build config based on the image tag
 						// Replace '.' with '_' as '.' is not allowed.
 						// env.BUILD_CONFIG_NAME = sh(script: 'echo "${IMAGE_TAG}" | sed -r "s/\\./\\-/g"', returnStdout: true)
@@ -103,10 +104,10 @@ pipeline {
 				container('oc') {
 					script {
 						sh """#!/bin/bash
-							oc -n $OC_PROJECT patch "bc/${APP_NAME}-int" -p "\$(jq -n --arg ref '${GIT_SHORT_COMMIT}' '{spec: {source: {git: {ref: \$ref}}}}')"
-							oc -n $OC_PROJECT patch "bc/${APP_NAME}-int" -p "\$(jq -n --arg ref '${BRANCH_NAME}' '{metadata: {annotations: {ref: \$ref}}}')"
-							oc -n $OC_PROJECT patch "bc/${APP_NAME}-int" -p "\$(jq -n --arg shortcommit '${GIT_SHORT_COMMIT}' '{metadata: {annotations: {shortcommit: \$shortcommit}}}')"
-						"""
+							oc -n $OC_PROJECT patch "bc/${APP_NAME}-int" -p "{\\"spec\\":{\\"source\\":{\\"git\\":{\\"ref\\":\\"${GIT_SHORT_COMMIT}\\"}}}}"
+							oc -n $OC_PROJECT patch "bc/${APP_NAME}-int" -p "{\\"metadata\\":{\\"annotations\\":{\\"ref\\":\\"${BRANCH_NAME}\\"}}}"
+							oc -n $OC_PROJECT patch "bc/${APP_NAME}-int" -p "{\\"metadata\\":{\\"annotations\\":{\\"shortcommit\\":\\"${GIT_SHORT_COMMIT}\\"}}}"
+                        """
 					}
 					startOpenShiftBuild('int', '${BRANCH_NAME}')
 				}
@@ -217,10 +218,10 @@ pipeline {
 				container('oc') {
 					script {
 						sh """#!/bin/bash
-							oc -n $OC_PROJECT patch "bc/${APP_NAME}-int" -p "\$(jq -n --arg ref '${GIT_SHORT_COMMIT}' '{spec: {source: {git: {ref: \$ref}}}}')"
-							oc -n $OC_PROJECT patch "bc/${APP_NAME}-int" -p "\$(jq -n --arg ref '${BRANCH_NAME}' '{metadata: {annotations: {ref: \$ref}}}')"
-							oc -n $OC_PROJECT patch "bc/${APP_NAME}-int" -p "\$(jq -n --arg shortcommit '${GIT_SHORT_COMMIT}' '{metadata: {annotations: {shortcommit: \$shortcommit}}}')"
-						"""
+							oc -n $OC_PROJECT patch "bc/${APP_NAME}-prd" -p "{\\"spec\\":{\\"source\\":{\\"git\\":{\\"ref\\":\\"${IMAGE_TAG}\\"}}}}"
+							oc -n $OC_PROJECT patch "bc/${APP_NAME}-prd" -p "{\\"metadata\\":{\\"annotations\\":{\\"ref\\":\\"${IMAGE_TAG}\\"}}}"
+							oc -n $OC_PROJECT patch "bc/${APP_NAME}-prd" -p "{\\"metadata\\":{\\"annotations\\":{\\"shortcommit\\":\\"${GIT_SHORT_COMMIT}\\"}}}"
+                        """
 					}
 					startOpenShiftBuild('prd', '${IMAGE_TAG}')
 				}

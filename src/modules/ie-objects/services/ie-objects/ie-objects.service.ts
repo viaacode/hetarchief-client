@@ -79,18 +79,22 @@ export class IeObjectsService {
 
 	/**
 	 * Get an IE object by its schemaIdentifier
-	 * @param schemaIdentifier The ie object schemaIdentifier, eg: 086348mc8s
+	 * @param schemaIdentifiers The ie object schemaIdentifiers, eg: 086348mc8s, qstt4fps28
 	 */
-	public static async getBySchemaIdentifier(schemaIdentifier: string): Promise<IeObject> {
+	public static async getBySchemaIdentifiers(schemaIdentifiers: string[]): Promise<IeObject[]> {
 		console.log(`[PERFORMANCE] ${new Date().toISOString()} start fetch ie object`);
-		const ieObject: IeObject = await ApiService.getApi()
-			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${schemaIdentifier}`)
-			.json();
+		const url = stringifyUrl({
+			url: IE_OBJECTS_SERVICE_BASE_URL,
+			query: {
+				ids: schemaIdentifiers,
+			},
+		});
+		const ieObjects: IeObject[] = await ApiService.getApi().get(url).json();
 		console.log(
-			`[PERFORMANCE] ${new Date().toISOString()} finished fetch ie object`,
-			schemaIdentifier
+			`[PERFORMANCE] ${new Date().toISOString()} finished fetch ie objects`,
+			schemaIdentifiers
 		);
-		return ieObject;
+		return ieObjects;
 	}
 
 	public static async getSeoBySchemaIdentifier(schemaIdentifier: string): Promise<SeoInfo> {

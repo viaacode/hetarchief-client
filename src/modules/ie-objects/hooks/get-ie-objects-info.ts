@@ -6,16 +6,6 @@ import { QUERY_KEYS } from '@shared/const/query-keys';
 import type { IeObject } from './../ie-objects.types';
 import { IeObjectsService } from './../services';
 
-/**
- * Get an IE object by its schemaIdentifier
- * @param schemaIdentifier The ie object schemaIdentifier, eg: 086348mc8s
- */
-export async function getIeObjectInfoBySchemaIdentifier(
-	schemaIdentifier: string
-): Promise<IeObject | null> {
-	return IeObjectsService.getBySchemaIdentifier(schemaIdentifier);
-}
-
 export const useGetIeObjectInfo = (
 	schemaIdentifier: string,
 	options: {
@@ -23,9 +13,9 @@ export const useGetIeObjectInfo = (
 		enabled?: boolean;
 	} = {}
 ): UseQueryResult<IeObject | null> => {
-	return useQuery(
+	return useQuery<IeObject>(
 		[QUERY_KEYS.getIeObjectsInfo, schemaIdentifier],
-		async () => {
+		async (): Promise<IeObject> => {
 			let newSchemaIdentifier: string;
 			if (schemaIdentifier.length > MIN_LENGTH_SCHEMA_IDENTIFIER_V2) {
 				// This is an old schema identifier (v2), we need to convert it to a new one (v3)
@@ -36,7 +26,11 @@ export const useGetIeObjectInfo = (
 				// This is already a new schema identifier (v3)
 				newSchemaIdentifier = schemaIdentifier;
 			}
-			return getIeObjectInfoBySchemaIdentifier(newSchemaIdentifier);
+			const ieObjects = await IeObjectsService.getBySchemaIdentifiers([newSchemaIdentifier]);
+			if (ieObjects[0]) {
+				return ieObjects[0];
+			}
+			throw new Error(`404: IeObject not found: ${newSchemaIdentifier}`);
 		},
 		{
 			keepPreviousData: true,
@@ -52,6 +46,9 @@ export function makeServerSideRequestGetIeObjectInfo(
 ): Promise<void> {
 	return queryClient.prefetchQuery({
 		queryKey: [QUERY_KEYS.getIeObjectsInfo, schemaIdentifier],
-		queryFn: () => getIeObjectInfoBySchemaIdentifier(schemaIdentifier),
+		queryFn: async () => {
+			const ieObjects = await IeObjectsService.getBySchemaIdentifiers([schemaIdentifier]);
+			return ieObjects[0];
+		},
 	});
 }

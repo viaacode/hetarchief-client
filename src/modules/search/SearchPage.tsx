@@ -10,7 +10,7 @@ import {
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
 import type { HTTPError } from 'ky';
-import { compact, intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
+import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
 import Head from 'next/head';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
@@ -23,7 +23,6 @@ import { GroupName, Permission } from '@account/const';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
 import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/get-ie-object-format-counts';
-import { useGetIeObjectTicketServiceTokens } from '@ie-objects/hooks/get-ie-object-ticket-service-tokens';
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
 import { IeObjectAccessThrough } from '@ie-objects/ie-objects.types';
 import { isInAFolder } from '@ie-objects/utils/folders';
@@ -100,7 +99,6 @@ import type { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/co
 import type { ConsultablePublicDomainFilterFormState } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm.types';
 import type { DurationFilterFormState } from '@visitor-space/components/DurationFilterForm';
 import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
-import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import type { GenreFilterFormState } from '@visitor-space/components/GenreFilterForm';
 import type { KeywordsFilterFormState } from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.types';
 import type { LanguageFilterFormState } from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
@@ -271,9 +269,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 		// Enabled when search query is finished, so it loads the tab counts after the initial results
 		{ enabled: !searchResultsRefetching }
 	);
-	const { data: thumbnailTickets } = useGetIeObjectTicketServiceTokens(
-		compact(searchResults?.items?.map((item) => item.thumbnailUrl) || [])
-	);
 
 	const showManyResultsTile = page === PAGE_NUMBER_OF_MANY_RESULTS_TILE;
 
@@ -299,33 +294,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	useEffect(() => {
 		dispatch(setShowZendesk(!isKioskUser && !query[SearchFilterId.Maintainer]));
 	}, [dispatch, isKioskUser, query]);
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: Make sure the dependency array contains the same items as passed to VISITOR_SPACE_FILTERS
-	useEffect(() => {
-		// Filter out all disabled query param keys/ids
-		const disabledFilterKeys: SearchFilterId[] = SEARCH_PAGE_FILTERS(
-			isGlobalArchive,
-			isKioskUser,
-			isKeyUser,
-			format
-		)
-			.filter(
-				({ isDisabled, tabs }: FilterMenuFilterOption): boolean =>
-					isDisabled?.() || !tabs.includes(format)
-			)
-			.map(({ id }: FilterMenuFilterOption): SearchFilterId => id as SearchFilterId);
-
-		// Loop over all existing query params and replace the disabled filters with their initial value if they exist
-		const disabledKeysSet: Set<SearchFilterId> = new Set(disabledFilterKeys);
-		const queryKeys = Object.keys(query) as SearchFilterId[];
-		const strippedQuery = Object.fromEntries(
-			queryKeys.map((key) => {
-				return [key, disabledKeysSet.has(key) ? VISITOR_SPACE_QUERY_PARAM_INIT[key] : query[key]];
-			})
-		);
-
-		setQuery(strippedQuery);
-	}, [isKeyUser, isGlobalArchive]);
 
 	useEffect(() => {
 		// Ward: wait until items are rendered on the screen before scrolling
@@ -567,24 +535,23 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				data = (values as MaintainerFilterFormState).maintainers;
 				break;
 
-			case SearchFilterId.ConsultableOnlyOnLocation:
+			case SearchFilterId.ConsultableOnlyOnLocation: {
 				// Info: remove query param if false (= set to undefined)
-				data =
-					(values as ConsultableOnlyOnLocationFilterFormState)[
-						IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
-					] || undefined;
+				const filterValue = (values as ConsultableOnlyOnLocationFilterFormState)[
+					IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
+				];
+				data = filterValue || undefined;
 				break;
+			}
 
-			case SearchFilterId.ConsultableMedia:
+			case SearchFilterId.ConsultableMedia: {
 				// Info: remove query param if false (= set to undefined)
-				data = (values as ConsultableMediaFilterFormState)[
+				const filterValue = (values as ConsultableMediaFilterFormState)[
 					IeObjectsSearchFilterField.CONSULTABLE_MEDIA
-				]
-					? (values as ConsultableMediaFilterFormState)[
-							IeObjectsSearchFilterField.CONSULTABLE_MEDIA
-						]
-					: undefined;
+				];
+				data = filterValue || undefined;
 				break;
+			}
 
 			case SearchFilterId.ConsultablePublicDomain:
 				// Info: remove query param if false (= set to undefined)
@@ -736,15 +703,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 			const description =
 				type === IeObjectType.Newspaper ? item.transcript || item.description : item.description;
 
-			const thumbnailUrlToken = thumbnailTickets?.[item.thumbnailUrl];
-			const thumbnailUrlWithToken =
-				thumbnailUrlToken && item.thumbnailUrl
-					? stringifyUrl({
-							url: item.thumbnailUrl,
-							query: { token: thumbnailUrlToken },
-						})
-					: undefined;
-
 			return {
 				schemaIdentifier: item.schemaIdentifier,
 				maintainerSlug: item.maintainerSlug,
@@ -754,7 +712,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				publishedOrCreatedDate: item.datePublished ?? item.dateCreated ?? null,
 				publishedBy: item.maintainerName || '',
 				type,
-				thumbnail: thumbnailUrlWithToken || undefined,
+				thumbnail: item.thumbnailUrl || undefined,
 				name: item.name,
 				hasRelated: (item.related_count || 0) > 0,
 				hasTempAccess,
@@ -767,14 +725,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				numOfChildren: item.children || 0,
 			};
 		});
-	}, [
-		isKioskUser,
-		locale,
-		searchResults?.items,
-		thumbnailTickets,
-		searchResults?.searchTerms,
-		isGlobalArchive,
-	]);
+	}, [isKioskUser, locale, searchResults?.items, searchResults?.searchTerms, isGlobalArchive]);
 
 	const openAndScrollToAdvancedFilters = () => {
 		setFilterMenuOpen(true);
@@ -1071,6 +1022,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 											renderedRight={renderSearchInputRightControls()}
 											size="lg"
 											value={activeFilters}
+											isLoading={searchResultsLoading || searchResultsRefetching}
 										/>
 									</div>
 								</FormControl>

@@ -231,7 +231,12 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					setCopyrightModalOpen(true);
 					setOnConfirmCopyright(() => () => {
 						window.open(
-							`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo?.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/zip`
+							stringifyUrl({
+								url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo?.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/zip`,
+								query: {
+									currentPageUrl: window.origin + router.asPath,
+								},
+							})
 						);
 					});
 					break;
@@ -240,18 +245,28 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					setCopyrightModalOpen(true);
 					setOnConfirmCopyright(() => () => {
 						window.open(
-							`${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`
+							stringifyUrl({
+								url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`,
+								query: {
+									currentPageUrl: window.origin + router.asPath,
+								},
+							})
 						);
 					});
 					break;
 				default:
 					window.open(
-						`${publicRuntimeConfig.PROXY_URL}/${IE_OBJECTS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`
+						stringifyUrl({
+							url: `${publicRuntimeConfig.PROXY_URL}/${IE_OBJECTS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`,
+							query: {
+								currentPageUrl: window.origin + router.asPath,
+							},
+						})
 					);
 			}
 			setMetadataExportDropdownOpen(false);
 		},
-		[currentPageIndex, mediaInfo]
+		[currentPageIndex, mediaInfo, router.asPath]
 	);
 
 	const getActionButtonSortMapByUserType = useCallback((): MetadataSortMap[] => {
@@ -324,10 +339,10 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									aria-label={buttonLabelDesktop}
 									title={buttonLabelDesktop}
 								>
-									<span className="u-text-ellipsis u-display-none u-display-block-md">
+									<span className="u-text-ellipsis u-display-none u-display-block-lg">
 										{buttonLabelDesktop}
 									</span>
-									<span className="u-text-ellipsis u-display-block u-display-none-md">
+									<span className="u-text-ellipsis u-display-block u-display-none-lg">
 										{buttonLabelMobile}
 									</span>
 								</Button>
@@ -450,7 +465,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 
 				{!isKiosk && maintainerLogo && (
 					<div className={styles['p-object-detail__sidebar__content-logo']}>
-						{/* TODO remove this hack once we fully switched to the new graph.organisations table */}
 						{/* eslint-disable-next-line @next/next/no-img-element */}
 						<img src={maintainerLogo} alt={`Logo ${maintainerName}`} />
 					</div>

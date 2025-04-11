@@ -4,7 +4,6 @@ import type { FC } from 'react';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { dropdownIndicatorCxState } from '@shared/components/TagsInput';
-
 import type { TagSearchBarClearProps } from './TagSearchBarClear.types';
 
 const TagSearchBarClear: FC<TagSearchBarClearProps> = ({

@@ -12,6 +12,7 @@ import { Locale } from '@shared/utils/i18n';
 
 import type { MappedElement } from '../BlockContentEnclose.types';
 
+import { IeObjectsService } from '@ie-objects/services';
 import type {
 	ContentPage,
 	GetContentBlockEncloseContentReturnType,
@@ -26,18 +27,10 @@ export const useGetContentBlockEncloseContent = (
 	const ieObjectIds = ids.filter((id) => id.type === 'IE_OBJECT').map((id) => id.value);
 	const contentPageIds = ids.filter((id) => id.type === 'CONTENT_PAGE').map((id) => id.value);
 
-	const url = stringifyUrl({
-		url: `${publicRuntimeConfig.PROXY_URL}/ie-objects`,
-		query: {
-			id: ieObjectIds,
-		},
-	});
+	// TODO PREF: see if we can use a custom endpoint to speed up the fetching of multiple objects for this block
 	const ieObjectQuery = {
 		queryKey: [QUERY_KEYS.GET_IE_OBJECT_FOR_CONTENT_ENCLOSE_BLOCK],
-		queryFn: () =>
-			fetchWithLogoutJson<IeObject[]>(url, {
-				headers: { referer: AdminConfigManager.getConfig().env.CLIENT_URL },
-			}),
+		queryFn: () => IeObjectsService.getBySchemaIdentifiers(ieObjectIds),
 		keepPreviousData: true,
 		enabled: ieObjectIds.length > 0,
 	};
