@@ -25,7 +25,7 @@ interface MaterialRequestBladeProps {
 	isEditMode?: boolean;
 	onClose: () => void;
 	objectName: string;
-	objectId: string;
+	objectSchemaIdentifier: string;
 	objectDctermsFormat: IeObjectType;
 	maintainerName: string;
 	maintainerLogo: string | null;
@@ -43,7 +43,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	isEditMode = false,
 	onClose,
 	objectName,
-	objectId,
+	objectSchemaIdentifier,
 	objectDctermsFormat,
 	maintainerName,
 	maintainerLogo,
@@ -88,7 +88,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			}
 			setNoTypeSelectedOnSave(false);
 			const response = await MaterialRequestsService.create({
-				objectId,
+				objectSchemaIdentifier,
 				type: typeSelected,
 				reason: reasonInputValue,
 				requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
@@ -287,7 +287,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			</div>
 			<a
 				tabIndex={-1}
-				href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectId}`}
+				href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectSchemaIdentifier}`}
 				className={styles['c-request-material__material-link']}
 			>
 				<div className={styles['c-request-material__material']}>
@@ -298,7 +298,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						/>
 						<span>{objectName}</span>
 					</p>
-					<p className={styles['c-request-material__material-id']}>{objectId}</p>
+					<p className={styles['c-request-material__material-id']}>{objectSchemaIdentifier}</p>
 				</div>
 			</a>
 			<div className={styles['c-request-material__content']}>

@@ -1611,7 +1611,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					isOpen={activeBlade === MediaActions.RequestMaterial}
 					onClose={onCloseBlade}
 					objectName={mediaInfo?.name}
-					objectId={mediaInfo?.schemaIdentifier}
+					objectSchemaIdentifier={mediaInfo?.schemaIdentifier}
 					objectDctermsFormat={mediaInfo.dctermsFormat}
 					maintainerName={mediaInfo?.maintainerName}
 					maintainerLogo={mediaInfo?.maintainerLogo}
