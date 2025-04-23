@@ -52,16 +52,18 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 						)}
 						variants={['text', ...variants]}
 						onClick={() => onChangeSearchIndex(currentSearchIndex - 1)}
-						disabled={currentSearchIndex === 0}
+						disabled={currentSearchIndex === 0 || searchResults.length === 0}
 					/>
 					<span className="pagination-info">
-						{tText(
-							'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___current-search-index-van-de-total-search-results',
-							{
-								currentSearchIndex: currentSearchIndex + 1,
-								totalSearchResults: searchResults.length,
-							}
-						)}
+						{searchResults.length === 0
+							? tText('0 resultaten')
+							: tText(
+									'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___current-search-index-van-de-total-search-results',
+									{
+										currentSearchIndex: currentSearchIndex + 1,
+										totalSearchResults: searchResults.length,
+									}
+								)}
 					</span>
 					<Button
 						iconStart={<Icon name={IconNamesLight.AngleRight} />}
@@ -70,7 +72,7 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 						)}
 						variants={['text', ...variants]}
 						onClick={() => onChangeSearchIndex(currentSearchIndex + 1)}
-						disabled={currentSearchIndex === searchResults.length - 1}
+						disabled={currentSearchIndex === searchResults.length - 1 || searchResults.length === 0}
 					/>
 					<Button
 						iconStart={<Icon name={IconNamesLight.Times} />}
