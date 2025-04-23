@@ -1,4 +1,9 @@
 .c-metadata-search-link {
+	// https://meemoo.atlassian.net/browse/ARC-2879
+	a {
+		text-decoration: none !important;
+	}
+
 	:global(.c-tag--medium) {
 		height: auto !important;
 	}
