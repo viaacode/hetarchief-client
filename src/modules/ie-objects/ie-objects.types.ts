@@ -6,12 +6,14 @@ import type { ElasticsearchFieldNames } from '@visitor-space/types';
 // Mapped intellectual entity object
 
 export enum IsPartOfKey {
-	archief = 'https://schema.org/ArchiveComponent',
-	programma = 'https://schema.org/BroadcastEvent',
-	serie = 'https://schema.org/CreativeWorkSeries',
-	episode = 'https://schema.org/Episode',
+	archief = 'archief',
+	programma = 'programma',
+	serie = 'serie',
+	episode = 'episode',
 	bestanddeel = 'bestanddeel',
 	seizoennummer = 'seizoennummer',
+	seizoen = 'seizoen',
+	krant = 'krant',
 }
 
 export interface IsPartOfCollection {
