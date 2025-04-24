@@ -14,6 +14,10 @@
 	line-height: $line-height-base;
 	white-space: nowrap;
 
+	// Fix icon rendering on safari
+	// https://meemoo.atlassian.net/browse/ARC-2874
+	text-align: left;
+
 	// Enable Ligatures
 	font-feature-settings: "liga";
 	font-variant-ligatures: discretionary-ligatures;
