@@ -1449,6 +1449,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					'modules/ie-objects/object-detail-page___je-hebt-enkel-toegang-tot-de-metadata-van-dit-object-omdat-dit-object-niet-publiek-beschikbaar-is-volgens-de-licenties-van-de-auteur'
 				)}
 				className={styles['p-object-detail__media--not-available']}
+				onOpenRequestAccess={showVisitButton ? openRequestAccessBlade : undefined}
 			/>
 		);
 	};
