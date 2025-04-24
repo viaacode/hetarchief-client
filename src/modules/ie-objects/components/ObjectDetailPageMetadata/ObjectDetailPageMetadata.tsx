@@ -464,10 +464,10 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				</div>
 
 				{!isKiosk && maintainerLogo && (
-					<div className={styles['p-object-detail__sidebar__content-logo']}>
-						{/* eslint-disable-next-line @next/next/no-img-element */}
-						<img src={maintainerLogo} alt={`Logo ${maintainerName}`} />
-					</div>
+					<div
+						className={styles['p-object-detail__sidebar__content-logo']}
+						style={{ backgroundImage: `url(${maintainerLogo})` }}
+					/>
 				)}
 			</div>
 		);
