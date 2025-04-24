@@ -74,11 +74,11 @@ $header-and-buttons-height-mobile: 21.8rem;
 		margin-top: $spacer-1xl;
 		min-height: 0;
 		overflow-y: auto;
-		max-height: calc(100vh - $top-navigation-bar-height - $header-and-buttons-height-mobile);
+		max-height: calc($view-height - $top-navigation-bar-height - $header-and-buttons-height-mobile);
 
 		@media (min-width: $breakpoint-md) {
 			margin-top: $spacer-lg * 2;
-			max-height: calc(100vh - $top-navigation-bar-height - $header-and-buttons-height);
+			max-height: calc($view-height - $top-navigation-bar-height - $header-and-buttons-height);
 		}
 
 		.c-content-page-preview {

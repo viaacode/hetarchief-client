@@ -1,5 +1,5 @@
 @use "src/styles/abstracts" as *;
 
 .p-pid__c-loading--fullscreen {
-	height: calc(100vh - $top-navigation-bar-height - $footer-height);
+	height: calc($view-height - $top-navigation-bar-height - $footer-height);
 }

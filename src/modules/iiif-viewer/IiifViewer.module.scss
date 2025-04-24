@@ -77,7 +77,7 @@ $controls-margin-bottom: $spacer-sm;
 		background-color: #222;
 		justify-content: center;
 		align-items: center;
-		height: calc(100vh - 10rem);
+		height: calc($view-height - 10rem);
 		padding-bottom: $spacer-1xl * 4;
 
 		@media (max-width: $breakpoint-md) {

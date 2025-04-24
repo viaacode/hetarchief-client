@@ -142,7 +142,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 
 	.c-navigation__dropdown-overlay {
 		z-index: get-z-layer("nav-dropdown"); // above foreground layers
-		height: 100vh;
+		height: $view-height;
 	}
 
 	.c-navigation__hamburger-overlay {
@@ -466,9 +466,8 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 
 	.c-navigation__section {
 		:global(.c-menu) {
-			max-height: calc(100vh - $c-navigation-height - 10rem); // Extra margin for browser url bar on mobile safari
-			overflow-x: hidden;
-			overflow-y: auto;
+			max-height: calc($view-height - $c-navigation-height - 10rem); // Extra margin for browser url bar on mobile safari
+			overflow: hidden auto;
 		}
 
 		:global(.c-badge) {
@@ -498,8 +497,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		column-gap: $spacer-lg;
 
 		@media (max-width: $breakpoint-xxl) {
-			column-gap: 0 !important;
-			row-gap: $spacer-sm;
+			gap: $spacer-sm 0 !important;
 		}
 
 		> :global([class*="c-navigation__section"]) {
