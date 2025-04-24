@@ -250,23 +250,17 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			width: 100%;
 		}
 
-		&-tab {
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
-			background-color: $platinum;
+		:global(.c-tab) {
+			display: flex;
+			justify-content: center;
+			background-color: $black;
 
-			.c-tab {
-				justify-content: center;
-				height: 8rem;
-				font-size: $font-size-md;
+			:global(.c-tab__icon) {
+				font-size: $font-size-lg;
+			}
 
-				&__icon {
-					font-size: $font-size-lg;
-				}
-
-				&.c-tab--active {
-					background-color: $white;
-				}
+			&:global(.c-tab--active) {
+				background-color: $white;
 			}
 		}
 	}
