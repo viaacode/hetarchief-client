@@ -82,7 +82,7 @@ export const GET_NEWSPAPER_DOWNLOAD_OPTIONS = (): MenuItemInfo[] => [
 /**
  * Object placeholders
  */
-const getDefaultPlaceholderValues = () => ({
+const getDefaultPlaceholderLabels = () => ({
 	description: tText(
 		'modules/ie-objects/ie-objects___je-kan-dit-object-enkel-bekijken-tijdens-een-fysiek-bezoek-aan-de-bezoekersruimte'
 	),
@@ -91,7 +91,7 @@ const getDefaultPlaceholderValues = () => ({
 	closeModalButtonLabel: tText('modules/ie-objects/ie-objects___sluit'),
 });
 
-export const ticketErrorPlaceholder = (): ObjectPlaceholderProps => ({
+export const getTicketErrorPlaceholderLabels = (): ObjectPlaceholderProps => ({
 	description: tHtml('modules/ie-objects/const/index___ophalen-van-afspeel-token-mislukt'),
 	reasonTitle: tText('modules/ie-objects/const/index___waarom-kan-ik-dit-object-niet-bekijken'),
 	reasonDescription: tHtml(
@@ -103,15 +103,15 @@ export const ticketErrorPlaceholder = (): ObjectPlaceholderProps => ({
 	closeModalButtonLabel: tText('pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'),
 });
 
-export const objectPlaceholder = (): ObjectPlaceholderProps => ({
-	...getDefaultPlaceholderValues(),
+export const getObjectPlaceholderLabels = (): ObjectPlaceholderProps => ({
+	...getDefaultPlaceholderLabels(),
 	openModalButtonLabel: tText(
 		'pages/bezoekersruimte/visitor-space-slug/object-id/index___meer-info'
 	),
 	closeModalButtonLabel: tText('pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'),
 });
 
-export const noLicensePlaceholder = (): ObjectPlaceholderProps => ({
+export const getNoLicensePlaceholderLabels = (): ObjectPlaceholderProps => ({
 	description: tText(
 		'modules/ie-objects/const/index___je-kan-dit-object-enkel-bekijken-tijdens-een-fysiek-bezoek-aan-de-bezoekersruimte'
 	),

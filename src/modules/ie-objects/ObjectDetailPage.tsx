@@ -66,9 +66,9 @@ import {
 	JSON_FORMATS,
 	OBJECT_DETAIL_TABS,
 	XML_FORMATS,
-	noLicensePlaceholder,
-	objectPlaceholder,
-	ticketErrorPlaceholder,
+	getNoLicensePlaceholderLabels,
+	getObjectPlaceholderLabels,
+	getTicketErrorPlaceholderLabels,
 } from '@ie-objects/ie-objects.consts';
 import {
 	type AltoTextLine,
@@ -1136,14 +1136,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 		if (isErrorPlayableUrl) {
 			return (
-				<ObjectPlaceholder {...ticketErrorPlaceholder()} addSliderPadding={showFragmentSlider} />
+				<ObjectPlaceholder
+					{...getTicketErrorPlaceholderLabels()}
+					addSliderPadding={showFragmentSlider}
+				/>
 			);
 		}
 
 		if (!playableUrl || !currentPlayableFile || !mediaInfo?.pageRepresentations?.length) {
 			return (
 				<ObjectPlaceholder
-					{...noLicensePlaceholder()}
+					{...getNoLicensePlaceholderLabels()}
 					onOpenRequestAccess={showVisitButton ? openRequestAccessBlade : undefined}
 					addSliderPadding={showFragmentSlider}
 				/>
@@ -1441,7 +1444,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 		return (
 			<ObjectPlaceholder
-				{...objectPlaceholder()}
+				{...getObjectPlaceholderLabels()}
 				reasonDescription={tText(
 					'modules/ie-objects/object-detail-page___je-hebt-enkel-toegang-tot-de-metadata-van-dit-object-omdat-dit-object-niet-publiek-beschikbaar-is-volgens-de-licenties-van-de-auteur'
 				)}
