@@ -154,6 +154,38 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			bottomLeftContainer?.append(closeFullscreenButton);
 		}, []);
 
+		/**
+		 * Show or hide bottom border, if reference strip is scrollable
+		 * https://meemoo.atlassian.net/browse/ARC-2855
+		 */
+		const checkReferenceStripBottomBorder = useCallback(() => {
+			const referenceStrip = document.querySelector(
+				'[class*="IiifViewer_c-iiif-viewer__iiif__reference-strip__"]'
+			);
+			if (!referenceStrip) {
+				return;
+			}
+			const scrollHeight = referenceStrip.scrollHeight;
+			const height = referenceStrip.clientHeight;
+
+			if (scrollHeight > height) {
+				// Elements scrolls, show after element
+				referenceStrip.classList.add(styles['c-iiif-viewer__iiif__reference-strip--scrollable']);
+			} else {
+				// Elements doesn't scroll, hide after element
+				referenceStrip.classList.remove(styles['c-iiif-viewer__iiif__reference-strip--scrollable']);
+			}
+		}, []);
+
+		useEffect(() => {
+			window.addEventListener('resize', checkReferenceStripBottomBorder);
+			checkReferenceStripBottomBorder();
+
+			return () => {
+				window.removeEventListener('resize', checkReferenceStripBottomBorder);
+			};
+		}, [checkReferenceStripBottomBorder]);
+
 		const getCurrentImageSize = (): ImageSize => {
 			const imageSize = {
 				// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
