@@ -987,10 +987,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						simplifiedAltoInfo?.description.softwareCreator
 					)}
 					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___ocr-software-maker'),
-						simplifiedAltoInfo?.description.softwareCreator
-					)}
-					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___ocr-gemaakt-op'),
 						simplifiedAltoInfo?.description.processingDateTime
 					)}
