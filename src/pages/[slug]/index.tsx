@@ -1,7 +1,4 @@
-import {
-	ContentPageRenderer,
-	convertDbContentPageToContentPageInfo,
-} from '@meemoo/admin-core-ui/dist/admin.mjs';
+import { ContentPageRenderer, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import { QueryClient } from '@tanstack/react-query';
 import type { HTTPError } from 'ky';
 import { kebabCase } from 'lodash-es';
@@ -19,10 +16,7 @@ import {
 	useGetContentPageByLanguageAndPath,
 } from '@content-page/hooks/get-content-page';
 import { ContentPageClientService } from '@content-page/services/content-page-client.service';
-import {
-	makeServerSideRequestGetIeObjectInfo,
-	useGetIeObjectInfo,
-} from '@ie-objects/hooks/get-ie-objects-info';
+import { makeServerSideRequestGetIeObjectInfo, useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';
 import { type PageInfo, SeoTags } from '@shared/components/SeoTags/SeoTags';
@@ -45,6 +39,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 	image,
 	url,
 	commonUser,
+	isLoadingUserStatus,
 }) => {
 	const router = useRouter();
 	const locale = useLocale();
@@ -65,7 +60,13 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 		error: contentPageError,
 		isLoading: isContentPageLoading,
 		data: dbContentPage,
-	} = useGetContentPageByLanguageAndPath(locale, `/${contentPageSlugOrObjectSchemaIdentifier}`);
+	} = useGetContentPageByLanguageAndPath(
+		(commonUser?.language as Locale | undefined) || locale,
+		`/${contentPageSlugOrObjectSchemaIdentifier}`,
+		{
+			enabled: !isLoadingUserStatus,
+		}
+	);
 	const contentPageInfo = dbContentPage
 		? convertDbContentPageToContentPageInfo(dbContentPage)
 		: null;
@@ -102,12 +103,27 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 		dispatch(setShowZendesk(!isKioskUser));
 	}, [dispatch, isKioskUser]);
 
+	useEffect(() => {
+		if (!contentPageInfo) {
+			return;
+		}
+		if (
+			contentPageInfo.path !== `/${contentPageSlugOrObjectSchemaIdentifier}` ||
+			locale !== (contentPageInfo.language as unknown as Locale)
+		) {
+			// Redirect url to match the content page path and language
+			router.replace(`/${contentPageInfo?.language}/${contentPageInfo?.path}`, undefined, {
+				shallow: true,
+			});
+		}
+	}, [contentPageInfo, contentPageSlugOrObjectSchemaIdentifier, router.replace, locale]);
+
 	/**
 	 * Render
 	 */
 
 	const renderPageContent = () => {
-		if (isContentPageLoading || isIeObjectLoading) {
+		if (isContentPageLoading || isLoadingUserStatus || isIeObjectLoading) {
 			return <Loading fullscreen owner={'/[slug]/index page'} />;
 		}
 

@@ -1,4 +1,3 @@
-import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/dist/client.mjs';
 import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import type { Avo } from '@viaa/avo2-types';
@@ -16,7 +15,6 @@ import { GroupName, Permission } from '@account/const';
 import { AuthModal } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
-import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
 import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
@@ -46,7 +44,6 @@ import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCe
 import { ZendeskWrapper } from '@shared/components/ZendeskWrapper';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
-import { changeApplicationLocale } from '@shared/helpers/change-application-locale';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
@@ -71,7 +68,6 @@ import {
 } from '@shared/store/ui/';
 import { Breakpoints } from '@shared/types';
 import type { VisitRequest } from '@shared/types/visit-request';
-import type { Locale } from '@shared/utils/i18n';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visits';
 
@@ -177,28 +173,28 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	const [isLoaded, setIsLoaded] = useState(false);
 
-	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
-		locale,
-		`/${router.query.slug}`,
-		{ enabled: router.route === '/[slug]' }
-	);
-
-	const contentPageInfo = dbContentPage
-		? convertDbContentPageToContentPageInfo(dbContentPage)
-		: null;
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	useEffect(() => {
-		if (user?.language) {
-			changeApplicationLocale(
-				locale,
-				user?.language as Locale,
-				router,
-				queryClient,
-				contentPageInfo
-			);
-		}
-	}, [user]);
+	// const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
+	// 	locale,
+	// 	`/${router.query.slug}`,
+	// 	{ enabled: router.route === '/[slug]' }
+	// );
+	//
+	// const contentPageInfo = dbContentPage
+	// 	? convertDbContentPageToContentPageInfo(dbContentPage)
+	// 	: null;
+	//
+	// // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	// useEffect(() => {
+	// 	if (user?.language) {
+	// 		changeApplicationLocale(
+	// 			locale,
+	// 			user?.language as Locale,
+	// 			router,
+	// 			queryClient,
+	// 			contentPageInfo
+	// 		);
+	// 	}
+	// }, [user]);
 
 	useEffect(() => {
 		// ARC-2011: small timeout so login is not shown before user is checked

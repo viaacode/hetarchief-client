@@ -4,7 +4,7 @@ import { reverse, sortBy } from 'lodash-es';
 import type { NextRouter } from 'next/router';
 
 import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/LanguageSwitcher.exceptions';
-import { QUERY_KEYS, type RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
+import { QUERY_KEYS, ROUTES_BY_LOCALE, type RouteKey } from '@shared/const';
 import { Locale } from '@shared/utils/i18n';
 
 export const changeApplicationLocale = (
@@ -14,6 +14,7 @@ export const changeApplicationLocale = (
 	queryClient: QueryClient,
 	contentPageInfo?: ContentPageInfo | undefined | null
 ): void => {
+	return;
 	if (oldLocale === newLocale) {
 		return; // Already viewing the correct language
 	}
