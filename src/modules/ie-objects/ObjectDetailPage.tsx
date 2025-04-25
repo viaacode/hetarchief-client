@@ -66,9 +66,9 @@ import {
 	JSON_FORMATS,
 	OBJECT_DETAIL_TABS,
 	XML_FORMATS,
-	noLicensePlaceholder,
-	objectPlaceholder,
-	ticketErrorPlaceholder,
+	getNoLicensePlaceholderLabels,
+	getObjectPlaceholderLabels,
+	getTicketErrorPlaceholderLabels,
 } from '@ie-objects/ie-objects.consts';
 import {
 	type AltoTextLine,
@@ -76,7 +76,7 @@ import {
 	IeObjectAccessThrough,
 	type IeObjectFile,
 	IeObjectLicense,
-	type IeObjectPageRepresentation,
+	type IeObjectPage,
 	type IeObjectRepresentation,
 	MediaActions,
 	ObjectDetailTabs,
@@ -236,8 +236,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
-	const currentPage: IeObjectPageRepresentation | undefined =
-		mediaInfo?.pageRepresentations?.[currentPageIndex];
+	const currentPage: IeObjectPage | null = mediaInfo?.pages?.[currentPageIndex] || null;
 
 	const getRepresentationByType = useCallback(
 		(mimeTypes: string[]): IeObjectRepresentation | null => {
@@ -273,17 +272,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		useRef<IiifViewerFunctions>() as MutableRefObject<IiifViewerFunctions>;
 
 	const representationsToDisplay =
-		(mediaInfo?.pageRepresentations || []).flatMap((pageRepresentation) =>
-			pageRepresentation.representations.flatMap((rep) =>
-				rep.files.filter((file) => FLOWPLAYER_FORMATS.includes(file.mimeType))
+		(mediaInfo?.pages || []).flatMap((page) =>
+			page?.representations?.flatMap((representation) =>
+				representation.files.filter((file) => FLOWPLAYER_FORMATS.includes(file.mimeType))
 			)
 		) || [];
 	const iiifViewerImageInfos = useMemo((): ImageInfo[] => {
 		return compact(
-			mediaInfo?.pageRepresentations?.flatMap((pageRepresentation) => {
-				const files = pageRepresentation?.representations?.flatMap(
-					(representation) => representation.files
-				);
+			mediaInfo?.pages?.flatMap((page) => {
+				const files = page?.representations?.flatMap((representation) => representation.files);
 				const imageApiFile = files.find((file) => IMAGE_API_FORMATS.includes(file.mimeType));
 				if (!imageApiFile?.storedAt) {
 					return null;
@@ -300,7 +297,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				};
 			})
 		);
-	}, [mediaInfo?.pageRepresentations]);
+	}, [mediaInfo?.pages]);
 
 	// Playable url for flowplayer
 	const currentPlayableFile: IeObjectFile | null = getFileByType(FLOWPLAYER_FORMATS);
@@ -394,7 +391,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	/**
 	 * Computed
 	 */
-	const hasMedia = (mediaInfo?.pageRepresentations?.length || 0) > 0;
+	const hasMedia = (mediaInfo?.pages?.length || 0) > 0;
 	const isMediaInfoErrorNotFound = (mediaInfoError as HTTPError)?.response?.status === 404;
 	const isMediaInfoErrorNoAccess = (mediaInfoError as HTTPError)?.response?.status === 403;
 	const isVisitRequestErrorNotFound =
@@ -419,16 +416,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const pageOcrTexts: (string | null)[] = useMemo(() => {
 		const pageOcrTextsTemp: (string | null)[] = [];
-		for (const pageRepresentation of mediaInfo?.pageRepresentations || []) {
+		for (const page of mediaInfo?.pages || []) {
 			const pageTranscripts = compact(
-				pageRepresentation?.representations?.map((representation) => {
+				page?.representations?.map((representation) => {
 					return representation.schemaTranscript;
 				})
 			);
 			pageOcrTextsTemp.push(pageTranscripts[0]?.toLowerCase() || null);
 		}
 		return pageOcrTextsTemp;
-	}, [mediaInfo?.pageRepresentations]);
+	}, [mediaInfo?.pages]);
 
 	const arePagesOcrTextsAvailable = compact(pageOcrTexts).length !== 0;
 
@@ -1098,7 +1095,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 
 		// IIIF viewer
-		if (isNewspaper && !!mediaInfo && mediaInfo.pageRepresentations?.length) {
+		if (isNewspaper && !!mediaInfo && mediaInfo.pages?.length) {
 			if (!hasNewsPaperBeenRendered) {
 				handleOnPlay();
 				setHasNewsPaperBeenRendered(true);
@@ -1136,14 +1133,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 		if (isErrorPlayableUrl) {
 			return (
-				<ObjectPlaceholder {...ticketErrorPlaceholder()} addSliderPadding={showFragmentSlider} />
+				<ObjectPlaceholder
+					{...getTicketErrorPlaceholderLabels()}
+					addSliderPadding={showFragmentSlider}
+				/>
 			);
 		}
 
-		if (!playableUrl || !currentPlayableFile || !mediaInfo?.pageRepresentations?.length) {
+		if (!playableUrl || !currentPlayableFile || !mediaInfo?.pages?.length) {
 			return (
 				<ObjectPlaceholder
-					{...noLicensePlaceholder()}
+					{...getNoLicensePlaceholderLabels()}
 					onOpenRequestAccess={showVisitButton ? openRequestAccessBlade : undefined}
 					addSliderPadding={showFragmentSlider}
 				/>
@@ -1441,11 +1441,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 		return (
 			<ObjectPlaceholder
-				{...objectPlaceholder()}
+				{...getObjectPlaceholderLabels()}
 				reasonDescription={tText(
 					'modules/ie-objects/object-detail-page___je-hebt-enkel-toegang-tot-de-metadata-van-dit-object-omdat-dit-object-niet-publiek-beschikbaar-is-volgens-de-licenties-van-de-auteur'
 				)}
 				className={styles['p-object-detail__media--not-available']}
+				onOpenRequestAccess={showVisitButton ? openRequestAccessBlade : undefined}
 			/>
 		);
 	};
@@ -1566,7 +1567,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								showVisitButton={showVisitButton || false}
 								hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
 								currentPageIndex={currentPageIndex}
-								currentPage={currentPage || null}
+								setCurrentPageIndex={setCurrentPageIndex}
+								currentPage={currentPage}
 								activeFile={getFileByType([...FLOWPLAYER_FORMATS, ...IMAGE_API_FORMATS])}
 								simplifiedAltoInfo={simplifiedAltoInfo || null}
 								iiifZoomTo={iiifViewerReference.current?.iiifZoomTo}
@@ -1611,7 +1613,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					isOpen={activeBlade === MediaActions.RequestMaterial}
 					onClose={onCloseBlade}
 					objectName={mediaInfo?.name}
-					objectId={mediaInfo?.schemaIdentifier}
+					objectSchemaIdentifier={mediaInfo?.schemaIdentifier}
 					objectDctermsFormat={mediaInfo.dctermsFormat}
 					maintainerName={mediaInfo?.maintainerName}
 					maintainerLogo={mediaInfo?.maintainerLogo}

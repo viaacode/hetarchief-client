@@ -138,7 +138,7 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 	}
 
 	.c-content-edit-view__preview {
-		height: calc(100vh - $top-navigation-bar-height - $content-page-header-height - $content-page-tabs-height - $content-page-sidebar-margin);
+		height: calc($view-height - $top-navigation-bar-height - $content-page-header-height - $content-page-tabs-height - $content-page-sidebar-margin);
 	}
 
 	.c-content-page-preview {
@@ -149,10 +149,9 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 	.o-sidebar__content {
 		> .c-scrollable {
 			width: 100%;
-			overflow-x: hidden;
-			overflow-y: auto;
+			overflow: hidden auto;
 			box-sizing: border-box;
-			height: calc(100vh - $top-navigation-bar-height - $content-page-header-height - $content-page-tabs-height - $content-page-sidebar-margin - $content-page-sidebar-blok-dropdown-height);
+			height: calc($view-height - $top-navigation-bar-height - $content-page-header-height - $content-page-tabs-height - $content-page-sidebar-margin - $content-page-sidebar-blok-dropdown-height);
 			padding: 0 $spacer-sm;
 		}
 	}

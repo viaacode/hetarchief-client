@@ -10,6 +10,7 @@ export interface MaterialRequest {
 	maintainerName: string;
 	maintainerSlug: string;
 	objectDctermsFormat: IeObjectType;
+	objectId: string;
 	objectSchemaIdentifier: string;
 	objectSchemaName: string;
 	profileId: string;
@@ -31,7 +32,7 @@ export interface MaterialRequestDetail extends MaterialRequest {
 }
 
 export interface MaterialRequestCreation {
-	objectId: string;
+	objectSchemaIdentifier: string;
 	type: MaterialRequestType;
 	reason: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;

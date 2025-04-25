@@ -19,16 +19,6 @@ $component: "c-tabs";
 
 	&--dark {
 		background-color: $black;
-
-		.#{$component} {
-			&__item {
-				&:not(:last-child) {
-					@media (min-width: $breakpoint-md) {
-						margin-right: $spacer-md;
-					}
-				}
-			}
-		}
 	}
 
 	&--light {

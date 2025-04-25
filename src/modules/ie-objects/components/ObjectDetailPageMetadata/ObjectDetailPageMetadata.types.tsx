@@ -1,7 +1,7 @@
 import type {
 	IeObject,
 	IeObjectFile,
-	IeObjectPageRepresentation,
+	IeObjectPage,
 	MediaActions,
 } from '@ie-objects/ie-objects.types';
 import type { SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
@@ -10,10 +10,11 @@ import type { VisitRequest } from '@shared/types/visit-request';
 export interface ObjectDetailPageMetadataProps {
 	mediaInfo: IeObject | null | undefined;
 	currentPageIndex: number;
+	setCurrentPageIndex: (newPageIndex: number) => void;
+	currentPage: IeObjectPage | null;
 	hasAccessToVisitorSpaceOfObject: boolean;
 	showVisitButton: boolean;
 	visitRequest: VisitRequest | null;
-	currentPage: IeObjectPageRepresentation | null;
 	activeFile: IeObjectFile | null;
 	simplifiedAltoInfo: SimplifiedAlto | null;
 	onClickAction: (id: MediaActions) => Promise<void>;

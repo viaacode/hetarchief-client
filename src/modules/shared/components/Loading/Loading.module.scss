@@ -5,10 +5,10 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: calc(100vh - #{$c-navigation-height-md});
+	height: calc($view-height - #{$c-navigation-height-md});
 
 	@media (min-width: $breakpoint-md) {
-		height: calc(100vh - #{$c-navigation-height});
+		height: calc($view-height - #{$c-navigation-height});
 	}
 }
 

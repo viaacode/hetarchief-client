@@ -148,7 +148,7 @@ $checkbox-size: $spacer-sm;
 
 			// Overwrite popper styles
 			min-width: $blade-max-width !important;
-			max-height: 100vh;
+			max-height: $view-height;
 
 			&:global(.c-menu) {
 				padding: $c-filter-menu-flyout-top-padding 0 0;

@@ -94,8 +94,8 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		grid-template-rows: minmax(0, max-content) max-content 1fr minmax(0, max-content);
 		grid-template-columns: $back-to-global-search-button-width-desktop 16fr 10fr;
 		width: 100vw;
-		min-height: calc(100vh - $top-navigation-bar-height);
-		max-height: calc(100vh - $top-navigation-bar-height);
+		min-height: calc($view-height - $top-navigation-bar-height);
+		max-height: calc($view-height - $top-navigation-bar-height);
 		place-items: stretch stretch;
 		align-content: stretch;
 		transition: 100ms ease-out;
@@ -250,23 +250,17 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			width: 100%;
 		}
 
-		&-tab {
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
-			background-color: $platinum;
+		:global(.c-tab) {
+			display: flex;
+			justify-content: center;
+			background-color: $black;
 
-			.c-tab {
-				justify-content: center;
-				height: 8rem;
-				font-size: $font-size-md;
+			:global(.c-tab__icon) {
+				font-size: $font-size-lg;
+			}
 
-				&__icon {
-					font-size: $font-size-lg;
-				}
-
-				&.c-tab--active {
-					background-color: $white;
-				}
+			&:global(.c-tab--active) {
+				background-color: $white;
 			}
 		}
 	}
@@ -341,7 +335,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			grid-column: 1/3;
 
 			@media (max-width: $breakpoint-md) {
-				height: calc(100vh - $top-navigation-bar-height - $metadata-media-ocr-tabs-height-mobile);
+				height: calc($view-height - $top-navigation-bar-height - $metadata-media-ocr-tabs-height-mobile);
 			}
 		}
 	}

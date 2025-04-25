@@ -17,9 +17,8 @@ const useWindowSize: UseWindowSize = () => {
 				height: window.innerHeight,
 			});
 
-			// Set custom vh css var to exclude browser ui on mobile
-			const vh = window.innerHeight * 0.01;
-			document.documentElement.style.setProperty('--vh', `${vh}px`);
+			// Calculate real view height to adjust when ipad resizes their browser chrome
+			document.documentElement.style.setProperty('--vh', `${window.innerHeight}px`);
 		};
 
 		window.addEventListener('resize', handleResize);

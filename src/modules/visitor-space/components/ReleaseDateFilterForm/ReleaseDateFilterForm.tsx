@@ -188,8 +188,9 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 			});
 			return;
 		}
+
 		// Single date input
-		const date = parseISO(form.releaseDate || '');
+		const date = parseISO(form.releaseDate?.split('--')?.[0] || '');
 		if (date && isValid(date)) {
 			clearErrors('releaseDate');
 			return handleSubmit(onValid, onInvalid);

@@ -65,12 +65,15 @@ $maintainer-logo-height: 7rem;
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: flex-start;
+}
 
-	// maintainer logo
-	img {
-		max-height: 7rem;
-		max-width: 50%;
-		margin-left: auto;
-		margin-right: 0;
-	}
+// maintainer logo
+.p-object-detail__sidebar__content-logo {
+	width: 100%;
+	height: 5.3rem;
+	max-width: 16rem;
+	max-height: 5.3rem;
+	background-repeat: no-repeat;
+	background-position: right;
+	background-size: contain;
 }

@@ -1,6 +1,11 @@
 @use "sass:color";
 @use "sass:map";
 
+// Set real view height in src/modules/shared/hooks/use-window-size/use-window-size.ts
+// To avoid the browser ui on mobile devices
+// https://meemoo.atlassian.net/browse/ARC-2859
+$view-height: var(--vh, 100vh);
+
 /**
  * Colors
  */

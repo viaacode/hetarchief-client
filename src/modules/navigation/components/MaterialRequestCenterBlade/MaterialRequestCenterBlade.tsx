@@ -328,7 +328,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						setSelectedMaterialRequest(null);
 					}}
 					objectName={selectedMaterialRequest.objectSchemaName}
-					objectId={selectedMaterialRequest.objectSchemaIdentifier}
+					objectSchemaIdentifier={selectedMaterialRequest.objectSchemaIdentifier}
 					objectDctermsFormat={selectedMaterialRequest.objectDctermsFormat}
 					maintainerName={selectedMaterialRequest.maintainerName}
 					maintainerLogo={selectedMaterialRequest.maintainerLogo}
