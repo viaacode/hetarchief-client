@@ -8,7 +8,6 @@ import { tText } from '@shared/helpers/translate';
 import styles from './ConfidenceIndicator.module.scss';
 
 export const ConfidenceIndicator: FC<ConfidenceIndicatorProps> = ({ className, confidence }) => {
-	confidence = 0.8;
 	return (
 		<Tooltip position="left">
 			<TooltipTrigger>

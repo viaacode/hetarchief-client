@@ -1,4 +1,9 @@
+import type { NamesListProps } from '@ie-objects/components/NamesList/NamesList.types';
+import type { Mention } from '@ie-objects/ie-objects.types';
 import { Button, TextInput } from '@meemoo/react-components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
 import { sortBy } from 'lodash-es';
 import React, {
@@ -12,15 +17,9 @@ import React, {
 } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
-import { ConfidenceIndicator } from '@ie-objects/components/ConfidenceIndicator/ConfidenceIndicator';
-import type { NamesListProps } from '@ie-objects/components/NamesList/NamesList.types';
-import type { Mention } from '@ie-objects/ie-objects.types';
-import { Icon } from '@shared/components/Icon';
-import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { tText } from '@shared/helpers/translate';
-
 import styles from './NamesList.module.scss';
 import 'react-perfect-scrollbar/dist/css/styles.css';
+import ConfidenceIndicator from '@ie-objects/components/ConfidenceIndicator/ConfidenceIndicator';
 
 export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToLocation }) => {
 	const [searchTermsTemp, setSearchTermsTemp] = useState('');
@@ -77,6 +76,69 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToLoc
 		};
 	}, []);
 
+	const renderMentionHighlight = (
+		mention: Mention & { index: number },
+		highlight: Mention['highlights'][0]
+	) => {
+		return (
+			<div key={mention.index} className={styles['c-names-list__person']}>
+				<div className={styles['c-names-list__person__occurrence-confidence']}>
+					<ConfidenceIndicator
+						className={styles['c-names-list__person__confidence-indicator']}
+						confidence={mention.confidence}
+					/>
+				</div>
+				<div className={clsx(styles['c-names-list__person__info'], 'u-flex-grow')}>
+					<div className={styles['c-names-list__person__info__name']}>{mention.name}</div>
+					<div className={styles['c-names-list__person__info__dates-and-locations']}>
+						<span>
+							° {mention.birthDate} {mention.birthPlace}
+						</span>
+						<span className={styles['c-names-list__person__info__dates-and-locations__comma']}>
+							,{' '}
+						</span>
+						<span>
+							† {mention.deathDate} {mention.deathPlace}
+						</span>
+					</div>
+				</div>
+				{highlight.x && highlight.x && highlight.width && highlight.height && (
+					<Button
+						icon={<Icon name={IconNamesLight.SearchText} />}
+						variants={['white']}
+						tooltipText={tText(
+							'modules/ie-objects/components/names-list/names-list___spring-naar-de-locatie-van-deze-naam'
+						)}
+						tooltipPosition="left"
+						onClick={() =>
+							onZoomToLocation(
+								highlight.x + highlight.width / 2,
+								highlight.y + highlight.height / 2
+							)
+						}
+					/>
+				)}
+
+				<a
+					href={mention.iri}
+					target="_blank"
+					rel="noreferrer noopener"
+					// Hide if no link, so it does take up space and all links/zoom buttons are nicely below each-other
+					style={{ visibility: mention.iri ? 'visible' : 'hidden' }}
+				>
+					<Button
+						icon={<Icon name={IconNamesLight.Extern} className="u-font-size-28" />}
+						variants={['white']}
+						tooltipText={tText(
+							'modules/ie-objects/components/names-list/names-list___meer-info-over-deze-persoon'
+						)}
+						tooltipPosition="left"
+					/>
+				</a>
+			</div>
+		);
+	};
+
 	return (
 		<div className={clsx(className, styles['c-names-list'])} ref={ref}>
 			<TextInput
@@ -99,66 +161,12 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToLoc
 					</div>
 				)}
 				{filteredNames
-					.map((nameInfo, index) => ({ ...nameInfo, index }))
-					.map((nameInfo: Mention & { index: number }) => (
-						<div key={nameInfo.index} className={styles['c-names-list__person']}>
-							<div className={styles['c-names-list__person__occurrence-confidence']}>
-								<ConfidenceIndicator
-									className={styles['c-names-list__person__confidence-indicator']}
-									confidence={nameInfo.confidence}
-								/>
-							</div>
-							<div className={clsx(styles['c-names-list__person__info'], 'u-flex-grow')}>
-								<div className={styles['c-names-list__person__info__name']}>{nameInfo.name}</div>
-								<div className={styles['c-names-list__person__info__dates-and-locations']}>
-									<span>
-										° {nameInfo.birthDate} {nameInfo.birthPlace}
-									</span>
-									<span
-										className={styles['c-names-list__person__info__dates-and-locations__comma']}
-									>
-										,{' '}
-									</span>
-									<span>
-										† {nameInfo.deathDate} {nameInfo.deathPlace}
-									</span>
-								</div>
-							</div>
-							{nameInfo.x && nameInfo.x && nameInfo.width && nameInfo.height && (
-								<Button
-									icon={<Icon name={IconNamesLight.SearchText} />}
-									variants={['white']}
-									tooltipText={tText(
-										'modules/ie-objects/components/names-list/names-list___spring-naar-de-locatie-van-deze-naam'
-									)}
-									tooltipPosition="left"
-									onClick={() =>
-										onZoomToLocation(
-											nameInfo.x + nameInfo.width / 2,
-											nameInfo.y + nameInfo.height / 2
-										)
-									}
-								/>
-							)}
-
-							<a
-								href={nameInfo.iri}
-								target="_blank"
-								rel="noreferrer noopener"
-								// Hide if no link, so it does take up space and all links/zoom buttons are nicely below each-other
-								style={{ visibility: nameInfo.iri ? 'visible' : 'hidden' }}
-							>
-								<Button
-									icon={<Icon name={IconNamesLight.Extern} className="u-font-size-28" />}
-									variants={['white']}
-									tooltipText={tText(
-										'modules/ie-objects/components/names-list/names-list___meer-info-over-deze-persoon'
-									)}
-									tooltipPosition="left"
-								/>
-							</a>
-						</div>
-					))}
+					.map((mention, index) => ({ ...mention, index }))
+					.map((mention: Mention & { index: number }) => {
+						return mention.highlights.map((highlight) => {
+							return renderMentionHighlight(mention, highlight);
+						});
+					})}
 			</PerfectScrollbar>
 		</div>
 	);
