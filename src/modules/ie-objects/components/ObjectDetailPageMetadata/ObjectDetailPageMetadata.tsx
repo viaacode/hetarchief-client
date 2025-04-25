@@ -54,6 +54,8 @@ import {
 	IeObjectLicense,
 	IsPartOfKey,
 	MediaActions,
+	type Mention,
+	type MentionHighlight,
 	MetadataExportFormats,
 	type MetadataSortMap,
 } from '@ie-objects/ie-objects.types';
@@ -120,6 +122,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	mediaInfo,
 	currentPage,
 	currentPageIndex,
+	setCurrentPageIndex,
 	hasAccessToVisitorSpaceOfObject,
 	showVisitButton,
 	visitRequest,
@@ -300,6 +303,28 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		isCPAdmin,
 		canDownloadNewspaper,
 	]);
+
+	const handleZoomToMentionHighlight = (mention: Mention, highlight: MentionHighlight) => {
+		if (isNil(simplifiedAltoInfo) || !currentPage) {
+			return;
+		}
+
+		const x = highlight.x + highlight.width / 2;
+		const y = highlight.y + highlight.height / 2;
+
+		if (mention.pageNumber !== currentPage.pageNumber) {
+			// Switch to the correct page first
+			setCurrentPageIndex(mention.pageIndex);
+
+			// Wait for page load
+			setTimeout(() => {
+				iiifZoomTo(x, y);
+			}, 1000);
+		} else {
+			// Already on the correct page => zoom to highlight
+			iiifZoomTo(x, y);
+		}
+	};
 
 	const renderExportDropdown = useCallback(
 		(isPrimary: boolean) => {
@@ -1079,7 +1104,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				</MetadataList>
 
 				<MetadataList allowTwoColumns={false}>
-					{isNewspaper && !!currentPage?.mentions?.length && (
+					{isNewspaper && !!mediaInfo?.mentions?.length && (
 						<Metadata
 							title={tText('modules/ie-objects/object-detail-page___namenlijst')}
 							key="metadata-fallen-names-list"
@@ -1091,7 +1116,10 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 								</div>
 							}
 						>
-							<NamesList mentions={currentPage?.mentions || []} onZoomToLocation={iiifZoomTo} />
+							<NamesList
+								mentions={mediaInfo?.mentions || []}
+								onZoomToHighlight={handleZoomToMentionHighlight}
+							/>
 						</Metadata>
 					)}
 

@@ -39,7 +39,7 @@ export interface IeObject {
 	dctermsMedium: string[];
 	premisIdentifier: Record<string, string>[];
 	abstract: string;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: we don't know the exact format of this field, since each organisation can enter it differently
 	creator: any;
 	dateCreated: string | null;
 	datePublished: string;
@@ -58,7 +58,7 @@ export interface IeObject {
 	maintainerOverlay: boolean | null;
 	maintainerIiifAgreement?: boolean | null;
 	name: string;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: we don't know the exact format of this field, since each organisation can enter it differently
 	publisher: any;
 	spatial: string[];
 	temporal: string[];
@@ -67,7 +67,7 @@ export interface IeObject {
 	accessThrough?: IeObjectAccessThrough[];
 	ebucoreObjectType?: string | null;
 	meemoofilmContainsEmbeddedCaption?: boolean;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: we don't know the exact format of this field, since each organisation can enter it differently
 	contributor?: any;
 	copyrightHolder?: string;
 	premisIsPartOf?: string | null;
@@ -110,8 +110,8 @@ export interface IeObject {
 	alternativeTitle?: string[];
 	digitizationDate?: string;
 	children?: number;
-
-	pageRepresentations?: IeObjectPageRepresentation[];
+	pages?: IeObjectPage[];
+	mentions?: Mention[];
 }
 
 export enum IeObjectAccessThrough {
@@ -156,9 +156,9 @@ export interface IeObjectFile {
 	createdAt: string;
 }
 
-export interface IeObjectPageRepresentation {
+export interface IeObjectPage {
+	pageNumber: number;
 	representations: IeObjectRepresentation[];
-	mentions: Mention[];
 }
 
 export interface IeObjectRepresentation {
@@ -275,6 +275,8 @@ export interface OcrSearchResult {
 }
 
 export interface Mention {
+	pageNumber: number;
+	pageIndex: number;
 	iri: string;
 	name: string;
 	confidence: number;
@@ -282,10 +284,12 @@ export interface Mention {
 	birthPlace: string;
 	deathDate: number;
 	deathPlace: string;
-	highlights: {
-		x: number;
-		y: number;
-		width: number;
-		height: number;
-	}[];
+	highlights: MentionHighlight[];
+}
+
+export interface MentionHighlight {
+	x: number;
+	y: number;
+	width: number;
+	height: number;
 }
