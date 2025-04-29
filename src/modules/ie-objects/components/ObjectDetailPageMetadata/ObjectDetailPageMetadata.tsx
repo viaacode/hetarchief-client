@@ -944,8 +944,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___categorie'),
-						!isEmpty(mediaInfo.genre)
-							? mediaInfo.genre.map((genre) => (
+						!isEmpty(mediaInfo.genre) ? (
+							<div className={styles['p-object-detail__metadata-category-tags']}>
+								{mediaInfo.genre.map((genre) => (
 									<SearchLinkTag
 										key={genre}
 										label={genre}
@@ -953,8 +954,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 											FilterProperty.GENRE
 										)}${operatorToAcronym(Operator.EQUALS)}${genre}`}
 									/>
-								))
-							: null
+								))}
+							</div>
+						) : null
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___programmabeschrijving'),
