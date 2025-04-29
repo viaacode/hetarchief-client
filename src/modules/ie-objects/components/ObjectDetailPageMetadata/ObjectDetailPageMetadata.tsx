@@ -1190,7 +1190,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 					id="object-detail-page__metadata-field-detail-blade"
 				>
-					<div className="u-px-32 u-pb-32">
+					<div className="u-px-32 u-px-16-md u-pb-32">
 						<HighlightedMetadata
 							title={selectedMetadataField?.title}
 							data={selectedMetadataField?.data}

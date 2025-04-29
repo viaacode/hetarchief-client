@@ -272,7 +272,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 
 	return (
 		<>
-			<div className={clsx(className, styles.releaseDate, 'u-px-20 u-px-32-md')}>
+			<div className={clsx(className, styles.releaseDate, 'u-px-32 u-px-20-md')}>
 				<FormControl
 					className={clsx('u-mb-24 c-form-control--label-hidden')}
 					errors={[<RedFormWarning error={errors.operator?.message} key="form-error--operator" />]}
@@ -304,7 +304,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 					/>
 				</FormControl>
 			</div>
-			<div className={clsx(styles.releaseDateFilterForm__date, 'u-px-20 u-px-32-md')}>
+			<div className={clsx(styles.releaseDateFilterForm__date, 'u-px-32 u-px-20-md')}>
 				<FormControl
 					className="u-mb-24 c-form-control--label-hidden"
 					errors={[

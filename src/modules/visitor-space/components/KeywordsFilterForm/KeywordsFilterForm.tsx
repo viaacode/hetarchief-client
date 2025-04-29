@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FormControl, keysEnter, onKey, type TagInfo, TagsInput } from '@meemoo/react-components';
+import { FormControl, type TagInfo, TagsInput, keysEnter, onKey } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { type FC, type KeyboardEvent, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -121,7 +121,7 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 
 	return (
 		<>
-			<div className={clsx(className, 'u-px-20 u-px-32-md')}>
+			<div className={clsx(className, 'u-px-32 u-px-20-md')}>
 				<div className="u-mb-32">
 					<FormControl
 						className="u-mb-24 c-form-control--label-hidden"

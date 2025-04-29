@@ -73,7 +73,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 
 	const renderFooter = () => {
 		return (
-			<div className="u-px-32 u-py-24">
+			<div className="u-px-32 u-px-16-md u-py-24">
 				<Button
 					className="u-mb-16"
 					label={

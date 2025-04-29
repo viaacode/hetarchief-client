@@ -109,7 +109,7 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 
 	return (
 		<>
-			<div className={clsx(className, 'u-px-20 u-px-32-md')}>
+			<div className={clsx(className, 'u-px-32 u-px-20-md')}>
 				<SearchBar
 					id={`${visitorSpaceLabelKeys.filters.title}--${SearchFilterId.Maintainers}`}
 					value={search}

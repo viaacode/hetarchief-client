@@ -5,6 +5,7 @@ import { tHtml } from '@shared/helpers/translate';
 
 import SpacePreview from '../SpacePreview/SpacePreview';
 
+import clsx from 'clsx';
 import styles from './VisitSummary.module.scss';
 
 const VisitSummary: FC<VisitSummaryProps> = ({
@@ -21,7 +22,7 @@ const VisitSummary: FC<VisitSummaryProps> = ({
 	preview = false,
 }) => {
 	return (
-		<div className={styles['c-visit-summary']}>
+		<div className={clsx(styles['c-visit-summary'], 'u-px-32 u-px-20-md')}>
 			{preview && (
 				<SpacePreview
 					visitorSpace={{
