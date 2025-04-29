@@ -89,13 +89,21 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 				<div className={clsx(styles['c-names-list__person__info'], 'u-flex-grow')}>
 					<div className={styles['c-names-list__person__info__name']}>{mention.name}</div>
 					<div className={styles['c-names-list__person__info__dates-and-locations']}>
-						<span title={tText('Geboorte jaar en plaats')}>
+						<span
+							title={tText(
+								'modules/ie-objects/components/names-list/names-list___geboorte-jaar-en-plaats'
+							)}
+						>
 							° {compact([mention.birthDate, mention.birthPlace]).join(' ')}
 						</span>
 						<span className={styles['c-names-list__person__info__dates-and-locations__comma']}>
 							,{' '}
 						</span>
-						<span title={tText('Sterfte jaar en plaats')}>
+						<span
+							title={tText(
+								'modules/ie-objects/components/names-list/names-list___sterfte-jaar-en-plaats'
+							)}
+						>
 							† {compact([mention.deathDate, mention.deathPlace]).join(' ')}
 						</span>
 					</div>

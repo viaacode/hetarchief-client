@@ -56,7 +56,9 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 					/>
 					<span className="pagination-info">
 						{searchResults.length === 0
-							? tText('0 resultaten')
+							? tText(
+									'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___0-resultaten'
+								)
 							: tText(
 									'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___current-search-index-van-de-total-search-results',
 									{
