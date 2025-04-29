@@ -22,7 +22,7 @@ export const HistoryTableAccessFrom = 'startAt';
 export type HistoryTableColumnProps = Column<VisitRequest> & UseSortByColumnOptions<VisitRequest>;
 
 export const HistoryTableColumns = (
-	onClickRow: (visit: VisitRequest) => void
+	onPlanVisit: (visit: VisitRequest) => void
 ): HistoryTableColumnProps[] => [
 	{
 		Header: tText('modules/account/const/my-history___bezoekersruimte') || '',
@@ -72,7 +72,7 @@ export const HistoryTableColumns = (
 					variants={['text', 'block', 'fill', 'underline']}
 					onClick={(e: MouseEvent) => {
 						e.stopPropagation();
-						onClickRow(visit);
+						onPlanVisit(visit);
 					}}
 				>
 					{tText('modules/account/const/my-history___bezoek')}

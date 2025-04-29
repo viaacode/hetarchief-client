@@ -39,6 +39,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 	const [filters, setFilters] = useQueryParams(ACCOUNT_HISTORY_QUERY_PARAM_CONFIG);
 	const [currentDetailVisit, setCurrentDetailVisit] = useState<VisitRequest | null>(null);
 	const [isVisitDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
+	const [isPlanVisitBladeOpen, setIsPlanVisitBladeOpen] = useState(false);
 
 	const hasAccountHistoryPerm = useHasAnyPermission(
 		Permission.READ_PERSONAL_APPROVED_VISIT_REQUESTS
@@ -84,7 +85,10 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 		if (!orderDirectionResolved) {
 			orderDirectionResolved = OrderDirection.desc;
 		}
-		if (filters.orderProp !== orderDirectionResolved || filters.orderDirection !== orderDirection) {
+		if (
+			filters.orderProp !== orderPropResolved ||
+			filters.orderDirection !== orderDirectionResolved
+		) {
 			setFilters({
 				...filters,
 				orderProp: orderPropResolved,
@@ -94,7 +98,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 		}
 	};
 
-	const onClickRow = async (visit: VisitRequest) => {
+	const onPlanVisitClicked = async (visit: VisitRequest) => {
 		try {
 			const response = await getAccessStatus(visit.spaceSlug);
 			switch (response?.status) {
@@ -123,7 +127,10 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 		}
 	};
 
-	const onRowClick = (evt: MouseEvent<HTMLTableRowElement>, row: Row<VisitRequest>) => {
+	const onVisitRequestRowClicked = (
+		evt: MouseEvent<HTMLTableRowElement>,
+		row: Row<VisitRequest>
+	) => {
 		setCurrentDetailVisit(row.original);
 		setIsDetailBladeOpen(true);
 	};
@@ -155,9 +162,9 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 						<Table<VisitRequest>
 							className="u-mt-24"
 							style={{ cursor: 'pointer' }}
-							onRowClick={onRowClick}
+							onRowClick={onVisitRequestRowClicked}
 							options={{
-								columns: HistoryTableColumns(onClickRow),
+								columns: HistoryTableColumns(onPlanVisitClicked),
 								data: filteredVisits || [],
 								initialState: {
 									pageSize: HistoryItemListSize,
