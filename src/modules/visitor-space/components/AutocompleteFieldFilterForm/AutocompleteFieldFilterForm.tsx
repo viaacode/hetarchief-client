@@ -63,7 +63,7 @@ export const AutocompleteFieldFilterForm: FC<{
 	return (
 		<>
 			<div
-				className={clsx(className, styles['c-creator-filter-form__input'], 'u-px-20 u-px-32-md')}
+				className={clsx(className, styles['c-creator-filter-form__input'], 'u-px-32 u-px-20-md')}
 			>
 				<FormControl
 					className="c-form-control--label-hidden"

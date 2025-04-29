@@ -153,38 +153,38 @@ $spacer-64: $spacer-lg * 2;
 	padding-right: $spacer-lg;
 }
 
-@media (min-width: $breakpoint-md) {
-	.u-px-md-0 {
+@media (max-width: $breakpoint-md) {
+	.u-px-0-md {
 		padding-left: 0;
 		padding-right: 0;
 	}
 
-	.u-px-md-8 {
+	.u-px-8-md {
 		padding-left: $spacer-xs;
 		padding-right: $spacer-xs;
 	}
 
-	.u-px-md-12 {
+	.u-px-12-md {
 		padding-left: $spacer-12;
 		padding-right: $spacer-12;
 	}
 
-	.u-px-md-16 {
+	.u-px-16-md {
 		padding-left: $spacer-sm;
 		padding-right: $spacer-sm;
 	}
 
-	.u-px-md-20 {
+	.u-px-20-md {
 		padding-left: $spacer-20;
 		padding-right: $spacer-20;
 	}
 
-	.u-px-md-24 {
+	.u-px-24-md {
 		padding-left: $spacer-md;
 		padding-right: $spacer-md;
 	}
 
-	.u-px-md-32 {
+	.u-px-32-md {
 		padding-left: $spacer-lg;
 		padding-right: $spacer-lg;
 	}

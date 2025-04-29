@@ -97,7 +97,7 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 
 	const renderFooter = () => {
 		return (
-			<div className={clsx('u-px-32 u-py-24')}>
+			<div className={clsx('u-px-32 u-px-16-md u-py-24')}>
 				<Button
 					variants={['block', 'black']}
 					onClick={() => submitData()}

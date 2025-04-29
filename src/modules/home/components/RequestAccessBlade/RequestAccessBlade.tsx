@@ -107,7 +107,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 
 	const renderFooter = () => {
 		return (
-			<div className="u-px-32 u-py-24 u-px-16-md u-py-16-md u-flex u-flex-col u-gap-xs">
+			<div className="u-px-32  u-px-16-md u-py-24 u-py-16-md u-flex u-flex-col u-gap-xs">
 				{!(preferences?.newsletter || false) ? (
 					<Checkbox
 						className={styles['c-request-access-blade__checkbox']}

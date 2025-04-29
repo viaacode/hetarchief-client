@@ -52,7 +52,7 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 
 	const renderFooter = () => {
 		return (
-			<div className="u-px-32 u-py-24">
+			<div className="u-px-32 u-px-16-md u-py-24">
 				<Button
 					className="u-mb-16"
 					label={tHtml(
@@ -85,7 +85,7 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 				</h2>
 			)}
 		>
-			<div className="u-px-16 u-px-32-md u-pr-56-md">
+			<div className="u-px-32 u-px-16-md u-pr-56">
 				<strong>
 					{tHtml(
 						'modules/home/components/cancel-visit-blade/cancel-visit-blade___ben-je-zeker-dat-je-je-bezoek-wil-annuleren'

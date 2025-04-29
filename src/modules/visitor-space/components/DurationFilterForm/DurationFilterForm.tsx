@@ -19,7 +19,7 @@ import type {
 	DurationFilterFormState,
 } from '@visitor-space/components/DurationFilterForm/DurationFilterForm.types';
 
-import { FilterProperty, isRange, Operator, SearchFilterId } from '../../types';
+import { FilterProperty, Operator, SearchFilterId, isRange } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import { DurationInput } from '../DurationInput';
 import { defaultValue } from '../DurationInput/DurationInput';
@@ -104,7 +104,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 							// eslint-disable-next-line @typescript-eslint/no-unused-vars
 							const { ref, ...rest } = field;
 							return (
-								<div className="u-px-20 u-px-32-md">
+								<div className="u-px-32 u-px-20-md">
 									<ReactSelect
 										{...rest}
 										isDisabled={disabled}
@@ -150,7 +150,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 							const { ref, ...refless } = field;
 
 							return (
-								<div className="u-py-32 u-px-20 u-px-32-md u-bg-platinum">
+								<div className="u-py-32 u-px-32 u-px-20-md u-bg-platinum">
 									{showRange ? (
 										<DurationRangeInput
 											{...refless}

@@ -296,7 +296,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 
 	const renderFooter = () => {
 		return (
-			<div className="u-px-32 u-py-24">
+			<div className="u-px-32 u-px-16-md u-py-24">
 				<Button
 					className="u-mb-16"
 					label={tHtml(
@@ -388,7 +388,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 				</h2>
 			)}
 		>
-			<div className="u-px-32">
+			<div className="u-px-32 u-px-16-md">
 				{tHtml(
 					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___kies-de-map-waaraan-je-strong-title-strong-wil-toevoegen',
 					{
@@ -398,7 +398,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			</div>
 
 			{isOpen && (
-				<div className="u-px-32 u-bg-platinum u-mt-32">
+				<div className="u-px-32 u-px-16-md u-bg-platinum u-mt-32">
 					<ul className={clsx(styles['c-add-to-folder-blade__list'])}>
 						{renderFolderCheckboxes()}
 

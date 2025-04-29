@@ -19,8 +19,8 @@ import type {
 	LanguageFilterFormState,
 } from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
 import {
-	type LanguageCode,
 	LANGUAGES,
+	type LanguageCode,
 } from '@visitor-space/components/LanguageFilterForm/languages';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import {
@@ -102,7 +102,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 
 	return (
 		<>
-			<div className={clsx(className, 'u-px-20 u-px-32-md')}>
+			<div className={clsx(className, 'u-px-32 u-px-20-md')}>
 				<SearchBar
 					id={`${visitorSpaceLabelKeys.filters.title}--${SearchFilterId.Language}`}
 					value={search}

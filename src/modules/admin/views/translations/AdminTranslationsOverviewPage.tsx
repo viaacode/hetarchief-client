@@ -37,7 +37,12 @@ export const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	}) => {
 		const renderFooter = () => {
 			return (
-				<div className={clsx('u-px-32 u-py-24', styles['c-translations-overview__blade-footer'])}>
+				<div
+					className={clsx(
+						'u-px-32 u-px-16-md u-py-24',
+						styles['c-translations-overview__blade-footer']
+					)}
+				>
 					<Button
 						variants={['block', 'black']}
 						onClick={onSave}

@@ -289,7 +289,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const renderFooter = () => {
 		return (
-			<div className="u-px-32 u-py-24">
+			<div className="u-px-32 u-px-16-md u-py-24">
 				<RedFormWarning
 					error={
 						noFoldersSelectedOnSubmit
@@ -466,7 +466,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			className={styles['c-approve-request-blade']}
 		>
 			{props.isOpen && !!visitRequest && (
-				<div className="u-px-32">
+				<div className="u-px-32 u-px-16-md">
 					<FormControl
 						className={clsx(styles['c-approve-request-blade__access-type'], 'u-mb-32')}
 						errors={[

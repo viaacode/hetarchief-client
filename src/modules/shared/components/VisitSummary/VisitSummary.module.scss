@@ -4,10 +4,4 @@ $component: "c-visit-summary";
 
 .#{$component} {
 	@include blade-text-styling;
-
-	padding: 0 $spacer-sm;
-
-	@media (min-width: $breakpoint-md) {
-		padding: 0 $spacer-lg;
-	}
 }

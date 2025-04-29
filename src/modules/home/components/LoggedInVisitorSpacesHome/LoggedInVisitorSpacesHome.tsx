@@ -374,7 +374,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 				)}
 				id="logged-in-home__visitor-space-not-available-blade"
 			>
-				<div className="u-px-32">
+				<div className="u-px-32 u-px-16-md">
 					{visitorSpaceInfo && <SpacePreview visitorSpace={visitorSpaceInfo} />}
 					<p>
 						{tHtml(

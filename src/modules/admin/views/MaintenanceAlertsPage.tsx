@@ -20,7 +20,7 @@ const MaintenanceAlertsOverview = lazy(() =>
 export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const renderPopupFooter = (onSave: () => void, onClose: () => void) => {
 		return (
-			<div className={clsx('u-px-32 u-py-24')}>
+			<div className={clsx('u-px-32 u-px-16-md u-py-24')}>
 				<Button
 					variants={['block', 'black']}
 					onClick={onSave}
@@ -57,7 +57,7 @@ export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => <h2 {...props}>{title}</h2>}
 				id="alerts-blade"
 			>
-				<div className="u-px-32">{body}</div>
+				<div className="u-px-32 u-px-16-md">{body}</div>
 			</Blade>
 		);
 	};

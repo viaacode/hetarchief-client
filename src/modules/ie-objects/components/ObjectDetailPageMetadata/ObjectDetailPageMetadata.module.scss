@@ -67,6 +67,12 @@ $maintainer-logo-height: 7rem;
 	align-items: flex-start;
 }
 
+.p-object-detail__metadata-category-tags {
+	display: flex;
+	flex-direction: row;
+	gap: $spacer-xs;
+}
+
 // maintainer logo
 .p-object-detail__sidebar__content-logo {
 	width: 100%;

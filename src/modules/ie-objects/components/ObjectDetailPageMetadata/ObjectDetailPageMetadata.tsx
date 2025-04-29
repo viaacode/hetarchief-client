@@ -944,8 +944,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___categorie'),
-						!isEmpty(mediaInfo.genre)
-							? mediaInfo.genre.map((genre) => (
+						!isEmpty(mediaInfo.genre) ? (
+							<div className={styles['p-object-detail__metadata-category-tags']}>
+								{mediaInfo.genre.map((genre) => (
 									<SearchLinkTag
 										key={genre}
 										label={genre}
@@ -953,8 +954,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 											FilterProperty.GENRE
 										)}${operatorToAcronym(Operator.EQUALS)}${genre}`}
 									/>
-								))
-							: null
+								))}
+							</div>
+						) : null
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___programmabeschrijving'),
@@ -1188,7 +1190,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 					id="object-detail-page__metadata-field-detail-blade"
 				>
-					<div className="u-px-32 u-pb-32">
+					<div className="u-px-32 u-px-16-md u-pb-32">
 						<HighlightedMetadata
 							title={selectedMetadataField?.title}
 							data={selectedMetadataField?.data}
