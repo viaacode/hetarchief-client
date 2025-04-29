@@ -94,6 +94,7 @@ import type {
 	ImageInfo,
 	ImageInfoWithToken,
 	Rect,
+	TextLine,
 } from '@iiif-viewer/IiifViewer.types';
 import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
@@ -435,17 +436,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const canDownloadNewspaper: boolean =
 		(useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user) && isPublicNewspaper;
 
-	const getHighlightedAltoTexts = useCallback((): AltoTextLine[] => {
-		return (
-			simplifiedAltoInfo?.text?.filter((altoText) =>
-				searchTerms
-					.toLowerCase()
-					.split(' ')
-					.some((searchTermWord) => altoText.text.toLowerCase().includes(searchTermWord))
-			) || []
-		);
-	}, [searchTerms, simplifiedAltoInfo?.text]);
-
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	const handleSearch = useCallback(
 		async (newSearchTerms: string): Promise<void> => {
@@ -483,11 +473,19 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					let searchTermCharacterOffset: number = pageOcrText.indexOf(searchTerm);
 					let searchTermIndexOnPage = 0;
 					while (searchTermCharacterOffset !== -1) {
+						const textLine = simplifiedAltoInfo?.text?.[searchTermIndexOnPage] as TextLine;
 						const searchResult: OcrSearchResult = {
 							pageIndex,
 							searchTerm,
 							searchTermCharacterOffset,
 							searchTermIndexOnPage,
+							location: {
+								text: textLine.text,
+								x: textLine.x,
+								y: textLine.y,
+								width: textLine.width,
+								height: textLine.height,
+							},
 						};
 						searchResultsTemp.push(searchResult);
 						searchTermCharacterOffset = pageOcrText?.indexOf(
@@ -597,18 +595,39 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
 			return;
 		}
+		if (
+			currentPageIndex !== searchResults[0]?.pageIndex &&
+			searchResults?.[0] &&
+			isNil(searchResults[0]?.searchTermCharacterOffset)
+		) {
+			// Fallen soldier name highlight was visible on previous page
+			// Clear highlights of names
+			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
+			setSearchResults([]);
+			return;
+		}
 
-		const highlightedAltoTexts = getHighlightedAltoTexts();
-		const currentHighlightedAltoText =
-			highlightedAltoTexts[searchResults[currentSearchResultIndex || 0]?.searchTermIndexOnPage];
+		const highlightedAltoTexts = searchResults.map((searchResult) => searchResult.location);
 
-		if (currentHighlightedAltoText) {
-			iiifViewerReference.current?.iiifZoomToRect(currentHighlightedAltoText);
-		} else {
-			console.error('Could not find currentHighlightedAltoText', {
-				searchResults,
-				highlightedAltoTexts,
-			});
+		let currentHighlightedAltoText: AltoTextLine | null = null;
+		if (
+			!isNil(currentSearchResultIndex) &&
+			!isNil(searchResults[currentSearchResultIndex]?.searchTermIndexOnPage)
+		) {
+			// Only update the current search result if it is available during search
+			// It is not available when highlighting a name of a person
+			const searchTermIndexOnPage = searchResults[currentSearchResultIndex]
+				.searchTermIndexOnPage as number;
+			currentHighlightedAltoText = highlightedAltoTexts[searchTermIndexOnPage];
+
+			if (currentHighlightedAltoText) {
+				iiifViewerReference.current?.iiifZoomToRect(currentHighlightedAltoText);
+			} else {
+				console.error('Could not find currentHighlightedAltoText', {
+					searchResults,
+					highlightedAltoTexts,
+				});
+			}
 		}
 
 		if (isTextOverlayVisible) {
@@ -623,7 +642,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		isLoadingPageImage,
 		searchTerms,
 		currentPageIndex,
-		getHighlightedAltoTexts,
 		isTextOverlayVisible,
 		searchResults,
 		currentSearchResultIndex,
@@ -1073,11 +1091,36 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		);
 	};
 
-	const handleActiveImageIndexChange = (index: number) => {
-		setCurrentPageIndex(index, 'replaceIn');
+	/**
+	 * Update react state in response to changes to the IIIF viewer page index
+	 * @param newPageIndex the new page index
+	 */
+	const handleActiveImageIndexChange = (newPageIndex: number): void => {
+		setCurrentPageIndex(newPageIndex, 'replaceIn');
 		setIsLoadingPageImage(true);
 		setCurrentSearchResultIndex(
-			searchResults?.findIndex((result) => result.pageIndex === index) || 0
+			searchResults?.findIndex((result) => result.pageIndex === newPageIndex) || 0
+		);
+	};
+
+	/**
+	 * When the user wants to switch to a specific page
+	 * This is for instance used when they click a "zoom to mention" of a fallen soldier, but the mention is on a different page
+	 * @param newPageIndex
+	 */
+	const handleSetCurrentPage = (newPageIndex: number): void => {
+		iiifViewerReference?.current?.iiifGoToPage(newPageIndex);
+	};
+
+	/**
+	 * Update react state in response to changes to the IIIF viewer page index
+	 * @param newPageIndex the new page index
+	 */
+	const handleOnPageChanged = (newPageIndex: number): void => {
+		setCurrentPageIndex(newPageIndex, 'replaceIn');
+		setIsLoadingPageImage(false);
+		setCurrentSearchResultIndex(
+			searchResults?.findIndex((result) => result.pageIndex === newPageIndex) || 0
 		);
 	};
 
@@ -1127,6 +1170,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					setSearchResultIndex={handleChangeSearchIndex}
 					onSelection={handleIiifViewerSelection}
 					enableSelection={canDownloadNewspaper}
+					onPageChanged={handleOnPageChanged}
 				/>
 			);
 		}
@@ -1567,11 +1611,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								showVisitButton={showVisitButton || false}
 								hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
 								currentPageIndex={currentPageIndex}
-								setCurrentPageIndex={setCurrentPageIndex}
+								goToPage={handleSetCurrentPage}
 								currentPage={currentPage}
 								activeFile={getFileByType([...FLOWPLAYER_FORMATS, ...IMAGE_API_FORMATS])}
 								simplifiedAltoInfo={simplifiedAltoInfo || null}
 								iiifZoomTo={iiifViewerReference.current?.iiifZoomTo}
+								setSearchResults={setSearchResults}
+								setIsTextOverlayVisible={setIsTextOverlayVisible}
 							/>
 						)}
 						{!!similar.length && (

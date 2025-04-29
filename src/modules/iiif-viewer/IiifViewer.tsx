@@ -64,6 +64,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			setSearchResultIndex,
 			onSelection,
 			enableSelection = false,
+			onPageChanged,
 		},
 		ref
 	) => {
@@ -82,7 +83,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 			(window as any).meemoo__iiifViewer = newOpenSeaDragonViewer;
 		};
-		const activeImageTileSource: TileSource | undefined =
+		const getActiveImageTileSource = (): TileSource | undefined =>
 			openSeaDragonViewer?.world?.getItemAt(0)?.source;
 
 		const [isSelectionActive, setIsSelectionActive] = useState<boolean>(false);
@@ -123,11 +124,11 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			if (!openSeaDragonViewer) {
 				return;
 			}
-			if (openSeaDragonViewer && activeImageTileSource) {
+			if (openSeaDragonViewer && getActiveImageTileSource()) {
 				openSeaDragonViewer.clearOverlays();
 				openSeaDragonViewer.goToPage(activeImageIndex);
 			}
-			// Do not include activeImageTileSource since it causes a rerender loop since this can change in js world without react knowing about it
+			// Do not include getActiveImageTileSource() since it causes a rerender loop since this can change in js world without react knowing about it
 		}, [openSeaDragonViewer, activeImageIndex]);
 
 		const addFullscreenCloseButton = useCallback((openSeadragonViewer: OpenSeadragon.Viewer) => {
@@ -187,12 +188,11 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		}, [checkReferenceStripBottomBorder]);
 
 		const getCurrentImageSize = (): ImageSize => {
+			// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
+			const tileSource = getActiveImageTileSource() as any;
 			const imageSize = {
-				// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
-				width: (activeImageTileSource as any)?.width || activeImageTileSource?.dimensions.x,
-				height:
-					// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
-					(activeImageTileSource as any)?.height || activeImageTileSource?.dimensions.y,
+				width: tileSource?.width || tileSource?.dimensions.x,
+				height: tileSource?.height || tileSource?.dimensions.y,
 			};
 			if (!imageSize.width || !imageSize.height) {
 				throw new Error(
@@ -200,7 +200,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 						{
 							message: 'Failed to get image size from the current tile source',
 							additionalInfo: {
-								activeImageTileSource,
+								activeImageTileSource: tileSource,
 								activeImageIndex,
 							},
 						},
@@ -229,15 +229,13 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					return;
 				}
 
-				if (!activeImageTileSource) {
+				// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
+				const tileSource = getActiveImageTileSource() as any;
+				if (!tileSource) {
 					return;
 				}
-				const imageWidth: number | undefined =
-					// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
-					(activeImageTileSource as any).width || activeImageTileSource.dimensions.x;
-				const imageHeight: number | undefined =
-					// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
-					(activeImageTileSource as any).height || activeImageTileSource.dimensions.y;
+				const imageWidth: number | undefined = tileSource.width || tileSource?.dimensions?.x;
+				const imageHeight: number | undefined = tileSource.height || tileSource?.dimensions?.y;
 
 				if (!imageWidth || !imageHeight) {
 					throw new Error('Failed to find current page width/height');
@@ -279,7 +277,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 					);
 				}
 			},
-			[openSeaDragonLib, activeImageTileSource]
+			[openSeaDragonLib, getActiveImageTileSource()]
 		);
 
 		// biome-ignore lint/correctness/useExhaustiveDependencies: Only update the pan and zoom once when loading the iiif viewer
@@ -341,7 +339,14 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			const handleOpenTemp = () => {
 				setIsLoading(false);
 			};
+
+			// Keep track of the current page index
+			const handlePageChanged = () => {
+				onPageChanged(openSeadragonViewerTemp.currentPage());
+			};
+
 			openSeadragonViewerTemp.addHandler('open', handleOpenTemp);
+			openSeadragonViewerTemp.addHandler('page', handlePageChanged);
 
 			return () => {
 				openSeadragonViewerTemp.removeHandler('viewport-change', handleViewportChangeTemp);
@@ -464,26 +469,33 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		};
 
 		const iiifZoomTo = (x: number, y: number): void => {
+			// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
+			const tileSource = getActiveImageTileSource() as any;
+			console.log('zoom to ', {
+				x,
+				y,
+				openSeaDragonViewer,
+				activeImageTileSource: tileSource,
+			});
 			if (!openSeaDragonViewer) {
 				console.error('iiifZoomToRect failed because openSeaDragonViewer is undefined');
 				return;
 			}
-			if (!activeImageTileSource) {
+			if (!tileSource) {
 				console.error('iiifZoomToRect failed because imageTileSource is undefined', {
 					activeImageIndex,
 				});
 				return;
 			}
-			const imageWidth: number | undefined =
-				// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
-				(activeImageTileSource as any).width || activeImageTileSource.dimensions.x;
+			const imageWidth: number | undefined = tileSource.width || tileSource?.dimensions?.x;
 
 			if (!imageWidth) {
-				console.error('aborting zoom to rect because activeImageTileSource is undefined', {
-					item: activeImageTileSource,
+				console.error('aborting zoom to rect because getActiveImageTileSource() is undefined', {
+					x,
+					y,
 					openSeaDragonViewer,
 					imageWidth,
-					activeImageTileSource,
+					activeImageTileSource: tileSource,
 				});
 				return;
 			}
@@ -529,6 +541,16 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			});
 		};
 
+		const iiifGoToPage = (pageIndex: number): void => {
+			if (!openSeaDragonViewer) {
+				console.error('Failed to go to pageIndex because openSeaDragonViewer is not initialized', {
+					pageIndex,
+				});
+				return;
+			}
+			openSeaDragonViewer.goToPage(pageIndex);
+		};
+
 		useImperativeHandle(ref, () => ({
 			iiifZoomToRect,
 			iiifRotate,
@@ -536,6 +558,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 			iiifZoom,
 			iiifZoomTo,
 			iiifGoToHome,
+			iiifGoToPage,
 			waitForReadyState,
 			updateHighlightedAltoTexts,
 		}));

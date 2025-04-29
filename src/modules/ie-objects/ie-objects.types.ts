@@ -270,8 +270,9 @@ export interface AltoTextLine {
 export interface OcrSearchResult {
 	pageIndex: number;
 	searchTerm: string;
-	searchTermCharacterOffset: number;
-	searchTermIndexOnPage: number;
+	searchTermCharacterOffset: number | null;
+	searchTermIndexOnPage: number | null;
+	location: AltoTextLine;
 }
 
 export interface Mention {

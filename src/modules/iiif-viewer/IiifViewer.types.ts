@@ -34,6 +34,7 @@ export interface IiifViewerProps {
 	initialZoomLevel?: number;
 	isLoading: boolean;
 	setIsLoading: (isLoading: boolean) => void;
+	onPageChanged: (newPageIndex: number) => void;
 
 	// Search through pages
 	isSearchEnabled: boolean;
@@ -57,6 +58,7 @@ export interface IiifViewerFunctions {
 	iiifFullscreen: (expand: boolean) => void;
 	iiifZoom: (multiplier: number) => void;
 	iiifGoToHome: () => void;
+	iiifGoToPage: (pageIndex: number) => void;
 	waitForReadyState: () => Promise<void>;
 	updateHighlightedAltoTexts: (
 		highlightedAltoTexts: AltoTextLine[],

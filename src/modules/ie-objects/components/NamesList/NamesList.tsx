@@ -1,5 +1,5 @@
 import type { NamesListProps } from '@ie-objects/components/NamesList/NamesList.types';
-import type { Mention, MentionHighlight } from '@ie-objects/ie-objects.types';
+import type { Mention } from '@ie-objects/ie-objects.types';
 import { Button, TextInput } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -21,7 +21,7 @@ import styles from './NamesList.module.scss';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import ConfidenceIndicator from '@ie-objects/components/ConfidenceIndicator/ConfidenceIndicator';
 
-export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToHighlight }) => {
+export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMention }) => {
 	const [searchTermsTemp, setSearchTermsTemp] = useState('');
 	const [searchTerms, setSearchTerms] = useState('');
 	const [filteredNames, setFilteredNames] = useState<Mention[]>(mentions);
@@ -76,10 +76,8 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToHig
 		};
 	}, []);
 
-	const renderMentionHighlight = (
-		mention: Mention & { index: number },
-		highlight: MentionHighlight
-	) => {
+	const renderMention = (mention: Mention & { index: number }) => {
+		const firstHighlight = mention.highlights?.[0];
 		return (
 			<div key={mention.index} className={styles['c-names-list__person']}>
 				<div className={styles['c-names-list__person__occurrence-confidence']}>
@@ -102,7 +100,7 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToHig
 						</span>
 					</div>
 				</div>
-				{highlight.x && highlight.x && highlight.width && highlight.height && (
+				{firstHighlight.x && firstHighlight.x && firstHighlight.width && firstHighlight.height && (
 					<Button
 						icon={<Icon name={IconNamesLight.SearchText} />}
 						variants={['white']}
@@ -110,7 +108,7 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToHig
 							'modules/ie-objects/components/names-list/names-list___spring-naar-de-locatie-van-deze-naam'
 						)}
 						tooltipPosition="left"
-						onClick={() => onZoomToHighlight(mention, highlight)}
+						onClick={() => onZoomToMention(mention)}
 					/>
 				)}
 
@@ -158,9 +156,7 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToHig
 				{filteredNames
 					.map((mention, index) => ({ ...mention, index }))
 					.map((mention: Mention & { index: number }) => {
-						return mention.highlights.map((highlight) => {
-							return renderMentionHighlight(mention, highlight);
-						});
+						return renderMention(mention);
 					})}
 			</PerfectScrollbar>
 		</div>
