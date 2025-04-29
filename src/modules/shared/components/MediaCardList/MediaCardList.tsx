@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { type FC, memo, type ReactNode } from 'react';
+import { type FC, type ReactNode, memo } from 'react';
 import Masonry from 'react-masonry-css';
 
 import type { MediaCardListProps } from '@shared/components/MediaCardList/MediaCardList.types';
@@ -9,6 +9,8 @@ import { Breakpoints } from '@shared/types';
 
 import { type IdentifiableMediaCard, MediaCard, type MediaCardProps } from '../MediaCard';
 
+import { Loading } from '@shared/components/Loading';
+import { isServerSideRendering } from '@shared/utils/is-browser';
 import { MEDIA_CARD_LIST_GRID_BP_COLS } from './MediaCardList.const';
 import styles from './MediaCardList.module.scss';
 
@@ -161,6 +163,12 @@ const MediaCardList: FC<MediaCardListProps> = ({
 			item
 		);
 	});
+
+	if (isServerSideRendering()) {
+		// Avoid masonry layout shift on SSR
+		// https://meemoo.atlassian.net/browse/ARC-2913
+		return <Loading fullscreen owner="media card list" />;
+	}
 
 	return (
 		<div
