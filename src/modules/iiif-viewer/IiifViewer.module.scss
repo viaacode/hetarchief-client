@@ -234,12 +234,21 @@ $controls-margin-bottom: $spacer-sm;
 	overflow-y: auto;
 	padding-right: $spacer-sm;
 
+	&.c-iiif-viewer__iiif__reference-strip--scrollable::after {
+		content: "";
+		height: 10px;
+		background-color: black;
+		position: fixed;
+		bottom: 24.4rem;
+		width: 100px;
+	}
+
 	@media (max-width: $breakpoint-md) {
 		display: none;
 	}
 
 	> div {
-		background-color: $black-80;
+		background-color: $black;
 		padding: $spacer-xs;
 
 		> button {

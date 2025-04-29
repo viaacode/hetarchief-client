@@ -1,5 +1,5 @@
 import type { NamesListProps } from '@ie-objects/components/NamesList/NamesList.types';
-import type { Mention, MentionHighlight } from '@ie-objects/ie-objects.types';
+import type { Mention } from '@ie-objects/ie-objects.types';
 import { Button, TextInput } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -21,7 +21,7 @@ import styles from './NamesList.module.scss';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import ConfidenceIndicator from '@ie-objects/components/ConfidenceIndicator/ConfidenceIndicator';
 
-export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToHighlight }) => {
+export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMention }) => {
 	const [searchTermsTemp, setSearchTermsTemp] = useState('');
 	const [searchTerms, setSearchTerms] = useState('');
 	const [filteredNames, setFilteredNames] = useState<Mention[]>(mentions);
@@ -76,10 +76,8 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToHig
 		};
 	}, []);
 
-	const renderMentionHighlight = (
-		mention: Mention & { index: number },
-		highlight: MentionHighlight
-	) => {
+	const renderMention = (mention: Mention & { index: number }) => {
+		const firstHighlight = mention.highlights?.[0];
 		return (
 			<div key={mention.index} className={styles['c-names-list__person']}>
 				<div className={styles['c-names-list__person__occurrence-confidence']}>
@@ -91,18 +89,26 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToHig
 				<div className={clsx(styles['c-names-list__person__info'], 'u-flex-grow')}>
 					<div className={styles['c-names-list__person__info__name']}>{mention.name}</div>
 					<div className={styles['c-names-list__person__info__dates-and-locations']}>
-						<span title={tText('Geboorte jaar en plaats')}>
+						<span
+							title={tText(
+								'modules/ie-objects/components/names-list/names-list___geboorte-jaar-en-plaats'
+							)}
+						>
 							° {compact([mention.birthDate, mention.birthPlace]).join(' ')}
 						</span>
 						<span className={styles['c-names-list__person__info__dates-and-locations__comma']}>
 							,{' '}
 						</span>
-						<span title={tText('Sterfte jaar en plaats')}>
+						<span
+							title={tText(
+								'modules/ie-objects/components/names-list/names-list___sterfte-jaar-en-plaats'
+							)}
+						>
 							† {compact([mention.deathDate, mention.deathPlace]).join(' ')}
 						</span>
 					</div>
 				</div>
-				{highlight.x && highlight.x && highlight.width && highlight.height && (
+				{firstHighlight.x && firstHighlight.x && firstHighlight.width && firstHighlight.height && (
 					<Button
 						icon={<Icon name={IconNamesLight.SearchText} />}
 						variants={['white']}
@@ -110,7 +116,7 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToHig
 							'modules/ie-objects/components/names-list/names-list___spring-naar-de-locatie-van-deze-naam'
 						)}
 						tooltipPosition="left"
-						onClick={() => onZoomToHighlight(mention, highlight)}
+						onClick={() => onZoomToMention(mention)}
 					/>
 				)}
 
@@ -158,9 +164,7 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToHig
 				{filteredNames
 					.map((mention, index) => ({ ...mention, index }))
 					.map((mention: Mention & { index: number }) => {
-						return mention.highlights.map((highlight) => {
-							return renderMentionHighlight(mention, highlight);
-						});
+						return renderMention(mention);
 					})}
 			</PerfectScrollbar>
 		</div>

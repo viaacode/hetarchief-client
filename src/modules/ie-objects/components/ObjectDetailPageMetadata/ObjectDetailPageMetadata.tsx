@@ -55,9 +55,9 @@ import {
 	IsPartOfKey,
 	MediaActions,
 	type Mention,
-	type MentionHighlight,
 	MetadataExportFormats,
 	type MetadataSortMap,
+	type OcrSearchResult,
 } from '@ie-objects/ie-objects.types';
 import {
 	IE_OBJECTS_SERVICE_BASE_URL,
@@ -114,6 +114,7 @@ import {
 import Callout from '../../../shared/components/Callout/Callout';
 import MetadataList from '../Metadata/MetadataList';
 
+import { getFirstMentionHighlight } from '@ie-objects/utils/get-first-mention-highlight';
 import styles from './ObjectDetailPageMetadata.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
@@ -122,7 +123,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	mediaInfo,
 	currentPage,
 	currentPageIndex,
-	setCurrentPageIndex,
+	goToPage,
 	hasAccessToVisitorSpaceOfObject,
 	showVisitButton,
 	visitRequest,
@@ -131,6 +132,8 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	onClickAction,
 	openRequestAccessBlade,
 	iiifZoomTo,
+	setSearchResults,
+	setIsTextOverlayVisible,
 }) => {
 	const router = useRouter();
 	const locale = useLocale();
@@ -304,25 +307,60 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		canDownloadNewspaper,
 	]);
 
-	const handleZoomToMentionHighlight = (mention: Mention, highlight: MentionHighlight) => {
-		if (isNil(simplifiedAltoInfo) || !currentPage) {
+	const zoomToName = useCallback(
+		(mention: Mention) => {
+			const firstHighlight = getFirstMentionHighlight(mention.highlights);
+
+			if (!firstHighlight) {
+				return;
+			}
+
+			// Show the highlights on the iiif viewer newspaper image
+			setIsTextOverlayVisible(true);
+
+			// Highlight the words in the mention name
+			setSearchResults(
+				mention.highlights.map((highlight): OcrSearchResult => {
+					return {
+						pageIndex: mention.pageIndex,
+						searchTerm: mention.name,
+						searchTermCharacterOffset: null,
+						searchTermIndexOnPage: null,
+						location: {
+							text: mention.name,
+							x: highlight.x,
+							y: highlight.y,
+							width: highlight.width,
+							height: highlight.height,
+						},
+					};
+				})
+			);
+
+			// Zoom to first word in mention name
+			const x = firstHighlight.x + firstHighlight.width / 2;
+			const y = firstHighlight.y + firstHighlight.height / 2;
+			iiifZoomTo(x, y);
+		},
+		[iiifZoomTo, setSearchResults, setIsTextOverlayVisible]
+	);
+
+	const handleZoomToMention = (mention: Mention) => {
+		if (!currentPage) {
 			return;
 		}
 
-		const x = highlight.x + highlight.width / 2;
-		const y = highlight.y + highlight.height / 2;
-
 		if (mention.pageNumber !== currentPage.pageNumber) {
 			// Switch to the correct page first
-			setCurrentPageIndex(mention.pageIndex);
+			goToPage(mention.pageIndex);
 
 			// Wait for page load
 			setTimeout(() => {
-				iiifZoomTo(x, y);
+				zoomToName(mention);
 			}, 1000);
 		} else {
 			// Already on the correct page => zoom to highlight
-			iiifZoomTo(x, y);
+			zoomToName(mention);
 		}
 	};
 
@@ -987,10 +1025,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						simplifiedAltoInfo?.description.softwareCreator
 					)}
 					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___ocr-software-maker'),
-						simplifiedAltoInfo?.description.softwareCreator
-					)}
-					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___ocr-gemaakt-op'),
 						simplifiedAltoInfo?.description.processingDateTime
 					)}
@@ -1118,7 +1152,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						>
 							<NamesList
 								mentions={mediaInfo?.mentions || []}
-								onZoomToHighlight={handleZoomToMentionHighlight}
+								onZoomToMention={handleZoomToMention}
 							/>
 						</Metadata>
 					)}

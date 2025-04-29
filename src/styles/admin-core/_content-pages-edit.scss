@@ -29,3 +29,11 @@
 		padding: 1.8rem 1.8rem 1.2rem 1.2rem;
 	}
 }
+
+// Hide export description field which is only used by AVO
+// https://meemoo.atlassian.net/browse/ARC-2657
+.c-content-edit-form {
+	.field-meta-description {
+		display: none;
+	}
+}

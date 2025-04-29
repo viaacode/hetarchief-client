@@ -3,6 +3,7 @@ import type {
 	IeObjectFile,
 	IeObjectPage,
 	MediaActions,
+	OcrSearchResult,
 } from '@ie-objects/ie-objects.types';
 import type { SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
 import type { VisitRequest } from '@shared/types/visit-request';
@@ -10,7 +11,7 @@ import type { VisitRequest } from '@shared/types/visit-request';
 export interface ObjectDetailPageMetadataProps {
 	mediaInfo: IeObject | null | undefined;
 	currentPageIndex: number;
-	setCurrentPageIndex: (newPageIndex: number) => void;
+	goToPage: (pageIndex: number) => void;
 	currentPage: IeObjectPage | null;
 	hasAccessToVisitorSpaceOfObject: boolean;
 	showVisitButton: boolean;
@@ -20,4 +21,6 @@ export interface ObjectDetailPageMetadataProps {
 	onClickAction: (id: MediaActions) => Promise<void>;
 	openRequestAccessBlade: () => void;
 	iiifZoomTo: (x: number, y: number) => void;
+	setSearchResults: (searchResults: OcrSearchResult[]) => void;
+	setIsTextOverlayVisible: (visible: boolean) => void;
 }
