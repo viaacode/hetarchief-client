@@ -11,6 +11,7 @@ import AutocompleteFieldInput from '@visitor-space/components/AutocompleteFieldI
 import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import type { DefaultFilterFormChildrenParams } from '@visitor-space/types';
 
+import { tText } from '@shared/helpers/translate';
 import styles from './AutocompleteFieldFilterForm.module.scss';
 
 export const AutocompleteFieldFilterForm: FC<{
@@ -35,7 +36,11 @@ export const AutocompleteFieldFilterForm: FC<{
 	} = useForm<{ value: string }>({
 		resolver: yupResolver(
 			yupObject({
-				value: yupString().required(),
+				value: yupString().required(
+					tText(
+						'modules/visitor-space/components/autocomplete-field-filter-form/autocomplete-field-filter-form___de-naam-van-de-maker-is-een-verplicht-veld'
+					)
+				),
 			})
 		),
 		defaultValues: { value: '' },
