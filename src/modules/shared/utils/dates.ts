@@ -1,6 +1,7 @@
 import { format, formatDistanceToNow, isSameDay, isToday } from 'date-fns';
 
-import { Locale, getLocaleFromI18nLanguage } from './i18n';
+import { TranslationService } from '@shared/services/translation-service/translation.service';
+import { type Locale, getLocaleFromI18nLanguage } from './i18n';
 
 // Shared
 
@@ -31,8 +32,11 @@ export const asDate = (input: Date | string | undefined | null): Date | undefine
 	return undefined;
 };
 
-export const localisedOptions = {
-	locale: getLocaleFromI18nLanguage(Locale.nl),
+export const getLocalisedOptions = () => {
+	const locale = TranslationService.getLocale() as Locale;
+	return {
+		locale: getLocaleFromI18nLanguage(locale),
+	};
 };
 
 // Do not export to contain all user-facing formatters here
@@ -41,7 +45,7 @@ const formatWithLocale = (formatString: string, date?: Date): string => {
 		return '';
 	}
 
-	return date ? format(date, formatString, { ...localisedOptions }) : '';
+	return date ? format(date, formatString, { ...getLocalisedOptions() }) : '';
 };
 
 // 09:30
@@ -82,6 +86,7 @@ export const formatDistanceToday = (input: Date | string): string => {
 	const date = asDate(input);
 
 	if (date && isToday(date)) {
+		const localisedOptions = getLocalisedOptions();
 		return formatDistanceToNow(date, {
 			...localisedOptions,
 			addSuffix: true,
@@ -99,7 +104,7 @@ export const formatDistanceTodayWithoutTime = (input: Date | string): string => 
 
 	if (date && isToday(date)) {
 		return formatDistanceToNow(date, {
-			...localisedOptions,
+			...getLocalisedOptions(),
 			addSuffix: true,
 		});
 	}

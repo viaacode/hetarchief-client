@@ -1,4 +1,4 @@
-import { array, date, mixed, object, ref, type Schema, string } from 'yup';
+import { type Schema, array, date, mixed, object, ref, string } from 'yup';
 
 import type { ApproveRequestFormState } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.types';
 import { tText } from '@shared/helpers/translate';
@@ -41,8 +41,20 @@ export const APPROVE_REQUEST_FORM_SCHEMA = (): Schema<ApproveRequestFormState> =
 						.of(string().required())
 						.required('Selecting folders is required when access type is FOLDERS');
 				}
-				return array().of(string().required()).optional();
+				return array()
+					.of(
+						string().required(
+							tText(
+								'modules/shared/components/approve-request-blade/approve-request-blade___de-map-id-is-een-verplicht-veld'
+							)
+						)
+					)
+					.optional();
 			}),
-		}).required(),
+		}).required(
+			tText(
+				'modules/shared/components/approve-request-blade/approve-request-blade___het-type-toegang-is-een-verplicht-veld'
+			)
+		),
 	}) as Schema<ApproveRequestFormState>;
 };

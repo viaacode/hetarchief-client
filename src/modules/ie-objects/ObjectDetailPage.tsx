@@ -94,7 +94,6 @@ import type {
 	ImageInfo,
 	ImageInfoWithToken,
 	Rect,
-	TextLine,
 } from '@iiif-viewer/IiifViewer.types';
 import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
@@ -227,6 +226,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const [isLoadingPageImage, setIsLoadingPageImage] = useState(true);
 	const [searchResults, setSearchResults] = useState<OcrSearchResult[] | null>(null);
+	const [highlights, setHighlights] = useState<AltoTextLine[]>([]);
 
 	const {
 		data: mediaInfo,
@@ -415,7 +415,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		visitorSpace?.status === VisitorSpaceStatus.Active &&
 		!isKiosk;
 
-	const pageOcrTexts: (string | null)[] = useMemo(() => {
+	const pageOcrTranscripts: (string | null)[] = useMemo(() => {
 		const pageOcrTextsTemp: (string | null)[] = [];
 		for (const page of mediaInfo?.pages || []) {
 			const pageTranscripts = compact(
@@ -428,13 +428,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		return pageOcrTextsTemp;
 	}, [mediaInfo?.pages]);
 
-	const arePagesOcrTextsAvailable = compact(pageOcrTexts).length !== 0;
+	const arePagesOcrTextsAvailable = compact(pageOcrTranscripts).length !== 0;
 
 	const isPublicNewspaper: boolean = useIsPublicNewspaper(mediaInfo);
 	// You need the permission or not to be logged in to download the newspaper
 	// https://meemoo.atlassian.net/browse/ARC-2617
 	const canDownloadNewspaper: boolean =
 		(useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user) && isPublicNewspaper;
+
+	const getAltoTextsWithSearchTerms = useCallback((): AltoTextLine[] => {
+		return (
+			simplifiedAltoInfo?.text?.filter((altoText) =>
+				searchTerms
+					.toLowerCase()
+					.split(' ')
+					.some((searchTermWord) => altoText.text.toLowerCase().includes(searchTermWord))
+			) || []
+		);
+	}, [searchTerms, simplifiedAltoInfo?.text]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	const handleSearch = useCallback(
@@ -444,12 +455,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				// Zoom to whole page
 				iiifViewerReference.current?.iiifGoToHome();
 				setSearchResults([]);
+				setHighlights([]);
 				setSearchTerms('');
 				setCurrentSearchResultIndex(0);
 				return;
 			}
 
-			if (!pageOcrTexts.length) {
+			if (!pageOcrTranscripts.length) {
 				// Only show the error if the user has access to the essence of the newspaper
 				// https://meemoo.atlassian.net/browse/ARC-2556
 				if (mediaInfo?.thumbnailUrl) {
@@ -466,29 +478,21 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 			const searchResultsTemp: OcrSearchResult[] = [];
 			for (const searchTerm of newSearchTerms.toLowerCase().split(' ')) {
-				pageOcrTexts.forEach((pageOcrText, pageIndex) => {
-					if (!pageOcrText) {
+				pageOcrTranscripts.forEach((pageOcrTranscript, pageIndex) => {
+					if (!pageOcrTranscript) {
 						return; // Skip this page since it doesn't have an ocr transcript
 					}
-					let searchTermCharacterOffset: number = pageOcrText.indexOf(searchTerm);
+					let searchTermCharacterOffset: number = pageOcrTranscript.indexOf(searchTerm);
 					let searchTermIndexOnPage = 0;
 					while (searchTermCharacterOffset !== -1) {
-						const textLine = simplifiedAltoInfo?.text?.[searchTermIndexOnPage] as TextLine;
 						const searchResult: OcrSearchResult = {
 							pageIndex,
 							searchTerm,
 							searchTermCharacterOffset,
 							searchTermIndexOnPage,
-							location: {
-								text: textLine.text,
-								x: textLine.x,
-								y: textLine.y,
-								width: textLine.width,
-								height: textLine.height,
-							},
 						};
 						searchResultsTemp.push(searchResult);
-						searchTermCharacterOffset = pageOcrText?.indexOf(
+						searchTermCharacterOffset = pageOcrTranscript?.indexOf(
 							searchTerm,
 							searchTermCharacterOffset + 1
 						);
@@ -498,6 +502,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			}
 
 			setSearchResults(searchResultsTemp);
+			setHighlights(getAltoTextsWithSearchTerms());
 			setSearchTerms(newSearchTerms.toLowerCase());
 
 			const parsedUrl = parseUrl(window.location.href);
@@ -520,7 +525,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				setCurrentSearchResultIndex(firstSearchResultOnCurrentPage);
 			}
 		},
-		[currentPageIndex, mediaInfo?.thumbnailUrl, pageOcrTexts, router]
+		[currentPageIndex, mediaInfo?.thumbnailUrl, pageOcrTranscripts, router]
 	);
 
 	const handleIsTextOverlayVisibleChange = useCallback(
@@ -604,10 +609,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			// Clear highlights of names
 			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
 			setSearchResults([]);
+			setHighlights([]);
 			return;
 		}
-
-		const highlightedAltoTexts = searchResults.map((searchResult) => searchResult.location);
 
 		let currentHighlightedAltoText: AltoTextLine | null = null;
 		if (
@@ -618,21 +622,21 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			// It is not available when highlighting a name of a person
 			const searchTermIndexOnPage = searchResults[currentSearchResultIndex]
 				.searchTermIndexOnPage as number;
-			currentHighlightedAltoText = highlightedAltoTexts[searchTermIndexOnPage];
+			currentHighlightedAltoText = highlights[searchTermIndexOnPage];
 
 			if (currentHighlightedAltoText) {
 				iiifViewerReference.current?.iiifZoomToRect(currentHighlightedAltoText);
 			} else {
 				console.error('Could not find currentHighlightedAltoText', {
 					searchResults,
-					highlightedAltoTexts,
+					highlights,
 				});
 			}
 		}
 
 		if (isTextOverlayVisible) {
 			iiifViewerReference.current?.updateHighlightedAltoTexts(
-				highlightedAltoTexts,
+				highlights,
 				currentHighlightedAltoText
 			);
 		} else {
@@ -1011,6 +1015,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		setSearchTerms('');
 		setHighlightedSearchTerms('');
 		setSearchResults(null);
+		setHighlights([]);
 		setCurrentSearchResultIndex(null);
 		iiifViewerReference.current?.iiifGoToHome();
 	};
@@ -1616,7 +1621,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								activeFile={getFileByType([...FLOWPLAYER_FORMATS, ...IMAGE_API_FORMATS])}
 								simplifiedAltoInfo={simplifiedAltoInfo || null}
 								iiifZoomTo={iiifViewerReference.current?.iiifZoomTo}
-								setSearchResults={setSearchResults}
+								setHighlights={setHighlights}
 								setIsTextOverlayVisible={setIsTextOverlayVisible}
 							/>
 						)}

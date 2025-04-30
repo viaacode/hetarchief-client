@@ -29,6 +29,9 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 
 	const handleOnChange = (evt: ChangeEvent<HTMLInputElement>): void => {
 		setSearchTermsTemp(evt.target.value);
+		if (evt.target.value === '') {
+			setSearchTerms(evt.target.value);
+		}
 	};
 
 	const handleOnKeyUp = (evt: KeyboardEvent<HTMLInputElement>): void => {
