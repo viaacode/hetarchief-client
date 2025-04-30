@@ -272,7 +272,6 @@ export interface OcrSearchResult {
 	searchTerm: string;
 	searchTermCharacterOffset: number | null;
 	searchTermIndexOnPage: number | null;
-	location: AltoTextLine;
 }
 
 export interface Mention {

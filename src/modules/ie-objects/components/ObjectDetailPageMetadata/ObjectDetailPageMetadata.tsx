@@ -49,6 +49,7 @@ import {
 	renderIsPartOfValue,
 } from '@ie-objects/ie-objects.consts';
 import {
+	type AltoTextLine,
 	type IeObject,
 	IeObjectAccessThrough,
 	IeObjectLicense,
@@ -57,7 +58,6 @@ import {
 	type Mention,
 	MetadataExportFormats,
 	type MetadataSortMap,
-	type OcrSearchResult,
 } from '@ie-objects/ie-objects.types';
 import {
 	IE_OBJECTS_SERVICE_BASE_URL,
@@ -132,7 +132,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	onClickAction,
 	openRequestAccessBlade,
 	iiifZoomTo,
-	setSearchResults,
+	setHighlights,
 	setIsTextOverlayVisible,
 }) => {
 	const router = useRouter();
@@ -319,20 +319,14 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			setIsTextOverlayVisible(true);
 
 			// Highlight the words in the mention name
-			setSearchResults(
-				mention.highlights.map((highlight): OcrSearchResult => {
+			setHighlights(
+				mention.highlights.map((highlight): AltoTextLine => {
 					return {
-						pageIndex: mention.pageIndex,
-						searchTerm: mention.name,
-						searchTermCharacterOffset: null,
-						searchTermIndexOnPage: null,
-						location: {
-							text: mention.name,
-							x: highlight.x,
-							y: highlight.y,
-							width: highlight.width,
-							height: highlight.height,
-						},
+						text: mention.name,
+						x: highlight.x,
+						y: highlight.y,
+						width: highlight.width,
+						height: highlight.height,
 					};
 				})
 			);
@@ -342,7 +336,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			const y = firstHighlight.y + firstHighlight.height / 2;
 			iiifZoomTo(x, y);
 		},
-		[iiifZoomTo, setSearchResults, setIsTextOverlayVisible]
+		[iiifZoomTo, setHighlights, setIsTextOverlayVisible]
 	);
 
 	const handleZoomToMention = (mention: Mention) => {
