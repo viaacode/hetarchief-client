@@ -5,6 +5,7 @@ $component: "c-block-het-archief-header-search";
 .#{$component} {
 	display: flex;
 	flex-direction: row;
+	justify-content: space-between;
 	gap: $spacer-1xl;
 
 	@media (max-width: $breakpoint-md) {
@@ -52,6 +53,7 @@ $component: "c-block-het-archief-header-search";
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
+		max-width: 42%;
 
 		input {
 			border-radius: 4rem;
