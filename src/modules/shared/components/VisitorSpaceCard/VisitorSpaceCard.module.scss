@@ -72,11 +72,10 @@ $component: "c-visitor-space-card";
 		}
 	}
 
-	&__description_wrapper {
-		max-width: 100%;
-	}
-
 	&__description {
+		max-width: 100%;
+		min-height: 6rem;
+
 		&__container {
 			display: flex;
 			flex-direction: row;

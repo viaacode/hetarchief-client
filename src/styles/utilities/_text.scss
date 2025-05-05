@@ -4,22 +4,31 @@
 	@include text-ellipsis;
 }
 
-// Use a CSS multi-line truncator to avoid repaint-heavy packages
-// Note: include `1` for completeness sake
+[class*="u-text-ellipsis--"] {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+}
 
-$lines: (1, 2, 3, 4, 5, 6, 7);
+.u-text-ellipsis--2 {
+	-webkit-line-clamp: 2;
+	line-clamp: 2;
+}
 
-@each $var in $lines {
-	.u-text-ellipsis--#{$var} {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		/* stylelint-disable-next-line value-no-vendor-prefix */
-		display: -webkit-box;
-		-webkit-line-clamp: $var; /* number of lines to show */
-		/* stylelint-disable-next-line property-no-unknown */
-		line-clamp: $var;
-		-webkit-box-orient: vertical;
-	}
+.u-text-ellipsis--3 {
+	-webkit-line-clamp: 3;
+	line-clamp: 3;
+}
+
+.u-text-ellipsis--5 {
+	-webkit-line-clamp: 5;
+	line-clamp: 5;
+}
+
+.u-text-ellipsis--7 {
+	-webkit-line-clamp: 7;
+	line-clamp: 7;
 }
 
 .u-text-break {
