@@ -17,7 +17,7 @@ import { VisitorSpaceCardControls } from './VisitorSpaceCardControls';
 const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 	const { room, type } = props;
 	const locale = useLocale();
-	const [expandDescription, setExpandDescription] = useState(false);
+	const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 	const descriptionElement = useRef<HTMLDivElement | null>(null);
 	const [hasOverflowingChildren, setHasOverflowingChildren] = useState(false);
 
@@ -104,23 +104,19 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 		);
 	};
 
-	const renderDescription = () => (
-		<div
-			ref={descriptionElement}
-			className={clsx(styles['c-visitor-space-card__description_wrapper'], {
-				[`u-text-ellipsis--${flat ? 2 : 3}`]: expandDescription,
-			})}
-		>
+	const renderDescription = () => {
+		return (
 			<p
-				className={clsx(
-					styles['c-visitor-space-card__description'],
-					flat && styles['c-visitor-space-card__description--flat']
-				)}
+				ref={descriptionElement}
+				className={clsx(styles['c-visitor-space-card__description'], {
+					[styles['c-visitor-space-card__description--flat']]: flat,
+					[`u-text-ellipsis--${flat ? 2 : 3}`]: !isDescriptionExpanded,
+				})}
 			>
 				{room?.info}
 			</p>
-		</div>
-	);
+		);
+	};
 
 	const mode = typeAccessGranted ? 'dark' : 'light';
 	const orientation = hasRequested ? 'horizontal' : typeNoAccess ? 'vertical--at-md' : 'vertical';
@@ -157,12 +153,12 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 						<div
 							className={clsx(styles['c-visitor-space-card__description__container'], {
 								[styles['c-visitor-space-card__description__container--expanded']]:
-									expandDescription,
+									isDescriptionExpanded,
 							})}
-							onClick={() => setExpandDescription(!expandDescription)}
+							onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
 							onKeyUp={(evt) => {
 								if (evt.key === 'Enter') {
-									setExpandDescription(!expandDescription);
+									setIsDescriptionExpanded(!isDescriptionExpanded);
 								}
 							}}
 						>
