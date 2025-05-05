@@ -2,12 +2,12 @@ import type { SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { type FC, useCallback } from 'react';
 import type { ActionMeta, SingleValue } from 'react-select';
-import AsyncCreatableSelect from 'react-select/async-creatable';
 
 import { IeObjectsService } from '@ie-objects/services';
 import { tText } from '@shared/helpers/translate';
 import type { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 
+import AsyncSelect from 'react-select/async';
 import styles from './AutocompleteFieldInput.module.scss';
 
 export interface AutocompleteFieldInputProps {
@@ -45,19 +45,16 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps> = ({
 		newValue: SingleValue<SelectOption>,
 		actionMeta: ActionMeta<SelectOption>
 	): void => {
-		if (actionMeta.action === 'select-option' || actionMeta.action === 'create-option') {
+		if (actionMeta.action === 'select-option') {
 			onChange(newValue?.value || null);
 		}
 	};
 
 	return (
-		<AsyncCreatableSelect<SelectOption>
+		<AsyncSelect<SelectOption>
 			aria-label={label}
 			className={clsx(styles['c-autocomplete-field-input'], 'c-react-select')}
 			classNamePrefix={'c-react-select'}
-			createOptionPosition="first"
-			allowCreateWhileLoading
-			formatCreateLabel={(inputValue) => inputValue}
 			defaultOptions={false}
 			onChange={handleChange}
 			loadOptions={handleLoadOptions}
