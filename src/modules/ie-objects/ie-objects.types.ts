@@ -293,3 +293,8 @@ export interface MentionHighlight {
 	width: number;
 	height: number;
 }
+
+export enum HighlightMode {
+	NAMES = 'NAMES', // Highlight fallen soldier name
+	SEARCH = 'SEARCH', // Highlight ocr search terms
+}

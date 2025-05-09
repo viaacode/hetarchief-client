@@ -132,7 +132,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	onClickAction,
 	openRequestAccessBlade,
 	iiifZoomTo,
-	setHighlights,
+	setActiveMentionHighlights,
 	setIsTextOverlayVisible,
 }) => {
 	const router = useRouter();
@@ -319,7 +319,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			setIsTextOverlayVisible(true);
 
 			// Highlight the words in the mention name
-			setHighlights(
+			setActiveMentionHighlights(
 				mention.highlights.map((highlight): AltoTextLine => {
 					return {
 						text: mention.name,
@@ -336,7 +336,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			const y = firstHighlight.y + firstHighlight.height / 2;
 			iiifZoomTo(x, y);
 		},
-		[iiifZoomTo, setHighlights, setIsTextOverlayVisible]
+		[iiifZoomTo, setActiveMentionHighlights, setIsTextOverlayVisible]
 	);
 
 	const handleZoomToMention = (mention: Mention) => {
