@@ -319,17 +319,19 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			setIsTextOverlayVisible(true);
 
 			// Highlight the words in the mention name
-			setActiveMentionHighlights(
-				mention.highlights.map((highlight): AltoTextLine => {
-					return {
-						text: mention.name,
-						x: highlight.x,
-						y: highlight.y,
-						width: highlight.width,
-						height: highlight.height,
-					};
-				})
-			);
+			const highlights = mention.highlights.map((highlight): AltoTextLine => {
+				return {
+					text: mention.name,
+					x: highlight.x,
+					y: highlight.y,
+					width: highlight.width,
+					height: highlight.height,
+				};
+			});
+			setActiveMentionHighlights({
+				pageIndex: mention.pageIndex,
+				highlights,
+			});
 
 			// Zoom to first word in mention name
 			const x = firstHighlight.x + firstHighlight.width / 2;

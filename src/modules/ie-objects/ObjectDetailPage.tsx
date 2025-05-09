@@ -226,7 +226,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [isTextOverlayVisible, setIsTextOverlayVisible] = useState(false);
 
 	const [isLoadingPageImage, setIsLoadingPageImage] = useState(true);
-	const [activeMentionHighlights, setActiveMentionHighlights] = useState<AltoTextLine[]>([]);
+	const [activeMentionHighlights, setActiveMentionHighlights] = useState<{
+		pageIndex: number;
+		highlights: AltoTextLine[];
+	} | null>(null);
 
 	const [highlightMode, setHighlightMode] = useState<HighlightMode>(HighlightMode.SEARCH);
 
@@ -492,12 +495,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	const handleSearch = useCallback(
 		async (newSearchTerms: string): Promise<void> => {
+			setHighlightMode(HighlightMode.SEARCH);
 			if (newSearchTerms === '') {
 				// Reset search
 				// Zoom to whole page
 				iiifViewerReference.current?.iiifGoToHome();
 				setSearchTerms('');
 				setCurrentSearchResultIndex(0);
+				setActiveMentionHighlights(null);
 				return;
 			}
 
@@ -517,7 +522,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			}
 
 			setSearchTerms(newSearchTerms.toLowerCase());
-			setHighlightMode(HighlightMode.SEARCH);
 			setCurrentSearchResultIndex(0);
 
 			const parsedUrl = parseUrl(window.location.href);
@@ -591,23 +595,28 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	/**
 	 * Recalculate the green highlights in the IIIF viewer to reflect the latest changes to the last highlighted fallen soldier name (mention)
 	 */
-	const updateHighlightsForNames = () => {
-		if (
-			currentPageIndex !== searchResults[0]?.pageIndex &&
-			searchResults?.[0] &&
-			isNil(searchResults[0]?.searchTermCharacterOffset)
-		) {
-			// Fallen soldier name highlight was visible on previous page
-			// Clear highlights of names
+	const updateHighlightsForNames = useCallback(() => {
+		if (activeMentionHighlights?.pageIndex === currentPageIndex) {
+			// Only update the highlights if the active mention is on the current page
+			iiifViewerReference.current?.updateHighlightedAltoTexts(
+				activeMentionHighlights?.highlights,
+				null
+			);
+		} else {
+			// If the active mention is not on the current page, remove the highlights
 			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
-			return;
 		}
-	};
+	}, [
+		currentPageIndex,
+		iiifViewerReference.current,
+		activeMentionHighlights?.highlights,
+		activeMentionHighlights?.pageIndex,
+	]);
 
 	/**
 	 * Recalculate the green highlights in the IIIF viewer to reflect the latest changes to the OCR search terms
 	 */
-	const updateHighlightsForSearch = () => {
+	const updateHighlightsForSearch = useCallback(() => {
 		if (!searchResults || searchResults.length === 0) {
 			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
 			return;
@@ -641,7 +650,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		} else {
 			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
 		}
-	};
+	}, [
+		iiifViewerReference.current,
+		currentSearchResultIndex,
+		searchResults,
+		getAltoTextsOnCurrentPageForSearchTerms,
+		isTextOverlayVisible,
+	]);
 
 	/**
 	 * Update the highlighted alto texts in the iiif viewer when
@@ -652,7 +667,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * - the current search result index changes
 	 * - the current page index changes
 	 */
-	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		if (isLoadingPageImage) {
 			return; // Wait for the page to load before changing overlays or zoom
@@ -665,15 +679,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			// HighlightMode.SEARCH
 			updateHighlightsForSearch();
 		}
-	}, [
-		isLoadingPageImage,
-		currentPageIndex,
-		isTextOverlayVisible,
-		searchResults,
-		activeMentionHighlights,
-		currentSearchResultIndex,
-		simplifiedAltoInfo?.text,
-	]);
+	}, [highlightMode, updateHighlightsForNames, updateHighlightsForSearch, isLoadingPageImage]);
 
 	/**
 	 * When the page loads, search the ocr texts for the searchTerms in the query params in the url
@@ -1150,7 +1156,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		setIsLoadingPageImage(false);
 	};
 
-	const handleSetActiveMentionHighlights = (mentionHighlights: AltoTextLine[]) => {
+	const handleSetActiveMentionHighlights = (mentionHighlights: {
+		pageIndex: number;
+		highlights: AltoTextLine[];
+	}) => {
 		setActiveMentionHighlights(mentionHighlights);
 		setHighlightMode(HighlightMode.NAMES);
 		setSearchTerms('');

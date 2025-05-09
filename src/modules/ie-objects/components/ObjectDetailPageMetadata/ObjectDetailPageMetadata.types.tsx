@@ -21,6 +21,9 @@ export interface ObjectDetailPageMetadataProps {
 	onClickAction: (id: MediaActions) => Promise<void>;
 	openRequestAccessBlade: () => void;
 	iiifZoomTo: (x: number, y: number) => void;
-	setActiveMentionHighlights: (highlights: AltoTextLine[]) => void;
+	setActiveMentionHighlights: (mentionHighlights: {
+		pageIndex: number;
+		highlights: AltoTextLine[];
+	}) => void;
 	setIsTextOverlayVisible: (visible: boolean) => void;
 }
