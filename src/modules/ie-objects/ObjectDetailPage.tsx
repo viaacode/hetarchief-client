@@ -71,7 +71,7 @@ import {
 	getTicketErrorPlaceholderLabels,
 } from '@ie-objects/ie-objects.consts';
 import {
-	type AltoTextLine,
+	HighlightMode,
 	type IeObject,
 	IeObjectAccessThrough,
 	type IeObjectFile,
@@ -94,6 +94,7 @@ import type {
 	ImageInfo,
 	ImageInfoWithToken,
 	Rect,
+	TextLine,
 } from '@iiif-viewer/IiifViewer.types';
 import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
@@ -205,7 +206,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		withDefault(NumberParam, 0)
 	);
 
-	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number | null>(null);
+	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number>(0);
 	const [expandSidebar, setExpandSidebar] = useQueryParam(
 		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
 		withDefault(BooleanParam, false)
@@ -225,8 +226,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [isTextOverlayVisible, setIsTextOverlayVisible] = useState(false);
 
 	const [isLoadingPageImage, setIsLoadingPageImage] = useState(true);
-	const [searchResults, setSearchResults] = useState<OcrSearchResult[] | null>(null);
-	const [highlights, setHighlights] = useState<AltoTextLine[]>([]);
+	const [activeMentionHighlights, setActiveMentionHighlights] = useState<{
+		pageIndex: number;
+		highlights: TextLine[];
+	} | null>(null);
+	const [activeOcrWord, setActiveOcrWord] = useState<{
+		pageIndex: number;
+		textLine: TextLine;
+	} | null>(null);
+
+	const [highlightMode, setHighlightMode] = useState<HighlightMode>(HighlightMode.OCR_SEARCH);
 
 	const {
 		data: mediaInfo,
@@ -428,6 +437,47 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		return pageOcrTextsTemp;
 	}, [mediaInfo?.pages]);
 
+	const searchResults = useMemo((): OcrSearchResult[] => {
+		if (!searchTerms) {
+			return [];
+		}
+		const searchResultsTemp: OcrSearchResult[] = [];
+		for (const searchTerm of searchTerms.toLowerCase().split(' ')) {
+			pageOcrTranscripts.forEach((pageOcrTranscript, pageIndex) => {
+				if (!pageOcrTranscript) {
+					return; // Skip this page since it doesn't have an ocr transcript
+				}
+				let searchTermCharacterOffset: number = pageOcrTranscript.indexOf(searchTerm);
+				let searchTermIndexOnPage = 0;
+				while (searchTermCharacterOffset !== -1) {
+					const searchResult: OcrSearchResult = {
+						pageIndex,
+						searchTerm,
+						searchTermCharacterOffset,
+						searchTermIndexOnPage,
+					};
+					searchResultsTemp.push(searchResult);
+					searchTermCharacterOffset = pageOcrTranscript?.indexOf(
+						searchTerm,
+						searchTermCharacterOffset + 1
+					);
+					searchTermIndexOnPage += 1;
+				}
+			});
+		}
+
+		const firstSearchResultOnCurrentPage = searchResultsTemp.findIndex(
+			(result) => result.pageIndex === currentPageIndex
+		);
+		if (firstSearchResultOnCurrentPage === -1) {
+			setCurrentSearchResultIndex(0);
+		} else {
+			setCurrentSearchResultIndex(firstSearchResultOnCurrentPage);
+		}
+
+		return searchResultsTemp;
+	}, [searchTerms, pageOcrTranscripts, currentPageIndex]);
+
 	const arePagesOcrTextsAvailable = compact(pageOcrTranscripts).length !== 0;
 
 	const isPublicNewspaper: boolean = useIsPublicNewspaper(mediaInfo);
@@ -436,28 +486,27 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const canDownloadNewspaper: boolean =
 		(useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user) && isPublicNewspaper;
 
-	const getAltoTextsWithSearchTerms = useCallback((): AltoTextLine[] => {
+	const getAltoTextsOnCurrentPageForSearchTerms = useCallback((): TextLine[] => {
+		const searchTermParts = searchTerms.toLowerCase().split(' ');
 		return (
-			simplifiedAltoInfo?.text?.filter((altoText) =>
-				searchTerms
-					.toLowerCase()
-					.split(' ')
-					.some((searchTermWord) => altoText.text.toLowerCase().includes(searchTermWord))
-			) || []
+			simplifiedAltoInfo?.text?.filter((altoText) => {
+				const lowercaseAltoText = altoText.text.toLowerCase();
+				return searchTermParts.some((searchTermWord) => lowercaseAltoText.includes(searchTermWord));
+			}) || []
 		);
 	}, [searchTerms, simplifiedAltoInfo?.text]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	const handleSearch = useCallback(
 		async (newSearchTerms: string): Promise<void> => {
+			setHighlightMode(HighlightMode.OCR_SEARCH);
 			if (newSearchTerms === '') {
 				// Reset search
 				// Zoom to whole page
 				iiifViewerReference.current?.iiifGoToHome();
-				setSearchResults([]);
-				setHighlights([]);
 				setSearchTerms('');
 				setCurrentSearchResultIndex(0);
+				setActiveMentionHighlights(null);
 				return;
 			}
 
@@ -476,34 +525,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				return;
 			}
 
-			const searchResultsTemp: OcrSearchResult[] = [];
-			for (const searchTerm of newSearchTerms.toLowerCase().split(' ')) {
-				pageOcrTranscripts.forEach((pageOcrTranscript, pageIndex) => {
-					if (!pageOcrTranscript) {
-						return; // Skip this page since it doesn't have an ocr transcript
-					}
-					let searchTermCharacterOffset: number = pageOcrTranscript.indexOf(searchTerm);
-					let searchTermIndexOnPage = 0;
-					while (searchTermCharacterOffset !== -1) {
-						const searchResult: OcrSearchResult = {
-							pageIndex,
-							searchTerm,
-							searchTermCharacterOffset,
-							searchTermIndexOnPage,
-						};
-						searchResultsTemp.push(searchResult);
-						searchTermCharacterOffset = pageOcrTranscript?.indexOf(
-							searchTerm,
-							searchTermCharacterOffset + 1
-						);
-						searchTermIndexOnPage += 1;
-					}
-				});
-			}
-
-			setSearchResults(searchResultsTemp);
-			setHighlights(getAltoTextsWithSearchTerms());
 			setSearchTerms(newSearchTerms.toLowerCase());
+			setCurrentSearchResultIndex(0);
 
 			const parsedUrl = parseUrl(window.location.href);
 			const newUrl = stringifyUrl({
@@ -515,15 +538,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				},
 			});
 			await router.replace(newUrl, undefined, { shallow: true });
-
-			const firstSearchResultOnCurrentPage = searchResultsTemp.findIndex(
-				(result) => result.pageIndex === currentPageIndex
-			);
-			if (firstSearchResultOnCurrentPage === -1) {
-				setCurrentSearchResultIndex(0);
-			} else {
-				setCurrentSearchResultIndex(firstSearchResultOnCurrentPage);
-			}
 		},
 		[currentPageIndex, mediaInfo?.thumbnailUrl, pageOcrTranscripts, router]
 	);
@@ -583,37 +597,54 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	}, [mediaInfo, maintainerSlug, ieObjectNameSlug, router.replace, router.asPath.replace]);
 
 	/**
-	 * Update the highlighted alto texts in the iiif viewer when
-	 * - the search terms change
-	 * - the overlay is enabled/disabled
-	 * - another page alto texts are loaded
-	 * - the current search result index changes
-	 * - the current page index changes
+	 * Recalculate the green highlights in the IIIF viewer to reflect the latest changes to the last highlighted fallen soldier name (mention)
 	 */
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
-	useEffect(() => {
-		if (isLoadingPageImage) {
-			return; // Wait for the page to load before changing overlays or zoom
+	const updateHighlightsForMentionName = useCallback(() => {
+		if (activeMentionHighlights?.pageIndex === currentPageIndex) {
+			// Only update the highlights if the active mention is on the current page
+			iiifViewerReference.current?.updateHighlightedAltoTexts(
+				activeMentionHighlights?.highlights,
+				null
+			);
+		} else {
+			// If the active mention is not on the current page, remove the highlights
+			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
 		}
+	}, [
+		currentPageIndex,
+		iiifViewerReference.current,
+		activeMentionHighlights?.highlights,
+		activeMentionHighlights?.pageIndex,
+	]);
+
+	/**
+	 * Recalculate the green highlights in the IIIF viewer to reflect the latest click on an ocr word
+	 */
+	const updateHighlightsForOcrWord = useCallback(() => {
+		if (activeOcrWord?.pageIndex === currentPageIndex) {
+			// Only update the highlights if the active ocr word is on the current page
+			iiifViewerReference.current?.updateHighlightedAltoTexts([activeOcrWord?.textLine], null);
+		} else {
+			// If the active ocr word is not on the current page or null, remove the highlights
+			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
+		}
+	}, [
+		currentPageIndex,
+		iiifViewerReference.current,
+		activeOcrWord?.textLine,
+		activeOcrWord?.pageIndex,
+	]);
+
+	/**
+	 * Recalculate the green highlights in the IIIF viewer to reflect the latest changes to the OCR search terms
+	 */
+	const updateHighlightsForSearch = useCallback(() => {
 		if (!searchResults || searchResults.length === 0) {
 			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
 			return;
 		}
-		if (
-			currentPageIndex !== searchResults[0]?.pageIndex &&
-			searchResults?.[0] &&
-			isNil(searchResults[0]?.searchTermCharacterOffset)
-		) {
-			// Fallen soldier name highlight was visible on previous page
-			// Clear highlights of names
-			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
-			setSearchResults([]);
-			setHighlights([]);
-			return;
-		}
-
-		let currentHighlightedAltoText: AltoTextLine | null = null;
+		const highlights: TextLine[] = getAltoTextsOnCurrentPageForSearchTerms();
+		let currentHighlightedAltoText: TextLine | null = null;
 		if (
 			!isNil(currentSearchResultIndex) &&
 			!isNil(searchResults[currentSearchResultIndex]?.searchTermIndexOnPage)
@@ -622,14 +653,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			// It is not available when highlighting a name of a person
 			const searchTermIndexOnPage = searchResults[currentSearchResultIndex]
 				.searchTermIndexOnPage as number;
-			currentHighlightedAltoText = highlights[searchTermIndexOnPage];
+			currentHighlightedAltoText = highlights[searchTermIndexOnPage] || null;
 
 			if (currentHighlightedAltoText) {
 				iiifViewerReference.current?.iiifZoomToRect(currentHighlightedAltoText);
 			} else {
 				console.error('Could not find currentHighlightedAltoText', {
 					searchResults,
-					highlights,
 				});
 			}
 		}
@@ -643,13 +673,52 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
 		}
 	}, [
-		isLoadingPageImage,
-		searchTerms,
-		currentPageIndex,
-		isTextOverlayVisible,
-		searchResults,
+		iiifViewerReference.current,
 		currentSearchResultIndex,
-		simplifiedAltoInfo?.text,
+		searchResults,
+		getAltoTextsOnCurrentPageForSearchTerms,
+		isTextOverlayVisible,
+	]);
+
+	/**
+	 * Update the highlighted alto texts in the iiif viewer when
+	 * - the search terms change
+	 * - a fallen soldier's name is highlighted
+	 * - an ocr word is clicked
+	 * - the overlay is enabled/disabled
+	 * - another page alto texts are loaded
+	 * - the current search result index changes
+	 * - the current page index changes
+	 */
+	useEffect(() => {
+		if (isLoadingPageImage) {
+			return; // Wait for the page to load before changing overlays or zoom
+		}
+
+		switch (highlightMode) {
+			case HighlightMode.MENTION_NAME:
+				updateHighlightsForMentionName();
+				break;
+
+			case HighlightMode.OCR_WORD:
+				updateHighlightsForOcrWord();
+				break;
+
+			case HighlightMode.OCR_SEARCH:
+				updateHighlightsForSearch();
+				break;
+
+			default:
+				iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
+				break;
+		}
+	}, [
+		highlightMode,
+		updateHighlightsForMentionName,
+		updateHighlightsForSearch,
+		updateHighlightsForOcrWord,
+		iiifViewerReference.current?.updateHighlightedAltoTexts,
+		isLoadingPageImage,
 	]);
 
 	/**
@@ -1010,15 +1079,33 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		[searchResults, currentPageIndex, setCurrentPageIndex]
 	);
 
+	useEffect(() => {
+		setCurrentSearchResultIndex(
+			searchResults?.findIndex((result) => result.pageIndex === currentPageIndex) || 0
+		);
+	}, [currentPageIndex, searchResults]);
+
 	const handleClearSearch = () => {
 		setSearchTermsTemp('');
 		setSearchTerms('');
 		setHighlightedSearchTerms('');
-		setSearchResults(null);
-		setHighlights([]);
-		setCurrentSearchResultIndex(null);
+		setCurrentSearchResultIndex(0);
 		iiifViewerReference.current?.iiifGoToHome();
 	};
+
+	const handleClickOnOcrWord = useCallback(
+		(textLocation: TextLine) => {
+			if (textLocation) {
+				iiifViewerReference.current?.iiifZoomToRect(textLocation);
+				setHighlightMode(HighlightMode.OCR_WORD);
+				setActiveOcrWord({
+					pageIndex: currentPageIndex,
+					textLine: textLocation,
+				});
+			}
+		},
+		[iiifViewerReference.current, currentPageIndex]
+	);
 
 	/**
 	 * Content
@@ -1103,9 +1190,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const handleActiveImageIndexChange = (newPageIndex: number): void => {
 		setCurrentPageIndex(newPageIndex, 'replaceIn');
 		setIsLoadingPageImage(true);
-		setCurrentSearchResultIndex(
-			searchResults?.findIndex((result) => result.pageIndex === newPageIndex) || 0
-		);
 	};
 
 	/**
@@ -1124,9 +1208,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const handleOnPageChanged = (newPageIndex: number): void => {
 		setCurrentPageIndex(newPageIndex, 'replaceIn');
 		setIsLoadingPageImage(false);
-		setCurrentSearchResultIndex(
-			searchResults?.findIndex((result) => result.pageIndex === newPageIndex) || 0
-		);
+	};
+
+	const handleSetActiveMentionHighlights = (mentionHighlights: {
+		pageIndex: number;
+		highlights: TextLine[];
+	}) => {
+		setActiveMentionHighlights(mentionHighlights);
+		setHighlightMode(HighlightMode.MENTION_NAME);
+		setSearchTerms('');
+		setCurrentSearchResultIndex(0);
 	};
 
 	/**
@@ -1171,7 +1262,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					onSearch={handleSearch}
 					onClearSearch={handleClearSearch}
 					currentSearchIndex={currentSearchResultIndex || 0}
-					searchResults={searchResults}
+					searchResults={searchTerms ? searchResults : null}
 					setSearchResultIndex={handleChangeSearchIndex}
 					onSelection={handleIiifViewerSelection}
 					enableSelection={canDownloadNewspaper}
@@ -1346,13 +1437,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		);
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: avoid rerendering ocr text since it's heavy
 	const renderedOcrText = useMemo(() => {
 		const searchTermWords = compact(searchTerms.split(' '));
 		let searchTermIndex = 0;
 		return (
 			<div className={styles['p-object-detail__ocr__words-container']}>
-				{simplifiedAltoInfo?.text?.map((textLocation) => {
+				{simplifiedAltoInfo?.text?.map((textLocation, textIndex) => {
 					const isMarked: boolean =
 						!!searchTerms &&
 						searchTermWords.some((searchWord) =>
@@ -1369,11 +1459,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 					const wordElement = (
 						<span
-							key={`ocr-text--${ieObjectId}--${textLocation.x}-${textLocation.y}`}
-							onClick={() => iiifViewerReference.current?.iiifZoomToRect(textLocation)}
+							key={`ocr-text--${ieObjectId}--${currentPageIndex}--${
+								// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+								textIndex
+							}`}
+							onClick={() => handleClickOnOcrWord(textLocation)}
 							onKeyUp={(evt) => {
 								if (evt.key === 'Enter') {
-									iiifViewerReference.current?.iiifZoomToRect(textLocation);
+									handleClickOnOcrWord(textLocation);
 								}
 							}}
 							onDoubleClick={() => handleIsTextOverlayVisibleChange(!isTextOverlayVisible)}
@@ -1402,6 +1495,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		ieObjectId,
 		currentPageIndex,
 		handleIsTextOverlayVisibleChange,
+		handleClickOnOcrWord,
 		isTextOverlayVisible,
 	]);
 
@@ -1423,7 +1517,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						onChange={setSearchTermsTemp}
 						onSearch={(newSearchTerms) => handleSearch(newSearchTerms)}
 						onClearSearch={handleClearSearch}
-						searchResults={searchResults}
+						searchResults={searchTerms ? searchResults : null}
 						currentSearchIndex={currentSearchResultIndex || 0}
 						onChangeSearchIndex={handleChangeSearchIndex}
 					/>
@@ -1621,7 +1715,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								activeFile={getFileByType([...FLOWPLAYER_FORMATS, ...IMAGE_API_FORMATS])}
 								simplifiedAltoInfo={simplifiedAltoInfo || null}
 								iiifZoomTo={iiifViewerReference.current?.iiifZoomTo}
-								setHighlights={setHighlights}
+								setActiveMentionHighlights={handleSetActiveMentionHighlights}
 								setIsTextOverlayVisible={setIsTextOverlayVisible}
 							/>
 						)}

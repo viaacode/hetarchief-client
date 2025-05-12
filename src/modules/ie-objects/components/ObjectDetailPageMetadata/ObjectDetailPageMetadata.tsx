@@ -49,7 +49,6 @@ import {
 	renderIsPartOfValue,
 } from '@ie-objects/ie-objects.consts';
 import {
-	type AltoTextLine,
 	type IeObject,
 	IeObjectAccessThrough,
 	IeObjectLicense,
@@ -115,6 +114,7 @@ import Callout from '../../../shared/components/Callout/Callout';
 import MetadataList from '../Metadata/MetadataList';
 
 import { getFirstMentionHighlight } from '@ie-objects/utils/get-first-mention-highlight';
+import type { TextLine } from '@iiif-viewer/IiifViewer.types';
 import styles from './ObjectDetailPageMetadata.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
@@ -132,7 +132,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	onClickAction,
 	openRequestAccessBlade,
 	iiifZoomTo,
-	setHighlights,
+	setActiveMentionHighlights,
 	setIsTextOverlayVisible,
 }) => {
 	const router = useRouter();
@@ -319,24 +319,26 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			setIsTextOverlayVisible(true);
 
 			// Highlight the words in the mention name
-			setHighlights(
-				mention.highlights.map((highlight): AltoTextLine => {
-					return {
-						text: mention.name,
-						x: highlight.x,
-						y: highlight.y,
-						width: highlight.width,
-						height: highlight.height,
-					};
-				})
-			);
+			const highlights = mention.highlights.map((highlight): TextLine => {
+				return {
+					text: mention.name,
+					x: highlight.x,
+					y: highlight.y,
+					width: highlight.width,
+					height: highlight.height,
+				};
+			});
+			setActiveMentionHighlights({
+				pageIndex: mention.pageIndex,
+				highlights,
+			});
 
 			// Zoom to first word in mention name
 			const x = firstHighlight.x + firstHighlight.width / 2;
 			const y = firstHighlight.y + firstHighlight.height / 2;
 			iiifZoomTo(x, y);
 		},
-		[iiifZoomTo, setHighlights, setIsTextOverlayVisible]
+		[iiifZoomTo, setActiveMentionHighlights, setIsTextOverlayVisible]
 	);
 
 	const handleZoomToMention = (mention: Mention) => {

@@ -1,4 +1,4 @@
-import type { AltoTextLine, OcrSearchResult } from '@ie-objects/ie-objects.types';
+import type { OcrSearchResult } from '@ie-objects/ie-objects.types';
 
 export interface ImageInfo {
 	thumbnailUrl: string;
@@ -61,8 +61,8 @@ export interface IiifViewerFunctions {
 	iiifGoToPage: (pageIndex: number) => void;
 	waitForReadyState: () => Promise<void>;
 	updateHighlightedAltoTexts: (
-		highlightedAltoTexts: AltoTextLine[],
-		selectedAltoText: AltoTextLine | null
+		highlightedAltoTexts: TextLine[],
+		selectedAltoText: TextLine | null
 	) => void;
 }
 

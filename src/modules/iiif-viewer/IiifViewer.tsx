@@ -14,13 +14,13 @@ import React, {
 } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
-import type { AltoTextLine } from '@ie-objects/ie-objects.types';
 import {
 	HIGHLIGHT_MARGIN,
 	type IiifViewerFunctions,
 	type IiifViewerProps,
 	type ImageSize,
 	type Rect,
+	type TextLine,
 } from '@iiif-viewer/IiifViewer.types';
 import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import {
@@ -214,7 +214,7 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 
 		// biome-ignore lint/correctness/useExhaustiveDependencies: We don't include the tile source since it causes a rerender loop
 		const updateHighlightedAltoTexts = useCallback(
-			(highlightedAltoTexts: AltoTextLine[], selectedHighlightedAltoText: AltoTextLine | null) => {
+			(highlightedAltoTexts: TextLine[], selectedHighlightedAltoText: TextLine | null) => {
 				if (isServerSideRendering()) {
 					return;
 				}

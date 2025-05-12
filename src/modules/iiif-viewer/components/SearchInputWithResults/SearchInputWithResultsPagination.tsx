@@ -26,6 +26,7 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 		}
 	};
 
+	console.log('rendering SearchInputWithResultsPagination', { currentSearchIndex });
 	return (
 		<div
 			className={clsx(
