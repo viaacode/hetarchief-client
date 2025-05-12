@@ -471,12 +471,6 @@ const IiifViewer = forwardRef<IiifViewerFunctions, IiifViewerProps>(
 		const iiifZoomTo = (x: number, y: number): void => {
 			// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
 			const tileSource = getActiveImageTileSource() as any;
-			console.log('zoom to ', {
-				x,
-				y,
-				openSeaDragonViewer,
-				activeImageTileSource: tileSource,
-			});
 			if (!openSeaDragonViewer) {
 				console.error('iiifZoomToRect failed because openSeaDragonViewer is undefined');
 				return;
