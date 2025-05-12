@@ -341,24 +341,27 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		[iiifZoomTo, setActiveMentionHighlights, setIsTextOverlayVisible]
 	);
 
-	const handleZoomToMention = (mention: Mention) => {
-		if (!currentPage) {
-			return;
-		}
+	const handleZoomToMention = useCallback(
+		(mention: Mention) => {
+			if (!currentPage) {
+				return;
+			}
 
-		if (mention.pageNumber !== currentPage.pageNumber) {
-			// Switch to the correct page first
-			goToPage(mention.pageIndex);
+			if (mention.pageNumber !== currentPage.pageNumber) {
+				// Switch to the correct page first
+				goToPage(mention.pageIndex);
 
-			// Wait for page load
-			setTimeout(() => {
+				// Wait for page load
+				setTimeout(() => {
+					zoomToName(mention);
+				}, 1000);
+			} else {
+				// Already on the correct page => zoom to highlight
 				zoomToName(mention);
-			}, 1000);
-		} else {
-			// Already on the correct page => zoom to highlight
-			zoomToName(mention);
-		}
-	};
+			}
+		},
+		[currentPage, zoomToName, goToPage]
+	);
 
 	const renderExportDropdown = useCallback(
 		(isPrimary: boolean) => {
@@ -780,6 +783,18 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			]).join(', ');
 		}
 
+		// biome-ignore lint/correctness/useExhaustiveDependencies: We want this translation to be recalculated when the language is changed
+		const explainNamesListLink = useMemo(
+			() => (
+				<div className="u-color-neutral u-font-size-14 u-font-weight-400">
+					{tHtml(
+						'modules/ie-objects/object-detail-page___a-href-namenlijst-gesneuvelden-wat-is-dit-a'
+					)}
+				</div>
+			),
+			[locale]
+		);
+
 		return (
 			<div className={styles['p-object-detail__metadata-wrapper']}>
 				<div className={styles['p-object-detail__metadata-content']}>
@@ -1140,13 +1155,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						<Metadata
 							title={tText('modules/ie-objects/object-detail-page___namenlijst')}
 							key="metadata-fallen-names-list"
-							renderTitleRight={
-								<div className="u-color-neutral u-font-size-14 u-font-weight-400">
-									{tHtml(
-										'modules/ie-objects/object-detail-page___a-href-namenlijst-gesneuvelden-wat-is-dit-a'
-									)}
-								</div>
-							}
+							renderedTitleRight={explainNamesListLink}
 						>
 							<NamesList
 								mentions={mediaInfo?.mentions || []}
