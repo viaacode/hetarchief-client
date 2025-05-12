@@ -71,7 +71,6 @@ import {
 	getTicketErrorPlaceholderLabels,
 } from '@ie-objects/ie-objects.consts';
 import {
-	type AltoTextLine,
 	HighlightMode,
 	type IeObject,
 	IeObjectAccessThrough,
@@ -95,6 +94,7 @@ import type {
 	ImageInfo,
 	ImageInfoWithToken,
 	Rect,
+	TextLine,
 } from '@iiif-viewer/IiifViewer.types';
 import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
@@ -228,10 +228,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [isLoadingPageImage, setIsLoadingPageImage] = useState(true);
 	const [activeMentionHighlights, setActiveMentionHighlights] = useState<{
 		pageIndex: number;
-		highlights: AltoTextLine[];
+		highlights: TextLine[];
+	} | null>(null);
+	const [activeOcrWord, setActiveOcrWord] = useState<{
+		pageIndex: number;
+		textLine: TextLine;
 	} | null>(null);
 
-	const [highlightMode, setHighlightMode] = useState<HighlightMode>(HighlightMode.SEARCH);
+	const [highlightMode, setHighlightMode] = useState<HighlightMode>(HighlightMode.OCR_SEARCH);
 
 	const {
 		data: mediaInfo,
@@ -482,7 +486,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const canDownloadNewspaper: boolean =
 		(useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user) && isPublicNewspaper;
 
-	const getAltoTextsOnCurrentPageForSearchTerms = useCallback((): AltoTextLine[] => {
+	const getAltoTextsOnCurrentPageForSearchTerms = useCallback((): TextLine[] => {
 		const searchTermParts = searchTerms.toLowerCase().split(' ');
 		return (
 			simplifiedAltoInfo?.text?.filter((altoText) => {
@@ -495,7 +499,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	const handleSearch = useCallback(
 		async (newSearchTerms: string): Promise<void> => {
-			setHighlightMode(HighlightMode.SEARCH);
+			setHighlightMode(HighlightMode.OCR_SEARCH);
 			if (newSearchTerms === '') {
 				// Reset search
 				// Zoom to whole page
@@ -595,7 +599,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	/**
 	 * Recalculate the green highlights in the IIIF viewer to reflect the latest changes to the last highlighted fallen soldier name (mention)
 	 */
-	const updateHighlightsForNames = useCallback(() => {
+	const updateHighlightsForMentionName = useCallback(() => {
 		if (activeMentionHighlights?.pageIndex === currentPageIndex) {
 			// Only update the highlights if the active mention is on the current page
 			iiifViewerReference.current?.updateHighlightedAltoTexts(
@@ -614,6 +618,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	]);
 
 	/**
+	 * Recalculate the green highlights in the IIIF viewer to reflect the latest click on an ocr word
+	 */
+	const updateHighlightsForOcrWord = useCallback(() => {
+		if (activeOcrWord?.pageIndex === currentPageIndex) {
+			// Only update the highlights if the active ocr word is on the current page
+			iiifViewerReference.current?.updateHighlightedAltoTexts([activeOcrWord?.textLine], null);
+		} else {
+			// If the active ocr word is not on the current page or null, remove the highlights
+			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
+		}
+	}, [
+		currentPageIndex,
+		iiifViewerReference.current,
+		activeOcrWord?.textLine,
+		activeOcrWord?.pageIndex,
+	]);
+
+	/**
 	 * Recalculate the green highlights in the IIIF viewer to reflect the latest changes to the OCR search terms
 	 */
 	const updateHighlightsForSearch = useCallback(() => {
@@ -621,8 +643,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
 			return;
 		}
-		const highlights: AltoTextLine[] = getAltoTextsOnCurrentPageForSearchTerms();
-		let currentHighlightedAltoText: AltoTextLine | null = null;
+		const highlights: TextLine[] = getAltoTextsOnCurrentPageForSearchTerms();
+		let currentHighlightedAltoText: TextLine | null = null;
 		if (
 			!isNil(currentSearchResultIndex) &&
 			!isNil(searchResults[currentSearchResultIndex]?.searchTermIndexOnPage)
@@ -662,6 +684,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Update the highlighted alto texts in the iiif viewer when
 	 * - the search terms change
 	 * - a fallen soldier's name is highlighted
+	 * - an ocr word is clicked
 	 * - the overlay is enabled/disabled
 	 * - another page alto texts are loaded
 	 * - the current search result index changes
@@ -672,14 +695,31 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			return; // Wait for the page to load before changing overlays or zoom
 		}
 
-		if (highlightMode === HighlightMode.NAMES) {
-			// HighlightMode.NAMES
-			updateHighlightsForNames();
-		} else {
-			// HighlightMode.SEARCH
-			updateHighlightsForSearch();
+		switch (highlightMode) {
+			case HighlightMode.MENTION_NAME:
+				updateHighlightsForMentionName();
+				break;
+
+			case HighlightMode.OCR_WORD:
+				updateHighlightsForOcrWord();
+				break;
+
+			case HighlightMode.OCR_SEARCH:
+				updateHighlightsForSearch();
+				break;
+
+			default:
+				iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
+				break;
 		}
-	}, [highlightMode, updateHighlightsForNames, updateHighlightsForSearch, isLoadingPageImage]);
+	}, [
+		highlightMode,
+		updateHighlightsForMentionName,
+		updateHighlightsForSearch,
+		updateHighlightsForOcrWord,
+		iiifViewerReference.current?.updateHighlightedAltoTexts,
+		isLoadingPageImage,
+	]);
 
 	/**
 	 * When the page loads, search the ocr texts for the searchTerms in the query params in the url
@@ -1053,6 +1093,20 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		iiifViewerReference.current?.iiifGoToHome();
 	};
 
+	const handleClickOnOcrWord = useCallback(
+		(textLocation: TextLine) => {
+			if (textLocation) {
+				iiifViewerReference.current?.iiifZoomToRect(textLocation);
+				setHighlightMode(HighlightMode.OCR_WORD);
+				setActiveOcrWord({
+					pageIndex: currentPageIndex,
+					textLine: textLocation,
+				});
+			}
+		},
+		[iiifViewerReference.current, currentPageIndex]
+	);
+
 	/**
 	 * Content
 	 */
@@ -1158,10 +1212,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const handleSetActiveMentionHighlights = (mentionHighlights: {
 		pageIndex: number;
-		highlights: AltoTextLine[];
+		highlights: TextLine[];
 	}) => {
 		setActiveMentionHighlights(mentionHighlights);
-		setHighlightMode(HighlightMode.NAMES);
+		setHighlightMode(HighlightMode.MENTION_NAME);
 		setSearchTerms('');
 		setCurrentSearchResultIndex(0);
 	};
@@ -1383,7 +1437,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		);
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: avoid rerendering ocr text since it's heavy
 	const renderedOcrText = useMemo(() => {
 		const searchTermWords = compact(searchTerms.split(' '));
 		let searchTermIndex = 0;
@@ -1410,10 +1463,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 								textIndex
 							}`}
-							onClick={() => iiifViewerReference.current?.iiifZoomToRect(textLocation)}
+							onClick={() => handleClickOnOcrWord(textLocation)}
 							onKeyUp={(evt) => {
 								if (evt.key === 'Enter') {
-									iiifViewerReference.current?.iiifZoomToRect(textLocation);
+									handleClickOnOcrWord(textLocation);
 								}
 							}}
 							onDoubleClick={() => handleIsTextOverlayVisibleChange(!isTextOverlayVisible)}
@@ -1442,6 +1495,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		ieObjectId,
 		currentPageIndex,
 		handleIsTextOverlayVisibleChange,
+		handleClickOnOcrWord,
 		isTextOverlayVisible,
 	]);
 

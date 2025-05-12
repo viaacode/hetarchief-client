@@ -1,11 +1,10 @@
 import type {
-	AltoTextLine,
 	IeObject,
 	IeObjectFile,
 	IeObjectPage,
 	MediaActions,
 } from '@ie-objects/ie-objects.types';
-import type { SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
+import type { SimplifiedAlto, TextLine } from '@iiif-viewer/IiifViewer.types';
 import type { VisitRequest } from '@shared/types/visit-request';
 
 export interface ObjectDetailPageMetadataProps {
@@ -23,7 +22,7 @@ export interface ObjectDetailPageMetadataProps {
 	iiifZoomTo: (x: number, y: number) => void;
 	setActiveMentionHighlights: (mentionHighlights: {
 		pageIndex: number;
-		highlights: AltoTextLine[];
+		highlights: TextLine[];
 	}) => void;
 	setIsTextOverlayVisible: (visible: boolean) => void;
 }

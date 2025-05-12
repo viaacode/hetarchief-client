@@ -259,14 +259,6 @@ export interface MetadataSortMap {
 	isPrimary?: boolean;
 }
 
-export interface AltoTextLine {
-	text: string;
-	x: number;
-	y: number;
-	width: number;
-	height: number;
-}
-
 export interface OcrSearchResult {
 	pageIndex: number;
 	searchTerm: string;
@@ -295,6 +287,7 @@ export interface MentionHighlight {
 }
 
 export enum HighlightMode {
-	NAMES = 'NAMES', // Highlight fallen soldier name
-	SEARCH = 'SEARCH', // Highlight ocr search terms
+	MENTION_NAME = 'MENTION_NAME', // Highlight fallen soldier name
+	OCR_SEARCH = 'OCR_SEARCH', // Highlight ocr search terms
+	OCR_WORD = 'OCR_WORD', // Highlight ocr word that the user clicked
 }
