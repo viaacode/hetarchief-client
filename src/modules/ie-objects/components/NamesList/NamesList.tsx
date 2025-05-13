@@ -156,7 +156,6 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 		);
 	};
 
-	console.log('rerendering nameslist');
 	if (isServerSideRendering()) {
 		// This is a workaround for the server side rendering issue with react-virtualized
 		return null;
