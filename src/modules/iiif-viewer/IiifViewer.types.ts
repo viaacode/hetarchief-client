@@ -89,3 +89,69 @@ export interface SimplifiedAlto {
 }
 
 export const HIGHLIGHT_MARGIN = 0.003;
+
+export enum IiifViewerAction {
+	IIIF_VIEWER_ZOOM_TO_RECT = 'IIIF_VIEWER_ZOOM_TO_RECT',
+	IIIF_VIEWER_ROTATE = 'IIIF_VIEWER_ROTATE',
+	IIIF_VIEWER_FULLSCREEN = 'IIIF_VIEWER_FULLSCREEN',
+	IIIF_VIEWER_ZOOM = 'IIIF_VIEWER_ZOOM',
+	IIIF_VIEWER_ZOOM_TO = 'IIIF_VIEWER_ZOOM_TO',
+	IIIF_VIEWER_GO_TO_HOME = 'IIIF_VIEWER_GO_TO_HOME',
+	IIIF_VIEWER_GO_TO_PAGE = 'IIIF_VIEWER_GO_TO_PAGE',
+	IIIF_VIEWER_WAIT_FOR_READY_STATE = 'IIIF_VIEWER_WAIT_FOR_READY_STATE',
+	IIIF_VIEWER_UPDATE_HIGHLIGHTED_ALTO_TEXTS = 'IIIF_VIEWER_UPDATE_HIGHLIGHTED_ALTO_TEXTS',
+}
+
+export interface IiifViewerZoomToRectEvent extends Event {
+	functionProps: {
+		x: number;
+		y: number;
+		width: number;
+		height: number;
+	};
+}
+
+export interface IiifViewerRotateEvent extends Event {
+	functionProps: {
+		rotateRight: boolean;
+	};
+}
+
+export interface IiifViewerFullscreenEvent extends Event {
+	functionProps: { expand: boolean };
+}
+
+export interface IiifViewerZoomEvent extends Event {
+	functionProps: {
+		multiplier: number;
+	};
+}
+
+export interface IiifViewerZoomToEvent extends Event {
+	functionProps: {
+		x: number;
+		y: number;
+	};
+}
+
+export interface IiifViewerGoToPageEvent extends Event {
+	functionProps: {
+		pageIndex: number;
+	};
+}
+
+export interface IiifViewerUpdateHighlightedAltoTextsEvent extends Event {
+	functionProps: {
+		highlightedAltoTexts: TextLine[];
+		selectedAltoText: TextLine | null;
+	};
+}
+
+export type IiifViewerEvent =
+	| IiifViewerZoomToRectEvent
+	| IiifViewerRotateEvent
+	| IiifViewerFullscreenEvent
+	| IiifViewerZoomEvent
+	| IiifViewerZoomToEvent
+	| IiifViewerGoToPageEvent
+	| IiifViewerUpdateHighlightedAltoTextsEvent;
