@@ -290,7 +290,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const peakFileStoredAt: string | null = getFileByType(JSON_FORMATS)?.storedAt || null;
 
 	// media info
-	const { data: peakJson } = useGetPeakFile(peakFileStoredAt, {
+	const { data: peakJson, isLoading: isLoadingPeakFile } = useGetPeakFile(peakFileStoredAt, {
 		enabled: mediaInfo?.dctermsFormat === 'audio',
 	});
 
@@ -1371,7 +1371,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 		// Audio player
 		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(currentPlayableFile.mimeType)) {
-			if (peakFileStoredAt && !peakJson) {
+			if (peakFileStoredAt && isLoadingPeakFile) {
 				return (
 					<Loading
 						fullscreen
