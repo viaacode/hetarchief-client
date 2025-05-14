@@ -32,9 +32,8 @@ export interface IiifViewerProps {
 	initialFocusX?: number;
 	initialFocusY?: number;
 	initialZoomLevel?: number;
-	isLoading: boolean;
-	setIsLoading: (isLoading: boolean) => void;
 	onPageChanged: (newPageIndex: number) => void;
+	onReady: () => void;
 
 	// Search through pages
 	isSearchEnabled: boolean;
@@ -98,7 +97,6 @@ export enum IiifViewerAction {
 	IIIF_VIEWER_ZOOM_TO = 'IIIF_VIEWER_ZOOM_TO',
 	IIIF_VIEWER_GO_TO_HOME = 'IIIF_VIEWER_GO_TO_HOME',
 	IIIF_VIEWER_GO_TO_PAGE = 'IIIF_VIEWER_GO_TO_PAGE',
-	IIIF_VIEWER_WAIT_FOR_READY_STATE = 'IIIF_VIEWER_WAIT_FOR_READY_STATE',
 	IIIF_VIEWER_UPDATE_HIGHLIGHTED_ALTO_TEXTS = 'IIIF_VIEWER_UPDATE_HIGHLIGHTED_ALTO_TEXTS',
 }
 

@@ -50,8 +50,6 @@ export const IiifViewer = ({
 	initialFocusX,
 	initialFocusY,
 	initialZoomLevel,
-	isLoading,
-	setIsLoading,
 	isSearchEnabled,
 	searchTerms,
 	setSearchTerms,
@@ -63,24 +61,29 @@ export const IiifViewer = ({
 	onSelection,
 	enableSelection = false,
 	onPageChanged,
+	onReady,
 }: IiifViewerProps) => {
 	/**
 	 * Hooks
 	 */
 	const router = useRouter();
-
-	// Internal state
 	const [iiifGridViewEnabled, setIiifGridViewEnabled] = useState<boolean>(false);
-	// biome-ignore lint/suspicious/noExplicitAny: open sea dragon lib isn't typed yet
-	const [openSeaDragonLib, setOpenSeaDragonLib] = useState<any | null>(null);
 	// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
-	const openSeaDragonViewer = (window as any).meemoo__iiifViewer || null;
+	const getOpenSeaDragonLib = (): any => (window as any).meemoo__iiifViewerLib || null;
+	// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
+	const setOpenSeaDragonLib = (newOpenSeaDragonLib: any) => {
+		// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
+		(window as any).meemoo__iiifViewerLib = newOpenSeaDragonLib;
+	};
+	const getOpenSeaDragonViewer = (): OpenSeadragon.Viewer =>
+		// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
+		(window as any).meemoo__iiifViewer || null;
 	const setOpenSeadragonViewer = (newOpenSeaDragonViewer: Viewer) => {
 		// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 		(window as any).meemoo__iiifViewer = newOpenSeaDragonViewer;
 	};
 	const getActiveImageTileSource = (): TileSource | undefined =>
-		openSeaDragonViewer?.world?.getItemAt(0)?.source;
+		getOpenSeaDragonViewer()?.world?.getItemAt(0)?.source;
 
 	const [isSelectionActive, setIsSelectionActive] = useState<boolean>(false);
 
@@ -164,10 +167,6 @@ export const IiifViewer = ({
 			iiifGoToPage(evt.functionProps.pageIndex);
 		};
 
-		const handleWaitForReadyStateEvent = async () => {
-			await waitForReadyState();
-		};
-
 		const handleUpdateHighlightedAltoTextsEvent = (
 			evt: IiifViewerUpdateHighlightedAltoTextsEvent
 		) => {
@@ -201,10 +200,6 @@ export const IiifViewer = ({
 		window.addEventListener(
 			IiifViewerAction.IIIF_VIEWER_GO_TO_PAGE,
 			handleGoToPageEvent as EventListener
-		);
-		window.addEventListener(
-			IiifViewerAction.IIIF_VIEWER_WAIT_FOR_READY_STATE,
-			handleWaitForReadyStateEvent as EventListener
 		);
 		window.addEventListener(
 			IiifViewerAction.IIIF_VIEWER_UPDATE_HIGHLIGHTED_ALTO_TEXTS,
@@ -241,27 +236,23 @@ export const IiifViewer = ({
 				handleGoToPageEvent as EventListener
 			);
 			window.removeEventListener(
-				IiifViewerAction.IIIF_VIEWER_WAIT_FOR_READY_STATE,
-				handleWaitForReadyStateEvent as EventListener
-			);
-			window.removeEventListener(
 				IiifViewerAction.IIIF_VIEWER_UPDATE_HIGHLIGHTED_ALTO_TEXTS,
 				handleUpdateHighlightedAltoTextsEvent as EventListener
 			);
 		};
-	});
+	}, []);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
-		if (!openSeaDragonViewer) {
+		if (!getOpenSeaDragonViewer()) {
 			return;
 		}
-		if (openSeaDragonViewer && getActiveImageTileSource()) {
-			openSeaDragonViewer.clearOverlays();
-			openSeaDragonViewer.goToPage(activeImageIndex);
+		if (getOpenSeaDragonViewer() && getActiveImageTileSource()) {
+			getOpenSeaDragonViewer().clearOverlays();
+			getOpenSeaDragonViewer().goToPage(activeImageIndex);
 		}
 		// Do not include getActiveImageTileSource() since it causes a rerender loop since this can change in js world without react knowing about it
-	}, [openSeaDragonViewer, activeImageIndex]);
+	}, [getOpenSeaDragonViewer(), activeImageIndex]);
 
 	const addFullscreenCloseButton = useCallback((openSeadragonViewer: OpenSeadragon.Viewer) => {
 		if (!openSeadragonViewer.container) {
@@ -349,11 +340,11 @@ export const IiifViewer = ({
 				return;
 			}
 
-			if (!openSeaDragonViewer || !openSeaDragonLib) {
+			if (!getOpenSeaDragonViewer() || !getOpenSeaDragonLib()) {
 				return null;
 			}
 
-			openSeaDragonViewer?.clearOverlays();
+			getOpenSeaDragonViewer()?.clearOverlays();
 
 			if (!highlightedAltoTexts?.length) {
 				return;
@@ -400,14 +391,15 @@ export const IiifViewer = ({
 						? ' c-iiif-viewer__iiif__alto__text--selected'
 						: ' c-iiif-viewer__iiif__alto__text--highlighted'
 				}`;
-				openSeaDragonViewer.addOverlay(
+				getOpenSeaDragonViewer().addOverlay(
 					span,
-					new openSeaDragonLib.Rect(x, y, width, height, 0),
-					openSeaDragonLib.Placement.TOP_LEFT
+					// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+					new (getOpenSeaDragonLib() as any).Rect(x, y, width, height, 0),
+					getOpenSeaDragonLib().Placement.TOP_LEFT
 				);
 			}
 		},
-		[openSeaDragonLib, getActiveImageTileSource()]
+		[getActiveImageTileSource()]
 	);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: Only update the pan and zoom once when loading the iiif viewer
@@ -463,24 +455,18 @@ export const IiifViewer = ({
 	const addEventListeners = useCallback((openSeadragonViewerTemp: Viewer) => {
 		// Keep track of the current zoom and location in the url
 		const handleViewportChangeTemp = () => handleViewportChanged(openSeadragonViewerTemp);
-		openSeadragonViewerTemp.addHandler('viewport-change', handleViewportChangeTemp);
-
-		// Keep track of the loading state of the viewer page
-		const handleOpenTemp = () => {
-			setIsLoading(false);
-		};
 
 		// Keep track of the current page index
 		const handlePageChanged = () => {
 			onPageChanged(openSeadragonViewerTemp.currentPage());
 		};
 
-		openSeadragonViewerTemp.addHandler('open', handleOpenTemp);
+		openSeadragonViewerTemp.addHandler('viewport-change', handleViewportChangeTemp);
 		openSeadragonViewerTemp.addHandler('page', handlePageChanged);
 
 		return () => {
 			openSeadragonViewerTemp.removeHandler('viewport-change', handleViewportChangeTemp);
-			openSeadragonViewerTemp.removeHandler('open', handleOpenTemp);
+			openSeadragonViewerTemp.removeHandler('page', handlePageChanged);
 		};
 	}, []);
 
@@ -499,7 +485,7 @@ export const IiifViewer = ({
 			// We need to use a function here,
 			// since the library is a function itself,
 			// and otherwise the setState thinks this is a setter function
-			setOpenSeaDragonLib(() => openSeadragonLibTemp);
+			setOpenSeaDragonLib(openSeadragonLibTemp);
 
 			const imageSources: TiledImageOptions[] = compact(
 				imageInfosWithTokens.map((imageInfo): TiledImageOptions | null => {
@@ -531,6 +517,10 @@ export const IiifViewer = ({
 			openSeadragonViewerTemp.goToPage(activeImageIndex);
 
 			setOpenSeadragonViewer(openSeadragonViewerTemp);
+
+			getWaitForReadyStatePromise(openSeadragonViewerTemp).then(() => {
+				onReady();
+			});
 		}
 	}, [imageInfosWithTokens, iiifViewerId, isMobile]);
 
@@ -543,29 +533,29 @@ export const IiifViewer = ({
 	 */
 
 	const iiifZoom = (multiplier: number): void => {
-		if (!openSeaDragonViewer) {
+		if (!getOpenSeaDragonViewer()) {
 			return;
 		}
-		const currentZoom = openSeaDragonViewer.viewport.getZoom(true);
+		const currentZoom = getOpenSeaDragonViewer().viewport.getZoom(true);
 		const desiredZoom = clamp(
 			currentZoom * multiplier,
-			openSeaDragonViewer.viewport.getMinZoom(),
-			openSeaDragonViewer.viewport.getMaxZoom()
+			getOpenSeaDragonViewer().viewport.getMinZoom(),
+			getOpenSeaDragonViewer().viewport.getMaxZoom()
 		);
-		openSeaDragonViewer.viewport.zoomTo(desiredZoom);
+		getOpenSeaDragonViewer().viewport.zoomTo(desiredZoom);
 	};
 
 	const iiifFullscreen = (expand: boolean): void => {
-		openSeaDragonViewer?.setFullScreen(expand);
+		getOpenSeaDragonViewer()?.setFullScreen(expand);
 	};
 
 	const iiifGoToHome = (): void => {
-		openSeaDragonViewer?.viewport.goHome(false);
+		getOpenSeaDragonViewer()?.viewport.goHome(false);
 	};
 
 	const iiifRotate = (rotateRight: boolean): void => {
-		openSeaDragonViewer?.viewport.setRotation(
-			(openSeaDragonViewer?.viewport.getRotation() + 90 * (rotateRight ? 1 : -1)) % 360
+		getOpenSeaDragonViewer()?.viewport.setRotation(
+			(getOpenSeaDragonViewer()?.viewport.getRotation() + 90 * (rotateRight ? 1 : -1)) % 360
 		);
 	};
 
@@ -577,7 +567,7 @@ export const IiifViewer = ({
 	};
 
 	const iiifToggleSelection = async (): Promise<void> => {
-		if (!openSeaDragonViewer) {
+		if (!getOpenSeaDragonViewer()) {
 			return;
 		}
 		const newIsSelectionActive = !isSelectionActive;
@@ -585,15 +575,15 @@ export const IiifViewer = ({
 		handleIsSelectionActiveChange(newIsSelectionActive);
 
 		if (newIsSelectionActive) {
-			openSeaDragonViewer.setMouseNavEnabled(false);
+			getOpenSeaDragonViewer().setMouseNavEnabled(false);
 			initOpenSeadragonViewerMouseTracker(
 				getCurrentImageSize(),
 				handleSelectionCreated,
-				openSeaDragonLib,
-				openSeaDragonViewer
+				getOpenSeaDragonLib(),
+				getOpenSeaDragonViewer()
 			);
 		} else {
-			openSeaDragonViewer.setMouseNavEnabled(true);
+			getOpenSeaDragonViewer().setMouseNavEnabled(true);
 			destroyOpenSeadragonViewerMouseTracker();
 		}
 	};
@@ -601,7 +591,7 @@ export const IiifViewer = ({
 	const iiifZoomTo = (x: number, y: number): void => {
 		// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
 		const tileSource = getActiveImageTileSource() as any;
-		if (!openSeaDragonViewer) {
+		if (!getOpenSeaDragonViewer()) {
 			console.error('iiifZoomToRect failed because openSeaDragonViewer is undefined');
 			return;
 		}
@@ -617,15 +607,19 @@ export const IiifViewer = ({
 			console.error('aborting zoom to rect because getActiveImageTileSource() is undefined', {
 				x,
 				y,
-				openSeaDragonViewer,
+				openSeaDragonViewer: getOpenSeaDragonViewer(),
 				imageWidth,
 				activeImageTileSource: tileSource,
 			});
 			return;
 		}
-		openSeaDragonViewer.viewport.zoomTo(1.5, undefined, true);
-		openSeaDragonViewer.viewport.panTo(
-			new openSeaDragonLib.Point(x / imageWidth, y / imageWidth), // All relative coordinates are relative to the image width
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		const lib = getOpenSeaDragonLib() as any;
+		const Point = lib.Point;
+
+		getOpenSeaDragonViewer().viewport.zoomTo(1.5, undefined, true);
+		getOpenSeaDragonViewer().viewport.panTo(
+			new Point(x / imageWidth, y / imageWidth), // All relative coordinates are relative to the image width
 			false
 		);
 	};
@@ -647,32 +641,24 @@ export const IiifViewer = ({
 		iiifZoomTo(x + width / 2, y + height / 2);
 	};
 
-	const waitForReadyState = async (): Promise<void> => {
+	const getWaitForReadyStatePromise = async (
+		openSeadragonViewerTemp: OpenSeadragon.Viewer
+	): Promise<void> => {
 		return new Promise<void>((resolve) => {
-			if (!isLoading) {
-				resolve();
-			} else {
-				// biome-ignore lint/suspicious/noExplicitAny: open sea dragon lib isn't typed yet
-				(openSeaDragonViewer as any).id = Math.random();
-
-				openSeaDragonViewer?.addHandler('fully-loaded-change', () => {
-					console.log(
-						`[PERFORMANCE] ${new Date().toISOString()} iiif viewer fully-loaded image tiles`
-					);
-					resolve();
-				});
-			}
+			// biome-ignore lint/suspicious/noExplicitAny: open sea dragon lib isn't typed yet
+			(openSeadragonViewerTemp as any).id = Math.random();
+			openSeadragonViewerTemp?.addOnceHandler('tile-loaded', () => resolve());
 		});
 	};
 
 	const iiifGoToPage = (pageIndex: number): void => {
-		if (!openSeaDragonViewer) {
+		if (!getOpenSeaDragonViewer()) {
 			console.error('Failed to go to pageIndex because openSeaDragonViewer is not initialized', {
 				pageIndex,
 			});
 			return;
 		}
-		openSeaDragonViewer.goToPage(pageIndex);
+		getOpenSeaDragonViewer().goToPage(pageIndex);
 	};
 
 	/**
@@ -883,7 +869,7 @@ export const IiifViewer = ({
 								onClick={() => {
 									setIiifGridViewEnabled(false);
 									setActiveImageIndex(index);
-									openSeaDragonViewer?.forceRedraw();
+									getOpenSeaDragonViewer()?.forceRedraw();
 								}}
 								type="button"
 							>
