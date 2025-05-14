@@ -22,6 +22,9 @@ export interface ElasticsearchAggregations {
 
 export interface IeObjectsSearchTerms {
 	searchTerms: string[];
+	// Not yet used, but could be used to show a toast message
+	// about failed logical operator parsing in the search query string
+	searchTermsParsedSuccessfully: boolean;
 }
 
 export type GetIeObjectsResponse = IPagination<IeObject & { related_count?: number }> &
