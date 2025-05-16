@@ -209,13 +209,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		QUERY_PARAM_KEY.ACTIVE_BLADE,
 		withDefault(StringParam, undefined)
 	);
-	const [activeTab, setActiveTab] = useQueryParam(
-		QUERY_PARAM_KEY.ACTIVE_TAB,
-		withDefault(
-			StringParam,
-			highlightedSearchTerms ? ObjectDetailTabs.Ocr : ObjectDetailTabs.Metadata
-		)
-	);
 
 	// Used for going through the pages of a newspaper (iiif viewer reference strip)
 	const [currentPageIndex, setCurrentPageIndex] = useQueryParam(
@@ -241,6 +234,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		withDefault(NumberParam, undefined)
 	);
 	const [isTextOverlayVisible, setIsTextOverlayVisible] = useState(false);
+	const [activeTab, setActiveTab] = useState<ObjectDetailTabs>(ObjectDetailTabs.Metadata);
 
 	const [activeMentionHighlights, setActiveMentionHighlights] = useState<{
 		pageIndex: number;
@@ -524,6 +518,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	const handleSearch = useCallback(
 		async (newSearchTerms: string): Promise<void> => {
+			updateActiveTab(ObjectDetailTabs.Ocr);
 			setHighlightMode(HighlightMode.OCR_SEARCH);
 			if (newSearchTerms === '') {
 				// Reset search
@@ -588,6 +583,50 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			router.replace(newUrl, undefined, { shallow: true });
 		},
 		[router]
+	);
+
+	// Link activeTab and isOverLayVisible from the query params to the internal state
+	// We cannot use the useQueryParam hook here because
+	// There seems to be a disconnect between React/NextJS router and the useQueryParam hook
+	// Probably because of the hacky way we had to get the use query param hook to work with NextJS
+	// See: src/modules/shared/providers/NextQueryParamProvider/NextQueryParamProvider.tsx
+	// This could probably be solved by using the latest version of use-query-params and the next-query-params package
+	// But that causes build issues with commonJS vs ES modules, so we should update to ESM first
+	useEffect(() => {
+		const parsedUrl = parseUrl(window.location.href);
+		const activeTabFromUrl = parsedUrl.query[QUERY_PARAM_KEY.ACTIVE_TAB];
+		const isTextOverlayVisibleFromUrl =
+			parsedUrl.query[QUERY_PARAM_KEY.IIIF_VIEWER_TEXT_OVERLAY_ENABLED];
+		if (activeTabFromUrl) {
+			setActiveTab(activeTabFromUrl as ObjectDetailTabs);
+		}
+		if (isTextOverlayVisibleFromUrl) {
+			setIsTextOverlayVisible(isTextOverlayVisibleFromUrl === 'true');
+		}
+	}, []);
+
+	const updateActiveTab = useCallback(
+		async (newActiveTab: ObjectDetailTabs | null) => {
+			setActiveTab(newActiveTab || ObjectDetailTabs.Metadata);
+
+			// Also update the query param
+			// We cannot use the useQueryParam hook here because
+			// There seems to be a disconnect between React/NextJS router and the useQueryParam hook
+			// Probably because of the hacky way we had to get the use query param hook to work with NextJS
+			// See: src/modules/shared/providers/NextQueryParamProvider/NextQueryParamProvider.tsx
+			// This could probably be solved by using the latest version of use-query-params and the next-query-params package
+			// But that causes build issues with commonJS vs ES modules, so we should update to ESM first
+			const parsedUrl = parseUrl(window.location.href);
+			const newUrl = stringifyUrl({
+				url: parsedUrl.url,
+				query: {
+					...parsedUrl.query,
+					[QUERY_PARAM_KEY.ACTIVE_TAB]: newActiveTab,
+				},
+			});
+			await router.replace(newUrl, undefined, { shallow: true });
+		},
+		[router.replace]
 	);
 
 	/**
@@ -758,7 +797,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * When the page loads, search the ocr texts for the searchTerms in the query params in the url
 	 */
 	useEffect(() => {
-		if (highlightedSearchTerms && isNewspaper && !hasAppliedUrlSearchTerms) {
+		if (highlightedSearchTerms && isNewspaper && !hasAppliedUrlSearchTerms && simplifiedAltoInfo) {
 			const newSearchTerms: string = highlightedSearchTerms
 				.split(HIGHLIGHTED_SEARCH_TERMS_SEPARATOR)
 				.join(' ');
@@ -767,7 +806,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			handleSearch(newSearchTerms);
 			handleIsTextOverlayVisibleChange(true);
 			setHasAppliedUrlSearchTerms(true);
-			setActiveTab(ObjectDetailTabs.Ocr);
 		}
 	}, [
 		isNewspaper,
@@ -775,7 +813,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		handleSearch,
 		highlightedSearchTerms,
 		handleIsTextOverlayVisibleChange,
-		setActiveTab,
+		simplifiedAltoInfo,
 	]);
 
 	/**
@@ -871,7 +909,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		// Set default view
 		if (isMobile) {
 			// Default to metadata tab on mobile
-			setActiveTab(ObjectDetailTabs.Metadata, 'replaceIn');
+			updateActiveTab(ObjectDetailTabs.Metadata);
 		} else {
 			// Check media content and license for default tab on desktop
 			setExpandSidebar(!mediaInfo?.dctermsFormat || !hasMedia, 'replaceIn');
@@ -1130,7 +1168,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const handleClearSearch = () => {
 		setSearchTermsTemp('');
 		setSearchTerms('');
-		setHighlightedSearchTerms('');
+		setHighlightedSearchTerms('', 'replaceIn');
 		setCurrentSearchResultIndex(0);
 		iiifGoToHome(iiifViewerInitializedPromise as Promise<void>);
 	};
@@ -1725,7 +1763,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					className={clsx(styles['p-object-detail__tabs'])}
 					variants={['dark']}
 					tabs={tabs}
-					onClick={(tabId) => setActiveTab(tabId as ObjectDetailTabs | null, 'replaceIn')}
+					onClick={(tabId) => updateActiveTab(tabId as ObjectDetailTabs | null)}
 				/>
 
 				{/* Sidebar */}
