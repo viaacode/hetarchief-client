@@ -53,7 +53,10 @@ $component: "c-block-het-archief-header-search";
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		max-width: 42%;
+
+		@media (min-width: $breakpoint-md) {
+			max-width: 42%;
+		}
 
 		input {
 			border-radius: 4rem;
