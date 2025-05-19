@@ -335,7 +335,7 @@ export const MEDIA_ACTIONS = ({
  */
 
 export function renderAbrahamLink(
-	abrahamInfo: { id: string; uri: string; code: string } | undefined
+	abrahamInfo: { id: string; uri: string } | undefined
 ): ReactNode | null {
 	if (!abrahamInfo) {
 		return null;

@@ -87,7 +87,6 @@ export interface IeObject {
 	abrahamInfo?: {
 		id: string;
 		uri: string;
-		code: string;
 	};
 	synopsis: string;
 	collectionName?: string;
