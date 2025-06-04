@@ -1,5 +1,4 @@
-import type { ButtonAction, ButtonType } from '@viaa/avo2-components';
-import type { IconNameSchema } from '@viaa/avo2-components/dist/components/Icon/Icon.types';
+import type { ButtonAction, ButtonType, IconName } from '@viaa/avo2-components';
 import type { Avo } from '@viaa/avo2-types';
 import type { ContentPickerTypeSchema } from '@viaa/avo2-types/types/core';
 
@@ -10,7 +9,7 @@ export type BlockContentEncloseProps = {
 	buttonLabel: string;
 	buttonAction: ButtonAction;
 	buttonType: ButtonType;
-	buttonIcon: IconNameSchema;
+	buttonIcon: IconName;
 	buttonAltTitle: string;
 	elements: {
 		mediaItem: Avo.Core.PickerItem;
