@@ -13,5 +13,5 @@ pre-commit:
 
       - name: typescript
         glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx}"
-        run: npx tsc --noEmit --skipLibCheck --pretty --jsx preserve --project ./tsconfig.json
+        run: npx tsgo --noEmit --skipLibCheck --pretty --jsx preserve --project ./tsconfig.json
 
