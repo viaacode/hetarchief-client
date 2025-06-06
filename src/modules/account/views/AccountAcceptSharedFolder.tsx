@@ -15,7 +15,7 @@ interface AccountSharedFolderProps {
 	folderId: string | undefined;
 }
 
-export const AccountSharedFolder: FC<DefaultSeoInfo & AccountSharedFolderProps> = ({
+export const AccountAcceptSharedFolder: FC<DefaultSeoInfo & AccountSharedFolderProps> = ({
 	folderId,
 }) => {
 	const router = useRouter();

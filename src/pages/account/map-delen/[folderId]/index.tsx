@@ -2,7 +2,7 @@ import type { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } fr
 import { useRouter } from 'next/router';
 import type { ComponentType } from 'react';
 
-import { AccountSharedFolder } from '@account/views/ShareFolder';
+import { AccountAcceptSharedFolder } from '@account/views/AccountAcceptSharedFolder';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
@@ -13,7 +13,7 @@ const AccountSharedFolderDutch: NextPage<DefaultSeoInfo> = ({ url, locale }) => 
 
 	const folderId = router.asPath.split('/').pop();
 
-	return <AccountSharedFolder url={url} locale={locale} folderId={folderId} />;
+	return <AccountAcceptSharedFolder url={url} locale={locale} folderId={folderId} />;
 };
 
 export async function getServerSideProps(

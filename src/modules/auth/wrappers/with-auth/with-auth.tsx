@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router';
 import { stringify } from 'query-string';
-import { type ComponentType, useCallback, useEffect } from 'react';
+import { type ComponentType, useCallback, useEffect, useState } from 'react';
 
 import { GroupName } from '@account/const';
 import { AuthMessage, AuthService } from '@auth/services/auth-service';
+import { Loading } from '@shared/components/Loading';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -29,6 +30,8 @@ export const withAuth = (
 	return function ComponentWithAuth(props: Record<string, unknown>) {
 		const router = useRouter();
 		const locale = useLocale();
+
+		const [canView, setCanView] = useState<boolean>(false);
 
 		// biome-ignore lint/correctness/useExhaustiveDependencies: render loop if we add router to the dep array
 		const checkLoginStatus = useCallback(async (): Promise<void> => {
@@ -59,6 +62,7 @@ export const withAuth = (
 					await toHome();
 				} else {
 					// User is logged out, but the page can be seen without logging in
+					setCanView(true);
 				}
 			} else {
 				// User is logged in
@@ -68,6 +72,7 @@ export const withAuth = (
 					login.userInfo.groupName === GroupName.KIOSK_VISITOR
 				) {
 					// User has accepted the latest version of the terms of service
+					setCanView(true);
 				} else {
 					// When the user has not accepted the TOS or accepted a previous version of the TOS => show terms of service
 					await toTermsOfService();
@@ -79,6 +84,9 @@ export const withAuth = (
 			checkLoginStatus();
 		}, [checkLoginStatus]);
 
+		if (!canView) {
+			return <Loading fullscreen owner={'withAuth'} />;
+		}
 		return <WrappedComponent {...props} />;
 	};
 };
