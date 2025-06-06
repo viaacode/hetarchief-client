@@ -87,7 +87,6 @@ export interface IeObject {
 	abrahamInfo?: {
 		id: string;
 		uri: string;
-		code: string;
 	};
 	synopsis: string;
 	collectionName?: string;
@@ -259,14 +258,6 @@ export interface MetadataSortMap {
 	isPrimary?: boolean;
 }
 
-export interface AltoTextLine {
-	text: string;
-	x: number;
-	y: number;
-	width: number;
-	height: number;
-}
-
 export interface OcrSearchResult {
 	pageIndex: number;
 	searchTerm: string;
@@ -292,4 +283,10 @@ export interface MentionHighlight {
 	y: number;
 	width: number;
 	height: number;
+}
+
+export enum HighlightMode {
+	MENTION_NAME = 'MENTION_NAME', // Highlight fallen soldier name
+	OCR_SEARCH = 'OCR_SEARCH', // Highlight ocr search terms
+	OCR_WORD = 'OCR_WORD', // Highlight ocr word that the user clicked
 }

@@ -9,7 +9,7 @@ const Metadata: FC<MetadataProps> = ({
 	title,
 	children,
 	renderRight,
-	renderTitleRight,
+	renderedTitleRight,
 }) => {
 	if (!children) {
 		return null;
@@ -20,7 +20,7 @@ const Metadata: FC<MetadataProps> = ({
 			<div className="u-flex-grow">
 				<dt className={styles['c-metadata__item-title']}>
 					<span className="u-flex-grow">{title}</span>
-					<span>{renderTitleRight}</span>
+					<span>{renderedTitleRight}</span>
 				</dt>
 				<dd className={styles['c-metadata__item-text']}>{children}</dd>
 			</div>

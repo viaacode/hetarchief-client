@@ -15,6 +15,9 @@ export function getIeObjectRightsStatusInfo(
 	externalLink: string;
 	internalLink: string;
 } | null {
+	if (!ieObject.licenses.includes(IeObjectLicense.PUBLIEK_CONTENT)) {
+		return null; // Only objects with the public content can have a rights label: https://meemoo.atlassian.net/browse/ARC-2975
+	}
 	if (ieObject.licenses.includes(IeObjectLicense.PUBLIC_DOMAIN)) {
 		return {
 			label: tText('modules/ie-objects/utils/get-ie-object-rights-status___public-domein'),

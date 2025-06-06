@@ -83,7 +83,10 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 		document.addEventListener('scroll', updateMargin);
 		window.addEventListener('resize', onResize);
 
-		const resizeObserver = new ResizeObserver(updateMargin);
+		const resizeObserver = new ResizeObserver(() => {
+			updateFooterHeight();
+			updateMargin();
+		});
 		resizeObserver.observe(document.body);
 
 		updateFooterHeight();

@@ -15,5 +15,9 @@ export function getDatePickerDefaultProps(locale: Locale): Partial<ReactDatePick
 		dropdownMode: 'select' as const,
 		calendarStartDay: 1,
 		locale: { [Locale.nl]: nlBE, [Locale.en]: enGB }[locale],
+		scrollableYearDropdown: true,
+		yearDropdownItemNumber: 400,
+		minDate: new Date(1700, 0, 1),
+		maxDate: new Date(2050, 11, 31),
 	};
 }

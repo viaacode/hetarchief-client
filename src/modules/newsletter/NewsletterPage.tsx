@@ -12,7 +12,7 @@ import { Loading } from '@shared/components/Loading';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
-import { labelKeys, NEWSLETTER_FORM_SCHEMA } from '@shared/const/newsletter';
+import { NEWSLETTER_FORM_SCHEMA, labelKeys } from '@shared/const/newsletter';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -163,24 +163,26 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 	);
 
 	return (
-		<div
-			className={clsx('p-newsletter', {
-				'p-newsletter--wallpaper': !isLoggedIn && hasCheckedLogin,
-			})}
-		>
-			<SeoTags
-				title={tText('pages/nieuwsbrief/index___nieuwsbrief')}
-				description={tText('pages/nieuwsbrief/index___nieuwsbrief-omschrijving')}
-				imgUrl={undefined}
-				translatedPages={[]}
-				relativeUrl={url}
-			/>
+		<div className="p-newsletter">
+			<div
+				className={clsx({
+					'p-newsletter--wallpaper': !isLoggedIn && hasCheckedLogin,
+				})}
+			>
+				<SeoTags
+					title={tText('pages/nieuwsbrief/index___nieuwsbrief')}
+					description={tText('pages/nieuwsbrief/index___nieuwsbrief-omschrijving')}
+					imgUrl={undefined}
+					translatedPages={[]}
+					relativeUrl={url}
+				/>
 
-			{(hasCheckedLogin && isLoggedIn) || !hasCheckedLogin ? (
-				<Loading fullscreen owner="newsletter" />
-			) : (
-				renderPageContent()
-			)}
+				{(hasCheckedLogin && isLoggedIn) || !hasCheckedLogin ? (
+					<Loading fullscreen owner="newsletter" />
+				) : (
+					renderPageContent()
+				)}
+			</div>
 		</div>
 	);
 };

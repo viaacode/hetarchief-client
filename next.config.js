@@ -13,7 +13,11 @@ const path = require('node:path');
 // 	enabled: process.env.ANALYZE === 'true',
 // });
 
-const withTM = nextTranspileModules(['ky-universal']);
+const withTM = nextTranspileModules([
+	'ky-universal',
+	'@viaa/avo2-components',
+	'@meemoo/react-components',
+]);
 
 /** @type {import("next").NextConfig} */
 // module.exports = withBundleAnalyzer(
@@ -186,11 +190,11 @@ module.exports = withTM({
 				destination: '/account/mijn-mappen/favorieten',
 				permanent: true,
 			},
-			{
-				source: '/account/mijn-mappen',
-				destination: '/account/mijn-mappen/favorieten',
-				permanent: true,
-			},
+			// {
+			// 	source: '/account/mijn-mappen',
+			// 	destination: '/account/mijn-mappen/favorieten',
+			// 	permanent: true,
+			// },
 			{
 				source: '/account/my-folders',
 				destination: '/account/my-folders/favorites',

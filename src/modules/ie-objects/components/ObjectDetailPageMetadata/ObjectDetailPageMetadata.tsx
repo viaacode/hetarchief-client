@@ -49,7 +49,6 @@ import {
 	renderIsPartOfValue,
 } from '@ie-objects/ie-objects.consts';
 import {
-	type AltoTextLine,
 	type IeObject,
 	IeObjectAccessThrough,
 	IeObjectLicense,
@@ -115,6 +114,7 @@ import Callout from '../../../shared/components/Callout/Callout';
 import MetadataList from '../Metadata/MetadataList';
 
 import { getFirstMentionHighlight } from '@ie-objects/utils/get-first-mention-highlight';
+import type { TextLine } from '@iiif-viewer/IiifViewer.types';
 import styles from './ObjectDetailPageMetadata.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
@@ -132,7 +132,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	onClickAction,
 	openRequestAccessBlade,
 	iiifZoomTo,
-	setHighlights,
+	setActiveMentionHighlights,
 	setIsTextOverlayVisible,
 }) => {
 	const router = useRouter();
@@ -319,44 +319,49 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			setIsTextOverlayVisible(true);
 
 			// Highlight the words in the mention name
-			setHighlights(
-				mention.highlights.map((highlight): AltoTextLine => {
-					return {
-						text: mention.name,
-						x: highlight.x,
-						y: highlight.y,
-						width: highlight.width,
-						height: highlight.height,
-					};
-				})
-			);
+			const highlights = mention.highlights.map((highlight): TextLine => {
+				return {
+					text: mention.name,
+					x: highlight.x,
+					y: highlight.y,
+					width: highlight.width,
+					height: highlight.height,
+				};
+			});
+			setActiveMentionHighlights({
+				pageIndex: mention.pageIndex,
+				highlights,
+			});
 
 			// Zoom to first word in mention name
 			const x = firstHighlight.x + firstHighlight.width / 2;
 			const y = firstHighlight.y + firstHighlight.height / 2;
 			iiifZoomTo(x, y);
 		},
-		[iiifZoomTo, setHighlights, setIsTextOverlayVisible]
+		[iiifZoomTo, setActiveMentionHighlights, setIsTextOverlayVisible]
 	);
 
-	const handleZoomToMention = (mention: Mention) => {
-		if (!currentPage) {
-			return;
-		}
+	const handleZoomToMention = useCallback(
+		(mention: Mention) => {
+			if (!currentPage) {
+				return;
+			}
 
-		if (mention.pageNumber !== currentPage.pageNumber) {
-			// Switch to the correct page first
-			goToPage(mention.pageIndex);
+			if (mention.pageNumber !== currentPage.pageNumber) {
+				// Switch to the correct page first
+				goToPage(mention.pageIndex);
 
-			// Wait for page load
-			setTimeout(() => {
+				// Wait for page load
+				setTimeout(() => {
+					zoomToName(mention);
+				}, 1000);
+			} else {
+				// Already on the correct page => zoom to highlight
 				zoomToName(mention);
-			}, 1000);
-		} else {
-			// Already on the correct page => zoom to highlight
-			zoomToName(mention);
-		}
-	};
+			}
+		},
+		[currentPage, zoomToName, goToPage]
+	);
 
 	const renderExportDropdown = useCallback(
 		(isPrimary: boolean) => {
@@ -778,6 +783,18 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			]).join(', ');
 		}
 
+		// biome-ignore lint/correctness/useExhaustiveDependencies: We want this translation to be recalculated when the language is changed
+		const explainNamesListLink = useMemo(
+			() => (
+				<div className="u-color-neutral u-font-size-14 u-font-weight-400">
+					{tHtml(
+						'modules/ie-objects/object-detail-page___a-href-namenlijst-gesneuvelden-wat-is-dit-a'
+					)}
+				</div>
+			),
+			[locale]
+		);
+
 		return (
 			<div className={styles['p-object-detail__metadata-wrapper']}>
 				<div className={styles['p-object-detail__metadata-content']}>
@@ -1138,13 +1155,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						<Metadata
 							title={tText('modules/ie-objects/object-detail-page___namenlijst')}
 							key="metadata-fallen-names-list"
-							renderTitleRight={
-								<div className="u-color-neutral u-font-size-14 u-font-weight-400">
-									{tHtml(
-										'modules/ie-objects/object-detail-page___a-href-namenlijst-gesneuvelden-wat-is-dit-a'
-									)}
-								</div>
-							}
+							renderedTitleRight={explainNamesListLink}
 						>
 							<NamesList
 								mentions={mediaInfo?.mentions || []}

@@ -65,7 +65,7 @@ export const useGetContentBlockEncloseContent = (
 					return [];
 				}
 				if (Array.isArray(result.data)) {
-					const ieObjects = result.data as IeObject[];
+					const ieObjects: IeObject[] = compact(result.data as (IeObject | null)[]);
 					return ieObjects.map((item: IeObject): GetContentBlockEncloseContentReturnType => {
 						return {
 							id: item.maintainerId,

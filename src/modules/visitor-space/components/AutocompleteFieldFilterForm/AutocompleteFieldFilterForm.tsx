@@ -24,6 +24,33 @@ export const AutocompleteFieldFilterForm: FC<{
 }> = ({ children, className, autocompleteField, filterTitle, fieldLabel }) => {
 	const [initial] = useQueryParam(autocompleteField, StringParam);
 
+	const getAutocompleteErrorMessage = (field: AutocompleteField) => {
+		switch (field) {
+			case AutocompleteField.creator:
+				return tText(
+					'modules/visitor-space/components/autocomplete-field-filter-form/autocomplete-field-filter-form___de-naam-van-de-maker-is-een-verplicht-veld'
+				);
+
+			case AutocompleteField.newspaperSeriesName:
+				return tText(
+					'modules/visitor-space/components/autocomplete-field-filter-form/autocomplete-field-filter-form___de-naam-van-de-krant-serie-is-een-verplicht-veld'
+				);
+
+			case AutocompleteField.locationCreated:
+				return tText(
+					'modules/visitor-space/components/autocomplete-field-filter-form/autocomplete-field-filter-form___de-locatie-waar-het-object-is-gemaakt-is-een-verplicht-veld'
+				);
+
+			case AutocompleteField.mentions:
+				return tText(
+					'modules/visitor-space/components/autocomplete-field-filter-form/autocomplete-field-filter-form___de-naam-van-de-persoon-is-een-verplicht-veld'
+				);
+
+			default:
+				return '';
+		}
+	};
+
 	const [form, setForm] = useState<{ value: string }>({
 		value: initial || '',
 	});
@@ -36,11 +63,7 @@ export const AutocompleteFieldFilterForm: FC<{
 	} = useForm<{ value: string }>({
 		resolver: yupResolver(
 			yupObject({
-				value: yupString().required(
-					tText(
-						'modules/visitor-space/components/autocomplete-field-filter-form/autocomplete-field-filter-form___de-naam-van-de-maker-is-een-verplicht-veld'
-					)
-				),
+				value: yupString().required(getAutocompleteErrorMessage(autocompleteField)),
 			})
 		),
 		defaultValues: { value: '' },

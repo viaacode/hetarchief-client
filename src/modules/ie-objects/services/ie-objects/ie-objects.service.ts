@@ -198,17 +198,19 @@ export class IeObjectsService {
 			.json();
 	}
 
-	static getAutocompleteFieldOptions(field: AutocompleteField, query: string): Promise<string[]> {
+	static getAutocompleteFieldOptions(
+		field: AutocompleteField,
+		query: string,
+		filters: IeObjectsSearchFilter[]
+	): Promise<string[]> {
 		return ApiService.getApi()
-			.get(
-				stringifyUrl({
-					url: `${IE_OBJECTS_SERVICE_BASE_URL}/metadata/autocomplete`,
-					query: {
-						field,
-						query,
-					},
-				})
-			)
+			.post(`${IE_OBJECTS_SERVICE_BASE_URL}/metadata/autocomplete`, {
+				body: JSON.stringify({
+					field,
+					query,
+					filters,
+				}),
+			})
 			.json();
 	}
 

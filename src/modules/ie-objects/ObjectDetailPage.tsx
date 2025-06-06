@@ -17,12 +17,10 @@ import { parseUrl, stringifyUrl } from 'query-string';
 import React, {
 	type FC,
 	Fragment,
-	type MutableRefObject,
 	type ReactNode,
 	useCallback,
 	useEffect,
 	useMemo,
-	useRef,
 	useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -71,7 +69,7 @@ import {
 	getTicketErrorPlaceholderLabels,
 } from '@ie-objects/ie-objects.consts';
 import {
-	type AltoTextLine,
+	HighlightMode,
 	type IeObject,
 	IeObjectAccessThrough,
 	type IeObjectFile,
@@ -88,13 +86,8 @@ import {
 	NEWSPAPERS_SERVICE_BASE_URL,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
-import IiifViewer from '@iiif-viewer/IiifViewer';
-import type {
-	IiifViewerFunctions,
-	ImageInfo,
-	ImageInfoWithToken,
-	Rect,
-} from '@iiif-viewer/IiifViewer.types';
+import { IiifViewer } from '@iiif-viewer/IiifViewer';
+import type { ImageInfo, ImageInfoWithToken, Rect, TextLine } from '@iiif-viewer/IiifViewer.types';
 import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
@@ -136,6 +129,13 @@ import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 
+import {
+	iiifGoToHome,
+	iiifGoToPage,
+	iiifUpdateHighlightedAltoTexts,
+	iiifZoomTo,
+	iiifZoomToRect,
+} from '@iiif-viewer/helpers/trigger-iiif-viewer-events';
 import styles from './ObjectDetailPage.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
@@ -162,6 +162,21 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 
 	// Internal state
+	const [iiifViewerInitializedPromise, setIiifViewerInitializedPromise] =
+		useState<Promise<void> | null>(null);
+	const [iiifViewerInitializedPromiseResolve, setIiifViewerInitializedPromiseResolved] = useState<
+		(() => void) | null
+	>(null);
+
+	/**
+	 * Init a promise that resolves when the iiif viewer is ready hooking up event listeners
+	 */
+	useEffect(() => {
+		const promise = new Promise<void>((resolve) => {
+			setIiifViewerInitializedPromiseResolved(() => resolve);
+		});
+		setIiifViewerInitializedPromise(promise);
+	}, []);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | null>(null);
@@ -194,10 +209,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		QUERY_PARAM_KEY.ACTIVE_BLADE,
 		withDefault(StringParam, undefined)
 	);
-	const [activeTab, setActiveTab] = useQueryParam(
-		QUERY_PARAM_KEY.ACTIVE_TAB,
-		withDefault(StringParam, ObjectDetailTabs.Metadata)
-	);
 
 	// Used for going through the pages of a newspaper (iiif viewer reference strip)
 	const [currentPageIndex, setCurrentPageIndex] = useQueryParam(
@@ -205,7 +216,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		withDefault(NumberParam, 0)
 	);
 
-	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number | null>(null);
+	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number>(0);
 	const [expandSidebar, setExpandSidebar] = useQueryParam(
 		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
 		withDefault(BooleanParam, false)
@@ -223,10 +234,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		withDefault(NumberParam, undefined)
 	);
 	const [isTextOverlayVisible, setIsTextOverlayVisible] = useState(false);
+	const [activeTab, setActiveTab] = useState<ObjectDetailTabs>(ObjectDetailTabs.Metadata);
 
-	const [isLoadingPageImage, setIsLoadingPageImage] = useState(true);
-	const [searchResults, setSearchResults] = useState<OcrSearchResult[] | null>(null);
-	const [highlights, setHighlights] = useState<AltoTextLine[]>([]);
+	const [activeMentionHighlights, setActiveMentionHighlights] = useState<{
+		pageIndex: number;
+		highlights: TextLine[];
+	} | null>(null);
+	const [activeOcrWord, setActiveOcrWord] = useState<{
+		pageIndex: number;
+		textLine: TextLine;
+	} | null>(null);
+
+	const [highlightMode, setHighlightMode] = useState<HighlightMode>(HighlightMode.OCR_SEARCH);
 
 	const {
 		data: mediaInfo,
@@ -265,12 +284,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const peakFileStoredAt: string | null = getFileByType(JSON_FORMATS)?.storedAt || null;
 
 	// media info
-	const { data: peakJson } = useGetPeakFile(peakFileStoredAt, {
+	const { data: peakJson, isLoading: isLoadingPeakFile } = useGetPeakFile(peakFileStoredAt, {
 		enabled: mediaInfo?.dctermsFormat === 'audio',
 	});
-
-	const iiifViewerReference =
-		useRef<IiifViewerFunctions>() as MutableRefObject<IiifViewerFunctions>;
 
 	const representationsToDisplay =
 		(mediaInfo?.pages || []).flatMap((page) =>
@@ -428,6 +444,55 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		return pageOcrTextsTemp;
 	}, [mediaInfo?.pages]);
 
+	const searchResults = useMemo((): OcrSearchResult[] => {
+		if (!searchTerms) {
+			return [];
+		}
+		const searchResultsTemp: OcrSearchResult[] = [];
+		for (const searchTerm of searchTerms.toLowerCase().split(' ')) {
+			pageOcrTranscripts.forEach((pageOcrTranscript, pageIndex) => {
+				if (!pageOcrTranscript) {
+					return; // Skip this page since it doesn't have an ocr transcript
+				}
+				let searchTermCharacterOffset: number = pageOcrTranscript.indexOf(searchTerm);
+				let searchTermIndexOnPage = 0;
+				while (searchTermCharacterOffset !== -1) {
+					const searchResult: OcrSearchResult = {
+						pageIndex,
+						searchTerm,
+						searchTermCharacterOffset,
+						searchTermIndexOnPage,
+					};
+					searchResultsTemp.push(searchResult);
+					searchTermCharacterOffset = pageOcrTranscript?.indexOf(
+						searchTerm,
+						searchTermCharacterOffset + 1
+					);
+					searchTermIndexOnPage += 1;
+				}
+			});
+		}
+
+		if (searchResultsTemp.length === 0) {
+			// No search results found
+			// Zoom to the whole page
+			iiifGoToHome(iiifViewerInitializedPromise as Promise<void>);
+			setCurrentSearchResultIndex(0);
+			return [];
+		}
+
+		const firstSearchResultOnPageIndex = searchResultsTemp.findIndex(
+			(result) => result.pageIndex === currentPageIndex
+		);
+		iiifGoToPage(
+			iiifViewerInitializedPromise as Promise<void>,
+			searchResultsTemp[firstSearchResultOnPageIndex].pageIndex
+		);
+		setCurrentSearchResultIndex(searchResultsTemp[0].searchTermIndexOnPage ?? -1);
+
+		return searchResultsTemp;
+	}, [searchTerms, pageOcrTranscripts, currentPageIndex, iiifViewerInitializedPromise]);
+
 	const arePagesOcrTextsAvailable = compact(pageOcrTranscripts).length !== 0;
 
 	const isPublicNewspaper: boolean = useIsPublicNewspaper(mediaInfo);
@@ -436,28 +501,29 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const canDownloadNewspaper: boolean =
 		(useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user) && isPublicNewspaper;
 
-	const getAltoTextsWithSearchTerms = useCallback((): AltoTextLine[] => {
+	const getAltoTextsOnCurrentPageForSearchTerms = useCallback((): TextLine[] => {
+		const searchTermParts = searchTerms.toLowerCase().split(' ');
 		return (
-			simplifiedAltoInfo?.text?.filter((altoText) =>
-				searchTerms
-					.toLowerCase()
-					.split(' ')
-					.some((searchTermWord) => altoText.text.toLowerCase().includes(searchTermWord))
-			) || []
+			simplifiedAltoInfo?.text?.filter((altoText) => {
+				const lowercaseAltoText = altoText.text.toLowerCase();
+				return searchTermParts.some((searchTermWord) => lowercaseAltoText.includes(searchTermWord));
+			}) || []
 		);
 	}, [searchTerms, simplifiedAltoInfo?.text]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	const handleSearch = useCallback(
 		async (newSearchTerms: string): Promise<void> => {
+			updateActiveTab(ObjectDetailTabs.Ocr);
+			setHighlightMode(HighlightMode.OCR_SEARCH);
 			if (newSearchTerms === '') {
 				// Reset search
 				// Zoom to whole page
-				iiifViewerReference.current?.iiifGoToHome();
-				setSearchResults([]);
-				setHighlights([]);
+				iiifGoToHome(iiifViewerInitializedPromise as Promise<void>);
 				setSearchTerms('');
 				setCurrentSearchResultIndex(0);
+				setActiveMentionHighlights(null);
+				updateHighlightsForSearch();
 				return;
 			}
 
@@ -476,33 +542,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				return;
 			}
 
-			const searchResultsTemp: OcrSearchResult[] = [];
-			for (const searchTerm of newSearchTerms.toLowerCase().split(' ')) {
-				pageOcrTranscripts.forEach((pageOcrTranscript, pageIndex) => {
-					if (!pageOcrTranscript) {
-						return; // Skip this page since it doesn't have an ocr transcript
-					}
-					let searchTermCharacterOffset: number = pageOcrTranscript.indexOf(searchTerm);
-					let searchTermIndexOnPage = 0;
-					while (searchTermCharacterOffset !== -1) {
-						const searchResult: OcrSearchResult = {
-							pageIndex,
-							searchTerm,
-							searchTermCharacterOffset,
-							searchTermIndexOnPage,
-						};
-						searchResultsTemp.push(searchResult);
-						searchTermCharacterOffset = pageOcrTranscript?.indexOf(
-							searchTerm,
-							searchTermCharacterOffset + 1
-						);
-						searchTermIndexOnPage += 1;
-					}
-				});
-			}
-
-			setSearchResults(searchResultsTemp);
-			setHighlights(getAltoTextsWithSearchTerms());
 			setSearchTerms(newSearchTerms.toLowerCase());
 
 			const parsedUrl = parseUrl(window.location.href);
@@ -515,15 +554,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				},
 			});
 			await router.replace(newUrl, undefined, { shallow: true });
-
-			const firstSearchResultOnCurrentPage = searchResultsTemp.findIndex(
-				(result) => result.pageIndex === currentPageIndex
-			);
-			if (firstSearchResultOnCurrentPage === -1) {
-				setCurrentSearchResultIndex(0);
-			} else {
-				setCurrentSearchResultIndex(firstSearchResultOnCurrentPage);
-			}
 		},
 		[currentPageIndex, mediaInfo?.thumbnailUrl, pageOcrTranscripts, router]
 	);
@@ -552,6 +582,50 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		[router]
 	);
 
+	// Link activeTab and isOverLayVisible from the query params to the internal state
+	// We cannot use the useQueryParam hook here because
+	// There seems to be a disconnect between React/NextJS router and the useQueryParam hook
+	// Probably because of the hacky way we had to get the use query param hook to work with NextJS
+	// See: src/modules/shared/providers/NextQueryParamProvider/NextQueryParamProvider.tsx
+	// This could probably be solved by using the latest version of use-query-params and the next-query-params package
+	// But that causes build issues with commonJS vs ES modules, so we should update to ESM first
+	useEffect(() => {
+		const parsedUrl = parseUrl(window.location.href);
+		const activeTabFromUrl = parsedUrl.query[QUERY_PARAM_KEY.ACTIVE_TAB];
+		const isTextOverlayVisibleFromUrl =
+			parsedUrl.query[QUERY_PARAM_KEY.IIIF_VIEWER_TEXT_OVERLAY_ENABLED];
+		if (activeTabFromUrl) {
+			setActiveTab(activeTabFromUrl as ObjectDetailTabs);
+		}
+		if (isTextOverlayVisibleFromUrl) {
+			setIsTextOverlayVisible(isTextOverlayVisibleFromUrl === 'true');
+		}
+	}, []);
+
+	const updateActiveTab = useCallback(
+		async (newActiveTab: ObjectDetailTabs | null) => {
+			setActiveTab(newActiveTab || ObjectDetailTabs.Metadata);
+
+			// Also update the query param
+			// We cannot use the useQueryParam hook here because
+			// There seems to be a disconnect between React/NextJS router and the useQueryParam hook
+			// Probably because of the hacky way we had to get the use query param hook to work with NextJS
+			// See: src/modules/shared/providers/NextQueryParamProvider/NextQueryParamProvider.tsx
+			// This could probably be solved by using the latest version of use-query-params and the next-query-params package
+			// But that causes build issues with commonJS vs ES modules, so we should update to ESM first
+			const parsedUrl = parseUrl(window.location.href);
+			const newUrl = stringifyUrl({
+				url: parsedUrl.url,
+				query: {
+					...parsedUrl.query,
+					[QUERY_PARAM_KEY.ACTIVE_TAB]: newActiveTab,
+				},
+			});
+			await router.replace(newUrl, undefined, { shallow: true });
+		},
+		[router.replace]
+	);
+
 	/**
 	 * Effects
 	 */
@@ -566,6 +640,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 	}, [mediaInfo]);
 
+	/**
+	 * When the url doesn't fully match with the loaded ie-object, then we need to do a redirect
+	 * Eg: maintainer was renamed, but the old slug should still work
+	 * user goes to: /search/old-slug-maintainer/ie-object-id/ie-object-slug
+	 * should be redirected to: /search/new-slug-maintainer/ie-object-id/ie-object-slug
+	 */
 	useEffect(() => {
 		if (
 			mediaInfo?.maintainerSlug &&
@@ -583,37 +663,77 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	}, [mediaInfo, maintainerSlug, ieObjectNameSlug, router.replace, router.asPath.replace]);
 
 	/**
-	 * Update the highlighted alto texts in the iiif viewer when
-	 * - the search terms change
-	 * - the overlay is enabled/disabled
-	 * - another page alto texts are loaded
-	 * - the current search result index changes
-	 * - the current page index changes
+	 * Recalculate the green highlights in the IIIF viewer to reflect the latest changes to the last highlighted fallen soldier name (mention)
 	 */
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+	const updateHighlightsForMentionName = useCallback(async () => {
+		if (!iiifViewerInitializedPromise) {
+			return;
+		}
+		await iiifViewerInitializedPromise;
+		if (activeMentionHighlights?.pageIndex === currentPageIndex) {
+			// Only update the highlights if the active mention is on the current page
+			iiifUpdateHighlightedAltoTexts(
+				iiifViewerInitializedPromise as Promise<void>,
+				activeMentionHighlights?.highlights,
+				null
+			);
+		} else {
+			// If the active mention is not on the current page, remove the highlights
+			iiifUpdateHighlightedAltoTexts(iiifViewerInitializedPromise as Promise<void>, [], null);
+		}
+	}, [
+		currentPageIndex,
+		activeMentionHighlights?.highlights,
+		activeMentionHighlights?.pageIndex,
+		iiifViewerInitializedPromise,
+	]);
 	useEffect(() => {
-		if (isLoadingPageImage) {
-			return; // Wait for the page to load before changing overlays or zoom
-		}
-		if (!searchResults || searchResults.length === 0) {
-			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
-			return;
-		}
-		if (
-			currentPageIndex !== searchResults[0]?.pageIndex &&
-			searchResults?.[0] &&
-			isNil(searchResults[0]?.searchTermCharacterOffset)
-		) {
-			// Fallen soldier name highlight was visible on previous page
-			// Clear highlights of names
-			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
-			setSearchResults([]);
-			setHighlights([]);
-			return;
-		}
+		updateHighlightsForMentionName();
+	}, [updateHighlightsForMentionName]);
 
-		let currentHighlightedAltoText: AltoTextLine | null = null;
+	/**
+	 * Recalculate the green highlights in the IIIF viewer to reflect the latest click on an ocr word
+	 */
+	const updateHighlightsForOcrWord = useCallback(async () => {
+		if (!iiifViewerInitializedPromise) {
+			return;
+		}
+		await iiifViewerInitializedPromise;
+		if (activeOcrWord?.pageIndex === currentPageIndex) {
+			// Only update the highlights if the active ocr word is on the current page
+			iiifUpdateHighlightedAltoTexts(
+				iiifViewerInitializedPromise as Promise<void>,
+				[activeOcrWord?.textLine],
+				null
+			);
+		} else {
+			// If the active ocr word is not on the current page or null, remove the highlights
+			iiifUpdateHighlightedAltoTexts(iiifViewerInitializedPromise as Promise<void>, [], null);
+		}
+	}, [
+		currentPageIndex,
+		activeOcrWord?.textLine,
+		activeOcrWord?.pageIndex,
+		iiifViewerInitializedPromise,
+	]);
+	useEffect(() => {
+		updateHighlightsForOcrWord();
+	}, [updateHighlightsForOcrWord]);
+
+	/**
+	 * Recalculate the green highlights in the IIIF viewer to reflect the latest changes to the OCR search terms
+	 */
+	const updateHighlightsForSearch = useCallback(async () => {
+		if (!iiifViewerInitializedPromise) {
+			return;
+		}
+		await iiifViewerInitializedPromise;
+		if (!searchResults || searchResults.length === 0) {
+			iiifUpdateHighlightedAltoTexts(iiifViewerInitializedPromise as Promise<void>, [], null);
+			return;
+		}
+		const highlights: TextLine[] = getAltoTextsOnCurrentPageForSearchTerms();
+		let currentHighlightedAltoText: TextLine | null = null;
 		if (
 			!isNil(currentSearchResultIndex) &&
 			!isNil(searchResults[currentSearchResultIndex]?.searchTermIndexOnPage)
@@ -622,41 +742,42 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			// It is not available when highlighting a name of a person
 			const searchTermIndexOnPage = searchResults[currentSearchResultIndex]
 				.searchTermIndexOnPage as number;
-			currentHighlightedAltoText = highlights[searchTermIndexOnPage];
+			currentHighlightedAltoText = highlights[searchTermIndexOnPage] || null;
 
 			if (currentHighlightedAltoText) {
-				iiifViewerReference.current?.iiifZoomToRect(currentHighlightedAltoText);
+				iiifZoomToRect(iiifViewerInitializedPromise as Promise<void>, currentHighlightedAltoText);
 			} else {
 				console.error('Could not find currentHighlightedAltoText', {
 					searchResults,
-					highlights,
 				});
 			}
 		}
 
 		if (isTextOverlayVisible) {
-			iiifViewerReference.current?.updateHighlightedAltoTexts(
+			iiifUpdateHighlightedAltoTexts(
+				iiifViewerInitializedPromise as Promise<void>,
 				highlights,
 				currentHighlightedAltoText
 			);
 		} else {
-			iiifViewerReference.current?.updateHighlightedAltoTexts([], null);
+			iiifUpdateHighlightedAltoTexts(iiifViewerInitializedPromise as Promise<void>, [], null);
 		}
 	}, [
-		isLoadingPageImage,
-		searchTerms,
-		currentPageIndex,
-		isTextOverlayVisible,
-		searchResults,
 		currentSearchResultIndex,
-		simplifiedAltoInfo?.text,
+		searchResults,
+		getAltoTextsOnCurrentPageForSearchTerms,
+		isTextOverlayVisible,
+		iiifViewerInitializedPromise,
 	]);
+	useEffect(() => {
+		updateHighlightsForSearch();
+	}, [updateHighlightsForSearch]);
 
 	/**
 	 * When the page loads, search the ocr texts for the searchTerms in the query params in the url
 	 */
 	useEffect(() => {
-		if (highlightedSearchTerms && isNewspaper && !hasAppliedUrlSearchTerms) {
+		if (highlightedSearchTerms && isNewspaper && !hasAppliedUrlSearchTerms && simplifiedAltoInfo) {
 			const newSearchTerms: string = highlightedSearchTerms
 				.split(HIGHLIGHTED_SEARCH_TERMS_SEPARATOR)
 				.join(' ');
@@ -672,33 +793,48 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		handleSearch,
 		highlightedSearchTerms,
 		handleIsTextOverlayVisibleChange,
+		simplifiedAltoInfo,
 	]);
 
 	/**
 	 * Scroll to active search result in ocr tab when the current search result index changes
 	 */
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	useEffect(() => {
-		// Wait for active word to be rendered before starting scroll
-		window.setTimeout(() => {
-			const activeSearchResultElem = document.querySelector(
-				moduleClassSelector('p-object-detail__ocr__word--marked--active')
-			);
-			const scrollable = document.querySelector(
-				moduleClassSelector('p-object-detail__ocr__words-container')
-			);
+	const scrollActiveSearchWordIntoView = useCallback(() => {
+		const activeSearchResultElem = document.querySelector(
+			moduleClassSelector('p-object-detail__ocr__word--marked--active')
+		);
+		const scrollable = document.querySelector(
+			moduleClassSelector('p-object-detail__ocr__words-container')
+		);
 
-			const scrollTopWord = activeSearchResultElem?.scrollTop || 0;
-			scrollable?.scrollTo({
-				top: scrollTopWord,
-			});
-			activeSearchResultElem?.scrollIntoView({
-				behavior: 'instant',
-				block: 'nearest',
-				inline: 'start',
-			});
-		}, 100);
-	}, [currentSearchResultIndex, searchTerms]);
+		// If word was not found, try again in 100ms
+		if (!activeSearchResultElem && currentSearchResultIndex !== -1) {
+			setTimeout(() => {
+				scrollActiveSearchWordIntoView();
+			}, 100);
+			return;
+		}
+
+		const scrollTopWord = activeSearchResultElem?.scrollTop || 0;
+		scrollable?.scrollTo({
+			top: scrollTopWord,
+		});
+		activeSearchResultElem?.scrollIntoView({
+			behavior: 'instant',
+			block: 'nearest',
+			inline: 'start',
+		});
+	}, [currentSearchResultIndex]);
+
+	/**
+	 * In the ocr tab, when a user searches for a word
+	 * We want to scroll into view the first word that is found in the ocr text
+	 */
+	useEffect(() => {
+		iiifViewerInitializedPromise?.then(() => {
+			scrollActiveSearchWordIntoView();
+		});
+	}, [iiifViewerInitializedPromise, scrollActiveSearchWordIntoView]);
 
 	/**
 	 * Hide the zendesk button for
@@ -753,7 +889,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		// Set default view
 		if (isMobile) {
 			// Default to metadata tab on mobile
-			setActiveTab(ObjectDetailTabs.Metadata, 'replaceIn');
+			updateActiveTab(ObjectDetailTabs.Metadata);
 		} else {
 			// Check media content and license for default tab on desktop
 			setExpandSidebar(!mediaInfo?.dctermsFormat || !hasMedia, 'replaceIn');
@@ -1003,7 +1139,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				return;
 			}
 			if (searchResult.pageIndex !== currentPageIndex) {
-				setIsLoadingPageImage(true);
 				setCurrentPageIndex(searchResult.pageIndex, 'replaceIn');
 			}
 		},
@@ -1013,12 +1148,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const handleClearSearch = () => {
 		setSearchTermsTemp('');
 		setSearchTerms('');
-		setHighlightedSearchTerms('');
-		setSearchResults(null);
-		setHighlights([]);
-		setCurrentSearchResultIndex(null);
-		iiifViewerReference.current?.iiifGoToHome();
+		setHighlightedSearchTerms('', 'replaceIn');
+		setCurrentSearchResultIndex(0);
+		iiifGoToHome(iiifViewerInitializedPromise as Promise<void>);
 	};
+
+	const handleClickOnOcrWord = useCallback(
+		(textLocation: TextLine) => {
+			if (textLocation) {
+				iiifZoomToRect(iiifViewerInitializedPromise as Promise<void>, textLocation);
+				setHighlightMode(HighlightMode.OCR_WORD);
+				setActiveOcrWord({
+					pageIndex: currentPageIndex,
+					textLine: textLocation,
+				});
+			}
+		},
+		[currentPageIndex, iiifViewerInitializedPromise]
+	);
 
 	/**
 	 * Content
@@ -1081,20 +1228,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const showVisitorSpaceNavigationBar = !isNil(accessEndDate) || isKiosk;
 
-	const handleIiifViewerSelection = (rect: Rect) => {
-		window.open(
-			stringifyUrl({
-				url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/jpg/selection`,
-				query: {
-					page: currentPageIndex,
-					startX: Math.floor(rect.x),
-					startY: Math.floor(rect.y),
-					width: Math.ceil(rect.width),
-					height: Math.ceil(rect.height),
-				},
-			})
-		);
-	};
+	const handleIiifViewerSelection = useCallback(
+		(rect: Rect, pageIndex: number) => {
+			window.open(
+				stringifyUrl({
+					url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/jpg/selection`,
+					query: {
+						page: pageIndex,
+						startX: Math.floor(rect.x),
+						startY: Math.floor(rect.y),
+						width: Math.ceil(rect.width),
+						height: Math.ceil(rect.height),
+						currentPageUrl: window.origin + router.asPath,
+					},
+				})
+			);
+		},
+		[ieObjectId, router.asPath]
+	);
 
 	/**
 	 * Update react state in response to changes to the IIIF viewer page index
@@ -1102,10 +1253,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 */
 	const handleActiveImageIndexChange = (newPageIndex: number): void => {
 		setCurrentPageIndex(newPageIndex, 'replaceIn');
-		setIsLoadingPageImage(true);
-		setCurrentSearchResultIndex(
-			searchResults?.findIndex((result) => result.pageIndex === newPageIndex) || 0
-		);
 	};
 
 	/**
@@ -1114,7 +1261,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * @param newPageIndex
 	 */
 	const handleSetCurrentPage = (newPageIndex: number): void => {
-		iiifViewerReference?.current?.iiifGoToPage(newPageIndex);
+		iiifGoToPage(iiifViewerInitializedPromise as Promise<void>, newPageIndex);
 	};
 
 	/**
@@ -1122,11 +1269,19 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * @param newPageIndex the new page index
 	 */
 	const handleOnPageChanged = (newPageIndex: number): void => {
-		setCurrentPageIndex(newPageIndex, 'replaceIn');
-		setIsLoadingPageImage(false);
-		setCurrentSearchResultIndex(
-			searchResults?.findIndex((result) => result.pageIndex === newPageIndex) || 0
-		);
+		if (currentPageIndex !== newPageIndex) {
+			setCurrentPageIndex(newPageIndex, 'replaceIn');
+		}
+	};
+
+	const handleSetActiveMentionHighlights = (mentionHighlights: {
+		pageIndex: number;
+		highlights: TextLine[];
+	}) => {
+		setActiveMentionHighlights(mentionHighlights);
+		setHighlightMode(HighlightMode.MENTION_NAME);
+		setSearchTerms('');
+		setCurrentSearchResultIndex(0);
 	};
 
 	/**
@@ -1151,10 +1306,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			if (isLoadingTickets) {
 				return <Loading owner="iiifviewer-tickets" fullscreen={true} mode="light" />;
 			}
+			console.log('render iifviewer');
 			return (
 				<IiifViewer
 					imageInfosWithTokens={imageInfosWithTokens}
-					ref={iiifViewerReference}
 					id={mediaInfo?.schemaIdentifier as string}
 					isTextOverlayVisible={isTextOverlayVisible || false}
 					setIsTextOverlayVisible={handleIsTextOverlayVisibleChange}
@@ -1163,19 +1318,20 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					initialFocusX={iiifViewerFocusX}
 					initialFocusY={iiifViewerFocusY}
 					initialZoomLevel={iiifViewerZoomLevel}
-					isLoading={isLoadingPageImage}
-					setIsLoading={setIsLoadingPageImage}
 					isSearchEnabled={arePagesOcrTextsAvailable}
 					searchTerms={searchTermsTemp}
 					setSearchTerms={setSearchTermsTemp}
 					onSearch={handleSearch}
 					onClearSearch={handleClearSearch}
 					currentSearchIndex={currentSearchResultIndex || 0}
-					searchResults={searchResults}
+					searchResults={searchTerms ? searchResults : null}
 					setSearchResultIndex={handleChangeSearchIndex}
 					onSelection={handleIiifViewerSelection}
 					enableSelection={canDownloadNewspaper}
 					onPageChanged={handleOnPageChanged}
+					onReady={() => {
+						iiifViewerInitializedPromiseResolve?.();
+					}}
 				/>
 			);
 		}
@@ -1239,7 +1395,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 		// Audio player
 		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(currentPlayableFile.mimeType)) {
-			if (peakFileStoredAt && !peakJson) {
+			if (peakFileStoredAt && isLoadingPeakFile) {
 				return (
 					<Loading
 						fullscreen
@@ -1346,13 +1502,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		);
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: avoid rerendering ocr text since it's heavy
 	const renderedOcrText = useMemo(() => {
 		const searchTermWords = compact(searchTerms.split(' '));
 		let searchTermIndex = 0;
 		return (
 			<div className={styles['p-object-detail__ocr__words-container']}>
-				{simplifiedAltoInfo?.text?.map((textLocation) => {
+				{simplifiedAltoInfo?.text?.map((textLocation, textIndex) => {
 					const isMarked: boolean =
 						!!searchTerms &&
 						searchTermWords.some((searchWord) =>
@@ -1369,11 +1524,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 					const wordElement = (
 						<span
-							key={`ocr-text--${ieObjectId}--${textLocation.x}-${textLocation.y}`}
-							onClick={() => iiifViewerReference.current?.iiifZoomToRect(textLocation)}
+							key={`ocr-text--${ieObjectId}--${currentPageIndex}--${
+								// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+								textIndex
+							}`}
+							onClick={() => handleClickOnOcrWord(textLocation)}
 							onKeyUp={(evt) => {
 								if (evt.key === 'Enter') {
-									iiifViewerReference.current?.iiifZoomToRect(textLocation);
+									handleClickOnOcrWord(textLocation);
 								}
 							}}
 							onDoubleClick={() => handleIsTextOverlayVisibleChange(!isTextOverlayVisible)}
@@ -1402,6 +1560,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		ieObjectId,
 		currentPageIndex,
 		handleIsTextOverlayVisibleChange,
+		handleClickOnOcrWord,
 		isTextOverlayVisible,
 	]);
 
@@ -1423,7 +1582,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						onChange={setSearchTermsTemp}
 						onSearch={(newSearchTerms) => handleSearch(newSearchTerms)}
 						onClearSearch={handleClearSearch}
-						searchResults={searchResults}
+						searchResults={searchTerms ? searchResults : null}
 						currentSearchIndex={currentSearchResultIndex || 0}
 						onChangeSearchIndex={handleChangeSearchIndex}
 					/>
@@ -1590,7 +1749,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					className={clsx(styles['p-object-detail__tabs'])}
 					variants={['dark']}
 					tabs={tabs}
-					onClick={(tabId) => setActiveTab(tabId as ObjectDetailTabs | null, 'replaceIn')}
+					onClick={(tabId) => updateActiveTab(tabId as ObjectDetailTabs | null)}
 				/>
 
 				{/* Sidebar */}
@@ -1620,8 +1779,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								currentPage={currentPage}
 								activeFile={getFileByType([...FLOWPLAYER_FORMATS, ...IMAGE_API_FORMATS])}
 								simplifiedAltoInfo={simplifiedAltoInfo || null}
-								iiifZoomTo={iiifViewerReference.current?.iiifZoomTo}
-								setHighlights={setHighlights}
+								iiifZoomTo={(x: number, y: number) =>
+									iiifZoomTo(iiifViewerInitializedPromise as Promise<void>, x, y)
+								}
+								setActiveMentionHighlights={handleSetActiveMentionHighlights}
 								setIsTextOverlayVisible={setIsTextOverlayVisible}
 							/>
 						)}
