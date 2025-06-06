@@ -66,21 +66,6 @@ export const IiifViewer = ({
 	/**
 	 * Hooks
 	 */
-	const [iiifViewerInitializedPromise, setIiifViewerInitializedPromise] =
-		useState<Promise<void> | null>(null);
-	const [iiifViewerInitializedPromiseResolve, setIiifViewerInitializedPromiseResolved] = useState<
-		(() => void) | null
-	>(null);
-	/**
-	 * Init a promise that resolves when the iiif viewer is ready hooking up event listeners
-	 */
-	useEffect(() => {
-		const promise = new Promise<void>((resolve) => {
-			setIiifViewerInitializedPromiseResolved(() => resolve);
-		});
-		setIiifViewerInitializedPromise(promise);
-	}, []);
-
 	const router = useRouter();
 	const [iiifGridViewEnabled, setIiifGridViewEnabled] = useState<boolean>(false);
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -93,11 +78,24 @@ export const IiifViewer = ({
 		// biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		((window as any).meemoo__iiifViewerLib = newOpenSeaDragonLib);
-	const getOpenSeaDragonViewer = (): Promise<OpenSeadragon.Viewer> => {
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	const checkViewerReady = (resolve: (viewer: any) => void) => {
 		// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
-		return (window as any).meemoo__iiifViewer || null;
+		const viewer = (window as any).meemoo__iiifViewer || null;
+		if (viewer) {
+			resolve(viewer);
+		} else {
+			setTimeout(() => {
+				checkViewerReady(resolve);
+			}, 100);
+		}
 	};
-	const setOpenSeadragonViewer = (newOpenSeaDragonViewer: Viewer) => {
+	const getOpenSeaDragonViewer = async (): Promise<OpenSeadragon.Viewer> => {
+		return new Promise((resolve) => {
+			checkViewerReady(resolve);
+		});
+	};
+	const setOpenSeaDragonViewer = (newOpenSeaDragonViewer: Viewer) => {
 		// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 		(window as any).meemoo__iiifViewer = newOpenSeaDragonViewer;
 	};
@@ -357,12 +355,11 @@ export const IiifViewer = ({
 		};
 	}, [checkReferenceStripBottomBorder]);
 
-	const getCurrentImageSize = (): ImageSize => {
-		// biome-ignore lint/suspicious/noExplicitAny: tile source isn't typed yet
-		const tileSource = getActiveImageTileSource() as any;
+	const getCurrentImageSize = async (): Promise<ImageSize> => {
+		const tileSource = await getActiveImageTileSource();
 		const imageSize = {
-			width: tileSource?.width || tileSource?.dimensions.x,
-			height: tileSource?.height || tileSource?.dimensions.y,
+			width: tileSource?.dimensions.x,
+			height: tileSource?.dimensions.y,
 		};
 		if (!imageSize.width || !imageSize.height) {
 			throw new Error(
@@ -409,32 +406,17 @@ export const IiifViewer = ({
 				return;
 			}
 
-			const tileSource = await getActiveImageTileSource();
-			if (!tileSource) {
-				// console.error('skipping updateHighlightedAltoTexts since no tile source is available', {
-				// 	tileSource,
-				// });
-				return;
-			}
-			const imageWidth: number | undefined = tileSource?.dimensions?.x;
-			const imageHeight: number | undefined = tileSource?.dimensions?.y;
-
-			if (!imageWidth || !imageHeight) {
-				// console.error(
-				// 	'skipping updateHighlightedAltoTexts since no image width/height is available'
-				// );
-				throw new Error('Failed to find current page width/height');
-			}
+			const imageSize = await getCurrentImageSize();
 
 			(await getOpenSeaDragonViewer()).clearOverlays();
 
 			for (const altoTextLocation of highlightedAltoTexts || []) {
-				const x = altoTextLocation.x / imageWidth - HIGHLIGHT_MARGIN;
+				const x = altoTextLocation.x / imageSize.width - HIGHLIGHT_MARGIN;
 				// All coordinates are relative to the image width even the y coordinates
-				const y = altoTextLocation.y / imageWidth - HIGHLIGHT_MARGIN;
-				const width = altoTextLocation.width / imageWidth + HIGHLIGHT_MARGIN * 2;
+				const y = altoTextLocation.y / imageSize.width - HIGHLIGHT_MARGIN;
+				const width = altoTextLocation.width / imageSize.width + HIGHLIGHT_MARGIN * 2;
 				// All coordinates are relative to the image width even the height
-				const height = altoTextLocation.height / imageWidth + HIGHLIGHT_MARGIN * 2;
+				const height = altoTextLocation.height / imageSize.width + HIGHLIGHT_MARGIN * 2;
 				const isSymbols = /^[^a-zA-Z0-9]$/g.test(altoTextLocation.text);
 				if (
 					!x ||
@@ -597,11 +579,10 @@ export const IiifViewer = ({
 
 			openSeadragonViewerTemp.goToPage(activeImageIndex);
 
-			setOpenSeadragonViewer(openSeadragonViewerTemp);
+			setOpenSeaDragonViewer(openSeadragonViewerTemp);
 
 			getWaitForReadyStatePromise(openSeadragonViewerTemp).then(() => {
 				onReady();
-				iiifViewerInitializedPromiseResolve?.();
 			});
 		}
 	}, [imageInfosWithTokens, iiifViewerId, isMobile]);
@@ -641,9 +622,9 @@ export const IiifViewer = ({
 		);
 	};
 
-	const handleSelectionCreated = (rect: Rect) => {
+	const handleSelectionCreated = async (rect: Rect) => {
 		if (onSelection) {
-			onSelection(rect);
+			onSelection(rect, (await getOpenSeaDragonViewer()).currentPage());
 		}
 		handleIsSelectionActiveChange(false);
 	};
@@ -659,7 +640,7 @@ export const IiifViewer = ({
 		if (newIsSelectionActive) {
 			(await getOpenSeaDragonViewer()).setMouseNavEnabled(false);
 			initOpenSeadragonViewerMouseTracker(
-				getCurrentImageSize(),
+				await getCurrentImageSize(),
 				handleSelectionCreated,
 				getOpenSeaDragonLib(),
 				await getOpenSeaDragonViewer()

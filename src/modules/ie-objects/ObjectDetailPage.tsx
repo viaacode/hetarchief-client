@@ -1228,21 +1228,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const showVisitorSpaceNavigationBar = !isNil(accessEndDate) || isKiosk;
 
-	const handleIiifViewerSelection = (rect: Rect) => {
-		window.open(
-			stringifyUrl({
-				url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/jpg/selection`,
-				query: {
-					page: currentPageIndex,
-					startX: Math.floor(rect.x),
-					startY: Math.floor(rect.y),
-					width: Math.ceil(rect.width),
-					height: Math.ceil(rect.height),
-					currentPageUrl: window.origin + router.asPath,
-				},
-			})
-		);
-	};
+	const handleIiifViewerSelection = useCallback(
+		(rect: Rect, pageIndex: number) => {
+			window.open(
+				stringifyUrl({
+					url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/jpg/selection`,
+					query: {
+						page: pageIndex,
+						startX: Math.floor(rect.x),
+						startY: Math.floor(rect.y),
+						width: Math.ceil(rect.width),
+						height: Math.ceil(rect.height),
+						currentPageUrl: window.origin + router.asPath,
+					},
+				})
+			);
+		},
+		[ieObjectId, router.asPath]
+	);
 
 	/**
 	 * Update react state in response to changes to the IIIF viewer page index

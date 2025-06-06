@@ -46,7 +46,7 @@ export interface IiifViewerProps {
 	setSearchResultIndex: (newSearchIndex: number) => void;
 
 	// Selection + download
-	onSelection?: (rect: Rect) => void;
+	onSelection?: (rect: Rect, pageIndex: number) => void;
 	enableSelection?: boolean;
 }
 
