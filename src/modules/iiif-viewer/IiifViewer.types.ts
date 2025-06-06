@@ -140,8 +140,8 @@ export interface IiifViewerGoToPageEvent extends Event {
 
 export interface IiifViewerUpdateHighlightedAltoTextsEvent extends Event {
 	functionProps: {
-		highlightedAltoTexts: TextLine[];
-		selectedAltoText: TextLine | null;
+		highlightedAltoTexts?: TextLine[];
+		selectedAltoText?: TextLine | null;
 	};
 }
 

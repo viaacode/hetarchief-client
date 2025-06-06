@@ -481,18 +481,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			return [];
 		}
 
-		const firstSearchResultOnCurrentPage = searchResultsTemp.findIndex(
+		const firstSearchResultOnPageIndex = searchResultsTemp.findIndex(
 			(result) => result.pageIndex === currentPageIndex
 		);
-		if (firstSearchResultOnCurrentPage === -1) {
-			// No search results on this page
-			// Switch to the first page that has a result
-			iiifGoToPage(iiifViewerInitializedPromise as Promise<void>, searchResultsTemp[0].pageIndex);
-			setCurrentSearchResultIndex(searchResultsTemp[0].searchTermIndexOnPage || -1);
-		} else {
-			// There are search results on this page
-			setCurrentSearchResultIndex(firstSearchResultOnCurrentPage);
-		}
+		iiifGoToPage(
+			iiifViewerInitializedPromise as Promise<void>,
+			searchResultsTemp[firstSearchResultOnPageIndex].pageIndex
+		);
+		setCurrentSearchResultIndex(searchResultsTemp[0].searchTermIndexOnPage ?? -1);
 
 		return searchResultsTemp;
 	}, [searchTerms, pageOcrTranscripts, currentPageIndex, iiifViewerInitializedPromise]);
@@ -527,6 +523,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				setSearchTerms('');
 				setCurrentSearchResultIndex(0);
 				setActiveMentionHighlights(null);
+				updateHighlightsForSearch();
 				return;
 			}
 
@@ -668,7 +665,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	/**
 	 * Recalculate the green highlights in the IIIF viewer to reflect the latest changes to the last highlighted fallen soldier name (mention)
 	 */
-	const updateHighlightsForMentionName = useCallback(() => {
+	const updateHighlightsForMentionName = useCallback(async () => {
+		if (!iiifViewerInitializedPromise) {
+			return;
+		}
+		await iiifViewerInitializedPromise;
 		if (activeMentionHighlights?.pageIndex === currentPageIndex) {
 			// Only update the highlights if the active mention is on the current page
 			iiifUpdateHighlightedAltoTexts(
@@ -686,11 +687,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		activeMentionHighlights?.pageIndex,
 		iiifViewerInitializedPromise,
 	]);
+	useEffect(() => {
+		updateHighlightsForMentionName();
+	}, [updateHighlightsForMentionName]);
 
 	/**
 	 * Recalculate the green highlights in the IIIF viewer to reflect the latest click on an ocr word
 	 */
-	const updateHighlightsForOcrWord = useCallback(() => {
+	const updateHighlightsForOcrWord = useCallback(async () => {
+		if (!iiifViewerInitializedPromise) {
+			return;
+		}
+		await iiifViewerInitializedPromise;
 		if (activeOcrWord?.pageIndex === currentPageIndex) {
 			// Only update the highlights if the active ocr word is on the current page
 			iiifUpdateHighlightedAltoTexts(
@@ -708,11 +716,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		activeOcrWord?.pageIndex,
 		iiifViewerInitializedPromise,
 	]);
+	useEffect(() => {
+		updateHighlightsForOcrWord();
+	}, [updateHighlightsForOcrWord]);
 
 	/**
 	 * Recalculate the green highlights in the IIIF viewer to reflect the latest changes to the OCR search terms
 	 */
-	const updateHighlightsForSearch = useCallback(() => {
+	const updateHighlightsForSearch = useCallback(async () => {
+		if (!iiifViewerInitializedPromise) {
+			return;
+		}
+		await iiifViewerInitializedPromise;
 		if (!searchResults || searchResults.length === 0) {
 			iiifUpdateHighlightedAltoTexts(iiifViewerInitializedPromise as Promise<void>, [], null);
 			return;
@@ -754,44 +769,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		isTextOverlayVisible,
 		iiifViewerInitializedPromise,
 	]);
-
-	/**
-	 * Update the highlighted alto texts in the iiif viewer when
-	 * - the search terms change
-	 * - a fallen soldier's name is highlighted
-	 * - an ocr word is clicked
-	 * - the overlay is enabled/disabled
-	 * - another page alto texts are loaded
-	 * - the current search result index changes
-	 * - the current page index changes
-	 */
 	useEffect(() => {
-		iiifViewerInitializedPromise?.then(() => {
-			switch (highlightMode) {
-				case HighlightMode.MENTION_NAME:
-					updateHighlightsForMentionName();
-					break;
-
-				case HighlightMode.OCR_WORD:
-					updateHighlightsForOcrWord();
-					break;
-
-				case HighlightMode.OCR_SEARCH:
-					updateHighlightsForSearch();
-					break;
-
-				default:
-					iiifUpdateHighlightedAltoTexts(iiifViewerInitializedPromise as Promise<void>, [], null);
-					break;
-			}
-		});
-	}, [
-		highlightMode,
-		updateHighlightsForMentionName,
-		updateHighlightsForSearch,
-		updateHighlightsForOcrWord,
-		iiifViewerInitializedPromise,
-	]);
+		updateHighlightsForSearch();
+	}, [updateHighlightsForSearch]);
 
 	/**
 	 * When the page loads, search the ocr texts for the searchTerms in the query params in the url
@@ -1286,7 +1266,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * @param newPageIndex the new page index
 	 */
 	const handleOnPageChanged = (newPageIndex: number): void => {
-		setCurrentPageIndex(newPageIndex, 'replaceIn');
+		if (currentPageIndex !== newPageIndex) {
+			setCurrentPageIndex(newPageIndex, 'replaceIn');
+		}
 	};
 
 	const handleSetActiveMentionHighlights = (mentionHighlights: {
@@ -1321,6 +1303,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			if (isLoadingTickets) {
 				return <Loading owner="iiifviewer-tickets" fullscreen={true} mode="light" />;
 			}
+			console.log('render iifviewer');
 			return (
 				<IiifViewer
 					imageInfosWithTokens={imageInfosWithTokens}
