@@ -6,10 +6,11 @@ import {
 	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
+	SearchPageMediaType,
 } from '@shared/types/ie-objects';
 import type { VisitRequest } from '@shared/types/visit-request';
 
-import { type SearchPageQueryParams, VISITOR_SPACE_QUERY_PARAM_INIT } from '../../const';
+import type { SearchPageQueryParams } from '../../const';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '../../types';
 import { mapAdvancedToElastic } from '../map-filters';
 
@@ -76,16 +77,29 @@ const getFiltersForSearchTerms = (query: SearchPageQueryParams): IeObjectsSearch
 	});
 };
 
+const getFiltersForFormat = (query: SearchPageQueryParams): IeObjectsSearchFilter[] => {
+	if (!query.format) {
+		return [];
+	}
+	const formatValue = query.format;
+	if (formatValue === SearchPageMediaType.All) {
+		return [];
+	}
+	return [
+		{
+			field: IeObjectsSearchFilterField.FORMAT,
+			operator: IeObjectsSearchOperator.IS,
+			value: formatValue || '',
+		},
+	];
+};
+
 export const mapFiltersToElastic = (query: SearchPageQueryParams): IeObjectsSearchFilter[] => {
 	const allFilters = [
 		// Searchbar
 		...getFiltersForSearchTerms(query),
 		// Tabs
-		{
-			field: IeObjectsSearchFilterField.FORMAT,
-			operator: IeObjectsSearchOperator.IS,
-			value: query.format || VISITOR_SPACE_QUERY_PARAM_INIT.format,
-		},
+		...getFiltersForFormat(query),
 		// Medium
 		{
 			field: IeObjectsSearchFilterField.MEDIUM,
