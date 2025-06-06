@@ -77,18 +77,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 					href="/fonts/sofia-pro/sofia-pro-bold.woff"
 					as="font"
 					type="font/woff"
+					crossOrigin="anonymous"
 				/>
 				<link
 					rel="preload"
 					href="/fonts/sofia-pro/sofia-pro-regular.woff"
 					as="font"
 					type="font/woff"
+					crossOrigin="anonymous"
 				/>
 				<link
 					rel="preload"
 					href="/fonts/meemoo-icons-light/meemoo-icons-light.woff"
 					as="font"
 					type="font/woff"
+					crossOrigin="anonymous"
 				/>
 			</CustomHead>
 			<body>
