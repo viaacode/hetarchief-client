@@ -287,6 +287,22 @@ export const IiifViewer = ({
 		);
 	}, [highlightedAltoTextInfo]);
 
+	/**
+	 * Set the current page index in the OpenSeaDragon viewer when the activeImageIndex changes.
+	 */
+	// biome-ignore lint/correctness/useExhaustiveDependencies: since openSeaDragonViewer is stored outside React, this could create a rerender loop
+	const handlePageIndexChanged = useCallback(async () => {
+		const viewer = await getOpenSeaDragonViewer();
+		const source = await getActiveImageTileSource();
+		if (viewer && source) {
+			viewer.clearOverlays();
+			viewer.goToPage(activeImageIndex);
+		}
+	}, [activeImageIndex]);
+	useEffect(() => {
+		handlePageIndexChanged();
+	}, [handlePageIndexChanged]);
+
 	const addFullscreenCloseButton = useCallback((openSeadragonViewer: OpenSeadragon.Viewer) => {
 		if (!openSeadragonViewer.container) {
 			return;
