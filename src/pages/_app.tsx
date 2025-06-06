@@ -49,6 +49,8 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 
 	useEffect(() => {
 		console.log(`[PERFORMANCE] ${new Date().toISOString()} init hetarchief client`);
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		console.info((window as any).APP_VERSION);
 	}, []);
 
 	useEffect(() => {
@@ -56,11 +58,9 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 	}, [locale, router]);
 
 	if (!isServerSideRendering()) {
-		// client-side-only code, window is not available during nextjs server side prerender
+		// client-side-only code, window is not available during NextJS server side prerender
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		(window as any).APP_VERSION = { version: pkg.version };
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		console.info((window as any).APP_VERSION);
 	}
 	return (
 		<>
