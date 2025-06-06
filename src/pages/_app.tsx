@@ -59,6 +59,8 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 		// client-side-only code, window is not available during nextjs server side prerender
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		(window as any).APP_VERSION = { version: pkg.version };
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		console.info((window as any).APP_VERSION);
 	}
 	return (
 		<>
