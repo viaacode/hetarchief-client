@@ -94,8 +94,12 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps & UserProps> = ({
 				})
 				.catch((err) => {
 					toastService.notify({
-						title: tText('Error'),
-						description: tText('Het ophalen van de autocomplete suggesties is mislukt'),
+						title: tText(
+							'modules/visitor-space/components/autocomplete-field-input/autocomplete-field-input___error'
+						),
+						description: tText(
+							'modules/visitor-space/components/autocomplete-field-input/autocomplete-field-input___het-ophalen-van-de-autocomplete-suggesties-is-mislukt'
+						),
 					});
 				});
 		},
