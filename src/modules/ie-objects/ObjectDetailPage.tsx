@@ -216,7 +216,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		withDefault(NumberParam, 0)
 	);
 
-	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number>(0);
+	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number>(-1);
 	const [expandSidebar, setExpandSidebar] = useQueryParam(
 		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
 		withDefault(BooleanParam, false)
@@ -503,7 +503,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				// Zoom to whole page
 				iiifGoToHome(iiifViewerInitializedPromise as Promise<void>);
 				setSearchTerms('');
-				setCurrentSearchResultIndex(0);
+				setCurrentSearchResultIndex(-1);
 				setActiveMentionHighlights(null);
 				updateHighlightsForSearch();
 				return;
@@ -759,7 +759,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * When the search results change, we want to set the current search result index to the first result on the current page
 	 */
 	useEffect(() => {
-		if (searchResults.length > 0) {
+		// Only change the current search result index if there are search results and the current search result index is not set
+		if (searchResults.length > 0 && currentSearchResultIndex === -1) {
 			const firstSearchResultOnCurrentPage = searchResults.find(
 				(result) => result.pageIndex === currentPageIndex
 			);
@@ -774,7 +775,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				setCurrentSearchResultIndex(0);
 			}
 		}
-	}, [searchResults, currentPageIndex, setCurrentPageIndex]);
+	}, [searchResults, currentPageIndex, setCurrentPageIndex, currentSearchResultIndex]);
 
 	/**
 	 * When the page loads, search the ocr texts for the searchTerms in the query params in the url
@@ -1152,7 +1153,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		setSearchTermsTemp('');
 		setSearchTerms('');
 		setHighlightedSearchTerms('', 'replaceIn');
-		setCurrentSearchResultIndex(0);
+		setCurrentSearchResultIndex(-1);
 		iiifGoToHome(iiifViewerInitializedPromise as Promise<void>);
 	};
 
