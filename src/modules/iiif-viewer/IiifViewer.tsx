@@ -400,6 +400,7 @@ export const IiifViewer = ({
 			}
 
 			if (!highlightedAltoTexts?.length) {
+				(await getOpenSeaDragonViewer()).clearOverlays();
 				// console.error(
 				// 	'skipping updateHighlightedAltoTexts since no highlighted texts are provided'
 				// );

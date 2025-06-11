@@ -472,26 +472,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				}
 			});
 		}
-
-		if (searchResultsTemp.length === 0) {
-			// No search results found
-			// Zoom to the whole page
-			iiifGoToHome(iiifViewerInitializedPromise as Promise<void>);
-			setCurrentSearchResultIndex(0);
-			return [];
-		}
-
-		const firstSearchResultOnPageIndex = searchResultsTemp.findIndex(
-			(result) => result.pageIndex === currentPageIndex
-		);
-		iiifGoToPage(
-			iiifViewerInitializedPromise as Promise<void>,
-			searchResultsTemp[firstSearchResultOnPageIndex].pageIndex
-		);
-		setCurrentSearchResultIndex(searchResultsTemp[0].searchTermIndexOnPage ?? -1);
-
 		return searchResultsTemp;
-	}, [searchTerms, pageOcrTranscripts, currentPageIndex, iiifViewerInitializedPromise]);
+	}, [searchTerms, pageOcrTranscripts]);
 
 	const arePagesOcrTextsAvailable = compact(pageOcrTranscripts).length !== 0;
 
@@ -772,6 +754,27 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	useEffect(() => {
 		updateHighlightsForSearch();
 	}, [updateHighlightsForSearch]);
+
+	/**
+	 * When the search results change, we want to set the current search result index to the first result on the current page
+	 */
+	useEffect(() => {
+		if (searchResults.length > 0) {
+			const firstSearchResultOnCurrentPage = searchResults.find(
+				(result) => result.pageIndex === currentPageIndex
+			);
+			if (firstSearchResultOnCurrentPage) {
+				// Set the current search result index to the first result on the current page
+				setCurrentSearchResultIndex(searchResults.indexOf(firstSearchResultOnCurrentPage));
+			} else {
+				// Go to the first page and show the first search result
+				if (currentPageIndex !== 0) {
+					setCurrentPageIndex(0);
+				}
+				setCurrentSearchResultIndex(0);
+			}
+		}
+	}, [searchResults, currentPageIndex, setCurrentPageIndex]);
 
 	/**
 	 * When the page loads, search the ocr texts for the searchTerms in the query params in the url
@@ -1306,7 +1309,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			if (isLoadingTickets) {
 				return <Loading owner="iiifviewer-tickets" fullscreen={true} mode="light" />;
 			}
-			console.log('render iifviewer');
 			return (
 				<IiifViewer
 					imageInfosWithTokens={imageInfosWithTokens}
