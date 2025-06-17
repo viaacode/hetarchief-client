@@ -190,11 +190,11 @@ module.exports = withTM({
 				destination: '/account/mijn-mappen/favorieten',
 				permanent: true,
 			},
-			// {
-			// 	source: '/account/mijn-mappen',
-			// 	destination: '/account/mijn-mappen/favorieten',
-			// 	permanent: true,
-			// },
+			{
+				source: '/account/mijn-mappen',
+				destination: '/account/mijn-mappen/favorieten',
+				permanent: true,
+			},
 			{
 				source: '/account/my-folders',
 				destination: '/account/my-folders/favorites',
