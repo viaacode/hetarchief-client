@@ -49,8 +49,7 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 
 	useEffect(() => {
 		console.log(`[PERFORMANCE] ${new Date().toISOString()} init hetarchief client`);
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		console.info((window as any).APP_VERSION);
+		console.info(`%c application version: ${pkg.version}`, 'color: #bada55');
 	}, []);
 
 	useEffect(() => {
