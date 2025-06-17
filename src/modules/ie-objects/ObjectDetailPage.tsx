@@ -648,6 +648,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Recalculate the green highlights in the IIIF viewer to reflect the latest changes to the last highlighted fallen soldier name (mention)
 	 */
 	const updateHighlightsForMentionName = useCallback(async () => {
+		if (highlightMode !== HighlightMode.MENTION_NAME) {
+			return;
+		}
 		if (!iiifViewerInitializedPromise) {
 			return;
 		}
@@ -664,6 +667,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			iiifUpdateHighlightedAltoTexts(iiifViewerInitializedPromise as Promise<void>, [], null);
 		}
 	}, [
+		highlightMode,
 		currentPageIndex,
 		activeMentionHighlights?.highlights,
 		activeMentionHighlights?.pageIndex,
@@ -677,6 +681,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Recalculate the green highlights in the IIIF viewer to reflect the latest click on an ocr word
 	 */
 	const updateHighlightsForOcrWord = useCallback(async () => {
+		if (highlightMode !== HighlightMode.OCR_WORD) {
+			return;
+		}
 		if (!iiifViewerInitializedPromise) {
 			return;
 		}
@@ -693,6 +700,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			iiifUpdateHighlightedAltoTexts(iiifViewerInitializedPromise as Promise<void>, [], null);
 		}
 	}, [
+		highlightMode,
 		currentPageIndex,
 		activeOcrWord?.textLine,
 		activeOcrWord?.pageIndex,
@@ -706,6 +714,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Recalculate the green highlights in the IIIF viewer to reflect the latest changes to the OCR search terms
 	 */
 	const updateHighlightsForSearch = useCallback(async () => {
+		if (highlightMode !== HighlightMode.OCR_SEARCH) {
+			return;
+		}
 		if (!iiifViewerInitializedPromise) {
 			return;
 		}
@@ -745,6 +756,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			iiifUpdateHighlightedAltoTexts(iiifViewerInitializedPromise as Promise<void>, [], null);
 		}
 	}, [
+		highlightMode,
 		currentSearchResultIndex,
 		searchResults,
 		getAltoTextsOnCurrentPageForSearchTerms,

@@ -293,7 +293,9 @@ export const IiifViewer = ({
 		const viewer = await getOpenSeaDragonViewer();
 		const source = await getActiveImageTileSource();
 		if (viewer && source) {
-			viewer.clearOverlays();
+			viewer.addOnceHandler('viewport-change', () => {
+				applyInitialZoomAndPan(viewer, getOpenSeaDragonLib());
+			});
 			viewer.goToPage(activeImageIndex);
 		}
 	}, [activeImageIndex]);
@@ -512,25 +514,12 @@ export const IiifViewer = ({
 			onPageChanged(openSeadragonViewerTemp.currentPage());
 		};
 
-		const handleOpenPageEvent = () => {
-			setTimeout(() => {
-				updateHighlightedAltoTexts(
-					highlightedAltoTextInfo.highlightedAltoTexts,
-					highlightedAltoTextInfo.selectedAltoText
-				);
-			}, 1000);
-		};
-
 		openSeadragonViewerTemp.addHandler('viewport-change', handleViewportChangeTemp);
 		openSeadragonViewerTemp.addHandler('page', handlePageChanged);
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		openSeadragonViewerTemp.addHandler('open' as any, handleOpenPageEvent);
 
 		return () => {
 			openSeadragonViewerTemp.removeHandler('viewport-change', handleViewportChangeTemp);
 			openSeadragonViewerTemp.removeHandler('page', handlePageChanged);
-			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-			openSeadragonViewerTemp.removeHandler('open' as any, handleOpenPageEvent);
 		};
 	}, []);
 
