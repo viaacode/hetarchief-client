@@ -4,7 +4,7 @@ import { reverse, sortBy } from 'lodash-es';
 import type { NextRouter } from 'next/router';
 
 import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/LanguageSwitcher.exceptions';
-import { QUERY_KEYS, type RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
+import { QUERY_KEYS, ROUTES_BY_LOCALE, type RouteKey } from '@shared/const';
 import { Locale } from '@shared/utils/i18n';
 
 export const changeApplicationLocale = (
@@ -47,7 +47,7 @@ export const changeApplicationLocale = (
 	newFullPath = handleRouteExceptions(routeKey, newFullPath);
 
 	// exception for content pages
-	if (router.route === '/[lang]/[slug]') {
+	if (router.route === '/[lang]/[slug]' || router.route === '/[slug]') {
 		// const contentPage ContentPageService.getContentPageByLanguageAndPath(language as any, path);
 		const translatedContentPageInfo = (contentPageInfo?.translatedPages || []).find(
 			(translatedPage) =>
