@@ -262,11 +262,12 @@ $controls-margin-bottom: $spacer-sm;
 				vertical-align: bottom;
 			}
 
+			&:global(.active),
 			&:hover,
 			&:focus-visible {
 				opacity: 0.9;
-				border: 0.2rem solid #00c8aa;
-				outline: none;
+				outline: 0.2rem solid #00c8aa;
+				outline-offset: 0.1rem;
 			}
 		}
 

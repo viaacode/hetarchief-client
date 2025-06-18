@@ -893,7 +893,11 @@ export const IiifViewer = ({
 				{imageInfosWithTokens.map((imageInfo, index) => {
 					return (
 						<div key={`c-iiif-viewer__iiif__reference-strip__${imageInfo.imageUrl}`}>
-							<button onClick={() => setActiveImageIndex(index)} type="button">
+							<button
+								onClick={() => setActiveImageIndex(index)}
+								type="button"
+								className={activeImageIndex === index ? 'active' : ''}
+							>
 								{/* eslint-disable-next-line @next/next/no-img-element */}
 								<img src={imageInfo.thumbnailUrl} alt={`page ${index + 1}`} />
 							</button>
