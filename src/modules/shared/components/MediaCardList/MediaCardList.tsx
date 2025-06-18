@@ -7,10 +7,11 @@ import { tText } from '@shared/helpers/translate';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 
-import { type IdentifiableMediaCard, MediaCard, type MediaCardProps } from '../MediaCard';
+import { type IdentifiableMediaCard, MediaCard } from '../MediaCard';
 
 import { Loading } from '@shared/components/Loading';
 import { isServerSideRendering } from '@shared/utils/is-browser';
+import { compact } from 'lodash-es';
 import { MEDIA_CARD_LIST_GRID_BP_COLS } from './MediaCardList.const';
 import styles from './MediaCardList.module.scss';
 
@@ -41,18 +42,9 @@ const MediaCardList: FC<MediaCardListProps> = ({
 			</div>
 		);
 
-	const getKey = (item: MediaCardProps, i: number) => {
-		let key = (item as IdentifiableMediaCard).schemaIdentifier;
-
-		if (key === undefined) {
-			if (typeof item.title === 'string') {
-				key = `${encodeURIComponent(item.title || 'card')}--${i}`;
-			} else {
-				key = i.toString();
-			}
-		}
-
-		return key;
+	const getKey = (item: IdentifiableMediaCard, i: number) => {
+		const identifier: string = item.schemaIdentifier || item.id || item.objectId || 'card';
+		return `media-card--${view}--${identifier}--${i}`;
 	};
 
 	/**
@@ -144,25 +136,30 @@ const MediaCardList: FC<MediaCardListProps> = ({
 		return tiles;
 	};
 
-	const tiles = items.map((item, i) => {
-		return renderWrapper(
-			<MediaCard
-				key={getKey(item, i)}
-				id={getKey(item, i)}
-				buttons={renderButtons?.(item)}
-				objectId={item.schemaIdentifier}
-				actions={renderActions?.(item)}
-				{...item}
-				keywords={keywords}
-				view={view}
-				showLocallyAvailable={item.showLocallyAvailable}
-				showPlanVisitButtons={item.showPlanVisitButtons}
-				link={item.link}
-				maintainerSlug={item.maintainerSlug}
-			/>,
-			item
-		);
-	});
+	const tiles = compact(
+		items.map((item, i) => {
+			if (!item.schemaIdentifier) {
+				return null;
+			}
+			return renderWrapper(
+				<MediaCard
+					key={getKey(item, i)}
+					id={getKey(item, i)}
+					buttons={renderButtons?.(item)}
+					objectId={item.schemaIdentifier}
+					actions={renderActions?.(item)}
+					{...item}
+					keywords={keywords}
+					view={view}
+					showLocallyAvailable={item.showLocallyAvailable}
+					showPlanVisitButtons={item.showPlanVisitButtons}
+					link={item.link}
+					maintainerSlug={item.maintainerSlug}
+				/>,
+				item
+			);
+		})
+	);
 
 	if (isServerSideRendering()) {
 		// Avoid masonry layout shift on SSR
