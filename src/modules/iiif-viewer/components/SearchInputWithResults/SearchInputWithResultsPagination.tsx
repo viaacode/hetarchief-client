@@ -62,7 +62,7 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 							: tText(
 									'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___current-search-index-van-de-total-search-results',
 									{
-										currentSearchIndex: currentSearchIndex + 1 || 1, // Default to 1 if 0
+										currentSearchIndex: currentSearchIndex + 1 > 0 ? currentSearchIndex + 1 : 1, // Default to 1 if zero or negative: https://meemoo.atlassian.net/browse/ARC-3071
 										totalSearchResults: searchResults.length,
 									}
 								)}
