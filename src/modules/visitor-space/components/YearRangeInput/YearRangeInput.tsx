@@ -71,13 +71,14 @@ const YearRangeInput: FC<Omit<YearRangeInputProps, 'onSelect'>> = (props) => {
 		}
 	};
 
+	const { showLabels, ...restProps } = props;
 	return (
 		<div className={styles['c-year-range-input']}>
 			<YearInput
-				{...props}
-				isYearInputRange
+				{...restProps}
+				isYearInputRange={true}
 				label={
-					props.showLabels
+					showLabels
 						? tText(
 								'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___van'
 							)
@@ -91,9 +92,9 @@ const YearRangeInput: FC<Omit<YearRangeInputProps, 'onSelect'>> = (props) => {
 				}}
 			/>
 			<YearInput
-				{...props}
+				{...restProps}
 				label={
-					props.showLabels
+					showLabels
 						? tText(
 								'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tot'
 							)
