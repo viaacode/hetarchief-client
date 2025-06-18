@@ -1,5 +1,7 @@
 import type { QueryParamConfig } from 'use-query-params';
 
+import { TEMP_FILTER_KEY_PREFIX } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import { v4 as uuidV4 } from 'uuid';
 import { type AdvancedFilter, FilterProperty, Operator } from '../types';
 
 const divider = ',';
@@ -28,7 +30,12 @@ export const AdvancedFilterArrayParam: QueryParamConfig<AdvancedFilter[] | undef
 
 					const val = decodeURIComponent(filter.slice(4));
 
-					return { prop: filterProperty, op: filterOperator, val };
+					return {
+						prop: filterProperty,
+						op: filterOperator,
+						val,
+						renderKey: TEMP_FILTER_KEY_PREFIX + uuidV4(),
+					};
 				})
 			: undefined;
 	},

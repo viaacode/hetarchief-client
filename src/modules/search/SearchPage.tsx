@@ -92,7 +92,10 @@ import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/g
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitTimeframe } from '@visit-requests/types';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
-import { initialFields } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import {
+	TEMP_FILTER_KEY_PREFIX,
+	initialFields,
+} from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import type { AdvancedFilterFormState } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.types';
 import type { ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
 import type { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
@@ -122,6 +125,7 @@ import {
 } from '@visitor-space/types';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
+import { v4 as uuidV4 } from 'uuid';
 
 const labelKeys = {
 	search: 'SearchPage__search',
@@ -480,6 +484,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				data = state.duration
 					? [
 							{
+								renderKey: TEMP_FILTER_KEY_PREFIX + uuidV4(),
 								prop: FilterProperty.DURATION,
 								op: state.operator,
 								val: state.duration,
@@ -494,6 +499,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				data = state.releaseDate
 					? [
 							{
+								renderKey: TEMP_FILTER_KEY_PREFIX + uuidV4(),
 								prop: FilterProperty.RELEASE_DATE,
 								op: state.operator,
 								val: state.releaseDate,

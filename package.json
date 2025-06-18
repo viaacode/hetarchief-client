@@ -107,6 +107,7 @@
     "ts-retry-promise": "0.8.1",
     "use-debouncy": "5.0.1",
     "use-query-params": "1.2.3",
+    "uuid": "11.1.0",
     "xml2js": "0.6.2",
     "yup": "1.4.0"
   },
