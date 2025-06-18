@@ -1,7 +1,4 @@
-import {
-	ContentPageRenderer,
-	convertDbContentPageToContentPageInfo,
-} from '@meemoo/admin-core-ui/dist/admin.mjs';
+import { ContentPageRenderer, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/dist/admin.mjs';
 import { QueryClient } from '@tanstack/react-query';
 import type { HTTPError } from 'ky';
 import { kebabCase } from 'lodash-es';
@@ -19,10 +16,7 @@ import {
 	useGetContentPageByLanguageAndPath,
 } from '@content-page/hooks/get-content-page';
 import { ContentPageClientService } from '@content-page/services/content-page-client.service';
-import {
-	makeServerSideRequestGetIeObjectInfo,
-	useGetIeObjectInfo,
-} from '@ie-objects/hooks/get-ie-objects-info';
+import { makeServerSideRequestGetIeObjectInfo, useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';
 import { type PageInfo, SeoTags } from '@shared/components/SeoTags/SeoTags';
@@ -35,8 +29,8 @@ import withUser, { type UserProps } from '@shared/hooks/with-user';
 import { setShowZendesk } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
-import { VisitorLayout } from '@visitor-layout/index';
 import { isServerSideRendering } from '@shared/utils/is-browser';
+import { VisitorLayout } from '@visitor-layout/index';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -65,6 +59,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 	const {
 		error: contentPageError,
 		isLoading: isContentPageLoading,
+		isFetching: isContentPageFetching,
 		data: dbContentPage,
 	} = useGetContentPageByLanguageAndPath(locale, `/${contentPageSlugOrObjectSchemaIdentifier}`);
 	const contentPageInfo = dbContentPage
@@ -108,7 +103,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 	 */
 
 	const renderPageContent = () => {
-		if (isContentPageLoading || isIeObjectLoading) {
+		if (isContentPageLoading || isIeObjectLoading || (isContentPageFetching && !contentPageInfo)) {
 			return <Loading fullscreen owner={'/[slug]/index page'} />;
 		}
 
