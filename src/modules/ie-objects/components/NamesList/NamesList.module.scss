@@ -7,13 +7,20 @@ $names-list-scrollable-height: 29rem;
 	container-type: inline-size;
 	container-name: names-list;
 
-	&__search input {
-		background-color: $silver;
-		border: 0;
-		border-radius: $button-radius;
-		height: $button-height;
-		margin-top: $spacer-sm;
-		margin-bottom: $spacer-sm;
+	&__search {
+		input {
+			background-color: $silver;
+			border: 0;
+			border-radius: $button-radius;
+			height: $button-height;
+			margin-top: $spacer-sm;
+			margin-bottom: $spacer-sm;
+		}
+
+		:global(.c-input__icon) {
+			pointer-events: all;
+			cursor: pointer;
+		}
 	}
 
 	&__person-container {
