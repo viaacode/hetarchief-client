@@ -216,7 +216,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		withDefault(NumberParam, 0)
 	);
 
-	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number>(0);
+	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number>(-1);
 	const [expandSidebar, setExpandSidebar] = useQueryParam(
 		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
 		withDefault(BooleanParam, false)
@@ -472,26 +472,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				}
 			});
 		}
-
-		if (searchResultsTemp.length === 0) {
-			// No search results found
-			// Zoom to the whole page
-			iiifGoToHome(iiifViewerInitializedPromise as Promise<void>);
-			setCurrentSearchResultIndex(0);
-			return [];
-		}
-
-		const firstSearchResultOnPageIndex = searchResultsTemp.findIndex(
-			(result) => result.pageIndex === currentPageIndex
-		);
-		iiifGoToPage(
-			iiifViewerInitializedPromise as Promise<void>,
-			searchResultsTemp[firstSearchResultOnPageIndex].pageIndex
-		);
-		setCurrentSearchResultIndex(searchResultsTemp[0].searchTermIndexOnPage ?? -1);
-
 		return searchResultsTemp;
-	}, [searchTerms, pageOcrTranscripts, currentPageIndex, iiifViewerInitializedPromise]);
+	}, [searchTerms, pageOcrTranscripts]);
 
 	const arePagesOcrTextsAvailable = compact(pageOcrTranscripts).length !== 0;
 
@@ -521,7 +503,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				// Zoom to whole page
 				iiifGoToHome(iiifViewerInitializedPromise as Promise<void>);
 				setSearchTerms('');
-				setCurrentSearchResultIndex(0);
+				setCurrentSearchResultIndex(-1);
 				setActiveMentionHighlights(null);
 				updateHighlightsForSearch();
 				return;
@@ -666,6 +648,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Recalculate the green highlights in the IIIF viewer to reflect the latest changes to the last highlighted fallen soldier name (mention)
 	 */
 	const updateHighlightsForMentionName = useCallback(async () => {
+		if (highlightMode !== HighlightMode.MENTION_NAME) {
+			return;
+		}
 		if (!iiifViewerInitializedPromise) {
 			return;
 		}
@@ -682,6 +667,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			iiifUpdateHighlightedAltoTexts(iiifViewerInitializedPromise as Promise<void>, [], null);
 		}
 	}, [
+		highlightMode,
 		currentPageIndex,
 		activeMentionHighlights?.highlights,
 		activeMentionHighlights?.pageIndex,
@@ -695,6 +681,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Recalculate the green highlights in the IIIF viewer to reflect the latest click on an ocr word
 	 */
 	const updateHighlightsForOcrWord = useCallback(async () => {
+		if (highlightMode !== HighlightMode.OCR_WORD) {
+			return;
+		}
 		if (!iiifViewerInitializedPromise) {
 			return;
 		}
@@ -711,6 +700,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			iiifUpdateHighlightedAltoTexts(iiifViewerInitializedPromise as Promise<void>, [], null);
 		}
 	}, [
+		highlightMode,
 		currentPageIndex,
 		activeOcrWord?.textLine,
 		activeOcrWord?.pageIndex,
@@ -724,6 +714,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * Recalculate the green highlights in the IIIF viewer to reflect the latest changes to the OCR search terms
 	 */
 	const updateHighlightsForSearch = useCallback(async () => {
+		if (highlightMode !== HighlightMode.OCR_SEARCH) {
+			return;
+		}
 		if (!iiifViewerInitializedPromise) {
 			return;
 		}
@@ -763,6 +756,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			iiifUpdateHighlightedAltoTexts(iiifViewerInitializedPromise as Promise<void>, [], null);
 		}
 	}, [
+		highlightMode,
 		currentSearchResultIndex,
 		searchResults,
 		getAltoTextsOnCurrentPageForSearchTerms,
@@ -772,6 +766,28 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	useEffect(() => {
 		updateHighlightsForSearch();
 	}, [updateHighlightsForSearch]);
+
+	/**
+	 * When the search results change, we want to set the current search result index to the first result on the current page
+	 */
+	useEffect(() => {
+		// Only change the current search result index if there are search results and the current search result index is not set
+		if (searchResults.length > 0 && currentSearchResultIndex === -1) {
+			const firstSearchResultOnCurrentPage = searchResults.find(
+				(result) => result.pageIndex === currentPageIndex
+			);
+			if (firstSearchResultOnCurrentPage) {
+				// Set the current search result index to the first result on the current page
+				setCurrentSearchResultIndex(searchResults.indexOf(firstSearchResultOnCurrentPage));
+			} else {
+				// Go to the first page and show the first search result
+				if (currentPageIndex !== 0) {
+					setCurrentPageIndex(0);
+				}
+				setCurrentSearchResultIndex(0);
+			}
+		}
+	}, [searchResults, currentPageIndex, setCurrentPageIndex, currentSearchResultIndex]);
 
 	/**
 	 * When the page loads, search the ocr texts for the searchTerms in the query params in the url
@@ -1149,7 +1165,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		setSearchTermsTemp('');
 		setSearchTerms('');
 		setHighlightedSearchTerms('', 'replaceIn');
-		setCurrentSearchResultIndex(0);
+		setCurrentSearchResultIndex(-1);
 		iiifGoToHome(iiifViewerInitializedPromise as Promise<void>);
 	};
 
@@ -1306,7 +1322,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			if (isLoadingTickets) {
 				return <Loading owner="iiifviewer-tickets" fullscreen={true} mode="light" />;
 			}
-			console.log('render iifviewer');
 			return (
 				<IiifViewer
 					imageInfosWithTokens={imageInfosWithTokens}

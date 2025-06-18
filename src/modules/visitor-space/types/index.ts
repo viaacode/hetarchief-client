@@ -144,6 +144,7 @@ export type PropertyOptions = Array<
 >;
 
 export interface AdvancedFilter {
+	renderKey: string; // Unique key for the filter, used by react to render the filter in the UI
 	prop?: string; // Which property/field is being filtered on
 	op?: string; // Which operator, see Operator enum
 	val?: string; // stringified value, potentially character-separated

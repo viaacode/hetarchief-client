@@ -17,12 +17,17 @@ const YearInput: FC<YearInputProps> = (props) => {
 		: props.isYearInputRange
 			? styles['c-year-input__placeholder-wide']
 			: styles['c-year-input__placeholder'];
+	const { isYearInputRange, ...propsWithoutIsYearInputRange } = props;
 	return (
 		<div className={styles['c-year-input']}>
 			<div className={styles['c-year-input__label']}>
 				<b>{props.label}</b>
 			</div>
-			<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} type="text" {...props} />
+			<TextInput
+				iconStart={<Icon name={IconNamesLight.Calendar} />}
+				type="text"
+				{...propsWithoutIsYearInputRange}
+			/>
 			<span className={classname}>jjjj</span>
 		</div>
 	);

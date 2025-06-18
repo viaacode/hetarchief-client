@@ -82,10 +82,9 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 
 				{!disabled &&
 					filterValues.map((filterValue, index) => {
-						const key = `advanced-filter-${filterValue.prop}--${filterValue.op}`;
 						return (
 							<AdvancedFilterFields
-								key={key}
+								key={filterValue.renderKey}
 								id={filterValue.id}
 								index={index}
 								filterValue={filterValue}

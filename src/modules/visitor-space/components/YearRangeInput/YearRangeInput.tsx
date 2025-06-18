@@ -18,8 +18,8 @@ interface YearRangeInputProps extends TextInputProps {
 const YearRangeInput: FC<Omit<YearRangeInputProps, 'onSelect'>> = (props) => {
 	const split = (props.value || '').toString().split(SEPARATOR, 2);
 
-	const from: string | undefined = split[0];
-	const to: string | undefined = split[1];
+	const from: string = split[0] || '';
+	const to: string = split[1] || '';
 
 	const [yearFrom, setYearFrom] = useState(from);
 	const [yearTo, setYearTo] = useState(to);
@@ -31,12 +31,10 @@ const YearRangeInput: FC<Omit<YearRangeInputProps, 'onSelect'>> = (props) => {
 		const isNumber = isNumberReg.test(yearString) || yearString === '';
 
 		const newYearFrom = type === 'from' ? yearString : yearFrom;
-		const newYearTo = type === 'to' ? yearString : yearFrom;
+		const newYearTo = type === 'to' ? yearString : yearTo;
 
-		const startOfYear = newYearFrom ? asDate(`01/01/${newYearFrom}`)?.toISOString() : undefined;
-		const endOfYear = newYearTo
-			? endOfDay(asDate(`12/31/${newYearTo}`) as Date).toISOString()
-			: undefined;
+		const startOfYear = newYearFrom ? (asDate(`01/01/${newYearFrom}`) as Date).toISOString() : '';
+		const endOfYear = newYearTo ? endOfDay(asDate(`12/31/${newYearTo}`) as Date).toISOString() : '';
 
 		switch (type) {
 			case 'from':
@@ -71,13 +69,14 @@ const YearRangeInput: FC<Omit<YearRangeInputProps, 'onSelect'>> = (props) => {
 		}
 	};
 
+	const { showLabels, ...restProps } = props;
 	return (
 		<div className={styles['c-year-range-input']}>
 			<YearInput
-				{...props}
-				isYearInputRange
+				{...restProps}
+				isYearInputRange={true}
 				label={
-					props.showLabels
+					showLabels
 						? tText(
 								'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___van'
 							)
@@ -91,9 +90,9 @@ const YearRangeInput: FC<Omit<YearRangeInputProps, 'onSelect'>> = (props) => {
 				}}
 			/>
 			<YearInput
-				{...props}
+				{...restProps}
 				label={
-					props.showLabels
+					showLabels
 						? tText(
 								'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tot'
 							)

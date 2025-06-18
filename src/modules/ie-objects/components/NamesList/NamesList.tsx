@@ -46,6 +46,10 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 		[searchTermsTemp]
 	);
 
+	const handleSearchIconClicked = () => {
+		setSearchTerms(searchTermsTemp);
+	};
+
 	const searchNames = useCallback(() => {
 		if (searchTerms === '') {
 			setFilteredNames(sortBy(mentions, (mention) => 1 - mention.confidence));
@@ -165,7 +169,7 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 			<TextInput
 				type="search"
 				className={styles['c-names-list__search']}
-				iconEnd={<Icon name={IconNamesLight.Search} />}
+				iconEnd={<Icon name={IconNamesLight.Search} onClick={handleSearchIconClicked} />}
 				placeholder={tText(
 					'modules/ie-objects/components/names-list/names-list___zoek-op-naam-locatie-jaar'
 				)}

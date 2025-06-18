@@ -1,7 +1,7 @@
 import { Button, RadioButton, TextArea } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
-import React, { type FC, useState } from 'react';
+import React, { type FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { MaterialRequestsService } from '@material-requests/services';
@@ -62,6 +62,17 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const [noTypeSelectedOnSave, setNoTypeSelectedOnSave] = useState(false);
 
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
+
+	/**
+	 * Reset form when the model is opened
+	 */
+	useEffect(() => {
+		if (isOpen) {
+			setReasonInputValue(reason || '');
+			setTypeSelected(type);
+			setNoTypeSelectedOnSave(false);
+		}
+	}, [isOpen, reason, type]);
 
 	const onCloseModal = () => {
 		onClose();
