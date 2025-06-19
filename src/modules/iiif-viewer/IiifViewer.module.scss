@@ -230,17 +230,18 @@ $controls-margin-bottom: $spacer-sm;
 	max-height: calc(100% - $navigator-margin-top) !important;
 	display: flex;
 	flex-direction: column;
-	width: calc(100px + $spacer-sm);
+	width: calc(10rem + $spacer-sm);
 	overflow-y: auto;
 	padding-right: $spacer-sm;
 
 	&.c-iiif-viewer__iiif__reference-strip--scrollable::after {
 		content: "";
-		height: 10px;
+		height: 1rem;
 		background-color: black;
 		position: fixed;
-		bottom: 24.4rem;
-		width: 100px;
+		top: var(--reference-strip-bottom-border-y); // Set from javascript IiifViewer.tsx
+		width: 10rem;
+		margin-top: -1rem;
 	}
 
 	@media (max-width: $breakpoint-md) {
