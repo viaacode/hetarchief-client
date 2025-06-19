@@ -1,6 +1,8 @@
 @use "src/styles/abstracts" as *;
 
 .c-block-het-archief-image-text-background {
+	max-width: 100vw;
+
 	@media (max-width: $breakpoint-md) {
 		width: 100% !important;
 	}
