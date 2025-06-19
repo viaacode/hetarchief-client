@@ -48,13 +48,13 @@ import Metadata, {
 } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata';
 import { ObjectPlaceholder } from '@ie-objects/components/ObjectPlaceholder';
 import { type MediaObject, RelatedObject } from '@ie-objects/components/RelatedObject';
-import { useGetAltoJsonFileContent } from '@ie-objects/hooks/get-alto-json-file-content';
-import { useGetIeObjectTicketServiceTokens } from '@ie-objects/hooks/get-ie-object-ticket-service-tokens';
-import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
-import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
-import { useGetIeObjectsAlsoInteresting } from '@ie-objects/hooks/get-ie-objects-similar';
-import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-ticket-url';
-import { useIsPublicNewspaper } from '@ie-objects/hooks/get-is-public-newspaper';
+import { useGetAltoJsonFileContent } from '@ie-objects/hooks/use-get-alto-json-file-content';
+import { useGetIeObjectTicketServiceTokens } from '@ie-objects/hooks/use-get-ie-object-ticket-service-tokens';
+import { useGetIeObjectInfo } from '@ie-objects/hooks/use-get-ie-objects-info';
+import { useGetIeObjectsRelated } from '@ie-objects/hooks/use-get-ie-objects-related';
+import { useGetIeObjectsAlsoInteresting } from '@ie-objects/hooks/use-get-ie-objects-similar';
+import { useGetIeObjectsTicketUrl } from '@ie-objects/hooks/use-get-ie-objects-ticket-url';
+import { useIsPublicNewspaper } from '@ie-objects/hooks/use-get-is-public-newspaper';
 import {
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_FORMATS,
@@ -323,7 +323,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		data: playableUrl,
 		isLoading: isLoadingPlayableUrl,
 		isError: isErrorPlayableUrl,
-	} = useGetIeObjectsTicketInfo(
+	} = useGetIeObjectsTicketUrl(
 		fileStoredAt,
 		!!fileStoredAt,
 		() => setFlowPlayerKey(fileStoredAt) // Force flowplayer rerender after successful fetch

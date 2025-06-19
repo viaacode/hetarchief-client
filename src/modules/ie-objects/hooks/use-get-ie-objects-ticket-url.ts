@@ -3,7 +3,7 @@ import { type UseQueryResult, useQuery } from '@tanstack/react-query';
 import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
-export const useGetIeObjectsTicketInfo = (
+export const useGetIeObjectsTicketUrl = (
 	fileStoredAt: string | undefined | null,
 	enabled = true,
 	onComplete?: () => void

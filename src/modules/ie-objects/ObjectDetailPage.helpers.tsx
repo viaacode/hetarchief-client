@@ -1,8 +1,8 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import { makeServerSideRequestGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
-import { makeServerSideRequestGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
-import { makeServerSideRequestGetIeObjectsSimilar } from '@ie-objects/hooks/get-ie-objects-similar';
+import { makeServerSideRequestGetIeObjectInfo } from '@ie-objects/hooks/use-get-ie-objects-info';
+import { makeServerSideRequestGetIeObjectsRelated } from '@ie-objects/hooks/use-get-ie-objects-related';
+import { makeServerSideRequestGetIeObjectsSimilar } from '@ie-objects/hooks/use-get-ie-objects-similar';
 import { makeServerSideRequestGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { makeServerSideRequestGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 

@@ -8,10 +8,7 @@ import { useDispatch } from 'react-redux';
 
 import { GroupName } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
-import {
-	makeServerSideRequestGetIeObjectInfo,
-	useGetIeObjectInfo,
-} from '@ie-objects/hooks/get-ie-objects-info';
+import { makeServerSideRequestGetIeObjectInfo, useGetIeObjectInfo } from '@ie-objects/hooks/use-get-ie-objects-info';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';

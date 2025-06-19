@@ -69,7 +69,7 @@ $maintainer-logo-height: 7rem;
 
 .p-object-detail__metadata-category-tags {
 	display: flex;
-	flex-direction: row;
+	flex-flow: row wrap;
 	gap: $spacer-xs;
 }
 

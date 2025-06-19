@@ -35,6 +35,7 @@ export const FLOWPLAYER_VIDEO_FORMATS: string[] = [
 ];
 export const FLOWPLAYER_AUDIO_FORMATS: string[] = [
 	'audio/mp4', // We want to play the mp4 video file with the ugly speaker (decided by team archief)
+	'audio/mpeg',
 ];
 export const FLOWPLAYER_FORMATS: string[] = [
 	...FLOWPLAYER_VIDEO_FORMATS,

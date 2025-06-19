@@ -117,6 +117,7 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps & UserProps> = ({
 
 	return (
 		<AsyncSelect<SelectOption>
+			key={value ? 'autocomplete-field-input__value-set' : 'autocomplete-field-input__no-value-set'}
 			aria-label={label}
 			className={clsx(styles['c-autocomplete-field-input'], 'c-react-select')}
 			classNamePrefix={'c-react-select'}

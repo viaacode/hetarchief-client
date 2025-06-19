@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { type FC, useEffect } from 'react';
 
-import { useGetIeObjectInfo } from '@ie-objects/hooks/get-ie-objects-info';
+import { useGetIeObjectInfo } from '@ie-objects/hooks/use-get-ie-objects-info';
 import { Loading } from '@shared/components/Loading';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';

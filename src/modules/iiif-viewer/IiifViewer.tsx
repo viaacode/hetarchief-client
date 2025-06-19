@@ -4,7 +4,7 @@ import { clamp, compact, isNil, round } from 'lodash-es';
 import { useRouter } from 'next/router';
 import type { TileSource, TiledImageOptions, Viewer } from 'openseadragon';
 import { parseUrl } from 'query-string';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import {
@@ -39,6 +39,7 @@ import { isBrowser, isServerSideRendering } from '@shared/utils/is-browser';
 
 import styles from './IiifViewer.module.scss';
 import 'react-perfect-scrollbar/dist/css/styles.css';
+import { useSize } from '@shared/hooks/use-size';
 
 export const IiifViewer = ({
 	imageInfosWithTokens,
@@ -133,6 +134,16 @@ export const IiifViewer = ({
 	// Layout
 	useStickyLayout();
 	useHideFooter();
+
+	// Keep track of the reference strip size and update the bottom border if needed
+	const referenceStripRef = useRef<HTMLDivElement>(null);
+	useSize(
+		referenceStripRef,
+		(referenceStripContainer) => {
+			checkReferenceStripBottomBorder(referenceStripContainer);
+		},
+		'_container'
+	);
 
 	// Sizes
 	const windowSize = useWindowSizeContext();
@@ -329,33 +340,31 @@ export const IiifViewer = ({
 	 * Show or hide bottom border, if reference strip is scrollable
 	 * https://meemoo.atlassian.net/browse/ARC-2855
 	 */
-	const checkReferenceStripBottomBorder = useCallback(() => {
-		const referenceStrip = document.querySelector(
-			'[class*="IiifViewer_c-iiif-viewer__iiif__reference-strip__"]'
-		);
-		if (!referenceStrip) {
+	const checkReferenceStripBottomBorder = useCallback((referenceStripElement: HTMLElement) => {
+		if (!referenceStripElement) {
 			return;
 		}
-		const scrollHeight = referenceStrip.scrollHeight;
-		const height = referenceStrip.clientHeight;
+		const scrollHeight = referenceStripElement.scrollHeight;
+		const height = referenceStripElement.clientHeight;
+
+		const referenceStripBottomBorderY = referenceStripElement.getBoundingClientRect().bottom;
+		document.documentElement.style.setProperty(
+			'--reference-strip-bottom-border-y',
+			`${referenceStripBottomBorderY}px`
+		);
 
 		if (scrollHeight > height) {
 			// Elements scrolls, show after element
-			referenceStrip.classList.add(styles['c-iiif-viewer__iiif__reference-strip--scrollable']);
+			referenceStripElement.classList.add(
+				styles['c-iiif-viewer__iiif__reference-strip--scrollable']
+			);
 		} else {
 			// Elements doesn't scroll, hide after element
-			referenceStrip.classList.remove(styles['c-iiif-viewer__iiif__reference-strip--scrollable']);
+			referenceStripElement.classList.remove(
+				styles['c-iiif-viewer__iiif__reference-strip--scrollable']
+			);
 		}
 	}, []);
-
-	useEffect(() => {
-		window.addEventListener('resize', checkReferenceStripBottomBorder);
-		checkReferenceStripBottomBorder();
-
-		return () => {
-			window.removeEventListener('resize', checkReferenceStripBottomBorder);
-		};
-	}, [checkReferenceStripBottomBorder]);
 
 	const getCurrentImageSize = async (): Promise<ImageSize> => {
 		const tileSource = await getActiveImageTileSource();
@@ -889,7 +898,11 @@ export const IiifViewer = ({
 		// Use custom scrollbar because on windows the default scrollbar is big and ugly
 		// and here it shows up on the right side of the reference strip, so it extra noticeable
 		return (
-			<PerfectScrollbar className={styles['c-iiif-viewer__iiif__reference-strip']}>
+			<PerfectScrollbar
+				className={styles['c-iiif-viewer__iiif__reference-strip']}
+				// biome-ignore lint/suspicious/noExplicitAny: ref on PerfectScrollbar returns a Scrollbar instance, not a HTMLElement
+				ref={referenceStripRef as any}
+			>
 				{imageInfosWithTokens.map((imageInfo, index) => {
 					return (
 						<div key={`c-iiif-viewer__iiif__reference-strip__${imageInfo.imageUrl}`}>

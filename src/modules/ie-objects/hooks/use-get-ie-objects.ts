@@ -1,5 +1,5 @@
 import { OrderDirection } from '@meemoo/react-components';
-import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react-query';
+import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
 import { isEmpty, isNil, noop } from 'lodash-es';
 import { useDispatch, useSelector } from 'react-redux';
 
