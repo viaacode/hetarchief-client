@@ -118,7 +118,7 @@ export const AutocompleteFieldFilterForm: FC<{
 			{children({
 				values: { [autocompleteField]: form.value },
 				reset: () => {
-					setForm({ value: '' });
+					setValue('value', '');
 					clearErrors();
 				},
 				handleSubmit,
