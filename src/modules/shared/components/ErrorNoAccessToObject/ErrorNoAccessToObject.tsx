@@ -20,6 +20,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setShowAuthModal } from '@shared/store/ui';
 import Link from 'next/link';
+import { stringifyUrl } from 'query-string';
 import styles from './ErrorNoAccessToObject.module.scss';
 
 interface ErrorNoAccessToObjectProps {
@@ -83,15 +84,36 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 		}
 	}, []);
 
-	const onOpenRequestAccess = () => {
-		setQuery({
-			[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug,
+	const getRequestAccessUrl = () => {
+		if (!visitorSpaceSlug) {
+			console.error('Visitor space slug is required to request access.');
+			return '#';
+		}
+		if (isAnonymous) {
+			const redirectAfterLoginUrl = stringifyUrl({
+				url: `/${ROUTES_BY_LOCALE[locale].visit}`,
+				query: { [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug.toLowerCase() },
+			});
+			return stringifyUrl({
+				url: router.asPath,
+				query: {
+					[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: 'true',
+					[QUERY_PARAM_KEY.REDIRECT_TO_QUERY_KEY]: redirectAfterLoginUrl,
+				},
+			});
+		}
+		return stringifyUrl({
+			url: `/${ROUTES_BY_LOCALE[locale].visit}`,
+			query: {
+				[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug.toLowerCase(),
+			},
 		});
+	};
+
+	const handleAccessToVisitorSpaceButtonClicked = () => {
 		if (isAnonymous) {
 			dispatch(setShowAuthModal(true));
-			return;
 		}
-		setIsRequestAccessBladeOpen(true);
 	};
 
 	const canRequestVisitorSpaceAccess = isAnonymous || (!!visitorSpaceSlug && !isKioskUser);
@@ -107,12 +129,14 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 				buttonsComponent={
 					<div className={styles['p-error-no-access-to-object__buttons-container']}>
 						{canRequestVisitorSpaceAccess && (
-							<Button
-								label={`${tText('modules/shared/components/error-no-access-to-object/error-no-access-to-object___plan-een-bezoek-bij')} ${visitorSpaceName}`}
-								variants="black"
-								className={styles['p-error-no-access-to-object__button']}
-								onClick={() => onOpenRequestAccess()}
-							/>
+							<Link href={getRequestAccessUrl()}>
+								<Button
+									label={`${tText('modules/shared/components/error-no-access-to-object/error-no-access-to-object___plan-een-bezoek-bij')} ${visitorSpaceName}`}
+									variants="black"
+									className={styles['p-error-no-access-to-object__button']}
+									onClick={handleAccessToVisitorSpaceButtonClicked}
+								/>
+							</Link>
 						)}
 						{canViewPublicCatalog && (
 							<Link href={ROUTES_BY_LOCALE[locale].search} className="u-mt-16">
