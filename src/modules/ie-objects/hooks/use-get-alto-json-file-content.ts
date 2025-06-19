@@ -1,4 +1,4 @@
-import { useQuery, type UseQueryResult } from '@tanstack/react-query';
+import { type UseQueryResult, useQuery } from '@tanstack/react-query';
 
 import { IeObjectsService } from '@ie-objects/services';
 import type { SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';

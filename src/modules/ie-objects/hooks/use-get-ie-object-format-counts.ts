@@ -1,4 +1,4 @@
-import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react-query';
+import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
 import { isEmpty, isNil } from 'lodash-es';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';

@@ -3,8 +3,8 @@ import type { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } fr
 import type { ComponentType } from 'react';
 
 import { withAuth } from '@auth/wrappers/with-auth';
-import { makeServerSideRequestGetIeObjectFormatCounts } from '@ie-objects/hooks/get-ie-object-format-counts';
-import { makeServerSideRequestGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
+import { makeServerSideRequestGetIeObjectFormatCounts } from '@ie-objects/hooks/use-get-ie-object-format-counts';
+import { makeServerSideRequestGetIeObjects } from '@ie-objects/hooks/use-get-ie-objects';
 import SearchPage from '@search/SearchPage';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
