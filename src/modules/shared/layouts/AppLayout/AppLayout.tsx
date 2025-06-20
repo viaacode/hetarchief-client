@@ -1,17 +1,3 @@
-import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/dist/client.mjs';
-import { Alert } from '@meemoo/react-components';
-import { useQueryClient } from '@tanstack/react-query';
-import type { Avo } from '@viaa/avo2-types';
-import clsx from 'clsx';
-import getConfig from 'next/config';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
-import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Slide, ToastContainer } from 'react-toastify';
-import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
-
 import { GroupName, Permission } from '@account/const';
 import { AuthModal } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
@@ -20,6 +6,8 @@ import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-cont
 import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
 import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
+import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/dist/client.mjs';
+import { Alert } from '@meemoo/react-components';
 import { Footer } from '@navigation/components/Footer';
 import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';
 import { Navigation } from '@navigation/components/Navigation/Navigation';
@@ -73,7 +61,18 @@ import { Breakpoints } from '@shared/types';
 import type { VisitRequest } from '@shared/types/visit-request';
 import type { Locale } from '@shared/utils/i18n';
 import { scrollTo } from '@shared/utils/scroll-to-top';
+import { useQueryClient } from '@tanstack/react-query';
+import type { Avo } from '@viaa/avo2-types';
 import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visits';
+import clsx from 'clsx';
+import getConfig from 'next/config';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { parse, stringifyUrl } from 'query-string';
+import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Slide, ToastContainer } from 'react-toastify';
+import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 
 import packageJson from '../../../../../package.json';
 
@@ -189,13 +188,16 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
-		if (user?.language) {
+		// Redirect the user to the correct language version of the page
+		// If the preview query param is set, we don't want to change the language, since this is used for previewing content pages in the admin dashboard (admin-core-ui)
+		if (user?.language && parse(window.location.search).preview !== 'true') {
 			changeApplicationLocale(
 				locale,
 				user?.language as Locale,
 				router,
 				queryClient,
-				contentPageInfo
+				contentPageInfo,
+				null
 			);
 		}
 	}, [user]);
@@ -340,7 +342,7 @@ const AppLayout: FC<any> = ({ children }) => {
 
 		const staticItems = [
 			{
-				// Hard reload the page when going to the homepage because of nextjs issues with the static 404 page not loading env variables
+				// Hard reload the page when going to the homepage because of Next.js issues with the static 404 page not loading env variables
 				// Otherwise you get an infinite loading state because no api calls will work
 				// https://github.com/vercel/next.js/issues/37005
 				node: (

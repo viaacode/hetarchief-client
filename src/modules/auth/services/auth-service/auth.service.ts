@@ -17,8 +17,14 @@ const { publicRuntimeConfig } = getConfig();
 
 export class AuthService {
 	public static async checkLogin(options: Options = {}): Promise<CheckLoginResponse> {
-		const test = await ApiService.getApi().get('auth/check-login', options).json();
-		return test as CheckLoginResponse;
+		const response = await ApiService.getApi().get('auth/check-login', options).json();
+		return response as CheckLoginResponse;
+	}
+
+	public static async updateLanguagePreference(newLocale: Locale): Promise<void> {
+		await ApiService.getApi().patch('users/update-language', {
+			body: JSON.stringify({ language: newLocale }),
+		});
 	}
 
 	public static async redirectToLoginHetArchief(

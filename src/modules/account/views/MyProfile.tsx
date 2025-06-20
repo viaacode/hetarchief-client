@@ -1,5 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/dist/client.mjs';
 import {
 	Alert,
 	Box,
@@ -28,14 +27,12 @@ import {
 	Permission,
 } from '@account/const';
 import { COMMUNICATION_SECTION_ID } from '@account/const/MyProfile.consts';
-import { useChangeLanguagePreference } from '@account/hooks/change-language-preference';
 import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
 import { AccountLayout } from '@account/layouts';
 import type { CommunicationFormState } from '@account/types';
-import { selectUser } from '@auth/store/user';
+import { checkLoginAction, selectCommonUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
@@ -47,11 +44,11 @@ import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
-import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
+import { useAppDispatch } from '@shared/store';
 import type { DefaultSeoInfo } from '@shared/types/seo';
-import type { Locale } from '@shared/utils/i18n';
+import { Locale } from '@shared/utils/i18n';
 import { VisitorLayout } from '@visitor-layout/index';
 
 const { publicRuntimeConfig } = getConfig();
@@ -61,37 +58,21 @@ const labelKeys: Record<keyof CommunicationFormState, string> = {
 };
 
 export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
-	const user = useSelector(selectUser);
+	const dispatch = useAppDispatch();
+	const commonUser = useSelector(selectCommonUser);
+	const currentAccountLocale = (commonUser?.language || Locale.nl) as Locale;
 	const router = useRouter();
-	const locale = useLocale();
 	const queryClient = useQueryClient();
 	const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false);
 	const [acceptNewsletter, setAcceptNewsletter] = useState<boolean>(false);
-	const [selectedLanguage, setSelectedLanguage] = useState<Locale>(locale);
+	const [selectedLanguage, setSelectedLanguage] = useState<Locale>(
+		currentAccountLocale || Locale.nl
+	);
 	const isAdminUser: boolean = useHasAnyGroup(GroupName.MEEMOO_ADMIN, GroupName.CP_ADMIN);
 	const canEditProfile: boolean = useHasAllPermission(Permission.CAN_EDIT_PROFILE_INFO);
 	const isKeyUser: boolean = useIsKeyUser();
 	const { data: allLanguages } = useGetAllLanguages();
-	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference();
-	const { data: preferences } = useGetNewsletterPreferences(user?.email);
-
-	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
-		locale,
-		`/${router.query.slug}`,
-		{ enabled: router.route === '/[slug]' }
-	);
-
-	const contentPageInfo = dbContentPage
-		? convertDbContentPageToContentPageInfo(dbContentPage)
-		: null;
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop router
-	useEffect(() => {
-		if (user) {
-			mutateLanguagePreference(selectedLanguage);
-		}
-		changeApplicationLocale(locale, selectedLanguage, router, queryClient, contentPageInfo);
-	}, [selectedLanguage, mutateLanguagePreference]);
+	const { data: preferences } = useGetNewsletterPreferences(commonUser?.email);
 
 	const {
 		formState: { errors },
@@ -99,7 +80,14 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 		resolver: yupResolver(COMMUNICATION_FORM_SCHEMA()),
 	});
 
-	const canEdit = user?.idp === Idp.HETARCHIEF && canEditProfile;
+	const canEdit =
+		commonUser?.idp && (commonUser.idp as unknown as Idp) === Idp.HETARCHIEF && canEditProfile;
+
+	useEffect(() => {
+		if (currentAccountLocale && !selectedLanguage) {
+			setSelectedLanguage(currentAccountLocale);
+		}
+	}, [currentAccountLocale, selectedLanguage]);
 
 	useEffect(() => {
 		if (isNil(preferences)) {
@@ -114,7 +102,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 	}, [preferences]);
 
 	const onFormSubmit = async (newsletter: boolean) => {
-		if (!user) {
+		if (!commonUser) {
 			return;
 		}
 
@@ -142,6 +130,20 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 		}
 	};
 
+	const handleSelectedLanguageChanged = async (newLocale: Locale) => {
+		setSelectedLanguage(newLocale);
+		await changeApplicationLocale(
+			currentAccountLocale,
+			newLocale,
+			router,
+			queryClient,
+			undefined,
+			commonUser
+		);
+		// biome-ignore lint/suspicious/noExplicitAny: todo replace redux with Jotai
+		dispatch(checkLoginAction() as any);
+	};
+
 	const onUpdateAcceptNewsletter = async (newSubscribeNewsletter: boolean): Promise<void> => {
 		setIsFormSubmitting(true);
 		await onFormSubmit(!newSubscribeNewsletter);
@@ -159,14 +161,14 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 	const renderGeneralInfo = (): ReactNode => (
 		<dl>
 			<dt>{tHtml('pages/account/mijn-profiel/index___voornaam')}</dt>
-			<dd className="u-text-ellipsis u-color-neutral">{user?.firstName}</dd>
+			<dd className="u-text-ellipsis u-color-neutral">{commonUser?.firstName}</dd>
 
 			<dt>{tHtml('pages/account/mijn-profiel/index___familienaam')}</dt>
-			<dd className="u-text-ellipsis u-color-neutral">{user?.lastName}</dd>
+			<dd className="u-text-ellipsis u-color-neutral">{commonUser?.lastName}</dd>
 
 			<dt>{tHtml('pages/account/mijn-profiel/index___email')}</dt>
-			<dd className="u-text-ellipsis u-color-neutral" title={user?.email}>
-				{user?.email}
+			<dd className="u-text-ellipsis u-color-neutral" title={commonUser?.email}>
+				{commonUser?.email}
 			</dd>
 			{renderOrganisation()}
 		</dl>
@@ -187,7 +189,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 		);
 
 	const renderUserGroup = (): ReactNode => {
-		const userGroup: GroupName = user?.groupName as GroupName;
+		const userGroup: GroupName = commonUser?.userGroup?.name as GroupName;
 		const { name, description, isHidden } = GET_PERMISSION_TRANSLATIONS_BY_GROUP()[userGroup];
 
 		return (
@@ -206,7 +208,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 			{/* Which will redirect to the client homepage => after user logs in, redirect to client profile page */}
 			<Link
 				href={stringifyUrl({
-					url: publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL.replace('{locale}', locale),
+					url: publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL.replace('{locale}', currentAccountLocale),
 					query: {
 						redirect_to: stringifyUrl({
 							url: `${publicRuntimeConfig.PROXY_URL}/auth/global-logout`,
@@ -230,7 +232,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 	);
 
 	const renderOrganisation = (): ReactNode => {
-		if (isNil(user?.organisationName)) {
+		if (isNil(commonUser?.organisation?.name)) {
 			return null;
 		}
 
@@ -238,8 +240,8 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 			<>
 				<dt>{tHtml('pages/account/mijn-profiel/index___organisatie')}</dt>
 
-				<dd className="u-text-ellipsis u-color-neutral" title={user?.organisationName}>
-					{user?.organisationName}
+				<dd className="u-text-ellipsis u-color-neutral" title={commonUser?.organisation?.name}>
+					{commonUser?.organisation?.name}
 				</dd>
 			</>
 		);
@@ -283,7 +285,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 					checked: selectedLanguage === language.languageCode,
 				})) || []
 			}
-			onItemClick={(_, value) => setSelectedLanguage(value as Locale)}
+			onItemClick={(_, value) => handleSelectedLanguageChanged(value as Locale)}
 		/>
 	);
 
