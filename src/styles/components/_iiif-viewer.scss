@@ -5,7 +5,7 @@
 .fullpage .c-iiif-viewer__iiif__close-fullscreen {
 	display: block;
 	font-family: meemoo-icons-light, sans-serif;
-	margin-right: 50vw;
-	margin-bottom: 2rem;
-	transform: translateX(50%);
+	right: calc(50vw);
+	bottom: 2rem;
+	position: fixed;
 }

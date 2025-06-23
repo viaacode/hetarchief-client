@@ -330,7 +330,12 @@ export const IiifViewer = ({
 			'c-iiif-viewer__iiif__close-fullscreen c-button c-button--icon c-button--white';
 		closeFullscreenButton.innerHTML = 'times';
 		closeFullscreenButton.title = tText('modules/iiif-viewer/iiif-viewer___sluit-volledig-scherm');
-		closeFullscreenButton.addEventListener('click', () => {
+		closeFullscreenButton.addEventListener('click', (evt) => {
+			evt.stopPropagation();
+			openSeadragonViewer.setFullScreen(false);
+		});
+		closeFullscreenButton.addEventListener('touchend', (evt) => {
+			evt.stopPropagation();
 			openSeadragonViewer.setFullScreen(false);
 		});
 		bottomLeftContainer?.append(closeFullscreenButton);

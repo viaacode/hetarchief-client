@@ -6,8 +6,7 @@ import { useRouter } from 'next/router';
 import { type FC, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useChangeLanguagePreference } from '@account/hooks/change-language-preference';
-import { selectUser } from '@auth/store/user';
+import { selectCommonUser } from '@auth/store/user';
 import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { NavigationDropdown } from '@navigation/components/Navigation/NavigationDropdown';
 import { Icon } from '@shared/components/Icon';
@@ -31,11 +30,10 @@ export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 	const router = useRouter();
 	const locale = useLocale();
 	const queryClient = useQueryClient();
-	const user = useSelector(selectUser);
+	const commonUser = useSelector(selectCommonUser);
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useDispatch();
 	const { data: allLanguages } = useGetAllLanguages();
-	const { mutate: mutateLanguagePreference } = useChangeLanguagePreference();
 	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
 		locale,
 		`/${router.query.slug}`,
@@ -69,12 +67,16 @@ export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 				key={languageOption.value}
 				label={languageOption.label}
 				variants={['text']}
-				onClick={() => {
+				onClick={async () => {
 					const selectedLanguage = languageOption.value as Locale;
-					if (user) {
-						mutateLanguagePreference(selectedLanguage);
-					}
-					changeApplicationLocale(locale, selectedLanguage, router, queryClient, contentPageInfo);
+					await changeApplicationLocale(
+						locale,
+						selectedLanguage,
+						router,
+						queryClient,
+						contentPageInfo,
+						commonUser
+					);
 					setIsOpen(false);
 				}}
 			/>

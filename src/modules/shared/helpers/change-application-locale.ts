@@ -3,17 +3,29 @@ import type { QueryClient } from '@tanstack/react-query';
 import { reverse, sortBy } from 'lodash-es';
 import type { NextRouter } from 'next/router';
 
+import { AuthService } from '@auth/services/auth-service';
 import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/LanguageSwitcher.exceptions';
 import { QUERY_KEYS, ROUTES_BY_LOCALE, type RouteKey } from '@shared/const';
 import { Locale } from '@shared/utils/i18n';
+import type { Avo } from '@viaa/avo2-types';
 
-export const changeApplicationLocale = (
+/**
+ * Update the application locale and redirect to the new path
+ * @param oldLocale
+ * @param newLocale
+ * @param router used to change the current route
+ * @param queryClient used to invalidate queries after changing the locale
+ * @param contentPageInfo if passed, will be used to find the translated content page for the new route
+ * @param commonUser
+ */
+export const changeApplicationLocale = async (
 	oldLocale: Locale,
 	newLocale: Locale,
 	router: NextRouter,
 	queryClient: QueryClient,
-	contentPageInfo?: ContentPageInfo | undefined | null
-): void => {
+	contentPageInfo: ContentPageInfo | undefined | null,
+	commonUser: Avo.User.CommonUser | null
+): Promise<void> => {
 	if (oldLocale === newLocale) {
 		return; // Already viewing the correct language
 	}
@@ -56,6 +68,12 @@ export const changeApplicationLocale = (
 		newFullPath = translatedContentPageInfo?.path || ROUTES_BY_LOCALE[newLocale].home;
 	}
 	// Redirect to new path
-	router.push(newFullPath, newFullPath, { locale: newLocale });
-	queryClient.invalidateQueries([QUERY_KEYS.getNavigationItems]);
+	await router.replace(newFullPath, newFullPath, { locale: newLocale, shallow: false });
+
+	// If user is passed, also update the language for the current user account in the database / Campaign Monitor
+	if (commonUser) {
+		await AuthService.updateLanguagePreference(newLocale);
+	}
+
+	await queryClient.invalidateQueries([QUERY_KEYS.getNavigationItems]);
 };

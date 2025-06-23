@@ -16,6 +16,7 @@ export enum QUERY_PARAM_KEY {
 	ACTIVE_PAGE = 'activePage',
 	EXPAND_SIDEBAR = 'expandSidebar',
 	IIIF_VIEWER_TEXT_OVERLAY_ENABLED = 'textOverlay',
+	CONTENT_PAGE_PREVIEW = 'preview',
 }
 
 export const HIGHLIGHTED_SEARCH_TERMS_SEPARATOR = ',';
