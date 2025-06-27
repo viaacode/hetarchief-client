@@ -1298,7 +1298,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		setActiveMentionHighlights(mentionHighlights);
 		setHighlightMode(HighlightMode.MENTION_NAME);
 		setSearchTerms('');
-		setCurrentSearchResultIndex(0);
+		setCurrentSearchResultIndex(-1);
 	};
 
 	/**
