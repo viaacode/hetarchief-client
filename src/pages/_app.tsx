@@ -23,6 +23,7 @@ import Head from 'next/head';
 import pkg from '../../package.json';
 
 import '../styles/main.scss';
+import { ApiService } from '@shared/services/api-service';
 
 // Set global locale:
 setDefaultOptions({ locale: nlBE });
@@ -49,7 +50,17 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 
 	useEffect(() => {
 		console.log(`[PERFORMANCE] ${new Date().toISOString()} init hetarchief client`);
-		console.info(`%c application version: ${pkg.version}`, 'color: #bada55');
+		console.info(`%c client version: ${pkg.version}`, 'color: #bada55');
+		ApiService.getApi()
+			.get('')
+			.then(async (response) => {
+				try {
+					const body = await response.json<{ version: string }>();
+					console.info(`%c server version: ${body.version}`, 'color: #bada55');
+				} catch (err) {
+					// ignore errors
+				}
+			});
 	}, []);
 
 	useEffect(() => {
