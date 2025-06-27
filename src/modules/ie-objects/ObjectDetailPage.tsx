@@ -780,9 +780,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				// Set the current search result index to the first result on the current page
 				setCurrentSearchResultIndex(searchResults.indexOf(firstSearchResultOnCurrentPage));
 			} else {
-				// Go to the first page and show the first search result
-				if (currentPageIndex !== 0) {
-					setCurrentPageIndex(0);
+				// Go to the first page that has a search result and show the first search result on that page
+				const firstSearchResult = searchResults[0];
+				if (currentPageIndex !== firstSearchResult.pageIndex) {
+					setCurrentPageIndex(firstSearchResult.pageIndex);
 				}
 				setCurrentSearchResultIndex(0);
 			}
