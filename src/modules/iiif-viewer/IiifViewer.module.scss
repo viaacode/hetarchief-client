@@ -233,6 +233,7 @@ $controls-margin-bottom: $spacer-sm;
 	width: calc(10rem + $spacer-sm);
 	overflow-y: auto;
 	padding-right: $spacer-sm;
+	padding-bottom: 0.5rem;
 
 	&.c-iiif-viewer__iiif__reference-strip--scrollable::after {
 		content: "";
