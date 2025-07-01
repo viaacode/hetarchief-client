@@ -80,8 +80,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 		resolver: yupResolver(COMMUNICATION_FORM_SCHEMA()),
 	});
 
-	const canEdit =
-		commonUser?.idp && (commonUser.idp as unknown as Idp) === Idp.HETARCHIEF && canEditProfile;
+	const canEdit = Object.keys(commonUser?.idps || {}).includes(Idp.HETARCHIEF) && canEditProfile;
 
 	useEffect(() => {
 		if (currentAccountLocale && !selectedLanguage) {
