@@ -1802,7 +1802,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								setIsTextOverlayVisible={setIsTextOverlayVisible}
 							/>
 						)}
-						{!!similar.length && (
+						{activeTab === ObjectDetailTabs.Metadata && !!similar.length && (
 							<MetadataList allowTwoColumns={false}>
 								<Metadata
 									title={tHtml('pages/slug/ie/index___ook-interessant')}
