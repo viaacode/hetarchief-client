@@ -1,3 +1,5 @@
+import type { Locale } from '@shared/utils/i18n';
+
 export interface Alert {
 	id: string;
 	title: string;
@@ -6,4 +8,5 @@ export interface Alert {
 	userGroups: string[];
 	fromDate: string;
 	untilDate: string;
+	language: Locale;
 }

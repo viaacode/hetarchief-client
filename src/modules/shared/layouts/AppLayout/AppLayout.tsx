@@ -413,9 +413,10 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	const activeAlerts = useMemo(() => {
 		return maintenanceAlerts?.items.filter(
-			(item) => JSON.parse(alertsIgnoreUntil)[item.id] !== item.untilDate
+			(item) =>
+				JSON.parse(alertsIgnoreUntil)[item.id] !== item.untilDate && item.language === locale
 		);
-	}, [maintenanceAlerts?.items, alertsIgnoreUntil]);
+	}, [maintenanceAlerts?.items, alertsIgnoreUntil, locale]);
 
 	const renderAlerts = () => {
 		return (
