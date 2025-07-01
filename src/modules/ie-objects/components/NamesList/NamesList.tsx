@@ -1,4 +1,4 @@
-import type { NamesListProps } from '@ie-objects/components/NamesList/NamesList.types';
+import { type NamesListProps, ROW_HEIGHT } from '@ie-objects/components/NamesList/NamesList.types';
 import type { Mention } from '@ie-objects/ie-objects.types';
 import { Button, TextInput } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
@@ -185,7 +185,7 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 				autoContainerWidth={true}
 				autoWidth={true}
 				width={1000}
-				height={300}
+				height={Math.min(300, ROW_HEIGHT * filteredNames.length)}
 				columnCount={1}
 			/>
 		</div>

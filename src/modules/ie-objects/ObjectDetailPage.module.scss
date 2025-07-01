@@ -419,6 +419,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		height: 100%;
 		overflow-y: auto;
 		box-shadow: $shadow-24-black-12;
+		padding-bottom: $spacer-2xl;
 
 		&__tab-media {
 			overflow-y: auto;

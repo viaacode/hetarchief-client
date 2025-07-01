@@ -5,3 +5,5 @@ export interface NamesListProps extends DefaultComponentProps {
 	mentions: Mention[];
 	onZoomToMention: (mention: Mention) => void;
 }
+
+export const ROW_HEIGHT = 82;
