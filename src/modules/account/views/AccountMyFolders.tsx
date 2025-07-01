@@ -49,7 +49,7 @@ import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 
 import { Loading } from '@shared/components/Loading';
-import styles from './MyFolders.module.scss';
+import styles from './AccountMyFolders.module.scss';
 
 type ListNavigationFolderItem = ListNavigationItem & Folder;
 
@@ -495,7 +495,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				</div>
 			);
 		}
-		if ((folderMedia?.data?.total || 0) === 0) {
+		if ((folderMedia?.data?.items?.length || 0) === 0) {
 			return (
 				<div className="l-container u-color-neutral">
 					<p>

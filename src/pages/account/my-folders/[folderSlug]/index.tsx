@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import type { GetServerSidePropsContext } from 'next/types';
 import React, { type ComponentType } from 'react';
 
-import { AccountMyFolders } from '@account/views/MyFolders';
+import { AccountMyFolders } from '@account/views/AccountMyFolders';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import type { DefaultSeoInfo } from '@shared/types/seo';
