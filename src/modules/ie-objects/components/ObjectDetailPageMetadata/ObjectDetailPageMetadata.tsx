@@ -113,6 +113,7 @@ import {
 import Callout from '../../../shared/components/Callout/Callout';
 import MetadataList from '../Metadata/MetadataList';
 
+import { checkIeObjectPermissions } from '@ie-objects/utils/check-ie-object-permissions';
 import { getFirstMentionHighlight } from '@ie-objects/utils/get-first-mention-highlight';
 import type { TextLine } from '@iiif-viewer/IiifViewer.types';
 import styles from './ObjectDetailPageMetadata.module.scss';
@@ -183,19 +184,31 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		Permission.CREATE_MATERIAL_REQUESTS
 	);
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
+	const canViewObjectVisitorSpace: boolean = !!accessibleVisitorSpaces?.find(
+		(space) => space.maintainerId === mediaInfo?.maintainerId
+	);
 	const canRequestAccess =
-		isNil(
-			accessibleVisitorSpaces?.find((space) => space.maintainerId === mediaInfo?.maintainerId)
-		) &&
+		!canViewObjectVisitorSpace &&
 		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
 		isNil(mediaInfo.thumbnailUrl);
 	const showKeyUserPill = mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
-	const canDownloadMetadata: boolean = useHasAnyPermission(Permission.EXPORT_OBJECT) || !user;
+	const ieObjectPermissions = checkIeObjectPermissions(
+		isNewspaper,
+		!!(
+			mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIC_DOMAIN) ||
+			mediaInfo?.licenses?.includes(IeObjectLicense.COPYRIGHT_UNDETERMINED)
+		),
+		!!mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT),
+		hasAccessToVisitorSpaceOfObject,
+		useHasAnyPermission(Permission.EXPORT_OBJECT) || !user,
+		useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user
+	);
+	const canDownloadMetadata: boolean = ieObjectPermissions.canExportMetadata;
 
 	// You need the permission or not to be logged in to download the newspaper
 	// https://meemoo.atlassian.net/browse/ARC-2617
-	const canDownloadNewspaper: boolean =
-		(useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user) && isPublicNewspaper;
+	// https://meemoo.atlassian.net/browse/ARC-3117
+	const canDownloadNewspaper: boolean = ieObjectPermissions.canDownloadEssence;
 
 	const windowSize = useWindowSizeContext();
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
@@ -276,12 +289,13 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	);
 
 	const getActionButtonSortMapByUserType = useCallback((): MetadataSortMap[] => {
+		const canExport = canDownloadMetadata || canDownloadNewspaper;
 		if (isNil(user)) {
-			return ANONYMOUS_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
+			return ANONYMOUS_ACTION_SORT_MAP(canExport);
 		}
 
 		if (isKeyUser) {
-			return KEY_USER_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
+			return KEY_USER_ACTION_SORT_MAP(canExport);
 		}
 
 		if (isKiosk) {
@@ -289,14 +303,14 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		}
 
 		if (isMeemooAdmin) {
-			return MEEMOO_ADMIN_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
+			return MEEMOO_ADMIN_ACTION_SORT_MAP(canExport);
 		}
 
 		if (isCPAdmin) {
-			return CP_ADMIN_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
+			return CP_ADMIN_ACTION_SORT_MAP(canExport);
 		}
 
-		return VISITOR_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
+		return VISITOR_ACTION_SORT_MAP(canExport);
 	}, [
 		canDownloadMetadata,
 		isKeyUser,
