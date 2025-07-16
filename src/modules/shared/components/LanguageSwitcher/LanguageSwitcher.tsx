@@ -24,6 +24,7 @@ import {
 } from '@shared/store/ui';
 import { Locale } from '@shared/utils/i18n';
 
+import { getSlugFromQueryParams } from '@shared/helpers/get-slug-from-query-params';
 import styles from './LanguageSwitcher.module.scss';
 
 export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
@@ -34,11 +35,10 @@ export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useDispatch();
 	const { data: allLanguages } = useGetAllLanguages();
-	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
-		locale,
-		`/${router.query.slug}`,
-		{ enabled: router.route === '/[slug]' }
-	);
+	const slug = getSlugFromQueryParams(router.query);
+	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(locale, `/${slug}`, {
+		enabled: router.route === '/[...slug]',
+	});
 
 	const contentPageInfo = dbContentPage
 		? convertDbContentPageToContentPageInfo(dbContentPage)
