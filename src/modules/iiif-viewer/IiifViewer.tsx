@@ -471,7 +471,7 @@ export const IiifViewer = ({
 	const applyInitialZoomAndPan = useCallback(
 		// biome-ignore lint/suspicious/noExplicitAny: open sea dragon lib isn't typed yet
 		(openSeadragonViewerTemp: Viewer, openSeadragonLibTemp: any) => {
-			openSeadragonViewerTemp.addOnceHandler('open', () => {
+			openSeadragonViewerTemp.addOnceHandler('tile-loaded', () => {
 				// When the viewer is initialized, set the desired zoom and pan
 				if (!isNil(initialFocusX) && !isNil(initialFocusY) && !isNil(initialZoomLevel)) {
 					const centerPoint = new openSeadragonLibTemp.Point(initialFocusX, initialFocusY);

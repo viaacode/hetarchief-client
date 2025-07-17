@@ -28,6 +28,7 @@ import { Loading } from '@shared/components/Loading';
 import { type PageInfo, SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
+import { getSlugFromQueryParams } from '@shared/helpers/get-slug-from-query-params';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -52,10 +53,10 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 
 	/**
 	 * slug can contain multiple things
-	 * * content page path
+	 * * content page path (array of path segments or single string)
 	 * * ie object schema identifier
 	 */
-	const { slug: contentPageSlugOrObjectSchemaIdentifier } = router.query;
+	const contentPageSlugOrObjectSchemaIdentifier = getSlugFromQueryParams(router.query);
 	const dispatch = useDispatch();
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 
@@ -110,7 +111,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 
 	const renderPageContent = () => {
 		if (isContentPageLoading || isIeObjectLoading || (isContentPageFetching && !contentPageInfo)) {
-			return <Loading fullscreen owner={'/[slug]/index page'} />;
+			return <Loading fullscreen owner={'/[...slug]/index page'} />;
 		}
 
 		if (contentPageInfo) {
@@ -144,7 +145,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 				// Avoid loading a 404 page in SSR
 				// since we don't want to see a 404 error flash before the page loads for logged-in users
 				// https://meemoo.atlassian.net/browse/ARC-2857
-				return <Loading fullscreen owner={'/[slug]/index page'} />;
+				return <Loading fullscreen owner={'/[...slug]/index page'} />;
 			}
 			return (
 				<>

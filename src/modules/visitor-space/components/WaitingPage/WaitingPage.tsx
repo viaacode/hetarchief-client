@@ -23,7 +23,7 @@ const WaitingPage: FC<WaitingPageProps> = ({ visitorSpace, backLink }) => {
 					backLink={backLink ?? ROUTES_BY_LOCALE[locale].home}
 				/>
 
-				{/* I'm choosing to duplicate the above instead of splitting to a separate layout because back-button functionality on this page differs from the `[slug]` page */}
+				{/* I'm choosing to duplicate the above instead of splitting to a separate layout because back-button functionality on this page differs from the `[...slug]` page */}
 
 				{visitorSpace && (
 					<div className="l-container p-visit-requested__content">

@@ -62,6 +62,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 				preferences: {
 					newsletter: true,
 				},
+				language: locale,
 				...values,
 			});
 
