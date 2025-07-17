@@ -11,6 +11,7 @@
 	border-radius: 100%;
 	margin-left: 0;
 	color: $neutral;
+	cursor: pointer;
 
 	@media (min-width: $breakpoint-md) {
 		position: relative;
@@ -20,23 +21,12 @@
 		border: 0.1rem solid $shade;
 	}
 
-	&:hover {
-		cursor: pointer;
-
-		.c-tag-search-bar-info__content {
-			visibility: visible;
-			opacity: 1;
-		}
+	&--open {
+		outline: 0.4rem solid $teal;
 	}
 
-	&:focus,
-	&:focus-within {
-		outline: 0.4rem solid $teal;
-
-		.c-tag-search-bar-info__content {
-			visibility: visible;
-			opacity: 1;
-		}
+	&__icon {
+		user-select: none;
 	}
 
 	&__content {
@@ -49,8 +39,6 @@
 		padding: $spacer-sm;
 		background-color: $white;
 		box-shadow: $shadow-24-black-12;
-		opacity: 0;
-		visibility: hidden;
 		z-index: get-z-layer("foreground");
 		transition: opacity $animate-default;
 
