@@ -17,6 +17,7 @@ import { toastService } from '@shared/services/toast-service';
 import { useAppDispatch } from '@shared/store';
 import { setShowMaterialRequestCenter } from '@shared/store/ui';
 
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { PersonalInfoBladeBladeProps } from './PersonalInfo.types';
 import styles from './PersonalInfoBlade.module.scss';
 
@@ -29,6 +30,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 	refetch,
 }) => {
 	const user = useSelector(selectUser);
+	const locale = useLocale();
 	const dispatch = useAppDispatch();
 	const { data: preferences } = useGetNewsletterPreferences(user?.email);
 	const shouldRenderNewsletterCheckbox: boolean = !preferences?.newsletter;
@@ -68,6 +70,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 					preferences: {
 						newsletter: isSubscribedToNewsletter,
 					},
+					language: locale,
 				}).then(noop);
 			}
 
