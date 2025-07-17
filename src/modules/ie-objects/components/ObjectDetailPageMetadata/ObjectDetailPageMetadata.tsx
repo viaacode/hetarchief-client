@@ -192,17 +192,20 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
 		isNil(mediaInfo.thumbnailUrl);
 	const showKeyUserPill = mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
-	const ieObjectPermissions = checkIeObjectPermissions(
+	const ieObjectPermissions = checkIeObjectPermissions({
 		isNewspaper,
-		!!(
+		hasLicensePublicDomainOrCopyrightUndetermined: !!(
 			mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIC_DOMAIN) ||
 			mediaInfo?.licenses?.includes(IeObjectLicense.COPYRIGHT_UNDETERMINED)
 		),
-		!!mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT),
-		hasAccessToVisitorSpaceOfObject,
-		useHasAnyPermission(Permission.EXPORT_OBJECT) || !user,
-		useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user
-	);
+		hasLicensePublicContent: !!mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT),
+		hasLicenseVisitorToolMetadataAllOrContent:
+			!!mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
+			!!mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT),
+		hasAccessToVisitorSpace: hasAccessToVisitorSpaceOfObject,
+		hasPermissionExportObject: useHasAnyPermission(Permission.EXPORT_OBJECT) || !user,
+		hasPermissionDownloadObject: useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user,
+	});
 	const canDownloadMetadata: boolean = ieObjectPermissions.canExportMetadata;
 
 	// You need the permission or not to be logged in to download the newspaper
