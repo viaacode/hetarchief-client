@@ -135,6 +135,7 @@ import {
 	iiifZoomTo,
 	iiifZoomToRect,
 } from '@iiif-viewer/helpers/trigger-iiif-viewer-events';
+import { Blade } from '@shared/components/Blade/Blade';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import styles from './ObjectDetailPage.module.scss';
 
@@ -167,6 +168,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [iiifViewerInitializedPromiseResolve, setIiifViewerInitializedPromiseResolved] = useState<
 		(() => void) | null
 	>(null);
+	const [selectionDownloadUrl, setSelectionDownloadUrl] = useState<string | null>(null);
 
 	/**
 	 * Init a promise that resolves when the iiif viewer is ready hooking up event listeners
@@ -1248,19 +1250,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const handleIiifViewerSelection = useCallback(
 		(rect: Rect, pageIndex: number) => {
-			window.open(
-				stringifyUrl({
-					url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/jpg/selection`,
-					query: {
-						page: pageIndex,
-						startX: Math.floor(rect.x),
-						startY: Math.floor(rect.y),
-						width: Math.ceil(rect.width),
-						height: Math.ceil(rect.height),
-						currentPageUrl: window.origin + router.asPath,
-					},
-				})
-			);
+			const downloadUrl = stringifyUrl({
+				url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/jpg/selection`,
+				query: {
+					page: pageIndex,
+					startX: Math.floor(rect.x),
+					startY: Math.floor(rect.y),
+					width: Math.ceil(rect.width),
+					height: Math.ceil(rect.height),
+					currentPageUrl: window.origin + router.asPath,
+				},
+			});
+			// Download the file and save it
+			// const win = window.open(downloadUrl, '_blank');
+			// if (!win) {
+			// iPad doesn't want to open a page from javascript without a click event?
+			// Show popup with download link
+			setSelectionDownloadUrl(downloadUrl);
+			// }
 		},
 		[ieObjectId, router.asPath]
 	);
@@ -1863,6 +1870,32 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				onSubmit={onRequestAccessSubmit}
 				id="object-detail-page__request-access-blade"
 			/>
+			<Blade
+				id="iiif-selection-download-url"
+				isOpen={!!selectionDownloadUrl}
+				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
+					<h2 {...props}>{tHtml('Selectie is klaar')}</h2>
+				)}
+				footer={
+					<div className="u-px-32 u-px-16-md u-py-24 u-py-16-md u-flex u-flex-col u-gap-xs">
+						<a
+							href={selectionDownloadUrl || undefined}
+							onClick={() => {
+								setTimeout(() => {
+									setSelectionDownloadUrl(null);
+								}, 100);
+							}}
+							rel="noreferrer"
+						>
+							<Button label={tText('Download selection')} variants={['block', 'black']} />
+						</a>
+					</div>
+				}
+			>
+				<div className="u-px-32 u-px-16-md">
+					{tHtml('Je selectie kan worden gedownload als afbeelding.')}
+				</div>
+			</Blade>
 		</>
 	);
 
