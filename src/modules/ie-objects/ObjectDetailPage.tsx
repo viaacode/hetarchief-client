@@ -104,7 +104,6 @@ import {
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
 import { convertDurationStringToSeconds } from '@shared/helpers/convert-duration-string-to-seconds';
-import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
@@ -136,6 +135,7 @@ import {
 	iiifZoomTo,
 	iiifZoomToRect,
 } from '@iiif-viewer/helpers/trigger-iiif-viewer-events';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import styles from './ObjectDetailPage.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
@@ -819,7 +819,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const scrollActiveSearchWordIntoView = useCallback(() => {
 		const activeSearchResultElem = document.querySelector(
 			moduleClassSelector('p-object-detail__ocr__word--marked--active')
-		);
+		) as HTMLSpanElement | null;
 		const scrollable = document.querySelector(
 			moduleClassSelector('p-object-detail__ocr__words-container')
 		);
@@ -832,14 +832,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			return;
 		}
 
-		const scrollTopWord = activeSearchResultElem?.scrollTop || 0;
+		// Location of the word inside the scrollable container minus a margin to make sure it's about in the center of the screen
+		const scrollTopWord = Math.max(
+			0,
+			(activeSearchResultElem?.offsetTop || 0) - (scrollable?.clientHeight || 300)
+		);
+		// We don't use scrollIntoView because it causes scrolling on the whole page
+		// https://meemoo.atlassian.net/browse/ARC-3020
 		scrollable?.scrollTo({
 			top: scrollTopWord,
-		});
-		activeSearchResultElem?.scrollIntoView({
-			behavior: 'instant',
-			block: 'nearest',
-			inline: 'start',
 		});
 	}, [currentSearchResultIndex]);
 
