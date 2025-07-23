@@ -26,6 +26,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -54,6 +55,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -82,6 +84,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -110,6 +113,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -138,6 +142,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -166,6 +171,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -194,6 +200,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -222,6 +229,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -250,6 +258,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -278,6 +287,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -306,6 +316,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -334,6 +345,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -362,6 +374,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -390,6 +403,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -418,6 +432,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -446,6 +461,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -474,6 +490,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -502,6 +519,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -530,6 +548,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -558,6 +577,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -586,6 +606,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -614,6 +635,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -642,6 +664,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -670,6 +693,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -698,6 +722,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -726,6 +751,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -754,6 +780,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -782,6 +809,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -810,6 +838,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -838,6 +867,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -866,6 +896,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -894,6 +925,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -922,6 +954,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -950,6 +983,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -978,6 +1012,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1006,6 +1041,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1034,6 +1070,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1062,6 +1099,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1090,6 +1128,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1118,6 +1157,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1146,6 +1186,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1174,6 +1215,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1202,6 +1244,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1230,6 +1273,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1258,6 +1302,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1286,6 +1331,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1314,6 +1360,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1342,6 +1389,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1370,6 +1418,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -1398,6 +1447,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -1426,6 +1476,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -1454,6 +1505,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -1482,6 +1534,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -1510,6 +1563,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -1538,6 +1592,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -1566,6 +1621,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -1594,6 +1650,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -1622,6 +1679,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -1650,6 +1708,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -1678,6 +1737,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -1706,6 +1766,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -1734,6 +1795,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -1762,6 +1824,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -1790,6 +1853,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -1818,6 +1882,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1846,6 +1911,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1874,6 +1940,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1902,6 +1969,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1930,6 +1998,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -1939,230 +2008,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 	});
 	test(`{
 		isNewsletter: false,
-		hasLicensePublicDomainOrCopyrightUndetermined: false,
-		hasLicensePublicContent: false,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: true,
-		hasPermissionExportObject: true,
-		hasPermissionDownloadObject: false
-	} => {
-		canViewEssence: false,
-		canExportMetadata: true,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: false,
-			hasLicensePublicDomainOrCopyrightUndetermined: false,
-			hasLicensePublicContent: false,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: true,
-			hasPermissionExportObject: true,
-			hasPermissionDownloadObject: false,
-		});
-		expect(result).toEqual({
-			canViewEssence: false,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: false,
-		hasLicensePublicDomainOrCopyrightUndetermined: false,
-		hasLicensePublicContent: false,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: true,
-		hasPermissionExportObject: false,
-		hasPermissionDownloadObject: true
-	} => {
-		canViewEssence: false,
-		canExportMetadata: false,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: false,
-			hasLicensePublicDomainOrCopyrightUndetermined: false,
-			hasLicensePublicContent: false,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: true,
-			hasPermissionExportObject: false,
-			hasPermissionDownloadObject: true,
-		});
-		expect(result).toEqual({
-			canViewEssence: false,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: false,
-		hasLicensePublicDomainOrCopyrightUndetermined: false,
-		hasLicensePublicContent: false,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: true,
-		hasPermissionExportObject: true,
-		hasPermissionDownloadObject: true
-	} => {
-		canViewEssence: false,
-		canExportMetadata: true,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: false,
-			hasLicensePublicDomainOrCopyrightUndetermined: false,
-			hasLicensePublicContent: false,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: true,
-			hasPermissionExportObject: true,
-			hasPermissionDownloadObject: true,
-		});
-		expect(result).toEqual({
-			canViewEssence: false,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: true,
-		hasLicensePublicDomainOrCopyrightUndetermined: false,
-		hasLicensePublicContent: false,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: false,
-		hasPermissionExportObject: false,
-		hasPermissionDownloadObject: false
-	} => {
-		canViewEssence: false,
-		canExportMetadata: false,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: true,
-			hasLicensePublicDomainOrCopyrightUndetermined: false,
-			hasLicensePublicContent: false,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: false,
-			hasPermissionExportObject: false,
-			hasPermissionDownloadObject: false,
-		});
-		expect(result).toEqual({
-			canViewEssence: false,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: true,
-		hasLicensePublicDomainOrCopyrightUndetermined: false,
-		hasLicensePublicContent: false,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: false,
-		hasPermissionExportObject: true,
-		hasPermissionDownloadObject: false
-	} => {
-		canViewEssence: false,
-		canExportMetadata: false,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: true,
-			hasLicensePublicDomainOrCopyrightUndetermined: false,
-			hasLicensePublicContent: false,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: false,
-			hasPermissionExportObject: true,
-			hasPermissionDownloadObject: false,
-		});
-		expect(result).toEqual({
-			canViewEssence: false,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: true,
-		hasLicensePublicDomainOrCopyrightUndetermined: false,
-		hasLicensePublicContent: false,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: false,
-		hasPermissionExportObject: false,
-		hasPermissionDownloadObject: true
-	} => {
-		canViewEssence: false,
-		canExportMetadata: false,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: true,
-			hasLicensePublicDomainOrCopyrightUndetermined: false,
-			hasLicensePublicContent: false,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: false,
-			hasPermissionExportObject: false,
-			hasPermissionDownloadObject: true,
-		});
-		expect(result).toEqual({
-			canViewEssence: false,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: true,
-		hasLicensePublicDomainOrCopyrightUndetermined: false,
-		hasLicensePublicContent: false,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: false,
-		hasPermissionExportObject: true,
-		hasPermissionDownloadObject: true
-	} => {
-		canViewEssence: false,
-		canExportMetadata: false,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: true,
-			hasLicensePublicDomainOrCopyrightUndetermined: false,
-			hasLicensePublicContent: false,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: false,
-			hasPermissionExportObject: true,
-			hasPermissionDownloadObject: true,
-		});
-		expect(result).toEqual({
-			canViewEssence: false,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: true,
-		hasLicensePublicDomainOrCopyrightUndetermined: false,
-		hasLicensePublicContent: false,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: true,
-		hasPermissionExportObject: false,
-		hasPermissionDownloadObject: false
-	} => {
-		canViewEssence: false,
-		canExportMetadata: false,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: true,
-			hasLicensePublicDomainOrCopyrightUndetermined: false,
-			hasLicensePublicContent: false,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: true,
-			hasPermissionExportObject: false,
-			hasPermissionDownloadObject: false,
-		});
-		expect(result).toEqual({
-			canViewEssence: false,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: true,
 		hasLicensePublicDomainOrCopyrightUndetermined: false,
 		hasLicensePublicContent: false,
 		hasLicenseVisitorToolMetadataAllOrContent: false,
@@ -2175,6 +2020,238 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		canDownloadEssence: false
 	}`, () => {
 		const result = checkIeObjectPermissions({
+			isNewspaper: false,
+			hasLicensePublicDomainOrCopyrightUndetermined: false,
+			hasLicensePublicContent: false,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: true,
+			hasPermissionExportObject: true,
+			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: false,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: false,
+		hasLicensePublicDomainOrCopyrightUndetermined: false,
+		hasLicensePublicContent: false,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: true,
+		hasPermissionExportObject: false,
+		hasPermissionDownloadObject: true
+	} => {
+		canViewEssence: false,
+		canExportMetadata: false,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
+			isNewspaper: false,
+			hasLicensePublicDomainOrCopyrightUndetermined: false,
+			hasLicensePublicContent: false,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: true,
+			hasPermissionExportObject: false,
+			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: false,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: false,
+		hasLicensePublicDomainOrCopyrightUndetermined: false,
+		hasLicensePublicContent: false,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: true,
+		hasPermissionExportObject: true,
+		hasPermissionDownloadObject: true
+	} => {
+		canViewEssence: false,
+		canExportMetadata: true,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
+			isNewspaper: false,
+			hasLicensePublicDomainOrCopyrightUndetermined: false,
+			hasLicensePublicContent: false,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: true,
+			hasPermissionExportObject: true,
+			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: false,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: true,
+		hasLicensePublicDomainOrCopyrightUndetermined: false,
+		hasLicensePublicContent: false,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: false,
+		hasPermissionExportObject: false,
+		hasPermissionDownloadObject: false
+	} => {
+		canViewEssence: false,
+		canExportMetadata: false,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
+			isNewspaper: true,
+			hasLicensePublicDomainOrCopyrightUndetermined: false,
+			hasLicensePublicContent: false,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: false,
+			hasPermissionExportObject: false,
+			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: false,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: true,
+		hasLicensePublicDomainOrCopyrightUndetermined: false,
+		hasLicensePublicContent: false,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: false,
+		hasPermissionExportObject: true,
+		hasPermissionDownloadObject: false
+	} => {
+		canViewEssence: false,
+		canExportMetadata: false,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
+			isNewspaper: true,
+			hasLicensePublicDomainOrCopyrightUndetermined: false,
+			hasLicensePublicContent: false,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: false,
+			hasPermissionExportObject: true,
+			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: false,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: true,
+		hasLicensePublicDomainOrCopyrightUndetermined: false,
+		hasLicensePublicContent: false,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: false,
+		hasPermissionExportObject: false,
+		hasPermissionDownloadObject: true
+	} => {
+		canViewEssence: false,
+		canExportMetadata: false,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
+			isNewspaper: true,
+			hasLicensePublicDomainOrCopyrightUndetermined: false,
+			hasLicensePublicContent: false,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: false,
+			hasPermissionExportObject: false,
+			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: false,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: true,
+		hasLicensePublicDomainOrCopyrightUndetermined: false,
+		hasLicensePublicContent: false,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: false,
+		hasPermissionExportObject: true,
+		hasPermissionDownloadObject: true
+	} => {
+		canViewEssence: false,
+		canExportMetadata: false,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
+			isNewspaper: true,
+			hasLicensePublicDomainOrCopyrightUndetermined: false,
+			hasLicensePublicContent: false,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: false,
+			hasPermissionExportObject: true,
+			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: false,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: true,
+		hasLicensePublicDomainOrCopyrightUndetermined: false,
+		hasLicensePublicContent: false,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: true,
+		hasPermissionExportObject: false,
+		hasPermissionDownloadObject: false
+	} => {
+		canViewEssence: false,
+		canExportMetadata: false,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
+			isNewspaper: true,
+			hasLicensePublicDomainOrCopyrightUndetermined: false,
+			hasLicensePublicContent: false,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: true,
+			hasPermissionExportObject: false,
+			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: false,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: true,
+		hasLicensePublicDomainOrCopyrightUndetermined: false,
+		hasLicensePublicContent: false,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: true,
+		hasPermissionExportObject: true,
+		hasPermissionDownloadObject: false
+	} => {
+		canViewEssence: false,
+		canExportMetadata: true,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
 			isNewspaper: true,
 			hasLicensePublicDomainOrCopyrightUndetermined: false,
 			hasLicensePublicContent: false,
@@ -2182,6 +2259,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -2210,6 +2288,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -2238,6 +2317,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -2266,6 +2346,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -2294,6 +2375,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -2322,6 +2404,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -2350,6 +2433,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -2378,6 +2462,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -2387,230 +2472,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 	});
 	test(`{
 		isNewsletter: false,
-		hasLicensePublicDomainOrCopyrightUndetermined: false,
-		hasLicensePublicContent: true,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: true,
-		hasPermissionExportObject: true,
-		hasPermissionDownloadObject: false
-	} => {
-		canViewEssence: true,
-		canExportMetadata: true,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: false,
-			hasLicensePublicDomainOrCopyrightUndetermined: false,
-			hasLicensePublicContent: true,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: true,
-			hasPermissionExportObject: true,
-			hasPermissionDownloadObject: false,
-		});
-		expect(result).toEqual({
-			canViewEssence: true,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: false,
-		hasLicensePublicDomainOrCopyrightUndetermined: false,
-		hasLicensePublicContent: true,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: true,
-		hasPermissionExportObject: false,
-		hasPermissionDownloadObject: true
-	} => {
-		canViewEssence: true,
-		canExportMetadata: false,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: false,
-			hasLicensePublicDomainOrCopyrightUndetermined: false,
-			hasLicensePublicContent: true,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: true,
-			hasPermissionExportObject: false,
-			hasPermissionDownloadObject: true,
-		});
-		expect(result).toEqual({
-			canViewEssence: true,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: false,
-		hasLicensePublicDomainOrCopyrightUndetermined: false,
-		hasLicensePublicContent: true,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: true,
-		hasPermissionExportObject: true,
-		hasPermissionDownloadObject: true
-	} => {
-		canViewEssence: true,
-		canExportMetadata: true,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: false,
-			hasLicensePublicDomainOrCopyrightUndetermined: false,
-			hasLicensePublicContent: true,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: true,
-			hasPermissionExportObject: true,
-			hasPermissionDownloadObject: true,
-		});
-		expect(result).toEqual({
-			canViewEssence: true,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: true,
-		hasLicensePublicDomainOrCopyrightUndetermined: false,
-		hasLicensePublicContent: true,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: false,
-		hasPermissionExportObject: false,
-		hasPermissionDownloadObject: false
-	} => {
-		canViewEssence: true,
-		canExportMetadata: false,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: true,
-			hasLicensePublicDomainOrCopyrightUndetermined: false,
-			hasLicensePublicContent: true,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: false,
-			hasPermissionExportObject: false,
-			hasPermissionDownloadObject: false,
-		});
-		expect(result).toEqual({
-			canViewEssence: true,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: true,
-		hasLicensePublicDomainOrCopyrightUndetermined: false,
-		hasLicensePublicContent: true,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: false,
-		hasPermissionExportObject: true,
-		hasPermissionDownloadObject: false
-	} => {
-		canViewEssence: true,
-		canExportMetadata: false,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: true,
-			hasLicensePublicDomainOrCopyrightUndetermined: false,
-			hasLicensePublicContent: true,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: false,
-			hasPermissionExportObject: true,
-			hasPermissionDownloadObject: false,
-		});
-		expect(result).toEqual({
-			canViewEssence: true,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: true,
-		hasLicensePublicDomainOrCopyrightUndetermined: false,
-		hasLicensePublicContent: true,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: false,
-		hasPermissionExportObject: false,
-		hasPermissionDownloadObject: true
-	} => {
-		canViewEssence: true,
-		canExportMetadata: false,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: true,
-			hasLicensePublicDomainOrCopyrightUndetermined: false,
-			hasLicensePublicContent: true,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: false,
-			hasPermissionExportObject: false,
-			hasPermissionDownloadObject: true,
-		});
-		expect(result).toEqual({
-			canViewEssence: true,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: true,
-		hasLicensePublicDomainOrCopyrightUndetermined: false,
-		hasLicensePublicContent: true,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: false,
-		hasPermissionExportObject: true,
-		hasPermissionDownloadObject: true
-	} => {
-		canViewEssence: true,
-		canExportMetadata: false,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: true,
-			hasLicensePublicDomainOrCopyrightUndetermined: false,
-			hasLicensePublicContent: true,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: false,
-			hasPermissionExportObject: true,
-			hasPermissionDownloadObject: true,
-		});
-		expect(result).toEqual({
-			canViewEssence: true,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: true,
-		hasLicensePublicDomainOrCopyrightUndetermined: false,
-		hasLicensePublicContent: true,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: true,
-		hasPermissionExportObject: false,
-		hasPermissionDownloadObject: false
-	} => {
-		canViewEssence: true,
-		canExportMetadata: false,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: true,
-			hasLicensePublicDomainOrCopyrightUndetermined: false,
-			hasLicensePublicContent: true,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: true,
-			hasPermissionExportObject: false,
-			hasPermissionDownloadObject: false,
-		});
-		expect(result).toEqual({
-			canViewEssence: true,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: true,
 		hasLicensePublicDomainOrCopyrightUndetermined: false,
 		hasLicensePublicContent: true,
 		hasLicenseVisitorToolMetadataAllOrContent: false,
@@ -2623,6 +2484,238 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		canDownloadEssence: false
 	}`, () => {
 		const result = checkIeObjectPermissions({
+			isNewspaper: false,
+			hasLicensePublicDomainOrCopyrightUndetermined: false,
+			hasLicensePublicContent: true,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: true,
+			hasPermissionExportObject: true,
+			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: true,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: false,
+		hasLicensePublicDomainOrCopyrightUndetermined: false,
+		hasLicensePublicContent: true,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: true,
+		hasPermissionExportObject: false,
+		hasPermissionDownloadObject: true
+	} => {
+		canViewEssence: true,
+		canExportMetadata: false,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
+			isNewspaper: false,
+			hasLicensePublicDomainOrCopyrightUndetermined: false,
+			hasLicensePublicContent: true,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: true,
+			hasPermissionExportObject: false,
+			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: true,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: false,
+		hasLicensePublicDomainOrCopyrightUndetermined: false,
+		hasLicensePublicContent: true,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: true,
+		hasPermissionExportObject: true,
+		hasPermissionDownloadObject: true
+	} => {
+		canViewEssence: true,
+		canExportMetadata: true,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
+			isNewspaper: false,
+			hasLicensePublicDomainOrCopyrightUndetermined: false,
+			hasLicensePublicContent: true,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: true,
+			hasPermissionExportObject: true,
+			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: true,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: true,
+		hasLicensePublicDomainOrCopyrightUndetermined: false,
+		hasLicensePublicContent: true,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: false,
+		hasPermissionExportObject: false,
+		hasPermissionDownloadObject: false
+	} => {
+		canViewEssence: true,
+		canExportMetadata: false,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
+			isNewspaper: true,
+			hasLicensePublicDomainOrCopyrightUndetermined: false,
+			hasLicensePublicContent: true,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: false,
+			hasPermissionExportObject: false,
+			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: true,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: true,
+		hasLicensePublicDomainOrCopyrightUndetermined: false,
+		hasLicensePublicContent: true,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: false,
+		hasPermissionExportObject: true,
+		hasPermissionDownloadObject: false
+	} => {
+		canViewEssence: true,
+		canExportMetadata: false,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
+			isNewspaper: true,
+			hasLicensePublicDomainOrCopyrightUndetermined: false,
+			hasLicensePublicContent: true,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: false,
+			hasPermissionExportObject: true,
+			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: true,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: true,
+		hasLicensePublicDomainOrCopyrightUndetermined: false,
+		hasLicensePublicContent: true,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: false,
+		hasPermissionExportObject: false,
+		hasPermissionDownloadObject: true
+	} => {
+		canViewEssence: true,
+		canExportMetadata: false,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
+			isNewspaper: true,
+			hasLicensePublicDomainOrCopyrightUndetermined: false,
+			hasLicensePublicContent: true,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: false,
+			hasPermissionExportObject: false,
+			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: true,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: true,
+		hasLicensePublicDomainOrCopyrightUndetermined: false,
+		hasLicensePublicContent: true,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: false,
+		hasPermissionExportObject: true,
+		hasPermissionDownloadObject: true
+	} => {
+		canViewEssence: true,
+		canExportMetadata: false,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
+			isNewspaper: true,
+			hasLicensePublicDomainOrCopyrightUndetermined: false,
+			hasLicensePublicContent: true,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: false,
+			hasPermissionExportObject: true,
+			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: true,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: true,
+		hasLicensePublicDomainOrCopyrightUndetermined: false,
+		hasLicensePublicContent: true,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: true,
+		hasPermissionExportObject: false,
+		hasPermissionDownloadObject: false
+	} => {
+		canViewEssence: true,
+		canExportMetadata: false,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
+			isNewspaper: true,
+			hasLicensePublicDomainOrCopyrightUndetermined: false,
+			hasLicensePublicContent: true,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: true,
+			hasPermissionExportObject: false,
+			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: true,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: true,
+		hasLicensePublicDomainOrCopyrightUndetermined: false,
+		hasLicensePublicContent: true,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: true,
+		hasPermissionExportObject: true,
+		hasPermissionDownloadObject: false
+	} => {
+		canViewEssence: true,
+		canExportMetadata: true,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
 			isNewspaper: true,
 			hasLicensePublicDomainOrCopyrightUndetermined: false,
 			hasLicensePublicContent: true,
@@ -2630,6 +2723,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -2658,6 +2752,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -2686,6 +2781,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -2714,6 +2810,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -2742,6 +2839,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -2770,6 +2868,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -2798,6 +2897,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -2826,6 +2926,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -2854,6 +2955,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -2882,6 +2984,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -2910,6 +3013,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -2938,6 +3042,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -2966,6 +3071,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -2994,6 +3100,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -3022,6 +3129,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -3050,6 +3158,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -3065,62 +3174,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasAccessToVisitorSpace: true,
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
-	} => {
-		canViewEssence: false,
-		canExportMetadata: true,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: true,
-			hasLicensePublicDomainOrCopyrightUndetermined: true,
-			hasLicensePublicContent: false,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: true,
-			hasPermissionExportObject: true,
-			hasPermissionDownloadObject: false,
-		});
-		expect(result).toEqual({
-			canViewEssence: false,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: true,
-		hasLicensePublicDomainOrCopyrightUndetermined: true,
-		hasLicensePublicContent: false,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: true,
-		hasPermissionExportObject: false,
-		hasPermissionDownloadObject: true
-	} => {
-		canViewEssence: false,
-		canExportMetadata: false,
-		canDownloadEssence: false
-	}`, () => {
-		const result = checkIeObjectPermissions({
-			isNewspaper: true,
-			hasLicensePublicDomainOrCopyrightUndetermined: true,
-			hasLicensePublicContent: false,
-			hasLicenseVisitorToolMetadataAllOrContent: false,
-			hasAccessToVisitorSpace: true,
-			hasPermissionExportObject: false,
-			hasPermissionDownloadObject: true,
-		});
-		expect(result).toEqual({
-			canViewEssence: false,
-			canExportMetadata: false,
-			canDownloadEssence: false,
-		});
-	});
-	test(`{
-		isNewsletter: true,
-		hasLicensePublicDomainOrCopyrightUndetermined: true,
-		hasLicensePublicContent: false,
-		hasLicenseVisitorToolMetadataAllOrContent: false,
-		hasAccessToVisitorSpace: true,
-		hasPermissionExportObject: true,
-		hasPermissionDownloadObject: true
 	} => {
 		canViewEssence: false,
 		canExportMetadata: true,
@@ -3133,7 +3186,66 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasLicenseVisitorToolMetadataAllOrContent: false,
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
+			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: false,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: true,
+		hasLicensePublicDomainOrCopyrightUndetermined: true,
+		hasLicensePublicContent: false,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: true,
+		hasPermissionExportObject: false,
+		hasPermissionDownloadObject: true
+	} => {
+		canViewEssence: false,
+		canExportMetadata: false,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
+			isNewspaper: true,
+			hasLicensePublicDomainOrCopyrightUndetermined: true,
+			hasLicensePublicContent: false,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: true,
+			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
+		});
+		expect(result).toEqual({
+			canViewEssence: false,
+			canExportMetadata: false,
+			canDownloadEssence: false,
+		});
+	});
+	test(`{
+		isNewsletter: true,
+		hasLicensePublicDomainOrCopyrightUndetermined: true,
+		hasLicensePublicContent: false,
+		hasLicenseVisitorToolMetadataAllOrContent: false,
+		hasAccessToVisitorSpace: true,
+		hasPermissionExportObject: true,
+		hasPermissionDownloadObject: true
+	} => {
+		canViewEssence: false,
+		canExportMetadata: true,
+		canDownloadEssence: false
+	}`, () => {
+		const result = checkIeObjectPermissions({
+			isNewspaper: true,
+			hasLicensePublicDomainOrCopyrightUndetermined: true,
+			hasLicensePublicContent: false,
+			hasLicenseVisitorToolMetadataAllOrContent: false,
+			hasAccessToVisitorSpace: true,
+			hasPermissionExportObject: true,
+			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: false,
@@ -3162,6 +3274,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -3190,6 +3303,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -3218,6 +3332,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -3246,6 +3361,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -3274,6 +3390,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -3302,6 +3419,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -3330,6 +3448,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -3358,6 +3477,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -3386,6 +3506,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -3414,6 +3535,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -3442,6 +3564,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -3470,6 +3593,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: false,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -3498,6 +3622,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -3526,6 +3651,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: false,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -3554,6 +3680,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: false,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,
@@ -3582,6 +3709,7 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			hasAccessToVisitorSpace: true,
 			hasPermissionExportObject: true,
 			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
 			canViewEssence: true,

@@ -4,16 +4,21 @@ function checkCanExportMetadata(
 	hasLicensePublicContent: boolean,
 	hasLicenseVisitorToolMetadataAllOrContent: boolean,
 	hasAccessToVisitorSpace: boolean,
-	hasPermissionExportObject: boolean
+	hasPermissionExportObject: boolean,
+	isLoggedOutUser: boolean
 ): boolean {
-	if (!hasPermissionExportObject) {
+	if (!hasPermissionExportObject && !isLoggedOutUser) {
+		// Kiosk users cannot export metadata
 		return false;
 	}
 
 	if (isNewsletter) {
-		return hasLicensePublicDomainOrCopyrightUndetermined && hasLicensePublicContent;
+		// public newspaper
+		if (hasLicensePublicDomainOrCopyrightUndetermined && hasLicensePublicContent) {
+			return true;
+		}
 	}
-	// audio / video
+	// audio / video / newspaper
 	return hasLicenseVisitorToolMetadataAllOrContent && hasAccessToVisitorSpace;
 }
 
@@ -21,9 +26,11 @@ function checkCanDownloadEssence(
 	isNewsletter: boolean,
 	hasLicensePublicDomainOrCopyrightUndetermined: boolean,
 	hasLicensePublicContent: boolean,
-	hasPermissionDownloadObject: boolean
+	hasPermissionDownloadObject: boolean,
+	isLoggedOutUser: boolean
 ): boolean {
-	if (!hasPermissionDownloadObject) {
+	if (!hasPermissionDownloadObject && !isLoggedOutUser) {
+		// Kiosk users cannot download essence
 		return false;
 	}
 	if (!isNewsletter) {
@@ -44,6 +51,7 @@ export function checkIeObjectPermissions({
 	hasAccessToVisitorSpace,
 	hasPermissionExportObject,
 	hasPermissionDownloadObject,
+	isLoggedOutUser,
 }: {
 	isNewspaper: boolean;
 	hasLicensePublicDomainOrCopyrightUndetermined: boolean;
@@ -52,6 +60,7 @@ export function checkIeObjectPermissions({
 	hasAccessToVisitorSpace: boolean;
 	hasPermissionExportObject: boolean;
 	hasPermissionDownloadObject: boolean;
+	isLoggedOutUser: boolean;
 }): {
 	canViewEssence: boolean;
 	canExportMetadata: boolean;
@@ -68,7 +77,8 @@ export function checkIeObjectPermissions({
 		hasLicensePublicContent,
 		hasLicenseVisitorToolMetadataAllOrContent,
 		hasAccessToVisitorSpace,
-		hasPermissionExportObject
+		hasPermissionExportObject,
+		isLoggedOutUser
 	);
 
 	// You can download the essence only on newsletters that carry
@@ -78,7 +88,8 @@ export function checkIeObjectPermissions({
 		isNewspaper,
 		hasLicensePublicDomainOrCopyrightUndetermined,
 		hasLicensePublicContent,
-		hasPermissionDownloadObject
+		hasPermissionDownloadObject,
+		isLoggedOutUser
 	);
 
 	return { canViewEssence, canExportMetadata, canDownloadEssence };

@@ -203,8 +203,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			!!mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
 			!!mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT),
 		hasAccessToVisitorSpace: hasAccessToVisitorSpaceOfObject,
-		hasPermissionExportObject: useHasAnyPermission(Permission.EXPORT_OBJECT) || !user,
-		hasPermissionDownloadObject: useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user,
+		hasPermissionExportObject: useHasAnyPermission(Permission.EXPORT_OBJECT),
+		hasPermissionDownloadObject: useHasAnyPermission(Permission.DOWNLOAD_OBJECT),
+		isLoggedOutUser: !user,
 	});
 	const canDownloadMetadata: boolean = ieObjectPermissions.canExportMetadata;
 

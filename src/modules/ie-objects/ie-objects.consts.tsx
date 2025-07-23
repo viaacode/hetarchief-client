@@ -208,8 +208,8 @@ export const MEEMOO_ADMIN_ACTION_SORT_MAP = (canExport: boolean): MetadataSortMa
 ];
 
 export const CP_ADMIN_ACTION_SORT_MAP = (canExport: boolean): MetadataSortMap[] => [
-	{ id: MediaActions.RequestMaterial, isPrimary: true },
-	...(canExport ? [{ id: MediaActions.Export }] : []),
+	...(canExport ? [{ id: MediaActions.Export, isPrimary: true }] : []),
+	{ id: MediaActions.RequestMaterial },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];
