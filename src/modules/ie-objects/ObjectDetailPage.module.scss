@@ -101,14 +101,14 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		transition: 100ms ease-out;
 		overflow: clip;
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: $breakpoint-lg) {
 			grid-template-rows: minmax(0, max-content) max-content 1fr minmax(0, max-content);
 			grid-template-columns: max-content 1fr;
 		}
 
 		&--no-ocr-available {
 			:global(.c-tabs) {
-				@media (min-width: $breakpoint-md) {
+				@media (min-width: $breakpoint-lg) {
 					// On desktop if no ocr is available, we don't need to show the tabs, since only one tab will be visible
 					display: none !important;
 				}
@@ -116,7 +116,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 			:global([class*="ObjectDetailPage_p-object-detail__sidebar__"]) {
 				// Sidebar can take the space of the tabs if there is no media, since only one tab would be visible or desktop
-				@media (min-width: $breakpoint-md) {
+				@media (min-width: $breakpoint-lg) {
 					grid-row: 2 / 5 !important;
 				}
 			}
@@ -141,7 +141,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		background-color: $black;
 		border-radius: 0;
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: $breakpoint-lg) {
 			height: auto;
 			width: $back-to-global-search-button-width-mobile;
 		}
@@ -153,7 +153,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		z-index: get-z-layer("foreground");
 		flex-shrink: 0;
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: $breakpoint-lg) {
 			grid-column: 1 / 2;
 			width: 100vw;
 		}
@@ -171,7 +171,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			opacity: 0.64;
 			width: 100vw;
 
-			@media (min-width: $breakpoint-md) {
+			@media (min-width: $breakpoint-lg) {
 				visibility: hidden;
 			}
 		}
@@ -189,7 +189,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		.p-object-detail__tabs {
 			display: none;
 
-			@media (max-width: $breakpoint-md) {
+			@media (max-width: $breakpoint-lg) {
 				display: flex;
 				grid-row: 2 !important;
 				grid-column: 1 / 3 !important;
@@ -217,7 +217,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			grid-row: 2;
 			grid-column: 3;
 
-			@media (max-width: $breakpoint-md) {
+			@media (max-width: $breakpoint-lg) {
 				// Phone
 				grid-row: 2;
 				grid-column: 2;
@@ -228,14 +228,14 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	&__tabs {
 		display: none;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: $breakpoint-lg) {
 			// Desktop
 			:global(.c-tab--media) {
 				display: none !important;
 			}
 		}
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: $breakpoint-lg) {
 			// Mobile
 			grid-column: 1 / 4;
 			width: 100%;
@@ -269,7 +269,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		align-self: center;
 		inset: 0;
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: $breakpoint-lg) {
 			width: 100%;
 		}
 
@@ -324,7 +324,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			height: 100%;
 		}
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: $breakpoint-lg) {
 			grid-row: 3 / 4;
 			grid-column: 1 / 3;
 			width: 100vw;
@@ -334,13 +334,13 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			grid-row: 1/4;
 			grid-column: 1/3;
 
-			@media (max-width: $breakpoint-md) {
+			@media (max-width: $breakpoint-lg) {
 				height: calc($view-height - $top-navigation-bar-height - $metadata-media-ocr-tabs-height-mobile);
 			}
 		}
 	}
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: $breakpoint-lg) {
 		// mobile
 		&__media-wrapper--inside-sidebar {
 			display: block;
@@ -351,7 +351,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		}
 	}
 
-	@media (min-width: $breakpoint-md - 1) {
+	@media (min-width: $breakpoint-lg - 1) {
 		// desktop
 		&__media-wrapper--inside-sidebar {
 			display: none;
@@ -368,7 +368,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		background-color: $black-8;
 		padding: 2rem 3rem;
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: $breakpoint-lg) {
 			grid-column: 1 / 3;
 			width: 100vw;
 		}
@@ -382,7 +382,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		max-height: 100%;
 		overflow: hidden;
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: $breakpoint-lg) {
 			grid-row: 3 / 5;
 			grid-column: 1 / 3;
 			width: 100vw;
@@ -394,7 +394,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			grid-row: 3 / 5;
 			grid-column: 3;
 
-			@media (max-width: $breakpoint-md) {
+			@media (max-width: $breakpoint-lg) {
 				grid-row: 3 / 5;
 				grid-column: 1 / 3;
 			}
@@ -407,7 +407,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			width: 100%;
 			height: $metadata-media-ocr-tabs-height-desktop;
 
-			@media (max-width: $breakpoint-md) {
+			@media (max-width: $breakpoint-lg) {
 				width: 100%;
 				grid-row: 2;
 				grid-column: 2 / 3;
@@ -453,7 +453,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			margin-right: $spacer-lg;
 			width: calc(100% - $spacer-lg * 2);
 
-			@media (max-width: $breakpoint-md) {
+			@media (max-width: $breakpoint-lg) {
 				margin: $spacer-sm;
 				width: calc(100% - $spacer-sm * 2);
 			}
@@ -467,7 +467,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			width: 100%;
 			margin: 0;
 
-			@media (max-width: $breakpoint-md) {
+			@media (max-width: $breakpoint-lg) {
 				padding: 0 $spacer-sm $spacer-1xl;
 				width: 100vw;
 			}
@@ -521,7 +521,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 				color: $zinc;
 			}
 
-			@media (max-width: $breakpoint-md) {
+			@media (max-width: $breakpoint-lg) {
 				:global(.c-button__label) {
 					display: none;
 				}
@@ -550,7 +550,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	:global(.p-object-detail__metadata-component) {
 		padding: 0 2rem;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: $breakpoint-lg) {
 			padding: 0 $spacer-lg;
 		}
 	}
@@ -569,7 +569,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		background-color: $platinum;
 		padding-bottom: 10rem;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: $breakpoint-lg) {
 			// Firefox and Safari render weirdly with: margin: 0 - $spacer-md;
 			margin-left: -$spacer-lg;
 			margin-right: -$spacer-lg;
@@ -577,7 +577,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		}
 	}
 
-	@media (min-width: $breakpoint-md) {
+	@media (min-width: $breakpoint-lg) {
 		&__related {
 			grid-column: 2;
 		}
@@ -587,7 +587,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		padding: 2rem;
 		height: max-content;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: $breakpoint-lg) {
 			padding: $spacer-lg;
 		}
 
@@ -598,7 +598,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		}
 	}
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: $breakpoint-lg) {
 		&__wrapper--metadata,
 		&__wrapper--ocr {
 			.p-object-detail__media {
@@ -689,12 +689,12 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			font-size: $font-size-2xm;
 		}
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: $breakpoint-lg) {
 			visibility: visible;
 		}
 
 		// `include respond-at(md)` -fix for safari
-		@media screen and (width >= $breakpoint-md) {
+		@media screen and (width >= $breakpoint-lg) {
 			visibility: visible;
 		}
 	}
