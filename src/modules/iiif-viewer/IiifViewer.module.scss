@@ -124,6 +124,11 @@ $controls-margin-bottom: $spacer-sm;
 		grid-gap: $spacer-xs $spacer-xs;
 		container: iiif__controls / size;
 
+		@media (max-width: $breakpoint-xl) {
+			// Avoid buttons behind ipad bottom bar indicator
+			bottom: $spacer-md;
+		}
+
 		&__button-group {
 			display: flex;
 			flex-flow: row nowrap;
