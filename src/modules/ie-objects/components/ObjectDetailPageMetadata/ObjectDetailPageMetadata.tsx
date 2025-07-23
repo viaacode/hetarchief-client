@@ -49,6 +49,7 @@ import {
 	renderIsPartOfValue,
 } from '@ie-objects/ie-objects.consts';
 import {
+	type ButtonsSortOrder,
 	type IeObject,
 	IeObjectAccessThrough,
 	IeObjectLicense,
@@ -56,7 +57,6 @@ import {
 	MediaActions,
 	type Mention,
 	MetadataExportFormats,
-	type MetadataSortMap,
 } from '@ie-objects/ie-objects.types';
 import {
 	IE_OBJECTS_SERVICE_BASE_URL,
@@ -292,7 +292,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		[currentPageIndex, mediaInfo, router.asPath]
 	);
 
-	const getActionButtonSortMapByUserType = useCallback((): MetadataSortMap[] => {
+	const getActionButtonSortMapByUserType = useCallback((): ButtonsSortOrder[] => {
 		const canExport = canDownloadMetadata || canDownloadNewspaper;
 		if (isNil(user)) {
 			return ANONYMOUS_ACTION_SORT_MAP(canExport);

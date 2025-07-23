@@ -253,7 +253,7 @@ export enum MetadataExportFormats {
 	csv = 'csv',
 }
 
-export interface MetadataSortMap {
+export interface ButtonsSortOrder {
 	id: MediaActions;
 	isPrimary?: boolean;
 }
