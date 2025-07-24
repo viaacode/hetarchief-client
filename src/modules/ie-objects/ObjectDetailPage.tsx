@@ -1874,7 +1874,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				id="iiif-selection-download-url"
 				isOpen={!!selectionDownloadUrl}
 				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-					<h2 {...props}>{tHtml('Selectie is klaar')}</h2>
+					<h2 {...props}>{tHtml('modules/ie-objects/object-detail-page___selectie-is-klaar')}</h2>
 				)}
 				footer={
 					<div className="u-px-32 u-px-16-md u-py-24 u-py-16-md u-flex u-flex-col u-gap-xs">
@@ -1887,13 +1887,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							}}
 							rel="noreferrer"
 						>
-							<Button label={tText('Download selection')} variants={['block', 'black']} />
+							<Button
+								label={tText('modules/ie-objects/object-detail-page___download-selection')}
+								variants={['block', 'black']}
+							/>
 						</a>
 					</div>
 				}
 			>
 				<div className="u-px-32 u-px-16-md">
-					{tHtml('Je selectie kan worden gedownload als afbeelding.')}
+					{tHtml(
+						'modules/ie-objects/object-detail-page___je-selectie-kan-worden-gedownload-als-afbeelding'
+					)}
 				</div>
 			</Blade>
 		</>

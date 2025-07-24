@@ -841,7 +841,15 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							<Metadata
 								title={tHtml('modules/ie-objects/object-detail-page___bronvermelding')}
 								key="metadata-source-attribution"
-								renderRight={<CopyButton text={rightsAttributionText} variants={['white']} />}
+								renderRight={
+									<CopyButton
+										text={rightsAttributionText}
+										title={tText(
+											'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___kopieer-de-bronvermelding-naar-je-klembord'
+										)}
+										variants={['white']}
+									/>
+								}
 								className="u-bt-0"
 							>
 								<span>{rightsAttributionText}</span>
@@ -912,7 +920,13 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							key="metadata-rights-status"
 							renderRight={
 								<a target="_blank" href={rightsStatusInfo.internalLink} rel="noreferrer">
-									<Button variants={['white']} icon={<Icon name={IconNamesLight.Extern} />} />
+									<Button
+										variants={['white']}
+										icon={<Icon name={IconNamesLight.Extern} />}
+										title={tText(
+											'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___kopieer-de-rechten-naar-je-klembord'
+										)}
+									/>
 								</a>
 							}
 						>
@@ -922,10 +936,20 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									className="u-text-no-decoration"
 									target="_blank"
 									rel="noreferrer"
+									title={tText(
+										'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
+									)}
 								>
 									{rightsStatusInfo.icon}
 								</a>
-								<a href={rightsStatusInfo.externalLink} target="_blank" rel="noreferrer">
+								<a
+									href={rightsStatusInfo.externalLink}
+									target="_blank"
+									rel="noreferrer"
+									title={tText(
+										'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
+									)}
+								>
 									{rightsStatusInfo?.label}
 								</a>
 							</span>
