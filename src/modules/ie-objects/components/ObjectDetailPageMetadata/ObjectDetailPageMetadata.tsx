@@ -1162,7 +1162,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.series)
 					)}
 					{renderSimpleMetadataField(
-						tText('Seizoen'),
+						tText(
+							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___seizoen'
+						),
 						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.season)
 					)}
 					{renderSimpleMetadataField(
