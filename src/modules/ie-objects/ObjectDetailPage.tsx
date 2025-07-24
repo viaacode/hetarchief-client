@@ -508,6 +508,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				setCurrentSearchResultIndex(-1);
 				setActiveMentionHighlights(null);
 				updateHighlightsForSearch();
+				handleIsTextOverlayVisibleChange(false);
 				return;
 			}
 
@@ -527,6 +528,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			}
 
 			setSearchTerms(newSearchTerms.toLowerCase());
+			handleIsTextOverlayVisibleChange(true);
 
 			const parsedUrl = parseUrl(window.location.href);
 			const newUrl = stringifyUrl({
@@ -1170,7 +1172,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		setSearchTerms('');
 		setHighlightedSearchTerms('', 'replaceIn');
 		setCurrentSearchResultIndex(-1);
-		iiifGoToHome(iiifViewerInitializedPromise as Promise<void>);
+		handleIsTextOverlayVisibleChange(false);
 	};
 
 	const handleClickOnOcrWord = useCallback(
