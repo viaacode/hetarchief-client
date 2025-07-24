@@ -85,7 +85,7 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 
 				<div>{tText('modules/navigation/components/footer/footer___een-initiatief-van')}</div>
 				<Link
-					href="https://meemoo.be"
+					href={`https://meemoo.be/${locale}/hetarchiefbe`}
 					className={styles['c-footer__image-link']}
 					target="_blank"
 					aria-label={tText('modules/navigation/components/footer/footer___link-naar-meemoo-be')}
