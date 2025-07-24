@@ -346,6 +346,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 					<TabLabel
 						label={tab.label}
 						count={numberWithCommas(getItemCounts(tab.id as SearchPageMediaType))}
+						showCountOnMobile={tab.showCountOnMobile}
 					/>
 				),
 				active: tab.id === format,

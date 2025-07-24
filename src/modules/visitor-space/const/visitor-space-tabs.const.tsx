@@ -5,10 +5,11 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import { SearchPageMediaType } from '@shared/types/ie-objects';
 
-export const SEARCH_PAGE_IE_OBJECT_TABS = (): TabProps[] => [
+export const SEARCH_PAGE_IE_OBJECT_TABS = (): (TabProps & { showCountOnMobile?: boolean })[] => [
 	{
 		id: SearchPageMediaType.All,
 		label: tText('modules/visitor-space/const/index___alles'),
+		showCountOnMobile: true,
 	},
 	{
 		id: SearchPageMediaType.Video,
