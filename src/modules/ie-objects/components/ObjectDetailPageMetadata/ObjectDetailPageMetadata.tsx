@@ -1151,29 +1151,24 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___archief'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.archief)
+						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.archive)
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___programma'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.programma)
+						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.program)
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___serie'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.serie)
+						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.series)
+					)}
+					{renderSimpleMetadataField(
+						tText('Seizoen'),
+						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.season)
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___episode'),
 						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.episode)
 					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___bestanddeel'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.bestanddeel)
-					)}
-					{/* https://meemoo.atlassian.net/browse/ARC-2606 */}
-					{/*{renderSimpleMetadataField(*/}
-					{/*	tText('modules/ie-objects/const/index___serienummer'),*/}
-					{/*	mediaInfo.collectionSeasonNumber,*/}
-					{/*)}*/}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___seizoennummer'),
 						mediaInfo.collectionSeasonNumber

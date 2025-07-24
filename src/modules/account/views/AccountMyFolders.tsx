@@ -419,11 +419,11 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___programma'),
-				value: folderIeObject?.isPartOf?.[IsPartOfKey.programma]?.join(', ') || '',
+				value: folderIeObject?.isPartOf?.[IsPartOfKey.program]?.join(', ') || '',
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___serie'),
-				value: folderIeObject?.isPartOf?.[IsPartOfKey.serie]?.join(', ') || '',
+				value: folderIeObject?.isPartOf?.[IsPartOfKey.series]?.join(', ') || '',
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___type'),

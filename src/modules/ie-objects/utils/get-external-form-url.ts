@@ -32,7 +32,7 @@ export function getExternalMaterialRequestUrlIfAvailable(
 				'{title_serie}',
 				encodeOrNotUriComponent(
 					mediaInfo?.isPartOf?.find(
-						(isPartOfEntry) => isPartOfEntry?.collectionType === IsPartOfKey.serie
+						(isPartOfEntry) => isPartOfEntry?.collectionType === IsPartOfKey.series
 					)?.name || ''
 				)
 			);
