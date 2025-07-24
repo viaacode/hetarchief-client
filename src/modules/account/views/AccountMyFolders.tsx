@@ -49,7 +49,7 @@ import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 
 import { Loading } from '@shared/components/Loading';
-import styles from './MyFolders.module.scss';
+import styles from './AccountMyFolders.module.scss';
 
 type ListNavigationFolderItem = ListNavigationItem & Folder;
 
@@ -419,11 +419,11 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___programma'),
-				value: folderIeObject?.isPartOf?.[IsPartOfKey.programma]?.join(', ') || '',
+				value: folderIeObject?.isPartOf?.[IsPartOfKey.program]?.join(', ') || '',
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___serie'),
-				value: folderIeObject?.isPartOf?.[IsPartOfKey.serie]?.join(', ') || '',
+				value: folderIeObject?.isPartOf?.[IsPartOfKey.series]?.join(', ') || '',
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___type'),
@@ -495,7 +495,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				</div>
 			);
 		}
-		if ((folderMedia?.data?.total || 0) === 0) {
+		if ((folderMedia?.data?.items?.length || 0) === 0) {
 			return (
 				<div className="l-container u-color-neutral">
 					<p>

@@ -76,7 +76,8 @@ import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 
 import packageJson from '../../../../../package.json';
 
-import styles from './AppLayout.module.scss'; // We want to make sure config gets fetched here, no sure why anymore
+import { getSlugFromQueryParams } from '@shared/helpers/get-slug-from-query-params'; // We want to make sure config gets fetched here, no sure why anymore
+import styles from './AppLayout.module.scss';
 
 // We want to make sure config gets fetched here, no sure why anymore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -176,11 +177,10 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	const [isLoaded, setIsLoaded] = useState(false);
 
-	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
-		locale,
-		`/${router.query.slug}`,
-		{ enabled: router.route === '/[slug]' }
-	);
+	const slug = getSlugFromQueryParams(router.query);
+	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(locale, `/${slug}`, {
+		enabled: router.route === '/[...slug]',
+	});
 
 	const contentPageInfo = dbContentPage
 		? convertDbContentPageToContentPageInfo(dbContentPage)
@@ -413,9 +413,10 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	const activeAlerts = useMemo(() => {
 		return maintenanceAlerts?.items.filter(
-			(item) => JSON.parse(alertsIgnoreUntil)[item.id] !== item.untilDate
+			(item) =>
+				JSON.parse(alertsIgnoreUntil)[item.id] !== item.untilDate && item.language === locale
 		);
-	}, [maintenanceAlerts?.items, alertsIgnoreUntil]);
+	}, [maintenanceAlerts?.items, alertsIgnoreUntil, locale]);
 
 	const renderAlerts = () => {
 		return (

@@ -15,7 +15,10 @@ export function useSize<T extends HTMLElement>(
 		if (ref.current) {
 			if (subProperty) {
 				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-				onResize((ref.current as any)[subProperty] as HTMLElement);
+				const element = (ref.current as any)?.[subProperty] as HTMLElement | undefined;
+				if (element) {
+					onResize(element);
+				}
 			} else {
 				onResize(ref.current);
 			}
@@ -23,8 +26,10 @@ export function useSize<T extends HTMLElement>(
 	}, [ref, onResize, subProperty]);
 
 	useEffect(() => {
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		const element = subProperty ? ((ref.current as any)[subProperty] as HTMLElement) : ref.current;
+		const element = subProperty
+			? // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+				((ref.current as any)?.[subProperty] as HTMLElement | undefined)
+			: ref.current;
 		if (!element) return;
 		const resizeObserver = new ResizeObserver(() => onResize(element));
 		resizeObserver.observe(element);

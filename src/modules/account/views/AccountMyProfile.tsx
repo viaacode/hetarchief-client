@@ -44,6 +44,7 @@ import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
 import { useAppDispatch } from '@shared/store';
@@ -59,6 +60,7 @@ const labelKeys: Record<keyof CommunicationFormState, string> = {
 
 export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 	const dispatch = useAppDispatch();
+	const locale = useLocale();
 	const commonUser = useSelector(selectCommonUser);
 	const currentAccountLocale = (commonUser?.language || Locale.nl) as Locale;
 	const router = useRouter();
@@ -80,8 +82,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 		resolver: yupResolver(COMMUNICATION_FORM_SCHEMA()),
 	});
 
-	const canEdit =
-		commonUser?.idp && (commonUser.idp as unknown as Idp) === Idp.HETARCHIEF && canEditProfile;
+	const canEdit = Object.keys(commonUser?.idps || {}).includes(Idp.HETARCHIEF) && canEditProfile;
 
 	useEffect(() => {
 		if (currentAccountLocale && !selectedLanguage) {
@@ -111,6 +112,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 				preferences: {
 					newsletter,
 				},
+				language: locale,
 			});
 
 			setAcceptNewsletter(newsletter);

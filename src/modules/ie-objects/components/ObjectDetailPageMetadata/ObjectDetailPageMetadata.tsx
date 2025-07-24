@@ -49,6 +49,7 @@ import {
 	renderIsPartOfValue,
 } from '@ie-objects/ie-objects.consts';
 import {
+	type ButtonsSortOrder,
 	type IeObject,
 	IeObjectAccessThrough,
 	IeObjectLicense,
@@ -56,7 +57,6 @@ import {
 	MediaActions,
 	type Mention,
 	MetadataExportFormats,
-	type MetadataSortMap,
 } from '@ie-objects/ie-objects.types';
 import {
 	IE_OBJECTS_SERVICE_BASE_URL,
@@ -113,6 +113,7 @@ import {
 import Callout from '../../../shared/components/Callout/Callout';
 import MetadataList from '../Metadata/MetadataList';
 
+import { checkIeObjectPermissions } from '@ie-objects/utils/check-ie-object-permissions';
 import { getFirstMentionHighlight } from '@ie-objects/utils/get-first-mention-highlight';
 import type { TextLine } from '@iiif-viewer/IiifViewer.types';
 import styles from './ObjectDetailPageMetadata.module.scss';
@@ -183,19 +184,35 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		Permission.CREATE_MATERIAL_REQUESTS
 	);
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
+	const canViewObjectVisitorSpace: boolean = !!accessibleVisitorSpaces?.find(
+		(space) => space.maintainerId === mediaInfo?.maintainerId
+	);
 	const canRequestAccess =
-		isNil(
-			accessibleVisitorSpaces?.find((space) => space.maintainerId === mediaInfo?.maintainerId)
-		) &&
+		!canViewObjectVisitorSpace &&
 		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
 		isNil(mediaInfo.thumbnailUrl);
 	const showKeyUserPill = mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
-	const canDownloadMetadata: boolean = useHasAnyPermission(Permission.EXPORT_OBJECT) || !user;
+	const ieObjectPermissions = checkIeObjectPermissions({
+		isNewspaper,
+		hasLicensePublicDomainOrCopyrightUndetermined: !!(
+			mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIC_DOMAIN) ||
+			mediaInfo?.licenses?.includes(IeObjectLicense.COPYRIGHT_UNDETERMINED)
+		),
+		hasLicensePublicContent: !!mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT),
+		hasLicenseVisitorToolMetadataAllOrContent:
+			!!mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
+			!!mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT),
+		hasAccessToVisitorSpace: hasAccessToVisitorSpaceOfObject,
+		hasPermissionExportObject: useHasAnyPermission(Permission.EXPORT_OBJECT),
+		hasPermissionDownloadObject: useHasAnyPermission(Permission.DOWNLOAD_OBJECT),
+		isLoggedOutUser: !user,
+	});
+	const canDownloadMetadata: boolean = ieObjectPermissions.canExportMetadata;
 
 	// You need the permission or not to be logged in to download the newspaper
 	// https://meemoo.atlassian.net/browse/ARC-2617
-	const canDownloadNewspaper: boolean =
-		(useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user) && isPublicNewspaper;
+	// https://meemoo.atlassian.net/browse/ARC-3117
+	const canDownloadNewspaper: boolean = ieObjectPermissions.canDownloadEssence;
 
 	const windowSize = useWindowSizeContext();
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
@@ -275,13 +292,14 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		[currentPageIndex, mediaInfo, router.asPath]
 	);
 
-	const getActionButtonSortMapByUserType = useCallback((): MetadataSortMap[] => {
+	const getActionButtonSortMapByUserType = useCallback((): ButtonsSortOrder[] => {
+		const canExport = canDownloadMetadata || canDownloadNewspaper;
 		if (isNil(user)) {
-			return ANONYMOUS_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
+			return ANONYMOUS_ACTION_SORT_MAP(canExport);
 		}
 
 		if (isKeyUser) {
-			return KEY_USER_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
+			return KEY_USER_ACTION_SORT_MAP(canExport);
 		}
 
 		if (isKiosk) {
@@ -289,14 +307,14 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		}
 
 		if (isMeemooAdmin) {
-			return MEEMOO_ADMIN_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
+			return MEEMOO_ADMIN_ACTION_SORT_MAP(canExport);
 		}
 
 		if (isCPAdmin) {
-			return CP_ADMIN_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
+			return CP_ADMIN_ACTION_SORT_MAP(canExport);
 		}
 
-		return VISITOR_ACTION_SORT_MAP(canDownloadMetadata || canDownloadNewspaper);
+		return VISITOR_ACTION_SORT_MAP(canExport);
 	}, [
 		canDownloadMetadata,
 		isKeyUser,
@@ -823,7 +841,15 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							<Metadata
 								title={tHtml('modules/ie-objects/object-detail-page___bronvermelding')}
 								key="metadata-source-attribution"
-								renderRight={<CopyButton text={rightsAttributionText} variants={['white']} />}
+								renderRight={
+									<CopyButton
+										text={rightsAttributionText}
+										title={tText(
+											'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___kopieer-de-bronvermelding-naar-je-klembord'
+										)}
+										variants={['white']}
+									/>
+								}
 								className="u-bt-0"
 							>
 								<span>{rightsAttributionText}</span>
@@ -894,7 +920,13 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							key="metadata-rights-status"
 							renderRight={
 								<a target="_blank" href={rightsStatusInfo.internalLink} rel="noreferrer">
-									<Button variants={['white']} icon={<Icon name={IconNamesLight.Extern} />} />
+									<Button
+										variants={['white']}
+										icon={<Icon name={IconNamesLight.Extern} />}
+										title={tText(
+											'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___kopieer-de-rechten-naar-je-klembord'
+										)}
+									/>
 								</a>
 							}
 						>
@@ -904,10 +936,20 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									className="u-text-no-decoration"
 									target="_blank"
 									rel="noreferrer"
+									title={tText(
+										'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
+									)}
 								>
 									{rightsStatusInfo.icon}
 								</a>
-								<a href={rightsStatusInfo.externalLink} target="_blank" rel="noreferrer">
+								<a
+									href={rightsStatusInfo.externalLink}
+									target="_blank"
+									rel="noreferrer"
+									title={tText(
+										'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
+									)}
+								>
 									{rightsStatusInfo?.label}
 								</a>
 							</span>
@@ -1109,29 +1151,26 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___archief'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.archief)
+						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.archive)
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___programma'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.programma)
+						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.program)
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___serie'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.serie)
+						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.series)
+					)}
+					{renderSimpleMetadataField(
+						tText(
+							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___seizoen'
+						),
+						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.season)
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___episode'),
 						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.episode)
 					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___bestanddeel'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.bestanddeel)
-					)}
-					{/* https://meemoo.atlassian.net/browse/ARC-2606 */}
-					{/*{renderSimpleMetadataField(*/}
-					{/*	tText('modules/ie-objects/const/index___serienummer'),*/}
-					{/*	mediaInfo.collectionSeasonNumber,*/}
-					{/*)}*/}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___seizoennummer'),
 						mediaInfo.collectionSeasonNumber

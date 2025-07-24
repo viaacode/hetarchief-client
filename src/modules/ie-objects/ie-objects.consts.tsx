@@ -4,11 +4,11 @@ import React, { type ReactNode } from 'react';
 import type { ActionItem, DynamicActionMenuProps } from '@ie-objects/components/DynamicActionMenu';
 import type { ObjectPlaceholderProps } from '@ie-objects/components/ObjectPlaceholder';
 import {
+	type ButtonsSortOrder,
 	type IsPartOfCollection,
 	type IsPartOfKey,
 	MediaActions,
 	MetadataExportFormats,
-	type MetadataSortMap,
 	ObjectDetailTabs,
 } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
@@ -177,42 +177,52 @@ export const OBJECT_DETAIL_TABS = (
  */
 // https://meemoo.atlassian.net/browse/ARC-1302 export action follows this task
 
-export const KIOSK_ACTION_SORT_MAP = (): MetadataSortMap[] => [];
+function setFirstButtonAsPrimary(buttons: ButtonsSortOrder[]): ButtonsSortOrder[] {
+	buttons[0].isPrimary = true;
+	return buttons;
+}
 
-export const ANONYMOUS_ACTION_SORT_MAP = (canExport: boolean): MetadataSortMap[] => [
-	...(canExport ? [{ id: MediaActions.Export, isPrimary: true }] : []),
-	{ id: MediaActions.RequestMaterial },
-	{ id: MediaActions.Bookmark },
-	{ id: MediaActions.Report },
-];
+export const KIOSK_ACTION_SORT_MAP = (): ButtonsSortOrder[] => [];
 
-export const VISITOR_ACTION_SORT_MAP = (canExport: boolean): MetadataSortMap[] => [
-	...(canExport ? [{ id: MediaActions.Export, isPrimary: true }] : []),
-	{ id: MediaActions.RequestMaterial, isPrimary: !canExport },
-	{ id: MediaActions.Bookmark },
-	{ id: MediaActions.Report },
-];
+export const ANONYMOUS_ACTION_SORT_MAP = (canExport: boolean): ButtonsSortOrder[] =>
+	setFirstButtonAsPrimary([
+		...(canExport ? [{ id: MediaActions.Export }] : []),
+		{ id: MediaActions.RequestMaterial },
+		{ id: MediaActions.Bookmark },
+		{ id: MediaActions.Report },
+	]);
 
-export const KEY_USER_ACTION_SORT_MAP = (canExport: boolean): MetadataSortMap[] => [
-	...(canExport ? [{ id: MediaActions.Export, isPrimary: true }] : []),
-	{ id: MediaActions.RequestMaterial, isPrimary: !canExport },
-	{ id: MediaActions.Bookmark },
-	{ id: MediaActions.Report },
-];
+export const VISITOR_ACTION_SORT_MAP = (canExport: boolean): ButtonsSortOrder[] =>
+	setFirstButtonAsPrimary([
+		...(canExport ? [{ id: MediaActions.Export }] : []),
+		{ id: MediaActions.RequestMaterial },
+		{ id: MediaActions.Bookmark },
+		{ id: MediaActions.Report },
+	]);
 
-export const MEEMOO_ADMIN_ACTION_SORT_MAP = (canExport: boolean): MetadataSortMap[] => [
-	...(canExport ? [{ id: MediaActions.Export, isPrimary: true }] : []),
-	{ id: MediaActions.RequestMaterial, isPrimary: !canExport },
-	{ id: MediaActions.Bookmark },
-	{ id: MediaActions.Report },
-];
+export const KEY_USER_ACTION_SORT_MAP = (canExport: boolean): ButtonsSortOrder[] =>
+	setFirstButtonAsPrimary([
+		...(canExport ? [{ id: MediaActions.Export }] : []),
+		{ id: MediaActions.RequestMaterial },
+		{ id: MediaActions.Bookmark },
+		{ id: MediaActions.Report },
+	]);
 
-export const CP_ADMIN_ACTION_SORT_MAP = (canExport: boolean): MetadataSortMap[] => [
-	{ id: MediaActions.RequestMaterial, isPrimary: true },
-	...(canExport ? [{ id: MediaActions.Export }] : []),
-	{ id: MediaActions.Bookmark },
-	{ id: MediaActions.Report },
-];
+export const MEEMOO_ADMIN_ACTION_SORT_MAP = (canExport: boolean): ButtonsSortOrder[] =>
+	setFirstButtonAsPrimary([
+		...(canExport ? [{ id: MediaActions.Export }] : []),
+		{ id: MediaActions.RequestMaterial },
+		{ id: MediaActions.Bookmark },
+		{ id: MediaActions.Report },
+	]);
+
+export const CP_ADMIN_ACTION_SORT_MAP = (canExport: boolean): ButtonsSortOrder[] =>
+	setFirstButtonAsPrimary([
+		...(canExport ? [{ id: MediaActions.Export }] : []),
+		{ id: MediaActions.RequestMaterial },
+		{ id: MediaActions.Bookmark },
+		{ id: MediaActions.Report },
+	]);
 
 export const MEDIA_ACTIONS = ({
 	isMobile,

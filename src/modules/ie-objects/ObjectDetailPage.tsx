@@ -104,7 +104,6 @@ import {
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
 import { convertDurationStringToSeconds } from '@shared/helpers/convert-duration-string-to-seconds';
-import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
@@ -136,6 +135,8 @@ import {
 	iiifZoomTo,
 	iiifZoomToRect,
 } from '@iiif-viewer/helpers/trigger-iiif-viewer-events';
+import { Blade } from '@shared/components/Blade/Blade';
+import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import styles from './ObjectDetailPage.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
@@ -167,6 +168,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [iiifViewerInitializedPromiseResolve, setIiifViewerInitializedPromiseResolved] = useState<
 		(() => void) | null
 	>(null);
+	const [selectionDownloadUrl, setSelectionDownloadUrl] = useState<string | null>(null);
 
 	/**
 	 * Init a promise that resolves when the iiif viewer is ready hooking up event listeners
@@ -506,6 +508,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				setCurrentSearchResultIndex(-1);
 				setActiveMentionHighlights(null);
 				updateHighlightsForSearch();
+				handleIsTextOverlayVisibleChange(false);
 				return;
 			}
 
@@ -525,6 +528,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			}
 
 			setSearchTerms(newSearchTerms.toLowerCase());
+			handleIsTextOverlayVisibleChange(true);
 
 			const parsedUrl = parseUrl(window.location.href);
 			const newUrl = stringifyUrl({
@@ -624,25 +628,40 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	/**
 	 * When the url doesn't fully match with the loaded ie-object, then we need to do a redirect
-	 * Eg: maintainer was renamed, but the old slug should still work
+	 * Eg:
+	 * maintainer was renamed, but the old slug should still work
 	 * user goes to: /search/old-slug-maintainer/ie-object-id/ie-object-slug
 	 * should be redirected to: /search/new-slug-maintainer/ie-object-id/ie-object-slug
+	 *
+	 * Eg:
+	 * url uses an old v2 schema identifier (eg: 16c7b994da244d4aafedcfa6389f56fcb87f085ddffc4f50a23ae423e5c60b6f6eea738d00fc43b88701d3a4cd22f901)
+	 * should be redirected to the new v3 schema identifier (eg: pn8xb19k8t)
 	 */
 	useEffect(() => {
 		if (
-			mediaInfo?.maintainerSlug &&
-			maintainerSlug &&
-			mediaInfo?.maintainerSlug !== maintainerSlug
+			(ieObjectId && mediaInfo?.schemaIdentifier && ieObjectId !== mediaInfo?.schemaIdentifier) ||
+			(mediaInfo?.maintainerSlug && maintainerSlug && mediaInfo?.maintainerSlug !== maintainerSlug)
 		) {
+			// The user is loading a url with the old ie-object schema identifier v2 (eg: 16c7b994da244d4aafedcfa6389f56fcb87f085ddffc4f50a23ae423e5c60b6f6eea738d00fc43b88701d3a4cd22f901)
+			// OR
 			// Maintainer was renamed and the user is loading an url with the old maintainer slug
+			// =>
 			// Redirect to the new maintainer slug
 			// https://meemoo.atlassian.net/browse/ARC-2678
 			const newPath = router.asPath
+				.replace(`/${ieObjectId}/`, `/${mediaInfo?.schemaIdentifier}/`)
 				.replace(`/${maintainerSlug}/`, `/${mediaInfo?.maintainerSlug}/`)
 				.replace(`/${ieObjectNameSlug}`, `/${kebabCase(mediaInfo?.name || '')}`);
 			router.replace(newPath, undefined, { shallow: true });
 		}
-	}, [mediaInfo, maintainerSlug, ieObjectNameSlug, router.replace, router.asPath.replace]);
+	}, [
+		mediaInfo,
+		maintainerSlug,
+		ieObjectId,
+		ieObjectNameSlug,
+		router.replace,
+		router.asPath.replace,
+	]);
 
 	/**
 	 * Recalculate the green highlights in the IIIF viewer to reflect the latest changes to the last highlighted fallen soldier name (mention)
@@ -783,7 +802,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				// Go to the first page that has a search result and show the first search result on that page
 				const firstSearchResult = searchResults[0];
 				if (currentPageIndex !== firstSearchResult.pageIndex) {
-					setCurrentPageIndex(firstSearchResult.pageIndex);
+					setCurrentPageIndex(firstSearchResult.pageIndex, 'replaceIn');
 				}
 				setCurrentSearchResultIndex(0);
 			}
@@ -819,7 +838,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const scrollActiveSearchWordIntoView = useCallback(() => {
 		const activeSearchResultElem = document.querySelector(
 			moduleClassSelector('p-object-detail__ocr__word--marked--active')
-		);
+		) as HTMLSpanElement | null;
 		const scrollable = document.querySelector(
 			moduleClassSelector('p-object-detail__ocr__words-container')
 		);
@@ -832,14 +851,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			return;
 		}
 
-		const scrollTopWord = activeSearchResultElem?.scrollTop || 0;
+		// Location of the word inside the scrollable container minus a margin to make sure it's about in the center of the screen
+		const scrollTopWord = Math.max(
+			0,
+			(activeSearchResultElem?.offsetTop || 0) - (scrollable?.clientHeight || 300)
+		);
+		// We don't use scrollIntoView because it causes scrolling on the whole page
+		// https://meemoo.atlassian.net/browse/ARC-3020
 		scrollable?.scrollTo({
 			top: scrollTopWord,
-		});
-		activeSearchResultElem?.scrollIntoView({
-			behavior: 'instant',
-			block: 'nearest',
-			inline: 'start',
 		});
 	}, [currentSearchResultIndex]);
 
@@ -1167,7 +1187,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		setSearchTerms('');
 		setHighlightedSearchTerms('', 'replaceIn');
 		setCurrentSearchResultIndex(-1);
-		iiifGoToHome(iiifViewerInitializedPromise as Promise<void>);
+		handleIsTextOverlayVisibleChange(false);
 	};
 
 	const handleClickOnOcrWord = useCallback(
@@ -1247,19 +1267,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const handleIiifViewerSelection = useCallback(
 		(rect: Rect, pageIndex: number) => {
-			window.open(
-				stringifyUrl({
-					url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/jpg/selection`,
-					query: {
-						page: pageIndex,
-						startX: Math.floor(rect.x),
-						startY: Math.floor(rect.y),
-						width: Math.ceil(rect.width),
-						height: Math.ceil(rect.height),
-						currentPageUrl: window.origin + router.asPath,
-					},
-				})
-			);
+			const downloadUrl = stringifyUrl({
+				url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/jpg/selection`,
+				query: {
+					page: pageIndex,
+					startX: Math.floor(rect.x),
+					startY: Math.floor(rect.y),
+					width: Math.ceil(rect.width),
+					height: Math.ceil(rect.height),
+					currentPageUrl: window.origin + router.asPath,
+				},
+			});
+			// Download the file and save it
+			// const win = window.open(downloadUrl, '_blank');
+			// if (!win) {
+			// iPad doesn't want to open a page from javascript without a click event?
+			// Show popup with download link
+			setSelectionDownloadUrl(downloadUrl);
+			// }
 		},
 		[ieObjectId, router.asPath]
 	);
@@ -1802,7 +1827,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								setIsTextOverlayVisible={setIsTextOverlayVisible}
 							/>
 						)}
-						{!!similar.length && (
+						{activeTab === ObjectDetailTabs.Metadata && !!similar.length && (
 							<MetadataList allowTwoColumns={false}>
 								<Metadata
 									title={tHtml('pages/slug/ie/index___ook-interessant')}
@@ -1862,6 +1887,37 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				onSubmit={onRequestAccessSubmit}
 				id="object-detail-page__request-access-blade"
 			/>
+			<Blade
+				id="iiif-selection-download-url"
+				isOpen={!!selectionDownloadUrl}
+				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
+					<h2 {...props}>{tHtml('modules/ie-objects/object-detail-page___selectie-is-klaar')}</h2>
+				)}
+				footer={
+					<div className="u-px-32 u-px-16-md u-py-24 u-py-16-md u-flex u-flex-col u-gap-xs">
+						<a
+							href={selectionDownloadUrl || undefined}
+							onClick={() => {
+								setTimeout(() => {
+									setSelectionDownloadUrl(null);
+								}, 100);
+							}}
+							rel="noreferrer"
+						>
+							<Button
+								label={tText('modules/ie-objects/object-detail-page___download-selection')}
+								variants={['block', 'black']}
+							/>
+						</a>
+					</div>
+				}
+			>
+				<div className="u-px-32 u-px-16-md">
+					{tHtml(
+						'modules/ie-objects/object-detail-page___je-selectie-kan-worden-gedownload-als-afbeelding'
+					)}
+				</div>
+			</Blade>
 		</>
 	);
 

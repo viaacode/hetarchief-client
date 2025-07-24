@@ -1,0 +1,12 @@
+@use "../../../../../styles/abstracts" as *;
+@use "../../../../../styles/abstracts" as *;
+
+@media (max-width: $breakpoint-md) {
+	.c-tab-label__count {
+		display: none;
+	}
+
+	.c-tab-label__count--show-on-mobile {
+		display: inline;
+	}
+}

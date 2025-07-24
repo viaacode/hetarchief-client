@@ -3,12 +3,12 @@ import { useRouter } from 'next/router';
 import type { GetServerSidePropsContext } from 'next/types';
 import type { ComponentType } from 'react';
 
-import { AccountMyFolders } from '@account/views/MyFolders';
+import { AccountMyFolders } from '@account/views/AccountMyFolders';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 
-const AccountMyFoldersDutch: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
+const AccountMyFoldersSlugDutch: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
 	const router = useRouter();
 	const folderSlug = router.query.folderSlug as string | undefined;
 
@@ -21,4 +21,4 @@ export async function getServerSideProps(
 	return getDefaultStaticProps(context, context.resolvedUrl);
 }
 
-export default withAuth(AccountMyFoldersDutch as ComponentType, true);
+export default withAuth(AccountMyFoldersSlugDutch as ComponentType, true);

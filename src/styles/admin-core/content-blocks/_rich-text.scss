@@ -1,11 +1,20 @@
 @use "src/styles/abstracts" as *;
 
-$component: "c-rich-text-block";
-
-.#{$component} {
+.c-rich-text-block {
 	hr {
 		margin: 0;
 		border: 0.1rem solid $black;
 		opacity: 0.12;
+	}
+
+	// https://meemoo.atlassian.net/browse/ARC-2906
+	.o-grid {
+		:first-child {
+			margin-left: 0;
+		}
+
+		:last-child {
+			margin-right: 0;
+		}
 	}
 }

@@ -21,7 +21,7 @@ export const useGetIeObjectInfo = (
 				// This is an old schema identifier (v2), we need to convert it to a new one (v3)
 				const v3IdentifierResponse =
 					await IeObjectsService.schemaIdentifierLookup(schemaIdentifier);
-				newSchemaIdentifier = v3IdentifierResponse.id;
+				newSchemaIdentifier = v3IdentifierResponse.schemaIdentifierV3;
 			} else {
 				// This is already a new schema identifier (v3)
 				newSchemaIdentifier = schemaIdentifier;

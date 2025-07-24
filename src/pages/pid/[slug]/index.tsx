@@ -83,7 +83,7 @@ const IeObjectLinkResolver: NextPage<DefaultSeoInfo & UserProps> = ({ url }) => 
 			<Loading
 				fullscreen
 				className={styles['p-pid__c-loading--fullscreen']}
-				owner={'/pid/[slug]/index page'}
+				owner={'/pid/[...slug]/index page'}
 			/>
 		);
 	};

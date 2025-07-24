@@ -1,18 +1,21 @@
 import type { GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import type { GetServerSidePropsContext } from 'next/types';
-import React, { type ComponentType } from 'react';
+import { type ComponentType, useEffect } from 'react';
 
-import { AccountMyFolders } from '@account/views/AccountMyFolders';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { Loading } from '@shared/components/Loading';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 
-const AccountMyFoldersSlugEnglish: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
+const AccountMyFoldersDutch: NextPage<DefaultSeoInfo> = () => {
 	const router = useRouter();
-	const folderSlug = router.query.folderSlug as string | undefined;
+	useEffect(() => {
+		router.replace(ROUTES_BY_LOCALE.nl.accountMyFoldersFavorites);
+	}, [router.replace]);
 
-	return <AccountMyFolders folderSlug={folderSlug} url={url} locale={locale} />;
+	return <Loading owner="my folders dutch" fullscreen />;
 };
 
 export async function getServerSideProps(
@@ -21,4 +24,4 @@ export async function getServerSideProps(
 	return getDefaultStaticProps(context, context.resolvedUrl);
 }
 
-export default withAuth(AccountMyFoldersSlugEnglish as ComponentType, true);
+export default withAuth(AccountMyFoldersDutch as ComponentType, true);

@@ -21,6 +21,7 @@ import { CampaignMonitorService } from '@shared/services/campaign-monitor-servic
 import { toastService } from '@shared/services/toast-service';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { REQUEST_ACCESS_FORM_SCHEMA } from './RequestAccessBlade.const';
 import styles from './RequestAccessBlade.module.scss';
 
@@ -32,6 +33,7 @@ const labelKeys: Record<keyof RequestAccessFormState, string> = {
 
 const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...bladeProps }) => {
 	const commonUser = useSelector(selectCommonUser);
+	const locale = useLocale();
 
 	const [query] = useQueryParams({
 		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
@@ -87,6 +89,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 				preferences: {
 					newsletter: isSubscribedToNewsletter,
 				},
+				language: locale,
 			}).catch(() =>
 				toastService.notify({
 					title: tText(

@@ -80,7 +80,7 @@ $controls-margin-bottom: $spacer-sm;
 		height: calc($view-height - 10rem);
 		padding-bottom: $spacer-1xl * 4;
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: $breakpoint-lg) {
 			padding: $spacer-1xl;
 			padding-bottom: $spacer-1xl * 4;
 			gap: 2rem;
@@ -92,7 +92,7 @@ $controls-margin-bottom: $spacer-sm;
 			border: 0.4rem solid #222;
 			width: 25%;
 
-			@media (max-width: $breakpoint-md) {
+			@media (max-width: $breakpoint-lg) {
 				width: 40%;
 			}
 
@@ -123,6 +123,11 @@ $controls-margin-bottom: $spacer-sm;
 		grid-template-rows: auto;
 		grid-gap: $spacer-xs $spacer-xs;
 		container: iiif__controls / size;
+
+		@media (max-width: $breakpoint-xl) {
+			// Avoid buttons behind ipad bottom bar indicator
+			bottom: $spacer-md;
+		}
 
 		&__button-group {
 			display: flex;
@@ -233,6 +238,7 @@ $controls-margin-bottom: $spacer-sm;
 	width: calc(10rem + $spacer-sm);
 	overflow-y: auto;
 	padding-right: $spacer-sm;
+	padding-bottom: 0.5rem;
 
 	&.c-iiif-viewer__iiif__reference-strip--scrollable::after {
 		content: "";
@@ -244,7 +250,7 @@ $controls-margin-bottom: $spacer-sm;
 		margin-top: -1rem;
 	}
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: $breakpoint-lg) {
 		display: none;
 	}
 

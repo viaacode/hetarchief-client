@@ -2,7 +2,7 @@ import type { GetServerSidePropsResult, NextPage } from 'next';
 import type { GetServerSidePropsContext } from 'next/types';
 import type { ComponentType } from 'react';
 
-import { AccountMyHistory } from '@account/views/MyHistory';
+import { AccountMyHistory } from '@account/views/AccountMyHistory';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';

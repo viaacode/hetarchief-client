@@ -59,7 +59,7 @@ export const changeApplicationLocale = async (
 	newFullPath = handleRouteExceptions(routeKey, newFullPath);
 
 	// exception for content pages
-	if (router.route === '/[lang]/[slug]' || router.route === '/[slug]') {
+	if (router.route === '/[lang]/[...slug]' || router.route === '/[...slug]') {
 		// const contentPage ContentPageService.getContentPageByLanguageAndPath(language as any, path);
 		const translatedContentPageInfo = (contentPageInfo?.translatedPages || []).find(
 			(translatedPage) =>

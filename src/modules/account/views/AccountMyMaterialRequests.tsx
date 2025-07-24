@@ -9,8 +9,8 @@ import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetai
 import {
 	ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
 	ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
-	getAccountMaterialRequestTableColumns,
 	Permission,
+	getAccountMaterialRequestTableColumns,
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';

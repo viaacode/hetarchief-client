@@ -1,3 +1,5 @@
+import type { Locale } from '@shared/utils/i18n';
+
 export interface NewsletterFormState {
 	firstName: string;
 	lastName: string;
@@ -13,4 +15,5 @@ export interface SetNewsletterPreferencesBody {
 	lastName?: string;
 	mail?: string;
 	preferences: GetNewsletterPreferencesResponse;
+	language?: Locale;
 }
