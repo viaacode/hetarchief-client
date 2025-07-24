@@ -628,25 +628,40 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	/**
 	 * When the url doesn't fully match with the loaded ie-object, then we need to do a redirect
-	 * Eg: maintainer was renamed, but the old slug should still work
+	 * Eg:
+	 * maintainer was renamed, but the old slug should still work
 	 * user goes to: /search/old-slug-maintainer/ie-object-id/ie-object-slug
 	 * should be redirected to: /search/new-slug-maintainer/ie-object-id/ie-object-slug
+	 *
+	 * Eg:
+	 * url uses an old v2 schema identifier (eg: 16c7b994da244d4aafedcfa6389f56fcb87f085ddffc4f50a23ae423e5c60b6f6eea738d00fc43b88701d3a4cd22f901)
+	 * should be redirected to the new v3 schema identifier (eg: pn8xb19k8t)
 	 */
 	useEffect(() => {
 		if (
-			mediaInfo?.maintainerSlug &&
-			maintainerSlug &&
-			mediaInfo?.maintainerSlug !== maintainerSlug
+			(ieObjectId && mediaInfo?.schemaIdentifier && ieObjectId !== mediaInfo?.schemaIdentifier) ||
+			(mediaInfo?.maintainerSlug && maintainerSlug && mediaInfo?.maintainerSlug !== maintainerSlug)
 		) {
+			// The user is loading a url with the old ie-object schema identifier v2 (eg: 16c7b994da244d4aafedcfa6389f56fcb87f085ddffc4f50a23ae423e5c60b6f6eea738d00fc43b88701d3a4cd22f901)
+			// OR
 			// Maintainer was renamed and the user is loading an url with the old maintainer slug
+			// =>
 			// Redirect to the new maintainer slug
 			// https://meemoo.atlassian.net/browse/ARC-2678
 			const newPath = router.asPath
+				.replace(`/${ieObjectId}/`, `/${mediaInfo?.schemaIdentifier}/`)
 				.replace(`/${maintainerSlug}/`, `/${mediaInfo?.maintainerSlug}/`)
 				.replace(`/${ieObjectNameSlug}`, `/${kebabCase(mediaInfo?.name || '')}`);
 			router.replace(newPath, undefined, { shallow: true });
 		}
-	}, [mediaInfo, maintainerSlug, ieObjectNameSlug, router.replace, router.asPath.replace]);
+	}, [
+		mediaInfo,
+		maintainerSlug,
+		ieObjectId,
+		ieObjectNameSlug,
+		router.replace,
+		router.asPath.replace,
+	]);
 
 	/**
 	 * Recalculate the green highlights in the IIIF viewer to reflect the latest changes to the last highlighted fallen soldier name (mention)
