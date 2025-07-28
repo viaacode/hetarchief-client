@@ -9,8 +9,6 @@ import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 test('T25: Krant metadata', async ({ page, context }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();
 
-	const IE_OBJECT_ID = '6d5p873h9s';
-
 	/**
 	 * Go to a newspaper detail page ---------------------------------------------------------------
 	 */
@@ -18,7 +16,7 @@ test('T25: Krant metadata', async ({ page, context }) => {
 	await goToPageAndAcceptCookies(
 		page,
 		context,
-		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${IE_OBJECT_ID}?showAuth=1`,
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${process.env.TEST_OBJECT_KRANT_3}?showAuth=1`,
 		NEWSPAPER_PAGE_TITLE
 	);
 
@@ -60,7 +58,7 @@ test('T25: Krant metadata', async ({ page, context }) => {
 	await goToPageAndAcceptCookies(
 		page,
 		context,
-		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${IE_OBJECT_ID}?showAuth=1`,
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${process.env.TEST_OBJECT_KRANT_3}?showAuth=1`,
 		NEWSPAPER_PAGE_TITLE
 	);
 
@@ -77,7 +75,7 @@ test('T25: Krant metadata', async ({ page, context }) => {
 		hasText: SITE_TRANSLATIONS.nl['modules/ie-objects/ie-objects___fysieke-drager'],
 	});
 	await expect(metadataField1).toBeVisible();
-	await expect(metadataField1.locator(`text=${IconName.Newspaper}`)).toBeVisible();
+	await expect(metadataField1.locator('text=krant')).toBeVisible();
 
 	// Check if the metadata field "OCR Software" is "ABBYY FineReader Engine"
 	metadataField2 = page.locator(moduleClassSelector('c-metadata__item'), {

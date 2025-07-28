@@ -14,11 +14,11 @@ test('T23: Krant toevoegen aan map', async ({ page, context }) => {
 	/**
 	 * Go to a newspaper detail page ---------------------------------------------------------------
 	 */
-	const NEWSPAPER_PAGE_TITLE = 'Wet- en verordeningsblad voor de bezette streke...';
+	const NEWSPAPER_PAGE_TITLE = 'De toekomst: weekblad voor de arrondissementen ...';
 	await goToPageAndAcceptCookies(
 		page,
 		context,
-		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/h98z893q54?showAuth=1`,
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${process.env.TEST_OBJECT_KRANT_1}?showAuth=1`,
 		NEWSPAPER_PAGE_TITLE
 	);
 

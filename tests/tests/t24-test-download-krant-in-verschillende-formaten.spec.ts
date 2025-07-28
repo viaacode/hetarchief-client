@@ -9,8 +9,6 @@ import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 test('T24: Download krant in verschillende formaten', async ({ page, context }) => {
 	const SITE_TRANSLATIONS = await getSiteTranslations();
 
-	const IE_OBJECT_ID = 'h98z893q54';
-
 	/**
 	 * Go to a newspaper detail page ---------------------------------------------------------------
 	 */
@@ -18,7 +16,7 @@ test('T24: Download krant in verschillende formaten', async ({ page, context }) 
 	await goToPageAndAcceptCookies(
 		page,
 		context,
-		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${IE_OBJECT_ID}?showAuth=1`,
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${process.env.TEST_OBJECT_KRANT_2}?showAuth=1`,
 		NEWSPAPER_PAGE_TITLE
 	);
 
@@ -84,8 +82,8 @@ test('T24: Download krant in verschillende formaten', async ({ page, context }) 
 	// Wait for the download to complete
 	let download = await downloadPromise;
 
-	// Check if the browser downloaded a zip file with name: newspaper-h98z893q54.zip
-	expect(download.suggestedFilename()).toBe(`newspaper-${IE_OBJECT_ID}.zip`);
+	// Check if the browser downloaded a zip file with name: newspaper-${process.env.TEST_OBJECT_KRANT_2}.zip
+	expect(download.suggestedFilename()).toBe(`newspaper-${process.env.TEST_OBJECT_KRANT_2}.zip`);
 
 	// Check XML download --------------------------------------------------------------------------------------------
 	// Click the export newspaper dropdown button
@@ -103,7 +101,7 @@ test('T24: Download krant in verschillende formaten', async ({ page, context }) 
 	// Wait for the download to complete
 	download = await downloadPromise;
 
-	// Check if the browser downloaded a zip file with name: newspaper-h98z893q54.zip
+	// Check if the browser downloaded a zip file with name: newspaper-${process.env.TEST_OBJECT_KRANT_2}.zip
 	expect(download.suggestedFilename()).toBe(
 		'wet-en-verordeningsblad-voor-de-bezette-streken-van-belgie.xml'
 	);
