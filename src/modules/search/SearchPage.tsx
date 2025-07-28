@@ -939,11 +939,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 							const isSecondLast = i === visitorSpaceLinks.length - 2;
 
 							return (
-								<div key={`visitor-space-link--${visitorSpaceLink}`}>
+								<span key={`visitor-space-link--${visitorSpaceLink}`}>
 									{visitorSpaceLink}
 									{!isLast && !isSecondLast && ', '}
 									{isSecondLast && ' en '}
-								</div>
+								</span>
 							);
 						})}
 					{'.'}

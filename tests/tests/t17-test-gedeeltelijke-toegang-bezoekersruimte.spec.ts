@@ -258,10 +258,10 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	await page.locator(`[aria-label="${saveNewFolderLabel}"]`).click();
 
-	const folderHasBeenCreated = SITE_TRANSLATIONS.nl[
+	const folderHasBeenCreatedLabel = SITE_TRANSLATIONS.nl[
 		'modules/account/components/create-folder-button/create-folder-button___name-is-aangemaakt'
 	].replace('{{name}}', FOLDER_NAME);
-	await checkToastMessage(page, folderHasBeenCreated);
+	await checkToastMessage(page, folderHasBeenCreatedLabel);
 
 	// Check folder is added and checked
 	bookmarkFolderCounts = await getFolderObjectCounts(page);
@@ -499,11 +499,9 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await waitForSearchPage(page, () => amsabSpaceLink.click(), 'OR-154dn75');
 
 	const ALL_TAB = SITE_TRANSLATIONS.nl['modules/visitor-space/const/index___alles'];
-	expect(
-		await page
-			.locator('button.c-tabs__item.c-tab.c-tab--dark.c-tab--all.c-tab--active')
-			.allInnerTexts()
-	).toContain([`${ALL_TAB}(`]);
+	const tabs = page.locator('button.c-tabs__item.c-tab.c-tab--dark.c-tab--all.c-tab--active');
+	await expect(tabs).toBeVisible();
+	expect((await tabs.allInnerTexts()).join('')).toContain(`${ALL_TAB}(`);
 
 	// Get the pid of the first object
 	const objectPid = await page

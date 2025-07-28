@@ -51,6 +51,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	expect(page.url()).toContain('https://ssum-int-iam.private.cloud.meemoo.be/nl/account/nieuw');
 
 	// Enter account info
+	await expect(page.locator('#person_email')).toBeVisible({ timeout: 10000 });
 	await page.fill('#person_email', userEmail);
 	await page.fill('#person_first_name', 'Test-at');
 	await page.fill('#person_last_name', 'Testers-at');
