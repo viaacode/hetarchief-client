@@ -1,4 +1,4 @@
-import { expect, type Page } from '@playwright/test';
+import { type Page, expect } from '@playwright/test';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { Locale } from '@shared/utils/i18n';
 
@@ -49,5 +49,5 @@ export async function loginUserHetArchiefIdp(
 	await page.click('button[type="submit"]');
 
 	// Wait for site to load after login
-	await waitForPageTitle(page, titleAfterLogin || HOMEPAGE_TITLE);
+	await waitForPageTitle(page, titleAfterLogin || HOMEPAGE_TITLE, locale);
 }

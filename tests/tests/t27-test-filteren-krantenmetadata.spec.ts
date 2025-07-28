@@ -26,7 +26,7 @@ test('T27: Filteren op krant metadata', async ({ page, context }) => {
 
 	// Should only be one search result
 	const tabText = await newspaperTab.innerText();
-	expect(tabText).toContain('newspaper\nKrant(1)');
+	expect(tabText).toContain('newspaper\nKrant(2)');
 
 	// Check all search results are newspapers
 	const searchResults = page.locator(
@@ -37,7 +37,7 @@ test('T27: Filteren op krant metadata', async ({ page, context }) => {
 	const firstNewspaperSearchResult = searchResults.nth(0);
 	await expect(firstNewspaperSearchResult).toBeVisible();
 	await expect(firstNewspaperSearchResult).toContainText('newspaper'); // Icon
-	await expect(firstNewspaperSearchResult).toContainText('h98z893q54');
+	await expect(firstNewspaperSearchResult).toContainText(process.env.TEST_OBJECT_KRANT_2 as string);
 
 	// Wait for close to save the videos
 	await context.close();

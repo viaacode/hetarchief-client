@@ -10,12 +10,14 @@ test('T19: Test OCR raadplegen', async ({ page, context }) => {
 	await goToPageAndAcceptCookies(
 		page,
 		context,
-		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/h98z893q54`,
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${process.env.TEST_OBJECT_KRANT_1}`,
 		'Wet- en verordeningsblad voor de bezette streke...'
 	);
 
 	// Go to page again to fix non-loading newspaper in incognito browser
-	await page.goto(`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/h98z893q54`);
+	await page.goto(
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${process.env.TEST_OBJECT_KRANT_1}`
+	);
 
 	// Check ocr tab exists
 	await expect(page.locator('.c-tab--ocr')).toBeVisible();

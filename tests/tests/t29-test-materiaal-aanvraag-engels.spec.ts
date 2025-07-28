@@ -17,7 +17,7 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 	await goToPageAndAcceptCookies(
 		page,
 		context,
-		`${process.env.TEST_CLIENT_ENDPOINT as string}/en/pid/h98z893q54?showAuth=1`,
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/en/pid/${process.env.TEST_OBJECT_KRANT_2}?showAuth=1`,
 		NEWSPAPER_PAGE_TITLE,
 		'all',
 		Locale.en
@@ -143,7 +143,7 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 		.locator(moduleClassSelector('c-personal-info-blade__content-value'))
 		.first();
 	await expect(nameValue).toBeVisible();
-	await expect(nameValue).toContainText('Basisgebruiker Test');
+	await expect(nameValue).toContainText('Basis 3 Gebruiker 3');
 
 	// Check email is filled in:
 	const emailLabel = personalDetailsBlade
@@ -158,7 +158,7 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 		.locator(moduleClassSelector('c-personal-info-blade__content-value'))
 		.nth(1);
 	await expect(emailValue).toBeVisible();
-	await expect(emailValue).toContainText('hetarchief2.0+basisgebruiker@meemoo.be');
+	await expect(emailValue).toContainText('hetarchief2.0+basisgebruiker3@meemoo.be');
 
 	// Check organisation is empty
 	const orgInputField = page.locator(
@@ -171,11 +171,11 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 	const subscribeNewsletterCheckbox = page.locator(
 		`.u-hide-lt-bp2 ${moduleClassSelector('c-personal-info-blade__checkbox')}`
 	);
-	await expect(subscribeNewsletterCheckbox).toContainText(
+	const subscribeToNewsletterLabel =
 		SITE_TRANSLATIONS.en[
 			'modules/home/components/request-access-blade/request-access-blade___schrijf-je-in-voor-de-nieuwsbrief'
-		]
-	);
+		];
+	await expect(subscribeNewsletterCheckbox).toContainText(subscribeToNewsletterLabel);
 	await expect(subscribeNewsletterCheckbox).toBeVisible();
 
 	// Check the radio button for "I ask for fragments in the context of private research"

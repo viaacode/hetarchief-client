@@ -12,17 +12,19 @@ test('T22: bronvermelding', async ({ page, context }) => {
 	/**
 	 * Go to a newspaper detail page ---------------------------------------------------------------
 	 */
+	const NEWSPAPER_PAGE_TITLE = 'De toekomst: weekblad voor de arrondissementen ...';
 	await goToPageAndAcceptCookies(
 		page,
 		context,
-		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/h98z893q54`,
-		'Wet- en verordeningsblad voor de bezette streke...'
+		`${process.env.TEST_CLIENT_ENDPOINT as string}/pid/${process.env.TEST_OBJECT_KRANT_1}`,
+		NEWSPAPER_PAGE_TITLE
 	);
 
 	// Scroll into view attribution metadata
+	const attributionLabel = SITE_TRANSLATIONS.nl['modules/ie-objects/ie-objects___bronvermelding'];
 	const attributionMetadata = page
 		.locator(moduleClassSelector('c-metadata__item'), {
-			hasText: SITE_TRANSLATIONS.nl['modules/ie-objects/ie-objects___bronvermelding'],
+			hasText: attributionLabel,
 		})
 		.first();
 	await attributionMetadata.scrollIntoViewIfNeeded();
@@ -31,9 +33,9 @@ test('T22: bronvermelding', async ({ page, context }) => {
 	await expect(attributionMetadata).toBeVisible();
 
 	// Check that the text contains all required parts
-	const attributionText = `onbekend, Wet- en verordeningsblad voor de bezette streken van België, KU Leuven Universiteitsbibliotheek, Public domein, ${
+	const attributionText = `onbekend, De toekomst: weekblad voor de arrondissementen Gent-Eecloo 1911-03-19, Amsab-ISG, Copyright undetermined, ${
 		process.env.TEST_CLIENT_ENDPOINT as string
-	}/pid/h98z893q54`;
+	}/pid/${process.env.TEST_OBJECT_KRANT_1}`;
 	await expect(attributionMetadata).toContainText(attributionText);
 
 	// Click the copy button
