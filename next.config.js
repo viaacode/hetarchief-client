@@ -331,19 +331,29 @@ module.exports = withTM({
 				permanent: true,
 			},
 			// Keep the redirects above  until 01/01/2026: https://meemoo.atlassian.net/browse/ARC-2659
+			// ku-leuven-universiteitsbibliotheek => ku-leuven-universiteitsbibliotheken
+			{
+				source: '/bezoek/ku-leuven-universiteitsbibliotheek/:path*',
+				destination: '/bezoek/ku-leuven-universiteitsbibliotheken/:path*',
+				permanent: true,
+			},
+			{
+				source: '/zoeken/ku-leuven-universiteitsbibliotheek/:path*',
+				destination: '/zoeken/ku-leuven-universiteitsbibliotheken/:path*',
+				permanent: true,
+			},
 			{
 				source: '/zoeken',
 				has: [
 					{
 						type: 'query',
 						key: 'aanbieder',
-						value: 'ku-leuven-limel',
+						value: 'ku-leuven-universiteitsbibliotheek',
 					},
 				],
-				destination: '/zoeken?aanbieder=ku-leuven-dienst-onderwijs',
+				destination: '/zoeken?aanbieder=ku-leuven-universiteitsbibliotheken',
 				permanent: true,
 			},
-			// Keep the redirects above  until 01/01/2026: https://meemoo.atlassian.net/browse/ARC-2659
 		];
 	},
 });
