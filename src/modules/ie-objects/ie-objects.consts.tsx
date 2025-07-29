@@ -34,7 +34,11 @@ export const FLOWPLAYER_VIDEO_FORMATS: string[] = [
 	'application/vnd.apple.mpegurl',
 ];
 export const FLOWPLAYER_AUDIO_FORMATS: string[] = [
-	'audio/mp4', // We want to play the mp4 video file with the ugly speaker (decided by team archief)
+	// We want to play the mp4 video file with the ugly speaker (decided by team archief)
+	'audio/mp4',
+	// If the mp4 with ugly speaker is not available, we want to play the mp3 file
+	// backend will ensure there is only one of these two formats available
+	// https://meemoo.atlassian.net/browse/ARC-3121
 	'audio/mpeg',
 ];
 export const FLOWPLAYER_FORMATS: string[] = [
