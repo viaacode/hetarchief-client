@@ -1199,6 +1199,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					pageIndex: currentPageIndex,
 					textLine: textLocation,
 				});
+				setIsTextOverlayVisible(true);
 			}
 		},
 		[currentPageIndex, iiifViewerInitializedPromise]

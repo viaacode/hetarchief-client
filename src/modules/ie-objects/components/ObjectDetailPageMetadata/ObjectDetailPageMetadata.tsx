@@ -864,7 +864,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						onReadMoreClicked={setSelectedMetadataField}
 					/>
 
-					{showAlert && (
+					{showAlert && !isNewspaper && (
 						<Alert
 							className="c-Alert__margin-bottom"
 							icon={<Icon name={IconNamesLight.Info} />}
