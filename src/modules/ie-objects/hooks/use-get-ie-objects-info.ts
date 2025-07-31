@@ -2,7 +2,6 @@ import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react
 
 import { MIN_LENGTH_SCHEMA_IDENTIFIER_V2 } from '@ie-objects/ie-objects.consts';
 import { QUERY_KEYS } from '@shared/const/query-keys';
-
 import type { IeObject } from './../ie-objects.types';
 import { IeObjectsService } from './../services';
 
@@ -27,6 +26,7 @@ export const useGetIeObjectInfo = (
 				newSchemaIdentifier = schemaIdentifier;
 			}
 			const ieObjects = await IeObjectsService.getBySchemaIdentifiers([newSchemaIdentifier]);
+
 			if (ieObjects[0]) {
 				return ieObjects[0];
 			}

@@ -6,6 +6,7 @@ import type { NextRouter } from 'next/router';
 import { AuthService } from '@auth/services/auth-service';
 import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/LanguageSwitcher.exceptions';
 import { QUERY_KEYS, ROUTES_BY_LOCALE, type RouteKey } from '@shared/const';
+import { isRootSlugRoute } from '@shared/helpers/is-root-slug-route';
 import { Locale } from '@shared/utils/i18n';
 import type { Avo } from '@viaa/avo2-types';
 
@@ -59,7 +60,7 @@ export const changeApplicationLocale = async (
 	newFullPath = handleRouteExceptions(routeKey, newFullPath);
 
 	// exception for content pages
-	if (router.route === '/[lang]/[...slug]' || router.route === '/[...slug]') {
+	if (isRootSlugRoute(router.route)) {
 		// const contentPage ContentPageService.getContentPageByLanguageAndPath(language as any, path);
 		const translatedContentPageInfo = (contentPageInfo?.translatedPages || []).find(
 			(translatedPage) =>

@@ -319,6 +319,13 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		flex-direction: column;
 		background-color: $shade-darker;
 		container: object-detail__media / size;
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: center;
+
+		> :global(.c-loading) {
+			backdrop-filter: blur(4px);
+		}
 
 		:global(.p-object-detail__flowplayer) {
 			height: 100%;

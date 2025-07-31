@@ -35,6 +35,8 @@ import { ZendeskWrapper } from '@shared/components/ZendeskWrapper';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { changeApplicationLocale } from '@shared/helpers/change-application-locale';
+import { getSlugFromQueryParams } from '@shared/helpers/get-slug-from-query-params'; // We want to make sure config gets fetched here, no sure why anymore
+import { isRootSlugRoute } from '@shared/helpers/is-root-slug-route';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
@@ -73,11 +75,8 @@ import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react
 import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
 import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
-
 import packageJson from '../../../../../package.json';
-
-import { getSlugFromQueryParams } from '@shared/helpers/get-slug-from-query-params'; // We want to make sure config gets fetched here, no sure why anymore
-import styles from './AppLayout.module.scss';
+import styles from './AppLayout.module.scss'; // We want to make sure config gets fetched here, no sure why anymore
 
 // We want to make sure config gets fetched here, no sure why anymore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -179,7 +178,7 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	const slug = getSlugFromQueryParams(router.query);
 	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(locale, `/${slug}`, {
-		enabled: router.route === '/[...slug]',
+		enabled: isRootSlugRoute(router.route),
 	});
 
 	const contentPageInfo = dbContentPage
