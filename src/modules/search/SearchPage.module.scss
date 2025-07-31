@@ -1,0 +1,21 @@
+@use "../../styles/abstracts" as *;
+
+.p-visitor-space {
+	:global(.c-tab) {
+		// Only show active tab count on mobile
+		// https://meemoo.atlassian.net/browse/ARC-3065
+		@media (max-width: $breakpoint-md) {
+			:global(.c-tab-label__count) {
+				display: none;
+			}
+
+			:global(.c-tab__icon) {
+				display: none;
+			}
+
+			&:global(.c-tab--active) :global(.c-tab-label__count) {
+				display: inline-block;
+			}
+		}
+	}
+}
