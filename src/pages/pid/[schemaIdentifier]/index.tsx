@@ -25,12 +25,13 @@ import { setShowZendesk } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorLayout } from '@visitor-layout/index';
 
+import { makeServerSideRequestGetIeObjectThumbnail } from '@ie-objects/hooks/use-get-ie-objects-thumbnail';
 import styles from './index.module.scss';
 
 const IeObjectLinkResolver: NextPage<DefaultSeoInfo & UserProps> = ({ url }) => {
 	const router = useRouter();
 	const locale = useLocale();
-	const { slug: schemaIdentifier } = router.query;
+	const schemaIdentifier = router.query.schemaIdentifier;
 	const dispatch = useDispatch();
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 
@@ -83,7 +84,7 @@ const IeObjectLinkResolver: NextPage<DefaultSeoInfo & UserProps> = ({ url }) => 
 			<Loading
 				fullscreen
 				className={styles['p-pid__c-loading--fullscreen']}
-				owner={'/pid/[...slug]/index page'}
+				owner={'/pid/[slug]/index page'}
 			/>
 		);
 	};
@@ -101,6 +102,7 @@ export async function getServerSideProps(
 
 	const queryClient = new QueryClient();
 	await makeServerSideRequestGetIeObjectInfo(queryClient, schemaIdentifier);
+	await makeServerSideRequestGetIeObjectThumbnail(queryClient, schemaIdentifier);
 
 	return getDefaultStaticProps(context, context.resolvedUrl, {
 		queryClient,

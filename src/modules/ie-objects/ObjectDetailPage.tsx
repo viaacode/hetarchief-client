@@ -128,6 +128,7 @@ import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 
+import { useGetIeObjectThumbnail } from '@ie-objects/hooks/use-get-ie-objects-thumbnail';
 import {
 	iiifGoToHome,
 	iiifGoToPage,
@@ -255,6 +256,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		isError: mediaInfoIsError,
 		error: mediaInfoError,
 	} = useGetIeObjectInfo(ieObjectId);
+
+	const { data: thumbnailUrl, isLoading: thumbnailUrlIsLoading } =
+		useGetIeObjectThumbnail(ieObjectId);
 
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
@@ -1675,7 +1679,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		if (mediaInfo?.thumbnailUrl) {
 			return (
 				<>
-					<div className={styles['p-object-detail__media']}>{renderMedia()}</div>
+					<div
+						className={styles['p-object-detail__media']}
+						style={thumbnailUrl ? { backgroundImage: `url(${thumbnailUrl})` } : {}}
+					>
+						{renderMedia()}
+					</div>
 					{showFragmentSlider && (
 						<FragmentSlider
 							className={styles['p-object-detail__grey-slider-bar']}
@@ -1933,16 +1942,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	//                   - 404, 403: no access error page
 
 	const renderPageContent = () => {
-		if (mediaInfoIsLoading || visitRequestIsLoading || visitorSpaceIsLoading) {
+		if (thumbnailUrlIsLoading && !mediaInfo) {
 			return <Loading fullscreen owner="object detail page: render page content" />;
 		}
 
-		if (mediaInfo) {
+		if (mediaInfo || thumbnailUrl) {
 			return (
 				<div
 					className={clsx(
 						styles['p-object-detail'],
-						`p-object-detail--${mediaInfo.dctermsFormat}`,
+						`p-object-detail--${mediaInfo?.dctermsFormat}`,
 						{
 							[styles['p-object-detail__visitor-space-navigation-bar--visible']]:
 								showVisitorSpaceNavigationBar,

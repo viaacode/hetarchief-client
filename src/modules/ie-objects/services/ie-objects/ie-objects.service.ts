@@ -97,6 +97,27 @@ export class IeObjectsService {
 		return ieObjects;
 	}
 
+	/**
+	 * Get an IE object thumbnail by its schemaIdentifier
+	 * @param schemaIdentifier The ie object schemaIdentifier, eg: 086348mc8s, qstt4fps28
+	 */
+	public static async getThumbnailBySchemaIdentifier(
+		schemaIdentifier: string
+	): Promise<string | null> {
+		const url = stringifyUrl({
+			url: `${IE_OBJECTS_SERVICE_BASE_URL}/thumbnails`,
+			query: {
+				ids: [schemaIdentifier],
+			},
+		});
+		const thumbnailInfos: {
+			iri: string;
+			schemaIdentifier: string;
+			thumbnailUrl: string | null;
+		}[] = await ApiService.getApi().get(url).json();
+		return thumbnailInfos?.[0]?.thumbnailUrl || null;
+	}
+
 	public static async getSeoBySchemaIdentifier(schemaIdentifier: string): Promise<SeoInfo> {
 		return await ApiService.getApi()
 			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_SEO_URL}/${schemaIdentifier}`)

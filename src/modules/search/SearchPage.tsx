@@ -126,6 +126,7 @@ import {
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
 import { v4 as uuidV4 } from 'uuid';
+import styles from './SearchPage.module.scss';
 
 const labelKeys = {
 	search: 'SearchPage__search',
@@ -346,7 +347,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 					<TabLabel
 						label={tab.label}
 						count={numberWithCommas(getItemCounts(tab.id as SearchPageMediaType))}
-						showCountOnMobile={tab.showCountOnMobile}
 					/>
 				),
 				active: tab.id === format,
@@ -1009,7 +1009,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 					<link rel="canonical" href="https://hetarchief.be/zoeken" />
 				</Head>
 				{accessibleVisitorSpaceRequests && (
-					<div className="p-visitor-space">
+					<div className={clsx('p-visitor-space', styles['p-visitor-space'])}>
 						<section className="u-bg-black u-pt-8">
 							<div className="l-container">
 								<FormControl

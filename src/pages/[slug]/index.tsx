@@ -1,3 +1,11 @@
+// We need to duplicate this page into /[slug]/[...slug] otherwise we get all kind of nasty page loads for these paths:
+// .well-known
+// appspecific
+// com.chrome.devtools.json
+// _next
+// static
+// webpack
+// .*.webpack.hot-update.json
 import {
 	ContentPageRenderer,
 	convertDbContentPageToContentPageInfo,
@@ -23,6 +31,7 @@ import {
 	makeServerSideRequestGetIeObjectInfo,
 	useGetIeObjectInfo,
 } from '@ie-objects/hooks/use-get-ie-objects-info';
+import { makeServerSideRequestGetIeObjectThumbnail } from '@ie-objects/hooks/use-get-ie-objects-thumbnail';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';
 import { type PageInfo, SeoTags } from '@shared/components/SeoTags/SeoTags';
@@ -111,7 +120,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 
 	const renderPageContent = () => {
 		if (isContentPageLoading || isIeObjectLoading || (isContentPageFetching && !contentPageInfo)) {
-			return <Loading fullscreen owner={'/[...slug]/index page'} />;
+			return <Loading fullscreen owner={'/[slug]/index page'} />;
 		}
 
 		if (contentPageInfo) {
@@ -145,7 +154,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 				// Avoid loading a 404 page in SSR
 				// since we don't want to see a 404 error flash before the page loads for logged-in users
 				// https://meemoo.atlassian.net/browse/ARC-2857
-				return <Loading fullscreen owner={'/[...slug]/index page'} />;
+				return <Loading fullscreen owner={'/[slug]/index page'} />;
 			}
 			return (
 				<>
@@ -173,6 +182,7 @@ export async function getServerSideProps(
 	let image: string | null = null;
 	const pathOrIeObjectId = context.query.slug as string;
 	const locale = (context.locale || Locale.nl) as Locale;
+
 	if (pathOrIeObjectId) {
 		try {
 			const contentPage = await ContentPageClientService.getByLanguageAndPath(
@@ -197,6 +207,7 @@ export async function getServerSideProps(
 			locale
 		),
 		makeServerSideRequestGetIeObjectInfo(queryClient, pathOrIeObjectId),
+		makeServerSideRequestGetIeObjectThumbnail(queryClient, pathOrIeObjectId),
 	]);
 
 	return getDefaultStaticProps(context, context.resolvedUrl, {

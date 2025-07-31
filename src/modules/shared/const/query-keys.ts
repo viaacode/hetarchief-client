@@ -8,6 +8,7 @@ export enum QUERY_KEYS {
 	getIeObjectsExport = 'getIeObjectsExport',
 	getIeObjectsFilterOptions = 'getMediaFilterOptions',
 	getIeObjectsInfo = 'getIeObjectsInfo',
+	getIeObjectsThumbnail = 'getIeObjectsThumbnail',
 	getIeObjectsResults = 'getIeObjectsResults',
 	getIeObjectFormatCounts = 'getIeObjectFormatCounts',
 	getIeObjectsRelated = 'getIeObjectsRelated',
