@@ -13,6 +13,7 @@
     "build": "next build",
     "build-production": "cross-env NODE_ENV=production next build",
     "start": "next start",
+    "start-production-locally": "cross-env NODE_ENV=production next start -p 3200",
     "docker-start": "node ./scripts/next-config-to-env-file.js && node ./scripts/copy-robots-txt-file.js && next start",
     "install-pre-commit-hook": "lefthook install",
     "lint": "npm run lint:ts && npm run lint:scss",
