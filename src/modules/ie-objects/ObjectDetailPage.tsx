@@ -425,7 +425,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
 	const isNewspaper = mediaInfo?.dctermsFormat === IeObjectType.Newspaper;
 	const showFragmentSlider = representationsToDisplay.length > 1 && !isNewspaper;
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.lg); // mobile and tablet portrait
 	const hasAccessToVisitorSpaceOfObject =
 		intersection(mediaInfo?.accessThrough, [
 			IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
@@ -1392,7 +1392,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			);
 		}
 
-		if (!playableUrl || !currentPlayableFile || !mediaInfo?.pages?.length) {
+		// https://meemoo.atlassian.net/browse/ARC-2508
+		if ((!playableUrl || !currentPlayableFile || !mediaInfo?.pages?.length) && !isMobile) {
 			return (
 				<ObjectPlaceholder
 					{...getNoLicensePlaceholderLabels()}
