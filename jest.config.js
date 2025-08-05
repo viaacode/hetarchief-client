@@ -46,7 +46,7 @@ module.exports = {
 	testEnvironment: 'jsdom',
 	transformIgnorePatterns: [
 		'^.+\\.module\\.(css|sass|scss)$',
-		'/node_modules/(?!(@meemoo/react-components|@viaa/avo2-components|lodash-es|ky)/)',
+		'/node_modules/(?!(@meemoo/react-components|@viaa/avo2-components|lodash-es|ky|string-strip-html)/)',
 	],
 	globals: {
 		TZ: 'UTC',
