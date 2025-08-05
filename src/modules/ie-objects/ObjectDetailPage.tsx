@@ -275,19 +275,19 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		[currentPage]
 	);
 
-	const getFileByType = useCallback(
-		(mimeTypes: string[]): IeObjectFile | null => {
+	const getFilesByType = useCallback(
+		(mimeTypes: string[]): IeObjectFile[] => {
 			return (
-				getRepresentationByType(mimeTypes)?.files?.find((file) =>
+				getRepresentationByType(mimeTypes)?.files?.filter((file) =>
 					mimeTypes.includes(file.mimeType)
-				) || null
+				) || []
 			);
 		},
 		[getRepresentationByType]
 	);
 
 	// peak file
-	const peakFileStoredAt: string | null = getFileByType(JSON_FORMATS)?.storedAt || null;
+	const peakFileStoredAt: string | null = getFilesByType(JSON_FORMATS)?.[0]?.storedAt || null;
 
 	// media info
 	const { data: peakJson, isLoading: isLoadingPeakFile } = useGetPeakFile(peakFileStoredAt, {
@@ -323,7 +323,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	}, [mediaInfo?.pages]);
 
 	// Playable url for flowplayer
-	const currentPlayableFile: IeObjectFile | null = getFileByType(FLOWPLAYER_FORMATS);
+	const currentPlayableFile: IeObjectFile | null =
+		getFilesByType(FLOWPLAYER_FORMATS)[currentPageIndex] || null;
 	const fileStoredAt: string | null = currentPlayableFile?.storedAt ?? null;
 	const {
 		data: playableUrl,
@@ -1223,7 +1224,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				return !isErrorPlayableUrl && !!playableUrl && !!currentPlayableFile;
 
 			case IeObjectType.Newspaper: {
-				return !!getFileByType(IMAGE_API_FORMATS)?.storedAt;
+				return !!getFilesByType(IMAGE_API_FORMATS)?.[0]?.storedAt;
 			}
 
 			default:
@@ -1234,7 +1235,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		isErrorPlayableUrl,
 		playableUrl,
 		currentPlayableFile,
-		getFileByType,
+		getFilesByType,
 	]);
 
 	const tabs: TabProps[] = useMemo(() => {
@@ -1828,7 +1829,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 								currentPageIndex={currentPageIndex}
 								goToPage={handleSetCurrentPage}
 								currentPage={currentPage}
-								activeFile={getFileByType([...FLOWPLAYER_FORMATS, ...IMAGE_API_FORMATS])}
+								activeFile={
+									getFilesByType([...FLOWPLAYER_FORMATS, ...IMAGE_API_FORMATS])?.[
+										currentPageIndex
+									] || null
+								}
 								simplifiedAltoInfo={simplifiedAltoInfo || null}
 								iiifZoomTo={(x: number, y: number) =>
 									iiifZoomTo(iiifViewerInitializedPromise as Promise<void>, x, y)
