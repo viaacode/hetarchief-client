@@ -60,7 +60,7 @@ import {
 	FLOWPLAYER_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
 	IMAGE_API_FORMATS,
-	IMAGE_FORMATS,
+	IMAGE_BROWSE_COPY_FORMATS,
 	JSON_FORMATS,
 	OBJECT_DETAIL_TABS,
 	XML_FORMATS,
@@ -304,11 +304,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		return compact(
 			mediaInfo?.pages?.flatMap((page) => {
 				const files = page?.representations?.flatMap((representation) => representation.files);
-				const imageApiFile = files.find((file) => IMAGE_API_FORMATS.includes(file.mimeType));
+				const imageApiFile =
+					files.find((file) => IMAGE_API_FORMATS.includes(file.mimeType)) ||
+					// Delete when https://meemoo.atlassian.net/browse/ARC-3156 is fixed
+					files.find((file) => file.storedAt.endsWith('jp2'));
 				if (!imageApiFile?.storedAt) {
 					return null;
 				}
-				const imageFile = files.find((file) => IMAGE_FORMATS.includes(file.mimeType));
+				const imageFile = files.find((file) => IMAGE_BROWSE_COPY_FORMATS.includes(file.mimeType));
 				const altoFile = files.find((file) => XML_FORMATS.includes(file.mimeType));
 				if (!imageFile?.storedAt) {
 					return null;
@@ -410,7 +413,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		});
 		return altoFileUrl;
 	}, [currentPage]);
-	const { data: simplifiedAltoInfo } = useGetAltoJsonFileContent(currentPageAltoUrl);
+	const { data: simplifiedAltoInfo } = useGetAltoJsonFileContent(
+		currentPageAltoUrl,
+		currentPageIndex
+	);
 
 	/**
 	 * Computed
@@ -493,12 +499,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const getAltoTextsOnCurrentPageForSearchTerms = useCallback((): TextLine[] => {
 		const searchTermParts = searchTerms.toLowerCase().split(' ');
 		return (
-			simplifiedAltoInfo?.text?.filter((altoText) => {
+			simplifiedAltoInfo?.altoJsonContent?.text?.filter((altoText) => {
 				const lowercaseAltoText = altoText.text.toLowerCase();
 				return searchTermParts.some((searchTermWord) => lowercaseAltoText.includes(searchTermWord));
 			}) || []
 		);
-	}, [searchTerms, simplifiedAltoInfo?.text]);
+	}, [searchTerms, simplifiedAltoInfo?.altoJsonContent?.text]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	const handleSearch = useCallback(
@@ -684,11 +690,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			iiifUpdateHighlightedAltoTexts(
 				iiifViewerInitializedPromise as Promise<void>,
 				activeMentionHighlights?.highlights,
-				null
+				null,
+				false
 			);
 		} else {
 			// If the active mention is not on the current page, remove the highlights
-			iiifUpdateHighlightedAltoTexts(iiifViewerInitializedPromise as Promise<void>, [], null);
+			iiifUpdateHighlightedAltoTexts(
+				iiifViewerInitializedPromise as Promise<void>,
+				[],
+				null,
+				false
+			);
 		}
 	}, [
 		highlightMode,
@@ -717,11 +729,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			iiifUpdateHighlightedAltoTexts(
 				iiifViewerInitializedPromise as Promise<void>,
 				[activeOcrWord?.textLine],
-				null
+				null,
+				false
 			);
 		} else {
 			// If the active ocr word is not on the current page or null, remove the highlights
-			iiifUpdateHighlightedAltoTexts(iiifViewerInitializedPromise as Promise<void>, [], null);
+			iiifUpdateHighlightedAltoTexts(
+				iiifViewerInitializedPromise as Promise<void>,
+				[],
+				null,
+				false
+			);
 		}
 	}, [
 		highlightMode,
@@ -746,24 +764,35 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		}
 		await iiifViewerInitializedPromise;
 		if (!searchResults || searchResults.length === 0) {
-			iiifUpdateHighlightedAltoTexts(iiifViewerInitializedPromise as Promise<void>, [], null);
+			iiifUpdateHighlightedAltoTexts(
+				iiifViewerInitializedPromise as Promise<void>,
+				[],
+				null,
+				false
+			);
+			return;
+		}
+		const currentSearchResult = searchResults[currentSearchResultIndex];
+		if (!currentSearchResult) {
+			return;
+		}
+		if (currentSearchResult.pageIndex !== currentPageIndex) {
+			// Do not update the highlights if we first need to switch pages before highlighting and zooming to a search result on an other page
+			return;
+		}
+		if (simplifiedAltoInfo?.pageIndex !== currentPageIndex) {
+			// If the simplifiedAltoJson is still loaded from the previous page, we need to wait for it to be loaded before updating the highlights
 			return;
 		}
 		const highlights: TextLine[] = getAltoTextsOnCurrentPageForSearchTerms();
 		let currentHighlightedAltoText: TextLine | null = null;
-		if (
-			!isNil(currentSearchResultIndex) &&
-			!isNil(searchResults[currentSearchResultIndex]?.searchTermIndexOnPage)
-		) {
+		if (!isNil(currentSearchResultIndex) && !isNil(currentSearchResult?.searchTermIndexOnPage)) {
 			// Only update the current search result if it is available during search
 			// It is not available when highlighting a name of a person
-			const searchTermIndexOnPage = searchResults[currentSearchResultIndex]
-				.searchTermIndexOnPage as number;
+			const searchTermIndexOnPage = currentSearchResult.searchTermIndexOnPage as number;
 			currentHighlightedAltoText = highlights[searchTermIndexOnPage] || null;
 
-			if (currentHighlightedAltoText) {
-				iiifZoomToRect(iiifViewerInitializedPromise as Promise<void>, currentHighlightedAltoText);
-			} else {
+			if (!currentHighlightedAltoText) {
 				console.error('Could not find currentHighlightedAltoText', {
 					searchResults,
 				});
@@ -774,10 +803,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			iiifUpdateHighlightedAltoTexts(
 				iiifViewerInitializedPromise as Promise<void>,
 				highlights,
-				currentHighlightedAltoText
+				currentHighlightedAltoText,
+				true
 			);
 		} else {
-			iiifUpdateHighlightedAltoTexts(iiifViewerInitializedPromise as Promise<void>, [], null);
+			iiifUpdateHighlightedAltoTexts(
+				iiifViewerInitializedPromise as Promise<void>,
+				[],
+				null,
+				false
+			);
 		}
 	}, [
 		highlightMode,
@@ -786,6 +821,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		getAltoTextsOnCurrentPageForSearchTerms,
 		isTextOverlayVisible,
 		iiifViewerInitializedPromise,
+		currentPageIndex,
+		simplifiedAltoInfo?.pageIndex,
 	]);
 	useEffect(() => {
 		updateHighlightsForSearch();
@@ -818,7 +855,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	 * When the page loads, search the ocr texts for the searchTerms in the query params in the url
 	 */
 	useEffect(() => {
-		if (highlightedSearchTerms && isNewspaper && !hasAppliedUrlSearchTerms && simplifiedAltoInfo) {
+		if (
+			highlightedSearchTerms &&
+			isNewspaper &&
+			!hasAppliedUrlSearchTerms &&
+			simplifiedAltoInfo?.altoJsonContent
+		) {
 			const newSearchTerms: string = highlightedSearchTerms
 				.split(HIGHLIGHTED_SEARCH_TERMS_SEPARATOR)
 				.join(' ');
@@ -834,7 +876,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		handleSearch,
 		highlightedSearchTerms,
 		handleIsTextOverlayVisibleChange,
-		simplifiedAltoInfo,
+		simplifiedAltoInfo?.altoJsonContent,
 	]);
 
 	/**
@@ -1181,6 +1223,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				return;
 			}
 			if (searchResult.pageIndex !== currentPageIndex) {
+				console.log('updating page index to ', searchResult.pageIndex);
 				setCurrentPageIndex(searchResult.pageIndex, 'replaceIn');
 			}
 		},
@@ -1207,7 +1250,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				setIsTextOverlayVisible(true);
 			}
 		},
-		[currentPageIndex, iiifViewerInitializedPromise]
+		[iiifViewerInitializedPromise, currentPageIndex]
 	);
 
 	/**
@@ -1375,10 +1418,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					setSearchResultIndex={handleChangeSearchIndex}
 					onSelection={handleIiifViewerSelection}
 					enableSelection={canDownloadNewspaper}
-					onPageChanged={handleOnPageChanged}
-					onReady={() => {
+					onInitialized={() => {
 						iiifViewerInitializedPromiseResolve?.();
 					}}
+					onPageChanged={handleOnPageChanged}
 				/>
 			);
 		}
@@ -1555,7 +1598,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		let searchTermIndex = 0;
 		return (
 			<div className={styles['p-object-detail__ocr__words-container']}>
-				{simplifiedAltoInfo?.text?.map((textLocation, textIndex) => {
+				{simplifiedAltoInfo?.altoJsonContent?.text?.map((textLocation, textIndex) => {
 					const isMarked: boolean =
 						!!searchTerms &&
 						searchTermWords.some((searchWord) =>
@@ -1602,7 +1645,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		);
 	}, [
 		searchTerms,
-		simplifiedAltoInfo?.text,
+		simplifiedAltoInfo?.altoJsonContent?.text,
 		searchResults,
 		currentSearchResultIndex,
 		ieObjectId,
@@ -1835,7 +1878,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 										currentPageIndex
 									] || null
 								}
-								simplifiedAltoInfo={simplifiedAltoInfo || null}
+								simplifiedAltoInfo={simplifiedAltoInfo?.altoJsonContent || null}
 								iiifZoomTo={(x: number, y: number) =>
 									iiifZoomTo(iiifViewerInitializedPromise as Promise<void>, x, y)
 								}

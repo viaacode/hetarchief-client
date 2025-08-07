@@ -32,8 +32,8 @@ export interface IiifViewerProps {
 	initialFocusX?: number;
 	initialFocusY?: number;
 	initialZoomLevel?: number;
+	onInitialized: () => void;
 	onPageChanged: (newPageIndex: number) => void;
-	onReady: () => void;
 
 	// Search through pages
 	isSearchEnabled: boolean;
@@ -71,6 +71,12 @@ export interface TextLine {
 	y: number;
 	width: number;
 	height: number;
+}
+
+export interface SimplifiedAltoInfo {
+	pageIndex: number;
+	altoJsonUrl: string;
+	altoJsonContent: SimplifiedAlto;
 }
 
 export interface SimplifiedAlto {
@@ -142,6 +148,7 @@ export interface IiifViewerUpdateHighlightedAltoTextsEvent extends Event {
 	functionProps: {
 		highlightedAltoTexts?: TextLine[];
 		selectedAltoText?: TextLine | null;
+		zoomToSelectedAltoText: boolean;
 	};
 }
 
