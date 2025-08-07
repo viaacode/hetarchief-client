@@ -1114,11 +1114,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						tText('modules/ie-objects/ie-objects___datum-toegevoegd-aan-platform'),
 						renderDate(activeFile?.createdAt)
 					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___permanente-url'),
-						publicRuntimeConfig.CLIENT_URL +
-							ROUTES_BY_LOCALE[locale].permalink.replace(':pid', mediaInfo.schemaIdentifier)
-					)}
+					{/*{renderSimpleMetadataField(*/}
+					{/*	tText('modules/ie-objects/ie-objects___permanente-url'),*/}
+					{/*	publicRuntimeConfig.CLIENT_URL +*/}
+					{/*		ROUTES_BY_LOCALE[locale].permalink.replace(':pid', mediaInfo.schemaIdentifier)*/}
+					{/*)}*/}
 					{mapObjectsToMetadata(
 						mediaInfo.premisIdentifier?.filter(
 							(premisEntry) => !['abraham_id', 'abraham_uri'].includes(Object.keys(premisEntry)[0])
