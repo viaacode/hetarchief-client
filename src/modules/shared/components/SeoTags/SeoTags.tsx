@@ -2,12 +2,14 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import type { FC } from 'react';
 
-import { ROUTE_PARTS_BY_LOCALE, type RouteKey, ROUTES_BY_LOCALE } from '@shared/const';
+import { ROUTES_BY_LOCALE, ROUTE_PARTS_BY_LOCALE, type RouteKey } from '@shared/const';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { LanguageInfo } from '@shared/services/translation-service/translation.types';
 import { Locale } from '@shared/utils/i18n';
 import { createPageTitle } from '@shared/utils/seo';
+import { truncate } from 'lodash-es';
+import { stripHtml } from 'string-strip-html';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -40,6 +42,10 @@ export const SeoTags: FC<SeoTagsProps> = ({
 	translatedPages = [],
 }) => {
 	const resolvedTitle = createPageTitle(title);
+	// https://meemoo.atlassian.net/browse/ARC-2393
+	const resolvedDescription = description
+		? truncate(stripHtml(description).result, { omission: '', length: 120 })
+		: null;
 	const locale = useLocale();
 	const { data: languages } = useGetAllLanguages();
 	const otherLanguages = (languages || []).filter((lang) => lang.languageCode !== locale);
@@ -101,11 +107,11 @@ export const SeoTags: FC<SeoTagsProps> = ({
 	return (
 		<Head>
 			<title>{resolvedTitle}</title>
-			{description && <meta name="description" content={description} />}
+			{resolvedDescription && <meta name="description" content={resolvedDescription} />}
 			<meta property="og:type" content="website" />
 			<meta property="og:url" content={url} />
 			<meta property="og:title" content={resolvedTitle} />
-			{description && <meta property="og:description" content={description} />}
+			{resolvedDescription && <meta property="og:description" content={resolvedDescription} />}
 			<meta
 				property="og:image"
 				content={imgUrl || `${publicRuntimeConfig.CLIENT_URL}/images/og.jpg`}
@@ -113,7 +119,7 @@ export const SeoTags: FC<SeoTagsProps> = ({
 			<meta property="twitter:card" content="summary_large_image" />
 			<meta property="twitter:domain" content={publicRuntimeConfig.CLIENT_URL} />
 			<meta property="twitter:title" content={resolvedTitle} />
-			{description && <meta property="twitter:description" content={description} />}
+			{resolvedDescription && <meta property="twitter:description" content={resolvedDescription} />}
 			{getTranslatedPages().map((translatedPage) => {
 				return (
 					<link

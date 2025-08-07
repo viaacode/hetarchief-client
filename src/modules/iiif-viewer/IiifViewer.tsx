@@ -61,8 +61,8 @@ export const IiifViewer = ({
 	setSearchResultIndex,
 	onSelection,
 	enableSelection = false,
+	onInitialized,
 	onPageChanged,
-	onReady,
 }: IiifViewerProps) => {
 	/**
 	 * Hooks
@@ -125,7 +125,8 @@ export const IiifViewer = ({
 	const [highlightedAltoTextInfo, setHighlightedAltoTextInfo] = useState<{
 		highlightedAltoTexts: TextLine[];
 		selectedAltoText: TextLine | null;
-	}>({ highlightedAltoTexts: [], selectedAltoText: null });
+		zoomToSelectedAltoText: boolean;
+	}>({ highlightedAltoTexts: [], selectedAltoText: null, zoomToSelectedAltoText: false });
 
 	useEffect(() => {
 		console.log(`[PERFORMANCE] ${new Date().toISOString()} init iiif viewer`);
@@ -179,6 +180,7 @@ export const IiifViewer = ({
 
 	useEffect(() => {
 		const handleZoomToRectEvent = (evt: IiifViewerZoomToRectEvent) => {
+			console.log('handleZoomToRectEvent', evt);
 			iiifZoomToRect({
 				x: evt.functionProps.x,
 				y: evt.functionProps.y,
@@ -196,27 +198,33 @@ export const IiifViewer = ({
 		};
 
 		const handleZoomEvent = (evt: IiifViewerZoomEvent) => {
+			console.log('handleZoomEvent', evt);
 			iiifZoom(evt.functionProps.multiplier);
 		};
 
 		const handleZoomToEvent = (evt: IiifViewerZoomToEvent) => {
+			console.log('handleZoomToEvent', evt);
 			iiifZoomTo(evt.functionProps.x, evt.functionProps.y);
 		};
 
 		const handleGoToHomeEvent = () => {
+			console.log('handleGoToHomeEvent');
 			iiifGoToHome();
 		};
 
 		const handleGoToPageEvent = (evt: IiifViewerGoToPageEvent) => {
+			console.log('handleGoToPageEvent', evt);
 			iiifGoToPage(evt.functionProps.pageIndex);
 		};
 
 		const handleUpdateHighlightedAltoTextsEvent = (
 			evt: IiifViewerUpdateHighlightedAltoTextsEvent
 		) => {
+			console.log('handleUpdateHighlightedAltoTextsEvent', evt);
 			setHighlightedAltoTextInfo({
 				highlightedAltoTexts: evt.functionProps.highlightedAltoTexts || [],
 				selectedAltoText: evt.functionProps.selectedAltoText || null,
+				zoomToSelectedAltoText: evt.functionProps.zoomToSelectedAltoText,
 			});
 		};
 
@@ -292,7 +300,8 @@ export const IiifViewer = ({
 	useEffect(() => {
 		updateHighlightedAltoTexts(
 			highlightedAltoTextInfo.highlightedAltoTexts,
-			highlightedAltoTextInfo.selectedAltoText
+			highlightedAltoTextInfo.selectedAltoText,
+			highlightedAltoTextInfo.zoomToSelectedAltoText
 		);
 	}, [highlightedAltoTextInfo]);
 
@@ -304,9 +313,6 @@ export const IiifViewer = ({
 		const viewer = await getOpenSeaDragonViewer();
 		const source = await getActiveImageTileSource();
 		if (viewer && source) {
-			viewer.addOnceHandler('viewport-change', () => {
-				applyInitialZoomAndPan(viewer, getOpenSeaDragonLib());
-			});
 			viewer.goToPage(activeImageIndex);
 		}
 	}, [activeImageIndex]);
@@ -397,7 +403,11 @@ export const IiifViewer = ({
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: We don't include the tile source since it causes a rerender loop
 	const updateHighlightedAltoTexts = useCallback(
-		async (highlightedAltoTexts: TextLine[], selectedHighlightedAltoText: TextLine | null) => {
+		async (
+			highlightedAltoTexts: TextLine[],
+			selectedHighlightedAltoText: TextLine | null,
+			zoomToSelectedAltoText: boolean
+		) => {
 			if (isServerSideRendering()) {
 				console.error('skipping updateHighlightedAltoTexts on SSR');
 				return;
@@ -425,7 +435,7 @@ export const IiifViewer = ({
 
 			const imageSize = await getCurrentImageSize();
 
-			(await getOpenSeaDragonViewer()).clearOverlays();
+			viewer.clearOverlays();
 
 			for (const altoTextLocation of highlightedAltoTexts || []) {
 				const x = altoTextLocation.x / imageSize.width - HIGHLIGHT_MARGIN;
@@ -456,12 +466,29 @@ export const IiifViewer = ({
 						? ' c-iiif-viewer__iiif__alto__text--selected'
 						: ' c-iiif-viewer__iiif__alto__text--highlighted'
 				}`;
-				(await getOpenSeaDragonViewer()).addOverlay(
+				viewer.addOverlay(
 					span,
 					// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 					new (getOpenSeaDragonLib() as any).Rect(x, y, width, height, 0),
 					getOpenSeaDragonLib().Placement.TOP_LEFT
 				);
+			}
+
+			if (zoomToSelectedAltoText && selectedHighlightedAltoText) {
+				iiifZoomToRect(selectedHighlightedAltoText);
+				viewer.addOnceHandler('tile-loaded', (evt) => {
+					console.log('loaded new page => zoom to location', selectedHighlightedAltoText, evt, {
+						currentPageIndex: viewer.currentPage(),
+						// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+						tileSourceId: (evt?.eventSource as any)?.source?.id,
+						// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+						tileSourceIds: (evt?.eventSource as any)?.tileSources?.map(
+							// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+							(tileSource: any) => tileSource.tileSource
+						),
+					});
+					iiifZoomToRect(selectedHighlightedAltoText);
+				});
 			}
 		},
 		[]
@@ -586,7 +613,7 @@ export const IiifViewer = ({
 			setOpenSeaDragonViewer(openSeadragonViewerTemp);
 
 			getWaitForReadyStatePromise(openSeadragonViewerTemp).then(() => {
-				onReady();
+				onInitialized();
 			});
 		}
 	}, [imageInfosWithTokens, iiifViewerId, isMobile]);
@@ -701,6 +728,12 @@ export const IiifViewer = ({
 		if (isNil(x) || isNil(y) || isNil(width) || isNil(height)) {
 			throw new Error('Invalid rect provided to iiifZoomToRect');
 		}
+		console.log('zoom to rect: ', {
+			x,
+			y,
+			width,
+			height,
+		});
 		iiifZoomTo(x + width / 2, y + height / 2);
 	};
 

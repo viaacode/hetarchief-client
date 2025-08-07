@@ -13,64 +13,70 @@ import {
  * https://meemoo.atlassian.net/browse/ARC-2986
  */
 
-export async function iiifZoomToRect(isIiifViewerInitialized: Promise<void>, textLine: TextLine) {
-	await isIiifViewerInitialized;
+export async function iiifZoomToRect(iiifViewerInitialized: Promise<void>, textLine: TextLine) {
+	console.log('iiifZoomToRect waiting', textLine);
+	await iiifViewerInitialized;
+	console.log('iiifZoomToRect waiting done, executing', textLine);
 	const event: Event = new Event(IiifViewerAction.IIIF_VIEWER_ZOOM_TO_RECT);
 	(event as IiifViewerZoomToRectEvent).functionProps = textLine;
 	window.dispatchEvent(event);
 }
 
-export async function iiifRotate(isIiifViewerInitialized: Promise<void>, rotateRight: boolean) {
-	await isIiifViewerInitialized;
+export async function iiifRotate(iiifViewerInitialized: Promise<void>, rotateRight: boolean) {
+	await iiifViewerInitialized;
 	const event: Event = new Event(IiifViewerAction.IIIF_VIEWER_ROTATE);
 	(event as IiifViewerEvent).functionProps = { rotateRight };
 	window.dispatchEvent(event);
 }
 
-export async function iiifFullscreen(isIiifViewerInitialized: Promise<void>, expand: boolean) {
-	await isIiifViewerInitialized;
+export async function iiifFullscreen(iiifViewerInitialized: Promise<void>, expand: boolean) {
+	await iiifViewerInitialized;
 	const event: Event = new Event(IiifViewerAction.IIIF_VIEWER_FULLSCREEN);
 	(event as IiifViewerEvent).functionProps = { expand };
 	window.dispatchEvent(event);
 }
 
-export async function iiifZoom(isIiifViewerInitialized: Promise<void>, multiplier: number) {
-	await isIiifViewerInitialized;
+export async function iiifZoom(iiifViewerInitialized: Promise<void>, multiplier: number) {
+	await iiifViewerInitialized;
 	const event: Event = new Event(IiifViewerAction.IIIF_VIEWER_ZOOM);
 	(event as IiifViewerEvent).functionProps = { multiplier };
 	window.dispatchEvent(event);
 }
 
-export async function iiifZoomTo(isIiifViewerInitialized: Promise<void>, x: number, y: number) {
-	await isIiifViewerInitialized;
+export async function iiifZoomTo(iiifViewerInitialized: Promise<void>, x: number, y: number) {
+	console.log('iiifZoomTo waiting', x, y);
+	await iiifViewerInitialized;
+	console.log('iiifZoomTo waiting done, executing', x, y);
 	const event: Event = new Event(IiifViewerAction.IIIF_VIEWER_ZOOM_TO);
 	(event as IiifViewerEvent).functionProps = { x, y };
 	window.dispatchEvent(event);
 }
 
-export async function iiifGoToHome(isIiifViewerInitialized: Promise<void>) {
-	await isIiifViewerInitialized;
+export async function iiifGoToHome(iiifViewerInitialized: Promise<void>) {
+	await iiifViewerInitialized;
 	const event: Event = new Event(IiifViewerAction.IIIF_VIEWER_GO_TO_HOME);
 	window.dispatchEvent(event);
 }
 
-export async function iiifGoToPage(isIiifViewerInitialized: Promise<void>, pageIndex: number) {
-	await isIiifViewerInitialized;
+export async function iiifGoToPage(iiifViewerInitialized: Promise<void>, pageIndex: number) {
+	await iiifViewerInitialized;
 	const event: Event = new Event(IiifViewerAction.IIIF_VIEWER_GO_TO_PAGE);
 	(event as IiifViewerEvent).functionProps = { pageIndex };
 	window.dispatchEvent(event);
 }
 
 export async function iiifUpdateHighlightedAltoTexts(
-	isIiifViewerInitialized: Promise<void>,
+	iiifViewerInitialized: Promise<void>,
 	highlightedAltoTexts: TextLine[],
-	selectedAltoText: TextLine | null
+	selectedAltoText: TextLine | null,
+	zoomToSelectedAltoText: boolean
 ) {
-	await isIiifViewerInitialized;
+	await iiifViewerInitialized;
 	const event: Event = new Event(IiifViewerAction.IIIF_VIEWER_UPDATE_HIGHLIGHTED_ALTO_TEXTS);
 	(event as IiifViewerEvent).functionProps = {
 		highlightedAltoTexts,
 		selectedAltoText,
+		zoomToSelectedAltoText,
 	};
 	window.dispatchEvent(event);
 }

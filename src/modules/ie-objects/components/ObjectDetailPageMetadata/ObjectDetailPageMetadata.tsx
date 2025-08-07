@@ -777,6 +777,18 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		);
 	}
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: We want this translation to be recalculated when the language is changed
+	const explainNamesListLink = useMemo(
+		() => (
+			<div className="u-color-neutral u-font-size-14 u-font-weight-400">
+				{tHtml(
+					'modules/ie-objects/object-detail-page___a-href-namenlijst-gesneuvelden-wat-is-dit-a'
+				)}
+			</div>
+		),
+		[locale]
+	);
+
 	const renderMetaData = () => {
 		if (isNil(mediaInfo)) {
 			return;
@@ -800,18 +812,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					ROUTES_BY_LOCALE[locale].permalink.replace(':pid', mediaInfo.schemaIdentifier),
 			]).join(', ');
 		}
-
-		// biome-ignore lint/correctness/useExhaustiveDependencies: We want this translation to be recalculated when the language is changed
-		const explainNamesListLink = useMemo(
-			() => (
-				<div className="u-color-neutral u-font-size-14 u-font-weight-400">
-					{tHtml(
-						'modules/ie-objects/object-detail-page___a-href-namenlijst-gesneuvelden-wat-is-dit-a'
-					)}
-				</div>
-			),
-			[locale]
-		);
 
 		return (
 			<div className={styles['p-object-detail__metadata-wrapper']}>
@@ -1114,11 +1114,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						tText('modules/ie-objects/ie-objects___datum-toegevoegd-aan-platform'),
 						renderDate(activeFile?.createdAt)
 					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___permanente-url'),
-						publicRuntimeConfig.CLIENT_URL +
-							ROUTES_BY_LOCALE[locale].permalink.replace(':pid', mediaInfo.schemaIdentifier)
-					)}
+					{/*{renderSimpleMetadataField(*/}
+					{/*	tText('modules/ie-objects/ie-objects___permanente-url'),*/}
+					{/*	publicRuntimeConfig.CLIENT_URL +*/}
+					{/*		ROUTES_BY_LOCALE[locale].permalink.replace(':pid', mediaInfo.schemaIdentifier)*/}
+					{/*)}*/}
 					{mapObjectsToMetadata(
 						mediaInfo.premisIdentifier?.filter(
 							(premisEntry) => !['abraham_id', 'abraham_uri'].includes(Object.keys(premisEntry)[0])
