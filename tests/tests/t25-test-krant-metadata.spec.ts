@@ -37,7 +37,7 @@ test('T25: Krant metadata', async ({ page, context }) => {
 	await expect(metadataField1.locator(`text=${IconName.Newspaper}`)).toBeVisible();
 
 	// Check if the metadata field "OCR Software" is hidden
-	let metadataField2 = page.locator(moduleClassSelector('c-metadata__item'), {
+	const metadataField2 = page.locator(moduleClassSelector('c-metadata__item'), {
 		hasText: SITE_TRANSLATIONS.nl['modules/ie-objects/ie-objects___ocr-software'],
 	});
 	await expect(metadataField2).not.toBeVisible();
@@ -77,12 +77,14 @@ test('T25: Krant metadata', async ({ page, context }) => {
 	await expect(metadataField1).toBeVisible();
 	await expect(metadataField1.locator('text=krant')).toBeVisible();
 
-	// Check if the metadata field "OCR Software" is "ABBYY FineReader Engine"
-	metadataField2 = page.locator(moduleClassSelector('c-metadata__item'), {
-		hasText: SITE_TRANSLATIONS.nl['modules/ie-objects/ie-objects___ocr-software-version'],
-	});
-	await expect(metadataField2).toBeVisible();
-	await expect(metadataField2.locator('text=12')).toBeVisible();
+	// This step is disabled because the alto ocr metadata fields are not available when you do not have access to the alto files.
+	// https://meemoo.atlassian.net/browse/ARC-2283
+	// // Check if the metadata field "OCR Software" is "ABBYY FineReader Engine"
+	// metadataField2 = page.locator(moduleClassSelector('c-metadata__item'), {
+	// 	hasText: SITE_TRANSLATIONS.nl['modules/ie-objects/ie-objects___ocr-software-version'],
+	// });
+	// await expect(metadataField2).toBeVisible();
+	// await expect(metadataField2.locator('text=12')).toBeVisible();
 
 	// Wait for close to save the videos
 	await context.close();
