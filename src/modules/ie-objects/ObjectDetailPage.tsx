@@ -1539,7 +1539,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 						'u-bg-platinum',
 						'u-list-reset',
 						styles['p-object-detail__metadata-list'],
-						`p-object-detail__metadata-list--${type}`
+						`p-object-detail__metadata-list--${type}`,
+						'u-pb-80'
 					)}
 				>
 					{items.map((item, index) => {
