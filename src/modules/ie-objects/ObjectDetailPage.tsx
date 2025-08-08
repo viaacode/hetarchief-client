@@ -2013,6 +2013,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							[styles['p-object-detail__sidebar--collapsed']]: !expandSidebar,
 						}
 					)}
+					/**
+					 * Sometimes the ie_object data in the database is updated
+					 * And the Server side rendering isn't refreshed yet
+					 * Which causes a 500 error. We don't want to see these 500 errors
+					 * And just ignore them until the SSR cache times out and
+					 * the page is rerendered on the server with fresh data
+					 * https://meemoo.atlassian.net/browse/ARC-2891
+					 **/
+					suppressHydrationWarning
 				>
 					{renderObjectDetail()}
 				</div>
