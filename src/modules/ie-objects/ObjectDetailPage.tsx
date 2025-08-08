@@ -326,18 +326,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	}, [mediaInfo?.pages]);
 
 	// Playable url for flowplayer
-	const currentPlayableFile: IeObjectFile | null =
-		getFilesByType(FLOWPLAYER_FORMATS)[currentPageIndex] || null;
+	const currentPlayableFile: IeObjectFile | null = getFilesByType(FLOWPLAYER_FORMATS)[0] || null; // First playable file for the currently selected page
 	const fileStoredAt: string | null = currentPlayableFile?.storedAt ?? null;
 	const {
 		data: playableUrl,
 		isLoading: isLoadingPlayableUrl,
+		isFetching: isFetchingPlayableUrl,
 		isError: isErrorPlayableUrl,
-	} = useGetIeObjectsTicketUrl(
-		fileStoredAt,
-		!!fileStoredAt,
-		() => setFlowPlayerKey(fileStoredAt) // Force flowplayer rerender after successful fetch
-	);
+	} = useGetIeObjectsTicketUrl(fileStoredAt, !!fileStoredAt, () => {
+		// Force flowplayer rerender after successful fetch
+		setFlowPlayerKey(fileStoredAt);
+	});
 	const { data: ticketServiceTokensByPath, isLoading: isLoadingTickets } =
 		useGetIeObjectTicketServiceTokens(
 			iiifViewerImageInfos.map((imageInfo) => imageInfo.imageUrl),
@@ -1473,9 +1472,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 		// Flowplayer
 		if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(currentPlayableFile.mimeType)) {
+			if (isFetchingPlayableUrl) {
+				return <Loading fullscreen owner="object detail page: render video" mode="light" />;
+			}
 			return (
 				<FlowPlayer
-					key={flowPlayerKey}
+					key={`${flowPlayerKey}__${currentPageIndex}`}
 					type="video"
 					src={playableUrl as string}
 					poster={mediaInfo?.thumbnailUrl || undefined}
