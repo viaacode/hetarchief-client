@@ -138,6 +138,7 @@ import {
 } from '@iiif-viewer/helpers/trigger-iiif-viewer-events';
 import { Blade } from '@shared/components/Blade/Blade';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
+import { isServerSideRendering } from '@shared/utils/is-browser';
 import styles from './ObjectDetailPage.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
@@ -1137,7 +1138,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			// https://stackoverflow.com/questions/53845595/wrong-react-hooks-behaviour-with-event-listener
 			// https://meemoo.atlassian.net/browse/ARC-2039
 			setHasMediaPlayed((oldHasMediaPlayed) => {
-				if (!oldHasMediaPlayed) {
+				// Skip triggering event on server side rendering since window is not available
+				if (!oldHasMediaPlayed && !isServerSideRendering()) {
 					const path = window.location.href;
 					const eventData = {
 						type: mediaInfo?.dctermsFormat,
