@@ -732,6 +732,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	}
 
 	function renderPreviousAndNextButtons(): ReactNode | null {
+		if (user && !user?.permissions?.includes(Permission.VIEW_PREVIOUS_AND_NEXT_NEWSPAPER_BUTTONS)) {
+			// Kiosk user cannot see previous and next buttons
+			// https://meemoo.atlassian.net/browse/ARC-2933
+			return null;
+		}
 		if (
 			!mediaInfo ||
 			(!ieObjectPreviousNextIds?.previousIeObjectId && !ieObjectPreviousNextIds?.nextIeObjectId)
