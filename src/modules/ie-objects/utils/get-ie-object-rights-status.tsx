@@ -23,13 +23,16 @@ export function getIeObjectRightsStatusInfo(
 			label: tText('modules/ie-objects/utils/get-ie-object-rights-status___public-domein'),
 			icon: <Icon name={IconNamesLight.CopyrightPublicDomain} />,
 			externalLink: tText(
-				'modules/ie-objects/utils/get-ie-object-rights-status___https-creativecommons-org-public-domain',
+				'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-external-link',
 				{
 					languageCode: locale,
 				}
 			),
 			internalLink: tText(
-				'modules/ie-objects/utils/get-ie-object-rights-status___rechten-status-publiek-domain-meer-info-link'
+				'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-internal-link',
+				{
+					languageCode: locale,
+				}
 			),
 		};
 	}
@@ -41,13 +44,16 @@ export function getIeObjectRightsStatusInfo(
 			label: tText('modules/ie-objects/utils/get-ie-object-rights-status___copyright-undetermined'),
 			icon: <Icon name={IconNamesLight.CopyrightUndetermined} />,
 			externalLink: tText(
-				'modules/ie-objects/utils/get-ie-object-rights-status___https-rightsstatements-org-page-und-1-0-language-language-code',
+				'modules/ie-objects/utils/get-ie-object-rights-status___copyright-undetermined-external-link',
 				{
 					languageCode: locale,
 				}
 			),
 			internalLink: tText(
-				'modules/ie-objects/utils/get-ie-object-rights-status___rechten-status-copyright-undetermined-meer-info-link'
+				'modules/ie-objects/utils/get-ie-object-rights-status___copyright-undetermined-internal-link',
+				{
+					languageCode: locale,
+				}
 			),
 		};
 	}
