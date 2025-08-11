@@ -30,6 +30,7 @@ module.exports = withTM({
 	// https://stackoverflow.com/questions/71847778/why-my-nextjs-component-is-rendering-twice
 	// Disabling react 18 strict mode, otherwise the zendesk widget is rendered twice
 	reactStrictMode: false,
+	swcMinify: false, // disables JS minification to test ssr vs client side rendering issues
 	experimental: {
 		/**
 		 * Necessary to prevent errors like:
