@@ -924,12 +924,12 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							className={styles['p-object-detail__metadata-content__rights-status']}
 							key="metadata-rights-status"
 							renderRight={
-								<a target="_blank" href={rightsStatusInfo.internalLink} rel="noreferrer">
+								<a target="_blank" href={rightsStatusInfo.externalLink} rel="noreferrer">
 									<Button
 										variants={['white']}
 										icon={<Icon name={IconNamesLight.Extern} />}
 										title={tText(
-											'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___kopieer-de-rechten-naar-je-klembord'
+											'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
 										)}
 									/>
 								</a>
@@ -937,7 +937,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						>
 							<span className="u-flex u-flex-items-center u-gap-xs">
 								<a
-									href={rightsStatusInfo.externalLink}
+									href={rightsStatusInfo.internalLink}
 									className="u-text-no-decoration"
 									target="_blank"
 									rel="noreferrer"
@@ -948,7 +948,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									{rightsStatusInfo.icon}
 								</a>
 								<a
-									href={rightsStatusInfo.externalLink}
+									href={rightsStatusInfo.internalLink}
 									target="_blank"
 									rel="noreferrer"
 									title={tText(
