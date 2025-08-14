@@ -1329,12 +1329,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				},
 			});
 			// Download the file and save it
-			// const win = window.open(downloadUrl, '_blank');
-			// if (!win) {
-			// iPad doesn't want to open a page from javascript without a click event?
-			// Show popup with download link
-			setSelectionDownloadUrl(downloadUrl);
-			// }
+			const win = window.open(downloadUrl, '_blank');
+			if (!win) {
+				// iPad doesn't want to open a page from javascript without a click event?
+				// Show popup with download link
+				setSelectionDownloadUrl(downloadUrl);
+			}
 		},
 		[ieObjectId, router.asPath]
 	);
