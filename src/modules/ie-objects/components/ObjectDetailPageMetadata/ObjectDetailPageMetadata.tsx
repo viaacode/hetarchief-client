@@ -732,6 +732,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	}
 
 	function renderPreviousAndNextButtons(): ReactNode | null {
+		if (user && !user?.permissions?.includes(Permission.VIEW_PREVIOUS_AND_NEXT_NEWSPAPER_BUTTONS)) {
+			// Kiosk user cannot see previous and next buttons
+			// https://meemoo.atlassian.net/browse/ARC-2933
+			return null;
+		}
 		if (
 			!mediaInfo ||
 			(!ieObjectPreviousNextIds?.previousIeObjectId && !ieObjectPreviousNextIds?.nextIeObjectId)
@@ -802,14 +807,14 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) &&
 			rightsStatusInfo
 		) {
+			// https://meemoo.atlassian.net/browse/ARC-3165
 			rightsAttributionText = compact([
-				getIeObjectRightsOwnerAsText(mediaInfo),
-				mediaInfo.datePublished,
+				getIeObjectRightsOwnerAsText(mediaInfo) || mediaInfo.maintainerName,
+				mediaInfo.dateCreated,
 				mediaInfo.name,
 				mediaInfo.maintainerName,
 				rightsStatusInfo.label,
-				publicRuntimeConfig.CLIENT_URL +
-					ROUTES_BY_LOCALE[locale].permalink.replace(':pid', mediaInfo.schemaIdentifier),
+				'www.hetarchief.be',
 			]).join(', ');
 		}
 
@@ -919,12 +924,12 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							className={styles['p-object-detail__metadata-content__rights-status']}
 							key="metadata-rights-status"
 							renderRight={
-								<a target="_blank" href={rightsStatusInfo.internalLink} rel="noreferrer">
+								<a target="_blank" href={rightsStatusInfo.externalLink} rel="noreferrer">
 									<Button
 										variants={['white']}
 										icon={<Icon name={IconNamesLight.Extern} />}
 										title={tText(
-											'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___kopieer-de-rechten-naar-je-klembord'
+											'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
 										)}
 									/>
 								</a>
@@ -932,7 +937,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						>
 							<span className="u-flex u-flex-items-center u-gap-xs">
 								<a
-									href={rightsStatusInfo.externalLink}
+									href={rightsStatusInfo.internalLink}
 									className="u-text-no-decoration"
 									target="_blank"
 									rel="noreferrer"
@@ -943,7 +948,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									{rightsStatusInfo.icon}
 								</a>
 								<a
-									href={rightsStatusInfo.externalLink}
+									href={rightsStatusInfo.internalLink}
 									target="_blank"
 									rel="noreferrer"
 									title={tText(

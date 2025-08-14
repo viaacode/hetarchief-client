@@ -185,7 +185,7 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 				autoContainerWidth={true}
 				autoWidth={true}
 				width={1000}
-				height={Math.min(300, ROW_HEIGHT * filteredNames.length)}
+				height={Math.min(288, ROW_HEIGHT * filteredNames.length)}
 				columnCount={1}
 			/>
 		</div>

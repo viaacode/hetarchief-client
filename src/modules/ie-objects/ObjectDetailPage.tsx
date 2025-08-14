@@ -138,6 +138,7 @@ import {
 } from '@iiif-viewer/helpers/trigger-iiif-viewer-events';
 import { Blade } from '@shared/components/Blade/Blade';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
+import { isServerSideRendering } from '@shared/utils/is-browser';
 import styles from './ObjectDetailPage.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
@@ -326,18 +327,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	}, [mediaInfo?.pages]);
 
 	// Playable url for flowplayer
-	const currentPlayableFile: IeObjectFile | null =
-		getFilesByType(FLOWPLAYER_FORMATS)[currentPageIndex] || null;
+	const currentPlayableFile: IeObjectFile | null = getFilesByType(FLOWPLAYER_FORMATS)[0] || null; // First playable file for the currently selected page
 	const fileStoredAt: string | null = currentPlayableFile?.storedAt ?? null;
 	const {
 		data: playableUrl,
 		isLoading: isLoadingPlayableUrl,
+		isFetching: isFetchingPlayableUrl,
 		isError: isErrorPlayableUrl,
-	} = useGetIeObjectsTicketUrl(
-		fileStoredAt,
-		!!fileStoredAt,
-		() => setFlowPlayerKey(fileStoredAt) // Force flowplayer rerender after successful fetch
-	);
+	} = useGetIeObjectsTicketUrl(fileStoredAt, !!fileStoredAt, () => {
+		// Force flowplayer rerender after successful fetch
+		setFlowPlayerKey(fileStoredAt);
+	});
 	const { data: ticketServiceTokensByPath, isLoading: isLoadingTickets } =
 		useGetIeObjectTicketServiceTokens(
 			iiifViewerImageInfos.map((imageInfo) => imageInfo.imageUrl),
@@ -1138,7 +1138,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 			// https://stackoverflow.com/questions/53845595/wrong-react-hooks-behaviour-with-event-listener
 			// https://meemoo.atlassian.net/browse/ARC-2039
 			setHasMediaPlayed((oldHasMediaPlayed) => {
-				if (!oldHasMediaPlayed) {
+				// Skip triggering event on server side rendering since window is not available
+				if (!oldHasMediaPlayed && !isServerSideRendering()) {
 					const path = window.location.href;
 					const eventData = {
 						type: mediaInfo?.dctermsFormat,
@@ -1328,12 +1329,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				},
 			});
 			// Download the file and save it
-			// const win = window.open(downloadUrl, '_blank');
-			// if (!win) {
-			// iPad doesn't want to open a page from javascript without a click event?
-			// Show popup with download link
-			setSelectionDownloadUrl(downloadUrl);
-			// }
+			const win = window.open(downloadUrl, '_blank');
+			if (!win) {
+				// iPad doesn't want to open a page from javascript without a click event?
+				// Show popup with download link
+				setSelectionDownloadUrl(downloadUrl);
+			}
 		},
 		[ieObjectId, router.asPath]
 	);
@@ -1473,9 +1474,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 		// Flowplayer
 		if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(currentPlayableFile.mimeType)) {
+			if (isFetchingPlayableUrl) {
+				return <Loading fullscreen owner="object detail page: render video" mode="light" />;
+			}
 			return (
 				<FlowPlayer
-					key={flowPlayerKey}
+					key={`${flowPlayerKey}__${currentPageIndex}`}
 					type="video"
 					src={playableUrl as string}
 					poster={mediaInfo?.thumbnailUrl || undefined}
@@ -2010,6 +2014,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 							[styles['p-object-detail__sidebar--collapsed']]: !expandSidebar,
 						}
 					)}
+					/**
+					 * Sometimes the ie_object data in the database is updated
+					 * And the Server side rendering isn't refreshed yet
+					 * Which causes a 500 error. We don't want to see these 500 errors
+					 * And just ignore them until the SSR cache times out and
+					 * the page is rerendered on the server with fresh data
+					 * https://meemoo.atlassian.net/browse/ARC-2891
+					 **/
+					suppressHydrationWarning
 				>
 					{renderObjectDetail()}
 				</div>
