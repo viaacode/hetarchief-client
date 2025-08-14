@@ -807,14 +807,14 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) &&
 			rightsStatusInfo
 		) {
+			// https://meemoo.atlassian.net/browse/ARC-3165
 			rightsAttributionText = compact([
-				getIeObjectRightsOwnerAsText(mediaInfo),
-				mediaInfo.datePublished,
+				getIeObjectRightsOwnerAsText(mediaInfo) || mediaInfo.maintainerName,
+				mediaInfo.dateCreated,
 				mediaInfo.name,
 				mediaInfo.maintainerName,
 				rightsStatusInfo.label,
-				publicRuntimeConfig.CLIENT_URL +
-					ROUTES_BY_LOCALE[locale].permalink.replace(':pid', mediaInfo.schemaIdentifier),
+				'www.hetarchief.be',
 			]).join(', ');
 		}
 
