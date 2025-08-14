@@ -1,7 +1,7 @@
 @use "sass:math";
 @use "src/styles/abstracts" as *;
 
-$names-list-scrollable-height: 29rem;
+$names-list-scrollable-height: 29.5rem;
 
 .c-names-list {
 	container-type: inline-size;
