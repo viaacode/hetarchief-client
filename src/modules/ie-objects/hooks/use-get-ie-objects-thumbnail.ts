@@ -12,6 +12,9 @@ export const useGetIeObjectThumbnail = (
 	return useQuery<string | null>(
 		[QUERY_KEYS.getIeObjectsThumbnail, schemaIdentifier],
 		async (): Promise<string | null> => {
+			if (schemaIdentifier.startsWith('_next')) {
+				return null;
+			}
 			return await IeObjectsService.getThumbnailBySchemaIdentifier(schemaIdentifier);
 		},
 		{
@@ -29,6 +32,9 @@ export function makeServerSideRequestGetIeObjectThumbnail(
 	return queryClient.prefetchQuery({
 		queryKey: [QUERY_KEYS.getIeObjectsThumbnail, schemaIdentifier],
 		queryFn: async () => {
+			if (schemaIdentifier.startsWith('_next')) {
+				return null;
+			}
 			return await IeObjectsService.getThumbnailBySchemaIdentifier(schemaIdentifier);
 		},
 	});
