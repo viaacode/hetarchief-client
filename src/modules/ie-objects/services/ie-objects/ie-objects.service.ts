@@ -81,7 +81,12 @@ export class IeObjectsService {
 	 * Get an IE object by its schemaIdentifier
 	 * @param schemaIdentifiers The ie object schemaIdentifiers, eg: 086348mc8s, qstt4fps28
 	 */
-	public static async getBySchemaIdentifiers(schemaIdentifiers: string[]): Promise<IeObject[]> {
+	public static async getBySchemaIdentifiers(
+		schemaIdentifiers: string[]
+	): Promise<(IeObject | null)[]> {
+		if (schemaIdentifiers[0].startsWith('_next')) {
+			return [null]; // Weird NextJS issue with [slug] route matching all assets that nextjs tries to load, like _next/static/webpack/7b0ff23bbcbf53bc.webpack.hot-update.json
+		}
 		console.log(`[PERFORMANCE] ${new Date().toISOString()} start fetch ie object`);
 		const url = stringifyUrl({
 			url: IE_OBJECTS_SERVICE_BASE_URL,
@@ -211,11 +216,19 @@ export class IeObjectsService {
 			.json();
 	}
 
-	public static async schemaIdentifierLookup(
+	public static async lookupV2Id(
 		schemaIdentifierV2: string
 	): Promise<{ schemaIdentifierV3: string; id: string }> {
 		return await ApiService.getApi()
-			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/schemaIdentifierLookup/${schemaIdentifierV2}`)
+			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/lookup/v2/${schemaIdentifierV2}`)
+			.json();
+	}
+
+	public static async lookupNvdgoId(
+		mediaMosaId: string
+	): Promise<{ schema_identifier: string; title: string; maintainerSlug: string }> {
+		return await ApiService.getApi()
+			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/lookup/nvdgo/${mediaMosaId}`)
 			.json();
 	}
 

@@ -12,14 +12,13 @@ export const useGetIeObjectInfo = (
 		enabled?: boolean;
 	} = {}
 ): UseQueryResult<IeObject | null> => {
-	return useQuery<IeObject>(
+	return useQuery<IeObject | null>(
 		[QUERY_KEYS.getIeObjectsInfo, schemaIdentifier],
-		async (): Promise<IeObject> => {
+		async (): Promise<IeObject | null> => {
 			let newSchemaIdentifier: string;
 			if (schemaIdentifier.length > MIN_LENGTH_SCHEMA_IDENTIFIER_V2) {
 				// This is an old schema identifier (v2), we need to convert it to a new one (v3)
-				const v3IdentifierResponse =
-					await IeObjectsService.schemaIdentifierLookup(schemaIdentifier);
+				const v3IdentifierResponse = await IeObjectsService.lookupV2Id(schemaIdentifier);
 				newSchemaIdentifier = v3IdentifierResponse.schemaIdentifierV3;
 			} else {
 				// This is already a new schema identifier (v3)
