@@ -7,7 +7,10 @@
 // webpack
 // .*.webpack.hot-update.json
 
-import { ContentPageRenderer, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/dist/admin.mjs';
+import {
+	ContentPageRenderer,
+	convertDbContentPageToContentPageInfo,
+} from '@meemoo/admin-core-ui/dist/admin.mjs';
 import { QueryClient } from '@tanstack/react-query';
 import type { HTTPError } from 'ky';
 import { kebabCase } from 'lodash-es';
@@ -25,7 +28,10 @@ import {
 	useGetContentPageByLanguageAndPath,
 } from '@content-page/hooks/get-content-page';
 import { ContentPageClientService } from '@content-page/services/content-page-client.service';
-import { makeServerSideRequestGetIeObjectInfo, useGetIeObjectInfo } from '@ie-objects/hooks/use-get-ie-objects-info';
+import {
+	makeServerSideRequestGetIeObjectInfo,
+	useGetIeObjectInfo,
+} from '@ie-objects/hooks/use-get-ie-objects-info';
 import { makeServerSideRequestGetIeObjectThumbnail } from '@ie-objects/hooks/use-get-ie-objects-thumbnail';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';

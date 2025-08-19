@@ -65,7 +65,6 @@ import {
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { isInAFolder } from '@ie-objects/utils/folders';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
-import { getIeObjectRightsOwnerAsText } from '@ie-objects/utils/get-ie-object-rights-owner-as-text';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import {
 	mapArrayToMetadataData,
@@ -809,7 +808,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		) {
 			// https://meemoo.atlassian.net/browse/ARC-3165
 			rightsAttributionText = compact([
-				getIeObjectRightsOwnerAsText(mediaInfo) || mediaInfo.maintainerName,
+				mediaInfo.maintainerName,
 				mediaInfo.dateCreated,
 				mediaInfo.name,
 				mediaInfo.maintainerName,
