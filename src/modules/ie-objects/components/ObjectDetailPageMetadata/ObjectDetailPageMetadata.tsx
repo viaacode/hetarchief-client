@@ -808,12 +808,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		) {
 			// https://meemoo.atlassian.net/browse/ARC-3165
 			rightsAttributionText = compact([
-				mediaInfo.maintainerName,
-				mediaInfo.dateCreated,
 				mediaInfo.name,
+				mediaInfo.dateCreated,
 				mediaInfo.maintainerName,
 				rightsStatusInfo.label,
-				'www.hetarchief.be',
+				'hetarchief.be',
 			]).join(', ');
 		}
 
