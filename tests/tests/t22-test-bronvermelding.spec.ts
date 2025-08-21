@@ -33,9 +33,8 @@ test('T22: bronvermelding', async ({ page, context }) => {
 	await expect(attributionMetadata).toBeVisible();
 
 	// Check that the text contains all required parts
-	const attributionText = `onbekend, De toekomst: weekblad voor de arrondissementen Gent-Eecloo 1911-03-19, Amsab-ISG, Copyright undetermined, ${
-		process.env.TEST_CLIENT_ENDPOINT as string
-	}/pid/${process.env.TEST_OBJECT_KRANT_1}`;
+	const attributionText =
+		'De toekomst: weekblad voor de arrondissementen Gent-Eecloo 1911-03-19, 1911-03-19, Amsab-ISG, Copyright undetermined, hetarchief.be';
 	await expect(attributionMetadata).toContainText(attributionText);
 
 	// Click the copy button
