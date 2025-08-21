@@ -1956,6 +1956,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 					<h2 {...props}>{tHtml('modules/ie-objects/object-detail-page___selectie-is-klaar')}</h2>
 				)}
+				onClose={() => setSelectionDownloadUrl(null)}
 				footer={
 					<div className="u-px-32 u-px-16-md u-py-24 u-py-16-md u-flex u-flex-col u-gap-xs">
 						<a
