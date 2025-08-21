@@ -314,9 +314,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				}
 				const imageFile = files.find((file) => IMAGE_BROWSE_COPY_FORMATS.includes(file.mimeType));
 				const altoFile = files.find((file) => XML_FORMATS.includes(file.mimeType));
-				if (!imageFile?.storedAt) {
-					return null;
-				}
 				return {
 					imageUrl: `${imageApiFile.storedAt.replace('https://iiif-qas.meemoo.be/image/3/public', 'https://iiif-qas.meemoo.be/image/3/hetarchief')}`,
 					thumbnailUrl: imageFile?.thumbnailUrl,
@@ -1224,7 +1221,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				return;
 			}
 			if (searchResult.pageIndex !== currentPageIndex) {
-				console.log('updating page index to ', searchResult.pageIndex);
 				setCurrentPageIndex(searchResult.pageIndex, 'replaceIn');
 			}
 		},
