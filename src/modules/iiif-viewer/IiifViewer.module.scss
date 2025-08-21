@@ -273,7 +273,7 @@ $controls-margin-bottom: $spacer-sm;
 			&:hover,
 			&:focus-visible {
 				opacity: 0.9;
-				outline: 0.2rem solid #00c8aa;
+				outline: 0.2rem solid $teal;
 				outline-offset: 0.1rem;
 			}
 		}
@@ -281,6 +281,12 @@ $controls-margin-bottom: $spacer-sm;
 		+ div {
 			padding-top: 0;
 		}
+	}
+
+	&__fake-newspaper-thumbnail {
+		width: 8rem;
+		height: 10.5rem;
+		background-color: $newspaper-bg;
 	}
 }
 
