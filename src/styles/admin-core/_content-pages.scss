@@ -178,6 +178,22 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 			}
 		}
 	}
+
+	.right-side-content-page-nav .c-user-group-select  {
+		.c-checkbox-group{
+			border: none;
+			border-radius: 0;
+			padding: 0;
+
+			.c-checkbox {
+				border-radius: 0;
+
+				.c-checkbox__check-icon {
+					margin: 1.5rem 2.2rem;
+				}
+			}
+		}
+	}
 }
 
 .c-content-block {
