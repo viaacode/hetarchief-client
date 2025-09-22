@@ -314,9 +314,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				}
 				const imageFile = files.find((file) => IMAGE_BROWSE_COPY_FORMATS.includes(file.mimeType));
 				const altoFile = files.find((file) => XML_FORMATS.includes(file.mimeType));
-				if (!imageFile?.storedAt) {
-					return null;
-				}
 				return {
 					imageUrl: `${imageApiFile.storedAt.replace('https://iiif-qas.meemoo.be/image/3/public', 'https://iiif-qas.meemoo.be/image/3/hetarchief')}`,
 					thumbnailUrl: imageFile?.thumbnailUrl,
@@ -1224,7 +1221,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				return;
 			}
 			if (searchResult.pageIndex !== currentPageIndex) {
-				console.log('updating page index to ', searchResult.pageIndex);
 				setCurrentPageIndex(searchResult.pageIndex, 'replaceIn');
 			}
 		},
@@ -1956,6 +1952,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 					<h2 {...props}>{tHtml('modules/ie-objects/object-detail-page___selectie-is-klaar')}</h2>
 				)}
+				onClose={() => setSelectionDownloadUrl(null)}
 				footer={
 					<div className="u-px-32 u-px-16-md u-py-24 u-py-16-md u-flex u-flex-col u-gap-xs">
 						<a

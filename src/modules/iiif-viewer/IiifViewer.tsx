@@ -180,7 +180,6 @@ export const IiifViewer = ({
 
 	useEffect(() => {
 		const handleZoomToRectEvent = (evt: IiifViewerZoomToRectEvent) => {
-			console.log('handleZoomToRectEvent', evt);
 			iiifZoomToRect({
 				x: evt.functionProps.x,
 				y: evt.functionProps.y,
@@ -198,29 +197,24 @@ export const IiifViewer = ({
 		};
 
 		const handleZoomEvent = (evt: IiifViewerZoomEvent) => {
-			console.log('handleZoomEvent', evt);
 			iiifZoom(evt.functionProps.multiplier);
 		};
 
 		const handleZoomToEvent = (evt: IiifViewerZoomToEvent) => {
-			console.log('handleZoomToEvent', evt);
 			iiifZoomTo(evt.functionProps.x, evt.functionProps.y);
 		};
 
 		const handleGoToHomeEvent = () => {
-			console.log('handleGoToHomeEvent');
 			iiifGoToHome();
 		};
 
 		const handleGoToPageEvent = (evt: IiifViewerGoToPageEvent) => {
-			console.log('handleGoToPageEvent', evt);
 			iiifGoToPage(evt.functionProps.pageIndex);
 		};
 
 		const handleUpdateHighlightedAltoTextsEvent = (
 			evt: IiifViewerUpdateHighlightedAltoTextsEvent
 		) => {
-			console.log('handleUpdateHighlightedAltoTextsEvent', evt);
 			setHighlightedAltoTextInfo({
 				highlightedAltoTexts: evt.functionProps.highlightedAltoTexts || [],
 				selectedAltoText: evt.functionProps.selectedAltoText || null,
@@ -477,16 +471,6 @@ export const IiifViewer = ({
 			if (zoomToSelectedAltoText && selectedHighlightedAltoText) {
 				iiifZoomToRect(selectedHighlightedAltoText);
 				viewer.addOnceHandler('tile-loaded', (evt) => {
-					console.log('loaded new page => zoom to location', selectedHighlightedAltoText, evt, {
-						currentPageIndex: viewer.currentPage(),
-						// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-						tileSourceId: (evt?.eventSource as any)?.source?.id,
-						// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-						tileSourceIds: (evt?.eventSource as any)?.tileSources?.map(
-							// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-							(tileSource: any) => tileSource.tileSource
-						),
-					});
 					iiifZoomToRect(selectedHighlightedAltoText);
 				});
 			}
@@ -566,7 +550,6 @@ export const IiifViewer = ({
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: Do not rerun this function when the queryParams change, since we only want apply the zoom and pan from the query params once to the iiif viewer
 	const initIiifViewer = useCallback(async () => {
-		console.log('init iiif viewer js lib------------------------');
 		if (!!iiifViewerId && isBrowser()) {
 			const iiifContainer = document.getElementById(iiifViewerId);
 			if (!iiifContainer) {
@@ -728,12 +711,6 @@ export const IiifViewer = ({
 		if (isNil(x) || isNil(y) || isNil(width) || isNil(height)) {
 			throw new Error('Invalid rect provided to iiifZoomToRect');
 		}
-		console.log('zoom to rect: ', {
-			x,
-			y,
-			width,
-			height,
-		});
 		iiifZoomTo(x + width / 2, y + height / 2);
 	};
 
@@ -958,8 +935,15 @@ export const IiifViewer = ({
 								type="button"
 								className={activeImageIndex === index ? 'active' : ''}
 							>
-								{/* eslint-disable-next-line @next/next/no-img-element */}
-								<img src={imageInfo.thumbnailUrl} alt={`page ${index + 1}`} />
+								{imageInfo.thumbnailUrl ? (
+									<img src={imageInfo.thumbnailUrl} alt={`page ${index + 1} thumbnail`} />
+								) : (
+									<div
+										className={
+											styles['c-iiif-viewer__iiif__reference-strip__fake-newspaper-thumbnail']
+										}
+									/>
+								)}
 							</button>
 						</div>
 					);
@@ -1000,7 +984,6 @@ export const IiifViewer = ({
 		if (isServerSideRendering()) {
 			return null; // Do not render the IIIF viewer container on the server side, since it differs from the client side html
 		}
-		console.log('rerender iiifviewer--------------------');
 		return <div className={clsx(styles['c-iiif-viewer__iiif-container'])} id={iiifViewerId} />;
 	}, [iiifViewerId]);
 

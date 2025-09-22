@@ -84,14 +84,14 @@ export const SeoTags: FC<SeoTagsProps> = ({
 		}
 
 		// No known route was found and no translatedPages were passed
-		// This can be because NextJS also renders the dutch paths for the english locale
+		// This can be because Next.js also renders the Dutch paths for the english locale
 		// We'll check that here
 		// if that isn't the case either, we should output a warning to notify the developer that he forgot something
 		const knownRoutePairForOtherLocale = Object.entries(
 			ROUTES_BY_LOCALE[locale === Locale.nl ? Locale.en : Locale.nl]
 		).find((pair) => pair[1] === relativeUrl);
 		if (knownRoutePairForOtherLocale) {
-			// This is just NextJS rendering dutch paths with the english locale or vice versa, we can ignore this
+			// This is just Next.js rendering Dutch paths with the english locale or vice versa, we can ignore this
 			return [];
 		}
 		if (
@@ -103,6 +103,9 @@ export const SeoTags: FC<SeoTagsProps> = ({
 		return [];
 	};
 
+	if (!relativeUrl) {
+		return null;
+	}
 	const url = getResolvedUrl(relativeUrl);
 	return (
 		<Head>
