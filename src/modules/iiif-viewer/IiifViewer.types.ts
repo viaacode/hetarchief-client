@@ -1,7 +1,7 @@
 import type { OcrSearchResult } from '@ie-objects/ie-objects.types';
 
 export interface ImageInfo {
-	thumbnailUrl: string;
+	thumbnailUrl?: string;
 	imageUrl: string;
 	altoUrl?: string;
 }

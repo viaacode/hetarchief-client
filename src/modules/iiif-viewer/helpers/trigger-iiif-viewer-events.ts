@@ -14,9 +14,7 @@ import {
  */
 
 export async function iiifZoomToRect(iiifViewerInitialized: Promise<void>, textLine: TextLine) {
-	console.log('iiifZoomToRect waiting', textLine);
 	await iiifViewerInitialized;
-	console.log('iiifZoomToRect waiting done, executing', textLine);
 	const event: Event = new Event(IiifViewerAction.IIIF_VIEWER_ZOOM_TO_RECT);
 	(event as IiifViewerZoomToRectEvent).functionProps = textLine;
 	window.dispatchEvent(event);
@@ -44,9 +42,7 @@ export async function iiifZoom(iiifViewerInitialized: Promise<void>, multiplier:
 }
 
 export async function iiifZoomTo(iiifViewerInitialized: Promise<void>, x: number, y: number) {
-	console.log('iiifZoomTo waiting', x, y);
 	await iiifViewerInitialized;
-	console.log('iiifZoomTo waiting done, executing', x, y);
 	const event: Event = new Event(IiifViewerAction.IIIF_VIEWER_ZOOM_TO);
 	(event as IiifViewerEvent).functionProps = { x, y };
 	window.dispatchEvent(event);
