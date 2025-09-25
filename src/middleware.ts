@@ -9,6 +9,11 @@ interface IeObjectRedirectInfo {
 
 export async function middleware(request: NextRequest) {
 	const pathName = request.nextUrl.pathname;
+
+	if (pathName === '/sitemap.xml.gz') {
+		return new NextResponse('Not found', { status: 404 });
+	}
+
 	const pathParts = pathName.split('/media/');
 	const mediaMosaId = pathParts.pop()?.split('/').pop();
 	if (!mediaMosaId) {
@@ -29,5 +34,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-	matcher: ['/media/:path*', '/:locale/media/:path*'],
+	matcher: ['/media/:path*', '/:locale/media/:path*', '/sitemap.xml.gz'],
 };
