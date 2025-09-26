@@ -61,8 +61,7 @@ $component: "c-cp-settings";
 	&__bezoekersruimte {
 		&-controls {
 			display: grid;
-			column-gap: $spacer-lg;
-			row-gap: 2rem;
+			gap: 2rem $spacer-lg;
 			grid-template-rows: repeat(3, auto) $button-height;
 		}
 

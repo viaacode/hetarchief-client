@@ -73,6 +73,14 @@ module.exports = withTM({
 			})
 		);
 
+		// Ignore NextJS warnings about skipped css rules that are not compatible with server side rendering
+		// https://meemoo.atlassian.net/browse/ARC-3192
+		config.ignoreWarnings = [
+			{ message: /rules skipped due to selector errors/i },
+			{ message: /Empty sub-selector/i },
+		];
+
+		// Ensure certain packages are always resolved to one version instead of other versions from admin-core or component libraries
 		config.resolve.alias = {
 			...config.resolve.alias,
 			'@tanstack/react-query': path.resolve('./node_modules/@tanstack/react-query'),

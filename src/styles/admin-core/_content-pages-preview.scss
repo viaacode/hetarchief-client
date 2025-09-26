@@ -119,9 +119,8 @@ $l-container-padding-xs: 2rem;
 		align-items: flex-start;
 
 		@media (max-width: $breakpoint-md) {
-			justify-content: center;
+			place-content: center center;
 			flex-direction: column;
-			align-content: center;
 		}
 
 		.c-block-grid__text-wrapper {

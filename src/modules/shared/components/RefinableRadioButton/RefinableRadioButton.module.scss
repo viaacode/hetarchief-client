@@ -21,8 +21,7 @@
 
 		:global(.c-dropdown__content-open) {
 			max-height: 30rem;
-			overflow-y: auto;
-			overflow-x: hidden;
+			overflow: hidden auto;
 		}
 
 		&--disabled {

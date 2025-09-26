@@ -5,8 +5,7 @@
 	max-width: 48.6rem;
 	display: grid;
 	grid-template-columns: 1fr auto;
-	column-gap: $spacer-sm;
-	row-gap: $spacer-xs;
+	gap: $spacer-xs $spacer-sm;
 	padding: 2rem;
 	background-color: $black;
 	color: white;
