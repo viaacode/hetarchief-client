@@ -10,6 +10,7 @@ interface IeObjectRedirectInfo {
 export async function middleware(request: NextRequest) {
 	const pathName = request.nextUrl.pathname;
 
+	// https://meemoo.atlassian.net/browse/ARC-3185
 	if (pathName === '/sitemap.xml.gz') {
 		return new NextResponse('Not found', { status: 404 });
 	}
