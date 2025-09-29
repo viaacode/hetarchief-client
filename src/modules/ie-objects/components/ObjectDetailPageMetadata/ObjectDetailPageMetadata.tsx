@@ -63,8 +63,10 @@ import {
 	IE_OBJECTS_SERVICE_EXPORT,
 	NEWSPAPERS_SERVICE_BASE_URL,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
+import { checkIeObjectPermissions } from '@ie-objects/utils/check-ie-object-permissions';
 import { isInAFolder } from '@ie-objects/utils/folders';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
+import { getFirstMentionHighlight } from '@ie-objects/utils/get-first-mention-highlight';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import {
 	mapArrayToMetadataData,
@@ -72,6 +74,7 @@ import {
 	mapObjectsToMetadata,
 	renderKeywordsAsTags,
 } from '@ie-objects/utils/map-metadata';
+import type { TextLine } from '@iiif-viewer/IiifViewer.types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { Blade } from '@shared/components/Blade/Blade';
 import { CopyButton } from '@shared/components/CopyButton';
@@ -83,7 +86,6 @@ import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDa
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { Pill } from '@shared/components/Pill';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
@@ -112,9 +114,6 @@ import {
 import Callout from '../../../shared/components/Callout/Callout';
 import MetadataList from '../Metadata/MetadataList';
 
-import { checkIeObjectPermissions } from '@ie-objects/utils/check-ie-object-permissions';
-import { getFirstMentionHighlight } from '@ie-objects/utils/get-first-mention-highlight';
-import type { TextLine } from '@iiif-viewer/IiifViewer.types';
 import styles from './ObjectDetailPageMetadata.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
@@ -254,7 +253,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					setOnConfirmCopyright(() => () => {
 						window.open(
 							stringifyUrl({
-								url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo?.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/zip`,
+								url: `${
+									publicRuntimeConfig.PROXY_URL
+								}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(
+									mediaInfo?.schemaIdentifier
+								)}/${IE_OBJECTS_SERVICE_EXPORT}/zip`,
 								query: {
 									currentPageUrl: window.origin + router.asPath,
 								},
@@ -268,7 +271,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					setOnConfirmCopyright(() => () => {
 						window.open(
 							stringifyUrl({
-								url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`,
+								url: `${
+									publicRuntimeConfig.PROXY_URL
+								}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(
+									mediaInfo.schemaIdentifier
+								)}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`,
 								query: {
 									currentPageUrl: window.origin + router.asPath,
 								},
@@ -279,7 +286,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				default:
 					window.open(
 						stringifyUrl({
-							url: `${publicRuntimeConfig.PROXY_URL}/${IE_OBJECTS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`,
+							url: `${
+								publicRuntimeConfig.PROXY_URL
+							}/${IE_OBJECTS_SERVICE_BASE_URL}/${encodeURIComponent(
+								mediaInfo.schemaIdentifier
+							)}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`,
 							query: {
 								currentPageUrl: window.origin + router.asPath,
 							},
@@ -720,14 +731,10 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				/>
 			);
 		}
-		// Use the generic text filter
-		const searchLink = stringifyUrl({
-			url: ROUTES_BY_LOCALE[locale].search,
-			query: {
-				[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: mediaInfo.collectionName,
-			},
-		});
-		return <SearchLinkTag label={mediaInfo.collectionName} link={searchLink} />;
+
+		// This series filter isn't available for audio / video material, since the filter doesn't work well for those media types
+		// https://meemoo.atlassian.net/browse/ARC-3046
+		return mediaInfo.collectionName;
 	}
 
 	function renderPreviousAndNextButtons(): ReactNode | null {
