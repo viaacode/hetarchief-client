@@ -731,6 +731,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				/>
 			);
 		}
+
+		// This series filter isn't available for audio / video material, since the filter doesn't work well for those media types
+		// https://meemoo.atlassian.net/browse/ARC-3046
 		return mediaInfo.collectionName;
 	}
 
