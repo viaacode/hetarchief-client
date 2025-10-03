@@ -1063,7 +1063,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		} else {
 			// Open the login blade first
 			setShowAuthQueryKey('1', 'replaceIn');
-			setActiveBlade(MediaActions.RequestAccess, 'replaceIn');
+			// Delay the request access otherwise it will miss the setShowAuthQueryKey
+			// https://meemoo.atlassian.net/browse/ARC-3189
+			setTimeout(() => setActiveBlade(MediaActions.RequestAccess, 'replaceIn'));
 		}
 	};
 
