@@ -122,7 +122,7 @@ const AppLayout: FC<any> = ({ children }) => {
 		{},
 		{
 			keepPreviousData: true,
-			enabled: shouldFetchMaterialRequests,
+			enabled: true,
 		}
 	);
 	const { mutateAsync: dismissMaintenanceAlert } = useDismissMaintenanceAlert();
