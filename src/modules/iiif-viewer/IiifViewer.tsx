@@ -511,11 +511,10 @@ export const IiifViewer = ({
 			// Use window to parse query params, since this native event listener doesn't have access to the update-to-date router.query query params
 			// We also include ...router.query since route params (eg: slug and ieObjectId) are also part of the router.query object
 			const parsedUrl = parseUrl(window.location.href);
-			const searchParams = new URLSearchParams(window.location.search);
 
-			const oldZoomLevel = searchParams.get('zoomLevel');
-			const oldFocusX = searchParams.get('focusX');
-			const oldFocusY = searchParams.get('focusY');
+			const oldZoomLevel = parsedUrl.query.zoomLevel;
+			const oldFocusX = parsedUrl.query.focusX;
+			const oldFocusY = parsedUrl.query.focusY;
 			const newZoomLevel = round(zoomLevel, 3).toString();
 			const newFocusX = round(centerPoint.x, 3).toString();
 			const newFocusY = round(centerPoint.y, 3).toString();
