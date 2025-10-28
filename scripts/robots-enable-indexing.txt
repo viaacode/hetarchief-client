@@ -1,6 +1,5 @@
 User-agent: *
 # Paths
-Disallow: /*?*
 Disallow: /admin/
 Disallow: /beheer/
 Disallow: /account/
