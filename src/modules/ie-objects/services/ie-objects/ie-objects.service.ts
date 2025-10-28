@@ -87,19 +87,13 @@ export class IeObjectsService {
 		if (schemaIdentifiers[0].startsWith('_next')) {
 			return [null]; // Weird NextJS issue with [slug] route matching all assets that nextjs tries to load, like _next/static/webpack/7b0ff23bbcbf53bc.webpack.hot-update.json
 		}
-		console.log(`[PERFORMANCE] ${new Date().toISOString()} start fetch ie object`);
 		const url = stringifyUrl({
 			url: IE_OBJECTS_SERVICE_BASE_URL,
 			query: {
 				ids: schemaIdentifiers,
 			},
 		});
-		const ieObjects: IeObject[] = await ApiService.getApi().get(url).json();
-		console.log(
-			`[PERFORMANCE] ${new Date().toISOString()} finished fetch ie objects`,
-			schemaIdentifiers
-		);
-		return ieObjects;
+		return await ApiService.getApi().get(url).json();
 	}
 
 	/**

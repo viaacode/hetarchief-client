@@ -239,6 +239,11 @@ export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilte
 			case FilterProperty.CREATED_AT:
 			case FilterProperty.PUBLISHED_AT:
 			case FilterProperty.RELEASE_DATE:
+				if (item.op === Operator.EQUALS && values.length === 1) {
+					// Manually create a range of equal values: https://meemoo.atlassian.net/browse/ARC-3191
+					values[i] = values[0];
+				}
+
 				parsed = parseISO(values[i]);
 				values[i] = (parsed && format(parsed, 'yyyy-MM-dd')) || values[i];
 				break;

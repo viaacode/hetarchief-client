@@ -79,8 +79,7 @@
 
 	&__body-wrapper {
 		grid-row-start: 3;
-		overflow-y: auto;
-		overflow-x: hidden;
+		overflow: hidden auto;
 		display: flex;
 		height: 100%;
 		flex-direction: column;

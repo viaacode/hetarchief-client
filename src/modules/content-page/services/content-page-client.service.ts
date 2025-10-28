@@ -1,4 +1,4 @@
-import type { ContentPageInfo } from '@meemoo/admin-core-ui/dist/client.mjs';
+import type { ContentPageInfo } from '@meemoo/admin-core-ui/client';
 import { startsWith } from 'lodash-es';
 import getConfig from 'next/config';
 import { stringifyUrl } from 'query-string';
@@ -27,7 +27,7 @@ export class ContentPageClientService {
 				path,
 			},
 		});
-		const { fetchWithLogoutJson } = await import('@meemoo/admin-core-ui/dist/admin.mjs');
+		const { fetchWithLogoutJson } = await import('@meemoo/admin-core-ui/admin');
 		return fetchWithLogoutJson(url);
 	}
 }

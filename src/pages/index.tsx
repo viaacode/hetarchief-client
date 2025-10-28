@@ -1,7 +1,7 @@
 import {
 	ContentPageRenderer,
 	convertDbContentPageToContentPageInfo,
-} from '@meemoo/admin-core-ui/dist/admin.mjs';
+} from '@meemoo/admin-core-ui/admin';
 import { QueryClient } from '@tanstack/react-query';
 import type { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -23,6 +23,7 @@ import withUser, { type UserProps } from '@shared/hooks/with-user';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
 import { VisitorLayout } from '@visitor-layout/index';
+import ErrorNoAccess from '../modules/shared/components/ErrorNoAccess/ErrorNoAccess';
 
 const Homepage: NextPage<DefaultSeoInfo & UserProps> = ({
 	title,
@@ -62,7 +63,11 @@ const Homepage: NextPage<DefaultSeoInfo & UserProps> = ({
 		if (contentPageInfo) {
 			return (
 				<>
-					<ContentPageRenderer contentPageInfo={contentPageInfo} commonUser={commonUser} />
+					<ContentPageRenderer
+						contentPageInfo={contentPageInfo}
+						commonUser={commonUser}
+						renderNoAccessError={() => <ErrorNoAccess visitorSpaceSlug={null} />}
+					/>
 				</>
 			);
 		}

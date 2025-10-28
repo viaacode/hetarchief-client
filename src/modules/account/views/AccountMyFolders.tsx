@@ -23,7 +23,7 @@ import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import type { ListNavigationItem } from '@shared/components/ListNavigation';
-import { type IdentifiableMediaCard, TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
+import { type IdentifiableMediaCard, getIconFromObjectType } from '@shared/components/MediaCard';
 import { MediaCardList } from '@shared/components/MediaCardList';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
@@ -544,7 +544,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 							...base,
 							actions: renderActions(base, activeFolder),
 							...(!isNil(media.dctermsFormat) && {
-								icon: TYPE_TO_ICON_MAP[media.dctermsFormat],
+								icon: getIconFromObjectType(media.dctermsFormat, true),
 							}),
 						};
 					})}

@@ -1,4 +1,4 @@
-import { type AdminConfig, AdminConfigManager } from '@meemoo/admin-core-ui/dist/admin.mjs';
+import { type AdminConfig, AdminConfigManager } from '@meemoo/admin-core-ui/admin';
 import { useRouter } from 'next/router';
 import { type ComponentType, useCallback, useEffect, useState } from 'react';
 

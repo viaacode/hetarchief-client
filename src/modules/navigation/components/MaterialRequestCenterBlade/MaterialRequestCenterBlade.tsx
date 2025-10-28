@@ -13,7 +13,7 @@ import { BladeManager } from '@shared/components/BladeManager';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
-import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
+import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { setMaterialRequestCount } from '@shared/store/ui';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
@@ -171,7 +171,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						<p className={styles['c-material-request-center-blade__material-label']}>
 							<Icon
 								className={styles['c-material-request-center-blade__material-label-icon']}
-								name={TYPE_TO_ICON_MAP[materialRequest.objectDctermsFormat]}
+								name={getIconFromObjectType(materialRequest.objectDctermsFormat, true)}
 							/>
 							<span>{materialRequest.objectSchemaName}</span>
 						</p>

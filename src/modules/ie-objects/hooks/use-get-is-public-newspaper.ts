@@ -11,6 +11,6 @@ export const useIsPublicNewspaper = (mediaInfo: IeObject | null | undefined): bo
 		mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIC_DOMAIN) ||
 		mediaInfo?.licenses?.includes(IeObjectLicense.COPYRIGHT_UNDETERMINED);
 	return (
-		hasPublicLicense && hasPublicCopyright && mediaInfo.dctermsFormat === IeObjectType.Newspaper
+		hasPublicLicense && hasPublicCopyright && mediaInfo.dctermsFormat === IeObjectType.NEWSPAPER
 	);
 };

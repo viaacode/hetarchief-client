@@ -5,7 +5,7 @@ import type { RelatedObjectProps } from '../RelatedObject.types';
 export const relatedObjectVideoMock: RelatedObjectProps = {
 	object: {
 		id: 'relatedObjectVideoMock',
-		type: IeObjectType.Video,
+		type: IeObjectType.VIDEO,
 		title: 'GIVE: Gecoördineerd Initiatief voor Vlaamse Erfgoeddigitalisering',
 		subtitle: 'Digitaliseren | Toegang & hergebruik',
 		thumbnail: '/images/bg-newsletter.png',

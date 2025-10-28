@@ -1,4 +1,4 @@
-import { SmartLink } from '@meemoo/admin-core-ui/dist/client.mjs';
+import { SmartLink } from '@meemoo/admin-core-ui/client';
 import { Button } from '@viaa/avo2-components';
 import { compact } from 'lodash-es';
 import type { FC } from 'react';

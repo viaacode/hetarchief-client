@@ -12,7 +12,7 @@ import { tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 
 const MaintenanceAlertsOverview = lazy(() =>
-	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({
+	import('@meemoo/admin-core-ui/admin').then((adminCoreModule) => ({
 		default: adminCoreModule.MaintenanceAlertsOverview,
 	}))
 );

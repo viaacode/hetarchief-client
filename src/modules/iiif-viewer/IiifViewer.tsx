@@ -1,5 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { debounce } from 'lodash';
 import { clamp, compact, isNil, round } from 'lodash-es';
 import { useRouter } from 'next/router';
 import type { TileSource, TiledImageOptions, Viewer } from 'openseadragon';
@@ -510,28 +511,42 @@ export const IiifViewer = ({
 			// Use window to parse query params, since this native event listener doesn't have access to the update-to-date router.query query params
 			// We also include ...router.query since route params (eg: slug and ieObjectId) are also part of the router.query object
 			const parsedUrl = parseUrl(window.location.href);
-			router.replace(
-				{
-					query: {
-						...router.query,
-						...parsedUrl.query,
-						zoomLevel: round(zoomLevel, 3),
-						focusX: round(centerPoint.x, 3),
-						focusY: round(centerPoint.y, 3),
+
+			const oldZoomLevel = parsedUrl.query.zoomLevel;
+			const oldFocusX = parsedUrl.query.focusX;
+			const oldFocusY = parsedUrl.query.focusY;
+			const newZoomLevel = round(zoomLevel, 3).toString();
+			const newFocusX = round(centerPoint.x, 3).toString();
+			const newFocusY = round(centerPoint.y, 3).toString();
+
+			if (oldZoomLevel !== newZoomLevel || oldFocusX !== newFocusX || oldFocusY !== newFocusY) {
+				// Only update router when something changed. Otherwise this will fire too often causing listeners to the params not to get triggered
+				// https://meemoo.atlassian.net/browse/ARC-3090
+				router.replace(
+					{
+						query: {
+							...router.query,
+							...parsedUrl.query,
+							zoomLevel: newZoomLevel,
+							focusX: newFocusX,
+							focusY: newFocusY,
+						},
 					},
-				},
-				undefined,
-				{ shallow: true }
-			);
+					undefined,
+					{ shallow: true }
+				);
+			}
 		},
 		[id, router]
 	);
+	// Add a debounce to the update of the viewport event handler, just to avoid a bit too many updates
+	const debouncedHandleViewportChanged = debounce(handleViewportChanged, 100);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: Only register the viewport-change event once when loading the iiif viewer
 	const addEventListeners = useCallback((openSeadragonViewerTemp: Viewer) => {
 		// Keep track of the current zoom and location in the url
 		const handleViewportChangeTemp = () => {
-			handleViewportChanged(openSeadragonViewerTemp);
+			debouncedHandleViewportChanged(openSeadragonViewerTemp);
 		};
 
 		// Keep track of the current page index

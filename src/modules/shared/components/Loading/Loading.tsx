@@ -1,9 +1,8 @@
+import type { DefaultComponentProps } from '@shared/types';
 import clsx from 'clsx';
 import type { FC, ReactNode } from 'react';
 
-import { tHtml } from '@shared/helpers/translate';
-import type { DefaultComponentProps } from '@shared/types';
-
+import { tText } from '@shared/helpers/translate';
 import styles from './Loading.module.scss';
 
 export interface LoadingProps extends DefaultComponentProps {
@@ -34,7 +33,9 @@ const Loading: FC<LoadingProps> = ({
 		>
 			{/* enable if you want to figure out which loader is misbehaving */}
 			{/*<div dangerouslySetInnerHTML={{ __html: `<!-- ${owner} -->` }} />*/}
-			<span>{tHtml('modules/shared/components/loading/loading___laden')}</span>
+			{/* Hide stars in loader, since translations could not be loaded yet */}
+			{/* https://meemoo.atlassian.net/browse/ARC-3169 */}
+			<span>{tText('modules/shared/components/loading/loading___laden').replace('***', '')}</span>
 		</div>
 	);
 };

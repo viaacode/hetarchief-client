@@ -30,7 +30,9 @@ import {
 import type { MetadataItem } from '@ie-objects/components/Metadata';
 import Metadata from '@ie-objects/components/Metadata/Metadata';
 import { NamesList } from '@ie-objects/components/NamesList/NamesList';
-import type { ObjectDetailPageMetadataProps } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata.types';
+import type {
+	ObjectDetailPageMetadataProps,
+} from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata.types';
 import { SearchLinkTag } from '@ie-objects/components/SearchLinkTag/SearchLinkTag';
 import { useGetIeObjectPreviousNextIds } from '@ie-objects/hooks/use-get-ie-object-previous-next-ids';
 import { useIsPublicNewspaper } from '@ie-objects/hooks/use-get-is-public-newspaper';
@@ -43,10 +45,10 @@ import {
 	MEDIA_ACTIONS,
 	MEEMOO_ADMIN_ACTION_SORT_MAP,
 	METADATA_EXPORT_OPTIONS,
-	VISITOR_ACTION_SORT_MAP,
 	renderAbrahamLink,
 	renderDate,
 	renderIsPartOfValue,
+	VISITOR_ACTION_SORT_MAP,
 } from '@ie-objects/ie-objects.consts';
 import {
 	type ButtonsSortOrder,
@@ -63,8 +65,10 @@ import {
 	IE_OBJECTS_SERVICE_EXPORT,
 	NEWSPAPERS_SERVICE_BASE_URL,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
+import { checkIeObjectPermissions } from '@ie-objects/utils/check-ie-object-permissions';
 import { isInAFolder } from '@ie-objects/utils/folders';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
+import { getFirstMentionHighlight } from '@ie-objects/utils/get-first-mention-highlight';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import {
 	mapArrayToMetadataData,
@@ -72,6 +76,7 @@ import {
 	mapObjectsToMetadata,
 	renderKeywordsAsTags,
 } from '@ie-objects/utils/map-metadata';
+import type { TextLine } from '@iiif-viewer/IiifViewer.types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { Blade } from '@shared/components/Blade/Blade';
 import { CopyButton } from '@shared/components/CopyButton';
@@ -79,11 +84,11 @@ import HighlightSearchTerms from '@shared/components/HighlightedMetadata/Highlig
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
+import MetaDataFieldWithHighlightingAndMaxLength
+	from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { Pill } from '@shared/components/Pill';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
@@ -94,27 +99,13 @@ import { selectBreadcrumbs } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { Locale } from '@shared/utils/i18n';
-import {
-	LANGUAGES,
-	type LanguageCode,
-} from '@visitor-space/components/LanguageFilterForm/languages';
-import {
-	filterNameToAcronym,
-	operatorToAcronym,
-} from '@visitor-space/const/advanced-filter-array-param';
-import {
-	FILTER_LABEL_VALUE_DELIMITER,
-	FilterProperty,
-	Operator,
-	SearchFilterId,
-} from '@visitor-space/types';
+import { type LanguageCode, LANGUAGES } from '@visitor-space/components/LanguageFilterForm/languages';
+import { filterNameToAcronym, operatorToAcronym } from '@visitor-space/const/advanced-filter-array-param';
+import { FILTER_LABEL_VALUE_DELIMITER, FilterProperty, Operator, SearchFilterId } from '@visitor-space/types';
 
 import Callout from '../../../shared/components/Callout/Callout';
 import MetadataList from '../Metadata/MetadataList';
 
-import { checkIeObjectPermissions } from '@ie-objects/utils/check-ie-object-permissions';
-import { getFirstMentionHighlight } from '@ie-objects/utils/get-first-mention-highlight';
-import type { TextLine } from '@iiif-viewer/IiifViewer.types';
 import styles from './ObjectDetailPageMetadata.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
@@ -143,7 +134,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	 */
 
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
-	const isNewspaper = mediaInfo?.dctermsFormat === IeObjectType.Newspaper;
+	const isNewspaper = mediaInfo?.dctermsFormat === IeObjectType.NEWSPAPER;
 	const isPublicNewspaper: boolean = useIsPublicNewspaper(mediaInfo);
 	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
 	const breadcrumbs = useSelector(selectBreadcrumbs);
@@ -152,7 +143,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		mediaInfo?.iri,
 		{
 			enabled:
-				mediaInfo?.dctermsFormat === IeObjectType.Newspaper &&
+				mediaInfo?.dctermsFormat === IeObjectType.NEWSPAPER &&
 				!!mediaInfo?.collectionId &&
 				!!mediaInfo?.schemaIdentifier,
 		}
@@ -254,7 +245,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					setOnConfirmCopyright(() => () => {
 						window.open(
 							stringifyUrl({
-								url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo?.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/zip`,
+								url: `${
+									publicRuntimeConfig.PROXY_URL
+								}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(
+									mediaInfo?.schemaIdentifier
+								)}/${IE_OBJECTS_SERVICE_EXPORT}/zip`,
 								query: {
 									currentPageUrl: window.origin + router.asPath,
 								},
@@ -268,7 +263,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					setOnConfirmCopyright(() => () => {
 						window.open(
 							stringifyUrl({
-								url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`,
+								url: `${
+									publicRuntimeConfig.PROXY_URL
+								}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(
+									mediaInfo.schemaIdentifier
+								)}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`,
 								query: {
 									currentPageUrl: window.origin + router.asPath,
 								},
@@ -279,7 +278,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				default:
 					window.open(
 						stringifyUrl({
-							url: `${publicRuntimeConfig.PROXY_URL}/${IE_OBJECTS_SERVICE_BASE_URL}/${encodeURIComponent(mediaInfo.schemaIdentifier)}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`,
+							url: `${
+								publicRuntimeConfig.PROXY_URL
+							}/${IE_OBJECTS_SERVICE_BASE_URL}/${encodeURIComponent(
+								mediaInfo.schemaIdentifier
+							)}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`,
 							query: {
 								currentPageUrl: window.origin + router.asPath,
 							},
@@ -709,25 +712,21 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		if (!mediaInfo.collectionName) {
 			return null;
 		}
-		if (mediaInfo.dctermsFormat === IeObjectType.Newspaper) {
+		if (mediaInfo.dctermsFormat === IeObjectType.NEWSPAPER) {
 			// Use the series filter
 			return (
 				<SearchLinkTag
 					label={mediaInfo.collectionName}
-					link={`${ROUTES_BY_LOCALE[locale].search}?format=${IeObjectType.Newspaper}&${
+					link={`${ROUTES_BY_LOCALE[locale].search}?format=${IeObjectType.NEWSPAPER}&${
 						SearchFilterId.NewspaperSeriesName
 					}=${encodeURIComponent(mediaInfo.collectionName)}`}
 				/>
 			);
 		}
-		// Use the generic text filter
-		const searchLink = stringifyUrl({
-			url: ROUTES_BY_LOCALE[locale].search,
-			query: {
-				[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: mediaInfo.collectionName,
-			},
-		});
-		return <SearchLinkTag label={mediaInfo.collectionName} link={searchLink} />;
+
+		// This series filter isn't available for audio / video material, since the filter doesn't work well for those media types
+		// https://meemoo.atlassian.net/browse/ARC-3046
+		return mediaInfo.collectionName;
 	}
 
 	function renderPreviousAndNextButtons(): ReactNode | null {

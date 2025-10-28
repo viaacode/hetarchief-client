@@ -11,9 +11,8 @@ $component: "c-visitor-space-card-list";
 	row-gap: $spacer-md;
 
 	@media (min-width: $breakpoint-md) {
-		column-gap: $spacer-lg;
+		gap: $spacer-lg * 2 $spacer-lg;
 		grid-template-columns: repeat(3, 1fr);
 		grid-template-rows: max-content;
-		row-gap: $spacer-lg * 2;
 	}
 }

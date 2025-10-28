@@ -3,7 +3,7 @@ import {
 	type ContentPageInfo,
 	ContentPageRenderer,
 	convertDbContentPageToContentPageInfo,
-} from '@meemoo/admin-core-ui/dist/client.mjs';
+} from '@meemoo/admin-core-ui/client';
 import { Button } from '@meemoo/react-components';
 import type { Avo } from '@viaa/avo2-types';
 import clsx from 'clsx';
@@ -28,6 +28,7 @@ import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 
+import ErrorNoAccess from '../shared/components/ErrorNoAccess/ErrorNoAccess';
 import styles from './UserConditions.module.scss';
 
 export const UserConditions: FC<
@@ -112,6 +113,7 @@ export const UserConditions: FC<
 								<ContentPageRenderer
 									contentPageInfo={contentPageInfo as ContentPageInfo}
 									commonUser={commonUser}
+									renderNoAccessError={() => <ErrorNoAccess visitorSpaceSlug={null} />}
 								/>
 							)}
 						</div>

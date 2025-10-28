@@ -35,8 +35,7 @@ import {
 	type IdentifiableMediaCard,
 	type MediaCardProps,
 	type MediaCardViewMode,
-	TYPE_TO_ICON_MAP,
-	TYPE_TO_NO_ICON_MAP,
+	getIconFromObjectType,
 } from '@shared/components/MediaCard';
 import { MediaCardList } from '@shared/components/MediaCardList';
 import {
@@ -722,7 +721,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 			// Newspapers should use transcript text instead of the description
 			const description =
-				type === IeObjectType.Newspaper ? item.transcript || item.description : item.description;
+				type === IeObjectType.NEWSPAPER ? item.transcript || item.description : item.description;
 
 			return {
 				schemaIdentifier: item.schemaIdentifier,
@@ -739,7 +738,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				hasTempAccess,
 				showKeyUserLabel,
 				...(!isNil(type) && {
-					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
+					icon: getIconFromObjectType(type, !!item.thumbnailUrl),
 				}),
 				link,
 				previousPage: ROUTES_BY_LOCALE[locale].search,
