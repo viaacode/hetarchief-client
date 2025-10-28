@@ -29,7 +29,7 @@ const Template: ComponentStory<typeof MediaCard> = (args) => {
 				<MediaCard
 					{...args}
 					title="Something you can hear"
-					type={IeObjectType.Audio}
+					type={IeObjectType.AUDIO}
 					thumbnail={soundwave}
 				/>
 			</div>
@@ -37,7 +37,7 @@ const Template: ComponentStory<typeof MediaCard> = (args) => {
 				<MediaCard
 					{...args}
 					title="Something you can watch"
-					type={IeObjectType.Video}
+					type={IeObjectType.VIDEO}
 					thumbnail={thumbnail}
 				/>
 			</div>
@@ -45,14 +45,14 @@ const Template: ComponentStory<typeof MediaCard> = (args) => {
 				<MediaCard
 					{...args}
 					title="Something you can hear very little about"
-					type={IeObjectType.Audio}
+					type={IeObjectType.AUDIO}
 				/>
 			</div>
 			<div style={column}>
-				<MediaCard {...args} title="Something you can read about" type={IeObjectType.Newspaper} />
+				<MediaCard {...args} title="Something you can read about" type={IeObjectType.NEWSPAPER} />
 			</div>
 			<div style={column}>
-				<MediaCard {...args} title="Something you can see nothing of" type={IeObjectType.Video} />
+				<MediaCard {...args} title="Something you can see nothing of" type={IeObjectType.VIDEO} />
 			</div>
 		</section>
 	);

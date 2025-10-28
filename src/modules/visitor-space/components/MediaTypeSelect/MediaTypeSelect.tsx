@@ -10,15 +10,15 @@ const MediaTypeSelect: FC<ReactSelectProps> = (props) => {
 	const options: MediaTypeOptions = [
 		{
 			label: tText('modules/visitor-space/components/media-type-select/media-type-select___audio'),
-			value: IeObjectType.Audio,
+			value: IeObjectType.AUDIO,
 		},
 		{
 			label: tText('modules/visitor-space/components/media-type-select/media-type-select___video'),
-			value: IeObjectType.Video,
+			value: IeObjectType.VIDEO,
 		},
 		{
 			label: tText('modules/visitor-space/components/media-type-select/media-type-select___krant'),
-			value: IeObjectType.Newspaper,
+			value: IeObjectType.NEWSPAPER,
 		},
 	];
 

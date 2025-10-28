@@ -1,11 +1,4 @@
-import {
-	Alert,
-	Button,
-	FlowPlayer,
-	type FlowPlayerProps,
-	type TabProps,
-	Tabs,
-} from '@meemoo/react-components';
+import { Alert, Button, FlowPlayer, type FlowPlayerProps, type TabProps, Tabs } from '@meemoo/react-components';
 import clsx from 'clsx';
 import type { HTTPError } from 'ky';
 import { capitalize, compact, intersection, isNil, kebabCase, lowerCase, noop } from 'lodash-es';
@@ -14,31 +7,14 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { parseUrl, stringifyUrl } from 'query-string';
-import React, {
-	type FC,
-	Fragment,
-	type ReactNode,
-	useCallback,
-	useEffect,
-	useMemo,
-	useState,
-} from 'react';
+import React, { type FC, Fragment, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-	BooleanParam,
-	NumberParam,
-	StringParam,
-	useQueryParam,
-	withDefault,
-} from 'use-query-params';
+import { BooleanParam, NumberParam, StringParam, useQueryParam, withDefault } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import type { User } from '@auth/types';
-import {
-	RequestAccessBlade,
-	type RequestAccessFormState,
-} from '@home/components/RequestAccessBlade';
+import { RequestAccessBlade, type RequestAccessFormState } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { CollapsableBlade } from '@ie-objects/components/CollapsableBlade';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
@@ -59,14 +35,14 @@ import {
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
+	getNoLicensePlaceholderLabels,
+	getObjectPlaceholderLabels,
+	getTicketErrorPlaceholderLabels,
 	IMAGE_API_FORMATS,
 	IMAGE_BROWSE_COPY_FORMATS,
 	JSON_FORMATS,
 	OBJECT_DETAIL_TABS,
 	XML_FORMATS,
-	getNoLicensePlaceholderLabels,
-	getObjectPlaceholderLabels,
-	getTicketErrorPlaceholderLabels,
 } from '@ie-objects/ie-objects.consts';
 import {
 	HighlightMode,
@@ -88,7 +64,9 @@ import {
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { IiifViewer } from '@iiif-viewer/IiifViewer';
 import type { ImageInfo, ImageInfoWithToken, Rect, TextLine } from '@iiif-viewer/IiifViewer.types';
-import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
+import {
+	SearchInputWithResultsPagination,
+} from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
@@ -99,10 +77,7 @@ import { Loading } from '@shared/components/Loading';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
-import {
-	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
-	QUERY_PARAM_KEY,
-} from '@shared/const/query-param-keys';
+import { HIGHLIGHTED_SEARCH_TERMS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { convertDurationStringToSeconds } from '@shared/helpers/convert-duration-string-to-seconds';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -119,7 +94,9 @@ import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
-import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
+import {
+	useGetActiveVisitRequestForUserAndSpace,
+} from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
@@ -129,6 +106,7 @@ import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 
 import { useGetIeObjectThumbnail } from '@ie-objects/hooks/use-get-ie-objects-thumbnail';
+import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
 import {
 	iiifGoToHome,
 	iiifGoToPage,
@@ -426,7 +404,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		(visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
-	const isNewspaper = mediaInfo?.dctermsFormat === IeObjectType.Newspaper;
+	const isNewspaper = mediaInfo?.dctermsFormat === IeObjectType.NEWSPAPER;
 	const showFragmentSlider = representationsToDisplay.length > 1 && !isNewspaper;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.lg); // mobile and tablet portrait
 	const hasAccessToVisitorSpaceOfObject =
@@ -938,7 +916,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 		if (mediaInfo) {
 			const path = window.location.href;
 			const eventData = {
-				type: mediaInfo.dctermsFormat,
+				type: mapDcTermsFormatToSimpleType(mediaInfo.dctermsFormat),
 				fragment_id: mediaInfo.schemaIdentifier,
 				pid: mediaInfo.schemaIdentifier,
 				user_group_name: user?.groupName ?? GroupName.ANONYMOUS,
@@ -1120,7 +1098,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				pid: mediaInfo?.schemaIdentifier,
 				user_group_name: user?.groupName,
 				or_id: mediaInfo?.maintainerId,
-				type: mediaInfo?.dctermsFormat,
+				type: mapDcTermsFormatToSimpleType(mediaInfo?.dctermsFormat),
 			});
 
 			// The external url is opened with an actual link, so safari doesn't block the popup
@@ -1141,7 +1119,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 				if (!oldHasMediaPlayed && !isServerSideRendering()) {
 					const path = window.location.href;
 					const eventData = {
-						type: mediaInfo?.dctermsFormat,
+						type: mapDcTermsFormatToSimpleType(mediaInfo?.dctermsFormat),
 						fragment_id: mediaInfo?.schemaIdentifier,
 						pid: mediaInfo?.schemaIdentifier,
 						user_group_name: user?.groupName,
@@ -1258,14 +1236,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const isMediaAvailable = useCallback((): boolean => {
 		switch (mediaInfo?.dctermsFormat) {
-			case IeObjectType.Audio:
-			case IeObjectType.AudioFragment:
-			case IeObjectType.Video:
-			case IeObjectType.VideoFragment:
-			case IeObjectType.Film:
+			case IeObjectType.AUDIO:
+			case IeObjectType.AUDIO_FRAGMENT:
+			case IeObjectType.VIDEO:
+			case IeObjectType.VIDEO_FRAGMENT:
+			case IeObjectType.FILM:
 				return !isErrorPlayableUrl && !!playableUrl && !!currentPlayableFile;
 
-			case IeObjectType.Newspaper: {
+			case IeObjectType.NEWSPAPER: {
 				return !!getFilesByType(IMAGE_API_FORMATS)?.[0]?.storedAt;
 			}
 

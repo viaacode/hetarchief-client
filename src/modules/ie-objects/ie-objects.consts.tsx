@@ -13,11 +13,7 @@ import {
 } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
-import {
-	GET_TYPE_TO_LABEL_MAP,
-	TYPE_TO_ICON_MAP,
-	TYPE_TO_NO_ICON_MAP,
-} from '@shared/components/MediaCard';
+import { GET_TYPE_TO_LABEL_MAP, TYPE_TO_ICON_MAP, TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate } from '@shared/utils/dates';
@@ -140,7 +136,7 @@ export const OBJECT_DETAIL_TABS = (
 	mediaAvailable = true,
 	ocrAvailable = true
 ): TabProps[] => {
-	const typeWithDefault = mediaType || IeObjectType.Video;
+	const typeWithDefault = mediaType || IeObjectType.VIDEO;
 	return [
 		{
 			id: ObjectDetailTabs.Metadata,

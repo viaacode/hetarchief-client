@@ -10,10 +10,7 @@ import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
-import {
-	RequestAccessBlade,
-	type RequestAccessFormState,
-} from '@home/components/RequestAccessBlade';
+import { RequestAccessBlade, type RequestAccessFormState } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
@@ -291,7 +288,7 @@ const MediaCard: FC<MediaCardProps> = ({
 			);
 		}
 
-		if (type === IeObjectType.Audio || type === IeObjectType.AudioFragment) {
+		if (type === IeObjectType.AUDIO || type === IeObjectType.AUDIO_FRAGMENT) {
 			// Only render the waveform if the thumbnail is available
 			// The thumbnail is an ugly speaker icon that we never want to show
 			// But if that thumbnail is not available it most likely means this object does not have the BEZOEKERTOOL-CONTENT license
