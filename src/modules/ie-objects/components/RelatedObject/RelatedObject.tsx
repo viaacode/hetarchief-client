@@ -4,10 +4,9 @@ import React, { type FC } from 'react';
 
 import { CardImage } from '@shared/components/CardImage';
 import { Icon } from '@shared/components/Icon';
-import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
+import { getIconFromObjectType } from '@shared/components/MediaCard';
 
 import { ObjectPlaceholder } from '../ObjectPlaceholder';
-
 import styles from './RelatedObject.module.scss';
 import type { RelatedObjectProps } from './RelatedObject.types';
 
@@ -43,7 +42,7 @@ const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 			subtitle={object.subtitle}
 			title={
 				<>
-					{object.type && <Icon name={TYPE_TO_ICON_MAP[object.type]} />}
+					{object.type && <Icon name={getIconFromObjectType(object.type, true)} />}
 					<strong>{object.title}</strong>
 				</>
 			}

@@ -5,7 +5,7 @@ import {
 	ContentPageWidth,
 	type LinkInfo,
 	type ToastInfo,
-} from '@meemoo/admin-core-ui/dist/client.mjs';
+} from '@meemoo/admin-core-ui/client';
 import { DatabaseType } from '@viaa/avo2-types';
 import getConfig from 'next/config';
 import Link from 'next/link';

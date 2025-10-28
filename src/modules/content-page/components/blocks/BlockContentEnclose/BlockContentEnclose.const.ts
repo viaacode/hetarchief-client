@@ -1,4 +1,4 @@
-import { AdminConfigManager } from '@meemoo/admin-core-ui/dist/client.mjs';
+import { AdminConfigManager } from '@meemoo/admin-core-ui/client';
 
 import type { IconName } from '@shared/components/Icon';
 

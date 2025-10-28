@@ -16,7 +16,7 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 import styles from './PermissionsOverviewPage.module.scss';
 
 const UserGroupOverview = lazy(() =>
-	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({
+	import('@meemoo/admin-core-ui/admin').then((adminCoreModule) => ({
 		default: adminCoreModule.UserGroupOverview,
 	}))
 );

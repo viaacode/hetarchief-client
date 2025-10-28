@@ -4,10 +4,13 @@ import Image from 'next/image';
 import React, { type FC } from 'react';
 
 import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
-import { GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD, type MaterialRequestDetail } from '@material-requests/types';
+import {
+	GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD,
+	type MaterialRequestDetail,
+} from '@material-requests/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
-import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard';
+import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { tText } from '@shared/helpers/translate';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { formatMediumDate } from '@shared/utils/dates';
@@ -91,11 +94,10 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 					<p className={styles['p-account-my-material-requests__material-label']}>
 						<Icon
 							className={styles['p-account-my-material-requests__material-label-icon']}
-							name={
-								TYPE_TO_ICON_MAP[
-									currentMaterialRequestDetail?.objectDctermsFormat || IeObjectType.VIDEO
-								]
-							}
+							name={getIconFromObjectType(
+								currentMaterialRequestDetail?.objectDctermsFormat || IeObjectType.VIDEO,
+								true
+							)}
 						/>
 						<span>{currentMaterialRequestDetail?.objectSchemaName}</span>
 					</p>

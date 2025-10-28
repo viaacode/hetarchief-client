@@ -35,8 +35,7 @@ import {
 	type IdentifiableMediaCard,
 	type MediaCardProps,
 	type MediaCardViewMode,
-	TYPE_TO_ICON_MAP,
-	TYPE_TO_NO_ICON_MAP,
+	getIconFromObjectType,
 } from '@shared/components/MediaCard';
 import { MediaCardList } from '@shared/components/MediaCardList';
 import {
@@ -51,9 +50,19 @@ import { ScrollableTabs, TabLabel } from '@shared/components/Tabs';
 import { TagSearchBar } from '@shared/components/TagSearchBar';
 import { TagSearchBarInfo } from '@shared/components/TagSearchBar/TagSearchBarInfo';
 import type { ToggleOption } from '@shared/components/Toggle';
-import { VisitorSpaceDropdown, type VisitorSpaceDropdownOption } from '@shared/components/VisitorSpaceDropdown';
-import { GET_VISITOR_SPACE_VIEW_TOGGLE_OPTIONS, ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
-import { HIGHLIGHTED_SEARCH_TERMS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import {
+	VisitorSpaceDropdown,
+	type VisitorSpaceDropdownOption,
+} from '@shared/components/VisitorSpaceDropdown';
+import {
+	GET_VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
+	ROUTES_BY_LOCALE,
+	ROUTE_PARTS_BY_LOCALE,
+} from '@shared/const';
+import {
+	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
+	QUERY_PARAM_KEY,
+} from '@shared/const/query-param-keys';
 import { numberWithCommas } from '@shared/helpers';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -62,41 +71,40 @@ import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { selectLastScrollPosition, setBreadcrumbs, setLastScrollPosition, setShowZendesk } from '@shared/store/ui';
+import {
+	selectLastScrollPosition,
+	setBreadcrumbs,
+	setLastScrollPosition,
+	setShowZendesk,
+} from '@shared/store/ui';
 import { Breakpoints, type SortObject } from '@shared/types';
-import { IeObjectsSearchFilterField, IeObjectType, SearchPageMediaType } from '@shared/types/ie-objects';
+import {
+	IeObjectType,
+	IeObjectsSearchFilterField,
+	SearchPageMediaType,
+} from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
 import { scrollTo } from '@shared/utils/scroll-to-top';
-import {
-	useGetActiveVisitRequestForUserAndSpace,
-} from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
+import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitTimeframe } from '@visit-requests/types';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import {
-	initialFields,
 	TEMP_FILTER_KEY_PREFIX,
+	initialFields,
 } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import type { AdvancedFilterFormState } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.types';
-import type {
-	ConsultableMediaFilterFormState,
-} from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
-import type {
-	ConsultableOnlyOnLocationFilterFormState,
-} from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
-import type {
-	ConsultablePublicDomainFilterFormState,
-} from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm.types';
+import type { ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
+import type { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
+import type { ConsultablePublicDomainFilterFormState } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm.types';
 import type { DurationFilterFormState } from '@visitor-space/components/DurationFilterForm';
 import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
 import type { GenreFilterFormState } from '@visitor-space/components/GenreFilterForm';
 import type { KeywordsFilterFormState } from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.types';
 import type { LanguageFilterFormState } from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
-import type {
-	MaintainerFilterFormState,
-} from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
+import type { MaintainerFilterFormState } from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
 import type { MediumFilterFormState } from '@visitor-space/components/MediumFilterForm';
 import type { ReleaseDateFilterFormState } from '@visitor-space/components/ReleaseDateFilterForm';
 import {
@@ -108,7 +116,12 @@ import {
 } from '@visitor-space/const';
 import { SEARCH_PAGE_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
 import { SEARCH_PAGE_IE_OBJECT_TABS } from '@visitor-space/const/visitor-space-tabs.const';
-import { type AdvancedFilter, FilterProperty, SearchFilterId, type TagIdentity } from '@visitor-space/types';
+import {
+	type AdvancedFilter,
+	FilterProperty,
+	SearchFilterId,
+	type TagIdentity,
+} from '@visitor-space/types';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
 import { v4 as uuidV4 } from 'uuid';
@@ -725,7 +738,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				hasTempAccess,
 				showKeyUserLabel,
 				...(!isNil(type) && {
-					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
+					icon: getIconFromObjectType(type, !!item.thumbnailUrl),
 				}),
 				link,
 				previousPage: ROUTES_BY_LOCALE[locale].search,

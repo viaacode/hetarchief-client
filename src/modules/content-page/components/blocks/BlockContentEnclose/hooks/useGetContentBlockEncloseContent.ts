@@ -1,4 +1,4 @@
-import { AdminConfigManager, fetchWithLogoutJson } from '@meemoo/admin-core-ui/dist/client.mjs';
+import { AdminConfigManager, fetchWithLogoutJson } from '@meemoo/admin-core-ui/client';
 import { useQueries } from '@tanstack/react-query';
 import type { Avo } from '@viaa/avo2-types';
 import { compact, kebabCase } from 'lodash-es';

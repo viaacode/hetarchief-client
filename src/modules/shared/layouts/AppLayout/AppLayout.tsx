@@ -6,7 +6,7 @@ import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-cont
 import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
 import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
-import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/dist/client.mjs';
+import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/client';
 import { Alert } from '@meemoo/react-components';
 import { Footer } from '@navigation/components/Footer';
 import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';

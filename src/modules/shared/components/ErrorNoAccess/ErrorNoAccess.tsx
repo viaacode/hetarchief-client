@@ -6,7 +6,7 @@ import { tHtml } from '@shared/helpers/translate';
 
 interface ErrorSpaceNoAccessProps {
 	visitorSpaceSlug: string | null;
-	description: string | ReactNode;
+	description?: string | ReactNode;
 }
 
 const ErrorNoAccess: FC<ErrorSpaceNoAccessProps> = ({ visitorSpaceSlug, description }) => {
@@ -19,7 +19,12 @@ const ErrorNoAccess: FC<ErrorSpaceNoAccessProps> = ({ visitorSpaceSlug, descript
 						)
 					: tHtml('modules/shared/components/error-no-access/error-no-access___geen-toegang')
 			}
-			description={description}
+			description={
+				description ||
+				tHtml(
+					'modules/shared/components/error-no-access/error-no-access___je-hebt-geen-toegang-tot-deze-pagina'
+				)
+			}
 			link={{
 				component: <Button label={tHtml('pages/404___ga-naar-de-homepage')} variants="black" />,
 				to: '/',

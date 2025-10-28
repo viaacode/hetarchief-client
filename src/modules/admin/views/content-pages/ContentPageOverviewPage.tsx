@@ -15,7 +15,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageOverview = lazy(() =>
-	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => ({
+	import('@meemoo/admin-core-ui/admin').then((adminCoreModule) => ({
 		default: adminCoreModule.ContentPageOverview,
 	}))
 );

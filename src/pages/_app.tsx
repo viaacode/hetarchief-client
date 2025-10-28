@@ -1,4 +1,4 @@
-import { AdminConfigManager } from '@meemoo/admin-core-ui/dist/client.mjs';
+import { AdminConfigManager } from '@meemoo/admin-core-ui/client';
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import nlBE from 'date-fns/locale/nl-BE/index.js';
 import setDefaultOptions from 'date-fns/setDefaultOptions';
@@ -23,7 +23,7 @@ import Head from 'next/head';
 import pkg from '../../package.json';
 
 import '../styles/main.scss';
-import { ApiService } from '@shared/services/api-service';
+import { ApiService } from '@shared/services/api-service'; // Set global locale:
 
 // Set global locale:
 setDefaultOptions({ locale: nlBE });

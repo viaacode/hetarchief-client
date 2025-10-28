@@ -1,4 +1,4 @@
-import { AdminConfigManager } from '@meemoo/admin-core-ui/dist/admin.mjs';
+import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
 import { Badge, Button, Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isValid } from 'date-fns';
@@ -10,13 +10,16 @@ import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
-import { RequestAccessBlade, type RequestAccessFormState } from '@home/components/RequestAccessBlade';
+import {
+	RequestAccessBlade,
+	type RequestAccessFormState,
+} from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
 import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { TRUNCATED_TEXT_LENGTH, TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
+import { TRUNCATED_TEXT_LENGTH, getIconFromObjectType } from '@shared/components/MediaCard';
 import { Modal } from '@shared/components/Modal';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { Pill } from '@shared/components/Pill';
@@ -30,7 +33,6 @@ import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 
 import Icon from '../Icon/Icon';
-
 import styles from './MediaCard.module.scss';
 import type { MediaCardProps } from './MediaCard.types';
 
@@ -224,7 +226,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				className={clsx(styles['c-media-card__no-content-icon'], styles['c-media-card__icon'], {
 					[styles['c-media-card__no-content-icon']]: !link,
 				})}
-				name={TYPE_TO_NO_ICON_MAP[type as IeObjectType]}
+				name={getIconFromObjectType(type as IeObjectType, false)}
 			/>
 		);
 	};

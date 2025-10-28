@@ -1,4 +1,4 @@
-import type { AdminConfig } from '@meemoo/admin-core-ui/dist/client.mjs';
+import type { AdminConfig } from '@meemoo/admin-core-ui/client';
 
 import type { Locale } from '@shared/utils/i18n';
 

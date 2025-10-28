@@ -14,7 +14,7 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 import styles from './AdminTranslationsOverviewPage.module.scss';
 
 const TranslationsOverview = lazy(() =>
-	import('@meemoo/admin-core-ui/dist/admin.mjs').then((adminCoreModule) => {
+	import('@meemoo/admin-core-ui/admin').then((adminCoreModule) => {
 		return {
 			default: adminCoreModule.TranslationsOverview,
 		};
