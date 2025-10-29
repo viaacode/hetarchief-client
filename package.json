@@ -115,6 +115,7 @@
   "devDependencies": {
     "@babel/core": "7.23.0",
     "@babel/preset-env": "7.22.20",
+    "babel-plugin-macros": "3.1.0",
     "@biomejs/biome": "1.9.4",
     "@commitlint/cli": "15.0.0",
     "@commitlint/config-conventional": "15.0.0",
@@ -189,6 +190,9 @@
     "@emotion/react": "11.11.1",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
+    "babel-plugin-macros": "3.1.0",
+    "i18next": "^22.0.6",
+    "i18next-http-backend": "2.6.1",
     "is-fullwidth-code-point": "3.0.0",
     "react": "18.3.1",
     "react-datepicker": "4.21.0",
@@ -197,9 +201,7 @@
     "slice-ansi": "4.0.0",
     "string-width": "4.2.3",
     "stylelint": "16.14.1",
-    "typescript": "5.1.6",
-    "i18next": "^22.0.6",
-    "i18next-http-backend": "2.6.1"
+    "typescript": "5.1.6"
   },
   "browserslist": [">0.3%", "not ie 11", "not dead", "not op_mini all"]
 }
