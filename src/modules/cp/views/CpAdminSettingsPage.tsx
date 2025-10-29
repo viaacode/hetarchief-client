@@ -11,7 +11,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 
-export const CpAdminSettingsPage: FC<DefaultSeoInfo> = ({ url }) => {
+export const CpAdminSettingsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	/**
 	 * Hooks
 	 */
@@ -49,6 +49,7 @@ export const CpAdminSettingsPage: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 
 			<PermissionsCheck allPermissions={[Permission.UPDATE_OWN_SPACE]}>

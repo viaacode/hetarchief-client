@@ -10,7 +10,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 
-export const NewsletterConfirmation: FC<DefaultSeoInfo> = ({ url }) => {
+export const NewsletterConfirmation: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	useHideFooter();
 
 	const router = useRouter();
@@ -48,6 +48,7 @@ export const NewsletterConfirmation: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 
 			<Loading owner="nieuwsbrief bevestiging" fullscreen />

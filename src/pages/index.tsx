@@ -23,13 +23,17 @@ import withUser, { type UserProps } from '@shared/hooks/with-user';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
 import { VisitorLayout } from '@visitor-layout/index';
+import getConfig from 'next/config';
 import ErrorNoAccess from '../modules/shared/components/ErrorNoAccess/ErrorNoAccess';
+
+const { publicRuntimeConfig } = getConfig();
 
 const Homepage: NextPage<DefaultSeoInfo & UserProps> = ({
 	title,
 	description,
 	image,
 	url,
+	canonicalUrl,
 	commonUser,
 }) => {
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
@@ -83,6 +87,7 @@ const Homepage: NextPage<DefaultSeoInfo & UserProps> = ({
 				imgUrl={image || contentPageInfo?.thumbnailPath || null}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={publicRuntimeConfig.CLIENT_URL}
 			/>
 			{renderPageContent()}
 		</VisitorLayout>

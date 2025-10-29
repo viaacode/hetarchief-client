@@ -17,7 +17,12 @@ import { VisitorLayout } from '@visitor-layout/index';
 import { WaitingPage } from '@visitor-space/components/WaitingPage';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
-export const VisitRequestedPage: FC<DefaultSeoInfo> = ({ title, description, url }) => {
+export const VisitRequestedPage: FC<DefaultSeoInfo> = ({
+	title,
+	description,
+	url,
+	canonicalUrl,
+}) => {
 	const router = useRouter();
 	const locale = useLocale();
 	const dispatch = useDispatch();
@@ -100,6 +105,7 @@ export const VisitRequestedPage: FC<DefaultSeoInfo> = ({ title, description, url
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 			{renderPageContent()}
 		</VisitorLayout>

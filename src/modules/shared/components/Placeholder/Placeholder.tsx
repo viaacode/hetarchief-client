@@ -25,6 +25,7 @@ const Placeholder: FC<PlaceholderProps> = ({
 			{!icon && img && (
 				<div className={styles['c-placeholder__img']}>
 					<Image
+						unoptimized
 						src={img}
 						alt={imgAlt as string}
 						fill

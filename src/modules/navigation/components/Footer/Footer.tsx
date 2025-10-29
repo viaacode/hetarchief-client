@@ -41,6 +41,7 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 					aria-label={'Link naar hetarchief.be'}
 				>
 					<Image
+						unoptimized
 						src={`/images/logo_hetarchief_${locale}.svg`}
 						alt={tText('modules/navigation/components/footer/footer___hetarchief-logo')}
 						width={178}
@@ -70,6 +71,7 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 					)}
 				>
 					<Image
+						unoptimized
 						src={`/images/logo_vlaanderen_${locale}.svg`}
 						alt={tText('modules/navigation/components/footer/footer___vlaanderen-logo')}
 						width={89}
@@ -91,6 +93,7 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 					aria-label={tText('modules/navigation/components/footer/footer___link-naar-meemoo-be')}
 				>
 					<Image
+						unoptimized
 						src={`/images/logo_meemoo_${locale}.svg`}
 						alt={tText('modules/navigation/components/footer/footer___meemoo-logo')}
 						width={104}

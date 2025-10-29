@@ -62,6 +62,7 @@ const LoggedOutVisitorSpacesHome: FC = () => {
 				<div className={styles['c-hero']}>
 					<div className={styles['c-hero__image']}>
 						<Image
+							unoptimized
 							src="/images/hero.jpg"
 							alt={tText('modules/home/components/logged-out-home/logged-out-home___hero-alt')}
 							priority

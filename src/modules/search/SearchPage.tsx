@@ -11,7 +11,6 @@ import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
 import type { HTTPError } from 'ky';
 import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
-import Head from 'next/head';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -140,7 +139,7 @@ const getDefaultOption = (): VisitorSpaceDropdownOption => {
 	};
 };
 
-const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
+const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const windowSize = useWindowSizeContext();
 	const dispatch = useDispatch();
 	const locale = useLocale();
@@ -1004,9 +1003,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const renderSearchPage = () => {
 		return (
 			<>
-				<Head>
-					<link rel="canonical" href="https://hetarchief.be/zoeken" />
-				</Head>
 				{accessibleVisitorSpaceRequests && (
 					<div className={clsx('p-visitor-space', styles['p-visitor-space'])}>
 						<section className="u-bg-black u-pt-8">
@@ -1151,6 +1147,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 			{renderPageContent()}
 		</>

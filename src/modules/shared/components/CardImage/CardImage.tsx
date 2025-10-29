@@ -15,7 +15,6 @@ const CardImage: FC<CardImageProps> = ({
 	shadow,
 	style,
 	className,
-	unoptimized = false,
 }) => {
 	color = color || '#009690'; // Set default, accounting for `null`
 
@@ -35,7 +34,7 @@ const CardImage: FC<CardImageProps> = ({
 			{image && (
 				<div className={styles['c-card-image__background--image']}>
 					<Image
-						unoptimized={unoptimized}
+						unoptimized
 						src={image}
 						alt={name || id || 'background'}
 						fill
@@ -50,7 +49,7 @@ const CardImage: FC<CardImageProps> = ({
 			{logo && (
 				<div className={styles['c-card-image__logo']}>
 					<Image
-						unoptimized={unoptimized}
+						unoptimized
 						className={styles['c-card-image__logo-image']}
 						src={logo}
 						alt={name || id || 'logo'}

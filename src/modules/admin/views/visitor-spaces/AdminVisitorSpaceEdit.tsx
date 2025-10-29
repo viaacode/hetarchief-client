@@ -9,7 +9,7 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 
-export const AdminVisitorSpaceEdit: FC<DefaultSeoInfo> = ({ url }) => {
+export const AdminVisitorSpaceEdit: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const router = useRouter();
 
 	const renderPageContent = () => {
@@ -38,6 +38,7 @@ export const AdminVisitorSpaceEdit: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 
 			<PermissionsCheck allPermissions={[Permission.UPDATE_ALL_SPACES]}>

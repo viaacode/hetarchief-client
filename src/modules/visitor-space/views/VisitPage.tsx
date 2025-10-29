@@ -23,7 +23,7 @@ import { SearchFilterId } from '@visitor-space/types';
 
 import { VisitorLayout } from '../../visitor-layout';
 
-export const VisitPage: FC<DefaultSeoInfo> = ({ title, description, url }) => {
+export const VisitPage: FC<DefaultSeoInfo> = ({ title, description, url, canonicalUrl }) => {
 	const router = useRouter();
 	const locale = useLocale();
 	const { slug } = router.query;
@@ -147,6 +147,7 @@ export const VisitPage: FC<DefaultSeoInfo> = ({ title, description, url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 			{renderPageContent()}
 		</VisitorLayout>

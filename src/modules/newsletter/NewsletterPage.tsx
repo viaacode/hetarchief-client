@@ -22,7 +22,7 @@ import { toastService } from '@shared/services/toast-service';
 import type { NewsletterFormState } from '@shared/types/newsletter';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 
-export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
+export const NewsletterPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	useHideFooter();
 	useStickyLayout();
 
@@ -176,6 +176,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url }) => {
 					imgUrl={undefined}
 					translatedPages={[]}
 					relativeUrl={url}
+					canonicalUrl={canonicalUrl}
 				/>
 
 				{(hasCheckedLogin && isLoggedIn) || !hasCheckedLogin ? (

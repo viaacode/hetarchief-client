@@ -58,7 +58,7 @@ const labelKeys: Record<keyof CommunicationFormState, string> = {
 	acceptNewsletter: 'Communication__acceptNewsletter',
 };
 
-export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
+export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const dispatch = useAppDispatch();
 	const locale = useLocale();
 	const commonUser = useSelector(selectCommonUser);
@@ -360,6 +360,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 
 			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT]}>

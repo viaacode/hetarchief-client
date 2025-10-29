@@ -18,7 +18,7 @@ const ContentPageLabelDetail = lazy(() =>
 	}))
 );
 
-export const ContentPageLabelsDetailPage: FC<DefaultSeoInfo> = ({ url }) => {
+export const ContentPageLabelsDetailPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const locale = useLocale();
 	const router = useRouter();
 
@@ -53,6 +53,7 @@ export const ContentPageLabelsDetailPage: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 			<PermissionsCheck anyPermissions={[Permission.EDIT_CONTENT_PAGE_LABELS]}>
 				{renderPageContent()}

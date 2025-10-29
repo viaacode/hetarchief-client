@@ -17,7 +17,7 @@ const MaintenanceAlertsOverview = lazy(() =>
 	}))
 );
 
-export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url }) => {
+export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const renderPopupFooter = (onSave: () => void, onClose: () => void) => {
 		return (
 			<div className={clsx('u-px-32 u-px-16-md u-py-24')}>
@@ -84,6 +84,7 @@ export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 
 			<PermissionsCheck allPermissions={[Permission.VIEW_ANY_MAINTENANCE_ALERTS]}>

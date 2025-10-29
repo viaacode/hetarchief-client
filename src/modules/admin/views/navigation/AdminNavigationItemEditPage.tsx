@@ -27,6 +27,7 @@ interface NavigationPageCreatePageProps {
 
 export const AdminNavigationItemEditPage: FC<DefaultSeoInfo & NavigationPageCreatePageProps> = ({
 	url,
+	canonicalUrl,
 	navigationBarId,
 	navigationItemId,
 }) => {
@@ -67,6 +68,7 @@ export const AdminNavigationItemEditPage: FC<DefaultSeoInfo & NavigationPageCrea
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 
 			<PermissionsCheck allPermissions={[Permission.EDIT_NAVIGATION_BARS]}>

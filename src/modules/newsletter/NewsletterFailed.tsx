@@ -10,7 +10,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 
-export const NewsletterFailed: FC<DefaultSeoInfo> = ({ url }) => {
+export const NewsletterFailed: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	useHideFooter();
 
 	const router = useRouter();
@@ -46,6 +46,7 @@ export const NewsletterFailed: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 
 			<Loading fullscreen owner="nieuwsbrief mislukt" />

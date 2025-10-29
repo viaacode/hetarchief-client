@@ -14,7 +14,7 @@ const NavigationBarOverview = lazy(() =>
 	}))
 );
 
-export const AdminNavigationOverview: FC<DefaultSeoInfo> = ({ url }) => {
+export const AdminNavigationOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const renderPageContent = () => {
 		return (
 			<AdminLayout>
@@ -37,6 +37,7 @@ export const AdminNavigationOverview: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 
 			<PermissionsCheck allPermissions={[Permission.EDIT_NAVIGATION_BARS]}>

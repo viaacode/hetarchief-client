@@ -28,6 +28,7 @@ const ErrorPage: FC<ErrorPageProps> = ({
 					{title && <h1 className={styles['c-error-page__title']}>{title}</h1>}
 					<div className={styles['c-error-page__image-wrapper']}>
 						<Image
+							unoptimized
 							src={image.image}
 							alt=""
 							fill

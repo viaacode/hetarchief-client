@@ -22,7 +22,7 @@ const ContentPageOverview = lazy(() =>
 
 export const ContentPageOverviewPage: FC<
 	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined }
-> = ({ url, commonUser }) => {
+> = ({ url, canonicalUrl, commonUser }) => {
 	const locale = useLocale();
 	const canCreateContentPages = useHasAllPermission(Permission.CREATE_CONTENT_PAGES) || true; // TODO remove once permission is added to the database
 
@@ -71,6 +71,7 @@ export const ContentPageOverviewPage: FC<
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 			<PermissionsCheck
 				anyPermissions={[Permission.EDIT_ANY_CONTENT_PAGES, Permission.EDIT_OWN_CONTENT_PAGES]}

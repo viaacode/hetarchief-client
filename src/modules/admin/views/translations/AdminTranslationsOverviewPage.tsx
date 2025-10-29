@@ -21,7 +21,7 @@ const TranslationsOverview = lazy(() =>
 	})
 );
 
-export const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url }) => {
+export const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const renderPopup = ({
 		title,
 		body,
@@ -97,6 +97,7 @@ export const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 
 			<PermissionsCheck allPermissions={[Permission.EDIT_TRANSLATIONS]}>

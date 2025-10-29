@@ -277,6 +277,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				{maintainerLogo && (
 					<div className={styles['c-request-material__maintainer-logo']}>
 						<Image
+							unoptimized
 							alt="maintainer logo"
 							src={maintainerLogo}
 							fill

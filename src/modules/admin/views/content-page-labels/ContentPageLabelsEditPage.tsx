@@ -25,6 +25,7 @@ interface ContentPageLabelsEditPageProps {
 
 export const ContentPageLabelsEditPage: FC<DefaultSeoInfo & ContentPageLabelsEditPageProps> = ({
 	url,
+	canonicalUrl,
 	id,
 }) => {
 	const locale = useLocale();
@@ -72,6 +73,7 @@ export const ContentPageLabelsEditPage: FC<DefaultSeoInfo & ContentPageLabelsEdi
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 			<PermissionsCheck anyPermissions={[Permission.EDIT_CONTENT_PAGE_LABELS]}>
 				{renderPageContent()}

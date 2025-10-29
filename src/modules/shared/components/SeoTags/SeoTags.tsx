@@ -23,6 +23,7 @@ interface SeoTagsProps {
 	description: string | null | undefined;
 	relativeUrl: string;
 	imgUrl: string | null | undefined;
+	canonicalUrl: string | null | undefined;
 	translatedPages: PageInfo[];
 }
 
@@ -39,6 +40,7 @@ export const SeoTags: FC<SeoTagsProps> = ({
 	description,
 	relativeUrl,
 	imgUrl = null,
+	canonicalUrl = null,
 	translatedPages = [],
 }) => {
 	const resolvedTitle = createPageTitle(title);
@@ -113,6 +115,7 @@ export const SeoTags: FC<SeoTagsProps> = ({
 			{resolvedDescription && <meta name="description" content={resolvedDescription} />}
 			<meta property="og:type" content="website" />
 			<meta property="og:url" content={url} />
+			{canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
 			<meta property="og:title" content={resolvedTitle} />
 			{resolvedDescription && <meta property="og:description" content={resolvedDescription} />}
 			<meta
