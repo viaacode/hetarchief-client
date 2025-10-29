@@ -30,7 +30,7 @@ export const ContentPageDetailPage: FC<
 	DefaultSeoInfo & {
 		commonUser: Avo.User.CommonUser | undefined;
 	} & ContentPageDetailPageProps
-> = ({ url, commonUser, id }) => {
+> = ({ url, canonicalUrl, commonUser, id }) => {
 	const locale = useLocale();
 	const router = useRouter();
 
@@ -59,6 +59,7 @@ export const ContentPageDetailPage: FC<
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 			<PermissionsCheck
 				anyPermissions={[Permission.EDIT_ANY_CONTENT_PAGES, Permission.EDIT_OWN_CONTENT_PAGES]}

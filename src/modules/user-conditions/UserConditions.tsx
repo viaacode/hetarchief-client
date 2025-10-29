@@ -33,7 +33,7 @@ import styles from './UserConditions.module.scss';
 
 export const UserConditions: FC<
 	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined }
-> = ({ url, commonUser }) => {
+> = ({ url, canonicalUrl, commonUser }) => {
 	useStickyLayout();
 	useHideFooter();
 
@@ -153,6 +153,7 @@ export const UserConditions: FC<
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 
 			{renderPageContent()}

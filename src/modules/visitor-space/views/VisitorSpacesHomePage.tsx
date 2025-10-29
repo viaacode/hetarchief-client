@@ -50,6 +50,7 @@ export const VisitorSpacesHomePage: FC<DefaultSeoInfo> = (props) => {
 				relativeUrl={props.url}
 				translatedPages={[]}
 				imgUrl={undefined}
+				canonicalUrl={props.canonicalUrl}
 			/>
 			{renderPageContent()}
 		</VisitorLayout>

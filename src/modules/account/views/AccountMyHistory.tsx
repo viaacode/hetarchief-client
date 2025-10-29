@@ -33,7 +33,7 @@ import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitorLayout } from '@visitor-layout/index';
 import { SearchFilterId } from '@visitor-space/types';
 
-export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
+export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const router = useRouter();
 	const locale = useLocale();
 	const [filters, setFilters] = useQueryParams(ACCOUNT_HISTORY_QUERY_PARAM_CONFIG);
@@ -222,6 +222,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT]}>
 				{renderPageContent()}

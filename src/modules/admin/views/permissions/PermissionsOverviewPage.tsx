@@ -21,7 +21,7 @@ const UserGroupOverview = lazy(() =>
 	}))
 );
 
-export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
+export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	// Access child functions
 	const permissionsRef = useRef<UserGroupOverviewRef>();
 
@@ -107,6 +107,7 @@ export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 
 			<PermissionsCheck allPermissions={[Permission.EDIT_PERMISSION_GROUPS]}>

@@ -21,7 +21,14 @@ const SearchPageEnglish: NextPage<SearchPageProps> = ({
 	locale,
 }) => {
 	return (
-		<SearchPage url={url} title={title} description={description} image={image} locale={locale} />
+		<SearchPage
+			url={url}
+			title={title}
+			description={description}
+			image={image}
+			locale={locale}
+			canonicalUrl="https://hetarchief.be/zoeken"
+		/>
 	);
 };
 

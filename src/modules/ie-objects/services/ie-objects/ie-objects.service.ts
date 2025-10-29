@@ -4,7 +4,7 @@ import { parseUrl, stringifyUrl } from 'query-string';
 import type { IeObject, IeObjectSimilar, RelatedIeObjects } from '@ie-objects/ie-objects.types';
 import type {
 	IeObjectPreviousNextIds,
-	SeoInfo,
+	IeObjectSeo,
 } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import type { SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
 import { ApiService } from '@shared/services/api-service';
@@ -117,7 +117,7 @@ export class IeObjectsService {
 		return thumbnailInfos?.[0]?.thumbnailUrl || null;
 	}
 
-	public static async getSeoBySchemaIdentifier(schemaIdentifier: string): Promise<SeoInfo> {
+	public static async getSeoBySchemaIdentifier(schemaIdentifier: string): Promise<IeObjectSeo> {
 		return await ApiService.getApi()
 			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_SEO_URL}/${schemaIdentifier}`)
 			.json();

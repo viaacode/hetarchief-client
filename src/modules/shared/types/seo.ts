@@ -8,6 +8,7 @@ export interface DefaultSeoInfo {
 	title?: string | null;
 	description?: string | null;
 	image?: string | null;
+	canonicalUrl?: string | null;
 	dehydratedState?: DehydratedState;
 	_nextI18Next?: {
 		initialI18nStore: {

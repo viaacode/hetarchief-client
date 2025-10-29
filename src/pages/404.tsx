@@ -9,7 +9,7 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 
 import useHideFooter from '../modules/shared/hooks/use-hide-footer/use-hide-footer';
 
-const NotFound: NextPage<DefaultSeoInfo> = ({ url }) => {
+const NotFound: NextPage<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	useHideFooter();
 
 	return (
@@ -20,6 +20,7 @@ const NotFound: NextPage<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 			<ErrorNotFound />
 		</>

@@ -24,6 +24,7 @@ interface AdminNavigationBarDetailPage {
 
 export const AdminNavigationBarDetailPage: FC<DefaultSeoInfo & AdminNavigationBarDetailPage> = ({
 	url,
+	canonicalUrl,
 	navigationBarId,
 }) => {
 	const locale = useLocale();
@@ -60,6 +61,7 @@ export const AdminNavigationBarDetailPage: FC<DefaultSeoInfo & AdminNavigationBa
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 
 			<PermissionsCheck allPermissions={[Permission.EDIT_NAVIGATION_BARS]}>

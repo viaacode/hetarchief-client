@@ -1,8 +1,9 @@
-export interface SeoInfo {
-	name: string | null;
-	description: string | null;
-	thumbnailUrl: string | null;
-}
+import type { IeObject } from '@ie-objects/ie-objects.types';
+
+export type IeObjectSeo = Pick<
+	IeObject,
+	'name' | 'description' | 'thumbnailUrl' | 'maintainerSlug'
+>;
 
 export interface IeObjectPreviousNextIds {
 	previousIeObjectId: string | null;

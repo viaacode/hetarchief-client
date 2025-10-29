@@ -22,7 +22,7 @@ import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table';
 import { ScrollableTabs } from '@shared/components/Tabs';
-import { globalLabelKeys, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE, globalLabelKeys } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -38,7 +38,7 @@ import {
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
 
-export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
+export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const router = useRouter();
 	const locale = useLocale();
 
@@ -327,6 +327,7 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 			<PermissionsCheck allPermissions={[Permission.READ_ALL_SPACES]}>
 				{renderPageLayoutAndContent()}

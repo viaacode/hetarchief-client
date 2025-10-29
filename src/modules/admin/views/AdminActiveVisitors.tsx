@@ -27,7 +27,7 @@ import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { useUpdateVisitRequest } from '@visit-requests/hooks/update-visit';
 import { VisitTimeframe } from '@visit-requests/types';
 
-export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
+export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const [filters, setFilters] = useQueryParams(ADMIN_VISITORS_QUERY_PARAM_CONFIG);
 	const [showDenyVisitRequestModal, setShowDenyVisitRequestModal] = useState<boolean>(false);
 	const [showEditVisitRequestModal, setShowEditVisitRequestModal] = useState<boolean>(false);
@@ -242,6 +242,7 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 
 			<PermissionsCheck allPermissions={[Permission.MANAGE_ALL_VISIT_REQUESTS]}>

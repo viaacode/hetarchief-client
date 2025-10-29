@@ -18,7 +18,7 @@ const UserOverview = lazy(() =>
 
 export const UsersOverviewPage: FC<
 	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined }
-> = ({ url, commonUser }) => {
+> = ({ url, canonicalUrl, commonUser }) => {
 	const renderPageContent = () => {
 		return (
 			<AdminLayout pageTitle={tText('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')}>
@@ -46,6 +46,7 @@ export const UsersOverviewPage: FC<
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 			<PermissionsCheck allPermissions={[Permission.VIEW_USERS]}>
 				{renderPageContent()}

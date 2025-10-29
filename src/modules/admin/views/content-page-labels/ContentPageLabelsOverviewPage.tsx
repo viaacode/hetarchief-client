@@ -14,7 +14,7 @@ const ContentPageLabelOverview = lazy(() =>
 	}))
 );
 
-export const ContentPageLabelsOverviewPage: FC<DefaultSeoInfo> = ({ url }) => {
+export const ContentPageLabelsOverviewPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const renderPageContent = () => {
 		return (
 			<AdminLayout>
@@ -39,6 +39,7 @@ export const ContentPageLabelsOverviewPage: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 			<PermissionsCheck anyPermissions={[Permission.EDIT_CONTENT_PAGE_LABELS]}>
 				{renderPageContent()}

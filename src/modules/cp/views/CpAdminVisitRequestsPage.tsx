@@ -9,7 +9,7 @@ import { tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import VisitRequestsOverview from '@visit-requests/components/VisitRequestsOverview/VisitRequestsOverview';
 
-export const CpAdminVisitRequestsPage: FC<DefaultSeoInfo> = ({ url }) => {
+export const CpAdminVisitRequestsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const renderPageContent = () => {
 		return (
 			<CPAdminLayout
@@ -31,6 +31,7 @@ export const CpAdminVisitRequestsPage: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 
 			<PermissionsCheck allPermissions={[Permission.MANAGE_CP_VISIT_REQUESTS]}>

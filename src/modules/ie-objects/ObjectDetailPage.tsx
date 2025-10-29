@@ -1,20 +1,37 @@
-import { Alert, Button, FlowPlayer, type FlowPlayerProps, type TabProps, Tabs } from '@meemoo/react-components';
+import {
+	Alert,
+	Button,
+	FlowPlayer,
+	type FlowPlayerProps,
+	type TabProps,
+	Tabs,
+} from '@meemoo/react-components';
 import clsx from 'clsx';
 import type { HTTPError } from 'ky';
 import { capitalize, compact, intersection, isNil, kebabCase, lowerCase, noop } from 'lodash-es';
 import getConfig from 'next/config';
-import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { parseUrl, stringifyUrl } from 'query-string';
-import React, { type FC, Fragment, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+	type FC,
+	Fragment,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BooleanParam, NumberParam, StringParam, useQueryParam, withDefault } from 'use-query-params';
+import { NumberParam, StringParam, useQueryParam, withDefault } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import type { User } from '@auth/types';
-import { RequestAccessBlade, type RequestAccessFormState } from '@home/components/RequestAccessBlade';
+import {
+	RequestAccessBlade,
+	type RequestAccessFormState,
+} from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { CollapsableBlade } from '@ie-objects/components/CollapsableBlade';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
@@ -35,14 +52,14 @@ import {
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
-	getNoLicensePlaceholderLabels,
-	getObjectPlaceholderLabels,
-	getTicketErrorPlaceholderLabels,
 	IMAGE_API_FORMATS,
 	IMAGE_BROWSE_COPY_FORMATS,
 	JSON_FORMATS,
 	OBJECT_DETAIL_TABS,
 	XML_FORMATS,
+	getNoLicensePlaceholderLabels,
+	getObjectPlaceholderLabels,
+	getTicketErrorPlaceholderLabels,
 } from '@ie-objects/ie-objects.consts';
 import {
 	HighlightMode,
@@ -64,9 +81,7 @@ import {
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { IiifViewer } from '@iiif-viewer/IiifViewer';
 import type { ImageInfo, ImageInfoWithToken, Rect, TextLine } from '@iiif-viewer/IiifViewer.types';
-import {
-	SearchInputWithResultsPagination,
-} from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
+import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
@@ -77,7 +92,10 @@ import { Loading } from '@shared/components/Loading';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
-import { HIGHLIGHTED_SEARCH_TERMS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import {
+	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
+	QUERY_PARAM_KEY,
+} from '@shared/const/query-param-keys';
 import { convertDurationStringToSeconds } from '@shared/helpers/convert-duration-string-to-seconds';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -94,9 +112,7 @@ import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
-import {
-	useGetActiveVisitRequestForUserAndSpace,
-} from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
+import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
@@ -115,13 +131,20 @@ import {
 	iiifZoomToRect,
 } from '@iiif-viewer/helpers/trigger-iiif-viewer-events';
 import { Blade } from '@shared/components/Blade/Blade';
+import { BooleanParamWithDefault } from '@shared/helpers/boolean-param-with-default';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { isServerSideRendering } from '@shared/utils/is-browser';
 import styles from './ObjectDetailPage.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
 
-export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image, url }) => {
+export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
+	title,
+	description,
+	image,
+	url,
+	canonicalUrl,
+}) => {
 	/**
 	 * Hooks
 	 */
@@ -201,7 +224,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number>(-1);
 	const [expandSidebar, setExpandSidebar] = useQueryParam(
 		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
-		withDefault(BooleanParam, false)
+		BooleanParamWithDefault(false)
 	);
 	const [iiifViewerFocusX] = useQueryParam(
 		QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_X,
@@ -1760,10 +1783,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 
 	const renderObjectDetail = () => (
 		<>
-			<Head>
-				<link rel="canonical" href={`https://hetarchief.be/zoeken/${ieObjectId}`} />
-			</Head>
-
 			{isNoAccessError && (
 				<ErrorNoAccessToObject
 					visitorSpaceName={visitorSpace?.name as string}
@@ -2057,6 +2076,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({ title, description, image
 					imgUrl={image}
 					translatedPages={[]}
 					relativeUrl={url}
+					canonicalUrl={canonicalUrl}
 				/>
 				{renderPageContent()}
 			</VisitorLayout>

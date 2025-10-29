@@ -10,7 +10,7 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './CookiePolicy.module.scss';
 
-export const CookiePolicy: FC<DefaultSeoInfo> = ({ url }) => {
+export const CookiePolicy: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const locale = useLocale();
 	const [cookieDeclarationHtml, setCookieDeclarationHtml] = useState<string>('');
 
@@ -64,6 +64,7 @@ export const CookiePolicy: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 			<div className={clsx('p-cookie-policy__wrapper', styles['p-cookie-policy__wrapper'])}>
 				{/* biome-ignore lint/security/noDangerouslySetInnerHtml: This is a hack to inject the html into the cookie declaration html */}

@@ -32,7 +32,6 @@ import { type PageInfo, SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { getSlugFromQueryParams } from '@shared/helpers/get-slug-from-query-params';
-import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import withUser, { type UserProps } from '@shared/hooks/with-user';
@@ -50,6 +49,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 	description,
 	image,
 	url,
+	canonicalUrl,
 	commonUser,
 }) => {
 	const router = useRouter();
@@ -134,6 +134,11 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 							})
 						)}
 						relativeUrl={url}
+						canonicalUrl={
+							contentPageInfo.translatedPages.find(
+								(page) => (page.language as unknown as Locale) === Locale.nl
+							)?.path
+						}
 					/>
 					<ContentPageRenderer
 						contentPageInfo={contentPageInfo}
@@ -150,16 +155,29 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 				// Avoid loading a 404 page in SSR
 				// since we don't want to see a 404 error flash before the page loads for logged-in users
 				// https://meemoo.atlassian.net/browse/ARC-2857
-				return <Loading fullscreen owner={'/[slug]/index page'} />;
+				return (
+					<>
+						<SeoTags
+							title={title}
+							description={description}
+							imgUrl={image}
+							translatedPages={[]}
+							relativeUrl={url}
+							canonicalUrl={canonicalUrl}
+						/>
+						<Loading fullscreen owner={'/[slug]/index page'} />
+					</>
+				);
 			}
 			return (
 				<>
 					<SeoTags
-						title={tText('pages/404___niet-gevonden')}
-						description={tText('pages/404___pagina-niet-gevonden')}
-						imgUrl={undefined}
+						title={title}
+						description={description}
+						imgUrl={image}
 						translatedPages={[]}
 						relativeUrl={url}
+						canonicalUrl={canonicalUrl}
 					/>
 					<ErrorNotFound />
 				</>
@@ -167,7 +185,19 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 		}
 	};
 
-	return <VisitorLayout>{renderPageContent()}</VisitorLayout>;
+	return (
+		<VisitorLayout>
+			<SeoTags
+				title={title || 'Het Archief'}
+				description={description}
+				imgUrl={image}
+				translatedPages={[]}
+				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
+			/>
+			{renderPageContent()}
+		</VisitorLayout>
+	);
 };
 
 export async function getServerSideProps(
@@ -208,6 +238,7 @@ export async function getServerSideProps(
 
 	return getDefaultStaticProps(context, context.resolvedUrl, {
 		queryClient,
+		schemaIdentifier: pathOrIeObjectId,
 		title,
 		description,
 		image,

@@ -15,7 +15,14 @@ type SearchPageProps = DefaultSeoInfo;
 
 const SearchPageDutch: NextPage<SearchPageProps> = ({ url, locale, title, description, image }) => {
 	return (
-		<SearchPage url={url} locale={locale} title={title} description={description} image={image} />
+		<SearchPage
+			url={url}
+			locale={locale}
+			title={title}
+			description={description}
+			image={image}
+			canonicalUrl="https://hetarchief.be/zoeken"
+		/>
 	);
 };
 

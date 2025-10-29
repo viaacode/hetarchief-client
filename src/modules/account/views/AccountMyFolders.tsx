@@ -61,7 +61,11 @@ interface AccountMyFolders {
 	folderSlug: string | undefined;
 }
 
-export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, folderSlug }) => {
+export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
+	url,
+	canonicalUrl,
+	folderSlug,
+}) => {
 	const router = useRouter();
 	const locale = useLocale();
 	const dispatch = useDispatch();
@@ -712,6 +716,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({ url, f
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT, Permission.MANAGE_FOLDERS]}>
 				{renderPageContent()}

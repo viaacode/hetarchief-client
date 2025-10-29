@@ -7,8 +7,8 @@ import { Permission } from '@account/const';
 import { RequestTablePageSize } from '@cp/const/requests.const';
 import {
 	CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG,
-	visitorsStatusFilters,
 	VisitorsTableColumns,
+	visitorsStatusFilters,
 } from '@cp/const/visitors.const';
 import { CPAdminLayout } from '@cp/layouts';
 import { ApproveRequestBlade } from '@shared/components/ApproveRequestBlade';
@@ -30,7 +30,7 @@ import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { useUpdateVisitRequest } from '@visit-requests/hooks/update-visit';
 import { RequestStatusAll, VisitTimeframe } from '@visit-requests/types';
 
-export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
+export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 
@@ -290,6 +290,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 
 			<PermissionsCheck allPermissions={[Permission.MANAGE_CP_VISIT_REQUESTS]}>

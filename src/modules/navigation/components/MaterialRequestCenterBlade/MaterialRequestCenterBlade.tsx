@@ -126,6 +126,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				{item.maintainerLogo ? (
 					<div className={styles['c-material-request-center-blade__maintainer-logo']}>
 						<Image
+							unoptimized
 							alt="maintainer logo"
 							src={item.maintainerLogo}
 							fill

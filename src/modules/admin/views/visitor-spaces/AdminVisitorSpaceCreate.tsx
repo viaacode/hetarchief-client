@@ -8,7 +8,7 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 
-export const AdminVisitorSpaceCreate: FC<DefaultSeoInfo> = ({ url }) => {
+export const AdminVisitorSpaceCreate: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const renderPageContent = () => {
 		return (
 			<AdminLayout>
@@ -30,6 +30,7 @@ export const AdminVisitorSpaceCreate: FC<DefaultSeoInfo> = ({ url }) => {
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}
+				canonicalUrl={canonicalUrl}
 			/>
 			<PermissionsCheck allPermissions={[Permission.UPDATE_ALL_SPACES]}>
 				{renderPageContent()}

@@ -6,7 +6,7 @@ import { ObjectDetailPage } from '@ie-objects/ObjectDetailPage';
 import { prefetchDetailPageQueries } from '@ie-objects/ObjectDetailPage.helpers';
 import type { IeObject } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
-import type { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
+import type { IeObjectSeo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -37,10 +37,14 @@ export async function getServerSideProps(
 	try {
 		ieObject = (await IeObjectsService.getBySchemaIdentifiers([schemaIdentifier]))?.[0];
 	} catch (err) {
-		// TODO see what we should do with objects that are not publicly available during server side rendering
+		return { notFound: true };
 	}
 
-	let seoInfo: SeoInfo | null = null;
+	if (!ieObject) {
+		return { notFound: true };
+	}
+
+	let seoInfo: IeObjectSeo | null = null;
 	try {
 		seoInfo = await IeObjectsService.getSeoBySchemaIdentifier(schemaIdentifier);
 	} catch (err) {
