@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@emotion/cache": "11.11.0",
-    "@flowplayer/player": "3.3.0",
+    "@flowplayer/player": "3.13.0",
     "@hookform/resolvers": "2.9.11",
     "@meemoo/admin-core-ui": "4.6.15",
     "@meemoo/react-components": "4.4.3",
