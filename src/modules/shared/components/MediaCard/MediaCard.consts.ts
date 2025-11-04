@@ -44,8 +44,10 @@ export function GET_TYPE_TO_LABEL_MAP(type: IeObjectType): string | undefined {
 		[SimpleIeObjectType.NEWSPAPER]: tText(
 			'modules/shared/components/media-card/media-card___krant'
 		),
-		[SimpleIeObjectType.IMAGE]: tText('Afbeelding'),
-		unknown: tText('Object type niet gekend'),
+		[SimpleIeObjectType.IMAGE]: tText(
+			'modules/shared/components/media-card/media-card___afbeelding'
+		),
+		unknown: tText('modules/shared/components/media-card/media-card___object-type-niet-gekend'),
 	}[simpleType];
 }
 

@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import type { FC, ReactNode } from 'react';
 
 import { tText } from '@shared/helpers/translate';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { Locale } from '@shared/utils/i18n';
 import styles from './Loading.module.scss';
 
 export interface LoadingProps extends DefaultComponentProps {
@@ -20,6 +22,20 @@ const Loading: FC<LoadingProps> = ({
 	className,
 	style = {},
 }) => {
+	const locale = useLocale();
+
+	const renderLoadingMessage = () => {
+		const loadingText = tText('modules/shared/components/loading/loading___laden');
+
+		if (loadingText.includes('***')) {
+			if (locale === Locale.en) {
+				return 'Load...';
+			}
+			return 'Laden...';
+		}
+		return loadingText;
+	};
+
 	return (
 		<div
 			className={clsx(
@@ -35,7 +51,7 @@ const Loading: FC<LoadingProps> = ({
 			{/*<div dangerouslySetInnerHTML={{ __html: `<!-- ${owner} -->` }} />*/}
 			{/* Hide stars in loader, since translations could not be loaded yet */}
 			{/* https://meemoo.atlassian.net/browse/ARC-3169 */}
-			<span>{tText('modules/shared/components/loading/loading___laden').replace('***', '')}</span>
+			<span>{renderLoadingMessage()}</span>
 		</div>
 	);
 };
