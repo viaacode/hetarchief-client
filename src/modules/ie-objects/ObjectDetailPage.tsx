@@ -460,7 +460,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			return [];
 		}
 		const searchResultsTemp: OcrSearchResult[] = [];
-		for (const searchTerm of searchTerms.toLowerCase().split(' ')) {
+		const searchTermWords = searchTerms
+			.toLowerCase()
+			.split(' ')
+			.map((word) => word.trim())
+			.filter((word) => !!word);
+		for (const searchTerm of searchTermWords) {
 			pageOcrTranscripts.forEach((pageOcrTranscript, pageIndex) => {
 				if (!pageOcrTranscript) {
 					return; // Skip this page since it doesn't have an ocr transcript
