@@ -116,7 +116,7 @@
     "@babel/core": "7.23.0",
     "@babel/preset-env": "7.22.20",
     "babel-plugin-macros": "3.1.0",
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.3.4",
     "@commitlint/cli": "15.0.0",
     "@commitlint/config-conventional": "15.0.0",
     "@next/bundle-analyzer": "13.4.6",
