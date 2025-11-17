@@ -2,10 +2,7 @@ import { isEmpty } from 'lodash-es';
 import { parseUrl, stringifyUrl } from 'query-string';
 
 import type { IeObject, IeObjectSimilar, RelatedIeObjects } from '@ie-objects/ie-objects.types';
-import type {
-	IeObjectPreviousNextIds,
-	IeObjectSeo,
-} from '@ie-objects/services/ie-objects/ie-objects.service.types';
+import type { IeObjectPreviousNextIds, IeObjectSeo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import type { SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
 import { ApiService } from '@shared/services/api-service';
 import type { SortObject } from '@shared/types';
@@ -20,11 +17,11 @@ import type { AutocompleteField } from '@visitor-space/components/FilterMenu/Fil
 import { SearchSortProp } from '@visitor-space/types';
 
 import {
-	IE_OBJECTS_SERVICE_BASE_URL,
-	IE_OBJECTS_SERVICE_SIMILAR,
 	IE_OBJECT_SERVICE_SEO_URL,
 	IE_OBJECT_SERVICE_TICKET_URL,
 	IE_OBJECT_TICKET_SERVICE_URL,
+	IE_OBJECTS_SERVICE_BASE_URL,
+	IE_OBJECTS_SERVICE_SIMILAR,
 	IO_OBJECTS_SERVICE_DOWNLOAD_ALTO_JSON,
 	IO_OBJECTS_SERVICE_RELATED,
 } from './ie-objects.service.const';
