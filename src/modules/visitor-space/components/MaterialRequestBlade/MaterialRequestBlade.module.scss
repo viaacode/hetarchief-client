@@ -3,6 +3,11 @@
 $component: "c-request-material";
 
 .#{$component} {
+	&__subtitle {
+		color: $zinc;
+		padding: 0 5.6rem 3.2rem 3.2rem;
+	}
+
 	&__maintainer {
 		padding: $spacer-sm $spacer-lg;
 		background-color: $platinum;

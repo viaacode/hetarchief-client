@@ -181,7 +181,17 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
 				);
 
-		return <h2 {...props}>{title}</h2>;
+
+		return (
+			<div className={styles['c-request-material__title-container']}>
+				<h2 {...props} style={{paddingBottom: 0}}>{title}</h2>
+				<p className={styles['c-request-material__subtitle']}>
+					{tHtml(
+						'Meer informatie over aanvragen'
+					)}
+				</p>
+			</div>
+		);
 	};
 
 	const renderFooter = () => {
@@ -235,6 +245,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							)}
 							variants={['block', 'text', 'dark']}
 							onClick={onAddToList}
+							disabled={!typeSelected}
 							className={styles['c-request-material__voeg-toe-button']}
 						/>
 					),
@@ -245,6 +256,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							)}
 							variants={['block', 'text', 'dark']}
 							onClick={onAddToList}
+							disabled={!typeSelected}
 							className={styles['c-request-material__voeg-toe-button']}
 						/>
 					),
@@ -366,7 +378,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 								</span>
 							) : null}
 						</dd>
-						<dt className={styles['c-request-material__content-label']}>
+						{(typeSelected === MaterialRequestType.VIEW || typeSelected === MaterialRequestType.MORE_INFO) && <><dt className={styles['c-request-material__content-label']}>
 							<label htmlFor="reason-input">
 								{tText(
 									'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
@@ -380,7 +392,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 								onChange={(e) => setReasonInputValue(e.target.value)}
 								value={reasonInputValue}
 							/>
-						</dd>
+						</dd></>}
 					</>
 				</dl>
 			</div>
