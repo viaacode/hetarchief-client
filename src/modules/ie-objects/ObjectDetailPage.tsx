@@ -1,11 +1,4 @@
-import {
-	Alert,
-	Button,
-	FlowPlayer,
-	type FlowPlayerProps,
-	type TabProps,
-	Tabs,
-} from '@meemoo/react-components';
+import { Alert, Button, FlowPlayer, type FlowPlayerProps, type TabProps, Tabs } from '@meemoo/react-components';
 import clsx from 'clsx';
 import type { HTTPError } from 'ky';
 import { capitalize, compact, intersection, isNil, kebabCase, lowerCase, noop } from 'lodash-es';
@@ -13,25 +6,14 @@ import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { parseUrl, stringifyUrl } from 'query-string';
-import React, {
-	type FC,
-	Fragment,
-	type ReactNode,
-	useCallback,
-	useEffect,
-	useMemo,
-	useState,
-} from 'react';
+import React, { type FC, Fragment, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NumberParam, StringParam, useQueryParam, withDefault } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import type { User } from '@auth/types';
-import {
-	RequestAccessBlade,
-	type RequestAccessFormState,
-} from '@home/components/RequestAccessBlade';
+import { RequestAccessBlade, type RequestAccessFormState } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { CollapsableBlade } from '@ie-objects/components/CollapsableBlade';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
@@ -52,14 +34,14 @@ import {
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
+	getNoLicensePlaceholderLabels,
+	getObjectPlaceholderLabels,
+	getTicketErrorPlaceholderLabels,
 	IMAGE_API_FORMATS,
 	IMAGE_BROWSE_COPY_FORMATS,
 	JSON_FORMATS,
 	OBJECT_DETAIL_TABS,
 	XML_FORMATS,
-	getNoLicensePlaceholderLabels,
-	getObjectPlaceholderLabels,
-	getTicketErrorPlaceholderLabels,
 } from '@ie-objects/ie-objects.consts';
 import {
 	HighlightMode,
@@ -81,7 +63,9 @@ import {
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { IiifViewer } from '@iiif-viewer/IiifViewer';
 import type { ImageInfo, ImageInfoWithToken, Rect, TextLine } from '@iiif-viewer/IiifViewer.types';
-import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
+import {
+	SearchInputWithResultsPagination,
+} from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import { MaterialRequestsService } from '@material-requests/services';
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
@@ -92,10 +76,7 @@ import { Loading } from '@shared/components/Loading';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
-import {
-	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
-	QUERY_PARAM_KEY,
-} from '@shared/const/query-param-keys';
+import { HIGHLIGHTED_SEARCH_TERMS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { convertDurationStringToSeconds } from '@shared/helpers/convert-duration-string-to-seconds';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -112,7 +93,9 @@ import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
-import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
+import {
+	useGetActiveVisitRequestForUserAndSpace,
+} from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
@@ -220,6 +203,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		QUERY_PARAM_KEY.ACTIVE_PAGE,
 		withDefault(NumberParam, 0)
 	);
+	const [currentFileIndex, setCurrentFileIndex] = useQueryParam(
+		QUERY_PARAM_KEY.ACTIVE_REPRESENTATION,
+		withDefault(NumberParam, 0)
+	);
 
 	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number>(-1);
 	const [expandSidebar, setExpandSidebar] = useQueryParam(
@@ -296,7 +283,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		enabled: mediaInfo?.dctermsFormat === 'audio',
 	});
 
-	const representationsToDisplay =
+	const allFilesToDisplayInCurrentPage =
 		(mediaInfo?.pages || []).flatMap((page) =>
 			page?.representations?.flatMap((representation) =>
 				representation.files.filter((file) => FLOWPLAYER_FORMATS.includes(file.mimeType))
@@ -325,7 +312,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	}, [mediaInfo?.pages]);
 
 	// Playable url for flowplayer
-	const currentPlayableFile: IeObjectFile | null = getFilesByType(FLOWPLAYER_FORMATS)[0] || null; // First playable file for the currently selected page
+	const currentPlayableFile: IeObjectFile | null = allFilesToDisplayInCurrentPage[currentFileIndex] || null;
 	const fileStoredAt: string | null = currentPlayableFile?.storedAt ?? null;
 	const {
 		data: playableUrl,
@@ -428,7 +415,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
 	const isNewspaper = mediaInfo?.dctermsFormat === IeObjectType.NEWSPAPER;
-	const showFragmentSlider = representationsToDisplay.length > 1 && !isNewspaper;
+	const showFragmentSlider = allFilesToDisplayInCurrentPage.length > 1 && !isNewspaper;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.lg); // mobile and tablet portrait
 	const hasAccessToVisitorSpaceOfObject =
 		intersection(mediaInfo?.accessThrough, [
@@ -1483,7 +1470,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			}
 			return (
 				<FlowPlayer
-					key={`${flowPlayerKey}__${currentPageIndex}`}
+					key={`${flowPlayerKey}__${currentFileIndex}`}
 					type="video"
 					src={playableUrl as string}
 					poster={mediaInfo?.thumbnailUrl || undefined}
@@ -1741,10 +1728,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					{showFragmentSlider && (
 						<FragmentSlider
 							className={styles['p-object-detail__grey-slider-bar']}
-							fileRepresentations={representationsToDisplay}
-							activeIndex={currentPageIndex}
+							fileRepresentations={allFilesToDisplayInCurrentPage}
+							activeIndex={currentFileIndex}
 							setActiveIndex={(index) => {
-								setCurrentPageIndex(index, 'replaceIn');
+								setCurrentFileIndex(index, 'replaceIn');
 							}}
 						/>
 					)}
