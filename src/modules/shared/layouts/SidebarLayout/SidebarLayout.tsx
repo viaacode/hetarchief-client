@@ -1,10 +1,9 @@
-import clsx from 'clsx';
-import { type FC, useState } from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { ListNavigation } from '@shared/components/ListNavigation';
 import { Sidebar } from '@shared/components/Sidebar';
+import clsx from 'clsx';
+import { type FC, useState } from 'react';
 
 import styles from './SidebarLayout.module.scss';
 import type { SidebarLayoutProps } from './SidebarLayout.types';
@@ -44,8 +43,8 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({
 
 			<div className={styles['l-sidebar__main']}>
 				{isResponsive && (
+					// biome-ignore lint/a11y/useSemanticElements: _
 					<div
-						// biome-ignore lint/a11y/useSemanticElements: <explanation>
 						role="button"
 						tabIndex={0}
 						onClick={() => setExpanded(true)}

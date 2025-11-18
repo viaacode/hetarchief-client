@@ -1,13 +1,3 @@
-import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
-import { Badge, Button, Card } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { isValid } from 'date-fns';
-import { isNil } from 'lodash-es';
-import { useRouter } from 'next/router';
-import { type FC, type MouseEvent, type ReactNode, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { StringParam, useQueryParams } from 'use-query-params';
-
 import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import {
@@ -16,10 +6,12 @@ import {
 } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
+import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
+import { Badge, Button, Card } from '@meemoo/react-components';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
 import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { TRUNCATED_TEXT_LENGTH, getIconFromObjectType } from '@shared/components/MediaCard';
+import { getIconFromObjectType, TRUNCATED_TEXT_LENGTH } from '@shared/components/MediaCard';
 import { Modal } from '@shared/components/Modal';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { Pill } from '@shared/components/Pill';
@@ -31,6 +23,13 @@ import { toastService } from '@shared/services/toast-service';
 import { setLastScrollPosition } from '@shared/store/ui';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
+import clsx from 'clsx';
+import { isValid } from 'date-fns';
+import { isNil } from 'lodash-es';
+import { useRouter } from 'next/router';
+import { type FC, type MouseEvent, type ReactNode, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { StringParam, useQueryParams } from 'use-query-params';
 
 import Icon from '../Icon/Icon';
 import styles from './MediaCard.module.scss';
@@ -307,6 +306,7 @@ const MediaCard: FC<MediaCardProps> = ({
 					view === 'blade' && styles['c-media-card__header--blade']
 				)}
 			>
+				{/** biome-ignore lint/performance/noImgElement: we need this*/}
 				<img src={imagePath} alt={''} width="100%" />
 				{!isNil(icon) && (
 					<>

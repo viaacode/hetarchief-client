@@ -1,12 +1,5 @@
-import { Badge } from '@meemoo/react-components';
-import type { Avo } from '@viaa/avo2-types';
-import clsx from 'clsx';
-import { groupBy, intersection, isNil } from 'lodash-es';
-import Link from 'next/link';
-import { stringifyUrl } from 'query-string';
-import type { MouseEventHandler, ReactNode } from 'react';
-
 import { Permission } from '@account/const';
+import { Badge } from '@meemoo/react-components';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import { NAVIGATION_DROPDOWN } from '@navigation/components/Navigation/Navigation.types';
 import { NavigationLink } from '@navigation/components/Navigation/NavigationLink';
@@ -26,7 +19,13 @@ import { tText } from '@shared/helpers/translate';
 import { Breakpoints } from '@shared/types';
 import type { VisitRequest } from '@shared/types/visit-request';
 import type { Locale } from '@shared/utils/i18n';
+import type { Avo } from '@viaa/avo2-types';
 import { SearchFilterId, type VisitorSpaceInfo } from '@visitor-space/types';
+import clsx from 'clsx';
+import { groupBy, intersection, isNil } from 'lodash-es';
+import Link from 'next/link';
+import { stringifyUrl } from 'query-string';
+import type { MouseEventHandler, ReactNode } from 'react';
 
 const linkCls = (...classNames: string[]) => {
 	return clsx(styles['c-navigation__link'], ...classNames);
@@ -94,6 +93,7 @@ const renderLink = (
 	}
 
 	return (
+		// biome-ignore lint/a11y/useAriaPropsSupportedByRole: still using it
 		<span aria-label={tooltip} className={cn} title={tooltip}>
 			{iconStart && iconStart}
 			{label}

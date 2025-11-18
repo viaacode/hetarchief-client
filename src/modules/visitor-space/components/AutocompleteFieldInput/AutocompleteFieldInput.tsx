@@ -1,15 +1,9 @@
-import { OrderDirection, type SelectOption } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { type FC, useCallback, useMemo } from 'react';
-import type { ActionMeta, SingleValue } from 'react-select';
-
-import { IeObjectsService } from '@ie-objects/services';
-import { tText } from '@shared/helpers/translate';
-import type { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
-
 import { GroupName } from '@account/const';
 import { selectIsLoggedIn } from '@auth/store/user';
 import type { User } from '@auth/types';
+import { IeObjectsService } from '@ie-objects/services';
+import { OrderDirection, type SelectOption } from '@meemoo/react-components';
+import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import withUser, { type UserProps } from '@shared/hooks/with-user';
 import { toastService } from '@shared/services/toast-service';
@@ -18,11 +12,15 @@ import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
 import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitTimeframe } from '@visit-requests/types';
+import type { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { SEARCH_PAGE_QUERY_PARAM_CONFIG } from '@visitor-space/const';
 import { SearchFilterId } from '@visitor-space/types';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
+import clsx from 'clsx';
 import { sortBy } from 'lodash-es';
+import { type FC, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
+import type { ActionMeta, SingleValue } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { useQueryParams } from 'use-query-params';
 import styles from './AutocompleteFieldInput.module.scss';
@@ -49,7 +47,7 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps & UserProps> = ({
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const isAnonymousUser = useHasAnyGroup(GroupName.ANONYMOUS);
 	const isUserWithAccount = isLoggedIn && !!user && !isAnonymousUser;
-	const [query, setQuery] = useQueryParams(SEARCH_PAGE_QUERY_PARAM_CONFIG);
+	const [query, _setQuery] = useQueryParams(SEARCH_PAGE_QUERY_PARAM_CONFIG);
 
 	const { data: visitRequestsPaginated } = useGetVisitRequests(
 		{
@@ -63,11 +61,10 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps & UserProps> = ({
 		},
 		{ enabled: !!user }
 	);
-	const { data: activeVisitRequest, isLoading: isLoadingActiveVisitRequest } =
-		useGetActiveVisitRequestForUserAndSpace(
-			query[SearchFilterId.Maintainer],
-			user as unknown as User | null
-		);
+	const { data: activeVisitRequest } = useGetActiveVisitRequestForUserAndSpace(
+		query[SearchFilterId.Maintainer],
+		user as unknown as User | null
+	);
 	const accessibleVisitorSpaceRequests: VisitRequest[] = useMemo(
 		() =>
 			isUserWithAccount
@@ -92,7 +89,7 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps & UserProps> = ({
 				.then((options) => {
 					callback(options.map((option) => ({ label: option, value: option })));
 				})
-				.catch((err) => {
+				.catch((_err) => {
 					toastService.notify({
 						title: tText(
 							'modules/visitor-space/components/autocomplete-field-input/autocomplete-field-input___error'

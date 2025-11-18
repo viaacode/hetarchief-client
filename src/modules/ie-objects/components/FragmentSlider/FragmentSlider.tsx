@@ -1,15 +1,14 @@
-import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import Image from 'next/image';
-import { type FC, useEffect, useRef, useState } from 'react';
-
 import { FLOWPLAYER_AUDIO_FORMATS } from '@ie-objects/ie-objects.consts';
 import type { IeObjectFile } from '@ie-objects/ie-objects.types';
+import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { soundwave } from '@shared/components/MediaCard/__mocks__/media-card';
 import { tText } from '@shared/helpers/translate';
 import { useElementSize } from '@shared/hooks/use-element-size';
+import clsx from 'clsx';
+import Image from 'next/image';
+import { type FC, useEffect, useRef, useState } from 'react';
 
 import { ObjectPlaceholder } from '../ObjectPlaceholder';
 
@@ -140,7 +139,10 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 							key={`fragment-${file.id}--${file.name}`}
 							data-index={index}
 							onClick={(e) => {
-								const index = Number.parseInt(e.currentTarget.getAttribute('data-index') as string);
+								const index = Number.parseInt(
+									e.currentTarget.getAttribute('data-index') as string,
+									10
+								);
 								needsScrolling && setOffset(index);
 								setActiveIndex(index);
 							}}
@@ -148,14 +150,16 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 								if (e.key === 'Tab') {
 									// Scroll through fragments
 									const offsetIndex = Number.parseInt(
-										e.currentTarget.getAttribute('data-index') as string
+										e.currentTarget.getAttribute('data-index') as string,
+										10
 									);
 									needsScrolling && setOffset(offsetIndex);
 								}
 								if (e.key === 'Enter') {
 									// Select fragment
 									const activeIndex = Number.parseInt(
-										e.currentTarget.getAttribute('data-index') as string
+										e.currentTarget.getAttribute('data-index') as string,
+										10
 									);
 									setActiveIndex(activeIndex);
 								}

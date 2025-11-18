@@ -17,9 +17,9 @@ export async function getSearchTabBarCounts(page: Page): Promise<SearchTabCounts
 	const newspaperTab = await tabBar.locator('.c-tab--newspaper small').innerText();
 
 	return {
-		all: Number.parseInt(allTab.replace(/[^0-9]+/g, '')),
-		video: Number.parseInt(videosTab.replace(/[^0-9]+/g, '')),
-		audio: Number.parseInt(audioTab.replace(/[^0-9]+/g, '')),
-		newspaper: Number.parseInt(newspaperTab.replace(/[^0-9]+/g, '')),
+		all: Number.parseInt(allTab.replace(/[^0-9]+/g, ''), 10),
+		video: Number.parseInt(videosTab.replace(/[^0-9]+/g, ''), 10),
+		audio: Number.parseInt(audioTab.replace(/[^0-9]+/g, ''), 10),
+		newspaper: Number.parseInt(newspaperTab.replace(/[^0-9]+/g, ''), 10),
 	};
 }

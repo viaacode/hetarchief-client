@@ -1,8 +1,8 @@
-import { isEmpty } from 'lodash-es';
-import { parseUrl, stringifyUrl } from 'query-string';
-
 import type { IeObject, IeObjectSimilar, RelatedIeObjects } from '@ie-objects/ie-objects.types';
-import type { IeObjectPreviousNextIds, IeObjectSeo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
+import type {
+	IeObjectPreviousNextIds,
+	IeObjectSeo,
+} from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import type { SimplifiedAlto } from '@iiif-viewer/IiifViewer.types';
 import { ApiService } from '@shared/services/api-service';
 import type { SortObject } from '@shared/types';
@@ -15,6 +15,8 @@ import {
 } from '@shared/types/ie-objects';
 import type { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { SearchSortProp } from '@visitor-space/types';
+import { isEmpty } from 'lodash-es';
+import { parseUrl, stringifyUrl } from 'query-string';
 
 import {
 	IE_OBJECT_SERVICE_SEO_URL,

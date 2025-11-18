@@ -1,7 +1,6 @@
+import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
 import { compact, isString } from 'lodash-es';
 import type { FC, ReactElement, ReactNode } from 'react';
-
-import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
 
 interface HighlightedMetadataProps {
 	title?: string | ReactNode;
@@ -34,7 +33,7 @@ const HighlightedMetadata: FC<HighlightedMetadataProps> = ({ title, data, enable
 			</>
 		);
 	}
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: Not yet types yet
 	return (data || null) as ReactElement<any, any> | null;
 };
 

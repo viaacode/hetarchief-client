@@ -1,13 +1,12 @@
-import type { NextPage } from 'next';
-import type { GetServerSidePropsContext, GetServerSidePropsResult } from 'next/types';
-import React from 'react';
-
+import type { IeObject } from '@ie-objects/ie-objects.types';
 import { ObjectDetailPage } from '@ie-objects/ObjectDetailPage';
 import { prefetchDetailPageQueries } from '@ie-objects/ObjectDetailPage.helpers';
-import type { IeObject } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import type { NextPage } from 'next';
+import type { GetServerSidePropsContext, GetServerSidePropsResult } from 'next/types';
+import React from 'react';
 
 type ObjectDetailPageProps = {
 	title: string | null;
@@ -40,7 +39,7 @@ export async function getServerSideProps(
 	let ieObject: IeObject | null = null;
 	try {
 		ieObject = (await IeObjectsService.getBySchemaIdentifiers([schemaIdentifier]))?.[0];
-	} catch (err) {
+	} catch (_err) {
 		return { notFound: true };
 	}
 

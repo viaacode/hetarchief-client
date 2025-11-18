@@ -1,14 +1,13 @@
 import { Button, keysEscape } from '@meemoo/react-components';
-import clsx from 'clsx';
-import FocusTrap from 'focus-trap-react';
-import { isUndefined } from 'lodash-es';
-import { type FC, useCallback, useEffect } from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
+import clsx from 'clsx';
+import FocusTrap from 'focus-trap-react';
+import { isUndefined } from 'lodash-es';
+import { type FC, useCallback, useEffect } from 'react';
 
 import { Overlay } from '../Overlay';
 
@@ -70,6 +69,7 @@ export const Blade: FC<BladeProps> = ({
 		return showBackButton ? (
 			<div className={styles['c-blade__top-bar-container']}>
 				{/* biome-ignore lint/a11y/useKeyWithClickEvents: onKeyUp is added to the inner button */}
+				{/** biome-ignore lint/a11y/noStaticElementInteractions: Container should also be clickable */}
 				<div
 					className={styles['c-blade__back-container']}
 					onClick={() => {
@@ -119,7 +119,6 @@ export const Blade: FC<BladeProps> = ({
 	const renderContent = (hide: boolean) => {
 		return (
 			<div
-				// biome-ignore lint/a11y/useSemanticElements: dialog has other effects that a div, and we cannot rework how blades work right now
 				role="dialog"
 				aria-modal
 				aria-labelledby={id}

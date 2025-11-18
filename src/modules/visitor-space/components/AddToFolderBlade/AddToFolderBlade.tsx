@@ -1,17 +1,16 @@
-import { Button, Checkbox } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { compact, isNil } from 'lodash-es';
-import { type FC, useEffect, useState } from 'react';
-
 import { CreateFolderButton } from '@account/components';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { FoldersService } from '@account/services/folders';
 import type { Folder } from '@account/types';
+import { Button, Checkbox } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
+import clsx from 'clsx';
+import { compact, isNil } from 'lodash-es';
+import { type FC, useEffect, useState } from 'react';
 
 import styles from './AddToFolderBlade.module.scss';
 import type { AddToFolderBladeProps } from './AddToFolderBlade.types';
@@ -255,7 +254,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			onSubmit?.(selectedFolderIds || []);
 			resetForm();
 			onClose?.();
-		} catch (err) {
+		} catch (_err) {
 			toastService.notify({
 				maxLines: 3,
 				title: tHtml(

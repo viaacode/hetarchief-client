@@ -1,8 +1,7 @@
+import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import { type IeObjectType, SimpleIeObjectType } from '@shared/types/ie-objects';
-
-import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
 import type { IconName } from '../Icon';
 
 export function getIconFromObjectType(type: IeObjectType, accessible: boolean): IconName {
@@ -25,7 +24,7 @@ export function getIconFromObjectType(type: IeObjectType, accessible: boolean): 
 	}[simpleType];
 }
 
-export function GET_TYPE_TO_ICON_MAP(type: IeObjectType, accessible: boolean): IconName {
+export function GET_TYPE_TO_ICON_MAP(type: IeObjectType, _accessible: boolean): IconName {
 	const simpleType = mapDcTermsFormatToSimpleType(type);
 	return {
 		[SimpleIeObjectType.VIDEO]: IconNamesLight.Video,

@@ -1,6 +1,5 @@
-import type { FC, ReactNode } from 'react';
-
 import type { DefaultComponentProps } from '@shared/types';
+import type { FC, ReactNode } from 'react';
 
 import type { DefaultFilterFormProps, InlineFilterFormProps, SearchFilterId } from '../../../types';
 import type {
@@ -11,7 +10,7 @@ import type {
 
 export interface FilterFormProps extends DefaultComponentProps {
 	children?: ReactNode;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	form: FC<DefaultFilterFormProps<any>> | FC<InlineFilterFormProps> | null;
 	id: SearchFilterId;
 	onFormReset: OnFilterMenuFormReset;

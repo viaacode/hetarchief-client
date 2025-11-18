@@ -1,8 +1,7 @@
 import { getVariantsArray, Tabs, type TabsProps } from '@meemoo/react-components';
+import { isBrowser } from '@shared/utils/is-browser';
 import clsx from 'clsx';
 import React, { type FC, useCallback, useEffect, useRef, useState } from 'react';
-
-import { isBrowser } from '@shared/utils/is-browser';
 
 import styles from './ScrollableTabs.module.scss';
 
@@ -143,7 +142,7 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 	}, [tabsHeight, setGradients]);
 
 	// Set initial values
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	// biome-ignore lint/correctness/useExhaustiveDependencies: enough to set the initial values
 	useEffect(() => {
 		if (!hasInitialised.current && tabsRef.current) {
 			setGradients(tabsRef.current);

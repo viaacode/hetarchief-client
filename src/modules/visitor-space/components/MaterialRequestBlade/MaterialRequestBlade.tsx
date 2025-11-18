@@ -1,22 +1,20 @@
-import { Button, RadioButton, TextArea } from '@meemoo/react-components';
-import { IeObjectType } from '@shared/types/ie-objects';
-import clsx from 'clsx';
-import React, { type FC, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestRequesterCapacity, MaterialRequestType } from '@material-requests/types';
+import { Button, RadioButton, TextArea } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount } from '@shared/store/ui';
-
-import { getIconFromObjectType } from '@shared/components/MediaCard';
+import type { IeObjectType } from '@shared/types/ie-objects';
+import clsx from 'clsx';
+import React, { type FC, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import MediaCard from '../../../shared/components/MediaCard/MediaCard';
 import styles from './MaterialRequestBlade.module.scss';
 
@@ -121,7 +119,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			});
 			await onSuccessCreated();
 			onCloseModal();
-		} catch (err) {
+		} catch (_err) {
 			onFailedRequest();
 		}
 	};
@@ -156,7 +154,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				});
 				await onSuccessCreated();
 				onCloseModal();
-			} catch (err) {
+			} catch (_err) {
 				onFailedRequest();
 			}
 		}
@@ -183,14 +181,13 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
 				);
 
-
 		return (
 			<div className={styles['c-request-material__title-container']}>
-				<h2 {...props} style={{paddingBottom: 0}}>{title}</h2>
+				<h2 {...props} style={{ paddingBottom: 0 }}>
+					{title}
+				</h2>
 				<p className={styles['c-request-material__subtitle']}>
-					{tHtml(
-						'Meer informatie over aanvragen'
-					)}
+					{tHtml('Meer informatie over aanvragen')}
 				</p>
 			</div>
 		);
@@ -303,78 +300,76 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			/>
 			<div className={styles['c-request-material__content']}>
 				<dl>
-					<>
-						<dt className={styles['c-request-material__content-label']}>
-							{/* biome-ignore lint/a11y/noLabelWithoutControl: radio buttons reference this label */}
-							<label id="radio-group-label">
-								{tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___selecteer-een-type'
-								)}
-							</label>
-						</dt>
-						<dd
-							className={clsx(
-								styles['c-request-material__content-value'],
-								styles['c-request-material__radio-buttons-container']
+					<dt className={styles['c-request-material__content-label']}>
+						{/* biome-ignore lint/a11y/noLabelWithoutControl: radio buttons reference this label */}
+						<label id="radio-group-label">
+							{tText(
+								'modules/visitor-space/components/material-request-blade/material-request-blade___selecteer-een-type'
 							)}
-						>
-							<RadioButton
-								aria-labelledby="radio-group-label"
-								className={styles['c-request-material__radio-button']}
-								label={tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___view'
+						</label>
+					</dt>
+					<dd
+						className={clsx(
+							styles['c-request-material__content-value'],
+							styles['c-request-material__radio-buttons-container']
+						)}
+					>
+						<RadioButton
+							aria-labelledby="radio-group-label"
+							className={styles['c-request-material__radio-button']}
+							label={tText(
+								'modules/visitor-space/components/material-request-blade/material-request-blade___view'
+							)}
+							checked={typeSelected === MaterialRequestType.VIEW}
+							onClick={() => setTypeSelected(MaterialRequestType.VIEW)}
+						/>
+						<RadioButton
+							aria-labelledby="radio-group-label"
+							className={styles['c-request-material__radio-button']}
+							label={tText(
+								'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
+							)}
+							checked={typeSelected === MaterialRequestType.REUSE}
+							onClick={() => setTypeSelected(MaterialRequestType.REUSE)}
+						/>
+						<RadioButton
+							aria-labelledby="radio-group-label"
+							className={styles['c-request-material__radio-button']}
+							label={tText(
+								'modules/visitor-space/components/material-request-blade/material-request-blade___more-info'
+							)}
+							checked={typeSelected === MaterialRequestType.MORE_INFO}
+							onClick={() => setTypeSelected(MaterialRequestType.MORE_INFO)}
+						/>
+						{noTypeSelectedOnSave ? (
+							<span className="c-form-control__errors">
+								<Icon className="u-mr-8 " name={IconNamesLight.Exclamation} />
+								{tText(
+									'modules/visitor-space/components/material-request-blade/material-request-blade___type-verplicht-error'
 								)}
-								checked={typeSelected === MaterialRequestType.VIEW}
-								onClick={() => setTypeSelected(MaterialRequestType.VIEW)}
-							/>
-							<RadioButton
-								aria-labelledby="radio-group-label"
-								className={styles['c-request-material__radio-button']}
-								label={tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
-								)}
-								checked={typeSelected === MaterialRequestType.REUSE}
-								onClick={() => setTypeSelected(MaterialRequestType.REUSE)}
-							/>
-							<RadioButton
-								aria-labelledby="radio-group-label"
-								className={styles['c-request-material__radio-button']}
-								label={tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___more-info'
-								)}
-								checked={typeSelected === MaterialRequestType.MORE_INFO}
-								onClick={() => setTypeSelected(MaterialRequestType.MORE_INFO)}
-							/>
-							{noTypeSelectedOnSave ? (
-								<span className="c-form-control__errors">
-									<Icon className="u-mr-8 " name={IconNamesLight.Exclamation} />
+							</span>
+						) : null}
+					</dd>
+					{(typeSelected === MaterialRequestType.VIEW ||
+						typeSelected === MaterialRequestType.MORE_INFO) && (
+						<>
+							<dt className={styles['c-request-material__content-label']}>
+								<label htmlFor="reason-input">
 									{tText(
-										'modules/visitor-space/components/material-request-blade/material-request-blade___type-verplicht-error'
+										'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
 									)}
-								</span>
-							) : null}
-						</dd>
-						{
-							(typeSelected === MaterialRequestType.VIEW || typeSelected === MaterialRequestType.MORE_INFO) &&
-							<>
-								<dt className={styles['c-request-material__content-label']}>
-									<label htmlFor="reason-input">
-										{tText(
-											'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
-										)}
-									</label>
-								</dt>
-								<dd className={styles['c-request-material__content-value']}>
-									<TextArea
-										id="reason-input"
-										className={styles['c-request-material__reason-input']}
-										onChange={(e) => setReasonInputValue(e.target.value)}
-										value={reasonInputValue}
-									/>
-								</dd>
-							</>
-						}
-					</>
+								</label>
+							</dt>
+							<dd className={styles['c-request-material__content-value']}>
+								<TextArea
+									id="reason-input"
+									className={styles['c-request-material__reason-input']}
+									onChange={(e) => setReasonInputValue(e.target.value)}
+									value={reasonInputValue}
+								/>
+							</dd>
+						</>
+					)}
 				</dl>
 			</div>
 		</Blade>

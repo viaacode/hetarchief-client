@@ -1,12 +1,11 @@
 import { keysEnter, onKey } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { type FC, useMemo, useState } from 'react';
-
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import type {
 	VisitorSpaceDropdownOption,
 	VisitorSpaceDropdownProps,
 } from '@shared/components/VisitorSpaceDropdown/VisitorSpaceDropdown.types';
+import clsx from 'clsx';
+import { type FC, useMemo, useState } from 'react';
 
 import { Icon } from '../Icon';
 
@@ -42,7 +41,7 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 					'aria-expanded': isOpen,
 					'aria-controls': 'list-controls',
 					onClick: onClickDropdown,
-					// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+					// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 					onKeyDown: (evt: any) => onKey(evt, [...keysEnter], onClickDropdown),
 				}
 			: {};
@@ -79,6 +78,7 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 				})}
 			>
 				{options.map((option: VisitorSpaceDropdownOption) => (
+					// biome-ignore lint/a11y/useAriaPropsSupportedByRole: because it works?
 					<li
 						tabIndex={isOpen ? 0 : 1}
 						key={option.slug}

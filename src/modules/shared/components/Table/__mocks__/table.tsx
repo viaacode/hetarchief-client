@@ -1,10 +1,9 @@
 import { Badge, Button, type Column, type TableData } from '@meemoo/react-components';
-import React, { type ReactElement } from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { formatDateTime } from '@shared/components/VisitorSpaceCard/VisitorSpaceCard.utils';
 import { tText } from '@shared/helpers/translate';
+import React, { type ReactElement } from 'react';
 
 export const mockNames = [
 	'Jan Verminnen',
@@ -51,7 +50,7 @@ export const mockColumns: Column<TableData>[] = [
 	{
 		Header: 'Timestamp',
 		accessor: 'created_at',
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 		Cell: ({ value }: { value: number }): ReactElement<any, any> => (
 			<>{formatDateTime(new Date(value))}</>
 		),
@@ -59,7 +58,7 @@ export const mockColumns: Column<TableData>[] = [
 	{
 		Header: 'Status',
 		accessor: 'approved',
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 		Cell: ({ value }: { value: boolean }): ReactElement<any, any> => (
 			<div style={{ display: 'flex', alignItems: 'center' }}>
 				<Badge

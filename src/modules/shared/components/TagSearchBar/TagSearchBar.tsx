@@ -124,7 +124,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 				classNamePrefix={'c-tags-input'}
 				{...tagsInputProps}
 				className={rootCls}
-				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+				// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 				components={components as any}
 				inputValue={inputValue}
 				isClearable={isClearable}
@@ -137,14 +137,10 @@ const TagSearchBar = <IsMulti extends boolean>({
 				value={value}
 				// ts-ignore is necessary to provide custom props to react-select, this is explained
 				// in the react-select docs: https://react-select.com/components#defining-components
-				/* eslint-disable @typescript-eslint/ban-ts-comment */
-				// @ts-ignore
 				clearLabel={clearLabel}
-				// @ts-ignore
 				valuePlaceholder={valuePlaceholder}
-				// @ts-ignore
 				onSearch={onSafeSearchSingle}
-				// @ts-ignore
+				// @ts-expect-error
 				onChange={onSearchChange}
 				/* eslint-enable @typescript-eslint/ban-ts-comment */
 			/>

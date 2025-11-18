@@ -1,17 +1,3 @@
-import {
-	MultiSelect,
-	type MultiSelectOption,
-	OrderDirection,
-	PaginationBar,
-	Table,
-} from '@meemoo/react-components';
-import clsx from 'clsx';
-import { isEmpty, isNil, without } from 'lodash-es';
-import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import type { Row, SortingRule, TableState } from 'react-table';
-import { useQueryParams } from 'use-query-params';
-
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
 import { Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
@@ -29,6 +15,13 @@ import {
 	MaterialRequestKeys,
 	type MaterialRequestType,
 } from '@material-requests/types';
+import {
+	MultiSelect,
+	type MultiSelectOption,
+	OrderDirection,
+	PaginationBar,
+	Table,
+} from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -40,6 +33,12 @@ import { sortingIcons } from '@shared/components/Table';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import clsx from 'clsx';
+import { isEmpty, isNil, without } from 'lodash-es';
+import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import type { Row, SortingRule, TableState } from 'react-table';
+import { useQueryParams } from 'use-query-params';
 
 export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const [filters, setFilters] = useQueryParams(CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
@@ -164,7 +163,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		);
 	};
 
-	const onRowClick = (evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
+	const onRowClick = (_evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
 		setCurrentMaterialRequest(row.original);
 		setIsDetailBladeOpen(true);
 	};
@@ -195,47 +194,45 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 				className="p-material-requests"
 				pageTitle={tText('pages/beheer/materiaalaanvragen/index___materiaalaanvragen')}
 			>
-				<>
-					<div className="l-container">
-						<div className="p-material-requests__header">
-							<MultiSelect
-								variant="rounded"
-								label="Type"
-								options={typesList}
-								onChange={onMultiTypeChange}
-								className="p-material-requests__dropdown"
-								iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
-								iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-								iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-							/>
+				<div className="l-container">
+					<div className="p-material-requests__header">
+						<MultiSelect
+							variant="rounded"
+							label="Type"
+							options={typesList}
+							onChange={onMultiTypeChange}
+							className="p-material-requests__dropdown"
+							iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+							iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+							iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+						/>
 
-							<SearchBar
-								id="materiaalaanvragen-searchbar"
-								value={search}
-								className="p-material-requests__searchbar"
-								placeholder={tText('pages/beheer/materiaalaanvragen/index___zoek')}
-								onChange={setSearch}
-								onSearch={(newValue) =>
-									setFilters({
-										[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: newValue,
-										page: 1,
-									})
-								}
-							/>
-						</div>
+						<SearchBar
+							id="materiaalaanvragen-searchbar"
+							value={search}
+							className="p-material-requests__searchbar"
+							placeholder={tText('pages/beheer/materiaalaanvragen/index___zoek')}
+							onChange={setSearch}
+							onSearch={(newValue) =>
+								setFilters({
+									[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: newValue,
+									page: 1,
+								})
+							}
+						/>
 					</div>
+				</div>
 
-					<div
-						className={clsx('l-container l-container--edgeless-to-lg', {
-							'u-text-center u-color-neutral u-py-48': isFetching || noData,
-						})}
-					>
-						{isFetching && <Loading owner="Material requests overview" fullscreen />}
-						{noData && renderEmptyMessage()}
-						{!noData && !isFetching && renderContent()}
-					</div>
-					{currentMaterialRequest?.id && renderDetailBlade()}
-				</>
+				<div
+					className={clsx('l-container l-container--edgeless-to-lg', {
+						'u-text-center u-color-neutral u-py-48': isFetching || noData,
+					})}
+				>
+					{isFetching && <Loading owner="Material requests overview" fullscreen />}
+					{noData && renderEmptyMessage()}
+					{!noData && !isFetching && renderContent()}
+				</div>
+				{currentMaterialRequest?.id && renderDetailBlade()}
 			</CPAdminLayout>
 		);
 	};

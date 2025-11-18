@@ -1,13 +1,12 @@
-import { useRouter } from 'next/router';
-import { type FC, type ReactElement, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-
 import type { Permission } from '@account/const';
 import { checkLoginAction, selectCheckLoginLoading, selectHasCheckedLogin } from '@auth/store/user';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { tHtml } from '@shared/helpers/translate';
 import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useAppDispatch } from '@shared/store';
+import { useRouter } from 'next/router';
+import { type FC, type ReactElement, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import Loading from '../Loading/Loading';
 
@@ -32,10 +31,10 @@ const PermissionsCheck: FC<PermissionsCheckProps> = ({
 
 	const hasRequiredPermissions = hasAllRequiredPermissions && hasAnyRequiredPermissions;
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	// biome-ignore lint/correctness/useExhaustiveDependencies: We want to update as such
 	useEffect(() => {
 		if (!checkLoginLoading && !hasCheckedLogin) {
-			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 			dispatch(checkLoginAction() as any);
 		}
 	}, [router, hasRequiredPermissions, hasCheckedLogin, checkLoginLoading, dispatch]);
