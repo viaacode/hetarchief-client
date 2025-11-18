@@ -13,6 +13,8 @@ export interface MaterialRequest {
 	objectId: string;
 	objectSchemaIdentifier: string;
 	objectSchemaName: string;
+	objectThumbnailUrl: string;
+	objectPublishedOrCreatedDate?: string;
 	profileId: string;
 	reason: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;

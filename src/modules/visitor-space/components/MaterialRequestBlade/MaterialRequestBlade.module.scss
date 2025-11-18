@@ -5,7 +5,7 @@ $component: "c-request-material";
 .#{$component} {
 	&__subtitle {
 		color: $zinc;
-		padding: 0 5.6rem 3.2rem 3.2rem;
+		padding: 0 5.6rem 0 3.2rem;
 	}
 
 	&__maintainer {
@@ -30,7 +30,7 @@ $component: "c-request-material";
 
 	&__material {
 		padding: $spacer-md $spacer-lg;
-		border-bottom: 0.2rem solid $platinum;
+		border-bottom: 0.1rem solid $silver;
 		color: $black;
 
 		&:focus,
@@ -68,6 +68,7 @@ $component: "c-request-material";
 
 		dl {
 			margin-top: 0;
+			margin-bottom: 0;
 		}
 
 		&-label {
@@ -77,7 +78,10 @@ $component: "c-request-material";
 
 		&-value {
 			margin-left: 0;
-			margin-bottom: $spacer-md;
+
+			&:not(:last-child) {
+				margin-bottom: $spacer-md;
+			}
 		}
 	}
 
@@ -112,6 +116,12 @@ $component: "c-request-material";
 			border: 0.1rem solid $black;
 			background-color: $black;
 			color: $white;
+		}
+
+		&:disabled {
+			border: none !important;
+			background-color: $silver !important;
+			color: $zinc !important;
 		}
 	}
 

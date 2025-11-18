@@ -1,6 +1,6 @@
 import { Button, RadioButton, TextArea } from '@meemoo/react-components';
+import { IeObjectType } from '@shared/types/ie-objects';
 import clsx from 'clsx';
-import Image from 'next/image';
 import React, { type FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -15,9 +15,9 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount } from '@shared/store/ui';
-import type { IeObjectType } from '@shared/types/ie-objects';
 
 import { getIconFromObjectType } from '@shared/components/MediaCard';
+import MediaCard from '../../../shared/components/MediaCard/MediaCard';
 import styles from './MaterialRequestBlade.module.scss';
 
 interface MaterialRequestBladeProps {
@@ -26,9 +26,10 @@ interface MaterialRequestBladeProps {
 	onClose: () => void;
 	objectName: string;
 	objectSchemaIdentifier: string;
+	objectThumbnailUrl: string;
 	objectDctermsFormat: IeObjectType;
+	objectPublishedOrCreatedDate?: string;
 	maintainerName: string;
-	maintainerLogo: string | null;
 	maintainerSlug: string;
 	materialRequestId?: string;
 	reason?: string;
@@ -44,9 +45,10 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	onClose,
 	objectName,
 	objectSchemaIdentifier,
+	objectThumbnailUrl,
 	objectDctermsFormat,
+	objectPublishedOrCreatedDate,
 	maintainerName,
-	maintainerLogo,
 	maintainerSlug,
 	materialRequestId,
 	type,
@@ -285,46 +287,20 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			isManaged
 			id="material-request-blade"
 		>
-			<div className={styles['c-request-material__maintainer']}>
-				{maintainerLogo && (
-					<div className={styles['c-request-material__maintainer-logo']}>
-						<Image
-							unoptimized
-							alt="maintainer logo"
-							src={maintainerLogo}
-							fill
-							sizes="100vw"
-							style={{
-								objectFit: 'contain',
-							}}
-						/>
-					</div>
-				)}
-				<div>
-					<p className={styles['c-request-material__maintainer-details']}>
-						{tHtml(
-							'modules/visitor-space/components/material-request-blade/material-request-blade___item-van'
-						)}
-					</p>
-					<p className={styles['c-request-material__maintainer-details']}>{maintainerName}</p>
-				</div>
-			</div>
-			<a
-				tabIndex={-1}
-				href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectSchemaIdentifier}`}
-				className={styles['c-request-material__material-link']}
-			>
-				<div className={styles['c-request-material__material']}>
-					<p className={styles['c-request-material__material-label']}>
-						<Icon
-							className={styles['c-request-material__material-label-icon']}
-							name={getIconFromObjectType(objectDctermsFormat, true)}
-						/>
-						<span>{objectName}</span>
-					</p>
-					<p className={styles['c-request-material__material-id']}>{objectSchemaIdentifier}</p>
-				</div>
-			</a>
+			<MediaCard
+				className={styles['c-request-material__material']}
+				objectId={objectSchemaIdentifier}
+				title={objectName}
+				view="blade"
+				thumbnail={objectThumbnailUrl}
+				link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectSchemaIdentifier}`}
+				maintainerSlug={maintainerSlug}
+				type={objectDctermsFormat}
+				publishedBy={maintainerName}
+				publishedOrCreatedDate={objectPublishedOrCreatedDate}
+				name={objectName}
+				icon={getIconFromObjectType(objectDctermsFormat, true)}
+			/>
 			<div className={styles['c-request-material__content']}>
 				<dl>
 					<>
@@ -378,21 +354,26 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 								</span>
 							) : null}
 						</dd>
-						{(typeSelected === MaterialRequestType.VIEW || typeSelected === MaterialRequestType.MORE_INFO) && <><dt className={styles['c-request-material__content-label']}>
-							<label htmlFor="reason-input">
-								{tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
-								)}
-							</label>
-						</dt>
-						<dd className={styles['c-request-material__content-value']}>
-							<TextArea
-								id="reason-input"
-								className={styles['c-request-material__reason-input']}
-								onChange={(e) => setReasonInputValue(e.target.value)}
-								value={reasonInputValue}
-							/>
-						</dd></>}
+						{
+							(typeSelected === MaterialRequestType.VIEW || typeSelected === MaterialRequestType.MORE_INFO) &&
+							<>
+								<dt className={styles['c-request-material__content-label']}>
+									<label htmlFor="reason-input">
+										{tText(
+											'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
+										)}
+									</label>
+								</dt>
+								<dd className={styles['c-request-material__content-value']}>
+									<TextArea
+										id="reason-input"
+										className={styles['c-request-material__reason-input']}
+										onChange={(e) => setReasonInputValue(e.target.value)}
+										value={reasonInputValue}
+									/>
+								</dd>
+							</>
+						}
 					</>
 				</dl>
 			</div>

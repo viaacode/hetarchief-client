@@ -102,7 +102,8 @@ $media-card-list-view-height: 13rem;
 		place-content: center;
 
 		&--list,
-		&--grid {
+		&--grid,
+		&--blade {
 			position: relative;
 
 			> span {
@@ -123,6 +124,19 @@ $media-card-list-view-height: 13rem;
 
 			@media (min-width: $breakpoint-md) {
 				min-width: 248px;
+			}
+		}
+
+		&--blade {
+			min-height: $media-card-list-view-height;
+
+			span > img {
+				max-height: unset !important;
+				min-height: unset !important;
+			}
+
+			@media (min-width: $breakpoint-xs) {
+				min-width: 124px;
 			}
 		}
 
@@ -148,7 +162,8 @@ $media-card-list-view-height: 13rem;
 				position: relative;
 			}
 
-			&.c-media-card__header--list {
+			&.c-media-card__header--list,
+			&.c-media-card__header--blade {
 				background-color: $silver;
 				min-height: $media-card-list-view-height;
 				display: flex;

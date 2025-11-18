@@ -5,7 +5,7 @@ import type { IeObjectType } from '@shared/types/ie-objects';
 
 import type { IconName } from '../Icon';
 
-export type MediaCardViewMode = 'list' | 'grid';
+export type MediaCardViewMode = 'list' | 'grid' | 'blade';
 
 export interface MediaCardProps {
 	children?: ReactNode;

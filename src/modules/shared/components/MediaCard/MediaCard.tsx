@@ -280,6 +280,7 @@ const MediaCard: FC<MediaCardProps> = ({
 						styles['c-media-card__header'],
 						view === 'grid' && styles['c-media-card__header--grid'],
 						view === 'list' && styles['c-media-card__header--list'],
+						view === 'blade' && styles['c-media-card__header--blade'],
 						styles['c-media-card__header--no-content']
 					)}
 				>
@@ -302,7 +303,8 @@ const MediaCard: FC<MediaCardProps> = ({
 				className={clsx(
 					styles['c-media-card__header'],
 					view === 'grid' && styles['c-media-card__header--grid'],
-					view === 'list' && styles['c-media-card__header--list']
+					view === 'list' && styles['c-media-card__header--list'],
+					view === 'blade' && styles['c-media-card__header--blade']
 				)}
 			>
 				<img src={imagePath} alt={''} width="100%" />
