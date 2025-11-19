@@ -15,7 +15,7 @@ import type { IeObjectType } from '@shared/types/ie-objects';
 import clsx from 'clsx';
 import React, { type FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import MediaCard from '../../../shared/components/MediaCard/MediaCard';
+import MaterialCard from '../MaterialCard/MaterialCard';
 import styles from './MaterialRequestBlade.module.scss';
 
 interface MaterialRequestBladeProps {
@@ -30,6 +30,7 @@ interface MaterialRequestBladeProps {
 	maintainerName: string;
 	maintainerSlug: string;
 	materialRequestId?: string;
+	accessThroughKeyUser: boolean;
 	reason?: string;
 	refetchMaterialRequests?: () => void;
 	type?: MaterialRequestType;
@@ -49,6 +50,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	maintainerName,
 	maintainerSlug,
 	materialRequestId,
+	accessThroughKeyUser,
 	type,
 	reason,
 	refetchMaterialRequests,
@@ -217,6 +219,23 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				</div>
 			);
 		}
+
+		const addButtonLabel = (isMobile: boolean) => {
+			if (typeSelected === MaterialRequestType.REUSE) {
+				return isMobile
+					? tText('Vul bijkomende informatie aan - Mobile')
+					: tText('Vul bijkomende informatie aan ');
+			}
+
+			return isMobile
+				? tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek-mobile'
+					)
+				: tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek'
+					);
+		};
+
 		return (
 			<div className={styles['c-request-material__footer-container']}>
 				{/* ARC-1188: requested to hide single material request button
@@ -239,9 +258,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				{renderMobileDesktop({
 					mobile: (
 						<Button
-							label={tText(
-								'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek-mobile'
-							)}
+							label={addButtonLabel(true)}
 							variants={['block', 'text', 'dark']}
 							onClick={onAddToList}
 							disabled={!typeSelected}
@@ -250,9 +267,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					),
 					desktop: (
 						<Button
-							label={tText(
-								'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek'
-							)}
+							label={addButtonLabel(false)}
 							variants={['block', 'text', 'dark']}
 							onClick={onAddToList}
 							disabled={!typeSelected}
@@ -284,18 +299,15 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			isManaged
 			id="material-request-blade"
 		>
-			<MediaCard
+			<MaterialCard
 				className={styles['c-request-material__material']}
 				objectId={objectSchemaIdentifier}
 				title={objectName}
-				view="blade"
 				thumbnail={objectThumbnailUrl}
 				link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectSchemaIdentifier}`}
-				maintainerSlug={maintainerSlug}
 				type={objectDctermsFormat}
 				publishedBy={maintainerName}
 				publishedOrCreatedDate={objectPublishedOrCreatedDate}
-				name={objectName}
 				icon={getIconFromObjectType(objectDctermsFormat, true)}
 			/>
 			<div className={styles['c-request-material__content']}>
@@ -314,15 +326,17 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							styles['c-request-material__radio-buttons-container']
 						)}
 					>
-						<RadioButton
-							aria-labelledby="radio-group-label"
-							className={styles['c-request-material__radio-button']}
-							label={tText(
-								'modules/visitor-space/components/material-request-blade/material-request-blade___view'
-							)}
-							checked={typeSelected === MaterialRequestType.VIEW}
-							onClick={() => setTypeSelected(MaterialRequestType.VIEW)}
-						/>
+						{!accessThroughKeyUser && (
+							<RadioButton
+								aria-labelledby="radio-group-label"
+								className={styles['c-request-material__radio-button']}
+								label={tText(
+									'modules/visitor-space/components/material-request-blade/material-request-blade___view'
+								)}
+								checked={typeSelected === MaterialRequestType.VIEW}
+								onClick={() => setTypeSelected(MaterialRequestType.VIEW)}
+							/>
+						)}
 						<RadioButton
 							aria-labelledby="radio-group-label"
 							className={styles['c-request-material__radio-button']}

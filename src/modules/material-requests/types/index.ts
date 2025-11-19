@@ -1,3 +1,4 @@
+import type { IeObjectAccessThrough } from '@ie-objects/ie-objects.types';
 import { tText } from '@shared/helpers/translate';
 import type { IeObjectType } from '@shared/types/ie-objects';
 
@@ -15,6 +16,7 @@ export interface MaterialRequest {
 	objectSchemaName: string;
 	objectThumbnailUrl: string;
 	objectPublishedOrCreatedDate?: string;
+	objectAccessThrough: IeObjectAccessThrough[];
 	profileId: string;
 	reason: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;

@@ -1937,6 +1937,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					}
 					maintainerName={mediaInfo?.maintainerName}
 					maintainerSlug={mediaInfo?.maintainerSlug}
+					accessThroughKeyUser={!!mediaInfo.accessThrough?.includes(IeObjectAccessThrough.SECTOR)}
 					layer={1}
 					currentLayer={1}
 				/>

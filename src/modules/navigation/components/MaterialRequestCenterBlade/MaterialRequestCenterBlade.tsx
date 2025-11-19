@@ -1,13 +1,10 @@
-import { Button, type OrderDirection } from '@meemoo/react-components';
-import Image from 'next/image';
-import { type FC, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
 import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
+import { IeObjectAccessThrough } from '@ie-objects/ie-objects.types';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { MaterialRequestsService } from '@material-requests/services';
 import { type MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
+import { Button, type OrderDirection } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import { BladeManager } from '@shared/components/BladeManager';
 import { Icon } from '@shared/components/Icon';
@@ -17,11 +14,12 @@ import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { setMaterialRequestCount } from '@shared/store/ui';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
-
+import { groupBy } from 'lodash-es';
+import Image from 'next/image';
+import { type FC, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import bladeStyles from '../../../shared/components/Blade/Blade.module.scss';
 import PersonalInfoBlade from '../PersonalInfoBlade/PersonalInfoBlade';
-
-import { groupBy } from 'lodash-es';
 import styles from './MaterialRequestCenterBlade.module.scss';
 
 export enum MaterialRequestBladeId {
@@ -339,6 +337,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					reason={selectedMaterialRequest.reason}
 					type={selectedMaterialRequest.type}
 					refetchMaterialRequests={refetchMaterialRequests}
+					accessThroughKeyUser={
+						!!selectedMaterialRequest.objectAccessThrough?.includes(IeObjectAccessThrough.SECTOR)
+					}
 					isEditMode
 					layer={activeBlade === MaterialRequestBladeId.EditMaterialRequest ? 2 : 99}
 					currentLayer={
