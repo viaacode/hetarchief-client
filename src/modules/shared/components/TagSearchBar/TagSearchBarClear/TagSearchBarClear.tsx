@@ -1,9 +1,8 @@
-import clsx from 'clsx';
-import type { FC } from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { dropdownIndicatorCxState } from '@shared/components/TagsInput';
+import clsx from 'clsx';
+import type { FC } from 'react';
 import type { TagSearchBarClearProps } from './TagSearchBarClear.types';
 
 const TagSearchBarClear: FC<TagSearchBarClearProps> = ({
@@ -13,11 +12,11 @@ const TagSearchBarClear: FC<TagSearchBarClearProps> = ({
 	selectProps,
 	clearValue,
 }) => {
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
+	// @ts-expect-error
 	const { clearLabel } = selectProps;
 
 	return (
+		// biome-ignore lint/a11y/noStaticElementInteractions: _
 		<span
 			{...innerProps}
 			onKeyDown={(e) => {

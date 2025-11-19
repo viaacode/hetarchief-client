@@ -1,11 +1,10 @@
 import { Card } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { kebabCase } from 'lodash-es';
-import { type FC, useLayoutEffect, useRef, useState } from 'react';
-
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { Locale } from '@shared/utils/i18n';
+import clsx from 'clsx';
+import { kebabCase } from 'lodash-es';
+import { type FC, useLayoutEffect, useRef, useState } from 'react';
 
 import { CardImage } from '../CardImage';
 
@@ -150,6 +149,7 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 				>
 					{flat && renderTitle()}
 					{locale === Locale.nl && (
+						// biome-ignore lint/a11y/noStaticElementInteractions: _
 						<div
 							className={clsx(styles['c-visitor-space-card__description__container'], {
 								[styles['c-visitor-space-card__description__container--expanded']]:

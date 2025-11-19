@@ -1,3 +1,4 @@
+import type { MediaActions } from '@ie-objects/ie-objects.types';
 import {
 	Button,
 	Dropdown,
@@ -8,10 +9,6 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { type FC, type ReactElement, type ReactNode, useRef, useState } from 'react';
-
-import type { MediaActions } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
@@ -19,6 +16,8 @@ import { useElementSize } from '@shared/hooks/use-element-size';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
+import clsx from 'clsx';
+import { type FC, type ReactElement, type ReactNode, useRef, useState } from 'react';
 
 import {
 	DYNAMIC_ACTION_BOX,
@@ -185,21 +184,19 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	};
 
 	return (
-		<>
-			<ul className={clsx(className, styles['c-dynamic-action-menu'])}>
-				{primaryActions.map(renderPrimaryButton)}
-				<div
-					className={styles['c-dynamic-action-menu__secondary']}
-					ref={listRef}
-					style={{
-						minWidth: `${(limit + 1) * DYNAMIC_ACTION_WIDTH + limit * DYNAMIC_ACTION_SPACER}px`,
-					}}
-				>
-					{visibleActions.map(renderSecondaryButton)}
-					{!!hiddenActions.length && renderDropdown(secondaryActions)}
-				</div>
-			</ul>
-		</>
+		<ul className={clsx(className, styles['c-dynamic-action-menu'])}>
+			{primaryActions.map(renderPrimaryButton)}
+			<div
+				className={styles['c-dynamic-action-menu__secondary']}
+				ref={listRef}
+				style={{
+					minWidth: `${(limit + 1) * DYNAMIC_ACTION_WIDTH + limit * DYNAMIC_ACTION_SPACER}px`,
+				}}
+			>
+				{visibleActions.map(renderSecondaryButton)}
+				{!!hiddenActions.length && renderDropdown(secondaryActions)}
+			</div>
+		</ul>
 	);
 };
 

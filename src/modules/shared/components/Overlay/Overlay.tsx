@@ -1,7 +1,6 @@
+import { useScrollbarWidth } from '@shared/hooks/use-scrollbar-width';
 import clsx from 'clsx';
 import type { FC } from 'react';
-
-import { useScrollbarWidth } from '@shared/hooks/use-scrollbar-width';
 
 import styles from './Overlay.module.scss';
 import type { OverlayProps } from './Overlay.types';
@@ -28,6 +27,7 @@ const Overlay: FC<OverlayProps> = ({
 	};
 
 	return (
+		// biome-ignore lint/a11y/noStaticElementInteractions: The overlay needs to be clickable
 		<div
 			className={clsx(
 				className,

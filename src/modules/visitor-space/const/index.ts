@@ -2,6 +2,10 @@
 // advanced-filters => advanced filters
 // visitor space search page => search page
 import { OrderDirection, type TabProps } from '@meemoo/react-components';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { tText } from '@shared/helpers/translate';
+import { SearchPageMediaType } from '@shared/types/ie-objects';
+import type { FilterMenuSortOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import {
 	ArrayParam,
 	BooleanParam,
@@ -10,11 +14,6 @@ import {
 	type QueryParamConfig,
 	StringParam,
 } from 'use-query-params';
-
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { tText } from '@shared/helpers/translate';
-import { SearchPageMediaType } from '@shared/types/ie-objects';
-import type { FilterMenuSortOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 
 import { SearchFilterId, SearchSortProp, VisitorSpaceStatus } from '../types';
 
@@ -68,7 +67,7 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
 	orderDirection: OrderDirection.desc,
 };
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 export const SEARCH_PAGE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<any>> = {
 	// Filters
 	format: StringParam,

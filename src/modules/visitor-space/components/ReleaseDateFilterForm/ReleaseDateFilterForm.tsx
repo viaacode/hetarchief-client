@@ -1,28 +1,25 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, type SelectOption } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { endOfDay, isValid, parseISO, startOfDay } from 'date-fns';
-import React, { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
-import { Controller, type UseFormHandleSubmit, useForm } from 'react-hook-form';
-import type { MultiValue, SingleValue } from 'react-select';
-import { useQueryParams } from 'use-query-params';
-
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SEPARATOR } from '@shared/const';
 import { YEAR_LENGTH } from '@shared/const/date';
 import { convertYearToDate } from '@shared/helpers/convert-year-to-date';
 import { tHtml, tText } from '@shared/helpers/translate';
-
-import { FilterProperty, Operator, isRange } from '../../types';
+import clsx from 'clsx';
+import { endOfDay, isValid, parseISO, startOfDay } from 'date-fns';
+import { getOperators } from 'modules/visitor-space/utils/advanced-filters';
+import React, { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
+import { Controller, type UseFormHandleSubmit, useForm } from 'react-hook-form';
+import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form/dist/types/form';
+import type { MultiValue, SingleValue } from 'react-select';
+import { useQueryParams } from 'use-query-params';
+import { FilterProperty, isRange, Operator } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import { DateInput } from '../DateInput';
 import { DateRangeInput } from '../DateRangeInput';
 import { SelectDateOrYear } from '../SelectDateOrYear';
 import { YearInput } from '../YearInput';
 import YearRangeInput from '../YearRangeInput/YearRangeInput';
-
-import { getOperators } from 'modules/visitor-space/utils/advanced-filters';
-import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form/dist/types/form';
 import {
 	RELEASE_DATE_FILTER_FORM_QUERY_PARAM_CONFIG,
 	RELEASE_DATE_FILTER_FORM_SCHEMA,
@@ -42,8 +39,6 @@ const defaultValues: ReleaseDateFilterFormState = {
 	releaseDate: undefined,
 	operator: Operator.GREATER_THAN_OR_EQUAL,
 };
-
-const VALID_YEAR_REGEX = /[1-9][0-9]{3}/g;
 
 const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 	children,
@@ -104,7 +99,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 			const value = `${parsedFrom}${SEPARATOR}${parsedTo}`;
 
 			setForm((oldForm) => ({ ...oldForm, releaseDate: value }));
-		} catch (err) {
+		} catch (_err) {
 			// ignore invalid dates since the user can still be typing something
 		}
 	};
@@ -285,7 +280,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 						control={control}
 						name="operator"
 						render={({ field }) => {
-							// eslint-disable-next-line @typescript-eslint/no-unused-vars
+							// biome-ignore lint/correctness/noUnusedVariables: No need for the ref
 							const { ref, ...rest } = field;
 							return (
 								<ReactSelect

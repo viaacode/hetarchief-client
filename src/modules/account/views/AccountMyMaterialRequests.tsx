@@ -1,21 +1,15 @@
-import { OrderDirection, PaginationBar, type Row, Table } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { isEmpty, isNil } from 'lodash-es';
-import { type FC, type MouseEvent, type ReactNode, useMemo, useState } from 'react';
-import type { SortingRule, TableState } from 'react-table';
-import { useQueryParams } from 'use-query-params';
-
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
 import {
 	ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
 	ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
-	Permission,
 	getAccountMaterialRequestTableColumns,
+	Permission,
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
 import { type MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
+import { OrderDirection, PaginationBar, type Row, Table } from '@meemoo/react-components';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { Loading } from '@shared/components/Loading';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
@@ -26,6 +20,11 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorLayout } from '@visitor-layout/index';
+import clsx from 'clsx';
+import { isEmpty, isNil } from 'lodash-es';
+import { type FC, type MouseEvent, type ReactNode, useMemo, useState } from 'react';
+import type { SortingRule, TableState } from 'react-table';
+import { useQueryParams } from 'use-query-params';
 
 export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const [filters, setFilters] = useQueryParams(ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
@@ -104,7 +103,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	const renderEmptyMessage = (): ReactNode =>
 		tHtml('pages/account/mijn-profiel/index___geen-materiaal-aanvragen');
 
-	const onRowClick = (evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
+	const onRowClick = (_evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
 		setCurrentMaterialRequest(row.original);
 		setIsDetailBladeOpen(true);
 	};

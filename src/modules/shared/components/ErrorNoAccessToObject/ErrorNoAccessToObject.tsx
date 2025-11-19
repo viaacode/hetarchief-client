@@ -1,9 +1,3 @@
-import { Button } from '@meemoo/react-components';
-import { useRouter } from 'next/router';
-import { type FC, type ReactNode, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { StringParam, useQueryParams } from 'use-query-params';
-
 import { GroupName } from '@account/const';
 import { selectCommonUser } from '@auth/store/user';
 import {
@@ -11,6 +5,7 @@ import {
 	type RequestAccessFormState,
 } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
+import { Button } from '@meemoo/react-components';
 import { ErrorPage } from '@shared/components/ErrorPage';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
@@ -20,7 +15,11 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setShowAuthModal } from '@shared/store/ui';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
+import { type FC, type ReactNode, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { StringParam, useQueryParams } from 'use-query-params';
 import styles from './ErrorNoAccessToObject.module.scss';
 
 interface ErrorNoAccessToObjectProps {
@@ -45,7 +44,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 
-	const [query, setQuery] = useQueryParams({
+	const [query, _setQuery] = useQueryParams({
 		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
 

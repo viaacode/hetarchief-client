@@ -1,9 +1,3 @@
-import { OrderDirection, PaginationBar, Table } from '@meemoo/react-components';
-import { useRouter } from 'next/router';
-import { type FC, type MouseEvent, type ReactNode, useMemo, useState } from 'react';
-import type { Row, TableState } from 'react-table';
-import { useQueryParams } from 'use-query-params';
-
 import {
 	ACCOUNT_HISTORY_QUERY_PARAM_CONFIG,
 	HistoryItemListSize,
@@ -13,6 +7,7 @@ import {
 	Permission,
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
+import { OrderDirection, PaginationBar, Table } from '@meemoo/react-components';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { Loading } from '@shared/components/Loading';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
@@ -32,6 +27,10 @@ import { useGetVisitAccessStatusMutation } from '@visit-requests/hooks/get-visit
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitorLayout } from '@visitor-layout/index';
 import { SearchFilterId } from '@visitor-space/types';
+import { useRouter } from 'next/router';
+import { type FC, type MouseEvent, type ReactNode, useMemo, useState } from 'react';
+import type { Row, TableState } from 'react-table';
+import { useQueryParams } from 'use-query-params';
 
 export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const router = useRouter();
@@ -39,7 +38,6 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const [filters, setFilters] = useQueryParams(ACCOUNT_HISTORY_QUERY_PARAM_CONFIG);
 	const [currentDetailVisit, setCurrentDetailVisit] = useState<VisitRequest | null>(null);
 	const [isVisitDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
-	const [isPlanVisitBladeOpen, setIsPlanVisitBladeOpen] = useState(false);
 
 	const hasAccountHistoryPerm = useHasAnyPermission(
 		Permission.READ_PERSONAL_APPROVED_VISIT_REQUESTS
@@ -128,7 +126,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	};
 
 	const onVisitRequestRowClicked = (
-		evt: MouseEvent<HTMLTableRowElement>,
+		_evt: MouseEvent<HTMLTableRowElement>,
 		row: Row<VisitRequest>
 	) => {
 		setCurrentDetailVisit(row.original);

@@ -106,6 +106,7 @@ export async function getSiteTranslations() {
 		nl: {},
 		en: {},
 	};
+	// biome-ignore lint/suspicious/useIterableCallbackReturn: _
 	translations.map((translationEntry: TranslationEntry) => {
 		translationsByLocale[translationEntry.language][getFullKey(translationEntry)] =
 			translationEntry.value;

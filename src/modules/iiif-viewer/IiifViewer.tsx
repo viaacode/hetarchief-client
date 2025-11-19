@@ -1,13 +1,8 @@
-import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { debounce } from 'lodash';
-import { clamp, compact, isNil, round } from 'lodash-es';
-import { useRouter } from 'next/router';
-import type { TileSource, TiledImageOptions, Viewer } from 'openseadragon';
-import { parseUrl } from 'query-string';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-
+import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
+import {
+	destroyOpenSeadragonViewerMouseTracker,
+	initOpenSeadragonViewerMouseTracker,
+} from '@iiif-viewer/helpers/iiif-viewer-selection-handler';
 import {
 	HIGHLIGHT_MARGIN,
 	IiifViewerAction,
@@ -23,12 +18,8 @@ import {
 	type Rect,
 	type TextLine,
 } from '@iiif-viewer/IiifViewer.types';
-import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
-import {
-	destroyOpenSeadragonViewerMouseTracker,
-	initOpenSeadragonViewerMouseTracker,
-} from '@iiif-viewer/helpers/iiif-viewer-selection-handler';
 import { getOpenSeadragonConfig } from '@iiif-viewer/openseadragon-config';
+import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
@@ -37,6 +28,14 @@ import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 import { isBrowser, isServerSideRendering } from '@shared/utils/is-browser';
+import clsx from 'clsx';
+import { debounce } from 'lodash';
+import { clamp, compact, isNil, round } from 'lodash-es';
+import { useRouter } from 'next/router';
+import type { TiledImageOptions, TileSource, Viewer } from 'openseadragon';
+import { parseUrl } from 'query-string';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import styles from './IiifViewer.module.scss';
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -70,17 +69,17 @@ export const IiifViewer = ({
 	 */
 	const router = useRouter();
 	const [iiifGridViewEnabled, setIiifGridViewEnabled] = useState<boolean>(false);
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: no typing yet
 	const getOpenSeaDragonLib = (): any | null => {
 		// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 		return (window as any).meemoo__iiifViewerLib || null;
 	};
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: no typing yet
 	const setOpenSeaDragonLib = (newOpenSeaDragonLib: any) =>
-		// biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// biome-ignore lint/suspicious/noAssignInExpressions: no explanation
+		// biome-ignore lint/suspicious/noExplicitAny: indow isn't typed yet
 		((window as any).meemoo__iiifViewerLib = newOpenSeaDragonLib);
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: no typing yet
 	const checkViewerReady = (resolve: (viewer: any) => void) => {
 		// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 		const viewer = (window as any).meemoo__iiifViewer || null;
@@ -102,7 +101,7 @@ export const IiifViewer = ({
 		(window as any).meemoo__iiifViewer = newOpenSeaDragonViewer;
 	};
 	const getActiveImageTileSource = async (): Promise<TileSource> => {
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// biome-ignore lint/suspicious/noExplicitAny: no typing yet
 		const viewer = (await getOpenSeaDragonViewer()) as any;
 		if (viewer.source) {
 			return viewer.source as TileSource;
@@ -179,6 +178,7 @@ export const IiifViewer = ({
 	 * 		updateHighlightedAltoTexts,
 	 */
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: because it needs to work as this
 	useEffect(() => {
 		const handleZoomToRectEvent = (evt: IiifViewerZoomToRectEvent) => {
 			iiifZoomToRect({
@@ -292,6 +292,8 @@ export const IiifViewer = ({
 	/**
 	 * When the highlighted texts change, update them in the OpenSeaDragon viewer
 	 */
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: No need for the other deps
 	useEffect(() => {
 		updateHighlightedAltoTexts(
 			highlightedAltoTextInfo.highlightedAltoTexts,
@@ -463,7 +465,7 @@ export const IiifViewer = ({
 				}`;
 				viewer.addOverlay(
 					span,
-					// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+					// biome-ignore lint/suspicious/noExplicitAny: no typing yet
 					new (getOpenSeaDragonLib() as any).Rect(x, y, width, height, 0),
 					getOpenSeaDragonLib().Placement.TOP_LEFT
 				);
@@ -471,7 +473,7 @@ export const IiifViewer = ({
 
 			if (zoomToSelectedAltoText && selectedHighlightedAltoText) {
 				iiifZoomToRect(selectedHighlightedAltoText);
-				viewer.addOnceHandler('tile-loaded', (evt) => {
+				viewer.addOnceHandler('tile-loaded', () => {
 					iiifZoomToRect(selectedHighlightedAltoText);
 				});
 			}
@@ -701,7 +703,7 @@ export const IiifViewer = ({
 			});
 			return;
 		}
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// biome-ignore lint/suspicious/noExplicitAny: no typing yet
 		const lib = getOpenSeaDragonLib() as any;
 		const Point = lib.Point;
 
@@ -951,6 +953,7 @@ export const IiifViewer = ({
 								className={activeImageIndex === index ? 'active' : ''}
 							>
 								{imageInfo.thumbnailUrl ? (
+									// biome-ignore lint/performance/noImgElement: this is how it works
 									<img src={imageInfo.thumbnailUrl} alt={`page ${index + 1} thumbnail`} />
 								) : (
 									<div
@@ -985,7 +988,7 @@ export const IiifViewer = ({
 								}}
 								type="button"
 							>
-								{/* eslint-disable-next-line @next/next/no-img-element */}
+								{/* biome-ignore lint/performance/noImgElement: this is how it works */}
 								<img src={imageInfo.thumbnailUrl} alt={`page ${index + 1}`} />
 							</button>
 						);

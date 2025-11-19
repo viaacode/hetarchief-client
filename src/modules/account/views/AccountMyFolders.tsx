@@ -1,14 +1,3 @@
-import { Button, FormControl, PaginationBar } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { isEmpty, isNil, kebabCase } from 'lodash-es';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
-import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import Highlighter from 'react-highlight-words';
-import { useDispatch, useSelector } from 'react-redux';
-import { useQueryParams } from 'use-query-params';
-
 import { CreateFolderButton } from '@account/components';
 import { EditFolderBlade } from '@account/components/EditFolderBlade';
 import { ACCOUNT_FOLDERS_QUERY_PARAM_CONFIG, FolderItemListSize, Permission } from '@account/const';
@@ -19,11 +8,13 @@ import { FoldersService } from '@account/services/folders';
 import type { Folder, FolderIeObject } from '@account/types';
 import { createFolderSlug } from '@account/utils';
 import { IeObjectAccessThrough, IeObjectLicense, IsPartOfKey } from '@ie-objects/ie-objects.types';
+import { Button, FormControl, PaginationBar } from '@meemoo/react-components';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import type { ListNavigationItem } from '@shared/components/ListNavigation';
-import { type IdentifiableMediaCard, getIconFromObjectType } from '@shared/components/MediaCard';
+import { Loading } from '@shared/components/Loading';
+import { getIconFromObjectType, type IdentifiableMediaCard } from '@shared/components/MediaCard';
 import { MediaCardList } from '@shared/components/MediaCardList';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
@@ -31,7 +22,7 @@ import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ShareFolderBlade } from '@shared/components/ShareFolderBlade';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
-import { ROUTES_BY_LOCALE, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
@@ -47,8 +38,15 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
-
-import { Loading } from '@shared/components/Loading';
+import clsx from 'clsx';
+import { isEmpty, isNil, kebabCase } from 'lodash-es';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
+import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import Highlighter from 'react-highlight-words';
+import { useDispatch, useSelector } from 'react-redux';
+import { useQueryParams } from 'use-query-params';
 import styles from './AccountMyFolders.module.scss';
 
 type ListNavigationFolderItem = ListNavigationItem & Folder;
@@ -453,7 +451,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 
 		return (
 			<div className="p-account-my-folders__card-description">
-				{metadataEntries.map((metadataEntry, i) => {
+				{metadataEntries.map((metadataEntry) => {
 					return metadataEntry.value ? (
 						<p
 							key={`metadata-entry--${metadataEntry.label}--${metadataEntry.value}`}

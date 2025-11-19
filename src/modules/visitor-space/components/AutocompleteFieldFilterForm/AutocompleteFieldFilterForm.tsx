@@ -1,21 +1,19 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl } from '@meemoo/react-components';
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
+import { tText } from '@shared/helpers/translate';
+import AutocompleteFieldInput from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
+import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import type { DefaultFilterFormChildrenParams } from '@visitor-space/types';
 import clsx from 'clsx';
 import { type FC, type ReactNode, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { StringParam, useQueryParam } from 'use-query-params';
 import { object as yupObject, string as yupString } from 'yup';
-
-import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
-import AutocompleteFieldInput from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
-import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
-import type { DefaultFilterFormChildrenParams } from '@visitor-space/types';
-
-import { tText } from '@shared/helpers/translate';
 import styles from './AutocompleteFieldFilterForm.module.scss';
 
 export const AutocompleteFieldFilterForm: FC<{
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	children: ({ values, reset, handleSubmit }: DefaultFilterFormChildrenParams<any>) => ReactNode;
 	className?: string;
 	autocompleteField: AutocompleteField;

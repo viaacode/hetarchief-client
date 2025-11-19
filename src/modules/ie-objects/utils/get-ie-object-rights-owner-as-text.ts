@@ -1,7 +1,6 @@
-import { compact, isString } from 'lodash-es';
-
 import type { IeObject } from '@ie-objects/ie-objects.types';
 import { tText } from '@shared/helpers/translate';
+import { compact, isString } from 'lodash-es';
 
 export function getIeObjectRightsOwnerAsText(ieObject: IeObject): string {
 	try {
@@ -17,7 +16,7 @@ export function getIeObjectRightsOwnerAsText(ieObject: IeObject): string {
 			ieObject.maintainerName ||
 			tText('modules/ie-objects/utils/get-ie-object-rights-owner-as-text___onbekend')
 		);
-	} catch (err) {
+	} catch (_err) {
 		return JSON.stringify(ieObject.creator).replaceAll(/[{}()"]+/, '');
 	}
 }

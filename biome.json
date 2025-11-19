@@ -7,7 +7,11 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["**/src", "**/tests", "**/scripts"]
+    "includes": [
+      "src/**/*.{ts,tsx,json,graphql}",
+      "tests/**/*.{ts,tsx,json,graphql}",
+      "scripts/**/*.{ts,tsx,json,graphql}"
+    ]
   },
   "formatter": {
     "enabled": true,

@@ -7,11 +7,6 @@ import {
 	TextInput,
 	type TextInputProps,
 } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { parseISO } from 'date-fns';
-import React, { type FC } from 'react';
-import type { SingleValue } from 'react-select';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { SEPARATOR } from '@shared/const';
@@ -39,16 +34,18 @@ import type {
 	FilterConfig,
 	FilterInputComponentProps,
 } from '@visitor-space/const/advanced-filters.consts';
-
-import type { FilterProperty, IdentityAdvancedFilter, Operator } from '../../types';
-import { getSelectValue } from '../../utils/select';
-import DurationInput, { defaultValue } from '../DurationInput/DurationInput';
-
+import clsx from 'clsx';
+import { parseISO } from 'date-fns';
 import {
 	getAdvancedProperties,
 	getFilterConfig,
 	getOperators,
 } from 'modules/visitor-space/utils/advanced-filters';
+import React, { type FC } from 'react';
+import type { MultiValue, SingleValue } from 'react-select';
+import type { FilterProperty, IdentityAdvancedFilter, Operator } from '../../types';
+import { getSelectValue } from '../../utils/select';
+import DurationInput, { defaultValue } from '../DurationInput/DurationInput';
 import styles from './AdvancedFilterFields.module.scss';
 
 const labelKeys = {
@@ -197,8 +194,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 							styles['c-advanced-filter-fields__dynamic-field--select']
 						)}
 						value={value}
-						// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-						onChange={(e: any) =>
+						onChange={(e: SingleValue<SelectOption> | MultiValue<SelectOption>) =>
 							onFieldChange({
 								val: (e as SingleValue<SelectOption>)?.value ?? undefined,
 							})
@@ -230,8 +226,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 							styles['c-advanced-filter-fields__dynamic-field--select']
 						)}
 						value={value}
-						// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-						onChange={(e: any) =>
+						onChange={(e: SingleValue<SelectOption> | MultiValue<SelectOption>) =>
 							onFieldChange({
 								val: (e as SingleValue<SelectOption>)?.value ?? undefined,
 							})

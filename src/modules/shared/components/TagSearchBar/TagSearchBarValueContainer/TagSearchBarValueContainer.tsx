@@ -11,7 +11,7 @@ const TagSearchBarValueContainer: FC<TagSearchBarValueContainerProps> = ({
 }) => {
 	const { hasValue, selectProps } = valueContainerProps;
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
+	// @ts-expect-error
 	const { valuePlaceholder } = selectProps;
 	const showPlaceholder = hasValue && valuePlaceholder;
 

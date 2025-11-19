@@ -1,14 +1,13 @@
-import { Button, FormControl, TextArea, TextInput } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { type FC, useEffect, useState } from 'react';
-
 import { EDIT_FOLDER_VALIDATION_SCHEMA } from '@account/components/EditFolderBlade/EditFolderBlade.consts';
 import { FoldersService } from '@account/services/folders';
 import type { Folder } from '@account/types';
+import { Button, FormControl, TextArea, TextInput } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { validateForm } from '@shared/helpers/validate-form';
 import { toastService } from '@shared/services/toast-service';
+import clsx from 'clsx';
+import { type FC, useEffect, useState } from 'react';
 
 import styles from './EditFolderBlade.module.scss';
 
@@ -83,7 +82,7 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 			resetForm();
 			onSave(newFolder);
 			onClose();
-		} catch (error) {
+		} catch (_error) {
 			toastService.notify({
 				title: tHtml(
 					'modules/account/components/edit-folder-blade/edit-folder-blade___er-is-een-fout-opgetreden'

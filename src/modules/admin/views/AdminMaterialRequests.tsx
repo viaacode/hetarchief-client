@@ -1,23 +1,3 @@
-import {
-	MultiSelect,
-	type MultiSelectOption,
-	OrderDirection,
-	PaginationBar,
-	Table,
-} from '@meemoo/react-components';
-import clsx from 'clsx';
-import { isEmpty, isNil, without } from 'lodash-es';
-import React, {
-	type FC,
-	type MouseEvent,
-	type ReactNode,
-	useEffect,
-	useMemo,
-	useState,
-} from 'react';
-import type { Row, SortingRule, TableState } from 'react-table';
-import { useQueryParams } from 'use-query-params';
-
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
 import { Permission } from '@account/const';
 import {
@@ -35,6 +15,13 @@ import {
 	MaterialRequestKeys,
 	type MaterialRequestType,
 } from '@material-requests/types';
+import {
+	MultiSelect,
+	type MultiSelectOption,
+	OrderDirection,
+	PaginationBar,
+	Table,
+} from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -47,6 +34,18 @@ import { globalLabelKeys } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import clsx from 'clsx';
+import { isEmpty, isNil, without } from 'lodash-es';
+import React, {
+	type FC,
+	type MouseEvent,
+	type ReactNode,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
+import type { Row, SortingRule, TableState } from 'react-table';
+import { useQueryParams } from 'use-query-params';
 
 export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
@@ -160,7 +159,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	const renderEmptyMessage = (): ReactNode =>
 		tHtml('pages/admin/materiaalaanvragen/index___geen-materiaalaanvragen');
 
-	const onRowClick = (evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
+	const onRowClick = (_evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
 		setCurrentMaterialRequest(row.original);
 		setIsDetailBladeOpen(true);
 	};

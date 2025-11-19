@@ -5,7 +5,7 @@ import kyMock from './__mocks__/ky-universal';
 import nextConfig from './__mocks__/next-config';
 import nextRouterMock from './__mocks__/next-router';
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 declare const window: any;
 
 window.scrollTo = jest.fn();

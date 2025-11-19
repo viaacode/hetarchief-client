@@ -1,6 +1,5 @@
-import type { IPagination } from '@studiohyperdrive/pagination';
-
 import type { IeObjectType } from '@shared/types/ie-objects';
+import type { IPagination } from '@studiohyperdrive/pagination';
 import type { ElasticsearchFieldNames } from '@visitor-space/types';
 
 // Mapped intellectual entity object
@@ -17,17 +16,17 @@ export enum IsPartOfKey {
 export interface IsPartOfCollection {
 	name: string;
 	collectionType: IsPartOfKey;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: no typing yet
 	isPreceededBy?: any[];
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: no typing yet
 	isSucceededBy?: any[];
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: no typing yet
 	locationCreated?: any;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: no typing yet
 	startDate?: any;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: no typing yet
 	endDate?: any;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: no typing yet
 	publisher?: any;
 }
 

@@ -2,7 +2,7 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 
 import useWindowSize from './use-window-size';
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 declare const window: any; // TODO declare window type
 
 describe('Hooks', () => {

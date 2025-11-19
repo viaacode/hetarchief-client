@@ -28,7 +28,7 @@ export async function waitForPageTitle(
 				timeout: 10000,
 			}
 		);
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// biome-ignore lint/suspicious/noExplicitAny: We need to check the message property
 	} catch (err: any) {
 		(err as Error).message =
 			`The page title was not the expected value after 10 seconds. Expected: ${partialTitle} | ${MAIN_SITE_TITLE}, received: ${await page.title()}`;

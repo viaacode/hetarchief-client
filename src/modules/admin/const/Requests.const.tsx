@@ -1,8 +1,4 @@
 import { Button } from '@meemoo/react-components';
-import { truncate } from 'lodash-es';
-import React from 'react';
-import type { Column } from 'react-table';
-
 import { CopyButton } from '@shared/components/CopyButton';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -10,6 +6,9 @@ import { RequestStatusBadge } from '@shared/components/RequestStatusBadge';
 import { tText } from '@shared/helpers/translate';
 import type { VisitRequest, VisitRow } from '@shared/types/visit-request';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils/dates';
+import { truncate } from 'lodash-es';
+import React from 'react';
+import type { Column } from 'react-table';
 
 export const RequestTableColumns = (): Column<VisitRequest>[] => [
 	{
@@ -21,6 +20,7 @@ export const RequestTableColumns = (): Column<VisitRequest>[] => [
 		accessor: 'visitorName',
 		Cell: ({ row }: VisitRow) => {
 			return (
+				// biome-ignore lint/a11y/useAriaPropsSupportedByRole: it still works
 				<span className="u-color-neutral" aria-label={row.original.visitorName}>
 					{row.original.visitorName}
 				</span>

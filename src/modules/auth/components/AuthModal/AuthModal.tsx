@@ -1,16 +1,15 @@
-import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { useRouter } from 'next/router';
-import type { FC } from 'react';
-
 import type { AuthModalProps } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
+import { Button } from '@meemoo/react-components';
 import Html from '@shared/components/Html/Html';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Modal } from '@shared/components/Modal';
 import { globalLabelKeys } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
+import clsx from 'clsx';
+import { useRouter } from 'next/router';
+import type { FC } from 'react';
 
 import styles from './AuthModal.module.scss';
 
@@ -23,13 +22,13 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 	 */
 
 	const onLoginHetArchief = async () => {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		// biome-ignore lint/correctness/noUnusedVariables: prevent showAuth to be passed
 		const { showAuth, ...queryParams } = query;
 		await AuthService.redirectToLoginHetArchief(queryParams, router);
 	};
 
 	const onRegisterHetArchief = async () => {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		// biome-ignore lint/correctness/noUnusedVariables: prevent showAuth to be passed
 		const { showAuth, ...queryParams } = query;
 		await AuthService.redirectToRegisterHetArchief(queryParams, router);
 	};

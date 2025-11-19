@@ -27,6 +27,7 @@ export const TAGS_INPUT_COMPONENTS: TagsInputProps<boolean>['components'] = {
 	},
 	DropdownIndicator: ({ className, cx, innerProps }) => {
 		return (
+			// biome-ignore lint/a11y/noStaticElementInteractions: we want to avoid events being triggered by this
 			<span
 				{...innerProps}
 				onMouseDown={(e) => {

@@ -1,6 +1,4 @@
 import { type ReactSelectProps, TextInput, type TextInputProps } from '@meemoo/react-components';
-import type { FC } from 'react';
-
 import { tText } from '@shared/helpers/translate';
 import {
 	type IeObjectsSearchFilter,
@@ -19,6 +17,7 @@ import { GenreSelect } from '@visitor-space/components/GenreSelect';
 import { LanguageSelect } from '@visitor-space/components/LanguageSelect/LanguageSelect';
 import { MediumSelect } from '@visitor-space/components/MediumSelect/MediumSelect';
 import { getFilterLabel } from '@visitor-space/utils/advanced-filters';
+import type { FC } from 'react';
 
 import DurationInput from '../components/DurationInput/DurationInput';
 import { FilterProperty, Operator } from '../types';
@@ -236,9 +235,9 @@ const DURATION_LESS_THAN_OR_EQUALS = (
 const CONTAINS = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField,
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	inputComponent?: FC<any>,
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {
@@ -259,9 +258,9 @@ const CONTAINS = (
 const CONTAINS_NOT = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField,
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	inputComponent?: FC<any>,
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {
@@ -282,9 +281,9 @@ const CONTAINS_NOT = (
 const EQUALS = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField,
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	inputComponent?: FC<any>,
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {
@@ -305,9 +304,9 @@ const EQUALS = (
 const EQUALS_NOT = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField,
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	inputComponent?: FC<any>,
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {
@@ -328,9 +327,9 @@ const EQUALS_NOT = (
 const CONTAINS_AND_EQUALS = (
 	operatorLabels: Record<string, string>,
 	field: IeObjectsSearchFilterField,
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	inputComponent?: FC<any>,
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {

@@ -1,14 +1,10 @@
-import { Button, RadioButton, TextArea } from '@meemoo/react-components';
-import clsx from 'clsx';
-import Image from 'next/image';
-import React, { type FC, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestRequesterCapacity, MaterialRequestType } from '@material-requests/types';
+import { Button, RadioButton, TextArea } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -16,8 +12,10 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount } from '@shared/store/ui';
 import type { IeObjectType } from '@shared/types/ie-objects';
-
-import { getIconFromObjectType } from '@shared/components/MediaCard';
+import clsx from 'clsx';
+import React, { type FC, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import MediaCard from '../../../shared/components/MediaCard/MediaCard';
 import styles from './MaterialRequestBlade.module.scss';
 
 interface MaterialRequestBladeProps {
@@ -26,9 +24,10 @@ interface MaterialRequestBladeProps {
 	onClose: () => void;
 	objectName: string;
 	objectSchemaIdentifier: string;
+	objectThumbnailUrl: string;
 	objectDctermsFormat: IeObjectType;
+	objectPublishedOrCreatedDate?: string;
 	maintainerName: string;
-	maintainerLogo: string | null;
 	maintainerSlug: string;
 	materialRequestId?: string;
 	reason?: string;
@@ -44,9 +43,10 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	onClose,
 	objectName,
 	objectSchemaIdentifier,
+	objectThumbnailUrl,
 	objectDctermsFormat,
+	objectPublishedOrCreatedDate,
 	maintainerName,
-	maintainerLogo,
 	maintainerSlug,
 	materialRequestId,
 	type,
@@ -119,7 +119,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			});
 			await onSuccessCreated();
 			onCloseModal();
-		} catch (err) {
+		} catch (_err) {
 			onFailedRequest();
 		}
 	};
@@ -154,7 +154,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				});
 				await onSuccessCreated();
 				onCloseModal();
-			} catch (err) {
+			} catch (_err) {
 				onFailedRequest();
 			}
 		}
@@ -181,7 +181,16 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
 				);
 
-		return <h2 {...props}>{title}</h2>;
+		return (
+			<div className={styles['c-request-material__title-container']}>
+				<h2 {...props} style={{ paddingBottom: 0 }}>
+					{title}
+				</h2>
+				<p className={styles['c-request-material__subtitle']}>
+					{tHtml('Meer informatie over aanvragen')}
+				</p>
+			</div>
+		);
 	};
 
 	const renderFooter = () => {
@@ -235,6 +244,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							)}
 							variants={['block', 'text', 'dark']}
 							onClick={onAddToList}
+							disabled={!typeSelected}
 							className={styles['c-request-material__voeg-toe-button']}
 						/>
 					),
@@ -245,6 +255,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							)}
 							variants={['block', 'text', 'dark']}
 							onClick={onAddToList}
+							disabled={!typeSelected}
 							className={styles['c-request-material__voeg-toe-button']}
 						/>
 					),
@@ -273,115 +284,92 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			isManaged
 			id="material-request-blade"
 		>
-			<div className={styles['c-request-material__maintainer']}>
-				{maintainerLogo && (
-					<div className={styles['c-request-material__maintainer-logo']}>
-						<Image
-							unoptimized
-							alt="maintainer logo"
-							src={maintainerLogo}
-							fill
-							sizes="100vw"
-							style={{
-								objectFit: 'contain',
-							}}
-						/>
-					</div>
-				)}
-				<div>
-					<p className={styles['c-request-material__maintainer-details']}>
-						{tHtml(
-							'modules/visitor-space/components/material-request-blade/material-request-blade___item-van'
-						)}
-					</p>
-					<p className={styles['c-request-material__maintainer-details']}>{maintainerName}</p>
-				</div>
-			</div>
-			<a
-				tabIndex={-1}
-				href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectSchemaIdentifier}`}
-				className={styles['c-request-material__material-link']}
-			>
-				<div className={styles['c-request-material__material']}>
-					<p className={styles['c-request-material__material-label']}>
-						<Icon
-							className={styles['c-request-material__material-label-icon']}
-							name={getIconFromObjectType(objectDctermsFormat, true)}
-						/>
-						<span>{objectName}</span>
-					</p>
-					<p className={styles['c-request-material__material-id']}>{objectSchemaIdentifier}</p>
-				</div>
-			</a>
+			<MediaCard
+				className={styles['c-request-material__material']}
+				objectId={objectSchemaIdentifier}
+				title={objectName}
+				view="blade"
+				thumbnail={objectThumbnailUrl}
+				link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectSchemaIdentifier}`}
+				maintainerSlug={maintainerSlug}
+				type={objectDctermsFormat}
+				publishedBy={maintainerName}
+				publishedOrCreatedDate={objectPublishedOrCreatedDate}
+				name={objectName}
+				icon={getIconFromObjectType(objectDctermsFormat, true)}
+			/>
 			<div className={styles['c-request-material__content']}>
 				<dl>
-					<>
-						<dt className={styles['c-request-material__content-label']}>
-							{/* biome-ignore lint/a11y/noLabelWithoutControl: radio buttons reference this label */}
-							<label id="radio-group-label">
-								{tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___selecteer-een-type'
-								)}
-							</label>
-						</dt>
-						<dd
-							className={clsx(
-								styles['c-request-material__content-value'],
-								styles['c-request-material__radio-buttons-container']
+					<dt className={styles['c-request-material__content-label']}>
+						{/* biome-ignore lint/a11y/noLabelWithoutControl: radio buttons reference this label */}
+						<label id="radio-group-label">
+							{tText(
+								'modules/visitor-space/components/material-request-blade/material-request-blade___selecteer-een-type'
 							)}
-						>
-							<RadioButton
-								aria-labelledby="radio-group-label"
-								className={styles['c-request-material__radio-button']}
-								label={tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___view'
-								)}
-								checked={typeSelected === MaterialRequestType.VIEW}
-								onClick={() => setTypeSelected(MaterialRequestType.VIEW)}
-							/>
-							<RadioButton
-								aria-labelledby="radio-group-label"
-								className={styles['c-request-material__radio-button']}
-								label={tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
-								)}
-								checked={typeSelected === MaterialRequestType.REUSE}
-								onClick={() => setTypeSelected(MaterialRequestType.REUSE)}
-							/>
-							<RadioButton
-								aria-labelledby="radio-group-label"
-								className={styles['c-request-material__radio-button']}
-								label={tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___more-info'
-								)}
-								checked={typeSelected === MaterialRequestType.MORE_INFO}
-								onClick={() => setTypeSelected(MaterialRequestType.MORE_INFO)}
-							/>
-							{noTypeSelectedOnSave ? (
-								<span className="c-form-control__errors">
-									<Icon className="u-mr-8 " name={IconNamesLight.Exclamation} />
-									{tText(
-										'modules/visitor-space/components/material-request-blade/material-request-blade___type-verplicht-error'
-									)}
-								</span>
-							) : null}
-						</dd>
-						<dt className={styles['c-request-material__content-label']}>
-							<label htmlFor="reason-input">
+						</label>
+					</dt>
+					<dd
+						className={clsx(
+							styles['c-request-material__content-value'],
+							styles['c-request-material__radio-buttons-container']
+						)}
+					>
+						<RadioButton
+							aria-labelledby="radio-group-label"
+							className={styles['c-request-material__radio-button']}
+							label={tText(
+								'modules/visitor-space/components/material-request-blade/material-request-blade___view'
+							)}
+							checked={typeSelected === MaterialRequestType.VIEW}
+							onClick={() => setTypeSelected(MaterialRequestType.VIEW)}
+						/>
+						<RadioButton
+							aria-labelledby="radio-group-label"
+							className={styles['c-request-material__radio-button']}
+							label={tText(
+								'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
+							)}
+							checked={typeSelected === MaterialRequestType.REUSE}
+							onClick={() => setTypeSelected(MaterialRequestType.REUSE)}
+						/>
+						<RadioButton
+							aria-labelledby="radio-group-label"
+							className={styles['c-request-material__radio-button']}
+							label={tText(
+								'modules/visitor-space/components/material-request-blade/material-request-blade___more-info'
+							)}
+							checked={typeSelected === MaterialRequestType.MORE_INFO}
+							onClick={() => setTypeSelected(MaterialRequestType.MORE_INFO)}
+						/>
+						{noTypeSelectedOnSave ? (
+							<span className="c-form-control__errors">
+								<Icon className="u-mr-8 " name={IconNamesLight.Exclamation} />
 								{tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
+									'modules/visitor-space/components/material-request-blade/material-request-blade___type-verplicht-error'
 								)}
-							</label>
-						</dt>
-						<dd className={styles['c-request-material__content-value']}>
-							<TextArea
-								id="reason-input"
-								className={styles['c-request-material__reason-input']}
-								onChange={(e) => setReasonInputValue(e.target.value)}
-								value={reasonInputValue}
-							/>
-						</dd>
-					</>
+							</span>
+						) : null}
+					</dd>
+					{(typeSelected === MaterialRequestType.VIEW ||
+						typeSelected === MaterialRequestType.MORE_INFO) && (
+						<>
+							<dt className={styles['c-request-material__content-label']}>
+								<label htmlFor="reason-input">
+									{tText(
+										'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
+									)}
+								</label>
+							</dt>
+							<dd className={styles['c-request-material__content-value']}>
+								<TextArea
+									id="reason-input"
+									className={styles['c-request-material__reason-input']}
+									onChange={(e) => setReasonInputValue(e.target.value)}
+									value={reasonInputValue}
+								/>
+							</dd>
+						</>
+					)}
 				</dl>
 			</div>
 		</Blade>

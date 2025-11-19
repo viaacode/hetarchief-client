@@ -1,13 +1,12 @@
 import { Button, OrderDirection, TagList } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { isNil } from 'lodash-es';
-import { type FC, type ReactElement, useEffect, useState } from 'react';
-
 import { Navigation } from '@navigation/components/Navigation/Navigation';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml } from '@shared/helpers/translate';
 import { mapFiltersToTags } from '@visitor-space/utils/map-filters';
+import clsx from 'clsx';
+import { isNil } from 'lodash-es';
+import { type FC, type ReactElement, useEffect, useState } from 'react';
 
 import type { SearchSortProp } from '../../../types';
 import { FilterButton } from '../FilterButton';
@@ -38,9 +37,9 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 
 	// re-render form to ensure correct state
 	// e.g. open -> reset -> close -> open === values in url, in form
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Only update when opening/closing
 	useEffect(() => {
-		setOpenedAt(new Date().valueOf());
+		setOpenedAt(Date.now());
 	}, [isOpen]);
 
 	if (!isOpen) {
@@ -172,6 +171,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 			case FilterMenuType.Checkbox:
 				return renderFormModal(filterOption, true);
 			default:
+				// biome-ignore lint/complexity/noUselessFragments: We want a ReactElement
 				return <></>;
 		}
 	};

@@ -1,10 +1,9 @@
 import type { OrderDirection } from '@meemoo/react-components';
-import type { FC, ReactNode } from 'react';
-
 import type { IconName } from '@shared/components/Icon';
 import type { ToggleOption } from '@shared/components/Toggle';
 import type { DefaultComponentProps, SortObject } from '@shared/types';
 import type { SearchPageMediaType } from '@shared/types/ie-objects';
+import type { FC, ReactNode } from 'react';
 
 import type {
 	DefaultFilterFormProps,
@@ -47,7 +46,7 @@ export interface FilterMenuFilterOption {
 	id: SearchFilterId;
 	icon?: IconName;
 	label: string;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	form: FC<DefaultFilterFormProps<any>> | FC<InlineFilterFormProps<any>> | null; // eslint-disable-line @typescript-eslint/no-explicit-any
 	type: FilterMenuType;
 	isDisabled?: () => boolean;

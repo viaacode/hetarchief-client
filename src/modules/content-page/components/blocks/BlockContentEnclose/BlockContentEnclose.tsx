@@ -1,11 +1,10 @@
+import { GET_TYPE_TO_ICON_MAP } from '@content-page/components/blocks/BlockContentEnclose/BlockContentEnclose.const';
 import { SmartLink } from '@meemoo/admin-core-ui/client';
+import { Icon, type IconName } from '@shared/components/Icon';
 import { Button } from '@viaa/avo2-components';
 import { compact } from 'lodash-es';
 import type { FC } from 'react';
 import React, { useMemo } from 'react';
-
-import { GET_TYPE_TO_ICON_MAP } from '@content-page/components/blocks/BlockContentEnclose/BlockContentEnclose.const';
-import { Icon, type IconName } from '@shared/components/Icon';
 
 import MediaCard from '../../../../shared/components/MediaCard/MediaCard';
 
@@ -30,7 +29,7 @@ export const BlockContentEnclose: FC<BlockContentEncloseProps> = ({
 			compact(
 				elements.map((element) => {
 					if (!element?.mediaItem?.value) {
-						return;
+						return undefined;
 					}
 					return {
 						value: element.mediaItem.value,

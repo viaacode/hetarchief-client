@@ -1,3 +1,10 @@
+import { GroupName, Permission } from '@account/const';
+import { useGetFolders } from '@account/hooks/get-folders';
+import { selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
+import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/use-get-ie-object-format-counts';
+import { useGetIeObjects } from '@ie-objects/hooks/use-get-ie-objects';
+import { IeObjectAccessThrough } from '@ie-objects/ie-objects.types';
+import { isInAFolder } from '@ie-objects/utils/folders';
 import {
 	type Breadcrumb,
 	Breadcrumbs,
@@ -7,34 +14,16 @@ import {
 	PaginationBar,
 	type TabProps,
 } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { addYears, isAfter } from 'date-fns';
-import type { HTTPError } from 'ky';
-import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
-import Link from 'next/link';
-import { stringifyUrl } from 'query-string';
-import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import type { MultiValue } from 'react-select';
-import { useQueryParams } from 'use-query-params';
-
-import { GroupName, Permission } from '@account/const';
-import { useGetFolders } from '@account/hooks/get-folders';
-import { selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
-import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/use-get-ie-object-format-counts';
-import { useGetIeObjects } from '@ie-objects/hooks/use-get-ie-objects';
-import { IeObjectAccessThrough } from '@ie-objects/ie-objects.types';
-import { isInAFolder } from '@ie-objects/utils/folders';
 import { Callout } from '@shared/components/Callout';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import {
+	getIconFromObjectType,
 	type IdentifiableMediaCard,
 	type MediaCardProps,
 	type MediaCardViewMode,
-	getIconFromObjectType,
 } from '@shared/components/MediaCard';
 import { MediaCardList } from '@shared/components/MediaCardList';
 import {
@@ -55,8 +44,8 @@ import {
 } from '@shared/components/VisitorSpaceDropdown';
 import {
 	GET_VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
-	ROUTES_BY_LOCALE,
 	ROUTE_PARTS_BY_LOCALE,
+	ROUTES_BY_LOCALE,
 } from '@shared/const';
 import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
@@ -67,8 +56,8 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
-import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import {
 	selectLastScrollPosition,
@@ -78,8 +67,8 @@ import {
 } from '@shared/store/ui';
 import { Breakpoints, type SortObject } from '@shared/types';
 import {
-	IeObjectType,
 	IeObjectsSearchFilterField,
+	IeObjectType,
 	SearchPageMediaType,
 } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
@@ -91,8 +80,8 @@ import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitTimeframe } from '@visit-requests/types';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import {
-	TEMP_FILTER_KEY_PREFIX,
 	initialFields,
+	TEMP_FILTER_KEY_PREFIX,
 } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import type { AdvancedFilterFormState } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.types';
 import type { ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
@@ -123,6 +112,16 @@ import {
 } from '@visitor-space/types';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
+import clsx from 'clsx';
+import { addYears, isAfter } from 'date-fns';
+import type { HTTPError } from 'ky';
+import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
+import Link from 'next/link';
+import { stringifyUrl } from 'query-string';
+import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import type { MultiValue } from 'react-select';
+import { useQueryParams } from 'use-query-params';
 import { v4 as uuidV4 } from 'uuid';
 import styles from './SearchPage.module.scss';
 
@@ -638,7 +637,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		}
 
 		// Destructure to keyword-able filters
-		/* eslint-disable @typescript-eslint/no-unused-vars */
+		// biome-ignore-start lint/correctness/noUnusedVariables: filter it out of the query
 		const {
 			format,
 			orderProp,
@@ -650,7 +649,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		} = {
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
 		};
-		/* eslint-disable @typescript-eslint/no-unused-vars */
+		// biome-ignore-end lint/correctness/noUnusedVariables: filter it out of the query
 
 		setQuery({ ...rest, ...updatedQuery, page: undefined });
 	};

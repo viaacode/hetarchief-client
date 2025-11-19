@@ -1,9 +1,8 @@
-import clsx from 'clsx';
-import type { FC } from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { dropdownIndicatorCxState } from '@shared/components/TagsInput';
+import clsx from 'clsx';
+import type { FC } from 'react';
 
 import styles from './TagSearchBarButton.module.scss';
 import type { TagSearchBarButtonProps } from './TagSearchBarButton.types';
@@ -15,17 +14,18 @@ const TagSearchBarButton: FC<TagSearchBarButtonProps> = ({
 	selectProps,
 }) => {
 	return (
+		// biome-ignore lint/a11y/noStaticElementInteractions: _
 		<span
 			{...innerProps}
 			className={clsx(dropdownIndicatorCxState, className, styles['c-tag-search-bar-button'])}
 			/* eslint-disable @typescript-eslint/ban-ts-comment */
-			// @ts-ignore
+			// @ts-expect-error
 			onClick={selectProps.onSearch}
-			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 			onTouchEnd={() => (selectProps as any).onSearch?.()} // Make search button clickable on touch devices
 			onKeyDown={(e) => {
 				if (e.key === 'Enter') {
-					// @ts-ignore
+					// @ts-expect-error
 					selectProps.onSearch?.();
 				}
 			}}
