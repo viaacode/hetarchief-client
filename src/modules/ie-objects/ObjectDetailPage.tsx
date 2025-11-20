@@ -1103,21 +1103,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			return;
 		}
 
-		const materialRequests = await MaterialRequestsService.getAll({
-			size: 500,
-			isPending: true,
-			isPersonal: true,
-		});
-
-		if (
-			materialRequests?.items?.find(
-				(request) => request.objectSchemaIdentifier === mediaInfo?.schemaIdentifier
-			)
-		) {
-			onDuplicateRequest();
-			return;
-		}
-
 		const externalFormUrl = getExternalMaterialRequestUrlIfAvailable(mediaInfo, isAnonymous, user);
 		if (externalFormUrl) {
 			EventsService.triggerEvent(LogEventType.ITEM_REQUEST, window.location.href, {
@@ -1129,9 +1114,23 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			});
 
 			// The external url is opened with an actual link, so safari doesn't block the popup
-		} else {
-			setActiveBlade(MediaActions.RequestMaterial, 'replaceIn');
+			window.open(externalFormUrl, '_blank');
+			return;
 		}
+
+		if (!user?.isKeyUser) {
+			// Key users are allowed to create multiple items and the duplicate validation will be made later in the flow
+			const requestsForItem = await MaterialRequestsService.forMediaItem(
+				mediaInfo?.schemaIdentifier
+			);
+
+			if (requestsForItem.length) {
+				onDuplicateRequest();
+				return;
+			}
+		}
+
+		setActiveBlade(MediaActions.RequestMaterial, 'replaceIn');
 	};
 
 	const handleOnPlay = () => {
@@ -1935,9 +1934,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					objectPublishedOrCreatedDate={
 						mediaInfo.datePublished || mediaInfo.dateCreated || undefined
 					}
+					objectAccessThrough={mediaInfo?.accessThrough}
+					objectLicences={mediaInfo?.licenses}
 					maintainerName={mediaInfo?.maintainerName}
 					maintainerSlug={mediaInfo?.maintainerSlug}
-					accessThroughKeyUser={!!mediaInfo.accessThrough?.includes(IeObjectAccessThrough.SECTOR)}
 					layer={1}
 					currentLayer={1}
 				/>

@@ -146,4 +146,14 @@ $component: "c-request-material";
 			resize: none;
 		}
 	}
+
+	:global(.c-Alert) {
+		background-color: $light-blue;
+	}
+
+	&__alert {
+		p {
+			padding-bottom: $spacer-xs;
+		}
+	}
 }

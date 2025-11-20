@@ -1,4 +1,4 @@
-import type { IeObjectAccessThrough } from '@ie-objects/ie-objects.types';
+import type { IeObjectAccessThrough, IeObjectLicense } from '@ie-objects/ie-objects.types';
 import { tText } from '@shared/helpers/translate';
 import type { IeObjectType } from '@shared/types/ie-objects';
 
@@ -17,6 +17,7 @@ export interface MaterialRequest {
 	objectThumbnailUrl: string;
 	objectPublishedOrCreatedDate?: string;
 	objectAccessThrough: IeObjectAccessThrough[];
+	objectLicences: IeObjectLicense[];
 	profileId: string;
 	reason: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;

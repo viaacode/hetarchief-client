@@ -331,15 +331,14 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					objectDctermsFormat={selectedMaterialRequest.objectDctermsFormat}
 					objectThumbnailUrl={selectedMaterialRequest.objectThumbnailUrl}
 					objectPublishedOrCreatedDate={selectedMaterialRequest.objectPublishedOrCreatedDate}
+					objectLicences={selectedMaterialRequest.objectLicences}
+					objectAccessThrough={selectedMaterialRequest.objectAccessThrough}
 					maintainerName={selectedMaterialRequest.maintainerName}
 					maintainerSlug={selectedMaterialRequest.maintainerSlug}
 					materialRequestId={selectedMaterialRequest.id}
 					reason={selectedMaterialRequest.reason}
 					type={selectedMaterialRequest.type}
 					refetchMaterialRequests={refetchMaterialRequests}
-					accessThroughKeyUser={
-						!!selectedMaterialRequest.objectAccessThrough?.includes(IeObjectAccessThrough.SECTOR)
-					}
 					isEditMode
 					layer={activeBlade === MaterialRequestBladeId.EditMaterialRequest ? 2 : 99}
 					currentLayer={

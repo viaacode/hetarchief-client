@@ -1,7 +1,3 @@
-import type { IPagination } from '@studiohyperdrive/pagination';
-import { isNil } from 'lodash-es';
-import { stringifyUrl } from 'query-string';
-
 import type {
 	MaterialRequest,
 	MaterialRequestCreation,
@@ -11,6 +7,9 @@ import type {
 	MaterialRequestUpdate,
 } from '@material-requests/types';
 import { ApiService } from '@shared/services/api-service';
+import type { IPagination } from '@studiohyperdrive/pagination';
+import { isNil } from 'lodash-es';
+import { stringifyUrl } from 'query-string';
 
 import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from './material-requests.service.const';
 import type { GetMaterialRequestsProps } from './material-requests.service.types';
@@ -83,5 +82,21 @@ export abstract class MaterialRequestsService {
 
 	public static async sendAll(json: MaterialRequestSendAll): Promise<void> {
 		return ApiService.getApi().post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/send`, { json }).json();
+	}
+
+	public static async forMediaItem(itemId?: string | null): Promise<MaterialRequest[]> {
+		if (!itemId) {
+			return [];
+		}
+
+		const materialRequests = await MaterialRequestsService.getAll({
+			size: 500,
+			isPending: true,
+			isPersonal: true,
+		});
+
+		return (materialRequests?.items || []).filter(
+			(request) => request.objectSchemaIdentifier === itemId
+		);
 	}
 }
