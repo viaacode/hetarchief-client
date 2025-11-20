@@ -1,6 +1,11 @@
+import { selectUser } from '@auth/store/user';
+import type { User } from '@auth/types';
+import { IE_OBJECT_INTRA_CP_LICENSES } from '@ie-objects/ie-objects.consts';
+import { IeObjectAccessThrough, type IeObjectLicense } from '@ie-objects/ie-objects.types';
+import { useGetMaterialRequestsForMediaItem } from '@material-requests/hooks/get-material-requests-for-media-item';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestRequesterCapacity, MaterialRequestType } from '@material-requests/types';
-import { Button, RadioButton, TextArea } from '@meemoo/react-components';
+import { Alert, Button, RadioButton, TextArea } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -10,12 +15,13 @@ import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
-import { setMaterialRequestCount } from '@shared/store/ui';
+import { setMaterialRequestCount, setShowMaterialRequestCenter } from '@shared/store/ui';
 import type { IeObjectType } from '@shared/types/ie-objects';
 import clsx from 'clsx';
-import React, { type FC, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import MediaCard from '../../../shared/components/MediaCard/MediaCard';
+import { intersection, noop } from 'lodash-es';
+import React, { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import MaterialCard from '../MaterialCard/MaterialCard';
 import styles from './MaterialRequestBlade.module.scss';
 
 interface MaterialRequestBladeProps {
@@ -27,6 +33,8 @@ interface MaterialRequestBladeProps {
 	objectThumbnailUrl: string;
 	objectDctermsFormat: IeObjectType;
 	objectPublishedOrCreatedDate?: string;
+	objectAccessThrough?: IeObjectAccessThrough[];
+	objectLicences?: IeObjectLicense[];
 	maintainerName: string;
 	maintainerSlug: string;
 	materialRequestId?: string;
@@ -46,6 +54,8 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	objectThumbnailUrl,
 	objectDctermsFormat,
 	objectPublishedOrCreatedDate,
+	objectAccessThrough = [],
+	objectLicences = [],
 	maintainerName,
 	maintainerSlug,
 	materialRequestId,
@@ -57,11 +67,28 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 }) => {
 	const dispatch = useDispatch();
 	const locale = useLocale();
+	const user: User | null = useSelector(selectUser);
+	const triggerComplexReuseFlow =
+		intersection(objectLicences, IE_OBJECT_INTRA_CP_LICENSES).length > 0;
+	const hideViewTypeOption = objectAccessThrough.includes(IeObjectAccessThrough.SECTOR);
 
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestType | undefined>(type);
-	const [noTypeSelectedOnSave, setNoTypeSelectedOnSave] = useState(false);
-
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
+
+	const {
+		data: potentialDuplicates,
+		isLoading,
+		refetch,
+	} = useGetMaterialRequestsForMediaItem(objectSchemaIdentifier, !!user?.isKeyUser);
+
+	const showDuplicateWarning = useMemo(
+		() =>
+			!isEditMode &&
+			(typeSelected !== MaterialRequestType.REUSE ? true : !triggerComplexReuseFlow) &&
+			!isLoading &&
+			!!potentialDuplicates?.find((item) => item.type === typeSelected),
+		[isEditMode, potentialDuplicates, typeSelected, isLoading, triggerComplexReuseFlow]
+	);
 
 	/**
 	 * Reset form when the model is opened
@@ -70,14 +97,13 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		if (isOpen) {
 			setReasonInputValue(reason || '');
 			setTypeSelected(type);
-			setNoTypeSelectedOnSave(false);
+			refetch().then(noop);
 		}
-	}, [isOpen, reason, type]);
+	}, [isOpen, reason, type, refetch]);
 
 	const onCloseModal = () => {
 		onClose();
 		setReasonInputValue('');
-		setNoTypeSelectedOnSave(false);
 		setTypeSelected(undefined);
 		refetchMaterialRequests?.();
 	};
@@ -94,10 +120,10 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const onAddToList = async () => {
 		try {
 			if (!typeSelected) {
-				setNoTypeSelectedOnSave(true);
 				return;
 			}
-			setNoTypeSelectedOnSave(false);
+			// TODO trigger complex flow
+
 			const response = await MaterialRequestsService.create({
 				objectSchemaIdentifier,
 				type: typeSelected,
@@ -130,10 +156,8 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		} else {
 			try {
 				if (!typeSelected) {
-					setNoTypeSelectedOnSave(true);
 					return;
 				}
-				setNoTypeSelectedOnSave(false);
 				const response = await MaterialRequestsService.update(materialRequestId, {
 					type: typeSelected,
 					reason: reasonInputValue,
@@ -217,6 +241,23 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				</div>
 			);
 		}
+
+		const addButtonLabel = (isMobile: boolean) => {
+			if (typeSelected === MaterialRequestType.REUSE && triggerComplexReuseFlow) {
+				return isMobile
+					? tText('Vul bijkomende informatie aan - Mobile')
+					: tText('Vul bijkomende informatie aan ');
+			}
+
+			return isMobile
+				? tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek-mobile'
+					)
+				: tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek'
+					);
+		};
+
 		return (
 			<div className={styles['c-request-material__footer-container']}>
 				{/* ARC-1188: requested to hide single material request button
@@ -228,34 +269,22 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					onClick={onCloseModal}
 					className={styles['c-request-material__verstuur-button']}
 				/> */}
-				{noTypeSelectedOnSave ? (
-					<span className={styles['c-request-material__reason-error']}>
-						<Icon className="u-mr-8" name={IconNamesLight.Exclamation} />
-						{tText(
-							'modules/visitor-space/components/material-request-blade/material-request-blade___er-staan-fouten-in-dit-formulier-corrigeer-deze-en-probeer-het-opnieuw'
-						)}
-					</span>
-				) : null}
 				{renderMobileDesktop({
 					mobile: (
 						<Button
-							label={tText(
-								'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek-mobile'
-							)}
+							label={addButtonLabel(true)}
 							variants={['block', 'text', 'dark']}
 							onClick={onAddToList}
-							disabled={!typeSelected}
+							disabled={!typeSelected || showDuplicateWarning}
 							className={styles['c-request-material__voeg-toe-button']}
 						/>
 					),
 					desktop: (
 						<Button
-							label={tText(
-								'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek'
-							)}
+							label={addButtonLabel(false)}
 							variants={['block', 'text', 'dark']}
 							onClick={onAddToList}
-							disabled={!typeSelected}
+							disabled={!typeSelected || showDuplicateWarning}
 							className={styles['c-request-material__voeg-toe-button']}
 						/>
 					),
@@ -272,6 +301,38 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		);
 	};
 
+	const renderDuplicateAlertContent = (): ReactNode => {
+		return (
+			<>
+				<p>
+					{tText(
+						'Je hebt al op dit materiaal al een aanvraag van dit type ingediend. Je kan wachten op de behandeling van deze aanvraag, of ze nog annuleren, indien de aanbieder ze nog niet bekeken heeft.'
+					)}
+				</p>
+				<Button
+					className="u-py-0 u-px-0 u-height-auto"
+					label={tText('Ga naar mijn aanvraaglijst')}
+					variants={['text', 'underline']}
+					onClick={() => {
+						onCloseModal();
+						dispatch(setShowMaterialRequestCenter(true));
+					}}
+				/>
+			</>
+		);
+	};
+
+	const renderDuplicateAlert = (): ReactNode => {
+		return (
+			<Alert
+				className={styles['c-request-material__alert']}
+				icon={<Icon name={IconNamesLight.Exclamation} aria-hidden />}
+				title={tText('Aanvraag reeds in behandeling')}
+				content={renderDuplicateAlertContent()}
+			/>
+		);
+	};
+
 	return (
 		<Blade
 			isOpen={isOpen}
@@ -284,18 +345,15 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			isManaged
 			id="material-request-blade"
 		>
-			<MediaCard
+			<MaterialCard
 				className={styles['c-request-material__material']}
 				objectId={objectSchemaIdentifier}
 				title={objectName}
-				view="blade"
 				thumbnail={objectThumbnailUrl}
 				link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectSchemaIdentifier}`}
-				maintainerSlug={maintainerSlug}
 				type={objectDctermsFormat}
 				publishedBy={maintainerName}
 				publishedOrCreatedDate={objectPublishedOrCreatedDate}
-				name={objectName}
 				icon={getIconFromObjectType(objectDctermsFormat, true)}
 			/>
 			<div className={styles['c-request-material__content']}>
@@ -314,15 +372,17 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							styles['c-request-material__radio-buttons-container']
 						)}
 					>
-						<RadioButton
-							aria-labelledby="radio-group-label"
-							className={styles['c-request-material__radio-button']}
-							label={tText(
-								'modules/visitor-space/components/material-request-blade/material-request-blade___view'
-							)}
-							checked={typeSelected === MaterialRequestType.VIEW}
-							onClick={() => setTypeSelected(MaterialRequestType.VIEW)}
-						/>
+						{!hideViewTypeOption && (
+							<RadioButton
+								aria-labelledby="radio-group-label"
+								className={styles['c-request-material__radio-button']}
+								label={tText(
+									'modules/visitor-space/components/material-request-blade/material-request-blade___view'
+								)}
+								checked={typeSelected === MaterialRequestType.VIEW}
+								onClick={() => setTypeSelected(MaterialRequestType.VIEW)}
+							/>
+						)}
 						<RadioButton
 							aria-labelledby="radio-group-label"
 							className={styles['c-request-material__radio-button']}
@@ -341,35 +401,30 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							checked={typeSelected === MaterialRequestType.MORE_INFO}
 							onClick={() => setTypeSelected(MaterialRequestType.MORE_INFO)}
 						/>
-						{noTypeSelectedOnSave ? (
-							<span className="c-form-control__errors">
-								<Icon className="u-mr-8 " name={IconNamesLight.Exclamation} />
-								{tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___type-verplicht-error'
-								)}
-							</span>
-						) : null}
 					</dd>
 					{(typeSelected === MaterialRequestType.VIEW ||
-						typeSelected === MaterialRequestType.MORE_INFO) && (
-						<>
-							<dt className={styles['c-request-material__content-label']}>
-								<label htmlFor="reason-input">
-									{tText(
-										'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
-									)}
-								</label>
-							</dt>
-							<dd className={styles['c-request-material__content-value']}>
-								<TextArea
-									id="reason-input"
-									className={styles['c-request-material__reason-input']}
-									onChange={(e) => setReasonInputValue(e.target.value)}
-									value={reasonInputValue}
-								/>
-							</dd>
-						</>
-					)}
+						typeSelected === MaterialRequestType.MORE_INFO) &&
+						!showDuplicateWarning && (
+							<>
+								<dt className={styles['c-request-material__content-label']}>
+									<label htmlFor="reason-input">
+										{tText(
+											'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
+										)}
+									</label>
+								</dt>
+								<dd className={styles['c-request-material__content-value']}>
+									<TextArea
+										id="reason-input"
+										className={styles['c-request-material__reason-input']}
+										onChange={(e) => setReasonInputValue(e.target.value)}
+										value={reasonInputValue}
+									/>
+								</dd>
+							</>
+						)}
+
+					{showDuplicateWarning && renderDuplicateAlert()}
 				</dl>
 			</div>
 		</Blade>
