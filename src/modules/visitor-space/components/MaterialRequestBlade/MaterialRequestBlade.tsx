@@ -10,6 +10,7 @@ import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -74,6 +75,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestType | undefined>(type);
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
+	const [noTypeSelectedOnSave, setNoTypeSelectedOnSave] = useState(false);
 
 	const {
 		data: potentialDuplicates,
@@ -97,6 +99,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		if (isOpen) {
 			setReasonInputValue(reason || '');
 			setTypeSelected(type);
+			setNoTypeSelectedOnSave(false);
 			refetch().then(noop);
 		}
 	}, [isOpen, reason, type, refetch]);
@@ -105,6 +108,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		onClose();
 		setReasonInputValue('');
 		setTypeSelected(undefined);
+		setNoTypeSelectedOnSave(false);
 		refetchMaterialRequests?.();
 	};
 
@@ -120,8 +124,10 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const onAddToList = async () => {
 		try {
 			if (!typeSelected) {
+				setNoTypeSelectedOnSave(true);
 				return;
 			}
+			setNoTypeSelectedOnSave(false);
 			// TODO trigger complex flow
 
 			const response = await MaterialRequestsService.create({
@@ -156,8 +162,10 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		} else {
 			try {
 				if (!typeSelected) {
+					setNoTypeSelectedOnSave(true);
 					return;
 				}
+				setNoTypeSelectedOnSave(false);
 				const response = await MaterialRequestsService.update(materialRequestId, {
 					type: typeSelected,
 					reason: reasonInputValue,
@@ -269,13 +277,20 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					onClick={onCloseModal}
 					className={styles['c-request-material__verstuur-button']}
 				/> */}
+				{noTypeSelectedOnSave ? (
+					<RedFormWarning
+						error={tHtml(
+							'modules/visitor-space/components/material-request-blade/material-request-blade___er-staan-fouten-in-dit-formulier-corrigeer-deze-en-probeer-het-opnieuw'
+						)}
+					/>
+				) : null}
 				{renderMobileDesktop({
 					mobile: (
 						<Button
 							label={addButtonLabel(true)}
 							variants={['block', 'text', 'dark']}
 							onClick={onAddToList}
-							disabled={!typeSelected || showDuplicateWarning}
+							disabled={showDuplicateWarning}
 							className={styles['c-request-material__voeg-toe-button']}
 						/>
 					),
@@ -284,7 +299,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							label={addButtonLabel(false)}
 							variants={['block', 'text', 'dark']}
 							onClick={onAddToList}
-							disabled={!typeSelected || showDuplicateWarning}
+							disabled={showDuplicateWarning}
 							className={styles['c-request-material__voeg-toe-button']}
 						/>
 					),
@@ -401,6 +416,13 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							checked={typeSelected === MaterialRequestType.MORE_INFO}
 							onClick={() => setTypeSelected(MaterialRequestType.MORE_INFO)}
 						/>
+						{noTypeSelectedOnSave ? (
+							<RedFormWarning
+								error={tHtml(
+									'modules/visitor-space/components/material-request-blade/material-request-blade___type-verplicht-error'
+								)}
+							/>
+						) : null}
 					</dd>
 					{(typeSelected === MaterialRequestType.VIEW ||
 						typeSelected === MaterialRequestType.MORE_INFO) &&
