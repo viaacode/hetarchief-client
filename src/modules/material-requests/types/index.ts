@@ -25,6 +25,18 @@ export interface MaterialRequest {
 	requesterId: string;
 	requesterMail: string;
 	type: MaterialRequestType;
+	startTime?: number;
+	endTime?: number;
+	downloadQuality?: MaterialRequestDownloadQuality;
+	intendedUsage?: string;
+	exploitation?: MaterialRequestExploitation;
+	distributionAccess?: MaterialRequestDistributionAccess;
+	distributionType?: MaterialRequestDistributionType;
+	distributionTypeOtherExplanation?: string;
+	materialEditing?: MaterialRequestEditing;
+	geographicalUsage?: MaterialRequestGeographicalUsage;
+	timeUsage?: MaterialRequestTimeUsage;
+	copyrightDisplay?: MaterialRequestCopyrightDisplay;
 	updatedAt: string;
 	organisation?: string;
 }
@@ -112,3 +124,48 @@ export enum MaterialRequestKeys {
 }
 
 export type MaterialRequestRow = { row: { original: MaterialRequest } };
+
+export enum MaterialRequestDownloadQuality {
+	NORMAL = 'NORMAL',
+	HIGH = 'HIGH',
+}
+
+export enum MaterialRequestExploitation {
+	INTERN = 'INTERN',
+	NON_COMMERCIAL = 'NON_COMMERCIAL',
+	INDIRECT_COMMERCIAL = 'INDIRECT_COMMERCIAL',
+	COMMERCIAL = 'COMMERCIAL',
+}
+
+export enum MaterialRequestDistributionAccess {
+	INTERN = 'INTERN',
+	INTERN_EXTERN = 'INTERN_EXTERN',
+}
+
+export enum MaterialRequestDistributionType {
+	ANALOG = 'ANALOG',
+	DIGITAL_OFFLINE = 'DIGITAL_OFFLINE',
+	DIGITAL_ONLINE = 'DIGITAL_ONLINE',
+	OTHER = 'OTHER',
+}
+
+export enum MaterialRequestEditing {
+	NONE = 'NONE',
+	WITH_CHANGES = 'WITH_CHANGES',
+}
+
+export enum MaterialRequestGeographicalUsage {
+	COMPLETELY_LOCAL = 'COMPLETELY_LOCAL',
+	NOT_COMPLETELY_LOCAL = 'NOT_COMPLETELY_LOCAL',
+}
+
+export enum MaterialRequestTimeUsage {
+	UNLIMITED = 'UNLIMITED',
+	IN_TIME = 'IN_TIME',
+}
+
+export enum MaterialRequestCopyrightDisplay {
+	SAME_TIME_WITH_OBJECT = 'SAME_TIME_WITH_OBJECT',
+	AROUND_OBJECT = 'AROUND_OBJECT',
+	NONE = 'NONE',
+}

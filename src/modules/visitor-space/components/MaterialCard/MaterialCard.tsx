@@ -17,12 +17,16 @@ const MaterialCard: FC<MaterialCardProps> = ({
 	objectId,
 	title,
 	thumbnail,
+	hideThumbnail = false,
 	link,
 	type,
 	publishedBy,
 	publishedOrCreatedDate,
 	icon,
+	withBorder = true,
 }) => {
+	const withThumbnail = !thumbnail || hideThumbnail;
+
 	const renderTitle = (): ReactNode => {
 		if (typeof title === 'string') {
 			return <b className={`u-text-ellipsis--3`}>{title}</b>;
@@ -84,6 +88,30 @@ const MaterialCard: FC<MaterialCardProps> = ({
 			);
 		}
 
+		if (hideThumbnail) {
+			return (
+				<div
+					className={clsx(
+						styles['c-material-card__header'],
+						styles['c-material-card__header--no-content']
+					)}
+				>
+					{!isNil(icon) && (
+						<Icon
+							className={clsx(
+								styles['c-material-card__no-content-icon'],
+								styles['c-material-card__icon'],
+								{
+									[styles['c-material-card__no-content-icon']]: !link,
+								}
+							)}
+							name={icon}
+						/>
+					)}
+				</div>
+			);
+		}
+
 		if (type === IeObjectType.AUDIO || type === IeObjectType.AUDIO_FRAGMENT) {
 			// Only render the waveform if the thumbnail is available
 			// The thumbnail is an ugly speaker icon that we never want to show
@@ -108,7 +136,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 		styles['c-material-card'],
 		`c-material-card--${type}`,
 		!link && 'c-material-card--no-link',
-		thumbnail && 'c-material-card--with-thumbnail'
+		withThumbnail && 'c-material-card--with-thumbnail'
 	);
 
 	return (
@@ -116,7 +144,8 @@ const MaterialCard: FC<MaterialCardProps> = ({
 			<NextLink passHref href={link} style={{ textDecoration: 'none' }}>
 				<Card
 					className={classNames}
-					orientation={thumbnail ? 'horizontal' : 'vertical'}
+					orientation={withThumbnail ? 'vertical' : 'horizontal'}
+					edge={withBorder ? 'zinc' : 'none'}
 					title={renderTitle()}
 					image={renderImage(thumbnail)}
 					subtitle={objectId}

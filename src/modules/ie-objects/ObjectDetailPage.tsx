@@ -65,6 +65,7 @@ import {
 import { IiifViewer } from '@iiif-viewer/IiifViewer';
 import type { ImageInfo, ImageInfoWithToken, Rect, TextLine } from '@iiif-viewer/IiifViewer.types';
 import { MaterialRequestsService } from '@material-requests/services';
+import type { MaterialRequest } from '@material-requests/types';
 import {
 	Alert,
 	Button,
@@ -110,6 +111,7 @@ import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/g
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
+import { MaterialRequestForReuseBlade } from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade';
 import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { VisitorSpaceNavigation } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
@@ -1938,6 +1940,26 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					objectLicences={mediaInfo?.licenses}
 					maintainerName={mediaInfo?.maintainerName}
 					maintainerSlug={mediaInfo?.maintainerSlug}
+					layer={1}
+					currentLayer={1}
+				/>
+			)}
+			{mediaInfo && !isKiosk && (
+				<MaterialRequestForReuseBlade
+					isOpen={activeBlade === MediaActions.RequestMaterialForReuse}
+					onClose={onCloseBlade}
+					materialRequest={
+						{
+							objectSchemaName: mediaInfo.name,
+							objectSchemaIdentifier: mediaInfo.schemaIdentifier,
+							objectDctermsFormat: mediaInfo.dctermsFormat,
+							objectThumbnailUrl: mediaInfo.thumbnailUrl,
+							objectPublishedOrCreatedDate:
+								mediaInfo.datePublished || mediaInfo.dateCreated || undefined,
+							maintainerName: mediaInfo?.maintainerName,
+							maintainerSlug: mediaInfo?.maintainerSlug,
+						} as MaterialRequest
+					}
 					layer={1}
 					currentLayer={1}
 				/>

@@ -7,9 +7,11 @@ export interface MaterialCardProps {
 	objectId?: string;
 	title?: string | ReactNode;
 	thumbnail?: string;
+	hideThumbnail?: boolean;
 	link: string;
 	type: IeObjectType | null;
 	publishedBy?: string;
 	publishedOrCreatedDate?: string;
 	icon?: IconName;
+	withBorder?: boolean;
 }

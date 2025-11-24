@@ -1,0 +1,101 @@
+@use "../../../../styles/abstracts" as *;
+
+$component: "c-request-material-reuse";
+
+.#{$component} {
+	.c-blade__top-bar-container {
+		background-color: $platinum;
+	}
+
+	&__title-container{
+		background-color: $platinum;
+		border-bottom: $card-edge-size solid $zinc-40;
+
+		.c-request-material-reuse__content{
+			margin: $spacer-sm $spacer-lg;
+		}
+	}
+
+	&__content-container {
+		height: 100%;
+		overflow: auto;
+	}
+
+
+	&__content-form {
+		display: flex;
+		flex-direction: column;
+		margin: $spacer-md $spacer-lg;
+		gap: $spacer-xs;
+	}
+
+	&__content {
+		display: flex;
+		flex-direction: row;
+		flex-grow: 1;
+		background-color: $white;
+		border: 0.1rem solid $silver;
+		margin-block: 0;
+
+		&-label {
+			width: 30%;
+			padding: $spacer-lg;
+			font-weight: $font-weight-bold;
+			font-size: $font-size-md;
+			line-height: $line-height-lg;
+		}
+
+		&-value {
+			width: 100%;
+			padding: $spacer-lg;
+			padding-left: 0;
+
+			&-length {
+				color: $grey;
+				display: block;
+				text-align: right;
+				margin-left: auto;
+			}
+
+			:global(.c-form-control){
+				:global(.c-form-control__label){
+					margin-bottom: $spacer-xs;
+					font-weight: normal;
+				}
+			}
+		}
+
+		.c-request-material-reuse__material {
+			border-left: $card-edge-size solid $zinc-40;
+		}
+
+	}
+
+	&__footer-container {
+		display: flex;
+		padding: $spacer-md $spacer-lg;
+		border-top: 0.1rem solid $silver;
+		justify-content: space-between;
+	}
+
+	&__voeg-toe-button {
+		background-color: $black !important;
+		color: $white !important;
+
+		div {
+			font-weight: $font-weight-bold;
+		}
+
+		&:hover {
+			background-color: $white !important;
+			color: $zinc !important;
+			border: 0.1rem solid $zinc !important;
+		}
+	}
+
+	&__annuleer-button {
+		&:hover {
+			border: 0.1rem solid $zinc;
+		}
+	}
+}
