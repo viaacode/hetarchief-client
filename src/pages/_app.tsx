@@ -24,6 +24,7 @@ import pkg from '../../package.json';
 
 import '../styles/main.scss';
 import { ApiService } from '@shared/services/api-service'; // Set global locale:
+import '@meemoo/admin-core-ui/styles.css';
 
 // Set global locale:
 setDefaultOptions({ locale: nlBE });
