@@ -220,37 +220,57 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		);
 	};
 
-	const renderDownloadQuality = () => {
-		const radiobuttonOptions = [
-			{
-				label: tText('Afspeelkwaliteit'),
-				value: MaterialRequestDownloadQuality.NORMAL,
-				description: tHtml('Afspeelkwaliteit omschrijving'),
-			},
-			{
-				label: tText('Hogere kwaliteit'),
-				value: MaterialRequestDownloadQuality.HIGH,
-				description: tHtml('Hogere kwaliteit omschrijving'),
-			},
-		];
+	const renderRadiobuttonGroup = (
+		label: string,
+		title: string,
+		property: keyof MaterialRequestReuseSettings,
+		radiobuttonOptions: RadioButtonAccordionOption<unknown>[],
+		additionalErrors: (keyof MaterialRequestReuseSettings)[] = []
+	) => {
+		const foundAdditionalError = additionalErrors.find(
+			(errorProperty) => formErrors[errorProperty]
+		);
 
 		return (
 			<dl className={styles['c-request-material-reuse__content']}>
 				<dt className={styles['c-request-material-reuse__content-label']}>
 					{/** biome-ignore lint/a11y/noLabelWithoutControl: Inputs can be found in RadioButtonAccordion */}
-					<label>{tText('Downloadkwaliteit label')}</label>
+					<label>{label}</label>
 				</dt>
 				<dd className={styles['c-request-material-reuse__content-value']}>
 					<RadioButtonAccordion
-						title={tText('Downloadkwaliteit subtitel')}
-						radioButtonGroupLabel="download-quality"
-						selectedOption={formValues.downloadQuality}
-						onChange={(value) => setFormValue('downloadQuality', value)}
+						title={title}
+						radioButtonGroupLabel={kebabCase(property)}
+						selectedOption={formValues[property]}
+						onChange={(value) => setFormValue(property, value)}
 						options={radiobuttonOptions}
-						error={formErrors.downloadQuality}
+						error={
+							formErrors[property] ||
+							(foundAdditionalError ? formErrors[foundAdditionalError] : null)
+						}
 					/>
 				</dd>
 			</dl>
+		);
+	};
+
+	const renderDownloadQuality = () => {
+		return renderRadiobuttonGroup(
+			tText('Downloadkwaliteit label'),
+			tText('Downloadkwaliteit subtitel'),
+			'downloadQuality',
+			[
+				{
+					label: tText('Afspeelkwaliteit'),
+					value: MaterialRequestDownloadQuality.NORMAL,
+					description: tHtml('Afspeelkwaliteit omschrijving'),
+				},
+				{
+					label: tText('Hogere kwaliteit'),
+					value: MaterialRequestDownloadQuality.HIGH,
+					description: tHtml('Hogere kwaliteit omschrijving'),
+				},
+			]
 		);
 	};
 
@@ -284,272 +304,175 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	};
 
 	const renderExploitation = () => {
-		const radiobuttonOptions = [
-			{
-				label: tText('Interne exploitatie zonder verdere vergoeding'),
-				value: MaterialRequestExploitation.INTERN,
-				description: tHtml('Interne exploitatie omschrijving'),
-			},
-			{
-				label: tText('Niet-commerciële exploitatie'),
-				value: MaterialRequestExploitation.NON_COMMERCIAL,
-				description: tHtml('Niet-commerciële exploitatie omschrijving'),
-			},
-			{
-				label: tText('Indirecte commerciële exploitatie'),
-				value: MaterialRequestExploitation.INDIRECT_COMMERCIAL,
-				description: tHtml('Indirecte commerciële exploitatie omschrijving'),
-			},
-			{
-				label: tText('Directe commerciële exploitatie'),
-				value: MaterialRequestExploitation.COMMERCIAL,
-				description: tHtml('Directe commerciële exploitatie omschrijving'),
-			},
-		];
-
-		return (
-			<dl className={styles['c-request-material-reuse__content']}>
-				<dt className={styles['c-request-material-reuse__content-label']}>
-					{/** biome-ignore lint/a11y/noLabelWithoutControl: Inputs can be found in RadioButtonAccordion */}
-					<label>{tText('Commerciële exploitatie label')}</label>
-				</dt>
-				<dd className={styles['c-request-material-reuse__content-value']}>
-					<RadioButtonAccordion
-						title={tText('Commerciële exploitatie subtitel')}
-						selectedOption={formValues.exploitation}
-						onChange={(value) => setFormValue('exploitation', value)}
-						radioButtonGroupLabel="exploitation"
-						options={radiobuttonOptions}
-						error={formErrors.exploitation}
-					/>
-				</dd>
-			</dl>
+		return renderRadiobuttonGroup(
+			tText('Commerciële exploitatie label'),
+			tText('Commerciële exploitatie subtitel'),
+			'exploitation',
+			[
+				{
+					label: tText('Interne exploitatie zonder verdere vergoeding'),
+					value: MaterialRequestExploitation.INTERN,
+					description: tHtml('Interne exploitatie omschrijving'),
+				},
+				{
+					label: tText('Niet-commerciële exploitatie'),
+					value: MaterialRequestExploitation.NON_COMMERCIAL,
+					description: tHtml('Niet-commerciële exploitatie omschrijving'),
+				},
+				{
+					label: tText('Indirecte commerciële exploitatie'),
+					value: MaterialRequestExploitation.INDIRECT_COMMERCIAL,
+					description: tHtml('Indirecte commerciële exploitatie omschrijving'),
+				},
+				{
+					label: tText('Directe commerciële exploitatie'),
+					value: MaterialRequestExploitation.COMMERCIAL,
+					description: tHtml('Directe commerciële exploitatie omschrijving'),
+				},
+			]
 		);
 	};
 
 	const renderDistributionAccess = () => {
-		const radiobuttonOptions = [
-			{
-				label: tText('Enkel binnen de organisatie'),
-				value: MaterialRequestDistributionAccess.INTERN,
-				description: tHtml('Enkel binnen de organisatie omschrijving'),
-			},
-			{
-				label: tText('Organisatie en externe gebruikers'),
-				value: MaterialRequestDistributionAccess.INTERN_EXTERN,
-				description: tHtml('Organisatie en externe gebruikers omschrijving'),
-			},
-		];
-
-		return (
-			<dl className={styles['c-request-material-reuse__content']}>
-				<dt className={styles['c-request-material-reuse__content-label']}>
-					{/** biome-ignore lint/a11y/noLabelWithoutControl: Inputs can be found in RadioButtonAccordion */}
-					<label>{tText('Verspreiding materiaal label')}</label>
-				</dt>
-				<dd className={styles['c-request-material-reuse__content-value']}>
-					<RadioButtonAccordion
-						title={tText('Verspreiding materiaal subtitel')}
-						selectedOption={formValues.distributionAccess}
-						onChange={(value) => setFormValue('distributionAccess', value)}
-						radioButtonGroupLabel="distribution-access"
-						options={radiobuttonOptions}
-						error={formErrors.distributionAccess}
-					/>
-				</dd>
-			</dl>
+		return renderRadiobuttonGroup(
+			tText('Verspreiding materiaal label'),
+			tText('Verspreiding materiaal subtitel'),
+			'distributionAccess',
+			[
+				{
+					label: tText('Enkel binnen de organisatie'),
+					value: MaterialRequestDistributionAccess.INTERN,
+					description: tHtml('Enkel binnen de organisatie omschrijving'),
+				},
+				{
+					label: tText('Organisatie en externe gebruikers'),
+					value: MaterialRequestDistributionAccess.INTERN_EXTERN,
+					description: tHtml('Organisatie en externe gebruikers omschrijving'),
+				},
+			]
 		);
 	};
 
 	const renderDistributionType = () => {
-		const radiobuttonOptions = [
-			{
-				label: tText(
-					'Enkel analoge (fysieke) exemplaren zonder digitale verspreiding (bv. papieren prints, posters)'
-				),
-				value: MaterialRequestDistributionType.ANALOG,
-				description: tHtml('Enkel analoog omschrijving'),
-			},
-			{
-				label: tText('Digitale ontsluiting via een vast medium'),
-				value: MaterialRequestDistributionType.DIGITAL_OFFLINE,
-				description: tHtml('Digitale ontsluiting via een vast medium omschrijving'),
-			},
-			{
-				label: tText('Digitale ontsluiting via netwerkverbinding'),
-				value: MaterialRequestDistributionType.DIGITAL_ONLINE,
-				description: <span>TODO: More radio buttons</span>,
-			},
-			{
-				label: tText('Andere, namelijk: (te verduidelijken)'),
-				value: MaterialRequestDistributionType.OTHER,
-				description: (
-					<TextArea
-						value={formValues.distributionTypeOtherExplanation}
-						onChange={(evt) => setFormValue('distributionTypeOtherExplanation', evt.target.value)}
-					/>
-				),
-			},
-		];
-
-		return (
-			<dl className={styles['c-request-material-reuse__content']}>
-				<dt className={styles['c-request-material-reuse__content-label']}>
-					{/** biome-ignore lint/a11y/noLabelWithoutControl: Inputs can be found in RadioButtonAccordion */}
-					<label>{tText('Type verspreiding label')}</label>
-				</dt>
-				<dd className={styles['c-request-material-reuse__content-value']}>
-					<RadioButtonAccordion
-						title={tText('Type verspreiding subtitel')}
-						selectedOption={formValues.distributionType}
-						onChange={(value) => setFormValue('distributionType', value)}
-						radioButtonGroupLabel="distribution-type"
-						options={radiobuttonOptions}
-						error={formErrors.distributionType || formErrors.distributionTypeOtherExplanation}
-					/>
-				</dd>
-			</dl>
+		return renderRadiobuttonGroup(
+			tText('Type verspreiding label'),
+			tText('Type verspreiding subtitel'),
+			'distributionType',
+			[
+				{
+					label: tText(
+						'Enkel analoge (fysieke) exemplaren zonder digitale verspreiding (bv. papieren prints, posters)'
+					),
+					value: MaterialRequestDistributionType.ANALOG,
+					description: tHtml('Enkel analoog omschrijving'),
+				},
+				{
+					label: tText('Digitale ontsluiting via een vast medium'),
+					value: MaterialRequestDistributionType.DIGITAL_OFFLINE,
+					description: tHtml('Digitale ontsluiting via een vast medium omschrijving'),
+				},
+				{
+					label: tText('Digitale ontsluiting via netwerkverbinding'),
+					value: MaterialRequestDistributionType.DIGITAL_ONLINE,
+					description: <span>TODO: More radio buttons</span>,
+				},
+				{
+					label: tText('Andere, namelijk: (te verduidelijken)'),
+					value: MaterialRequestDistributionType.OTHER,
+					description: (
+						<TextArea
+							value={formValues.distributionTypeOtherExplanation}
+							onChange={(evt) => setFormValue('distributionTypeOtherExplanation', evt.target.value)}
+						/>
+					),
+				},
+			],
+			['distributionTypeOtherExplanation']
 		);
 	};
 
 	const renderMaterialEditing = () => {
-		const radiobuttonOptions = [
-			{
-				label: tText('Geen wijzigingen'),
-				value: MaterialRequestEditing.NONE,
-				description: tHtml('Geen wijzigingen omschrijving'),
-			},
-			{
-				label: tText('De organisatie zal het bronmateriaal wijzigen'),
-				value: MaterialRequestEditing.WITH_CHANGES,
-				description: tHtml('De organisatie zal het bronmateriaal wijzigen omschrijving'),
-			},
-		];
-
-		return (
-			<dl className={styles['c-request-material-reuse__content']}>
-				<dt className={styles['c-request-material-reuse__content-label']}>
-					{/** biome-ignore lint/a11y/noLabelWithoutControl: Inputs can be found in RadioButtonAccordion */}
-					<label>{tText('Wijziging materiaal label')}</label>
-				</dt>
-				<dd className={styles['c-request-material-reuse__content-value']}>
-					<RadioButtonAccordion
-						title={tText('Wijziging materiaal subtitel')}
-						selectedOption={formValues.materialEditing}
-						onChange={(value) => setFormValue('materialEditing', value)}
-						radioButtonGroupLabel="material-editing"
-						options={radiobuttonOptions}
-						error={formErrors.materialEditing}
-					/>
-				</dd>
-			</dl>
+		return renderRadiobuttonGroup(
+			tText('Wijziging materiaal label'),
+			tText('Wijziging materiaal subtitel'),
+			'materialEditing',
+			[
+				{
+					label: tText('Geen wijzigingen'),
+					value: MaterialRequestEditing.NONE,
+					description: tHtml('Geen wijzigingen omschrijving'),
+				},
+				{
+					label: tText('De organisatie zal het bronmateriaal wijzigen'),
+					value: MaterialRequestEditing.WITH_CHANGES,
+					description: tHtml('De organisatie zal het bronmateriaal wijzigen omschrijving'),
+				},
+			]
 		);
 	};
 
 	const renderGeographicalUsage = () => {
-		const radiobuttonOptions = [
-			{
-				label: tText('Integraal gericht op Vlaamse of Belgische markt'),
-				value: MaterialRequestGeographicalUsage.COMPLETELY_LOCAL,
-				description: tHtml('Integraal gericht op Vlaamse of Belgische markt omschrijving'),
-			},
-			{
-				label: tText('Niet integraal gericht op Vlaamse of Belgische markt'),
-				value: MaterialRequestGeographicalUsage.NOT_COMPLETELY_LOCAL,
-				description: tHtml('Niet integraal gericht op Vlaamse of Belgische markt omschrijving'),
-			},
-		];
-
-		return (
-			<dl className={styles['c-request-material-reuse__content']}>
-				<dt className={styles['c-request-material-reuse__content-label']}>
-					{/** biome-ignore lint/a11y/noLabelWithoutControl: Inputs can be found in RadioButtonAccordion */}
-					<label>{tText('Geografisch gebruik label')}</label>
-				</dt>
-				<dd className={styles['c-request-material-reuse__content-value']}>
-					<RadioButtonAccordion
-						title={tText('Geografisch gebruik subtitel')}
-						selectedOption={formValues.geographicalUsage}
-						onChange={(value) => setFormValue('geographicalUsage', value)}
-						radioButtonGroupLabel="geographical-usage"
-						options={radiobuttonOptions}
-						error={formErrors.geographicalUsage}
-					/>
-				</dd>
-			</dl>
+		return renderRadiobuttonGroup(
+			tText('Geografisch gebruik label'),
+			tText('Geografisch gebruik subtitel'),
+			'geographicalUsage',
+			[
+				{
+					label: tText('Integraal gericht op Vlaamse of Belgische markt'),
+					value: MaterialRequestGeographicalUsage.COMPLETELY_LOCAL,
+					description: tHtml('Integraal gericht op Vlaamse of Belgische markt omschrijving'),
+				},
+				{
+					label: tText('Niet integraal gericht op Vlaamse of Belgische markt'),
+					value: MaterialRequestGeographicalUsage.NOT_COMPLETELY_LOCAL,
+					description: tHtml('Niet integraal gericht op Vlaamse of Belgische markt omschrijving'),
+				},
+			]
 		);
 	};
 
 	const renderTimeUsage = () => {
-		const radiobuttonOptions = [
-			{
-				label: tText('Onbeperkt'),
-				value: MaterialRequestTimeUsage.UNLIMITED,
-				description: tHtml('Onbeperkt omschrijving'),
-			},
-			{
-				label: tText('Beperkte periode, namelijk...'),
-				value: MaterialRequestTimeUsage.IN_TIME,
-				description: <span>TODO: TIME RANGE</span>,
-			},
-		];
-
-		return (
-			<dl className={styles['c-request-material-reuse__content']}>
-				<dt className={styles['c-request-material-reuse__content-label']}>
-					{/** biome-ignore lint/a11y/noLabelWithoutControl: Inputs can be found in RadioButtonAccordion */}
-					<label>{tText('Gebruik in de tijd label')}</label>
-				</dt>
-				<dd className={styles['c-request-material-reuse__content-value']}>
-					<RadioButtonAccordion
-						title={tText('Gebruik in de tijd subtitel')}
-						selectedOption={formValues.timeUsage}
-						onChange={(value) => setFormValue('timeUsage', value)}
-						radioButtonGroupLabel="time-usage"
-						options={radiobuttonOptions}
-						error={formErrors.timeUsage}
-					/>
-				</dd>
-			</dl>
+		return renderRadiobuttonGroup(
+			tText('Gebruik in de tijd label'),
+			tText('Gebruik in de tijd subtitel'),
+			'timeUsage',
+			[
+				{
+					label: tText('Onbeperkt'),
+					value: MaterialRequestTimeUsage.UNLIMITED,
+					description: tHtml('Onbeperkt omschrijving'),
+				},
+				{
+					label: tText('Beperkte periode, namelijk...'),
+					value: MaterialRequestTimeUsage.IN_TIME,
+					description: <span>TODO: TIME RANGE</span>,
+				},
+			]
 		);
 	};
 
 	const renderCopyrightHandling = () => {
-		const radiobuttonOptions = [
-			{
-				label: tText('Gelijktijdig met object'),
-				value: MaterialRequestCopyrightDisplay.SAME_TIME_WITH_OBJECT,
-				description: tHtml('Gelijktijdig met object omschrijving'),
-			},
-			{
-				label: tText('Vermelding bij object, niet noodzakelijk gelijktijdig'),
-				value: MaterialRequestCopyrightDisplay.AROUND_OBJECT,
-				description: tHtml('Vermelding bij object, niet noodzakelijk gelijktijdig omschrijving'),
-			},
-			{
-				label: tText('Geen vermelding'),
-				value: MaterialRequestCopyrightDisplay.NONE,
-				description: tHtml('Geen vermelding omschrijving'),
-			},
-		];
-
-		return (
-			<dl className={styles['c-request-material-reuse__content']}>
-				<dt className={styles['c-request-material-reuse__content-label']}>
-					{/** biome-ignore lint/a11y/noLabelWithoutControl: Inputs can be found in RadioButtonAccordion */}
-					<label>{tText('Bronvermelding label')}</label>
-				</dt>
-				<dd className={styles['c-request-material-reuse__content-value']}>
-					<RadioButtonAccordion
-						title={tText('Bronvermelding subtitel')}
-						selectedOption={formValues.copyrightDisplay}
-						onChange={(value) => setFormValue('copyrightDisplay', value)}
-						radioButtonGroupLabel="copyright-usage"
-						options={radiobuttonOptions}
-						error={formErrors.copyrightDisplay}
-					/>
-				</dd>
-			</dl>
+		return renderRadiobuttonGroup(
+			tText('Bronvermelding label'),
+			tText('Bronvermelding subtitel'),
+			'copyrightDisplay',
+			[
+				{
+					label: tText('Gelijktijdig met object'),
+					value: MaterialRequestCopyrightDisplay.SAME_TIME_WITH_OBJECT,
+					description: tHtml('Gelijktijdig met object omschrijving'),
+				},
+				{
+					label: tText('Vermelding bij object, niet noodzakelijk gelijktijdig'),
+					value: MaterialRequestCopyrightDisplay.AROUND_OBJECT,
+					description: tHtml('Vermelding bij object, niet noodzakelijk gelijktijdig omschrijving'),
+				},
+				{
+					label: tText('Geen vermelding'),
+					value: MaterialRequestCopyrightDisplay.NONE,
+					description: tHtml('Geen vermelding omschrijving'),
+				},
+			]
 		);
 	};
 
