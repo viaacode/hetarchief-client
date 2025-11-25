@@ -3,12 +3,14 @@ import {
 	type MaterialRequest,
 	MaterialRequestCopyrightDisplay,
 	MaterialRequestDistributionAccess,
+	MaterialRequestDistributionDigitalOnline,
 	MaterialRequestDistributionType,
 	MaterialRequestDownloadQuality,
 	MaterialRequestEditing,
 	MaterialRequestExploitation,
 	MaterialRequestGeographicalUsage,
 	MaterialRequestRequesterCapacity,
+	type MaterialRequestReuseForm,
 	MaterialRequestTimeUsage,
 	MaterialRequestType,
 } from '@material-requests/types';
@@ -61,7 +63,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const dispatch = useDispatch();
 	const locale = useLocale();
 
-	const [formValues, setFormValues] = useState<MaterialRequest>({ ...materialRequest });
+	const [formValues, setFormValues] = useState<MaterialRequestReuseForm>({
+		...materialRequest.reuseForm,
+	});
 	const [formErrors, setFormErrors] = useState<
 		Partial<Record<keyof MaterialRequestReuseSettings, string | undefined>>
 	>({});
@@ -71,7 +75,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	 */
 	useEffect(() => {
 		if (isOpen) {
-			setFormValues({ ...materialRequest });
+			setFormValues({ ...materialRequest.reuseForm });
 			setFormErrors({});
 		}
 	}, [isOpen, materialRequest]);
@@ -81,10 +85,25 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		refetchMaterialRequests?.();
 	};
 
-	const setFormValue = (key: keyof MaterialRequest, value: unknown) => {
+	const setFormValue = (key: keyof MaterialRequestReuseForm, value: unknown) => {
+		const newFormValues: Partial<MaterialRequestReuseForm> = { [key]: value };
+
+		if (key === 'distributionType') {
+			if (value !== MaterialRequestDistributionType.DIGITAL_ONLINE) {
+				newFormValues.distributionTypeDigitalOnline = undefined;
+			}
+			if (value !== MaterialRequestDistributionType.OTHER) {
+				newFormValues.distributionTypeOtherExplanation = undefined;
+			}
+		} else if (key === 'timeUsageType') {
+			if (value !== MaterialRequestTimeUsage.IN_TIME) {
+				newFormValues.timeUsageFrom = newFormValues.timeUsageTo = undefined;
+			}
+		}
+
 		setFormValues((prevState) => ({
 			...prevState,
-			[key]: value,
+			...newFormValues,
 		}));
 	};
 
@@ -98,7 +117,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	};
 
 	const validateFormValues = useCallback(
-		async (newFormValues: MaterialRequest | undefined): Promise<boolean> => {
+		async (newFormValues: MaterialRequestReuseForm | undefined): Promise<boolean> => {
 			const formErrors = (await validateForm(
 				newFormValues,
 				MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA()
@@ -378,7 +397,26 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					label: tText('Digitale ontsluiting via netwerkverbinding'),
 					value: MaterialRequestDistributionType.DIGITAL_ONLINE,
 					openOnSelect: true,
-					description: <span>TODO: More radio buttons</span>,
+					description: (
+						<RadioButtonAccordion
+							title=""
+							radioButtonGroupLabel={kebabCase('distributionTypeDigitalOnline')}
+							selectedOption={formValues.distributionTypeDigitalOnline}
+							onChange={(value) => setFormValue('distributionTypeDigitalOnline', value)}
+							options={[
+								{
+									label: tText('Publiek zonder authenticatie'),
+									value: MaterialRequestDistributionDigitalOnline.NO_AUTH,
+									description: tText('Publiek zonder authenticatie omschrijving'),
+								},
+								{
+									label: tText('Publiek met authenticatie'),
+									value: MaterialRequestDistributionDigitalOnline.WITH_AUTH,
+									description: tText('Publiek met authenticatie omschrijving'),
+								},
+							]}
+						/>
+					),
 				},
 				{
 					label: tText('Andere, namelijk:'),
@@ -399,7 +437,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					),
 				},
 			],
-			['distributionTypeOtherExplanation']
+			['distributionTypeDigitalOnline', 'distributionTypeOtherExplanation']
 		);
 	};
 

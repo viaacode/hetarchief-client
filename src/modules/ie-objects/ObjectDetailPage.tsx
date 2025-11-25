@@ -1958,6 +1958,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 								mediaInfo.datePublished || mediaInfo.dateCreated || undefined,
 							maintainerName: mediaInfo?.maintainerName,
 							maintainerSlug: mediaInfo?.maintainerSlug,
+							reuseForm: {},
 						} as MaterialRequest
 					}
 					layer={1}

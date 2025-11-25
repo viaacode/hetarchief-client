@@ -73,17 +73,19 @@ function RadioButtonAccordion<OptionValueType>({
 							onClick={() => handleSelection(option)}
 						/>
 					</div>
-					<Button
-						className={clsx(styles['c-radiobutton-accordion__item-icon'])}
-						icon={
-							<Icon name={isAccordionOpen ? IconNamesLight.AngleUp : IconNamesLight.AngleDown} />
-						}
-						variants="text"
-						aria-label={isAccordionOpen ? tText('Open accordion') : tText('Close accordion')}
-						onClick={() => toggleOpenOption(option)}
-					/>
+					{option.description && (
+						<Button
+							className={clsx(styles['c-radiobutton-accordion__item-icon'])}
+							icon={
+								<Icon name={isAccordionOpen ? IconNamesLight.AngleUp : IconNamesLight.AngleDown} />
+							}
+							variants="text"
+							aria-label={isAccordionOpen ? tText('Open accordion') : tText('Close accordion')}
+							onClick={() => toggleOpenOption(option)}
+						/>
+					)}
 				</div>
-				{isAccordionOpen && (
+				{isAccordionOpen && option.description && (
 					<div className={clsx(styles['c-radiobutton-accordion__item-body'])}>
 						{option.description}
 					</div>
@@ -92,19 +94,22 @@ function RadioButtonAccordion<OptionValueType>({
 		);
 	};
 
+	const renderErrors = () => {
+		if (!error) {
+			return [];
+		}
+		return [
+			<RedFormWarning
+				className={clsx(styles['c-radiobutton-accordion__form-error'])}
+				error={error}
+				key={`form-error--${radioButtonGroupLabel}`}
+			/>,
+		];
+	};
+
 	return (
 		<Form className={clsx(styles['c-radiobutton-accordion'])}>
-			<FormControl
-				id={radioButtonGroupLabel}
-				label={title}
-				errors={[
-					<RedFormWarning
-						className={clsx(styles['c-radiobutton-accordion__form-error'])}
-						error={error}
-						key={`form-error--${radioButtonGroupLabel}`}
-					/>,
-				]}
-			>
+			<FormControl id={radioButtonGroupLabel} label={title} errors={renderErrors()}>
 				{options.map(renderOption)}
 			</FormControl>
 		</Form>

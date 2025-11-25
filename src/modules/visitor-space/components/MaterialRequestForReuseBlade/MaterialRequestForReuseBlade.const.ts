@@ -1,19 +1,21 @@
 import {
-	type MaterialRequest,
 	MaterialRequestCopyrightDisplay,
 	MaterialRequestDistributionAccess,
+	MaterialRequestDistributionDigitalOnline,
 	MaterialRequestDistributionType,
 	MaterialRequestDownloadQuality,
 	MaterialRequestEditing,
 	MaterialRequestExploitation,
 	MaterialRequestGeographicalUsage,
+	type MaterialRequestReuseForm,
 	MaterialRequestTimeUsage,
 } from '@material-requests/types';
 import { tText } from '@shared/helpers/translate';
+import { parseISO } from 'date-fns';
 import { mixed, number, object, type Schema, string } from 'yup';
 
 export type MaterialRequestReuseSettings = Pick<
-	MaterialRequest,
+	MaterialRequestReuseForm,
 	| 'startTime'
 	| 'endTime'
 	| 'downloadQuality'
@@ -21,6 +23,7 @@ export type MaterialRequestReuseSettings = Pick<
 	| 'exploitation'
 	| 'distributionAccess'
 	| 'distributionType'
+	| 'distributionTypeDigitalOnline'
 	| 'distributionTypeOtherExplanation'
 	| 'materialEditing'
 	| 'geographicalUsage'
@@ -56,6 +59,16 @@ export const MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA =
 				.required(
 					tText('Duid aan of het over analoge of digitale verspreiding van het materiaal gaat.')
 				),
+			distributionTypeDigitalOnline: mixed<MaterialRequestDistributionDigitalOnline>()
+				.oneOf(Object.values(MaterialRequestDistributionDigitalOnline))
+				.when('distributionType', ([value]) => {
+					if (value === MaterialRequestDistributionType.DIGITAL_ONLINE) {
+						return mixed().required(
+							tText('Duid aan of het over analoge of digitale verspreiding van het materiaal gaat.')
+						);
+					}
+					return mixed().optional();
+				}),
 			distributionTypeOtherExplanation: string().when('distributionType', ([value]) => {
 				if (value === MaterialRequestDistributionType.OTHER) {
 					return string().required(
@@ -79,12 +92,23 @@ export const MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA =
 				}
 				return string().optional();
 			}),
-			timeUsageTo: string().when('timeUsageType', ([value]) => {
-				if (value === MaterialRequestTimeUsage.IN_TIME) {
-					return string().required(tText('Geef het geplande gebruik doorheen de tijd aan.'));
+			timeUsageTo: string().when(
+				['timeUsageType', 'timeUsageFrom'],
+				([timeUsageType, timeUsageFrom]) => {
+					if (timeUsageType !== MaterialRequestTimeUsage.IN_TIME) {
+						return string().optional();
+					}
+
+					return string()
+						.required(tText('Geef het geplande gebruik doorheen de tijd aan.'))
+						.test(
+							'to-date-after-start-date',
+							tText('De einddatum moet groter zijn dan de startdatum'),
+							(timeUsageTo) =>
+								timeUsageFrom && timeUsageTo && parseISO(timeUsageFrom) < parseISO(timeUsageTo)
+						);
 				}
-				return string().optional();
-			}),
+			),
 			copyrightDisplay: mixed<MaterialRequestCopyrightDisplay>()
 				.oneOf(Object.values(MaterialRequestCopyrightDisplay))
 				.required(tText('Geef op hoe je bronvermelding zal aanpakken.')),

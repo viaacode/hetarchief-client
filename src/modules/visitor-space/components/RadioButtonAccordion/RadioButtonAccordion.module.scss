@@ -24,6 +24,22 @@ $c-accordion-border: $zinc !default;
 			margin-left: 5rem;
 			font-size: $font-size-sm;
 			line-height: 2rem;
+			padding: 0.8rem 1.6rem 0.8rem 0;
+
+			&:has(.c-radiobutton-accordion){
+				padding: 0;
+			}
+
+			.c-radiobutton-accordion {
+				.c-radiobutton-accordion__item {
+					border: none;
+
+					&:not(:last-child) {
+						border-bottom: .5px solid $c-accordion-border;
+					}
+				}
+			}
+
 		}
 
 		&-closed {
@@ -54,11 +70,7 @@ $c-accordion-border: $zinc !default;
 
 		&-icon {
 			color: $grey;
-		}
-
-		&-body {
-			padding: 0.8rem 1.6rem;
-			padding-left: 0;
+			flex-shrink: 0;
 		}
 	}
 

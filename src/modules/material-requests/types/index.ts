@@ -25,6 +25,12 @@ export interface MaterialRequest {
 	requesterId: string;
 	requesterMail: string;
 	type: MaterialRequestType;
+	reuseForm?: MaterialRequestReuseForm;
+	updatedAt: string;
+	organisation?: string;
+}
+
+export interface MaterialRequestReuseForm {
 	startTime?: number;
 	endTime?: number;
 	downloadQuality?: MaterialRequestDownloadQuality;
@@ -32,6 +38,7 @@ export interface MaterialRequest {
 	exploitation?: MaterialRequestExploitation;
 	distributionAccess?: MaterialRequestDistributionAccess;
 	distributionType?: MaterialRequestDistributionType;
+	distributionTypeDigitalOnline?: MaterialRequestDistributionDigitalOnline;
 	distributionTypeOtherExplanation?: string;
 	materialEditing?: MaterialRequestEditing;
 	geographicalUsage?: MaterialRequestGeographicalUsage;
@@ -39,8 +46,6 @@ export interface MaterialRequest {
 	timeUsageFrom?: string;
 	timeUsageTo?: string;
 	copyrightDisplay?: MaterialRequestCopyrightDisplay;
-	updatedAt: string;
-	organisation?: string;
 }
 
 export interface MaterialRequestDetail extends MaterialRequest {
@@ -149,6 +154,11 @@ export enum MaterialRequestDistributionType {
 	DIGITAL_OFFLINE = 'DIGITAL_OFFLINE',
 	DIGITAL_ONLINE = 'DIGITAL_ONLINE',
 	OTHER = 'OTHER',
+}
+
+export enum MaterialRequestDistributionDigitalOnline {
+	NO_AUTH = 'NO_AUTH',
+	WITH_AUTH = 'WITH_AUTH',
 }
 
 export enum MaterialRequestEditing {
