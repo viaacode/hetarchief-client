@@ -35,7 +35,9 @@ export interface MaterialRequest {
 	distributionTypeOtherExplanation?: string;
 	materialEditing?: MaterialRequestEditing;
 	geographicalUsage?: MaterialRequestGeographicalUsage;
-	timeUsage?: MaterialRequestTimeUsage;
+	timeUsageType?: MaterialRequestTimeUsage;
+	timeUsageFrom?: string;
+	timeUsageTo?: string;
 	copyrightDisplay?: MaterialRequestCopyrightDisplay;
 	updatedAt: string;
 	organisation?: string;

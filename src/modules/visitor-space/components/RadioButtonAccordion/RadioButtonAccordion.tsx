@@ -41,6 +41,10 @@ function RadioButtonAccordion<OptionValueType>({
 			setOpenOption(null);
 			onChange(option.value);
 		}
+
+		if (option.openOnSelect) {
+			setOpenOption(option.value);
+		}
 	};
 
 	const renderOption = (option: RadioButtonAccordionOption<OptionValueType>) => {

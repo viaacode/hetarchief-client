@@ -57,6 +57,18 @@ $component: "c-request-material-reuse";
 				margin-left: auto;
 			}
 
+			:global(.c-input){
+				height: 100%;
+				border: none;
+				padding: 0;
+				background: none;
+			}
+
+			&-extra-padding {
+				padding-top: $spacer-sm;
+				padding-bottom: $spacer-md;
+			}
+
 			:global(.c-form-control){
 				:global(.c-form-control__label){
 					margin-bottom: $spacer-xs;

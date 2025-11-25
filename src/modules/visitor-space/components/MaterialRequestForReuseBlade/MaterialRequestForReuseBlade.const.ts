@@ -24,7 +24,9 @@ export type MaterialRequestReuseSettings = Pick<
 	| 'distributionTypeOtherExplanation'
 	| 'materialEditing'
 	| 'geographicalUsage'
-	| 'timeUsage'
+	| 'timeUsageType'
+	| 'timeUsageFrom'
+	| 'timeUsageTo'
 	| 'copyrightDisplay'
 >;
 
@@ -68,9 +70,21 @@ export const MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA =
 			geographicalUsage: mixed<MaterialRequestGeographicalUsage>()
 				.oneOf(Object.values(MaterialRequestGeographicalUsage))
 				.required(tText('Duid aan wat het geografisch gebruik van het materiaal zal zijn.')),
-			timeUsage: mixed<MaterialRequestTimeUsage>()
+			timeUsageType: mixed<MaterialRequestTimeUsage>()
 				.oneOf(Object.values(MaterialRequestTimeUsage))
 				.required(tText('Geef het geplande gebruik doorheen de tijd aan.')),
+			timeUsageFrom: string().when('timeUsageType', ([value]) => {
+				if (value === MaterialRequestTimeUsage.IN_TIME) {
+					return string().required(tText('Geef het geplande gebruik doorheen de tijd aan.'));
+				}
+				return string().optional();
+			}),
+			timeUsageTo: string().when('timeUsageType', ([value]) => {
+				if (value === MaterialRequestTimeUsage.IN_TIME) {
+					return string().required(tText('Geef het geplande gebruik doorheen de tijd aan.'));
+				}
+				return string().optional();
+			}),
 			copyrightDisplay: mixed<MaterialRequestCopyrightDisplay>()
 				.oneOf(Object.values(MaterialRequestCopyrightDisplay))
 				.required(tText('Geef op hoe je bronvermelding zal aanpakken.')),

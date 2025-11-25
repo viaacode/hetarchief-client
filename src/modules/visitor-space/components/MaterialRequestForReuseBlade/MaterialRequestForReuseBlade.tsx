@@ -28,10 +28,13 @@ import {
 } from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade.const';
 import RadioButtonAccordion from '@visitor-space/components/RadioButtonAccordion/RadioButtonAccordion';
 import type { RadioButtonAccordionOption } from '@visitor-space/components/RadioButtonAccordion/RadioButtonAccordion.types';
+import clsx from 'clsx';
+import { parseISO } from 'date-fns';
 import { kebabCase } from 'lodash-es';
 import { useRouter } from 'next/router';
 import React, { type FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import DateRangeInput from '../DateRangeInput/DateRangeInput';
 import MaterialCard from '../MaterialCard/MaterialCard';
 import styles from './MaterialRequestForReuseBlade.module.scss';
 
@@ -374,16 +377,25 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				{
 					label: tText('Digitale ontsluiting via netwerkverbinding'),
 					value: MaterialRequestDistributionType.DIGITAL_ONLINE,
+					openOnSelect: true,
 					description: <span>TODO: More radio buttons</span>,
 				},
 				{
-					label: tText('Andere, namelijk: (te verduidelijken)'),
+					label: tText('Andere, namelijk:'),
 					value: MaterialRequestDistributionType.OTHER,
+					openOnSelect: true,
 					description: (
-						<TextArea
-							value={formValues.distributionTypeOtherExplanation}
-							onChange={(evt) => setFormValue('distributionTypeOtherExplanation', evt.target.value)}
-						/>
+						<FormControl
+							className={clsx(styles['c-request-material-reuse__content-value-extra-padding'])}
+						>
+							<TextArea
+								value={formValues.distributionTypeOtherExplanation}
+								disabled={formValues.distributionType !== MaterialRequestDistributionType.OTHER}
+								onChange={(evt) =>
+									setFormValue('distributionTypeOtherExplanation', evt.target.value)
+								}
+							/>
+						</FormControl>
 					),
 				},
 			],
@@ -432,10 +444,13 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	};
 
 	const renderTimeUsage = () => {
+		const from = formValues.timeUsageFrom ? parseISO(formValues.timeUsageFrom) : undefined;
+		const to = formValues.timeUsageTo ? parseISO(formValues.timeUsageTo) : undefined;
+
 		return renderRadiobuttonGroup(
 			tText('Gebruik in de tijd label'),
 			tText('Gebruik in de tijd subtitel'),
-			'timeUsage',
+			'timeUsageType',
 			[
 				{
 					label: tText('Onbeperkt'),
@@ -443,11 +458,29 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					description: tHtml('Onbeperkt omschrijving'),
 				},
 				{
-					label: tText('Beperkte periode, namelijk...'),
+					label: tText('Beperkte periode, namelijk:'),
 					value: MaterialRequestTimeUsage.IN_TIME,
-					description: <span>TODO: TIME RANGE</span>,
+					openOnSelect: true,
+					description: (
+						<FormControl
+							className={clsx(styles['c-request-material-reuse__content-value-extra-padding'])}
+						>
+							<DateRangeInput
+								showLabels={true}
+								from={from}
+								to={to}
+								id="timeUsage"
+								disabled={formValues.timeUsageType !== MaterialRequestTimeUsage.IN_TIME}
+								onChange={(newFromDate: Date | undefined, newToDate: Date | undefined) => {
+									setFormValue('timeUsageFrom', newFromDate?.toISOString());
+									setFormValue('timeUsageTo', newToDate?.toISOString());
+								}}
+							/>
+						</FormControl>
+					),
 				},
-			]
+			],
+			['timeUsageFrom', 'timeUsageTo']
 		);
 	};
 
