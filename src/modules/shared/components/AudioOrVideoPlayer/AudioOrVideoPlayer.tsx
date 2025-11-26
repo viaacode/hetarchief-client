@@ -7,9 +7,8 @@ import {
 	getTicketErrorPlaceholderLabels,
 	JSON_FORMATS,
 } from '@ie-objects/ie-objects.consts';
-import type { IeObjectFile, IeObjectRepresentation } from '@ie-objects/ie-objects.types';
+import type { IeObjectFile } from '@ie-objects/ie-objects.types';
 import { FlowPlayer, type FlowPlayerProps } from '@meemoo/react-components';
-import type { FlowPlayerWrapperProps } from '@shared/components/FlowPlayerWrapper/FlowPlayerWrapper.types';
 import { Loading } from '@shared/components/Loading';
 import { getValidStartAndEnd } from '@shared/helpers/cut-start-and-end';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
@@ -17,15 +16,16 @@ import clsx from 'clsx';
 import getConfig from 'next/config';
 import React, { type FC, useCallback, useState } from 'react';
 import { convertDurationStringToSeconds, toSeconds } from '../../helpers/duration';
+import type { AudioOrVideoPlayerProps } from './AudioOrVideoPlayer.types';
 
 const { publicRuntimeConfig } = getConfig();
 
-export const FlowPlayerWrapper: FC<FlowPlayerWrapperProps> = ({
+export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	paused,
 	onPlay,
 	onPause,
 	onMediaReady,
-	ieObjectPage,
+	representation,
 	dctermsFormat,
 	maintainerLogo,
 	owner,
@@ -35,34 +35,17 @@ export const FlowPlayerWrapper: FC<FlowPlayerWrapperProps> = ({
 }) => {
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | null>(null);
 
-	const allFilesToDisplayInCurrentPage =
-		ieObjectPage?.representations?.flatMap((representation) =>
-			representation.files.filter((file) => FLOWPLAYER_FORMATS.includes(file.mimeType))
-		) || [];
-
-	const getRepresentationByType = useCallback(
-		(mimeTypes: string[]): IeObjectRepresentation | null => {
-			return (
-				ieObjectPage?.representations?.find((representation) =>
-					representation?.files?.find((file) => mimeTypes.includes(file.mimeType))
-				) || null
-			);
-		},
-		[ieObjectPage]
-	);
+	const allFilesToInRepresentation =
+		representation?.files.filter((file) => FLOWPLAYER_FORMATS.includes(file.mimeType)) || [];
 
 	const getFilesByType = useCallback(
 		(mimeTypes: string[]): IeObjectFile[] => {
-			return (
-				getRepresentationByType(mimeTypes)?.files?.filter((file) =>
-					mimeTypes.includes(file.mimeType)
-				) || []
-			);
+			return representation?.files?.filter((file) => mimeTypes.includes(file.mimeType)) || [];
 		},
-		[getRepresentationByType]
+		[representation]
 	);
 
-	const currentPlayableFile: IeObjectFile | null = allFilesToDisplayInCurrentPage[0] || null;
+	const currentPlayableFile: IeObjectFile | null = allFilesToInRepresentation?.[0] || null;
 	const fileStoredAt: string | null = currentPlayableFile?.storedAt ?? null;
 	const {
 		data: playableUrl,
@@ -85,25 +68,23 @@ export const FlowPlayerWrapper: FC<FlowPlayerWrapperProps> = ({
 		return <Loading fullscreen owner={`${owner}: render media`} mode="light" />;
 	}
 
-	if (isErrorPlayableUrl) {
+	if (isErrorPlayableUrl || !currentPlayableFile) {
 		return <ObjectPlaceholder {...getTicketErrorPlaceholderLabels()} />;
 	}
 
-	const playableRepresentation = getRepresentationByType(FLOWPLAYER_FORMATS);
 	const getStartAndEnd = () => {
-		const durationInSeconds = toSeconds(duration || playableRepresentation?.schemaEndTime);
+		const durationInSeconds = toSeconds(duration || currentPlayableFile?.duration);
 		const mapTimeToNumber = (value: string | undefined) =>
 			value ? convertDurationStringToSeconds(value) : undefined;
 
-		const start = cuePoints?.start || mapTimeToNumber(playableRepresentation?.schemaStartTime) || 0;
+		const start = cuePoints?.start || mapTimeToNumber(representation?.schemaStartTime) || 0;
 		const end =
-			cuePoints?.end || mapTimeToNumber(playableRepresentation?.schemaEndTime) || durationInSeconds;
+			cuePoints?.end || mapTimeToNumber(representation?.schemaEndTime) || durationInSeconds;
 
 		return getValidStartAndEnd(start, end, durationInSeconds);
 	};
 
 	const [start, end]: [number | null, number | null] = getStartAndEnd();
-
 	const shared: Partial<FlowPlayerProps> = {
 		className: clsx('p-object-detail__flowplayer'),
 		title: currentPlayableFile?.name,
@@ -122,17 +103,16 @@ export const FlowPlayerWrapper: FC<FlowPlayerWrapperProps> = ({
 		end,
 	};
 
-	// Flowplayer
 	if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(currentPlayableFile.mimeType)) {
 		if (isFetchingPlayableUrl) {
 			return <Loading fullscreen owner={`${owner}: render video`} mode="light" />;
 		}
 		return (
 			<FlowPlayer
-				key={flowPlayerKey}
+				key={`${flowPlayerKey}__${currentPlayableFile.id}`}
 				type="video"
 				src={playableUrl as string}
-				poster={poster}
+				poster={poster || currentPlayableFile.thumbnailUrl}
 				renderLoader={() => <Loading owner="flowplayer suspense" fullscreen mode="light" />}
 				{...shared}
 			/>
@@ -145,7 +125,7 @@ export const FlowPlayerWrapper: FC<FlowPlayerWrapperProps> = ({
 		}
 		return (
 			<FlowPlayer
-				key={flowPlayerKey}
+				key={`${flowPlayerKey}__${currentPlayableFile.id}`}
 				type="audio"
 				src={[
 					{

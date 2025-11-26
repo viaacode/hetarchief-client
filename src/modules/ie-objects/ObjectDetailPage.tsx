@@ -23,6 +23,7 @@ import { useGetIeObjectThumbnail } from '@ie-objects/hooks/use-get-ie-objects-th
 import { useIsPublicNewspaper } from '@ie-objects/hooks/use-get-is-public-newspaper';
 import {
 	FLOWPLAYER_FORMATS,
+	getNoLicensePlaceholderLabels,
 	getObjectPlaceholderLabels,
 	IMAGE_API_FORMATS,
 	IMAGE_BROWSE_COPY_FORMATS,
@@ -61,11 +62,11 @@ import type { ImageInfo, ImageInfoWithToken, Rect, TextLine } from '@iiif-viewer
 import { MaterialRequestsService } from '@material-requests/services';
 import type { MaterialRequest } from '@material-requests/types';
 import { Alert, Button, type TabProps, Tabs } from '@meemoo/react-components';
+import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import { Blade } from '@shared/components/Blade/Blade';
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
-import { FlowPlayerWrapper } from '@shared/components/FlowPlayerWrapper/FlowPlayerWrapper';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -1386,13 +1387,33 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			);
 		}
 
+		// https://meemoo.atlassian.net/browse/ARC-2508
+		if (!mediaInfo?.pages?.length && !isMobile) {
+			return (
+				<ObjectPlaceholder
+					{...getNoLicensePlaceholderLabels()}
+					onOpenRequestAccess={showVisitButton ? openRequestAccessBlade : undefined}
+					addSliderPadding={showFragmentSlider}
+				/>
+			);
+		}
+
+		const allRepresentations = (mediaInfo?.pages || []).flatMap((page) => page?.representations);
+		const currentRepresentation = allRepresentations.find((representation) =>
+			representation.files.find(
+				(file) => file.id === allFilesToDisplayInCurrentPage[currentFileIndex].id
+			)
+		);
+
 		return (
-			<FlowPlayerWrapper
+			<AudioOrVideoPlayer
 				owner="object detail page"
-				ieObjectPage={currentPage}
+				representation={currentRepresentation}
 				dctermsFormat={mediaInfo.dctermsFormat}
 				maintainerLogo={mediaInfo?.maintainerOverlay ? mediaInfo.maintainerLogo : undefined}
-				poster={mediaInfo?.thumbnailUrl}
+				cuePoints={undefined}
+				duration={undefined}
+				poster={undefined}
 				paused={isMediaPaused}
 				onPlay={handleOnPlay}
 				onPause={handleOnPause}
