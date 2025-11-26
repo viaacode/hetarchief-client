@@ -24,7 +24,7 @@ $c-accordion-border: $zinc !default;
 			margin-left: 5rem;
 			font-size: $font-size-sm;
 			line-height: 2rem;
-			padding: 0.8rem 1.6rem 0.8rem 0;
+			padding: $spacer-xs $spacer-sm $spacer-xs 0;
 
 			&:has(.c-radiobutton-accordion){
 				padding: 0;

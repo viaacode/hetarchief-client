@@ -21,7 +21,6 @@ $component: "c-request-material-reuse";
 		overflow: auto;
 	}
 
-
 	&__content-form {
 		display: flex;
 		flex-direction: column;
@@ -33,9 +32,26 @@ $component: "c-request-material-reuse";
 		display: flex;
 		flex-direction: row;
 		flex-grow: 1;
+		margin-block: 0;
 		background-color: $white;
 		border: 0.1rem solid $silver;
-		margin-block: 0;
+
+		&-no-border {
+			border: none;
+
+			.c-request-material-reuse__content-label,.c-request-material-reuse__content-value {
+				padding-bottom: $spacer-md;
+			}
+		}
+
+		&-column {
+			flex-direction: column;
+		}
+
+		&-full-width {
+			padding: 0 $spacer-lg $spacer-sm;
+			width: 100%;
+		}
 
 		&-label {
 			width: 30%;
@@ -81,6 +97,19 @@ $component: "c-request-material-reuse";
 			border-left: $card-edge-size solid $zinc-40;
 		}
 
+		&-video-player {
+			align-self: center;
+			inset: 0;
+			max-height: 50vh;
+
+			@media (max-width: $breakpoint-lg) {
+				width: 100%;
+			}
+
+			:global(.c-request-material-reuse__content-video-player-fullscreen-button) {
+				display: none;
+			}
+		}
 	}
 
 	&__footer-container {

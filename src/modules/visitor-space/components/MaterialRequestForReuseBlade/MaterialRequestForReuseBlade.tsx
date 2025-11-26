@@ -15,6 +15,7 @@ import {
 	MaterialRequestType,
 } from '@material-requests/types';
 import { Button, FormControl, TextArea } from '@meemoo/react-components';
+import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import { Blade } from '@shared/components/Blade/Blade';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
@@ -32,7 +33,7 @@ import RadioButtonAccordion from '@visitor-space/components/RadioButtonAccordion
 import type { RadioButtonAccordionOption } from '@visitor-space/components/RadioButtonAccordion/RadioButtonAccordion.types';
 import clsx from 'clsx';
 import { parseISO } from 'date-fns';
-import { kebabCase } from 'lodash-es';
+import { kebabCase, noop } from 'lodash-es';
 import { useRouter } from 'next/router';
 import React, { type FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -69,6 +70,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const [formErrors, setFormErrors] = useState<
 		Partial<Record<keyof MaterialRequestReuseSettings, string | undefined>>
 	>({});
+	const [isMediaPaused, setIsMediaPaused] = useState(true);
 
 	/**
 	 * Reset form when the model is opened
@@ -232,13 +234,50 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	};
 
 	const renderVideoSettings = () => {
+		if (!materialRequest.objectRepresentation) {
+			return null;
+		}
+
 		return (
-			<dl className={styles['c-request-material-reuse__content']}>
-				<dt className={styles['c-request-material-reuse__content-label']}>
-					{tText('Materiaalselectie')}
-				</dt>
-				<dd className={styles['c-request-material-reuse__content-value']}>TODO: VIDEO</dd>
-			</dl>
+			<div
+				className={clsx(
+					styles['c-request-material-reuse__content'],
+					styles['c-request-material-reuse__content-column']
+				)}
+			>
+				<dl
+					className={clsx(
+						styles['c-request-material-reuse__content'],
+						styles['c-request-material-reuse__content-no-border']
+					)}
+				>
+					<dt className={styles['c-request-material-reuse__content-label']}>
+						{tText('Materiaalselectie')}
+					</dt>
+					<dd className={styles['c-request-material-reuse__content-value']}>
+						{tText('Materiaalselectie subtitel')}
+					</dd>
+				</dl>
+				<div className={styles['c-request-material-reuse__content-full-width']}>
+					<AudioOrVideoPlayer
+						className={styles['c-request-material-reuse__content-video-player']}
+						owner="material request re-uage blade"
+						representation={materialRequest.objectRepresentation}
+						dctermsFormat={materialRequest.objectDctermsFormat}
+						maintainerLogo={
+							materialRequest?.maintainerLogo ? materialRequest.maintainerLogo : undefined
+						}
+						cuePoints={undefined}
+						duration={undefined}
+						poster={undefined}
+						allowFullScreen={false}
+						paused={isMediaPaused}
+						onPlay={() => setIsMediaPaused(false)}
+						onPause={() => setIsMediaPaused(true)}
+						onMediaReady={noop}
+					/>
+				</div>
+			</div>
 		);
 	};
 

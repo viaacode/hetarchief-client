@@ -1,4 +1,8 @@
-import type { IeObjectAccessThrough, IeObjectLicense } from '@ie-objects/ie-objects.types';
+import type {
+	IeObjectAccessThrough,
+	IeObjectLicense,
+	IeObjectRepresentation,
+} from '@ie-objects/ie-objects.types';
 import { tText } from '@shared/helpers/translate';
 import type { IeObjectType } from '@shared/types/ie-objects';
 
@@ -18,6 +22,7 @@ export interface MaterialRequest {
 	objectPublishedOrCreatedDate?: string;
 	objectAccessThrough: IeObjectAccessThrough[];
 	objectLicences: IeObjectLicense[];
+	objectRepresentation: IeObjectRepresentation;
 	profileId: string;
 	reason: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;

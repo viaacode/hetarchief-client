@@ -3,7 +3,6 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tText } from '@shared/helpers/translate';
-import { Form } from '@viaa/avo2-components';
 import clsx from 'clsx';
 import { useState } from 'react';
 import styles from './RadioButtonAccordion.module.scss';
@@ -108,11 +107,11 @@ function RadioButtonAccordion<OptionValueType>({
 	};
 
 	return (
-		<Form className={clsx(styles['c-radiobutton-accordion'])}>
+		<form className={clsx(styles['c-radiobutton-accordion'])}>
 			<FormControl id={radioButtonGroupLabel} label={title} errors={renderErrors()}>
 				{options.map(renderOption)}
 			</FormControl>
-		</Form>
+		</form>
 	);
 }
 

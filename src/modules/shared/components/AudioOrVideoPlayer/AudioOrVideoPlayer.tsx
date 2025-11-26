@@ -12,7 +12,6 @@ import { FlowPlayer, type FlowPlayerProps } from '@meemoo/react-components';
 import { Loading } from '@shared/components/Loading';
 import { getValidStartAndEnd } from '@shared/helpers/cut-start-and-end';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
-import clsx from 'clsx';
 import getConfig from 'next/config';
 import React, { type FC, useCallback, useState } from 'react';
 import { convertDurationStringToSeconds, toSeconds } from '../../helpers/duration';
@@ -21,6 +20,8 @@ import type { AudioOrVideoPlayerProps } from './AudioOrVideoPlayer.types';
 const { publicRuntimeConfig } = getConfig();
 
 export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
+	className,
+	allowFullScreen = true,
 	paused,
 	onPlay,
 	onPause,
@@ -86,7 +87,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 
 	const [start, end]: [number | null, number | null] = getStartAndEnd();
 	const shared: Partial<FlowPlayerProps> = {
-		className: clsx('p-object-detail__flowplayer'),
+		className,
 		title: currentPlayableFile?.name,
 		logo: maintainerLogo ?? undefined,
 		pause: paused,
@@ -94,6 +95,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		onPause,
 		token: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
 		dataPlayerId: publicRuntimeConfig.FLOW_PLAYER_ID,
+		ui: allowFullScreen ? undefined : 1, // 1 = NO_FULLSCREEN
 		plugins: ['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio', 'keyboard'],
 		peakColorBackground: '#303030', // $shade-darker
 		peakColorInactive: '#adadad', // zinc

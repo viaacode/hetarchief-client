@@ -7,6 +7,8 @@ export interface CuePoints {
 }
 
 export type AudioOrVideoPlayerProps = {
+	className?: string;
+	allowFullScreen?: boolean;
 	paused: boolean;
 	onPlay: () => void;
 	onPause: () => void;

@@ -285,6 +285,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				representation.files.filter((file) => FLOWPLAYER_FORMATS.includes(file.mimeType))
 			)
 		) || [];
+
+	const getRepresentationByCurrentFileIndex = useCallback(() => {
+		const allRepresentations = (mediaInfo?.pages || []).flatMap((page) => page?.representations);
+		return allRepresentations.find((representation) =>
+			representation.files.find(
+				(file) => file.id === allFilesToDisplayInCurrentPage[currentFileIndex].id
+			)
+		);
+	}, [mediaInfo, allFilesToDisplayInCurrentPage, currentFileIndex]);
+
 	const iiifViewerImageInfos = useMemo((): ImageInfo[] => {
 		return compact(
 			mediaInfo?.pages?.flatMap((page) => {
@@ -1398,17 +1408,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			);
 		}
 
-		const allRepresentations = (mediaInfo?.pages || []).flatMap((page) => page?.representations);
-		const currentRepresentation = allRepresentations.find((representation) =>
-			representation.files.find(
-				(file) => file.id === allFilesToDisplayInCurrentPage[currentFileIndex].id
-			)
-		);
-
 		return (
 			<AudioOrVideoPlayer
+				className={clsx('p-object-detail__flowplayer')}
 				owner="object detail page"
-				representation={currentRepresentation}
+				representation={getRepresentationByCurrentFileIndex()}
 				dctermsFormat={mediaInfo.dctermsFormat}
 				maintainerLogo={mediaInfo?.maintainerOverlay ? mediaInfo.maintainerLogo : undefined}
 				cuePoints={undefined}
@@ -1858,6 +1862,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							objectThumbnailUrl: mediaInfo.thumbnailUrl,
 							objectPublishedOrCreatedDate:
 								mediaInfo.datePublished || mediaInfo.dateCreated || undefined,
+							objectRepresentation: getRepresentationByCurrentFileIndex(),
 							maintainerName: mediaInfo?.maintainerName,
 							maintainerSlug: mediaInfo?.maintainerSlug,
 							reuseForm: {},
