@@ -79,18 +79,36 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 
 	const {
 		data: potentialDuplicates,
-		isLoading,
-		refetch,
+		isLoading: isLoadingPotentialDuplicates,
+		refetch: refetchPotentialDuplicates,
 	} = useGetMaterialRequestsForMediaItem(objectSchemaIdentifier, !!user?.isKeyUser);
 
-	const showDuplicateWarning = useMemo(
-		() =>
-			!isEditMode &&
-			(typeSelected !== MaterialRequestType.REUSE ? true : !triggerComplexReuseFlow) &&
-			!isLoading &&
-			!!potentialDuplicates?.find((item) => item.type === typeSelected),
-		[isEditMode, potentialDuplicates, typeSelected, isLoading, triggerComplexReuseFlow]
-	);
+	const showDuplicateWarning = useMemo(() => {
+		if (isEditMode) {
+			// When editing checking for duplicates would always return true since the request we are editing would turn up
+			return false;
+		}
+
+		if (isLoadingPotentialDuplicates) {
+			// Still loading the potential duplicates, until then do not show a warning
+			return false;
+		}
+
+		// When the selected type is for re-usage and we need the more complex flow with additional information needed to be filled in
+		// Validation on duplicates depends on said information (cue points of the media, download quality, ...)
+		if (typeSelected === MaterialRequestType.REUSE && triggerComplexReuseFlow) {
+			return false;
+		}
+
+		// Show a warning if there is already a request for this item with the same type as the selected type
+		return !!potentialDuplicates?.find((item) => item.type === typeSelected);
+	}, [
+		isEditMode,
+		potentialDuplicates,
+		typeSelected,
+		isLoadingPotentialDuplicates,
+		triggerComplexReuseFlow,
+	]);
 
 	/**
 	 * Reset form when the model is opened
@@ -100,9 +118,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			setReasonInputValue(reason || '');
 			setTypeSelected(type);
 			setNoTypeSelectedOnSave(false);
-			refetch().then(noop);
+			refetchPotentialDuplicates().then(noop);
 		}
-	}, [isOpen, reason, type, refetch]);
+	}, [isOpen, reason, type, refetchPotentialDuplicates]);
 
 	const onCloseModal = () => {
 		onClose();
