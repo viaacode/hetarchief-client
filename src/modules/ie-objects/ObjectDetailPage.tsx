@@ -20,18 +20,12 @@ import { useGetIeObjectInfo } from '@ie-objects/hooks/use-get-ie-objects-info';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/use-get-ie-objects-related';
 import { useGetIeObjectsAlsoInteresting } from '@ie-objects/hooks/use-get-ie-objects-similar';
 import { useGetIeObjectThumbnail } from '@ie-objects/hooks/use-get-ie-objects-thumbnail';
-import { useGetIeObjectsTicketUrl } from '@ie-objects/hooks/use-get-ie-objects-ticket-url';
 import { useIsPublicNewspaper } from '@ie-objects/hooks/use-get-is-public-newspaper';
 import {
-	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_FORMATS,
-	FLOWPLAYER_VIDEO_FORMATS,
-	getNoLicensePlaceholderLabels,
 	getObjectPlaceholderLabels,
-	getTicketErrorPlaceholderLabels,
 	IMAGE_API_FORMATS,
 	IMAGE_BROWSE_COPY_FORMATS,
-	JSON_FORMATS,
 	OBJECT_DETAIL_TABS,
 	XML_FORMATS,
 } from '@ie-objects/ie-objects.consts';
@@ -66,18 +60,12 @@ import { IiifViewer } from '@iiif-viewer/IiifViewer';
 import type { ImageInfo, ImageInfoWithToken, Rect, TextLine } from '@iiif-viewer/IiifViewer.types';
 import { MaterialRequestsService } from '@material-requests/services';
 import type { MaterialRequest } from '@material-requests/types';
-import {
-	Alert,
-	Button,
-	FlowPlayer,
-	type FlowPlayerProps,
-	type TabProps,
-	Tabs,
-} from '@meemoo/react-components';
+import { Alert, Button, type TabProps, Tabs } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
+import { FlowPlayerWrapper } from '@shared/components/FlowPlayerWrapper/FlowPlayerWrapper';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -89,12 +77,10 @@ import {
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
 import { BooleanParamWithDefault } from '@shared/helpers/boolean-param-with-default';
-import { convertDurationStringToSeconds } from '@shared/helpers/convert-duration-string-to-seconds';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
-import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
@@ -184,7 +170,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	}, []);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
-	const [flowPlayerKey, setFlowPlayerKey] = useState<string | null>(null);
+	const [isFlowPlayerMediaAvailable, setIsFlowPlayerMediaAvailable] = useState(false);
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
 	const [isRelatedObjectsBladeOpen, setIsRelatedObjectsBladeOpen] = useState(false);
 	const [hasNewsPaperBeenRendered, setHasNewsPaperBeenRendered] = useState(false);
@@ -292,14 +278,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		[getRepresentationByType]
 	);
 
-	// peak file
-	const peakFileStoredAt: string | null = getFilesByType(JSON_FORMATS)?.[0]?.storedAt || null;
-
-	// media info
-	const { data: peakJson, isLoading: isLoadingPeakFile } = useGetPeakFile(peakFileStoredAt, {
-		enabled: mediaInfo?.dctermsFormat === 'audio',
-	});
-
 	const allFilesToDisplayInCurrentPage =
 		(mediaInfo?.pages || []).flatMap((page) =>
 			page?.representations?.flatMap((representation) =>
@@ -328,19 +306,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		);
 	}, [mediaInfo?.pages]);
 
-	// Playable url for flowplayer
-	const currentPlayableFile: IeObjectFile | null =
-		allFilesToDisplayInCurrentPage[currentFileIndex] || null;
-	const fileStoredAt: string | null = currentPlayableFile?.storedAt ?? null;
-	const {
-		data: playableUrl,
-		isLoading: isLoadingPlayableUrl,
-		isFetching: isFetchingPlayableUrl,
-		isError: isErrorPlayableUrl,
-	} = useGetIeObjectsTicketUrl(fileStoredAt, !!fileStoredAt, () => {
-		// Force flowplayer rerender after successful fetch
-		setFlowPlayerKey(fileStoredAt);
-	});
 	const { data: ticketServiceTokensByPath, isLoading: isLoadingTickets } =
 		useGetIeObjectTicketServiceTokens(
 			iiifViewerImageInfos.map((imageInfo) => imageInfo.imageUrl),
@@ -1269,7 +1234,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			case IeObjectType.VIDEO:
 			case IeObjectType.VIDEO_FRAGMENT:
 			case IeObjectType.FILM:
-				return !isErrorPlayableUrl && !!playableUrl && !!currentPlayableFile;
+				return isFlowPlayerMediaAvailable;
 
 			case IeObjectType.NEWSPAPER: {
 				return !!getFilesByType(IMAGE_API_FORMATS)?.[0]?.storedAt;
@@ -1278,13 +1243,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			default:
 				return false;
 		}
-	}, [
-		mediaInfo?.dctermsFormat,
-		isErrorPlayableUrl,
-		playableUrl,
-		currentPlayableFile,
-		getFilesByType,
-	]);
+	}, [mediaInfo?.dctermsFormat, isFlowPlayerMediaAvailable, getFilesByType]);
 
 	const tabs: TabProps[] = useMemo(() => {
 		return OBJECT_DETAIL_TABS(
@@ -1385,11 +1344,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 */
 
 	const renderMedia = (): ReactNode => {
-		if (
-			(!isNewspaper && isLoadingPlayableUrl) ||
-			(isNewspaper && Object.keys(imageInfosWithTokens).length === 0) ||
-			!mediaInfo
-		) {
+		if ((isNewspaper && Object.keys(imageInfosWithTokens).length === 0) || !mediaInfo) {
 			return <Loading fullscreen owner="object detail page: render media" mode="light" />;
 		}
 
@@ -1431,93 +1386,19 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			);
 		}
 
-		if (isErrorPlayableUrl) {
-			return (
-				<ObjectPlaceholder
-					{...getTicketErrorPlaceholderLabels()}
-					addSliderPadding={showFragmentSlider}
-				/>
-			);
-		}
-
-		// https://meemoo.atlassian.net/browse/ARC-2508
-		if ((!playableUrl || !currentPlayableFile || !mediaInfo?.pages?.length) && !isMobile) {
-			return (
-				<ObjectPlaceholder
-					{...getNoLicensePlaceholderLabels()}
-					onOpenRequestAccess={showVisitButton ? openRequestAccessBlade : undefined}
-					addSliderPadding={showFragmentSlider}
-				/>
-			);
-		}
-
-		const playableRepresentation = getRepresentationByType(FLOWPLAYER_FORMATS);
-		const shared: Partial<FlowPlayerProps> = {
-			className: clsx('p-object-detail__flowplayer', {
-				'p-object-detail__flowplayer--with-slider': showFragmentSlider,
-			}),
-			title: currentPlayableFile?.name,
-			logo: mediaInfo?.maintainerOverlay ? mediaInfo?.maintainerLogo || undefined : undefined,
-			pause: isMediaPaused,
-			onPlay: handleOnPlay,
-			onPause: handleOnPause,
-			token: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
-			dataPlayerId: publicRuntimeConfig.FLOW_PLAYER_ID,
-			plugins: ['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio', 'keyboard'],
-			peakColorBackground: '#303030', // $shade-darker
-			peakColorInactive: '#adadad', // zinc
-			peakColorActive: '#00857d', // $teal
-			peakHeightFactor: 0.6,
-			start: playableRepresentation?.schemaStartTime
-				? convertDurationStringToSeconds(playableRepresentation?.schemaStartTime)
-				: undefined,
-			end: playableRepresentation?.schemaEndTime
-				? convertDurationStringToSeconds(playableRepresentation?.schemaEndTime)
-				: undefined,
-		};
-
-		// Flowplayer
-		if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(currentPlayableFile.mimeType)) {
-			if (isFetchingPlayableUrl) {
-				return <Loading fullscreen owner="object detail page: render video" mode="light" />;
-			}
-			return (
-				<FlowPlayer
-					key={`${flowPlayerKey}__${currentFileIndex}`}
-					type="video"
-					src={playableUrl as string}
-					poster={mediaInfo?.thumbnailUrl || undefined}
-					renderLoader={() => <Loading owner="flowplayer suspense" fullscreen mode="light" />}
-					{...shared}
-				/>
-			);
-		}
-		// Audio player
-		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(currentPlayableFile.mimeType)) {
-			if (peakFileStoredAt && isLoadingPeakFile) {
-				return (
-					<Loading
-						fullscreen
-						owner="object detail page: render media audio peak file"
-						mode="light"
-					/>
-				);
-			}
-			return (
-				<FlowPlayer
-					key={flowPlayerKey}
-					type="audio"
-					src={[
-						{
-							src: playableUrl as string,
-							type: currentPlayableFile.mimeType,
-						},
-					]}
-					waveformData={peakJson?.data || undefined}
-					{...shared}
-				/>
-			);
-		}
+		return (
+			<FlowPlayerWrapper
+				owner="object detail page"
+				ieObjectPage={currentPage}
+				dctermsFormat={mediaInfo.dctermsFormat}
+				maintainerLogo={mediaInfo?.maintainerOverlay ? mediaInfo.maintainerLogo : undefined}
+				poster={mediaInfo?.thumbnailUrl}
+				paused={isMediaPaused}
+				onPlay={handleOnPlay}
+				onPause={handleOnPause}
+				onMediaReady={setIsFlowPlayerMediaAvailable}
+			/>
+		);
 	};
 
 	// Metadata
