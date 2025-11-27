@@ -31,7 +31,6 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	maintainerLogo,
 	owner,
 	cuePoints,
-	duration,
 	poster,
 }) => {
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | null>(null);
@@ -56,7 +55,10 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	} = useGetIeObjectsTicketUrl(fileStoredAt, !!fileStoredAt, () => {
 		// Force flowplayer rerender after successful fetch
 		setFlowPlayerKey(fileStoredAt);
-		onMediaReady(!isErrorPlayableUrl && !!playableUrl && !!currentPlayableFile);
+		onMediaReady(
+			!isErrorPlayableUrl && !!playableUrl && !!currentPlayableFile,
+			currentPlayableFile
+		);
 	});
 
 	// peak file
@@ -74,7 +76,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	}
 
 	const getStartAndEnd = () => {
-		const durationInSeconds = toSeconds(duration || currentPlayableFile?.duration);
+		const durationInSeconds = toSeconds(currentPlayableFile?.duration);
 		const mapTimeToNumber = (value: string | undefined) =>
 			value ? convertDurationStringToSeconds(value) : undefined;
 

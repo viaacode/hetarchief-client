@@ -1416,7 +1416,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				dctermsFormat={mediaInfo.dctermsFormat}
 				maintainerLogo={mediaInfo?.maintainerOverlay ? mediaInfo.maintainerLogo : undefined}
 				cuePoints={undefined}
-				duration={undefined}
 				poster={undefined}
 				paused={isMediaPaused}
 				onPlay={handleOnPlay}

@@ -1,3 +1,4 @@
+import type { IeObjectFile } from '@ie-objects/ie-objects.types';
 import { MaterialRequestsService } from '@material-requests/services';
 import {
 	type MaterialRequest,
@@ -14,12 +15,13 @@ import {
 	MaterialRequestTimeUsage,
 	MaterialRequestType,
 } from '@material-requests/types';
-import { Button, FormControl, TextArea } from '@meemoo/react-components';
+import { Button, FormControl, TextArea, TimeCropControls } from '@meemoo/react-components';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import { Blade } from '@shared/components/Blade/Blade';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { toSeconds } from '@shared/helpers/duration';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { validateForm } from '@shared/helpers/validate-form';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -71,6 +73,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		Partial<Record<keyof MaterialRequestReuseSettings, string | undefined>>
 	>({});
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
+	const [playableFile, setPlayableFile] = useState<IeObjectFile | null>(null);
 
 	/**
 	 * Reset form when the model is opened
@@ -233,6 +236,15 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		);
 	};
 
+	const setVideoSeekTime = (newTime: number) => {
+		const video: HTMLVideoElement | null = document.querySelector(
+			'.c-request-material-reuse__content-video-player.c-video-player video'
+		) as HTMLVideoElement | null;
+		if (video) {
+			video.currentTime = newTime;
+		}
+	};
+
 	const renderVideoSettings = () => {
 		if (!materialRequest.objectRepresentation) {
 			return null;
@@ -260,23 +272,52 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				</dl>
 				<div className={styles['c-request-material-reuse__content-full-width']}>
 					<AudioOrVideoPlayer
-						className={styles['c-request-material-reuse__content-video-player']}
+						className={clsx(
+							styles['c-request-material-reuse__content-video-player'],
+							'c-request-material-reuse__content-video-player'
+						)}
 						owner="material request re-uage blade"
 						representation={materialRequest.objectRepresentation}
 						dctermsFormat={materialRequest.objectDctermsFormat}
 						maintainerLogo={
 							materialRequest?.maintainerLogo ? materialRequest.maintainerLogo : undefined
 						}
-						cuePoints={undefined}
-						duration={undefined}
+						cuePoints={{
+							start: formValues.startTime ?? null,
+							end: formValues.endTime ?? null,
+						}}
 						poster={undefined}
 						allowFullScreen={false}
 						paused={isMediaPaused}
 						onPlay={() => setIsMediaPaused(false)}
 						onPause={() => setIsMediaPaused(true)}
-						onMediaReady={noop}
+						onMediaReady={(_, file) => setPlayableFile(file)}
 					/>
 				</div>
+				{playableFile && (
+					<div className={styles['c-request-material-reuse__content-full-width']}>
+						<TimeCropControls
+							className={styles['c-request-material-reuse__content-time-controls']}
+							startTime={formValues.startTime ?? 0}
+							endTime={formValues.endTime || toSeconds(playableFile.duration) || 0}
+							minTime={0}
+							maxTime={toSeconds(playableFile.duration) ?? 0}
+							trackColor="#adadad"
+							highlightColor="#000"
+							onChange={(startTime, endTime) => {
+								if (startTime !== formValues.startTime) {
+									setVideoSeekTime(startTime);
+								} else if (endTime !== formValues.endTime) {
+									setVideoSeekTime(endTime);
+								}
+
+								setFormValue('startTime', startTime);
+								setFormValue('endTime', endTime);
+							}}
+							onError={noop}
+						/>
+					</div>
+				)}
 			</div>
 		);
 	};
