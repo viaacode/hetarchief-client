@@ -56,6 +56,7 @@ function RadioButtonAccordion<OptionValueType>({
 					[styles['c-radiobutton-accordion__item-selected']]: isAccordionSelected,
 					[styles['c-radiobutton-accordion__item-closed']]: !isAccordionOpen,
 				})}
+				key={`${radioButtonGroupLabel}__option-${option.value}`}
 			>
 				<div className={clsx(styles['c-radiobutton-accordion__item-header'])}>
 					{/** biome-ignore lint/a11y/noStaticElementInteractions: Entire title should behave as if the radiobutton was clicked */}
