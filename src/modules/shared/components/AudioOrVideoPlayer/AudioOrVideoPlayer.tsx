@@ -13,7 +13,7 @@ import { Loading } from '@shared/components/Loading';
 import { getValidStartAndEnd } from '@shared/helpers/cut-start-and-end';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import getConfig from 'next/config';
-import React, { type FC, useCallback, useState } from 'react';
+import React, { type FC, useCallback, useEffect, useState } from 'react';
 import { convertDurationStringToSeconds, toSeconds } from '../../helpers/duration';
 import type { AudioOrVideoPlayerProps } from './AudioOrVideoPlayer.types';
 
@@ -52,14 +52,26 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		isLoading: isLoadingPlayableUrl,
 		isFetching: isFetchingPlayableUrl,
 		isError: isErrorPlayableUrl,
-	} = useGetIeObjectsTicketUrl(fileStoredAt, !!fileStoredAt, () => {
-		// Force flowplayer rerender after successful fetch
-		setFlowPlayerKey(fileStoredAt);
-		onMediaReady(
-			!isErrorPlayableUrl && !!playableUrl && !!currentPlayableFile,
-			currentPlayableFile
-		);
-	});
+	} = useGetIeObjectsTicketUrl(fileStoredAt, !!fileStoredAt);
+
+	useEffect(() => {
+		if (!isLoadingPlayableUrl && !isFetchingPlayableUrl) {
+			// Force flowplayer rerender after successful fetch
+			setFlowPlayerKey(fileStoredAt);
+			onMediaReady(
+				!isErrorPlayableUrl && !!playableUrl && !!currentPlayableFile,
+				currentPlayableFile
+			);
+		}
+	}, [
+		isLoadingPlayableUrl,
+		isFetchingPlayableUrl,
+		isErrorPlayableUrl,
+		playableUrl,
+		currentPlayableFile,
+		fileStoredAt,
+		onMediaReady,
+	]);
 
 	// peak file
 	const peakFileStoredAt: string | null = getFilesByType(JSON_FORMATS)?.[0]?.storedAt || null;

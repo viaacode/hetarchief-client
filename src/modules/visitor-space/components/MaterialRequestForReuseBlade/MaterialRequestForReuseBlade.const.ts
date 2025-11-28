@@ -16,6 +16,7 @@ import { mixed, number, object, type Schema, string } from 'yup';
 
 export type MaterialRequestReuseSettings = Pick<
 	MaterialRequestReuseForm,
+	| 'representationId'
 	| 'startTime'
 	| 'endTime'
 	| 'downloadQuality'
@@ -36,8 +37,18 @@ export type MaterialRequestReuseSettings = Pick<
 export const MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA =
 	(): Schema<MaterialRequestReuseSettings> => {
 		return object({
-			startTime: number().required(),
-			endTime: number().required(),
+			startTime: number().when('representationId', ([representationId]) => {
+				if (representationId) {
+					return number().required(tText('Video start knippunt - error verplicht'));
+				}
+				return number().optional();
+			}),
+			endTime: number().when('representationId', ([representationId]) => {
+				if (representationId) {
+					return number().required(tText('Video start knippunt - error verplicht'));
+				}
+				return number().optional();
+			}),
 			downloadQuality: mixed<MaterialRequestDownloadQuality>()
 				.oneOf(Object.values(MaterialRequestDownloadQuality))
 				.required(tText('Downloadkwaliteit - error verplicht')),

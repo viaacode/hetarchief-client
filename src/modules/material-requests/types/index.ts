@@ -36,6 +36,7 @@ export interface MaterialRequest {
 }
 
 export interface MaterialRequestReuseForm {
+	representationId?: string;
 	startTime?: number;
 	endTime?: number;
 	downloadQuality?: MaterialRequestDownloadQuality;
