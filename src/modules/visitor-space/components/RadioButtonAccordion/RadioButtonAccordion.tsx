@@ -36,6 +36,10 @@ function RadioButtonAccordion<OptionValueType>({
 	};
 
 	const handleSelection = (option: RadioButtonAccordionOption<OptionValueType>) => {
+		if (option.disabled) {
+			return;
+		}
+
 		if (option.value !== selectedOption) {
 			setOpenOption(null);
 			onChange(option.value);
@@ -69,6 +73,7 @@ function RadioButtonAccordion<OptionValueType>({
 							aria-labelledby={radioButtonGroupLabel}
 							className={clsx(styles['c-radiobutton-accordion__item-radio-button'])}
 							label={option.label}
+							disabled={option.disabled}
 							checked={isAccordionSelected}
 							onClick={() => handleSelection(option)}
 						/>

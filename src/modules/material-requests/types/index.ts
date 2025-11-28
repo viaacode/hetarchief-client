@@ -39,14 +39,15 @@ export interface MaterialRequestReuseForm {
 	startTime?: number;
 	endTime?: number;
 	downloadQuality?: MaterialRequestDownloadQuality;
-	intendedUsage?: string;
-	exploitation?: MaterialRequestExploitation;
+	intendedUsageDescription?: string;
+	intendedUsage?: MaterialRequestIntendedUsage;
 	distributionAccess?: MaterialRequestDistributionAccess;
 	distributionType?: MaterialRequestDistributionType;
 	distributionTypeDigitalOnline?: MaterialRequestDistributionDigitalOnline;
 	distributionTypeOtherExplanation?: string;
 	materialEditing?: MaterialRequestEditing;
 	geographicalUsage?: MaterialRequestGeographicalUsage;
+	geographicalUsageDescription?: string;
 	timeUsageType?: MaterialRequestTimeUsage;
 	timeUsageFrom?: string;
 	timeUsageTo?: string;
@@ -142,10 +143,9 @@ export enum MaterialRequestDownloadQuality {
 	HIGH = 'HIGH',
 }
 
-export enum MaterialRequestExploitation {
+export enum MaterialRequestIntendedUsage {
 	INTERN = 'INTERN',
 	NON_COMMERCIAL = 'NON_COMMERCIAL',
-	INDIRECT_COMMERCIAL = 'INDIRECT_COMMERCIAL',
 	COMMERCIAL = 'COMMERCIAL',
 }
 
@@ -155,13 +155,13 @@ export enum MaterialRequestDistributionAccess {
 }
 
 export enum MaterialRequestDistributionType {
-	ANALOG = 'ANALOG',
 	DIGITAL_OFFLINE = 'DIGITAL_OFFLINE',
 	DIGITAL_ONLINE = 'DIGITAL_ONLINE',
 	OTHER = 'OTHER',
 }
 
 export enum MaterialRequestDistributionDigitalOnline {
+	INTERNAL = 'INTERNAL',
 	NO_AUTH = 'NO_AUTH',
 	WITH_AUTH = 'WITH_AUTH',
 }

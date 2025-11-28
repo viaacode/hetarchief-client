@@ -1,4 +1,7 @@
+import { selectUser } from '@auth/store/user';
+import type { User } from '@auth/types';
 import type { IeObjectFile } from '@ie-objects/ie-objects.types';
+import { useGetMaterialRequestsForMediaItem } from '@material-requests/hooks/get-material-requests-for-media-item';
 import { MaterialRequestsService } from '@material-requests/services';
 import {
 	type MaterialRequest,
@@ -8,16 +11,18 @@ import {
 	MaterialRequestDistributionType,
 	MaterialRequestDownloadQuality,
 	MaterialRequestEditing,
-	MaterialRequestExploitation,
 	MaterialRequestGeographicalUsage,
+	MaterialRequestIntendedUsage,
 	MaterialRequestRequesterCapacity,
 	type MaterialRequestReuseForm,
 	MaterialRequestTimeUsage,
 	MaterialRequestType,
 } from '@material-requests/types';
-import { Button, FormControl, TextArea, TimeCropControls } from '@meemoo/react-components';
+import { Alert, Button, FormControl, TextArea, TimeCropControls } from '@meemoo/react-components';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import { Blade } from '@shared/components/Blade/Blade';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
@@ -37,8 +42,8 @@ import clsx from 'clsx';
 import { parseISO } from 'date-fns';
 import { kebabCase, noop } from 'lodash-es';
 import { useRouter } from 'next/router';
-import React, { type FC, useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import DateRangeInput from '../DateRangeInput/DateRangeInput';
 import MaterialCard from '../MaterialCard/MaterialCard';
 import styles from './MaterialRequestForReuseBlade.module.scss';
@@ -65,6 +70,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const locale = useLocale();
+	const user: User | null = useSelector(selectUser);
 
 	const [formValues, setFormValues] = useState<MaterialRequestReuseForm>({
 		...materialRequest.reuseForm,
@@ -75,6 +81,46 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [playableFile, setPlayableFile] = useState<IeObjectFile | null>(null);
 
+	const {
+		data: potentialDuplicates,
+		isLoading: isLoadingPotentialDuplicates,
+		refetch: refetchPotentialDuplicates,
+	} = useGetMaterialRequestsForMediaItem(
+		materialRequest?.objectSchemaIdentifier,
+		!!user?.isKeyUser
+	);
+
+	const showDuplicateWarning = useMemo(() => {
+		// Still loading the potential duplicates, until then do not show a warning
+		if (isLoadingPotentialDuplicates) {
+			return false;
+		}
+
+		let duplicatesToCheck = potentialDuplicates ? [...potentialDuplicates] : [];
+
+		// When editing we filter out the current request to avoid the validation check to find itself as duplicate
+		if (isEditMode) {
+			duplicatesToCheck = duplicatesToCheck.filter((item) => item.id !== materialRequest.id);
+		}
+
+		// Show a warning if there is already a request for this item with the same cue points and download quality
+		return !!duplicatesToCheck?.find(
+			(item) =>
+				item.type === materialRequest.type &&
+				item.reuseForm?.startTime === formValues.startTime &&
+				item.reuseForm?.endTime === formValues.endTime &&
+				item.reuseForm?.downloadQuality === formValues.downloadQuality
+		);
+	}, [
+		isEditMode,
+		potentialDuplicates,
+		isLoadingPotentialDuplicates,
+		materialRequest,
+		formValues.startTime,
+		formValues.endTime,
+		formValues.downloadQuality,
+	]);
+
 	/**
 	 * Reset form when the model is opened
 	 */
@@ -82,8 +128,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		if (isOpen) {
 			setFormValues({ ...materialRequest.reuseForm });
 			setFormErrors({});
+			refetchPotentialDuplicates().then(noop);
 		}
-	}, [isOpen, materialRequest]);
+	}, [isOpen, materialRequest, refetchPotentialDuplicates]);
 
 	const onCloseModal = () => {
 		onClose();
@@ -103,6 +150,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		} else if (key === 'timeUsageType') {
 			if (value !== MaterialRequestTimeUsage.IN_TIME) {
 				newFormValues.timeUsageFrom = newFormValues.timeUsageTo = undefined;
+			}
+		} else if (key === 'geographicalUsage') {
+			if (value !== MaterialRequestGeographicalUsage.NOT_COMPLETELY_LOCAL) {
+				newFormValues.geographicalUsageDescription = undefined;
 			}
 		}
 
@@ -236,6 +287,19 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		);
 	};
 
+	const renderDuplicateAlert = (): ReactNode => {
+		return (
+			<Alert
+				className={styles['c-request-material__alert']}
+				icon={<Icon name={IconNamesLight.Exclamation} aria-hidden />}
+				title={tText('Er bestaat reeds een hergebruiksformulier met deze informatie')}
+				content={tText(
+					'Je hebt voor dit materiaal een formulier voor hergebruik ingevuld met exact dezelfde vereisten. Gelieve een ander fragment of een andere downloadkwaliteit te selecteren'
+				)}
+			/>
+		);
+	};
+
 	const setVideoSeekTime = (newTime: number) => {
 		const video: HTMLVideoElement | null = document.querySelector(
 			'.c-request-material-reuse__content-video-player.c-video-player video'
@@ -267,7 +331,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 						{tText('Materiaalselectie')}
 					</dt>
 					<dd className={styles['c-request-material-reuse__content-value']}>
-						{tText('Materiaalselectie subtitel')}
+						{tText('Materiaalselectie vraag')}
 					</dd>
 				</dl>
 				<div className={styles['c-request-material-reuse__content-full-width']}>
@@ -359,45 +423,45 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const renderDownloadQuality = () => {
 		return renderRadiobuttonGroup(
 			tText('Downloadkwaliteit label'),
-			tText('Downloadkwaliteit subtitel'),
+			tText('Downloadkwaliteit vraag'),
 			'downloadQuality',
 			[
 				{
-					label: tText('Afspeelkwaliteit'),
+					label: tText('Downloadkwaliteit - Afspeelkwaliteit label'),
 					value: MaterialRequestDownloadQuality.NORMAL,
-					description: tHtml('Afspeelkwaliteit omschrijving'),
+					description: tHtml('Downloadkwaliteit - Afspeelkwaliteit omschrijving'),
 				},
 				{
-					label: tText('Hogere kwaliteit'),
+					label: tText('Downloadkwaliteit - Hogere kwaliteit label'),
 					value: MaterialRequestDownloadQuality.HIGH,
-					description: tHtml('Hogere kwaliteit omschrijving'),
+					description: tHtml('Downloadkwaliteit - Hogere kwaliteit omschrijving'),
 				},
 			]
 		);
 	};
 
-	const renderIntendedUsage = () => {
+	const renderIntendedUsageDescription = () => {
 		return (
 			<dl className={styles['c-request-material-reuse__content']}>
 				<dt className={styles['c-request-material-reuse__content-label']}>
-					{tText('Bedoeld gebruik label')}
+					{tText('Bedoeld gebruik (beschrijving) label')}
 				</dt>
 				<dd className={styles['c-request-material-reuse__content-value']}>
 					<FormControl
-						label={tText('Bedoeld gebruik subtitel')}
+						label={tText('Bedoeld gebruik (beschrijving) vraag')}
 						errors={[
 							<div className="u-flex" key={`form-error--intendedUsage`}>
-								<RedFormWarning error={formErrors.intendedUsage} />
+								<RedFormWarning error={formErrors.intendedUsageDescription} />
 								<span className={styles['c-request-material-reuse__content-value-length']}>
-									{formValues.intendedUsage?.length || 0} / 300
+									{formValues.intendedUsageDescription?.length || 0} / 300
 								</span>
 							</div>,
 						]}
 					>
 						<TextArea
-							value={formValues.intendedUsage}
+							value={formValues.intendedUsageDescription}
 							maxLength={300}
-							onChange={(evt) => setFormValue('intendedUsage', evt.target.value)}
+							onChange={(evt) => setFormValue('intendedUsageDescription', evt.target.value)}
 						/>
 					</FormControl>
 				</dd>
@@ -405,31 +469,28 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		);
 	};
 
-	const renderExploitation = () => {
+	const renderIntendedUsage = () => {
 		return renderRadiobuttonGroup(
-			tText('Commerciële exploitatie label'),
-			tText('Commerciële exploitatie subtitel'),
-			'exploitation',
+			tText('Bedoeld gebruik label'),
+			tText('Bedoeld gebruik vraag'),
+			'intendedUsage',
 			[
 				{
-					label: tText('Interne exploitatie zonder verdere vergoeding'),
-					value: MaterialRequestExploitation.INTERN,
-					description: tHtml('Interne exploitatie omschrijving'),
+					label: tText('Bedoeld gebruik - Intern gebruik zonder vergoeding label'),
+					value: MaterialRequestIntendedUsage.INTERN,
+					description: tHtml('Bedoeld gebruik - Intern gebruik zonder omschrijving'),
 				},
 				{
-					label: tText('Niet-commerciële exploitatie'),
-					value: MaterialRequestExploitation.NON_COMMERCIAL,
-					description: tHtml('Niet-commerciële exploitatie omschrijving'),
+					label: tText('Bedoeld gebruik - extern gebruik zonder direct commercieel voordeel label'),
+					value: MaterialRequestIntendedUsage.NON_COMMERCIAL,
+					description: tHtml(
+						'Bedoeld gebruik - Extern gebruik zonder direct commercieel voordeel omschrijving'
+					),
 				},
 				{
-					label: tText('Indirecte commerciële exploitatie'),
-					value: MaterialRequestExploitation.INDIRECT_COMMERCIAL,
-					description: tHtml('Indirecte commerciële exploitatie omschrijving'),
-				},
-				{
-					label: tText('Directe commerciële exploitatie'),
-					value: MaterialRequestExploitation.COMMERCIAL,
-					description: tHtml('Directe commerciële exploitatie omschrijving'),
+					label: tText('Bedoeld gebruik - Directe commerciële exploitatie label'),
+					value: MaterialRequestIntendedUsage.COMMERCIAL,
+					description: tHtml('Bedoeld gebruik - Directe commerciële exploitatie omschrijving'),
 				},
 			]
 		);
@@ -437,19 +498,21 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 	const renderDistributionAccess = () => {
 		return renderRadiobuttonGroup(
-			tText('Verspreiding materiaal label'),
-			tText('Verspreiding materiaal subtitel'),
+			tText('Ontsluiting materiaal label'),
+			tText('Ontsluiting materiaal vraag'),
 			'distributionAccess',
 			[
 				{
-					label: tText('Enkel binnen de organisatie'),
+					label: tText('Ontsluiting materiaal - Enkel binnen de organisatie label'),
 					value: MaterialRequestDistributionAccess.INTERN,
-					description: tHtml('Enkel binnen de organisatie omschrijving'),
+					description: tHtml('Ontsluiting materiaal - Enkel binnen de organisatie omschrijving'),
 				},
 				{
-					label: tText('Organisatie en externe gebruikers'),
+					label: tText('Ontsluiting materiaal - Organisatie en externe gebruikers label'),
 					value: MaterialRequestDistributionAccess.INTERN_EXTERN,
-					description: tHtml('Organisatie en externe gebruikers omschrijving'),
+					description: tHtml(
+						'Ontsluiting materiaal - Organisatie en externe gebruikers omschrijving'
+					),
 				},
 			]
 		);
@@ -457,24 +520,19 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 	const renderDistributionType = () => {
 		return renderRadiobuttonGroup(
-			tText('Type verspreiding label'),
-			tText('Type verspreiding subtitel'),
+			tText('Type ontsluiting label'),
+			tText('Type ontsluiting vraag'),
 			'distributionType',
 			[
 				{
-					label: tText(
-						'Enkel analoge (fysieke) exemplaren zonder digitale verspreiding (bv. papieren prints, posters)'
-					),
-					value: MaterialRequestDistributionType.ANALOG,
-					description: tHtml('Enkel analoog omschrijving'),
-				},
-				{
-					label: tText('Digitale ontsluiting via een vast medium'),
+					label: tText('Type ontsluiting - Digitale ontsluiting via een vast medium label'),
 					value: MaterialRequestDistributionType.DIGITAL_OFFLINE,
-					description: tHtml('Digitale ontsluiting via een vast medium omschrijving'),
+					description: tHtml(
+						'Type ontsluiting - Digitale ontsluiting via een vast medium omschrijving'
+					),
 				},
 				{
-					label: tText('Digitale ontsluiting via netwerkverbinding'),
+					label: tText('Type ontsluiting - Digitale ontsluiting via netwerkverbinding label'),
 					value: MaterialRequestDistributionType.DIGITAL_ONLINE,
 					openOnSelect: true,
 					description: (
@@ -485,35 +543,61 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 							onChange={(value) => setFormValue('distributionTypeDigitalOnline', value)}
 							options={[
 								{
-									label: tText('Publiek zonder authenticatie'),
-									value: MaterialRequestDistributionDigitalOnline.NO_AUTH,
-									description: tText('Publiek zonder authenticatie omschrijving'),
+									label: tText(
+										'Type ontsluiting - Digitale ontsluiting via netwerkverbinding - Een besloten dienst label'
+									),
+									value: MaterialRequestDistributionDigitalOnline.INTERNAL,
+									disabled:
+										formValues.distributionType !== MaterialRequestDistributionType.DIGITAL_ONLINE,
+									description: tText(
+										'Type ontsluiting - Digitale ontsluiting via netwerkverbinding - Een besloten dienst omschrijving'
+									),
 								},
 								{
-									label: tText('Publiek met authenticatie'),
+									label: tText(
+										'Type ontsluiting - Digitale ontsluiting via netwerkverbinding - Publiek zonder authenticatie label'
+									),
+									value: MaterialRequestDistributionDigitalOnline.NO_AUTH,
+									disabled:
+										formValues.distributionType !== MaterialRequestDistributionType.DIGITAL_ONLINE,
+									description: tText(
+										'Type ontsluiting - Digitale ontsluiting via netwerkverbinding - Publiek zonder authenticatie omschrijving'
+									),
+								},
+								{
+									label: tText(
+										'Type ontsluiting - Digitale ontsluiting via netwerkverbinding - Publiek met authenticatie label'
+									),
 									value: MaterialRequestDistributionDigitalOnline.WITH_AUTH,
-									description: tText('Publiek met authenticatie omschrijving'),
+									disabled:
+										formValues.distributionType !== MaterialRequestDistributionType.DIGITAL_ONLINE,
+									description: tText(
+										'Type ontsluiting - Digitale ontsluiting via netwerkverbinding - Publiek met authenticatie omschrijving'
+									),
 								},
 							]}
 						/>
 					),
 				},
 				{
-					label: tText('Andere, namelijk:'),
+					label: tText('Type ontsluiting - Andere label'),
 					value: MaterialRequestDistributionType.OTHER,
 					openOnSelect: true,
 					description: (
-						<FormControl
-							className={clsx(styles['c-request-material-reuse__content-value-extra-padding'])}
-						>
-							<TextArea
-								value={formValues.distributionTypeOtherExplanation}
-								disabled={formValues.distributionType !== MaterialRequestDistributionType.OTHER}
-								onChange={(evt) =>
-									setFormValue('distributionTypeOtherExplanation', evt.target.value)
-								}
-							/>
-						</FormControl>
+						<>
+							{tHtml('Type ontsluiting - Andere omschrijving')}
+							<FormControl
+								className={clsx(styles['c-request-material-reuse__content-value-extra-padding'])}
+							>
+								<TextArea
+									value={formValues.distributionTypeOtherExplanation}
+									disabled={formValues.distributionType !== MaterialRequestDistributionType.OTHER}
+									onChange={(evt) =>
+										setFormValue('distributionTypeOtherExplanation', evt.target.value)
+									}
+								/>
+							</FormControl>
+						</>
 					),
 				},
 			],
@@ -524,18 +608,20 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const renderMaterialEditing = () => {
 		return renderRadiobuttonGroup(
 			tText('Wijziging materiaal label'),
-			tText('Wijziging materiaal subtitel'),
+			tText('Wijziging materiaal vraag'),
 			'materialEditing',
 			[
 				{
-					label: tText('Geen wijzigingen'),
+					label: tText('Wijziging materiaal - Geen wijzigingen label'),
 					value: MaterialRequestEditing.NONE,
-					description: tHtml('Geen wijzigingen omschrijving'),
+					description: tHtml('Wijziging materiaal - Geen wijzigingen omschrijving'),
 				},
 				{
-					label: tText('De organisatie zal het bronmateriaal wijzigen'),
+					label: tText('Wijziging materiaal - De organisatie zal het bronmateriaal wijzigen label'),
 					value: MaterialRequestEditing.WITH_CHANGES,
-					description: tHtml('De organisatie zal het bronmateriaal wijzigen omschrijving'),
+					description: tHtml(
+						'Wijziging materiaal - De organisatie zal het bronmateriaal wijzigen omschrijving'
+					),
 				},
 			]
 		);
@@ -544,18 +630,43 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const renderGeographicalUsage = () => {
 		return renderRadiobuttonGroup(
 			tText('Geografisch gebruik label'),
-			tText('Geografisch gebruik subtitel'),
+			tText('Geografisch gebruik vraag'),
 			'geographicalUsage',
 			[
 				{
-					label: tText('Integraal gericht op Vlaamse of Belgische markt'),
+					label: tText(
+						'Geografisch gebruik - Integraal gericht op Vlaamse of Belgische markt label'
+					),
 					value: MaterialRequestGeographicalUsage.COMPLETELY_LOCAL,
-					description: tHtml('Integraal gericht op Vlaamse of Belgische markt omschrijving'),
+					description: tHtml(
+						'Geografisch gebruik - Integraal gericht op Vlaamse of Belgische markt omschrijving'
+					),
 				},
 				{
-					label: tText('Niet integraal gericht op Vlaamse of Belgische markt'),
+					label: tText(
+						'Geografisch gebruik - Niet integraal gericht op Vlaamse of Belgische markt label'
+					),
+					openOnSelect: true,
 					value: MaterialRequestGeographicalUsage.NOT_COMPLETELY_LOCAL,
-					description: tHtml('Niet integraal gericht op Vlaamse of Belgische markt omschrijving'),
+					description: (
+						<>
+							{tHtml(
+								'Geografisch gebruik - Niet integraal gericht op Vlaamse of Belgische markt omschrijving'
+							)}
+							<FormControl
+								className={clsx(styles['c-request-material-reuse__content-value-extra-padding'])}
+							>
+								<TextArea
+									value={formValues.geographicalUsageDescription}
+									disabled={
+										formValues.geographicalUsage !==
+										MaterialRequestGeographicalUsage.NOT_COMPLETELY_LOCAL
+									}
+									onChange={(evt) => setFormValue('geographicalUsageDescription', evt.target.value)}
+								/>
+							</FormControl>
+						</>
+					),
 				},
 			]
 		);
@@ -567,34 +678,37 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 		return renderRadiobuttonGroup(
 			tText('Gebruik in de tijd label'),
-			tText('Gebruik in de tijd subtitel'),
+			tText('Gebruik in de tijd vraag'),
 			'timeUsageType',
 			[
 				{
-					label: tText('Onbeperkt'),
+					label: tText('Gebruik in de tijd - Onbeperkt label'),
 					value: MaterialRequestTimeUsage.UNLIMITED,
-					description: tHtml('Onbeperkt omschrijving'),
+					description: tHtml('Gebruik in de tijd - Onbeperkt omschrijving'),
 				},
 				{
-					label: tText('Beperkte periode, namelijk:'),
+					label: tText('Gebruik in de tijd - Beperkte periode label'),
 					value: MaterialRequestTimeUsage.IN_TIME,
 					openOnSelect: true,
 					description: (
-						<FormControl
-							className={clsx(styles['c-request-material-reuse__content-value-extra-padding'])}
-						>
-							<DateRangeInput
-								showLabels={true}
-								from={from}
-								to={to}
-								id="timeUsage"
-								disabled={formValues.timeUsageType !== MaterialRequestTimeUsage.IN_TIME}
-								onChange={(newFromDate: Date | undefined, newToDate: Date | undefined) => {
-									setFormValue('timeUsageFrom', newFromDate?.toISOString());
-									setFormValue('timeUsageTo', newToDate?.toISOString());
-								}}
-							/>
-						</FormControl>
+						<>
+							{tHtml('Gebruik in de tijd - Beperkte periode omschrijving')}
+							<FormControl
+								className={clsx(styles['c-request-material-reuse__content-value-extra-padding'])}
+							>
+								<DateRangeInput
+									showLabels={true}
+									from={from}
+									to={to}
+									id="timeUsage"
+									disabled={formValues.timeUsageType !== MaterialRequestTimeUsage.IN_TIME}
+									onChange={(newFromDate: Date | undefined, newToDate: Date | undefined) => {
+										setFormValue('timeUsageFrom', newFromDate?.toISOString());
+										setFormValue('timeUsageTo', newToDate?.toISOString());
+									}}
+								/>
+							</FormControl>
+						</>
 					),
 				},
 			],
@@ -605,25 +719,44 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const renderCopyrightHandling = () => {
 		return renderRadiobuttonGroup(
 			tText('Bronvermelding label'),
-			tText('Bronvermelding subtitel'),
+			tText('Bronvermelding vraag'),
 			'copyrightDisplay',
 			[
 				{
-					label: tText('Gelijktijdig met object'),
+					label: tText('Bronvermelding - Gelijktijdig met object label'),
 					value: MaterialRequestCopyrightDisplay.SAME_TIME_WITH_OBJECT,
-					description: tHtml('Gelijktijdig met object omschrijving'),
+					description: tHtml('Bronvermelding - Gelijktijdig met object omschrijving'),
 				},
 				{
-					label: tText('Vermelding bij object, niet noodzakelijk gelijktijdig'),
+					label: tText(
+						'Bronvermelding - Vermelding bij object, niet noodzakelijk gelijktijdig label'
+					),
 					value: MaterialRequestCopyrightDisplay.AROUND_OBJECT,
-					description: tHtml('Vermelding bij object, niet noodzakelijk gelijktijdig omschrijving'),
+					description: tHtml(
+						'Bronvermelding - Vermelding bij object, niet noodzakelijk gelijktijdig omschrijving'
+					),
 				},
 				{
-					label: tText('Geen vermelding'),
+					label: tText('Bronvermelding - Geen vermelding label'),
 					value: MaterialRequestCopyrightDisplay.NONE,
-					description: tHtml('Geen vermelding omschrijving'),
+					description: tHtml('Bronvermelding - Geen vermelding omschrijving'),
 				},
 			]
+		);
+	};
+
+	const renderOtherOptionsNotDeterminingDuplicates = () => {
+		return (
+			<>
+				{renderIntendedUsage()}
+				{renderIntendedUsageDescription()}
+				{renderDistributionAccess()}
+				{renderDistributionType()}
+				{renderMaterialEditing()}
+				{renderGeographicalUsage()}
+				{renderTimeUsage()}
+				{renderCopyrightHandling()}
+			</>
 		);
 	};
 
@@ -645,14 +778,8 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					<div className={styles['c-request-material-reuse__content-form']}>
 						{renderVideoSettings()}
 						{renderDownloadQuality()}
-						{renderIntendedUsage()}
-						{renderExploitation()}
-						{renderDistributionAccess()}
-						{renderDistributionType()}
-						{renderMaterialEditing()}
-						{renderGeographicalUsage()}
-						{renderTimeUsage()}
-						{renderCopyrightHandling()}
+						{renderOtherOptionsNotDeterminingDuplicates()}
+						{showDuplicateWarning && renderDuplicateAlert()}
 					</div>
 					{renderFooter()}
 				</div>

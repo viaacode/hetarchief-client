@@ -5,4 +5,5 @@ export interface RadioButtonAccordionOption<ValueType> {
 	value: ValueType;
 	description: string | ReactNode;
 	openOnSelect?: boolean;
+	disabled?: boolean;
 }

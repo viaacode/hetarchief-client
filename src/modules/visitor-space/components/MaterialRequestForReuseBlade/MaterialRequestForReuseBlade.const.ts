@@ -5,8 +5,8 @@ import {
 	MaterialRequestDistributionType,
 	MaterialRequestDownloadQuality,
 	MaterialRequestEditing,
-	MaterialRequestExploitation,
 	MaterialRequestGeographicalUsage,
+	MaterialRequestIntendedUsage,
 	type MaterialRequestReuseForm,
 	MaterialRequestTimeUsage,
 } from '@material-requests/types';
@@ -19,8 +19,8 @@ export type MaterialRequestReuseSettings = Pick<
 	| 'startTime'
 	| 'endTime'
 	| 'downloadQuality'
+	| 'intendedUsageDescription'
 	| 'intendedUsage'
-	| 'exploitation'
 	| 'distributionAccess'
 	| 'distributionType'
 	| 'distributionTypeDigitalOnline'
@@ -40,55 +40,49 @@ export const MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA =
 			endTime: number().required(),
 			downloadQuality: mixed<MaterialRequestDownloadQuality>()
 				.oneOf(Object.values(MaterialRequestDownloadQuality))
-				.required(tText('Duid aan in welke kwaliteit je het materiaal wil ontvangen.')),
-			intendedUsage: string()
-				.required(tText('Beschrijf waarvoor je het materiaal wenst te gebruiken.'))
+				.required(tText('Downloadkwaliteit - error verplicht')),
+			intendedUsage: mixed<MaterialRequestIntendedUsage>()
+				.oneOf(Object.values(MaterialRequestIntendedUsage))
+				.required(tText('Bedoeld gebruik - error verplicht')),
+			intendedUsageDescription: string()
+				.required(tText('Bedoeld gebruik beschrijving - error verplicht'))
 				.max(300),
-			exploitation: mixed<MaterialRequestExploitation>()
-				.oneOf(Object.values(MaterialRequestExploitation))
-				.required(
-					tText(
-						'Duid aan welke eventuele commerciële exploitatie van het materiaal van toepassing is.'
-					)
-				),
 			distributionAccess: mixed<MaterialRequestDistributionAccess>()
 				.oneOf(Object.values(MaterialRequestDistributionAccess))
-				.required(tText('Duid aan welke verspreiding van het materiaal van toepassing is.')),
+				.required(tText('Ontsluiting materiaal - error verplicht')),
 			distributionType: mixed<MaterialRequestDistributionType>()
 				.oneOf(Object.values(MaterialRequestDistributionType))
-				.required(
-					tText('Duid aan of het over analoge of digitale verspreiding van het materiaal gaat.')
-				),
+				.required(tText('Type ontsluiting - error verplicht')),
 			distributionTypeDigitalOnline: mixed<MaterialRequestDistributionDigitalOnline>()
 				.oneOf(Object.values(MaterialRequestDistributionDigitalOnline))
 				.when('distributionType', ([value]) => {
 					if (value === MaterialRequestDistributionType.DIGITAL_ONLINE) {
 						return mixed().required(
-							tText('Duid aan of het over analoge of digitale verspreiding van het materiaal gaat.')
+							tText(
+								'Type ontsluiting - Digitale ontsluiting via netwerkverbinding - error verplicht'
+							)
 						);
 					}
 					return mixed().optional();
 				}),
 			distributionTypeOtherExplanation: string().when('distributionType', ([value]) => {
 				if (value === MaterialRequestDistributionType.OTHER) {
-					return string().required(
-						tText('Duid aan of het over analoge of digitale verspreiding van het materiaal gaat.')
-					);
+					return string().required(tText('Type ontsluiting - Andere - error verplicht'));
 				}
 				return string().optional();
 			}),
 			materialEditing: mixed<MaterialRequestEditing>()
 				.oneOf(Object.values(MaterialRequestEditing))
-				.required(tText('Geef aan of je wijzigingen aan het materiaal zal maken.')),
+				.required(tText('Wijziging materiaal - error verplicht')),
 			geographicalUsage: mixed<MaterialRequestGeographicalUsage>()
 				.oneOf(Object.values(MaterialRequestGeographicalUsage))
-				.required(tText('Duid aan wat het geografisch gebruik van het materiaal zal zijn.')),
+				.required(tText('Geografisch gebruik - error verplicht')),
 			timeUsageType: mixed<MaterialRequestTimeUsage>()
 				.oneOf(Object.values(MaterialRequestTimeUsage))
-				.required(tText('Geef het geplande gebruik doorheen de tijd aan.')),
+				.required(tText('Gebruik in de tijd - error verplicht')),
 			timeUsageFrom: string().when('timeUsageType', ([value]) => {
 				if (value === MaterialRequestTimeUsage.IN_TIME) {
-					return string().required(tText('Geef het geplande gebruik doorheen de tijd aan.'));
+					return string().required(tText('Gebruik in de tijd - startdatum - error verplicht'));
 				}
 				return string().optional();
 			}),
@@ -100,10 +94,10 @@ export const MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA =
 					}
 
 					return string()
-						.required(tText('Geef het geplande gebruik doorheen de tijd aan.'))
+						.required(tText('Gebruik in de tijd - einddatum - error verplicht'))
 						.test(
 							'to-date-after-start-date',
-							tText('De einddatum moet groter zijn dan de startdatum'),
+							tText('Gebruik in de tijd - einddatum - error einddatum voor startdatum'),
 							(timeUsageTo) =>
 								timeUsageFrom && timeUsageTo && parseISO(timeUsageFrom) < parseISO(timeUsageTo)
 						);
@@ -111,6 +105,6 @@ export const MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA =
 			),
 			copyrightDisplay: mixed<MaterialRequestCopyrightDisplay>()
 				.oneOf(Object.values(MaterialRequestCopyrightDisplay))
-				.required(tText('Geef op hoe je bronvermelding zal aanpakken.')),
+				.required(tText('Bronvermelding - error verplicht')),
 		}) as Schema<MaterialRequestReuseSettings>;
 	};
