@@ -97,13 +97,8 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	} = useGetMaterialRequestsForMediaItem(objectSchemaIdentifier, !!user?.isKeyUser);
 
 	const showDuplicateWarning = useMemo(() => {
-		if (isEditMode) {
-			// When editing checking for duplicates would always return true since the request we are editing would turn up
-			return false;
-		}
-
+		// Still loading the potential duplicates, until then do not show a warning
 		if (isLoadingPotentialDuplicates) {
-			// Still loading the potential duplicates, until then do not show a warning
 			return false;
 		}
 
@@ -113,14 +108,22 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			return false;
 		}
 
+		let duplicatesToCheck = potentialDuplicates ? [...potentialDuplicates] : [];
+
+		// When editing we filter out the current request to avoid the validation check to find itself as duplicate
+		if (isEditMode) {
+			duplicatesToCheck = duplicatesToCheck.filter((item) => item.id !== materialRequestId);
+		}
+
 		// Show a warning if there is already a request for this item with the same type as the selected type
-		return !!potentialDuplicates?.find((item) => item.type === typeSelected);
+		return !!duplicatesToCheck?.find((item) => item.type === typeSelected);
 	}, [
 		isEditMode,
 		potentialDuplicates,
 		typeSelected,
 		isLoadingPotentialDuplicates,
 		triggerComplexReuseFlow,
+		materialRequestId,
 	]);
 
 	/**
