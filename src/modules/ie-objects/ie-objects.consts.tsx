@@ -1,22 +1,22 @@
-import type { MenuItemInfo, TabProps } from '@meemoo/react-components';
-import React, { type ReactNode } from 'react';
-
 import type { ActionItem, DynamicActionMenuProps } from '@ie-objects/components/DynamicActionMenu';
 import type { ObjectPlaceholderProps } from '@ie-objects/components/ObjectPlaceholder';
 import {
 	type ButtonsSortOrder,
+	IeObjectLicense,
 	type IsPartOfCollection,
 	type IsPartOfKey,
 	MediaActions,
 	MetadataExportFormats,
 	ObjectDetailTabs,
 } from '@ie-objects/ie-objects.types';
+import type { MenuItemInfo, TabProps } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
 import { GET_TYPE_TO_LABEL_MAP, getIconFromObjectType } from '@shared/components/MediaCard';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate } from '@shared/utils/dates';
+import React, { type ReactNode } from 'react';
 
 /**
  * Render media
@@ -375,3 +375,9 @@ export function renderDate(date: string | null | undefined): string | null {
 	}
 	return formatLongDate(asDate(date));
 }
+
+export const IE_OBJECT_INTRA_CP_LICENSES: Readonly<IeObjectLicense[]> = [
+	IeObjectLicense.INTRA_CP_CONTENT,
+	IeObjectLicense.INTRA_CP_METADATA_ALL,
+	IeObjectLicense.INTRA_CP_METADATA_LTD,
+];
