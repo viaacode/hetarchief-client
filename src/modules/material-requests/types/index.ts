@@ -68,6 +68,7 @@ export interface MaterialRequestCreation {
 	reason: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;
 	organisation?: string;
+	reuseForm?: MaterialRequestReuseForm;
 }
 
 export interface MaterialRequestUpdate {

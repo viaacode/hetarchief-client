@@ -31,7 +31,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { validateForm } from '@shared/helpers/validate-form';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
-import { setMaterialRequestCount } from '@shared/store/ui';
+import { setMaterialRequestCount, setShowMaterialRequestCenter } from '@shared/store/ui';
 import {
 	MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA,
 	type MaterialRequestReuseSettings,
@@ -106,7 +106,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		// Show a warning if there is already a request for this item with the same cue points and download quality
 		return !!duplicatesToCheck?.find(
 			(item) =>
-				item.type === materialRequest.type &&
+				item.type === MaterialRequestType.REUSE &&
 				item.reuseForm?.startTime === formValues.startTime &&
 				item.reuseForm?.endTime === formValues.endTime &&
 				item.reuseForm?.downloadQuality === formValues.downloadQuality
@@ -197,31 +197,25 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				return;
 			}
 
-			// TODO: adjust endpoint to store all formValues
-			/*
-
 			const response = await MaterialRequestsService.create({
 				objectSchemaIdentifier: materialRequest.objectSchemaIdentifier,
 				type: MaterialRequestType.REUSE,
 				reason: '',
 				requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
+				reuseForm: formValues,
 			});
 			if (response === undefined) {
 				onFailedRequest();
 				return;
 			}
 			toastService.notify({
-				maxLines: 3,
-				title: tText(
-					'modules/visitor-space/components/material-request-blade/material-request-blade___succes'
-				),
-				description: tText(
-					'modules/visitor-space/components/material-request-blade/material-request-blade___rond-je-aanvragenlijst-af'
-				),
+				title: tText('Toegevoegd aan aanvraaglijst'),
+				description: tText('Verstuur je aanvraag of zoek verder naar digitaal erfgoed'),
+				actionLabel: tText('Bekijk je aanvraaglijst'),
+				onAction: () => dispatch(setShowMaterialRequestCenter(true)),
 			});
 			await onSuccessCreated();
 			onCloseModal();
-			 */
 		} catch (_err) {
 			onFailedRequest();
 		}
@@ -278,6 +272,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					className={styles['c-request-material-reuse__annuleer-button']}
 				/>
 				<Button
+					disabled={showDuplicateWarning}
 					label={tText('Voeg toe aan aanvraaglijst & zoek verder')}
 					variants={['text', 'dark']}
 					onClick={onAddToList}
