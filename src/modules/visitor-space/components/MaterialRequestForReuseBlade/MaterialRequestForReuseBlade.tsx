@@ -191,6 +191,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 	const onAddToList = async () => {
 		try {
+			if (showDuplicateWarning) {
+				return;
+			}
+
 			const isFormValid = await validateFormValues(formValues);
 
 			if (!isFormValid) {
@@ -272,7 +276,6 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					className={styles['c-request-material-reuse__annuleer-button']}
 				/>
 				<Button
-					disabled={showDuplicateWarning}
 					label={tText('Voeg toe aan aanvraaglijst & zoek verder')}
 					variants={['text', 'dark']}
 					onClick={onAddToList}
@@ -762,6 +765,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	};
 
 	const renderOtherOptionsNotDeterminingDuplicates = () => {
+		if (showDuplicateWarning) {
+			return null;
+		}
+
 		return (
 			<>
 				{renderIntendedUsage()}
