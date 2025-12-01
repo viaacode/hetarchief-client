@@ -40,7 +40,7 @@ import RadioButtonAccordion from '@visitor-space/components/RadioButtonAccordion
 import type { RadioButtonAccordionOption } from '@visitor-space/components/RadioButtonAccordion/RadioButtonAccordion.types';
 import clsx from 'clsx';
 import { parseISO } from 'date-fns';
-import { kebabCase, noop } from 'lodash-es';
+import { isNil, kebabCase, noop } from 'lodash-es';
 import { useRouter } from 'next/router';
 import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -197,6 +197,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				return;
 			}
 
+			// TODO: adjust endpoint to store all formValues
+			/*
+
 			const response = await MaterialRequestsService.create({
 				objectSchemaIdentifier: materialRequest.objectSchemaIdentifier,
 				type: MaterialRequestType.REUSE,
@@ -218,6 +221,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			});
 			await onSuccessCreated();
 			onCloseModal();
+			 */
 		} catch (_err) {
 			onFailedRequest();
 		}
@@ -226,12 +230,8 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const onFailedRequest = () => {
 		toastService.notify({
 			maxLines: 3,
-			title: tText(
-				'modules/visitor-space/components/material-request-blade/material-request-blade___er-ging-iets-mis'
-			),
-			description: tText(
-				'modules/visitor-space/components/material-request-blade/material-request-blade___er-ging-iets-mis-tijdens-het-opslaan'
-			),
+			title: tText('Er ging iets mis'),
+			description: tText('Er ging iets mis tijdens het opslaan'),
 		});
 	};
 
@@ -355,7 +355,19 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 						paused={isMediaPaused}
 						onPlay={() => setIsMediaPaused(false)}
 						onPause={() => setIsMediaPaused(true)}
-						onMediaReady={(_, file) => setPlayableFile(file)}
+						onMediaReady={(_, file) => {
+							setPlayableFile(file);
+
+							// Prefill the start time if nothing has been set yet (Ensures timecontrols and video are in sync)
+							if (isNil(formValues.startTime)) {
+								setFormValue('startTime', 0);
+							}
+
+							// Prefill the end time if nothing has been set yet (Ensures timecontrols and video are in sync)
+							if (isNil(formValues.endTime)) {
+								setFormValue('endTime', toSeconds(file?.duration) ?? 0);
+							}
+						}}
 					/>
 				</div>
 				{playableFile && (
@@ -368,6 +380,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 							maxTime={toSeconds(playableFile.duration) ?? 0}
 							trackColor="#adadad"
 							highlightColor="#000"
+							// Skip hour formatting if video length is less than an hour
+							skipHourFormatting={(toSeconds(playableFile.duration) ?? 0) < 3600}
+							correctWrongTimeInput={true}
+							allowStartAndEndToBeTheSame={true}
 							onChange={(startTime, endTime) => {
 								if (startTime !== formValues.startTime) {
 									setVideoSeekTime(startTime);
@@ -380,6 +396,11 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 							}}
 							onError={noop}
 						/>
+					</div>
+				)}
+				{(formErrors.startTime || formErrors.endTime) && (
+					<div className={styles['c-request-material-reuse__content-full-width']}>
+						<RedFormWarning error={formErrors.startTime || formErrors.endTime} />
 					</div>
 				)}
 			</div>

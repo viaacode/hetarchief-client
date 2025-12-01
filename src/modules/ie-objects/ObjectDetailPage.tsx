@@ -1864,7 +1864,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							objectRepresentation: getRepresentationByCurrentFileIndex(),
 							maintainerName: mediaInfo?.maintainerName,
 							maintainerSlug: mediaInfo?.maintainerSlug,
-							reuseForm: {},
+							reuseForm: {
+								representationId: getRepresentationByCurrentFileIndex()?.id,
+							},
 						} as MaterialRequest
 					}
 					layer={1}

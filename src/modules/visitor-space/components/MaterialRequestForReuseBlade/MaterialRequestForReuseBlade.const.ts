@@ -43,9 +43,14 @@ export const MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA =
 				}
 				return number().optional();
 			}),
-			endTime: number().when('representationId', ([representationId]) => {
+			endTime: number().when(['representationId', 'startTime'], ([representationId, startTime]) => {
 				if (representationId) {
-					return number().required(tText('Video start knippunt - error verplicht'));
+					return number()
+						.required(tText('Video start knippunt - error verplicht'))
+						.moreThan(
+							startTime,
+							tText('Video start knippunt - error eindtijd gelijk aan of voor starttijd')
+						);
 				}
 				return number().optional();
 			}),
