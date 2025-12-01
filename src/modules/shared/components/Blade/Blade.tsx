@@ -27,6 +27,8 @@ export const Blade: FC<BladeProps> = ({
 	layer,
 	renderTitle,
 	id,
+	extraWide,
+	headerBackground = 'white',
 }) => {
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
 
@@ -66,31 +68,38 @@ export const Blade: FC<BladeProps> = ({
 	}, [escFunction]);
 
 	const renderTopBar = () => {
-		return showBackButton ? (
-			<div className={styles['c-blade__top-bar-container']}>
-				{/* biome-ignore lint/a11y/useKeyWithClickEvents: onKeyUp is added to the inner button */}
-				{/** biome-ignore lint/a11y/noStaticElementInteractions: Container should also be clickable */}
-				<div
-					className={styles['c-blade__back-container']}
-					onClick={() => {
-						handleClose();
-					}}
-				>
-					<Button
-						variants="text"
-						icon={
-							<Icon
-								name={IconNamesLight.ArrowLeft}
-								onKeyUp={(evt) => {
-									if (evt.key === 'Enter') {
-										handleClose();
-									}
-								}}
-							/>
-						}
-					/>
-					<span>{tText('modules/shared/components/blade/blade___vorige-stap')}</span>
-				</div>
+		return (
+			<div
+				className={clsx(
+					styles['c-blade__top-bar-container'],
+					headerBackground === 'platinum' ? 'u-bg-platinum' : 'u-bg-white'
+				)}
+			>
+				{showBackButton && (
+					/* biome-ignore lint/a11y/useKeyWithClickEvents: onKeyUp is added to the inner button */
+					/** biome-ignore lint/a11y/noStaticElementInteractions: Container should also be clickable */
+					<div
+						className={styles['c-blade__back-container']}
+						onClick={() => {
+							handleClose();
+						}}
+					>
+						<Button
+							variants="text"
+							icon={
+								<Icon
+									name={IconNamesLight.ArrowLeft}
+									onKeyUp={(evt) => {
+										if (evt.key === 'Enter') {
+											handleClose();
+										}
+									}}
+								/>
+							}
+						/>
+						<span>{tText('modules/shared/components/blade/blade___vorige-stap')}</span>
+					</div>
+				)}
 				<Button
 					className={clsx(styles['c-blade__close-button'], {
 						[styles['c-blade__close-button--absolute']]: showCloseButtonOnTop,
@@ -102,17 +111,6 @@ export const Blade: FC<BladeProps> = ({
 					disabled={!isOpen}
 				/>
 			</div>
-		) : (
-			<Button
-				className={clsx(styles['c-blade__close-button'], {
-					[styles['c-blade__close-button--absolute']]: showCloseButtonOnTop,
-				})}
-				icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-				aria-label={tText('modules/shared/components/blade/blade___sluiten')}
-				variants="text"
-				onClick={() => handleClose()}
-				disabled={!isOpen}
-			/>
 		);
 	};
 
@@ -129,7 +127,8 @@ export const Blade: FC<BladeProps> = ({
 					isBladeOpen &&
 						(layer === currentLayer || (currentLayer === 0 && isUndefined(layer))) &&
 						'c-blade--active',
-					isLayered && [styles['c-blade--managed']]
+					isLayered && [styles['c-blade--managed']],
+					extraWide && [styles['c-blade--extra-wide']]
 				)}
 				// offset underlying blades
 				style={

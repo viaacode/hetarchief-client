@@ -1,0 +1,80 @@
+@use "../../../../styles/abstracts" as *;
+
+$component: "c-radiobutton-accordion";
+$c-accordion-border: $zinc !default;
+
+.#{$component} {
+	:global(.c-form-control){
+		:global(.c-form-control__label){
+			margin-bottom: $spacer-xs;
+			font-weight: normal;
+		}
+	}
+
+	&__item {
+		border: 0.1rem solid $c-accordion-border;
+
+		&:not(:last-child) {
+			border-bottom: none;
+		}
+
+		&-body {
+			display: block;
+			border-top: .5px solid $c-accordion-border;
+			margin-left: 5rem;
+			font-size: $font-size-sm;
+			line-height: 2rem;
+			padding: $spacer-xs $spacer-sm $spacer-xs 0;
+
+			&:has(.c-radiobutton-accordion){
+				padding: 0;
+			}
+
+			.c-radiobutton-accordion {
+				.c-radiobutton-accordion__item {
+					border: none;
+
+					&:not(:last-child) {
+						border-bottom: .5px solid $c-accordion-border;
+					}
+				}
+			}
+
+		}
+
+		&-closed {
+			.c-radiobutton-accordion__body {
+				display: none;
+			}
+		}
+
+		&-selected {
+			background-color: $platinum;
+		}
+
+		&-header {
+			font-size: 1.6rem;
+			font-weight: 500;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		&-header-title {
+			font-size: 1.6rem;
+			font-weight: 500;
+			flex-grow: 1;
+			padding: 1.6rem;
+			cursor: pointer;
+		}
+
+		&-icon {
+			color: $grey;
+			flex-shrink: 0;
+		}
+	}
+
+	&__form-error{
+		margin-bottom: 0;
+	}
+}

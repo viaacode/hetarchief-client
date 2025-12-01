@@ -1,7 +1,12 @@
 import { selectUser } from '@auth/store/user';
 import type { User } from '@auth/types';
 import { IE_OBJECT_INTRA_CP_LICENSES } from '@ie-objects/ie-objects.consts';
-import { IeObjectAccessThrough, type IeObjectLicense } from '@ie-objects/ie-objects.types';
+import {
+	IeObjectAccessThrough,
+	type IeObjectLicense,
+	MediaActions,
+} from '@ie-objects/ie-objects.types';
+import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
 import { useGetMaterialRequestsForMediaItem } from '@material-requests/hooks/get-material-requests-for-media-item';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestRequesterCapacity, MaterialRequestType } from '@material-requests/types';
@@ -12,16 +17,18 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount, setShowMaterialRequestCenter } from '@shared/store/ui';
-import type { IeObjectType } from '@shared/types/ie-objects';
+import { type IeObjectType, SimpleIeObjectType } from '@shared/types/ie-objects';
 import clsx from 'clsx';
 import { intersection, noop } from 'lodash-es';
 import React, { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { StringParam, useQueryParam, withDefault } from 'use-query-params';
 import MaterialCard from '../MaterialCard/MaterialCard';
 import styles from './MaterialRequestBlade.module.scss';
 
@@ -69,13 +76,19 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const dispatch = useDispatch();
 	const locale = useLocale();
 	const user: User | null = useSelector(selectUser);
+	const simpleType = mapDcTermsFormatToSimpleType(objectDctermsFormat);
 	const triggerComplexReuseFlow =
+		(simpleType === SimpleIeObjectType.AUDIO || simpleType === SimpleIeObjectType.VIDEO) &&
 		intersection(objectLicences, IE_OBJECT_INTRA_CP_LICENSES).length > 0;
 	const hideViewTypeOption = objectAccessThrough.includes(IeObjectAccessThrough.SECTOR);
 
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestType | undefined>(type);
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
 	const [noTypeSelectedOnSave, setNoTypeSelectedOnSave] = useState(false);
+	const [, setActiveBlade] = useQueryParam(
+		QUERY_PARAM_KEY.ACTIVE_BLADE,
+		withDefault(StringParam, undefined)
+	);
 
 	const {
 		data: potentialDuplicates,
@@ -149,7 +162,11 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				return;
 			}
 			setNoTypeSelectedOnSave(false);
-			// TODO trigger complex flow
+
+			if (typeSelected === MaterialRequestType.REUSE && triggerComplexReuseFlow) {
+				setActiveBlade(MediaActions.RequestMaterialForReuse);
+				return;
+			}
 
 			const response = await MaterialRequestsService.create({
 				objectSchemaIdentifier,

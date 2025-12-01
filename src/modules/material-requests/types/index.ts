@@ -1,4 +1,8 @@
-import type { IeObjectAccessThrough, IeObjectLicense } from '@ie-objects/ie-objects.types';
+import type {
+	IeObjectAccessThrough,
+	IeObjectLicense,
+	IeObjectRepresentation,
+} from '@ie-objects/ie-objects.types';
 import { tText } from '@shared/helpers/translate';
 import type { IeObjectType } from '@shared/types/ie-objects';
 
@@ -18,6 +22,7 @@ export interface MaterialRequest {
 	objectPublishedOrCreatedDate?: string;
 	objectAccessThrough: IeObjectAccessThrough[];
 	objectLicences: IeObjectLicense[];
+	objectRepresentation: IeObjectRepresentation;
 	profileId: string;
 	reason: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;
@@ -25,8 +30,29 @@ export interface MaterialRequest {
 	requesterId: string;
 	requesterMail: string;
 	type: MaterialRequestType;
+	reuseForm?: MaterialRequestReuseForm;
 	updatedAt: string;
 	organisation?: string;
+}
+
+export interface MaterialRequestReuseForm {
+	representationId?: string;
+	startTime?: number;
+	endTime?: number;
+	downloadQuality?: MaterialRequestDownloadQuality;
+	intendedUsageDescription?: string;
+	intendedUsage?: MaterialRequestIntendedUsage;
+	distributionAccess?: MaterialRequestDistributionAccess;
+	distributionType?: MaterialRequestDistributionType;
+	distributionTypeDigitalOnline?: MaterialRequestDistributionDigitalOnline;
+	distributionTypeOtherExplanation?: string;
+	materialEditing?: MaterialRequestEditing;
+	geographicalUsage?: MaterialRequestGeographicalUsage;
+	geographicalUsageDescription?: string;
+	timeUsageType?: MaterialRequestTimeUsage;
+	timeUsageFrom?: string;
+	timeUsageTo?: string;
+	copyrightDisplay?: MaterialRequestCopyrightDisplay;
 }
 
 export interface MaterialRequestDetail extends MaterialRequest {
@@ -42,6 +68,7 @@ export interface MaterialRequestCreation {
 	reason: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;
 	organisation?: string;
+	reuseForm?: MaterialRequestReuseForm;
 }
 
 export interface MaterialRequestUpdate {
@@ -112,3 +139,52 @@ export enum MaterialRequestKeys {
 }
 
 export type MaterialRequestRow = { row: { original: MaterialRequest } };
+
+export enum MaterialRequestDownloadQuality {
+	NORMAL = 'NORMAL',
+	HIGH = 'HIGH',
+}
+
+export enum MaterialRequestIntendedUsage {
+	INTERN = 'INTERN',
+	NON_COMMERCIAL = 'NON_COMMERCIAL',
+	COMMERCIAL = 'COMMERCIAL',
+}
+
+export enum MaterialRequestDistributionAccess {
+	INTERN = 'INTERN',
+	INTERN_EXTERN = 'INTERN_EXTERN',
+}
+
+export enum MaterialRequestDistributionType {
+	DIGITAL_OFFLINE = 'DIGITAL_OFFLINE',
+	DIGITAL_ONLINE = 'DIGITAL_ONLINE',
+	OTHER = 'OTHER',
+}
+
+export enum MaterialRequestDistributionDigitalOnline {
+	INTERNAL = 'INTERNAL',
+	NO_AUTH = 'NO_AUTH',
+	WITH_AUTH = 'WITH_AUTH',
+}
+
+export enum MaterialRequestEditing {
+	NONE = 'NONE',
+	WITH_CHANGES = 'WITH_CHANGES',
+}
+
+export enum MaterialRequestGeographicalUsage {
+	COMPLETELY_LOCAL = 'COMPLETELY_LOCAL',
+	NOT_COMPLETELY_LOCAL = 'NOT_COMPLETELY_LOCAL',
+}
+
+export enum MaterialRequestTimeUsage {
+	UNLIMITED = 'UNLIMITED',
+	IN_TIME = 'IN_TIME',
+}
+
+export enum MaterialRequestCopyrightDisplay {
+	SAME_TIME_WITH_OBJECT = 'SAME_TIME_WITH_OBJECT',
+	AROUND_OBJECT = 'AROUND_OBJECT',
+	NONE = 'NONE',
+}

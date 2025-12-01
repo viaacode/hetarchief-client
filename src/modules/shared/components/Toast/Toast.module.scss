@@ -27,6 +27,12 @@
 		grid-row: 1 / 3;
 	}
 
+	&__action-button {
+		margin-top: $spacer-xs;
+		margin-left: auto;
+		grid-column: span 2;
+	}
+
 	&--visible {
 		visibility: visible;
 	}
