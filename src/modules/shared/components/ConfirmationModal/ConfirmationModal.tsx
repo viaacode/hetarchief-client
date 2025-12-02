@@ -1,7 +1,7 @@
 import { Button } from '@meemoo/react-components';
-import type { FC } from 'react';
-
 import { tHtml } from '@shared/helpers/translate';
+import clsx from 'clsx';
+import type { FC } from 'react';
 
 import { Modal } from '../Modal';
 
@@ -9,6 +9,7 @@ import type { ConfirmationModalProps } from './ConfirmationModal.types';
 
 const ConfirmationModal: FC<ConfirmationModalProps> = ({
 	text = {},
+	buttonWrapperClassName,
 	onConfirm,
 	onCancel,
 	onClose,
@@ -18,7 +19,7 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 
 	const renderButtons = () => {
 		return (
-			<div className="u-text-center u-mb-48">
+			<div className={buttonWrapperClassName || clsx('u-text-center', 'u-mb-48')}>
 				<Button
 					label={
 						no || tHtml('modules/shared/components/confirmation-modal/confirmation-modal___nee')

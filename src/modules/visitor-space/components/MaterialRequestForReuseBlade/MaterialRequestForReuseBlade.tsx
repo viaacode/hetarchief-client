@@ -1,6 +1,7 @@
 import { selectUser } from '@auth/store/user';
 import type { User } from '@auth/types';
 import type { IeObjectFile } from '@ie-objects/ie-objects.types';
+import { GET_BLANK_MATERIAL_REQUEST_REUSE_FORM } from '@material-requests/const';
 import { useGetMaterialRequestsForMediaItem } from '@material-requests/hooks/get-material-requests-for-media-item';
 import { MaterialRequestsService } from '@material-requests/services';
 import {
@@ -21,6 +22,7 @@ import {
 import { Alert, Button, FormControl, TextArea, TimeCropControls } from '@meemoo/react-components';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import { Blade } from '@shared/components/Blade/Blade';
+import { ConfirmModalBeforeUnload } from '@shared/components/ConfirmModalBeforeUnload';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
@@ -73,6 +75,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const user: User | null = useSelector(selectUser);
 
 	const [formValues, setFormValues] = useState<MaterialRequestReuseForm>({
+		...GET_BLANK_MATERIAL_REQUEST_REUSE_FORM(),
 		...materialRequest.reuseForm,
 	});
 	const [formErrors, setFormErrors] = useState<
@@ -80,6 +83,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	>({});
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [playableFile, setPlayableFile] = useState<IeObjectFile | null>(null);
+	const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
 	const {
 		data: potentialDuplicates,
@@ -126,8 +130,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	 */
 	useEffect(() => {
 		if (isOpen) {
-			setFormValues({ ...materialRequest.reuseForm });
+			setFormValues({ ...GET_BLANK_MATERIAL_REQUEST_REUSE_FORM(), ...materialRequest.reuseForm });
 			setFormErrors({});
+			setHasUnsavedChanges(false);
 			refetchPotentialDuplicates().then(noop);
 		}
 	}, [isOpen, materialRequest, refetchPotentialDuplicates]);
@@ -157,6 +162,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			}
 		}
 
+		setHasUnsavedChanges(JSON.stringify(materialRequest.reuseForm) !== JSON.stringify(formValues));
 		setFormValues((prevState) => ({
 			...prevState,
 			...newFormValues,
@@ -797,15 +803,23 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			headerBackground="platinum"
 		>
 			{isOpen && (
-				<div className={styles['c-request-material-reuse__content-container']}>
-					<div className={styles['c-request-material-reuse__content-form']}>
-						{renderVideoSettings()}
-						{renderDownloadQuality()}
-						{renderOtherOptionsNotDeterminingDuplicates()}
-						{showDuplicateWarning && renderDuplicateAlert()}
+				<>
+					<div className={styles['c-request-material-reuse__content-container']}>
+						<div className={styles['c-request-material-reuse__content-form']}>
+							{renderVideoSettings()}
+							{renderDownloadQuality()}
+							{renderOtherOptionsNotDeterminingDuplicates()}
+							{showDuplicateWarning && renderDuplicateAlert()}
+						</div>
+						{renderFooter()}
 					</div>
-					{renderFooter()}
-				</div>
+					<ConfirmModalBeforeUnload
+						when={hasUnsavedChanges}
+						message={tText(
+							'Ben je zeker dat je dit venster wilt sluiten? Hiermee gaat de voortgang verloren en wordt het object niet toegevoegd aan jouw aanvraaglijst. Als je verder werkt en het toevoegt aan je aanvraaglijst, kan je het nadien nog aanpassen.'
+						)}
+					/>
+				</>
 			)}
 		</Blade>
 	);

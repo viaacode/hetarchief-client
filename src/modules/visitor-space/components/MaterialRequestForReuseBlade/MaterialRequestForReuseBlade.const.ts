@@ -37,6 +37,7 @@ export type MaterialRequestReuseSettings = Pick<
 export const MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA =
 	(): Schema<MaterialRequestReuseSettings> => {
 		return object({
+			representationId: string().optional(),
 			startTime: number().when('representationId', ([representationId]) => {
 				if (representationId) {
 					return number().required(tText('Video start knippunt - error verplicht'));
