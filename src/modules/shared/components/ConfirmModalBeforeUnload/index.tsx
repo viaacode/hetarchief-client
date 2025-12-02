@@ -1,0 +1,1 @@
+export { ConfirmModalBeforeUnload } from './ConfirmModalBeforeUnload';

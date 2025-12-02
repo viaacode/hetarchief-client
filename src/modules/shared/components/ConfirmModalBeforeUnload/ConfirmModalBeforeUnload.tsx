@@ -1,9 +1,14 @@
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { tText } from '@shared/helpers/translate';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 
-export const useWarningBeforeUnload = ({ when, message }: { when: boolean; message?: string }) => {
+interface ConfirmModalBeforeUnloadProps {
+	when: boolean;
+	message?: string;
+}
+
+export const ConfirmModalBeforeUnload: FC<ConfirmModalBeforeUnloadProps> = ({ when, message }) => {
 	const router = useRouter();
 	const [hasConfirmed, setHasConfirmed] = useState(false);
 	const [nextRoute, setNextRoute] = useState<string | null>(null);
@@ -73,27 +78,20 @@ export const useWarningBeforeUnload = ({ when, message }: { when: boolean; messa
 		}
 	}, [nextRoute, hasConfirmed, router]);
 
-	const ConfirmModal = useCallback(
-		() => (
-			<ConfirmationModal
-				text={{
-					description: (
-						<p className="u-px-24 u-mb-32 u-color-neutral u-text-center">{messageOrDefault}</p>
-					),
-					yes: tText('Verder werken'),
-					no: tText('Ja, ik ben zeker'),
-				}}
-				buttonWrapperClassName="u-p-24 u-flex-space-between u-flex"
-				isOpen={isModalOpen}
-				onClose={resetRouteAndHasConfirmed}
-				onCancel={confirmNavigation}
-				onConfirm={resetRouteAndHasConfirmed}
-			/>
-		),
-		[messageOrDefault, isModalOpen, resetRouteAndHasConfirmed, confirmNavigation]
+	return (
+		<ConfirmationModal
+			text={{
+				description: (
+					<p className="u-px-24 u-mb-32 u-color-neutral u-text-center">{messageOrDefault}</p>
+				),
+				yes: tText('Verder werken'),
+				no: tText('Ja, ik ben zeker'),
+			}}
+			buttonWrapperClassName="u-p-24 u-flex-space-between u-flex"
+			isOpen={isModalOpen}
+			onClose={resetRouteAndHasConfirmed}
+			onCancel={confirmNavigation}
+			onConfirm={resetRouteAndHasConfirmed}
+		/>
 	);
-
-	return {
-		ConfirmModal,
-	};
 };

@@ -22,6 +22,7 @@ import {
 import { Alert, Button, FormControl, TextArea, TimeCropControls } from '@meemoo/react-components';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import { Blade } from '@shared/components/Blade/Blade';
+import { ConfirmModalBeforeUnload } from '@shared/components/ConfirmModalBeforeUnload';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
@@ -31,7 +32,6 @@ import { toSeconds } from '@shared/helpers/duration';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { validateForm } from '@shared/helpers/validate-form';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { useWarningBeforeUnload } from '@shared/hooks/use-warning-before-unload';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount, setShowMaterialRequestCenter } from '@shared/store/ui';
 import {
@@ -84,13 +84,6 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [playableFile, setPlayableFile] = useState<IeObjectFile | null>(null);
 	const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-
-	const { ConfirmModal } = useWarningBeforeUnload({
-		when: isOpen && hasUnsavedChanges,
-		message: tText(
-			'Ben je zeker dat je dit venster wilt sluiten? Hiermee gaat de voortgang verloren en wordt het object niet toegevoegd aan jouw aanvraaglijst. Als je verder werkt en het toevoegt aan je aanvraaglijst, kan je het nadien nog aanpassen.'
-		),
-	});
 
 	const {
 		data: potentialDuplicates,
@@ -810,16 +803,23 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			headerBackground="platinum"
 		>
 			{isOpen && (
-				<div className={styles['c-request-material-reuse__content-container']}>
-					<div className={styles['c-request-material-reuse__content-form']}>
-						{renderVideoSettings()}
-						{renderDownloadQuality()}
-						{renderOtherOptionsNotDeterminingDuplicates()}
-						{showDuplicateWarning && renderDuplicateAlert()}
+				<>
+					<div className={styles['c-request-material-reuse__content-container']}>
+						<div className={styles['c-request-material-reuse__content-form']}>
+							{renderVideoSettings()}
+							{renderDownloadQuality()}
+							{renderOtherOptionsNotDeterminingDuplicates()}
+							{showDuplicateWarning && renderDuplicateAlert()}
+						</div>
+						{renderFooter()}
 					</div>
-					{renderFooter()}
-					<ConfirmModal />
-				</div>
+					<ConfirmModalBeforeUnload
+						when={hasUnsavedChanges}
+						message={tText(
+							'Ben je zeker dat je dit venster wilt sluiten? Hiermee gaat de voortgang verloren en wordt het object niet toegevoegd aan jouw aanvraaglijst. Als je verder werkt en het toevoegt aan je aanvraaglijst, kan je het nadien nog aanpassen.'
+						)}
+					/>
+				</>
 			)}
 		</Blade>
 	);
