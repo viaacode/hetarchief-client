@@ -88,7 +88,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const { ConfirmModal } = useWarningBeforeUnload({
 		when: isOpen && hasUnsavedChanges,
 		message: tText(
-			'Ben je zeker dat je dit venster wilt sluiten? Hiermee gaat de voortgang verloren en wordt het object niet toegevoegd aan jouw aanvraaglijst. Als je verder werkt en het toevoegt aan je aanvraaglijs, kan je het nadien nog aanpassen.'
+			'Ben je zeker dat je dit venster wilt sluiten? Hiermee gaat de voortgang verloren en wordt het object niet toegevoegd aan jouw aanvraaglijst. Als je verder werkt en het toevoegt aan je aanvraaglijst, kan je het nadien nog aanpassen.'
 		),
 	});
 
