@@ -59,6 +59,7 @@ import {
 } from '@iiif-viewer/helpers/trigger-iiif-viewer-events';
 import { IiifViewer } from '@iiif-viewer/IiifViewer';
 import type { ImageInfo, ImageInfoWithToken, Rect, TextLine } from '@iiif-viewer/IiifViewer.types';
+import { GET_BLANK_MATERIAL_REQUEST_REUSE_FORM } from '@material-requests/const';
 import { MaterialRequestsService } from '@material-requests/services';
 import type { MaterialRequest } from '@material-requests/types';
 import { Alert, Button, type TabProps, Tabs } from '@meemoo/react-components';
@@ -1865,6 +1866,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							maintainerName: mediaInfo?.maintainerName,
 							maintainerSlug: mediaInfo?.maintainerSlug,
 							reuseForm: {
+								...GET_BLANK_MATERIAL_REQUEST_REUSE_FORM(),
 								representationId: getRepresentationByCurrentFileIndex()?.id,
 							},
 						} as MaterialRequest

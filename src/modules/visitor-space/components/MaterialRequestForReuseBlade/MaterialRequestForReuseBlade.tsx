@@ -1,6 +1,7 @@
 import { selectUser } from '@auth/store/user';
 import type { User } from '@auth/types';
 import type { IeObjectFile } from '@ie-objects/ie-objects.types';
+import { GET_BLANK_MATERIAL_REQUEST_REUSE_FORM } from '@material-requests/const';
 import { useGetMaterialRequestsForMediaItem } from '@material-requests/hooks/get-material-requests-for-media-item';
 import { MaterialRequestsService } from '@material-requests/services';
 import {
@@ -30,6 +31,7 @@ import { toSeconds } from '@shared/helpers/duration';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { validateForm } from '@shared/helpers/validate-form';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { useWarningBeforeUnload } from '@shared/hooks/use-warning-before-unload';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount, setShowMaterialRequestCenter } from '@shared/store/ui';
 import {
@@ -73,6 +75,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const user: User | null = useSelector(selectUser);
 
 	const [formValues, setFormValues] = useState<MaterialRequestReuseForm>({
+		...GET_BLANK_MATERIAL_REQUEST_REUSE_FORM(),
 		...materialRequest.reuseForm,
 	});
 	const [formErrors, setFormErrors] = useState<
@@ -80,6 +83,14 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	>({});
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [playableFile, setPlayableFile] = useState<IeObjectFile | null>(null);
+	const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+
+	const { ConfirmModal } = useWarningBeforeUnload({
+		when: isOpen && hasUnsavedChanges,
+		message: tText(
+			'Ben je zeker dat je dit venster wilt sluiten? Hiermee gaat de voortgang verloren en wordt het object niet toegevoegd aan jouw aanvraaglijst. Als je verder werkt en het toevoegt aan je aanvraaglijs, kan je het nadien nog aanpassen.'
+		),
+	});
 
 	const {
 		data: potentialDuplicates,
@@ -126,8 +137,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	 */
 	useEffect(() => {
 		if (isOpen) {
-			setFormValues({ ...materialRequest.reuseForm });
+			setFormValues({ ...GET_BLANK_MATERIAL_REQUEST_REUSE_FORM(), ...materialRequest.reuseForm });
 			setFormErrors({});
+			setHasUnsavedChanges(false);
 			refetchPotentialDuplicates().then(noop);
 		}
 	}, [isOpen, materialRequest, refetchPotentialDuplicates]);
@@ -157,6 +169,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			}
 		}
 
+		setHasUnsavedChanges(JSON.stringify(materialRequest.reuseForm) !== JSON.stringify(formValues));
 		setFormValues((prevState) => ({
 			...prevState,
 			...newFormValues,
@@ -805,6 +818,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 						{showDuplicateWarning && renderDuplicateAlert()}
 					</div>
 					{renderFooter()}
+					<ConfirmModal />
 				</div>
 			)}
 		</Blade>

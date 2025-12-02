@@ -36,23 +36,23 @@ export interface MaterialRequest {
 }
 
 export interface MaterialRequestReuseForm {
-	representationId?: string;
-	startTime?: number;
-	endTime?: number;
-	downloadQuality?: MaterialRequestDownloadQuality;
-	intendedUsageDescription?: string;
-	intendedUsage?: MaterialRequestIntendedUsage;
-	distributionAccess?: MaterialRequestDistributionAccess;
-	distributionType?: MaterialRequestDistributionType;
-	distributionTypeDigitalOnline?: MaterialRequestDistributionDigitalOnline;
-	distributionTypeOtherExplanation?: string;
-	materialEditing?: MaterialRequestEditing;
-	geographicalUsage?: MaterialRequestGeographicalUsage;
-	geographicalUsageDescription?: string;
-	timeUsageType?: MaterialRequestTimeUsage;
-	timeUsageFrom?: string;
-	timeUsageTo?: string;
-	copyrightDisplay?: MaterialRequestCopyrightDisplay;
+	representationId: string | undefined;
+	startTime: number | undefined;
+	endTime: number | undefined;
+	downloadQuality: MaterialRequestDownloadQuality | undefined;
+	intendedUsageDescription: string | undefined;
+	intendedUsage: MaterialRequestIntendedUsage | undefined;
+	distributionAccess: MaterialRequestDistributionAccess | undefined;
+	distributionType: MaterialRequestDistributionType | undefined;
+	distributionTypeDigitalOnline: MaterialRequestDistributionDigitalOnline | undefined;
+	distributionTypeOtherExplanation: string | undefined;
+	materialEditing: MaterialRequestEditing | undefined;
+	geographicalUsage: MaterialRequestGeographicalUsage | undefined;
+	geographicalUsageDescription: string | undefined;
+	timeUsageType: MaterialRequestTimeUsage | undefined;
+	timeUsageFrom: string | undefined;
+	timeUsageTo: string | undefined;
+	copyrightDisplay: MaterialRequestCopyrightDisplay | undefined;
 }
 
 export interface MaterialRequestDetail extends MaterialRequest {
