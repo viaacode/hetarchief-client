@@ -243,7 +243,6 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 	const renderTitle = (props: Pick<HTMLElement, 'id' | 'className'>) => {
 		const title = isEditMode ? tText('Pas je aanvraag aan') : tText('Aanvraag');
-
 		return (
 			<div className={styles['c-request-material-reuse__title-container']}>
 				<div {...props} style={{ paddingBottom: 0 }}>
@@ -261,6 +260,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 							title={materialRequest.objectSchemaName}
 							thumbnail={materialRequest.objectThumbnailUrl}
 							hideThumbnail={true}
+							orientation="vertical"
 							link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${materialRequest.maintainerSlug}/${materialRequest.objectSchemaIdentifier}`}
 							type={materialRequest.objectDctermsFormat}
 							publishedBy={materialRequest.maintainerName}

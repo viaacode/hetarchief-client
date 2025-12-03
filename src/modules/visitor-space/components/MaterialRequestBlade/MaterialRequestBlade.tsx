@@ -402,6 +402,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				className={styles['c-request-material__material']}
 				objectId={objectSchemaIdentifier}
 				title={objectName}
+				orientation={objectThumbnailUrl ? 'horizontal' : 'vertical'}
 				thumbnail={objectThumbnailUrl}
 				link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectSchemaIdentifier}`}
 				type={objectDctermsFormat}

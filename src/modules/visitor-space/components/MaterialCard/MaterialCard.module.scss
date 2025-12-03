@@ -1,11 +1,10 @@
 @use "sass:math";
 @use "src/styles/abstracts" as *;
 
-$component: "c-material-card";
 $c-material-card-no-video-intended-spacing: 0.9rem;
 $material-card-list-view-height: 13rem;
 
-.#{$component} {
+.c-material-card {
 	> a {
 		text-decoration: none;
 	}
