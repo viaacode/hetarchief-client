@@ -170,6 +170,8 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	};
 
 	const onSuccessCreated = async () => {
+		setHasUnsavedChanges(false);
+
 		const response = await MaterialRequestsService.getAll({
 			size: 500,
 			isPersonal: true,
