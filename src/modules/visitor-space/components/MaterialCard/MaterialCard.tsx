@@ -24,8 +24,9 @@ const MaterialCard: FC<MaterialCardProps> = ({
 	publishedOrCreatedDate,
 	icon,
 	withBorder = true,
+	orientation,
 }) => {
-	const withThumbnail = !thumbnail || hideThumbnail;
+	const withThumbnail = !!thumbnail || !hideThumbnail;
 
 	const renderTitle = (): ReactNode => {
 		if (typeof title === 'string') {
@@ -144,7 +145,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 			<NextLink passHref href={link} style={{ textDecoration: 'none' }}>
 				<Card
 					className={classNames}
-					orientation={withThumbnail ? 'vertical' : 'horizontal'}
+					orientation={orientation}
 					edge={withBorder ? 'zinc' : 'none'}
 					title={renderTitle()}
 					image={renderImage(thumbnail)}

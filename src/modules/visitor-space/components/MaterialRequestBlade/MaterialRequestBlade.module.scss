@@ -1,8 +1,6 @@
 @use "../../../../styles/abstracts" as *;
 
-$component: "c-request-material";
-
-.#{$component} {
+.c-request-material {
 	&__subtitle {
 		color: $zinc;
 		padding: 0 5.6rem 0 3.2rem;

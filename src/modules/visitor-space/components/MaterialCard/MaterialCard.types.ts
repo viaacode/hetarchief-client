@@ -14,4 +14,5 @@ export interface MaterialCardProps {
 	publishedOrCreatedDate?: string;
 	icon?: IconName;
 	withBorder?: boolean;
+	orientation: 'horizontal' | 'vertical';
 }
