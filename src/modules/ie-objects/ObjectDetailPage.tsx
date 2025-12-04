@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NumberParam, StringParam, useQueryParam, withDefault } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
-import { selectUser } from '@auth/store/user';
+import { selectHasCheckedLogin, selectUser } from '@auth/store/user';
 import type { User } from '@auth/types';
 import { RequestAccessBlade, type RequestAccessFormState } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
@@ -135,6 +135,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const locale = useLocale();
 	const dispatch = useDispatch();
 	const user: User | null = useSelector(selectUser);
+	const hasCheckedLogin: boolean = useSelector(selectHasCheckedLogin);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const ieObjectId = router.query.ie as string;
 	const maintainerSlug = router.query.slug as string;
@@ -172,6 +173,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const [isRelatedObjectsBladeOpen, setIsRelatedObjectsBladeOpen] = useState(false);
 	const [hasNewsPaperBeenRendered, setHasNewsPaperBeenRendered] = useState(false);
 	const [hasAppliedUrlSearchTerms, setHasAppliedUrlSearchTerms] = useState<boolean>(false);
+	/**
+	 * Ensure that we only trigger the 'view' event once per unique URL/href
+	 */
+	const [hasTriggeredViewEventForHref, setHasTriggeredViewEventForHref] = useState<string | null>(null);
 
 	// Layout
 	useStickyLayout();
@@ -928,7 +933,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 * Trigger events for viewing the ie object
 	 */
 	useEffect(() => {
-		if (mediaInfo) {
+		if (mediaInfo && hasCheckedLogin && hasTriggeredViewEventForHref !== window.location.href) {
+			setHasTriggeredViewEventForHref(window.location.href);
 			const path = window.location.href;
 			const eventData = {
 				type: mapDcTermsFormatToSimpleType(mediaInfo.dctermsFormat),
