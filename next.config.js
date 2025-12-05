@@ -338,6 +338,30 @@ module.exports = withTM({
 				destination: '/zoeken?aanbieder=ku-leuven-dienst-onderwijs',
 				permanent: true,
 			},
+			// villanella => de-studio
+			// https://meemoo.atlassian.net/browse/ARC-3304
+			{
+				source: '/bezoek/villanella/:path*',
+				destination: '/bezoek/de-studio/:path*',
+				permanent: true,
+			},
+			{
+				source: '/zoeken/villanella/:path*',
+				destination: '/zoeken/de-studio/:path*',
+				permanent: true,
+			},
+			{
+				source: '/zoeken',
+				has: [
+					{
+						type: 'query',
+						key: 'aanbieder',
+						value: 'villanella',
+					},
+				],
+				destination: '/zoeken?aanbieder=de-studio',
+				permanent: true,
+			},
 			// Keep the redirects above  until 01/01/2026: https://meemoo.atlassian.net/browse/ARC-2659
 			// ku-leuven-universiteitsbibliotheek => ku-leuven-universiteitsbibliotheken
 			{
