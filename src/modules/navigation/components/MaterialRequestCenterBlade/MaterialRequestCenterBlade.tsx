@@ -1,5 +1,6 @@
 import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
+import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { MaterialRequestsService } from '@material-requests/services';
 import { type MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
@@ -9,8 +10,9 @@ import { BladeManager } from '@shared/components/BladeManager';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
+import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
-import { tHtml, tText } from '@shared/helpers/translate';
+import { tText } from '@shared/helpers/translate';
 import { setMaterialRequestCount } from '@shared/store/ui';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
 import clsx from 'clsx';
@@ -100,9 +102,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					)}
 					{materialRequests?.length && ` (${materialRequests.length})`}
 				</h2>
-				<p className={styles['c-material-request-center-blade__subtitle']}>
-					{tHtml('Meer informatie over aanvragen')}
-				</p>
+				<MaterialRequestInformation />
 				<p className={styles['c-material-request-center-blade__more-info']}>
 					{tText('Vraag dit materiaal rechtstreeks aan bij de aanbieder(s).')}
 				</p>
@@ -130,7 +130,13 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						publishedBy={materialRequest.maintainerName}
 						publishedOrCreatedDate={materialRequest.objectPublishedOrCreatedDate}
 						icon={getIconFromObjectType(materialRequest.objectDctermsFormat, true)}
-					/>
+					>
+						<p className={clsx('u-font-size-14')}>
+							{tText('Aanvraag tot', {
+								requestType: GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[materialRequest.type],
+							})}
+						</p>
+					</MaterialCard>
 				</div>
 				<div className={styles['c-material-request-center-blade__material-actions']}>
 					<Button

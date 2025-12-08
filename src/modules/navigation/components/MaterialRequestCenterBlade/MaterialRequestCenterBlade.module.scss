@@ -23,12 +23,6 @@ $component: "c-material-request-center-blade";
 		color: $black;
 	}
 
-	&__subtitle {
-		font-size: $font-size-sm;
-		color: $zinc;
-		padding: 0 $spacer-1xl $spacer-md $spacer-lg;
-	}
-
 	&__more-info {
 		padding: 0 $spacer-1xl 0 $spacer-lg;
 	}
@@ -62,6 +56,15 @@ $component: "c-material-request-center-blade";
 				color: $blue;
 				margin-right: $spacer-xs;
 				font-size: 2.4rem;
+			}
+
+			:global(.c-card__children-wrapper) {
+				@include text-ellipsis;
+
+				color: $black;
+				font-weight: $font-weight-normal;
+				margin-bottom: 0 !important;
+				padding-top: $spacer-xs;
 			}
 		}
 

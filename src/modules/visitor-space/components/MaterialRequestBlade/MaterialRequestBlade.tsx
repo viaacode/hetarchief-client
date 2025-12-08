@@ -14,6 +14,7 @@ import { Alert, Button, RadioButton, TextArea } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
@@ -256,9 +257,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				<h2 {...props} style={{ paddingBottom: 0 }}>
 					{title}
 				</h2>
-				<p className={styles['c-request-material__subtitle']}>
-					{tHtml('Meer informatie over aanvragen')}
-				</p>
+				<MaterialRequestInformation />
 			</div>
 		);
 	};

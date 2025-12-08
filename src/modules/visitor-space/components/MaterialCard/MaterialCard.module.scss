@@ -105,7 +105,7 @@ $material-card-list-view-height: 13rem;
 
 	:global(.c-card__subtitle-wrapper) {
 		font-size: $font-size-sm;
-		line-height: $line-height-base * 2;
+		line-height: $line-height-base * 2rem;
 		font-weight: $font-weight-normal;
 		text-overflow: ellipsis;
 		overflow: hidden;

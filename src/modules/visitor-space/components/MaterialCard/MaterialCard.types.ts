@@ -15,4 +15,5 @@ export interface MaterialCardProps {
 	icon?: IconName;
 	withBorder?: boolean;
 	orientation: 'horizontal' | 'vertical';
+	children?: ReactNode;
 }

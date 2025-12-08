@@ -25,6 +25,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 	icon,
 	withBorder = true,
 	orientation,
+	children,
 }) => {
 	const withThumbnail = !!thumbnail || !hideThumbnail;
 
@@ -152,7 +153,9 @@ const MaterialCard: FC<MaterialCardProps> = ({
 					subtitle={objectId}
 					caption={renderCaption()}
 					padding="both"
-				/>
+				>
+					{children}
+				</Card>
 			</NextLink>
 		</div>
 	);
