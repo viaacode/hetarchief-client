@@ -7,7 +7,7 @@ export interface ConfirmationModalProps extends Pick<ModalProps, 'isOpen' | 'onC
 	text?: ConfirmationModalTranslations;
 	onConfirm?: () => void;
 	onCancel?: () => void;
-	buttonWrapperClassName?: string;
+	fullWidthButtonWrapper?: boolean;
 }
 
 export interface ConfirmationModalTranslations {

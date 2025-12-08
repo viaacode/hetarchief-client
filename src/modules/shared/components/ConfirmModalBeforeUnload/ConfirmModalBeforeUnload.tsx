@@ -87,7 +87,7 @@ export const ConfirmModalBeforeUnload: FC<ConfirmModalBeforeUnloadProps> = ({ wh
 				yes: tText('Verder werken'),
 				no: tText('Ja, ik ben zeker'),
 			}}
-			buttonWrapperClassName="u-p-24 u-flex-space-between u-flex"
+			fullWidthButtonWrapper
 			isOpen={isModalOpen}
 			onClose={resetRouteAndHasConfirmed}
 			onCancel={confirmNavigation}

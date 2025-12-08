@@ -3,16 +3,21 @@ import { selectUser } from '@auth/store/user';
 import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { MaterialRequestsService } from '@material-requests/services';
-import { type MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
+import {
+	type MaterialRequest,
+	MaterialRequestKeys,
+	MaterialRequestType,
+} from '@material-requests/types';
 import { Button, type OrderDirection } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import { BladeManager } from '@shared/components/BladeManager';
+import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
-import { tText } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { setMaterialRequestCount } from '@shared/store/ui';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
 import clsx from 'clsx';
@@ -43,6 +48,11 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	const [activeBlade, setActiveBlade] = useState<MaterialRequestBladeId>(
 		MaterialRequestBladeId.Overview
 	);
+	const [materialRequestToDelete, setMaterialRequestToDelete] = useState<MaterialRequest | null>(
+		null
+	);
+	const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+
 	const getCurrentLayer = () => {
 		if (!isOpen) {
 			return 0;
@@ -88,9 +98,26 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		isOpen && refetchMaterialRequests();
 	}, [isOpen, refetchMaterialRequests]);
 
-	const deleteMaterialRequest = async (id: string) => {
+	const deleteMaterialRequest = async (materialRequest: MaterialRequest) => {
+		setMaterialRequestToDelete(materialRequest);
+		if (materialRequest.type === MaterialRequestType.REUSE && materialRequest.reuseForm) {
+			setShowConfirmDelete(true);
+			return;
+		}
+
+		await doDeleteMaterialRequest(materialRequest.id);
+	};
+
+	const doDeleteMaterialRequest = async (id: string) => {
+		setShowConfirmDelete(false);
 		const deleteResponse = await MaterialRequestsService.delete(id);
 		deleteResponse && (await refetchMaterialRequests());
+		setMaterialRequestToDelete(null);
+	};
+
+	const cancelDeleteMaterialRequest = async () => {
+		setShowConfirmDelete(false);
+		setMaterialRequestToDelete(null);
 	};
 
 	const renderTitle = (props: Pick<HTMLElement, 'id' | 'className'>) => {
@@ -160,7 +187,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					/>
 					<Button
 						key={'delete-material-request'}
-						onClick={() => deleteMaterialRequest(materialRequest.id)}
+						onClick={() => deleteMaterialRequest(materialRequest)}
 						variants={['silver', 'sm']}
 						name="Delete"
 						icon={
@@ -312,6 +339,20 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					refetch={refetchMaterialRequests}
 				/>
 			)}
+			<ConfirmationModal
+				text={{
+					yes: tHtml('Verwijderen'),
+					no: tHtml('Annuleren'),
+					description: tHtml(
+						'Ben je zeker dat je deze aanvraag wil verwijderen? De informatie in het hergebruikformulier zal hiermee ook verwijderd worden.'
+					),
+				}}
+				fullWidthButtonWrapper
+				isOpen={showConfirmDelete}
+				onClose={cancelDeleteMaterialRequest}
+				onCancel={cancelDeleteMaterialRequest}
+				onConfirm={() => doDeleteMaterialRequest(materialRequestToDelete?.id as string)}
+			/>
 		</BladeManager>
 	);
 };
