@@ -80,6 +80,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const simpleType = mapDcTermsFormatToSimpleType(objectDctermsFormat);
 	const triggerComplexReuseFlow =
 		(simpleType === SimpleIeObjectType.AUDIO || simpleType === SimpleIeObjectType.VIDEO) &&
+		!!user?.isKeyUser &&
 		intersection(objectLicences, IE_OBJECT_INTRA_CP_LICENSES).length > 0;
 	const hideViewTypeOption = objectAccessThrough.includes(IeObjectAccessThrough.SECTOR);
 
