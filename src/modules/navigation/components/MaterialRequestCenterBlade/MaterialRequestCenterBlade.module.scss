@@ -30,10 +30,10 @@ $component: "c-material-request-center-blade";
 	&__material-container {
 		display: flex;
 		border: 0.1rem solid $silver;
-		margin: $spacer-md $spacer-lg 0;
+		margin: $spacer-md $spacer-lg;
 
-		&:last-child {
-			margin-bottom: $spacer-md;
+		& + & {
+			margin-top: 0;
 		}
 	}
 

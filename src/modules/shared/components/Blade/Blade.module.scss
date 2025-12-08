@@ -101,16 +101,18 @@
 		}
 	}
 
-	&__footer-wrapper {
-		grid-row-start: 4;
-	}
-
 	&__flex-grow {
 		flex-grow: 1;
 	}
 
 	&__footer {
+		grid-row-start: 4;
 		align-content: flex-end;
+	}
+
+	&__footer-sticky {
+		border-top: $divider-grey;
+		background-color: $platinum;
 	}
 
 	&__overlay {

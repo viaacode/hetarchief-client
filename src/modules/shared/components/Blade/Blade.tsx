@@ -29,6 +29,7 @@ export const Blade: FC<BladeProps> = ({
 	id,
 	extraWide,
 	headerBackground = 'white',
+	stickyFooter = false,
 }) => {
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
 
@@ -146,8 +147,13 @@ export const Blade: FC<BladeProps> = ({
 					{renderTitle?.({ id, className: styles['c-blade__title'] })}
 					{children}
 					<div className={styles['c-blade__flex-grow']} />
-					{footer && <div className={styles['c-blade__footer']}>{footer}</div>}
+					{!stickyFooter && footer && <div className={styles['c-blade__footer']}>{footer}</div>}
 				</div>
+				{stickyFooter && footer && (
+					<div className={clsx(styles['c-blade__footer'], styles['c-blade__footer-sticky'])}>
+						{footer}
+					</div>
+				)}
 			</div>
 		);
 	};

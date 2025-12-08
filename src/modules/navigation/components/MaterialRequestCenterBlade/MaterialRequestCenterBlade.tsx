@@ -210,9 +210,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			<div className={styles['c-material-request-center-blade__close-button-container']}>
 				{user && (
 					<Button
-						label={tText(
-							'modules/navigation/components/material-request-center-blade/material-request-center-blade___vul-gegevens-aan'
-						)}
+						label={tText('Werk je aanvraag af')}
 						variants={['block', 'text', 'dark']}
 						onClick={() => {
 							setActiveBlade(MaterialRequestBladeId.PersonalDetails);
@@ -251,6 +249,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				footer={isOpen && renderFooter()}
 				onClose={onClose}
 				isManaged
+				stickyFooter
 				id="material-request-center-blade"
 			>
 				{renderTitle({
