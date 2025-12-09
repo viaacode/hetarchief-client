@@ -88,7 +88,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	>({});
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [playableFile, setPlayableFile] = useState<IeObjectFile | null>(null);
-	const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+	const [hasUnsavedChanges, setHasUnsavedChanges] = useState(isEditMode);
 
 	const {
 		data: potentialDuplicates,
@@ -138,10 +138,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			// Not using the materialRequest ensures this happens only when the isOpen has changed
 			setFormValues(defaultFormValues);
 			setFormErrors({});
-			setHasUnsavedChanges(false);
+			setHasUnsavedChanges(isEditMode);
 			refetchPotentialDuplicates().then(noop);
 		}
-	}, [isOpen, defaultFormValues, refetchPotentialDuplicates]);
+	}, [isOpen, isEditMode, defaultFormValues, refetchPotentialDuplicates]);
 
 	const onCloseModal = () => {
 		onClose();
@@ -168,7 +168,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			}
 		}
 
-		setHasUnsavedChanges(JSON.stringify(materialRequest.reuseForm) !== JSON.stringify(formValues));
+		setHasUnsavedChanges(
+			isEditMode || JSON.stringify(materialRequest.reuseForm) !== JSON.stringify(formValues)
+		);
 		setFormValues((prevState) => ({
 			...prevState,
 			...newFormValues,
