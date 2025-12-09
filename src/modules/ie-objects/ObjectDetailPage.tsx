@@ -1835,17 +1835,20 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				<MaterialRequestBlade
 					isOpen={activeBlade === MediaActions.RequestMaterial}
 					onClose={onCloseBlade}
-					objectName={mediaInfo?.name}
-					objectSchemaIdentifier={mediaInfo?.schemaIdentifier}
-					objectDctermsFormat={mediaInfo.dctermsFormat}
-					objectThumbnailUrl={mediaInfo.thumbnailUrl}
-					objectPublishedOrCreatedDate={
-						mediaInfo.datePublished || mediaInfo.dateCreated || undefined
+					materialRequest={
+						{
+							objectSchemaName: mediaInfo.name,
+							objectSchemaIdentifier: mediaInfo.schemaIdentifier,
+							objectDctermsFormat: mediaInfo.dctermsFormat,
+							objectThumbnailUrl: mediaInfo.thumbnailUrl,
+							objectPublishedOrCreatedDate:
+								mediaInfo.datePublished || mediaInfo.dateCreated || undefined,
+							objectAccessThrough: mediaInfo.accessThrough || [],
+							objectLicences: mediaInfo.licenses,
+							maintainerName: mediaInfo.maintainerName,
+							maintainerSlug: mediaInfo.maintainerSlug,
+						} as MaterialRequest
 					}
-					objectAccessThrough={mediaInfo?.accessThrough}
-					objectLicences={mediaInfo?.licenses}
-					maintainerName={mediaInfo?.maintainerName}
-					maintainerSlug={mediaInfo?.maintainerSlug}
 					layer={1}
 					currentLayer={1}
 				/>
@@ -1862,13 +1865,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							objectThumbnailUrl: mediaInfo.thumbnailUrl,
 							objectPublishedOrCreatedDate:
 								mediaInfo.datePublished || mediaInfo.dateCreated || undefined,
+							objectRepresentationId: getRepresentationByCurrentFileIndex()?.id,
 							objectRepresentation: getRepresentationByCurrentFileIndex(),
 							maintainerName: mediaInfo?.maintainerName,
 							maintainerSlug: mediaInfo?.maintainerSlug,
-							reuseForm: {
-								...GET_BLANK_MATERIAL_REQUEST_REUSE_FORM(),
-								representationId: getRepresentationByCurrentFileIndex()?.id,
-							},
+							reuseForm: GET_BLANK_MATERIAL_REQUEST_REUSE_FORM(),
 						} as MaterialRequest
 					}
 					layer={1}

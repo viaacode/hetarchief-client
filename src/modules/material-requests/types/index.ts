@@ -22,7 +22,8 @@ export interface MaterialRequest {
 	objectPublishedOrCreatedDate?: string;
 	objectAccessThrough: IeObjectAccessThrough[];
 	objectLicences: IeObjectLicense[];
-	objectRepresentation: IeObjectRepresentation;
+	objectRepresentationId?: string;
+	objectRepresentation?: IeObjectRepresentation;
 	profileId: string;
 	reason: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;
@@ -64,6 +65,7 @@ export interface MaterialRequestDetail extends MaterialRequest {
 
 export interface MaterialRequestCreation {
 	objectSchemaIdentifier: string;
+	objectRepresentationId: string | undefined;
 	type: MaterialRequestType;
 	reason: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;

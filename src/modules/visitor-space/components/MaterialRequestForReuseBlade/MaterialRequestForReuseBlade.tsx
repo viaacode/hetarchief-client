@@ -77,6 +77,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const [formValues, setFormValues] = useState<MaterialRequestReuseForm>({
 		...GET_BLANK_MATERIAL_REQUEST_REUSE_FORM(),
 		...materialRequest.reuseForm,
+		representationId: materialRequest.objectRepresentationId,
 	});
 	const [formErrors, setFormErrors] = useState<
 		Partial<Record<keyof MaterialRequestReuseSettings, string | undefined>>
@@ -211,6 +212,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 			const response = await MaterialRequestsService.create({
 				objectSchemaIdentifier: materialRequest.objectSchemaIdentifier,
+				objectRepresentationId: materialRequest.objectRepresentationId,
 				type: MaterialRequestType.REUSE,
 				reason: '',
 				requesterCapacity: MaterialRequestRequesterCapacity.OTHER,

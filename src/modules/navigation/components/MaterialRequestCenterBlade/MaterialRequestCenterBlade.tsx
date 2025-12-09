@@ -299,18 +299,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						setActiveBlade(MaterialRequestBladeId.Overview);
 						setSelectedMaterialRequest(null);
 					}}
-					objectName={selectedMaterialRequest.objectSchemaName}
-					objectSchemaIdentifier={selectedMaterialRequest.objectSchemaIdentifier}
-					objectDctermsFormat={selectedMaterialRequest.objectDctermsFormat}
-					objectThumbnailUrl={selectedMaterialRequest.objectThumbnailUrl}
-					objectPublishedOrCreatedDate={selectedMaterialRequest.objectPublishedOrCreatedDate}
-					objectLicences={selectedMaterialRequest.objectLicences}
-					objectAccessThrough={selectedMaterialRequest.objectAccessThrough}
-					maintainerName={selectedMaterialRequest.maintainerName}
-					maintainerSlug={selectedMaterialRequest.maintainerSlug}
-					materialRequestId={selectedMaterialRequest.id}
-					reason={selectedMaterialRequest.reason}
-					type={selectedMaterialRequest.type}
+					materialRequest={selectedMaterialRequest}
 					refetchMaterialRequests={refetchMaterialRequests}
 					isEditMode
 					layer={activeBlade === MaterialRequestBladeId.EditMaterialRequest ? 2 : 99}
