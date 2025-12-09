@@ -78,6 +78,7 @@ export interface MaterialRequestUpdate {
 	reason: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;
 	organisation?: string;
+	reuseForm?: MaterialRequestReuseForm;
 }
 
 export interface MaterialRequestSendAll {
