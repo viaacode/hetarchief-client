@@ -37,7 +37,7 @@ import styles from './MaterialRequestBlade.module.scss';
 interface MaterialRequestBladeProps {
 	isOpen: boolean;
 	isEditMode?: boolean;
-	onClose: () => void;
+	onClose: (shouldTriggerComplexReuseFlow: boolean) => void;
 	materialRequest: MaterialRequest;
 	refetchMaterialRequests?: () => void;
 	layer: number;
@@ -142,8 +142,8 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		}
 	}, [isOpen, reason, type, refetchPotentialDuplicates]);
 
-	const onCloseModal = () => {
-		onClose();
+	const onCloseModal = (shouldTriggerComplexReuseFlow: boolean) => {
+		onClose(shouldTriggerComplexReuseFlow);
 		setReasonInputValue('');
 		setTypeSelected(undefined);
 		setNoTypeSelectedOnSave(false);
@@ -193,7 +193,8 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				),
 			});
 			await onSuccessCreated();
-			onCloseModal();
+			//Reuse form already triggered before creation
+			onCloseModal(false);
 		} catch (_err) {
 			onFailedRequest();
 		}
@@ -229,7 +230,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				});
 			}
 			await onSuccessCreated();
-			onCloseModal();
+			onCloseModal(shouldTriggerReuseForm);
 		} catch (_err) {
 			onFailedRequest();
 		}
@@ -307,7 +308,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
 						)}
 						variants={['block', 'text']}
-						onClick={onCloseModal}
+						onClick={() => onCloseModal(false)}
 						className={styles['c-request-material__annuleer-button']}
 					/>
 				</div>
@@ -373,7 +374,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
 					)}
 					variants={['block', 'text']}
-					onClick={onCloseModal}
+					onClick={() => onCloseModal(false)}
 					className={styles['c-request-material__annuleer-button']}
 				/>
 			</div>
@@ -393,7 +394,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					label={tText('Ga naar mijn aanvraaglijst')}
 					variants={['text', 'underline']}
 					onClick={() => {
-						onCloseModal();
+						onCloseModal(false);
 						dispatch(setShowMaterialRequestCenter(true));
 					}}
 				/>
@@ -435,7 +436,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					className="u-py-0 u-px-0 u-height-auto"
 					label={tText('Ga naar het formulier')}
 					variants={['text', 'underline']}
-					onClick={onCloseModal}
+					onClick={() => onCloseModal(true)}
 				/>
 			</>
 		);
@@ -446,7 +447,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			isOpen={isOpen}
 			renderTitle={renderTitle}
 			footer={isOpen && renderFooter()}
-			onClose={onCloseModal}
+			onClose={() => onCloseModal(false)}
 			layer={layer}
 			currentLayer={currentLayer}
 			className={styles['c-request-material']}

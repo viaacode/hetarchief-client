@@ -17,21 +17,25 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { setMaterialRequestCount } from '@shared/store/ui';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
+import { MaterialRequestForReuseBlade } from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade';
 import clsx from 'clsx';
 import { type FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { StringParam, useQueryParam, withDefault } from 'use-query-params';
 import bladeStyles from '../../../shared/components/Blade/Blade.module.scss';
 import MaterialCard from '../../../visitor-space/components/MaterialCard/MaterialCard';
 import PersonalInfoBlade from '../PersonalInfoBlade/PersonalInfoBlade';
 import styles from './MaterialRequestCenterBlade.module.scss';
 
 export enum MaterialRequestBladeId {
-	Overview = 'Overview',
-	EditMaterialRequest = 'EditMaterialRequest',
-	PersonalDetails = 'PersonalDetails',
+	Overview = 'overview',
+	EditMaterialRequest = 'edit-material-request',
+	EditMaterialRequestReuseForm = 'edit-material-request-reuse-form',
+	PersonalDetails = 'personal-details',
 }
 
 interface MaterialRequestCenterBladeProps {
@@ -45,8 +49,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	const [selectedMaterialRequest, setSelectedMaterialRequest] = useState<MaterialRequest | null>(
 		null
 	);
-	const [activeBlade, setActiveBlade] = useState<MaterialRequestBladeId>(
-		MaterialRequestBladeId.Overview
+	const [activeBlade, setActiveBlade] = useQueryParam(
+		QUERY_PARAM_KEY.ACTIVE_BLADE,
+		withDefault(StringParam, undefined)
 	);
 	const [materialRequestToDelete, setMaterialRequestToDelete] = useState<MaterialRequest | null>(
 		null
@@ -64,6 +69,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			case MaterialRequestBladeId.EditMaterialRequest:
 			case MaterialRequestBladeId.PersonalDetails:
 				return 2; // Both blades are at level 2
+
+			case MaterialRequestBladeId.EditMaterialRequestReuseForm:
+				return 3;
 
 			default:
 				return 0;
@@ -95,8 +103,16 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	}, [materialRequests, dispatch]);
 
 	useEffect(() => {
-		isOpen && refetchMaterialRequests();
-	}, [isOpen, refetchMaterialRequests]);
+		if (isOpen) {
+			setActiveBlade(MaterialRequestBladeId.Overview);
+			void refetchMaterialRequests();
+		}
+	}, [isOpen, setActiveBlade, refetchMaterialRequests]);
+
+	const onCloseBlades = () => {
+		setActiveBlade(undefined);
+		onClose();
+	};
 
 	const deleteMaterialRequest = async (materialRequest: MaterialRequest) => {
 		setMaterialRequestToDelete(materialRequest);
@@ -227,7 +243,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___sluit'
 						)}
 						variants={['block', 'text']}
-						onClick={onClose}
+						onClick={onCloseBlades}
 						className={styles['c-material-request-center-blade__send-button']}
 					/>
 				</div>
@@ -250,7 +266,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						'modules/navigation/components/material-request-center-blade/material-request-center-blade___sluit'
 					)}
 					variants={['block', 'text', 'light']}
-					onClick={onClose}
+					onClick={onCloseBlades}
 				/>
 			</div>
 		);
@@ -259,10 +275,11 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	return (
 		<BladeManager
 			currentLayer={getCurrentLayer()}
-			onCloseBlade={(layer) => {
+			onCloseBlade={(layer, currentLayer) => {
 				setActiveBlade(MaterialRequestBladeId.Overview);
-				if (layer === 1) {
-					onClose();
+				// Prevent closing of the reuse modal
+				if (layer === 1 && currentLayer !== 3) {
+					onCloseBlades();
 				}
 			}}
 			opacityStep={0.1}
@@ -274,7 +291,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				currentLayer={getCurrentLayer()}
 				renderTitle={() => null}
 				footer={isOpen && renderFooter()}
-				onClose={onClose}
+				onClose={onCloseBlades}
 				isManaged
 				stickyFooter
 				id="material-request-center-blade"
@@ -295,9 +312,13 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			{selectedMaterialRequest && (
 				<MaterialRequestBlade
 					isOpen={activeBlade === MaterialRequestBladeId.EditMaterialRequest}
-					onClose={() => {
-						setActiveBlade(MaterialRequestBladeId.Overview);
-						setSelectedMaterialRequest(null);
+					onClose={(shouldTriggerReuseForm) => {
+						if (shouldTriggerReuseForm) {
+							setActiveBlade(MaterialRequestBladeId.EditMaterialRequestReuseForm);
+						} else {
+							setActiveBlade(MaterialRequestBladeId.Overview);
+							setSelectedMaterialRequest(null);
+						}
 					}}
 					materialRequest={selectedMaterialRequest}
 					refetchMaterialRequests={refetchMaterialRequests}
@@ -308,12 +329,28 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					}
 				/>
 			)}
+			{selectedMaterialRequest && (
+				<MaterialRequestForReuseBlade
+					isOpen={activeBlade === MaterialRequestBladeId.EditMaterialRequestReuseForm}
+					onClose={() => {
+						setSelectedMaterialRequest(null);
+						setActiveBlade(MaterialRequestBladeId.Overview);
+					}}
+					materialRequest={selectedMaterialRequest}
+					refetchMaterialRequests={refetchMaterialRequests}
+					isEditMode
+					layer={activeBlade === MaterialRequestBladeId.EditMaterialRequestReuseForm ? 3 : 99}
+					currentLayer={
+						activeBlade === MaterialRequestBladeId.EditMaterialRequestReuseForm
+							? getCurrentLayer()
+							: 9999
+					}
+				/>
+			)}
 			{user && (
 				<PersonalInfoBlade
 					isOpen={activeBlade === MaterialRequestBladeId.PersonalDetails}
-					onClose={() => {
-						setActiveBlade(MaterialRequestBladeId.Overview);
-					}}
+					onClose={() => setActiveBlade(MaterialRequestBladeId.Overview)}
 					personalInfo={{
 						fullName: user.fullName,
 						email: user.email,
