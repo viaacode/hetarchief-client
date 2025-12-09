@@ -242,6 +242,40 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		}
 	};
 
+	const onEditRequest = async () => {
+		try {
+			if (showDuplicateWarning) {
+				return;
+			}
+
+			const isFormValid = await validateFormValues(formValues);
+
+			if (!isFormValid) {
+				return;
+			}
+
+			const response = await MaterialRequestsService.update(materialRequest.id, {
+				type: MaterialRequestType.REUSE,
+				reason: '',
+				requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
+				reuseForm: formValues,
+			});
+			if (response === undefined) {
+				onFailedRequest();
+				return;
+			}
+			toastService.notify({
+				maxLines: 3,
+				title: tText('Wijzigingen success'),
+				description: tText('Wijzigingen toegepast'),
+			});
+			await onSuccessCreated();
+			onCloseModal();
+		} catch (_err) {
+			onFailedRequest();
+		}
+	};
+
 	const onFailedRequest = () => {
 		toastService.notify({
 			maxLines: 3,
@@ -284,6 +318,24 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	};
 
 	const renderFooter = () => {
+		if (isEditMode) {
+			return (
+				<div className={styles['c-request-material-reuse__footer-container']}>
+					<Button
+						label={tText('Keer terug')}
+						variants={['text']}
+						onClick={() => router.back()}
+						className={styles['c-request-material-reuse__annuleer-button']}
+					/>
+					<Button
+						label={tText('Wijzigingen opslaan')}
+						variants={['text', 'dark']}
+						onClick={onEditRequest}
+						className={styles['c-request-material-reuse__voeg-toe-button']}
+					/>
+				</div>
+			);
+		}
 		return (
 			<div className={styles['c-request-material-reuse__footer-container']}>
 				<Button
