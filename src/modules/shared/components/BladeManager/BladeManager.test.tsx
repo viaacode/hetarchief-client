@@ -1,9 +1,8 @@
 import { jest } from '@jest/globals';
 import { Button } from '@meemoo/react-components';
+import { Blade } from '@shared/components/Blade/Blade';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-
-import { Blade } from '@shared/components/Blade/Blade';
 import '@testing-library/jest-dom';
 
 import { mockStore } from '../../../../__mocks__/store';
@@ -67,7 +66,7 @@ describe('Component: <Blade /> (default)', () => {
 
 	it('render call onClose when the close button is clicked', () => {
 		const onClick = jest.fn() as () => null;
-		renderBladeManager(1, onClick);
+		renderBladeManager(2, onClick);
 
 		const closeButton = screen.getByText('Blade 1').parentElement?.previousElementSibling;
 
@@ -75,7 +74,7 @@ describe('Component: <Blade /> (default)', () => {
 
 		expect(onClick).toHaveBeenCalled;
 		expect(onClick).toHaveBeenCalledTimes(1);
-		expect(onClick).toHaveBeenCalledWith(1);
+		expect(onClick).toHaveBeenCalledWith(1, 2);
 	});
 
 	it('render call onClose when the overlay is clicked', () => {
@@ -88,7 +87,7 @@ describe('Component: <Blade /> (default)', () => {
 
 		expect(onClick).toHaveBeenCalled;
 		expect(onClick).toHaveBeenCalledTimes(1);
-		expect(onClick).toHaveBeenCalledWith(1);
+		expect(onClick).toHaveBeenCalledWith(1, 1);
 	});
 
 	it('render render overlays progressively lighter', () => {
