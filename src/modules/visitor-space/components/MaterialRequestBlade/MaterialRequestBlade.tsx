@@ -12,6 +12,7 @@ import {
 } from '@material-requests/types';
 import { Alert, Button, RadioButton, TextArea } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
+import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
@@ -36,7 +37,7 @@ import styles from './MaterialRequestBlade.module.scss';
 interface MaterialRequestBladeProps {
 	isOpen: boolean;
 	isEditMode?: boolean;
-	onClose: () => void;
+	onClose: (shouldTriggerComplexReuseFlow: boolean) => void;
 	materialRequest: MaterialRequest;
 	refetchMaterialRequests?: () => void;
 	layer: number;
@@ -64,6 +65,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		objectRepresentationId,
 		type,
 		reason,
+		reuseForm,
 		maintainerSlug,
 		maintainerName,
 	} = materialRequest;
@@ -80,6 +82,8 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestType | undefined>(type);
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
 	const [noTypeSelectedOnSave, setNoTypeSelectedOnSave] = useState(false);
+	const [showConfirmTypeEdit, setShowConfirmTypeEdit] = useState(false);
+
 	const [, setActiveBlade] = useQueryParam(
 		QUERY_PARAM_KEY.ACTIVE_BLADE,
 		withDefault(StringParam, undefined)
@@ -121,6 +125,11 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		materialRequestId,
 	]);
 
+	const showReuseFormWarning = useMemo(
+		() => isEditMode && type === MaterialRequestType.REUSE && !!reuseForm,
+		[isEditMode, type, reuseForm]
+	);
+
 	/**
 	 * Reset form when the model is opened
 	 */
@@ -133,8 +142,8 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		}
 	}, [isOpen, reason, type, refetchPotentialDuplicates]);
 
-	const onCloseModal = () => {
-		onClose();
+	const onCloseModal = (shouldTriggerComplexReuseFlow: boolean) => {
+		onClose(shouldTriggerComplexReuseFlow);
 		setReasonInputValue('');
 		setTypeSelected(undefined);
 		setNoTypeSelectedOnSave(false);
@@ -184,7 +193,44 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				),
 			});
 			await onSuccessCreated();
-			onCloseModal();
+			//Reuse form already triggered before creation
+			onCloseModal(false);
+		} catch (_err) {
+			onFailedRequest();
+		}
+	};
+
+	const doEditRequest = async () => {
+		try {
+			setShowConfirmTypeEdit(false);
+
+			const response = await MaterialRequestsService.update(materialRequestId, {
+				type: typeSelected as MaterialRequestType,
+				reason: reasonInputValue,
+				requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
+				reuseForm,
+			});
+			if (response === undefined) {
+				onFailedRequest();
+				return;
+			}
+
+			const shouldTriggerReuseForm =
+				typeSelected === MaterialRequestType.REUSE && triggerComplexReuseFlow;
+
+			if (!shouldTriggerReuseForm) {
+				toastService.notify({
+					maxLines: 3,
+					title: tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-succes'
+					),
+					description: tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-toegepast'
+					),
+				});
+			}
+			await onSuccessCreated();
+			onCloseModal(shouldTriggerReuseForm);
 		} catch (_err) {
 			onFailedRequest();
 		}
@@ -200,26 +246,12 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					return;
 				}
 				setNoTypeSelectedOnSave(false);
-				const response = await MaterialRequestsService.update(materialRequestId, {
-					type: typeSelected,
-					reason: reasonInputValue,
-					requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
-				});
-				if (response === undefined) {
-					onFailedRequest();
-					return;
+
+				if (showReuseFormWarning && typeSelected !== MaterialRequestType.REUSE) {
+					setShowConfirmTypeEdit(true);
+				} else {
+					await doEditRequest();
 				}
-				toastService.notify({
-					maxLines: 3,
-					title: tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-succes'
-					),
-					description: tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-toegepast'
-					),
-				});
-				await onSuccessCreated();
-				onCloseModal();
 			} catch (_err) {
 				onFailedRequest();
 			}
@@ -266,6 +298,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-opslaan'
 						)}
 						variants={['block', 'text']}
+						disabled={showDuplicateWarning}
 						onClick={onEditRequest}
 						className={styles['c-request-material__verstuur-button']}
 					/>
@@ -275,7 +308,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
 						)}
 						variants={['block', 'text']}
-						onClick={onCloseModal}
+						onClick={() => onCloseModal(false)}
 						className={styles['c-request-material__annuleer-button']}
 					/>
 				</div>
@@ -341,7 +374,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
 					)}
 					variants={['block', 'text']}
-					onClick={onCloseModal}
+					onClick={() => onCloseModal(false)}
 					className={styles['c-request-material__annuleer-button']}
 				/>
 			</div>
@@ -361,7 +394,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					label={tText('Ga naar mijn aanvraaglijst')}
 					variants={['text', 'underline']}
 					onClick={() => {
-						onCloseModal();
+						onCloseModal(false);
 						dispatch(setShowMaterialRequestCenter(true));
 					}}
 				/>
@@ -380,12 +413,41 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		);
 	};
 
+	const renderReuseFormAlert = (): ReactNode => {
+		return (
+			<Alert
+				className={styles['c-request-material__alert']}
+				icon={<Icon name={IconNamesLight.Exclamation} aria-hidden />}
+				title={tText('Hergebruikformulier is ingevuld')}
+				content={renderReuseFormAlertContent()}
+			/>
+		);
+	};
+
+	const renderReuseFormAlertContent = (): ReactNode => {
+		return (
+			<>
+				<p>
+					{tText(
+						'Je hebt al op dit materiaal een formulier voor hergebruik ingevuld. Als je het type aanvraag verandert zal de informatie in dit formulier onherroepelijk verwijderd worden. Je kan de inhoud van het formulier aanpassen door op de onderstaande link te klikken.'
+					)}
+				</p>
+				<Button
+					className="u-py-0 u-px-0 u-height-auto"
+					label={tText('Ga naar het formulier')}
+					variants={['text', 'underline']}
+					onClick={() => onCloseModal(true)}
+				/>
+			</>
+		);
+	};
+
 	return (
 		<Blade
 			isOpen={isOpen}
 			renderTitle={renderTitle}
 			footer={isOpen && renderFooter()}
-			onClose={onCloseModal}
+			onClose={() => onCloseModal(false)}
 			layer={layer}
 			currentLayer={currentLayer}
 			className={styles['c-request-material']}
@@ -478,10 +540,24 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 								</dd>
 							</>
 						)}
-
+					{showReuseFormWarning && renderReuseFormAlert()}
 					{showDuplicateWarning && renderDuplicateAlert()}
 				</dl>
 			</div>
+			<ConfirmationModal
+				text={{
+					description: tText(
+						'Je hebt al op dit materiaal een formulier voor hergebruik ingevuld. Als je het type aanvraag verandert zal de informatie in dit formulier onherroepelijk verwijderd worden.'
+					),
+					yes: tHtml('Type aanvraag wijzigen'),
+					no: tHtml('Annuleren'),
+				}}
+				fullWidthButtonWrapper
+				isOpen={showConfirmTypeEdit}
+				onClose={() => setShowConfirmTypeEdit(false)}
+				onCancel={() => setShowConfirmTypeEdit(false)}
+				onConfirm={doEditRequest}
+			/>
 		</Blade>
 	);
 };

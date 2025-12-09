@@ -45,19 +45,24 @@ export const Blade: FC<BladeProps> = ({
 
 	const handleClose = useCallback(() => {
 		if (isLayered && onCloseBlade) {
-			onCloseBlade(layer);
+			onCloseBlade(layer, currentLayer);
 		} else if (onClose) {
 			onClose();
 		}
-	}, [isLayered, layer, onClose, onCloseBlade]);
+	}, [isLayered, layer, currentLayer, onClose, onCloseBlade]);
 
 	const escFunction = useCallback(
 		(event: KeyboardEvent) => {
-			if (keysEscape.includes(event.key)) {
+			// Only allow the esc functionality to be triggered when the blade is open
+			if (isOpen && keysEscape.includes(event.key)) {
+				if (isLayered) {
+					// Stop propagation in layered blades so it is only triggered once
+					event.stopImmediatePropagation();
+				}
 				handleClose();
 			}
 		},
-		[handleClose]
+		[isOpen, isLayered, handleClose]
 	);
 
 	useEffect(() => {
