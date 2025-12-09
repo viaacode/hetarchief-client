@@ -365,7 +365,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 							start: formValues.startTime ?? null,
 							end: formValues.endTime ?? null,
 						}}
-						poster={undefined}
+						poster={materialRequest.objectThumbnailUrl}
 						allowFullScreen={false}
 						paused={isMediaPaused}
 						onPlay={() => setIsMediaPaused(false)}
