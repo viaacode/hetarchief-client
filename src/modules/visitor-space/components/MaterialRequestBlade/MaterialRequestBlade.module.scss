@@ -1,11 +1,6 @@
 @use "../../../../styles/abstracts" as *;
 
 .c-request-material {
-	&__subtitle {
-		color: $zinc;
-		padding: 0 5.6rem 0 3.2rem;
-	}
-
 	&__maintainer {
 		padding: $spacer-sm $spacer-lg;
 		background-color: $platinum;
@@ -153,5 +148,9 @@
 		p {
 			padding-bottom: $spacer-xs;
 		}
+	}
+
+	&__alert + &__alert {
+		margin-top: $spacer-md;
 	}
 }

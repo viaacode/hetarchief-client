@@ -9,7 +9,7 @@ import type { ConfirmationModalProps } from './ConfirmationModal.types';
 
 const ConfirmationModal: FC<ConfirmationModalProps> = ({
 	text = {},
-	buttonWrapperClassName,
+	fullWidthButtonWrapper,
 	onConfirm,
 	onCancel,
 	onClose,
@@ -19,7 +19,13 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 
 	const renderButtons = () => {
 		return (
-			<div className={buttonWrapperClassName || clsx('u-text-center', 'u-mb-48')}>
+			<div
+				className={
+					fullWidthButtonWrapper
+						? clsx('u-p-24', 'u-flex-space-between', 'u-flex')
+						: clsx('u-text-center', 'u-mb-48')
+				}
+			>
 				<Button
 					label={
 						no || tHtml('modules/shared/components/confirmation-modal/confirmation-modal___nee')
@@ -53,13 +59,12 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 			}
 			footer={renderButtons()}
 		>
-			{description || (
-				<p className="u-px-24 u-mb-32 u-color-neutral u-text-center">
-					{tHtml(
+			<p className="u-px-24 u-mb-32 u-color-neutral u-text-center">
+				{description ||
+					tHtml(
 						'modules/shared/components/confirmation-modal/confirmation-modal___deze-actie-kan-niet-worden-teruggedraaid'
 					)}
-				</p>
-			)}
+			</p>
 		</Modal>
 	);
 };

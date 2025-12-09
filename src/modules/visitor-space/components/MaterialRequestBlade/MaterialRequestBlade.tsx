@@ -1,19 +1,20 @@
 import { selectUser } from '@auth/store/user';
 import type { User } from '@auth/types';
 import { IE_OBJECT_INTRA_CP_LICENSES } from '@ie-objects/ie-objects.consts';
-import {
-	IeObjectAccessThrough,
-	type IeObjectLicense,
-	MediaActions,
-} from '@ie-objects/ie-objects.types';
+import { IeObjectAccessThrough, MediaActions } from '@ie-objects/ie-objects.types';
 import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
 import { useGetMaterialRequestsForMediaItem } from '@material-requests/hooks/get-material-requests-for-media-item';
 import { MaterialRequestsService } from '@material-requests/services';
-import { MaterialRequestRequesterCapacity, MaterialRequestType } from '@material-requests/types';
+import {
+	type MaterialRequest,
+	MaterialRequestRequesterCapacity,
+	MaterialRequestType,
+} from '@material-requests/types';
 import { Alert, Button, RadioButton, TextArea } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
@@ -23,7 +24,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount, setShowMaterialRequestCenter } from '@shared/store/ui';
-import { type IeObjectType, SimpleIeObjectType } from '@shared/types/ie-objects';
+import { SimpleIeObjectType } from '@shared/types/ie-objects';
 import clsx from 'clsx';
 import { intersection, noop } from 'lodash-es';
 import React, { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
@@ -36,19 +37,8 @@ interface MaterialRequestBladeProps {
 	isOpen: boolean;
 	isEditMode?: boolean;
 	onClose: () => void;
-	objectName: string;
-	objectSchemaIdentifier: string;
-	objectThumbnailUrl: string;
-	objectDctermsFormat: IeObjectType;
-	objectPublishedOrCreatedDate?: string;
-	objectAccessThrough?: IeObjectAccessThrough[];
-	objectLicences?: IeObjectLicense[];
-	maintainerName: string;
-	maintainerSlug: string;
-	materialRequestId?: string;
-	reason?: string;
+	materialRequest: MaterialRequest;
 	refetchMaterialRequests?: () => void;
-	type?: MaterialRequestType;
 	layer: number;
 	currentLayer: number;
 }
@@ -57,28 +47,33 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	isOpen,
 	isEditMode = false,
 	onClose,
-	objectName,
-	objectSchemaIdentifier,
-	objectThumbnailUrl,
-	objectDctermsFormat,
-	objectPublishedOrCreatedDate,
-	objectAccessThrough = [],
-	objectLicences = [],
-	maintainerName,
-	maintainerSlug,
-	materialRequestId,
-	type,
-	reason,
+	materialRequest,
 	refetchMaterialRequests,
 	layer,
 	currentLayer,
 }) => {
+	const {
+		id: materialRequestId,
+		objectSchemaName: objectName,
+		objectDctermsFormat,
+		objectSchemaIdentifier,
+		objectLicences,
+		objectAccessThrough,
+		objectThumbnailUrl,
+		objectPublishedOrCreatedDate,
+		objectRepresentationId,
+		type,
+		reason,
+		maintainerSlug,
+		maintainerName,
+	} = materialRequest;
 	const dispatch = useDispatch();
 	const locale = useLocale();
 	const user: User | null = useSelector(selectUser);
 	const simpleType = mapDcTermsFormatToSimpleType(objectDctermsFormat);
 	const triggerComplexReuseFlow =
 		(simpleType === SimpleIeObjectType.AUDIO || simpleType === SimpleIeObjectType.VIDEO) &&
+		!!user?.isKeyUser &&
 		intersection(objectLicences, IE_OBJECT_INTRA_CP_LICENSES).length > 0;
 	const hideViewTypeOption = objectAccessThrough.includes(IeObjectAccessThrough.SECTOR);
 
@@ -170,6 +165,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 
 			const response = await MaterialRequestsService.create({
 				objectSchemaIdentifier,
+				objectRepresentationId,
 				type: typeSelected,
 				reason: reasonInputValue,
 				requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
@@ -256,9 +252,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				<h2 {...props} style={{ paddingBottom: 0 }}>
 					{title}
 				</h2>
-				<p className={styles['c-request-material__subtitle']}>
-					{tHtml('Meer informatie over aanvragen')}
-				</p>
+				<MaterialRequestInformation />
 			</div>
 		);
 	};

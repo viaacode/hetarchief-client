@@ -11,6 +11,7 @@ interface ConfirmModalBeforeUnloadProps {
 export const ConfirmModalBeforeUnload: FC<ConfirmModalBeforeUnloadProps> = ({ when, message }) => {
 	const router = useRouter();
 	const [hasConfirmed, setHasConfirmed] = useState(false);
+	const [navigationThroughBackButton, setNavigationThroughBackButton] = useState(false);
 	const [nextRoute, setNextRoute] = useState<string | null>(null);
 
 	const isModalOpen = useMemo(() => !!nextRoute, [nextRoute]);
@@ -22,11 +23,42 @@ export const ConfirmModalBeforeUnload: FC<ConfirmModalBeforeUnloadProps> = ({ wh
 	const resetRouteAndHasConfirmed = useCallback(() => {
 		setNextRoute(null);
 		setHasConfirmed(false);
+		setNavigationThroughBackButton(false);
 	}, []);
 
 	const confirmNavigation = useCallback(() => {
 		setHasConfirmed(true);
 	}, []);
+
+	const cancelNavigation = useCallback(() => {
+		const windowPath = window.location.pathname + window.location.search;
+
+		// With the custom modal the router and window location get out of sync
+		// When that happens we want to make sure they get in sync again in case we cancel the navigation
+		// It will reset the other values on route completion
+		if (windowPath !== router.asPath) {
+			setNextRoute(router.asPath);
+
+			// If the navigation happened via the back button, we go forward again to the route we were on
+			if (navigationThroughBackButton) {
+				window.history.forward();
+			} else {
+				// Navigation happened via adding a new route, so we are updating it back to the old
+				router.replace(router, router.asPath);
+			}
+		} else {
+			// Only reset this when the router and the window is in sync.
+			resetRouteAndHasConfirmed();
+		}
+	}, [resetRouteAndHasConfirmed, router, navigationThroughBackButton]);
+
+	// Storing if navigation happens via the back button
+	useEffect(() => {
+		router.beforePopState(() => {
+			setNavigationThroughBackButton(true);
+			return true;
+		});
+	}, [router]);
 
 	// Use beforeunload to prevent closing the tab, refreshing the page or moving outside the Next app
 	useEffect(() => {
@@ -44,13 +76,18 @@ export const ConfirmModalBeforeUnload: FC<ConfirmModalBeforeUnloadProps> = ({ wh
 		};
 	}, [when, messageOrDefault]);
 
-	// Use routeChangeStart to prevent navigation inside the Next app
+	// Use beforeHistoryChange to prevent navigation inside the Next app
 	useEffect(() => {
 		const onRouteChangeStart = (route: string) => {
-			if (!when || hasConfirmed) {
+			// Allow routing when we:
+			// Have no need for confirmation
+			// The user has already confirmed
+			// We update the route with the same route (probably to  make sure the window url and router are in sync)
+			if (!when || hasConfirmed || nextRoute === route) {
 				return;
 			}
 
+			// We need confirmation, so store the route we want to navigate to and throw an error on the router to stop navigation
 			setNextRoute(route);
 			router.events.emit('routeChangeError');
 			throw 'navigation aborted';
@@ -67,7 +104,7 @@ export const ConfirmModalBeforeUnload: FC<ConfirmModalBeforeUnloadProps> = ({ wh
 			router.events.off('beforeHistoryChange', onRouteChangeStart);
 			router.events.off('routeChangeComplete', onRouteComplete);
 		};
-	}, [hasConfirmed, router, when, resetRouteAndHasConfirmed]);
+	}, [nextRoute, hasConfirmed, router, when, resetRouteAndHasConfirmed]);
 
 	useEffect(() => {
 		if (hasConfirmed) {
@@ -81,17 +118,15 @@ export const ConfirmModalBeforeUnload: FC<ConfirmModalBeforeUnloadProps> = ({ wh
 	return (
 		<ConfirmationModal
 			text={{
-				description: (
-					<p className="u-px-24 u-mb-32 u-color-neutral u-text-center">{messageOrDefault}</p>
-				),
+				description: messageOrDefault,
 				yes: tText('Verder werken'),
 				no: tText('Ja, ik ben zeker'),
 			}}
-			buttonWrapperClassName="u-p-24 u-flex-space-between u-flex"
+			fullWidthButtonWrapper
 			isOpen={isModalOpen}
-			onClose={resetRouteAndHasConfirmed}
+			onClose={cancelNavigation}
 			onCancel={confirmNavigation}
-			onConfirm={resetRouteAndHasConfirmed}
+			onConfirm={cancelNavigation}
 		/>
 	);
 };

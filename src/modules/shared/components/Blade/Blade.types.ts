@@ -18,4 +18,5 @@ export interface BladeProps extends DefaultComponentProps {
 	id: string;
 	extraWide?: boolean;
 	headerBackground?: 'white' | 'platinum';
+	stickyFooter?: boolean;
 }

@@ -1,6 +1,8 @@
 @use "../../../../styles/abstracts" as *;
 
 .c-request-material-reuse {
+	color: $black;
+
 	.c-blade__top-bar-container {
 		background-color: $platinum;
 	}

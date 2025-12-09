@@ -73,11 +73,16 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const dispatch = useDispatch();
 	const locale = useLocale();
 	const user: User | null = useSelector(selectUser);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: This should only run once so we can use it for resetting
+	const defaultFormValues = useMemo(() => {
+		return {
+			...GET_BLANK_MATERIAL_REQUEST_REUSE_FORM(),
+			...materialRequest.reuseForm,
+			representationId: materialRequest.objectRepresentationId,
+		};
+	}, []);
 
-	const [formValues, setFormValues] = useState<MaterialRequestReuseForm>({
-		...GET_BLANK_MATERIAL_REQUEST_REUSE_FORM(),
-		...materialRequest.reuseForm,
-	});
+	const [formValues, setFormValues] = useState<MaterialRequestReuseForm>(defaultFormValues);
 	const [formErrors, setFormErrors] = useState<
 		Partial<Record<keyof MaterialRequestReuseSettings, string | undefined>>
 	>({});
@@ -130,12 +135,13 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	 */
 	useEffect(() => {
 		if (isOpen) {
-			setFormValues({ ...GET_BLANK_MATERIAL_REQUEST_REUSE_FORM(), ...materialRequest.reuseForm });
+			// Not using the materialRequest ensures this happens only when the isOpen has changed
+			setFormValues(defaultFormValues);
 			setFormErrors({});
 			setHasUnsavedChanges(false);
 			refetchPotentialDuplicates().then(noop);
 		}
-	}, [isOpen, materialRequest, refetchPotentialDuplicates]);
+	}, [isOpen, defaultFormValues, refetchPotentialDuplicates]);
 
 	const onCloseModal = () => {
 		onClose();
@@ -211,6 +217,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 			const response = await MaterialRequestsService.create({
 				objectSchemaIdentifier: materialRequest.objectSchemaIdentifier,
+				objectRepresentationId: materialRequest.objectRepresentationId,
 				type: MaterialRequestType.REUSE,
 				reason: '',
 				requesterCapacity: MaterialRequestRequesterCapacity.OTHER,

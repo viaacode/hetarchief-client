@@ -23,48 +23,27 @@ $component: "c-material-request-center-blade";
 		color: $black;
 	}
 
-	&__subtitle {
-		color: $zinc;
-		padding: 0 5.6rem 3.2rem 3.2rem;
+	&__more-info {
+		padding: 0 $spacer-1xl 0 $spacer-lg;
 	}
 
 	&__material-container {
 		display: flex;
-		align-items: center;
-		border-bottom: 0.2rem solid $platinum;
-	}
+		border: 0.1rem solid $silver;
+		margin: $spacer-md $spacer-lg;
 
-	&__maintainer {
-		padding: $spacer-sm $spacer-lg;
-		background-color: $platinum;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-
-		&-details {
-			color: $neutral;
-			text-align: end;
-			font-size: $font-size-sm;
-		}
-
-		&-logo {
-			position: relative;
-			width: 8rem;
-			height: 5rem;
+		& + & {
+			margin-top: 0;
 		}
 	}
 
 	&__material {
+		flex-grow: 1;
+
 		&:focus,
 		&:focus-within {
 			outline: 0.2rem solid $teal;
 			outline-offset: -0.2rem;
-		}
-
-		&-link {
-			text-decoration: none;
-			padding: $spacer-md $spacer-lg;
-			flex-grow: 3;
 		}
 
 		&-label {
@@ -78,19 +57,22 @@ $component: "c-material-request-center-blade";
 				margin-right: $spacer-xs;
 				font-size: 2.4rem;
 			}
-		}
 
-		&-id {
-			font-size: $font-size-sm;
-			color: $neutral;
-			overflow: hidden;
-			text-overflow: ellipsis;
+			:global(.c-card__children-wrapper) {
+				@include text-ellipsis;
+
+				color: $black;
+				font-weight: $font-weight-normal;
+				margin-bottom: 0 !important;
+				padding-top: $spacer-xs;
+			}
 		}
 
 		&-actions {
 			display: flex;
 			flex-direction: row;
-			padding: $spacer-md $spacer-lg;
+			padding: $spacer-md ;
+			padding-top: 5rem;
 
 			&-button {
 				margin-right: $spacer-xs;
