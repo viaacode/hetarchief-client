@@ -149,4 +149,8 @@
 			padding-bottom: $spacer-xs;
 		}
 	}
+
+	&__alert + &__alert {
+		margin-top: $spacer-md;
+	}
 }
