@@ -37,13 +37,19 @@ export async function getServerSideProps(
 	const schemaIdentifier = context.query.ie as string;
 
 	let ieObject: IeObject | null = null;
+	let showHard404IfNotFound = true;
 	try {
 		ieObject = (await IeObjectsService.getBySchemaIdentifiers([schemaIdentifier]))?.[0];
-	} catch (_err) {
-		return { notFound: true };
+		// biome-ignore lint/suspicious/noExplicitAny: we just do not know
+	} catch (err: any) {
+		if (err?.response?.status === 403) {
+			// https://meemoo.atlassian.net/browse/ARC-3299
+			// Do not throw a hard 404 when the object is not publicly accessible, since users still want to visit that page
+			showHard404IfNotFound = false;
+		}
 	}
 
-	if (!ieObject) {
+	if (!ieObject && showHard404IfNotFound) {
 		return { notFound: true };
 	}
 
