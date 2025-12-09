@@ -103,6 +103,17 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	}, [materialRequests, dispatch]);
 
 	useEffect(() => {
+		// If the center is not open but the active blade is one of its sub-blades, we clear the active blade
+		if (
+			!isOpen &&
+			activeBlade &&
+			Object.values(MaterialRequestBladeId).includes(activeBlade as MaterialRequestBladeId)
+		) {
+			setActiveBlade(undefined);
+		}
+	}, [isOpen, activeBlade, setActiveBlade]);
+
+	useEffect(() => {
 		if (isOpen) {
 			setActiveBlade(MaterialRequestBladeId.Overview);
 			void refetchMaterialRequests();
