@@ -13,6 +13,7 @@ export type AudioOrVideoPlayerProps = {
 	onPlay: () => void;
 	onPause: () => void;
 	onMediaReady: (isAvailable: boolean, playableFile: IeObjectFile | null) => void;
+	onMetadataLoaded?: (evt: Event) => void;
 	dctermsFormat: IeObjectType | null;
 	representation: IeObjectRepresentation | null | undefined;
 	maintainerLogo: string | null | undefined;
