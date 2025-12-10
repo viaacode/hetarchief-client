@@ -17,25 +17,26 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
+import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { setMaterialRequestCount } from '@shared/store/ui';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
 import { MaterialRequestForReuseBlade } from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade';
 import clsx from 'clsx';
+import Link from 'next/link';
 import { type FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParam, withDefault } from 'use-query-params';
 import bladeStyles from '../../../shared/components/Blade/Blade.module.scss';
 import MaterialCard from '../../../visitor-space/components/MaterialCard/MaterialCard';
-import PersonalInfoBlade from '../PersonalInfoBlade/PersonalInfoBlade';
 import styles from './MaterialRequestCenterBlade.module.scss';
 
 export enum MaterialRequestBladeId {
 	Overview = 'overview',
 	EditMaterialRequest = 'edit-material-request',
 	EditMaterialRequestReuseForm = 'edit-material-request-reuse-form',
-	PersonalDetails = 'personal-details',
 }
 
 interface MaterialRequestCenterBladeProps {
@@ -45,6 +46,7 @@ interface MaterialRequestCenterBladeProps {
 
 const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpen, onClose }) => {
 	const dispatch = useDispatch();
+	const locale = useLocale();
 
 	const [selectedMaterialRequest, setSelectedMaterialRequest] = useState<MaterialRequest | null>(
 		null
@@ -67,8 +69,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				return 1;
 
 			case MaterialRequestBladeId.EditMaterialRequest:
-			case MaterialRequestBladeId.PersonalDetails:
-				return 2; // Both blades are at level 2
+				return 2;
 
 			case MaterialRequestBladeId.EditMaterialRequestReuseForm:
 				return 3;
@@ -268,16 +269,20 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		return (
 			<div className={styles['c-material-request-center-blade__close-button-container']}>
 				{user && (
-					<Button
-						label={tText(
+					<Link
+						passHref
+						href={`/${ROUTE_PARTS_BY_LOCALE[locale].account}/${ROUTE_PARTS_BY_LOCALE[locale].myApplicationList}`}
+						onClick={onCloseBlades}
+						aria-label={tText('Werk je aanvraag af')}
+					>
+						<Button
+							label={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___werk-je-aanvraag-af'
 						)}
-						variants={['block', 'text', 'dark']}
-						onClick={() => {
-							setActiveBlade(MaterialRequestBladeId.PersonalDetails);
-						}}
-						className={styles['c-material-request-center-blade__send-button']}
-					/>
+							variants={['block', 'text', 'dark']}
+							className={styles['c-material-request-center-blade__send-button']}
+						/>
+					</Link>
 				)}
 				<Button
 					label={tText(
@@ -363,24 +368,6 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 							? getCurrentLayer()
 							: 9999
 					}
-				/>
-			)}
-			{user && (
-				<PersonalInfoBlade
-					isOpen={activeBlade === MaterialRequestBladeId.PersonalDetails}
-					onClose={() => setActiveBlade(MaterialRequestBladeId.Overview)}
-					personalInfo={{
-						fullName: user.fullName,
-						email: user.email,
-						...(user.organisationName && {
-							organisation: user.organisationName,
-						}),
-					}}
-					layer={activeBlade === MaterialRequestBladeId.PersonalDetails ? 2 : 99}
-					currentLayer={
-						activeBlade === MaterialRequestBladeId.PersonalDetails ? getCurrentLayer() : 9999
-					}
-					refetch={refetchMaterialRequests}
 				/>
 			)}
 			<ConfirmationModal
