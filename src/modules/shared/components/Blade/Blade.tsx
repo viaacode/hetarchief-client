@@ -47,17 +47,13 @@ export const Blade: FC<BladeProps> = ({
 	}, [isOpen]);
 
 	const handleClose = useCallback(() => {
-		console.log('handleClose', hasOpenConfirmationModal);
-
 		if (hasOpenConfirmationModal) {
 			return;
 		}
 
 		if (isLayered && onCloseBlade) {
-			console.log('onCloseBlade');
 			onCloseBlade(layer, currentLayer);
 		} else if (onClose) {
-			console.log('onClose');
 			onClose();
 		}
 	}, [hasOpenConfirmationModal, isLayered, layer, currentLayer, onClose, onCloseBlade]);
