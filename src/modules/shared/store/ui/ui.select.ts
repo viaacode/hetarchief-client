@@ -27,3 +27,5 @@ export const selectMaterialRequestCount = (state: AppState): number =>
 export const selectLastScrollPosition = (state: AppState): LastScrollPositionType | null =>
 	state.ui.lastScrollPosition;
 export const selectBreadcrumbs = (state: AppState): Breadcrumb[] => state.ui.breadcrumbs;
+export const selectHasOpenConfirmationModal = (state: AppState): Breadcrumb[] =>
+	state.ui.hasOpenConfirmationModal;

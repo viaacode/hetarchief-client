@@ -4,10 +4,12 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
+import { selectHasOpenConfirmationModal } from '@shared/store/ui';
 import clsx from 'clsx';
 import FocusTrap from 'focus-trap-react';
 import { isUndefined } from 'lodash-es';
 import { type FC, useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import { Overlay } from '../Overlay';
 
@@ -32,6 +34,7 @@ export const Blade: FC<BladeProps> = ({
 	stickyFooter = false,
 }) => {
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
+	const hasOpenConfirmationModal = useSelector(selectHasOpenConfirmationModal);
 
 	useScrollLock(!isManaged && isOpen, 'Blade');
 
@@ -44,12 +47,16 @@ export const Blade: FC<BladeProps> = ({
 	}, [isOpen]);
 
 	const handleClose = useCallback(() => {
+		if (hasOpenConfirmationModal) {
+			return;
+		}
+
 		if (isLayered && onCloseBlade) {
 			onCloseBlade(layer, currentLayer);
 		} else if (onClose) {
 			onClose();
 		}
-	}, [isLayered, layer, currentLayer, onClose, onCloseBlade]);
+	}, [hasOpenConfirmationModal, isLayered, layer, currentLayer, onClose, onCloseBlade]);
 
 	const escFunction = useCallback(
 		(event: KeyboardEvent) => {

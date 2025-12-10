@@ -167,6 +167,10 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			}
 			setNoTypeSelectedOnSave(false);
 
+			if (showDuplicateWarning) {
+				return;
+			}
+
 			if (typeSelected === MaterialRequestType.REUSE && triggerComplexReuseFlow) {
 				setActiveBlade(MediaActions.RequestMaterialForReuse);
 				return;
@@ -247,6 +251,10 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				}
 				setNoTypeSelectedOnSave(false);
 
+				if (showDuplicateWarning) {
+					return;
+				}
+
 				if (showReuseFormWarning && typeSelected !== MaterialRequestType.REUSE) {
 					setShowConfirmTypeEdit(true);
 				} else {
@@ -298,7 +306,6 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-opslaan'
 						)}
 						variants={['block', 'text']}
-						disabled={showDuplicateWarning}
 						onClick={onEditRequest}
 						className={styles['c-request-material__verstuur-button']}
 					/>
@@ -355,7 +362,6 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							label={addButtonLabel(true)}
 							variants={['block', 'text', 'dark']}
 							onClick={onAddToList}
-							disabled={showDuplicateWarning}
 							className={styles['c-request-material__voeg-toe-button']}
 						/>
 					),
@@ -364,7 +370,6 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							label={addButtonLabel(false)}
 							variants={['block', 'text', 'dark']}
 							onClick={onAddToList}
-							disabled={showDuplicateWarning}
 							className={styles['c-request-material__voeg-toe-button']}
 						/>
 					),

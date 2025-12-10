@@ -1,7 +1,9 @@
 import { Button } from '@meemoo/react-components';
 import { tHtml } from '@shared/helpers/translate';
+import { setHasOpenConfirmationModal } from '@shared/store/ui';
 import clsx from 'clsx';
-import type { FC } from 'react';
+import { type FC, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { Modal } from '../Modal';
 
@@ -15,7 +17,15 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 	onClose,
 	isOpen,
 }) => {
+	const dispatch = useDispatch();
 	const { title, description, yes, no } = text;
+
+	useEffect(() => {
+		dispatch(setHasOpenConfirmationModal(isOpen ?? false));
+		return () => {
+			dispatch(setHasOpenConfirmationModal(false));
+		};
+	}, [isOpen, dispatch]);
 
 	const renderButtons = () => {
 		return (
