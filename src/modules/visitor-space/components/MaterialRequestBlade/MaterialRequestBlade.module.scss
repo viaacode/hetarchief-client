@@ -22,19 +22,14 @@
 	}
 
 	&__material {
-		padding: $spacer-md $spacer-lg;
-		border-bottom: 0.1rem solid $silver;
+		margin: $spacer-md $spacer-lg;
 		color: $black;
 
-		&:focus,
-		&:focus-within {
-			outline: 0.2rem solid $teal;
-			outline-offset: -0.2rem;
-		}
-
-		&-link {
-			text-decoration: none;
-		}
+			&:focus,
+			&:focus-within {
+				outline: 0.2rem solid $teal;
+				outline-offset: -0.2rem;
+			}
 
 		&-label {
 			font-weight: $font-weight-bold;
@@ -56,6 +51,7 @@
 	}
 
 	&__content {
+		border-top: 0.1rem solid $silver;
 		padding: $spacer-lg;
 		color: $black;
 
