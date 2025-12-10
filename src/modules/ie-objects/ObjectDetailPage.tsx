@@ -303,6 +303,26 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		);
 	}, [mediaInfo, allFilesToDisplayInCurrentPage, currentFileIndex]);
 
+	const getMaterialRequest = useCallback(
+		(mediaInfo: IeObject) => {
+			return {
+				objectSchemaName: mediaInfo.name,
+				objectSchemaIdentifier: mediaInfo.schemaIdentifier,
+				objectDctermsFormat: mediaInfo.dctermsFormat,
+				objectThumbnailUrl: mediaInfo.thumbnailUrl,
+				objectRepresentationId: getRepresentationByCurrentFileIndex()?.id,
+				objectRepresentation: getRepresentationByCurrentFileIndex(),
+				objectPublishedOrCreatedDate: mediaInfo.datePublished || mediaInfo.dateCreated || undefined,
+				objectAccessThrough: mediaInfo.accessThrough || [],
+				objectLicences: mediaInfo.licenses,
+				maintainerName: mediaInfo.maintainerName,
+				maintainerSlug: mediaInfo.maintainerSlug,
+				reuseForm: GET_BLANK_MATERIAL_REQUEST_REUSE_FORM(),
+			} as MaterialRequest;
+		},
+		[getRepresentationByCurrentFileIndex]
+	);
+
 	const iiifViewerImageInfos = useMemo((): ImageInfo[] => {
 		return compact(
 			mediaInfo?.pages?.flatMap((page) => {
@@ -1849,20 +1869,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				<MaterialRequestBlade
 					isOpen={activeBlade === MediaActions.RequestMaterial}
 					onClose={onCloseBlade}
-					materialRequest={
-						{
-							objectSchemaName: mediaInfo.name,
-							objectSchemaIdentifier: mediaInfo.schemaIdentifier,
-							objectDctermsFormat: mediaInfo.dctermsFormat,
-							objectThumbnailUrl: mediaInfo.thumbnailUrl,
-							objectPublishedOrCreatedDate:
-								mediaInfo.datePublished || mediaInfo.dateCreated || undefined,
-							objectAccessThrough: mediaInfo.accessThrough || [],
-							objectLicences: mediaInfo.licenses,
-							maintainerName: mediaInfo.maintainerName,
-							maintainerSlug: mediaInfo.maintainerSlug,
-						} as MaterialRequest
-					}
+					materialRequest={getMaterialRequest(mediaInfo)}
 					layer={1}
 					currentLayer={1}
 				/>
@@ -1871,21 +1878,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				<MaterialRequestForReuseBlade
 					isOpen={activeBlade === MediaActions.RequestMaterialForReuse}
 					onClose={onCloseBlade}
-					materialRequest={
-						{
-							objectSchemaName: mediaInfo.name,
-							objectSchemaIdentifier: mediaInfo.schemaIdentifier,
-							objectDctermsFormat: mediaInfo.dctermsFormat,
-							objectThumbnailUrl: mediaInfo.thumbnailUrl,
-							objectPublishedOrCreatedDate:
-								mediaInfo.datePublished || mediaInfo.dateCreated || undefined,
-							objectRepresentationId: getRepresentationByCurrentFileIndex()?.id,
-							objectRepresentation: getRepresentationByCurrentFileIndex(),
-							maintainerName: mediaInfo?.maintainerName,
-							maintainerSlug: mediaInfo?.maintainerSlug,
-							reuseForm: GET_BLANK_MATERIAL_REQUEST_REUSE_FORM(),
-						} as MaterialRequest
-					}
+					materialRequest={getMaterialRequest(mediaInfo)}
 					layer={1}
 					currentLayer={1}
 				/>
