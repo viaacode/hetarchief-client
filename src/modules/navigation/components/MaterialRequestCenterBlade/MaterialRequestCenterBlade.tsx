@@ -158,7 +158,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				</h2>
 				<MaterialRequestInformation />
 				<p className={styles['c-material-request-center-blade__more-info']}>
-					{tText('Vraag dit materiaal rechtstreeks aan bij de aanbieder(s).')}
+					{tText(
+						'modules/navigation/components/material-request-center-blade/material-request-center-blade___vraag-dit-materiaal-rechtstreeks-aan-bij-de-aanbieder-s'
+					)}
 				</p>
 			</div>
 		);
@@ -186,9 +188,12 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						icon={getIconFromObjectType(materialRequest.objectDctermsFormat, true)}
 					>
 						<p className={clsx('u-font-size-14')}>
-							{tText('Aanvraag tot', {
-								requestType: GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[materialRequest.type],
-							})}
+							{tText(
+								'modules/navigation/components/material-request-center-blade/material-request-center-blade___aanvraag-tot',
+								{
+									requestType: GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[materialRequest.type],
+								}
+							)}
 						</p>
 					</MaterialCard>
 				</div>
@@ -264,7 +269,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			<div className={styles['c-material-request-center-blade__close-button-container']}>
 				{user && (
 					<Button
-						label={tText('Werk je aanvraag af')}
+						label={tText(
+							'modules/navigation/components/material-request-center-blade/material-request-center-blade___werk-je-aanvraag-af'
+						)}
 						variants={['block', 'text', 'dark']}
 						onClick={() => {
 							setActiveBlade(MaterialRequestBladeId.PersonalDetails);
@@ -378,10 +385,14 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			)}
 			<ConfirmationModal
 				text={{
-					yes: tHtml('Verwijderen'),
-					no: tHtml('Annuleren'),
+					yes: tHtml(
+						'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijderen'
+					),
+					no: tHtml(
+						'modules/navigation/components/material-request-center-blade/material-request-center-blade___annuleren'
+					),
 					description: tHtml(
-						'Ben je zeker dat je deze aanvraag wil verwijderen? De informatie in het hergebruikformulier zal hiermee ook verwijderd worden.'
+						'modules/navigation/components/material-request-center-blade/material-request-center-blade___ben-je-zeker-dat-je-deze-aanvraag-wil-verwijderen-de-informatie-in-het-hergebruikformulier-zal-hiermee-ook-verwijderd-worden'
 					),
 				}}
 				fullWidthButtonWrapper

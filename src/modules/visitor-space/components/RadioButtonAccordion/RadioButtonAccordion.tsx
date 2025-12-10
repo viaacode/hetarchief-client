@@ -85,7 +85,15 @@ function RadioButtonAccordion<OptionValueType>({
 								<Icon name={isAccordionOpen ? IconNamesLight.AngleUp : IconNamesLight.AngleDown} />
 							}
 							variants="text"
-							aria-label={isAccordionOpen ? tText('Open accordion') : tText('Close accordion')}
+							aria-label={
+								isAccordionOpen
+									? tText(
+											'modules/visitor-space/components/radio-button-accordion/radio-button-accordion___open-accordion'
+										)
+									: tText(
+											'modules/visitor-space/components/radio-button-accordion/radio-button-accordion___close-accordion'
+										)
+							}
 							onClick={() => toggleOpenOption(option)}
 						/>
 					)}

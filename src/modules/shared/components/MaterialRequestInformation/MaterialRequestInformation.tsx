@@ -7,7 +7,9 @@ import styles from './MaterialRequestInformation.module.scss';
 const MaterialRequestInformation: FC = () => (
 	<p className={styles['c-material-request-information']}>
 		<Icon name={IconNamesLight.Info} aria-hidden />
-		{tHtml('Meer informatie over aanvragen')}
+		{tHtml(
+			'modules/shared/components/material-request-information/material-request-information___meer-informatie-over-aanvragen'
+		)}
 	</p>
 );
 

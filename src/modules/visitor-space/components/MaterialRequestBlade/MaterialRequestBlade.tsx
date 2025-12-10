@@ -325,8 +325,12 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		const addButtonLabel = (isMobile: boolean) => {
 			if (typeSelected === MaterialRequestType.REUSE && triggerComplexReuseFlow) {
 				return isMobile
-					? tText('Vul bijkomende informatie aan - Mobile')
-					: tText('Vul bijkomende informatie aan ');
+					? tText(
+							'modules/visitor-space/components/material-request-blade/material-request-blade___vul-bijkomende-informatie-aan-mobile'
+						)
+					: tText(
+							'modules/visitor-space/components/material-request-blade/material-request-blade___vul-bijkomende-informatie-aan'
+						);
 			}
 
 			return isMobile
@@ -391,12 +395,14 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			<>
 				<p>
 					{tText(
-						'Je hebt al op dit materiaal al een aanvraag van dit type ingediend. Je kan wachten op de behandeling van deze aanvraag, of ze nog annuleren, indien de aanbieder ze nog niet bekeken heeft.'
+						'modules/visitor-space/components/material-request-blade/material-request-blade___je-hebt-al-op-dit-materiaal-al-een-aanvraag-van-dit-type-ingediend-je-kan-wachten-op-de-behandeling-van-deze-aanvraag-of-ze-nog-annuleren-indien-de-aanbieder-ze-nog-niet-bekeken-heeft'
 					)}
 				</p>
 				<Button
 					className="u-py-0 u-px-0 u-height-auto"
-					label={tText('Ga naar mijn aanvraaglijst')}
+					label={tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___ga-naar-mijn-aanvraaglijst'
+					)}
 					variants={['text', 'underline']}
 					onClick={() => {
 						onCloseModal(false);
@@ -412,7 +418,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			<Alert
 				className={styles['c-request-material__alert']}
 				icon={<Icon name={IconNamesLight.Exclamation} aria-hidden />}
-				title={tText('Aanvraag reeds in behandeling')}
+				title={tText(
+					'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-reeds-in-behandeling'
+				)}
 				content={renderDuplicateAlertContent()}
 			/>
 		);
@@ -423,7 +431,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			<Alert
 				className={styles['c-request-material__alert']}
 				icon={<Icon name={IconNamesLight.Exclamation} aria-hidden />}
-				title={tText('Hergebruikformulier is ingevuld')}
+				title={tText(
+					'modules/visitor-space/components/material-request-blade/material-request-blade___hergebruikformulier-is-ingevuld'
+				)}
 				content={renderReuseFormAlertContent()}
 			/>
 		);
@@ -434,12 +444,14 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			<>
 				<p>
 					{tText(
-						'Je hebt al op dit materiaal een formulier voor hergebruik ingevuld. Als je het type aanvraag verandert zal de informatie in dit formulier onherroepelijk verwijderd worden. Je kan de inhoud van het formulier aanpassen door op de onderstaande link te klikken.'
+						'modules/visitor-space/components/material-request-blade/material-request-blade___je-hebt-al-op-dit-materiaal-een-formulier-voor-hergebruik-ingevuld-als-je-het-type-aanvraag-verandert-zal-de-informatie-in-dit-formulier-onherroepelijk-verwijderd-worden-je-kan-de-inhoud-van-het-formulier-aanpassen-door-op-de-onderstaande-link-te-klikken'
 					)}
 				</p>
 				<Button
 					className="u-py-0 u-px-0 u-height-auto"
-					label={tText('Ga naar het formulier')}
+					label={tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___ga-naar-het-formulier'
+					)}
 					variants={['text', 'underline']}
 					onClick={() => onCloseModal(true)}
 				/>
@@ -552,10 +564,14 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			<ConfirmationModal
 				text={{
 					description: tText(
-						'Je hebt al op dit materiaal een formulier voor hergebruik ingevuld. Als je het type aanvraag verandert zal de informatie in dit formulier onherroepelijk verwijderd worden.'
+						'modules/visitor-space/components/material-request-blade/material-request-blade___je-hebt-al-op-dit-materiaal-een-formulier-voor-hergebruik-ingevuld-als-je-het-type-aanvraag-verandert-zal-de-informatie-in-dit-formulier-onherroepelijk-verwijderd-worden'
 					),
-					yes: tHtml('Type aanvraag wijzigen'),
-					no: tHtml('Annuleren'),
+					yes: tHtml(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___type-aanvraag-wijzigen'
+					),
+					no: tHtml(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___annuleren'
+					),
 				}}
 				fullWidthButtonWrapper
 				isOpen={showConfirmTypeEdit}

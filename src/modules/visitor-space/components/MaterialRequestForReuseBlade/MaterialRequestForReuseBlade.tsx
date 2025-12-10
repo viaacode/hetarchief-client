@@ -230,9 +230,15 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				return;
 			}
 			toastService.notify({
-				title: tText('Toegevoegd aan aanvraaglijst'),
-				description: tText('Verstuur je aanvraag of zoek verder naar digitaal erfgoed'),
-				actionLabel: tText('Bekijk je aanvraaglijst'),
+				title: tText(
+					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___toegevoegd-aan-aanvraaglijst'
+				),
+				description: tText(
+					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___verstuur-je-aanvraag-of-zoek-verder-naar-digitaal-erfgoed'
+				),
+				actionLabel: tText(
+					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bekijk-je-aanvraaglijst'
+				),
 				onAction: () => dispatch(setShowMaterialRequestCenter(true)),
 			});
 			await onSuccessCreated();
@@ -266,8 +272,12 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			}
 			toastService.notify({
 				maxLines: 3,
-				title: tText('Wijzigingen success'),
-				description: tText('Wijzigingen toegepast'),
+				title: tText(
+					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___wijzigingen-success'
+				),
+				description: tText(
+					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___wijzigingen-toegepast'
+				),
 			});
 			await onSuccessCreated();
 			onCloseModal();
@@ -279,22 +289,38 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const onFailedRequest = () => {
 		toastService.notify({
 			maxLines: 3,
-			title: tText('Er ging iets mis'),
-			description: tText('Er ging iets mis tijdens het opslaan'),
+			title: tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___er-ging-iets-mis'
+			),
+			description: tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___er-ging-iets-mis-tijdens-het-opslaan'
+			),
 		});
 	};
 
 	const renderTitle = (props: Pick<HTMLElement, 'id' | 'className'>) => {
-		const title = isEditMode ? tText('Pas je aanvraag aan') : tText('Aanvraag');
+		const title = isEditMode
+			? tText(
+					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___pas-je-aanvraag-aan'
+				)
+			: tText(
+					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___aanvraag'
+				);
 		return (
 			<div className={styles['c-request-material-reuse__title-container']}>
 				<div {...props} style={{ paddingBottom: 0 }}>
 					<h6>{title}</h6>
-					<h2>{tText('Ik wil dit materiaal downloaden en hergebruiken')}</h2>
+					<h2>
+						{tText(
+							'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ik-wil-dit-materiaal-downloaden-en-hergebruiken'
+						)}
+					</h2>
 				</div>
 				<dl className={styles['c-request-material-reuse__content']}>
 					<dt className={styles['c-request-material-reuse__content-label']}>
-						{tText('Materiaal')}
+						{tText(
+							'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___materiaal'
+						)}
 					</dt>
 					<dd style={{ width: '100%' }}>
 						<MaterialCard
@@ -322,13 +348,17 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			return (
 				<div className={styles['c-request-material-reuse__footer-container']}>
 					<Button
-						label={tText('Keer terug')}
+						label={tText(
+							'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___keer-terug'
+						)}
 						variants={['text']}
 						onClick={() => router.back()}
 						className={styles['c-request-material-reuse__annuleer-button']}
 					/>
 					<Button
-						label={tText('Wijzigingen opslaan')}
+						label={tText(
+							'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___wijzigingen-opslaan'
+						)}
 						variants={['text', 'dark']}
 						onClick={onEditRequest}
 						className={styles['c-request-material-reuse__voeg-toe-button']}
@@ -339,13 +369,17 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		return (
 			<div className={styles['c-request-material-reuse__footer-container']}>
 				<Button
-					label={tText('Keer terug')}
+					label={tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___keer-terug'
+					)}
 					variants={['text']}
 					onClick={() => router.back()}
 					className={styles['c-request-material-reuse__annuleer-button']}
 				/>
 				<Button
-					label={tText('Voeg toe aan aanvraaglijst & zoek verder')}
+					label={tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___voeg-toe-aan-aanvraaglijst-zoek-verder'
+					)}
 					variants={['text', 'dark']}
 					onClick={onAddToList}
 					className={styles['c-request-material-reuse__voeg-toe-button']}
@@ -359,9 +393,11 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			<Alert
 				className={styles['c-request-material__alert']}
 				icon={<Icon name={IconNamesLight.Exclamation} aria-hidden />}
-				title={tText('Er bestaat reeds een hergebruiksformulier met deze informatie')}
+				title={tText(
+					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___er-bestaat-reeds-een-hergebruiksformulier-met-deze-informatie'
+				)}
 				content={tText(
-					'Je hebt voor dit materiaal een formulier voor hergebruik ingevuld met exact dezelfde vereisten. Gelieve een ander fragment of een andere downloadkwaliteit te selecteren'
+					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___je-hebt-voor-dit-materiaal-een-formulier-voor-hergebruik-ingevuld-met-exact-dezelfde-vereisten-gelieve-een-ander-fragment-of-een-andere-downloadkwaliteit-te-selecteren'
 				)}
 			/>
 		);
@@ -395,10 +431,14 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					)}
 				>
 					<dt className={styles['c-request-material-reuse__content-label']}>
-						{tText('Materiaalselectie')}
+						{tText(
+							'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___materiaalselectie'
+						)}
 					</dt>
 					<dd className={styles['c-request-material-reuse__content-value']}>
-						{tText('Materiaalselectie vraag')}
+						{tText(
+							'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___materiaalselectie-vraag'
+						)}
 					</dd>
 				</dl>
 				<div className={styles['c-request-material-reuse__content-full-width']}>
@@ -510,19 +550,31 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 	const renderDownloadQuality = () => {
 		return renderRadiobuttonGroup(
-			tText('Downloadkwaliteit label'),
-			tText('Downloadkwaliteit vraag'),
+			tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___downloadkwaliteit-label'
+			),
+			tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___downloadkwaliteit-vraag'
+			),
 			'downloadQuality',
 			[
 				{
-					label: tText('Downloadkwaliteit - Afspeelkwaliteit label'),
+					label: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___downloadkwaliteit-afspeelkwaliteit-label'
+					),
 					value: MaterialRequestDownloadQuality.NORMAL,
-					description: tHtml('Downloadkwaliteit - Afspeelkwaliteit omschrijving'),
+					description: tHtml(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___downloadkwaliteit-afspeelkwaliteit-omschrijving'
+					),
 				},
 				{
-					label: tText('Downloadkwaliteit - Hogere kwaliteit label'),
+					label: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___downloadkwaliteit-hogere-kwaliteit-label'
+					),
 					value: MaterialRequestDownloadQuality.HIGH,
-					description: tHtml('Downloadkwaliteit - Hogere kwaliteit omschrijving'),
+					description: tHtml(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___downloadkwaliteit-hogere-kwaliteit-omschrijving'
+					),
 				},
 			]
 		);
@@ -532,11 +584,15 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		return (
 			<dl className={styles['c-request-material-reuse__content']}>
 				<dt className={styles['c-request-material-reuse__content-label']}>
-					{tText('Bedoeld gebruik (beschrijving) label')}
+					{tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bedoeld-gebruik-beschrijving-label'
+					)}
 				</dt>
 				<dd className={styles['c-request-material-reuse__content-value']}>
 					<FormControl
-						label={tText('Bedoeld gebruik (beschrijving) vraag')}
+						label={tText(
+							'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bedoeld-gebruik-beschrijving-vraag'
+						)}
 						errors={[
 							<div className="u-flex" key={`form-error--intendedUsage`}>
 								<RedFormWarning error={formErrors.intendedUsageDescription} />
@@ -559,26 +615,40 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 	const renderIntendedUsage = () => {
 		return renderRadiobuttonGroup(
-			tText('Bedoeld gebruik label'),
-			tText('Bedoeld gebruik vraag'),
+			tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bedoeld-gebruik-label'
+			),
+			tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bedoeld-gebruik-vraag'
+			),
 			'intendedUsage',
 			[
 				{
-					label: tText('Bedoeld gebruik - Intern gebruik zonder vergoeding label'),
+					label: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bedoeld-gebruik-intern-gebruik-zonder-vergoeding-label'
+					),
 					value: MaterialRequestIntendedUsage.INTERN,
-					description: tHtml('Bedoeld gebruik - Intern gebruik zonder omschrijving'),
-				},
-				{
-					label: tText('Bedoeld gebruik - extern gebruik zonder direct commercieel voordeel label'),
-					value: MaterialRequestIntendedUsage.NON_COMMERCIAL,
 					description: tHtml(
-						'Bedoeld gebruik - Extern gebruik zonder direct commercieel voordeel omschrijving'
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bedoeld-gebruik-intern-gebruik-zonder-omschrijving'
 					),
 				},
 				{
-					label: tText('Bedoeld gebruik - Directe commerciële exploitatie label'),
+					label: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bedoeld-gebruik-extern-gebruik-zonder-direct-commercieel-voordeel-label'
+					),
+					value: MaterialRequestIntendedUsage.NON_COMMERCIAL,
+					description: tHtml(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bedoeld-gebruik-extern-gebruik-zonder-direct-commercieel-voordeel-omschrijving'
+					),
+				},
+				{
+					label: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bedoeld-gebruik-directe-commerciele-exploitatie-label'
+					),
 					value: MaterialRequestIntendedUsage.COMMERCIAL,
-					description: tHtml('Bedoeld gebruik - Directe commerciële exploitatie omschrijving'),
+					description: tHtml(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bedoeld-gebruik-directe-commerciele-exploitatie-omschrijving'
+					),
 				},
 			]
 		);
@@ -586,20 +656,30 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 	const renderDistributionAccess = () => {
 		return renderRadiobuttonGroup(
-			tText('Ontsluiting materiaal label'),
-			tText('Ontsluiting materiaal vraag'),
+			tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ontsluiting-materiaal-label'
+			),
+			tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ontsluiting-materiaal-vraag'
+			),
 			'distributionAccess',
 			[
 				{
-					label: tText('Ontsluiting materiaal - Enkel binnen de organisatie label'),
+					label: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ontsluiting-materiaal-enkel-binnen-de-organisatie-label'
+					),
 					value: MaterialRequestDistributionAccess.INTERN,
-					description: tHtml('Ontsluiting materiaal - Enkel binnen de organisatie omschrijving'),
+					description: tHtml(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ontsluiting-materiaal-enkel-binnen-de-organisatie-omschrijving'
+					),
 				},
 				{
-					label: tText('Ontsluiting materiaal - Organisatie en externe gebruikers label'),
+					label: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ontsluiting-materiaal-organisatie-en-externe-gebruikers-label'
+					),
 					value: MaterialRequestDistributionAccess.INTERN_EXTERN,
 					description: tHtml(
-						'Ontsluiting materiaal - Organisatie en externe gebruikers omschrijving'
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ontsluiting-materiaal-organisatie-en-externe-gebruikers-omschrijving'
 					),
 				},
 			]
@@ -608,19 +688,27 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 	const renderDistributionType = () => {
 		return renderRadiobuttonGroup(
-			tText('Type ontsluiting label'),
-			tText('Type ontsluiting vraag'),
+			tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-label'
+			),
+			tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-vraag'
+			),
 			'distributionType',
 			[
 				{
-					label: tText('Type ontsluiting - Digitale ontsluiting via een vast medium label'),
+					label: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-digitale-ontsluiting-via-een-vast-medium-label'
+					),
 					value: MaterialRequestDistributionType.DIGITAL_OFFLINE,
 					description: tHtml(
-						'Type ontsluiting - Digitale ontsluiting via een vast medium omschrijving'
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-digitale-ontsluiting-via-een-vast-medium-omschrijving'
 					),
 				},
 				{
-					label: tText('Type ontsluiting - Digitale ontsluiting via netwerkverbinding label'),
+					label: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-digitale-ontsluiting-via-netwerkverbinding-label'
+					),
 					value: MaterialRequestDistributionType.DIGITAL_ONLINE,
 					openOnSelect: true,
 					description: (
@@ -632,35 +720,35 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 							options={[
 								{
 									label: tText(
-										'Type ontsluiting - Digitale ontsluiting via netwerkverbinding - Een besloten dienst label'
+										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-digitale-ontsluiting-via-netwerkverbinding-een-besloten-dienst-label'
 									),
 									value: MaterialRequestDistributionDigitalOnline.INTERNAL,
 									disabled:
 										formValues.distributionType !== MaterialRequestDistributionType.DIGITAL_ONLINE,
 									description: tText(
-										'Type ontsluiting - Digitale ontsluiting via netwerkverbinding - Een besloten dienst omschrijving'
+										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-digitale-ontsluiting-via-netwerkverbinding-een-besloten-dienst-omschrijving'
 									),
 								},
 								{
 									label: tText(
-										'Type ontsluiting - Digitale ontsluiting via netwerkverbinding - Publiek zonder authenticatie label'
+										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-digitale-ontsluiting-via-netwerkverbinding-publiek-zonder-authenticatie-label'
 									),
 									value: MaterialRequestDistributionDigitalOnline.NO_AUTH,
 									disabled:
 										formValues.distributionType !== MaterialRequestDistributionType.DIGITAL_ONLINE,
 									description: tText(
-										'Type ontsluiting - Digitale ontsluiting via netwerkverbinding - Publiek zonder authenticatie omschrijving'
+										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-digitale-ontsluiting-via-netwerkverbinding-publiek-zonder-authenticatie-omschrijving'
 									),
 								},
 								{
 									label: tText(
-										'Type ontsluiting - Digitale ontsluiting via netwerkverbinding - Publiek met authenticatie label'
+										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-digitale-ontsluiting-via-netwerkverbinding-publiek-met-authenticatie-label'
 									),
 									value: MaterialRequestDistributionDigitalOnline.WITH_AUTH,
 									disabled:
 										formValues.distributionType !== MaterialRequestDistributionType.DIGITAL_ONLINE,
 									description: tText(
-										'Type ontsluiting - Digitale ontsluiting via netwerkverbinding - Publiek met authenticatie omschrijving'
+										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-digitale-ontsluiting-via-netwerkverbinding-publiek-met-authenticatie-omschrijving'
 									),
 								},
 							]}
@@ -668,12 +756,16 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					),
 				},
 				{
-					label: tText('Type ontsluiting - Andere label'),
+					label: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-andere-label'
+					),
 					value: MaterialRequestDistributionType.OTHER,
 					openOnSelect: true,
 					description: (
 						<>
-							{tHtml('Type ontsluiting - Andere omschrijving')}
+							{tHtml(
+								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-andere-omschrijving'
+							)}
 							<FormControl
 								className={clsx(styles['c-request-material-reuse__content-value-extra-padding'])}
 							>
@@ -695,20 +787,30 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 	const renderMaterialEditing = () => {
 		return renderRadiobuttonGroup(
-			tText('Wijziging materiaal label'),
-			tText('Wijziging materiaal vraag'),
+			tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___wijziging-materiaal-label'
+			),
+			tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___wijziging-materiaal-vraag'
+			),
 			'materialEditing',
 			[
 				{
-					label: tText('Wijziging materiaal - Geen wijzigingen label'),
+					label: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___wijziging-materiaal-geen-wijzigingen-label'
+					),
 					value: MaterialRequestEditing.NONE,
-					description: tHtml('Wijziging materiaal - Geen wijzigingen omschrijving'),
+					description: tHtml(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___wijziging-materiaal-geen-wijzigingen-omschrijving'
+					),
 				},
 				{
-					label: tText('Wijziging materiaal - De organisatie zal het bronmateriaal wijzigen label'),
+					label: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___wijziging-materiaal-de-organisatie-zal-het-bronmateriaal-wijzigen-label'
+					),
 					value: MaterialRequestEditing.WITH_CHANGES,
 					description: tHtml(
-						'Wijziging materiaal - De organisatie zal het bronmateriaal wijzigen omschrijving'
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___wijziging-materiaal-de-organisatie-zal-het-bronmateriaal-wijzigen-omschrijving'
 					),
 				},
 			]
@@ -717,29 +819,33 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 	const renderGeographicalUsage = () => {
 		return renderRadiobuttonGroup(
-			tText('Geografisch gebruik label'),
-			tText('Geografisch gebruik vraag'),
+			tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___geografisch-gebruik-label'
+			),
+			tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___geografisch-gebruik-vraag'
+			),
 			'geographicalUsage',
 			[
 				{
 					label: tText(
-						'Geografisch gebruik - Integraal gericht op Vlaamse of Belgische markt label'
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___geografisch-gebruik-integraal-gericht-op-vlaamse-of-belgische-markt-label'
 					),
 					value: MaterialRequestGeographicalUsage.COMPLETELY_LOCAL,
 					description: tHtml(
-						'Geografisch gebruik - Integraal gericht op Vlaamse of Belgische markt omschrijving'
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___geografisch-gebruik-integraal-gericht-op-vlaamse-of-belgische-markt-omschrijving'
 					),
 				},
 				{
 					label: tText(
-						'Geografisch gebruik - Niet integraal gericht op Vlaamse of Belgische markt label'
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___geografisch-gebruik-niet-integraal-gericht-op-vlaamse-of-belgische-markt-label'
 					),
 					openOnSelect: true,
 					value: MaterialRequestGeographicalUsage.NOT_COMPLETELY_LOCAL,
 					description: (
 						<>
 							{tHtml(
-								'Geografisch gebruik - Niet integraal gericht op Vlaamse of Belgische markt omschrijving'
+								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___geografisch-gebruik-niet-integraal-gericht-op-vlaamse-of-belgische-markt-omschrijving'
 							)}
 							<FormControl
 								className={clsx(styles['c-request-material-reuse__content-value-extra-padding'])}
@@ -765,22 +871,34 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		const to = formValues.timeUsageTo ? parseISO(formValues.timeUsageTo) : undefined;
 
 		return renderRadiobuttonGroup(
-			tText('Gebruik in de tijd label'),
-			tText('Gebruik in de tijd vraag'),
+			tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___gebruik-in-de-tijd-label'
+			),
+			tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___gebruik-in-de-tijd-vraag'
+			),
 			'timeUsageType',
 			[
 				{
-					label: tText('Gebruik in de tijd - Onbeperkt label'),
+					label: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___gebruik-in-de-tijd-onbeperkt-label'
+					),
 					value: MaterialRequestTimeUsage.UNLIMITED,
-					description: tHtml('Gebruik in de tijd - Onbeperkt omschrijving'),
+					description: tHtml(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___gebruik-in-de-tijd-onbeperkt-omschrijving'
+					),
 				},
 				{
-					label: tText('Gebruik in de tijd - Beperkte periode label'),
+					label: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___gebruik-in-de-tijd-beperkte-periode-label'
+					),
 					value: MaterialRequestTimeUsage.IN_TIME,
 					openOnSelect: true,
 					description: (
 						<>
-							{tHtml('Gebruik in de tijd - Beperkte periode omschrijving')}
+							{tHtml(
+								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___gebruik-in-de-tijd-beperkte-periode-omschrijving'
+							)}
 							<FormControl
 								className={clsx(styles['c-request-material-reuse__content-value-extra-padding'])}
 							>
@@ -806,28 +924,40 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 	const renderCopyrightHandling = () => {
 		return renderRadiobuttonGroup(
-			tText('Bronvermelding label'),
-			tText('Bronvermelding vraag'),
+			tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bronvermelding-label'
+			),
+			tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bronvermelding-vraag'
+			),
 			'copyrightDisplay',
 			[
 				{
-					label: tText('Bronvermelding - Gelijktijdig met object label'),
+					label: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bronvermelding-gelijktijdig-met-object-label'
+					),
 					value: MaterialRequestCopyrightDisplay.SAME_TIME_WITH_OBJECT,
-					description: tHtml('Bronvermelding - Gelijktijdig met object omschrijving'),
+					description: tHtml(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bronvermelding-gelijktijdig-met-object-omschrijving'
+					),
 				},
 				{
 					label: tText(
-						'Bronvermelding - Vermelding bij object, niet noodzakelijk gelijktijdig label'
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bronvermelding-vermelding-bij-object-niet-noodzakelijk-gelijktijdig-label'
 					),
 					value: MaterialRequestCopyrightDisplay.AROUND_OBJECT,
 					description: tHtml(
-						'Bronvermelding - Vermelding bij object, niet noodzakelijk gelijktijdig omschrijving'
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bronvermelding-vermelding-bij-object-niet-noodzakelijk-gelijktijdig-omschrijving'
 					),
 				},
 				{
-					label: tText('Bronvermelding - Geen vermelding label'),
+					label: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bronvermelding-geen-vermelding-label'
+					),
 					value: MaterialRequestCopyrightDisplay.NONE,
-					description: tHtml('Bronvermelding - Geen vermelding omschrijving'),
+					description: tHtml(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bronvermelding-geen-vermelding-omschrijving'
+					),
 				},
 			]
 		);
@@ -879,7 +1009,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					<ConfirmModalBeforeUnload
 						when={hasUnsavedChanges}
 						message={tText(
-							'Ben je zeker dat je dit venster wilt sluiten? Hiermee gaat de voortgang verloren en wordt het object niet toegevoegd aan jouw aanvraaglijst. Als je verder werkt en het toevoegt aan je aanvraaglijst, kan je het nadien nog aanpassen.'
+							'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ben-je-zeker-dat-je-dit-venster-wilt-sluiten-hiermee-gaat-de-voortgang-verloren-en-wordt-het-object-niet-toegevoegd-aan-jouw-aanvraaglijst-als-je-verder-werkt-en-het-toevoegt-aan-je-aanvraaglijst-kan-je-het-nadien-nog-aanpassen'
 						)}
 					/>
 				</>
