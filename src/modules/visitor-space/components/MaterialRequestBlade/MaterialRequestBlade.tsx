@@ -1,7 +1,7 @@
 import { selectUser } from '@auth/store/user';
 import type { User } from '@auth/types';
 import { IE_OBJECT_INTRA_CP_LICENSES } from '@ie-objects/ie-objects.consts';
-import { IeObjectAccessThrough, MediaActions } from '@ie-objects/ie-objects.types';
+import { MediaActions } from '@ie-objects/ie-objects.types';
 import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
 import { useGetMaterialRequestsForMediaItem } from '@material-requests/hooks/get-material-requests-for-media-item';
 import { MaterialRequestsService } from '@material-requests/services';
@@ -59,7 +59,6 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		objectDctermsFormat,
 		objectSchemaIdentifier,
 		objectLicences,
-		objectAccessThrough,
 		objectThumbnailUrl,
 		objectPublishedOrCreatedDate,
 		objectRepresentationId,
@@ -77,7 +76,8 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		(simpleType === SimpleIeObjectType.AUDIO || simpleType === SimpleIeObjectType.VIDEO) &&
 		!!user?.isKeyUser &&
 		intersection(objectLicences, IE_OBJECT_INTRA_CP_LICENSES).length > 0;
-	const hideViewTypeOption = objectAccessThrough.includes(IeObjectAccessThrough.SECTOR);
+	// We have a representation, so we know the user is allowed to see this
+	const hideViewTypeOption = !!user?.isKeyUser && !!objectRepresentationId;
 
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestType | undefined>(type);
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
