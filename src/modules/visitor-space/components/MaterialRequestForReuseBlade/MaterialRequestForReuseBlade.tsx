@@ -73,14 +73,14 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const dispatch = useDispatch();
 	const locale = useLocale();
 	const user: User | null = useSelector(selectUser);
-	// biome-ignore lint/correctness/useExhaustiveDependencies: This should only run once so we can use it for resetting
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Only change the default values when the id of the request changes
 	const defaultFormValues = useMemo(() => {
 		return {
 			...GET_BLANK_MATERIAL_REQUEST_REUSE_FORM(),
 			...materialRequest.reuseForm,
 			representationId: materialRequest.objectRepresentationId,
 		};
-	}, []);
+	}, [materialRequest.id]);
 
 	const [formValues, setFormValues] = useState<MaterialRequestReuseForm>(defaultFormValues);
 	const [formErrors, setFormErrors] = useState<
@@ -89,7 +89,14 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [playableFile, setPlayableFile] = useState<IeObjectFile | null>(null);
 	const [mediaDuration, setMediaDuration] = useState<number | null>(null);
-	const [hasUnsavedChanges, setHasUnsavedChanges] = useState(isEditMode);
+	const [isRequestSaved, setIsRequestSaved] = useState(false);
+
+	const hasUnsavedChanges = useMemo(() => {
+		if (isRequestSaved) {
+			return false;
+		}
+		return isEditMode || JSON.stringify(defaultFormValues) !== JSON.stringify(formValues);
+	}, [isRequestSaved, isEditMode, defaultFormValues, formValues]);
 
 	const {
 		data: potentialDuplicates,
@@ -139,10 +146,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			// Not using the materialRequest ensures this happens only when the isOpen has changed
 			setFormValues(defaultFormValues);
 			setFormErrors({});
-			setHasUnsavedChanges(isEditMode);
 			refetchPotentialDuplicates().then(noop);
+			setIsRequestSaved(false);
 		}
-	}, [isOpen, isEditMode, defaultFormValues, refetchPotentialDuplicates]);
+	}, [isOpen, defaultFormValues, refetchPotentialDuplicates]);
 
 	const onCloseModal = () => {
 		onClose();
@@ -169,9 +176,6 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			}
 		}
 
-		setHasUnsavedChanges(
-			isEditMode || JSON.stringify(materialRequest.reuseForm) !== JSON.stringify(formValues)
-		);
 		setFormValues((prevState) => ({
 			...prevState,
 			...newFormValues,
@@ -179,8 +183,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	};
 
 	const onSuccessCreated = async () => {
-		setHasUnsavedChanges(false);
-
+		setIsRequestSaved(true);
 		const response = await MaterialRequestsService.getAll({
 			size: 500,
 			isPersonal: true,
