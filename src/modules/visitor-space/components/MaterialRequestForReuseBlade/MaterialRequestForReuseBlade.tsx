@@ -88,6 +88,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	>({});
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [playableFile, setPlayableFile] = useState<IeObjectFile | null>(null);
+	const [mediaDuration, setMediaDuration] = useState<number | null>(null);
 	const [isRequestSaved, setIsRequestSaved] = useState(false);
 
 	const hasUnsavedChanges = useMemo(() => {
@@ -379,6 +380,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		}
 	};
 
+	const handleMetadataLoaded = (evt: Event) => {
+		setMediaDuration((evt?.target as HTMLVideoElement)?.duration);
+	};
+
 	const renderVideoSettings = () => {
 		if (!materialRequest.objectRepresentation) {
 			return null;
@@ -438,6 +443,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 								setFormValue('endTime', toSeconds(file?.duration) ?? 0);
 							}
 						}}
+						onMetadataLoaded={handleMetadataLoaded}
 					/>
 				</div>
 				{playableFile && (
@@ -445,9 +451,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 						<TimeCropControls
 							className={styles['c-request-material-reuse__content-time-controls']}
 							startTime={formValues.startTime ?? 0}
-							endTime={formValues.endTime || toSeconds(playableFile.duration) || 0}
+							endTime={formValues.endTime || toSeconds(mediaDuration) || 0}
 							minTime={0}
-							maxTime={toSeconds(playableFile.duration) ?? 0}
+							maxTime={mediaDuration || 0}
 							trackColor="#adadad"
 							highlightColor="#000"
 							// Skip hour formatting if video length is less than an hour

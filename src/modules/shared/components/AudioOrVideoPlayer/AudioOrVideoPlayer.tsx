@@ -26,6 +26,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	onPlay,
 	onPause,
 	onMediaReady,
+	onMetadataLoaded,
 	representation,
 	dctermsFormat,
 	maintainerLogo,
@@ -99,6 +100,10 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		return getValidStartAndEnd(start, end, durationInSeconds);
 	};
 
+	const handleMetadataLoaded = (evt: Event) => {
+		onMetadataLoaded?.(evt);
+	};
+
 	const [start, end]: [number | null, number | null] = getStartAndEnd();
 	const shared: Partial<FlowPlayerProps> = {
 		className,
@@ -130,6 +135,8 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 				src={playableUrl as string}
 				poster={poster || currentPlayableFile.thumbnailUrl}
 				renderLoader={() => <Loading owner="flowplayer suspense" fullscreen mode="light" />}
+				preload="metadata"
+				onMetadataLoaded={handleMetadataLoaded}
 				{...shared}
 			/>
 		);
@@ -150,6 +157,8 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 					},
 				]}
 				waveformData={peakJson?.data || undefined}
+				preload="metadata"
+				onMetadataLoaded={handleMetadataLoaded}
 				{...shared}
 			/>
 		);
