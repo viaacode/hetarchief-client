@@ -26,6 +26,7 @@ import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestB
 import { MaterialRequestForReuseBlade } from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade';
 import clsx from 'clsx';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { type FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParam, withDefault } from 'use-query-params';
@@ -45,6 +46,7 @@ interface MaterialRequestCenterBladeProps {
 }
 
 const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpen, onClose }) => {
+	const router = useRouter();
 	const dispatch = useDispatch();
 	const locale = useLocale();
 
@@ -98,6 +100,19 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	const materialRequests = materialRequestsResponse?.items as MaterialRequest[];
 
 	const noContent = !materialRequests || materialRequests?.length === 0;
+
+	useEffect(() => {
+		const onRouteComplete = () => {
+			if (!activeBlade) {
+				onClose();
+			}
+		};
+
+		router.events.on('routeChangeComplete', onRouteComplete);
+		return () => {
+			router.events.off('routeChangeComplete', onRouteComplete);
+		};
+	}, [activeBlade, onClose, router]);
 
 	useEffect(() => {
 		materialRequests && dispatch(setMaterialRequestCount(materialRequests.length));
@@ -275,13 +290,12 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					<Link
 						passHref
 						href={`/${ROUTE_PARTS_BY_LOCALE[locale].account}/${ROUTE_PARTS_BY_LOCALE[locale].myApplicationList}`}
-						onClick={onCloseBlades}
 						aria-label={tText('Werk je aanvraag af')}
 					>
 						<Button
 							label={tText(
-							'modules/navigation/components/material-request-center-blade/material-request-center-blade___werk-je-aanvraag-af'
-						)}
+								'modules/navigation/components/material-request-center-blade/material-request-center-blade___werk-je-aanvraag-af'
+							)}
 							variants={['block', 'text', 'dark']}
 							className={styles['c-material-request-center-blade__send-button']}
 						/>
