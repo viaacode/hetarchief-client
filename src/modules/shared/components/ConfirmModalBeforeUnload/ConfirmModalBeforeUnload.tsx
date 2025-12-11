@@ -18,7 +18,9 @@ export const ConfirmModalBeforeUnload: FC<ConfirmModalBeforeUnloadProps> = ({ wh
 
 	const messageOrDefault =
 		message ||
-		tText('Er zijn nog niet opgeslagen wijzigingen. Weet je zeker dat je de pagina wil verlaten?');
+		tText(
+			'modules/shared/components/confirm-modal-before-unload/confirm-modal-before-unload___er-zijn-nog-niet-opgeslagen-wijzigingen-weet-je-zeker-dat-je-de-pagina-wil-verlaten'
+		);
 
 	const resetRouteAndHasConfirmed = useCallback(() => {
 		setNextRoute(null);
@@ -125,8 +127,12 @@ export const ConfirmModalBeforeUnload: FC<ConfirmModalBeforeUnloadProps> = ({ wh
 		<ConfirmationModal
 			text={{
 				description: messageOrDefault,
-				yes: tText('Verder werken'),
-				no: tText('Ja, ik ben zeker'),
+				yes: tText(
+					'modules/shared/components/confirm-modal-before-unload/confirm-modal-before-unload___verder-werken'
+				),
+				no: tText(
+					'modules/shared/components/confirm-modal-before-unload/confirm-modal-before-unload___ja-ik-ben-zeker'
+				),
 			}}
 			fullWidthButtonWrapper
 			isOpen={isModalOpen}
