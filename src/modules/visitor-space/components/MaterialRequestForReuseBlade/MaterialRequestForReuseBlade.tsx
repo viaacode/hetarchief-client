@@ -73,7 +73,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const dispatch = useDispatch();
 	const locale = useLocale();
 	const user: User | null = useSelector(selectUser);
-	// biome-ignore lint/correctness/useExhaustiveDependencies: Only change the default Values when the id of the request changes
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Only change the default values when the id of the request changes
 	const defaultFormValues = useMemo(() => {
 		return {
 			...GET_BLANK_MATERIAL_REQUEST_REUSE_FORM(),
