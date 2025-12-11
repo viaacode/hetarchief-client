@@ -82,8 +82,14 @@ export const ConfirmModalBeforeUnload: FC<ConfirmModalBeforeUnloadProps> = ({ wh
 			// Allow routing when we:
 			// Have no need for confirmation
 			// The user has already confirmed
-			// We update the route with the same route (probably to  make sure the window url and router are in sync)
-			if (!when || hasConfirmed || nextRoute === route) {
+			if (!when || hasConfirmed) {
+				return;
+			}
+
+			// The navigation is to make sure window and router are back in sync
+			// Resetting the values since this will not trigger a route complete event since the window was already updated in the mean time
+			if (nextRoute === route) {
+				resetRouteAndHasConfirmed();
 				return;
 			}
 
