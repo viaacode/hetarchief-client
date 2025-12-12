@@ -295,11 +295,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		) || [];
 
 	const getRepresentationByCurrentFileIndex = useCallback(() => {
+		const filterId = allFilesToDisplayInCurrentPage?.[currentFileIndex]?.id;
+
+		if (!filterId) {
+			return undefined;
+		}
+
 		const allRepresentations = (mediaInfo?.pages || []).flatMap((page) => page?.representations);
 		return allRepresentations.find((representation) =>
-			representation.files.find(
-				(file) => file.id === allFilesToDisplayInCurrentPage[currentFileIndex].id
-			)
+			representation.files.find((file) => file.id === filterId)
 		);
 	}, [mediaInfo, allFilesToDisplayInCurrentPage, currentFileIndex]);
 
