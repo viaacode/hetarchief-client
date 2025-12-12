@@ -8,6 +8,7 @@ import type { IeObject } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import type { IeObjectSeo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 
 type ObjectDetailPageProps = {
 	title: string | null;
@@ -53,6 +54,13 @@ export async function getServerSideProps(
 		return { notFound: true };
 	}
 
+	let seoInfo: IeObjectSeo | null = null;
+	try {
+		seoInfo = await IeObjectsService.getSeoBySchemaIdentifier(schemaIdentifier);
+	} catch (err) {
+		console.error(`Failed to fetch media info by id: ${context.query.ie}`, err);
+	}
+
 	return getDefaultStaticProps(context, context.resolvedUrl, {
 		queryClient: await prefetchDetailPageQueries(
 			schemaIdentifier,
@@ -60,6 +68,9 @@ export async function getServerSideProps(
 			ieObject?.maintainerSlug
 		),
 		schemaIdentifier,
+		title: seoInfo?.name,
+		description: seoInfo?.description,
+		image: seoInfo?.thumbnailUrl,
 	});
 }
 
