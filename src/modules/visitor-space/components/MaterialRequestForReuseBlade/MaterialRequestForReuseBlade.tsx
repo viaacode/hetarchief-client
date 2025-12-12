@@ -28,7 +28,6 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
-import { toSeconds } from '@shared/helpers/duration';
 import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { validateForm } from '@shared/helpers/validate-form';
@@ -441,7 +440,14 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	};
 
 	const handleMetadataLoaded = (evt: Event) => {
-		setMediaDuration((evt?.target as HTMLVideoElement)?.duration);
+		const duration = (evt?.target as HTMLVideoElement)?.duration;
+
+		setMediaDuration(duration);
+
+		// Prefill the end time if nothing has been set yet (Ensures timecontrols and video are in sync)
+		if (isNil(formValues.endTime)) {
+			setFormValue('endTime', duration ?? 0);
+		}
 	};
 
 	const renderVideoSettings = () => {
@@ -501,11 +507,6 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 							if (isNil(formValues.startTime)) {
 								setFormValue('startTime', 0);
 							}
-
-							// Prefill the end time if nothing has been set yet (Ensures timecontrols and video are in sync)
-							if (isNil(formValues.endTime)) {
-								setFormValue('endTime', toSeconds(file?.duration) ?? 0);
-							}
 						}}
 						onMetadataLoaded={handleMetadataLoaded}
 					/>
@@ -515,13 +516,13 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 						<TimeCropControls
 							className={styles['c-request-material-reuse__content-time-controls']}
 							startTime={formValues.startTime ?? 0}
-							endTime={formValues.endTime || toSeconds(mediaDuration) || 0}
+							endTime={formValues.endTime || mediaDuration || 0}
 							minTime={0}
 							maxTime={mediaDuration || 0}
 							trackColor="#adadad"
 							highlightColor="#000"
 							// Skip hour formatting if video length is less than an hour
-							skipHourFormatting={(toSeconds(playableFile.duration) ?? 0) < 3600}
+							skipHourFormatting={(mediaDuration ?? 0) < 3600}
 							correctWrongTimeInput={true}
 							allowStartAndEndToBeTheSame={true}
 							onChange={(startTime, endTime) => {
