@@ -154,7 +154,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					{tText(
 						'modules/navigation/components/material-request-center-blade/material-request-center-blade___aanvraaglijst'
 					)}
-					{materialRequests?.length && ` (${materialRequests.length})`}
+					{materialRequests?.length > 0 && ` (${materialRequests.length})`}
 				</h2>
 				<MaterialRequestInformation />
 				<p className={styles['c-material-request-center-blade__more-info']}>
