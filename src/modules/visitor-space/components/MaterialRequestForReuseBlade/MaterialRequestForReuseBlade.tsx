@@ -29,6 +29,7 @@ import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { toSeconds } from '@shared/helpers/duration';
+import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { validateForm } from '@shared/helpers/validate-form';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -302,6 +303,51 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		});
 	};
 
+	const renderTitleHeader = (
+		props: Pick<HTMLElement, 'id' | 'className'>,
+		title: string,
+		removePadding = false
+	) => (
+		<div {...props} style={removePadding ? { paddingBottom: 0 } : {}}>
+			<h6>{title}</h6>
+			<h2>
+				{tText(
+					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ik-wil-dit-materiaal-downloaden-en-hergebruiken'
+				)}
+			</h2>
+		</div>
+	);
+
+	const renderMaterialInfo = () => (
+		<dl
+			className={clsx(
+				styles['c-request-material-reuse__content'],
+				styles['c-request-material-reuse__content-material']
+			)}
+		>
+			<dt className={styles['c-request-material-reuse__content-label']}>
+				{tText(
+					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___materiaal'
+				)}
+			</dt>
+			<dd className={styles['c-request-material-reuse__material']}>
+				<MaterialCard
+					objectId={materialRequest.objectSchemaIdentifier}
+					title={materialRequest.objectSchemaName}
+					thumbnail={materialRequest.objectThumbnailUrl}
+					hideThumbnail={true}
+					orientation="vertical"
+					link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${materialRequest.maintainerSlug}/${materialRequest.objectSchemaIdentifier}`}
+					type={materialRequest.objectDctermsFormat}
+					publishedBy={materialRequest.maintainerName}
+					publishedOrCreatedDate={materialRequest.objectPublishedOrCreatedDate}
+					icon={getIconFromObjectType(materialRequest.objectDctermsFormat, true)}
+					withBorder={false}
+				/>
+			</dd>
+		</dl>
+	);
+
 	const renderTitle = (props: Pick<HTMLElement, 'id' | 'className'>) => {
 		const title = isEditMode
 			? tText(
@@ -312,37 +358,15 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				);
 		return (
 			<div className={styles['c-request-material-reuse__title-container']}>
-				<div {...props} style={{ paddingBottom: 0 }}>
-					<h6>{title}</h6>
-					<h2>
-						{tText(
-							'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ik-wil-dit-materiaal-downloaden-en-hergebruiken'
-						)}
-					</h2>
-				</div>
-				<dl className={styles['c-request-material-reuse__content']}>
-					<dt className={styles['c-request-material-reuse__content-label']}>
-						{tText(
-							'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___materiaal'
-						)}
-					</dt>
-					<dd style={{ width: '100%' }}>
-						<MaterialCard
-							className={styles['c-request-material-reuse__material']}
-							objectId={materialRequest.objectSchemaIdentifier}
-							title={materialRequest.objectSchemaName}
-							thumbnail={materialRequest.objectThumbnailUrl}
-							hideThumbnail={true}
-							orientation="vertical"
-							link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${materialRequest.maintainerSlug}/${materialRequest.objectSchemaIdentifier}`}
-							type={materialRequest.objectDctermsFormat}
-							publishedBy={materialRequest.maintainerName}
-							publishedOrCreatedDate={materialRequest.objectPublishedOrCreatedDate}
-							icon={getIconFromObjectType(materialRequest.objectDctermsFormat, true)}
-							withBorder={false}
-						/>
-					</dd>
-				</dl>
+				{renderMobileDesktop({
+					mobile: renderTitleHeader(props, title),
+					desktop: (
+						<>
+							{renderTitleHeader(props, title, true)}
+							{renderMaterialInfo()}
+						</>
+					),
+				})}
 			</div>
 		);
 	};
@@ -1008,6 +1032,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				<>
 					<div className={styles['c-request-material-reuse__content-container']}>
 						<div className={styles['c-request-material-reuse__content-form']}>
+							{renderMobileDesktop({
+								mobile: renderMaterialInfo(),
+								desktop: null,
+							})}
 							{renderVideoSettings()}
 							{renderDownloadQuality()}
 							{renderOtherOptionsNotDeterminingDuplicates()}
