@@ -16,4 +16,5 @@ export interface MaterialCardProps {
 	withBorder?: boolean;
 	orientation: 'horizontal' | 'vertical';
 	children?: ReactNode;
+	renderAdditionalCaption?: (caption: string) => ReactNode;
 }
