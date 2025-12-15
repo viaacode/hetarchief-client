@@ -511,18 +511,18 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 						onMetadataLoaded={handleMetadataLoaded}
 					/>
 				</div>
-				{playableFile && (
+				{playableFile && mediaDuration && (
 					<div className={styles['c-request-material-reuse__content-full-width']}>
 						<TimeCropControls
 							className={styles['c-request-material-reuse__content-time-controls']}
 							startTime={formValues.startTime ?? 0}
-							endTime={formValues.endTime || mediaDuration || 0}
+							endTime={formValues.endTime || mediaDuration}
 							minTime={0}
-							maxTime={mediaDuration || 0}
+							maxTime={mediaDuration}
 							trackColor="#adadad"
 							highlightColor="#000"
 							// Skip hour formatting if video length is less than an hour
-							skipHourFormatting={(mediaDuration ?? 0) < 3600}
+							skipHourFormatting={mediaDuration < 3600}
 							correctWrongTimeInput={true}
 							allowStartAndEndToBeTheSame={true}
 							onChange={(startTime, endTime) => {
