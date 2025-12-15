@@ -80,7 +80,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			...materialRequest.reuseForm,
 			representationId: materialRequest.objectRepresentationId,
 		};
-	}, [materialRequest.id]);
+	}, [materialRequest.id, materialRequest.objectRepresentationId]);
 
 	const [formValues, setFormValues] = useState<MaterialRequestReuseForm>(defaultFormValues);
 	const [formErrors, setFormErrors] = useState<
@@ -124,6 +124,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		return !!duplicatesToCheck?.find(
 			(item) =>
 				item.type === MaterialRequestType.REUSE &&
+				item.objectRepresentationId === formValues.representationId &&
 				item.reuseForm?.startTime === formValues.startTime &&
 				item.reuseForm?.endTime === formValues.endTime &&
 				item.reuseForm?.downloadQuality === formValues.downloadQuality
@@ -133,6 +134,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		potentialDuplicates,
 		isLoadingPotentialDuplicates,
 		materialRequest,
+		formValues.representationId,
 		formValues.startTime,
 		formValues.endTime,
 		formValues.downloadQuality,
