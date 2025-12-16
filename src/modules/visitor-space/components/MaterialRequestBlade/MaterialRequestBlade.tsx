@@ -159,14 +159,6 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		dispatch(setMaterialRequestCount(response.items.length));
 	};
 
-	const onDuplicateRequest = () => {
-		toastService.notify({
-			maxLines: 3,
-			title: tText('aanvraag-al-in-lijst'),
-			description: tText('aanvraag-al-in-lijst-beschrijving'),
-		});
-	};
-
 	const onAddToList = async () => {
 		try {
 			if (!typeSelected) {
@@ -176,9 +168,6 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			setNoTypeSelectedOnSave(false);
 
 			if (showDuplicateWarning) {
-				if (!triggerComplexReuseFlow) {
-					onDuplicateRequest();
-				}
 				return;
 			}
 
@@ -439,17 +428,13 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 
 	const renderReason = () => {
 		// No type selected, so no input to show
-		if (!typeSelected) {
+		// Duplicate detected, so no input to show
+		if (!typeSelected || showDuplicateWarning) {
 			return null;
 		}
 
-		// We have the complex reuse flow and we either have selected to trigger said flow or we already have of said type
-		// Since for the complex flow we display a warning, we do not render the input field
-		// For non complex request, we will still show the input field even for duplicates since they show a toast message
-		if (
-			triggerComplexReuseFlow &&
-			(typeSelected === MaterialRequestType.REUSE || showDuplicateWarning)
-		) {
+		// We have the complex reuse flow so no reason needed
+		if (triggerComplexReuseFlow && typeSelected === MaterialRequestType.REUSE) {
 			return null;
 		}
 
