@@ -888,12 +888,16 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 							>
 								<TextArea
 									value={formValues.geographicalUsageDescription}
+									maxLength={300}
 									disabled={
 										formValues.geographicalUsage !==
 										MaterialRequestGeographicalUsage.NOT_COMPLETELY_LOCAL
 									}
 									onChange={(evt) => setFormValue('geographicalUsageDescription', evt.target.value)}
 								/>
+								<span className={styles['c-request-material-reuse__content-value-length']}>
+									{formValues.geographicalUsageDescription?.length || 0} / 300
+								</span>
 							</FormControl>
 						</>
 					),
