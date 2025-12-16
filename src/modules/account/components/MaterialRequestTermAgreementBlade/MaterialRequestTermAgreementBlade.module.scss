@@ -1,0 +1,57 @@
+@use "../../../../styles/abstracts" as *;
+
+.c-material-request-term-agreement-blade {
+	color: $black;
+
+	.c-blade__top-bar-container {
+		background-color: $platinum;
+	}
+
+	&__title{
+		background-color: $platinum;
+		border-bottom: $card-edge-size solid $zinc-40;
+	}
+
+	&__content-container {
+		height: 100%;
+		overflow: auto;
+	}
+
+	&__content-form {
+		margin: $spacer-md $spacer-lg;
+		gap: $spacer-xs;
+	}
+
+	&__footer-container {
+		display: flex;
+		padding: $spacer-md $spacer-lg;
+		border-top: 0.1rem solid $silver;
+		justify-content: space-between;
+		background-color: $platinum;
+
+		@media (max-width: $breakpoint-md) {
+			flex-direction: column-reverse;
+		}
+	}
+
+	&__agree-button {
+		background-color: $black !important;
+		color: $white !important;
+
+		div {
+			font-weight: $font-weight-bold;
+		}
+
+		&:hover {
+			background-color: $white !important;
+			color: $zinc !important;
+			border: 0.1rem solid $zinc !important;
+		}
+	}
+
+	&__annuleer-button {
+		&:hover {
+			border: 0.1rem solid $zinc;
+		}
+	}
+}

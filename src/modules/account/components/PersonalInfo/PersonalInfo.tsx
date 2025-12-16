@@ -1,3 +1,4 @@
+import MaterialRequestTermAgreementBlade from '@account/components/MaterialRequestTermAgreementBlade/MaterialRequestTermAgreementBlade';
 import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
 import { selectUser } from '@auth/store/user';
 import { MaterialRequestsService } from '@material-requests/services';
@@ -61,6 +62,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 	const [validationError, setValidationError] = useState('');
 	const [contentIsScrollable, setContentIsScrollable] = useState(false);
 	const [agreedToTerms, setAgreedToTerms] = useState(false);
+	const [showTermAgreement, setShowTermAgreement] = useState(false);
 
 	// Keep track of the reference strip size and update the bottom border if needed
 	const contentRef = useRef<HTMLDivElement>(null);
@@ -137,9 +139,22 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 			<Checkbox
 				className={styles['c-personal-info__checkbox']}
 				checked={agreedToTerms}
-				label={tHtml(
-					'Ik nam kennis en ga akkoord met de Aanvullende gebruiksvoorwaarden bij aanvragen'
-				)}
+				label={
+					<>
+						{tText('Ik nam kennis en ga akkoord met de')}{' '}
+						{/** biome-ignore lint/a11y/noStaticElementInteractions: We need hyperlink behavior in the label*/}
+						{/** biome-ignore lint/a11y/useKeyWithClickEvents: We need hyperlink behavior in the label */}
+						<span
+							onClick={(event) => {
+								event.preventDefault();
+								setShowTermAgreement(true);
+							}}
+							className={clsx(styles['c-personal-info__checkbox-hyperlink'])}
+						>
+							{tText('Aanvullende gebruiksvoorwaarden bij aanvragen')}
+						</span>
+					</>
+				}
 				onClick={() => setAgreedToTerms((prevState) => !prevState)}
 			/>
 		);
@@ -157,6 +172,22 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 				onClick={() => setIsSubscribedToNewsletter((prevState) => !prevState)}
 			/>
 		);
+	};
+
+	const renderCheckboxes = () => {
+		const agreedToTermsCheckbox = renderAgreeTermsCheckbox();
+		const newsletterCheckbox = renderNewsletterCheckbox();
+
+		if (agreedToTermsCheckbox || newsletterCheckbox) {
+			return (
+				<div className={clsx(styles['c-personal-info__content-group'])}>
+					{agreedToTermsCheckbox}
+					{newsletterCheckbox}
+				</div>
+			);
+		}
+
+		return null;
 	};
 
 	const onFailedRequest = () => {
@@ -315,15 +346,17 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 						)}
 					</div>
 				</div>
-
 				{isKeyUser ? renderNameEntry() : renderCapacity()}
-
-				<div className={clsx(styles['c-personal-info__content-group'])}>
-					{renderAgreeTermsCheckbox()}
-					{renderNewsletterCheckbox()}
-				</div>
+				{renderCheckboxes()}
 			</div>
 			{renderFooter()}
+			<MaterialRequestTermAgreementBlade
+				isOpen={showTermAgreement}
+				onClose={(agreed) => {
+					setShowTermAgreement(false);
+					setAgreedToTerms(agreed);
+				}}
+			/>
 		</div>
 	);
 };

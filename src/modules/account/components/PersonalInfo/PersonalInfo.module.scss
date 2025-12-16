@@ -93,5 +93,9 @@
 		&:not(:last-child) {
 			margin-bottom: $spacer-sm;
 		}
+
+		&-hyperlink {
+			text-decoration: underline;
+		}
 	}
 }
