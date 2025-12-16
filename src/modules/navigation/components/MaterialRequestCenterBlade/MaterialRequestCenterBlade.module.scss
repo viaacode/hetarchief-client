@@ -1,8 +1,6 @@
 @use "../../../../styles/abstracts" as *;
 
-$component: "c-material-request-center-blade";
-
-.#{$component} {
+.c-material-request-center-blade {
 	margin-top: $c-navigation-height-md;
 
 	@media (min-width: $breakpoint-md) {
@@ -25,6 +23,10 @@ $component: "c-material-request-center-blade";
 
 	&__more-info {
 		padding: 0 $spacer-1xl 0 $spacer-lg;
+
+		@media (max-width: $breakpoint-md) {
+			padding-top: $spacer-md;
+		}
 	}
 
 	&__material-container {
