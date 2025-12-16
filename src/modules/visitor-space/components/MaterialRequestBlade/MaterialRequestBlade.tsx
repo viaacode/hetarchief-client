@@ -481,7 +481,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				type={objectDctermsFormat}
 				publishedBy={maintainerName}
 				publishedOrCreatedDate={objectPublishedOrCreatedDate}
-				icon={getIconFromObjectType(objectDctermsFormat, true)}
+				icon={getIconFromObjectType(objectDctermsFormat, !!materialRequest.objectRepresentationId)}
 			/>
 			<div className={styles['c-request-material__content']}>
 				<dl>
@@ -536,27 +536,25 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							/>
 						) : null}
 					</dd>
-					{(typeSelected === MaterialRequestType.VIEW ||
-						typeSelected === MaterialRequestType.MORE_INFO) &&
-						!showDuplicateWarning && (
-							<>
-								<dt className={styles['c-request-material__content-label']}>
-									<label htmlFor="reason-input">
-										{tText(
-											'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
-										)}
-									</label>
-								</dt>
-								<dd className={styles['c-request-material__content-value']}>
-									<TextArea
-										id="reason-input"
-										className={styles['c-request-material__reason-input']}
-										onChange={(e) => setReasonInputValue(e.target.value)}
-										value={reasonInputValue}
-									/>
-								</dd>
-							</>
-						)}
+					{!triggerComplexReuseFlow && !showDuplicateWarning && (
+						<>
+							<dt className={styles['c-request-material__content-label']}>
+								<label htmlFor="reason-input">
+									{tText(
+										'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
+									)}
+								</label>
+							</dt>
+							<dd className={styles['c-request-material__content-value']}>
+								<TextArea
+									id="reason-input"
+									className={styles['c-request-material__reason-input']}
+									onChange={(e) => setReasonInputValue(e.target.value)}
+									value={reasonInputValue}
+								/>
+							</dd>
+						</>
+					)}
 					{showReuseFormWarning && renderReuseFormAlert()}
 					{showDuplicateWarning && renderDuplicateAlert()}
 				</dl>

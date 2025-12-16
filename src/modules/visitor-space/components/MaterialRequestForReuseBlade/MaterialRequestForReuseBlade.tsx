@@ -80,7 +80,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			...materialRequest.reuseForm,
 			representationId: materialRequest.objectRepresentationId,
 		};
-	}, [materialRequest.id]);
+	}, [materialRequest.id, materialRequest.objectRepresentationId]);
 
 	const [formValues, setFormValues] = useState<MaterialRequestReuseForm>(defaultFormValues);
 	const [formErrors, setFormErrors] = useState<
@@ -124,6 +124,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		return !!duplicatesToCheck?.find(
 			(item) =>
 				item.type === MaterialRequestType.REUSE &&
+				item.objectRepresentationId === formValues.representationId &&
 				item.reuseForm?.startTime === formValues.startTime &&
 				item.reuseForm?.endTime === formValues.endTime &&
 				item.reuseForm?.downloadQuality === formValues.downloadQuality
@@ -133,6 +134,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		potentialDuplicates,
 		isLoadingPotentialDuplicates,
 		materialRequest,
+		formValues.representationId,
 		formValues.startTime,
 		formValues.endTime,
 		formValues.downloadQuality,
@@ -340,7 +342,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					type={materialRequest.objectDctermsFormat}
 					publishedBy={materialRequest.maintainerName}
 					publishedOrCreatedDate={materialRequest.objectPublishedOrCreatedDate}
-					icon={getIconFromObjectType(materialRequest.objectDctermsFormat, true)}
+					icon={getIconFromObjectType(
+						materialRequest.objectDctermsFormat,
+						!!materialRequest.objectRepresentationId
+					)}
 					withBorder={false}
 				/>
 			</dd>
@@ -886,12 +891,16 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 							>
 								<TextArea
 									value={formValues.geographicalUsageDescription}
+									maxLength={300}
 									disabled={
 										formValues.geographicalUsage !==
 										MaterialRequestGeographicalUsage.NOT_COMPLETELY_LOCAL
 									}
 									onChange={(evt) => setFormValue('geographicalUsageDescription', evt.target.value)}
 								/>
+								<span className={styles['c-request-material-reuse__content-value-length']}>
+									{formValues.geographicalUsageDescription?.length || 0} / 300
+								</span>
 							</FormControl>
 						</>
 					),
