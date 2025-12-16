@@ -1066,18 +1066,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		setActiveBlade(null, 'replaceIn');
 	};
 
-	const onDuplicateRequest = () => {
-		toastService.notify({
-			maxLines: 3,
-			title: tText(
-				'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst'
-			),
-			description: tText(
-				'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst-beschrijving'
-			),
-		});
-	};
-
 	const openRequestAccessBlade = () => {
 		if (user) {
 			// Open the request access blade
@@ -1133,18 +1121,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			// The external url is opened with an actual link, so safari doesn't block the popup
 			window.open(externalFormUrl, '_blank');
 			return;
-		}
-
-		if (!user?.isKeyUser) {
-			// Key users are allowed to create multiple items and the duplicate validation will be made later in the flow
-			const requestsForItem = await MaterialRequestsService.forMediaItem(
-				mediaInfo?.schemaIdentifier
-			);
-
-			if (requestsForItem.length) {
-				onDuplicateRequest();
-				return;
-			}
 		}
 
 		setActiveBlade(MediaActions.RequestMaterial, 'replaceIn');
@@ -1870,22 +1846,22 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				/>
 			)}
 			{mediaInfo && !isKiosk && (
-				<MaterialRequestBlade
-					isOpen={activeBlade === MediaActions.RequestMaterial}
-					onClose={onCloseBlade}
-					materialRequest={getMaterialRequest(mediaInfo)}
-					layer={1}
-					currentLayer={1}
-				/>
-			)}
-			{mediaInfo && !isKiosk && (
-				<MaterialRequestForReuseBlade
-					isOpen={activeBlade === MediaActions.RequestMaterialForReuse}
-					onClose={onCloseBlade}
-					materialRequest={getMaterialRequest(mediaInfo)}
-					layer={1}
-					currentLayer={1}
-				/>
+				<>
+					<MaterialRequestBlade
+						isOpen={activeBlade === MediaActions.RequestMaterial}
+						onClose={onCloseBlade}
+						materialRequest={getMaterialRequest(mediaInfo)}
+						layer={1}
+						currentLayer={1}
+					/>
+					<MaterialRequestForReuseBlade
+						isOpen={activeBlade === MediaActions.RequestMaterialForReuse}
+						onClose={onCloseBlade}
+						materialRequest={getMaterialRequest(mediaInfo)}
+						layer={1}
+						currentLayer={1}
+					/>
+				</>
 			)}
 			<ReportBlade
 				user={user}
