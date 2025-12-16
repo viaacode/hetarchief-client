@@ -31,7 +31,7 @@ const MaterialRequestTermAgreementBlade: FC<MaterialRequestTermAgreementBladePro
 			<div className={styles['c-material-request-term-agreement-blade__footer-container']}>
 				<Button
 					label={tText('Sluit')}
-					variants={['text']}
+					variants={['text', 'light']}
 					onClick={() => onClose(false)}
 					className={styles['c-material-request-term-agreement-blade__cancel-button']}
 				/>
@@ -53,7 +53,6 @@ const MaterialRequestTermAgreementBlade: FC<MaterialRequestTermAgreementBladePro
 			footer={renderFooter()}
 			onClose={() => onClose(false)}
 			id="material-request-term-agreement-blade"
-			headerBackground="platinum"
 		>
 			{isOpen && (
 				<div className={styles['c-material-request-term-agreement-blade__content-container']}>
