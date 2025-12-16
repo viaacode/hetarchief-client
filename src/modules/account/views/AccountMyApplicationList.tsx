@@ -1,4 +1,6 @@
+import PersonalInfo from '@account/components/PersonalInfo/PersonalInfo';
 import { Permission } from '@account/const';
+import { selectUser } from '@auth/store/user';
 import {
 	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_COPYRIGHT,
 	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DISTRIBUTION_ACCESS,
@@ -24,7 +26,6 @@ import {
 	type MaterialRequestIntendedUsage,
 	MaterialRequestKeys,
 	MaterialRequestTimeUsage,
-	MaterialRequestType,
 } from '@material-requests/types';
 import {
 	formatDurationHoursMinutesSeconds,
@@ -40,18 +41,26 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
+import { useAppDispatch } from '@shared/store';
+import { setShowMaterialRequestCenter } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { VisitorLayout } from '@visitor-layout/index';
 import clsx from 'clsx';
-import { isEmpty, isNil } from 'lodash-es';
+import { isEmpty, isNil, noop } from 'lodash-es';
+import { useRouter } from 'next/router';
 import { type FC, type ReactNode, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import MaterialCard from '../../visitor-space/components/MaterialCard/MaterialCard';
 import styles from './AccountMyApplicationList.module.scss';
 
 export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	useHideFooter();
 	useStickyLayout();
+
+	const router = useRouter();
+	const dispatch = useAppDispatch();
+	const user = useSelector(selectUser);
 
 	const hasMaterialRequestsPerm = useHasAnyPermission(Permission.CREATE_MATERIAL_REQUESTS);
 
@@ -68,6 +77,11 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 		(): MaterialRequest[] => materialRequestsResponse?.items || [],
 		[materialRequestsResponse]
 	);
+
+	const onCancelRequest = () => {
+		router.back();
+		dispatch(setShowMaterialRequestCenter(true));
+	};
 
 	const renderEmptyMessage = (): ReactNode => tHtml('Geen aanvragen te vervolledigen');
 
@@ -102,7 +116,7 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 			value: ReactNode | string;
 		}[] = [];
 
-		if (materialRequest.type !== MaterialRequestType.REUSE) {
+		if (!materialRequest.reuseForm) {
 			materialRequestEntries.push({
 				label: tText('Reden van aanvraag'),
 				value: materialRequest.reason,
@@ -119,14 +133,14 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 
 			materialRequestEntries.push({
 				label: tText('Materiaal selectie'),
-				value: `${formatTimeStamp(materialRequest.reuseForm?.startTime)} - ${formatTimeStamp(materialRequest.reuseForm?.endTime)}`,
+				value: `${formatTimeStamp(materialRequest.reuseForm.startTime)} - ${formatTimeStamp(materialRequest.reuseForm.endTime)}`,
 			});
 
 			materialRequestEntries.push({
 				label: tText('Downloadkwaliteit'),
 				value:
 					GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DOWNLOAD_QUALITY()[
-						materialRequest.reuseForm?.downloadQuality as MaterialRequestDownloadQuality
+						materialRequest.reuseForm.downloadQuality as MaterialRequestDownloadQuality
 					],
 			});
 
@@ -136,10 +150,10 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 					<>
 						{
 							GET_MATERIAL_REQUEST_TRANSLATIONS_BY_INTENDED_USAGE()[
-								materialRequest.reuseForm?.intendedUsage as MaterialRequestIntendedUsage
+								materialRequest.reuseForm.intendedUsage as MaterialRequestIntendedUsage
 							]
 						}
-						<br /> {materialRequest.reuseForm?.intendedUsageDescription}
+						<br /> {materialRequest.reuseForm.intendedUsageDescription}
 					</>
 				),
 			});
@@ -148,7 +162,7 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 				label: tText('Ontsluiting materiaal'),
 				value:
 					GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DISTRIBUTION_ACCESS()[
-						materialRequest.reuseForm?.distributionAccess as MaterialRequestDistributionAccess
+						materialRequest.reuseForm.distributionAccess as MaterialRequestDistributionAccess
 					],
 			});
 
@@ -158,10 +172,10 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 					<>
 						{
 							GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DISTRIBUTION_TYPE()[
-								materialRequest.reuseForm?.distributionType as MaterialRequestDistributionType
+								materialRequest.reuseForm.distributionType as MaterialRequestDistributionType
 							]
 						}
-						{materialRequest.reuseForm?.distributionTypeDigitalOnline && (
+						{materialRequest.reuseForm.distributionTypeDigitalOnline && (
 							<>
 								<br />
 								{
@@ -172,10 +186,10 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 								}
 							</>
 						)}
-						{materialRequest.reuseForm?.distributionTypeOtherExplanation && (
+						{materialRequest.reuseForm.distributionTypeOtherExplanation && (
 							<>
 								<br />
-								{materialRequest.reuseForm?.distributionTypeOtherExplanation}
+								{materialRequest.reuseForm.distributionTypeOtherExplanation}
 							</>
 						)}
 					</>
@@ -186,7 +200,7 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 				label: tText('Wijzigingen'),
 				value:
 					GET_MATERIAL_REQUEST_TRANSLATIONS_BY_MATERIAL_EDITING()[
-						materialRequest.reuseForm?.materialEditing as MaterialRequestEditing
+						materialRequest.reuseForm.materialEditing as MaterialRequestEditing
 					],
 			});
 
@@ -196,13 +210,13 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 					<>
 						{
 							GET_MATERIAL_REQUEST_TRANSLATIONS_BY_GEOGRAPHICAL_USAGE()[
-								materialRequest.reuseForm?.geographicalUsage as MaterialRequestGeographicalUsage
+								materialRequest.reuseForm.geographicalUsage as MaterialRequestGeographicalUsage
 							]
 						}
-						{materialRequest.reuseForm?.geographicalUsageDescription && (
+						{materialRequest.reuseForm.geographicalUsageDescription && (
 							<>
 								<br />
-								{materialRequest.reuseForm?.geographicalUsageDescription}
+								{materialRequest.reuseForm.geographicalUsageDescription}
 							</>
 						)}
 					</>
@@ -215,15 +229,15 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 					<>
 						{
 							GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TIME_USAGE()[
-								materialRequest.reuseForm?.timeUsageType as MaterialRequestTimeUsage
+								materialRequest.reuseForm.timeUsageType as MaterialRequestTimeUsage
 							]
 						}
-						{materialRequest.reuseForm?.timeUsageType === MaterialRequestTimeUsage.IN_TIME && (
+						{materialRequest.reuseForm.timeUsageType === MaterialRequestTimeUsage.IN_TIME && (
 							<>
 								{': '}
-								{formatMediumDate(asDate(materialRequest.reuseForm?.timeUsageFrom))}
+								{formatMediumDate(asDate(materialRequest.reuseForm.timeUsageFrom))}
 								{' - '}
-								{formatMediumDate(asDate(materialRequest.reuseForm?.timeUsageTo))}
+								{formatMediumDate(asDate(materialRequest.reuseForm.timeUsageTo))}
 							</>
 						)}
 					</>
@@ -234,7 +248,7 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 				label: tText('Bronvermelding'),
 				value:
 					GET_MATERIAL_REQUEST_TRANSLATIONS_BY_COPYRIGHT()[
-						materialRequest.reuseForm?.copyrightDisplay as MaterialRequestCopyrightDisplay
+						materialRequest.reuseForm.copyrightDisplay as MaterialRequestCopyrightDisplay
 					],
 			});
 		}
@@ -290,27 +304,36 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 			);
 		}
 		return (
-			<>
-				<header className={clsx(styles['p-my-application-list__header'], 'l-container')}>
-					<h2 className={styles['p-my-application-list__page-title']}>
-						{tText('Aanvraaglijst')}
-						{materialRequests?.length > 0 && ` (${materialRequests.length})`}
-					</h2>
-				</header>
-				<div
-					className={clsx(
-						'l-container l-container--edgeless-to-lg',
-						styles['p-my-application-list__wrapper'],
-						{
-							'u-text-center u-color-neutral u-py-48': isFetching || noData,
-						}
-					)}
-				>
-					{isFetching && <Loading owner="Material requests overview" fullscreen />}
-					{noData && renderEmptyMessage()}
-					{!noData && !isFetching && renderContent()}
+			<div className={clsx(styles['p-my-application-list'])}>
+				<div>
+					<header className={clsx(styles['p-my-application-list__header'], 'l-container')}>
+						<h2 className={styles['p-my-application-list__page-title']}>
+							{tText('Aanvraaglijst')}
+							{materialRequests?.length > 0 && ` (${materialRequests.length})`}
+						</h2>
+					</header>
+					<div
+						className={clsx(
+							'l-container l-container--edgeless-to-lg',
+							styles['p-my-application-list__wrapper'],
+							{
+								'u-text-center u-color-neutral u-py-48': isFetching || noData,
+							}
+						)}
+					>
+						{isFetching && <Loading owner="Material requests overview" fullscreen />}
+						{noData && renderEmptyMessage()}
+						{!noData && !isFetching && renderContent()}
+					</div>
 				</div>
-			</>
+				{user && materialRequests.length > 0 && (
+					<PersonalInfo
+						mostRecentMaterialRequestName={materialRequests[0].objectSchemaName}
+						onCancel={onCancelRequest}
+						onSuccess={noop}
+					/>
+				)}
+			</div>
 		);
 	};
 	return (

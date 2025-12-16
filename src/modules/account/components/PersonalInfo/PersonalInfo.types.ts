@@ -1,6 +1,5 @@
-import type { ReactNode } from 'react';
-
 import type { MaterialRequestRequesterCapacity } from '@material-requests/types';
+import type { ReactNode } from 'react';
 
 export interface PersonalInfoType {
 	fullName: string;
@@ -9,12 +8,9 @@ export interface PersonalInfoType {
 	requesterCapacity?: MaterialRequestRequesterCapacity;
 }
 
-export interface PersonalInfoBladeBladeProps {
+export interface PersonalInfoProps {
 	children?: ReactNode;
-	isOpen: boolean;
-	onClose: () => void;
-	personalInfo: PersonalInfoType;
-	layer: number;
-	currentLayer: number;
-	refetch: () => void;
+	mostRecentMaterialRequestName: string;
+	onCancel: () => void;
+	onSuccess: () => void;
 }

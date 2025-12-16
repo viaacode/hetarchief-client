@@ -1,16 +1,29 @@
 @use "src/styles/abstracts" as *;
 
+$container-heigth: calc($view-height - $top-navigation-bar-height);
 $header-height: 17rem;
 
 .p-my-application-list {
-	visibility: visible;
-	flex-grow: 1;
-	min-height: 0;
-	flex-flow: column;
+	display: flex;
+	flex-direction: row;
+
+	> :first-child{
+		width: 72%;
+		padding: 0 $spacer-3xl;
+	}
+
+	> :last-child {
+		width: 28%;
+		background-color: $white;
+		border-left: 1px solid $silver;
+		min-height: $container-heigth;
+		max-height: $container-heigth;
+		overflow: hidden;
+	}
 
 	&__wrapper {
-		min-height: calc($view-height - $top-navigation-bar-height - $header-height);
-		max-height: calc($view-height - $top-navigation-bar-height - $header-height);
+		min-height: calc($container-heigth - $header-height);
+		max-height: calc($container-heigth - $header-height);
 		overflow: auto;
 	}
 
@@ -72,7 +85,7 @@ $header-height: 17rem;
 
 		&-row{
 			display: grid;
-			grid-template-columns: 1fr 5fr;
+			grid-template-columns: 1fr 3fr;
 			font-size: $font-size-sm;
 			margin: $spacer-sm;
 
