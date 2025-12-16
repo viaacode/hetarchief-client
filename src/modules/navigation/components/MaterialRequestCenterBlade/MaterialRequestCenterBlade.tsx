@@ -185,7 +185,10 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						type={materialRequest.objectDctermsFormat}
 						publishedBy={materialRequest.maintainerName}
 						publishedOrCreatedDate={materialRequest.objectPublishedOrCreatedDate}
-						icon={getIconFromObjectType(materialRequest.objectDctermsFormat, true)}
+						icon={getIconFromObjectType(
+							materialRequest.objectDctermsFormat,
+							!!materialRequest.objectRepresentationId
+						)}
 					>
 						<p className={clsx('u-font-size-14')}>
 							{tText(

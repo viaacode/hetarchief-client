@@ -481,7 +481,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				type={objectDctermsFormat}
 				publishedBy={maintainerName}
 				publishedOrCreatedDate={objectPublishedOrCreatedDate}
-				icon={getIconFromObjectType(objectDctermsFormat, true)}
+				icon={getIconFromObjectType(objectDctermsFormat, !!materialRequest.objectRepresentationId)}
 			/>
 			<div className={styles['c-request-material__content']}>
 				<dl>

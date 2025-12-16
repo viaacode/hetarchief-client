@@ -342,7 +342,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					type={materialRequest.objectDctermsFormat}
 					publishedBy={materialRequest.maintainerName}
 					publishedOrCreatedDate={materialRequest.objectPublishedOrCreatedDate}
-					icon={getIconFromObjectType(materialRequest.objectDctermsFormat, true)}
+					icon={getIconFromObjectType(
+						materialRequest.objectDctermsFormat,
+						!!materialRequest.objectRepresentationId
+					)}
 					withBorder={false}
 				/>
 			</dd>
