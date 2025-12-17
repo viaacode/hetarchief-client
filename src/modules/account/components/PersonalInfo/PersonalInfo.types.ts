@@ -10,6 +10,7 @@ export interface PersonalInfoType {
 
 export interface PersonalInfoProps {
 	children?: ReactNode;
+	hasRequests: boolean;
 	mostRecentMaterialRequestName: string;
 	onCancel: () => void;
 	onSuccess: () => void;

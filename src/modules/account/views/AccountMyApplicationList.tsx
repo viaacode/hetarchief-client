@@ -1,6 +1,6 @@
+import ApplicationListSent from '@account/components/ApplicationListSent/ApplicationListSent';
 import PersonalInfo from '@account/components/PersonalInfo/PersonalInfo';
 import { Permission } from '@account/const';
-import { selectUser } from '@auth/store/user';
 import {
 	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_COPYRIGHT,
 	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DISTRIBUTION_ACCESS,
@@ -42,15 +42,18 @@ import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useAppDispatch } from '@shared/store';
-import { setShowMaterialRequestCenter } from '@shared/store/ui';
+import {
+	setMaterialRequestCount,
+	setShowFooter,
+	setShowMaterialRequestCenter,
+} from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { VisitorLayout } from '@visitor-layout/index';
 import clsx from 'clsx';
-import { isEmpty, isNil, noop } from 'lodash-es';
+import { isEmpty, isNil } from 'lodash-es';
 import { useRouter } from 'next/router';
-import { type FC, type ReactNode, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
 import MaterialCard from '../../visitor-space/components/MaterialCard/MaterialCard';
 import styles from './AccountMyApplicationList.module.scss';
 
@@ -60,11 +63,15 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 
 	const router = useRouter();
 	const dispatch = useAppDispatch();
-	const user = useSelector(selectUser);
 
 	const hasMaterialRequestsPerm = useHasAnyPermission(Permission.CREATE_MATERIAL_REQUESTS);
+	const [applicationListSent, setApplicationListSent] = useState(false);
 
-	const { data: materialRequestsResponse, isFetching } = useGetPendingMaterialRequests({
+	const {
+		data: materialRequestsResponse,
+		isFetching,
+		refetch: refetchMaterialRequests,
+	} = useGetPendingMaterialRequests({
 		orderProp: MaterialRequestKeys.createdAt,
 		orderDirection: 'desc' as OrderDirection,
 	});
@@ -78,9 +85,19 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 		[materialRequestsResponse]
 	);
 
+	useEffect(() => {
+		materialRequests && dispatch(setMaterialRequestCount(materialRequests.length));
+	}, [materialRequests, dispatch]);
+
 	const onCancelRequest = () => {
 		router.back();
 		dispatch(setShowMaterialRequestCenter(true));
+	};
+
+	const onSuccessRequest = () => {
+		void refetchMaterialRequests();
+		setApplicationListSent(true);
+		dispatch(setShowFooter(true));
 	};
 
 	const renderEmptyMessage = (): ReactNode => tHtml('Geen aanvragen te vervolledigen');
@@ -303,6 +320,11 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 				/>
 			);
 		}
+
+		if (applicationListSent) {
+			return <ApplicationListSent />;
+		}
+
 		return (
 			<div className={clsx(styles['p-my-application-list'])}>
 				<div>
@@ -326,20 +348,21 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 						{!noData && !isFetching && renderContent()}
 					</div>
 				</div>
-				{user && materialRequests.length > 0 && (
-					<PersonalInfo
-						mostRecentMaterialRequestName={materialRequests[0].objectSchemaName}
-						onCancel={onCancelRequest}
-						onSuccess={noop}
-					/>
-				)}
+				<PersonalInfo
+					mostRecentMaterialRequestName={
+						materialRequests.length > 0 ? materialRequests[0].objectSchemaName : ''
+					}
+					hasRequests={materialRequests.length > 0}
+					onCancel={onCancelRequest}
+					onSuccess={onSuccessRequest}
+				/>
 			</div>
 		);
 	};
 	return (
 		<VisitorLayout>
 			<SeoTags
-				title={tText('Aanvraaglijst')}
+				title={tText('Aanvraaglijst meta titel')}
 				description={tText('Aanvraaglijst meta omschrijving')}
 				imgUrl={undefined}
 				translatedPages={[]}

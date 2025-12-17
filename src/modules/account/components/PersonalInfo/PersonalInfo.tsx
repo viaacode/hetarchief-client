@@ -25,13 +25,14 @@ import { getLocalisedOptions } from '@shared/utils/dates';
 import clsx from 'clsx';
 import { format } from 'date-fns';
 import { noop } from 'lodash-es';
-import React, { type FC, useCallback, useRef, useState } from 'react';
+import React, { type FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './PersonalInfo.module.scss';
 import type { PersonalInfoProps } from './PersonalInfo.types';
 
 const PersonalInfo: FC<PersonalInfoProps> = ({
 	mostRecentMaterialRequestName,
+	hasRequests,
 	onCancel,
 	onSuccess,
 }) => {
@@ -45,11 +46,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 	const editUserDataHyperlink = '';
 	const maxNameLength = 40;
 
-	const [requestName, setRequestName] = useState<string>(() => {
-		const formattedDate = format(new Date(), 'MM-yyyy', { ...getLocalisedOptions() });
-
-		return `${mostRecentMaterialRequestName.substring(0, maxNameLength - formattedDate.length - 1)} ${formattedDate}`;
-	});
+	const [requestName, setRequestName] = useState('');
 	const [isSubscribedToNewsletter, setIsSubscribedToNewsletter] = useState<boolean>(
 		preferences?.newsletter || false
 	);
@@ -68,6 +65,14 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 	const contentRef = useRef<HTMLDivElement>(null);
 	useSize(contentRef, (referenceStripContainer) => checkContentSize(referenceStripContainer));
 
+	useEffect(() => {
+		const formattedDate = format(new Date(), 'MM-yyyy', { ...getLocalisedOptions() });
+
+		setRequestName(
+			`${mostRecentMaterialRequestName.substring(0, maxNameLength - formattedDate.length - 1)} ${formattedDate}`
+		);
+	}, [mostRecentMaterialRequestName]);
+
 	const checkContentSize = useCallback((referenceStripElement: HTMLElement) => {
 		if (!referenceStripElement) {
 			return;
@@ -80,6 +85,11 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 
 	const onSendRequests = async () => {
 		try {
+			if (!hasRequests) {
+				setValidationError(tText('Er zijn geen aanvragen te vervolledigen'));
+				return;
+			}
+
 			if (!typeSelected) {
 				setValidationError(tText('De hoedanigheid is verplicht'));
 				return;
@@ -101,7 +111,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 			await MaterialRequestsService.sendAll({
 				type: typeSelected,
 				organisation: organisationInputValue,
-				requestName: requestName,
+				//requestName: requestName,
 			});
 
 			// Only subscribe to newsletter if the user is not already subscribed and indicated that he wants to be subscribed

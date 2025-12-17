@@ -1,0 +1,88 @@
+@use "src/styles/abstracts" as *;
+
+.p-application-list-success {
+	height: 100%;
+	display: grid;
+	background-color: $white;
+
+	&__title {
+		z-index: get-z-layer("foreground");
+		max-width: 63rem;
+		grid-row: 3;
+		color: white;
+		text-align: center;
+		margin: 0 auto;
+		padding: $font-size-1xl $spacer-sm 0;
+		align-self: center;
+		font-size: $font-size-1xl;
+		line-height: $line-height-2xl;
+
+		@media (min-width: $breakpoint-md) {
+			font-size: $font-size-2xl;
+			padding-top: $spacer-2xl;
+		}
+	}
+
+	&__image-background {
+		background-color: $black;
+		grid-row: 1;
+		grid-column: 1 / 4;
+		display: grid;
+		grid-template-rows: 1fr 8rem 2fr;
+		justify-content: center;
+		padding-bottom: $spacer-2xl;
+
+		@media (min-width: $breakpoint-md) {
+			grid-template-rows: 1fr 15rem 2fr;
+		}
+	}
+
+	&__image-wrapper {
+		position: relative;
+		height: 100%;
+		width: 100vw;
+		max-width: 144rem;
+		grid-row: 2;
+
+		img {
+			object-fit: contain;
+		}
+	}
+
+	&__info {
+		grid-column: 2;
+		display: grid;
+		justify-items: center;
+		row-gap: $spacer-md;
+		padding: $spacer-sm 0;
+
+		@media (min-width: $breakpoint-md) {
+			grid-template-rows: 1fr auto auto 2fr;
+		}
+	}
+
+	&__description {
+		text-align: center;
+		align-self: flex-end;
+		color: $neutral;
+		line-height: $line-height-4xl;
+
+		@media (min-width: $breakpoint-md) {
+			grid-row: 2;
+			max-width: 53rem;
+		}
+	}
+
+	&__button-component {
+		display: flex;
+		margin-top: $spacer-sm !important;
+		gap: $spacer-sm;
+		align-items: center;
+		flex-direction: column;
+
+		@media (min-width: $breakpoint-md) {
+			grid-row: 3;
+			flex-direction: row;
+		}
+	}
+}
