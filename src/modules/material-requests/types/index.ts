@@ -84,6 +84,7 @@ export interface MaterialRequestUpdate {
 export interface MaterialRequestSendAll {
 	type: MaterialRequestRequesterCapacity;
 	organisation?: string;
+	requestName?: string;
 }
 
 export enum MaterialRequestType {

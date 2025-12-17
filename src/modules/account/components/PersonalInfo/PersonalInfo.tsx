@@ -101,6 +101,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 			await MaterialRequestsService.sendAll({
 				type: typeSelected,
 				organisation: organisationInputValue,
+				requestName: requestName,
 			});
 
 			// Only subscribe to newsletter if the user is not already subscribed and indicated that he wants to be subscribed
@@ -113,17 +114,6 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 					language: locale,
 				}).then(noop);
 			}
-
-			toastService.notify({
-				maxLines: 3,
-				title: tText(
-					'modules/navigation/components/personal-info-blade/personal-info-blade___verzenden-succes'
-				),
-				description: tText(
-					'modules/navigation/components/personal-info-blade/personal-info-blade___requests-zijn-verzonden'
-				),
-			});
-			//refetch();
 			onSuccess();
 		} catch (err) {
 			console.error({ err });
@@ -191,14 +181,12 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 	};
 
 	const onFailedRequest = () => {
+		setAgreedToTerms(false);
+		setIsSubscribedToNewsletter(false);
 		toastService.notify({
 			maxLines: 3,
-			title: tText(
-				'modules/navigation/components/personal-info-blade/personal-info-blade___er-ging-iets-mis'
-			),
-			description: tText(
-				'modules/navigation/components/personal-info-blade/personal-info-blade___er-ging-iets-mis-tijdens-het-versturen'
-			),
+			title: tText('er-ging-iets-mis'),
+			description: tText('er-ging-iets-mis-tijdens-het-versturen'),
 		});
 	};
 
@@ -272,33 +260,25 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 			<div className={clsx(styles['c-personal-info__content-group-radio-button-group'])}>
 				<RadioButton
 					className={styles['c-personal-info__content-group-radio-button']}
-					label={tText(
-						'modules/navigation/components/personal-info-blade/personal-info-blade___requester-capacity-education'
-					)}
+					label={tText('requester-capacity-education')}
 					checked={typeSelected === MaterialRequestRequesterCapacity.EDUCATION}
 					onClick={() => setTypeSelected(MaterialRequestRequesterCapacity.EDUCATION)}
 				/>
 				<RadioButton
 					className={styles['c-personal-info__content-group-radio-button']}
-					label={tText(
-						'modules/navigation/components/personal-info-blade/personal-info-blade___requester-capacity-work'
-					)}
+					label={tText('requester-capacity-work')}
 					checked={typeSelected === MaterialRequestRequesterCapacity.WORK}
 					onClick={() => setTypeSelected(MaterialRequestRequesterCapacity.WORK)}
 				/>
 				<RadioButton
 					className={styles['c-personal-info__content-group-radio-button']}
-					label={tText(
-						'modules/navigation/components/personal-info-blade/personal-info-blade___requester-capacity-private-researcher'
-					)}
+					label={tText('requester-capacity-private-researcher')}
 					checked={typeSelected === MaterialRequestRequesterCapacity.PRIVATE_RESEARCH}
 					onClick={() => setTypeSelected(MaterialRequestRequesterCapacity.PRIVATE_RESEARCH)}
 				/>
 				<RadioButton
 					className={styles['c-personal-info__content-group-radio-button']}
-					label={tText(
-						'modules/navigation/components/personal-info-blade/personal-info-blade___requester-capacity-other'
-					)}
+					label={tText('requester-capacity-other')}
 					checked={typeSelected === MaterialRequestRequesterCapacity.OTHER}
 					onClick={() => setTypeSelected(MaterialRequestRequesterCapacity.OTHER)}
 				/>

@@ -12,7 +12,7 @@ $header-height: 17rem;
 		padding: 0 $spacer-3xl;
 	}
 
-	> :last-child {
+	> :last-child:not(:only-child) {
 		width: $blade-max-width;
 		background-color: $white;
 		border-left: 1px solid $silver;
