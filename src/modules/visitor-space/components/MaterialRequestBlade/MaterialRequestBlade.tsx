@@ -426,6 +426,39 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		);
 	};
 
+	const renderReason = () => {
+		// No type selected, so no input to show
+		// Duplicate detected, so no input to show
+		if (!typeSelected || showDuplicateWarning) {
+			return null;
+		}
+
+		// We have the complex reuse flow so no reason needed
+		if (triggerComplexReuseFlow && typeSelected === MaterialRequestType.REUSE) {
+			return null;
+		}
+
+		return (
+			<>
+				<dt className={styles['c-request-material__content-label']}>
+					<label htmlFor="reason-input">
+						{tText(
+							'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
+						)}
+					</label>
+				</dt>
+				<dd className={styles['c-request-material__content-value']}>
+					<TextArea
+						id="reason-input"
+						className={styles['c-request-material__reason-input']}
+						onChange={(e) => setReasonInputValue(e.target.value)}
+						value={reasonInputValue}
+					/>
+				</dd>
+			</>
+		);
+	};
+
 	const renderReuseFormAlert = (): ReactNode => {
 		return (
 			<Alert
@@ -536,27 +569,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							/>
 						) : null}
 					</dd>
-					{!triggerComplexReuseFlow && !showDuplicateWarning && (
-						<>
-							<dt className={styles['c-request-material__content-label']}>
-								<label htmlFor="reason-input">
-									{tText(
-										'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
-									)}
-								</label>
-							</dt>
-							<dd className={styles['c-request-material__content-value']}>
-								<TextArea
-									id="reason-input"
-									className={styles['c-request-material__reason-input']}
-									onChange={(e) => setReasonInputValue(e.target.value)}
-									value={reasonInputValue}
-								/>
-							</dd>
-						</>
-					)}
+					{renderReason()}
 					{showReuseFormWarning && renderReuseFormAlert()}
-					{showDuplicateWarning && renderDuplicateAlert()}
+					{showDuplicateWarning && triggerComplexReuseFlow && renderDuplicateAlert()}
 				</dl>
 			</div>
 			<ConfirmationModal
