@@ -111,7 +111,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 			await MaterialRequestsService.sendAll({
 				type: typeSelected,
 				organisation: organisationInputValue,
-				//requestName: requestName,
+				requestName: requestName,
 			});
 
 			// Only subscribe to newsletter if the user is not already subscribed and indicated that he wants to be subscribed
