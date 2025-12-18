@@ -44,7 +44,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 	const shouldRenderNewsletterCheckbox: boolean = !preferences?.newsletter;
 	// TODO: https://meemoo.atlassian.net/browse/ARC-3226 - fix url for zendesk
 	const editUserDataHyperlink = '';
-	const maxNameLength = 40;
+	const MAX_NAME_LENGTH = 40;
 
 	const [requestName, setRequestName] = useState('');
 	const [isSubscribedToNewsletter, setIsSubscribedToNewsletter] = useState<boolean>(
