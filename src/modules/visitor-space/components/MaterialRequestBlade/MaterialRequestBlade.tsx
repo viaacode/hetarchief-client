@@ -116,7 +116,10 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 
 		// Show a warning if there is already a request for this item with the same type as the selected type
 		return !!duplicatesToCheck?.find(
-			(item) => item.type === typeSelected && item.objectRepresentationId === objectRepresentationId
+			(item) =>
+				item.type === typeSelected &&
+				// Adding fallback values since sometimes it can happen we have an empty string and undefined
+				(item.objectRepresentationId || '') === (objectRepresentationId || '')
 		);
 	}, [
 		isEditMode,

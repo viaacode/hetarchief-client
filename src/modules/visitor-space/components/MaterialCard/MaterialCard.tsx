@@ -26,6 +26,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 	withBorder = true,
 	orientation,
 	children,
+	renderAdditionalCaption,
 }) => {
 	const withThumbnail = !!thumbnail || !hideThumbnail;
 
@@ -57,7 +58,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 
 		subtitle = subtitle.trim();
 
-		return subtitle;
+		return renderAdditionalCaption?.(subtitle) || subtitle;
 	};
 
 	const renderNoContentIcon = () => {
