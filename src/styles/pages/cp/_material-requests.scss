@@ -1,10 +1,8 @@
 @use "src/styles/abstracts" as *;
 
-$page: "p-material-requests";
-
 // TODO: make styles reusable (see visitors)
 
-.#{$page} {
+.p-material-requests {
 	&__header {
 		@media (min-width: $breakpoint-md) {
 			display: flex;
@@ -23,6 +21,12 @@ $page: "p-material-requests";
 
 		&--open {
 			box-shadow: $shadow-24-black-08;
+		}
+
+		&-no-dividers {
+			.c-multi-select__checkbox-list-item {
+				border-top: none;
+			}
 		}
 	}
 

@@ -41,7 +41,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorLayout } from '@visitor-layout/index';
 import clsx from 'clsx';
-import { isEmpty, isNil, without } from 'lodash-es';
+import { isEmpty, isNil, noop } from 'lodash-es';
 import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
 import type { SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
@@ -118,14 +118,6 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		],
 		[filters]
 	);
-
-	const onMultiTypeChange = (checked: boolean, id: string) => {
-		setSelectedTypes((prev) => (!checked ? [...prev, id] : without(prev, id)));
-	};
-
-	const onMultiStatusChange = (checked: boolean, id: string) => {
-		setSelectedStatuses((prev) => (!checked ? [...prev, id] : without(prev, id)));
-	};
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
@@ -265,21 +257,52 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 									variant="rounded"
 									label={tText('Type')}
 									options={typesList}
-									onChange={onMultiTypeChange}
-									className="p-material-requests__dropdown"
+									onChange={noop}
+									className={clsx(
+										'p-material-requests__dropdown',
+										'p-material-requests__dropdown-no-dividers'
+									)}
 									iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
 									iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 									iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+									checkboxHeader={tText('Status aanvraag')}
+									confirmOptions={{
+										label: tText('Pas toe'),
+										variants: ['black'],
+										onClick: setSelectedTypes,
+									}}
+									resetOptions={{
+										icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+										label: tText('Reset'),
+										variants: ['text'],
+										onClick: setSelectedTypes,
+									}}
 								/>
+
 								<MultiSelect
 									variant="rounded"
 									label={tText('Status')}
 									options={statusList}
-									onChange={onMultiStatusChange}
-									className="p-material-requests__dropdown"
+									onChange={noop}
+									className={clsx(
+										'p-material-requests__dropdown',
+										'p-material-requests__dropdown-no-dividers'
+									)}
 									iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
 									iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 									iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+									checkboxHeader={tText('Status aanvraag')}
+									confirmOptions={{
+										label: tText('Pas toe'),
+										variants: ['black'],
+										onClick: setSelectedStatuses,
+									}}
+									resetOptions={{
+										icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+										label: tText('Reset'),
+										variants: ['text'],
+										onClick: setSelectedStatuses,
+									}}
 								/>
 							</div>
 
