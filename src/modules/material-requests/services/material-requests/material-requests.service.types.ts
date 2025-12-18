@@ -11,6 +11,7 @@ export interface GetMaterialRequestsProps {
 	search?: string;
 	type?: MaterialRequestType[];
 	status?: MaterialRequestStatus[];
+	hasDownloadUrl?: string[];
 	maintainerIds?: string[];
 	isPending?: boolean;
 	page?: number;

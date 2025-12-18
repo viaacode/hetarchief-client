@@ -2,6 +2,7 @@ import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetai
 import {
 	ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
 	ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
+	GET_MATERIAL_REQUEST_DOWNLOAD_FILTER_ARRAY,
 	GET_MATERIAL_REQUEST_STATUS_FILTER_ARRAY,
 	GET_MATERIAL_REQUEST_TYPE_FILTER_ARRAY,
 	getAccountMaterialRequestTableColumns,
@@ -53,6 +54,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
 	const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 	const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
+	const [selectedDownloadFilters, setSelectedDownloadFilters] = useState<string[]>([]);
 
 	const hasOwnMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
 	const hasAnyMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_ANY_MATERIAL_REQUESTS);
@@ -78,8 +80,11 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		...(!isNil(filters.type) && {
 			type: filters.type as MaterialRequestType[],
 		}),
-		...(!isNil(filters.type) && {
+		...(!isNil(filters.status) && {
 			status: filters.status as MaterialRequestStatus[],
+		}),
+		...(!isNil(filters.hasDownloadUrl) && {
+			hasDownloadUrl: filters.hasDownloadUrl as string[],
 		}),
 	});
 
@@ -109,6 +114,18 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		];
 	}, [selectedStatuses]);
 
+	const downloadUrlList = useMemo(() => {
+		return [
+			...GET_MATERIAL_REQUEST_DOWNLOAD_FILTER_ARRAY().map(
+				({ id, label }): MultiSelectOption => ({
+					id,
+					label,
+					checked: selectedDownloadFilters.includes(id),
+				})
+			),
+		];
+	}, [selectedDownloadFilters]);
+
 	const sortFilters = useMemo(
 		(): SortingRule<{ id: MaterialRequestKeys; desc: boolean }>[] => [
 			{
@@ -136,6 +153,15 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 			page: 1,
 		});
 	}, [selectedStatuses]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+	useEffect(() => {
+		setFilters({
+			...filters,
+			hasDownloadUrl: selectedDownloadFilters,
+			page: 1,
+		});
+	}, [selectedDownloadFilters]);
 
 	const onSortChange = (
 		orderProp: string | undefined,
@@ -302,6 +328,32 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 										label: tText('Reset'),
 										variants: ['text'],
 										onClick: setSelectedStatuses,
+									}}
+								/>
+
+								<MultiSelect
+									variant="rounded"
+									label={tText('Download')}
+									options={downloadUrlList}
+									onChange={noop}
+									className={clsx(
+										'p-material-requests__dropdown',
+										'p-material-requests__dropdown-no-dividers'
+									)}
+									iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+									iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+									iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+									checkboxHeader={tText('Aanvraag met download')}
+									confirmOptions={{
+										label: tText('Pas toe'),
+										variants: ['black'],
+										onClick: setSelectedDownloadFilters,
+									}}
+									resetOptions={{
+										icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+										label: tText('Reset'),
+										variants: ['text'],
+										onClick: setSelectedDownloadFilters,
 									}}
 								/>
 							</div>

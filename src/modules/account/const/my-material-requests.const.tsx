@@ -21,6 +21,7 @@ export const ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	type: withDefault(ArrayParam, []),
 	status: withDefault(ArrayParam, []),
+	hasDownloadUrl: withDefault(ArrayParam, []),
 	orderProp: withDefault(StringParam, MaterialRequestKeys.createdAt),
 	orderDirection: withDefault(SortDirectionParam, undefined),
 	page: withDefault(NumberParam, 1),
@@ -71,6 +72,20 @@ export const GET_MATERIAL_REQUEST_STATUS_FILTER_ARRAY = (): {
 	{
 		id: MaterialRequestStatus.NONE,
 		label: tText('modules/cp/const/material-requests___filter-status-none'),
+	},
+];
+
+export const GET_MATERIAL_REQUEST_DOWNLOAD_FILTER_ARRAY = (): {
+	id: string;
+	label: string;
+}[] => [
+	{
+		id: 'true',
+		label: tText('modules/cp/const/material-requests___filter-download-url-yes'),
+	},
+	{
+		id: 'false',
+		label: tText('modules/cp/const/material-requests___filter-download-url-no'),
 	},
 ];
 
