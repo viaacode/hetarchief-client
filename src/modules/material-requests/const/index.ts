@@ -8,6 +8,7 @@ import {
 	MaterialRequestGeographicalUsage,
 	MaterialRequestIntendedUsage,
 	type MaterialRequestReuseForm,
+	MaterialRequestStatus,
 	MaterialRequestTimeUsage,
 	MaterialRequestType,
 } from '@material-requests/types';
@@ -26,6 +27,18 @@ export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE = (): Record<
 	[MaterialRequestType.VIEW]: tText(
 		'modules/material-requests/const/material-requests___type-view'
 	),
+});
+
+export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_STATUS = (): Record<
+	MaterialRequestStatus,
+	string
+> => ({
+	[MaterialRequestStatus.NEW]: tText('status-new'),
+	[MaterialRequestStatus.PENDING]: tText('status-pending'),
+	[MaterialRequestStatus.APPROVED]: tText('status-approved'),
+	[MaterialRequestStatus.DENIED]: tText('status-denied'),
+	[MaterialRequestStatus.CANCELLED]: tText('status-cancelled'),
+	[MaterialRequestStatus.NONE]: tText('status-none'),
 });
 
 export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DOWNLOAD_QUALITY = (): Record<
