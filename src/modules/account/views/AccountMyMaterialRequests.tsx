@@ -11,13 +11,17 @@ import { useGetMaterialRequests } from '@material-requests/hooks/get-material-re
 import { type MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
 import { OrderDirection, PaginationBar, type Row, Table } from '@meemoo/react-components';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorLayout } from '@visitor-layout/index';
 import clsx from 'clsx';
@@ -31,7 +35,9 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
 
-	const hasMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
+	const hasOwnMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
+	const hasAnyMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_ANY_MATERIAL_REQUESTS);
+	const locale = useLocale();
 
 	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
 		currentMaterialRequest?.id || null
@@ -138,8 +144,26 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		);
 	};
 
+	const renderPageTitle = () => (
+		<>
+			{tText('pages/account/mijn-profiel/index___mijn-materiaalaanvragen')}
+			{hasAnyMaterialRequestsPerm && (
+				<div className="u-color-neutral u-font-size-14 u-font-weight-400 u-pt-8">
+					<a
+						href={ROUTES_BY_LOCALE[locale].cpAdminMaterialRequests}
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						{tText('Ga naar de inkomende materiaalaanvragen van mijn organisatie')}
+					</a>
+					<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+				</div>
+			)}
+		</>
+	);
+
 	const renderPageContent = () => {
-		if (!hasMaterialRequestsPerm) {
+		if (!hasOwnMaterialRequestsPerm) {
 			return (
 				<ErrorNoAccess
 					visitorSpaceSlug={null}
@@ -150,10 +174,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 			);
 		}
 		return (
-			<AccountLayout
-				className="p-account-my-material-requests"
-				pageTitle={tText('pages/account/mijn-profiel/index___mijn-materiaalaanvragen')}
-			>
+			<AccountLayout className="p-account-my-material-requests" pageTitle={renderPageTitle()}>
 				<div
 					className={clsx('l-container l-container--edgeless-to-lg', {
 						'u-text-center u-color-neutral u-py-48': isFetching || noData,
