@@ -265,7 +265,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 									iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
 									iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 									iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-									checkboxHeader={tText('Status aanvraag')}
+									checkboxHeader={tText('Type aanvraag')}
 									confirmOptions={{
 										label: tText('Pas toe'),
 										variants: ['black'],
