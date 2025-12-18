@@ -89,6 +89,7 @@ export enum IconName {
 	SortDown = 'sort-down',
 	SortTable = 'sort-table',
 	SortUp = 'sort-up',
+	Star = 'star',
 	Timer = 'timer',
 	Times = 'times',
 	Trash = 'trash',

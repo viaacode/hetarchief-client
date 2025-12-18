@@ -89,6 +89,7 @@ export enum IconNamesLight {
 	SortDown = 'sort-down--light',
 	SortTable = 'sort-table--light',
 	SortUp = 'sort-up--light',
+	Star = 'star--light',
 	Timer = 'timer--light',
 	Times = 'times--light',
 	Trash = 'trash--light',

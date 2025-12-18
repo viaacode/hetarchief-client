@@ -1,0 +1,38 @@
+@use "src/styles/abstracts" as *;
+
+.c-material-request-status-pill {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	&__pill{
+		height: 3rem;
+		width: 4rem;
+		font-size: $font-size-2xm;
+
+		&--new, &--cancelled {
+			background-color: $grey;
+			color: $white;
+		}
+
+		&--pending {
+			background-color: $mustard;
+			color: $black;
+		}
+
+		&--approved {
+			background-color: $teal-dark;
+			color: $white;
+		}
+
+		&--denied {
+			background-color: $cherry;
+			color: $white;
+		}
+	}
+
+	&__label {
+		color: $neutral;
+		margin-left: $spacer-xs;
+	}
+}
