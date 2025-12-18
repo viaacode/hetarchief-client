@@ -149,7 +149,7 @@ export enum MaterialRequestKeys {
 	updatedAt = 'updatedAt',
 	type = 'type',
 	status = 'status',
-	download = 'downloadUrl',
+	downloadUrl = 'downloadUrl',
 	requestName = 'requestName',
 	name = 'requesterFullName',
 	email = 'requesterMail',
