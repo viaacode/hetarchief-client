@@ -58,7 +58,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 
 		subtitle = subtitle.trim();
 
-		return renderAdditionalCaption ? renderAdditionalCaption(subtitle) : subtitle;
+		return renderAdditionalCaption?.(subtitle) || subtitle;
 	};
 
 	const renderNoContentIcon = () => {
