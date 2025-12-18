@@ -18,6 +18,7 @@ export abstract class MaterialRequestsService {
 	public static async getAll({
 		search,
 		type,
+		status,
 		maintainerIds,
 		isPending,
 		page,
@@ -35,6 +36,7 @@ export abstract class MaterialRequestsService {
 					query: {
 						...(search?.trim() ? { query: `%${search}%` } : {}),
 						...(type && { type }),
+						...(status && { status }),
 						...(maintainerIds && { maintainerIds }),
 						...(!isNil(isPending) && { isPending }),
 						...(page && { page }),

@@ -2,38 +2,57 @@ import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetai
 import {
 	ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
 	ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
+	GET_MATERIAL_REQUEST_STATUS_FILTER_ARRAY,
+	GET_MATERIAL_REQUEST_TYPE_FILTER_ARRAY,
 	getAccountMaterialRequestTableColumns,
 	Permission,
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
-import { type MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
-import { OrderDirection, PaginationBar, type Row, Table } from '@meemoo/react-components';
+import {
+	type MaterialRequest,
+	MaterialRequestKeys,
+	type MaterialRequestStatus,
+	type MaterialRequestType,
+} from '@material-requests/types';
+import {
+	MultiSelect,
+	type MultiSelectOption,
+	OrderDirection,
+	PaginationBar,
+	type Row,
+	Table,
+} from '@meemoo/react-components';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table';
 import { ROUTES_BY_LOCALE } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorLayout } from '@visitor-layout/index';
 import clsx from 'clsx';
-import { isEmpty, isNil } from 'lodash-es';
-import { type FC, type MouseEvent, type ReactNode, useMemo, useState } from 'react';
+import { isEmpty, isNil, without } from 'lodash-es';
+import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
 import type { SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const [filters, setFilters] = useQueryParams(ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
+	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
+	const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+	const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
 
 	const hasOwnMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
 	const hasAnyMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_ANY_MATERIAL_REQUESTS);
@@ -53,9 +72,42 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		...(!isNil(filters.orderDirection) && {
 			orderDirection: filters.orderDirection as OrderDirection,
 		}),
+		...(!isNil(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]) && {
+			search: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
+		}),
+		...(!isNil(filters.type) && {
+			type: filters.type as MaterialRequestType[],
+		}),
+		...(!isNil(filters.type) && {
+			status: filters.status as MaterialRequestStatus[],
+		}),
 	});
 
 	const noData = useMemo((): boolean => isEmpty(materialRequests?.items), [materialRequests]);
+
+	const typesList = useMemo(() => {
+		return [
+			...GET_MATERIAL_REQUEST_TYPE_FILTER_ARRAY().map(
+				({ id, label }): MultiSelectOption => ({
+					id,
+					label,
+					checked: selectedTypes.includes(id),
+				})
+			),
+		];
+	}, [selectedTypes]);
+
+	const statusList = useMemo(() => {
+		return [
+			...GET_MATERIAL_REQUEST_STATUS_FILTER_ARRAY().map(
+				({ id, label }): MultiSelectOption => ({
+					id,
+					label,
+					checked: selectedStatuses.includes(id),
+				})
+			),
+		];
+	}, [selectedStatuses]);
 
 	const sortFilters = useMemo(
 		(): SortingRule<{ id: MaterialRequestKeys; desc: boolean }>[] => [
@@ -66,6 +118,32 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		],
 		[filters]
 	);
+
+	const onMultiTypeChange = (checked: boolean, id: string) => {
+		setSelectedTypes((prev) => (!checked ? [...prev, id] : without(prev, id)));
+	};
+
+	const onMultiStatusChange = (checked: boolean, id: string) => {
+		setSelectedStatuses((prev) => (!checked ? [...prev, id] : without(prev, id)));
+	};
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+	useEffect(() => {
+		setFilters({
+			...filters,
+			type: selectedTypes,
+			page: 1,
+		});
+	}, [selectedTypes]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+	useEffect(() => {
+		setFilters({
+			...filters,
+			status: selectedStatuses,
+			page: 1,
+		});
+	}, [selectedStatuses]);
 
 	const onSortChange = (
 		orderProp: string | undefined,
@@ -180,6 +258,47 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 						'u-text-center u-color-neutral u-py-48': isFetching || noData,
 					})}
 				>
+					<div className="l-container">
+						<div className="p-material-requests__header">
+							<div className={clsx('u-flex', 'u-flex-row', 'u-gap-sm')}>
+								<MultiSelect
+									variant="rounded"
+									label={tText('Type')}
+									options={typesList}
+									onChange={onMultiTypeChange}
+									className="p-material-requests__dropdown"
+									iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+									iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+									iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+								/>
+								<MultiSelect
+									variant="rounded"
+									label={tText('Status')}
+									options={statusList}
+									onChange={onMultiStatusChange}
+									className="p-material-requests__dropdown"
+									iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+									iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+									iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+								/>
+							</div>
+
+							<SearchBar
+								id="materiaalaanvragen-searchbar"
+								value={search}
+								className="p-material-requests__searchbar"
+								placeholder={tText('Zoek')}
+								onChange={setSearch}
+								onSearch={(newValue) =>
+									setFilters({
+										[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: newValue,
+										page: 1,
+									})
+								}
+							/>
+						</div>
+					</div>
+
 					{isFetching && <Loading owner="Material requests overview" fullscreen />}
 					{noData && renderEmptyMessage()}
 					{!noData && !isFetching && renderContent()}
