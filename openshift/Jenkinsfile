@@ -67,10 +67,9 @@ pipeline {
 			steps {
 				container('default') {
 					script {
-						sh '''#!/bin/bash
-                            echo "npm ci --include=dev"
-                            echo "npm run test:ci"
-                        '''
+						sh '''echo "npm ci --include=dev";
+                                                      echo "npm run test:ci"
+                                                   '''
 					}
 				}
 			}
