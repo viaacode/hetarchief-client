@@ -134,7 +134,7 @@ export const getAccountMaterialRequestTableColumns = (): Column<MaterialRequest>
 	},
 	{
 		Header: tText('modules/cp/const/material-requests___download'),
-		accessor: MaterialRequestKeys.download,
+		accessor: MaterialRequestKeys.downloadUrl,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<MaterialRequestDownloadButton materialRequest={original} />
 		),

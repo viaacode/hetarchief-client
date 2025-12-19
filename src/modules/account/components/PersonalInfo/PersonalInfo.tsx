@@ -44,7 +44,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 	const shouldRenderNewsletterCheckbox: boolean = !preferences?.newsletter;
 	// TODO: https://meemoo.atlassian.net/browse/ARC-3226 - fix url for zendesk
 	const editUserDataHyperlink = '';
-	const maxNameLength = 40;
+	const MAX_NAME_LENGTH = 40;
 
 	const [requestName, setRequestName] = useState('');
 	const [isSubscribedToNewsletter, setIsSubscribedToNewsletter] = useState<boolean>(
@@ -69,7 +69,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 		const formattedDate = format(new Date(), 'MM-yyyy', { ...getLocalisedOptions() });
 
 		setRequestName(
-			`${mostRecentMaterialRequestName.substring(0, maxNameLength - formattedDate.length - 1)} ${formattedDate}`
+			`${mostRecentMaterialRequestName.substring(0, MAX_NAME_LENGTH - formattedDate.length - 1)} ${formattedDate}`
 		);
 	}, [mostRecentMaterialRequestName]);
 
@@ -126,7 +126,18 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 			}
 			onSuccess();
 		} catch (err) {
-			console.error({ err });
+			console.error({
+				message: 'Failed to material requests',
+				innerException: err,
+				additionalInfo: {
+					typeSelected,
+					organisationInputValue,
+					requestName,
+					isSubscribedToNewsletter,
+					preferences,
+					locale,
+				},
+			});
 			onFailedRequest();
 		}
 	};
@@ -239,7 +250,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 			<Tooltip position="left">
 				<TooltipTrigger>
 					<TextInput
-						maxLength={maxNameLength}
+						maxLength={MAX_NAME_LENGTH}
 						value={requestName}
 						onChange={(e) => setRequestName(e.target.value)}
 					/>
@@ -257,7 +268,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 					styles['c-personal-info__content-group-value-length']
 				)}
 			>
-				{requestName.length || 0} / {maxNameLength}
+				{requestName.length || 0} / {MAX_NAME_LENGTH}
 			</span>
 		</div>
 	);
