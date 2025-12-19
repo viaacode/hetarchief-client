@@ -34,6 +34,10 @@ export interface MaterialRequest {
 	type: MaterialRequestType;
 	reuseForm?: MaterialRequestReuseForm;
 	updatedAt: string;
+	requestedAt: string;
+	approvedAt: string;
+	deniedAt: string;
+	cancelledAt: string;
 	organisation?: string;
 	requestName: string | null;
 	downloadUrl: string | null;
@@ -146,7 +150,7 @@ export interface MaterialRequestMaintainer {
 
 export enum MaterialRequestKeys {
 	createdAt = 'createdAt',
-	updatedAt = 'updatedAt',
+	requestedAt = 'requestedAt',
 	type = 'type',
 	status = 'status',
 	downloadUrl = 'downloadUrl',

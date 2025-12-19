@@ -22,7 +22,7 @@ export const ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
 	type: withDefault(ArrayParam, []),
 	status: withDefault(ArrayParam, []),
 	hasDownloadUrl: withDefault(ArrayParam, []),
-	orderProp: withDefault(StringParam, MaterialRequestKeys.createdAt),
+	orderProp: withDefault(StringParam, MaterialRequestKeys.requestedAt),
 	orderDirection: withDefault(SortDirectionParam, undefined),
 	page: withDefault(NumberParam, 1),
 };
@@ -106,9 +106,9 @@ export const getAccountMaterialRequestTableColumns = (): Column<MaterialRequest>
 	},
 	{
 		Header: tText('modules/cp/const/material-requests___aangevraagd-op'),
-		accessor: MaterialRequestKeys.createdAt,
+		accessor: MaterialRequestKeys.requestedAt,
 		Cell: ({ row: { original } }: MaterialRequestRow) => {
-			const date = formatMediumDate(asDate(original.createdAt));
+			const date = formatMediumDate(asDate(original.requestedAt || original.createdAt));
 			return (
 				<span className="u-color-neutral" title={date}>
 					{date}

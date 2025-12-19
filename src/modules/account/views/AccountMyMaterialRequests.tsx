@@ -167,7 +167,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	): void => {
-		if (filters.orderProp === MaterialRequestKeys.updatedAt && orderDirection === undefined) {
+		if (filters.orderProp === MaterialRequestKeys.requestedAt && orderDirection === undefined) {
 			setFilters({
 				...filters,
 				orderProp,
@@ -211,6 +211,9 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	};
 
 	const renderDetailBlade = () => {
+		if (!currentMaterialRequestDetail) {
+			return null;
+		}
 		return (
 			<MaterialRequestDetailBlade
 				isOpen={!isLoading && isDetailBladeOpen}
