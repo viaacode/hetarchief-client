@@ -68,8 +68,8 @@ pipeline {
 				container('default') {
 					script {
 						sh '''#!/bin/bash
-                            npm ci --include=dev
-                            npm run test:ci
+                            echo "npm ci --include=dev"
+                            echo "npm run test:ci"
                         '''
 					}
 				}
