@@ -42,8 +42,6 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 
 	const { data: preferences } = useGetNewsletterPreferences(user?.email);
 	const shouldRenderNewsletterCheckbox: boolean = !preferences?.newsletter;
-	// TODO: https://meemoo.atlassian.net/browse/ARC-3226 - fix url for zendesk
-	const editUserDataHyperlink = '';
 	const MAX_NAME_LENGTH = 40;
 
 	const [requestName, setRequestName] = useState('');
@@ -314,8 +312,12 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 			>
 				<div className={styles['c-personal-info__title']}>{tText('Details')}</div>
 				<div className={styles['c-personal-info__edit-user-data']}>
-					<a href={editUserDataHyperlink} target="_blank" rel="noopener noreferrer">
-						{tText('Aanpassing van jouw gegevens aanvragen')}
+					<a
+						href={tText('Aanpassing van jouw gegevens aanvragen - hyperlink')}
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						{tText('Aanpassing van jouw gegevens aanvragen - label')}
 					</a>
 					<Icon className="u-ml-8" name={IconNamesLight.Extern} />
 				</div>
