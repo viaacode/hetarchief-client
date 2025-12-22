@@ -4,6 +4,8 @@ FROM node:24-alpine AS runner
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 ENV NODE_ENV production
+# disable color output, since jenkins doesn't support it in it's log viewer
+ENV NO_COLOR=true
 COPY . .
 ARG DEBUG_TOOLS=false
 RUN echo debug is set $DEBUG_TOOLS
