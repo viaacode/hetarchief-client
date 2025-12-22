@@ -1,6 +1,3 @@
-import { useRouter } from 'next/router';
-import { type FC, useCallback, useEffect } from 'react';
-
 import { FoldersService } from '@account/services/folders';
 import { SharedFolderStatus } from '@account/types';
 import { createFolderSlug } from '@account/utils';
@@ -10,6 +7,8 @@ import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { useRouter } from 'next/router';
+import { type FC, useCallback, useEffect } from 'react';
 
 interface AccountSharedFolderProps {
 	folderId: string | undefined;
@@ -53,7 +52,7 @@ export const AccountAcceptSharedFolder: FC<DefaultSeoInfo & AccountSharedFolderP
 				const folderUrl = `${ROUTES_BY_LOCALE[locale].accountMyFolders}/${slug}`;
 
 				await router.replace(folderUrl);
-			} catch (err) {
+			} catch (_err) {
 				toastService.notify({
 					maxLines: 3,
 					title: tText('pages/account/map-delen/folder-id/index___error'),

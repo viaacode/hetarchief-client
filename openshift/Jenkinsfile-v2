@@ -223,7 +223,7 @@ pipeline {
 }
 
 static String getImageFromDockerfile() {
-	return 'node:20.4'
+	return 'node:24-alpine'
 }
 
 static void getBaseImageName() {

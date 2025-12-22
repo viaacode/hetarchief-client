@@ -1,33 +1,41 @@
-import { Button, type OrderDirection } from '@meemoo/react-components';
-import Image from 'next/image';
-import { type FC, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
 import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
+import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { MaterialRequestsService } from '@material-requests/services';
-import { type MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
+import {
+	type MaterialRequest,
+	MaterialRequestKeys,
+	MaterialRequestType,
+} from '@material-requests/types';
+import { Button, type OrderDirection } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import { BladeManager } from '@shared/components/BladeManager';
+import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
+import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { setMaterialRequestCount } from '@shared/store/ui';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
-
+import { MaterialRequestForReuseBlade } from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade';
+import clsx from 'clsx';
+import { type FC, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { StringParam, useQueryParam, withDefault } from 'use-query-params';
 import bladeStyles from '../../../shared/components/Blade/Blade.module.scss';
+import MaterialCard from '../../../visitor-space/components/MaterialCard/MaterialCard';
 import PersonalInfoBlade from '../PersonalInfoBlade/PersonalInfoBlade';
-
-import { groupBy } from 'lodash-es';
 import styles from './MaterialRequestCenterBlade.module.scss';
 
 export enum MaterialRequestBladeId {
-	Overview = 'Overview',
-	EditMaterialRequest = 'EditMaterialRequest',
-	PersonalDetails = 'PersonalDetails',
+	Overview = 'overview',
+	EditMaterialRequest = 'edit-material-request',
+	EditMaterialRequestReuseForm = 'edit-material-request-reuse-form',
+	PersonalDetails = 'personal-details',
 }
 
 interface MaterialRequestCenterBladeProps {
@@ -41,9 +49,15 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	const [selectedMaterialRequest, setSelectedMaterialRequest] = useState<MaterialRequest | null>(
 		null
 	);
-	const [activeBlade, setActiveBlade] = useState<MaterialRequestBladeId>(
-		MaterialRequestBladeId.Overview
+	const [activeBlade, setActiveBlade] = useQueryParam(
+		QUERY_PARAM_KEY.ACTIVE_BLADE,
+		withDefault(StringParam, undefined)
 	);
+	const [materialRequestToDelete, setMaterialRequestToDelete] = useState<MaterialRequest | null>(
+		null
+	);
+	const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+
 	const getCurrentLayer = () => {
 		if (!isOpen) {
 			return 0;
@@ -55,6 +69,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			case MaterialRequestBladeId.EditMaterialRequest:
 			case MaterialRequestBladeId.PersonalDetails:
 				return 2; // Both blades are at level 2
+
+			case MaterialRequestBladeId.EditMaterialRequestReuseForm:
+				return 3;
 
 			default:
 				return 0;
@@ -72,8 +89,8 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		refetch: refetchMaterialRequests,
 	} = useGetPendingMaterialRequests(
 		{
-			orderProp: MaterialRequestKeys.maintainer,
-			orderDirection: 'asc' as OrderDirection,
+			orderProp: MaterialRequestKeys.createdAt,
+			orderDirection: 'desc' as OrderDirection,
 		},
 		{ enabled: shouldFetchMaterialRequests }
 	);
@@ -81,78 +98,70 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 
 	const noContent = !materialRequests || materialRequests?.length === 0;
 
-	// Create an object containing all the distinct maintainerId's as properties
-	const materialRequestsByMaintainer = useMemo(
-		() => groupBy(materialRequests, (materialRequest) => materialRequest.maintainerId),
-		[materialRequests]
-	);
-
 	useEffect(() => {
 		materialRequests && dispatch(setMaterialRequestCount(materialRequests.length));
 	}, [materialRequests, dispatch]);
 
 	useEffect(() => {
-		isOpen && refetchMaterialRequests();
-	}, [isOpen, refetchMaterialRequests]);
+		// If the center is not open but the active blade is one of its sub-blades, we clear the active blade
+		if (
+			!isOpen &&
+			activeBlade &&
+			Object.values(MaterialRequestBladeId).includes(activeBlade as MaterialRequestBladeId)
+		) {
+			setActiveBlade(undefined);
+		}
+	}, [isOpen, activeBlade, setActiveBlade]);
 
-	const deleteMaterialRequest = async (id: string) => {
+	useEffect(() => {
+		if (isOpen) {
+			setActiveBlade(MaterialRequestBladeId.Overview);
+			void refetchMaterialRequests();
+		}
+	}, [isOpen, setActiveBlade, refetchMaterialRequests]);
+
+	const onCloseBlades = () => {
+		setActiveBlade(undefined);
+		onClose();
+	};
+
+	const deleteMaterialRequest = async (materialRequest: MaterialRequest) => {
+		setMaterialRequestToDelete(materialRequest);
+		if (materialRequest.type === MaterialRequestType.REUSE && materialRequest.reuseForm) {
+			setShowConfirmDelete(true);
+			return;
+		}
+
+		await doDeleteMaterialRequest(materialRequest.id);
+	};
+
+	const doDeleteMaterialRequest = async (id: string) => {
+		setShowConfirmDelete(false);
 		const deleteResponse = await MaterialRequestsService.delete(id);
 		deleteResponse && (await refetchMaterialRequests());
+		setMaterialRequestToDelete(null);
+	};
+
+	const cancelDeleteMaterialRequest = async () => {
+		setShowConfirmDelete(false);
+		setMaterialRequestToDelete(null);
 	};
 
 	const renderTitle = (props: Pick<HTMLElement, 'id' | 'className'>) => {
 		return (
 			<div className={styles['c-material-request-center-blade__title-container']}>
-				<h2 {...props}>
+				<h2 {...props} style={{ paddingBottom: 0 }}>
 					{tText(
 						'modules/navigation/components/material-request-center-blade/material-request-center-blade___aanvraaglijst'
 					)}
+					{materialRequests?.length > 0 && ` (${materialRequests.length})`}
 				</h2>
-				{/* Ward: add label when there is more than 1 maintainer */}
-				{materialRequestsByMaintainer && Object.keys(materialRequestsByMaintainer).length > 1 && (
-					<p className={styles['c-material-request-center-blade__subtitle']}>
-						{tHtml(
-							'modules/navigation/components/material-request-center-blade/material-request-center-blade___meerdere-aanbieders'
-						)}
-					</p>
-				)}
-			</div>
-		);
-	};
-
-	const renderMaintainer = (item: MaterialRequest, length: number) => {
-		return (
-			<div className={styles['c-material-request-center-blade__maintainer']}>
-				{item.maintainerLogo ? (
-					<div className={styles['c-material-request-center-blade__maintainer-logo']}>
-						<Image
-							unoptimized
-							alt="maintainer logo"
-							src={item.maintainerLogo}
-							fill
-							sizes="100vw"
-							style={{
-								objectFit: 'contain',
-							}}
-						/>
-					</div>
-				) : (
-					<div
-						className={styles['c-material-request-center-blade__maintainer-logo']}
-						style={{ color: 'black' }}
-					/>
-				)}
-
-				<div>
-					<p className={styles['c-material-request-center-blade__maintainer-details']}>
-						{tHtml(
-							'modules/navigation/components/material-request-center-blade/material-request-center-blade___aangevraagd'
-						)}
-					</p>
-					<p className={styles['c-material-request-center-blade__maintainer-details']}>
-						{item.maintainerName} ({length})
-					</p>
-				</div>
+				<MaterialRequestInformation hideOnMobile={true} />
+				<p className={styles['c-material-request-center-blade__more-info']}>
+					{tText(
+						'modules/navigation/components/material-request-center-blade/material-request-center-blade___vraag-dit-materiaal-rechtstreeks-aan-bij-de-aanbieder-s'
+					)}
+				</p>
 			</div>
 		);
 	};
@@ -163,24 +172,34 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				key={materialRequest.id}
 				className={styles['c-material-request-center-blade__material-container']}
 			>
-				<a
-					tabIndex={-1}
-					href={`/zoeken/${materialRequest.maintainerSlug}/${materialRequest.objectSchemaIdentifier}`}
-					className={styles['c-material-request-center-blade__material-link']}
-				>
-					<div className={styles['c-material-request-center-blade__material']}>
-						<p className={styles['c-material-request-center-blade__material-label']}>
-							<Icon
-								className={styles['c-material-request-center-blade__material-label-icon']}
-								name={getIconFromObjectType(materialRequest.objectDctermsFormat, true)}
-							/>
-							<span>{materialRequest.objectSchemaName}</span>
+				<div className={styles['c-material-request-center-blade__material']}>
+					<MaterialCard
+						className={styles['c-material-request-center-blade__material-label']}
+						objectId={materialRequest.objectSchemaIdentifier}
+						title={materialRequest.objectSchemaName}
+						orientation="vertical"
+						thumbnail={materialRequest.objectThumbnailUrl}
+						hideThumbnail={true}
+						withBorder={false}
+						link={`/zoeken/${materialRequest.maintainerSlug}/${materialRequest.objectSchemaIdentifier}`}
+						type={materialRequest.objectDctermsFormat}
+						publishedBy={materialRequest.maintainerName}
+						publishedOrCreatedDate={materialRequest.objectPublishedOrCreatedDate}
+						icon={getIconFromObjectType(
+							materialRequest.objectDctermsFormat,
+							!!materialRequest.objectRepresentationId
+						)}
+					>
+						<p className={clsx('u-font-size-14')}>
+							{tText(
+								'modules/navigation/components/material-request-center-blade/material-request-center-blade___aanvraag-tot',
+								{
+									requestType: GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[materialRequest.type],
+								}
+							)}
 						</p>
-						<p className={styles['c-material-request-center-blade__material-id']}>
-							{materialRequest.objectSchemaIdentifier}
-						</p>
-					</div>
-				</a>
+					</MaterialCard>
+				</div>
 				<div className={styles['c-material-request-center-blade__material-actions']}>
 					<Button
 						key={'edit-material-request'}
@@ -189,9 +208,11 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 							setSelectedMaterialRequest(materialRequest);
 							setActiveBlade(MaterialRequestBladeId.EditMaterialRequest);
 						}}
-						variants={['silver']}
+						variants={['silver', 'sm']}
 						name="Edit"
-						icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
+						icon={
+							<Icon className={clsx('u-font-size-18')} name={IconNamesLight.Edit} aria-hidden />
+						}
 						aria-label={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
 						)}
@@ -201,10 +222,12 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					/>
 					<Button
 						key={'delete-material-request'}
-						onClick={() => deleteMaterialRequest(materialRequest.id)}
-						variants={['silver']}
+						onClick={() => deleteMaterialRequest(materialRequest)}
+						variants={['silver', 'sm']}
 						name="Delete"
-						icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
+						icon={
+							<Icon className={clsx('u-font-size-18')} name={IconNamesLight.Trash} aria-hidden />
+						}
 						aria-label={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder-materiaal-aanvraag'
 						)}
@@ -227,23 +250,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				</p>
 			);
 		}
-		return (
-			materialRequestsByMaintainer &&
-			// Ward: render each unique maintainer
-			Object.keys(materialRequestsByMaintainer).map((key) => (
-				<div key={key}>
-					{renderMaintainer(
-						materialRequestsByMaintainer[key][0],
-						materialRequestsByMaintainer[key].length
-					)}
-
-					{/* Ward: render all materialRequests of current maintainer, sorted by objectSchemaName */}
-					{materialRequestsByMaintainer[key]
-						.sort((a, b) => a.objectSchemaName.localeCompare(b.objectSchemaName))
-						.map((item) => renderMaterialRequest(item))}
-				</div>
-			))
-		);
+		return materialRequests.map((item) => renderMaterialRequest(item));
 	};
 
 	const renderFooter = () => {
@@ -255,7 +262,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___sluit'
 						)}
 						variants={['block', 'text']}
-						onClick={onClose}
+						onClick={onCloseBlades}
 						className={styles['c-material-request-center-blade__send-button']}
 					/>
 				</div>
@@ -266,7 +273,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				{user && (
 					<Button
 						label={tText(
-							'modules/navigation/components/material-request-center-blade/material-request-center-blade___vul-gegevens-aan'
+							'modules/navigation/components/material-request-center-blade/material-request-center-blade___werk-je-aanvraag-af'
 						)}
 						variants={['block', 'text', 'dark']}
 						onClick={() => {
@@ -280,7 +287,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						'modules/navigation/components/material-request-center-blade/material-request-center-blade___sluit'
 					)}
 					variants={['block', 'text', 'light']}
-					onClick={onClose}
+					onClick={onCloseBlades}
 				/>
 			</div>
 		);
@@ -289,10 +296,11 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	return (
 		<BladeManager
 			currentLayer={getCurrentLayer()}
-			onCloseBlade={(layer) => {
+			onCloseBlade={(layer, currentLayer) => {
 				setActiveBlade(MaterialRequestBladeId.Overview);
-				if (layer === 1) {
-					onClose();
+				// Prevent closing of the reuse modal
+				if (layer === 1 && currentLayer !== 3) {
+					onCloseBlades();
 				}
 			}}
 			opacityStep={0.1}
@@ -304,8 +312,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				currentLayer={getCurrentLayer()}
 				renderTitle={() => null}
 				footer={isOpen && renderFooter()}
-				onClose={onClose}
+				onClose={onCloseBlades}
 				isManaged
+				stickyFooter
 				id="material-request-center-blade"
 			>
 				{renderTitle({
@@ -324,19 +333,15 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			{selectedMaterialRequest && (
 				<MaterialRequestBlade
 					isOpen={activeBlade === MaterialRequestBladeId.EditMaterialRequest}
-					onClose={() => {
-						setActiveBlade(MaterialRequestBladeId.Overview);
-						setSelectedMaterialRequest(null);
+					onClose={(shouldTriggerReuseForm) => {
+						if (shouldTriggerReuseForm) {
+							setActiveBlade(MaterialRequestBladeId.EditMaterialRequestReuseForm);
+						} else {
+							setActiveBlade(MaterialRequestBladeId.Overview);
+							setSelectedMaterialRequest(null);
+						}
 					}}
-					objectName={selectedMaterialRequest.objectSchemaName}
-					objectSchemaIdentifier={selectedMaterialRequest.objectSchemaIdentifier}
-					objectDctermsFormat={selectedMaterialRequest.objectDctermsFormat}
-					maintainerName={selectedMaterialRequest.maintainerName}
-					maintainerLogo={selectedMaterialRequest.maintainerLogo}
-					maintainerSlug={selectedMaterialRequest.maintainerSlug}
-					materialRequestId={selectedMaterialRequest.id}
-					reason={selectedMaterialRequest.reason}
-					type={selectedMaterialRequest.type}
+					materialRequest={selectedMaterialRequest}
 					refetchMaterialRequests={refetchMaterialRequests}
 					isEditMode
 					layer={activeBlade === MaterialRequestBladeId.EditMaterialRequest ? 2 : 99}
@@ -345,12 +350,28 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					}
 				/>
 			)}
+			{selectedMaterialRequest && (
+				<MaterialRequestForReuseBlade
+					isOpen={activeBlade === MaterialRequestBladeId.EditMaterialRequestReuseForm}
+					onClose={() => {
+						setSelectedMaterialRequest(null);
+						setActiveBlade(MaterialRequestBladeId.Overview);
+					}}
+					materialRequest={selectedMaterialRequest}
+					refetchMaterialRequests={refetchMaterialRequests}
+					isEditMode
+					layer={activeBlade === MaterialRequestBladeId.EditMaterialRequestReuseForm ? 3 : 99}
+					currentLayer={
+						activeBlade === MaterialRequestBladeId.EditMaterialRequestReuseForm
+							? getCurrentLayer()
+							: 9999
+					}
+				/>
+			)}
 			{user && (
 				<PersonalInfoBlade
 					isOpen={activeBlade === MaterialRequestBladeId.PersonalDetails}
-					onClose={() => {
-						setActiveBlade(MaterialRequestBladeId.Overview);
-					}}
+					onClose={() => setActiveBlade(MaterialRequestBladeId.Overview)}
 					personalInfo={{
 						fullName: user.fullName,
 						email: user.email,
@@ -365,6 +386,24 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					refetch={refetchMaterialRequests}
 				/>
 			)}
+			<ConfirmationModal
+				text={{
+					yes: tHtml(
+						'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijderen'
+					),
+					no: tHtml(
+						'modules/navigation/components/material-request-center-blade/material-request-center-blade___annuleren'
+					),
+					description: tHtml(
+						'modules/navigation/components/material-request-center-blade/material-request-center-blade___ben-je-zeker-dat-je-deze-aanvraag-wil-verwijderen-de-informatie-in-het-hergebruikformulier-zal-hiermee-ook-verwijderd-worden'
+					),
+				}}
+				fullWidthButtonWrapper
+				isOpen={showConfirmDelete}
+				onClose={cancelDeleteMaterialRequest}
+				onCancel={cancelDeleteMaterialRequest}
+				onConfirm={() => doDeleteMaterialRequest(materialRequestToDelete?.id as string)}
+			/>
 		</BladeManager>
 	);
 };

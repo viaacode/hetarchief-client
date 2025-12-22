@@ -13,7 +13,7 @@ export function useLocalStorage(
 			}
 			window.localStorage.setItem(keyName, JSON.stringify(defaultValue));
 			return defaultValue;
-		} catch (err) {
+		} catch (_err) {
 			return defaultValue;
 		}
 	});
@@ -21,7 +21,7 @@ export function useLocalStorage(
 	const setValue = (newValue: string) => {
 		try {
 			window.localStorage.setItem(keyName, JSON.stringify(newValue));
-		} catch (err) {
+		} catch (_err) {
 			// Ignore localstorage errors
 		}
 		setStoredValue(newValue);

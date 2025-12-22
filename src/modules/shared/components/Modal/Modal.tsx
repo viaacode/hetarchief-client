@@ -1,14 +1,14 @@
 import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { type FC, useEffect, useState } from 'react';
-import { default as ReactModal } from 'react-modal';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { globalLabelKeys } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { useScrollbarWidth } from '@shared/hooks/use-scrollbar-width';
+import clsx from 'clsx';
+import FocusTrap from 'focus-trap-react';
+import { type FC, useEffect, useState } from 'react';
+import { default as ReactModal } from 'react-modal';
 
 import styles from './Modal.module.scss';
 import type { ModalProps } from './Modal.types';
@@ -65,23 +65,30 @@ const Modal: FC<ModalProps> = ({
 				labelledby: globalLabelKeys.modal.title,
 			}}
 		>
-			<section className={styles['c-hetarchief-modal__heading']}>
-				<div className={styles['c-hetarchief-modal__title-wrapper']}>{top}</div>
+			<FocusTrap
+				active={ready && !!isOpen && process.env.NODE_ENV !== 'test'}
+				focusTrapOptions={{ clickOutsideDeactivates: true }}
+			>
+				<div>
+					<section className={styles['c-hetarchief-modal__heading']}>
+						<div className={styles['c-hetarchief-modal__title-wrapper']}>{top}</div>
 
-				<div className={styles['c-hetarchief-modal__close-wrapper']}>
-					<Button
-						className={styles['c-hetarchief-modal__close']}
-						icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-						aria-label={tText('modules/shared/components/modal/modal___sluiten')}
-						variants={['text']}
-						onClick={onClose}
-					/>
+						<div className={styles['c-hetarchief-modal__close-wrapper']}>
+							<Button
+								className={styles['c-hetarchief-modal__close']}
+								icon={<Icon name={IconNamesLight.Times} aria-hidden />}
+								aria-label={tText('modules/shared/components/modal/modal___sluiten')}
+								variants={['text']}
+								onClick={onClose}
+							/>
+						</div>
+					</section>
+
+					<section className={styles['c-hetarchief-modal__content']}>{children}</section>
+
+					{footer && <section className={styles['c-hetarchief-modal__footer']}>{footer}</section>}
 				</div>
-			</section>
-
-			<section className={styles['c-hetarchief-modal__content']}>{children}</section>
-
-			{footer && <section className={styles['c-hetarchief-modal__footer']}>{footer}</section>}
+			</FocusTrap>
 		</ReactModal>
 	);
 };

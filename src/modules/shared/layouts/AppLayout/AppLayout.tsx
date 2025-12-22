@@ -10,11 +10,11 @@ import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/cli
 import { Alert } from '@meemoo/react-components';
 import { Footer } from '@navigation/components/Footer';
 import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';
+import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
+import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
 import { Navigation } from '@navigation/components/Navigation/Navigation';
 import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
 import type { NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
-import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
-import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
 import {
 	GET_NAV_HAMBURGER_PROPS,
 	GET_NAV_ITEMS_RIGHT,
@@ -39,8 +39,8 @@ import { getSlugFromQueryParams } from '@shared/helpers/get-slug-from-query-para
 import { isRootSlugRoute } from '@shared/helpers/is-root-slug-route';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
-import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useWindowSize } from '@shared/hooks/use-window-size';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import { useAppDispatch } from '@shared/store';
@@ -76,13 +76,12 @@ import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
 import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 import packageJson from '../../../../../package.json';
-import styles from './AppLayout.module.scss'; // We want to make sure config gets fetched here, no sure why anymore
+import styles from './AppLayout.module.scss';
 
-// We want to make sure config gets fetched here, no sure why anymore
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// biome-ignore lint/correctness/noUnusedVariables: We want to make sure config gets fetched here, no sure why anymore
 const { publicRuntimeConfig } = getConfig();
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 const AppLayout: FC<any> = ({ children }) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
@@ -185,7 +184,7 @@ const AppLayout: FC<any> = ({ children }) => {
 		? convertDbContentPageToContentPageInfo(dbContentPage)
 		: null;
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Only updating according for the user
 	useEffect(() => {
 		// Redirect the user to the correct language version of the page
 		// If the preview query param is set, we don't want to change the language, since this is used for previewing content pages in the admin dashboard (admin-core-ui)
@@ -225,9 +224,9 @@ const AppLayout: FC<any> = ({ children }) => {
 	}, [queryClient, router, user, setNotificationsOpen, setUnreadNotifications]);
 
 	useEffect(() => {
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 		dispatch(checkLoginAction() as any);
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 		dispatch(getTosAction() as any);
 	}, [dispatch]);
 
@@ -452,6 +451,7 @@ const AppLayout: FC<any> = ({ children }) => {
 				})}
 			>
 				{!isLoggedIn && isMobile && (
+					// biome-ignore lint/a11y/noStaticElementInteractions: _
 					<div
 						className="c-navigation__logo--hamburger"
 						onClick={() => {

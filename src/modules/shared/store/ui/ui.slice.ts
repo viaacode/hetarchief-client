@@ -18,6 +18,7 @@ const initialState: UIState = {
 	materialRequestCount: 0,
 	lastScrollPosition: null,
 	breadcrumbs: [],
+	hasOpenConfirmationModal: false,
 };
 
 export const uiSlice = toolkitRaw.createSlice({
@@ -72,6 +73,9 @@ export const uiSlice = toolkitRaw.createSlice({
 		setBreadcrumbs(state, action: toolkitRaw.PayloadAction<Breadcrumb[]>) {
 			state.breadcrumbs = action.payload;
 		},
+		setHasOpenConfirmationModal(state, action: toolkitRaw.PayloadAction<boolean>) {
+			state.hasOpenConfirmationModal = action.payload;
+		},
 	},
 });
 
@@ -90,4 +94,5 @@ export const {
 	setMaterialRequestCount,
 	setLastScrollPosition,
 	setBreadcrumbs,
+	setHasOpenConfirmationModal,
 } = uiSlice.actions;

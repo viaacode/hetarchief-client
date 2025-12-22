@@ -1,7 +1,9 @@
 import { Button } from '@meemoo/react-components';
-import type { FC } from 'react';
-
 import { tHtml } from '@shared/helpers/translate';
+import { setHasOpenConfirmationModal } from '@shared/store/ui';
+import clsx from 'clsx';
+import { type FC, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { Modal } from '../Modal';
 
@@ -9,16 +11,31 @@ import type { ConfirmationModalProps } from './ConfirmationModal.types';
 
 const ConfirmationModal: FC<ConfirmationModalProps> = ({
 	text = {},
+	fullWidthButtonWrapper,
 	onConfirm,
 	onCancel,
 	onClose,
 	isOpen,
 }) => {
+	const dispatch = useDispatch();
 	const { title, description, yes, no } = text;
+
+	useEffect(() => {
+		dispatch(setHasOpenConfirmationModal(isOpen ?? false));
+		return () => {
+			dispatch(setHasOpenConfirmationModal(false));
+		};
+	}, [isOpen, dispatch]);
 
 	const renderButtons = () => {
 		return (
-			<div className="u-text-center u-mb-48">
+			<div
+				className={
+					fullWidthButtonWrapper
+						? clsx('u-p-24', 'u-flex-space-between', 'u-flex')
+						: clsx('u-text-center', 'u-mb-48')
+				}
+			>
 				<Button
 					label={
 						no || tHtml('modules/shared/components/confirmation-modal/confirmation-modal___nee')
@@ -52,13 +69,12 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 			}
 			footer={renderButtons()}
 		>
-			{description || (
-				<p className="u-px-24 u-mb-32 u-color-neutral u-text-center">
-					{tHtml(
+			<p className="u-px-24 u-mb-32 u-color-neutral u-text-center">
+				{description ||
+					tHtml(
 						'modules/shared/components/confirmation-modal/confirmation-modal___deze-actie-kan-niet-worden-teruggedraaid'
 					)}
-				</p>
-			)}
+			</p>
 		</Modal>
 	);
 };

@@ -1,12 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, type SelectOption } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { isNil } from 'lodash-es';
-import { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import type { SingleValue } from 'react-select';
-import { useQueryParams } from 'use-query-params';
-
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SEPARATOR } from '@shared/const';
 import { tHtml } from '@shared/helpers/translate';
@@ -18,14 +11,18 @@ import type {
 	DurationFilterFormProps,
 	DurationFilterFormState,
 } from '@visitor-space/components/DurationFilterForm/DurationFilterForm.types';
-
-import { FilterProperty, Operator, SearchFilterId, isRange } from '../../types';
+import clsx from 'clsx';
+import { isNil } from 'lodash-es';
+import { getOperators } from 'modules/visitor-space/utils/advanced-filters';
+import { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import type { SingleValue } from 'react-select';
+import { useQueryParams } from 'use-query-params';
+import { FilterProperty, isRange, Operator, SearchFilterId } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import { DurationInput } from '../DurationInput';
 import { defaultValue } from '../DurationInput/DurationInput';
 import { DurationRangeInput } from '../DurationRangeInput';
-
-import { getOperators } from 'modules/visitor-space/utils/advanced-filters';
 
 const labelKeys: Record<keyof DurationFilterFormState, string> = {
 	duration: 'DurationFilterForm__duration',
@@ -101,7 +98,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 						control={control}
 						name="operator"
 						render={({ field }) => {
-							// eslint-disable-next-line @typescript-eslint/no-unused-vars
+							// biome-ignore lint/correctness/noUnusedVariables: No need to use ref
 							const { ref, ...rest } = field;
 							return (
 								<div className="u-px-32 u-px-20-md">
@@ -146,7 +143,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 						control={control}
 						name="duration"
 						render={({ field }) => {
-							// eslint-disable-next-line @typescript-eslint/no-unused-vars
+							// biome-ignore lint/correctness/noUnusedVariables: No use for ref
 							const { ref, ...refless } = field;
 
 							return (

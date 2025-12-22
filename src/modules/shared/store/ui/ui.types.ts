@@ -20,4 +20,5 @@ export interface UIState {
 	materialRequestCount: number;
 	lastScrollPosition: LastScrollPositionType | null;
 	breadcrumbs: Breadcrumb[];
+	hasOpenConfirmationModal: boolean;
 }

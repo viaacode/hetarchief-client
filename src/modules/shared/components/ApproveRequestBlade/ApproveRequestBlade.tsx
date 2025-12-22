@@ -1,14 +1,7 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, FormControl, OrderDirection, TextInput } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { addHours, areIntervalsOverlapping, endOfDay, startOfDay } from 'date-fns';
-import { isEmpty } from 'lodash-es';
-import Link from 'next/link';
-import React, { type FC, useCallback, useEffect, useState } from 'react';
-import { Controller, type ControllerRenderProps, type FieldError, useForm } from 'react-hook-form';
-
 import { Permission } from '@account/const';
 import { useGetFolders } from '@account/hooks/get-folders';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Button, FormControl, OrderDirection, TextInput } from '@meemoo/react-components';
 import { APPROVE_REQUEST_FORM_SCHEMA } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.const';
 import {
 	getAccessToDate,
@@ -34,6 +27,12 @@ import { asDate, formatMediumDateWithTime, formatTime } from '@shared/utils/date
 import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
 import { VisitTimeframe } from '@visit-requests/types';
 import DateInput from '@visitor-space/components/DateInput/DateInput';
+import clsx from 'clsx';
+import { addHours, areIntervalsOverlapping, endOfDay, startOfDay } from 'date-fns';
+import { isEmpty } from 'lodash-es';
+import Link from 'next/link';
+import React, { type FC, useCallback, useEffect, useState } from 'react';
+import { Controller, type ControllerRenderProps, type FieldError, useForm } from 'react-hook-form';
 
 import Timepicker from '../Timepicker/Timepicker';
 
@@ -328,11 +327,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	};
 
 	const renderAccessFrom = useCallback(
-		({
-			field,
-		}: {
-			field: ControllerRenderProps<ApproveRequestFormState, 'accessFrom'>;
-		}) => {
+		({ field }: { field: ControllerRenderProps<ApproveRequestFormState, 'accessFrom'> }) => {
 			const now = new Date();
 
 			const onFromDateChange = (
@@ -382,11 +377,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	);
 
 	const renderAccessTo = useCallback(
-		({
-			field,
-		}: {
-			field: ControllerRenderProps<ApproveRequestFormState, 'accessTo'>;
-		}) => {
+		({ field }: { field: ControllerRenderProps<ApproveRequestFormState, 'accessTo'> }) => {
 			const now = new Date();
 
 			// Disabled by request of Ineke, 21/03/2022
@@ -434,11 +425,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	);
 
 	const renderAccessType = useCallback(
-		({
-			field,
-		}: {
-			field: ControllerRenderProps<ApproveRequestFormState, 'accessType'>;
-		}) => {
+		({ field }: { field: ControllerRenderProps<ApproveRequestFormState, 'accessType'> }) => {
 			const refinableRadioButtonValue = {
 				selectedOption: field.value?.type ?? AccessType.FULL,
 				refinedSelection: field.value?.folderIds ?? [],

@@ -79,7 +79,9 @@
 	}
 
 	.c-block-grid {
+		display: flex;
 		gap: 1.6rem;
+		flex-wrap: wrap;
 
 		@media (max-width: $breakpoint-md) {
 			max-width: 100%;

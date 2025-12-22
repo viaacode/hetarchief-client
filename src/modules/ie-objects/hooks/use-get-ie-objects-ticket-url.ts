@@ -1,12 +1,10 @@
-import { type UseQueryResult, useQuery } from '@tanstack/react-query';
-
 import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const/query-keys';
+import { type UseQueryResult, useQuery } from '@tanstack/react-query';
 
 export const useGetIeObjectsTicketUrl = (
 	fileStoredAt: string | undefined | null,
-	enabled = true,
-	onComplete?: () => void
+	enabled = true
 ): UseQueryResult<string> => {
 	return useQuery(
 		[QUERY_KEYS.getIeObjectPlayerTicket, fileStoredAt],
@@ -14,7 +12,6 @@ export const useGetIeObjectsTicketUrl = (
 		{
 			enabled: enabled && !!fileStoredAt,
 			keepPreviousData: true,
-			onSuccess: onComplete,
 			cacheTime: 30 * 60 * 1000, // 30 minutes
 			staleTime: 30 * 60 * 1000, // 30 minutes
 		}

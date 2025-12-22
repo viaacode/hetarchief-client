@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// biome-ignore lint/correctness/noUnusedImports: We still need the import
 import FilterMenu from './FilterMenu';
 
 describe('Components', () => {

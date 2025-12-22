@@ -1,8 +1,4 @@
 import { keysSpacebar, onKey } from '@meemoo/react-components';
-import clsx from 'clsx';
-import type { FC } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
 import type { NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
 import { Icon, type IconName } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -13,6 +9,9 @@ import {
 	setShowMaterialRequestCenter,
 	setShowNotificationsCenter,
 } from '@shared/store/ui';
+import clsx from 'clsx';
+import type { FC } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import styles from '../Navigation.module.scss';
 import { NavigationDropdown } from '../NavigationDropdown';
@@ -42,10 +41,10 @@ const NavigationList: FC<NavigationListProps> = ({ items, onOpenDropdowns }) => 
 
 	const renderTrigger = (item: NavigationItem, iconName: IconName) => {
 		return (
+			// biome-ignore lint/a11y/useSemanticElements: styling?
 			<div
 				className={clsx(styles['c-navigation__link--wrapper'], 'u-cursor-pointer')}
 				onKeyDown={(e) => onKey(e, keysSpacebar, () => e.preventDefault())}
-				// biome-ignore lint/a11y/useSemanticElements: <explanation>
 				role="button"
 				tabIndex={0}
 			>

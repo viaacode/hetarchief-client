@@ -1,14 +1,15 @@
 import { Button, keysEscape } from '@meemoo/react-components';
-import clsx from 'clsx';
-import FocusTrap from 'focus-trap-react';
-import { isUndefined } from 'lodash-es';
-import { type FC, useCallback, useEffect } from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
+import { selectHasOpenConfirmationModal } from '@shared/store/ui';
+import clsx from 'clsx';
+import FocusTrap from 'focus-trap-react';
+import { isUndefined } from 'lodash-es';
+import { type FC, useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import { Overlay } from '../Overlay';
 
@@ -28,8 +29,12 @@ export const Blade: FC<BladeProps> = ({
 	layer,
 	renderTitle,
 	id,
+	extraWide,
+	headerBackground = 'white',
+	stickyFooter = false,
 }) => {
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
+	const hasOpenConfirmationModal = useSelector(selectHasOpenConfirmationModal);
 
 	useScrollLock(!isManaged && isOpen, 'Blade');
 
@@ -42,20 +47,29 @@ export const Blade: FC<BladeProps> = ({
 	}, [isOpen]);
 
 	const handleClose = useCallback(() => {
+		if (hasOpenConfirmationModal) {
+			return;
+		}
+
 		if (isLayered && onCloseBlade) {
-			onCloseBlade(layer);
+			onCloseBlade(layer, currentLayer);
 		} else if (onClose) {
 			onClose();
 		}
-	}, [isLayered, layer, onClose, onCloseBlade]);
+	}, [hasOpenConfirmationModal, isLayered, layer, currentLayer, onClose, onCloseBlade]);
 
 	const escFunction = useCallback(
 		(event: KeyboardEvent) => {
-			if (keysEscape.includes(event.key)) {
+			// Only allow the esc functionality to be triggered when the blade is open
+			if (isOpen && keysEscape.includes(event.key)) {
+				if (isLayered) {
+					// Stop propagation in layered blades so it is only triggered once
+					event.stopImmediatePropagation();
+				}
 				handleClose();
 			}
 		},
-		[handleClose]
+		[isOpen, isLayered, handleClose]
 	);
 
 	useEffect(() => {
@@ -67,30 +81,38 @@ export const Blade: FC<BladeProps> = ({
 	}, [escFunction]);
 
 	const renderTopBar = () => {
-		return showBackButton ? (
-			<div className={styles['c-blade__top-bar-container']}>
-				{/* biome-ignore lint/a11y/useKeyWithClickEvents: onKeyUp is added to the inner button */}
-				<div
-					className={styles['c-blade__back-container']}
-					onClick={() => {
-						handleClose();
-					}}
-				>
-					<Button
-						variants="text"
-						icon={
-							<Icon
-								name={IconNamesLight.ArrowLeft}
-								onKeyUp={(evt) => {
-									if (evt.key === 'Enter') {
-										handleClose();
-									}
-								}}
-							/>
-						}
-					/>
-					<span>{tText('modules/shared/components/blade/blade___vorige-stap')}</span>
-				</div>
+		return (
+			<div
+				className={clsx(
+					styles['c-blade__top-bar-container'],
+					headerBackground === 'platinum' ? 'u-bg-platinum' : 'u-bg-white'
+				)}
+			>
+				{showBackButton && (
+					/* biome-ignore lint/a11y/useKeyWithClickEvents: onKeyUp is added to the inner button */
+					/** biome-ignore lint/a11y/noStaticElementInteractions: Container should also be clickable */
+					<div
+						className={styles['c-blade__back-container']}
+						onClick={() => {
+							handleClose();
+						}}
+					>
+						<Button
+							variants="text"
+							icon={
+								<Icon
+									name={IconNamesLight.ArrowLeft}
+									onKeyUp={(evt) => {
+										if (evt.key === 'Enter') {
+											handleClose();
+										}
+									}}
+								/>
+							}
+						/>
+						<span>{tText('modules/shared/components/blade/blade___vorige-stap')}</span>
+					</div>
+				)}
 				<Button
 					className={clsx(styles['c-blade__close-button'], {
 						[styles['c-blade__close-button--absolute']]: showCloseButtonOnTop,
@@ -102,24 +124,12 @@ export const Blade: FC<BladeProps> = ({
 					disabled={!isOpen}
 				/>
 			</div>
-		) : (
-			<Button
-				className={clsx(styles['c-blade__close-button'], {
-					[styles['c-blade__close-button--absolute']]: showCloseButtonOnTop,
-				})}
-				icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-				aria-label={tText('modules/shared/components/blade/blade___sluiten')}
-				variants="text"
-				onClick={() => handleClose()}
-				disabled={!isOpen}
-			/>
 		);
 	};
 
 	const renderContent = (hide: boolean) => {
 		return (
 			<div
-				// biome-ignore lint/a11y/useSemanticElements: dialog has other effects that a div, and we cannot rework how blades work right now
 				role="dialog"
 				aria-modal
 				aria-labelledby={id}
@@ -130,7 +140,8 @@ export const Blade: FC<BladeProps> = ({
 					isBladeOpen &&
 						(layer === currentLayer || (currentLayer === 0 && isUndefined(layer))) &&
 						'c-blade--active',
-					isLayered && [styles['c-blade--managed']]
+					isLayered && [styles['c-blade--managed']],
+					extraWide && [styles['c-blade--extra-wide']]
 				)}
 				// offset underlying blades
 				style={
@@ -148,8 +159,13 @@ export const Blade: FC<BladeProps> = ({
 					{renderTitle?.({ id, className: styles['c-blade__title'] })}
 					{children}
 					<div className={styles['c-blade__flex-grow']} />
-					{footer && <div className={styles['c-blade__footer']}>{footer}</div>}
+					{!stickyFooter && footer && <div className={styles['c-blade__footer']}>{footer}</div>}
 				</div>
+				{stickyFooter && footer && (
+					<div className={clsx(styles['c-blade__footer'], styles['c-blade__footer-sticky'])}>
+						{footer}
+					</div>
+				)}
 			</div>
 		);
 	};

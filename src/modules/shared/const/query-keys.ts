@@ -28,6 +28,7 @@ export enum QUERY_KEYS {
 	getContentPage = 'getContentPage',
 	getContentPartners = 'getContentPartners',
 	getMaterialRequests = 'getMaterialRequests',
+	getMaterialRequestsDuplicates = 'getMaterialRequestsDuplicates',
 	getMaterialRequestById = 'getMaterialRequestById',
 	getMaintenanceAlerts = 'getMaintenanceAlerts',
 	getNewsletterPreferences = 'getNewsletterPreferences',

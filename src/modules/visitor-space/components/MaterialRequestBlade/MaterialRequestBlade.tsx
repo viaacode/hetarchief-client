@@ -1,39 +1,45 @@
-import { Button, RadioButton, TextArea } from '@meemoo/react-components';
-import clsx from 'clsx';
-import Image from 'next/image';
-import React, { type FC, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-
+import { selectUser } from '@auth/store/user';
+import type { User } from '@auth/types';
+import { IE_OBJECT_INTRA_CP_LICENSES } from '@ie-objects/ie-objects.consts';
+import { MediaActions } from '@ie-objects/ie-objects.types';
+import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
+import { useGetMaterialRequestsForMediaItem } from '@material-requests/hooks/get-material-requests-for-media-item';
 import { MaterialRequestsService } from '@material-requests/services';
-import { MaterialRequestRequesterCapacity, MaterialRequestType } from '@material-requests/types';
+import {
+	type MaterialRequest,
+	MaterialRequestRequesterCapacity,
+	MaterialRequestType,
+} from '@material-requests/types';
+import { Alert, Button, RadioButton, TextArea } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
+import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
+import { getIconFromObjectType } from '@shared/components/MediaCard';
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
-import { setMaterialRequestCount } from '@shared/store/ui';
-import type { IeObjectType } from '@shared/types/ie-objects';
-
-import { getIconFromObjectType } from '@shared/components/MediaCard';
+import { setMaterialRequestCount, setShowMaterialRequestCenter } from '@shared/store/ui';
+import { SimpleIeObjectType } from '@shared/types/ie-objects';
+import clsx from 'clsx';
+import { intersection, noop } from 'lodash-es';
+import React, { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { StringParam, useQueryParam, withDefault } from 'use-query-params';
+import MaterialCard from '../MaterialCard/MaterialCard';
 import styles from './MaterialRequestBlade.module.scss';
 
 interface MaterialRequestBladeProps {
 	isOpen: boolean;
 	isEditMode?: boolean;
-	onClose: () => void;
-	objectName: string;
-	objectSchemaIdentifier: string;
-	objectDctermsFormat: IeObjectType;
-	maintainerName: string;
-	maintainerLogo: string | null;
-	maintainerSlug: string;
-	materialRequestId?: string;
-	reason?: string;
+	onClose: (shouldTriggerComplexReuseFlow: boolean) => void;
+	materialRequest: MaterialRequest;
 	refetchMaterialRequests?: () => void;
-	type?: MaterialRequestType;
 	layer: number;
 	currentLayer: number;
 }
@@ -42,26 +48,87 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	isOpen,
 	isEditMode = false,
 	onClose,
-	objectName,
-	objectSchemaIdentifier,
-	objectDctermsFormat,
-	maintainerName,
-	maintainerLogo,
-	maintainerSlug,
-	materialRequestId,
-	type,
-	reason,
+	materialRequest,
 	refetchMaterialRequests,
 	layer,
 	currentLayer,
 }) => {
+	const {
+		id: materialRequestId,
+		objectSchemaName: objectName,
+		objectDctermsFormat,
+		objectSchemaIdentifier,
+		objectLicences,
+		objectThumbnailUrl,
+		objectPublishedOrCreatedDate,
+		objectRepresentationId,
+		type,
+		reason,
+		reuseForm,
+		maintainerSlug,
+		maintainerName,
+	} = materialRequest;
 	const dispatch = useDispatch();
 	const locale = useLocale();
+	const user: User | null = useSelector(selectUser);
+	const simpleType = mapDcTermsFormatToSimpleType(objectDctermsFormat);
+	const triggerComplexReuseFlow =
+		(simpleType === SimpleIeObjectType.AUDIO || simpleType === SimpleIeObjectType.VIDEO) &&
+		!!user?.isKeyUser &&
+		intersection(objectLicences, IE_OBJECT_INTRA_CP_LICENSES).length > 0;
+	// We have a representation, so we know the user is allowed to see this
+	const hideViewTypeOption = !!user?.isKeyUser && !!objectRepresentationId;
 
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestType | undefined>(type);
-	const [noTypeSelectedOnSave, setNoTypeSelectedOnSave] = useState(false);
-
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
+	const [noTypeSelectedOnSave, setNoTypeSelectedOnSave] = useState(false);
+	const [showConfirmTypeEdit, setShowConfirmTypeEdit] = useState(false);
+
+	const [, setActiveBlade] = useQueryParam(
+		QUERY_PARAM_KEY.ACTIVE_BLADE,
+		withDefault(StringParam, undefined)
+	);
+
+	const {
+		data: potentialDuplicates,
+		isLoading: isLoadingPotentialDuplicates,
+		refetch: refetchPotentialDuplicates,
+	} = useGetMaterialRequestsForMediaItem(objectSchemaIdentifier, !!user?.isKeyUser);
+
+	const showDuplicateWarning = useMemo(() => {
+		// Still loading the potential duplicates, until then do not show a warning
+		if (isLoadingPotentialDuplicates) {
+			return false;
+		}
+
+		// When the selected type is for re-usage and we need the more complex flow with additional information needed to be filled in
+		// Validation on duplicates depends on said information (cue points of the media, download quality, ...)
+		if (typeSelected === MaterialRequestType.REUSE && triggerComplexReuseFlow) {
+			return false;
+		}
+
+		let duplicatesToCheck = potentialDuplicates ? [...potentialDuplicates] : [];
+
+		// When editing we filter out the current request to avoid the validation check to find itself as duplicate
+		if (isEditMode) {
+			duplicatesToCheck = duplicatesToCheck.filter((item) => item.id !== materialRequestId);
+		}
+
+		// Show a warning if there is already a request for this item with the same type as the selected type
+		return !!duplicatesToCheck?.find((item) => item.type === typeSelected);
+	}, [
+		isEditMode,
+		potentialDuplicates,
+		typeSelected,
+		isLoadingPotentialDuplicates,
+		triggerComplexReuseFlow,
+		materialRequestId,
+	]);
+
+	const showReuseFormWarning = useMemo(
+		() => isEditMode && type === MaterialRequestType.REUSE && !!reuseForm,
+		[isEditMode, type, reuseForm]
+	);
 
 	/**
 	 * Reset form when the model is opened
@@ -71,14 +138,15 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			setReasonInputValue(reason || '');
 			setTypeSelected(type);
 			setNoTypeSelectedOnSave(false);
+			refetchPotentialDuplicates().then(noop);
 		}
-	}, [isOpen, reason, type]);
+	}, [isOpen, reason, type, refetchPotentialDuplicates]);
 
-	const onCloseModal = () => {
-		onClose();
+	const onCloseModal = (shouldTriggerComplexReuseFlow: boolean) => {
+		onClose(shouldTriggerComplexReuseFlow);
 		setReasonInputValue('');
-		setNoTypeSelectedOnSave(false);
 		setTypeSelected(undefined);
+		setNoTypeSelectedOnSave(false);
 		refetchMaterialRequests?.();
 	};
 
@@ -98,8 +166,19 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				return;
 			}
 			setNoTypeSelectedOnSave(false);
+
+			if (showDuplicateWarning) {
+				return;
+			}
+
+			if (typeSelected === MaterialRequestType.REUSE && triggerComplexReuseFlow) {
+				setActiveBlade(MediaActions.RequestMaterialForReuse);
+				return;
+			}
+
 			const response = await MaterialRequestsService.create({
 				objectSchemaIdentifier,
+				objectRepresentationId,
 				type: typeSelected,
 				reason: reasonInputValue,
 				requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
@@ -118,8 +197,45 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				),
 			});
 			await onSuccessCreated();
-			onCloseModal();
-		} catch (err) {
+			//Reuse form already triggered before creation
+			onCloseModal(false);
+		} catch (_err) {
+			onFailedRequest();
+		}
+	};
+
+	const doEditRequest = async () => {
+		try {
+			setShowConfirmTypeEdit(false);
+
+			const response = await MaterialRequestsService.update(materialRequestId, {
+				type: typeSelected as MaterialRequestType,
+				reason: reasonInputValue,
+				requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
+				reuseForm,
+			});
+			if (response === undefined) {
+				onFailedRequest();
+				return;
+			}
+
+			const shouldTriggerReuseForm =
+				typeSelected === MaterialRequestType.REUSE && triggerComplexReuseFlow;
+
+			if (!shouldTriggerReuseForm) {
+				toastService.notify({
+					maxLines: 3,
+					title: tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-succes'
+					),
+					description: tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-toegepast'
+					),
+				});
+			}
+			await onSuccessCreated();
+			onCloseModal(shouldTriggerReuseForm);
+		} catch (_err) {
 			onFailedRequest();
 		}
 	};
@@ -134,27 +250,17 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					return;
 				}
 				setNoTypeSelectedOnSave(false);
-				const response = await MaterialRequestsService.update(materialRequestId, {
-					type: typeSelected,
-					reason: reasonInputValue,
-					requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
-				});
-				if (response === undefined) {
-					onFailedRequest();
+
+				if (showDuplicateWarning) {
 					return;
 				}
-				toastService.notify({
-					maxLines: 3,
-					title: tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-succes'
-					),
-					description: tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-toegepast'
-					),
-				});
-				await onSuccessCreated();
-				onCloseModal();
-			} catch (err) {
+
+				if (showReuseFormWarning && typeSelected !== MaterialRequestType.REUSE) {
+					setShowConfirmTypeEdit(true);
+				} else {
+					await doEditRequest();
+				}
+			} catch (_err) {
 				onFailedRequest();
 			}
 		}
@@ -181,7 +287,14 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
 				);
 
-		return <h2 {...props}>{title}</h2>;
+		return (
+			<div className={styles['c-request-material__title-container']}>
+				<h2 {...props} style={{ paddingBottom: 0 }}>
+					{title}
+				</h2>
+				<MaterialRequestInformation />
+			</div>
+		);
 	};
 
 	const renderFooter = () => {
@@ -202,12 +315,33 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
 						)}
 						variants={['block', 'text']}
-						onClick={onCloseModal}
+						onClick={() => onCloseModal(false)}
 						className={styles['c-request-material__annuleer-button']}
 					/>
 				</div>
 			);
 		}
+
+		const addButtonLabel = (isMobile: boolean) => {
+			if (typeSelected === MaterialRequestType.REUSE && triggerComplexReuseFlow) {
+				return isMobile
+					? tText(
+							'modules/visitor-space/components/material-request-blade/material-request-blade___vul-bijkomende-informatie-aan-mobile'
+						)
+					: tText(
+							'modules/visitor-space/components/material-request-blade/material-request-blade___vul-bijkomende-informatie-aan'
+						);
+			}
+
+			return isMobile
+				? tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek-mobile'
+					)
+				: tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek'
+					);
+		};
+
 		return (
 			<div className={styles['c-request-material__footer-container']}>
 				{/* ARC-1188: requested to hide single material request button
@@ -220,19 +354,16 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					className={styles['c-request-material__verstuur-button']}
 				/> */}
 				{noTypeSelectedOnSave ? (
-					<span className={styles['c-request-material__reason-error']}>
-						<Icon className="u-mr-8" name={IconNamesLight.Exclamation} />
-						{tText(
+					<RedFormWarning
+						error={tHtml(
 							'modules/visitor-space/components/material-request-blade/material-request-blade___er-staan-fouten-in-dit-formulier-corrigeer-deze-en-probeer-het-opnieuw'
 						)}
-					</span>
+					/>
 				) : null}
 				{renderMobileDesktop({
 					mobile: (
 						<Button
-							label={tText(
-								'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek-mobile'
-							)}
+							label={addButtonLabel(true)}
 							variants={['block', 'text', 'dark']}
 							onClick={onAddToList}
 							className={styles['c-request-material__voeg-toe-button']}
@@ -240,9 +371,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					),
 					desktop: (
 						<Button
-							label={tText(
-								'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek'
-							)}
+							label={addButtonLabel(false)}
 							variants={['block', 'text', 'dark']}
 							onClick={onAddToList}
 							className={styles['c-request-material__voeg-toe-button']}
@@ -254,10 +383,79 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
 					)}
 					variants={['block', 'text']}
-					onClick={onCloseModal}
+					onClick={() => onCloseModal(false)}
 					className={styles['c-request-material__annuleer-button']}
 				/>
 			</div>
+		);
+	};
+
+	const renderDuplicateAlertContent = (): ReactNode => {
+		return (
+			<>
+				<p>
+					{tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___je-hebt-al-op-dit-materiaal-al-een-aanvraag-van-dit-type-ingediend-je-kan-wachten-op-de-behandeling-van-deze-aanvraag-of-ze-nog-annuleren-indien-de-aanbieder-ze-nog-niet-bekeken-heeft'
+					)}
+				</p>
+				<Button
+					className="u-py-0 u-px-0 u-height-auto"
+					label={tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___ga-naar-mijn-aanvraaglijst'
+					)}
+					variants={['text', 'underline']}
+					onClick={() => {
+						onCloseModal(false);
+						dispatch(setShowMaterialRequestCenter(true));
+					}}
+				/>
+			</>
+		);
+	};
+
+	const renderDuplicateAlert = (): ReactNode => {
+		return (
+			<Alert
+				className={styles['c-request-material__alert']}
+				icon={<Icon name={IconNamesLight.Exclamation} aria-hidden />}
+				title={tText(
+					'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-reeds-in-behandeling'
+				)}
+				content={renderDuplicateAlertContent()}
+			/>
+		);
+	};
+
+	const renderReuseFormAlert = (): ReactNode => {
+		return (
+			<Alert
+				className={styles['c-request-material__alert']}
+				icon={<Icon name={IconNamesLight.Exclamation} aria-hidden />}
+				title={tText(
+					'modules/visitor-space/components/material-request-blade/material-request-blade___hergebruikformulier-is-ingevuld'
+				)}
+				content={renderReuseFormAlertContent()}
+			/>
+		);
+	};
+
+	const renderReuseFormAlertContent = (): ReactNode => {
+		return (
+			<>
+				<p>
+					{tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___je-hebt-al-op-dit-materiaal-een-formulier-voor-hergebruik-ingevuld-als-je-het-type-aanvraag-verandert-zal-de-informatie-in-dit-formulier-onherroepelijk-verwijderd-worden-je-kan-de-inhoud-van-het-formulier-aanpassen-door-op-de-onderstaande-link-te-klikken'
+					)}
+				</p>
+				<Button
+					className="u-py-0 u-px-0 u-height-auto"
+					label={tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___ga-naar-het-formulier'
+					)}
+					variants={['text', 'underline']}
+					onClick={() => onCloseModal(true)}
+				/>
+			</>
 		);
 	};
 
@@ -266,70 +464,42 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			isOpen={isOpen}
 			renderTitle={renderTitle}
 			footer={isOpen && renderFooter()}
-			onClose={onCloseModal}
+			onClose={() => onCloseModal(false)}
 			layer={layer}
 			currentLayer={currentLayer}
 			className={styles['c-request-material']}
 			isManaged
 			id="material-request-blade"
 		>
-			<div className={styles['c-request-material__maintainer']}>
-				{maintainerLogo && (
-					<div className={styles['c-request-material__maintainer-logo']}>
-						<Image
-							unoptimized
-							alt="maintainer logo"
-							src={maintainerLogo}
-							fill
-							sizes="100vw"
-							style={{
-								objectFit: 'contain',
-							}}
-						/>
-					</div>
-				)}
-				<div>
-					<p className={styles['c-request-material__maintainer-details']}>
-						{tHtml(
-							'modules/visitor-space/components/material-request-blade/material-request-blade___item-van'
-						)}
-					</p>
-					<p className={styles['c-request-material__maintainer-details']}>{maintainerName}</p>
-				</div>
-			</div>
-			<a
-				tabIndex={-1}
-				href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectSchemaIdentifier}`}
-				className={styles['c-request-material__material-link']}
-			>
-				<div className={styles['c-request-material__material']}>
-					<p className={styles['c-request-material__material-label']}>
-						<Icon
-							className={styles['c-request-material__material-label-icon']}
-							name={getIconFromObjectType(objectDctermsFormat, true)}
-						/>
-						<span>{objectName}</span>
-					</p>
-					<p className={styles['c-request-material__material-id']}>{objectSchemaIdentifier}</p>
-				</div>
-			</a>
+			<MaterialCard
+				className={styles['c-request-material__material']}
+				objectId={objectSchemaIdentifier}
+				title={objectName}
+				orientation={objectThumbnailUrl ? 'horizontal' : 'vertical'}
+				thumbnail={objectThumbnailUrl}
+				link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectSchemaIdentifier}`}
+				type={objectDctermsFormat}
+				publishedBy={maintainerName}
+				publishedOrCreatedDate={objectPublishedOrCreatedDate}
+				icon={getIconFromObjectType(objectDctermsFormat, !!materialRequest.objectRepresentationId)}
+			/>
 			<div className={styles['c-request-material__content']}>
 				<dl>
-					<>
-						<dt className={styles['c-request-material__content-label']}>
-							{/* biome-ignore lint/a11y/noLabelWithoutControl: radio buttons reference this label */}
-							<label id="radio-group-label">
-								{tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___selecteer-een-type'
-								)}
-							</label>
-						</dt>
-						<dd
-							className={clsx(
-								styles['c-request-material__content-value'],
-								styles['c-request-material__radio-buttons-container']
+					<dt className={styles['c-request-material__content-label']}>
+						{/* biome-ignore lint/a11y/noLabelWithoutControl: radio buttons reference this label */}
+						<label id="radio-group-label">
+							{tText(
+								'modules/visitor-space/components/material-request-blade/material-request-blade___selecteer-een-type'
 							)}
-						>
+						</label>
+					</dt>
+					<dd
+						className={clsx(
+							styles['c-request-material__content-value'],
+							styles['c-request-material__radio-buttons-container']
+						)}
+					>
+						{!hideViewTypeOption && (
 							<RadioButton
 								aria-labelledby="radio-group-label"
 								className={styles['c-request-material__radio-button']}
@@ -339,51 +509,74 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 								checked={typeSelected === MaterialRequestType.VIEW}
 								onClick={() => setTypeSelected(MaterialRequestType.VIEW)}
 							/>
-							<RadioButton
-								aria-labelledby="radio-group-label"
-								className={styles['c-request-material__radio-button']}
-								label={tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
+						)}
+						<RadioButton
+							aria-labelledby="radio-group-label"
+							className={styles['c-request-material__radio-button']}
+							label={tText(
+								'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
+							)}
+							checked={typeSelected === MaterialRequestType.REUSE}
+							onClick={() => setTypeSelected(MaterialRequestType.REUSE)}
+						/>
+						<RadioButton
+							aria-labelledby="radio-group-label"
+							className={styles['c-request-material__radio-button']}
+							label={tText(
+								'modules/visitor-space/components/material-request-blade/material-request-blade___more-info'
+							)}
+							checked={typeSelected === MaterialRequestType.MORE_INFO}
+							onClick={() => setTypeSelected(MaterialRequestType.MORE_INFO)}
+						/>
+						{noTypeSelectedOnSave ? (
+							<RedFormWarning
+								error={tHtml(
+									'modules/visitor-space/components/material-request-blade/material-request-blade___type-verplicht-error'
 								)}
-								checked={typeSelected === MaterialRequestType.REUSE}
-								onClick={() => setTypeSelected(MaterialRequestType.REUSE)}
 							/>
-							<RadioButton
-								aria-labelledby="radio-group-label"
-								className={styles['c-request-material__radio-button']}
-								label={tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___more-info'
-								)}
-								checked={typeSelected === MaterialRequestType.MORE_INFO}
-								onClick={() => setTypeSelected(MaterialRequestType.MORE_INFO)}
-							/>
-							{noTypeSelectedOnSave ? (
-								<span className="c-form-control__errors">
-									<Icon className="u-mr-8 " name={IconNamesLight.Exclamation} />
+						) : null}
+					</dd>
+					{!triggerComplexReuseFlow && !showDuplicateWarning && (
+						<>
+							<dt className={styles['c-request-material__content-label']}>
+								<label htmlFor="reason-input">
 									{tText(
-										'modules/visitor-space/components/material-request-blade/material-request-blade___type-verplicht-error'
+										'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
 									)}
-								</span>
-							) : null}
-						</dd>
-						<dt className={styles['c-request-material__content-label']}>
-							<label htmlFor="reason-input">
-								{tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
-								)}
-							</label>
-						</dt>
-						<dd className={styles['c-request-material__content-value']}>
-							<TextArea
-								id="reason-input"
-								className={styles['c-request-material__reason-input']}
-								onChange={(e) => setReasonInputValue(e.target.value)}
-								value={reasonInputValue}
-							/>
-						</dd>
-					</>
+								</label>
+							</dt>
+							<dd className={styles['c-request-material__content-value']}>
+								<TextArea
+									id="reason-input"
+									className={styles['c-request-material__reason-input']}
+									onChange={(e) => setReasonInputValue(e.target.value)}
+									value={reasonInputValue}
+								/>
+							</dd>
+						</>
+					)}
+					{showReuseFormWarning && renderReuseFormAlert()}
+					{showDuplicateWarning && renderDuplicateAlert()}
 				</dl>
 			</div>
+			<ConfirmationModal
+				text={{
+					description: tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___je-hebt-al-op-dit-materiaal-een-formulier-voor-hergebruik-ingevuld-als-je-het-type-aanvraag-verandert-zal-de-informatie-in-dit-formulier-onherroepelijk-verwijderd-worden'
+					),
+					yes: tHtml(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___type-aanvraag-wijzigen'
+					),
+					no: tHtml(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___annuleren'
+					),
+				}}
+				fullWidthButtonWrapper
+				isOpen={showConfirmTypeEdit}
+				onClose={() => setShowConfirmTypeEdit(false)}
+				onCancel={() => setShowConfirmTypeEdit(false)}
+				onConfirm={doEditRequest}
+			/>
 		</Blade>
 	);
 };

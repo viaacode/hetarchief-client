@@ -1,8 +1,4 @@
 import { Button, FormControl, TextArea, TextInput } from '@meemoo/react-components';
-import clsx from 'clsx';
-import type { Requests } from 'node-zendesk';
-import { type FC, useCallback, useEffect, useState } from 'react';
-
 import { Blade } from '@shared/components/Blade/Blade';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -10,6 +6,9 @@ import { validateForm } from '@shared/helpers/validate-form';
 import { useZendesk } from '@shared/hooks/use-zendesk';
 import { toastService } from '@shared/services/toast-service';
 import { REPORT_FORM_SCHEMA } from '@visitor-space/components/reportBlade/ReportBlade.const';
+import clsx from 'clsx';
+import type { Requests } from 'node-zendesk';
+import { type FC, useCallback, useEffect, useState } from 'react';
 
 import styles from './ReportBlade.module.scss';
 import type { ReportBladeProps } from './ReportBlade.types';
@@ -111,7 +110,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 			};
 			await createZendeskTicket(ticket);
 			onSuccessfulRequest();
-		} catch (err) {
+		} catch (_err) {
 			onFailedRequest();
 		} finally {
 			setIsSubmittingForm(false);

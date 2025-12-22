@@ -1,13 +1,12 @@
 import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { type FC, type ReactElement, useCallback, useEffect, useState } from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Overlay } from '@shared/components/Overlay';
 import { tText } from '@shared/helpers/translate';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import { SearchFilterId } from '@visitor-space/types';
+import clsx from 'clsx';
+import { type FC, type ReactElement, useCallback, useEffect, useState } from 'react';
 
 import { FilterButton } from '../FilterButton';
 import FilterForm from '../FilterForm/FilterForm';
@@ -34,11 +33,9 @@ const FilterOption: FC<FilterOptionProps> = ({
 	const onFilterToggle = useCallback(() => onClick?.(id), [id, onClick]);
 	const [openedAt, setOpenedAt] = useState<number | undefined>(undefined);
 
-	// re-render form to ensure correct state
-	// e.g. open -> reset -> close -> open === values in url, in form
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	// biome-ignore lint/correctness/useExhaustiveDependencies: re-render form to ensure correct state,  e.g. open -> reset -> close -> open === values in url, in form
 	useEffect(() => {
-		setOpenedAt(new Date().valueOf());
+		setOpenedAt(Date.now());
 	}, [filterIsActive]);
 
 	const renderFilterOptionByType = (): ReactElement => {
@@ -48,6 +45,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 			case FilterMenuType.Checkbox:
 				return renderCheckbox();
 			default:
+				// biome-ignore lint/complexity/noUselessFragments: We want to have a ReactElement
 				return <></>;
 		}
 	};

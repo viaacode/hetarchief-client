@@ -1,6 +1,6 @@
 {
   "name": "hetarchief-client",
-  "version": "3.3.7",
+  "version": "4.0.3",
   "private": true,
   "contributors": [
     "Bert Verhelst <bert.verhelst@studiohyperdrive.be>",
@@ -42,9 +42,10 @@
     "@emotion/cache": "11.11.0",
     "@flowplayer/player": "3.3.0",
     "@hookform/resolvers": "2.9.11",
-    "@meemoo/admin-core-ui": "4.6.15",
-    "@meemoo/react-components": "4.4.3",
+    "@meemoo/admin-core-ui": "4.6.31",
+    "@meemoo/react-components": "4.4.8",
     "@react-hook/resize-observer": "1.2.5",
+    "blend-promise-utils": "1.29.2",
     "@reduxjs/toolkit": "1.9.6",
     "@studiohyperdrive/pagination": "1.0.0",
     "@tanstack/react-query": "4.36.1",
@@ -71,7 +72,7 @@
     "lodash-es": "^4.17.21",
     "lru-cache": "11.0.2",
     "marked": "4.0.15",
-    "next": "14.2.23",
+    "next": "14.2.35",
     "next-i18next": "13.3.0",
     "next-redux-wrapper": "8.1.0",
     "next-transpile-modules": "10.0.1",
@@ -116,7 +117,7 @@
     "@babel/core": "7.23.0",
     "@babel/preset-env": "7.22.20",
     "babel-plugin-macros": "3.1.0",
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.3.4",
     "@commitlint/cli": "15.0.0",
     "@commitlint/config-conventional": "15.0.0",
     "@next/bundle-analyzer": "13.4.6",
@@ -203,5 +204,10 @@
     "stylelint": "16.14.1",
     "typescript": "5.1.6"
   },
-  "browserslist": [">0.3%", "not ie 11", "not dead", "not op_mini all"]
+  "browserslist": [
+    ">0.3%",
+    "not ie 11",
+    "not dead",
+    "not op_mini all"
+  ]
 }

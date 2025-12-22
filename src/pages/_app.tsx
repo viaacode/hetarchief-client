@@ -1,29 +1,29 @@
-import { AdminConfigManager } from '@meemoo/admin-core-ui/client';
-import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import nlBE from 'date-fns/locale/nl-BE/index.js';
-import setDefaultOptions from 'date-fns/setDefaultOptions';
-import HttpApi from 'i18next-http-backend';
-import { lowerCase, upperFirst } from 'lodash-es';
-import { appWithTranslation } from 'next-i18next';
-import type { AppProps } from 'next/app';
-import getConfig from 'next/config';
-import { useRouter } from 'next/router';
-import React, { type ReactElement, useEffect } from 'react';
-import { Provider } from 'react-redux';
-
 import { getAdminCoreConfig } from '@admin/wrappers/admin-core-config';
+import { AdminConfigManager } from '@meemoo/admin-core-ui/client';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { AppLayout } from '@shared/layouts/AppLayout';
 import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
 import { wrapper } from '@shared/store';
 import { Locale } from '@shared/utils/i18n';
 import { isServerSideRendering } from '@shared/utils/is-browser';
+import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import nlBE from 'date-fns/locale/nl-BE/index.js';
+import setDefaultOptions from 'date-fns/setDefaultOptions';
+import HttpApi from 'i18next-http-backend';
+import { lowerCase, upperFirst } from 'lodash-es';
+import type { AppProps } from 'next/app';
+import getConfig from 'next/config';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { appWithTranslation } from 'next-i18next';
+import React, { type ReactElement, useEffect } from 'react';
+import { Provider } from 'react-redux';
 
 import pkg from '../../package.json';
 
 import '../styles/main.scss';
 import { ApiService } from '@shared/services/api-service'; // Set global locale:
+import '@meemoo/admin-core-ui/styles.css';
 
 // Set global locale:
 setDefaultOptions({ locale: nlBE });
@@ -57,7 +57,7 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 				try {
 					const body = await response.json<{ version: string }>();
 					console.info(`%c server version: ${body.version}`, 'color: #bada55');
-				} catch (err) {
+				} catch (_err) {
 					// ignore errors
 				}
 			});
@@ -69,7 +69,7 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 
 	if (!isServerSideRendering()) {
 		// client-side-only code, window is not available during NextJS server side prerender
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// biome-ignore lint/suspicious/noExplicitAny: Window is not yet typed
 		(window as any).APP_VERSION = { version: pkg.version };
 	}
 	return (

@@ -1,8 +1,7 @@
+import { getRectFromPointerEventDrag } from '@iiif-viewer/helpers/rect-from-pointer-event-drag';
+import type { ImageSize, Rect } from '@iiif-viewer/IiifViewer.types';
 import { noop } from 'lodash-es';
 import type { MouseTracker, Point, PointerMouseTrackerEvent, Viewer } from 'openseadragon';
-
-import type { ImageSize, Rect } from '@iiif-viewer/IiifViewer.types';
-import { getRectFromPointerEventDrag } from '@iiif-viewer/helpers/rect-from-pointer-event-drag';
 
 // We need to track some state on the window object because the open sea dragon viewer isn't being reloaded by react
 // so we cannot access the actual react state
@@ -114,7 +113,7 @@ export function handleDrag(
 	);
 
 	openSeaDragonViewer.updateOverlay(
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 		(window as any).selectionOverlayElement as HTMLDivElement,
 		rect
 	);

@@ -1,3 +1,6 @@
+import { AuthService } from '@auth/services/auth-service';
+import { selectUser } from '@auth/store/user';
+import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import {
 	AdminConfigManager,
 	type ContentPageInfo,
@@ -5,16 +8,6 @@ import {
 	convertDbContentPageToContentPageInfo,
 } from '@meemoo/admin-core-ui/client';
 import { Button } from '@meemoo/react-components';
-import type { Avo } from '@viaa/avo2-types';
-import clsx from 'clsx';
-import { useRouter } from 'next/router';
-import { type FC, useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useQueryParams } from 'use-query-params';
-
-import { AuthService } from '@auth/services/auth-service';
-import { selectUser } from '@auth/store/user';
-import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { GET_TOS_INDEX_QUERY_PARAM_CONFIG, KNOWN_STATIC_ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
@@ -27,6 +20,12 @@ import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import type { Avo } from '@viaa/avo2-types';
+import clsx from 'clsx';
+import { useRouter } from 'next/router';
+import { type FC, useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useQueryParams } from 'use-query-params';
 
 import ErrorNoAccess from '../shared/components/ErrorNoAccess/ErrorNoAccess';
 import styles from './UserConditions.module.scss';
@@ -60,7 +59,7 @@ export const UserConditions: FC<
 		dispatch(setShowZendesk(false));
 	}, [dispatch]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	// biome-ignore lint/correctness/useExhaustiveDependencies: enough to update when scrollable changes
 	const onContentScroll = useCallback(() => {
 		const el = scrollable.current;
 

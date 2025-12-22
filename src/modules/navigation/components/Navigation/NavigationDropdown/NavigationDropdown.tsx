@@ -1,9 +1,8 @@
 import { Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
-import clsx from 'clsx';
-import type { FC, ReactNode } from 'react';
-
 import type { NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
+import clsx from 'clsx';
+import type { FC, ReactNode } from 'react';
 
 import styles from '../Navigation.module.scss';
 
@@ -25,6 +24,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 
 	const renderChildrenRecursively = (items: NavigationItem[], layer = 0): ReactNode => {
 		return (
+			// biome-ignore lint/a11y/noStaticElementInteractions: closing the dropdown on item click is needed
 			<div
 				className={clsx(layer > 0 && styles['c-navigation__dropdown-submenu'])}
 				onClick={() => onClose?.()} // Close dropdown on item click

@@ -1,3 +1,8 @@
+import type {
+	IeObjectAccessThrough,
+	IeObjectLicense,
+	IeObjectRepresentation,
+} from '@ie-objects/ie-objects.types';
 import { tText } from '@shared/helpers/translate';
 import type { IeObjectType } from '@shared/types/ie-objects';
 
@@ -13,6 +18,12 @@ export interface MaterialRequest {
 	objectId: string;
 	objectSchemaIdentifier: string;
 	objectSchemaName: string;
+	objectThumbnailUrl: string;
+	objectPublishedOrCreatedDate?: string;
+	objectAccessThrough: IeObjectAccessThrough[];
+	objectLicences: IeObjectLicense[];
+	objectRepresentationId?: string;
+	objectRepresentation?: IeObjectRepresentation;
 	profileId: string;
 	reason: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;
@@ -20,8 +31,29 @@ export interface MaterialRequest {
 	requesterId: string;
 	requesterMail: string;
 	type: MaterialRequestType;
+	reuseForm?: MaterialRequestReuseForm;
 	updatedAt: string;
 	organisation?: string;
+}
+
+export interface MaterialRequestReuseForm {
+	representationId: string | undefined;
+	startTime: number | undefined;
+	endTime: number | undefined;
+	downloadQuality: MaterialRequestDownloadQuality | undefined;
+	intendedUsageDescription: string | undefined;
+	intendedUsage: MaterialRequestIntendedUsage | undefined;
+	distributionAccess: MaterialRequestDistributionAccess | undefined;
+	distributionType: MaterialRequestDistributionType | undefined;
+	distributionTypeDigitalOnline: MaterialRequestDistributionDigitalOnline | undefined;
+	distributionTypeOtherExplanation: string | undefined;
+	materialEditing: MaterialRequestEditing | undefined;
+	geographicalUsage: MaterialRequestGeographicalUsage | undefined;
+	geographicalUsageDescription: string | undefined;
+	timeUsageType: MaterialRequestTimeUsage | undefined;
+	timeUsageFrom: string | undefined;
+	timeUsageTo: string | undefined;
+	copyrightDisplay: MaterialRequestCopyrightDisplay | undefined;
 }
 
 export interface MaterialRequestDetail extends MaterialRequest {
@@ -33,10 +65,12 @@ export interface MaterialRequestDetail extends MaterialRequest {
 
 export interface MaterialRequestCreation {
 	objectSchemaIdentifier: string;
+	objectRepresentationId: string | undefined;
 	type: MaterialRequestType;
 	reason: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;
 	organisation?: string;
+	reuseForm?: MaterialRequestReuseForm;
 }
 
 export interface MaterialRequestUpdate {
@@ -44,6 +78,7 @@ export interface MaterialRequestUpdate {
 	reason: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;
 	organisation?: string;
+	reuseForm?: MaterialRequestReuseForm;
 }
 
 export interface MaterialRequestSendAll {
@@ -107,3 +142,52 @@ export enum MaterialRequestKeys {
 }
 
 export type MaterialRequestRow = { row: { original: MaterialRequest } };
+
+export enum MaterialRequestDownloadQuality {
+	NORMAL = 'NORMAL',
+	HIGH = 'HIGH',
+}
+
+export enum MaterialRequestIntendedUsage {
+	INTERN = 'INTERN',
+	NON_COMMERCIAL = 'NON_COMMERCIAL',
+	COMMERCIAL = 'COMMERCIAL',
+}
+
+export enum MaterialRequestDistributionAccess {
+	INTERN = 'INTERN',
+	INTERN_EXTERN = 'INTERN_EXTERN',
+}
+
+export enum MaterialRequestDistributionType {
+	DIGITAL_OFFLINE = 'DIGITAL_OFFLINE',
+	DIGITAL_ONLINE = 'DIGITAL_ONLINE',
+	OTHER = 'OTHER',
+}
+
+export enum MaterialRequestDistributionDigitalOnline {
+	INTERNAL = 'INTERNAL',
+	NO_AUTH = 'NO_AUTH',
+	WITH_AUTH = 'WITH_AUTH',
+}
+
+export enum MaterialRequestEditing {
+	NONE = 'NONE',
+	WITH_CHANGES = 'WITH_CHANGES',
+}
+
+export enum MaterialRequestGeographicalUsage {
+	COMPLETELY_LOCAL = 'COMPLETELY_LOCAL',
+	NOT_COMPLETELY_LOCAL = 'NOT_COMPLETELY_LOCAL',
+}
+
+export enum MaterialRequestTimeUsage {
+	UNLIMITED = 'UNLIMITED',
+	IN_TIME = 'IN_TIME',
+}
+
+export enum MaterialRequestCopyrightDisplay {
+	SAME_TIME_WITH_OBJECT = 'SAME_TIME_WITH_OBJECT',
+	AROUND_OBJECT = 'AROUND_OBJECT',
+	NONE = 'NONE',
+}

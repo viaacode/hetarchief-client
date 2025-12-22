@@ -1,8 +1,7 @@
 import { TextInput, type TextInputProps } from '@meemoo/react-components';
-import type { FC } from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import type { FC } from 'react';
 
 import styles from './YearInput.module.scss';
 
@@ -17,6 +16,7 @@ const YearInput: FC<YearInputProps> = (props) => {
 		: props.isYearInputRange
 			? styles['c-year-input__placeholder-wide']
 			: styles['c-year-input__placeholder'];
+	// biome-ignore lint/correctness/noUnusedVariables: No need for the variable to pass on
 	const { isYearInputRange, ...propsWithoutIsYearInputRange } = props;
 	return (
 		<div className={styles['c-year-input']}>

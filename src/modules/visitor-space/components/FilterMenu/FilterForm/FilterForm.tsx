@@ -1,7 +1,4 @@
 import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { type FC, type ReactElement, useMemo } from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml } from '@shared/helpers/translate';
@@ -11,6 +8,8 @@ import type {
 	InlineFilterFormProps,
 	SearchFilterId,
 } from '@visitor-space/types';
+import clsx from 'clsx';
+import { type FC, type ReactElement, useMemo } from 'react';
 
 import { FilterMenuType } from '../FilterMenu.types';
 
@@ -50,6 +49,7 @@ const FilterForm: FC<FilterFormProps> = ({
 			case FilterMenuType.Checkbox:
 				return renderCheckbox();
 			default:
+				// biome-ignore lint/complexity/noUselessFragments: We want to return a ReactElement
 				return <></>;
 		}
 	};
@@ -73,7 +73,7 @@ const FilterForm: FC<FilterFormProps> = ({
 	};
 
 	const renderModal = (): ReactElement => {
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 		const FormComponent = (form as FC<DefaultFilterFormProps<any>>) ?? (() => null);
 
 		return (

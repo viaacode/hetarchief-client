@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.4/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -7,16 +7,18 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": [".next", ".vscode"]
+    "includes": [
+      "src/**/*.{ts,tsx,json,graphql}",
+      "tests/**/*.{ts,tsx,json,graphql}",
+      "scripts/**/*.{ts,tsx,json,graphql}"
+    ]
   },
   "formatter": {
     "enabled": true,
     "indentStyle": "tab",
     "lineWidth": 100
   },
-  "organizeImports": {
-    "enabled": true
-  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "linter": {
     "enabled": true,
     "rules": {

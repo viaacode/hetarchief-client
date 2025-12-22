@@ -14,6 +14,7 @@ export enum QUERY_PARAM_KEY {
 	IIIF_VIEWER_FOCUS_Y = 'focusY',
 	IIIF_VIEWER_ZOOM_LEVEL = 'zoomLevel',
 	ACTIVE_PAGE = 'activePage',
+	ACTIVE_REPRESENTATION = 'activeRepresentation',
 	EXPAND_SIDEBAR = 'expandSidebar',
 	IIIF_VIEWER_TEXT_OVERLAY_ENABLED = 'textOverlay',
 	CONTENT_PAGE_PREVIEW = 'preview',

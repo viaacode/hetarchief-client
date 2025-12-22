@@ -3,8 +3,9 @@
 // Resets
 
 .c-toast-container {
-	max-width: 48.6rem;
-	width: 100%;
+	// Not limiting it to a fixed width since the toast itself has a max-width
+	// But also not setting it to 100% because it otherwise blocks elements behind it although the toast itself is not as wide
+	width: fit-content;
 	padding: 0;
 }
 

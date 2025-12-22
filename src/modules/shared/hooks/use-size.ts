@@ -14,7 +14,7 @@ export function useSize<T extends HTMLElement>(
 	useLayoutEffect(() => {
 		if (ref.current) {
 			if (subProperty) {
-				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+				// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 				const element = (ref.current as any)?.[subProperty] as HTMLElement | undefined;
 				if (element) {
 					onResize(element);
@@ -27,7 +27,7 @@ export function useSize<T extends HTMLElement>(
 
 	useEffect(() => {
 		const element = subProperty
-			? // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			? // biome-ignore lint/suspicious/noExplicitAny: No typing yet
 				((ref.current as any)?.[subProperty] as HTMLElement | undefined)
 			: ref.current;
 		if (!element) return;

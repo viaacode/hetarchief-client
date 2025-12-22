@@ -1,6 +1,5 @@
-import type { ReactNode } from 'react';
-
 import type { DefaultComponentProps } from '@shared/types';
+import type { ReactNode } from 'react';
 
 export interface BladeProps extends DefaultComponentProps {
 	children?: ReactNode;
@@ -17,4 +16,7 @@ export interface BladeProps extends DefaultComponentProps {
 	currentLayer?: number;
 	renderTitle?: (props: Pick<HTMLElement, 'id' | 'className'>) => ReactNode;
 	id: string;
+	extraWide?: boolean;
+	headerBackground?: 'white' | 'platinum';
+	stickyFooter?: boolean;
 }

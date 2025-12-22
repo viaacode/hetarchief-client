@@ -1,6 +1,3 @@
-import { isEmpty } from 'lodash-es';
-import { parseUrl, stringifyUrl } from 'query-string';
-
 import type { IeObject, IeObjectSimilar, RelatedIeObjects } from '@ie-objects/ie-objects.types';
 import type {
 	IeObjectPreviousNextIds,
@@ -18,13 +15,15 @@ import {
 } from '@shared/types/ie-objects';
 import type { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { SearchSortProp } from '@visitor-space/types';
+import { isEmpty } from 'lodash-es';
+import { parseUrl, stringifyUrl } from 'query-string';
 
 import {
-	IE_OBJECTS_SERVICE_BASE_URL,
-	IE_OBJECTS_SERVICE_SIMILAR,
 	IE_OBJECT_SERVICE_SEO_URL,
 	IE_OBJECT_SERVICE_TICKET_URL,
 	IE_OBJECT_TICKET_SERVICE_URL,
+	IE_OBJECTS_SERVICE_BASE_URL,
+	IE_OBJECTS_SERVICE_SIMILAR,
 	IO_OBJECTS_SERVICE_DOWNLOAD_ALTO_JSON,
 	IO_OBJECTS_SERVICE_RELATED,
 } from './ie-objects.service.const';
