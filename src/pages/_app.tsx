@@ -3,11 +3,17 @@ import { AdminConfigManager } from '@meemoo/admin-core-ui/client';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { AppLayout } from '@shared/layouts/AppLayout';
 import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
+import { ApiService } from '@shared/services/api-service'; // Set global locale:
 import { wrapper } from '@shared/store';
 import { Locale } from '@shared/utils/i18n';
 import { isServerSideRendering } from '@shared/utils/is-browser';
-import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import nlBE from 'date-fns/locale/nl-BE/index.js';
+import {
+	HydrationBoundary,
+	keepPreviousData,
+	QueryClient,
+	QueryClientProvider,
+} from '@tanstack/react-query';
+import nlBE from 'date-fns/locale/nl-BE';
 import setDefaultOptions from 'date-fns/setDefaultOptions';
 import HttpApi from 'i18next-http-backend';
 import { lowerCase, upperFirst } from 'lodash-es';
@@ -21,9 +27,8 @@ import { Provider } from 'react-redux';
 
 import pkg from '../../package.json';
 
+import '@meemoo/admin-core-ui/admin.css';
 import '../styles/main.scss';
-import { ApiService } from '@shared/services/api-service'; // Set global locale:
-import '@meemoo/admin-core-ui/styles.css';
 
 // Set global locale:
 setDefaultOptions({ locale: nlBE });
@@ -33,9 +38,11 @@ const { publicRuntimeConfig } = getConfig();
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
+			placeholderData: keepPreviousData,
 			refetchOnWindowFocus: false,
-			keepPreviousData: true,
-			retry: 0,
+			retry: false,
+			refetchInterval: false,
+			refetchIntervalInBackground: false,
 		},
 	},
 });
@@ -80,13 +87,13 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 			</Head>
 			<NextQueryParamProvider>
 				<QueryClientProvider client={queryClient}>
-					<Hydrate state={pageProps.dehydratedState}>
+					<HydrationBoundary state={pageProps.dehydratedState}>
 						<Provider store={store}>
 							<AppLayout>
 								<Component {...props} />
 							</AppLayout>
 						</Provider>
-					</Hydrate>
+					</HydrationBoundary>
 				</QueryClientProvider>
 			</NextQueryParamProvider>
 		</>

@@ -1,7 +1,3 @@
-import type { Avo } from '@viaa/avo2-types';
-import { useRouter } from 'next/router';
-import React, { type FC, lazy, Suspense } from 'react';
-
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { Loading } from '@shared/components/Loading';
@@ -13,6 +9,9 @@ import { goBrowserBackWithFallback } from '@shared/helpers/go-browser-back-with-
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import type { AvoUserCommonUser } from '@viaa/avo2-types';
+import { useRouter } from 'next/router';
+import React, { type FC, lazy, Suspense } from 'react';
 
 const ContentPageEdit = lazy(() =>
 	import('@meemoo/admin-core-ui/admin').then((adminCoreModule) => ({
@@ -26,7 +25,7 @@ interface ContentPageEditPageProps {
 
 export const ContentPageEditPage: FC<
 	DefaultSeoInfo & {
-		commonUser: Avo.User.CommonUser | undefined;
+		commonUser: AvoUserCommonUser | undefined;
 	} & ContentPageEditPageProps
 > = ({ url, canonicalUrl, commonUser, id }) => {
 	const locale = useLocale();
@@ -40,7 +39,7 @@ export const ContentPageEditPage: FC<
 						<Suspense fallback={<Loading fullscreen owner="ContentPageEditPage" />}>
 							<ContentPageEdit
 								id={id}
-								commonUser={commonUser as Avo.User.CommonUser}
+								commonUser={commonUser as AvoUserCommonUser}
 								onGoBack={() =>
 									goBrowserBackWithFallback(
 										buildLink(ROUTES_BY_LOCALE[locale].adminContentPageDetail, {

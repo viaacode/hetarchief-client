@@ -1,10 +1,11 @@
 // TODO move these files to a search page module
 // advanced-filters => advanced filters
 // visitor space search page => search page
-import { OrderDirection, type TabProps } from '@meemoo/react-components';
+import type { TabProps } from '@meemoo/react-components';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import { SearchPageMediaType } from '@shared/types/ie-objects';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import type { FilterMenuSortOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import {
 	ArrayParam,
@@ -31,7 +32,7 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
 > & {
 	page: number;
 	orderProp: SearchSortProp;
-	orderDirection: OrderDirection;
+	orderDirection: AvoSearchOrderDirection;
 } = {
 	// Filters
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: undefined,
@@ -64,7 +65,7 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
 	page: 1,
 	// Sorting
 	orderProp: SearchSortProp.Relevance,
-	orderDirection: OrderDirection.desc,
+	orderDirection: AvoSearchOrderDirection.DESC,
 };
 
 // biome-ignore lint/suspicious/noExplicitAny: No typing yet
@@ -118,28 +119,28 @@ export const VISITOR_SPACE_SORT_OPTIONS = (): FilterMenuSortOption[] => [
 	{
 		label: tText('modules/visitor-space/const/index___datum-oplopend'),
 		orderProp: SearchSortProp.Date,
-		orderDirection: OrderDirection.asc,
+		orderDirection: AvoSearchOrderDirection.ASC,
 	},
 	{
 		label: tText('modules/visitor-space/const/index___datum-aflopend'),
 		orderProp: SearchSortProp.Date,
-		orderDirection: OrderDirection.desc,
+		orderDirection: AvoSearchOrderDirection.DESC,
 	},
 	{
 		label: tText('modules/visitor-space/const/index___gearchiveerd'),
 		orderProp: SearchSortProp.Archived,
-		orderDirection: OrderDirection.desc,
+		orderDirection: AvoSearchOrderDirection.DESC,
 	},
 	// schema_name niet sorteerbaar in https://meemoo.atlassian.net/wiki/pages/viewpage.action?pageId=3309174878&pageVersion=3
 	// {
 	// 	label: tText('modules/visitor-space/const/index___van-a-tot-z'),
 	// 	orderProp: VisitorSpaceSort.Title,
-	// 	orderDirection: OrderDirection.asc,
+	// 	orderDirection: AvoSearchOrderDirection.ASC,
 	// },
 	// {
 	// 	label: tText('modules/visitor-space/const/index___van-z-tot-a'),
 	// 	orderProp: VisitorSpaceSort.Title,
-	// 	orderDirection: OrderDirection.desc,
+	// 	orderDirection: AvoSearchOrderDirection.DESC,
 	// },
 ];
 

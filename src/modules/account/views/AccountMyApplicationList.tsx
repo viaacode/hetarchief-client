@@ -30,7 +30,6 @@ import {
 import {
 	formatDurationHoursMinutesSeconds,
 	formatDurationMinutesSeconds,
-	type OrderDirection,
 } from '@meemoo/react-components';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { Loading } from '@shared/components/Loading';
@@ -49,6 +48,7 @@ import {
 } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitorLayout } from '@visitor-layout/index';
 import clsx from 'clsx';
 import { isEmpty, isNil } from 'lodash-es';
@@ -73,7 +73,7 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 		refetch: refetchMaterialRequests,
 	} = useGetPendingMaterialRequests({
 		orderProp: MaterialRequestKeys.createdAt,
-		orderDirection: 'desc' as OrderDirection,
+		orderDirection: AvoSearchOrderDirection.DESC,
 	});
 
 	const noData = useMemo(

@@ -1,8 +1,4 @@
-import { Button, OrderDirection, type TabProps } from '@meemoo/react-components';
-import { isWithinInterval } from 'date-fns';
-import type { Column } from 'react-table';
-import { NumberParam, StringParam, withDefault } from 'use-query-params';
-
+import { Button, type TabProps } from '@meemoo/react-components';
 import { CopyButton } from '@shared/components/CopyButton';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
 import { UnreadMarker } from '@shared/components/UnreadMarker';
@@ -11,14 +7,18 @@ import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import type { VisitRequest, VisitRow } from '@shared/types/visit-request';
 import { asDate, formatSameDayRange } from '@shared/utils/dates';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { RequestStatusAll, VisitTimeframe } from '@visit-requests/types';
+import { isWithinInterval } from 'date-fns';
+import type { Column } from 'react-table';
+import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 export const CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG = {
 	timeframe: withDefault(StringParam, RequestStatusAll.ALL),
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
 	orderProp: withDefault(StringParam, 'startAt'),
-	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
+	orderDirection: withDefault(SortDirectionParam, AvoSearchOrderDirection.DESC),
 };
 
 export const visitorsStatusFilters = (): TabProps[] => {

@@ -19,7 +19,7 @@ import { tText } from '@shared/helpers/translate';
 import { Breakpoints } from '@shared/types';
 import type { VisitRequest } from '@shared/types/visit-request';
 import type { Locale } from '@shared/utils/i18n';
-import type { Avo } from '@viaa/avo2-types';
+import { type AvoUserCommonUser, PermissionName } from '@viaa/avo2-types';
 import { SearchFilterId, type VisitorSpaceInfo } from '@visitor-space/types';
 import clsx from 'clsx';
 import { groupBy, intersection, isNil } from 'lodash-es';
@@ -490,7 +490,7 @@ export const getNavigationItemsProfileDropdown = (
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
 	linkedSpaceOrId: string | null,
 	locale: Locale,
-	user: Avo.User.CommonUser | null
+	user: AvoUserCommonUser | null
 ): NavigationItem[] => {
 	const profileDropdown = getDynamicHeaderLinks(
 		currentPath,
@@ -522,7 +522,7 @@ export const getNavigationItemsProfileDropdown = (
 	const filteredDefaultRoutes = defaultRoutes?.filter((navItem: NavigationItem) => {
 		if (navItem.path.trim() === ROUTES_BY_LOCALE[locale].accountMyFolders.trim()) {
 			// Check managed folders permission
-			return user?.permissions?.includes(Permission.MANAGE_FOLDERS);
+			return user?.permissions?.includes(PermissionName.MANAGE_FOLDERS);
 		}
 
 		// All other nav items can be shown

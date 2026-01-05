@@ -9,20 +9,17 @@ export const useGetIeObjectThumbnail = (
 		enabled?: boolean;
 	} = {}
 ): UseQueryResult<string | null> => {
-	return useQuery<string | null>(
-		[QUERY_KEYS.getIeObjectsThumbnail, schemaIdentifier],
-		async (): Promise<string | null> => {
+	return useQuery({
+		queryKey: [QUERY_KEYS.getIeObjectsThumbnail, schemaIdentifier],
+		queryFn: async (): Promise<string | null> => {
 			if (schemaIdentifier.startsWith('_next')) {
 				return null;
 			}
 			return await IeObjectsService.getThumbnailBySchemaIdentifier(schemaIdentifier);
 		},
-		{
-			keepPreviousData: true,
-			enabled: true,
-			...options,
-		}
-	);
+		enabled: true,
+		...options,
+	});
 };
 
 export function makeServerSideRequestGetIeObjectThumbnail(

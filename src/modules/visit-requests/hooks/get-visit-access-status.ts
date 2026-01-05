@@ -1,12 +1,11 @@
-import {
-	useMutation,
-	type UseMutationResult,
-	useQuery,
-	type UseQueryResult,
-} from '@tanstack/react-query';
-
 import { QUERY_KEYS } from '@shared/const';
 import type { VisitAccessStatus } from '@shared/types/visit-request';
+import {
+	type UseMutationResult,
+	type UseQueryResult,
+	useMutation,
+	useQuery,
+} from '@tanstack/react-query';
 import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
 
 // Query
@@ -15,11 +14,11 @@ export function useGetVisitAccessStatus(
 	slug: string,
 	enabled = true
 ): UseQueryResult<VisitAccessStatus | null> {
-	return useQuery(
-		[QUERY_KEYS.getVisitAccessStatus, slug],
-		() => VisitRequestService.getAccessStatusBySpaceSlug(slug),
-		{ enabled }
-	);
+	return useQuery({
+		queryKey: [QUERY_KEYS.getVisitAccessStatus, slug],
+		queryFn: () => VisitRequestService.getAccessStatusBySpaceSlug(slug),
+		enabled,
+	});
 }
 
 // Mutation
@@ -29,5 +28,7 @@ export function useGetVisitAccessStatusMutation(): UseMutationResult<
 	unknown,
 	string
 > {
-	return useMutation((slug: string) => VisitRequestService.getAccessStatusBySpaceSlug(slug));
+	return useMutation({
+		mutationFn: (slug: string) => VisitRequestService.getAccessStatusBySpaceSlug(slug),
+	});
 }

@@ -1,8 +1,7 @@
-import { type QueryClient, useQuery, type UseQueryResult } from '@tanstack/react-query';
-
 import type { User } from '@auth/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import type { VisitRequest } from '@shared/types/visit-request';
+import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
 import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
 
 export async function getActiveVisitRequestForUserAndSpace(
@@ -19,12 +18,14 @@ export function useGetActiveVisitRequestForUserAndSpace(
 	visitorSpaceSlug: string,
 	user: User | null | undefined,
 	options: { enabled?: boolean } = {}
-): UseQueryResult<VisitRequest> {
-	return useQuery(
-		[QUERY_KEYS.getActiveVisitForUserAndSpace, visitorSpaceSlug, user?.id || null],
-		() => getActiveVisitRequestForUserAndSpace(visitorSpaceSlug, user || null),
-		{ enabled: true, retry: 0, ...options }
-	);
+): UseQueryResult<VisitRequest | null> {
+	return useQuery({
+		queryKey: [QUERY_KEYS.getActiveVisitForUserAndSpace, visitorSpaceSlug, user?.id || null],
+		queryFn: () => getActiveVisitRequestForUserAndSpace(visitorSpaceSlug, user || null),
+		enabled: true,
+		retry: 0,
+		...options,
+	});
 }
 
 export async function makeServerSideRequestGetActiveVisitRequestForUserAndSpace(

@@ -8,7 +8,7 @@ import {
 	MaterialRequestKeys,
 	MaterialRequestType,
 } from '@material-requests/types';
-import { Button, type OrderDirection } from '@meemoo/react-components';
+import { Button } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import { BladeManager } from '@shared/components/BladeManager';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
@@ -22,6 +22,7 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { setMaterialRequestCount } from '@shared/store/ui';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
 import { MaterialRequestForReuseBlade } from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade';
 import clsx from 'clsx';
@@ -93,7 +94,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	} = useGetPendingMaterialRequests(
 		{
 			orderProp: MaterialRequestKeys.createdAt,
-			orderDirection: 'desc' as OrderDirection,
+			orderDirection: AvoSearchOrderDirection.DESC,
 		},
 		{ enabled: shouldFetchMaterialRequests }
 	);

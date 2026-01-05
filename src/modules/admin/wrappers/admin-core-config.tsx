@@ -1,3 +1,4 @@
+import { BlockContentEnclose } from '@content-page/components/blocks/BlockContentEnclose/BlockContentEnclose';
 import {
 	type AdminConfig,
 	ContentBlockType,
@@ -6,14 +7,6 @@ import {
 	type LinkInfo,
 	type ToastInfo,
 } from '@meemoo/admin-core-ui/client';
-import { DatabaseType } from '@viaa/avo2-types';
-import getConfig from 'next/config';
-import Link from 'next/link';
-import type { NextRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
-import type { FunctionComponent } from 'react';
-
-import { BlockContentEnclose } from '@content-page/components/blocks/BlockContentEnclose/BlockContentEnclose';
 import { NAVIGATION_DROPDOWN } from '@navigation/components/Navigation/Navigation.types';
 import {
 	GET_ALERT_ICON_LIST_CONFIG,
@@ -28,6 +21,12 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
 import type { Locale } from '@shared/utils/i18n';
+import { AvoCoreDatabaseType } from '@viaa/avo2-types';
+import getConfig from 'next/config';
+import Link from 'next/link';
+import type { NextRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
+import type { FunctionComponent } from 'react';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -190,12 +189,17 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 			},
 			router: {
 				Link: InternalLink as FunctionComponent<LinkInfo>,
-				useHistory: () => ({
-					// biome-ignore lint/suspicious/noExplicitAny: We want a simple interface, not a very specific one for one specific router (next or react-router)
-					push: router?.push as any,
-					// biome-ignore lint/suspicious/noExplicitAny: We want a simple interface, not a very specific one for one specific router (next or react-router)
-					replace: router?.replace as any,
-				}),
+				navigateFunc: async (to: string, options?: { replace?: boolean }): Promise<void> => {
+					if (options?.replace) {
+						if (router) {
+							await router.replace(to);
+						}
+					} else {
+						if (router) {
+							await router.push(to);
+						}
+					}
+				},
 			},
 			queryCache: {
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -220,7 +224,7 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 		locale: locale as any,
 		env: {
 			CLIENT_URL: publicRuntimeConfig.CLIENT_URL,
-			DATABASE_APPLICATION_TYPE: DatabaseType.hetArchief,
+			DATABASE_APPLICATION_TYPE: AvoCoreDatabaseType.hetArchief,
 		},
 	};
 }

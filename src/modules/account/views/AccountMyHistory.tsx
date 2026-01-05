@@ -7,7 +7,7 @@ import {
 	Permission,
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
-import { OrderDirection, PaginationBar, Table } from '@meemoo/react-components';
+import { PaginationBar, Table } from '@meemoo/react-components';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { Loading } from '@shared/components/Loading';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
@@ -23,6 +23,7 @@ import { toastService } from '@shared/services/toast-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { AccessStatus, type VisitRequest } from '@shared/types/visit-request';
 import { createVisitorSpacesWithFilterUrl } from '@shared/utils/create-url';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { useGetVisitAccessStatusMutation } from '@visit-requests/hooks/get-visit-access-status';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitorLayout } from '@visitor-layout/index';
@@ -48,7 +49,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		page: filters.page,
 		size: HistoryItemListSize,
 		orderProp: filters.orderProp as keyof VisitRequest,
-		orderDirection: filters.orderDirection as OrderDirection,
+		orderDirection: filters.orderDirection as AvoSearchOrderDirection,
 		personal: true,
 	});
 
@@ -61,7 +62,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		return [
 			{
 				id: filters.orderProp,
-				desc: filters.orderDirection !== OrderDirection.asc,
+				desc: filters.orderDirection !== AvoSearchOrderDirection.ASC,
 			},
 		];
 	}, [filters]);
@@ -70,10 +71,10 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 	const onSortChange = (
 		orderProp: string | undefined,
-		orderDirection: OrderDirection | undefined
+		orderDirection: AvoSearchOrderDirection | undefined
 	) => {
 		let orderPropResolved: string | undefined = orderProp;
-		let orderDirectionResolved: OrderDirection | undefined = orderDirection;
+		let orderDirectionResolved: AvoSearchOrderDirection | undefined = orderDirection;
 		if (orderPropResolved === HistoryTableAccessComboId) {
 			orderPropResolved = HistoryTableAccessFrom;
 		}
@@ -81,7 +82,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			orderPropResolved = 'startAt';
 		}
 		if (!orderDirectionResolved) {
-			orderDirectionResolved = OrderDirection.desc;
+			orderDirectionResolved = AvoSearchOrderDirection.DESC;
 		}
 		if (
 			filters.orderProp !== orderPropResolved ||

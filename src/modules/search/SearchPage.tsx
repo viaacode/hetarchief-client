@@ -10,7 +10,6 @@ import {
 	Breadcrumbs,
 	Button,
 	FormControl,
-	OrderDirection,
 	PaginationBar,
 	type TabProps,
 } from '@meemoo/react-components';
@@ -75,6 +74,7 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
 import { scrollTo } from '@shared/utils/scroll-to-top';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitTimeframe } from '@visit-requests/types';
@@ -176,7 +176,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const format = (query.format || VISITOR_SPACE_QUERY_PARAM_INIT.format) as SearchPageMediaType;
 	const orderProp = query.orderProp || VISITOR_SPACE_QUERY_PARAM_INIT.orderProp;
 	const orderDirection = (query.orderDirection ||
-		VISITOR_SPACE_QUERY_PARAM_INIT.orderDirection) as OrderDirection;
+		VISITOR_SPACE_QUERY_PARAM_INIT.orderDirection) as AvoSearchOrderDirection;
 
 	const isUserWithAccount = isLoggedIn && !!user && !isAnonymousUser;
 	const { data: visitRequestsPaginated } = useGetVisitRequests(
@@ -184,7 +184,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			page: 1,
 			size: 100,
 			orderProp: 'startAt',
-			orderDirection: OrderDirection.desc,
+			orderDirection: AvoSearchOrderDirection.DESC,
 			status: VisitStatus.APPROVED,
 			timeframe: VisitTimeframe.ACTIVE,
 			personal: true,
@@ -654,7 +654,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		setQuery({ ...rest, ...updatedQuery, page: undefined });
 	};
 
-	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) => {
+	const onSortClick = (orderProp: string, orderDirection?: AvoSearchOrderDirection) => {
 		setQuery({ orderProp, orderDirection, page: undefined });
 	};
 

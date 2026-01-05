@@ -20,7 +20,7 @@ import {
 	GET_NAV_ITEMS_RIGHT,
 	GET_NAV_ITEMS_RIGHT_LOGGED_IN,
 } from '@navigation/const';
-import { NavigationPlacement } from '@navigation/services/navigation-service';
+import { type NavigationInfo, NavigationPlacement } from '@navigation/services/navigation-service';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { HetArchiefLogo, HetArchiefLogoType } from '@shared/components/HetArchiefLogo';
 import Html from '@shared/components/Html/Html';
@@ -64,7 +64,7 @@ import type { VisitRequest } from '@shared/types/visit-request';
 import type { Locale } from '@shared/utils/i18n';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useQueryClient } from '@tanstack/react-query';
-import type { Avo } from '@viaa/avo2-types';
+import type { AvoUserCommonUser } from '@viaa/avo2-types';
 import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visits';
 import clsx from 'clsx';
 import getConfig from 'next/config';
@@ -120,17 +120,13 @@ const AppLayout: FC<any> = ({ children }) => {
 	const { data: maintenanceAlerts } = useGetActiveMaintenanceAlerts(
 		{},
 		{
-			keepPreviousData: true,
 			enabled: true,
 		}
 	);
 	const { mutateAsync: dismissMaintenanceAlert } = useDismissMaintenanceAlert();
 	const isKioskOrAnonymous = useHasAnyGroup(GroupName.KIOSK_VISITOR, GroupName.ANONYMOUS);
 	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
-	const { data: spaces } = useGetAllActiveVisits(
-		{},
-		{ keepPreviousData: true, enabled: isLoggedIn }
-	);
+	const { data: spaces } = useGetAllActiveVisits({}, { enabled: isLoggedIn });
 
 	const [alertsIgnoreUntil, setAlertsIgnoreUntil] = useLocalStorage(
 		'HET_ARCHIEF.alerts.ignoreUntil',
@@ -290,11 +286,11 @@ const AppLayout: FC<any> = ({ children }) => {
 
 			return GET_NAV_ITEMS_RIGHT_LOGGED_IN(
 				router.asPath,
-				navigationItems || {},
+				navigationItems || ({} as Record<NavigationPlacement, NavigationInfo[]>),
 				accessibleVisitorSpaces || [],
 				showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
 				locale,
-				user as Avo.User.CommonUser | null,
+				user as AvoUserCommonUser | null,
 				{
 					hasUnreadNotifications,
 					notificationsOpen: showNotificationsCenter,
@@ -328,7 +324,7 @@ const AppLayout: FC<any> = ({ children }) => {
 		const dynamicItems = getNavigationItemsLeft(
 			router.asPath,
 			accessibleVisitorSpaces || [],
-			navigationItems || {},
+			navigationItems || ({} as Record<NavigationPlacement, NavigationInfo[]>),
 			user?.permissions || [],
 			showLinkedSpaceAsHomepage ? linkedSpaceOrId : null,
 			isMobile,

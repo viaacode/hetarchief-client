@@ -1,6 +1,6 @@
 @charset "utf-8";
 @use "abstracts" as *;
-@forward "base";
+@use "base";
 @use "vendor" as *;
 @use "components" as *;
 @use "layouts" as *;

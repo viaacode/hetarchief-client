@@ -1,8 +1,9 @@
-import { Button, OrderDirection, TagList } from '@meemoo/react-components';
+import { Button, TagList } from '@meemoo/react-components';
 import { Navigation } from '@navigation/components/Navigation/Navigation';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml } from '@shared/helpers/translate';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { mapFiltersToTags } from '@visitor-space/utils/map-filters';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
@@ -55,7 +56,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 		: () => setIsSortActive(false);
 	const tags = filterValues ? mapFiltersToTags(filterValues) : [];
 
-	const handleSortClick = (key: SearchSortProp, order?: OrderDirection) => {
+	const handleSortClick = (key: SearchSortProp, order?: AvoSearchOrderDirection) => {
 		onSortClick?.(key, order);
 		setIsSortActive(false);
 	};
@@ -191,7 +192,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 						{sortOptions.length > 0 && (
 							<FilterButton
 								icon={
-									activeSort?.orderDirection === OrderDirection.desc
+									activeSort?.orderDirection === AvoSearchOrderDirection.DESC
 										? IconNamesLight.SortDown
 										: IconNamesLight.SortUp
 								}

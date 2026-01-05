@@ -1,17 +1,16 @@
-import { type UseQueryResult, useQuery } from '@tanstack/react-query';
-
 import { IeObjectsService } from '@ie-objects/services';
 import type { SimplifiedAltoInfo } from '@iiif-viewer/IiifViewer.types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
+import { useQuery } from '@tanstack/react-query';
 
 export const useGetAltoJsonFileContent = (
 	altoJsonUrl: string | null,
 	pageIndex: number,
 	options: { enabled: boolean } = { enabled: true }
-): UseQueryResult<SimplifiedAltoInfo> => {
-	return useQuery(
-		[QUERY_KEYS.getAltoJsonFileContent, altoJsonUrl, pageIndex, options],
-		async () => {
+) => {
+	return useQuery<SimplifiedAltoInfo | null>({
+		queryKey: [QUERY_KEYS.getAltoJsonFileContent, altoJsonUrl, pageIndex, options],
+		queryFn: async () => {
 			if (!altoJsonUrl) {
 				return null;
 			}
@@ -23,9 +22,6 @@ export const useGetAltoJsonFileContent = (
 				altoJsonContent,
 			};
 		},
-		{
-			keepPreviousData: true,
-			enabled: options.enabled,
-		}
-	);
+		enabled: options.enabled,
+	});
 };

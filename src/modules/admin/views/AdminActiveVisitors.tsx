@@ -1,8 +1,3 @@
-import { OrderDirection, PaginationBar, Table } from '@meemoo/react-components';
-import React, { type FC, type ReactNode, useMemo, useState } from 'react';
-import type { TableState } from 'react-table';
-import { useQueryParams } from 'use-query-params';
-
 import { Permission } from '@account/const';
 import {
 	ADMIN_VISITORS_QUERY_PARAM_CONFIG,
@@ -10,6 +5,7 @@ import {
 	VisitorsTablePageSize,
 } from '@admin/const/Visitors.const';
 import { AdminLayout } from '@admin/layouts';
+import { PaginationBar, Table } from '@meemoo/react-components';
 import { ApproveRequestBlade } from '@shared/components/ApproveRequestBlade';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
@@ -23,9 +19,13 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { useUpdateVisitRequest } from '@visit-requests/hooks/update-visit';
 import { VisitTimeframe } from '@visit-requests/types';
+import React, { type FC, type ReactNode, useMemo, useState } from 'react';
+import type { TableState } from 'react-table';
+import { useQueryParams } from 'use-query-params';
 
 export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const [filters, setFilters] = useQueryParams(ADMIN_VISITORS_QUERY_PARAM_CONFIG);
@@ -44,7 +44,7 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 		page: filters.page,
 		size: VisitorsTablePageSize,
 		orderProp: filters.orderProp as keyof VisitRequest,
-		orderDirection: filters.orderDirection as OrderDirection,
+		orderDirection: filters.orderDirection as AvoSearchOrderDirection,
 	});
 	const [search, setSearch] = useState<string>('');
 	const { mutateAsync: updateVisitRequest } = useUpdateVisitRequest();
@@ -58,7 +58,7 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 		return [
 			{
 				id: filters.orderProp,
-				desc: filters.orderDirection !== OrderDirection.asc,
+				desc: filters.orderDirection !== AvoSearchOrderDirection.ASC,
 			},
 		];
 	}, [filters]);
@@ -67,13 +67,13 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 
 	const onSortChange = (
 		orderProp: string | undefined,
-		orderDirection: OrderDirection | undefined
+		orderDirection: AvoSearchOrderDirection | undefined
 	) => {
 		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
 				orderProp: orderProp || 'startAt',
-				orderDirection: orderDirection || OrderDirection.desc,
+				orderDirection: orderDirection || AvoSearchOrderDirection.DESC,
 				page: 1,
 			});
 		}

@@ -1,9 +1,7 @@
-import type { OrderDirection } from '@meemoo/react-components';
-import type { IPagination } from '@studiohyperdrive/pagination';
-import { useQuery, type UseQueryResult } from '@tanstack/react-query';
-
 import { QUERY_KEYS } from '@shared/const/query-keys';
-
+import type { IPagination } from '@studiohyperdrive/pagination';
+import { type UseQueryResult, useQuery } from '@tanstack/react-query';
+import type { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitorSpaceService } from '../services';
 import type { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '../types';
 
@@ -13,13 +11,14 @@ export function useGetVisitorSpaces(
 	page: number,
 	size: number,
 	orderProp?: VisitorSpaceOrderProps,
-	orderDirection?: OrderDirection
+	orderDirection?: AvoSearchOrderDirection
 ): UseQueryResult<IPagination<VisitorSpaceInfo>> {
-	return useQuery(
-		[QUERY_KEYS.getVisitorSpaces, { searchInput, status, page, size, orderProp, orderDirection }],
-		() => VisitorSpaceService.getAll(searchInput, status, page, size, orderProp, orderDirection),
-		{
-			keepPreviousData: true,
-		}
-	);
+	return useQuery({
+		queryKey: [
+			QUERY_KEYS.getVisitorSpaces,
+			{ searchInput, status, page, size, orderProp, orderDirection },
+		],
+		queryFn: () =>
+			VisitorSpaceService.getAll(searchInput, status, page, size, orderProp, orderDirection),
+	});
 }

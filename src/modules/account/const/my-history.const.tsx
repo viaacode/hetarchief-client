@@ -1,19 +1,19 @@
-import { Button, OrderDirection } from '@meemoo/react-components';
-import type { MouseEvent } from 'react';
-import type { Column, UseSortByColumnOptions } from 'react-table';
-import { NumberParam, StringParam, withDefault } from 'use-query-params';
-
+import { Button } from '@meemoo/react-components';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import type { VisitRequest, VisitRow } from '@shared/types/visit-request';
 import { formatSameDayRange } from '@shared/utils/dates';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
+import type { MouseEvent } from 'react';
+import type { Column, UseSortByColumnOptions } from 'react-table';
+import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 export const HistoryItemListSize = 20;
 
 export const ACCOUNT_HISTORY_QUERY_PARAM_CONFIG = {
 	page: withDefault(NumberParam, 1),
 	orderProp: withDefault(StringParam, 'startAt'),
-	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
+	orderDirection: withDefault(SortDirectionParam, AvoSearchOrderDirection.DESC),
 };
 
 export const HistoryTableAccessComboId = 'account-history-from-to';

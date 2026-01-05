@@ -1,8 +1,7 @@
-import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
-
 import type { RelatedIeObjects } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const';
+import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
 
 export async function getIeObjectsRelated(
 	ieObjectIri: string | undefined,
@@ -22,16 +21,13 @@ export const useGetIeObjectsRelated = (
 	parentIeObjectIri: string | null,
 	options: { enabled?: boolean } = {}
 ): UseQueryResult<RelatedIeObjects> => {
-	return useQuery(
-		[QUERY_KEYS.getIeObjectsRelated, ieObjectIri, parentIeObjectIri],
-		() => getIeObjectsRelated(ieObjectIri, parentIeObjectIri),
-		{
-			keepPreviousData: true,
-			enabled: true,
-			cacheTime: 5 * 60 * 1000,
-			...options,
-		}
-	);
+	return useQuery({
+		queryKey: [QUERY_KEYS.getIeObjectsRelated, ieObjectIri, parentIeObjectIri],
+		queryFn: () => getIeObjectsRelated(ieObjectIri, parentIeObjectIri),
+		enabled: true,
+		staleTime: 5 * 60 * 1000,
+		...options,
+	});
 };
 
 export async function makeServerSideRequestGetIeObjectsRelated(
@@ -40,8 +36,8 @@ export async function makeServerSideRequestGetIeObjectsRelated(
 	maintainerId?: string,
 	meemooId?: string
 ): Promise<void> {
-	await queryClient.prefetchQuery(
-		[QUERY_KEYS.getIeObjectsRelated, id, maintainerId, meemooId],
-		() => getIeObjectsRelated('', null)
-	);
+	await queryClient.prefetchQuery({
+		queryKey: [QUERY_KEYS.getIeObjectsRelated, id, maintainerId, meemooId],
+		queryFn: () => getIeObjectsRelated('', null),
+	});
 }

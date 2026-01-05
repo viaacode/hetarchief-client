@@ -1,20 +1,13 @@
-import {
-	Dropdown,
-	DropdownButton,
-	DropdownContent,
-	OrderDirection,
-} from '@meemoo/react-components';
-import clsx from 'clsx';
-import { type FC, useState } from 'react';
-
+import { Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Overlay } from '@shared/components/Overlay';
-
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
+import clsx from 'clsx';
+import { type FC, useState } from 'react';
 import type { SearchSortProp } from '../../../types';
 import { FilterButton } from '../FilterButton';
 import styles from '../FilterMenu.module.scss';
 import { FilterSortList } from '../FilterSortList';
-
 import type { FilterSortProps } from './FilterSort.types';
 
 const FilterSort: FC<FilterSortProps> = ({
@@ -28,7 +21,7 @@ const FilterSort: FC<FilterSortProps> = ({
 
 	const onCloseDropdown = () => setSortOptionsOpen(false);
 
-	const handleOptionClick = (key: SearchSortProp, order?: OrderDirection) => {
+	const handleOptionClick = (key: SearchSortProp, order?: AvoSearchOrderDirection) => {
 		onOptionClick?.(key, order);
 		setSortOptionsOpen(false);
 	};
@@ -49,7 +42,7 @@ const FilterSort: FC<FilterSortProps> = ({
 							'u-bg-shade': !sortOptionsOpen,
 						})}
 						icon={
-							activeSort?.orderDirection === OrderDirection.desc
+							activeSort?.orderDirection === AvoSearchOrderDirection.DESC
 								? IconNamesLight.SortDown
 								: IconNamesLight.SortUp
 						}

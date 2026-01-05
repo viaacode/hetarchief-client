@@ -1,10 +1,6 @@
-import { Button } from '@meemoo/react-components';
-import type { Avo } from '@viaa/avo2-types';
-import Link from 'next/link';
-import React, { type FC, lazy, Suspense } from 'react';
-
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
+import { Button } from '@meemoo/react-components';
 import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
@@ -13,6 +9,9 @@ import { tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import type { AvoUserCommonUser } from '@viaa/avo2-types';
+import Link from 'next/link';
+import React, { type FC, lazy, Suspense } from 'react';
 
 const ContentPageOverview = lazy(() =>
 	import('@meemoo/admin-core-ui/admin').then((adminCoreModule) => ({
@@ -21,7 +20,7 @@ const ContentPageOverview = lazy(() =>
 );
 
 export const ContentPageOverviewPage: FC<
-	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined }
+	DefaultSeoInfo & { commonUser: AvoUserCommonUser | undefined }
 > = ({ url, canonicalUrl, commonUser }) => {
 	const locale = useLocale();
 	const canCreateContentPages = useHasAllPermission(Permission.CREATE_CONTENT_PAGES) || true; // TODO remove once permission is added to the database

@@ -1,9 +1,8 @@
 import { ContentPageService, type DbContentPage } from '@meemoo/admin-core-ui/client';
-import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
-import { startsWith } from 'lodash-es';
-
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import type { Locale } from '@shared/utils/i18n';
+import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
+import { startsWith } from 'lodash-es';
 
 export async function getContentPageByLanguageAndPath(
 	language: Locale,
@@ -32,11 +31,12 @@ export const useGetContentPageByLanguageAndPath = (
 	path: string | undefined,
 	options: { enabled?: boolean } = {}
 ): UseQueryResult<DbContentPage | null> => {
-	return useQuery(
-		[QUERY_KEYS.getContentPage, path, language],
-		() => getContentPageByLanguageAndPath(language, path),
-		{ enabled: true, ...options }
-	);
+	return useQuery({
+		queryKey: [QUERY_KEYS.getContentPage, path, language],
+		queryFn: () => getContentPageByLanguageAndPath(language, path),
+		enabled: true,
+		...options,
+	});
 };
 
 export async function makeServerSideRequestGetContentPageByLanguageAndPath(

@@ -2,13 +2,14 @@ import { GroupName } from '@account/const';
 import { selectIsLoggedIn } from '@auth/store/user';
 import type { User } from '@auth/types';
 import { IeObjectsService } from '@ie-objects/services';
-import { OrderDirection, type SelectOption } from '@meemoo/react-components';
+import type { SelectOption } from '@meemoo/react-components';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import withUser, { type UserProps } from '@shared/hooks/with-user';
 import { toastService } from '@shared/services/toast-service';
 import type { IeObjectsSearchFilter } from '@shared/types/ie-objects';
 import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitTimeframe } from '@visit-requests/types';
@@ -54,7 +55,7 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps & UserProps> = ({
 			page: 1,
 			size: 100,
 			orderProp: 'startAt',
-			orderDirection: OrderDirection.desc,
+			orderDirection: AvoSearchOrderDirection.DESC,
 			status: VisitStatus.APPROVED,
 			timeframe: VisitTimeframe.ACTIVE,
 			personal: true,

@@ -1,10 +1,4 @@
 import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { partition } from 'lodash-es';
-import Link from 'next/link';
-import { type FC, useState } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
-
 import { Blade } from '@shared/components/Blade/Blade';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -16,6 +10,11 @@ import {
 	NotificationStatus,
 } from '@shared/services/notifications-service/notifications.types';
 import { toastService } from '@shared/services/toast-service';
+import clsx from 'clsx';
+import { partition } from 'lodash-es';
+import Link from 'next/link';
+import { type FC, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Html from '../Html/Html';
 import { Icon } from '../Icon';
@@ -54,8 +53,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 		return notificationReadStatus[notification.id] || notification.status;
 	};
 
-	const notifications =
-		notificationResponse?.pages?.flatMap((notificationPage) => notificationPage.items) || [];
+	const notifications = notificationResponse?.items || [];
 
 	const [unread, read] = partition(
 		notifications,
@@ -217,7 +215,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 				className={styles['c-notification-center__infinite-scroll']}
 				dataLength={notifications?.length || 0}
 				next={() => fetchNextPage()}
-				hasMore={(notificationResponse?.pages[0].total || 0) > notifications.length}
+				hasMore={(notificationResponse?.total || 0) > notifications.length}
 				loader={
 					<Loading
 						className={styles['c-notification-center__infinite-scroll-loading']}

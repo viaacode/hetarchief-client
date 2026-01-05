@@ -1,6 +1,3 @@
-import type { Avo } from '@viaa/avo2-types';
-import React, { type FC, lazy, Suspense } from 'react';
-
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { Loading } from '@shared/components/Loading';
@@ -9,6 +6,8 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { formatDistanceTodayWithoutTime } from '@shared/utils/dates';
+import type { AvoUserCommonUser } from '@viaa/avo2-types';
+import React, { type FC, lazy, Suspense } from 'react';
 
 const UserOverview = lazy(() =>
 	import('@meemoo/admin-core-ui/admin').then((adminCoreModule) => ({
@@ -17,18 +16,15 @@ const UserOverview = lazy(() =>
 );
 
 export const UsersOverviewPage: FC<
-	DefaultSeoInfo & { commonUser: Avo.User.CommonUser | undefined }
-> = ({ url, canonicalUrl, commonUser }) => {
+	DefaultSeoInfo & { commonUser: AvoUserCommonUser | undefined }
+> = ({ url, canonicalUrl }) => {
 	const renderPageContent = () => {
 		return (
 			<AdminLayout pageTitle={tText('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')}>
 				<AdminLayout.Content>
 					<div className="l-container">
 						<Suspense fallback={<Loading fullscreen owner="UsersOverviewPage" />}>
-							<UserOverview
-								customFormatDate={formatDistanceTodayWithoutTime}
-								commonUser={commonUser as Avo.User.CommonUser}
-							/>
+							<UserOverview customFormatDate={formatDistanceTodayWithoutTime} />
 						</Suspense>
 					</div>
 				</AdminLayout.Content>
