@@ -1,84 +1,66 @@
 @use "../../../../styles/abstracts" as *;
 
-$component: "p-account-my-material-requests";
-
-.#{$component} {
+.p-account-my-material-requests {
 	&__table {
 		cursor: pointer;
 	}
 
 	&__title {
 		padding: 0 $spacer-lg;
-		margin-bottom: $spacer-1xl;
+		margin-bottom: 0;
 	}
 
-	&__maintainer {
-		padding: $spacer-sm $spacer-lg;
-		background-color: $platinum;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
+	&__content-wrapper {
+		> * {
+			border-bottom: 1px solid $silver;
 
-		&-details {
-			color: $neutral;
-			text-align: end;
-			font-size: $font-size-sm;
-		}
-
-		&-logo {
-			position: relative;
-			width: 8rem;
-			height: 5rem;
-		}
-	}
-
-	&__material {
-		padding: $spacer-md $spacer-lg;
-		border-bottom: 0.2rem solid $platinum;
-
-		&:focus,
-		&:focus-within {
-			outline: 0.2rem solid $teal;
-			outline-offset: -0.2rem;
-		}
-
-		&-link {
-			text-decoration: none;
-		}
-
-		&-label {
-			font-weight: $font-weight-bold;
-			margin-bottom: $spacer-xxs;
-
-			&-icon {
-				color: $blue;
-				margin-right: $spacer-xs;
+			&:last-child {
+				border-bottom: none;
 			}
-		}
-
-		&-id {
-			font-size: $font-size-sm;
-			color: $neutral;
-			overflow: hidden;
-			text-overflow: ellipsis;
 		}
 	}
 
 	&__content {
-		padding: $spacer-lg;
+		padding: 0 $spacer-md $spacer-sm;
 
-		dl {
-			margin-top: 0;
-		}
+		&-block {
+			padding: $spacer-sm 0;
+			display: flex;
+			flex-direction: column;
+			border-bottom: 1px solid $silver;
 
-		&-label {
-			font-weight: $font-weight-bold;
-			margin-bottom: $spacer-xs;
-		}
+			&:first-child {
+				padding-top: 0;
+			}
 
-		&-value {
-			margin-left: 0;
-			margin-bottom: $spacer-md;
+			&:last-child {
+				border-bottom: none;
+				padding-bottom: 0;
+			}
+
+			dt, dd {
+				margin: 0;
+			}
+
+			&-title {
+				font-size: $font-size-md;
+				line-height: $font-size-base;
+				font-weight: $font-weight-bold;
+				padding-bottom: $spacer-xs;
+			}
+
+			&-subtitle {
+				font-size: $font-size-base;
+				line-height: $font-size-lg;
+				padding-bottom: $spacer-xxs;
+			}
+
+			&-value {
+				color: $grey;
+				padding: 0;
+				font-size: $font-size-sm;
+				line-height: $font-size-base;
+			}
 		}
 	}
 
