@@ -38,6 +38,7 @@ import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
+import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorLayout } from '@visitor-layout/index';
@@ -59,6 +60,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	const hasOwnMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
 	const hasAnyMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_ANY_MATERIAL_REQUESTS);
 	const locale = useLocale();
+	const isKeyUser = useIsKeyUser();
 
 	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
 		currentMaterialRequest?.id || null
@@ -228,7 +230,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 			<Table<MaterialRequest>
 				className="u-mt-24 p-material-requests__table p-account-my-material-requests__table"
 				options={{
-					columns: getAccountMaterialRequestTableColumns(),
+					columns: getAccountMaterialRequestTableColumns(isKeyUser),
 					data: materialRequests?.items || [],
 					initialState: {
 						pageSize: ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
@@ -279,103 +281,105 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 						'u-text-center u-color-neutral u-py-48': isFetching || noData,
 					})}
 				>
-					<div className="l-container">
-						<div className="p-material-requests__header">
-							<div className={clsx('u-flex', 'u-flex-row', 'u-gap-sm')}>
-								<MultiSelect
-									variant="rounded"
-									label={tText('Type')}
-									options={typesList}
-									onChange={noop}
-									className={clsx(
-										'p-material-requests__dropdown',
-										'p-material-requests__dropdown-no-dividers'
-									)}
-									iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
-									iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-									iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-									checkboxHeader={tText('Type aanvraag')}
-									confirmOptions={{
-										label: tText('Pas toe'),
-										variants: ['black'],
-										onClick: setSelectedTypes,
-									}}
-									resetOptions={{
-										icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
-										label: tText('Reset'),
-										variants: ['text'],
-										onClick: setSelectedTypes,
-									}}
-								/>
+					{isKeyUser && (
+						<div className="l-container">
+							<div className="p-material-requests__header">
+								<div className={clsx('u-flex', 'u-flex-row', 'u-gap-sm')}>
+									<MultiSelect
+										variant="rounded"
+										label={tText('Type')}
+										options={typesList}
+										onChange={noop}
+										className={clsx(
+											'p-material-requests__dropdown',
+											'p-material-requests__dropdown-no-dividers'
+										)}
+										iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+										iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+										iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+										checkboxHeader={tText('Type aanvraag')}
+										confirmOptions={{
+											label: tText('Pas toe'),
+											variants: ['black'],
+											onClick: setSelectedTypes,
+										}}
+										resetOptions={{
+											icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+											label: tText('Reset'),
+											variants: ['text'],
+											onClick: setSelectedTypes,
+										}}
+									/>
 
-								<MultiSelect
-									variant="rounded"
-									label={tText('Status')}
-									options={statusList}
-									onChange={noop}
-									className={clsx(
-										'p-material-requests__dropdown',
-										'p-material-requests__dropdown-no-dividers'
-									)}
-									iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
-									iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-									iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-									checkboxHeader={tText('Status aanvraag')}
-									confirmOptions={{
-										label: tText('Pas toe'),
-										variants: ['black'],
-										onClick: setSelectedStatuses,
-									}}
-									resetOptions={{
-										icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
-										label: tText('Reset'),
-										variants: ['text'],
-										onClick: setSelectedStatuses,
-									}}
-								/>
+									<MultiSelect
+										variant="rounded"
+										label={tText('Status')}
+										options={statusList}
+										onChange={noop}
+										className={clsx(
+											'p-material-requests__dropdown',
+											'p-material-requests__dropdown-no-dividers'
+										)}
+										iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+										iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+										iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+										checkboxHeader={tText('Status aanvraag')}
+										confirmOptions={{
+											label: tText('Pas toe'),
+											variants: ['black'],
+											onClick: setSelectedStatuses,
+										}}
+										resetOptions={{
+											icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+											label: tText('Reset'),
+											variants: ['text'],
+											onClick: setSelectedStatuses,
+										}}
+									/>
 
-								<MultiSelect
-									variant="rounded"
-									label={tText('Download')}
-									options={downloadUrlList}
-									onChange={noop}
-									className={clsx(
-										'p-material-requests__dropdown',
-										'p-material-requests__dropdown-no-dividers'
-									)}
-									iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
-									iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-									iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-									checkboxHeader={tText('Aanvraag met download')}
-									confirmOptions={{
-										label: tText('Pas toe'),
-										variants: ['black'],
-										onClick: setSelectedDownloadFilters,
-									}}
-									resetOptions={{
-										icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
-										label: tText('Reset'),
-										variants: ['text'],
-										onClick: setSelectedDownloadFilters,
-									}}
+									<MultiSelect
+										variant="rounded"
+										label={tText('Download')}
+										options={downloadUrlList}
+										onChange={noop}
+										className={clsx(
+											'p-material-requests__dropdown',
+											'p-material-requests__dropdown-no-dividers'
+										)}
+										iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+										iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+										iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+										checkboxHeader={tText('Aanvraag met download')}
+										confirmOptions={{
+											label: tText('Pas toe'),
+											variants: ['black'],
+											onClick: setSelectedDownloadFilters,
+										}}
+										resetOptions={{
+											icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+											label: tText('Reset'),
+											variants: ['text'],
+											onClick: setSelectedDownloadFilters,
+										}}
+									/>
+								</div>
+
+								<SearchBar
+									id="materiaalaanvragen-searchbar"
+									value={search}
+									className="p-material-requests__searchbar"
+									placeholder={tText('Zoek')}
+									onChange={setSearch}
+									onSearch={(newValue) =>
+										setFilters({
+											[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: newValue,
+											page: 1,
+										})
+									}
 								/>
 							</div>
-
-							<SearchBar
-								id="materiaalaanvragen-searchbar"
-								value={search}
-								className="p-material-requests__searchbar"
-								placeholder={tText('Zoek')}
-								onChange={setSearch}
-								onSearch={(newValue) =>
-									setFilters({
-										[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: newValue,
-										page: 1,
-									})
-								}
-							/>
 						</div>
-					</div>
+					)}
 
 					{isFetching && <Loading owner="Material requests overview" fullscreen />}
 					{noData && renderEmptyMessage()}

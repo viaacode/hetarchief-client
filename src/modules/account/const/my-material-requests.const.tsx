@@ -89,21 +89,39 @@ export const GET_MATERIAL_REQUEST_DOWNLOAD_FILTER_ARRAY = (): {
 	},
 ];
 
-export const getAccountMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
-	{
-		Header: tText('modules/cp/const/material-requests___materiaal'),
-		accessor: MaterialRequestKeys.material,
-		Cell: ({ row: { original } }: MaterialRequestRow) => (
-			<span className="p-material-requests__table-titel-material">
-				<span className="p-material-requests__table-titel-material-name">
-					{original.objectSchemaName}
-				</span>
-				<span className="p-material-requests__table-titel-material-provider">
-					{original.maintainerName}
-				</span>
-			</span>
-		),
-	},
+export const getAccountMaterialRequestTableColumns = (
+	isKeyUser: boolean
+): Column<MaterialRequest>[] => [
+	...(isKeyUser
+		? [
+				{
+					Header: tText('modules/cp/const/material-requests___materiaal'),
+					accessor: MaterialRequestKeys.material,
+					Cell: ({ row: { original } }: MaterialRequestRow) => (
+						<span className="p-material-requests__table-titel-material">
+							<span className="p-material-requests__table-titel-material-name">
+								{original.objectSchemaName}
+							</span>
+							<span className="p-material-requests__table-titel-material-provider">
+								{original.maintainerName}
+							</span>
+						</span>
+					),
+				},
+			]
+		: [
+				{
+					Header: tText('modules/cp/const/material-requests___materiaal'),
+					accessor: MaterialRequestKeys.material,
+				},
+				{
+					Header: tText('modules/cp/const/material-requests___aanbieder'),
+					accessor: MaterialRequestKeys.maintainer,
+					Cell: ({ row: { original } }: MaterialRequestRow) => (
+						<span className="u-color-neutral">{original.maintainerName}</span>
+					),
+				},
+			]),
 	{
 		Header: tText('modules/cp/const/material-requests___aangevraagd-op'),
 		accessor: MaterialRequestKeys.requestedAt,
@@ -125,25 +143,29 @@ export const getAccountMaterialRequestTableColumns = (): Column<MaterialRequest>
 			</span>
 		),
 	},
-	{
-		Header: tText('modules/cp/const/material-requests___status'),
-		accessor: MaterialRequestKeys.status,
-		Cell: ({ row: { original } }: MaterialRequestRow) => (
-			<MaterialRequestStatusPill status={original.status} />
-		),
-	},
-	{
-		Header: tText('modules/cp/const/material-requests___download'),
-		accessor: MaterialRequestKeys.downloadUrl,
-		Cell: ({ row: { original } }: MaterialRequestRow) => (
-			<MaterialRequestDownloadButton materialRequest={original} />
-		),
-	},
-	{
-		Header: tText('modules/cp/const/material-requests___request-name'),
-		accessor: MaterialRequestKeys.requestName,
-		Cell: ({ row: { original } }: MaterialRequestRow) => (
-			<span className="u-color-neutral">{original.requestName}</span>
-		),
-	},
+	...(isKeyUser
+		? [
+				{
+					Header: tText('modules/cp/const/material-requests___status'),
+					accessor: MaterialRequestKeys.status,
+					Cell: ({ row: { original } }: MaterialRequestRow) => (
+						<MaterialRequestStatusPill status={original.status} />
+					),
+				},
+				{
+					Header: tText('modules/cp/const/material-requests___download'),
+					accessor: MaterialRequestKeys.downloadUrl,
+					Cell: ({ row: { original } }: MaterialRequestRow) => (
+						<MaterialRequestDownloadButton materialRequest={original} />
+					),
+				},
+				{
+					Header: tText('modules/cp/const/material-requests___request-name'),
+					accessor: MaterialRequestKeys.requestName,
+					Cell: ({ row: { original } }: MaterialRequestRow) => (
+						<span className="u-color-neutral">{original.requestName}</span>
+					),
+				},
+			]
+		: []),
 ];
