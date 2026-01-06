@@ -18,6 +18,8 @@ export enum QUERY_PARAM_KEY {
 	EXPAND_SIDEBAR = 'expandSidebar',
 	IIIF_VIEWER_TEXT_OVERLAY_ENABLED = 'textOverlay',
 	CONTENT_PAGE_PREVIEW = 'preview',
+	CUE_POINTS = 'cuepoints',
 }
 
 export const HIGHLIGHTED_SEARCH_TERMS_SEPARATOR = ',';
+export const CUE_POINTS_SEPARATOR = ',';

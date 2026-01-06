@@ -12,11 +12,15 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
+import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { asDate, formatLongDate } from '@shared/utils/dates';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
 import clsx from 'clsx';
+import { isNil } from 'lodash-es';
+import { stringifyUrl } from 'query-string';
 import React, { type FC, type ReactNode } from 'react';
 
 import styles from './MaterialRequestDetailBlade.module.scss';
@@ -33,6 +37,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	currentMaterialRequestDetail,
 }) => {
 	const locale = useLocale();
+	const isKeyUser = useIsKeyUser();
 
 	const renderFooter = () => {
 		return (
@@ -211,6 +216,18 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		);
 	};
 
+	const itemLink = stringifyUrl({
+		url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${currentMaterialRequestDetail.maintainerSlug}/${currentMaterialRequestDetail.objectSchemaIdentifier}`,
+		query: isNil(currentMaterialRequestDetail.reuseForm?.startTime)
+			? {}
+			: {
+					[QUERY_PARAM_KEY.CUE_POINTS]: [
+						currentMaterialRequestDetail.reuseForm?.startTime,
+						currentMaterialRequestDetail.reuseForm?.endTime,
+					].join(CUE_POINTS_SEPARATOR),
+				},
+	});
+
 	return (
 		<Blade
 			isOpen={isOpen}
@@ -234,12 +251,13 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			<div className={styles['p-account-my-material-requests__content-wrapper']}>
 				<div className={styles['p-account-my-material-requests__content']}>
 					<MaterialCard
+						openInNewTab={true}
 						objectId={currentMaterialRequestDetail.objectSchemaIdentifier}
 						title={currentMaterialRequestDetail.objectSchemaName}
 						thumbnail={currentMaterialRequestDetail.objectThumbnailUrl}
 						hideThumbnail={true}
 						orientation="vertical"
-						link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${currentMaterialRequestDetail.maintainerSlug}/${currentMaterialRequestDetail.objectSchemaIdentifier}`}
+						link={itemLink}
 						type={currentMaterialRequestDetail.objectDctermsFormat}
 						publishedBy={currentMaterialRequestDetail.maintainerName}
 						publishedOrCreatedDate={currentMaterialRequestDetail.objectPublishedOrCreatedDate}
