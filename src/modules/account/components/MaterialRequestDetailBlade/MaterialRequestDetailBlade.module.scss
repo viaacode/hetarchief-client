@@ -73,13 +73,4 @@
 	&__close-button-container {
 		padding: $spacer-lg;
 	}
-
-	&__close-button {
-		background-color: $black;
-		color: $white;
-
-		&:hover {
-			border: 0.1rem solid $zinc;
-		}
-	}
 }

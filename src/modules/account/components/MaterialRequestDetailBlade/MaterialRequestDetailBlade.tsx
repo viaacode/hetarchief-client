@@ -5,6 +5,7 @@ import {
 	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DOWNLOAD_QUALITY,
 	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE,
 } from '@material-requests/const';
+import { MaterialRequestsService } from '@material-requests/services';
 import {
 	GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD,
 	type MaterialRequestDetail,
@@ -13,22 +14,24 @@ import {
 } from '@material-requests/types';
 import { Button } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
+import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { tText } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { toastService } from '@shared/services/toast-service';
 import { asDate, formatLongDate } from '@shared/utils/dates';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
 import { default as NextLink } from 'next/link';
 import { stringifyUrl } from 'query-string';
-import React, { type FC, type ReactNode, useMemo } from 'react';
+import React, { type FC, type ReactNode, useMemo, useState } from 'react';
 
 import styles from './MaterialRequestDetailBlade.module.scss';
 
@@ -36,15 +39,19 @@ interface MaterialRequestDetailBladeProps {
 	isOpen: boolean;
 	onClose: () => void;
 	currentMaterialRequestDetail: MaterialRequestDetail;
+	refetchMaterialRequests?: () => void;
 }
 
 const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	isOpen,
 	onClose,
 	currentMaterialRequestDetail,
+	refetchMaterialRequests,
 }) => {
 	const locale = useLocale();
 	const isKeyUser = useIsKeyUser();
+
+	const [showConfirmModal, setShowConfirmModal] = useState(false);
 
 	const itemLink = useMemo(
 		() =>
@@ -62,6 +69,29 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		[currentMaterialRequestDetail, locale]
 	);
 
+	const onFailedRequest = () => {
+		toastService.notify({
+			maxLines: 3,
+			title: tText('Er ging iets mis'),
+			description: tText('Er ging iets mis tijdens het annuleren van de aanvraag'),
+		});
+	};
+
+	const onCancelRequest = async () => {
+		try {
+			setShowConfirmModal(false);
+			const response = await MaterialRequestsService.cancel(currentMaterialRequestDetail.id);
+			if (response === undefined) {
+				onFailedRequest();
+				return;
+			}
+			refetchMaterialRequests?.();
+			onClose();
+		} catch (_err) {
+			onFailedRequest();
+		}
+	};
+
 	const renderFooter = () => {
 		return (
 			<div className={styles['p-account-my-material-requests__close-button-container']}>
@@ -69,10 +99,16 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 					label={tText(
 						'modules/account/components/material-request-detail-blade/material-requests___sluit'
 					)}
-					variants={['block', 'text']}
+					variants={['block', 'black']}
 					onClick={onClose}
-					className={styles['p-account-my-material-requests__close-button']}
 				/>
+				{currentMaterialRequestDetail.status === MaterialRequestStatus.NEW && (
+					<Button
+						label={tText('Annuleer aanvraag')}
+						variants={['block', 'text']}
+						onClick={() => setShowConfirmModal(true)}
+					/>
+				)}
 			</div>
 		);
 	};
@@ -87,7 +123,10 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		}
 
 		return (
-			<dl className={styles['p-account-my-material-requests__content-block']}>
+			<dl
+				key={`material-request-content-block-${title}`}
+				className={styles['p-account-my-material-requests__content-block']}
+			>
 				{title && (
 					<dt className={styles['p-account-my-material-requests__content-block-title']}>{title}</dt>
 				)}
@@ -351,6 +390,18 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 					{renderReuseForm()}
 				</div>
 			</div>
+			<ConfirmationModal
+				text={{
+					yes: tHtml('Verder werken'),
+					no: tHtml('Ja, ik ben zeker'),
+					description: tHtml('Ben je zeker dat je deze aanvraag wil annuleren?'),
+				}}
+				fullWidthButtonWrapper
+				isOpen={showConfirmModal}
+				onClose={() => setShowConfirmModal(false)}
+				onCancel={onCancelRequest}
+				onConfirm={() => setShowConfirmModal(false)}
+			/>
 		</Blade>
 	);
 };

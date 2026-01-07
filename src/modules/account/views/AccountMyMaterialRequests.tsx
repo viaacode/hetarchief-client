@@ -71,7 +71,11 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
 		currentMaterialRequest?.id || null
 	);
-	const { data: materialRequests, isFetching } = useGetMaterialRequests({
+	const {
+		data: materialRequests,
+		refetch: refetchMaterialRequests,
+		isFetching,
+	} = useGetMaterialRequests({
 		isPersonal: true,
 		isPending: false,
 		size: ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
@@ -227,6 +231,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 				isOpen={!isLoading && isDetailBladeOpen}
 				onClose={() => setIsDetailBladeOpen(false)}
 				currentMaterialRequestDetail={currentMaterialRequestDetail}
+				refetchMaterialRequests={refetchMaterialRequests}
 			/>
 		);
 	};
