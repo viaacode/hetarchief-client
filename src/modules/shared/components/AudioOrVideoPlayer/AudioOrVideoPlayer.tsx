@@ -11,11 +11,12 @@ import type { IeObjectFile } from '@ie-objects/ie-objects.types';
 import { FlowPlayer, type FlowPlayerProps } from '@meemoo/react-components';
 import { Loading } from '@shared/components/Loading';
 import { getValidStartAndEnd } from '@shared/helpers/cut-start-and-end';
+import { useGetFileDuration } from '@shared/hooks/use-get-file-duration';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import { isNil } from 'lodash-es';
 import getConfig from 'next/config';
 import React, { type FC, useCallback, useEffect, useState } from 'react';
-import { convertDurationStringToSeconds, toSeconds } from '../../helpers/duration';
+import { convertDurationStringToSeconds } from '../../helpers/duration';
 import type { AudioOrVideoPlayerProps } from './AudioOrVideoPlayer.types';
 
 const { publicRuntimeConfig } = getConfig();
@@ -27,7 +28,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	onPlay,
 	onPause,
 	onMediaReady,
-	onMetadataLoaded,
+	onMediaDurationLoaded,
 	representation,
 	dctermsFormat,
 	maintainerLogo,
@@ -48,6 +49,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	);
 
 	const currentPlayableFile: IeObjectFile | null = allFilesToInRepresentation?.[0] || null;
+
 	const fileStoredAt: string | null = currentPlayableFile?.storedAt ?? null;
 	const {
 		data: playableUrl,
@@ -55,6 +57,12 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		isFetching: isFetchingPlayableUrl,
 		isError: isErrorPlayableUrl,
 	} = useGetIeObjectsTicketUrl(fileStoredAt, !!fileStoredAt);
+
+	const {
+		data: mediaDuration,
+		isLoading: isLoadingMediaDuration,
+		isError: isErrorMediaDuration,
+	} = useGetFileDuration(playableUrl);
 
 	useEffect(() => {
 		if (!isLoadingPlayableUrl && !isFetchingPlayableUrl) {
@@ -75,27 +83,32 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		onMediaReady,
 	]);
 
+	useEffect(() => {
+		if (!isLoadingMediaDuration && !isErrorMediaDuration) {
+			onMediaDurationLoaded?.(mediaDuration);
+		}
+	}, [mediaDuration, onMediaDurationLoaded, isLoadingMediaDuration, isErrorMediaDuration]);
+
 	// peak file
 	const peakFileStoredAt: string | null = getFilesByType(JSON_FORMATS)?.[0]?.storedAt || null;
 	const { data: peakJson, isLoading: isLoadingPeakFile } = useGetPeakFile(peakFileStoredAt, {
 		enabled: dctermsFormat === 'audio',
 	});
 
-	if (isLoadingPlayableUrl) {
+	if (isLoadingPlayableUrl || isLoadingMediaDuration) {
 		return <Loading fullscreen owner={`${owner}: render media`} mode="light" />;
 	}
 
-	if (isErrorPlayableUrl || !currentPlayableFile) {
+	if (isErrorPlayableUrl || !currentPlayableFile || isErrorMediaDuration) {
 		return <ObjectPlaceholder {...getTicketErrorPlaceholderLabels()} />;
 	}
 
 	const getStartAndEnd = () => {
-		const durationInSeconds = toSeconds(currentPlayableFile?.duration);
 		const mapTimeToNumber = (value: string | undefined) =>
 			value ? convertDurationStringToSeconds(value) : undefined;
 
 		let start = mapTimeToNumber(representation?.schemaStartTime) || 0;
-		let end = mapTimeToNumber(representation?.schemaEndTime) || durationInSeconds;
+		let end = mapTimeToNumber(representation?.schemaEndTime) || mediaDuration;
 
 		// Only cuepoints if there are any set and they do not fall outside the range of the video itself
 		if (cuePoints) {
@@ -103,16 +116,15 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 				start = cuePoints.start;
 			}
 
-			if (isNil(end) || (cuePoints.end && cuePoints.end < end && cuePoints.end > start)) {
+			if (
+				cuePoints.end &&
+				(isNil(end) || (cuePoints.end && cuePoints.end < end && cuePoints.end > start))
+			) {
 				end = cuePoints.end;
 			}
 		}
 
-		return getValidStartAndEnd(start, end, durationInSeconds);
-	};
-
-	const handleMetadataLoaded = (evt: Event) => {
-		onMetadataLoaded?.(evt);
+		return getValidStartAndEnd(start, end, mediaDuration);
 	};
 
 	const [start, end]: [number | null, number | null] = getStartAndEnd();
@@ -147,7 +159,6 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 				poster={poster || currentPlayableFile.thumbnailUrl}
 				renderLoader={() => <Loading owner="flowplayer suspense" fullscreen mode="light" />}
 				preload="metadata"
-				onMetadataLoaded={handleMetadataLoaded}
 				{...shared}
 			/>
 		);
@@ -169,7 +180,6 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 				]}
 				waveformData={peakJson?.data || undefined}
 				preload="metadata"
-				onMetadataLoaded={handleMetadataLoaded}
 				{...shared}
 			/>
 		);
