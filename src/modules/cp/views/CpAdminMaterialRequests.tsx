@@ -157,6 +157,9 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		tHtml('pages/beheer/materiaalaanvragen/index___geen-materiaal-aanvragen');
 
 	const renderDetailBlade = () => {
+		if (!currentMaterialRequestDetail) {
+			return null;
+		}
 		return (
 			<MaterialRequestDetailBlade
 				isOpen={!isLoading && isDetailBladeOpen}

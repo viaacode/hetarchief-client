@@ -165,6 +165,9 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	};
 
 	const renderDetailBlade = () => {
+		if (!currentMaterialRequestDetail) {
+			return null;
+		}
 		return (
 			<MaterialRequestDetailBlade
 				isOpen={!isLoading && isDetailBladeOpen}

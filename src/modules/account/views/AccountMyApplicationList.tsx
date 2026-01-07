@@ -1,37 +1,19 @@
 import ApplicationListSent from '@account/components/ApplicationListSent/ApplicationListSent';
 import PersonalInfo from '@account/components/PersonalInfo/PersonalInfo';
 import { Permission } from '@account/const';
+import { createLabelValuePairMaterialRequestReuseForm } from '@account/utils/create-label-value-material-request-reuse-form';
+import { formatCuePointsMaterialRequest } from '@account/utils/format-cuepoints-material-request';
 import {
-	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_COPYRIGHT,
-	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DISTRIBUTION_ACCESS,
-	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DISTRIBUTION_DIGITAL_ONLINE,
-	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DISTRIBUTION_TYPE,
 	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DOWNLOAD_QUALITY,
-	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_GEOGRAPHICAL_USAGE,
-	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_INTENDED_USAGE,
-	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_MATERIAL_EDITING,
-	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TIME_USAGE,
 	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE,
 } from '@material-requests/const';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import {
 	type MaterialRequest,
-	type MaterialRequestCopyrightDisplay,
-	type MaterialRequestDistributionAccess,
-	type MaterialRequestDistributionDigitalOnline,
-	type MaterialRequestDistributionType,
 	type MaterialRequestDownloadQuality,
-	type MaterialRequestEditing,
-	type MaterialRequestGeographicalUsage,
-	type MaterialRequestIntendedUsage,
 	MaterialRequestKeys,
-	MaterialRequestTimeUsage,
 } from '@material-requests/types';
-import {
-	formatDurationHoursMinutesSeconds,
-	formatDurationMinutesSeconds,
-	type OrderDirection,
-} from '@meemoo/react-components';
+import type { OrderDirection } from '@meemoo/react-components';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { Loading } from '@shared/components/Loading';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
@@ -48,10 +30,9 @@ import {
 	setShowMaterialRequestCenter,
 } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
-import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { VisitorLayout } from '@visitor-layout/index';
 import clsx from 'clsx';
-import { isEmpty, isNil } from 'lodash-es';
+import { isEmpty } from 'lodash-es';
 import { useRouter } from 'next/router';
 import { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
 import MaterialCard from '../../visitor-space/components/MaterialCard/MaterialCard';
@@ -128,10 +109,9 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 	};
 
 	const renderMaterialRequest = (materialRequest: MaterialRequest) => {
-		const materialRequestEntries: {
-			label: string;
-			value: ReactNode | string;
-		}[] = [];
+		let materialRequestEntries = createLabelValuePairMaterialRequestReuseForm(
+			materialRequest.reuseForm
+		);
 
 		if (!materialRequest.reuseForm) {
 			materialRequestEntries.push({
@@ -139,135 +119,20 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 				value: materialRequest.reason,
 			});
 		} else {
-			const formatTimeStamp = (value: number | undefined) => {
-				if (isNil(value)) return '';
-
-				if (value < 60 * 60) {
-					return formatDurationMinutesSeconds(value);
-				}
-				return formatDurationHoursMinutesSeconds(value);
-			};
-
-			materialRequestEntries.push({
-				label: tText('Materiaal selectie'),
-				value: `${formatTimeStamp(materialRequest.reuseForm.startTime)} - ${formatTimeStamp(materialRequest.reuseForm.endTime)}`,
-			});
-
-			materialRequestEntries.push({
-				label: tText('Downloadkwaliteit'),
-				value:
-					GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DOWNLOAD_QUALITY()[
-						materialRequest.reuseForm.downloadQuality as MaterialRequestDownloadQuality
-					],
-			});
-
-			materialRequestEntries.push({
-				label: tText('Bedoeld gebruik'),
-				value: (
-					<>
-						{
-							GET_MATERIAL_REQUEST_TRANSLATIONS_BY_INTENDED_USAGE()[
-								materialRequest.reuseForm.intendedUsage as MaterialRequestIntendedUsage
-							]
-						}
-						<br /> {materialRequest.reuseForm.intendedUsageDescription}
-					</>
-				),
-			});
-
-			materialRequestEntries.push({
-				label: tText('Ontsluiting materiaal'),
-				value:
-					GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DISTRIBUTION_ACCESS()[
-						materialRequest.reuseForm.distributionAccess as MaterialRequestDistributionAccess
-					],
-			});
-
-			materialRequestEntries.push({
-				label: tText('Type ontsluiting'),
-				value: (
-					<>
-						{
-							GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DISTRIBUTION_TYPE()[
-								materialRequest.reuseForm.distributionType as MaterialRequestDistributionType
-							]
-						}
-						{materialRequest.reuseForm.distributionTypeDigitalOnline && (
-							<>
-								<br />
-								{
-									GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DISTRIBUTION_DIGITAL_ONLINE()[
-										materialRequest.reuseForm
-											.distributionTypeDigitalOnline as MaterialRequestDistributionDigitalOnline
-									]
-								}
-							</>
-						)}
-						{materialRequest.reuseForm.distributionTypeOtherExplanation && (
-							<>
-								<br />
-								{materialRequest.reuseForm.distributionTypeOtherExplanation}
-							</>
-						)}
-					</>
-				),
-			});
-
-			materialRequestEntries.push({
-				label: tText('Wijzigingen'),
-				value:
-					GET_MATERIAL_REQUEST_TRANSLATIONS_BY_MATERIAL_EDITING()[
-						materialRequest.reuseForm.materialEditing as MaterialRequestEditing
-					],
-			});
-
-			materialRequestEntries.push({
-				label: tText('Geografisch hergebruik'),
-				value: (
-					<>
-						{
-							GET_MATERIAL_REQUEST_TRANSLATIONS_BY_GEOGRAPHICAL_USAGE()[
-								materialRequest.reuseForm.geographicalUsage as MaterialRequestGeographicalUsage
-							]
-						}
-						{materialRequest.reuseForm.geographicalUsageDescription && (
-							<>
-								<br />
-								{materialRequest.reuseForm.geographicalUsageDescription}
-							</>
-						)}
-					</>
-				),
-			});
-
-			materialRequestEntries.push({
-				label: tText('Gebruik doorheen de tijd'),
-				value: (
-					<>
-						{
-							GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TIME_USAGE()[
-								materialRequest.reuseForm.timeUsageType as MaterialRequestTimeUsage
-							]
-						}
-						{materialRequest.reuseForm.timeUsageType === MaterialRequestTimeUsage.IN_TIME && (
-							<>
-								{': '}
-								{formatMediumDate(asDate(materialRequest.reuseForm.timeUsageFrom))}
-								{' - '}
-								{formatMediumDate(asDate(materialRequest.reuseForm.timeUsageTo))}
-							</>
-						)}
-					</>
-				),
-			});
-
-			materialRequestEntries.push({
-				label: tText('Bronvermelding'),
-				value:
-					GET_MATERIAL_REQUEST_TRANSLATIONS_BY_COPYRIGHT()[
-						materialRequest.reuseForm.copyrightDisplay as MaterialRequestCopyrightDisplay
-					],
-			});
+			materialRequestEntries = [
+				{
+					label: tText('Materiaal selectie'),
+					value: formatCuePointsMaterialRequest(materialRequest.reuseForm),
+				},
+				{
+					label: tText('Downloadkwaliteit'),
+					value:
+						GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DOWNLOAD_QUALITY()[
+							materialRequest.reuseForm.downloadQuality as MaterialRequestDownloadQuality
+						],
+				},
+				...materialRequestEntries,
+			];
 		}
 
 		return (
