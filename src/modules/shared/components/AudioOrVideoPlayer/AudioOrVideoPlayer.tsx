@@ -12,6 +12,7 @@ import { FlowPlayer, type FlowPlayerProps } from '@meemoo/react-components';
 import { Loading } from '@shared/components/Loading';
 import { getValidStartAndEnd } from '@shared/helpers/cut-start-and-end';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
+import { isNil } from 'lodash-es';
 import getConfig from 'next/config';
 import React, { type FC, useCallback, useEffect, useState } from 'react';
 import { convertDurationStringToSeconds, toSeconds } from '../../helpers/duration';
@@ -93,9 +94,19 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		const mapTimeToNumber = (value: string | undefined) =>
 			value ? convertDurationStringToSeconds(value) : undefined;
 
-		const start = cuePoints?.start || mapTimeToNumber(representation?.schemaStartTime) || 0;
-		const end =
-			cuePoints?.end || mapTimeToNumber(representation?.schemaEndTime) || durationInSeconds;
+		let start = mapTimeToNumber(representation?.schemaStartTime) || 0;
+		let end = mapTimeToNumber(representation?.schemaEndTime) || durationInSeconds;
+
+		// Only cuepoints if there are any set and they do not fall outside the range of the video itself
+		if (cuePoints) {
+			if (cuePoints.start && cuePoints.start > start && (isNil(end) || cuePoints.start < end)) {
+				start = cuePoints.start;
+			}
+
+			if (isNil(end) || (cuePoints.end && cuePoints.end < end && cuePoints.end > start)) {
+				end = cuePoints.end;
+			}
+		}
 
 		return getValidStartAndEnd(start, end, durationInSeconds);
 	};

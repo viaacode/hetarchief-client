@@ -1,8 +1,14 @@
 import { MaterialRequestStatusPill } from '@account/components/MaterialRequestStatusPill';
-import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
+import { createLabelValuePairMaterialRequestReuseForm } from '@account/utils/create-label-value-material-request-reuse-form';
+import { formatCuePointsMaterialRequest } from '@account/utils/format-cuepoints-material-request';
+import {
+	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DOWNLOAD_QUALITY,
+	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE,
+} from '@material-requests/const';
 import {
 	GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD,
 	type MaterialRequestDetail,
+	type MaterialRequestDownloadQuality,
 	MaterialRequestStatus,
 } from '@material-requests/types';
 import { Button } from '@meemoo/react-components';
@@ -20,8 +26,9 @@ import { asDate, formatLongDate } from '@shared/utils/dates';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
+import { default as NextLink } from 'next/link';
 import { stringifyUrl } from 'query-string';
-import React, { type FC, type ReactNode } from 'react';
+import React, { type FC, type ReactNode, useMemo } from 'react';
 
 import styles from './MaterialRequestDetailBlade.module.scss';
 
@@ -38,6 +45,22 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 }) => {
 	const locale = useLocale();
 	const isKeyUser = useIsKeyUser();
+
+	const itemLink = useMemo(
+		() =>
+			stringifyUrl({
+				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${currentMaterialRequestDetail.maintainerSlug}/${currentMaterialRequestDetail.objectSchemaIdentifier}`,
+				query: isNil(currentMaterialRequestDetail.reuseForm?.endTime)
+					? {}
+					: {
+							[QUERY_PARAM_KEY.CUE_POINTS]: [
+								currentMaterialRequestDetail.reuseForm?.startTime,
+								currentMaterialRequestDetail.reuseForm?.endTime,
+							].join(CUE_POINTS_SEPARATOR),
+						},
+			}),
+		[currentMaterialRequestDetail, locale]
+	);
 
 	const renderFooter = () => {
 		return (
@@ -56,8 +79,8 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 
 	const renderContentBlock = (
 		title: string,
-		subtitle: ReactNode | undefined,
-		content: ReactNode | undefined
+		content: ReactNode | undefined,
+		subtitle?: ReactNode
 	) => {
 		if (!subtitle && !content) {
 			return null;
@@ -89,7 +112,6 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			return null;
 		}
 
-		// TODO: take into account if the download url has expired and ots date
 		const hasDownloadExpired = false;
 		const downloadExpirationDate =
 			currentMaterialRequestDetail.downloadUrl &&
@@ -194,39 +216,63 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		);
 	};
 
+	const renderMotivation = () => {
+		if (
+			currentMaterialRequestDetail.status !== MaterialRequestStatus.APPROVED &&
+			currentMaterialRequestDetail.status !== MaterialRequestStatus.DENIED
+		) {
+			return null;
+		}
+
+		return renderContentBlock(tText('Motivatie'), currentMaterialRequestDetail.statusMotivation);
+	};
+
+	const renderThumbnail = () => {
+		const { objectThumbnailUrl, reuseForm } = currentMaterialRequestDetail;
+
+		if (!reuseForm || !objectThumbnailUrl) {
+			return null;
+		}
+
+		return renderContentBlock(
+			tText('Fragment resolutie'),
+			<>
+				{formatCuePointsMaterialRequest(reuseForm)}
+				<br />
+				{
+					GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DOWNLOAD_QUALITY()[
+						reuseForm.downloadQuality as MaterialRequestDownloadQuality
+					]
+				}
+			</>,
+			<NextLink passHref href={itemLink} style={{ textDecoration: 'none' }} target="_blank">
+				{/** biome-ignore lint/performance/noImgElement: Thumbnail is needed here */}
+				<img
+					className={styles['p-account-my-material-requests__content-block-media']}
+					src={objectThumbnailUrl}
+					aria-hidden
+					alt=""
+				/>
+			</NextLink>
+		);
+	};
+
 	const renderReuseForm = () => {
 		if (!currentMaterialRequestDetail.reuseForm) {
 			return;
 		}
 
-		const { objectThumbnailUrl, reuseForm } = currentMaterialRequestDetail;
+		const materialRequestEntries = createLabelValuePairMaterialRequestReuseForm(
+			currentMaterialRequestDetail.reuseForm
+		);
 
 		return (
 			<>
-				{objectThumbnailUrl &&
-					renderContentBlock(
-						tText('Fragment resolutie'),
-						<div
-							className={styles['p-object-detail__media']}
-							style={{ backgroundImage: `url(${objectThumbnailUrl})` }}
-						></div>,
-						undefined
-					)}
+				{renderThumbnail()}
+				{materialRequestEntries.map(({ label, value }) => renderContentBlock(label, value))}
 			</>
 		);
 	};
-
-	const itemLink = stringifyUrl({
-		url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${currentMaterialRequestDetail.maintainerSlug}/${currentMaterialRequestDetail.objectSchemaIdentifier}`,
-		query: isNil(currentMaterialRequestDetail.reuseForm?.startTime)
-			? {}
-			: {
-					[QUERY_PARAM_KEY.CUE_POINTS]: [
-						currentMaterialRequestDetail.reuseForm?.startTime,
-						currentMaterialRequestDetail.reuseForm?.endTime,
-					].join(CUE_POINTS_SEPARATOR),
-				},
-	});
 
 	return (
 		<Blade
@@ -270,31 +316,33 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 
 				<div className={styles['p-account-my-material-requests__content']}>
 					{renderRequestStatus()}
+					{renderMotivation()}
 
-					{renderContentBlock(
-						tText('Naam aanvraag'),
-						undefined,
-						currentMaterialRequestDetail.requestName
-					)}
+					{renderContentBlock(tText('Naam aanvraag'), currentMaterialRequestDetail.requestName)}
 					{renderContentBlock(
 						tText('Aanvrager'),
-						currentMaterialRequestDetail.requesterFullName,
-						currentMaterialRequestDetail.requesterMail
+						currentMaterialRequestDetail.requesterMail,
+						currentMaterialRequestDetail.requesterFullName
 					)}
 					{renderContentBlock(
 						tText('Aanvragende organisatie'),
-						currentMaterialRequestDetail.organisation,
-						undefined
+						undefined,
+						currentMaterialRequestDetail.organisation
 					)}
+					{(!isKeyUser || !currentMaterialRequestDetail.reuseForm) &&
+						renderContentBlock(
+							tText(
+								'modules/account/components/material-request-detail-blade/material-requests___reden'
+							),
+							currentMaterialRequestDetail.reason || '-'
+						)}
 
-					{/** TODO: CHeck if the requester is a key user, in that case do not show this. Otherwise do show this */}
-					{!currentMaterialRequestDetail.reuseForm &&
+					{!isKeyUser &&
 						currentMaterialRequestDetail.requesterCapacity &&
 						renderContentBlock(
 							tText(
 								'modules/account/components/material-request-detail-blade/material-requests___hoedanigheid'
 							),
-							undefined,
 							GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD()[
 								currentMaterialRequestDetail.requesterCapacity
 							]
