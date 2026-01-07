@@ -54,13 +54,13 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
 	const [selectedTypes, setSelectedTypes] = useState<string[]>(
-		(filters[QUERY_PARAM_KEY.TYPE_QUERY_KEY] || []) as string[]
+		(filters[QUERY_PARAM_KEY.TYPE] || []) as string[]
 	);
 	const [selectedStatuses, setSelectedStatuses] = useState<string[]>(
-		(filters[QUERY_PARAM_KEY.STATUS_QUERY_KEY] || []) as string[]
+		(filters[QUERY_PARAM_KEY.STATUS] || []) as string[]
 	);
 	const [selectedDownloadFilters, setSelectedDownloadFilters] = useState<string[]>(
-		(filters[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL_QUERY_KEY] || []) as string[]
+		(filters[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL] || []) as string[]
 	);
 
 	const hasOwnMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);

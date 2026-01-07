@@ -20,12 +20,12 @@ export enum QUERY_PARAM_KEY {
 	CONTENT_PAGE_PREVIEW = 'preview',
 	CUE_POINTS = 'cuepoints',
 
-	TYPE_QUERY_KEY = 'type',
-	STATUS_QUERY_KEY = 'status',
-	HAS_DOWNLOAD_URL_QUERY_KEY = 'hasDownloadUrl',
-	ORDER_PROP_QUERY_KEY = 'orderProp',
-	ORDER_DIRECTION_QUERY_KEY = 'orderDirection',
-	PAGE_QUERY_KEY = 'page',
+	TYPE = 'type',
+	STATUS = 'status',
+	HAS_DOWNLOAD_URL = 'hasDownloadUrl',
+	ORDER_PROP = 'orderProp',
+	ORDER_DIRECTION = 'orderDirection',
+	PAGE = 'page',
 }
 
 export const HIGHLIGHTED_SEARCH_TERMS_SEPARATOR = ',';

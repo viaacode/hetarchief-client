@@ -48,13 +48,13 @@
 			display: flex;
 			flex-direction: column;
 
-			&-name{
+			&__name{
 				color: $black;
 				font-size: $font-size-base;
 				line-height: $font-size-md;
 			}
 
-			&-provider{
+			&__provider{
 				color: $neutral;
 				font-size: $font-size-sm;
 				line-height: $font-size-base;
