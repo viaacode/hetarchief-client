@@ -19,6 +19,13 @@ export enum QUERY_PARAM_KEY {
 	IIIF_VIEWER_TEXT_OVERLAY_ENABLED = 'textOverlay',
 	CONTENT_PAGE_PREVIEW = 'preview',
 	CUE_POINTS = 'cuepoints',
+
+	TYPE_QUERY_KEY = 'type',
+	STATUS_QUERY_KEY = 'status',
+	HAS_DOWNLOAD_URL_QUERY_KEY = 'hasDownloadUrl',
+	ORDER_PROP_QUERY_KEY = 'orderProp',
+	ORDER_DIRECTION_QUERY_KEY = 'orderDirection',
+	PAGE_QUERY_KEY = 'page',
 }
 
 export const HIGHLIGHTED_SEARCH_TERMS_SEPARATOR = ',';

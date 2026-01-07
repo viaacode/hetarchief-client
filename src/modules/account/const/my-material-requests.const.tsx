@@ -19,12 +19,12 @@ export const ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE = 20;
 
 export const ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
-	type: withDefault(ArrayParam, []),
-	status: withDefault(ArrayParam, []),
-	hasDownloadUrl: withDefault(ArrayParam, []),
-	orderProp: withDefault(StringParam, MaterialRequestKeys.requestedAt),
-	orderDirection: withDefault(SortDirectionParam, undefined),
-	page: withDefault(NumberParam, 1),
+	[QUERY_PARAM_KEY.TYPE_QUERY_KEY]: withDefault(ArrayParam, []),
+	[QUERY_PARAM_KEY.STATUS_QUERY_KEY]: withDefault(ArrayParam, []),
+	[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL_QUERY_KEY]: withDefault(ArrayParam, []),
+	[QUERY_PARAM_KEY.ORDER_PROP_QUERY_KEY]: withDefault(StringParam, MaterialRequestKeys.requestedAt),
+	[QUERY_PARAM_KEY.ORDER_DIRECTION_QUERY_KEY]: withDefault(SortDirectionParam, undefined),
+	[QUERY_PARAM_KEY.PAGE_QUERY_KEY]: withDefault(NumberParam, 1),
 };
 
 export const GET_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = (): {
