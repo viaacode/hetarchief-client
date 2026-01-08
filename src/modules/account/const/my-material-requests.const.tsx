@@ -19,12 +19,12 @@ export const ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE = 20;
 
 export const ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
-	[QUERY_PARAM_KEY.TYPE_QUERY_KEY]: withDefault(ArrayParam, []),
-	[QUERY_PARAM_KEY.STATUS_QUERY_KEY]: withDefault(ArrayParam, []),
-	[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL_QUERY_KEY]: withDefault(ArrayParam, []),
-	[QUERY_PARAM_KEY.ORDER_PROP_QUERY_KEY]: withDefault(StringParam, MaterialRequestKeys.requestedAt),
-	[QUERY_PARAM_KEY.ORDER_DIRECTION_QUERY_KEY]: withDefault(SortDirectionParam, undefined),
-	[QUERY_PARAM_KEY.PAGE_QUERY_KEY]: withDefault(NumberParam, 1),
+	[QUERY_PARAM_KEY.TYPE]: withDefault(ArrayParam, []),
+	[QUERY_PARAM_KEY.STATUS]: withDefault(ArrayParam, []),
+	[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL]: withDefault(ArrayParam, []),
+	[QUERY_PARAM_KEY.ORDER_PROP]: withDefault(StringParam, MaterialRequestKeys.requestedAt),
+	[QUERY_PARAM_KEY.ORDER_DIRECTION]: withDefault(SortDirectionParam, undefined),
+	[QUERY_PARAM_KEY.PAGE]: withDefault(NumberParam, 1),
 };
 
 export const GET_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = (): {
@@ -99,10 +99,10 @@ export const getAccountMaterialRequestTableColumns = (
 					accessor: MaterialRequestKeys.material,
 					Cell: ({ row: { original } }: MaterialRequestRow) => (
 						<span className="p-material-requests__table-titel-material">
-							<span className="p-material-requests__table-titel-material-name">
+							<span className="p-material-requests__table-titel-material__name">
 								{original.objectSchemaName}
 							</span>
-							<span className="p-material-requests__table-titel-material-provider">
+							<span className="p-material-requests__table-titel-material__provider">
 								{original.maintainerName}
 							</span>
 						</span>
