@@ -5,6 +5,7 @@ import {
 	GET_MATERIAL_REQUEST_DOWNLOAD_FILTER_ARRAY,
 	GET_MATERIAL_REQUEST_STATUS_FILTER_ARRAY,
 	GET_MATERIAL_REQUEST_TYPE_FILTER_ARRAY,
+	GroupName,
 	getAccountMaterialRequestTableColumns,
 	Permission,
 } from '@account/const';
@@ -37,6 +38,7 @@ import { sortingIcons } from '@shared/components/Table';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -67,6 +69,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	const hasAnyMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_ANY_MATERIAL_REQUESTS);
 	const locale = useLocale();
 	const isKeyUser = useIsKeyUser();
+	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
 
 	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
 		currentMaterialRequest?.id || null
@@ -256,23 +259,28 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		);
 	};
 
-	const renderPageTitle = () => (
-		<>
-			{tText('pages/account/mijn-profiel/index___mijn-materiaalaanvragen')}
-			{hasAnyMaterialRequestsPerm && (
-				<div className="u-color-neutral u-font-size-14 u-font-weight-400 u-pt-8">
-					<a
-						href={ROUTES_BY_LOCALE[locale].cpAdminMaterialRequests}
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						{tText('Ga naar de inkomende materiaalaanvragen van mijn organisatie')}
-					</a>
-					<Icon className="u-ml-8" name={IconNamesLight.Extern} />
-				</div>
-			)}
-		</>
-	);
+	const renderPageTitle = () => {
+		const incomingRequestLabel = isMeemooAdmin
+			? tText('Ga naar de alle materiaalaanvragen')
+			: tText('Ga naar de inkomende materiaalaanvragen van mijn organisatie');
+		const incomingRequestHyperlink = isMeemooAdmin
+			? ROUTES_BY_LOCALE[locale].adminMaterialRequests
+			: ROUTES_BY_LOCALE[locale].cpAdminMaterialRequests;
+
+		return (
+			<>
+				{tText('pages/account/mijn-profiel/index___mijn-materiaalaanvragen')}
+				{hasAnyMaterialRequestsPerm && (
+					<div className="u-color-neutral u-font-size-14 u-font-weight-400 u-pt-8">
+						<a href={incomingRequestHyperlink} target="_blank" rel="noopener noreferrer">
+							{incomingRequestLabel}
+						</a>
+						<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+					</div>
+				)}
+			</>
+		);
+	};
 
 	const renderPageContent = () => {
 		if (!hasOwnMaterialRequestsPerm) {

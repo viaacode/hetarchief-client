@@ -21,4 +21,5 @@ export interface User {
 	visitorSpaceSlug?: string;
 	permissions: Permission[];
 	isKeyUser: boolean;
+	isEvaluator: boolean;
 }
