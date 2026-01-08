@@ -81,7 +81,8 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 		dispatch(setShowFooter(true));
 	};
 
-	const renderEmptyMessage = (): ReactNode => tHtml('Geen aanvragen te vervolledigen');
+	const renderEmptyMessage = (): ReactNode =>
+		tHtml('modules/account/views/account-my-application-list___geen-aanvragen-te-vervolledigen');
 
 	const renderMaterialRequestEntry = (label: string, value: ReactNode | string) => {
 		return (
@@ -115,17 +116,17 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 
 		if (!materialRequest.reuseForm) {
 			materialRequestEntries.push({
-				label: tText('Reden van aanvraag'),
+				label: tText('modules/account/views/account-my-application-list___reden-van-aanvraag'),
 				value: materialRequest.reason,
 			});
 		} else {
 			materialRequestEntries = [
 				{
-					label: tText('Materiaal selectie'),
+					label: tText('modules/account/views/account-my-application-list___materiaal-selectie'),
 					value: formatCuePointsMaterialRequest(materialRequest.reuseForm),
 				},
 				{
-					label: tText('Downloadkwaliteit'),
+					label: tText('modules/account/views/account-my-application-list___downloadkwaliteit'),
 					value:
 						GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DOWNLOAD_QUALITY()[
 							materialRequest.reuseForm.downloadQuality as MaterialRequestDownloadQuality
@@ -195,7 +196,7 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 				<div>
 					<header className={clsx(styles['p-my-application-list__header'], 'l-container')}>
 						<h2 className={styles['p-my-application-list__page-title']}>
-							{tText('Aanvraaglijst')}
+							{tText('modules/account/views/account-my-application-list___aanvraaglijst')}
 							{materialRequests?.length > 0 && ` (${materialRequests.length})`}
 						</h2>
 					</header>
@@ -227,8 +228,12 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 	return (
 		<VisitorLayout>
 			<SeoTags
-				title={tText('Aanvraaglijst meta titel')}
-				description={tText('Aanvraaglijst meta omschrijving')}
+				title={tText(
+					'modules/account/views/account-my-application-list___aanvraaglijst-meta-titel'
+				)}
+				description={tText(
+					'modules/account/views/account-my-application-list___aanvraaglijst-meta-omschrijving'
+				)}
 				imgUrl={undefined}
 				translatedPages={[]}
 				relativeUrl={url}

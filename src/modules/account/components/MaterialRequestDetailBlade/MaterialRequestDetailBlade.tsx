@@ -72,8 +72,12 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	const onFailedRequest = () => {
 		toastService.notify({
 			maxLines: 3,
-			title: tText('Er ging iets mis'),
-			description: tText('Er ging iets mis tijdens het annuleren van de aanvraag'),
+			title: tText(
+				'modules/account/components/material-request-detail-blade/material-request-detail-blade___er-ging-iets-mis'
+			),
+			description: tText(
+				'modules/account/components/material-request-detail-blade/material-request-detail-blade___er-ging-iets-mis-tijdens-het-annuleren-van-de-aanvraag'
+			),
 		});
 	};
 
@@ -104,7 +108,9 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				/>
 				{currentMaterialRequestDetail.status === MaterialRequestStatus.NEW && (
 					<Button
-						label={tText('Annuleer aanvraag')}
+						label={tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag'
+						)}
 						variants={['block', 'text']}
 						onClick={() => setShowConfirmModal(true)}
 					/>
@@ -163,8 +169,12 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						className="u-mt-16"
 						label={
 							currentMaterialRequestDetail.downloadUrl
-								? tText('Downlooad materiaal')
-								: tText('Download in voorbereiding')
+								? tText(
+										'modules/account/components/material-request-detail-blade/material-request-detail-blade___downlooad-materiaal'
+									)
+								: tText(
+										'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-in-voorbereiding'
+									)
 						}
 						disabled={!currentMaterialRequestDetail.downloadUrl}
 						variants={['block']}
@@ -184,8 +194,14 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 					>
 						<Icon name={IconNamesLight.Exclamation} className="u-mr-4" />
 						{hasDownloadExpired
-							? tText('Download is verlopen op', { downloadExpirationDate })
-							: tText('Download is beschikbaar tot en met', { downloadExpirationDate })}
+							? tText(
+									'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-verlopen-op',
+									{ downloadExpirationDate }
+								)
+							: tText(
+									'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-beschikbaar-tot-en-met',
+									{ downloadExpirationDate }
+								)}
 					</span>
 				)}
 			</>
@@ -194,30 +210,44 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 
 	const renderRequestStatus = () => {
 		const formattedStatusDates = [
-			tText('Aangevraagd op', {
-				requestedAt: formatLongDate(
-					asDate(currentMaterialRequestDetail.requestedAt || currentMaterialRequestDetail.createdAt)
-				),
-			}),
+			tText(
+				'modules/account/components/material-request-detail-blade/material-request-detail-blade___aangevraagd-op',
+				{
+					requestedAt: formatLongDate(
+						asDate(
+							currentMaterialRequestDetail.requestedAt || currentMaterialRequestDetail.createdAt
+						)
+					),
+				}
+			),
 			...(currentMaterialRequestDetail.approvedAt
 				? [
-						tText('Goedgekeurd op', {
-							approvedAt: formatLongDate(asDate(currentMaterialRequestDetail.approvedAt)),
-						}),
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___goedgekeurd-op',
+							{
+								approvedAt: formatLongDate(asDate(currentMaterialRequestDetail.approvedAt)),
+							}
+						),
 					]
 				: []),
 			...(currentMaterialRequestDetail.deniedAt
 				? [
-						tText('Geweigerd op', {
-							deniedAt: formatLongDate(asDate(currentMaterialRequestDetail.deniedAt)),
-						}),
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___geweigerd-op',
+							{
+								deniedAt: formatLongDate(asDate(currentMaterialRequestDetail.deniedAt)),
+							}
+						),
 					]
 				: []),
 			...(currentMaterialRequestDetail.cancelledAt
 				? [
-						tText('Geannulleerd op', {
-							cancelledAt: formatLongDate(asDate(currentMaterialRequestDetail.cancelledAt)),
-						}),
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___geannulleerd-op',
+							{
+								cancelledAt: formatLongDate(asDate(currentMaterialRequestDetail.cancelledAt)),
+							}
+						),
 					]
 				: []),
 		];
@@ -263,7 +293,12 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			return null;
 		}
 
-		return renderContentBlock(tText('Motivatie'), currentMaterialRequestDetail.statusMotivation);
+		return renderContentBlock(
+			tText(
+				'modules/account/components/material-request-detail-blade/material-request-detail-blade___motivatie'
+			),
+			currentMaterialRequestDetail.statusMotivation
+		);
 	};
 
 	const renderThumbnail = () => {
@@ -274,7 +309,9 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		}
 
 		return renderContentBlock(
-			tText('Fragment resolutie'),
+			tText(
+				'modules/account/components/material-request-detail-blade/material-request-detail-blade___fragment-resolutie'
+			),
 			<>
 				{formatCuePointsMaterialRequest(reuseForm)}
 				<br />
@@ -357,14 +394,23 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 					{renderRequestStatus()}
 					{renderMotivation()}
 
-					{renderContentBlock(tText('Naam aanvraag'), currentMaterialRequestDetail.requestName)}
 					{renderContentBlock(
-						tText('Aanvrager'),
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
+						),
+						currentMaterialRequestDetail.requestName
+					)}
+					{renderContentBlock(
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvrager'
+						),
 						currentMaterialRequestDetail.requesterMail,
 						currentMaterialRequestDetail.requesterFullName
 					)}
 					{renderContentBlock(
-						tText('Aanvragende organisatie'),
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvragende-organisatie'
+						),
 						undefined,
 						currentMaterialRequestDetail.organisation
 					)}
@@ -392,9 +438,15 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			</div>
 			<ConfirmationModal
 				text={{
-					yes: tHtml('Verder werken'),
-					no: tHtml('Ja, ik ben zeker'),
-					description: tHtml('Ben je zeker dat je deze aanvraag wil annuleren?'),
+					yes: tHtml(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___verder-werken'
+					),
+					no: tHtml(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___ja-ik-ben-zeker'
+					),
+					description: tHtml(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___ben-je-zeker-dat-je-deze-aanvraag-wil-annuleren'
+					),
 				}}
 				fullWidthButtonWrapper
 				isOpen={showConfirmModal}

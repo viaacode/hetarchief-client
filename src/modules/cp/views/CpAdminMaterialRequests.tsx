@@ -203,7 +203,9 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 					target="_blank"
 					rel="noopener noreferrer"
 				>
-					{tText('Ga naar mijn uitgaande materiaalaanvragen')}
+					{tText(
+						'modules/cp/views/cp-admin-material-requests___ga-naar-mijn-uitgaande-materiaalaanvragen'
+					)}
 				</a>
 				<Icon className="u-ml-8" name={IconNamesLight.Extern} />
 			</div>

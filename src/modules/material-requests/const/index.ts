@@ -33,46 +33,70 @@ export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_STATUS = (): Record<
 	MaterialRequestStatus,
 	string
 > => ({
-	[MaterialRequestStatus.NEW]: tText('status-new'),
-	[MaterialRequestStatus.PENDING]: tText('status-pending'),
-	[MaterialRequestStatus.APPROVED]: tText('status-approved'),
-	[MaterialRequestStatus.DENIED]: tText('status-denied'),
-	[MaterialRequestStatus.CANCELLED]: tText('status-cancelled'),
-	[MaterialRequestStatus.NONE]: tText('status-none'),
+	[MaterialRequestStatus.NEW]: tText('modules/material-requests/const/index___status-new'),
+	[MaterialRequestStatus.PENDING]: tText('modules/material-requests/const/index___status-pending'),
+	[MaterialRequestStatus.APPROVED]: tText(
+		'modules/material-requests/const/index___status-approved'
+	),
+	[MaterialRequestStatus.DENIED]: tText('modules/material-requests/const/index___status-denied'),
+	[MaterialRequestStatus.CANCELLED]: tText(
+		'modules/material-requests/const/index___status-cancelled'
+	),
+	[MaterialRequestStatus.NONE]: tText('modules/material-requests/const/index___status-none'),
 });
 
 export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DOWNLOAD_QUALITY = (): Record<
 	MaterialRequestDownloadQuality,
 	string
 > => ({
-	[MaterialRequestDownloadQuality.NORMAL]: tText('download-quality-normal'),
-	[MaterialRequestDownloadQuality.HIGH]: tText('download-quality-high'),
+	[MaterialRequestDownloadQuality.NORMAL]: tText(
+		'modules/material-requests/const/index___download-quality-normal'
+	),
+	[MaterialRequestDownloadQuality.HIGH]: tText(
+		'modules/material-requests/const/index___download-quality-high'
+	),
 });
 
 export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_INTENDED_USAGE = (): Record<
 	MaterialRequestIntendedUsage,
 	string
 > => ({
-	[MaterialRequestIntendedUsage.INTERN]: tText('intended-usage-intern'),
-	[MaterialRequestIntendedUsage.NON_COMMERCIAL]: tText('intended-usage-non-commercial'),
-	[MaterialRequestIntendedUsage.COMMERCIAL]: tText('intended-usage-commercial'),
+	[MaterialRequestIntendedUsage.INTERN]: tText(
+		'modules/material-requests/const/index___intended-usage-intern'
+	),
+	[MaterialRequestIntendedUsage.NON_COMMERCIAL]: tText(
+		'modules/material-requests/const/index___intended-usage-non-commercial'
+	),
+	[MaterialRequestIntendedUsage.COMMERCIAL]: tText(
+		'modules/material-requests/const/index___intended-usage-commercial'
+	),
 });
 
 export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DISTRIBUTION_ACCESS = (): Record<
 	MaterialRequestDistributionAccess,
 	string
 > => ({
-	[MaterialRequestDistributionAccess.INTERN]: tText('distribution-access-intern'),
-	[MaterialRequestDistributionAccess.INTERN_EXTERN]: tText('distribution-access-intern-extern'),
+	[MaterialRequestDistributionAccess.INTERN]: tText(
+		'modules/material-requests/const/index___distribution-access-intern'
+	),
+	[MaterialRequestDistributionAccess.INTERN_EXTERN]: tText(
+		'modules/material-requests/const/index___distribution-access-intern-extern'
+	),
 });
 
 export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DISTRIBUTION_TYPE = (): Record<
 	MaterialRequestDistributionType,
 	string
 > => ({
-	[MaterialRequestDistributionType.DIGITAL_OFFLINE]: tText('distribution-type-digital-offline'),
-	[MaterialRequestDistributionType.DIGITAL_ONLINE]: tText('distribution-type-digital-online'),
-	[MaterialRequestDistributionType.OTHER]: tText('distribution-type-other'),
+	[MaterialRequestDistributionType.DIGITAL_OFFLINE]: tText(
+		'modules/material-requests/const/index___distribution-type-digital-offline'
+	),
+	[MaterialRequestDistributionType.DIGITAL_ONLINE]: tText(
+		'modules/material-requests/const/index___distribution-type-digital-online'
+	),
+	[MaterialRequestDistributionType.OTHER]: tText(
+		'modules/material-requests/const/index___distribution-type-other'
+	),
 });
 
 export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DISTRIBUTION_DIGITAL_ONLINE = (): Record<
@@ -80,11 +104,13 @@ export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DISTRIBUTION_DIGITAL_ONLINE = 
 	string
 > => ({
 	[MaterialRequestDistributionDigitalOnline.INTERNAL]: tText(
-		'distribution-digital-online-internal'
+		'modules/material-requests/const/index___distribution-digital-online-internal'
 	),
-	[MaterialRequestDistributionDigitalOnline.NO_AUTH]: tText('distribution-digital-online-no-auth'),
+	[MaterialRequestDistributionDigitalOnline.NO_AUTH]: tText(
+		'modules/material-requests/const/index___distribution-digital-online-no-auth'
+	),
 	[MaterialRequestDistributionDigitalOnline.WITH_AUTH]: tText(
-		'distribution-digital-online-with-auth'
+		'modules/material-requests/const/index___distribution-digital-online-with-auth'
 	),
 });
 
@@ -92,17 +118,23 @@ export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_MATERIAL_EDITING = (): Record<
 	MaterialRequestEditing,
 	string
 > => ({
-	[MaterialRequestEditing.NONE]: tText('material-request-editing-none'),
-	[MaterialRequestEditing.WITH_CHANGES]: tText('material-request-editing-with-changes'),
+	[MaterialRequestEditing.NONE]: tText(
+		'modules/material-requests/const/index___material-request-editing-none'
+	),
+	[MaterialRequestEditing.WITH_CHANGES]: tText(
+		'modules/material-requests/const/index___material-request-editing-with-changes'
+	),
 });
 
 export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_GEOGRAPHICAL_USAGE = (): Record<
 	MaterialRequestGeographicalUsage,
 	string
 > => ({
-	[MaterialRequestGeographicalUsage.COMPLETELY_LOCAL]: tText('geographical-usage-completely-local'),
+	[MaterialRequestGeographicalUsage.COMPLETELY_LOCAL]: tText(
+		'modules/material-requests/const/index___geographical-usage-completely-local'
+	),
 	[MaterialRequestGeographicalUsage.NOT_COMPLETELY_LOCAL]: tText(
-		'geographical-usage-not-completely-local'
+		'modules/material-requests/const/index___geographical-usage-not-completely-local'
 	),
 });
 
@@ -110,8 +142,12 @@ export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TIME_USAGE = (): Record<
 	MaterialRequestTimeUsage,
 	string
 > => ({
-	[MaterialRequestTimeUsage.UNLIMITED]: tText('time-usage-unlimited'),
-	[MaterialRequestTimeUsage.IN_TIME]: tText('time-usage-in-time'),
+	[MaterialRequestTimeUsage.UNLIMITED]: tText(
+		'modules/material-requests/const/index___time-usage-unlimited'
+	),
+	[MaterialRequestTimeUsage.IN_TIME]: tText(
+		'modules/material-requests/const/index___time-usage-in-time'
+	),
 });
 
 export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_COPYRIGHT = (): Record<
@@ -119,10 +155,14 @@ export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_COPYRIGHT = (): Record<
 	string
 > => ({
 	[MaterialRequestCopyrightDisplay.SAME_TIME_WITH_OBJECT]: tText(
-		'copyright-display-same-time-with-object'
+		'modules/material-requests/const/index___copyright-display-same-time-with-object'
 	),
-	[MaterialRequestCopyrightDisplay.AROUND_OBJECT]: tText('copyright-display-around-object'),
-	[MaterialRequestCopyrightDisplay.NONE]: tText('copyright-display-none'),
+	[MaterialRequestCopyrightDisplay.AROUND_OBJECT]: tText(
+		'modules/material-requests/const/index___copyright-display-around-object'
+	),
+	[MaterialRequestCopyrightDisplay.NONE]: tText(
+		'modules/material-requests/const/index___copyright-display-none'
+	),
 });
 
 export const GET_BLANK_MATERIAL_REQUEST_REUSE_FORM = (): MaterialRequestReuseForm => ({

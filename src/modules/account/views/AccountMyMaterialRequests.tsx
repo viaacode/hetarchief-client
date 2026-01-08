@@ -261,8 +261,12 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 
 	const renderPageTitle = () => {
 		const incomingRequestLabel = isMeemooAdmin
-			? tText('Ga naar de alle materiaalaanvragen')
-			: tText('Ga naar de inkomende materiaalaanvragen van mijn organisatie');
+			? tText(
+					'modules/account/views/account-my-material-requests___ga-naar-de-alle-materiaalaanvragen'
+				)
+			: tText(
+					'modules/account/views/account-my-material-requests___ga-naar-de-inkomende-materiaalaanvragen-van-mijn-organisatie'
+				);
 		const incomingRequestHyperlink = isMeemooAdmin
 			? ROUTES_BY_LOCALE[locale].adminMaterialRequests
 			: ROUTES_BY_LOCALE[locale].cpAdminMaterialRequests;
@@ -306,7 +310,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 								<div className={clsx('u-flex', 'u-flex-row', 'u-gap-sm')}>
 									<MultiSelect
 										variant="rounded"
-										label={tText('Type')}
+										label={tText('modules/account/views/account-my-material-requests___type')}
 										options={typesList}
 										onChange={noop}
 										className={clsx(
@@ -316,15 +320,17 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 										iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
 										iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 										iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-										checkboxHeader={tText('Type aanvraag')}
+										checkboxHeader={tText(
+											'modules/account/views/account-my-material-requests___type-aanvraag'
+										)}
 										confirmOptions={{
-											label: tText('Pas toe'),
+											label: tText('modules/account/views/account-my-material-requests___pas-toe'),
 											variants: ['black'],
 											onClick: setSelectedTypes,
 										}}
 										resetOptions={{
 											icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
-											label: tText('Reset'),
+											label: tText('modules/account/views/account-my-material-requests___reset'),
 											variants: ['text'],
 											onClick: setSelectedTypes,
 										}}
@@ -332,7 +338,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 
 									<MultiSelect
 										variant="rounded"
-										label={tText('Status')}
+										label={tText('modules/account/views/account-my-material-requests___status')}
 										options={statusList}
 										onChange={noop}
 										className={clsx(
@@ -342,15 +348,17 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 										iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
 										iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 										iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-										checkboxHeader={tText('Status aanvraag')}
+										checkboxHeader={tText(
+											'modules/account/views/account-my-material-requests___status-aanvraag'
+										)}
 										confirmOptions={{
-											label: tText('Pas toe'),
+											label: tText('modules/account/views/account-my-material-requests___pas-toe'),
 											variants: ['black'],
 											onClick: setSelectedStatuses,
 										}}
 										resetOptions={{
 											icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
-											label: tText('Reset'),
+											label: tText('modules/account/views/account-my-material-requests___reset'),
 											variants: ['text'],
 											onClick: setSelectedStatuses,
 										}}
@@ -358,7 +366,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 
 									<MultiSelect
 										variant="rounded"
-										label={tText('Download')}
+										label={tText('modules/account/views/account-my-material-requests___download')}
 										options={downloadUrlList}
 										onChange={noop}
 										className={clsx(
@@ -368,15 +376,17 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 										iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
 										iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 										iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-										checkboxHeader={tText('Aanvraag met download')}
+										checkboxHeader={tText(
+											'modules/account/views/account-my-material-requests___aanvraag-met-download'
+										)}
 										confirmOptions={{
-											label: tText('Pas toe'),
+											label: tText('modules/account/views/account-my-material-requests___pas-toe'),
 											variants: ['black'],
 											onClick: setSelectedDownloadFilters,
 										}}
 										resetOptions={{
 											icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
-											label: tText('Reset'),
+											label: tText('modules/account/views/account-my-material-requests___reset'),
 											variants: ['text'],
 											onClick: setSelectedDownloadFilters,
 										}}
@@ -387,7 +397,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 									id="materiaalaanvragen-searchbar"
 									value={search}
 									className="p-material-requests__searchbar"
-									placeholder={tText('Zoek')}
+									placeholder={tText('modules/account/views/account-my-material-requests___zoek')}
 									onChange={setSearch}
 									onSearch={(newValue) =>
 										setFilters({
