@@ -10,6 +10,7 @@ export interface MaterialRequest {
 	createdAt: string;
 	id: string;
 	isPending: boolean;
+	status: MaterialRequestStatus;
 	maintainerId: string;
 	maintainerLogo: string;
 	maintainerName: string;
@@ -33,7 +34,14 @@ export interface MaterialRequest {
 	type: MaterialRequestType;
 	reuseForm?: MaterialRequestReuseForm;
 	updatedAt: string;
+	requestedAt: string;
+	approvedAt: string;
+	deniedAt: string;
+	cancelledAt: string;
+	statusMotivation?: string;
 	organisation?: string;
+	requestName: string | null;
+	downloadUrl: string | null;
 }
 
 export interface MaterialRequestReuseForm {
@@ -84,12 +92,22 @@ export interface MaterialRequestUpdate {
 export interface MaterialRequestSendAll {
 	type: MaterialRequestRequesterCapacity;
 	organisation?: string;
+	requestName?: string;
 }
 
 export enum MaterialRequestType {
 	REUSE = 'REUSE',
 	MORE_INFO = 'MORE_INFO',
 	VIEW = 'VIEW',
+}
+
+export enum MaterialRequestStatus {
+	NEW = 'NEW',
+	PENDING = 'PENDING',
+	APPROVED = 'APPROVED',
+	DENIED = 'DENIED',
+	CANCELLED = 'CANCELLED',
+	NONE = 'NONE',
 }
 
 export enum MaterialRequestRequesterCapacity {
@@ -133,8 +151,11 @@ export interface MaterialRequestMaintainer {
 
 export enum MaterialRequestKeys {
 	createdAt = 'createdAt',
-	updatedAt = 'updatedAt',
+	requestedAt = 'requestedAt',
 	type = 'type',
+	status = 'status',
+	downloadUrl = 'downloadUrl',
+	requestName = 'requestName',
 	name = 'requesterFullName',
 	email = 'requesterMail',
 	maintainer = 'maintainerName',

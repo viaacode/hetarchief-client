@@ -18,6 +18,8 @@ export abstract class MaterialRequestsService {
 	public static async getAll({
 		search,
 		type,
+		status,
+		hasDownloadUrl,
 		maintainerIds,
 		isPending,
 		page,
@@ -35,6 +37,8 @@ export abstract class MaterialRequestsService {
 					query: {
 						...(search?.trim() ? { query: `%${search}%` } : {}),
 						...(type && { type }),
+						...(status && { status }),
+						...(hasDownloadUrl && { hasDownloadUrl }),
 						...(maintainerIds && { maintainerIds }),
 						...(!isNil(isPending) && { isPending }),
 						...(page && { page }),
@@ -71,6 +75,10 @@ export abstract class MaterialRequestsService {
 		return ApiService.getApi()
 			.patch(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}`, { json })
 			.json();
+	}
+
+	public static async cancel(id: string): Promise<MaterialRequestDetail | null> {
+		return ApiService.getApi().post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}/cancel`).json();
 	}
 
 	public static async delete(id: string | null): Promise<MaterialRequestDetail | null> {

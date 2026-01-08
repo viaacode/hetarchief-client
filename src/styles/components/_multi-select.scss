@@ -1,16 +1,33 @@
 @use "src/styles/abstracts" as *;
 
-$component: "c-multi-select";
-
-.#{$component} {
+.c-multi-select {
 	&__dropdown {
 		width: 100%;
 	}
 
-	&__checkbox-list {
+	&__header {
+		width: 100%;
+		background-color: $white;
+		padding: $spacer-sm $spacer-sm $spacer-sm $spacer-sm + $spacer-xs;
+		color: $neutral;
+		font-size: $font-size-sm;
+	}
+
+	&__footer {
+		width: 100%;
+		background-color: $white;
+		padding: $spacer-xs;
+		gap: $spacer-xs;
+	}
+
+	&__content-wrapper {
 		@extend %reset-list;
 
 		box-shadow: $shadow-24-black-08;
+	}
+
+	&__checkbox-list {
+		@extend %reset-list;
 
 		&-item {
 			border-top: 0.1rem solid $zinc;

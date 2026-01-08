@@ -30,8 +30,10 @@ import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsChe
 import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import clsx from 'clsx';
 import { isEmpty, isNil, without } from 'lodash-es';
@@ -45,6 +47,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 
 	const user = useSelector(selectUser);
+	const locale = useLocale();
 
 	const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
@@ -154,6 +157,9 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		tHtml('pages/beheer/materiaalaanvragen/index___geen-materiaal-aanvragen');
 
 	const renderDetailBlade = () => {
+		if (!currentMaterialRequestDetail) {
+			return null;
+		}
 		return (
 			<MaterialRequestDetailBlade
 				isOpen={!isLoading && isDetailBladeOpen}
@@ -188,12 +194,25 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		);
 	};
 
+	const renderPageTitle = () => (
+		<>
+			{tText('pages/beheer/materiaalaanvragen/index___materiaalaanvragen')}
+			<div className="u-color-neutral u-font-size-14 u-font-weight-400 u-pt-8">
+				<a
+					href={ROUTES_BY_LOCALE[locale].accountMyMaterialRequests}
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					{tText('Ga naar mijn uitgaande materiaalaanvragen')}
+				</a>
+				<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+			</div>
+		</>
+	);
+
 	const renderPageContent = () => {
 		return (
-			<CPAdminLayout
-				className="p-material-requests"
-				pageTitle={tText('pages/beheer/materiaalaanvragen/index___materiaalaanvragen')}
-			>
+			<CPAdminLayout className="p-material-requests" pageTitle={renderPageTitle()}>
 				<div className="l-container">
 					<div className="p-material-requests__header">
 						<MultiSelect

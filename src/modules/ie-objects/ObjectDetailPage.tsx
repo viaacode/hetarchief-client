@@ -60,10 +60,10 @@ import {
 import { IiifViewer } from '@iiif-viewer/IiifViewer';
 import type { ImageInfo, ImageInfoWithToken, Rect, TextLine } from '@iiif-viewer/IiifViewer.types';
 import { GET_BLANK_MATERIAL_REQUEST_REUSE_FORM } from '@material-requests/const';
-import { MaterialRequestsService } from '@material-requests/services';
 import type { MaterialRequest } from '@material-requests/types';
 import { Alert, Button, type TabProps, Tabs } from '@meemoo/react-components';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
+import type { CuePoints } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer.types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
@@ -75,6 +75,7 @@ import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import {
+	CUE_POINTS_SEPARATOR,
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
@@ -239,6 +240,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	);
 	const [isTextOverlayVisible, setIsTextOverlayVisible] = useState(false);
 	const [activeTab, setActiveTab] = useState<ObjectDetailTabs>(ObjectDetailTabs.Metadata);
+	const [cuePoints, setCuePoints] = useState<CuePoints | undefined>(undefined);
 
 	const [activeMentionHighlights, setActiveMentionHighlights] = useState<{
 		pageIndex: number;
@@ -610,6 +612,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		}
 		if (isTextOverlayVisibleFromUrl) {
 			setIsTextOverlayVisible(isTextOverlayVisibleFromUrl === 'true');
+		}
+
+		const cuePointsFromUrl = parsedUrl.query[QUERY_PARAM_KEY.CUE_POINTS] || '';
+		const cuePointsArray = (cuePointsFromUrl as string)?.split(CUE_POINTS_SEPARATOR);
+		if (cuePointsArray?.length > 0) {
+			setCuePoints({
+				start: Number.parseFloat(cuePointsArray[0]),
+				end: Number.parseFloat(cuePointsArray[1]),
+			});
 		}
 	}, []);
 
@@ -1066,18 +1077,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		setActiveBlade(null, 'replaceIn');
 	};
 
-	const onDuplicateRequest = () => {
-		toastService.notify({
-			maxLines: 3,
-			title: tText(
-				'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst'
-			),
-			description: tText(
-				'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst-beschrijving'
-			),
-		});
-	};
-
 	const openRequestAccessBlade = () => {
 		if (user) {
 			// Open the request access blade
@@ -1133,18 +1132,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			// The external url is opened with an actual link, so safari doesn't block the popup
 			window.open(externalFormUrl, '_blank');
 			return;
-		}
-
-		if (!user?.isKeyUser) {
-			// Key users are allowed to create multiple items and the duplicate validation will be made later in the flow
-			const requestsForItem = await MaterialRequestsService.forMediaItem(
-				mediaInfo?.schemaIdentifier
-			);
-
-			if (requestsForItem.length) {
-				onDuplicateRequest();
-				return;
-			}
 		}
 
 		setActiveBlade(MediaActions.RequestMaterial, 'replaceIn');
@@ -1454,7 +1441,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				representation={getRepresentationByCurrentFileIndex()}
 				dctermsFormat={mediaInfo.dctermsFormat}
 				maintainerLogo={mediaInfo?.maintainerOverlay ? mediaInfo.maintainerLogo : undefined}
-				cuePoints={undefined}
+				cuePoints={cuePoints}
 				poster={undefined}
 				paused={isMediaPaused}
 				onPlay={handleOnPlay}
@@ -1870,22 +1857,22 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				/>
 			)}
 			{mediaInfo && !isKiosk && (
-				<MaterialRequestBlade
-					isOpen={activeBlade === MediaActions.RequestMaterial}
-					onClose={onCloseBlade}
-					materialRequest={getMaterialRequest(mediaInfo)}
-					layer={1}
-					currentLayer={1}
-				/>
-			)}
-			{mediaInfo && !isKiosk && (
-				<MaterialRequestForReuseBlade
-					isOpen={activeBlade === MediaActions.RequestMaterialForReuse}
-					onClose={onCloseBlade}
-					materialRequest={getMaterialRequest(mediaInfo)}
-					layer={1}
-					currentLayer={1}
-				/>
+				<>
+					<MaterialRequestBlade
+						isOpen={activeBlade === MediaActions.RequestMaterial}
+						onClose={onCloseBlade}
+						materialRequest={getMaterialRequest(mediaInfo)}
+						layer={1}
+						currentLayer={1}
+					/>
+					<MaterialRequestForReuseBlade
+						isOpen={activeBlade === MediaActions.RequestMaterialForReuse}
+						onClose={onCloseBlade}
+						materialRequest={getMaterialRequest(mediaInfo)}
+						layer={1}
+						currentLayer={1}
+					/>
+				</>
 			)}
 			<ReportBlade
 				user={user}
