@@ -1,11 +1,4 @@
-import clsx from 'clsx';
-import { isNil } from 'lodash-es';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
-import { type FC, useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
+import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { CP_ADMIN_NAVIGATION_LINKS, CP_ADMIN_SEARCH_VISITOR_SPACE_KEY } from '@cp/const';
 import type { CPAdminLayoutProps } from '@cp/layouts';
@@ -18,6 +11,13 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
 import { SearchFilterId } from '@visitor-space/types';
+import clsx from 'clsx';
+import { isNil } from 'lodash-es';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
+import { type FC, useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './CPAdminLayout.module.scss';
 
@@ -30,7 +30,12 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
-			CP_ADMIN_NAVIGATION_LINKS(locale).map(({ id, label, href, iconName }) => {
+			CP_ADMIN_NAVIGATION_LINKS(
+				locale,
+				user?.permissions || [],
+				user?.visitorSpaceSlug,
+				user?.groupName === GroupName.CP_ADMIN
+			).map(({ id, label, href, iconName }) => {
 				const url =
 					id !== CP_ADMIN_SEARCH_VISITOR_SPACE_KEY
 						? href
@@ -52,7 +57,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 					active: asPath.includes(url),
 				};
 			}),
-		[asPath, locale, user?.visitorSpaceSlug]
+		[asPath, locale, user?.visitorSpaceSlug, user?.permissions, user?.groupName]
 	);
 
 	useEffect(() => {
