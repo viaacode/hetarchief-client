@@ -1,6 +1,11 @@
 import { MIN_LENGTH_SCHEMA_IDENTIFIER_V2 } from '@ie-objects/ie-objects.consts';
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
+import {
+	keepPreviousData,
+	type QueryClient,
+	type UseQueryResult,
+	useQuery,
+} from '@tanstack/react-query';
 import type { IeObject } from './../ie-objects.types';
 import { IeObjectsService } from './../services';
 
@@ -28,6 +33,7 @@ export const useGetIeObjectInfo = (
 			throw new Error(`404: IeObject not found: ${newSchemaIdentifier}`);
 		},
 		enabled: true,
+		placeholderData: keepPreviousData,
 		...options,
 	});
 };

@@ -191,13 +191,9 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 				Link: InternalLink as FunctionComponent<LinkInfo>,
 				navigateFunc: async (to: string, options?: { replace?: boolean }): Promise<void> => {
 					if (options?.replace) {
-						if (router) {
-							await router.replace(to);
-						}
+						await router?.replace(to);
 					} else {
-						if (router) {
-							await router.push(to);
-						}
+						await router?.push(to);
 					}
 				},
 			},

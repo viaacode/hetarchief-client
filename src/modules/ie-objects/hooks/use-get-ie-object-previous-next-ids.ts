@@ -1,6 +1,6 @@
 import type { IeObjectPreviousNextIds } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { type UseQueryResult, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, type UseQueryResult, useQuery } from '@tanstack/react-query';
 
 import { IeObjectsService } from './../services';
 
@@ -17,6 +17,7 @@ export const useGetIeObjectPreviousNextIds = (
 			}
 			return IeObjectsService.getIeObjectPreviousNextIds(collectionId, ieObjectIri);
 		},
+		placeholderData: keepPreviousData,
 		...options,
 	});
 };

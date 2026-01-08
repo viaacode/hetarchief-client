@@ -7,12 +7,7 @@ import { ApiService } from '@shared/services/api-service'; // Set global locale:
 import { wrapper } from '@shared/store';
 import { Locale } from '@shared/utils/i18n';
 import { isServerSideRendering } from '@shared/utils/is-browser';
-import {
-	HydrationBoundary,
-	keepPreviousData,
-	QueryClient,
-	QueryClientProvider,
-} from '@tanstack/react-query';
+import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import nlBE from 'date-fns/locale/nl-BE';
 import setDefaultOptions from 'date-fns/setDefaultOptions';
 import HttpApi from 'i18next-http-backend';
@@ -38,7 +33,6 @@ const { publicRuntimeConfig } = getConfig();
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
-			placeholderData: keepPreviousData,
 			refetchOnWindowFocus: false,
 			retry: false,
 			refetchInterval: false,

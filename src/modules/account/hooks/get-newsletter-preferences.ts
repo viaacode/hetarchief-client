@@ -20,6 +20,5 @@ export const useGetNewsletterPreferences = (
 
 			return CampaignMonitorService.getPreferences(email);
 		},
-		enabled: !!email && !isEmpty(email),
 	});
 };

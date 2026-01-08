@@ -4,7 +4,12 @@ import {
 	IeObjectsSearchFilterField,
 	SearchPageMediaType,
 } from '@shared/types/ie-objects';
-import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
+import {
+	keepPreviousData,
+	type QueryClient,
+	type UseQueryResult,
+	useQuery,
+} from '@tanstack/react-query';
 import { ElasticsearchFieldNames } from '@visitor-space/types';
 import { isEmpty, isNil } from 'lodash-es';
 
@@ -52,6 +57,7 @@ export const useGetIeObjectFormatCounts = (
 		queryKey: [QUERY_KEYS.getIeObjectFormatCounts, filters, options],
 		queryFn: async () => getIeObjectFormatCounts(filters),
 		enabled: true,
+		placeholderData: keepPreviousData,
 		...options,
 	});
 };

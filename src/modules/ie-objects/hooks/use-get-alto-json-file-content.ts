@@ -1,7 +1,7 @@
 import { IeObjectsService } from '@ie-objects/services';
 import type { SimplifiedAltoInfo } from '@iiif-viewer/IiifViewer.types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 export const useGetAltoJsonFileContent = (
 	altoJsonUrl: string | null,
@@ -22,6 +22,7 @@ export const useGetAltoJsonFileContent = (
 				altoJsonContent,
 			};
 		},
+		placeholderData: keepPreviousData,
 		enabled: options.enabled,
 	});
 };

@@ -3,7 +3,7 @@ import { IeObjectsService } from '@ie-objects/services';
 import { AdminConfigManager, fetchWithLogoutJson } from '@meemoo/admin-core-ui/client';
 import { QUERY_KEYS } from '@shared/const';
 import { Locale } from '@shared/utils/i18n';
-import { useQueries } from '@tanstack/react-query';
+import { keepPreviousData, useQueries } from '@tanstack/react-query';
 import type { AvoCorePickerItem } from '@viaa/avo2-types';
 import { compact, kebabCase } from 'lodash-es';
 import getConfig from 'next/config';
@@ -28,6 +28,7 @@ export const useGetContentBlockEncloseContent = (
 	const ieObjectQuery = {
 		queryKey: [QUERY_KEYS.GET_IE_OBJECT_FOR_CONTENT_ENCLOSE_BLOCK],
 		queryFn: () => IeObjectsService.getBySchemaIdentifiers(ieObjectIds),
+		placeholderData: keepPreviousData,
 		enabled: ieObjectIds.length > 0,
 	};
 

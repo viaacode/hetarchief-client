@@ -6,7 +6,6 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { formatDistanceTodayWithoutTime } from '@shared/utils/dates';
-import type { AvoUserCommonUser } from '@viaa/avo2-types';
 import React, { type FC, lazy, Suspense } from 'react';
 
 const UserOverview = lazy(() =>
@@ -15,9 +14,7 @@ const UserOverview = lazy(() =>
 	}))
 );
 
-export const UsersOverviewPage: FC<
-	DefaultSeoInfo & { commonUser: AvoUserCommonUser | undefined }
-> = ({ url, canonicalUrl }) => {
+export const UsersOverviewPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const renderPageContent = () => {
 		return (
 			<AdminLayout pageTitle={tText('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')}>

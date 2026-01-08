@@ -9,7 +9,6 @@ import { tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
-import type { AvoUserCommonUser } from '@viaa/avo2-types';
 import Link from 'next/link';
 import React, { type FC, lazy, Suspense } from 'react';
 
@@ -19,9 +18,7 @@ const ContentPageOverview = lazy(() =>
 	}))
 );
 
-export const ContentPageOverviewPage: FC<
-	DefaultSeoInfo & { commonUser: AvoUserCommonUser | undefined }
-> = ({ url, canonicalUrl, commonUser }) => {
+export const ContentPageOverviewPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const locale = useLocale();
 	const canCreateContentPages = useHasAllPermission(Permission.CREATE_CONTENT_PAGES) || true; // TODO remove once permission is added to the database
 
@@ -52,7 +49,7 @@ export const ContentPageOverviewPage: FC<
 				<AdminLayout.Content>
 					<div className="l-container p-admin-content">
 						<Suspense fallback={<Loading fullscreen owner="ContentPageOverviewPage" />}>
-							<ContentPageOverview commonUser={commonUser} />
+							<ContentPageOverview />
 						</Suspense>
 					</div>
 				</AdminLayout.Content>

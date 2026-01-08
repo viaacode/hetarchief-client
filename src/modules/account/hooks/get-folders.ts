@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 export function useGetFolders(enabled = true): UseQueryResult<Folder[]> {
 	const dispatch = useDispatch();
 
-	return useQuery({
+	return useQuery<Folder[]>({
 		queryKey: [QUERY_KEYS.getCollections],
 		queryFn: async () => {
 			const response = await FoldersService.getAll();
