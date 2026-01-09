@@ -85,6 +85,21 @@ export abstract class MaterialRequestsService {
 		return ApiService.getApi().post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}/viewed`).json();
 	}
 
+	public static async approve(
+		id: string,
+		motivation?: string
+	): Promise<MaterialRequestDetail | null> {
+		return ApiService.getApi()
+			.post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}/approve`, { json: { motivation } })
+			.json();
+	}
+
+	public static async deny(id: string, motivation?: string): Promise<MaterialRequestDetail | null> {
+		return ApiService.getApi()
+			.post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}/deny`, { json: { motivation } })
+			.json();
+	}
+
 	public static async delete(id: string | null): Promise<MaterialRequestDetail | null> {
 		if (!id) {
 			return null;
