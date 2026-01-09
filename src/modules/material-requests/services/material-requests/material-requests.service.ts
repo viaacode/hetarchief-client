@@ -81,6 +81,10 @@ export abstract class MaterialRequestsService {
 		return ApiService.getApi().post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}/cancel`).json();
 	}
 
+	public static async setAsPending(id: string): Promise<MaterialRequestDetail | null> {
+		return ApiService.getApi().post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}/viewed`).json();
+	}
+
 	public static async delete(id: string | null): Promise<MaterialRequestDetail | null> {
 		if (!id) {
 			return null;

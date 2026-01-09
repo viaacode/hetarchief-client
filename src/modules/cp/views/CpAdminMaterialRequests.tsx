@@ -14,10 +14,11 @@ import {
 import { CPAdminLayout } from '@cp/layouts';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
+import { MaterialRequestsService } from '@material-requests/services';
 import {
 	type MaterialRequest,
 	MaterialRequestKeys,
-	type MaterialRequestStatus,
+	MaterialRequestStatus,
 	type MaterialRequestType,
 } from '@material-requests/types';
 import {
@@ -65,7 +66,11 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
-	const { data: materialRequests, isFetching } = useGetMaterialRequests({
+	const {
+		data: materialRequests,
+		isFetching,
+		refetch: refetchMaterialRequests,
+	} = useGetMaterialRequests({
 		size: CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
 		...(!isNil(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]) && {
 			search: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
@@ -219,14 +224,21 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		}
 		return (
 			<MaterialRequestDetailBlade
+				isPersonalRequest={false}
 				isOpen={!isLoading && isDetailBladeOpen}
-				onClose={() => setIsDetailBladeOpen(false)}
+				onClose={() => {
+					void refetchMaterialRequests();
+					setIsDetailBladeOpen(false);
+				}}
 				currentMaterialRequestDetail={currentMaterialRequestDetail}
 			/>
 		);
 	};
 
-	const onRowClick = (_evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
+	const onRowClick = async (_evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
+		if (row.original.status === MaterialRequestStatus.NEW) {
+			await MaterialRequestsService.setAsPending(row.original.id);
+		}
 		setCurrentMaterialRequest(row.original);
 		setIsDetailBladeOpen(true);
 	};
