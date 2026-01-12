@@ -15,7 +15,6 @@ import {
 import { CPAdminLayout } from '@cp/layouts';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
-import { MaterialRequestsService } from '@material-requests/services';
 import {
 	type MaterialRequest,
 	MaterialRequestKeys,
@@ -213,6 +212,11 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		});
 	};
 
+	const onMaterialRequestStatusChange = () => {
+		void refetchCurrentMaterialRequestDetail();
+		void refetchMaterialRequests();
+	};
+
 	const renderPagination = ({ gotoPage }: { gotoPage: (i: number) => void }): ReactNode => (
 		<PaginationBar
 			{...getDefaultPaginationBarProps()}
@@ -257,10 +261,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 				<MaterialRequestDetailBlade
 					allowRequestCancellation={false}
 					isOpen={!isLoading && isDetailBladeOpen}
-					onClose={() => {
-						void refetchMaterialRequests();
-						setIsDetailBladeOpen(false);
-					}}
+					onClose={() => setIsDetailBladeOpen(false)}
 					onApproveRequest={() =>
 						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.APPROVED)
 					}
@@ -268,20 +269,16 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
 					}
 					currentMaterialRequestDetail={currentMaterialRequestDetail}
+					onStatusChange={onMaterialRequestStatusChange}
 					layer={isDetailBladeOpen ? 1 : 99}
 					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 				/>
 				<MaterialRequestStatusUpdateBlade
 					isOpen={!isLoading && !!isDetailStatusBladeOpenWithStatus}
-					onClose={(success) => {
-						setIsDetailStatusBladeOpenWithStatus(undefined);
-						if (success) {
-							void refetchCurrentMaterialRequestDetail();
-							void refetchMaterialRequests();
-						}
-					}}
+					onClose={() => setIsDetailStatusBladeOpenWithStatus(undefined)}
 					status={isDetailStatusBladeOpenWithStatus}
 					currentMaterialRequestDetail={currentMaterialRequestDetail}
+					onStatusChange={onMaterialRequestStatusChange}
 					layer={isDetailBladeOpen ? 2 : 99}
 					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 				/>
@@ -290,11 +287,6 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	};
 
 	const onRowClick = async (_evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
-		if (row.original.status === MaterialRequestStatus.NEW && user?.isEvaluator) {
-			MaterialRequestsService.setAsPending(row.original.id).then(() =>
-				refetchCurrentMaterialRequestDetail()
-			);
-		}
 		setCurrentMaterialRequest(row.original);
 		setIsDetailBladeOpen(true);
 	};
