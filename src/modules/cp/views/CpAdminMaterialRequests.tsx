@@ -230,7 +230,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 			return null;
 		}
 
-		const getCurrentLayer = () => {
+		const getBladeLayerIndex = () => {
 			if (isDetailStatusBladeOpenWithStatus) {
 				return 2;
 			}
@@ -243,7 +243,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 
 		return (
 			<BladeManager
-				currentLayer={getCurrentLayer()}
+				currentLayer={getBladeLayerIndex()}
 				onCloseBlade={() => {
 					if (isDetailStatusBladeOpenWithStatus) {
 						setIsDetailStatusBladeOpenWithStatus(undefined);
@@ -268,7 +268,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 					}
 					currentMaterialRequestDetail={currentMaterialRequestDetail}
 					layer={isDetailBladeOpen ? 1 : 99}
-					currentLayer={isDetailBladeOpen ? getCurrentLayer() : 9999}
+					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 				/>
 				<MaterialRequestStatusUpdateBlade
 					isOpen={!isLoading && !!isDetailStatusBladeOpenWithStatus}
@@ -282,7 +282,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 					status={isDetailStatusBladeOpenWithStatus}
 					currentMaterialRequestDetail={currentMaterialRequestDetail}
 					layer={isDetailBladeOpen ? 2 : 99}
-					currentLayer={isDetailBladeOpen ? getCurrentLayer() : 9999}
+					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 				/>
 			</BladeManager>
 		);

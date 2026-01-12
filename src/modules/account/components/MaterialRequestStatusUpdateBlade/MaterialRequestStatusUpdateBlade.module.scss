@@ -1,5 +1,7 @@
 @use "../../../../styles/abstracts" as *;
 
+$minimum-rich-text-editor-height: 21rem;
+
 .c-request-material-status-update {
 	&__title {
 		padding: 0 $spacer-lg;
@@ -50,7 +52,7 @@
 
 	&__motivation-input {
 		textarea {
-			min-height: 21rem !important;
+			min-height: $minimum-rich-text-editor-height !important;
 			resize: none;
 		}
 	}

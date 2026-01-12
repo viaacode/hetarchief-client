@@ -44,6 +44,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 		maintainerName,
 	} = currentMaterialRequestDetail;
 	const locale = useLocale();
+	const MAX_MOTIVATION_LENGTH = 300;
 
 	const [motivationInputValue, setMotivationInputValue] = useState('');
 
@@ -180,7 +181,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 										<span
 											className={styles['c-request-material-status-update__content-value-length']}
 										>
-											{motivationInputValue?.length || 0} / 300
+											{motivationInputValue?.length || 0} / {MAX_MOTIVATION_LENGTH}
 										</span>
 									</div>,
 								]}
@@ -188,7 +189,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 								<TextArea
 									id="motivation-input"
 									className={styles['c-request-material-status-update__motivation-input']}
-									maxLength={300}
+									maxLength={MAX_MOTIVATION_LENGTH}
 									onChange={(e) => setMotivationInputValue(e.target.value)}
 									value={motivationInputValue}
 								/>
