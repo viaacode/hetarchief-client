@@ -290,7 +290,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	};
 
 	const onRowClick = async (_evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
-		if (row.original.status === MaterialRequestStatus.NEW) {
+		if (row.original.status === MaterialRequestStatus.NEW && user?.isEvaluator) {
 			MaterialRequestsService.setAsPending(row.original.id).then(() =>
 				refetchCurrentMaterialRequestDetail()
 			);
