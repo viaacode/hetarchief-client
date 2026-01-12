@@ -41,7 +41,9 @@ export function createLabelValuePairMaterialRequestReuseForm(
 
 	if (reuseForm) {
 		materialRequestEntries.push({
-			label: tText('Bedoeld gebruik'),
+			label: tText(
+				'modules/account/utils/create-label-value-material-request-reuse-form___bedoeld-gebruik'
+			),
 			value: (
 				<>
 					{
@@ -55,7 +57,9 @@ export function createLabelValuePairMaterialRequestReuseForm(
 		});
 
 		materialRequestEntries.push({
-			label: tText('Ontsluiting materiaal'),
+			label: tText(
+				'modules/account/utils/create-label-value-material-request-reuse-form___ontsluiting-materiaal'
+			),
 			value:
 				GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DISTRIBUTION_ACCESS()[
 					reuseForm.distributionAccess as MaterialRequestDistributionAccess
@@ -63,7 +67,9 @@ export function createLabelValuePairMaterialRequestReuseForm(
 		});
 
 		materialRequestEntries.push({
-			label: tText('Type ontsluiting'),
+			label: tText(
+				'modules/account/utils/create-label-value-material-request-reuse-form___type-ontsluiting'
+			),
 			value: (
 				<>
 					{
@@ -92,7 +98,9 @@ export function createLabelValuePairMaterialRequestReuseForm(
 		});
 
 		materialRequestEntries.push({
-			label: tText('Wijzigingen'),
+			label: tText(
+				'modules/account/utils/create-label-value-material-request-reuse-form___wijzigingen'
+			),
 			value:
 				GET_MATERIAL_REQUEST_TRANSLATIONS_BY_MATERIAL_EDITING()[
 					reuseForm.materialEditing as MaterialRequestEditing
@@ -100,7 +108,9 @@ export function createLabelValuePairMaterialRequestReuseForm(
 		});
 
 		materialRequestEntries.push({
-			label: tText('Geografisch hergebruik'),
+			label: tText(
+				'modules/account/utils/create-label-value-material-request-reuse-form___geografisch-hergebruik'
+			),
 			value: (
 				<>
 					{
@@ -119,7 +129,9 @@ export function createLabelValuePairMaterialRequestReuseForm(
 		});
 
 		materialRequestEntries.push({
-			label: tText('Gebruik doorheen de tijd'),
+			label: tText(
+				'modules/account/utils/create-label-value-material-request-reuse-form___gebruik-doorheen-de-tijd'
+			),
 			value: (
 				<>
 					{
@@ -140,7 +152,9 @@ export function createLabelValuePairMaterialRequestReuseForm(
 		});
 
 		materialRequestEntries.push({
-			label: tText('Bronvermelding'),
+			label: tText(
+				'modules/account/utils/create-label-value-material-request-reuse-form___bronvermelding'
+			),
 			value:
 				GET_MATERIAL_REQUEST_TRANSLATIONS_BY_COPYRIGHT()[
 					reuseForm.copyrightDisplay as MaterialRequestCopyrightDisplay

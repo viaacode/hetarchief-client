@@ -21,7 +21,9 @@ const MaterialRequestTermAgreementBlade: FC<MaterialRequestTermAgreementBladePro
 				{...props}
 				className={clsx(props.className, styles['c-material-request-term-agreement-blade__title'])}
 			>
-				{tText('Aanvullende gebruiksvoorwaarden bij aanvragen')}
+				{tText(
+					'modules/account/components/material-request-term-agreement-blade/material-request-term-agreement-blade___aanvullende-gebruiksvoorwaarden-bij-aanvragen'
+				)}
 			</h2>
 		);
 	};
@@ -30,13 +32,17 @@ const MaterialRequestTermAgreementBlade: FC<MaterialRequestTermAgreementBladePro
 		return (
 			<div className={styles['c-material-request-term-agreement-blade__footer-container']}>
 				<Button
-					label={tText('Sluit')}
+					label={tText(
+						'modules/account/components/material-request-term-agreement-blade/material-request-term-agreement-blade___sluit'
+					)}
 					variants={['text', 'light']}
 					onClick={() => onClose(false)}
 					className={styles['c-material-request-term-agreement-blade__cancel-button']}
 				/>
 				<Button
-					label={tText('Ik ga akkoord')}
+					label={tText(
+						'modules/account/components/material-request-term-agreement-blade/material-request-term-agreement-blade___ik-ga-akkoord'
+					)}
 					variants={['text', 'dark']}
 					onClick={() => onClose(true)}
 					className={styles['c-material-request-term-agreement-blade__agree-button']}
@@ -57,7 +63,9 @@ const MaterialRequestTermAgreementBlade: FC<MaterialRequestTermAgreementBladePro
 			{isOpen && (
 				<div className={styles['c-material-request-term-agreement-blade__content-container']}>
 					<div className={styles['c-material-request-term-agreement-blade__content-form']}>
-						{tHtml('Aanvullende gebruiksvoorwaarden bij aanvragen inhoud')}
+						{tHtml(
+							'modules/account/components/material-request-term-agreement-blade/material-request-term-agreement-blade___aanvullende-gebruiksvoorwaarden-bij-aanvragen-inhoud'
+						)}
 					</div>
 				</div>
 			)}

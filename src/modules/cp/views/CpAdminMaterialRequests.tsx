@@ -328,7 +328,9 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 					target="_blank"
 					rel="noopener noreferrer"
 				>
-					{tText('Ga naar mijn uitgaande materiaalaanvragen')}
+					{tText(
+						'modules/cp/views/cp-admin-material-requests___ga-naar-mijn-uitgaande-materiaalaanvragen'
+					)}
 				</a>
 				<Icon className="u-ml-8" name={IconNamesLight.Extern} />
 			</div>
@@ -343,7 +345,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 						<div className={clsx('u-flex', 'u-flex-row', 'u-gap-sm')}>
 							<MultiSelect
 								variant="rounded"
-								label={tText('Type')}
+								label={tText('modules/cp/views/cp-admin-material-requests___type')}
 								options={typesList}
 								onChange={noop}
 								className={clsx(
@@ -353,15 +355,17 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 								iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
 								iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 								iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-								checkboxHeader={tText('Type aanvraag')}
+								checkboxHeader={tText(
+									'modules/cp/views/cp-admin-material-requests___type-aanvraag'
+								)}
 								confirmOptions={{
-									label: tText('Pas toe'),
+									label: tText('modules/cp/views/cp-admin-material-requests___pas-toe'),
 									variants: ['black'],
 									onClick: setSelectedTypes,
 								}}
 								resetOptions={{
 									icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
-									label: tText('Reset'),
+									label: tText('modules/cp/views/cp-admin-material-requests___reset'),
 									variants: ['text'],
 									onClick: setSelectedTypes,
 								}}
@@ -369,7 +373,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 
 							<MultiSelect
 								variant="rounded"
-								label={tText('Status')}
+								label={tText('modules/cp/views/cp-admin-material-requests___status')}
 								options={statusList}
 								onChange={noop}
 								className={clsx(
@@ -379,15 +383,17 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 								iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
 								iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 								iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-								checkboxHeader={tText('Status aanvraag')}
+								checkboxHeader={tText(
+									'modules/cp/views/cp-admin-material-requests___status-aanvraag'
+								)}
 								confirmOptions={{
-									label: tText('Pas toe'),
+									label: tText('modules/cp/views/cp-admin-material-requests___pas-toe'),
 									variants: ['black'],
 									onClick: setSelectedStatuses,
 								}}
 								resetOptions={{
 									icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
-									label: tText('Reset'),
+									label: tText('modules/cp/views/cp-admin-material-requests___reset'),
 									variants: ['text'],
 									onClick: setSelectedStatuses,
 								}}
@@ -395,7 +401,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 
 							<MultiSelect
 								variant="rounded"
-								label={tText('Download')}
+								label={tText('modules/cp/views/cp-admin-material-requests___download')}
 								options={downloadUrlList}
 								onChange={noop}
 								className={clsx(
@@ -405,15 +411,17 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 								iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
 								iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 								iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-								checkboxHeader={tText('Aanvraag met download')}
+								checkboxHeader={tText(
+									'modules/cp/views/cp-admin-material-requests___aanvraag-met-download'
+								)}
 								confirmOptions={{
-									label: tText('Pas toe'),
+									label: tText('modules/cp/views/cp-admin-material-requests___pas-toe'),
 									variants: ['black'],
 									onClick: setSelectedDownloadFilters,
 								}}
 								resetOptions={{
 									icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
-									label: tText('Reset'),
+									label: tText('modules/cp/views/cp-admin-material-requests___reset'),
 									variants: ['text'],
 									onClick: setSelectedDownloadFilters,
 								}}

@@ -19,7 +19,9 @@ const MaterialRequestDownloadButton: FC<MaterialRequestStatusPillProps> = ({ mat
 		<Button
 			icon={<Icon name={IconNamesLight.Download} aria-hidden />}
 			variants={['silver', 'sm']}
-			tooltipText={tText('download materiaal')}
+			tooltipText={tText(
+				'modules/account/components/material-request-download-button/material-request-download-button___download-materiaal'
+			)}
 			onClick={(event) => {
 				event.preventDefault();
 				event.stopPropagation();
