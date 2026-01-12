@@ -107,7 +107,9 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 				{...props}
 				className={clsx(props.className, styles['c-request-material-status-update__title'])}
 			>
-				{tText('Aanvraag')}
+				{tText(
+					'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag'
+				)}
 			</h2>
 			<MaterialRequestInformation />
 		</>
@@ -118,8 +120,12 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 			<Button
 				label={
 					status === MaterialRequestStatus.APPROVED
-						? tText('Aanvraag goedkeuren')
-						: tText('Aanvraag afkeuren')
+						? tText(
+								'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-goedkeuren'
+							)
+						: tText(
+								'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-afkeuren'
+							)
 				}
 				variants={['block', 'black']}
 				onClick={onApproveOrDeny}
@@ -170,8 +176,12 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 						<dt className={styles['c-request-material-status-update__content-label']}>
 							<label htmlFor="motivation-input">
 								{status === MaterialRequestStatus.APPROVED
-									? tText('Aanvraag goedkeuren')
-									: tText('Aanvraag afkeuren')}
+									? tText(
+											'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-goedkeuren'
+										)
+									: tText(
+											'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-afkeuren'
+										)}
 							</label>
 						</dt>
 						<dd className={styles['c-request-material-status-update__content-value']}>

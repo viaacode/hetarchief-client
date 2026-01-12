@@ -117,12 +117,16 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			return (
 				<div className={styles['p-account-my-material-requests__close-button-container']}>
 					<Button
-						label={tText('Goedkeuren')}
+						label={tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___goedkeuren'
+						)}
 						variants={['block', 'primary']}
 						onClick={onApproveRequest}
 					/>
 					<Button
-						label={tText('Afkeuren')}
+						label={tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___afkeuren'
+						)}
 						variants={['block']}
 						className={styles['p-account-my-material-requests__decline-button']}
 						onClick={onDeclineRequest}
