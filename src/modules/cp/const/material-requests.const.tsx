@@ -1,3 +1,5 @@
+import MaterialRequestDownloadButton from '@account/components/MaterialRequestDownloadButton/MaterialRequestDownloadButton';
+import { MaterialRequestStatusPill } from '@account/components/MaterialRequestStatusPill';
 import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
 import {
 	type MaterialRequest,
@@ -9,7 +11,7 @@ import { CopyButton } from '@shared/components/CopyButton';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils/dates';
+import { asDate, formatMediumDate } from '@shared/utils/dates';
 import type { Column } from 'react-table';
 import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
@@ -17,10 +19,12 @@ export const CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE = 20;
 
 export const CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
-	type: withDefault(ArrayParam, []),
-	orderProp: withDefault(StringParam, MaterialRequestKeys.requestedAt),
-	orderDirection: withDefault(SortDirectionParam, undefined),
-	page: withDefault(NumberParam, 1),
+	[QUERY_PARAM_KEY.TYPE]: withDefault(ArrayParam, []),
+	[QUERY_PARAM_KEY.STATUS]: withDefault(ArrayParam, []),
+	[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL]: withDefault(ArrayParam, []),
+	[QUERY_PARAM_KEY.ORDER_PROP]: withDefault(StringParam, MaterialRequestKeys.requestedAt),
+	[QUERY_PARAM_KEY.ORDER_DIRECTION]: withDefault(SortDirectionParam, undefined),
+	[QUERY_PARAM_KEY.PAGE]: withDefault(NumberParam, 1),
 };
 
 export const GET_CP_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = (): {
@@ -43,34 +47,39 @@ export const GET_CP_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = (): {
 
 export const getMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 	{
-		Header: tText('modules/cp/const/material-requests___naam'),
+		Header: tText('modules/cp/const/material-requests___aanvrager'),
 		accessor: MaterialRequestKeys.name,
-	},
-	{
-		Header: tText('modules/cp/const/material-requests___emailadres'),
-		accessor: MaterialRequestKeys.email,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
-			<CopyButton
-				className="u-color-neutral u-p-0 c-table__copy"
-				icon={undefined}
-				variants="text"
-				text={original.requesterMail}
-			>
-				{original.requesterMail}
-			</CopyButton>
-		),
-	},
-	{
-		Header: tText('modules/cp/const/material-requests___datum-aangevraagd'),
-		accessor: MaterialRequestKeys.requestedAt,
-		Cell: ({ row: { original } }: MaterialRequestRow) => (
-			<span
-				className="u-color-neutral"
-				title={formatMediumDateWithTime(asDate(original.requestedAt || original.createdAt))}
-			>
-				{formatDistanceToday(original.requestedAt || original.createdAt)}
+			<span className="p-material-requests__table-titel-material">
+				<span className="p-material-requests__table-titel-material__requester">
+					{original.requesterFullName}
+				</span>
+				<CopyButton
+					className="p-material-requests__table-titel-material__mail u-p-0 c-table__copy u-text-break"
+					icon={undefined}
+					variants="text"
+					text={original.requesterMail}
+				>
+					{original.requesterMail}
+				</CopyButton>
 			</span>
 		),
+	},
+	{
+		Header: tText('modules/cp/const/material-requests___titel-materiaal'),
+		accessor: MaterialRequestKeys.material,
+	},
+	{
+		Header: tText('modules/cp/const/material-requests___aangevraagd-op'),
+		accessor: MaterialRequestKeys.requestedAt,
+		Cell: ({ row: { original } }: MaterialRequestRow) => {
+			const date = formatMediumDate(asDate(original.requestedAt || original.createdAt));
+			return (
+				<span className="u-color-neutral" title={date}>
+					{date}
+				</span>
+			);
+		},
 	},
 	{
 		Header: tText('modules/cp/const/material-requests___type'),
@@ -79,6 +88,20 @@ export const getMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 			<span className="u-color-neutral p-material-requests__table-type">
 				{GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[original.type]}
 			</span>
+		),
+	},
+	{
+		Header: tText('modules/cp/const/material-requests___status'),
+		accessor: MaterialRequestKeys.status,
+		Cell: ({ row: { original } }: MaterialRequestRow) => (
+			<MaterialRequestStatusPill status={original.status} />
+		),
+	},
+	{
+		Header: tText('modules/cp/const/material-requests___download'),
+		accessor: MaterialRequestKeys.downloadUrl,
+		Cell: ({ row: { original } }: MaterialRequestRow) => (
+			<MaterialRequestDownloadButton materialRequest={original} />
 		),
 	},
 ];

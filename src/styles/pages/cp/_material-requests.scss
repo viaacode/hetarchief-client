@@ -48,16 +48,21 @@
 			display: flex;
 			flex-direction: column;
 
-			&__name{
+			&__name,&__requester{
 				color: $black;
 				font-size: $font-size-base;
 				line-height: $font-size-md;
 			}
 
-			&__provider{
+			&__provider,&__mail{
 				color: $neutral;
 				font-size: $font-size-sm;
 				line-height: $font-size-base;
+
+				> .c-button__content {
+					white-space: unset;
+					text-align: left;
+				}
 			}
 		}
 	}

@@ -71,6 +71,14 @@
 	}
 
 	&__close-button-container {
+		display: flex;
+		flex-direction: column;
 		padding: $spacer-lg;
+		gap: $spacer-xs;
+	}
+
+	&__decline-button {
+		background-color: $cherry;
+		border: 1px solid $cherry;
 	}
 }
