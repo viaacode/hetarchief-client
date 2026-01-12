@@ -71,9 +71,11 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	const isKeyUser = useIsKeyUser();
 	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
 
-	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
-		currentMaterialRequest?.id || null
-	);
+	const {
+		data: currentMaterialRequestDetail,
+		isFetching: isLoading,
+		refetch: refetchCurrentMaterialRequestDetail,
+	} = useGetMaterialRequestById(currentMaterialRequest?.id || null);
 	const {
 		data: materialRequests,
 		refetch: refetchMaterialRequests,
@@ -221,6 +223,10 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		tHtml('pages/account/mijn-profiel/index___geen-materiaal-aanvragen');
 
 	const onRowClick = (_evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
+		if (row.original.id === currentMaterialRequest?.id) {
+			// In case we open the same request, refetch it to make sure we have the latest status
+			void refetchCurrentMaterialRequestDetail();
+		}
 		setCurrentMaterialRequest(row.original);
 		setIsDetailBladeOpen(true);
 	};
