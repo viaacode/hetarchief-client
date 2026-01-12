@@ -170,7 +170,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		}
 		return (
 			<MaterialRequestDetailBlade
-				isPersonalRequest={false}
+				allowRequestCancellation={false}
 				isOpen={!isLoading && isDetailBladeOpen}
 				onClose={() => setIsDetailBladeOpen(false)}
 				currentMaterialRequestDetail={currentMaterialRequestDetail}
