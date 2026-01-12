@@ -76,6 +76,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		isFetching,
 		refetch: refetchMaterialRequests,
 	} = useGetMaterialRequests({
+		isPending: false,
 		size: CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
 		...(!isNil(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]) && {
 			search: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
