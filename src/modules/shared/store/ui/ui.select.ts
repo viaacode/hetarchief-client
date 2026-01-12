@@ -29,3 +29,4 @@ export const selectLastScrollPosition = (state: AppState): LastScrollPositionTyp
 export const selectBreadcrumbs = (state: AppState): Breadcrumb[] => state.ui.breadcrumbs;
 export const selectHasOpenConfirmationModal = (state: AppState): Breadcrumb[] =>
 	state.ui.hasOpenConfirmationModal;
+export const selectLastSearchParams = (state: AppState): string => state.ui.lastSearchParams;

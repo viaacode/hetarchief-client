@@ -90,7 +90,7 @@ import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
-import { setShowAuthModal, setShowZendesk } from '@shared/store/ui';
+import { selectLastSearchParams, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
@@ -142,6 +142,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const dispatch = useDispatch();
 	const user: User | null = useSelector(selectUser);
 	const hasCheckedLogin: boolean = useSelector(selectHasCheckedLogin);
+	const lastSearchParams = useSelector(selectLastSearchParams);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const ieObjectId = router.query.ie as string;
 	const maintainerSlug = router.query.slug as string;
@@ -1707,14 +1708,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		}
 
 		return (
-			<Button
+			<Link
 				className={styles['p-object-detail__back']}
-				icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
-				onClick={() => {
-					router.back();
-				}}
-				variants={['black']}
-			/>
+				href={`/${ROUTES_BY_LOCALE[locale].search}?${lastSearchParams}`}
+			>
+				<Button
+					className={styles['p-object-detail__back']}
+					icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
+					variants={['black']}
+				/>
+			</Link>
 		);
 	};
 
