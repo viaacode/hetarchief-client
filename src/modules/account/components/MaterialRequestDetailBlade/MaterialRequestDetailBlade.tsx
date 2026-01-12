@@ -40,7 +40,7 @@ import styles from './MaterialRequestDetailBlade.module.scss';
 interface MaterialRequestDetailBladeProps {
 	isOpen: boolean;
 	onClose: () => void;
-	isPersonalRequest: boolean;
+	allowRequestCancellation: boolean;
 	currentMaterialRequestDetail: MaterialRequestDetail;
 	refetchMaterialRequests?: () => void;
 }
@@ -48,7 +48,7 @@ interface MaterialRequestDetailBladeProps {
 const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	isOpen,
 	onClose,
-	isPersonalRequest,
+	allowRequestCancellation,
 	currentMaterialRequestDetail,
 	refetchMaterialRequests,
 }) => {
@@ -128,7 +128,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 					onClick={onClose}
 				/>
 				{currentMaterialRequestDetail.status === MaterialRequestStatus.NEW &&
-					isPersonalRequest &&
+					allowRequestCancellation &&
 					currentMaterialRequestDetail.requesterId === user?.id && (
 						<Button
 							label={tText('Annuleer aanvraag')}

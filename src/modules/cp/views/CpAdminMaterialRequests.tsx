@@ -224,7 +224,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		}
 		return (
 			<MaterialRequestDetailBlade
-				isPersonalRequest={false}
+				allowRequestCancellation={false}
 				isOpen={!isLoading && isDetailBladeOpen}
 				onClose={() => {
 					void refetchMaterialRequests();
