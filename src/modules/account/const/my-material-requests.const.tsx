@@ -69,10 +69,6 @@ export const GET_MATERIAL_REQUEST_STATUS_FILTER_ARRAY = (): {
 		id: MaterialRequestStatus.CANCELLED,
 		label: tText('modules/cp/const/material-requests___filter-status-cancelled'),
 	},
-	{
-		id: MaterialRequestStatus.NONE,
-		label: tText('modules/cp/const/material-requests___filter-status-none'),
-	},
 ];
 
 export const GET_MATERIAL_REQUEST_DOWNLOAD_FILTER_ARRAY = (): {
