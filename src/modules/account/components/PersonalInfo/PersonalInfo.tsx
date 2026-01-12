@@ -388,6 +388,11 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 							/>
 						)}
 					</div>
+					{user?.sector && (
+						<div className={clsx(styles['c-personal-info__content-group-value'])}>
+							{user.sector}
+						</div>
+					)}
 				</div>
 				{isKeyUser ? renderNameEntry() : renderCapacity()}
 				{renderCheckboxes()}
