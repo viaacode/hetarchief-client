@@ -1,5 +1,9 @@
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
-import { Permission } from '@account/const';
+import {
+	GET_MATERIAL_REQUEST_DOWNLOAD_FILTER_ARRAY,
+	GET_MATERIAL_REQUEST_STATUS_FILTER_ARRAY,
+	Permission,
+} from '@account/const';
 import {
 	ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
 	ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
@@ -13,6 +17,7 @@ import { useGetMaterialRequestsMaintainers } from '@material-requests/hooks/get-
 import {
 	type MaterialRequest,
 	MaterialRequestKeys,
+	type MaterialRequestStatus,
 	type MaterialRequestType,
 } from '@material-requests/types';
 import {
@@ -35,7 +40,7 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import clsx from 'clsx';
-import { isEmpty, isNil, without } from 'lodash-es';
+import { isEmpty, isNil, noop } from 'lodash-es';
 import React, {
 	type FC,
 	type MouseEvent,
@@ -50,8 +55,19 @@ import { useQueryParams } from 'use-query-params';
 export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
-	const [selectedMaintainers, setSelectedMaintainers] = useState<string[]>([]);
 	const [filters, setFilters] = useQueryParams(ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
+	const [selectedMaintainers, setSelectedMaintainers] = useState<string[]>(
+		(filters['maintainerIds'] || []) as string[]
+	);
+	const [selectedTypes, setSelectedTypes] = useState<string[]>(
+		(filters[QUERY_PARAM_KEY.TYPE] || []) as string[]
+	);
+	const [selectedStatuses, setSelectedStatuses] = useState<string[]>(
+		(filters[QUERY_PARAM_KEY.STATUS] || []) as string[]
+	);
+	const [selectedDownloadFilters, setSelectedDownloadFilters] = useState<string[]>(
+		(filters[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL] || []) as string[]
+	);
 	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 
 	const { data: materialRequests, isLoading: isLoadingMaterialRequests } = useGetMaterialRequests({
@@ -66,7 +82,15 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 			orderDirection: filters.orderDirection as OrderDirection,
 		}),
 		search: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
-		type: filters.type as MaterialRequestType[],
+		...(!isNil(filters.type) && {
+			type: filters.type as MaterialRequestType[],
+		}),
+		...(!isNil(filters.status) && {
+			status: filters.status as MaterialRequestStatus[],
+		}),
+		...(!isNil(filters.hasDownloadUrl) && {
+			hasDownloadUrl: filters.hasDownloadUrl as string[],
+		}),
 		maintainerIds: filters.maintainerIds as string[],
 	});
 
@@ -92,11 +116,35 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 				({ id, label }): MultiSelectOption => ({
 					id,
 					label,
-					checked: ((filters.type as string[] | null) || []).includes(id),
+					checked: selectedTypes.includes(id),
 				})
 			),
 		];
-	}, [filters.type]);
+	}, [selectedTypes]);
+
+	const statusList = useMemo(() => {
+		return [
+			...GET_MATERIAL_REQUEST_STATUS_FILTER_ARRAY().map(
+				({ id, label }): MultiSelectOption => ({
+					id,
+					label,
+					checked: selectedStatuses.includes(id),
+				})
+			),
+		];
+	}, [selectedStatuses]);
+
+	const downloadUrlList = useMemo(() => {
+		return [
+			...GET_MATERIAL_REQUEST_DOWNLOAD_FILTER_ARRAY().map(
+				({ id, label }): MultiSelectOption => ({
+					id,
+					label,
+					checked: selectedDownloadFilters.includes(id),
+				})
+			),
+		];
+	}, [selectedDownloadFilters]);
 
 	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
 		currentMaterialRequest?.id || null
@@ -117,21 +165,57 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		[filters.orderProp, filters.orderDirection]
 	);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+	useEffect(() => {
+		setFilters({
+			...filters,
+			type: selectedTypes,
+			page: 1,
+		});
+	}, [selectedTypes]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+	useEffect(() => {
+		setFilters({
+			...filters,
+			status: selectedStatuses,
+			page: 1,
+		});
+	}, [selectedStatuses]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+	useEffect(() => {
+		setFilters({
+			...filters,
+			hasDownloadUrl: selectedDownloadFilters,
+			page: 1,
+		});
+	}, [selectedDownloadFilters]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: we want to set the filters if selectedMaintainers changes, but we cannot set it as a dependency or we get a loop
+	useEffect(() => {
+		setFilters({
+			...filters,
+			maintainerIds: selectedMaintainers,
+			page: 1,
+		});
+	}, [selectedMaintainers]);
+
 	const onSortChange = (
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	): void => {
-		if (filters.orderProp === MaterialRequestKeys.createdAt && orderDirection === undefined) {
+		if (filters.orderProp === MaterialRequestKeys.requestedAt && orderDirection === undefined) {
 			setFilters({
 				...filters,
-				orderProp: orderProp || 'createdAt',
+				orderProp: orderProp || 'requestedAt',
 				orderDirection: OrderDirection.asc,
 				page: 1,
 			});
 		} else if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
-				orderProp: orderProp || 'createdAt',
+				orderProp: orderProp || 'requestedAt',
 				orderDirection: orderDirection || OrderDirection.desc,
 				page: 1,
 			});
@@ -198,29 +282,6 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		);
 	};
 
-	// Note: Internal selected IDs state
-	const onMultiTypeChange = (checked: boolean, id: string) => {
-		const newSelectedTypes = !checked ? [...filters.type, id] : without(filters.type, id);
-		setFilters({
-			...filters,
-			type: newSelectedTypes,
-			page: 1,
-		});
-	};
-
-	const onMultiMaintainersChange = (checked: boolean, id: string) => {
-		setSelectedMaintainers((prev) => (!checked ? [...prev, id] : without(prev, id)));
-	};
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: we want to set the filters if selectedMaintainers changes, but we cannot set it as a dependency or we get a loop
-	useEffect(() => {
-		setFilters({
-			...filters,
-			maintainerIds: selectedMaintainers,
-			page: 1,
-		});
-	}, [selectedMaintainers]);
-
 	const renderPageContent = () => {
 		return (
 			<AdminLayout pageTitle={tText('pages/admin/materiaalaanvragen/index___materiaalaanvragen')}>
@@ -233,24 +294,110 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 						<div className="p-admin-material-requests__header-dropdowns">
 							<MultiSelect
 								variant="rounded"
-								label="Type"
+								label={tText('pages/admin/materiaalaanvragen/index___type')}
 								options={typesList}
-								onChange={onMultiTypeChange}
-								className="p-admin-material-requests__dropdown"
+								onChange={noop}
+								className={clsx(
+									'p-admin-material-requests__dropdown',
+									'p-admin-material-requests__dropdown-no-dividers'
+								)}
 								iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
 								iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 								iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+								checkboxHeader={tText('pages/admin/materiaalaanvragen/index___type-aanvraag')}
+								confirmOptions={{
+									label: tText('pages/admin/materiaalaanvragen/index___pas-toe'),
+									variants: ['black'],
+									onClick: setSelectedTypes,
+								}}
+								resetOptions={{
+									icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+									label: tText('pages/admin/materiaalaanvragen/index___reset'),
+									variants: ['text'],
+									onClick: setSelectedTypes,
+								}}
+							/>
+
+							<MultiSelect
+								variant="rounded"
+								label={tText('pages/admin/materiaalaanvragen/index___status')}
+								options={statusList}
+								onChange={noop}
+								className={clsx(
+									'p-admin-material-requests__dropdown',
+									'p-admin-material-requests__dropdown-no-dividers'
+								)}
+								iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+								iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+								iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+								checkboxHeader={tText('pages/admin/materiaalaanvragen/index___status-aanvraag')}
+								confirmOptions={{
+									label: tText('pages/admin/materiaalaanvragen/index___pas-toe'),
+									variants: ['black'],
+									onClick: setSelectedStatuses,
+								}}
+								resetOptions={{
+									icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+									label: tText('pages/admin/materiaalaanvragen/index___reset'),
+									variants: ['text'],
+									onClick: setSelectedStatuses,
+								}}
+							/>
+
+							<MultiSelect
+								variant="rounded"
+								label={tText('pages/admin/materiaalaanvragen/index___download')}
+								options={downloadUrlList}
+								onChange={noop}
+								className={clsx(
+									'p-admin-material-requests__dropdown',
+									'p-admin-material-requests__dropdown-no-dividers'
+								)}
+								iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+								iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+								iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+								checkboxHeader={tText(
+									'pages/admin/materiaalaanvragen/index___aanvraag-met-download'
+								)}
+								confirmOptions={{
+									label: tText('pages/admin/materiaalaanvragen/index___pas-toe'),
+									variants: ['black'],
+									onClick: setSelectedDownloadFilters,
+								}}
+								resetOptions={{
+									icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+									label: tText('pages/admin/materiaalaanvragen/index___reset'),
+									variants: ['text'],
+									onClick: setSelectedDownloadFilters,
+								}}
 							/>
 							{maintainerList && (
 								<MultiSelect
 									variant="rounded"
 									label={tText('pages/admin/materiaalaanvragen/index___aanbieder')}
 									options={maintainerList}
-									onChange={onMultiMaintainersChange}
-									className="p-admin-material-requests__dropdown c-multi-select"
+									onChange={noop}
+									className={clsx(
+										'p-admin-material-requests__dropdown',
+										'p-admin-material-requests__dropdown-no-dividers'
+									)}
 									iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
 									iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 									iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+									checkboxHeader={tText(
+										'pages/admin/materiaalaanvragen/index___aanbieder-aanvraag'
+									)}
+									confirmOptions={{
+										label: tText('pages/admin/materiaalaanvragen/index___pas-toe'),
+										variants: ['black'],
+										onClick: setSelectedMaintainers,
+									}}
+									resetOptions={{
+										icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+										label: tText('pages/admin/materiaalaanvragen/index___reset'),
+										variants: ['text'],
+										onClick: setSelectedMaintainers,
+									}}
 								/>
 							)}
 						</div>
