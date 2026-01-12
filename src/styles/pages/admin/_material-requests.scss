@@ -26,12 +26,18 @@ $page: "p-admin-material-requests";
 		margin-bottom: $spacer-xs;
 
 		@media (min-width: $breakpoint-md) {
-			margin-right: $spacer-md;
+			margin-right: $spacer-sm;
 			margin-bottom: 0;
 		}
 
 		&--open {
 			box-shadow: $shadow-24-black-08;
+		}
+
+		&-no-dividers {
+			.c-multi-select__checkbox-list-item {
+				border-top: none;
+			}
 		}
 	}
 }
