@@ -138,7 +138,7 @@ export abstract class MaterialRequestsService {
 		motivation?: string
 	): Promise<MaterialRequestDetail | null> {
 		return ApiService.getApi()
-			.post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}/status`, {
+			.patch(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}/status`, {
 				json: { status, motivation },
 			})
 			.json();
