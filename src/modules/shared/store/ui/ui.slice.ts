@@ -19,6 +19,7 @@ const initialState: UIState = {
 	lastScrollPosition: null,
 	breadcrumbs: [],
 	hasOpenConfirmationModal: false,
+	lastSearchParams: '',
 };
 
 export const uiSlice = toolkitRaw.createSlice({
@@ -76,6 +77,9 @@ export const uiSlice = toolkitRaw.createSlice({
 		setHasOpenConfirmationModal(state, action: toolkitRaw.PayloadAction<boolean>) {
 			state.hasOpenConfirmationModal = action.payload;
 		},
+		setLastSearchParams(state, action: toolkitRaw.PayloadAction<string>) {
+			state.lastSearchParams = action.payload;
+		},
 	},
 });
 
@@ -95,4 +99,5 @@ export const {
 	setLastScrollPosition,
 	setBreadcrumbs,
 	setHasOpenConfirmationModal,
+	setLastSearchParams,
 } = uiSlice.actions;

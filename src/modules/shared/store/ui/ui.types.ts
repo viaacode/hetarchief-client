@@ -21,4 +21,5 @@ export interface UIState {
 	lastScrollPosition: LastScrollPositionType | null;
 	breadcrumbs: Breadcrumb[];
 	hasOpenConfirmationModal: boolean;
+	lastSearchParams: string;
 }
