@@ -1,4 +1,5 @@
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
+import MaterialRequestStatusUpdateBlade from '@account/components/MaterialRequestStatusUpdateBlade/MaterialRequestStatusUpdateBlade';
 import {
 	GET_MATERIAL_REQUEST_DOWNLOAD_FILTER_ARRAY,
 	GET_MATERIAL_REQUEST_STATUS_FILTER_ARRAY,
@@ -28,6 +29,7 @@ import {
 	PaginationBar,
 	Table,
 } from '@meemoo/react-components';
+import { BladeManager } from '@shared/components/BladeManager';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -65,6 +67,9 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	const locale = useLocale();
 
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
+	const [isDetailStatusBladeOpenWithStatus, setIsDetailStatusBladeOpenWithStatus] = useState<
+		MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED | undefined
+	>(undefined);
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
 	const {
 		data: materialRequests,
@@ -94,9 +99,11 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		...(user?.organisationId ? { maintainerIds: [user.organisationId] } : {}),
 	});
 
-	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
-		currentMaterialRequest?.id || null
-	);
+	const {
+		data: currentMaterialRequestDetail,
+		isFetching: isLoading,
+		refetch: refetchCurrentMaterialRequestDetail,
+	} = useGetMaterialRequestById(currentMaterialRequest?.id || null);
 
 	const noData = useMemo(
 		(): boolean => isEmpty(materialRequests?.items),
@@ -219,25 +226,73 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		tHtml('pages/beheer/materiaalaanvragen/index___geen-materiaal-aanvragen');
 
 	const renderDetailBlade = () => {
-		if (!currentMaterialRequestDetail) {
+		if (!currentMaterialRequest?.id || !currentMaterialRequestDetail) {
 			return null;
 		}
+
+		const getBladeLayerIndex = () => {
+			if (isDetailStatusBladeOpenWithStatus) {
+				return 2;
+			}
+
+			if (isDetailBladeOpen) {
+				return 1;
+			}
+			return 0;
+		};
+
 		return (
-			<MaterialRequestDetailBlade
-				allowRequestCancellation={false}
-				isOpen={!isLoading && isDetailBladeOpen}
-				onClose={() => {
-					void refetchMaterialRequests();
-					setIsDetailBladeOpen(false);
+			<BladeManager
+				currentLayer={getBladeLayerIndex()}
+				onCloseBlade={() => {
+					if (isDetailStatusBladeOpenWithStatus) {
+						setIsDetailStatusBladeOpenWithStatus(undefined);
+					} else {
+						setIsDetailBladeOpen(false);
+					}
 				}}
-				currentMaterialRequestDetail={currentMaterialRequestDetail}
-			/>
+				opacityStep={0.1}
+			>
+				<MaterialRequestDetailBlade
+					allowRequestCancellation={false}
+					isOpen={!isLoading && isDetailBladeOpen}
+					onClose={() => {
+						void refetchMaterialRequests();
+						setIsDetailBladeOpen(false);
+					}}
+					onApproveRequest={() =>
+						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.APPROVED)
+					}
+					onDeclineRequest={() =>
+						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
+					}
+					currentMaterialRequestDetail={currentMaterialRequestDetail}
+					layer={isDetailBladeOpen ? 1 : 99}
+					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
+				/>
+				<MaterialRequestStatusUpdateBlade
+					isOpen={!isLoading && !!isDetailStatusBladeOpenWithStatus}
+					onClose={(success) => {
+						setIsDetailStatusBladeOpenWithStatus(undefined);
+						if (success) {
+							void refetchCurrentMaterialRequestDetail();
+							void refetchMaterialRequests();
+						}
+					}}
+					status={isDetailStatusBladeOpenWithStatus}
+					currentMaterialRequestDetail={currentMaterialRequestDetail}
+					layer={isDetailBladeOpen ? 2 : 99}
+					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
+				/>
+			</BladeManager>
 		);
 	};
 
 	const onRowClick = async (_evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
 		if (row.original.status === MaterialRequestStatus.NEW) {
-			await MaterialRequestsService.setAsPending(row.original.id);
+			MaterialRequestsService.setAsPending(row.original.id).then(() =>
+				refetchCurrentMaterialRequestDetail()
+			);
 		}
 		setCurrentMaterialRequest(row.original);
 		setIsDetailBladeOpen(true);
@@ -389,7 +444,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 					{noData && renderEmptyMessage()}
 					{!noData && !isFetching && renderContent()}
 				</div>
-				{currentMaterialRequest?.id && renderDetailBlade()}
+				{renderDetailBlade()}
 			</CPAdminLayout>
 		);
 	};

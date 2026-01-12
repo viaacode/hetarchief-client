@@ -23,7 +23,6 @@ import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { asDate, formatLongDate } from '@shared/utils/dates';
@@ -41,8 +40,12 @@ interface MaterialRequestDetailBladeProps {
 	isOpen: boolean;
 	onClose: () => void;
 	allowRequestCancellation: boolean;
+	onApproveRequest?: () => void;
+	onDeclineRequest?: () => void;
 	currentMaterialRequestDetail: MaterialRequestDetail;
 	refetchMaterialRequests?: () => void;
+	layer?: number;
+	currentLayer?: number;
 }
 
 const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
@@ -50,10 +53,13 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	onClose,
 	allowRequestCancellation,
 	currentMaterialRequestDetail,
+	onApproveRequest,
+	onDeclineRequest,
 	refetchMaterialRequests,
+	layer,
+	currentLayer,
 }) => {
 	const locale = useLocale();
-	const isKeyUser = useIsKeyUser();
 	const user = useSelector(selectUser);
 
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -104,15 +110,18 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 
 	const renderFooter = () => {
 		if (canRequestBeEvaluated) {
-			// TODO: approve/decline logic
 			return (
 				<div className={styles['p-account-my-material-requests__close-button-container']}>
-					<Button label={tText('Goedkeuren')} variants={['block', 'primary']} onClick={onClose} />
+					<Button
+						label={tText('Goedkeuren')}
+						variants={['block', 'primary']}
+						onClick={onApproveRequest}
+					/>
 					<Button
 						label={tText('Afkeuren')}
 						variants={['block']}
 						className={styles['p-account-my-material-requests__decline-button']}
-						onClick={onClose}
+						onClick={onDeclineRequest}
 					/>
 				</div>
 			);
@@ -360,6 +369,8 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			stickyFooter={canRequestBeEvaluated}
 			onClose={onClose}
 			id="material-request-detail-blade"
+			layer={layer}
+			currentLayer={currentLayer}
 		>
 			<div className={styles['p-account-my-material-requests__content-wrapper']}>
 				<div className={styles['p-account-my-material-requests__content']}>
@@ -396,7 +407,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						undefined,
 						currentMaterialRequestDetail.organisation
 					)}
-					{(!isKeyUser || !currentMaterialRequestDetail.reuseForm) &&
+					{!currentMaterialRequestDetail.reuseForm &&
 						renderContentBlock(
 							tText(
 								'modules/account/components/material-request-detail-blade/material-requests___reden'
@@ -404,7 +415,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 							currentMaterialRequestDetail.reason || '-'
 						)}
 
-					{!isKeyUser &&
+					{!currentMaterialRequestDetail.reuseForm &&
 						currentMaterialRequestDetail.requesterCapacity &&
 						renderContentBlock(
 							tText(
