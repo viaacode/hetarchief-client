@@ -1,4 +1,4 @@
-// We need to duplicate this page into /[slug]/[...slug] otherwise we get all kind of nasty page loads for these paths:
+// We need to duplicate this page into /[slug] otherwise we get all kind of nasty page loads for these paths:
 // .well-known
 // appspecific
 // com.chrome.devtools.json
@@ -15,18 +15,16 @@ import {
 	useGetContentPageByLanguageAndPath,
 } from '@content-page/hooks/get-content-page';
 import { ContentPageClientService } from '@content-page/services/content-page-client.service';
-import {
-	ContentPageRenderer,
-	convertDbContentPageToContentPageInfo,
-} from '@meemoo/admin-core-ui/client';
+import { ContentPageRenderer, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/client';
+import ErrorNoAccess from '@shared/components/ErrorNoAccess/ErrorNoAccess';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';
 import { type PageInfo, SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { getSlugFromQueryParams } from '@shared/helpers/get-slug-from-query-params';
+import { getFallbackPath } from '@shared/helpers/get-fallback-path';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import withUser, { type UserProps } from '@shared/hooks/with-user';
+import type { UserProps } from '@shared/hooks/with-user';
 import { setShowZendesk } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
@@ -40,7 +38,6 @@ import { useRouter } from 'next/router';
 import type { GetServerSidePropsContext } from 'next/types';
 import { type ComponentType, type FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import ErrorNoAccess from '../../modules/shared/components/ErrorNoAccess/ErrorNoAccess';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -50,12 +47,11 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 	image,
 	url,
 	canonicalUrl,
-	commonUser,
 }) => {
 	const router = useRouter();
 	const locale = useLocale();
 	const hasCheckedLogin: boolean = useSelector(selectHasCheckedLogin);
-	const contentPageSlug = getSlugFromQueryParams(router.query);
+	const contentPageSlug = getFallbackPath(router.query.fallback);
 	const dispatch = useDispatch();
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 
@@ -97,7 +93,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 
 	const renderPageContent = () => {
 		if (isContentPageLoading || !hasCheckedLogin || (isContentPageFetching && !contentPageInfo)) {
-			return <Loading fullscreen owner={'/[slug]/[...deeperslug]/index page'} />;
+			return <Loading fullscreen owner={'/[...fallback]/index page'} />;
 		}
 
 		if (contentPageInfo) {
@@ -124,7 +120,6 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 					/>
 					<ContentPageRenderer
 						contentPageInfo={contentPageInfo}
-						commonUser={commonUser}
 						key={contentPageInfo.path}
 						renderNoAccessError={() => <ErrorNoAccess visitorSpaceSlug={null} />}
 					/>
@@ -147,7 +142,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 							relativeUrl={url}
 							canonicalUrl={canonicalUrl}
 						/>
-						<Loading fullscreen owner={'/[slug]/index page'} />
+						<Loading fullscreen owner={'/[...fallback]/index page'} />
 					</>
 				);
 			}
@@ -167,32 +162,35 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 		}
 	};
 
-	return (
-		<VisitorLayout>
-			<SeoTags
-				title={title || 'Het Archief'}
-				description={description}
-				imgUrl={image}
-				translatedPages={[]}
-				relativeUrl={url}
-				canonicalUrl={canonicalUrl}
-			/>
-			{renderPageContent()}
-		</VisitorLayout>
-	);
+	return <VisitorLayout>{renderPageContent()}</VisitorLayout>;
 };
 
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	const isNextDataReq = context.req.headers['x-nextjs-data'] === '1';
+	const isNextInternalPath =
+		typeof context.req.url === 'string' && context.req.url.startsWith('/_next/');
+
+	const queryClient = new QueryClient();
+
+	if (isNextDataReq || isNextInternalPath) {
+		// Not a real page, but a Next.js data request or internal Next.js path
+		return getDefaultStaticProps(context, context.resolvedUrl, {
+			queryClient,
+			title: 'Home - Het Archief',
+			description: null,
+			image: null,
+		});
+	}
+
 	let title: string | null = null;
 	let description: string | null = null;
 	let image: string | null = null;
-	const path = getSlugFromQueryParams(context.query);
+	const path = context.query.fallback;
 	const locale = (context.locale || Locale.nl) as Locale;
-	const queryClient = new QueryClient();
 
-	if (path && !path.includes('.well-known')) {
+	if (path) {
 		try {
 			const contentPage = await ContentPageClientService.getByLanguageAndPath(locale, `/${path}`);
 			title = contentPage?.title || null;
@@ -221,6 +219,4 @@ export async function getServerSideProps(
 	});
 }
 
-export default withUser(
-	withAuth(DynamicRouteResolver as ComponentType, false)
-) as FC<DefaultSeoInfo>;
+export default withAuth(DynamicRouteResolver as ComponentType, false) as FC<DefaultSeoInfo>;

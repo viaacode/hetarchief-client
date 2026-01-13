@@ -9,7 +9,6 @@ import { goBrowserBackWithFallback } from '@shared/helpers/go-browser-back-with-
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
-import type { AvoUserCommonUser } from '@viaa/avo2-types';
 import { useRouter } from 'next/router';
 import React, { type FC, lazy, Suspense } from 'react';
 
@@ -23,11 +22,11 @@ interface ContentPageEditPageProps {
 	id: string | undefined;
 }
 
-export const ContentPageEditPage: FC<
-	DefaultSeoInfo & {
-		commonUser: AvoUserCommonUser | undefined;
-	} & ContentPageEditPageProps
-> = ({ url, canonicalUrl, commonUser, id }) => {
+export const ContentPageEditPage: FC<DefaultSeoInfo & ContentPageEditPageProps> = ({
+	url,
+	canonicalUrl,
+	id,
+}) => {
 	const locale = useLocale();
 	const router = useRouter();
 
@@ -39,7 +38,6 @@ export const ContentPageEditPage: FC<
 						<Suspense fallback={<Loading fullscreen owner="ContentPageEditPage" />}>
 							<ContentPageEdit
 								id={id}
-								commonUser={commonUser as AvoUserCommonUser}
 								onGoBack={() =>
 									goBrowserBackWithFallback(
 										buildLink(ROUTES_BY_LOCALE[locale].adminContentPageDetail, {
@@ -48,6 +46,7 @@ export const ContentPageEditPage: FC<
 										router
 									)
 								}
+								url={router.asPath}
 							/>
 						</Suspense>
 					</div>

@@ -2,7 +2,7 @@ import { getAdminCoreConfig } from '@admin/wrappers/admin-core-config';
 import { AdminConfigManager } from '@meemoo/admin-core-ui/client';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { AppLayout } from '@shared/layouts/AppLayout';
-import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
+import NextQueryParamProvider from '@shared/providers/NextQueryParamProvider/NextQueryParamProvider';
 import { ApiService } from '@shared/services/api-service'; // Set global locale:
 import { wrapper } from '@shared/store';
 import { Locale } from '@shared/utils/i18n';
@@ -22,7 +22,10 @@ import { Provider } from 'react-redux';
 
 import pkg from '../../package.json';
 
+import '@viaa/avo2-components/styles.css';
+import '@meemoo/react-components/styles.css';
 import '@meemoo/admin-core-ui/admin.css';
+import '@meemoo/admin-core-ui/client.css';
 import '../styles/main.scss';
 
 // Set global locale:

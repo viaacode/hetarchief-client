@@ -14,7 +14,6 @@ import { KNOWN_STATIC_ROUTES, QUERY_KEYS, ROUTES_BY_LOCALE } from '@shared/const
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import withUser, { type UserProps } from '@shared/hooks/with-user';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
 import { QueryClient } from '@tanstack/react-query';
@@ -27,13 +26,7 @@ import ErrorNoAccess from '../modules/shared/components/ErrorNoAccess/ErrorNoAcc
 
 const { publicRuntimeConfig } = getConfig();
 
-const Homepage: NextPage<DefaultSeoInfo & UserProps> = ({
-	title,
-	description,
-	image,
-	url,
-	commonUser,
-}) => {
+const Homepage: NextPage<DefaultSeoInfo> = ({ title, description, image, url }) => {
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const router = useRouter();
 	const locale = useLocale();
@@ -66,7 +59,6 @@ const Homepage: NextPage<DefaultSeoInfo & UserProps> = ({
 			return (
 				<ContentPageRenderer
 					contentPageInfo={contentPageInfo}
-					commonUser={commonUser}
 					renderNoAccessError={() => <ErrorNoAccess visitorSpaceSlug={null} />}
 				/>
 			);
@@ -128,4 +120,4 @@ export async function getStaticProps(
 	});
 }
 
-export default withUser(withAuth(Homepage as ComponentType, false)) as FC<DefaultSeoInfo>;
+export default withAuth(Homepage as ComponentType, false) as FC<DefaultSeoInfo>;

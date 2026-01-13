@@ -20,7 +20,6 @@ import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
-import type { AvoUserCommonUser } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { type FC, useCallback, useEffect, useRef, useState } from 'react';
@@ -29,11 +28,7 @@ import { useQueryParams } from 'use-query-params';
 import ErrorNoAccess from '../shared/components/ErrorNoAccess/ErrorNoAccess';
 import styles from './UserConditions.module.scss';
 
-export const UserConditions: FC<DefaultSeoInfo & { commonUser: AvoUserCommonUser | undefined }> = ({
-	url,
-	canonicalUrl,
-	commonUser,
-}) => {
+export const UserConditions: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	useStickyLayout();
 	useHideFooter();
 
@@ -112,7 +107,6 @@ export const UserConditions: FC<DefaultSeoInfo & { commonUser: AvoUserCommonUser
 							{AdminConfigManager.getConfig() && (
 								<ContentPageRenderer
 									contentPageInfo={contentPageInfo as ContentPageInfo}
-									commonUser={commonUser}
 									renderNoAccessError={() => <ErrorNoAccess visitorSpaceSlug={null} />}
 								/>
 							)}

@@ -4,11 +4,11 @@
  * - https://github.com/pbeshai/use-query-params/issues/13
  * Waiting for official support in use-query-params
  */
+
+import { isBrowser } from '@shared/utils/is-browser';
 import { useRouter } from 'next/router';
 import React, { type ComponentProps, memo, useMemo } from 'react';
 import { QueryParamProvider } from 'use-query-params';
-
-import { isBrowser } from '@shared/utils/is-browser';
 
 type Props = Omit<
 	ComponentProps<typeof QueryParamProvider>,
