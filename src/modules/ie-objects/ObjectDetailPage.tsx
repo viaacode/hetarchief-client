@@ -1319,7 +1319,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const handleIiifViewerSelection = useCallback(
 		(rect: Rect, pageIndex: number) => {
 			const downloadUrl = stringifyUrl({
-				url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/jpg/selection`,
+				url: `${process.env.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/jpg/selection`,
 				query: {
 					page: pageIndex,
 					startX: Math.floor(rect.x),

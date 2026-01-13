@@ -1,10 +1,9 @@
-import getConfig from 'next/config';
-import { parseUrl } from 'query-string';
-
 import { ApiService } from '@shared/services/api-service';
 import type { LanguageInfo } from '@shared/services/translation-service/translation.types';
 import { Locale } from '@shared/utils/i18n';
 import { isServerSideRendering } from '@shared/utils/is-browser';
+import getConfig from 'next/config';
+import { parseUrl } from 'query-string';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -32,8 +31,8 @@ export class TranslationService {
 		return (
 			Object.values(Locale).find((languageCode) => {
 				return (
-					pageUrl.includes(`${publicRuntimeConfig.CLIENT_URL}/${languageCode}/`) ||
-					pageUrl === `${publicRuntimeConfig.CLIENT_URL}/${languageCode}`
+					pageUrl.includes(`${process.env.CLIENT_URL}/${languageCode}/`) ||
+					pageUrl === `${process.env.CLIENT_URL}/${languageCode}`
 				);
 			}) || Locale.nl
 		);

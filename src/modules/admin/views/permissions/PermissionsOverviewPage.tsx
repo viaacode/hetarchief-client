@@ -1,10 +1,7 @@
-import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import React, { type FC, lazy, Suspense, useRef, useState } from 'react';
-
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import type { UserGroupOverviewRef } from '@admin/types';
+import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -12,6 +9,8 @@ import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsChe
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tHtml, tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import clsx from 'clsx';
+import React, { type FC, lazy, Suspense, useRef, useState } from 'react';
 
 import styles from './PermissionsOverviewPage.module.scss';
 
@@ -23,7 +22,7 @@ const UserGroupOverview = lazy(() =>
 
 export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	// Access child functions
-	const permissionsRef = useRef<UserGroupOverviewRef>();
+	const permissionsRef = useRef<UserGroupOverviewRef>(undefined);
 
 	const [hasChanges, setHasChanges] = useState<boolean>(false);
 

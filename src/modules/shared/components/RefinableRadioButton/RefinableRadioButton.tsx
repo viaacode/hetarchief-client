@@ -1,9 +1,8 @@
 import { CheckboxList, Dropdown, RadioButton } from '@meemoo/react-components';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import clsx from 'clsx';
 import { isEmpty, isNil, without } from 'lodash-es';
 import { type FC, type ReactElement, type ReactNode, useState } from 'react';
-
-import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 import { Icon } from '../Icon';
 
@@ -20,7 +19,7 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 	value,
 	onChange,
 	className,
-}: RefinableRadioButtonProps): ReactElement => {
+}: RefinableRadioButtonProps): ReactElement<any> => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
 	const onRadioButtonClick = (id: string): void => {

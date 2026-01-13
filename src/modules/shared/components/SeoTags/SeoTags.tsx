@@ -1,14 +1,13 @@
-import getConfig from 'next/config';
-import Head from 'next/head';
-import type { FC } from 'react';
-
-import { ROUTES_BY_LOCALE, ROUTE_PARTS_BY_LOCALE, type RouteKey } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE, type RouteKey } from '@shared/const';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { LanguageInfo } from '@shared/services/translation-service/translation.types';
 import { Locale } from '@shared/utils/i18n';
 import { createPageTitle } from '@shared/utils/seo';
 import { truncate } from 'lodash-es';
+import getConfig from 'next/config';
+import Head from 'next/head';
+import type { FC } from 'react';
 import { stripHtml } from 'string-strip-html';
 
 const { publicRuntimeConfig } = getConfig();
@@ -54,14 +53,14 @@ export const SeoTags: FC<SeoTagsProps> = ({
 
 	const getResolvedUrl = (url: string): string => {
 		if (!url) {
-			return publicRuntimeConfig.CLIENT_URL;
+			return process.env.CLIENT_URL;
 		}
 		if (url.startsWith('http')) {
 			// Absolute url
 			return url;
 		}
 		// relative url
-		return `${publicRuntimeConfig.CLIENT_URL}/${locale}${url || ''}`;
+		return `${process.env.CLIENT_URL}/${locale}${url || ''}`;
 	};
 
 	const getTranslatedPages = (): PageInfo[] => {
@@ -118,12 +117,9 @@ export const SeoTags: FC<SeoTagsProps> = ({
 			{canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
 			<meta property="og:title" content={resolvedTitle} />
 			{resolvedDescription && <meta property="og:description" content={resolvedDescription} />}
-			<meta
-				property="og:image"
-				content={imgUrl || `${publicRuntimeConfig.CLIENT_URL}/images/og.jpg`}
-			/>
+			<meta property="og:image" content={imgUrl || `${process.env.CLIENT_URL}/images/og.jpg`} />
 			<meta property="twitter:card" content="summary_large_image" />
-			<meta property="twitter:domain" content={publicRuntimeConfig.CLIENT_URL} />
+			<meta property="twitter:domain" content={process.env.CLIENT_URL} />
 			<meta property="twitter:title" content={resolvedTitle} />
 			{resolvedDescription && <meta property="twitter:description" content={resolvedDescription} />}
 			{getTranslatedPages().map((translatedPage) => {

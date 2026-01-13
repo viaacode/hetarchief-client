@@ -65,7 +65,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 		itemsToHide > 1 ? secondaryActions.slice(0, -itemsToHide) : secondaryActions;
 	const hiddenActions = itemsToHide > 1 ? secondaryActions.slice(-itemsToHide) : [];
 
-	const renderInTooltip = (trigger: ReactNode, tooltip: string): ReactElement => {
+	const renderInTooltip = (trigger: ReactNode, tooltip: string): ReactElement<any> => {
 		return (
 			<NoServerSideRendering>
 				<Tooltip position="top">

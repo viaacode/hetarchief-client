@@ -204,11 +204,11 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 			getContentPageByLanguageAndPathEndpoint: null,
 		},
 		database: {
-			proxyUrl: publicRuntimeConfig.PROXY_URL,
+			proxyUrl: process.env.PROXY_URL,
 		},
 		flowplayer: {
-			FLOW_PLAYER_ID: publicRuntimeConfig.FLOW_PLAYER_ID,
-			FLOW_PLAYER_TOKEN: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
+			FLOW_PLAYER_ID: process.env.FLOW_PLAYER_ID,
+			FLOW_PLAYER_TOKEN: process.env.FLOW_PLAYER_TOKEN,
 		},
 		handlers: {
 			onExternalLink: () => {
@@ -219,7 +219,7 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 		// biome-ignore lint/suspicious/noExplicitAny: The Locale types between the admin-core and the client differ slightly, so they never match
 		locale: locale as any,
 		env: {
-			CLIENT_URL: publicRuntimeConfig.CLIENT_URL,
+			CLIENT_URL: process.env.CLIENT_URL,
 			DATABASE_APPLICATION_TYPE: AvoCoreDatabaseType.hetArchief,
 		},
 	};

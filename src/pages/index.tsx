@@ -75,7 +75,7 @@ const Homepage: NextPage<DefaultSeoInfo> = ({ title, description, image, url }) 
 				imgUrl={image || contentPageInfo?.thumbnailPath || null}
 				translatedPages={[]}
 				relativeUrl={url}
-				canonicalUrl={publicRuntimeConfig.CLIENT_URL}
+				canonicalUrl={process.env.CLIENT_URL}
 			/>
 			{renderPageContent()}
 		</VisitorLayout>

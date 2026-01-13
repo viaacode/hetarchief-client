@@ -40,7 +40,7 @@ export const useGetContentBlockEncloseContent = (
 			}
 			return fetchWithLogoutJson<ContentPage[]>(
 				stringifyUrl({
-					url: `${publicRuntimeConfig.PROXY_URL}/admin/content-pages/by-language-and-path`,
+					url: `${process.env.PROXY_URL}/admin/content-pages/by-language-and-path`,
 					query: {
 						language: AdminConfigManager.getConfig().locale || Locale.nl,
 						path: id,

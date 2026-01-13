@@ -1,24 +1,3 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import {
-	Alert,
-	Box,
-	Button,
-	Checkbox,
-	CheckboxList,
-	keysEnter,
-	keysSpacebar,
-	onKey,
-} from '@meemoo/react-components';
-import { useQueryClient } from '@tanstack/react-query';
-import { isNil } from 'lodash-es';
-import getConfig from 'next/config';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
-import { type ComponentType, type FC, type ReactNode, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
-
 import {
 	COMMUNICATION_FORM_SCHEMA,
 	GET_PERMISSION_TRANSLATIONS_BY_GROUP,
@@ -33,6 +12,17 @@ import type { CommunicationFormState } from '@account/types';
 import { checkLoginAction, selectCommonUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { yupResolver } from '@hookform/resolvers/yup';
+import {
+	Alert,
+	Box,
+	Button,
+	Checkbox,
+	CheckboxList,
+	keysEnter,
+	keysSpacebar,
+	onKey,
+} from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
@@ -50,7 +40,16 @@ import { toastService } from '@shared/services/toast-service';
 import { useAppDispatch } from '@shared/store';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
+import { useQueryClient } from '@tanstack/react-query';
 import { VisitorLayout } from '@visitor-layout/index';
+import { isNil } from 'lodash-es';
+import getConfig from 'next/config';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
+import { type ComponentType, type FC, type ReactNode, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -210,10 +209,10 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			{/* Which will redirect to the client homepage => after user logs in, redirect to client profile page */}
 			<Link
 				href={stringifyUrl({
-					url: publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL.replace('{locale}', currentAccountLocale),
+					url: process.env.SSUM_EDIT_ACCOUNT_URL.replace('{locale}', currentAccountLocale),
 					query: {
 						redirect_to: stringifyUrl({
-							url: `${publicRuntimeConfig.PROXY_URL}/auth/global-logout`,
+							url: `${process.env.PROXY_URL}/auth/global-logout`,
 							query: {
 								returnToUrl: window.location.href,
 							},

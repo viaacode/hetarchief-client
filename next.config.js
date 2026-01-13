@@ -37,7 +37,7 @@ module.exports = withTM({
 		 *   Use 'import' to reference the package instead.
 		 *   Solution: https://nextjs.org/docs/messages/import-esm-externals
 		 */
-		esmExternals: 'loose',
+		// esmExternals: 'loose',
 		/**
 		 * Ignore warnings about big page data, since we load translations like that
 		 * https://meemoo.atlassian.net/browse/ARC-1932
@@ -47,9 +47,6 @@ module.exports = withTM({
 		// Attempt to improve css loading
 		// https://meemoo.atlassian.net/browse/ARC-2913
 		optimizeCss: true,
-	},
-	eslint: {
-		ignoreDuringBuilds: true, // We're using biome instead of eslint
 	},
 	webpack: (config, options) => {
 		config.mode = 'production';
@@ -113,21 +110,6 @@ module.exports = withTM({
 		],
 	},
 	productionBrowserSourceMaps: true, // process.env.DEBUG_TOOLS === 'true',
-	publicRuntimeConfig: {
-		NEXT_TELEMETRY_DISABLED: process.env.NEXT_TELEMETRY_DISABLED,
-		NODE_ENV: process.env.NODE_ENV,
-		PORT: process.env.PORT,
-		CLIENT_URL: process.env.CLIENT_URL,
-		SSUM_EDIT_ACCOUNT_URL: process.env.SSUM_EDIT_ACCOUNT_URL,
-		PROXY_URL: process.env.PROXY_URL,
-		DEBUG_TOOLS: process.env.DEBUG_TOOLS,
-		ZENDESK_KEY: process.env.ZENDESK_KEY,
-		FLOW_PLAYER_TOKEN: process.env.FLOW_PLAYER_TOKEN,
-		FLOW_PLAYER_ID: process.env.FLOW_PLAYER_ID,
-		GOOGLE_TAG_MANAGER_ID: process.env.GOOGLE_TAG_MANAGER_ID,
-		ENABLE_GOOGLE_INDEXING: process.env.ENABLE_GOOGLE_INDEXING,
-		IIIF_IMAGE_API: process.env.IIIF_IMAGE_API,
-	},
 	async headers() {
 		if (process.env.ENABLE_GOOGLE_INDEXING === 'false') {
 			return [

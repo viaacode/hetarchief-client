@@ -1,9 +1,8 @@
 import type { ContentPageInfo } from '@meemoo/admin-core-ui/client';
+import type { Locale } from '@shared/utils/i18n';
 import { startsWith } from 'lodash-es';
 import getConfig from 'next/config';
 import { stringifyUrl } from 'query-string';
-
-import type { Locale } from '@shared/utils/i18n';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -21,7 +20,7 @@ export class ContentPageClientService {
 		}
 
 		const url = stringifyUrl({
-			url: `${publicRuntimeConfig.PROXY_URL}/admin/content-pages/by-language-and-path`,
+			url: `${process.env.PROXY_URL}/admin/content-pages/by-language-and-path`,
 			query: {
 				language,
 				path,

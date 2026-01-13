@@ -1,16 +1,15 @@
 import { action } from '@storybook/addon-actions';
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { cloneElement, type ReactElement, useState } from 'react';
-
+import { toggleMock } from './__mocks__/toggle';
 import Toggle from './Toggle';
 import type { ToggleOption } from './Toggle.types';
-import { toggleMock } from './__mocks__/toggle';
 
 const ToggleStoryComponent = ({
 	children,
 	initialOptions = toggleMock.options,
 }: {
-	children: ReactElement;
+	children: ReactElement<any>;
 	initialOptions?: ToggleOption[];
 }) => {
 	const [options, setOptions] = useState(initialOptions);

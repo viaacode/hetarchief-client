@@ -47,7 +47,7 @@ const queryClient = new QueryClient({
 // Temp version with undefined router and nl locale
 AdminConfigManager.setConfig(getAdminCoreConfig(null, Locale.nl));
 
-function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
+function MyApp({ Component, pageProps }: AppProps): ReactElement<any> | null {
 	const router = useRouter();
 	const locale = useLocale();
 	const { store, props } = wrapper.useWrappedStore(pageProps);
@@ -105,7 +105,7 @@ export default appWithTranslation(MyApp, {
 		localeDetection: false,
 	},
 	backend: {
-		loadPath: `${publicRuntimeConfig.PROXY_URL}/admin/translations/{{lng}}.json`,
+		loadPath: `${process.env.PROXY_URL}/admin/translations/{{lng}}.json`,
 	},
 	use: [HttpApi],
 	ns: ['common'],

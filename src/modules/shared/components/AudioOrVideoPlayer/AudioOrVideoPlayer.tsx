@@ -135,8 +135,8 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		pause: paused,
 		onPlay,
 		onPause,
-		token: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
-		dataPlayerId: publicRuntimeConfig.FLOW_PLAYER_ID,
+		token: process.env.FLOW_PLAYER_TOKEN,
+		dataPlayerId: process.env.FLOW_PLAYER_ID,
 		ui: allowFullScreen ? undefined : 1, // 1 = NO_FULLSCREEN
 		plugins: ['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio', 'keyboard'],
 		peakColorBackground: '#303030', // $shade-darker

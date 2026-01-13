@@ -79,7 +79,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 
 	useEffect(() => {
 		if (isContentPageNotFoundError) {
-			window.open(`${publicRuntimeConfig.PROXY_URL}/not-found`, '_self');
+			window.open(`${process.env.PROXY_URL}/not-found`, '_self');
 		}
 	}, [isContentPageNotFoundError]);
 

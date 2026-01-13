@@ -1,8 +1,7 @@
-import ky from 'ky-universal';
-import type { KyInstance } from 'ky/distribution/types/ky';
-import getConfig from 'next/config';
-
 import { AuthService } from '@auth/services/auth-service';
+import type { KyInstance } from 'ky/distribution/types/ky';
+import ky from 'ky-universal';
+import getConfig from 'next/config';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -12,7 +11,7 @@ export abstract class ApiService {
 	public static getApi(ignoreAuthError = false): KyInstance {
 		if (!ApiService.api) {
 			ApiService.api = ky.create({
-				prefixUrl: publicRuntimeConfig.PROXY_URL,
+				prefixUrl: process.env.PROXY_URL,
 				timeout: 30000,
 				headers: {
 					'content-type': 'application/json',

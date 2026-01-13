@@ -62,7 +62,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	};
 
 	// Render
-	const renderModalButton = ({ icon, id, label }: FilterMenuFilterOption): ReactElement => {
+	const renderModalButton = ({ icon, id, label }: FilterMenuFilterOption): ReactElement<any> => {
 		const filterIsActive = id === activeFilter;
 
 		return (
@@ -79,7 +79,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 		);
 	};
 
-	const renderFilterModalHeader = (): ReactElement => (
+	const renderFilterModalHeader = (): ReactElement<any> => (
 		<Navigation className={styles['c-filter-menu-mobile__nav']}>
 			<Button
 				key="filter-menu-mobile-nav-filter"
@@ -94,7 +94,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 		</Navigation>
 	);
 
-	const renderFilterHeader = (): ReactElement => (
+	const renderFilterHeader = (): ReactElement<any> => (
 		<Navigation className={styles['c-filter-menu-mobile__nav']}>
 			<Button
 				key="filter-menu-mobile-nav-close"
@@ -109,7 +109,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 		</Navigation>
 	);
 
-	const renderTagList = (): ReactElement => (
+	const renderTagList = (): ReactElement<any> => (
 		<div className="l-container">
 			<h4 className="u-text-center u-mt-24">
 				{tHtml(
@@ -127,7 +127,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 		</div>
 	);
 
-	const renderSortModal = (): ReactElement => (
+	const renderSortModal = (): ReactElement<any> => (
 		<>
 			<h4 className="u-text-center u-mt-24 u-mb-16">
 				{tHtml(
@@ -146,7 +146,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	const renderFormModal = (
 		{ form, id, label, type }: FilterMenuFilterOption,
 		isInline?: boolean
-	): ReactElement => (
+	): ReactElement<any> => (
 		<FilterForm
 			className={clsx(styles['c-filter-menu-mobile__form'], {
 				[styles['c-filter-menu-mobile--inline']]: isInline,
@@ -165,7 +165,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 		/>
 	);
 
-	const renderFilterFormByType = (filterOption: FilterMenuFilterOption): ReactElement => {
+	const renderFilterFormByType = (filterOption: FilterMenuFilterOption): ReactElement<any> => {
 		switch (filterOption.type) {
 			case FilterMenuType.Modal:
 				return renderModalButton(filterOption);

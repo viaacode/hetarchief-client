@@ -111,7 +111,7 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 		<NoServerSideRendering>
 			<Zendesk
 				{...settings}
-				zendeskKey={publicRuntimeConfig.ZENDESK_KEY}
+				zendeskKey={process.env.ZENDESK_KEY}
 				defer={true}
 				color={{ theme: '#00857d' }} // Ensure a contrast of 4.51:1 with white text
 				onLoaded={() => {

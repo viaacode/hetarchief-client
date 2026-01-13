@@ -42,7 +42,7 @@ const FilterForm: FC<FilterFormProps> = ({
 		[id]
 	);
 
-	const renderFilterFormByType = (): ReactElement => {
+	const renderFilterFormByType = (): ReactElement<any> => {
 		switch (type) {
 			case FilterMenuType.Modal:
 				return renderModal();
@@ -54,7 +54,7 @@ const FilterForm: FC<FilterFormProps> = ({
 		}
 	};
 
-	const renderCheckbox = (): ReactElement => {
+	const renderCheckbox = (): ReactElement<any> => {
 		const FormComponent = (form as FC<InlineFilterFormProps>) ?? (() => null);
 
 		return (
@@ -72,7 +72,7 @@ const FilterForm: FC<FilterFormProps> = ({
 		);
 	};
 
-	const renderModal = (): ReactElement => {
+	const renderModal = (): ReactElement<any> => {
 		// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 		const FormComponent = (form as FC<DefaultFilterFormProps<any>>) ?? (() => null);
 

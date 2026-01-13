@@ -1,7 +1,3 @@
-import { QueryClient, dehydrate } from '@tanstack/react-query';
-import { i18n } from 'next-i18next';
-import type { GetServerSidePropsContext, GetStaticPropsResult } from 'next/types';
-
 import { getTranslations } from '@i18n/helpers/get-translations';
 import { IeObjectsService } from '@ie-objects/services';
 import type { IeObjectSeo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
@@ -9,8 +5,11 @@ import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { makeServerSideRequestGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { kebabCase } from 'lodash-es';
 import getConfig from 'next/config';
+import type { GetServerSidePropsContext, GetStaticPropsResult } from 'next/types';
+import { i18n } from 'next-i18next';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -49,7 +48,7 @@ export async function getDefaultStaticProps(
 		options.title = options.title || seoInfo?.name || 'Het Archief';
 		options.description = options.description || seoInfo?.description || null;
 		options.image = options.image || seoInfo?.thumbnailUrl || null;
-		const baseUrl = publicRuntimeConfig.CLIENT_URL;
+		const baseUrl = process.env.CLIENT_URL;
 		const maintainerSlug = seoInfo?.maintainerSlug;
 		if (baseUrl && maintainerSlug && options.schemaIdentifier && options.title) {
 			options.canonicalUrl =

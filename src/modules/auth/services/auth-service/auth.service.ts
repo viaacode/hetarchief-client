@@ -1,15 +1,14 @@
+import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { ApiService } from '@shared/services/api-service';
+import { TranslationService } from '@shared/services/translation-service/translation.service';
+import { Locale } from '@shared/utils/i18n';
 import { QueryClient } from '@tanstack/react-query';
 import type { Options } from 'ky/distribution/types/options';
 import { omit, trimEnd } from 'lodash-es';
 import getConfig from 'next/config';
 import type { NextRouter } from 'next/router';
-import { type StringifiableRecord, parseUrl, stringifyUrl } from 'query-string';
-
-import { ROUTES_BY_LOCALE, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { ApiService } from '@shared/services/api-service';
-import { TranslationService } from '@shared/services/translation-service/translation.service';
-import { Locale } from '@shared/utils/i18n';
+import { parseUrl, type StringifiableRecord, stringifyUrl } from 'query-string';
 
 import type { CheckLoginResponse } from './auth.service.types';
 
@@ -53,10 +52,7 @@ export class AuthService {
 			});
 		}
 
-		let returnToUrl = trimEnd(
-			`${publicRuntimeConfig.CLIENT_URL}/${router.locale}${originalPath}`,
-			'/'
-		);
+		let returnToUrl = trimEnd(`${process.env.CLIENT_URL}/${router.locale}${originalPath}`, '/');
 		const parsedRedirectUrl = parseUrl(returnToUrl);
 		returnToUrl = stringifyUrl({
 			url: parsedRedirectUrl.url,
@@ -68,7 +64,7 @@ export class AuthService {
 
 		await router.replace(
 			stringifyUrl({
-				url: `${publicRuntimeConfig.PROXY_URL}/auth/hetarchief/login`,
+				url: `${process.env.PROXY_URL}/auth/hetarchief/login`,
 				query: {
 					returnToUrl,
 					language: router.locale,
@@ -83,13 +79,13 @@ export class AuthService {
 	): Promise<void> {
 		const { redirectTo, ...otherQueryParams } = query;
 		const returnToUrl = stringifyUrl({
-			url: `${publicRuntimeConfig.CLIENT_URL}/${router.locale}/${redirectTo ?? ''}`,
+			url: `${process.env.CLIENT_URL}/${router.locale}/${redirectTo ?? ''}`,
 			query: otherQueryParams,
 		});
 
 		await router.replace(
 			stringifyUrl({
-				url: `${publicRuntimeConfig.PROXY_URL}/auth/hetarchief/register`,
+				url: `${process.env.PROXY_URL}/auth/hetarchief/register`,
 				query: {
 					returnToUrl,
 					locale: router.locale,
@@ -100,9 +96,9 @@ export class AuthService {
 
 	public static async logout(shouldRedirectToOriginalPage = false): Promise<void> {
 		const locale = TranslationService.getLocale();
-		let returnToUrl = `${publicRuntimeConfig.CLIENT_URL}/${locale}`;
+		let returnToUrl = `${process.env.CLIENT_URL}/${locale}`;
 		if (shouldRedirectToOriginalPage) {
-			let originalPath = window.location.href.substring(publicRuntimeConfig.CLIENT_URL.length);
+			let originalPath = window.location.href.substring(process.env.CLIENT_URL.length);
 			const originalPathIsLogoutPath = !!Object.values(ROUTE_PARTS_BY_LOCALE)
 				.map((value) => value.logout)
 				.find((logoutPart) => originalPath.startsWith(`/${logoutPart}`));
@@ -110,7 +106,7 @@ export class AuthService {
 				originalPath = '/';
 			}
 			returnToUrl = stringifyUrl({
-				url: `${publicRuntimeConfig.CLIENT_URL}/${locale}`,
+				url: `${process.env.CLIENT_URL}/${locale}`,
 				query: {
 					redirectTo: `/${locale}${originalPath}`,
 					showAuth: 1,
@@ -125,7 +121,7 @@ export class AuthService {
 		queryClient.clear();
 
 		window.location.href = stringifyUrl({
-			url: `${publicRuntimeConfig.PROXY_URL}/auth/global-logout`,
+			url: `${process.env.PROXY_URL}/auth/global-logout`,
 			query: {
 				returnToUrl,
 			},

@@ -40,7 +40,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 }: Partial<TagSearchBarProps<IsMulti>> & {
 	setInputValue: (newInputValue: string) => void;
 	isLoading: boolean;
-}): ReactElement => {
+}): ReactElement<any> => {
 	const selectValue = useMemo(
 		() => (inputValue ? { label: inputValue, value: inputValue } : null),
 		[inputValue]

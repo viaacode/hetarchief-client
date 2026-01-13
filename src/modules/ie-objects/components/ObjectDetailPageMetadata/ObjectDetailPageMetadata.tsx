@@ -1,22 +1,3 @@
-import {
-	Alert,
-	type Breadcrumb,
-	Breadcrumbs,
-	Button,
-	Dropdown,
-	DropdownButton,
-	DropdownContent,
-	MenuContent,
-} from '@meemoo/react-components';
-import clsx from 'clsx';
-import { compact, indexOf, isEmpty, isNil, isString, noop, sortBy } from 'lodash-es';
-import getConfig from 'next/config';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
-import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-
 import { GroupName, Permission } from '@account/const';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { selectUser } from '@auth/store/user';
@@ -43,10 +24,10 @@ import {
 	MEDIA_ACTIONS,
 	MEEMOO_ADMIN_ACTION_SORT_MAP,
 	METADATA_EXPORT_OPTIONS,
-	VISITOR_ACTION_SORT_MAP,
 	renderAbrahamLink,
 	renderDate,
 	renderIsPartOfValue,
+	VISITOR_ACTION_SORT_MAP,
 } from '@ie-objects/ie-objects.consts';
 import {
 	type ButtonsSortOrder,
@@ -75,11 +56,21 @@ import {
 	renderKeywordsAsTags,
 } from '@ie-objects/utils/map-metadata';
 import type { TextLine } from '@iiif-viewer/IiifViewer.types';
+import {
+	Alert,
+	type Breadcrumb,
+	Breadcrumbs,
+	Button,
+	Dropdown,
+	DropdownButton,
+	DropdownContent,
+	MenuContent,
+} from '@meemoo/react-components';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { Blade } from '@shared/components/Blade/Blade';
 import { CopyButton } from '@shared/components/CopyButton';
-import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
+import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
@@ -110,6 +101,14 @@ import {
 	Operator,
 	SearchFilterId,
 } from '@visitor-space/types';
+import clsx from 'clsx';
+import { compact, indexOf, isEmpty, isNil, isString, noop, sortBy } from 'lodash-es';
+import getConfig from 'next/config';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
+import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import Callout from '../../../shared/components/Callout/Callout';
 import MetadataList from '../Metadata/MetadataList';
@@ -253,9 +252,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					setOnConfirmCopyright(() => () => {
 						window.open(
 							stringifyUrl({
-								url: `${
-									publicRuntimeConfig.PROXY_URL
-								}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(
+								url: `${process.env.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(
 									mediaInfo?.schemaIdentifier
 								)}/${IE_OBJECTS_SERVICE_EXPORT}/zip`,
 								query: {
@@ -271,9 +268,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					setOnConfirmCopyright(() => () => {
 						window.open(
 							stringifyUrl({
-								url: `${
-									publicRuntimeConfig.PROXY_URL
-								}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(
+								url: `${process.env.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(
 									mediaInfo.schemaIdentifier
 								)}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`,
 								query: {
@@ -286,9 +281,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				default:
 					window.open(
 						stringifyUrl({
-							url: `${
-								publicRuntimeConfig.PROXY_URL
-							}/${IE_OBJECTS_SERVICE_BASE_URL}/${encodeURIComponent(
+							url: `${process.env.PROXY_URL}/${IE_OBJECTS_SERVICE_BASE_URL}/${encodeURIComponent(
 								mediaInfo.schemaIdentifier
 							)}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`,
 							query: {
@@ -1126,7 +1119,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 					{/*{renderSimpleMetadataField(*/}
 					{/*	tText('modules/ie-objects/ie-objects___permanente-url'),*/}
-					{/*	publicRuntimeConfig.CLIENT_URL +*/}
+					{/*	process.env.CLIENT_URL +*/}
 					{/*		ROUTES_BY_LOCALE[locale].permalink.replace(':pid', mediaInfo.schemaIdentifier)*/}
 					{/*)}*/}
 					{mapObjectsToMetadata(
