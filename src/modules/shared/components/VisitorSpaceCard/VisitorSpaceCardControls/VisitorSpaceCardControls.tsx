@@ -1,8 +1,4 @@
 import { Button, TagList } from '@meemoo/react-components';
-import clsx from 'clsx';
-import Link from 'next/link';
-import type { FC, MouseEvent, ReactNode } from 'react';
-
 import { CopyButton } from '@shared/components/CopyButton';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -14,6 +10,9 @@ import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
+import clsx from 'clsx';
+import Link from 'next/link';
+import type { FC, MouseEvent, ReactNode } from 'react';
 
 import { Icon, type IconName } from '../../Icon';
 import { formatDateTime } from '../VisitorSpaceCard.utils';
@@ -79,10 +78,11 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 			);
 		}
 		return (
-			<div title={'hover contact informatie'}>
+			<div title={tText('hover contact informatie')}>
 				<DropdownMenu
 					placement="bottom-end"
 					triggerButtonProps={{
+						'aria-label': tText('Contact informatie dropdown aria-label'),
 						icon: <Icon name={IconNamesLight.Contact} />,
 						variants: ['silver', 'sm'],
 					}}
