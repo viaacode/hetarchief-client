@@ -19,7 +19,7 @@ interface MaterialRequestStatusUpdateBladeProps {
 	onClose: () => void;
 	status?: MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED;
 	currentMaterialRequestDetail: MaterialRequestDetail;
-	onStatusChange: () => void;
+	afterStatusChanged: () => void;
 	layer: number;
 	currentLayer: number;
 }
@@ -29,7 +29,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 	onClose,
 	status,
 	currentMaterialRequestDetail,
-	onStatusChange,
+	afterStatusChanged,
 	layer,
 	currentLayer,
 }) => {
@@ -78,7 +78,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 				onFailedRequest();
 				return;
 			}
-			onStatusChange();
+			afterStatusChanged();
 			onCloseModal();
 		} catch (_err) {
 			onFailedRequest();

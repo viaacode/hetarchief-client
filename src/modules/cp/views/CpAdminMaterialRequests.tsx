@@ -269,7 +269,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
 					}
 					currentMaterialRequestDetail={currentMaterialRequestDetail}
-					onStatusChange={onMaterialRequestStatusChange}
+					afterStatusChanged={onMaterialRequestStatusChange}
 					layer={isDetailBladeOpen ? 1 : 99}
 					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 				/>
@@ -278,7 +278,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 					onClose={() => setIsDetailStatusBladeOpenWithStatus(undefined)}
 					status={isDetailStatusBladeOpenWithStatus}
 					currentMaterialRequestDetail={currentMaterialRequestDetail}
-					onStatusChange={onMaterialRequestStatusChange}
+					afterStatusChanged={onMaterialRequestStatusChange}
 					layer={isDetailBladeOpen ? 2 : 99}
 					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 				/>

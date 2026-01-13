@@ -43,7 +43,7 @@ interface MaterialRequestDetailBladeProps {
 	onApproveRequest?: () => void;
 	onDeclineRequest?: () => void;
 	currentMaterialRequestDetail: MaterialRequestDetail;
-	onStatusChange: () => void;
+	afterStatusChanged: () => void;
 	layer?: number;
 	currentLayer?: number;
 }
@@ -55,7 +55,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	currentMaterialRequestDetail,
 	onApproveRequest,
 	onDeclineRequest,
-	onStatusChange,
+	afterStatusChanged,
 	layer,
 	currentLayer,
 }) => {
@@ -88,14 +88,14 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	useEffect(() => {
 		if (currentMaterialRequestDetail.status === MaterialRequestStatus.NEW && user?.isEvaluator) {
 			MaterialRequestsService.setAsPending(currentMaterialRequestDetail.id).then(() => {
-				onStatusChange();
+				afterStatusChanged();
 			});
 		}
 	}, [
 		currentMaterialRequestDetail.id,
 		currentMaterialRequestDetail.status,
 		user?.isEvaluator,
-		onStatusChange,
+		afterStatusChanged,
 	]);
 
 	const onFailedRequest = () => {
@@ -118,7 +118,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				onFailedRequest();
 				return;
 			}
-			onStatusChange();
+			afterStatusChanged();
 			onClose();
 		} catch (_err) {
 			onFailedRequest();

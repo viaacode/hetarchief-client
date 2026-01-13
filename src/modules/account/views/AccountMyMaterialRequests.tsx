@@ -246,7 +246,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 				isOpen={!isLoading && isDetailBladeOpen}
 				onClose={() => setIsDetailBladeOpen(false)}
 				currentMaterialRequestDetail={currentMaterialRequestDetail}
-				onStatusChange={onMaterialRequestStatusChange}
+				afterStatusChanged={onMaterialRequestStatusChange}
 			/>
 		);
 	};
