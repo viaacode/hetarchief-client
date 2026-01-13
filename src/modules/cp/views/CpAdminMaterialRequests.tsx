@@ -441,8 +441,8 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 						'u-text-center u-color-neutral u-py-48': isFetching || noData,
 					})}
 				>
-					{isFetching && <Loading owner="Material requests overview" fullscreen />}
-					{noData && renderEmptyMessage()}
+					{isFetching && <Loading owner="Material requests overview" />}
+					{noData && !isFetching && renderEmptyMessage()}
 					{!noData && !isFetching && renderContent()}
 				</div>
 				{renderDetailBlade()}

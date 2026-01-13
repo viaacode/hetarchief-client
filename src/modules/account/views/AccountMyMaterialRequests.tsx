@@ -422,10 +422,10 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 						</div>
 					)}
 
-					{isFetching && <Loading owner="Material requests overview" fullscreen />}
-					{noData && renderEmptyMessage()}
+					{isFetching && <Loading owner="Material requests overview" />}
+					{noData && !isFetching && renderEmptyMessage()}
 					{!noData && !isFetching && renderContent()}
-					{currentMaterialRequest?.id && renderDetailBlade()}
+					{renderDetailBlade()}
 				</div>
 			</AccountLayout>
 		);
