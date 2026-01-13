@@ -1,24 +1,3 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import {
-	Alert,
-	Box,
-	Button,
-	Checkbox,
-	CheckboxList,
-	keysEnter,
-	keysSpacebar,
-	onKey,
-} from '@meemoo/react-components';
-import { useQueryClient } from '@tanstack/react-query';
-import { isNil } from 'lodash-es';
-import getConfig from 'next/config';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
-import { type ComponentType, type FC, type ReactNode, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
-
 import {
 	COMMUNICATION_FORM_SCHEMA,
 	GET_PERMISSION_TRANSLATIONS_BY_GROUP,
@@ -33,6 +12,17 @@ import type { CommunicationFormState } from '@account/types';
 import { checkLoginAction, selectCommonUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { yupResolver } from '@hookform/resolvers/yup';
+import {
+	Alert,
+	Box,
+	Button,
+	Checkbox,
+	CheckboxList,
+	keysEnter,
+	keysSpacebar,
+	onKey,
+} from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
@@ -42,6 +32,7 @@ import { changeApplicationLocale } from '@shared/helpers/change-application-loca
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import { useIsEvaluator } from '@shared/hooks/is-evaluator';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -50,7 +41,16 @@ import { toastService } from '@shared/services/toast-service';
 import { useAppDispatch } from '@shared/store';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
+import { useQueryClient } from '@tanstack/react-query';
 import { VisitorLayout } from '@visitor-layout/index';
+import { isNil } from 'lodash-es';
+import getConfig from 'next/config';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
+import { type ComponentType, type FC, type ReactNode, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -73,6 +73,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const isAdminUser: boolean = useHasAnyGroup(GroupName.MEEMOO_ADMIN, GroupName.CP_ADMIN);
 	const canEditProfile: boolean = useHasAllPermission(Permission.CAN_EDIT_PROFILE_INFO);
 	const isKeyUser: boolean = useIsKeyUser();
+	const isEvaluator: boolean = useIsEvaluator();
 	const { data: allLanguages } = useGetAllLanguages();
 	const { data: preferences } = useGetNewsletterPreferences(commonUser?.email);
 
@@ -186,6 +187,18 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 					{tHtml(
 						'pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-omschrijving'
 					)}
+				</dd>
+			</>
+		);
+
+	const renderEvaluatorInfo = (): ReactNode =>
+		isEvaluator && (
+			<>
+				<dt className="u-mt-32">
+					{tText('pages/account/mijn-profiel/index___gebruikersrechten-beoordelaar-titel')}
+				</dt>
+				<dd className="u-color-neutral u-mt-8">
+					{tHtml('pages/account/mijn-profiel/index___gebruikersrechten-beoordelaar-omschrijving')}
 				</dd>
 			</>
 		);
@@ -320,6 +333,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 								<dl className="p-account-my-profile__permissions-list u-mb-24">
 									{renderUserGroup()}
 									{renderKeyUserInfo()}
+									{renderEvaluatorInfo()}
 								</dl>
 							</section>
 						</Box>
