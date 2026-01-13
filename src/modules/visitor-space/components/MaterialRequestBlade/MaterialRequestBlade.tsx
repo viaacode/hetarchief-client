@@ -540,7 +540,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					>
 						{!hideViewTypeOption && (
 							<RadioButton
-								aria-labelledby="radio-group-label"
+								aria-label={tText(
+									'modules/visitor-space/components/material-request-blade/material-request-blade___view-aria-label'
+								)}
 								className={styles['c-request-material__radio-button']}
 								label={tText(
 									'modules/visitor-space/components/material-request-blade/material-request-blade___view'
@@ -550,7 +552,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							/>
 						)}
 						<RadioButton
-							aria-labelledby="radio-group-label"
+							aria-label={tText(
+								'modules/visitor-space/components/material-request-blade/material-request-blade___reuse-aria-label'
+							)}
 							className={styles['c-request-material__radio-button']}
 							label={tText(
 								'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
@@ -559,7 +563,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							onClick={() => setTypeSelected(MaterialRequestType.REUSE)}
 						/>
 						<RadioButton
-							aria-labelledby="radio-group-label"
+							aria-label={tText(
+								'modules/visitor-space/components/material-request-blade/material-request-blade___more-info-aria-label'
+							)}
 							className={styles['c-request-material__radio-button']}
 							label={tText(
 								'modules/visitor-space/components/material-request-blade/material-request-blade___more-info'
