@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "../../../../styles/abstracts/variables" as variables;
 
 .c-material-request-status-pill {
 	display: flex;
@@ -8,31 +8,31 @@
 	&__pill{
 		height: 3rem;
 		width: 4rem;
-		font-size: $font-size-2xm;
+		font-size: variables.$font-size-2xm;
 
 		&--new, &--cancelled {
-			background-color: $grey;
-			color: $white;
+			background-color: variables.$grey;
+			color: variables.$white;
 		}
 
 		&--pending {
-			background-color: $mustard;
-			color: $black;
+			background-color: variables.$mustard;
+			color: variables.$black;
 		}
 
 		&--approved {
-			background-color: $teal-dark;
-			color: $white;
+			background-color: variables.$teal-dark;
+			color: variables.$white;
 		}
 
 		&--denied {
-			background-color: $cherry;
-			color: $white;
+			background-color: variables.$cherry;
+			color: variables.$white;
 		}
 	}
 
 	&__label {
-		color: $neutral;
-		margin-left: $spacer-xs;
+		color: variables.$neutral;
+		margin-left: variables.$spacer-xs;
 	}
 }

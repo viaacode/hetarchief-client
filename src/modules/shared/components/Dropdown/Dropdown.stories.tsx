@@ -1,4 +1,4 @@
-import { Dropdown, DropdownButton, DropdownContent, MenuContent } from '@meemoo/react-components';
+import { Dropdown, DropdownButton, DropdownContent, type DropdownProps, MenuContent } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { action } from '@storybook/addon-actions';
@@ -24,7 +24,7 @@ const DropdownStoryComponent = ({ children }: { children: ReactElement }) => {
 		isOpen,
 		onOpen: open,
 		onClose: close,
-	});
+	} as DropdownProps);
 };
 
 export default {

@@ -7,7 +7,7 @@ interface IeObjectRedirectInfo {
 	title: string;
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
 	try {
 		const pathName = request.nextUrl.pathname;
 
