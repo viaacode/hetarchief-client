@@ -9,7 +9,7 @@ export const useGetMaterialRequests = (
 	props: GetMaterialRequestsProps,
 	options: {
 		enabled?: boolean;
-	}
+	} = { enabled: true }
 ): UseQueryResult<IPagination<MaterialRequest>> =>
 	useQuery({
 		queryKey: [QUERY_KEYS.getMaterialRequests, props],
