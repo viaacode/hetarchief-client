@@ -3,11 +3,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml } from '@shared/helpers/translate';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
-import type {
-	DefaultFilterFormProps,
-	InlineFilterFormProps,
-	SearchFilterId,
-} from '@visitor-space/types';
+import type { DefaultFilterFormProps, InlineFilterFormProps, SearchFilterId } from '@visitor-space/types';
 import clsx from 'clsx';
 import { type FC, type ReactElement, useMemo } from 'react';
 
@@ -42,7 +38,7 @@ const FilterForm: FC<FilterFormProps> = ({
 		[id]
 	);
 
-	const renderFilterFormByType = (): ReactElement<any> => {
+	const renderFilterFormByType = (): ReactElement => {
 		switch (type) {
 			case FilterMenuType.Modal:
 				return renderModal();
@@ -54,7 +50,7 @@ const FilterForm: FC<FilterFormProps> = ({
 		}
 	};
 
-	const renderCheckbox = (): ReactElement<any> => {
+	const renderCheckbox = (): ReactElement => {
 		const FormComponent = (form as FC<InlineFilterFormProps>) ?? (() => null);
 
 		return (
@@ -72,7 +68,7 @@ const FilterForm: FC<FilterFormProps> = ({
 		);
 	};
 
-	const renderModal = (): ReactElement<any> => {
+	const renderModal = (): ReactElement => {
 		// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 		const FormComponent = (form as FC<DefaultFilterFormProps<any>>) ?? (() => null);
 

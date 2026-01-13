@@ -9,7 +9,7 @@ const ToggleStoryComponent = ({
 	children,
 	initialOptions = toggleMock.options,
 }: {
-	children: ReactElement<any>;
+	children: ReactElement;
 	initialOptions?: ToggleOption[];
 }) => {
 	const [options, setOptions] = useState(initialOptions);

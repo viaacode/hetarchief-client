@@ -14,12 +14,9 @@ import { getValidStartAndEnd } from '@shared/helpers/cut-start-and-end';
 import { useGetFileDuration } from '@shared/hooks/use-get-file-duration';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import { isNil } from 'lodash-es';
-import getConfig from 'next/config';
 import React, { type FC, useCallback, useEffect, useState } from 'react';
 import { convertDurationStringToSeconds } from '../../helpers/duration';
 import type { AudioOrVideoPlayerProps } from './AudioOrVideoPlayer.types';
-
-const { publicRuntimeConfig } = getConfig();
 
 export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	className,

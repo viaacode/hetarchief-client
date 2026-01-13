@@ -4,7 +4,7 @@ import React, { cloneElement, type ReactElement, useState } from 'react';
 import { tagsInputOptionsMock } from './__mocks__/tags-input';
 import { TAGS_INPUT_COMPONENTS } from './TagsInput.const';
 
-const TagsInputStoryComponent = ({ children }: { children: ReactElement<any> }) => {
+const TagsInputStoryComponent = ({ children }: { children: ReactElement }) => {
 	const [values, setValues] = useState<TagsInputProps['value']>(tagsInputOptionsMock);
 
 	const onChange = (values: TagsInputProps['value']) => {

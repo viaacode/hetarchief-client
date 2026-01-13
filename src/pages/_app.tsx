@@ -13,7 +13,6 @@ import setDefaultOptions from 'date-fns/setDefaultOptions';
 import HttpApi from 'i18next-http-backend';
 import { lowerCase, upperFirst } from 'lodash-es';
 import type { AppProps } from 'next/app';
-import getConfig from 'next/config';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { appWithTranslation } from 'next-i18next';
@@ -31,7 +30,6 @@ import '../styles/main.scss';
 // Set global locale:
 setDefaultOptions({ locale: nlBE });
 
-const { publicRuntimeConfig } = getConfig();
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -47,7 +45,7 @@ const queryClient = new QueryClient({
 // Temp version with undefined router and nl locale
 AdminConfigManager.setConfig(getAdminCoreConfig(null, Locale.nl));
 
-function MyApp({ Component, pageProps }: AppProps): ReactElement<any> | null {
+function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 	const router = useRouter();
 	const locale = useLocale();
 	const { store, props } = wrapper.useWrappedStore(pageProps);

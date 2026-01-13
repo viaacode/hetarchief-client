@@ -1,10 +1,7 @@
 import type { ContentPageInfo } from '@meemoo/admin-core-ui/client';
 import type { Locale } from '@shared/utils/i18n';
 import { startsWith } from 'lodash-es';
-import getConfig from 'next/config';
 import { stringifyUrl } from 'query-string';
-
-const { publicRuntimeConfig } = getConfig();
 
 export class ContentPageClientService {
 	public static async getByLanguageAndPath(

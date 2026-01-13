@@ -6,13 +6,11 @@ import { Locale } from '@shared/utils/i18n';
 import { QueryClient } from '@tanstack/react-query';
 import type { Options } from 'ky/distribution/types/options';
 import { omit, trimEnd } from 'lodash-es';
-import getConfig from 'next/config';
 import type { NextRouter } from 'next/router';
 import { parseUrl, type StringifiableRecord, stringifyUrl } from 'query-string';
 
 import type { CheckLoginResponse } from './auth.service.types';
 
-const { publicRuntimeConfig } = getConfig();
 
 export class AuthService {
 	public static async checkLogin(options: Options = {}): Promise<CheckLoginResponse> {

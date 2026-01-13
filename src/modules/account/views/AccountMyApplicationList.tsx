@@ -1,7 +1,9 @@
 import ApplicationListSent from '@account/components/ApplicationListSent/ApplicationListSent';
 import PersonalInfo from '@account/components/PersonalInfo/PersonalInfo';
 import { Permission } from '@account/const';
-import { createLabelValuePairMaterialRequestReuseForm } from '@account/utils/create-label-value-material-request-reuse-form';
+import {
+	createLabelValuePairMaterialRequestReuseForm,
+} from '@account/utils/create-label-value-material-request-reuse-form';
 import { formatCuePointsMaterialRequest } from '@account/utils/format-cuepoints-material-request';
 import {
 	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DOWNLOAD_QUALITY,
@@ -13,10 +15,6 @@ import {
 	type MaterialRequestDownloadQuality,
 	MaterialRequestKeys,
 } from '@material-requests/types';
-import {
-	formatDurationHoursMinutesSeconds,
-	formatDurationMinutesSeconds,
-} from '@meemoo/react-components';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { Loading } from '@shared/components/Loading';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
@@ -27,13 +25,8 @@ import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useAppDispatch } from '@shared/store';
-import {
-	setMaterialRequestCount,
-	setShowFooter,
-	setShowMaterialRequestCenter,
-} from '@shared/store/ui';
+import { setMaterialRequestCount, setShowFooter, setShowMaterialRequestCenter } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
-import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitorLayout } from '@visitor-layout/index';
 import clsx from 'clsx';

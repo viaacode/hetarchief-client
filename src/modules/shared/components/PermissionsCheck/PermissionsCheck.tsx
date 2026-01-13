@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import Loading from '../Loading/Loading';
 
 type PermissionsCheckProps = {
-	children: ReactElement<any>;
+	children: ReactElement;
 	allPermissions?: Permission[];
 	anyPermissions?: Permission[];
 };
@@ -20,7 +20,7 @@ const PermissionsCheck: FC<PermissionsCheckProps> = ({
 	children,
 	allPermissions = [],
 	anyPermissions = [],
-}): ReactElement<any> => {
+}): ReactElement => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 

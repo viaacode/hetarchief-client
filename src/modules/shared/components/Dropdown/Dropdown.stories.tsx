@@ -7,7 +7,7 @@ import React, { cloneElement, type ReactElement, useState } from 'react';
 
 import { menuItemsWithIcons } from './__mocks__/dropdown';
 
-const DropdownStoryComponent = ({ children }: { children: ReactElement<any> }) => {
+const DropdownStoryComponent = ({ children }: { children: ReactElement }) => {
 	const [isOpen, setOpen] = useState(false);
 
 	const open = () => {

@@ -15,11 +15,7 @@ import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/g
 import { Navigation } from '@navigation/components/Navigation/Navigation';
 import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
 import type { NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
-import {
-	GET_NAV_HAMBURGER_PROPS,
-	GET_NAV_ITEMS_RIGHT,
-	GET_NAV_ITEMS_RIGHT_LOGGED_IN,
-} from '@navigation/const';
+import { GET_NAV_HAMBURGER_PROPS, GET_NAV_ITEMS_RIGHT, GET_NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
 import { type NavigationInfo, NavigationPlacement } from '@navigation/services/navigation-service';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { HetArchiefLogo, HetArchiefLogoType } from '@shared/components/HetArchiefLogo';
@@ -29,8 +25,12 @@ import { type AlertIconNames, IconNamesLight } from '@shared/components/Icon/Ico
 import { LanguageSwitcher } from '@shared/components/LanguageSwitcher/LanguageSwitcher';
 import { NotificationCenter } from '@shared/components/NotificationCenter';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
-import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
-import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
+import {
+	useMarkAllNotificationsAsRead,
+} from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
+import {
+	useMarkOneNotificationsAsRead,
+} from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
 import { ZendeskWrapper } from '@shared/components/ZendeskWrapper';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
@@ -67,7 +67,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import type { AvoUserCommonUser } from '@viaa/avo2-types';
 import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visits';
 import clsx from 'clsx';
-import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { parse, stringifyUrl } from 'query-string';
@@ -77,9 +76,6 @@ import { Slide, ToastContainer } from 'react-toastify';
 import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 import packageJson from '../../../../../package.json';
 import styles from './AppLayout.module.scss';
-
-// biome-ignore lint/correctness/noUnusedVariables: We want to make sure config gets fetched here, no sure why anymore
-const { publicRuntimeConfig } = getConfig();
 
 // biome-ignore lint/suspicious/noExplicitAny: No typing yet
 const AppLayout: FC<any> = ({ children }) => {

@@ -33,13 +33,11 @@ import { QueryClient } from '@tanstack/react-query';
 import { VisitorLayout } from '@visitor-layout/index';
 import type { HTTPError } from 'ky';
 import type { GetServerSidePropsResult, NextPage } from 'next';
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import type { GetServerSidePropsContext } from 'next/types';
 import { type ComponentType, type FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-const { publicRuntimeConfig } = getConfig();
 
 const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 	title,

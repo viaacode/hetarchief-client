@@ -7,11 +7,9 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { kebabCase } from 'lodash-es';
-import getConfig from 'next/config';
 import type { GetServerSidePropsContext, GetStaticPropsResult } from 'next/types';
 import { i18n } from 'next-i18next';
 
-const { publicRuntimeConfig } = getConfig();
 
 export async function getDefaultStaticProps(
 	context: GetServerSidePropsContext,

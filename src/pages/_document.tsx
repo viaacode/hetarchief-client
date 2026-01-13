@@ -1,5 +1,4 @@
 import { TranslationService } from '@shared/services/translation-service/translation.service';
-import getConfig from 'next/config';
 import { type DocumentProps, Head, Html, Main, NextScript } from 'next/document';
 import React, { type ReactElement } from 'react';
 
@@ -10,7 +9,7 @@ declare type DocumentFiles = {
 };
 
 class CustomHead extends Head {
-	getScripts(files: DocumentFiles): ReactElement<any>[] {
+	getScripts(files: DocumentFiles): ReactElement[] {
 		const originalScripts = super.getScripts(files);
 		return originalScripts.map((script) => {
 			return React.cloneElement(script, {
@@ -20,9 +19,8 @@ class CustomHead extends Head {
 	}
 }
 
-const { publicRuntimeConfig } = getConfig();
 
-const Document = (props: DocumentProps): ReactElement<any> => {
+const Document = (props: DocumentProps): ReactElement => {
 	const locale = TranslationService.getLocale();
 
 	return (

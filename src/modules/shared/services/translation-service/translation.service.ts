@@ -2,10 +2,8 @@ import { ApiService } from '@shared/services/api-service';
 import type { LanguageInfo } from '@shared/services/translation-service/translation.types';
 import { Locale } from '@shared/utils/i18n';
 import { isServerSideRendering } from '@shared/utils/is-browser';
-import getConfig from 'next/config';
 import { parseUrl } from 'query-string';
 
-const { publicRuntimeConfig } = getConfig();
 
 export class TranslationService {
 	private static baseUrl = 'admin/translations/languages';

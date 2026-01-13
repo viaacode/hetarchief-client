@@ -19,7 +19,7 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 	value,
 	onChange,
 	className,
-}: RefinableRadioButtonProps): ReactElement<any> => {
+}: RefinableRadioButtonProps): ReactElement => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
 	const onRadioButtonClick = (id: string): void => {

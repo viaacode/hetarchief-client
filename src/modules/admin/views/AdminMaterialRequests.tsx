@@ -1,5 +1,6 @@
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
-import MaterialRequestStatusUpdateBlade from '@account/components/MaterialRequestStatusUpdateBlade/MaterialRequestStatusUpdateBlade';
+import MaterialRequestStatusUpdateBlade
+	from '@account/components/MaterialRequestStatusUpdateBlade/MaterialRequestStatusUpdateBlade';
 import {
 	GET_MATERIAL_REQUEST_DOWNLOAD_FILTER_ARRAY,
 	GET_MATERIAL_REQUEST_STATUS_FILTER_ARRAY,
@@ -21,12 +22,7 @@ import {
 	MaterialRequestStatus,
 	type MaterialRequestType,
 } from '@material-requests/types';
-import {
-	MultiSelect,
-	type MultiSelectOption,
-	PaginationBar,
-	Table,
-} from '@meemoo/react-components';
+import { MultiSelect, type MultiSelectOption, PaginationBar, Table } from '@meemoo/react-components';
 import { BladeManager } from '@shared/components/BladeManager';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -43,14 +39,7 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import { isEmpty, isNil, noop } from 'lodash-es';
-import React, {
-	type FC,
-	type MouseEvent,
-	type ReactNode,
-	useEffect,
-	useMemo,
-	useState,
-} from 'react';
+import React, { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
 import type { Row, SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -62,7 +51,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
 	const [filters, setFilters] = useQueryParams(ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const [selectedMaintainers, setSelectedMaintainers] = useState<string[]>(
-		(filters['maintainerIds'] || []) as string[]
+		(filters.maintainerIds || []) as string[]
 	);
 	const [selectedTypes, setSelectedTypes] = useState<string[]>(
 		(filters[QUERY_PARAM_KEY.TYPE] || []) as string[]

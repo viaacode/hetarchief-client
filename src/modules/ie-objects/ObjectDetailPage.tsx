@@ -1,10 +1,7 @@
 import { GroupName, Permission } from '@account/const';
 import { selectHasCheckedLogin, selectUser } from '@auth/store/user';
 import type { User } from '@auth/types';
-import {
-	RequestAccessBlade,
-	type RequestAccessFormState,
-} from '@home/components/RequestAccessBlade';
+import { RequestAccessBlade, type RequestAccessFormState } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { CollapsableBlade } from '@ie-objects/components/CollapsableBlade';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
@@ -49,7 +46,9 @@ import {
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
-import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
+import {
+	SearchInputWithResultsPagination,
+} from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
 import {
 	iiifGoToHome,
 	iiifGoToPage,
@@ -96,11 +95,15 @@ import { IeObjectType } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
 import { isServerSideRendering } from '@shared/utils/is-browser';
-import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
+import {
+	useGetActiveVisitRequestForUserAndSpace,
+} from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
-import { MaterialRequestForReuseBlade } from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade';
+import {
+	MaterialRequestForReuseBlade,
+} from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade';
 import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { VisitorSpaceNavigation } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
@@ -108,24 +111,13 @@ import { VisitorSpaceStatus } from '@visitor-space/types';
 import clsx from 'clsx';
 import type { HTTPError } from 'ky';
 import { capitalize, compact, intersection, isNil, kebabCase, lowerCase, noop } from 'lodash-es';
-import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { parseUrl, stringifyUrl } from 'query-string';
-import React, {
-	type FC,
-	Fragment,
-	type ReactNode,
-	useCallback,
-	useEffect,
-	useMemo,
-	useState,
-} from 'react';
+import React, { type FC, Fragment, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NumberParam, StringParam, useQueryParam, withDefault } from 'use-query-params';
 import styles from './ObjectDetailPage.module.scss';
-
-const { publicRuntimeConfig } = getConfig();
 
 export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	title,

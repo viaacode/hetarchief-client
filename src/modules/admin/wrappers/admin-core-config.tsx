@@ -8,12 +8,7 @@ import {
 	type ToastInfo,
 } from '@meemoo/admin-core-ui/client';
 import { NAVIGATION_DROPDOWN } from '@navigation/components/Navigation/Navigation.types';
-import {
-	GET_ALERT_ICON_LIST_CONFIG,
-	GET_ICON_LIST_CONFIG,
-	Icon,
-	type IconName,
-} from '@shared/components/Icon';
+import { GET_ALERT_ICON_LIST_CONFIG, GET_ICON_LIST_CONFIG, Icon, type IconName } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import Loading from '@shared/components/Loading/Loading';
 import { ADMIN_CORE_ROUTES_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
@@ -22,13 +17,11 @@ import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
 import type { Locale } from '@shared/utils/i18n';
 import { AvoCoreDatabaseType } from '@viaa/avo2-types';
-import getConfig from 'next/config';
 import Link from 'next/link';
 import type { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import type { FunctionComponent } from 'react';
 
-const { publicRuntimeConfig } = getConfig();
 
 const InternalLink = (linkInfo: LinkInfo) => {
 	const { to, ...rest } = linkInfo;

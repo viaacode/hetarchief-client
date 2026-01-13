@@ -13,16 +13,7 @@ import { checkLoginAction, selectCommonUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-	Alert,
-	Box,
-	Button,
-	Checkbox,
-	CheckboxList,
-	keysEnter,
-	keysSpacebar,
-	onKey,
-} from '@meemoo/react-components';
+import { Alert, Box, Button, Checkbox, CheckboxList, keysEnter, keysSpacebar, onKey } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
@@ -43,7 +34,6 @@ import { Locale } from '@shared/utils/i18n';
 import { useQueryClient } from '@tanstack/react-query';
 import { VisitorLayout } from '@visitor-layout/index';
 import { isNil } from 'lodash-es';
-import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
@@ -51,7 +41,6 @@ import { type ComponentType, type FC, type ReactNode, useEffect, useState } from
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
-const { publicRuntimeConfig } = getConfig();
 
 const labelKeys: Record<keyof CommunicationFormState, string> = {
 	acceptNewsletter: 'Communication__acceptNewsletter',

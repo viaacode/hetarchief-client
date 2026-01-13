@@ -11,7 +11,9 @@ import {
 import type { MetadataItem } from '@ie-objects/components/Metadata';
 import Metadata from '@ie-objects/components/Metadata/Metadata';
 import { NamesList } from '@ie-objects/components/NamesList/NamesList';
-import type { ObjectDetailPageMetadataProps } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata.types';
+import type {
+	ObjectDetailPageMetadataProps,
+} from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata.types';
 import { SearchLinkTag } from '@ie-objects/components/SearchLinkTag/SearchLinkTag';
 import { useGetIeObjectPreviousNextIds } from '@ie-objects/hooks/use-get-ie-object-previous-next-ids';
 import { useIsPublicNewspaper } from '@ie-objects/hooks/use-get-is-public-newspaper';
@@ -73,7 +75,8 @@ import HighlightedMetadata from '@shared/components/HighlightedMetadata/Highligh
 import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
+import MetaDataFieldWithHighlightingAndMaxLength
+	from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { Pill } from '@shared/components/Pill';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
@@ -87,23 +90,11 @@ import { selectBreadcrumbs } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { Locale } from '@shared/utils/i18n';
-import {
-	LANGUAGES,
-	type LanguageCode,
-} from '@visitor-space/components/LanguageFilterForm/languages';
-import {
-	filterNameToAcronym,
-	operatorToAcronym,
-} from '@visitor-space/const/advanced-filter-array-param';
-import {
-	FILTER_LABEL_VALUE_DELIMITER,
-	FilterProperty,
-	Operator,
-	SearchFilterId,
-} from '@visitor-space/types';
+import { type LanguageCode, LANGUAGES } from '@visitor-space/components/LanguageFilterForm/languages';
+import { filterNameToAcronym, operatorToAcronym } from '@visitor-space/const/advanced-filter-array-param';
+import { FILTER_LABEL_VALUE_DELIMITER, FilterProperty, Operator, SearchFilterId } from '@visitor-space/types';
 import clsx from 'clsx';
 import { compact, indexOf, isEmpty, isNil, isString, noop, sortBy } from 'lodash-es';
-import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
@@ -114,8 +105,6 @@ import Callout from '../../../shared/components/Callout/Callout';
 import MetadataList from '../Metadata/MetadataList';
 
 import styles from './ObjectDetailPageMetadata.module.scss';
-
-const { publicRuntimeConfig } = getConfig();
 
 export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	mediaInfo,

@@ -6,17 +6,12 @@ import type { FC, ReactElement } from 'react';
 import styles from './Pill.module.scss';
 import type { PillProps } from './Pill.types';
 
-const Pill: FC<PillProps> = ({
-	className,
-	icon,
-	label,
-	isExpanded,
-}: PillProps): ReactElement<any> => {
+const Pill: FC<PillProps> = ({ className, icon, label, isExpanded }: PillProps): ReactElement => {
 	const rootCls = clsx(className, styles['c-pill'], {
 		[styles['c-pill--expanded']]: isExpanded,
 	});
 
-	const renderTooltipPill = (): ReactElement<any> => (
+	const renderTooltipPill = (): ReactElement => (
 		<Tooltip position="right">
 			<TooltipTrigger>
 				<span className={rootCls}>
@@ -27,7 +22,7 @@ const Pill: FC<PillProps> = ({
 		</Tooltip>
 	);
 
-	const renderExpandedPill = (): ReactElement<any> => (
+	const renderExpandedPill = (): ReactElement => (
 		<div className={rootCls}>
 			<Icon name={icon} />
 			<span className={styles['c-pill__label']}>{label}</span>

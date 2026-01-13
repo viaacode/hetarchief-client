@@ -38,7 +38,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 		setOpenedAt(Date.now());
 	}, [filterIsActive]);
 
-	const renderFilterOptionByType = (): ReactElement<any> => {
+	const renderFilterOptionByType = (): ReactElement => {
 		switch (type) {
 			case FilterMenuType.Modal:
 				return renderModal();
@@ -50,7 +50,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 		}
 	};
 
-	const renderFilterForm = (cs: string, isInline?: boolean): ReactElement<any> => (
+	const renderFilterForm = (cs: string, isInline?: boolean): ReactElement => (
 		<FilterForm
 			className={clsx(styles['c-filter-menu__option'], cs, {
 				[`${className}`]: isInline,
@@ -67,8 +67,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 		/>
 	);
 
-	const renderCheckbox = (): ReactElement<any> =>
-		renderFilterForm('c-filter-menu__form--inline', true);
+	const renderCheckbox = (): ReactElement => renderFilterForm('c-filter-menu__form--inline', true);
 
 	const FILTER_MENU_HEIGHTS: Partial<Record<SearchFilterId, string>> = {
 		[SearchFilterId.Medium]: '63.7rem',
@@ -82,7 +81,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 		[SearchFilterId.Maintainers]: '63.7rem',
 		[SearchFilterId.Advanced]: '60.1rem',
 	};
-	const renderModal = (): ReactElement<any> => {
+	const renderModal = (): ReactElement => {
 		return (
 			<>
 				<div

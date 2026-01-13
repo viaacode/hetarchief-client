@@ -1,13 +1,11 @@
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { selectShowZendesk } from '@shared/store/ui';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import React, { type FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Zendesk, { type IZendeskProps } from 'react-zendesk';
 
-const { publicRuntimeConfig } = getConfig();
 
 const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 	const router = useRouter();

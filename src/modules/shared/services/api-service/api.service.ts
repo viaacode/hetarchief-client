@@ -1,9 +1,7 @@
 import { AuthService } from '@auth/services/auth-service';
 import type { KyInstance } from 'ky/distribution/types/ky';
 import ky from 'ky-universal';
-import getConfig from 'next/config';
 
-const { publicRuntimeConfig } = getConfig();
 
 export abstract class ApiService {
 	private static api: KyInstance | null = null;

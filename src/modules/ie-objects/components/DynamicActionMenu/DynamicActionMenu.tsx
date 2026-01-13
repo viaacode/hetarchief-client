@@ -19,11 +19,7 @@ import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRen
 import clsx from 'clsx';
 import { type FC, type ReactElement, type ReactNode, useRef, useState } from 'react';
 
-import {
-	DYNAMIC_ACTION_BOX,
-	DYNAMIC_ACTION_SPACER,
-	DYNAMIC_ACTION_WIDTH,
-} from './DynamicActionMenu.const';
+import { DYNAMIC_ACTION_BOX, DYNAMIC_ACTION_SPACER, DYNAMIC_ACTION_WIDTH } from './DynamicActionMenu.const';
 import styles from './DynamicActionMenu.module.scss';
 import type { ActionItem, DynamicActionMenuProps } from './DynamicActionMenu.types';
 
@@ -65,7 +61,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 		itemsToHide > 1 ? secondaryActions.slice(0, -itemsToHide) : secondaryActions;
 	const hiddenActions = itemsToHide > 1 ? secondaryActions.slice(-itemsToHide) : [];
 
-	const renderInTooltip = (trigger: ReactNode, tooltip: string): ReactElement<any> => {
+	const renderInTooltip = (trigger: ReactNode, tooltip: string): ReactElement => {
 		return (
 			<NoServerSideRendering>
 				<Tooltip position="top">
