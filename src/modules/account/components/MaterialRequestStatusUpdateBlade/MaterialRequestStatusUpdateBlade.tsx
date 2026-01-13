@@ -16,10 +16,10 @@ import styles from './MaterialRequestStatusUpdateBlade.module.scss';
 
 interface MaterialRequestStatusUpdateBladeProps {
 	isOpen: boolean;
-	onClose: (success: boolean) => void;
+	onClose: () => void;
 	status?: MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED;
 	currentMaterialRequestDetail: MaterialRequestDetail;
-	refetchMaterialRequests?: () => void;
+	afterStatusChanged: () => void;
 	layer: number;
 	currentLayer: number;
 }
@@ -29,7 +29,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 	onClose,
 	status,
 	currentMaterialRequestDetail,
-	refetchMaterialRequests,
+	afterStatusChanged,
 	layer,
 	currentLayer,
 }) => {
@@ -57,14 +57,9 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 		}
 	}, [isOpen]);
 
-	const onCloseModal = (success: boolean) => {
-		onClose(success);
+	const onCloseModal = () => {
+		onClose();
 		setMotivationInputValue('');
-	};
-
-	const onSuccessStatusUpdated = async () => {
-		refetchMaterialRequests?.();
-		onCloseModal(true);
 	};
 
 	const onApproveOrDeny = async () => {
@@ -83,7 +78,8 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 				onFailedRequest();
 				return;
 			}
-			await onSuccessStatusUpdated();
+			afterStatusChanged();
+			onCloseModal();
 		} catch (_err) {
 			onFailedRequest();
 		}
@@ -137,7 +133,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 					'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
 				)}
 				variants={['block', 'text']}
-				onClick={() => onCloseModal(false)}
+				onClick={() => onCloseModal()}
 				className={styles['c-request-material-status-update__annuleer-button']}
 			/>
 		</div>
@@ -148,7 +144,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 			isOpen={isOpen}
 			renderTitle={renderTitle}
 			footer={isOpen && renderFooter()}
-			onClose={() => onCloseModal(false)}
+			onClose={() => onCloseModal()}
 			layer={layer}
 			currentLayer={currentLayer}
 			className={styles['c-request-material-status-update']}

@@ -31,7 +31,7 @@ import clsx from 'clsx';
 import { isNil } from 'lodash-es';
 import { default as NextLink } from 'next/link';
 import { stringifyUrl } from 'query-string';
-import React, { type FC, type ReactNode, useMemo, useState } from 'react';
+import React, { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import styles from './MaterialRequestDetailBlade.module.scss';
@@ -43,7 +43,7 @@ interface MaterialRequestDetailBladeProps {
 	onApproveRequest?: () => void;
 	onDeclineRequest?: () => void;
 	currentMaterialRequestDetail: MaterialRequestDetail;
-	refetchMaterialRequests?: () => void;
+	afterStatusChanged: () => void;
 	layer?: number;
 	currentLayer?: number;
 }
@@ -55,7 +55,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	currentMaterialRequestDetail,
 	onApproveRequest,
 	onDeclineRequest,
-	refetchMaterialRequests,
+	afterStatusChanged,
 	layer,
 	currentLayer,
 }) => {
@@ -85,6 +85,19 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		[currentMaterialRequestDetail, locale]
 	);
 
+	useEffect(() => {
+		if (currentMaterialRequestDetail.status === MaterialRequestStatus.NEW && user?.isEvaluator) {
+			MaterialRequestsService.setAsPending(currentMaterialRequestDetail.id).then(() => {
+				afterStatusChanged();
+			});
+		}
+	}, [
+		currentMaterialRequestDetail.id,
+		currentMaterialRequestDetail.status,
+		user?.isEvaluator,
+		afterStatusChanged,
+	]);
+
 	const onFailedRequest = () => {
 		toastService.notify({
 			maxLines: 3,
@@ -105,7 +118,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				onFailedRequest();
 				return;
 			}
-			refetchMaterialRequests?.();
+			afterStatusChanged();
 			onClose();
 		} catch (_err) {
 			onFailedRequest();

@@ -231,6 +231,11 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		setIsDetailBladeOpen(true);
 	};
 
+	const onMaterialRequestStatusChange = () => {
+		void refetchCurrentMaterialRequestDetail();
+		void refetchMaterialRequests();
+	};
+
 	const renderDetailBlade = () => {
 		if (!currentMaterialRequestDetail) {
 			return null;
@@ -241,7 +246,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 				isOpen={!isLoading && isDetailBladeOpen}
 				onClose={() => setIsDetailBladeOpen(false)}
 				currentMaterialRequestDetail={currentMaterialRequestDetail}
-				refetchMaterialRequests={refetchMaterialRequests}
+				afterStatusChanged={onMaterialRequestStatusChange}
 			/>
 		);
 	};

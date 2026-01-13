@@ -1,4 +1,5 @@
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
+import MaterialRequestStatusUpdateBlade from '@account/components/MaterialRequestStatusUpdateBlade/MaterialRequestStatusUpdateBlade';
 import {
 	GET_MATERIAL_REQUEST_DOWNLOAD_FILTER_ARRAY,
 	GET_MATERIAL_REQUEST_STATUS_FILTER_ARRAY,
@@ -17,7 +18,7 @@ import { useGetMaterialRequestsMaintainers } from '@material-requests/hooks/get-
 import {
 	type MaterialRequest,
 	MaterialRequestKeys,
-	type MaterialRequestStatus,
+	MaterialRequestStatus,
 	type MaterialRequestType,
 } from '@material-requests/types';
 import {
@@ -27,6 +28,7 @@ import {
 	PaginationBar,
 	Table,
 } from '@meemoo/react-components';
+import { BladeManager } from '@shared/components/BladeManager';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -54,6 +56,9 @@ import { useQueryParams } from 'use-query-params';
 
 export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
+	const [isDetailStatusBladeOpenWithStatus, setIsDetailStatusBladeOpenWithStatus] = useState<
+		MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED | undefined
+	>(undefined);
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
 	const [filters, setFilters] = useQueryParams(ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const [selectedMaintainers, setSelectedMaintainers] = useState<string[]>(
@@ -70,7 +75,11 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	);
 	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 
-	const { data: materialRequests, isLoading: isLoadingMaterialRequests } = useGetMaterialRequests({
+	const {
+		data: materialRequests,
+		isLoading: isLoadingMaterialRequests,
+		refetch: refetchMaterialRequests,
+	} = useGetMaterialRequests({
 		isPersonal: false,
 		isPending: false,
 		size: ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
@@ -146,9 +155,11 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		];
 	}, [selectedDownloadFilters]);
 
-	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
-		currentMaterialRequest?.id || null
-	);
+	const {
+		data: currentMaterialRequestDetail,
+		isFetching: isLoading,
+		refetch: refetchCurrentMaterialRequestDetail,
+	} = useGetMaterialRequestById(currentMaterialRequest?.id || null);
 
 	const noData = useMemo(
 		(): boolean => isEmpty(materialRequests?.items),
@@ -248,17 +259,64 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		setIsDetailBladeOpen(true);
 	};
 
+	const onMaterialRequestStatusChange = () => {
+		void refetchCurrentMaterialRequestDetail();
+		void refetchMaterialRequests();
+	};
+
 	const renderDetailBlade = () => {
-		if (!currentMaterialRequestDetail) {
+		if (!currentMaterialRequest?.id || !currentMaterialRequestDetail) {
 			return null;
 		}
+
+		const getBladeLayerIndex = () => {
+			if (isDetailStatusBladeOpenWithStatus) {
+				return 2;
+			}
+
+			if (isDetailBladeOpen) {
+				return 1;
+			}
+			return 0;
+		};
+
 		return (
-			<MaterialRequestDetailBlade
-				allowRequestCancellation={false}
-				isOpen={!isLoading && isDetailBladeOpen}
-				onClose={() => setIsDetailBladeOpen(false)}
-				currentMaterialRequestDetail={currentMaterialRequestDetail}
-			/>
+			<BladeManager
+				currentLayer={getBladeLayerIndex()}
+				onCloseBlade={() => {
+					if (isDetailStatusBladeOpenWithStatus) {
+						setIsDetailStatusBladeOpenWithStatus(undefined);
+					} else {
+						setIsDetailBladeOpen(false);
+					}
+				}}
+				opacityStep={0.1}
+			>
+				<MaterialRequestDetailBlade
+					allowRequestCancellation={false}
+					isOpen={!isLoading && isDetailBladeOpen}
+					onClose={() => setIsDetailBladeOpen(false)}
+					onApproveRequest={() =>
+						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.APPROVED)
+					}
+					onDeclineRequest={() =>
+						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
+					}
+					currentMaterialRequestDetail={currentMaterialRequestDetail}
+					afterStatusChanged={onMaterialRequestStatusChange}
+					layer={isDetailBladeOpen ? 1 : 99}
+					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
+				/>
+				<MaterialRequestStatusUpdateBlade
+					isOpen={!isLoading && !!isDetailStatusBladeOpenWithStatus}
+					onClose={() => setIsDetailStatusBladeOpenWithStatus(undefined)}
+					status={isDetailStatusBladeOpenWithStatus}
+					currentMaterialRequestDetail={currentMaterialRequestDetail}
+					afterStatusChanged={onMaterialRequestStatusChange}
+					layer={isDetailBladeOpen ? 2 : 99}
+					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
+				/>
+			</BladeManager>
 		);
 	};
 
