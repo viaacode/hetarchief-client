@@ -27,6 +27,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 	orientation,
 	children,
 	renderAdditionalCaption,
+	openInNewTab = false,
 }) => {
 	const withThumbnail = !!thumbnail || !hideThumbnail;
 
@@ -144,7 +145,12 @@ const MaterialCard: FC<MaterialCardProps> = ({
 
 	return (
 		<div className={className}>
-			<NextLink passHref href={link} style={{ textDecoration: 'none' }}>
+			<NextLink
+				passHref
+				href={link}
+				style={{ textDecoration: 'none' }}
+				target={openInNewTab ? '_blank' : '_self'}
+			>
 				<Card
 					className={classNames}
 					orientation={orientation}

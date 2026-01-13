@@ -39,6 +39,12 @@
 		outline: $teal solid 1px !important;
 	}
 
+	// We need to be more specific than the react-components
+	// so adding the fp-controls in between to make sure the styling will be overridden
+	.fp-controls .fp-cuepoint {
+		background-color: $teal-dark !important;
+	}
+
 	.c-video-player-inner {
 		background-color: $silver !important;
 	}

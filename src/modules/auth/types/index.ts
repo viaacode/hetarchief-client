@@ -18,7 +18,9 @@ export interface User {
 	idp: Idp;
 	organisationId: string | null;
 	organisationName: string | null;
+	sector: string | null;
 	visitorSpaceSlug?: string;
 	permissions: Permission[];
 	isKeyUser: boolean;
+	isEvaluator: boolean;
 }

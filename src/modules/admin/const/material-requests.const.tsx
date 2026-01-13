@@ -1,3 +1,5 @@
+import MaterialRequestDownloadButton from '@account/components/MaterialRequestDownloadButton/MaterialRequestDownloadButton';
+import { MaterialRequestStatusPill } from '@account/components/MaterialRequestStatusPill';
 import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
 import {
 	type MaterialRequest,
@@ -5,37 +7,45 @@ import {
 	type MaterialRequestRow,
 	MaterialRequestType,
 } from '@material-requests/types';
+import { CopyButton } from '@shared/components/CopyButton';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils/dates';
+import { asDate, formatMediumDate } from '@shared/utils/dates';
 import type { Column } from 'react-table';
 import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
 export const ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE = 20;
 
 export const ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
-	orderProp: withDefault(StringParam, MaterialRequestKeys.requestedAt),
-	orderDirection: withDefault(SortDirectionParam, undefined),
-	page: withDefault(NumberParam, 1),
+	[QUERY_PARAM_KEY.ORDER_PROP]: withDefault(StringParam, MaterialRequestKeys.requestedAt),
+	[QUERY_PARAM_KEY.ORDER_DIRECTION]: withDefault(SortDirectionParam, undefined),
+	[QUERY_PARAM_KEY.PAGE]: withDefault(NumberParam, 1),
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: withDefault(StringParam, ''),
-	type: withDefault(ArrayParam, []),
+	[QUERY_PARAM_KEY.TYPE]: withDefault(ArrayParam, []),
+	[QUERY_PARAM_KEY.STATUS]: withDefault(ArrayParam, []),
+	[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL]: withDefault(ArrayParam, []),
 	maintainerIds: withDefault(ArrayParam, []),
 };
 
 export const getAdminMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 	{
-		Header: tText('modules/admin/const/material-requests___naam'),
+		Header: tText('modules/admin/const/material-requests___aanvrager'),
 		accessor: MaterialRequestKeys.name,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
-			<span className="u-color-neutral">{original.requesterFullName}</span>
-		),
-	},
-	{
-		Header: tText('modules/admin/const/material-requests___emailadres'),
-		accessor: MaterialRequestKeys.email,
-		Cell: ({ row: { original } }: MaterialRequestRow) => (
-			<span className="u-color-neutral">{original.requesterMail}</span>
+			<span className="p-material-requests__table-titel-material">
+				<span className="p-material-requests__table-titel-material__requester">
+					{original.requesterFullName}
+				</span>
+				<CopyButton
+					className="p-material-requests__table-titel-material__mail u-p-0 c-table__copy u-text-break"
+					icon={undefined}
+					variants="text"
+					text={original.requesterMail}
+				>
+					{original.requesterMail}
+				</CopyButton>
+			</span>
 		),
 	},
 	{
@@ -46,16 +56,20 @@ export const getAdminMaterialRequestTableColumns = (): Column<MaterialRequest>[]
 		),
 	},
 	{
+		Header: tText('modules/admin/const/material-requests___titel-materiaal'),
+		accessor: MaterialRequestKeys.material,
+	},
+	{
 		Header: tText('modules/admin/const/material-requests___datum'),
 		accessor: MaterialRequestKeys.requestedAt,
-		Cell: ({ row: { original } }: MaterialRequestRow) => (
-			<span
-				className="u-color-neutral"
-				title={formatMediumDateWithTime(asDate(original.requestedAt || original.createdAt))}
-			>
-				{formatDistanceToday(original.requestedAt || original.createdAt)}
-			</span>
-		),
+		Cell: ({ row: { original } }: MaterialRequestRow) => {
+			const date = formatMediumDate(asDate(original.requestedAt || original.createdAt));
+			return (
+				<span className="u-color-neutral" title={date}>
+					{date}
+				</span>
+			);
+		},
 	},
 	{
 		Header: tText('modules/admin/const/material-requests___type'),
@@ -66,6 +80,21 @@ export const getAdminMaterialRequestTableColumns = (): Column<MaterialRequest>[]
 			</span>
 		),
 	},
+	{
+		Header: tText('modules/admin/const/material-requests___status'),
+		accessor: MaterialRequestKeys.status,
+		Cell: ({ row: { original } }: MaterialRequestRow) => (
+			<MaterialRequestStatusPill status={original.status} />
+		),
+	},
+	{
+		Header: tText('modules/admin/const/material-requests___download'),
+		accessor: MaterialRequestKeys.downloadUrl,
+		disableSortBy: true,
+		Cell: ({ row: { original } }: MaterialRequestRow) => (
+			<MaterialRequestDownloadButton materialRequest={original} />
+		),
+	} as Column<MaterialRequest>,
 ];
 
 export const GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = (): {

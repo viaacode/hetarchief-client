@@ -84,23 +84,39 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 	const onSendRequests = async () => {
 		try {
 			if (!hasRequests) {
-				setValidationError(tText('Er zijn geen aanvragen te vervolledigen'));
+				setValidationError(
+					tText(
+						'modules/account/components/personal-info/personal-info___er-zijn-geen-aanvragen-te-vervolledigen'
+					)
+				);
 				return;
 			}
 
 			if (!typeSelected) {
-				setValidationError(tText('De hoedanigheid is verplicht'));
+				setValidationError(
+					tText(
+						'modules/account/components/personal-info/personal-info___de-hoedanigheid-is-verplicht'
+					)
+				);
 				return;
 			}
 
 			if (isKeyUser) {
 				if (requestName.length === 0) {
-					setValidationError(tText('De aanvraag naam is verplicht'));
+					setValidationError(
+						tText(
+							'modules/account/components/personal-info/personal-info___de-aanvraag-naam-is-verplicht'
+						)
+					);
 					return;
 				}
 
 				if (!agreedToTerms) {
-					setValidationError(tText('Keur de aanvullende gebruiksvoorwaarden bij aanvragen goed.'));
+					setValidationError(
+						tText(
+							'modules/account/components/personal-info/personal-info___keur-de-aanvullende-gebruiksvoorwaarden-bij-aanvragen-goed'
+						)
+					);
 					return;
 				}
 			}
@@ -150,7 +166,9 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 				checked={agreedToTerms}
 				label={
 					<>
-						{tText('Ik nam kennis en ga akkoord met de')}{' '}
+						{tText(
+							'modules/account/components/personal-info/personal-info___ik-nam-kennis-en-ga-akkoord-met-de'
+						)}{' '}
 						{/** biome-ignore lint/a11y/noStaticElementInteractions: We need hyperlink behavior in the label*/}
 						{/** biome-ignore lint/a11y/useKeyWithClickEvents: We need hyperlink behavior in the label */}
 						<span
@@ -160,7 +178,9 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 							}}
 							className={clsx(styles['c-personal-info__checkbox-hyperlink'])}
 						>
-							{tText('Aanvullende gebruiksvoorwaarden bij aanvragen')}
+							{tText(
+								'modules/account/components/personal-info/personal-info___aanvullende-gebruiksvoorwaarden-bij-aanvragen'
+							)}
 						</span>
 					</>
 				}
@@ -177,7 +197,9 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 			<Checkbox
 				className={styles['c-personal-info__checkbox']}
 				checked={isSubscribedToNewsletter}
-				label={tHtml('Ik wens me in te schrijven voor de nieuwsbrief')}
+				label={tHtml(
+					'modules/account/components/personal-info/personal-info___ik-wens-me-in-te-schrijven-voor-de-nieuwsbrief'
+				)}
 				onClick={() => setIsSubscribedToNewsletter((prevState) => !prevState)}
 			/>
 		);
@@ -204,8 +226,10 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 		setIsSubscribedToNewsletter(false);
 		toastService.notify({
 			maxLines: 3,
-			title: tText('er-ging-iets-mis'),
-			description: tText('er-ging-iets-mis-tijdens-het-versturen'),
+			title: tText('modules/account/components/personal-info/personal-info___er-ging-iets-mis'),
+			description: tText(
+				'modules/account/components/personal-info/personal-info___er-ging-iets-mis-tijdens-het-versturen'
+			),
 		});
 	};
 
@@ -222,12 +246,14 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 				) : null}
 
 				<Button
-					label={tText('Verstuur aanvraag')}
+					label={tText(
+						'modules/account/components/personal-info/personal-info___verstuur-aanvraag'
+					)}
 					variants={['block', 'text', 'dark']}
 					onClick={onSendRequests}
 				/>
 				<Button
-					label={tText('Keer terug')}
+					label={tText('modules/account/components/personal-info/personal-info___keer-terug')}
 					variants={['block', 'text', 'light']}
 					onClick={onCancel}
 				/>
@@ -238,11 +264,11 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 	const renderNameEntry = () => (
 		<div className={styles['c-personal-info__content-group']}>
 			<div className={clsx(styles['c-personal-info__content-group-semi-title'])}>
-				{tText('Naam aanvraag')}
+				{tText('modules/account/components/personal-info/personal-info___naam-aanvraag')}
 			</div>
 			<div className={clsx(styles['c-personal-info__content-group-value'])}>
 				{tText(
-					'Door je aanvraag een naam te geven behoud je het overzicht van de objecten die samen in één aanvraag uitgevoerd werden.'
+					'modules/account/components/personal-info/personal-info___door-je-aanvraag-een-naam-te-geven-behoud-je-het-overzicht-van-de-objecten-die-samen-in-een-aanvraag-uitgevoerd-werden'
 				)}
 			</div>
 			<Tooltip position="left">
@@ -255,7 +281,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 				</TooltipTrigger>
 				<TooltipContent>
 					{tText(
-						'Met deze naam groepeer je al je huidige aanvragen in je lijst. Dit is handig om later het overzicht te behouden.'
+						'modules/account/components/personal-info/personal-info___met-deze-naam-groepeer-je-al-je-huidige-aanvragen-in-je-lijst-dit-is-handig-om-later-het-overzicht-te-behouden'
 					)}
 				</TooltipContent>
 			</Tooltip>
@@ -274,30 +300,38 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 	const renderCapacity = () => (
 		<div className={styles['c-personal-info__content-group']}>
 			<div className={clsx(styles['c-personal-info__content-group-title'])}>
-				{tText('Jouw rol')}
+				{tText('modules/account/components/personal-info/personal-info___jouw-rol')}
 			</div>
 			<div className={clsx(styles['c-personal-info__content-group-radio-button-group'])}>
 				<RadioButton
 					className={styles['c-personal-info__content-group-radio-button']}
-					label={tText('requester-capacity-education')}
+					label={tText(
+						'modules/account/components/personal-info/personal-info___requester-capacity-education'
+					)}
 					checked={typeSelected === MaterialRequestRequesterCapacity.EDUCATION}
 					onClick={() => setTypeSelected(MaterialRequestRequesterCapacity.EDUCATION)}
 				/>
 				<RadioButton
 					className={styles['c-personal-info__content-group-radio-button']}
-					label={tText('requester-capacity-work')}
+					label={tText(
+						'modules/account/components/personal-info/personal-info___requester-capacity-work'
+					)}
 					checked={typeSelected === MaterialRequestRequesterCapacity.WORK}
 					onClick={() => setTypeSelected(MaterialRequestRequesterCapacity.WORK)}
 				/>
 				<RadioButton
 					className={styles['c-personal-info__content-group-radio-button']}
-					label={tText('requester-capacity-private-researcher')}
+					label={tText(
+						'modules/account/components/personal-info/personal-info___requester-capacity-private-researcher'
+					)}
 					checked={typeSelected === MaterialRequestRequesterCapacity.PRIVATE_RESEARCH}
 					onClick={() => setTypeSelected(MaterialRequestRequesterCapacity.PRIVATE_RESEARCH)}
 				/>
 				<RadioButton
 					className={styles['c-personal-info__content-group-radio-button']}
-					label={tText('requester-capacity-other')}
+					label={tText(
+						'modules/account/components/personal-info/personal-info___requester-capacity-other'
+					)}
 					checked={typeSelected === MaterialRequestRequesterCapacity.OTHER}
 					onClick={() => setTypeSelected(MaterialRequestRequesterCapacity.OTHER)}
 				/>
@@ -310,14 +344,20 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 			<div
 				className={clsx(styles['c-personal-info__header'], contentIsScrollable && 'u-bg-platinum')}
 			>
-				<div className={styles['c-personal-info__title']}>{tText('Details')}</div>
+				<div className={styles['c-personal-info__title']}>
+					{tText('modules/account/components/personal-info/personal-info___details')}
+				</div>
 				<div className={styles['c-personal-info__edit-user-data']}>
 					<a
-						href={tText('Aanpassing van jouw gegevens aanvragen - hyperlink')}
+						href={tText(
+							'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-hyperlink'
+						)}
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-						{tText('Aanpassing van jouw gegevens aanvragen - label')}
+						{tText(
+							'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-label'
+						)}
 					</a>
 					<Icon className="u-ml-8" name={IconNamesLight.Extern} />
 				</div>
@@ -325,7 +365,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 			<div ref={contentRef} className={styles['c-personal-info__content']}>
 				<div className={styles['c-personal-info__content-group']}>
 					<div className={clsx(styles['c-personal-info__content-group-title'])}>
-						{tText('Over jou')}
+						{tText('modules/account/components/personal-info/personal-info___over-jou')}
 					</div>
 					<div className={clsx(styles['c-personal-info__content-group-subtitle'])}>
 						{user?.fullName}
@@ -335,7 +375,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 
 				<div className={styles['c-personal-info__content-group']}>
 					<div className={clsx(styles['c-personal-info__content-group-title'])}>
-						{tText('Jouw organisatie')}
+						{tText('modules/account/components/personal-info/personal-info___jouw-organisatie')}
 					</div>
 					<div className={clsx(styles['c-personal-info__content-group-subtitle'])}>
 						{user?.organisationName ? (
@@ -348,6 +388,11 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 							/>
 						)}
 					</div>
+					{user?.sector && (
+						<div className={clsx(styles['c-personal-info__content-group-value'])}>
+							{user.sector}
+						</div>
+					)}
 				</div>
 				{isKeyUser ? renderNameEntry() : renderCapacity()}
 				{renderCheckboxes()}

@@ -291,7 +291,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					<Link
 						passHref
 						href={`/${ROUTE_PARTS_BY_LOCALE[locale].account}/${ROUTE_PARTS_BY_LOCALE[locale].myApplicationList}`}
-						aria-label={tText('Werk je aanvraag af')}
+						aria-label={tText(
+							'modules/navigation/components/material-request-center-blade/material-request-center-blade___werk-je-aanvraag-af'
+						)}
 					>
 						<Button
 							label={tText(

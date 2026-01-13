@@ -444,9 +444,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		}
 	};
 
-	const handleMetadataLoaded = (evt: Event) => {
-		const duration = (evt?.target as HTMLVideoElement)?.duration;
-
+	const handleMetadataLoaded = (duration: number) => {
 		setMediaDuration(duration);
 
 		// Prefill the end time if nothing has been set yet (Ensures timecontrols and video are in sync)
@@ -513,7 +511,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 								setFormValue('startTime', 0);
 							}
 						}}
-						onMetadataLoaded={handleMetadataLoaded}
+						onMediaDurationLoaded={handleMetadataLoaded}
 					/>
 				</div>
 				{playableFile && mediaDuration && (

@@ -17,4 +17,5 @@ export interface MaterialCardProps {
 	orientation: 'horizontal' | 'vertical';
 	children?: ReactNode;
 	renderAdditionalCaption?: (caption: string) => ReactNode;
+	openInNewTab?: boolean;
 }

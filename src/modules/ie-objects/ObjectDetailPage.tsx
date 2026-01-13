@@ -60,10 +60,10 @@ import {
 import { IiifViewer } from '@iiif-viewer/IiifViewer';
 import type { ImageInfo, ImageInfoWithToken, Rect, TextLine } from '@iiif-viewer/IiifViewer.types';
 import { GET_BLANK_MATERIAL_REQUEST_REUSE_FORM } from '@material-requests/const';
-import { MaterialRequestsService } from '@material-requests/services';
 import type { MaterialRequest } from '@material-requests/types';
 import { Alert, Button, type TabProps, Tabs } from '@meemoo/react-components';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
+import type { CuePoints } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer.types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
@@ -75,6 +75,7 @@ import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import {
+	CUE_POINTS_SEPARATOR,
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
@@ -89,7 +90,7 @@ import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
-import { setShowAuthModal, setShowZendesk } from '@shared/store/ui';
+import { selectLastSearchParams, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
@@ -141,6 +142,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const dispatch = useDispatch();
 	const user: User | null = useSelector(selectUser);
 	const hasCheckedLogin: boolean = useSelector(selectHasCheckedLogin);
+	const lastSearchParams = useSelector(selectLastSearchParams);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const ieObjectId = router.query.ie as string;
 	const maintainerSlug = router.query.slug as string;
@@ -239,6 +241,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	);
 	const [isTextOverlayVisible, setIsTextOverlayVisible] = useState(false);
 	const [activeTab, setActiveTab] = useState<ObjectDetailTabs>(ObjectDetailTabs.Metadata);
+	const [cuePoints, setCuePoints] = useState<CuePoints | undefined>(undefined);
 
 	const [activeMentionHighlights, setActiveMentionHighlights] = useState<{
 		pageIndex: number;
@@ -610,6 +613,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		}
 		if (isTextOverlayVisibleFromUrl) {
 			setIsTextOverlayVisible(isTextOverlayVisibleFromUrl === 'true');
+		}
+
+		const cuePointsFromUrl = parsedUrl.query[QUERY_PARAM_KEY.CUE_POINTS] || '';
+		const cuePointsArray = (cuePointsFromUrl as string)?.split(CUE_POINTS_SEPARATOR);
+		if (cuePointsArray?.length > 0) {
+			setCuePoints({
+				start: Number.parseFloat(cuePointsArray[0]),
+				end: Number.parseFloat(cuePointsArray[1]),
+			});
 		}
 	}, []);
 
@@ -1430,7 +1442,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				representation={getRepresentationByCurrentFileIndex()}
 				dctermsFormat={mediaInfo.dctermsFormat}
 				maintainerLogo={mediaInfo?.maintainerOverlay ? mediaInfo.maintainerLogo : undefined}
-				cuePoints={undefined}
+				cuePoints={cuePoints}
 				poster={undefined}
 				paused={isMediaPaused}
 				onPlay={handleOnPlay}
@@ -1696,14 +1708,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		}
 
 		return (
-			<Button
+			<Link
 				className={styles['p-object-detail__back']}
-				icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
-				onClick={() => {
-					router.back();
-				}}
-				variants={['black']}
-			/>
+				href={`/${ROUTES_BY_LOCALE[locale].search}?${lastSearchParams}`}
+			>
+				<Button
+					className={styles['p-object-detail__back']}
+					icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
+					variants={['black']}
+				/>
+			</Link>
 		);
 	};
 

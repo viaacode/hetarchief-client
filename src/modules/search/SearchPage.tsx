@@ -62,6 +62,7 @@ import {
 	selectLastScrollPosition,
 	setBreadcrumbs,
 	setLastScrollPosition,
+	setLastSearchParams,
 	setShowZendesk,
 } from '@shared/store/ui';
 import { Breakpoints, type SortObject } from '@shared/types';
@@ -117,6 +118,7 @@ import { addYears, isAfter } from 'date-fns';
 import type { HTTPError } from 'ky';
 import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -150,6 +152,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const isCPAdmin = useHasAnyGroup(GroupName.CP_ADMIN);
 	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
 	const isAnonymousUser = useHasAnyGroup(GroupName.ANONYMOUS);
+	const searchParams = useSearchParams();
 
 	/**
 	 * State
@@ -317,6 +320,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	useEffect(() => {
 		setIsInitialPageLoad(true);
 	}, []);
+
+	useEffect(() => {
+		dispatch(setLastSearchParams(searchParams.toString()));
+	}, [searchParams, dispatch]);
 
 	/**
 	 * Display

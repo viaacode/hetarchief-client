@@ -38,6 +38,7 @@ export interface MaterialRequest {
 	approvedAt: string;
 	deniedAt: string;
 	cancelledAt: string;
+	statusMotivation?: string;
 	organisation?: string;
 	requestName: string | null;
 	downloadUrl: string | null;
