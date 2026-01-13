@@ -482,10 +482,10 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 						})}
 					>
 						{isLoadingMaterialRequests && <Loading owner="Material requests overview" />}
-						{noData && renderEmptyMessage()}
+						{noData && !isLoadingMaterialRequests && renderEmptyMessage()}
 						{!noData && !isLoadingMaterialRequests && renderContent()}
 					</div>
-					{currentMaterialRequest?.id && renderDetailBlade()}
+					{renderDetailBlade()}
 				</AdminLayout.Content>
 			</AdminLayout>
 		);
