@@ -1,3 +1,4 @@
+import { handleDownloadMaterialRequest } from '@account/utils/handle-download-material-request';
 import { type MaterialRequest, MaterialRequestStatus } from '@material-requests/types';
 import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
@@ -25,7 +26,7 @@ const MaterialRequestDownloadButton: FC<MaterialRequestStatusPillProps> = ({ mat
 			onClick={(event) => {
 				event.preventDefault();
 				event.stopPropagation();
-				window.open(materialRequest.downloadUrl as string);
+				handleDownloadMaterialRequest(materialRequest);
 			}}
 		/>
 	);

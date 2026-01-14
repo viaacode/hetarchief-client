@@ -157,9 +157,9 @@ export const getAccountMaterialRequestTableColumns = (
 				},
 				{
 					Header: tText('modules/cp/const/material-requests___request-name'),
-					accessor: MaterialRequestKeys.requestName,
+					accessor: MaterialRequestKeys.requestGroupName,
 					Cell: ({ row: { original } }: MaterialRequestRow) => (
-						<span className="u-color-neutral">{original.requestName}</span>
+						<span className="u-color-neutral">{original.requestGroupName}</span>
 					),
 				},
 			]

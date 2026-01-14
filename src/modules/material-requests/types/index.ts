@@ -40,8 +40,11 @@ export interface MaterialRequest {
 	cancelledAt: string;
 	statusMotivation?: string;
 	organisation?: string;
-	requestName: string | null;
+	requestGroupName: string | null;
+	requestGroupId: string | null;
 	downloadUrl: string | null;
+	downloadAvailableAt?: string;
+	downloadExpiresAt?: string;
 }
 
 export interface MaterialRequestReuseForm {
@@ -92,7 +95,7 @@ export interface MaterialRequestUpdate {
 export interface MaterialRequestSendAll {
 	type: MaterialRequestRequesterCapacity;
 	organisation?: string;
-	requestName?: string;
+	requestGroupName?: string;
 }
 
 export enum MaterialRequestType {
@@ -155,7 +158,7 @@ export enum MaterialRequestKeys {
 	type = 'type',
 	status = 'status',
 	downloadUrl = 'downloadUrl',
-	requestName = 'requestName',
+	requestGroupName = 'requestGroupName',
 	name = 'requesterFullName',
 	email = 'requesterMail',
 	maintainer = 'maintainerName',
