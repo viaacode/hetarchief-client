@@ -184,10 +184,16 @@ export async function getServerSideProps(
 		});
 	}
 
+	const path = getFallbackPath(context.query.fallback);
+	// This fallback route should not resolve admin paths
+	// The admin/ paths are static routes that don't work well on the first load while using the dev server
+	if (path?.startsWith('admin/')) {
+		return { notFound: true };
+	}
+
 	let title: string | null = null;
 	let description: string | null = null;
 	let image: string | null = null;
-	const path = context.query.fallback;
 	const locale = (context.locale || Locale.nl) as Locale;
 
 	if (path) {

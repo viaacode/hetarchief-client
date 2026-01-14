@@ -12,9 +12,6 @@ export const useGetIeObjectThumbnail = (
 	return useQuery({
 		queryKey: [QUERY_KEYS.getIeObjectsThumbnail, schemaIdentifier],
 		queryFn: async (): Promise<string | null> => {
-			if (schemaIdentifier.startsWith('_next')) {
-				return null;
-			}
 			return await IeObjectsService.getThumbnailBySchemaIdentifier(schemaIdentifier);
 		},
 		enabled: true,
