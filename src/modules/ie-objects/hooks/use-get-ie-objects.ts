@@ -1,10 +1,6 @@
-import { OrderDirection } from '@meemoo/react-components';
-import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
-import { isEmpty, isNil, noop } from 'lodash-es';
-import { useDispatch, useSelector } from 'react-redux';
-
 import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
+import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { setFilterOptions, setResults } from '@shared/store/ie-objects';
@@ -16,11 +12,18 @@ import {
 	IeObjectsSearchOperator,
 	SearchPageMediaType,
 } from '@shared/types/ie-objects';
+import {
+	keepPreviousData,
+	type QueryClient,
+	type UseQueryResult,
+	useQuery,
+} from '@tanstack/react-query';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { SEARCH_RESULTS_PAGE_SIZE } from '@visitor-space/const';
 import { SearchSortProp } from '@visitor-space/types';
 import { VISITOR_SPACE_LICENSES } from '@visitor-space/utils/elastic-filters';
-
-import { IeObjectsService } from './../services';
+import { isEmpty, isNil, noop } from 'lodash-es';
+import { useDispatch, useSelector } from 'react-redux';
 
 export async function getIeObjects(
 	filters: IeObjectsSearchFilter[],
@@ -40,14 +43,14 @@ export const useGetIeObjects = (
 		size: number;
 		sort?: SortObject;
 	},
-	options: { enabled: boolean } = { enabled: true }
+	enabled: boolean = true
 ): UseQueryResult<GetIeObjectsResponse> => {
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
 
-	return useQuery(
-		[QUERY_KEYS.getIeObjectsResults, args, options],
-		async () => {
+	return useQuery({
+		queryKey: [QUERY_KEYS.getIeObjectsResults, args],
+		queryFn: async () => {
 			const results = await getIeObjects(args.filters, args.page, args.size, args.sort);
 
 			dispatch(setResults(results));
@@ -75,11 +78,9 @@ export const useGetIeObjects = (
 
 			return results;
 		},
-		{
-			keepPreviousData: true,
-			enabled: options.enabled,
-		}
-	);
+		placeholderData: keepPreviousData,
+		enabled,
+	});
 };
 
 export async function makeServerSideRequestGetIeObjects(queryClient: QueryClient) {
@@ -95,7 +96,7 @@ export async function makeServerSideRequestGetIeObjects(queryClient: QueryClient
 		size: SEARCH_RESULTS_PAGE_SIZE,
 		sort: {
 			orderProp: SearchSortProp.Relevance,
-			orderDirection: OrderDirection.desc,
+			orderDirection: AvoSearchOrderDirection.DESC,
 		},
 	};
 	await Promise.all([

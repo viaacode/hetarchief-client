@@ -1,3 +1,6 @@
+import { Permission } from '@account/const';
+import { VISITOR_SPACE_VALIDATION_SCHEMA } from '@cp/components/VisitorSpaceSettings/VisitorSpaceSettings.const';
+import { validateFile } from '@cp/components/VisitorSpaceSettings/VisitorSpaceSettings.utils';
 import {
 	Box,
 	Button,
@@ -8,23 +11,6 @@ import {
 	type SelectOption,
 	TextInput,
 } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { isEqual, kebabCase } from 'lodash-es';
-import { useRouter } from 'next/router';
-import React, {
-	type FC,
-	type ReactNode,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
-import type { SingleValue } from 'react-select';
-
-import { Permission } from '@account/const';
-import { VISITOR_SPACE_VALIDATION_SCHEMA } from '@cp/components/VisitorSpaceSettings/VisitorSpaceSettings.const';
-import { validateFile } from '@cp/components/VisitorSpaceSettings/VisitorSpaceSettings.utils';
 import CardImage from '@shared/components/CardImage/CardImage';
 import FileInput from '@shared/components/FileInput/FileInput';
 import Icon from '@shared/components/Icon/Icon';
@@ -48,6 +34,19 @@ import type {
 	UpdateVisitorSpaceSettings,
 } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 import { VisitorSpaceStatus } from '@visitor-space/types';
+import clsx from 'clsx';
+import { isEqual, kebabCase } from 'lodash-es';
+import { useRouter } from 'next/router';
+import React, {
+	type FC,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
+import type { SingleValue } from 'react-select';
 
 import adminLayoutStyles from '../../../admin/layouts/AdminLayout/AdminLayout.module.scss';
 
@@ -84,11 +83,9 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 		{
 			hasSpace: false,
 		},
-		{ enabled: action === 'create' }
+		action === 'create'
 	);
-	const { data: maintainer } = useGetVisitorSpace(visitorSpaceSlug, false, {
-		enabled: action === 'create',
-	});
+	const { data: maintainer } = useGetVisitorSpace(visitorSpaceSlug, false, action === 'create');
 	const maintainerOptions = (contentPartners || []).map((maintainer) => ({
 		label: maintainer?.name,
 		value: maintainer?.id,

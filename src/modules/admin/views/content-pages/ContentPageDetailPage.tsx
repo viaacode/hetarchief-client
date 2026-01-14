@@ -1,9 +1,6 @@
 'use client';
-// https://github.com/vercel/next.js/issues/47232
 
-import type { Avo } from '@viaa/avo2-types';
-import { useRouter } from 'next/router';
-import React, { type FC, lazy, Suspense } from 'react';
+// https://github.com/vercel/next.js/issues/47232
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
@@ -15,6 +12,9 @@ import { goBrowserBackWithFallback } from '@shared/helpers/go-browser-back-with-
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import type { AvoUserCommonUser } from '@viaa/avo2-types';
+import { useRouter } from 'next/router';
+import React, { type FC, lazy, Suspense } from 'react';
 
 const ContentPageDetail = lazy(() =>
 	import('@meemoo/admin-core-ui/admin').then((adminCoreModule) => ({
@@ -28,7 +28,7 @@ interface ContentPageDetailPageProps {
 
 export const ContentPageDetailPage: FC<
 	DefaultSeoInfo & {
-		commonUser: Avo.User.CommonUser | undefined;
+		commonUser: AvoUserCommonUser | undefined;
 	} & ContentPageDetailPageProps
 > = ({ url, canonicalUrl, commonUser, id }) => {
 	const locale = useLocale();
@@ -41,7 +41,7 @@ export const ContentPageDetailPage: FC<
 					<Suspense fallback={<Loading fullscreen owner="ContentPageDetailPage" />}>
 						<ContentPageDetail
 							id={id}
-							commonUser={commonUser as Avo.User.CommonUser}
+							commonUser={commonUser as AvoUserCommonUser}
 							onGoBack={() =>
 								goBrowserBackWithFallback(ROUTES_BY_LOCALE[locale].adminContentPages, router)
 							}

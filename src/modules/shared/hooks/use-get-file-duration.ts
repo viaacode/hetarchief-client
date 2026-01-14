@@ -1,12 +1,10 @@
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { type UseQueryResult, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
-export const useGetFileDuration = (
-	playableUrl: string | undefined | null
-): UseQueryResult<number> => {
-	return useQuery(
-		[QUERY_KEYS.getIeObjectPlayerDuration, playableUrl],
-		() =>
+export const useGetFileDuration = (playableUrl: string | undefined | null) => {
+	return useQuery<number>({
+		queryKey: [QUERY_KEYS.getIeObjectPlayerDuration, playableUrl],
+		queryFn: () =>
 			new Promise((resolve, reject) => {
 				if (!playableUrl) {
 					return reject(undefined);
@@ -26,11 +24,9 @@ export const useGetFileDuration = (
 
 				video.src = playableUrl;
 			}),
-		{
-			enabled: !!playableUrl,
-			keepPreviousData: true,
-			cacheTime: 30 * 60 * 1000, // 30 minutes
-			staleTime: 30 * 60 * 1000, // 30 minutes
-		}
-	);
+
+		enabled: !!playableUrl,
+		placeholderData: keepPreviousData,
+		staleTime: 30 * 60 * 1000, // 30 minutes
+	});
 };

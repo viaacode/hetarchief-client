@@ -1,4 +1,4 @@
-import type { OrderDirection } from '@meemoo/react-components';
+import type { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import type { CSSProperties, ReactNode } from 'react';
 
 /**
@@ -23,7 +23,7 @@ export interface ComponentLink {
 
 export interface SortObject {
 	orderProp: string;
-	orderDirection?: OrderDirection;
+	orderDirection?: AvoSearchOrderDirection;
 }
 
 /**

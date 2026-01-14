@@ -1,6 +1,5 @@
-import { useQuery, type UseQueryResult } from '@tanstack/react-query';
-
 import { QUERY_KEYS } from '@shared/const/query-keys';
+import { keepPreviousData, type UseQueryResult, useQuery } from '@tanstack/react-query';
 import { VisitorSpaceService } from '@visitor-space/services';
 import type { VisitorSpaceInfo } from '@visitor-space/types';
 
@@ -9,11 +8,9 @@ export function useGetAccessibleVisitorSpaces({
 }: {
 	canViewAllSpaces: boolean;
 }): UseQueryResult<VisitorSpaceInfo[]> {
-	return useQuery(
-		[QUERY_KEYS.getAccessibleVisitorSpaces, canViewAllSpaces],
-		() => VisitorSpaceService.getAllAccessible(canViewAllSpaces),
-		{
-			keepPreviousData: true,
-		}
-	);
+	return useQuery({
+		queryKey: [QUERY_KEYS.getAccessibleVisitorSpaces, canViewAllSpaces],
+		queryFn: () => VisitorSpaceService.getAllAccessible(canViewAllSpaces),
+		placeholderData: keepPreviousData,
+	});
 }

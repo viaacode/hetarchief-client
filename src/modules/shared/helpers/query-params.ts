@@ -1,7 +1,10 @@
-import { OrderDirection } from '@meemoo/react-components';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { decodeString, encodeString, type QueryParamConfig } from 'use-query-params';
 
-const QUERY_PARAM_SORT_DIRECTIONS = [OrderDirection.asc, OrderDirection.desc] as const;
+const QUERY_PARAM_SORT_DIRECTIONS = [
+	AvoSearchOrderDirection.ASC,
+	AvoSearchOrderDirection.DESC,
+] as const;
 type SortDirectionTuple = typeof QUERY_PARAM_SORT_DIRECTIONS;
 type SortDirection = SortDirectionTuple[number];
 

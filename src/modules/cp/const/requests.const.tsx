@@ -1,9 +1,4 @@
-import { Button, OrderDirection, type TabProps } from '@meemoo/react-components';
-import { truncate } from 'lodash-es';
-import React from 'react';
-import type { Column } from 'react-table';
-import { NumberParam, StringParam, withDefault } from 'use-query-params';
-
+import { Button, type TabProps } from '@meemoo/react-components';
 import { CopyButton } from '@shared/components/CopyButton';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -18,7 +13,12 @@ import {
 	VisitStatus,
 } from '@shared/types/visit-request';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils/dates';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { RequestStatusAll } from '@visit-requests/types';
+import { truncate } from 'lodash-es';
+import React from 'react';
+import type { Column } from 'react-table';
+import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 export const RequestTablePageSize = 20;
 export const VISIT_REQUEST_ID_QUERY_KEY = 'aanvraag';
@@ -29,7 +29,7 @@ export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
 	orderProp: withDefault(StringParam, 'createdAt'),
-	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
+	orderDirection: withDefault(SortDirectionParam, AvoSearchOrderDirection.DESC),
 };
 
 export const GET_CP_ADMIN_REQUESTS_ACCESS_TYPE_TRANSLATION_KEYS = (): Record<

@@ -1,8 +1,3 @@
-import type { IPagination } from '@studiohyperdrive/pagination';
-import { QueryClient } from '@tanstack/react-query';
-import type { NextRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
-
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { tText } from '@shared/helpers/translate';
@@ -10,6 +5,10 @@ import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
 import { TranslationService } from '@shared/services/translation-service/translation.service';
 import { asDate } from '@shared/utils/dates';
+import type { IPagination } from '@studiohyperdrive/pagination';
+import { QueryClient } from '@tanstack/react-query';
+import type { NextRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
 
 import { GET_PATH_FROM_NOTIFICATION_TYPE } from './notifications.consts';
 import {
@@ -104,9 +103,9 @@ export abstract class NotificationsService {
 				});
 
 				hasSpaceNotification &&
-					(await NotificationsService.queryClient.invalidateQueries([
-						QUERY_KEYS.getAccessibleVisitorSpaces,
-					]));
+					(await NotificationsService.queryClient.invalidateQueries({
+						queryKey: [QUERY_KEYS.getAccessibleVisitorSpaces],
+					}));
 
 				if (
 					newNotifications.find(
@@ -169,7 +168,9 @@ export abstract class NotificationsService {
 		NotificationsService.lastNotifications = notifications;
 		if (unreadNotifications.length > 0) {
 			NotificationsService.setHasUnreadNotifications?.(true);
-			await NotificationsService.queryClient.invalidateQueries([QUERY_KEYS.getNotifications]);
+			await NotificationsService.queryClient.invalidateQueries({
+				queryKey: [QUERY_KEYS.getNotifications],
+			});
 		}
 	}
 
