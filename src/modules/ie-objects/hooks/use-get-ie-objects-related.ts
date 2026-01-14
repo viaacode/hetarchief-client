@@ -24,15 +24,14 @@ export async function getIeObjectsRelated(
 export const useGetIeObjectsRelated = (
 	ieObjectIri: string | undefined,
 	parentIeObjectIri: string | null,
-	options: { enabled?: boolean } = {}
+	enabled: boolean = true
 ): UseQueryResult<RelatedIeObjects> => {
 	return useQuery({
 		queryKey: [QUERY_KEYS.getIeObjectsRelated, ieObjectIri, parentIeObjectIri],
 		queryFn: () => getIeObjectsRelated(ieObjectIri, parentIeObjectIri),
 		placeholderData: keepPreviousData,
-		enabled: true,
+		enabled,
 		staleTime: 5 * 60 * 1000,
-		...options,
 	});
 };
 

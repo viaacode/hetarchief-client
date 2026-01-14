@@ -15,7 +15,7 @@ export interface JsonWaveformData {
 
 export function useGetPeakFile(
 	filePath: string | null,
-	options: { enabled: boolean } = { enabled: true }
+	enabled: boolean = true
 ): UseQueryResult<JsonWaveformData | null> {
 	return useQuery({
 		queryKey: [QUERY_KEYS.getPeakFile, filePath],
@@ -31,6 +31,6 @@ export function useGetPeakFile(
 			const peakFileResponse = await ky.get(jsonFileUrl);
 			return (await peakFileResponse.json()) as JsonWaveformData;
 		},
-		...options,
+		enabled,
 	});
 }

@@ -2,7 +2,7 @@ import { QUERY_KEYS } from '@shared/const/query-keys';
 import {
 	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
-	SearchPageMediaType,
+	type SearchPageMediaType,
 } from '@shared/types/ie-objects';
 import {
 	keepPreviousData,
@@ -25,40 +25,25 @@ export async function getIeObjectFormatCounts(
 	]);
 
 	// Get all possible media types
-	const allMediaTypes: SearchPageMediaType[] = [
-		SearchPageMediaType.All,
-		SearchPageMediaType.Audio,
-		SearchPageMediaType.Video,
-		SearchPageMediaType.Newspaper,
-	];
-
-	const buckets = results.aggregations[ElasticsearchFieldNames.Format].buckets;
-	const counts: Record<SearchPageMediaType, number> = allMediaTypes.reduce(
-		(acc, type) => {
-			acc[type] = 0;
-			return acc;
-		},
-		{} as Record<SearchPageMediaType, number>
-	);
-	for (const bucket of buckets) {
-		const key = bucket.key as SearchPageMediaType;
-		if (key in counts) {
-			counts[key] = bucket.doc_count;
-		}
-	}
-	return counts;
+	return Object.fromEntries(
+		results.aggregations[ElasticsearchFieldNames.Format].buckets.map(
+			(bucket): [SearchPageMediaType, number] => [
+				bucket.key as SearchPageMediaType,
+				bucket.doc_count,
+			]
+		)
+	) as Record<SearchPageMediaType, number>;
 }
 
 export const useGetIeObjectFormatCounts = (
 	filters: IeObjectsSearchFilter[],
-	options: { enabled?: boolean } = {}
+	enabled: boolean = true
 ): UseQueryResult<Record<SearchPageMediaType, number>> => {
 	return useQuery({
-		queryKey: [QUERY_KEYS.getIeObjectFormatCounts, filters, options],
+		queryKey: [QUERY_KEYS.getIeObjectFormatCounts, filters],
 		queryFn: async () => getIeObjectFormatCounts(filters),
-		enabled: true,
 		placeholderData: keepPreviousData,
-		...options,
+		enabled,
 	});
 };
 

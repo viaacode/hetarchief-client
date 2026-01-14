@@ -15,11 +15,9 @@ import { partition } from 'lodash-es';
 import Link from 'next/link';
 import { type FC, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-
 import Html from '../Html/Html';
 import { Icon } from '../Icon';
 import { UnreadMarker } from '../UnreadMarker';
-
 import styles from './NotificationCenter.module.scss';
 
 const NotificationCenter: FC<NotificationCenterProps> = ({
@@ -53,7 +51,8 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 		return notificationReadStatus[notification.id] || notification.status;
 	};
 
-	const notifications = notificationResponse?.items || [];
+	const notifications =
+		notificationResponse?.pages?.flatMap((notificationPage) => notificationPage.items) || [];
 
 	const [unread, read] = partition(
 		notifications,
@@ -215,7 +214,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 				className={styles['c-notification-center__infinite-scroll']}
 				dataLength={notifications?.length || 0}
 				next={() => fetchNextPage()}
-				hasMore={(notificationResponse?.total || 0) > notifications.length}
+				hasMore={(notificationResponse?.pages[0].total || 0) > notifications.length}
 				loader={
 					<Loading
 						className={styles['c-notification-center__infinite-scroll-loading']}

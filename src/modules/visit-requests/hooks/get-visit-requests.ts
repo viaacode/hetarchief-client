@@ -1,7 +1,12 @@
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import type { VisitRequest } from '@shared/types/visit-request';
 import type { IPagination } from '@studiohyperdrive/pagination';
-import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
+import {
+	keepPreviousData,
+	type QueryClient,
+	type UseQueryResult,
+	useQuery,
+} from '@tanstack/react-query';
 import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
 import type { GetVisitRequestsProps } from '@visit-requests/services/visit-request/visit-request.service.types';
 
@@ -14,13 +19,14 @@ export async function getVisitRequests(
 export function useGetVisitRequests(
 	props: GetVisitRequestsProps,
 	options: {
-		keepPreviousData?: boolean;
+		placeholderData?: typeof keepPreviousData | undefined;
 		enabled?: boolean;
 	} = {}
 ): UseQueryResult<IPagination<VisitRequest>> {
 	return useQuery({
 		queryKey: [QUERY_KEYS.getVisitRequests, props],
 		queryFn: () => getVisitRequests(props),
+		placeholderData: keepPreviousData,
 		enabled: true,
 		...options,
 	});

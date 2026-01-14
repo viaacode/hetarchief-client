@@ -21,7 +21,7 @@ import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';
 import { type PageInfo, SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { getFallbackPath } from '@shared/helpers/get-fallback-path';
+import { getPagePath } from '@shared/helpers/get-page-path';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { UserProps } from '@shared/hooks/with-user';
@@ -51,7 +51,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 	const router = useRouter();
 	const locale = useLocale();
 	const hasCheckedLogin: boolean = useSelector(selectHasCheckedLogin);
-	const contentPageSlug = getFallbackPath(router.query.fallback);
+	const contentPageSlug = getPagePath(router.query.pagePath);
 	const dispatch = useDispatch();
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 
@@ -184,7 +184,7 @@ export async function getServerSideProps(
 		});
 	}
 
-	const path = getFallbackPath(context.query.fallback);
+	const path = getPagePath(context.query.pagePath);
 	// This fallback route should not resolve admin paths
 	// The admin/ paths are static routes that don't work well on the first load while using the dev server
 	if (path?.startsWith('admin/')) {

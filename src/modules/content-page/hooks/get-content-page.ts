@@ -24,18 +24,17 @@ export async function getContentPageByLanguageAndPath(
  * Get a content page by language and path
  * @param language
  * @param path path of the content page including a leading slash
- * @param options
+ * @param enabled
  */
 export const useGetContentPageByLanguageAndPath = (
 	language: Locale,
 	path: string | undefined,
-	options: { enabled?: boolean } = {}
+	enabled: boolean = true
 ): UseQueryResult<DbContentPage | null> => {
 	return useQuery({
 		queryKey: [QUERY_KEYS.getContentPage, path, language],
 		queryFn: () => getContentPageByLanguageAndPath(language, path),
-		enabled: true,
-		...options,
+		enabled,
 	});
 };
 

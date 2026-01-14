@@ -6,11 +6,11 @@ import { type UseQueryResult, useQuery } from '@tanstack/react-query';
 export function useGetOrganisationBySlug(
 	slug: string | null,
 	ignoreAuthError = false,
-	options: { enabled: boolean } = { enabled: true }
+	enabled: boolean = true
 ): UseQueryResult<Organisation | null> {
 	return useQuery({
 		queryKey: [QUERY_KEYS.getIeObjectsInfo, slug],
 		queryFn: () => OrganisationService.getBySlug(slug as string, ignoreAuthError),
-		...options,
+		enabled,
 	});
 }

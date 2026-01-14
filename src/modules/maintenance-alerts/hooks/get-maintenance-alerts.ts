@@ -7,14 +7,11 @@ import type { Alert } from '../types';
 
 export const useGetActiveMaintenanceAlerts = (
 	props?: GetMaterialRequestsProps,
-	options: {
-		enabled?: boolean;
-	} = {}
+	enabled?: boolean
 ): UseQueryResult<IPagination<Alert>, unknown> =>
 	useQuery({
 		queryKey: [QUERY_KEYS.getMaintenanceAlerts, props],
 		queryFn: () => MaintenanceAlertsService.getAllActive(props),
 		placeholderData: keepPreviousData,
-		enabled: true,
-		...options,
+		enabled,
 	});

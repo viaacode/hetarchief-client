@@ -7,14 +7,13 @@ import type { VisitorSpaceInfo } from '../types';
 export function useGetVisitorSpace(
 	maintainerSlug: string | null,
 	ignoreAuthError = false,
-	options: { enabled?: boolean } = {}
+	enabled: boolean = true
 ): UseQueryResult<VisitorSpaceInfo | null> {
 	return useQuery({
 		queryKey: [QUERY_KEYS.getVisitorSpaceInfo, maintainerSlug, ignoreAuthError],
 		queryFn: async () => VisitorSpaceService.getBySlug(maintainerSlug, ignoreAuthError),
-		enabled: true,
+		enabled,
 		retry: false,
-		...options,
 	});
 }
 

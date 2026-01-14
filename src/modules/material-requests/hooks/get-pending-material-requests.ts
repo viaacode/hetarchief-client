@@ -8,7 +8,7 @@ import type { MaterialRequest } from '../types';
 export const useGetPendingMaterialRequests = (
 	props: GetMaterialRequestsProps,
 	options: {
-		keepPreviousData?: boolean;
+		placeholderData?: typeof keepPreviousData | undefined;
 		enabled?: boolean;
 	} = {}
 ): UseQueryResult<IPagination<MaterialRequest>> =>

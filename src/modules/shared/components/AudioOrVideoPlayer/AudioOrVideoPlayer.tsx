@@ -91,9 +91,10 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 
 	// peak file
 	const peakFileStoredAt: string | null = getFilesByType(JSON_FORMATS)?.[0]?.storedAt || null;
-	const { data: peakJson, isLoading: isLoadingPeakFile } = useGetPeakFile(peakFileStoredAt, {
-		enabled: dctermsFormat === 'audio',
-	});
+	const { data: peakJson, isLoading: isLoadingPeakFile } = useGetPeakFile(
+		peakFileStoredAt,
+		dctermsFormat === 'audio'
+	);
 
 	if (isLoadingPlayableUrl || isLoadingMediaDuration) {
 		return <Loading fullscreen owner={`${owner}: render media`} mode="light" />;

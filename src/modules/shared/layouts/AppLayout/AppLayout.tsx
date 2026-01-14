@@ -117,16 +117,11 @@ const AppLayout: FC<any> = ({ children }) => {
 		[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: StringParam,
 		[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: BooleanParam,
 	});
-	const { data: maintenanceAlerts } = useGetActiveMaintenanceAlerts(
-		{},
-		{
-			enabled: true,
-		}
-	);
+	const { data: maintenanceAlerts } = useGetActiveMaintenanceAlerts({});
 	const { mutateAsync: dismissMaintenanceAlert } = useDismissMaintenanceAlert();
 	const isKioskOrAnonymous = useHasAnyGroup(GroupName.KIOSK_VISITOR, GroupName.ANONYMOUS);
 	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
-	const { data: spaces } = useGetAllActiveVisits({}, { enabled: isLoggedIn });
+	const { data: spaces } = useGetAllActiveVisits({}, isLoggedIn);
 
 	const [alertsIgnoreUntil, setAlertsIgnoreUntil] = useLocalStorage(
 		'HET_ARCHIEF.alerts.ignoreUntil',
@@ -172,15 +167,17 @@ const AppLayout: FC<any> = ({ children }) => {
 	const [isLoaded, setIsLoaded] = useState(false);
 
 	const slug = getSlugFromQueryParams(router.query);
-	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(locale, `/${slug}`, {
-		enabled: isRootSlugRoute(router.route),
-	});
+	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
+		locale,
+		`/${slug}`,
+		isRootSlugRoute(router.route)
+	);
 
 	const contentPageInfo = dbContentPage
 		? convertDbContentPageToContentPageInfo(dbContentPage)
 		: null;
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: Only updating according for the user
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Only updating for the user
 	useEffect(() => {
 		// Redirect the user to the correct language version of the page
 		// If the preview query param is set, we don't want to change the language, since this is used for previewing content pages in the admin dashboard (admin-core-ui)

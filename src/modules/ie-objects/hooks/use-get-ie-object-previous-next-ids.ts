@@ -7,10 +7,10 @@ import { IeObjectsService } from './../services';
 export const useGetIeObjectPreviousNextIds = (
 	collectionId: string | undefined,
 	ieObjectIri: string | undefined,
-	options: { enabled: boolean } = { enabled: true }
+	enabled: boolean = true
 ): UseQueryResult<IeObjectPreviousNextIds> => {
 	return useQuery({
-		queryKey: [QUERY_KEYS.getIeObjectsResults, collectionId, ieObjectIri, options],
+		queryKey: [QUERY_KEYS.getIeObjectsResults, collectionId, ieObjectIri],
 		queryFn: async () => {
 			if (!collectionId || !ieObjectIri) {
 				return { previousIeObjectId: null, nextIeObjectId: null };
@@ -18,6 +18,6 @@ export const useGetIeObjectPreviousNextIds = (
 			return IeObjectsService.getIeObjectPreviousNextIds(collectionId, ieObjectIri);
 		},
 		placeholderData: keepPreviousData,
-		...options,
+		enabled,
 	});
 };

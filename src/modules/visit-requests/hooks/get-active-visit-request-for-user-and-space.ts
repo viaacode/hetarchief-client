@@ -17,14 +17,13 @@ export async function getActiveVisitRequestForUserAndSpace(
 export function useGetActiveVisitRequestForUserAndSpace(
 	visitorSpaceSlug: string,
 	user: User | null | undefined,
-	options: { enabled?: boolean } = {}
+	enabled: boolean = true
 ): UseQueryResult<VisitRequest | null> {
 	return useQuery({
 		queryKey: [QUERY_KEYS.getActiveVisitForUserAndSpace, visitorSpaceSlug, user?.id || null],
 		queryFn: () => getActiveVisitRequestForUserAndSpace(visitorSpaceSlug, user || null),
-		enabled: true,
 		retry: 0,
-		...options,
+		enabled,
 	});
 }
 

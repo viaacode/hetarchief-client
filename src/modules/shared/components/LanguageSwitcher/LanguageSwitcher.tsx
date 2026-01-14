@@ -1,18 +1,14 @@
-import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/client';
-import { Button } from '@meemoo/react-components';
-import { useQueryClient } from '@tanstack/react-query';
-import clsx from 'clsx';
-import { useRouter } from 'next/router';
-import { type FC, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
 import { selectCommonUser } from '@auth/store/user';
 import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
+import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/client';
+import { Button } from '@meemoo/react-components';
 import { NavigationDropdown } from '@navigation/components/Navigation/NavigationDropdown';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { GET_LANGUAGE_NAMES } from '@shared/const/language-names';
 import { changeApplicationLocale } from '@shared/helpers/change-application-locale';
+import { getSlugFromQueryParams } from '@shared/helpers/get-slug-from-query-params';
+import { isRootSlugRoute } from '@shared/helpers/is-root-slug-route';
 import { tText } from '@shared/helpers/translate';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -23,9 +19,11 @@ import {
 	setShowNotificationsCenter,
 } from '@shared/store/ui';
 import { Locale } from '@shared/utils/i18n';
-
-import { getSlugFromQueryParams } from '@shared/helpers/get-slug-from-query-params';
-import { isRootSlugRoute } from '@shared/helpers/is-root-slug-route';
+import { useQueryClient } from '@tanstack/react-query';
+import clsx from 'clsx';
+import { useRouter } from 'next/router';
+import { type FC, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from './LanguageSwitcher.module.scss';
 
 export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
@@ -37,9 +35,11 @@ export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 	const dispatch = useDispatch();
 	const { data: allLanguages } = useGetAllLanguages();
 	const slug = getSlugFromQueryParams(router.query);
-	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(locale, `/${slug}`, {
-		enabled: isRootSlugRoute(router.route),
-	});
+	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
+		locale,
+		`/${slug}`,
+		isRootSlugRoute(router.route)
+	);
 
 	const contentPageInfo = dbContentPage
 		? convertDbContentPageToContentPageInfo(dbContentPage)

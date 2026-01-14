@@ -4,7 +4,7 @@ import { keepPreviousData, type UseQueryResult, useQuery } from '@tanstack/react
 
 export const useGetIeObjectsTicketUrl = (
 	fileStoredAt: string | undefined | null,
-	enabled = true
+	enabled: boolean = true
 ): UseQueryResult<string | null> => {
 	return useQuery({
 		queryKey: [QUERY_KEYS.getIeObjectPlayerTicket, fileStoredAt],

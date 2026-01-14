@@ -3,6 +3,7 @@ import { Loading } from '@shared/components/Loading';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { keepPreviousData } from '@tanstack/react-query';
 import { useGetOrganisationBySlug } from '@visitor-space/hooks/get-organisation-by-slug';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
 import { kebabCase } from 'lodash-es';
@@ -25,12 +26,11 @@ export const MaintainerSearchPage: FC<MaintainerSearchPageProps> = () => {
 	const { data: organisation } = useGetOrganisationBySlug(
 		(orgSlugOrObjectSchemaIdentifier || null) as string | null,
 		true,
-		{
-			enabled: !!orgSlugOrObjectSchemaIdentifier,
-		}
+		!!orgSlugOrObjectSchemaIdentifier
 	);
 	const { data: ieObjectInfo } = useGetIeObjectInfo(orgSlugOrObjectSchemaIdentifier as string, {
 		enabled: !!orgSlugOrObjectSchemaIdentifier,
+		placeholderData: keepPreviousData,
 	});
 
 	// If url is: /zoeken/slug/:object-id => redirect to /zoeken/:slug/:object-id/:object-name

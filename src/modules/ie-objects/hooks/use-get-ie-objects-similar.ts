@@ -6,7 +6,7 @@ import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react
 export const useGetIeObjectsAlsoInteresting = (
 	schemaIdentifier: string | undefined,
 	maintainerId = '',
-	options: { enabled?: boolean } = {}
+	enabled: boolean = true
 ): UseQueryResult<IeObjectSimilar | null> => {
 	return useQuery({
 		queryKey: [QUERY_KEYS.getIeObjectsSimilar, schemaIdentifier, maintainerId],
@@ -16,8 +16,7 @@ export const useGetIeObjectsAlsoInteresting = (
 			}
 			return IeObjectsService.getSimilar(schemaIdentifier, maintainerId);
 		},
-		enabled: true,
-		...options,
+		enabled,
 	});
 };
 

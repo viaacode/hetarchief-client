@@ -23,6 +23,6 @@ export const useGetAltoJsonFileContent = (
 			};
 		},
 		placeholderData: keepPreviousData,
-		enabled: options.enabled,
+		...options,
 	});
 };

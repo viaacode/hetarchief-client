@@ -1,7 +1,7 @@
 import { MIN_LENGTH_SCHEMA_IDENTIFIER_V2 } from '@ie-objects/ie-objects.consts';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import {
-	keepPreviousData,
+	type keepPreviousData,
 	type QueryClient,
 	type UseQueryResult,
 	useQuery,
@@ -13,6 +13,7 @@ export const useGetIeObjectInfo = (
 	schemaIdentifier: string,
 	options: {
 		enabled?: boolean;
+		placeholderData?: typeof keepPreviousData;
 	} = {}
 ): UseQueryResult<IeObject | null> => {
 	return useQuery({
@@ -32,7 +33,6 @@ export const useGetIeObjectInfo = (
 			}
 			throw new Error(`404: IeObject not found: ${newSchemaIdentifier}`);
 		},
-		placeholderData: keepPreviousData,
 		enabled: true,
 		...options,
 	});

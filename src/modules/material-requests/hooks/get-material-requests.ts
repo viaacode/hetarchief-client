@@ -7,14 +7,11 @@ import type { MaterialRequest } from '../types';
 
 export const useGetMaterialRequests = (
 	props: GetMaterialRequestsProps,
-	options: {
-		enabled?: boolean;
-	} = { enabled: true }
+	enabled: boolean = true
 ): UseQueryResult<IPagination<MaterialRequest>> =>
 	useQuery({
 		queryKey: [QUERY_KEYS.getMaterialRequests, props],
 		queryFn: () => MaterialRequestsService.getAll(props),
 		placeholderData: keepPreviousData,
-		enabled: true,
-		...options,
+		enabled,
 	});

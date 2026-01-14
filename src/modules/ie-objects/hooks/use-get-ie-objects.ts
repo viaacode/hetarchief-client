@@ -43,13 +43,13 @@ export const useGetIeObjects = (
 		size: number;
 		sort?: SortObject;
 	},
-	options: { enabled: boolean } = { enabled: true }
+	enabled: boolean = true
 ): UseQueryResult<GetIeObjectsResponse> => {
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
 
 	return useQuery({
-		queryKey: [QUERY_KEYS.getIeObjectsResults, args, options],
+		queryKey: [QUERY_KEYS.getIeObjectsResults, args],
 		queryFn: async () => {
 			const results = await getIeObjects(args.filters, args.page, args.size, args.sort);
 
@@ -79,7 +79,7 @@ export const useGetIeObjects = (
 			return results;
 		},
 		placeholderData: keepPreviousData,
-		enabled: options.enabled,
+		enabled,
 	});
 };
 

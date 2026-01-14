@@ -12,7 +12,7 @@ import { VisitRequestService } from '@visit-requests/services/visit-request/visi
 
 export function useGetVisitAccessStatus(
 	slug: string,
-	enabled = true
+	enabled: boolean = true
 ): UseQueryResult<VisitAccessStatus | null> {
 	return useQuery({
 		queryKey: [QUERY_KEYS.getVisitAccessStatus, slug],

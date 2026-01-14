@@ -263,7 +263,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			size: SEARCH_RESULTS_PAGE_SIZE,
 			sort: activeSort,
 		},
-		{ enabled: !isLoadingActiveVisitRequest }
+		!isLoadingActiveVisitRequest
 	);
 	const { data: formatCounts } = useGetIeObjectFormatCounts(
 		[
@@ -272,7 +272,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		].filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
 
 		// Enabled when search query is finished, so it loads the tab counts after the initial results
-		{ enabled: !searchResultsRefetching }
+		!searchResultsRefetching
 	);
 
 	const showManyResultsTile = page === PAGE_NUMBER_OF_MANY_RESULTS_TILE;

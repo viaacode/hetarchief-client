@@ -1,8 +1,3 @@
-import type { HTTPError } from 'ky';
-import { useRouter } from 'next/router';
-import { type FC, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { Loading } from '@shared/components/Loading';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
@@ -16,6 +11,10 @@ import { useGetVisitAccessStatus } from '@visit-requests/hooks/get-visit-access-
 import { VisitorLayout } from '@visitor-layout/index';
 import { WaitingPage } from '@visitor-space/components/WaitingPage';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
+import type { HTTPError } from 'ky';
+import { useRouter } from 'next/router';
+import { type FC, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 export const VisitRequestedPage: FC<DefaultSeoInfo> = ({
 	title,
@@ -46,9 +45,7 @@ export const VisitRequestedPage: FC<DefaultSeoInfo> = ({
 	const { data: visitorSpace, isLoading: isLoadingSpace } = useGetVisitorSpace(
 		slug as string,
 		false,
-		{
-			enabled: enabled && hasPendingRequest,
-		}
+		enabled && hasPendingRequest
 	);
 
 	/**

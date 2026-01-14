@@ -7,15 +7,11 @@ import type { GetAllActiveVisitsProps } from '@visit-requests/services/visit-req
 
 export function useGetAllActiveVisits(
 	props: GetAllActiveVisitsProps,
-	options: {
-		enabled: boolean;
-	} = {
-		enabled: true,
-	}
+	enabled: boolean = true
 ): UseQueryResult<IPagination<VisitRequest>> {
 	return useQuery({
 		queryKey: [QUERY_KEYS.getVisitRequests, props],
 		queryFn: () => VisitRequestService.getAllActiveVisits(props),
-		...options,
+		enabled,
 	});
 }

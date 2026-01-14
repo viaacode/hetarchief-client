@@ -1,5 +1,7 @@
+import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import { Locale } from '../tests/helpers/get-site-translations';
 
 interface IeObjectRedirectInfo {
 	schema_identifier: string;
@@ -40,7 +42,9 @@ export async function middleware(request: NextRequest) {
 				);
 				return NextResponse.rewrite(new URL('/__force-404', request.url));
 			}
-			const search = pathName.startsWith('/en/') ? 'en/search' : 'zoeken';
+			const search = pathName.startsWith(`/${Locale.En}/`)
+				? `${Locale.En}/${ROUTE_PARTS_BY_LOCALE.en.search}`
+				: ROUTE_PARTS_BY_LOCALE.nl.search;
 			const maintainerSlug = ieObjectRedirectInfo.maintainerSlug;
 			const title = ieObjectRedirectInfo.title ? ieObjectRedirectInfo.title.replace(/ /g, '-') : '';
 
