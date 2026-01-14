@@ -24,7 +24,7 @@ import pkg from '../../package.json';
 
 import '@viaa/avo2-components/styles.css';
 import '@meemoo/react-components/styles.css';
-import '@meemoo/admin-core-ui/admin.css';
+// import '@meemoo/admin-core-ui/admin.css';
 import '@meemoo/admin-core-ui/client.css';
 import '../styles/main.scss';
 
