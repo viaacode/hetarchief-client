@@ -12,7 +12,6 @@ import { IeObjectsService } from './../services';
 export const useGetIeObjectInfo = (
 	schemaIdentifier: string,
 	options: {
-		keepPreviousData?: boolean;
 		enabled?: boolean;
 	} = {}
 ): UseQueryResult<IeObject | null> => {
@@ -21,6 +20,7 @@ export const useGetIeObjectInfo = (
 		queryFn: async (): Promise<IeObject | null> => {
 			let newSchemaIdentifier: string;
 			if (schemaIdentifier.length > MIN_LENGTH_SCHEMA_IDENTIFIER_V2) {
+				// This is an old schema identifier (v2), we need to convert it to a new one (v3)
 				const v3IdentifierResponse = await IeObjectsService.lookupV2Id(schemaIdentifier);
 				newSchemaIdentifier = v3IdentifierResponse.schemaIdentifierV3;
 			} else {
@@ -32,8 +32,8 @@ export const useGetIeObjectInfo = (
 			}
 			throw new Error(`404: IeObject not found: ${newSchemaIdentifier}`);
 		},
-		enabled: true,
 		placeholderData: keepPreviousData,
+		enabled: true,
 		...options,
 	});
 };

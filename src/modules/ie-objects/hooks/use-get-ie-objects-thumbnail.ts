@@ -1,5 +1,10 @@
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
+import {
+	keepPreviousData,
+	type QueryClient,
+	type UseQueryResult,
+	useQuery,
+} from '@tanstack/react-query';
 import { IeObjectsService } from './../services';
 
 export const useGetIeObjectThumbnail = (
@@ -14,6 +19,7 @@ export const useGetIeObjectThumbnail = (
 		queryFn: async (): Promise<string | null> => {
 			return await IeObjectsService.getThumbnailBySchemaIdentifier(schemaIdentifier);
 		},
+		placeholderData: keepPreviousData,
 		enabled: true,
 		...options,
 	});

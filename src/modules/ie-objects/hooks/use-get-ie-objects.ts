@@ -12,7 +12,12 @@ import {
 	IeObjectsSearchOperator,
 	SearchPageMediaType,
 } from '@shared/types/ie-objects';
-import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
+import {
+	keepPreviousData,
+	type QueryClient,
+	type UseQueryResult,
+	useQuery,
+} from '@tanstack/react-query';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { SEARCH_RESULTS_PAGE_SIZE } from '@visitor-space/const';
 import { SearchSortProp } from '@visitor-space/types';
@@ -73,6 +78,7 @@ export const useGetIeObjects = (
 
 			return results;
 		},
+		placeholderData: keepPreviousData,
 		enabled: options.enabled,
 	});
 };

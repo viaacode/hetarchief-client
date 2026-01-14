@@ -1,6 +1,6 @@
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import type { IPagination } from '@studiohyperdrive/pagination';
-import { type UseQueryResult, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, type UseQueryResult, useQuery } from '@tanstack/react-query';
 import type { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitorSpaceService } from '../services';
 import type { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '../types';
@@ -20,5 +20,6 @@ export function useGetVisitorSpaces(
 		],
 		queryFn: () =>
 			VisitorSpaceService.getAll(searchInput, status, page, size, orderProp, orderDirection),
+		placeholderData: keepPreviousData,
 	});
 }
