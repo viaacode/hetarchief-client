@@ -640,6 +640,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 						]}
 					>
 						<TextArea
+							aria-label={tText(
+								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bedoeld-gebruik-beschrijving-aria-label'
+							)}
 							value={formValues.intendedUsageDescription}
 							maxLength={300}
 							onChange={(evt) => setFormValue('intendedUsageDescription', evt.target.value)}
@@ -807,6 +810,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 								className={clsx(styles['c-request-material-reuse__content-value-extra-padding'])}
 							>
 								<TextArea
+									aria-label={tText(
+										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-andere-aria-label'
+									)}
 									value={formValues.distributionTypeOtherExplanation}
 									disabled={formValues.distributionType !== MaterialRequestDistributionType.OTHER}
 									onChange={(evt) =>
@@ -888,6 +894,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 								className={clsx(styles['c-request-material-reuse__content-value-extra-padding'])}
 							>
 								<TextArea
+									aria-label={tText(
+										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___geografisch-gebruik-niet-integraal-gericht-op-vlaamse-of-belgische-markt-aria-label'
+									)}
 									value={formValues.geographicalUsageDescription}
 									maxLength={300}
 									disabled={
