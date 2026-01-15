@@ -23,6 +23,15 @@ export enum LogEventType {
 	// Regular flow for material requests trigger in the backend.
 	// But flows for uGent and VRT with an external material request form trigger in the client
 	ITEM_REQUEST = 'be.hetarchief.item.request',
+
+	// Triggered in the backend
+	ITEM_REQUEST_APPROVE = 'be.hetarchief.reuse.approve',
+	ITEM_REQUEST_DENY = 'be.hetarchief.reuse.disapprove',
+	ITEM_REQUEST_CANCEL = 'be.hetarchief.reuse.cancel',
+	ITEM_REQUEST_DOWNLOAD_AVAILABLE = 'be.hetarchief.reuse.downloadavailable',
+
+	// Triggered in the frontend
+	ITEM_REQUEST_DOWNLOAD_EXECUTED = 'be.hetarchief.reuse.downloadexecuted',
 }
 
 export interface LogEvent {

@@ -1,6 +1,10 @@
 import { MaterialRequestStatusPill } from '@account/components/MaterialRequestStatusPill';
 import { createLabelValuePairMaterialRequestReuseForm } from '@account/utils/create-label-value-material-request-reuse-form';
 import { formatCuePointsMaterialRequest } from '@account/utils/format-cuepoints-material-request';
+import {
+	determineHasDownloadExpired,
+	handleDownloadMaterialRequest,
+} from '@account/utils/handle-download-material-request';
 import { selectUser } from '@auth/store/user';
 import {
 	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DOWNLOAD_QUALITY,
@@ -210,10 +214,10 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			return null;
 		}
 
-		const hasDownloadExpired = false;
-		const downloadExpirationDate =
-			currentMaterialRequestDetail.downloadUrl &&
-			formatLongDate(asDate(currentMaterialRequestDetail.createdAt));
+		const hasDownloadExpired = determineHasDownloadExpired(currentMaterialRequestDetail);
+		const downloadExpirationDate = formatLongDate(
+			asDate(currentMaterialRequestDetail.downloadExpiresAt)
+		);
 
 		return (
 			<>
@@ -231,7 +235,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						}
 						disabled={!currentMaterialRequestDetail.downloadUrl}
 						variants={['block']}
-						onClick={() => window.open(currentMaterialRequestDetail.downloadUrl as string)}
+						onClick={() => handleDownloadMaterialRequest(currentMaterialRequestDetail)}
 					/>
 				)}
 
@@ -454,7 +458,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						tText(
 							'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
 						),
-						currentMaterialRequestDetail.requestName
+						currentMaterialRequestDetail.requestGroupName
 					)}
 					{renderContentBlock(
 						tText(
