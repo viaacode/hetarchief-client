@@ -1,7 +1,4 @@
 import { Avatar, Button } from '@meemoo/react-components';
-import type { Avo } from '@viaa/avo2-types';
-import clsx from 'clsx';
-
 import { MaterialRequestCenterButton } from '@navigation/components/MaterialRequestCenter';
 import { getNavigationItemsProfileDropdown } from '@navigation/components/Navigation/Navigation.consts';
 import { NavigationLink } from '@navigation/components/Navigation/NavigationLink';
@@ -15,8 +12,9 @@ import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enu
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import type { Locale } from '@shared/utils/i18n';
+import type { AvoUserCommonUser } from '@viaa/avo2-types';
 import type { VisitorSpaceInfo } from '@visitor-space/types';
-
+import clsx from 'clsx';
 import styles from '../components/Navigation/Navigation.module.scss';
 import type { NavItemsRightLoggedIn } from '../types';
 
@@ -49,7 +47,7 @@ export const GET_NAV_ITEMS_RIGHT_LOGGED_IN = (
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
 	linkedSpaceSlug: string | null,
 	locale: Locale,
-	user: Avo.User.CommonUser | null,
+	user: AvoUserCommonUser | null,
 	{
 		hasUnreadNotifications,
 		notificationsOpen,

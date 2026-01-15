@@ -90,10 +90,11 @@ export const getAdminMaterialRequestTableColumns = (): Column<MaterialRequest>[]
 	{
 		Header: tText('modules/admin/const/material-requests___download'),
 		accessor: MaterialRequestKeys.downloadUrl,
+		disableSortBy: true,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<MaterialRequestDownloadButton materialRequest={original} />
 		),
-	},
+	} as Column<MaterialRequest>,
 ];
 
 export const GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = (): {

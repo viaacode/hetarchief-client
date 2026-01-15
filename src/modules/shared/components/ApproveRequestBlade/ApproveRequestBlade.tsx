@@ -1,7 +1,7 @@
 import { Permission } from '@account/const';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, FormControl, OrderDirection, TextInput } from '@meemoo/react-components';
+import { Button, FormControl, TextInput } from '@meemoo/react-components';
 import { APPROVE_REQUEST_FORM_SCHEMA } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.const';
 import {
 	getAccessToDate,
@@ -24,6 +24,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { AccessType, type VisitRequest, VisitStatus } from '@shared/types/visit-request';
 import { asDate, formatMediumDateWithTime, formatTime } from '@shared/utils/dates';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
 import { VisitTimeframe } from '@visit-requests/types';
 import DateInput from '@visitor-space/components/DateInput/DateInput';
@@ -183,7 +184,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				page: 1,
 				size: 40,
 				orderProp: 'startAt',
-				orderDirection: OrderDirection.desc,
+				orderDirection: AvoSearchOrderDirection.DESC,
 				personal: false,
 			});
 			const overlappingRequests = visitResponse.items

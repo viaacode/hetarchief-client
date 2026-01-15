@@ -1,12 +1,15 @@
-import type { IPagination } from '@studiohyperdrive/pagination';
-import type { InfiniteQueryObserverSuccessResult, UseMutationResult } from '@tanstack/react-query';
-
 import {
 	type MarkAllAsReadResult,
 	type Notification,
 	NotificationStatus,
 	NotificationType,
 } from '@shared/services/notifications-service/notifications.types';
+import type { IPagination } from '@studiohyperdrive/pagination';
+import type {
+	InfiniteData,
+	UseInfiniteQueryResult,
+	UseMutationResult,
+} from '@tanstack/react-query';
 
 import type { NotificationCenterProps } from '../NotificationCenter.types';
 
@@ -253,7 +256,7 @@ const notificationsHookResponse = {
 	refetch: () => {
 		// empty for mocking purposes
 	},
-} as unknown as InfiniteQueryObserverSuccessResult<IPagination<Notification>>;
+} as unknown as UseInfiniteQueryResult<InfiniteData<IPagination<Notification>>>;
 
 const useMarkOneNotificationsAsReadResponse = {
 	mutateAsync: () => {

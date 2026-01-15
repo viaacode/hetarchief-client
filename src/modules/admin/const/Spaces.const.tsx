@@ -1,8 +1,5 @@
-import { Button, OrderDirection } from '@meemoo/react-components';
-import Link from 'next/link';
-import { NumberParam, StringParam, withDefault } from 'use-query-params';
-
 import type { AdminVisitorSpaceInfoRow } from '@admin/types';
+import { Button } from '@meemoo/react-components';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -12,12 +9,15 @@ import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { Locale } from '@shared/utils/i18n';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import {
 	type VisitorSpaceInfo,
 	VisitorSpaceOrderProps,
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
+import Link from 'next/link';
 import type { Column } from 'react-table';
+import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 export const VisitorSpacesOverviewTablePageSize = 20;
 
@@ -26,7 +26,7 @@ export const ADMIN_VISITOR_SPACES_OVERVIEW_QUERY_PARAM_CONFIG = {
 	status: withDefault(StringParam, 'ALL'),
 	page: withDefault(NumberParam, 1),
 	orderProp: withDefault(StringParam, VisitorSpaceOrderProps.OrganisationName),
-	orderDirection: withDefault(SortDirectionParam, OrderDirection.asc),
+	orderDirection: withDefault(SortDirectionParam, AvoSearchOrderDirection.ASC),
 };
 
 export const VisitorSpacesOverviewTableColumns = (

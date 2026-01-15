@@ -1,8 +1,7 @@
-import { enGB } from 'date-fns/locale';
-import nlBE from 'date-fns/locale/nl-BE/index.js';
-import type { ReactDatePickerProps } from 'react-datepicker';
-
 import { Locale } from '@shared/utils/i18n';
+import { enGB } from 'date-fns/locale';
+import nlBE from 'date-fns/locale/nl-BE';
+import type { ReactDatePickerProps } from 'react-datepicker';
 
 export function getDatePickerDefaultProps(locale: Locale): Partial<ReactDatePickerProps> {
 	return {

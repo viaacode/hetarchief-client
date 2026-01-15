@@ -330,7 +330,7 @@ const ROUTES_EN: Record<RouteKey, string> = {
 } as const;
 
 const ADMIN_CORE_ROUTES_NL: AdminConfig['routes'] = {
-	ADMIN_ALERTS_OVERVIEW: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.alerts}`,
+	ADMIN_DASHBOARD: `/${ROUTE_PARTS_NL.admin}`,
 	ADMIN_CONTENT_PAGE_CREATE: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.contentPages}/${ROUTE_PARTS_NL.create}`,
 	ADMIN_CONTENT_PAGE_DETAIL: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.contentPages}/:id`,
 	ADMIN_CONTENT_PAGE_EDIT: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.contentPages}/:id/${ROUTE_PARTS_NL.edit}`,
@@ -352,11 +352,12 @@ const ADMIN_CORE_ROUTES_NL: AdminConfig['routes'] = {
 	ADMIN_USER_GROUP_EDIT: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.permissions}/:id/${ROUTE_PARTS_NL.edit}`,
 	ADMIN_USER_GROUP_OVERVIEW: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.permissions}`,
 	ADMIN_USER_OVERVIEW: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.users}`,
+	ADMIN_MAINTENANCE_ALERTS_OVERVIEW: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.alerts}`,
 	SEARCH: `/${ROUTE_PARTS_NL.search}`,
 } as const;
 
 const ADMIN_CORE_ROUTES_EN: AdminConfig['routes'] = {
-	ADMIN_ALERTS_OVERVIEW: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.alerts}`,
+	ADMIN_DASHBOARD: `/${ROUTE_PARTS_EN.admin}`,
 	ADMIN_CONTENT_PAGE_CREATE: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.contentPages}/${ROUTE_PARTS_EN.create}`,
 	ADMIN_CONTENT_PAGE_DETAIL: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.contentPages}/:id`,
 	ADMIN_CONTENT_PAGE_EDIT: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.contentPages}/:id/${ROUTE_PARTS_EN.edit}`,
@@ -378,6 +379,7 @@ const ADMIN_CORE_ROUTES_EN: AdminConfig['routes'] = {
 	ADMIN_USER_GROUP_EDIT: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.permissions}/:id/${ROUTE_PARTS_EN.edit}`,
 	ADMIN_USER_GROUP_OVERVIEW: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.permissions}`,
 	ADMIN_USER_OVERVIEW: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.users}`,
+	ADMIN_MAINTENANCE_ALERTS_OVERVIEW: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.alerts}`,
 	SEARCH: `/${ROUTE_PARTS_EN.search}`,
 } as const;
 

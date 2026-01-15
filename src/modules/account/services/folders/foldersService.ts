@@ -1,8 +1,7 @@
-import type { IPagination } from '@studiohyperdrive/pagination';
-import { stringifyUrl } from 'query-string';
-
 import type { Folder, FolderIeObject, SharedFolderResponse } from '@account/types';
 import { ApiService } from '@shared/services/api-service';
+import type { IPagination } from '@studiohyperdrive/pagination';
+import { stringifyUrl } from 'query-string';
 
 import {
 	FOLDERS_SERVICE_BASE_URL,
@@ -21,7 +20,7 @@ export abstract class FoldersService {
 		searchInput = '',
 		page = 0,
 		size = 20
-	): Promise<FolderIeObject> {
+	): Promise<IPagination<FolderIeObject>> {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({

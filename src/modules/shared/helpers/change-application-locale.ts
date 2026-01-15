@@ -1,14 +1,13 @@
-import type { ContentPageInfo } from '@meemoo/admin-core-ui/admin';
-import type { QueryClient } from '@tanstack/react-query';
-import { reverse, sortBy } from 'lodash-es';
-import type { NextRouter } from 'next/router';
-
 import { AuthService } from '@auth/services/auth-service';
+import type { ContentPageInfo } from '@meemoo/admin-core-ui/admin';
 import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/LanguageSwitcher.exceptions';
 import { QUERY_KEYS, ROUTES_BY_LOCALE, type RouteKey } from '@shared/const';
 import { isRootSlugRoute } from '@shared/helpers/is-root-slug-route';
 import { Locale } from '@shared/utils/i18n';
-import type { Avo } from '@viaa/avo2-types';
+import type { QueryClient } from '@tanstack/react-query';
+import type { AvoUserCommonUser } from '@viaa/avo2-types';
+import { reverse, sortBy } from 'lodash-es';
+import type { NextRouter } from 'next/router';
 
 /**
  * Update the application locale and redirect to the new path
@@ -25,7 +24,7 @@ export const changeApplicationLocale = async (
 	router: NextRouter,
 	queryClient: QueryClient,
 	contentPageInfo: ContentPageInfo | undefined | null,
-	commonUser: Avo.User.CommonUser | null
+	commonUser: AvoUserCommonUser | null
 ): Promise<void> => {
 	if (oldLocale === newLocale) {
 		return; // Already viewing the correct language
@@ -76,5 +75,7 @@ export const changeApplicationLocale = async (
 		await AuthService.updateLanguagePreference(newLocale);
 	}
 
-	await queryClient.invalidateQueries([QUERY_KEYS.getNavigationItems]);
+	await queryClient.invalidateQueries({
+		queryKey: [QUERY_KEYS.getNavigationItems],
+	});
 };
