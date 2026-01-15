@@ -1,10 +1,9 @@
-import type { OrderDirection } from '@meemoo/react-components';
 import type { IconName } from '@shared/components/Icon';
 import type { ToggleOption } from '@shared/components/Toggle';
 import type { DefaultComponentProps, SortObject } from '@shared/types';
 import type { SearchPageMediaType } from '@shared/types/ie-objects';
+import type { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import type { FC, ReactNode } from 'react';
-
 import type {
 	DefaultFilterFormProps,
 	InlineFilterFormProps,
@@ -34,7 +33,7 @@ export interface FilterMenuProps extends DefaultComponentProps {
 export interface FilterMenuSortOption {
 	label: string;
 	orderProp: SearchSortProp;
-	orderDirection?: OrderDirection;
+	orderDirection?: AvoSearchOrderDirection;
 }
 
 export enum FilterMenuType {
@@ -53,7 +52,7 @@ export interface FilterMenuFilterOption {
 	tabs: SearchPageMediaType[];
 }
 
-export type OnFilterMenuSortClick = (key: SearchSortProp, order?: OrderDirection) => void;
+export type OnFilterMenuSortClick = (key: SearchSortProp, order?: AvoSearchOrderDirection) => void;
 export type OnFilterMenuFormSubmit = <Values>(id: SearchFilterId, values: Values) => void;
 export type OnFilterMenuFormReset = (id: SearchFilterId) => void;
 

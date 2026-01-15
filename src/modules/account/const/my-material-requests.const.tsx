@@ -151,10 +151,11 @@ export const getAccountMaterialRequestTableColumns = (
 				{
 					Header: tText('modules/cp/const/material-requests___download'),
 					accessor: MaterialRequestKeys.downloadUrl,
+					disableSortBy: true,
 					Cell: ({ row: { original } }: MaterialRequestRow) => (
 						<MaterialRequestDownloadButton materialRequest={original} />
 					),
-				},
+				} as Column<MaterialRequest>,
 				{
 					Header: tText('modules/cp/const/material-requests___request-name'),
 					accessor: MaterialRequestKeys.requestGroupName,

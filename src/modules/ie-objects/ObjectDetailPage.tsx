@@ -381,18 +381,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const { data: similarData } = useGetIeObjectsAlsoInteresting(
 		mediaInfo?.schemaIdentifier,
 		isKiosk || userHasAccessToMaintainer ? (mediaInfo?.maintainerId ?? '') : '',
-		{
-			enabled: !!mediaInfo,
-		}
+		!!mediaInfo
 	);
 
 	// related
 	const { data: relatedIeObjects } = useGetIeObjectsRelated(
 		mediaInfo?.iri,
 		mediaInfo?.premisIsPartOf || null,
-		{
-			enabled: !!mediaInfo,
-		}
+		!!mediaInfo
 	);
 
 	// visit info

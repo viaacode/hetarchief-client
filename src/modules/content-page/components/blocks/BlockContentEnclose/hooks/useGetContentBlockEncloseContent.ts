@@ -1,18 +1,15 @@
+import type { IeObject } from '@ie-objects/ie-objects.types';
+import { IeObjectsService } from '@ie-objects/services';
 import { AdminConfigManager, fetchWithLogoutJson } from '@meemoo/admin-core-ui/client';
-import { useQueries } from '@tanstack/react-query';
-import type { Avo } from '@viaa/avo2-types';
+import { QUERY_KEYS } from '@shared/const';
+import { Locale } from '@shared/utils/i18n';
+import { keepPreviousData, useQueries } from '@tanstack/react-query';
+import type { AvoCorePickerItem } from '@viaa/avo2-types';
 import { compact, kebabCase } from 'lodash-es';
 import getConfig from 'next/config';
 import { stringifyUrl } from 'query-string';
 import { stripHtml } from 'string-strip-html';
-
-import type { IeObject } from '@ie-objects/ie-objects.types';
-import { QUERY_KEYS } from '@shared/const';
-import { Locale } from '@shared/utils/i18n';
-
 import type { MappedElement } from '../BlockContentEnclose.types';
-
-import { IeObjectsService } from '@ie-objects/services';
 import type {
 	ContentPage,
 	GetContentBlockEncloseContentReturnType,
@@ -22,7 +19,7 @@ const { publicRuntimeConfig } = getConfig();
 
 export const useGetContentBlockEncloseContent = (
 	ids: MappedElement[],
-	originalElements: { mediaItem: Avo.Core.PickerItem }[]
+	originalElements: { mediaItem: AvoCorePickerItem }[]
 ): GetContentBlockEncloseContentReturnType[] => {
 	const ieObjectIds = ids.filter((id) => id.type === 'IE_OBJECT').map((id) => id.value);
 	const contentPageIds = ids.filter((id) => id.type === 'CONTENT_PAGE').map((id) => id.value);
@@ -31,7 +28,7 @@ export const useGetContentBlockEncloseContent = (
 	const ieObjectQuery = {
 		queryKey: [QUERY_KEYS.GET_IE_OBJECT_FOR_CONTENT_ENCLOSE_BLOCK],
 		queryFn: () => IeObjectsService.getBySchemaIdentifiers(ieObjectIds),
-		keepPreviousData: true,
+		placeholderData: keepPreviousData,
 		enabled: ieObjectIds.length > 0,
 	};
 

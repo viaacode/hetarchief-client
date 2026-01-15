@@ -1,10 +1,3 @@
-import { Button, OrderDirection, PaginationBar, Table } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { useRouter } from 'next/router';
-import React, { type FC, type ReactNode, useMemo, useState } from 'react';
-import type { TableState } from 'react-table';
-import { useQueryParams } from 'use-query-params';
-
 import { Permission } from '@account/const';
 import {
 	ADMIN_VISITOR_SPACES_OVERVIEW_QUERY_PARAM_CONFIG,
@@ -13,6 +6,7 @@ import {
 } from '@admin/const/Spaces.const';
 import { AdminLayout } from '@admin/layouts';
 import styles from '@admin/layouts/AdminLayout/AdminLayout.module.scss';
+import { Button, PaginationBar, Table } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -22,13 +16,14 @@ import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table';
 import { ScrollableTabs } from '@shared/components/Tabs';
-import { ROUTE_PARTS_BY_LOCALE, globalLabelKeys } from '@shared/const';
+import { globalLabelKeys, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitorSpaceStatusOptions } from '@visitor-space/const';
 import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
 import { VisitorSpaceService } from '@visitor-space/services';
@@ -37,6 +32,11 @@ import {
 	type VisitorSpaceOrderProps,
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
+import clsx from 'clsx';
+import { useRouter } from 'next/router';
+import React, { type FC, type ReactNode, useMemo, useState } from 'react';
+import type { TableState } from 'react-table';
+import { useQueryParams } from 'use-query-params';
 
 export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const router = useRouter();
@@ -63,7 +63,7 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalU
 		filters.page,
 		VisitorSpacesOverviewTablePageSize,
 		filters.orderProp as VisitorSpaceOrderProps,
-		filters.orderDirection as OrderDirection
+		filters.orderDirection as AvoSearchOrderDirection
 	);
 
 	// Filters
@@ -72,7 +72,7 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalU
 		return [
 			{
 				id: filters.orderProp,
-				desc: filters.orderDirection !== OrderDirection.asc,
+				desc: filters.orderDirection !== AvoSearchOrderDirection.ASC,
 			},
 		];
 	}, [filters]);
@@ -81,13 +81,13 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalU
 
 	const onSortChange = (
 		orderProp: string | undefined,
-		orderDirection: OrderDirection | undefined
+		orderDirection: AvoSearchOrderDirection | undefined
 	) => {
 		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
 				orderProp: orderProp || 'created_at',
-				orderDirection: orderDirection || OrderDirection.desc,
+				orderDirection: orderDirection || AvoSearchOrderDirection.DESC,
 				page: 1,
 			});
 		}

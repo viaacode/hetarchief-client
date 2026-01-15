@@ -1,18 +1,15 @@
-import type { OrderDirection } from '@meemoo/react-components';
-import type { IPagination } from '@studiohyperdrive/pagination';
-import { QueryClient } from '@tanstack/react-query';
-import { sortBy } from 'lodash-es';
-import { stringifyUrl } from 'query-string';
-
 import { QUERY_KEYS } from '@shared/const';
 import { ApiService } from '@shared/services/api-service';
-
+import type { IPagination } from '@studiohyperdrive/pagination';
+import { QueryClient } from '@tanstack/react-query';
+import type { AvoSearchOrderDirection } from '@viaa/avo2-types';
+import { sortBy } from 'lodash-es';
+import { stringifyUrl } from 'query-string';
 import {
 	type VisitorSpaceInfo,
 	type VisitorSpaceOrderProps,
 	VisitorSpaceStatus,
 } from '../../types';
-
 import { VISITOR_SPACE_SERVICE_BASE_URL } from './visitor-space.service.const';
 import {
 	AccessType,
@@ -29,7 +26,7 @@ export class VisitorSpaceService {
 		page = 0,
 		size = 20,
 		orderProp?: VisitorSpaceOrderProps,
-		orderDirection?: OrderDirection
+		orderDirection?: AvoSearchOrderDirection
 	): Promise<IPagination<VisitorSpaceInfo>> {
 		const parsed = await ApiService.getApi()
 			.get(
@@ -116,7 +113,9 @@ export class VisitorSpaceService {
 		const response: VisitorSpaceInfo = await ApiService.getApi()
 			.post(VISITOR_SPACE_SERVICE_BASE_URL, { body: formData, headers })
 			.json();
-		await VisitorSpaceService.queryClient.invalidateQueries([QUERY_KEYS.getContentPartners]);
+		await VisitorSpaceService.queryClient.invalidateQueries({
+			queryKey: [QUERY_KEYS.getContentPartners],
+		});
 
 		return response;
 	}

@@ -1,20 +1,18 @@
-import { OrderDirection } from '@meemoo/react-components';
-import type { IPagination } from '@studiohyperdrive/pagination';
-import { stringifyUrl } from 'query-string';
-
 import { ApiService } from '@shared/services/api-service';
 import {
 	type VisitAccessStatus,
 	type VisitRequest,
 	VisitStatus,
 } from '@shared/types/visit-request';
+import type { IPagination } from '@studiohyperdrive/pagination';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import type {
 	GetAllActiveVisitsProps,
 	GetVisitRequestsProps,
 } from '@visit-requests/services/visit-request/visit-request.service.types';
 import type { PatchVisit } from '@visit-requests/types';
 import type { CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
-
+import { stringifyUrl } from 'query-string';
 import {
 	VISITS_SERVICE_ACCESS_STATUS_URL,
 	VISITS_SERVICE_ACTIVE_SPACE_URL,
@@ -33,7 +31,7 @@ export class VisitRequestService {
 		page = 0,
 		size = 20,
 		orderProp,
-		orderDirection = OrderDirection.desc,
+		orderDirection = AvoSearchOrderDirection.DESC,
 		personal,
 		ignoreAuthError = false,
 	}: GetVisitRequestsProps): Promise<IPagination<VisitRequest>> {
@@ -119,7 +117,7 @@ export class VisitRequestService {
 	public static async getAllActiveVisits({
 		requesterId,
 		orderProp = 'endAt',
-		orderDirection = OrderDirection.asc,
+		orderDirection = AvoSearchOrderDirection.ASC,
 		page = 0,
 		size = 20,
 	}: GetAllActiveVisitsProps): Promise<IPagination<VisitRequest>> {

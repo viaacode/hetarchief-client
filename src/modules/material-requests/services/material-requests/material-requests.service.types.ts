@@ -3,7 +3,7 @@ import type {
 	MaterialRequestStatus,
 	MaterialRequestType,
 } from '@material-requests/types';
-import type { OrderDirection } from '@meemoo/react-components';
+import type { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import type { ReactNode } from 'react';
 
 export interface GetMaterialRequestsProps {
@@ -17,6 +17,6 @@ export interface GetMaterialRequestsProps {
 	page?: number;
 	size?: number;
 	orderProp?: keyof MaterialRequest;
-	orderDirection?: OrderDirection;
+	orderDirection?: AvoSearchOrderDirection;
 	isPersonal?: boolean;
 }

@@ -1,8 +1,9 @@
-import { useMutation, type UseMutationResult } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 import { MaintenanceAlertsService } from '../services';
 
-export const useDismissMaintenanceAlert = (): UseMutationResult<void, unknown, string> =>
-	useMutation((maintenanceAlertId: string) =>
-		MaintenanceAlertsService.dismissMaintenanceAlert(maintenanceAlertId)
-	);
+export const useDismissMaintenanceAlert = () =>
+	useMutation({
+		mutationFn: (maintenanceAlertId: string) =>
+			MaintenanceAlertsService.dismissMaintenanceAlert(maintenanceAlertId),
+	});

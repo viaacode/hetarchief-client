@@ -3,6 +3,7 @@ import { Loading } from '@shared/components/Loading';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { keepPreviousData } from '@tanstack/react-query';
 import { kebabCase } from 'lodash-es';
 import { useRouter } from 'next/router';
 import { parseUrl, stringifyUrl } from 'query-string';
@@ -20,8 +21,8 @@ export const IeObjectWithoutObjectNamePage: FC<MaintainerSearchPageProps> = () =
 	const { ie: schemaIdentifier, slug } = router.query;
 
 	const { data: ieObjectInfo, isError } = useGetIeObjectInfo(schemaIdentifier as string, {
-		keepPreviousData: true,
 		enabled: !!schemaIdentifier,
+		placeholderData: keepPreviousData,
 	});
 
 	// If the url is: /zoeken/:slug/:object-id => redirect to /zoeken/:slug/:object-id/:object-name

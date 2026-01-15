@@ -1,30 +1,17 @@
+import { ContentPageEditPage } from '@admin/views/content-pages/ContentPageEditPage';
+import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
+import { withAuth } from '@auth/wrappers/with-auth';
+import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
+import type { DefaultSeoInfo } from '@shared/types/seo';
 import type { GetServerSidePropsResult } from 'next';
 import { useRouter } from 'next/router';
 import type { GetServerSidePropsContext, NextPage } from 'next/types';
 import React, { type ComponentType } from 'react';
 
-import { ContentPageEditPage } from '@admin/views/content-pages/ContentPageEditPage';
-import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
-import { withAuth } from '@auth/wrappers/with-auth';
-import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import withUser, { type UserProps } from '@shared/hooks/with-user';
-import type { DefaultSeoInfo } from '@shared/types/seo';
-
-const ContentPageEditPageEnglish: NextPage<DefaultSeoInfo & UserProps> = ({
-	url,
-	locale,
-	commonUser,
-}) => {
+const ContentPageEditPageEnglish: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
 	const router = useRouter();
 
-	return (
-		<ContentPageEditPage
-			url={url}
-			locale={locale}
-			commonUser={commonUser}
-			id={router.query.id as string}
-		/>
-	);
+	return <ContentPageEditPage url={url} locale={locale} id={router.query.id as string} />;
 };
 
 export async function getServerSideProps(
@@ -34,6 +21,6 @@ export async function getServerSideProps(
 }
 
 export default withAuth(
-	withAdminCoreConfig(withUser(ContentPageEditPageEnglish) as ComponentType),
+	withAdminCoreConfig(ContentPageEditPageEnglish as ComponentType),
 	true
 ) as NextPage<DefaultSeoInfo>;

@@ -1,6 +1,5 @@
-import type { Avo } from '@viaa/avo2-types';
-
 import type { User } from '@auth/types';
+import type { AvoUserCommonUser } from '@viaa/avo2-types';
 
 export enum AuthMessage {
 	LoggedIn = 'LOGGED_IN',
@@ -9,7 +8,7 @@ export enum AuthMessage {
 
 interface CheckLoginSuccess {
 	userInfo?: User;
-	commonUserInfo?: Avo.User.CommonUser;
+	commonUserInfo?: AvoUserCommonUser;
 	message: AuthMessage;
 }
 

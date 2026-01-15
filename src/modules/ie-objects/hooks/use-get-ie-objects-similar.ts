@@ -1,27 +1,23 @@
-import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
-
 import type { IeObjectSimilar } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const';
+import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
 
 export const useGetIeObjectsAlsoInteresting = (
 	schemaIdentifier: string | undefined,
 	maintainerId = '',
-	options: { enabled?: boolean } = {}
+	enabled: boolean = true
 ): UseQueryResult<IeObjectSimilar | null> => {
-	return useQuery(
-		[QUERY_KEYS.getIeObjectsSimilar, schemaIdentifier, maintainerId],
-		() => {
+	return useQuery({
+		queryKey: [QUERY_KEYS.getIeObjectsSimilar, schemaIdentifier, maintainerId],
+		queryFn: () => {
 			if (!schemaIdentifier) {
 				return null;
 			}
 			return IeObjectsService.getSimilar(schemaIdentifier, maintainerId);
 		},
-		{
-			enabled: true,
-			...options,
-		}
-	);
+		enabled,
+	});
 };
 
 export async function makeServerSideRequestGetIeObjectsSimilar(
@@ -29,7 +25,8 @@ export async function makeServerSideRequestGetIeObjectsSimilar(
 	id: string,
 	maintainerId = ''
 ) {
-	await queryClient.prefetchQuery([QUERY_KEYS.getIeObjectsSimilar, id, maintainerId], () =>
-		IeObjectsService.getSimilar(id, maintainerId)
-	);
+	await queryClient.prefetchQuery({
+		queryKey: [QUERY_KEYS.getIeObjectsSimilar, id, maintainerId],
+		queryFn: () => IeObjectsService.getSimilar(id, maintainerId),
+	});
 }

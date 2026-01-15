@@ -1,5 +1,3 @@
-import React, { type FC, lazy, Suspense } from 'react';
-
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { Loading } from '@shared/components/Loading';
@@ -7,6 +5,7 @@ import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsChe
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import React, { type FC, lazy, Suspense } from 'react';
 
 const NavigationBarOverview = lazy(() =>
 	import('@meemoo/admin-core-ui/admin').then((adminCoreModule) => ({
@@ -17,7 +16,7 @@ const NavigationBarOverview = lazy(() =>
 export const AdminNavigationOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const renderPageContent = () => {
 		return (
-			<AdminLayout>
+			<AdminLayout pageTitle={tText('Navigatie')}>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40 p-admin-navigation">
 						<Suspense fallback={<Loading fullscreen owner="AdminNavigationOverview" />}>
