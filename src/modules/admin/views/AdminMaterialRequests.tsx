@@ -24,7 +24,6 @@ import {
 import {
 	MultiSelect,
 	type MultiSelectOption,
-	OrderDirection,
 	PaginationBar,
 	Table,
 } from '@meemoo/react-components';
@@ -41,6 +40,7 @@ import { globalLabelKeys } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import { isEmpty, isNil, noop } from 'lodash-es';
 import React, {
@@ -88,7 +88,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 			orderProp: filters.orderProp as MaterialRequestKeys,
 		}),
 		...(!isNil(filters.orderDirection) && {
-			orderDirection: filters.orderDirection as OrderDirection,
+			orderDirection: filters.orderDirection as AvoSearchOrderDirection,
 		}),
 		search: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
 		...(!isNil(filters.type) && {
@@ -108,7 +108,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	const maintainerList = useMemo(() => {
 		if (maintainers) {
 			return [
-				...maintainers.map(
+				...(maintainers || []).map(
 					({ id, name }): MultiSelectOption => ({
 						id,
 						label: name,
@@ -170,7 +170,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		(): SortingRule<{ id: MaterialRequestKeys; desc: boolean }>[] => [
 			{
 				id: filters.orderProp,
-				desc: filters.orderDirection !== OrderDirection.asc,
+				desc: filters.orderDirection !== AvoSearchOrderDirection.ASC,
 			},
 		],
 		[filters.orderProp, filters.orderDirection]
@@ -214,20 +214,20 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 
 	const onSortChange = (
 		orderProp: string | undefined,
-		orderDirection: OrderDirection | undefined
+		orderDirection: AvoSearchOrderDirection | undefined
 	): void => {
 		if (filters.orderProp === MaterialRequestKeys.requestedAt && orderDirection === undefined) {
 			setFilters({
 				...filters,
 				orderProp: orderProp || 'requestedAt',
-				orderDirection: OrderDirection.asc,
+				orderDirection: AvoSearchOrderDirection.ASC,
 				page: 1,
 			});
 		} else if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
 				orderProp: orderProp || 'requestedAt',
-				orderDirection: orderDirection || OrderDirection.desc,
+				orderDirection: orderDirection || AvoSearchOrderDirection.DESC,
 				page: 1,
 			});
 		}
@@ -482,10 +482,10 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 						})}
 					>
 						{isLoadingMaterialRequests && <Loading owner="Material requests overview" />}
-						{noData && renderEmptyMessage()}
+						{noData && !isLoadingMaterialRequests && renderEmptyMessage()}
 						{!noData && !isLoadingMaterialRequests && renderContent()}
 					</div>
-					{currentMaterialRequest?.id && renderDetailBlade()}
+					{renderDetailBlade()}
 				</AdminLayout.Content>
 			</AdminLayout>
 		);

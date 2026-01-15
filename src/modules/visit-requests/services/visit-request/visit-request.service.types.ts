@@ -1,8 +1,7 @@
-import type { OrderDirection } from '@meemoo/react-components';
-import type { ReactNode } from 'react';
-
 import type { VisitRequest, VisitStatus } from '@shared/types/visit-request';
+import type { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import type { VisitTimeframe } from '@visit-requests/types';
+import type { ReactNode } from 'react';
 
 export interface GetVisitRequestsProps {
 	children?: ReactNode;
@@ -14,7 +13,7 @@ export interface GetVisitRequestsProps {
 	page: number;
 	size: number;
 	orderProp?: keyof VisitRequest;
-	orderDirection?: OrderDirection;
+	orderDirection?: AvoSearchOrderDirection;
 	userProfileId?: string;
 	personal?: boolean;
 	ignoreAuthError?: boolean;
@@ -26,5 +25,5 @@ export interface GetAllActiveVisitsProps {
 	page?: number;
 	size?: number;
 	orderProp?: keyof VisitRequest;
-	orderDirection?: OrderDirection;
+	orderDirection?: AvoSearchOrderDirection;
 }

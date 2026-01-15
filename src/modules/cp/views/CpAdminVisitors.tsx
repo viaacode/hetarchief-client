@@ -1,8 +1,3 @@
-import { OrderDirection, PaginationBar, Table } from '@meemoo/react-components';
-import { type FC, type ReactNode, useMemo, useState } from 'react';
-import type { TableState } from 'react-table';
-import { useQueryParams } from 'use-query-params';
-
 import { Permission } from '@account/const';
 import { RequestTablePageSize } from '@cp/const/requests.const';
 import {
@@ -11,6 +6,7 @@ import {
 	visitorsStatusFilters,
 } from '@cp/const/visitors.const';
 import { CPAdminLayout } from '@cp/layouts';
+import { PaginationBar, Table } from '@meemoo/react-components';
 import { ApproveRequestBlade } from '@shared/components/ApproveRequestBlade';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Loading } from '@shared/components/Loading';
@@ -26,9 +22,13 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { useUpdateVisitRequest } from '@visit-requests/hooks/update-visit';
 import { RequestStatusAll, VisitTimeframe } from '@visit-requests/types';
+import { type FC, type ReactNode, useMemo, useState } from 'react';
+import type { TableState } from 'react-table';
+import { useQueryParams } from 'use-query-params';
 
 export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG);
@@ -52,7 +52,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 		page: filters.page,
 		size: RequestTablePageSize,
 		orderProp: filters.orderProp as keyof VisitRequest,
-		orderDirection: filters.orderDirection as OrderDirection,
+		orderDirection: filters.orderDirection as AvoSearchOrderDirection,
 	});
 
 	const { mutateAsync: updateVisitRequest } = useUpdateVisitRequest();
@@ -78,7 +78,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 		return [
 			{
 				id: filters.orderProp,
-				desc: filters.orderDirection !== OrderDirection.asc,
+				desc: filters.orderDirection !== AvoSearchOrderDirection.ASC,
 			},
 		];
 	}, [filters.orderProp, filters.orderDirection]);
@@ -87,13 +87,13 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 
 	const onSortChange = (
 		orderProp: string | undefined,
-		orderDirection: OrderDirection | undefined
+		orderDirection: AvoSearchOrderDirection | undefined
 	) => {
 		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
 				orderProp: orderProp || 'startAt',
-				orderDirection: orderDirection || OrderDirection.desc,
+				orderDirection: orderDirection || AvoSearchOrderDirection.DESC,
 				page: 1,
 			});
 		}

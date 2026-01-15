@@ -1,5 +1,3 @@
-import { compact, isString } from 'lodash-es';
-
 import { IeObjectLicense } from '@ie-objects/ie-objects.types';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import {
@@ -9,6 +7,7 @@ import {
 	SearchPageMediaType,
 } from '@shared/types/ie-objects';
 import type { VisitRequest } from '@shared/types/visit-request';
+import { compact, isString } from 'lodash-es';
 
 import type { SearchPageQueryParams } from '../../const';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '../../types';
@@ -21,7 +20,7 @@ export const VISITOR_SPACE_LICENSES = [
 
 export const mapMaintainerToElastic = (
 	query: SearchPageQueryParams,
-	activeVisitorSpace: VisitRequest | undefined,
+	activeVisitorSpace: VisitRequest | null | undefined,
 	accessibleVisitorSpaceRequests: VisitRequest[] | undefined
 ): IeObjectsSearchFilter[] => {
 	const filterMaintainerSlug = query?.[SearchFilterId.Maintainer];

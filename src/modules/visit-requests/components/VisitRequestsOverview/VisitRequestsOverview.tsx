@@ -1,16 +1,11 @@
-import { OrderDirection, PaginationBar, type Row, Table } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
-import type { TableState } from 'react-table';
-import { useQueryParams } from 'use-query-params';
-
 import { Permission } from '@account/const';
 import {
 	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
-	requestStatusFilters,
 	RequestTablePageSize,
+	requestStatusFilters,
 	VISIT_REQUEST_ID_QUERY_KEY,
 } from '@cp/const/requests.const';
+import { PaginationBar, type Row, Table } from '@meemoo/react-components';
 import { Loading } from '@shared/components/Loading';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
 import ProcessRequestBlade from '@shared/components/ProcessRequestBlade/ProcessRequestBlade';
@@ -23,9 +18,14 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { useGetVisitRequest } from '@visit-requests/hooks/get-visit-request';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { RequestStatusAll } from '@visit-requests/types';
+import clsx from 'clsx';
+import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
+import type { TableState } from 'react-table';
+import { useQueryParams } from 'use-query-params';
 
 import type { VisitRequestOverviewProps } from './VisitRequestsOverview.types';
 
@@ -51,7 +51,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		page: filters.page,
 		size: RequestTablePageSize,
 		orderProp: filters.orderProp as keyof VisitRequest,
-		orderDirection: filters.orderDirection as OrderDirection,
+		orderDirection: filters.orderDirection as AvoSearchOrderDirection,
 	});
 
 	const { mutateAsync: getVisitRequest } = useGetVisitRequest();
@@ -106,7 +106,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		return [
 			{
 				id: filters.orderProp,
-				desc: filters.orderDirection !== OrderDirection.asc,
+				desc: filters.orderDirection !== AvoSearchOrderDirection.ASC,
 			},
 		];
 	}, [filters]);
@@ -115,13 +115,13 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 
 	const onSortChange = (
 		orderProp: string | undefined,
-		orderDirection: OrderDirection | undefined
+		orderDirection: AvoSearchOrderDirection | undefined
 	) => {
 		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
 				orderProp: orderProp || 'startAt',
-				orderDirection: orderDirection || OrderDirection.desc,
+				orderDirection: orderDirection || AvoSearchOrderDirection.DESC,
 				page: 1,
 			});
 		}

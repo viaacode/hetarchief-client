@@ -109,9 +109,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 	const { data: visitorSpaceInfo, isError: isErrorGetVisitorSpace } = useGetVisitorSpace(
 		query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] as string,
 		false,
-		{
-			enabled: !!query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY],
-		}
+		!!query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]
 	);
 
 	// ARC-1650: Do not show all visit accesses for admin users

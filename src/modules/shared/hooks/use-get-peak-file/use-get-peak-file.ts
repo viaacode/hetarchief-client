@@ -1,8 +1,7 @@
-import { useQuery, type UseQueryResult } from '@tanstack/react-query';
-import ky from 'ky-universal';
-
 import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const';
+import { type UseQueryResult, useQuery } from '@tanstack/react-query';
+import ky from 'ky-universal';
 
 export interface JsonWaveformData {
 	version: number;
@@ -16,11 +15,11 @@ export interface JsonWaveformData {
 
 export function useGetPeakFile(
 	filePath: string | null,
-	options: { enabled: boolean } = { enabled: true }
+	enabled: boolean = true
 ): UseQueryResult<JsonWaveformData | null> {
-	return useQuery(
-		[QUERY_KEYS.getPeakFile, filePath],
-		async () => {
+	return useQuery({
+		queryKey: [QUERY_KEYS.getPeakFile, filePath],
+		queryFn: async () => {
 			if (!filePath) {
 				return null;
 			}
@@ -32,6 +31,6 @@ export function useGetPeakFile(
 			const peakFileResponse = await ky.get(jsonFileUrl);
 			return (await peakFileResponse.json()) as JsonWaveformData;
 		},
-		options
-	);
+		enabled,
+	});
 }

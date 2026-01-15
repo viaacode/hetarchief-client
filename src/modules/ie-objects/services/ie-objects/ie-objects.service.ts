@@ -83,9 +83,6 @@ export class IeObjectsService {
 	public static async getBySchemaIdentifiers(
 		schemaIdentifiers: string[]
 	): Promise<(IeObject | null)[]> {
-		if (schemaIdentifiers[0].startsWith('_next')) {
-			return [null]; // Weird NextJS issue with [slug] route matching all assets that nextjs tries to load, like _next/static/webpack/7b0ff23bbcbf53bc.webpack.hot-update.json
-		}
 		const url = stringifyUrl({
 			url: IE_OBJECTS_SERVICE_BASE_URL,
 			query: {

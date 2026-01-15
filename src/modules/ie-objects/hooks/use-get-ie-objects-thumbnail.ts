@@ -1,5 +1,10 @@
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
+import {
+	keepPreviousData,
+	type QueryClient,
+	type UseQueryResult,
+	useQuery,
+} from '@tanstack/react-query';
 import { IeObjectsService } from './../services';
 
 export const useGetIeObjectThumbnail = (
@@ -9,20 +14,15 @@ export const useGetIeObjectThumbnail = (
 		enabled?: boolean;
 	} = {}
 ): UseQueryResult<string | null> => {
-	return useQuery<string | null>(
-		[QUERY_KEYS.getIeObjectsThumbnail, schemaIdentifier],
-		async (): Promise<string | null> => {
-			if (schemaIdentifier.startsWith('_next')) {
-				return null;
-			}
+	return useQuery({
+		queryKey: [QUERY_KEYS.getIeObjectsThumbnail, schemaIdentifier],
+		queryFn: async (): Promise<string | null> => {
 			return await IeObjectsService.getThumbnailBySchemaIdentifier(schemaIdentifier);
 		},
-		{
-			keepPreviousData: true,
-			enabled: true,
-			...options,
-		}
-	);
+		placeholderData: keepPreviousData,
+		enabled: true,
+		...options,
+	});
 };
 
 export function makeServerSideRequestGetIeObjectThumbnail(

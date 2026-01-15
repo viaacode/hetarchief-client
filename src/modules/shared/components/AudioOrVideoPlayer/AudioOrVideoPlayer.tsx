@@ -84,16 +84,17 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	]);
 
 	useEffect(() => {
-		if (!isLoadingMediaDuration && !isErrorMediaDuration) {
+		if (!isLoadingMediaDuration && !isErrorMediaDuration && !isNil(mediaDuration)) {
 			onMediaDurationLoaded?.(mediaDuration);
 		}
 	}, [mediaDuration, onMediaDurationLoaded, isLoadingMediaDuration, isErrorMediaDuration]);
 
 	// peak file
 	const peakFileStoredAt: string | null = getFilesByType(JSON_FORMATS)?.[0]?.storedAt || null;
-	const { data: peakJson, isLoading: isLoadingPeakFile } = useGetPeakFile(peakFileStoredAt, {
-		enabled: dctermsFormat === 'audio',
-	});
+	const { data: peakJson, isLoading: isLoadingPeakFile } = useGetPeakFile(
+		peakFileStoredAt,
+		dctermsFormat === 'audio'
+	);
 
 	if (isLoadingPlayableUrl || isLoadingMediaDuration) {
 		return <Loading fullscreen owner={`${owner}: render media`} mode="light" />;

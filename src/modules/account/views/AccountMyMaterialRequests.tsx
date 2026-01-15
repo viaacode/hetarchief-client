@@ -21,7 +21,6 @@ import {
 import {
 	MultiSelect,
 	type MultiSelectOption,
-	OrderDirection,
 	PaginationBar,
 	type Row,
 	Table,
@@ -43,6 +42,7 @@ import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitorLayout } from '@visitor-layout/index';
 import clsx from 'clsx';
 import { isEmpty, isNil, noop } from 'lodash-es';
@@ -89,7 +89,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 			orderProp: filters.orderProp as MaterialRequestKeys,
 		}),
 		...(!isNil(filters.orderDirection) && {
-			orderDirection: filters.orderDirection as OrderDirection,
+			orderDirection: filters.orderDirection as AvoSearchOrderDirection,
 		}),
 		...(!isNil(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]) && {
 			search: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
@@ -147,7 +147,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		(): SortingRule<{ id: MaterialRequestKeys; desc: boolean }>[] => [
 			{
 				id: filters.orderProp,
-				desc: filters.orderDirection !== OrderDirection.asc,
+				desc: filters.orderDirection !== AvoSearchOrderDirection.ASC,
 			},
 		],
 		[filters]
@@ -182,13 +182,13 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 
 	const onSortChange = (
 		orderProp: string | undefined,
-		orderDirection: OrderDirection | undefined
+		orderDirection: AvoSearchOrderDirection | undefined
 	): void => {
 		if (filters.orderProp === MaterialRequestKeys.requestedAt && orderDirection === undefined) {
 			setFilters({
 				...filters,
 				orderProp,
-				orderDirection: OrderDirection.asc,
+				orderDirection: AvoSearchOrderDirection.ASC,
 				page: 1,
 			});
 		} else if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
@@ -422,10 +422,10 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 						</div>
 					)}
 
-					{isFetching && <Loading owner="Material requests overview" fullscreen />}
-					{noData && renderEmptyMessage()}
+					{isFetching && <Loading owner="Material requests overview" />}
+					{noData && !isFetching && renderEmptyMessage()}
 					{!noData && !isFetching && renderContent()}
-					{currentMaterialRequest?.id && renderDetailBlade()}
+					{renderDetailBlade()}
 				</div>
 			</AccountLayout>
 		);

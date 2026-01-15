@@ -1,4 +1,4 @@
-import type { OrderDirection } from '@meemoo/react-components';
+import type { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import type { ReactNode } from 'react';
 
 export enum MaintenanceAlertsOrderProps {
@@ -13,5 +13,5 @@ export interface GetMaterialRequestsProps {
 	children?: ReactNode;
 	page?: number;
 	orderProp?: MaintenanceAlertsOrderProps;
-	orderDirection?: OrderDirection;
+	orderDirection?: AvoSearchOrderDirection;
 }

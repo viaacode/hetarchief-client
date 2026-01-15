@@ -1,6 +1,6 @@
 import { selectCommonUser, selectUser } from '@auth/store/user';
 import type { AppState } from '@shared/store';
-import type { Avo } from '@viaa/avo2-types';
+import type { AvoUserCommonUser, AvoUserUser } from '@viaa/avo2-types';
 import React, { type FunctionComponent, type ReactNode } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -21,6 +21,6 @@ export default compose(connect(mapStateToProps), withUser);
 
 export interface UserProps {
 	children?: ReactNode;
-	user: Avo.User.User | undefined;
-	commonUser: Avo.User.CommonUser | undefined;
+	user: AvoUserUser | undefined;
+	commonUser: AvoUserCommonUser | undefined;
 }

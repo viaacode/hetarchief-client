@@ -8,10 +8,8 @@ export const useGetMaterialRequestsForMediaItem = (
 	id: string | null,
 	enabled?: boolean
 ): UseQueryResult<MaterialRequest[]> =>
-	useQuery(
-		[QUERY_KEYS.getMaterialRequestsDuplicates, id],
-		() => MaterialRequestsService.forMediaItem(id),
-		{
-			enabled,
-		}
-	);
+	useQuery({
+		queryKey: [QUERY_KEYS.getMaterialRequestsDuplicates, id],
+		queryFn: () => MaterialRequestsService.forMediaItem(id),
+		enabled,
+	});
