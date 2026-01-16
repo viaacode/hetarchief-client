@@ -336,6 +336,8 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 				pagination={renderPagination}
 				onSortChange={onSortChange}
 				onRowClick={onRowClick}
+				hideTable={noData || isLoadingMaterialRequests}
+				enableRowFocusOnClick={true}
 			/>
 		);
 	};
@@ -483,7 +485,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 					>
 						{isLoadingMaterialRequests && <Loading owner="Material requests overview" />}
 						{noData && !isLoadingMaterialRequests && renderEmptyMessage()}
-						{!noData && !isLoadingMaterialRequests && renderContent()}
+						{renderContent()}
 					</div>
 					{renderDetailBlade()}
 				</AdminLayout.Content>

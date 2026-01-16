@@ -151,47 +151,14 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				/>
 			);
 		}
+		const hasData = (filteredVisits?.length || 0) > 0;
+
 		return (
 			<AccountLayout
 				className="p-account-my-history"
 				pageTitle={tText('pages/account/mijn-bezoek-historiek/index___mijn-bezoek-historiek')}
 			>
-				{(filteredVisits?.length || 0) > 0 ? (
-					<div className="l-container l-container--edgeless-to-lg">
-						<Table<VisitRequest>
-							className="u-mt-24"
-							style={{ cursor: 'pointer' }}
-							onRowClick={onVisitRequestRowClicked}
-							options={{
-								columns: HistoryTableColumns(onPlanVisitClicked),
-								data: filteredVisits || [],
-								initialState: {
-									pageSize: HistoryItemListSize,
-									sortBy: sortFilters,
-								} as TableState<VisitRequest>,
-							}}
-							onSortChange={onSortChange}
-							sortingIcons={sortingIcons}
-							pagination={({ gotoPage }) => {
-								return (
-									<PaginationBar
-										{...getDefaultPaginationBarProps()}
-										itemsPerPage={HistoryItemListSize}
-										startItem={Math.max(0, filters.page - 1) * HistoryItemListSize}
-										totalItems={visits.data?.total || 0}
-										onPageChange={(pageZeroBased: number) => {
-											gotoPage(pageZeroBased);
-											setFilters({
-												...filters,
-												page: pageZeroBased + 1,
-											});
-										}}
-									/>
-								);
-							}}
-						/>
-					</div>
-				) : (
+				{!hasData && (
 					<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
 						{visits.isFetching ? (
 							<Loading fullscreen owner="my history page" />
@@ -200,6 +167,42 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 						)}
 					</div>
 				)}
+				<div className="l-container l-container--edgeless-to-lg">
+					<Table<VisitRequest>
+						className="u-mt-24"
+						style={{ cursor: 'pointer' }}
+						onRowClick={onVisitRequestRowClicked}
+						options={{
+							columns: HistoryTableColumns(onPlanVisitClicked),
+							data: filteredVisits || [],
+							initialState: {
+								pageSize: HistoryItemListSize,
+								sortBy: sortFilters,
+							} as TableState<VisitRequest>,
+						}}
+						onSortChange={onSortChange}
+						sortingIcons={sortingIcons}
+						hideTable={!hasData}
+						enableRowFocusOnClick={true}
+						pagination={({ gotoPage }) => {
+							return (
+								<PaginationBar
+									{...getDefaultPaginationBarProps()}
+									itemsPerPage={HistoryItemListSize}
+									startItem={Math.max(0, filters.page - 1) * HistoryItemListSize}
+									totalItems={visits.data?.total || 0}
+									onPageChange={(pageZeroBased: number) => {
+										gotoPage(pageZeroBased);
+										setFilters({
+											...filters,
+											page: pageZeroBased + 1,
+										});
+									}}
+								/>
+							);
+						}}
+					/>
+				</div>
 				{currentDetailVisit && (
 					<VisitDetailBlade
 						isOpen={isVisitDetailBladeOpen}

@@ -166,56 +166,58 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalU
 	};
 
 	const renderVisitorSpacesTable = () => {
-		if (isFetching) {
-			return (
-				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-					<Loading owner="admin visitor spaces page: table loading" />
-				</div>
-			);
-		}
-		if (!visitorSpaces?.items?.length) {
-			return (
-				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-					{renderEmptyMessage()}
-				</div>
-			);
-		}
+		const noData = !visitorSpaces?.items?.length;
 		return (
-			<Table<VisitorSpaceInfo>
-				className="u-mt-24"
-				options={{
-					columns: VisitorSpacesOverviewTableColumns(
-						updateRoomStatus,
-						showEditButton,
-						showStatusDropdown,
-						locale
-					),
-					data: visitorSpaces?.items || [],
-					initialState: {
-						pageSize: VisitorSpacesOverviewTablePageSize,
-						sortBy: sortFilters,
-					} as TableState<VisitorSpaceInfo>,
-				}}
-				onSortChange={onSortChange}
-				sortingIcons={sortingIcons}
-				pagination={({ gotoPage }) => {
-					return (
-						<PaginationBar
-							{...getDefaultPaginationBarProps()}
-							itemsPerPage={VisitorSpacesOverviewTablePageSize}
-							startItem={Math.max(0, filters.page - 1) * VisitorSpacesOverviewTablePageSize}
-							totalItems={visitorSpaces?.total || 0}
-							onPageChange={(pageZeroBased) => {
-								gotoPage(pageZeroBased);
-								setFilters({
-									...filters,
-									page: pageZeroBased + 1,
-								});
-							}}
-						/>
-					);
-				}}
-			/>
+			<>
+				{isFetching ? (
+					<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
+						<Loading owner="admin visitor spaces page: table loading" />
+					</div>
+				) : (
+					noData && (
+						<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
+							{renderEmptyMessage()}
+						</div>
+					)
+				)}
+				<Table<VisitorSpaceInfo>
+					className="u-mt-24"
+					options={{
+						columns: VisitorSpacesOverviewTableColumns(
+							updateRoomStatus,
+							showEditButton,
+							showStatusDropdown,
+							locale
+						),
+						data: visitorSpaces?.items || [],
+						initialState: {
+							pageSize: VisitorSpacesOverviewTablePageSize,
+							sortBy: sortFilters,
+						} as TableState<VisitorSpaceInfo>,
+					}}
+					onSortChange={onSortChange}
+					sortingIcons={sortingIcons}
+					hideTable={noData || isFetching}
+					enableRowFocusOnClick={true}
+					pagination={({ gotoPage }) => {
+						return (
+							<PaginationBar
+								{...getDefaultPaginationBarProps()}
+								itemsPerPage={VisitorSpacesOverviewTablePageSize}
+								startItem={Math.max(0, filters.page - 1) * VisitorSpacesOverviewTablePageSize}
+								totalItems={visitorSpaces?.total || 0}
+								onPageChange={(pageZeroBased) => {
+									gotoPage(pageZeroBased);
+									setFilters({
+										...filters,
+										page: pageZeroBased + 1,
+									});
+								}}
+							/>
+						);
+					}}
+				/>
+			</>
 		);
 	};
 
