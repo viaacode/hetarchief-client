@@ -22,7 +22,7 @@ export const mockData = [1, 2, 3, 4, 5, 6, 7, 8].map((data) => {
 	const room = 'Bezoekersruimte 1';
 
 	return {
-		id: data,
+		id: data.toString(),
 		room,
 		name,
 		email,

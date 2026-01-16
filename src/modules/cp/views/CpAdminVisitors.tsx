@@ -162,54 +162,56 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 	};
 
 	const renderVisitorsTable = () => {
-		if (isFetching) {
-			return (
-				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-					<Loading owner="admin visitors page: table loading" fullscreen />
-				</div>
-			);
-		}
-		if ((visits?.items?.length || 0) <= 0) {
-			return (
-				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-					{renderEmptyMessage()}
-				</div>
-			);
-		}
+		const noData = (visits?.items?.length || 0) <= 0;
 		return (
-			<div className="l-container l-container--edgeless-to-lg">
-				<Table<VisitRequest>
-					className="u-mt-24 c-table--no-padding-last-column"
-					options={{
-						columns: VisitorsTableColumns(denyVisitRequest, editVisitRequest),
-						data: visits?.items || [],
-						initialState: {
-							pageSize: RequestTablePageSize,
-							sortBy: sortFilters,
-						} as TableState<VisitRequest>,
-					}}
-					onSortChange={onSortChange}
-					sortingIcons={sortingIcons}
-					pagination={({ gotoPage }) => {
-						return (
-							<PaginationBar
-								{...getDefaultPaginationBarProps()}
-								itemsPerPage={RequestTablePageSize}
-								startItem={Math.max(0, filters.page - 1) * RequestTablePageSize}
-								totalItems={visits?.total || 0}
-								onPageChange={(pageZeroBased) => {
-									gotoPage(pageZeroBased);
-									// setSelected(null);
-									setFilters({
-										...filters,
-										page: pageZeroBased + 1,
-									});
-								}}
-							/>
-						);
-					}}
-				/>
-			</div>
+			<>
+				{isFetching ? (
+					<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
+						<Loading owner="admin visitors page: table loading" fullscreen />
+					</div>
+				) : (
+					noData && (
+						<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
+							{renderEmptyMessage()}
+						</div>
+					)
+				)}
+				<div className="l-container l-container--edgeless-to-lg">
+					<Table<VisitRequest>
+						className="u-mt-24 c-table--no-padding-last-column"
+						options={{
+							columns: VisitorsTableColumns(denyVisitRequest, editVisitRequest),
+							data: visits?.items || [],
+							initialState: {
+								pageSize: RequestTablePageSize,
+								sortBy: sortFilters,
+							} as TableState<VisitRequest>,
+						}}
+						onSortChange={onSortChange}
+						sortingIcons={sortingIcons}
+						hideTable={noData || isFetching}
+						enableRowFocusOnClick={true}
+						pagination={({ gotoPage }) => {
+							return (
+								<PaginationBar
+									{...getDefaultPaginationBarProps()}
+									itemsPerPage={RequestTablePageSize}
+									startItem={Math.max(0, filters.page - 1) * RequestTablePageSize}
+									totalItems={visits?.total || 0}
+									onPageChange={(pageZeroBased) => {
+										gotoPage(pageZeroBased);
+										// setSelected(null);
+										setFilters({
+											...filters,
+											page: pageZeroBased + 1,
+										});
+									}}
+								/>
+							);
+						}}
+					/>
+				</div>
+			</>
 		);
 	};
 

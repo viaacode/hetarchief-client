@@ -159,48 +159,52 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 	};
 
 	const renderContent = () => {
-		if (isLoadingVisitRequests) {
-			return <Loading owner="visit request overview" fullscreen />;
-		}
-		if ((filteredVisits?.length || 0) <= 0) {
-			return renderEmptyMessage();
-		}
+		const noData = (filteredVisits?.length || 0) <= 0;
 		return (
-			<div className="l-container l-container--edgeless-to-lg">
-				<Table<VisitRequest>
-					className="u-mt-24"
-					options={{
-						columns: columns,
-						data: filteredVisits || [],
-						initialState: {
-							pageSize: RequestTablePageSize,
-							sortBy: sortFilters,
-						} as TableState<VisitRequest>,
-					}}
-					onRowClick={onRowClick}
-					onSortChange={onSortChange}
-					sortingIcons={sortingIcons}
-					pagination={({ gotoPage }) => {
-						return (
-							<PaginationBar
-								{...getDefaultPaginationBarProps()}
-								itemsPerPage={RequestTablePageSize}
-								startItem={Math.max(0, filters.page - 1) * RequestTablePageSize}
-								totalItems={visits?.total || 0}
-								onPageChange={(pageZeroBased) => {
-									gotoPage(pageZeroBased);
-									setFilters({
-										...filters,
-										page: pageZeroBased + 1,
-										[VISIT_REQUEST_ID_QUERY_KEY]: undefined,
-									});
-									setSelectedNotOnCurrentPage(undefined);
-								}}
-							/>
-						);
-					}}
-				/>
-			</div>
+			<>
+				{isLoadingVisitRequests ? (
+					<Loading owner="visit request overview" fullscreen />
+				) : (
+					noData && renderEmptyMessage()
+				)}
+				<div className="l-container l-container--edgeless-to-lg">
+					<Table<VisitRequest>
+						className="u-mt-24"
+						options={{
+							columns: columns,
+							data: filteredVisits || [],
+							initialState: {
+								pageSize: RequestTablePageSize,
+								sortBy: sortFilters,
+							} as TableState<VisitRequest>,
+						}}
+						onRowClick={onRowClick}
+						onSortChange={onSortChange}
+						sortingIcons={sortingIcons}
+						hideTable={noData || isLoadingVisitRequests}
+						enableRowFocusOnClick={true}
+						pagination={({ gotoPage }) => {
+							return (
+								<PaginationBar
+									{...getDefaultPaginationBarProps()}
+									itemsPerPage={RequestTablePageSize}
+									startItem={Math.max(0, filters.page - 1) * RequestTablePageSize}
+									totalItems={visits?.total || 0}
+									onPageChange={(pageZeroBased) => {
+										gotoPage(pageZeroBased);
+										setFilters({
+											...filters,
+											page: pageZeroBased + 1,
+											[VISIT_REQUEST_ID_QUERY_KEY]: undefined,
+										});
+										setSelectedNotOnCurrentPage(undefined);
+									}}
+								/>
+							);
+						}}
+					/>
+				</div>
+			</>
 		);
 	};
 

@@ -132,6 +132,7 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 	};
 
 	const renderPageContent = () => {
+		const hasData = (visitRequests?.items?.length || 0) > 0;
 		return (
 			<AdminLayout
 				pageTitle={tText('pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers')}
@@ -157,41 +158,43 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 							/>
 						</div>
 
-						{(visitRequests?.items?.length || 0) > 0 ? (
-							<div className="l-container--edgeless-to-lg">
-								<Table<VisitRequest>
-									className="u-mt-24 c-table--no-padding-last-column"
-									options={{
-										columns: VisitorsTableColumns(denyVisitRequest, editVisitRequest),
-										data: visitRequests?.items || [],
-										initialState: {
-											pageSize: VisitorsTablePageSize,
-											sortBy: sortFilters,
-										} as TableState<VisitRequest>,
-									}}
-									onSortChange={onSortChange}
-									sortingIcons={sortingIcons}
-									pagination={({ gotoPage }) => {
-										return (
-											<PaginationBar
-												{...getDefaultPaginationBarProps()}
-												itemsPerPage={VisitorsTablePageSize}
-												startItem={Math.max(0, filters.page - 1) * VisitorsTablePageSize}
-												totalItems={visitRequests?.total || 0}
-												onPageChange={(pageZeroBased) => {
-													gotoPage(pageZeroBased);
-													// setSelected(null);
-													setFilters({
-														...filters,
-														page: pageZeroBased + 1,
-													});
-												}}
-											/>
-										);
-									}}
-								/>
-							</div>
-						) : (
+						<div className="l-container--edgeless-to-lg">
+							<Table<VisitRequest>
+								className="u-mt-24 c-table--no-padding-last-column"
+								options={{
+									columns: VisitorsTableColumns(denyVisitRequest, editVisitRequest),
+									data: visitRequests?.items || [],
+									initialState: {
+										pageSize: VisitorsTablePageSize,
+										sortBy: sortFilters,
+									} as TableState<VisitRequest>,
+								}}
+								onSortChange={onSortChange}
+								sortingIcons={sortingIcons}
+								hideTable={!hasData}
+								enableRowFocusOnClick={true}
+								pagination={({ gotoPage }) => {
+									return (
+										<PaginationBar
+											{...getDefaultPaginationBarProps()}
+											itemsPerPage={VisitorsTablePageSize}
+											startItem={Math.max(0, filters.page - 1) * VisitorsTablePageSize}
+											totalItems={visitRequests?.total || 0}
+											onPageChange={(pageZeroBased) => {
+												gotoPage(pageZeroBased);
+												// setSelected(null);
+												setFilters({
+													...filters,
+													page: pageZeroBased + 1,
+												});
+											}}
+										/>
+									);
+								}}
+							/>
+						</div>
+
+						{!hasData && (
 							<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
 								{isFetching
 									? tHtml('modules/admin/visitor-spaces/pages/visitors/visitors___laden')
