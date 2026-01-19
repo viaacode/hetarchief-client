@@ -30,6 +30,7 @@
 		:global(.c-table__row) {
 			:global(> td:first-child) {
 				width: 40%;
+				padding-left: $spacer-md;
 			}
 
 			:global(> td:not(:first-child)) {
@@ -56,6 +57,26 @@
 
 		:global(.u-text-muted) {
 			color: $neutral;
+		}
+	}
+
+	:global(.c-table__with-row-focus) {
+		:global(.c-table__row) {
+			:global(> td:first-child) {
+				min-width: $focus-cell-width;
+				max-width: $focus-cell-width;
+				width: $focus-cell-width;
+			}
+
+			:global(> td:nth-child(2)) {
+				width: 40%;
+				padding-left: $spacer-md;
+			}
+
+			:global(> td:not(:first-child, :nth-child(2))) {
+				width: 30%;
+				padding: 0;
+			}
 		}
 	}
 }

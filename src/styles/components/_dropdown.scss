@@ -169,7 +169,7 @@
 
 .u-useroverview-table {
 	tbody {
-		td {
+		td:not(.c-table__focus-cell) {
 			padding: 0.4rem 2.4rem !important;
 			word-break: break-word;
 		}
