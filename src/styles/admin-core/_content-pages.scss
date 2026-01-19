@@ -30,7 +30,8 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 			padding: $spacer-md 0.5rem;
 			line-height: $line-height-lg;
 
-			&:first-child {
+			// Second child since we have the focus row enabled
+			&:nth-child(2) {
 				padding-left: $spacer-md;
 			}
 

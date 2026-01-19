@@ -4,7 +4,6 @@
 
 $component: "c-table";
 $c-table-border: 1px solid $silver;
-$focus-cell-width: .8rem;
 
 .#{$component} {
 	width: 100%;
@@ -76,11 +75,6 @@ $focus-cell-width: .8rem;
 				&__cell--active {
 					color: $black;
 				}
-
-				&__highlight-cell {
-					width: $focus-cell-width;
-					padding: 0 !important;
-				}
 			}
 
 			.#{$component} {
@@ -93,6 +87,8 @@ $focus-cell-width: .8rem;
 	}
 
 	&__focus-cell {
+		min-width: $focus-cell-width;
+		max-width: $focus-cell-width;
 		width: $focus-cell-width;
 		padding: 0 !important;
 

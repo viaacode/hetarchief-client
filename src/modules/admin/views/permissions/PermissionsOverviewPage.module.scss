@@ -16,7 +16,7 @@
 		white-space: normal;
 	}
 
-	:global(.c-table__cell) + :global(.c-table__cell) {
+	:global(.c-table__cell:not(.c-table__focus-cell)) + :global(.c-table__cell) {
 		width: 15%;
 		text-align: center;
 	}
