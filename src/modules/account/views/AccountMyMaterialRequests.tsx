@@ -267,6 +267,8 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 				pagination={renderPagination}
 				onSortChange={onSortChange}
 				onRowClick={onRowClick}
+				showTable={!noData && !isFetching}
+				enableRowFocusOnClick={true}
 			/>
 		);
 	};
@@ -424,7 +426,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 
 					{isFetching && <Loading owner="Material requests overview" />}
 					{noData && !isFetching && renderEmptyMessage()}
-					{!noData && !isFetching && renderContent()}
+					{renderContent()}
 					{renderDetailBlade()}
 				</div>
 			</AccountLayout>

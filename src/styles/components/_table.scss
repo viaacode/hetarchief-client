@@ -4,6 +4,7 @@
 
 $component: "c-table";
 $c-table-border: 1px solid $silver;
+$focus-cell-width: .8rem;
 
 .#{$component} {
 	width: 100%;
@@ -75,6 +76,11 @@ $c-table-border: 1px solid $silver;
 				&__cell--active {
 					color: $black;
 				}
+
+				&__highlight-cell {
+					width: $focus-cell-width;
+					padding: 0 !important;
+				}
 			}
 
 			.#{$component} {
@@ -83,6 +89,15 @@ $c-table-border: 1px solid $silver;
 					position: absolute; // This is enough to correctly position it
 				}
 			}
+		}
+	}
+
+	&__focus-cell {
+		width: $focus-cell-width;
+		padding: 0 !important;
+
+		&--active {
+			background-color: $teal;
 		}
 	}
 

@@ -307,6 +307,8 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 				pagination={renderPagination}
 				onSortChange={onSortChange}
 				onRowClick={onRowClick}
+				showTable={!noData && !isFetching}
+				enableRowFocusOnClick={true}
 			/>
 		);
 	};
@@ -443,7 +445,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 				>
 					{isFetching && <Loading owner="Material requests overview" />}
 					{noData && !isFetching && renderEmptyMessage()}
-					{!noData && !isFetching && renderContent()}
+					{renderContent()}
 				</div>
 				{renderDetailBlade()}
 			</CPAdminLayout>

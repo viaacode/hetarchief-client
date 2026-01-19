@@ -93,12 +93,14 @@ table[class*="c-table--styled"] {
 	}
 }
 
-.c-admin__content:not(.Table-module_c-table--styled__H4Ms4) tbody td {
-	&:first-child {
+.c-admin__content {
+	:not(.Table-module_c-table--styled__H4Ms4) tbody td:first-child,
+		// tables with row focus will add an additional column for the focus so we need to add the padding on the second child
+	:has(.c-table__with-row-focus) tbody td:nth-child(2){
 		padding-left: $spacer-md;
 	}
 
-	&:last-child {
+	:not(.Table-module_c-table--styled__H4Ms4) tbody td:last-child {
 		padding-right: $spacer-md;
 	}
 }
