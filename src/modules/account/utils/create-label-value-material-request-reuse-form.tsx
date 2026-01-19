@@ -90,7 +90,7 @@ export function createLabelValuePairMaterialRequestReuseForm(
 					{reuseForm.distributionTypeOtherExplanation && (
 						<>
 							<br />
-							reuseForm.distributionTypeOtherExplanation;
+							{reuseForm.distributionTypeOtherExplanation}
 						</>
 					)}
 				</>
