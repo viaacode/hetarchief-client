@@ -44,7 +44,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 	const shouldRenderNewsletterCheckbox: boolean = !preferences?.newsletter;
 	const MAX_NAME_LENGTH = 40;
 
-	const [requestName, setRequestName] = useState('');
+	const [requestGroupName, setRequestGroupName] = useState('');
 	const [isSubscribedToNewsletter, setIsSubscribedToNewsletter] = useState<boolean>(
 		preferences?.newsletter || false
 	);
@@ -66,7 +66,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 	useEffect(() => {
 		const formattedDate = format(new Date(), 'MM-yyyy', { ...getLocalisedOptions() });
 
-		setRequestName(
+		setRequestGroupName(
 			`${mostRecentMaterialRequestName.substring(0, MAX_NAME_LENGTH - formattedDate.length - 1)} ${formattedDate}`
 		);
 	}, [mostRecentMaterialRequestName]);
@@ -102,7 +102,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 			}
 
 			if (isKeyUser) {
-				if (requestName.length === 0) {
+				if (requestGroupName.length === 0) {
 					setValidationError(
 						tText(
 							'modules/account/components/personal-info/personal-info___de-aanvraag-naam-is-verplicht'
@@ -125,7 +125,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 			await MaterialRequestsService.sendAll({
 				type: typeSelected,
 				organisation: organisationInputValue,
-				requestName: requestName,
+				requestGroupName,
 			});
 
 			// Only subscribe to newsletter if the user is not already subscribed and indicated that he wants to be subscribed
@@ -146,7 +146,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 				additionalInfo: {
 					typeSelected,
 					organisationInputValue,
-					requestName,
+					requestGroupName,
 					isSubscribedToNewsletter,
 					preferences,
 					locale,
@@ -275,8 +275,8 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 				<TooltipTrigger>
 					<TextInput
 						maxLength={MAX_NAME_LENGTH}
-						value={requestName}
-						onChange={(e) => setRequestName(e.target.value)}
+						value={requestGroupName}
+						onChange={(e) => setRequestGroupName(e.target.value)}
 					/>
 				</TooltipTrigger>
 				<TooltipContent>
@@ -292,7 +292,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 					styles['c-personal-info__content-group-value-length']
 				)}
 			>
-				{requestName.length || 0} / {MAX_NAME_LENGTH}
+				{requestGroupName.length || 0} / {MAX_NAME_LENGTH}
 			</span>
 		</div>
 	);
