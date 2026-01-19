@@ -1,10 +1,8 @@
-import { render } from '@testing-library/react';
-
 import type { SpacePreviewSpace } from '@shared/components/SpacePreview/SpacePreview.types';
-
-import '@testing-library/jest-dom';
-import SpacePreview from './SpacePreview';
+import { render } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 import { SPACE_PREVIEW_PROPS_MOCK } from './__mocks__/spacePreview';
+import SpacePreview from './SpacePreview';
 
 const renderSpacePreview = ({ ...args }: SpacePreviewSpace, className = '') => {
 	return render(

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { jest } from '@jest/globals';
 
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import { toastService } from '@shared/services/toast-service';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const oldDate = '2022-05-03T16:30:39.70604+00:00';
 const newDate = '2022-05-04T16:30:48.824352+00:00';
@@ -52,7 +52,7 @@ describe('NotificationService', () => {
 
 	describe('checkNotifications()', () => {
 		it('Should not show any toasts when the first notifications are fetched and the response is empty', async () => {
-			const mockSetHasUnreadNotifications = jest.fn();
+			const mockSetHasUnreadNotifications = vi.fn();
 			await NotificationsService.initPolling(
 				// biome-ignore lint/suspicious/noExplicitAny: Test case
 				null as any,
@@ -60,7 +60,7 @@ describe('NotificationService', () => {
 				null as any,
 				mockSetHasUnreadNotifications
 			);
-			const mockGetNotifications = jest.fn();
+			const mockGetNotifications = vi.fn();
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [],
@@ -71,7 +71,7 @@ describe('NotificationService', () => {
 			});
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
 			NotificationsService.getNotifications = mockGetNotifications as any;
-			const mockedNotifyFunc = jest.fn();
+			const mockedNotifyFunc = vi.fn();
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
 			toastService.notify = mockedNotifyFunc as any;
 
@@ -83,7 +83,7 @@ describe('NotificationService', () => {
 		});
 
 		it('Should not show any toasts when the first notifications are fetched and the response contains only READ notifications', async () => {
-			const mockSetHasUnreadNotifications = jest.fn();
+			const mockSetHasUnreadNotifications = vi.fn();
 			await NotificationsService.initPolling(
 				// biome-ignore lint/suspicious/noExplicitAny: Test case with null
 				null as any,
@@ -91,7 +91,7 @@ describe('NotificationService', () => {
 				null as any,
 				mockSetHasUnreadNotifications
 			);
-			const mockGetNotifications = jest.fn();
+			const mockGetNotifications = vi.fn();
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockReadNotification, mockReadNotification],
@@ -103,7 +103,7 @@ describe('NotificationService', () => {
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
 			NotificationsService.getNotifications = mockGetNotifications as any;
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
-			const mockedNotifyFunc = jest.fn() as any;
+			const mockedNotifyFunc = vi.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
 			await NotificationsService.checkNotifications();
@@ -114,7 +114,7 @@ describe('NotificationService', () => {
 		});
 
 		it('Should not show any toasts when the first notifications are fetched and the response contains only UNREAD notifications', async () => {
-			const mockSetHasUnreadNotifications = jest.fn();
+			const mockSetHasUnreadNotifications = vi.fn();
 			await NotificationsService.initPolling(
 				// biome-ignore lint/suspicious/noExplicitAny: Test case
 				null as any,
@@ -123,7 +123,7 @@ describe('NotificationService', () => {
 				mockSetHasUnreadNotifications
 			);
 
-			const mockGetNotifications = jest.fn();
+			const mockGetNotifications = vi.fn();
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockUnreadNotification, mockUnreadNotification],
@@ -135,7 +135,7 @@ describe('NotificationService', () => {
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
 			NotificationsService.getNotifications = mockGetNotifications as any;
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
-			const mockedNotifyFunc = jest.fn() as any;
+			const mockedNotifyFunc = vi.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
 			await NotificationsService.checkNotifications();
@@ -146,7 +146,7 @@ describe('NotificationService', () => {
 		});
 
 		it('Should not show any toasts when the first notifications are fetched and the response contains both UNREAD and READ notifications', async () => {
-			const mockSetHasUnreadNotifications = jest.fn();
+			const mockSetHasUnreadNotifications = vi.fn();
 			await NotificationsService.initPolling(
 				// biome-ignore lint/suspicious/noExplicitAny: Test case
 				null as any,
@@ -155,7 +155,7 @@ describe('NotificationService', () => {
 				mockSetHasUnreadNotifications
 			);
 
-			const mockGetNotifications = jest.fn();
+			const mockGetNotifications = vi.fn();
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockUnreadNotification, mockReadNotification],
@@ -167,7 +167,7 @@ describe('NotificationService', () => {
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
 			NotificationsService.getNotifications = mockGetNotifications as any;
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
-			const mockedNotifyFunc = jest.fn() as any;
+			const mockedNotifyFunc = vi.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
 			await NotificationsService.checkNotifications();
@@ -178,7 +178,7 @@ describe('NotificationService', () => {
 		});
 
 		it('Should show a single toasts when a new UNREAD notification is fetched', async () => {
-			const mockSetHasUnreadNotifications = jest.fn();
+			const mockSetHasUnreadNotifications = vi.fn();
 			await NotificationsService.initPolling(
 				// biome-ignore lint/suspicious/noExplicitAny: Test case
 				null as any,
@@ -187,7 +187,7 @@ describe('NotificationService', () => {
 				mockSetHasUnreadNotifications
 			);
 
-			const mockGetNotifications = jest.fn();
+			const mockGetNotifications = vi.fn();
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockUnreadNotification, mockReadNotification],
@@ -207,7 +207,7 @@ describe('NotificationService', () => {
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
 			NotificationsService.getNotifications = mockGetNotifications as any;
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
-			const mockedNotifyFunc = jest.fn() as any;
+			const mockedNotifyFunc = vi.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
 			// Initial fetch
@@ -231,7 +231,7 @@ describe('NotificationService', () => {
 		});
 
 		it('Should show a single toasts when multiple new UNREAD notifications are fetched', async () => {
-			const mockSetHasUnreadNotifications = jest.fn();
+			const mockSetHasUnreadNotifications = vi.fn();
 			await NotificationsService.initPolling(
 				// biome-ignore lint/suspicious/noExplicitAny: Test case
 				null as any,
@@ -240,7 +240,7 @@ describe('NotificationService', () => {
 				mockSetHasUnreadNotifications
 			);
 
-			const mockGetNotifications = jest.fn();
+			const mockGetNotifications = vi.fn();
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockUnreadNotification, mockReadNotification],
@@ -265,7 +265,7 @@ describe('NotificationService', () => {
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
 			NotificationsService.getNotifications = mockGetNotifications as any;
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
-			const mockedNotifyFunc = jest.fn() as any;
+			const mockedNotifyFunc = vi.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
 			// Initial fetch
@@ -289,7 +289,7 @@ describe('NotificationService', () => {
 		});
 
 		it('Should not show a new toast when the same notifications are fetched', async () => {
-			const mockSetHasUnreadNotifications = jest.fn();
+			const mockSetHasUnreadNotifications = vi.fn();
 			await NotificationsService.initPolling(
 				// biome-ignore lint/suspicious/noExplicitAny: Test case
 				null as any,
@@ -298,7 +298,7 @@ describe('NotificationService', () => {
 				mockSetHasUnreadNotifications
 			);
 
-			const mockGetNotifications = jest.fn();
+			const mockGetNotifications = vi.fn();
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockUnreadNotification, mockReadNotification],
@@ -318,7 +318,7 @@ describe('NotificationService', () => {
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
 			NotificationsService.getNotifications = mockGetNotifications as any;
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
-			const mockedNotifyFunc = jest.fn() as any;
+			const mockedNotifyFunc = vi.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
 			// Initial fetch
@@ -335,7 +335,7 @@ describe('NotificationService', () => {
 		});
 
 		it('Should not show a new toast when a new READ notification is fetched', async () => {
-			const mockSetHasUnreadNotifications = jest.fn();
+			const mockSetHasUnreadNotifications = vi.fn();
 			await NotificationsService.initPolling(
 				// biome-ignore lint/suspicious/noExplicitAny: Test case
 				null as any,
@@ -344,7 +344,7 @@ describe('NotificationService', () => {
 				mockSetHasUnreadNotifications
 			);
 
-			const mockGetNotifications = jest.fn();
+			const mockGetNotifications = vi.fn();
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
 			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockUnreadNotification, mockReadNotification],
@@ -372,7 +372,7 @@ describe('NotificationService', () => {
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
 			NotificationsService.getNotifications = mockGetNotifications as any;
 			// biome-ignore lint/suspicious/noExplicitAny: Test case
-			const mockedNotifyFunc = jest.fn() as any;
+			const mockedNotifyFunc = vi.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
 			// Initial fetch

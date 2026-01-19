@@ -27,7 +27,7 @@
     },
     "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "types": ["jest", "node"],
+    "types": ["node"],
     "module": "esnext",
     "moduleResolution": "node",
     "allowJs": true,
@@ -42,10 +42,12 @@
     "incremental": true,
     "typeRoots": ["src", "node_modules/@types"]
   },
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node"
-  },
-  "include": ["next-env.d.ts", "jest/**/*.js", "src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "tests/**/*.ts",
+    "node_modules/vitest/globals.d.ts"
+  ],
   "exclude": ["node_modules"]
 }

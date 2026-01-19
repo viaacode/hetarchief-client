@@ -1,8 +1,7 @@
+import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { renderHook } from '@testing-library/react';
 import type { ReactNode } from 'react';
-
-import { WindowSizeContext } from '@shared/context/WindowSizeContext';
-
+import { describe, expect, it } from 'vitest';
 import useWindowSizeContext from './use-window-size-context';
 
 describe('Hooks', () => {

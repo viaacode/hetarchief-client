@@ -1,12 +1,11 @@
-import { jest } from '@jest/globals';
 import { Button } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import '@testing-library/jest-dom';
 
+import { describe, expect, it, vi } from 'vitest';
 import { mockStore } from '../../../../__mocks__/store';
-
 import BladeManager from './BladeManager';
 
 const renderBladeManager = (currentBlade = 0, onClose = () => null) => {
@@ -65,7 +64,7 @@ describe('Component: <Blade /> (default)', () => {
 	});
 
 	it('render call onClose when the close button is clicked', () => {
-		const onClick = jest.fn() as () => null;
+		const onClick = vi.fn() as () => null;
 		renderBladeManager(2, onClick);
 
 		const closeButton = screen.getByText('Blade 1').parentElement?.previousElementSibling;
@@ -78,7 +77,7 @@ describe('Component: <Blade /> (default)', () => {
 	});
 
 	it('render call onClose when the overlay is clicked', () => {
-		const onClick = jest.fn() as () => null;
+		const onClick = vi.fn() as () => null;
 		renderBladeManager(1, onClick);
 
 		const overlay = screen.getByText('Blade 1').parentElement?.previousElementSibling;

@@ -1,11 +1,11 @@
-import { renderHook } from '@testing-library/react';
-import type { ReactNode } from 'react';
-
 import {
 	BladeManagerContext,
 	type BladeManagerContextValue,
 } from '@shared/context/BladeManagerContext';
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context/use-blade-manager-context';
+import { renderHook } from '@testing-library/react';
+import type { ReactNode } from 'react';
+import { describe, expect, it } from 'vitest';
 
 describe('Hooks', () => {
 	describe('useBladeManagerContext()', () => {

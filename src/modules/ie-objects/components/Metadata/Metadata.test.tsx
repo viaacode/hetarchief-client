@@ -1,14 +1,14 @@
-import { render } from '@testing-library/react';
-
 import type {
 	MetadataItem,
 	MetadataListProps,
 } from '@ie-objects/components/Metadata/Metadata.types';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
+import { render } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
-import Metadata from './Metadata';
+import { describe, expect, it } from 'vitest';
 import { metadataMock } from './__mocks__/metadata';
+import Metadata from './Metadata';
 
 const renderMetadataList = ({ ...args }: Partial<MetadataListProps>, metadata: MetadataItem[]) => {
 	return render(

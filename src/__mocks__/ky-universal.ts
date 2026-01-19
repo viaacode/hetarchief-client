@@ -1,4 +1,4 @@
-import { jest } from '@jest/globals';
+import { vi } from 'vitest';
 
 const json = () => null;
 const kyResponse = { json };
@@ -8,6 +8,9 @@ kyInstance.get = () => kyResponse;
 
 const create = () => kyInstance;
 
-export default jest.mock('ky-universal', () => ({
+const kyMock = {
 	create,
-}));
+	default: { create },
+};
+
+vi.mock('ky-universal', () => kyMock);

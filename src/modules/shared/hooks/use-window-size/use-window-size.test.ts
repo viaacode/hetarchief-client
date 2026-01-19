@@ -1,5 +1,5 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
-
+import { describe, expect, it } from 'vitest';
 import useWindowSize from './use-window-size';
 
 // biome-ignore lint/suspicious/noExplicitAny: No typing yet

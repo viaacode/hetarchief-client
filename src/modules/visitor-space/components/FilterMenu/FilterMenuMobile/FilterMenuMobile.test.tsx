@@ -1,5 +1,4 @@
-// biome-ignore lint/correctness/noUnusedImports: We still need the import
-import FilterMenuMobile from './FilterMenuMobile';
+import { describe, it } from 'vitest';
 
 describe('Components', () => {
 	describe('<FilterMenuMobile />', () => {

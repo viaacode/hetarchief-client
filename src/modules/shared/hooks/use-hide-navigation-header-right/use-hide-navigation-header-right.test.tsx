@@ -1,18 +1,17 @@
-import { jest } from '@jest/globals';
 import { renderHook } from '@testing-library/react';
-
+import { describe, expect, it, vi } from 'vitest';
 import useHideNavigationHeaderRight from './use-hide-navigation-header-right';
 
-let mockDispatch = jest.fn();
-jest.mock('react-redux', () => ({
-	useSelector: jest.fn(),
+let mockDispatch = vi.fn();
+vi.mock('react-redux', () => ({
+	useSelector: vi.fn(),
 	useDispatch: () => mockDispatch,
 }));
 
 describe('Hooks', () => {
 	describe('UseHideNavigationHeaderRight', () => {
 		it('Should set showNavigationHeaderRight in the store', () => {
-			mockDispatch = jest.fn();
+			mockDispatch = vi.fn();
 			renderHook(() => useHideNavigationHeaderRight());
 
 			expect(mockDispatch).toHaveBeenCalled();
@@ -24,7 +23,7 @@ describe('Hooks', () => {
 		});
 
 		it('Should unset showNavigationHeaderRight in the store', () => {
-			mockDispatch = jest.fn();
+			mockDispatch = vi.fn();
 			renderHook(() => useHideNavigationHeaderRight(true));
 
 			expect(mockDispatch).toHaveBeenCalled();

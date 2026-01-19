@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { parseSitemapPriorities, stringifySitemapPriorities } from './parse-sitemap-priorities';
 import {
 	INVALID_SITEMAP_PRIORITIES,

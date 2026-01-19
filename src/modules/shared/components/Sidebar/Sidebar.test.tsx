@@ -1,6 +1,5 @@
 import { render } from '@testing-library/react';
-import '@testing-library/jest-dom';
-
+import { describe, expect, it } from 'vitest';
 import Sidebar from './Sidebar';
 
 const renderSidebar = ({ title = 'some title', children = <></>, ...rest }) => {

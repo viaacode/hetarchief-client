@@ -1,6 +1,7 @@
-// import { jest } from '@jest/globals';
+// import { vi } from 'vitest';
 // import { fireEvent, render } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { describe, expect, it } from 'vitest';
+import '@testing-library/jest-dom'; // import DynamicActionMenu from './DynamicActionMenu';
 
 // import DynamicActionMenu from './DynamicActionMenu';
 // import { dynamicActionMenuMock } from './__mocks__/dynamic-action-menu';
@@ -12,7 +13,7 @@ import '@testing-library/jest-dom';
 describe('Components', () => {
 	describe('<DynamicactionMenu />', () => {
 		// TODO find out why this test fails after the vite build switch
-		test('skip', () => {
+		it('skip', () => {
 			expect(true).toBe(true);
 		});
 		// it('Should set the correct class name', () => {
@@ -54,7 +55,7 @@ describe('Components', () => {
 		// });
 		//
 		// it('Should call the onClickAction callback when a button is clicked', () => {
-		// 	const onClickAction = jest.fn();
+		// 	const onClickAction = vi.fn();
 		// 	const { getAllByRole } = renderObjectPlaceholder({ onClickAction });
 		//
 		// 	const buttons = getAllByRole('button');

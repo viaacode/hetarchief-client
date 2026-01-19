@@ -1,10 +1,9 @@
+import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
+import { Locale } from '@shared/utils/i18n';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { queryByText, render, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
-
-import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
-import { Locale } from '@shared/utils/i18n';
-
+import { describe, expect, it } from 'vitest';
 import { mockStore } from '../../__mocks__/store';
 import Home from '../../pages/bezoek/index';
 

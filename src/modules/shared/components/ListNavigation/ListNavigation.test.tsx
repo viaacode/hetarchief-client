@@ -1,14 +1,12 @@
-import { jest } from '@jest/globals';
 import { fireEvent, render } from '@testing-library/react';
 import Link from 'next/link';
-import '@testing-library/jest-dom';
-
-import ListNavigation from './ListNavigation';
+import { describe, expect, it, vi } from 'vitest';
 import {
 	mockListNavigationItem,
 	mockListNavigationItemWithoutChildren,
 	secondaryListNavigationMock,
 } from './__mocks__/list-navigation';
+import ListNavigation from './ListNavigation';
 
 const renderListNavigation = ({ items = secondaryListNavigationMock.listItems, ...rest }) => {
 	return render(<ListNavigation listItems={items} {...rest} />);
@@ -88,7 +86,7 @@ describe('Component: <ListNavigation /> (default)', () => {
 	});
 
 	it('Should call onClick handler', () => {
-		const onClick = jest.fn();
+		const onClick = vi.fn();
 		const { getByText } = renderListNavigation({
 			items: mockListNavigationItem(),
 			onClick,

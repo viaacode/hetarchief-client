@@ -1,10 +1,8 @@
-import { render, screen } from '@testing-library/react';
-
 import type { IconTypes } from '@shared/components/Icon';
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
-
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 import Placeholder from './Placeholder';
-import '@testing-library/jest-dom';
 
 const parseIconName = (name: IconNamesLight | IconNamesSolid): string => name.split('--')[0];
 

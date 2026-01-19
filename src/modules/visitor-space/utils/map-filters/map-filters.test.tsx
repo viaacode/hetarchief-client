@@ -1,5 +1,5 @@
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-
+import { describe, expect, it } from 'vitest';
 import { mapFiltersToTags, tagPrefix } from './map-filters';
 
 describe('Utils', () => {

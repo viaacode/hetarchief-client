@@ -1,6 +1,7 @@
 // import { render } from '@testing-library/react';
 // import { Provider } from 'react-redux';
 // import configureStore from 'redux-mock-store';
+import { describe, expect, it } from 'vitest';
 import '@testing-library/jest-dom';
 
 // import { AppState } from '@shared/store';
@@ -35,7 +36,7 @@ import '@testing-library/jest-dom';
 describe('Components', () => {
 	describe('<VisitorSpaceSettings />', () => {
 		// TODO find out why this test fails after the vite build switch
-		test('skip', () => {
+		it('skip', () => {
 			expect(true).toBe(true);
 		});
 		// it('Should set the correct class name', () => {

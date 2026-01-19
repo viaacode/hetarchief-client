@@ -1,15 +1,11 @@
-import { jest } from '@jest/globals';
 import { fireEvent, render } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { Provider } from 'react-redux';
-
+import { describe, expect, it, vi } from 'vitest';
 import { mockStore } from '../../../../__mocks__/store';
-
+import { mockBladeProps } from './__mocks__/blade';
 import { Blade } from './Blade';
 import type { BladeProps } from './Blade.types';
-import { mockBladeProps } from './__mocks__/blade';
-
-import '@testing-library/jest-dom';
 
 const renderBlade = (
 	bladeProps: BladeProps = mockBladeProps,
@@ -84,7 +80,7 @@ describe('Component: <Blade /> (default)', () => {
 	});
 
 	it('Should call onClose when the close button is clicked', () => {
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		const { getByRole } = renderBlade({
 			...mockBladeProps,
 			onClose,
@@ -109,7 +105,7 @@ describe('Component: <Blade /> (default)', () => {
 	});
 
 	it('Should call onClose when the overlay is clicked', () => {
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		const { container } = renderBlade({ ...mockBladeProps, onClose });
 
 		const overlay = container.firstChild;

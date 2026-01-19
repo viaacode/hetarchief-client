@@ -1,11 +1,8 @@
-import { jest } from '@jest/globals';
-import { fireEvent, render, type RenderOptions, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { fireEvent, type RenderOptions, render, screen } from '@testing-library/react';
 import type { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
-
+import { describe, expect, it, vi } from 'vitest';
 import { mockStore } from '../../../../__mocks__/store';
-
 import Modal from './Modal';
 import type { ModalProps } from './Modal.types';
 
@@ -62,7 +59,7 @@ describe('Component: <Modal />', () => {
 
 	// Note: no need to test a function that changes isOpen, state & prop-binding have their own framework-level tests
 	it('Should call a function when pressing the close button', () => {
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		renderModal({ onClose });
 
 		const close = screen.getByText(closeIcon);

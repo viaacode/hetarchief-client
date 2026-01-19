@@ -1,11 +1,9 @@
-import { jest } from '@jest/globals';
-import { fireEvent, render } from '@testing-library/react';
-
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-
+import { fireEvent, render } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import { toggleMock } from './__mocks__/toggle';
 import Toggle from './Toggle';
 import type { ToggleOption, ToggleProps } from './Toggle.types';
-import { toggleMock } from './__mocks__/toggle';
 
 const renderToggle = (mock: ToggleProps = toggleMock) => {
 	return render(<Toggle {...mock} />);
@@ -81,7 +79,7 @@ describe('Component: <Toggle /> (default)', () => {
 	});
 
 	it('Should call onChange when an option is clicked', () => {
-		const onChangeHandler = jest.fn();
+		const onChangeHandler = vi.fn();
 		const { getAllByRole } = renderToggle({
 			...toggleMock,
 			onChange: onChangeHandler,
