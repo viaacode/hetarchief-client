@@ -1,4 +1,7 @@
-import { handleDownloadMaterialRequest } from '@account/utils/handle-download-material-request';
+import {
+	determineHasDownloadExpired,
+	handleDownloadMaterialRequest,
+} from '@account/utils/handle-download-material-request';
 import { type MaterialRequest, MaterialRequestStatus } from '@material-requests/types';
 import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
@@ -12,7 +15,11 @@ interface MaterialRequestStatusPillProps {
 }
 
 const MaterialRequestDownloadButton: FC<MaterialRequestStatusPillProps> = ({ materialRequest }) => {
-	if (materialRequest.status !== MaterialRequestStatus.APPROVED || !materialRequest.downloadUrl) {
+	if (
+		materialRequest.status !== MaterialRequestStatus.APPROVED ||
+		!materialRequest.downloadUrl ||
+		determineHasDownloadExpired(materialRequest)
+	) {
 		return null;
 	}
 

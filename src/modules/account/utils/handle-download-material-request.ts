@@ -22,6 +22,9 @@ export function handleDownloadMaterialRequest(materialRequest: MaterialRequest):
 	const hasDownloadExpired = determineHasDownloadExpired(materialRequest);
 
 	if (hasDownloadExpired || !materialRequest.downloadUrl) {
+		console.error(
+			`The download has expired (${hasDownloadExpired}) or has no download url ('${materialRequest.downloadUrl}')`
+		);
 		return;
 	}
 
