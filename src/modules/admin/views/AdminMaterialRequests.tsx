@@ -62,7 +62,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
 	const [filters, setFilters] = useQueryParams(ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const [selectedMaintainers, setSelectedMaintainers] = useState<string[]>(
-		(filters['maintainerIds'] || []) as string[]
+		(filters.maintainerIds || []) as string[]
 	);
 	const [selectedTypes, setSelectedTypes] = useState<string[]>(
 		(filters[QUERY_PARAM_KEY.TYPE] || []) as string[]

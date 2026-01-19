@@ -13,10 +13,6 @@ import {
 	type MaterialRequestDownloadQuality,
 	MaterialRequestKeys,
 } from '@material-requests/types';
-import {
-	formatDurationHoursMinutesSeconds,
-	formatDurationMinutesSeconds,
-} from '@meemoo/react-components';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { Loading } from '@shared/components/Loading';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
@@ -33,7 +29,6 @@ import {
 	setShowMaterialRequestCenter,
 } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
-import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitorLayout } from '@visitor-layout/index';
 import clsx from 'clsx';
