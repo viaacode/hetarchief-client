@@ -1,10 +1,3 @@
-import { useSlot } from '@meemoo/react-components';
-import clsx from 'clsx';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useCallback, useEffect, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
-
 import { ADMIN_NAVIGATION_LINKS } from '@admin/const/Routing.const';
 import type { AdminLayoutComponent } from '@admin/layouts';
 import {
@@ -13,6 +6,7 @@ import {
 	AdminFiltersLeft,
 	AdminFiltersRight,
 } from '@admin/layouts/AdminLayout/AdminLayout.slots';
+import { useSlot } from '@meemoo/react-components';
 import type { ListNavigationItem } from '@shared/components/ListNavigation';
 import { globalLabelKeys } from '@shared/const';
 import { tHtml } from '@shared/helpers/translate';
@@ -20,7 +14,13 @@ import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
+import clsx from 'clsx';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useCallback, useEffect, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
 
+import '@meemoo/admin-core-ui/admin.css';
 import styles from './AdminLayout.module.scss';
 
 const AdminLayout: AdminLayoutComponent = ({
