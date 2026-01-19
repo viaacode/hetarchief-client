@@ -307,7 +307,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 				pagination={renderPagination}
 				onSortChange={onSortChange}
 				onRowClick={onRowClick}
-				hideTable={noData || isFetching}
+				showTable={!noData && !isFetching}
 				enableRowFocusOnClick={true}
 			/>
 		);

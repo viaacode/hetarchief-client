@@ -181,7 +181,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 						onRowClick={onRowClick}
 						onSortChange={onSortChange}
 						sortingIcons={sortingIcons}
-						hideTable={noData || isLoadingVisitRequests}
+						showTable={!noData && !isLoadingVisitRequests}
 						enableRowFocusOnClick={true}
 						pagination={({ gotoPage }) => {
 							return (

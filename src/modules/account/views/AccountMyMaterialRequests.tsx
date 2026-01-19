@@ -267,7 +267,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 				pagination={renderPagination}
 				onSortChange={onSortChange}
 				onRowClick={onRowClick}
-				hideTable={noData || isFetching}
+				showTable={!noData && !isFetching}
 				enableRowFocusOnClick={true}
 			/>
 		);

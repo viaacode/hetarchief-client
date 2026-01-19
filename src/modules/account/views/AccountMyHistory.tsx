@@ -182,7 +182,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 						}}
 						onSortChange={onSortChange}
 						sortingIcons={sortingIcons}
-						hideTable={!hasData}
+						showTable={hasData}
 						enableRowFocusOnClick={true}
 						pagination={({ gotoPage }) => {
 							return (

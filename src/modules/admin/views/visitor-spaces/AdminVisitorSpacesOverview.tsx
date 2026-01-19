@@ -197,7 +197,7 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalU
 					}}
 					onSortChange={onSortChange}
 					sortingIcons={sortingIcons}
-					hideTable={noData || isFetching}
+					showTable={!noData && !isFetching}
 					enableRowFocusOnClick={true}
 					pagination={({ gotoPage }) => {
 						return (

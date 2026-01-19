@@ -336,7 +336,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 				pagination={renderPagination}
 				onSortChange={onSortChange}
 				onRowClick={onRowClick}
-				hideTable={noData || isLoadingMaterialRequests}
+				showTable={!noData && !isLoadingMaterialRequests}
 				enableRowFocusOnClick={true}
 			/>
 		);

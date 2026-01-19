@@ -189,7 +189,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 						}}
 						onSortChange={onSortChange}
 						sortingIcons={sortingIcons}
-						hideTable={noData || isFetching}
+						showTable={!noData && !isFetching}
 						enableRowFocusOnClick={true}
 						pagination={({ gotoPage }) => {
 							return (
