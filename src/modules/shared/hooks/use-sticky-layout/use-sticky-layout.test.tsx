@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import useStickyLayout from './use-sticky-layout';
 
 let mockDispatch = vi.fn();
@@ -10,8 +10,11 @@ vi.mock('react-redux', () => ({
 
 describe('Hooks', () => {
 	describe('useStickyLayout', () => {
-		it('Should set isStickyLayout in the store', () => {
+		beforeEach(() => {
 			mockDispatch = vi.fn();
+		});
+
+		it('Should set isStickyLayout in the store', () => {
 			renderHook(() => useStickyLayout());
 
 			expect(mockDispatch).toHaveBeenCalled();
@@ -23,7 +26,6 @@ describe('Hooks', () => {
 		});
 
 		it('Should unset isStickyLayout in the store', () => {
-			mockDispatch = vi.fn();
 			renderHook(() => useStickyLayout(false));
 
 			expect(mockDispatch).toHaveBeenCalled();

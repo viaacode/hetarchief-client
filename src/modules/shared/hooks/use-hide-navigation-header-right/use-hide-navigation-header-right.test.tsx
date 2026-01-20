@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import useHideNavigationHeaderRight from './use-hide-navigation-header-right';
 
 let mockDispatch = vi.fn();
@@ -10,8 +10,10 @@ vi.mock('react-redux', () => ({
 
 describe('Hooks', () => {
 	describe('UseHideNavigationHeaderRight', () => {
-		it('Should set showNavigationHeaderRight in the store', () => {
+		beforeEach(() => {
 			mockDispatch = vi.fn();
+		});
+		it('Should set showNavigationHeaderRight in the store', () => {
 			renderHook(() => useHideNavigationHeaderRight());
 
 			expect(mockDispatch).toHaveBeenCalled();
@@ -23,7 +25,6 @@ describe('Hooks', () => {
 		});
 
 		it('Should unset showNavigationHeaderRight in the store', () => {
-			mockDispatch = vi.fn();
 			renderHook(() => useHideNavigationHeaderRight(true));
 
 			expect(mockDispatch).toHaveBeenCalled();

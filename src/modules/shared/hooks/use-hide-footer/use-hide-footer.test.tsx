@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import useHideFooter from './use-hide-footer';
 
 let mockDispatch = vi.fn();
@@ -10,8 +10,11 @@ vi.mock('react-redux', () => ({
 
 describe('Hooks', () => {
 	describe('useHideFooter', () => {
-		it('Should set showFooter in the store', () => {
+		beforeEach(() => {
 			mockDispatch = vi.fn();
+		});
+
+		it('Should set showFooter in the store', () => {
 			renderHook(() => useHideFooter());
 
 			expect(mockDispatch).toHaveBeenCalled();
@@ -23,7 +26,6 @@ describe('Hooks', () => {
 		});
 
 		it('Should unset showFooter in the store', () => {
-			mockDispatch = vi.fn();
 			renderHook(() => useHideFooter(true));
 
 			expect(mockDispatch).toHaveBeenCalled();
