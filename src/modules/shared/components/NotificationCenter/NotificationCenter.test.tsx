@@ -1,11 +1,10 @@
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
-
+import { describe, expect, it } from 'vitest';
 import { mockStore } from '../../../../__mocks__/store';
-
+import { NOTIFICATIONS_FIRST_PAGE, notificationCenterMock } from './__mocks__/notification-center';
 import NotificationCenter from './NotificationCenter';
 import type { NotificationCenterProps } from './NotificationCenter.types';
-import { notificationCenterMock, NOTIFICATIONS_FIRST_PAGE } from './__mocks__/notification-center';
 
 const renderNotificationCenter = (args: Partial<NotificationCenterProps>) => {
 	return render(

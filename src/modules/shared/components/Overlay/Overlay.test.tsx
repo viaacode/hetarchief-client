@@ -1,6 +1,5 @@
-import { jest } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react';
-
+import { describe, expect, it, vi } from 'vitest';
 import Overlay from './Overlay';
 
 describe('Component: <Overlay /> (default)', () => {
@@ -59,7 +58,7 @@ describe('Component: <Overlay /> (default)', () => {
 
 	it('Should call the onClick handler when clicked', () => {
 		const testId = 'overlayWrapper';
-		const onClickHandler = jest.fn();
+		const onClickHandler = vi.fn();
 
 		render(
 			<div data-testid={testId}>

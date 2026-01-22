@@ -1,19 +1,17 @@
-import { jest } from '@jest/globals';
 import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
-
+import { describe, expect, it, vi } from 'vitest';
 import { mockTabs } from '../__mocks__/tabs';
-
-import ScrollableTabs from './ScrollableTabs';
+import ScrollableTabs from './ScrollableTabs'; // Mock ResizeObserver used in ScrollableTabs component
 
 // Mock ResizeObserver used in ScrollableTabs component
 window.ResizeObserver =
 	window.ResizeObserver ||
-	jest.fn().mockImplementation(() => ({
-		disconnect: jest.fn(),
-		observe: jest.fn(),
-		unobserve: jest.fn(),
-	}));
+	class {
+		disconnect = vi.fn();
+		observe = vi.fn();
+		unobserve = vi.fn();
+	};
 
 // Make sure the container is small enough to create overflow
 const containerWidth = 320;

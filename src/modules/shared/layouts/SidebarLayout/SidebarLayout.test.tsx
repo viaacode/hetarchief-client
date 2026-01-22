@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import type { PropsWithChildren } from 'react';
 import '@testing-library/jest-dom';
 
+import { describe, expect, it } from 'vitest';
 import SidebarLayout from './SidebarLayout';
 import type { SidebarLayoutProps } from './SidebarLayout.types';
 

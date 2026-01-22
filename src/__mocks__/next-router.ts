@@ -1,11 +1,11 @@
-import { jest } from '@jest/globals';
+import { vi } from 'vitest';
 
-export default jest.mock('next/router', () => ({
+vi.mock('next/router', () => ({
 	useRouter: () => {
 		return {
 			asPath: 'http://hetarchief.be',
-			push: jest.fn(),
-			replace: jest.fn(),
+			push: vi.fn(),
+			replace: vi.fn(),
 		};
 	},
 }));

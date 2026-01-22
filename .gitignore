@@ -57,3 +57,6 @@ dist/
 
 tests/end2end.xml
 tmp/
+
+# ignore Claude AI files
+.claude/

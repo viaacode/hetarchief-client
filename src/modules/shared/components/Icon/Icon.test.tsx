@@ -1,8 +1,6 @@
-import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
-
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
-
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 import Icon from './Icon';
 
 const parseIconName = (name: IconNamesLight | IconNamesSolid): string => name.split('--')[0];

@@ -1,20 +1,19 @@
-import { jest } from '@jest/globals';
-// import { render, screen, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { describe, expect, it, vi } from 'vitest'; // import { render, screen, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom'; // import Navigation from './Navigation';
 
 // import Navigation from './Navigation';
 // import { MOCK_HAMBURGER_PROPS, MOCK_ITEMS_LEFT, MOCK_ITEMS_RIGHT } from './__mocks__/navigation';
 
-const mockDispatch = jest.fn();
-jest.mock('react-redux', () => ({
-	useSelector: jest.fn(),
+const mockDispatch = vi.fn();
+vi.mock('react-redux', () => ({
+	useSelector: vi.fn(),
 	useDispatch: () => mockDispatch,
 }));
 
 describe('Components', () => {
 	describe('<Navigation />', () => {
 		// TODO find out why this test fails after the vite build switch
-		test('skip', () => {
+		it('skip', () => {
 			expect(true).toBe(true);
 		});
 		// it('Should render children in the left section', () => {

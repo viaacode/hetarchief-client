@@ -1,13 +1,11 @@
-import { jest } from '@jest/globals';
-import { render } from '@testing-library/react';
-import React, { type ReactNode } from 'react';
-
 import type { CollapsableBladeProps } from '@ie-objects/components/CollapsableBlade';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-
-import CollapsableBlade from './CollapsableBlade';
+import { render } from '@testing-library/react';
+import React, { type ReactNode } from 'react';
+import { describe, expect, it, vi } from 'vitest';
 import { collapsableBladeMock } from './__mocks__/CollapsedBlade.mock';
+import CollapsableBlade from './CollapsableBlade';
 
 import '@testing-library/jest-dom';
 
@@ -57,7 +55,7 @@ describe('Components', () => {
 		});
 
 		it('Should pass props to content function', () => {
-			const renderContent = jest.fn() as (hidden: boolean) => ReactNode;
+			const renderContent = vi.fn() as (hidden: boolean) => ReactNode;
 			renderCollapsableBlade({
 				renderContent,
 				isOpen: false,

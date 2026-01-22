@@ -1,14 +1,11 @@
-import { jest } from '@jest/globals';
 import { Button } from '@meemoo/react-components';
-import { fireEvent, render } from '@testing-library/react';
-import '@testing-library/jest-dom';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-
+import { fireEvent, render } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import { calloutMock } from './__mocks__/callout';
 import Callout from './Callout';
 import type { CalloutProps } from './Callout.types';
-import { calloutMock } from './__mocks__/callout';
 
 const renderCallout = (mock: CalloutProps = calloutMock) => {
 	return render(<Callout {...mock} />);
@@ -50,7 +47,7 @@ describe('Component: <Callout /> (default)', () => {
 	});
 
 	it('Should handle action click', () => {
-		const onClick = jest.fn();
+		const onClick = vi.fn();
 		const action = <Button label="foo" onClick={onClick} />;
 		const { getByText } = renderCallout({ ...calloutMock, action });
 

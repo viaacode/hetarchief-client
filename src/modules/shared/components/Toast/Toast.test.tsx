@@ -1,10 +1,8 @@
-import { jest } from '@jest/globals';
 import { fireEvent, render } from '@testing-library/react';
-import '@testing-library/jest-dom';
-
+import { describe, expect, it, vi } from 'vitest';
+import { toastMock } from './__mocks__/toast';
 import Toast from './Toast';
 import type { ToastProps } from './Toast.types';
-import { toastMock } from './__mocks__/toast';
 
 const renderToast = (mock: ToastProps, { ...rest }) => {
 	return render(<Toast {...mock} {...rest} />);
@@ -47,7 +45,7 @@ describe('Component: <Toast /> (default)', () => {
 	});
 
 	it('should call onClose function on button click', () => {
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		const { getByText } = renderToast(toastMock, { onClose });
 
 		const button = getByText(toastMock.buttonLabel);

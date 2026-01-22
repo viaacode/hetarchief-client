@@ -1,18 +1,20 @@
-import { jest } from '@jest/globals';
 import { renderHook } from '@testing-library/react';
-
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import useHideFooter from './use-hide-footer';
 
-let mockDispatch = jest.fn();
-jest.mock('react-redux', () => ({
-	useSelector: jest.fn(),
+let mockDispatch = vi.fn();
+vi.mock('react-redux', () => ({
+	useSelector: vi.fn(),
 	useDispatch: () => mockDispatch,
 }));
 
 describe('Hooks', () => {
 	describe('useHideFooter', () => {
+		beforeEach(() => {
+			mockDispatch = vi.fn();
+		});
+
 		it('Should set showFooter in the store', () => {
-			mockDispatch = jest.fn();
 			renderHook(() => useHideFooter());
 
 			expect(mockDispatch).toHaveBeenCalled();
@@ -24,7 +26,6 @@ describe('Hooks', () => {
 		});
 
 		it('Should unset showFooter in the store', () => {
-			mockDispatch = jest.fn();
 			renderHook(() => useHideFooter(true));
 
 			expect(mockDispatch).toHaveBeenCalled();

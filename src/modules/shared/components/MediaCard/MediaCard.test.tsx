@@ -1,6 +1,7 @@
+import { describe, expect, it } from 'vitest';
+
 // import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // import { render, RenderResult, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
 // import { ReactNode } from 'react';
 // import { Provider } from 'react-redux';
 //
@@ -24,7 +25,7 @@ import '@testing-library/jest-dom';
 
 describe('Component: <MediaCard />', () => {
 	// TODO find out why this test fails after the vite build switch
-	test('skip', () => {
+	it('skip', () => {
 		expect(true).toBe(true);
 	});
 	// let rendered: RenderResult;

@@ -1,4 +1,5 @@
 import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
+import { describe, expect, it } from 'vitest';
 
 describe('Extract snippet by search term', () => {
 	it('should return start of full text if searchterm is not found', () => {
