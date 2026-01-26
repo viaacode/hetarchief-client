@@ -13,6 +13,7 @@ import { Loading } from '@shared/components/Loading';
 import { getValidStartAndEnd } from '@shared/helpers/cut-start-and-end';
 import { useGetFileDuration } from '@shared/hooks/use-get-file-duration';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
+import { IeObjectType } from '@shared/types/ie-objects';
 import { isNil } from 'lodash-es';
 import getConfig from 'next/config';
 import React, { type FC, useCallback, useEffect, useState } from 'react';
@@ -93,7 +94,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	const peakFileStoredAt: string | null = getFilesByType(JSON_FORMATS)?.[0]?.storedAt || null;
 	const { data: peakJson, isLoading: isLoadingPeakFile } = useGetPeakFile(
 		peakFileStoredAt,
-		dctermsFormat === 'audio'
+		dctermsFormat === IeObjectType.AUDIO || dctermsFormat === IeObjectType.AUDIO_FRAGMENT
 	);
 
 	if (isLoadingPlayableUrl || isLoadingMediaDuration) {
