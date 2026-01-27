@@ -1,5 +1,4 @@
-import { selectUser } from '@auth/store/user';
-import type { User } from '@auth/types';
+import { selectCommonUser } from '@auth/store/user';
 import type { IeObjectFile } from '@ie-objects/ie-objects.types';
 import { GET_BLANK_MATERIAL_REQUEST_REUSE_FORM } from '@material-requests/const';
 import { useGetMaterialRequestsForMediaItem } from '@material-requests/hooks/get-material-requests-for-media-item';
@@ -34,12 +33,14 @@ import { validateForm } from '@shared/helpers/validate-form';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount, setShowMaterialRequestCenter } from '@shared/store/ui';
+import type { AvoUserCommonUser } from '@viaa/avo2-types';
 import {
 	MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA,
 	type MaterialRequestReuseSettings,
 } from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade.const';
 import RadioButtonAccordion from '@visitor-space/components/RadioButtonAccordion/RadioButtonAccordion';
 import type { RadioButtonAccordionOption } from '@visitor-space/components/RadioButtonAccordion/RadioButtonAccordion.types';
+import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
 import { parseISO } from 'date-fns';
 import { isNil, kebabCase, noop } from 'lodash-es';
@@ -72,7 +73,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const locale = useLocale();
-	const user: User | null = useSelector(selectUser);
+	const user: AvoUserCommonUser | null = useSelector(selectCommonUser);
 	// biome-ignore lint/correctness/useExhaustiveDependencies: Only change the default values when the id of the request changes
 	const defaultFormValues = useMemo(() => {
 		return {
@@ -97,6 +98,8 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		}
 		return isEditMode || JSON.stringify(defaultFormValues) !== JSON.stringify(formValues);
 	}, [isRequestSaved, isEditMode, defaultFormValues, formValues]);
+
+	const { isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(materialRequest, user);
 
 	const {
 		data: potentialDuplicates,
@@ -344,7 +347,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					publishedOrCreatedDate={materialRequest.objectPublishedOrCreatedDate}
 					icon={getIconFromObjectType(
 						materialRequest.objectDctermsFormat,
-						!!materialRequest.objectRepresentationId
+						isObjectEssenceAccessibleToUser
 					)}
 					withBorder={false}
 				/>

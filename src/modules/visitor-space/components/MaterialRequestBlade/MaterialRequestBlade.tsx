@@ -1,8 +1,5 @@
-import { selectUser } from '@auth/store/user';
-import type { User } from '@auth/types';
-import { IE_OBJECT_INTRA_CP_LICENSES } from '@ie-objects/ie-objects.consts';
+import { selectCommonUser } from '@auth/store/user';
 import { MediaActions } from '@ie-objects/ie-objects.types';
-import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
 import { useGetMaterialRequestsForMediaItem } from '@material-requests/hooks/get-material-requests-for-media-item';
 import { MaterialRequestsService } from '@material-requests/services';
 import {
@@ -25,9 +22,10 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount, setShowMaterialRequestCenter } from '@shared/store/ui';
-import { SimpleIeObjectType } from '@shared/types/ie-objects';
+import type { AvoUserCommonUser } from '@viaa/avo2-types';
+import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
-import { intersection, noop } from 'lodash-es';
+import { noop } from 'lodash-es';
 import React, { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParam, withDefault } from 'use-query-params';
@@ -58,7 +56,6 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		objectSchemaName: objectName,
 		objectDctermsFormat,
 		objectSchemaIdentifier,
-		objectLicences,
 		objectThumbnailUrl,
 		objectPublishedOrCreatedDate,
 		objectRepresentationId,
@@ -70,14 +67,11 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	} = materialRequest;
 	const dispatch = useDispatch();
 	const locale = useLocale();
-	const user: User | null = useSelector(selectUser);
-	const simpleType = mapDcTermsFormatToSimpleType(objectDctermsFormat);
-	const triggerComplexReuseFlow =
-		(simpleType === SimpleIeObjectType.AUDIO || simpleType === SimpleIeObjectType.VIDEO) &&
-		!!user?.isKeyUser &&
-		intersection(objectLicences, IE_OBJECT_INTRA_CP_LICENSES).length > 0;
-	// We have a representation, so we know the user is allowed to see this
-	const hideViewTypeOption = !!user?.isKeyUser && !!objectRepresentationId;
+	const user: AvoUserCommonUser | null = useSelector(selectCommonUser);
+	const { isComplexReuseFlow, isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(
+		materialRequest,
+		user
+	);
 
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestType | undefined>(type);
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
@@ -103,7 +97,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 
 		// When the selected type is for re-usage and we need the more complex flow with additional information needed to be filled in
 		// Validation on duplicates depends on said information (cue points of the media, download quality, ...)
-		if (typeSelected === MaterialRequestType.REUSE && triggerComplexReuseFlow) {
+		if (typeSelected === MaterialRequestType.REUSE && isComplexReuseFlow) {
 			return false;
 		}
 
@@ -126,7 +120,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		potentialDuplicates,
 		typeSelected,
 		isLoadingPotentialDuplicates,
-		triggerComplexReuseFlow,
+		isComplexReuseFlow,
 		materialRequestId,
 		objectRepresentationId,
 	]);
@@ -177,7 +171,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				return;
 			}
 
-			if (typeSelected === MaterialRequestType.REUSE && triggerComplexReuseFlow) {
+			if (typeSelected === MaterialRequestType.REUSE && isComplexReuseFlow) {
 				setActiveBlade(MediaActions.RequestMaterialForReuse);
 				return;
 			}
@@ -226,7 +220,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			}
 
 			const shouldTriggerReuseForm =
-				typeSelected === MaterialRequestType.REUSE && triggerComplexReuseFlow;
+				typeSelected === MaterialRequestType.REUSE && isComplexReuseFlow;
 
 			if (!shouldTriggerReuseForm) {
 				toastService.notify({
@@ -329,7 +323,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		}
 
 		const addButtonLabel = (isMobile: boolean) => {
-			if (typeSelected === MaterialRequestType.REUSE && triggerComplexReuseFlow) {
+			if (typeSelected === MaterialRequestType.REUSE && isComplexReuseFlow) {
 				return isMobile
 					? tText(
 							'modules/visitor-space/components/material-request-blade/material-request-blade___vul-bijkomende-informatie-aan-mobile'
@@ -440,7 +434,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		}
 
 		// We have the complex reuse flow so no reason needed
-		if (triggerComplexReuseFlow && typeSelected === MaterialRequestType.REUSE) {
+		if (isComplexReuseFlow && typeSelected === MaterialRequestType.REUSE) {
 			return null;
 		}
 
@@ -520,7 +514,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				type={objectDctermsFormat}
 				publishedBy={maintainerName}
 				publishedOrCreatedDate={objectPublishedOrCreatedDate}
-				icon={getIconFromObjectType(objectDctermsFormat, !!materialRequest.objectRepresentationId)}
+				icon={getIconFromObjectType(objectDctermsFormat, isObjectEssenceAccessibleToUser)}
 			/>
 			<div className={styles['c-request-material__content']}>
 				<dl>
@@ -538,7 +532,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							styles['c-request-material__radio-buttons-container']
 						)}
 					>
-						{!hideViewTypeOption && (
+						{!isObjectEssenceAccessibleToUser && (
 							<RadioButton
 								aria-labelledby="radio-group-label"
 								className={styles['c-request-material__radio-button']}
