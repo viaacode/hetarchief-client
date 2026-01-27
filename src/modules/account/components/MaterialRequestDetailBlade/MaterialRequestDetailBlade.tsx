@@ -17,6 +17,7 @@ import {
 	type MaterialRequestDownloadQuality,
 	MaterialRequestStatus,
 } from '@material-requests/types';
+import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
 import { Button } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
@@ -29,6 +30,7 @@ import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
+import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate } from '@shared/utils/dates';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
 import clsx from 'clsx';
@@ -37,7 +39,6 @@ import { default as NextLink } from 'next/link';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import styles from './MaterialRequestDetailBlade.module.scss';
 
 interface MaterialRequestDetailBladeProps {
@@ -359,10 +360,17 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	const renderThumbnail = () => {
-		const { objectThumbnailUrl, reuseForm } = currentMaterialRequestDetail;
+		let { objectThumbnailUrl, reuseForm } = currentMaterialRequestDetail;
 
 		if (!reuseForm || !objectThumbnailUrl) {
 			return null;
+		}
+
+		if (
+			currentMaterialRequestDetail.objectDctermsFormat === IeObjectType.AUDIO ||
+			currentMaterialRequestDetail.objectDctermsFormat === IeObjectType.AUDIO_FRAGMENT
+		) {
+			objectThumbnailUrl = AdminConfigManager.getConfig().components.defaultAudioStill;
 		}
 
 		return renderContentBlock(

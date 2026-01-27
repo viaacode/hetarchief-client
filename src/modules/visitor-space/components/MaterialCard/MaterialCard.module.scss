@@ -101,6 +101,10 @@ $material-card-list-view-height: 13rem;
 		color: $blue;
 		padding: 0.5rem;
 		background-color: $white;
+
+		// Avoid icon clipping outline border when media card is highlighted
+		margin-left: 1px;
+		margin-top: 1px;
 	}
 
 	:global(.c-card__subtitle-wrapper) {
