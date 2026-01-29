@@ -33,20 +33,27 @@ export const ConfirmModalBeforeUnload: FC<ConfirmModalBeforeUnloadProps> = ({ wh
 	}, []);
 
 	const cancelNavigation = useCallback(() => {
-		const windowPath = window.location.pathname + window.location.search;
+		const currentRoute = window.location.pathname + window.location.search;
+		let potentialNextRoute = router.asPath;
+
+		if (router.locale !== router.defaultLocale) {
+			// Add the local to our nextRoute because router.asPath does not include to locale although we need it in cases like english
+			// This does not need to be added if the locale is the default because then the asPath matches the browser url
+			potentialNextRoute = `/${router.locale}${potentialNextRoute}`;
+		}
 
 		// With the custom modal the router and window location get out of sync
 		// When that happens we want to make sure they get in sync again in case we cancel the navigation
 		// It will reset the other values on route completion
-		if (windowPath !== router.asPath) {
-			setNextRoute(router.asPath);
+		if (currentRoute !== potentialNextRoute) {
+			setNextRoute(potentialNextRoute);
 
 			// If the navigation happened via the back button, we go forward again to the route we were on
 			if (navigationThroughBackButton) {
 				window.history.forward();
 			} else {
 				// Navigation happened via adding a new route, so we are updating it back to the old
-				router.replace(router, router.asPath);
+				router.replace(router, potentialNextRoute);
 			}
 		} else {
 			// Only reset this when the router and the window is in sync.
