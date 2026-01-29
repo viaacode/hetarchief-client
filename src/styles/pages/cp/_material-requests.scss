@@ -58,10 +58,10 @@
 				color: $neutral;
 				font-size: $font-size-sm;
 				line-height: $font-size-base;
+				text-align: left;
 
 				> .c-button__content {
 					white-space: unset;
-					text-align: left;
 				}
 			}
 		}

@@ -1,4 +1,5 @@
 import {
+	type MaterialRequest,
 	MaterialRequestCopyrightDisplay,
 	MaterialRequestDistributionAccess,
 	MaterialRequestDistributionDigitalOnline,
@@ -7,12 +8,14 @@ import {
 	MaterialRequestEditing,
 	MaterialRequestGeographicalUsage,
 	MaterialRequestIntendedUsage,
+	MaterialRequestKeys,
 	type MaterialRequestReuseForm,
 	MaterialRequestStatus,
 	MaterialRequestTimeUsage,
 	MaterialRequestType,
 } from '@material-requests/types';
 import { tText } from '@shared/helpers/translate';
+import type { ColumnInstance, HeaderGroup, TableCellProps, TableHeaderProps } from 'react-table';
 
 export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE = (): Record<
 	MaterialRequestType,
@@ -183,4 +186,32 @@ export const GET_BLANK_MATERIAL_REQUEST_REUSE_FORM = (): MaterialRequestReuseFor
 	timeUsageFrom: undefined,
 	timeUsageTo: undefined,
 	copyrightDisplay: undefined,
+});
+
+export const getAccountMaterialRequestTableColumnProps = (
+	column: HeaderGroup<MaterialRequest> | ColumnInstance<MaterialRequest>
+): Partial<TableHeaderProps> | Partial<TableCellProps> => {
+	if (column.id === MaterialRequestKeys.requestedAt) {
+		return { style: createColumnWidth('15rem') };
+	}
+
+	if (column.id === MaterialRequestKeys.type) {
+		return { style: createColumnWidth('20rem') };
+	}
+
+	if (column.id === MaterialRequestKeys.status || column.id === MaterialRequestKeys.downloadUrl) {
+		return { style: createColumnWidth('10rem') };
+	}
+
+	if (column.id === MaterialRequestKeys.requestGroupName) {
+		return { style: createColumnWidth('25rem') };
+	}
+
+	return {};
+};
+
+const createColumnWidth = (size: number | string): TableHeaderProps['style'] => ({
+	width: size,
+	minWidth: size,
+	maxWidth: size,
 });
