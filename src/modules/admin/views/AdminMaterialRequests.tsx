@@ -243,6 +243,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 
 	const renderPagination = ({ gotoPage }: { gotoPage: (i: number) => void }): ReactNode => (
 		<PaginationBar
+			showFirstAndLastButtons
 			{...getDefaultPaginationBarProps()}
 			startItem={Math.max(0, filters.page - 1) * ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}
 			totalItems={materialRequests?.total || 0}
