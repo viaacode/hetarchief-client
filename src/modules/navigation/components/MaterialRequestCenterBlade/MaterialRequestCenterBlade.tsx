@@ -173,7 +173,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					)}
 					{materialRequests?.length > 0 && ` (${materialRequests.length})`}
 				</h2>
-				<MaterialRequestInformation hideOnMobile={true} />
+				<MaterialRequestInformation />
 				<p className={styles['c-material-request-center-blade__more-info']}>
 					{tText(
 						'modules/navigation/components/material-request-center-blade/material-request-center-blade___vraag-dit-materiaal-rechtstreeks-aan-bij-de-aanbieder-s'
