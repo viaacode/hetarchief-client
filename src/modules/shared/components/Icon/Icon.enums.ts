@@ -14,6 +14,8 @@ export enum IconNamesLight {
 	Bookmark = 'bookmark--light',
 	Calendar = 'calendar--light',
 	Check = 'check--light',
+	ChevronsLeft = 'double-angle-left--light',
+	ChevronsRight = 'double-angle-right--light',
 	Clock = 'clock--light',
 	Compress = 'compress--light',
 	Contact = 'contact--light',

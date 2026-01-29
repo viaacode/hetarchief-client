@@ -26,9 +26,9 @@ export const getDefaultPaginationBarProps = (): Pick<
 	previousLabel: tText('modules/shared/components/pagination-bar/pagination-bar___vorige'),
 	previousIcon: <Icon name={IconNamesLight.AngleLeft} />,
 	firstLabel: tText('modules/shared/components/pagination-bar/pagination-bar___eerste'),
-	firstIcon: <Icon name={IconNamesLight.Rewind} />,
+	firstIcon: <Icon name={IconNamesLight.ChevronsLeft} />,
 	lastLabel: tText('modules/shared/components/pagination-bar/pagination-bar___laatste'),
-	lastIcon: <Icon name={IconNamesLight.FastForward} />,
+	lastIcon: <Icon name={IconNamesLight.ChevronsRight} />,
 	backToTopLabel: tText(
 		'modules/shared/components/pagination-bar/pagination-bar___terug-naar-boven'
 	),
