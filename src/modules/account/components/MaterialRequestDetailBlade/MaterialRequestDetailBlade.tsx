@@ -430,71 +430,73 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			layer={layer}
 			currentLayer={currentLayer}
 		>
-			<div className={styles['p-account-my-material-requests__content-wrapper']}>
-				<div className={styles['p-account-my-material-requests__content']}>
-					<MaterialCard
-						openInNewTab={true}
-						objectId={currentMaterialRequestDetail.objectSchemaIdentifier}
-						title={currentMaterialRequestDetail.objectSchemaName}
-						thumbnail={currentMaterialRequestDetail.objectThumbnailUrl}
-						hideThumbnail={true}
-						orientation="vertical"
-						link={itemLink}
-						type={currentMaterialRequestDetail.objectDctermsFormat}
-						publishedBy={currentMaterialRequestDetail.maintainerName}
-						publishedOrCreatedDate={currentMaterialRequestDetail.objectPublishedOrCreatedDate}
-						icon={getIconFromObjectType(
-							currentMaterialRequestDetail.objectDctermsFormat,
-							!!currentMaterialRequestDetail.objectRepresentationId
-						)}
-					/>
-				</div>
+			{isOpen && (
+				<div className={styles['p-account-my-material-requests__content-wrapper']}>
+					<div className={styles['p-account-my-material-requests__content']}>
+						<MaterialCard
+							openInNewTab={true}
+							objectId={currentMaterialRequestDetail.objectSchemaIdentifier}
+							title={currentMaterialRequestDetail.objectSchemaName}
+							thumbnail={currentMaterialRequestDetail.objectThumbnailUrl}
+							hideThumbnail={true}
+							orientation="vertical"
+							link={itemLink}
+							type={currentMaterialRequestDetail.objectDctermsFormat}
+							publishedBy={currentMaterialRequestDetail.maintainerName}
+							publishedOrCreatedDate={currentMaterialRequestDetail.objectPublishedOrCreatedDate}
+							icon={getIconFromObjectType(
+								currentMaterialRequestDetail.objectDctermsFormat,
+								!!currentMaterialRequestDetail.objectRepresentationId
+							)}
+						/>
+					</div>
 
-				<div className={styles['p-account-my-material-requests__content']}>
-					{renderRequestStatus()}
-					{renderContentBlock(
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
-						),
-						currentMaterialRequestDetail.requestGroupName
-					)}
-					{renderMotivation()}
-					{renderContentBlock(
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvrager'
-						),
-						currentMaterialRequestDetail.requesterMail,
-						currentMaterialRequestDetail.requesterFullName
-					)}
-					{renderContentBlock(
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvragende-organisatie'
-						),
-						undefined,
-						currentMaterialRequestDetail.organisation
-					)}
-					{!currentMaterialRequestDetail.reuseForm &&
-						renderContentBlock(
+					<div className={styles['p-account-my-material-requests__content']}>
+						{renderRequestStatus()}
+						{renderContentBlock(
 							tText(
-								'modules/account/components/material-request-detail-blade/material-requests___reden'
+								'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
 							),
-							currentMaterialRequestDetail.reason || '-'
+							currentMaterialRequestDetail.requestGroupName
 						)}
-
-					{!currentMaterialRequestDetail.reuseForm &&
-						currentMaterialRequestDetail.requesterCapacity &&
-						renderContentBlock(
+						{renderMotivation()}
+						{renderContentBlock(
 							tText(
-								'modules/account/components/material-request-detail-blade/material-requests___hoedanigheid'
+								'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvrager'
 							),
-							GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD()[
-								currentMaterialRequestDetail.requesterCapacity
-							]
+							currentMaterialRequestDetail.requesterMail,
+							currentMaterialRequestDetail.requesterFullName
 						)}
+						{renderContentBlock(
+							tText(
+								'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvragende-organisatie'
+							),
+							undefined,
+							currentMaterialRequestDetail.organisation
+						)}
+						{!currentMaterialRequestDetail.reuseForm &&
+							renderContentBlock(
+								tText(
+									'modules/account/components/material-request-detail-blade/material-requests___reden'
+								),
+								currentMaterialRequestDetail.reason || '-'
+							)}
 
-					{renderReuseForm()}
+						{!currentMaterialRequestDetail.reuseForm &&
+							currentMaterialRequestDetail.requesterCapacity &&
+							renderContentBlock(
+								tText(
+									'modules/account/components/material-request-detail-blade/material-requests___hoedanigheid'
+								),
+								GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD()[
+									currentMaterialRequestDetail.requesterCapacity
+								]
+							)}
+
+						{renderReuseForm()}
+					</div>
 				</div>
-			</div>
+			)}
 			<ConfirmationModal
 				text={{
 					yes: tHtml(
