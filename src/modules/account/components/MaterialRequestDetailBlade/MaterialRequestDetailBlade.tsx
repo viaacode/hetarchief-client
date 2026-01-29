@@ -452,14 +452,13 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 
 				<div className={styles['p-account-my-material-requests__content']}>
 					{renderRequestStatus()}
-					{renderMotivation()}
-
 					{renderContentBlock(
 						tText(
 							'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
 						),
 						currentMaterialRequestDetail.requestGroupName
 					)}
+					{renderMotivation()}
 					{renderContentBlock(
 						tText(
 							'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvrager'
