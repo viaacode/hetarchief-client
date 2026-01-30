@@ -84,9 +84,9 @@ import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectBreadcrumbs } from '@shared/store/ui';
-import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { Locale } from '@shared/utils/i18n';
+import { isMobileSize } from '@shared/utils/is-mobile';
 import {
 	LANGUAGES,
 	type LanguageCode,
@@ -210,7 +210,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	const canDownloadNewspaper: boolean = ieObjectPermissions.canDownloadEssence;
 
 	const windowSize = useWindowSizeContext();
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const isMobile = isMobileSize(windowSize);
 	const { data: folders } = useGetFolders();
 
 	/**
@@ -464,7 +464,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	);
 
 	const mediaActions: DynamicActionMenuProps = useMemo(() => {
-		const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+		const isMobile = isMobileSize(windowSize);
 		const originalActions = MEDIA_ACTIONS({
 			isMobile,
 			canManageFolders: canManageFolders || isAnonymous,
@@ -513,7 +513,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			actions: compact(sortedActionsWithCustomElements),
 		};
 	}, [
-		windowSize.width,
+		windowSize,
 		canManageFolders,
 		isAnonymous,
 		folders,

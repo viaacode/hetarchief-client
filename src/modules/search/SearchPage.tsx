@@ -65,7 +65,7 @@ import {
 	setLastSearchParams,
 	setShowZendesk,
 } from '@shared/store/ui';
-import { Breakpoints, type SortObject } from '@shared/types';
+import type { SortObject } from '@shared/types';
 import {
 	IeObjectsSearchFilterField,
 	IeObjectType,
@@ -74,6 +74,7 @@ import {
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
+import { isMobileSize } from '@shared/utils/is-mobile';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
@@ -209,7 +210,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 	const [isInitialPageLoad, setIsInitialPageLoad] = useState(false);
 
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const isMobile = isMobileSize(windowSize);
 	const activeSort: SortObject = {
 		orderProp,
 		orderDirection,

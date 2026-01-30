@@ -14,7 +14,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { Breakpoints } from '@shared/types';
+import { isMobileSize } from '@shared/utils/is-mobile';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import clsx from 'clsx';
 import { type FC, type ReactElement, type ReactNode, useRef, useState } from 'react';
@@ -39,7 +39,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	const size = useElementSize(listRef);
 
 	const windowSize = useWindowSizeContext();
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const isMobile = isMobileSize(windowSize);
 
 	const primaryActions = actions.filter(({ isPrimary }: ActionItem) => isPrimary);
 	const secondaryActions = actions.filter(({ isPrimary }: ActionItem) => !isPrimary);

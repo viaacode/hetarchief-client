@@ -91,11 +91,11 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectLastSearchParams, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
-import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
 import { isServerSideRendering } from '@shared/utils/is-browser';
+import { isTabletPortraitSize } from '@shared/utils/is-mobile';
 import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
@@ -439,7 +439,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
 	const isNewspaper = mediaInfo?.dctermsFormat === IeObjectType.NEWSPAPER;
 	const showFragmentSlider = allFilesToDisplayInCurrentPage.length > 1 && !isNewspaper;
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.lg); // mobile and tablet portrait
+	const isMobile = isTabletPortraitSize(windowSize); // mobile and tablet portrait
 	const hasAccessToVisitorSpaceOfObject =
 		intersection(mediaInfo?.accessThrough, [
 			IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
