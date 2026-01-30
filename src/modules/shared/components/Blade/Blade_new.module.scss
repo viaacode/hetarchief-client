@@ -1,0 +1,188 @@
+@use "sass:map";
+@use "sass:math";
+@use "src/styles/abstracts" as *;
+
+$padding-horizontal: $spacer-lg;
+$padding-horizontal-mobile: $spacer-sm;
+
+.c-blade {
+	background-color: $white;
+	bottom: 0;
+	display: grid;
+	grid-template-rows: auto auto 1fr auto;
+	margin-left: 4rem;
+	max-height: 100%;
+	width: 100%;
+	pointer-events: none;
+	position: fixed;
+	right: 0;
+	top: 0;
+	transform: translateX(100%);
+	transition:
+		transform $animate-default,
+		visibility $animate-default;
+	visibility: hidden;
+	z-index: get-z-layer("blade");
+
+	&:not(.c-blade--extra-wide){
+		max-width: $blade-max-width;
+	}
+
+	&.c-blade--extra-wide{
+		max-width: 90%;
+	}
+
+	&__content-scrolled {
+		background: $platinum;
+	}
+
+	&__top-bar-container {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	&__close-button {
+		grid-row-start: 1;
+		justify-self: flex-end;
+		margin: 2rem;
+		z-index: get-z-layer("blade");
+
+		&:only-child:not(&--absolute) {
+			margin-left: auto;
+		}
+
+		&--absolute {
+			position: absolute;
+			right: 0;
+			top: 0;
+		}
+
+		@media (max-width: $breakpoint-md) {
+			margin: auto 0 0 auto;
+		}
+	}
+
+	&__title {
+		color: $black;
+		padding: 0 ($padding-horizontal + $spacer-md) $spacer-sm $padding-horizontal;
+
+		@media (max-width: $breakpoint-md) {
+			padding: $padding-horizontal-mobile;
+
+			&--mobile-wrapper {
+				display: flex;
+				padding:0;
+			}
+		}
+
+		&.c-blade__content-scrolled {
+			border-bottom: $divider-grey;
+		}
+
+		&--text {
+			line-height: $line-height-lg;
+			font-size: $font-size-lg;
+
+			@media (max-width: $breakpoint-md) {
+				display: flex;
+			}
+		}
+
+		&--sticky-subtitle,&--subtitle {
+			padding-top: $spacer-sm;
+
+			@media (max-width: $breakpoint-md) {
+				padding-top: $spacer-xs;
+			}
+		}
+	}
+
+	&__body-wrapper {
+		grid-row-start: 3;
+		overflow: hidden auto;
+		display: flex;
+		height: 100%;
+		flex-direction: column;
+		justify-content: space-between;
+		padding: $spacer-md $padding-horizontal;
+
+		@media (max-width: $breakpoint-md) {
+			padding: $padding-horizontal-mobile;
+		}
+
+		div {
+			white-space: pre-line;
+		}
+	}
+
+	&__footer {
+		grid-row-start: 4;
+		display: flex;
+		flex-direction: column;
+		align-content: flex-end;
+		gap: $spacer-xs;
+		padding: $spacer-sm $padding-horizontal;
+
+		:global(.c-button) {
+			display: block;
+			width: 100%;
+
+			@media (max-width: $breakpoint-md) {
+				display: inline-block;
+				width: unset;
+			}
+		}
+
+		@media (max-width: $breakpoint-md) {
+			flex-direction: row-reverse;
+			padding: $padding-horizontal-mobile;
+			justify-content: space-between;
+		}
+
+		&.c-blade__content-scrolled {
+			border-top: $divider-grey;
+		}
+
+		:global(.c-button--primary):hover {
+			background-color: $white;
+			color: $teal-dark;
+			border: 1px solid $teal-dark;
+		}
+
+		:global(.c-button--secondary) {
+			background-color: $cherry;
+			border: 1px solid $cherry;
+
+			&:hover{
+				background-color: $white;
+				color: $cherry;
+				border: 1px solid $cherry;
+			}
+		}
+	}
+
+	&__overlay {
+		z-index: get-z-layer("blade");
+
+		&--managed {
+			left: auto;
+			transform: translateX(5.6rem);
+			transition:
+				opacity $timing-default linear,
+				transform $animate-default;
+			width: calc($blade-max-width + 5.6rem);
+		}
+	}
+
+	&--visible {
+		pointer-events: all;
+		transform: translateX(0);
+		visibility: visible;
+	}
+
+	&--managed {
+		width: 100%;
+	}
+}

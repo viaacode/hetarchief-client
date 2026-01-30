@@ -472,12 +472,14 @@ const AppLayout: FC<any> = ({ children }) => {
 				{isLoaded && showNavigationHeaderRight && (
 					<div className={styles['c-navigation__section--right']}>
 						<LanguageSwitcher className="c-navigation__section-right__language-switcher" />
-						<Navigation.Right
-							currentPath={router.asPath}
-							placement="right"
-							items={rightNavItems}
-							onOpenDropdowns={onOpenNavDropdowns}
-						/>
+						<WindowSizeContext.Provider value={windowSize}>
+							<Navigation.Right
+								currentPath={router.asPath}
+								placement="right"
+								items={rightNavItems}
+								onOpenDropdowns={onOpenNavDropdowns}
+							/>
+						</WindowSizeContext.Provider>
 					</div>
 				)}
 			</Navigation>

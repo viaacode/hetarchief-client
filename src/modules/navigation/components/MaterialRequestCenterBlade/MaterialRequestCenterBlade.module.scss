@@ -17,13 +17,7 @@
 		color: $black;
 	}
 
-	&__title-container {
-		color: $black;
-	}
-
 	&__more-info {
-		padding: 0 $spacer-1xl 0 $spacer-lg;
-
 		@media (max-width: $breakpoint-md) {
 			display: none;
 		}
@@ -32,10 +26,13 @@
 	&__material-container {
 		display: flex;
 		border: 0.1rem solid $silver;
-		margin: $spacer-md $spacer-lg;
 
 		& + & {
-			margin-top: 0;
+			margin-top: $spacer-md;
+
+			@media (max-width: $breakpoint-md) {
+				margin-top: $spacer-sm;
+			}
 		}
 	}
 

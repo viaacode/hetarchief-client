@@ -20,3 +20,77 @@ export interface BladeProps extends DefaultComponentProps {
 	headerBackground?: 'white' | 'platinum';
 	stickyFooter?: boolean;
 }
+
+export interface BladeNewProps extends DefaultComponentProps {
+	id: string;
+	children?: ReactNode;
+	isOpen: boolean;
+	showCloseButtonOnTop?: boolean;
+	onClose?: () => void;
+
+	// Title props
+	/**
+	 * Small text above the title <br/>
+	 * When set will make the blade extra wide <br/>
+	 * Will be hidden on mobile
+	 */
+	wideBladeTitle?: string;
+	/**
+	 * The actual title
+	 * Will always be shown
+	 */
+	title: string;
+	/**
+	 * All elements needed to be below the title <br/>
+	 * Will be sticky as well if the header is sticky
+	 */
+	stickySubTitle?: ReactNode;
+	/**
+	 * Additional elements below the title <br/>
+	 * Will be sticky on desktop but not on Mobile
+	 */
+	subTitle?: ReactNode;
+
+	// Footer props
+	/**
+	 * Depending on de setting of both buttons, the blade will set certain styling <br/>
+	 * Primary buttons will <br/>
+	 *   - always be rendered first - on top (desktop) or right (mobile)
+	 *   - black if they are the only primary
+	 *
+	 * Secondary buttons will <br/>
+	 *   - always be rendered last - bottom (desktop) or left (mobile)
+	 *   - text only (no exceptions)
+	 *
+	 * General rules
+	 *   - Only 1 button:
+	 *     - the type of the button will be ignored and set to primary unless enforceType is set
+	 *   - 2 primary buttons:
+	 *     - the order of the buttons will be kept
+	 *     - 1 will be green
+	 *     - 1 will be red
+	 *   - 2 secondary buttons:
+	 *     - the order of the buttons will be kept
+	 *     - the type of the first button will be ignored and set to primary
+	 *   - 1 primary and 1 secondary button:
+	 *     - the order of the buttons will be ignored
+	 */
+	footerButtons: BladeFooterProps;
+	stickyFooter?: boolean;
+
+	// manager types
+	layer?: number;
+	isManaged?: boolean;
+	currentLayer?: number;
+}
+
+export interface BladeFooterButton {
+	label: string;
+	type: 'primary' | 'secondary';
+	enforceSecondary?: boolean; // Only used when we have just 1 button, and need to be secondary
+	onClick?: () => void;
+	disabled?: boolean;
+	href?: string; // Determines if this is a link and will be rendered as such
+}
+
+export type BladeFooterProps = [BladeFooterButton, BladeFooterButton?];
