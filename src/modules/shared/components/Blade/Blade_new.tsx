@@ -124,9 +124,6 @@ export const BladeNew: FC<BladeNewProps> = ({
 						contentHasBeenScrolled && [styles['c-blade__content-scrolled']]
 					)}
 				>
-					{wideBladeTitle && (
-						<div className={clsx(styles['c-blade__title--wide-blade'])}>{wideBladeTitle}</div>
-					)}
 					<div className={clsx(styles['c-blade__title--mobile-wrapper'])}>
 						<h2 className={clsx(styles['c-blade__title--text'])}>{title}</h2>
 						<Button
