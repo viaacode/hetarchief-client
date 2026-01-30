@@ -49,7 +49,7 @@ export interface BladeNewProps extends DefaultComponentProps {
 	 * Additional elements below the title <br/>
 	 * Will be sticky on desktop but not on Mobile
 	 */
-	subTitle?: ReactNode;
+	subtitle?: ReactNode;
 
 	// Footer props
 	isBladeInvalid?: boolean;

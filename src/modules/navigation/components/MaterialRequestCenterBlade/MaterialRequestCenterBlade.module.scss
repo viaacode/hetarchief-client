@@ -13,12 +13,6 @@
 		color: $black;
 	}
 
-	&__more-info {
-		@media (max-width: $breakpoint-md) {
-			display: none;
-		}
-	}
-
 	&__material-container {
 		display: flex;
 		border: 0.1rem solid $silver;

@@ -8,6 +8,7 @@ $padding-horizontal-mobile: $spacer-sm;
 
 .c-blade {
 	background-color: $white;
+	color: $black;
 	bottom: 0;
 	display: grid;
 	grid-template-rows: auto auto 1fr auto;
@@ -92,7 +93,7 @@ $padding-horizontal-mobile: $spacer-sm;
 			}
 		}
 
-		&--sticky-subtitle,&--subtitle {
+		&--sticky-subtitle, &--subtitle {
 			padding-top: $spacer-sm;
 
 			@media (max-width: $breakpoint-md) {
@@ -116,6 +117,10 @@ $padding-horizontal-mobile: $spacer-sm;
 
 		div {
 			white-space: pre-line;
+		}
+
+		&--subtitle {
+			padding-bottom: $padding-horizontal-mobile;
 		}
 	}
 

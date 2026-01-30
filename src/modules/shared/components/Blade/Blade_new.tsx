@@ -29,7 +29,7 @@ export const BladeNew: FC<BladeNewProps> = ({
 	wideBladeTitle,
 	title,
 	stickySubTitle,
-	subTitle,
+	subtitle,
 	isBladeInvalid = false,
 	footerButtons,
 	stickyFooter = true,
@@ -175,7 +175,7 @@ export const BladeNew: FC<BladeNewProps> = ({
 					)}
 					<h2 className={clsx(styles['c-blade__title--text'])}>{title}</h2>
 					<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>{stickySubTitle}</div>
-					<div className={clsx(styles['c-blade__title--subtitle'])}>{subTitle}</div>
+					<div className={clsx(styles['c-blade__title--subtitle'])}>{subtitle}</div>
 				</div>
 			</>
 		);
@@ -308,7 +308,9 @@ export const BladeNew: FC<BladeNewProps> = ({
 					className={styles['c-blade__body-wrapper']}
 					onScroll={onScrollContent}
 				>
-					{isMobile && subTitle}
+					{isMobile && subtitle && (
+						<div className={clsx(styles['c-blade__body-wrapper--subtitle'])}>{subtitle}</div>
+					)}
 					{children}
 					<div className={'u-flex-grow'} />
 					{!stickyFooter && renderFooter()}

@@ -22,7 +22,9 @@ import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { setMaterialRequestCount } from '@shared/store/ui';
+import { isMobileSize } from '@shared/utils/is-mobile';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
 import { MaterialRequestForReuseBlade } from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade';
@@ -49,6 +51,10 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const locale = useLocale();
+
+	// We need different functionalities for different viewport sizes
+	const windowSize = useWindowSizeContext();
+	const isMobile = isMobileSize(windowSize);
 
 	const [selectedMaterialRequest, setSelectedMaterialRequest] = useState<MaterialRequest | null>(
 		null
@@ -296,6 +302,16 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		return title;
 	};
 
+	const getSubtitle = () => {
+		if (isMobile) {
+			return null;
+		}
+
+		return tText(
+			'modules/navigation/components/material-request-center-blade/material-request-center-blade___vraag-dit-materiaal-rechtstreeks-aan-bij-de-aanbieder-s'
+		);
+	};
+
 	return (
 		<BladeManager
 			currentLayer={getCurrentLayer()}
@@ -318,13 +334,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				isManaged
 				title={getTitle()}
 				stickySubTitle={<MaterialRequestInformation />}
-				subTitle={
-					<p className={styles['c-material-request-center-blade__more-info']}>
-						{tText(
-							'modules/navigation/components/material-request-center-blade/material-request-center-blade___vraag-dit-materiaal-rechtstreeks-aan-bij-de-aanbieder-s'
-						)}
-					</p>
-				}
+				subtitle={getSubtitle()}
 				footerButtons={getFooterButtons()}
 				stickyFooter
 			>
