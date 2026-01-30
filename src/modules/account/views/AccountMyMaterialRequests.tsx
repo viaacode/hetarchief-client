@@ -290,10 +290,9 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 				{tText('pages/account/mijn-profiel/index___mijn-materiaalaanvragen')}
 				{hasAnyMaterialRequestsPerm && (
 					<div className="u-color-neutral u-font-size-14 u-font-weight-400 u-pt-8">
-						<a href={incomingRequestHyperlink} target="_blank" rel="noopener noreferrer">
+						<a href={incomingRequestHyperlink} target="_self" rel="noopener noreferrer">
 							{incomingRequestLabel}
 						</a>
-						<Icon className="u-ml-8" name={IconNamesLight.Extern} />
 					</div>
 				)}
 			</>

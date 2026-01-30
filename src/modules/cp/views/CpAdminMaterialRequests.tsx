@@ -319,14 +319,13 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 			<div className="u-color-neutral u-font-size-14 u-font-weight-400 u-pt-8">
 				<a
 					href={ROUTES_BY_LOCALE[locale].accountMyMaterialRequests}
-					target="_blank"
+					target="_self"
 					rel="noopener noreferrer"
 				>
 					{tText(
 						'modules/cp/views/cp-admin-material-requests___ga-naar-mijn-uitgaande-materiaalaanvragen'
 					)}
 				</a>
-				<Icon className="u-ml-8" name={IconNamesLight.Extern} />
 			</div>
 		</>
 	);
