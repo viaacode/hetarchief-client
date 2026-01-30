@@ -52,6 +52,7 @@ export interface BladeNewProps extends DefaultComponentProps {
 	subTitle?: ReactNode;
 
 	// Footer props
+	isBladeInvalid?: boolean;
 	/**
 	 * Depending on de setting of both buttons, the blade will set certain styling <br/>
 	 * Primary buttons will <br/>

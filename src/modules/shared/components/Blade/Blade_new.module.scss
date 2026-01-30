@@ -2,6 +2,7 @@
 @use "sass:math";
 @use "src/styles/abstracts" as *;
 
+$sticky-background: $platinum;
 $padding-horizontal: $spacer-lg;
 $padding-horizontal-mobile: $spacer-sm;
 
@@ -32,15 +33,15 @@ $padding-horizontal-mobile: $spacer-sm;
 		max-width: 90%;
 	}
 
-	&__content-scrolled {
-		background: $platinum;
-	}
-
 	&__top-bar-container {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
+
+		&.c-blade__content-scrolled {
+			background: $sticky-background;
+		}
 	}
 
 	&__close-button {
@@ -79,6 +80,7 @@ $padding-horizontal-mobile: $spacer-sm;
 
 		&.c-blade__content-scrolled {
 			border-bottom: $divider-grey;
+			background: $sticky-background;
 		}
 
 		&--text {
@@ -119,11 +121,33 @@ $padding-horizontal-mobile: $spacer-sm;
 
 	&__footer {
 		grid-row-start: 4;
-		display: flex;
-		flex-direction: column;
-		align-content: flex-end;
 		gap: $spacer-xs;
-		padding: $spacer-sm $padding-horizontal;
+
+		&-sticky {
+			&.c-blade__content-scrolled {
+				border-top: $divider-grey;
+				background: $sticky-background;
+			}
+
+			padding: $spacer-sm $padding-horizontal;
+
+			@media (max-width: $breakpoint-md) {
+				padding: $padding-horizontal-mobile;
+			}
+		}
+
+		&-buttons {
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			align-content: flex-end;
+			gap: $spacer-xs;
+
+			@media (max-width: $breakpoint-md) {
+				flex-direction: row-reverse;
+				justify-content: space-between;
+			}
+		}
 
 		:global(.c-button) {
 			display: block;
@@ -133,16 +157,6 @@ $padding-horizontal-mobile: $spacer-sm;
 				display: inline-block;
 				width: unset;
 			}
-		}
-
-		@media (max-width: $breakpoint-md) {
-			flex-direction: row-reverse;
-			padding: $padding-horizontal-mobile;
-			justify-content: space-between;
-		}
-
-		&.c-blade__content-scrolled {
-			border-top: $divider-grey;
 		}
 
 		:global(.c-button--primary):hover {

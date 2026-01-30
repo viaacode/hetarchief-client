@@ -1,7 +1,8 @@
 import { Button, keysEscape } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { tText } from '@shared/helpers/translate';
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { useSize } from '@shared/hooks/use-size';
@@ -29,8 +30,9 @@ export const BladeNew: FC<BladeNewProps> = ({
 	title,
 	stickySubTitle,
 	subTitle,
+	isBladeInvalid = false,
 	footerButtons,
-	stickyFooter = false,
+	stickyFooter = true,
 	layer,
 }) => {
 	const [contentIsScrollable, setContentIsScrollable] = useState(false);
@@ -258,8 +260,18 @@ export const BladeNew: FC<BladeNewProps> = ({
 					contentHasBeenScrolled && [styles['c-blade__content-scrolled']]
 				)}
 			>
-				{renderFooterButton(firstButton)}
-				{renderFooterButton(lastButton)}
+				{isBladeInvalid && (
+					<RedFormWarning
+						className={clsx(styles['c-blade__footer--validation'])}
+						error={tHtml(
+							'Er staan fouten in dit formulier. Corrigeer deze en probeer het opnieuw.'
+						)}
+					/>
+				)}
+				<div className={clsx(styles['c-blade__footer-buttons'])}>
+					{renderFooterButton(firstButton)}
+					{renderFooterButton(lastButton)}
+				</div>
 			</div>
 		);
 	};
