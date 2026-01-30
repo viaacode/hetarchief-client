@@ -11,7 +11,8 @@ import {
 	MaterialRequestType,
 } from '@material-requests/types';
 import { Alert, Button, RadioButton, TextArea } from '@meemoo/react-components';
-import { Blade } from '@shared/components/Blade/Blade';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -20,12 +21,13 @@ import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount, setShowMaterialRequestCenter } from '@shared/store/ui';
 import { SimpleIeObjectType } from '@shared/types/ie-objects';
+import { isMobileSize } from '@shared/utils/is-mobile';
 import clsx from 'clsx';
 import { intersection, noop } from 'lodash-es';
 import React, { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
@@ -88,6 +90,10 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		QUERY_PARAM_KEY.ACTIVE_BLADE,
 		withDefault(StringParam, undefined)
 	);
+
+	// We need different functionalities for different viewport sizes
+	const windowSize = useWindowSizeContext();
+	const isMobile = isMobileSize(windowSize);
 
 	const {
 		data: potentialDuplicates,
@@ -284,48 +290,50 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		});
 	};
 
-	const renderTitle = (props: Pick<HTMLElement, 'id' | 'className'>) => {
-		const title = isEditMode
-			? tText(
-					'modules/visitor-space/components/material-request-blade/material-request-blade___pas-je-aanvraag-aan'
-				)
-			: tText(
-					'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
-				);
-
-		return (
-			<div className={styles['c-request-material__title-container']}>
-				<h2 {...props} style={{ paddingBottom: 0 }}>
-					{title}
-				</h2>
-				<MaterialRequestInformation />
-			</div>
+	const getTitle = () => {
+		if (isEditMode) {
+			return tText(
+				'modules/visitor-space/components/material-request-blade/material-request-blade___pas-je-aanvraag-aan'
+			);
+		}
+		return tText(
+			'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
 		);
 	};
 
-	const renderFooter = () => {
-		if (isEditMode) {
-			return (
-				<div className={styles['c-request-material__footer-container']}>
-					<Button
-						label={tText(
-							'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-opslaan'
-						)}
-						variants={['block', 'text']}
-						onClick={onEditRequest}
-						className={styles['c-request-material__verstuur-button']}
-					/>
+	const getSubtitle = () => (
+		<MaterialCard
+			className={styles['c-request-material__material']}
+			objectId={objectSchemaIdentifier}
+			title={objectName}
+			orientation={objectThumbnailUrl ? 'horizontal' : 'vertical'}
+			thumbnail={objectThumbnailUrl}
+			link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectSchemaIdentifier}`}
+			type={objectDctermsFormat}
+			publishedBy={maintainerName}
+			publishedOrCreatedDate={objectPublishedOrCreatedDate}
+			icon={getIconFromObjectType(objectDctermsFormat, !!materialRequest.objectRepresentationId)}
+		/>
+	);
 
-					<Button
-						label={tText(
-							'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
-						)}
-						variants={['block', 'text']}
-						onClick={() => onCloseModal(false)}
-						className={styles['c-request-material__annuleer-button']}
-					/>
-				</div>
-			);
+	const getFooterButtons = (): BladeFooterProps => {
+		if (isEditMode) {
+			return [
+				{
+					label: tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-opslaan'
+					),
+					type: 'primary',
+					onClick: onEditRequest,
+				},
+				{
+					label: tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
+					),
+					type: 'secondary',
+					onClick: () => onCloseModal(false),
+				},
+			];
 		}
 
 		const addButtonLabel = (isMobile: boolean) => {
@@ -348,52 +356,20 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					);
 		};
 
-		return (
-			<div className={styles['c-request-material__footer-container']}>
-				{/* ARC-1188: requested to hide single material request button
-				<Button
-					label={tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___verstuur'
-					)}
-					variants={['block', 'text']}
-					onClick={onCloseModal}
-					className={styles['c-request-material__verstuur-button']}
-				/> */}
-				{noTypeSelectedOnSave ? (
-					<RedFormWarning
-						error={tHtml(
-							'modules/visitor-space/components/material-request-blade/material-request-blade___er-staan-fouten-in-dit-formulier-corrigeer-deze-en-probeer-het-opnieuw'
-						)}
-					/>
-				) : null}
-				{renderMobileDesktop({
-					mobile: (
-						<Button
-							label={addButtonLabel(true)}
-							variants={['block', 'text', 'dark']}
-							onClick={onAddToList}
-							className={styles['c-request-material__voeg-toe-button']}
-						/>
-					),
-					desktop: (
-						<Button
-							label={addButtonLabel(false)}
-							variants={['block', 'text', 'dark']}
-							onClick={onAddToList}
-							className={styles['c-request-material__voeg-toe-button']}
-						/>
-					),
-				})}
-				<Button
-					label={tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
-					)}
-					variants={['block', 'text']}
-					onClick={() => onCloseModal(false)}
-					className={styles['c-request-material__annuleer-button']}
-				/>
-			</div>
-		);
+		return [
+			{
+				label: addButtonLabel(isMobile),
+				type: 'primary',
+				onClick: onAddToList,
+			},
+			{
+				label: tText(
+					'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
+				),
+				type: 'secondary',
+				onClick: () => onCloseModal(false),
+			},
+		];
 	};
 
 	const renderDuplicateAlertContent = (): ReactNode => {
@@ -499,29 +475,20 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	};
 
 	return (
-		<Blade
+		<BladeNew
+			id="material-request-blade"
+			className={styles['c-request-material']}
 			isOpen={isOpen}
-			renderTitle={renderTitle}
-			footer={isOpen && renderFooter()}
-			onClose={() => onCloseModal(false)}
 			layer={layer}
 			currentLayer={currentLayer}
-			className={styles['c-request-material']}
+			onClose={() => onCloseModal(false)}
+			title={getTitle()}
+			stickySubTitle={<MaterialRequestInformation />}
+			subtitle={getSubtitle()}
+			footerButtons={getFooterButtons()}
 			isManaged
-			id="material-request-blade"
+			isBladeInvalid={noTypeSelectedOnSave}
 		>
-			<MaterialCard
-				className={styles['c-request-material__material']}
-				objectId={objectSchemaIdentifier}
-				title={objectName}
-				orientation={objectThumbnailUrl ? 'horizontal' : 'vertical'}
-				thumbnail={objectThumbnailUrl}
-				link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectSchemaIdentifier}`}
-				type={objectDctermsFormat}
-				publishedBy={maintainerName}
-				publishedOrCreatedDate={objectPublishedOrCreatedDate}
-				icon={getIconFromObjectType(objectDctermsFormat, !!materialRequest.objectRepresentationId)}
-			/>
 			<div className={styles['c-request-material__content']}>
 				<dl>
 					<dt className={styles['c-request-material__content-label']}>
@@ -598,6 +565,6 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				onCancel={() => setShowConfirmTypeEdit(false)}
 				onConfirm={doEditRequest}
 			/>
-		</Blade>
+		</BladeNew>
 	);
 };
