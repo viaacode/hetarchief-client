@@ -333,7 +333,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				onClose={onCloseBlades}
 				isManaged
 				title={getTitle()}
-				stickySubTitle={<MaterialRequestInformation />}
+				stickySubtitle={<MaterialRequestInformation />}
 				subtitle={getSubtitle()}
 				footerButtons={getFooterButtons()}
 			>

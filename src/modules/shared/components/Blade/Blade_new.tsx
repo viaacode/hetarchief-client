@@ -28,7 +28,7 @@ export const BladeNew: FC<BladeNewProps> = ({
 	onClose,
 	wideBladeTitle,
 	title,
-	stickySubTitle,
+	stickySubtitle,
 	subtitle,
 	isBladeInvalid = false,
 	footerButtons,
@@ -139,7 +139,7 @@ export const BladeNew: FC<BladeNewProps> = ({
 							disabled={!isOpen}
 						/>
 					</div>
-					<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>{stickySubTitle}</div>
+					<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>{stickySubtitle}</div>
 				</div>
 			);
 		}
@@ -174,7 +174,7 @@ export const BladeNew: FC<BladeNewProps> = ({
 						<div className={clsx(styles['c-blade__title--wide-blade'])}>{wideBladeTitle}</div>
 					)}
 					<h2 className={clsx(styles['c-blade__title--text'])}>{title}</h2>
-					<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>{stickySubTitle}</div>
+					<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>{stickySubtitle}</div>
 					<div className={clsx(styles['c-blade__title--subtitle'])}>{subtitle}</div>
 				</div>
 			</>
@@ -268,7 +268,12 @@ export const BladeNew: FC<BladeNewProps> = ({
 						)}
 					/>
 				)}
-				<div className={clsx(styles['c-blade__footer-buttons'])}>
+				<div
+					className={clsx(
+						styles['c-blade__footer-buttons'],
+						styles['c-blade__footer-buttons-extra-wide']
+					)}
+				>
 					{renderFooterButton(firstButton)}
 					{renderFooterButton(lastButton)}
 				</div>

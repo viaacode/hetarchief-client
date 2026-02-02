@@ -483,7 +483,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			currentLayer={currentLayer}
 			onClose={() => onCloseModal(false)}
 			title={getTitle()}
-			stickySubTitle={<MaterialRequestInformation />}
+			stickySubtitle={<MaterialRequestInformation />}
 			subtitle={getSubtitle()}
 			footerButtons={getFooterButtons()}
 			isManaged

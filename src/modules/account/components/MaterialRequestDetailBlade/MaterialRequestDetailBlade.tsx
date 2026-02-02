@@ -419,7 +419,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			title={tText(
 				'modules/account/components/material-request-detail-blade/material-requests___detail'
 			)}
-			stickySubTitle={<MaterialRequestInformation />}
+			stickySubtitle={<MaterialRequestInformation />}
 			subtitle={
 				<MaterialCard
 					openInNewTab={true}

@@ -44,7 +44,7 @@ export interface BladeNewProps extends DefaultComponentProps {
 	 * All elements needed to be below the title <br/>
 	 * Will be sticky as well if the header is sticky
 	 */
-	stickySubTitle?: ReactNode;
+	stickySubtitle?: ReactNode;
 	/**
 	 * Additional elements below the title <br/>
 	 * Will be sticky on desktop but not on Mobile

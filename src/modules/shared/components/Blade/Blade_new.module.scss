@@ -32,6 +32,11 @@ $padding-horizontal-mobile: $spacer-sm;
 
 	&.c-blade--extra-wide{
 		max-width: 90%;
+
+
+		@media (max-width: $breakpoint-sm) {
+			max-width: 100%;
+		}
 	}
 
 	&__top-bar-container {
@@ -83,6 +88,22 @@ $padding-horizontal-mobile: $spacer-sm;
 		&.c-blade__content-scrolled {
 			border-bottom: $divider-grey;
 			background: $sticky-background;
+		}
+
+		&--wide-blade {
+			line-height: $line-height-md;
+			font-size: $font-size-md;
+			font-weight: $font-weight-bold;
+
+			+ .c-blade__title--text {
+				line-height: $line-height-2xl;
+				font-size: $font-size-2xl;
+
+				@media (max-width: $breakpoint-lg) {
+					line-height: $line-height-1xl;
+					font-size: $font-size-1xl;
+				}
+			}
 		}
 
 		&--text {
@@ -146,19 +167,31 @@ $padding-horizontal-mobile: $spacer-sm;
 			align-content: flex-end;
 			gap: $spacer-xs;
 
+			&-extra-wide {
+				flex-direction: row-reverse;
+				justify-content: space-between;
+
+				:global(.c-button) {
+					display: inline-block;
+					width: unset;
+				}
+			}
+
 			@media (max-width: $breakpoint-md) {
 				flex-direction: row-reverse;
 				justify-content: space-between;
 			}
-		}
 
-		:global(.c-button) {
-			display: block;
-			width: 100%;
+			&:not(&-extra-wide){
+				:global(.c-button) {
+					display: block;
+					width: 100%;
 
-			@media (max-width: $breakpoint-md) {
-				display: inline-block;
-				width: unset;
+					@media (max-width: $breakpoint-md) {
+						display: inline-block;
+						width: unset;
+					}
+				}
 			}
 		}
 
