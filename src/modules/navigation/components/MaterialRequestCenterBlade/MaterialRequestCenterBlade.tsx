@@ -336,7 +336,6 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				stickySubTitle={<MaterialRequestInformation />}
 				subtitle={getSubtitle()}
 				footerButtons={getFooterButtons()}
-				stickyFooter
 			>
 				{isFetching ? (
 					<Loading
