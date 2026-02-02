@@ -3,32 +3,9 @@
 $minimum-rich-text-editor-height: 21rem;
 
 .c-request-material-status-update {
-	&__title {
-		padding: 0 $spacer-lg;
-		margin-bottom: 0;
-	}
-
-	&__content-wrapper {
-		> * {
-			border-bottom: 1px solid $silver;
-
-			&:last-child {
-				border-bottom: none;
-			}
-		}
-	}
-
 	&__content {
-		padding: 0 $spacer-md $spacer-sm;
-
 		dt, dd {
 			margin-left: 0;
-		}
-
-		&:not(:first-child) {
-			border-top: 0.1rem solid $silver;
-			padding: $spacer-lg;
-			color: $black;
 		}
 
 		dl {
@@ -55,9 +32,5 @@ $minimum-rich-text-editor-height: 21rem;
 			min-height: $minimum-rich-text-editor-height !important;
 			resize: none;
 		}
-	}
-
-	&__footer-container {
-		padding: $spacer-lg;
 	}
 }
