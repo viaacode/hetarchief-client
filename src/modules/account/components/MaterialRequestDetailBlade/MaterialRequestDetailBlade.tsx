@@ -485,8 +485,8 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 							tText(
 								'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvragende-organisatie'
 							),
-							undefined,
-							currentMaterialRequestDetail.organisation
+							currentMaterialRequestDetail.requesterOrganisationSector,
+							currentMaterialRequestDetail.requesterOrganisation
 						)}
 						{!currentMaterialRequestDetail.reuseForm &&
 							renderContentBlock(
