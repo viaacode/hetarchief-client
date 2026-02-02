@@ -1016,22 +1016,18 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			stickyFooter={false}
 			isBladeInvalid={!isFormValid}
 		>
-			{isOpen && (
-				<>
-					<div className={styles['c-request-material-reuse__content-form']}>
-						{renderVideoSettings()}
-						{renderDownloadQuality()}
-						{renderOtherOptionsNotDeterminingDuplicates()}
-						{showDuplicateWarning && renderDuplicateAlert()}
-					</div>
-					<ConfirmModalBeforeUnload
-						when={hasUnsavedChanges}
-						message={tText(
-							'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ben-je-zeker-dat-je-dit-venster-wilt-sluiten-hiermee-gaat-de-voortgang-verloren-en-wordt-het-object-niet-toegevoegd-aan-jouw-aanvraaglijst-als-je-verder-werkt-en-het-toevoegt-aan-je-aanvraaglijst-kan-je-het-nadien-nog-aanpassen'
-						)}
-					/>
-				</>
-			)}
+			<div className={styles['c-request-material-reuse__content-form']}>
+				{renderVideoSettings()}
+				{renderDownloadQuality()}
+				{renderOtherOptionsNotDeterminingDuplicates()}
+				{showDuplicateWarning && renderDuplicateAlert()}
+			</div>
+			<ConfirmModalBeforeUnload
+				when={hasUnsavedChanges}
+				message={tText(
+					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ben-je-zeker-dat-je-dit-venster-wilt-sluiten-hiermee-gaat-de-voortgang-verloren-en-wordt-het-object-niet-toegevoegd-aan-jouw-aanvraaglijst-als-je-verder-werkt-en-het-toevoegt-aan-je-aanvraaglijst-kan-je-het-nadien-nog-aanpassen'
+				)}
+			/>
 		</BladeNew>
 	);
 };

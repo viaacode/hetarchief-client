@@ -457,54 +457,52 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			footerButtons={getFooterButtons()}
 			stickyFooter={canRequestBeEvaluated}
 		>
-			{isOpen && (
-				<div className={styles['p-material-request-detail__content-wrapper']}>
-					<div className={styles['p-material-request-detail__content']}>
-						{renderRequestStatus()}
-						{renderContentBlock(
+			<div className={styles['p-material-request-detail__content-wrapper']}>
+				<div className={styles['p-material-request-detail__content']}>
+					{renderRequestStatus()}
+					{renderContentBlock(
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
+						),
+						currentMaterialRequestDetail.requestGroupName
+					)}
+					{renderMotivation()}
+					{renderContentBlock(
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvrager'
+						),
+						currentMaterialRequestDetail.requesterMail,
+						currentMaterialRequestDetail.requesterFullName
+					)}
+					{renderContentBlock(
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvragende-organisatie'
+						),
+						currentMaterialRequestDetail.requesterOrganisationSector,
+						currentMaterialRequestDetail.requesterOrganisation
+					)}
+					{!currentMaterialRequestDetail.reuseForm &&
+						renderContentBlock(
 							tText(
-								'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
+								'modules/account/components/material-request-detail-blade/material-requests___reden'
 							),
-							currentMaterialRequestDetail.requestGroupName
+							currentMaterialRequestDetail.reason || '-'
 						)}
-						{renderMotivation()}
-						{renderContentBlock(
-							tText(
-								'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvrager'
-							),
-							currentMaterialRequestDetail.requesterMail,
-							currentMaterialRequestDetail.requesterFullName
-						)}
-						{renderContentBlock(
-							tText(
-								'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvragende-organisatie'
-							),
-							currentMaterialRequestDetail.requesterOrganisationSector,
-							currentMaterialRequestDetail.requesterOrganisation
-						)}
-						{!currentMaterialRequestDetail.reuseForm &&
-							renderContentBlock(
-								tText(
-									'modules/account/components/material-request-detail-blade/material-requests___reden'
-								),
-								currentMaterialRequestDetail.reason || '-'
-							)}
 
-						{!currentMaterialRequestDetail.reuseForm &&
-							currentMaterialRequestDetail.requesterCapacity &&
-							renderContentBlock(
-								tText(
-									'modules/account/components/material-request-detail-blade/material-requests___hoedanigheid'
-								),
-								GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD()[
-									currentMaterialRequestDetail.requesterCapacity
-								]
-							)}
+					{!currentMaterialRequestDetail.reuseForm &&
+						currentMaterialRequestDetail.requesterCapacity &&
+						renderContentBlock(
+							tText(
+								'modules/account/components/material-request-detail-blade/material-requests___hoedanigheid'
+							),
+							GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD()[
+								currentMaterialRequestDetail.requesterCapacity
+							]
+						)}
 
-						{renderReuseForm()}
-					</div>
+					{renderReuseForm()}
 				</div>
-			)}
+			</div>
 			<ConfirmationModal
 				text={{
 					yes: tHtml(
