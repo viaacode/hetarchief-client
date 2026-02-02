@@ -62,13 +62,14 @@ $padding-horizontal-mobile: $spacer-sm;
 		}
 
 		@media (max-width: $breakpoint-md) {
-			margin: auto 0 0 auto;
+			margin: auto 0 auto auto;
 		}
 	}
 
 	&__title {
 		color: $black;
-		padding: 0 ($padding-horizontal + $spacer-md) $spacer-sm $padding-horizontal;
+		padding: 0 $padding-horizontal $spacer-sm;
+		word-break: break-word;
 
 		@media (max-width: $breakpoint-md) {
 			padding: $padding-horizontal-mobile;
