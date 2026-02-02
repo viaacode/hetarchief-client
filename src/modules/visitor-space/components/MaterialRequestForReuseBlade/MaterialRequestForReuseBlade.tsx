@@ -19,16 +19,16 @@ import {
 	MaterialRequestTimeUsage,
 	MaterialRequestType,
 } from '@material-requests/types';
-import { Alert, Button, FormControl, TextArea, TimeCropControls } from '@meemoo/react-components';
+import { Alert, FormControl, TextArea, TimeCropControls } from '@meemoo/react-components';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
-import { Blade } from '@shared/components/Blade/Blade';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { ConfirmModalBeforeUnload } from '@shared/components/ConfirmModalBeforeUnload';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
-import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { validateForm } from '@shared/helpers/validate-form';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -90,6 +90,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const [playableFile, setPlayableFile] = useState<IeObjectFile | null>(null);
 	const [mediaDuration, setMediaDuration] = useState<number | null>(null);
 	const [isRequestSaved, setIsRequestSaved] = useState(false);
+	const [isFormValid, setIsFormValid] = useState(true);
 
 	const hasUnsavedChanges = useMemo(() => {
 		if (isRequestSaved) {
@@ -217,9 +218,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				return;
 			}
 
-			const isFormValid = await validateFormValues(formValues);
+			const formValid = await validateFormValues(formValues);
+			setIsFormValid(formValid);
 
-			if (!isFormValid) {
+			if (!formValid) {
 				return;
 			}
 
@@ -304,21 +306,6 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		});
 	};
 
-	const renderTitleHeader = (
-		props: Pick<HTMLElement, 'id' | 'className'>,
-		title: string,
-		removePadding = false
-	) => (
-		<div {...props} style={removePadding ? { paddingBottom: 0 } : {}}>
-			<h6>{title}</h6>
-			<h2>
-				{tText(
-					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ik-wil-dit-materiaal-downloaden-en-hergebruiken'
-				)}
-			</h2>
-		</div>
-	);
-
 	const renderMaterialInfo = () => (
 		<dl
 			className={clsx(
@@ -331,7 +318,12 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___materiaal'
 				)}
 			</dt>
-			<dd className={styles['c-request-material-reuse__material']}>
+			<dd
+				className={clsx(
+					styles['c-request-material-reuse__content-value'],
+					styles['c-request-material-reuse__material']
+				)}
+			>
 				<MaterialCard
 					objectId={materialRequest.objectSchemaIdentifier}
 					title={materialRequest.objectSchemaName}
@@ -352,72 +344,52 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		</dl>
 	);
 
-	const renderTitle = (props: Pick<HTMLElement, 'id' | 'className'>) => {
-		const title = isEditMode
-			? tText(
-					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___pas-je-aanvraag-aan'
-				)
-			: tText(
-					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___aanvraag'
-				);
-		return (
-			<div className={styles['c-request-material-reuse__title-container']}>
-				{renderMobileDesktop({
-					mobile: renderTitleHeader(props, title),
-					desktop: (
-						<>
-							{renderTitleHeader(props, title, true)}
-							{renderMaterialInfo()}
-						</>
-					),
-				})}
-			</div>
+	const getWideBladeTitle = () => {
+		if (isEditMode) {
+			return tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___pas-je-aanvraag-aan'
+			);
+		}
+		return tText(
+			'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___aanvraag'
 		);
 	};
 
-	const renderFooter = () => {
+	const getFooterButtons = (): BladeFooterProps => {
 		if (isEditMode) {
-			return (
-				<div className={styles['c-request-material-reuse__footer-container']}>
-					<Button
-						label={tText(
-							'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___keer-terug'
-						)}
-						variants={['text']}
-						onClick={() => router.back()}
-						className={styles['c-request-material-reuse__annuleer-button']}
-					/>
-					<Button
-						label={tText(
-							'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___wijzigingen-opslaan'
-						)}
-						variants={['text', 'dark']}
-						onClick={onEditRequest}
-						className={styles['c-request-material-reuse__voeg-toe-button']}
-					/>
-				</div>
-			);
-		}
-		return (
-			<div className={styles['c-request-material-reuse__footer-container']}>
-				<Button
-					label={tText(
+			return [
+				{
+					label: tText(
 						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___keer-terug'
-					)}
-					variants={['text']}
-					onClick={() => router.back()}
-					className={styles['c-request-material-reuse__annuleer-button']}
-				/>
-				<Button
-					label={tText(
-						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___voeg-toe-aan-aanvraaglijst-zoek-verder'
-					)}
-					variants={['text', 'dark']}
-					onClick={onAddToList}
-					className={styles['c-request-material-reuse__voeg-toe-button']}
-				/>
-			</div>
-		);
+					),
+					type: 'secondary',
+					onClick: () => router.back(),
+				},
+				{
+					label: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___wijzigingen-opslaan'
+					),
+					type: 'primary',
+					onClick: onEditRequest,
+				},
+			];
+		}
+		return [
+			{
+				label: tText(
+					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___keer-terug'
+				),
+				type: 'secondary',
+				onClick: () => router.back(),
+			},
+			{
+				label: tText(
+					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___voeg-toe-aan-aanvraaglijst-zoek-verder'
+				),
+				type: 'primary',
+				onClick: onAddToList,
+			},
+		];
 	};
 
 	const renderDuplicateAlert = (): ReactNode => {
@@ -1024,32 +996,30 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	};
 
 	return (
-		<Blade
+		<BladeNew
+			id="material-request-blade-reuse"
+			className={styles['c-request-material-reuse']}
 			isOpen={isOpen}
-			renderTitle={renderTitle}
-			onClose={onCloseModal}
 			layer={layer}
 			currentLayer={currentLayer}
-			className={styles['c-request-material-reuse']}
+			onClose={onCloseModal}
 			isManaged
-			id="material-request-blade-reuse"
-			extraWide={true}
-			headerBackground="platinum"
+			wideBladeTitle={getWideBladeTitle()}
+			title={tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ik-wil-dit-materiaal-downloaden-en-hergebruiken'
+			)}
+			subtitle={renderMaterialInfo()}
+			footerButtons={getFooterButtons()}
+			stickyFooter={false}
+			isBladeInvalid={!isFormValid}
 		>
 			{isOpen && (
 				<>
-					<div className={styles['c-request-material-reuse__content-container']}>
-						<div className={styles['c-request-material-reuse__content-form']}>
-							{renderMobileDesktop({
-								mobile: renderMaterialInfo(),
-								desktop: null,
-							})}
-							{renderVideoSettings()}
-							{renderDownloadQuality()}
-							{renderOtherOptionsNotDeterminingDuplicates()}
-							{showDuplicateWarning && renderDuplicateAlert()}
-						</div>
-						{renderFooter()}
+					<div className={styles['c-request-material-reuse__content-form']}>
+						{renderVideoSettings()}
+						{renderDownloadQuality()}
+						{renderOtherOptionsNotDeterminingDuplicates()}
+						{showDuplicateWarning && renderDuplicateAlert()}
 					</div>
 					<ConfirmModalBeforeUnload
 						when={hasUnsavedChanges}
@@ -1059,6 +1029,6 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					/>
 				</>
 			)}
-		</Blade>
+		</BladeNew>
 	);
 };

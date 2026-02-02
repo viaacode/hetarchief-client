@@ -1,30 +1,9 @@
 @use "../../../../styles/abstracts" as *;
 
 .c-request-material-reuse {
-	color: $black;
-
-	.c-blade__top-bar-container {
-		background-color: $platinum;
-	}
-
-	&__title-container{
-		background-color: $platinum;
-		border-bottom: $card-edge-size solid $zinc-40;
-
-		.c-request-material-reuse__content{
-			margin: $spacer-sm $spacer-lg;
-		}
-	}
-
-	&__content-container {
-		height: 100%;
-		overflow: auto;
-	}
-
 	&__content-form {
 		display: flex;
 		flex-direction: column;
-		margin: $spacer-md $spacer-lg;
 		gap: $spacer-xs;
 	}
 
@@ -46,14 +25,17 @@
 
 		@media (max-width: $breakpoint-md) {
 			flex-direction: column;
-			padding: $spacer-lg;
+			padding: $spacer-sm;
 
 			&-material {
 				padding: $spacer-sm;
 
 				.c-request-material-reuse__content-label {
-					padding: $spacer-sm;
-					padding-bottom: 0;
+					display: none;
+				}
+
+				.c-request-material-reuse__content-value {
+					padding-top: 0;
 				}
 			}
 
@@ -113,6 +95,7 @@
 				display: block;
 				text-align: right;
 				margin-left: auto;
+				white-space: nowrap;
 			}
 
 			:global(.c-input){
@@ -137,6 +120,7 @@
 
 		.c-request-material-reuse__material {
 			border-left: $card-edge-size solid $zinc-40;
+			padding: 0;
 
 			@media (max-width: $breakpoint-md) {
 				border-left: none;
@@ -151,6 +135,10 @@
 
 			@media (max-width: $breakpoint-lg) {
 				width: 100%;
+			}
+
+			@media (max-height: $breakpoint-lg) {
+				max-height: 40vh;
 			}
 		}
 
@@ -223,39 +211,6 @@
 					}
 				}
 			}
-		}
-	}
-
-	&__footer-container {
-		display: flex;
-		padding: $spacer-md $spacer-lg;
-		border-top: 0.1rem solid $silver;
-		justify-content: space-between;
-
-
-		@media (max-width: $breakpoint-md) {
-			flex-direction: column-reverse;
-		}
-	}
-
-	&__voeg-toe-button {
-		background-color: $black !important;
-		color: $white !important;
-
-		div {
-			font-weight: $font-weight-bold;
-		}
-
-		&:hover {
-			background-color: $white !important;
-			color: $zinc !important;
-			border: 0.1rem solid $zinc !important;
-		}
-	}
-
-	&__annuleer-button {
-		&:hover {
-			border: 0.1rem solid $zinc;
 		}
 	}
 
