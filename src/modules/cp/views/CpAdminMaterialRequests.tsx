@@ -44,6 +44,7 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import { isEmpty, isNil, noop } from 'lodash-es';
+import Link from 'next/link';
 import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { Row, SortingRule, TableState } from 'react-table';
@@ -317,7 +318,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		<>
 			{tText('pages/beheer/materiaalaanvragen/index___materiaalaanvragen')}
 			<div className="u-color-neutral u-font-size-14 u-font-weight-400 u-pt-8">
-				<a
+				<Link
 					href={ROUTES_BY_LOCALE[locale].accountMyMaterialRequests}
 					target="_self"
 					rel="noopener noreferrer"
@@ -325,7 +326,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 					{tText(
 						'modules/cp/views/cp-admin-material-requests___ga-naar-mijn-uitgaande-materiaalaanvragen'
 					)}
-				</a>
+				</Link>
 			</div>
 		</>
 	);
