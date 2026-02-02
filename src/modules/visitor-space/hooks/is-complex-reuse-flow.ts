@@ -1,20 +1,22 @@
+import { selectCommonUser } from '@auth/store/user';
 import { IE_OBJECT_INTRA_CP_LICENSES } from '@ie-objects/ie-objects.consts';
 import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
 import type { MaterialRequest } from '@material-requests/types';
 import { SimpleIeObjectType } from '@shared/types/ie-objects';
 import type { AvoUserCommonUser } from '@viaa/avo2-types';
 import { intersection } from 'lodash-es';
+import { useSelector } from 'react-redux';
 
 /**
  * Determines if the given IE object and user qualify for a complex reuse flow from the hermes track
  * @param materialRequest
- * @param user
  */
-export function useIsComplexReuseFlow(
-	materialRequest: MaterialRequest,
-	user: AvoUserCommonUser | null
-): { isComplexReuseFlow: boolean; isObjectEssenceAccessibleToUser: boolean } {
-	return checkIsComplexReuseFlow(materialRequest, user);
+export function useIsComplexReuseFlow(materialRequest: MaterialRequest): {
+	isComplexReuseFlow: boolean;
+	isObjectEssenceAccessibleToUser: boolean;
+} {
+	const commonUser = useSelector(selectCommonUser);
+	return checkIsComplexReuseFlow(materialRequest, commonUser);
 }
 
 /**

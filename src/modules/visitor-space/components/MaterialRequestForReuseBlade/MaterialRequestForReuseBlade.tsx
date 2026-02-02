@@ -99,7 +99,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		return isEditMode || JSON.stringify(defaultFormValues) !== JSON.stringify(formValues);
 	}, [isRequestSaved, isEditMode, defaultFormValues, formValues]);
 
-	const { isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(materialRequest, user);
+	const { isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(materialRequest);
 
 	const {
 		data: potentialDuplicates,

@@ -68,10 +68,11 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const dispatch = useDispatch();
 	const locale = useLocale();
 	const user: AvoUserCommonUser | null = useSelector(selectCommonUser);
-	const { isComplexReuseFlow, isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(
-		materialRequest,
-		user
-	);
+	const { isComplexReuseFlow, isObjectEssenceAccessibleToUser } =
+		useIsComplexReuseFlow(materialRequest);
+
+	// Only hide the "view object" option when the user is a key user, and they already have access to the object
+	const hideViewTypeOption = user?.isKeyUser && objectRepresentationId;
 
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestType | undefined>(type);
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
@@ -532,7 +533,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							styles['c-request-material__radio-buttons-container']
 						)}
 					>
-						{!isObjectEssenceAccessibleToUser && (
+						{!hideViewTypeOption && (
 							<RadioButton
 								aria-labelledby="radio-group-label"
 								className={styles['c-request-material__radio-button']}
