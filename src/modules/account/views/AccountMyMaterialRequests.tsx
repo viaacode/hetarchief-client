@@ -47,6 +47,7 @@ import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitorLayout } from '@visitor-layout/index';
 import clsx from 'clsx';
 import { isEmpty, isNil, noop } from 'lodash-es';
+import Link from 'next/link';
 import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
 import type { SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
@@ -292,9 +293,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 				{tText('pages/account/mijn-profiel/index___mijn-materiaalaanvragen')}
 				{hasAnyMaterialRequestsPerm && (
 					<div className="u-color-neutral u-font-size-14 u-font-weight-400 u-pt-8">
-						<a href={incomingRequestHyperlink} target="_self" rel="noopener noreferrer">
-							{incomingRequestLabel}
-						</a>
+						<Link href={incomingRequestHyperlink}>{incomingRequestLabel}</Link>
 					</div>
 				)}
 			</>

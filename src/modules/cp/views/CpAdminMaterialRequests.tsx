@@ -320,11 +320,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		<>
 			{tText('pages/beheer/materiaalaanvragen/index___materiaalaanvragen')}
 			<div className="u-color-neutral u-font-size-14 u-font-weight-400 u-pt-8">
-				<Link
-					href={ROUTES_BY_LOCALE[locale].accountMyMaterialRequests}
-					target="_self"
-					rel="noopener noreferrer"
-				>
+				<Link href={ROUTES_BY_LOCALE[locale].accountMyMaterialRequests}>
 					{tText(
 						'modules/cp/views/cp-admin-material-requests___ga-naar-mijn-uitgaande-materiaalaanvragen'
 					)}
