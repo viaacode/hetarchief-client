@@ -271,7 +271,7 @@ export const BladeNew: FC<BladeNewProps> = ({
 				<div
 					className={clsx(
 						styles['c-blade__footer-buttons'],
-						styles['c-blade__footer-buttons-extra-wide']
+						wideBladeTitle && styles['c-blade__footer-buttons-extra-wide']
 					)}
 				>
 					{renderFooterButton(firstButton)}
