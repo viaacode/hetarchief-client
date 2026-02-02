@@ -36,13 +36,13 @@ export interface BladeNewProps extends DefaultComponentProps {
 	 */
 	wideBladeTitle?: string;
 	/**
-	 * The actual title
+	 * The actual title <br/>
 	 * Will always be shown
 	 */
 	title: string;
 	/**
 	 * All elements needed to be below the title <br/>
-	 * Will be sticky as well if the header is sticky
+	 * Will be sticky
 	 */
 	stickySubtitle?: ReactNode;
 	/**
@@ -52,6 +52,9 @@ export interface BladeNewProps extends DefaultComponentProps {
 	subtitle?: ReactNode;
 
 	// Footer props
+	/**
+	 * Show red error message in the footer that there are errors in the form
+	 */
 	isBladeInvalid?: boolean;
 	/**
 	 * Depending on de setting of both buttons, the blade will set certain styling <br/>
@@ -77,6 +80,9 @@ export interface BladeNewProps extends DefaultComponentProps {
 	 *     - the order of the buttons will be ignored
 	 */
 	footerButtons: BladeFooterProps;
+	/**
+	 * Is the footer sticky? Will be true by default
+	 */
 	stickyFooter?: boolean;
 
 	// manager types
