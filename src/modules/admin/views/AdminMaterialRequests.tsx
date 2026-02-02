@@ -12,6 +12,7 @@ import {
 	getAdminMaterialRequestTableColumns,
 } from '@admin/const/material-requests.const';
 import { AdminLayout } from '@admin/layouts';
+import { getMaterialRequestTableColumnProps } from '@material-requests/const';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
 import { useGetMaterialRequestsMaintainers } from '@material-requests/hooks/get-material-requests-maintainers';
@@ -333,6 +334,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 						sortBy: sortFilters,
 					} as TableState<MaterialRequest>,
 				}}
+				getColumnProps={getMaterialRequestTableColumnProps}
 				sortingIcons={sortingIcons}
 				pagination={renderPagination}
 				onSortChange={onSortChange}

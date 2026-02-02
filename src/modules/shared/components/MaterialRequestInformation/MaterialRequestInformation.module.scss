@@ -6,12 +6,6 @@
 	color: $zinc;
 	padding: 0 $spacer-1xl $spacer-md $spacer-lg;
 
-	@media (max-width: $breakpoint-md) {
-		&__hidden {
-			display: none;
-		}
-	}
-
 	:global([class*="c-icon"]) {
 		margin-right: $spacer-xxs;
 		font-size: $font-size-base;
