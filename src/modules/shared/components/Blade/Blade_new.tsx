@@ -308,10 +308,12 @@ export const BladeNew: FC<BladeNewProps> = ({
 					className={styles['c-blade__body-wrapper']}
 					onScroll={onScrollContent}
 				>
-					{isMobile && subtitle && (
-						<div className={clsx(styles['c-blade__body-wrapper--subtitle'])}>{subtitle}</div>
-					)}
-					{children}
+					<div className={clsx(styles['c-blade__body-wrapper--content'])}>
+						{isMobile && subtitle && (
+							<div className={clsx(styles['c-blade__body-wrapper--subtitle'])}>{subtitle}</div>
+						)}
+						{children}
+					</div>
 					<div className={'u-flex-grow'} />
 					{!stickyFooter && renderFooter()}
 				</div>

@@ -109,11 +109,6 @@ $padding-horizontal-mobile: $spacer-sm;
 		height: 100%;
 		flex-direction: column;
 		justify-content: space-between;
-		padding: $spacer-md $padding-horizontal;
-
-		@media (max-width: $breakpoint-md) {
-			padding: $padding-horizontal-mobile;
-		}
 
 		div {
 			white-space: pre-line;
@@ -122,23 +117,25 @@ $padding-horizontal-mobile: $spacer-sm;
 		&--subtitle {
 			padding-bottom: $padding-horizontal-mobile;
 		}
+
+		&--content {
+			padding: $spacer-md $padding-horizontal;
+
+			@media (max-width: $breakpoint-md) {
+				padding: $padding-horizontal-mobile;
+			}
+		}
 	}
 
 	&__footer {
 		grid-row-start: 4;
 		gap: $spacer-xs;
+		border-top: $divider-grey;
+		background: $sticky-background;
+		padding: $spacer-sm $padding-horizontal;
 
-		&-sticky {
-			&.c-blade__content-scrolled {
-				border-top: $divider-grey;
-				background: $sticky-background;
-			}
-
-			padding: $spacer-sm $padding-horizontal;
-
-			@media (max-width: $breakpoint-md) {
-				padding: $padding-horizontal-mobile;
-			}
+		@media (max-width: $breakpoint-md) {
+			padding: $padding-horizontal-mobile;
 		}
 
 		&-buttons {
