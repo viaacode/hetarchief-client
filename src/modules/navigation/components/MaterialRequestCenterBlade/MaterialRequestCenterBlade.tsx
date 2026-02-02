@@ -1,5 +1,5 @@
 import { GroupName } from '@account/const';
-import { selectUser } from '@auth/store/user';
+import { selectCommonUser } from '@auth/store/user';
 import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { MaterialRequestsService } from '@material-requests/services';
@@ -28,6 +28,7 @@ import { isMobileSize } from '@shared/utils/is-mobile';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
 import { MaterialRequestForReuseBlade } from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade';
+import { checkIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { type FC, useEffect, useState } from 'react';
@@ -87,10 +88,10 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		}
 	};
 
-	const user = useSelector(selectUser);
+	const user = useSelector(selectCommonUser);
 
 	// Never fetch material requests for kiosk visitors
-	const shouldFetchMaterialRequests = !!user && user.groupName !== GroupName.KIOSK_VISITOR;
+	const shouldFetchMaterialRequests = !!user && user.userGroup?.name !== GroupName.KIOSK_VISITOR;
 
 	const {
 		data: materialRequestsResponse,
@@ -170,6 +171,10 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	};
 
 	const renderMaterialRequest = (materialRequest: MaterialRequest) => {
+		const { isObjectEssenceAccessibleToUser } = checkIsComplexReuseFlow(
+			materialRequest,
+			user || null
+		);
 		return (
 			<div
 				key={materialRequest.id}
@@ -184,13 +189,13 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						thumbnail={materialRequest.objectThumbnailUrl}
 						hideThumbnail={true}
 						withBorder={false}
-						link={`/zoeken/${materialRequest.maintainerSlug}/${materialRequest.objectSchemaIdentifier}`}
+						link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${materialRequest.maintainerSlug}/${materialRequest.objectSchemaIdentifier}`}
 						type={materialRequest.objectDctermsFormat}
 						publishedBy={materialRequest.maintainerName}
 						publishedOrCreatedDate={materialRequest.objectPublishedOrCreatedDate}
 						icon={getIconFromObjectType(
 							materialRequest.objectDctermsFormat,
-							!!materialRequest.objectRepresentationId
+							isObjectEssenceAccessibleToUser
 						)}
 					>
 						<p className={clsx('u-font-size-14')}>

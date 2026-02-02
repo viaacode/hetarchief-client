@@ -10,6 +10,7 @@ import {
 	Permission,
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
+import { getMaterialRequestTableColumnProps } from '@material-requests/const';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
 import {
@@ -46,6 +47,7 @@ import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitorLayout } from '@visitor-layout/index';
 import clsx from 'clsx';
 import { isEmpty, isNil, noop } from 'lodash-es';
+import Link from 'next/link';
 import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
 import type { SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
@@ -263,6 +265,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 						sortBy: sortFilters,
 					} as TableState<MaterialRequest>,
 				}}
+				getColumnProps={getMaterialRequestTableColumnProps}
 				sortingIcons={sortingIcons}
 				pagination={renderPagination}
 				onSortChange={onSortChange}
@@ -290,10 +293,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 				{tText('pages/account/mijn-profiel/index___mijn-materiaalaanvragen')}
 				{hasAnyMaterialRequestsPerm && (
 					<div className="u-color-neutral u-font-size-14 u-font-weight-400 u-pt-8">
-						<a href={incomingRequestHyperlink} target="_blank" rel="noopener noreferrer">
-							{incomingRequestLabel}
-						</a>
-						<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+						<Link href={incomingRequestHyperlink}>{incomingRequestLabel}</Link>
 					</div>
 				)}
 			</>

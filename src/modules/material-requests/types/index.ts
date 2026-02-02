@@ -31,6 +31,8 @@ export interface MaterialRequest {
 	requesterFullName: string;
 	requesterId: string;
 	requesterMail: string;
+	requesterOrganisation?: string;
+	requesterOrganisationSector?: string;
 	type: MaterialRequestType;
 	reuseForm?: MaterialRequestReuseForm;
 	updatedAt: string;
@@ -39,7 +41,6 @@ export interface MaterialRequest {
 	deniedAt: string;
 	cancelledAt: string;
 	statusMotivation?: string;
-	organisation?: string;
 	requestGroupName: string | null;
 	requestGroupId: string | null;
 	downloadUrl: string | null;
