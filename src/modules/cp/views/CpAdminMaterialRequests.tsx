@@ -13,6 +13,7 @@ import {
 	getMaterialRequestTableColumns,
 } from '@cp/const/material-requests.const';
 import { CPAdminLayout } from '@cp/layouts';
+import { getMaterialRequestTableColumnProps } from '@material-requests/const';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
 import {
@@ -44,6 +45,7 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import { isEmpty, isNil, noop } from 'lodash-es';
+import Link from 'next/link';
 import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { Row, SortingRule, TableState } from 'react-table';
@@ -303,6 +305,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 						sortBy: sortFilters,
 					} as TableState<MaterialRequest>,
 				}}
+				getColumnProps={getMaterialRequestTableColumnProps}
 				sortingIcons={sortingIcons}
 				pagination={renderPagination}
 				onSortChange={onSortChange}
@@ -317,16 +320,11 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		<>
 			{tText('pages/beheer/materiaalaanvragen/index___materiaalaanvragen')}
 			<div className="u-color-neutral u-font-size-14 u-font-weight-400 u-pt-8">
-				<a
-					href={ROUTES_BY_LOCALE[locale].accountMyMaterialRequests}
-					target="_blank"
-					rel="noopener noreferrer"
-				>
+				<Link href={ROUTES_BY_LOCALE[locale].accountMyMaterialRequests}>
 					{tText(
 						'modules/cp/views/cp-admin-material-requests___ga-naar-mijn-uitgaande-materiaalaanvragen'
 					)}
-				</a>
-				<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+				</Link>
 			</div>
 		</>
 	);

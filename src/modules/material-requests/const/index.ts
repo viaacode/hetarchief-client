@@ -1,4 +1,5 @@
 import {
+	type MaterialRequest,
 	MaterialRequestCopyrightDisplay,
 	MaterialRequestDistributionAccess,
 	MaterialRequestDistributionDigitalOnline,
@@ -7,12 +8,14 @@ import {
 	MaterialRequestEditing,
 	MaterialRequestGeographicalUsage,
 	MaterialRequestIntendedUsage,
+	MaterialRequestKeys,
 	type MaterialRequestReuseForm,
 	MaterialRequestStatus,
 	MaterialRequestTimeUsage,
 	MaterialRequestType,
 } from '@material-requests/types';
 import { tText } from '@shared/helpers/translate';
+import type { ColumnInstance, HeaderGroup, TableCellProps, TableHeaderProps } from 'react-table';
 
 export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE = (): Record<
 	MaterialRequestType,
@@ -184,3 +187,29 @@ export const GET_BLANK_MATERIAL_REQUEST_REUSE_FORM = (): MaterialRequestReuseFor
 	timeUsageTo: undefined,
 	copyrightDisplay: undefined,
 });
+
+export const getMaterialRequestTableColumnProps = (
+	column: HeaderGroup<MaterialRequest> | ColumnInstance<MaterialRequest>
+): Partial<TableHeaderProps> | Partial<TableCellProps> => {
+	const columnWidth = COLUMN_WIDTH_LOOKUP[column.id as MaterialRequestKeys];
+
+	if (columnWidth) {
+		return {
+			style: {
+				width: columnWidth,
+				minWidth: columnWidth,
+				maxWidth: columnWidth,
+			},
+		};
+	}
+
+	return {};
+};
+
+const COLUMN_WIDTH_LOOKUP: Record<MaterialRequestKeys, string> = {
+	[MaterialRequestKeys.requestedAt]: '15rem',
+	[MaterialRequestKeys.type]: '20rem',
+	[MaterialRequestKeys.status]: '10rem',
+	[MaterialRequestKeys.downloadUrl]: '10rem',
+	[MaterialRequestKeys.requestGroupName]: '25rem',
+} as Record<MaterialRequestKeys, string>;
