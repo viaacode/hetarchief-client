@@ -32,7 +32,7 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitorLayout } from '@visitor-layout/index';
 import clsx from 'clsx';
-import { isEmpty } from 'lodash-es';
+import { isEmpty, isNil } from 'lodash-es';
 import { useRouter } from 'next/router';
 import { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
 import MaterialCard from '../../visitor-space/components/MaterialCard/MaterialCard';
@@ -123,7 +123,9 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 			materialRequestEntries = [
 				{
 					label: tText('modules/account/views/account-my-application-list___materiaal-selectie'),
-					value: formatCuePointsMaterialRequest(materialRequest.reuseForm),
+					value: isNil(materialRequest.reuseForm.endTime)
+						? tText('Volledig bestand')
+						: formatCuePointsMaterialRequest(materialRequest.reuseForm),
 				},
 				{
 					label: tText('modules/account/views/account-my-application-list___downloadkwaliteit'),
