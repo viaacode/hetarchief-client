@@ -1,6 +1,7 @@
 import { Button, keysEscape } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { Loading } from '@shared/components/Loading';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
@@ -139,7 +140,9 @@ export const BladeNew: FC<BladeNewProps> = ({
 							disabled={!isOpen}
 						/>
 					</div>
-					<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>{stickySubtitle}</div>
+					{isOpen && (
+						<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>{stickySubtitle}</div>
+					)}
 				</div>
 			);
 		}
@@ -174,8 +177,14 @@ export const BladeNew: FC<BladeNewProps> = ({
 						<div className={clsx(styles['c-blade__title--wide-blade'])}>{wideBladeTitle}</div>
 					)}
 					<h2 className={clsx(styles['c-blade__title--text'])}>{title}</h2>
-					<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>{stickySubtitle}</div>
-					<div className={clsx(styles['c-blade__title--subtitle'])}>{subtitle}</div>
+					{isOpen && (
+						<>
+							<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>
+								{stickySubtitle}
+							</div>
+							<div className={clsx(styles['c-blade__title--subtitle'])}>{subtitle}</div>
+						</>
+					)}
 				</div>
 			</>
 		);
@@ -314,10 +323,16 @@ export const BladeNew: FC<BladeNewProps> = ({
 					onScroll={onScrollContent}
 				>
 					<div className={clsx(styles['c-blade__body-wrapper--content'])}>
-						{isMobile && subtitle && (
-							<div className={clsx(styles['c-blade__body-wrapper--subtitle'])}>{subtitle}</div>
+						{isOpen ? (
+							<>
+								{isMobile && subtitle && (
+									<div className={clsx(styles['c-blade__body-wrapper--subtitle'])}>{subtitle}</div>
+								)}
+								{children}
+							</>
+						) : (
+							<Loading owner="Blade content unopened" />
 						)}
-						{children}
 					</div>
 					<div className={'u-flex-grow'} />
 					{!stickyFooter && renderFooter()}
