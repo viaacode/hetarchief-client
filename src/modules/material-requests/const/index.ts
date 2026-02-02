@@ -191,27 +191,25 @@ export const GET_BLANK_MATERIAL_REQUEST_REUSE_FORM = (): MaterialRequestReuseFor
 export const getAccountMaterialRequestTableColumnProps = (
 	column: HeaderGroup<MaterialRequest> | ColumnInstance<MaterialRequest>
 ): Partial<TableHeaderProps> | Partial<TableCellProps> => {
-	if (column.id === MaterialRequestKeys.requestedAt) {
-		return { style: createColumnWidth('15rem') };
-	}
+	const columnWidth = COLUMN_WIDTH_LOOKUP[column.id as MaterialRequestKeys];
 
-	if (column.id === MaterialRequestKeys.type) {
-		return { style: createColumnWidth('20rem') };
-	}
-
-	if (column.id === MaterialRequestKeys.status || column.id === MaterialRequestKeys.downloadUrl) {
-		return { style: createColumnWidth('10rem') };
-	}
-
-	if (column.id === MaterialRequestKeys.requestGroupName) {
-		return { style: createColumnWidth('25rem') };
+	if (columnWidth) {
+		return {
+			style: {
+				width: columnWidth,
+				minWidth: columnWidth,
+				maxWidth: columnWidth,
+			},
+		};
 	}
 
 	return {};
 };
 
-const createColumnWidth = (size: number | string): TableHeaderProps['style'] => ({
-	width: size,
-	minWidth: size,
-	maxWidth: size,
-});
+const COLUMN_WIDTH_LOOKUP: Record<MaterialRequestKeys, string> = {
+	[MaterialRequestKeys.requestedAt]: '15rem',
+	[MaterialRequestKeys.type]: '20rem',
+	[MaterialRequestKeys.status]: '10rem',
+	[MaterialRequestKeys.downloadUrl]: '10rem',
+	[MaterialRequestKeys.requestGroupName]: '25rem',
+} as Record<MaterialRequestKeys, string>;
