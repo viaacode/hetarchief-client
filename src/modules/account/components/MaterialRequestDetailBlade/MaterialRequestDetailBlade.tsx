@@ -103,6 +103,12 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		afterStatusChanged,
 	]);
 
+	useEffect(() => {
+		if (isOpen) {
+			document.querySelector('#material-request-detail-blade')?.scrollIntoView();
+		}
+	}, [isOpen]);
+
 	const onFailedRequest = () => {
 		toastService.notify({
 			maxLines: 3,
