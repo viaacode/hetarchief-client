@@ -42,6 +42,7 @@
 
 		.c-table__cell {
 			text-align: left;
+			word-break: break-word;
 		}
 
 		&-titel-material{
@@ -58,10 +59,10 @@
 				color: $neutral;
 				font-size: $font-size-sm;
 				line-height: $font-size-base;
+				text-align: left;
 
 				> .c-button__content {
 					white-space: unset;
-					text-align: left;
 				}
 			}
 		}
