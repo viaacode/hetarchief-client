@@ -1,4 +1,3 @@
-import ApplicationListSent from '@account/components/ApplicationListSent/ApplicationListSent';
 import PersonalInfo from '@account/components/PersonalInfo/PersonalInfo';
 import { Permission } from '@account/const';
 import { createLabelValuePairMaterialRequestReuseForm } from '@account/utils/create-label-value-material-request-reuse-form';
@@ -18,9 +17,11 @@ import { Loading } from '@shared/components/Loading';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useAppDispatch } from '@shared/store';
 import {
@@ -34,7 +35,7 @@ import { VisitorLayout } from '@visitor-layout/index';
 import clsx from 'clsx';
 import { isEmpty, isNil } from 'lodash-es';
 import { useRouter } from 'next/router';
-import { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
+import { type FC, type ReactNode, useEffect, useMemo } from 'react';
 import MaterialCard from '../../visitor-space/components/MaterialCard/MaterialCard';
 import styles from './AccountMyApplicationList.module.scss';
 
@@ -44,9 +45,9 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 
 	const router = useRouter();
 	const dispatch = useAppDispatch();
+	const locale = useLocale();
 
 	const hasMaterialRequestsPerm = useHasAnyPermission(Permission.CREATE_MATERIAL_REQUESTS);
-	const [applicationListSent, setApplicationListSent] = useState(false);
 
 	const {
 		data: materialRequestsResponse,
@@ -77,7 +78,7 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 
 	const onSuccessRequest = () => {
 		void refetchMaterialRequests();
-		setApplicationListSent(true);
+		router.push(`/${ROUTES_BY_LOCALE[locale].accountMyApplicationListSent}`);
 		dispatch(setShowFooter(true));
 	};
 
@@ -187,10 +188,6 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 					)}
 				/>
 			);
-		}
-
-		if (applicationListSent) {
-			return <ApplicationListSent />;
 		}
 
 		return (
