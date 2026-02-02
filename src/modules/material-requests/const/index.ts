@@ -188,7 +188,7 @@ export const GET_BLANK_MATERIAL_REQUEST_REUSE_FORM = (): MaterialRequestReuseFor
 	copyrightDisplay: undefined,
 });
 
-export const getAccountMaterialRequestTableColumnProps = (
+export const getMaterialRequestTableColumnProps = (
 	column: HeaderGroup<MaterialRequest> | ColumnInstance<MaterialRequest>
 ): Partial<TableHeaderProps> | Partial<TableCellProps> => {
 	const columnWidth = COLUMN_WIDTH_LOOKUP[column.id as MaterialRequestKeys];
