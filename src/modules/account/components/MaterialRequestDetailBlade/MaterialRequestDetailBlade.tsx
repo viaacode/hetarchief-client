@@ -18,7 +18,8 @@ import {
 	MaterialRequestStatus,
 } from '@material-requests/types';
 import { Button } from '@meemoo/react-components';
-import { Blade } from '@shared/components/Blade/Blade';
+import type { BladeFooterButton, BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -129,51 +130,52 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		}
 	};
 
-	const renderFooter = () => {
+	const getFooterButtons = (): BladeFooterProps => {
 		if (canRequestBeEvaluated) {
-			return (
-				<div className={styles['p-account-my-material-requests__close-button-container']}>
-					<Button
-						label={tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___goedkeuren'
-						)}
-						variants={['block', 'primary']}
-						onClick={onApproveRequest}
-					/>
-					<Button
-						label={tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___afkeuren'
-						)}
-						variants={['block']}
-						className={styles['p-account-my-material-requests__decline-button']}
-						onClick={onDeclineRequest}
-					/>
-				</div>
-			);
+			return [
+				{
+					label: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___goedkeuren'
+					),
+					type: 'primary',
+					onClick: onApproveRequest,
+				},
+				{
+					label: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___afkeuren'
+					),
+					type: 'primary',
+					onClick: onDeclineRequest,
+				},
+			];
 		}
 
-		return (
-			<div className={styles['p-account-my-material-requests__close-button-container']}>
-				<Button
-					label={tText(
-						'modules/account/components/material-request-detail-blade/material-requests___sluit'
-					)}
-					variants={['block', 'black']}
-					onClick={onClose}
-				/>
-				{currentMaterialRequestDetail.status === MaterialRequestStatus.NEW &&
-					allowRequestCancellation &&
-					currentMaterialRequestDetail.requesterId === user?.id && (
-						<Button
-							label={tText(
-								'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag'
-							)}
-							variants={['block', 'text']}
-							onClick={() => setShowConfirmModal(true)}
-						/>
-					)}
-			</div>
-		);
+		const closeButton = {
+			label: tText(
+				'modules/account/components/material-request-detail-blade/material-requests___sluit'
+			),
+			type: 'primary',
+			onClick: onClose,
+		} as BladeFooterButton;
+
+		if (
+			currentMaterialRequestDetail.status === MaterialRequestStatus.NEW &&
+			allowRequestCancellation &&
+			currentMaterialRequestDetail.requesterId === user?.id
+		) {
+			return [
+				closeButton,
+				{
+					label: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag'
+					),
+					type: 'secondary',
+					onClick: () => setShowConfirmModal(true),
+				},
+			];
+		}
+
+		return [closeButton];
 	};
 
 	const renderContentBlock = (
@@ -188,19 +190,19 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		return (
 			<dl
 				key={`material-request-content-block-${title}`}
-				className={styles['p-account-my-material-requests__content-block']}
+				className={styles['p-material-request-detail__content-block']}
 			>
 				{title && (
-					<dt className={styles['p-account-my-material-requests__content-block-title']}>{title}</dt>
+					<dt className={styles['p-material-request-detail__content-block-title']}>{title}</dt>
 				)}
 				<dd>
 					{subtitle && (
-						<div className={styles['p-account-my-material-requests__content-block-subtitle']}>
+						<div className={styles['p-material-request-detail__content-block-subtitle']}>
 							{subtitle}
 						</div>
 					)}
 					{content && (
-						<div className={styles['p-account-my-material-requests__content-block-value']}>
+						<div className={styles['p-material-request-detail__content-block-value']}>
 							{content}
 						</div>
 					)}
@@ -242,7 +244,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				{downloadExpirationDate && (
 					<span
 						className={clsx(
-							styles['p-account-my-material-requests__content-block-value'],
+							styles['p-material-request-detail__content-block-value'],
 							'u-flex',
 							'u-align-center',
 							'u-flex-row',
@@ -310,7 +312,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		];
 
 		return (
-			<dl className={styles['p-account-my-material-requests__content-block']}>
+			<dl className={styles['p-material-request-detail__content-block']}>
 				<dt
 					className={clsx(
 						'u-font-size-14',
@@ -332,7 +334,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				{formattedStatusDates.map((date) => (
 					<dd
 						key={`material-request-status-date-${date}`}
-						className={styles['p-account-my-material-requests__content-block-value']}
+						className={styles['p-material-request-detail__content-block-value']}
 					>
 						{date}
 					</dd>
@@ -381,7 +383,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			<NextLink passHref href={itemLink} style={{ textDecoration: 'none' }} target="_blank">
 				{/** biome-ignore lint/performance/noImgElement: Thumbnail is needed here */}
 				<img
-					className={styles['p-account-my-material-requests__content-block-media']}
+					className={styles['p-material-request-detail__content-block-media']}
 					src={objectThumbnailUrl}
 					aria-hidden
 					alt=""
@@ -408,49 +410,39 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	return (
-		<Blade
-			isOpen={isOpen}
-			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-				<>
-					<h2
-						{...props}
-						className={clsx(props.className, styles['p-account-my-material-requests__title'])}
-					>
-						{tText(
-							'modules/account/components/material-request-detail-blade/material-requests___detail'
-						)}
-					</h2>
-					<MaterialRequestInformation />
-				</>
-			)}
-			footer={isOpen && renderFooter()}
-			stickyFooter={canRequestBeEvaluated}
-			onClose={onClose}
+		<BladeNew
 			id="material-request-detail-blade"
+			isOpen={isOpen}
 			layer={layer}
 			currentLayer={currentLayer}
+			onClose={onClose}
+			title={tText(
+				'modules/account/components/material-request-detail-blade/material-requests___detail'
+			)}
+			stickySubTitle={<MaterialRequestInformation />}
+			subtitle={
+				<MaterialCard
+					openInNewTab={true}
+					objectId={currentMaterialRequestDetail.objectSchemaIdentifier}
+					title={currentMaterialRequestDetail.objectSchemaName}
+					thumbnail={currentMaterialRequestDetail.objectThumbnailUrl}
+					hideThumbnail={true}
+					orientation="vertical"
+					link={itemLink}
+					type={currentMaterialRequestDetail.objectDctermsFormat}
+					publishedBy={currentMaterialRequestDetail.maintainerName}
+					publishedOrCreatedDate={currentMaterialRequestDetail.objectPublishedOrCreatedDate}
+					icon={getIconFromObjectType(
+						currentMaterialRequestDetail.objectDctermsFormat,
+						!!currentMaterialRequestDetail.objectRepresentationId
+					)}
+				/>
+			}
+			footerButtons={getFooterButtons()}
+			stickyFooter={canRequestBeEvaluated}
 		>
-			<div className={styles['p-account-my-material-requests__content-wrapper']}>
-				<div className={styles['p-account-my-material-requests__content']}>
-					<MaterialCard
-						openInNewTab={true}
-						objectId={currentMaterialRequestDetail.objectSchemaIdentifier}
-						title={currentMaterialRequestDetail.objectSchemaName}
-						thumbnail={currentMaterialRequestDetail.objectThumbnailUrl}
-						hideThumbnail={true}
-						orientation="vertical"
-						link={itemLink}
-						type={currentMaterialRequestDetail.objectDctermsFormat}
-						publishedBy={currentMaterialRequestDetail.maintainerName}
-						publishedOrCreatedDate={currentMaterialRequestDetail.objectPublishedOrCreatedDate}
-						icon={getIconFromObjectType(
-							currentMaterialRequestDetail.objectDctermsFormat,
-							!!currentMaterialRequestDetail.objectRepresentationId
-						)}
-					/>
-				</div>
-
-				<div className={styles['p-account-my-material-requests__content']}>
+			<div className={styles['p-material-request-detail__content-wrapper']}>
+				<div className={styles['p-material-request-detail__content']}>
 					{renderRequestStatus()}
 					{renderMotivation()}
 
@@ -514,7 +506,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				onCancel={onCancelRequest}
 				onConfirm={() => setShowConfirmModal(false)}
 			/>
-		</Blade>
+		</BladeNew>
 	);
 };
 
