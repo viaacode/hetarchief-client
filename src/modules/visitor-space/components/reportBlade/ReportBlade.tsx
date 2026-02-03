@@ -1,5 +1,6 @@
-import { Button, FormControl, TextArea, TextInput } from '@meemoo/react-components';
-import { Blade } from '@shared/components/Blade/Blade';
+import { FormControl, TextArea, TextInput } from '@meemoo/react-components';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { validateForm } from '@shared/helpers/validate-form';
@@ -127,92 +128,77 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 	 * Render
 	 */
 
-	const renderFooter = () => {
-		return (
-			<div className="u-px-32 u-px-16-md u-py-24">
-				<Button
-					className="u-mb-16"
-					label={tHtml('modules/visitor-space/components/report-blade/report-blade___rapporteer')}
-					variants={['block', 'black']}
-					onClick={handleFormSubmit}
-					disabled={isSubmittingForm}
-				/>
-
-				<Button
-					label={tHtml('modules/visitor-space/components/report-blade/report-blade___annuleer')}
-					variants={['block', 'text']}
-					onClick={onCloseBlade}
-				/>
-			</div>
-		);
+	const getFooterButtons = (): BladeFooterProps => {
+		return [
+			{
+				label: tText('modules/visitor-space/components/report-blade/report-blade___rapporteer'),
+				type: 'primary',
+				onClick: handleFormSubmit,
+				disabled: isSubmittingForm,
+			},
+			{
+				label: tText('modules/visitor-space/components/report-blade/report-blade___annuleer'),
+				type: 'secondary',
+				onClick: onCloseBlade,
+			},
+		];
 	};
 
 	return (
-		<Blade
+		<BladeNew
 			{...props}
 			className={clsx(props.className, styles['c-report-blade'])}
-			footer={props.isOpen && renderFooter()}
+			footerButtons={getFooterButtons()}
 			onClose={onCloseBlade}
-			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-				<h2 {...props}>
-					{tHtml('modules/visitor-space/components/report-blade/report-blade___rapporteren')}
-				</h2>
-			)}
+			title={tText('modules/visitor-space/components/report-blade/report-blade___rapporteren')}
+			isBladeInvalid={!!formErrors.reportMessage || !!formErrors.email}
 		>
-			<div className="u-px-32 u-px-16-md">
-				{props.isOpen && (
-					<FormControl
-						className="u-mb-24"
-						errors={[<RedFormWarning error={formErrors.reportMessage} key="form-error--report" />]}
-						id="reportMessage"
-						label={tHtml(
-							'modules/visitor-space/components/report-blade/report-blade___beschrijf-het-probleem'
-						)}
-					>
-						<TextArea
-							id="reportMessage"
-							name="reportMessage"
-							disabled={!props.isOpen}
-							value={reportMessage}
-							onChange={(evt) => {
-								const report = evt.target.value;
-								setReportMessage(report);
-							}}
-						/>
-					</FormControl>
+			<FormControl
+				className="u-mb-24"
+				errors={[<RedFormWarning error={formErrors.reportMessage} key="form-error--report" />]}
+				id="reportMessage"
+				label={tHtml(
+					'modules/visitor-space/components/report-blade/report-blade___beschrijf-het-probleem'
 				)}
+			>
+				<TextArea
+					id="reportMessage"
+					name="reportMessage"
+					disabled={!props.isOpen}
+					value={reportMessage}
+					onChange={(evt) => {
+						const report = evt.target.value;
+						setReportMessage(report);
+					}}
+				/>
+			</FormControl>
 
-				{props.isOpen && (
-					<FormControl
-						className={clsx('u-mb-24', {
-							[styles['c-report-blade__input--disabled']]: !!user?.email,
-						})}
-						errors={[<RedFormWarning error={formErrors.email} key="form-error--email" />]}
-						id="email"
-						label={tHtml(
-							'modules/visitor-space/components/report-blade/report-blade___email-adres'
-						)}
-					>
-						<TextInput
-							type="email"
-							id="email"
-							name="email"
-							autoComplete="email"
-							disabled={!props.isOpen || !!user?.email}
-							value={user?.email || email}
-							onChange={(evt) => {
-								if (user?.email) {
-									return;
-								}
+			<FormControl
+				className={clsx('u-mb-24', {
+					[styles['c-report-blade__input--disabled']]: !!user?.email,
+				})}
+				errors={[<RedFormWarning error={formErrors.email} key="form-error--email" />]}
+				id="email"
+				label={tHtml('modules/visitor-space/components/report-blade/report-blade___email-adres')}
+			>
+				<TextInput
+					type="email"
+					id="email"
+					name="email"
+					autoComplete="email"
+					disabled={!props.isOpen || !!user?.email}
+					value={user?.email || email}
+					onChange={(evt) => {
+						if (user?.email) {
+							return;
+						}
 
-								const email = evt.currentTarget.value;
-								setEmail(email);
-							}}
-						/>
-					</FormControl>
-				)}
-			</div>
-		</Blade>
+						const email = evt.currentTarget.value;
+						setEmail(email);
+					}}
+				/>
+			</FormControl>
+		</BladeNew>
 	);
 };
 
