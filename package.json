@@ -49,7 +49,7 @@
     "@studiohyperdrive/pagination": "1.0.0",
     "@tanstack/react-query": "5.90.7",
     "@types/openseadragon": "3.0.10",
-    "@viaa/avo2-components": "6.2.4",
+    "@viaa/avo2-components": "6.2.5",
     "@viaa/avo2-types": "5.0.10",
     "autosize": "6.0.1",
     "blend-promise-utils": "1.29.2",

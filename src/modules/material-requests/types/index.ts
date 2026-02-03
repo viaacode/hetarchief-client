@@ -48,6 +48,27 @@ export interface MaterialRequest {
 	downloadExpiresAt?: string;
 }
 
+export enum MaterialRequestReuseFormKey {
+	representationId = 'representationId',
+	thumbnailUrl = 'thumbnailUrl',
+	startTime = 'startTime',
+	endTime = 'endTime',
+	downloadQuality = 'downloadQuality',
+	intendedUsageDescription = 'intendedUsageDescription',
+	intendedUsage = 'intendedUsage',
+	distributionAccess = 'distributionAccess',
+	distributionType = 'distributionType',
+	distributionTypeDigitalOnline = 'distributionTypeDigitalOnline',
+	distributionTypeOtherExplanation = 'distributionTypeOtherExplanation',
+	materialEditing = 'materialEditing',
+	geographicalUsage = 'geographicalUsage',
+	geographicalUsageDescription = 'geographicalUsageDescription',
+	timeUsageType = 'timeUsageType',
+	timeUsageFrom = 'timeUsageFrom',
+	timeUsageTo = 'timeUsageTo',
+	copyrightDisplay = 'copyrightDisplay',
+}
+
 export interface MaterialRequestReuseForm {
 	representationId: string | undefined;
 	startTime: number | undefined;
@@ -63,9 +84,10 @@ export interface MaterialRequestReuseForm {
 	geographicalUsage: MaterialRequestGeographicalUsage | undefined;
 	geographicalUsageDescription: string | undefined;
 	timeUsageType: MaterialRequestTimeUsage | undefined;
-	timeUsageFrom: string | undefined;
+	timeUsageFrom?: string | undefined;
 	timeUsageTo: string | undefined;
 	copyrightDisplay: MaterialRequestCopyrightDisplay | undefined;
+	thumbnailUrl?: string;
 }
 
 export interface MaterialRequestDetail extends MaterialRequest {

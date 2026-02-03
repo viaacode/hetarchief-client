@@ -15,6 +15,7 @@ import {
 	MaterialRequestIntendedUsage,
 	MaterialRequestRequesterCapacity,
 	type MaterialRequestReuseForm,
+	MaterialRequestReuseFormKey,
 	MaterialRequestTimeUsage,
 	MaterialRequestType,
 } from '@material-requests/types';
@@ -34,10 +35,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount, setShowMaterialRequestCenter } from '@shared/store/ui';
 import type { AvoUserCommonUser } from '@viaa/avo2-types';
-import {
-	MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA,
-	type MaterialRequestReuseSettings,
-} from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade.const';
+import { MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA } from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade.const';
 import RadioButtonAccordion from '@visitor-space/components/RadioButtonAccordion/RadioButtonAccordion';
 import type { RadioButtonAccordionOption } from '@visitor-space/components/RadioButtonAccordion/RadioButtonAccordion.types';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
@@ -85,7 +83,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 	const [formValues, setFormValues] = useState<MaterialRequestReuseForm>(defaultFormValues);
 	const [formErrors, setFormErrors] = useState<
-		Partial<Record<keyof MaterialRequestReuseSettings, string | undefined>>
+		Partial<Record<MaterialRequestReuseFormKey, string | undefined>>
 	>({});
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [playableFile, setPlayableFile] = useState<IeObjectFile | null>(null);
@@ -202,9 +200,19 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			const formErrors = (await validateForm(
 				newFormValues,
 				MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA()
-			)) as Partial<Record<keyof MaterialRequestReuseSettings, string | undefined>>;
+			)) as Partial<Record<MaterialRequestReuseFormKey, string | undefined>>;
 			if (formErrors) {
 				setFormErrors(formErrors);
+				// scroll to first error
+				const errorProperties = Object.keys(formErrors);
+				if (errorProperties.length > 0) {
+					document
+						.querySelector(errorProperties.map((prop) => `[data-id="${prop}"]`).join(','))
+						?.scrollIntoView({
+							behavior: 'smooth',
+							block: 'center',
+						});
+				}
 				return false;
 			}
 
@@ -450,9 +458,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const handleMetadataLoaded = (duration: number) => {
 		setMediaDuration(duration);
 
-		// Prefill the end time if nothing has been set yet (Ensures timecontrols and video are in sync)
+		// Prefill the end time if nothing has been set yet (Ensures time controls and video are in sync)
 		if (isNil(formValues.endTime)) {
-			setFormValue('endTime', duration ?? 0);
+			setFormValue(MaterialRequestReuseFormKey.endTime, duration ?? 0);
 		}
 	};
 
@@ -501,7 +509,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 							start: formValues.startTime ?? null,
 							end: formValues.endTime ?? null,
 						}}
-						poster={materialRequest.objectThumbnailUrl}
+						poster={materialRequest?.reuseForm?.thumbnailUrl || materialRequest.objectThumbnailUrl}
 						allowFullScreen={false}
 						paused={isMediaPaused}
 						onPlay={() => setIsMediaPaused(false)}
@@ -509,9 +517,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 						onMediaReady={(_, file) => {
 							setPlayableFile(file);
 
-							// Prefill the start time if nothing has been set yet (Ensures timecontrols and video are in sync)
+							// Prefill the start time if nothing has been set yet (Ensures time controls and video are in sync)
 							if (isNil(formValues.startTime)) {
-								setFormValue('startTime', 0);
+								setFormValue(MaterialRequestReuseFormKey.startTime, 0);
 							}
 						}}
 						onMediaDurationLoaded={handleMetadataLoaded}
@@ -538,8 +546,8 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 									setVideoSeekTime(endTime);
 								}
 
-								setFormValue('startTime', startTime);
-								setFormValue('endTime', endTime);
+								setFormValue(MaterialRequestReuseFormKey.startTime, startTime);
+								setFormValue(MaterialRequestReuseFormKey.endTime, endTime);
 							}}
 							onError={noop}
 						/>
@@ -557,16 +565,16 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const renderRadiobuttonGroup = (
 		label: string,
 		title: string,
-		property: keyof MaterialRequestReuseSettings,
+		property: MaterialRequestReuseFormKey,
 		radiobuttonOptions: RadioButtonAccordionOption<unknown>[],
-		additionalErrors: (keyof MaterialRequestReuseSettings)[] = []
+		additionalErrors: MaterialRequestReuseFormKey[] = []
 	) => {
 		const foundAdditionalError = additionalErrors.find(
 			(errorProperty) => formErrors[errorProperty]
 		);
 
 		return (
-			<dl className={styles['c-request-material-reuse__content']}>
+			<dl className={styles['c-request-material-reuse__content']} data-id={property}>
 				<dt className={styles['c-request-material-reuse__content-label']}>
 					{/** biome-ignore lint/a11y/noLabelWithoutControl: Inputs can be found in RadioButtonAccordion */}
 					<label>{label}</label>
@@ -596,7 +604,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			tText(
 				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___downloadkwaliteit-vraag'
 			),
-			'downloadQuality',
+			MaterialRequestReuseFormKey.downloadQuality,
 			[
 				{
 					label: tText(
@@ -645,7 +653,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 						<TextArea
 							value={formValues.intendedUsageDescription}
 							maxLength={300}
-							onChange={(evt) => setFormValue('intendedUsageDescription', evt.target.value)}
+							onChange={(evt) =>
+								setFormValue(MaterialRequestReuseFormKey.intendedUsageDescription, evt.target.value)
+							}
 						/>
 					</FormControl>
 				</dd>
@@ -661,7 +671,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			tText(
 				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bedoeld-gebruik-vraag'
 			),
-			'intendedUsage',
+			MaterialRequestReuseFormKey.intendedUsage,
 			[
 				{
 					label: tText(
@@ -702,7 +712,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			tText(
 				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ontsluiting-materiaal-vraag'
 			),
-			'distributionAccess',
+			MaterialRequestReuseFormKey.distributionAccess,
 			[
 				{
 					label: tText(
@@ -734,7 +744,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			tText(
 				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-vraag'
 			),
-			'distributionType',
+			MaterialRequestReuseFormKey.distributionType,
 			[
 				{
 					label: tText(
@@ -756,7 +766,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 							title=""
 							radioButtonGroupLabel={kebabCase('distributionTypeDigitalOnline')}
 							selectedOption={formValues.distributionTypeDigitalOnline}
-							onChange={(value) => setFormValue('distributionTypeDigitalOnline', value)}
+							onChange={(value) =>
+								setFormValue(MaterialRequestReuseFormKey.distributionTypeDigitalOnline, value)
+							}
 							options={[
 								{
 									label: tText(
@@ -813,7 +825,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 									value={formValues.distributionTypeOtherExplanation}
 									disabled={formValues.distributionType !== MaterialRequestDistributionType.OTHER}
 									onChange={(evt) =>
-										setFormValue('distributionTypeOtherExplanation', evt.target.value)
+										setFormValue(
+											MaterialRequestReuseFormKey.distributionTypeOtherExplanation,
+											evt.target.value
+										)
 									}
 								/>
 							</FormControl>
@@ -821,7 +836,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					),
 				},
 			],
-			['distributionTypeDigitalOnline', 'distributionTypeOtherExplanation']
+			[
+				MaterialRequestReuseFormKey.distributionTypeDigitalOnline,
+				MaterialRequestReuseFormKey.distributionTypeOtherExplanation,
+			]
 		);
 	};
 
@@ -833,7 +851,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			tText(
 				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___wijziging-materiaal-vraag'
 			),
-			'materialEditing',
+			MaterialRequestReuseFormKey.materialEditing,
 			[
 				{
 					label: tText(
@@ -865,7 +883,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			tText(
 				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___geografisch-gebruik-vraag'
 			),
-			'geographicalUsage',
+			MaterialRequestReuseFormKey.geographicalUsage,
 			[
 				{
 					label: tText(
@@ -897,7 +915,12 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 										formValues.geographicalUsage !==
 										MaterialRequestGeographicalUsage.NOT_COMPLETELY_LOCAL
 									}
-									onChange={(evt) => setFormValue('geographicalUsageDescription', evt.target.value)}
+									onChange={(evt) =>
+										setFormValue(
+											MaterialRequestReuseFormKey.geographicalUsageDescription,
+											evt.target.value
+										)
+									}
 								/>
 								<span className={styles['c-request-material-reuse__content-value-length']}>
 									{formValues.geographicalUsageDescription?.length || 0} / 300
@@ -921,7 +944,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			tText(
 				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___gebruik-in-de-tijd-vraag'
 			),
-			'timeUsageType',
+			MaterialRequestReuseFormKey.timeUsageType,
 			[
 				{
 					label: tText(
@@ -953,8 +976,11 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 									id="timeUsage"
 									disabled={formValues.timeUsageType !== MaterialRequestTimeUsage.IN_TIME}
 									onChange={(newFromDate: Date | undefined, newToDate: Date | undefined) => {
-										setFormValue('timeUsageFrom', newFromDate?.toISOString());
-										setFormValue('timeUsageTo', newToDate?.toISOString());
+										setFormValue(
+											MaterialRequestReuseFormKey.timeUsageFrom,
+											newFromDate?.toISOString()
+										);
+										setFormValue(MaterialRequestReuseFormKey.timeUsageTo, newToDate?.toISOString());
 									}}
 								/>
 							</FormControl>
@@ -962,7 +988,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					),
 				},
 			],
-			['timeUsageFrom', 'timeUsageTo']
+			[MaterialRequestReuseFormKey.timeUsageFrom, MaterialRequestReuseFormKey.timeUsageTo]
 		);
 	};
 
@@ -974,7 +1000,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			tText(
 				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bronvermelding-vraag'
 			),
-			'copyrightDisplay',
+			MaterialRequestReuseFormKey.copyrightDisplay,
 			[
 				{
 					label: tText(
