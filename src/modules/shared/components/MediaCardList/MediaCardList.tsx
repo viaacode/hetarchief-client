@@ -1,17 +1,14 @@
-import clsx from 'clsx';
-import { type FC, type ReactNode, memo } from 'react';
-import Masonry from 'react-masonry-css';
-
+import { Loading } from '@shared/components/Loading';
 import type { MediaCardListProps } from '@shared/components/MediaCardList/MediaCardList.types';
 import { tText } from '@shared/helpers/translate';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
-
-import { type IdentifiableMediaCard, MediaCard } from '../MediaCard';
-
-import { Loading } from '@shared/components/Loading';
 import { isServerSideRendering } from '@shared/utils/is-browser';
+import clsx from 'clsx';
 import { compact } from 'lodash-es';
+import { type FC, memo, type ReactNode } from 'react';
+import Masonry from 'react-masonry-css';
+import { type IdentifiableMediaCard, MediaCard } from '../MediaCard';
 import { MEDIA_CARD_LIST_GRID_BP_COLS } from './MediaCardList.const';
 import styles from './MediaCardList.module.scss';
 
@@ -130,6 +127,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 					)}
 					view={view}
 					link={undefined}
+					icon={null}
 				/>
 			);
 		}

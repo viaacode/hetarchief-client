@@ -83,7 +83,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 	const [showShareMapBlade, setShowShareMapBlade] = useState(false);
 	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
 	const [editMode, setEditMode] = useState(false);
-	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
+	const [selected, setSelected] = useState<Partial<IdentifiableMediaCard> | null>(null);
 	const lastScrollPosition = useSelector(selectLastScrollPosition);
 	const { data: folders, refetch: refetchFolders } = useGetFolders();
 	const defaultFolder = (folders || []).find((folder) => folder.isDefault);
@@ -227,13 +227,13 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 		await router.push(createFolderSlug(newFolder, locale));
 	};
 
-	const onMoveFolder = (item: IdentifiableMediaCard) => {
+	const onMoveFolder = (item: Partial<IdentifiableMediaCard>) => {
 		setSelected(item);
 		setShowAddToFolderBlade(true);
 	};
 
-	const onRemoveFromFolder = (item: IdentifiableMediaCard, folder: Folder) => {
-		FoldersService.removeFromFolder(folder.id, item.schemaIdentifier).then((response) => {
+	const onRemoveFromFolder = (item: Partial<IdentifiableMediaCard>, folder: Folder) => {
+		FoldersService.removeFromFolder(folder.id, item.schemaIdentifier as string).then((response) => {
 			if (response === undefined) {
 				return;
 			}
@@ -380,7 +380,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 		);
 	};
 
-	const renderActions = (item: IdentifiableMediaCard, folder: Folder | undefined) => {
+	const renderActions = (item: Partial<IdentifiableMediaCard>, folder: Folder | undefined) => {
 		if (!folder) {
 			return null;
 		}
@@ -525,7 +525,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 							// If the user has no access to the object, do not make the card clickable
 							link = undefined;
 						}
-						const base: IdentifiableMediaCard = {
+						const base: Partial<IdentifiableMediaCard> = {
 							schemaIdentifier: media.schemaIdentifier,
 							maintainerSlug: media.maintainerSlug,
 							description: renderDescription(media),
@@ -548,7 +548,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 							...(!isNil(media.dctermsFormat) && {
 								icon: getIconFromObjectType(media.dctermsFormat, true),
 							}),
-						};
+						} as IdentifiableMediaCard;
 					})}
 					view={'list'}
 				/>
@@ -678,7 +678,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 					objectToAdd={
 						selected
 							? {
-									schemaIdentifier: selected.schemaIdentifier,
+									schemaIdentifier: selected.schemaIdentifier as string,
 									title: selected.name,
 								}
 							: undefined

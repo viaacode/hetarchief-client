@@ -97,9 +97,7 @@ export const BlockContentEnclose: FC<BlockContentEncloseProps> = ({
 							description={elementInfo.description}
 							publishedOrCreatedDate={elementInfo.datePublished || elementInfo.dateCreated}
 							thumbnail={elementInfo.thumbnail}
-							icon={
-								elementInfo.objectType ? GET_TYPE_TO_ICON_MAP()[elementInfo.objectType] : undefined
-							}
+							icon={elementInfo.objectType ? GET_TYPE_TO_ICON_MAP()[elementInfo.objectType] : null}
 						/>
 					);
 				})}
