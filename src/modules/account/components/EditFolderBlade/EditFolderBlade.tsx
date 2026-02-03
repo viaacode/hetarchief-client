@@ -1,15 +1,15 @@
 import { EDIT_FOLDER_VALIDATION_SCHEMA } from '@account/components/EditFolderBlade/EditFolderBlade.consts';
 import { FoldersService } from '@account/services/folders';
 import type { Folder } from '@account/types';
-import { Button, FormControl, TextArea, TextInput } from '@meemoo/react-components';
-import { Blade } from '@shared/components/Blade/Blade';
+import { FormControl, TextArea, TextInput } from '@meemoo/react-components';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import { BladeNew } from '@shared/components/Blade/Blade_new';
+import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { validateForm } from '@shared/helpers/validate-form';
 import { toastService } from '@shared/services/toast-service';
-import clsx from 'clsx';
 import { type FC, useEffect, useState } from 'react';
-
-import styles from './EditFolderBlade.module.scss';
 
 interface EditFolderBladeProps {
 	isOpen: boolean;
@@ -94,56 +94,60 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 		}
 	};
 
-	const renderFooter = () => {
-		return (
-			<div className={clsx('u-px-32 u-px-16-md u-py-24')}>
-				<Button
-					variants={['block', 'black']}
-					onClick={() => submitData()}
-					label={tText('modules/account/components/edit-folder-blade/edit-folder-blade___bewaar')}
-				/>
-
-				<Button
-					variants={['block', 'text']}
-					onClick={() => handleClose()}
-					label={tText('modules/account/components/edit-folder-blade/edit-folder-blade___sluit')}
-				/>
-			</div>
-		);
+	const getFooterButtons = (): BladeFooterProps => {
+		return [
+			{
+				label: tText('modules/account/components/edit-folder-blade/edit-folder-blade___bewaar'),
+				type: 'primary',
+				onClick: () => submitData(),
+			},
+			{
+				label: tText('modules/account/components/edit-folder-blade/edit-folder-blade___sluit'),
+				type: 'secondary',
+				onClick: handleClose,
+			},
+		];
 	};
 
 	return (
-		<Blade
+		<BladeNew
 			isOpen={isOpen}
-			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-				<h1 {...props} className={clsx(props.className, styles['p-folder-editor__title'])}>
-					{tText('modules/account/components/edit-folder-blade/edit-folder-blade___map-aanpassen')}
-				</h1>
+			title={tText(
+				'modules/account/components/edit-folder-blade/edit-folder-blade___map-aanpassen'
 			)}
-			footer={isOpen && renderFooter()}
+			footerButtons={getFooterButtons()}
 			onClose={handleClose}
 			id="edit-folder-blade"
+			isBladeInvalid={!!formErrors.name || !!formErrors.description}
 		>
-			<div className={styles['p-folder-editor__content']}>
-				<FormControl
-					label={tText('modules/account/components/edit-folder-blade/edit-folder-blade___naam')}
-					errors={[formErrors.name]}
-				>
-					<TextInput value={name} onChange={(e) => setName(e.target.value)} />
-				</FormControl>
-				<FormControl
-					label={tText(
-						'modules/account/components/edit-folder-blade/edit-folder-blade___beschrijving'
-					)}
-					errors={[formErrors.description]}
-				>
-					<TextArea
-						className={styles['c-request-material__reason-input']}
-						onChange={(e) => setDescription(e.target.value)}
-						value={description}
-					/>
-				</FormControl>
-			</div>
-		</Blade>
+			<FormControl
+				label={tText('modules/account/components/edit-folder-blade/edit-folder-blade___naam')}
+				errors={[
+					<div className="u-flex" key={`form-error--name`}>
+						<RedFormWarning error={formErrors.name} />
+						<MaxLengthIndicator maxLength={90} value={name} />
+					</div>,
+				]}
+			>
+				<TextInput maxLength={90} value={name} onChange={(e) => setName(e.target.value)} />
+			</FormControl>
+			<FormControl
+				label={tText(
+					'modules/account/components/edit-folder-blade/edit-folder-blade___beschrijving'
+				)}
+				errors={[
+					<div className="u-flex" key={`form-error--description`}>
+						<RedFormWarning error={formErrors.description} />
+						<MaxLengthIndicator maxLength={300} value={description} />
+					</div>,
+				]}
+			>
+				<TextArea
+					maxLength={300}
+					onChange={(e) => setDescription(e.target.value)}
+					value={description}
+				/>
+			</FormControl>
+		</BladeNew>
 	);
 };
