@@ -179,10 +179,14 @@ export const BladeNew: FC<BladeNewProps> = ({
 					<h2 className={clsx(styles['c-blade__title--text'])}>{title}</h2>
 					{isOpen && (
 						<>
-							<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>
-								{stickySubtitle}
-							</div>
-							<div className={clsx(styles['c-blade__title--subtitle'])}>{subtitle}</div>
+							{stickySubtitle && (
+								<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>
+									{stickySubtitle}
+								</div>
+							)}
+							{subtitle && (
+								<div className={clsx(styles['c-blade__title--subtitle'])}>{subtitle}</div>
+							)}
 						</>
 					)}
 				</div>
