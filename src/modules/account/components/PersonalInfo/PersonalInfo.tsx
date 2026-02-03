@@ -12,6 +12,7 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from '@meemoo/react-components';
+import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
@@ -285,15 +286,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 					)}
 				</TooltipContent>
 			</Tooltip>
-
-			<span
-				className={clsx(
-					styles['c-personal-info__content-group-value'],
-					styles['c-personal-info__content-group-value-length']
-				)}
-			>
-				{requestGroupName.length || 0} / {MAX_NAME_LENGTH}
-			</span>
+			<MaxLengthIndicator maxLength={MAX_NAME_LENGTH} value={requestGroupName} />
 		</div>
 	);
 

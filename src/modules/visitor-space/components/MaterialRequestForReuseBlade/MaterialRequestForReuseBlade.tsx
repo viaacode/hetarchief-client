@@ -23,6 +23,7 @@ import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioO
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
 import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { ConfirmModalBeforeUnload } from '@shared/components/ConfirmModalBeforeUnload';
+import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
@@ -206,10 +207,12 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			)) as Partial<Record<keyof MaterialRequestReuseSettings, string | undefined>>;
 			if (formErrors) {
 				setFormErrors(formErrors);
+				setIsFormValid(false);
 				return false;
 			}
 
 			setFormErrors({});
+			setIsFormValid(true);
 			return true;
 		},
 		[]
@@ -222,7 +225,6 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			}
 
 			const formValid = await validateFormValues(formValues);
-			setIsFormValid(formValid);
 
 			if (!formValid) {
 				return;
@@ -608,9 +610,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 						errors={[
 							<div className="u-flex" key={`form-error--intendedUsage`}>
 								<RedFormWarning error={formErrors.intendedUsageDescription} />
-								<span className={styles['c-request-material-reuse__content-value-length']}>
-									{formValues.intendedUsageDescription?.length || 0} / 300
-								</span>
+								<MaxLengthIndicator maxLength={300} value={formValues.intendedUsageDescription} />
 							</div>,
 						]}
 					>
@@ -871,9 +871,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 									}
 									onChange={(evt) => setFormValue('geographicalUsageDescription', evt.target.value)}
 								/>
-								<span className={styles['c-request-material-reuse__content-value-length']}>
-									{formValues.geographicalUsageDescription?.length || 0} / 300
-								</span>
+								<MaxLengthIndicator
+									maxLength={300}
+									value={formValues.geographicalUsageDescription}
+								/>
 							</FormControl>
 						</>
 					),

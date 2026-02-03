@@ -90,14 +90,6 @@
 				margin-inline-start: 0;
 			}
 
-			&-length {
-				color: $grey;
-				display: block;
-				text-align: right;
-				margin-left: auto;
-				white-space: nowrap;
-			}
-
 			:global(.c-input){
 				height: 100%;
 				border: none;

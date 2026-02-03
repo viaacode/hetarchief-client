@@ -3,6 +3,7 @@ import { type MaterialRequestDetail, MaterialRequestStatus } from '@material-req
 import { FormControl, TextArea } from '@meemoo/react-components';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
 import { BladeNew } from '@shared/components/Blade/Blade_new';
+import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
@@ -167,13 +168,11 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 					<dd className={styles['c-request-material-status-update__content-value']}>
 						<FormControl
 							errors={[
-								<div className="u-flex" key={`form-error--motivation`}>
-									<span
-										className={styles['c-request-material-status-update__content-value-length']}
-									>
-										{motivationInputValue?.length || 0} / {MAX_MOTIVATION_LENGTH}
-									</span>
-								</div>,
+								<MaxLengthIndicator
+									maxLength={MAX_MOTIVATION_LENGTH}
+									value={motivationInputValue}
+									key={`form-error--motivation`}
+								/>,
 							]}
 						>
 							<TextArea
