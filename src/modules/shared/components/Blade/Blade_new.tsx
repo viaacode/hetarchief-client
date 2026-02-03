@@ -25,7 +25,6 @@ export const BladeNew: FC<BladeNewProps> = ({
 	className,
 	children,
 	isOpen,
-	showCloseButtonOnTop = false,
 	onClose,
 	wideBladeTitle,
 	title,
@@ -130,9 +129,7 @@ export const BladeNew: FC<BladeNewProps> = ({
 					<div className={clsx(styles['c-blade__title--mobile-wrapper'])}>
 						<h2 className={clsx(styles['c-blade__title--text'])}>{title}</h2>
 						<Button
-							className={clsx(styles['c-blade__close-button'], {
-								[styles['c-blade__close-button--absolute']]: showCloseButtonOnTop,
-							})}
+							className={clsx(styles['c-blade__close-button'])}
 							icon={<Icon name={IconNamesLight.Times} aria-hidden />}
 							aria-label={tText('modules/shared/components/blade/blade___sluiten')}
 							variants={['text', 'icon', 'xxs']}
@@ -140,7 +137,7 @@ export const BladeNew: FC<BladeNewProps> = ({
 							disabled={!isOpen}
 						/>
 					</div>
-					{isOpen && (
+					{isOpen && stickySubtitle && (
 						<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>{stickySubtitle}</div>
 					)}
 				</div>
@@ -156,9 +153,7 @@ export const BladeNew: FC<BladeNewProps> = ({
 					)}
 				>
 					<Button
-						className={clsx(styles['c-blade__close-button'], {
-							[styles['c-blade__close-button--absolute']]: showCloseButtonOnTop,
-						})}
+						className={clsx(styles['c-blade__close-button'])}
 						icon={<Icon name={IconNamesLight.Times} aria-hidden />}
 						aria-label={tText('modules/shared/components/blade/blade___sluiten')}
 						variants={['text', 'icon', 'xs']}
@@ -201,27 +196,32 @@ export const BladeNew: FC<BladeNewProps> = ({
 			return null;
 		}
 
+		const renderButton = () => {
+			return (
+				<Button
+					label={buttonConfig.label}
+					title={buttonConfig.title || undefined}
+					aria-label={buttonConfig.ariaLabel || undefined}
+					variants={buttonConfig.variants}
+					onClick={() => buttonConfig.onClick?.()}
+					disabled={buttonConfig.disabled}
+					iconStart={buttonConfig.icon && <Icon name={buttonConfig.icon} />}
+				/>
+			);
+		};
+
 		if (buttonConfig.href) {
 			return (
-				<Link passHref href={buttonConfig.href} aria-label={buttonConfig.label}>
-					<Button
-						label={buttonConfig.label}
-						variants={buttonConfig.variants}
-						onClick={() => buttonConfig.onClick?.()}
-						disabled={buttonConfig.disabled}
-					/>
+				<Link
+					passHref
+					href={buttonConfig.href}
+					aria-label={buttonConfig.ariaLabel || buttonConfig.label}
+				>
+					{renderButton()}
 				</Link>
 			);
 		}
-
-		return (
-			<Button
-				label={buttonConfig.label}
-				variants={buttonConfig.variants}
-				onClick={() => buttonConfig.onClick?.()}
-				disabled={buttonConfig.disabled}
-			/>
-		);
+		return renderButton();
 	};
 
 	const renderFooter = () => {

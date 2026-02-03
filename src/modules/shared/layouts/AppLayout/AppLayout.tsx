@@ -487,14 +487,14 @@ const AppLayout: FC<any> = ({ children }) => {
 			<main className="l-app__main">
 				<WindowSizeContext.Provider value={windowSize}>
 					<ErrorBoundary>{children}</ErrorBoundary>
+					<NotificationCenter
+						isOpen={showNotificationsCenter}
+						onClose={() => setNotificationsOpen(false)}
+						useGetNotificationsHook={useGetNotifications}
+						useMarkOneNotificationsAsReadHook={useMarkOneNotificationsAsRead}
+						useMarkAllNotificationsAsReadHook={useMarkAllNotificationsAsRead}
+					/>
 				</WindowSizeContext.Provider>
-				<NotificationCenter
-					isOpen={showNotificationsCenter}
-					onClose={() => setNotificationsOpen(false)}
-					useGetNotificationsHook={useGetNotifications}
-					useMarkOneNotificationsAsReadHook={useMarkOneNotificationsAsRead}
-					useMarkAllNotificationsAsReadHook={useMarkAllNotificationsAsRead}
-				/>
 				{renderAlerts()}
 			</main>
 

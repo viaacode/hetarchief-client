@@ -1,3 +1,4 @@
+import type { IconName } from '@shared/components/Icon';
 import type { DefaultComponentProps } from '@shared/types';
 import type { ReactNode } from 'react';
 
@@ -25,7 +26,6 @@ export interface BladeNewProps extends DefaultComponentProps {
 	id: string;
 	children?: ReactNode;
 	isOpen: boolean;
-	showCloseButtonOnTop?: boolean;
 	onClose?: () => void;
 
 	// Title props
@@ -93,11 +93,14 @@ export interface BladeNewProps extends DefaultComponentProps {
 
 export interface BladeFooterButton {
 	label: string;
+	title?: string;
+	ariaLabel?: string;
 	type: 'primary' | 'secondary';
 	enforceSecondary?: boolean; // Only used when we have just 1 button, and need to be secondary
 	onClick?: () => void;
 	disabled?: boolean;
 	href?: string; // Determines if this is a link and will be rendered as such
+	icon?: IconName; // Should use only in specific cases
 }
 
 export type BladeFooterProps = [BladeFooterButton, BladeFooterButton?];

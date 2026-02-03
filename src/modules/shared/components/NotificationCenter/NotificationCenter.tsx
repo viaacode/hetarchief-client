@@ -1,5 +1,6 @@
 import { Button } from '@meemoo/react-components';
-import { Blade } from '@shared/components/Blade/Blade';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import type { NotificationCenterProps } from '@shared/components/NotificationCenter/NotificationCenter.types';
@@ -157,30 +158,30 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 		);
 	};
 
-	const renderFooter = () => (
-		<Button
-			disabled={!unread.length}
-			onClick={onMarkAllAsRead}
-			className={styles['c-notification-center__button']}
-			variants={['black', 'block']}
-			iconStart={<Icon name={IconNamesLight.Check} />}
-			aria-label={tText(
-				'modules/shared/components/notification-center/notification-center___markeer-alle-notificaties-als-gelezen'
-			)}
-			title={
-				unread.length > 0
-					? tText(
-							'modules/shared/components/notification-center/notification-center___markeer-alle-notificaties-als-gelezen'
-						)
-					: tText(
-							'modules/shared/components/notification-center/notification-center___alle-notificaties-zijn-reeds-gelezen'
-						)
-			}
-			label={tHtml(
-				'modules/shared/components/notification-center/notification-center___markeer-alles-als-gelezen'
-			)}
-		/>
-	);
+	const getFooterButtons = (): BladeFooterProps => {
+		return [
+			{
+				label: tText(
+					'modules/shared/components/notification-center/notification-center___markeer-alles-als-gelezen'
+				),
+				type: 'primary',
+				onClick: onMarkAllAsRead,
+				icon: IconNamesLight.Check,
+				ariaLabel: tText(
+					'modules/shared/components/notification-center/notification-center___markeer-alle-notificaties-als-gelezen'
+				),
+				title:
+					unread.length > 0
+						? tText(
+								'modules/shared/components/notification-center/notification-center___markeer-alle-notificaties-als-gelezen'
+							)
+						: tText(
+								'modules/shared/components/notification-center/notification-center___alle-notificaties-zijn-reeds-gelezen'
+							),
+				disabled: !unread.length,
+			},
+		];
+	};
 
 	const renderBladeContent = () => {
 		if (isLoading) {
@@ -200,11 +201,11 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 		if (notifications.length === 0) {
 			return (
 				<div className={styles['c-notification-center__empty']}>
-					<h4 className={styles['c-notification-center__header']}>
+					<p className={styles['c-notification-center__header']}>
 						{tHtml(
 							'modules/shared/components/notification-center/notification-center___er-zijn-nog-geen-notificaties'
 						)}
-					</h4>
+					</p>
 				</div>
 			);
 		}
@@ -281,23 +282,18 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 	};
 
 	return (
-		<Blade
+		<BladeNew
 			className={clsx(className, styles['c-notification-center'])}
-			footer={renderFooter()}
+			footerButtons={getFooterButtons()}
 			isOpen={isOpen}
 			onClose={onClose}
-			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-				<h2 {...props} className={clsx(props.className, 'u-display-none')}>
-					{tText(
-						'modules/shared/components/notification-center/notification-center___notificaties'
-					)}
-				</h2>
+			title={tText(
+				'modules/shared/components/notification-center/notification-center___notificaties'
 			)}
-			showCloseButtonOnTop
 			id="notification-center-blade"
 		>
 			{renderBladeContent()}
-		</Blade>
+		</BladeNew>
 	);
 };
 
