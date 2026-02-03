@@ -28,6 +28,12 @@ export function checkIsComplexReuseFlow(
 	materialRequest: MaterialRequest,
 	user: AvoUserCommonUser | null
 ): { isComplexReuseFlow: boolean; isObjectEssenceAccessibleToUser: boolean } {
+	if (!materialRequest) {
+		return {
+			isComplexReuseFlow: false,
+			isObjectEssenceAccessibleToUser: false,
+		};
+	}
 	const simpleType = mapDcTermsFormatToSimpleType(materialRequest.objectDctermsFormat);
 	const isComplexReuseFlow: boolean =
 		(simpleType === SimpleIeObjectType.AUDIO || simpleType === SimpleIeObjectType.VIDEO) &&

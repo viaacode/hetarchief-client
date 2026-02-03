@@ -185,6 +185,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	};
 
 	const renderMaterialRequest = (materialRequest: MaterialRequest) => {
+		if (!materialRequest) {
+			return null;
+		}
 		const { isObjectEssenceAccessibleToUser } = checkIsComplexReuseFlow(
 			materialRequest,
 			user || null
