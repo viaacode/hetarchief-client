@@ -28,17 +28,17 @@ export function checkIsComplexReuseFlow(
 	materialRequest: MaterialRequest,
 	user: AvoUserCommonUser | null
 ): { isComplexReuseFlow: boolean; isObjectEssenceAccessibleToUser: boolean } {
-	const simpleType = mapDcTermsFormatToSimpleType(materialRequest.objectDctermsFormat);
+	const simpleType = mapDcTermsFormatToSimpleType(materialRequest?.objectDctermsFormat);
 	const isComplexReuseFlow: boolean =
 		(simpleType === SimpleIeObjectType.AUDIO || simpleType === SimpleIeObjectType.VIDEO) &&
 		!!user?.isKeyUser &&
-		intersection(materialRequest.objectLicences, IE_OBJECT_INTRA_CP_LICENSES).length > 0;
+		intersection(materialRequest?.objectLicences || [], IE_OBJECT_INTRA_CP_LICENSES).length > 0;
 
 	// If we're in the complex reuse flow and have a representation, then we know the user is allowed to see this object
 	// If we're in the simple flow, we can check the thumbnail url
 	const isObjectEssenceAccessibleToUser: boolean = isComplexReuseFlow
-		? !!materialRequest.objectRepresentationId
-		: !!materialRequest.objectThumbnailUrl;
+		? !!materialRequest?.objectRepresentationId
+		: !!materialRequest?.objectThumbnailUrl;
 	return {
 		isComplexReuseFlow,
 		isObjectEssenceAccessibleToUser,
