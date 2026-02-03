@@ -23,10 +23,6 @@ $material-card-list-view-height: 13rem;
 		}
 	}
 
-	&__no-content-icon {
-		color: $blue !important;
-	}
-
 	&__link {
 		text-decoration: none;
 	}
@@ -119,6 +115,7 @@ $material-card-list-view-height: 13rem;
 	&__icon {
 		font-size: $font-size-lg * math.div(11, 12);
 		line-height: $line-height-lg;
+		color: $blue !important;
 	}
 
 	&:global(.c-material-card--video),

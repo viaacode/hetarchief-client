@@ -11,7 +11,7 @@ import { Badge, Button, Card } from '@meemoo/react-components';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
 import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { getIconFromObjectType, TRUNCATED_TEXT_LENGTH } from '@shared/components/MediaCard';
+import { TRUNCATED_TEXT_LENGTH } from '@shared/components/MediaCard';
 import { Modal } from '@shared/components/Modal';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { Pill } from '@shared/components/Pill';
@@ -219,15 +219,11 @@ const MediaCard: FC<MediaCardProps> = ({
 		);
 	};
 
-	const renderNoContentIcon = () => {
-		return (
-			<Icon
-				className={clsx(styles['c-media-card__no-content-icon'], styles['c-media-card__icon'], {
-					[styles['c-media-card__no-content-icon']]: !link,
-				})}
-				name={getIconFromObjectType(type as IeObjectType, false)}
-			/>
-		);
+	const renderIcon = () => {
+		if (isNil(icon)) {
+			return null;
+		}
+		return <Icon className={styles['c-media-card__icon']} name={icon} />;
 	};
 
 	const renderDuration = () => (
@@ -283,7 +279,7 @@ const MediaCard: FC<MediaCardProps> = ({
 						styles['c-media-card__header--no-content']
 					)}
 				>
-					{renderNoContentIcon()}
+					{renderIcon()}
 					{renderNumberOfChildren()}
 					{renderLocallyAvailablePill()}
 				</div>
@@ -310,9 +306,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				<img src={imagePath} alt={''} width="100%" />
 				{!isNil(icon) && (
 					<>
-						<div className={clsx(styles['c-media-card__header-icon'])}>
-							<Icon name={icon} />
-						</div>
+						<div className={clsx(styles['c-media-card__header-icon'])}>{renderIcon()}</div>
 						{renderLocallyAvailablePill()}
 					</>
 				)}
