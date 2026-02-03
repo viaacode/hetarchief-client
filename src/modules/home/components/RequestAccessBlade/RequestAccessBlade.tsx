@@ -1,15 +1,13 @@
-import { Button, Checkbox, TextArea } from '@meemoo/react-components';
-import { type FC, useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { StringParam, useQueryParams } from 'use-query-params';
-
 import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
 import { selectCommonUser } from '@auth/store/user';
 import type {
 	RequestAccessBladeProps,
 	RequestAccessFormState,
 } from '@home/components/RequestAccessBlade/RequestAccessBlade.types';
-import { Blade } from '@shared/components/Blade/Blade';
+import { Checkbox, FormControl, TextArea } from '@meemoo/react-components';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import { BladeNew } from '@shared/components/Blade/Blade_new';
+import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
@@ -17,11 +15,13 @@ import { SpacePreview } from '@shared/components/SpacePreview';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { validateForm } from '@shared/helpers/validate-form';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
-
-import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { type FC, useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { StringParam, useQueryParams } from 'use-query-params';
 import { REQUEST_ACCESS_FORM_SCHEMA } from './RequestAccessBlade.const';
 import styles from './RequestAccessBlade.module.scss';
 
@@ -108,21 +108,97 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 		isOpen && reset();
 	}, [isOpen, reset]);
 
-	const renderFooter = () => {
-		return (
-			<div className="u-px-32  u-px-16-md u-py-24 u-py-16-md u-flex u-flex-col u-gap-xs">
-				{!(preferences?.newsletter || false) ? (
-					<Checkbox
-						className={styles['c-request-access-blade__checkbox']}
-						checkIcon={<Icon name={IconNamesLight.Check} />}
-						checked={isSubscribedToNewsletter}
-						label={tHtml(
-							'modules/home/components/request-access-blade/request-access-blade___schrijf-je-in-voor-de-nieuwsbrief'
-						)}
-						onClick={() => setIsSubscribedToNewsletter((prevState) => !prevState)}
-					/>
-				) : null}
+	const getFooterButtons = (): BladeFooterProps => {
+		return [
+			{
+				label: tText(
+					'modules/home/components/request-access-blade/request-access-blade___verstuur'
+				),
+				type: 'primary',
+				onClick: () => handleFormSubmit(),
+				disabled: !isOpen || isSubmitting,
+			},
+			{
+				label: tText(
+					'modules/home/components/request-access-blade/request-access-blade___annuleer'
+				),
+				type: 'secondary',
+				onClick: bladeProps.onClose,
+				disabled: !isOpen,
+			},
+		];
+	};
 
+	return (
+		<BladeNew
+			{...bladeProps}
+			className={styles['c-request-access-blade']}
+			footerButtons={getFooterButtons()}
+			isOpen={isOpen}
+			title={tText(
+				'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
+			)}
+			isBladeInvalid={isError}
+		>
+			{visitorSpace && <SpacePreview visitorSpace={visitorSpace} />}
+			<FormControl
+				errors={[
+					<div className="u-flex" key={`form-error--request-reason`}>
+						<RedFormWarning error={errors.requestReason} />
+						<MaxLengthIndicator maxLength={300} value={formValues.requestReason} />
+					</div>,
+				]}
+				id={labelKeys.requestReason}
+				label={tHtml(
+					'modules/home/components/request-access-blade/request-access-blade___reden-van-aanvraag'
+				)}
+			>
+				<TextArea
+					value={formValues.requestReason}
+					onChange={(evt) => setFormValue('requestReason', evt.target.value)}
+					id={labelKeys.requestReason}
+					maxLength={300}
+					disabled={!isOpen}
+				/>
+			</FormControl>
+
+			<FormControl
+				errors={[
+					<div className="u-flex" key={`form-error--visit-time`}>
+						<RedFormWarning error={errors.visitTime} />
+						<MaxLengthIndicator maxLength={300} value={formValues.visitTime} />
+					</div>,
+				]}
+				id={labelKeys.visitTime}
+				label={tHtml(
+					'modules/home/components/request-access-blade/request-access-blade___wanneer-wil-je-de-bezoekersruimte-bezoeken'
+				)}
+			>
+				<TextArea
+					value={formValues.visitTime}
+					onChange={(evt) => setFormValue('visitTime', evt.target.value)}
+					id={labelKeys.visitTime}
+					maxLength={300}
+					disabled={!isOpen}
+				/>
+			</FormControl>
+
+			{!(preferences?.newsletter ?? true) ? (
+				<Checkbox
+					className={styles['c-request-access-blade__checkbox']}
+					checkIcon={<Icon name={IconNamesLight.Check} />}
+					checked={isSubscribedToNewsletter}
+					label={tHtml(
+						'modules/home/components/request-access-blade/request-access-blade___schrijf-je-in-voor-de-nieuwsbrief'
+					)}
+					onClick={() => setIsSubscribedToNewsletter((prevState) => !prevState)}
+				/>
+			) : null}
+
+			<FormControl
+				errors={[<RedFormWarning error={errors.acceptTerms} key={`form-error--accept-terms`} />]}
+				id={labelKeys.acceptTerms}
+			>
 				<Checkbox
 					checked={formValues.acceptTerms}
 					checkIcon={<Icon name={IconNamesLight.Check} />}
@@ -134,85 +210,8 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 					value="accept-terms"
 					onChange={(evt) => setFormValue('acceptTerms', evt.target.checked)}
 				/>
-				<RedFormWarning error={errors.acceptTerms} />
-
-				{isError && (
-					<RedFormWarning
-						error={tHtml(
-							'modules/home/components/request-access-blade/request-access-blade___error'
-						)}
-					/>
-				)}
-
-				<Button
-					className="u-mb-8 u-mb-16-md"
-					label={tHtml(
-						'modules/home/components/request-access-blade/request-access-blade___verstuur'
-					)}
-					variants={['block', 'black']}
-					onClick={() => handleFormSubmit()}
-					disabled={!isOpen || isSubmitting}
-				/>
-
-				<Button
-					label={tHtml(
-						'modules/home/components/request-access-blade/request-access-blade___annuleer'
-					)}
-					variants={['block', 'text']}
-					onClick={bladeProps.onClose}
-					disabled={!isOpen}
-				/>
-			</div>
-		);
-	};
-
-	return (
-		<Blade
-			{...bladeProps}
-			className={styles['c-request-access-blade']}
-			footer={renderFooter()}
-			isOpen={isOpen}
-			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-				<h2 {...props}>
-					{tHtml(
-						'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
-					)}
-				</h2>
-			)}
-		>
-			<div className="u-px-32 u-px-16-md">
-				{visitorSpace && <SpacePreview visitorSpace={visitorSpace} />}
-
-				<label className="u-mb-8 u-display-block" htmlFor={labelKeys.requestReason}>
-					{tHtml(
-						'modules/home/components/request-access-blade/request-access-blade___reden-van-aanvraag'
-					)}
-				</label>
-				<TextArea
-					value={formValues.requestReason}
-					onChange={(evt) => setFormValue('requestReason', evt.target.value)}
-					id={labelKeys.requestReason}
-					disabled={!isOpen}
-				/>
-				<RedFormWarning
-					error={errors.requestReason}
-					key="form-error--request-reason"
-					className="u-mt-8"
-				/>
-
-				<label className="u-mb-8 u-display-block u-mt-24" htmlFor={labelKeys.visitTime}>
-					{tHtml(
-						'modules/home/components/request-access-blade/request-access-blade___wanneer-wil-je-de-bezoekersruimte-bezoeken'
-					)}
-				</label>
-				<TextArea
-					value={formValues.visitTime}
-					onChange={(evt) => setFormValue('visitTime', evt.target.value)}
-					id={labelKeys.visitTime}
-					disabled={!isOpen}
-				/>
-			</div>
-		</Blade>
+			</FormControl>
+		</BladeNew>
 	);
 };
 

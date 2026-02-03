@@ -1,16 +1,17 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, FormControl, TextArea } from '@meemoo/react-components';
-import { type FC, useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-
-import { Blade } from '@shared/components/Blade/Blade';
+import { FormControl, TextArea } from '@meemoo/react-components';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import { BladeNew } from '@shared/components/Blade/Blade_new';
+import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { VisitSummary } from '@shared/components/VisitSummary';
 import { OPTIONAL_LABEL } from '@shared/const';
-import { tHtml } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types/visit-request';
 import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
+import { type FC, useCallback, useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
 import { DECLINE_REQUEST_FORM_SCHEMA } from './DeclineRequestBlade.const';
 import type {
@@ -25,18 +26,28 @@ const labelKeys: Record<keyof DeclineRequestFormState, string> = {
 const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 	const { onSubmit, selected } = props;
 
+	const getInitialValues = useCallback(
+		() => ({
+			reasonForDenial: selected?.note?.note || undefined,
+		}),
+		[selected]
+	);
+
 	const {
 		control,
-		formState: { errors, isSubmitting },
+		formState: { errors, isValid },
+		setValue,
 		handleSubmit,
 		reset,
 	} = useForm<DeclineRequestFormState>({
 		resolver: yupResolver(DECLINE_REQUEST_FORM_SCHEMA()),
+		defaultValues: getInitialValues(),
 	});
 
 	useEffect(() => {
-		props.isOpen && reset();
-	}, [props.isOpen, reset]);
+		// If the selectedVisitRequest changes, reinitialize the form
+		props.isOpen && reset(getInitialValues());
+	}, [props.isOpen, reset, getInitialValues]);
 
 	const onFormSubmit = (values: DeclineRequestFormState) => {
 		selected &&
@@ -62,69 +73,64 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 
 	// Render
 
-	const renderFooter = () => {
-		return (
-			<div className="u-px-32 u-px-16-md u-py-24">
-				<Button
-					className="u-mb-16"
-					label={tHtml(
-						'modules/cp/components/decline-request-blade/decline-request-blade___keur-af'
-					)}
-					variants={['block', 'black']}
-					onClick={handleSubmit(onFormSubmit)}
-					disabled={isSubmitting}
-				/>
-
-				<Button
-					label={tHtml(
-						'modules/cp/components/decline-request-blade/decline-request-blade___annuleer'
-					)}
-					variants={['block', 'text']}
-					onClick={props.onClose}
-				/>
-			</div>
-		);
+	const getFooterButtons = (): BladeFooterProps => {
+		return [
+			{
+				label: tText('modules/cp/components/decline-request-blade/decline-request-blade___keur-af'),
+				type: 'primary',
+				onClick: handleSubmit(onFormSubmit),
+			},
+			{
+				label: tText(
+					'modules/cp/components/decline-request-blade/decline-request-blade___annuleer'
+				),
+				type: 'secondary',
+				onClick: props.onClose,
+			},
+		];
 	};
 
 	return (
-		<Blade
+		<BladeNew
 			{...props}
-			footer={props.isOpen && renderFooter()}
-			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-				<h2 {...props}>
-					{tHtml(
-						'modules/cp/components/decline-request-blade/decline-request-blade___aanvraag-afkeuren'
-					)}
-				</h2>
+			footerButtons={getFooterButtons()}
+			isBladeInvalid={!isValid}
+			title={tText(
+				'modules/cp/components/decline-request-blade/decline-request-blade___aanvraag-afkeuren'
 			)}
 		>
 			{selected && <VisitSummary {...selected} />}
 
-			{props.isOpen && (
-				<div className="u-px-32 u-px-16-md">
-					<FormControl
-						className="u-mb-24"
-						errors={[
-							<RedFormWarning
-								error={errors.reasonForDenial?.message}
-								key="form-error--reason-for-denial"
-							/>,
-						]}
-						id={labelKeys.reasonForDenial}
-						label={tHtml(
-							'modules/cp/components/decline-request-blade/decline-request-blade___reden-voor-afkeuring'
-						)}
-						suffix={OPTIONAL_LABEL()}
-					>
-						<Controller
-							name="reasonForDenial"
-							control={control}
-							render={({ field }) => <TextArea {...field} id={labelKeys.reasonForDenial} />}
-						/>
-					</FormControl>
-				</div>
-			)}
-		</Blade>
+			<FormControl
+				errors={[
+					<RedFormWarning
+						error={errors.reasonForDenial?.message}
+						key="form-error--reason-for-denial"
+					/>,
+				]}
+				id={labelKeys.reasonForDenial}
+				label={tHtml(
+					'modules/cp/components/decline-request-blade/decline-request-blade___reden-voor-afkeuring'
+				)}
+				suffix={OPTIONAL_LABEL()}
+			>
+				<Controller
+					name="reasonForDenial"
+					control={control}
+					render={({ field }) => (
+						<>
+							<TextArea
+								{...field}
+								id={labelKeys.reasonForDenial}
+								maxLength={300}
+								onChange={(evt) => setValue('reasonForDenial', evt.target.value)}
+							/>
+							<MaxLengthIndicator maxLength={300} value={field.value} />
+						</>
+					)}
+				/>
+			</FormControl>
+		</BladeNew>
 	);
 };
 

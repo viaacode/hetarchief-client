@@ -1,23 +1,21 @@
-import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { useRouter } from 'next/router';
-import React, { type FC, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { StringParam, useQueryParams } from 'use-query-params';
-
 import { selectUser } from '@auth/store/user';
 import {
 	RequestAccessBlade,
 	type RequestAccessFormState,
 } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
-import { Blade } from '@shared/components/Blade/Blade';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { tText } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { asDate, formatMediumDateWithTime } from '@shared/utils/dates';
+import { useRouter } from 'next/router';
+import React, { type FC, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { StringParam, useQueryParams } from 'use-query-params';
 
 import type { VisitDetailBladeProps } from './VisitDetail.types';
 import styles from './VisitDetailBlade.module.scss';
@@ -87,55 +85,43 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 		setIsRequestAccessBladeOpen(true);
 	};
 
-	const renderFooter = () => {
-		return (
-			<div className={styles['c-visit-detail-blade__close-button-container']}>
-				<Button
-					label={tText(
-						'modules/shared/components/visit-detail-blade/visit-detail-blade___plan-bezoek'
-					)}
-					variants={['block', 'text', 'dark']}
-					className={styles['c-visit-detail-blade__plan-button']}
-					onClick={() => onOpenRequestAccess()}
-				/>
-				<Button
-					label={tText('modules/shared/components/visit-detail-blade/visit-detail-blade___sluit')}
-					variants={['block', 'text', 'light']}
-					onClick={onCloseVisitDetailBlade}
-				/>
-			</div>
-		);
+	const getFooterButtons = (): BladeFooterProps => {
+		return [
+			{
+				label: tText(
+					'modules/shared/components/visit-detail-blade/visit-detail-blade___plan-bezoek'
+				),
+				type: 'primary',
+				onClick: () => onOpenRequestAccess(),
+			},
+			{
+				label: tText('modules/shared/components/visit-detail-blade/visit-detail-blade___sluit'),
+				type: 'secondary',
+				onClick: onCloseVisitDetailBlade,
+			},
+		];
 	};
 
 	return (
-		<Blade
+		<BladeNew
 			isOpen={isOpen}
-			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-				<h2 {...props} className={clsx(styles['c-visit-detail-blade__title'], props.className)}>
-					{tText('modules/shared/components/visit-detail-blade/visit-detail-blade___bezoekdetail')}
-				</h2>
+			title={tText(
+				'modules/shared/components/visit-detail-blade/visit-detail-blade___bezoekdetail'
 			)}
-			footer={isOpen && renderFooter()}
+			footerButtons={getFooterButtons()}
 			onClose={onCloseVisitDetailBlade}
 			id="visit-detail-blade"
 		>
-			<div className={styles['c-visit-detail-blade__content']}>
-				<div className={styles['c-visit-detail-blade__content-element']}>
-					<span className={styles['c-visit-detail-blade__content-element-label']}>
-						{tText('modules/shared/components/visit-detail-blade/visit-detail-blade___toegang-van')}
-					</span>
-					<span className={styles['c-visit-detail-blade__content-element-value']}>
-						{formatMediumDateWithTime(asDate(visit.startAt))}
-					</span>
-				</div>
-				<div className={styles['c-visit-detail-blade__content-element']}>
-					<span className={styles['c-visit-detail-blade__content-element-label']}>
-						{tText('modules/shared/components/visit-detail-blade/visit-detail-blade___toegang-tot')}
-					</span>
-					<span className={styles['c-visit-detail-blade__content-element-value']}>
-						{formatMediumDateWithTime(asDate(visit.endAt))}
-					</span>
-				</div>
+			<div className={styles['c-visit-detail-blade']}>
+				<strong>
+					{tHtml('modules/shared/components/visit-detail-blade/visit-detail-blade___toegang-van')}
+				</strong>
+				<p>{formatMediumDateWithTime(asDate(visit.startAt))}</p>
+
+				<strong>
+					{tHtml('modules/shared/components/visit-detail-blade/visit-detail-blade___toegang-tot')}
+				</strong>
+				<p>{formatMediumDateWithTime(asDate(visit.endAt))}</p>
 			</div>
 			<RequestAccessBlade
 				isOpen={isRequestAccessBladeOpen}
@@ -145,7 +131,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 				onSubmit={onRequestAccessSubmit}
 				id="visit-detail-blade__request-access-blade"
 			/>
-		</Blade>
+		</BladeNew>
 	);
 };
 
