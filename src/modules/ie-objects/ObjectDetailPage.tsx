@@ -64,7 +64,7 @@ import type { MaterialRequest } from '@material-requests/types';
 import { Alert, Button, type TabProps, Tabs } from '@meemoo/react-components';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import type { CuePoints } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer.types';
-import { Blade } from '@shared/components/Blade/Blade';
+import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
@@ -1885,38 +1885,28 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				onSubmit={onRequestAccessSubmit}
 				id="object-detail-page__request-access-blade"
 			/>
-			<Blade
+			<BladeNew
 				id="iiif-selection-download-url"
 				isOpen={!!selectionDownloadUrl}
-				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-					<h2 {...props}>{tHtml('modules/ie-objects/object-detail-page___selectie-is-klaar')}</h2>
-				)}
+				title={tText('modules/ie-objects/object-detail-page___selectie-is-klaar')}
 				onClose={() => setSelectionDownloadUrl(null)}
-				footer={
-					<div className="u-px-32 u-px-16-md u-py-24 u-py-16-md u-flex u-flex-col u-gap-xs">
-						<a
-							href={selectionDownloadUrl || undefined}
-							onClick={() => {
-								setTimeout(() => {
-									setSelectionDownloadUrl(null);
-								}, 100);
-							}}
-							rel="noreferrer"
-						>
-							<Button
-								label={tText('modules/ie-objects/object-detail-page___download-selection')}
-								variants={['block', 'black']}
-							/>
-						</a>
-					</div>
-				}
+				footerButtons={[
+					{
+						label: tText('modules/ie-objects/object-detail-page___download-selection'),
+						type: 'primary',
+						onClick: () => {
+							setTimeout(() => {
+								setSelectionDownloadUrl(null);
+							}, 100);
+						},
+						href: selectionDownloadUrl || undefined,
+					},
+				]}
 			>
-				<div className="u-px-32 u-px-16-md">
-					{tHtml(
-						'modules/ie-objects/object-detail-page___je-selectie-kan-worden-gedownload-als-afbeelding'
-					)}
-				</div>
-			</Blade>
+				{tHtml(
+					'modules/ie-objects/object-detail-page___je-selectie-kan-worden-gedownload-als-afbeelding'
+				)}
+			</BladeNew>
 		</>
 	);
 
