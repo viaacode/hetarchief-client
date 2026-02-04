@@ -5,13 +5,13 @@ import nlBE from 'date-fns/locale/nl-BE';
 export function getLocaleFromI18nLanguage(language: Locale): DateFnsLocale {
 	switch (language) {
 		case 'en':
-			return enGB;
+			return enGB as unknown as DateFnsLocale;
 
 		case 'nl':
-			return nlBE;
+			return nlBE as unknown as DateFnsLocale;
 
 		default:
-			return nlBE;
+			return nlBE as unknown as DateFnsLocale;
 	}
 }
 
