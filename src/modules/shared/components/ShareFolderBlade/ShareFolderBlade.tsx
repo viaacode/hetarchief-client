@@ -1,6 +1,7 @@
 import { FoldersService } from '@account/services/folders';
 import { Alert, Button, FormControl, TextInput } from '@meemoo/react-components';
-import { Blade } from '@shared/components/Blade/Blade';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { CopyButton } from '@shared/components/CopyButton';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -27,6 +28,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 
 	const handleClose = () => {
 		setEmail('');
+		setFormErrors({});
 		onClose();
 	};
 
@@ -56,17 +58,15 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 		}
 	};
 
-	const renderFooter = () => {
-		return (
-			<div className={styles['c-share-folder-blade__close-button-container']}>
-				<Button
-					label={tText('pages/account/map-delen/folder-id/index___sluit')}
-					variants={['block', 'text', 'dark']}
-					onClick={onClose}
-					className={styles['c-share-folder-blade__close-button']}
-				/>
-			</div>
-		);
+	const getFooterButtons = (): BladeFooterProps => {
+		return [
+			{
+				label: tText('pages/account/map-delen/folder-id/index___sluit'),
+				type: 'secondary',
+				onClick: onClose,
+				enforceSecondary: true,
+			},
+		];
 	};
 
 	const renderEditAlert = (): ReactNode => (
@@ -79,74 +79,57 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 	);
 
 	return (
-		<Blade
+		<BladeNew
 			isOpen={isOpen}
-			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-				<h2 {...props}>{tText('pages/account/map-delen/folder-id/index___deel-map')}</h2>
-			)}
-			footer={isOpen && renderFooter()}
+			title={tText('pages/account/map-delen/folder-id/index___deel-map')}
+			footerButtons={getFooterButtons()}
 			onClose={handleClose}
 			id="share-folder-blade"
+			stickyFooter={false}
+			isBladeInvalid={!!formErrors.email}
 		>
 			<div className={styles['c-share-folder-blade__content']}>
 				{renderEditAlert()}
-				<label className={styles['c-share-folder-blade__content-label']} htmlFor="link">
-					<h5>{tText('pages/account/map-delen/folder-id/index___via-deellink')}</h5>
-				</label>
-				<div
-					className={clsx(
-						styles['c-share-folder-blade__content-value'],
-						styles['c-share-folder-blade__content-copy-container']
-					)}
+				<FormControl
+					label={tText('pages/account/map-delen/folder-id/index___via-email')}
+					errors={[<RedFormWarning error={formErrors.email} key="form-error--email" />]}
 				>
-					<TextInput
-						id="link"
-						value={link}
-						className={styles['c-share-folder-blade__content-copy-input']}
-					/>
-					<CopyButton
-						text={link}
-						iconStart={<Icon name={IconNamesLight.Copy} aria-hidden />}
-						label={tText('modules/shared/components/copy-button/copy-button___kopieer')}
-						variants={['inputCopy']}
-					/>
-				</div>
-				<label className={styles['c-share-folder-blade__content-label']} htmlFor={labelKeys.email}>
-					<h5 className={styles['c-share-folder-blade__content-label--margin-top']}>
-						{tText('pages/account/map-delen/folder-id/index___via-email')}
-					</h5>
-				</label>
-				<label
-					className={styles['c-share-folder-blade__content-label--email']}
-					htmlFor={labelKeys.email}
-				>
-					{tText('pages/account/map-delen/folder-id/index___email')}
-				</label>
-				<div className={styles['c-share-folder-blade__content-value']}>
-					<FormControl
-						className="u-mb-8 u-mb-24-md"
-						id={labelKeys.email}
-						errors={[<RedFormWarning error={formErrors.email} key="form-error--email" />]}
-					>
+					<div className={clsx(styles['c-share-folder-blade__content-copy-container'])}>
 						<TextInput
 							name="email"
 							id={labelKeys.email}
 							autoComplete={'email'}
 							value={email}
 							onChange={(evt) => setEmail(evt.target.value)}
+							className={styles['c-share-folder-blade__content-copy-input']}
 						/>
-					</FormControl>
-				</div>
+						<Button
+							label={tText('pages/account/map-delen/folder-id/index___verstuur')}
+							iconStart={<Icon name={IconNamesLight.Search} aria-hidden />}
+							variants={['inline-input']}
+							className={styles['c-share-folder-blade__send-button']}
+							onClick={handleSend}
+						/>
+					</div>
+				</FormControl>
 
-				<Button
-					label={tText('pages/account/map-delen/folder-id/index___verstuur')}
-					variants={['block', 'text']}
-					className={styles['c-share-folder-blade__send-button']}
-					onClick={handleSend}
-					disabled={!!formErrors.email}
-				/>
+				<FormControl label={tText('pages/account/map-delen/folder-id/index___via-deellink')}>
+					<div className={clsx(styles['c-share-folder-blade__content-copy-container'])}>
+						<TextInput
+							id="link"
+							value={link}
+							className={styles['c-share-folder-blade__content-copy-input']}
+						/>
+						<CopyButton
+							text={link}
+							iconStart={<Icon name={IconNamesLight.Copy} aria-hidden />}
+							label={tText('modules/shared/components/copy-button/copy-button___kopieer')}
+							variants={['inline-input']}
+						/>
+					</div>
+				</FormControl>
 			</div>
-		</Blade>
+		</BladeNew>
 	);
 };
 
