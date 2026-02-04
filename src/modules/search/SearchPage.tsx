@@ -743,9 +743,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				hasRelated: (item.related_count || 0) > 0,
 				hasTempAccess,
 				showKeyUserLabel,
-				...(!isNil(type) && {
-					icon: getIconFromObjectType(type, !!item.thumbnailUrl),
-				}),
+				icon: type ? getIconFromObjectType(type, !!item.thumbnailUrl) : null,
 				link,
 				previousPage: ROUTES_BY_LOCALE[locale].search,
 				numOfChildren: item.children || 0,

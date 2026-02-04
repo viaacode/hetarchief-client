@@ -8,153 +8,156 @@ import {
 	MaterialRequestGeographicalUsage,
 	MaterialRequestIntendedUsage,
 	type MaterialRequestReuseForm,
+	MaterialRequestReuseFormKey,
 	MaterialRequestTimeUsage,
 } from '@material-requests/types';
 import { tText } from '@shared/helpers/translate';
 import { parseISO } from 'date-fns';
 import { mixed, number, object, type Schema, string } from 'yup';
 
-export type MaterialRequestReuseSettings = Pick<
-	MaterialRequestReuseForm,
-	| 'representationId'
-	| 'startTime'
-	| 'endTime'
-	| 'downloadQuality'
-	| 'intendedUsageDescription'
-	| 'intendedUsage'
-	| 'distributionAccess'
-	| 'distributionType'
-	| 'distributionTypeDigitalOnline'
-	| 'distributionTypeOtherExplanation'
-	| 'materialEditing'
-	| 'geographicalUsage'
-	| 'timeUsageType'
-	| 'timeUsageFrom'
-	| 'timeUsageTo'
-	| 'copyrightDisplay'
->;
-
 export const MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA =
-	(): Schema<MaterialRequestReuseSettings> => {
-		return object({
-			representationId: string().optional(),
-			startTime: number().when('representationId', ([representationId]) => {
-				if (representationId) {
-					return number().required(
-						tText(
-							'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___video-start-knippunt-error-verplicht'
-						)
-					);
-				}
-				return number().optional();
-			}),
-			endTime: number().when(['representationId', 'startTime'], ([representationId, startTime]) => {
-				if (representationId) {
-					return number()
-						.required(
+	(): Schema<MaterialRequestReuseForm> => {
+		return object<MaterialRequestReuseForm>().shape({
+			[MaterialRequestReuseFormKey.representationId]: string().defined(),
+			[MaterialRequestReuseFormKey.startTime]: number().when(
+				MaterialRequestReuseFormKey.representationId,
+				([representationId]) => {
+					if (representationId) {
+						return number().required(
 							tText(
 								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___video-start-knippunt-error-verplicht'
 							)
-						)
-						.moreThan(
-							startTime,
-							tText(
-								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___video-start-knippunt-error-eindtijd-gelijk-aan-of-voor-starttijd'
-							)
 						);
+					}
+					return number().defined();
 				}
-				return number().optional();
-			}),
-			downloadQuality: mixed<MaterialRequestDownloadQuality>()
+			),
+			[MaterialRequestReuseFormKey.endTime]: number().when(
+				[MaterialRequestReuseFormKey.representationId, MaterialRequestReuseFormKey.startTime],
+				([representationId, startTime]) => {
+					if (representationId) {
+						return number()
+							.required(
+								tText(
+									'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___video-start-knippunt-error-verplicht'
+								)
+							)
+							.moreThan(
+								startTime,
+								tText(
+									'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___video-start-knippunt-error-eindtijd-gelijk-aan-of-voor-starttijd'
+								)
+							);
+					}
+					return number().defined();
+				}
+			),
+			[MaterialRequestReuseFormKey.downloadQuality]: mixed<MaterialRequestDownloadQuality>()
 				.oneOf(Object.values(MaterialRequestDownloadQuality))
 				.required(
 					tText(
 						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___downloadkwaliteit-error-verplicht'
 					)
 				),
-			intendedUsage: mixed<MaterialRequestIntendedUsage>()
+			[MaterialRequestReuseFormKey.intendedUsage]: mixed<MaterialRequestIntendedUsage>()
 				.oneOf(Object.values(MaterialRequestIntendedUsage))
 				.required(
 					tText(
 						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bedoeld-gebruik-error-verplicht'
 					)
 				),
-			intendedUsageDescription: string()
+			[MaterialRequestReuseFormKey.intendedUsageDescription]: string()
 				.required(
 					tText(
 						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bedoeld-gebruik-beschrijving-error-verplicht'
 					)
 				)
 				.max(300),
-			distributionAccess: mixed<MaterialRequestDistributionAccess>()
+			[MaterialRequestReuseFormKey.distributionAccess]: mixed<MaterialRequestDistributionAccess>()
 				.oneOf(Object.values(MaterialRequestDistributionAccess))
 				.required(
 					tText(
 						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ontsluiting-materiaal-error-verplicht'
 					)
 				),
-			distributionType: mixed<MaterialRequestDistributionType>()
+			[MaterialRequestReuseFormKey.distributionType]: mixed<MaterialRequestDistributionType>()
 				.oneOf(Object.values(MaterialRequestDistributionType))
 				.required(
 					tText(
 						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-error-verplicht'
 					)
 				),
-			distributionTypeDigitalOnline: mixed<MaterialRequestDistributionDigitalOnline>()
-				.oneOf(Object.values(MaterialRequestDistributionDigitalOnline))
-				.when('distributionType', ([value]) => {
-					if (value === MaterialRequestDistributionType.DIGITAL_ONLINE) {
-						return mixed().required(
+			[MaterialRequestReuseFormKey.distributionTypeDigitalOnline]:
+				mixed<MaterialRequestDistributionDigitalOnline>()
+					.oneOf(Object.values(MaterialRequestDistributionDigitalOnline))
+					.when(MaterialRequestReuseFormKey.distributionType, ([value]) => {
+						if (value === MaterialRequestDistributionType.DIGITAL_ONLINE) {
+							return mixed().required(
+								tText(
+									'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-digitale-ontsluiting-via-netwerkverbinding-error-verplicht'
+								)
+							);
+						}
+						return mixed().optional();
+					}),
+			[MaterialRequestReuseFormKey.distributionTypeOtherExplanation]: string().when(
+				MaterialRequestReuseFormKey.distributionType,
+				([value]) => {
+					if (value === MaterialRequestDistributionType.OTHER) {
+						return string().required(
 							tText(
-								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-digitale-ontsluiting-via-netwerkverbinding-error-verplicht'
+								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-andere-error-verplicht'
 							)
 						);
 					}
-					return mixed().optional();
-				}),
-			distributionTypeOtherExplanation: string().when('distributionType', ([value]) => {
-				if (value === MaterialRequestDistributionType.OTHER) {
-					return string().required(
-						tText(
-							'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-andere-error-verplicht'
-						)
-					);
+					return string().optional();
 				}
-				return string().optional();
-			}),
-			materialEditing: mixed<MaterialRequestEditing>()
+			),
+			[MaterialRequestReuseFormKey.materialEditing]: mixed<MaterialRequestEditing>()
 				.oneOf(Object.values(MaterialRequestEditing))
 				.required(
 					tText(
 						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___wijziging-materiaal-error-verplicht'
 					)
 				),
-			geographicalUsage: mixed<MaterialRequestGeographicalUsage>()
+			[MaterialRequestReuseFormKey.geographicalUsage]: mixed<MaterialRequestGeographicalUsage>()
 				.oneOf(Object.values(MaterialRequestGeographicalUsage))
 				.required(
 					tText(
 						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___geografisch-gebruik-error-verplicht'
 					)
 				),
-			timeUsageType: mixed<MaterialRequestTimeUsage>()
+			[MaterialRequestReuseFormKey.geographicalUsageDescription]: string()
+				.when(MaterialRequestReuseFormKey.geographicalUsage, ([_value]) => {
+					// Wait for response Philip: https://studiohyperdrive.slack.com/archives/C027HPM6SCD/p1770137111507109
+					// if (_value === MaterialRequestGeographicalUsage.NOT_COMPLETELY_LOCAL) {
+					// 	return string().required(tText('geographisch-gebruik-berschrijving-error-verplicht'));
+					// }
+					return string().optional();
+				})
+				.required(),
+			[MaterialRequestReuseFormKey.timeUsageType]: mixed<MaterialRequestTimeUsage>()
 				.oneOf(Object.values(MaterialRequestTimeUsage))
 				.required(
 					tText(
 						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___gebruik-in-de-tijd-error-verplicht'
 					)
 				),
-			timeUsageFrom: string().when('timeUsageType', ([value]) => {
-				if (value === MaterialRequestTimeUsage.IN_TIME) {
-					return string().required(
-						tText(
-							'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___gebruik-in-de-tijd-startdatum-error-verplicht'
-						)
-					);
+			[MaterialRequestReuseFormKey.timeUsageFrom]: string().when(
+				MaterialRequestReuseFormKey.timeUsageType,
+				([value]) => {
+					if (value === MaterialRequestTimeUsage.IN_TIME) {
+						return string().required(
+							tText(
+								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___gebruik-in-de-tijd-startdatum-error-verplicht'
+							)
+						);
+					}
+					return string().optional();
 				}
-				return string().optional();
-			}),
-			timeUsageTo: string().when(
-				['timeUsageType', 'timeUsageFrom'],
+			),
+			[MaterialRequestReuseFormKey.timeUsageTo]: string().when(
+				[MaterialRequestReuseFormKey.timeUsageType, MaterialRequestReuseFormKey.timeUsageFrom],
 				([timeUsageType, timeUsageFrom]) => {
 					if (timeUsageType !== MaterialRequestTimeUsage.IN_TIME) {
 						return string().optional();
@@ -176,12 +179,12 @@ export const MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA =
 						);
 				}
 			),
-			copyrightDisplay: mixed<MaterialRequestCopyrightDisplay>()
+			[MaterialRequestReuseFormKey.copyrightDisplay]: mixed<MaterialRequestCopyrightDisplay>()
 				.oneOf(Object.values(MaterialRequestCopyrightDisplay))
 				.required(
 					tText(
 						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___bronvermelding-error-verplicht'
 					)
 				),
-		}) as Schema<MaterialRequestReuseSettings>;
+		}) as Schema<MaterialRequestReuseForm>;
 	};

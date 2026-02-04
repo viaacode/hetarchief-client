@@ -12,7 +12,7 @@ export interface MaterialCardProps {
 	type: IeObjectType | null;
 	publishedBy?: string;
 	publishedOrCreatedDate?: string;
-	icon?: IconName;
+	icon: IconName;
 	withBorder?: boolean;
 	orientation: 'horizontal' | 'vertical';
 	children?: ReactNode;

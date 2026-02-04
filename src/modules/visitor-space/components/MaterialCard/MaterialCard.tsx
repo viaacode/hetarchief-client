@@ -1,12 +1,10 @@
 import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
 import { Card } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
-import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 import clsx from 'clsx';
 import { isValid } from 'date-fns';
-import { isNil } from 'lodash-es';
 import { default as NextLink } from 'next/link';
 import type { FC, ReactNode } from 'react';
 import styles from './MaterialCard.module.scss';
@@ -62,37 +60,14 @@ const MaterialCard: FC<MaterialCardProps> = ({
 		return renderAdditionalCaption?.(subtitle) || subtitle;
 	};
 
-	const renderNoContentIcon = () => {
-		return (
-			<Icon
-				className={clsx(
-					styles['c-material-card__no-content-icon'],
-					styles['c-material-card__icon'],
-					{
-						[styles['c-material-card__no-content-icon']]: !link,
-					}
-				)}
-				name={getIconFromObjectType(type as IeObjectType, false)}
-			/>
-		);
+	const renderIcon = () => {
+		return <Icon className={styles['c-material-card__icon']} name={icon} />;
 	};
 
 	const renderImage = (imgPath: string | undefined) => {
 		let imagePath: string | undefined = imgPath;
-		if (!imagePath) {
-			return (
-				<div
-					className={clsx(
-						styles['c-material-card__header'],
-						styles['c-material-card__header--no-content']
-					)}
-				>
-					{renderNoContentIcon()}
-				</div>
-			);
-		}
 
-		if (hideThumbnail) {
+		if (!imagePath || hideThumbnail) {
 			return (
 				<div
 					className={clsx(
@@ -100,18 +75,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 						styles['c-material-card__header--no-content']
 					)}
 				>
-					{!isNil(icon) && (
-						<Icon
-							className={clsx(
-								styles['c-material-card__no-content-icon'],
-								styles['c-material-card__icon'],
-								{
-									[styles['c-material-card__no-content-icon']]: !link,
-								}
-							)}
-							name={icon}
-						/>
-					)}
+					{renderIcon()}
 				</div>
 			);
 		}
@@ -127,11 +91,9 @@ const MaterialCard: FC<MaterialCardProps> = ({
 			<div className={clsx(styles['c-material-card__header'])}>
 				{/** biome-ignore lint/performance/noImgElement: we need this*/}
 				<img src={imagePath} alt={''} width="100%" height="100%" />
-				{!isNil(icon) && (
-					<div className={clsx(styles['c-material-card__header-icon'])}>
-						<Icon name={icon} />
-					</div>
-				)}
+				<div className={clsx(styles['c-material-card__header-icon'])}>
+					<Icon name={icon} />
+				</div>
 			</div>
 		);
 	};
