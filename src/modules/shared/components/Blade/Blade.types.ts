@@ -22,10 +22,11 @@ export interface BladeProps extends DefaultComponentProps {
 	stickyFooter?: boolean;
 }
 
-export interface BladeNewProps extends DefaultComponentProps {
+export interface BladeContentProps extends DefaultComponentProps {
 	id: string;
 	children?: ReactNode;
-	isOpen: boolean;
+	closable?: boolean;
+	isOpen?: boolean;
 	onClose?: () => void;
 
 	// Title props
@@ -84,6 +85,10 @@ export interface BladeNewProps extends DefaultComponentProps {
 	 * Is the footer sticky? Will be true by default
 	 */
 	stickyFooter?: boolean;
+}
+
+export interface BladeNewProps extends Omit<BladeContentProps, 'closable' | 'isOpen'> {
+	isOpen: boolean;
 
 	// manager types
 	layer?: number;

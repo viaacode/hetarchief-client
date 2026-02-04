@@ -1,79 +1,26 @@
-import { Button, keysEscape } from '@meemoo/react-components';
-import { Icon } from '@shared/components/Icon';
-import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { Loading } from '@shared/components/Loading';
-import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
-import { tHtml, tText } from '@shared/helpers/translate';
+import { keysEscape } from '@meemoo/react-components';
+import { BladeContent } from '@shared/components/Blade/BladeContent';
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
-import { useSize } from '@shared/hooks/use-size';
-import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHasOpenConfirmationModal } from '@shared/store/ui';
-import { isMobileSize } from '@shared/utils/is-mobile';
 import clsx from 'clsx';
 import FocusTrap from 'focus-trap-react';
 import { isUndefined } from 'lodash-es';
-import Link from 'next/link';
-import { type FC, useCallback, useEffect, useRef, useState } from 'react';
+import { type FC, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Overlay } from '../Overlay';
-import type { BladeFooterButton, BladeNewProps } from './Blade.types';
-import styles from '././Blade_new.module.scss';
+import type { BladeNewProps } from './Blade.types';
+import styles from './Blade_new.module.scss';
 
-export const BladeNew: FC<BladeNewProps> = ({
-	id,
-	className,
-	children,
-	isOpen,
-	onClose,
-	wideBladeTitle,
-	title,
-	stickySubtitle,
-	subtitle,
-	isBladeInvalid = false,
-	footerButtons,
-	stickyFooter = true,
-	layer,
-}) => {
-	const [contentIsScrollable, setContentIsScrollable] = useState(false);
-	const [contentHasBeenScrolled, setContentHasBeenScrolled] = useState(false);
-
+export const BladeNew: FC<BladeNewProps> = (props) => {
+	const { id, className, isOpen, onClose, wideBladeTitle, layer } = props;
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
 	const hasOpenConfirmationModal = useSelector(selectHasOpenConfirmationModal);
-
-	const contentRef = useRef<HTMLDivElement>(null);
-	useSize(contentRef, (referenceStripContainer) => checkContentSize(referenceStripContainer));
-
-	const checkContentSize = useCallback((referenceStripElement: HTMLElement) => {
-		if (!referenceStripElement) {
-			return;
-		}
-		const scrollHeight = referenceStripElement.scrollHeight;
-		const height = referenceStripElement.clientHeight;
-
-		setContentIsScrollable(scrollHeight > height);
-	}, []);
-
-	const onScrollContent = useCallback(() => {
-		// We need to check the scroll position as well. Otherwise, if the content starts stretching, it will trigger as well
-		if (
-			isOpen &&
-			contentIsScrollable &&
-			!contentHasBeenScrolled &&
-			(contentRef?.current?.scrollTop ?? 0) > 0
-		) {
-			setContentHasBeenScrolled(true);
-		}
-	}, [isOpen, contentIsScrollable, contentHasBeenScrolled]);
 
 	useScrollLock(!isManaged && isOpen, 'Blade');
 
 	const isLayered = isManaged && !!layer;
 	const isBladeOpen = isLayered ? layer <= currentLayer : isOpen;
-
-	// We need different functionalities for different viewport sizes
-	const windowSize = useWindowSizeContext();
-	const isMobile = isMobileSize(windowSize);
 
 	// Hack to remove ios outline on the close button: https://meemoo.atlassian.net/browse/ARC-1025
 	useEffect(() => {
@@ -90,8 +37,6 @@ export const BladeNew: FC<BladeNewProps> = ({
 		} else if (onClose) {
 			onClose();
 		}
-		// Waiting for the animation to finish
-		setTimeout(() => setContentHasBeenScrolled(false), 200);
 	}, [hasOpenConfirmationModal, isLayered, layer, currentLayer, onClose, onCloseBlade]);
 
 	const escFunction = useCallback(
@@ -115,184 +60,6 @@ export const BladeNew: FC<BladeNewProps> = ({
 			document.removeEventListener('keydown', escFunction, false);
 		};
 	}, [escFunction]);
-
-	const renderHeader = () => {
-		if (isMobile) {
-			return (
-				<div
-					id={id}
-					className={clsx(
-						styles['c-blade__title'],
-						contentHasBeenScrolled && [styles['c-blade__content-scrolled']]
-					)}
-				>
-					<div className={clsx(styles['c-blade__title--mobile-wrapper'])}>
-						<h2 className={clsx(styles['c-blade__title--text'])}>{title}</h2>
-						<Button
-							className={clsx(styles['c-blade__close-button'])}
-							icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-							aria-label={tText('modules/shared/components/blade/blade___sluiten')}
-							variants={['text', 'icon', 'xxs']}
-							onClick={() => handleClose()}
-							disabled={!isOpen}
-						/>
-					</div>
-					{isOpen && stickySubtitle && (
-						<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>{stickySubtitle}</div>
-					)}
-				</div>
-			);
-		}
-
-		return (
-			<>
-				<div
-					className={clsx(
-						styles['c-blade__top-bar-container'],
-						contentHasBeenScrolled && [styles['c-blade__content-scrolled']]
-					)}
-				>
-					<Button
-						className={clsx(styles['c-blade__close-button'])}
-						icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-						aria-label={tText('modules/shared/components/blade/blade___sluiten')}
-						variants={['text', 'icon', 'xs']}
-						onClick={() => handleClose()}
-						disabled={!isOpen}
-					/>
-				</div>
-				<div
-					id={id}
-					className={clsx(
-						styles['c-blade__title'],
-						contentHasBeenScrolled && [styles['c-blade__content-scrolled']]
-					)}
-				>
-					{wideBladeTitle && (
-						<div className={clsx(styles['c-blade__title--wide-blade'])}>{wideBladeTitle}</div>
-					)}
-					<h2 className={clsx(styles['c-blade__title--text'])}>{title}</h2>
-					{isOpen && (
-						<>
-							{stickySubtitle && (
-								<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>
-									{stickySubtitle}
-								</div>
-							)}
-							{subtitle && (
-								<div className={clsx(styles['c-blade__title--subtitle'])}>{subtitle}</div>
-							)}
-						</>
-					)}
-				</div>
-			</>
-		);
-	};
-
-	const renderFooterButton = (
-		buttonConfig: (BladeFooterButton & { variants: string[] }) | undefined
-	) => {
-		if (!buttonConfig) {
-			return null;
-		}
-
-		const renderButton = () => {
-			return (
-				<Button
-					label={buttonConfig.label}
-					title={buttonConfig.title || undefined}
-					aria-label={buttonConfig.ariaLabel || undefined}
-					variants={buttonConfig.variants}
-					onClick={() => buttonConfig.onClick?.()}
-					disabled={buttonConfig.disabled}
-					iconStart={buttonConfig.icon && <Icon name={buttonConfig.icon} />}
-				/>
-			);
-		};
-
-		if (buttonConfig.href) {
-			return (
-				<Link
-					passHref
-					href={buttonConfig.href}
-					aria-label={buttonConfig.ariaLabel || buttonConfig.label}
-				>
-					{renderButton()}
-				</Link>
-			);
-		}
-		return renderButton();
-	};
-
-	const renderFooter = () => {
-		let firstButton: BladeFooterButton & { variants: string[] };
-		let lastButton: (BladeFooterButton & { variants: string[] }) | undefined;
-
-		const secondaryVariant = ['text'];
-		const blackPrimaryVariant = ['dark'];
-
-		if (footerButtons.length === 1) {
-			firstButton = {
-				...footerButtons[0],
-				variants: footerButtons[0].enforceSecondary ? secondaryVariant : blackPrimaryVariant,
-			};
-		} else if (footerButtons.every((button) => button?.type === 'secondary')) {
-			firstButton = {
-				...footerButtons[0],
-				variants: blackPrimaryVariant,
-			};
-			lastButton = {
-				...(footerButtons[1] as BladeFooterButton),
-				variants: secondaryVariant,
-			};
-		} else if (footerButtons.every((button) => button?.type === 'primary')) {
-			firstButton = {
-				...footerButtons[0],
-				variants: ['primary'],
-			};
-			lastButton = {
-				...(footerButtons[1] as BladeFooterButton),
-				variants: ['secondary'],
-			};
-		} else {
-			firstButton = {
-				...footerButtons.find((button) => button?.type === 'primary'),
-				variants: blackPrimaryVariant,
-			} as BladeFooterButton & { variants: string[] };
-			lastButton = {
-				...footerButtons.find((button) => button?.type === 'secondary'),
-				variants: secondaryVariant,
-			} as BladeFooterButton & { variants: string[] };
-		}
-
-		return (
-			<div
-				className={clsx(
-					styles['c-blade__footer'],
-					stickyFooter && styles['c-blade__footer-sticky'],
-					contentHasBeenScrolled && [styles['c-blade__content-scrolled']]
-				)}
-			>
-				{isBladeInvalid && (
-					<RedFormWarning
-						className={clsx(styles['c-blade__footer--validation'])}
-						error={tHtml(
-							'Er staan fouten in dit formulier. Corrigeer deze en probeer het opnieuw.'
-						)}
-					/>
-				)}
-				<div
-					className={clsx(
-						styles['c-blade__footer-buttons'],
-						wideBladeTitle && styles['c-blade__footer-buttons-extra-wide']
-					)}
-				>
-					{renderFooterButton(firstButton)}
-					{renderFooterButton(lastButton)}
-				</div>
-			</div>
-		);
-	};
 
 	const renderContent = () => {
 		return (
@@ -320,28 +87,7 @@ export const BladeNew: FC<BladeNewProps> = ({
 						: { visibility: 'visible' }
 				}
 			>
-				{renderHeader()}
-				<div
-					ref={contentRef}
-					className={styles['c-blade__body-wrapper']}
-					onScroll={onScrollContent}
-				>
-					<div className={clsx(styles['c-blade__body-wrapper--content'])}>
-						{isOpen ? (
-							<>
-								{isMobile && subtitle && (
-									<div className={clsx(styles['c-blade__body-wrapper--subtitle'])}>{subtitle}</div>
-								)}
-								{children}
-							</>
-						) : (
-							<Loading owner="Blade content unopened" />
-						)}
-					</div>
-					<div className={'u-flex-grow'} />
-					{!stickyFooter && renderFooter()}
-				</div>
-				{stickyFooter && renderFooter()}
+				<BladeContent {...props} onClose={handleClose} />
 			</div>
 		);
 	};
