@@ -9,7 +9,7 @@ import { METADATA_FIELD_MAX_LENGTH } from './MetaDataFieldWithHighlightingAndMax
 import styles from './MetaDataFieldWithHighlightingAndMaxLength.module.scss';
 
 interface MetaDataFieldWithHighlightingAndMaxLengthProps extends DefaultComponentProps {
-	title: string | ReactNode;
+	title: string;
 	data: string;
 	onReadMoreClicked: (item: MetadataItem) => void;
 	enableHighlighting?: boolean;

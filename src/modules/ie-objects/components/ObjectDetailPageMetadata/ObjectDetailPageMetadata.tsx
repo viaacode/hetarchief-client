@@ -67,7 +67,7 @@ import {
 	MenuContent,
 } from '@meemoo/react-components';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
-import { Blade } from '@shared/components/Blade/Blade';
+import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { CopyButton } from '@shared/components/CopyButton';
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
@@ -617,7 +617,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	);
 
 	const renderSimpleMetadataField = (
-		title: string | ReactNode,
+		title: string,
 		data: string | ReactNode | null | undefined
 	): ReactNode => {
 		if (!data) {
@@ -1229,25 +1229,29 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				</MetadataList>
 
 				{/* Read more metadata field blade */}
-				<Blade
+				<BladeNew
 					className={clsx(
 						'u-pb-24 u-line-height-1-4 u-font-size-14',
 						styles['p-object-detail__metadata-blade']
 					)}
 					isOpen={!!selectedMetadataField}
 					onClose={() => setSelectedMetadataField(null)}
-					renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-						<h2 {...props}>{selectedMetadataField?.title}</h2>
-					)}
+					title={selectedMetadataField?.title ?? ''}
+					stickyFooter={false}
+					footerButtons={[
+						{
+							label: tText('Sluit'),
+							type: 'secondary',
+							onClick: () => setSelectedMetadataField(null),
+						},
+					]}
 					id="object-detail-page__metadata-field-detail-blade"
 				>
-					<div className="u-px-32 u-px-16-md u-pb-32">
-						<HighlightedMetadata
-							title={selectedMetadataField?.title}
-							data={selectedMetadataField?.data}
-						/>
-					</div>
-				</Blade>
+					<HighlightedMetadata
+						title={selectedMetadataField?.title}
+						data={selectedMetadataField?.data}
+					/>
+				</BladeNew>
 
 				<CopyrightConfirmationModal
 					isOpen={copyrightModalOpen}
