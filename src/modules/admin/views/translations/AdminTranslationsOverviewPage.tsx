@@ -1,15 +1,13 @@
-import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import React, { type FC, lazy, type ReactNode, Suspense } from 'react';
-
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
-import { Blade } from '@shared/components/Blade/Blade';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import React, { type FC, lazy, type ReactNode, Suspense } from 'react';
 
 import styles from './AdminTranslationsOverviewPage.module.scss';
 
@@ -29,46 +27,38 @@ export const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		onSave,
 		onClose,
 	}: {
-		title: ReactNode;
+		title: string;
 		body: ReactNode;
 		isOpen: boolean;
 		onSave: () => void;
 		onClose: () => void;
 	}) => {
-		const renderFooter = () => {
-			return (
-				<div
-					className={clsx(
-						'u-px-32 u-px-16-md u-py-24',
-						styles['c-translations-overview__blade-footer']
-					)}
-				>
-					<Button
-						variants={['block', 'black']}
-						onClick={onSave}
-						label={tText('pages/admin/vertalingen/index___bewaar-wijzigingen')}
-					/>
-
-					<Button
-						variants={['block', 'text']}
-						onClick={onClose}
-						label={tText('pages/admin/vertalingen/index___annuleer')}
-					/>
-				</div>
-			);
+		const getFooterButtons = (): BladeFooterProps => {
+			return [
+				{
+					label: tText('pages/admin/vertalingen/index___bewaar-wijzigingen'),
+					type: 'primary',
+					onClick: onSave,
+				},
+				{
+					label: tText('pages/admin/vertalingen/index___annuleer'),
+					type: 'secondary',
+					onClick: onClose,
+				},
+			];
 		};
 
 		return (
-			<Blade
+			<BladeNew
 				className={styles['c-translations-overview__blade']}
-				footer={renderFooter()}
+				footerButtons={getFooterButtons()}
 				isOpen={isOpen}
 				onClose={onClose}
-				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => <h2 {...props}>{title}</h2>}
+				title={title}
 				id="translations-blade"
 			>
 				<div className={styles['c-translations-overview__blade-body']}>{body}</div>
-			</Blade>
+			</BladeNew>
 		);
 	};
 

@@ -1,15 +1,13 @@
-import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import React, { type FC, lazy, type ReactNode, Suspense } from 'react';
-
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
-import { Blade } from '@shared/components/Blade/Blade';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import React, { type FC, lazy, type ReactNode, Suspense } from 'react';
 
 const MaintenanceAlertsOverview = lazy(() =>
 	import('@meemoo/admin-core-ui/admin').then((adminCoreModule) => ({
@@ -18,22 +16,19 @@ const MaintenanceAlertsOverview = lazy(() =>
 );
 
 export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
-	const renderPopupFooter = (onSave: () => void, onClose: () => void) => {
-		return (
-			<div className={clsx('u-px-32 u-px-16-md u-py-24')}>
-				<Button
-					variants={['block', 'black']}
-					onClick={onSave}
-					label={tText('pages/admin/vertalingen/index___bewaar-wijzigingen')}
-				/>
-
-				<Button
-					variants={['block', 'text']}
-					onClick={onClose}
-					label={tText('pages/admin/vertalingen/index___annuleer')}
-				/>
-			</div>
-		);
+	const getFooterButtons = (onSave: () => void, onClose: () => void): BladeFooterProps => {
+		return [
+			{
+				label: tText('pages/admin/vertalingen/index___bewaar-wijzigingen'),
+				type: 'primary',
+				onClick: onSave,
+			},
+			{
+				label: tText('pages/admin/vertalingen/index___annuleer'),
+				type: 'secondary',
+				onClick: onClose,
+			},
+		];
 	};
 
 	const renderPopup = ({
@@ -43,22 +38,22 @@ export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url, canoni
 		onSave,
 		onClose,
 	}: {
-		title: ReactNode;
+		title: string;
 		body: ReactNode;
 		isOpen: boolean;
 		onSave: () => void;
 		onClose: () => void;
 	}) => {
 		return (
-			<Blade
-				footer={renderPopupFooter(onSave, onClose)}
+			<BladeNew
+				footerButtons={getFooterButtons(onSave, onClose)}
 				isOpen={isOpen}
 				onClose={onClose}
-				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => <h2 {...props}>{title}</h2>}
+				title={title}
 				id="alerts-blade"
 			>
-				<div className="u-px-32 u-px-16-md">{body}</div>
-			</Blade>
+				{body}
+			</BladeNew>
 		);
 	};
 
