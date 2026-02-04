@@ -1,23 +1,22 @@
-import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import React, { type FC, lazy, type ReactNode, Suspense } from 'react';
-
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
+import { Button } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import clsx from 'clsx';
+import React, { type FC, lazy, type ReactNode, Suspense } from 'react';
 
-const MaintenanceAlertsOverview = lazy(() =>
+const AdminMaintenanceAlertsOverview = lazy(() =>
 	import('@meemoo/admin-core-ui/admin').then((adminCoreModule) => ({
 		default: adminCoreModule.MaintenanceAlertsOverview,
 	}))
 );
 
-export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
+export const AdminMaintenanceAlertsOverviewPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const renderPopupFooter = (onSave: () => void, onClose: () => void) => {
 		return (
 			<div className={clsx('u-px-32 u-px-16-md u-py-24')}>
@@ -67,8 +66,11 @@ export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url, canoni
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40">
-						<Suspense fallback={<Loading fullscreen owner="AdminMaintenanceAlertsOverview" />}>
-							<MaintenanceAlertsOverview className="p-admin-alerts" renderPopup={renderPopup} />
+						<Suspense fallback={<Loading fullscreen owner="AdminMaintenanceAlertsOverviewPage" />}>
+							<AdminMaintenanceAlertsOverview
+								className="p-admin-alerts"
+								renderPopup={renderPopup}
+							/>
 						</Suspense>
 					</div>
 				</AdminLayout.Content>
