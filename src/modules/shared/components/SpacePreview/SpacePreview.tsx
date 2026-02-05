@@ -1,9 +1,8 @@
-import clsx from 'clsx';
-import type { FC } from 'react';
-
 import type { SpacePreviewProps } from '@shared/components/SpacePreview/SpacePreview.types';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { Locale } from '@shared/utils/i18n';
+import clsx from 'clsx';
+import type { FC } from 'react';
 
 import { CardImage } from '../CardImage';
 import Html from '../Html/Html';
@@ -30,6 +29,7 @@ const SpacePreview: FC<SpacePreviewProps> = ({
 			{locale === Locale.nl &&
 				serviceDescriptionNl &&
 				serviceDescriptionNl.length > 0 &&
+				serviceDescriptionNl !== '<p></p>' &&
 				canPreview && (
 					<Html
 						className="u-mb-40 u-color-neutral c-content"
@@ -41,6 +41,7 @@ const SpacePreview: FC<SpacePreviewProps> = ({
 			{locale === Locale.en &&
 				serviceDescriptionEn &&
 				serviceDescriptionEn.length > 0 &&
+				serviceDescriptionEn !== '<p></p>' &&
 				canPreview && (
 					<Html
 						className="u-mb-40 u-color-neutral c-content"

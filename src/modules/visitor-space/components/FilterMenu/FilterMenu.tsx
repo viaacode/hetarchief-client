@@ -1,21 +1,20 @@
 import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { isEmpty, isNil } from 'lodash-es';
-import { type FC, type ReactNode, useEffect, useState } from 'react';
-import { useQueryParams } from 'use-query-params';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Toggle } from '@shared/components/Toggle';
 import { tText } from '@shared/helpers/translate';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { Breakpoints } from '@shared/types';
+import { isTabletPortraitSize } from '@shared/utils/is-mobile';
 import FilterMenuMobile from '@visitor-space/components/FilterMenu/FilterMenuMobile/FilterMenuMobile';
 import {
 	SEARCH_PAGE_QUERY_PARAM_CONFIG,
 	VISITOR_SPACE_ACTIVE_SORT_MAP,
 } from '@visitor-space/const';
+import clsx from 'clsx';
+import { isEmpty, isNil } from 'lodash-es';
+import { type FC, type ReactNode, useEffect, useState } from 'react';
+import { useQueryParams } from 'use-query-params';
 
 import type { SearchFilterId, SearchSortProp } from '../../types';
 
@@ -47,7 +46,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();
 
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.lg);
+	const isMobile = isTabletPortraitSize(windowSize);
 	const openIcon = isMobile
 		? IconNamesLight.Filter
 		: isOpen

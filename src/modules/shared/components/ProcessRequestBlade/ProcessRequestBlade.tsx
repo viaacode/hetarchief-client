@@ -1,19 +1,14 @@
-import { Button } from '@meemoo/react-components';
-import React, { type FC, type ReactNode, useState } from 'react';
-
 import { Blade } from '@shared/components/Blade/Blade';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
 import { BladeManager } from '@shared/components/BladeManager';
-import { Icon } from '@shared/components/Icon';
-import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { VisitSummary } from '@shared/components/VisitSummary';
-import { tHtml } from '@shared/helpers/translate';
+import { tText } from '@shared/helpers/translate';
 import { VisitStatus } from '@shared/types/visit-request';
-import { formatDistanceToday } from '@shared/utils/dates';
+import React, { type FC, useState } from 'react';
 
 import { ApproveRequestBlade } from '../ApproveRequestBlade';
 import { DeclineRequestBlade } from '../DeclineRequestBlade';
 
-import styles from './ProcessRequestBlade.module.scss';
 import type { ProcessRequestBladeProps } from './ProcessRequestBlade.types';
 
 const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
@@ -44,25 +39,25 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 		return 0;
 	};
 
-	const getTitle = (): string | ReactNode => {
+	const getTitle = (): string => {
 		switch (selected?.status) {
 			case VisitStatus.PENDING:
-				return tHtml(
+				return tText(
 					'modules/cp/components/process-request-blade/process-request-blade___open-aanvraag'
 				);
 
 			case VisitStatus.APPROVED:
-				return tHtml(
+				return tText(
 					'modules/cp/components/process-request-blade/process-request-blade___goedgekeurde-aanvraag'
 				);
 
 			case VisitStatus.DENIED:
-				return tHtml(
+				return tText(
 					'modules/cp/components/process-request-blade/process-request-blade___geweigerde-aanvraag'
 				);
 
 			case VisitStatus.CANCELLED_BY_VISITOR:
-				return tHtml(
+				return tText(
 					'modules/cp/components/process-request-blade/process-request-blade___geannuleerde-aanvraag'
 				);
 
@@ -71,51 +66,43 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 		}
 	};
 
-	const renderFooter = () => {
-		return (
-			<div className="u-px-32 u-px-16-md u-py-24">
-				<Button
-					className="u-mb-16"
-					label={
-						selected && selected?.status === VisitStatus.APPROVED
-							? tHtml(
-									'modules/cp/components/process-request-blade/process-request-blade___aanpassen'
-								)
-							: tHtml(
-									'modules/cp/components/process-request-blade/process-request-blade___goedkeuren'
-								)
-					}
-					iconStart={<Icon name={IconNamesLight.Check} />}
-					variants={['block', 'black']}
-					onClick={() => setShowApprove(true)}
-				/>
+	const getFooterButtons = (): BladeFooterProps => {
+		if (
+			!selected ||
+			![VisitStatus.APPROVED, VisitStatus.DENIED, VisitStatus.PENDING].includes(selected.status)
+		) {
+			return [
+				{
+					label: tText('modules/cp/components/process-request-blade/process-request-blade___sluit'),
+					type: 'primary',
+					onClick: () => props.onClose?.(),
+				},
+			];
+		}
 
-				<Button
-					label={
-						selected && selected?.status === VisitStatus.DENIED
-							? tHtml(
-									'modules/cp/components/process-request-blade/process-request-blade___aanpassen'
-								)
-							: tHtml(
-									'modules/cp/components/process-request-blade/process-request-blade___weigeren'
-								)
-					}
-					iconStart={<Icon name={IconNamesLight.Forbidden} />}
-					variants={['block', 'text']}
-					onClick={() => setShowDecline(true)}
-				/>
-			</div>
-		);
+		return [
+			{
+				label:
+					selected?.status === VisitStatus.APPROVED
+						? tText('modules/cp/components/process-request-blade/process-request-blade___aanpassen')
+						: tText(
+								'modules/cp/components/process-request-blade/process-request-blade___goedkeuren'
+							),
+				type: 'primary',
+				onClick: () => setShowApprove(true),
+			},
+			{
+				label:
+					selected?.status === VisitStatus.DENIED
+						? tText('modules/cp/components/process-request-blade/process-request-blade___aanpassen')
+						: tText('modules/cp/components/process-request-blade/process-request-blade___weigeren'),
+				type: 'primary',
+				onClick: () => setShowDecline(true),
+			},
+		];
 	};
 
 	// Decide when to show process buttons
-	const footer =
-		props.isOpen &&
-		selected &&
-		[VisitStatus.APPROVED, VisitStatus.DENIED, VisitStatus.PENDING].includes(selected.status)
-			? renderFooter()
-			: undefined;
-
 	return (
 		<BladeManager
 			currentLayer={getCurrentLayer()}
@@ -130,45 +117,18 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 		>
 			<Blade
 				{...props}
-				footer={footer}
+				footerButtons={getFooterButtons()}
 				isOpen={getCurrentLayer() === 1}
 				layer={1}
-				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-					<h2 {...props}>{getTitle()}</h2>
-				)}
+				title={getTitle()}
 			>
-				{selected && (
-					<>
-						<div className={styles['c-process-request-blade__info']}>
-							<ul className={styles['c-process-request-blade__info-list']}>
-								<li className={styles['c-process-request-blade__info-item']}>
-									<strong>
-										{tHtml(
-											'modules/cp/components/process-request-blade/process-request-blade___emailadres'
-										)}
-										:
-									</strong>{' '}
-									{selected.visitorMail}
-								</li>
-
-								<li className={styles['c-process-request-blade__info-item']}>
-									<strong>
-										{tHtml(
-											'modules/cp/components/process-request-blade/process-request-blade___tijdstip'
-										)}
-										:
-									</strong>{' '}
-									{formatDistanceToday(selected.createdAt)}
-								</li>
-							</ul>
-						</div>
-
-						<VisitSummary {...selected} />
-					</>
-				)}
+				{selected && <VisitSummary {...selected} />}
 			</Blade>
 
 			<ApproveRequestBlade
+				title={tText(
+					'modules/cp/components/approve-request-blade/approve-request-blade___aanvraag-goedkeuren'
+				)}
 				isOpen={getCurrentLayer() === (showApprove ? 2 : 9999)}
 				layer={showApprove ? 2 : 9999}
 				selected={selected}

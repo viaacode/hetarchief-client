@@ -2,8 +2,13 @@
 @use "sass:math";
 @use "src/styles/abstracts" as *;
 
+$sticky-background: $platinum;
+$padding-horizontal: $spacer-lg;
+$padding-horizontal-mobile: $spacer-sm;
+
 .c-blade {
 	background-color: $white;
+	color: $black;
 	bottom: 0;
 	display: grid;
 	grid-template-rows: auto auto 1fr auto;
@@ -27,6 +32,26 @@
 
 	&.c-blade--extra-wide{
 		max-width: 90%;
+
+
+		@media (max-width: $breakpoint-sm) {
+			max-width: 100%;
+		}
+	}
+
+	&__content-standalone {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		max-width: $blade-max-width;
+		background-color: $white;
+		color: $black;
+		border-left: 1px solid $silver;
+		max-height: calc($view-height - #{$c-navigation-height-md});
+
+		@media (min-width: $breakpoint-md) {
+			max-height: calc($view-height - #{$c-navigation-height});
+		}
 	}
 
 	&__top-bar-container {
@@ -34,17 +59,14 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-	}
+		min-height: $padding-horizontal;
 
-	&__back-container {
-		color: $black;
-		cursor: pointer;
-		display: flex;
-		flex-direction: row;
-		align-items: center;
+		&.c-blade__content-scrolled {
+			background: $sticky-background;
+		}
 
-		&:hover {
-			color: $neutral;
+		@media (max-width: $breakpoint-md) {
+			min-height: $padding-horizontal-mobile;
 		}
 	}
 
@@ -53,38 +75,67 @@
 		justify-self: flex-end;
 		margin: 2rem;
 		z-index: get-z-layer("blade");
+		box-shadow: none !important;
 
-		&:only-child:not(&--absolute) {
+		&:only-child {
 			margin-left: auto;
 		}
 
-		&--absolute {
-			position: absolute;
-			right: 0;
-			top: 0;
+		@media (max-width: $breakpoint-md) {
+			margin: auto 0 auto auto;
 		}
 	}
 
 	&__title {
 		color: $black;
-		font-size: $font-size-lg;
-		line-height: $line-height-lg;
-		padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-sm;
+		padding: 0 $padding-horizontal $spacer-sm;
+		word-break: break-word;
 
 		@media (max-width: $breakpoint-md) {
-			text-align: center;
+			padding: $padding-horizontal-mobile;
+
+			&--mobile-wrapper {
+				display: flex;
+				padding:0;
+			}
 		}
 
-		@media (min-width: $breakpoint-md) {
+		&.c-blade__content-scrolled {
+			border-bottom: $divider-grey;
+			background: $sticky-background;
+		}
+
+		&--wide-blade {
+			line-height: $line-height-md;
+			font-size: $font-size-md;
+			font-weight: $font-weight-bold;
+
+			+ .c-blade__title--text {
+				line-height: $line-height-2xl;
+				font-size: $font-size-2xl;
+
+				@media (max-width: $breakpoint-lg) {
+					line-height: $line-height-1xl;
+					font-size: $font-size-1xl;
+				}
+			}
+		}
+
+		&--text {
+			line-height: $line-height-lg;
 			font-size: $font-size-lg;
-			padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-lg;
 
-			// Force line height to be an integer, avoids .5px misalignments in datepickers in blades
-			line-height: $font-size-3xl * (math.div(56, 48));
+			@media (max-width: $breakpoint-md) {
+				display: flex;
+			}
 		}
 
-		&-wrapper {
-			grid-row-start: 2;
+		&--sticky-subtitle, &--subtitle {
+			padding-top: $spacer-sm;
+
+			@media (max-width: $breakpoint-md) {
+				padding-top: $spacer-xs;
+			}
 		}
 	}
 
@@ -99,27 +150,94 @@
 		div {
 			white-space: pre-line;
 		}
-	}
 
-	&__flex-grow {
-		flex-grow: 1;
+		&--subtitle {
+			padding-bottom: $padding-horizontal-mobile;
+		}
+
+		&--content {
+			padding: $spacer-md $padding-horizontal;
+
+			@media (max-width: $breakpoint-md) {
+				padding: $padding-horizontal-mobile;
+			}
+		}
 	}
 
 	&__footer {
 		grid-row-start: 4;
-		align-content: flex-end;
-	}
-
-	&__footer-sticky {
+		gap: $spacer-xs;
 		border-top: $divider-grey;
-		background-color: $platinum;
+		background: $sticky-background;
+		padding: $spacer-sm $padding-horizontal;
+
+		@media (max-width: $breakpoint-md) {
+			padding: $padding-horizontal-mobile;
+		}
+
+		&-buttons {
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			align-content: flex-end;
+			gap: $spacer-xs;
+
+			&-extra-wide {
+				flex-direction: row-reverse;
+				justify-content: space-between;
+
+				:global(.c-button) {
+					display: inline-block;
+					width: unset;
+				}
+			}
+
+			@media (max-width: $breakpoint-md) {
+				flex-direction: row-reverse;
+				justify-content: space-between;
+			}
+
+			&:not(&-extra-wide){
+				:global(.c-button) {
+					display: block;
+					width: 100%;
+
+					@media (max-width: $breakpoint-md) {
+						display: inline-block;
+						width: unset;
+
+						&:only-child {
+							display: block;
+							width: 100%;
+						}
+					}
+				}
+			}
+		}
+
+		:global(.c-button--primary):hover {
+			background-color: $white;
+			color: $teal-dark;
+			border: 1px solid $teal-dark;
+		}
+
+		:global(.c-button--secondary) {
+			background-color: $cherry;
+			border: 1px solid $cherry;
+
+			&:hover{
+				background-color: $white;
+				color: $cherry;
+				border: 1px solid $cherry;
+			}
+		}
 	}
 
 	&__overlay {
-		z-index: get-z-layer("blade");
+		z-index: get-z-layer("blade") !important;
 
 		&--managed {
-			left: auto;
+			left: auto !important;
 			transform: translateX(5.6rem);
 			transition:
 				opacity $timing-default linear,

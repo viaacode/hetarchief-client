@@ -1,8 +1,4 @@
 import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { type FC, useEffect, useRef, useState } from 'react';
-import { StringParam, useQueryParams } from 'use-query-params';
-
 import { Loading } from '@shared/components/Loading';
 import { SearchBar } from '@shared/components/SearchBar';
 import {
@@ -13,9 +9,12 @@ import { VisitorSpaceCardList } from '@shared/components/VisitorSpaceCardList';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { Breakpoints } from '@shared/types';
+import { isMobileSize } from '@shared/utils/is-mobile';
 import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
 import { type VisitorSpaceInfo, VisitorSpaceStatus } from '@visitor-space/types';
+import clsx from 'clsx';
+import { type FC, useEffect, useRef, useState } from 'react';
+import { StringParam, useQueryParams } from 'use-query-params';
 
 const NUMBER_OF_VISITOR_SPACES = 6;
 const NUMBER_OF_VISITOR_SPACES_MOBILE = 3;
@@ -48,7 +47,7 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const isMobile = isMobileSize(windowSize);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: only execute the scroll down one time
 	useEffect(() => {

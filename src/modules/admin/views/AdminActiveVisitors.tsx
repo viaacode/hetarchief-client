@@ -214,7 +214,7 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 							}}
 						/>
 						<ApproveRequestBlade
-							title={tHtml('pages/beheer/bezoekers/index___aanvraag-aanpassen')}
+							title={tText('pages/beheer/bezoekers/index___aanvraag-aanpassen')}
 							approveButtonLabel={tText('pages/beheer/bezoekers/index___aanpassen')}
 							successTitle={tHtml('pages/beheer/bezoekers/index___de-aanpassingen-zijn-opgeslagen')}
 							successDescription={tHtml(

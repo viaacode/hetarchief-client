@@ -111,6 +111,10 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 	};
 
 	const renderMaterialRequest = (materialRequest: MaterialRequest) => {
+		if (!materialRequest) {
+			return null;
+		}
+
 		let materialRequestEntries = createLabelValuePairMaterialRequestReuseForm(
 			materialRequest.reuseForm
 		);

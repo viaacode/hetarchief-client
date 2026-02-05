@@ -6,8 +6,8 @@ import {
 } from '@home/components/RequestAccessBlade';
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
-import { Button } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
 import { Loading } from '@shared/components/Loading';
 import { SpacePreview } from '@shared/components/SpacePreview';
 import {
@@ -18,7 +18,7 @@ import {
 import type { VisitSummaryType } from '@shared/components/VisitSummary';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { tHtml } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
@@ -355,42 +355,32 @@ const LoggedInVisitorSpacesHome: FC = () => {
 	};
 
 	const renderVisitorSpaceNotAvailableBlade = () => {
+		const footerButtons: BladeFooterProps = [
+			{
+				label: tText('modules/home/components/logged-in-home/logged-in-home___ga-naar-de-homepage'),
+				type: 'primary',
+				onClick: () => {
+					setIsVisitorSpaceNotAvailable(false);
+					setQuery({
+						[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: undefined,
+					});
+				},
+			},
+		];
 		return (
 			<Blade
 				className={styles['c-visitor-space-not-available-blade']}
 				isOpen={isVisitorSpaceNotAvailable}
-				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-					<h2
-						{...props}
-						className={clsx(props.className, styles['c-visitor-space-not-available-blade__title'])}
-					>
-						{tHtml(
-							'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
-						)}
-					</h2>
+				title={tText(
+					'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
 				)}
+				footerButtons={footerButtons}
 				id="logged-in-home__visitor-space-not-available-blade"
 			>
-				<div className="u-px-32 u-px-16-md">
-					{visitorSpaceInfo && <SpacePreview visitorSpace={visitorSpaceInfo} />}
-					<p>
-						{tHtml(
-							'modules/home/components/logged-in-home/logged-in-home___het-is-niet-mogelijk-om-toegang-tot-deze-bezoekersruimte-aan-te-vragen-op-dit-moment'
-						)}
-					</p>
-					<Button
-						label={tHtml(
-							'modules/home/components/logged-in-home/logged-in-home___ga-naar-de-homepage'
-						)}
-						variants="black"
-						onClick={() => {
-							setIsVisitorSpaceNotAvailable(false);
-							setQuery({
-								[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: undefined,
-							});
-						}}
-					/>
-				</div>
+				{visitorSpaceInfo && <SpacePreview visitorSpace={visitorSpaceInfo} />}
+				{tHtml(
+					'modules/home/components/logged-in-home/logged-in-home___het-is-niet-mogelijk-om-toegang-tot-deze-bezoekersruimte-aan-te-vragen-op-dit-moment'
+				)}
 			</Blade>
 		);
 	};
@@ -409,7 +399,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 					isOpen={isRequestAccessBladeOpen}
 					onClose={onCloseRequestBlade}
 					onSubmit={onRequestAccessSubmit}
-					id=""
+					id="logged-in-home__request-access-blade"
 				/>
 				{renderVisitorSpaceNotAvailableBlade()}
 				<ProcessVisitBlade
@@ -421,7 +411,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 						refetchFuture();
 						refetchPending();
 					}}
-					id=""
+					id="logged-in-home__process-visit-blade"
 				/>
 			</>
 		);

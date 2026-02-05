@@ -1,11 +1,8 @@
-import type { FC } from 'react';
-
 import type { VisitSummaryProps } from '@shared/components/VisitSummary';
 import { tHtml } from '@shared/helpers/translate';
-
-import SpacePreview from '../SpacePreview/SpacePreview';
-
 import clsx from 'clsx';
+import type { FC } from 'react';
+import SpacePreview from '../SpacePreview/SpacePreview';
 import styles from './VisitSummary.module.scss';
 
 const VisitSummary: FC<VisitSummaryProps> = ({
@@ -22,7 +19,7 @@ const VisitSummary: FC<VisitSummaryProps> = ({
 	preview = false,
 }) => {
 	return (
-		<div className={clsx(styles['c-visit-summary'], 'u-px-32 u-px-20-md')}>
+		<div className={clsx(styles['c-visit-summary'])}>
 			{preview && (
 				<SpacePreview
 					visitorSpace={{

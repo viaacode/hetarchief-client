@@ -10,6 +10,7 @@ import {
 } from '@material-requests/types';
 import { Button } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
 import { BladeManager } from '@shared/components/BladeManager';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
@@ -21,18 +22,18 @@ import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { setMaterialRequestCount } from '@shared/store/ui';
+import { isMobileSize } from '@shared/utils/is-mobile';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
 import { MaterialRequestForReuseBlade } from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade';
 import { checkIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { type FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParam, withDefault } from 'use-query-params';
-import bladeStyles from '../../../shared/components/Blade/Blade.module.scss';
 import MaterialCard from '../../../visitor-space/components/MaterialCard/MaterialCard';
 import styles from './MaterialRequestCenterBlade.module.scss';
 
@@ -51,6 +52,10 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const locale = useLocale();
+
+	// We need different functionalities for different viewport sizes
+	const windowSize = useWindowSizeContext();
+	const isMobile = isMobileSize(windowSize);
 
 	const [selectedMaterialRequest, setSelectedMaterialRequest] = useState<MaterialRequest | null>(
 		null
@@ -165,25 +170,6 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		setMaterialRequestToDelete(null);
 	};
 
-	const renderTitle = (props: Pick<HTMLElement, 'id' | 'className'>) => {
-		return (
-			<div className={styles['c-material-request-center-blade__title-container']}>
-				<h2 {...props} style={{ paddingBottom: 0 }}>
-					{tText(
-						'modules/navigation/components/material-request-center-blade/material-request-center-blade___aanvraaglijst'
-					)}
-					{materialRequests?.length > 0 && ` (${materialRequests.length})`}
-				</h2>
-				<MaterialRequestInformation />
-				<p className={styles['c-material-request-center-blade__more-info']}>
-					{tText(
-						'modules/navigation/components/material-request-center-blade/material-request-center-blade___vraag-dit-materiaal-rechtstreeks-aan-bij-de-aanbieder-s'
-					)}
-				</p>
-			</div>
-		);
-	};
-
 	const renderMaterialRequest = (materialRequest: MaterialRequest) => {
 		if (!materialRequest) {
 			return null;
@@ -278,48 +264,59 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		return materialRequests.map((item) => renderMaterialRequest(item));
 	};
 
-	const renderFooter = () => {
+	const getFooterButtons = (): BladeFooterProps => {
 		if (noContent) {
-			return (
-				<div className={styles['c-material-request-center-blade__close-button-container']}>
-					<Button
-						label={tText(
-							'modules/navigation/components/material-request-center-blade/material-request-center-blade___sluit'
-						)}
-						variants={['block', 'text']}
-						onClick={onCloseBlades}
-						className={styles['c-material-request-center-blade__send-button']}
-					/>
-				</div>
-			);
-		}
-		return (
-			<div className={styles['c-material-request-center-blade__close-button-container']}>
-				{user && (
-					<Link
-						passHref
-						href={`/${ROUTE_PARTS_BY_LOCALE[locale].account}/${ROUTE_PARTS_BY_LOCALE[locale].myApplicationList}`}
-						aria-label={tText(
-							'modules/navigation/components/material-request-center-blade/material-request-center-blade___werk-je-aanvraag-af'
-						)}
-					>
-						<Button
-							label={tText(
-								'modules/navigation/components/material-request-center-blade/material-request-center-blade___werk-je-aanvraag-af'
-							)}
-							variants={['block', 'text', 'dark']}
-							className={styles['c-material-request-center-blade__send-button']}
-						/>
-					</Link>
-				)}
-				<Button
-					label={tText(
+			return [
+				{
+					label: tText(
 						'modules/navigation/components/material-request-center-blade/material-request-center-blade___sluit'
-					)}
-					variants={['block', 'text', 'light']}
-					onClick={onCloseBlades}
-				/>
-			</div>
+					),
+					type: 'primary',
+					onClick: onCloseBlades,
+				},
+			];
+		}
+
+		return [
+			{
+				label: tText(
+					'modules/navigation/components/material-request-center-blade/material-request-center-blade___werk-je-aanvraag-af'
+				),
+				type: 'primary',
+				onClick: onCloseBlades,
+				href: user
+					? `/${ROUTE_PARTS_BY_LOCALE[locale].account}/${ROUTE_PARTS_BY_LOCALE[locale].myApplicationList}`
+					: undefined,
+			},
+			{
+				label: tText(
+					'modules/navigation/components/material-request-center-blade/material-request-center-blade___sluit'
+				),
+				type: 'secondary',
+				onClick: onCloseBlades,
+			},
+		];
+	};
+
+	const getTitle = () => {
+		const title = tText(
+			'modules/navigation/components/material-request-center-blade/material-request-center-blade___aanvraaglijst'
+		);
+
+		if (materialRequests?.length > 0) {
+			return `${title} (${materialRequests.length})`;
+		}
+
+		return title;
+	};
+
+	const getSubtitle = () => {
+		if (isMobile) {
+			return null;
+		}
+
+		return tText(
+			'modules/navigation/components/material-request-center-blade/material-request-center-blade___vraag-dit-materiaal-rechtstreeks-aan-bij-de-aanbieder-s'
 		);
 	};
 
@@ -336,21 +333,18 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			opacityStep={0.1}
 		>
 			<Blade
+				id="material-request-center-blade"
 				className={styles['c-material-request-center-blade']}
 				isOpen={isOpen}
 				layer={1}
 				currentLayer={getCurrentLayer()}
-				renderTitle={() => null}
-				footer={isOpen && renderFooter()}
 				onClose={onCloseBlades}
 				isManaged
-				stickyFooter
-				id="material-request-center-blade"
+				title={getTitle()}
+				stickySubtitle={<MaterialRequestInformation />}
+				subtitle={getSubtitle()}
+				footerButtons={getFooterButtons()}
 			>
-				{renderTitle({
-					id: 'material-requests-overview-blade-title',
-					className: bladeStyles['c-blade__title'],
-				})}
 				{isFetching ? (
 					<Loading
 						className={styles['c-material-request-center-blade__loading']}

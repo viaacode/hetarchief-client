@@ -298,22 +298,17 @@
 @mixin blade-text-styling() {
 	strong,
 	p {
-		font-size: $font-size-sm;
-		line-height: $font-size-md;
+		font-size: $font-size-base;
+		line-height: $line-height-1xl;
+		margin-bottom: $spacer-sm;
 	}
 
 	strong {
 		display: block;
-		margin-bottom: $spacer-sm;
 	}
 
 	p {
 		color: $neutral;
-		margin-bottom: $spacer-1xl;
-
-		@media (min-width: $breakpoint-md) {
-			font-size: $font-size-base;
-			line-height: $font-size-2xm;
-		}
+		margin-bottom: $spacer-md;
 	}
 }

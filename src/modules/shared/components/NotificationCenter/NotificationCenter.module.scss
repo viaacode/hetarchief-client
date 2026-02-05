@@ -9,30 +9,15 @@ $component: "c-notification-center";
 		margin-top: $c-navigation-height;
 	}
 
-	&__empty,
-	&__unread,
-	&__read {
-		padding-left: $spacer-md;
-		padding-right: $spacer-md;
-		padding-bottom: $spacer-md;
-	}
-
-	&__empty,
-	&__unread {
-		padding-top: $spacer-md;
-	}
-
 	&__empty {
-		width: $blade-max-width;
-		padding-top: 3.6rem;
 		text-align: center;
 		color: $neutral;
 	}
 
-	&__read {
-		padding-top: $spacer-lg;
-		background-color: $platinum;
-		padding-bottom: $spacer-md;
+	&__unread + &__read {
+		margin-top: $spacer-md;
+		padding-top: $spacer-md;
+		border-top: 1px solid $silver;
 	}
 
 	&__header {

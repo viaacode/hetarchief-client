@@ -4,31 +4,33 @@ import { selectUser } from '@auth/store/user';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestRequesterCapacity } from '@material-requests/types';
 import {
-	Button,
 	Checkbox,
+	FormControl,
 	RadioButton,
 	TextInput,
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
 } from '@meemoo/react-components';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import { BladeContent } from '@shared/components/Blade/BladeContent';
+import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { useSize } from '@shared/hooks/use-size';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
 import { getLocalisedOptions } from '@shared/utils/dates';
 import clsx from 'clsx';
 import { format } from 'date-fns';
 import { noop } from 'lodash-es';
-import React, { type FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { type FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './PersonalInfo.module.scss';
-import type { PersonalInfoProps } from './PersonalInfo.types';
+import type { PersonalInfoFormState, PersonalInfoProps } from './PersonalInfo.types';
 
 const PersonalInfo: FC<PersonalInfoProps> = ({
 	mostRecentMaterialRequestName,
@@ -54,14 +56,12 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestRequesterCapacity | undefined>(
 		isKeyUser ? MaterialRequestRequesterCapacity.WORK : undefined
 	);
-	const [validationError, setValidationError] = useState('');
-	const [contentIsScrollable, setContentIsScrollable] = useState(false);
 	const [agreedToTerms, setAgreedToTerms] = useState(false);
 	const [showTermAgreement, setShowTermAgreement] = useState(false);
-
-	// Keep track of the reference strip size and update the bottom border if needed
-	const contentRef = useRef<HTMLDivElement>(null);
-	useSize(contentRef, (referenceStripContainer) => checkContentSize(referenceStripContainer));
+	const [isFormValid, setIsFormValid] = useState(true);
+	const [errors, setFormErrors] = useState<Partial<Record<keyof PersonalInfoFormState, string>>>(
+		{}
+	);
 
 	useEffect(() => {
 		const formattedDate = format(new Date(), 'MM-yyyy', { ...getLocalisedOptions() });
@@ -71,59 +71,54 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 		);
 	}, [mostRecentMaterialRequestName]);
 
-	const checkContentSize = useCallback((referenceStripElement: HTMLElement) => {
-		if (!referenceStripElement) {
-			return;
-		}
-		const scrollHeight = referenceStripElement.scrollHeight;
-		const height = referenceStripElement.clientHeight;
+	const validateForm = () => {
+		const errors = {
+			hasRequests: !hasRequests
+				? tText(
+						'modules/account/components/personal-info/personal-info___er-zijn-geen-aanvragen-te-vervolledigen'
+					)
+				: undefined,
+			requesterCapacity: !typeSelected
+				? tText(
+						'modules/account/components/personal-info/personal-info___de-hoedanigheid-is-verplicht'
+					)
+				: undefined,
+			requestGroupName:
+				isKeyUser && requestGroupName.length === 0
+					? tText(
+							'modules/account/components/personal-info/personal-info___de-aanvraag-naam-is-verplicht'
+						)
+					: undefined,
+			agreedToTerms:
+				isKeyUser && !agreedToTerms
+					? tText(
+							'modules/account/components/personal-info/personal-info___keur-de-aanvullende-gebruiksvoorwaarden-bij-aanvragen-goed'
+						)
+					: undefined,
+		};
 
-		setContentIsScrollable(scrollHeight > height);
-	}, []);
+		setFormErrors(errors);
+		const isInvalid =
+			!!errors.hasRequests ||
+			!!errors.requesterCapacity ||
+			!!errors.requestGroupName ||
+			!!errors.agreedToTerms;
+
+		setIsFormValid(!isInvalid);
+
+		return !isInvalid;
+	};
 
 	const onSendRequests = async () => {
 		try {
-			if (!hasRequests) {
-				setValidationError(
-					tText(
-						'modules/account/components/personal-info/personal-info___er-zijn-geen-aanvragen-te-vervolledigen'
-					)
-				);
+			const formValid = validateForm();
+
+			if (!formValid) {
 				return;
 			}
 
-			if (!typeSelected) {
-				setValidationError(
-					tText(
-						'modules/account/components/personal-info/personal-info___de-hoedanigheid-is-verplicht'
-					)
-				);
-				return;
-			}
-
-			if (isKeyUser) {
-				if (requestGroupName.length === 0) {
-					setValidationError(
-						tText(
-							'modules/account/components/personal-info/personal-info___de-aanvraag-naam-is-verplicht'
-						)
-					);
-					return;
-				}
-
-				if (!agreedToTerms) {
-					setValidationError(
-						tText(
-							'modules/account/components/personal-info/personal-info___keur-de-aanvullende-gebruiksvoorwaarden-bij-aanvragen-goed'
-						)
-					);
-					return;
-				}
-			}
-
-			setValidationError('');
 			await MaterialRequestsService.sendAll({
-				type: typeSelected,
+				type: typeSelected as MaterialRequestRequesterCapacity,
 				organisation: organisationInputValue,
 				requestGroupName,
 			});
@@ -161,31 +156,37 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 			return null;
 		}
 		return (
-			<Checkbox
-				className={styles['c-personal-info__checkbox']}
-				checked={agreedToTerms}
-				label={
-					<>
-						{tText(
-							'modules/account/components/personal-info/personal-info___ik-nam-kennis-en-ga-akkoord-met-de'
-						)}{' '}
-						{/** biome-ignore lint/a11y/noStaticElementInteractions: We need hyperlink behavior in the label*/}
-						{/** biome-ignore lint/a11y/useKeyWithClickEvents: We need hyperlink behavior in the label */}
-						<span
-							onClick={(event) => {
-								event.preventDefault();
-								setShowTermAgreement(true);
-							}}
-							className={clsx(styles['c-personal-info__checkbox-hyperlink'])}
-						>
+			<FormControl
+				errors={[
+					<RedFormWarning error={errors.agreedToTerms} key={`form-error--agreed-to-terms`} />,
+				]}
+			>
+				<Checkbox
+					className={styles['c-personal-info__checkbox']}
+					checked={agreedToTerms}
+					label={
+						<>
 							{tText(
-								'modules/account/components/personal-info/personal-info___aanvullende-gebruiksvoorwaarden-bij-aanvragen'
-							)}
-						</span>
-					</>
-				}
-				onClick={() => setAgreedToTerms((prevState) => !prevState)}
-			/>
+								'modules/account/components/personal-info/personal-info___ik-nam-kennis-en-ga-akkoord-met-de'
+							)}{' '}
+							{/** biome-ignore lint/a11y/noStaticElementInteractions: We need hyperlink behavior in the label*/}
+							{/** biome-ignore lint/a11y/useKeyWithClickEvents: We need hyperlink behavior in the label */}
+							<span
+								onClick={(event) => {
+									event.preventDefault();
+									setShowTermAgreement(true);
+								}}
+								className={clsx(styles['c-personal-info__checkbox-hyperlink'])}
+							>
+								{tText(
+									'modules/account/components/personal-info/personal-info___aanvullende-gebruiksvoorwaarden-bij-aanvragen'
+								)}
+							</span>
+						</>
+					}
+					onClick={() => setAgreedToTerms((prevState) => !prevState)}
+				/>
+			</FormControl>
 		);
 	};
 
@@ -233,44 +234,23 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 		});
 	};
 
-	const renderFooter = () => {
-		return (
-			<div
-				className={clsx(styles['c-personal-info__footer'], contentIsScrollable && 'u-bg-platinum')}
-			>
-				{validationError ? (
-					<RedFormWarning
-						className={clsx(styles['c-personal-info__footer-error'])}
-						error={validationError}
-					/>
-				) : null}
-
-				<Button
-					label={tText(
-						'modules/account/components/personal-info/personal-info___verstuur-aanvraag'
-					)}
-					variants={['block', 'text', 'dark']}
-					onClick={onSendRequests}
-				/>
-				<Button
-					label={tText('modules/account/components/personal-info/personal-info___keer-terug')}
-					variants={['block', 'text', 'light']}
-					onClick={onCancel}
-				/>
-			</div>
-		);
-	};
-
 	const renderNameEntry = () => (
-		<div className={styles['c-personal-info__content-group']}>
-			<div className={clsx(styles['c-personal-info__content-group-semi-title'])}>
-				{tText('modules/account/components/personal-info/personal-info___naam-aanvraag')}
-			</div>
-			<div className={clsx(styles['c-personal-info__content-group-value'])}>
+		<FormControl
+			errors={[
+				<div className="u-flex" key={`form-error--request-group-name`}>
+					<RedFormWarning error={errors.requestGroupName} />
+					<MaxLengthIndicator maxLength={MAX_NAME_LENGTH} value={requestGroupName} />
+				</div>,
+			]}
+			id="PersonalInfoBladeContent__requestGroupName"
+			className={clsx(styles['c-personal-info__content-group'])}
+			label={tHtml('modules/account/components/personal-info/personal-info___naam-aanvraag')}
+		>
+			<p className={clsx(styles['c-personal-info__content-group-value'])}>
 				{tText(
 					'modules/account/components/personal-info/personal-info___door-je-aanvraag-een-naam-te-geven-behoud-je-het-overzicht-van-de-objecten-die-samen-in-een-aanvraag-uitgevoerd-werden'
 				)}
-			</div>
+			</p>
 			<Tooltip position="left">
 				<TooltipTrigger>
 					<TextInput
@@ -285,23 +265,17 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 					)}
 				</TooltipContent>
 			</Tooltip>
-
-			<span
-				className={clsx(
-					styles['c-personal-info__content-group-value'],
-					styles['c-personal-info__content-group-value-length']
-				)}
-			>
-				{requestGroupName.length || 0} / {MAX_NAME_LENGTH}
-			</span>
-		</div>
+		</FormControl>
 	);
 
 	const renderCapacity = () => (
-		<div className={styles['c-personal-info__content-group']}>
-			<div className={clsx(styles['c-personal-info__content-group-title'])}>
-				{tText('modules/account/components/personal-info/personal-info___jouw-rol')}
-			</div>
+		<FormControl
+			label={tText('modules/account/components/personal-info/personal-info___jouw-rol')}
+			errors={[
+				<RedFormWarning error={errors.requesterCapacity} key={`form-error--requester-capacity`} />,
+			]}
+			className={clsx(styles['c-personal-info__content-group'])}
+		>
 			<div className={clsx(styles['c-personal-info__content-group-radio-button-group'])}>
 				<RadioButton
 					className={styles['c-personal-info__content-group-radio-button']}
@@ -336,68 +310,101 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 					onClick={() => setTypeSelected(MaterialRequestRequesterCapacity.OTHER)}
 				/>
 			</div>
-		</div>
+		</FormControl>
 	);
 
-	return (
-		<div className={styles['c-personal-info']}>
-			<div
-				className={clsx(styles['c-personal-info__header'], contentIsScrollable && 'u-bg-platinum')}
-			>
-				<div className={styles['c-personal-info__title']}>
-					{tText('modules/account/components/personal-info/personal-info___details')}
-				</div>
-				<div className={styles['c-personal-info__edit-user-data']}>
-					<a
-						href={tText(
-							'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-hyperlink'
-						)}
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						{tText(
-							'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-label'
-						)}
-					</a>
-					<Icon className="u-ml-8" name={IconNamesLight.Extern} />
-				</div>
-			</div>
-			<div ref={contentRef} className={styles['c-personal-info__content']}>
-				<div className={styles['c-personal-info__content-group']}>
-					<div className={clsx(styles['c-personal-info__content-group-title'])}>
-						{tText('modules/account/components/personal-info/personal-info___over-jou')}
-					</div>
-					<div className={clsx(styles['c-personal-info__content-group-subtitle'])}>
-						{user?.fullName}
-					</div>
-					<div className={clsx(styles['c-personal-info__content-group-value'])}>{user?.email}</div>
-				</div>
+	const getFooterButtons = (): BladeFooterProps => {
+		return [
+			{
+				label: tText('modules/account/components/personal-info/personal-info___verstuur-aanvraag'),
+				type: 'primary',
+				onClick: onSendRequests,
+			},
+			{
+				label: tText('modules/account/components/personal-info/personal-info___keer-terug'),
+				type: 'secondary',
+				onClick: onCancel,
+			},
+		];
+	};
 
+	return (
+		<>
+			<BladeContent
+				id="personal-info-blade-content"
+				className={styles['c-personal-info']}
+				isBladeInvalid={!isFormValid}
+				closable={false}
+				title={tText('modules/account/components/personal-info/personal-info___details')}
+				stickySubtitle={
+					<div className={styles['c-personal-info__edit-user-data']}>
+						<a
+							href={tText(
+								'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-hyperlink'
+							)}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							{tText(
+								'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-label'
+							)}
+						</a>
+						<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+					</div>
+				}
+				footerButtons={getFooterButtons()}
+			>
 				<div className={styles['c-personal-info__content-group']}>
-					<div className={clsx(styles['c-personal-info__content-group-title'])}>
-						{tText('modules/account/components/personal-info/personal-info___jouw-organisatie')}
-					</div>
-					<div className={clsx(styles['c-personal-info__content-group-subtitle'])}>
-						{user?.organisationName ? (
-							user.organisationName
-						) : (
-							<TextInput
-								value={organisationInputValue}
-								onChange={(e) => setOrganisationInputValue(e.target.value)}
-								autoComplete="organization"
-							/>
-						)}
-					</div>
-					{user?.sector && (
-						<div className={clsx(styles['c-personal-info__content-group-value'])}>
-							{user.sector}
+					<strong>
+						{tHtml('modules/account/components/personal-info/personal-info___over-jou')}
+					</strong>
+					<p>
+						<div className={clsx(styles['c-personal-info__content-group-subtitle'])}>
+							{user?.fullName}
 						</div>
-					)}
+						<div className={clsx(styles['c-personal-info__content-group-value'])}>
+							{user?.email}
+						</div>
+					</p>
 				</div>
-				{isKeyUser ? renderNameEntry() : renderCapacity()}
-				{renderCheckboxes()}
-			</div>
-			{renderFooter()}
+				<div className={styles['c-personal-info__content-group']}>
+					<strong>
+						{tHtml('modules/account/components/personal-info/personal-info___jouw-organisatie')}
+					</strong>
+					<p>
+						<div className={clsx(styles['c-personal-info__content-group-subtitle'])}>
+							{user?.organisationName ? (
+								user.organisationName
+							) : (
+								<TextInput
+									value={organisationInputValue}
+									onChange={(e) => setOrganisationInputValue(e.target.value)}
+									autoComplete="organization"
+								/>
+							)}
+						</div>
+						{user?.sector && (
+							<div className={clsx(styles['c-personal-info__content-group-value'])}>
+								{user.sector}
+							</div>
+						)}
+					</p>
+				</div>
+				{hasRequests ? (
+					<>
+						{isKeyUser ? renderNameEntry() : renderCapacity()}
+						{renderCheckboxes()}
+					</>
+				) : (
+					errors.hasRequests && (
+						<FormControl
+							errors={[
+								<RedFormWarning error={errors.hasRequests} key={`form-error--has-requests`} />,
+							]}
+						></FormControl>
+					)
+				)}
+			</BladeContent>
 			<MaterialRequestTermAgreementBlade
 				isOpen={showTermAgreement}
 				onClose={(agreed) => {
@@ -405,7 +412,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 					setAgreedToTerms(agreed);
 				}}
 			/>
-		</div>
+		</>
 	);
 };
 

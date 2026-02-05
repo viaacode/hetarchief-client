@@ -1,0 +1,19 @@
+@use "../../../../styles/abstracts" as *;
+
+.c-form-control__value-length {
+	color: $neutral;
+	display: block;
+	text-align: right;
+	margin-left: auto;
+	white-space: nowrap;
+	font-size: $font-size-sm;
+	margin-top: $spacer-xxs;
+}
+
+
+:global(.c-form-control__errors) {
+	* > .c-form-control__value-length {
+		// This means the indicotor is put in the same line as the errors so we need to reverse its padding and margin
+		margin-top: (-$spacer-sm + $spacer-xxs);
+	}
+}

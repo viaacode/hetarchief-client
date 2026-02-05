@@ -1,11 +1,11 @@
-import { Button } from '@meemoo/react-components';
-import { type FC, useState } from 'react';
-
+import { FormControl } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
-import { tHtml } from '@shared/helpers/translate';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types/visit-request';
 import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
+import { type FC, useState } from 'react';
 
 import type { CancelVisitBladeProps } from './CancelVisitBlade.types';
 
@@ -50,54 +50,42 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 
 	// Render
 
-	const renderFooter = () => {
-		return (
-			<div className="u-px-32 u-px-16-md u-py-24">
-				<Button
-					className="u-mb-16"
-					label={tHtml(
-						'modules/home/components/cancel-visit-blade/cancel-visit-blade___ja-annuleer-bezoek'
-					)}
-					variants={['block', 'black']}
-					onClick={onFormSubmit}
-					disabled={!props.isOpen || isSubmitting}
-				/>
-
-				<Button
-					label={tHtml('modules/home/components/cancel-visit-blade/cancel-visit-blade___sluit')}
-					variants={['block', 'text']}
-					onClick={props.onClose}
-					disabled={!props.isOpen}
-				/>
-			</div>
-		);
+	const getFooterButtons = (): BladeFooterProps => {
+		return [
+			{
+				label: tText(
+					'modules/home/components/cancel-visit-blade/cancel-visit-blade___ja-annuleer-bezoek'
+				),
+				type: 'primary',
+				onClick: onFormSubmit,
+				disabled: !props.isOpen || isSubmitting,
+			},
+			{
+				label: tText('modules/home/components/cancel-visit-blade/cancel-visit-blade___sluit'),
+				type: 'secondary',
+				onClick: props.onClose,
+				disabled: !props.isOpen,
+			},
+		];
 	};
 
 	return (
 		<Blade
 			{...props}
-			footer={renderFooter()}
-			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-				<h2 {...props}>
-					{tHtml(
-						'modules/home/components/cancel-visit-blade/cancel-visit-blade___bezoek-annuleren'
-					)}
-				</h2>
+			footerButtons={getFooterButtons()}
+			title={tText(
+				'modules/home/components/cancel-visit-blade/cancel-visit-blade___bezoek-annuleren'
 			)}
 		>
-			<div className="u-px-32 u-px-16-md u-pr-56">
-				<strong>
-					{tHtml(
-						'modules/home/components/cancel-visit-blade/cancel-visit-blade___ben-je-zeker-dat-je-je-bezoek-wil-annuleren'
-					)}
-				</strong>
-
-				<p>
-					{tHtml(
-						'modules/home/components/cancel-visit-blade/cancel-visit-blade___je-zal-op-de-ingeplande-dag-geen-toegang-hebben-tot-het-materiaal-een-nieuw-bezoek-inplannen-kan-steeds'
-					)}
-				</p>
-			</div>
+			<FormControl
+				label={tHtml(
+					'modules/home/components/cancel-visit-blade/cancel-visit-blade___ben-je-zeker-dat-je-je-bezoek-wil-annuleren'
+				)}
+			>
+				{tHtml(
+					'modules/home/components/cancel-visit-blade/cancel-visit-blade___je-zal-op-de-ingeplande-dag-geen-toegang-hebben-tot-het-materiaal-een-nieuw-bezoek-inplannen-kan-steeds'
+				)}
+			</FormControl>
 		</Blade>
 	);
 };

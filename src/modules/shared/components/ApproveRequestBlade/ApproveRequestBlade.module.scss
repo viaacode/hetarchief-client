@@ -4,12 +4,6 @@ $component: "c-approve-request-blade";
 
 .#{$component} {
 	&__date-time {
-		@media (min-width: $breakpoint-md) {
-			:global(.c-datepicker:not(.c-datepicker--time)) :global(.c-input__field) {
-				border-right-width: 0;
-			}
-		}
-
 		:global(.c-form-control__input) {
 			@media (min-width: $breakpoint-lg) {
 				display: flex;
@@ -41,6 +35,4 @@ $component: "c-approve-request-blade";
 .c-form-control__errors {
 	margin-top: -$spacer-sm !important;
 	margin-bottom: $spacer-lg !important;
-	display: flex;
-	align-items: center;
 }
