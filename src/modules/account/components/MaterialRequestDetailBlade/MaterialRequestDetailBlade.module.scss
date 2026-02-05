@@ -53,9 +53,10 @@
 			}
 
 			&-media {
-				min-width: 70%;
-				max-width: 100%;
-				object-fit: contain;
+				width: 100%;
+				aspect-ratio: 16/9;
+				object-fit: cover;
+				object-position: center;
 			}
 		}
 	}
