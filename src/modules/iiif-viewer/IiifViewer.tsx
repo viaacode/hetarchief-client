@@ -26,8 +26,8 @@ import { tText } from '@shared/helpers/translate';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { Breakpoints } from '@shared/types';
 import { isBrowser, isServerSideRendering } from '@shared/utils/is-browser';
+import { isMobileSize } from '@shared/utils/is-mobile';
 import clsx from 'clsx';
 import { debounce } from 'lodash';
 import { clamp, compact, isNil, round } from 'lodash-es';
@@ -156,7 +156,7 @@ export const IiifViewer = ({
 	/**
 	 * Computed
 	 */
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const isMobile = isMobileSize(windowSize);
 
 	/**
 	 * Effects

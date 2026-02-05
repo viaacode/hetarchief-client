@@ -1,7 +1,5 @@
 @use "src/styles/abstracts" as *;
 
-$component: "c-visit-summary";
-
-.#{$component} {
+.c-visit-summary {
 	@include blade-text-styling;
 }

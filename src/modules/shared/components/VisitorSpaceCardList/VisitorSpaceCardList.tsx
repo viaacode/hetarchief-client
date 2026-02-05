@@ -38,7 +38,7 @@ const VisitorSpaceCardList: FC<VisitorSpaceCardListProps> = ({
 			{getItems().map((item) => (
 				<li
 					className={styles['c-visitor-space-card-list__item']}
-					key={`visitor-space-card-item--${item.title}--${item.to}`}
+					key={`visitor-space-card-item--${item.room.id}`}
 				>
 					<VisitorSpaceCard {...item} />
 				</li>

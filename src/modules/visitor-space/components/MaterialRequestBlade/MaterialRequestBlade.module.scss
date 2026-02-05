@@ -1,58 +1,17 @@
 @use "../../../../styles/abstracts" as *;
 
 .c-request-material {
-	&__maintainer {
-		padding: $spacer-sm $spacer-lg;
-		background-color: $platinum;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-
-		&-details {
-			color: $neutral;
-			text-align: end;
-			font-size: $font-size-sm;
-		}
-
-		&-logo {
-			position: relative;
-			width: 8rem;
-			height: 5rem;
-		}
-	}
-
 	&__material {
-		margin: $spacer-md $spacer-lg;
 		color: $black;
 
-			&:focus,
-			&:focus-within {
-				outline: 0.2rem solid $teal;
-				outline-offset: -0.2rem;
-			}
-
-		&-label {
-			font-weight: $font-weight-bold;
-			margin-bottom: $spacer-xxs;
-			word-break: break-word;
-
-			&-icon {
-				color: $blue;
-				margin-right: $spacer-xs;
-			}
+		&:focus,
+		&:focus-within {
+			outline: 0.2rem solid $teal;
+			outline-offset: -0.2rem;
 		}
-
-		&-id {
-			font-size: $font-size-sm;
-			color: $neutral;
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
-	}
+}
 
 	&__content {
-		border-top: 0.1rem solid $silver;
-		padding: $spacer-lg;
 		color: $black;
 
 		dl {
@@ -71,52 +30,6 @@
 			&:not(:last-child) {
 				margin-bottom: $spacer-md;
 			}
-		}
-	}
-
-	&__footer-container {
-		padding: $spacer-lg;
-	}
-
-	&__verstuur-button {
-		background-color: $black !important;
-		color: $white !important;
-		margin-bottom: $spacer-sm;
-
-		div {
-			font-weight: $font-weight-bold;
-		}
-
-		&:hover {
-			background-color: $white !important;
-			color: $zinc !important;
-			border: 0.1rem solid $zinc !important;
-		}
-	}
-
-	&__voeg-toe-button {
-		background-color: $white;
-		color: $black;
-		border: 0.1rem solid $black !important;
-		font-weight: $font-weight-bold !important;
-		margin-bottom: $spacer-sm;
-
-		&:hover {
-			border: 0.1rem solid $black;
-			background-color: $black;
-			color: $white;
-		}
-
-		&:disabled {
-			border: none !important;
-			background-color: $silver !important;
-			color: $zinc !important;
-		}
-	}
-
-	&__annuleer-button {
-		&:hover {
-			border: 0.1rem solid $zinc;
 		}
 	}
 

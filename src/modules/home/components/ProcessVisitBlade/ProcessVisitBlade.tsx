@@ -1,13 +1,10 @@
-import { Button } from '@meemoo/react-components';
-import { type FC, type ReactNode, useState } from 'react';
-
 import { Blade } from '@shared/components/Blade/Blade';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
 import { BladeManager } from '@shared/components/BladeManager';
-import { Icon } from '@shared/components/Icon';
-import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { VisitSummary } from '@shared/components/VisitSummary';
-import { tHtml } from '@shared/helpers/translate';
+import { tText } from '@shared/helpers/translate';
 import { VisitStatus } from '@shared/types/visit-request';
+import { type FC, useState } from 'react';
 
 import { CancelVisitBlade } from '../CancelVisitBlade';
 
@@ -40,15 +37,15 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 		return 0;
 	};
 
-	const getTitle = (): string | ReactNode => {
+	const getTitle = (): string => {
 		switch (selected?.status) {
 			case VisitStatus.PENDING:
-				return tHtml(
+				return tText(
 					'modules/home/components/process-visit-blade/process-visit-blade___detail-aanvraag'
 				);
 
 			case VisitStatus.APPROVED:
-				return tHtml(
+				return tText(
 					'modules/home/components/process-visit-blade/process-visit-blade___detail-gepland-bezoek'
 				);
 
@@ -57,30 +54,24 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 		}
 	};
 
-	const renderFooter = () => {
-		return (
-			<div className="u-px-32 u-px-16-md u-py-24">
-				<Button
-					className="u-mb-16"
-					label={tHtml(
-						'modules/home/components/process-visit-blade/process-visit-blade___annuleer-bezoek'
-					)}
-					iconStart={<Icon name={IconNamesLight.Forbidden} />}
-					variants={['block', 'outline']}
-					onClick={() => setShowCancel(true)}
-					disabled={!props.isOpen}
-				/>
-
-				<Button
-					label={tHtml('modules/home/components/process-visit-blade/process-visit-blade___sluit')}
-					variants={['block', 'text']}
-					onClick={() => props.onClose?.()}
-					disabled={!props.isOpen}
-				/>
-			</div>
-		);
+	const getFooterButtons = (): BladeFooterProps => {
+		return [
+			{
+				label: tText(
+					'modules/home/components/process-visit-blade/process-visit-blade___annuleer-bezoek'
+				),
+				type: 'secondary',
+				onClick: () => setShowCancel(true),
+				disabled: !props.isOpen,
+			},
+			{
+				label: tText('modules/home/components/process-visit-blade/process-visit-blade___sluit'),
+				type: 'primary',
+				onClick: () => props.onClose?.(),
+				disabled: !props.isOpen,
+			},
+		];
 	};
-
 	return (
 		<BladeManager
 			currentLayer={getCurrentLayer()}
@@ -94,12 +85,10 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 		>
 			<Blade
 				{...props}
-				footer={renderFooter()}
+				footerButtons={getFooterButtons()}
 				isOpen={getCurrentLayer() === 1}
 				layer={1}
-				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-					<h2 {...props}>{getTitle()}</h2>
-				)}
+				title={getTitle()}
 				id="process-visit-blade__visit-summary"
 			>
 				{selected && <VisitSummary preview {...selected} />}

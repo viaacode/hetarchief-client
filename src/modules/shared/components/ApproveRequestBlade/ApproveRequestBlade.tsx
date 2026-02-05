@@ -1,7 +1,7 @@
 import { Permission } from '@account/const';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, FormControl, TextInput } from '@meemoo/react-components';
+import { FormControl, TextArea } from '@meemoo/react-components';
 import { APPROVE_REQUEST_FORM_SCHEMA } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.const';
 import {
 	getAccessToDate,
@@ -12,6 +12,8 @@ import type {
 	ApproveRequestFormState,
 } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.types';
 import { Blade } from '@shared/components/Blade/Blade';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import {
 	RefinableRadioButton,
@@ -71,12 +73,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		selected: visitRequest,
 		onClose,
 		onSubmit,
-		title = tHtml(
-			'modules/cp/components/approve-request-blade/approve-request-blade___aanvraag-goedkeuren'
-		),
-		approveButtonLabel = tHtml(
-			'modules/cp/components/approve-request-blade/approve-request-blade___keur-goed'
-		),
 		successTitle = tHtml(
 			'modules/cp/components/approve-request-blade/approve-request-blade___de-aanvraag-is-goedgekeurd'
 		),
@@ -102,7 +98,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const {
 		control,
-		formState: { errors, isSubmitting },
+		formState: { errors },
 		handleSubmit,
 		setValue,
 		getValues,
@@ -117,7 +113,9 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		errors.accessType?.folderIds ||
 		errors.accessFrom ||
 		errors.accessTo ||
-		errors.accessRemark
+		errors.accessRemark ||
+		noFoldersSelectedOnSubmit ||
+		!!overlappingRequests.length
 	);
 
 	useEffect(() => {
@@ -287,44 +285,23 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	// Render
 
-	const renderFooter = () => {
-		return (
-			<div className="u-px-32 u-px-16-md u-py-24">
-				<RedFormWarning
-					error={
-						noFoldersSelectedOnSubmit
-							? tHtml(
-									'modules/shared/components/approve-request-blade/approve-request-blade___selecteer-een-of-meerdere-mappen'
-								)
-							: null
-					}
-					key="form-error--no-folder-selected"
-				/>
-				{isError && (
-					<RedFormWarning
-						error={tHtml(
-							'modules/shared/components/approve-request-blade/approve-request-blade___bepaalde-invoer-velden-zijn-niet-geldig'
-						)}
-					/>
-				)}
-
-				<Button
-					className="u-mb-16"
-					label={approveButtonLabel}
-					variants={['block', 'black']}
-					onClick={handleSubmit(onFormSubmit)}
-					disabled={isSubmitting}
-				/>
-
-				<Button
-					label={tHtml(
-						'modules/cp/components/approve-request-blade/approve-request-blade___annuleer'
-					)}
-					variants={['block', 'text']}
-					onClick={onClose}
-				/>
-			</div>
-		);
+	const getFooterButtons = (): BladeFooterProps => {
+		return [
+			{
+				label: tText(
+					'modules/cp/components/approve-request-blade/approve-request-blade___keur-goed'
+				),
+				type: 'primary',
+				onClick: handleSubmit(onFormSubmit),
+			},
+			{
+				label: tText(
+					'modules/cp/components/approve-request-blade/approve-request-blade___annuleer'
+				),
+				type: 'secondary',
+				onClick: props.onClose,
+			},
+		];
 	};
 
 	const renderAccessFrom = useCallback(
@@ -418,11 +395,15 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	}: {
 		field: ControllerRenderProps<ApproveRequestFormState, 'accessRemark'>;
 	}) => (
-		<TextInput
-			{...field}
-			id={labelKeys.accessRemark}
-			onChange={(evt) => setValue('accessRemark', evt.target.value)}
-		/>
+		<>
+			<TextArea
+				{...field}
+				id={labelKeys.accessRemark}
+				maxLength={300}
+				onChange={(evt) => setValue('accessRemark', evt.target.value)}
+			/>
+			<MaxLengthIndicator maxLength={300} value={field.value} />
+		</>
 	);
 
 	const renderAccessType = useCallback(
@@ -445,16 +426,26 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		[getAccessTypeOptions, onChangeAccessType]
 	);
 
+	const getOverlappingRequest = () => {
+		const text = tText(
+			'modules/shared/components/approve-request-blade/approve-request-blade___er-is-reeds-een-goedgekeurde-aanvraag-voor-deze-periode'
+		);
+		const startAt = formatMediumDateWithTime(asDate(overlappingRequests[0].startAt));
+		const endAt = formatMediumDateWithTime(asDate(overlappingRequests[0].endAt));
+
+		return `${text} (${startAt} - ${endAt})`;
+	};
+
 	const ROUTE_PARTS = ROUTE_PARTS_BY_LOCALE[locale];
 	return (
 		<Blade
 			{...props}
-			footer={props.isOpen && renderFooter()}
-			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => <h2 {...props}>{title}</h2>}
+			isBladeInvalid={isError}
+			footerButtons={getFooterButtons()}
 			className={styles['c-approve-request-blade']}
 		>
-			{props.isOpen && !!visitRequest && (
-				<div className="u-px-32 u-px-16-md">
+			{!!visitRequest && (
+				<>
 					<FormControl
 						className={clsx(styles['c-approve-request-blade__access-type'], 'u-mb-32')}
 						errors={[
@@ -506,15 +497,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 					{!!overlappingRequests.length && (
 						<p className={clsx('c-form-control__errors', styles['c-form-control__errors'])}>
-							{tHtml(
-								'modules/shared/components/approve-request-blade/approve-request-blade___er-is-reeds-een-goedgekeurde-aanvraag-voor-deze-periode'
-							)}
-							<br />
-							<br />
-							{formatMediumDateWithTime(asDate(overlappingRequests[0].startAt))}
-							{' - '}
-							{formatMediumDateWithTime(asDate(overlappingRequests[0].endAt))}
-							<br />
+							<p>{getOverlappingRequest()}</p>
 							<br />
 							<Link
 								href={
@@ -544,7 +527,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					>
 						<Controller name="accessRemark" control={control} render={renderAccessRemark} />
 					</FormControl>
-				</div>
+				</>
 			)}
 		</Blade>
 	);

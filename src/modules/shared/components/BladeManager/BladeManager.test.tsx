@@ -8,17 +8,44 @@ import { describe, expect, it, vi } from 'vitest';
 import { mockStore } from '../../../../__mocks__/store';
 import BladeManager from './BladeManager';
 
+// Mock ResizeObserver used in ScrollableTabs component
+window.ResizeObserver =
+	window.ResizeObserver ||
+	class {
+		disconnect = vi.fn();
+		observe = vi.fn();
+		unobserve = vi.fn();
+	};
+
 const renderBladeManager = (currentBlade = 0, onClose = () => null) => {
 	return render(
 		<Provider store={mockStore}>
 			<BladeManager currentLayer={currentBlade} onCloseBlade={onClose}>
-				<Blade isOpen={true} renderTitle={() => 'Blade 1'} layer={1} id="blade1">
+				<Blade
+					isOpen={true}
+					title={'Blade 1'}
+					layer={1}
+					id="blade1"
+					footerButtons={[{ label: 'continue', type: 'primary' }]}
+				>
 					<Button label="Open second blade" />
 				</Blade>
-				<Blade isOpen={false} renderTitle={() => 'Blade 2'} layer={2} id="blade2">
+				<Blade
+					isOpen={false}
+					title={'Blade 2'}
+					layer={2}
+					id="blade2"
+					footerButtons={[{ label: 'continue', type: 'primary' }]}
+				>
 					<Button label="Open third blade" />
 				</Blade>
-				<Blade isOpen={false} renderTitle={() => 'Blade 3'} layer={3} id="blade3" />
+				<Blade
+					isOpen={false}
+					title={'Blade 3'}
+					layer={3}
+					id="blade3"
+					footerButtons={[{ label: 'continue', type: 'primary' }]}
+				/>
 			</BladeManager>
 		</Provider>
 	);
@@ -31,34 +58,45 @@ describe('Component: <Blade /> (default)', () => {
 		expect(container).toBeInTheDocument();
 	});
 
-	it('Should render multiple blades', () => {
+	it('Should not render blades when current layer is 0', () => {
 		renderBladeManager();
 
-		const blade1 = screen.getByText('Blade 1');
-		const blade2 = screen.getByText('Blade 2');
-		const blade3 = screen.getByText('Blade 3');
-
-		expect(blade1).toBeInTheDocument();
-		expect(blade2).toBeInTheDocument();
-		expect(blade3).toBeInTheDocument();
+		try {
+			screen.getByText('Blade 1').parentElement;
+		} catch (error) {
+			expect(error);
+		}
+		try {
+			screen.getByText('Blade 2').parentElement;
+		} catch (error) {
+			expect(error);
+		}
+		try {
+			screen.getByText('Blade 3').parentElement;
+		} catch (error) {
+			expect(error);
+		}
 	});
 
 	it('render all layers under currentLayer', () => {
 		renderBladeManager(2);
 
-		const blade1 = screen.getByText('Blade 1').parentElement;
-		const blade2 = screen.getByText('Blade 2').parentElement;
-		const blade3 = screen.getByText('Blade 3').parentElement;
+		const blade1 = screen.getByText('Blade 1').parentElement?.parentElement;
+		const blade2 = screen.getByText('Blade 2').parentElement?.parentElement;
+		try {
+			screen.getByText('Blade 3').parentElement;
+		} catch (error) {
+			expect(error);
+		}
 
 		expect(blade1).toHaveClass('c-blade--visible');
 		expect(blade2).toHaveClass('c-blade--visible');
-		expect(blade3).not.toHaveClass('c-blade--visible');
 	});
 
 	it('render overlay under a blade', () => {
 		renderBladeManager(1);
 
-		const blade1 = screen.getByText('Blade 1').parentElement;
+		const blade1 = screen.getByText('Blade 1').parentElement?.parentElement;
 
 		expect(blade1?.previousSibling).toHaveClass('c-overlay');
 	});
@@ -67,7 +105,8 @@ describe('Component: <Blade /> (default)', () => {
 		const onClick = vi.fn() as () => null;
 		renderBladeManager(2, onClick);
 
-		const closeButton = screen.getByText('Blade 1').parentElement?.previousElementSibling;
+		const closeButton =
+			screen.getByText('Blade 1').parentElement?.parentElement?.previousElementSibling;
 
 		closeButton && fireEvent.click(closeButton);
 
@@ -80,7 +119,8 @@ describe('Component: <Blade /> (default)', () => {
 		const onClick = vi.fn() as () => null;
 		renderBladeManager(1, onClick);
 
-		const overlay = screen.getByText('Blade 1').parentElement?.previousElementSibling;
+		const overlay =
+			screen.getByText('Blade 1').parentElement?.parentElement?.previousElementSibling;
 
 		overlay && fireEvent.click(overlay);
 

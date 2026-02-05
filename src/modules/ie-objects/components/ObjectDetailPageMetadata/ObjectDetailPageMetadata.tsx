@@ -84,9 +84,9 @@ import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectBreadcrumbs } from '@shared/store/ui';
-import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { Locale } from '@shared/utils/i18n';
+import { isMobileSize } from '@shared/utils/is-mobile';
 import {
 	LANGUAGES,
 	type LanguageCode,
@@ -210,7 +210,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	const canDownloadNewspaper: boolean = ieObjectPermissions.canDownloadEssence;
 
 	const windowSize = useWindowSizeContext();
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const isMobile = isMobileSize(windowSize);
 	const { data: folders } = useGetFolders();
 
 	/**
@@ -464,7 +464,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	);
 
 	const mediaActions: DynamicActionMenuProps = useMemo(() => {
-		const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+		const isMobile = isMobileSize(windowSize);
 		const originalActions = MEDIA_ACTIONS({
 			isMobile,
 			canManageFolders: canManageFolders || isAnonymous,
@@ -513,7 +513,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			actions: compact(sortedActionsWithCustomElements),
 		};
 	}, [
-		windowSize.width,
+		windowSize,
 		canManageFolders,
 		isAnonymous,
 		folders,
@@ -617,7 +617,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	);
 
 	const renderSimpleMetadataField = (
-		title: string | ReactNode,
+		title: string,
 		data: string | ReactNode | null | undefined
 	): ReactNode => {
 		if (!data) {
@@ -1236,17 +1236,21 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 					isOpen={!!selectedMetadataField}
 					onClose={() => setSelectedMetadataField(null)}
-					renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-						<h2 {...props}>{selectedMetadataField?.title}</h2>
-					)}
+					title={selectedMetadataField?.title ?? ''}
+					stickyFooter={false}
+					footerButtons={[
+						{
+							label: tText('Sluit'),
+							type: 'secondary',
+							onClick: () => setSelectedMetadataField(null),
+						},
+					]}
 					id="object-detail-page__metadata-field-detail-blade"
 				>
-					<div className="u-px-32 u-px-16-md u-pb-32">
-						<HighlightedMetadata
-							title={selectedMetadataField?.title}
-							data={selectedMetadataField?.data}
-						/>
-					</div>
+					<HighlightedMetadata
+						title={selectedMetadataField?.title}
+						data={selectedMetadataField?.data}
+					/>
 				</Blade>
 
 				<CopyrightConfirmationModal

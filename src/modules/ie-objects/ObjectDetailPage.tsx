@@ -91,11 +91,11 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectLastSearchParams, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
-import { Breakpoints } from '@shared/types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
 import { isServerSideRendering } from '@shared/utils/is-browser';
+import { isTabletPortraitSize } from '@shared/utils/is-mobile';
 import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
@@ -439,7 +439,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
 	const isNewspaper = mediaInfo?.dctermsFormat === IeObjectType.NEWSPAPER;
 	const showFragmentSlider = allFilesToDisplayInCurrentPage.length > 1 && !isNewspaper;
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.lg); // mobile and tablet portrait
+	const isMobile = isTabletPortraitSize(windowSize); // mobile and tablet portrait
 	const hasAccessToVisitorSpaceOfObject =
 		intersection(mediaInfo?.accessThrough, [
 			IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
@@ -1888,34 +1888,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			<Blade
 				id="iiif-selection-download-url"
 				isOpen={!!selectionDownloadUrl}
-				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-					<h2 {...props}>{tHtml('modules/ie-objects/object-detail-page___selectie-is-klaar')}</h2>
-				)}
+				title={tText('modules/ie-objects/object-detail-page___selectie-is-klaar')}
 				onClose={() => setSelectionDownloadUrl(null)}
-				footer={
-					<div className="u-px-32 u-px-16-md u-py-24 u-py-16-md u-flex u-flex-col u-gap-xs">
-						<a
-							href={selectionDownloadUrl || undefined}
-							onClick={() => {
-								setTimeout(() => {
-									setSelectionDownloadUrl(null);
-								}, 100);
-							}}
-							rel="noreferrer"
-						>
-							<Button
-								label={tText('modules/ie-objects/object-detail-page___download-selection')}
-								variants={['block', 'black']}
-							/>
-						</a>
-					</div>
-				}
+				footerButtons={[
+					{
+						label: tText('modules/ie-objects/object-detail-page___download-selection'),
+						type: 'primary',
+						onClick: () => {
+							setTimeout(() => {
+								setSelectionDownloadUrl(null);
+							}, 100);
+						},
+						href: selectionDownloadUrl || undefined,
+					},
+				]}
 			>
-				<div className="u-px-32 u-px-16-md">
-					{tHtml(
-						'modules/ie-objects/object-detail-page___je-selectie-kan-worden-gedownload-als-afbeelding'
-					)}
-				</div>
+				{tHtml(
+					'modules/ie-objects/object-detail-page___je-selectie-kan-worden-gedownload-als-afbeelding'
+				)}
 			</Blade>
 		</>
 	);

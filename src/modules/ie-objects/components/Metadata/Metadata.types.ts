@@ -1,6 +1,5 @@
-import type { ReactNode } from 'react';
-
 import type { DefaultComponentProps } from '@shared/types';
+import type { ReactNode } from 'react';
 
 export interface MetadataProps extends DefaultComponentProps {
 	title: ReactNode;
@@ -16,6 +15,6 @@ export interface MetadataListProps extends DefaultComponentProps {
 }
 
 export interface MetadataItem {
-	title: string | ReactNode;
+	title: string;
 	data: string | ReactNode | null | undefined;
 }

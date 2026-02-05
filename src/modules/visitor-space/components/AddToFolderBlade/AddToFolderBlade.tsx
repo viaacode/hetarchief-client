@@ -2,8 +2,9 @@ import { CreateFolderButton } from '@account/components';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { FoldersService } from '@account/services/folders';
 import type { Folder } from '@account/types';
-import { Button, Checkbox } from '@meemoo/react-components';
+import { Checkbox } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
+import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -293,28 +294,24 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	 * Render
 	 */
 
-	const renderFooter = () => {
-		return (
-			<div className="u-px-32 u-px-16-md u-py-24">
-				<Button
-					className="u-mb-16"
-					label={tHtml(
-						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe'
-					)}
-					variants={['block', 'black']}
-					onClick={handleSubmit}
-					disabled={isSubmitting}
-				/>
-
-				<Button
-					label={tHtml(
-						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___annuleer'
-					)}
-					variants={['block', 'text']}
-					onClick={onClose}
-				/>
-			</div>
-		);
+	const getFooterButtons = (): BladeFooterProps => {
+		return [
+			{
+				label: tText(
+					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe'
+				),
+				type: 'primary',
+				onClick: handleSubmit,
+				disabled: isSubmitting,
+			},
+			{
+				label: tText(
+					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___annuleer'
+				),
+				type: 'secondary',
+				onClick: onClose,
+			},
+		];
 	};
 
 	const renderFolderCheckboxes = () => {
@@ -378,35 +375,25 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			isOpen={isOpen}
 			onClose={onClose}
 			className={clsx(className, styles['c-add-to-folder-blade'])}
-			footer={isOpen && renderFooter()}
-			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
-				<h2 {...props}>
-					{tHtml(
-						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe-aan-map'
-					)}
-				</h2>
+			footerButtons={getFooterButtons()}
+			title={tText(
+				'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe-aan-map'
 			)}
 		>
-			<div className="u-px-32 u-px-16-md">
-				{tHtml(
-					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___kies-de-map-waaraan-je-strong-title-strong-wil-toevoegen',
-					{
-						title: objectToAdd?.title || '',
-					}
-				)}
-			</div>
-
-			{isOpen && (
-				<div className="u-px-32 u-px-16-md u-bg-platinum u-mt-32">
-					<ul className={clsx(styles['c-add-to-folder-blade__list'])}>
-						{renderFolderCheckboxes()}
-
-						<li className={styles['c-add-to-folder-blade__list-button']}>
-							<CreateFolderButton afterSubmit={afterCreateFolderSubmit} />
-						</li>
-					</ul>
-				</div>
+			{tHtml(
+				'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___kies-de-map-waaraan-je-strong-title-strong-wil-toevoegen',
+				{
+					title: objectToAdd?.title || '',
+				}
 			)}
+
+			<ul className={clsx(styles['c-add-to-folder-blade__list'])}>
+				{renderFolderCheckboxes()}
+
+				<li className={styles['c-add-to-folder-blade__list-button']}>
+					<CreateFolderButton afterSubmit={afterCreateFolderSubmit} />
+				</li>
+			</ul>
 		</Blade>
 	);
 };
