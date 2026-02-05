@@ -22,11 +22,6 @@ export const BladeNew: FC<BladeNewProps> = (props) => {
 	const isLayered = isManaged && !!layer;
 	const isBladeOpen = isLayered ? layer <= currentLayer : isOpen;
 
-	// Hack to remove ios outline on the close button: https://meemoo.atlassian.net/browse/ARC-1025
-	useEffect(() => {
-		isOpen && (document.activeElement as HTMLElement)?.blur?.();
-	}, [isOpen]);
-
 	const handleClose = useCallback(() => {
 		if (hasOpenConfirmationModal) {
 			return;
@@ -87,7 +82,7 @@ export const BladeNew: FC<BladeNewProps> = (props) => {
 						: { visibility: 'visible' }
 				}
 			>
-				<BladeContent {...props} onClose={handleClose} />
+				{isOpen && <BladeContent {...props} onClose={handleClose} />}
 			</div>
 		);
 	};
@@ -113,7 +108,7 @@ export const BladeNew: FC<BladeNewProps> = (props) => {
 			/>
 			<FocusTrap
 				active={isBladeOpen && process.env.NODE_ENV !== 'test'}
-				focusTrapOptions={{ clickOutsideDeactivates: true }}
+				focusTrapOptions={{ clickOutsideDeactivates: true, delayInitialFocus: false }}
 			>
 				{renderContent()}
 			</FocusTrap>

@@ -26,7 +26,6 @@ export interface BladeContentProps extends DefaultComponentProps {
 	id: string;
 	children?: ReactNode;
 	closable?: boolean;
-	isOpen?: boolean;
 	onClose?: () => void;
 
 	// Title props
@@ -87,7 +86,7 @@ export interface BladeContentProps extends DefaultComponentProps {
 	stickyFooter?: boolean;
 }
 
-export interface BladeNewProps extends Omit<BladeContentProps, 'closable' | 'isOpen'> {
+export interface BladeNewProps extends Omit<BladeContentProps, 'closable'> {
 	isOpen: boolean;
 
 	// manager types

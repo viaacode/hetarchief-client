@@ -1,7 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { Loading } from '@shared/components/Loading';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useSize } from '@shared/hooks/use-size';
@@ -16,7 +15,6 @@ import styles from '././Blade_new.module.scss';
 export const BladeContent: FC<BladeContentProps> = ({
 	id,
 	children,
-	isOpen,
 	closable = true,
 	onClose,
 	wideBladeTitle,
@@ -29,8 +27,6 @@ export const BladeContent: FC<BladeContentProps> = ({
 }) => {
 	const [contentIsScrollable, setContentIsScrollable] = useState(false);
 	const [contentHasBeenScrolled, setContentHasBeenScrolled] = useState(false);
-
-	const isBladeOpen = closable ? isOpen : true;
 
 	const contentRef = useRef<HTMLDivElement>(null);
 	useSize(contentRef, (referenceStripContainer) => checkContentSize(referenceStripContainer));
@@ -48,14 +44,13 @@ export const BladeContent: FC<BladeContentProps> = ({
 	const onScrollContent = useCallback(() => {
 		// We need to check the scroll position as well. Otherwise, if the content starts stretching, it will trigger as well
 		if (
-			isBladeOpen &&
 			contentIsScrollable &&
 			!contentHasBeenScrolled &&
 			(contentRef?.current?.scrollTop ?? 0) > 0
 		) {
 			setContentHasBeenScrolled(true);
 		}
-	}, [isBladeOpen, contentIsScrollable, contentHasBeenScrolled]);
+	}, [contentIsScrollable, contentHasBeenScrolled]);
 
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();
@@ -63,16 +58,14 @@ export const BladeContent: FC<BladeContentProps> = ({
 
 	// Hack to remove ios outline on the close button: https://meemoo.atlassian.net/browse/ARC-1025
 	useEffect(() => {
-		if (isBladeOpen) {
-			(document.activeElement as HTMLElement)?.blur?.();
-		} else {
-			setContentHasBeenScrolled(false);
-		}
-	}, [isBladeOpen]);
+		(document.activeElement as HTMLElement)?.blur?.();
+	}, []);
 
 	const handleClose = useCallback(() => {
-		onClose?.();
-	}, [onClose]);
+		if (closable) {
+			onClose?.();
+		}
+	}, [closable, onClose]);
 
 	const renderHeader = () => {
 		if (isMobile) {
@@ -93,11 +86,10 @@ export const BladeContent: FC<BladeContentProps> = ({
 								aria-label={tText('modules/shared/components/blade/blade___sluiten')}
 								variants={['text', 'icon', 'xxs']}
 								onClick={() => handleClose()}
-								disabled={!isBladeOpen}
 							/>
 						)}
 					</div>
-					{isBladeOpen && stickySubtitle && (
+					{stickySubtitle && (
 						<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>{stickySubtitle}</div>
 					)}
 				</div>
@@ -119,7 +111,6 @@ export const BladeContent: FC<BladeContentProps> = ({
 							aria-label={tText('modules/shared/components/blade/blade___sluiten')}
 							variants={['text', 'icon', 'xs']}
 							onClick={() => handleClose()}
-							disabled={!isBladeOpen}
 						/>
 					)}
 				</div>
@@ -134,18 +125,10 @@ export const BladeContent: FC<BladeContentProps> = ({
 						<div className={clsx(styles['c-blade__title--wide-blade'])}>{wideBladeTitle}</div>
 					)}
 					<h2 className={clsx(styles['c-blade__title--text'])}>{title}</h2>
-					{isBladeOpen && (
-						<>
-							{stickySubtitle && (
-								<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>
-									{stickySubtitle}
-								</div>
-							)}
-							{subtitle && (
-								<div className={clsx(styles['c-blade__title--subtitle'])}>{subtitle}</div>
-							)}
-						</>
+					{stickySubtitle && (
+						<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>{stickySubtitle}</div>
 					)}
+					{subtitle && <div className={clsx(styles['c-blade__title--subtitle'])}>{subtitle}</div>}
 				</div>
 			</>
 		);
@@ -261,16 +244,10 @@ export const BladeContent: FC<BladeContentProps> = ({
 			{renderHeader()}
 			<div ref={contentRef} className={styles['c-blade__body-wrapper']} onScroll={onScrollContent}>
 				<div className={clsx(styles['c-blade__body-wrapper--content'])}>
-					{isBladeOpen ? (
-						<>
-							{isMobile && subtitle && (
-								<div className={clsx(styles['c-blade__body-wrapper--subtitle'])}>{subtitle}</div>
-							)}
-							{children}
-						</>
-					) : (
-						<Loading owner="Blade content unopened" />
+					{isMobile && subtitle && (
+						<div className={clsx(styles['c-blade__body-wrapper--subtitle'])}>{subtitle}</div>
 					)}
+					{children}
 				</div>
 				<div className={'u-flex-grow'} />
 				{!stickyFooter && renderFooter()}
