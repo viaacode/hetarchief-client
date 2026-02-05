@@ -248,7 +248,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 							styles['c-advanced-filter-fields__dynamic-field--datepicker']
 						)}
 						value={value}
-						onChange={(newDate: Date) => {
+						onChange={(newDate: Date | null) => {
 							onFieldChange({
 								val: newDate ? newDate.toISOString() : undefined,
 							});

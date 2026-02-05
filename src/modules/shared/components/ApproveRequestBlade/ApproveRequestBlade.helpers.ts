@@ -1,5 +1,11 @@
-import { differenceInMinutes, isAfter, isBefore, isSameDay, subMinutes } from 'date-fns';
-import addMinutes from 'date-fns/addMinutes';
+import {
+	addMinutes,
+	differenceInMinutes,
+	isAfter,
+	isBefore,
+	isSameDay,
+	subMinutes,
+} from 'date-fns';
 
 /**
  * We're not using the build in date-fns roundToNearestMinutes function since it contains a bug
