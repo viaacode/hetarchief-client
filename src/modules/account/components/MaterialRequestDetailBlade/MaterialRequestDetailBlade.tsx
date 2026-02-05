@@ -370,17 +370,21 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	const renderThumbnail = () => {
-		let { objectThumbnailUrl, reuseForm } = currentMaterialRequestDetail;
-
-		if (!reuseForm || !objectThumbnailUrl) {
+		if (!currentMaterialRequestDetail.reuseForm) {
 			return null;
 		}
 
+		let { objectThumbnailUrl, objectDctermsFormat, reuseForm } = currentMaterialRequestDetail;
+
 		if (
-			currentMaterialRequestDetail.objectDctermsFormat === IeObjectType.AUDIO ||
-			currentMaterialRequestDetail.objectDctermsFormat === IeObjectType.AUDIO_FRAGMENT
+			objectDctermsFormat === IeObjectType.AUDIO ||
+			objectDctermsFormat === IeObjectType.AUDIO_FRAGMENT
 		) {
 			objectThumbnailUrl = AdminConfigManager.getConfig().components.defaultAudioStill;
+		}
+
+		if (!objectThumbnailUrl) {
+			return null;
 		}
 
 		return renderContentBlock(
