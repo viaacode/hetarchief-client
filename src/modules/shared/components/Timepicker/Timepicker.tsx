@@ -1,19 +1,12 @@
 import { TextInput } from '@meemoo/react-components';
-import clsx from 'clsx';
-import React, { type FC } from 'react';
-import ReactDatePicker from 'react-datepicker';
-
 import { getDatePickerDefaultProps } from '@shared/components/DatePicker/DatePicker.consts';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-
+import { DatePicker } from '@viaa/avo2-components';
+import clsx from 'clsx';
+import React, { type FC } from 'react';
 import type { TimepickerProps } from './Timepicker.types';
-
-// Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: object.
-// https://github.com/Hacker0x01/react-datepicker/issues/3834#issuecomment-1451662259
-const DatePicker =
-	(ReactDatePicker as unknown as { default: typeof ReactDatePicker }).default ?? ReactDatePicker;
 
 const Timepicker: FC<TimepickerProps> = (props) => {
 	const locale = useLocale();
@@ -35,7 +28,8 @@ const Timepicker: FC<TimepickerProps> = (props) => {
 			timeFormat="HH:mm"
 			popperPlacement="bottom-start"
 			customInput={<TextInput iconStart={<Icon name={IconNamesLight.Clock} />} />}
-			{...props}
+			// biome-ignore lint/suspicious/noExplicitAny: datepicker props are strange
+			{...(props as any)}
 		/>
 	);
 };

@@ -9,13 +9,13 @@ import { tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import React, { type FC, lazy, type ReactNode, Suspense } from 'react';
 
-const MaintenanceAlertsOverview = lazy(() =>
+const AdminMaintenanceAlertsOverview = lazy(() =>
 	import('@meemoo/admin-core-ui/admin').then((adminCoreModule) => ({
 		default: adminCoreModule.MaintenanceAlertsOverview,
 	}))
 );
 
-export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
+export const AdminMaintenanceAlertsOverviewPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const getFooterButtons = (onSave: () => void, onClose: () => void): BladeFooterProps => {
 		return [
 			{
@@ -62,8 +62,11 @@ export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url, canoni
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40">
-						<Suspense fallback={<Loading fullscreen owner="AdminMaintenanceAlertsOverview" />}>
-							<MaintenanceAlertsOverview className="p-admin-alerts" renderPopup={renderPopup} />
+						<Suspense fallback={<Loading fullscreen owner="AdminMaintenanceAlertsOverviewPage" />}>
+							<AdminMaintenanceAlertsOverview
+								className="p-admin-alerts"
+								renderPopup={renderPopup}
+							/>
 						</Suspense>
 					</div>
 				</AdminLayout.Content>

@@ -1,13 +1,12 @@
 import { TextInput } from '@meemoo/react-components';
-import { isValid } from 'date-fns';
-import { noop } from 'lodash-es';
-import type { FC } from 'react';
-import ReactDatePicker from 'react-datepicker';
-
 import { getDatePickerDefaultProps } from '@shared/components/DatePicker/DatePicker.consts';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { isValid } from 'date-fns';
+import { noop } from 'lodash-es';
+import type { FC } from 'react';
+import ReactDatePicker from 'react-datepicker';
 
 import styles from './DateInput.module.scss';
 
@@ -23,7 +22,7 @@ export interface DateInputProps {
 	label?: string;
 	disabled?: boolean;
 	id?: string;
-	onChange: (date: Date) => void;
+	onChange: (date: Date | null) => void;
 	onBlur?: (evt: Event) => void;
 	value?: Date;
 	className?: string;
@@ -48,7 +47,7 @@ const DateInput: FC<DateInputProps> = ({
 			<DatePicker
 				{...getDatePickerDefaultProps(locale)}
 				id={id}
-				onChange={onChange}
+				onChange={(newDate) => onChange(newDate)}
 				onBlur={onBlur}
 				className={className}
 				disabled={disabled}

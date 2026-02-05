@@ -8,8 +8,8 @@ import { wrapper } from '@shared/store';
 import { Locale } from '@shared/utils/i18n';
 import { isServerSideRendering } from '@shared/utils/is-browser';
 import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { setDefaultOptions } from 'date-fns';
 import nlBE from 'date-fns/locale/nl-BE';
-import setDefaultOptions from 'date-fns/setDefaultOptions';
 import HttpApi from 'i18next-http-backend';
 import { lowerCase, upperFirst } from 'lodash-es';
 import type { AppProps } from 'next/app';
@@ -29,7 +29,8 @@ import '@meemoo/admin-core-ui/client.css';
 import '../styles/main.scss';
 
 // Set global locale:
-setDefaultOptions({ locale: nlBE });
+// biome-ignore lint/suspicious/noExplicitAny: date fns and nlBE typing issue
+setDefaultOptions({ locale: nlBE } as any);
 
 const { publicRuntimeConfig } = getConfig();
 
