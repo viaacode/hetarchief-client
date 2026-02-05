@@ -3,9 +3,9 @@ import { getDatePickerDefaultProps } from '@shared/components/DatePicker/DatePic
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { DatePicker } from '@viaa/avo2-components';
 import clsx from 'clsx';
 import React, { type FC } from 'react';
+import ReactDatePicker from 'react-datepicker';
 import type { TimepickerProps } from './Timepicker.types';
 
 const Timepicker: FC<TimepickerProps> = (props) => {
@@ -15,7 +15,7 @@ const Timepicker: FC<TimepickerProps> = (props) => {
 	const classNames = clsx(className, 'c-datepicker', 'c-datepicker--time');
 
 	return (
-		<DatePicker
+		<ReactDatePicker
 			{...getDatePickerDefaultProps(locale)}
 			showTimeSelect
 			showTimeSelectOnly
