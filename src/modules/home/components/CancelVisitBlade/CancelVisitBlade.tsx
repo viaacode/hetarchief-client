@@ -1,6 +1,6 @@
 import { FormControl } from '@meemoo/react-components';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types/visit-request';
@@ -70,7 +70,7 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 	};
 
 	return (
-		<BladeNew
+		<Blade
 			{...props}
 			footerButtons={getFooterButtons()}
 			title={tText(
@@ -86,7 +86,7 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 					'modules/home/components/cancel-visit-blade/cancel-visit-blade___je-zal-op-de-ingeplande-dag-geen-toegang-hebben-tot-het-materiaal-een-nieuw-bezoek-inplannen-kan-steeds'
 				)}
 			</FormControl>
-		</BladeNew>
+		</Blade>
 	);
 };
 

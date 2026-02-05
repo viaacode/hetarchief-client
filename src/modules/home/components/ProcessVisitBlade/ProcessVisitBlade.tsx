@@ -1,5 +1,5 @@
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { BladeManager } from '@shared/components/BladeManager';
 import { VisitSummary } from '@shared/components/VisitSummary';
 import { tText } from '@shared/helpers/translate';
@@ -83,7 +83,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 				}
 			}}
 		>
-			<BladeNew
+			<Blade
 				{...props}
 				footerButtons={getFooterButtons()}
 				isOpen={getCurrentLayer() === 1}
@@ -92,7 +92,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 				id="process-visit-blade__visit-summary"
 			>
 				{selected && <VisitSummary preview {...selected} />}
-			</BladeNew>
+			</Blade>
 
 			<CancelVisitBlade
 				isOpen={getCurrentLayer() === (showCancel ? 2 : 9999)}

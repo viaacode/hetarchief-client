@@ -1,6 +1,6 @@
 import { FormControl, TextArea, TextInput } from '@meemoo/react-components';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { validateForm } from '@shared/helpers/validate-form';
@@ -145,7 +145,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 	};
 
 	return (
-		<BladeNew
+		<Blade
 			{...props}
 			className={clsx(props.className, styles['c-report-blade'])}
 			footerButtons={getFooterButtons()}
@@ -198,7 +198,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 					}}
 				/>
 			</FormControl>
-		</BladeNew>
+		</Blade>
 	);
 };
 

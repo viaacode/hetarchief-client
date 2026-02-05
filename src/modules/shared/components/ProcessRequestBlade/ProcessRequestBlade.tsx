@@ -1,5 +1,5 @@
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { BladeManager } from '@shared/components/BladeManager';
 import { VisitSummary } from '@shared/components/VisitSummary';
 import { tText } from '@shared/helpers/translate';
@@ -115,7 +115,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 				}
 			}}
 		>
-			<BladeNew
+			<Blade
 				{...props}
 				footerButtons={getFooterButtons()}
 				isOpen={getCurrentLayer() === 1}
@@ -123,7 +123,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 				title={getTitle()}
 			>
 				{selected && <VisitSummary {...selected} />}
-			</BladeNew>
+			</Blade>
 
 			<ApproveRequestBlade
 				isOpen={getCurrentLayer() === (showApprove ? 2 : 9999)}

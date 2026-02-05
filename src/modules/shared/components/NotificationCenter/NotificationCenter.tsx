@@ -1,6 +1,6 @@
 import { Button } from '@meemoo/react-components';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import type { NotificationCenterProps } from '@shared/components/NotificationCenter/NotificationCenter.types';
@@ -282,7 +282,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 	};
 
 	return (
-		<BladeNew
+		<Blade
 			className={clsx(className, styles['c-notification-center'])}
 			footerButtons={getFooterButtons()}
 			isOpen={isOpen}
@@ -293,7 +293,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 			id="notification-center-blade"
 		>
 			{renderBladeContent()}
-		</BladeNew>
+		</Blade>
 	);
 };
 

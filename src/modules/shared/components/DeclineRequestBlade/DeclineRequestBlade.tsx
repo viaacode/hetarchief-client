@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, TextArea } from '@meemoo/react-components';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { VisitSummary } from '@shared/components/VisitSummary';
@@ -91,7 +91,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 	};
 
 	return (
-		<BladeNew
+		<Blade
 			{...props}
 			footerButtons={getFooterButtons()}
 			isBladeInvalid={!isValid}
@@ -130,7 +130,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 					)}
 				/>
 			</FormControl>
-		</BladeNew>
+		</Blade>
 	);
 };
 

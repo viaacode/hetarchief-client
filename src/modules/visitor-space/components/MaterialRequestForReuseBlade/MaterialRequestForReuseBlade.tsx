@@ -21,8 +21,8 @@ import {
 } from '@material-requests/types';
 import { Alert, FormControl, TextArea, TimeCropControls } from '@meemoo/react-components';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { ConfirmModalBeforeUnload } from '@shared/components/ConfirmModalBeforeUnload';
 import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { Icon } from '@shared/components/Icon';
@@ -1026,7 +1026,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	};
 
 	return (
-		<BladeNew
+		<Blade
 			id="material-request-blade-reuse"
 			className={styles['c-request-material-reuse']}
 			isOpen={isOpen}
@@ -1055,6 +1055,6 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ben-je-zeker-dat-je-dit-venster-wilt-sluiten-hiermee-gaat-de-voortgang-verloren-en-wordt-het-object-niet-toegevoegd-aan-jouw-aanvraaglijst-als-je-verder-werkt-en-het-toevoegt-aan-je-aanvraaglijst-kan-je-het-nadien-nog-aanpassen'
 				)}
 			/>
-		</BladeNew>
+		</Blade>
 	);
 };

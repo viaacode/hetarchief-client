@@ -2,26 +2,6 @@ import type { IconName } from '@shared/components/Icon';
 import type { DefaultComponentProps } from '@shared/types';
 import type { ReactNode } from 'react';
 
-export interface BladeProps extends DefaultComponentProps {
-	children?: ReactNode;
-	footer?: ReactNode;
-	isOpen: boolean;
-	hideOverlay?: boolean;
-	hideCloseButton?: boolean;
-	showCloseButtonOnTop?: boolean;
-	showBackButton?: boolean;
-	onClose?: () => void;
-	// manager types
-	layer?: number;
-	isManaged?: boolean;
-	currentLayer?: number;
-	renderTitle?: (props: Pick<HTMLElement, 'id' | 'className'>) => ReactNode;
-	id: string;
-	extraWide?: boolean;
-	headerBackground?: 'white' | 'platinum';
-	stickyFooter?: boolean;
-}
-
 export interface BladeContentProps extends DefaultComponentProps {
 	id: string;
 	children?: ReactNode;
@@ -86,7 +66,7 @@ export interface BladeContentProps extends DefaultComponentProps {
 	stickyFooter?: boolean;
 }
 
-export interface BladeNewProps extends Omit<BladeContentProps, 'closable'> {
+export interface BladeProps extends Omit<BladeContentProps, 'closable'> {
 	isOpen: boolean;
 
 	// manager types

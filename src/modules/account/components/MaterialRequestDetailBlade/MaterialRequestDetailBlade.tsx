@@ -19,8 +19,8 @@ import {
 } from '@material-requests/types';
 import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
 import { Button } from '@meemoo/react-components';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterButton, BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -426,7 +426,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	return (
-		<BladeNew
+		<Blade
 			id="material-request-detail-blade"
 			isOpen={isOpen}
 			layer={layer}
@@ -521,7 +521,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				onCancel={onCancelRequest}
 				onConfirm={() => setShowConfirmModal(false)}
 			/>
-		</BladeNew>
+		</Blade>
 	);
 };
 

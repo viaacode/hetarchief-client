@@ -9,8 +9,8 @@ import {
 	MaterialRequestType,
 } from '@material-requests/types';
 import { Button } from '@meemoo/react-components';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { BladeManager } from '@shared/components/BladeManager';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
@@ -332,7 +332,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			}}
 			opacityStep={0.1}
 		>
-			<BladeNew
+			<Blade
 				id="material-request-center-blade"
 				className={styles['c-material-request-center-blade']}
 				isOpen={isOpen}
@@ -353,7 +353,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				) : (
 					renderContent()
 				)}
-			</BladeNew>
+			</Blade>
 			{selectedMaterialRequest && (
 				<MaterialRequestBlade
 					isOpen={activeBlade === MaterialRequestBladeId.EditMaterialRequest}

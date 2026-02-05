@@ -8,8 +8,8 @@ import {
 	MaterialRequestType,
 } from '@material-requests/types';
 import { Alert, Button, RadioButton, TextArea } from '@meemoo/react-components';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -470,7 +470,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	};
 
 	return (
-		<BladeNew
+		<Blade
 			id="material-request-blade"
 			className={styles['c-request-material']}
 			isOpen={isOpen}
@@ -560,6 +560,6 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				onCancel={() => setShowConfirmTypeEdit(false)}
 				onConfirm={doEditRequest}
 			/>
-		</BladeNew>
+		</Blade>
 	);
 };

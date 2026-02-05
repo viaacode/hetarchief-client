@@ -1,8 +1,8 @@
 import { MaterialRequestsService } from '@material-requests/services';
 import { type MaterialRequestDetail, MaterialRequestStatus } from '@material-requests/types';
 import { FormControl, TextArea } from '@meemoo/react-components';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
@@ -123,7 +123,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 	};
 
 	return (
-		<BladeNew
+		<Blade
 			id="material-request-status-update-blade"
 			className={styles['c-request-material-status-update']}
 			isOpen={isOpen}
@@ -186,7 +186,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 					</dd>
 				</dl>
 			</div>
-		</BladeNew>
+		</Blade>
 	);
 };
 

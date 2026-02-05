@@ -4,8 +4,8 @@ import {
 	type RequestAccessFormState,
 } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -103,7 +103,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 	};
 
 	return (
-		<BladeNew
+		<Blade
 			isOpen={isOpen}
 			title={tText(
 				'modules/shared/components/visit-detail-blade/visit-detail-blade___bezoekdetail'
@@ -131,7 +131,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 				onSubmit={onRequestAccessSubmit}
 				id="visit-detail-blade__request-access-blade"
 			/>
-		</BladeNew>
+		</Blade>
 	);
 };
 

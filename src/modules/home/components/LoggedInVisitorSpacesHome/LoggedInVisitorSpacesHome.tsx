@@ -6,8 +6,8 @@ import {
 } from '@home/components/RequestAccessBlade';
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { Loading } from '@shared/components/Loading';
 import { SpacePreview } from '@shared/components/SpacePreview';
 import {
@@ -368,7 +368,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 			},
 		];
 		return (
-			<BladeNew
+			<Blade
 				className={styles['c-visitor-space-not-available-blade']}
 				isOpen={isVisitorSpaceNotAvailable}
 				title={tText(
@@ -381,7 +381,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 				{tHtml(
 					'modules/home/components/logged-in-home/logged-in-home___het-is-niet-mogelijk-om-toegang-tot-deze-bezoekersruimte-aan-te-vragen-op-dit-moment'
 				)}
-			</BladeNew>
+			</Blade>
 		);
 	};
 
@@ -399,7 +399,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 					isOpen={isRequestAccessBladeOpen}
 					onClose={onCloseRequestBlade}
 					onSubmit={onRequestAccessSubmit}
-					id=""
+					id="logged-in-home__request-access-blade"
 				/>
 				{renderVisitorSpaceNotAvailableBlade()}
 				<ProcessVisitBlade
@@ -411,7 +411,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 						refetchFuture();
 						refetchPending();
 					}}
-					id=""
+					id="logged-in-home__process-visit-blade"
 				/>
 			</>
 		);
