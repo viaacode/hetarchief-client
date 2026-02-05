@@ -2,6 +2,7 @@ import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
+import warningStyles from '@shared/components/RedFormWarning/RedFormWarning.module.scss';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useSize } from '@shared/hooks/use-size';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
@@ -60,6 +61,28 @@ export const BladeContent: FC<BladeContentProps> = ({
 	useEffect(() => {
 		(document.activeElement as HTMLElement)?.blur?.();
 	}, []);
+
+	// When the blade is set to invalid we search the children for the first error
+	// Expecting that every error is using <RedFormWarning ... /> so we can find it
+	useEffect(() => {
+		if (isBladeInvalid) {
+			const warningCls = warningStyles['c-red-form-warning'];
+			// Search the first <RedFormWarning ... />
+			const firstError = contentRef.current?.querySelector<HTMLDivElement>(`.${warningCls}`);
+
+			// When it is closable this will to all likelihood be rendered inside a blade
+			if (closable) {
+				// Scroll the error into view
+				firstError?.scrollIntoView({
+					behavior: 'smooth',
+					block: 'center',
+				});
+			} else {
+				// Not rendered inside a blade so we are scrolling differently to avoid the entire screen to scroll
+				contentRef.current?.scrollTo({ behavior: 'smooth', top: firstError?.offsetTop });
+			}
+		}
+	}, [isBladeInvalid, closable]);
 
 	const handleClose = useCallback(() => {
 		if (closable) {

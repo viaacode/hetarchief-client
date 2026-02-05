@@ -72,6 +72,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 	}, [mostRecentMaterialRequestName]);
 
 	const validateForm = () => {
+		setIsFormValid(true);
 		const errors = {
 			hasRequests: !hasRequests
 				? tText(
@@ -104,7 +105,9 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 			!!errors.requestGroupName ||
 			!!errors.agreedToTerms;
 
-		setIsFormValid(!isInvalid);
+		setTimeout(() => {
+			setIsFormValid(!isInvalid);
+		});
 
 		return !isInvalid;
 	};

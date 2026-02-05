@@ -76,6 +76,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 	};
 
 	const handleFormSubmit = async () => {
+		setFormErrors({});
 		const errors = await validateForm(formValues, REQUEST_ACCESS_FORM_SCHEMA());
 		if (errors) {
 			setFormErrors(errors);
