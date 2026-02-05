@@ -10,11 +10,6 @@ import ReactDatePicker from 'react-datepicker';
 
 import styles from './DateInput.module.scss';
 
-// Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: object.
-// https://github.com/Hacker0x01/react-datepicker/issues/3834#issuecomment-1451662259
-const DatePicker =
-	(ReactDatePicker as unknown as { default: typeof ReactDatePicker }).default ?? ReactDatePicker;
-
 // Wrap the Datepicker in a div and define an input & formatting
 // The wrapping div ensures the tab loop element doesn't mess with grids (i.e. DateRangeInput)
 
@@ -44,7 +39,7 @@ const DateInput: FC<DateInputProps> = ({
 	return (
 		<div className={styles['c-date-input']}>
 			{!!label && <p className={styles['c-date-input__label']}>{label}</p>}
-			<DatePicker
+			<ReactDatePicker
 				{...getDatePickerDefaultProps(locale)}
 				id={id}
 				onChange={(newDate) => onChange(newDate)}
