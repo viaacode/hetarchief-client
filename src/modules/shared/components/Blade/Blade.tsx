@@ -82,7 +82,7 @@ export const Blade: FC<BladeProps> = (props) => {
 						: { visibility: 'visible' }
 				}
 			>
-				{isOpen && <BladeContent {...props} onClose={handleClose} />}
+				{isBladeOpen && <BladeContent {...props} onClose={handleClose} />}
 			</div>
 		);
 	};
