@@ -2,7 +2,7 @@
 @use "src/styles/abstracts" as *;
 
 $c-material-card-no-video-intended-spacing: 0.9rem;
-$material-card-list-view-height: 13rem;
+$material-card-list-view-height: 10rem;
 
 .c-material-card {
 	> a {
@@ -32,17 +32,20 @@ $material-card-list-view-height: 13rem;
 		max-height: 10rem;
 		overflow: hidden;
 		font-variation-settings: $line-height-md * 2rem;
-		align-items: start;
+		align-items: center;
 		color: $zinc;
 		display: flex;
 		min-height: $material-card-list-view-height;
 		place-content: center;
 		position: relative;
-		padding: $spacer-sm;
+		margin: $spacer-sm;
 
 		span > img {
 			max-height: unset !important;
 			min-height: unset !important;
+			aspect-ratio: 16/9;
+			object-fit: cover;
+			object-position: center;
 		}
 
 		@media (min-width: $breakpoint-xs) {
@@ -75,6 +78,8 @@ $material-card-list-view-height: 13rem;
 
 	&:global(.c-material-card--with-thumbnail) {
 		:global(.c-card__top-wrapper) {
+			min-width: 50%;
+			max-width: 50%;
 			width: 50%;
 		}
 	}
@@ -97,10 +102,6 @@ $material-card-list-view-height: 13rem;
 		color: $blue;
 		padding: 0.5rem;
 		background-color: $white;
-
-		// Avoid icon clipping outline border when media card is highlighted
-		margin-left: 1px;
-		margin-top: 1px;
 	}
 
 	:global(.c-card__subtitle-wrapper) {
