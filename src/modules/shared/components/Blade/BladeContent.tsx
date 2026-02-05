@@ -2,6 +2,7 @@ import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
+import warningStyles from '@shared/components/RedFormWarning/RedFormWarning.module.scss';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useSize } from '@shared/hooks/use-size';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
@@ -60,6 +61,25 @@ export const BladeContent: FC<BladeContentProps> = ({
 	useEffect(() => {
 		(document.activeElement as HTMLElement)?.blur?.();
 	}, []);
+
+	useEffect(() => {
+		// scroll to first error
+		if (isBladeInvalid) {
+			const warningCls = clsx(warningStyles['c-red-form-warning']);
+			const firstError = contentRef.current?.querySelector<HTMLDivElement>(`.${warningCls}`);
+
+			// When it is closable this will to all likelihood be rendered inside a blade
+			if (closable) {
+				firstError?.scrollIntoView({
+					behavior: 'smooth',
+					block: 'center',
+				});
+			} else {
+				// Not rendered inside a blade so we are scrolling differently to avoid the entire screen to scroll
+				contentRef.current?.scrollTo({ behavior: 'smooth', top: firstError?.offsetTop });
+			}
+		}
+	}, [isBladeInvalid, closable]);
 
 	const handleClose = useCallback(() => {
 		if (closable) {

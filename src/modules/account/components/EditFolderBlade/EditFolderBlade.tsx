@@ -52,6 +52,7 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 
 	const submitData = async () => {
 		try {
+			setFormErrors({});
 			const errors = await validateForm(
 				{
 					name,

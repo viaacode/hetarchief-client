@@ -199,22 +199,13 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 	const validateFormValues = useCallback(
 		async (newFormValues: MaterialRequestReuseForm | undefined): Promise<boolean> => {
+			setIsFormValid(true);
 			const formErrors = (await validateForm(
 				newFormValues,
 				MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA()
 			)) as Partial<Record<MaterialRequestReuseFormKey, string | undefined>>;
 			if (formErrors) {
 				setFormErrors(formErrors);
-				// scroll to first error
-				const errorProperties = Object.keys(formErrors);
-				if (errorProperties.length > 0) {
-					document
-						.querySelector(errorProperties.map((prop) => `[data-id="${prop}"]`).join(','))
-						?.scrollIntoView({
-							behavior: 'smooth',
-							block: 'center',
-						});
-				}
 				setIsFormValid(false);
 				return false;
 			}

@@ -10,7 +10,6 @@ $layout: "l-app";
 
 	&--sticky { // fallback for browsers that do not support custom css properties
 		height: $view-height; // '$view-height' for mobile excludes browser ui. Custom --vh prop is set in use-window-size.ts
-		min-height: 72rem;
 		min-height: $view-height;
 		overflow: hidden;
 
