@@ -15,3 +15,10 @@ export interface PersonalInfoProps {
 	onCancel: () => void;
 	onSuccess: () => void;
 }
+
+export interface PersonalInfoFormState {
+	hasRequests: boolean;
+	requestGroupName?: string;
+	agreedToTerms: boolean;
+	requesterCapacity?: MaterialRequestRequesterCapacity;
+}
