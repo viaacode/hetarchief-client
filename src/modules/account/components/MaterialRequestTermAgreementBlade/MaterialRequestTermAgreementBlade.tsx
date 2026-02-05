@@ -1,5 +1,5 @@
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { tHtml, tText } from '@shared/helpers/translate';
 import React, { type FC } from 'react';
 
@@ -32,7 +32,7 @@ const MaterialRequestTermAgreementBlade: FC<MaterialRequestTermAgreementBladePro
 	};
 
 	return (
-		<BladeNew
+		<Blade
 			id="material-request-term-agreement-blade"
 			isOpen={isOpen}
 			wideBladeTitle={' '}
@@ -45,7 +45,7 @@ const MaterialRequestTermAgreementBlade: FC<MaterialRequestTermAgreementBladePro
 			{tHtml(
 				'modules/account/components/material-request-term-agreement-blade/material-request-term-agreement-blade___aanvullende-gebruiksvoorwaarden-bij-aanvragen-inhoud'
 			)}
-		</BladeNew>
+		</Blade>
 	);
 };
 

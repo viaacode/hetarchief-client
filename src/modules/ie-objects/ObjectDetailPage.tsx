@@ -64,7 +64,7 @@ import type { MaterialRequest } from '@material-requests/types';
 import { Alert, Button, type TabProps, Tabs } from '@meemoo/react-components';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import type { CuePoints } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
+import { Blade } from '@shared/components/Blade/Blade';
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
@@ -1885,7 +1885,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				onSubmit={onRequestAccessSubmit}
 				id="object-detail-page__request-access-blade"
 			/>
-			<BladeNew
+			<Blade
 				id="iiif-selection-download-url"
 				isOpen={!!selectionDownloadUrl}
 				title={tText('modules/ie-objects/object-detail-page___selectie-is-klaar')}
@@ -1906,7 +1906,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				{tHtml(
 					'modules/ie-objects/object-detail-page___je-selectie-kan-worden-gedownload-als-afbeelding'
 				)}
-			</BladeNew>
+			</Blade>
 		</>
 	);
 

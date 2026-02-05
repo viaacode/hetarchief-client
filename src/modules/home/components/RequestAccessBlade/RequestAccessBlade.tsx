@@ -5,8 +5,8 @@ import type {
 	RequestAccessFormState,
 } from '@home/components/RequestAccessBlade/RequestAccessBlade.types';
 import { Checkbox, FormControl, TextArea } from '@meemoo/react-components';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -130,7 +130,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 	};
 
 	return (
-		<BladeNew
+		<Blade
 			{...bladeProps}
 			className={styles['c-request-access-blade']}
 			footerButtons={getFooterButtons()}
@@ -211,7 +211,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 					onChange={(evt) => setFormValue('acceptTerms', evt.target.checked)}
 				/>
 			</FormControl>
-		</BladeNew>
+		</Blade>
 	);
 };
 

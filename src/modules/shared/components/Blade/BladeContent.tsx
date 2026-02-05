@@ -9,8 +9,8 @@ import { isMobileSize } from '@shared/utils/is-mobile';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { type FC, useCallback, useEffect, useRef, useState } from 'react';
+import styles from '././Blade.module.scss';
 import type { BladeContentProps, BladeFooterButton } from './Blade.types';
-import styles from '././Blade_new.module.scss';
 
 export const BladeContent: FC<BladeContentProps> = ({
 	id,

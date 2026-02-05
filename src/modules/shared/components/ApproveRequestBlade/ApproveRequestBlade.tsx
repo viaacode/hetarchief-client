@@ -11,8 +11,8 @@ import type {
 	ApproveRequestBladeProps,
 	ApproveRequestFormState,
 } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.types';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import {
@@ -438,11 +438,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const ROUTE_PARTS = ROUTE_PARTS_BY_LOCALE[locale];
 	return (
-		<BladeNew
+		<Blade
 			{...props}
-			title={tText(
-				'modules/cp/components/approve-request-blade/approve-request-blade___aanvraag-goedkeuren'
-			)}
 			isBladeInvalid={isError}
 			footerButtons={getFooterButtons()}
 			className={styles['c-approve-request-blade']}
@@ -532,7 +529,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					</FormControl>
 				</>
 			)}
-		</BladeNew>
+		</Blade>
 	);
 };
 export default ApproveRequestBlade;

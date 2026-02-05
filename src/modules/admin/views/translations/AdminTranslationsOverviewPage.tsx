@@ -1,7 +1,7 @@
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
@@ -49,7 +49,7 @@ export const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		};
 
 		return (
-			<BladeNew
+			<Blade
 				className={styles['c-translations-overview__blade']}
 				footerButtons={getFooterButtons()}
 				isOpen={isOpen}
@@ -58,7 +58,7 @@ export const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUr
 				id="translations-blade"
 			>
 				<div className={styles['c-translations-overview__blade-body']}>{body}</div>
-			</BladeNew>
+			</Blade>
 		);
 	};
 

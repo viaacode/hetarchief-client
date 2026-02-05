@@ -1,7 +1,7 @@
 import { FoldersService } from '@account/services/folders';
 import { Alert, Button, FormControl, TextInput } from '@meemoo/react-components';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { CopyButton } from '@shared/components/CopyButton';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -79,7 +79,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 	);
 
 	return (
-		<BladeNew
+		<Blade
 			isOpen={isOpen}
 			title={tText('pages/account/map-delen/folder-id/index___deel-map')}
 			footerButtons={getFooterButtons()}
@@ -129,7 +129,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 					</div>
 				</FormControl>
 			</div>
-		</BladeNew>
+		</Blade>
 	);
 };
 

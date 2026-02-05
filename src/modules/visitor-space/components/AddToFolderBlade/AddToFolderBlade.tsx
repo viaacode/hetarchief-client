@@ -3,8 +3,8 @@ import { useGetFolders } from '@account/hooks/get-folders';
 import { FoldersService } from '@account/services/folders';
 import type { Folder } from '@account/types';
 import { Checkbox } from '@meemoo/react-components';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -370,7 +370,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	};
 
 	return (
-		<BladeNew
+		<Blade
 			{...bladeProps}
 			isOpen={isOpen}
 			onClose={onClose}
@@ -394,7 +394,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 					<CreateFolderButton afterSubmit={afterCreateFolderSubmit} />
 				</li>
 			</ul>
-		</BladeNew>
+		</Blade>
 	);
 };
 

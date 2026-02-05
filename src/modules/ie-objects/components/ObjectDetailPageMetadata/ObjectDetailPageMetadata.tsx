@@ -67,7 +67,7 @@ import {
 	MenuContent,
 } from '@meemoo/react-components';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
+import { Blade } from '@shared/components/Blade/Blade';
 import { CopyButton } from '@shared/components/CopyButton';
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
@@ -1229,7 +1229,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				</MetadataList>
 
 				{/* Read more metadata field blade */}
-				<BladeNew
+				<Blade
 					className={clsx(
 						'u-pb-24 u-line-height-1-4 u-font-size-14',
 						styles['p-object-detail__metadata-blade']
@@ -1251,7 +1251,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						title={selectedMetadataField?.title}
 						data={selectedMetadataField?.data}
 					/>
-				</BladeNew>
+				</Blade>
 
 				<CopyrightConfirmationModal
 					isOpen={copyrightModalOpen}

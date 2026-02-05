@@ -1,7 +1,7 @@
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
@@ -45,7 +45,7 @@ export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url, canoni
 		onClose: () => void;
 	}) => {
 		return (
-			<BladeNew
+			<Blade
 				footerButtons={getFooterButtons(onSave, onClose)}
 				isOpen={isOpen}
 				onClose={onClose}
@@ -53,7 +53,7 @@ export const AdminMaintenanceAlertsOverview: FC<DefaultSeoInfo> = ({ url, canoni
 				id="alerts-blade"
 			>
 				{body}
-			</BladeNew>
+			</Blade>
 		);
 	};
 

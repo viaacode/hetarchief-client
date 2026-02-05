@@ -8,17 +8,44 @@ import { describe, expect, it, vi } from 'vitest';
 import { mockStore } from '../../../../__mocks__/store';
 import BladeManager from './BladeManager';
 
+// Mock ResizeObserver used in ScrollableTabs component
+window.ResizeObserver =
+	window.ResizeObserver ||
+	class {
+		disconnect = vi.fn();
+		observe = vi.fn();
+		unobserve = vi.fn();
+	};
+
 const renderBladeManager = (currentBlade = 0, onClose = () => null) => {
 	return render(
 		<Provider store={mockStore}>
 			<BladeManager currentLayer={currentBlade} onCloseBlade={onClose}>
-				<Blade isOpen={true} renderTitle={() => 'Blade 1'} layer={1} id="blade1">
+				<Blade
+					isOpen={true}
+					title={'Blade 1'}
+					layer={1}
+					id="blade1"
+					footerButtons={[{ label: 'continue', type: 'primary' }]}
+				>
 					<Button label="Open second blade" />
 				</Blade>
-				<Blade isOpen={false} renderTitle={() => 'Blade 2'} layer={2} id="blade2">
+				<Blade
+					isOpen={false}
+					title={'Blade 2'}
+					layer={2}
+					id="blade2"
+					footerButtons={[{ label: 'continue', type: 'primary' }]}
+				>
 					<Button label="Open third blade" />
 				</Blade>
-				<Blade isOpen={false} renderTitle={() => 'Blade 3'} layer={3} id="blade3" />
+				<Blade
+					isOpen={false}
+					title={'Blade 3'}
+					layer={3}
+					id="blade3"
+					footerButtons={[{ label: 'continue', type: 'primary' }]}
+				/>
 			</BladeManager>
 		</Provider>
 	);

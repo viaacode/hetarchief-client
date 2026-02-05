@@ -2,8 +2,8 @@ import { EDIT_FOLDER_VALIDATION_SCHEMA } from '@account/components/EditFolderBla
 import { FoldersService } from '@account/services/folders';
 import type { Folder } from '@account/types';
 import { FormControl, TextArea, TextInput } from '@meemoo/react-components';
+import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
-import { BladeNew } from '@shared/components/Blade/Blade_new';
 import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -110,7 +110,7 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 	};
 
 	return (
-		<BladeNew
+		<Blade
 			isOpen={isOpen}
 			title={tText(
 				'modules/account/components/edit-folder-blade/edit-folder-blade___map-aanpassen'
@@ -148,6 +148,6 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 					value={description}
 				/>
 			</FormControl>
-		</BladeNew>
+		</Blade>
 	);
 };
