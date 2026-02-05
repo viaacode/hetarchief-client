@@ -205,6 +205,11 @@ $padding-horizontal-mobile: $spacer-sm;
 					@media (max-width: $breakpoint-md) {
 						display: inline-block;
 						width: unset;
+
+						&:only-child {
+							display: block;
+							width: 100%;
+						}
 					}
 				}
 			}
