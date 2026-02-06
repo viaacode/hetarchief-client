@@ -13,7 +13,7 @@ import {
 import { MaterialRequestsService } from '@material-requests/services';
 import {
 	GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD,
-	type MaterialRequestDetail,
+	type MaterialRequest,
 	type MaterialRequestDownloadQuality,
 	MaterialRequestStatus,
 } from '@material-requests/types';
@@ -24,6 +24,7 @@ import type { BladeFooterButton, BladeFooterProps } from '@shared/components/Bla
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { Loading } from '@shared/components/Loading';
 import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
@@ -49,7 +50,7 @@ interface MaterialRequestDetailBladeProps {
 	allowRequestCancellation: boolean;
 	onApproveRequest?: () => void;
 	onDeclineRequest?: () => void;
-	currentMaterialRequestDetail: MaterialRequestDetail;
+	currentMaterialRequestDetail: MaterialRequest | undefined;
 	afterStatusChanged: () => void;
 	layer?: number;
 	currentLayer?: number;
@@ -74,34 +75,36 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 
 	const canRequestBeEvaluated = useMemo(
 		() =>
-			currentMaterialRequestDetail.status === MaterialRequestStatus.PENDING && user?.isEvaluator,
-		[currentMaterialRequestDetail.status, user?.isEvaluator]
+			currentMaterialRequestDetail?.status === MaterialRequestStatus.PENDING && user?.isEvaluator,
+		[currentMaterialRequestDetail?.status, user?.isEvaluator]
 	);
 	const itemLink = useMemo(
 		() =>
-			stringifyUrl({
-				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${currentMaterialRequestDetail.maintainerSlug}/${currentMaterialRequestDetail.objectSchemaIdentifier}`,
-				query: isNil(currentMaterialRequestDetail.reuseForm?.endTime)
-					? {}
-					: {
-							[QUERY_PARAM_KEY.CUE_POINTS]: [
-								currentMaterialRequestDetail.reuseForm?.startTime,
-								currentMaterialRequestDetail.reuseForm?.endTime,
-							].join(CUE_POINTS_SEPARATOR),
-						},
-			}),
+			currentMaterialRequestDetail
+				? stringifyUrl({
+						url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${currentMaterialRequestDetail.maintainerSlug}/${currentMaterialRequestDetail.objectSchemaIdentifier}`,
+						query: isNil(currentMaterialRequestDetail.reuseForm?.endTime)
+							? {}
+							: {
+									[QUERY_PARAM_KEY.CUE_POINTS]: [
+										currentMaterialRequestDetail.reuseForm?.startTime,
+										currentMaterialRequestDetail.reuseForm?.endTime,
+									].join(CUE_POINTS_SEPARATOR),
+								},
+					})
+				: '',
 		[currentMaterialRequestDetail, locale]
 	);
 
 	useEffect(() => {
-		if (currentMaterialRequestDetail.status === MaterialRequestStatus.NEW && user?.isEvaluator) {
+		if (currentMaterialRequestDetail?.status === MaterialRequestStatus.NEW && user?.isEvaluator) {
 			MaterialRequestsService.setAsPending(currentMaterialRequestDetail.id).then(() => {
 				afterStatusChanged();
 			});
 		}
 	}, [
-		currentMaterialRequestDetail.id,
-		currentMaterialRequestDetail.status,
+		currentMaterialRequestDetail?.id,
+		currentMaterialRequestDetail?.status,
 		user?.isEvaluator,
 		afterStatusChanged,
 	]);
@@ -126,6 +129,10 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 
 	const onCancelRequest = async () => {
 		try {
+			if (!currentMaterialRequestDetail) {
+				return;
+			}
+
 			setShowConfirmModal(false);
 			const response = await MaterialRequestsService.cancel(currentMaterialRequestDetail.id);
 			if (response === undefined) {
@@ -168,6 +175,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		} as BladeFooterButton;
 
 		if (
+			currentMaterialRequestDetail &&
 			currentMaterialRequestDetail.status === MaterialRequestStatus.NEW &&
 			allowRequestCancellation &&
 			currentMaterialRequestDetail.requesterId === user?.id
@@ -221,7 +229,10 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	const renderDownload = () => {
-		if (currentMaterialRequestDetail.status !== MaterialRequestStatus.APPROVED) {
+		if (
+			!currentMaterialRequestDetail ||
+			currentMaterialRequestDetail.status !== MaterialRequestStatus.APPROVED
+		) {
 			return null;
 		}
 
@@ -277,6 +288,10 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	const renderRequestStatus = () => {
+		if (!currentMaterialRequestDetail) {
+			return null;
+		}
+
 		const formattedStatusDates = [
 			tText(
 				'modules/account/components/material-request-detail-blade/material-request-detail-blade___aangevraagd-op',
@@ -355,8 +370,8 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 
 	const renderMotivation = () => {
 		if (
-			currentMaterialRequestDetail.status !== MaterialRequestStatus.APPROVED &&
-			currentMaterialRequestDetail.status !== MaterialRequestStatus.DENIED
+			currentMaterialRequestDetail?.status !== MaterialRequestStatus.APPROVED &&
+			currentMaterialRequestDetail?.status !== MaterialRequestStatus.DENIED
 		) {
 			return null;
 		}
@@ -370,7 +385,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	const renderThumbnail = () => {
-		if (!currentMaterialRequestDetail.reuseForm) {
+		if (!currentMaterialRequestDetail?.reuseForm) {
 			return null;
 		}
 
@@ -413,7 +428,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	const renderReuseForm = () => {
-		if (!currentMaterialRequestDetail.reuseForm) {
+		if (!currentMaterialRequestDetail?.reuseForm) {
 			return;
 		}
 
@@ -441,71 +456,77 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			)}
 			stickySubtitle={<MaterialRequestInformation />}
 			subtitle={
-				<MaterialCard
-					openInNewTab={true}
-					objectId={currentMaterialRequestDetail.objectSchemaIdentifier}
-					title={currentMaterialRequestDetail.objectSchemaName}
-					thumbnail={currentMaterialRequestDetail.objectThumbnailUrl}
-					hideThumbnail={true}
-					orientation="vertical"
-					link={itemLink}
-					type={currentMaterialRequestDetail.objectDctermsFormat}
-					publishedBy={currentMaterialRequestDetail.maintainerName}
-					publishedOrCreatedDate={currentMaterialRequestDetail.objectPublishedOrCreatedDate}
-					icon={getIconFromObjectType(
-						currentMaterialRequestDetail.objectDctermsFormat,
-						isObjectEssenceAccessibleToUser
-					)}
-				/>
+				currentMaterialRequestDetail && (
+					<MaterialCard
+						openInNewTab={true}
+						objectId={currentMaterialRequestDetail.objectSchemaIdentifier}
+						title={currentMaterialRequestDetail.objectSchemaName}
+						thumbnail={currentMaterialRequestDetail.objectThumbnailUrl}
+						hideThumbnail={true}
+						orientation="vertical"
+						link={itemLink}
+						type={currentMaterialRequestDetail.objectDctermsFormat}
+						publishedBy={currentMaterialRequestDetail.maintainerName}
+						publishedOrCreatedDate={currentMaterialRequestDetail.objectPublishedOrCreatedDate}
+						icon={getIconFromObjectType(
+							currentMaterialRequestDetail.objectDctermsFormat,
+							isObjectEssenceAccessibleToUser
+						)}
+					/>
+				)
 			}
 			footerButtons={getFooterButtons()}
 			stickyFooter={canRequestBeEvaluated}
 		>
 			<div className={styles['p-material-request-detail__content-wrapper']}>
-				<div className={styles['p-material-request-detail__content']}>
-					{renderRequestStatus()}
-					{renderContentBlock(
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
-						),
-						currentMaterialRequestDetail.requestGroupName
-					)}
-					{renderMotivation()}
-					{renderContentBlock(
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvrager'
-						),
-						currentMaterialRequestDetail.requesterMail,
-						currentMaterialRequestDetail.requesterFullName
-					)}
-					{renderContentBlock(
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvragende-organisatie'
-						),
-						currentMaterialRequestDetail.requesterOrganisationSector,
-						currentMaterialRequestDetail.requesterOrganisation
-					)}
-					{!currentMaterialRequestDetail.reuseForm &&
-						renderContentBlock(
+				{currentMaterialRequestDetail ? (
+					<div className={styles['p-material-request-detail__content']}>
+						{renderRequestStatus()}
+						{renderContentBlock(
 							tText(
-								'modules/account/components/material-request-detail-blade/material-requests___reden'
+								'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
 							),
-							currentMaterialRequestDetail.reason || '-'
+							currentMaterialRequestDetail.requestGroupName
 						)}
-
-					{!currentMaterialRequestDetail.reuseForm &&
-						currentMaterialRequestDetail.requesterCapacity &&
-						renderContentBlock(
+						{renderMotivation()}
+						{renderContentBlock(
 							tText(
-								'modules/account/components/material-request-detail-blade/material-requests___hoedanigheid'
+								'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvrager'
 							),
-							GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD()[
-								currentMaterialRequestDetail.requesterCapacity
-							]
+							currentMaterialRequestDetail.requesterMail,
+							currentMaterialRequestDetail.requesterFullName
 						)}
+						{renderContentBlock(
+							tText(
+								'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvragende-organisatie'
+							),
+							currentMaterialRequestDetail.requesterOrganisationSector,
+							currentMaterialRequestDetail.requesterOrganisation
+						)}
+						{!currentMaterialRequestDetail.reuseForm &&
+							renderContentBlock(
+								tText(
+									'modules/account/components/material-request-detail-blade/material-requests___reden'
+								),
+								currentMaterialRequestDetail.reason || '-'
+							)}
 
-					{renderReuseForm()}
-				</div>
+						{!currentMaterialRequestDetail.reuseForm &&
+							currentMaterialRequestDetail.requesterCapacity &&
+							renderContentBlock(
+								tText(
+									'modules/account/components/material-request-detail-blade/material-requests___hoedanigheid'
+								),
+								GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD()[
+									currentMaterialRequestDetail.requesterCapacity
+								]
+							)}
+
+						{renderReuseForm()}
+					</div>
+				) : (
+					<Loading owner="material request detail blade" />
+				)}
 			</div>
 			<ConfirmationModal
 				text={{

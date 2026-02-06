@@ -13,7 +13,6 @@ import {
 } from '@admin/const/material-requests.const';
 import { AdminLayout } from '@admin/layouts';
 import { getMaterialRequestTableColumnProps } from '@material-requests/const';
-import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
 import { useGetMaterialRequestsMaintainers } from '@material-requests/hooks/get-material-requests-maintainers';
 import {
@@ -156,12 +155,6 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		];
 	}, [selectedDownloadFilters]);
 
-	const {
-		data: currentMaterialRequestDetail,
-		isFetching: isLoading,
-		refetch: refetchCurrentMaterialRequestDetail,
-	} = useGetMaterialRequestById(currentMaterialRequest?.id || null);
-
 	const noData = useMemo(
 		(): boolean => isEmpty(materialRequests?.items),
 		[materialRequests?.items]
@@ -262,12 +255,11 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	};
 
 	const onMaterialRequestStatusChange = () => {
-		void refetchCurrentMaterialRequestDetail();
 		void refetchMaterialRequests();
 	};
 
 	const renderDetailBlade = () => {
-		if (!currentMaterialRequest?.id || !currentMaterialRequestDetail) {
+		if (!currentMaterialRequest?.id) {
 			return null;
 		}
 
@@ -296,7 +288,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 			>
 				<MaterialRequestDetailBlade
 					allowRequestCancellation={false}
-					isOpen={!isLoading && isDetailBladeOpen}
+					isOpen={isDetailBladeOpen}
 					onClose={() => setIsDetailBladeOpen(false)}
 					onApproveRequest={() =>
 						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.APPROVED)
@@ -304,16 +296,16 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 					onDeclineRequest={() =>
 						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
 					}
-					currentMaterialRequestDetail={currentMaterialRequestDetail}
+					currentMaterialRequestDetail={currentMaterialRequest}
 					afterStatusChanged={onMaterialRequestStatusChange}
 					layer={isDetailBladeOpen ? 1 : 99}
 					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 				/>
 				<MaterialRequestStatusUpdateBlade
-					isOpen={!isLoading && !!isDetailStatusBladeOpenWithStatus}
+					isOpen={!!isDetailStatusBladeOpenWithStatus}
 					onClose={() => setIsDetailStatusBladeOpenWithStatus(undefined)}
 					status={isDetailStatusBladeOpenWithStatus}
-					currentMaterialRequestDetail={currentMaterialRequestDetail}
+					currentMaterialRequestDetail={currentMaterialRequest}
 					afterStatusChanged={onMaterialRequestStatusChange}
 					layer={isDetailBladeOpen ? 2 : 99}
 					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}

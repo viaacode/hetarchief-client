@@ -1,5 +1,5 @@
 import { MaterialRequestsService } from '@material-requests/services';
-import { type MaterialRequestDetail, MaterialRequestStatus } from '@material-requests/types';
+import { type MaterialRequest, MaterialRequestStatus } from '@material-requests/types';
 import { FormControl, TextArea } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
@@ -19,7 +19,7 @@ interface MaterialRequestStatusUpdateBladeProps {
 	isOpen: boolean;
 	onClose: () => void;
 	status?: MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED;
-	currentMaterialRequestDetail: MaterialRequestDetail;
+	currentMaterialRequestDetail: MaterialRequest | undefined;
 	afterStatusChanged: () => void;
 	layer: number;
 	currentLayer: number;
@@ -34,16 +34,6 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 	layer,
 	currentLayer,
 }) => {
-	const {
-		objectSchemaName: objectName,
-		objectDctermsFormat,
-		objectSchemaIdentifier,
-		objectRepresentationId,
-		objectThumbnailUrl,
-		objectPublishedOrCreatedDate,
-		maintainerSlug,
-		maintainerName,
-	} = currentMaterialRequestDetail;
 	const locale = useLocale();
 	const MAX_MOTIVATION_LENGTH = 300;
 
@@ -57,6 +47,21 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 			setMotivationInputValue('');
 		}
 	}, [isOpen]);
+
+	if (!currentMaterialRequestDetail) {
+		return null;
+	}
+
+	const {
+		objectSchemaName: objectName,
+		objectDctermsFormat,
+		objectSchemaIdentifier,
+		objectRepresentationId,
+		objectThumbnailUrl,
+		objectPublishedOrCreatedDate,
+		maintainerSlug,
+		maintainerName,
+	} = currentMaterialRequestDetail;
 
 	const onCloseModal = () => {
 		onClose();
