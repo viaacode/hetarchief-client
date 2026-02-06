@@ -68,13 +68,6 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 			});
 	}, []);
 
-	/**
-	 * Set admin-core config when router becomes available
-	 */
-	useEffect(() => {
-		AdminConfigManager.setConfig(getAdminCoreConfig(router, locale || Locale.nl, null));
-	}, [locale, router]);
-
 	if (!isServerSideRendering()) {
 		// client-side-only code, window is not available during NextJS server side prerender
 		// biome-ignore lint/suspicious/noExplicitAny: Window is not yet typed

@@ -15,10 +15,7 @@ import {
 	useGetContentPageByLanguageAndPath,
 } from '@content-page/hooks/get-content-page';
 import { ContentPageClientService } from '@content-page/services/content-page-client.service';
-import {
-	ContentPageRenderer,
-	convertDbContentPageToContentPageInfo,
-} from '@meemoo/admin-core-ui/client';
+import { ContentPageRenderer, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/client';
 import ErrorNoAccess from '@shared/components/ErrorNoAccess/ErrorNoAccess';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';
@@ -96,7 +93,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 
 	const renderPageContent = () => {
 		if (isContentPageLoading || !hasCheckedLogin || (isContentPageFetching && !contentPageInfo)) {
-			return <Loading fullscreen locationId={'/[...fallback]/index page'} />;
+			return <Loading fullscreen locationId={'/[...pagePath]/index page'} />;
 		}
 
 		if (contentPageInfo) {
@@ -145,7 +142,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 							relativeUrl={url}
 							canonicalUrl={canonicalUrl}
 						/>
-						<Loading fullscreen locationId={'/[...fallback]/index page'} />
+						<Loading fullscreen locationId={'/[...pagePath]/index page'} />
 					</>
 				);
 			}
@@ -188,7 +185,7 @@ export async function getServerSideProps(
 	}
 
 	const path = getPagePath(context.query.pagePath);
-	// This fallback route should not resolve admin paths
+	// This pagePath route should not resolve admin paths
 	// The admin/ paths are static routes that don't work well on the first load while using the dev server
 	if (path?.startsWith('admin/')) {
 		return { notFound: true };

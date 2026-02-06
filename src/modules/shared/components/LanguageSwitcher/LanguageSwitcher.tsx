@@ -34,16 +34,6 @@ export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useDispatch();
 	const { data: allLanguages } = useGetAllLanguages();
-	const slug = getSlugFromQueryParams(router.query);
-	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
-		locale,
-		`/${slug}`,
-		isRootSlugRoute(router.route)
-	);
-
-	const contentPageInfo = dbContentPage
-		? convertDbContentPageToContentPageInfo(dbContentPage)
-		: null;
 
 	const languageOptions = (allLanguages || []).map((languageInfo) => {
 		const langCode = languageInfo.languageCode.toLowerCase() as Locale;
@@ -70,14 +60,7 @@ export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 				variants={['text']}
 				onClick={async () => {
 					const selectedLanguage = languageOption.value as Locale;
-					await changeApplicationLocale(
-						locale,
-						selectedLanguage,
-						router,
-						queryClient,
-						contentPageInfo,
-						commonUser
-					);
+					await changeApplicationLocale(locale, selectedLanguage, router, queryClient, commonUser);
 					setIsOpen(false);
 				}}
 			/>

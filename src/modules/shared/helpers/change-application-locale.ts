@@ -1,12 +1,13 @@
 import { AuthService } from '@auth/services/auth-service';
 import type { ContentPageInfo } from '@meemoo/admin-core-ui/admin';
+import { ContentPageService } from '@meemoo/admin-core-ui/client';
 import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/LanguageSwitcher.exceptions';
 import { QUERY_KEYS, ROUTES_BY_LOCALE, type RouteKey } from '@shared/const';
 import { isRootSlugRoute } from '@shared/helpers/is-root-slug-route';
 import { Locale } from '@shared/utils/i18n';
 import type { QueryClient } from '@tanstack/react-query';
 import type { AvoUserCommonUser } from '@viaa/avo2-types';
-import { reverse, sortBy } from 'lodash-es';
+import { reverse, sortBy, trimEnd } from 'lodash-es';
 import type { NextRouter } from 'next/router';
 
 /**
@@ -15,7 +16,6 @@ import type { NextRouter } from 'next/router';
  * @param newLocale
  * @param router used to change the current route
  * @param queryClient used to invalidate queries after changing the locale
- * @param contentPageInfo if passed, will be used to find the translated content page for the new route
  * @param commonUser
  */
 export const changeApplicationLocale = async (
@@ -23,13 +23,12 @@ export const changeApplicationLocale = async (
 	newLocale: Locale,
 	router: NextRouter,
 	queryClient: QueryClient,
-	contentPageInfo: ContentPageInfo | undefined | null,
 	commonUser: AvoUserCommonUser | null
 ): Promise<void> => {
 	if (oldLocale === newLocale) {
 		return; // Already viewing the correct language
 	}
-	let oldFullPath = router.asPath;
+	let oldFullPath = trimEnd(router.asPath, '?');
 	if (
 		Object.values(Locale)
 			.map((locale) => `/${locale}/`)
@@ -60,8 +59,11 @@ export const changeApplicationLocale = async (
 
 	// exception for content pages
 	if (isRootSlugRoute(router.route)) {
-		// const contentPage ContentPageService.getContentPageByLanguageAndPath(language as any, path);
-		const translatedContentPageInfo = (contentPageInfo?.translatedPages || []).find(
+		const contentPage = await ContentPageService.getContentPageByLanguageAndPath(
+			oldLocale as any,
+			newFullPath
+		);
+		const translatedContentPageInfo = (contentPage?.translatedPages || []).find(
 			(translatedPage) =>
 				(translatedPage.language as unknown as Locale) === newLocale && translatedPage.isPublic
 		);

@@ -135,14 +135,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 	const handleSelectedLanguageChanged = async (newLocale: Locale) => {
 		setSelectedLanguage(newLocale);
-		await changeApplicationLocale(
-			currentAccountLocale,
-			newLocale,
-			router,
-			queryClient,
-			undefined,
-			commonUser
-		);
+		await changeApplicationLocale(currentAccountLocale, newLocale, router, queryClient, commonUser);
 		// biome-ignore lint/suspicious/noExplicitAny: todo replace redux with Jotai
 		dispatch(checkLoginAction() as any);
 	};

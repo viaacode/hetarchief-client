@@ -193,14 +193,7 @@ const AppLayout: FC<any> = ({ children }) => {
 		// Redirect the user to the correct language version of the page
 		// If the preview query param is set, we don't want to change the language, since this is used for previewing content pages in the admin dashboard (admin-core-ui)
 		if (user?.language && parse(window.location.search).preview !== 'true') {
-			changeApplicationLocale(
-				locale,
-				user?.language as Locale,
-				router,
-				queryClient,
-				contentPageInfo,
-				null
-			);
+			changeApplicationLocale(locale, user?.language as Locale, router, queryClient, null);
 		}
 	}, [user]);
 
