@@ -215,6 +215,7 @@ const getDynamicHeaderLinks = (
 	linkedSpaceOrId: string | null,
 	activeVisits: VisitRequest[] | null,
 	isMeemooAdmin: boolean | undefined,
+	permissions: Permission[],
 	locale: Locale
 ) => {
 	const itemsByPlacement = navigationItems[placement];
@@ -223,44 +224,57 @@ const getDynamicHeaderLinks = (
 		return [];
 	}
 
-	return itemsByPlacement.map(
-		({ contentPath, id, label, linkTarget, iconName, tooltip }: NavigationInfo): NavigationItem => {
-			const hasActiveVisits = activeVisits && activeVisits.length > 0;
-			const isSearchNavItem = contentPath === ROUTES_BY_LOCALE[locale].search;
-			const searchUrl =
-				isSearchNavItem && hasActiveVisits && !isMeemooAdmin
-					? `${ROUTES_BY_LOCALE[locale].search}?aanbieder=${activeVisits[0].spaceSlug}`
-					: contentPath;
-
-			if (contentPath === NAVIGATION_DROPDOWN.VISITOR_SPACES) {
-				return getVisitorSpacesDropdown(
-					label,
-					currentPath,
-					accessibleVisitorSpaces,
-					linkedSpaceOrId,
-					locale
-				);
-			}
-
-			return {
-				activeDesktop: currentPath.includes(contentPath),
-				activeMobile: currentPath.includes(contentPath),
+	return itemsByPlacement
+		.filter((navigationItem) =>
+			navigationItem.contentPath === ROUTES_BY_LOCALE[locale].cpAdminMaterialRequests
+				? permissions.includes(Permission.VIEW_ANY_MATERIAL_REQUESTS)
+				: true
+		)
+		.map(
+			({
+				contentPath,
 				id,
-				path: contentPath,
-				node: renderLink(
-					label,
-					searchUrl,
-					{
-						target: linkTarget || undefined,
-						iconStart: iconName ? <Icon name={iconName as IconName} /> : null,
-						tooltip: tooltip || undefined,
-						className: linkClasses,
-					},
-					placement
-				),
-			};
-		}
-	);
+				label,
+				linkTarget,
+				iconName,
+				tooltip,
+			}: NavigationInfo): NavigationItem => {
+				const hasActiveVisits = activeVisits && activeVisits.length > 0;
+				const isSearchNavItem = contentPath === ROUTES_BY_LOCALE[locale].search;
+				const searchUrl =
+					isSearchNavItem && hasActiveVisits && !isMeemooAdmin
+						? `${ROUTES_BY_LOCALE[locale].search}?aanbieder=${activeVisits[0].spaceSlug}`
+						: contentPath;
+
+				if (contentPath === NAVIGATION_DROPDOWN.VISITOR_SPACES) {
+					return getVisitorSpacesDropdown(
+						label,
+						currentPath,
+						accessibleVisitorSpaces,
+						linkedSpaceOrId,
+						locale
+					);
+				}
+
+				return {
+					activeDesktop: currentPath.includes(contentPath),
+					activeMobile: currentPath.includes(contentPath),
+					id,
+					path: contentPath,
+					node: renderLink(
+						label,
+						searchUrl,
+						{
+							target: linkTarget || undefined,
+							iconStart: iconName ? <Icon name={iconName as IconName} /> : null,
+							tooltip: tooltip || undefined,
+							className: linkClasses,
+						},
+						placement
+					),
+				};
+			}
+		);
 };
 
 const getCpAdminManagementDropdown = (
@@ -447,6 +461,7 @@ export const getNavigationItemsLeft = (
 		linkedSpaceOrId,
 		activeVisits,
 		isMeemooAdmin,
+		permissions,
 		locale
 	);
 	const afterDivider = getDynamicHeaderLinks(
@@ -457,6 +472,7 @@ export const getNavigationItemsLeft = (
 		linkedSpaceOrId,
 		null,
 		undefined,
+		permissions,
 		locale
 	);
 
@@ -500,6 +516,7 @@ export const getNavigationItemsProfileDropdown = (
 		linkedSpaceOrId,
 		null,
 		undefined,
+		(user?.permissions || []) as unknown as Permission[],
 		locale
 	);
 
