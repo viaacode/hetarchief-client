@@ -18,6 +18,7 @@ const MaterialRequestTermAgreementBlade: FC<MaterialRequestTermAgreementBladePro
 				label: tText(
 					'modules/account/components/material-request-term-agreement-blade/material-request-term-agreement-blade___ik-ga-akkoord'
 				),
+				mobileLabel: tText('Ik ga akkoord mobiel'),
 				type: 'primary',
 				onClick: () => onClose(true),
 			},
@@ -25,6 +26,7 @@ const MaterialRequestTermAgreementBlade: FC<MaterialRequestTermAgreementBladePro
 				label: tText(
 					'modules/account/components/material-request-term-agreement-blade/material-request-term-agreement-blade___sluit'
 				),
+				mobileLabel: tText('Sluit mobiel'),
 				type: 'secondary',
 				onClick: () => onClose(false),
 			},

@@ -115,6 +115,10 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 						: tText(
 								'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-afkeuren'
 							),
+				mobileLabel:
+					status === MaterialRequestStatus.APPROVED
+						? tText('Aanvraag goedkeuren mobiel')
+						: tText('Aanvraag afkeuren mobiel'),
 				type: 'primary',
 				onClick: onApproveOrDeny,
 			},
@@ -122,6 +126,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 				label: tText(
 					'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
 				),
+				mobileLabel: tText('Annuleer mobiel'),
 				type: 'secondary',
 				onClick: onCloseModal,
 			},

@@ -20,10 +20,8 @@ import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount, setShowMaterialRequestCenter } from '@shared/store/ui';
-import { isMobileSize } from '@shared/utils/is-mobile';
 import type { AvoUserCommonUser } from '@viaa/avo2-types';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
@@ -85,10 +83,6 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		QUERY_PARAM_KEY.ACTIVE_BLADE,
 		withDefault(StringParam, undefined)
 	);
-
-	// We need different functionalities for different viewport sizes
-	const windowSize = useWindowSizeContext();
-	const isMobile = isMobileSize(windowSize);
 
 	const {
 		data: potentialDuplicates,
@@ -318,6 +312,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					label: tText(
 						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-opslaan'
 					),
+					mobileLabel: tText('Wijzigingen opslaan mobiel'),
 					type: 'primary',
 					onClick: onEditRequest,
 				},
@@ -325,6 +320,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					label: tText(
 						'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
 					),
+					mobileLabel: tText('Annuleer mobiel'),
 					type: 'secondary',
 					onClick: () => onCloseModal(false),
 				},
@@ -353,7 +349,8 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 
 		return [
 			{
-				label: addButtonLabel(isMobile),
+				label: addButtonLabel(false),
+				mobileLabel: addButtonLabel(true),
 				type: 'primary',
 				onClick: onAddToList,
 			},
@@ -361,6 +358,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				label: tText(
 					'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
 				),
+				mobileLabel: tText('Annuleer mobiel'),
 				type: 'secondary',
 				onClick: () => onCloseModal(false),
 			},

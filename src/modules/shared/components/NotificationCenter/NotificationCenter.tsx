@@ -164,6 +164,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 				label: tText(
 					'modules/shared/components/notification-center/notification-center___markeer-alles-als-gelezen'
 				),
+				mobileLabel: tText('Markeer alles als gelezen mobiel'),
 				type: 'primary',
 				onClick: onMarkAllAsRead,
 				icon: IconNamesLight.Check,

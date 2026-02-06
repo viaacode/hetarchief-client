@@ -1241,6 +1241,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					footerButtons={[
 						{
 							label: tText('Sluit'),
+							mobileLabel: tText('Sluit mobiel'),
 							type: 'secondary',
 							onClick: () => setSelectedMetadataField(null),
 						},

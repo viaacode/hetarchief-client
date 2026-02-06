@@ -164,10 +164,12 @@ export const BladeContent: FC<BladeContentProps> = ({
 			return null;
 		}
 
+		const label = isMobile ? buttonConfig.mobileLabel : buttonConfig.label;
+
 		const renderButton = () => {
 			return (
 				<Button
-					label={buttonConfig.label}
+					label={label}
 					title={buttonConfig.title || undefined}
 					aria-label={buttonConfig.ariaLabel || undefined}
 					variants={buttonConfig.variants}
@@ -180,11 +182,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 
 		if (buttonConfig.href) {
 			return (
-				<Link
-					passHref
-					href={buttonConfig.href}
-					aria-label={buttonConfig.ariaLabel || buttonConfig.label}
-				>
+				<Link passHref href={buttonConfig.href} aria-label={buttonConfig.ariaLabel || label}>
 					{renderButton()}
 				</Link>
 			);

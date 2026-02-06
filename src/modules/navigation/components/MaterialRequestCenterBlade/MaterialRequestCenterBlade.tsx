@@ -271,6 +271,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					label: tText(
 						'modules/navigation/components/material-request-center-blade/material-request-center-blade___sluit'
 					),
+					mobileLabel: tText('Sluit mobiel'),
 					type: 'primary',
 					onClick: onCloseBlades,
 				},
@@ -282,6 +283,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				label: tText(
 					'modules/navigation/components/material-request-center-blade/material-request-center-blade___werk-je-aanvraag-af'
 				),
+				mobileLabel: tText('Werk je aanvraag af mobiel'),
 				type: 'primary',
 				onClick: onCloseBlades,
 				href: user
@@ -292,6 +294,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				label: tText(
 					'modules/navigation/components/material-request-center-blade/material-request-center-blade___sluit'
 				),
+				mobileLabel: tText('Sluit mobiel'),
 				type: 'secondary',
 				onClick: onCloseBlades,
 			},

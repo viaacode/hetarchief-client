@@ -77,6 +77,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 		return [
 			{
 				label: tText('modules/cp/components/decline-request-blade/decline-request-blade___keur-af'),
+				mobileLabel: tText('Keur af mobiel'),
 				type: 'primary',
 				onClick: handleSubmit(onFormSubmit),
 			},
@@ -84,6 +85,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 				label: tText(
 					'modules/cp/components/decline-request-blade/decline-request-blade___annuleer'
 				),
+				mobileLabel: tText('Annuleer mobiel'),
 				type: 'secondary',
 				onClick: props.onClose,
 			},

@@ -93,7 +93,7 @@ describe('Component: <Blade /> (default)', () => {
 		const { getByRole, getByText } = renderBlade({
 			...mockBladeProps,
 			isOpen: true,
-			footerButtons: [{ label: footerLabel, type: 'primary' }],
+			footerButtons: [{ label: footerLabel, mobileLabel: footerLabel, type: 'primary' }],
 		});
 
 		const footer = getByRole('dialog').querySelector('.c-blade__footer');
@@ -107,7 +107,7 @@ describe('Component: <Blade /> (default)', () => {
 		const footerLabel = 'some footer';
 		const { getByText } = renderBlade({
 			...mockBladeProps,
-			footerButtons: [{ label: footerLabel, type: 'primary' }],
+			footerButtons: [{ label: footerLabel, mobileLabel: footerLabel, type: 'primary' }],
 		});
 
 		try {

@@ -91,11 +91,13 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 				label: tText(
 					'modules/shared/components/visit-detail-blade/visit-detail-blade___plan-bezoek'
 				),
+				mobileLabel: tText('Plan bezoek mobiel'),
 				type: 'primary',
 				onClick: () => onOpenRequestAccess(),
 			},
 			{
 				label: tText('modules/shared/components/visit-detail-blade/visit-detail-blade___sluit'),
+				mobileLabel: tText('Sluit mobiel'),
 				type: 'secondary',
 				onClick: onCloseVisitDetailBlade,
 			},
