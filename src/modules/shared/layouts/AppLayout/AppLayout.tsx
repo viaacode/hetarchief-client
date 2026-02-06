@@ -1,12 +1,16 @@
 import { GroupName, Permission } from '@account/const';
+import { getAdminCoreConfig } from '@admin/wrappers/admin-core-config';
 import { AuthModal } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
-import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
+import { checkLoginAction, selectCommonUser, selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
 import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
-import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/client';
+import {
+	AdminConfigManager,
+	convertDbContentPageToContentPageInfo,
+} from '@meemoo/admin-core-ui/client';
 import { Alert } from '@meemoo/react-components';
 import { Footer } from '@navigation/components/Footer';
 import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';
@@ -61,7 +65,7 @@ import {
 } from '@shared/store/ui/';
 import { Breakpoints } from '@shared/types';
 import type { VisitRequest } from '@shared/types/visit-request';
-import type { Locale } from '@shared/utils/i18n';
+import { Locale } from '@shared/utils/i18n';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useQueryClient } from '@tanstack/react-query';
 import type { AvoUserCommonUser } from '@viaa/avo2-types';
@@ -76,7 +80,7 @@ import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
 import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 import packageJson from '../../../../../package.json';
-import styles from './AppLayout.module.scss';
+import styles from './AppLayout.module.scss'; // biome-ignore lint/correctness/noUnusedVariables: We want to make sure config gets fetched here, no sure why anymore
 
 // biome-ignore lint/correctness/noUnusedVariables: We want to make sure config gets fetched here, no sure why anymore
 const { publicRuntimeConfig } = getConfig();
@@ -89,8 +93,8 @@ const AppLayout: FC<any> = ({ children }) => {
 	const locale = useLocale();
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const user = useSelector(selectUser);
-	const shouldFetchMaterialRequests =
-		!!user?.groupName && user?.groupName !== GroupName.KIOSK_VISITOR;
+	const commonUser = useSelector(selectCommonUser);
+	const shouldFetchMaterialRequests = user?.groupName !== GroupName.KIOSK_VISITOR;
 	const sticky = useSelector(selectIsStickyLayout);
 	const showNavigationHeaderRight = useSelector(selectShowNavigationHeaderRight);
 	const showFooter = useSelector(selectShowFooter);
@@ -129,6 +133,13 @@ const AppLayout: FC<any> = ({ children }) => {
 	);
 
 	const [visitorSpaces, setVisitorSpaces] = useState<VisitRequest[]>([]);
+
+	/**
+	 * Set admin-core config when user becomes available
+	 */
+	useEffect(() => {
+		AdminConfigManager.setConfig(getAdminCoreConfig(router, locale || Locale.nl, commonUser));
+	}, [locale, router, commonUser]);
 
 	useEffect(() => {
 		if (showNotificationsCenter) {

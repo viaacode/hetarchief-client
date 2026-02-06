@@ -186,7 +186,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 
 	const renderBladeContent = () => {
 		if (isLoading) {
-			return <Loading owner="notification center" />;
+			return <Loading locationId="notification center" />;
 		}
 
 		if (isError) {
@@ -220,7 +220,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 				loader={
 					<Loading
 						className={styles['c-notification-center__infinite-scroll-loading']}
-						owner="notification center: infinite scroll loader"
+						locationId="notification center: infinite scroll loader"
 					/>
 				}
 			>

@@ -163,7 +163,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		return (
 			<>
 				{isLoadingVisitRequests ? (
-					<Loading owner="visit request overview" fullscreen />
+					<Loading locationId="visit request overview" fullscreen />
 				) : (
 					noData && renderEmptyMessage()
 				)}

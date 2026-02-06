@@ -529,7 +529,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						{renderReuseForm()}
 					</div>
 				) : (
-					<Loading owner="material request detail blade" />
+					<Loading locationId="material request detail blade" />
 				)}
 			</div>
 			<ConfirmationModal

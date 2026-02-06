@@ -478,7 +478,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 							'u-text-center u-color-neutral u-py-48': isLoadingMaterialRequests || noData,
 						})}
 					>
-						{isLoadingMaterialRequests && <Loading owner="Material requests overview" />}
+						{isLoadingMaterialRequests && <Loading locationId="Material requests overview" />}
 						{noData && !isLoadingMaterialRequests && renderEmptyMessage()}
 						{renderContent()}
 					</div>

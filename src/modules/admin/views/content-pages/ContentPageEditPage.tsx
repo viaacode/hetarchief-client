@@ -35,7 +35,7 @@ export const ContentPageEditPage: FC<DefaultSeoInfo & ContentPageEditPageProps> 
 			<AdminLayout bottomPadding={false} className="p-admin-content-page-create">
 				<AdminLayout.Content>
 					<div className="p-admin-content__edit">
-						<Suspense fallback={<Loading fullscreen owner="ContentPageEditPage" />}>
+						<Suspense fallback={<Loading fullscreen locationId="ContentPageEditPage" />}>
 							<ContentPageEdit
 								id={id}
 								onGoBack={() =>

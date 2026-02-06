@@ -69,5 +69,5 @@ export const AccountAcceptSharedFolder: FC<DefaultSeoInfo & AccountSharedFolderP
 		shareFolder();
 	}, [shareFolder]);
 
-	return <Loading fullscreen owner="share folder page" />;
+	return <Loading fullscreen locationId="share folder page" />;
 };

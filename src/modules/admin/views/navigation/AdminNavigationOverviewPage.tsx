@@ -19,7 +19,7 @@ export const AdminNavigationOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 			<AdminLayout pageTitle={tText('Navigatie')}>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40 p-admin-navigation">
-						<Suspense fallback={<Loading fullscreen owner="AdminNavigationOverview" />}>
+						<Suspense fallback={<Loading fullscreen locationId="AdminNavigationOverview" />}>
 							<NavigationBarOverview />
 						</Suspense>
 					</div>

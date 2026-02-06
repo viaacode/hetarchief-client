@@ -1,6 +1,3 @@
-import { useRouter } from 'next/router';
-import React, { type FC, lazy, Suspense } from 'react';
-
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { Loading } from '@shared/components/Loading';
@@ -11,6 +8,8 @@ import { goBrowserBackWithFallback } from '@shared/helpers/go-browser-back-with-
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { useRouter } from 'next/router';
+import React, { type FC, lazy, Suspense } from 'react';
 
 const ContentPageLabelDetail = lazy(() =>
 	import('@meemoo/admin-core-ui/admin').then((adminCoreModule) => ({
@@ -27,7 +26,7 @@ export const ContentPageLabelsDetailPage: FC<DefaultSeoInfo> = ({ url, canonical
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-content-page-labels__detail">
-						<Suspense fallback={<Loading fullscreen owner="ContentPageLabelsDetailPage" />}>
+						<Suspense fallback={<Loading fullscreen locationId="ContentPageLabelsDetailPage" />}>
 							<ContentPageLabelDetail
 								contentPageLabelId={router.query.id as string}
 								onGoBack={() =>

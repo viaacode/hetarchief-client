@@ -21,7 +21,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
 import type { Locale } from '@shared/utils/i18n';
-import { AvoCoreDatabaseType } from '@viaa/avo2-types';
+import { AvoCoreDatabaseType, type AvoUserCommonUser } from '@viaa/avo2-types';
 import getConfig from 'next/config';
 import Link from 'next/link';
 import type { NextRouter } from 'next/router';
@@ -50,7 +50,11 @@ const onSaveContentPage = async (contentPageInfo: ContentPageInfo) => {
 	);
 };
 
-export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): AdminConfig {
+export function getAdminCoreConfig(
+	router: NextRouter | null,
+	locale: Locale,
+	user: AvoUserCommonUser | null
+): AdminConfig {
 	return {
 		staticPages: Object.fromEntries(
 			Object.keys(ROUTES_BY_LOCALE).map((language) => [
@@ -128,7 +132,7 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 		components: {
 			defaultAudioStill: '/images/waveform.svg',
 			loader: {
-				component: () => <Loading fullscreen owner="admin-core-loader" />,
+				component: () => <Loading fullscreen locationId="admin-core-loader" />,
 			},
 			enableMultiLanguage: true,
 			buttonTypes: () => [
@@ -221,6 +225,9 @@ export function getAdminCoreConfig(router: NextRouter | null, locale: Locale): A
 		env: {
 			CLIENT_URL: publicRuntimeConfig.CLIENT_URL,
 			DATABASE_APPLICATION_TYPE: AvoCoreDatabaseType.hetArchief,
+		},
+		users: {
+			getCommonUser: () => user,
 		},
 	};
 }

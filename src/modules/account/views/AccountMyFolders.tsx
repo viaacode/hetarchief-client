@@ -493,7 +493,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 		if (folderMedia?.isLoading) {
 			return (
 				<div className="l-container u-color-neutral">
-					<Loading owner="my folders load objects" />
+					<Loading locationId="my folders load objects" />
 				</div>
 			);
 		}

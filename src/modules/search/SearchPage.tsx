@@ -1127,7 +1127,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 	const renderPageContent = () => {
 		if (searchResultsLoading) {
-			return <Loading fullscreen owner="visitor space search page: render page content" />;
+			return <Loading fullscreen locationId="visitor space search page: render page content" />;
 		}
 
 		if (searchResultsNoAccess) {

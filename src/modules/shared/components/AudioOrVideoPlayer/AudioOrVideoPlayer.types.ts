@@ -18,6 +18,6 @@ export type AudioOrVideoPlayerProps = {
 	representation: IeObjectRepresentation | null | undefined;
 	maintainerLogo: string | null | undefined;
 	cuePoints: CuePoints | undefined;
-	owner: string;
+	locationId: string;
 	poster: string | undefined;
 };

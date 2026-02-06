@@ -18,9 +18,13 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import '@meemoo/admin-core-ui/admin.css';
+import { getAdminCoreConfig } from '@admin/wrappers/admin-core-config';
+import { selectCommonUser } from '@auth/store/user';
+import { AdminConfigManager } from '@meemoo/admin-core-ui/client';
+import { Locale } from '@shared/utils/i18n';
 import styles from './AdminLayout.module.scss';
 
 const AdminLayout: AdminLayoutComponent = ({
@@ -32,6 +36,8 @@ const AdminLayout: AdminLayoutComponent = ({
 	const { asPath } = useRouter();
 	const dispatch = useDispatch();
 	const locale = useLocale();
+	const router = useRouter();
+	const commonUser = useSelector(selectCommonUser);
 
 	const actions = useSlot(AdminActions, children);
 	const filtersLeft = useSlot(AdminFiltersLeft, children);
@@ -39,6 +45,13 @@ const AdminLayout: AdminLayoutComponent = ({
 	const content = useSlot(AdminContent, children);
 
 	useHideFooter();
+
+	/**
+	 * Set admin-core config when user becomes available
+	 */
+	useEffect(() => {
+		AdminConfigManager.setConfig(getAdminCoreConfig(router, locale || Locale.nl, commonUser));
+	}, [locale, router, commonUser]);
 
 	useEffect(() => {
 		dispatch(setShowZendesk(false));

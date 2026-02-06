@@ -96,7 +96,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 
 	const renderPageContent = () => {
 		if (isContentPageLoading || !hasCheckedLogin || (isContentPageFetching && !contentPageInfo)) {
-			return <Loading fullscreen owner={'/[...fallback]/index page'} />;
+			return <Loading fullscreen locationId={'/[...fallback]/index page'} />;
 		}
 
 		if (contentPageInfo) {
@@ -145,7 +145,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 							relativeUrl={url}
 							canonicalUrl={canonicalUrl}
 						/>
-						<Loading fullscreen owner={'/[...fallback]/index page'} />
+						<Loading fullscreen locationId={'/[...fallback]/index page'} />
 					</>
 				);
 			}

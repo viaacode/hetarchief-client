@@ -425,7 +425,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 						</div>
 					)}
 
-					{isFetching && <Loading owner="Material requests overview" />}
+					{isFetching && <Loading locationId="Material requests overview" />}
 					{noData && !isFetching && renderEmptyMessage()}
 					{renderContent()}
 					{renderDetailBlade()}

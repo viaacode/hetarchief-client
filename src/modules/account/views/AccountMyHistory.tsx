@@ -161,7 +161,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				{!hasData && (
 					<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
 						{visits.isFetching ? (
-							<Loading fullscreen owner="my history page" />
+							<Loading fullscreen locationId="my history page" />
 						) : (
 							renderEmptyMessage()
 						)}

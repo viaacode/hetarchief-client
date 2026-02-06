@@ -828,7 +828,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 	]);
 
 	if (isLoading) {
-		return <Loading owner="admin visitor spaces slug page" fullscreen />;
+		return <Loading locationId="admin visitor spaces slug page" fullscreen />;
 	}
 	if (visitorSpaceError) {
 		return tHtml(

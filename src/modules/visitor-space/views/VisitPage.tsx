@@ -1,9 +1,3 @@
-import type { HTTPError } from 'ky';
-import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
-import type { FC } from 'react';
-import { useSelector } from 'react-redux';
-
 import { selectIsLoggedIn } from '@auth/store/user';
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
@@ -20,6 +14,11 @@ import { useGetVisitAccessStatus } from '@visit-requests/hooks/get-visit-access-
 import { useGetOrganisationBySlug } from '@visitor-space/hooks/get-organisation-by-slug';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { SearchFilterId } from '@visitor-space/types';
+import type { HTTPError } from 'ky';
+import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
+import type { FC } from 'react';
+import { useSelector } from 'react-redux';
 
 import { VisitorLayout } from '../../visitor-layout';
 
@@ -70,7 +69,7 @@ export const VisitPage: FC<DefaultSeoInfo> = ({ title, description, url, canonic
 	};
 
 	const renderLoading = () => {
-		return <Loading fullscreen owner="request access page" />;
+		return <Loading fullscreen locationId="request access page" />;
 	};
 
 	const renderPageContent = () => {

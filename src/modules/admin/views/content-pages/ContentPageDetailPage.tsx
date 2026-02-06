@@ -38,7 +38,7 @@ export const ContentPageDetailPage: FC<
 		return (
 			<AdminLayout className="p-admin-content-page-detail">
 				<AdminLayout.Content>
-					<Suspense fallback={<Loading fullscreen owner="ContentPageDetailPage" />}>
+					<Suspense fallback={<Loading fullscreen locationId="ContentPageDetailPage" />}>
 						<ContentPageDetail
 							id={id}
 							commonUser={commonUser as AvoUserCommonUser}

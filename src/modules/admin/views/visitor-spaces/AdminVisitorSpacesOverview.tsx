@@ -171,7 +171,7 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalU
 			<>
 				{isFetching ? (
 					<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-						<Loading owner="admin visitor spaces page: table loading" />
+						<Loading locationId="admin visitor spaces page: table loading" />
 					</div>
 				) : (
 					noData && (
@@ -285,7 +285,7 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalU
 
 	const renderPageContent = () => {
 		if (isLoading) {
-			return <Loading owner="admin visitor spaces page: render page content" fullscreen />;
+			return <Loading locationId="admin visitor spaces page: render page content" fullscreen />;
 		}
 		if (isError) {
 			return (

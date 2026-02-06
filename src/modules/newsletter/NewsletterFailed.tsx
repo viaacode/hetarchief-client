@@ -1,6 +1,3 @@
-import { useRouter } from 'next/router';
-import { type FC, useEffect, useState } from 'react';
-
 import { Loading } from '@shared/components/Loading';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
@@ -9,6 +6,8 @@ import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { useRouter } from 'next/router';
+import { type FC, useEffect, useState } from 'react';
 
 export const NewsletterFailed: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	useHideFooter();
@@ -49,7 +48,7 @@ export const NewsletterFailed: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				canonicalUrl={canonicalUrl}
 			/>
 
-			<Loading fullscreen owner="nieuwsbrief mislukt" />
+			<Loading fullscreen locationId="nieuwsbrief mislukt" />
 		</div>
 	);
 };

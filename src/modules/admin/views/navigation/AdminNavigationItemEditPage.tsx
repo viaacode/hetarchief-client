@@ -1,6 +1,3 @@
-import { useRouter } from 'next/router';
-import React, { type FC, lazy, Suspense } from 'react';
-
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { Loading } from '@shared/components/Loading';
@@ -13,6 +10,8 @@ import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
+import { useRouter } from 'next/router';
+import React, { type FC, lazy, Suspense } from 'react';
 
 const NavigationItemEdit = lazy(() =>
 	import('@meemoo/admin-core-ui/admin').then((adminCoreModule) => ({
@@ -40,7 +39,7 @@ export const AdminNavigationItemEditPage: FC<DefaultSeoInfo & NavigationPageCrea
 				<AdminLayout.Content>
 					<div className="l-container p-admin-navigation__create">
 						<NoServerSideRendering>
-							<Suspense fallback={<Loading fullscreen owner="AdminNavigationItemEditPage" />}>
+							<Suspense fallback={<Loading fullscreen locationId="AdminNavigationItemEditPage" />}>
 								<NavigationItemEdit
 									navigationBarId={navigationBarId}
 									navigationItemId={navigationItemId}

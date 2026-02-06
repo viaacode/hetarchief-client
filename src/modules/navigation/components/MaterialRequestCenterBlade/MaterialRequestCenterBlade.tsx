@@ -351,7 +351,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				{isFetching ? (
 					<Loading
 						className={styles['c-material-request-center-blade__loading']}
-						owner="MaterialRequestCenterBlade: render material requests"
+						locationId="MaterialRequestCenterBlade: render material requests"
 					/>
 				) : (
 					renderContent()

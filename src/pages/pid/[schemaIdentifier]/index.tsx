@@ -78,7 +78,7 @@ const IeObjectPidRouteRedirect: NextPage<DefaultSeoInfo & UserProps> = ({
 			<Loading
 				fullscreen
 				className={styles['p-pid__c-loading--fullscreen']}
-				owner={'/pid/[slug]/index page'}
+				locationId={'/pid/[slug]/index page'}
 			/>
 		);
 	};

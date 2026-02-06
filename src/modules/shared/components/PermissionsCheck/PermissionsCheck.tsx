@@ -51,7 +51,7 @@ const PermissionsCheck: FC<PermissionsCheckProps> = ({
 	}
 
 	if (!hasRequiredPermissions) {
-		return <Loading fullscreen owner="permission check" />;
+		return <Loading fullscreen locationId="permission check" />;
 	}
 	return children;
 };

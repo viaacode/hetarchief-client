@@ -107,7 +107,9 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 				/>
 			</div>
 
-			{isLoadingVisitorSpaces && <Loading owner="visitor space cards with search" fullscreen />}
+			{isLoadingVisitorSpaces && (
+				<Loading locationId="visitor space cards with search" fullscreen />
+			)}
 			{!isLoadingVisitorSpaces && visitorSpaces?.items?.length === 0 && (
 				<p>{tHtml('pages/index___geen-resultaten-voor-de-geselecteerde-filters')}</p>
 			)}

@@ -76,7 +76,7 @@ export const VisitRequestedPage: FC<DefaultSeoInfo> = ({
 
 	const renderPageContent = () => {
 		if (isLoadingAccessStatus || isLoadingSpace) {
-			return <Loading fullscreen owner="request access page" />;
+			return <Loading fullscreen locationId="request access page" />;
 		}
 		if (isNoAccessError) {
 			return (

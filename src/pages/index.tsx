@@ -53,7 +53,7 @@ const Homepage: NextPage<DefaultSeoInfo> = ({ title, description, image, url }) 
 
 	const renderPageContent = () => {
 		if (isContentPageLoading || isKioskUser) {
-			return <Loading fullscreen owner="homepage" />;
+			return <Loading fullscreen locationId="homepage" />;
 		}
 		if (contentPageInfo) {
 			return (

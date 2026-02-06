@@ -1,7 +1,3 @@
-import { useRouter } from 'next/router';
-import { stringify } from 'query-string';
-import { type ComponentType, useCallback, useEffect, useState } from 'react';
-
 import { GroupName } from '@account/const';
 import { AuthMessage, AuthService } from '@auth/services/auth-service';
 import { Loading } from '@shared/components/Loading';
@@ -10,6 +6,9 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { TosService } from '@shared/services/tos-service';
 import { isCurrentTosAccepted } from '@shared/utils/tos';
+import { useRouter } from 'next/router';
+import { stringify } from 'query-string';
+import { type ComponentType, useCallback, useEffect, useState } from 'react';
 
 /**
  * Checks the users login status
@@ -85,7 +84,7 @@ export const withAuth = (
 		}, [checkLoginStatus]);
 
 		if (!canView) {
-			return <Loading fullscreen owner={'withAuth'} />;
+			return <Loading fullscreen locationId={'withAuth'} />;
 		}
 		return <WrappedComponent {...props} />;
 	};

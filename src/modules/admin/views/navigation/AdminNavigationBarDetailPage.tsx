@@ -1,6 +1,3 @@
-import { useRouter } from 'next/router';
-import React, { type FC, lazy, Suspense } from 'react';
-
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { Loading } from '@shared/components/Loading';
@@ -11,6 +8,8 @@ import { goBrowserBackWithFallback } from '@shared/helpers/go-browser-back-with-
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { useRouter } from 'next/router';
+import React, { type FC, lazy, Suspense } from 'react';
 
 const NavigationBarDetail = lazy(() =>
 	import('@meemoo/admin-core-ui/admin').then((adminCoreModule) => ({
@@ -35,7 +34,7 @@ export const AdminNavigationBarDetailPage: FC<DefaultSeoInfo & AdminNavigationBa
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-navigation__detail">
-						<Suspense fallback={<Loading fullscreen owner="AdminNavigationBarDetailPage" />}>
+						<Suspense fallback={<Loading fullscreen locationId="AdminNavigationBarDetailPage" />}>
 							<NavigationBarDetail
 								navigationBarId={navigationBarId}
 								onGoBack={() =>

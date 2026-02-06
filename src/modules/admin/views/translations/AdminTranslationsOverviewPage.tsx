@@ -69,7 +69,7 @@ export const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUr
 			<AdminLayout pageTitle={tText('pages/admin/vertalingen/index___vertalingen')}>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40 p-admin-vertalingen">
-						<Suspense fallback={<Loading fullscreen owner="AdminTranslationsOverviewPage" />}>
+						<Suspense fallback={<Loading fullscreen locationId="AdminTranslationsOverviewPage" />}>
 							<TranslationsOverview
 								className={styles['c-translations-overview']}
 								renderPopup={renderPopup}

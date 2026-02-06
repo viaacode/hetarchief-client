@@ -33,7 +33,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	representation,
 	dctermsFormat,
 	maintainerLogo,
-	owner,
+	locationId,
 	cuePoints,
 	poster,
 }) => {
@@ -98,7 +98,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	);
 
 	if (isLoadingPlayableUrl || isLoadingMediaDuration) {
-		return <Loading fullscreen owner={`${owner}: render media`} mode="light" />;
+		return <Loading fullscreen locationId={`${locationId}: render media`} mode="light" />;
 	}
 
 	if (isErrorPlayableUrl || !currentPlayableFile || isErrorMediaDuration) {
@@ -151,7 +151,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 
 	if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(currentPlayableFile.mimeType)) {
 		if (isFetchingPlayableUrl) {
-			return <Loading fullscreen owner={`${owner}: render video`} mode="light" />;
+			return <Loading fullscreen locationId={`${locationId}: render video`} mode="light" />;
 		}
 		return (
 			<FlowPlayer
@@ -159,7 +159,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 				type="video"
 				src={playableUrl as string}
 				poster={poster || currentPlayableFile.thumbnailUrl}
-				renderLoader={() => <Loading owner="flowplayer suspense" fullscreen mode="light" />}
+				renderLoader={() => <Loading locationId="flowplayer suspense" fullscreen mode="light" />}
 				preload="metadata"
 				{...shared}
 			/>
@@ -168,7 +168,13 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	// Audio player
 	if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(currentPlayableFile.mimeType)) {
 		if (peakFileStoredAt && isLoadingPeakFile) {
-			return <Loading fullscreen owner={`${owner}: render media audio peak file`} mode="light" />;
+			return (
+				<Loading
+					fullscreen
+					locationId={`${locationId}: render media audio peak file`}
+					mode="light"
+				/>
+			);
 		}
 		return (
 			<FlowPlayer

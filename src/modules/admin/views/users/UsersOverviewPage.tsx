@@ -20,7 +20,7 @@ export const UsersOverviewPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => 
 			<AdminLayout pageTitle={tText('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')}>
 				<AdminLayout.Content>
 					<div className="l-container">
-						<Suspense fallback={<Loading fullscreen owner="UsersOverviewPage" />}>
+						<Suspense fallback={<Loading fullscreen locationId="UsersOverviewPage" />}>
 							<UserOverview customFormatDate={formatDistanceTodayWithoutTime} />
 						</Suspense>
 					</div>

@@ -1379,7 +1379,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 
 	const renderMedia = (): ReactNode => {
 		if ((isNewspaper && Object.keys(imageInfosWithTokens).length === 0) || !mediaInfo) {
-			return <Loading fullscreen owner="object detail page: render media" mode="light" />;
+			return <Loading fullscreen locationId="object detail page: render media" mode="light" />;
 		}
 
 		// IIIF viewer
@@ -1389,7 +1389,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				setHasNewsPaperBeenRendered(true);
 			}
 			if (isLoadingTickets) {
-				return <Loading owner="iiifviewer-tickets" fullscreen={true} mode="light" />;
+				return <Loading locationId="iiifviewer-tickets" fullscreen={true} mode="light" />;
 			}
 			return (
 				<IiifViewer
@@ -1434,7 +1434,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		return (
 			<AudioOrVideoPlayer
 				className={clsx('p-object-detail__flowplayer')}
-				owner="object detail page"
+				locationId="object detail page"
 				representation={getRepresentationByCurrentFileIndex()}
 				dctermsFormat={mediaInfo.dctermsFormat}
 				maintainerLogo={mediaInfo?.maintainerOverlay ? mediaInfo.maintainerLogo : undefined}
@@ -1923,7 +1923,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 
 	const renderPageContent = () => {
 		if (thumbnailUrlIsLoading && !mediaInfo) {
-			return <Loading fullscreen owner="object detail page: render page content" />;
+			return <Loading fullscreen locationId="object detail page: render page content" />;
 		}
 
 		if (mediaInfo || thumbnailUrl) {

@@ -56,5 +56,5 @@ export const MaintainerSearchPage: FC<MaintainerSearchPageProps> = () => {
 		}
 	}, [router, ieObjectInfo, locale]);
 
-	return <Loading owner="maintainer search page redirect" fullscreen />;
+	return <Loading locationId="maintainer search page redirect" fullscreen />;
 };

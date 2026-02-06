@@ -1,6 +1,3 @@
-import { useRouter } from 'next/router';
-import React, { type FC, lazy, Suspense } from 'react';
-
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { Loading } from '@shared/components/Loading';
@@ -12,6 +9,8 @@ import { goBrowserBackWithFallback } from '@shared/helpers/go-browser-back-with-
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { useRouter } from 'next/router';
+import React, { type FC, lazy, Suspense } from 'react';
 
 const ContentPageLabelEdit = lazy(() =>
 	import('@meemoo/admin-core-ui/admin').then((adminCoreModule) => ({
@@ -36,7 +35,7 @@ export const ContentPageLabelsEditPage: FC<DefaultSeoInfo & ContentPageLabelsEdi
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-content-page-labels__create">
-						<Suspense fallback={<Loading fullscreen owner="ContentPageLabelsEditPage" />}>
+						<Suspense fallback={<Loading fullscreen locationId="ContentPageLabelsEditPage" />}>
 							<ContentPageLabelEdit
 								contentPageLabelId={id}
 								onGoBack={() =>

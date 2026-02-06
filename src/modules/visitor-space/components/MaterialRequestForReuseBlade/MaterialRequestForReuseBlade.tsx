@@ -466,7 +466,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 							styles['c-request-material-reuse__content-video-player'],
 							'c-request-material-reuse__content-video-player'
 						)}
-						owner="material request re-uage blade"
+						locationId="material request re-uage blade"
 						representation={materialRequest.objectRepresentation}
 						dctermsFormat={materialRequest.objectDctermsFormat}
 						maintainerLogo={

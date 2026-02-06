@@ -224,7 +224,7 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 							}
 						)}
 					>
-						{isFetching && <Loading owner="Material requests overview" fullscreen />}
+						{isFetching && <Loading locationId="Material requests overview" fullscreen />}
 						{noData && renderEmptyMessage()}
 						{!noData && !isFetching && renderContent()}
 					</div>

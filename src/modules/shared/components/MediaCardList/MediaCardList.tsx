@@ -162,7 +162,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	if (isServerSideRendering()) {
 		// Avoid masonry layout shift on SSR
 		// https://meemoo.atlassian.net/browse/ARC-2913
-		return <Loading fullscreen owner="media card list" />;
+		return <Loading fullscreen locationId="media card list" />;
 	}
 
 	return (

@@ -48,7 +48,7 @@ export const ContentPageOverviewPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 				</AdminLayout.Actions>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-content">
-						<Suspense fallback={<Loading fullscreen owner="ContentPageOverviewPage" />}>
+						<Suspense fallback={<Loading fullscreen locationId="ContentPageOverviewPage" />}>
 							<ContentPageOverview />
 						</Suspense>
 					</div>

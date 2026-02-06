@@ -46,7 +46,7 @@ const queryClient = new QueryClient({
 });
 
 // Temp version with undefined router and nl locale
-AdminConfigManager.setConfig(getAdminCoreConfig(null, Locale.nl));
+AdminConfigManager.setConfig(getAdminCoreConfig(null, Locale.nl, null));
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 	const router = useRouter();
@@ -68,8 +68,11 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 			});
 	}, []);
 
+	/**
+	 * Set admin-core config when router becomes available
+	 */
 	useEffect(() => {
-		AdminConfigManager.setConfig(getAdminCoreConfig(router, locale || Locale.nl));
+		AdminConfigManager.setConfig(getAdminCoreConfig(router, locale || Locale.nl, null));
 	}, [locale, router]);
 
 	if (!isServerSideRendering()) {

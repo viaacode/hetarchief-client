@@ -419,7 +419,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 	};
 	const renderHomePageContent = () => {
 		if (isLoadingFuture || isLoadingPending || isLoadingActive) {
-			return <Loading fullscreen owner="logged in home" />;
+			return <Loading fullscreen locationId="logged in home" />;
 		}
 		return <div className="p-home u-page-bottom-padding">{renderPageContent()}</div>;
 	};

@@ -167,7 +167,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 			<>
 				{isFetching ? (
 					<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-						<Loading owner="admin visitors page: table loading" fullscreen />
+						<Loading locationId="admin visitors page: table loading" fullscreen />
 					</div>
 				) : (
 					noData && (

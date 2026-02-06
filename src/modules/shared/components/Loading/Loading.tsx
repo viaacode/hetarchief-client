@@ -1,10 +1,9 @@
-import type { DefaultComponentProps } from '@shared/types';
-import clsx from 'clsx';
-import type { FC, ReactNode } from 'react';
-
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import type { DefaultComponentProps } from '@shared/types';
 import { Locale } from '@shared/utils/i18n';
+import clsx from 'clsx';
+import type { FC, ReactNode } from 'react';
 import styles from './Loading.module.scss';
 
 export interface LoadingProps extends DefaultComponentProps {
@@ -12,13 +11,14 @@ export interface LoadingProps extends DefaultComponentProps {
 	fullscreen?: boolean;
 	mode?: 'light' | 'dark';
 	centeredHorizontally?: boolean;
-	owner: string; // Used to identify which loader is shown
+	locationId: string; // Used to identify which loader is shown
 }
 
 const Loading: FC<LoadingProps> = ({
 	fullscreen = false,
 	centeredHorizontally = false,
 	mode = 'dark',
+	locationId,
 	className,
 	style = {},
 }) => {
@@ -38,6 +38,7 @@ const Loading: FC<LoadingProps> = ({
 
 	return (
 		<div
+			data-loaction-id={locationId}
 			className={clsx(
 				className,
 				'c-loading',

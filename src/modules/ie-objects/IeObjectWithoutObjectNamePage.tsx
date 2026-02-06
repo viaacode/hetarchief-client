@@ -40,5 +40,5 @@ export const IeObjectWithoutObjectNamePage: FC<MaintainerSearchPageProps> = () =
 		}
 	}, [router, ieObjectInfo, isError, slug, schemaIdentifier, locale]);
 
-	return <Loading owner="IeObjectWithoutObjectNamePage" fullscreen />;
+	return <Loading locationId="IeObjectWithoutObjectNamePage" fullscreen />;
 };

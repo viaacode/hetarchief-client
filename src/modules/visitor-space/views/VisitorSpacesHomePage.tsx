@@ -1,7 +1,3 @@
-import { useRouter } from 'next/router';
-import { type FC, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-
 import { Permission } from '@account/const';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import LoggedInVisitorSpacesHome from '@home/components/LoggedInVisitorSpacesHome/LoggedInVisitorSpacesHome';
@@ -12,6 +8,9 @@ import { tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorLayout } from '@visitor-layout/index';
+import { useRouter } from 'next/router';
+import { type FC, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 export const VisitorSpacesHomePage: FC<DefaultSeoInfo> = (props) => {
 	const router = useRouter();
@@ -33,7 +32,7 @@ export const VisitorSpacesHomePage: FC<DefaultSeoInfo> = (props) => {
 	const renderPageContent = () => {
 		if (isLoggedIn && !!user) {
 			if (showLinkedSpaceAsHomepage && linkedSpaceSlug) {
-				return <Loading fullscreen owner="root page logged" />;
+				return <Loading fullscreen locationId="root page logged" />;
 			}
 			return <LoggedInVisitorSpacesHome />;
 		}

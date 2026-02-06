@@ -1,18 +1,12 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, FormControl, TextInput } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { useRouter } from 'next/router';
-import { type FC, type ReactNode, useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
-
 import { COMMUNICATION_SECTION_ID } from '@account/const/MyProfile.consts';
 import { selectHasCheckedLogin, selectIsLoggedIn } from '@auth/store/user';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Button, FormControl, TextInput } from '@meemoo/react-components';
 import { Loading } from '@shared/components/Loading';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
-import { NEWSLETTER_FORM_SCHEMA, labelKeys } from '@shared/const/newsletter';
+import { labelKeys, NEWSLETTER_FORM_SCHEMA } from '@shared/const/newsletter';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -21,6 +15,11 @@ import { CampaignMonitorService } from '@shared/services/campaign-monitor-servic
 import { toastService } from '@shared/services/toast-service';
 import type { NewsletterFormState } from '@shared/types/newsletter';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import clsx from 'clsx';
+import { useRouter } from 'next/router';
+import { type FC, type ReactNode, useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 export const NewsletterPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	useHideFooter();
@@ -180,7 +179,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				/>
 
 				{(hasCheckedLogin && isLoggedIn) || !hasCheckedLogin ? (
-					<Loading fullscreen owner="newsletter" />
+					<Loading fullscreen locationId="newsletter" />
 				) : (
 					renderPageContent()
 				)}

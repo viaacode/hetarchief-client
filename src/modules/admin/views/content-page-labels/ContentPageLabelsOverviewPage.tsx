@@ -1,5 +1,3 @@
-import { type FC, Suspense, lazy } from 'react';
-
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { Loading } from '@shared/components/Loading';
@@ -7,6 +5,7 @@ import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsChe
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { type FC, lazy, Suspense } from 'react';
 
 const ContentPageLabelOverview = lazy(() =>
 	import('@meemoo/admin-core-ui/admin').then((adminCoreModule) => ({
@@ -20,7 +19,7 @@ export const ContentPageLabelsOverviewPage: FC<DefaultSeoInfo> = ({ url, canonic
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-content-page-labels">
-						<Suspense fallback={<Loading fullscreen owner="ContentPageLabelsOverviewPage" />}>
+						<Suspense fallback={<Loading fullscreen locationId="ContentPageLabelsOverviewPage" />}>
 							<ContentPageLabelOverview />
 						</Suspense>
 					</div>
