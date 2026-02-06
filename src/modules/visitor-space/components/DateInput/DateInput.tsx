@@ -49,6 +49,7 @@ const DateInput: FC<DateInputProps> = ({
 				selected={isValid(value) ? value : defaultValue}
 				dateFormat="dd/MM/yyyy"
 				placeholderText="dd/mm/jjjj"
+				popperPlacement="bottom-start"
 				customInput={<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />}
 			/>
 		</div>
