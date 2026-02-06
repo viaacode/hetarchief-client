@@ -90,8 +90,8 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const [playableFile, setPlayableFile] = useState<IeObjectFile | null>(null);
 	const [mediaDuration, setMediaDuration] = useState<number | null>(null);
 	const [isRequestSaved, setIsRequestSaved] = useState(false);
-	const [isFormValid, setIsFormValid] = useState(true);
 
+	const isFormValid = useMemo(() => Object.keys(formErrors).length === 0, [formErrors]);
 	const hasUnsavedChanges = useMemo(() => {
 		if (isRequestSaved) {
 			return false;
@@ -150,9 +150,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		if (isOpen) {
 			// Not using the materialRequest ensures this happens only when the isOpen has changed
 			setFormValues(defaultFormValues);
-			setFormErrors({});
 			refetchPotentialDuplicates().then(noop);
 			setIsRequestSaved(false);
+		} else {
+			setFormErrors({});
 		}
 	}, [isOpen, defaultFormValues, refetchPotentialDuplicates]);
 
@@ -199,19 +200,16 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 	const validateFormValues = useCallback(
 		async (newFormValues: MaterialRequestReuseForm | undefined): Promise<boolean> => {
-			setIsFormValid(true);
+			setFormErrors({});
 			const formErrors = (await validateForm(
 				newFormValues,
 				MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA()
 			)) as Partial<Record<MaterialRequestReuseFormKey, string | undefined>>;
 			if (formErrors) {
 				setFormErrors(formErrors);
-				setIsFormValid(false);
 				return false;
 			}
 
-			setFormErrors({});
-			setIsFormValid(true);
 			return true;
 		},
 		[]
