@@ -20,11 +20,13 @@ export const AdminMaintenanceAlertsOverviewPage: FC<DefaultSeoInfo> = ({ url, ca
 		return [
 			{
 				label: tText('pages/admin/vertalingen/index___bewaar-wijzigingen'),
+				mobileLabel: tText('Bewaar wijzigingen mobiel'),
 				type: 'primary',
 				onClick: onSave,
 			},
 			{
 				label: tText('pages/admin/vertalingen/index___annuleer'),
+				mobileLabel: tText('Annuleer mobiel'),
 				type: 'secondary',
 				onClick: onClose,
 			},

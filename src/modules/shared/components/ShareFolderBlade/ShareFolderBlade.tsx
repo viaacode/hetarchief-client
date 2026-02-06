@@ -63,6 +63,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 		return [
 			{
 				label: tText('pages/account/map-delen/folder-id/index___sluit'),
+				mobileLabel: tText('Sluit mobiel'),
 				type: 'secondary',
 				onClick: handleClose,
 				enforceSecondary: true,

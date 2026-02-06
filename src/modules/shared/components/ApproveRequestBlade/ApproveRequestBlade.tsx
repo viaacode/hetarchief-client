@@ -295,6 +295,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				label: tText(
 					'modules/cp/components/approve-request-blade/approve-request-blade___keur-goed'
 				),
+				mobileLabel: tText('Keur goed mobiel'),
 				type: 'primary',
 				onClick: handleSubmit(onFormSubmit),
 			},
@@ -302,6 +303,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				label: tText(
 					'modules/cp/components/approve-request-blade/approve-request-blade___annuleer'
 				),
+				mobileLabel: tText('Annuleer mobiel'),
 				type: 'secondary',
 				onClick: props.onClose,
 			},

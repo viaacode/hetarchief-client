@@ -320,11 +320,13 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 		return [
 			{
 				label: tText('modules/account/components/personal-info/personal-info___verstuur-aanvraag'),
+				mobileLabel: tText('verstuur aanvraag mobiel'),
 				type: 'primary',
 				onClick: onSendRequests,
 			},
 			{
 				label: tText('modules/account/components/personal-info/personal-info___keer-terug'),
+				mobileLabel: tText('keer terug mobiel'),
 				type: 'secondary',
 				onClick: onCancel,
 			},

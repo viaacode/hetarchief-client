@@ -77,6 +77,7 @@ export interface BladeProps extends Omit<BladeContentProps, 'closable'> {
 
 export interface BladeFooterButton {
 	label: string;
+	mobileLabel: string; // The label used on mobile
 	title?: string;
 	ariaLabel?: string;
 	type: 'primary' | 'secondary';

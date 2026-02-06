@@ -56,12 +56,14 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 				label: tText(
 					'modules/home/components/cancel-visit-blade/cancel-visit-blade___ja-annuleer-bezoek'
 				),
+				mobileLabel: tText('Ja annuleer bezoek mobiel'),
 				type: 'primary',
 				onClick: onFormSubmit,
 				disabled: !props.isOpen || isSubmitting,
 			},
 			{
 				label: tText('modules/home/components/cancel-visit-blade/cancel-visit-blade___sluit'),
+				mobileLabel: tText('Sluit mobiel'),
 				type: 'secondary',
 				onClick: props.onClose,
 				disabled: !props.isOpen,
