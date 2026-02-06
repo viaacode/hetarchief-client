@@ -11,6 +11,7 @@ import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
+import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import React, { type FC, useEffect, useState } from 'react';
 
 import styles from './MaterialRequestStatusUpdateBlade.module.scss';
@@ -36,6 +37,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 }) => {
 	const locale = useLocale();
 	const MAX_MOTIVATION_LENGTH = 300;
+	const { isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(currentMaterialRequestDetail);
 
 	const [motivationInputValue, setMotivationInputValue] = useState('');
 
@@ -56,7 +58,6 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 		objectSchemaName: objectName,
 		objectDctermsFormat,
 		objectSchemaIdentifier,
-		objectRepresentationId,
 		objectThumbnailUrl,
 		objectPublishedOrCreatedDate,
 		maintainerSlug,
@@ -152,7 +153,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 					type={objectDctermsFormat}
 					publishedBy={maintainerName}
 					publishedOrCreatedDate={objectPublishedOrCreatedDate}
-					icon={getIconFromObjectType(objectDctermsFormat, !!objectRepresentationId)}
+					icon={getIconFromObjectType(objectDctermsFormat, isObjectEssenceAccessibleToUser)}
 				/>
 			}
 			footerButtons={getFooterButtons()}
