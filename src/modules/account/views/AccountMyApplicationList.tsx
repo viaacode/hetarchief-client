@@ -2,6 +2,7 @@ import PersonalInfo from '@account/components/PersonalInfo/PersonalInfo';
 import { Permission } from '@account/const';
 import { createLabelValuePairMaterialRequestReuseForm } from '@account/utils/create-label-value-material-request-reuse-form';
 import { formatCuePointsMaterialRequest } from '@account/utils/format-cuepoints-material-request';
+import { selectCommonUser } from '@auth/store/user';
 import {
 	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DOWNLOAD_QUALITY,
 	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE,
@@ -32,10 +33,12 @@ import {
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitorLayout } from '@visitor-layout/index';
+import { checkIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
 import { isEmpty, isNil } from 'lodash-es';
 import { useRouter } from 'next/router';
 import { type FC, type ReactNode, useEffect, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import MaterialCard from '../../visitor-space/components/MaterialCard/MaterialCard';
 import styles from './AccountMyApplicationList.module.scss';
 
@@ -46,6 +49,7 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const locale = useLocale();
+	const user = useSelector(selectCommonUser);
 
 	const hasMaterialRequestsPerm = useHasAnyPermission(Permission.CREATE_MATERIAL_REQUESTS);
 
@@ -143,6 +147,11 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 			];
 		}
 
+		const { isObjectEssenceAccessibleToUser } = checkIsComplexReuseFlow(
+			materialRequest,
+			user || null
+		);
+
 		return (
 			<div key={materialRequest.id} className={styles['p-my-application-list__request-container']}>
 				<div className={styles['p-my-application-list__request']}>
@@ -158,7 +167,10 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 						type={materialRequest.objectDctermsFormat}
 						publishedBy={materialRequest.maintainerName}
 						publishedOrCreatedDate={materialRequest.objectPublishedOrCreatedDate}
-						icon={getIconFromObjectType(materialRequest.objectDctermsFormat, true)}
+						icon={getIconFromObjectType(
+							materialRequest.objectDctermsFormat,
+							isObjectEssenceAccessibleToUser
+						)}
 						renderAdditionalCaption={(caption) =>
 							renderMaterialRequestCardCaption(caption, materialRequest)
 						}
