@@ -219,6 +219,12 @@ $padding-horizontal-mobile: $spacer-sm;
 			background-color: $white;
 			color: $teal-dark;
 			border: 1px solid $teal-dark;
+
+			&:hover{
+				background-color: $white;
+				color: $teal-dark;
+				border: 1px solid $teal-dark;
+			}
 		}
 
 		:global(.c-button--secondary) {
