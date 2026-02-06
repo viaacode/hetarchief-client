@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
  * Determines if the given IE object and user qualify for a complex reuse flow from the hermes track
  * @param materialRequest
  */
-export function useIsComplexReuseFlow(materialRequest: MaterialRequest): {
+export function useIsComplexReuseFlow(materialRequest: MaterialRequest | undefined): {
 	isComplexReuseFlow: boolean;
 	isObjectEssenceAccessibleToUser: boolean;
 } {
@@ -25,7 +25,7 @@ export function useIsComplexReuseFlow(materialRequest: MaterialRequest): {
  * @param user
  */
 export function checkIsComplexReuseFlow(
-	materialRequest: MaterialRequest,
+	materialRequest: MaterialRequest | undefined,
 	user: AvoUserCommonUser | null
 ): { isComplexReuseFlow: boolean; isObjectEssenceAccessibleToUser: boolean } {
 	if (!materialRequest) {

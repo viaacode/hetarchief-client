@@ -123,6 +123,14 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		reset(getInitialValues());
 	}, [reset, getInitialValues]);
 
+	useEffect(() => {
+		// reset validation when closed
+		if (!props.isOpen) {
+			setNoFoldersSelectedOnSubmit(false);
+			reset(getInitialValues());
+		}
+	}, [props.isOpen, getInitialValues, reset]);
+
 	const getAccessTypeLabel = useCallback(
 		(accessType: ApproveRequestFormState['accessType']) => {
 			const selectedFolders = (folders || []).filter((item) =>
@@ -167,10 +175,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		],
 		[getAccessTypeLabel, folders]
 	);
-
-	useEffect(() => {
-		props.isOpen && reset();
-	}, [props.isOpen, reset]);
 
 	const checkOverlappingRequests = useCallback(
 		async (formValues: ApproveRequestFormState): Promise<VisitRequest[]> => {

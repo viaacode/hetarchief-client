@@ -64,7 +64,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 			{
 				label: tText('pages/account/map-delen/folder-id/index___sluit'),
 				type: 'secondary',
-				onClick: onClose,
+				onClick: handleClose,
 				enforceSecondary: true,
 			},
 		];
@@ -87,7 +87,6 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 			onClose={handleClose}
 			id="share-folder-blade"
 			stickyFooter={false}
-			isBladeInvalid={!!formErrors.email}
 		>
 			<div className={styles['c-share-folder-blade__content']}>
 				{renderEditAlert()}

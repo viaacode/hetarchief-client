@@ -1,5 +1,5 @@
 import { MaterialRequestsService } from '@material-requests/services';
-import { type MaterialRequestDetail, MaterialRequestStatus } from '@material-requests/types';
+import { type MaterialRequest, MaterialRequestStatus } from '@material-requests/types';
 import { FormControl, TextArea } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
@@ -11,6 +11,7 @@ import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
+import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import React, { type FC, useEffect, useState } from 'react';
 
 import styles from './MaterialRequestStatusUpdateBlade.module.scss';
@@ -19,7 +20,7 @@ interface MaterialRequestStatusUpdateBladeProps {
 	isOpen: boolean;
 	onClose: () => void;
 	status?: MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED;
-	currentMaterialRequestDetail: MaterialRequestDetail;
+	currentMaterialRequestDetail: MaterialRequest | undefined;
 	afterStatusChanged: () => void;
 	layer: number;
 	currentLayer: number;
@@ -34,18 +35,9 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 	layer,
 	currentLayer,
 }) => {
-	const {
-		objectSchemaName: objectName,
-		objectDctermsFormat,
-		objectSchemaIdentifier,
-		objectRepresentationId,
-		objectThumbnailUrl,
-		objectPublishedOrCreatedDate,
-		maintainerSlug,
-		maintainerName,
-	} = currentMaterialRequestDetail;
 	const locale = useLocale();
 	const MAX_MOTIVATION_LENGTH = 300;
+	const { isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(currentMaterialRequestDetail);
 
 	const [motivationInputValue, setMotivationInputValue] = useState('');
 
@@ -57,6 +49,20 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 			setMotivationInputValue('');
 		}
 	}, [isOpen]);
+
+	if (!currentMaterialRequestDetail) {
+		return null;
+	}
+
+	const {
+		objectSchemaName: objectName,
+		objectDctermsFormat,
+		objectSchemaIdentifier,
+		objectThumbnailUrl,
+		objectPublishedOrCreatedDate,
+		maintainerSlug,
+		maintainerName,
+	} = currentMaterialRequestDetail;
 
 	const onCloseModal = () => {
 		onClose();
@@ -147,7 +153,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 					type={objectDctermsFormat}
 					publishedBy={maintainerName}
 					publishedOrCreatedDate={objectPublishedOrCreatedDate}
-					icon={getIconFromObjectType(objectDctermsFormat, !!objectRepresentationId)}
+					icon={getIconFromObjectType(objectDctermsFormat, isObjectEssenceAccessibleToUser)}
 				/>
 			}
 			footerButtons={getFooterButtons()}

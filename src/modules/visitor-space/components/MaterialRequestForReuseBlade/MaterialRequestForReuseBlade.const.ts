@@ -18,7 +18,7 @@ import { mixed, number, object, type Schema, string } from 'yup';
 export const MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA =
 	(): Schema<MaterialRequestReuseForm> => {
 		return object<MaterialRequestReuseForm>().shape({
-			[MaterialRequestReuseFormKey.representationId]: string().defined(),
+			[MaterialRequestReuseFormKey.representationId]: string().optional(),
 			[MaterialRequestReuseFormKey.startTime]: number().when(
 				MaterialRequestReuseFormKey.representationId,
 				([representationId]) => {
@@ -49,7 +49,7 @@ export const MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA =
 								)
 							);
 					}
-					return number().defined();
+					return number().optional();
 				}
 			),
 			[MaterialRequestReuseFormKey.downloadQuality]: mixed<MaterialRequestDownloadQuality>()

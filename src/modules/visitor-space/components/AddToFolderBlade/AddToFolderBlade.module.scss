@@ -8,8 +8,6 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 	&__list {
 		@extend %reset-list;
 
-		margin-bottom: $spacer-lg;
-
 		// CreateFolderButton
 		&-button {
 			:global(.u-px-24) {
@@ -18,18 +16,10 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 			}
 
 			:global(.c-content-input) {
-				padding-top: $spacer-sm;
+				padding-top: $spacer-xs;
 
 				@media (min-width: $breakpoint-md) {
-					padding-top: $spacer-md;
-				}
-			}
-
-			:global(.c-form-control__errors) {
-				padding-bottom: $spacer-sm;
-
-				@media (min-width: $breakpoint-md) {
-					padding-bottom: $spacer-md;
+					padding-top: $spacer-sm;
 				}
 			}
 
@@ -77,6 +67,7 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 				flex-shrink: 0;
 				flex-basis: 6rem;
 				text-align: right;
+				white-space: nowrap;
 			}
 
 			&:not(:last-child) {
