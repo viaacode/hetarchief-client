@@ -42,7 +42,9 @@ import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { isTabletPortraitSize } from '@shared/utils/is-mobile';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitorLayout } from '@visitor-layout/index';
 import clsx from 'clsx';
@@ -53,6 +55,10 @@ import type { SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
+	// We need different functionalities for different viewport sizes
+	const windowSize = useWindowSizeContext();
+	const isTabletPortrait = isTabletPortraitSize(windowSize);
+
 	const [filters, setFilters] = useQueryParams(ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
@@ -256,24 +262,26 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 
 	const renderContent = (): ReactNode => {
 		return (
-			<Table<MaterialRequest>
-				className="u-mt-24 p-material-requests__table p-account-my-material-requests__table"
-				options={{
-					columns: getAccountMaterialRequestTableColumns(isKeyUser),
-					data: materialRequests?.items || [],
-					initialState: {
-						pageSize: ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
-						sortBy: sortFilters,
-					} as TableState<MaterialRequest>,
-				}}
-				getColumnProps={getMaterialRequestTableColumnProps}
-				sortingIcons={sortingIcons}
-				pagination={renderPagination}
-				onSortChange={onSortChange}
-				onRowClick={onRowClick}
-				showTable={!noData && !isFetching}
-				enableRowFocusOnClick={true}
-			/>
+			<div className="l-container">
+				<Table<MaterialRequest>
+					className="u-mt-24 p-material-requests__table p-account-my-material-requests__table"
+					options={{
+						columns: getAccountMaterialRequestTableColumns(isKeyUser, isTabletPortrait),
+						data: materialRequests?.items || [],
+						initialState: {
+							pageSize: ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
+							sortBy: sortFilters,
+						} as TableState<MaterialRequest>,
+					}}
+					getColumnProps={getMaterialRequestTableColumnProps}
+					sortingIcons={sortingIcons}
+					pagination={renderPagination}
+					onSortChange={onSortChange}
+					onRowClick={onRowClick}
+					showTable={!noData && !isFetching}
+					enableRowFocusOnClick={true}
+				/>
+			</div>
 		);
 	};
 

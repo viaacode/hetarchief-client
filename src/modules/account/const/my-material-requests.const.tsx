@@ -86,39 +86,55 @@ export const GET_MATERIAL_REQUEST_DOWNLOAD_FILTER_ARRAY = (): {
 ];
 
 export const getAccountMaterialRequestTableColumns = (
-	isKeyUser: boolean
-): Column<MaterialRequest>[] => [
-	...(isKeyUser
-		? [
-				{
-					Header: tText('modules/cp/const/material-requests___materiaal'),
-					accessor: MaterialRequestKeys.material,
-					Cell: ({ row: { original } }: MaterialRequestRow) => (
-						<span className="p-material-requests__table-titel-material">
-							<span className="p-material-requests__table-titel-material__name">
-								{original.objectSchemaName}
-							</span>
-							<span className="p-material-requests__table-titel-material__provider">
-								{original.maintainerName}
-							</span>
-						</span>
-					),
-				},
-			]
-		: [
-				{
-					Header: tText('modules/cp/const/material-requests___materiaal'),
-					accessor: MaterialRequestKeys.material,
-				},
-				{
-					Header: tText('modules/cp/const/material-requests___aanbieder'),
-					accessor: MaterialRequestKeys.maintainer,
-					Cell: ({ row: { original } }: MaterialRequestRow) => (
-						<span className="u-color-neutral">{original.maintainerName}</span>
-					),
-				},
-			]),
-	{
+	isKeyUser: boolean,
+	isTabletPortrait: boolean
+): Column<MaterialRequest>[] => {
+	if (!isKeyUser) {
+		return [
+			{
+				Header: tText('modules/cp/const/material-requests___materiaal'),
+				accessor: MaterialRequestKeys.material,
+			},
+			{
+				Header: tText('modules/cp/const/material-requests___aanbieder'),
+				accessor: MaterialRequestKeys.maintainer,
+				Cell: ({ row: { original } }: MaterialRequestRow) => (
+					<span className="u-color-neutral">{original.maintainerName}</span>
+				),
+			},
+			getRequestedAtColumn(),
+			getTypeColumn(false),
+		];
+	}
+
+	return [
+		getMaterialColumn(isTabletPortrait),
+		...(isTabletPortrait ? [] : [getRequestedAtColumn()]),
+		getTypeColumn(isTabletPortrait),
+		getStatusColumn(isTabletPortrait),
+		...(isTabletPortrait ? [] : [getDownloadColumn(), getGroupNameColumn()]),
+	];
+};
+
+const getMaterialColumn = (disableSort: boolean): Column<MaterialRequest> =>
+	({
+		Header: tText('modules/cp/const/material-requests___materiaal'),
+		accessor: MaterialRequestKeys.material,
+		disableSortBy: disableSort,
+		Cell: ({ row: { original } }: MaterialRequestRow) => (
+			<span className="p-material-requests__table-titel-material">
+				<span className="p-material-requests__table-titel-material__name">
+					{original.objectSchemaName}
+				</span>
+				<span className="p-material-requests__table-titel-material__provider">
+					{original.maintainerName}
+				</span>
+			</span>
+		),
+	}) as Column<MaterialRequest>;
+
+const getRequestedAtColumn = (): Column<MaterialRequest> =>
+	({
 		Header: tText('modules/cp/const/material-requests___aangevraagd-op'),
 		accessor: MaterialRequestKeys.requestedAt,
 		Cell: ({ row: { original } }: MaterialRequestRow) => {
@@ -129,40 +145,45 @@ export const getAccountMaterialRequestTableColumns = (
 				</span>
 			);
 		},
-	},
-	{
+	}) as Column<MaterialRequest>;
+
+const getTypeColumn = (disableSort: boolean): Column<MaterialRequest> =>
+	({
 		Header: tText('modules/cp/const/material-requests___type'),
 		accessor: MaterialRequestKeys.type,
+		disableSortBy: disableSort,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span className="u-color-neutral p-material-requests__table-type">
 				{GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[original.type]}
 			</span>
 		),
-	},
-	...(isKeyUser
-		? [
-				{
-					Header: tText('modules/cp/const/material-requests___status'),
-					accessor: MaterialRequestKeys.status,
-					Cell: ({ row: { original } }: MaterialRequestRow) => (
-						<MaterialRequestStatusPill status={original.status} />
-					),
-				},
-				{
-					Header: tText('modules/cp/const/material-requests___download'),
-					accessor: MaterialRequestKeys.downloadUrl,
-					disableSortBy: true,
-					Cell: ({ row: { original } }: MaterialRequestRow) => (
-						<MaterialRequestDownloadButton materialRequest={original} />
-					),
-				} as Column<MaterialRequest>,
-				{
-					Header: tText('modules/cp/const/material-requests___request-name'),
-					accessor: MaterialRequestKeys.requestGroupName,
-					Cell: ({ row: { original } }: MaterialRequestRow) => (
-						<span className="u-color-neutral">{original.requestGroupName}</span>
-					),
-				},
-			]
-		: []),
-];
+	}) as Column<MaterialRequest>;
+
+const getStatusColumn = (disableSort: boolean): Column<MaterialRequest> =>
+	({
+		Header: tText('modules/cp/const/material-requests___status'),
+		accessor: MaterialRequestKeys.status,
+		disableSortBy: disableSort,
+		Cell: ({ row: { original } }: MaterialRequestRow) => (
+			<MaterialRequestStatusPill status={original.status} />
+		),
+	}) as Column<MaterialRequest>;
+
+const getDownloadColumn = (): Column<MaterialRequest> =>
+	({
+		Header: tText('modules/cp/const/material-requests___download'),
+		accessor: MaterialRequestKeys.downloadUrl,
+		disableSortBy: true,
+		Cell: ({ row: { original } }: MaterialRequestRow) => (
+			<MaterialRequestDownloadButton materialRequest={original} />
+		),
+	}) as Column<MaterialRequest>;
+
+const getGroupNameColumn = (): Column<MaterialRequest> =>
+	({
+		Header: tText('modules/cp/const/material-requests___request-name'),
+		accessor: MaterialRequestKeys.requestGroupName,
+		Cell: ({ row: { original } }: MaterialRequestRow) => (
+			<span className="u-color-neutral">{original.requestGroupName}</span>
+		),
+	}) as Column<MaterialRequest>;
