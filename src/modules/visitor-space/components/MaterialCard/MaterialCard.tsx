@@ -100,7 +100,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 
 	const classNames = clsx(
 		styles['c-material-card'],
-		`c-material-card--${type}`,
+		styles[`c-material-card--${type}`],
 		!link && 'c-material-card--no-link',
 		withThumbnail && 'c-material-card--with-thumbnail'
 	);
