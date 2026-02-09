@@ -27,6 +27,14 @@ $material-card-list-view-height: 10rem;
 		text-decoration: none;
 	}
 
+	&--newspaper {
+		.c-material-card__header {
+			img {
+				object-position: top !important;
+			}
+		}
+	}
+
 	// Override next/image
 	&__header {
 		max-height: 10rem;
@@ -40,7 +48,7 @@ $material-card-list-view-height: 10rem;
 		position: relative;
 		margin: $spacer-sm;
 
-		span > img {
+		img {
 			max-height: unset !important;
 			min-height: unset !important;
 			aspect-ratio: 16/9;
@@ -117,19 +125,6 @@ $material-card-list-view-height: 10rem;
 		font-size: $font-size-lg * math.div(11, 12);
 		line-height: $line-height-lg;
 		color: $blue !important;
-	}
-
-	&:global(.c-material-card--video),
-	&:global(.c-material-card--audio) {
-		// https://meemoo.atlassian.net/browse/ARC-2546
-		:global([class*="MediaCard_c-material-card__header__"]) {
-			img {
-				object-fit: cover;
-				object-position: top;
-				width: 100%;
-				height: 100%;
-			}
-		}
 	}
 
 	&:global(.c-material-card--newspaper) {
