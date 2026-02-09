@@ -45,10 +45,13 @@ export const GET_CP_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = (): {
 	},
 ];
 
-export const getMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
+export const getMaterialRequestTableColumns = (
+	isTabletPortrait: boolean
+): Column<MaterialRequest>[] => [
 	{
 		Header: tText('modules/cp/const/material-requests___aanvrager'),
 		accessor: MaterialRequestKeys.name,
+		disableSortBy: isTabletPortrait,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span className="p-material-requests__table-titel-material">
 				<span className="p-material-requests__table-titel-material__requester">
@@ -64,45 +67,56 @@ export const getMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 				</CopyButton>
 			</span>
 		),
-	},
+	} as Column<MaterialRequest>,
 	{
 		Header: tText('modules/cp/const/material-requests___titel-materiaal'),
 		accessor: MaterialRequestKeys.material,
-	},
-	{
-		Header: tText('modules/cp/const/material-requests___aangevraagd-op'),
-		accessor: MaterialRequestKeys.requestedAt,
-		Cell: ({ row: { original } }: MaterialRequestRow) => {
-			const date = formatMediumDate(asDate(original.requestedAt || original.createdAt));
-			return (
-				<span className="u-color-neutral" title={date}>
-					{date}
-				</span>
-			);
-		},
-	},
+		disableSortBy: isTabletPortrait,
+	} as Column<MaterialRequest>,
+	...(isTabletPortrait
+		? []
+		: [
+				{
+					Header: tText('modules/cp/const/material-requests___aangevraagd-op'),
+					accessor: MaterialRequestKeys.requestedAt,
+					Cell: ({ row: { original } }: MaterialRequestRow) => {
+						const date = formatMediumDate(asDate(original.requestedAt || original.createdAt));
+						return (
+							<span className="u-color-neutral" title={date}>
+								{date}
+							</span>
+						);
+					},
+				},
+			]),
 	{
 		Header: tText('modules/cp/const/material-requests___type'),
 		accessor: MaterialRequestKeys.type,
+		disableSortBy: isTabletPortrait,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span className="u-color-neutral p-material-requests__table-type">
 				{GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[original.type]}
 			</span>
 		),
-	},
+	} as Column<MaterialRequest>,
 	{
 		Header: tText('modules/cp/const/material-requests___status'),
+		disableSortBy: isTabletPortrait,
 		accessor: MaterialRequestKeys.status,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<MaterialRequestStatusPill status={original.status} />
 		),
-	},
-	{
-		Header: tText('modules/cp/const/material-requests___download'),
-		accessor: MaterialRequestKeys.downloadUrl,
-		disableSortBy: true,
-		Cell: ({ row: { original } }: MaterialRequestRow) => (
-			<MaterialRequestDownloadButton materialRequest={original} />
-		),
 	} as Column<MaterialRequest>,
+	...(isTabletPortrait
+		? []
+		: [
+				{
+					Header: tText('modules/cp/const/material-requests___download'),
+					accessor: MaterialRequestKeys.downloadUrl,
+					disableSortBy: true,
+					Cell: ({ row: { original } }: MaterialRequestRow) => (
+						<MaterialRequestDownloadButton materialRequest={original} />
+					),
+				} as Column<MaterialRequest>,
+			]),
 ];
