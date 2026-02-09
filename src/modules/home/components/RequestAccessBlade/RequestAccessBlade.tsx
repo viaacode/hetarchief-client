@@ -115,7 +115,9 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 				label: tText(
 					'modules/home/components/request-access-blade/request-access-blade___verstuur'
 				),
-				mobileLabel: tText('Verstuur mobiel'),
+				mobileLabel: tText(
+					'modules/home/components/request-access-blade/request-access-blade___verstuur-mobiel'
+				),
 				type: 'primary',
 				onClick: () => handleFormSubmit(),
 				disabled: !isOpen || isSubmitting,
@@ -124,7 +126,9 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 				label: tText(
 					'modules/home/components/request-access-blade/request-access-blade___annuleer'
 				),
-				mobileLabel: tText('Annuleer mobiel'),
+				mobileLabel: tText(
+					'modules/home/components/request-access-blade/request-access-blade___annuleer-mobiel'
+				),
 				type: 'secondary',
 				onClick: bladeProps.onClose,
 				disabled: !isOpen,

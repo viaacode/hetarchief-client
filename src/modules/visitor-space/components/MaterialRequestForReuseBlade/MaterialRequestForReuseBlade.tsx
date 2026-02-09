@@ -364,7 +364,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					label: tText(
 						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___keer-terug'
 					),
-					mobileLabel: tText('Keer terug mobiel'),
+					mobileLabel: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___keer-terug-mobiel'
+					),
 					type: 'secondary',
 					onClick: () => router.back(),
 				},
@@ -372,7 +374,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					label: tText(
 						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___wijzigingen-opslaan'
 					),
-					mobileLabel: tText('Wijzigingen opslaan mobiel'),
+					mobileLabel: tText(
+						'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___wijzigingen-opslaan-mobiel'
+					),
 					type: 'primary',
 					onClick: onEditRequest,
 				},
@@ -383,7 +387,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				label: tText(
 					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___keer-terug'
 				),
-				mobileLabel: tText('Keer terug mobiel'),
+				mobileLabel: tText(
+					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___keer-terug-mobiel'
+				),
 				type: 'secondary',
 				onClick: () => router.back(),
 			},
@@ -391,7 +397,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				label: tText(
 					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___voeg-toe-aan-aanvraaglijst-zoek-verder'
 				),
-				mobileLabel: tText('Voeg toe aan aanvraaglijst zoek verder mobiel'),
+				mobileLabel: tText(
+					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___voeg-toe-aan-aanvraaglijst-zoek-verder-mobiel'
+				),
 				type: 'primary',
 				onClick: onAddToList,
 			},

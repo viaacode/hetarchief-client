@@ -15,7 +15,10 @@ import {
 	useGetContentPageByLanguageAndPath,
 } from '@content-page/hooks/get-content-page';
 import { ContentPageClientService } from '@content-page/services/content-page-client.service';
-import { ContentPageRenderer, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/client';
+import {
+	ContentPageRenderer,
+	convertDbContentPageToContentPageInfo,
+} from '@meemoo/admin-core-ui/client';
 import ErrorNoAccess from '@shared/components/ErrorNoAccess/ErrorNoAccess';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';

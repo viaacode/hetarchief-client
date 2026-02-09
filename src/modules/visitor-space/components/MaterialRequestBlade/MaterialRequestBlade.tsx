@@ -312,7 +312,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					label: tText(
 						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-opslaan'
 					),
-					mobileLabel: tText('Wijzigingen opslaan mobiel'),
+					mobileLabel: tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-opslaan-mobiel'
+					),
 					type: 'primary',
 					onClick: onEditRequest,
 				},
@@ -320,7 +322,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					label: tText(
 						'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
 					),
-					mobileLabel: tText('Annuleer mobiel'),
+					mobileLabel: tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer-mobiel'
+					),
 					type: 'secondary',
 					onClick: () => onCloseModal(false),
 				},
@@ -358,7 +362,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				label: tText(
 					'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
 				),
-				mobileLabel: tText('Annuleer mobiel'),
+				mobileLabel: tText(
+					'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer-mobiel'
+				),
 				type: 'secondary',
 				onClick: () => onCloseModal(false),
 			},

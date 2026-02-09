@@ -16,7 +16,11 @@ const NavigationBarOverview = lazy(() =>
 export const AdminNavigationOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const renderPageContent = () => {
 		return (
-			<AdminLayout pageTitle={tText('Navigatie')}>
+			<AdminLayout
+				pageTitle={tText(
+					'modules/admin/views/navigation/admin-navigation-overview-page___navigatie'
+				)}
+			>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40 p-admin-navigation">
 						<Suspense fallback={<Loading fullscreen locationId="AdminNavigationOverview" />}>

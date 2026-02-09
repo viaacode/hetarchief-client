@@ -300,7 +300,9 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 				label: tText(
 					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe'
 				),
-				mobileLabel: tText('Voeg toe mobiel'),
+				mobileLabel: tText(
+					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe-mobiel'
+				),
 				type: 'primary',
 				onClick: handleSubmit,
 				disabled: isSubmitting,
@@ -309,7 +311,9 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 				label: tText(
 					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___annuleer'
 				),
-				mobileLabel: tText('Annuleer mobiel'),
+				mobileLabel: tText(
+					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___annuleer-mobiel'
+				),
 				type: 'secondary',
 				onClick: onClose,
 			},

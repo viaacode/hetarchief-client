@@ -243,7 +243,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 					<RedFormWarning
 						className={clsx(styles['c-blade__footer--validation'])}
 						error={tHtml(
-							'Er staan fouten in dit formulier. Corrigeer deze en probeer het opnieuw.'
+							'modules/shared/components/blade/blade-content___er-staan-fouten-in-dit-formulier-corrigeer-deze-en-probeer-het-opnieuw'
 						)}
 					/>
 				)}

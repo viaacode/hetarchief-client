@@ -358,7 +358,9 @@ const LoggedInVisitorSpacesHome: FC = () => {
 		const footerButtons: BladeFooterProps = [
 			{
 				label: tText('modules/home/components/logged-in-home/logged-in-home___ga-naar-de-homepage'),
-				mobileLabel: tText('Ga naar de homepage mobiel'),
+				mobileLabel: tText(
+					'modules/home/components/logged-in-visitor-spaces-home/logged-in-visitor-spaces-home___ga-naar-de-homepage-mobiel'
+				),
 				type: 'primary',
 				onClick: () => {
 					setIsVisitorSpaceNotAvailable(false);

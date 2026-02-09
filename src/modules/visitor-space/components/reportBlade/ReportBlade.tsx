@@ -133,14 +133,18 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 		return [
 			{
 				label: tText('modules/visitor-space/components/report-blade/report-blade___rapporteer'),
-				mobileLabel: tText('Rapporteer mobiel'),
+				mobileLabel: tText(
+					'modules/visitor-space/components/report-blade/report-blade___rapporteer-mobiel'
+				),
 				type: 'primary',
 				onClick: handleFormSubmit,
 				disabled: isSubmittingForm,
 			},
 			{
 				label: tText('modules/visitor-space/components/report-blade/report-blade___annuleer'),
-				mobileLabel: tText('Annuleer mobiel'),
+				mobileLabel: tText(
+					'modules/visitor-space/components/report-blade/report-blade___annuleer-mobiel'
+				),
 				type: 'secondary',
 				onClick: onCloseBlade,
 			},

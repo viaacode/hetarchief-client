@@ -153,7 +153,9 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 					label: tText(
 						'modules/account/components/material-request-detail-blade/material-request-detail-blade___goedkeuren'
 					),
-					mobileLabel: tText('Goedkeuren mobiel'),
+					mobileLabel: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___goedkeuren-mobiel'
+					),
 					type: 'primary',
 					onClick: onApproveRequest,
 				},
@@ -161,7 +163,9 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 					label: tText(
 						'modules/account/components/material-request-detail-blade/material-request-detail-blade___afkeuren'
 					),
-					mobileLabel: tText('Afkeuren mobiel'),
+					mobileLabel: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___afkeuren-mobiel'
+					),
 					type: 'primary',
 					onClick: onDeclineRequest,
 				},
@@ -172,7 +176,9 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			label: tText(
 				'modules/account/components/material-request-detail-blade/material-requests___sluit'
 			),
-			mobileLabel: tText('Sluit mobiel'),
+			mobileLabel: tText(
+				'modules/account/components/material-request-detail-blade/material-request-detail-blade___sluit-mobiel'
+			),
 			type: 'primary',
 			onClick: onClose,
 		} as BladeFooterButton;
@@ -189,7 +195,9 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 					label: tText(
 						'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag'
 					),
-					mobileLabel: tText('Annuleer aanvraag mobiel'),
+					mobileLabel: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag-mobiel'
+					),
 					type: 'secondary',
 					onClick: () => setShowConfirmModal(true),
 				},

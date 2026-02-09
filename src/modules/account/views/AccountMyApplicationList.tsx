@@ -133,7 +133,7 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 				{
 					label: tText('modules/account/views/account-my-application-list___materiaal-selectie'),
 					value: isNil(materialRequest.reuseForm.endTime)
-						? tText('Volledig bestand')
+						? tText('modules/account/views/account-my-application-list___volledig-bestand')
 						: formatCuePointsMaterialRequest(materialRequest.reuseForm),
 				},
 				{

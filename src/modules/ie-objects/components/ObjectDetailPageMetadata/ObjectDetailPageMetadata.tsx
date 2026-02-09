@@ -1240,8 +1240,12 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					stickyFooter={false}
 					footerButtons={[
 						{
-							label: tText('Sluit'),
-							mobileLabel: tText('Sluit mobiel'),
+							label: tText(
+								'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___sluit'
+							),
+							mobileLabel: tText(
+								'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___sluit-mobiel'
+							),
 							type: 'secondary',
 							onClick: () => setSelectedMetadataField(null),
 						},

@@ -74,7 +74,9 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 			return [
 				{
 					label: tText('modules/cp/components/process-request-blade/process-request-blade___sluit'),
-					mobileLabel: tText('Sluit mobiel'),
+					mobileLabel: tText(
+						'modules/shared/components/process-request-blade/process-request-blade___sluit-mobiel'
+					),
 					type: 'primary',
 					onClick: () => props.onClose?.(),
 				},
@@ -91,8 +93,12 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 							),
 				mobileLabel:
 					selected?.status === VisitStatus.APPROVED
-						? tText('Aanpassen mobiel')
-						: tText('Goedkeuren mobiel'),
+						? tText(
+								'modules/shared/components/process-request-blade/process-request-blade___aanpassen-mobiel'
+							)
+						: tText(
+								'modules/shared/components/process-request-blade/process-request-blade___goedkeuren-mobiel'
+							),
 				type: 'primary',
 				onClick: () => setShowApprove(true),
 			},
@@ -103,8 +109,12 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 						: tText('modules/cp/components/process-request-blade/process-request-blade___weigeren'),
 				mobileLabel:
 					selected?.status === VisitStatus.DENIED
-						? tText('Aanpassen mobiel')
-						: tText('Weigeren mobiel'),
+						? tText(
+								'modules/shared/components/process-request-blade/process-request-blade___aanpassen-mobiel'
+							)
+						: tText(
+								'modules/shared/components/process-request-blade/process-request-blade___weigeren-mobiel'
+							),
 				type: 'primary',
 				onClick: () => setShowDecline(true),
 			},

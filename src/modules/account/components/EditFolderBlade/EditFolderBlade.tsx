@@ -99,13 +99,17 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 		return [
 			{
 				label: tText('modules/account/components/edit-folder-blade/edit-folder-blade___bewaar'),
-				mobileLabel: tText('Bewaar mobiel'),
+				mobileLabel: tText(
+					'modules/account/components/edit-folder-blade/edit-folder-blade___bewaar-mobiel'
+				),
 				type: 'primary',
 				onClick: () => submitData(),
 			},
 			{
 				label: tText('modules/account/components/edit-folder-blade/edit-folder-blade___sluit'),
-				mobileLabel: tText('Sluit mobiel'),
+				mobileLabel: tText(
+					'modules/account/components/edit-folder-blade/edit-folder-blade___sluit-mobiel'
+				),
 				type: 'secondary',
 				onClick: handleClose,
 			},

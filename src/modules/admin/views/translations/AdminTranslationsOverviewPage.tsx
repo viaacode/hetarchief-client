@@ -37,13 +37,17 @@ export const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUr
 			return [
 				{
 					label: tText('pages/admin/vertalingen/index___bewaar-wijzigingen'),
-					mobileLabel: tText('Bewaar wijzigingen mobiel'),
+					mobileLabel: tText(
+						'modules/admin/views/translations/admin-translations-overview-page___bewaar-wijzigingen-mobiel'
+					),
 					type: 'primary',
 					onClick: onSave,
 				},
 				{
 					label: tText('pages/admin/vertalingen/index___annuleer'),
-					mobileLabel: tText('Annuleer mobiel'),
+					mobileLabel: tText(
+						'modules/admin/views/translations/admin-translations-overview-page___annuleer-mobiel'
+					),
 					type: 'secondary',
 					onClick: onClose,
 				},

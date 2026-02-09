@@ -1893,7 +1893,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				footerButtons={[
 					{
 						label: tText('modules/ie-objects/object-detail-page___download-selection'),
-						mobileLabel: tText('Downloed selection mobiel'),
+						mobileLabel: tText('modules/ie-objects/object-detail-page___downloed-selection-mobiel'),
 						type: 'primary',
 						onClick: () => {
 							setTimeout(() => {

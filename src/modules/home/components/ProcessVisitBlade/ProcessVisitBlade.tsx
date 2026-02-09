@@ -60,14 +60,18 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 				label: tText(
 					'modules/home/components/process-visit-blade/process-visit-blade___annuleer-bezoek'
 				),
-				mobileLabel: tText('Annuleer bezoek mobiel'),
+				mobileLabel: tText(
+					'modules/home/components/process-visit-blade/process-visit-blade___annuleer-bezoek-mobiel'
+				),
 				type: 'secondary',
 				onClick: () => setShowCancel(true),
 				disabled: !props.isOpen,
 			},
 			{
 				label: tText('modules/home/components/process-visit-blade/process-visit-blade___sluit'),
-				mobileLabel: tText('Sluit mobiel'),
+				mobileLabel: tText(
+					'modules/home/components/process-visit-blade/process-visit-blade___sluit-mobiel'
+				),
 				type: 'primary',
 				onClick: () => props.onClose?.(),
 				disabled: !props.isOpen,
