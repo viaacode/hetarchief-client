@@ -1,7 +1,8 @@
+import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
 import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
 import { Card } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
-import { IeObjectType } from '@shared/types/ie-objects';
+import { SimpleIeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 import clsx from 'clsx';
 import { isValid } from 'date-fns';
@@ -28,6 +29,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 	openInNewTab = false,
 }) => {
 	const withThumbnail = !!thumbnail || !hideThumbnail;
+	const simpleType = mapDcTermsFormatToSimpleType(type);
 
 	const renderTitle = (): ReactNode => {
 		if (typeof title === 'string') {
@@ -80,7 +82,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 			);
 		}
 
-		if (type === IeObjectType.AUDIO || type === IeObjectType.AUDIO_FRAGMENT) {
+		if (simpleType === SimpleIeObjectType.AUDIO) {
 			// Only render the waveform if the thumbnail is available
 			// The thumbnail is an ugly speaker icon that we never want to show
 			// But if that thumbnail is not available it most likely means this object does not have the BEZOEKERTOOL-CONTENT license
@@ -100,7 +102,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 
 	const classNames = clsx(
 		styles['c-material-card'],
-		styles[`c-material-card--${type}`],
+		styles[`c-material-card--${simpleType}`],
 		!link && 'c-material-card--no-link',
 		withThumbnail && 'c-material-card--with-thumbnail'
 	);
