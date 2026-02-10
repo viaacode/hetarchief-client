@@ -89,30 +89,30 @@ export const getAccountMaterialRequestTableColumns = (
 	isKeyUser: boolean,
 	isTabletPortrait: boolean
 ): Column<MaterialRequest>[] => {
-	if (!isKeyUser) {
+	if (isKeyUser) {
 		return [
-			{
-				Header: tText('modules/cp/const/material-requests___materiaal'),
-				accessor: MaterialRequestKeys.material,
-			},
-			{
-				Header: tText('modules/cp/const/material-requests___aanbieder'),
-				accessor: MaterialRequestKeys.maintainer,
-				Cell: ({ row: { original } }: MaterialRequestRow) => (
-					<span className="u-color-neutral">{original.maintainerName}</span>
-				),
-			},
-			getRequestedAtColumn(),
-			getTypeColumn(false),
+			getMaterialColumn(isTabletPortrait),
+			...(isTabletPortrait ? [] : [getRequestedAtColumn()]),
+			getTypeColumn(isTabletPortrait),
+			getStatusColumn(isTabletPortrait),
+			...(isTabletPortrait ? [] : [getDownloadColumn(), getGroupNameColumn()]),
 		];
 	}
 
 	return [
-		getMaterialColumn(isTabletPortrait),
-		...(isTabletPortrait ? [] : [getRequestedAtColumn()]),
-		getTypeColumn(isTabletPortrait),
-		getStatusColumn(isTabletPortrait),
-		...(isTabletPortrait ? [] : [getDownloadColumn(), getGroupNameColumn()]),
+		{
+			Header: tText('modules/cp/const/material-requests___materiaal'),
+			accessor: MaterialRequestKeys.material,
+		},
+		{
+			Header: tText('modules/cp/const/material-requests___aanbieder'),
+			accessor: MaterialRequestKeys.maintainer,
+			Cell: ({ row: { original } }: MaterialRequestRow) => (
+				<span className="u-color-neutral">{original.maintainerName}</span>
+			),
+		},
+		getRequestedAtColumn(),
+		getTypeColumn(false),
 	];
 };
 
