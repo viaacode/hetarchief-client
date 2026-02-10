@@ -43,7 +43,7 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 					className="u-mx-4"
 					name={'cancel'}
 					onClick={onCancel}
-					variants={['white']}
+					variants={['text']}
 				/>
 				<Button
 					label={
@@ -52,7 +52,7 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 					className="u-mx-4"
 					name={'confirm'}
 					onClick={onConfirm}
-					variants={['black']}
+					variants={['dark']}
 				/>
 			</div>
 		);
