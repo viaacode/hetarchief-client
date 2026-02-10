@@ -13,7 +13,7 @@ import styles from './Blade.module.scss';
 import type { BladeProps } from './Blade.types';
 
 export const Blade: FC<BladeProps> = (props) => {
-	const { id, className, isOpen, onClose, wideBladeTitle, layer } = props;
+	const { id, className, isOpen, onClose, isWideBlade, layer } = props;
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
 	const hasOpenConfirmationModal = useSelector(selectHasOpenConfirmationModal);
 
@@ -70,7 +70,7 @@ export const Blade: FC<BladeProps> = (props) => {
 						(layer === currentLayer || (currentLayer === 0 && isUndefined(layer))) &&
 						'c-blade--active',
 					isLayered && [styles['c-blade--managed']],
-					!!wideBladeTitle && [styles['c-blade--extra-wide']]
+					isWideBlade && [styles['c-blade--extra-wide']]
 				)}
 				// offset underlying blades
 				style={
