@@ -18,7 +18,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 	children,
 	closable = true,
 	onClose,
-	wideBladeTitle,
+	isWideBlade,
 	title,
 	stickySubtitle,
 	subtitle,
@@ -91,13 +91,14 @@ export const BladeContent: FC<BladeContentProps> = ({
 	}, [closable, onClose]);
 
 	const renderHeader = () => {
-		if (isMobile) {
+		if (isMobile || isWideBlade) {
 			return (
 				<div
 					id={id}
 					className={clsx(
 						styles['c-blade__title'],
-						contentHasBeenScrolled && [styles['c-blade__content-scrolled']]
+						contentHasBeenScrolled && [styles['c-blade__content-scrolled']],
+						isWideBlade && styles['c-blade__title-extra-wide']
 					)}
 				>
 					<div className={clsx(styles['c-blade__title--mobile-wrapper'])}>
@@ -114,6 +115,9 @@ export const BladeContent: FC<BladeContentProps> = ({
 					</div>
 					{stickySubtitle && (
 						<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>{stickySubtitle}</div>
+					)}
+					{!isMobile && subtitle && (
+						<div className={clsx(styles['c-blade__title--subtitle'])}>{subtitle}</div>
 					)}
 				</div>
 			);
@@ -144,9 +148,6 @@ export const BladeContent: FC<BladeContentProps> = ({
 						contentHasBeenScrolled && [styles['c-blade__content-scrolled']]
 					)}
 				>
-					{wideBladeTitle && (
-						<div className={clsx(styles['c-blade__title--wide-blade'])}>{wideBladeTitle}</div>
-					)}
 					<h2 className={clsx(styles['c-blade__title--text'])}>{title}</h2>
 					{stickySubtitle && (
 						<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>{stickySubtitle}</div>
@@ -250,7 +251,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 				<div
 					className={clsx(
 						styles['c-blade__footer-buttons'],
-						wideBladeTitle && styles['c-blade__footer-buttons-extra-wide']
+						isWideBlade && styles['c-blade__footer-buttons-extra-wide']
 					)}
 				>
 					{renderFooterButton(firstButton)}

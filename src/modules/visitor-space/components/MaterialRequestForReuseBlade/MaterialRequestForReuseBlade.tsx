@@ -346,17 +346,6 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		</dl>
 	);
 
-	const getWideBladeTitle = () => {
-		if (isEditMode) {
-			return tText(
-				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___pas-je-aanvraag-aan'
-			);
-		}
-		return tText(
-			'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___aanvraag'
-		);
-	};
-
 	const getFooterButtons = (): BladeFooterProps => {
 		if (isEditMode) {
 			return [
@@ -1035,7 +1024,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			currentLayer={currentLayer}
 			onClose={onCloseModal}
 			isManaged
-			wideBladeTitle={getWideBladeTitle()}
+			isWideBlade
 			title={tText(
 				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ik-wil-dit-materiaal-downloaden-en-hergebruiken'
 			)}

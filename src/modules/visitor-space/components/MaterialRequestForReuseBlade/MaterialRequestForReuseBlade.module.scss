@@ -132,6 +132,10 @@
 			@media (max-height: $breakpoint-lg) {
 				max-height: 40vh;
 			}
+
+			@media (max-height: $breakpoint-md) {
+				max-height: 30vh;
+			}
 		}
 
 		:global(.c-time-crop-controls){
