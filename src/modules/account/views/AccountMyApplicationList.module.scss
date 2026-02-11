@@ -1,21 +1,52 @@
 @use "src/styles/abstracts" as *;
 
-$container-heigth: calc($view-height - $top-navigation-bar-height);
+$container-height: calc($view-height - $top-navigation-bar-height);
 $header-height: 17rem;
 
 .p-my-application-list {
 	display: flex;
 	flex-direction: row;
 
+	@media (max-width: $breakpoint-lg) {
+		flex-direction: column;
+	}
+
 	> :first-child{
 		width: calc(100% - $blade-max-width);
 		padding: 0 $spacer-3xl;
+
+		@media (max-width: $breakpoint-xxl) {
+			padding: 0 $spacer-1xl;
+		}
+
+		@media (max-width: $breakpoint-xl) {
+			padding: 0 $spacer-md;
+		}
+
+		@media (max-width: $breakpoint-lg) {
+			width: 100%;
+		}
+	}
+
+	> :nth-child(2) {
+		@media (max-width: $breakpoint-lg) {
+			width: calc(100% - $spacer-md - $spacer-md);
+			max-width: unset;
+			margin: 0 $spacer-md;
+			border: 1px solid $silver;
+			margin-bottom: $spacer-lg;
+		}
 	}
 
 	&__wrapper {
-		min-height: calc($container-heigth - $header-height);
-		max-height: calc($container-heigth - $header-height);
+		min-height: calc($container-height - $header-height);
+		max-height: calc($container-height - $header-height);
 		overflow: auto;
+
+		@media (max-width: $breakpoint-lg) {
+			min-height: unset;
+			max-height: unset;
+		}
 	}
 
 	&__requests-wrapper {
@@ -27,24 +58,32 @@ $header-height: 17rem;
 
 	&__header {
 		display: flex;
-		flex-direction: row;
 		height: $header-height;
 		max-height: $header-height;
 		padding-top: 6.4rem;
 		padding-bottom: $spacer-1xl;
 
 		@media (max-width: $breakpoint-md) {
-			flex-direction: column;
+			height: unset;
+			max-height:unset;
 		}
 	}
 
-	&_page-title {
+	&__page-title {
 		flex-grow: 1;
 		max-width: 100%;
 
 		label {
 			overflow: hidden;
 			text-overflow: ellipsis;
+		}
+
+		@media (max-width: $breakpoint-lg) {
+			font-size: $font-size-2xl;
+		}
+
+		@media (max-width: $breakpoint-md) {
+			font-size: $font-size-xl;
 		}
 	}
 
@@ -88,6 +127,19 @@ $header-height: 17rem;
 				grid-column: 2;
 				color: $neutral;
 
+				@media (max-width: $breakpoint-md) {
+					margin-inline-start: 0;
+					margin-top: $spacer-xs;
+				}
+			}
+
+			@media (max-width: $breakpoint-xl) {
+				grid-template-columns: 2fr 4fr;
+			}
+
+			@media (max-width: $breakpoint-md) {
+				display: flex;
+				flex-direction: column;
 			}
 		}
 	}

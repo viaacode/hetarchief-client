@@ -24,13 +24,16 @@ import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { useAppDispatch } from '@shared/store';
 import {
+	setIsStickyLayout,
 	setMaterialRequestCount,
 	setShowFooter,
 	setShowMaterialRequestCenter,
 } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { isTabletPortraitSize } from '@shared/utils/is-mobile';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitorLayout } from '@visitor-layout/index';
 import { checkIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
@@ -50,6 +53,10 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 	const dispatch = useAppDispatch();
 	const locale = useLocale();
 	const user = useSelector(selectCommonUser);
+
+	// We need different functionalities for different viewport sizes
+	const windowSize = useWindowSizeContext();
+	const isTabletPortrait = isTabletPortraitSize(windowSize);
 
 	const hasMaterialRequestsPerm = useHasAnyPermission(Permission.CREATE_MATERIAL_REQUESTS);
 
@@ -74,6 +81,13 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 	useEffect(() => {
 		materialRequests && dispatch(setMaterialRequestCount(materialRequests.length));
 	}, [materialRequests, dispatch]);
+
+	useEffect(() => {
+		// We need the body to be non-scrollable when the window size is larger than Breakpoints.lg
+		// Because only the requests will be scrollable
+		// Otherwise we want the entire body to be scrollable since the PersonalInfo will be below the list
+		dispatch(setIsStickyLayout(!isTabletPortrait));
+	}, [isTabletPortrait, dispatch]);
 
 	const onCancelRequest = () => {
 		router.back();
@@ -209,7 +223,13 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 		return (
 			<div className={clsx(styles['p-my-application-list'])}>
 				<div>
-					<header className={clsx(styles['p-my-application-list__header'], 'l-container')}>
+					<header
+						className={clsx(
+							styles['p-my-application-list__header'],
+							'l-container',
+							'l-container--edgeless-to-lg'
+						)}
+					>
 						<h2 className={styles['p-my-application-list__page-title']}>
 							{tText('modules/account/views/account-my-application-list___aanvraaglijst')}
 							{materialRequests?.length > 0 && ` (${materialRequests.length})`}
@@ -225,7 +245,7 @@ export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl
 						)}
 					>
 						{isFetching && <Loading locationId="Material requests overview" fullscreen />}
-						{noData && renderEmptyMessage()}
+						{noData && !isFetching && renderEmptyMessage()}
 						{!noData && !isFetching && renderContent()}
 					</div>
 				</div>

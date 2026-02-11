@@ -45,10 +45,22 @@ export const GET_CP_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = (): {
 	},
 ];
 
-export const getMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
-	{
+export const getMaterialRequestTableColumns = (
+	isTabletPortrait: boolean
+): Column<MaterialRequest>[] => [
+	getRequesterColumn(isTabletPortrait),
+	getTitleColumn(isTabletPortrait),
+	...(isTabletPortrait ? [] : [getRequestedAtColumn()]),
+	getTypeColumn(isTabletPortrait),
+	getStatusColumn(isTabletPortrait),
+	...(isTabletPortrait ? [] : [getDownloadColumn()]),
+];
+
+const getRequesterColumn = (disableSort: boolean): Column<MaterialRequest> =>
+	({
 		Header: tText('modules/cp/const/material-requests___aanvrager'),
 		accessor: MaterialRequestKeys.name,
+		disableSortBy: disableSort,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span className="p-material-requests__table-titel-material">
 				<span className="p-material-requests__table-titel-material__requester">
@@ -64,12 +76,17 @@ export const getMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 				</CopyButton>
 			</span>
 		),
-	},
-	{
+	}) as Column<MaterialRequest>;
+
+const getTitleColumn = (disableSort: boolean): Column<MaterialRequest> =>
+	({
 		Header: tText('modules/cp/const/material-requests___titel-materiaal'),
 		accessor: MaterialRequestKeys.material,
-	},
-	{
+		disableSortBy: disableSort,
+	}) as Column<MaterialRequest>;
+
+const getRequestedAtColumn = (): Column<MaterialRequest> =>
+	({
 		Header: tText('modules/cp/const/material-requests___aangevraagd-op'),
 		accessor: MaterialRequestKeys.requestedAt,
 		Cell: ({ row: { original } }: MaterialRequestRow) => {
@@ -80,29 +97,36 @@ export const getMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 				</span>
 			);
 		},
-	},
-	{
+	}) as Column<MaterialRequest>;
+
+const getTypeColumn = (disableSort: boolean): Column<MaterialRequest> =>
+	({
 		Header: tText('modules/cp/const/material-requests___type'),
 		accessor: MaterialRequestKeys.type,
+		disableSortBy: disableSort,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span className="u-color-neutral p-material-requests__table-type">
 				{GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[original.type]}
 			</span>
 		),
-	},
-	{
+	}) as Column<MaterialRequest>;
+
+const getStatusColumn = (disableSort: boolean): Column<MaterialRequest> =>
+	({
 		Header: tText('modules/cp/const/material-requests___status'),
+		disableSortBy: disableSort,
 		accessor: MaterialRequestKeys.status,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<MaterialRequestStatusPill status={original.status} />
 		),
-	},
-	{
+	}) as Column<MaterialRequest>;
+
+const getDownloadColumn = (): Column<MaterialRequest> =>
+	({
 		Header: tText('modules/cp/const/material-requests___download'),
 		accessor: MaterialRequestKeys.downloadUrl,
 		disableSortBy: true,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<MaterialRequestDownloadButton materialRequest={original} />
 		),
-	} as Column<MaterialRequest>,
-];
+	}) as Column<MaterialRequest>;
