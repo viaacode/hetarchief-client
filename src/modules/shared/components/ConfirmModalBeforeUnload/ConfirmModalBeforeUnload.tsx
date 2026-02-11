@@ -1,6 +1,7 @@
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { tText } from '@shared/helpers/translate';
 import { useRouter } from 'next/router';
+import { parseUrl, stringify } from 'query-string';
 import { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 
 interface ConfirmModalBeforeUnloadProps {
@@ -36,10 +37,16 @@ export const ConfirmModalBeforeUnload: FC<ConfirmModalBeforeUnloadProps> = ({ wh
 		const currentRoute = window.location.pathname + window.location.search;
 		let potentialNextRoute = router.asPath;
 
+		// Add the local to our nextRoute because router.asPath does not include to locale although we need it in cases like english
+		// This does not need to be added if the locale is the default because then the asPath matches the browser url
 		if (router.locale !== router.defaultLocale) {
-			// Add the local to our nextRoute because router.asPath does not include to locale although we need it in cases like english
-			// This does not need to be added if the locale is the default because then the asPath matches the browser url
-			potentialNextRoute = `/${router.locale}${potentialNextRoute}`;
+			// the route starting with /? indicates we are at the homepage but have only a query param
+			// /en/?param=something is no valid url and thus we are making it to one
+			if (potentialNextRoute.startsWith('/?')) {
+				potentialNextRoute = `/${router.locale}${potentialNextRoute.slice(1)}`;
+			} else {
+				potentialNextRoute = `/${router.locale}${potentialNextRoute}`;
+			}
 		}
 
 		// With the custom modal the router and window location get out of sync
@@ -126,7 +133,17 @@ export const ConfirmModalBeforeUnload: FC<ConfirmModalBeforeUnloadProps> = ({ wh
 			if (!nextRoute) {
 				return;
 			}
-			void router.push(nextRoute);
+
+			// In case of the localized homepage we need to navigate to it without the localization set as url
+			// Otherwise this would cause the entire application to release
+			if (nextRoute.startsWith(`/${router.locale}?`)) {
+				const parsed = parseUrl(nextRoute);
+				router.push({ pathname: '/', query: stringify(parsed.query) }, undefined, {
+					locale: router.locale,
+				});
+			} else {
+				void router.push(nextRoute);
+			}
 		}
 	}, [nextRoute, hasConfirmed, router]);
 

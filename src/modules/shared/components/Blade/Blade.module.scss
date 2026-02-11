@@ -91,6 +91,19 @@ $padding-horizontal-mobile: $spacer-sm;
 		padding: 0 $padding-horizontal $spacer-sm;
 		word-break: break-word;
 
+		&-extra-wide {
+			padding: $padding-horizontal $padding-horizontal $spacer-sm;
+
+			.c-blade__title--mobile-wrapper {
+				display: flex;
+				padding:0;
+			}
+
+			.c-blade__close-button {
+				margin: auto 0 auto auto;
+			}
+		}
+
 		@media (max-width: $breakpoint-md) {
 			padding: $padding-horizontal-mobile;
 
@@ -103,22 +116,6 @@ $padding-horizontal-mobile: $spacer-sm;
 		&.c-blade__content-scrolled {
 			border-bottom: $divider-grey;
 			background: $sticky-background;
-		}
-
-		&--wide-blade {
-			line-height: $line-height-md;
-			font-size: $font-size-md;
-			font-weight: $font-weight-bold;
-
-			+ .c-blade__title--text {
-				line-height: $line-height-2xl;
-				font-size: $font-size-2xl;
-
-				@media (max-width: $breakpoint-lg) {
-					line-height: $line-height-1xl;
-					font-size: $font-size-1xl;
-				}
-			}
 		}
 
 		&--text {

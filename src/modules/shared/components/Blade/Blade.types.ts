@@ -10,11 +10,9 @@ export interface BladeContentProps extends DefaultComponentProps {
 
 	// Title props
 	/**
-	 * Small text above the title <br/>
-	 * When set will make the blade extra wide <br/>
-	 * Will be hidden on mobile
+	 * Blade should be 90% instead of the default small size
 	 */
-	wideBladeTitle?: string;
+	isWideBlade?: boolean;
 	/**
 	 * The actual title <br/>
 	 * Will always be shown

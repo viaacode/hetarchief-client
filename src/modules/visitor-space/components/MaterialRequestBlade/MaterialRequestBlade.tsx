@@ -72,7 +72,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		useIsComplexReuseFlow(materialRequest);
 
 	// Only hide the "view object" option when the user is a key user, and they already have access to the object
-	const hideViewTypeOption = user?.isKeyUser && objectRepresentationId;
+	const hideViewTypeOption = user?.isKeyUser && (objectRepresentationId || objectThumbnailUrl);
 
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestType | undefined>(type);
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
