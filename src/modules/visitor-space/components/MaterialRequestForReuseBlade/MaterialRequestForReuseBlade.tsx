@@ -228,7 +228,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			}
 
 			const response = await MaterialRequestsService.create({
-				objectSchemaIdentifier: materialRequest.objectSchemaIdentifier,
+				objectId: materialRequest.objectId,
 				objectRepresentationId: materialRequest.objectRepresentationId,
 				type: MaterialRequestType.REUSE,
 				reason: '',

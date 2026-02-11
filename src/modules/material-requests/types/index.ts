@@ -98,7 +98,7 @@ export interface MaterialRequestDetail extends MaterialRequest {
 }
 
 export interface MaterialRequestCreation {
-	objectSchemaIdentifier: string;
+	objectId: string;
 	objectRepresentationId: string | undefined;
 	type: MaterialRequestType;
 	reason: string;
