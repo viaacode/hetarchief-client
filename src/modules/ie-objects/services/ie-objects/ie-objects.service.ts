@@ -165,13 +165,13 @@ export class IeObjectsService {
 
 	// Used for "ook interessant" on the detail page
 	public static async getSimilar(
-		schemaIdentifier: string,
+		ieObjectId: string,
 		maintainerId: string
 	): Promise<IeObjectSimilar> {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${schemaIdentifier}/${IE_OBJECTS_SERVICE_SIMILAR}`,
+					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_SIMILAR}`,
 					query: {
 						...(!isEmpty(maintainerId) && { maintainerId }),
 					},

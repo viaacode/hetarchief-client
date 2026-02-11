@@ -178,7 +178,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			}
 
 			const response = await MaterialRequestsService.create({
-				objectSchemaIdentifier,
+				objectId: materialRequest.objectId,
 				objectRepresentationId,
 				type: typeSelected,
 				reason: reasonInputValue,

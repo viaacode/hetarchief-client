@@ -315,6 +315,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			return {
 				objectSchemaName: mediaInfo.name,
 				objectSchemaIdentifier: mediaInfo.schemaIdentifier,
+				objectId: mediaInfo.iri,
 				objectDctermsFormat: mediaInfo.dctermsFormat,
 				objectThumbnailUrl: mediaInfo.thumbnailUrl,
 				objectRepresentationId: getRepresentationByCurrentFileIndex()?.id,

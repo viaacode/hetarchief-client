@@ -261,7 +261,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				</p>
 			);
 		}
-		return materialRequests.map((item) => renderMaterialRequest(item));
+		return materialRequests.map((materialRequest) => renderMaterialRequest(materialRequest));
 	};
 
 	const getFooterButtons = (): BladeFooterProps => {

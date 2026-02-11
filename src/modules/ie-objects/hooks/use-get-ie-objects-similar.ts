@@ -22,11 +22,11 @@ export const useGetIeObjectsAlsoInteresting = (
 
 export async function makeServerSideRequestGetIeObjectsSimilar(
 	queryClient: QueryClient,
-	id: string,
+	schemaIdentifier: string,
 	maintainerId = ''
 ) {
 	await queryClient.prefetchQuery({
-		queryKey: [QUERY_KEYS.getIeObjectsSimilar, id, maintainerId],
-		queryFn: () => IeObjectsService.getSimilar(id, maintainerId),
+		queryKey: [QUERY_KEYS.getIeObjectsSimilar, schemaIdentifier, maintainerId],
+		queryFn: () => IeObjectsService.getSimilar(schemaIdentifier, maintainerId),
 	});
 }
