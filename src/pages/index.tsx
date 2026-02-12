@@ -11,17 +11,21 @@ import {
 import { Loading } from '@shared/components/Loading';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { KNOWN_STATIC_ROUTES, QUERY_KEYS, ROUTES_BY_LOCALE } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { EventsService, LogEventType } from '@shared/services/events-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
 import { QueryClient } from '@tanstack/react-query';
 import { VisitorLayout } from '@visitor-layout/index';
+import { noop } from 'lodash-es';
 import type { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import { type ComponentType, type FC, useEffect } from 'react';
+import { type ComponentType, type FC, useEffect, useState } from 'react';
+import { BooleanParam, useQueryParam } from 'use-query-params';
 import ErrorNoAccess from '../modules/shared/components/ErrorNoAccess/ErrorNoAccess';
 
 const { publicRuntimeConfig } = getConfig();
@@ -30,6 +34,9 @@ const Homepage: NextPage<DefaultSeoInfo> = ({ title, description, image, url }) 
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const router = useRouter();
 	const locale = useLocale();
+	const [hasTriggeredContentPageViewEvent, setHasTriggeredContentPageViewEvent] =
+		useState<boolean>(false);
+	const [previewQueryParam] = useQueryParam(QUERY_PARAM_KEY.CONTENT_PAGE_PREVIEW, BooleanParam);
 
 	/**
 	 * Data
@@ -41,11 +48,27 @@ const Homepage: NextPage<DefaultSeoInfo> = ({ title, description, image, url }) 
 		? convertDbContentPageToContentPageInfo(dbContentPage)
 		: null;
 
+	/**
+	 * At startup check if user is a kiosk user, if so redirect to search page since kiosk users should only be used for searching
+	 */
 	useEffect(() => {
 		if (isKioskUser) {
-			router.replace(ROUTES_BY_LOCALE[locale].search);
+			router.replace(ROUTES_BY_LOCALE[locale].search).then(noop);
 		}
 	}, [router, isKioskUser, locale]);
+
+	/**
+	 * At startup trigger a content page viewed event
+	 */
+	useEffect(() => {
+		if (!contentPageInfo || hasTriggeredContentPageViewEvent || previewQueryParam) {
+			return;
+		}
+		EventsService.triggerEvent(LogEventType.CONTENT_PAGE_VIEW, window.location.href, {
+			type: contentPageInfo.contentType,
+		}).then(noop);
+		setHasTriggeredContentPageViewEvent(true);
+	}, [hasTriggeredContentPageViewEvent, contentPageInfo, previewQueryParam]);
 
 	/**
 	 * Render
