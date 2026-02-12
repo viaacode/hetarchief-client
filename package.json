@@ -1,6 +1,6 @@
 {
   "name": "hetarchief-client",
-  "version": "4.0.19",
+  "version": "4.0.20",
   "private": true,
   "contributors": [
     "Bert Verhelst <bert.verhelst@studiohyperdrive.be>",
@@ -42,7 +42,7 @@
     "@emotion/cache": "11.11.0",
     "@flowplayer/player": "3.32.1",
     "@hookform/resolvers": "2.9.11",
-    "@meemoo/admin-core-ui": "5.2.25",
+    "@meemoo/admin-core-ui": "5.2.27",
     "@meemoo/react-components": "5.1.8",
     "@react-hook/resize-observer": "1.2.5",
     "@reduxjs/toolkit": "1.9.6",
