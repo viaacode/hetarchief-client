@@ -11,6 +11,7 @@ import {
 import { Loading } from '@shared/components/Loading';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { KNOWN_STATIC_ROUTES, QUERY_KEYS, ROUTES_BY_LOCALE } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -24,6 +25,7 @@ import type { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } fr
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { type ComponentType, type FC, useEffect, useState } from 'react';
+import { BooleanParam, useQueryParam } from 'use-query-params';
 import ErrorNoAccess from '../modules/shared/components/ErrorNoAccess/ErrorNoAccess';
 
 const { publicRuntimeConfig } = getConfig();
@@ -34,6 +36,7 @@ const Homepage: NextPage<DefaultSeoInfo> = ({ title, description, image, url }) 
 	const locale = useLocale();
 	const [hasTriggeredContentPageViewEvent, setHasTriggeredContentPageViewEvent] =
 		useState<boolean>(false);
+	const [previewQueryParam] = useQueryParam(QUERY_PARAM_KEY.CONTENT_PAGE_PREVIEW, BooleanParam);
 
 	/**
 	 * Data
@@ -58,14 +61,14 @@ const Homepage: NextPage<DefaultSeoInfo> = ({ title, description, image, url }) 
 	 * At startup trigger a content page viewed event
 	 */
 	useEffect(() => {
-		if (!contentPageInfo || hasTriggeredContentPageViewEvent) {
+		if (!contentPageInfo || hasTriggeredContentPageViewEvent || previewQueryParam) {
 			return;
 		}
 		EventsService.triggerEvent(LogEventType.CONTENT_PAGE_VIEW, window.location.href, {
 			type: contentPageInfo.contentType,
 		}).then(noop);
 		setHasTriggeredContentPageViewEvent(true);
-	}, [hasTriggeredContentPageViewEvent, contentPageInfo]);
+	}, [hasTriggeredContentPageViewEvent, contentPageInfo, previewQueryParam]);
 
 	/**
 	 * Render

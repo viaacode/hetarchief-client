@@ -20,6 +20,7 @@ import ErrorNoAccess from '@shared/components/ErrorNoAccess/ErrorNoAccess';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';
 import { type PageInfo, SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { getPagePath } from '@shared/helpers/get-page-path';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -40,6 +41,7 @@ import { useRouter } from 'next/router';
 import type { GetServerSidePropsContext } from 'next/types';
 import { type ComponentType, type FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { BooleanParam, useQueryParam } from 'use-query-params';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -58,6 +60,7 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const [hasTriggeredContentPageViewEvent, setHasTriggeredContentPageViewEvent] =
 		useState<boolean>(false);
+	const [previewQueryParam] = useQueryParam(QUERY_PARAM_KEY.CONTENT_PAGE_PREVIEW, BooleanParam);
 
 	/**
 	 * Data
@@ -101,14 +104,18 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 	 * At startup trigger a content page viewed event
 	 */
 	useEffect(() => {
-		if (!contentPageInfo || hasTriggeredContentPageViewEvent) {
+		if (!contentPageInfo || hasTriggeredContentPageViewEvent || previewQueryParam) {
+			// Do not trigger the content page view event if
+			// - The content page hasn't loaded yet
+			// - We already triggered the event for this page
+			// - The user is viewing a preview of the content page from the admin-dashboard
 			return;
 		}
 		EventsService.triggerEvent(LogEventType.CONTENT_PAGE_VIEW, window.location.href, {
 			type: contentPageInfo.contentType,
 		}).then(noop);
 		setHasTriggeredContentPageViewEvent(true);
-	}, [hasTriggeredContentPageViewEvent, contentPageInfo]);
+	}, [hasTriggeredContentPageViewEvent, contentPageInfo, previewQueryParam]);
 
 	/**
 	 * Render
