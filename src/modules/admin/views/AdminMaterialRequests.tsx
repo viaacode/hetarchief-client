@@ -65,7 +65,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	const [isDetailStatusBladeOpenWithStatus, setIsDetailStatusBladeOpenWithStatus] = useState<
 		MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED | undefined
 	>(undefined);
-	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
+
 	const [filters, setFilters] = useQueryParams(ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const [selectedMaintainers, setSelectedMaintainers] = useState<string[]>(
 		(filters.maintainerIds || []) as string[]
@@ -108,6 +108,9 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		}),
 		maintainerIds: filters.maintainerIds as string[],
 	});
+	const [currentMaterialRequestId, setCurrentMaterialRequestId] = useState<string | null>(null);
+	const currentMaterialRequest =
+		materialRequests?.items?.find((request) => request.id === currentMaterialRequestId) || null;
 
 	const { data: maintainers } = useGetMaterialRequestsMaintainers();
 
@@ -256,12 +259,12 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		tHtml('pages/admin/materiaalaanvragen/index___geen-materiaalaanvragen');
 
 	const onRowClick = (_evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
-		setCurrentMaterialRequest(row.original);
+		setCurrentMaterialRequestId(row.original?.id || null);
 		setIsDetailBladeOpen(true);
 	};
 
-	const onMaterialRequestStatusChange = () => {
-		void refetchMaterialRequests();
+	const onMaterialRequestStatusChange = async () => {
+		await refetchMaterialRequests();
 	};
 
 	const renderDetailBlade = () => {

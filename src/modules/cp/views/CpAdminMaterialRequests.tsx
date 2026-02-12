@@ -76,7 +76,6 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	const [isDetailStatusBladeOpenWithStatus, setIsDetailStatusBladeOpenWithStatus] = useState<
 		MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED | undefined
 	>(undefined);
-	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
 	const {
 		data: materialRequests,
 		isFetching,
@@ -105,6 +104,9 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		}),
 		...(user?.organisationId ? { maintainerIds: [user.organisationId] } : {}),
 	});
+	const [currentMaterialRequestId, setCurrentMaterialRequestId] = useState<string | null>(null);
+	const currentMaterialRequest =
+		materialRequests?.items?.find((request) => request.id === currentMaterialRequestId) || null;
 
 	const noData = useMemo(
 		(): boolean => isEmpty(materialRequests?.items),
@@ -213,8 +215,8 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		});
 	};
 
-	const onMaterialRequestStatusChange = () => {
-		void refetchMaterialRequests();
+	const onMaterialRequestStatusChange = async () => {
+		await refetchMaterialRequests();
 	};
 
 	const renderPagination = ({ gotoPage }: { gotoPage: (i: number) => void }): ReactNode => (
@@ -288,7 +290,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	};
 
 	const onRowClick = async (_evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
-		setCurrentMaterialRequest(row.original);
+		setCurrentMaterialRequestId(row.original?.id || null);
 		setIsDetailBladeOpen(true);
 	};
 

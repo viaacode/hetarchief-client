@@ -62,7 +62,6 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	const [filters, setFilters] = useQueryParams(ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
-	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
 	const [selectedTypes, setSelectedTypes] = useState<string[]>(
 		(filters[QUERY_PARAM_KEY.TYPE] || []) as string[]
 	);
@@ -79,11 +78,6 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	const isKeyUser = useIsKeyUser();
 	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
 
-	const {
-		data: currentMaterialRequestDetail,
-		isFetching: isLoading,
-		refetch: refetchCurrentMaterialRequestDetail,
-	} = useGetMaterialRequestById(currentMaterialRequest?.id || null);
 	const {
 		data: materialRequests,
 		refetch: refetchMaterialRequests,
@@ -112,6 +106,14 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 			hasDownloadUrl: filters.hasDownloadUrl as string[],
 		}),
 	});
+	const [currentMaterialRequestId, setCurrentMaterialRequestId] = useState<string | null>(null);
+	const currentMaterialRequest =
+		materialRequests?.items?.find((request) => request.id === currentMaterialRequestId) || null;
+	const {
+		data: currentMaterialRequestDetail,
+		isFetching: isLoading,
+		refetch: refetchCurrentMaterialRequestDetail,
+	} = useGetMaterialRequestById(currentMaterialRequest?.id || null);
 
 	const noData = useMemo((): boolean => isEmpty(materialRequests?.items), [materialRequests]);
 
@@ -236,13 +238,12 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 			// In case we open the same request, refetch it to make sure we have the latest status
 			void refetchCurrentMaterialRequestDetail();
 		}
-		setCurrentMaterialRequest(row.original);
+		setCurrentMaterialRequestId(row.original?.id);
 		setIsDetailBladeOpen(true);
 	};
 
-	const onMaterialRequestStatusChange = () => {
-		void refetchCurrentMaterialRequestDetail();
-		void refetchMaterialRequests();
+	const onMaterialRequestStatusChange = async () => {
+		await Promise.all([refetchCurrentMaterialRequestDetail(), refetchMaterialRequests()]);
 	};
 
 	const renderDetailBlade = () => {
@@ -254,7 +255,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 				allowRequestCancellation={true}
 				isOpen={!isLoading && isDetailBladeOpen}
 				onClose={() => setIsDetailBladeOpen(false)}
-				currentMaterialRequestDetail={currentMaterialRequest}
+				currentMaterialRequestDetail={currentMaterialRequestDetail}
 				afterStatusChanged={onMaterialRequestStatusChange}
 			/>
 		);
