@@ -15,10 +15,7 @@ import {
 	useGetContentPageByLanguageAndPath,
 } from '@content-page/hooks/get-content-page';
 import { ContentPageClientService } from '@content-page/services/content-page-client.service';
-import {
-	ContentPageRenderer,
-	convertDbContentPageToContentPageInfo,
-} from '@meemoo/admin-core-ui/client';
+import { ContentPageRenderer, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/client';
 import ErrorNoAccess from '@shared/components/ErrorNoAccess/ErrorNoAccess';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';
@@ -28,6 +25,7 @@ import { getPagePath } from '@shared/helpers/get-page-path';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { UserProps } from '@shared/hooks/with-user';
+import { EventsService, LogEventType } from '@shared/services/events-service';
 import { setShowZendesk } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
@@ -35,11 +33,12 @@ import { isServerSideRendering } from '@shared/utils/is-browser';
 import { QueryClient } from '@tanstack/react-query';
 import { VisitorLayout } from '@visitor-layout/index';
 import type { HTTPError } from 'ky';
+import { noop } from 'lodash-es';
 import type { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import type { GetServerSidePropsContext } from 'next/types';
-import { type ComponentType, type FC, useEffect } from 'react';
+import { type ComponentType, type FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 const { publicRuntimeConfig } = getConfig();
@@ -57,6 +56,8 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 	const contentPageSlug = getPagePath(router.query.pagePath);
 	const dispatch = useDispatch();
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
+	const [hasTriggeredContentPageViewEvent, setHasTriggeredContentPageViewEvent] =
+		useState<boolean>(false);
 
 	/**
 	 * Data
@@ -80,15 +81,34 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 	 * Effects
 	 */
 
+	/**
+	 * If content page cannot be found, redirect the user to the not found page
+	 */
 	useEffect(() => {
 		if (isContentPageNotFoundError) {
 			window.open(`${publicRuntimeConfig.PROXY_URL}/not-found`, '_self');
 		}
 	}, [isContentPageNotFoundError]);
 
+	/**
+	 * At startup check if zendesk widget should be shown or hidden
+	 */
 	useEffect(() => {
 		dispatch(setShowZendesk(!isKioskUser));
 	}, [dispatch, isKioskUser]);
+
+	/**
+	 * At startup trigger a content page viewed event
+	 */
+	useEffect(() => {
+		if (!contentPageInfo || hasTriggeredContentPageViewEvent) {
+			return;
+		}
+		EventsService.triggerEvent(LogEventType.CONTENT_PAGE_VIEW, window.location.href, {
+			type: contentPageInfo.contentType,
+		}).then(noop);
+		setHasTriggeredContentPageViewEvent(true);
+	}, [hasTriggeredContentPageViewEvent, contentPageInfo]);
 
 	/**
 	 * Render
