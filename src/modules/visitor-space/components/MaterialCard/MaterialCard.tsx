@@ -2,6 +2,7 @@ import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-for
 import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
 import { Card } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
+import { tText } from '@shared/helpers/translate';
 import { SimpleIeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 import clsx from 'clsx';
@@ -92,7 +93,12 @@ const MaterialCard: FC<MaterialCardProps> = ({
 		return (
 			<div className={clsx(styles['c-material-card__header'])}>
 				{/** biome-ignore lint/performance/noImgElement: we need this*/}
-				<img src={imagePath} alt={''} width="100%" height="100%" />
+				<img
+					src={imagePath}
+					alt={typeof title === 'string' ? title : tText('image of the media object')}
+					width="100%"
+					height="100%"
+				/>
 				<div className={clsx(styles['c-material-card__header-icon'])}>
 					<Icon name={icon} />
 				</div>

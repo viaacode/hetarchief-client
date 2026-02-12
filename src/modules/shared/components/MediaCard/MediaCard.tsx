@@ -303,7 +303,11 @@ const MediaCard: FC<MediaCardProps> = ({
 				)}
 			>
 				{/** biome-ignore lint/performance/noImgElement: we need this*/}
-				<img src={imagePath} alt={''} width="100%" />
+				<img
+					src={imagePath}
+					alt={typeof title === 'string' ? title : tText('image of the media object')}
+					width="100%"
+				/>
 				{!isNil(icon) && (
 					<>
 						<div className={clsx(styles['c-media-card__header-icon'])}>{renderIcon()}</div>

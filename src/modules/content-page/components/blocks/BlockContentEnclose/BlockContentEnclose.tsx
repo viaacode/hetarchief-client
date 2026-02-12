@@ -82,23 +82,26 @@ export const BlockContentEnclose: FC<BlockContentEncloseProps> = ({
 			<ul className={styles['c-block-enclosed-content__cards']}>
 				{elementInfos?.map((elementInfo, index) => {
 					return (
-						<MediaCard
-							className={styles['c-block-enclosed-content__card']}
-							key={getKey(elementInfo, index)}
-							id={getKey(elementInfo, index)}
-							objectId={elementInfo.identifier}
-							title={elementInfo.name}
-							view="grid"
-							link={elementInfo.link}
-							maintainerSlug={elementInfo.maintainerSlug}
-							type={elementInfo.objectType}
-							publishedBy={elementInfo.maintainerName}
-							name={elementInfo.name}
-							description={elementInfo.description}
-							publishedOrCreatedDate={elementInfo.datePublished || elementInfo.dateCreated}
-							thumbnail={elementInfo.thumbnail}
-							icon={elementInfo.objectType ? GET_TYPE_TO_ICON_MAP()[elementInfo.objectType] : null}
-						/>
+						<li key={getKey(elementInfo, index)}>
+							<MediaCard
+								className={styles['c-block-enclosed-content__card']}
+								id={getKey(elementInfo, index)}
+								objectId={elementInfo.identifier}
+								title={elementInfo.name}
+								view="grid"
+								link={elementInfo.link}
+								maintainerSlug={elementInfo.maintainerSlug}
+								type={elementInfo.objectType}
+								publishedBy={elementInfo.maintainerName}
+								name={elementInfo.name}
+								description={elementInfo.description}
+								publishedOrCreatedDate={elementInfo.datePublished || elementInfo.dateCreated}
+								thumbnail={elementInfo.thumbnail}
+								icon={
+									elementInfo.objectType ? GET_TYPE_TO_ICON_MAP()[elementInfo.objectType] : null
+								}
+							/>
+						</li>
 					);
 				})}
 			</ul>
