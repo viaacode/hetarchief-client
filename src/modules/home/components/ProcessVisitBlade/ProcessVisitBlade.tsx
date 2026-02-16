@@ -1,6 +1,7 @@
 import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
 import { BladeManager } from '@shared/components/BladeManager';
+import SpacePreviewHeader from '@shared/components/SpacePreview/SpacePreviewHeader';
 import { VisitSummary } from '@shared/components/VisitSummary';
 import { tText } from '@shared/helpers/translate';
 import { VisitStatus } from '@shared/types/visit-request';
@@ -96,8 +97,23 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 				layer={1}
 				title={getTitle()}
 				id="process-visit-blade__visit-summary"
+				stickySubtitle={
+					selected && (
+						<SpacePreviewHeader
+							visitorSpace={{
+								id: selected.spaceId,
+								image: selected.spaceImage || '',
+								logo: selected.spaceLogo || '',
+								name: selected.spaceName || '',
+								color: selected.spaceColor || '',
+								serviceDescriptionNl: selected.spaceServiceDescriptionNl || '',
+								serviceDescriptionEn: selected.spaceServiceDescriptionEn || '',
+							}}
+						/>
+					)
+				}
 			>
-				{selected && <VisitSummary preview {...selected} />}
+				{selected && <VisitSummary preview {...selected} showLogoAndName={false} />}
 			</Blade>
 
 			<CancelVisitBlade

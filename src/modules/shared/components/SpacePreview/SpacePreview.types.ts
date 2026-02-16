@@ -1,11 +1,14 @@
-import type { ReactNode } from 'react';
-
 import type { DefaultComponentProps } from '@shared/types';
 import type { VisitorSpaceInfo } from '@visitor-space/types';
+import type { ReactNode } from 'react';
 
-export interface SpacePreviewProps extends DefaultComponentProps {
+export interface SpacePreviewHeaderProps extends DefaultComponentProps {
 	children?: ReactNode;
 	visitorSpace: SpacePreviewSpace;
+}
+
+export interface SpacePreviewProps extends SpacePreviewHeaderProps {
+	showLogoAndName?: boolean;
 }
 
 export type SpacePreviewSpace = Pick<

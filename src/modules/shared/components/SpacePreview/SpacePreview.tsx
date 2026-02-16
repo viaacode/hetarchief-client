@@ -1,30 +1,26 @@
 import type { SpacePreviewProps } from '@shared/components/SpacePreview/SpacePreview.types';
+import SpacePreviewHeader from '@shared/components/SpacePreview/SpacePreviewHeader';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { Locale } from '@shared/utils/i18n';
 import clsx from 'clsx';
 import type { FC } from 'react';
 
-import { CardImage } from '../CardImage';
 import Html from '../Html/Html';
 
 import styles from './SpacePreview.module.scss';
 
 const SpacePreview: FC<SpacePreviewProps> = ({
 	className,
-	visitorSpace: { id, image, logo, name, color, serviceDescriptionNl, serviceDescriptionEn },
+	showLogoAndName = true,
+	visitorSpace,
 }) => {
+	const { image, logo, name, serviceDescriptionNl, serviceDescriptionEn } = visitorSpace;
 	const canPreview = image || logo?.length > 0 || name?.length > 0;
 	const locale = useLocale();
 
 	return (
 		<div className={clsx(className, styles['c-space-preview'])}>
-			{canPreview && (
-				<div className={clsx(styles['c-space-preview__summary'], 'u-mb-24')}>
-					<CardImage id={id} color={color} image={image} logo={logo} />
-
-					{name && <strong className="u-px-12 u-mb-0">{name}</strong>}
-				</div>
-			)}
+			{showLogoAndName && <SpacePreviewHeader visitorSpace={visitorSpace} className="u-mb-24" />}
 
 			{locale === Locale.nl &&
 				serviceDescriptionNl &&

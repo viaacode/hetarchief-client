@@ -14,4 +14,4 @@ export type VisitSummaryType = Pick<
 	| 'reason'
 	| 'timeframe'
 >;
-export type VisitSummaryProps = VisitSummaryType & { preview?: boolean };
+export type VisitSummaryProps = VisitSummaryType & { preview?: boolean; showLogoAndName?: boolean };

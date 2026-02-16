@@ -10,6 +10,7 @@ import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
 import { Loading } from '@shared/components/Loading';
 import { SpacePreview } from '@shared/components/SpacePreview';
+import SpacePreviewHeader from '@shared/components/SpacePreview/SpacePreviewHeader';
 import {
 	VisitorSpaceCard,
 	type VisitorSpaceCardProps,
@@ -377,10 +378,13 @@ const LoggedInVisitorSpacesHome: FC = () => {
 				title={tText(
 					'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
 				)}
+				stickySubtitle={visitorSpaceInfo && <SpacePreviewHeader visitorSpace={visitorSpaceInfo} />}
 				footerButtons={footerButtons}
 				id="logged-in-home__visitor-space-not-available-blade"
 			>
-				{visitorSpaceInfo && <SpacePreview visitorSpace={visitorSpaceInfo} />}
+				{visitorSpaceInfo && (
+					<SpacePreview visitorSpace={visitorSpaceInfo} showLogoAndName={false} />
+				)}
 				{tHtml(
 					'modules/home/components/logged-in-home/logged-in-home___het-is-niet-mogelijk-om-toegang-tot-deze-bezoekersruimte-aan-te-vragen-op-dit-moment'
 				)}
