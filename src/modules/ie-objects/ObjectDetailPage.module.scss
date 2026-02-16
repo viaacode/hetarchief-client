@@ -750,6 +750,9 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		:global(span) {
 			word-break: break-word !important;
 		}
+
+		line-height: $line-height-3xl;
+		font-size: $font-size-sm;
 	}
 
 	.c-loading__iiif-viewer {
