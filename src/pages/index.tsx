@@ -15,7 +15,8 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { EventsService, LogEventType } from '@shared/services/events-service';
+import { useTriggerEventOnPageLoad } from '@shared/hooks/use-trigger-event-on-page-load/use-trigger-event-on-page-load';
+import { LogEventType } from '@shared/services/events-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
 import { QueryClient } from '@tanstack/react-query';
@@ -34,9 +35,6 @@ const Homepage: NextPage<DefaultSeoInfo> = ({ title, description, image, url }) 
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const router = useRouter();
 	const locale = useLocale();
-	const [hasTriggeredContentPageViewEvent, setHasTriggeredContentPageViewEvent] =
-		useState<boolean>(false);
-	const [previewQueryParam] = useQueryParam(QUERY_PARAM_KEY.CONTENT_PAGE_PREVIEW, BooleanParam);
 
 	/**
 	 * Data
@@ -60,15 +58,11 @@ const Homepage: NextPage<DefaultSeoInfo> = ({ title, description, image, url }) 
 	/**
 	 * At startup trigger a content page viewed event
 	 */
-	useEffect(() => {
-		if (!contentPageInfo || hasTriggeredContentPageViewEvent || previewQueryParam) {
-			return;
-		}
-		EventsService.triggerEvent(LogEventType.CONTENT_PAGE_VIEW, window.location.href, {
-			type: contentPageInfo.contentType,
-		}).then(noop);
-		setHasTriggeredContentPageViewEvent(true);
-	}, [hasTriggeredContentPageViewEvent, contentPageInfo, previewQueryParam]);
+	useTriggerEventOnPageLoad({
+		eventType: LogEventType.CONTENT_PAGE_VIEW,
+		eventData: contentPageInfo ? { type: contentPageInfo.contentType } : undefined,
+		shouldTrigger: !!contentPageInfo,
+	});
 
 	/**
 	 * Render

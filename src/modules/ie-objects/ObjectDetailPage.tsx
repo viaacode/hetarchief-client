@@ -973,9 +973,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			};
 
 			if (hasAccessToVisitorSpaceOfObject) {
-				EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_VIEW, path, eventData);
+				EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_VIEW, path, eventData).then(noop);
 			} else {
-				EventsService.triggerEvent(LogEventType.ITEM_VIEW, path, eventData);
+				EventsService.triggerEvent(LogEventType.ITEM_VIEW, path, eventData).then(noop);
 			}
 		}
 	}, [
@@ -1125,7 +1125,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				user_group_name: user?.groupName,
 				or_id: mediaInfo?.maintainerId,
 				type: mapDcTermsFormatToSimpleType(mediaInfo?.dctermsFormat),
-			});
+			}).then(noop);
 
 			// The external url is opened with an actual link, so safari doesn't block the popup
 			window.open(externalFormUrl, '_blank');

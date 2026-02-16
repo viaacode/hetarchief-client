@@ -25,8 +25,9 @@ import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-p
 import { getPagePath } from '@shared/helpers/get-page-path';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { useTriggerEventOnPageLoad } from '@shared/hooks/use-trigger-event-on-page-load/use-trigger-event-on-page-load';
 import type { UserProps } from '@shared/hooks/with-user';
-import { EventsService, LogEventType } from '@shared/services/events-service';
+import { LogEventType } from '@shared/services/events-service';
 import { setShowZendesk } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
@@ -58,9 +59,6 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 	const contentPageSlug = getPagePath(router.query.pagePath);
 	const dispatch = useDispatch();
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
-	const [hasTriggeredContentPageViewEvent, setHasTriggeredContentPageViewEvent] =
-		useState<boolean>(false);
-	const [previewQueryParam] = useQueryParam(QUERY_PARAM_KEY.CONTENT_PAGE_PREVIEW, BooleanParam);
 
 	/**
 	 * Data
@@ -103,19 +101,11 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 	/**
 	 * At startup trigger a content page viewed event
 	 */
-	useEffect(() => {
-		if (!contentPageInfo || hasTriggeredContentPageViewEvent || previewQueryParam) {
-			// Do not trigger the content page view event if
-			// - The content page hasn't loaded yet
-			// - We already triggered the event for this page
-			// - The user is viewing a preview of the content page from the admin-dashboard
-			return;
-		}
-		EventsService.triggerEvent(LogEventType.CONTENT_PAGE_VIEW, window.location.href, {
-			type: contentPageInfo.contentType,
-		}).then(noop);
-		setHasTriggeredContentPageViewEvent(true);
-	}, [hasTriggeredContentPageViewEvent, contentPageInfo, previewQueryParam]);
+	useTriggerEventOnPageLoad({
+		eventType: LogEventType.CONTENT_PAGE_VIEW,
+		eventData: contentPageInfo ? { type: contentPageInfo.contentType } : undefined,
+		shouldTrigger: !!contentPageInfo,
+	});
 
 	/**
 	 * Render
