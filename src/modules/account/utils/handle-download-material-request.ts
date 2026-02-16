@@ -3,6 +3,7 @@ import type { MaterialRequest } from '@material-requests/types';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { asDate } from '@shared/utils/dates';
 import { isWithinInterval } from 'date-fns';
+import { noop } from 'lodash-es';
 
 export function determineHasDownloadExpired(materialRequest: MaterialRequest): boolean {
 	const downloadAvailableAt = asDate(materialRequest?.downloadAvailableAt);
@@ -34,7 +35,7 @@ export function handleDownloadMaterialRequest(materialRequest: MaterialRequest):
 		pid: materialRequest.objectSchemaIdentifier,
 		material_request_group_id: materialRequest.requestGroupId,
 		time: materialRequest.downloadAvailableAt,
-	});
+	}).then(noop);
 
 	window.open(materialRequest.downloadUrl);
 }

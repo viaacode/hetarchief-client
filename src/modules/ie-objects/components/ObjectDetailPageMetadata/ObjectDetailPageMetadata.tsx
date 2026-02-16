@@ -1230,10 +1230,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 
 				{/* Read more metadata field blade */}
 				<Blade
-					className={clsx(
-						'u-pb-24 u-line-height-1-4 u-font-size-14',
-						styles['p-object-detail__metadata-blade']
-					)}
+					className={clsx(styles['p-object-detail__metadata-blade'])}
 					isOpen={!!selectedMetadataField}
 					onClose={() => setSelectedMetadataField(null)}
 					title={selectedMetadataField?.title ?? ''}

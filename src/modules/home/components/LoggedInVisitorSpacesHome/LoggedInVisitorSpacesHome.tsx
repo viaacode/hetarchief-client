@@ -248,6 +248,13 @@ const LoggedInVisitorSpacesHome: FC = () => {
 		setIsProcessVisitBladeOpen(true);
 	};
 
+	const onClose = () => {
+		setIsVisitorSpaceNotAvailable(false);
+		setQuery({
+			[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: undefined,
+		});
+	};
+
 	const mapVisitToRoom = (visit: VisitRequest): VisitorSpaceCardProps['room'] => ({
 		image: visit.spaceImage || null,
 		logo: visit.spaceLogo || '',
@@ -362,12 +369,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 					'modules/home/components/logged-in-visitor-spaces-home/logged-in-visitor-spaces-home___ga-naar-de-homepage-mobiel'
 				),
 				type: 'primary',
-				onClick: () => {
-					setIsVisitorSpaceNotAvailable(false);
-					setQuery({
-						[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: undefined,
-					});
-				},
+				onClick: onClose,
 			},
 		];
 		return (
@@ -378,6 +380,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 					'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
 				)}
 				footerButtons={footerButtons}
+				onClose={onClose}
 				id="logged-in-home__visitor-space-not-available-blade"
 			>
 				{visitorSpaceInfo && <SpacePreview visitorSpace={visitorSpaceInfo} />}
