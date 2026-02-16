@@ -17,11 +17,13 @@ const VisitSummary: FC<VisitSummaryProps> = ({
 	spaceServiceDescriptionNl,
 	spaceServiceDescriptionEn,
 	preview = false,
+	showLogoAndName = true,
 }) => {
 	return (
 		<div className={clsx(styles['c-visit-summary'])}>
 			{preview && (
 				<SpacePreview
+					showLogoAndName={showLogoAndName}
 					visitorSpace={{
 						id: spaceId,
 						image: spaceImage || '',
