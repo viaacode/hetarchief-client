@@ -6,6 +6,7 @@ export enum LogEventType {
 	ITEM_VIEW = 'be.hetarchief.item.view',
 	ITEM_PLAY = 'be.hetarchief.item.play',
 	SEARCH = 'be.hetarchief.item.search',
+	CONTENT_PAGE_VIEW = 'be.hetarchief.content.view',
 
 	// Triggered in the backend
 	DOWNLOAD = 'be.hetarchief.item.download',
