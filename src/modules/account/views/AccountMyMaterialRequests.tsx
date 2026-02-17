@@ -83,7 +83,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		data: currentMaterialRequestDetail,
 		isFetching: isLoading,
 		refetch: refetchCurrentMaterialRequestDetail,
-	} = useGetMaterialRequestById(currentMaterialRequest?.id || null);
+	} = useGetMaterialRequestById(currentMaterialRequest?.id || null, isDetailBladeOpen);
 	const {
 		data: materialRequests,
 		refetch: refetchMaterialRequests,

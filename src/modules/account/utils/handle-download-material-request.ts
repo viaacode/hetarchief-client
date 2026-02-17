@@ -1,5 +1,5 @@
 import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
-import type { MaterialRequest } from '@material-requests/types';
+import { type MaterialRequest, MaterialRequestDownloadStatus } from '@material-requests/types';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { asDate } from '@shared/utils/dates';
 import { isWithinInterval } from 'date-fns';
@@ -22,9 +22,12 @@ export function determineHasDownloadExpired(materialRequest: MaterialRequest): b
 export function handleDownloadMaterialRequest(materialRequest: MaterialRequest): void {
 	const hasDownloadExpired = determineHasDownloadExpired(materialRequest);
 
-	if (hasDownloadExpired || !materialRequest.downloadUrl) {
+	if (
+		hasDownloadExpired ||
+		materialRequest.downloadStatus !== MaterialRequestDownloadStatus.SUCCEEDED
+	) {
 		console.error(
-			`The download has expired (${hasDownloadExpired}) or has no download url ('${materialRequest.downloadUrl}')`
+			`The download has expired (${hasDownloadExpired}) or the download has not yet succeeded ('${materialRequest.downloadStatus}')`
 		);
 		return;
 	}
@@ -37,5 +40,5 @@ export function handleDownloadMaterialRequest(materialRequest: MaterialRequest):
 		time: materialRequest.downloadAvailableAt,
 	}).then(noop);
 
-	window.open(materialRequest.downloadUrl);
+	// TODO: trigger endpoint to get download;
 }

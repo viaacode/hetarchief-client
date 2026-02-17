@@ -15,6 +15,7 @@ import {
 	GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD,
 	type MaterialRequest,
 	type MaterialRequestDownloadQuality,
+	MaterialRequestDownloadStatus,
 	MaterialRequestStatus,
 } from '@material-requests/types';
 import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
@@ -108,12 +109,6 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		user?.isEvaluator,
 		afterStatusChanged,
 	]);
-
-	useEffect(() => {
-		if (isOpen) {
-			document.querySelector('#material-request-detail-blade')?.scrollIntoView();
-		}
-	}, [isOpen]);
 
 	const onFailedRequest = () => {
 		toastService.notify({
@@ -248,18 +243,21 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			return null;
 		}
 
+		const { downloadStatus } = currentMaterialRequestDetail;
 		const hasDownloadExpired = determineHasDownloadExpired(currentMaterialRequestDetail);
 		const downloadExpirationDate = formatLongDate(
 			asDate(currentMaterialRequestDetail.downloadExpiresAt)
 		);
+		const downloadStatusSucceeded = downloadStatus === MaterialRequestDownloadStatus.SUCCEEDED;
+		const downloadStatusFailed = downloadStatus === MaterialRequestDownloadStatus.FAILED;
 
 		return (
 			<>
-				{!hasDownloadExpired && (
+				{!hasDownloadExpired && !downloadStatusFailed && (
 					<Button
 						className="u-mt-16"
 						label={
-							currentMaterialRequestDetail.downloadUrl
+							downloadStatusSucceeded
 								? tText(
 										'modules/account/components/material-request-detail-blade/material-request-detail-blade___downlooad-materiaal'
 									)
@@ -267,13 +265,13 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 										'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-in-voorbereiding'
 									)
 						}
-						disabled={!currentMaterialRequestDetail.downloadUrl}
+						disabled={!downloadStatusSucceeded}
 						variants={['block']}
 						onClick={() => handleDownloadMaterialRequest(currentMaterialRequestDetail)}
 					/>
 				)}
 
-				{downloadExpirationDate && (
+				{(downloadExpirationDate || downloadStatusFailed) && (
 					<span
 						className={clsx(
 							styles['p-material-request-detail__content-block-value'],
@@ -284,15 +282,17 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						)}
 					>
 						<Icon name={IconNamesLight.Exclamation} className="u-mr-4" />
-						{hasDownloadExpired
-							? tText(
-									'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-verlopen-op',
-									{ downloadExpirationDate }
-								)
-							: tText(
-									'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-beschikbaar-tot-en-met',
-									{ downloadExpirationDate }
-								)}
+						{downloadStatusFailed
+							? tText('download voorbereiding gefaald')
+							: downloadExpirationDate
+								? tText(
+										'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-verlopen-op',
+										{ downloadExpirationDate }
+									)
+								: tText(
+										'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-beschikbaar-tot-en-met',
+										{ downloadExpirationDate }
+									)}
 					</span>
 				)}
 			</>

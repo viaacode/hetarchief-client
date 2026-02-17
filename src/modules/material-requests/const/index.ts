@@ -210,6 +210,6 @@ const COLUMN_WIDTH_LOOKUP: Record<MaterialRequestKeys, string> = {
 	[MaterialRequestKeys.requestedAt]: '15rem',
 	[MaterialRequestKeys.type]: '20rem',
 	[MaterialRequestKeys.status]: '10rem',
-	[MaterialRequestKeys.downloadUrl]: '10rem',
+	[MaterialRequestKeys.downloadStatus]: '10rem',
 	[MaterialRequestKeys.requestGroupName]: '25rem',
 } as Record<MaterialRequestKeys, string>;

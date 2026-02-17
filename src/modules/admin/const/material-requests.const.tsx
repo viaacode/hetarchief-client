@@ -151,7 +151,7 @@ const getStatusColumn = (disableSort: boolean): Column<MaterialRequest> =>
 const getDownloadColumn = (): Column<MaterialRequest> =>
 	({
 		Header: tText('modules/admin/const/material-requests___download'),
-		accessor: MaterialRequestKeys.downloadUrl,
+		accessor: MaterialRequestKeys.downloadStatus,
 		disableSortBy: true,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<MaterialRequestDownloadButton materialRequest={original} />
