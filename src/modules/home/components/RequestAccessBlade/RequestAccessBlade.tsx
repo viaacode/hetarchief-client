@@ -201,7 +201,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({
 			{!(preferences?.newsletter ?? true) ? (
 				<Checkbox
 					className={styles['c-request-access-blade__checkbox']}
-					checkIcon={<Icon name={IconNamesLight.Check} />}
+					checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
 					checked={isSubscribedToNewsletter}
 					label={tHtml(
 						'modules/home/components/request-access-blade/request-access-blade___schrijf-je-in-voor-de-nieuwsbrief'
@@ -216,7 +216,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({
 			>
 				<Checkbox
 					checked={formValues.acceptTerms}
-					checkIcon={<Icon name={IconNamesLight.Check} />}
+					checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
 					disabled={!isOpen}
 					id={labelKeys.acceptTerms}
 					label={tHtml(

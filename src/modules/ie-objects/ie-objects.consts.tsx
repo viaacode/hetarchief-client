@@ -329,6 +329,7 @@ export const MEDIA_ACTIONS = ({
 		],
 		limit: 1,
 		onClickAction: () => null,
+		id: 'object-detail-page__metadata__media-actions',
 	};
 };
 

@@ -114,7 +114,10 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 						firstHighlight.width &&
 						firstHighlight.height && (
 							<Button
-								icon={<Icon name={IconNamesLight.SearchText} />}
+								icon={<Icon name={IconNamesLight.SearchText} aria-hidden />}
+								aria-label={tText(
+									'modules/ie-objects/components/names-list/names-list___spring-naar-de-locatie-van-deze-naam'
+								)}
 								variants={['white']}
 								tooltipText={tText(
 									'modules/ie-objects/components/names-list/names-list___spring-naar-de-locatie-van-deze-naam'
@@ -132,7 +135,7 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 						style={{ visibility: mention.iri ? 'visible' : 'hidden' }}
 					>
 						<Button
-							icon={<Icon name={IconNamesLight.Extern} className="u-font-size-28" />}
+							icon={<Icon name={IconNamesLight.Extern} className="u-font-size-28" aria-hidden />}
 							variants={['white']}
 							tooltipText={tText(
 								'modules/ie-objects/components/names-list/names-list___meer-info-over-deze-persoon'
@@ -169,7 +172,9 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 			<TextInput
 				type="search"
 				className={styles['c-names-list__search']}
-				iconEnd={<Icon name={IconNamesLight.Search} onClick={handleSearchIconClicked} />}
+				iconEnd={
+					<Icon name={IconNamesLight.Search} onClick={handleSearchIconClicked} aria-hidden />
+				}
 				placeholder={tText(
 					'modules/ie-objects/components/names-list/names-list___zoek-op-naam-locatie-jaar'
 				)}

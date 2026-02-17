@@ -430,6 +430,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					onChange={(selectedOption: string, selectedRefineOptions: string[]) => {
 						onChangeAccessType(field, selectedOption as AccessType, selectedRefineOptions);
 					}}
+					id="approved-request-blade__access-type-visitor-space"
 				/>
 			);
 		},

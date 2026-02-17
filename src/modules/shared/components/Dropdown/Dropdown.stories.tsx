@@ -1,10 +1,9 @@
 import { Dropdown, DropdownButton, DropdownContent, MenuContent } from '@meemoo/react-components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { action } from '@storybook/addon-actions';
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { cloneElement, type ReactElement, useState } from 'react';
-
-import { Icon } from '@shared/components/Icon';
-import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 import { menuItemsWithIcons } from './__mocks__/dropdown';
 
@@ -67,18 +66,18 @@ const TemplateCustomButton: ComponentStory<typeof Dropdown> = (args) => (
 export const Default = Template.bind({});
 Default.args = {
 	label: 'Dropdown',
-	icon: <Icon name={IconNamesLight.Timer} />,
-	iconOpen: <Icon name={IconNamesLight.AngleDown} />,
-	iconClosed: <Icon name={IconNamesLight.AngleUp} />,
+	icon: <Icon name={IconNamesLight.Timer} aria-hidden />,
+	iconOpen: <Icon name={IconNamesLight.AngleDown} aria-hidden />,
+	iconClosed: <Icon name={IconNamesLight.AngleUp} aria-hidden />,
 	isOpen: true,
 };
 
 export const RightOpen = Template.bind({});
 RightOpen.args = {
 	label: 'Dropdown',
-	icon: <Icon name={IconNamesLight.Timer} />,
-	iconOpen: <Icon name={IconNamesLight.AngleDown} />,
-	iconClosed: <Icon name={IconNamesLight.AngleUp} />,
+	icon: <Icon name={IconNamesLight.Timer} aria-hidden />,
+	iconOpen: <Icon name={IconNamesLight.AngleDown} aria-hidden />,
+	iconClosed: <Icon name={IconNamesLight.AngleUp} aria-hidden />,
 	isOpen: true,
 	placement: 'right-start',
 };

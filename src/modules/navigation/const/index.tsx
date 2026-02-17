@@ -91,7 +91,7 @@ export const GET_NAV_ITEMS_RIGHT_LOGGED_IN = (
 			path: '',
 			node: (
 				<Avatar variants="padded-y" text={userName}>
-					<Icon name={IconNamesSolid.User} />
+					<Icon name={IconNamesSolid.User} aria-hidden />
 				</Avatar>
 			),
 			children: [

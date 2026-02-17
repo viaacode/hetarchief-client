@@ -1,9 +1,8 @@
 import { Badge } from '@meemoo/react-components';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import React from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
 
 export default {
 	title: 'Components/Badge',
@@ -19,14 +18,14 @@ BadgeText.args = {
 
 export const BadgeSuccess = Template.bind({});
 BadgeSuccess.args = {
-	text: <Icon name={IconNamesLight.Check} />,
+	text: <Icon name={IconNamesLight.Check} aria-hidden />,
 	type: 'success',
 	variants: 'icon', // Badges with icons need 'icon' variant to adjust font-size
 };
 
 export const BadgeError = Template.bind({});
 BadgeError.args = {
-	text: <Icon name={IconNamesLight.Forbidden} />,
+	text: <Icon name={IconNamesLight.Forbidden} aria-hidden />,
 	type: 'error',
 	variants: 'icon',
 };
@@ -39,6 +38,6 @@ BadgeSmallText.args = {
 
 export const BadgeSmallIcon = Template.bind({});
 BadgeSmallIcon.args = {
-	text: <Icon name={IconNamesLight.Link} />,
+	text: <Icon name={IconNamesLight.Link} aria-hidden />,
 	variants: ['small', 'icon'],
 };

@@ -49,7 +49,7 @@ const NavigationList: FC<NavigationListProps> = ({ items, onOpenDropdowns }) => 
 				tabIndex={0}
 			>
 				{typeof item.node === 'function' ? item.node({ closeDropdowns }) : item.node}
-				<Icon className="u-text-left u-ml-4" name={iconName} />
+				<Icon className="u-text-left u-ml-4" name={iconName} aria-hidden />
 			</div>
 		);
 	};

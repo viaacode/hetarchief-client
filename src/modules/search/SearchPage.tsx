@@ -823,7 +823,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			<Breadcrumbs
 				className="u-my-16"
 				items={[...staticBreadcrumbs, ...dynamicBreadcrumbs]}
-				icon={<Icon name={IconNamesLight.AngleRight} />}
+				icon={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
 				linkComponent={NextLinkWrapper}
 			/>
 		);
@@ -930,7 +930,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 		return (
 			<div className="p-visitor-space__temp-access-container">
-				<Icon name={IconNamesLight.Clock} />
+				<Icon name={IconNamesLight.Clock} aria-hidden />
 				<span className="p-visitor-space__temp-access-label">
 					{tText(
 						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___tijdelijke-toegang'

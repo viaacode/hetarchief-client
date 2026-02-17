@@ -1,16 +1,14 @@
 import { Button } from '@meemoo/react-components';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import React from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-
-import { Navigation } from './Navigation';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
 import {
 	MOCK_HAMBURGER_PROPS,
 	MOCK_ITEMS_LEFT,
 	MOCK_ITEMS_RIGHT,
 } from './__mocks__/navigation.mocks';
+import { Navigation } from './Navigation';
 
 export default {
 	title: 'Components/Navigation',
@@ -34,14 +32,14 @@ const ContextualTemplate: ComponentStory<typeof Navigation> = (args) => (
 		<Navigation.Left placement="left">
 			{/* biome-ignore lint/a11y/useValidAnchor: storybook */}
 			<a className="u-font-size-24" href="#">
-				<Icon name={IconNamesLight.AngleLeft} />
+				<Icon name={IconNamesLight.AngleLeft} aria-hidden />
 			</a>
 		</Navigation.Left>
 		<Navigation.Center title="Bezoekersruimte 8" />
 		<Navigation.Right placement="right">
 			<Button
 				className="u-color-white u-px-12"
-				iconStart={<Icon className="u-font-size-24" name={IconNamesLight.Contact} />}
+				iconStart={<Icon className="u-font-size-24" name={IconNamesLight.Contact} aria-hidden />}
 				label="Contacteer"
 				variants="text"
 			/>

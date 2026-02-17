@@ -139,6 +139,7 @@ const MediaCard: FC<MediaCardProps> = ({
 						evt.nativeEvent.stopImmediatePropagation();
 					},
 				}}
+				id={`media-card__actions-dropdown--${objectId}`}
 			>
 				{actions}
 			</DropdownMenu>
@@ -223,7 +224,7 @@ const MediaCard: FC<MediaCardProps> = ({
 		if (isNil(icon)) {
 			return null;
 		}
-		return <Icon className={styles['c-media-card__icon']} name={icon} />;
+		return <Icon className={styles['c-media-card__icon']} name={icon} aria-hidden />;
 	};
 
 	const renderDuration = () => (
@@ -231,7 +232,11 @@ const MediaCard: FC<MediaCardProps> = ({
 	);
 
 	const renderTags = () => {
-		return hasRelated && <Badge variants="small" text={<Icon name={IconNamesLight.Link} />} />;
+		return (
+			hasRelated && (
+				<Badge variants="small" text={<Icon name={IconNamesLight.Link} aria-hidden />} />
+			)
+		);
 	};
 
 	const renderLocallyAvailablePill = () => {
@@ -336,7 +341,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	const renderPlanVisitButtons = () => (
 		<div className={styles['c-media-card__locally-available-container']}>
 			<Button
-				iconStart={<Icon name={IconNamesLight.Info} />}
+				iconStart={<Icon name={IconNamesLight.Info} aria-hidden />}
 				label={tText('modules/shared/components/media-card/media-card___meer-info')}
 				variants={['info']}
 				className={styles['c-media-card__info-button']}

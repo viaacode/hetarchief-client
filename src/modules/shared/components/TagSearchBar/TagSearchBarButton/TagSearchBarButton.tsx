@@ -36,7 +36,7 @@ const TagSearchBarButton: FC<TagSearchBarButtonProps> = ({
 				e.preventDefault();
 			}}
 		>
-			<Icon className={cx({ 'indicator-icon': true })} name={IconNamesLight.Search} />
+			<Icon className={cx({ 'indicator-icon': true })} name={IconNamesLight.Search} aria-hidden />
 		</span>
 	);
 };

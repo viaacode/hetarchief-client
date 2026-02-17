@@ -63,7 +63,7 @@ export const mockColumns: Column<TableData>[] = [
 			<div style={{ display: 'flex', alignItems: 'center' }}>
 				<Badge
 					className="u-mr-8"
-					text={<Icon name={value ? IconNamesLight.Check : IconNamesLight.Forbidden} />}
+					text={<Icon name={value ? IconNamesLight.Check : IconNamesLight.Forbidden} aria-hidden />}
 					type={value ? 'success' : 'error'}
 				/>
 				{value ? 'Ja' : 'Nee'}

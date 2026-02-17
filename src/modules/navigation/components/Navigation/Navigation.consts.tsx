@@ -266,7 +266,7 @@ const getDynamicHeaderLinks = (
 						searchUrl,
 						{
 							target: linkTarget || undefined,
-							iconStart: iconName ? <Icon name={iconName as IconName} /> : null,
+							iconStart: iconName ? <Icon name={iconName as IconName} aria-hidden /> : null,
 							tooltip: tooltip || undefined,
 							className: linkClasses,
 						},

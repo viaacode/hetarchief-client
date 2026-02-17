@@ -1,11 +1,10 @@
 import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { type FC, useState } from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Modal } from '@shared/components/Modal';
 import { tText } from '@shared/helpers/translate';
+import clsx from 'clsx';
+import { type FC, useState } from 'react';
 
 import styles from './ObjectPlaceholder.module.scss';
 import type { ObjectPlaceholderProps } from './ObjectPlaceholder.types';
@@ -31,14 +30,18 @@ const ObjectPlaceholder: FC<ObjectPlaceholderProps> = ({
 			})}
 		>
 			<div className={styles['c-object-placeholder__page']}>
-				<Icon className={styles['c-object-placeholder__icon']} name={IconNamesLight.Hide} />
+				<Icon
+					className={styles['c-object-placeholder__icon']}
+					name={IconNamesLight.Hide}
+					aria-hidden
+				/>
 			</div>
 			{description && <p className={styles['c-object-placeholder__description']}>{description}</p>}
 			{openModalButtonLabel && (
 				<>
 					<Button
 						label={openModalButtonLabel}
-						iconStart={<Icon name={IconNamesLight.Info} />}
+						iconStart={<Icon name={IconNamesLight.Info} aria-hidden />}
 						variants={['outline']}
 						onClick={() => setIsModalOpen(true)}
 					/>

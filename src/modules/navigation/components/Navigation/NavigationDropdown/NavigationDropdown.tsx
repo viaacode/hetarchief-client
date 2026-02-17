@@ -65,6 +65,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 			flyoutClassName={flyoutClassName}
 			onOpen={() => onOpen?.(id)}
 			onClose={() => onClose?.(id)}
+			id={`navigation-dropdown-${id}`}
 		>
 			<DropdownButton>{trigger}</DropdownButton>
 			<DropdownContent>{renderedItems ?? renderChildrenRecursively(items || [])}</DropdownContent>

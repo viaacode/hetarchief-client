@@ -116,6 +116,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 			activeSortLabel={renderActiveSortLabel()}
 			options={sortOptions}
 			onOptionClick={onSortClick}
+			id="filter-menu__sorting"
 		/>
 	);
 
@@ -143,7 +144,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 				<Button
 					className={styles['c-filter-menu__toggle']}
 					label={label}
-					iconEnd={<Icon name={openIcon} />}
+					iconEnd={<Icon name={openIcon} aria-hidden />}
 					variants="black"
 					onClick={() => onToggleClick()}
 				/>

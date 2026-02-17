@@ -121,7 +121,7 @@ export const VisitorSpacesOverviewTableColumns = (
 							className="u-color-neutral u-font-size-24"
 							aria-label={tText('modules/admin/const/spaces___aanpassen')}
 						>
-							<Icon name={IconNamesLight.Edit} />
+							<Icon name={IconNamesLight.Edit} aria-hidden />
 						</Link>
 					)}
 					{showStatusDropdown && (
@@ -130,6 +130,7 @@ export const VisitorSpacesOverviewTableColumns = (
 								onClick: () => null,
 								className: 'u-color-neutral u-width-24 u-height-24 u-ml-20',
 							}}
+							id="visitor-space-status-dropdown"
 						>
 							{[VisitorSpaceStatus.Inactive, VisitorSpaceStatus.Requested].includes(status) && (
 								<Button

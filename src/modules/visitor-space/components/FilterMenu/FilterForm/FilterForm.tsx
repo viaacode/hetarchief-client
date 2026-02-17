@@ -95,7 +95,9 @@ const FilterForm: FC<FilterFormProps> = ({
 						<div className={styles['c-filter-form__footer']}>
 							<Button
 								className={clsx(styles['c-filter-form__reset'], 'u-p-0 u-mr-40')}
-								iconStart={<Icon className="u-font-size-22" name={IconNamesLight.Redo} />}
+								iconStart={
+									<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
+								}
 								label={tHtml(
 									'modules/visitor-space/components/filter-menu/filter-form/filter-form___reset'
 								)}

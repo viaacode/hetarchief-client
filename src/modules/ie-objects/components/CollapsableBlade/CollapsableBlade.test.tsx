@@ -23,7 +23,7 @@ describe('Components', () => {
 		});
 
 		it('Should render icon', () => {
-			const icon = <Icon name={IconNamesLight.RelatedObjects} />;
+			const icon = <Icon name={IconNamesLight.RelatedObjects} aria-hidden />;
 			const { getByText } = renderCollapsableBlade({ icon });
 
 			const iconNode = getByText('related-objects');

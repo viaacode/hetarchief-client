@@ -16,6 +16,7 @@ const FilterSort: FC<FilterSortProps> = ({
 	options,
 	onOptionClick,
 	className,
+	id,
 }) => {
 	const [sortOptionsOpen, setSortOptionsOpen] = useState(false);
 
@@ -35,6 +36,7 @@ const FilterSort: FC<FilterSortProps> = ({
 				isOpen={sortOptionsOpen}
 				onOpen={() => setSortOptionsOpen(true)}
 				onClose={onCloseDropdown}
+				id={`filter-sort__dropdown--${id}`}
 			>
 				<DropdownButton>
 					<FilterButton

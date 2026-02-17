@@ -176,7 +176,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 					variants={buttonConfig.variants}
 					onClick={() => buttonConfig.onClick?.()}
 					disabled={buttonConfig.disabled}
-					iconStart={buttonConfig.icon && <Icon name={buttonConfig.icon} />}
+					iconStart={buttonConfig.icon && <Icon name={buttonConfig.icon} aria-hidden />}
 				/>
 			);
 		};

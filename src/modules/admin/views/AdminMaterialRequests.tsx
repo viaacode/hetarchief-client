@@ -372,7 +372,9 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 										onClick: setSelectedTypes,
 									}}
 									resetOptions={{
-										icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+										icon: (
+											<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
+										),
 										label: tText('pages/admin/materiaalaanvragen/index___reset'),
 										variants: ['text'],
 										onClick: setSelectedTypes,
@@ -398,7 +400,9 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 										onClick: setSelectedStatuses,
 									}}
 									resetOptions={{
-										icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+										icon: (
+											<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
+										),
 										label: tText('pages/admin/materiaalaanvragen/index___reset'),
 										variants: ['text'],
 										onClick: setSelectedStatuses,
@@ -426,7 +430,9 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 										onClick: setSelectedDownloadFilters,
 									}}
 									resetOptions={{
-										icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+										icon: (
+											<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
+										),
 										label: tText('pages/admin/materiaalaanvragen/index___reset'),
 										variants: ['text'],
 										onClick: setSelectedDownloadFilters,
@@ -454,7 +460,9 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 											onClick: setSelectedMaintainers,
 										}}
 										resetOptions={{
-											icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+											icon: (
+												<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
+											),
 											label: tText('pages/admin/materiaalaanvragen/index___reset'),
 											variants: ['text'],
 											onClick: setSelectedMaintainers,

@@ -15,12 +15,14 @@ import {
 	useGetContentPageByLanguageAndPath,
 } from '@content-page/hooks/get-content-page';
 import { ContentPageClientService } from '@content-page/services/content-page-client.service';
-import { ContentPageRenderer, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/client';
+import {
+	ContentPageRenderer,
+	convertDbContentPageToContentPageInfo,
+} from '@meemoo/admin-core-ui/client';
 import ErrorNoAccess from '@shared/components/ErrorNoAccess/ErrorNoAccess';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';
 import { type PageInfo, SeoTags } from '@shared/components/SeoTags/SeoTags';
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { getPagePath } from '@shared/helpers/get-page-path';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -35,14 +37,12 @@ import { isServerSideRendering } from '@shared/utils/is-browser';
 import { QueryClient } from '@tanstack/react-query';
 import { VisitorLayout } from '@visitor-layout/index';
 import type { HTTPError } from 'ky';
-import { noop } from 'lodash-es';
 import type { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import type { GetServerSidePropsContext } from 'next/types';
-import { type ComponentType, type FC, useEffect, useState } from 'react';
+import { type ComponentType, type FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BooleanParam, useQueryParam } from 'use-query-params';
 
 const { publicRuntimeConfig } = getConfig();
 

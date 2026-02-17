@@ -1,8 +1,7 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@meemoo/react-components';
+import { Icon } from '@shared/components/Icon';
 import clsx from 'clsx';
 import type { FC, ReactElement } from 'react';
-
-import { Icon } from '@shared/components/Icon';
 
 import styles from './Pill.module.scss';
 import type { PillProps } from './Pill.types';
@@ -16,7 +15,7 @@ const Pill: FC<PillProps> = ({ className, icon, label, isExpanded }: PillProps):
 		<Tooltip position="right">
 			<TooltipTrigger>
 				<span className={rootCls}>
-					<Icon name={icon} />
+					<Icon name={icon} aria-hidden />
 				</span>
 			</TooltipTrigger>
 			<TooltipContent>{label}</TooltipContent>
@@ -25,7 +24,7 @@ const Pill: FC<PillProps> = ({ className, icon, label, isExpanded }: PillProps):
 
 	const renderExpandedPill = (): ReactElement => (
 		<div className={rootCls}>
-			<Icon name={icon} />
+			<Icon name={icon} aria-hidden />
 			<span className={styles['c-pill__label']}>{label}</span>
 		</div>
 	);

@@ -1,7 +1,6 @@
+import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
-
-import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
 
 import Icon from './Icon';
 
@@ -23,7 +22,11 @@ const AllIconsTemplate: ComponentStory<any> = () => (
 					}}
 					key={`all_icons_${iconName}`}
 				>
-					<Icon name={iconName} style={{ width: '5rem', height: '5rem', fontSize: '5rem' }} />
+					<Icon
+						name={iconName}
+						style={{ width: '5rem', height: '5rem', fontSize: '5rem' }}
+						aria-hidden
+					/>
 					{` ${iconName}`}
 				</div>
 			)

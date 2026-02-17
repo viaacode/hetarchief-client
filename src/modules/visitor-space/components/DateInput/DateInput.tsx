@@ -50,7 +50,7 @@ const DateInput: FC<DateInputProps> = ({
 				dateFormat="dd/MM/yyyy"
 				placeholderText="dd/mm/jjjj"
 				popperPlacement="bottom-start"
-				customInput={<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />}
+				customInput={<TextInput iconStart={<Icon name={IconNamesLight.Calendar} aria-hidden />} />}
 			/>
 		</div>
 	);

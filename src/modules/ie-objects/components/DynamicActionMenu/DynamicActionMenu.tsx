@@ -32,6 +32,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	actions,
 	limit = 0,
 	onClickAction,
+	id,
 }) => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -161,6 +162,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				onOpen={() => setIsDropdownOpen(true)}
 				onClose={() => setIsDropdownOpen(false)}
 				flyoutClassName={styles['c-dynamic-action-menu__flyout']}
+				id={`dynamic-action-menu--${id}`}
 			>
 				<DropdownButton>
 					<Button

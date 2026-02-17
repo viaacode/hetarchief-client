@@ -21,7 +21,7 @@ export const mockTabs = [
 				<small>(52)</small>
 			</>
 		),
-		icon: <Icon name={IconNamesLight.Audio} />,
+		icon: <Icon name={IconNamesLight.Audio} aria-hidden />,
 	},
 	{
 		id: SearchPageMediaType.Video,
@@ -31,7 +31,7 @@ export const mockTabs = [
 				<small>(0)</small>
 			</>
 		),
-		icon: <Icon name={IconNamesLight.Video} />,
+		icon: <Icon name={IconNamesLight.Video} aria-hidden />,
 	},
 	{
 		id: 'News',
@@ -41,7 +41,7 @@ export const mockTabs = [
 				<small>(0)</small>
 			</>
 		),
-		icon: <Icon name={IconNamesLight.Newspaper} />,
+		icon: <Icon name={IconNamesLight.Newspaper} aria-hidden />,
 	},
 ];
 

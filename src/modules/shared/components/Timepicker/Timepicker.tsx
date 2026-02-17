@@ -27,7 +27,7 @@ const Timepicker: FC<TimepickerProps> = (props) => {
 			dateFormat="HH:mm"
 			timeFormat="HH:mm"
 			popperPlacement="bottom-start"
-			customInput={<TextInput iconStart={<Icon name={IconNamesLight.Clock} />} />}
+			customInput={<TextInput iconStart={<Icon name={IconNamesLight.Clock} aria-hidden />} />}
 			// biome-ignore lint/suspicious/noExplicitAny: datepicker props are strange
 			{...(props as any)}
 		/>

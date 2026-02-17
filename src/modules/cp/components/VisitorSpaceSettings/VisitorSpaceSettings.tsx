@@ -612,7 +612,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 									label={tHtml(
 										'modules/cp/components/visitor-space-image-form/visitor-space-image-form___verwijder-afbeelding'
 									)}
-									iconStart={<Icon name={IconNamesLight.Trash} />}
+									iconStart={<Icon name={IconNamesLight.Trash} aria-hidden />}
 									variants="text"
 									onClick={() => {
 										updateValues({ image: '', file: undefined });

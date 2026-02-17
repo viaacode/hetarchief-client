@@ -24,7 +24,7 @@ const YearInput: FC<YearInputProps> = (props) => {
 				<b>{props.label}</b>
 			</div>
 			<TextInput
-				iconStart={<Icon name={IconNamesLight.Calendar} />}
+				iconStart={<Icon name={IconNamesLight.Calendar} aria-hidden />}
 				type="text"
 				{...propsWithoutIsYearInputRange}
 			/>

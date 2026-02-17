@@ -1,8 +1,4 @@
 import { Button, TagList } from '@meemoo/react-components';
-import clsx from 'clsx';
-import Link from 'next/link';
-import type { FC, MouseEvent, ReactNode } from 'react';
-
 import { CopyButton } from '@shared/components/CopyButton';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -14,6 +10,9 @@ import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
+import clsx from 'clsx';
+import Link from 'next/link';
+import type { FC, MouseEvent, ReactNode } from 'react';
 
 import { Icon, type IconName } from '../../Icon';
 import { formatDateTime } from '../VisitorSpaceCard.utils';
@@ -39,7 +38,11 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 	const renderLabel = (icon: IconName, text: ReactNode) => {
 		return (
 			<div className={styles['c-visitor-space-card-controls__label']}>
-				<Icon className={styles['c-visitor-space-card-controls__label-icon']} name={icon} />
+				<Icon
+					className={styles['c-visitor-space-card-controls__label-icon']}
+					name={icon}
+					aria-hidden
+				/>
 
 				<div className="u-text-ellipsis--2">
 					<p
@@ -83,9 +86,10 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 				<DropdownMenu
 					placement="bottom-end"
 					triggerButtonProps={{
-						icon: <Icon name={IconNamesLight.Contact} />,
+						icon: <Icon name={IconNamesLight.Contact} aria-hidden />,
 						variants: ['silver', 'sm'],
 					}}
+					id={tText('Toon contact informatie van deze bezoekersruimte [BUTTON_ARIA_LABEL]')}
 				>
 					{/* biome-ignore lint/a11y/useKeyWithClickEvents: only prevents the click event propagation */}
 					<ul

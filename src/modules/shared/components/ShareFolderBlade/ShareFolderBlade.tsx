@@ -78,7 +78,8 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 			className={styles['c-share-folder-blade__alert']}
 			title={tText('pages/account/map-delen/folder-id/index___zichtbaarheid-van-de-items')}
 			content={tText('pages/account/map-delen/folder-id/index___zichtbaarheid-message')}
-			icon={<Icon name={IconNamesLight.Exclamation} />}
+			icon={<Icon name={IconNamesLight.Exclamation} aria-hidden />}
+			closeButtonLabel=""
 		/>
 	);
 

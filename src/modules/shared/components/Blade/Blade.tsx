@@ -62,6 +62,7 @@ export const Blade: FC<BladeProps> = (props) => {
 				role="dialog"
 				aria-modal
 				aria-label={ariaLabel}
+				id={id}
 				className={clsx(
 					className,
 					styles['c-blade'],

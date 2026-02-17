@@ -73,7 +73,9 @@ export const BlockContentEnclose: FC<BlockContentEncloseProps> = ({
 							label={buttonAltTitle || buttonLabel}
 							type={buttonType}
 							renderIcon={
-								buttonIcon ? () => <Icon name={buttonIcon as unknown as IconName} /> : undefined
+								buttonIcon
+									? () => <Icon name={buttonIcon as unknown as IconName} aria-hidden />
+									: undefined
 							}
 						/>
 					</SmartLink>

@@ -1,9 +1,8 @@
 import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import Link from 'next/link';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import clsx from 'clsx';
+import Link from 'next/link';
 
 import styles from '../ListNavigation.module.scss';
 import type { ListNavigationItem, ListNavigationProps } from '../ListNavigation.types';
@@ -22,7 +21,7 @@ const renderLink = ({ to = '#', label = 'link', external = false }) => {
 
 const renderButton = ({
 	onClick = () => null,
-	icon = <Icon name={IconNamesLight.Plus} />,
+	icon = <Icon name={IconNamesLight.Plus} aria-hidden />,
 	label = 'voeg nieuwe map toe',
 }) => {
 	return (

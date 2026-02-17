@@ -21,7 +21,7 @@ const Placeholder: FC<PlaceholderProps> = ({
 
 	return (
 		<div className={clsx(className, styles['c-placeholder'])}>
-			{iconProps && <Icon className={styles['c-placeholder__icon']} {...iconProps} />}
+			{iconProps && <Icon className={styles['c-placeholder__icon']} {...iconProps} aria-hidden />}
 			{!icon && img && (
 				<div className={styles['c-placeholder__img']}>
 					<Image

@@ -381,7 +381,9 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 											onClick: setSelectedStatuses,
 										}}
 										resetOptions={{
-											icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+											icon: (
+												<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
+											),
 											label: tText('modules/account/views/account-my-material-requests___reset'),
 											variants: ['text'],
 											onClick: setSelectedStatuses,
@@ -409,7 +411,9 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 											onClick: setSelectedDownloadFilters,
 										}}
 										resetOptions={{
-											icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+											icon: (
+												<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
+											),
 											label: tText('modules/account/views/account-my-material-requests___reset'),
 											variants: ['text'],
 											onClick: setSelectedDownloadFilters,

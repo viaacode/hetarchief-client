@@ -64,7 +64,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 	};
 
 	const renderIcon = () => {
-		return <Icon className={styles['c-material-card__icon']} name={icon} />;
+		return <Icon className={styles['c-material-card__icon']} name={icon} aria-hidden />;
 	};
 
 	const renderImage = (imgPath: string | undefined) => {
@@ -101,7 +101,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 					height="100%"
 				/>
 				<div className={clsx(styles['c-material-card__header-icon'])}>
-					<Icon name={icon} />
+					<Icon name={icon} aria-hidden />
 				</div>
 			</div>
 		);

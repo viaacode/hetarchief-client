@@ -8,7 +8,7 @@ import styles from './Toggle.module.scss';
 import type { ToggleProps } from './Toggle.types';
 
 const Toggle: FC<ToggleProps> = ({ className, options, onChange, bordered, dark }) => {
-	const renderIcon = (name: IconName) => <Icon name={name} />;
+	const renderIcon = (name: IconName) => <Icon name={name} aria-hidden />;
 
 	return (
 		<div

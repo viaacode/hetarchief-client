@@ -353,6 +353,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 							)}
 							target="_blank"
 							rel="noopener noreferrer"
+							aria-label={tText('Bewerk je gegevens [BUTTON_ARIA_LABEL]')}
 						>
 							{tText(
 								'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-label'

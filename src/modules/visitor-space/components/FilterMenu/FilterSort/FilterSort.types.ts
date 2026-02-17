@@ -1,6 +1,5 @@
-import type { ReactNode } from 'react';
-
 import type { DefaultComponentProps, SortObject } from '@shared/types';
+import type { ReactNode } from 'react';
 
 import type { FilterMenuSortOption, OnFilterMenuSortClick } from '../FilterMenu.types';
 
@@ -10,4 +9,5 @@ export interface FilterSortProps extends DefaultComponentProps {
 	activeSortLabel: ReactNode;
 	options: FilterMenuSortOption[];
 	onOptionClick?: OnFilterMenuSortClick;
+	id: string;
 }

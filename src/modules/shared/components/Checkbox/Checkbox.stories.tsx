@@ -1,9 +1,8 @@
 import { Checkbox } from '@meemoo/react-components';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import React from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
 
 export default {
 	title: 'Components/Checkbox',
@@ -14,7 +13,7 @@ const Template: ComponentStory<typeof Checkbox> = (args) => <Checkbox {...args} 
 
 export const Default = Template.bind({});
 Default.args = {
-	checkIcon: <Icon name={IconNamesLight.Check} />,
+	checkIcon: <Icon name={IconNamesLight.Check} aria-hidden />,
 	checked: false,
 };
 

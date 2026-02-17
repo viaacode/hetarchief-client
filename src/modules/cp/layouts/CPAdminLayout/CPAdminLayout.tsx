@@ -50,7 +50,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 					id,
 					node: ({ linkClassName }) => (
 						<Link href={url} className={linkClassName} aria-label={label}>
-							{!isNil(iconName) && <Icon className="u-mr-4" name={iconName} />}
+							{!isNil(iconName) && <Icon className="u-mr-4" name={iconName} aria-hidden />}
 							<span>{label}</span>
 						</Link>
 					),

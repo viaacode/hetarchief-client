@@ -1,6 +1,5 @@
 import { getAdminCoreConfig } from '@admin/wrappers/admin-core-config';
 import { AdminConfigManager } from '@meemoo/admin-core-ui/client';
-import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { AppLayout } from '@shared/layouts/AppLayout';
 import NextQueryParamProvider from '@shared/providers/NextQueryParamProvider/NextQueryParamProvider';
 import { ApiService } from '@shared/services/api-service'; // Set global locale:
@@ -15,7 +14,6 @@ import { lowerCase, upperFirst } from 'lodash-es';
 import type { AppProps } from 'next/app';
 import getConfig from 'next/config';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { appWithTranslation } from 'next-i18next';
 import React, { type ReactElement, useEffect } from 'react';
 import { Provider } from 'react-redux';
@@ -49,8 +47,6 @@ const queryClient = new QueryClient({
 AdminConfigManager.setConfig(getAdminCoreConfig(null, Locale.nl, null));
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
-	const router = useRouter();
-	const locale = useLocale();
 	const { store, props } = wrapper.useWrappedStore(pageProps);
 
 	useEffect(() => {

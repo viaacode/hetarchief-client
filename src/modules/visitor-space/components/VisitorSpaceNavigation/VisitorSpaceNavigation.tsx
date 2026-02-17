@@ -1,9 +1,5 @@
-import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { isNil } from 'lodash-es';
-import React, { type FC, type ReactNode } from 'react';
-
 import { Permission } from '@account/const';
+import { Button } from '@meemoo/react-components';
 import { Navigation } from '@navigation/components/Navigation/Navigation';
 import { CopyButton } from '@shared/components/CopyButton';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
@@ -13,6 +9,9 @@ import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-searc
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import type { VisitorSpaceNavigationProps } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation.types';
+import clsx from 'clsx';
+import { isNil } from 'lodash-es';
+import React, { type FC, type ReactNode } from 'react';
 
 import styles from './VisitorSpaceNavigation.module.scss';
 
@@ -41,6 +40,7 @@ export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 
 		return (
 			<DropdownMenu
+				id={`visitor-space-contact-info--${title}`}
 				placement="bottom-end"
 				triggerButtonProps={{
 					className: clsx(

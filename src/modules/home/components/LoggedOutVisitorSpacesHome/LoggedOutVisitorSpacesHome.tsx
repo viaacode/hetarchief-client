@@ -1,10 +1,3 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { stringify } from 'query-string';
-import { type FC, useEffect } from 'react';
-import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
-
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -12,6 +5,12 @@ import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { stringify } from 'query-string';
+import { type FC, useEffect } from 'react';
+import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 
 import styles from './LoggedOutVisitorSpacesHome.module.scss';
 
@@ -89,7 +88,11 @@ const LoggedOutVisitorSpacesHome: FC = () => {
 							</Link>
 						</b>
 
-						<Icon name={IconNamesLight.ArrowDown} className={styles['c-hero__arrow-down']} />
+						<Icon
+							name={IconNamesLight.ArrowDown}
+							className={styles['c-hero__arrow-down']}
+							aria-hidden
+						/>
 					</div>
 				</div>
 				<VisitorSpaceCardsWithSearch onRequestAccess={onRequestAccess} />

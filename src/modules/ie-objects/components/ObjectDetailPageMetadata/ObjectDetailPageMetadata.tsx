@@ -415,6 +415,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						isOpen={metadataExportDropdownOpen}
 						onOpen={() => setMetadataExportDropdownOpen(true)}
 						onClose={() => setMetadataExportDropdownOpen(false)}
+						id={`object-detail-page__metadata__export-dropdown--${mediaInfo?.schemaIdentifier}`}
 					>
 						<DropdownButton>
 							{isPrimary ? (
@@ -460,6 +461,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			canDownloadMetadata,
 			metadataExportDropdownOpen,
 			onExportClick,
+			mediaInfo?.schemaIdentifier,
 		]
 	);
 
@@ -594,7 +596,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
 								{maintainerSiteUrl}
 							</a>
-							<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+							<Icon className="u-ml-8" name={IconNamesLight.Extern} aria-hidden />
 						</p>
 					)}
 					{showVisitButton && isMobile && renderVisitButton()}
@@ -707,7 +709,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			<Breadcrumbs
 				className="u-mt-32"
 				items={[...staticBreadcrumbs, ...dynamicBreadcrumbs]}
-				icon={<Icon name={IconNamesLight.AngleRight} />}
+				icon={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
 				linkComponent={NextLinkWrapper}
 			/>
 		);
@@ -749,7 +751,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		const previousButton = (
 			<Button
 				variants={['text']}
-				iconStart={<Icon name={IconNamesLight.ArrowLeft} />}
+				iconStart={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
 				label={tText(
 					'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___vorige'
 				)}
@@ -759,7 +761,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		const nextButton = (
 			<Button
 				variants={['text']}
-				iconEnd={<Icon name={IconNamesLight.ArrowRight} />}
+				iconEnd={<Icon name={IconNamesLight.ArrowRight} aria-hidden />}
 				label={tText(
 					'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___volgende'
 				)}
@@ -844,6 +846,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 								content={tHtml(
 									'modules/ie-objects/object-detail-page___deze-bronvermelding-is-automatisch-gegenereerd-en-kan-fouten-bevatten-a-href-bronvermelding-fouten-meer-info-a'
 								)}
+								closeButtonLabel=""
 							/>
 							<Metadata
 								title={tHtml('modules/ie-objects/object-detail-page___bronvermelding')}
@@ -874,11 +877,12 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					{showAlert && !isNewspaper && (
 						<Alert
 							className="c-Alert__margin-bottom"
-							icon={<Icon name={IconNamesLight.Info} />}
+							icon={<Icon name={IconNamesLight.Info} aria-hidden />}
 							content={tHtml(
 								'pages/bezoekersruimte/visitor-space-slug/object-id/index___geen-beschrijving'
 							)}
 							title=""
+							closeButtonLabel=""
 						/>
 					)}
 				</div>
@@ -929,7 +933,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 								<a target="_blank" href={rightsStatusInfo.externalLink} rel="noreferrer">
 									<Button
 										variants={['white']}
-										icon={<Icon name={IconNamesLight.Extern} />}
+										icon={<Icon name={IconNamesLight.Extern} aria-hidden />}
 										title={tText(
 											'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
 										)}
