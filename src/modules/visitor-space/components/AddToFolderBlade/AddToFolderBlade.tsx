@@ -385,14 +385,13 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			title={tText(
 				'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe-aan-map'
 			)}
-		>
-			{tHtml(
+			stickySubtitle={tHtml(
 				'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___kies-de-map-waaraan-je-strong-title-strong-wil-toevoegen',
 				{
 					title: objectToAdd?.title || '',
 				}
 			)}
-
+		>
 			<ul className={clsx(styles['c-add-to-folder-blade__list'])}>
 				{renderFolderCheckboxes()}
 

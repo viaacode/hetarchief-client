@@ -127,7 +127,8 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		return !!duplicatesToCheck?.find(
 			(item) =>
 				item.type === MaterialRequestType.REUSE &&
-				item.objectRepresentationId === formValues.representationId &&
+				// If there is already a request the objectRepresentation will be an empty string if the user has no access to the essence
+				(item.objectRepresentationId || '') === (formValues.representationId || '') &&
 				item.reuseForm?.startTime === formValues.startTime &&
 				item.reuseForm?.endTime === formValues.endTime &&
 				item.reuseForm?.downloadQuality === formValues.downloadQuality

@@ -12,6 +12,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SpacePreview } from '@shared/components/SpacePreview';
+import SpacePreviewHeader from '@shared/components/SpacePreview/SpacePreviewHeader';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { validateForm } from '@shared/helpers/validate-form';
@@ -145,9 +146,10 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 			title={tText(
 				'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
 			)}
+			stickySubtitle={visitorSpace && <SpacePreviewHeader visitorSpace={visitorSpace} />}
 			isBladeInvalid={isError}
 		>
-			{visitorSpace && <SpacePreview visitorSpace={visitorSpace} />}
+			{visitorSpace && <SpacePreview visitorSpace={visitorSpace} showLogoAndName={false} />}
 			<FormControl
 				errors={[
 					<div className="u-flex" key={`form-error--request-reason`}>
