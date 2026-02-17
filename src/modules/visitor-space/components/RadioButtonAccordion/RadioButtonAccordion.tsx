@@ -88,7 +88,7 @@ function RadioButtonAccordion<OptionValueType>({
 								/>
 							}
 							variants="text"
-							aria-label={
+							ariaLabel={
 								isAccordionOpen
 									? tText(
 											'modules/visitor-space/components/radio-button-accordion/radio-button-accordion___open-accordion'

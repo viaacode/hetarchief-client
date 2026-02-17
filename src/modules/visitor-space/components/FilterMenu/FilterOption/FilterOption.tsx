@@ -114,7 +114,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 							<Button
 								className={styles['c-filter-menu__flyout-close']}
 								icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-								aria-label={tText(
+								ariaLabel={tText(
 									'modules/visitor-space/components/filter-menu/filter-option/filter-option___sluiten'
 								)}
 								onClick={onFilterToggle}

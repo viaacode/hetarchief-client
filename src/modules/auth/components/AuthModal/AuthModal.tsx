@@ -72,7 +72,7 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 				/>
 				<Button
 					iconStart={<Icon className="u-text-left" name={IconNamesLight.LogIn} aria-hidden />}
-					label={tHtml(
+					label={tText(
 						'modules/auth/components/auth-modal/auth-modal___inloggen-met-het-archief-account'
 					)}
 					variants="black"
@@ -85,7 +85,7 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 				</p>
 				<Button
 					className="u-mb-48"
-					label={tHtml('modules/auth/components/auth-modal/auth-modal___registreer-je-hier')}
+					label={tText('modules/auth/components/auth-modal/auth-modal___registreer-je-hier')}
 					variants="outline"
 					onClick={onRegisterHetArchief}
 				/>

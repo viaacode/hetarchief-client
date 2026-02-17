@@ -74,6 +74,7 @@ export const HistoryTableColumns = (
 						e.stopPropagation();
 						onPlanVisit(visit);
 					}}
+					ariaLabel={tText('modules/account/const/my-history___bezoek')}
 				>
 					{tText('modules/account/const/my-history___bezoek')}
 				</Button>

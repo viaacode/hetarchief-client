@@ -773,7 +773,6 @@ export const IiifViewer = ({
 									'c-iiif-viewer__iiif__controls__grid-view__enable'
 								)}
 								icon={<Icon name={IconNamesLight.GridView} aria-hidden />}
-								aria-label={tText('pages/openseadragon/index___alle-paginas-in-een-grid-bekijken')}
 								title={tText('pages/openseadragon/index___alle-paginas-in-een-grid-bekijken')}
 								variants={['white', 'sm']}
 								onClick={() => setIiifGridViewEnabled(true)}
@@ -785,7 +784,6 @@ export const IiifViewer = ({
 									'c-iiif-viewer__iiif__controls__grid-view__previous-image'
 								)}
 								icon={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
-								aria-label={tText('modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding')}
 								title={tText('modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding')}
 								variants={['white', 'sm']}
 								onClick={() => setActiveImageIndex(activeImageIndex - 1)}
@@ -803,9 +801,6 @@ export const IiifViewer = ({
 									'c-iiif-viewer__iiif__controls__grid-view__next-image'
 								)}
 								icon={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
-								aria-label={tText(
-									'modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding'
-								)}
 								title={tText('modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding')}
 								variants={['white', 'sm']}
 								onClick={() => setActiveImageIndex(activeImageIndex + 1)}
@@ -851,7 +846,6 @@ export const IiifViewer = ({
 									'c-iiif-viewer__iiif__controls__toggle-ocr'
 								)}
 								icon={<Icon name={IconNamesLight.Ocr} aria-hidden />}
-								aria-label={tText('pages/openseadragon/index___tekst-boven-de-afbeelding-tonen')}
 								title={tText('pages/openseadragon/index___tekst-boven-de-afbeelding-tonen')}
 								variants={[isTextOverlayVisible ? 'green' : 'white', 'sm']}
 								onClick={() => setIsTextOverlayVisible(!isTextOverlayVisible)}
@@ -863,7 +857,6 @@ export const IiifViewer = ({
 										'c-iiif-viewer__iiif__controls__selection'
 									)}
 									icon={<Icon name={IconNamesLight.ScissorsClip} aria-hidden />}
-									aria-label={tText('modules/iiif-viewer/iiif-viewer___selectie-downloaden')}
 									title={tText('modules/iiif-viewer/iiif-viewer___selectie-downloaden')}
 									variants={[isSelectionActive ? 'green' : 'white', 'sm']}
 									onClick={() => iiifToggleSelection()}
@@ -875,7 +868,6 @@ export const IiifViewer = ({
 									'c-iiif-viewer__iiif__controls__zoom-in'
 								)}
 								icon={<Icon name={IconNamesLight.ZoomIn} aria-hidden />}
-								aria-label={tText('pages/openseadragon/index___afbeelding-inzoemen')}
 								title={tText('pages/openseadragon/index___afbeelding-inzoemen')}
 								variants={['white', 'sm']}
 								onClick={() => iiifZoom(1.3)}
@@ -886,7 +878,6 @@ export const IiifViewer = ({
 									'c-iiif-viewer__iiif__controls__zoom-out'
 								)}
 								icon={<Icon name={IconNamesLight.ZoomOut} aria-hidden />}
-								aria-label={tText('pages/openseadragon/index___afbeelding-uitzoemen')}
 								title={tText('pages/openseadragon/index___afbeelding-uitzoemen')}
 								variants={['white', 'sm']}
 								onClick={() => iiifZoom(0.7)}
@@ -897,9 +888,6 @@ export const IiifViewer = ({
 									'c-iiif-viewer__iiif__controls__fullscreen'
 								)}
 								icon={<Icon name={IconNamesLight.Expand} aria-hidden />}
-								aria-label={tText(
-									'pages/openseadragon/index___afbeelding-op-volledig-scherm-weergeven'
-								)}
 								title={tText('pages/openseadragon/index___afbeelding-op-volledig-scherm-weergeven')}
 								variants={['white', 'sm']}
 								onClick={() => iiifFullscreen(true)}
@@ -910,7 +898,6 @@ export const IiifViewer = ({
 									'c-iiif-viewer__iiif__controls__rotate-right'
 								)}
 								icon={<Icon name={IconNamesLight.Redo} aria-hidden />}
-								aria-label={tText('pages/openseadragon/index___afbeelding-rechts-draaien')}
 								title={tText('pages/openseadragon/index___afbeelding-rechts-draaien')}
 								variants={['white', 'sm']}
 								onClick={() => iiifRotate(true)}
@@ -925,7 +912,6 @@ export const IiifViewer = ({
 							'c-iiif-viewer__iiif__controls__grid-view__disable'
 						)}
 						icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-						aria-label={tText('pages/openseadragon/index___een-pagina-bekijken')}
 						title={tText('pages/openseadragon/index___een-pagina-bekijken')}
 						variants={['white', 'sm']}
 						onClick={() => setIiifGridViewEnabled(false)}

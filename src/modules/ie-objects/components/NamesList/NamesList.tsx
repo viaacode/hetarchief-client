@@ -115,9 +115,6 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 						firstHighlight.height && (
 							<Button
 								icon={<Icon name={IconNamesLight.SearchText} aria-hidden />}
-								aria-label={tText(
-									'modules/ie-objects/components/names-list/names-list___spring-naar-de-locatie-van-deze-naam'
-								)}
 								variants={['white']}
 								tooltipText={tText(
 									'modules/ie-objects/components/names-list/names-list___spring-naar-de-locatie-van-deze-naam'

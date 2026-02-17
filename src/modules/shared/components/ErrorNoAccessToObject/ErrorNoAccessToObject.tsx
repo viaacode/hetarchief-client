@@ -140,7 +140,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 						{canViewPublicCatalog && (
 							<Link href={ROUTES_BY_LOCALE[locale].search} className="u-mt-16">
 								<Button
-									label={tHtml(
+									label={tText(
 										'modules/shared/components/error-no-access-to-object/error-no-access-to-object___verken-de-publieke-catalogus'
 									)}
 									variants={['white', 'outline']}
@@ -150,7 +150,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 						{!canViewPublicCatalog && (
 							<Link href={ROUTES_BY_LOCALE[locale].search} className="u-mt-16">
 								<Button
-									label={tHtml(
+									label={tText(
 										'modules/shared/components/error-no-access-to-object/error-no-access-to-object___zoek-verder-in-het-archief-van-organisation-name',
 										{
 											organisationName: commonUser?.organisation?.name,

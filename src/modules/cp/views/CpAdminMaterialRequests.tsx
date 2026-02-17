@@ -341,6 +341,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 							<MultiSelect
 								variant="rounded"
 								label={tText('modules/cp/views/cp-admin-material-requests___type')}
+								id="cp-admin-material-requests__type-material-request"
 								options={typesList}
 								onChange={noop}
 								className={clsx(
@@ -369,6 +370,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 							<MultiSelect
 								variant="rounded"
 								label={tText('modules/cp/views/cp-admin-material-requests___status')}
+								id="cp-admin-material-requests__status-material-request"
 								options={statusList}
 								onChange={noop}
 								className={clsx(
@@ -397,6 +399,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 							<MultiSelect
 								variant="rounded"
 								label={tText('modules/cp/views/cp-admin-material-requests___download')}
+								id="cp-admin-material-requests__download-filter-material-request"
 								options={downloadUrlList}
 								onChange={noop}
 								className={clsx(

@@ -63,7 +63,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 			return (
 				<Button
 					icon={<Icon name={IconNamesLight.Contact} aria-hidden />}
-					aria-label={tText(
+					ariaLabel={tText(
 						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___geen-contactgegevens-beschikbaar'
 					)}
 					variants={['silver', 'sm', 'disabled']}
@@ -100,7 +100,13 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 							<li className={styles['c-visitor-space-card-controls__contact-item']}>
 								<p>{room.contactInfo.email}</p>
 
-								<CopyButton text={room.contactInfo.email} variants={['sm', 'text']} />
+								<CopyButton
+									text={room.contactInfo.email}
+									variants={['sm', 'text']}
+									ariaLabel={tText(
+										'Kopieer het email adres van de bezoekersruimte naar je klemboard'
+									)}
+								/>
 							</li>
 						)}
 
@@ -108,7 +114,13 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 							<li className={styles['c-visitor-space-card-controls__contact-item']}>
 								<p>{room.contactInfo.telephone}</p>
 
-								<CopyButton text={room.contactInfo.telephone} variants={['sm', 'text']} />
+								<CopyButton
+									text={room.contactInfo.telephone}
+									variants={['sm', 'text']}
+									ariaLabel={tText(
+										'Kopieer het telefoonnummer van de bezoekersruimte naar je klemboard'
+									)}
+								/>
 							</li>
 						)}
 					</ul>
@@ -131,14 +143,13 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 					</>
 				)}
 
-				<Link
-					href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}?aanbieder=${room.slug}`}
-					passHref
-					aria-label={tText(
-						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'
-					)}
-				>
-					<Button variants={['lg', 'white']}>
+				<Link href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}?aanbieder=${room.slug}`} passHref>
+					<Button
+						variants={['lg', 'white']}
+						ariaLabel={tText(
+							'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'
+						)}
+					>
 						{tHtml(
 							'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'
 						)}
@@ -186,11 +197,13 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 	const renderNoAccessControls = () => {
 		return (
 			<>
-				<Button variants={['sm', 'black']} onClick={() => onAccessRequest?.(room)}>
-					{tHtml(
+				<Button
+					variants={['sm', 'black']}
+					onClick={() => onAccessRequest?.(room)}
+					label={tText(
 						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___vraag-toegang-aan'
 					)}
-				</Button>
+				/>
 
 				{renderContactIconButton()}
 			</>

@@ -64,7 +64,11 @@ export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 						<li className={styles['c-visitor-space-navigation__contact-item']}>
 							<Button className="u-text-left" variants={['text', 'block', 'sm']} label={email} />
 
-							<CopyButton text={email} variants={['sm', 'text']} />
+							<CopyButton
+								text={email}
+								variants={['sm', 'text']}
+								ariaLabel={tText('Kopieer het emailadres naar je klemboard')}
+							/>
 						</li>
 					)}
 
@@ -72,7 +76,11 @@ export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 						<li className={styles['c-visitor-space-navigation__contact-item']}>
 							<Button className="u-text-left" variants={['text', 'block', 'sm']} label={phone} />
 
-							<CopyButton text={phone} variants={['sm', 'text']} />
+							<CopyButton
+								text={phone}
+								variants={['sm', 'text']}
+								ariaLabel={tText('Kopieer het telefoonnummer naar je klemboard')}
+							/>
 						</li>
 					)}
 				</ul>
@@ -89,6 +97,7 @@ export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 						variants="text"
 						className="u-color-white u-ml--12"
 						onClick={() => window.history.back()}
+						ariaLabel={tText('Ga terug naar de zoekresultaten')}
 					/>
 				)}
 			</Navigation.Left>

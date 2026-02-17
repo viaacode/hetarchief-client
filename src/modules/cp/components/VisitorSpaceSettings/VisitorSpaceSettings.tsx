@@ -330,12 +330,12 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 			return (
 				<div className={styles['c-cp-settings__cancel-save']}>
 					<Button
-						label={tHtml('pages/beheer/instellingen/index___annuleer')}
+						label={tText('pages/beheer/instellingen/index___annuleer')}
 						variants="text"
 						onClick={onCancel}
 					/>
 					<Button
-						label={tHtml('pages/beheer/instellingen/index___bewaar-wijzigingen')}
+						label={tText('pages/beheer/instellingen/index___bewaar-wijzigingen')}
 						variants="black"
 						onClick={onSave}
 					/>
@@ -383,7 +383,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 				className={clsx(adminLayoutStyles['c-admin__actions'], styles['c-cp-settings__actions'])}
 			>
 				<Button
-					label={tHtml(
+					label={tText(
 						'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___annuleren'
 					)}
 					variants="silver"
@@ -394,7 +394,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 					}
 				/>
 				<Button
-					label={tHtml('pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___opslaan')}
+					label={tText('pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___opslaan')}
 					variants="black"
 					onClick={createSpace}
 				/>
@@ -609,7 +609,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 
 							{formValues?.image && (
 								<Button
-									label={tHtml(
+									label={tText(
 										'modules/cp/components/visitor-space-image-form/visitor-space-image-form___verwijder-afbeelding'
 									)}
 									iconStart={<Icon name={IconNamesLight.Trash} aria-hidden />}

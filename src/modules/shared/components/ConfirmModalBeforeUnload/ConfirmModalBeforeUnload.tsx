@@ -150,13 +150,13 @@ export const ConfirmModalBeforeUnload: FC<ConfirmModalBeforeUnloadProps> = ({ wh
 	return (
 		<ConfirmationModal
 			text={{
-				description: messageOrDefault,
 				yes: tText(
 					'modules/shared/components/confirm-modal-before-unload/confirm-modal-before-unload___verder-werken'
 				),
 				no: tText(
 					'modules/shared/components/confirm-modal-before-unload/confirm-modal-before-unload___ja-ik-ben-zeker'
 				),
+				description: messageOrDefault,
 			}}
 			fullWidthButtonWrapper
 			isOpen={isModalOpen}

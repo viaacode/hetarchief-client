@@ -75,7 +75,7 @@ export const mockColumns: Column<TableData>[] = [
 		Cell: (
 			<Button
 				icon={<Icon name={IconNamesLight.DotsVertical} aria-hidden />}
-				aria-label={tText('modules/shared/components/table/mocks/table___meer-acties')}
+				ariaLabel={tText('modules/shared/components/table/mocks/table___meer-acties')}
 				variants={['xxs', 'text']}
 			/>
 		),

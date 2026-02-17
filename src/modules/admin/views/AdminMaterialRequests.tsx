@@ -356,6 +356,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 								<MultiSelect
 									variant="rounded"
 									label={tText('pages/admin/materiaalaanvragen/index___type')}
+									id="admin-material-requests__type-material-request"
 									options={typesList}
 									onChange={noop}
 									className={clsx(
@@ -384,6 +385,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 								<MultiSelect
 									variant="rounded"
 									label={tText('pages/admin/materiaalaanvragen/index___status')}
+									id="admin-material-requests__status-material-request"
 									options={statusList}
 									onChange={noop}
 									className={clsx(
@@ -412,6 +414,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 								<MultiSelect
 									variant="rounded"
 									label={tText('pages/admin/materiaalaanvragen/index___download')}
+									id="admin-material-requests__download-filter-material-request"
 									options={downloadUrlList}
 									onChange={noop}
 									className={clsx(
@@ -442,6 +445,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 									<MultiSelect
 										variant="rounded"
 										label={tText('pages/admin/materiaalaanvragen/index___aanbieder')}
+										id="admin-material-requests__maintainer-filter-material-request"
 										options={maintainerList}
 										onChange={noop}
 										className={clsx(

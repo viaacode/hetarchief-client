@@ -224,9 +224,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						icon={
 							<Icon className={clsx('u-font-size-18')} name={IconNamesLight.Edit} aria-hidden />
 						}
-						aria-label={tText(
-							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
-						)}
+						ariaLabel={tText('Pas je materiaal aanvraag aan')}
 						tooltipText={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
 						)}
@@ -239,7 +237,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						icon={
 							<Icon className={clsx('u-font-size-18')} name={IconNamesLight.Trash} aria-hidden />
 						}
-						aria-label={tText(
+						ariaLabel={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder-materiaal-aanvraag'
 						)}
 						tooltipText={tText(
@@ -404,10 +402,10 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			)}
 			<ConfirmationModal
 				text={{
-					yes: tHtml(
+					yes: tText(
 						'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijderen'
 					),
-					no: tHtml(
+					no: tText(
 						'modules/navigation/components/material-request-center-blade/material-request-center-blade___annuleren'
 					),
 					description: tHtml(

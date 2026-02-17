@@ -107,7 +107,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 							<Button
 								className={clsx(styles['c-blade__close-button'])}
 								icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-								aria-label={tText('modules/shared/components/blade/blade___sluiten')}
+								ariaLabel={tText('modules/shared/components/blade/blade___sluiten')}
 								variants={['text', 'icon', 'xxs']}
 								onClick={() => handleClose()}
 							/>
@@ -135,7 +135,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 						<Button
 							className={clsx(styles['c-blade__close-button'])}
 							icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-							aria-label={tText('modules/shared/components/blade/blade___sluiten')}
+							ariaLabel={tText('modules/shared/components/blade/blade___sluiten')}
 							variants={['text', 'icon', 'xs']}
 							onClick={() => handleClose()}
 						/>
@@ -172,7 +172,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 				<Button
 					label={label}
 					title={buttonConfig.title || undefined}
-					aria-label={buttonConfig.ariaLabel || undefined}
+					ariaLabel={buttonConfig.ariaLabel || undefined}
 					variants={buttonConfig.variants}
 					onClick={() => buttonConfig.onClick?.()}
 					disabled={buttonConfig.disabled}

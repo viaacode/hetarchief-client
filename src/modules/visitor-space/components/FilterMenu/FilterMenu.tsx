@@ -97,11 +97,14 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	 * Render
 	 */
 
-	const renderActiveSortLabel = () => {
+	const renderActiveSortLabel = (asString: boolean): ReactNode | string => {
 		const sortBtnLabel = activeSort
 			? VISITOR_SPACE_ACTIVE_SORT_MAP()[activeSort.orderProp as SearchSortProp]
 			: '';
 
+		if (asString) {
+			return `${tText('modules/visitor-space/components/filter-menu/filter-menu___sorteer-op')} ${sortBtnLabel}`;
+		}
 		return (
 			<>
 				{tText('modules/visitor-space/components/filter-menu/filter-menu___sorteer-op')}{' '}
@@ -113,7 +116,8 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	const renderFilterMenuSorting = (): ReactNode => (
 		<FilterSort
 			activeSort={activeSort}
-			activeSortLabel={renderActiveSortLabel()}
+			activeSortLabel={renderActiveSortLabel(false)}
+			activeSortAriaLabel={renderActiveSortLabel(true) as string}
 			options={sortOptions}
 			onOptionClick={onSortClick}
 			id="filter-menu__sorting"
@@ -170,7 +174,8 @@ const FilterMenu: FC<FilterMenuProps> = ({
 			<FilterMenuMobile
 				activeFilter={query.filter}
 				activeSort={activeSort}
-				activeSortLabel={renderActiveSortLabel()}
+				activeSortLabel={renderActiveSortLabel(false)}
+				activeSortAriaLabel={renderActiveSortLabel(true) as string}
 				filters={filters}
 				isOpen={isMobile && isMobileOpen}
 				sortOptions={sortOptions}

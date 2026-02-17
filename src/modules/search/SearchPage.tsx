@@ -879,9 +879,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				title={tText(
 					'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op'
 				)}
-				aria-label={tText(
-					'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op'
-				)}
 			/>
 		);
 	};

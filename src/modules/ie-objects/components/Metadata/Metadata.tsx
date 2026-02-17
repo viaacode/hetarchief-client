@@ -11,20 +11,44 @@ const Metadata: FC<MetadataProps> = ({
 	renderRight,
 	renderedTitleRight,
 }) => {
-	if (!children) {
-		return null;
-	}
-	return (
-		// biome-ignore lint/a11y/useSemanticElements: role is used to fetch these items in the tests
-		<div className={clsx(styles['c-metadata__item'], className, 'u-flex')} role="listitem">
-			<div className="u-flex-grow">
+	const renderDtAndDd = () => {
+		return (
+			<>
 				<dt className={styles['c-metadata__item-title']}>
 					<span className="u-flex-grow">{title}</span>
 					<span>{renderedTitleRight}</span>
 				</dt>
 				<dd className={styles['c-metadata__item-text']}>{children}</dd>
-			</div>
-			{renderRight && <div className={styles['c-metadata__item-right']}>{renderRight}</div>}
+			</>
+		);
+	};
+
+	const renderItem = () => {
+		if (renderRight) {
+			return (
+				<>
+					<div className="u-flex-grow">{renderDtAndDd()}</div>
+					<div className={styles['c-metadata__item-right']}>{renderRight}</div>
+				</>
+			);
+		}
+
+		return renderDtAndDd();
+	};
+
+	if (!children) {
+		return null;
+	}
+	return (
+		<div
+			className={clsx(
+				styles['c-metadata__item'],
+				className,
+				'u-flex',
+				renderRight ? 'u-flex-row' : 'u-flex-col'
+			)}
+		>
+			{renderItem()}
 		</div>
 	);
 };

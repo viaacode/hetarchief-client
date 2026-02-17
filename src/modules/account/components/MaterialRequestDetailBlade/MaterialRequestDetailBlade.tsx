@@ -253,20 +253,19 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			asDate(currentMaterialRequestDetail.downloadExpiresAt)
 		);
 
+		const buttonLabel = currentMaterialRequestDetail.downloadUrl
+			? tText(
+					'modules/account/components/material-request-detail-blade/material-request-detail-blade___downlooad-materiaal'
+				)
+			: tText(
+					'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-in-voorbereiding'
+				);
 		return (
 			<>
 				{!hasDownloadExpired && (
 					<Button
 						className="u-mt-16"
-						label={
-							currentMaterialRequestDetail.downloadUrl
-								? tText(
-										'modules/account/components/material-request-detail-blade/material-request-detail-blade___downlooad-materiaal'
-									)
-								: tText(
-										'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-in-voorbereiding'
-									)
-						}
+						label={buttonLabel}
 						disabled={!currentMaterialRequestDetail.downloadUrl}
 						variants={['block']}
 						onClick={() => handleDownloadMaterialRequest(currentMaterialRequestDetail)}
@@ -543,10 +542,10 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			</div>
 			<ConfirmationModal
 				text={{
-					yes: tHtml(
+					yes: tText(
 						'modules/account/components/material-request-detail-blade/material-request-detail-blade___verder-werken'
 					),
-					no: tHtml(
+					no: tText(
 						'modules/account/components/material-request-detail-blade/material-request-detail-blade___ja-ik-ben-zeker'
 					),
 					description: tHtml(

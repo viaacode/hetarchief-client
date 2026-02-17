@@ -37,11 +37,11 @@
  */
 
 .u-flex-col {
-	flex-direction: column;
+	flex-direction: column !important;
 }
 
 .u-flex-row {
-	flex-direction: row;
+	flex-direction: row !important;
 }
 
 @media (min-width: $breakpoint-md) {

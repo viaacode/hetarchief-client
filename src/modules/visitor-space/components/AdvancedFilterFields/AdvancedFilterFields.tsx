@@ -355,7 +355,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				{index > 0 && (
 					<Button
 						icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
-						aria-label={tText(
+						ariaLabel={tText(
 							'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___criterium-verwijderen'
 						)}
 						variants="black"

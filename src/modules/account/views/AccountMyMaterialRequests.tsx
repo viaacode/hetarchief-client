@@ -335,6 +335,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 									<MultiSelect
 										variant="rounded"
 										label={tText('modules/account/views/account-my-material-requests___type')}
+										id="account-my-material-requests___type-material-request"
 										options={typesList}
 										onChange={noop}
 										className={clsx(
@@ -363,6 +364,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 									<MultiSelect
 										variant="rounded"
 										label={tText('modules/account/views/account-my-material-requests___status')}
+										id="account-my-material-requests___status-material-request"
 										options={statusList}
 										onChange={noop}
 										className={clsx(
@@ -393,6 +395,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 									<MultiSelect
 										variant="rounded"
 										label={tText('modules/account/views/account-my-material-requests___download')}
+										id="account-my-material-requests___download-filter-material-request"
 										options={downloadUrlList}
 										onChange={noop}
 										className={clsx(

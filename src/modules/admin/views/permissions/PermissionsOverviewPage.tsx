@@ -7,7 +7,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
-import { tHtml, tText } from '@shared/helpers/translate';
+import { tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import clsx from 'clsx';
 import React, { type FC, lazy, Suspense, useRef, useState } from 'react';
@@ -34,7 +34,7 @@ export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 					<Button
 						variants={['text', 'icon', 'xxs']}
 						icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-						aria-label={tText('pages/admin/gebruikersbeheer/permissies/index___opnieuw-instellen')}
+						ariaLabel={tText('pages/admin/gebruikersbeheer/permissies/index___opnieuw-instellen')}
 						onClick={() => {
 							permissionsRef.current?.onSearch(undefined);
 						}}
@@ -43,7 +43,7 @@ export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 				<Button
 					variants={['text', 'icon', 'xxs']}
 					icon={<Icon name={IconNamesLight.Search} aria-hidden />}
-					aria-label={tText('pages/admin/gebruikersbeheer/permissies/index___uitvoeren')}
+					ariaLabel={tText('pages/admin/gebruikersbeheer/permissies/index___uitvoeren')}
 					onClick={() => permissionsRef.current?.onSearch(search)}
 				/>
 			</>
@@ -68,11 +68,11 @@ export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 			<>
 				<Button
 					onClick={() => permissionsRef.current?.onCancel()}
-					label={tHtml('pages/admin/gebruikersbeheer/permissies/index___annuleren')}
+					label={tText('pages/admin/gebruikersbeheer/permissies/index___annuleren')}
 				/>
 				<Button
 					onClick={() => permissionsRef.current?.onSave()}
-					label={tHtml('pages/admin/gebruikersbeheer/permissies/index___wijzigingen-opslaan')}
+					label={tText('pages/admin/gebruikersbeheer/permissies/index___wijzigingen-opslaan')}
 				/>
 			</>
 		);

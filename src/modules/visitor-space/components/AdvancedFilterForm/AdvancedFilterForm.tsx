@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { getRandomId } from '@shared/helpers/get-random-id';
-import { tHtml } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import type { AdvancedFilter, IdentityAdvancedFilter } from '@visitor-space/types';
 import clsx from 'clsx';
 import { omit } from 'lodash-es';
@@ -97,7 +97,7 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 						disabled={disabled}
 						className="u-p-0"
 						iconStart={<Icon name={IconNamesLight.Plus} aria-hidden />}
-						label={tHtml(
+						label={tText(
 							'modules/visitor-space/components/forms/advanced-filter-form/advanced-filter-form___nieuwe-stelling'
 						)}
 						variants="text"

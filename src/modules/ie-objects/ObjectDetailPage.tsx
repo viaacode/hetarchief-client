@@ -1491,16 +1491,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		</div>
 	);
 
-	const renderCollapsableBladeTitle = (mappedRelatedIeObjects: MediaObject[]) => {
+	const renderCollapsableBladeTitle = (mappedRelatedIeObjects: MediaObject[]): string => {
 		if (relatedIeObjects?.parent) {
-			return tHtml(
+			return tText(
 				'modules/ie-objects/object-detail-page___dit-object-is-onderdeel-van-dit-hoofdobject'
 			);
 		}
 		if (mappedRelatedIeObjects.length === 1) {
-			return tHtml('modules/ie-objects/object-detail-page___dit-object-heeft-1-fragment');
+			return tText('modules/ie-objects/object-detail-page___dit-object-heeft-1-fragment');
 		}
-		return tHtml('modules/ie-objects/object-detail-page___dit-object-heeft-amount-fragmenten', {
+		return tText('modules/ie-objects/object-detail-page___dit-object-heeft-amount-fragmenten', {
 			amount: mappedRelatedIeObjects.length,
 		});
 	};
@@ -1526,6 +1526,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				renderContent={(hidden: boolean) =>
 					renderIeObjectCards('related', mappedRelatedIeObjects, hidden)
 				}
+				ariaLabel={renderCollapsableBladeTitle(mappedRelatedIeObjects)}
 			/>
 		);
 	};
@@ -1626,7 +1627,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							[styles['p-object-detail__ocr__pagination__button--active']]: currentPageIndex > 0,
 						})}
 						iconStart={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
-						aria-label={tText('modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding')}
+						ariaLabel={tText('modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding')}
 						label={tText('modules/ie-objects/object-detail-page___vorige')}
 						variants={['text']}
 						onClick={() => {
@@ -1646,7 +1647,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 								currentPageIndex < iiifViewerImageInfos.length - 1,
 						})}
 						iconEnd={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
-						aria-label={tText('modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding')}
+						ariaLabel={tText('modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding')}
 						label={tText('modules/ie-objects/object-detail-page___volgende')}
 						variants={['text']}
 						onClick={() => {
@@ -1714,7 +1715,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					className={styles['p-object-detail__back']}
 					icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
 					variants={['black']}
-					aria-label={tText('Ga terug naar de zoekresultaten aria label')}
+					ariaLabel={tText('Ga terug naar de zoekresultaten [BUTTON_ARIA_LABEL]')}
 				/>
 			</Link>
 		);
@@ -1774,7 +1775,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 						onClick={handleExpandButtonClicked}
 						variants="white"
 						title={tText('modules/ie-objects/object-detail-page___hover-expand-knop')}
-						aria-label={tText('modules/ie-objects/object-detail-page___expand-knop')}
+						ariaLabel={tText('modules/ie-objects/object-detail-page___expand-knop')}
 					/>
 				)}
 

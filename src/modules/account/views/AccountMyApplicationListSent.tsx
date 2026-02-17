@@ -40,14 +40,14 @@ export const AccountMyApplicationListSent: FC<DefaultSeoInfo> = ({ url, canonica
 					<div className={styles['p-application-list-success__button-component']}>
 						<Link href={ROUTES_BY_LOCALE[locale].search}>
 							<Button
-								label={tHtml(
+								label={tText(
 									'modules/account/components/application-list-sent/application-list-sent___zoeken-in-de-catalogus'
 								)}
 							/>
 						</Link>
 						<Link href={ROUTES_BY_LOCALE[locale].accountMyMaterialRequests}>
 							<Button
-								label={tHtml(
+								label={tText(
 									'modules/account/components/application-list-sent/application-list-sent___mijn-materiaalaanvragen-raadplegen'
 								)}
 								variants={['silver']}

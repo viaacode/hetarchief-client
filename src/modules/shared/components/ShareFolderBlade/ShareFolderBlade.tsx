@@ -130,6 +130,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 							iconStart={<Icon name={IconNamesLight.Copy} aria-hidden />}
 							label={tText('modules/shared/components/copy-button/copy-button___kopieer')}
 							variants={['inline-input']}
+							ariaLabel={tText('Kopieer de map deel link naar je klemboard')}
 						/>
 					</div>
 				</FormControl>

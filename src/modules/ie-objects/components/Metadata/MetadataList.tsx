@@ -11,7 +11,7 @@ const Metadata: FC<MetadataListProps> = ({ className, children, allowTwoColumns 
 				[styles['c-metadata--container-query']]: allowTwoColumns,
 			})}
 		>
-			<ul className={styles['c-metadata__list']}>{children}</ul>
+			<dl className={styles['c-metadata__list']}>{children}</dl>
 		</div>
 	);
 };

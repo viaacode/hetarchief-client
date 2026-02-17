@@ -237,7 +237,7 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalU
 						{showCreateButton && (
 							<Button
 								iconStart={<Icon name={IconNamesLight.Plus} aria-hidden />}
-								label={tHtml(
+								label={tText(
 									'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/index___nieuwe-bezoekersruimte'
 								)}
 								variants="black"

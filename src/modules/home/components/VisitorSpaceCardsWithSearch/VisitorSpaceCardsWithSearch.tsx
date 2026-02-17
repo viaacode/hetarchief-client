@@ -137,6 +137,9 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 						className="u-font-weight-400"
 						onClick={handleLoadAllVisitorSpaces}
 						variants={['outline']}
+						ariaLabel={tText('Toon alle {{total}} bezoekerruimtes', {
+							total: visitorSpaces?.total,
+						})}
 					>
 						{tHtml('pages/index___toon-alles-amount', {
 							amount: visitorSpaces?.total,

@@ -35,11 +35,15 @@
 		padding: $spacer-md 0;
 		border-top: $divider-black;
 		display: flex;
-		flex-direction: row;
 		break-inside: avoid;
 
 		> div {
 			max-width: 100%;
+		}
+
+		dt, dd {
+			display: block;
+			width: 100%;
 		}
 	}
 

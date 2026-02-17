@@ -551,14 +551,14 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			</div>
 			<ConfirmationModal
 				text={{
-					description: tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___je-hebt-al-op-dit-materiaal-een-formulier-voor-hergebruik-ingevuld-als-je-het-type-aanvraag-verandert-zal-de-informatie-in-dit-formulier-onherroepelijk-verwijderd-worden'
-					),
-					yes: tHtml(
+					yes: tText(
 						'modules/visitor-space/components/material-request-blade/material-request-blade___type-aanvraag-wijzigen'
 					),
-					no: tHtml(
+					no: tText(
 						'modules/visitor-space/components/material-request-blade/material-request-blade___annuleren'
+					),
+					description: tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___je-hebt-al-op-dit-materiaal-een-formulier-voor-hergebruik-ingevuld-als-je-het-type-aanvraag-verandert-zal-de-informatie-in-dit-formulier-onherroepelijk-verwijderd-worden'
 					),
 				}}
 				fullWidthButtonWrapper

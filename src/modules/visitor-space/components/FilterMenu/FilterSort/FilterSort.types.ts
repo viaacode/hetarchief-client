@@ -7,6 +7,7 @@ export interface FilterSortProps extends DefaultComponentProps {
 	children?: ReactNode;
 	activeSort?: SortObject;
 	activeSortLabel: ReactNode;
+	activeSortAriaLabel: string;
 	options: FilterMenuSortOption[];
 	onOptionClick?: OnFilterMenuSortClick;
 	id: string;

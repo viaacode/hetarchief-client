@@ -234,7 +234,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				<Button
 					className="u-p-0"
 					iconStart={<Icon name={IconNamesLight.Edit} aria-hidden />}
-					label={tHtml('pages/account/mijn-profiel/index___wijzig-mijn-gegevens')}
+					label={tText('pages/account/mijn-profiel/index___wijzig-mijn-gegevens')}
 					variants="text"
 				/>
 			</Link>

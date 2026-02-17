@@ -424,7 +424,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									className={styles['p-object-detail__export']}
 									iconStart={icon}
 									iconEnd={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-									aria-label={buttonLabelDesktop}
 									title={buttonLabelDesktop}
 								>
 									<span className="u-text-ellipsis u-display-none u-display-block-lg">
@@ -435,12 +434,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									</span>
 								</Button>
 							) : (
-								<Button
-									icon={icon}
-									variants={['silver']}
-									aria-label={buttonLabelDesktop}
-									title={buttonLabelDesktop}
-								/>
+								<Button icon={icon} variants={['silver']} title={buttonLabelDesktop} />
 							)}
 						</DropdownButton>
 						<DropdownContent>
@@ -658,7 +652,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				>
 					<Button
 						className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
-						label={tHtml('pages/slug/index___meer-info')}
+						label={tText('pages/slug/index___meer-info')}
 						variants={['text', 'underline']}
 					/>
 				</Link>

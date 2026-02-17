@@ -46,7 +46,7 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 				<>
 					<Button
 						iconStart={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
-						aria-label={tText(
+						ariaLabel={tText(
 							'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___vorig-zoekresultaat'
 						)}
 						variants={['text', ...variants]}
@@ -68,7 +68,7 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 					</span>
 					<Button
 						iconStart={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
-						aria-label={tText(
+						ariaLabel={tText(
 							'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___volgend-zoekresultaat'
 						)}
 						variants={['text', ...variants]}
@@ -77,7 +77,7 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 					/>
 					<Button
 						iconStart={<Icon name={IconNamesLight.Times} aria-hidden />}
-						aria-label={tText(
+						ariaLabel={tText(
 							'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___verwijder-zoekterm'
 						)}
 						variants={['text', ...variants]}
@@ -88,7 +88,7 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 			{!searchResults && (
 				<Button
 					iconStart={<Icon name={IconNamesLight.Search} aria-hidden />}
-					aria-label={tText(
+					ariaLabel={tText(
 						'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___zoek-opdracht-uitvoeren'
 					)}
 					variants={['text', ...variants]}

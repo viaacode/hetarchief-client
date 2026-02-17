@@ -1,18 +1,17 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, ContentInput, FormControl } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { type FC, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-
 import type { CreateFolderButtonProps } from '@account/components';
 import { COLLECTION_FORM_SCHEMA } from '@account/const';
 import { FoldersService } from '@account/services/folders';
 import type { CreateFolderFormState } from '@account/types';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Button, ContentInput, FormControl } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
+import clsx from 'clsx';
+import { type FC, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
 import styles from './CreateFolderButton.module.scss';
 
@@ -102,7 +101,7 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 									variants={['platinum', 'sm']}
 									onClick={handler}
 									icon={<Icon name={IconNamesLight.Plus} aria-hidden />}
-									aria-label={tText(
+									ariaLabel={tText(
 										'modules/account/components/create-collection-button/create-collection-button___nieuwe-map-aanmaken'
 									)}
 								/>
@@ -116,7 +115,7 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 								tabIndex={-1}
 								variants={['black', 'sm']}
 								icon={<Icon name={IconNamesLight.Check} aria-hidden />}
-								aria-label={tText(
+								ariaLabel={tText(
 									'modules/account/components/create-collection-button/create-collection-button___nieuwe-map-opslaan'
 								)}
 							/>
@@ -126,7 +125,7 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 								tabIndex={-1}
 								variants={['silver', 'sm']}
 								icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-								aria-label={tText(
+								ariaLabel={tText(
 									'modules/account/components/create-collection-button/create-collection-button___nieuwe-map-aanmaken-annuleren'
 								)}
 							/>

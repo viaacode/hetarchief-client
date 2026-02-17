@@ -1,9 +1,4 @@
 import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { isNil } from 'lodash-es';
-import { type FC, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesSolid } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
@@ -16,6 +11,10 @@ import {
 	setShowNotificationsCenter,
 } from '@shared/store/ui';
 import { scrollTo } from '@shared/utils/scroll-to-top';
+import clsx from 'clsx';
+import { isNil } from 'lodash-es';
+import { type FC, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { MaterialRequestCenterBlade } from '../MaterialRequestCenterBlade';
 
@@ -109,7 +108,7 @@ const MaterialRequestCenterButton: FC = () => {
 						)}
 					</div>
 				}
-				aria-label={tText('modules/navigation/const/index___notificaties')}
+				ariaLabel={tText('modules/navigation/const/index___notificaties')}
 				title={tText(
 					'modules/navigation/components/material-request-center/material-request-center-button___hover-materiaal-aanvragen'
 				)}

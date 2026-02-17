@@ -1,10 +1,9 @@
-import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import React, { type FC } from 'react';
-
 import type { CollapsableBladeProps } from '@ie-objects/components/CollapsableBlade/CollapsableBlade.types';
+import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import clsx from 'clsx';
+import React, { type FC } from 'react';
 
 import styles from './CollapsableBlade.module.scss';
 
@@ -12,6 +11,7 @@ const CollapsableBlade: FC<CollapsableBladeProps> = ({
 	className,
 	icon,
 	title,
+	ariaLabel,
 	renderContent,
 	isOpen,
 	setIsOpen,
@@ -34,6 +34,7 @@ const CollapsableBlade: FC<CollapsableBladeProps> = ({
 					/>
 				}
 				label={title}
+				ariaLabel={ariaLabel}
 			/>
 			<div className={styles['c-collapsable-blade__scrollable']}>{renderContent(!isOpen)}</div>
 		</div>

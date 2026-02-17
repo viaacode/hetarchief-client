@@ -26,7 +26,6 @@ const MaterialRequestDownloadButton: FC<MaterialRequestStatusPillProps> = ({ mat
 	return (
 		<Button
 			icon={<Icon name={IconNamesLight.Download} aria-hidden />}
-			aria-label={tText('Download materiaal [BUTTON_ARIA_LABEL]')}
 			variants={['silver', 'sm']}
 			tooltipText={tText(
 				'modules/account/components/material-request-download-button/material-request-download-button___download-materiaal'

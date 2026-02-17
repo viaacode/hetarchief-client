@@ -80,6 +80,7 @@ export const RequestTableColumns = (): Column<VisitRequest>[] => [
 				variants="text"
 				text={row.original.visitorMail}
 				title={row.original.visitorMail}
+				ariaLabel={tText('Kopieer het email adres van de bezoeker naar je klemboard')}
 			>
 				{truncate(row.original.visitorMail, { length: 30 })}
 			</CopyButton>
@@ -127,7 +128,7 @@ export const RequestTableColumns = (): Column<VisitRequest>[] => [
 				<Button
 					className="p-cp-requests__edit"
 					icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
-					aria-label={tText('modules/cp/const/requests___bewerken')}
+					ariaLabel={tText('modules/cp/const/requests___bewerken')}
 					variants={['xxs', 'text']}
 				/>
 			);
