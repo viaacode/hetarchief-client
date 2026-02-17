@@ -1,3 +1,4 @@
+import MaterialRequestDownloadBlade from '@account/components/MaterialRequestDownloadBlade/MaterialRequestDownloadBlade';
 import { MaterialRequestStatusPill } from '@account/components/MaterialRequestStatusPill';
 import { createLabelValuePairMaterialRequestReuseForm } from '@account/utils/create-label-value-material-request-reuse-form';
 import { formatCuePointsMaterialRequest } from '@account/utils/format-cuepoints-material-request';
@@ -72,6 +73,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	const { isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(currentMaterialRequestDetail);
 
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
+	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
 	const canRequestBeEvaluated = useMemo(
 		() =>
@@ -258,7 +260,9 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						}
 						disabled={!downloadStatusSucceeded}
 						variants={['block']}
-						onClick={() => handleDownloadMaterialRequest(currentMaterialRequestDetail)}
+						onClick={() =>
+							handleDownloadMaterialRequest(currentMaterialRequestDetail).then(setDownloadUrl)
+						}
 					/>
 				)}
 
@@ -275,7 +279,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						<Icon name={IconNamesLight.Exclamation} className="u-mr-4" />
 						{downloadStatusFailed
 							? tText('download voorbereiding gefaald')
-							: downloadExpirationDate
+							: hasDownloadExpired
 								? tText(
 										'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-verlopen-op',
 										{ downloadExpirationDate }
@@ -444,102 +448,109 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	return (
-		<Blade
-			id="material-request-detail-blade"
-			isOpen={isOpen}
-			layer={layer}
-			currentLayer={currentLayer}
-			onClose={onClose}
-			title={tText(
-				'modules/account/components/material-request-detail-blade/material-requests___detail'
-			)}
-			stickySubtitle={<MaterialRequestInformation />}
-			subtitle={
-				<MaterialCard
-					openInNewTab={true}
-					objectId={currentMaterialRequestDetail.objectSchemaIdentifier}
-					title={currentMaterialRequestDetail.objectSchemaName}
-					thumbnail={currentMaterialRequestDetail.objectThumbnailUrl}
-					hideThumbnail={true}
-					orientation="vertical"
-					link={itemLink}
-					type={currentMaterialRequestDetail.objectDctermsFormat}
-					publishedBy={currentMaterialRequestDetail.maintainerName}
-					publishedOrCreatedDate={currentMaterialRequestDetail.objectPublishedOrCreatedDate}
-					icon={getIconFromObjectType(
-						currentMaterialRequestDetail.objectDctermsFormat,
-						isObjectEssenceAccessibleToUser
-					)}
-				/>
-			}
-			footerButtons={getFooterButtons()}
-			stickyFooter={canRequestBeEvaluated}
-		>
-			<div className={styles['p-material-request-detail__content-wrapper']}>
-				<div className={styles['p-material-request-detail__content']}>
-					{renderRequestStatus()}
-					{renderContentBlock(
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
-						),
-						currentMaterialRequestDetail.requestGroupName
-					)}
-					{renderMotivation()}
-					{renderContentBlock(
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvrager'
-						),
-						currentMaterialRequestDetail.requesterMail,
-						currentMaterialRequestDetail.requesterFullName
-					)}
-					{renderContentBlock(
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvragende-organisatie'
-						),
-						currentMaterialRequestDetail.requesterOrganisationSector,
-						currentMaterialRequestDetail.requesterOrganisation
-					)}
-					{!currentMaterialRequestDetail.reuseForm &&
-						renderContentBlock(
-							tText(
-								'modules/account/components/material-request-detail-blade/material-requests___reden'
-							),
-							currentMaterialRequestDetail.reason || '-'
+		<>
+			<Blade
+				id="material-request-detail-blade"
+				isOpen={isOpen}
+				layer={layer}
+				currentLayer={currentLayer}
+				onClose={onClose}
+				title={tText(
+					'modules/account/components/material-request-detail-blade/material-requests___detail'
+				)}
+				stickySubtitle={<MaterialRequestInformation />}
+				subtitle={
+					<MaterialCard
+						openInNewTab={true}
+						objectId={currentMaterialRequestDetail.objectSchemaIdentifier}
+						title={currentMaterialRequestDetail.objectSchemaName}
+						thumbnail={currentMaterialRequestDetail.objectThumbnailUrl}
+						hideThumbnail={true}
+						orientation="vertical"
+						link={itemLink}
+						type={currentMaterialRequestDetail.objectDctermsFormat}
+						publishedBy={currentMaterialRequestDetail.maintainerName}
+						publishedOrCreatedDate={currentMaterialRequestDetail.objectPublishedOrCreatedDate}
+						icon={getIconFromObjectType(
+							currentMaterialRequestDetail.objectDctermsFormat,
+							isObjectEssenceAccessibleToUser
 						)}
-
-					{!currentMaterialRequestDetail.reuseForm &&
-						currentMaterialRequestDetail.requesterCapacity &&
-						renderContentBlock(
+					/>
+				}
+				footerButtons={getFooterButtons()}
+				stickyFooter={canRequestBeEvaluated}
+			>
+				<div className={styles['p-material-request-detail__content-wrapper']}>
+					<div className={styles['p-material-request-detail__content']}>
+						{renderRequestStatus()}
+						{renderContentBlock(
 							tText(
-								'modules/account/components/material-request-detail-blade/material-requests___hoedanigheid'
+								'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
 							),
-							GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD()[
-								currentMaterialRequestDetail.requesterCapacity
-							]
+							currentMaterialRequestDetail.requestGroupName
 						)}
+						{renderMotivation()}
+						{renderContentBlock(
+							tText(
+								'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvrager'
+							),
+							currentMaterialRequestDetail.requesterMail,
+							currentMaterialRequestDetail.requesterFullName
+						)}
+						{renderContentBlock(
+							tText(
+								'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvragende-organisatie'
+							),
+							currentMaterialRequestDetail.requesterOrganisationSector,
+							currentMaterialRequestDetail.requesterOrganisation
+						)}
+						{!currentMaterialRequestDetail.reuseForm &&
+							renderContentBlock(
+								tText(
+									'modules/account/components/material-request-detail-blade/material-requests___reden'
+								),
+								currentMaterialRequestDetail.reason || '-'
+							)}
 
-					{renderReuseForm()}
+						{!currentMaterialRequestDetail.reuseForm &&
+							currentMaterialRequestDetail.requesterCapacity &&
+							renderContentBlock(
+								tText(
+									'modules/account/components/material-request-detail-blade/material-requests___hoedanigheid'
+								),
+								GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD()[
+									currentMaterialRequestDetail.requesterCapacity
+								]
+							)}
+
+						{renderReuseForm()}
+					</div>
 				</div>
-			</div>
-			<ConfirmationModal
-				text={{
-					yes: tHtml(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___verder-werken'
-					),
-					no: tHtml(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___ja-ik-ben-zeker'
-					),
-					description: tHtml(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___ben-je-zeker-dat-je-deze-aanvraag-wil-annuleren'
-					),
-				}}
-				fullWidthButtonWrapper
-				isOpen={showConfirmModal}
-				onClose={() => setShowConfirmModal(false)}
-				onCancel={onCancelRequest}
-				onConfirm={() => setShowConfirmModal(false)}
+				<ConfirmationModal
+					text={{
+						yes: tHtml(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___verder-werken'
+						),
+						no: tHtml(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___ja-ik-ben-zeker'
+						),
+						description: tHtml(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___ben-je-zeker-dat-je-deze-aanvraag-wil-annuleren'
+						),
+					}}
+					fullWidthButtonWrapper
+					isOpen={showConfirmModal}
+					onClose={() => setShowConfirmModal(false)}
+					onCancel={onCancelRequest}
+					onConfirm={() => setShowConfirmModal(false)}
+				/>
+			</Blade>
+			<MaterialRequestDownloadBlade
+				location="material-request-download-button"
+				downloadUrl={downloadUrl}
+				onClose={() => setDownloadUrl(null)}
 			/>
-		</Blade>
+		</>
 	);
 };
 
