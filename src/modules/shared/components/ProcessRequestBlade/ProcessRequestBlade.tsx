@@ -148,6 +148,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 				title={tText(
 					'modules/cp/components/approve-request-blade/approve-request-blade___aanvraag-goedkeuren'
 				)}
+				ariaLabel={tText('Aanvraag bezoekersruimte goedkeuren [BLADE_ARIA_LABEL]')}
 				isOpen={getCurrentLayer() === (showApprove ? 2 : 9999)}
 				layer={showApprove ? 2 : 9999}
 				selected={selected}
@@ -163,6 +164,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 				onClose={() => setShowDecline(false)}
 				onSubmit={async () => finish(setShowDecline)}
 				id="process-request-blade__decline-request-blade"
+				ariaLabel={tText('Aanvraag bezoekersruimte weigeren [BLADE_ARIA_LABEL]')}
 			/>
 		</BladeManager>
 	);

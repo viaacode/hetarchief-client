@@ -380,6 +380,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 				title={tText(
 					'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
 				)}
+				ariaLabel={tText('Vraag een bezoek aan bij de bezoekersruimte aan [BLADE_ARIA_LABEL]')}
 				stickySubtitle={visitorSpaceInfo && <SpacePreviewHeader visitorSpace={visitorSpaceInfo} />}
 				footerButtons={footerButtons}
 				onClose={onClose}
@@ -410,6 +411,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 					onClose={onCloseRequestBlade}
 					onSubmit={onRequestAccessSubmit}
 					id="logged-in-home__request-access-blade"
+					ariaLabel={tText('Vraag een bezoek aan bij de bezoekersruimte aan [BLADE_ARIA_LABEL]')}
 				/>
 				{renderVisitorSpaceNotAvailableBlade()}
 				<ProcessVisitBlade
@@ -422,6 +424,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 						refetchPending();
 					}}
 					id="logged-in-home__process-visit-blade"
+					ariaLabel={tText('Aanvraag bezoekersruimte annuleren [BLADE_ARIA_LABEL]')}
 				/>
 			</>
 		);

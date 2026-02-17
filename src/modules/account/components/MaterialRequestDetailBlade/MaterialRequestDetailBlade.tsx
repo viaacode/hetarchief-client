@@ -433,7 +433,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 					className={styles['p-material-request-detail__content-block-media']}
 					src={objectThumbnailUrl}
 					aria-hidden
-					alt=""
+					alt={tText("alt text of the thumbnail of the material that's being requested")}
 				/>
 			</NextLink>
 		);
@@ -466,6 +466,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			title={tText(
 				'modules/account/components/material-request-detail-blade/material-requests___detail'
 			)}
+			ariaLabel={tText('Materiaal aanvraag detail [BLADE_ARIA_LABEL]')}
 			stickySubtitle={<MaterialRequestInformation />}
 			subtitle={
 				currentMaterialRequestDetail && (

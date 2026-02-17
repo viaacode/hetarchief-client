@@ -954,7 +954,12 @@ export const IiifViewer = ({
 							>
 								{imageInfo.thumbnailUrl ? (
 									// biome-ignore lint/performance/noImgElement: this is how it works
-									<img src={imageInfo.thumbnailUrl} alt={`page ${index + 1} thumbnail`} />
+									<img
+										src={imageInfo.thumbnailUrl}
+										alt={tText('go to newspaper page {{pageNumber}} alt label', {
+											pageNumber: index + 1,
+										})}
+									/>
 								) : (
 									<div
 										className={
@@ -989,7 +994,10 @@ export const IiifViewer = ({
 								type="button"
 							>
 								{/* biome-ignore lint/performance/noImgElement: this is how it works */}
-								<img src={imageInfo.thumbnailUrl} alt={`page ${index + 1}`} />
+								<img
+									src={imageInfo.thumbnailUrl}
+									alt={tText('go to newspaper page {{pageNumber}}', { pageNumber: index + 1 })}
+								/>
 							</button>
 						);
 					})}

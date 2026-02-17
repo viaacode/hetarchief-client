@@ -1248,6 +1248,10 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						},
 					]}
 					id="object-detail-page__metadata-field-detail-blade"
+					ariaLabel={tText(
+						'Lees de volledige waarde van het metadata veld {{selectedMetadataFieldName}} [BLADE_ARIA_LABEL]',
+						{ selectedMetadataFieldName: selectedMetadataField?.title }
+					)}
 				>
 					<HighlightedMetadata
 						title={selectedMetadataField?.title}

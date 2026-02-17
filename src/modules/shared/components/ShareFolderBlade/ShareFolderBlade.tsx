@@ -86,6 +86,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 		<Blade
 			isOpen={isOpen}
 			title={tText('pages/account/map-delen/folder-id/index___deel-map')}
+			ariaLabel={tText('Deel een map met iemand anders [BLADE_ARIA_LABEL]')}
 			footerButtons={getFooterButtons()}
 			onClose={handleClose}
 			id="share-folder-blade"

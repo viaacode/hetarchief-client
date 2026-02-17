@@ -302,6 +302,7 @@ const MediaCard: FC<MediaCardProps> = ({
 					view === 'blade' && styles['c-media-card__header--blade']
 				)}
 			>
+				{/* No alt tag since the link already contains the title of the object that we're linking to */}
 				{/** biome-ignore lint/performance/noImgElement: we need this*/}
 				<img
 					src={imagePath}
@@ -437,6 +438,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				onClose={() => setIsRequestAccessBladeOpen(false)}
 				onSubmit={onRequestAccessSubmit}
 				id="media-card__request-access-blade"
+				ariaLabel={tText('Vraag een bezoek aan bij de bezoekersruimte aan [BLADE_ARIA_LABEL]')}
 			/>
 		</div>
 	);

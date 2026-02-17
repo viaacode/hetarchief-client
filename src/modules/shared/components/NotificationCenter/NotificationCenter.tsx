@@ -294,6 +294,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 				'modules/shared/components/notification-center/notification-center___notificaties'
 			)}
 			id="notification-center-blade"
+			ariaLabel={tText('Bekijk je notificaties [BLADE_ARIA_LABEL]')}
 		>
 			{renderBladeContent()}
 		</Blade>

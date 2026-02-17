@@ -1713,6 +1713,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					className={styles['p-object-detail__back']}
 					icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
 					variants={['black']}
+					aria-label={tText('Ga terug naar de zoekresultaten aria label')}
 				/>
 			</Link>
 		);
@@ -1854,6 +1855,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					onClose={onCloseBlade}
 					onSubmit={async () => onCloseBlade()}
 					id="object-detail-page__add-to-folder-blade"
+					ariaLabel={tText('Voeg dit object toe aan een map [BLADE_ARIA_LABEL]')}
 				/>
 			)}
 			{mediaInfo && !isKiosk && (
@@ -1879,15 +1881,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				isOpen={activeBlade === MediaActions.Report}
 				onClose={onCloseBlade}
 				id="object-detail-page__report-blade"
+				ariaLabel={tText('Rapporteer iets dat foutief is met dit object [BLADE_ARIA_LABEL]')}
 			/>
 			<RequestAccessBlade
 				isOpen={activeBlade === MediaActions.RequestAccess && !!user}
 				onClose={() => setActiveBlade(null, 'replaceIn')}
 				onSubmit={onRequestAccessSubmit}
 				id="object-detail-page__request-access-blade"
+				ariaLabel={tText('Vraag toegang tot dit object aan [BLADE_ARIA_LABEL]')}
 			/>
 			<Blade
 				id="iiif-selection-download-url"
+				ariaLabel={tText('Download je selectie als afbeelding [BLADE_ARIA_LABEL]')}
 				isOpen={!!selectionDownloadUrl}
 				title={tText('modules/ie-objects/object-detail-page___selectie-is-klaar')}
 				onClose={() => setSelectionDownloadUrl(null)}

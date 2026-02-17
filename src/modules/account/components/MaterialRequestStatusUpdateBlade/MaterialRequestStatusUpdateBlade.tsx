@@ -151,6 +151,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 			title={tText(
 				'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag'
 			)}
+			ariaLabel={tText('Materiaal aanvraag goedkeuren of afkeuren [BLADE_ARIA_LABEL]')}
 			stickySubtitle={<MaterialRequestInformation />}
 			subtitle={
 				<MaterialCard

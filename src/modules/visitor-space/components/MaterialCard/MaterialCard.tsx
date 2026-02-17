@@ -92,6 +92,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 
 		return (
 			<div className={clsx(styles['c-material-card__header'])}>
+				{/* No alt tag since the link already contains the title of the object that we're linking to */}
 				{/** biome-ignore lint/performance/noImgElement: we need this*/}
 				<img
 					src={imagePath}

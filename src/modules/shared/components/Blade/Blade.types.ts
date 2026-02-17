@@ -66,6 +66,7 @@ export interface BladeContentProps extends DefaultComponentProps {
 
 export interface BladeProps extends Omit<BladeContentProps, 'closable'> {
 	isOpen: boolean;
+	ariaLabel: string;
 
 	// manager types
 	layer?: number;

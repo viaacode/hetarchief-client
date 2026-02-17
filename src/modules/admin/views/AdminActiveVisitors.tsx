@@ -228,6 +228,7 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 							}}
 							onSubmit={handleEditVisitRequestFinished}
 							id="active-visitors-page__approve-request-blade"
+							ariaLabel={tText('Materiaal aanvraag aanpassen [BLADE_ARIA_LABEL]')}
 						/>
 					</div>
 				</AdminLayout.Content>

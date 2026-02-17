@@ -32,7 +32,12 @@ const labelKeys: Record<keyof RequestAccessFormState, string> = {
 	visitTime: 'RequestAccessBlade__visitTime',
 };
 
-const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...bladeProps }) => {
+const RequestAccessBlade: FC<RequestAccessBladeProps> = ({
+	onSubmit,
+	isOpen,
+	ariaLabel,
+	...bladeProps
+}) => {
 	const commonUser = useSelector(selectCommonUser);
 	const locale = useLocale();
 
@@ -146,6 +151,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 			title={tText(
 				'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
 			)}
+			ariaLabel={ariaLabel}
 			stickySubtitle={visitorSpace && <SpacePreviewHeader visitorSpace={visitorSpace} />}
 			isBladeInvalid={isError}
 		>

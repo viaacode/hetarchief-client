@@ -259,6 +259,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 				}}
 				onFinish={refetch}
 				id="visit-request-overview__process-request-blade"
+				ariaLabel={tText('Materiaal aanvraag behandelen [BLADE_ARIA_LABEL]')}
 			/>
 		</>
 	);

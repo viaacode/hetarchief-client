@@ -3,7 +3,6 @@ import { Blade } from '@shared/components/Blade/Blade';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import '@testing-library/jest-dom';
-
 import { describe, expect, it, vi } from 'vitest';
 import { mockStore } from '../../../../__mocks__/store';
 import BladeManager from './BladeManager';
@@ -27,6 +26,7 @@ const renderBladeManager = (currentBlade = 0, onClose = () => null) => {
 					layer={1}
 					id="blade1"
 					footerButtons={[{ label: 'continue', mobileLabel: 'continue', type: 'primary' }]}
+					ariaLabel="blade 1"
 				>
 					<Button label="Open second blade" />
 				</Blade>
@@ -36,6 +36,7 @@ const renderBladeManager = (currentBlade = 0, onClose = () => null) => {
 					layer={2}
 					id="blade2"
 					footerButtons={[{ label: 'continue', mobileLabel: 'continue', type: 'primary' }]}
+					ariaLabel="blade 2"
 				>
 					<Button label="Open third blade" />
 				</Blade>
@@ -45,6 +46,7 @@ const renderBladeManager = (currentBlade = 0, onClose = () => null) => {
 					layer={3}
 					id="blade3"
 					footerButtons={[{ label: 'continue', mobileLabel: 'continue', type: 'primary' }]}
+					ariaLabel="blade 3"
 				/>
 			</BladeManager>
 		</Provider>

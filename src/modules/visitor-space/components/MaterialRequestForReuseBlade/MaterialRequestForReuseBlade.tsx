@@ -1033,6 +1033,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			footerButtons={getFooterButtons()}
 			stickyFooter={false}
 			isBladeInvalid={!isFormValid}
+			ariaLabel={tText('Materiaal download en hergebruik aanvragen [BLADE_ARIA_LABEL]')}
 		>
 			<div className={styles['c-request-material-reuse__content-form']}>
 				{renderVideoSettings()}

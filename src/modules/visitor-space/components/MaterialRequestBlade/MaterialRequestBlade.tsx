@@ -487,6 +487,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			footerButtons={getFooterButtons()}
 			isManaged
 			isBladeInvalid={noTypeSelectedOnSave}
+			ariaLabel={tText('Vraag materiaal aan [BLADE_ARIA_LABEL]')}
 		>
 			<div className={styles['c-request-material__content']}>
 				<dl>

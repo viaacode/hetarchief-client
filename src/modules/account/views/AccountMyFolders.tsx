@@ -692,6 +692,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 						setSelected(null);
 					}}
 					id="folder-detail__add-to-folder-blade"
+					ariaLabel={tText('Voeg dit object toe aan een map [BLADE_ARIA_LABEL]')}
 				/>
 				{activeFolder?.id && (
 					<ShareFolderBlade

@@ -117,6 +117,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 			footerButtons={getFooterButtons()}
 			onClose={onCloseVisitDetailBlade}
 			id="visit-detail-blade"
+			ariaLabel={tText('Vraag een bezoek aan bij de bezoekersruimte aan [BLADE_ARIA_LABEL]')}
 		>
 			<div className={styles['c-visit-detail-blade']}>
 				<strong>
@@ -136,6 +137,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 				}}
 				onSubmit={onRequestAccessSubmit}
 				id="visit-detail-blade__request-access-blade"
+				ariaLabel={tText('Vraag een bezoek aan bij de bezoekersruimte aan [BLADE_ARIA_LABEL]')}
 			/>
 		</Blade>
 	);

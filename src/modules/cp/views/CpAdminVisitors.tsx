@@ -279,6 +279,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 					}}
 					onSubmit={handleEditVisitRequestFinished}
 					id="visitors-page__approve-request-blade"
+					ariaLabel={tText('Materiaal aanvraag goedkeuren [BLADE_ARIA_LABEL]')}
 				/>
 			</CPAdminLayout>
 		);

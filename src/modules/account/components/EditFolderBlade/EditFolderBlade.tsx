@@ -126,6 +126,7 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 			onClose={handleClose}
 			id="edit-folder-blade"
 			isBladeInvalid={!!formErrors.name || !!formErrors.description}
+			ariaLabel={tText('Map aanpassen [BLADE_ARIA_LABEL]')}
 		>
 			<FormControl
 				label={tText('modules/account/components/edit-folder-blade/edit-folder-blade___naam')}

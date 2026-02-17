@@ -343,6 +343,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		>
 			<Blade
 				id="material-request-center-blade"
+				ariaLabel={tText('Jouw nog te verzenden materiaal aanvragen [BLADE_ARIA_LABEL]')}
 				className={styles['c-material-request-center-blade']}
 				isOpen={isOpen}
 				layer={1}

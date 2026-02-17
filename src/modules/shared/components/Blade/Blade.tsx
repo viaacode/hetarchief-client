@@ -13,7 +13,7 @@ import styles from './Blade.module.scss';
 import type { BladeProps } from './Blade.types';
 
 export const Blade: FC<BladeProps> = (props) => {
-	const { id, className, isOpen, onClose, isWideBlade, layer } = props;
+	const { id, className, isOpen, onClose, isWideBlade, layer, ariaLabel } = props;
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
 	const hasOpenConfirmationModal = useSelector(selectHasOpenConfirmationModal);
 
@@ -61,7 +61,7 @@ export const Blade: FC<BladeProps> = (props) => {
 			<div
 				role="dialog"
 				aria-modal
-				aria-labelledby={id}
+				aria-label={ariaLabel}
 				className={clsx(
 					className,
 					styles['c-blade'],

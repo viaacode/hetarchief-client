@@ -55,6 +55,7 @@ export const AdminMaintenanceAlertsOverviewPage: FC<DefaultSeoInfo> = ({ url, ca
 				onClose={onClose}
 				title={title}
 				id="alerts-blade"
+				ariaLabel={tText('Bewerk een onderhoudsmelding [BLADE_ARIA_LABEL]')}
 			>
 				{body}
 			</Blade>
