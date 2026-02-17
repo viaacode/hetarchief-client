@@ -66,7 +66,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	const [isDetailStatusBladeOpenWithStatus, setIsDetailStatusBladeOpenWithStatus] = useState<
 		MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED | undefined
 	>(undefined);
-	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
+
 	const [filters, setFilters] = useQueryParams(ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const [selectedMaintainers, setSelectedMaintainers] = useState<string[]>(
 		(filters.maintainerIds || []) as string[]
@@ -81,19 +81,6 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		(filters[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL] || []) as string[]
 	);
 	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
-
-	const {
-		data: currentMaterialRequestDetail,
-		isFetching: isLoadingDetail,
-		refetch: refetchCurrentMaterialRequestDetail,
-	} = useGetMaterialRequestById(currentMaterialRequest?.id || null, isDetailBladeOpen);
-	const usableMaterialRequest = useMemo(
-		() =>
-			isLoadingDetail || !currentMaterialRequestDetail
-				? currentMaterialRequest
-				: currentMaterialRequestDetail,
-		[isLoadingDetail, currentMaterialRequest, currentMaterialRequestDetail]
-	);
 
 	const {
 		data: materialRequests,
@@ -122,6 +109,22 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		}),
 		maintainerIds: filters.maintainerIds as string[],
 	});
+
+	const [currentMaterialRequestId, setCurrentMaterialRequestId] = useState<string | null>(null);
+	const currentMaterialRequest =
+		materialRequests?.items?.find((request) => request.id === currentMaterialRequestId) || null;
+	const {
+		data: currentMaterialRequestDetail,
+		isFetching: isLoadingDetail,
+		refetch: refetchCurrentMaterialRequestDetail,
+	} = useGetMaterialRequestById(currentMaterialRequestId || null, isDetailBladeOpen);
+	const usableMaterialRequest = useMemo(
+		() =>
+			isLoadingDetail || !currentMaterialRequestDetail
+				? currentMaterialRequest
+				: currentMaterialRequestDetail,
+		[isLoadingDetail, currentMaterialRequest, currentMaterialRequestDetail]
+	);
 
 	const { data: maintainers } = useGetMaterialRequestsMaintainers();
 
@@ -274,13 +277,12 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 			// In case we open the same request, refetch it to make sure we have the latest status
 			void refetchCurrentMaterialRequestDetail();
 		}
-		setCurrentMaterialRequest(row.original);
+		setCurrentMaterialRequestId(row.original?.id || null);
 		setIsDetailBladeOpen(true);
 	};
 
-	const onMaterialRequestStatusChange = () => {
-		void refetchCurrentMaterialRequestDetail();
-		void refetchMaterialRequests();
+	const onMaterialRequestStatusChange = async () => {
+		await Promise.all([refetchCurrentMaterialRequestDetail(), refetchMaterialRequests()]);
 	};
 
 	const renderDetailBlade = () => {
