@@ -13,6 +13,7 @@ import {
 } from '@admin/const/material-requests.const';
 import { AdminLayout } from '@admin/layouts';
 import { getMaterialRequestTableColumnProps } from '@material-requests/const';
+import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
 import { useGetMaterialRequestsMaintainers } from '@material-requests/hooks/get-material-requests-maintainers';
 import {
@@ -80,6 +81,19 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		(filters[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL] || []) as string[]
 	);
 	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
+
+	const {
+		data: currentMaterialRequestDetail,
+		isFetching: isLoadingDetail,
+		refetch: refetchCurrentMaterialRequestDetail,
+	} = useGetMaterialRequestById(currentMaterialRequest?.id || null, isDetailBladeOpen);
+	const usableMaterialRequest = useMemo(
+		() =>
+			isLoadingDetail || !currentMaterialRequestDetail
+				? currentMaterialRequest
+				: currentMaterialRequestDetail,
+		[isLoadingDetail, currentMaterialRequest, currentMaterialRequestDetail]
+	);
 
 	const {
 		data: materialRequests,
@@ -256,16 +270,21 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		tHtml('pages/admin/materiaalaanvragen/index___geen-materiaalaanvragen');
 
 	const onRowClick = (_evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
+		if (row.original.id === currentMaterialRequest?.id) {
+			// In case we open the same request, refetch it to make sure we have the latest status
+			void refetchCurrentMaterialRequestDetail();
+		}
 		setCurrentMaterialRequest(row.original);
 		setIsDetailBladeOpen(true);
 	};
 
 	const onMaterialRequestStatusChange = () => {
+		void refetchCurrentMaterialRequestDetail();
 		void refetchMaterialRequests();
 	};
 
 	const renderDetailBlade = () => {
-		if (!currentMaterialRequest?.id) {
+		if (!usableMaterialRequest) {
 			return null;
 		}
 
@@ -302,7 +321,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 					onDeclineRequest={() =>
 						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
 					}
-					currentMaterialRequestDetail={currentMaterialRequest}
+					currentMaterialRequestDetail={usableMaterialRequest}
 					afterStatusChanged={onMaterialRequestStatusChange}
 					layer={isDetailBladeOpen ? 1 : 99}
 					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
@@ -311,7 +330,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 					isOpen={!!isDetailStatusBladeOpenWithStatus}
 					onClose={() => setIsDetailStatusBladeOpenWithStatus(undefined)}
 					status={isDetailStatusBladeOpenWithStatus}
-					currentMaterialRequestDetail={currentMaterialRequest}
+					currentMaterialRequestDetail={usableMaterialRequest}
 					afterStatusChanged={onMaterialRequestStatusChange}
 					layer={isDetailBladeOpen ? 2 : 99}
 					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}

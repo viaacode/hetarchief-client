@@ -4,7 +4,7 @@ import { minutesToMilliseconds } from 'date-fns';
 
 import { MaterialRequestsService } from '../services';
 import {
-	type MaterialRequestDetail,
+	type MaterialRequest,
 	MaterialRequestDownloadStatus,
 	MaterialRequestStatus,
 } from '../types';
@@ -12,13 +12,13 @@ import {
 export const useGetMaterialRequestById = (
 	id: string | null,
 	enabled: boolean
-): UseQueryResult<MaterialRequestDetail | null> =>
+): UseQueryResult<MaterialRequest | null> =>
 	useQuery({
 		queryKey: [QUERY_KEYS.getMaterialRequestById, id],
 		queryFn: () => MaterialRequestsService.getById(id),
 		placeholderData: keepPreviousData,
 		enabled,
-		refetchInterval: (query: Query<MaterialRequestDetail | null>) => {
+		refetchInterval: (query: Query<MaterialRequest | null>) => {
 			const materialRequest = query.state.data;
 
 			// We only want to poll if the status is approved and not failed or succeeded
