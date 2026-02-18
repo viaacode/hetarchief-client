@@ -407,7 +407,6 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				content={tText(
 					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___je-hebt-voor-dit-materiaal-een-formulier-voor-hergebruik-ingevuld-met-exact-dezelfde-vereisten-gelieve-een-ander-fragment-of-een-andere-downloadkwaliteit-te-selecteren'
 				)}
-				closeButtonLabel=""
 			/>
 		);
 	};

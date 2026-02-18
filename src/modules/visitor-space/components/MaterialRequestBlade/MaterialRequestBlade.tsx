@@ -403,7 +403,6 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-reeds-in-behandeling'
 				)}
 				content={renderDuplicateAlertContent()}
-				closeButtonLabel=""
 			/>
 		);
 	};
@@ -453,7 +452,6 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					'modules/visitor-space/components/material-request-blade/material-request-blade___hergebruikformulier-is-ingevuld'
 				)}
 				content={renderReuseFormAlertContent()}
-				closeButtonLabel=""
 			/>
 		);
 	};

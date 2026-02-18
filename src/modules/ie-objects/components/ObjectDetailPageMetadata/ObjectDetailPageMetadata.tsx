@@ -840,7 +840,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 								content={tHtml(
 									'modules/ie-objects/object-detail-page___deze-bronvermelding-is-automatisch-gegenereerd-en-kan-fouten-bevatten-a-href-bronvermelding-fouten-meer-info-a'
 								)}
-								closeButtonLabel=""
 							/>
 							<Metadata
 								title={tHtml('modules/ie-objects/object-detail-page___bronvermelding')}
@@ -876,7 +875,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 								'pages/bezoekersruimte/visitor-space-slug/object-id/index___geen-beschrijving'
 							)}
 							title=""
-							closeButtonLabel=""
 						/>
 					)}
 				</div>

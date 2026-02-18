@@ -1603,9 +1603,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					content={tHtml(
 						'modules/ie-objects/object-detail-page___deze-ocr-kan-fouten-bevatten-a-href-ocr-betrouwbaarheid-info-meer-info-vind-je-hier-a'
 					)}
-					closeButtonLabel={tText(
-						'modules/ie-objects/object-detail-page___sluit-deze-melding-button-aria-label'
-					)}
 				/>
 
 				{arePagesOcrTextsAvailable && (
