@@ -134,6 +134,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 									variants="black"
 									className={styles['p-error-no-access-to-object__button']}
 									onClick={handleAccessToVisitorSpaceButtonClicked}
+									tabIndex={-1}
 								/>
 							</Link>
 						)}
@@ -144,6 +145,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 										'modules/shared/components/error-no-access-to-object/error-no-access-to-object___verken-de-publieke-catalogus'
 									)}
 									variants={['white', 'outline']}
+									tabIndex={-1}
 								/>
 							</Link>
 						)}
@@ -157,6 +159,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 										}
 									)}
 									variants={['white', 'outline']}
+									tabIndex={-1}
 								/>
 							</Link>
 						)}

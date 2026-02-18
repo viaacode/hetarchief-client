@@ -43,6 +43,7 @@ export const AccountMyApplicationListSent: FC<DefaultSeoInfo> = ({ url, canonica
 								label={tText(
 									'modules/account/components/application-list-sent/application-list-sent___zoeken-in-de-catalogus'
 								)}
+								tabIndex={-1}
 							/>
 						</Link>
 						<Link href={ROUTES_BY_LOCALE[locale].accountMyMaterialRequests}>
@@ -51,6 +52,7 @@ export const AccountMyApplicationListSent: FC<DefaultSeoInfo> = ({ url, canonica
 									'modules/account/components/application-list-sent/application-list-sent___mijn-materiaalaanvragen-raadplegen'
 								)}
 								variants={['silver']}
+								tabIndex={-1}
 							/>
 						</Link>
 					</div>

@@ -1721,6 +1721,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					ariaLabel={tText(
 						'modules/ie-objects/object-detail-page___ga-terug-naar-de-zoekresultaten-button-aria-label'
 					)}
+					tabIndex={-1}
 				/>
 			</Link>
 		);

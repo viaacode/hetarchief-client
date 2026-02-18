@@ -152,7 +152,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'
 					)}
 				>
-					<Button variants={['lg', 'white']}>
+					<Button variants={['lg', 'white']} tabIndex={-1}>
 						{tHtml(
 							'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'
 						)}

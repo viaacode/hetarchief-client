@@ -42,6 +42,7 @@ export const ContentPageOverviewPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 								title={tText(
 									'admin/content/views/content-overview___maak-een-nieuwe-content-pagina-aan'
 								)}
+								tabIndex={-1}
 							/>
 						</Link>
 					)}

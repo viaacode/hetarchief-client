@@ -792,6 +792,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 						className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
 						label={tHtml('pages/slug/index___meer-info')}
 						variants={['text', 'underline']}
+						tabIndex={-1}
 					/>
 				</Link>
 			}

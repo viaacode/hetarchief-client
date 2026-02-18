@@ -167,7 +167,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 
 		const label = isMobile ? buttonConfig.mobileLabel : buttonConfig.label;
 
-		const renderButton = () => {
+		const renderButton = (isWrappedInLink: boolean) => {
 			return (
 				<Button
 					label={label}
@@ -177,6 +177,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 					onClick={() => buttonConfig.onClick?.()}
 					disabled={buttonConfig.disabled}
 					iconStart={buttonConfig.icon && <Icon name={buttonConfig.icon} aria-hidden />}
+					tabIndex={isWrappedInLink ? -1 : undefined}
 				/>
 			);
 		};
@@ -184,11 +185,11 @@ export const BladeContent: FC<BladeContentProps> = ({
 		if (buttonConfig.href) {
 			return (
 				<Link passHref href={buttonConfig.href} aria-label={buttonConfig.ariaLabel || label}>
-					{renderButton()}
+					{renderButton(true)}
 				</Link>
 			);
 		}
-		return renderButton();
+		return renderButton(false);
 	};
 
 	const renderFooter = () => {

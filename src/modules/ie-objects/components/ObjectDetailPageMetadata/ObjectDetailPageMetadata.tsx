@@ -654,6 +654,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
 						label={tText('pages/slug/index___meer-info')}
 						variants={['text', 'underline']}
+						tabIndex={-1}
 					/>
 				</Link>
 			}
@@ -752,16 +753,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				disabled={!ieObjectPreviousNextIds?.previousIeObjectId}
 			/>
 		);
-		const nextButton = (
-			<Button
-				variants={['text']}
-				iconEnd={<Icon name={IconNamesLight.ArrowRight} aria-hidden />}
-				label={tText(
-					'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___volgende'
-				)}
-				disabled={!ieObjectPreviousNextIds?.nextIeObjectId}
-			/>
+		const nextButtonIcon = <Icon name={IconNamesLight.ArrowRight} aria-hidden />;
+		const nextButtonLabel = tText(
+			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___volgende'
 		);
+		const nextButtonDisabled = !ieObjectPreviousNextIds?.nextIeObjectId;
 		return (
 			<div className={styles['p-object-detail__metadata-content__previous-next']}>
 				{ieObjectPreviousNextIds?.previousIeObjectId ? (
@@ -773,9 +769,22 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				<span>{mediaInfo?.datePublished || mediaInfo?.dateCreated || '-'}</span>
 
 				{ieObjectPreviousNextIds?.nextIeObjectId ? (
-					<Link href={`/pid/${ieObjectPreviousNextIds?.nextIeObjectId}`}>{nextButton}</Link>
+					<Link href={`/pid/${ieObjectPreviousNextIds?.nextIeObjectId}`}>
+						<Button
+							variants={['text']}
+							iconEnd={nextButtonIcon}
+							label={nextButtonLabel}
+							disabled={nextButtonDisabled}
+							tabIndex={-1}
+						/>
+					</Link>
 				) : (
-					nextButton
+					<Button
+						variants={['text']}
+						iconEnd={nextButtonIcon}
+						label={nextButtonLabel}
+						disabled={nextButtonDisabled}
+					/>
 				)}
 			</div>
 		);
