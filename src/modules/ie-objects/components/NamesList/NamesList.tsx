@@ -169,7 +169,9 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 				value={searchTermsTemp}
 				onChange={handleOnChange}
 				onEnter={() => setSearchTerms(searchTermsTemp)}
-				ariaLabel={tText('Zoek naar een persoonsnaam in deze krant [INPUT_ARIA_LABEL]')}
+				ariaLabel={tText(
+					'modules/ie-objects/components/names-list/names-list___zoek-naar-een-persoonsnaam-in-deze-krant-input-aria-label'
+				)}
 			/>
 			<List
 				rowCount={filteredNames.length}

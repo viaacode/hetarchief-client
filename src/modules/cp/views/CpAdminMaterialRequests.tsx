@@ -438,7 +438,9 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 									page: 1,
 								})
 							}
-							ariaLabel={tText('Zoek materiaal aanvragen [INPUT_ARIA_LABEL]')}
+							ariaLabel={tText(
+								'modules/cp/views/cp-admin-material-requests___zoek-materiaal-aanvragen-input-aria-label'
+							)}
 						/>
 					</div>
 				</div>

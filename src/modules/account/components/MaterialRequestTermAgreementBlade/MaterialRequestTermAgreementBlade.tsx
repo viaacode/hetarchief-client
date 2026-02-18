@@ -46,7 +46,7 @@ const MaterialRequestTermAgreementBlade: FC<MaterialRequestTermAgreementBladePro
 				'modules/account/components/material-request-term-agreement-blade/material-request-term-agreement-blade___aanvullende-gebruiksvoorwaarden-bij-aanvragen'
 			)}
 			ariaLabel={tText(
-				'Aanvullende gebruikersvoorwaarden voor materiaal aanvragen [BLADE_ARIA_LABEL]'
+				'modules/account/components/material-request-term-agreement-blade/material-request-term-agreement-blade___aanvullende-gebruikersvoorwaarden-voor-materiaal-aanvragen-blade-aria-label'
 			)}
 			footerButtons={getFooterButtons()}
 			onClose={() => onClose(false)}

@@ -94,7 +94,10 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 					val: e.target.value,
 				})
 			}
-			ariaLabel={tText('Zoek {{fieldName}} [INPUT_ARIA_LABEL]', { fieldName: label })}
+			ariaLabel={tText(
+				'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___zoek-field-name-input-aria-label',
+				{ fieldName: label }
+			)}
 			id={props?.id || label}
 		/>
 	);

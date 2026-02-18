@@ -263,7 +263,9 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalU
 								page: 1,
 							})
 						}
-						ariaLabel={tText('Zoek naar bezoekersruimtes [INPUT_ARIA_LABEL]')}
+						ariaLabel={tText(
+							'modules/admin/views/visitor-spaces/admin-visitor-spaces-overview___zoek-naar-bezoekersruimtes-input-aria-label'
+						)}
 					/>
 
 					<ScrollableTabs

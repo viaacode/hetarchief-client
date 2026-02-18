@@ -311,7 +311,11 @@ const MediaCard: FC<MediaCardProps> = ({
 				{/** biome-ignore lint/performance/noImgElement: we need this*/}
 				<img
 					src={imagePath}
-					alt={typeof title === 'string' ? title : tText('image of the media object')}
+					alt={
+						typeof title === 'string'
+							? title
+							: tText('modules/shared/components/media-card/media-card___image-of-the-media-object')
+					}
 					width="100%"
 				/>
 				{!isNil(icon) && (
@@ -443,7 +447,9 @@ const MediaCard: FC<MediaCardProps> = ({
 				onClose={() => setIsRequestAccessBladeOpen(false)}
 				onSubmit={onRequestAccessSubmit}
 				id="media-card__request-access-blade"
-				ariaLabel={tText('Vraag een bezoek aan bij de bezoekersruimte aan [BLADE_ARIA_LABEL]')}
+				ariaLabel={tText(
+					'modules/shared/components/media-card/media-card___vraag-een-bezoek-aan-bij-de-bezoekersruimte-aan-blade-aria-label'
+				)}
 			/>
 		</div>
 	);

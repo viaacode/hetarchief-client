@@ -155,7 +155,9 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 											onChange={onChangeDuration}
 											placeholder={form[SearchFilterId.Duration]}
 											id="duration-filter-form__duration_input"
-											ariaLabel={tText('Duur bereik [INPUT_ARIA_LABEL]')}
+											ariaLabel={tText(
+												'modules/visitor-space/components/duration-filter-form/duration-filter-form___duur-bereik-input-aria-label'
+											)}
 										/>
 									) : (
 										<DurationInput
@@ -164,7 +166,9 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 											onChange={onChangeDuration}
 											placeholder={form[SearchFilterId.Duration]}
 											id="duration-filter-form__duration_range_input"
-											ariaLabel={tText('Duurtijd [INPUT_ARIA_LABEL]')}
+											ariaLabel={tText(
+												'modules/visitor-space/components/duration-filter-form/duration-filter-form___duurtijd-input-aria-label'
+											)}
 										/>
 									)}
 								</div>

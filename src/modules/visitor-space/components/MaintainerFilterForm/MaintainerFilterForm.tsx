@@ -118,7 +118,9 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 					)}
 					onChange={setSearch}
 					onSearch={noop}
-					ariaLabel={tText('Zoek op aanbieder [INPUT_ARIA_LABEL]')}
+					ariaLabel={tText(
+						'modules/visitor-space/components/maintainer-filter-form/maintainer-filter-form___zoek-op-aanbieder-input-aria-label'
+					)}
 				/>
 
 				<div className="c-filter-form__body--scrollable">

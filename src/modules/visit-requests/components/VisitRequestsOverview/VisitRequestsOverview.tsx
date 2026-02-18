@@ -222,7 +222,9 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 						placeholder={tText('pages/beheer/toegangsaanvragen/index___zoek')}
 						onChange={setSearch}
 						onSearch={(value) => setFilters({ [QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: value, page: 1 })}
-						ariaLabel={tText('Zoek bezoekers aanvragen [INPUT_ARIA_LABEL]')}
+						ariaLabel={tText(
+							'modules/visit-requests/components/visit-requests-overview/visit-requests-overview___zoek-bezoekers-aanvragen-input-aria-label'
+						)}
 					/>
 
 					<ScrollableTabs
@@ -260,7 +262,9 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 				}}
 				onFinish={refetch}
 				id="visit-request-overview__process-request-blade"
-				ariaLabel={tText('Materiaal aanvraag behandelen [BLADE_ARIA_LABEL]')}
+				ariaLabel={tText(
+					'modules/visit-requests/components/visit-requests-overview/visit-requests-overview___materiaal-aanvraag-behandelen-blade-aria-label'
+				)}
 			/>
 		</>
 	);

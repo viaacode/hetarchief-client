@@ -1247,7 +1247,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					]}
 					id="object-detail-page__metadata-field-detail-blade"
 					ariaLabel={tText(
-						'Lees de volledige waarde van het metadata veld {{selectedMetadataFieldName}} [BLADE_ARIA_LABEL]',
+						'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___lees-de-volledige-waarde-van-het-metadata-veld-selected-metadata-field-name-blade-aria-label',
 						{ selectedMetadataFieldName: selectedMetadataField?.title }
 					)}
 				>

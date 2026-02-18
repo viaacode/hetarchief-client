@@ -85,7 +85,9 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 					)}
 					onChange={setSearch}
 					onSearch={noop}
-					ariaLabel={tText('Zoek op medium')}
+					ariaLabel={tText(
+						'modules/visitor-space/components/medium-filter-form/medium-filter-form___zoek-op-medium'
+					)}
 				/>
 
 				<div className="c-filter-form__body--scrollable">

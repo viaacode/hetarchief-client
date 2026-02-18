@@ -96,7 +96,13 @@ const MaterialCard: FC<MaterialCardProps> = ({
 				{/** biome-ignore lint/performance/noImgElement: we need this*/}
 				<img
 					src={imagePath}
-					alt={typeof title === 'string' ? title : tText('image of the media object')}
+					alt={
+						typeof title === 'string'
+							? title
+							: tText(
+									'modules/visitor-space/components/material-card/material-card___image-of-the-media-object'
+								)
+					}
 					width="100%"
 					height="100%"
 				/>

@@ -168,7 +168,9 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 				onClose={() => setIsRequestAccessBladeOpen(false)}
 				onSubmit={onRequestAccessSubmit}
 				id="error-no-access-to-object__request-access-blade"
-				ariaLabel={tText('Geen toegang tot dit object, vraag toegang aan [BLADE_ARIA_LABEL]')}
+				ariaLabel={tText(
+					'modules/shared/components/error-no-access-to-object/error-no-access-to-object___geen-toegang-tot-dit-object-vraag-toegang-aan-blade-aria-label'
+				)}
 			/>
 		</>
 	);

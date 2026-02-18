@@ -831,7 +831,9 @@ export const IiifViewer = ({
 								currentSearchIndex={currentSearchIndex}
 								onChangeSearchIndex={setSearchResultIndex}
 								variants={['sm']}
-								searchInputAriaLabel={tText('Zoek tekst in deze krant [INPUT_ARIA_LABEL]')}
+								searchInputAriaLabel={tText(
+									'modules/iiif-viewer/iiif-viewer___zoek-tekst-in-deze-krant-input-aria-label'
+								)}
 							/>
 						</div>
 
@@ -944,9 +946,12 @@ export const IiifViewer = ({
 									// biome-ignore lint/performance/noImgElement: this is how it works
 									<img
 										src={imageInfo.thumbnailUrl}
-										alt={tText('go to newspaper page {{pageNumber}} alt label', {
-											pageNumber: index + 1,
-										})}
+										alt={tText(
+											'modules/iiif-viewer/iiif-viewer___go-to-newspaper-page-page-number-alt-label',
+											{
+												pageNumber: index + 1,
+											}
+										)}
 									/>
 								) : (
 									<div
@@ -984,7 +989,9 @@ export const IiifViewer = ({
 								{/* biome-ignore lint/performance/noImgElement: this is how it works */}
 								<img
 									src={imageInfo.thumbnailUrl}
-									alt={tText('go to newspaper page {{pageNumber}}', { pageNumber: index + 1 })}
+									alt={tText('modules/iiif-viewer/iiif-viewer___go-to-newspaper-page-page-number', {
+										pageNumber: index + 1,
+									})}
 								/>
 							</button>
 						);

@@ -261,7 +261,9 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 						maxLength={MAX_NAME_LENGTH}
 						value={requestGroupName}
 						onChange={(e) => setRequestGroupName(e.target.value)}
-						ariaLabel={tText('Aanvraag groeperingsnaam [INPUT_ARIA_LABEL]')}
+						ariaLabel={tText(
+							'modules/account/components/personal-info/personal-info___aanvraag-groeperingsnaam-input-aria-label'
+						)}
 					/>
 				</TooltipTrigger>
 				<TooltipContent>
@@ -355,7 +357,9 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 							)}
 							target="_blank"
 							rel="noopener noreferrer"
-							aria-label={tText('Bewerk je gegevens [BUTTON_ARIA_LABEL]')}
+							aria-label={tText(
+								'modules/account/components/personal-info/personal-info___bewerk-je-gegevens-button-aria-label'
+							)}
 						>
 							{tText(
 								'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-label'
@@ -393,7 +397,9 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 									value={organisationInputValue}
 									onChange={(e) => setOrganisationInputValue(e.target.value)}
 									autoComplete="organization"
-									ariaLabel={tText('Organisatie naam [INPUT_ARIA_LABEL]')}
+									ariaLabel={tText(
+										'modules/account/components/personal-info/personal-info___organisatie-naam-input-aria-label'
+									)}
 								/>
 							)}
 						</div>

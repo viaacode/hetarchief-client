@@ -98,7 +98,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 						<TextInput
 							{...field}
 							id={labelKeys.firstName}
-							ariaLabel={tText('Voornaam [INPUT_ARIA_LABEL]')}
+							ariaLabel={tText('modules/newsletter/newsletter-page___voornaam-input-aria-label')}
 						/>
 					)}
 				/>
@@ -117,7 +117,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 						<TextInput
 							{...field}
 							id={labelKeys.lastName}
-							ariaLabel={tText('Achternaam [INPUT_ARIA_LABEL]')}
+							ariaLabel={tText('modules/newsletter/newsletter-page___achternaam-input-aria-label')}
 						/>
 					)}
 				/>
@@ -136,7 +136,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 						<TextInput
 							{...field}
 							id={labelKeys.mail}
-							ariaLabel={tText('Email [INPUT_ARIA_LABEL]')}
+							ariaLabel={tText('modules/newsletter/newsletter-page___email-input-aria-label')}
 						/>
 					)}
 				/>

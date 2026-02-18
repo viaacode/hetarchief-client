@@ -67,7 +67,9 @@ export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 							<CopyButton
 								text={email}
 								variants={['sm', 'text']}
-								ariaLabel={tText('Kopieer het emailadres naar je klemboard')}
+								ariaLabel={tText(
+									'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___kopieer-het-emailadres-naar-je-klemboard'
+								)}
 							/>
 						</li>
 					)}
@@ -79,7 +81,9 @@ export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 							<CopyButton
 								text={phone}
 								variants={['sm', 'text']}
-								ariaLabel={tText('Kopieer het telefoonnummer naar je klemboard')}
+								ariaLabel={tText(
+									'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___kopieer-het-telefoonnummer-naar-je-klemboard'
+								)}
 							/>
 						</li>
 					)}
@@ -97,7 +101,9 @@ export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 						variants="text"
 						className="u-color-white u-ml--12"
 						onClick={() => window.history.back()}
-						ariaLabel={tText('Ga terug naar de zoekresultaten')}
+						ariaLabel={tText(
+							'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___ga-terug-naar-de-zoekresultaten'
+						)}
 					/>
 				)}
 			</Navigation.Left>

@@ -37,7 +37,9 @@ export const RequestTableColumns = (): Column<VisitRequest>[] => [
 				variants="text"
 				text={row.original.visitorMail}
 				title={row.original.visitorMail}
-				ariaLabel={tText('Kopieer het email adres van de bezoeker naar je klemboard')}
+				ariaLabel={tText(
+					'modules/admin/const/requests___kopieer-het-email-adres-van-de-bezoeker-naar-je-klemboard'
+				)}
 			>
 				{truncate(row.original.visitorMail, { length: 35 })}
 			</CopyButton>

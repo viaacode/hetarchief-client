@@ -86,7 +86,9 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 					)}
 					onChange={(value) => setSearch(value || '')}
 					onSearch={noop}
-					ariaLabel={tText('Zoek genres [INPUT_ARIA_LABEL]')}
+					ariaLabel={tText(
+						'modules/visitor-space/components/genre-filter-form/genre-filter-form___zoek-genres-input-aria-label'
+					)}
 				/>
 
 				<div className="c-filter-form__body--scrollable">

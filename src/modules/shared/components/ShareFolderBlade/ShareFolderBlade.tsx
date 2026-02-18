@@ -87,7 +87,9 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 		<Blade
 			isOpen={isOpen}
 			title={tText('pages/account/map-delen/folder-id/index___deel-map')}
-			ariaLabel={tText('Deel een map met iemand anders [BLADE_ARIA_LABEL]')}
+			ariaLabel={tText(
+				'modules/shared/components/share-folder-blade/share-folder-blade___deel-een-map-met-iemand-anders-blade-aria-label'
+			)}
 			footerButtons={getFooterButtons()}
 			onClose={handleClose}
 			id="share-folder-blade"
@@ -108,7 +110,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 							onChange={(evt) => setEmail(evt.target.value)}
 							className={styles['c-share-folder-blade__content-copy-input']}
 							ariaLabel={tText(
-								'Email adres van de persoon waarmee je de map wilt delen [INPUT_ARIA_LABEL]'
+								'modules/shared/components/share-folder-blade/share-folder-blade___email-adres-van-de-persoon-waarmee-je-de-map-wilt-delen-input-aria-label'
 							)}
 						/>
 						<Button
@@ -127,14 +129,18 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 							id="share-folder-blade__link-input"
 							value={link}
 							className={styles['c-share-folder-blade__content-copy-input']}
-							ariaLabel={tText('Deel link van de map [INPUT_ARIA_LABEL]')}
+							ariaLabel={tText(
+								'modules/shared/components/share-folder-blade/share-folder-blade___deel-link-van-de-map-input-aria-label'
+							)}
 						/>
 						<CopyButton
 							text={link}
 							iconStart={<Icon name={IconNamesLight.Copy} aria-hidden />}
 							label={tText('modules/shared/components/copy-button/copy-button___kopieer')}
 							variants={['inline-input']}
-							ariaLabel={tText('Kopieer de map deel link naar je klemboard')}
+							ariaLabel={tText(
+								'modules/shared/components/share-folder-blade/share-folder-blade___kopieer-de-map-deel-link-naar-je-klemboard'
+							)}
 						/>
 					</div>
 				</FormControl>

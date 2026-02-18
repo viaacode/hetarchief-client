@@ -124,7 +124,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 				onFinish={() => finish(setShowCancel)}
 				id="process-visit-blade__cancel-visit-blade"
 				ariaLabel={tText(
-					'Aanuleer je aanvraag om een bezoekersruimte te komen bezoeken [BLADE_ARIA_LABEL]'
+					'modules/home/components/process-visit-blade/process-visit-blade___aanuleer-je-aanvraag-om-een-bezoekersruimte-te-komen-bezoeken-blade-aria-label'
 				)}
 			/>
 		</BladeManager>

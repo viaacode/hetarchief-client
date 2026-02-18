@@ -71,7 +71,9 @@ const getRequesterColumn = (disableSort: boolean): Column<MaterialRequest> =>
 					icon={undefined}
 					variants="text"
 					text={original.requesterMail}
-					ariaLabel={tText('Kopieer het email adres van de aanvrager naar je klemboard')}
+					ariaLabel={tText(
+						'modules/cp/const/material-requests___kopieer-het-email-adres-van-de-aanvrager-naar-je-klemboard'
+					)}
 				>
 					{original.requesterMail}
 				</CopyButton>

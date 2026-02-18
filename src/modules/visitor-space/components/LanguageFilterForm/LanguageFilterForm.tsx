@@ -111,7 +111,9 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 					)}
 					onChange={(value) => setSearch(value || '')}
 					onSearch={noop}
-					ariaLabel={tText('Zoek op taal [INPUT_ARIA_LABEL]')}
+					ariaLabel={tText(
+						'modules/visitor-space/components/language-filter-form/language-filter-form___zoek-op-taal-input-aria-label'
+					)}
 				/>
 
 				<div className="c-filter-form__body--scrollable">

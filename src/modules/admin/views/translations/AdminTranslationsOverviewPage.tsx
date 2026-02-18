@@ -62,7 +62,9 @@ export const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUr
 				onClose={onClose}
 				title={title}
 				id="translations-blade"
-				ariaLabel={tText('Vertaling bewerken [BLADE_ARIA_LABEL]')}
+				ariaLabel={tText(
+					'modules/admin/views/translations/admin-translations-overview-page___vertaling-bewerken-blade-aria-label'
+				)}
 			>
 				<div className={styles['c-translations-overview__blade-body']}>{body}</div>
 			</Blade>

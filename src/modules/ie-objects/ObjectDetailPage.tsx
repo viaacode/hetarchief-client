@@ -1603,7 +1603,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					content={tHtml(
 						'modules/ie-objects/object-detail-page___deze-ocr-kan-fouten-bevatten-a-href-ocr-betrouwbaarheid-info-meer-info-vind-je-hier-a'
 					)}
-					closeButtonLabel={tText('Sluit deze melding [BUTTON_ARIA_LABEL]')}
+					closeButtonLabel={tText(
+						'modules/ie-objects/object-detail-page___sluit-deze-melding-button-aria-label'
+					)}
 				/>
 
 				{arePagesOcrTextsAvailable && (
@@ -1617,7 +1619,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 						searchResults={searchTerms ? searchResults : null}
 						currentSearchIndex={currentSearchResultIndex || 0}
 						onChangeSearchIndex={handleChangeSearchIndex}
-						searchInputAriaLabel={tText('Zoek tekst in deze krant [INPUT_ARIA_LABEL]')}
+						searchInputAriaLabel={tText(
+							'modules/ie-objects/object-detail-page___zoek-tekst-in-deze-krant-input-aria-label'
+						)}
 					/>
 				)}
 
@@ -1717,7 +1721,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					className={styles['p-object-detail__back']}
 					icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
 					variants={['black']}
-					ariaLabel={tText('Ga terug naar de zoekresultaten [BUTTON_ARIA_LABEL]')}
+					ariaLabel={tText(
+						'modules/ie-objects/object-detail-page___ga-terug-naar-de-zoekresultaten-button-aria-label'
+					)}
 				/>
 			</Link>
 		);
@@ -1859,7 +1865,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					onClose={onCloseBlade}
 					onSubmit={async () => onCloseBlade()}
 					id="object-detail-page__add-to-folder-blade"
-					ariaLabel={tText('Voeg dit object toe aan een map [BLADE_ARIA_LABEL]')}
+					ariaLabel={tText(
+						'modules/ie-objects/object-detail-page___voeg-dit-object-toe-aan-een-map-blade-aria-label'
+					)}
 				/>
 			)}
 			{mediaInfo && !isKiosk && (
@@ -1885,18 +1893,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				isOpen={activeBlade === MediaActions.Report}
 				onClose={onCloseBlade}
 				id="object-detail-page__report-blade"
-				ariaLabel={tText('Rapporteer iets dat foutief is met dit object [BLADE_ARIA_LABEL]')}
+				ariaLabel={tText(
+					'modules/ie-objects/object-detail-page___rapporteer-iets-dat-foutief-is-met-dit-object-blade-aria-label'
+				)}
 			/>
 			<RequestAccessBlade
 				isOpen={activeBlade === MediaActions.RequestAccess && !!user}
 				onClose={() => setActiveBlade(null, 'replaceIn')}
 				onSubmit={onRequestAccessSubmit}
 				id="object-detail-page__request-access-blade"
-				ariaLabel={tText('Vraag toegang tot dit object aan [BLADE_ARIA_LABEL]')}
+				ariaLabel={tText(
+					'modules/ie-objects/object-detail-page___vraag-toegang-tot-dit-object-aan-blade-aria-label'
+				)}
 			/>
 			<Blade
 				id="iiif-selection-download-url"
-				ariaLabel={tText('Download je selectie als afbeelding [BLADE_ARIA_LABEL]')}
+				ariaLabel={tText(
+					'modules/ie-objects/object-detail-page___download-je-selectie-als-afbeelding-blade-aria-label'
+				)}
 				isOpen={!!selectionDownloadUrl}
 				title={tText('modules/ie-objects/object-detail-page___selectie-is-klaar')}
 				onClose={() => setSelectionDownloadUrl(null)}

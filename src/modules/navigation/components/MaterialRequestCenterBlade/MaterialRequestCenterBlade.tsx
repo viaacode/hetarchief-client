@@ -224,7 +224,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						icon={
 							<Icon className={clsx('u-font-size-18')} name={IconNamesLight.Edit} aria-hidden />
 						}
-						ariaLabel={tText('Pas je materiaal aanvraag aan')}
+						ariaLabel={tText(
+							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-materiaal-aanvraag-aan'
+						)}
 						tooltipText={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
 						)}
@@ -341,7 +343,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		>
 			<Blade
 				id="material-request-center-blade"
-				ariaLabel={tText('Jouw nog te verzenden materiaal aanvragen [BLADE_ARIA_LABEL]')}
+				ariaLabel={tText(
+					'modules/navigation/components/material-request-center-blade/material-request-center-blade___jouw-nog-te-verzenden-materiaal-aanvragen-blade-aria-label'
+				)}
 				className={styles['c-material-request-center-blade']}
 				isOpen={isOpen}
 				layer={1}

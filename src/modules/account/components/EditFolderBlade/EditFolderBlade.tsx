@@ -126,7 +126,9 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 			onClose={handleClose}
 			id="edit-folder-blade"
 			isBladeInvalid={!!formErrors.name || !!formErrors.description}
-			ariaLabel={tText('Map aanpassen [BLADE_ARIA_LABEL]')}
+			ariaLabel={tText(
+				'modules/account/components/edit-folder-blade/edit-folder-blade___map-aanpassen-blade-aria-label'
+			)}
 		>
 			<FormControl
 				label={tText('modules/account/components/edit-folder-blade/edit-folder-blade___naam')}
@@ -142,7 +144,9 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 					maxLength={90}
 					value={name}
 					onChange={(e) => setName(e.target.value)}
-					ariaLabel={tText('Naam van de map [INPUT_ARIA_LABEL]')}
+					ariaLabel={tText(
+						'modules/account/components/edit-folder-blade/edit-folder-blade___naam-van-de-map-input-aria-label'
+					)}
 				/>
 			</FormControl>
 			<FormControl
@@ -161,7 +165,9 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 					onChange={(e) => setDescription(e.target.value)}
 					value={description}
 					id="edit-folder-blade__folder-description"
-					ariaLabel={tText('Beschrijving van de map [INPUT_ARIA_LABEL]')}
+					ariaLabel={tText(
+						'modules/account/components/edit-folder-blade/edit-folder-blade___beschrijving-van-de-map-input-aria-label'
+					)}
 				/>
 			</FormControl>
 		</Blade>

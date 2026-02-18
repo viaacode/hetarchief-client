@@ -416,7 +416,9 @@ const AppLayout: FC<any> = ({ children }) => {
 							}
 							closeIcon={<Icon name={IconNamesLight.Times} aria-hidden />}
 							onClose={onCloseAlert}
-							closeButtonLabel={tText('Sluit deze melding [BUTTON_ARIA_LABEL]')}
+							closeButtonLabel={tText(
+								'modules/shared/layouts/app-layout/app-layout___sluit-deze-melding-button-aria-label'
+							)}
 						/>
 					);
 				})}

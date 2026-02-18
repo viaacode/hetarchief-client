@@ -518,9 +518,11 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 							}}
 							onError={noop}
 							startInputAriaLabel={tText(
-								'Start tijd van de video/audio selectie [INPUT_ARIA_LABEL]'
+								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___start-tijd-van-de-video-audio-selectie-input-aria-label'
 							)}
-							endInputAriaLabel={tText('Eind tijd van de video/audio selectie [INPUT_ARIA_LABEL]')}
+							endInputAriaLabel={tText(
+								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___eind-tijd-van-de-video-audio-selectie-input-aria-label'
+							)}
 						/>
 					</div>
 				)}
@@ -627,7 +629,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 								setFormValue(MaterialRequestReuseFormKey.intendedUsageDescription, evt.target.value)
 							}
 							ariaLabel={tText(
-								'Beschrijving van het bedoelde gebruik van het materiaal [INPUT_ARIA_LABEL]'
+								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___beschrijving-van-het-bedoelde-gebruik-van-het-materiaal-input-aria-label'
 							)}
 						/>
 					</FormControl>
@@ -805,7 +807,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 										)
 									}
 									ariaLabel={tText(
-										'Geef hier een uitleg over het type ontsluiting dat je wenst te gebruiken [INPUT_ARIA_LABEL]'
+										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___geef-hier-een-uitleg-over-het-type-ontsluiting-dat-je-wenst-te-gebruiken-input-aria-label'
 									)}
 								/>
 							</FormControl>
@@ -900,7 +902,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 										)
 									}
 									ariaLabel={tText(
-										'Geef hier een uitleg over het geografisch gebruik dat je wenst te gebruiken [INPUT_ARIA_LABEL]'
+										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___geef-hier-een-uitleg-over-het-geografisch-gebruik-dat-je-wenst-te-gebruiken-input-aria-label'
 									)}
 								/>
 								<MaxLengthIndicator
@@ -1051,7 +1053,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			footerButtons={getFooterButtons()}
 			stickyFooter={false}
 			isBladeInvalid={!isFormValid}
-			ariaLabel={tText('Materiaal download en hergebruik aanvragen [BLADE_ARIA_LABEL]')}
+			ariaLabel={tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___materiaal-download-en-hergebruik-aanvragen-blade-aria-label'
+			)}
 		>
 			<div className={styles['c-request-material-reuse__content-form']}>
 				{renderVideoSettings()}

@@ -1116,7 +1116,9 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 							setSelectedCard(null);
 						}}
 						id="search-page__add-to-folder-blade"
-						ariaLabel={tText('Voeg object toe aan map [BLADE_ARIA_LABEL]')}
+						ariaLabel={tText(
+							'modules/search/search-page___voeg-object-toe-aan-map-blade-aria-label'
+						)}
 					/>
 				)}
 			</>

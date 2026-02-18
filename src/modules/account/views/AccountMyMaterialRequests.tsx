@@ -436,7 +436,9 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 											page: 1,
 										})
 									}
-									ariaLabel={tText('Zoek naar materiaal aanvraag [INPUT_ARIA_LABEL]')}
+									ariaLabel={tText(
+										'modules/account/views/account-my-material-requests___zoek-naar-materiaal-aanvraag-input-aria-label'
+									)}
 								/>
 							</div>
 						</div>

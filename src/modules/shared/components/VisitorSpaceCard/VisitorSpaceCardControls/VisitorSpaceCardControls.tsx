@@ -89,7 +89,9 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 						icon: <Icon name={IconNamesLight.Contact} aria-hidden />,
 						variants: ['silver', 'sm'],
 					}}
-					id={tText('Toon contact informatie van deze bezoekersruimte [BUTTON_ARIA_LABEL]')}
+					id={tText(
+						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___toon-contact-informatie-van-deze-bezoekersruimte-button-aria-label'
+					)}
 				>
 					{/* biome-ignore lint/a11y/useKeyWithClickEvents: only prevents the click event propagation */}
 					<ul
@@ -104,7 +106,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 									text={room.contactInfo.email}
 									variants={['sm', 'text']}
 									ariaLabel={tText(
-										'Kopieer het email adres van de bezoekersruimte naar je klemboard'
+										'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___kopieer-het-email-adres-van-de-bezoekersruimte-naar-je-klemboard'
 									)}
 								/>
 							</li>
@@ -118,7 +120,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 									text={room.contactInfo.telephone}
 									variants={['sm', 'text']}
 									ariaLabel={tText(
-										'Kopieer het telefoonnummer van de bezoekersruimte naar je klemboard'
+										'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___kopieer-het-telefoonnummer-van-de-bezoekersruimte-naar-je-klemboard'
 									)}
 								/>
 							</li>

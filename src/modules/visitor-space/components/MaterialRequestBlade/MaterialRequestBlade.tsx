@@ -435,7 +435,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						className={styles['c-request-material__reason-input']}
 						onChange={(e) => setReasonInputValue(e.target.value)}
 						value={reasonInputValue}
-						ariaLabel={tText('Reden van aanvraag [INPUT_ARIA_LABEL]')}
+						ariaLabel={tText(
+							'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag-input-aria-label'
+						)}
 					/>
 				</dd>
 			</>
@@ -490,7 +492,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			footerButtons={getFooterButtons()}
 			isManaged
 			isBladeInvalid={noTypeSelectedOnSave}
-			ariaLabel={tText('Vraag materiaal aan [BLADE_ARIA_LABEL]')}
+			ariaLabel={tText(
+				'modules/visitor-space/components/material-request-blade/material-request-blade___vraag-materiaal-aan-blade-aria-label'
+			)}
 		>
 			<div className={styles['c-request-material__content']}>
 				<dl>

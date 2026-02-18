@@ -174,7 +174,9 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({
 					id={labelKeys.requestReason}
 					maxLength={300}
 					disabled={!isOpen}
-					ariaLabel={tText('Reden voor bezoekersaanvraag [INPUT_ARIA_LABEL]')}
+					ariaLabel={tText(
+						'modules/home/components/request-access-blade/request-access-blade___reden-voor-bezoekersaanvraag-input-aria-label'
+					)}
 				/>
 			</FormControl>
 
@@ -196,7 +198,9 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({
 					id={labelKeys.visitTime}
 					maxLength={300}
 					disabled={!isOpen}
-					ariaLabel={tText('Wanneer wil je de bezoekersruimte bezoeken? [INPUT_ARIA_LABEL]')}
+					ariaLabel={tText(
+						'modules/home/components/request-access-blade/request-access-blade___wanneer-wil-je-de-bezoekersruimte-bezoeken-input-aria-label'
+					)}
 				/>
 			</FormControl>
 

@@ -55,7 +55,9 @@ export const VisitorsTableColumns = (
 				icon={undefined}
 				variants="text"
 				text={row.original.visitorMail}
-				ariaLabel={tText('Kopieer het email adres van de bezoeker naar je klemboard')}
+				ariaLabel={tText(
+					'modules/cp/const/visitors___kopieer-het-email-adres-van-de-bezoeker-naar-je-klemboard'
+				)}
 			>
 				{row.original.visitorMail}
 			</CopyButton>
