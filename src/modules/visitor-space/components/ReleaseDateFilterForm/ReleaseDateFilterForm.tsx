@@ -216,6 +216,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 						setYearRange(e.target.value);
 					}}
 					value={yearRange}
+					ariaLabel={tText('Release datum')}
 				/>
 			);
 		}
@@ -248,6 +249,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 					id="releaseDate"
 					onChange={(e) => onChangeYear(e)}
 					value={year}
+					ariaLabel={tText('Release datum [INPUT_ARIA_LABEL]')}
 				/>
 			);
 		}
@@ -261,6 +263,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 					onChangeDateInput(date);
 				}}
 				value={value ? parseISO(value) : undefined}
+				ariaLabel={tText('Release datum')}
 			/>
 		);
 	};

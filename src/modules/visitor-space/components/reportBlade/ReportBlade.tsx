@@ -177,6 +177,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 						const report = evt.target.value;
 						setReportMessage(report);
 					}}
+					ariaLabel={tText('Beschrijf het probleem [INPUT_ARIA_LABEL]')}
 				/>
 			</FormControl>
 
@@ -203,6 +204,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 						const email = evt.currentTarget.value;
 						setEmail(email);
 					}}
+					ariaLabel={tText('Jouw email adres [INPUT_ARIA_LABEL]')}
 				/>
 			</FormControl>
 		</Blade>

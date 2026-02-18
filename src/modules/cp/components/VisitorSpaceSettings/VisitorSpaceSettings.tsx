@@ -488,7 +488,10 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 										slug: evt.currentTarget.value,
 									})
 								}
-								value={formValues?.slug}
+								value={formValues?.slug || ''}
+								ariaLabel={tText(
+									'Naam van de bezoekersruimte als slug in de url [INPUT_ARIA_LABEL]'
+								)}
 							/>
 						</FormControl>
 

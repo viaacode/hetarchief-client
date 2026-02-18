@@ -78,11 +78,12 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 	const renderTextField = (
 		Component: FC<TextInputProps>,
+		label: string,
 		value?: string,
 		props?: TextInputProps
 	) => (
 		<Component
-			{...props}
+			{...(props || {})}
 			className={clsx(
 				styles['c-advanced-filter-fields__dynamic-field'],
 				styles['c-advanced-filter-fields__dynamic-field--text']
@@ -93,6 +94,8 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 					val: e.target.value,
 				})
 			}
+			ariaLabel={tText('Zoek {{fieldName}} [INPUT_ARIA_LABEL]', { fieldName: label })}
+			id={props?.id || label}
 		/>
 	);
 
@@ -114,7 +117,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			case TextInput: {
 				const TextInputComponent = filterConfig.inputComponent as FC<TextInputProps>;
 				const textInputComponentProps = filterConfig.inputComponentProps as TextInputProps;
-				return renderTextField(TextInputComponent, filterValue.val, {
+				return renderTextField(TextInputComponent, filterConfig.label, filterValue.val, {
 					...textInputComponentProps,
 					...(props as TextInputProps),
 				});
@@ -153,7 +156,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				const TextInputComponent = filterConfig.inputComponent as FC<TextInputProps>;
 				const textInputComponent = filterConfig.inputComponentProps as TextInputProps;
 
-				return renderTextField(TextInputComponent, value, {
+				return renderTextField(TextInputComponent, filterConfig.label, value, {
 					...textInputComponent,
 					...(props as TextInputProps),
 				});
@@ -164,7 +167,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				const TextInputComponent = filterConfig.inputComponent as FC<TextInputProps>;
 				const textInputComponentProps = filterConfig.inputComponentProps as TextInputProps;
 
-				return renderTextField(TextInputComponent, value, {
+				return renderTextField(TextInputComponent, filterConfig.label, value, {
 					...textInputComponentProps,
 					...(props as TextInputProps),
 				});

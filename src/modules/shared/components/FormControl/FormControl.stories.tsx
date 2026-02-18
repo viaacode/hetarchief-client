@@ -12,7 +12,7 @@ const Template: ComponentStory<typeof FormControl> = (args) => <FormControl {...
 
 export const Basic = Template.bind({});
 Basic.args = {
-	children: <TextInput id={name} placeholder="..." />,
+	children: <TextInput id={name} placeholder="..." ariaLabel="test" value="" />,
 };
 
 export const Label = Template.bind({});
@@ -50,11 +50,11 @@ export const Disabled = Template.bind({});
 Disabled.args = {
 	...Label.args,
 	disabled: true,
-	children: <TextInput disabled id={name} placeholder="..." />,
+	children: <TextInput disabled id={name} placeholder="..." ariaLabel="test" value="" />,
 };
 
 export const Area = Template.bind({});
 Area.args = {
 	...Label.args,
-	children: <TextArea id={name} placeholder="..." />,
+	children: <TextArea id={name} placeholder="..." ariaLabel="test" value="" />,
 };

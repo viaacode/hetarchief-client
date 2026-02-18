@@ -13,7 +13,7 @@ const DurationInput: FC<TextInputProps> = (props) => (
 		{...props}
 		type="text"
 		pattern={durationRegex}
-		step="1"
+		step={1}
 		iconStart={<Icon name={IconNamesLight.Clock} aria-hidden />}
 		iconEnd={
 			<span className={styles['c-duration-input--placeholder']}>

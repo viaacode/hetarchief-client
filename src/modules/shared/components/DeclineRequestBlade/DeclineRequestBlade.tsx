@@ -127,9 +127,11 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 						<>
 							<TextArea
 								{...field}
+								value={field.value || ''}
 								id={labelKeys.reasonForDenial}
 								maxLength={300}
 								onChange={(evt) => setValue('reasonForDenial', evt.target.value)}
+								ariaLabel={tText('Reden voor weigering [INPUT_ARIA_LABEL]')}
 							/>
 							<MaxLengthIndicator maxLength={300} value={field.value} />
 						</>

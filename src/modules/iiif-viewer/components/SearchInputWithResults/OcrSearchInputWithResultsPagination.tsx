@@ -4,11 +4,12 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
-import type { FC, KeyboardEvent } from 'react';
+import type { FC } from 'react';
 
 import styles from './SearchInputWithResultsPagination.module.scss';
 
-export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginationProps> = ({
+export const OcrSearchInputWithResultsPagination: FC<SearchInputWithResultsPaginationProps> = ({
+	id,
 	value,
 	onChange,
 	onSearch,
@@ -18,13 +19,8 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 	currentSearchIndex,
 	className,
 	variants = [],
+	searchInputAriaLabel,
 }) => {
-	const handleKeyUp = (evt: KeyboardEvent<HTMLInputElement>) => {
-		if (evt.key === 'Enter') {
-			onSearch(value);
-		}
-	};
-
 	return (
 		<div
 			className={clsx(
@@ -34,13 +30,15 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 			)}
 		>
 			<TextInput
+				id={`ocr-search-input-with-results-pagination--${id}`}
 				value={value}
 				onChange={(evt) => onChange(evt.target.value)}
-				onKeyUp={handleKeyUp}
+				onEnter={() => onSearch(value)}
 				variants={variants}
 				placeholder={tText(
 					'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___zoek'
 				)}
+				ariaLabel={searchInputAriaLabel}
 			/>
 			{!!searchResults && (
 				<>

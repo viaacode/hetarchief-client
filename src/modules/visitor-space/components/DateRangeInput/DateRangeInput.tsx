@@ -1,7 +1,6 @@
+import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
 import type { FC } from 'react';
-
-import { tText } from '@shared/helpers/translate';
 
 import { DateInput } from '../DateInput';
 
@@ -40,6 +39,7 @@ const DateRangeInput: FC<DateRangeInputProps> = ({
 				onChange={(newDate) => newDate && onChange(newDate, to)}
 				disabled={disabled}
 				id={`${id}__from`}
+				ariaLabel={tText('Vanaf datum [INPUT_ARIA_LABEL]')}
 			/>
 			<DateInput
 				label={
@@ -53,6 +53,7 @@ const DateRangeInput: FC<DateRangeInputProps> = ({
 				onChange={(newDate) => newDate && onChange(from, newDate)}
 				disabled={disabled}
 				id={`${id}__to`}
+				ariaLabel={tText('Tot datum [INPUT_ARIA_LABEL]')}
 			/>
 		</div>
 	);

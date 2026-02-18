@@ -27,7 +27,7 @@ const Metadata: FC<MetadataProps> = ({
 		if (renderRight) {
 			return (
 				<>
-					<div className="u-flex-grow">{renderDtAndDd()}</div>
+					<dl className="u-flex-grow">{renderDtAndDd()}</dl>
 					<div className={styles['c-metadata__item-right']}>{renderRight}</div>
 				</>
 			);
@@ -39,18 +39,13 @@ const Metadata: FC<MetadataProps> = ({
 	if (!children) {
 		return null;
 	}
-	return (
-		<div
-			className={clsx(
-				styles['c-metadata__item'],
-				className,
-				'u-flex',
-				renderRight ? 'u-flex-row' : 'u-flex-col'
-			)}
-		>
-			{renderItem()}
-		</div>
+	const completeClassName: string = clsx(
+		styles['c-metadata__item'],
+		className,
+		'u-flex',
+		renderRight ? 'u-flex-row' : 'u-flex-col'
 	);
+	return <div className={completeClassName}>{renderItem()}</div>;
 };
 
 export default Metadata;

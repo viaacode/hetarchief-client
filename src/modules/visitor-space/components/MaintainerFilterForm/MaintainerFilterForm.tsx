@@ -1,12 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { compact, keyBy, mapValues, noop, without } from 'lodash-es';
-import { type FC, useCallback, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
-import { useQueryParams } from 'use-query-params';
-
 import { SearchBar } from '@shared/components/SearchBar';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
@@ -22,6 +15,12 @@ import {
 	SearchFilterId,
 } from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
+import clsx from 'clsx';
+import { compact, keyBy, mapValues, noop, without } from 'lodash-es';
+import { type FC, useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { useQueryParams } from 'use-query-params';
 
 import {
 	MAINTAINER_FILTER_FORM_QUERY_PARAM_CONFIG,
@@ -119,6 +118,7 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 					)}
 					onChange={setSearch}
 					onSearch={noop}
+					ariaLabel={tText('Zoek op aanbieder [INPUT_ARIA_LABEL]')}
 				/>
 
 				<div className="c-filter-form__body--scrollable">

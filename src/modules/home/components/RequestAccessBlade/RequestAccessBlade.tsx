@@ -174,6 +174,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({
 					id={labelKeys.requestReason}
 					maxLength={300}
 					disabled={!isOpen}
+					ariaLabel={tText('Reden voor bezoekersaanvraag [INPUT_ARIA_LABEL]')}
 				/>
 			</FormControl>
 
@@ -190,11 +191,12 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({
 				)}
 			>
 				<TextArea
-					value={formValues.visitTime}
+					value={formValues.visitTime || ''}
 					onChange={(evt) => setFormValue('visitTime', evt.target.value)}
 					id={labelKeys.visitTime}
 					maxLength={300}
 					disabled={!isOpen}
+					ariaLabel={tText('Wanneer wil je de bezoekersruimte bezoeken? [INPUT_ARIA_LABEL]')}
 				/>
 			</FormControl>
 

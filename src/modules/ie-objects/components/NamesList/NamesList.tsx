@@ -10,7 +10,6 @@ import React, {
 	type ChangeEvent,
 	type CSSProperties,
 	type FC,
-	type KeyboardEvent,
 	useCallback,
 	useEffect,
 	useRef,
@@ -36,15 +35,6 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 			setSearchTerms(evt.target.value);
 		}
 	};
-
-	const handleOnKeyUp = useCallback(
-		(evt: KeyboardEvent<HTMLInputElement>): void => {
-			if (evt.key === 'Enter') {
-				setSearchTerms(searchTermsTemp);
-			}
-		},
-		[searchTermsTemp]
-	);
 
 	const handleSearchIconClicked = () => {
 		setSearchTerms(searchTermsTemp);
@@ -167,6 +157,7 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 	return (
 		<div className={clsx(className, styles['c-names-list'])} ref={ref}>
 			<TextInput
+				id="person-names-search"
 				type="search"
 				className={styles['c-names-list__search']}
 				iconEnd={
@@ -177,7 +168,8 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 				)}
 				value={searchTermsTemp}
 				onChange={handleOnChange}
-				onKeyUp={handleOnKeyUp}
+				onEnter={() => setSearchTerms(searchTermsTemp)}
+				ariaLabel={tText('Zoek naar een persoonsnaam in deze krant [INPUT_ARIA_LABEL]')}
 			/>
 			<List
 				rowCount={filteredNames.length}

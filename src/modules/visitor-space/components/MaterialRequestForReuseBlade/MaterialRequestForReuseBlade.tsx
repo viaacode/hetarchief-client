@@ -494,6 +494,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				{playableFile && mediaDuration && (
 					<div className={styles['c-request-material-reuse__content-full-width']}>
 						<TimeCropControls
+							id="material-request_for-reuse-blade__time-crop-controls"
 							className={styles['c-request-material-reuse__content-time-controls']}
 							startTime={formValues.startTime ?? 0}
 							endTime={formValues.endTime || mediaDuration}
@@ -516,6 +517,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 								setFormValue(MaterialRequestReuseFormKey.endTime, endTime);
 							}}
 							onError={noop}
+							startInputAriaLabel={tText(
+								'Start tijd van de video/audio selectie [INPUT_ARIA_LABEL]'
+							)}
+							endInputAriaLabel={tText('Eind tijd van de video/audio selectie [INPUT_ARIA_LABEL]')}
 						/>
 					</div>
 				)}
@@ -615,11 +620,15 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 						]}
 					>
 						<TextArea
+							id="material-request-for-reuse-blade__intended-usage-description"
 							value={formValues.intendedUsageDescription}
 							maxLength={300}
 							onChange={(evt) =>
 								setFormValue(MaterialRequestReuseFormKey.intendedUsageDescription, evt.target.value)
 							}
+							ariaLabel={tText(
+								'Beschrijving van het bedoelde gebruik van het materiaal [INPUT_ARIA_LABEL]'
+							)}
 						/>
 					</FormControl>
 				</dd>
@@ -786,6 +795,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 								className={clsx(styles['c-request-material-reuse__content-value-extra-padding'])}
 							>
 								<TextArea
+									id="material-request-for-reuse-blade__distribution-type-other-explanation"
 									value={formValues.distributionTypeOtherExplanation}
 									disabled={formValues.distributionType !== MaterialRequestDistributionType.OTHER}
 									onChange={(evt) =>
@@ -794,6 +804,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 											evt.target.value
 										)
 									}
+									ariaLabel={tText(
+										'Geef hier een uitleg over het type ontsluiting dat je wenst te gebruiken [INPUT_ARIA_LABEL]'
+									)}
 								/>
 							</FormControl>
 						</>
@@ -873,6 +886,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 								className={clsx(styles['c-request-material-reuse__content-value-extra-padding'])}
 							>
 								<TextArea
+									id="material-request-for-reuse-blade__geographical-usage-description"
 									value={formValues.geographicalUsageDescription}
 									maxLength={300}
 									disabled={
@@ -885,6 +899,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 											evt.target.value
 										)
 									}
+									ariaLabel={tText(
+										'Geef hier een uitleg over het geografisch gebruik dat je wenst te gebruiken [INPUT_ARIA_LABEL]'
+									)}
 								/>
 								<MaxLengthIndicator
 									maxLength={300}

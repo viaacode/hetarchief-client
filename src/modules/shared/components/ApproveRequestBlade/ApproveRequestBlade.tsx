@@ -346,6 +346,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						onBlur={field.onBlur}
 						onChange={(date) => onFromDateChange(date, field)}
 						value={field.value}
+						ariaLabel={tText('Toegang vanaf datum [INPUT_ARIA_LABEL]')}
 					/>
 
 					<Timepicker
@@ -357,6 +358,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						onChange={(date) => onFromDateChange(date, field)}
 						selected={field.value}
 						value={formatTime(field.value)}
+						ariaLabel={tText('Toegang vanaf tijd [INPUT_ARIA_LABEL]')}
 					/>
 				</>
 			);
@@ -382,6 +384,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						onBlur={field.onBlur}
 						onChange={(date) => onSimpleDateChange(date, field)}
 						value={field.value}
+						ariaLabel={tText('Toegang tot datum [INPUT_ARIA_LABEL]')}
 					/>
 
 					<Timepicker
@@ -393,6 +396,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						onChange={(date) => onSimpleDateChange(date, field)}
 						selected={field.value}
 						value={formatTime(field.value)}
+						ariaLabel={tText('Toegang tot tijd [INPUT_ARIA_LABEL]')}
 					/>
 				</>
 			);
@@ -411,6 +415,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				id={labelKeys.accessRemark}
 				maxLength={300}
 				onChange={(evt) => setValue('accessRemark', evt.target.value)}
+				ariaLabel={tText('Opmerking [INPUT_ARIA_LABEL]')}
 			/>
 			<MaxLengthIndicator maxLength={300} value={field.value} />
 		</>

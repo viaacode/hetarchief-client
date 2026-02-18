@@ -107,6 +107,9 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 							value={email}
 							onChange={(evt) => setEmail(evt.target.value)}
 							className={styles['c-share-folder-blade__content-copy-input']}
+							ariaLabel={tText(
+								'Email adres van de persoon waarmee je de map wilt delen [INPUT_ARIA_LABEL]'
+							)}
 						/>
 						<Button
 							label={tText('pages/account/map-delen/folder-id/index___verstuur')}
@@ -121,9 +124,10 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 				<FormControl label={tText('pages/account/map-delen/folder-id/index___via-deellink')}>
 					<div className={clsx(styles['c-share-folder-blade__content-copy-container'])}>
 						<TextInput
-							id="link"
+							id="share-folder-blade__link-input"
 							value={link}
 							className={styles['c-share-folder-blade__content-copy-input']}
+							ariaLabel={tText('Deel link van de map [INPUT_ARIA_LABEL]')}
 						/>
 						<CopyButton
 							text={link}

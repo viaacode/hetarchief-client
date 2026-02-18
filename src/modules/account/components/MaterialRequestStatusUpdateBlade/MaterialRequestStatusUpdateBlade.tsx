@@ -199,6 +199,9 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 								maxLength={MAX_MOTIVATION_LENGTH}
 								onChange={(e) => setMotivationInputValue(e.target.value)}
 								value={motivationInputValue}
+								ariaLabel={tText(
+									'Motivatie voor het goedkeuren of afkeuren van de aanvraag [INPUT_ARIA_LABEL]'
+								)}
 							/>
 						</FormControl>
 					</dd>

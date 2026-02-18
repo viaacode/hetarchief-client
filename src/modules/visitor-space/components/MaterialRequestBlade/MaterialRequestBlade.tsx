@@ -435,6 +435,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						className={styles['c-request-material__reason-input']}
 						onChange={(e) => setReasonInputValue(e.target.value)}
 						value={reasonInputValue}
+						ariaLabel={tText('Reden van aanvraag [INPUT_ARIA_LABEL]')}
 					/>
 				</dd>
 			</>

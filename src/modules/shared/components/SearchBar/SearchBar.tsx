@@ -1,4 +1,4 @@
-import { Button, keysEnter, onKey, TextInput } from '@meemoo/react-components';
+import { Button, TextInput } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
@@ -24,7 +24,7 @@ const SearchBar: FC<SearchBarProps> = ({
 			value={value}
 			onChange={(e) => onChange(e.target.value)}
 			variants={getVariants()}
-			onKeyDown={(e) => onKey(e, [...keysEnter], () => onSearch(value))}
+			onEnter={() => onSearch(value)}
 			iconEnd={
 				<>
 					{value && (

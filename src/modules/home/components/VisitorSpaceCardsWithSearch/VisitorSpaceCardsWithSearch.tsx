@@ -104,6 +104,7 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 					onSearch={(value: string) => {
 						onSearch?.(value);
 					}}
+					ariaLabel={tText('Zoek bezoekersruimte [INPUT_ARIA_LABEL]')}
 				/>
 			</div>
 

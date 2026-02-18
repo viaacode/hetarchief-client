@@ -234,6 +234,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 									[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: value || undefined,
 								})
 							}
+							ariaLabel={tText('Zoek bezoekers [INPUT_ARIA_LABEL]')}
 						/>
 
 						<ScrollableTabs

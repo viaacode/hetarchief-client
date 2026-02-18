@@ -91,6 +91,7 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 				render={({ field }) => (
 					<ContentInput
 						{...field}
+						ariaLabel={tText('Nieuwe map naam [INPUT_ARIA_LABEL]')}
 						autoCapitalize="off"
 						autoComplete="off"
 						autoCorrect="off"
@@ -136,7 +137,7 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 						placeholder={tText(
 							'modules/account/components/create-folder-button/create-folder-button___nieuwe-map'
 						)}
-						spellCheck="false"
+						spellCheck={false}
 						variants={['normal']}
 					/>
 				)}

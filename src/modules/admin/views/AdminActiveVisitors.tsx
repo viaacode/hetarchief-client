@@ -155,6 +155,7 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 										page: 1,
 									})
 								}
+								ariaLabel={tText('Zoek actieve bezoekers [INPUT_ARIA_LABEL]')}
 							/>
 						</div>
 

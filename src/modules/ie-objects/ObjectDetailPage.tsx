@@ -49,7 +49,7 @@ import {
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
-import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
+import { OcrSearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/OcrSearchInputWithResultsPagination';
 import {
 	iiifGoToHome,
 	iiifGoToPage,
@@ -1607,7 +1607,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				/>
 
 				{arePagesOcrTextsAvailable && (
-					<SearchInputWithResultsPagination
+					<OcrSearchInputWithResultsPagination
+						id="object-detail-page__ocr-search-input"
 						className={styles['p-object-detail__ocr__search']}
 						value={searchTermsTemp}
 						onChange={setSearchTermsTemp}
@@ -1616,6 +1617,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 						searchResults={searchTerms ? searchResults : null}
 						currentSearchIndex={currentSearchResultIndex || 0}
 						onChangeSearchIndex={handleChangeSearchIndex}
+						searchInputAriaLabel={tText('Zoek tekst in deze krant [INPUT_ARIA_LABEL]')}
 					/>
 				)}
 

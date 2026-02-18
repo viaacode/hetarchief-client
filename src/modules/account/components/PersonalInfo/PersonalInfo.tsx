@@ -257,9 +257,11 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 			<Tooltip position="left">
 				<TooltipTrigger>
 					<TextInput
+						id="personal-info__material-reques-group-name"
 						maxLength={MAX_NAME_LENGTH}
 						value={requestGroupName}
 						onChange={(e) => setRequestGroupName(e.target.value)}
+						ariaLabel={tText('Aanvraag groeperingsnaam [INPUT_ARIA_LABEL]')}
 					/>
 				</TooltipTrigger>
 				<TooltipContent>
@@ -387,9 +389,11 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 								user.organisationName
 							) : (
 								<TextInput
+									id="personal-info__organisation-input"
 									value={organisationInputValue}
 									onChange={(e) => setOrganisationInputValue(e.target.value)}
 									autoComplete="organization"
+									ariaLabel={tText('Organisatie naam [INPUT_ARIA_LABEL]')}
 								/>
 							)}
 						</div>

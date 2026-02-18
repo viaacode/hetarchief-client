@@ -1,4 +1,4 @@
-import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
+import { OcrSearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/OcrSearchInputWithResultsPagination';
 import {
 	destroyOpenSeadragonViewerMouseTracker,
 	initOpenSeadragonViewerMouseTracker,
@@ -821,7 +821,8 @@ export const IiifViewer = ({
 								'u-flex-shrink'
 							)}
 						>
-							<SearchInputWithResultsPagination
+							<OcrSearchInputWithResultsPagination
+								id="iiif-viewer__iiif-viewer-buttons__ocr-search-input"
 								value={searchTerms}
 								onChange={setSearchTerms}
 								onSearch={onSearch}
@@ -830,6 +831,7 @@ export const IiifViewer = ({
 								currentSearchIndex={currentSearchIndex}
 								onChangeSearchIndex={setSearchResultIndex}
 								variants={['sm']}
+								searchInputAriaLabel={tText('Zoek tekst in deze krant [INPUT_ARIA_LABEL]')}
 							/>
 						</div>
 

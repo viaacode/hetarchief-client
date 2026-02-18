@@ -137,7 +137,13 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 					</div>,
 				]}
 			>
-				<TextInput maxLength={90} value={name} onChange={(e) => setName(e.target.value)} />
+				<TextInput
+					id={'edit-folder-name__folder-name'}
+					maxLength={90}
+					value={name}
+					onChange={(e) => setName(e.target.value)}
+					ariaLabel={tText('Naam van de map [INPUT_ARIA_LABEL]')}
+				/>
 			</FormControl>
 			<FormControl
 				label={tText(
@@ -154,6 +160,8 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 					maxLength={300}
 					onChange={(e) => setDescription(e.target.value)}
 					value={description}
+					id="edit-folder-blade__folder-description"
+					ariaLabel={tText('Beschrijving van de map [INPUT_ARIA_LABEL]')}
 				/>
 			</FormControl>
 		</Blade>

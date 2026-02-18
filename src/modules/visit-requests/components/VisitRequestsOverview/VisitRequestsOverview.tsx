@@ -222,6 +222,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 						placeholder={tText('pages/beheer/toegangsaanvragen/index___zoek')}
 						onChange={setSearch}
 						onSearch={(value) => setFilters({ [QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: value, page: 1 })}
+						ariaLabel={tText('Zoek bezoekers aanvragen [INPUT_ARIA_LABEL]')}
 					/>
 
 					<ScrollableTabs
