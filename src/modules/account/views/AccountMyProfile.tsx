@@ -151,7 +151,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			title={tText('pages/account/mijn-profiel/index___alert-title')}
 			content={tHtml('pages/account/mijn-profiel/index___alert-message')}
 			icon={<Icon name={IconNamesLight.Exclamation} aria-hidden />}
-			id={'edit-profile-alert'}
+			id="edit-profile-alert"
 		/>
 	);
 

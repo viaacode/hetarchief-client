@@ -54,7 +54,7 @@ const DateInput: FC<DateInputProps> = ({
 				popperPlacement="bottom-start"
 				customInput={
 					<TextInput
-						id="date-input__text-field"
+						id={`${id}__date-input__text-field`}
 						iconStart={<Icon name={IconNamesLight.Calendar} aria-hidden />}
 						ariaLabel={ariaLabel}
 						value=""

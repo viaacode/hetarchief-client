@@ -140,7 +140,7 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 				]}
 			>
 				<TextInput
-					id={'edit-folder-name__folder-name'}
+					id="edit-folder-name__folder-name"
 					maxLength={90}
 					value={name}
 					onChange={(e) => setName(e.target.value)}

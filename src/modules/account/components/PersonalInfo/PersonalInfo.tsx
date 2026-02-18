@@ -257,7 +257,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 			<Tooltip position="left">
 				<TooltipTrigger>
 					<TextInput
-						id="personal-info__material-reques-group-name"
+						id="personal-info__material-request-group-name"
 						maxLength={MAX_NAME_LENGTH}
 						value={requestGroupName}
 						onChange={(e) => setRequestGroupName(e.target.value)}
