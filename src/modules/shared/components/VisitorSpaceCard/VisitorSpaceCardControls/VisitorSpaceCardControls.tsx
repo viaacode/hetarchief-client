@@ -1,8 +1,4 @@
 import { Button, TagList } from '@meemoo/react-components';
-import clsx from 'clsx';
-import Link from 'next/link';
-import type { FC, MouseEvent, ReactNode } from 'react';
-
 import { CopyButton } from '@shared/components/CopyButton';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -14,6 +10,9 @@ import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
+import clsx from 'clsx';
+import Link from 'next/link';
+import type { FC, MouseEvent, ReactNode } from 'react';
 
 import { Icon, type IconName } from '../../Icon';
 import { formatDateTime } from '../VisitorSpaceCard.utils';
@@ -39,7 +38,11 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 	const renderLabel = (icon: IconName, text: ReactNode) => {
 		return (
 			<div className={styles['c-visitor-space-card-controls__label']}>
-				<Icon className={styles['c-visitor-space-card-controls__label-icon']} name={icon} />
+				<Icon
+					className={styles['c-visitor-space-card-controls__label-icon']}
+					name={icon}
+					aria-hidden
+				/>
 
 				<div className="u-text-ellipsis--2">
 					<p
@@ -60,7 +63,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 			return (
 				<Button
 					icon={<Icon name={IconNamesLight.Contact} aria-hidden />}
-					aria-label={tText(
+					ariaLabel={tText(
 						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___geen-contactgegevens-beschikbaar'
 					)}
 					variants={['silver', 'sm', 'disabled']}
@@ -83,9 +86,12 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 				<DropdownMenu
 					placement="bottom-end"
 					triggerButtonProps={{
-						icon: <Icon name={IconNamesLight.Contact} />,
+						icon: <Icon name={IconNamesLight.Contact} aria-hidden />,
 						variants: ['silver', 'sm'],
 					}}
+					id={tText(
+						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___toon-contact-informatie-van-deze-bezoekersruimte-button-aria-label'
+					)}
 				>
 					{/* biome-ignore lint/a11y/useKeyWithClickEvents: only prevents the click event propagation */}
 					<ul
@@ -96,7 +102,13 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 							<li className={styles['c-visitor-space-card-controls__contact-item']}>
 								<p>{room.contactInfo.email}</p>
 
-								<CopyButton text={room.contactInfo.email} variants={['sm', 'text']} />
+								<CopyButton
+									text={room.contactInfo.email}
+									variants={['sm', 'text']}
+									ariaLabel={tText(
+										'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___kopieer-het-email-adres-van-de-bezoekersruimte-naar-je-klemboard'
+									)}
+								/>
 							</li>
 						)}
 
@@ -104,7 +116,13 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 							<li className={styles['c-visitor-space-card-controls__contact-item']}>
 								<p>{room.contactInfo.telephone}</p>
 
-								<CopyButton text={room.contactInfo.telephone} variants={['sm', 'text']} />
+								<CopyButton
+									text={room.contactInfo.telephone}
+									variants={['sm', 'text']}
+									ariaLabel={tText(
+										'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___kopieer-het-telefoonnummer-van-de-bezoekersruimte-naar-je-klemboard'
+									)}
+								/>
 							</li>
 						)}
 					</ul>
@@ -134,7 +152,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'
 					)}
 				>
-					<Button variants={['lg', 'white']}>
+					<Button variants={['lg', 'white']} tabIndex={-1}>
 						{tHtml(
 							'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'
 						)}
@@ -182,11 +200,13 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 	const renderNoAccessControls = () => {
 		return (
 			<>
-				<Button variants={['sm', 'black']} onClick={() => onAccessRequest?.(room)}>
-					{tHtml(
+				<Button
+					variants={['sm', 'black']}
+					onClick={() => onAccessRequest?.(room)}
+					label={tText(
 						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___vraag-toegang-aan'
 					)}
-				</Button>
+				/>
 
 				{renderContactIconButton()}
 			</>

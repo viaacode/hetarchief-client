@@ -1,9 +1,8 @@
 import { Button } from '@meemoo/react-components';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import React from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
 
 export default {
 	title: 'Components/Button',
@@ -90,32 +89,32 @@ SizeSmall.args = {
 export const TextWithIconLeft = Template.bind({});
 TextWithIconLeft.args = {
 	children: 'Click me!',
-	iconStart: <Icon name={IconNamesLight.Info} />,
+	iconStart: <Icon name={IconNamesLight.Info} aria-hidden />,
 };
 
 export const TextWithIconRight = Template.bind({});
 TextWithIconRight.args = {
 	children: 'Click me!',
-	iconEnd: <Icon name={IconNamesLight.Info} />,
+	iconEnd: <Icon name={IconNamesLight.Info} aria-hidden />,
 };
 
 export const IconOnly = Template.bind({});
 IconOnly.args = {
-	icon: <Icon name={IconNamesLight.Info} />,
+	icon: <Icon name={IconNamesLight.Info} aria-hidden />,
 	title: 'Info',
 	variants: 'black',
 };
 
 export const IconOnlySmall = Template.bind({});
 IconOnlySmall.args = {
-	icon: <Icon name={IconNamesLight.Info} />,
+	icon: <Icon name={IconNamesLight.Info} aria-hidden />,
 	title: 'Info',
 	variants: ['sm', 'black'],
 };
 
 export const IconOnlyExtraSmall = Template.bind({});
 IconOnlyExtraSmall.args = {
-	icon: <Icon name={IconNamesLight.Info} />,
+	icon: <Icon name={IconNamesLight.Info} aria-hidden />,
 	title: 'Info',
 	variants: ['xs', 'black'],
 };

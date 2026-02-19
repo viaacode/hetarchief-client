@@ -1,7 +1,7 @@
 import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { tHtml } from '@shared/helpers/translate';
+import { tText } from '@shared/helpers/translate';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import type {
 	DefaultFilterFormProps,
@@ -95,8 +95,10 @@ const FilterForm: FC<FilterFormProps> = ({
 						<div className={styles['c-filter-form__footer']}>
 							<Button
 								className={clsx(styles['c-filter-form__reset'], 'u-p-0 u-mr-40')}
-								iconStart={<Icon className="u-font-size-22" name={IconNamesLight.Redo} />}
-								label={tHtml(
+								iconStart={
+									<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
+								}
+								label={tText(
 									'modules/visitor-space/components/filter-menu/filter-form/filter-form___reset'
 								)}
 								variants="text"
@@ -104,7 +106,7 @@ const FilterForm: FC<FilterFormProps> = ({
 							/>
 							<Button
 								className={styles['c-filter-form__submit']}
-								label={tHtml(
+								label={tText(
 									'modules/visitor-space/components/filter-menu/filter-form/filter-form___pas-toe'
 								)}
 								variants={['black']}

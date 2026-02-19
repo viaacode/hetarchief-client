@@ -177,6 +177,9 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 						const report = evt.target.value;
 						setReportMessage(report);
 					}}
+					ariaLabel={tText(
+						'modules/visitor-space/components/report-blade/report-blade___beschrijf-het-probleem-input-aria-label'
+					)}
 				/>
 			</FormControl>
 
@@ -203,6 +206,9 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 						const email = evt.currentTarget.value;
 						setEmail(email);
 					}}
+					ariaLabel={tText(
+						'modules/visitor-space/components/report-blade/report-blade___jouw-email-adres-input-aria-label'
+					)}
 				/>
 			</FormControl>
 		</Blade>

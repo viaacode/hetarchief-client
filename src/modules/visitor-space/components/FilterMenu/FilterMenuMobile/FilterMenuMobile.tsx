@@ -2,7 +2,7 @@ import { Button, TagList } from '@meemoo/react-components';
 import { Navigation } from '@navigation/components/Navigation/Navigation';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { tHtml } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { mapFiltersToTags } from '@visitor-space/utils/map-filters';
 import clsx from 'clsx';
@@ -22,6 +22,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	activeFilter,
 	activeSort,
 	activeSortLabel,
+	activeSortAriaLabel,
 	filters = [],
 	isOpen,
 	onClose,
@@ -84,8 +85,8 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 			<Button
 				key="filter-menu-mobile-nav-filter"
 				className={styles['c-filter-menu-mobile__back']}
-				iconStart={<Icon className="u-text-left" name={IconNamesLight.ArrowLeft} />}
-				label={tHtml(
+				iconStart={<Icon className="u-text-left" name={IconNamesLight.ArrowLeft} aria-hidden />}
+				label={tText(
 					'modules/visitor-space/components/filter-menu/filter-menu-mobile/filter-menu-mobile___filters'
 				)}
 				variants={['text']}
@@ -99,8 +100,8 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 			<Button
 				key="filter-menu-mobile-nav-close"
 				className={styles['c-filter-menu-mobile__back']}
-				iconStart={<Icon className="u-text-left" name={IconNamesLight.ArrowLeft} />}
-				label={tHtml(
+				iconStart={<Icon className="u-text-left" name={IconNamesLight.ArrowLeft} aria-hidden />}
+				label={tText(
 					'modules/visitor-space/components/filter-menu/filter-menu-mobile/filter-menu-mobile___zoekresultaten'
 				)}
 				variants={['text']}
@@ -119,7 +120,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 
 			<TagList
 				className={clsx(styles['c-filter-menu-mobile__tags'], 'u-mb-0')}
-				closeIcon={<Icon className="u-text-left" name={IconNamesLight.Times} />}
+				closeIcon={<Icon className="u-text-left" name={IconNamesLight.Times} aria-hidden />}
 				onTagClosed={(id) => onRemoveValue?.(tags.filter((tag) => tag.id !== id))}
 				tags={tags}
 				variants="large"
@@ -198,6 +199,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 								}
 								isActive={isSortActive}
 								label={activeSortLabel}
+								ariaLabel={activeSortAriaLabel}
 								type="sort"
 								onClick={() => setIsSortActive(true)}
 							/>

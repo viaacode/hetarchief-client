@@ -786,12 +786,15 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				<Link
 					passHref
 					href={`/${ROUTE_PARTS_BY_LOCALE[locale].kioskConditions}`}
-					aria-label={tText('pages/slug/index___meer-info')}
+					aria-label={tText(
+						'modules/search/search-page___meer-info-over-enkel-voor-onderzoek-doeleinden-link-aria-label'
+					)}
 				>
 					<Button
 						className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
 						label={tHtml('pages/slug/index___meer-info')}
 						variants={['text', 'underline']}
+						tabIndex={-1}
 					/>
 				</Link>
 			}
@@ -823,7 +826,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			<Breadcrumbs
 				className="u-my-16"
 				items={[...staticBreadcrumbs, ...dynamicBreadcrumbs]}
-				icon={<Icon name={IconNamesLight.AngleRight} />}
+				icon={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
 				linkComponent={NextLinkWrapper}
 			/>
 		);
@@ -879,9 +882,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				title={tText(
 					'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op'
 				)}
-				aria-label={tText(
-					'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op'
-				)}
 			/>
 		);
 	};
@@ -930,7 +930,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 		return (
 			<div className="p-visitor-space__temp-access-container">
-				<Icon name={IconNamesLight.Clock} />
+				<Icon name={IconNamesLight.Clock} aria-hidden />
 				<span className="p-visitor-space__temp-access-label">
 					{tText(
 						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___tijdelijke-toegang'
@@ -1119,6 +1119,9 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 							setSelectedCard(null);
 						}}
 						id="search-page__add-to-folder-blade"
+						ariaLabel={tText(
+							'modules/search/search-page___voeg-object-toe-aan-map-blade-aria-label'
+						)}
 					/>
 				)}
 			</>

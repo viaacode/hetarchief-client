@@ -216,6 +216,9 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 						setYearRange(e.target.value);
 					}}
 					value={yearRange}
+					ariaLabel={tText(
+						'modules/visitor-space/components/release-date-filter-form/release-date-filter-form___release-datum'
+					)}
 				/>
 			);
 		}
@@ -248,6 +251,9 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 					id="releaseDate"
 					onChange={(e) => onChangeYear(e)}
 					value={year}
+					ariaLabel={tText(
+						'modules/visitor-space/components/release-date-filter-form/release-date-filter-form___release-datum-input-aria-label'
+					)}
 				/>
 			);
 		}
@@ -261,6 +267,9 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 					onChangeDateInput(date);
 				}}
 				value={value ? parseISO(value) : undefined}
+				ariaLabel={tText(
+					'modules/visitor-space/components/release-date-filter-form/release-date-filter-form___release-datum'
+				)}
 			/>
 		);
 	};

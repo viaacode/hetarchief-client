@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, type SelectOption } from '@meemoo/react-components';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SEPARATOR } from '@shared/const';
-import { tHtml } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import {
 	DURATION_FILTER_FORM_QUERY_PARAM_CONFIG,
 	DURATION_FILTER_FORM_SCHEMA,
@@ -154,6 +154,10 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 											value={form.duration || `${defaultValue}${SEPARATOR}${defaultValue}`}
 											onChange={onChangeDuration}
 											placeholder={form[SearchFilterId.Duration]}
+											id="duration-filter-form__duration_input"
+											ariaLabel={tText(
+												'modules/visitor-space/components/duration-filter-form/duration-filter-form___duur-bereik-input-aria-label'
+											)}
 										/>
 									) : (
 										<DurationInput
@@ -161,6 +165,10 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 											value={form[SearchFilterId.Duration] || defaultValue}
 											onChange={onChangeDuration}
 											placeholder={form[SearchFilterId.Duration]}
+											id="duration-filter-form__duration_range_input"
+											ariaLabel={tText(
+												'modules/visitor-space/components/duration-filter-form/duration-filter-form___duurtijd-input-aria-label'
+											)}
 										/>
 									)}
 								</div>

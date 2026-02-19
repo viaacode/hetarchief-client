@@ -1,5 +1,4 @@
 import { AuthService } from '@auth/services/auth-service';
-import type { ContentPageInfo } from '@meemoo/admin-core-ui/admin';
 import { ContentPageService } from '@meemoo/admin-core-ui/client';
 import { handleRouteExceptions } from '@shared/components/LanguageSwitcher/LanguageSwitcher.exceptions';
 import { QUERY_KEYS, ROUTES_BY_LOCALE, type RouteKey } from '@shared/const';
@@ -60,6 +59,7 @@ export const changeApplicationLocale = async (
 	// exception for content pages
 	if (isRootSlugRoute(router.route)) {
 		const contentPage = await ContentPageService.getContentPageByLanguageAndPath(
+			// biome-ignore lint/suspicious/noExplicitAny: mismatch between admin-core locale and hetarchief locale
 			oldLocale as any,
 			newFullPath
 		);

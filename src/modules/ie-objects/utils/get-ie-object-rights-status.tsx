@@ -1,10 +1,9 @@
-import type { ReactNode } from 'react';
-
 import { type IeObject, IeObjectLicense } from '@ie-objects/ie-objects.types';
 import Icon from '@shared/components/Icon/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import type { Locale } from '@shared/utils/i18n';
+import type { ReactNode } from 'react';
 
 export function getIeObjectRightsStatusInfo(
 	ieObject: IeObject,
@@ -21,7 +20,7 @@ export function getIeObjectRightsStatusInfo(
 	if (ieObject.licenses.includes(IeObjectLicense.PUBLIC_DOMAIN)) {
 		return {
 			label: tText('modules/ie-objects/utils/get-ie-object-rights-status___public-domein'),
-			icon: <Icon name={IconNamesLight.CopyrightPublicDomain} />,
+			icon: <Icon name={IconNamesLight.CopyrightPublicDomain} aria-hidden />,
 			externalLink: tText(
 				'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-external-link',
 				{
@@ -42,7 +41,7 @@ export function getIeObjectRightsStatusInfo(
 	) {
 		return {
 			label: tText('modules/ie-objects/utils/get-ie-object-rights-status___copyright-undetermined'),
-			icon: <Icon name={IconNamesLight.CopyrightUndetermined} />,
+			icon: <Icon name={IconNamesLight.CopyrightUndetermined} aria-hidden />,
 			externalLink: tText(
 				'modules/ie-objects/utils/get-ie-object-rights-status___copyright-undetermined-external-link',
 				{

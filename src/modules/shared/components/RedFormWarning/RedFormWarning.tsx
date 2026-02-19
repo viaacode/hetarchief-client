@@ -9,7 +9,7 @@ import type { RedFormWarningProps } from './RedFormWarning.types';
 export const RedFormWarning: FC<RedFormWarningProps> = ({ error, className }) => {
 	return error ? (
 		<div className={clsx(styles['c-red-form-warning'], className)}>
-			<Icon name={IconNamesLight.Exclamation} />
+			<Icon name={IconNamesLight.Exclamation} aria-hidden />
 			{error}
 		</div>
 	) : (

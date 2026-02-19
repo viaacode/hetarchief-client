@@ -155,6 +155,9 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 										page: 1,
 									})
 								}
+								ariaLabel={tText(
+									'modules/admin/views/admin-active-visitors___zoek-actieve-bezoekers-input-aria-label'
+								)}
 							/>
 						</div>
 
@@ -228,6 +231,9 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 							}}
 							onSubmit={handleEditVisitRequestFinished}
 							id="active-visitors-page__approve-request-blade"
+							ariaLabel={tText(
+								'modules/admin/views/admin-active-visitors___materiaal-aanvraag-aanpassen-blade-aria-label'
+							)}
 						/>
 					</div>
 				</AdminLayout.Content>

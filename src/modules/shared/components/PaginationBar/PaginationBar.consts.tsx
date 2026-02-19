@@ -22,17 +22,17 @@ export const getDefaultPaginationBarProps = (): Pick<
 	| 'className'
 > => ({
 	nextLabel: tText('modules/shared/components/pagination-bar/pagination-bar___volgende'),
-	nextIcon: <Icon name={IconNamesLight.AngleRight} />,
+	nextIcon: <Icon name={IconNamesLight.AngleRight} aria-hidden />,
 	previousLabel: tText('modules/shared/components/pagination-bar/pagination-bar___vorige'),
-	previousIcon: <Icon name={IconNamesLight.AngleLeft} />,
+	previousIcon: <Icon name={IconNamesLight.AngleLeft} aria-hidden />,
 	firstLabel: tText('modules/shared/components/pagination-bar/pagination-bar___eerste'),
-	firstIcon: <Icon name={IconNamesLight.ChevronsLeft} />,
+	firstIcon: <Icon name={IconNamesLight.ChevronsLeft} aria-hidden />,
 	lastLabel: tText('modules/shared/components/pagination-bar/pagination-bar___laatste'),
-	lastIcon: <Icon name={IconNamesLight.ChevronsRight} />,
+	lastIcon: <Icon name={IconNamesLight.ChevronsRight} aria-hidden />,
 	backToTopLabel: tText(
 		'modules/shared/components/pagination-bar/pagination-bar___terug-naar-boven'
 	),
-	backToTopIcon: <Icon name={IconNamesLight.ArrowUp} />,
+	backToTopIcon: <Icon name={IconNamesLight.ArrowUp} aria-hidden />,
 	labelBetweenPageStartAndEnd: tText(
 		'modules/shared/components/filter-table/filter-table___label-between-start-and-end-page-in-pagination-bar'
 	),

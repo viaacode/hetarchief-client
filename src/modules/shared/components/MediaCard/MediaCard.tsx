@@ -139,6 +139,7 @@ const MediaCard: FC<MediaCardProps> = ({
 						evt.nativeEvent.stopImmediatePropagation();
 					},
 				}}
+				id={`media-card__actions-dropdown--${objectId}`}
 			>
 				{actions}
 			</DropdownMenu>
@@ -223,7 +224,7 @@ const MediaCard: FC<MediaCardProps> = ({
 		if (isNil(icon)) {
 			return null;
 		}
-		return <Icon className={styles['c-media-card__icon']} name={icon} />;
+		return <Icon className={styles['c-media-card__icon']} name={icon} aria-hidden />;
 	};
 
 	const renderDuration = () => (
@@ -231,7 +232,11 @@ const MediaCard: FC<MediaCardProps> = ({
 	);
 
 	const renderTags = () => {
-		return hasRelated && <Badge variants="small" text={<Icon name={IconNamesLight.Link} />} />;
+		return (
+			hasRelated && (
+				<Badge variants="small" text={<Icon name={IconNamesLight.Link} aria-hidden />} />
+			)
+		);
 	};
 
 	const renderLocallyAvailablePill = () => {
@@ -302,8 +307,17 @@ const MediaCard: FC<MediaCardProps> = ({
 					view === 'blade' && styles['c-media-card__header--blade']
 				)}
 			>
+				{/* No alt tag since the link already contains the title of the object that we're linking to */}
 				{/** biome-ignore lint/performance/noImgElement: we need this*/}
-				<img src={imagePath} alt={''} width="100%" />
+				<img
+					src={imagePath}
+					alt={
+						typeof title === 'string'
+							? title
+							: tText('modules/shared/components/media-card/media-card___image-of-the-media-object')
+					}
+					width="100%"
+				/>
 				{!isNil(icon) && (
 					<>
 						<div className={clsx(styles['c-media-card__header-icon'])}>{renderIcon()}</div>
@@ -331,7 +345,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	const renderPlanVisitButtons = () => (
 		<div className={styles['c-media-card__locally-available-container']}>
 			<Button
-				iconStart={<Icon name={IconNamesLight.Info} />}
+				iconStart={<Icon name={IconNamesLight.Info} aria-hidden />}
 				label={tText('modules/shared/components/media-card/media-card___meer-info')}
 				variants={['info']}
 				className={styles['c-media-card__info-button']}
@@ -433,6 +447,9 @@ const MediaCard: FC<MediaCardProps> = ({
 				onClose={() => setIsRequestAccessBladeOpen(false)}
 				onSubmit={onRequestAccessSubmit}
 				id="media-card__request-access-blade"
+				ariaLabel={tText(
+					'modules/shared/components/media-card/media-card___vraag-een-bezoek-aan-bij-de-bezoekersruimte-aan-blade-aria-label'
+				)}
 			/>
 		</div>
 	);

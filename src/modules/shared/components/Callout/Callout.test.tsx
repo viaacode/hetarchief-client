@@ -20,7 +20,7 @@ describe('Component: <Callout /> (default)', () => {
 	});
 
 	it('Should render icon', () => {
-		const icon = <Icon name={IconNamesLight.Info} />;
+		const icon = <Icon name={IconNamesLight.Info} aria-hidden />;
 		const { getByText } = renderCallout({ ...calloutMock, icon });
 
 		const iconNode = getByText('info');

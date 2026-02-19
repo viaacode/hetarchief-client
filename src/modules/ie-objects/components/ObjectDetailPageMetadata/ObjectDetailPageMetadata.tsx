@@ -415,6 +415,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						isOpen={metadataExportDropdownOpen}
 						onOpen={() => setMetadataExportDropdownOpen(true)}
 						onClose={() => setMetadataExportDropdownOpen(false)}
+						id={`object-detail-page__metadata__export-dropdown--${mediaInfo?.schemaIdentifier}`}
 					>
 						<DropdownButton>
 							{isPrimary ? (
@@ -423,7 +424,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									className={styles['p-object-detail__export']}
 									iconStart={icon}
 									iconEnd={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-									aria-label={buttonLabelDesktop}
 									title={buttonLabelDesktop}
 								>
 									<span className="u-text-ellipsis u-display-none u-display-block-lg">
@@ -434,12 +434,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									</span>
 								</Button>
 							) : (
-								<Button
-									icon={icon}
-									variants={['silver']}
-									aria-label={buttonLabelDesktop}
-									title={buttonLabelDesktop}
-								/>
+								<Button icon={icon} variants={['silver']} title={buttonLabelDesktop} />
 							)}
 						</DropdownButton>
 						<DropdownContent>
@@ -460,6 +455,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			canDownloadMetadata,
 			metadataExportDropdownOpen,
 			onExportClick,
+			mediaInfo?.schemaIdentifier,
 		]
 	);
 
@@ -594,7 +590,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
 								{maintainerSiteUrl}
 							</a>
-							<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+							<Icon className="u-ml-8" name={IconNamesLight.Extern} aria-hidden />
 						</p>
 					)}
 					{showVisitButton && isMobile && renderVisitButton()}
@@ -656,8 +652,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				>
 					<Button
 						className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
-						label={tHtml('pages/slug/index___meer-info')}
+						label={tText('pages/slug/index___meer-info')}
 						variants={['text', 'underline']}
+						tabIndex={-1}
 					/>
 				</Link>
 			}
@@ -707,13 +704,13 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			<Breadcrumbs
 				className="u-mt-32"
 				items={[...staticBreadcrumbs, ...dynamicBreadcrumbs]}
-				icon={<Icon name={IconNamesLight.AngleRight} />}
+				icon={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
 				linkComponent={NextLinkWrapper}
 			/>
 		);
 	};
 
-	function renderSeriesTitle(mediaInfo: IeObject) {
+	const renderSeriesTitle = (mediaInfo: IeObject) => {
 		if (!mediaInfo.collectionName) {
 			return null;
 		}
@@ -732,9 +729,43 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		// This series filter isn't available for audio / video material, since the filter doesn't work well for those media types
 		// https://meemoo.atlassian.net/browse/ARC-3046
 		return mediaInfo.collectionName;
-	}
+	};
 
-	function renderPreviousAndNextButtons(): ReactNode | null {
+	const renderPreviousButton = (isWrappedInLink: boolean, enabled: boolean) => {
+		const previousButtonIcon = <Icon name={IconNamesLight.ArrowLeft} aria-hidden />;
+		const previousButtonLabel = tText(
+			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___vorige'
+		);
+
+		return (
+			<Button
+				variants={['text']}
+				iconStart={previousButtonIcon}
+				label={previousButtonLabel}
+				disabled={enabled}
+				tabIndex={isWrappedInLink ? -1 : undefined}
+			/>
+		);
+	};
+
+	const renderNextButton = (isWrappedInLink: boolean, enabled: boolean) => {
+		const nextButtonIcon = <Icon name={IconNamesLight.ArrowRight} aria-hidden />;
+		const nextButtonLabel = tText(
+			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___volgende'
+		);
+
+		return (
+			<Button
+				variants={['text']}
+				iconEnd={nextButtonIcon}
+				label={nextButtonLabel}
+				disabled={enabled}
+				tabIndex={isWrappedInLink ? -1 : undefined}
+			/>
+		);
+	};
+
+	const renderPreviousAndNextButtons = (): ReactNode | null => {
 		if (user && !user?.permissions?.includes(Permission.VIEW_PREVIOUS_AND_NEXT_NEWSPAPER_BUTTONS)) {
 			// Kiosk user cannot see previous and next buttons
 			// https://meemoo.atlassian.net/browse/ARC-2933
@@ -746,44 +777,38 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		) {
 			return null;
 		}
-		const previousButton = (
-			<Button
-				variants={['text']}
-				iconStart={<Icon name={IconNamesLight.ArrowLeft} />}
-				label={tText(
-					'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___vorige'
-				)}
-				disabled={!ieObjectPreviousNextIds?.previousIeObjectId}
-			/>
-		);
-		const nextButton = (
-			<Button
-				variants={['text']}
-				iconEnd={<Icon name={IconNamesLight.ArrowRight} />}
-				label={tText(
-					'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___volgende'
-				)}
-				disabled={!ieObjectPreviousNextIds?.nextIeObjectId}
-			/>
-		);
 		return (
 			<div className={styles['p-object-detail__metadata-content__previous-next']}>
 				{ieObjectPreviousNextIds?.previousIeObjectId ? (
-					<Link href={`/pid/${ieObjectPreviousNextIds?.previousIeObjectId}`}>{previousButton}</Link>
+					<Link
+						href={`/pid/${ieObjectPreviousNextIds?.previousIeObjectId}`}
+						aria-label={tText(
+							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___ga-naar-de-vorige-krant-in-dezelfde-serie-link-aria-label'
+						)}
+					>
+						{renderPreviousButton(true, true)}
+					</Link>
 				) : (
-					previousButton
+					renderPreviousButton(false, false)
 				)}
 
 				<span>{mediaInfo?.datePublished || mediaInfo?.dateCreated || '-'}</span>
 
 				{ieObjectPreviousNextIds?.nextIeObjectId ? (
-					<Link href={`/pid/${ieObjectPreviousNextIds?.nextIeObjectId}`}>{nextButton}</Link>
+					<Link
+						href={`/pid/${ieObjectPreviousNextIds?.nextIeObjectId}`}
+						aria-label={tText(
+							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___ga-naar-de-volgende-krant-in-dezelfde-serie-link-aria-label'
+						)}
+					>
+						{renderNextButton(true, true)}
+					</Link>
 				) : (
-					nextButton
+					renderNextButton(false, false)
 				)}
 			</div>
 		);
-	}
+	};
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: We want this translation to be recalculated when the language is changed
 	const explainNamesListLink = useMemo(
@@ -874,7 +899,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					{showAlert && !isNewspaper && (
 						<Alert
 							className="c-Alert__margin-bottom"
-							icon={<Icon name={IconNamesLight.Info} />}
+							icon={<Icon name={IconNamesLight.Info} aria-hidden />}
 							content={tHtml(
 								'pages/bezoekersruimte/visitor-space-slug/object-id/index___geen-beschrijving'
 							)}
@@ -929,7 +954,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 								<a target="_blank" href={rightsStatusInfo.externalLink} rel="noreferrer">
 									<Button
 										variants={['white']}
-										icon={<Icon name={IconNamesLight.Extern} />}
+										icon={<Icon name={IconNamesLight.Extern} aria-hidden />}
 										title={tText(
 											'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
 										)}
@@ -1248,6 +1273,10 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						},
 					]}
 					id="object-detail-page__metadata-field-detail-blade"
+					ariaLabel={tText(
+						'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___lees-de-volledige-waarde-van-het-metadata-veld-selected-metadata-field-name-blade-aria-label',
+						{ selectedMetadataFieldName: selectedMetadataField?.title }
+					)}
 				>
 					<HighlightedMetadata
 						title={selectedMetadataField?.title}

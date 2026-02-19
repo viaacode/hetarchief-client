@@ -1,14 +1,10 @@
 import { selectCommonUser } from '@auth/store/user';
-import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
-import { convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui/client';
 import { Button } from '@meemoo/react-components';
 import { NavigationDropdown } from '@navigation/components/Navigation/NavigationDropdown';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { GET_LANGUAGE_NAMES } from '@shared/const/language-names';
 import { changeApplicationLocale } from '@shared/helpers/change-application-locale';
-import { getSlugFromQueryParams } from '@shared/helpers/get-slug-from-query-params';
-import { isRootSlugRoute } from '@shared/helpers/is-root-slug-route';
 import { tText } from '@shared/helpers/translate';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -76,12 +72,12 @@ export const LanguageSwitcher: FC<{ className?: string }> = ({ className }) => {
 				trigger={
 					<Button
 						label={(router.locale || Locale.nl)?.toUpperCase()}
-						aria-label={tText(
+						ariaLabel={tText(
 							'modules/shared/components/language-switcher/language-switcher___pas-de-taal-van-de-website-aan'
 						)}
 						variants={['black']}
 						onClick={() => setIsOpen(true)}
-						iconEnd={<Icon name={IconNamesLight.AngleDown} />}
+						iconEnd={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 					/>
 				}
 				renderedItems={renderLanguageOptionButtons()}

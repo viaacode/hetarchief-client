@@ -1,7 +1,6 @@
+import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
 import type { FC } from 'react';
-
-import { tText } from '@shared/helpers/translate';
 
 import { DateInput } from '../DateInput';
 
@@ -40,6 +39,9 @@ const DateRangeInput: FC<DateRangeInputProps> = ({
 				onChange={(newDate) => newDate && onChange(newDate, to)}
 				disabled={disabled}
 				id={`${id}__from`}
+				ariaLabel={tText(
+					'modules/visitor-space/components/date-range-input/date-range-input___vanaf-datum-input-aria-label'
+				)}
 			/>
 			<DateInput
 				label={
@@ -53,6 +55,9 @@ const DateRangeInput: FC<DateRangeInputProps> = ({
 				onChange={(newDate) => newDate && onChange(from, newDate)}
 				disabled={disabled}
 				id={`${id}__to`}
+				ariaLabel={tText(
+					'modules/visitor-space/components/date-range-input/date-range-input___tot-datum-input-aria-label'
+				)}
 			/>
 		</div>
 	);

@@ -360,6 +360,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 							<MultiSelect
 								variant="rounded"
 								label={tText('modules/cp/views/cp-admin-material-requests___type')}
+								id="cp-admin-material-requests__type-material-request"
 								options={typesList}
 								onChange={noop}
 								className={clsx(
@@ -378,7 +379,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 									onClick: setSelectedTypes,
 								}}
 								resetOptions={{
-									icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+									icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />,
 									label: tText('modules/cp/views/cp-admin-material-requests___reset'),
 									variants: ['text'],
 									onClick: setSelectedTypes,
@@ -388,6 +389,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 							<MultiSelect
 								variant="rounded"
 								label={tText('modules/cp/views/cp-admin-material-requests___status')}
+								id="cp-admin-material-requests__status-material-request"
 								options={statusList}
 								onChange={noop}
 								className={clsx(
@@ -406,7 +408,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 									onClick: setSelectedStatuses,
 								}}
 								resetOptions={{
-									icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+									icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />,
 									label: tText('modules/cp/views/cp-admin-material-requests___reset'),
 									variants: ['text'],
 									onClick: setSelectedStatuses,
@@ -416,6 +418,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 							<MultiSelect
 								variant="rounded"
 								label={tText('modules/cp/views/cp-admin-material-requests___download')}
+								id="cp-admin-material-requests__download-filter-material-request"
 								options={downloadUrlList}
 								onChange={noop}
 								className={clsx(
@@ -434,7 +437,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 									onClick: setSelectedDownloadFilters,
 								}}
 								resetOptions={{
-									icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+									icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />,
 									label: tText('modules/cp/views/cp-admin-material-requests___reset'),
 									variants: ['text'],
 									onClick: setSelectedDownloadFilters,
@@ -454,6 +457,9 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 									page: 1,
 								})
 							}
+							ariaLabel={tText(
+								'modules/cp/views/cp-admin-material-requests___zoek-materiaal-aanvragen-input-aria-label'
+							)}
 						/>
 					</div>
 				</div>

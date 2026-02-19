@@ -493,6 +493,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				{playableFile && mediaDuration && (
 					<div className={styles['c-request-material-reuse__content-full-width']}>
 						<TimeCropControls
+							id="material-request_for-reuse-blade__time-crop-controls"
 							className={styles['c-request-material-reuse__content-time-controls']}
 							startTime={formValues.startTime ?? 0}
 							endTime={formValues.endTime || mediaDuration}
@@ -515,6 +516,12 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 								setFormValue(MaterialRequestReuseFormKey.endTime, endTime);
 							}}
 							onError={noop}
+							startInputAriaLabel={tText(
+								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___start-tijd-van-de-video-audio-selectie-input-aria-label'
+							)}
+							endInputAriaLabel={tText(
+								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___eind-tijd-van-de-video-audio-selectie-input-aria-label'
+							)}
 						/>
 					</div>
 				)}
@@ -614,11 +621,15 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 						]}
 					>
 						<TextArea
+							id="material-request-for-reuse-blade__intended-usage-description"
 							value={formValues.intendedUsageDescription}
 							maxLength={300}
 							onChange={(evt) =>
 								setFormValue(MaterialRequestReuseFormKey.intendedUsageDescription, evt.target.value)
 							}
+							ariaLabel={tText(
+								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___beschrijving-van-het-bedoelde-gebruik-van-het-materiaal-input-aria-label'
+							)}
 						/>
 					</FormControl>
 				</dd>
@@ -785,6 +796,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 								className={clsx(styles['c-request-material-reuse__content-value-extra-padding'])}
 							>
 								<TextArea
+									id="material-request-for-reuse-blade__distribution-type-other-explanation"
 									value={formValues.distributionTypeOtherExplanation}
 									disabled={formValues.distributionType !== MaterialRequestDistributionType.OTHER}
 									onChange={(evt) =>
@@ -793,6 +805,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 											evt.target.value
 										)
 									}
+									ariaLabel={tText(
+										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___geef-hier-een-uitleg-over-het-type-ontsluiting-dat-je-wenst-te-gebruiken-input-aria-label'
+									)}
 								/>
 							</FormControl>
 						</>
@@ -872,6 +887,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 								className={clsx(styles['c-request-material-reuse__content-value-extra-padding'])}
 							>
 								<TextArea
+									id="material-request-for-reuse-blade__geographical-usage-description"
 									value={formValues.geographicalUsageDescription}
 									maxLength={300}
 									disabled={
@@ -884,6 +900,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 											evt.target.value
 										)
 									}
+									ariaLabel={tText(
+										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___geef-hier-een-uitleg-over-het-geografisch-gebruik-dat-je-wenst-te-gebruiken-input-aria-label'
+									)}
 								/>
 								<MaxLengthIndicator
 									maxLength={300}
@@ -1033,6 +1052,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			footerButtons={getFooterButtons()}
 			stickyFooter={false}
 			isBladeInvalid={!isFormValid}
+			ariaLabel={tText(
+				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___materiaal-download-en-hergebruik-aanvragen-blade-aria-label'
+			)}
 		>
 			<div className={styles['c-request-material-reuse__content-form']}>
 				{renderVideoSettings()}

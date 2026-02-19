@@ -82,10 +82,13 @@ function RadioButtonAccordion<OptionValueType>({
 						<Button
 							className={clsx(styles['c-radiobutton-accordion__item-icon'])}
 							icon={
-								<Icon name={isAccordionOpen ? IconNamesLight.AngleUp : IconNamesLight.AngleDown} />
+								<Icon
+									name={isAccordionOpen ? IconNamesLight.AngleUp : IconNamesLight.AngleDown}
+									aria-hidden
+								/>
 							}
 							variants="text"
-							aria-label={
+							ariaLabel={
 								isAccordionOpen
 									? tText(
 											'modules/visitor-space/components/radio-button-accordion/radio-button-accordion___open-accordion'

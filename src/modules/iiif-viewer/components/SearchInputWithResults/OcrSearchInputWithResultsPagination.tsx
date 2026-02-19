@@ -1,15 +1,15 @@
-import { Button, TextInput } from '@meemoo/react-components';
-import clsx from 'clsx';
-import type { FC, KeyboardEvent } from 'react';
-
 import type { SearchInputWithResultsPaginationProps } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination.types';
+import { Button, TextInput } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
+import clsx from 'clsx';
+import type { FC } from 'react';
 
 import styles from './SearchInputWithResultsPagination.module.scss';
 
-export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginationProps> = ({
+export const OcrSearchInputWithResultsPagination: FC<SearchInputWithResultsPaginationProps> = ({
+	id,
 	value,
 	onChange,
 	onSearch,
@@ -19,13 +19,8 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 	currentSearchIndex,
 	className,
 	variants = [],
+	searchInputAriaLabel,
 }) => {
-	const handleKeyUp = (evt: KeyboardEvent<HTMLInputElement>) => {
-		if (evt.key === 'Enter') {
-			onSearch(value);
-		}
-	};
-
 	return (
 		<div
 			className={clsx(
@@ -35,19 +30,21 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 			)}
 		>
 			<TextInput
+				id={`ocr-search-input-with-results-pagination--${id}`}
 				value={value}
 				onChange={(evt) => onChange(evt.target.value)}
-				onKeyUp={handleKeyUp}
+				onEnter={() => onSearch(value)}
 				variants={variants}
 				placeholder={tText(
 					'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___zoek'
 				)}
+				ariaLabel={searchInputAriaLabel}
 			/>
 			{!!searchResults && (
 				<>
 					<Button
-						iconStart={<Icon name={IconNamesLight.AngleLeft} />}
-						aria-label={tText(
+						iconStart={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
+						ariaLabel={tText(
 							'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___vorig-zoekresultaat'
 						)}
 						variants={['text', ...variants]}
@@ -68,8 +65,8 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 								)}
 					</span>
 					<Button
-						iconStart={<Icon name={IconNamesLight.AngleRight} />}
-						aria-label={tText(
+						iconStart={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
+						ariaLabel={tText(
 							'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___volgend-zoekresultaat'
 						)}
 						variants={['text', ...variants]}
@@ -77,8 +74,8 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 						disabled={currentSearchIndex === searchResults.length - 1 || searchResults.length === 0}
 					/>
 					<Button
-						iconStart={<Icon name={IconNamesLight.Times} />}
-						aria-label={tText(
+						iconStart={<Icon name={IconNamesLight.Times} aria-hidden />}
+						ariaLabel={tText(
 							'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___verwijder-zoekterm'
 						)}
 						variants={['text', ...variants]}
@@ -88,8 +85,8 @@ export const SearchInputWithResultsPagination: FC<SearchInputWithResultsPaginati
 			)}
 			{!searchResults && (
 				<Button
-					iconStart={<Icon name={IconNamesLight.Search} />}
-					aria-label={tText(
+					iconStart={<Icon name={IconNamesLight.Search} aria-hidden />}
+					ariaLabel={tText(
 						'modules/iiif-viewer/components/search-input-with-results/search-input-with-results-pagination___zoek-opdracht-uitvoeren'
 					)}
 					variants={['text', ...variants]}

@@ -1,9 +1,8 @@
 import { CheckboxList, Dropdown, RadioButton } from '@meemoo/react-components';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import clsx from 'clsx';
 import { isEmpty, isNil, without } from 'lodash-es';
 import { type FC, type ReactElement, type ReactNode, useState } from 'react';
-
-import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 import { Icon } from '../Icon';
 
@@ -20,6 +19,7 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 	value,
 	onChange,
 	className,
+	id,
 }: RefinableRadioButtonProps): ReactElement => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
@@ -61,8 +61,9 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 					isOpen={isDropdownOpen}
 					onOpen={() => setIsDropdownOpen(true)}
 					onClose={() => setIsDropdownOpen(false)}
-					iconOpen={<Icon name={IconNamesLight.AngleUp} />}
-					iconClosed={<Icon name={IconNamesLight.AngleDown} />}
+					iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+					iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+					id={`refinable-radio-button-dropdown-${id}`}
 				>
 					<CheckboxList
 						className={styles['c-refinable-radio-button__checkbox-list']}
@@ -72,7 +73,7 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 							label,
 							checked: value.refinedSelection.includes(id),
 						}))}
-						checkIcon={<Icon name={IconNamesLight.Check} />}
+						checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
 						onItemClick={onCheckboxClick}
 					/>
 				</Dropdown>

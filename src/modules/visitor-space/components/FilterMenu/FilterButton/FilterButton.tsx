@@ -1,8 +1,7 @@
 import { Button } from '@meemoo/react-components';
+import { Icon } from '@shared/components/Icon';
 import clsx from 'clsx';
 import type { FC } from 'react';
-
-import { Icon } from '@shared/components/Icon';
 
 import styles from '../FilterMenu.module.scss';
 
@@ -11,6 +10,7 @@ import type { FilterButtonProps } from './FilterButton.types';
 const FilterButton: FC<FilterButtonProps> = ({
 	className,
 	label,
+	ariaLabel,
 	icon,
 	isActive,
 	type = 'filter',
@@ -28,6 +28,7 @@ const FilterButton: FC<FilterButtonProps> = ({
 			className={filterBtnCls}
 			iconEnd={<Icon className="u-text-left" name={icon} aria-hidden />}
 			label={label}
+			ariaLabel={ariaLabel || (typeof label === 'string' ? label : undefined)}
 			variants={['black', 'block']}
 			onClick={onClick}
 			type="button"

@@ -21,7 +21,7 @@ export const TAGS_INPUT_COMPONENTS: TagsInputProps<boolean>['components'] = {
 	ClearIndicator: ({ className, cx, innerProps }) => {
 		return (
 			<span {...innerProps} className={cx(clearIndicatorCxState, className)}>
-				<Icon className={cx({ 'indicator-icon': true })} name={IconNamesLight.Times} />
+				<Icon className={cx({ 'indicator-icon': true })} name={IconNamesLight.Times} aria-hidden />
 			</span>
 		);
 	},
@@ -36,7 +36,11 @@ export const TAGS_INPUT_COMPONENTS: TagsInputProps<boolean>['components'] = {
 				}}
 				className={cx(dropdownIndicatorCxState, className)}
 			>
-				<Icon className={cx({ 'indicator-icon': true })} name={IconNamesLight.AngleDown} />
+				<Icon
+					className={cx({ 'indicator-icon': true })}
+					name={IconNamesLight.AngleDown}
+					aria-hidden
+				/>
 			</span>
 		);
 	},

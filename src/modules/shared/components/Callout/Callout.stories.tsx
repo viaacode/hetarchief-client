@@ -15,7 +15,7 @@ const Template: ComponentStory<typeof Callout> = (args) => <Callout {...args} />
 
 export const Default = Template.bind({});
 Default.args = {
-	icon: <Icon name={IconNamesLight.Info} />,
+	icon: <Icon name={IconNamesLight.Info} aria-hidden />,
 	text: 'Door gebruik te maken van deze applicatie bevestigt u dat u het beschikbare materiaal enkel raadpleegt voor wetenschappelijk- of privé onderzoek.',
 	// biome-ignore lint/a11y/noStaticElementInteractions: this is a storybook file, not actual production code
 	// biome-ignore lint/a11y/useKeyWithClickEvents: this is a storybook file, not actual production code

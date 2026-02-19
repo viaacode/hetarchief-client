@@ -1,8 +1,7 @@
 import { Button } from '@meemoo/react-components';
-import type { FC, ReactNode } from 'react';
-
 import { ErrorPage } from '@shared/components/ErrorPage';
-import { tHtml } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
+import type { FC, ReactNode } from 'react';
 
 interface ErrorSpaceNoAccessProps {
 	visitorSpaceSlug: string | null;
@@ -26,7 +25,7 @@ const ErrorNoAccess: FC<ErrorSpaceNoAccessProps> = ({ visitorSpaceSlug, descript
 				)
 			}
 			link={{
-				component: <Button label={tHtml('pages/404___ga-naar-de-homepage')} variants="black" />,
+				component: <Button label={tText('pages/404___ga-naar-de-homepage')} variants="black" />,
 				to: '/',
 			}}
 			image={{ image: '/images/no-access.svg', left: true }}

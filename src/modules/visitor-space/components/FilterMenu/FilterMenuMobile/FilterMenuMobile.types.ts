@@ -15,6 +15,7 @@ export interface FilterMenuMobileProps
 	children?: ReactNode;
 	activeFilter: string | null | undefined;
 	activeSortLabel: ReactNode;
+	activeSortAriaLabel: string;
 	isOpen: boolean;
 	onClose?: () => void;
 	onFilterClick?: (id: string) => void;

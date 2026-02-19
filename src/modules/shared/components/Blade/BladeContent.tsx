@@ -107,7 +107,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 							<Button
 								className={clsx(styles['c-blade__close-button'])}
 								icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-								aria-label={tText('modules/shared/components/blade/blade___sluiten')}
+								ariaLabel={tText('modules/shared/components/blade/blade___sluiten')}
 								variants={['text', 'icon', 'xxs']}
 								onClick={() => handleClose()}
 							/>
@@ -135,7 +135,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 						<Button
 							className={clsx(styles['c-blade__close-button'])}
 							icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-							aria-label={tText('modules/shared/components/blade/blade___sluiten')}
+							ariaLabel={tText('modules/shared/components/blade/blade___sluiten')}
 							variants={['text', 'icon', 'xs']}
 							onClick={() => handleClose()}
 						/>
@@ -167,16 +167,17 @@ export const BladeContent: FC<BladeContentProps> = ({
 
 		const label = isMobile ? buttonConfig.mobileLabel : buttonConfig.label;
 
-		const renderButton = () => {
+		const renderButton = (isWrappedInLink: boolean) => {
 			return (
 				<Button
 					label={label}
 					title={buttonConfig.title || undefined}
-					aria-label={buttonConfig.ariaLabel || undefined}
+					ariaLabel={buttonConfig.ariaLabel || undefined}
 					variants={buttonConfig.variants}
 					onClick={() => buttonConfig.onClick?.()}
 					disabled={buttonConfig.disabled}
-					iconStart={buttonConfig.icon && <Icon name={buttonConfig.icon} />}
+					iconStart={buttonConfig.icon && <Icon name={buttonConfig.icon} aria-hidden />}
+					tabIndex={isWrappedInLink ? -1 : undefined}
 				/>
 			);
 		};
@@ -189,11 +190,11 @@ export const BladeContent: FC<BladeContentProps> = ({
 					target={buttonConfig.externalLink ? '_blank' : '_self'}
 					aria-label={buttonConfig.ariaLabel || label}
 				>
-					{renderButton()}
+					{renderButton(true)}
 				</Link>
 			);
 		}
-		return renderButton();
+		return renderButton(false);
 	};
 
 	const renderFooter = () => {

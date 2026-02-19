@@ -236,8 +236,8 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalU
 					<div className={styles['c-admin__actions']}>
 						{showCreateButton && (
 							<Button
-								iconStart={<Icon name={IconNamesLight.Plus} />}
-								label={tHtml(
+								iconStart={<Icon name={IconNamesLight.Plus} aria-hidden />}
+								label={tText(
 									'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/index___nieuwe-bezoekersruimte'
 								)}
 								variants="black"
@@ -263,6 +263,9 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalU
 								page: 1,
 							})
 						}
+						ariaLabel={tText(
+							'modules/admin/views/visitor-spaces/admin-visitor-spaces-overview___zoek-naar-bezoekersruimtes-input-aria-label'
+						)}
 					/>
 
 					<ScrollableTabs

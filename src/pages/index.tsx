@@ -11,7 +11,6 @@ import {
 import { Loading } from '@shared/components/Loading';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { KNOWN_STATIC_ROUTES, QUERY_KEYS, ROUTES_BY_LOCALE } from '@shared/const';
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -25,8 +24,7 @@ import { noop } from 'lodash-es';
 import type { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import { type ComponentType, type FC, useEffect, useState } from 'react';
-import { BooleanParam, useQueryParam } from 'use-query-params';
+import { type ComponentType, type FC, useEffect } from 'react';
 import ErrorNoAccess from '../modules/shared/components/ErrorNoAccess/ErrorNoAccess';
 
 const { publicRuntimeConfig } = getConfig();

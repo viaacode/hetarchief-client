@@ -234,6 +234,9 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 									[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: value || undefined,
 								})
 							}
+							ariaLabel={tText(
+								'modules/cp/views/cp-admin-visitors___zoek-bezoekers-input-aria-label'
+							)}
 						/>
 
 						<ScrollableTabs
@@ -279,6 +282,9 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 					}}
 					onSubmit={handleEditVisitRequestFinished}
 					id="visitors-page__approve-request-blade"
+					ariaLabel={tText(
+						'modules/cp/views/cp-admin-visitors___materiaal-aanvraag-goedkeuren-blade-aria-label'
+					)}
 				/>
 			</CPAdminLayout>
 		);

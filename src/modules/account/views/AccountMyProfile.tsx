@@ -150,7 +150,8 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			className="p-account-my-profile__general-info-alert u-p-24"
 			title={tText('pages/account/mijn-profiel/index___alert-title')}
 			content={tHtml('pages/account/mijn-profiel/index___alert-message')}
-			icon={<Icon name={IconNamesLight.Exclamation} />}
+			icon={<Icon name={IconNamesLight.Exclamation} aria-hidden />}
+			id="edit-profile-alert"
 		/>
 	);
 
@@ -231,9 +232,10 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			>
 				<Button
 					className="u-p-0"
-					iconStart={<Icon name={IconNamesLight.Edit} />}
-					label={tHtml('pages/account/mijn-profiel/index___wijzig-mijn-gegevens')}
+					iconStart={<Icon name={IconNamesLight.Edit} aria-hidden />}
+					label={tText('pages/account/mijn-profiel/index___wijzig-mijn-gegevens')}
 					variants="text"
+					tabIndex={-1}
 				/>
 			</Link>
 		</div>
@@ -259,7 +261,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		<>
 			<Checkbox
 				checked={acceptNewsletter}
-				checkIcon={<Icon name={IconNamesLight.Check} />}
+				checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
 				id={labelKeys.acceptNewsletter}
 				value="accept-newsletter"
 				label={tHtml('pages/account/mijn-profiel/index___ik-ontvang-graag-de-nieuwsbrief')}

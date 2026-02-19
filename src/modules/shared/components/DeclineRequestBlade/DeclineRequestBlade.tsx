@@ -127,9 +127,13 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 						<>
 							<TextArea
 								{...field}
+								value={field.value || ''}
 								id={labelKeys.reasonForDenial}
 								maxLength={300}
 								onChange={(evt) => setValue('reasonForDenial', evt.target.value)}
+								ariaLabel={tText(
+									'modules/shared/components/decline-request-blade/decline-request-blade___reden-voor-weigering-input-aria-label'
+								)}
 							/>
 							<MaxLengthIndicator maxLength={300} value={field.value} />
 						</>

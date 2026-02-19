@@ -434,6 +434,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						className={styles['c-request-material__reason-input']}
 						onChange={(e) => setReasonInputValue(e.target.value)}
 						value={reasonInputValue}
+						ariaLabel={tText(
+							'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag-input-aria-label'
+						)}
 					/>
 				</dd>
 			</>
@@ -487,6 +490,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			footerButtons={getFooterButtons()}
 			isManaged
 			isBladeInvalid={noTypeSelectedOnSave}
+			ariaLabel={tText(
+				'modules/visitor-space/components/material-request-blade/material-request-blade___vraag-materiaal-aan-blade-aria-label'
+			)}
 		>
 			<div className={styles['c-request-material__content']}>
 				<dl>
@@ -548,14 +554,14 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			</div>
 			<ConfirmationModal
 				text={{
-					description: tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___je-hebt-al-op-dit-materiaal-een-formulier-voor-hergebruik-ingevuld-als-je-het-type-aanvraag-verandert-zal-de-informatie-in-dit-formulier-onherroepelijk-verwijderd-worden'
-					),
-					yes: tHtml(
+					yes: tText(
 						'modules/visitor-space/components/material-request-blade/material-request-blade___type-aanvraag-wijzigen'
 					),
-					no: tHtml(
+					no: tText(
 						'modules/visitor-space/components/material-request-blade/material-request-blade___annuleren'
+					),
+					description: tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___je-hebt-al-op-dit-materiaal-een-formulier-voor-hergebruik-ingevuld-als-je-het-type-aanvraag-verandert-zal-de-informatie-in-dit-formulier-onherroepelijk-verwijderd-worden'
 					),
 				}}
 				fullWidthButtonWrapper

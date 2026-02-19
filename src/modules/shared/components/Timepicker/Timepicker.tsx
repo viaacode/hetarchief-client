@@ -10,7 +10,7 @@ import type { TimepickerProps } from './Timepicker.types';
 
 const Timepicker: FC<TimepickerProps> = (props) => {
 	const locale = useLocale();
-	const { className } = props;
+	const { className, ariaLabel, id } = props;
 
 	const classNames = clsx(className, 'c-datepicker', 'c-datepicker--time');
 
@@ -27,7 +27,14 @@ const Timepicker: FC<TimepickerProps> = (props) => {
 			dateFormat="HH:mm"
 			timeFormat="HH:mm"
 			popperPlacement="bottom-start"
-			customInput={<TextInput iconStart={<Icon name={IconNamesLight.Clock} />} />}
+			customInput={
+				<TextInput
+					id={`time-picker--${id}__input`}
+					iconStart={<Icon name={IconNamesLight.Clock} aria-hidden />}
+					ariaLabel={ariaLabel}
+					value=""
+				/>
+			}
 			// biome-ignore lint/suspicious/noExplicitAny: datepicker props are strange
 			{...(props as any)}
 		/>

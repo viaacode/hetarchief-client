@@ -38,7 +38,7 @@ const TagSearchBarClear: FC<TagSearchBarClearProps> = ({
 					/>
 				</>
 			) : (
-				<Icon className={cx({ 'indicator-icon': true })} name={IconNamesLight.Times} />
+				<Icon className={cx({ 'indicator-icon': true })} name={IconNamesLight.Times} aria-hidden />
 			)}
 		</span>
 	);

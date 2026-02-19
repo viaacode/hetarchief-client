@@ -32,10 +32,11 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	actions,
 	limit = 0,
 	onClickAction,
+	id,
 }) => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-	const listRef = useRef<HTMLDivElement>(null);
+	const listRef = useRef<HTMLLIElement>(null);
 	const size = useElementSize(listRef);
 
 	const windowSize = useWindowSizeContext();
@@ -84,7 +85,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				variants={['teal', 'md']}
 				iconStart={action.icon}
 				onClick={() => onClickAction(action.id)}
-				aria-label={action.ariaLabel}
+				ariaLabel={action.ariaLabel}
 				title={action.tooltip}
 			>
 				<span className="u-text-ellipsis">{action.label}</span>
@@ -120,30 +121,30 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				onClick={() => onClickAction(action.id)}
 				icon={action.icon}
 				variants={['silver']}
-				aria-label={action.ariaLabel}
+				ariaLabel={action.ariaLabel}
 				title={action.tooltip}
 			/>
 		);
 
 		if (action.url) {
 			return (
-				<li
+				<div
 					className={styles['c-dynamic-action-menu__secondary-item']}
 					key={`media-action-${action.id}`}
 				>
 					<a href={action.url} target="_blank" referrerPolicy="no-referrer" rel="noreferrer">
 						{action.tooltip && !isMobile ? renderInTooltip($element, action.tooltip) : $element}
 					</a>
-				</li>
+				</div>
 			);
 		}
 		return (
-			<li
+			<div
 				className={styles['c-dynamic-action-menu__secondary-item']}
 				key={`media-action-${action.id}`}
 			>
 				{action.tooltip && !isMobile ? renderInTooltip($element, action.tooltip) : $element}
-			</li>
+			</div>
 		);
 	};
 
@@ -161,12 +162,13 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				onOpen={() => setIsDropdownOpen(true)}
 				onClose={() => setIsDropdownOpen(false)}
 				flyoutClassName={styles['c-dynamic-action-menu__flyout']}
+				id={`dynamic-action-menu--${id}`}
 			>
 				<DropdownButton>
 					<Button
 						className={styles['c-dynamic-action-menu__dropdown-button']}
 						icon={<Icon name={IconNamesLight.DotsHorizontal} aria-hidden />}
-						aria-label={tText(
+						ariaLabel={tText(
 							'modules/ie-objects/components/dynamic-action-menu/dynamic-action-menu___meer-acties'
 						)}
 						variants={['silver']}
@@ -186,7 +188,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	return (
 		<ul className={clsx(className, styles['c-dynamic-action-menu'])}>
 			{primaryActions.map(renderPrimaryButton)}
-			<div
+			<li
 				className={styles['c-dynamic-action-menu__secondary']}
 				ref={listRef}
 				style={{
@@ -195,7 +197,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 			>
 				{visibleActions.map(renderSecondaryButton)}
 				{!!hiddenActions.length && renderDropdown(secondaryActions)}
-			</div>
+			</li>
 		</ul>
 	);
 };

@@ -78,7 +78,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 			className={styles['c-share-folder-blade__alert']}
 			title={tText('pages/account/map-delen/folder-id/index___zichtbaarheid-van-de-items')}
 			content={tText('pages/account/map-delen/folder-id/index___zichtbaarheid-message')}
-			icon={<Icon name={IconNamesLight.Exclamation} />}
+			icon={<Icon name={IconNamesLight.Exclamation} aria-hidden />}
 		/>
 	);
 
@@ -86,6 +86,9 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 		<Blade
 			isOpen={isOpen}
 			title={tText('pages/account/map-delen/folder-id/index___deel-map')}
+			ariaLabel={tText(
+				'modules/shared/components/share-folder-blade/share-folder-blade___deel-een-map-met-iemand-anders-blade-aria-label'
+			)}
 			footerButtons={getFooterButtons()}
 			onClose={handleClose}
 			id="share-folder-blade"
@@ -101,10 +104,12 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 						<TextInput
 							name="email"
 							id={labelKeys.email}
-							autoComplete={'email'}
 							value={email}
 							onChange={(evt) => setEmail(evt.target.value)}
 							className={styles['c-share-folder-blade__content-copy-input']}
+							ariaLabel={tText(
+								'modules/shared/components/share-folder-blade/share-folder-blade___email-adres-van-de-persoon-waarmee-je-de-map-wilt-delen-input-aria-label'
+							)}
 						/>
 						<Button
 							label={tText('pages/account/map-delen/folder-id/index___verstuur')}
@@ -119,15 +124,21 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 				<FormControl label={tText('pages/account/map-delen/folder-id/index___via-deellink')}>
 					<div className={clsx(styles['c-share-folder-blade__content-copy-container'])}>
 						<TextInput
-							id="link"
+							id="share-folder-blade__link-input"
 							value={link}
 							className={styles['c-share-folder-blade__content-copy-input']}
+							ariaLabel={tText(
+								'modules/shared/components/share-folder-blade/share-folder-blade___deel-link-van-de-map-input-aria-label'
+							)}
 						/>
 						<CopyButton
 							text={link}
 							iconStart={<Icon name={IconNamesLight.Copy} aria-hidden />}
 							label={tText('modules/shared/components/copy-button/copy-button___kopieer')}
 							variants={['inline-input']}
+							ariaLabel={tText(
+								'modules/shared/components/share-folder-blade/share-folder-blade___kopieer-de-map-deel-link-naar-je-klemboard'
+							)}
 						/>
 					</div>
 				</FormControl>

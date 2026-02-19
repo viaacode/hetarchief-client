@@ -342,6 +342,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 									<MultiSelect
 										variant="rounded"
 										label={tText('modules/account/views/account-my-material-requests___type')}
+										id="account-my-material-requests___type-material-request"
 										options={typesList}
 										onChange={noop}
 										className={clsx(
@@ -370,6 +371,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 									<MultiSelect
 										variant="rounded"
 										label={tText('modules/account/views/account-my-material-requests___status')}
+										id="account-my-material-requests___status-material-request"
 										options={statusList}
 										onChange={noop}
 										className={clsx(
@@ -388,7 +390,9 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 											onClick: setSelectedStatuses,
 										}}
 										resetOptions={{
-											icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+											icon: (
+												<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
+											),
 											label: tText('modules/account/views/account-my-material-requests___reset'),
 											variants: ['text'],
 											onClick: setSelectedStatuses,
@@ -398,6 +402,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 									<MultiSelect
 										variant="rounded"
 										label={tText('modules/account/views/account-my-material-requests___download')}
+										id="account-my-material-requests___download-filter-material-request"
 										options={downloadUrlList}
 										onChange={noop}
 										className={clsx(
@@ -416,7 +421,9 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 											onClick: setSelectedDownloadFilters,
 										}}
 										resetOptions={{
-											icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+											icon: (
+												<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
+											),
 											label: tText('modules/account/views/account-my-material-requests___reset'),
 											variants: ['text'],
 											onClick: setSelectedDownloadFilters,
@@ -436,6 +443,9 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 											page: 1,
 										})
 									}
+									ariaLabel={tText(
+										'modules/account/views/account-my-material-requests___zoek-naar-materiaal-aanvraag-input-aria-label'
+									)}
 								/>
 							</div>
 						</div>

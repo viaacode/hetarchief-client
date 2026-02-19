@@ -60,7 +60,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({
 							'u-py-16'
 						)}
 					>
-						<Icon name={IconNamesLight.ArrowLeft} />
+						<Icon name={IconNamesLight.ArrowLeft} aria-hidden />
 						{sidebarTitle}
 					</div>
 				)}

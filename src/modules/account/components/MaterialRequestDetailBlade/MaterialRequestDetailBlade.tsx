@@ -431,7 +431,9 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 					className={styles['p-material-request-detail__content-block-media']}
 					src={objectThumbnailUrl}
 					aria-hidden
-					alt=""
+					alt={tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___alt-text-of-the-thumbnail-of-the-material-thats-being-requested'
+					)}
 				/>
 			</NextLink>
 		);
@@ -464,6 +466,9 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				onClose={onClose}
 				title={tText(
 					'modules/account/components/material-request-detail-blade/material-requests___detail'
+				)}
+				ariaLabel={tText(
+					'modules/account/components/material-request-detail-blade/material-request-detail-blade___materiaal-aanvraag-detail-blade-aria-label'
 				)}
 				stickySubtitle={<MaterialRequestInformation />}
 				subtitle={

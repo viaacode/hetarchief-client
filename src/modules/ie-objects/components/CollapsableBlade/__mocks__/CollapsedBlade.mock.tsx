@@ -3,8 +3,9 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
 export const collapsableBladeMock: CollapsableBladeProps = {
-	icon: <Icon className="u-font-size-24" name={IconNamesLight.RelatedObjects} />,
+	icon: <Icon className="u-font-size-24" name={IconNamesLight.RelatedObjects} aria-hidden />,
 	title: '3 gerelateerde objecten',
+	ariaLabel: '3 gerelateerde objecten',
 	isOpen: true,
 	setIsOpen: () => {},
 	renderContent: () => <div>content</div>,

@@ -1,9 +1,5 @@
-import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { isNil } from 'lodash-es';
-import React, { type FC, type ReactNode } from 'react';
-
 import { Permission } from '@account/const';
+import { Button } from '@meemoo/react-components';
 import { Navigation } from '@navigation/components/Navigation/Navigation';
 import { CopyButton } from '@shared/components/CopyButton';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
@@ -13,6 +9,9 @@ import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-searc
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import type { VisitorSpaceNavigationProps } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation.types';
+import clsx from 'clsx';
+import { isNil } from 'lodash-es';
+import React, { type FC, type ReactNode } from 'react';
 
 import styles from './VisitorSpaceNavigation.module.scss';
 
@@ -41,6 +40,7 @@ export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 
 		return (
 			<DropdownMenu
+				id={`visitor-space-contact-info--${title}`}
 				placement="bottom-end"
 				triggerButtonProps={{
 					className: clsx(
@@ -64,7 +64,13 @@ export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 						<li className={styles['c-visitor-space-navigation__contact-item']}>
 							<Button className="u-text-left" variants={['text', 'block', 'sm']} label={email} />
 
-							<CopyButton text={email} variants={['sm', 'text']} />
+							<CopyButton
+								text={email}
+								variants={['sm', 'text']}
+								ariaLabel={tText(
+									'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___kopieer-het-emailadres-naar-je-klemboard'
+								)}
+							/>
 						</li>
 					)}
 
@@ -72,7 +78,13 @@ export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 						<li className={styles['c-visitor-space-navigation__contact-item']}>
 							<Button className="u-text-left" variants={['text', 'block', 'sm']} label={phone} />
 
-							<CopyButton text={phone} variants={['sm', 'text']} />
+							<CopyButton
+								text={phone}
+								variants={['sm', 'text']}
+								ariaLabel={tText(
+									'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___kopieer-het-telefoonnummer-naar-je-klemboard'
+								)}
+							/>
 						</li>
 					)}
 				</ul>
@@ -89,6 +101,9 @@ export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 						variants="text"
 						className="u-color-white u-ml--12"
 						onClick={() => window.history.back()}
+						ariaLabel={tText(
+							'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___ga-terug-naar-de-zoekresultaten'
+						)}
 					/>
 				)}
 			</Navigation.Left>

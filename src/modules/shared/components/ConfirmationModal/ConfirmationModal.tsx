@@ -1,5 +1,5 @@
 import { Button } from '@meemoo/react-components';
-import { tHtml } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { setHasOpenConfirmationModal } from '@shared/store/ui';
 import clsx from 'clsx';
 import { type FC, useEffect } from 'react';
@@ -38,7 +38,7 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 			>
 				<Button
 					label={
-						no || tHtml('modules/shared/components/confirmation-modal/confirmation-modal___nee')
+						no || tText('modules/shared/components/confirmation-modal/confirmation-modal___nee')
 					}
 					className="u-mx-4"
 					name={'cancel'}
@@ -47,7 +47,7 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 				/>
 				<Button
 					label={
-						yes || tHtml('modules/shared/components/confirmation-modal/confirmation-modal___ja')
+						yes || tText('modules/shared/components/confirmation-modal/confirmation-modal___ja')
 					}
 					className="u-mx-4"
 					name={'confirm'}

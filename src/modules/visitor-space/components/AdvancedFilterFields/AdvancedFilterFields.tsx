@@ -36,6 +36,7 @@ import type {
 } from '@visitor-space/const/advanced-filters.consts';
 import clsx from 'clsx';
 import { parseISO } from 'date-fns';
+import { kebabCase } from 'lodash-es';
 import {
 	getAdvancedProperties,
 	getFilterConfig,
@@ -78,11 +79,12 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 	const renderTextField = (
 		Component: FC<TextInputProps>,
+		label: string,
 		value?: string,
 		props?: TextInputProps
 	) => (
 		<Component
-			{...props}
+			{...(props || {})}
 			className={clsx(
 				styles['c-advanced-filter-fields__dynamic-field'],
 				styles['c-advanced-filter-fields__dynamic-field--text']
@@ -93,6 +95,11 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 					val: e.target.value,
 				})
 			}
+			ariaLabel={tText(
+				'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___zoek-field-name-input-aria-label',
+				{ fieldName: label }
+			)}
+			id={props?.id || kebabCase(label)}
 		/>
 	);
 
@@ -114,7 +121,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			case TextInput: {
 				const TextInputComponent = filterConfig.inputComponent as FC<TextInputProps>;
 				const textInputComponentProps = filterConfig.inputComponentProps as TextInputProps;
-				return renderTextField(TextInputComponent, filterValue.val, {
+				return renderTextField(TextInputComponent, filterConfig.label, filterValue.val, {
 					...textInputComponentProps,
 					...(props as TextInputProps),
 				});
@@ -153,7 +160,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				const TextInputComponent = filterConfig.inputComponent as FC<TextInputProps>;
 				const textInputComponent = filterConfig.inputComponentProps as TextInputProps;
 
-				return renderTextField(TextInputComponent, value, {
+				return renderTextField(TextInputComponent, filterConfig.label, value, {
 					...textInputComponent,
 					...(props as TextInputProps),
 				});
@@ -164,7 +171,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				const TextInputComponent = filterConfig.inputComponent as FC<TextInputProps>;
 				const textInputComponentProps = filterConfig.inputComponentProps as TextInputProps;
 
-				return renderTextField(TextInputComponent, value, {
+				return renderTextField(TextInputComponent, filterConfig.label, value, {
 					...textInputComponentProps,
 					...(props as TextInputProps),
 				});
@@ -355,7 +362,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				{index > 0 && (
 					<Button
 						icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
-						aria-label={tText(
+						ariaLabel={tText(
 							'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___criterium-verwijderen'
 						)}
 						variants="black"

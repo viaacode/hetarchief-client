@@ -346,6 +346,9 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						onBlur={field.onBlur}
 						onChange={(date) => onFromDateChange(date, field)}
 						value={field.value}
+						ariaLabel={tText(
+							'modules/shared/components/approve-request-blade/approve-request-blade___toegang-vanaf-datum-input-aria-label'
+						)}
 					/>
 
 					<Timepicker
@@ -357,6 +360,9 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						onChange={(date) => onFromDateChange(date, field)}
 						selected={field.value}
 						value={formatTime(field.value)}
+						ariaLabel={tText(
+							'modules/shared/components/approve-request-blade/approve-request-blade___toegang-vanaf-tijd-input-aria-label'
+						)}
 					/>
 				</>
 			);
@@ -382,6 +388,9 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						onBlur={field.onBlur}
 						onChange={(date) => onSimpleDateChange(date, field)}
 						value={field.value}
+						ariaLabel={tText(
+							'modules/shared/components/approve-request-blade/approve-request-blade___toegang-tot-datum-input-aria-label'
+						)}
 					/>
 
 					<Timepicker
@@ -393,6 +402,9 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						onChange={(date) => onSimpleDateChange(date, field)}
 						selected={field.value}
 						value={formatTime(field.value)}
+						ariaLabel={tText(
+							'modules/shared/components/approve-request-blade/approve-request-blade___toegang-tot-tijd-input-aria-label'
+						)}
 					/>
 				</>
 			);
@@ -411,6 +423,9 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				id={labelKeys.accessRemark}
 				maxLength={300}
 				onChange={(evt) => setValue('accessRemark', evt.target.value)}
+				ariaLabel={tText(
+					'modules/shared/components/approve-request-blade/approve-request-blade___opmerking-input-aria-label'
+				)}
 			/>
 			<MaxLengthIndicator maxLength={300} value={field.value} />
 		</>
@@ -430,6 +445,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					onChange={(selectedOption: string, selectedRefineOptions: string[]) => {
 						onChangeAccessType(field, selectedOption as AccessType, selectedRefineOptions);
 					}}
+					id="approved-request-blade__access-type-visitor-space"
 				/>
 			);
 		},

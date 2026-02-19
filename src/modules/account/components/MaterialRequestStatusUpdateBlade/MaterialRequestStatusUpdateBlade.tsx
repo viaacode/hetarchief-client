@@ -147,6 +147,9 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 			title={tText(
 				'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag'
 			)}
+			ariaLabel={tText(
+				'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___materiaal-aanvraag-goedkeuren-of-afkeuren-blade-aria-label'
+			)}
 			stickySubtitle={<MaterialRequestInformation />}
 			subtitle={
 				<MaterialCard
@@ -194,6 +197,9 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 								maxLength={MAX_MOTIVATION_LENGTH}
 								onChange={(e) => setMotivationInputValue(e.target.value)}
 								value={motivationInputValue}
+								ariaLabel={tText(
+									'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___motivatie-voor-het-goedkeuren-of-afkeuren-van-de-aanvraag-input-aria-label'
+								)}
 							/>
 						</FormControl>
 					</dd>

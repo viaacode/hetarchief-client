@@ -347,7 +347,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 						value={`add-to--${folder.id}`}
 						className={styles['c-add-to-folder-blade__list-item__checkbox']}
 						checked={isFolderSelected}
-						checkIcon={<Icon name={IconNamesLight.Check} />}
+						checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
 						onClick={(e) => e.stopPropagation()}
 						variants={['no-label']}
 						aria-label={tText(

@@ -374,6 +374,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 								<MultiSelect
 									variant="rounded"
 									label={tText('pages/admin/materiaalaanvragen/index___type')}
+									id="admin-material-requests__type-material-request"
 									options={typesList}
 									onChange={noop}
 									className={clsx(
@@ -390,7 +391,9 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 										onClick: setSelectedTypes,
 									}}
 									resetOptions={{
-										icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+										icon: (
+											<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
+										),
 										label: tText('pages/admin/materiaalaanvragen/index___reset'),
 										variants: ['text'],
 										onClick: setSelectedTypes,
@@ -400,6 +403,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 								<MultiSelect
 									variant="rounded"
 									label={tText('pages/admin/materiaalaanvragen/index___status')}
+									id="admin-material-requests__status-material-request"
 									options={statusList}
 									onChange={noop}
 									className={clsx(
@@ -416,7 +420,9 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 										onClick: setSelectedStatuses,
 									}}
 									resetOptions={{
-										icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+										icon: (
+											<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
+										),
 										label: tText('pages/admin/materiaalaanvragen/index___reset'),
 										variants: ['text'],
 										onClick: setSelectedStatuses,
@@ -426,6 +432,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 								<MultiSelect
 									variant="rounded"
 									label={tText('pages/admin/materiaalaanvragen/index___download')}
+									id="admin-material-requests__download-filter-material-request"
 									options={downloadUrlList}
 									onChange={noop}
 									className={clsx(
@@ -444,7 +451,9 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 										onClick: setSelectedDownloadFilters,
 									}}
 									resetOptions={{
-										icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+										icon: (
+											<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
+										),
 										label: tText('pages/admin/materiaalaanvragen/index___reset'),
 										variants: ['text'],
 										onClick: setSelectedDownloadFilters,
@@ -454,6 +463,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 									<MultiSelect
 										variant="rounded"
 										label={tText('pages/admin/materiaalaanvragen/index___aanbieder')}
+										id="admin-material-requests__maintainer-filter-material-request"
 										options={maintainerList}
 										onChange={noop}
 										className={clsx(
@@ -472,7 +482,9 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 											onClick: setSelectedMaintainers,
 										}}
 										resetOptions={{
-											icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+											icon: (
+												<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
+											),
 											label: tText('pages/admin/materiaalaanvragen/index___reset'),
 											variants: ['text'],
 											onClick: setSelectedMaintainers,
@@ -484,7 +496,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 							<SearchBar
 								id={globalLabelKeys.adminLayout.title}
 								value={search}
-								aria-label={tText(
+								ariaLabel={tText(
 									'modules/admin/views/admin-material-requests___zoekbalk-aria-label'
 								)}
 								placeholder={tText('pages/admin/materiaalaanvragen/index___zoek')}

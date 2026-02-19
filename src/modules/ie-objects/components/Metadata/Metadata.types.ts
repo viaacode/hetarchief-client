@@ -7,6 +7,7 @@ export interface MetadataProps extends DefaultComponentProps {
 	children: ReactNode;
 	renderRight?: ReactNode;
 	renderedTitleRight?: ReactNode;
+	rootElementType?: 'dl' | 'div';
 }
 
 export interface MetadataListProps extends DefaultComponentProps {

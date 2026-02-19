@@ -94,7 +94,14 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				<Controller
 					name="firstName"
 					control={control}
-					render={({ field }) => <TextInput {...field} id={labelKeys.firstName} />}
+					render={({ field }) => (
+						<TextInput
+							{...field}
+							id={labelKeys.firstName}
+							ariaLabel={tText('modules/newsletter/newsletter-page___voornaam-input-aria-label')}
+							autoComplete="given-name"
+						/>
+					)}
 				/>
 			</FormControl>
 
@@ -107,7 +114,14 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				<Controller
 					name="lastName"
 					control={control}
-					render={({ field }) => <TextInput {...field} id={labelKeys.lastName} />}
+					render={({ field }) => (
+						<TextInput
+							{...field}
+							id={labelKeys.lastName}
+							ariaLabel={tText('modules/newsletter/newsletter-page___achternaam-input-aria-label')}
+							autoComplete="family-name"
+						/>
+					)}
 				/>
 			</FormControl>
 
@@ -120,7 +134,14 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				<Controller
 					name="mail"
 					control={control}
-					render={({ field }) => <TextInput {...field} id={labelKeys.mail} />}
+					render={({ field }) => (
+						<TextInput
+							{...field}
+							id={labelKeys.mail}
+							ariaLabel={tText('modules/newsletter/newsletter-page___email-input-aria-label')}
+							autoComplete="email"
+						/>
+					)}
 				/>
 			</FormControl>
 

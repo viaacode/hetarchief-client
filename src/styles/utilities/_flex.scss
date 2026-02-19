@@ -1,4 +1,4 @@
-@use "../abstracts" as *;
+@use "../abstracts" as abstracts;
 
 .u-flex {
 	display: flex;
@@ -21,15 +21,15 @@
 }
 
 .u-gap-md {
-	gap: $spacer-md;
+	gap: abstracts.$spacer-md;
 }
 
 .u-gap-sm {
-	gap: $spacer-sm;
+	gap: abstracts.$spacer-sm;
 }
 
 .u-gap-xs {
-	gap: $spacer-xs;
+	gap: abstracts.$spacer-xs;
 }
 
 /**
@@ -37,20 +37,20 @@
  */
 
 .u-flex-col {
-	flex-direction: column;
+	flex-direction: column !important;
 }
 
 .u-flex-row {
-	flex-direction: row;
+	flex-direction: row !important;
 }
 
-@media (min-width: $breakpoint-md) {
+@media (min-width: abstracts.$breakpoint-md) {
 	.u-flex-col-md {
-		flex-direction: column;
+		flex-direction: column !important;
 	}
 
 	.u-flex-row-md {
-		flex-direction: row;
+		flex-direction: row !important;
 	}
 }
 
@@ -62,7 +62,7 @@
 	align-items: center;
 }
 
-@media (min-width: $breakpoint-md) {
+@media (min-width: abstracts.$breakpoint-md) {
 	.u-align-center-md {
 		align-items: center;
 	}
@@ -80,7 +80,7 @@
 	justify-content: space-between;
 }
 
-@media (min-width: $breakpoint-md) {
+@media (min-width: abstracts.$breakpoint-md) {
 	.u-justify-center-md {
 		justify-content: center;
 	}

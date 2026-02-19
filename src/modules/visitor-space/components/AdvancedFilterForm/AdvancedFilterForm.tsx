@@ -1,20 +1,18 @@
 import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { type FC, useState } from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { tHtml } from '@shared/helpers/translate';
+import { getRandomId } from '@shared/helpers/get-random-id';
+import { tHtml, tText } from '@shared/helpers/translate';
+import type { AdvancedFilter, IdentityAdvancedFilter } from '@visitor-space/types';
+import clsx from 'clsx';
+import { omit } from 'lodash-es';
+import { type FC, useState } from 'react';
+import type { UseFormHandleSubmit } from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form/dist/types/form';
 import { AdvancedFilterFields } from '../AdvancedFilterFields/AdvancedFilterFields';
 import { initialFields } from './AdvancedFilterForm.const';
 import styles from './AdvancedFilterForm.module.scss';
 import type { AdvancedFilterFormProps, AdvancedFilterFormState } from './AdvancedFilterForm.types';
-
-import { getRandomId } from '@shared/helpers/get-random-id';
-import type { AdvancedFilter, IdentityAdvancedFilter } from '@visitor-space/types';
-import { omit } from 'lodash-es';
-import type { UseFormHandleSubmit } from 'react-hook-form';
-import type { SubmitHandler } from 'react-hook-form/dist/types/form';
 
 export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 	children,
@@ -98,8 +96,8 @@ export const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 					<Button
 						disabled={disabled}
 						className="u-p-0"
-						iconStart={<Icon name={IconNamesLight.Plus} />}
-						label={tHtml(
+						iconStart={<Icon name={IconNamesLight.Plus} aria-hidden />}
+						label={tText(
 							'modules/visitor-space/components/forms/advanced-filter-form/advanced-filter-form___nieuwe-stelling'
 						)}
 						variants="text"

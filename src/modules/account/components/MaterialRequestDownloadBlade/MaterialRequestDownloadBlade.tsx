@@ -17,6 +17,7 @@ const MaterialRequestDownloadBlade: FC<MaterialRequestDownloadBladeProps> = ({
 		id={`${location}__download-blade`}
 		isOpen={!!downloadUrl}
 		title={tText('Download is klaar')}
+		ariaLabel={tText('Download is klaar blade [ARIA_LABEL]')}
 		onClose={onClose}
 		footerButtons={[
 			{

@@ -1,12 +1,12 @@
-import type { ReactNode } from 'react';
-
 import type { DefaultComponentProps } from '@shared/types';
+import type { ReactNode } from 'react';
 
 export interface RefinableRadioButtonProps extends DefaultComponentProps {
 	children?: ReactNode;
 	options: RefinableRadioButtonOption[];
 	value: RefinableRadioButtonInitialState;
 	onChange: (selectedOption: string, refinedSelection: string[], isDropdownOpen: boolean) => void;
+	id: string;
 }
 
 export interface RefinableRadioButtonInitialState {

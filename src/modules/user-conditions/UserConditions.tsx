@@ -124,13 +124,19 @@ export const UserConditions: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 					<section className={clsx('u-pt-96', styles['p-terms-of-service__buttons-wrapper'])}>
 						<div className="l-container">
 							<div className={styles['p-terms-of-service__buttons']}>
-								<Button className="u-mr-8" variants="text" onClick={onCancelClick}>
-									{tHtml('pages/gebruiksvoorwaarden/index___annuleer')}
-								</Button>
+								<Button
+									className="u-mr-8"
+									variants="text"
+									onClick={onCancelClick}
+									label={tText('pages/gebruiksvoorwaarden/index___annuleer')}
+								/>
 
-								<Button variants="black" disabled={!hasFinished} onClick={onConfirmClick}>
-									{tHtml('pages/gebruiksvoorwaarden/index___aanvaarden')}
-								</Button>
+								<Button
+									variants="black"
+									disabled={!hasFinished}
+									onClick={onConfirmClick}
+									label={tText('pages/gebruiksvoorwaarden/index___aanvaarden')}
+								/>
 							</div>
 						</div>
 					</section>

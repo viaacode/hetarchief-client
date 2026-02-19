@@ -22,6 +22,7 @@ export interface DateInputProps {
 	value?: Date;
 	className?: string;
 	defaultValue?: Date;
+	ariaLabel: string;
 }
 
 const DateInput: FC<DateInputProps> = ({
@@ -33,6 +34,7 @@ const DateInput: FC<DateInputProps> = ({
 	onBlur = noop,
 	className,
 	defaultValue,
+	ariaLabel,
 }) => {
 	const locale = useLocale();
 
@@ -50,7 +52,14 @@ const DateInput: FC<DateInputProps> = ({
 				dateFormat="dd/MM/yyyy"
 				placeholderText="dd/mm/jjjj"
 				popperPlacement="bottom-start"
-				customInput={<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />}
+				customInput={
+					<TextInput
+						id={`${id}__date-input__text-field`}
+						iconStart={<Icon name={IconNamesLight.Calendar} aria-hidden />}
+						ariaLabel={ariaLabel}
+						value=""
+					/>
+				}
 			/>
 		</div>
 	);

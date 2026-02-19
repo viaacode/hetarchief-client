@@ -77,7 +77,7 @@ const Modal: FC<ModalProps> = ({
 							<Button
 								className={styles['c-hetarchief-modal__close']}
 								icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-								aria-label={tText('modules/shared/components/modal/modal___sluiten')}
+								ariaLabel={tText('modules/shared/components/modal/modal___sluiten')}
 								variants={['text']}
 								onClick={onClose}
 							/>

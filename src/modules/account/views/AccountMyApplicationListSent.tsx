@@ -38,19 +38,31 @@ export const AccountMyApplicationListSent: FC<DefaultSeoInfo> = ({ url, canonica
 						)}
 					</p>
 					<div className={styles['p-application-list-success__button-component']}>
-						<Link href={ROUTES_BY_LOCALE[locale].search}>
+						<Link
+							href={ROUTES_BY_LOCALE[locale].search}
+							aria-label={tText(
+								'modules/account/views/account-my-application-list-sent___ga-naar-zoeken-in-de-catalogus'
+							)}
+						>
 							<Button
-								label={tHtml(
+								label={tText(
 									'modules/account/components/application-list-sent/application-list-sent___zoeken-in-de-catalogus'
 								)}
+								tabIndex={-1}
 							/>
 						</Link>
-						<Link href={ROUTES_BY_LOCALE[locale].accountMyMaterialRequests}>
+						<Link
+							href={ROUTES_BY_LOCALE[locale].accountMyMaterialRequests}
+							aria-label={tText(
+								'modules/account/views/account-my-application-list-sent___ga-naar-mijn-materiaal-aanvragen-link-aria-label'
+							)}
+						>
 							<Button
-								label={tHtml(
+								label={tText(
 									'modules/account/components/application-list-sent/application-list-sent___mijn-materiaalaanvragen-raadplegen'
 								)}
 								variants={['silver']}
+								tabIndex={-1}
 							/>
 						</Link>
 					</div>

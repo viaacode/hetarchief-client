@@ -308,7 +308,6 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 								<Button
 									variants={['silver']}
 									icon={<Icon name={IconNamesLight.Share} aria-hidden />}
-									aria-label={tText('pages/account/mijn-mappen/folder-slug/index___map-delen')}
 									name={tText('pages/account/mijn-mappen/folder-slug/index___map-delen')}
 									onClick={(e) => {
 										e.stopPropagation();
@@ -331,9 +330,6 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 									className="p-account-my-folders__delete"
 									variants={['silver']}
 									icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
-									aria-label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
-									)}
 									name={tText('pages/account/mijn-mappen/folder-slug/index___map-verwijderen')}
 									onClick={(e) => {
 										e.stopPropagation();
@@ -367,9 +363,6 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 						'modules/account/components/edit-folder-title/edit-folder-title___map-aanpassen'
 					)}
 					icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
-					aria-label={tText(
-						'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen'
-					)}
 					tooltipText={tText(
 						'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen'
 					)}
@@ -388,12 +381,12 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 			<>
 				<Button
 					variants={['text']}
-					label={tHtml('pages/account/mijn-mappen/folder-slug/index___verwijderen')}
+					label={tText('pages/account/mijn-mappen/folder-slug/index___verwijderen')}
 					onClick={() => onRemoveFromFolder(item, folder)}
 				/>
 				<Button
 					variants={['text']}
-					label={tHtml('pages/account/mijn-mappen/folder-slug/index___verplaatsen')}
+					label={tText('pages/account/mijn-mappen/folder-slug/index___verplaatsen')}
 					onClick={() => onMoveFolder(item)}
 				/>
 			</>
@@ -629,7 +622,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 											</div>
 										)}
 										<SearchBar
-											aria-label={tText('modules/account/views/my-folders___zoekveld-aria-label')}
+											ariaLabel={tText('modules/account/views/my-folders___zoekveld-aria-label')}
 											id={`${labelKeys.search}--${activeFolder.id}`}
 											value={search}
 											className="p-account-my-folders__search"
@@ -652,8 +645,8 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 
 				<ConfirmationModal
 					text={{
-						yes: tHtml('pages/account/mijn-mappen/folder-slug/index___verwijderen'),
-						no: tHtml('pages/account/mijn-mappen/folder-slug/index___annuleren'),
+						yes: tText('pages/account/mijn-mappen/folder-slug/index___verwijderen'),
+						no: tText('pages/account/mijn-mappen/folder-slug/index___annuleren'),
 					}}
 					isOpen={activeFolder && showConfirmDelete}
 					onClose={() => setShowConfirmDelete(false)}
@@ -692,6 +685,9 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 						setSelected(null);
 					}}
 					id="folder-detail__add-to-folder-blade"
+					ariaLabel={tText(
+						'modules/account/views/account-my-folders___voeg-dit-object-toe-aan-een-map-blade-aria-label'
+					)}
 				/>
 				{activeFolder?.id && (
 					<ShareFolderBlade

@@ -1,11 +1,10 @@
 import { Button, type ButtonProps } from '@meemoo/react-components';
-import copy from 'copy-to-clipboard';
-import { type FC, type MouseEvent, useCallback } from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
+import copy from 'copy-to-clipboard';
+import { type FC, type MouseEvent, useCallback } from 'react';
 
 const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean }> = (props) => {
 	const { onClick, text, enableToast = true } = props;
@@ -38,8 +37,8 @@ const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean }> = (p
 		<Button
 			iconStart={props.iconStart}
 			icon={!props.iconStart && <Icon name={IconNamesLight.Copy} aria-hidden />}
-			aria-label={
-				props['aria-label'] ||
+			ariaLabel={
+				props.ariaLabel ||
 				tText('modules/shared/components/copy-button/copy-button___kopieer-naar-klembord')
 			}
 			variants={props.variants || 'sm'}

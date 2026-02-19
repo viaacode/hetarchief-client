@@ -134,29 +134,32 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 									variants="black"
 									className={styles['p-error-no-access-to-object__button']}
 									onClick={handleAccessToVisitorSpaceButtonClicked}
+									tabIndex={-1}
 								/>
 							</Link>
 						)}
 						{canViewPublicCatalog && (
 							<Link href={ROUTES_BY_LOCALE[locale].search} className="u-mt-16">
 								<Button
-									label={tHtml(
+									label={tText(
 										'modules/shared/components/error-no-access-to-object/error-no-access-to-object___verken-de-publieke-catalogus'
 									)}
 									variants={['white', 'outline']}
+									tabIndex={-1}
 								/>
 							</Link>
 						)}
 						{!canViewPublicCatalog && (
 							<Link href={ROUTES_BY_LOCALE[locale].search} className="u-mt-16">
 								<Button
-									label={tHtml(
+									label={tText(
 										'modules/shared/components/error-no-access-to-object/error-no-access-to-object___zoek-verder-in-het-archief-van-organisation-name',
 										{
 											organisationName: commonUser?.organisation?.name,
 										}
 									)}
 									variants={['white', 'outline']}
+									tabIndex={-1}
 								/>
 							</Link>
 						)}
@@ -168,6 +171,9 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 				onClose={() => setIsRequestAccessBladeOpen(false)}
 				onSubmit={onRequestAccessSubmit}
 				id="error-no-access-to-object__request-access-blade"
+				ariaLabel={tText(
+					'modules/shared/components/error-no-access-to-object/error-no-access-to-object___geen-toegang-tot-dit-object-vraag-toegang-aan-blade-aria-label'
+				)}
 			/>
 		</>
 	);

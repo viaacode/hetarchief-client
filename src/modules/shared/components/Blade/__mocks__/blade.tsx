@@ -5,4 +5,5 @@ export const mockBladeProps: BladeProps = {
 	isOpen: false,
 	footerButtons: [{ label: 'continue', mobileLabel: 'continue', type: 'primary' }],
 	id: 'mock-blade',
+	ariaLabel: 'Mock Blade',
 };

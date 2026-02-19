@@ -2,6 +2,7 @@ import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-for
 import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
 import { Card } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
+import { tText } from '@shared/helpers/translate';
 import { SimpleIeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 import clsx from 'clsx';
@@ -63,7 +64,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 	};
 
 	const renderIcon = () => {
-		return <Icon className={styles['c-material-card__icon']} name={icon} />;
+		return <Icon className={styles['c-material-card__icon']} name={icon} aria-hidden />;
 	};
 
 	const renderImage = (imgPath: string | undefined) => {
@@ -91,10 +92,22 @@ const MaterialCard: FC<MaterialCardProps> = ({
 
 		return (
 			<div className={clsx(styles['c-material-card__header'])}>
+				{/* No alt tag since the link already contains the title of the object that we're linking to */}
 				{/** biome-ignore lint/performance/noImgElement: we need this*/}
-				<img src={imagePath} alt={''} width="100%" height="100%" />
+				<img
+					src={imagePath}
+					alt={
+						typeof title === 'string'
+							? title
+							: tText(
+									'modules/visitor-space/components/material-card/material-card___image-of-the-media-object'
+								)
+					}
+					width="100%"
+					height="100%"
+				/>
 				<div className={clsx(styles['c-material-card__header-icon'])}>
-					<Icon name={icon} />
+					<Icon name={icon} aria-hidden />
 				</div>
 			</div>
 		);

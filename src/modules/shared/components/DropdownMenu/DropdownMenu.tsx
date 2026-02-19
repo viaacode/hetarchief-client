@@ -7,11 +7,10 @@ import {
 	type DropdownProps,
 	useClickOutside,
 } from '@meemoo/react-components';
-import { type FC, type MouseEvent, useState } from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
+import { type FC, type MouseEvent, useState } from 'react';
 
 import styles from './DropdownMenu.module.scss';
 
@@ -30,7 +29,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({ triggerButtonProps, childr
 			<DropdownButton>
 				<Button
 					icon={<Icon name={IconNamesLight.DotsVertical} aria-hidden />}
-					aria-label={tText('modules/shared/components/dropdown-menu/dropdown-menu___meer-acties')}
+					ariaLabel={tText('modules/shared/components/dropdown-menu/dropdown-menu___meer-acties')}
 					variants="text"
 					{...triggerButtonProps}
 					onClick={(evt: MouseEvent) => {

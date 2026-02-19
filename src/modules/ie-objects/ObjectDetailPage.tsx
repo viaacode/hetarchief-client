@@ -49,7 +49,7 @@ import {
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
-import { SearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/SearchInputWithResultsPagination';
+import { OcrSearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/OcrSearchInputWithResultsPagination';
 import {
 	iiifGoToHome,
 	iiifGoToPage,
@@ -1491,16 +1491,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		</div>
 	);
 
-	const renderCollapsableBladeTitle = (mappedRelatedIeObjects: MediaObject[]) => {
+	const renderCollapsableBladeTitle = (mappedRelatedIeObjects: MediaObject[]): string => {
 		if (relatedIeObjects?.parent) {
-			return tHtml(
+			return tText(
 				'modules/ie-objects/object-detail-page___dit-object-is-onderdeel-van-dit-hoofdobject'
 			);
 		}
 		if (mappedRelatedIeObjects.length === 1) {
-			return tHtml('modules/ie-objects/object-detail-page___dit-object-heeft-1-fragment');
+			return tText('modules/ie-objects/object-detail-page___dit-object-heeft-1-fragment');
 		}
-		return tHtml('modules/ie-objects/object-detail-page___dit-object-heeft-amount-fragmenten', {
+		return tText('modules/ie-objects/object-detail-page___dit-object-heeft-amount-fragmenten', {
 			amount: mappedRelatedIeObjects.length,
 		});
 	};
@@ -1526,6 +1526,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				renderContent={(hidden: boolean) =>
 					renderIeObjectCards('related', mappedRelatedIeObjects, hidden)
 				}
+				ariaLabel={renderCollapsableBladeTitle(mappedRelatedIeObjects)}
 			/>
 		);
 	};
@@ -1605,7 +1606,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				/>
 
 				{arePagesOcrTextsAvailable && (
-					<SearchInputWithResultsPagination
+					<OcrSearchInputWithResultsPagination
+						id="object-detail-page__ocr-search-input"
 						className={styles['p-object-detail__ocr__search']}
 						value={searchTermsTemp}
 						onChange={setSearchTermsTemp}
@@ -1614,6 +1616,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 						searchResults={searchTerms ? searchResults : null}
 						currentSearchIndex={currentSearchResultIndex || 0}
 						onChangeSearchIndex={handleChangeSearchIndex}
+						searchInputAriaLabel={tText(
+							'modules/ie-objects/object-detail-page___zoek-tekst-in-deze-krant-input-aria-label'
+						)}
 					/>
 				)}
 
@@ -1625,7 +1630,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							[styles['p-object-detail__ocr__pagination__button--active']]: currentPageIndex > 0,
 						})}
 						iconStart={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
-						aria-label={tText('modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding')}
+						ariaLabel={tText('modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding')}
 						label={tText('modules/ie-objects/object-detail-page___vorige')}
 						variants={['text']}
 						onClick={() => {
@@ -1645,7 +1650,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 								currentPageIndex < iiifViewerImageInfos.length - 1,
 						})}
 						iconEnd={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
-						aria-label={tText('modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding')}
+						ariaLabel={tText('modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding')}
 						label={tText('modules/ie-objects/object-detail-page___volgende')}
 						variants={['text']}
 						onClick={() => {
@@ -1708,11 +1713,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			<Link
 				className={styles['p-object-detail__back']}
 				href={`/${ROUTES_BY_LOCALE[locale].search}?${lastSearchParams}`}
+				aria-label={tText(
+					'modules/ie-objects/object-detail-page___ga-terug-naar-de-zoekresultaten-button-aria-label'
+				)}
 			>
 				<Button
 					className={styles['p-object-detail__back']}
 					icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
 					variants={['black']}
+					tabIndex={-1}
 				/>
 			</Link>
 		);
@@ -1772,7 +1781,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 						onClick={handleExpandButtonClicked}
 						variants="white"
 						title={tText('modules/ie-objects/object-detail-page___hover-expand-knop')}
-						aria-label={tText('modules/ie-objects/object-detail-page___expand-knop')}
+						ariaLabel={tText('modules/ie-objects/object-detail-page___expand-knop')}
 					/>
 				)}
 
@@ -1854,6 +1863,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					onClose={onCloseBlade}
 					onSubmit={async () => onCloseBlade()}
 					id="object-detail-page__add-to-folder-blade"
+					ariaLabel={tText(
+						'modules/ie-objects/object-detail-page___voeg-dit-object-toe-aan-een-map-blade-aria-label'
+					)}
 				/>
 			)}
 			{mediaInfo && !isKiosk && (
@@ -1879,15 +1891,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				isOpen={activeBlade === MediaActions.Report}
 				onClose={onCloseBlade}
 				id="object-detail-page__report-blade"
+				ariaLabel={tText(
+					'modules/ie-objects/object-detail-page___rapporteer-iets-dat-foutief-is-met-dit-object-blade-aria-label'
+				)}
 			/>
 			<RequestAccessBlade
 				isOpen={activeBlade === MediaActions.RequestAccess && !!user}
 				onClose={() => setActiveBlade(null, 'replaceIn')}
 				onSubmit={onRequestAccessSubmit}
 				id="object-detail-page__request-access-blade"
+				ariaLabel={tText(
+					'modules/ie-objects/object-detail-page___vraag-toegang-tot-dit-object-aan-blade-aria-label'
+				)}
 			/>
 			<Blade
 				id="iiif-selection-download-url"
+				ariaLabel={tText(
+					'modules/ie-objects/object-detail-page___download-je-selectie-als-afbeelding-blade-aria-label'
+				)}
 				isOpen={!!selectionDownloadUrl}
 				title={tText('modules/ie-objects/object-detail-page___selectie-is-klaar')}
 				onClose={() => setSelectionDownloadUrl(null)}

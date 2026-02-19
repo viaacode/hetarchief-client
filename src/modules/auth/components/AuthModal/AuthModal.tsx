@@ -51,7 +51,7 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 	const renderFooter = () => (
 		<div className="u-text-center u-bg-platinum">
 			<div className={clsx(styles['c-auth-modal__footer-keyuser'], 'u-p-16', 'u-text-left')}>
-				<Icon className="u-mr-8 u-font-size-22" name={IconNamesLight.Key} />
+				<Icon className="u-mr-8 u-font-size-22" name={IconNamesLight.Key} aria-hidden />
 				<p>
 					{tHtml(
 						'modules/auth/components/auth-modal/auth-modal___sleutelgebruiker-rechten-voor-aanbiedermedewerkers'
@@ -71,8 +71,8 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 					)}
 				/>
 				<Button
-					iconStart={<Icon className="u-text-left" name={IconNamesLight.LogIn} />}
-					label={tHtml(
+					iconStart={<Icon className="u-text-left" name={IconNamesLight.LogIn} aria-hidden />}
+					label={tText(
 						'modules/auth/components/auth-modal/auth-modal___inloggen-met-het-archief-account'
 					)}
 					variants="black"
@@ -85,7 +85,7 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 				</p>
 				<Button
 					className="u-mb-48"
-					label={tHtml('modules/auth/components/auth-modal/auth-modal___registreer-je-hier')}
+					label={tText('modules/auth/components/auth-modal/auth-modal___registreer-je-hier')}
 					variants="outline"
 					onClick={onRegisterHetArchief}
 				/>

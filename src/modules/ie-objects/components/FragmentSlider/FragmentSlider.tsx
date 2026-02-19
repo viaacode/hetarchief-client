@@ -96,7 +96,7 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 				tabIndex={-1}
 				className={styles['c-fragment-slider__nav-button']}
 				icon={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
-				aria-label={tText(
+				ariaLabel={tText(
 					'modules/ie-objects/components/fragment-slider/fragment-slider___naar-het-vorige-fragment'
 				)}
 				variants="black"
@@ -176,7 +176,7 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 				tabIndex={-1}
 				className={styles['c-fragment-slider__nav-button']}
 				icon={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
-				aria-label={tText(
+				ariaLabel={tText(
 					'modules/ie-objects/components/fragment-slider/fragment-slider___naar-het-volgende-fragment'
 				)}
 				variants="black"

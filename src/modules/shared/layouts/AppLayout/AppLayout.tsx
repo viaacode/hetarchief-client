@@ -3,14 +3,10 @@ import { getAdminCoreConfig } from '@admin/wrappers/admin-core-config';
 import { AuthModal } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectCommonUser, selectIsLoggedIn, selectUser } from '@auth/store/user';
-import { useGetContentPageByLanguageAndPath } from '@content-page/hooks/get-content-page';
 import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
 import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
-import {
-	AdminConfigManager,
-	convertDbContentPageToContentPageInfo,
-} from '@meemoo/admin-core-ui/client';
+import { AdminConfigManager } from '@meemoo/admin-core-ui/client';
 import { Alert } from '@meemoo/react-components';
 import { Footer } from '@navigation/components/Footer';
 import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';
@@ -39,8 +35,7 @@ import { ZendeskWrapper } from '@shared/components/ZendeskWrapper';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { changeApplicationLocale } from '@shared/helpers/change-application-locale';
-import { getSlugFromQueryParams } from '@shared/helpers/get-slug-from-query-params'; // We want to make sure config gets fetched here, no sure why anymore
-import { isRootSlugRoute } from '@shared/helpers/is-root-slug-route';
+import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -80,7 +75,7 @@ import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
 import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 import packageJson from '../../../../../package.json';
-import styles from './AppLayout.module.scss'; // biome-ignore lint/correctness/noUnusedVariables: We want to make sure config gets fetched here, no sure why anymore
+import styles from './AppLayout.module.scss';
 
 // biome-ignore lint/correctness/noUnusedVariables: We want to make sure config gets fetched here, no sure why anymore
 const { publicRuntimeConfig } = getConfig();
@@ -176,17 +171,6 @@ const AppLayout: FC<any> = ({ children }) => {
 	}, [isKioskOrAnonymous, spaces, user]);
 
 	const [isLoaded, setIsLoaded] = useState(false);
-
-	const slug = getSlugFromQueryParams(router.query);
-	const { data: dbContentPage } = useGetContentPageByLanguageAndPath(
-		locale,
-		`/${slug}`,
-		isRootSlugRoute(router.route)
-	);
-
-	const contentPageInfo = dbContentPage
-		? convertDbContentPageToContentPageInfo(dbContentPage)
-		: null;
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: Only updating for the user
 	useEffect(() => {
@@ -341,7 +325,13 @@ const AppLayout: FC<any> = ({ children }) => {
 				// Otherwise you get an infinite loading state because no api calls will work
 				// https://github.com/vercel/next.js/issues/37005
 				node: (
-					<Link href={`/${locale}`} passHref>
+					<Link
+						href={`/${locale}`}
+						passHref
+						aria-label={tText(
+							'modules/shared/layouts/app-layout/app-layout___ga-naar-de-homepage-link-aria-label'
+						)}
+					>
 						<HetArchiefLogo
 							className="c-navigation__logo c-navigation__logo--list"
 							type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
@@ -424,9 +414,17 @@ const AppLayout: FC<any> = ({ children }) => {
 							title={alert.title}
 							content={<Html content={alert.message} type="div" />}
 							variants="blue"
-							icon={<Icon name={IconNamesLight[alert.type as keyof typeof AlertIconNames]} />}
-							closeIcon={<Icon name={IconNamesLight.Times} />}
+							icon={
+								<Icon
+									name={IconNamesLight[alert.type as keyof typeof AlertIconNames]}
+									aria-hidden
+								/>
+							}
+							closeIcon={<Icon name={IconNamesLight.Times} aria-hidden />}
 							onClose={onCloseAlert}
+							closeButtonLabel={tText(
+								'modules/shared/layouts/app-layout/app-layout___sluit-deze-melding-button-aria-label'
+							)}
 						/>
 					);
 				})}

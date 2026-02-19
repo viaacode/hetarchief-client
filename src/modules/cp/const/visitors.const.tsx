@@ -55,6 +55,9 @@ export const VisitorsTableColumns = (
 				icon={undefined}
 				variants="text"
 				text={row.original.visitorMail}
+				ariaLabel={tText(
+					'modules/cp/const/visitors___kopieer-het-email-adres-van-de-bezoeker-naar-je-klemboard'
+				)}
 			>
 				{row.original.visitorMail}
 			</CopyButton>
@@ -90,7 +93,7 @@ export const VisitorsTableColumns = (
 		id: 'cp-visitors-histories-table-actions',
 		Cell: ({ row }: VisitRow) => {
 			return (
-				<DropdownMenu>
+				<DropdownMenu id={`visit-request-overview__actions-dropdown--${row.original.id}`}>
 					<Button
 						variants="text"
 						label={tText('modules/cp/const/visitors___toegang-intrekken')}

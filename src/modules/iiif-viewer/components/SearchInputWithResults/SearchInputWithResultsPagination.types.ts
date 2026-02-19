@@ -1,6 +1,7 @@
 import type { OcrSearchResult } from '@ie-objects/ie-objects.types';
 
 export interface SearchInputWithResultsPaginationProps {
+	id: string;
 	value: string;
 	onChange: (newValue: string) => void;
 	onSearch: (searchTerm: string) => void;
@@ -10,4 +11,5 @@ export interface SearchInputWithResultsPaginationProps {
 	currentSearchIndex: number;
 	className?: string;
 	variants?: string[];
+	searchInputAriaLabel: string;
 }

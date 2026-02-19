@@ -1,10 +1,9 @@
-import { Button, TextInput, keysEnter, onKey } from '@meemoo/react-components';
-import { isString } from 'lodash-es';
-import type { FC } from 'react';
-
+import { Button, TextInput } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
+import { isString } from 'lodash-es';
+import type { FC } from 'react';
 import type { SearchBarProps } from './SearchBar.types';
 
 const SearchBar: FC<SearchBarProps> = ({
@@ -25,14 +24,14 @@ const SearchBar: FC<SearchBarProps> = ({
 			value={value}
 			onChange={(e) => onChange(e.target.value)}
 			variants={getVariants()}
-			onKeyDown={(e) => onKey(e, [...keysEnter], () => onSearch(value))}
+			onEnter={() => onSearch(value)}
 			iconEnd={
 				<>
 					{value && (
 						<Button
 							variants={['text', 'icon', 'xxs']}
 							icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-							aria-label={tText(
+							ariaLabel={tText(
 								'modules/shared/components/search-bar/search-bar___opnieuw-instellen'
 							)}
 							onClick={() => {
@@ -44,7 +43,7 @@ const SearchBar: FC<SearchBarProps> = ({
 					<Button
 						variants={['text', 'icon', 'xxs']}
 						icon={<Icon name={IconNamesLight.Search} aria-hidden />}
-						aria-label={tText('modules/shared/components/search-bar/search-bar___uitvoeren')}
+						ariaLabel={tText('modules/shared/components/search-bar/search-bar___uitvoeren')}
 						onClick={() => onSearch(value)}
 					/>
 				</>

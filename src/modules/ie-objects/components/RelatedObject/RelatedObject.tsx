@@ -1,10 +1,9 @@
 import { Card } from '@meemoo/react-components';
-import clsx from 'clsx';
-import React, { type FC } from 'react';
-
 import { CardImage } from '@shared/components/CardImage';
 import { Icon } from '@shared/components/Icon';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
+import clsx from 'clsx';
+import React, { type FC } from 'react';
 
 import { ObjectPlaceholder } from '../ObjectPlaceholder';
 import styles from './RelatedObject.module.scss';
@@ -42,7 +41,7 @@ const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 			subtitle={object.subtitle}
 			title={
 				<>
-					{object.type && <Icon name={getIconFromObjectType(object.type, true)} />}
+					{object.type && <Icon name={getIconFromObjectType(object.type, true)} aria-hidden />}
 					<strong>{object.title}</strong>
 				</>
 			}

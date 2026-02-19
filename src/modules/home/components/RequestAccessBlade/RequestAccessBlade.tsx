@@ -32,7 +32,12 @@ const labelKeys: Record<keyof RequestAccessFormState, string> = {
 	visitTime: 'RequestAccessBlade__visitTime',
 };
 
-const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...bladeProps }) => {
+const RequestAccessBlade: FC<RequestAccessBladeProps> = ({
+	onSubmit,
+	isOpen,
+	ariaLabel,
+	...bladeProps
+}) => {
 	const commonUser = useSelector(selectCommonUser);
 	const locale = useLocale();
 
@@ -146,6 +151,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 			title={tText(
 				'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
 			)}
+			ariaLabel={ariaLabel}
 			stickySubtitle={visitorSpace && <SpacePreviewHeader visitorSpace={visitorSpace} />}
 			isBladeInvalid={isError}
 		>
@@ -168,6 +174,9 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 					id={labelKeys.requestReason}
 					maxLength={300}
 					disabled={!isOpen}
+					ariaLabel={tText(
+						'modules/home/components/request-access-blade/request-access-blade___reden-voor-bezoekersaanvraag-input-aria-label'
+					)}
 				/>
 			</FormControl>
 
@@ -184,18 +193,21 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 				)}
 			>
 				<TextArea
-					value={formValues.visitTime}
+					value={formValues.visitTime || ''}
 					onChange={(evt) => setFormValue('visitTime', evt.target.value)}
 					id={labelKeys.visitTime}
 					maxLength={300}
 					disabled={!isOpen}
+					ariaLabel={tText(
+						'modules/home/components/request-access-blade/request-access-blade___wanneer-wil-je-de-bezoekersruimte-bezoeken-input-aria-label'
+					)}
 				/>
 			</FormControl>
 
 			{!(preferences?.newsletter ?? true) ? (
 				<Checkbox
 					className={styles['c-request-access-blade__checkbox']}
-					checkIcon={<Icon name={IconNamesLight.Check} />}
+					checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
 					checked={isSubscribedToNewsletter}
 					label={tHtml(
 						'modules/home/components/request-access-blade/request-access-blade___schrijf-je-in-voor-de-nieuwsbrief'
@@ -210,7 +222,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 			>
 				<Checkbox
 					checked={formValues.acceptTerms}
-					checkIcon={<Icon name={IconNamesLight.Check} />}
+					checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
 					disabled={!isOpen}
 					id={labelKeys.acceptTerms}
 					label={tHtml(

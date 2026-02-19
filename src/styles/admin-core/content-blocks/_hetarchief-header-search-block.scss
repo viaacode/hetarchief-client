@@ -1,25 +1,23 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-block-het-archief-header-search";
-
-.#{$component} {
+.c-block-het-archief-header-search {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	gap: $spacer-1xl;
+	gap: abstracts.$spacer-1xl;
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: abstracts.$breakpoint-md) {
 		flex-direction: column;
 	}
 
 	div:first-child {
 		h1,
 		> ul > li {
-			font-size: $font-size-3xl;
-			font-weight: $font-weight-bold;
+			font-size: abstracts.$font-size-3xl;
+			font-weight: abstracts.$font-weight-bold;
 
-			@media (max-width: $breakpoint-md) {
-				font-size: $font-size-2xl;
+			@media (max-width: abstracts.$breakpoint-md) {
+				font-size: abstracts.$font-size-2xl;
 			}
 		}
 
@@ -31,7 +29,7 @@ $component: "c-block-het-archief-header-search";
 
 			li {
 				list-style: none;
-				color: $teal;
+				color: abstracts.$teal;
 				position: absolute;
 				top: 0;
 				left: 0;
@@ -54,7 +52,7 @@ $component: "c-block-het-archief-header-search";
 		flex-direction: column;
 		justify-content: center;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			max-width: 42%;
 		}
 
@@ -62,14 +60,25 @@ $component: "c-block-het-archief-header-search";
 			border-radius: 4rem;
 		}
 
-		.c-input .c-input__icon {
-			pointer-events: auto;
-			cursor: pointer;
+		.c-input {
+			.c-input__icon {
+				pointer-events: auto;
+				cursor: pointer;
+			}
+
+			button {
+				background-color: transparent;
+				border: none;
+				font-size: abstracts.$font-size-lg;
+				color: abstracts.$neutral;
+				line-height: abstracts.$font-size-lg;
+				padding: 0;
+			}
 		}
 
 		p {
 			text-align: right;
-			margin-top: $spacer-md;
+			margin-top: abstracts.$spacer-md;
 		}
 	}
 }

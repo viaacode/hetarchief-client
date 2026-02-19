@@ -10,7 +10,6 @@ import React, {
 	type ChangeEvent,
 	type CSSProperties,
 	type FC,
-	type KeyboardEvent,
 	useCallback,
 	useEffect,
 	useRef,
@@ -36,15 +35,6 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 			setSearchTerms(evt.target.value);
 		}
 	};
-
-	const handleOnKeyUp = useCallback(
-		(evt: KeyboardEvent<HTMLInputElement>): void => {
-			if (evt.key === 'Enter') {
-				setSearchTerms(searchTermsTemp);
-			}
-		},
-		[searchTermsTemp]
-	);
 
 	const handleSearchIconClicked = () => {
 		setSearchTerms(searchTermsTemp);
@@ -114,7 +104,7 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 						firstHighlight.width &&
 						firstHighlight.height && (
 							<Button
-								icon={<Icon name={IconNamesLight.SearchText} />}
+								icon={<Icon name={IconNamesLight.SearchText} aria-hidden />}
 								variants={['white']}
 								tooltipText={tText(
 									'modules/ie-objects/components/names-list/names-list___spring-naar-de-locatie-van-deze-naam'
@@ -132,7 +122,7 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 						style={{ visibility: mention.iri ? 'visible' : 'hidden' }}
 					>
 						<Button
-							icon={<Icon name={IconNamesLight.Extern} className="u-font-size-28" />}
+							icon={<Icon name={IconNamesLight.Extern} className="u-font-size-28" aria-hidden />}
 							variants={['white']}
 							tooltipText={tText(
 								'modules/ie-objects/components/names-list/names-list___meer-info-over-deze-persoon'
@@ -167,15 +157,21 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 	return (
 		<div className={clsx(className, styles['c-names-list'])} ref={ref}>
 			<TextInput
+				id="person-names-search"
 				type="search"
 				className={styles['c-names-list__search']}
-				iconEnd={<Icon name={IconNamesLight.Search} onClick={handleSearchIconClicked} />}
+				iconEnd={
+					<Icon name={IconNamesLight.Search} onClick={handleSearchIconClicked} aria-hidden />
+				}
 				placeholder={tText(
 					'modules/ie-objects/components/names-list/names-list___zoek-op-naam-locatie-jaar'
 				)}
 				value={searchTermsTemp}
 				onChange={handleOnChange}
-				onKeyUp={handleOnKeyUp}
+				onEnter={() => setSearchTerms(searchTermsTemp)}
+				ariaLabel={tText(
+					'modules/ie-objects/components/names-list/names-list___zoek-naar-een-persoonsnaam-in-deze-krant-input-aria-label'
+				)}
 			/>
 			<List
 				rowCount={filteredNames.length}
