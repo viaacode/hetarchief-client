@@ -186,7 +186,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 				<Link
 					passHref
 					href={buttonConfig.href}
-					target={buttonConfig.externalLink ? '_blank' : '_self	'}
+					target={buttonConfig.externalLink ? '_blank' : '_self'}
 					aria-label={buttonConfig.ariaLabel || label}
 				>
 					{renderButton()}
