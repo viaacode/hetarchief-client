@@ -116,7 +116,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	} = useGetMaterialRequestById(currentMaterialRequestId || null, isDetailBladeOpen);
 
 	const noData = useMemo((): boolean => isEmpty(materialRequests?.items), [materialRequests]);
-	const usableMaterialRequest = useMemo(
+	const resolvedMaterialRequest = useMemo(
 		() =>
 			isLoadingDetail || !currentMaterialRequestDetail
 				? currentMaterialRequest
@@ -254,7 +254,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	};
 
 	const renderDetailBlade = () => {
-		if (!usableMaterialRequest) {
+		if (!resolvedMaterialRequest) {
 			return null;
 		}
 		return (
@@ -262,7 +262,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 				allowRequestCancellation={true}
 				isOpen={isDetailBladeOpen}
 				onClose={() => setIsDetailBladeOpen(false)}
-				currentMaterialRequestDetail={usableMaterialRequest}
+				currentMaterialRequestDetail={resolvedMaterialRequest}
 				afterStatusChanged={onMaterialRequestStatusChange}
 			/>
 		);

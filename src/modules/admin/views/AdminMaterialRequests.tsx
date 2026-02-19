@@ -118,7 +118,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		isFetching: isLoadingDetail,
 		refetch: refetchCurrentMaterialRequestDetail,
 	} = useGetMaterialRequestById(currentMaterialRequestId || null, isDetailBladeOpen);
-	const usableMaterialRequest = useMemo(
+	const resolvedMaterialRequest = useMemo(
 		() =>
 			isLoadingDetail || !currentMaterialRequestDetail
 				? currentMaterialRequest
@@ -286,7 +286,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	};
 
 	const renderDetailBlade = () => {
-		if (!usableMaterialRequest) {
+		if (!resolvedMaterialRequest) {
 			return null;
 		}
 
@@ -323,7 +323,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 					onDeclineRequest={() =>
 						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
 					}
-					currentMaterialRequestDetail={usableMaterialRequest}
+					currentMaterialRequestDetail={resolvedMaterialRequest}
 					afterStatusChanged={onMaterialRequestStatusChange}
 					layer={isDetailBladeOpen ? 1 : 99}
 					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
@@ -332,7 +332,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 					isOpen={!!isDetailStatusBladeOpenWithStatus}
 					onClose={() => setIsDetailStatusBladeOpenWithStatus(undefined)}
 					status={isDetailStatusBladeOpenWithStatus}
-					currentMaterialRequestDetail={usableMaterialRequest}
+					currentMaterialRequestDetail={resolvedMaterialRequest}
 					afterStatusChanged={onMaterialRequestStatusChange}
 					layer={isDetailBladeOpen ? 2 : 99}
 					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}

@@ -243,6 +243,23 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		);
 		const downloadStatusSucceeded = downloadStatus === MaterialRequestDownloadStatus.SUCCEEDED;
 		const downloadStatusFailed = downloadStatus === MaterialRequestDownloadStatus.FAILED;
+		let downloadInformationMessage = '';
+
+		if (downloadStatusFailed) {
+			downloadInformationMessage = tText('Download voorbereiding gefaald');
+		} else if (downloadExpirationDate) {
+			if (hasDownloadExpired) {
+				downloadInformationMessage = tText(
+					'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-verlopen-op',
+					{ downloadExpirationDate }
+				);
+			} else {
+				downloadInformationMessage = tText(
+					'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-beschikbaar-tot-en-met',
+					{ downloadExpirationDate }
+				);
+			}
+		}
 
 		return (
 			<>
@@ -266,7 +283,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 					/>
 				)}
 
-				{(downloadExpirationDate || downloadStatusFailed) && (
+				{downloadInformationMessage && (
 					<span
 						className={clsx(
 							styles['p-material-request-detail__content-block-value'],
@@ -277,17 +294,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						)}
 					>
 						<Icon name={IconNamesLight.Exclamation} className="u-mr-4" />
-						{downloadStatusFailed
-							? tText('download voorbereiding gefaald')
-							: hasDownloadExpired
-								? tText(
-										'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-verlopen-op',
-										{ downloadExpirationDate }
-									)
-								: tText(
-										'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-beschikbaar-tot-en-met',
-										{ downloadExpirationDate }
-									)}
+						{downloadInformationMessage}
 					</span>
 				)}
 			</>
