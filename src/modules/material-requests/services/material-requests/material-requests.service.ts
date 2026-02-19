@@ -54,11 +54,15 @@ export abstract class MaterialRequestsService {
 		return result as IPagination<MaterialRequest>;
 	}
 
-	public static async getById(id: string | null): Promise<MaterialRequestDetail | null> {
+	public static async getById(id: string | null): Promise<MaterialRequest | null> {
 		if (!id) {
 			return null;
 		}
 		return ApiService.getApi().get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}`).json();
+	}
+
+	public static async handleDownload(id: string): Promise<string> {
+		return ApiService.getApi().get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}/download`).text();
 	}
 
 	public static async getMaintainers(): Promise<MaterialRequestMaintainer[] | null> {

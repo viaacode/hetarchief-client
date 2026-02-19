@@ -14,6 +14,7 @@ import {
 } from '@cp/const/material-requests.const';
 import { CPAdminLayout } from '@cp/layouts';
 import { getMaterialRequestTableColumnProps } from '@material-requests/const';
+import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
 import {
 	type MaterialRequest,
@@ -76,6 +77,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	const [isDetailStatusBladeOpenWithStatus, setIsDetailStatusBladeOpenWithStatus] = useState<
 		MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED | undefined
 	>(undefined);
+
 	const {
 		data: materialRequests,
 		isFetching,
@@ -107,6 +109,19 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	const [currentMaterialRequestId, setCurrentMaterialRequestId] = useState<string | null>(null);
 	const currentMaterialRequest =
 		materialRequests?.items?.find((request) => request.id === currentMaterialRequestId) || null;
+
+	const {
+		data: currentMaterialRequestDetail,
+		isFetching: isLoadingDetail,
+		refetch: refetchCurrentMaterialRequestDetail,
+	} = useGetMaterialRequestById(currentMaterialRequestId || null, isDetailBladeOpen);
+	const resolvedMaterialRequest = useMemo(
+		() =>
+			isLoadingDetail || !currentMaterialRequestDetail
+				? currentMaterialRequest
+				: currentMaterialRequestDetail,
+		[isLoadingDetail, currentMaterialRequest, currentMaterialRequestDetail]
+	);
 
 	const noData = useMemo(
 		(): boolean => isEmpty(materialRequests?.items),
@@ -216,7 +231,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	};
 
 	const onMaterialRequestStatusChange = async () => {
-		await refetchMaterialRequests();
+		await Promise.all([refetchCurrentMaterialRequestDetail(), refetchMaterialRequests()]);
 	};
 
 	const renderPagination = ({ gotoPage }: { gotoPage: (i: number) => void }): ReactNode => (
@@ -234,7 +249,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		tHtml('pages/beheer/materiaalaanvragen/index___geen-materiaal-aanvragen');
 
 	const renderDetailBlade = () => {
-		if (!currentMaterialRequest?.id) {
+		if (!resolvedMaterialRequest) {
 			return null;
 		}
 
@@ -271,7 +286,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 					onDeclineRequest={() =>
 						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
 					}
-					currentMaterialRequestDetail={currentMaterialRequest}
+					currentMaterialRequestDetail={resolvedMaterialRequest}
 					afterStatusChanged={onMaterialRequestStatusChange}
 					layer={isDetailBladeOpen ? 1 : 99}
 					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
@@ -280,7 +295,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 					isOpen={!!isDetailStatusBladeOpenWithStatus}
 					onClose={() => setIsDetailStatusBladeOpenWithStatus(undefined)}
 					status={isDetailStatusBladeOpenWithStatus}
-					currentMaterialRequestDetail={currentMaterialRequest}
+					currentMaterialRequestDetail={resolvedMaterialRequest}
 					afterStatusChanged={onMaterialRequestStatusChange}
 					layer={isDetailBladeOpen ? 2 : 99}
 					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
@@ -290,6 +305,10 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	};
 
 	const onRowClick = async (_evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
+		if (row.original.id === currentMaterialRequest?.id) {
+			// In case we open the same request, refetch it to make sure we have the latest status
+			void refetchCurrentMaterialRequestDetail();
+		}
 		setCurrentMaterialRequestId(row.original?.id || null);
 		setIsDetailBladeOpen(true);
 	};
@@ -447,8 +466,8 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 					{isFetching && <Loading locationId="Material requests overview" />}
 					{noData && !isFetching && renderEmptyMessage()}
 					{renderContent()}
+					{renderDetailBlade()}
 				</div>
-				{renderDetailBlade()}
 			</CPAdminLayout>
 		);
 	};

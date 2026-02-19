@@ -1,9 +1,7 @@
-import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
-import type { MaterialRequest } from '@material-requests/types';
-import { EventsService, LogEventType } from '@shared/services/events-service';
+import { MaterialRequestsService } from '@material-requests/services';
+import { type MaterialRequest, MaterialRequestDownloadStatus } from '@material-requests/types';
 import { asDate } from '@shared/utils/dates';
 import { isWithinInterval } from 'date-fns';
-import { noop } from 'lodash-es';
 
 export function determineHasDownloadExpired(materialRequest: MaterialRequest): boolean {
 	const downloadAvailableAt = asDate(materialRequest?.downloadAvailableAt);
@@ -19,23 +17,30 @@ export function determineHasDownloadExpired(materialRequest: MaterialRequest): b
 	);
 }
 
-export function handleDownloadMaterialRequest(materialRequest: MaterialRequest): void {
+export async function handleDownloadMaterialRequest(
+	materialRequest: MaterialRequest
+): Promise<string | null> {
 	const hasDownloadExpired = determineHasDownloadExpired(materialRequest);
 
-	if (hasDownloadExpired || !materialRequest.downloadUrl) {
+	if (
+		hasDownloadExpired ||
+		materialRequest.downloadStatus !== MaterialRequestDownloadStatus.SUCCEEDED
+	) {
 		console.error(
-			`The download has expired (${hasDownloadExpired}) or has no download url ('${materialRequest.downloadUrl}')`
+			`The download has expired (${hasDownloadExpired}) or the download has not yet succeeded ('${materialRequest.downloadStatus}')`
 		);
-		return;
+		return null;
 	}
 
-	EventsService.triggerEvent(LogEventType.ITEM_REQUEST_DOWNLOAD_EXECUTED, window.location.href, {
-		type: mapDcTermsFormatToSimpleType(materialRequest.objectDctermsFormat),
-		or_id: materialRequest.maintainerId,
-		pid: materialRequest.objectSchemaIdentifier,
-		material_request_group_id: materialRequest.requestGroupId,
-		time: materialRequest.downloadAvailableAt,
-	}).then(noop);
-
-	window.open(materialRequest.downloadUrl);
+	try {
+		const downloadUrl = await MaterialRequestsService.handleDownload(materialRequest.id);
+		const win = window.open(downloadUrl, '_blank');
+		if (!win) {
+			return downloadUrl;
+		}
+		return null;
+	} catch (error) {
+		console.error(error);
+		return null;
+	}
 }

@@ -83,6 +83,7 @@ export interface BladeFooterButton {
 	onClick?: () => void;
 	disabled?: boolean;
 	href?: string; // Determines if this is a link and will be rendered as such
+	externalLink?: boolean; // Determines if the link should open in a new window or not
 	icon?: IconName; // Should use only in specific cases
 }
 

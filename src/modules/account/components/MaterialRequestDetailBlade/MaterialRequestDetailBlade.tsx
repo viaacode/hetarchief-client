@@ -1,3 +1,4 @@
+import MaterialRequestDownloadBlade from '@account/components/MaterialRequestDownloadBlade/MaterialRequestDownloadBlade';
 import { MaterialRequestStatusPill } from '@account/components/MaterialRequestStatusPill';
 import { createLabelValuePairMaterialRequestReuseForm } from '@account/utils/create-label-value-material-request-reuse-form';
 import { formatCuePointsMaterialRequest } from '@account/utils/format-cuepoints-material-request';
@@ -15,6 +16,7 @@ import {
 	GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD,
 	type MaterialRequest,
 	type MaterialRequestDownloadQuality,
+	MaterialRequestDownloadStatus,
 	MaterialRequestStatus,
 } from '@material-requests/types';
 import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
@@ -24,7 +26,6 @@ import type { BladeFooterButton, BladeFooterProps } from '@shared/components/Bla
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { Loading } from '@shared/components/Loading';
 import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
@@ -50,7 +51,7 @@ interface MaterialRequestDetailBladeProps {
 	allowRequestCancellation: boolean;
 	onApproveRequest?: () => void;
 	onDeclineRequest?: () => void;
-	currentMaterialRequestDetail: MaterialRequest | undefined;
+	currentMaterialRequestDetail: MaterialRequest;
 	afterStatusChanged: () => void;
 	layer?: number;
 	currentLayer?: number;
@@ -72,11 +73,12 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	const { isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(currentMaterialRequestDetail);
 
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
+	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
 	const canRequestBeEvaluated = useMemo(
 		() =>
-			currentMaterialRequestDetail?.status === MaterialRequestStatus.PENDING && user?.isEvaluator,
-		[currentMaterialRequestDetail?.status, user?.isEvaluator]
+			currentMaterialRequestDetail.status === MaterialRequestStatus.PENDING && user?.isEvaluator,
+		[currentMaterialRequestDetail.status, user?.isEvaluator]
 	);
 	const itemLink = useMemo(
 		() =>
@@ -97,23 +99,17 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	);
 
 	useEffect(() => {
-		if (currentMaterialRequestDetail?.status === MaterialRequestStatus.NEW && user?.isEvaluator) {
+		if (currentMaterialRequestDetail.status === MaterialRequestStatus.NEW && user?.isEvaluator) {
 			MaterialRequestsService.setAsPending(currentMaterialRequestDetail.id).then(() => {
 				afterStatusChanged();
 			});
 		}
 	}, [
-		currentMaterialRequestDetail?.id,
-		currentMaterialRequestDetail?.status,
+		currentMaterialRequestDetail.id,
+		currentMaterialRequestDetail.status,
 		user?.isEvaluator,
 		afterStatusChanged,
 	]);
-
-	useEffect(() => {
-		if (isOpen) {
-			document.querySelector('#material-request-detail-blade')?.scrollIntoView();
-		}
-	}, [isOpen]);
 
 	const onFailedRequest = () => {
 		toastService.notify({
@@ -129,10 +125,6 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 
 	const onCancelRequest = async () => {
 		try {
-			if (!currentMaterialRequestDetail) {
-				return;
-			}
-
 			setShowConfirmModal(false);
 			const response = await MaterialRequestsService.cancel(currentMaterialRequestDetail.id);
 			if (response === undefined) {
@@ -184,7 +176,6 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		} as BladeFooterButton;
 
 		if (
-			currentMaterialRequestDetail &&
 			currentMaterialRequestDetail.status === MaterialRequestStatus.NEW &&
 			allowRequestCancellation &&
 			currentMaterialRequestDetail.requesterId === user?.id
@@ -241,25 +232,42 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	const renderDownload = () => {
-		if (
-			!currentMaterialRequestDetail ||
-			currentMaterialRequestDetail.status !== MaterialRequestStatus.APPROVED
-		) {
+		if (currentMaterialRequestDetail.status !== MaterialRequestStatus.APPROVED) {
 			return null;
 		}
 
+		const { downloadStatus } = currentMaterialRequestDetail;
 		const hasDownloadExpired = determineHasDownloadExpired(currentMaterialRequestDetail);
 		const downloadExpirationDate = formatLongDate(
 			asDate(currentMaterialRequestDetail.downloadExpiresAt)
 		);
+		const downloadStatusSucceeded = downloadStatus === MaterialRequestDownloadStatus.SUCCEEDED;
+		const downloadStatusFailed = downloadStatus === MaterialRequestDownloadStatus.FAILED;
+		let downloadInformationMessage = '';
+
+		if (downloadStatusFailed) {
+			downloadInformationMessage = tText('Download voorbereiding gefaald');
+		} else if (downloadExpirationDate) {
+			if (hasDownloadExpired) {
+				downloadInformationMessage = tText(
+					'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-verlopen-op',
+					{ downloadExpirationDate }
+				);
+			} else {
+				downloadInformationMessage = tText(
+					'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-beschikbaar-tot-en-met',
+					{ downloadExpirationDate }
+				);
+			}
+		}
 
 		return (
 			<>
-				{!hasDownloadExpired && (
+				{!hasDownloadExpired && !downloadStatusFailed && (
 					<Button
 						className="u-mt-16"
 						label={
-							currentMaterialRequestDetail.downloadUrl
+							downloadStatusSucceeded
 								? tText(
 										'modules/account/components/material-request-detail-blade/material-request-detail-blade___downlooad-materiaal'
 									)
@@ -267,13 +275,15 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 										'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-in-voorbereiding'
 									)
 						}
-						disabled={!currentMaterialRequestDetail.downloadUrl}
+						disabled={!downloadStatusSucceeded}
 						variants={['block']}
-						onClick={() => handleDownloadMaterialRequest(currentMaterialRequestDetail)}
+						onClick={() =>
+							handleDownloadMaterialRequest(currentMaterialRequestDetail).then(setDownloadUrl)
+						}
 					/>
 				)}
 
-				{downloadExpirationDate && (
+				{downloadInformationMessage && (
 					<span
 						className={clsx(
 							styles['p-material-request-detail__content-block-value'],
@@ -284,15 +294,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						)}
 					>
 						<Icon name={IconNamesLight.Exclamation} className="u-mr-4" />
-						{hasDownloadExpired
-							? tText(
-									'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-verlopen-op',
-									{ downloadExpirationDate }
-								)
-							: tText(
-									'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-beschikbaar-tot-en-met',
-									{ downloadExpirationDate }
-								)}
+						{downloadInformationMessage}
 					</span>
 				)}
 			</>
@@ -300,10 +302,6 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	const renderRequestStatus = () => {
-		if (!currentMaterialRequestDetail) {
-			return null;
-		}
-
 		const formattedStatusDates = [
 			tText(
 				'modules/account/components/material-request-detail-blade/material-request-detail-blade___aangevraagd-op',
@@ -382,8 +380,8 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 
 	const renderMotivation = () => {
 		if (
-			currentMaterialRequestDetail?.status !== MaterialRequestStatus.APPROVED &&
-			currentMaterialRequestDetail?.status !== MaterialRequestStatus.DENIED
+			currentMaterialRequestDetail.status !== MaterialRequestStatus.APPROVED &&
+			currentMaterialRequestDetail.status !== MaterialRequestStatus.DENIED
 		) {
 			return null;
 		}
@@ -397,7 +395,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	const renderThumbnail = () => {
-		if (!currentMaterialRequestDetail?.reuseForm) {
+		if (!currentMaterialRequestDetail.reuseForm) {
 			return null;
 		}
 
@@ -440,7 +438,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	const renderReuseForm = () => {
-		if (!currentMaterialRequestDetail?.reuseForm) {
+		if (!currentMaterialRequestDetail.reuseForm) {
 			return;
 		}
 
@@ -457,18 +455,18 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	return (
-		<Blade
-			id="material-request-detail-blade"
-			isOpen={isOpen}
-			layer={layer}
-			currentLayer={currentLayer}
-			onClose={onClose}
-			title={tText(
-				'modules/account/components/material-request-detail-blade/material-requests___detail'
-			)}
-			stickySubtitle={<MaterialRequestInformation />}
-			subtitle={
-				currentMaterialRequestDetail && (
+		<>
+			<Blade
+				id="material-request-detail-blade"
+				isOpen={isOpen}
+				layer={layer}
+				currentLayer={currentLayer}
+				onClose={onClose}
+				title={tText(
+					'modules/account/components/material-request-detail-blade/material-requests___detail'
+				)}
+				stickySubtitle={<MaterialRequestInformation />}
+				subtitle={
 					<MaterialCard
 						openInNewTab={true}
 						objectId={currentMaterialRequestDetail.objectSchemaIdentifier}
@@ -485,13 +483,11 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 							isObjectEssenceAccessibleToUser
 						)}
 					/>
-				)
-			}
-			footerButtons={getFooterButtons()}
-			stickyFooter={canRequestBeEvaluated}
-		>
-			<div className={styles['p-material-request-detail__content-wrapper']}>
-				{currentMaterialRequestDetail ? (
+				}
+				footerButtons={getFooterButtons()}
+				stickyFooter={canRequestBeEvaluated}
+			>
+				<div className={styles['p-material-request-detail__content-wrapper']}>
 					<div className={styles['p-material-request-detail__content']}>
 						{renderRequestStatus()}
 						{renderContentBlock(
@@ -536,29 +532,32 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 
 						{renderReuseForm()}
 					</div>
-				) : (
-					<Loading locationId="material request detail blade" />
-				)}
-			</div>
-			<ConfirmationModal
-				text={{
-					yes: tHtml(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___verder-werken'
-					),
-					no: tHtml(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___ja-ik-ben-zeker'
-					),
-					description: tHtml(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___ben-je-zeker-dat-je-deze-aanvraag-wil-annuleren'
-					),
-				}}
-				fullWidthButtonWrapper
-				isOpen={showConfirmModal}
-				onClose={() => setShowConfirmModal(false)}
-				onCancel={onCancelRequest}
-				onConfirm={() => setShowConfirmModal(false)}
+				</div>
+				<ConfirmationModal
+					text={{
+						yes: tHtml(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___verder-werken'
+						),
+						no: tHtml(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___ja-ik-ben-zeker'
+						),
+						description: tHtml(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___ben-je-zeker-dat-je-deze-aanvraag-wil-annuleren'
+						),
+					}}
+					fullWidthButtonWrapper
+					isOpen={showConfirmModal}
+					onClose={() => setShowConfirmModal(false)}
+					onCancel={onCancelRequest}
+					onConfirm={() => setShowConfirmModal(false)}
+				/>
+			</Blade>
+			<MaterialRequestDownloadBlade
+				location="material-request-download-button"
+				downloadUrl={downloadUrl}
+				onClose={() => setDownloadUrl(null)}
 			/>
-		</Blade>
+		</>
 	);
 };
 

@@ -43,7 +43,7 @@ export interface MaterialRequest {
 	statusMotivation?: string;
 	requestGroupName: string | null;
 	requestGroupId: string | null;
-	downloadUrl: string | null;
+	downloadStatus: MaterialRequestDownloadStatus | null;
 	downloadAvailableAt?: string;
 	downloadExpiresAt?: string;
 }
@@ -180,7 +180,7 @@ export enum MaterialRequestKeys {
 	requestedAt = 'requestedAt',
 	type = 'type',
 	status = 'status',
-	downloadUrl = 'downloadUrl',
+	downloadStatus = 'downloadStatus',
 	requestGroupName = 'requestGroupName',
 	name = 'requesterFullName',
 	email = 'requesterMail',
@@ -237,4 +237,15 @@ export enum MaterialRequestCopyrightDisplay {
 	SAME_TIME_WITH_OBJECT = 'SAME_TIME_WITH_OBJECT',
 	AROUND_OBJECT = 'AROUND_OBJECT',
 	NONE = 'NONE',
+}
+
+export enum MaterialRequestDownloadStatus {
+	/** download job failed */
+	FAILED = 'FAILED',
+	/** download was triggered, but job has not been fetched yet */
+	NEW = 'NEW',
+	/** download was triggered, and mam export job is in progress */
+	PENDING = 'PENDING',
+	/** download job succeeded, download_url filled in */
+	SUCCEEDED = 'SUCCEEDED',
 }

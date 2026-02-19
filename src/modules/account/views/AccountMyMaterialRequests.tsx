@@ -111,11 +111,18 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		materialRequests?.items?.find((request) => request.id === currentMaterialRequestId) || null;
 	const {
 		data: currentMaterialRequestDetail,
-		isFetching: isLoading,
+		isFetching: isLoadingDetail,
 		refetch: refetchCurrentMaterialRequestDetail,
-	} = useGetMaterialRequestById(currentMaterialRequest?.id || null);
+	} = useGetMaterialRequestById(currentMaterialRequestId || null, isDetailBladeOpen);
 
 	const noData = useMemo((): boolean => isEmpty(materialRequests?.items), [materialRequests]);
+	const resolvedMaterialRequest = useMemo(
+		() =>
+			isLoadingDetail || !currentMaterialRequestDetail
+				? currentMaterialRequest
+				: currentMaterialRequestDetail,
+		[isLoadingDetail, currentMaterialRequest, currentMaterialRequestDetail]
+	);
 
 	const typesList = useMemo(() => {
 		return [
@@ -247,15 +254,15 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	};
 
 	const renderDetailBlade = () => {
-		if (!currentMaterialRequestDetail) {
+		if (!resolvedMaterialRequest) {
 			return null;
 		}
 		return (
 			<MaterialRequestDetailBlade
 				allowRequestCancellation={true}
-				isOpen={!isLoading && isDetailBladeOpen}
+				isOpen={isDetailBladeOpen}
 				onClose={() => setIsDetailBladeOpen(false)}
-				currentMaterialRequestDetail={currentMaterialRequestDetail}
+				currentMaterialRequestDetail={resolvedMaterialRequest}
 				afterStatusChanged={onMaterialRequestStatusChange}
 			/>
 		);
