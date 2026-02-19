@@ -1,11 +1,10 @@
+import { tText } from '@shared/helpers/translate';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import type { ComponentLink } from '@shared/types';
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { FC } from 'react';
-
-import { tText } from '@shared/helpers/translate';
-import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import type { ComponentLink } from '@shared/types';
 
 import styles from './Footer.module.scss';
 import type { FooterProps } from './Footer.types';
@@ -38,7 +37,7 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 				<Link
 					href="/"
 					className={clsx(styles['c-footer__image-link'])}
-					aria-label={'Link naar hetarchief.be'}
+					aria-label={'Link naar de startpagina van hetarchief.be [LINK_ARIA_LABEL]'}
 				>
 					<Image
 						unoptimized
@@ -82,6 +81,7 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 							objectFit: 'contain',
 							objectPosition: 'center',
 						}}
+						aria-hidden
 					/>
 				</Link>
 
@@ -104,6 +104,7 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 							objectFit: 'contain',
 							objectPosition: 'center',
 						}}
+						aria-hidden
 					/>
 				</Link>
 			</div>

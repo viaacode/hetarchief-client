@@ -710,7 +710,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		);
 	};
 
-	function renderSeriesTitle(mediaInfo: IeObject) {
+	const renderSeriesTitle = (mediaInfo: IeObject) => {
 		if (!mediaInfo.collectionName) {
 			return null;
 		}
@@ -729,9 +729,27 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		// This series filter isn't available for audio / video material, since the filter doesn't work well for those media types
 		// https://meemoo.atlassian.net/browse/ARC-3046
 		return mediaInfo.collectionName;
-	}
+	};
 
-	function renderPreviousAndNextButtons(): ReactNode | null {
+	const renderNextButton = (isWrappedInLink: boolean) => {
+		const nextButtonIcon = <Icon name={IconNamesLight.ArrowRight} aria-hidden />;
+		const nextButtonLabel = tText(
+			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___volgende'
+		);
+		const nextButtonDisabled = !ieObjectPreviousNextIds?.nextIeObjectId;
+
+		return (
+			<Button
+				variants={['text']}
+				iconEnd={nextButtonIcon}
+				label={nextButtonLabel}
+				disabled={nextButtonDisabled}
+				tabIndex={isWrappedInLink ? -1 : undefined}
+			/>
+		);
+	};
+
+	const renderPreviousAndNextButtons = (): ReactNode | null => {
 		if (user && !user?.permissions?.includes(Permission.VIEW_PREVIOUS_AND_NEXT_NEWSPAPER_BUTTONS)) {
 			// Kiosk user cannot see previous and next buttons
 			// https://meemoo.atlassian.net/browse/ARC-2933
@@ -753,15 +771,17 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				disabled={!ieObjectPreviousNextIds?.previousIeObjectId}
 			/>
 		);
-		const nextButtonIcon = <Icon name={IconNamesLight.ArrowRight} aria-hidden />;
-		const nextButtonLabel = tText(
-			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___volgende'
-		);
-		const nextButtonDisabled = !ieObjectPreviousNextIds?.nextIeObjectId;
 		return (
 			<div className={styles['p-object-detail__metadata-content__previous-next']}>
 				{ieObjectPreviousNextIds?.previousIeObjectId ? (
-					<Link href={`/pid/${ieObjectPreviousNextIds?.previousIeObjectId}`}>{previousButton}</Link>
+					<Link
+						href={`/pid/${ieObjectPreviousNextIds?.previousIeObjectId}`}
+						aria-label={tText(
+							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___ga-naar-de-vorige-krant-in-dezelfde-serie-link-aria-label'
+						)}
+					>
+						{previousButton}
+					</Link>
 				) : (
 					previousButton
 				)}
@@ -769,26 +789,20 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				<span>{mediaInfo?.datePublished || mediaInfo?.dateCreated || '-'}</span>
 
 				{ieObjectPreviousNextIds?.nextIeObjectId ? (
-					<Link href={`/pid/${ieObjectPreviousNextIds?.nextIeObjectId}`}>
-						<Button
-							variants={['text']}
-							iconEnd={nextButtonIcon}
-							label={nextButtonLabel}
-							disabled={nextButtonDisabled}
-							tabIndex={-1}
-						/>
+					<Link
+						href={`/pid/${ieObjectPreviousNextIds?.nextIeObjectId}`}
+						aria-label={tText(
+							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___ga-naar-de-volgende-krant-in-dezelfde-serie-link-aria-label'
+						)}
+					>
+						{renderNextButton(true)}
 					</Link>
 				) : (
-					<Button
-						variants={['text']}
-						iconEnd={nextButtonIcon}
-						label={nextButtonLabel}
-						disabled={nextButtonDisabled}
-					/>
+					renderNextButton(false)
 				)}
 			</div>
 		);
-	}
+	};
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: We want this translation to be recalculated when the language is changed
 	const explainNamesListLink = useMemo(

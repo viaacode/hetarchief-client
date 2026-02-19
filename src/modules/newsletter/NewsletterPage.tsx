@@ -99,6 +99,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 							{...field}
 							id={labelKeys.firstName}
 							ariaLabel={tText('modules/newsletter/newsletter-page___voornaam-input-aria-label')}
+							autoComplete="given-name"
 						/>
 					)}
 				/>
@@ -118,6 +119,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 							{...field}
 							id={labelKeys.lastName}
 							ariaLabel={tText('modules/newsletter/newsletter-page___achternaam-input-aria-label')}
+							autoComplete="family-name"
 						/>
 					)}
 				/>
@@ -137,6 +139,7 @@ export const NewsletterPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 							{...field}
 							id={labelKeys.mail}
 							ariaLabel={tText('modules/newsletter/newsletter-page___email-input-aria-label')}
+							autoComplete="email"
 						/>
 					)}
 				/>

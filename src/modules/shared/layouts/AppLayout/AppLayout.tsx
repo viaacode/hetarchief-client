@@ -325,7 +325,13 @@ const AppLayout: FC<any> = ({ children }) => {
 				// Otherwise you get an infinite loading state because no api calls will work
 				// https://github.com/vercel/next.js/issues/37005
 				node: (
-					<Link href={`/${locale}`} passHref>
+					<Link
+						href={`/${locale}`}
+						passHref
+						aria-label={tText(
+							'modules/shared/layouts/app-layout/app-layout___ga-naar-de-homepage-link-aria-label'
+						)}
+					>
 						<HetArchiefLogo
 							className="c-navigation__logo c-navigation__logo--list"
 							type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}

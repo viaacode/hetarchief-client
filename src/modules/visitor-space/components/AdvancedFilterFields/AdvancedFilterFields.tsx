@@ -36,6 +36,7 @@ import type {
 } from '@visitor-space/const/advanced-filters.consts';
 import clsx from 'clsx';
 import { parseISO } from 'date-fns';
+import { kebabCase } from 'lodash-es';
 import {
 	getAdvancedProperties,
 	getFilterConfig,
@@ -98,7 +99,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___zoek-field-name-input-aria-label',
 				{ fieldName: label }
 			)}
-			id={props?.id || label}
+			id={props?.id || kebabCase(label)}
 		/>
 	);
 

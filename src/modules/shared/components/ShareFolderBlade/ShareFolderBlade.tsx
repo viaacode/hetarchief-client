@@ -104,7 +104,6 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 						<TextInput
 							name="email"
 							id={labelKeys.email}
-							autoComplete={'email'}
 							value={email}
 							onChange={(evt) => setEmail(evt.target.value)}
 							className={styles['c-share-folder-blade__content-copy-input']}

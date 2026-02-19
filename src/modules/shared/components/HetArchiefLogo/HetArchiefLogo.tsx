@@ -1,9 +1,8 @@
-import clsx from 'clsx';
-import type { FC } from 'react';
-
 import { HetArchiefLogoType } from '@shared/components/HetArchiefLogo/HetArchiefLogo.const';
 import type { HetArchiefLogoProps } from '@shared/components/HetArchiefLogo/HetArchiefLogo.types';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import clsx from 'clsx';
+import type { FC } from 'react';
 
 const HetArchiefLogo: FC<HetArchiefLogoProps> = ({ className, type = HetArchiefLogoType.Dark }) => {
 	const locale = useLocale();
@@ -19,6 +18,7 @@ const HetArchiefLogo: FC<HetArchiefLogoProps> = ({ className, type = HetArchiefL
 				version="1.1"
 				viewBox="832.791 370.887 1821.6001 593.5"
 				xmlns="http://www.w3.org/2000/svg"
+				aria-hidden
 			>
 				<path
 					d="M 1055.991 485.687 L 1056.091 582.687 L 1170.991 582.687 L 1170.991 376.287 L 1056.091 376.287 L 1056.091 473.187 C 1056.091 473.187 1056.091 473.287 1055.991 473.287 C 1055.891 473.287 1055.891 473.187 1055.891 473.187 C 1052.591 416.187 1005.291 370.887 947.491 370.887 C 889.691 370.887 838.891 419.487 838.891 479.487 C 838.891 539.487 887.491 588.087 947.491 588.087 C 1007.391 588.087 1052.591 542.787 1055.991 485.687 C 1055.891 485.787 1055.891 485.687 1055.991 485.687 L 1055.991 485.687 Z"
@@ -40,6 +40,7 @@ const HetArchiefLogo: FC<HetArchiefLogoProps> = ({ className, type = HetArchiefL
 			height={65}
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
+			aria-hidden
 		>
 			<title>hetarchief.be - een initiatief van meemoo (logo)</title>
 			<g clipPath="url(#prefix__clip0_1_2)">

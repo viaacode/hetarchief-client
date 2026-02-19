@@ -786,7 +786,9 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				<Link
 					passHref
 					href={`/${ROUTE_PARTS_BY_LOCALE[locale].kioskConditions}`}
-					aria-label={tText('pages/slug/index___meer-info')}
+					aria-label={tText(
+						'modules/search/search-page___meer-info-over-enkel-voor-onderzoek-doeleinden-link-aria-label'
+					)}
 				>
 					<Button
 						className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"

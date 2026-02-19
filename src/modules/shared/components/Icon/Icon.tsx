@@ -15,7 +15,7 @@ const Icon: FC<IconProps> = ({ className, name, ...rest }) => {
 	}
 
 	return (
-		<span className={rootCls} {...rest}>
+		<span className={rootCls} {...rest} aria-hidden="true">
 			{iconName}
 		</span>
 	);
