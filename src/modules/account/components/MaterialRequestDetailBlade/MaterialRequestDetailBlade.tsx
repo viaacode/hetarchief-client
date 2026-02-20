@@ -410,7 +410,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			objectThumbnailUrl = AdminConfigManager.getConfig().components.defaultAudioStill;
 		}
 
-		if (!objectThumbnailUrl) {
+		if (!objectThumbnailUrl || !isObjectEssenceAccessibleToUser) {
 			return null;
 		}
 
