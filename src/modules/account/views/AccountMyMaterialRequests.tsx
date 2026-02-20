@@ -52,7 +52,7 @@ import { isEmpty, isNil, noop } from 'lodash-es';
 import Link from 'next/link';
 import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
 import type { SortingRule, TableState } from 'react-table';
-import { useQueryParams } from 'use-query-params';
+import { StringParam, useQueryParam, useQueryParams } from 'use-query-params';
 
 export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	// We need different functionalities for different viewport sizes
@@ -61,7 +61,6 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 
 	const [filters, setFilters] = useQueryParams(ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
-	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
 	const [selectedTypes, setSelectedTypes] = useState<string[]>(
 		(filters[QUERY_PARAM_KEY.TYPE] || []) as string[]
 	);
@@ -106,9 +105,13 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 			hasDownloadUrl: filters.hasDownloadUrl as string[],
 		}),
 	});
-	const [currentMaterialRequestId, setCurrentMaterialRequestId] = useState<string | null>(null);
+	const [currentMaterialRequestId, setCurrentMaterialRequestId] = useQueryParam(
+		QUERY_PARAM_KEY.MATERIAL_REQUEST,
+		StringParam
+	);
 	const currentMaterialRequest =
 		materialRequests?.items?.find((request) => request.id === currentMaterialRequestId) || null;
+	const isDetailBladeOpen = !!currentMaterialRequest;
 	const {
 		data: currentMaterialRequestDetail,
 		isFetching: isLoadingDetail,
@@ -246,7 +249,6 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 			void refetchCurrentMaterialRequestDetail();
 		}
 		setCurrentMaterialRequestId(row.original?.id);
-		setIsDetailBladeOpen(true);
 	};
 
 	const onMaterialRequestStatusChange = async () => {
@@ -261,7 +263,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 			<MaterialRequestDetailBlade
 				allowRequestCancellation={true}
 				isOpen={isDetailBladeOpen}
-				onClose={() => setIsDetailBladeOpen(false)}
+				onClose={() => setCurrentMaterialRequestId(undefined)}
 				currentMaterialRequestDetail={resolvedMaterialRequest}
 				afterStatusChanged={onMaterialRequestStatusChange}
 			/>

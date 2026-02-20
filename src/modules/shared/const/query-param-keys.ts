@@ -26,6 +26,7 @@ export enum QUERY_PARAM_KEY {
 	ORDER_PROP = 'orderProp',
 	ORDER_DIRECTION = 'orderDirection',
 	PAGE = 'page',
+	MATERIAL_REQUEST = 'materialRequest',
 }
 
 export const HIGHLIGHTED_SEARCH_TERMS_SEPARATOR = ',';

@@ -51,7 +51,7 @@ import Link from 'next/link';
 import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { Row, SortingRule, TableState } from 'react-table';
-import { useQueryParams } from 'use-query-params';
+import { StringParam, useQueryParam, useQueryParams } from 'use-query-params';
 
 export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	// We need different functionalities for different viewport sizes
@@ -73,7 +73,6 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	const user = useSelector(selectUser);
 	const locale = useLocale();
 
-	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
 	const [isDetailStatusBladeOpenWithStatus, setIsDetailStatusBladeOpenWithStatus] = useState<
 		MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED | undefined
 	>(undefined);
@@ -106,9 +105,13 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		}),
 		...(user?.organisationId ? { maintainerIds: [user.organisationId] } : {}),
 	});
-	const [currentMaterialRequestId, setCurrentMaterialRequestId] = useState<string | null>(null);
+	const [currentMaterialRequestId, setCurrentMaterialRequestId] = useQueryParam(
+		QUERY_PARAM_KEY.MATERIAL_REQUEST,
+		StringParam
+	);
 	const currentMaterialRequest =
 		materialRequests?.items?.find((request) => request.id === currentMaterialRequestId) || null;
+	const isDetailBladeOpen = !!currentMaterialRequest;
 
 	const {
 		data: currentMaterialRequestDetail,
@@ -271,7 +274,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 					if (isDetailStatusBladeOpenWithStatus) {
 						setIsDetailStatusBladeOpenWithStatus(undefined);
 					} else {
-						setIsDetailBladeOpen(false);
+						setCurrentMaterialRequestId(undefined);
 					}
 				}}
 				opacityStep={0.1}
@@ -279,7 +282,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 				<MaterialRequestDetailBlade
 					allowRequestCancellation={false}
 					isOpen={isDetailBladeOpen}
-					onClose={() => setIsDetailBladeOpen(false)}
+					onClose={() => setCurrentMaterialRequestId(undefined)}
 					onApproveRequest={() =>
 						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.APPROVED)
 					}
@@ -310,7 +313,6 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 			void refetchCurrentMaterialRequestDetail();
 		}
 		setCurrentMaterialRequestId(row.original?.id || null);
-		setIsDetailBladeOpen(true);
 	};
 
 	const renderContent = (): ReactNode => {
