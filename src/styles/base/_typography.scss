@@ -40,6 +40,38 @@ h6 {
 	line-height: $line-height-lg;
 }
 
+@media (max-width: $breakpoint-md) {
+	h1 {
+		font-size: $font-size-3xl;
+		line-height: $line-height-md;
+	}
+
+	h2 {
+		font-size: $font-size-2xl;
+		line-height: $line-height-lg;
+	}
+
+	h3 {
+		font-size: $font-size-2xm;
+		line-height: $line-height-lg;
+	}
+
+	h4 {
+		font-size: $font-size-md;
+		line-height: $line-height-lg;
+	}
+
+	h5 {
+		font-size: $font-size-md;
+		line-height: $line-height-lg;
+	}
+
+	h6 {
+		font-size: $font-size-md;
+		line-height: $line-height-lg;
+	}
+}
+
 p {
 	font-size: $font-size-base;
 	line-height: $line-height-lg;
