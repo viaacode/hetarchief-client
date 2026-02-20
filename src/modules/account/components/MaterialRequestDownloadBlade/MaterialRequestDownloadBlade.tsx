@@ -16,13 +16,21 @@ const MaterialRequestDownloadBlade: FC<MaterialRequestDownloadBladeProps> = ({
 	<Blade
 		id={`${location}__download-blade`}
 		isOpen={!!downloadUrl}
-		title={tText('Download is klaar')}
-		ariaLabel={tText('Download is klaar blade [ARIA_LABEL]')}
+		title={tText(
+			'modules/account/components/material-request-download-blade/material-request-download-blade___download-is-klaar'
+		)}
+		ariaLabel={tText(
+			'modules/account/components/material-request-download-blade/material-request-download-blade___download-is-klaar-blade-aria-label'
+		)}
 		onClose={onClose}
 		footerButtons={[
 			{
-				label: tText('Download'),
-				mobileLabel: tText('Download mobiel'),
+				label: tText(
+					'modules/account/components/material-request-download-blade/material-request-download-blade___download'
+				),
+				mobileLabel: tText(
+					'modules/account/components/material-request-download-blade/material-request-download-blade___download-mobiel'
+				),
 				type: 'primary',
 				onClick: () => {
 					setTimeout(() => {
@@ -33,7 +41,9 @@ const MaterialRequestDownloadBlade: FC<MaterialRequestDownloadBladeProps> = ({
 			},
 		]}
 	>
-		{tHtml('Je kan je download nu downloaden')}
+		{tHtml(
+			'modules/account/components/material-request-download-blade/material-request-download-blade___je-kan-je-download-nu-downloaden'
+		)}
 	</Blade>
 );
 

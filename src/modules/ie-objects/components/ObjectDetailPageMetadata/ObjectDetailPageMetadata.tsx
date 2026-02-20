@@ -731,7 +731,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		return mediaInfo.collectionName;
 	};
 
-	const renderPreviousButton = (isWrappedInLink: boolean, enabled: boolean) => {
+	const renderPreviousButton = (enabled: boolean) => {
 		const previousButtonIcon = <Icon name={IconNamesLight.ArrowLeft} aria-hidden />;
 		const previousButtonLabel = tText(
 			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___vorige'
@@ -742,13 +742,13 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				variants={['text']}
 				iconStart={previousButtonIcon}
 				label={previousButtonLabel}
-				disabled={enabled}
-				tabIndex={isWrappedInLink ? -1 : undefined}
+				disabled={!enabled}
+				tabIndex={enabled ? undefined : -1}
 			/>
 		);
 	};
 
-	const renderNextButton = (isWrappedInLink: boolean, enabled: boolean) => {
+	const renderNextButton = (enabled: boolean) => {
 		const nextButtonIcon = <Icon name={IconNamesLight.ArrowRight} aria-hidden />;
 		const nextButtonLabel = tText(
 			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___volgende'
@@ -759,8 +759,8 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				variants={['text']}
 				iconEnd={nextButtonIcon}
 				label={nextButtonLabel}
-				disabled={enabled}
-				tabIndex={isWrappedInLink ? -1 : undefined}
+				disabled={!enabled}
+				tabIndex={enabled ? undefined : -1}
 			/>
 		);
 	};
@@ -786,10 +786,10 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___ga-naar-de-vorige-krant-in-dezelfde-serie-link-aria-label'
 						)}
 					>
-						{renderPreviousButton(true, true)}
+						{renderPreviousButton(true)}
 					</Link>
 				) : (
-					renderPreviousButton(false, false)
+					renderPreviousButton(false)
 				)}
 
 				<span>{mediaInfo?.datePublished || mediaInfo?.dateCreated || '-'}</span>
@@ -801,10 +801,10 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___ga-naar-de-volgende-krant-in-dezelfde-serie-link-aria-label'
 						)}
 					>
-						{renderNextButton(true, true)}
+						{renderNextButton(true)}
 					</Link>
 				) : (
-					renderNextButton(false, false)
+					renderNextButton(false)
 				)}
 			</div>
 		);

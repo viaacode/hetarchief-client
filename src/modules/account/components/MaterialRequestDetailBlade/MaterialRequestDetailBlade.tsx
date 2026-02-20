@@ -246,7 +246,9 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		let downloadInformationMessage = '';
 
 		if (downloadStatusFailed) {
-			downloadInformationMessage = tText('Download voorbereiding gefaald');
+			downloadInformationMessage = tText(
+				'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-voorbereiding-gefaald'
+			);
 		} else if (downloadExpirationDate) {
 			if (hasDownloadExpired) {
 				downloadInformationMessage = tText(
