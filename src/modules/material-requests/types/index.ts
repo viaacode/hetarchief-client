@@ -176,16 +176,16 @@ export interface MaterialRequestMaintainer {
 }
 
 export enum MaterialRequestKeys {
+	objectSchemaName = 'objectSchemaName',
+	maintainerName = 'maintainerName',
+	type = 'type',
+	requestGroupName = 'requestGroupName',
+	requesterFullName = 'requesterFullName',
+	requesterMail = 'requesterMail',
 	createdAt = 'createdAt',
 	requestedAt = 'requestedAt',
-	type = 'type',
 	status = 'status',
 	downloadStatus = 'downloadStatus',
-	requestGroupName = 'requestGroupName',
-	name = 'requesterFullName',
-	email = 'requesterMail',
-	maintainer = 'maintainerName',
-	material = 'objectSchemaName',
 }
 
 export type MaterialRequestRow = { row: { original: MaterialRequest } };

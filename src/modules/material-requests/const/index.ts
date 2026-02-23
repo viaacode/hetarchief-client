@@ -191,7 +191,7 @@ export const GET_BLANK_MATERIAL_REQUEST_REUSE_FORM = (): MaterialRequestReuseFor
 export const getMaterialRequestTableColumnProps = (
 	column: HeaderGroup<MaterialRequest> | ColumnInstance<MaterialRequest>
 ): Partial<TableHeaderProps> | Partial<TableCellProps> => {
-	const columnWidth = COLUMN_WIDTH_LOOKUP[column.id as MaterialRequestKeys];
+	const columnWidth = MATERIAL_REQUESTS_COLUMN_WIDTH_LOOKUP[column.id as MaterialRequestKeys];
 
 	if (columnWidth) {
 		return {
@@ -206,10 +206,13 @@ export const getMaterialRequestTableColumnProps = (
 	return {};
 };
 
-const COLUMN_WIDTH_LOOKUP: Record<MaterialRequestKeys, string> = {
+export const MATERIAL_REQUESTS_COLUMN_WIDTH_LOOKUP: Record<MaterialRequestKeys, string> = {
+	[MaterialRequestKeys.objectSchemaName]: '20rem',
+	[MaterialRequestKeys.maintainerName]: '20rem',
+	[MaterialRequestKeys.requesterFullName]: '20rem',
+	[MaterialRequestKeys.type]: '13rem',
 	[MaterialRequestKeys.requestedAt]: '15rem',
-	[MaterialRequestKeys.type]: '20rem',
-	[MaterialRequestKeys.status]: '10rem',
-	[MaterialRequestKeys.downloadStatus]: '10rem',
 	[MaterialRequestKeys.requestGroupName]: '25rem',
+	[MaterialRequestKeys.status]: '9rem',
+	[MaterialRequestKeys.downloadStatus]: '10rem',
 } as Record<MaterialRequestKeys, string>;

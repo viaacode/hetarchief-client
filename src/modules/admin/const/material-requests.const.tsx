@@ -61,7 +61,7 @@ export const GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = (): {
 const getRequesterColumn = (disableSort: boolean): Column<MaterialRequest> =>
 	({
 		Header: tText('modules/admin/const/material-requests___aanvrager'),
-		accessor: MaterialRequestKeys.name,
+		accessor: MaterialRequestKeys.requesterFullName,
 		disableSortBy: disableSort,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span className="p-material-requests__table-titel-material">
@@ -86,7 +86,7 @@ const getRequesterColumn = (disableSort: boolean): Column<MaterialRequest> =>
 const getMaterialColumn = (): Column<MaterialRequest> =>
 	({
 		Header: tText('modules/admin/const/material-requests___materiaal'),
-		accessor: MaterialRequestKeys.material,
+		accessor: MaterialRequestKeys.objectSchemaName,
 		disableSortBy: true,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span className="p-material-requests__table-titel-material">
@@ -103,7 +103,7 @@ const getMaterialColumn = (): Column<MaterialRequest> =>
 const getMaintainerColumn = (): Column<MaterialRequest> =>
 	({
 		Header: tText('modules/admin/const/material-requests___aanbieder'),
-		accessor: MaterialRequestKeys.maintainer,
+		accessor: MaterialRequestKeys.maintainerName,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span className="u-color-neutral">{original.maintainerName}</span>
 		),
@@ -112,7 +112,7 @@ const getMaintainerColumn = (): Column<MaterialRequest> =>
 const getTitleColumn = (): Column<MaterialRequest> =>
 	({
 		Header: tText('modules/admin/const/material-requests___titel-materiaal'),
-		accessor: MaterialRequestKeys.material,
+		accessor: MaterialRequestKeys.objectSchemaName,
 	}) as Column<MaterialRequest>;
 
 const getRequestedAtColumn = (): Column<MaterialRequest> =>

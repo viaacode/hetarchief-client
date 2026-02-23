@@ -102,11 +102,11 @@ export const getAccountMaterialRequestTableColumns = (
 	return [
 		{
 			Header: tText('modules/cp/const/material-requests___materiaal'),
-			accessor: MaterialRequestKeys.material,
+			accessor: MaterialRequestKeys.objectSchemaName,
 		},
 		{
 			Header: tText('modules/cp/const/material-requests___aanbieder'),
-			accessor: MaterialRequestKeys.maintainer,
+			accessor: MaterialRequestKeys.maintainerName,
 			Cell: ({ row: { original } }: MaterialRequestRow) => (
 				<span className="u-color-neutral">{original.maintainerName}</span>
 			),
@@ -119,7 +119,7 @@ export const getAccountMaterialRequestTableColumns = (
 const getMaterialColumn = (disableSort: boolean): Column<MaterialRequest> =>
 	({
 		Header: tText('modules/cp/const/material-requests___materiaal'),
-		accessor: MaterialRequestKeys.material,
+		accessor: MaterialRequestKeys.objectSchemaName,
 		disableSortBy: disableSort,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span className="p-material-requests__table-titel-material">

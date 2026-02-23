@@ -59,7 +59,7 @@ export const getMaterialRequestTableColumns = (
 const getRequesterColumn = (disableSort: boolean): Column<MaterialRequest> =>
 	({
 		Header: tText('modules/cp/const/material-requests___aanvrager'),
-		accessor: MaterialRequestKeys.name,
+		accessor: MaterialRequestKeys.requesterFullName,
 		disableSortBy: disableSort,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span className="p-material-requests__table-titel-material">
@@ -84,7 +84,7 @@ const getRequesterColumn = (disableSort: boolean): Column<MaterialRequest> =>
 const getTitleColumn = (disableSort: boolean): Column<MaterialRequest> =>
 	({
 		Header: tText('modules/cp/const/material-requests___titel-materiaal'),
-		accessor: MaterialRequestKeys.material,
+		accessor: MaterialRequestKeys.objectSchemaName,
 		disableSortBy: disableSort,
 	}) as Column<MaterialRequest>;
 
