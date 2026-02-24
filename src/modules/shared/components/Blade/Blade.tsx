@@ -17,7 +17,7 @@ export const Blade: FC<BladeProps> = (props) => {
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
 	const hasOpenConfirmationModal = useSelector(selectHasOpenConfirmationModal);
 
-	useScrollLock(!isManaged && isOpen, 'Blade');
+	useScrollLock(!isManaged && isOpen, `Blade__${id}`);
 
 	const isLayered = isManaged && !!layer;
 	const isBladeOpen = isLayered ? layer <= currentLayer : isOpen;
