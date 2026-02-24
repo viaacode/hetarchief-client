@@ -20,7 +20,7 @@
 .c-dropdown--filter {
 	height: 5.6rem;
 
-	.c-button {
+	&.c-button {
 		display: block;
 		width: 100%;
 		height: 100%;
@@ -49,7 +49,7 @@
 .c-dropdown--bordered {
 	height: $button-height;
 
-	.c-button {
+	&.c-button {
 		display: block;
 		width: 100%;
 		height: 100%;
@@ -89,7 +89,7 @@
 .c-dropdown--rounded {
 	height: 100%;
 
-	.c-button {
+	&.c-button {
 		display: block;
 		width: 100%;
 		height: 100%;
