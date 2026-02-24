@@ -89,6 +89,8 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 	};
 
 	const onFailedRequest = () => {
+		afterStatusChanged(); // Trigger this even when it fails because some step in the process could be the cause
+
 		toastService.notify({
 			maxLines: 3,
 			title: tText(
