@@ -5,7 +5,10 @@ import type { MaterialRequest } from '@material-requests/types';
 import { SimpleIeObjectType } from '@shared/types/ie-objects';
 import type { AvoUserCommonUser } from '@viaa/avo2-types';
 import { intersection } from 'lodash-es';
+import getConfig from 'next/config';
 import { useSelector } from 'react-redux';
+
+const { publicRuntimeConfig } = getConfig();
 
 /**
  * Determines if the given IE object and user qualify for a complex reuse flow from the hermes track
@@ -32,6 +35,12 @@ export function checkIsComplexReuseFlow(
 		return {
 			isComplexReuseFlow: false,
 			isObjectEssenceAccessibleToUser: false,
+		};
+	}
+	if (publicRuntimeConfig.ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW !== 'true') {
+		return {
+			isComplexReuseFlow: false,
+			isObjectEssenceAccessibleToUser: !!materialRequest?.objectThumbnailUrl,
 		};
 	}
 	const simpleType = mapDcTermsFormatToSimpleType(materialRequest?.objectDctermsFormat);
