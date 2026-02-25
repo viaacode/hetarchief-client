@@ -1,16 +1,13 @@
-import { stringifyUrl } from 'query-string';
-
-import type { EmailTemplate } from '@shared/components/ShareFolderBlade/ShareFolderBlade.consts';
 import { ApiService } from '@shared/services/api-service';
 import type {
 	GetNewsletterPreferencesResponse,
 	SetNewsletterPreferencesBody,
 } from '@shared/types/newsletter';
+import { stringifyUrl } from 'query-string';
 
 import {
 	CAMPAIGN_MONITOR_SERVICE_BASE_URL,
 	CAMPAIGN_MONITOR_SERVICE_PREFERENCES,
-	CAMPAIGN_MONITOR_SERVICE_SEND,
 } from './campaign-monitor.consts';
 
 export class CampaignMonitorService {
@@ -32,12 +29,6 @@ export class CampaignMonitorService {
 			.post(`${CAMPAIGN_MONITOR_SERVICE_BASE_URL}/${CAMPAIGN_MONITOR_SERVICE_PREFERENCES}`, {
 				body: JSON.stringify(preferences),
 			})
-			.json();
-	}
-
-	public static async send(json: EmailTemplate): Promise<void> {
-		await ApiService.getApi()
-			.post(`${CAMPAIGN_MONITOR_SERVICE_BASE_URL}/${CAMPAIGN_MONITOR_SERVICE_SEND}`, { json })
 			.json();
 	}
 }
