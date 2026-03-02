@@ -16,14 +16,14 @@ export function useTriggerEventOnPageLoad({
 	eventData,
 	shouldTrigger = true,
 }: UseTriggerEventOnPageLoadParams) {
-	const [hasTriggered, setHasTriggered] = useState<boolean>(false);
+	const [hasTriggeredForUrl, setHasTriggeredForUrl] = useState<Record<string, boolean>>({});
 	const [previewQueryParam] = useQueryParam(QUERY_PARAM_KEY.CONTENT_PAGE_PREVIEW, BooleanParam);
 
 	useEffect(() => {
-		if (!shouldTrigger || hasTriggered || previewQueryParam) {
+		if (!shouldTrigger || hasTriggeredForUrl[window.location.href] || previewQueryParam) {
 			return;
 		}
 		EventsService.triggerEvent(eventType, window.location.href, eventData).then(noop);
-		setHasTriggered(true);
-	}, [hasTriggered, shouldTrigger, previewQueryParam, eventType, eventData]);
+		setHasTriggeredForUrl((prev) => ({ ...prev, [window.location.href]: true }));
+	}, [hasTriggeredForUrl, shouldTrigger, previewQueryParam, eventType, eventData]);
 }
