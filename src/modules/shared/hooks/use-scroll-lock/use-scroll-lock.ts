@@ -1,5 +1,4 @@
 import { selectIsScrollLocked, setLockScroll } from '@shared/store/ui';
-import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -24,7 +23,11 @@ const useScrollLock: UseScrollLock = (lock, id) => {
 	 */
 
 	useEffect(() => {
-		isLocked ? disableBodyScroll(document.body) : enableBodyScroll(document.body);
+		if (isLocked) {
+			document.body.classList.add('global-scroll-block');
+		} else {
+			document.body.classList.remove('global-scroll-block');
+		}
 	}, [isLocked]);
 };
 
