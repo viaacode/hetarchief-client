@@ -474,8 +474,8 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 					{isFetching && <Loading locationId="Material requests overview" />}
 					{noData && !isFetching && renderEmptyMessage()}
 					{renderContent()}
-					{renderDetailBlade()}
 				</div>
+				{renderDetailBlade()}
 			</CPAdminLayout>
 		);
 	};
