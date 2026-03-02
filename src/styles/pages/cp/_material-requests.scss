@@ -4,19 +4,32 @@
 
 .p-material-requests {
 	&__header {
-		@media (min-width: $breakpoint-md) {
+		display: flex;
+		justify-content: space-between;
+		flex-direction: row;
+
+		@media (max-width: $breakpoint-xl) {
+			flex-direction: column;
+		}
+
+		&-dropdowns {
 			display: flex;
-			justify-content: space-between;
+			flex-direction: row;
+
+			@media (max-width: $breakpoint-xl) {
+				flex-direction: column;
+			}
 		}
 	}
 
 	&__searchbar,
 	&__dropdown {
-		width: 100%;
-		margin: $spacer-xs 0;
+		margin-right: $spacer-sm;
+		margin-bottom: 0;
 
-		@media (min-width: $breakpoint-md) {
-			max-width: 28rem;
+		@media (max-width: $breakpoint-xl) {
+			margin-right: 0;
+			margin-bottom: $spacer-xs;
 		}
 
 		&--open {
@@ -31,6 +44,8 @@
 	}
 
 	&__table {
+		overflow: auto;
+
 		tr {
 			cursor: pointer;
 		}
