@@ -38,3 +38,9 @@ $layout: "l-app";
 		row-gap: $spacer-sm;
 	}
 }
+
+body.global-scroll-block{
+	position: static !important;
+	width: initial !important;
+	overflow: hidden !important;
+}
