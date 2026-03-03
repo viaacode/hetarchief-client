@@ -73,6 +73,10 @@
 				color: abstracts.$neutral;
 				line-height: abstracts.$font-size-lg;
 				padding: 0;
+
+				[class*="Icon_c-icon"] {
+					padding-top: 0.5rem;
+				}
 			}
 		}
 
