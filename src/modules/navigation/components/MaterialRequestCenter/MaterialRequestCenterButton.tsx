@@ -108,7 +108,9 @@ const MaterialRequestCenterButton: FC = () => {
 						)}
 					</div>
 				}
-				ariaLabel={tText('modules/navigation/const/index___notificaties')}
+				ariaLabel={tText(
+					'modules/navigation/components/material-request-center/material-request-center-button___openstaande-materiaal-aanvragen'
+				)}
 				title={tText(
 					'modules/navigation/components/material-request-center/material-request-center-button___hover-materiaal-aanvragen'
 				)}
