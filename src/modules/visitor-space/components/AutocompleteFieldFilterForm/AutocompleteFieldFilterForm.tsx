@@ -86,6 +86,7 @@ export const AutocompleteFieldFilterForm: FC<{
 		setForm((oldForm) => ({ ...oldForm, value: newCreator || '' }));
 	};
 
+	const inputId = `AutocompleteFieldFilterForm__${autocompleteField}`;
 	return (
 		<>
 			<div
@@ -94,7 +95,7 @@ export const AutocompleteFieldFilterForm: FC<{
 				<FormControl
 					className="c-form-control--label-hidden"
 					errors={[<RedFormWarning error={errors?.value?.message} key="form-error--value" />]}
-					id={`AutocompleteFieldFilterForm__${autocompleteField}`}
+					id={inputId}
 					label={filterTitle}
 				>
 					<Controller
@@ -107,6 +108,7 @@ export const AutocompleteFieldFilterForm: FC<{
 								value={field.value}
 								id={AutocompleteField.creator}
 								label={fieldLabel}
+								inputId={inputId}
 							/>
 						)}
 					/>

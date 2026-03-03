@@ -288,6 +288,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 	const renderLanguagePreferencesForm = () => (
 		<CheckboxList
+			id="language-preferences-checkbox-list"
 			items={
 				allLanguages?.map((language) => ({
 					label: GET_TRANSLATED_LANGUAGE_LABELS()[language.languageCode],

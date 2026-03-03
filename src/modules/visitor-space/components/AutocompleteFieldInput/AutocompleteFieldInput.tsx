@@ -30,10 +30,11 @@ export interface AutocompleteFieldInputProps {
 	label?: string;
 	fieldName: AutocompleteField;
 	disabled?: boolean;
-	id?: string;
+	id: string;
 	onChange: (value: string | null) => void;
 	value?: string;
 	className?: string;
+	inputId: string;
 }
 
 const MIN_WORD_LENGTH_FOR_AUTOCOMPLETE = 3;
@@ -44,6 +45,8 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps & UserProps> = ({
 	fieldName,
 	label,
 	user,
+	id,
+	inputId,
 }) => {
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const isAnonymousUser = useHasAnyGroup(GroupName.ANONYMOUS);
@@ -115,6 +118,8 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps & UserProps> = ({
 
 	return (
 		<AsyncSelect<SelectOption>
+			id={id}
+			inputId={inputId}
 			key={value ? 'autocomplete-field-input__value-set' : 'autocomplete-field-input__no-value-set'}
 			aria-label={label}
 			className={clsx(styles['c-autocomplete-field-input'], 'c-react-select')}

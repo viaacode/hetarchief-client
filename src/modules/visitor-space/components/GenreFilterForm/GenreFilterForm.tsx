@@ -101,6 +101,7 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 					)}
 
 					<CheckboxList
+						id="genre-filter-form-checkbox-list"
 						className="u-my-16"
 						items={checkboxOptions}
 						onItemClick={(checked, value) => {

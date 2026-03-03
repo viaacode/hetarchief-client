@@ -100,6 +100,7 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 					)}
 
 					<CheckboxList
+						id="medium-filter-form-checkbox-list"
 						items={checkboxOptions}
 						onItemClick={(checked, value) => {
 							onItemClick(!checked, value as string);

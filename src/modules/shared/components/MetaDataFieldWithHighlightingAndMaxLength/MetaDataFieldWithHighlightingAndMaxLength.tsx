@@ -1,10 +1,10 @@
 import type { MetadataItem } from '@ie-objects/components/Metadata';
 import type { DefaultComponentProps } from '@meemoo/admin-core-ui/admin';
+import { Button } from '@meemoo/react-components';
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import { tText } from '@shared/helpers/translate';
 import { isString } from 'lodash-es';
 import type { FC, ReactNode } from 'react';
-
 import { METADATA_FIELD_MAX_LENGTH } from './MetaDataFieldWithHighlightingAndMaxLength.const';
 import styles from './MetaDataFieldWithHighlightingAndMaxLength.module.scss';
 
@@ -31,8 +31,8 @@ const MetaDataFieldWithHighlightingAndMaxLength: FC<
 			<HighlightedMetadata title={title} data={parsedFieldData} enabled={enableHighlighting} />
 
 			{isLongFieldData && (
-				// biome-ignore lint/a11y/noStaticElementInteractions: styling reasons
-				<div
+				<Button
+					variants={['text', 'sm']}
 					className={styles['c-metadata__field__blade__read-more']}
 					onClick={() => onReadMoreClicked({ title, data })}
 					onKeyUp={(evt) => {
@@ -42,7 +42,7 @@ const MetaDataFieldWithHighlightingAndMaxLength: FC<
 					}}
 				>
 					{tText('modules/visitor-space/utils/metadata/metadata___lees-meer')}
-				</div>
+				</Button>
 			)}
 		</div>
 	);

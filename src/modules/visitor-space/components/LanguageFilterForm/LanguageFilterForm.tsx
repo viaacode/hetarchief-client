@@ -126,6 +126,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 					)}
 
 					<CheckboxList
+						id="language-filter-form-checkbox-list"
 						items={checkboxOptions}
 						onItemClick={(checked, value) => {
 							onItemClick(!checked, value as string);

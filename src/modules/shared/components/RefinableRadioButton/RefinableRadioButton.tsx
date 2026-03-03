@@ -66,6 +66,7 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 					id={`refinable-radio-button-dropdown-${id}`}
 				>
 					<CheckboxList
+						id={`refinable-radio-button-checkbox-list--${id}`}
 						className={styles['c-refinable-radio-button__checkbox-list']}
 						itemClassName={styles['c-refinable-radio-button__checkbox-list-item']}
 						items={options.map(({ id, label }: RefinableRadioButtonRefineOption) => ({

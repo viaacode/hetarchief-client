@@ -132,7 +132,13 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 						</p>
 					)}
 
-					{maintainers && <CheckboxList items={checkboxOptions} onItemClick={onItemClick} />}
+					{maintainers && (
+						<CheckboxList
+							items={checkboxOptions}
+							onItemClick={onItemClick}
+							id="maintainer-filter-form-checkbox-list"
+						/>
+					)}
 				</div>
 			</div>
 

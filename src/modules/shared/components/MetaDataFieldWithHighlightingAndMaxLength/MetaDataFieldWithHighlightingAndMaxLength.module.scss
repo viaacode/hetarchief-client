@@ -6,10 +6,16 @@ $component: "c-metadata__field__blade";
 	&__read-more {
 		cursor: pointer;
 		font-size: $font-size-sm;
-		text-decoration: underline;
 		color: $neutral;
 		transition: opacity $animate-default;
 		margin-top: $spacer-xs;
+		padding: 0;
+		height: 2.4rem;
+		border-radius: 0;
+
+		:global(.c-button__content) {
+			text-decoration: underline !important;
+		}
 
 		&:hover,
 		&:focus {
