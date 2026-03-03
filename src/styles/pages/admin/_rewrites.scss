@@ -193,6 +193,15 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	&:focus:not(:focus-visible) {
 		border-color: $zinc;
 	}
+
+	// Filter table filters with values inside
+	.c-tag-list {
+		margin: 6px 0 6px 6px;
+
+		.c-tag {
+			background-color: $teal-medium;
+		}
+	}
 }
 
 .c-admin__actions button[class*="c-button--primary"],
