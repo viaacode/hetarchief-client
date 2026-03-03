@@ -35,7 +35,7 @@ import { Placeholder } from '@shared/components/Placeholder';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ScrollableTabs, TabLabel } from '@shared/components/Tabs';
 import { TagSearchBar } from '@shared/components/TagSearchBar';
-import { TagSearchBarInfo } from '@shared/components/TagSearchBar/TagSearchBarInfo';
+import { TagSearchBarInfo } from '@shared/components/TagSearchBar/TagSearchBarInfo/TagSearchBarInfo';
 import type { ToggleOption } from '@shared/components/Toggle';
 import {
 	VisitorSpaceDropdown,
@@ -989,14 +989,9 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const renderSearchInputRightControls = () => {
 		return (
 			<>
-				<TagSearchBarInfo
-					icon={IconNamesLight.Info}
-					content={tHtml(
-						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-zoeken-zoek-info'
-					)}
-				/>
+				<TagSearchBarInfo />
 				<Button
-					className="u-hide-lt-bp2"
+					className={clsx('u-hide-lt-bp2', styles['c-button--advanced-filters'])}
 					variants={['text', 'white']}
 					label={tText('modules/search/search-page___geavanceerde-filters')}
 					onClick={openAndScrollToAdvancedFilters}

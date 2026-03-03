@@ -7,8 +7,6 @@
 	align-items: center;
 	justify-content: center;
 	font-size: $font-size-lg;
-	padding: 0.6rem;
-	border-radius: 100%;
 	margin-left: 0;
 	color: $neutral;
 	cursor: pointer;
@@ -18,11 +16,15 @@
 		right: unset;
 		color: $white;
 		margin-left: 0.8rem;
-		border: 0.1rem solid $shade;
 	}
 
-	&--open {
-		outline: 0.4rem solid $teal;
+	&__button {
+		border: 0.1rem solid $shade;
+		padding: 0.6rem;
+		width: 4rem !important;
+		height: 4rem !important;
+		border-radius: 100%;
+		margin-right: 0.4rem;
 	}
 
 	&__icon {

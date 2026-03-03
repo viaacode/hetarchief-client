@@ -550,6 +550,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					<div
 						className={styles['p-object-detail__sidebar__content-logo']}
 						style={{ backgroundImage: `url(${maintainerLogo})` }}
+						aria-hidden="true"
 					/>
 				)}
 			</div>

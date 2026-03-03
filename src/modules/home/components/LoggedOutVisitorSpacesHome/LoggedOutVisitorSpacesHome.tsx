@@ -3,7 +3,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { tHtml, tText } from '@shared/helpers/translate';
+import { tHtml } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -63,7 +63,7 @@ const LoggedOutVisitorSpacesHome: FC = () => {
 						<Image
 							unoptimized
 							src="/images/hero.jpg"
-							alt={tText('modules/home/components/logged-out-home/logged-out-home___hero-alt')}
+							alt=""
 							priority
 							fill
 							sizes="100vw"
