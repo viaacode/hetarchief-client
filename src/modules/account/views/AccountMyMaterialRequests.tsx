@@ -44,7 +44,7 @@ import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import type { DefaultSeoInfo } from '@shared/types/seo';
-import { isTabletPortraitSize } from '@shared/utils/is-mobile';
+import { isLessThanXlSize } from '@shared/utils/is-mobile';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitorLayout } from '@visitor-layout/index';
 import clsx from 'clsx';
@@ -57,7 +57,7 @@ import { StringParam, useQueryParam, useQueryParams } from 'use-query-params';
 export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();
-	const isTabletPortrait = isTabletPortraitSize(windowSize);
+	const isTabletPortrait = isLessThanXlSize(windowSize);
 
 	const [filters, setFilters] = useQueryParams(ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
@@ -233,6 +233,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		<PaginationBar
 			showFirstAndLastButtons
 			{...getDefaultPaginationBarProps()}
+			backToTopLabel={isTabletPortrait ? '' : getDefaultPaginationBarProps().backToTopLabel}
 			startItem={Math.max(0, filters.page - 1) * ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}
 			totalItems={materialRequests?.total || 0}
 			itemsPerPage={ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}
@@ -340,7 +341,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 					{isKeyUser && (
 						<div className="l-container">
 							<div className="p-material-requests__header">
-								<div className={clsx('u-flex', 'u-flex-row', 'u-gap-sm')}>
+								<div className="p-material-requests__header-dropdowns">
 									<MultiSelect
 										variant="rounded"
 										label={tText('modules/account/views/account-my-material-requests___type')}

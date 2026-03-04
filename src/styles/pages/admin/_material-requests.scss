@@ -6,28 +6,29 @@ $page: "p-admin-material-requests";
 	&__header {
 		display: flex;
 		justify-content: space-between;
-		flex-direction: column;
+		flex-direction: row;
 
-		@media (min-width: $breakpoint-md) {
-			flex-direction: row;
+		@media (max-width: $breakpoint-xl) {
+			flex-direction: column;
 		}
 
 		&-dropdowns {
 			display: flex;
-			flex-direction: column;
+			flex-direction: row;
 
-			@media (min-width: $breakpoint-md) {
-				flex-direction: row;
+			@media (max-width: $breakpoint-xl) {
+				flex-direction: column;
 			}
 		}
 	}
 
 	&__dropdown {
-		margin-bottom: $spacer-xs;
+		margin-right: $spacer-sm;
+		margin-bottom: 0;
 
-		@media (min-width: $breakpoint-md) {
-			margin-right: $spacer-sm;
-			margin-bottom: 0;
+		@media (max-width: $breakpoint-xl) {
+			margin-right: 0;
+			margin-bottom: $spacer-xs;
 		}
 
 		&--open {

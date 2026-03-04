@@ -42,7 +42,7 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import type { DefaultSeoInfo } from '@shared/types/seo';
-import { isTabletPortraitSize } from '@shared/utils/is-mobile';
+import { isLessThanXlSize } from '@shared/utils/is-mobile';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import { isEmpty, isNil, noop } from 'lodash-es';
@@ -60,7 +60,7 @@ import { StringParam, useQueryParam, useQueryParams } from 'use-query-params';
 export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();
-	const isTabletPortrait = isTabletPortraitSize(windowSize);
+	const isTabletPortrait = isLessThanXlSize(windowSize);
 
 	const [isDetailStatusBladeOpenWithStatus, setIsDetailStatusBladeOpenWithStatus] = useState<
 		MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED | undefined
@@ -265,6 +265,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		<PaginationBar
 			showFirstAndLastButtons
 			{...getDefaultPaginationBarProps()}
+			backToTopLabel={isTabletPortrait ? '' : getDefaultPaginationBarProps().backToTopLabel}
 			startItem={Math.max(0, filters.page - 1) * ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}
 			totalItems={materialRequests?.total || 0}
 			itemsPerPage={ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}
