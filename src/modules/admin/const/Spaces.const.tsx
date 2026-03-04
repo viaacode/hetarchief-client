@@ -113,7 +113,7 @@ export const VisitorSpacesOverviewTableColumns = (
 			const status = row.original.status;
 
 			return (
-				<>
+				<span className="u-flex u-justify-right u-flex-items-center">
 					{showEditButton && (
 						<Link
 							href={`${ROUTES_BY_LOCALE[locale].adminVisitorSpaceEdit.replace(':slug', row.original.slug)}`}
@@ -131,6 +131,7 @@ export const VisitorSpacesOverviewTableColumns = (
 								className: 'u-color-neutral u-width-24 u-height-24 u-ml-20',
 							}}
 							id="visitor-space-status-dropdown"
+							placement="bottom-end"
 						>
 							{[VisitorSpaceStatus.Inactive, VisitorSpaceStatus.Requested].includes(status) && (
 								<Button
@@ -167,7 +168,7 @@ export const VisitorSpacesOverviewTableColumns = (
 							)}
 						</DropdownMenu>
 					)}
-				</>
+				</span>
 			);
 		},
 	},

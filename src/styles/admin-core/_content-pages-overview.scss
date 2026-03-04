@@ -1,17 +1,15 @@
-@use "src/styles/abstracts" as *;
-
-$button-size: 3.6rem;
+@use "src/styles/abstracts" as abstracts;$button-size: 3.6rem;
 
 .c-content-overview__table {
 	.c-content-overview__table__translated_pages {
 		display: flex;
-		gap: $spacer-xs;
+		gap: abstracts.$spacer-xs;
 
 		.c-content-overview__table__translated_pages__page {
 			width: $button-size;
 			height: $button-size;
 			text-align: center;
-			background-color: $silver;
+			background-color: abstracts.$silver;
 			display: inline-block;
 			line-height: $button-size;
 			border-radius: 50%;
@@ -22,14 +20,14 @@ $button-size: 3.6rem;
 			}
 
 			&--published {
-				color: $white;
-				background-color: $teal-dark;
+				color: abstracts.$white;
+				background-color: abstracts.$teal-dark;
 			}
 		}
 	}
 
 	tr > td:last-child {
-		gap: $spacer-xs;
+		gap: abstracts.$spacer-xs;
 
 		> .c-button,
 		.c-actions-dropdown > .c-button {
@@ -45,7 +43,7 @@ $button-size: 3.6rem;
 
 			> button {
 				&:hover {
-					background-color: $silver;
+					background-color: abstracts.$silver;
 				}
 			}
 		}
@@ -61,12 +59,12 @@ $button-size: 3.6rem;
 				text-decoration: none;
 
 				&:hover {
-					background-color: $silver;
+					background-color: abstracts.$silver;
 				}
 			}
 
 			button {
-				padding: $spacer-xs $spacer-sm;
+				padding: abstracts.$spacer-xs abstracts.$spacer-sm;
 				width: 100%;
 				border: 0;
 				background-color: transparent;
@@ -84,7 +82,7 @@ $button-size: 3.6rem;
 
 					span {
 						font-size: 1.8rem;
-						margin-right: $spacer-xs;
+						margin-right: abstracts.$spacer-xs;
 					}
 				}
 			}

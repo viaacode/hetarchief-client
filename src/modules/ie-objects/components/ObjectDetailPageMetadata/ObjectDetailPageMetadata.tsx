@@ -416,12 +416,13 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						onOpen={() => setMetadataExportDropdownOpen(true)}
 						onClose={() => setMetadataExportDropdownOpen(false)}
 						id={`object-detail-page__metadata__export-dropdown--${mediaInfo?.schemaIdentifier}`}
+						placement="bottom-start"
 					>
 						<DropdownButton>
 							{isPrimary ? (
 								<Button
 									variants={[isPrimary ? 'teal' : 'silver']}
-									className={styles['p-object-detail__export']}
+									className={styles['p-object-detail__export-dropdown']}
 									iconStart={icon}
 									iconEnd={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 									title={buttonLabelDesktop}
@@ -440,7 +441,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						<DropdownContent>
 							<MenuContent
 								rootClassName="c-dropdown-menu"
-								className={styles['p-object-detail__export-dropdown']}
+								className={styles['p-object-detail__export-dropdown__menu']}
 								menuItems={exportOptions}
 								onClick={(id) => onExportClick(id as MetadataExportFormats)}
 							/>

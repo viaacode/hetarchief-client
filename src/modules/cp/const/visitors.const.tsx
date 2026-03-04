@@ -93,7 +93,10 @@ export const VisitorsTableColumns = (
 		id: 'cp-visitors-histories-table-actions',
 		Cell: ({ row }: VisitRow) => {
 			return (
-				<DropdownMenu id={`visit-request-overview__actions-dropdown--${row.original.id}`}>
+				<DropdownMenu
+					id={`visit-request-overview__actions-dropdown--${row.original.id}`}
+					placement="bottom-end"
+				>
 					<Button
 						variants="text"
 						label={tText('modules/cp/const/visitors___toegang-intrekken')}

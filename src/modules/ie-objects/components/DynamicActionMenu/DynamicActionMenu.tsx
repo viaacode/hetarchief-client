@@ -163,6 +163,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				onClose={() => setIsDropdownOpen(false)}
 				flyoutClassName={styles['c-dynamic-action-menu__flyout']}
 				id={`dynamic-action-menu--${id}`}
+				placement="bottom-end"
 			>
 				<DropdownButton>
 					<Button

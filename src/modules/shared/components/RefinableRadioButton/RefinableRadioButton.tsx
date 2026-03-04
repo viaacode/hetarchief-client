@@ -64,6 +64,7 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 					iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
 					iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 					id={`refinable-radio-button-dropdown-${id}`}
+					placement="bottom-end"
 				>
 					<CheckboxList
 						id={`refinable-radio-button-checkbox-list--${id}`}
