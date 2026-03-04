@@ -43,7 +43,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import type { DefaultSeoInfo } from '@shared/types/seo';
-import { isTabletPortraitSize } from '@shared/utils/is-mobile';
+import { isLessThanXlSize } from '@shared/utils/is-mobile';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import { isEmpty, isNil, noop } from 'lodash-es';
@@ -56,7 +56,7 @@ import { StringParam, useQueryParam, useQueryParams } from 'use-query-params';
 export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();
-	const isTabletPortrait = isTabletPortraitSize(windowSize);
+	const isTabletPortrait = isLessThanXlSize(windowSize);
 
 	const [filters, setFilters] = useQueryParams(CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
@@ -241,6 +241,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		<PaginationBar
 			showFirstAndLastButtons
 			{...getDefaultPaginationBarProps()}
+			backToTopLabel={isTabletPortrait ? '' : getDefaultPaginationBarProps().backToTopLabel}
 			startItem={Math.max(0, filters.page - 1) * CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}
 			totalItems={materialRequests?.total || 0}
 			itemsPerPage={CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}
@@ -358,7 +359,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 			<CPAdminLayout className="p-material-requests" pageTitle={renderPageTitle()}>
 				<div className="l-container">
 					<div className="p-material-requests__header">
-						<div className={clsx('u-flex', 'u-flex-row', 'u-gap-sm')}>
+						<div className="p-material-requests__header-dropdowns">
 							<MultiSelect
 								variant="rounded"
 								label={tText('modules/cp/views/cp-admin-material-requests___type')}

@@ -8,3 +8,7 @@ export const isMobileSize = (windowSize: WindowSizeContextValue): boolean => {
 export const isTabletPortraitSize = (windowSize: WindowSizeContextValue): boolean => {
 	return !!(windowSize.width && windowSize.width < Breakpoints.lg);
 };
+
+export const isLessThanXlSize = (windowSize: WindowSizeContextValue): boolean => {
+	return !!(windowSize.width && windowSize.width < Breakpoints.xl);
+};
