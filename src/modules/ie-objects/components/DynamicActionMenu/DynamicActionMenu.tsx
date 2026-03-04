@@ -69,7 +69,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	const renderInTooltip = (trigger: ReactNode, tooltip: string): ReactElement => {
 		return (
 			<NoServerSideRendering>
-				<Tooltip position="top">
+				<Tooltip position="top" offset={10}>
 					<TooltipTrigger>{trigger}</TooltipTrigger>
 					<TooltipContent>{tooltip}</TooltipContent>
 				</Tooltip>

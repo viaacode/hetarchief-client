@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-dynamic-action-menu {
 	@extend %reset-list;
@@ -9,7 +9,7 @@
 
 	&__primary {
 		&-item {
-			padding-right: $spacer-xs;
+			padding-right: abstracts.$spacer-xs;
 		}
 	}
 
@@ -20,12 +20,12 @@
 		display: flex;
 
 		&-item:not(:last-of-type) {
-			padding-right: $spacer-xs;
+			padding-right: abstracts.$spacer-xs;
 		}
 	}
 
 	&__flyout {
-		box-shadow: $shadow-24-black-12;
+		box-shadow: abstracts.$shadow-24-black-12;
 	}
 
 	&__button {
