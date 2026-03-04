@@ -1,35 +1,44 @@
 @use "src/styles/abstracts" as abstracts;
 
-.c-actions-dropdown {
-	margin: 0;
+.c-admin__content {
+	.c-actions-dropdown.c-dropdown__trigger {
+		margin: 0.5rem 0;
 
-	> .c-button {
-		background-color: white;
-		color: abstracts.$black;
-		border: transparent;
+		> .c-button {
+			background-color: white;
+			color: abstracts.$black;
+			border: transparent;
+			font-size: abstracts.$font-size-lg;
+			padding: 0.8rem;
 
-		&:hover {
-			background-color: abstracts.$silver;
+			&:hover {
+				background-color: abstracts.$silver;
+			}
 		}
 	}
-}
 
-.c-actions-dropdown-flyout {
-	.c-menu__item {
-		background-color: white;
-		color: abstracts.$black;
-		border: transparent;
+	.c-actions-dropdown-flyout {
+		.c-menu__item {
+			background-color: white;
+			color: abstracts.$black;
+			border: transparent;
 
-		&:hover {
-			background-color: abstracts.$silver;
+			&:hover {
+				background-color: abstracts.$silver;
+			}
+
+			.c-menu__label {
+				font-size: abstracts.$font-size-sm;
+
+				[class*="Icon_c-icon__"] {
+					font-size: abstracts.$font-size-md;
+				}
+			}
 		}
 
-		.c-menu__label {
-			font-size: abstracts.$font-size-sm;
-
-			[class*="Icon_c-icon__"] {
-				font-size: abstracts.$font-size-md;
-			}
+		.c-button {
+			border-radius: 0 !important;
+			font-weight: 400;
 		}
 	}
 }
