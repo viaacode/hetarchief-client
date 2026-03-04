@@ -1,0 +1,35 @@
+@use "src/styles/abstracts" as abstracts;
+
+.c-actions-dropdown {
+	margin: 0;
+
+	> .c-button {
+		background-color: white;
+		color: abstracts.$black;
+		border: transparent;
+
+		&:hover {
+			background-color: abstracts.$silver;
+		}
+	}
+}
+
+.c-actions-dropdown-flyout {
+	.c-menu__item {
+		background-color: white;
+		color: abstracts.$black;
+		border: transparent;
+
+		&:hover {
+			background-color: abstracts.$silver;
+		}
+
+		.c-menu__label {
+			font-size: abstracts.$font-size-sm;
+
+			[class*="Icon_c-icon__"] {
+				font-size: abstracts.$font-size-md;
+			}
+		}
+	}
+}

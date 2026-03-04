@@ -66,6 +66,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 			onOpen={() => onOpen?.(id)}
 			onClose={() => onClose?.(id)}
 			id={`navigation-dropdown-${id}`}
+			placement="bottom-end"
 		>
 			<DropdownButton>{trigger}</DropdownButton>
 			<DropdownContent>{renderedItems ?? renderChildrenRecursively(items || [])}</DropdownContent>

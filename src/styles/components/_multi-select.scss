@@ -1,58 +1,68 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-multi-select {
-	&__dropdown {
+	.c-multi-select__dropdown {
 		width: 100%;
+
+		> .c-button {
+			background-color: abstracts.$white;
+			border: 1px solid abstracts.$silver;
+			color: abstracts.$black;
+			font-weight: 400;
+		}
 	}
 
-	&__header {
+	.c-multi-select__header {
 		width: 100%;
-		background-color: $white;
-		padding: $spacer-sm $spacer-sm $spacer-sm $spacer-sm + $spacer-xs;
-		color: $neutral;
-		font-size: $font-size-sm;
+		background-color: abstracts.$white;
+		padding: abstracts.$spacer-sm abstracts.$spacer-sm abstracts.$spacer-sm abstracts.$spacer-sm + abstracts.$spacer-xs;
+		color: abstracts.$neutral;
+		font-size: abstracts.$font-size-sm;
 	}
 
-	&__footer {
+	.c-multi-select__footer {
 		width: 100%;
-		background-color: $white;
-		padding: $spacer-xs;
-		gap: $spacer-xs;
+		background-color: abstracts.$white;
+		padding: abstracts.$spacer-xs;
+		gap: abstracts.$spacer-xs;
 	}
 
-	&__content-wrapper {
-		@extend %reset-list;
-
-		box-shadow: $shadow-24-black-08;
+	.c-multi-select__content-wrapper {
+		padding: 0;
+		margin: 0;
+		list-style: none;
+		box-shadow: abstracts.$shadow-24-black-08;
 	}
 
-	&__checkbox-list {
-		@extend %reset-list;
+	.c-multi-select__checkbox-list {
+		padding: 0;
+		margin: 0;
+		list-style: none;
 
-		&-item {
-			border-top: 0.1rem solid $zinc;
-			padding: $spacer-xs $spacer-sm;
+		.c-multi-select__checkbox-list-item {
+			border-top: 0.1rem solid abstracts.$zinc;
+			padding: abstracts.$spacer-xs abstracts.$spacer-sm;
 			display: flex;
 			flex-flow: row nowrap;
 			align-items: center;
 			cursor: pointer;
-			outline-color: $teal;
+			outline-color: abstracts.$teal;
 			user-select: none;
 
 			.c-checkbox {
-				padding: $spacer-xs;
+				padding: abstracts.$spacer-xs;
 				box-sizing: content-box;
-				margin-right: $spacer-xs;
+				margin-right: abstracts.$spacer-xs;
 				pointer-events: none;
 			}
 
 			.c-checkbox__check-icon {
 				top: 0;
-				margin: $spacer-xs;
+				margin: abstracts.$spacer-xs;
 			}
 
 			&.is-checked {
-				background-color: $teal-medium;
+				background-color: abstracts.$teal-medium;
 			}
 
 			&:first-of-type {

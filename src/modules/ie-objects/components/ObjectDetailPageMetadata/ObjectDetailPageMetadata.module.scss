@@ -79,3 +79,24 @@ $maintainer-logo-height: 7rem;
 	background-position: right;
 	background-size: contain;
 }
+
+.p-object-detail__export-dropdown__menu {
+	padding: 0;
+
+	:global(.c-menu__item) {
+		width: 100%;
+		background: none;
+		border: 0;
+		padding: $spacer-sm $spacer-md;
+
+		&:hover {
+			background: $silver;
+		}
+	}
+}
+
+.p-object-detail__export {
+	:global(.c-menu) {
+		margin: 0;
+	}
+}
