@@ -113,7 +113,7 @@ export const VisitorSpacesOverviewTableColumns = (
 			const status = row.original.status;
 
 			return (
-				<span className="u-flex u-justify-right u-flex-items-center">
+				<span className="u-inline-flex u-justify-right u-flex-items-center">
 					{showEditButton && (
 						<Link
 							href={`${ROUTES_BY_LOCALE[locale].adminVisitorSpaceEdit.replace(':slug', row.original.slug)}`}
