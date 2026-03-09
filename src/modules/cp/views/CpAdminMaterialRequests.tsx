@@ -73,6 +73,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	const user = useSelector(selectUser);
 	const locale = useLocale();
 
+	const [statusChanged, setStatusChanged] = useState(false);
 	const [isDetailStatusBladeOpenWithStatus, setIsDetailStatusBladeOpenWithStatus] = useState<
 		MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED | undefined
 	>(undefined);
@@ -234,7 +235,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	};
 
 	const onMaterialRequestStatusChange = async () => {
-		await Promise.all([refetchCurrentMaterialRequestDetail(), refetchMaterialRequests()]);
+		await refetchCurrentMaterialRequestDetail();
 	};
 
 	const renderPagination = ({ gotoPage }: { gotoPage: (i: number) => void }): ReactNode => (
@@ -277,13 +278,21 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 					} else {
 						setCurrentMaterialRequestId(undefined);
 					}
+					if (statusChanged) {
+						refetchMaterialRequests().then(noop);
+					}
 				}}
 				opacityStep={0.1}
 			>
 				<MaterialRequestDetailBlade
 					allowRequestCancellation={false}
 					isOpen={isDetailBladeOpen}
-					onClose={() => setCurrentMaterialRequestId(undefined)}
+					onClose={(statusUpdated) => {
+						if (statusUpdated || statusChanged) {
+							refetchMaterialRequests().then(noop);
+						}
+						setCurrentMaterialRequestId(undefined);
+					}}
 					onApproveRequest={() =>
 						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.APPROVED)
 					}
@@ -297,7 +306,12 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 				/>
 				<MaterialRequestStatusUpdateBlade
 					isOpen={!!isDetailStatusBladeOpenWithStatus}
-					onClose={() => setIsDetailStatusBladeOpenWithStatus(undefined)}
+					onClose={(statusUpdated) => {
+						if (statusUpdated) {
+							setStatusChanged(true);
+						}
+						setIsDetailStatusBladeOpenWithStatus(undefined);
+					}}
 					status={isDetailStatusBladeOpenWithStatus}
 					currentMaterialRequestDetail={resolvedMaterialRequest}
 					afterStatusChanged={onMaterialRequestStatusChange}

@@ -41,13 +41,13 @@ import clsx from 'clsx';
 import { isNil } from 'lodash-es';
 import { default as NextLink } from 'next/link';
 import { stringifyUrl } from 'query-string';
-import React, { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './MaterialRequestDetailBlade.module.scss';
 
 interface MaterialRequestDetailBladeProps {
 	isOpen: boolean;
-	onClose: () => void;
+	onClose: (statusChanged: boolean) => void;
 	allowRequestCancellation: boolean;
 	onApproveRequest?: () => void;
 	onDeclineRequest?: () => void;
@@ -72,8 +72,14 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	const user = useSelector(selectUser);
 	const { isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(currentMaterialRequestDetail);
 
+	const [statusChanged, setStatusChanged] = useState(false);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+
+	const handleStatusChanged = useCallback(() => {
+		setStatusChanged(true);
+		afterStatusChanged();
+	}, [afterStatusChanged]);
 
 	const canRequestBeEvaluated = useMemo(
 		() =>
@@ -101,18 +107,18 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	useEffect(() => {
 		if (currentMaterialRequestDetail.status === MaterialRequestStatus.NEW && user?.isEvaluator) {
 			MaterialRequestsService.setAsPending(currentMaterialRequestDetail.id).then(() => {
-				afterStatusChanged();
+				handleStatusChanged();
 			});
 		}
 	}, [
 		currentMaterialRequestDetail.id,
 		currentMaterialRequestDetail.status,
 		user?.isEvaluator,
-		afterStatusChanged,
+		handleStatusChanged,
 	]);
 
 	const onFailedRequest = () => {
-		afterStatusChanged(); // Trigger this even when it fails because some step in the process could be the cause
+		handleStatusChanged(); // Trigger this even when it fails because some step in the process could be the cause
 
 		toastService.notify({
 			maxLines: 3,
@@ -133,8 +139,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				onFailedRequest();
 				return;
 			}
-			afterStatusChanged();
-			onClose();
+			handleStatusChanged();
 		} catch (_err) {
 			onFailedRequest();
 		}
@@ -174,7 +179,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				'modules/account/components/material-request-detail-blade/material-request-detail-blade___sluit-mobiel'
 			),
 			type: 'primary',
-			onClick: onClose,
+			onClick: () => onClose(statusChanged),
 		} as BladeFooterButton;
 
 		if (
@@ -467,7 +472,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				isOpen={isOpen}
 				layer={layer}
 				currentLayer={currentLayer}
-				onClose={onClose}
+				onClose={() => onClose(statusChanged)}
 				title={tText(
 					'modules/account/components/material-request-detail-blade/material-requests___detail'
 				)}

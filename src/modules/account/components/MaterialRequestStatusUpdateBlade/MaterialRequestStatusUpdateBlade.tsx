@@ -18,7 +18,7 @@ import styles from './MaterialRequestStatusUpdateBlade.module.scss';
 
 interface MaterialRequestStatusUpdateBladeProps {
 	isOpen: boolean;
-	onClose: () => void;
+	onClose: (statusChanged: boolean) => void;
 	status?: MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED;
 	currentMaterialRequestDetail: MaterialRequest;
 	afterStatusChanged: () => void;
@@ -60,8 +60,8 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 		maintainerName,
 	} = currentMaterialRequestDetail;
 
-	const onCloseModal = () => {
-		onClose();
+	const onCloseModal = (statusChanged: boolean) => {
+		onClose(statusChanged);
 		setMotivationInputValue('');
 	};
 
@@ -82,7 +82,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 				return;
 			}
 			afterStatusChanged();
-			onCloseModal();
+			onCloseModal(true);
 		} catch (_err) {
 			onFailedRequest();
 		}
@@ -132,7 +132,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 					'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___annuleer-mobiel'
 				),
 				type: 'secondary',
-				onClick: onCloseModal,
+				onClick: () => onCloseModal(false),
 			},
 		];
 	};
@@ -144,7 +144,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 			isOpen={isOpen}
 			layer={layer}
 			currentLayer={currentLayer}
-			onClose={() => onCloseModal()}
+			onClose={() => onCloseModal(false)}
 			isManaged
 			title={tText(
 				'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag'

@@ -253,7 +253,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	};
 
 	const onMaterialRequestStatusChange = async () => {
-		await Promise.all([refetchCurrentMaterialRequestDetail(), refetchMaterialRequests()]);
+		await refetchCurrentMaterialRequestDetail();
 	};
 
 	const renderDetailBlade = () => {
@@ -264,7 +264,12 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 			<MaterialRequestDetailBlade
 				allowRequestCancellation={true}
 				isOpen={isDetailBladeOpen}
-				onClose={() => setCurrentMaterialRequestId(undefined)}
+				onClose={(statusChanged) => {
+					if (statusChanged) {
+						refetchMaterialRequests().then(noop);
+					}
+					setCurrentMaterialRequestId(undefined);
+				}}
 				currentMaterialRequestDetail={resolvedMaterialRequest}
 				afterStatusChanged={onMaterialRequestStatusChange}
 			/>
