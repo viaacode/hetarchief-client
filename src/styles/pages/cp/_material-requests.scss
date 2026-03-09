@@ -38,7 +38,7 @@
 
 		&-no-dividers {
 			.c-multi-select__checkbox-list-item {
-				border-top: none;
+				border-top: none !important;
 			}
 		}
 	}
