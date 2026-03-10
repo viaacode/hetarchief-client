@@ -25,6 +25,10 @@
 		background-color: abstracts.$white;
 		padding: abstracts.$spacer-xs;
 		gap: abstracts.$spacer-xs;
+
+		.c-button {
+			width: 50%;
+		}
 	}
 
 	.c-multi-select__content-wrapper {

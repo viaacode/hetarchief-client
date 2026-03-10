@@ -36,6 +36,10 @@ $page: "p-admin-material-requests";
 		}
 
 		&-no-dividers {
+			.c-button {
+				width: 100%;
+			}
+
 			.c-multi-select__checkbox-list-item {
 				border-top: none !important;
 			}
