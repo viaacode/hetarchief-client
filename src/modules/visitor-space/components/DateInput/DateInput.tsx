@@ -57,6 +57,8 @@ const DateInput: FC<DateInputProps> = ({
 					{
 						name: 'Force datepicker to be always at the bottom',
 						fn(state: MiddlewareState) {
+							// Not the prettiest solution but for now we will force the datepicker always below the input
+							// Regardless if there is space or not
 							return {
 								...state,
 								y:
