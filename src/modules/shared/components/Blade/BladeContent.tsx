@@ -238,6 +238,19 @@ export const BladeContent: FC<BladeContentProps> = ({
 			} as BladeFooterButton & { variants: string[] };
 		}
 
+		let renderPrimaryFirst: boolean;
+
+		// Wide blade always have their buttons on 1 line. The primary should be on the right
+		if (isWideBlade) {
+			renderPrimaryFirst = false;
+		} else if (isMobile) {
+			// Normal blades only have their buttons on 1 line on mobile. So only then should the primary be on the right
+			renderPrimaryFirst = false;
+		} else {
+			// Otherwise the primary should be on top
+			renderPrimaryFirst = true;
+		}
+
 		return (
 			<div
 				className={clsx(
@@ -260,8 +273,17 @@ export const BladeContent: FC<BladeContentProps> = ({
 						isWideBlade && styles['c-blade__footer-buttons-extra-wide']
 					)}
 				>
-					{renderFooterButton(firstButton)}
-					{renderFooterButton(lastButton)}
+					{renderPrimaryFirst ? (
+						<>
+							{renderFooterButton(firstButton)}
+							{renderFooterButton(lastButton)}
+						</>
+					) : (
+						<>
+							{renderFooterButton(lastButton)}
+							{renderFooterButton(firstButton)}
+						</>
+					)}
 				</div>
 			</div>
 		);
