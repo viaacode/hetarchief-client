@@ -176,7 +176,6 @@ $padding-horizontal-mobile: $spacer-sm;
 		&-buttons {
 			padding: 0;
 			display: inline-block;
-			gap: $spacer-xs;
 			width: 100%;
 
 			&-extra-wide {
@@ -185,7 +184,7 @@ $padding-horizontal-mobile: $spacer-sm;
 				:global(.c-button), a {
 					display: inline-block;
 					width: unset;
-					max-width: 50%;
+					max-width: calc(50% - $spacer-xxs);
 
 					:global(.c-button__content) {
 						width: 100%;
@@ -195,7 +194,12 @@ $padding-horizontal-mobile: $spacer-sm;
 						@include text-ellipsis(true);
 					}
 
+					&:first-child:nth-last-child(2) {
+						margin-right: $spacer-xxs;
+					}
+
 					&:last-child {
+						margin-left: $spacer-xxs;
 						float: right;
 					}
 				}
@@ -210,6 +214,10 @@ $padding-horizontal-mobile: $spacer-sm;
 					display: block;
 					width: 100%;
 
+					&:first-child:nth-last-child(2) {
+						margin-bottom: $spacer-xs;
+					}
+
 					:global(.c-button__content) {
 						width: 100%;
 					}
@@ -222,12 +230,22 @@ $padding-horizontal-mobile: $spacer-sm;
 
 					@media (max-width: $breakpoint-md) {
 						display: inline-block;
-						width: 50%;
+						width: calc(50% - $spacer-xxs);
+						margin-bottom: 0 !important;
 
 						&:only-child {
 							display: block;
 							width: 100%;
 						}
+
+						&:first-child:nth-last-child(2) {
+							margin-right: $spacer-xxs;
+						}
+
+						&:nth-child(2) {
+							margin-left: $spacer-xxs;
+						}
+
 					}
 				}
 			}
