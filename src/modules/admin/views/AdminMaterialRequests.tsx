@@ -62,7 +62,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	const windowSize = useWindowSizeContext();
 	const isTabletPortrait = isLessThanXlSize(windowSize);
 
-	const [statusChanged, setStatusChanged] = useState(false);
+	const [hasStatusChanged, setHasStatusChanged] = useState(false);
 	const [isDetailStatusBladeOpenWithStatus, setIsDetailStatusBladeOpenWithStatus] = useState<
 		MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED | undefined
 	>(undefined);
@@ -314,7 +314,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 					} else {
 						setCurrentMaterialRequestId(undefined);
 					}
-					if (statusChanged) {
+					if (hasStatusChanged) {
 						refetchMaterialRequests().then(noop);
 					}
 				}}
@@ -324,7 +324,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 					allowRequestCancellation={false}
 					isOpen={isDetailBladeOpen}
 					onClose={(statusUpdated) => {
-						if (statusUpdated || statusChanged) {
+						if (statusUpdated || hasStatusChanged) {
 							refetchMaterialRequests().then(noop);
 						}
 						setCurrentMaterialRequestId(undefined);
@@ -344,7 +344,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 					isOpen={!!isDetailStatusBladeOpenWithStatus}
 					onClose={(statusUpdated) => {
 						if (statusUpdated) {
-							setStatusChanged(true);
+							setHasStatusChanged(true);
 						}
 						setIsDetailStatusBladeOpenWithStatus(undefined);
 					}}

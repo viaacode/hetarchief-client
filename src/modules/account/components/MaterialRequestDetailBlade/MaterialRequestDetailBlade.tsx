@@ -72,12 +72,12 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	const user = useSelector(selectUser);
 	const { isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(currentMaterialRequestDetail);
 
-	const [statusChanged, setStatusChanged] = useState(false);
+	const [hasStatusChanged, setHasStatusChanged] = useState(false);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
 	const handleStatusChanged = useCallback(() => {
-		setStatusChanged(true);
+		setHasStatusChanged(true);
 		afterStatusChanged();
 	}, [afterStatusChanged]);
 
@@ -179,7 +179,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				'modules/account/components/material-request-detail-blade/material-request-detail-blade___sluit-mobiel'
 			),
 			type: 'primary',
-			onClick: () => onClose(statusChanged),
+			onClick: () => onClose(hasStatusChanged),
 		} as BladeFooterButton;
 
 		if (
@@ -472,7 +472,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				isOpen={isOpen}
 				layer={layer}
 				currentLayer={currentLayer}
-				onClose={() => onClose(statusChanged)}
+				onClose={() => onClose(hasStatusChanged)}
 				title={tText(
 					'modules/account/components/material-request-detail-blade/material-requests___detail'
 				)}
