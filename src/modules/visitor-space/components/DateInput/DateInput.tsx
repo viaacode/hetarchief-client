@@ -1,3 +1,4 @@
+import type { MiddlewareState } from '@floating-ui/react';
 import { TextInput } from '@meemoo/react-components';
 import { getDatePickerDefaultProps } from '@shared/components/DatePicker/DatePicker.consts';
 import { Icon } from '@shared/components/Icon';
@@ -52,6 +53,25 @@ const DateInput: FC<DateInputProps> = ({
 				dateFormat="dd/MM/yyyy"
 				placeholderText="dd/mm/jjjj"
 				popperPlacement="bottom-start"
+				popperModifiers={[
+					{
+						name: 'Force datepicker to be always at the bottom',
+						fn(state: MiddlewareState) {
+							// Not the prettiest solution but for now we will force the datepicker always below the input
+							// Regardless if there is space or not
+							return {
+								...state,
+								y:
+									// The y position of the input
+									state.rects.reference.y +
+									// adding the height of the input itself
+									state.rects.reference.height +
+									// And adding the offset
+									(state.middlewareData.offset?.y || 0),
+							} as MiddlewareState;
+						},
+					},
+				]}
 				customInput={
 					<TextInput
 						id={`${id}__date-input__text-field`}
