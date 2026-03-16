@@ -113,7 +113,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 						/>
 						<Button
 							label={tText('pages/account/map-delen/folder-id/index___verstuur')}
-							iconStart={<Icon name={IconNamesLight.Search} aria-hidden />}
+							iconStart={<Icon name={IconNamesLight.Email} aria-hidden />}
 							variants={['inline-input']}
 							className={styles['c-share-folder-blade__send-button']}
 							onClick={handleSend}
