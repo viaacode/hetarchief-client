@@ -105,15 +105,21 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	);
 
 	useEffect(() => {
-		if (currentMaterialRequestDetail.status === MaterialRequestStatus.NEW && user?.isEvaluator) {
+		if (
+			currentMaterialRequestDetail.status === MaterialRequestStatus.NEW &&
+			user?.isEvaluator &&
+			currentMaterialRequestDetail.requesterId !== user?.id
+		) {
 			MaterialRequestsService.setAsPending(currentMaterialRequestDetail.id).then(() => {
 				handleStatusChanged();
 			});
 		}
 	}, [
 		currentMaterialRequestDetail.id,
+		currentMaterialRequestDetail.requesterId,
 		currentMaterialRequestDetail.status,
 		user?.isEvaluator,
+		user?.id,
 		handleStatusChanged,
 	]);
 
