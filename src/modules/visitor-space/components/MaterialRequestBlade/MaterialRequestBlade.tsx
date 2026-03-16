@@ -209,21 +209,21 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		try {
 			setShowConfirmTypeEdit(false);
 
-			const response = await MaterialRequestsService.update(materialRequestId, {
-				type: typeSelected as MaterialRequestType,
-				reason: reasonInputValue,
-				requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
-				reuseForm,
-			});
-			if (response === undefined) {
-				onFailedRequest();
-				return;
-			}
-
 			const shouldTriggerReuseForm =
 				typeSelected === MaterialRequestType.REUSE && isComplexReuseFlow;
 
 			if (!shouldTriggerReuseForm) {
+				const response = await MaterialRequestsService.update(materialRequestId, {
+					type: typeSelected as MaterialRequestType,
+					reason: reasonInputValue,
+					requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
+					reuseForm,
+				});
+				if (response === undefined) {
+					onFailedRequest();
+					return;
+				}
+
 				toastService.notify({
 					maxLines: 3,
 					title: tText(
@@ -233,9 +233,11 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-toegepast'
 					),
 				});
+				await onSuccessCreated();
+				onCloseModal(false);
+			} else {
+				onCloseModal(true);
 			}
-			await onSuccessCreated();
-			onCloseModal(shouldTriggerReuseForm);
 		} catch (_err) {
 			onFailedRequest();
 		}
