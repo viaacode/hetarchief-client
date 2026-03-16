@@ -53,6 +53,7 @@ export enum MaterialRequestReuseFormKey {
 	thumbnailUrl = 'thumbnailUrl',
 	startTime = 'startTime',
 	endTime = 'endTime',
+	durationType = 'durationType',
 	downloadQuality = 'downloadQuality',
 	intendedUsageDescription = 'intendedUsageDescription',
 	intendedUsage = 'intendedUsage',
@@ -69,10 +70,16 @@ export enum MaterialRequestReuseFormKey {
 	copyrightDisplay = 'copyrightDisplay',
 }
 
+export enum MaterialRequestDurationType {
+	FULL = 'FULL',
+	PARTIAL = 'PARTIAL',
+}
+
 export interface MaterialRequestReuseForm {
 	representationId: string | undefined;
 	startTime: number | undefined;
 	endTime: number | undefined;
+	durationType: MaterialRequestDurationType | undefined;
 	downloadQuality: MaterialRequestDownloadQuality | undefined;
 	intendedUsageDescription: string | undefined;
 	intendedUsage: MaterialRequestIntendedUsage | undefined;

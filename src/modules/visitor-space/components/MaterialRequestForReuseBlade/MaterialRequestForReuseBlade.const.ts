@@ -52,6 +52,8 @@ export const MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA =
 					return number().optional();
 				}
 			),
+			// Optional, since this is a computed field that is set after the validation of the form
+			[MaterialRequestReuseFormKey.durationType]: string().optional(),
 			[MaterialRequestReuseFormKey.downloadQuality]: mixed<MaterialRequestDownloadQuality>()
 				.oneOf(Object.values(MaterialRequestDownloadQuality))
 				.required(

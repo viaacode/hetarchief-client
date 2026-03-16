@@ -172,6 +172,7 @@ export const GET_BLANK_MATERIAL_REQUEST_REUSE_FORM = (): MaterialRequestReuseFor
 	representationId: undefined,
 	startTime: 0,
 	endTime: undefined,
+	durationType: undefined,
 	downloadQuality: undefined,
 	intendedUsageDescription: undefined,
 	intendedUsage: undefined,
