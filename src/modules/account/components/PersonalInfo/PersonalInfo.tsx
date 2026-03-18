@@ -1,6 +1,6 @@
 import MaterialRequestTermAgreementBlade from '@account/components/MaterialRequestTermAgreementBlade/MaterialRequestTermAgreementBlade';
 import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
-import { selectUser } from '@auth/store/user';
+import { selectCommonUser } from '@auth/store/user';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestRequesterCapacity } from '@material-requests/types';
 import {
@@ -19,11 +19,11 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
 import { getLocalisedOptions } from '@shared/utils/dates';
+import { useIsComplexReuseFlowUser } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
 import { format } from 'date-fns';
 import { noop } from 'lodash-es';
@@ -38,11 +38,11 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 	onCancel,
 	onSuccess,
 }) => {
-	const user = useSelector(selectUser);
-	const isKeyUser = useIsKeyUser();
+	const commonUser = useSelector(selectCommonUser);
 	const locale = useLocale();
+	const isComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
 
-	const { data: preferences } = useGetNewsletterPreferences(user?.email);
+	const { data: preferences } = useGetNewsletterPreferences(commonUser?.email);
 	const shouldRenderNewsletterCheckbox: boolean = !preferences?.newsletter;
 	const MAX_NAME_LENGTH = 40;
 
@@ -51,10 +51,10 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 		preferences?.newsletter || false
 	);
 	const [organisationInputValue, setOrganisationInputValue] = useState<string>(
-		user?.organisationName || ''
+		commonUser?.organisation?.name || ''
 	);
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestRequesterCapacity | undefined>(
-		isKeyUser ? MaterialRequestRequesterCapacity.WORK : undefined
+		isComplexReuseFlow ? MaterialRequestRequesterCapacity.WORK : undefined
 	);
 	const [agreedToTerms, setAgreedToTerms] = useState(false);
 	const [showTermAgreement, setShowTermAgreement] = useState(false);
@@ -85,13 +85,13 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 					)
 				: undefined,
 			requestGroupName:
-				isKeyUser && requestGroupName.length === 0
+				isComplexReuseFlow && requestGroupName.length === 0
 					? tText(
 							'modules/account/components/personal-info/personal-info___de-aanvraag-naam-is-verplicht'
 						)
 					: undefined,
 			agreedToTerms:
-				isKeyUser && !agreedToTerms
+				isComplexReuseFlow && !agreedToTerms
 					? tText(
 							'modules/account/components/personal-info/personal-info___keur-de-aanvullende-gebruiksvoorwaarden-bij-aanvragen-goed'
 						)
@@ -155,7 +155,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 	};
 
 	const renderAgreeTermsCheckbox = () => {
-		if (!isKeyUser) {
+		if (!isComplexReuseFlow) {
 			return null;
 		}
 		return (
@@ -376,10 +376,10 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 					</strong>
 					<p>
 						<div className={clsx(styles['c-personal-info__content-group-subtitle'])}>
-							{user?.fullName}
+							{commonUser?.fullName}
 						</div>
 						<div className={clsx(styles['c-personal-info__content-group-value'])}>
-							{user?.email}
+							{commonUser?.email}
 						</div>
 					</p>
 				</div>
@@ -389,8 +389,8 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 					</strong>
 					<p>
 						<div className={clsx(styles['c-personal-info__content-group-subtitle'])}>
-							{user?.organisationName ? (
-								user.organisationName
+							{commonUser?.organisation?.name ? (
+								commonUser.organisation?.name
 							) : (
 								<TextInput
 									id="personal-info__organisation-input"
@@ -403,16 +403,16 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 								/>
 							)}
 						</div>
-						{user?.sector && (
+						{commonUser?.organisation?.data?.sector && (
 							<div className={clsx(styles['c-personal-info__content-group-value'])}>
-								{user.sector}
+								{commonUser?.organisation?.data?.sector}
 							</div>
 						)}
 					</p>
 				</div>
 				{hasRequests ? (
 					<>
-						{isKeyUser ? renderNameEntry() : renderCapacity()}
+						{isComplexReuseFlow ? renderNameEntry() : renderCapacity()}
 						{renderCheckboxes()}
 					</>
 				) : (

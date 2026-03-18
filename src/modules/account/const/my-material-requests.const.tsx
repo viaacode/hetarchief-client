@@ -86,10 +86,10 @@ export const GET_MATERIAL_REQUEST_DOWNLOAD_FILTER_ARRAY = (): {
 ];
 
 export const getAccountMaterialRequestTableColumns = (
-	isKeyUser: boolean,
+	isComplexReuseFlow: boolean,
 	isTabletPortrait: boolean
 ): Column<MaterialRequest>[] => {
-	if (isKeyUser) {
+	if (isComplexReuseFlow) {
 		return [
 			getMaterialColumn(isTabletPortrait),
 			...(isTabletPortrait ? [] : [getRequestedAtColumn()]),

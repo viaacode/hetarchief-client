@@ -12,6 +12,7 @@ import {
 	getAdminMaterialRequestTableColumns,
 } from '@admin/const/material-requests.const';
 import { AdminLayout } from '@admin/layouts';
+import { selectCommonUser } from '@auth/store/user';
 import { getMaterialRequestTableColumnProps } from '@material-requests/const';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
@@ -44,6 +45,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { isLessThanXlSize } from '@shared/utils/is-mobile';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
+import { useIsComplexReuseFlowUser } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
 import { isEmpty, isNil, noop } from 'lodash-es';
 import React, {
@@ -54,6 +56,7 @@ import React, {
 	useMemo,
 	useState,
 } from 'react';
+import { useSelector } from 'react-redux';
 import type { Row, SortingRule, TableState } from 'react-table';
 import { StringParam, useQueryParam, useQueryParams } from 'use-query-params';
 
@@ -61,6 +64,8 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();
 	const isTabletPortrait = isLessThanXlSize(windowSize);
+	const commonUser = useSelector(selectCommonUser);
+	const isComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
 
 	const [hasStatusChanged, setHasStatusChanged] = useState(false);
 	const [isDetailStatusBladeOpenWithStatus, setIsDetailStatusBladeOpenWithStatus] = useState<
@@ -381,6 +386,157 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		);
 	};
 
+	const renderTypeFilter = () => {
+		return (
+			<MultiSelect
+				variant="rounded"
+				label={tText('pages/admin/materiaalaanvragen/index___type')}
+				id="admin-material-requests__type-material-request"
+				options={typesList}
+				onChange={noop}
+				className={clsx(
+					'p-admin-material-requests__dropdown',
+					'p-admin-material-requests__dropdown-no-dividers'
+				)}
+				iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+				iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+				iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+				checkboxHeader={tText('pages/admin/materiaalaanvragen/index___type-aanvraag')}
+				confirmOptions={{
+					label: tText('pages/admin/materiaalaanvragen/index___pas-toe'),
+					variants: ['black'],
+					onClick: setSelectedTypes,
+				}}
+				resetOptions={{
+					icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />,
+					label: tText('pages/admin/materiaalaanvragen/index___reset'),
+					variants: ['text'],
+					onClick: setSelectedTypes,
+				}}
+			/>
+		);
+	};
+
+	const renderStatusFilter = () => {
+		if (!isComplexReuseFlow) {
+			return null;
+		}
+		return (
+			<MultiSelect
+				variant="rounded"
+				label={tText('pages/admin/materiaalaanvragen/index___status')}
+				id="admin-material-requests__status-material-request"
+				options={statusList}
+				onChange={noop}
+				className={clsx(
+					'p-admin-material-requests__dropdown',
+					'p-admin-material-requests__dropdown-no-dividers'
+				)}
+				iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+				iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+				iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+				checkboxHeader={tText('pages/admin/materiaalaanvragen/index___status-aanvraag')}
+				confirmOptions={{
+					label: tText('pages/admin/materiaalaanvragen/index___pas-toe'),
+					variants: ['black'],
+					onClick: setSelectedStatuses,
+				}}
+				resetOptions={{
+					icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />,
+					label: tText('pages/admin/materiaalaanvragen/index___reset'),
+					variants: ['text'],
+					onClick: setSelectedStatuses,
+				}}
+			/>
+		);
+	};
+
+	const renderDownloadFilter = () => {
+		if (!isComplexReuseFlow) {
+			return null;
+		}
+		return (
+			<MultiSelect
+				variant="rounded"
+				label={tText('pages/admin/materiaalaanvragen/index___download')}
+				id="admin-material-requests__download-filter-material-request"
+				options={downloadUrlList}
+				onChange={noop}
+				className={clsx(
+					'p-admin-material-requests__dropdown',
+					'p-admin-material-requests__dropdown-no-dividers'
+				)}
+				iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+				iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+				iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+				checkboxHeader={tText('pages/admin/materiaalaanvragen/index___aanvraag-met-download')}
+				confirmOptions={{
+					label: tText('pages/admin/materiaalaanvragen/index___pas-toe'),
+					variants: ['black'],
+					onClick: setSelectedDownloadFilters,
+				}}
+				resetOptions={{
+					icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />,
+					label: tText('pages/admin/materiaalaanvragen/index___reset'),
+					variants: ['text'],
+					onClick: setSelectedDownloadFilters,
+				}}
+			/>
+		);
+	};
+
+	const renderMaintainerFilter = () => {
+		if (!maintainerList) {
+			return null;
+		}
+		return (
+			<MultiSelect
+				variant="rounded"
+				label={tText('pages/admin/materiaalaanvragen/index___aanbieder')}
+				id="admin-material-requests__maintainer-filter-material-request"
+				options={maintainerList}
+				onChange={noop}
+				className={clsx(
+					'p-admin-material-requests__dropdown',
+					'p-admin-material-requests__dropdown-no-dividers'
+				)}
+				iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+				iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+				iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+				checkboxHeader={tText('pages/admin/materiaalaanvragen/index___aanbieder-aanvraag')}
+				confirmOptions={{
+					label: tText('pages/admin/materiaalaanvragen/index___pas-toe'),
+					variants: ['black'],
+					onClick: setSelectedMaintainers,
+				}}
+				resetOptions={{
+					icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />,
+					label: tText('pages/admin/materiaalaanvragen/index___reset'),
+					variants: ['text'],
+					onClick: setSelectedMaintainers,
+				}}
+			/>
+		);
+	};
+
+	const renderSearchInput = () => {
+		return (
+			<SearchBar
+				id={globalLabelKeys.adminLayout.title}
+				value={search}
+				ariaLabel={tText('modules/admin/views/admin-material-requests___zoekbalk-aria-label')}
+				placeholder={tText('pages/admin/materiaalaanvragen/index___zoek')}
+				onChange={setSearch}
+				onSearch={(newValue) =>
+					setFilters({
+						[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: newValue || undefined,
+						page: 1,
+					})
+				}
+			/>
+		);
+	};
+
 	const renderPageContent = () => {
 		return (
 			<AdminLayout pageTitle={tText('pages/admin/materiaalaanvragen/index___materiaalaanvragen')}>
@@ -388,143 +544,13 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 					<div className="l-container">
 						<div className={clsx('p-admin-material-requests__header')}>
 							<div className="p-admin-material-requests__header-dropdowns">
-								<MultiSelect
-									variant="rounded"
-									label={tText('pages/admin/materiaalaanvragen/index___type')}
-									id="admin-material-requests__type-material-request"
-									options={typesList}
-									onChange={noop}
-									className={clsx(
-										'p-admin-material-requests__dropdown',
-										'p-admin-material-requests__dropdown-no-dividers'
-									)}
-									iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
-									iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-									iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-									checkboxHeader={tText('pages/admin/materiaalaanvragen/index___type-aanvraag')}
-									confirmOptions={{
-										label: tText('pages/admin/materiaalaanvragen/index___pas-toe'),
-										variants: ['black'],
-										onClick: setSelectedTypes,
-									}}
-									resetOptions={{
-										icon: (
-											<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
-										),
-										label: tText('pages/admin/materiaalaanvragen/index___reset'),
-										variants: ['text'],
-										onClick: setSelectedTypes,
-									}}
-								/>
-
-								<MultiSelect
-									variant="rounded"
-									label={tText('pages/admin/materiaalaanvragen/index___status')}
-									id="admin-material-requests__status-material-request"
-									options={statusList}
-									onChange={noop}
-									className={clsx(
-										'p-admin-material-requests__dropdown',
-										'p-admin-material-requests__dropdown-no-dividers'
-									)}
-									iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
-									iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-									iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-									checkboxHeader={tText('pages/admin/materiaalaanvragen/index___status-aanvraag')}
-									confirmOptions={{
-										label: tText('pages/admin/materiaalaanvragen/index___pas-toe'),
-										variants: ['black'],
-										onClick: setSelectedStatuses,
-									}}
-									resetOptions={{
-										icon: (
-											<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
-										),
-										label: tText('pages/admin/materiaalaanvragen/index___reset'),
-										variants: ['text'],
-										onClick: setSelectedStatuses,
-									}}
-								/>
-
-								<MultiSelect
-									variant="rounded"
-									label={tText('pages/admin/materiaalaanvragen/index___download')}
-									id="admin-material-requests__download-filter-material-request"
-									options={downloadUrlList}
-									onChange={noop}
-									className={clsx(
-										'p-admin-material-requests__dropdown',
-										'p-admin-material-requests__dropdown-no-dividers'
-									)}
-									iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
-									iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-									iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-									checkboxHeader={tText(
-										'pages/admin/materiaalaanvragen/index___aanvraag-met-download'
-									)}
-									confirmOptions={{
-										label: tText('pages/admin/materiaalaanvragen/index___pas-toe'),
-										variants: ['black'],
-										onClick: setSelectedDownloadFilters,
-									}}
-									resetOptions={{
-										icon: (
-											<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
-										),
-										label: tText('pages/admin/materiaalaanvragen/index___reset'),
-										variants: ['text'],
-										onClick: setSelectedDownloadFilters,
-									}}
-								/>
-								{maintainerList && (
-									<MultiSelect
-										variant="rounded"
-										label={tText('pages/admin/materiaalaanvragen/index___aanbieder')}
-										id="admin-material-requests__maintainer-filter-material-request"
-										options={maintainerList}
-										onChange={noop}
-										className={clsx(
-											'p-admin-material-requests__dropdown',
-											'p-admin-material-requests__dropdown-no-dividers'
-										)}
-										iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
-										iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-										iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-										checkboxHeader={tText(
-											'pages/admin/materiaalaanvragen/index___aanbieder-aanvraag'
-										)}
-										confirmOptions={{
-											label: tText('pages/admin/materiaalaanvragen/index___pas-toe'),
-											variants: ['black'],
-											onClick: setSelectedMaintainers,
-										}}
-										resetOptions={{
-											icon: (
-												<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
-											),
-											label: tText('pages/admin/materiaalaanvragen/index___reset'),
-											variants: ['text'],
-											onClick: setSelectedMaintainers,
-										}}
-									/>
-								)}
+								{renderTypeFilter()}
+								{renderStatusFilter()}
+								{renderDownloadFilter()}
+								{renderMaintainerFilter()}
 							</div>
 
-							<SearchBar
-								id={globalLabelKeys.adminLayout.title}
-								value={search}
-								ariaLabel={tText(
-									'modules/admin/views/admin-material-requests___zoekbalk-aria-label'
-								)}
-								placeholder={tText('pages/admin/materiaalaanvragen/index___zoek')}
-								onChange={setSearch}
-								onSearch={(newValue) =>
-									setFilters({
-										[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: newValue || undefined,
-										page: 1,
-									})
-								}
-							/>
+							{renderSearchInput()}
 						</div>
 					</div>
 					<div

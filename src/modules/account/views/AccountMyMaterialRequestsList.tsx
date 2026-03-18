@@ -43,9 +43,9 @@ import { useRouter } from 'next/router';
 import { type FC, type ReactNode, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import MaterialCard from '../../visitor-space/components/MaterialCard/MaterialCard';
-import styles from './AccountMyApplicationList.module.scss';
+import styles from './AccountMyMaterialRequestsList.module.scss';
 
-export const AccountMyApplicationList: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
+export const AccountMyMaterialRequestsList: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	useHideFooter();
 	useStickyLayout();
 

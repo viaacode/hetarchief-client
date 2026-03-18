@@ -10,6 +10,7 @@ import {
 	MaterialRequestDistributionDigitalOnline,
 	MaterialRequestDistributionType,
 	MaterialRequestDownloadQuality,
+	MaterialRequestDurationType,
 	MaterialRequestEditing,
 	MaterialRequestGeographicalUsage,
 	MaterialRequestIntendedUsage,
@@ -228,13 +229,26 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				return;
 			}
 
+			// Omit start time and end time if they are equal to 0 and media duration respectively
+			// So the backend can know when yo export the whole video and when to export only a partial
+			const formValuesToSend = {
+				...formValues,
+			};
+			if (formValues.startTime === 0 && formValues.endTime === mediaDuration) {
+				formValuesToSend[MaterialRequestReuseFormKey.durationType] =
+					MaterialRequestDurationType.FULL;
+			} else {
+				formValuesToSend[MaterialRequestReuseFormKey.durationType] =
+					MaterialRequestDurationType.PARTIAL;
+			}
+
 			const response = await MaterialRequestsService.create({
 				objectId: materialRequest.objectId,
 				objectRepresentationId: materialRequest.objectRepresentationId,
 				type: MaterialRequestType.REUSE,
 				reason: '',
 				requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
-				reuseForm: formValues,
+				reuseForm: formValuesToSend,
 			});
 			if (response === undefined) {
 				onFailedRequest();
@@ -1064,9 +1078,15 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			</div>
 			<ConfirmModalBeforeUnload
 				when={hasUnsavedChanges}
-				message={tText(
-					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ben-je-zeker-dat-je-dit-venster-wilt-sluiten-hiermee-gaat-de-voortgang-verloren-en-wordt-het-object-niet-toegevoegd-aan-jouw-aanvraaglijst-als-je-verder-werkt-en-het-toevoegt-aan-je-aanvraaglijst-kan-je-het-nadien-nog-aanpassen'
-				)}
+				message={
+					isEditMode
+						? tText(
+								'Ben je zeker dat je dit venster wilt sluiten? Hiermee gaan al je wijzigingen aan je aanvraag verloren'
+							)
+						: tText(
+								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ben-je-zeker-dat-je-dit-venster-wilt-sluiten-hiermee-gaat-de-voortgang-verloren-en-wordt-het-object-niet-toegevoegd-aan-jouw-aanvraaglijst-als-je-verder-werkt-en-het-toevoegt-aan-je-aanvraaglijst-kan-je-het-nadien-nog-aanpassen'
+							)
+				}
 			/>
 		</Blade>
 	);

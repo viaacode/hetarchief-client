@@ -81,10 +81,13 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		afterStatusChanged();
 	}, [afterStatusChanged]);
 
+	const canUserEvaluate = useMemo(
+		() => user?.isEvaluator && currentMaterialRequestDetail.requesterId !== user?.id,
+		[currentMaterialRequestDetail.requesterId, user?.isEvaluator, user?.id]
+	);
 	const canRequestBeEvaluated = useMemo(
-		() =>
-			currentMaterialRequestDetail.status === MaterialRequestStatus.PENDING && user?.isEvaluator,
-		[currentMaterialRequestDetail.status, user?.isEvaluator]
+		() => currentMaterialRequestDetail.status === MaterialRequestStatus.PENDING && canUserEvaluate,
+		[currentMaterialRequestDetail.status, canUserEvaluate]
 	);
 	const itemLink = useMemo(
 		() =>
@@ -105,7 +108,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	);
 
 	useEffect(() => {
-		if (currentMaterialRequestDetail.status === MaterialRequestStatus.NEW && user?.isEvaluator) {
+		if (currentMaterialRequestDetail.status === MaterialRequestStatus.NEW && canUserEvaluate) {
 			MaterialRequestsService.setAsPending(currentMaterialRequestDetail.id).then(() => {
 				handleStatusChanged();
 			});
@@ -113,7 +116,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	}, [
 		currentMaterialRequestDetail.id,
 		currentMaterialRequestDetail.status,
-		user?.isEvaluator,
+		canUserEvaluate,
 		handleStatusChanged,
 	]);
 

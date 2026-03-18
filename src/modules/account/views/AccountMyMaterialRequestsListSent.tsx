@@ -11,9 +11,9 @@ import { VisitorLayout } from '@visitor-layout/index';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { FC } from 'react';
-import styles from './AccountMyApplicationListSent.module.scss';
+import styles from './AccountMyMaterialRequestsListSent.module.scss';
 
-export const AccountMyApplicationListSent: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
+export const AccountMyMaterialRequestsListSent: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	useHideFooter(true);
 	const locale = useLocale();
 
