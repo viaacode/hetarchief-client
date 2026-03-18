@@ -51,7 +51,8 @@ export function createLabelValuePairMaterialRequestReuseForm(
 							reuseForm.intendedUsage as MaterialRequestIntendedUsage
 						]
 					}
-					<br /> {reuseForm.intendedUsageDescription}
+					<br />
+					{tText('Opmerking', { remark: reuseForm.intendedUsageDescription })}
 				</>
 			),
 		});
@@ -90,7 +91,7 @@ export function createLabelValuePairMaterialRequestReuseForm(
 					{reuseForm.distributionTypeOtherExplanation && (
 						<>
 							<br />
-							{reuseForm.distributionTypeOtherExplanation}
+							{tText('Opmerking', { remark: reuseForm.distributionTypeOtherExplanation })}
 						</>
 					)}
 				</>
@@ -121,7 +122,7 @@ export function createLabelValuePairMaterialRequestReuseForm(
 					{reuseForm.geographicalUsageDescription && (
 						<>
 							<br />
-							{reuseForm.geographicalUsageDescription}
+							{tText('Opmerking', { remark: reuseForm.geographicalUsageDescription })}
 						</>
 					)}
 				</>
