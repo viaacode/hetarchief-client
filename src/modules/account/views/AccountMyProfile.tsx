@@ -43,6 +43,7 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
 import { useQueryClient } from '@tanstack/react-query';
 import { VisitorLayout } from '@visitor-layout/index';
+import { useIsComplexReuseFlowUser } from '@visitor-space/hooks/is-complex-reuse-flow';
 import { isNil } from 'lodash-es';
 import getConfig from 'next/config';
 import Link from 'next/link';
@@ -74,6 +75,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const canEditProfile: boolean = useHasAllPermission(Permission.CAN_EDIT_PROFILE_INFO);
 	const isKeyUser: boolean = useIsKeyUser();
 	const isEvaluator: boolean = useIsEvaluator();
+	const isComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
 	const { data: allLanguages } = useGetAllLanguages();
 	const { data: preferences } = useGetNewsletterPreferences(commonUser?.email);
 
@@ -185,8 +187,11 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			</>
 		);
 
-	const renderEvaluatorInfo = (): ReactNode =>
-		isEvaluator && (
+	const renderEvaluatorInfo = (): ReactNode => {
+		if (!isEvaluator || !isComplexReuseFlow) {
+			return null;
+		}
+		return (
 			<>
 				<dt className="u-mt-32">
 					{tText('pages/account/mijn-profiel/index___gebruikersrechten-beoordelaar-titel')}
@@ -196,6 +201,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				</dd>
 			</>
 		);
+	};
 
 	const renderUserGroup = (): ReactNode => {
 		const userGroup: GroupName = commonUser?.userGroup?.name as GroupName;
@@ -320,7 +326,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 						</section>
 					</Box>
 
-					{(isAdminUser || isKeyUser) && (
+					{(isAdminUser || isKeyUser || isEvaluator) && (
 						<Box className="u-mb-32">
 							<section className="u-p-24 p-account-my-profile__permissions">
 								<header className="p-account-my-profile__permissions-header u-mb-24">

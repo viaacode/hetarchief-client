@@ -22,6 +22,13 @@ export function useIsComplexReuseFlow(materialRequest: MaterialRequest): {
 	return checkIsComplexReuseFlow(materialRequest, commonUser);
 }
 
+export function useIsComplexReuseFlowUser(user: AvoUserCommonUser | null) {
+	const isKeyUser: boolean = user?.isKeyUser || false;
+	const isComplexReuseFlowEnabled =
+		publicRuntimeConfig.ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW === 'true';
+	return isKeyUser && isComplexReuseFlowEnabled;
+}
+
 /**
  * Determines if the given IE object and user qualify for a complex reuse flow from the hermes track
  * @param materialRequest
