@@ -52,7 +52,10 @@ export function createLabelValuePairMaterialRequestReuseForm(
 						]
 					}
 					<br />
-					{tText('Opmerking', { remark: reuseForm.intendedUsageDescription })}
+					{tText(
+						'modules/account/utils/create-label-value-material-request-reuse-form___opmerking',
+						{ remark: reuseForm.intendedUsageDescription }
+					)}
 				</>
 			),
 		});
@@ -91,7 +94,10 @@ export function createLabelValuePairMaterialRequestReuseForm(
 					{reuseForm.distributionTypeOtherExplanation && (
 						<>
 							<br />
-							{tText('Opmerking', { remark: reuseForm.distributionTypeOtherExplanation })}
+							{tText(
+								'modules/account/utils/create-label-value-material-request-reuse-form___opmerking',
+								{ remark: reuseForm.distributionTypeOtherExplanation }
+							)}
 						</>
 					)}
 				</>
@@ -122,7 +128,10 @@ export function createLabelValuePairMaterialRequestReuseForm(
 					{reuseForm.geographicalUsageDescription && (
 						<>
 							<br />
-							{tText('Opmerking', { remark: reuseForm.geographicalUsageDescription })}
+							{tText(
+								'modules/account/utils/create-label-value-material-request-reuse-form___opmerking',
+								{ remark: reuseForm.geographicalUsageDescription }
+							)}
 						</>
 					)}
 				</>
