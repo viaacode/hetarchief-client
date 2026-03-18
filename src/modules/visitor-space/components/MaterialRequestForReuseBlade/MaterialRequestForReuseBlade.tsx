@@ -1078,9 +1078,15 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			</div>
 			<ConfirmModalBeforeUnload
 				when={hasUnsavedChanges}
-				message={tText(
-					'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ben-je-zeker-dat-je-dit-venster-wilt-sluiten-hiermee-gaat-de-voortgang-verloren-en-wordt-het-object-niet-toegevoegd-aan-jouw-aanvraaglijst-als-je-verder-werkt-en-het-toevoegt-aan-je-aanvraaglijst-kan-je-het-nadien-nog-aanpassen'
-				)}
+				message={
+					isEditMode
+						? tText(
+								'Ben je zeker dat je dit venster wilt sluiten? Hiermee gaan al je wijzigingen aan je aanvraag verloren'
+							)
+						: tText(
+								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ben-je-zeker-dat-je-dit-venster-wilt-sluiten-hiermee-gaat-de-voortgang-verloren-en-wordt-het-object-niet-toegevoegd-aan-jouw-aanvraaglijst-als-je-verder-werkt-en-het-toevoegt-aan-je-aanvraaglijst-kan-je-het-nadien-nog-aanpassen'
+							)
+				}
 			/>
 		</Blade>
 	);
