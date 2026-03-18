@@ -177,7 +177,7 @@ export const MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA =
 								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___gebruik-in-de-tijd-einddatum-error-einddatum-voor-startdatum'
 							),
 							(timeUsageTo) =>
-								timeUsageFrom && timeUsageTo && parseISO(timeUsageFrom) < parseISO(timeUsageTo)
+								timeUsageFrom && timeUsageTo && parseISO(timeUsageFrom) <= parseISO(timeUsageTo)
 						);
 				}
 			),
