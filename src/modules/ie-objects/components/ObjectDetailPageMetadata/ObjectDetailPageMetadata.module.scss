@@ -56,6 +56,10 @@ $maintainer-logo-height: 7rem;
 	}
 }
 
+.p-object-detail__title {
+	overflow-wrap: break-word;
+}
+
 .p-object-detail__metadata-maintainer-title {
 	display: flex;
 	flex-direction: row;
