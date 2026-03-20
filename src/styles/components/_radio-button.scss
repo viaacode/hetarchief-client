@@ -1,2 +1,2 @@
-@use "src/styles/abstracts" as *;
-@include generate-checkbox-radio-styling("radio-button");
+@use "src/styles/abstracts" as abstracts;
+@include abstracts.generate-checkbox-radio-styling("radio-button");
