@@ -1,7 +1,7 @@
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
@@ -16,7 +16,7 @@ const AdminMaintenanceAlertsOverview = lazy(() =>
 );
 
 export const AdminMaintenanceAlertsOverviewPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
-	const getFooterButtons = (onSave: () => void, onClose: () => void): BladeFooterProps => {
+	const getFooterButtons = (onSave: () => void, onClose: () => void): BladeFooterButtonProps => {
 		return [
 			{
 				label: tText('pages/admin/vertalingen/index___bewaar-wijzigingen'),

@@ -7,7 +7,7 @@ import {
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { Loading } from '@shared/components/Loading';
 import { SpacePreview } from '@shared/components/SpacePreview';
 import SpacePreviewHeader from '@shared/components/SpacePreview/SpacePreviewHeader';
@@ -363,7 +363,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 	};
 
 	const renderVisitorSpaceNotAvailableBlade = () => {
-		const footerButtons: BladeFooterProps = [
+		const footerButtons: BladeFooterButtonProps = [
 			{
 				label: tText('modules/home/components/logged-in-home/logged-in-home___ga-naar-de-homepage'),
 				mobileLabel: tText(

@@ -10,7 +10,7 @@ import {
 } from '@material-requests/types';
 import { Button } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { BladeManager } from '@shared/components/BladeManager';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
@@ -264,7 +264,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		return materialRequests.map((materialRequest) => renderMaterialRequest(materialRequest));
 	};
 
-	const getFooterButtons = (): BladeFooterProps => {
+	const getFooterButtons = (): BladeFooterButtonProps => {
 		if (noContent) {
 			return [
 				{

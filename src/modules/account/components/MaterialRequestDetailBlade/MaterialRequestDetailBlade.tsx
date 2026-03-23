@@ -22,7 +22,12 @@ import {
 import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
 import { Button, type TabProps, Tabs } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterButton, BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import {
+	type BladeFooterButton,
+	BladeFooterButtonProps,
+	type BladeFooterProps,
+	type BladeHeaderProps,
+} from '@shared/components/Blade/Blade.types';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -541,14 +546,11 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		}
 	};
 
-	const getBladeHeaderProps = () => {
+	const getBladeHeaderProps = (): BladeHeaderProps => {
 		if (!currentMaterialRequestDetail.reuseForm) {
 			return {
 				title: tText(
 					'modules/account/components/material-request-detail-blade/material-requests___detail'
-				),
-				ariaLabel: tText(
-					'modules/account/components/material-request-detail-blade/material-request-detail-blade___materiaal-aanvraag-detail-blade-aria-label'
 				),
 				stickySubtitle: <MaterialRequestInformation />,
 				subtitle: (
@@ -574,12 +576,9 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 
 		return {
 			isWideBlade: true,
-			darkHeader: true,
-			smallerWideBladeTitle: true,
+			showHeaderBackgroundByDefault: true,
+			showTitleSmaller: true,
 			title: isRequester ? tText('Aanvraag aan') : tText('Aanvraag van'),
-			ariaLabel: tText(
-				'modules/account/components/material-request-detail-blade/material-request-detail-blade___materiaal-aanvraag-detail-blade-aria-label'
-			),
 			stickySubtitle: (
 				<>
 					<div className={clsx(styles['p-material-request-detail__title'])}>
@@ -600,71 +599,21 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		};
 	};
 
-	const getFooterButtons = (): BladeFooterProps => {
-		if (canRequestBeEvaluated) {
-			return [
-				{
-					label: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___goedkeuren'
-					),
-					mobileLabel: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___goedkeuren-mobiel'
-					),
-					type: 'primary',
-					onClick: onApproveRequest,
-				},
-				{
-					label: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___afkeuren'
-					),
-					mobileLabel: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___afkeuren-mobiel'
-					),
-					type: 'primary',
-					onClick: onDeclineRequest,
-				},
-			];
-		}
-
-		const closeButton = {
-			label: tText(
-				'modules/account/components/material-request-detail-blade/material-requests___sluit'
-			),
-			mobileLabel: tText(
-				'modules/account/components/material-request-detail-blade/material-request-detail-blade___sluit-mobiel'
-			),
-			type: 'primary',
-			onClick: () => onClose(hasStatusChanged),
-		} as BladeFooterButton;
-
-		if (
-			currentMaterialRequestDetail.status === MaterialRequestStatus.NEW &&
-			allowRequestCancellation &&
-			isRequester
-		) {
-			return [
-				closeButton,
-				{
-					label: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag'
-					),
-					mobileLabel: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag-mobiel'
-					),
-					type: 'secondary',
-					onClick: () => setShowConfirmModal(true),
-				},
-			];
-		}
-
-		return [closeButton];
-	};
-
-	const getBladeFooterProps = () => {
+	const getBladeFooterProps = (): BladeFooterProps => {
 		if (!currentMaterialRequestDetail.reuseForm) {
 			return {
-				footerButtons: getFooterButtons(),
-				stickyFooter: canRequestBeEvaluated,
+				footerButtons: [
+					{
+						label: tText(
+							'modules/account/components/material-request-detail-blade/material-requests___sluit'
+						),
+						mobileLabel: tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___sluit-mobiel'
+						),
+						type: 'primary',
+						onClick: () => onClose(hasStatusChanged),
+					} as BladeFooterButton,
+				],
 			};
 		}
 
@@ -691,6 +640,9 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				layer={layer}
 				currentLayer={currentLayer}
 				onClose={() => onClose(hasStatusChanged)}
+				ariaLabel={tText(
+					'modules/account/components/material-request-detail-blade/material-request-detail-blade___materiaal-aanvraag-detail-blade-aria-label'
+				)}
 				{...getBladeHeaderProps()}
 				{...getBladeFooterProps()}
 			>

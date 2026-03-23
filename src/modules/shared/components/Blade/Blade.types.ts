@@ -2,13 +2,17 @@ import type { IconName } from '@shared/components/Icon';
 import type { DefaultComponentProps } from '@shared/types';
 import type { ReactNode } from 'react';
 
-export interface BladeContentProps extends DefaultComponentProps {
+export interface BladeContentProps
+	extends BladeHeaderProps,
+		BladeFooterProps,
+		DefaultComponentProps {
 	id: string;
 	children?: ReactNode;
 	closable?: boolean;
 	onClose?: () => void;
+}
 
-	// Title props
+export interface BladeHeaderProps {
 	/**
 	 * Blade should be 90% instead of the default small size
 	 */
@@ -36,8 +40,9 @@ export interface BladeContentProps extends DefaultComponentProps {
 	 * Show the header as scrolled by default
 	 */
 	showHeaderBackgroundByDefault?: boolean;
+}
 
-	// Footer props
+export interface BladeFooterProps {
 	/**
 	 * Show red error message in the footer that there are errors in the form
 	 */
@@ -65,7 +70,7 @@ export interface BladeContentProps extends DefaultComponentProps {
 	 *   - 1 primary and 1 secondary button:
 	 *     - the order of the buttons will be ignored
 	 */
-	footerButtons: BladeFooterProps;
+	footerButtons: BladeFooterButtonProps;
 	/**
 	 * Set this to true if you want to ignore all default logic in regard to the footer
 	 * ARE YOU SURE YOU WANT TO DO THIS?????
@@ -108,4 +113,4 @@ export interface BladeFooterButton {
 	icon?: IconName; // Should use only in specific cases
 }
 
-export type BladeFooterProps = [BladeFooterButton, BladeFooterButton?] | undefined;
+export type BladeFooterButtonProps = [BladeFooterButton, BladeFooterButton?] | undefined;
