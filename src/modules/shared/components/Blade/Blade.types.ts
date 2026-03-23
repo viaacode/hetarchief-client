@@ -19,6 +19,10 @@ export interface BladeContentProps extends DefaultComponentProps {
 	 */
 	title: string;
 	/**
+	 * Should the actual title be a bit smaller since we are using a bigger subtitle?
+	 */
+	showTitleSmaller?: boolean;
+	/**
 	 * All elements needed to be below the title <br/>
 	 * Will be sticky
 	 */
@@ -28,6 +32,10 @@ export interface BladeContentProps extends DefaultComponentProps {
 	 * Will be sticky on desktop but not on Mobile
 	 */
 	subtitle?: ReactNode;
+	/**
+	 * Show the header as scrolled by default
+	 */
+	showHeaderBackgroundByDefault?: boolean;
 
 	// Footer props
 	/**

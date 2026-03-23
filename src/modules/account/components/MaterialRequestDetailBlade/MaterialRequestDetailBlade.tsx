@@ -20,7 +20,7 @@ import {
 	MaterialRequestStatus,
 } from '@material-requests/types';
 import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
-import { Button } from '@meemoo/react-components';
+import { Button, type TabProps, Tabs } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterButton, BladeFooterProps } from '@shared/components/Blade/Blade.types';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
@@ -32,9 +32,11 @@ import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { toastService } from '@shared/services/toast-service';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate } from '@shared/utils/dates';
+import { isMobileSize } from '@shared/utils/is-mobile';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
@@ -44,6 +46,8 @@ import { stringifyUrl } from 'query-string';
 import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './MaterialRequestDetailBlade.module.scss';
+import { MATERIAL_REQUEST_DETAILS_TABS } from './material-request-detail-blade.consts';
+import { MaterialRequestDetailBladeTabs } from './material-request-detail-blade.types';
 
 interface MaterialRequestDetailBladeProps {
 	isOpen: boolean;
@@ -72,18 +76,29 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	const user = useSelector(selectUser);
 	const { isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(currentMaterialRequestDetail);
 
+	// We need different functionalities for different viewport sizes
+	const windowSize = useWindowSizeContext();
+	const isMobile = isMobileSize(windowSize);
+
 	const [hasStatusChanged, setHasStatusChanged] = useState(false);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+	const [activeTab, setActiveTab] = useState<MaterialRequestDetailBladeTabs>(
+		MaterialRequestDetailBladeTabs.Information
+	);
 
 	const handleStatusChanged = useCallback(() => {
 		setHasStatusChanged(true);
 		afterStatusChanged();
 	}, [afterStatusChanged]);
 
+	const isRequester = useMemo(
+		() => currentMaterialRequestDetail.requesterId === user?.id,
+		[currentMaterialRequestDetail.requesterId, user?.id]
+	);
 	const canUserEvaluate = useMemo(
-		() => user?.isEvaluator && currentMaterialRequestDetail.requesterId !== user?.id,
-		[currentMaterialRequestDetail.requesterId, user?.isEvaluator, user?.id]
+		() => !!user?.isEvaluator && !isRequester,
+		[user?.isEvaluator, isRequester]
 	);
 	const canRequestBeEvaluated = useMemo(
 		() => currentMaterialRequestDetail.status === MaterialRequestStatus.PENDING && canUserEvaluate,
@@ -107,6 +122,11 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		[currentMaterialRequestDetail, locale]
 	);
 
+	const tabs: TabProps[] = useMemo(
+		() => MATERIAL_REQUEST_DETAILS_TABS(activeTab, isRequester || canUserEvaluate, isMobile),
+		[isMobile, isRequester, canUserEvaluate, activeTab]
+	);
+
 	useEffect(() => {
 		if (currentMaterialRequestDetail.status === MaterialRequestStatus.NEW && canUserEvaluate) {
 			MaterialRequestsService.setAsPending(currentMaterialRequestDetail.id).then(() => {
@@ -119,6 +139,13 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		canUserEvaluate,
 		handleStatusChanged,
 	]);
+
+	// Resetting the active tab on close of the blade
+	useEffect(() => {
+		if (!isOpen) {
+			setActiveTab(MaterialRequestDetailBladeTabs.Information);
+		}
+	}, [isOpen]);
 
 	const onFailedRequest = () => {
 		handleStatusChanged(); // Trigger this even when it fails because some step in the process could be the cause
@@ -146,66 +173,6 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		} catch (_err) {
 			onFailedRequest();
 		}
-	};
-
-	const getFooterButtons = (): BladeFooterProps => {
-		if (canRequestBeEvaluated) {
-			return [
-				{
-					label: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___goedkeuren'
-					),
-					mobileLabel: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___goedkeuren-mobiel'
-					),
-					type: 'primary',
-					onClick: onApproveRequest,
-				},
-				{
-					label: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___afkeuren'
-					),
-					mobileLabel: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___afkeuren-mobiel'
-					),
-					type: 'primary',
-					onClick: onDeclineRequest,
-				},
-			];
-		}
-
-		const closeButton = {
-			label: tText(
-				'modules/account/components/material-request-detail-blade/material-requests___sluit'
-			),
-			mobileLabel: tText(
-				'modules/account/components/material-request-detail-blade/material-request-detail-blade___sluit-mobiel'
-			),
-			type: 'primary',
-			onClick: () => onClose(hasStatusChanged),
-		} as BladeFooterButton;
-
-		if (
-			currentMaterialRequestDetail.status === MaterialRequestStatus.NEW &&
-			allowRequestCancellation &&
-			currentMaterialRequestDetail.requesterId === user?.id
-		) {
-			return [
-				closeButton,
-				{
-					label: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag'
-					),
-					mobileLabel: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag-mobiel'
-					),
-					type: 'secondary',
-					onClick: () => setShowConfirmModal(true),
-				},
-			];
-		}
-
-		return [closeButton];
 	};
 
 	const renderContentBlock = (
@@ -468,45 +435,61 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		);
 	};
 
-	return (
-		<>
-			<Blade
-				id="material-request-detail-blade"
-				isOpen={isOpen}
-				layer={layer}
-				currentLayer={currentLayer}
-				onClose={() => onClose(hasStatusChanged)}
-				title={tText(
-					'modules/account/components/material-request-detail-blade/material-requests___detail'
-				)}
-				ariaLabel={tText(
-					'modules/account/components/material-request-detail-blade/material-request-detail-blade___materiaal-aanvraag-detail-blade-aria-label'
-				)}
-				stickySubtitle={<MaterialRequestInformation />}
-				subtitle={
-					<MaterialCard
-						openInNewTab={true}
-						objectId={currentMaterialRequestDetail.objectSchemaIdentifier}
-						title={currentMaterialRequestDetail.objectSchemaName}
-						thumbnail={currentMaterialRequestDetail.objectThumbnailUrl}
-						hideThumbnail={true}
-						orientation="vertical"
-						link={itemLink}
-						type={currentMaterialRequestDetail.objectDctermsFormat}
-						publishedBy={currentMaterialRequestDetail.maintainerName}
-						publishedOrCreatedDate={currentMaterialRequestDetail.objectPublishedOrCreatedDate}
-						icon={getIconFromObjectType(
-							currentMaterialRequestDetail.objectDctermsFormat,
-							isObjectEssenceAccessibleToUser
+	const renderContent = () => {
+		// No tabs to show, so always render all content in the blade
+		if (!currentMaterialRequestDetail.reuseForm) {
+			return (
+				<>
+					{renderRequestStatus()}
+					{renderContentBlock(
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
+						),
+						currentMaterialRequestDetail.requestGroupName
+					)}
+					{renderMotivation()}
+					{renderContentBlock(
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvrager'
+						),
+						currentMaterialRequestDetail.requesterMail,
+						currentMaterialRequestDetail.requesterFullName
+					)}
+					{renderContentBlock(
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvragende-organisatie'
+						),
+						currentMaterialRequestDetail.requesterOrganisationSector,
+						currentMaterialRequestDetail.requesterOrganisation
+					)}
+					{!currentMaterialRequestDetail.reuseForm &&
+						renderContentBlock(
+							tText(
+								'modules/account/components/material-request-detail-blade/material-requests___reden'
+							),
+							currentMaterialRequestDetail.reason || '-'
 						)}
-					/>
-				}
-				footerButtons={getFooterButtons()}
-				stickyFooter={canRequestBeEvaluated}
-			>
-				<div className={styles['p-material-request-detail__content-wrapper']}>
-					<div className={styles['p-material-request-detail__content']}>
-						{renderRequestStatus()}
+
+					{!currentMaterialRequestDetail.reuseForm &&
+						currentMaterialRequestDetail.requesterCapacity &&
+						renderContentBlock(
+							tText(
+								'modules/account/components/material-request-detail-blade/material-requests___hoedanigheid'
+							),
+							GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD()[
+								currentMaterialRequestDetail.requesterCapacity
+							]
+						)}
+
+					{renderReuseForm()}
+				</>
+			);
+		}
+
+		switch (activeTab) {
+			case MaterialRequestDetailBladeTabs.Information: {
+				return (
+					<>
 						{renderContentBlock(
 							tText(
 								'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
@@ -548,7 +531,171 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 							)}
 
 						{renderReuseForm()}
+					</>
+				);
+			}
+			case MaterialRequestDetailBladeTabs.Conversation:
+				return null;
+			case MaterialRequestDetailBladeTabs.Documents:
+				return null;
+		}
+	};
+
+	const getBladeHeaderProps = () => {
+		if (!currentMaterialRequestDetail.reuseForm) {
+			return {
+				title: tText(
+					'modules/account/components/material-request-detail-blade/material-requests___detail'
+				),
+				ariaLabel: tText(
+					'modules/account/components/material-request-detail-blade/material-request-detail-blade___materiaal-aanvraag-detail-blade-aria-label'
+				),
+				stickySubtitle: <MaterialRequestInformation />,
+				subtitle: (
+					<MaterialCard
+						openInNewTab={true}
+						objectId={currentMaterialRequestDetail.objectSchemaIdentifier}
+						title={currentMaterialRequestDetail.objectSchemaName}
+						thumbnail={currentMaterialRequestDetail.objectThumbnailUrl}
+						hideThumbnail={true}
+						orientation="vertical"
+						link={itemLink}
+						type={currentMaterialRequestDetail.objectDctermsFormat}
+						publishedBy={currentMaterialRequestDetail.maintainerName}
+						publishedOrCreatedDate={currentMaterialRequestDetail.objectPublishedOrCreatedDate}
+						icon={getIconFromObjectType(
+							currentMaterialRequestDetail.objectDctermsFormat,
+							isObjectEssenceAccessibleToUser
+						)}
+					/>
+				),
+			};
+		}
+
+		return {
+			isWideBlade: true,
+			darkHeader: true,
+			smallerWideBladeTitle: true,
+			title: isRequester ? tText('Aanvraag aan') : tText('Aanvraag van'),
+			ariaLabel: tText(
+				'modules/account/components/material-request-detail-blade/material-request-detail-blade___materiaal-aanvraag-detail-blade-aria-label'
+			),
+			stickySubtitle: (
+				<>
+					<div className={clsx(styles['p-material-request-detail__title'])}>
+						<h3 className={clsx(styles['p-material-request-detail__title--text'])}>
+							{currentMaterialRequestDetail.maintainerName}
+						</h3>
+						<MaterialRequestStatusPill status={currentMaterialRequestDetail.status} showLabel />
 					</div>
+					{!isMobile && (
+						<Tabs
+							className={clsx(styles['p-material-request-detail__tabs'])}
+							tabs={tabs}
+							onClick={(tabId) => setActiveTab(tabId as MaterialRequestDetailBladeTabs)}
+						/>
+					)}
+				</>
+			),
+		};
+	};
+
+	const getFooterButtons = (): BladeFooterProps => {
+		if (canRequestBeEvaluated) {
+			return [
+				{
+					label: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___goedkeuren'
+					),
+					mobileLabel: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___goedkeuren-mobiel'
+					),
+					type: 'primary',
+					onClick: onApproveRequest,
+				},
+				{
+					label: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___afkeuren'
+					),
+					mobileLabel: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___afkeuren-mobiel'
+					),
+					type: 'primary',
+					onClick: onDeclineRequest,
+				},
+			];
+		}
+
+		const closeButton = {
+			label: tText(
+				'modules/account/components/material-request-detail-blade/material-requests___sluit'
+			),
+			mobileLabel: tText(
+				'modules/account/components/material-request-detail-blade/material-request-detail-blade___sluit-mobiel'
+			),
+			type: 'primary',
+			onClick: () => onClose(hasStatusChanged),
+		} as BladeFooterButton;
+
+		if (
+			currentMaterialRequestDetail.status === MaterialRequestStatus.NEW &&
+			allowRequestCancellation &&
+			isRequester
+		) {
+			return [
+				closeButton,
+				{
+					label: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag'
+					),
+					mobileLabel: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag-mobiel'
+					),
+					type: 'secondary',
+					onClick: () => setShowConfirmModal(true),
+				},
+			];
+		}
+
+		return [closeButton];
+	};
+
+	const getBladeFooterProps = () => {
+		if (!currentMaterialRequestDetail.reuseForm) {
+			return {
+				footerButtons: getFooterButtons(),
+				stickyFooter: canRequestBeEvaluated,
+			};
+		}
+
+		return {
+			footerButtons: undefined,
+			ignoreFooterButtons: true,
+			stickyFooter: true,
+			customFooter: isMobile && (
+				<Tabs
+					className={clsx(styles['p-material-request-detail__tabs'])}
+					tabs={tabs}
+					onClick={(tabId) => setActiveTab(tabId as MaterialRequestDetailBladeTabs)}
+				/>
+			),
+		};
+	};
+
+	return (
+		<>
+			<Blade
+				id="material-request-detail-blade"
+				className={clsx(styles['p-material-request-detail'])}
+				isOpen={isOpen}
+				layer={layer}
+				currentLayer={currentLayer}
+				onClose={() => onClose(hasStatusChanged)}
+				{...getBladeHeaderProps()}
+				{...getBladeFooterProps()}
+			>
+				<div className={styles['p-material-request-detail__content-wrapper']}>
+					<div className={styles['p-material-request-detail__content']}>{renderContent()}</div>
 				</div>
 				<ConfirmationModal
 					text={{

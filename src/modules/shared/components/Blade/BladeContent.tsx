@@ -22,6 +22,8 @@ export const BladeContent: FC<BladeContentProps> = ({
 	title,
 	stickySubtitle,
 	subtitle,
+	showHeaderBackgroundByDefault = false,
+	showTitleSmaller = false,
 	isBladeInvalid = false,
 	footerButtons,
 	ignoreFooterButtons,
@@ -29,7 +31,9 @@ export const BladeContent: FC<BladeContentProps> = ({
 	stickyFooter = true,
 }) => {
 	const [contentIsScrollable, setContentIsScrollable] = useState(false);
-	const [contentHasBeenScrolled, setContentHasBeenScrolled] = useState(false);
+	const [contentHasBeenScrolled, setContentHasBeenScrolled] = useState(
+		showHeaderBackgroundByDefault
+	);
 
 	const contentRef = useRef<HTMLDivElement>(null);
 	useSize(contentRef, (referenceStripContainer) => checkContentSize(referenceStripContainer));
@@ -98,13 +102,22 @@ export const BladeContent: FC<BladeContentProps> = ({
 				<div
 					id={id}
 					className={clsx(
+						'c-blade__title',
 						styles['c-blade__title'],
+						showTitleSmaller && styles['c-blade__title-small'],
 						contentHasBeenScrolled && [styles['c-blade__content-scrolled']],
 						isWideBlade && styles['c-blade__title-extra-wide']
 					)}
 				>
 					<div className={clsx(styles['c-blade__title--mobile-wrapper'])}>
-						<h2 className={clsx(styles['c-blade__title--text'])}>{title}</h2>
+						<h2
+							className={clsx(
+								styles['c-blade__title--text'],
+								showTitleSmaller && styles['c-blade__title--text-small']
+							)}
+						>
+							{title}
+						</h2>
 						{closable && (
 							<Button
 								className={clsx(styles['c-blade__close-button'])}
@@ -146,11 +159,20 @@ export const BladeContent: FC<BladeContentProps> = ({
 				<div
 					id={id}
 					className={clsx(
+						'c-blade__title',
 						styles['c-blade__title'],
+						showTitleSmaller && styles['c-blade__title-small'],
 						contentHasBeenScrolled && [styles['c-blade__content-scrolled']]
 					)}
 				>
-					<h2 className={clsx(styles['c-blade__title--text'])}>{title}</h2>
+					<h2
+						className={clsx(
+							styles['c-blade__title--text'],
+							showTitleSmaller && styles['c-blade__title--text-small']
+						)}
+					>
+						{title}
+					</h2>
 					{stickySubtitle && (
 						<div className={clsx(styles['c-blade__title--sticky-subtitle'])}>{stickySubtitle}</div>
 					)}
@@ -239,7 +261,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 		if (!footerButtons) {
 			if (ignoreFooterButtons) {
 				// Okay, the developer want to explicitly ignore the default logic so rendering the custom footer
-				return renderFooterWrapper(customFooter);
+				return customFooter && renderFooterWrapper(customFooter);
 			}
 			throw new Error(
 				`Are you sure you want to ignore the footer buttons????? You really should NOT do this unless in rare cases by ignoreFooterButtons`

@@ -1,6 +1,60 @@
 @use "../../../../styles/abstracts" as *;
 
 .p-material-request-detail {
+	@media (min-width: $breakpoint-md) {
+		:global(.c-blade__title){
+			padding-bottom: 0;
+		}
+
+		&__tabs {
+			:global(.c-tab) {
+				display: flex;
+				justify-content: center;
+				padding-bottom: $spacer-sm;
+				color: $neutral;
+				border-bottom: 3px solid transparent;
+
+				&:global(.c-tab--active) {
+					color: $black;
+					font-weight: $font-weight-bold;
+					border-bottom: 3px solid $teal;
+				}
+			}
+		}
+	}
+
+	@media (max-width: $breakpoint-md) {
+		&__tabs {
+			:global(.c-tabs__item) {
+				display: flex;
+				justify-content: center;
+				flex-grow: 1;
+				width: 100%;
+			}
+
+			:global(.c-tab) {
+				display: flex;
+				justify-content: center;
+				color: $zinc;
+				font-weight: $font-weight-normal;
+
+				:global(.c-tab__icon) {
+					font-size: $font-size-lg;
+					margin-right: 0;
+				}
+
+				&:global(.c-tab__label) {
+					display: none;
+				}
+
+				&:global(.c-tab--active) {
+					color: $black;
+					font-weight: $font-weight-bold;
+				}
+			}
+		}
+	}
+
 	&__content-wrapper {
 		> * {
 			border-bottom: 1px solid $silver;
@@ -8,6 +62,29 @@
 			&:last-child {
 				border-bottom: none;
 			}
+		}
+	}
+
+	&__title{
+		> :last-child {
+			margin-top: $spacer-sm;
+		}
+
+		@media (min-width: $breakpoint-md) {
+			padding-bottom: $spacer-md;
+			display: flex;
+			flex-direction: row;
+
+			> :last-child {
+				margin-top: 0;
+			}
+		}
+
+
+		&--text{
+			@include blade-title-styling;
+
+			margin-right: $spacer-md;
 		}
 	}
 
