@@ -295,6 +295,12 @@
  * Blade
  */
 
+@mixin blade-title-styling() {
+	line-height: $line-height-lg;
+	font-size: $font-size-lg;
+}
+
+
 @mixin blade-text-styling() {
 	strong,
 	p {

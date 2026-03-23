@@ -12,7 +12,7 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from '@meemoo/react-components';
-import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { BladeContent } from '@shared/components/Blade/BladeContent';
 import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { Icon } from '@shared/components/Icon';
@@ -320,7 +320,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 		</FormControl>
 	);
 
-	const getFooterButtons = (): BladeFooterProps => {
+	const getFooterButtons = (): BladeFooterButtonProps => {
 		return [
 			{
 				label: tText('modules/account/components/personal-info/personal-info___verstuur-aanvraag'),

@@ -4,7 +4,7 @@ import { FoldersService } from '@account/services/folders';
 import type { Folder } from '@account/types';
 import { Checkbox } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -294,7 +294,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	 * Render
 	 */
 
-	const getFooterButtons = (): BladeFooterProps => {
+	const getFooterButtons = (): BladeFooterButtonProps => {
 		return [
 			{
 				label: tText(

@@ -2,7 +2,7 @@ import { MaterialRequestsService } from '@material-requests/services';
 import { type MaterialRequest, MaterialRequestStatus } from '@material-requests/types';
 import { FormControl, TextArea } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
@@ -102,7 +102,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 		});
 	};
 
-	const getFooterButtons = (): BladeFooterProps => {
+	const getFooterButtons = (): BladeFooterButtonProps => {
 		return [
 			{
 				label:

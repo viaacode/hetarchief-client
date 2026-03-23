@@ -1,5 +1,5 @@
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { tHtml, tText } from '@shared/helpers/translate';
 import React, { type FC } from 'react';
 
@@ -12,7 +12,7 @@ const MaterialRequestTermAgreementBlade: FC<MaterialRequestTermAgreementBladePro
 	isOpen,
 	onClose,
 }) => {
-	const getFooterButtons = (): BladeFooterProps => {
+	const getFooterButtons = (): BladeFooterButtonProps => {
 		return [
 			{
 				label: tText(

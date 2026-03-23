@@ -1,6 +1,6 @@
 import { FormControl, TextArea, TextInput } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { validateForm } from '@shared/helpers/validate-form';
@@ -129,7 +129,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 	 * Render
 	 */
 
-	const getFooterButtons = (): BladeFooterProps => {
+	const getFooterButtons = (): BladeFooterButtonProps => {
 		return [
 			{
 				label: tText('modules/visitor-space/components/report-blade/report-blade___rapporteer'),

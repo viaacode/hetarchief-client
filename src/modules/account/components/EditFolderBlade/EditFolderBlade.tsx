@@ -3,7 +3,7 @@ import { FoldersService } from '@account/services/folders';
 import type { Folder } from '@account/types';
 import { FormControl, TextArea, TextInput } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -95,7 +95,7 @@ export const EditFolderBlade: FC<EditFolderBladeProps> = ({
 		}
 	};
 
-	const getFooterButtons = (): BladeFooterProps => {
+	const getFooterButtons = (): BladeFooterButtonProps => {
 		return [
 			{
 				label: tText('modules/account/components/edit-folder-blade/edit-folder-blade___bewaar'),

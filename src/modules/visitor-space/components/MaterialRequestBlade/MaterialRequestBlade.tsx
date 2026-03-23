@@ -9,7 +9,7 @@ import {
 } from '@material-requests/types';
 import { Alert, Button, RadioButton, TextArea } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -307,7 +307,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		/>
 	);
 
-	const getFooterButtons = (): BladeFooterProps => {
+	const getFooterButtons = (): BladeFooterButtonProps => {
 		if (isEditMode) {
 			return [
 				{

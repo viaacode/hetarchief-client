@@ -6,7 +6,7 @@ import type {
 } from '@home/components/RequestAccessBlade/RequestAccessBlade.types';
 import { Checkbox, FormControl, TextArea } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -115,7 +115,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({
 		isOpen && reset();
 	}, [isOpen, reset]);
 
-	const getFooterButtons = (): BladeFooterProps => {
+	const getFooterButtons = (): BladeFooterButtonProps => {
 		return [
 			{
 				label: tText(

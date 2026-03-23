@@ -1,7 +1,7 @@
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { Loading } from '@shared/components/Loading';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
@@ -33,7 +33,7 @@ export const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		onSave: () => void;
 		onClose: () => void;
 	}) => {
-		const getFooterButtons = (): BladeFooterProps => {
+		const getFooterButtons = (): BladeFooterButtonProps => {
 			return [
 				{
 					label: tText('pages/admin/vertalingen/index___bewaar-wijzigingen'),

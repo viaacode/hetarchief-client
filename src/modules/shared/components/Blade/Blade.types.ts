@@ -2,13 +2,17 @@ import type { IconName } from '@shared/components/Icon';
 import type { DefaultComponentProps } from '@shared/types';
 import type { ReactNode } from 'react';
 
-export interface BladeContentProps extends DefaultComponentProps {
+export interface BladeContentProps
+	extends BladeHeaderProps,
+		BladeFooterProps,
+		DefaultComponentProps {
 	id: string;
 	children?: ReactNode;
 	closable?: boolean;
 	onClose?: () => void;
+}
 
-	// Title props
+export interface BladeHeaderProps {
 	/**
 	 * Blade should be 90% instead of the default small size
 	 */
@@ -19,6 +23,10 @@ export interface BladeContentProps extends DefaultComponentProps {
 	 */
 	title: string;
 	/**
+	 * Should the actual title be a bit smaller since we are using a bigger subtitle?
+	 */
+	showTitleSmaller?: boolean;
+	/**
 	 * All elements needed to be below the title <br/>
 	 * Will be sticky
 	 */
@@ -28,8 +36,13 @@ export interface BladeContentProps extends DefaultComponentProps {
 	 * Will be sticky on desktop but not on Mobile
 	 */
 	subtitle?: ReactNode;
+	/**
+	 * Show the header as scrolled by default
+	 */
+	showHeaderBackgroundByDefault?: boolean;
+}
 
-	// Footer props
+export interface BladeFooterProps {
 	/**
 	 * Show red error message in the footer that there are errors in the form
 	 */
@@ -57,7 +70,19 @@ export interface BladeContentProps extends DefaultComponentProps {
 	 *   - 1 primary and 1 secondary button:
 	 *     - the order of the buttons will be ignored
 	 */
-	footerButtons: BladeFooterProps;
+	footerButtons: BladeFooterButtonProps;
+	/**
+	 * Set this to true if you want to ignore all default logic in regard to the footer
+	 * ARE YOU SURE YOU WANT TO DO THIS?????
+	 * This should only be used in very rare cases
+	 */
+	ignoreFooterButtons?: boolean;
+	/**
+	 * The custom footer used instead of the footer buttons.
+	 * ARE YOU SURE YOU WANT TO DO THIS?????
+	 * This should only be used in very rare cases
+	 */
+	customFooter?: ReactNode;
 	/**
 	 * Is the footer sticky? Will be true by default
 	 */
@@ -88,4 +113,4 @@ export interface BladeFooterButton {
 	icon?: IconName; // Should use only in specific cases
 }
 
-export type BladeFooterProps = [BladeFooterButton, BladeFooterButton?];
+export type BladeFooterButtonProps = [BladeFooterButton, BladeFooterButton?] | undefined;

@@ -1,5 +1,5 @@
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { BladeManager } from '@shared/components/BladeManager';
 import SpacePreviewHeader from '@shared/components/SpacePreview/SpacePreviewHeader';
 import { VisitSummary } from '@shared/components/VisitSummary';
@@ -55,7 +55,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 		}
 	};
 
-	const getFooterButtons = (): BladeFooterProps => {
+	const getFooterButtons = (): BladeFooterButtonProps => {
 		return [
 			{
 				label: tText(

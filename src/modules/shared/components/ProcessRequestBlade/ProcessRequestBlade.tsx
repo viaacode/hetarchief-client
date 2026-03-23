@@ -1,5 +1,5 @@
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { BladeManager } from '@shared/components/BladeManager';
 import { VisitSummary } from '@shared/components/VisitSummary';
 import { tText } from '@shared/helpers/translate';
@@ -66,7 +66,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 		}
 	};
 
-	const getFooterButtons = (): BladeFooterProps => {
+	const getFooterButtons = (): BladeFooterButtonProps => {
 		if (
 			!selected ||
 			![VisitStatus.APPROVED, VisitStatus.DENIED, VisitStatus.PENDING].includes(selected.status)

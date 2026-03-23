@@ -119,8 +119,12 @@ $padding-horizontal-mobile: $spacer-sm;
 		}
 
 		&--text {
-			line-height: $line-height-lg;
-			font-size: $font-size-lg;
+			@include blade-title-styling;
+
+			&-small {
+				font-size: $font-size-md;
+				line-height: $line-height-md;
+			}
 
 			@media (max-width: $breakpoint-md) {
 				display: flex;

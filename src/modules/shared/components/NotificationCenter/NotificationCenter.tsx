@@ -1,6 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import type { NotificationCenterProps } from '@shared/components/NotificationCenter/NotificationCenter.types';
@@ -158,7 +158,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 		);
 	};
 
-	const getFooterButtons = (): BladeFooterProps => {
+	const getFooterButtons = (): BladeFooterButtonProps => {
 		return [
 			{
 				label: tText(

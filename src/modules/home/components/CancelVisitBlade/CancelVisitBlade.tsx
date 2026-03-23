@@ -1,6 +1,6 @@
 import { FormControl } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterProps } from '@shared/components/Blade/Blade.types';
+import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types/visit-request';
@@ -50,7 +50,7 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 
 	// Render
 
-	const getFooterButtons = (): BladeFooterProps => {
+	const getFooterButtons = (): BladeFooterButtonProps => {
 		return [
 			{
 				label: tText(
