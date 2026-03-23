@@ -59,6 +59,18 @@ export interface BladeContentProps extends DefaultComponentProps {
 	 */
 	footerButtons: BladeFooterProps;
 	/**
+	 * Set this to true if you want to ignore all default logic in regard to the footer
+	 * ARE YOU SURE YOU WANT TO DO THIS?????
+	 * This should only be used in very rare cases
+	 */
+	ignoreFooterButtons?: boolean;
+	/**
+	 * The custom footer used instead of the footer buttons.
+	 * ARE YOU SURE YOU WANT TO DO THIS?????
+	 * This should only be used in very rare cases
+	 */
+	customFooter?: ReactNode;
+	/**
 	 * Is the footer sticky? Will be true by default
 	 */
 	stickyFooter?: boolean;
@@ -88,4 +100,4 @@ export interface BladeFooterButton {
 	icon?: IconName; // Should use only in specific cases
 }
 
-export type BladeFooterProps = [BladeFooterButton, BladeFooterButton?];
+export type BladeFooterProps = [BladeFooterButton, BladeFooterButton?] | undefined;

@@ -9,7 +9,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { isMobileSize } from '@shared/utils/is-mobile';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { type FC, useCallback, useEffect, useRef, useState } from 'react';
+import { type FC, type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import styles from '././Blade.module.scss';
 import type { BladeContentProps, BladeFooterButton } from './Blade.types';
 
@@ -24,6 +24,8 @@ export const BladeContent: FC<BladeContentProps> = ({
 	subtitle,
 	isBladeInvalid = false,
 	footerButtons,
+	ignoreFooterButtons,
+	customFooter,
 	stickyFooter = true,
 }) => {
 	const [contentIsScrollable, setContentIsScrollable] = useState(false);
@@ -197,12 +199,56 @@ export const BladeContent: FC<BladeContentProps> = ({
 		return renderButton(false);
 	};
 
+	const renderFooterWrapper = (children: ReactNode) => {
+		return (
+			<div
+				className={clsx(
+					styles['c-blade__footer'],
+					stickyFooter && styles['c-blade__footer-sticky'],
+					contentHasBeenScrolled && [styles['c-blade__content-scrolled']]
+				)}
+			>
+				{isBladeInvalid && (
+					<RedFormWarning
+						className={clsx(styles['c-blade__footer--validation'])}
+						error={tHtml(
+							'modules/shared/components/blade/blade-content___er-staan-fouten-in-dit-formulier-corrigeer-deze-en-probeer-het-opnieuw'
+						)}
+					/>
+				)}
+				<div
+					className={clsx(
+						styles['c-blade__footer-buttons'],
+						isWideBlade && styles['c-blade__footer-buttons-extra-wide']
+					)}
+				>
+					{children}
+				</div>
+			</div>
+		);
+	};
+
 	const renderFooter = () => {
 		let firstButton: BladeFooterButton & { variants: string[] };
 		let lastButton: (BladeFooterButton & { variants: string[] }) | undefined;
 
 		const secondaryVariant = ['text'];
 		const blackPrimaryVariant = ['dark'];
+
+		// No footer buttons passed so checking if there is logic for the custom footer
+		if (!footerButtons) {
+			if (ignoreFooterButtons) {
+				// Okay, the developer want to explicitly ignore the default logic so rendering the custom footer
+				return renderFooterWrapper(customFooter);
+			}
+			throw new Error(
+				`Are you sure you want to ignore the footer buttons????? You really should NOT do this unless in rare cases by ignoreFooterButtons`
+			);
+		} else if (customFooter || ignoreFooterButtons) {
+			throw new Error(
+				`Avoid doing this. Either use the footer buttons or a custom footer. So clean up this mess.`
+			);
+		}
 
 		if (footerButtons.length === 1) {
 			firstButton = {
@@ -251,41 +297,18 @@ export const BladeContent: FC<BladeContentProps> = ({
 			renderPrimaryFirst = true;
 		}
 
-		return (
-			<div
-				className={clsx(
-					styles['c-blade__footer'],
-					stickyFooter && styles['c-blade__footer-sticky'],
-					contentHasBeenScrolled && [styles['c-blade__content-scrolled']]
-				)}
-			>
-				{isBladeInvalid && (
-					<RedFormWarning
-						className={clsx(styles['c-blade__footer--validation'])}
-						error={tHtml(
-							'modules/shared/components/blade/blade-content___er-staan-fouten-in-dit-formulier-corrigeer-deze-en-probeer-het-opnieuw'
-						)}
-					/>
-				)}
-				<div
-					className={clsx(
-						styles['c-blade__footer-buttons'],
-						isWideBlade && styles['c-blade__footer-buttons-extra-wide']
-					)}
-				>
-					{renderPrimaryFirst ? (
-						<>
-							{renderFooterButton(firstButton)}
-							{renderFooterButton(lastButton)}
-						</>
-					) : (
-						<>
-							{renderFooterButton(lastButton)}
-							{renderFooterButton(firstButton)}
-						</>
-					)}
-				</div>
-			</div>
+		return renderFooterWrapper(
+			renderPrimaryFirst ? (
+				<>
+					{renderFooterButton(firstButton)}
+					{renderFooterButton(lastButton)}
+				</>
+			) : (
+				<>
+					{renderFooterButton(lastButton)}
+					{renderFooterButton(firstButton)}
+				</>
+			)
 		);
 	};
 
