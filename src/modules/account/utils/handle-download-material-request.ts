@@ -4,6 +4,10 @@ import { asDate } from '@shared/utils/dates';
 import { isWithinInterval } from 'date-fns';
 
 export function determineHasDownloadExpired(materialRequest: MaterialRequest): boolean {
+	if (materialRequest?.downloadStatus === MaterialRequestDownloadStatus.EXPIRED) {
+		return true;
+	}
+
 	const downloadAvailableAt = asDate(materialRequest?.downloadAvailableAt);
 	const downloadExpiresAt = asDate(materialRequest?.downloadExpiresAt);
 

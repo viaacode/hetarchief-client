@@ -1,9 +1,25 @@
 import MaterialRequestDownloadBlade from '@account/components/MaterialRequestDownloadBlade/MaterialRequestDownloadBlade';
 import { MaterialRequestStatusPill } from '@account/components/MaterialRequestStatusPill';
+import {
+	determineHasDownloadExpired,
+	handleDownloadMaterialRequest,
+} from '@account/utils/handle-download-material-request';
 import { selectUser } from '@auth/store/user';
 import { MaterialRequestsService } from '@material-requests/services';
-import { type MaterialRequest, MaterialRequestStatus } from '@material-requests/types';
-import { Button, type TabProps, Tabs } from '@meemoo/react-components';
+import {
+	type MaterialRequest,
+	MaterialRequestDownloadStatus,
+	MaterialRequestEventType,
+	MaterialRequestStatus,
+} from '@material-requests/types';
+import {
+	Button,
+	Dropdown,
+	DropdownButton,
+	DropdownContent,
+	type TabProps,
+	Tabs,
+} from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import type {
 	BladeFooterButton,
@@ -11,6 +27,8 @@ import type {
 	BladeHeaderProps,
 } from '@shared/components/Blade/Blade.types';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
@@ -19,6 +37,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { toastService } from '@shared/services/toast-service';
+import { asDate, formatLongDate } from '@shared/utils/dates';
 import { isMobileSize } from '@shared/utils/is-mobile';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
@@ -63,6 +82,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	const windowSize = useWindowSizeContext();
 	const isMobile = isMobileSize(windowSize);
 
+	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [hasStatusChanged, setHasStatusChanged] = useState(false);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
@@ -87,6 +107,15 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		() => currentMaterialRequestDetail.status === MaterialRequestStatus.PENDING && canUserEvaluate,
 		[currentMaterialRequestDetail.status, canUserEvaluate]
 	);
+	const requestHasAdditionalConditionsAsked = useMemo(
+		() =>
+			currentMaterialRequestDetail.status === MaterialRequestStatus.PENDING &&
+			currentMaterialRequestDetail.history.length > 0 &&
+			currentMaterialRequestDetail.history.at(currentMaterialRequestDetail.history.length - 1)
+				?.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS,
+		[currentMaterialRequestDetail.status, currentMaterialRequestDetail.history]
+	);
+
 	const itemLink = useMemo(
 		() =>
 			currentMaterialRequestDetail
@@ -177,11 +206,82 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		}
 	};
 
-	const renderCTA = () => {
+	const renderDownload = () => {
+		const { downloadStatus } = currentMaterialRequestDetail;
+		const hasDownloadExpired = determineHasDownloadExpired(currentMaterialRequestDetail);
+		const downloadExpirationDate = formatLongDate(
+			asDate(currentMaterialRequestDetail.downloadExpiresAt)
+		);
+		const downloadStatusSucceeded = downloadStatus === MaterialRequestDownloadStatus.SUCCEEDED;
+		const downloadStatusFailed = downloadStatus === MaterialRequestDownloadStatus.FAILED;
+		let downloadInformationMessage = '';
+
+		if (downloadStatusFailed) {
+			downloadInformationMessage = tText(
+				'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-voorbereiding-gefaald'
+			);
+		} else if (downloadExpirationDate) {
+			if (hasDownloadExpired) {
+				downloadInformationMessage = tText(
+					'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-verlopen-op',
+					{ downloadExpirationDate }
+				);
+			} else {
+				downloadInformationMessage = tText(
+					'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-beschikbaar-tot-en-met',
+					{ downloadExpirationDate }
+				);
+			}
+		}
+
+		return (
+			<>
+				{downloadInformationMessage && (
+					<span
+						className={clsx(
+							styles['p-material-request-detail__content-block-value'],
+							'u-flex',
+							'u-align-center',
+							'u-flex-row',
+							'u-pt-12',
+							'u-mr-8'
+						)}
+					>
+						<Icon name={IconNamesLight.Exclamation} className="u-mr-4" />
+						{downloadInformationMessage}
+					</span>
+				)}
+				{!hasDownloadExpired && !downloadStatusFailed && (
+					<Button
+						label={
+							downloadStatusSucceeded
+								? tText(
+										'modules/account/components/material-request-detail-blade/material-request-detail-blade___downlooad-materiaal'
+									)
+								: tText(
+										'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-in-voorbereiding'
+									)
+						}
+						disabled={!downloadStatusSucceeded}
+						variants={['inline-block']}
+						onClick={() =>
+							handleDownloadMaterialRequest(currentMaterialRequestDetail).then(setDownloadUrl)
+						}
+					/>
+				)}
+			</>
+		);
+	};
+
+	const renderRequesterCTA = () => {
+		if (!isRequester) {
+			return null;
+		}
+
+		// Is the requester allowed to cancel?
 		if (
 			currentMaterialRequestDetail.status === MaterialRequestStatus.NEW &&
-			allowRequestCancellation &&
-			isRequester
+			allowRequestCancellation
 		) {
 			return (
 				<Button
@@ -199,6 +299,135 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				/>
 			);
 		}
+
+		// Did the evaluator ask for additional conditions?
+		if (requestHasAdditionalConditionsAsked) {
+			// TODO: add logic to evaluate additional conditions
+			return (
+				<Button
+					label={isMobile ? tText('Voorwaarden evalueren mobiel') : tText('Voorwaarden evalueren')}
+					variants={['dark']}
+				/>
+			);
+		}
+
+		// Status is approved so render the download status
+		if (currentMaterialRequestDetail.status === MaterialRequestStatus.APPROVED) {
+			return renderDownload();
+		}
+	};
+
+	const renderEvaluatorButton = (
+		type: string,
+		icon: IconNamesLight,
+		label: string,
+		description: string,
+		disabled = false,
+		onClick?: () => void
+	) => {
+		return (
+			<Button
+				className={clsx(
+					styles['p-material-request-detail__evalutator-dropdown__button'],
+					styles[`p-material-request-detail__evalutator-dropdown__button-${type}`]
+				)}
+				ariaLabel={label}
+				disabled={disabled}
+				onClick={() => onClick?.()}
+			>
+				<div
+					className={clsx(styles['p-material-request-detail__evalutator-dropdown__button-title'])}
+				>
+					<Icon
+						className={clsx(styles['p-material-request-detail__evalutator-dropdown__button-icon'])}
+						name={icon}
+					/>
+					{label}
+				</div>
+				<span
+					className={clsx(
+						styles['p-material-request-detail__evalutator-dropdown__button-description']
+					)}
+				>
+					{description}
+				</span>
+			</Button>
+		);
+	};
+
+	const renderCTA = () => {
+		if (isRequester) {
+			return renderRequesterCTA();
+		}
+
+		if (!canRequestBeEvaluated) {
+			// Status is approved so render the download status
+			if (
+				currentMaterialRequestDetail.status === MaterialRequestStatus.APPROVED &&
+				canUserEvaluate
+			) {
+				return renderDownload();
+			}
+			return null;
+		}
+
+		return (
+			<Dropdown
+				isOpen={isDropdownOpen}
+				onOpen={() => setIsDropdownOpen(true)}
+				onClose={() => setIsDropdownOpen(false)}
+				id="material-request-evaluator-dropdown"
+				placement="bottom-end"
+				className={clsx(styles['p-material-request-detail__evalutator-dropdown'])}
+				flyoutClassName={clsx(styles['p-material-request-detail__evalutator-dropdown-flyout'])}
+			>
+				<DropdownButton>
+					<Button
+						variants={['dark']}
+						iconEnd={
+							<Icon
+								name={isDropdownOpen ? IconNamesLight.AngleUp : IconNamesLight.AngleDown}
+								aria-hidden
+							/>
+						}
+						label={isMobile ? tText('Aanvraag beoordelen mobiel') : tText('Aanvraag beoordelen')}
+					></Button>
+				</DropdownButton>
+				<DropdownContent>
+					<span className={clsx(styles['p-material-request-detail__evalutator-dropdown__title'])}>
+						{tText('Aanvraag beoordelen descriptive title')}
+					</span>
+					<span
+						className={clsx(styles['p-material-request-detail__evalutator-dropdown__description'])}
+					>
+						{tText('Kies voor de gewenste optie om de aanvraag te beoordelen.')}
+					</span>
+					{renderEvaluatorButton(
+						'approve',
+						IconNamesLight.Check,
+						tText('Goedkeuren knop label'),
+						tText('Goedkeuren knop beschrijving'),
+						false,
+						onApproveRequest
+					)}
+					{renderEvaluatorButton(
+						'additional-conditions',
+						IconNamesLight.Check,
+						tText('Goedkeuren mit voorwaarden knop label'),
+						tText('Goedkeuren mit voorwaarden knop beschrijving'),
+						requestHasAdditionalConditionsAsked
+					)}
+					{renderEvaluatorButton(
+						'deny',
+						IconNamesLight.Times,
+						tText('Afkeuren knop label'),
+						tText('Afkeuren knop beschrijving'),
+						false,
+						onDeclineRequest
+					)}
+				</DropdownContent>
+			</Dropdown>
+		);
 	};
 
 	const getBladeHeaderProps = (): BladeHeaderProps => {

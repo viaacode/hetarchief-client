@@ -303,4 +303,6 @@ export enum MaterialRequestDownloadStatus {
 	PENDING = 'PENDING',
 	/** download job succeeded, download_url filled in */
 	SUCCEEDED = 'SUCCEEDED',
+	/** download has expired */
+	EXPIRED = 'EXPIRED',
 }
