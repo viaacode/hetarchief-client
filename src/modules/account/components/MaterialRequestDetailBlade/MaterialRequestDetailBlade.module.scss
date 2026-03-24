@@ -7,10 +7,12 @@
 		}
 
 		&__tabs {
+			width: stretch;
+
 			:global(.c-tab) {
 				display: flex;
 				justify-content: center;
-				padding-bottom: $spacer-sm;
+				padding-bottom: $spacer-md;
 				color: $neutral;
 				border-bottom: 3px solid transparent;
 
@@ -19,6 +21,10 @@
 					font-weight: $font-weight-bold;
 					border-bottom: 3px solid $teal;
 				}
+			}
+
+			:global(.c-tab:focus){
+				outline: none;
 			}
 		}
 	}
@@ -95,6 +101,12 @@
 
 			margin-right: $spacer-md;
 		}
+	}
+
+	&__action-bar{
+		display: flex;
+		flex-direction: row;
+		align-items: baseline;
 	}
 
 	&__content {

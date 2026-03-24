@@ -3,7 +3,7 @@ import { MaterialRequestStatusPill } from '@account/components/MaterialRequestSt
 import { selectUser } from '@auth/store/user';
 import { MaterialRequestsService } from '@material-requests/services';
 import { type MaterialRequest, MaterialRequestStatus } from '@material-requests/types';
-import { type TabProps, Tabs } from '@meemoo/react-components';
+import { Button, type TabProps, Tabs } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import type {
 	BladeFooterButton,
@@ -177,6 +177,30 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		}
 	};
 
+	const renderCTA = () => {
+		if (
+			currentMaterialRequestDetail.status === MaterialRequestStatus.NEW &&
+			allowRequestCancellation &&
+			isRequester
+		) {
+			return (
+				<Button
+					label={
+						isMobile
+							? tText(
+									'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag-mobiel'
+								)
+							: tText(
+									'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag'
+								)
+					}
+					variants={['dark']}
+					onClick={() => setShowConfirmModal(true)}
+				/>
+			);
+		}
+	};
+
 	const getBladeHeaderProps = (): BladeHeaderProps => {
 		if (!currentMaterialRequestDetail.reuseForm) {
 			return {
@@ -219,11 +243,14 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						<MaterialRequestStatusPill status={currentMaterialRequestDetail.status} showLabel />
 					</div>
 					{!isMobile && (
-						<Tabs
-							className={clsx(styles['p-material-request-detail__tabs'])}
-							tabs={tabs}
-							onClick={(tabId) => setActiveTab(tabId as MaterialRequestDetailBladeTabs)}
-						/>
+						<div className={clsx(styles['p-material-request-detail__action-bar'])}>
+							<Tabs
+								className={clsx(styles['p-material-request-detail__tabs'])}
+								tabs={tabs}
+								onClick={(tabId) => setActiveTab(tabId as MaterialRequestDetailBladeTabs)}
+							/>
+							{renderCTA()}
+						</div>
 					)}
 				</>
 			),
