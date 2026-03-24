@@ -65,6 +65,15 @@
 		}
 	}
 
+	&__content-info-wrapper {
+		display: flex;
+		flex-direction: column;
+
+		@media (min-width: $breakpoint-xl) {
+			flex-direction: row;
+		}
+	}
+
 	&__title{
 		> :last-child {
 			margin-top: $spacer-sm;
