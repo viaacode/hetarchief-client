@@ -4,7 +4,6 @@ import {
 	determineHasDownloadExpired,
 	handleDownloadMaterialRequest,
 } from '@account/utils/handle-download-material-request';
-import { isLatestEventStatus } from '@account/utils/is-latest-event-status-material-request';
 import { selectUser } from '@auth/store/user';
 import { MaterialRequestsService } from '@material-requests/services';
 import {
@@ -49,7 +48,10 @@ import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react
 import { useSelector } from 'react-redux';
 import MaterialRequestContentInfo from './MaterialRequestContentInfo';
 import styles from './MaterialRequestDetailBlade.module.scss';
-import { MATERIAL_REQUEST_DETAILS_TABS } from './material-request-detail-blade.consts';
+import {
+	isLatestEventStatus,
+	MATERIAL_REQUEST_DETAILS_TABS,
+} from './material-request-detail-blade.consts';
 import { MaterialRequestDetailBladeTabs } from './material-request-detail-blade.types';
 
 interface MaterialRequestDetailBladeProps {
@@ -240,7 +242,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				{downloadInformationMessage && (
 					<span
 						className={clsx(
-							styles['p-material-request-detail__content-block-value'],
+							styles['p-material-request-detail__download-message'],
 							'u-flex',
 							'u-align-center',
 							'u-flex-row',

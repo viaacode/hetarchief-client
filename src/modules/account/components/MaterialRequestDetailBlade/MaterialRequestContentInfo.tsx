@@ -25,7 +25,7 @@ import { isNil } from 'lodash-es';
 import { default as NextLink } from 'next/link';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, type ReactNode, useMemo } from 'react';
-import styles from './MaterialRequestDetailBlade.module.scss';
+import styles from './MaterialRequestContentInfo.module.scss';
 
 interface MaterialRequestContentInfoProps {
 	currentMaterialRequestDetail: MaterialRequest;
