@@ -4,6 +4,7 @@ import {
 	determineHasDownloadExpired,
 	handleDownloadMaterialRequest,
 } from '@account/utils/handle-download-material-request';
+import { isLatestEventStatus } from '@account/utils/is-latest-event-status-material-request';
 import { selectUser } from '@auth/store/user';
 import { MaterialRequestsService } from '@material-requests/services';
 import {
@@ -109,11 +110,11 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	);
 	const requestHasAdditionalConditionsAsked = useMemo(
 		() =>
-			currentMaterialRequestDetail.status === MaterialRequestStatus.PENDING &&
-			currentMaterialRequestDetail.history.length > 0 &&
-			currentMaterialRequestDetail.history.at(currentMaterialRequestDetail.history.length - 1)
-				?.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS,
-		[currentMaterialRequestDetail.status, currentMaterialRequestDetail.history]
+			isLatestEventStatus(
+				currentMaterialRequestDetail,
+				MaterialRequestEventType.ADDITIONAL_CONDITIONS
+			),
+		[currentMaterialRequestDetail]
 	);
 
 	const itemLink = useMemo(
@@ -371,6 +372,26 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			return null;
 		}
 
+		// Request can be evaluated and user has additional conditions approved
+		if (
+			isLatestEventStatus(
+				currentMaterialRequestDetail,
+				MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED
+			)
+		) {
+			// TODO: add logic for manual start of the download
+			return (
+				<Button
+					label={
+						isMobile
+							? tText('Download beschikbaar maken mobiel')
+							: tText('Download beschikbaar maken')
+					}
+					variants={['dark']}
+				/>
+			);
+		}
+
 		return (
 			<Dropdown
 				isOpen={isDropdownOpen}
@@ -402,20 +423,22 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 					>
 						{tText('Kies voor de gewenste optie om de aanvraag te beoordelen.')}
 					</span>
-					{renderEvaluatorButton(
-						'approve',
-						IconNamesLight.Check,
-						tText('Goedkeuren knop label'),
-						tText('Goedkeuren knop beschrijving'),
-						false,
-						onApproveRequest
-					)}
+					{!requestHasAdditionalConditionsAsked &&
+						renderEvaluatorButton(
+							'approve',
+							IconNamesLight.Check,
+							tText('Goedkeuren knop label'),
+							tText('Goedkeuren knop beschrijving'),
+							false,
+							onApproveRequest
+						)}
 					{renderEvaluatorButton(
 						'additional-conditions',
 						IconNamesLight.Check,
 						tText('Goedkeuren mit voorwaarden knop label'),
 						tText('Goedkeuren mit voorwaarden knop beschrijving'),
 						requestHasAdditionalConditionsAsked
+						// TODO: add logic to request additional conditions
 					)}
 					{renderEvaluatorButton(
 						'deny',
