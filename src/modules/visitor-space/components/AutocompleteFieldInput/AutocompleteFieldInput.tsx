@@ -81,10 +81,6 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps & UserProps> = ({
 
 	const handleLoadOptions = useCallback(
 		(inputValue: string, callback: (newOptions: SelectOption[]) => void): void => {
-			if (inputValue.length < MIN_WORD_LENGTH_FOR_AUTOCOMPLETE) {
-				callback([]);
-				return;
-			}
 			const otherFilters: IeObjectsSearchFilter[] = [
 				...mapMaintainerToElastic(query, activeVisitRequest, accessibleVisitorSpaceRequests),
 				...mapFiltersToElastic(query),
@@ -124,7 +120,7 @@ const AutocompleteFieldInput: FC<AutocompleteFieldInputProps & UserProps> = ({
 			aria-label={label}
 			className={clsx(styles['c-autocomplete-field-input'], 'c-react-select')}
 			classNamePrefix={'c-react-select'}
-			defaultOptions={false}
+			defaultOptions
 			onChange={handleChange}
 			loadOptions={handleLoadOptions}
 			value={value ? { label: value, value: value } : undefined}
