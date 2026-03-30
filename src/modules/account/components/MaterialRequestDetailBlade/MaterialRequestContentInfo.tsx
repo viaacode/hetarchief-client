@@ -122,7 +122,6 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 		const formatEventDate = (date: string): string => formatMediumDateWithTime(asDate(date));
 
 		const mapEvent = (item: MaterialRequestEvent): string => {
-			console.log(item);
 			switch (item.messageType) {
 				case MaterialRequestEventType.APPROVED:
 					return tText(
