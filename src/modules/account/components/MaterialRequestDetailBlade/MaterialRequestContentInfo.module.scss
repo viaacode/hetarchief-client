@@ -57,6 +57,7 @@
 		}
 
 		&-subtitle {
+			color: $grey;
 			font-size: $font-size-base;
 			line-height: $font-size-lg;
 			padding-bottom: $spacer-xxs;
@@ -65,8 +66,8 @@
 		&-value {
 			color: $grey;
 			padding: 0;
-			font-size: $font-size-sm;
-			line-height: $font-size-base;
+			font-size: $font-size-base;
+			line-height: $font-size-lg;
 		}
 
 		&-media {
