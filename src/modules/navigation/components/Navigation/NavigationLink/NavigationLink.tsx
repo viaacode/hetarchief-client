@@ -1,12 +1,9 @@
+import { Icon, type IconProps } from '@shared/components/Icon';
+import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
 import Link from 'next/link';
 import type { FC } from 'react';
-
-import { Icon, type IconProps } from '@shared/components/Icon';
-import { tText } from '@shared/helpers/translate';
-
 import styles from '../Navigation.module.scss';
-
 import type { NavigationLinkIcon, NavigationLinkProps } from './NavigationLink.types';
 
 const NavigationLink: FC<NavigationLinkProps> = ({
@@ -56,9 +53,13 @@ const NavigationLink: FC<NavigationLinkProps> = ({
 			href={href}
 			passHref
 			className={rootCls}
-			aria-label={tText(
-				'modules/navigation/components/navigation/navigation-link/navigation-link___navigeer-naar-een-pagina'
-			)}
+			aria-label={
+				label
+					? `${label}`
+					: tText(
+							'modules/navigation/components/navigation/navigation-link/navigation-link___navigeer-naar-een-pagina'
+						)
+			}
 		>
 			{renderLabelWithIcons()}
 		</Link>
