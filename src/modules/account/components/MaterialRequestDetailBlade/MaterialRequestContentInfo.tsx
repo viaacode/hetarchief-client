@@ -13,8 +13,9 @@ import {
 	MaterialRequestEventType,
 } from '@material-requests/types';
 import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
-import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { buildLink } from '@shared/helpers/build-link';
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { IeObjectType } from '@shared/types/ie-objects';
@@ -23,7 +24,6 @@ import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flo
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
 import { default as NextLink } from 'next/link';
-import { stringifyUrl } from 'query-string';
 import React, { type FC, type ReactNode, useMemo } from 'react';
 import styles from './MaterialRequestContentInfo.module.scss';
 
@@ -39,19 +39,21 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 
 	const itemLink = useMemo(
 		() =>
-			currentMaterialRequestDetail
-				? stringifyUrl({
-						url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${currentMaterialRequestDetail.maintainerSlug}/${currentMaterialRequestDetail.objectSchemaIdentifier}`,
-						query: isNil(currentMaterialRequestDetail.reuseForm?.endTime)
-							? {}
-							: {
-									[QUERY_PARAM_KEY.CUE_POINTS]: [
-										currentMaterialRequestDetail.reuseForm?.startTime,
-										currentMaterialRequestDetail.reuseForm?.endTime,
-									].join(CUE_POINTS_SEPARATOR),
-								},
-					})
-				: '',
+			buildLink(
+				ROUTES_BY_LOCALE[locale].detailPage,
+				{
+					maintainerSlug: currentMaterialRequestDetail.maintainerSlug,
+					pid: currentMaterialRequestDetail.objectSchemaIdentifier,
+				},
+				isNil(currentMaterialRequestDetail.reuseForm?.endTime)
+					? {}
+					: {
+							[QUERY_PARAM_KEY.CUE_POINTS]: [
+								currentMaterialRequestDetail.reuseForm?.startTime,
+								currentMaterialRequestDetail.reuseForm?.endTime,
+							].join(CUE_POINTS_SEPARATOR),
+						}
+			),
 		[currentMaterialRequestDetail, locale]
 	);
 

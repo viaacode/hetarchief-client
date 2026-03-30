@@ -49,7 +49,7 @@ import { useSelector } from 'react-redux';
 import MaterialRequestContentInfo from './MaterialRequestContentInfo';
 import styles from './MaterialRequestDetailBlade.module.scss';
 import {
-	isLatestEventStatus,
+	getLastEvent,
 	MATERIAL_REQUEST_DETAILS_TABS,
 } from './material-request-detail-blade.consts';
 import { MaterialRequestDetailBladeTabs } from './material-request-detail-blade.types';
@@ -110,14 +110,13 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		() => currentMaterialRequestDetail.status === MaterialRequestStatus.PENDING && canUserEvaluate,
 		[currentMaterialRequestDetail.status, canUserEvaluate]
 	);
-	const requestHasAdditionalConditionsAsked = useMemo(
-		() =>
-			isLatestEventStatus(
-				currentMaterialRequestDetail,
-				MaterialRequestEventType.ADDITIONAL_CONDITIONS
-			),
-		[currentMaterialRequestDetail]
-	);
+	const requestHasAdditionalConditionsAsked = useMemo(() => {
+		const lastEvent = getLastEvent(currentMaterialRequestDetail);
+		return (
+			currentMaterialRequestDetail.status === MaterialRequestStatus.PENDING &&
+			lastEvent?.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS
+		);
+	}, [currentMaterialRequestDetail]);
 
 	const itemLink = useMemo(
 		() =>
@@ -375,11 +374,10 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		}
 
 		// Request can be evaluated and user has additional conditions approved
+		const lastEvent = getLastEvent(currentMaterialRequestDetail);
 		if (
-			isLatestEventStatus(
-				currentMaterialRequestDetail,
-				MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED
-			)
+			currentMaterialRequestDetail.status === MaterialRequestStatus.PENDING &&
+			lastEvent?.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED
 		) {
 			// TODO: add logic for manual start of the download
 			return (
