@@ -1,5 +1,7 @@
 import MaterialRequestDownloadBlade from '@account/components/MaterialRequestDownloadBlade/MaterialRequestDownloadBlade';
+import MaterialRequestEvaluatorOptions from '@account/components/MaterialRequestEvaluatorOptions/MaterialRequestEvaluatorOptions';
 import { MaterialRequestStatusPill } from '@account/components/MaterialRequestStatusPill';
+import { getLastEvent } from '@account/utils/get-last-material-request-event';
 import {
 	determineHasDownloadExpired,
 	handleDownloadMaterialRequest,
@@ -42,16 +44,13 @@ import { isMobileSize } from '@shared/utils/is-mobile';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
-import { isNil } from 'lodash-es';
+import { isNil, noop } from 'lodash-es';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import MaterialRequestContentInfo from './MaterialRequestContentInfo';
 import styles from './MaterialRequestDetailBlade.module.scss';
-import {
-	getLastEvent,
-	MATERIAL_REQUEST_DETAILS_TABS,
-} from './material-request-detail-blade.consts';
+import { MATERIAL_REQUEST_DETAILS_TABS } from './material-request-detail-blade.consts';
 import { MaterialRequestDetailBladeTabs } from './material-request-detail-blade.types';
 
 interface MaterialRequestDetailBladeProps {
@@ -319,44 +318,6 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		}
 	};
 
-	const renderEvaluatorButton = (
-		type: string,
-		icon: IconNamesLight,
-		label: string,
-		description: string,
-		disabled = false,
-		onClick?: () => void
-	) => {
-		return (
-			<Button
-				className={clsx(
-					styles['p-material-request-detail__evalutator-dropdown__button'],
-					styles[`p-material-request-detail__evalutator-dropdown__button-${type}`]
-				)}
-				ariaLabel={label}
-				disabled={disabled}
-				onClick={() => onClick?.()}
-			>
-				<div
-					className={clsx(styles['p-material-request-detail__evalutator-dropdown__button-title'])}
-				>
-					<Icon
-						className={clsx(styles['p-material-request-detail__evalutator-dropdown__button-icon'])}
-						name={icon}
-					/>
-					{label}
-				</div>
-				<span
-					className={clsx(
-						styles['p-material-request-detail__evalutator-dropdown__button-description']
-					)}
-				>
-					{description}
-				</span>
-			</Button>
-		);
-	};
-
 	const renderCTA = () => {
 		if (isRequester) {
 			return renderRequesterCTA();
@@ -392,6 +353,10 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			);
 		}
 
+		if (isMobile) {
+			return <Button variants={['dark']} label={tText('Aanvraag beoordelen mobiel')}></Button>;
+		}
+
 		return (
 			<Dropdown
 				isOpen={isDropdownOpen}
@@ -399,8 +364,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				onClose={() => setIsDropdownOpen(false)}
 				id="material-request-evaluator-dropdown"
 				placement="bottom-end"
-				className={clsx(styles['p-material-request-detail__evalutator-dropdown'])}
-				flyoutClassName={clsx(styles['p-material-request-detail__evalutator-dropdown-flyout'])}
+				flyoutClassName={clsx(styles['p-material-request-detail__evaluator-dropdown-flyout'])}
 			>
 				<DropdownButton>
 					<Button
@@ -411,43 +375,17 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 								aria-hidden
 							/>
 						}
-						label={isMobile ? tText('Aanvraag beoordelen mobiel') : tText('Aanvraag beoordelen')}
+						label={tText('Aanvraag beoordelen')}
 					></Button>
 				</DropdownButton>
 				<DropdownContent>
-					<span className={clsx(styles['p-material-request-detail__evalutator-dropdown__title'])}>
-						{tText('Aanvraag beoordelen descriptive title')}
-					</span>
-					<span
-						className={clsx(styles['p-material-request-detail__evalutator-dropdown__description'])}
-					>
-						{tText('Kies voor de gewenste optie om de aanvraag te beoordelen.')}
-					</span>
-					{!requestHasAdditionalConditionsAsked &&
-						renderEvaluatorButton(
-							'approve',
-							IconNamesLight.Check,
-							tText('Goedkeuren knop label'),
-							tText('Goedkeuren knop beschrijving'),
-							false,
-							onApproveRequest
-						)}
-					{renderEvaluatorButton(
-						'additional-conditions',
-						IconNamesLight.Check,
-						tText('Goedkeuren mit voorwaarden knop label'),
-						tText('Goedkeuren mit voorwaarden knop beschrijving'),
-						requestHasAdditionalConditionsAsked
+					<MaterialRequestEvaluatorOptions
+						currentMaterialRequestDetail={currentMaterialRequestDetail}
+						onApproveRequest={onApproveRequest}
+						onDeclineRequest={onDeclineRequest}
 						// TODO: add logic to request additional conditions
-					)}
-					{renderEvaluatorButton(
-						'deny',
-						IconNamesLight.Times,
-						tText('Afkeuren knop label'),
-						tText('Afkeuren knop beschrijving'),
-						false,
-						onDeclineRequest
-					)}
+						onRequestAdditionalConditions={noop}
+					/>
 				</DropdownContent>
 			</Dropdown>
 		);
@@ -492,7 +430,15 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						<h3 className={clsx(styles['p-material-request-detail__title--text'])}>
 							{currentMaterialRequestDetail.maintainerName}
 						</h3>
-						<MaterialRequestStatusPill status={currentMaterialRequestDetail.status} showLabel />
+						{isMobile && (
+							<div className={clsx(styles['p-material-request-detail__action-bar'])}>
+								<MaterialRequestStatusPill status={currentMaterialRequestDetail.status} showLabel />
+								{renderCTA()}
+							</div>
+						)}
+						{!isMobile && (
+							<MaterialRequestStatusPill status={currentMaterialRequestDetail.status} showLabel />
+						)}
 					</div>
 					{!isMobile && (
 						<div className={clsx(styles['p-material-request-detail__action-bar'])}>

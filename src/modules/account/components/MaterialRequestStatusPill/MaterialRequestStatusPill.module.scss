@@ -34,5 +34,7 @@
 	&__label {
 		color: $neutral;
 		margin-left: $spacer-xs;
+
+		@include text-ellipsis;
 	}
 }
