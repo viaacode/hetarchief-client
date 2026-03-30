@@ -223,6 +223,7 @@ export enum RouteKey {
 	visitRequested = 'visitRequested',
 	visitorSpaceManagement = 'visitorSpaceManagement',
 	permalink = 'permalink',
+	detailPage = 'detailPage',
 }
 
 const ROUTES_NL: Record<RouteKey, string> = {
@@ -278,6 +279,7 @@ const ROUTES_NL: Record<RouteKey, string> = {
 	visitRequested: `/${ROUTE_PARTS_NL.visit}/:slug/${ROUTE_PARTS_NL.accessRequested}`,
 	visitorSpaceManagement: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.visitorSpaceManagement}`,
 	permalink: `/${ROUTE_PARTS_NL.pid}/:pid`,
+	detailPage: `/${ROUTE_PARTS_NL.search}/:maintainerSlug/:pid`,
 } as const;
 
 const ROUTES_EN: Record<RouteKey, string> = {
@@ -333,6 +335,7 @@ const ROUTES_EN: Record<RouteKey, string> = {
 	visitRequested: `/${ROUTE_PARTS_EN.visit}/:slug/${ROUTE_PARTS_EN.accessRequested}`,
 	visitorSpaceManagement: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.visitorSpaceManagement}`,
 	permalink: `/${ROUTE_PARTS_NL.pid}/:pid`,
+	detailPage: `/${ROUTE_PARTS_NL.search}/:maintainerSlug/:pid`,
 } as const;
 
 const ADMIN_CORE_ROUTES_NL: AdminConfig['routes'] = {

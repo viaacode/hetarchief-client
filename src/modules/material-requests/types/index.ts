@@ -37,16 +37,51 @@ export interface MaterialRequest {
 	reuseForm?: MaterialRequestReuseForm;
 	updatedAt: string;
 	requestedAt: string;
-	approvedAt: string;
-	deniedAt: string;
-	cancelledAt: string;
-	statusMotivation?: string;
 	requestGroupName: string | null;
 	requestGroupId: string | null;
 	downloadStatus: MaterialRequestDownloadStatus | null;
 	downloadAvailableAt?: string;
 	downloadExpiresAt?: string;
+	history: MaterialRequestEvent[];
 }
+
+export interface MaterialRequestEvent {
+	id: string;
+	materialRequestId: string;
+	messageType: MaterialRequestEventType;
+	body: MaterialRequestMessageBody;
+	createdAt: string;
+}
+
+export enum MaterialRequestAdditionalConditionsType {
+	PERMISSION_LICENSE_OWNER = 'PERMISSION_LICENSE_OWNER',
+	ATTRIBUTION = 'ATTRIBUTION',
+	PAYMENT = 'PAYMENT',
+	EXTRA_USE_LIMITATION = 'EXTRA_USE_LIMITATION',
+}
+
+interface Condition {
+	type: MaterialRequestAdditionalConditionsType;
+	text: string;
+}
+
+export interface MaterialRequestMessageBodyMessage {
+	message: string;
+}
+
+export interface MaterialRequestMessageBodyAdditionalConditions {
+	conditions: Condition[];
+	autoApproveAfterAcceptAdditionalConditions: boolean;
+}
+
+export interface MaterialRequestMessageBodyStatusUpdateWithMotivation {
+	motivation: string;
+}
+
+export type MaterialRequestMessageBody =
+	| MaterialRequestMessageBodyMessage
+	| MaterialRequestMessageBodyAdditionalConditions
+	| MaterialRequestMessageBodyStatusUpdateWithMotivation;
 
 export enum MaterialRequestReuseFormKey {
 	representationId = 'representationId',
@@ -141,6 +176,19 @@ export enum MaterialRequestStatus {
 	DENIED = 'DENIED',
 	CANCELLED = 'CANCELLED',
 	NONE = 'NONE',
+}
+
+export enum MaterialRequestEventType {
+	MESSAGE = 'MESSAGE',
+	APPROVED = 'APPROVED',
+	DENIED = 'DENIED',
+	CANCELLED = 'CANCELLED',
+	ADDITIONAL_CONDITIONS = 'ADDITIONAL_CONDITIONS',
+	ADDITIONAL_CONDITIONS_ACCEPTED = 'ADDITIONAL_CONDITIONS_ACCEPTED',
+	ADDITIONAL_CONDITIONS_DENIED = 'ADDITIONAL_CONDITIONS_DENIED',
+	DOWNLOAD_REQUESTED = 'DOWNLOAD_REQUESTED',
+	DOWNLOAD_AVAILABLE = 'DOWNLOAD_AVAILABLE',
+	DOWNLOAD_EXPIRED = 'DOWNLOAD_EXPIRED',
 }
 
 export enum MaterialRequestRequesterCapacity {
@@ -255,4 +303,6 @@ export enum MaterialRequestDownloadStatus {
 	PENDING = 'PENDING',
 	/** download job succeeded, download_url filled in */
 	SUCCEEDED = 'SUCCEEDED',
+	/** download has expired */
+	EXPIRED = 'EXPIRED',
 }

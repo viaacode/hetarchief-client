@@ -1,32 +1,30 @@
 import MaterialRequestDownloadBlade from '@account/components/MaterialRequestDownloadBlade/MaterialRequestDownloadBlade';
 import { MaterialRequestStatusPill } from '@account/components/MaterialRequestStatusPill';
-import { createLabelValuePairMaterialRequestReuseForm } from '@account/utils/create-label-value-material-request-reuse-form';
-import { formatCuePointsMaterialRequest } from '@account/utils/format-cuepoints-material-request';
 import {
 	determineHasDownloadExpired,
 	handleDownloadMaterialRequest,
 } from '@account/utils/handle-download-material-request';
 import { selectUser } from '@auth/store/user';
-import {
-	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DOWNLOAD_QUALITY,
-	GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE,
-} from '@material-requests/const';
 import { MaterialRequestsService } from '@material-requests/services';
 import {
-	GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD,
 	type MaterialRequest,
-	type MaterialRequestDownloadQuality,
 	MaterialRequestDownloadStatus,
+	MaterialRequestEventType,
 	MaterialRequestStatus,
 } from '@material-requests/types';
-import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
-import { Button, type TabProps, Tabs } from '@meemoo/react-components';
-import { Blade } from '@shared/components/Blade/Blade';
 import {
-	type BladeFooterButton,
-	BladeFooterButtonProps,
-	type BladeFooterProps,
-	type BladeHeaderProps,
+	Button,
+	Dropdown,
+	DropdownButton,
+	DropdownContent,
+	type TabProps,
+	Tabs,
+} from '@meemoo/react-components';
+import { Blade } from '@shared/components/Blade/Blade';
+import type {
+	BladeFooterButton,
+	BladeFooterProps,
+	BladeHeaderProps,
 } from '@shared/components/Blade/Blade.types';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
@@ -39,19 +37,21 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { toastService } from '@shared/services/toast-service';
-import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate } from '@shared/utils/dates';
 import { isMobileSize } from '@shared/utils/is-mobile';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
-import { default as NextLink } from 'next/link';
 import { stringifyUrl } from 'query-string';
-import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import MaterialRequestContentInfo from './MaterialRequestContentInfo';
 import styles from './MaterialRequestDetailBlade.module.scss';
-import { MATERIAL_REQUEST_DETAILS_TABS } from './material-request-detail-blade.consts';
+import {
+	getLastEvent,
+	MATERIAL_REQUEST_DETAILS_TABS,
+} from './material-request-detail-blade.consts';
 import { MaterialRequestDetailBladeTabs } from './material-request-detail-blade.types';
 
 interface MaterialRequestDetailBladeProps {
@@ -85,6 +85,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	const windowSize = useWindowSizeContext();
 	const isMobile = isMobileSize(windowSize);
 
+	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [hasStatusChanged, setHasStatusChanged] = useState(false);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
@@ -109,6 +110,14 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		() => currentMaterialRequestDetail.status === MaterialRequestStatus.PENDING && canUserEvaluate,
 		[currentMaterialRequestDetail.status, canUserEvaluate]
 	);
+	const requestHasAdditionalConditionsAsked = useMemo(() => {
+		const lastEvent = getLastEvent(currentMaterialRequestDetail);
+		return (
+			currentMaterialRequestDetail.status === MaterialRequestStatus.PENDING &&
+			lastEvent?.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS
+		);
+	}, [currentMaterialRequestDetail]);
+
 	const itemLink = useMemo(
 		() =>
 			currentMaterialRequestDetail
@@ -180,44 +189,26 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		}
 	};
 
-	const renderContentBlock = (
-		title: string,
-		content: ReactNode | undefined,
-		subtitle?: ReactNode
-	) => {
-		if (!subtitle && !content) {
-			return null;
+	const renderContent = () => {
+		// No tabs to show, so always render all content in the blade
+		if (
+			!currentMaterialRequestDetail.reuseForm ||
+			activeTab === MaterialRequestDetailBladeTabs.Information
+		) {
+			return (
+				<MaterialRequestContentInfo currentMaterialRequestDetail={currentMaterialRequestDetail} />
+			);
 		}
 
-		return (
-			<dl
-				key={`material-request-content-block-${title}`}
-				className={styles['p-material-request-detail__content-block']}
-			>
-				{title && (
-					<dt className={styles['p-material-request-detail__content-block-title']}>{title}</dt>
-				)}
-				<dd>
-					{subtitle && (
-						<div className={styles['p-material-request-detail__content-block-subtitle']}>
-							{subtitle}
-						</div>
-					)}
-					{content && (
-						<div className={styles['p-material-request-detail__content-block-value']}>
-							{content}
-						</div>
-					)}
-				</dd>
-			</dl>
-		);
+		switch (activeTab) {
+			case MaterialRequestDetailBladeTabs.Conversation:
+				return null;
+			case MaterialRequestDetailBladeTabs.Documents:
+				return null;
+		}
 	};
 
 	const renderDownload = () => {
-		if (currentMaterialRequestDetail.status !== MaterialRequestStatus.APPROVED) {
-			return null;
-		}
-
 		const { downloadStatus } = currentMaterialRequestDetail;
 		const hasDownloadExpired = determineHasDownloadExpired(currentMaterialRequestDetail);
 		const downloadExpirationDate = formatLongDate(
@@ -247,9 +238,23 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 
 		return (
 			<>
+				{downloadInformationMessage && (
+					<span
+						className={clsx(
+							styles['p-material-request-detail__download-message'],
+							'u-flex',
+							'u-align-center',
+							'u-flex-row',
+							'u-pt-12',
+							'u-mr-8'
+						)}
+					>
+						<Icon name={IconNamesLight.Exclamation} className="u-mr-4" />
+						{downloadInformationMessage}
+					</span>
+				)}
 				{!hasDownloadExpired && !downloadStatusFailed && (
 					<Button
-						className="u-mt-16"
 						label={
 							downloadStatusSucceeded
 								? tText(
@@ -260,290 +265,192 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 									)
 						}
 						disabled={!downloadStatusSucceeded}
-						variants={['block']}
+						variants={['inline-block']}
 						onClick={() =>
 							handleDownloadMaterialRequest(currentMaterialRequestDetail).then(setDownloadUrl)
 						}
 					/>
 				)}
-
-				{downloadInformationMessage && (
-					<span
-						className={clsx(
-							styles['p-material-request-detail__content-block-value'],
-							'u-flex',
-							'u-align-center',
-							'u-flex-row',
-							'u-pt-12'
-						)}
-					>
-						<Icon name={IconNamesLight.Exclamation} className="u-mr-4" />
-						{downloadInformationMessage}
-					</span>
-				)}
 			</>
 		);
 	};
 
-	const renderRequestStatus = () => {
-		const formattedStatusDates = [
-			tText(
-				'modules/account/components/material-request-detail-blade/material-request-detail-blade___aangevraagd-op',
-				{
-					requestedAt: formatLongDate(
-						asDate(
-							currentMaterialRequestDetail.requestedAt || currentMaterialRequestDetail.createdAt
-						)
-					),
-				}
-			),
-			...(currentMaterialRequestDetail.approvedAt
-				? [
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___goedgekeurd-op',
-							{
-								approvedAt: formatLongDate(asDate(currentMaterialRequestDetail.approvedAt)),
-							}
-						),
-					]
-				: []),
-			...(currentMaterialRequestDetail.deniedAt
-				? [
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___geweigerd-op',
-							{
-								deniedAt: formatLongDate(asDate(currentMaterialRequestDetail.deniedAt)),
-							}
-						),
-					]
-				: []),
-			...(currentMaterialRequestDetail.cancelledAt
-				? [
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___geannulleerd-op',
-							{
-								cancelledAt: formatLongDate(asDate(currentMaterialRequestDetail.cancelledAt)),
-							}
-						),
-					]
-				: []),
-		];
+	const renderRequesterCTA = () => {
+		if (!isRequester) {
+			return null;
+		}
 
-		return (
-			<dl className={styles['p-material-request-detail__content-block']}>
-				<dt
-					className={clsx(
-						'u-font-size-14',
-						'u-flex',
-						'u-flex-row',
-						'u-align-center',
-						'u-justify-between'
-					)}
-				>
-					{tText(
-						'modules/navigation/components/material-request-center-blade/material-request-center-blade___aanvraag-tot',
-						{
-							requestType:
-								GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[currentMaterialRequestDetail.type],
-						}
-					)}
-					<MaterialRequestStatusPill status={currentMaterialRequestDetail.status} showLabel />
-				</dt>
-				{formattedStatusDates.map((date) => (
-					<dd
-						key={`material-request-status-date-${date}`}
-						className={styles['p-material-request-detail__content-block-value']}
-					>
-						{date}
-					</dd>
-				))}
-				<dd>{renderDownload()}</dd>
-			</dl>
-		);
-	};
-
-	const renderMotivation = () => {
+		// Is the requester allowed to cancel?
 		if (
-			currentMaterialRequestDetail.status !== MaterialRequestStatus.APPROVED &&
-			currentMaterialRequestDetail.status !== MaterialRequestStatus.DENIED
+			currentMaterialRequestDetail.status === MaterialRequestStatus.NEW &&
+			allowRequestCancellation
 		) {
-			return null;
-		}
-
-		return renderContentBlock(
-			tText(
-				'modules/account/components/material-request-detail-blade/material-request-detail-blade___motivatie'
-			),
-			currentMaterialRequestDetail.statusMotivation
-		);
-	};
-
-	const renderThumbnail = () => {
-		if (!currentMaterialRequestDetail.reuseForm) {
-			return null;
-		}
-
-		let { objectThumbnailUrl, objectDctermsFormat, reuseForm } = currentMaterialRequestDetail;
-
-		if (
-			objectDctermsFormat === IeObjectType.AUDIO ||
-			objectDctermsFormat === IeObjectType.AUDIO_FRAGMENT
-		) {
-			objectThumbnailUrl = AdminConfigManager.getConfig().components.defaultAudioStill;
-		}
-
-		if (!objectThumbnailUrl || !isObjectEssenceAccessibleToUser) {
-			return null;
-		}
-
-		return renderContentBlock(
-			tText(
-				'modules/account/components/material-request-detail-blade/material-request-detail-blade___fragment-resolutie'
-			),
-			<>
-				{formatCuePointsMaterialRequest(reuseForm)}
-				<br />
-				{
-					GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DOWNLOAD_QUALITY()[
-						reuseForm.downloadQuality as MaterialRequestDownloadQuality
-					]
-				}
-			</>,
-			<NextLink passHref href={itemLink} style={{ textDecoration: 'none' }} target="_blank">
-				{/** biome-ignore lint/performance/noImgElement: Thumbnail is needed here */}
-				<img
-					className={styles['p-material-request-detail__content-block-media']}
-					src={objectThumbnailUrl}
-					aria-hidden
-					alt={tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___alt-text-of-the-thumbnail-of-the-material-thats-being-requested'
-					)}
-				/>
-			</NextLink>
-		);
-	};
-
-	const renderReuseForm = () => {
-		if (!currentMaterialRequestDetail.reuseForm) {
-			return;
-		}
-
-		const materialRequestEntries = createLabelValuePairMaterialRequestReuseForm(
-			currentMaterialRequestDetail.reuseForm
-		);
-
-		return (
-			<>
-				{renderThumbnail()}
-				{materialRequestEntries.map(({ label, value }) => renderContentBlock(label, value))}
-			</>
-		);
-	};
-
-	const renderContent = () => {
-		// No tabs to show, so always render all content in the blade
-		if (!currentMaterialRequestDetail.reuseForm) {
 			return (
-				<>
-					{renderRequestStatus()}
-					{renderContentBlock(
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
-						),
-						currentMaterialRequestDetail.requestGroupName
-					)}
-					{renderMotivation()}
-					{renderContentBlock(
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvrager'
-						),
-						currentMaterialRequestDetail.requesterMail,
-						currentMaterialRequestDetail.requesterFullName
-					)}
-					{renderContentBlock(
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvragende-organisatie'
-						),
-						currentMaterialRequestDetail.requesterOrganisationSector,
-						currentMaterialRequestDetail.requesterOrganisation
-					)}
-					{!currentMaterialRequestDetail.reuseForm &&
-						renderContentBlock(
-							tText(
-								'modules/account/components/material-request-detail-blade/material-requests___reden'
-							),
-							currentMaterialRequestDetail.reason || '-'
-						)}
-
-					{!currentMaterialRequestDetail.reuseForm &&
-						currentMaterialRequestDetail.requesterCapacity &&
-						renderContentBlock(
-							tText(
-								'modules/account/components/material-request-detail-blade/material-requests___hoedanigheid'
-							),
-							GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD()[
-								currentMaterialRequestDetail.requesterCapacity
-							]
-						)}
-
-					{renderReuseForm()}
-				</>
+				<Button
+					label={
+						isMobile
+							? tText(
+									'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag-mobiel'
+								)
+							: tText(
+									'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag'
+								)
+					}
+					variants={['dark']}
+					onClick={() => setShowConfirmModal(true)}
+				/>
 			);
 		}
 
-		switch (activeTab) {
-			case MaterialRequestDetailBladeTabs.Information: {
-				return (
-					<>
-						{renderContentBlock(
-							tText(
-								'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
-							),
-							currentMaterialRequestDetail.requestGroupName
-						)}
-						{renderMotivation()}
-						{renderContentBlock(
-							tText(
-								'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvrager'
-							),
-							currentMaterialRequestDetail.requesterMail,
-							currentMaterialRequestDetail.requesterFullName
-						)}
-						{renderContentBlock(
-							tText(
-								'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvragende-organisatie'
-							),
-							currentMaterialRequestDetail.requesterOrganisationSector,
-							currentMaterialRequestDetail.requesterOrganisation
-						)}
-						{!currentMaterialRequestDetail.reuseForm &&
-							renderContentBlock(
-								tText(
-									'modules/account/components/material-request-detail-blade/material-requests___reden'
-								),
-								currentMaterialRequestDetail.reason || '-'
-							)}
-
-						{!currentMaterialRequestDetail.reuseForm &&
-							currentMaterialRequestDetail.requesterCapacity &&
-							renderContentBlock(
-								tText(
-									'modules/account/components/material-request-detail-blade/material-requests___hoedanigheid'
-								),
-								GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD()[
-									currentMaterialRequestDetail.requesterCapacity
-								]
-							)}
-
-						{renderReuseForm()}
-					</>
-				);
-			}
-			case MaterialRequestDetailBladeTabs.Conversation:
-				return null;
-			case MaterialRequestDetailBladeTabs.Documents:
-				return null;
+		// Did the evaluator ask for additional conditions?
+		if (requestHasAdditionalConditionsAsked) {
+			// TODO: add logic to evaluate additional conditions
+			return (
+				<Button
+					label={isMobile ? tText('Voorwaarden evalueren mobiel') : tText('Voorwaarden evalueren')}
+					variants={['dark']}
+				/>
+			);
 		}
+
+		// Status is approved so render the download status
+		if (currentMaterialRequestDetail.status === MaterialRequestStatus.APPROVED) {
+			return renderDownload();
+		}
+	};
+
+	const renderEvaluatorButton = (
+		type: string,
+		icon: IconNamesLight,
+		label: string,
+		description: string,
+		disabled = false,
+		onClick?: () => void
+	) => {
+		return (
+			<Button
+				className={clsx(
+					styles['p-material-request-detail__evalutator-dropdown__button'],
+					styles[`p-material-request-detail__evalutator-dropdown__button-${type}`]
+				)}
+				ariaLabel={label}
+				disabled={disabled}
+				onClick={() => onClick?.()}
+			>
+				<div
+					className={clsx(styles['p-material-request-detail__evalutator-dropdown__button-title'])}
+				>
+					<Icon
+						className={clsx(styles['p-material-request-detail__evalutator-dropdown__button-icon'])}
+						name={icon}
+					/>
+					{label}
+				</div>
+				<span
+					className={clsx(
+						styles['p-material-request-detail__evalutator-dropdown__button-description']
+					)}
+				>
+					{description}
+				</span>
+			</Button>
+		);
+	};
+
+	const renderCTA = () => {
+		if (isRequester) {
+			return renderRequesterCTA();
+		}
+
+		if (!canRequestBeEvaluated) {
+			// Status is approved so render the download status
+			if (
+				currentMaterialRequestDetail.status === MaterialRequestStatus.APPROVED &&
+				canUserEvaluate
+			) {
+				return renderDownload();
+			}
+			return null;
+		}
+
+		// Request can be evaluated and user has additional conditions approved
+		const lastEvent = getLastEvent(currentMaterialRequestDetail);
+		if (
+			currentMaterialRequestDetail.status === MaterialRequestStatus.PENDING &&
+			lastEvent?.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED
+		) {
+			// TODO: add logic for manual start of the download
+			return (
+				<Button
+					label={
+						isMobile
+							? tText('Download beschikbaar maken mobiel')
+							: tText('Download beschikbaar maken')
+					}
+					variants={['dark']}
+				/>
+			);
+		}
+
+		return (
+			<Dropdown
+				isOpen={isDropdownOpen}
+				onOpen={() => setIsDropdownOpen(true)}
+				onClose={() => setIsDropdownOpen(false)}
+				id="material-request-evaluator-dropdown"
+				placement="bottom-end"
+				className={clsx(styles['p-material-request-detail__evalutator-dropdown'])}
+				flyoutClassName={clsx(styles['p-material-request-detail__evalutator-dropdown-flyout'])}
+			>
+				<DropdownButton>
+					<Button
+						variants={['dark']}
+						iconEnd={
+							<Icon
+								name={isDropdownOpen ? IconNamesLight.AngleUp : IconNamesLight.AngleDown}
+								aria-hidden
+							/>
+						}
+						label={isMobile ? tText('Aanvraag beoordelen mobiel') : tText('Aanvraag beoordelen')}
+					></Button>
+				</DropdownButton>
+				<DropdownContent>
+					<span className={clsx(styles['p-material-request-detail__evalutator-dropdown__title'])}>
+						{tText('Aanvraag beoordelen descriptive title')}
+					</span>
+					<span
+						className={clsx(styles['p-material-request-detail__evalutator-dropdown__description'])}
+					>
+						{tText('Kies voor de gewenste optie om de aanvraag te beoordelen.')}
+					</span>
+					{!requestHasAdditionalConditionsAsked &&
+						renderEvaluatorButton(
+							'approve',
+							IconNamesLight.Check,
+							tText('Goedkeuren knop label'),
+							tText('Goedkeuren knop beschrijving'),
+							false,
+							onApproveRequest
+						)}
+					{renderEvaluatorButton(
+						'additional-conditions',
+						IconNamesLight.Check,
+						tText('Goedkeuren mit voorwaarden knop label'),
+						tText('Goedkeuren mit voorwaarden knop beschrijving'),
+						requestHasAdditionalConditionsAsked
+						// TODO: add logic to request additional conditions
+					)}
+					{renderEvaluatorButton(
+						'deny',
+						IconNamesLight.Times,
+						tText('Afkeuren knop label'),
+						tText('Afkeuren knop beschrijving'),
+						false,
+						onDeclineRequest
+					)}
+				</DropdownContent>
+			</Dropdown>
+		);
 	};
 
 	const getBladeHeaderProps = (): BladeHeaderProps => {
@@ -588,11 +495,14 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						<MaterialRequestStatusPill status={currentMaterialRequestDetail.status} showLabel />
 					</div>
 					{!isMobile && (
-						<Tabs
-							className={clsx(styles['p-material-request-detail__tabs'])}
-							tabs={tabs}
-							onClick={(tabId) => setActiveTab(tabId as MaterialRequestDetailBladeTabs)}
-						/>
+						<div className={clsx(styles['p-material-request-detail__action-bar'])}>
+							<Tabs
+								className={clsx(styles['p-material-request-detail__tabs'])}
+								tabs={tabs}
+								onClick={(tabId) => setActiveTab(tabId as MaterialRequestDetailBladeTabs)}
+							/>
+							{renderCTA()}
+						</div>
 					)}
 				</>
 			),
