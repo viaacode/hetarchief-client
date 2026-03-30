@@ -38,6 +38,10 @@
 				width: 100%;
 			}
 
+			:global(.c-tab:focus){
+				outline: none;
+			}
+
 			:global(.c-tab) {
 				display: flex;
 				justify-content: center;
