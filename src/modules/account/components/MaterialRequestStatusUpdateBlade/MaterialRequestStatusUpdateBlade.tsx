@@ -7,7 +7,7 @@ import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicato
 import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
-import { tText } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
@@ -175,16 +175,25 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 					<dt className={styles['c-request-material-status-update__content-label']}>
 						<label htmlFor="motivation-input">
 							{status === MaterialRequestStatus.APPROVED
-								? tText(
+								? tHtml(
 										'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-goedkeuren'
 									)
-								: tText(
+								: tHtml(
 										'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-afkeuren'
 									)}
 						</label>
 					</dt>
 					<dd className={styles['c-request-material-status-update__content-value']}>
 						<FormControl
+							label={
+								status === MaterialRequestStatus.APPROVED
+									? tText(
+											'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___motivatie-aanvraag-goedkeuren'
+										)
+									: tText(
+											'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___motivatie-aanvraag-afkeuren'
+										)
+							}
 							errors={[
 								<MaxLengthIndicator
 									maxLength={MAX_MOTIVATION_LENGTH}
