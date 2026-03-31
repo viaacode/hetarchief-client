@@ -15,6 +15,8 @@ describe('Hooks', () => {
 				currentLayer: 1,
 				opacityStep: 0.1,
 				onCloseBlade: () => null,
+				bladeWidths: [],
+				registerBladeWidth: () => null,
 			};
 			const wrapper = ({ children }: { children: ReactNode }) => (
 				<BladeManagerContext.Provider value={bladeManagerValues}>

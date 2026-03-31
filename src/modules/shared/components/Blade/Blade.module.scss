@@ -26,11 +26,11 @@ $padding-horizontal-mobile: $spacer-sm;
 	visibility: hidden;
 	z-index: get-z-layer("blade");
 
-	&:not(.c-blade--extra-wide){
+	&.c-blade--size-thin {
 		max-width: $blade-max-width;
 	}
 
-	&.c-blade--extra-wide{
+	&.c-blade--size-wide {
 		max-width: 90%;
 
 
@@ -91,7 +91,7 @@ $padding-horizontal-mobile: $spacer-sm;
 		padding: 0 $padding-horizontal $spacer-sm;
 		word-break: break-word;
 
-		&-extra-wide {
+		&--size-wide {
 			padding: $padding-horizontal $padding-horizontal $spacer-sm;
 
 			.c-blade__title--mobile-wrapper {
@@ -182,7 +182,7 @@ $padding-horizontal-mobile: $spacer-sm;
 			display: inline-block;
 			width: 100%;
 
-			&-extra-wide {
+			&--size-wide {
 				justify-content: space-between;
 
 				:global(.c-button), a {
@@ -213,7 +213,7 @@ $padding-horizontal-mobile: $spacer-sm;
 				justify-content: space-between;
 			}
 
-			&:not(&-extra-wide){
+			&:not(&--size-wide){
 				:global(.c-button), a {
 					display: block;
 					width: 100%;
@@ -284,11 +284,14 @@ $padding-horizontal-mobile: $spacer-sm;
 
 		&--managed {
 			left: auto !important;
-			transform: translateX(5.6rem);
 			transition:
 				opacity $timing-default linear,
 				transform $animate-default;
 			width: calc($blade-max-width + 5.6rem);
+		}
+
+		&--managed-wide-below {
+			width: calc(90vw + 5.6rem);
 		}
 	}
 

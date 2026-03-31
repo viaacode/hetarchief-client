@@ -11,14 +11,14 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { type FC, type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import styles from '././Blade.module.scss';
-import type { BladeContentProps, BladeFooterButton } from './Blade.types';
+import { type BladeContentProps, type BladeFooterButton, BladeSizeType } from './Blade.types';
 
 export const BladeContent: FC<BladeContentProps> = ({
 	id,
 	children,
 	closable = true,
 	onClose,
-	isWideBlade,
+	size = BladeSizeType.THIN,
 	title,
 	stickySubtitle,
 	subtitle,
@@ -97,7 +97,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 	}, [closable, onClose]);
 
 	const renderHeader = () => {
-		if (isMobile || isWideBlade) {
+		if (isMobile || size === BladeSizeType.WIDE) {
 			return (
 				<div
 					id={id}
@@ -106,7 +106,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 						styles['c-blade__title'],
 						showTitleSmaller && styles['c-blade__title-small'],
 						contentHasBeenScrolled && [styles['c-blade__content-scrolled']],
-						isWideBlade && styles['c-blade__title-extra-wide']
+						size === BladeSizeType.WIDE && styles['c-blade__title--size-wide']
 					)}
 				>
 					<div className={clsx(styles['c-blade__title--mobile-wrapper'])}>
@@ -241,7 +241,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 				<div
 					className={clsx(
 						styles['c-blade__footer-buttons'],
-						isWideBlade && styles['c-blade__footer-buttons-extra-wide']
+						size === BladeSizeType.WIDE && styles['c-blade__footer-buttons--size-wide']
 					)}
 				>
 					{children}
@@ -309,7 +309,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 		let renderPrimaryFirst: boolean;
 
 		// Wide blade always have their buttons on 1 line. The primary should be on the right
-		if (isWideBlade) {
+		if (size === BladeSizeType.WIDE) {
 			renderPrimaryFirst = false;
 		} else if (isMobile) {
 			// Normal blades only have their buttons on 1 line on mobile. So only then should the primary be on the right

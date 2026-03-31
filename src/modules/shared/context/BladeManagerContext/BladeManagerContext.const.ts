@@ -5,4 +5,6 @@ export const INITIAL_BLADE_MANAGER_CONTEXT_VALUE: BladeManagerContextValue = {
 	currentLayer: 0,
 	opacityStep: 0,
 	onCloseBlade: () => null,
+	bladeWidths: {},
+	registerBladeWidth: () => null,
 };

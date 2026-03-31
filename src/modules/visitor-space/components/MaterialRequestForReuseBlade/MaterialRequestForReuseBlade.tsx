@@ -23,7 +23,7 @@ import {
 import { Alert, FormControl, TextArea, TimeCropControls } from '@meemoo/react-components';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
+import { type BladeFooterButtonProps, BladeSizeType } from '@shared/components/Blade/Blade.types';
 import { ConfirmModalBeforeUnload } from '@shared/components/ConfirmModalBeforeUnload';
 import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { Icon } from '@shared/components/Icon';
@@ -1058,7 +1058,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			currentLayer={currentLayer}
 			onClose={onCloseModal}
 			isManaged
-			isWideBlade
+			size={BladeSizeType.WIDE}
 			title={tText(
 				'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___ik-wil-dit-materiaal-downloaden-en-hergebruiken'
 			)}
