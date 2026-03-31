@@ -47,7 +47,9 @@ export const MATERIAL_REQUEST_DETAILS_TABS = (
 	return [
 		getTab(
 			MaterialRequestDetailBladeTabs.Information,
-			tText('Info aanvraag'),
+			tText(
+				'modules/account/components/material-request-detail-blade/material-request-detail-blade___info-aanvraag'
+			),
 			IconNamesLight.Info,
 			isMobile
 		),
@@ -55,13 +57,17 @@ export const MATERIAL_REQUEST_DETAILS_TABS = (
 			? [
 					getTab(
 						MaterialRequestDetailBladeTabs.Conversation,
-						tText('Conversatie'),
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___conversatie'
+						),
 						IconNamesLight.Contact,
 						isMobile
 					),
 					getTab(
 						MaterialRequestDetailBladeTabs.Documents,
-						tText('Documenten'),
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___documenten'
+						),
 						IconNamesLight.File,
 						isMobile
 					),

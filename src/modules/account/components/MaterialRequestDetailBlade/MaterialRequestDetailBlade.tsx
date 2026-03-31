@@ -307,7 +307,15 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			// TODO: add logic to evaluate additional conditions
 			return (
 				<Button
-					label={isMobile ? tText('Voorwaarden evalueren mobiel') : tText('Voorwaarden evalueren')}
+					label={
+						isMobile
+							? tText(
+									'modules/account/components/material-request-detail-blade/material-request-detail-blade___voorwaarden-evalueren-mobiel'
+								)
+							: tText(
+									'modules/account/components/material-request-detail-blade/material-request-detail-blade___voorwaarden-evalueren'
+								)
+					}
 					variants={['dark']}
 				/>
 			);
@@ -384,8 +392,12 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				<Button
 					label={
 						isMobile
-							? tText('Download beschikbaar maken mobiel')
-							: tText('Download beschikbaar maken')
+							? tText(
+									'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-beschikbaar-maken-mobiel'
+								)
+							: tText(
+									'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-beschikbaar-maken'
+								)
 					}
 					variants={['dark']}
 				/>
@@ -411,40 +423,64 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 								aria-hidden
 							/>
 						}
-						label={isMobile ? tText('Aanvraag beoordelen mobiel') : tText('Aanvraag beoordelen')}
+						label={
+							isMobile
+								? tText(
+										'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvraag-beoordelen-mobiel'
+									)
+								: tText(
+										'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvraag-beoordelen'
+									)
+						}
 					></Button>
 				</DropdownButton>
 				<DropdownContent>
 					<span className={clsx(styles['p-material-request-detail__evalutator-dropdown__title'])}>
-						{tText('Aanvraag beoordelen descriptive title')}
+						{tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvraag-beoordelen-descriptive-title'
+						)}
 					</span>
 					<span
 						className={clsx(styles['p-material-request-detail__evalutator-dropdown__description'])}
 					>
-						{tText('Kies voor de gewenste optie om de aanvraag te beoordelen.')}
+						{tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___kies-voor-de-gewenste-optie-om-de-aanvraag-te-beoordelen'
+						)}
 					</span>
 					{!requestHasAdditionalConditionsAsked &&
 						renderEvaluatorButton(
 							'approve',
 							IconNamesLight.Check,
-							tText('Goedkeuren knop label'),
-							tText('Goedkeuren knop beschrijving'),
+							tText(
+								'modules/account/components/material-request-detail-blade/material-request-detail-blade___goedkeuren-knop-label'
+							),
+							tText(
+								'modules/account/components/material-request-detail-blade/material-request-detail-blade___goedkeuren-knop-beschrijving'
+							),
 							false,
 							onApproveRequest
 						)}
 					{renderEvaluatorButton(
 						'additional-conditions',
 						IconNamesLight.Check,
-						tText('Goedkeuren mit voorwaarden knop label'),
-						tText('Goedkeuren mit voorwaarden knop beschrijving'),
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___goedkeuren-mit-voorwaarden-knop-label'
+						),
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___goedkeuren-mit-voorwaarden-knop-beschrijving'
+						),
 						requestHasAdditionalConditionsAsked
 						// TODO: add logic to request additional conditions
 					)}
 					{renderEvaluatorButton(
 						'deny',
 						IconNamesLight.Times,
-						tText('Afkeuren knop label'),
-						tText('Afkeuren knop beschrijving'),
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___afkeuren-knop-label'
+						),
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___afkeuren-knop-beschrijving'
+						),
 						false,
 						onDeclineRequest
 					)}
@@ -485,7 +521,13 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			isWideBlade: true,
 			showHeaderBackgroundByDefault: true,
 			showTitleSmaller: true,
-			title: isRequester ? tText('Aanvraag aan') : tText('Aanvraag van'),
+			title: isRequester
+				? tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvraag-aan'
+					)
+				: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvraag-van'
+					),
 			stickySubtitle: (
 				<>
 					<div className={clsx(styles['p-material-request-detail__title'])}>

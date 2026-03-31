@@ -174,7 +174,9 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 		};
 
 		return renderContentBlock(
-			tText('Geschiedenis'),
+			tText(
+				'modules/account/components/material-request-detail-blade/material-request-content-info___geschiedenis'
+			),
 			[
 				tText(
 					'modules/account/components/material-request-detail-blade/material-request-detail-blade___aangevraagd-op',
@@ -324,7 +326,9 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 				)}
 				{renderMotivation()}
 				{renderContentBlock(
-					tText('Type aanvraag'),
+					tText(
+						'modules/account/components/material-request-detail-blade/material-request-content-info___type-aanvraag'
+					),
 					tText(
 						'modules/navigation/components/material-request-center-blade/material-request-center-blade___aanvraag-tot',
 						{
