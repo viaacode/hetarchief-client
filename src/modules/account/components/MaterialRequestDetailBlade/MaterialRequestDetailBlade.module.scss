@@ -47,6 +47,7 @@
 				justify-content: center;
 				color: $zinc;
 				font-weight: $font-weight-normal;
+				padding: $spacer-sm;
 
 				:global(.c-tab__icon) {
 					font-size: $font-size-lg;

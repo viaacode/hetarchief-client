@@ -491,6 +491,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			footerButtons: undefined,
 			ignoreFooterButtons: true,
 			stickyFooter: true,
+			removePaddingForCustomFooter: isMobile,
 			customFooter: isMobile && (
 				<Tabs
 					className={clsx(styles['p-material-request-detail__tabs'])}
