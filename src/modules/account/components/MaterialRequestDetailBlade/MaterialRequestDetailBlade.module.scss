@@ -112,6 +112,8 @@
 	}
 
 	&__evaluator-dropdown-flyout {
+		max-width: 35rem;
+
 		:global(.c-menu) {
 			padding: 0;
 		}

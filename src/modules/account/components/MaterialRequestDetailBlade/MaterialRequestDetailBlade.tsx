@@ -1,6 +1,7 @@
 import MaterialRequestDownloadBlade from '@account/components/MaterialRequestDownloadBlade/MaterialRequestDownloadBlade';
 import MaterialRequestEvaluatorOptions from '@account/components/MaterialRequestEvaluatorOptions/MaterialRequestEvaluatorOptions';
 import { MaterialRequestStatusPill } from '@account/components/MaterialRequestStatusPill';
+import MaterialRequestStatusUpdateBlade from '@account/components/MaterialRequestStatusUpdateBlade/MaterialRequestStatusUpdateBlade';
 import { getLastEvent } from '@account/utils/get-last-material-request-event';
 import {
 	determineHasDownloadExpired,
@@ -28,6 +29,7 @@ import type {
 	BladeFooterProps,
 	BladeHeaderProps,
 } from '@shared/components/Blade/Blade.types';
+import { BladeManager } from '@shared/components/BladeManager';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -54,38 +56,32 @@ import { MATERIAL_REQUEST_DETAILS_TABS } from './material-request-detail-blade.c
 import { MaterialRequestDetailBladeTabs } from './material-request-detail-blade.types';
 
 interface MaterialRequestDetailBladeProps {
-	isOpen: boolean;
 	onClose: (statusChanged: boolean) => void;
 	allowRequestCancellation: boolean;
-	onApproveRequest?: () => void;
-	onDeclineRequest?: () => void;
-	currentMaterialRequestDetail: MaterialRequest;
+	currentMaterialRequestDetail: MaterialRequest | undefined;
 	afterStatusChanged: () => void;
-	layer?: number;
-	currentLayer?: number;
 }
 
 const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
-	isOpen,
 	onClose,
 	allowRequestCancellation,
 	currentMaterialRequestDetail,
-	onApproveRequest,
-	onDeclineRequest,
 	afterStatusChanged,
-	layer,
-	currentLayer,
 }) => {
 	const locale = useLocale();
 	const user = useSelector(selectUser);
 	const { isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(currentMaterialRequestDetail);
+	const isDetailBladeOpen = !!currentMaterialRequestDetail;
 
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();
 	const isMobile = isMobileSize(windowSize);
 
-	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+	const [showEvaluatorOptions, setShowEvaluatorOptions] = useState(false);
 	const [hasStatusChanged, setHasStatusChanged] = useState(false);
+	const [isDetailStatusBladeOpenWithStatus, setIsDetailStatusBladeOpenWithStatus] = useState<
+		MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED | undefined
+	>(undefined);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 	const [activeTab, setActiveTab] = useState<MaterialRequestDetailBladeTabs>(
@@ -98,21 +94,21 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	}, [afterStatusChanged]);
 
 	const isRequester = useMemo(
-		() => currentMaterialRequestDetail.requesterId === user?.id,
-		[currentMaterialRequestDetail.requesterId, user?.id]
+		() => currentMaterialRequestDetail?.requesterId === user?.id,
+		[currentMaterialRequestDetail?.requesterId, user?.id]
 	);
 	const canUserEvaluate = useMemo(
 		() => !!user?.isEvaluator && !isRequester,
 		[user?.isEvaluator, isRequester]
 	);
 	const canRequestBeEvaluated = useMemo(
-		() => currentMaterialRequestDetail.status === MaterialRequestStatus.PENDING && canUserEvaluate,
-		[currentMaterialRequestDetail.status, canUserEvaluate]
+		() => currentMaterialRequestDetail?.status === MaterialRequestStatus.PENDING && canUserEvaluate,
+		[currentMaterialRequestDetail?.status, canUserEvaluate]
 	);
 	const requestHasAdditionalConditionsAsked = useMemo(() => {
 		const lastEvent = getLastEvent(currentMaterialRequestDetail);
 		return (
-			currentMaterialRequestDetail.status === MaterialRequestStatus.PENDING &&
+			currentMaterialRequestDetail?.status === MaterialRequestStatus.PENDING &&
 			lastEvent?.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS
 		);
 	}, [currentMaterialRequestDetail]);
@@ -141,24 +137,28 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	);
 
 	useEffect(() => {
-		if (currentMaterialRequestDetail.status === MaterialRequestStatus.NEW && canUserEvaluate) {
+		if (currentMaterialRequestDetail?.status === MaterialRequestStatus.NEW && canUserEvaluate) {
 			MaterialRequestsService.setAsPending(currentMaterialRequestDetail.id).then(() => {
 				handleStatusChanged();
 			});
 		}
 	}, [
-		currentMaterialRequestDetail.id,
-		currentMaterialRequestDetail.status,
+		currentMaterialRequestDetail?.id,
+		currentMaterialRequestDetail?.status,
 		canUserEvaluate,
 		handleStatusChanged,
 	]);
 
 	// Resetting the active tab on close of the blade
 	useEffect(() => {
-		if (!isOpen) {
+		if (!isDetailBladeOpen) {
 			setActiveTab(MaterialRequestDetailBladeTabs.Information);
 		}
-	}, [isOpen]);
+	}, [isDetailBladeOpen]);
+
+	if (!currentMaterialRequestDetail) {
+		return null;
+	}
 
 	const onFailedRequest = () => {
 		handleStatusChanged(); // Trigger this even when it fails because some step in the process could be the cause
@@ -275,7 +275,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	const renderRequesterCTA = () => {
-		if (!isRequester) {
+		if (!isRequester || !currentMaterialRequestDetail) {
 			return null;
 		}
 
@@ -319,6 +319,10 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	const renderCTA = () => {
+		if (!currentMaterialRequestDetail) {
+			return null;
+		}
+
 		if (isRequester) {
 			return renderRequesterCTA();
 		}
@@ -354,14 +358,20 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		}
 
 		if (isMobile) {
-			return <Button variants={['dark']} label={tText('Aanvraag beoordelen mobiel')}></Button>;
+			return (
+				<Button
+					variants={['dark']}
+					label={tText('Aanvraag beoordelen mobiel')}
+					onClick={() => setShowEvaluatorOptions(true)}
+				></Button>
+			);
 		}
 
 		return (
 			<Dropdown
-				isOpen={isDropdownOpen}
-				onOpen={() => setIsDropdownOpen(true)}
-				onClose={() => setIsDropdownOpen(false)}
+				isOpen={showEvaluatorOptions}
+				onOpen={() => setShowEvaluatorOptions(true)}
+				onClose={() => setShowEvaluatorOptions(false)}
 				id="material-request-evaluator-dropdown"
 				placement="bottom-end"
 				flyoutClassName={clsx(styles['p-material-request-detail__evaluator-dropdown-flyout'])}
@@ -371,7 +381,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						variants={['dark']}
 						iconEnd={
 							<Icon
-								name={isDropdownOpen ? IconNamesLight.AngleUp : IconNamesLight.AngleDown}
+								name={showEvaluatorOptions ? IconNamesLight.AngleUp : IconNamesLight.AngleDown}
 								aria-hidden
 							/>
 						}
@@ -381,8 +391,12 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				<DropdownContent>
 					<MaterialRequestEvaluatorOptions
 						currentMaterialRequestDetail={currentMaterialRequestDetail}
-						onApproveRequest={onApproveRequest}
-						onDeclineRequest={onDeclineRequest}
+						onApproveRequest={() =>
+							setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.APPROVED)
+						}
+						onDeclineRequest={() =>
+							setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
+						}
 						// TODO: add logic to request additional conditions
 						onRequestAdditionalConditions={noop}
 					/>
@@ -391,7 +405,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		);
 	};
 
-	const getBladeHeaderProps = (): BladeHeaderProps => {
+	const getBladeHeaderProps = (includeCTAs: boolean): BladeHeaderProps => {
 		if (!currentMaterialRequestDetail.reuseForm) {
 			return {
 				title: tText(
@@ -420,7 +434,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		}
 
 		return {
-			isWideBlade: true,
+			isWideBlade: isMobile ? false : true,
 			showHeaderBackgroundByDefault: true,
 			showTitleSmaller: true,
 			title: isRequester ? tText('Aanvraag aan') : tText('Aanvraag van'),
@@ -433,7 +447,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						{isMobile && (
 							<div className={clsx(styles['p-material-request-detail__action-bar'])}>
 								<MaterialRequestStatusPill status={currentMaterialRequestDetail.status} showLabel />
-								{renderCTA()}
+								{includeCTAs && renderCTA()}
 							</div>
 						)}
 						{!isMobile && (
@@ -447,7 +461,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 								tabs={tabs}
 								onClick={(tabId) => setActiveTab(tabId as MaterialRequestDetailBladeTabs)}
 							/>
-							{renderCTA()}
+							{includeCTAs && renderCTA()}
 						</div>
 					)}
 				</>
@@ -487,19 +501,50 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		};
 	};
 
+	const getBladeLayerIndex = () => {
+		if (isDetailStatusBladeOpenWithStatus) {
+			if (isMobile) {
+				return 3;
+			}
+			return 2;
+		}
+
+		if (showEvaluatorOptions && isMobile) {
+			return 2;
+		}
+
+		if (isDetailBladeOpen) {
+			return 1;
+		}
+		return 0;
+	};
+
 	return (
-		<>
+		<BladeManager
+			currentLayer={getBladeLayerIndex()}
+			onCloseBlade={() => {
+				if (isDetailStatusBladeOpenWithStatus) {
+					setShowEvaluatorOptions(false);
+					setIsDetailStatusBladeOpenWithStatus(undefined);
+				} else if (isMobile && showEvaluatorOptions) {
+					setIsDetailStatusBladeOpenWithStatus(undefined);
+				} else {
+					onClose(hasStatusChanged);
+				}
+			}}
+			opacityStep={0.1}
+		>
 			<Blade
 				id="material-request-detail-blade"
 				className={clsx(styles['p-material-request-detail'])}
-				isOpen={isOpen}
-				layer={layer}
-				currentLayer={currentLayer}
+				isOpen={isDetailBladeOpen}
+				layer={isDetailBladeOpen ? 1 : 99}
+				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 				onClose={() => onClose(hasStatusChanged)}
 				ariaLabel={tText(
 					'modules/account/components/material-request-detail-blade/material-request-detail-blade___materiaal-aanvraag-detail-blade-aria-label'
 				)}
-				{...getBladeHeaderProps()}
+				{...getBladeHeaderProps(true)}
 				{...getBladeFooterProps()}
 			>
 				<div className={styles['p-material-request-detail__content-wrapper']}>
@@ -529,7 +574,54 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				downloadUrl={downloadUrl}
 				onClose={() => setDownloadUrl(null)}
 			/>
-		</>
+			<Blade
+				id="material-request-evaluation-detail-blade"
+				isOpen={isMobile && showEvaluatorOptions}
+				layer={showEvaluatorOptions && isMobile ? 2 : 99}
+				currentLayer={showEvaluatorOptions ? getBladeLayerIndex() : 9999}
+				onClose={() => setShowEvaluatorOptions(false)}
+				ariaLabel={tText(
+					'modules/account/components/material-request-detail-blade/material-request-detail-blade___materiaal-aanvraag-evaluation-detail-blade-aria-label'
+				)}
+				{...getBladeHeaderProps(false)}
+				footerButtons={[
+					{
+						label: tText('Keer terug'),
+						mobileLabel: tText('Keer terug'),
+						type: 'secondary',
+						enforceSecondary: true,
+						onClick: () => setShowEvaluatorOptions(false),
+					} as BladeFooterButton,
+				]}
+			>
+				<MaterialRequestEvaluatorOptions
+					currentMaterialRequestDetail={currentMaterialRequestDetail}
+					onApproveRequest={() =>
+						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.APPROVED)
+					}
+					onDeclineRequest={() =>
+						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
+					}
+					// TODO: add logic to request additional conditions
+					onRequestAdditionalConditions={noop}
+				/>
+			</Blade>
+			<MaterialRequestStatusUpdateBlade
+				isOpen={!!isDetailStatusBladeOpenWithStatus}
+				onClose={(statusUpdated) => {
+					if (statusUpdated) {
+						setHasStatusChanged(true);
+					}
+					setShowEvaluatorOptions(false);
+					setIsDetailStatusBladeOpenWithStatus(undefined);
+				}}
+				status={isDetailStatusBladeOpenWithStatus}
+				currentMaterialRequestDetail={currentMaterialRequestDetail}
+				afterStatusChanged={afterStatusChanged}
+				layer={isDetailBladeOpen ? (isMobile ? 3 : 2) : 99}
+				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
+			/>
+		</BladeManager>
 	);
 };
 

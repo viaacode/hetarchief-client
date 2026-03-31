@@ -1,12 +1,15 @@
 @use "../../../../styles/abstracts" as *;
 
 .p-material-request-detail-evaluator-options {
-	max-width: 35rem;
 	display: flex;
 	flex-direction: column;
 	padding: $spacer-sm;
 	background-color: $white;
 	gap: $spacer-sm;
+
+	@media (max-width: $breakpoint-md) {
+		padding: 0;
+	}
 
 	&__title {
 		font-weight: $font-weight-bold;
@@ -20,8 +23,8 @@
 	&__button {
 		display: flex;
 		background-color: $white;
-		border: 1px solid $zinc;
-		border-left: .65rem solid $zinc;
+		border: 1px solid $silver;
+		border-left: $spacer-xs solid $silver;
 		padding: $spacer-sm;
 		font-size: $font-size-base;
 		font-weight: $font-weight-normal;
@@ -46,6 +49,7 @@
 			-webkit-font-smoothing: antialiased;
 			-moz-osx-font-smoothing: grayscale;
 			font-family: $font-family-icons-light;
+			color: $black;
 		}
 
 		:global(.c-button__content) {
@@ -57,6 +61,9 @@
 			align-items: center;
 			padding-bottom: $spacer-xxs;
 			white-space: normal;
+			font-size: $font-size-base;
+			line-height: $font-size-lg;
+			color: $black;
 		}
 
 		&-icon {
@@ -72,6 +79,9 @@
 			display: block;
 			font-style: italic;
 			white-space: normal;
+			font-size: $font-size-base;
+			line-height: $font-size-2xm;
+			color: $shade;
 		}
 
 		&:global(:hover:not(:disabled)) {
@@ -80,7 +90,12 @@
 
 		&:global(:hover) {
 			background-color: $white;
-			color: $neutral;
+
+			.p-material-request-detail-evaluator-options__button {
+				&-title {
+					font-weight: $font-weight-bold;
+				}
+			}
 		}
 
 		&:global(:disabled) {
