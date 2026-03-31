@@ -11,20 +11,17 @@ import {
 	type MaterialRequestDownloadQuality,
 	type MaterialRequestEvent,
 	MaterialRequestEventType,
+	type MaterialRequestMessageBodyStatusUpdateWithMotivation,
 } from '@material-requests/types';
 import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
-import { ROUTES_BY_LOCALE } from '@shared/const';
-import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { buildLink } from '@shared/helpers/build-link';
+import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import { tText } from '@shared/helpers/translate';
-import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { IeObjectType } from '@shared/types/ie-objects';
-import { asDate, formatLongDate } from '@shared/utils/dates';
+import { asDate, formatLongDate, formatMediumDateWithTime } from '@shared/utils/dates';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
-import { isNil } from 'lodash-es';
-import { default as NextLink } from 'next/link';
-import React, { type FC, type ReactNode, useMemo } from 'react';
+import { noop } from 'lodash-es';
+import React, { type FC, type ReactNode, useState } from 'react';
 import styles from './MaterialRequestContentInfo.module.scss';
 
 interface MaterialRequestContentInfoProps {
@@ -34,28 +31,9 @@ interface MaterialRequestContentInfoProps {
 const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 	currentMaterialRequestDetail,
 }) => {
-	const locale = useLocale();
 	const { isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(currentMaterialRequestDetail);
 
-	const itemLink = useMemo(
-		() =>
-			buildLink(
-				ROUTES_BY_LOCALE[locale].detailPage,
-				{
-					maintainerSlug: currentMaterialRequestDetail.maintainerSlug,
-					pid: currentMaterialRequestDetail.objectSchemaIdentifier,
-				},
-				isNil(currentMaterialRequestDetail.reuseForm?.endTime)
-					? {}
-					: {
-							[QUERY_PARAM_KEY.CUE_POINTS]: [
-								currentMaterialRequestDetail.reuseForm?.startTime,
-								currentMaterialRequestDetail.reuseForm?.endTime,
-							].join(CUE_POINTS_SEPARATOR),
-						}
-			),
-		[currentMaterialRequestDetail, locale]
-	);
+	const [isMediaPaused, setIsMediaPaused] = useState(true);
 
 	const renderContentBlock = (
 		title: string,
@@ -69,19 +47,23 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 		return (
 			<dl
 				key={`material-request-content-block-${title}`}
-				className={styles['p-material-request-detail__content-block']}
+				className={styles['p-material-request-detail__content-info__content-block']}
 			>
 				{title && (
-					<dt className={styles['p-material-request-detail__content-block-title']}>{title}</dt>
+					<dt className={styles['p-material-request-detail__content-info__content-block-title']}>
+						{title}
+					</dt>
 				)}
 				<dd>
 					{subtitle && (
-						<div className={styles['p-material-request-detail__content-block-subtitle']}>
+						<div
+							className={styles['p-material-request-detail__content-info__content-block-subtitle']}
+						>
 							{subtitle}
 						</div>
 					)}
 					{content && (
-						<div className={styles['p-material-request-detail__content-block-value']}>
+						<div className={styles['p-material-request-detail__content-info__content-block-value']}>
 							{content}
 						</div>
 					)}
@@ -105,7 +87,7 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 		];
 
 		return (
-			<dl className={styles['p-material-request-detail__content-block']}>
+			<dl className={styles['p-material-request-detail__content-info__content-block']}>
 				<dt
 					className={clsx(
 						'u-font-size-14',
@@ -127,7 +109,7 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 				{formattedStatusDates.map((date) => (
 					<dd
 						key={`material-request-status-date-${date}`}
-						className={styles['p-material-request-detail__content-block-value']}
+						className={styles['p-material-request-detail__content-info__content-block-value']}
 					>
 						{date}
 					</dd>
@@ -137,7 +119,7 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 	};
 
 	const renderHistory = () => {
-		const formatEventDate = (date: string): string => formatLongDate(asDate(date));
+		const formatEventDate = (date: string): string => formatMediumDateWithTime(asDate(date));
 
 		const mapEvent = (item: MaterialRequestEvent): string => {
 			switch (item.messageType) {
@@ -156,15 +138,38 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 						}
 					);
 				case MaterialRequestEventType.CANCELLED:
+				case MaterialRequestEventType.ADDITIONAL_CONDITIONS_DENIED:
 					return tText(
 						'modules/account/components/material-request-detail-blade/material-request-detail-blade___geannulleerd-op',
 						{
 							cancelledAt: formatEventDate(item.createdAt),
 						}
 					);
-				// TODO: add missing cases
+				case MaterialRequestEventType.DOWNLOAD_AVAILABLE:
+					return tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-beschikbaar-van-tot',
+						{
+							availableAt: formatEventDate(item.createdAt),
+							expiresAt: formatEventDate(currentMaterialRequestDetail.downloadExpiresAt as string),
+						}
+					);
+				case MaterialRequestEventType.ADDITIONAL_CONDITIONS:
+					return tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___voorwaarden-verstuurd-op',
+						{
+							sentAt: formatEventDate(item.createdAt),
+						}
+					);
+				case MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED:
+					return tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___voorwaarden-aanvaard-op',
+						{
+							sentAt: formatEventDate(item.createdAt),
+						}
+					);
 				default:
-					return formatEventDate(item.createdAt);
+					// Others will not be rendered
+					return '';
 			}
 		};
 
@@ -174,21 +179,73 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 				tText(
 					'modules/account/components/material-request-detail-blade/material-request-detail-blade___aangevraagd-op',
 					{
-						requestedAt: formatLongDate(
-							asDate(
-								currentMaterialRequestDetail.requestedAt || currentMaterialRequestDetail.createdAt
-							)
+						requestedAt: formatEventDate(
+							currentMaterialRequestDetail.requestedAt || currentMaterialRequestDetail.createdAt
 						),
 					}
 				),
 				...currentMaterialRequestDetail.history.map(mapEvent),
-			].map((date) => <div key={`material-request-status-date-${date}`}>{date}</div>)
+			]
+				.filter((item) => !!item)
+				.map((date) => <div key={`material-request-status-date-${date}`}>{date}</div>)
 		);
 	};
 
 	const renderMotivation = () => {
-		// TODO: render motivation
-		return null;
+		let event: MaterialRequestEvent | undefined;
+
+		const renderAdditionConditions = (_event: MaterialRequestEvent) => {
+			// TODO: render additional condition
+			return renderContentBlock(
+				tText(
+					'modules/account/components/material-request-detail-blade/material-request-detail-blade___motivatie'
+				),
+				'TODO: render additional condition'
+			);
+		};
+
+		const doRenderMotivation = (event: MaterialRequestEvent) => {
+			const motivation = (event.body as MaterialRequestMessageBodyStatusUpdateWithMotivation)
+				?.motivation;
+
+			if (!motivation) {
+				return null;
+			}
+			return renderContentBlock(
+				tText(
+					'modules/account/components/material-request-detail-blade/material-request-detail-blade___motivatie'
+				),
+				motivation
+			);
+		};
+
+		event = currentMaterialRequestDetail.history.find(
+			(item) => item.messageType === MaterialRequestEventType.DENIED
+		);
+		if (event) {
+			return doRenderMotivation(event);
+		}
+
+		event = currentMaterialRequestDetail.history.find(
+			(item) => item.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED
+		);
+		if (event) {
+			return renderAdditionConditions(event);
+		}
+
+		event = currentMaterialRequestDetail.history.find(
+			(item) => item.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS_DENIED
+		);
+		if (event) {
+			return renderAdditionConditions(event);
+		}
+
+		event = currentMaterialRequestDetail.history.find(
+			(item) => item.messageType === MaterialRequestEventType.APPROVED
+		);
+		if (event) {
+			return doRenderMotivation(event);
+		}
 	};
 
 	const renderThumbnail = () => {
@@ -196,7 +253,8 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 			return null;
 		}
 
-		let { objectThumbnailUrl, objectDctermsFormat, reuseForm } = currentMaterialRequestDetail;
+		let { objectThumbnailUrl, objectDctermsFormat, objectRepresentation, reuseForm } =
+			currentMaterialRequestDetail;
 
 		if (
 			objectDctermsFormat === IeObjectType.AUDIO ||
@@ -222,17 +280,60 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 					]
 				}
 			</>,
-			<NextLink passHref href={itemLink} style={{ textDecoration: 'none' }} target="_blank">
-				{/** biome-ignore lint/performance/noImgElement: Thumbnail is needed here */}
-				<img
-					className={styles['p-material-request-detail__content-block-media']}
-					src={objectThumbnailUrl}
-					aria-hidden
-					alt={tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___alt-text-of-the-thumbnail-of-the-material-thats-being-requested'
-					)}
-				/>
-			</NextLink>
+			<AudioOrVideoPlayer
+				locationId="Material request detail blade"
+				representation={objectRepresentation}
+				dctermsFormat={objectDctermsFormat}
+				cuePoints={
+					reuseForm?.endTime
+						? { start: reuseForm.startTime as number, end: reuseForm.endTime as number }
+						: undefined
+				}
+				maintainerLogo={currentMaterialRequestDetail.maintainerLogo ?? undefined}
+				poster={objectThumbnailUrl}
+				paused={isMediaPaused}
+				onPlay={() => setIsMediaPaused(false)}
+				onPause={() => setIsMediaPaused(true)}
+				onMediaReady={noop}
+			/>
+		);
+	};
+	const renderGeneralInformation = () => {
+		return (
+			<div className={styles['p-material-request-detail__content-info__general-information']}>
+				{renderHistory()}
+				{renderContentBlock(
+					tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvrager'
+					),
+					currentMaterialRequestDetail.requesterMail,
+					currentMaterialRequestDetail.requesterFullName
+				)}
+				{renderContentBlock(
+					tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvragende-organisatie'
+					),
+					currentMaterialRequestDetail.requesterOrganisationSector,
+					currentMaterialRequestDetail.requesterOrganisation
+				)}
+				{renderContentBlock(
+					tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
+					),
+					currentMaterialRequestDetail.requestGroupName
+				)}
+				{renderMotivation()}
+				{renderContentBlock(
+					tText('Type aanvraag'),
+					tText(
+						'modules/navigation/components/material-request-center-blade/material-request-center-blade___aanvraag-tot',
+						{
+							requestType:
+								GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[currentMaterialRequestDetail.type],
+						}
+					)
+				)}
+			</div>
 		);
 	};
 
@@ -246,10 +347,10 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 		);
 
 		return (
-			<>
+			<div className={styles['p-material-request-detail__content-info__reuse-form']}>
 				{renderThumbnail()}
 				{materialRequestEntries.map(({ label, value }) => renderContentBlock(label, value))}
-			</>
+			</div>
 		);
 	};
 
@@ -299,41 +400,10 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 	}
 
 	return (
-		<>
-			{renderHistory()}
-			{renderContentBlock(
-				tText(
-					'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvrager'
-				),
-				currentMaterialRequestDetail.requesterMail,
-				currentMaterialRequestDetail.requesterFullName
-			)}
-			{renderContentBlock(
-				tText(
-					'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvragende-organisatie'
-				),
-				currentMaterialRequestDetail.requesterOrganisationSector,
-				currentMaterialRequestDetail.requesterOrganisation
-			)}
-			{renderContentBlock(
-				tText(
-					'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
-				),
-				currentMaterialRequestDetail.requestGroupName
-			)}
-			{renderMotivation()}
-			{renderContentBlock(
-				tText('Type aanvraag'),
-				tText(
-					'modules/navigation/components/material-request-center-blade/material-request-center-blade___aanvraag-tot',
-					{
-						requestType:
-							GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[currentMaterialRequestDetail.type],
-					}
-				)
-			)}
+		<div className={styles['p-material-request-detail__content-info']}>
 			{renderReuseForm()}
-		</>
+			{renderGeneralInformation()}
+		</div>
 	);
 };
 

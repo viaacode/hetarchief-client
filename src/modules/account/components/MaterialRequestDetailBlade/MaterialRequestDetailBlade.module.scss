@@ -38,6 +38,10 @@
 				width: 100%;
 			}
 
+			:global(.c-tab:focus){
+				outline: none;
+			}
+
 			:global(.c-tab) {
 				display: flex;
 				justify-content: center;
@@ -232,6 +236,6 @@
 
 	&__download-message {
 		color: $grey;
-		font-size: $font-size-sm;
+		font-size: $font-size-base;
 	}
 }
