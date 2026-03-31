@@ -223,11 +223,17 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			);
 		} else if (downloadExpirationDate) {
 			if (hasDownloadExpired) {
-				downloadInformationMessage = tText(
-					'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-verlopen-op',
-					{ downloadExpirationDate }
-				);
-			} else {
+				downloadInformationMessage = isMobile
+					? tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-verlopen-op-mobiel',
+							{ downloadExpirationDate }
+						)
+					: tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-verlopen-op',
+							{ downloadExpirationDate }
+						);
+			} else if (!isMobile) {
+				// We only want to show the expiration date on desktop
 				downloadInformationMessage = tText(
 					'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-beschikbaar-tot-en-met',
 					{ downloadExpirationDate }
@@ -248,7 +254,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 							'u-mr-8'
 						)}
 					>
-						<Icon name={IconNamesLight.Exclamation} className="u-mr-4" />
+						{!isMobile && <Icon name={IconNamesLight.Exclamation} className="u-mr-4" />}
 						{downloadInformationMessage}
 					</span>
 				)}
@@ -264,7 +270,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 									)
 						}
 						disabled={!downloadStatusSucceeded}
-						variants={['inline-block']}
+						variants={['inline-block', 'dark']}
 						onClick={() =>
 							handleDownloadMaterialRequest(currentMaterialRequestDetail).then(setDownloadUrl)
 						}

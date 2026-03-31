@@ -105,10 +105,13 @@
 		align-items: baseline;
 		justify-content: space-between;
 
-
 		@media (max-width: $breakpoint-md) {
 			align-items: center;
 
+			&:has(.p-material-request-detail__download-message) {
+				flex-direction: column;
+				align-items: start;
+			}
 		}
 	}
 
