@@ -297,7 +297,9 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 					}
 					setCurrentMaterialRequestId(undefined);
 				}}
-				currentMaterialRequestDetail={resolvedMaterialRequest}
+				currentMaterialRequestDetail={
+					currentMaterialRequestId ? resolvedMaterialRequest : undefined
+				}
 				afterStatusChanged={onMaterialRequestStatusChange}
 			/>
 		);

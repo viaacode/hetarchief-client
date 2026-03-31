@@ -272,7 +272,9 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 					}
 					setCurrentMaterialRequestId(undefined);
 				}}
-				currentMaterialRequestDetail={resolvedMaterialRequest}
+				currentMaterialRequestDetail={
+					currentMaterialRequestId ? resolvedMaterialRequest : undefined
+				}
 				afterStatusChanged={onMaterialRequestStatusChange}
 			/>
 		);
