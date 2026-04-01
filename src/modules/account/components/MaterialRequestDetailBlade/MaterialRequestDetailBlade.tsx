@@ -312,7 +312,15 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			// TODO: add logic to evaluate additional conditions
 			return (
 				<Button
-					label={isMobile ? tText('Voorwaarden evalueren mobiel') : tText('Voorwaarden evalueren')}
+					label={
+						isMobile
+							? tText(
+									'modules/account/components/material-request-detail-blade/material-request-detail-blade___voorwaarden-evalueren-mobiel'
+								)
+							: tText(
+									'modules/account/components/material-request-detail-blade/material-request-detail-blade___voorwaarden-evalueren'
+								)
+					}
 					variants={['dark']}
 				/>
 			);
@@ -355,8 +363,12 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				<Button
 					label={
 						isMobile
-							? tText('Download beschikbaar maken mobiel')
-							: tText('Download beschikbaar maken')
+							? tText(
+									'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-beschikbaar-maken-mobiel'
+								)
+							: tText(
+									'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-beschikbaar-maken'
+								)
 					}
 					variants={['dark']}
 				/>
@@ -391,7 +403,9 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 								aria-hidden
 							/>
 						}
-						label={tText('Aanvraag beoordelen')}
+						label={tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvraag-beoordelen'
+						)}
 					></Button>
 				</DropdownButton>
 				<DropdownContent>
@@ -443,7 +457,13 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			isWideBlade: isMobile ? false : true,
 			showHeaderBackgroundByDefault: true,
 			showTitleSmaller: true,
-			title: isRequester ? tText('Aanvraag aan') : tText('Aanvraag van'),
+			title: isRequester
+				? tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvraag-aan'
+					)
+				: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvraag-van'
+					),
 			stickySubtitle: (
 				<>
 					<div className={clsx(styles['p-material-request-detail__title'])}>
