@@ -171,7 +171,7 @@ export const AccountMyMaterialRequestsList: FC<DefaultSeoInfo> = ({ url, canonic
 				<div className={styles['p-my-application-list__request']}>
 					<MaterialCard
 						className={styles['p-my-application-list__request-material-card']}
-						objectId={materialRequest.objectSchemaIdentifier}
+						objectSchemaIdentifier={materialRequest.objectSchemaIdentifier}
 						title={materialRequest.objectSchemaName}
 						orientation="vertical"
 						thumbnail={materialRequest.objectThumbnailUrl}

@@ -2,12 +2,12 @@ import type { IeObject } from '@ie-objects/ie-objects.types';
 import { ObjectDetailPage } from '@ie-objects/ObjectDetailPage';
 import { prefetchDetailPageQueries } from '@ie-objects/ObjectDetailPage.helpers';
 import { IeObjectsService } from '@ie-objects/services';
+import type { IeObjectSeo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import type { NextPage } from 'next';
 import type { GetServerSidePropsContext, GetServerSidePropsResult } from 'next/types';
 import React from 'react';
-import type { IeObjectSeo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 
 type ObjectDetailPageProps = {
 	title: string | null;
@@ -40,7 +40,7 @@ export async function getServerSideProps(
 	let ieObject: IeObject | null = null;
 	let showHard404IfNotFound = true;
 	try {
-		ieObject = (await IeObjectsService.getBySchemaIdentifiers([schemaIdentifier]))?.[0];
+		ieObject = (await IeObjectsService.getBySchemaIdentifiers([schemaIdentifier], true))?.[0];
 		// biome-ignore lint/suspicious/noExplicitAny: we just do not know
 	} catch (err: any) {
 		if (err?.response?.status === 403) {

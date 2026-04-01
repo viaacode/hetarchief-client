@@ -436,7 +436,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				subtitle: (
 					<MaterialCard
 						openInNewTab={true}
-						objectId={currentMaterialRequestDetail.objectSchemaIdentifier}
+						objectSchemaIdentifier={currentMaterialRequestDetail.objectSchemaIdentifier}
 						title={currentMaterialRequestDetail.objectSchemaName}
 						thumbnail={currentMaterialRequestDetail.objectThumbnailUrl}
 						hideThumbnail={true}

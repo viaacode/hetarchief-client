@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 
 export interface MaterialCardProps {
 	className?: string;
-	objectId?: string;
+	objectSchemaIdentifier?: string;
 	title?: string | ReactNode;
 	thumbnail?: string;
 	hideThumbnail?: boolean;
@@ -12,7 +12,7 @@ export interface MaterialCardProps {
 	type: IeObjectType | null;
 	publishedBy?: string;
 	publishedOrCreatedDate?: string;
-	icon: IconName;
+	icon: IconName | null;
 	withBorder?: boolean;
 	orientation: 'horizontal' | 'vertical';
 	children?: ReactNode;

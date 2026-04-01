@@ -1,4 +1,4 @@
-import { useGetIeObjectInfo } from '@ie-objects/hooks/use-get-ie-objects-info';
+import { useGetIeObjectBySchemaIdentifier } from '@ie-objects/hooks/use-get-ie-object-by-schema-identifier';
 import { Loading } from '@shared/components/Loading';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -20,13 +20,17 @@ export const IeObjectWithoutObjectNamePage: FC<MaintainerSearchPageProps> = () =
 	const locale = useLocale();
 	const { ie: schemaIdentifier, slug } = router.query;
 
-	const { data: ieObjectInfo, isError } = useGetIeObjectInfo(schemaIdentifier as string, {
-		enabled: !!schemaIdentifier,
-		placeholderData: keepPreviousData,
-	});
+	const { data: ieObjectInfo, isError } = useGetIeObjectBySchemaIdentifier(
+		schemaIdentifier as string,
+		false,
+		{
+			enabled: !!schemaIdentifier,
+			placeholderData: keepPreviousData,
+		}
+	);
 
 	// If the url is: /zoeken/:slug/:object-id => redirect to /zoeken/:slug/:object-id/:object-name
-	// We should however not forget the query params like cuepoints etc
+	// We should, however, not forget the query params like cuepoints etc.
 	useEffect(() => {
 		if (ieObjectInfo || isError) {
 			const parsedUrl = parseUrl(window.location.href);

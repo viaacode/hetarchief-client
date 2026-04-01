@@ -14,7 +14,7 @@ import type { MaterialCardProps } from './MaterialCard.types';
 
 const MaterialCard: FC<MaterialCardProps> = ({
 	className,
-	objectId,
+	objectSchemaIdentifier,
 	title,
 	thumbnail,
 	hideThumbnail = false,
@@ -64,6 +64,9 @@ const MaterialCard: FC<MaterialCardProps> = ({
 	};
 
 	const renderIcon = () => {
+		if (!icon) {
+			return null;
+		}
 		return <Icon className={styles['c-material-card__icon']} name={icon} aria-hidden />;
 	};
 
@@ -106,9 +109,11 @@ const MaterialCard: FC<MaterialCardProps> = ({
 					width="100%"
 					height="100%"
 				/>
-				<div className={clsx(styles['c-material-card__header-icon'])}>
-					<Icon name={icon} aria-hidden />
-				</div>
+				{icon ? (
+					<div className={clsx(styles['c-material-card__header-icon'])}>
+						<Icon name={icon} aria-hidden />
+					</div>
+				) : null}
 			</div>
 		);
 	};
@@ -134,7 +139,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 					edge={withBorder ? 'zinc' : 'none'}
 					title={renderTitle()}
 					image={renderImage(thumbnail)}
-					subtitle={objectId}
+					subtitle={objectSchemaIdentifier}
 					caption={renderCaption()}
 					padding="both"
 				>

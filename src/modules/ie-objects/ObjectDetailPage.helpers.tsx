@@ -1,4 +1,4 @@
-import { makeServerSideRequestGetIeObjectInfo } from '@ie-objects/hooks/use-get-ie-objects-info';
+import { makeServerSideRequestGetIeObjectInfo } from '@ie-objects/hooks/use-get-ie-object-by-schema-identifier';
 import { makeServerSideRequestGetIeObjectsRelated } from '@ie-objects/hooks/use-get-ie-objects-related';
 import { makeServerSideRequestGetIeObjectsSimilar } from '@ie-objects/hooks/use-get-ie-objects-similar';
 import { makeServerSideRequestGetIeObjectThumbnail } from '@ie-objects/hooks/use-get-ie-objects-thumbnail';
@@ -17,7 +17,7 @@ export async function prefetchDetailPageQueries(
 	const queryClient = new QueryClient();
 	const promises = [];
 	promises.push(
-		makeServerSideRequestGetIeObjectInfo(queryClient, schemaIdentifier),
+		makeServerSideRequestGetIeObjectInfo(queryClient, schemaIdentifier, true),
 		makeServerSideRequestGetIeObjectThumbnail(queryClient, schemaIdentifier),
 		makeServerSideRequestGetIeObjectsRelated(
 			queryClient,

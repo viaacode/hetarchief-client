@@ -27,7 +27,7 @@ export const useGetContentBlockEncloseContent = (
 	// TODO PREF: see if we can use a custom endpoint to speed up the fetching of multiple objects for this block
 	const ieObjectQuery = {
 		queryKey: [QUERY_KEYS.GET_IE_OBJECT_FOR_CONTENT_ENCLOSE_BLOCK],
-		queryFn: () => IeObjectsService.getBySchemaIdentifiers(ieObjectIds),
+		queryFn: () => IeObjectsService.getBySchemaIdentifiers(ieObjectIds, true),
 		placeholderData: keepPreviousData,
 		enabled: ieObjectIds.length > 0,
 	};

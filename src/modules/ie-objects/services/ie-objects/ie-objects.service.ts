@@ -79,14 +79,36 @@ export class IeObjectsService {
 	/**
 	 * Get an IE object by its schemaIdentifier
 	 * @param schemaIdentifiers The ie object schemaIdentifiers, eg: 086348mc8s, qstt4fps28
+	 * @param resolveThumbnailUrl should the thumbnail urls be resolved with a token, so you can view them? (slower)
 	 */
 	public static async getBySchemaIdentifiers(
-		schemaIdentifiers: string[]
+		schemaIdentifiers: string[],
+		resolveThumbnailUrl: boolean
 	): Promise<(IeObject | null)[]> {
 		const url = stringifyUrl({
 			url: IE_OBJECTS_SERVICE_BASE_URL,
 			query: {
-				ids: schemaIdentifiers,
+				schemaIdentifiers: schemaIdentifiers,
+				resolveThumbnailUrl,
+			},
+		});
+		return await ApiService.getApi().get(url).json();
+	}
+
+	/**
+	 * Get an IE object by its schemaIdentifier
+	 * @param ieObjectIds The ie object ids, eg: https://data-qas.hetarchief.be/id/entity/086348mc8s, https://data-qas.hetarchief.be/id/entity/qstt4fps28
+	 * @param resolveThumbnailUrl should the thumbnail urls be resolved with a token, so you can view them? (slower)
+	 */
+	public static async getByIeObjectIds(
+		ieObjectIds: string[],
+		resolveThumbnailUrl: boolean
+	): Promise<(IeObject | null)[]> {
+		const url = stringifyUrl({
+			url: IE_OBJECTS_SERVICE_BASE_URL,
+			query: {
+				ieObjectIds: ieObjectIds,
+				resolveThumbnailUrl,
 			},
 		});
 		return await ApiService.getApi().get(url).json();

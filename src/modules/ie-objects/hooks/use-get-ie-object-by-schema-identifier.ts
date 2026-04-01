@@ -9,8 +9,15 @@ import {
 import type { IeObject } from './../ie-objects.types';
 import { IeObjectsService } from './../services';
 
-export const useGetIeObjectInfo = (
+/**
+ * Get ieObject by schemaIdentifier. eg: qs6d5p9579
+ * @param schemaIdentifier the schemaIdentifier of the ieObject. aka PID. eg: qs6d5p9579
+ * @param resolveThumbnailUrl should the thumbnail urls be resolved with a token, so you can view them? (slower)
+ * @param options
+ */
+export const useGetIeObjectBySchemaIdentifier = (
 	schemaIdentifier: string,
+	resolveThumbnailUrl: boolean,
 	options: {
 		enabled?: boolean;
 		placeholderData?: typeof keepPreviousData;
@@ -27,7 +34,10 @@ export const useGetIeObjectInfo = (
 			} else {
 				newSchemaIdentifier = schemaIdentifier;
 			}
-			const ieObjects = await IeObjectsService.getBySchemaIdentifiers([newSchemaIdentifier]);
+			const ieObjects = await IeObjectsService.getBySchemaIdentifiers(
+				[newSchemaIdentifier],
+				resolveThumbnailUrl
+			);
 			if (ieObjects[0]) {
 				return ieObjects[0];
 			}
@@ -40,12 +50,16 @@ export const useGetIeObjectInfo = (
 
 export function makeServerSideRequestGetIeObjectInfo(
 	queryClient: QueryClient,
-	schemaIdentifier: string
+	schemaIdentifier: string,
+	resolveThumbnailUrl: boolean
 ): Promise<void> {
 	return queryClient.prefetchQuery({
 		queryKey: [QUERY_KEYS.getIeObjectsInfo, schemaIdentifier],
 		queryFn: async () => {
-			const ieObjects = await IeObjectsService.getBySchemaIdentifiers([schemaIdentifier]);
+			const ieObjects = await IeObjectsService.getBySchemaIdentifiers(
+				[schemaIdentifier],
+				resolveThumbnailUrl
+			);
 			return ieObjects[0];
 		},
 	});
