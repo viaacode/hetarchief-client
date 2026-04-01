@@ -116,13 +116,13 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		isFetching: isLoadingDetail,
 		refetch: refetchCurrentMaterialRequestDetail,
 	} = useGetMaterialRequestById(currentMaterialRequestId || null, isDetailBladeOpen);
-	const resolvedMaterialRequest = useMemo(
-		() =>
-			(isLoadingDetail || !currentMaterialRequestDetail
-				? currentMaterialRequest
-				: currentMaterialRequestDetail) ?? undefined,
-		[isLoadingDetail, currentMaterialRequest, currentMaterialRequestDetail]
-	);
+	const resolvedMaterialRequest = useMemo(() => {
+		if (isLoadingDetail || !currentMaterialRequestDetail) {
+			return currentMaterialRequest ?? undefined;
+		} else {
+			return currentMaterialRequestDetail ?? undefined;
+		}
+	}, [isLoadingDetail, currentMaterialRequest, currentMaterialRequestDetail]);
 
 	const noData = useMemo(
 		(): boolean => isEmpty(materialRequests?.items),

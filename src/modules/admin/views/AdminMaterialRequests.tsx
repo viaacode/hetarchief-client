@@ -120,13 +120,13 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		isFetching: isLoadingDetail,
 		refetch: refetchCurrentMaterialRequestDetail,
 	} = useGetMaterialRequestById(currentMaterialRequestId || null, isDetailBladeOpen);
-	const resolvedMaterialRequest = useMemo(
-		() =>
-			(isLoadingDetail || !currentMaterialRequestDetail
-				? currentMaterialRequest
-				: currentMaterialRequestDetail) ?? undefined,
-		[isLoadingDetail, currentMaterialRequest, currentMaterialRequestDetail]
-	);
+	const resolvedMaterialRequest = useMemo(() => {
+		if (isLoadingDetail || !currentMaterialRequestDetail) {
+			return currentMaterialRequest ?? undefined;
+		} else {
+			return currentMaterialRequestDetail ?? undefined;
+		}
+	}, [isLoadingDetail, currentMaterialRequest, currentMaterialRequestDetail]);
 
 	const { data: maintainers } = useGetMaterialRequestsMaintainers();
 
