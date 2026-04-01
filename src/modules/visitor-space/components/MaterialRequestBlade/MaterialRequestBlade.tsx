@@ -519,6 +519,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 								label={tText(
 									'modules/visitor-space/components/material-request-blade/material-request-blade___view'
 								)}
+								aria-label={tText(
+									'modules/visitor-space/components/material-request-blade/material-request-blade___view'
+								)}
 								checked={typeSelected === MaterialRequestType.VIEW}
 								onClick={() => setTypeSelected(MaterialRequestType.VIEW)}
 							/>
@@ -529,6 +532,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							label={tText(
 								'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
 							)}
+							aria-label={tText(
+								'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
+							)}
 							checked={typeSelected === MaterialRequestType.REUSE}
 							onClick={() => setTypeSelected(MaterialRequestType.REUSE)}
 						/>
@@ -536,6 +542,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							aria-labelledby="radio-group-label"
 							className={styles['c-request-material__radio-button']}
 							label={tText(
+								'modules/visitor-space/components/material-request-blade/material-request-blade___more-info'
+							)}
+							aria-label={tText(
 								'modules/visitor-space/components/material-request-blade/material-request-blade___more-info'
 							)}
 							checked={typeSelected === MaterialRequestType.MORE_INFO}
