@@ -29,6 +29,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 	ignoreFooterButtons,
 	customFooter,
 	stickyFooter = true,
+	removePaddingForCustomFooter,
 }) => {
 	const [contentIsScrollable, setContentIsScrollable] = useState(false);
 	const [contentHasBeenScrolled, setContentHasBeenScrolled] = useState(
@@ -227,7 +228,11 @@ export const BladeContent: FC<BladeContentProps> = ({
 				className={clsx(
 					styles['c-blade__footer'],
 					stickyFooter && styles['c-blade__footer-sticky'],
-					contentHasBeenScrolled && [styles['c-blade__content-scrolled']]
+					contentHasBeenScrolled && [styles['c-blade__content-scrolled']],
+					ignoreFooterButtons &&
+						customFooter &&
+						removePaddingForCustomFooter &&
+						styles['c-blade__footer__no-padding']
 				)}
 			>
 				{isBladeInvalid && (

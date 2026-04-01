@@ -266,14 +266,15 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		return (
 			<MaterialRequestDetailBlade
 				allowRequestCancellation={true}
-				isOpen={isDetailBladeOpen}
 				onClose={(statusChanged) => {
 					if (statusChanged) {
 						refetchMaterialRequests().then(noop);
 					}
 					setCurrentMaterialRequestId(undefined);
 				}}
-				currentMaterialRequestDetail={resolvedMaterialRequest}
+				currentMaterialRequestDetail={
+					currentMaterialRequestId ? resolvedMaterialRequest : undefined
+				}
 				afterStatusChanged={onMaterialRequestStatusChange}
 			/>
 		);

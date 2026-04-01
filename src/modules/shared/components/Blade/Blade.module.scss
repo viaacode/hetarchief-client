@@ -90,6 +90,7 @@ $padding-horizontal-mobile: $spacer-sm;
 		color: $black;
 		padding: 0 $padding-horizontal $spacer-sm;
 		word-break: break-word;
+		max-width: calc(100% - $padding-horizontal);
 
 		&--size-wide {
 			padding: $padding-horizontal $padding-horizontal $spacer-sm;
@@ -106,6 +107,7 @@ $padding-horizontal-mobile: $spacer-sm;
 
 		@media (max-width: $breakpoint-md) {
 			padding: $padding-horizontal-mobile;
+			max-width: calc(100% - $padding-horizontal-mobile);
 
 			&--mobile-wrapper {
 				display: flex;
@@ -158,9 +160,11 @@ $padding-horizontal-mobile: $spacer-sm;
 
 		&--content {
 			padding: $spacer-md $padding-horizontal;
+			max-width: calc(100% - $padding-horizontal);
 
 			@media (max-width: $breakpoint-md) {
 				padding: $padding-horizontal-mobile;
+				max-width: calc(100% - $padding-horizontal-mobile);
 			}
 		}
 	}
@@ -172,9 +176,21 @@ $padding-horizontal-mobile: $spacer-sm;
 		background: $sticky-background;
 		padding: $spacer-sm $padding-horizontal;
 		width: 100%;
+		max-width: calc(100% - $padding-horizontal);
+
+		&__no-padding {
+			padding: 0;
+			max-width: 100%;
+		}
 
 		@media (max-width: $breakpoint-md) {
 			padding: $padding-horizontal-mobile;
+			max-width: calc(100% - $padding-horizontal-mobile);
+
+			&__no-padding {
+				padding: 0;
+				max-width: 100%;
+			}
 		}
 
 		&-buttons {

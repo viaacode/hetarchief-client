@@ -13,12 +13,18 @@ $minimum-rich-text-editor-height: 21rem;
 		}
 
 		&-label {
-			font-weight: $font-weight-bold;
 			margin-bottom: $spacer-sm;
 		}
 
 		&-value {
 			margin-left: 0;
+		}
+
+		:global(.c-form-control__label) {
+			font-weight: $font-weight-normal;
+			font-size: $font-size-base;
+			line-height: $font-size-lg;
+			margin-bottom: 0;
 		}
 	}
 

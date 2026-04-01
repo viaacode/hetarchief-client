@@ -1,5 +1,4 @@
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
-import MaterialRequestStatusUpdateBlade from '@account/components/MaterialRequestStatusUpdateBlade/MaterialRequestStatusUpdateBlade';
 import {
 	GET_MATERIAL_REQUEST_DOWNLOAD_FILTER_ARRAY,
 	GET_MATERIAL_REQUEST_STATUS_FILTER_ARRAY,
@@ -19,7 +18,7 @@ import { useGetMaterialRequests } from '@material-requests/hooks/get-material-re
 import {
 	type MaterialRequest,
 	MaterialRequestKeys,
-	MaterialRequestStatus,
+	type MaterialRequestStatus,
 	type MaterialRequestType,
 } from '@material-requests/types';
 import {
@@ -28,7 +27,6 @@ import {
 	PaginationBar,
 	Table,
 } from '@meemoo/react-components';
-import { BladeManager } from '@shared/components/BladeManager';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -75,11 +73,6 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	const isComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
 	const locale = useLocale();
 
-	const [hasStatusChanged, setHasStatusChanged] = useState(false);
-	const [isDetailStatusBladeOpenWithStatus, setIsDetailStatusBladeOpenWithStatus] = useState<
-		MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED | undefined
-	>(undefined);
-
 	const {
 		data: materialRequests,
 		isFetching,
@@ -123,13 +116,13 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		isFetching: isLoadingDetail,
 		refetch: refetchCurrentMaterialRequestDetail,
 	} = useGetMaterialRequestById(currentMaterialRequestId || null, isDetailBladeOpen);
-	const resolvedMaterialRequest = useMemo(
-		() =>
-			isLoadingDetail || !currentMaterialRequestDetail
-				? currentMaterialRequest
-				: currentMaterialRequestDetail,
-		[isLoadingDetail, currentMaterialRequest, currentMaterialRequestDetail]
-	);
+	const resolvedMaterialRequest = useMemo(() => {
+		if (isLoadingDetail || !currentMaterialRequestDetail) {
+			return currentMaterialRequest ?? undefined;
+		} else {
+			return currentMaterialRequestDetail ?? undefined;
+		}
+	}, [isLoadingDetail, currentMaterialRequest, currentMaterialRequestDetail]);
 
 	const noData = useMemo(
 		(): boolean => isEmpty(materialRequests?.items),
@@ -258,71 +251,20 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		tHtml('pages/beheer/materiaalaanvragen/index___geen-materiaal-aanvragen');
 
 	const renderDetailBlade = () => {
-		if (!resolvedMaterialRequest) {
-			return null;
-		}
-
-		const getBladeLayerIndex = () => {
-			if (isDetailStatusBladeOpenWithStatus) {
-				return 2;
-			}
-
-			if (isDetailBladeOpen) {
-				return 1;
-			}
-			return 0;
-		};
-
 		return (
-			<BladeManager
-				currentLayer={getBladeLayerIndex()}
-				onCloseBlade={() => {
-					if (isDetailStatusBladeOpenWithStatus) {
-						setIsDetailStatusBladeOpenWithStatus(undefined);
-					} else {
-						setCurrentMaterialRequestId(undefined);
-					}
-					if (hasStatusChanged) {
+			<MaterialRequestDetailBlade
+				allowRequestCancellation={false}
+				onClose={(statusUpdated) => {
+					if (statusUpdated) {
 						refetchMaterialRequests().then(noop);
 					}
+					setCurrentMaterialRequestId(undefined);
 				}}
-				opacityStep={0.1}
-			>
-				<MaterialRequestDetailBlade
-					allowRequestCancellation={false}
-					isOpen={isDetailBladeOpen}
-					onClose={(statusUpdated) => {
-						if (statusUpdated || hasStatusChanged) {
-							refetchMaterialRequests().then(noop);
-						}
-						setCurrentMaterialRequestId(undefined);
-					}}
-					onApproveRequest={() =>
-						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.APPROVED)
-					}
-					onDeclineRequest={() =>
-						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
-					}
-					currentMaterialRequestDetail={resolvedMaterialRequest}
-					afterStatusChanged={onMaterialRequestStatusChange}
-					layer={isDetailBladeOpen ? 1 : 99}
-					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
-				/>
-				<MaterialRequestStatusUpdateBlade
-					isOpen={!!isDetailStatusBladeOpenWithStatus}
-					onClose={(statusUpdated) => {
-						if (statusUpdated) {
-							setHasStatusChanged(true);
-						}
-						setIsDetailStatusBladeOpenWithStatus(undefined);
-					}}
-					status={isDetailStatusBladeOpenWithStatus}
-					currentMaterialRequestDetail={resolvedMaterialRequest}
-					afterStatusChanged={onMaterialRequestStatusChange}
-					layer={isDetailBladeOpen ? 2 : 99}
-					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
-				/>
-			</BladeManager>
+				currentMaterialRequestDetail={
+					currentMaterialRequestId ? resolvedMaterialRequest : undefined
+				}
+				afterStatusChanged={onMaterialRequestStatusChange}
+			/>
 		);
 	};
 
