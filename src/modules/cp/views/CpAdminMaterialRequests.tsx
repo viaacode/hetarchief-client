@@ -93,12 +93,9 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		...(!isNil(filters.hasDownloadUrl) && {
 			hasDownloadUrl: filters.hasDownloadUrl as string[],
 		}),
-		...(!isNil(filters.orderProp) && {
-			orderProp: filters.orderProp as MaterialRequestKeys,
-		}),
-		...(!isNil(filters.orderDirection) && {
-			orderDirection: filters.orderDirection as AvoSearchOrderDirection,
-		}),
+		orderProp: (filters.orderProp as MaterialRequestKeys) || 'requestedAt',
+		orderDirection:
+			(filters.orderDirection as AvoSearchOrderDirection) || AvoSearchOrderDirection.DESC,
 		...(commonUser?.organisation?.or_id
 			? { maintainerIds: [commonUser?.organisation?.or_id] }
 			: {}),
