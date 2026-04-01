@@ -1,5 +1,5 @@
 import { Blade } from '@shared/components/Blade/Blade';
-import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
+import { type BladeFooterButtonProps, BladeSizeType } from '@shared/components/Blade/Blade.types';
 import { tHtml, tText } from '@shared/helpers/translate';
 import React, { type FC } from 'react';
 
@@ -41,7 +41,7 @@ const MaterialRequestTermAgreementBlade: FC<MaterialRequestTermAgreementBladePro
 		<Blade
 			id="material-request-term-agreement-blade"
 			isOpen={isOpen}
-			isWideBlade
+			size={BladeSizeType.WIDE}
 			title={tText(
 				'modules/account/components/material-request-term-agreement-blade/material-request-term-agreement-blade___aanvullende-gebruiksvoorwaarden-bij-aanvragen'
 			)}

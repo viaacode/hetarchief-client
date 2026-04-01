@@ -12,11 +12,16 @@ export interface BladeContentProps
 	onClose?: () => void;
 }
 
+export enum BladeSizeType {
+	THIN = 'thin',
+	WIDE = 'wide',
+}
+
 export interface BladeHeaderProps {
 	/**
-	 * Blade should be 90% instead of the default small size
+	 * Controls the width of the blade. Defaults to THIN.
 	 */
-	isWideBlade?: boolean;
+	size?: BladeSizeType;
 	/**
 	 * The actual title <br/>
 	 * Will always be shown

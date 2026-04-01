@@ -10,16 +10,18 @@ import { type FC, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Overlay } from '../Overlay';
 import styles from './Blade.module.scss';
-import type { BladeProps } from './Blade.types';
+import { type BladeProps, BladeSizeType } from './Blade.types';
 
 export const Blade: FC<BladeProps> = (props) => {
-	const { id, className, isOpen, onClose, isWideBlade, layer, ariaLabel } = props;
-	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
+	const { id, className, isOpen, onClose, size = BladeSizeType.THIN, layer, ariaLabel } = props;
+	const { isManaged, currentLayer, opacityStep, onCloseBlade, bladeWidths, registerBladeWidth } =
+		useBladeManagerContext();
 	const hasOpenConfirmationModal = useSelector(selectHasOpenConfirmationModal);
 
 	useScrollLock(!isManaged && isOpen, `Blade__${id}`);
 
 	const isLayered = isManaged && !!layer;
+	const isBladeBelowWide = isLayered && layer > 1 ? (bladeWidths[layer - 1] ?? false) : false;
 	const isBladeOpen = isLayered ? layer <= currentLayer : isOpen;
 
 	const handleClose = useCallback(() => {
@@ -56,6 +58,12 @@ export const Blade: FC<BladeProps> = (props) => {
 		};
 	}, [escFunction]);
 
+	useEffect(() => {
+		if (isLayered && layer !== undefined) {
+			registerBladeWidth(layer, size === BladeSizeType.WIDE);
+		}
+	}, [isLayered, layer, size, registerBladeWidth]);
+
 	const renderContent = () => {
 		return (
 			<div
@@ -71,7 +79,7 @@ export const Blade: FC<BladeProps> = (props) => {
 						(layer === currentLayer || (currentLayer === 0 && isUndefined(layer))) &&
 						'c-blade--active',
 					isLayered && [styles['c-blade--managed']],
-					isWideBlade && [styles['c-blade--extra-wide']]
+					styles[`c-blade--size-${size}`]
 				)}
 				// offset underlying blades
 				style={
@@ -96,6 +104,8 @@ export const Blade: FC<BladeProps> = (props) => {
 				animate="animate-default"
 				className={clsx(className, styles['c-blade__overlay'], {
 					[styles['c-blade__overlay--managed']]: isLayered && layer > 1,
+					[styles['c-blade__overlay--managed-wide-below']]:
+						isLayered && layer > 1 && isBladeBelowWide,
 				})}
 				style={
 					isLayered && layer > 1 && layer <= currentLayer

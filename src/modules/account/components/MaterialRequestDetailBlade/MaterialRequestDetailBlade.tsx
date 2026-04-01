@@ -24,10 +24,11 @@ import {
 	Tabs,
 } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
-import type {
-	BladeFooterButton,
-	BladeFooterProps,
-	BladeHeaderProps,
+import {
+	type BladeFooterButton,
+	type BladeFooterProps,
+	type BladeHeaderProps,
+	BladeSizeType,
 } from '@shared/components/Blade/Blade.types';
 import { BladeManager } from '@shared/components/BladeManager';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
@@ -454,7 +455,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		}
 
 		return {
-			isWideBlade: isMobile ? false : true,
+			size: isMobile ? BladeSizeType.WIDE : BladeSizeType.THIN,
 			showHeaderBackgroundByDefault: true,
 			showTitleSmaller: true,
 			title: isRequester
