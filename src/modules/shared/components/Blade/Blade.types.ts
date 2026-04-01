@@ -84,6 +84,11 @@ export interface BladeFooterProps {
 	 */
 	customFooter?: ReactNode;
 	/**
+	 * When a custom footer is used, sometimes you want to be able to remove the padding from the footer
+	 * This will only applied to the footer when there is a customFooter set
+	 */
+	removePaddingForCustomFooter?: boolean;
+	/**
 	 * Is the footer sticky? Will be true by default
 	 */
 	stickyFooter?: boolean;
