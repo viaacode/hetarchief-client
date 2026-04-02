@@ -451,11 +451,12 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						)}
 					/>
 				),
+				size: BladeSizeType.THIN,
 			};
 		}
 
 		return {
-			size: isMobile ? BladeSizeType.WIDE : BladeSizeType.THIN,
+			size: isMobile ? BladeSizeType.THIN : BladeSizeType.WIDE,
 			showHeaderBackgroundByDefault: true,
 			showTitleSmaller: true,
 			title: isRequester
