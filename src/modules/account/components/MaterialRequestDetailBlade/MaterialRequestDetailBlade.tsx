@@ -52,6 +52,7 @@ import { stringifyUrl } from 'query-string';
 import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import MaterialRequestContentInfo from './MaterialRequestContentInfo';
+import MaterialRequestConversation from './MaterialRequestConversation';
 import styles from './MaterialRequestDetailBlade.module.scss';
 import { MATERIAL_REQUEST_DETAILS_TABS } from './material-request-detail-blade.consts';
 import { MaterialRequestDetailBladeTabs } from './material-request-detail-blade.types';
@@ -202,7 +203,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 
 		switch (activeTab) {
 			case MaterialRequestDetailBladeTabs.Conversation:
-				return null;
+				return <MaterialRequestConversation />;
 			case MaterialRequestDetailBladeTabs.Documents:
 				return null;
 		}
