@@ -3,7 +3,7 @@
 @use "src/styles/abstracts" as *;
 
 $terms-of-service-background-color: #ebfbf8;
-$header-and-buttons-height: 31.4rem;
+$header-and-buttons-height: 25rem;
 $header-and-buttons-height-mobile: 21.8rem;
 
 .p-terms-of-service {
@@ -64,7 +64,7 @@ $header-and-buttons-height-mobile: 21.8rem;
 		text-align: center;
 
 		@media (min-width: $breakpoint-md) {
-			margin-top: $spacer-lg * 3;
+			margin-top: $spacer-lg * 2;
 			font-size: $font-size-3xl;
 			line-height: $line-height-lg;
 		}
@@ -77,14 +77,20 @@ $header-and-buttons-height-mobile: 21.8rem;
 		max-height: calc($view-height - $top-navigation-bar-height - $header-and-buttons-height-mobile);
 
 		@media (min-width: $breakpoint-md) {
-			margin-top: $spacer-lg * 2;
+			margin-top: $spacer-lg;
 			max-height: calc($view-height - $top-navigation-bar-height - $header-and-buttons-height);
 		}
 
-		.c-content-page-preview {
-			& > .c-content-block {
-				background-color: transparent !important;
+		:global(.c-content-page-preview) {
+			& > :global(.c-content-block) {
 				word-break: break-word;
+
+				& > :global(.c-content-block-preview) {
+					& > :global(.o-container.o-container--large) {
+						max-width: 100%;
+						padding: 0 $spacer-2xl;
+					}
+				}
 			}
 		}
 	}
