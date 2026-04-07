@@ -256,6 +256,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							stringifyUrl({
 								url: newspaperExportEndpoint,
 								query: {
+									ieObjectId: mediaInfo.iri,
 									currentPageUrl: window.origin + router.asPath,
 								},
 							})
@@ -270,6 +271,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							stringifyUrl({
 								url: newspaperExportEndpoint,
 								query: {
+									ieObjectId: mediaInfo.iri,
 									page: currentPageIndex,
 									currentPageUrl: window.origin + router.asPath,
 								},

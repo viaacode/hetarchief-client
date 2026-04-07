@@ -1,5 +1,4 @@
 import { selectCommonUser } from '@auth/store/user';
-import { useGetIeObjectByIeObjectId } from '@ie-objects/hooks/use-get-ie-object-by-ie-object-id';
 import { MediaActions } from '@ie-objects/ie-objects.types';
 import { useGetMaterialRequestsForMediaItem } from '@material-requests/hooks/get-material-requests-for-media-item';
 import { MaterialRequestsService } from '@material-requests/services';
@@ -72,13 +71,14 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const [noTypeSelectedOnSave, setNoTypeSelectedOnSave] = useState(false);
 	const [showConfirmTypeEdit, setShowConfirmTypeEdit] = useState(false);
 
-	const { data: ieObject, isLoading: isLoadingIeObject } = useGetIeObjectByIeObjectId(
-		materialRequest.objectId,
-		true,
-		{
-			enabled: !!materialRequest.objectId && isOpen,
-		}
-	);
+	const ieObject = {
+		schemaIdentifier: materialRequest.objectSchemaIdentifier,
+		thumbnailUrl: materialRequest.objectThumbnailUrl,
+		name: materialRequest.objectSchemaName,
+		dctermsFormat: materialRequest.objectDctermsFormat,
+		datePublished: materialRequest.objectPublishedOrCreatedDate,
+		dateCreated: materialRequest.objectPublishedOrCreatedDate,
+	};
 
 	// Only hide the "view object" option when the user is a key user, and they already have access to the object
 	const hideViewTypeOption = user?.isKeyUser && (objectRepresentationId || ieObject?.thumbnailUrl);
@@ -300,7 +300,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	};
 
 	const getSubtitle = () => {
-		if (isLoadingIeObject) {
+		if (!materialRequest || !ieObject) {
 			return null;
 		}
 		return (
@@ -314,11 +314,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				type={ieObject?.dctermsFormat || null}
 				publishedBy={maintainerName}
 				publishedOrCreatedDate={ieObject?.datePublished || ieObject?.dateCreated || undefined}
-				icon={
-					ieObject?.dctermsFormat
-						? getIconFromObjectType(ieObject?.dctermsFormat, isObjectEssenceAccessibleToUser)
-						: null
-				}
+				icon={getIconFromObjectType(ieObject.dctermsFormat, isObjectEssenceAccessibleToUser)}
 			/>
 		);
 	};
