@@ -1,4 +1,4 @@
-import { useGetIeObjectInfo } from '@ie-objects/hooks/use-get-ie-objects-info';
+import { useGetIeObjectBySchemaIdentifier } from '@ie-objects/hooks/use-get-ie-object-by-schema-identifier';
 import { Loading } from '@shared/components/Loading';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -28,10 +28,14 @@ export const MaintainerSearchPage: FC<MaintainerSearchPageProps> = () => {
 		true,
 		!!orgSlugOrObjectSchemaIdentifier
 	);
-	const { data: ieObjectInfo } = useGetIeObjectInfo(orgSlugOrObjectSchemaIdentifier as string, {
-		enabled: !!orgSlugOrObjectSchemaIdentifier,
-		placeholderData: keepPreviousData,
-	});
+	const { data: ieObjectInfo } = useGetIeObjectBySchemaIdentifier(
+		orgSlugOrObjectSchemaIdentifier as string,
+		false,
+		{
+			enabled: !!orgSlugOrObjectSchemaIdentifier,
+			placeholderData: keepPreviousData,
+		}
+	);
 
 	// If url is: /zoeken/slug/:object-id => redirect to /zoeken/:slug/:object-id/:object-name
 	useEffect(() => {

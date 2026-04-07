@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 
 export interface MaterialCardProps {
 	className?: string;
-	objectId?: string;
+	objectSchemaIdentifier?: string;
 	title?: string | ReactNode;
 	thumbnail?: string;
 	hideThumbnail?: boolean;

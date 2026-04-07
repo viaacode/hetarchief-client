@@ -160,7 +160,7 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 			subtitle={
 				<MaterialCard
 					openInNewTab={true}
-					objectId={objectSchemaIdentifier}
+					objectSchemaIdentifier={objectSchemaIdentifier}
 					title={objectName}
 					thumbnail={objectThumbnailUrl}
 					hideThumbnail={true}

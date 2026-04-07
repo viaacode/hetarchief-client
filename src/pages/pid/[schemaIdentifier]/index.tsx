@@ -1,17 +1,10 @@
-import { QueryClient } from '@tanstack/react-query';
-import { kebabCase } from 'lodash-es';
-import type { GetServerSidePropsResult, NextPage } from 'next';
-import { useRouter } from 'next/router';
-import type { GetServerSidePropsContext } from 'next/types';
-import { type ComponentType, type FC, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-
 import { GroupName } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
 	makeServerSideRequestGetIeObjectInfo,
-	useGetIeObjectInfo,
-} from '@ie-objects/hooks/use-get-ie-objects-info';
+	useGetIeObjectBySchemaIdentifier,
+} from '@ie-objects/hooks/use-get-ie-object-by-schema-identifier';
+import { makeServerSideRequestGetIeObjectThumbnail } from '@ie-objects/hooks/use-get-ie-objects-thumbnail';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
@@ -22,9 +15,14 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import withUser, { type UserProps } from '@shared/hooks/with-user';
 import { setShowZendesk } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { QueryClient } from '@tanstack/react-query';
 import { VisitorLayout } from '@visitor-layout/index';
-
-import { makeServerSideRequestGetIeObjectThumbnail } from '@ie-objects/hooks/use-get-ie-objects-thumbnail';
+import { kebabCase } from 'lodash-es';
+import type { GetServerSidePropsResult, NextPage } from 'next';
+import { useRouter } from 'next/router';
+import type { GetServerSidePropsContext } from 'next/types';
+import { type ComponentType, type FC, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import styles from './index.module.scss';
 
 const IeObjectPidRouteRedirect: NextPage<DefaultSeoInfo & UserProps> = ({
@@ -44,8 +42,9 @@ const IeObjectPidRouteRedirect: NextPage<DefaultSeoInfo & UserProps> = ({
 	 * Data
 	 */
 
-	const { data: ieObjectInfo, isError: isIeObjectError } = useGetIeObjectInfo(
-		schemaIdentifier as string
+	const { data: ieObjectInfo, isError: isIeObjectError } = useGetIeObjectBySchemaIdentifier(
+		schemaIdentifier as string,
+		false
 	);
 
 	/**
@@ -104,7 +103,7 @@ export async function getServerSideProps(
 	const schemaIdentifier = context.query.schemaIdentifier as string;
 
 	const queryClient = new QueryClient();
-	await makeServerSideRequestGetIeObjectInfo(queryClient, schemaIdentifier);
+	await makeServerSideRequestGetIeObjectInfo(queryClient, schemaIdentifier, false);
 	await makeServerSideRequestGetIeObjectThumbnail(queryClient, schemaIdentifier);
 
 	return getDefaultStaticProps(context, context.resolvedUrl, {

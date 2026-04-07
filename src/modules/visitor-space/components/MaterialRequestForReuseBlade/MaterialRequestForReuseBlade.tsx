@@ -342,7 +342,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				)}
 			>
 				<MaterialCard
-					objectId={materialRequest.objectSchemaIdentifier}
+					objectSchemaIdentifier={materialRequest.objectSchemaIdentifier}
 					title={materialRequest.objectSchemaName}
 					thumbnail={materialRequest.objectThumbnailUrl}
 					hideThumbnail={true}

@@ -15,8 +15,8 @@ import Metadata, {
 import { ObjectPlaceholder } from '@ie-objects/components/ObjectPlaceholder';
 import { type MediaObject, RelatedObject } from '@ie-objects/components/RelatedObject';
 import { useGetAltoJsonFileContent } from '@ie-objects/hooks/use-get-alto-json-file-content';
+import { useGetIeObjectBySchemaIdentifier } from '@ie-objects/hooks/use-get-ie-object-by-schema-identifier';
 import { useGetIeObjectTicketServiceTokens } from '@ie-objects/hooks/use-get-ie-object-ticket-service-tokens';
-import { useGetIeObjectInfo } from '@ie-objects/hooks/use-get-ie-objects-info';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/use-get-ie-objects-related';
 import { useGetIeObjectsAlsoInteresting } from '@ie-objects/hooks/use-get-ie-objects-similar';
 import { useGetIeObjectThumbnail } from '@ie-objects/hooks/use-get-ie-objects-thumbnail';
@@ -259,7 +259,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		isLoading: mediaInfoIsLoading,
 		isError: mediaInfoIsError,
 		error: mediaInfoError,
-	} = useGetIeObjectInfo(ieObjectId);
+	} = useGetIeObjectBySchemaIdentifier(ieObjectId, true);
 
 	const { data: thumbnailUrl, isLoading: thumbnailUrlIsLoading } =
 		useGetIeObjectThumbnail(ieObjectId);

@@ -35,7 +35,7 @@ export async function getServerSideProps(
 	let ieObject: IeObject | null = null;
 	let showHard404IfNotFound = true;
 	try {
-		ieObject = (await IeObjectsService.getBySchemaIdentifiers([schemaIdentifier]))?.[0];
+		ieObject = (await IeObjectsService.getBySchemaIdentifiers([schemaIdentifier], true))?.[0];
 		// biome-ignore lint/suspicious/noExplicitAny: unknown error
 	} catch (err: any) {
 		if (err?.response?.status === 403) {

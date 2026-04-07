@@ -186,7 +186,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				<div className={styles['c-material-request-center-blade__material']}>
 					<MaterialCard
 						className={styles['c-material-request-center-blade__material-label']}
-						objectId={materialRequest.objectSchemaIdentifier}
+						objectSchemaIdentifier={materialRequest.objectSchemaIdentifier}
 						title={materialRequest.objectSchemaName}
 						orientation="vertical"
 						thumbnail={materialRequest.objectThumbnailUrl}

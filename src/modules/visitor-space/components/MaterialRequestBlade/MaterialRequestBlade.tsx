@@ -53,11 +53,6 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 }) => {
 	const {
 		id: materialRequestId,
-		objectSchemaName: objectName,
-		objectDctermsFormat,
-		objectSchemaIdentifier,
-		objectThumbnailUrl,
-		objectPublishedOrCreatedDate,
 		objectRepresentationId,
 		type,
 		reason,
@@ -71,13 +66,22 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const { isComplexReuseFlow, isObjectEssenceAccessibleToUser } =
 		useIsComplexReuseFlow(materialRequest);
 
-	// Only hide the "view object" option when the user is a key user, and they already have access to the object
-	const hideViewTypeOption = user?.isKeyUser && (objectRepresentationId || objectThumbnailUrl);
-
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestType | undefined>(type);
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
 	const [noTypeSelectedOnSave, setNoTypeSelectedOnSave] = useState(false);
 	const [showConfirmTypeEdit, setShowConfirmTypeEdit] = useState(false);
+
+	const ieObject = {
+		schemaIdentifier: materialRequest.objectSchemaIdentifier,
+		thumbnailUrl: materialRequest.objectThumbnailUrl,
+		name: materialRequest.objectSchemaName,
+		dctermsFormat: materialRequest.objectDctermsFormat,
+		datePublished: materialRequest.objectPublishedOrCreatedDate,
+		dateCreated: materialRequest.objectPublishedOrCreatedDate,
+	};
+
+	// Only hide the "view object" option when the user is a key user, and they already have access to the object
+	const hideViewTypeOption = user?.isKeyUser && (objectRepresentationId || ieObject?.thumbnailUrl);
 
 	const [, setActiveBlade] = useQueryParam(
 		QUERY_PARAM_KEY.ACTIVE_BLADE,
@@ -88,7 +92,10 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		data: potentialDuplicates,
 		isLoading: isLoadingPotentialDuplicates,
 		refetch: refetchPotentialDuplicates,
-	} = useGetMaterialRequestsForMediaItem(objectSchemaIdentifier, !!user?.isKeyUser);
+	} = useGetMaterialRequestsForMediaItem(
+		ieObject?.schemaIdentifier || null,
+		!!user?.isKeyUser && !!ieObject?.schemaIdentifier
+	);
 
 	const showDuplicateWarning = useMemo(() => {
 		// Still loading the potential duplicates, until then do not show a warning
@@ -292,20 +299,25 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		);
 	};
 
-	const getSubtitle = () => (
-		<MaterialCard
-			className={styles['c-request-material__material']}
-			objectId={objectSchemaIdentifier}
-			title={objectName}
-			orientation={objectThumbnailUrl ? 'horizontal' : 'vertical'}
-			thumbnail={objectThumbnailUrl}
-			link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectSchemaIdentifier}`}
-			type={objectDctermsFormat}
-			publishedBy={maintainerName}
-			publishedOrCreatedDate={objectPublishedOrCreatedDate}
-			icon={getIconFromObjectType(objectDctermsFormat, isObjectEssenceAccessibleToUser)}
-		/>
-	);
+	const getSubtitle = () => {
+		if (!materialRequest || !ieObject) {
+			return null;
+		}
+		return (
+			<MaterialCard
+				className={styles['c-request-material__material']}
+				objectSchemaIdentifier={ieObject?.schemaIdentifier}
+				title={ieObject?.name}
+				orientation={ieObject?.thumbnailUrl ? 'horizontal' : 'vertical'}
+				thumbnail={ieObject?.thumbnailUrl}
+				link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${ieObject?.schemaIdentifier}`}
+				type={ieObject?.dctermsFormat || null}
+				publishedBy={maintainerName}
+				publishedOrCreatedDate={ieObject?.datePublished || ieObject?.dateCreated || undefined}
+				icon={getIconFromObjectType(ieObject.dctermsFormat, isObjectEssenceAccessibleToUser)}
+			/>
+		);
+	};
 
 	const getFooterButtons = (): BladeFooterButtonProps => {
 		if (isEditMode) {
