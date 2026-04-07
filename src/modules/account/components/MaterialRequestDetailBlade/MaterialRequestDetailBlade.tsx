@@ -440,24 +440,24 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 					'modules/account/components/material-request-detail-blade/material-requests___detail'
 				),
 				stickySubtitle: <MaterialRequestInformation />,
-				subtitle: (
+				subtitle: currentMaterialRequestDetail ? (
 					<MaterialCard
 						openInNewTab={true}
-						objectId={currentMaterialRequestDetail?.objectSchemaIdentifier}
-						title={currentMaterialRequestDetail?.objectSchemaName}
-						thumbnail={currentMaterialRequestDetail?.objectThumbnailUrl}
+						objectId={currentMaterialRequestDetail.objectSchemaIdentifier}
+						title={currentMaterialRequestDetail.objectSchemaName}
+						thumbnail={currentMaterialRequestDetail.objectThumbnailUrl}
 						hideThumbnail={true}
 						orientation="vertical"
 						link={itemLink}
-						type={currentMaterialRequestDetail?.objectDctermsFormat ?? null}
-						publishedBy={currentMaterialRequestDetail?.maintainerName}
-						publishedOrCreatedDate={currentMaterialRequestDetail?.objectPublishedOrCreatedDate}
+						type={currentMaterialRequestDetail.objectDctermsFormat ?? null}
+						publishedBy={currentMaterialRequestDetail.maintainerName}
+						publishedOrCreatedDate={currentMaterialRequestDetail.objectPublishedOrCreatedDate}
 						icon={getIconFromObjectType(
-							currentMaterialRequestDetail?.objectDctermsFormat,
+							currentMaterialRequestDetail.objectDctermsFormat,
 							isObjectEssenceAccessibleToUser
 						)}
 					/>
-				),
+				) : null,
 				size: BladeSizeType.THIN,
 			};
 		}
