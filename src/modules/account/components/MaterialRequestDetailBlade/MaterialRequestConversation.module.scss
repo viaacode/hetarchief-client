@@ -35,6 +35,10 @@ $rich-text-editor-height-desktop: 20rem;
 		display: flex;
 		flex-direction: column;
 
+		@media (max-width: abstracts.$breakpoint-lg) {
+			width: 80%;
+		}
+
 		&--own {
 			background-color: abstracts.$teal-medium;
 			margin-left: auto;
