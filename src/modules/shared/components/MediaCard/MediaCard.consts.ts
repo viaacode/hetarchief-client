@@ -4,7 +4,10 @@ import { tText } from '@shared/helpers/translate';
 import { type IeObjectType, SimpleIeObjectType } from '@shared/types/ie-objects';
 import type { IconName } from '../Icon';
 
-export function getIconFromObjectType(type: IeObjectType, accessible: boolean): IconName {
+export function getIconFromObjectType(
+	type: IeObjectType | undefined,
+	accessible: boolean
+): IconName {
 	const simpleType = mapDcTermsFormatToSimpleType(type);
 	if (accessible) {
 		return {
