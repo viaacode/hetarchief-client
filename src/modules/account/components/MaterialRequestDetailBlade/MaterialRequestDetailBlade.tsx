@@ -157,10 +157,6 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		}
 	}, [isDetailBladeOpen]);
 
-	if (!currentMaterialRequestDetail) {
-		return null;
-	}
-
 	const onFailedRequest = () => {
 		handleStatusChanged(); // Trigger this even when it fails because some step in the process could be the cause
 
@@ -177,6 +173,9 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 
 	const onCancelRequest = async () => {
 		try {
+			if (!currentMaterialRequestDetail) {
+				return;
+			}
 			setShowConfirmModal(false);
 			const response = await MaterialRequestsService.cancel(currentMaterialRequestDetail.id);
 			if (response === undefined) {
@@ -190,6 +189,10 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	const renderContent = () => {
+		if (!currentMaterialRequestDetail) {
+			return null;
+		}
+
 		// No tabs to show, so always render all content in the blade
 		if (
 			!currentMaterialRequestDetail.reuseForm ||
@@ -209,6 +212,10 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	const renderDownload = () => {
+		if (!currentMaterialRequestDetail) {
+			return null;
+		}
+
 		const { downloadStatus } = currentMaterialRequestDetail;
 		const hasDownloadExpired = determineHasDownloadExpired(currentMaterialRequestDetail);
 		const downloadExpirationDate = formatLongDate(
@@ -427,7 +434,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	const getBladeHeaderProps = (includeCTAs: boolean): BladeHeaderProps => {
-		if (!currentMaterialRequestDetail.reuseForm) {
+		if (!currentMaterialRequestDetail?.reuseForm) {
 			return {
 				title: tText(
 					'modules/account/components/material-request-detail-blade/material-requests___detail'
@@ -436,17 +443,17 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 				subtitle: (
 					<MaterialCard
 						openInNewTab={true}
-						objectId={currentMaterialRequestDetail.objectSchemaIdentifier}
-						title={currentMaterialRequestDetail.objectSchemaName}
-						thumbnail={currentMaterialRequestDetail.objectThumbnailUrl}
+						objectId={currentMaterialRequestDetail?.objectSchemaIdentifier}
+						title={currentMaterialRequestDetail?.objectSchemaName}
+						thumbnail={currentMaterialRequestDetail?.objectThumbnailUrl}
 						hideThumbnail={true}
 						orientation="vertical"
 						link={itemLink}
-						type={currentMaterialRequestDetail.objectDctermsFormat}
-						publishedBy={currentMaterialRequestDetail.maintainerName}
-						publishedOrCreatedDate={currentMaterialRequestDetail.objectPublishedOrCreatedDate}
+						type={currentMaterialRequestDetail?.objectDctermsFormat ?? null}
+						publishedBy={currentMaterialRequestDetail?.maintainerName}
+						publishedOrCreatedDate={currentMaterialRequestDetail?.objectPublishedOrCreatedDate}
 						icon={getIconFromObjectType(
-							currentMaterialRequestDetail.objectDctermsFormat,
+							currentMaterialRequestDetail?.objectDctermsFormat,
 							isObjectEssenceAccessibleToUser
 						)}
 					/>
@@ -498,7 +505,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	const getBladeFooterProps = (): BladeFooterProps => {
-		if (!currentMaterialRequestDetail.reuseForm) {
+		if (!currentMaterialRequestDetail?.reuseForm) {
 			return {
 				footerButtons: [
 					{
@@ -531,6 +538,10 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	};
 
 	const getBladeLayerIndex = () => {
+		if (!currentMaterialRequestDetail) {
+			return 0;
+		}
+
 		if (isDetailStatusBladeOpenWithStatus) {
 			if (isMobile) {
 				return 3;
@@ -623,17 +634,19 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 					} as BladeFooterButton,
 				]}
 			>
-				<MaterialRequestEvaluatorOptions
-					currentMaterialRequestDetail={currentMaterialRequestDetail}
-					onApproveRequest={() =>
-						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.APPROVED)
-					}
-					onDeclineRequest={() =>
-						setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
-					}
-					// TODO: add logic to request additional conditions
-					onRequestAdditionalConditions={noop}
-				/>
+				{currentMaterialRequestDetail && (
+					<MaterialRequestEvaluatorOptions
+						currentMaterialRequestDetail={currentMaterialRequestDetail}
+						onApproveRequest={() =>
+							setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.APPROVED)
+						}
+						onDeclineRequest={() =>
+							setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
+						}
+						// TODO: add logic to request additional conditions
+						onRequestAdditionalConditions={noop}
+					/>
+				)}
 			</Blade>
 			<MaterialRequestStatusUpdateBlade
 				isOpen={!!isDetailStatusBladeOpenWithStatus}
