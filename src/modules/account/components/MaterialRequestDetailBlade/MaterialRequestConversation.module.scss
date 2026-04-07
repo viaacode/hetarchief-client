@@ -18,6 +18,12 @@ $rich-text-editor-height-desktop: 20rem;
 		padding: abstracts.$spacer-md;
 	}
 
+	&__loading-more {
+		display: flex;
+		justify-content: center;
+		padding: abstracts.$spacer-sm 0;
+	}
+
 	&__message {
 		border-radius: abstracts.$spacer-sm;
 		padding: abstracts.$spacer-sm;

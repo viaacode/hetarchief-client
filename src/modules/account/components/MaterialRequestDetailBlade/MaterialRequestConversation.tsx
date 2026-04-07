@@ -14,7 +14,15 @@ import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
 import { format } from 'date-fns';
 import Link from 'next/link';
-import React, { type FC, type ReactNode, useEffect, useRef, useState } from 'react';
+import React, {
+	type FC,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useState,
+} from 'react';
 import { useSelector } from 'react-redux';
 import styles from './MaterialRequestConversation.module.scss';
 
@@ -28,19 +36,26 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	materialRequest,
 }) => {
 	const scrollableRef = useRef<HTMLDivElement>(null);
+	const scrollTriggerRef = useRef<HTMLDivElement>(null);
 	const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
+	const previousScrollHeightRef = useRef<number | null>(null);
 	const user = useSelector(selectCommonUser);
 
 	const [currentMessage, setCurrentMessage] = useState<string>('');
 
-	const { data: messages, isLoading: isLoadingMessages } =
-		useGetMaterialRequestConversationInfinite(
-			materialRequest.id,
-			MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE
-		);
+	const {
+		data: messages,
+		isLoading: isLoadingMessages,
+		fetchNextPage,
+		hasNextPage,
+		isFetchingNextPage,
+	} = useGetMaterialRequestConversationInfinite(
+		materialRequest.id,
+		MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE
+	);
 
 	/**
-	 * Scrolls to the bottom of the messages once at page load after the first messages have been loaded
+	 * Scrolls to the bottom of the messages once at page load after the first messages have been loaded.
 	 */
 	useEffect(() => {
 		if (
@@ -54,6 +69,58 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 			setHasScrolledToBottom(true);
 		}
 	}, [messages, hasScrolledToBottom]);
+
+	// Capture scrollHeight before every render so useLayoutEffect can correct after any page append
+	const pageCount = messages?.pages?.length ?? 0;
+	if (scrollableRef.current && hasScrolledToBottom) {
+		previousScrollHeightRef.current = scrollableRef.current.scrollHeight;
+	}
+
+	/**
+	 * Preserve scroll position after older messages are prepended.
+	 * Runs synchronously after DOM mutation but before paint.
+	 */
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: We want to trigger this effect when the number of pages changes
+	useLayoutEffect(() => {
+		const container = scrollableRef.current;
+		if (container && previousScrollHeightRef.current !== null) {
+			const newScrollHeight = container.scrollHeight;
+			container.scrollTop += newScrollHeight - previousScrollHeightRef.current;
+			previousScrollHeightRef.current = null;
+		}
+	}, [pageCount]);
+
+	/**
+	 * IntersectionObserver on a scroll-trigger element at the top of the message list.
+	 * When the scroll-trigger becomes visible, fetch the next page.
+	 */
+	const handleLoadMore = useCallback(() => {
+		if (!hasNextPage || isFetchingNextPage || !hasScrolledToBottom) return;
+		fetchNextPage().then(() => {
+			// Prefetch one extra page ahead so the user never hits the top
+			if (hasNextPage) {
+				fetchNextPage();
+			}
+		});
+	}, [hasNextPage, isFetchingNextPage, hasScrolledToBottom, fetchNextPage]);
+
+	useEffect(() => {
+		const sentinel = scrollTriggerRef.current;
+		const container = scrollableRef.current;
+		if (!sentinel || !container) return;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting && hasScrolledToBottom) {
+					handleLoadMore();
+				}
+			},
+			{ root: container, rootMargin: '500px 0px 0px 0px', threshold: 0 }
+		);
+		observer.observe(sentinel);
+		return () => observer.disconnect();
+	}, [handleLoadMore, hasScrolledToBottom]);
 
 	/**
 	 * Determines if the message is rendered
@@ -123,6 +190,12 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 					className={clsx(styles['p-conversation-messages__message-wrapper'])}
 					ref={scrollableRef}
 				>
+					<div ref={scrollTriggerRef} />
+					{isFetchingNextPage && (
+						<div className={clsx(styles['p-conversation-messages__loading-more'])}>
+							<Loading fullscreen={false} locationId="ConversationLoadMore" />
+						</div>
+					)}
 					{[...(messages?.pages || [])].reverse().map((page) => {
 						return [...page.items].reverse().map(renderMessage);
 					})}
