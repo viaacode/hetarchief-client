@@ -1,34 +1,166 @@
-import { RichTextEditorWithInternalState } from '@meemoo/react-components';
+import { useGetMaterialRequestConversationInfinite } from '@account/components/MaterialRequestDetailBlade/hooks/useGetMaterialRequestConversationInfinite';
+import {
+	Lookup_App_Material_Request_Message_Type_Enum,
+	type MaterialRequestMessage,
+} from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversation.types';
+import { selectCommonUser } from '@auth/store/user';
+import type { MaterialRequest, MaterialRequestMessageBodyMessage } from '@material-requests/types';
+import { Button, RichTextEditorWithInternalState } from '@meemoo/react-components';
+import Html from '@shared/components/Html/Html';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { Loading } from '@shared/components/Loading';
 import { tText } from '@shared/helpers/translate';
-import { type FC, useState } from 'react';
+import clsx from 'clsx';
+import { format } from 'date-fns';
+import Link from 'next/link';
+import React, { type FC, type ReactNode, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import styles from './MaterialRequestConversation.module.scss';
 
-const MaterialRequestConversation: FC = () => {
-	const [message, setMessage] = useState<string>('<p></p>');
+const MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE = 20;
+
+interface MaterialRequestConversationProps {
+	materialRequest: MaterialRequest;
+}
+
+export const MaterialRequestConversation: FC<MaterialRequestConversationProps> = ({
+	materialRequest,
+}) => {
+	const scrollableRef = useRef<HTMLDivElement>(null);
+	const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
+	const user = useSelector(selectCommonUser);
+
+	const [currentMessage, setCurrentMessage] = useState<string>('');
+
+	const { data: messages, isLoading: isLoadingMessages } =
+		useGetMaterialRequestConversationInfinite(
+			materialRequest.id,
+			MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE
+		);
+
+	/**
+	 * Scrolls to the bottom of the messages once at page load after the first messages have been loaded
+	 */
+	useEffect(() => {
+		if (
+			!hasScrolledToBottom &&
+			(messages?.pages?.[0]?.items || []).length &&
+			scrollableRef.current
+		) {
+			scrollableRef.current.scrollTo({
+				top: 100000000, // bottom
+			});
+			setHasScrolledToBottom(true);
+		}
+	}, [messages, hasScrolledToBottom]);
+
+	/**
+	 * Determines if the message is rendered
+	 * - on the right in green (own)
+	 * - on the left in grey (other)
+	 */
+	const isOwnMessage = (message: MaterialRequestMessage): boolean => {
+		return message.senderProfile.id === user?.profileId;
+	};
+
+	const renderOrganisationName = (message: MaterialRequestMessage) => {
+		if (message.senderProfile.organisation?.name) {
+			return `${message.senderProfile.organisation?.name} (${message.senderProfile.firstName})`;
+		} else {
+			return `${message.senderProfile.firstName} ${message.senderProfile.lastName}`;
+		}
+	};
+
+	const renderMessage = (message: MaterialRequestMessage): ReactNode => {
+		switch (message.messageType) {
+			case Lookup_App_Material_Request_Message_Type_Enum.Message:
+				return (
+					<div
+						className={clsx(
+							styles['p-conversation-messages__message'],
+							styles[`p-conversation-messages__message--${message.messageType}`],
+							isOwnMessage(message)
+								? styles[`p-conversation-messages__message--own`]
+								: styles[`p-conversation-messages__message--other`]
+						)}
+					>
+						<div className={clsx(styles['p-conversation-messages__message__sender'])}>
+							{renderOrganisationName(message)}
+						</div>
+						<div>{format(message.createdAt, 'dd MMM yyyy, HH:mm')}</div>
+						{!!message.body && (
+							<Html
+								type={'div'}
+								className={clsx(styles['p-conversation-messages__message__body'])}
+								content={(message.body as MaterialRequestMessageBodyMessage).message}
+							/>
+						)}
+						{message.attachmentUrl && (
+							<Link href={message.attachmentUrl} target="_blank" passHref>
+								<div className={clsx(styles['p-conversation-messages__message__attachment'])}>
+									<Icon name={IconNamesLight.File}></Icon>
+									<span>{message.attachmentFilename}</span>
+								</div>
+							</Link>
+						)}
+					</div>
+				);
+		}
+	};
+
+	const renderContent = () => {
+		if (isLoadingMessages) {
+			return (
+				<div className={clsx(styles['p-conversation-messages__loading'])}>
+					<Loading fullscreen locationId="ContentPageLabelsOverviewPage" />
+				</div>
+			);
+		}
+		return (
+			<div>
+				<div
+					className={clsx(styles['p-conversation-messages__message-wrapper'])}
+					ref={scrollableRef}
+				>
+					{[...(messages?.pages || [])].reverse().map((page) => {
+						return [...page.items].reverse().map(renderMessage);
+					})}
+				</div>
+				<div className={clsx(styles['p-conversation-messages__editor'])}>
+					<RichTextEditorWithInternalState
+						braft={{
+							contentStyle: {
+								minHeight: '100px',
+								maxHeight: '150px',
+								overflowY: 'auto',
+							},
+							draftProps: {
+								ariaDescribedBy: 'material-request-conversation__description',
+								ariaLabelledBy: 'material-request-conversation__label',
+							},
+						}}
+						id="material-request-conversation"
+						value={currentMessage}
+						onChange={(value) => setCurrentMessage(value)}
+						placeholder={tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___typ-je-bericht'
+						)}
+						controls={['bold', 'italic', 'underline', 'list-ul', 'list-ol', 'link']}
+					/>
+					<Button
+						className={clsx(styles['p-conversation-messages__editor__send-button'])}
+						variants={['text']}
+						icon={<Icon name={IconNamesLight.Email} />}
+						disabled={!currentMessage.length}
+						tabIndex={!currentMessage.length ? undefined : -1}
+					/>
+				</div>
+			</div>
+		);
+	};
 
 	return (
-		<div>
-			<RichTextEditorWithInternalState
-				braft={{
-					contentStyle: {
-						minHeight: '100px',
-						maxHeight: '150px',
-						overflowY: 'auto',
-					},
-					draftProps: {
-						ariaDescribedBy: 'material-request-conversation__description',
-						ariaLabelledBy: 'material-request-conversation__label',
-					},
-				}}
-				id="material-request-conversation"
-				value={message}
-				onChange={(value) => setMessage(value)}
-				placeholder={tText(
-					'modules/account/components/material-request-detail-blade/material-request-detail-blade___typ-je-bericht'
-				)}
-				controls={['bold', 'italic', 'underline', 'list-ul', 'list-ol', 'link']}
-			/>
-		</div>
+		<div className={clsx(styles['p-material-request-detail__conversation'])}>{renderContent()}</div>
 	);
 };
-
-export default MaterialRequestConversation;

@@ -1,0 +1,113 @@
+@use "../../../../styles/abstracts" as abstracts;
+
+$header-height-desktop: 18.1rem;
+$rich-text-editor-height-desktop: 20rem;
+
+.p-material-request-detail__tab--conversation {
+	:global([class*="Blade_c-blade__body-wrapper--content"]) {
+		padding: 0 !important;
+	}
+}
+
+.p-conversation-messages {
+	overflow: hidden;
+
+	&__message-wrapper {
+		height: calc(100vh - $header-height-desktop - $rich-text-editor-height-desktop);
+		overflow-y: scroll;
+		padding: abstracts.$spacer-md;
+	}
+
+	&__message {
+		border-radius: abstracts.$spacer-sm;
+		padding: abstracts.$spacer-sm;
+		margin-top: abstracts.$spacer-xs;
+		margin-bottom: abstracts.$spacer-sm;
+		width: 66%;
+		font-size: abstracts.$font-size-base;
+		gap: abstracts.$spacer-xs;
+		display: flex;
+		flex-direction: column;
+
+		&--own {
+			background-color: abstracts.$teal-medium;
+			margin-left: auto;
+			margin-right: 0;
+		}
+
+		&--other {
+			background-color: abstracts.$platinum;
+			margin-right: auto;
+			margin-left: 0;
+		}
+
+		&__sender {
+			font-weight: abstracts.$font-weight-bold;
+			font-size: abstracts.$font-size-md;
+		}
+
+		&__body {
+			margin-top: abstracts.$spacer-xxs;
+		}
+
+		&__attachment {
+			background-color: abstracts.$white;
+			border: 1px solid abstracts.$silver;
+			border-radius: abstracts.$spacer-xs;
+			padding: abstracts.$spacer-sm abstracts.$spacer-sm;
+			display: inline-flex;
+			flex-direction: column;
+			gap: abstracts.$spacer-xs;
+			width: auto;
+			text-decoration: none;
+			min-width: 20%;
+
+			[class*="Icon_c-icon"] {
+				font-size: 24px !important;
+				margin-left: -4px; // left align icon to text
+			}
+
+			&:hover {
+				background-color: abstracts.$platinum;
+				border: 1px solid abstracts.$zinc;
+			}
+		}
+	}
+
+	&__editor {
+		height: 20rem;
+		padding: 0 abstracts.$spacer-sm abstracts.$spacer-sm abstracts.$spacer-sm;
+
+		:global(.c-rich-text-editor) {
+			:global(.bf-controlbar) {
+				background-color: abstracts.$platinum;
+				border: 1px solid abstracts.$silver;
+				border-radius: abstracts.$spacer-xs abstracts.$spacer-xs 0 0;
+
+				&::before {
+					display: none;
+				}
+
+				:global(.separator-line) {
+					border: 1px solid abstracts.$silver;
+				}
+			}
+
+			:global(.bf-content) {
+				border: 1px solid abstracts.$silver !important;
+				border-radius: 0 0 abstracts.$spacer-xs abstracts.$spacer-xs;
+			}
+		}
+
+		&__send-button {
+			position: absolute;
+			right: abstracts.$spacer-md;
+			bottom: abstracts.$spacer-md;
+			padding: 1rem;
+			z-index: 3;
+
+			@include abstracts.focus-outline;
+		}
+	}
+}
+

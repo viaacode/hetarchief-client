@@ -1,40 +1,42 @@
-@use "../../../../styles/abstracts" as *;
+@use "../../../../styles/abstracts" as abstracts;
 
 .p-material-request-detail__documents {
+	padding: 2.4rem 3.2rem;
+
 	&--centered {
-		color: $neutral;
+		color: abstracts.$neutral;
 		text-align: center;
-		padding: $spacer-lg 0;
+		padding: abstracts.$spacer-lg 0;
 	}
 
 	&__table {
 		overflow: auto;
 
 		:global(.c-table__cell) {
-			font-size: $font-size-base;
-			line-height: $line-height-base;
+			font-size: abstracts.$font-size-base;
+			line-height: abstracts.$line-height-base;
 			text-align: left;
 
-			@media (max-width: $breakpoint-md) {
-				padding: $spacer-sm 0;
+			@media (max-width: abstracts.$breakpoint-md) {
+				padding: abstracts.$spacer-sm 0;
 			}
 		}
 
 		&-cell {
 			&-document {
-				transition: color $animate-default;
+				transition: color abstracts.$animate-default;
 
-				@include text-ellipsis(false);
+				@include abstracts.text-ellipsis(false);
 
 				&:hover,
 				&:focus {
 					cursor: pointer;
-					color: $teal;
+					color: abstracts.$teal;
 				}
 			}
 
 			&-date {
-				color: $neutral;
+				color: abstracts.$neutral;
 			}
 		}
 	}

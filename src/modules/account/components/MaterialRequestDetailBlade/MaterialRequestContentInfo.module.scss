@@ -1,19 +1,20 @@
-@use "../../../../styles/abstracts" as *;
+@use "../../../../styles/abstracts" as abstracts;
 
 .p-material-request-detail__content-info {
 	display: flex;
 	flex-direction: row;
-	gap: $spacer-lg;
+	gap: abstracts.$spacer-lg;
+	padding: 2.4rem 3.2rem;
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: abstracts.$breakpoint-md) {
 		flex-direction: column-reverse;
-		gap: $spacer-sm;
+		gap: abstracts.$spacer-sm;
 	}
 
 	&__reuse-form {
 		width: 50%;
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: abstracts.$breakpoint-md) {
 			width: 100%;
 		}
 	}
@@ -21,19 +22,19 @@
 	&__general-information {
 		width: 50%;
 
-		@media (max-width: $breakpoint-md) {
-			padding-bottom: $spacer-sm;
-			border-bottom: 1px solid $silver;
+		@media (max-width: abstracts.$breakpoint-md) {
+			padding-bottom: abstracts.$spacer-sm;
+			border-bottom: 1px solid abstracts.$silver;
 			width: 100%;
 
 		}
 	}
 
 	&__content-block {
-		padding: $spacer-sm 0;
+		padding: abstracts.$spacer-sm 0;
 		display: flex;
 		flex-direction: column;
-		border-bottom: 1px solid $silver;
+		border-bottom: 1px solid abstracts.$silver;
 		margin-block: 0;
 
 		&:first-child {
@@ -50,24 +51,24 @@
 		}
 
 		&-title {
-			font-size: $font-size-md;
-			line-height: $font-size-base;
-			font-weight: $font-weight-bold;
-			padding-bottom: $spacer-xs;
+			font-size: abstracts.$font-size-md;
+			line-height: abstracts.$font-size-base;
+			font-weight: abstracts.$font-weight-bold;
+			padding-bottom: abstracts.$spacer-xs;
 		}
 
 		&-subtitle {
-			color: $grey;
-			font-size: $font-size-base;
-			line-height: $font-size-lg;
-			padding-bottom: $spacer-xxs;
+			color: abstracts.$grey;
+			font-size: abstracts.$font-size-base;
+			line-height: abstracts.$font-size-lg;
+			padding-bottom: abstracts.$spacer-xxs;
 		}
 
 		&-value {
-			color: $grey;
+			color: abstracts.$grey;
 			padding: 0;
-			font-size: $font-size-base;
-			line-height: $font-size-lg;
+			font-size: abstracts.$font-size-base;
+			line-height: abstracts.$font-size-lg;
 		}
 
 		&-media {

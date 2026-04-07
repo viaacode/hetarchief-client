@@ -1,4 +1,4 @@
-import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
+import { MaterialRequestDetailBlade } from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
 import {
 	ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
 	ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,

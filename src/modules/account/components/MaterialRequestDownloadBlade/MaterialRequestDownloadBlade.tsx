@@ -8,7 +8,7 @@ interface MaterialRequestDownloadBladeProps {
 	onClose: () => void;
 }
 
-const MaterialRequestDownloadBlade: FC<MaterialRequestDownloadBladeProps> = ({
+export const MaterialRequestDownloadBlade: FC<MaterialRequestDownloadBladeProps> = ({
 	location,
 	downloadUrl,
 	onClose,
@@ -46,5 +46,3 @@ const MaterialRequestDownloadBlade: FC<MaterialRequestDownloadBladeProps> = ({
 		)}
 	</Blade>
 );
-
-export default MaterialRequestDownloadBlade;

@@ -1,13 +1,14 @@
-import MaterialRequestDownloadBlade from '@account/components/MaterialRequestDownloadBlade/MaterialRequestDownloadBlade';
-import MaterialRequestEvaluatorOptions from '@account/components/MaterialRequestEvaluatorOptions/MaterialRequestEvaluatorOptions';
+import { MaterialRequestConversation } from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversation';
+import { MaterialRequestDownloadBlade } from '@account/components/MaterialRequestDownloadBlade/MaterialRequestDownloadBlade';
+import { MaterialRequestEvaluatorOptions } from '@account/components/MaterialRequestEvaluatorOptions/MaterialRequestEvaluatorOptions';
 import { MaterialRequestStatusPill } from '@account/components/MaterialRequestStatusPill';
-import MaterialRequestStatusUpdateBlade from '@account/components/MaterialRequestStatusUpdateBlade/MaterialRequestStatusUpdateBlade';
+import { MaterialRequestStatusUpdateBlade } from '@account/components/MaterialRequestStatusUpdateBlade/MaterialRequestStatusUpdateBlade';
 import { getLastEvent } from '@account/utils/get-last-material-request-event';
 import {
 	determineHasDownloadExpired,
 	handleDownloadMaterialRequest,
 } from '@account/utils/handle-download-material-request';
-import { selectUser } from '@auth/store/user';
+import { selectCommonUser } from '@auth/store/user';
 import { MaterialRequestsService } from '@material-requests/services';
 import {
 	type MaterialRequest,
@@ -51,10 +52,10 @@ import { isNil, noop } from 'lodash-es';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { StringParam, useQueryParam } from 'use-query-params';
 import MaterialRequestContentInfo from './MaterialRequestContentInfo';
-import MaterialRequestConversation from './MaterialRequestConversation';
 import styles from './MaterialRequestDetailBlade.module.scss';
-import MaterialRequestDocuments from './MaterialRequestDocuments';
+import { MaterialRequestDocuments } from './MaterialRequestDocuments';
 import { MATERIAL_REQUEST_DETAILS_TABS } from './material-request-detail-blade.consts';
 import { MaterialRequestDetailBladeTabs } from './material-request-detail-blade.types';
 
@@ -65,14 +66,14 @@ interface MaterialRequestDetailBladeProps {
 	afterStatusChanged: () => void;
 }
 
-const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
+export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	onClose,
 	allowRequestCancellation,
 	currentMaterialRequestDetail,
 	afterStatusChanged,
 }) => {
 	const locale = useLocale();
-	const user = useSelector(selectUser);
+	const user = useSelector(selectCommonUser);
 	const { isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(currentMaterialRequestDetail);
 	const isDetailBladeOpen = !!currentMaterialRequestDetail;
 
@@ -87,9 +88,8 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	>(undefined);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-	const [activeTab, setActiveTab] = useState<MaterialRequestDetailBladeTabs>(
-		MaterialRequestDetailBladeTabs.Information
-	);
+	const [activeTabRaw, setActiveTab] = useQueryParam(QUERY_PARAM_KEY.ACTIVE_TAB, StringParam);
+	const activeTab = activeTabRaw || MaterialRequestDetailBladeTabs.Information;
 
 	const handleStatusChanged = useCallback(() => {
 		setHasStatusChanged(true);
@@ -97,8 +97,8 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	}, [afterStatusChanged]);
 
 	const isRequester = useMemo(
-		() => currentMaterialRequestDetail?.requesterId === user?.id,
-		[currentMaterialRequestDetail?.requesterId, user?.id]
+		() => currentMaterialRequestDetail?.requesterId === user?.profileId,
+		[currentMaterialRequestDetail?.requesterId, user?.profileId]
 	);
 	const canUserEvaluate = useMemo(
 		() => !!user?.isEvaluator && !isRequester,
@@ -135,7 +135,12 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	);
 
 	const tabs: TabProps[] = useMemo(
-		() => MATERIAL_REQUEST_DETAILS_TABS(activeTab, isRequester || canUserEvaluate, isMobile),
+		() =>
+			MATERIAL_REQUEST_DETAILS_TABS(
+				activeTab as MaterialRequestDetailBladeTabs,
+				isRequester || canUserEvaluate,
+				isMobile
+			),
 		[isMobile, isRequester, canUserEvaluate, activeTab]
 	);
 
@@ -157,7 +162,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		if (!isDetailBladeOpen) {
 			setActiveTab(MaterialRequestDetailBladeTabs.Information);
 		}
-	}, [isDetailBladeOpen]);
+	}, [isDetailBladeOpen, setActiveTab]);
 
 	if (!currentMaterialRequestDetail) {
 		return null;
@@ -204,7 +209,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 
 		switch (activeTab) {
 			case MaterialRequestDetailBladeTabs.Conversation:
-				return <MaterialRequestConversation />;
+				return <MaterialRequestConversation materialRequest={currentMaterialRequestDetail} />;
 			case MaterialRequestDetailBladeTabs.Documents:
 				return <MaterialRequestDocuments materialRequest={currentMaterialRequestDetail} />;
 		}
@@ -295,6 +300,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		) {
 			return (
 				<Button
+					className={clsx(styles['p-material-request-detail__cancel-button'])}
 					label={
 						isMobile
 							? tText(
@@ -655,5 +661,3 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		</BladeManager>
 	);
 };
-
-export default MaterialRequestDetailBlade;

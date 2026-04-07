@@ -1,3 +1,4 @@
+import type { MaterialRequestMessage } from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversation.types';
 import {
 	type MaterialRequest,
 	type MaterialRequestAttachment,
@@ -12,7 +13,6 @@ import { ApiService } from '@shared/services/api-service';
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { isNil } from 'lodash-es';
 import { stringifyUrl } from 'query-string';
-
 import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from './material-requests.service.const';
 import type { GetMaterialRequestsProps } from './material-requests.service.types';
 
@@ -137,6 +137,18 @@ export abstract class MaterialRequestsService {
 		);
 	}
 
+	private static async updateMaterialRequestStatus(
+		id: string,
+		status: MaterialRequestStatus,
+		motivation?: string
+	): Promise<MaterialRequestDetail | null> {
+		return ApiService.getApi()
+			.patch(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}/status`, {
+				json: { status, motivation },
+			})
+			.json();
+	}
+
 	public static async getAttachments(
 		materialRequestId: string,
 		orderProp?: string,
@@ -147,7 +159,7 @@ export abstract class MaterialRequestsService {
 		return ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: `material-request-messages/${materialRequestId}/attachments`,
+					url: `${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/attachments`,
 					query: {
 						...(orderProp && { orderProp }),
 						...(orderDirection && { orderDirection }),
@@ -159,15 +171,18 @@ export abstract class MaterialRequestsService {
 			.json();
 	}
 
-	private static async updateMaterialRequestStatus(
-		id: string,
-		status: MaterialRequestStatus,
-		motivation?: string
-	): Promise<MaterialRequestDetail | null> {
-		return ApiService.getApi()
-			.patch(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}/status`, {
-				json: { status, motivation },
-			})
-			.json();
+	public static getMaterialRequestMessages(
+		materialRequestId: string,
+		page: number,
+		size: number
+	): Promise<IPagination<MaterialRequestMessage>> {
+		const url = stringifyUrl({
+			url: `${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/messages`,
+			query: {
+				page,
+				size,
+			},
+		});
+		return ApiService.getApi().get(url).json();
 	}
 }

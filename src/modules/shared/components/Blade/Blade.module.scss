@@ -90,7 +90,6 @@ $padding-horizontal-mobile: $spacer-sm;
 		color: $black;
 		padding: 0 $padding-horizontal $spacer-sm;
 		word-break: break-word;
-		max-width: calc(100% - $padding-horizontal);
 
 		&--size-wide {
 			padding: $padding-horizontal $padding-horizontal $spacer-sm;

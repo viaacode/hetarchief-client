@@ -1,7 +1,7 @@
-@use "../../../../styles/abstracts" as *;
+@use "../../../../styles/abstracts" as abstracts;
 
 .p-material-request-detail {
-	@media (min-width: $breakpoint-md) {
+	@media (min-width: abstracts.$breakpoint-md) {
 		:global(.c-blade__title){
 			padding-bottom: 0;
 		}
@@ -12,24 +12,23 @@
 			:global(.c-tab) {
 				display: flex;
 				justify-content: center;
-				padding-bottom: $spacer-md;
-				color: $neutral;
+				padding-top: calc(#{abstracts.$spacer-sm} + 3px);
+				padding-bottom: abstracts.$spacer-sm;
+				color: abstracts.$neutral;
 				border-bottom: 3px solid transparent;
 
-				&:global(.c-tab--active) {
-					color: $black;
-					font-weight: $font-weight-bold;
-					border-bottom: 3px solid $teal;
-				}
-			}
+				@include abstracts.focus-outline;
 
-			:global(.c-tab:focus){
-				outline: none;
+				&:global(.c-tab--active) {
+					color: abstracts.$black;
+					font-weight: abstracts.$font-weight-bold;
+					border-bottom: 3px solid abstracts.$teal;
+				}
 			}
 		}
 	}
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: abstracts.$breakpoint-md) {
 		&__tabs {
 			:global(.c-tabs__item) {
 				display: flex;
@@ -38,19 +37,17 @@
 				width: 100%;
 			}
 
-			:global(.c-tab:focus){
-				outline: none;
-			}
+			:global(.c-tab){
+				@include abstracts.focus-outline;
 
-			:global(.c-tab) {
 				display: flex;
 				justify-content: center;
-				color: $zinc;
-				font-weight: $font-weight-normal;
-				padding: $spacer-sm;
+				color: abstracts.$zinc;
+				font-weight: abstracts.$font-weight-normal;
+				padding: abstracts.$spacer-sm;
 
 				:global(.c-tab__icon) {
-					font-size: $font-size-lg;
+					font-size: abstracts.$font-size-lg;
 					margin-right: 0;
 				}
 
@@ -59,16 +56,22 @@
 				}
 
 				&:global(.c-tab--active) {
-					color: $black;
-					font-weight: $font-weight-bold;
+					color: abstracts.$black;
+					font-weight: abstracts.$font-weight-bold;
 				}
 			}
 		}
 	}
 
+	:global([class*="Blade_c-blade__body-wrapper--content"]) {
+		padding: 0;
+		max-width: none;
+		overflow: hidden;
+	}
+
 	&__content-wrapper {
 		> * {
-			border-bottom: 1px solid $silver;
+			border-bottom: 1px solid abstracts.$silver;
 
 			&:last-child {
 				border-bottom: none;
@@ -78,11 +81,11 @@
 
 	&__title{
 		> :last-child {
-			margin-top: $spacer-xs;
+			margin-top: abstracts.$spacer-xs;
 		}
 
-		@media (min-width: $breakpoint-md) {
-			padding-bottom: $spacer-md;
+		@media (min-width: abstracts.$breakpoint-md) {
+			padding-bottom: abstracts.$spacer-md;
 			display: flex;
 			flex-direction: row;
 
@@ -93,9 +96,9 @@
 
 
 		&--text{
-			@include blade-title-styling;
+			@include abstracts.blade-title-styling;
 
-			margin-right: $spacer-md;
+			margin-right: abstracts.$spacer-md;
 		}
 	}
 
@@ -105,7 +108,7 @@
 		align-items: baseline;
 		justify-content: space-between;
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: abstracts.$breakpoint-md) {
 			align-items: center;
 
 			&:has(.p-material-request-detail__download-message) {
@@ -113,6 +116,10 @@
 				align-items: start;
 			}
 		}
+	}
+
+	&__cancel-button {
+		transform: translateY(-7px); // Move button up a bit, without affecting the tabs
 	}
 
 	&__evaluator-dropdown-flyout {
@@ -124,7 +131,7 @@
 	}
 
 	&__download-message {
-		color: $grey;
-		font-size: $font-size-base;
+		color: abstracts.$grey;
+		font-size: abstracts.$font-size-base;
 	}
 }
