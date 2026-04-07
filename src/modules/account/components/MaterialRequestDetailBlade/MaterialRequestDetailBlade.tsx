@@ -54,6 +54,7 @@ import { useSelector } from 'react-redux';
 import MaterialRequestContentInfo from './MaterialRequestContentInfo';
 import MaterialRequestConversation from './MaterialRequestConversation';
 import styles from './MaterialRequestDetailBlade.module.scss';
+import MaterialRequestDocuments from './MaterialRequestDocuments';
 import { MATERIAL_REQUEST_DETAILS_TABS } from './material-request-detail-blade.consts';
 import { MaterialRequestDetailBladeTabs } from './material-request-detail-blade.types';
 
@@ -205,7 +206,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			case MaterialRequestDetailBladeTabs.Conversation:
 				return <MaterialRequestConversation />;
 			case MaterialRequestDetailBladeTabs.Documents:
-				return null;
+				return <MaterialRequestDocuments materialRequest={currentMaterialRequestDetail} />;
 		}
 	};
 
