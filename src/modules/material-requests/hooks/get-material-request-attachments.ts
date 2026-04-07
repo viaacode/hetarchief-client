@@ -33,4 +33,5 @@ export const useGetMaterialRequestAttachments = (
 		placeholderData: keepPreviousData,
 		enabled,
 		retry: false,
+		refetchOnMount: 'always', // Refetching this on mount to make sure to have the latest
 	});

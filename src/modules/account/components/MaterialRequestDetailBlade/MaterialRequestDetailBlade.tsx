@@ -205,7 +205,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			case MaterialRequestDetailBladeTabs.Conversation:
 				return null;
 			case MaterialRequestDetailBladeTabs.Documents:
-				return <MaterialRequestDocuments materialRequestId={currentMaterialRequestDetail.id} />;
+				return <MaterialRequestDocuments materialRequest={currentMaterialRequestDetail} />;
 		}
 	};
 

@@ -1,5 +1,6 @@
+import { isMaterialRequestClosed } from '@account/utils/is-material-request-closed';
 import { useGetMaterialRequestAttachments } from '@material-requests/hooks/get-material-request-attachments';
-import type { MaterialRequestAttachment } from '@material-requests/types';
+import type { MaterialRequest, MaterialRequestAttachment } from '@material-requests/types';
 import { Button, PaginationBar, Table } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -9,19 +10,28 @@ import { sortingIcons } from '@shared/components/Table';
 import { tText } from '@shared/helpers/translate';
 import { asDate, formatMediumDateWithTime } from '@shared/utils/dates';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
+import clsx from 'clsx';
 import getConfig from 'next/config';
 import Link from 'next/link';
 import React, { type FC, useMemo, useState } from 'react';
-import type { Column, SortingRule, TableState } from 'react-table';
-import styles from './MaterialRequestDetailBlade.module.scss';
+import type {
+	Column,
+	ColumnInstance,
+	HeaderGroup,
+	SortingRule,
+	TableCellProps,
+	TableHeaderProps,
+	TableState,
+} from 'react-table';
+import styles from './MaterialRequestDocuments.module.scss';
 
 interface MaterialRequestDocumentsProps {
-	materialRequestId: string;
+	materialRequest: MaterialRequest;
 }
 
 const MATERIAL_REQUEST_DOCUMENTS_PAGE_SIZE = 20;
 
-const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({ materialRequestId }) => {
+const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({ materialRequest }) => {
 	const { publicRuntimeConfig } = getConfig();
 	const [orderProp, setOrderProp] = useState<string>('createdAt');
 	const [orderDirection, setOrderDirection] = useState<AvoSearchOrderDirection>(
@@ -32,9 +42,10 @@ const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({ materialR
 	const {
 		data: attachments,
 		isLoading,
+		isFetching,
 		isError,
 	} = useGetMaterialRequestAttachments(
-		materialRequestId,
+		materialRequest.id,
 		orderProp,
 		orderDirection,
 		page,
@@ -49,14 +60,18 @@ const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({ materialR
 			accessor: 'attachmentFilename',
 			disableSortBy: true,
 			Cell: ({ row: { original } }) => (
-				<a
+				<Link
+					className={clsx(
+						styles['p-material-request-detail__documents__table-cell'],
+						styles['p-material-request-detail__documents__table-cell-document']
+					)}
 					href={original.attachmentUrl}
 					target="_blank"
 					rel="noopener noreferrer"
 					aria-label={`${original.attachmentFilename} ${tText('modules/account/components/material-request-detail-blade/material-request-documents___opent-in-nieuw-venster')}`}
 				>
 					{original.attachmentFilename}
-				</a>
+				</Link>
 			),
 		} as Column<MaterialRequestAttachment>,
 		{
@@ -66,7 +81,17 @@ const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({ materialR
 			accessor: 'createdAt',
 			Cell: ({ row: { original } }) => {
 				const date = formatMediumDateWithTime(asDate(original.createdAt));
-				return <span title={date}>{date}</span>;
+				return (
+					<span
+						className={clsx(
+							styles['p-material-request-detail__documents__table-cell'],
+							styles['p-material-request-detail__documents__table-cell-date']
+						)}
+						title={date}
+					>
+						{date}
+					</span>
+				);
 			},
 		} as Column<MaterialRequestAttachment>,
 	];
@@ -85,76 +110,38 @@ const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({ materialR
 		newOrderProp: string | undefined,
 		newOrderDirection: AvoSearchOrderDirection | undefined
 	): void => {
+		console.log(newOrderProp, orderProp, newOrderDirection, orderDirection);
 		if (newOrderProp !== orderProp || newOrderDirection !== orderDirection) {
 			setOrderProp(newOrderProp || 'createdAt');
 			setOrderDirection(newOrderDirection || AvoSearchOrderDirection.DESC);
 		}
 	};
 
-	if (isLoading) {
-		return (
-			<div className={styles['p-material-request-detail__content']}>
-				<Loading fullscreen={false} locationId="material-request-documents" />
-			</div>
-		);
-	}
+	const getTableColumnProps = (
+		column: HeaderGroup<MaterialRequestAttachment> | ColumnInstance<MaterialRequestAttachment>
+	): Partial<TableHeaderProps> | Partial<TableCellProps> => {
+		if (column.id === 'createdAt') {
+			const columnWidth = '17rem';
+			return {
+				style: {
+					width: columnWidth,
+					minWidth: columnWidth,
+					maxWidth: columnWidth,
+				},
+			};
+		}
 
-	if (isError) {
-		return (
-			<div className={styles['p-material-request-detail__content']}>
-				<p>
-					{tText(
-						'modules/account/components/material-request-detail-blade/material-request-documents___fout-bij-laden'
-					)}
-				</p>
-			</div>
-		);
-	}
+		return {};
+	};
 
-	if (!attachments?.items || attachments.items.length === 0) {
+	const renderDownloadAllButton = () => {
+		if (!isMaterialRequestClosed(materialRequest)) {
+			return null;
+		}
 		return (
-			<div className={styles['p-material-request-detail__content']}>
-				<p>
-					{tText(
-						'modules/account/components/material-request-detail-blade/material-request-documents___geen-documenten'
-					)}
-				</p>
-			</div>
-		);
-	}
-
-	return (
-		<>
-			<Table<MaterialRequestAttachment>
-				options={{
-					columns,
-					data: attachments.items,
-					initialState: {
-						sortBy: sortFilters,
-						pageSize: MATERIAL_REQUEST_DOCUMENTS_PAGE_SIZE,
-					} as TableState<MaterialRequestAttachment>,
-				}}
-				sortingIcons={sortingIcons}
-				onSortChange={onSortChange}
-				showTable={true}
-				enableRowFocusOnClick={true}
-				pagination={({ gotoPage }) => (
-					<PaginationBar
-						showFirstAndLastButtons
-						{...getDefaultPaginationBarProps()}
-						startItem={Math.max(0, page - 1) * MATERIAL_REQUEST_DOCUMENTS_PAGE_SIZE}
-						totalItems={attachments?.total || 0}
-						itemsPerPage={MATERIAL_REQUEST_DOCUMENTS_PAGE_SIZE}
-						onPageChange={(pageZeroBased: number) => {
-							gotoPage(pageZeroBased);
-							setPage(pageZeroBased + 1);
-						}}
-					/>
-				)}
-			/>
 			<Link
 				passHref
-				href={`${publicRuntimeConfig.PROXY_URL}/material-request-messages/${materialRequestId}/attachments/download-zip`}
+				href={`${publicRuntimeConfig.PROXY_URL}/material-request-messages/${materialRequest.id}/attachments/download-zip`}
 				target="_blank"
 				rel="noopener noreferrer"
 				aria-label={tText(
@@ -162,20 +149,83 @@ const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({ materialR
 				)}
 			>
 				<Button
-					className="u-mt-16"
-					label={
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-documents___download-alles'
-						) + ` (${attachments.total})`
-					}
+					label={tText(
+						'modules/account/components/material-request-detail-blade/material-request-documents___download-alles',
+						{
+							numberOfAttachments: attachments?.total,
+						}
+					)}
 					variants="outline"
-					iconStart={
-						<Icon className="u-text-left" name={IconNamesLight.Download} aria-hidden="true" />
-					}
+					iconStart={<Icon name={IconNamesLight.Download} aria-hidden="true" />}
 					tabIndex={-1}
 				/>
 			</Link>
-		</>
+		);
+	};
+
+	const renderContent = () => {
+		if (isLoading || isFetching) {
+			return <Loading fullscreen={false} locationId="material-request-detail-blade-documents" />;
+		}
+
+		if (isError) {
+			return tText(
+				'modules/account/components/material-request-detail-blade/material-request-documents___fout-bij-laden'
+			);
+		}
+
+		if (!attachments?.items || attachments.items.length === 0) {
+			return tText(
+				'modules/account/components/material-request-detail-blade/material-request-documents___geen-documenten'
+			);
+		}
+
+		return (
+			<>
+				<Table<MaterialRequestAttachment>
+					className={clsx(styles['p-material-request-detail__documents__table'])}
+					getColumnProps={getTableColumnProps}
+					options={{
+						columns,
+						data: attachments.items,
+						initialState: {
+							sortBy: sortFilters,
+							pageSize: MATERIAL_REQUEST_DOCUMENTS_PAGE_SIZE,
+						} as TableState<MaterialRequestAttachment>,
+					}}
+					sortingIcons={sortingIcons}
+					onSortChange={onSortChange}
+					showTable={true}
+					enableRowFocusOnClick={true}
+					pagination={({ gotoPage }) => (
+						<PaginationBar
+							showFirstAndLastButtons
+							{...getDefaultPaginationBarProps()}
+							startItem={Math.max(0, page - 1) * MATERIAL_REQUEST_DOCUMENTS_PAGE_SIZE}
+							totalItems={attachments?.total || 0}
+							itemsPerPage={MATERIAL_REQUEST_DOCUMENTS_PAGE_SIZE}
+							onPageChange={(pageZeroBased: number) => {
+								gotoPage(pageZeroBased);
+								setPage(pageZeroBased + 1);
+							}}
+						/>
+					)}
+				/>
+				{renderDownloadAllButton()}
+			</>
+		);
+	};
+
+	return (
+		<div
+			className={clsx(
+				styles['p-material-request-detail__documents'],
+				(isLoading || isFetching || isError || !attachments?.items.length) &&
+					styles['p-material-request-detail__documents--centered']
+			)}
+		>
+			{renderContent()}
+		</div>
 	);
 };
 
