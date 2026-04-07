@@ -5,11 +5,11 @@ import { MaterialRequestsService } from '../services';
 import type { MaterialRequest } from '../types';
 
 export const useGetMaterialRequestsForMediaItem = (
-	id: string | null,
+	schemaIdentifier: string | null,
 	enabled?: boolean
 ): UseQueryResult<MaterialRequest[]> =>
 	useQuery({
-		queryKey: [QUERY_KEYS.getMaterialRequestsDuplicates, id],
-		queryFn: () => MaterialRequestsService.forMediaItem(id),
+		queryKey: [QUERY_KEYS.getMaterialRequestsDuplicates, schemaIdentifier],
+		queryFn: () => MaterialRequestsService.forMediaItem(schemaIdentifier),
 		enabled,
 	});

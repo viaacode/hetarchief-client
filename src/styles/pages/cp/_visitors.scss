@@ -1,12 +1,8 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$page: "p-cp-visitors";
-
-// TODO: make styles reusable (see requests)
-
-.#{$page} {
+.p-cp-visitors {
 	&__header {
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			display: flex;
 			flex-flow: row-reverse nowrap;
 
@@ -18,18 +14,18 @@ $page: "p-cp-visitors";
 	}
 
 	&__search {
-		margin-bottom: $spacer-md;
+		margin-bottom: abstracts.$spacer-md;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			flex-basis: 34.1rem;
 			margin-bottom: 0;
-			margin-left: $spacer-sm;
+			margin-left: abstracts.$spacer-sm;
 		}
 	}
 
 	&__actions {
 		cursor: pointer;
-		font-size: $font-size-lg;
+		font-size: abstracts.$font-size-lg;
 		transform: translateY(0.2rem); // shift if to center on single-line
 	}
 
@@ -40,13 +36,13 @@ $page: "p-cp-visitors";
 
 	&__link {
 		text-decoration: none;
-		transition: color $animate-default;
+		transition: color abstracts.$animate-default;
 
 		&:hover,
 		&:active,
 		&:focus,
 		&:focus-within {
-			color: $teal !important;
+			color: abstracts.$teal !important;
 		}
 	}
 
@@ -57,10 +53,4 @@ $page: "p-cp-visitors";
 			padding-bottom: 2rem;
 		}
 	}
-
-	// tbody {
-	// 	tr {
-	// 		cursor: pointer;
-	// 	}
-	// }
 }

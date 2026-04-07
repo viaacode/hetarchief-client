@@ -8,7 +8,9 @@ import { Loading } from '@shared/components/Loading';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
 import { sortingIcons } from '@shared/components/Table';
 import { tText } from '@shared/helpers/translate';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { asDate, formatMediumDateWithTime } from '@shared/utils/dates';
+import { isMobileSize } from '@shared/utils/is-mobile';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import getConfig from 'next/config';
@@ -40,6 +42,10 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 		AvoSearchOrderDirection.ASC
 	);
 	const [page, setPage] = useState<number>(1);
+
+	// We need different functionalities for different viewport sizes
+	const windowSize = useWindowSizeContext();
+	const isMobile = isMobileSize(windowSize);
 
 	const {
 		data: attachments,
@@ -112,7 +118,6 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 		newOrderProp: string | undefined,
 		newOrderDirection: AvoSearchOrderDirection | undefined
 	): void => {
-		console.log(newOrderProp, orderProp, newOrderDirection, orderDirection);
 		if (newOrderProp !== orderProp || newOrderDirection !== orderDirection) {
 			setOrderProp(newOrderProp || 'createdAt');
 			setOrderDirection(newOrderDirection || AvoSearchOrderDirection.DESC);
@@ -157,7 +162,7 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 							numberOfAttachments: attachments?.total,
 						}
 					)}
-					variants="outline"
+					variants={['outline', isMobile ? 'sm' : 'md']}
 					iconStart={<Icon name={IconNamesLight.Download} aria-hidden="true" />}
 					tabIndex={-1}
 				/>
@@ -165,23 +170,10 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 		);
 	};
 
-	const renderContent = () => {
-		if (isLoading || isFetching) {
-			return <Loading fullscreen={false} locationId="material-request-detail-blade-documents" />;
+	const renderTable = () => {
+		if (!attachments?.items?.length) {
+			return null;
 		}
-
-		if (isError) {
-			return tText(
-				'modules/account/components/material-request-detail-blade/material-request-documents___fout-bij-laden'
-			);
-		}
-
-		if (!attachments?.items || attachments.items.length === 0) {
-			return tText(
-				'modules/account/components/material-request-detail-blade/material-request-documents___geen-documenten'
-			);
-		}
-
 		return (
 			<>
 				<Table<MaterialRequestAttachment>
@@ -189,7 +181,7 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 					getColumnProps={getTableColumnProps}
 					options={{
 						columns,
-						data: attachments.items,
+						data: attachments?.items || [],
 						initialState: {
 							sortBy: sortFilters,
 							pageSize: MATERIAL_REQUEST_DOCUMENTS_PAGE_SIZE,
@@ -218,6 +210,132 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 		);
 	};
 
+	const renderList = () => {
+		return (
+			<div className={clsx(styles['p-material-request-detail__documents'])}>
+				<div className={clsx(styles['p-material-request-detail__documents__mobile-actions'])}>
+					{renderDownloadAllButton()}
+					<Button
+						label={tText(
+							'modules/account/components/material-request-detail-blade/material-request-documents___datum'
+						)}
+						variants={['text', 'block', 'sm']}
+						iconEnd={
+							<Icon
+								name={
+									orderDirection === AvoSearchOrderDirection.DESC
+										? IconNamesLight.ArrowDown
+										: IconNamesLight.ArrowUp
+								}
+								aria-hidden
+							/>
+						}
+						onClick={() =>
+							setOrderDirection(
+								orderDirection === AvoSearchOrderDirection.DESC
+									? AvoSearchOrderDirection.ASC
+									: AvoSearchOrderDirection.DESC
+							)
+						}
+						tabIndex={-1}
+					/>
+				</div>
+
+				<div
+					className={clsx(
+						(isLoading || isFetching || isError || !attachments?.items.length) &&
+							styles['p-material-request-detail__documents--centered']
+					)}
+				>
+					{renderLoading()}
+					{renderError()}
+					{!isLoading && !isFetching && !isError && (
+						<>
+							<ol className={clsx(styles['p-material-request-detail__documents__list'])}>
+								{renderEmptyState()}
+								{(attachments?.items || []).map((item) => (
+									<li
+										key={item.id}
+										className={clsx(styles['p-material-request-detail__documents__list-item'])}
+									>
+										<Link
+											href={item.attachmentUrl}
+											target="_blank"
+											rel="noopener noreferrer"
+											aria-label={`${item.attachmentFilename} ${tText('modules/account/components/material-request-detail-blade/material-request-documents___opent-in-nieuw-venster')}`}
+										>
+											<Icon
+												className={clsx(
+													styles['p-material-request-detail__documents__list-item-icon']
+												)}
+												name={IconNamesLight.File}
+											/>
+											<div
+												className={clsx(
+													styles['p-material-request-detail__documents__list-item-text']
+												)}
+											>
+												<span>{item.attachmentFilename}</span>
+												<span>{formatMediumDateWithTime(asDate(item.createdAt))}</span>
+											</div>
+										</Link>
+									</li>
+								))}
+							</ol>
+							<PaginationBar
+								showFirstAndLastButtons
+								{...getDefaultPaginationBarProps()}
+								startItem={Math.max(0, page - 1) * MATERIAL_REQUEST_DOCUMENTS_PAGE_SIZE}
+								totalItems={attachments?.total || 0}
+								itemsPerPage={MATERIAL_REQUEST_DOCUMENTS_PAGE_SIZE}
+								onPageChange={(pageZeroBased: number) => {
+									setPage(pageZeroBased + 1);
+								}}
+							/>
+						</>
+					)}
+				</div>
+			</div>
+		);
+	};
+
+	const renderLoading = () => {
+		if (!isLoading && !isFetching) {
+			return null;
+		}
+		return <Loading fullscreen={false} locationId="material-request-detail-blade-documents" />;
+	};
+
+	const renderError = () => {
+		if (isLoading || isFetching) {
+			return null;
+		}
+		if (!isError) {
+			return null;
+		}
+
+		return tText(
+			'modules/account/components/material-request-detail-blade/material-request-documents___fout-bij-laden'
+		);
+	};
+
+	const renderEmptyState = () => {
+		if (isLoading || isFetching || isError) {
+			return null;
+		}
+		if (attachments?.items?.length) {
+			return null;
+		}
+
+		return tText(
+			'modules/account/components/material-request-detail-blade/material-request-documents___geen-documenten'
+		);
+	};
+
+	if (isMobile) {
+		return renderList();
+	}
+
 	return (
 		<div
 			className={clsx(
@@ -226,7 +344,10 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 					styles['p-material-request-detail__documents--centered']
 			)}
 		>
-			{renderContent()}
+			{renderLoading()}
+			{renderError()}
+			{renderEmptyState()}
+			{renderTable()}
 		</div>
 	);
 };

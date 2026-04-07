@@ -24,6 +24,7 @@
 
 		&-cell {
 			&-document {
+				text-decoration: none;
 				transition: color abstracts.$animate-default;
 
 				@include abstracts.text-ellipsis(false);
@@ -37,6 +38,77 @@
 
 			&-date {
 				color: abstracts.$neutral;
+			}
+		}
+	}
+
+	&__mobile {
+		min-height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-items: start;
+	}
+
+	&__mobile-actions {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+
+		> * {
+			width: fit-content;
+		}
+
+		:last-child {
+			font-weight: abstracts.$font-weight-bold;
+		}
+
+		:only-child {
+			margin-left: auto;
+		}
+	}
+
+	&__list {
+		list-style: none;
+		height: 100%;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+
+		&-item {
+			border: 1px solid abstracts.$silver;
+			border-radius: abstracts.$spacer-xs;
+			margin: abstracts.$spacer-sm 0;
+			padding: abstracts.$spacer-sm;
+			width: 100%;
+			transition: color abstracts.$animate-default;
+
+			&:focus {
+				cursor: pointer;
+				color: abstracts.$teal;
+			}
+
+			&:last-child, {
+				margin-bottom: 0;
+			}
+
+			> a {
+				text-decoration: none;
+				display: flex;
+			}
+
+			&-icon {
+				font-size: abstracts.$font-size-lg;
+				margin-right: abstracts.$spacer-xs;
+			}
+
+			&-text {
+				display: flex;
+				flex-direction: column;
+
+				:last-child{
+					color: abstracts.$zinc;
+					font-style: italic;
+				}
 			}
 		}
 	}

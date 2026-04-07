@@ -244,18 +244,19 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				console.error('No media info available');
 				return;
 			}
+			const newspaperExportEndpoint = `${
+				publicRuntimeConfig.PROXY_URL
+			}/${NEWSPAPERS_SERVICE_BASE_URL}/${IE_OBJECTS_SERVICE_EXPORT}/zip`;
+
 			switch (format) {
 				case MetadataExportFormats.fullNewspaperZip:
 					setCopyrightModalOpen(true);
 					setOnConfirmCopyright(() => () => {
 						window.open(
 							stringifyUrl({
-								url: `${
-									publicRuntimeConfig.PROXY_URL
-								}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(
-									mediaInfo?.schemaIdentifier
-								)}/${IE_OBJECTS_SERVICE_EXPORT}/zip`,
+								url: newspaperExportEndpoint,
 								query: {
+									ieObjectId: mediaInfo.iri,
 									currentPageUrl: window.origin + router.asPath,
 								},
 							})
@@ -268,31 +269,30 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					setOnConfirmCopyright(() => () => {
 						window.open(
 							stringifyUrl({
-								url: `${
-									publicRuntimeConfig.PROXY_URL
-								}/${NEWSPAPERS_SERVICE_BASE_URL}/${encodeURIComponent(
-									mediaInfo.schemaIdentifier
-								)}/${IE_OBJECTS_SERVICE_EXPORT}/zip?page=${currentPageIndex}`,
+								url: newspaperExportEndpoint,
 								query: {
+									ieObjectId: mediaInfo.iri,
+									page: currentPageIndex,
 									currentPageUrl: window.origin + router.asPath,
 								},
 							})
 						);
 					});
 					break;
-				default:
+				default: {
+					const objectExportEndpoint = `${
+						publicRuntimeConfig.PROXY_URL
+					}/${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`;
 					window.open(
 						stringifyUrl({
-							url: `${
-								publicRuntimeConfig.PROXY_URL
-							}/${IE_OBJECTS_SERVICE_BASE_URL}/${encodeURIComponent(
-								mediaInfo.schemaIdentifier
-							)}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`,
+							url: objectExportEndpoint,
 							query: {
+								ieObjectId: mediaInfo.iri,
 								currentPageUrl: window.origin + router.asPath,
 							},
 						})
 					);
+				}
 			}
 			setMetadataExportDropdownOpen(false);
 		},

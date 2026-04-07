@@ -121,8 +121,10 @@ export abstract class MaterialRequestsService {
 		return ApiService.getApi().post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/send`, { json }).json();
 	}
 
-	public static async forMediaItem(itemId?: string | null): Promise<MaterialRequest[]> {
-		if (!itemId) {
+	public static async forMediaItem(
+		objectSchemaIdentifier?: string | null
+	): Promise<MaterialRequest[]> {
+		if (!objectSchemaIdentifier) {
 			return [];
 		}
 
@@ -133,7 +135,7 @@ export abstract class MaterialRequestsService {
 		});
 
 		return (materialRequests?.items || []).filter(
-			(request) => request.objectSchemaIdentifier === itemId
+			(request) => request.objectSchemaIdentifier === objectSchemaIdentifier
 		);
 	}
 

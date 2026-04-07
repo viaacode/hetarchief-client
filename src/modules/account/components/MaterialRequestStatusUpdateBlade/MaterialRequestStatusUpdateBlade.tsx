@@ -20,7 +20,7 @@ interface MaterialRequestStatusUpdateBladeProps {
 	isOpen: boolean;
 	onClose: (statusChanged: boolean) => void;
 	status?: MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED;
-	currentMaterialRequestDetail: MaterialRequest;
+	currentMaterialRequestDetail: MaterialRequest | undefined;
 	afterStatusChanged: () => void;
 	layer: number;
 	currentLayer: number;
@@ -49,6 +49,10 @@ export const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBla
 			setMotivationInputValue('');
 		}
 	}, [isOpen]);
+
+	if (!currentMaterialRequestDetail) {
+		return null;
+	}
 
 	const {
 		objectSchemaName: objectName,
@@ -156,7 +160,7 @@ export const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBla
 			subtitle={
 				<MaterialCard
 					openInNewTab={true}
-					objectId={objectSchemaIdentifier}
+					objectSchemaIdentifier={objectSchemaIdentifier}
 					title={objectName}
 					thumbnail={objectThumbnailUrl}
 					hideThumbnail={true}
