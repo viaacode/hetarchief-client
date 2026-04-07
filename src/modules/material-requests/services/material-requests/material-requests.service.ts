@@ -1,5 +1,6 @@
 import {
 	type MaterialRequest,
+	type MaterialRequestAttachment,
 	type MaterialRequestCreation,
 	type MaterialRequestDetail,
 	type MaterialRequestMaintainer,
@@ -136,6 +137,28 @@ export abstract class MaterialRequestsService {
 		return (materialRequests?.items || []).filter(
 			(request) => request.objectSchemaIdentifier === objectSchemaIdentifier
 		);
+	}
+
+	public static async getAttachments(
+		materialRequestId: string,
+		orderProp?: string,
+		orderDirection?: string,
+		page?: number,
+		size?: number
+	): Promise<IPagination<MaterialRequestAttachment>> {
+		return ApiService.getApi()
+			.get(
+				stringifyUrl({
+					url: `material-request-messages/${materialRequestId}/attachments`,
+					query: {
+						...(orderProp && { orderProp }),
+						...(orderDirection && { orderDirection }),
+						...(page && { page }),
+						...(size && { size }),
+					},
+				})
+			)
+			.json();
 	}
 
 	private static async updateMaterialRequestStatus(

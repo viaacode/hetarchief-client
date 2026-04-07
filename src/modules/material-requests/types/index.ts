@@ -53,6 +53,13 @@ export interface MaterialRequestEvent {
 	createdAt: string;
 }
 
+export interface MaterialRequestAttachment {
+	id: string;
+	attachmentUrl: string;
+	attachmentFilename: string;
+	createdAt: string;
+}
+
 export enum MaterialRequestAdditionalConditionsType {
 	PERMISSION_LICENSE_OWNER = 'PERMISSION_LICENSE_OWNER',
 	ATTRIBUTION = 'ATTRIBUTION',

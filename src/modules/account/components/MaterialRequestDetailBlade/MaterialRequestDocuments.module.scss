@@ -1,0 +1,41 @@
+@use "../../../../styles/abstracts" as *;
+
+.p-material-request-detail__documents {
+	&--centered {
+		color: $neutral;
+		text-align: center;
+		padding: $spacer-lg 0;
+	}
+
+	&__table {
+		overflow: auto;
+
+		:global(.c-table__cell) {
+			font-size: $font-size-base;
+			line-height: $line-height-base;
+			text-align: left;
+
+			@media (max-width: $breakpoint-md) {
+				padding: $spacer-sm 0;
+			}
+		}
+
+		&-cell {
+			&-document {
+				transition: color $animate-default;
+
+				@include text-ellipsis(false);
+
+				&:hover,
+				&:focus {
+					cursor: pointer;
+					color: $teal;
+				}
+			}
+
+			&-date {
+				color: $neutral;
+			}
+		}
+	}
+}
