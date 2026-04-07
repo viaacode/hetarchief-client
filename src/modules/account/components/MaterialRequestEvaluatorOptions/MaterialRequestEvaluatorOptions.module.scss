@@ -86,16 +86,16 @@
 
 		&:global(:hover:not(:disabled)) {
 			color: $black;
-		}
-
-		&:global(:hover) {
-			background-color: $white;
 
 			.p-material-request-detail-evaluator-options__button {
 				&-title {
 					font-weight: $font-weight-bold;
 				}
 			}
+		}
+
+		&:global(:hover) {
+			background-color: $white;
 		}
 
 		&:global(:disabled) {
