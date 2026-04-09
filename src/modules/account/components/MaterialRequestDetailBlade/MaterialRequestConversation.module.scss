@@ -98,6 +98,7 @@ $bottom-tabs-height-mobile: 5.6rem; // bottom tabs
 		height: 20rem;
 		padding: 0 abstracts.$spacer-sm abstracts.$spacer-sm abstracts.$spacer-sm;
 		position: relative;
+		overflow: hidden;
 
 		:global(.c-rich-text-editor) {
 			:global(.bf-controlbar) {

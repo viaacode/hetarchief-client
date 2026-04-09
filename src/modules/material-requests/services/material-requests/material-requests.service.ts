@@ -187,4 +187,15 @@ export abstract class MaterialRequestsService {
 		});
 		return ApiService.getApi().get(url).json();
 	}
+
+	public static sendMessage(
+		materialRequestId: string,
+		message: string
+	): Promise<MaterialRequestMessage> {
+		return ApiService.getApi()
+			.post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/messages`, {
+				json: { message },
+			})
+			.json();
+	}
 }

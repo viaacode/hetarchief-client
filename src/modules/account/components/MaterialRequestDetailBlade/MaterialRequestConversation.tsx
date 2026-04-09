@@ -1,4 +1,5 @@
 import { useGetMaterialRequestConversationInfinite } from '@account/components/MaterialRequestDetailBlade/hooks/useGetMaterialRequestConversationInfinite';
+import { useSendMaterialRequestMessage } from '@account/components/MaterialRequestDetailBlade/hooks/useSendMaterialRequestMessage';
 import {
 	Lookup_App_Material_Request_Message_Type_Enum,
 	type MaterialRequestMessage,
@@ -11,6 +12,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { tText } from '@shared/helpers/translate';
+import { toastService } from '@shared/services/toast-service';
 import clsx from 'clsx';
 import { format } from 'date-fns';
 import Link from 'next/link';
@@ -42,6 +44,30 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	const user = useSelector(selectCommonUser);
 
 	const [currentMessage, setCurrentMessage] = useState<string>('');
+
+	const { mutate: sendMessage, isPending: isSending } = useSendMaterialRequestMessage(
+		materialRequest.id
+	);
+
+	const handleSendMessage = useCallback(() => {
+		if (!currentMessage.trim()) return;
+		sendMessage(currentMessage, {
+			onSuccess: () => {
+				setCurrentMessage('');
+			},
+			onError: () => {
+				toastService.notify({
+					maxLines: 3,
+					title: tText(
+						'modules/account/components/material-request-detail-blade/material-request-conversation___er-ging-iets-mis'
+					),
+					description: tText(
+						'modules/account/components/material-request-detail-blade/material-request-conversation___het-bericht-kon-niet-worden-verzonden'
+					),
+				});
+			},
+		});
+	}, [currentMessage, sendMessage]);
 
 	const {
 		data: messages,
@@ -211,6 +237,19 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 							draftProps: {
 								ariaDescribedBy: 'material-request-conversation__description',
 								ariaLabelledBy: 'material-request-conversation__label',
+								handleKeyCommand: (command: string) => {
+									if (command === 'send-message') {
+										handleSendMessage();
+										return 'handled';
+									}
+									return 'not-handled';
+								},
+								keyBindingFn: (e: React.KeyboardEvent) => {
+									if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+										return 'send-message';
+									}
+									return undefined;
+								},
 							},
 						}}
 						id="material-request-conversation"
@@ -222,11 +261,13 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 						controls={['bold', 'italic', 'underline', 'list-ul', 'list-ol', 'link']}
 					/>
 					<Button
+						id="material-request-conversation__send-button"
 						className={clsx(styles['p-conversation-messages__editor__send-button'])}
 						variants={['text']}
 						icon={<Icon name={IconNamesLight.Email} />}
-						disabled={!currentMessage.length}
+						disabled={!currentMessage.length || isSending}
 						tabIndex={!currentMessage.length ? undefined : -1}
+						onClick={handleSendMessage}
 					/>
 				</div>
 			</div>

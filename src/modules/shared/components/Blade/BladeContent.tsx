@@ -349,7 +349,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 					)}
 					{children}
 				</div>
-				<div className="c-bottom-spacer u-flex-grow" />
+				{!stickyFooter && <div className="u-flex-grow" />}
 				{!stickyFooter && renderFooter()}
 			</div>
 			{stickyFooter && renderFooter()}
