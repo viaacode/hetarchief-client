@@ -3,6 +3,10 @@
 .p-material-request-detail__documents {
 	padding: 2.4rem 3.2rem;
 
+	@media (max-width: abstracts.$breakpoint-md) {
+		padding: 1.6rem;
+	}
+
 	&--centered {
 		color: abstracts.$neutral;
 		text-align: center;

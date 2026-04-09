@@ -24,7 +24,7 @@ $bottom-tabs-height-mobile: 5.6rem; // bottom tabs
 		&__message-wrapper {
 			height: calc(100vh - $header-height-mobile - $rich-text-editor-height-mobile - $bottom-tabs-height-mobile);
 			overflow-y: scroll;
-			padding: abstracts.$spacer-md;
+			padding: abstracts.$spacer-sm;
 		}
 	}
 

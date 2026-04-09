@@ -9,6 +9,7 @@
 	@media (max-width: abstracts.$breakpoint-md) {
 		flex-direction: column-reverse;
 		gap: abstracts.$spacer-sm;
+		padding: 1.6rem;
 	}
 
 	&__reuse-form {
