@@ -26,6 +26,10 @@ export function useGetMaterialRequestConversationInfinite(
 			lastPage.page < lastPage.pages ? lastPage.page + 1 : undefined,
 		initialPageParam: 1,
 		placeholderData: keepPreviousData,
+		staleTime: 1000 * 60, // 1 minute
+		refetchOnMount: true,
+		refetchOnReconnect: true,
+		refetchOnWindowFocus: true,
 		enabled,
 	});
 }

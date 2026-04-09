@@ -13,8 +13,7 @@
 			:global(.c-tab) {
 				display: flex;
 				justify-content: center;
-				padding-top: calc(#{abstracts.$spacer-sm} + 3px);
-				padding-bottom: abstracts.$spacer-sm;
+				padding-bottom: abstracts.$spacer-md;
 				color: abstracts.$neutral;
 				border-bottom: 3px solid transparent;
 
@@ -66,9 +65,9 @@
 
 	// Disable padding for this blade, since we need the conversation history to span the whole blade content
 	// And the history needs to be scrollable separate from the rich text input field
+	// The individual tabs in this blade restore the padding using a mixing: @include blade.blade-content-padding;
 	:global([class*="Blade_c-blade__body-wrapper--content"]) {
 		padding: 0;
-		max-width: none;
 	}
 
 	&__content-wrapper {
@@ -122,10 +121,6 @@
 				align-items: start;
 			}
 		}
-	}
-
-	&__cancel-button {
-		transform: translateY(-7px); // Move button up a bit, without affecting the tabs
 	}
 
 	&__evaluator-dropdown-flyout {

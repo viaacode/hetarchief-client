@@ -47,6 +47,17 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 
 	const [currentMessage, setCurrentMessage] = useState<string>('');
 
+	const {
+		data: messages,
+		isLoading: isLoadingMessages,
+		fetchNextPage,
+		hasNextPage,
+		isFetchingNextPage,
+	} = useGetMaterialRequestConversationInfinite(
+		materialRequest.id,
+		MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE
+	);
+
 	const { mutate: sendMessage, isPending: isSending } = useSendMaterialRequestMessage(
 		materialRequest.id
 	);
@@ -73,17 +84,6 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		});
 	}, [currentMessage, sendMessage]);
 
-	const {
-		data: messages,
-		isLoading: isLoadingMessages,
-		fetchNextPage,
-		hasNextPage,
-		isFetchingNextPage,
-	} = useGetMaterialRequestConversationInfinite(
-		materialRequest.id,
-		MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE
-	);
-
 	/**
 	 * Scrolls to the bottom of the messages once at page load after the first messages have been loaded.
 	 */
@@ -94,7 +94,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 			scrollableRef.current
 		) {
 			scrollableRef.current.scrollTo({
-				top: 100000000, // bottom
+				top: Number.MAX_SAFE_INTEGER, // scroll all the way to the bottom
 			});
 			setHasScrolledToBottom(true);
 		}
@@ -215,7 +215,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 			);
 		}
 		return (
-			<div>
+			<>
 				<div
 					className={clsx(styles['p-conversation-messages__message-wrapper'])}
 					ref={scrollableRef}
@@ -252,13 +252,14 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 						id="material-request-conversation__send-button"
 						className={clsx(styles['p-conversation-messages__editor__send-button'])}
 						variants={['text']}
+						// Replace this icon with a send icon when Jelle and JN add the icons to the font
 						icon={<Icon name={IconNamesLight.Email} />}
 						disabled={!currentMessage.length || isSending}
 						tabIndex={!currentMessage.length ? undefined : -1}
 						onClick={handleSendMessage}
 					/>
 				</div>
-			</div>
+			</>
 		);
 	};
 

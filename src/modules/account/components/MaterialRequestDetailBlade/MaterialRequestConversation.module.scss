@@ -1,11 +1,11 @@
 @use "../../../../styles/abstracts" as abstracts;
 
 // Desktop
-$header-height-desktop: 18.2rem; // header + tabs
+$header-height-desktop: 18.4rem; // header + tabs
 $rich-text-editor-height-desktop: 20rem; // rich text editor
 
 // Mobile
-$rich-text-editor-height-mobile: 20.1rem; // header
+$rich-text-editor-height-mobile: 20.2rem; // header
 $header-height-mobile: 14.7rem; // rich text editor
 $bottom-tabs-height-mobile: 5.6rem; // bottom tabs
 
@@ -83,7 +83,7 @@ $bottom-tabs-height-mobile: 5.6rem; // bottom tabs
 			min-width: 20%;
 
 			[class*="Icon_c-icon"] {
-				font-size: 24px !important;
+				font-size: abstracts.$font-size-lg !important;
 				margin-left: -4px; // left align icon to text
 			}
 
