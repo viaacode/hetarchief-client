@@ -1,14 +1,14 @@
 @use "sass:map";
 @use "sass:math";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$sticky-background: $platinum;
-$padding-horizontal: $spacer-lg;
-$padding-horizontal-mobile: $spacer-sm;
+$sticky-background: abstracts.$platinum;
+$padding-horizontal: abstracts.$spacer-lg;
+$padding-horizontal-mobile: abstracts.$spacer-sm;
 
 .c-blade {
-	background-color: $white;
-	color: $black;
+	background-color: abstracts.$white;
+	color: abstracts.$black;
 	bottom: 0;
 	display: grid;
 	grid-template-rows: auto auto 1fr auto;
@@ -21,20 +21,20 @@ $padding-horizontal-mobile: $spacer-sm;
 	top: 0;
 	transform: translateX(100%);
 	transition:
-		transform $animate-default,
-		visibility $animate-default;
+		transform abstracts.$animate-default,
+		visibility abstracts.$animate-default;
 	visibility: hidden;
-	z-index: get-z-layer("blade");
+	z-index: abstracts.get-z-layer("blade");
 
 	&.c-blade--size-thin {
-		max-width: $blade-max-width;
+		max-width: abstracts.$blade-max-width;
 	}
 
 	&.c-blade--size-wide {
 		max-width: 90%;
 
 
-		@media (max-width: $breakpoint-sm) {
+		@media (max-width: abstracts.$breakpoint-sm) {
 			max-width: 100%;
 		}
 	}
@@ -43,14 +43,14 @@ $padding-horizontal-mobile: $spacer-sm;
 		display: flex;
 		flex-direction: column;
 		width: 100%;
-		max-width: $blade-max-width;
-		background-color: $white;
-		color: $black;
-		border-left: 1px solid $silver;
-		max-height: calc($view-height - #{$c-navigation-height-md});
+		max-width: abstracts.$blade-max-width;
+		background-color: abstracts.$white;
+		color: abstracts.$black;
+		border-left: 1px solid abstracts.$silver;
+		max-height: calc(#{abstracts.$view-height} - #{abstracts.$c-navigation-height-md});
 
-		@media (min-width: $breakpoint-md) {
-			max-height: calc($view-height - #{$c-navigation-height});
+		@media (min-width: abstracts.$breakpoint-md) {
+			max-height: calc(#{abstracts.$view-height} - #{abstracts.$c-navigation-height});
 		}
 	}
 
@@ -65,7 +65,7 @@ $padding-horizontal-mobile: $spacer-sm;
 			background: $sticky-background;
 		}
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: abstracts.$breakpoint-md) {
 			min-height: $padding-horizontal-mobile;
 		}
 	}
@@ -74,26 +74,26 @@ $padding-horizontal-mobile: $spacer-sm;
 		grid-row-start: 1;
 		justify-self: flex-end;
 		margin: 2rem;
-		z-index: get-z-layer("blade");
+		z-index: abstracts.get-z-layer("blade");
 		box-shadow: none !important;
 
 		&:only-child {
 			margin-left: auto;
 		}
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: abstracts.$breakpoint-md) {
 			margin: auto 0 auto auto;
 		}
 	}
 
 	&__title {
-		color: $black;
-		padding: 0 $padding-horizontal $spacer-sm;
+		color: abstracts.$black;
+		padding: 0 $padding-horizontal abstracts.$spacer-sm;
 		word-break: break-word;
 		max-width: 100%;
 
 		&--size-wide {
-			padding: $padding-horizontal $padding-horizontal $spacer-sm;
+			padding: $padding-horizontal $padding-horizontal abstracts.$spacer-sm;
 
 			.c-blade__title--mobile-wrapper {
 				display: flex;
@@ -105,7 +105,7 @@ $padding-horizontal-mobile: $spacer-sm;
 			}
 		}
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: abstracts.$breakpoint-md) {
 			padding: $padding-horizontal-mobile;
 
 			&--mobile-wrapper {
@@ -115,28 +115,28 @@ $padding-horizontal-mobile: $spacer-sm;
 		}
 
 		&.c-blade__content-scrolled {
-			border-bottom: $divider-grey;
+			border-bottom: abstracts.$divider-grey;
 			background: $sticky-background;
 		}
 
 		&--text {
-			@include blade-title-styling;
+			@include abstracts.blade-title-styling;
 
 			&-small {
-				font-size: $font-size-md;
-				line-height: $line-height-md;
+				font-size: abstracts.$font-size-md;
+				line-height: abstracts.$line-height-md;
 			}
 
-			@media (max-width: $breakpoint-md) {
+			@media (max-width: abstracts.$breakpoint-md) {
 				display: flex;
 			}
 		}
 
 		&--sticky-subtitle, &--subtitle {
-			padding-top: $spacer-sm;
+			padding-top: abstracts.$spacer-sm;
 
-			@media (max-width: $breakpoint-md) {
-				padding-top: $spacer-xs;
+			@media (max-width: abstracts.$breakpoint-md) {
+				padding-top: abstracts.$spacer-xs;
 			}
 		}
 	}
@@ -158,10 +158,10 @@ $padding-horizontal-mobile: $spacer-sm;
 		}
 
 		&--content {
-			padding: $spacer-md $padding-horizontal;
+			padding: abstracts.$spacer-md $padding-horizontal;
 			max-width: 100%;
 
-			@media (max-width: $breakpoint-md) {
+			@media (max-width: abstracts.$breakpoint-md) {
 				padding: $padding-horizontal-mobile;
 			}
 		}
@@ -169,10 +169,10 @@ $padding-horizontal-mobile: $spacer-sm;
 
 	&__footer {
 		grid-row-start: 4;
-		gap: $spacer-xs;
-		border-top: $divider-grey;
+		gap: abstracts.$spacer-xs;
+		border-top: abstracts.$divider-grey;
 		background: $sticky-background;
-		padding: $spacer-sm $padding-horizontal;
+		padding: abstracts.$spacer-sm $padding-horizontal;
 		width: 100%;
 		max-width: 100%;
 
@@ -181,7 +181,7 @@ $padding-horizontal-mobile: $spacer-sm;
 			max-width: 100%;
 		}
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: abstracts.$breakpoint-md) {
 			padding: $padding-horizontal-mobile;
 
 			&__no-padding {
@@ -200,28 +200,28 @@ $padding-horizontal-mobile: $spacer-sm;
 				:global(.c-button), a {
 					display: inline-block;
 					width: unset;
-					max-width: calc(50% - $spacer-xxs);
+					max-width: calc(50% - #{abstracts.$spacer-xxs});
 
 					:global(.c-button__content) {
 						width: 100%;
 					}
 
 					:global(.c-button__label) {
-						@include text-ellipsis(true);
+						@include abstracts.text-ellipsis(true);
 					}
 
 					&:first-child:nth-last-child(2) {
-						margin-right: $spacer-xxs;
+						margin-right: abstracts.$spacer-xxs;
 					}
 
 					&:last-child {
-						margin-left: $spacer-xxs;
+						margin-left: abstracts.$spacer-xxs;
 						float: right;
 					}
 				}
 			}
 
-			@media (max-width: $breakpoint-md) {
+			@media (max-width: abstracts.$breakpoint-md) {
 				justify-content: space-between;
 			}
 
@@ -231,7 +231,7 @@ $padding-horizontal-mobile: $spacer-sm;
 					width: 100%;
 
 					&:first-child:nth-last-child(2) {
-						margin-bottom: $spacer-xs;
+						margin-bottom: abstracts.$spacer-xs;
 					}
 
 					:global(.c-button__content) {
@@ -239,14 +239,14 @@ $padding-horizontal-mobile: $spacer-sm;
 					}
 
 					:global(.c-button__label) {
-						@include text-ellipsis(true);
+						@include abstracts.text-ellipsis(true);
 
 						width: 100%;
 					}
 
-					@media (max-width: $breakpoint-md) {
+					@media (max-width: abstracts.$breakpoint-md) {
 						display: inline-block;
-						width: calc(50% - $spacer-xxs);
+						width: calc(50% - #{abstracts.$spacer-xxs});
 						margin-bottom: 0 !important;
 
 						&:only-child {
@@ -255,11 +255,11 @@ $padding-horizontal-mobile: $spacer-sm;
 						}
 
 						&:first-child:nth-last-child(2) {
-							margin-right: $spacer-xxs;
+							margin-right: abstracts.$spacer-xxs;
 						}
 
 						&:nth-child(2) {
-							margin-left: $spacer-xxs;
+							margin-left: abstracts.$spacer-xxs;
 						}
 
 					}
@@ -268,38 +268,38 @@ $padding-horizontal-mobile: $spacer-sm;
 		}
 
 		:global(.c-button--primary):hover {
-			background-color: $white;
-			color: $teal-dark;
-			border: 1px solid $teal-dark;
+			background-color: abstracts.$white;
+			color: abstracts.$teal-dark;
+			border: 1px solid abstracts.$teal-dark;
 
 			&:hover{
-				background-color: $white;
-				color: $teal-dark;
-				border: 1px solid $teal-dark;
+				background-color: abstracts.$white;
+				color: abstracts.$teal-dark;
+				border: 1px solid abstracts.$teal-dark;
 			}
 		}
 
 		:global(.c-button--secondary) {
-			background-color: $cherry;
-			border: 1px solid $cherry;
+			background-color: abstracts.$cherry;
+			border: 1px solid abstracts.$cherry;
 
 			&:hover{
-				background-color: $white;
-				color: $cherry;
-				border: 1px solid $cherry;
+				background-color: abstracts.$white;
+				color: abstracts.$cherry;
+				border: 1px solid abstracts.$cherry;
 			}
 		}
 	}
 
 	&__overlay {
-		z-index: get-z-layer("blade") !important;
+		z-index: abstracts.get-z-layer("blade") !important;
 
 		&--managed {
 			left: auto !important;
 			transition:
-				opacity $timing-default linear,
-				transform $animate-default;
-			width: calc($blade-max-width + 5.6rem);
+				opacity abstracts.$timing-default linear,
+				transform abstracts.$animate-default;
+			width: calc(#{abstracts.$blade-max-width} + 5.6rem);
 		}
 
 		&--managed-wide-below {
