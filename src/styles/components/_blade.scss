@@ -1,0 +1,9 @@
+@use "src/styles/abstracts" as abstracts;
+
+@mixin blade-content-padding {
+	padding: 2.4rem 3.2rem;
+
+	@media (max-width: abstracts.$breakpoint-md) {
+		padding: 1.6rem;
+	}
+}
