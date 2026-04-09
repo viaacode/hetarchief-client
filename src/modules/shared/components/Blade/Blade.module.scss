@@ -91,6 +91,8 @@ $padding-horizontal-mobile: abstracts.$spacer-sm;
 		padding: 0 $padding-horizontal abstracts.$spacer-sm;
 		word-break: break-word;
 		max-width: 100%;
+		border: 0 solid abstracts.$silver;
+		border-bottom-width: 1px;
 
 		&--size-wide {
 			padding: $padding-horizontal $padding-horizontal abstracts.$spacer-sm;
