@@ -26,6 +26,7 @@ import React, {
 	useState,
 } from 'react';
 import { useSelector } from 'react-redux';
+import { v4 as uuid } from 'uuid';
 import styles from './MaterialRequestConversation.module.scss';
 
 const MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE = 20;
@@ -42,6 +43,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
 	const previousScrollHeightRef = useRef<number | null>(null);
 	const user = useSelector(selectCommonUser);
+	const [editorKey, setEditorKey] = useState(uuid()); // To force rich text editor to rerender
 
 	const [currentMessage, setCurrentMessage] = useState<string>('');
 
@@ -54,8 +56,10 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		sendMessage(currentMessage, {
 			onSuccess: () => {
 				setCurrentMessage('');
+				setEditorKey(uuid()); // Force rerender of rich text editor
 			},
-			onError: () => {
+			onError: (err) => {
+				console.error(err);
 				toastService.notify({
 					maxLines: 3,
 					title: tText(
@@ -234,31 +238,15 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 								maxHeight: '150px',
 								overflowY: 'auto',
 							},
-							draftProps: {
-								ariaDescribedBy: 'material-request-conversation__description',
-								ariaLabelledBy: 'material-request-conversation__label',
-								handleKeyCommand: (command: string) => {
-									if (command === 'send-message') {
-										handleSendMessage();
-										return 'handled';
-									}
-									return 'not-handled';
-								},
-								keyBindingFn: (e: React.KeyboardEvent) => {
-									if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-										return 'send-message';
-									}
-									return undefined;
-								},
-							},
 						}}
-						id="material-request-conversation"
+						id={`material-request-conversation--${editorKey}`}
 						value={currentMessage}
 						onChange={(value) => setCurrentMessage(value)}
 						placeholder={tText(
 							'modules/account/components/material-request-detail-blade/material-request-detail-blade___typ-je-bericht'
 						)}
 						controls={['bold', 'italic', 'underline', 'list-ul', 'list-ol', 'link']}
+						key={editorKey}
 					/>
 					<Button
 						id="material-request-conversation__send-button"
