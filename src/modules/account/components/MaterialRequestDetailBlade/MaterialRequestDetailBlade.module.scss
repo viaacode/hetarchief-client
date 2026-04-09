@@ -63,10 +63,11 @@
 		}
 	}
 
+	// Disable padding for this blade, since we need the conversation history to span the whole blade content
+	// And the history needs to be scrollable separate from the rich text input field
 	:global([class*="Blade_c-blade__body-wrapper--content"]) {
 		padding: 0;
 		max-width: none;
-		overflow: hidden;
 	}
 
 	&__content-wrapper {
