@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 @use "sass:map";
 
 $expand-button-vertical-position: 35vh; // Visually a litter higher than halfway to compensate for the visual bottom bar
@@ -10,7 +10,7 @@ $back-to-global-search-button-width-desktop: 10rem;
 $back-to-global-search-button-width-mobile: 7rem;
 $zendesk-feedback-button-width-desktop: 20rem;
 $zendesk-feedback-button-width-mobile: 8rem;
-$zendesk-feedback-button-margin-bottom-desktop: $spacer-md;
+$zendesk-feedback-button-margin-bottom-desktop: abstracts.$spacer-md;
 $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 /**
@@ -94,21 +94,21 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		grid-template-rows: minmax(0, max-content) max-content 1fr minmax(0, max-content);
 		grid-template-columns: $back-to-global-search-button-width-desktop 16fr 10fr;
 		width: 100vw;
-		min-height: calc($view-height - $top-navigation-bar-height);
-		max-height: calc($view-height - $top-navigation-bar-height);
+		min-height: calc(#{abstracts.$view-height} - #{abstracts.$top-navigation-bar-height});
+		max-height: calc(#{abstracts.$view-height} - #{abstracts.$top-navigation-bar-height});
 		place-items: stretch stretch;
 		align-content: stretch;
 		transition: 100ms ease-out;
 		overflow: clip;
 
-		@media (max-width: $breakpoint-lg) {
+		@media (max-width: abstracts.$breakpoint-lg) {
 			grid-template-rows: minmax(0, max-content) max-content 1fr minmax(0, max-content);
 			grid-template-columns: max-content 1fr;
 		}
 
 		&--no-ocr-available {
 			:global(.c-tabs) {
-				@media (min-width: $breakpoint-lg) {
+				@media (min-width: abstracts.$breakpoint-lg) {
 					// On desktop if no ocr is available, we don't need to show the tabs, since only one tab will be visible
 					display: none !important;
 				}
@@ -116,7 +116,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 			:global([class*="ObjectDetailPage_p-object-detail__sidebar__"]) {
 				// Sidebar can take the space of the tabs if there is no media, since only one tab would be visible or desktop
-				@media (min-width: $breakpoint-lg) {
+				@media (min-width: abstracts.$breakpoint-lg) {
 					grid-row: 2 / 5 !important;
 				}
 			}
@@ -132,16 +132,16 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	&__back {
 		grid-row: 2;
 		grid-column: 1 / 2;
-		z-index: get-z-layer("foreground");
+		z-index: abstracts.get-z-layer("foreground");
 		width: $back-to-global-search-button-width-desktop;
 		height: $metadata-media-ocr-tabs-height-desktop;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		background-color: $black;
+		background-color: abstracts.$black;
 		border-radius: 0;
 
-		@media (max-width: $breakpoint-lg) {
+		@media (max-width: abstracts.$breakpoint-lg) {
 			height: auto;
 			width: $back-to-global-search-button-width-mobile;
 		}
@@ -150,10 +150,10 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	&__visitor-space-navigation-bar {
 		grid-row: 1;
 		grid-column: 1 / 4;
-		z-index: get-z-layer("foreground");
+		z-index: abstracts.get-z-layer("foreground");
 		flex-shrink: 0;
 
-		@media (max-width: $breakpoint-lg) {
+		@media (max-width: abstracts.$breakpoint-lg) {
 			grid-column: 1 / 2;
 			width: 100vw;
 		}
@@ -161,17 +161,17 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		&::after {
 			content: "";
 			position: absolute;
-			z-index: get-z-layer("foreground");
+			z-index: abstracts.get-z-layer("foreground");
 			visibility: visible;
 			bottom: 0;
 			left: 2rem;
 			right: 2rem;
 			height: 1px;
-			background-color: $shade;
+			background-color: abstracts.$shade;
 			opacity: 0.64;
 			width: 100vw;
 
-			@media (min-width: $breakpoint-lg) {
+			@media (min-width: abstracts.$breakpoint-lg) {
 				visibility: hidden;
 			}
 		}
@@ -189,7 +189,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		.p-object-detail__tabs {
 			display: none;
 
-			@media (max-width: $breakpoint-lg) {
+			@media (max-width: abstracts.$breakpoint-lg) {
 				display: flex;
 				grid-row: 2 !important;
 				grid-column: 1 / 3 !important;
@@ -217,7 +217,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			grid-row: 2;
 			grid-column: 3;
 
-			@media (max-width: $breakpoint-lg) {
+			@media (max-width: abstracts.$breakpoint-lg) {
 				// Phone
 				grid-row: 2;
 				grid-column: 2;
@@ -228,14 +228,14 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	&__tabs {
 		display: none;
 
-		@media (min-width: $breakpoint-lg) {
+		@media (min-width: abstracts.$breakpoint-lg) {
 			// Desktop
 			:global(.c-tab--media) {
 				display: none !important;
 			}
 		}
 
-		@media (max-width: $breakpoint-lg) {
+		@media (max-width: abstracts.$breakpoint-lg) {
 			// Mobile
 			grid-column: 1 / 4;
 			width: 100%;
@@ -253,14 +253,14 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		:global(.c-tab) {
 			display: flex;
 			justify-content: center;
-			background-color: $black;
+			background-color: abstracts.$black;
 
 			:global(.c-tab__icon) {
-				font-size: $font-size-lg;
+				font-size: abstracts.$font-size-lg;
 			}
 
 			&:global(.c-tab--active) {
-				background-color: $white;
+				background-color: abstracts.$white;
 			}
 		}
 	}
@@ -269,7 +269,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		align-self: center;
 		inset: 0;
 
-		@media (max-width: $breakpoint-lg) {
+		@media (max-width: abstracts.$breakpoint-lg) {
 			width: 100%;
 		}
 
@@ -279,18 +279,18 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		}
 
 		:global(.p-object-detail__flowplayer-fullscreen-button) {
-			z-index: get-z-layer("modal"); // Current highest
+			z-index: abstracts.get-z-layer("modal"); // Current highest
 			position: absolute;
-			bottom: $spacer-md;
-			right: $spacer-md;
+			bottom: abstracts.$spacer-md;
+			right: abstracts.$spacer-md;
 
 			:global(.p-object-detail__flowplayer-fullscreen-button--exit) {
 				display: none;
-				bottom: $spacer-lg;
-				right: $spacer-lg;
+				bottom: abstracts.$spacer-lg;
+				right: abstracts.$spacer-lg;
 
 				:global(.c-button__icon) {
-					color: $black;
+					color: abstracts.$black;
 				}
 			}
 		}
@@ -301,7 +301,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 		& :global(.is-hovered) :global(.p-object-detail__flowplayer-fullscreen-button--exit),
 		& :global(.is-paused) :global(.p-object-detail__flowplayer-fullscreen-button--exit) {
-			bottom: calc(#{$spacer-lg} + 5.8rem); // Add height of controls bar
+			bottom: calc(#{abstracts.$spacer-lg} + 5.8rem); // Add height of controls bar
 		}
 	}
 
@@ -317,7 +317,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		overflow: hidden;
 		display: flex;
 		flex-direction: column;
-		background-color: $shade-darker;
+		background-color: abstracts.$shade-darker;
 		container: object-detail__media / size;
 		background-size: contain;
 		background-repeat: no-repeat;
@@ -331,7 +331,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			height: 100%;
 		}
 
-		@media (max-width: $breakpoint-lg) {
+		@media (max-width: abstracts.$breakpoint-lg) {
 			grid-row: 3 / 4;
 			grid-column: 1 / 3;
 			width: 100vw;
@@ -341,13 +341,13 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			grid-row: 1/4;
 			grid-column: 1/3;
 
-			@media (max-width: $breakpoint-lg) {
-				height: calc($view-height - $top-navigation-bar-height - $metadata-media-ocr-tabs-height-mobile);
+			@media (max-width: abstracts.$breakpoint-lg) {
+				height: calc(#{abstracts.$view-height} - #{abstracts.$top-navigation-bar-height} - #{$metadata-media-ocr-tabs-height-mobile});
 			}
 		}
 	}
 
-	@media (max-width: $breakpoint-lg) {
+	@media (max-width: abstracts.$breakpoint-lg) {
 		// mobile
 		&__media-wrapper--inside-sidebar {
 			display: block;
@@ -358,7 +358,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		}
 	}
 
-	@media (min-width: $breakpoint-lg - 1) {
+	@media (min-width: abstracts.$breakpoint-lg - 1) {
 		// desktop
 		&__media-wrapper--inside-sidebar {
 			display: none;
@@ -372,10 +372,10 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	&__grey-slider-bar {
 		grid-row: 4;
 		grid-column: 1 / 3;
-		background-color: $black-8;
+		background-color: abstracts.$black-8;
 		padding: 2rem 3rem;
 
-		@media (max-width: $breakpoint-lg) {
+		@media (max-width: abstracts.$breakpoint-lg) {
 			grid-column: 1 / 3;
 			width: 100vw;
 		}
@@ -389,7 +389,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		max-height: 100%;
 		overflow: hidden;
 
-		@media (max-width: $breakpoint-lg) {
+		@media (max-width: abstracts.$breakpoint-lg) {
 			grid-row: 3 / 5;
 			grid-column: 1 / 3;
 			width: 100vw;
@@ -401,7 +401,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			grid-row: 3 / 5;
 			grid-column: 3;
 
-			@media (max-width: $breakpoint-lg) {
+			@media (max-width: abstracts.$breakpoint-lg) {
 				grid-row: 3 / 5;
 				grid-column: 1 / 3;
 			}
@@ -414,7 +414,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			width: 100%;
 			height: $metadata-media-ocr-tabs-height-desktop;
 
-			@media (max-width: $breakpoint-lg) {
+			@media (max-width: abstracts.$breakpoint-lg) {
 				width: 100%;
 				grid-row: 2;
 				grid-column: 2 / 3;
@@ -425,7 +425,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	&__sidebar__content {
 		height: 100%;
 		overflow-y: auto;
-		box-shadow: $shadow-24-black-12;
+		box-shadow: abstracts.$shadow-24-black-12;
 
 		&__tab-media {
 			overflow-y: auto;
@@ -444,24 +444,24 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	}
 
 	&__ocr {
-		background-color: $white;
+		background-color: abstracts.$white;
 		display: flex;
 		flex-direction: column;
 		height: 100%;
 		overflow: hidden;
 		width: 100%;
-		gap: $spacer-md;
-		padding: $spacer-lg 0;
+		gap: abstracts.$spacer-md;
+		padding: abstracts.$spacer-lg 0;
 
 		// Search, Alert, Pagination
 		> * {
-			margin-left: $spacer-lg;
-			margin-right: $spacer-lg;
-			width: calc(100% - $spacer-lg * 2);
+			margin-left: abstracts.$spacer-lg;
+			margin-right: abstracts.$spacer-lg;
+			width: calc(100% - #{abstracts.$spacer-lg} * 2);
 
-			@media (max-width: $breakpoint-lg) {
-				margin: $spacer-sm;
-				width: calc(100% - $spacer-sm * 2);
+			@media (max-width: abstracts.$breakpoint-lg) {
+				margin: abstracts.$spacer-sm;
+				width: calc(100% - #{abstracts.$spacer-sm} * 2);
 			}
 		}
 
@@ -469,12 +469,12 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			height: 100%;
 			max-height: 100%;
 			overflow-y: auto;
-			padding: 0 $spacer-lg $spacer-lg * 3;
+			padding: 0 abstracts.$spacer-lg abstracts.$spacer-lg * 3;
 			width: 100%;
 			margin: 0;
 
-			@media (max-width: $breakpoint-lg) {
-				padding: 0 $spacer-sm $spacer-1xl;
+			@media (max-width: abstracts.$breakpoint-lg) {
+				padding: 0 abstracts.$spacer-sm abstracts.$spacer-1xl;
 				width: 100vw;
 			}
 		}
@@ -487,24 +487,24 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			word-break: break-word;
 
 			&:hover {
-				background-color: $teal-30;
+				background-color: abstracts.$teal-30;
 				color: black;
 			}
 
 			&--marked {
-				background-color: $teal-dark;
+				background-color: abstracts.$teal-dark;
 				color: white;
 
 				&:hover {
-					background-color: $teal-30;
+					background-color: abstracts.$teal-30;
 					color: black;
 				}
 
 				&--active {
-					background-color: $black;
+					background-color: abstracts.$black;
 
 					&:hover {
-						background-color: $teal-30;
+						background-color: abstracts.$teal-30;
 						color: black;
 					}
 				}
@@ -514,8 +514,8 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		&__pagination {
 			display: flex;
 			align-items: center;
-			background-color: $silver;
-			border-radius: $button-radius;
+			background-color: abstracts.$silver;
+			border-radius: abstracts.$button-radius;
 			text-align: center;
 
 			:global(.pagination-info) {
@@ -524,10 +524,10 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 			> :global(.c-button) {
 				margin: 0;
-				color: $zinc;
+				color: abstracts.$zinc;
 			}
 
-			@media (max-width: $breakpoint-lg) {
+			@media (max-width: abstracts.$breakpoint-lg) {
 				:global(.c-button__label) {
 					display: none;
 				}
@@ -535,14 +535,14 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 			&__button {
 				&--active {
-					color: $black !important;
+					color: abstracts.$black !important;
 				}
 			}
 		}
 
 		:global(.u-flex) {
-			margin-bottom: $spacer-1xl;
-			height: $font-size-3xl;
+			margin-bottom: abstracts.$spacer-1xl;
+			height: abstracts.$font-size-3xl;
 		}
 
 		&__close {
@@ -556,35 +556,34 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	:global(.p-object-detail__metadata-component) {
 		padding: 0 2rem;
 
-		@media (min-width: $breakpoint-lg) {
-			padding: 0 $spacer-lg;
+		@media (min-width: abstracts.$breakpoint-lg) {
+			padding: 0 abstracts.$spacer-lg;
 		}
 	}
 
 	&__metadata-list {
 		display: flex;
 		flex-direction: column;
-		gap: $spacer-sm;
+		gap: abstracts.$spacer-sm;
 	}
 
 	:global(.p-object-detail__metadata-list--similar) {
-		// Firefox and Safari render weirdly with: margin: 0 - $spacer-md;
-		margin-left: -$spacer-md;
-		margin-right: -$spacer-md;
-		margin-top: $spacer-xs;
-		padding: $spacer-md;
-		background-color: $platinum;
-		padding-bottom: 10rem;
+		// Firefox and Safari render weirdly with: margin: 0 - abstracts.$spacer-md;
+		margin-left: -#{abstracts.$spacer-md};
+		margin-right: -#{abstracts.$spacer-md};
+		margin-top: abstracts.$spacer-xs;
+		background-color: abstracts.$platinum;
+		padding: abstracts.$spacer-md abstracts.$spacer-md 10rem;
 
-		@media (min-width: $breakpoint-lg) {
-			// Firefox and Safari render weirdly with: margin: 0 - $spacer-md;
-			margin-left: -$spacer-lg;
-			margin-right: -$spacer-lg;
-			padding: $spacer-md $spacer-lg;
+		@media (min-width: abstracts.$breakpoint-lg) {
+			// Firefox and Safari render weirdly with: margin: 0 - abstracts.$spacer-md;
+			margin-left: -#{abstracts.$spacer-lg};
+			margin-right: -#{abstracts.$spacer-lg};
+			padding: abstracts.$spacer-md abstracts.$spacer-lg;
 		}
 	}
 
-	@media (min-width: $breakpoint-lg) {
+	@media (min-width: abstracts.$breakpoint-lg) {
 		&__related {
 			grid-column: 2;
 		}
@@ -594,8 +593,8 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		padding: 2rem;
 		height: max-content;
 
-		@media (min-width: $breakpoint-lg) {
-			padding: $spacer-lg;
+		@media (min-width: abstracts.$breakpoint-lg) {
+			padding: abstracts.$spacer-lg;
 		}
 
 		ul {
@@ -605,7 +604,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		}
 	}
 
-	@media (max-width: $breakpoint-lg) {
+	@media (max-width: abstracts.$breakpoint-lg) {
 		&__wrapper--metadata,
 		&__wrapper--ocr {
 			.p-object-detail__media {
@@ -618,7 +617,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		display: block;
 
 		&:not(:active, :hover):focus {
-			outline: 0.2rem solid $teal;
+			outline: 0.2rem solid abstracts.$teal;
 		}
 	}
 
@@ -662,13 +661,13 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 			.p-object-detail__sidebar__content {
 				&-description {
-					margin-top: $spacer-xs;
+					margin-top: abstracts.$spacer-xs;
 				}
 
 				&-link {
 					display: inline-flex;
 					align-items: center;
-					margin-top: $spacer-xs;
+					margin-top: abstracts.$spacer-xs;
 				}
 			}
 		}
@@ -684,41 +683,41 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		grid-row: 3;
 		grid-column: 3;
 		visibility: hidden;
-		z-index: get-z-layer("foreground");
-		width: $button-height-sm;
-		height: $button-height;
-		border-radius: $button-radius-sm;
+		z-index: abstracts.get-z-layer("foreground");
+		width: abstracts.$button-height-sm;
+		height: abstracts.$button-height;
+		border-radius: abstracts.$button-radius-sm;
 		transform: translate(-50%, $expand-button-vertical-position);
-		transition: right $animate-default;
-		box-shadow: $shadow-12-black-16;
+		transition: right abstracts.$animate-default;
+		box-shadow: abstracts.$shadow-12-black-16;
 
 		:global(.c-button__icon span) {
-			font-size: $font-size-2xm;
+			font-size: abstracts.$font-size-2xm;
 		}
 
-		@media (min-width: $breakpoint-lg) {
+		@media (min-width: abstracts.$breakpoint-lg) {
 			visibility: visible;
 		}
 
 		// `include respond-at(md)` -fix for safari
-		@media screen and (width >= $breakpoint-lg) {
+		@media screen and (width >= #{abstracts.$breakpoint-lg}) {
 			visibility: visible;
 		}
 	}
 
 	&__export {
 		.c-dropdown__content-open .c-menu--default {
-			box-shadow: $shadow-12-black-16;
-			border: 0.1rem solid $silver !important;
+			box-shadow: abstracts.$shadow-12-black-16;
+			border: 0.1rem solid abstracts.$silver !important;
 		}
 
 		&-dropdown {
 			&.c-menu-content-item {
-				border: 0.1rem solid $silver;
+				border: 0.1rem solid abstracts.$silver;
 				border-top: none;
 
 				&:first-of-type {
-					border-top: $silver;
+					border-top: abstracts.$silver;
 				}
 			}
 		}
@@ -726,7 +725,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 	:global(.c-menu--default) {
 		padding: 0;
-		margin-top: $spacer-xxs;
+		margin-top: abstracts.$spacer-xxs;
 	}
 
 	:global(.p-object-detail__request-material) {
@@ -738,11 +737,11 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	}
 
 	&__callout {
-		border-bottom: $divider-black;
+		border-bottom: abstracts.$divider-black;
 	}
 
 	&__visit-button {
-		margin-top: $spacer-sm;
+		margin-top: abstracts.$spacer-sm;
 		max-width: fit-content;
 	}
 
@@ -751,13 +750,13 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			word-break: break-word !important;
 		}
 
-		line-height: $line-height-3xl;
-		font-size: $font-size-sm;
+		line-height: abstracts.$line-height-3xl;
+		font-size: abstracts.$font-size-sm;
 	}
 
 	.c-loading__iiif-viewer {
 		background-color: rgb(255 255 255 / 60%);
-		padding: $spacer-lg;
+		padding: abstracts.$spacer-lg;
 		z-index: 3;
 		position: absolute;
 		top: 50%;

@@ -33,7 +33,9 @@ interface MaterialRequestDocumentsProps {
 
 const MATERIAL_REQUEST_DOCUMENTS_PAGE_SIZE = 20;
 
-const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({ materialRequest }) => {
+export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
+	materialRequest,
+}) => {
 	const { publicRuntimeConfig } = getConfig();
 	const [orderProp, setOrderProp] = useState<string>('createdAt');
 	const [orderDirection, setOrderDirection] = useState<AvoSearchOrderDirection>(
@@ -349,5 +351,3 @@ const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({ materialR
 		</div>
 	);
 };
-
-export default MaterialRequestDocuments;

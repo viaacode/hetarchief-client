@@ -1,4 +1,4 @@
-import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
+import { MaterialRequestDetailBlade } from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
 import {
 	GET_MATERIAL_REQUEST_DOWNLOAD_FILTER_ARRAY,
 	GET_MATERIAL_REQUEST_STATUS_FILTER_ARRAY,

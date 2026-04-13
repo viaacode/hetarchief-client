@@ -1,41 +1,41 @@
-@use "../../../../styles/abstracts" as *;
+@use "../../../../styles/abstracts" as abstracts;
 
 .p-material-request-detail__documents {
 	&--centered {
-		color: $neutral;
+		color: abstracts.$neutral;
 		text-align: center;
-		padding: $spacer-lg 0;
+		padding: abstracts.$spacer-lg 0;
 	}
 
 	&__table {
 		overflow: auto;
 
 		:global(.c-table__cell) {
-			font-size: $font-size-base;
-			line-height: $line-height-base;
+			font-size: abstracts.$font-size-base;
+			line-height: abstracts.$line-height-base;
 			text-align: left;
 
-			@media (max-width: $breakpoint-md) {
-				padding: $spacer-sm 0;
+			@media (max-width: abstracts.$breakpoint-md) {
+				padding: abstracts.$spacer-sm 0;
 			}
 		}
 
 		&-cell {
 			&-document {
 				text-decoration: none;
-				transition: color $animate-default;
+				transition: color abstracts.$animate-default;
 
-				@include text-ellipsis(false);
+				@include abstracts.text-ellipsis(false);
 
 				&:hover,
 				&:focus {
 					cursor: pointer;
-					color: $teal;
+					color: abstracts.$teal;
 				}
 			}
 
 			&-date {
-				color: $neutral;
+				color: abstracts.$neutral;
 			}
 		}
 	}
@@ -57,7 +57,7 @@
 		}
 
 		:last-child {
-			font-weight: $font-weight-bold;
+			font-weight: abstracts.$font-weight-bold;
 		}
 
 		:only-child {
@@ -73,16 +73,16 @@
 		padding: 0;
 
 		&-item {
-			border: 1px solid $silver;
-			border-radius: $spacer-xs;
-			margin: $spacer-sm 0;
-			padding: $spacer-sm;
+			border: 1px solid abstracts.$silver;
+			border-radius: abstracts.$spacer-xs;
+			margin: abstracts.$spacer-sm 0;
+			padding: abstracts.$spacer-sm;
 			width: 100%;
-			transition: color $animate-default;
+			transition: color abstracts.$animate-default;
 
 			&:focus {
 				cursor: pointer;
-				color: $teal;
+				color: abstracts.$teal;
 			}
 
 			&:last-child, {
@@ -95,8 +95,8 @@
 			}
 
 			&-icon {
-				font-size: $font-size-lg;
-				margin-right: $spacer-xs;
+				font-size: abstracts.$font-size-lg;
+				margin-right: abstracts.$spacer-xs;
 			}
 
 			&-text {
@@ -104,7 +104,7 @@
 				flex-direction: column;
 
 				:last-child{
-					color: $zinc;
+					color: abstracts.$zinc;
 					font-style: italic;
 				}
 			}

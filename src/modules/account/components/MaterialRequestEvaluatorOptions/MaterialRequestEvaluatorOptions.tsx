@@ -19,7 +19,7 @@ interface MaterialRequestEvaluatorOptionsProps {
 	currentMaterialRequestDetail: MaterialRequest;
 }
 
-const MaterialRequestEvaluatorOptions: FC<MaterialRequestEvaluatorOptionsProps> = ({
+export const MaterialRequestEvaluatorOptions: FC<MaterialRequestEvaluatorOptionsProps> = ({
 	currentMaterialRequestDetail,
 	onApproveRequest,
 	onRequestAdditionalConditions,
@@ -105,5 +105,3 @@ const MaterialRequestEvaluatorOptions: FC<MaterialRequestEvaluatorOptionsProps> 
 		</div>
 	);
 };
-
-export default MaterialRequestEvaluatorOptions;

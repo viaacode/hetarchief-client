@@ -26,7 +26,7 @@ interface MaterialRequestStatusUpdateBladeProps {
 	currentLayer: number;
 }
 
-const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps> = ({
+export const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps> = ({
 	isOpen,
 	onClose,
 	status,
@@ -223,5 +223,3 @@ const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps
 		</Blade>
 	);
 };
-
-export default MaterialRequestStatusUpdateBlade;

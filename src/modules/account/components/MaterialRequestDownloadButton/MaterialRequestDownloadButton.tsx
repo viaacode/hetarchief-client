@@ -1,4 +1,4 @@
-import MaterialRequestDownloadBlade from '@account/components/MaterialRequestDownloadBlade/MaterialRequestDownloadBlade';
+import { MaterialRequestDownloadBlade } from '@account/components/MaterialRequestDownloadBlade/MaterialRequestDownloadBlade';
 import {
 	determineHasDownloadExpired,
 	handleDownloadMaterialRequest,
