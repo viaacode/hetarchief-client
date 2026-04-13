@@ -252,7 +252,25 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 						placeholder={tText(
 							'modules/account/components/material-request-detail-blade/material-request-detail-blade___typ-je-bericht'
 						)}
-						controls={['bold', 'italic', 'underline', 'list-ul', 'list-ol', 'link']}
+						controls={[
+							'bold',
+							'italic',
+							'underline',
+							'list-ul',
+							'list-ol',
+							'link',
+							{
+								type: 'customButton',
+								component: (
+									// TODO: replace this with an upload component and its validation logic
+									<Button
+										variants={['sm', 'text']}
+										onClick={() => console.log('custom clicked')}
+										icon={<Icon name={IconNamesLight.File} />}
+									/>
+								),
+							},
+						]}
 						key={editorKey}
 					/>
 					<Button
