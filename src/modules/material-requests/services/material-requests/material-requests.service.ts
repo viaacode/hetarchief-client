@@ -1,10 +1,10 @@
-import type { MaterialRequestMessage } from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversation.types';
 import {
 	type MaterialRequest,
 	type MaterialRequestAttachment,
 	type MaterialRequestCreation,
 	type MaterialRequestDetail,
 	type MaterialRequestMaintainer,
+	type MaterialRequestMessage,
 	type MaterialRequestSendAll,
 	MaterialRequestStatus,
 	type MaterialRequestUpdate,

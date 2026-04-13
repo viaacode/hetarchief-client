@@ -1,5 +1,4 @@
 @use "../../../../styles/abstracts" as abstracts;
-@use "../../../../styles/components/blade" as blade;
 
 .p-material-request-detail {
 	@media (min-width: abstracts.$breakpoint-md) {
@@ -63,11 +62,16 @@
 		}
 	}
 
-	// Disable padding for this blade, since we need the conversation history to span the whole blade content
-	// And the history needs to be scrollable separate from the rich text input field
-	// The individual tabs in this blade restore the padding using a mixing: @include blade.blade-content-padding;
 	:global([class*="Blade_c-blade__body-wrapper--content"]) {
-		padding: 0;
+		&:has([class*="p-material-request-detail__conversation"]){
+			padding: 0;
+			overflow: hidden;
+			height: 100%;
+
+			.p-material-request-detail__content-wrapper{
+				height: 100%;
+			}
+		}
 	}
 
 	&__content-wrapper {
@@ -77,10 +81,6 @@
 			&:last-child {
 				border-bottom: none;
 			}
-		}
-
-		&:global(.p-material-request-detail__content-wrapper--simple-flow) {
-			@include blade.blade-content-padding;
 		}
 	}
 

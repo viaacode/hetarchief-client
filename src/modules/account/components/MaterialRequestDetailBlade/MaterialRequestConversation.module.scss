@@ -5,7 +5,7 @@ $header-height-desktop: 18.4rem; // header + tabs
 $rich-text-editor-height-desktop: 20rem; // rich text editor
 
 // Mobile
-$rich-text-editor-height-mobile: 20.2rem; // header
+$rich-text-editor-height-mobile: 18.6rem; // header
 $header-height-mobile: 14.7rem; // rich text editor
 $bottom-tabs-height-mobile: 5.6rem; // bottom tabs
 
@@ -47,6 +47,10 @@ $bottom-tabs-height-mobile: 5.6rem; // bottom tabs
 
 		@media (max-width: abstracts.$breakpoint-lg) {
 			width: 80%;
+		}
+
+		&:last-child{
+			margin-bottom: 0;
 		}
 
 		&--own {
@@ -96,7 +100,7 @@ $bottom-tabs-height-mobile: 5.6rem; // bottom tabs
 
 	&__editor {
 		height: 20rem;
-		padding: 0 abstracts.$spacer-sm abstracts.$spacer-sm abstracts.$spacer-sm;
+		padding: 0 abstracts.$spacer-sm;
 		position: relative;
 		overflow: hidden;
 

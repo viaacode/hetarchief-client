@@ -1,11 +1,12 @@
 import { useGetMaterialRequestConversationInfinite } from '@account/components/MaterialRequestDetailBlade/hooks/useGetMaterialRequestConversationInfinite';
 import { useSendMaterialRequestMessage } from '@account/components/MaterialRequestDetailBlade/hooks/useSendMaterialRequestMessage';
-import {
-	Lookup_App_Material_Request_Message_Type_Enum,
-	type MaterialRequestMessage,
-} from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversation.types';
 import { selectCommonUser } from '@auth/store/user';
-import type { MaterialRequest, MaterialRequestMessageBodyMessage } from '@material-requests/types';
+import {
+	type MaterialRequest,
+	MaterialRequestEventType,
+	type MaterialRequestMessage,
+	type MaterialRequestMessageBodyMessage,
+} from '@material-requests/types';
 import { Button, RichTextEditorWithInternalState } from '@meemoo/react-components';
 import Html from '@shared/components/Html/Html';
 import { Icon } from '@shared/components/Icon';
@@ -63,7 +64,9 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	);
 
 	const handleSendMessage = useCallback(() => {
-		if (!currentMessage.trim()) return;
+		if (!currentMessage.trim()) {
+			return;
+		}
 		sendMessage(currentMessage, {
 			onSuccess: () => {
 				setCurrentMessage('');
@@ -126,7 +129,9 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	 * When the scroll-trigger becomes visible, fetch the next page.
 	 */
 	const handleLoadMore = useCallback(() => {
-		if (!hasNextPage || isFetchingNextPage || !hasScrolledToBottom) return;
+		if (!hasNextPage || isFetchingNextPage || !hasScrolledToBottom) {
+			return;
+		}
 		fetchNextPage().then(() => {
 			// Prefetch one extra page ahead so the user never hits the top
 			if (hasNextPage) {
@@ -138,7 +143,9 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	useEffect(() => {
 		const sentinel = scrollTriggerRef.current;
 		const container = scrollableRef.current;
-		if (!sentinel || !container) return;
+		if (!sentinel || !container) {
+			return;
+		}
 
 		const observer = new IntersectionObserver(
 			(entries) => {
@@ -171,7 +178,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 
 	const renderMessage = (message: MaterialRequestMessage): ReactNode => {
 		switch (message.messageType) {
-			case Lookup_App_Material_Request_Message_Type_Enum.Message:
+			case MaterialRequestEventType.MESSAGE:
 				return (
 					<div
 						className={clsx(
@@ -264,6 +271,13 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	};
 
 	return (
-		<div className={clsx(styles['p-material-request-detail__conversation'])}>{renderContent()}</div>
+		<div
+			className={clsx(
+				'p-material-request-detail__conversation',
+				styles['p-material-request-detail__conversation']
+			)}
+		>
+			{renderContent()}
+		</div>
 	);
 };

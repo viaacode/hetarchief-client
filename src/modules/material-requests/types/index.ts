@@ -51,6 +51,16 @@ export interface MaterialRequestEvent {
 	messageType: MaterialRequestEventType;
 	body: MaterialRequestMessageBody;
 	createdAt: string;
+	senderProfile: {
+		id: string;
+		mail: string;
+		firstName: string;
+		lastName: string;
+		organisation: {
+			id: string;
+			name: string;
+		};
+	};
 }
 
 export interface MaterialRequestAttachment {
@@ -89,6 +99,11 @@ export type MaterialRequestMessageBody =
 	| MaterialRequestMessageBodyMessage
 	| MaterialRequestMessageBodyAdditionalConditions
 	| MaterialRequestMessageBodyStatusUpdateWithMotivation;
+
+export interface MaterialRequestMessage extends MaterialRequestEvent {
+	attachmentUrl: string | null;
+	attachmentFilename: string | null;
+}
 
 export enum MaterialRequestReuseFormKey {
 	representationId = 'representationId',

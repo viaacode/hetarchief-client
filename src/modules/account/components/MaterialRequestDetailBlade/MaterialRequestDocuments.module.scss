@@ -1,9 +1,6 @@
 @use "../../../../styles/abstracts" as abstracts;
-@use "../../../../styles/components/blade" as blade;
 
 .p-material-request-detail__documents {
-	@include blade.blade-content-padding;
-
 	&--centered {
 		color: abstracts.$neutral;
 		text-align: center;
