@@ -27,9 +27,10 @@ export function useGetMaterialRequestConversationInfinite(
 		initialPageParam: 1,
 		placeholderData: keepPreviousData,
 		staleTime: 1000 * 60, // 1 minute
-		refetchOnMount: true,
-		refetchOnReconnect: true,
-		refetchOnWindowFocus: true,
+		refetchOnMount: 'always',
+		refetchOnReconnect: 'always',
+		refetchOnWindowFocus: 'always',
+		refetchInterval: 10_000, // every 10 seconds
 		enabled,
 	});
 }

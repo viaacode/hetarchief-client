@@ -1,4 +1,4 @@
-import type { TabProps } from '@meemoo/react-components';
+import { Badge, type TabProps } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
@@ -11,7 +11,8 @@ import { MaterialRequestDetailBladeTabs } from './material-request-detail-blade.
 export const MATERIAL_REQUEST_DETAILS_TABS = (
 	activeTab: MaterialRequestDetailBladeTabs,
 	showConversationAndDocumentsTabs: boolean,
-	isMobile: boolean
+	isMobile: boolean,
+	unreadCount: number
 ): TabProps[] => {
 	const getTab = (
 		id: MaterialRequestDetailBladeTabs,
@@ -23,14 +24,28 @@ export const MATERIAL_REQUEST_DETAILS_TABS = (
 			return {
 				id,
 				label: '',
-				icon: <Icon name={icon} aria-hidden />,
+				icon: (
+					<>
+						<Icon name={icon} aria-hidden />
+						{id === MaterialRequestDetailBladeTabs.Conversation && unreadCount > 0 && (
+							<Badge text={unreadCount} variants={['error', 'small']} />
+						)}
+					</>
+				),
 				active: id === activeTab,
 			};
 		}
 
 		return {
 			id,
-			label,
+			label: (
+				<>
+					{label}
+					{id === MaterialRequestDetailBladeTabs.Conversation && unreadCount > 0 && (
+						<Badge text={unreadCount} variants={['error', 'small']} />
+					)}
+				</>
+			),
 			active: id === activeTab,
 		};
 	};
