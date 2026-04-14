@@ -31,6 +31,10 @@
 	line-clamp: 7;
 }
 
+.u-text-italic {
+	font-style: italic;
+}
+
 .u-text-break {
 	word-break: break-all;
 }
@@ -94,6 +98,10 @@
 
 .u-font-weight-400 {
 	font-weight: $font-weight-normal;
+}
+
+.u-font-weight-700 {
+	font-weight: $font-weight-bold;
 }
 
 /**

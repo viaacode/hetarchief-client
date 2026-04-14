@@ -61,6 +61,17 @@ $bottom-tabs-height-mobile: 5.6rem; // bottom tabs
 			margin-left: 0;
 		}
 
+		&--final {
+			width: 100%;
+			margin-left: 0;
+			margin-right: 0;
+		}
+
+		&--system {
+			background-color: transparent;
+			border: 1px solid #e6e6e6;
+		}
+
 		&__sender {
 			font-weight: abstracts.$font-weight-bold;
 			font-size: abstracts.$font-size-md;
@@ -118,6 +129,14 @@ $bottom-tabs-height-mobile: 5.6rem; // bottom tabs
 			:global(.bf-content) {
 				border: 1px solid abstracts.$silver !important;
 				border-radius: 0 0 abstracts.$spacer-xs abstracts.$spacer-xs;
+			}
+
+			&:global(.disabled) {
+				:global(.control-item.button),
+				:global(.control-item.dropdown) {
+					pointer-events: none !important;
+					opacity: 0.5 !important;
+				}
 			}
 		}
 

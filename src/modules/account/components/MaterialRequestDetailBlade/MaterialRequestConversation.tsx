@@ -3,9 +3,19 @@ import { useSendMaterialRequestMessage } from '@account/components/MaterialReque
 import {
 	Lookup_App_Material_Request_Message_Type_Enum,
 	type MaterialRequestMessage,
+	type MaterialRequestMessageBodyStatusUpdateWithMotivation,
 } from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversation.types';
+import { MaterialRequestDownloadBlade } from '@account/components/MaterialRequestDownloadBlade/MaterialRequestDownloadBlade';
+import {
+	determineHasDownloadExpired,
+	handleDownloadMaterialRequest,
+} from '@account/utils/handle-download-material-request';
 import { selectCommonUser } from '@auth/store/user';
-import type { MaterialRequest, MaterialRequestMessageBodyMessage } from '@material-requests/types';
+import {
+	type MaterialRequest,
+	type MaterialRequestMessageBodyMessage,
+	MaterialRequestStatus,
+} from '@material-requests/types';
 import { Button, RichTextEditorWithInternalState } from '@meemoo/react-components';
 import Html from '@shared/components/Html/Html';
 import { Icon } from '@shared/components/Icon';
@@ -13,6 +23,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
+import { asDate, formatLongDate } from '@shared/utils/dates';
 import clsx from 'clsx';
 import { format } from 'date-fns';
 import Link from 'next/link';
@@ -46,6 +57,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	const [editorKey, setEditorKey] = useState(uuid()); // To force rich text editor to rerender
 
 	const [currentMessage, setCurrentMessage] = useState<string>('');
+	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
 	const {
 		data: messages,
@@ -61,6 +73,11 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	const { mutate: sendMessage, isPending: isSending } = useSendMaterialRequestMessage(
 		materialRequest.id
 	);
+
+	const isRequestClosed =
+		materialRequest.status === MaterialRequestStatus.DENIED ||
+		materialRequest.status === MaterialRequestStatus.CANCELLED ||
+		determineHasDownloadExpired(materialRequest);
 
 	const handleSendMessage = useCallback(() => {
 		if (!currentMessage.trim()) return;
@@ -169,39 +186,155 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		}
 	};
 
+	const renderMessageWrapper = (message: MaterialRequestMessage, content: ReactNode): ReactNode => {
+		const isFinalMessage = [
+			Lookup_App_Material_Request_Message_Type_Enum.Cancelled,
+			Lookup_App_Material_Request_Message_Type_Enum.Denied,
+			Lookup_App_Material_Request_Message_Type_Enum.Approved,
+			Lookup_App_Material_Request_Message_Type_Enum.DownloadExpired,
+		].includes(message.messageType);
+
+		const isSystemMessage =
+			message.messageType !== Lookup_App_Material_Request_Message_Type_Enum.Message &&
+			message.messageType !== Lookup_App_Material_Request_Message_Type_Enum.ReuseSummary;
+
+		return (
+			<div
+				className={clsx(
+					styles['p-conversation-messages__message'],
+					styles[`p-conversation-messages__message--${message.messageType}`],
+					isOwnMessage(message)
+						? styles[`p-conversation-messages__message--own`]
+						: styles[`p-conversation-messages__message--other`],
+					isFinalMessage && styles['p-conversation-messages__message--final'],
+					isSystemMessage && styles['p-conversation-messages__message--system']
+				)}
+			>
+				<div className={clsx(styles['p-conversation-messages__message__sender'])}>
+					{renderOrganisationName(message)}
+				</div>
+				<div>{format(message.createdAt, 'dd MMM yyyy, HH:mm')}</div>
+				{content}
+				{message.attachmentUrl && (
+					<Link href={message.attachmentUrl} target="_blank" passHref>
+						<div className={clsx(styles['p-conversation-messages__message__attachment'])}>
+							<Icon name={IconNamesLight.File}></Icon>
+							<span>{message.attachmentFilename}</span>
+						</div>
+					</Link>
+				)}
+			</div>
+		);
+	};
+
 	const renderMessage = (message: MaterialRequestMessage): ReactNode => {
+		// TODO(Senn): add messages for additional conditions when implemented
 		switch (message.messageType) {
 			case Lookup_App_Material_Request_Message_Type_Enum.Message:
-				return (
-					<div
-						className={clsx(
-							styles['p-conversation-messages__message'],
-							styles[`p-conversation-messages__message--${message.messageType}`],
-							isOwnMessage(message)
-								? styles[`p-conversation-messages__message--own`]
-								: styles[`p-conversation-messages__message--other`]
-						)}
-					>
-						<div className={clsx(styles['p-conversation-messages__message__sender'])}>
-							{renderOrganisationName(message)}
+			case Lookup_App_Material_Request_Message_Type_Enum.ReuseSummary:
+				return renderMessageWrapper(
+					message,
+					message.body && (
+						<Html
+							type={'div'}
+							className={clsx(styles['p-conversation-messages__message__body'])}
+							content={(message.body as MaterialRequestMessageBodyMessage).message}
+						/>
+					)
+				);
+
+			case Lookup_App_Material_Request_Message_Type_Enum.Cancelled:
+				return renderMessageWrapper(
+					message,
+					<div className={clsx(styles['p-conversation-messages__message__body'])}>
+						{message.senderProfile.organisation?.name ||
+							`${message.senderProfile.firstName} ${message.senderProfile.lastName}`}{' '}
+						{tText('annuleerde de aanvraag.')}
+					</div>
+				);
+
+			case Lookup_App_Material_Request_Message_Type_Enum.Denied:
+				return renderMessageWrapper(
+					message,
+					<div className={clsx(styles['p-conversation-messages__message__body'])}>
+						<div>
+							{message.senderProfile.organisation?.name ||
+								`${message.senderProfile.firstName} ${message.senderProfile.lastName}`}{' '}
+							{tText('keurde de aanvraag af met de volgende boodschap:')}
 						</div>
-						<div>{format(message.createdAt, 'dd MMM yyyy, HH:mm')}</div>
-						{!!message.body && (
-							<Html
-								type={'div'}
-								className={clsx(styles['p-conversation-messages__message__body'])}
-								content={(message.body as MaterialRequestMessageBodyMessage).message}
-							/>
-						)}
-						{message.attachmentUrl && (
-							<Link href={message.attachmentUrl} target="_blank" passHref>
-								<div className={clsx(styles['p-conversation-messages__message__attachment'])}>
-									<Icon name={IconNamesLight.File}></Icon>
-									<span>{message.attachmentFilename}</span>
+						<div className="u-mt-16 u-text-italic">
+							{(message.body as MaterialRequestMessageBodyStatusUpdateWithMotivation).motivation}
+						</div>
+					</div>
+				);
+
+			case Lookup_App_Material_Request_Message_Type_Enum.Approved: {
+				const motivation = (message.body as MaterialRequestMessageBodyStatusUpdateWithMotivation)
+					?.motivation;
+				return renderMessageWrapper(
+					message,
+					<div className={clsx(styles['p-conversation-messages__message__body'])}>
+						{motivation ? (
+							<>
+								<div>
+									{message.senderProfile.organisation?.name ||
+										`${message.senderProfile.firstName} ${message.senderProfile.lastName}`}{' '}
+									{tText('keurde de aanvraag goed met de volgende boodschap:')}
 								</div>
-							</Link>
+								<div className="u-mt-16 u-text-italic">{motivation}</div>
+							</>
+						) : (
+							<div>
+								{message.senderProfile.organisation?.name ||
+									`${message.senderProfile.firstName} ${message.senderProfile.lastName}`}{' '}
+								{tText('keurde de aanvraag goed.')}
+							</div>
 						)}
 					</div>
+				);
+			}
+
+			case Lookup_App_Material_Request_Message_Type_Enum.DownloadExpired:
+				return renderMessageWrapper(
+					message,
+					<>
+						<div
+							className={clsx(
+								styles['p-conversation-messages__message__body'],
+								'u-font-weight-700'
+							)}
+						>
+							{tText('Download is verlopen op')} {format(message.createdAt, 'dd MMM yyyy')}.
+						</div>
+						<div className="u-text-italic">
+							{tText('De download is niet langer beschikbaar, dus deze aanvraag wordt afgesloten.')}
+						</div>
+					</>
+				);
+
+			case Lookup_App_Material_Request_Message_Type_Enum.DownloadAvailable:
+				return renderMessageWrapper(
+					message,
+					<>
+						<div className={clsx(styles['p-conversation-messages__message__body'])}>
+							{tText('Het aangevraagde materiaal is beschikbaar voor download')}
+						</div>
+						<Button
+							label={tText(
+								'modules/account/components/material-request-detail-blade/material-request-detail-blade___downlooad-materiaal'
+							)}
+							variants={['dark']}
+							onClick={() => handleDownloadMaterialRequest(materialRequest).then(setDownloadUrl)}
+							className={clsx(
+								'u-mt-16',
+								styles['p-conversation-messages__message__download-button']
+							)}
+						/>
+						<div className={clsx('u-mt-16', 'u-color-grey', 'u-text-italic')}>
+							<Icon name={IconNamesLight.Info} /> {tText('De download is beschikbaar tot en met')}{' '}
+							{formatLongDate(asDate(materialRequest.downloadExpiresAt))}
+						</div>
+					</>
 				);
 		}
 	};
@@ -239,6 +372,8 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 								overflowY: 'auto',
 							},
 						}}
+						disabled={isRequestClosed}
+						className={isRequestClosed ? 'disabled' : undefined}
 						id={`material-request-conversation--${editorKey}`}
 						value={currentMessage}
 						onChange={(value) => setCurrentMessage(value)}
@@ -254,7 +389,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 						variants={['text']}
 						// Replace this icon with a send icon when Jelle and JN add the icons to the font
 						icon={<Icon name={IconNamesLight.Email} />}
-						disabled={!currentMessage.length || isSending}
+						disabled={!currentMessage.length || isSending || isRequestClosed}
 						tabIndex={!currentMessage.length ? undefined : -1}
 						onClick={handleSendMessage}
 					/>
@@ -264,6 +399,15 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	};
 
 	return (
-		<div className={clsx(styles['p-material-request-detail__conversation'])}>{renderContent()}</div>
+		<>
+			<div className={clsx(styles['p-material-request-detail__conversation'])}>
+				{renderContent()}
+			</div>
+			<MaterialRequestDownloadBlade
+				location="material-request-conversation-download-button"
+				downloadUrl={downloadUrl}
+				onClose={() => setDownloadUrl(null)}
+			/>
+		</>
 	);
 };
