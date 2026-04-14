@@ -7,7 +7,7 @@ import {
 	type MaterialRequestMessage,
 	type MaterialRequestMessageBodyMessage,
 } from '@material-requests/types';
-import { Button, RichTextEditorWithInternalState } from '@meemoo/react-components';
+import { Button, keysEnter, RichTextEditorWithInternalState } from '@meemoo/react-components';
 import Html from '@shared/components/Html/Html';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -244,6 +244,18 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 								minHeight: '100px',
 								maxHeight: '150px',
 								overflowY: 'auto',
+							},
+							// @ts-expect-error: This method does exists on the braft editor so ts-ignoring this to get the error gone
+							keyBindingFn: (evt: KeyboardEvent) => {
+								if (evt.ctrlKey || evt.shiftKey || evt.altKey || evt.metaKey) {
+									// In case of these buttons being pressed, we will allow the enter to go through
+									// Otherwise it will be impossible to get more than 1 entry in a list
+									return;
+								}
+
+								if (keysEnter.includes(evt.key)) {
+									handleSendMessage();
+								}
 							},
 						}}
 						id={`material-request-conversation--${editorKey}`}
