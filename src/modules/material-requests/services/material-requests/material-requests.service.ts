@@ -59,7 +59,14 @@ export abstract class MaterialRequestsService {
 		if (!id) {
 			return null;
 		}
-		return ApiService.getApi().get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}`).json();
+		return ApiService.getApi()
+			.get(
+				stringifyUrl({
+					url: `${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}`,
+					query: { resolveThumbnailUrl: true },
+				})
+			)
+			.json();
 	}
 
 	public static async handleDownload(id: string): Promise<string> {
