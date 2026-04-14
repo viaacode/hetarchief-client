@@ -1,12 +1,9 @@
 @use "../../../../styles/abstracts" as abstracts;
-@use "../../../../styles/components/blade" as blade;
 
 .p-material-request-detail__content-info {
 	display: flex;
 	flex-direction: row;
 	gap: abstracts.$spacer-lg;
-
-	@include blade.blade-content-padding;
 
 	@media (max-width: abstracts.$breakpoint-md) {
 		flex-direction: column-reverse;

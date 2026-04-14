@@ -1,20 +1,22 @@
 @use "../../../../styles/abstracts" as abstracts;
 
 // Desktop
-$header-height-desktop: 18.4rem; // header + tabs
 $rich-text-editor-height-desktop: 20rem; // rich text editor
 
 // Mobile
-$rich-text-editor-height-mobile: 20.2rem; // header
-$header-height-mobile: 14.7rem; // rich text editor
-$bottom-tabs-height-mobile: 5.6rem; // bottom tabs
+$rich-text-editor-height-mobile: 14.7rem; // rich text editor
+
+.p-material-request-detail__conversation{
+	position: relative;
+	height: 100%;
+}
 
 .p-conversation-messages {
 	overflow: hidden;
 
 	// Desktop
 	&__message-wrapper {
-		height: calc(100vh - $header-height-desktop - $rich-text-editor-height-desktop);
+		height: calc(100% - $rich-text-editor-height-desktop);
 		overflow-y: scroll;
 		padding: abstracts.$spacer-md;
 	}
@@ -22,7 +24,7 @@ $bottom-tabs-height-mobile: 5.6rem; // bottom tabs
 	// Mobile
 	@media (max-width: abstracts.$breakpoint-md) {
 		&__message-wrapper {
-			height: calc(100vh - $header-height-mobile - $rich-text-editor-height-mobile - $bottom-tabs-height-mobile);
+			height: calc(100% - $rich-text-editor-height-desktop);
 			overflow-y: scroll;
 			padding: abstracts.$spacer-sm;
 		}
@@ -55,6 +57,10 @@ $bottom-tabs-height-mobile: 5.6rem; // bottom tabs
 
 		@media (max-width: abstracts.$breakpoint-lg) {
 			width: 80%;
+		}
+
+		&:last-child{
+			margin-bottom: 0;
 		}
 
 		&--own {
@@ -141,12 +147,14 @@ $bottom-tabs-height-mobile: 5.6rem; // bottom tabs
 	}
 
 	&__editor {
-		height: 20rem;
-		padding: 0 abstracts.$spacer-sm abstracts.$spacer-sm abstracts.$spacer-sm;
+		height: $rich-text-editor-height-desktop;
+		padding: 0 abstracts.$spacer-sm;
 		position: relative;
 		overflow: hidden;
 
 		:global(.c-rich-text-editor) {
+			height: $rich-text-editor-height-desktop;
+
 			:global(.bf-controlbar) {
 				background-color: abstracts.$platinum;
 				border: 1px solid abstracts.$silver;

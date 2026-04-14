@@ -74,9 +74,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 }) => {
 	const locale = useLocale();
 	const user = useSelector(selectCommonUser);
-	const { isComplexReuseFlow, isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(
-		currentMaterialRequestDetail
-	);
+	const { isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(currentMaterialRequestDetail);
 	const isDetailBladeOpen = !!currentMaterialRequestDetail;
 
 	// We need different functionalities for different viewport sizes
@@ -597,15 +595,8 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				{...getBladeHeaderProps(true)}
 				{...getBladeFooterProps()}
 			>
-				<div
-					className={clsx(
-						styles['p-material-request-detail__content-wrapper'],
-						currentMaterialRequestDetail?.reuseForm
-							? 'p-material-request-detail__content-wrapper--complex-reuse-flow'
-							: 'p-material-request-detail__content-wrapper--simple-flow'
-					)}
-				>
-					<div className={styles['p-material-request-detail__content']}>{renderContent()}</div>
+				<div className={clsx(styles['p-material-request-detail__content-wrapper'])}>
+					{renderContent()}
 				</div>
 				<ConfirmationModal
 					text={{

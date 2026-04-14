@@ -1,12 +1,6 @@
 import { useGetMaterialRequestConversationInfinite } from '@account/components/MaterialRequestDetailBlade/hooks/useGetMaterialRequestConversationInfinite';
 import { useSendMaterialRequestMessage } from '@account/components/MaterialRequestDetailBlade/hooks/useSendMaterialRequestMessage';
 import {
-	Lookup_App_Material_Request_Message_Type_Enum,
-	type MaterialRequestMessage,
-	type MaterialRequestMessageBodyStatusUpdateWithMotivation,
-} from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversation.types';
-import { MaterialRequestDownloadBlade } from '@account/components/MaterialRequestDownloadBlade/MaterialRequestDownloadBlade';
-import {
 	determineHasDownloadExpired,
 	handleDownloadMaterialRequest,
 } from '@account/utils/handle-download-material-request';
@@ -14,7 +8,10 @@ import { isMaterialRequestClosed } from '@account/utils/is-material-request-clos
 import { selectCommonUser } from '@auth/store/user';
 import {
 	type MaterialRequest,
+	MaterialRequestEventType,
+	type MaterialRequestMessage,
 	type MaterialRequestMessageBodyMessage,
+	type MaterialRequestMessageBodyStatusUpdateWithMotivation,
 	MaterialRequestStatus,
 } from '@material-requests/types';
 import { Button, RichTextEditorWithInternalState } from '@meemoo/react-components';
@@ -76,7 +73,9 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	);
 
 	const handleSendMessage = useCallback(() => {
-		if (!currentMessage.trim()) return;
+		if (!currentMessage.trim()) {
+			return;
+		}
 		sendMessage(currentMessage, {
 			onSuccess: () => {
 				setCurrentMessage('');
@@ -139,7 +138,9 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	 * When the scroll-trigger becomes visible, fetch the next page.
 	 */
 	const handleLoadMore = useCallback(() => {
-		if (!hasNextPage || isFetchingNextPage || !hasScrolledToBottom) return;
+		if (!hasNextPage || isFetchingNextPage || !hasScrolledToBottom) {
+			return;
+		}
 		fetchNextPage().then(() => {
 			// Prefetch one extra page ahead so the user never hits the top
 			if (hasNextPage) {
@@ -151,7 +152,9 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	useEffect(() => {
 		const sentinel = scrollTriggerRef.current;
 		const container = scrollableRef.current;
-		if (!sentinel || !container) return;
+		if (!sentinel || !container) {
+			return;
+		}
 
 		const observer = new IntersectionObserver(
 			(entries) => {
@@ -184,15 +187,13 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 
 	const renderMessageWrapper = (message: MaterialRequestMessage, content: ReactNode): ReactNode => {
 		const isFinalMessage = [
-			Lookup_App_Material_Request_Message_Type_Enum.Cancelled,
-			Lookup_App_Material_Request_Message_Type_Enum.Denied,
-			Lookup_App_Material_Request_Message_Type_Enum.Approved,
-			Lookup_App_Material_Request_Message_Type_Enum.DownloadExpired,
+			MaterialRequestEventType.CANCELLED,
+			MaterialRequestEventType.DENIED,
+			MaterialRequestEventType.APPROVED,
+			MaterialRequestEventType.DOWNLOAD_EXPIRED,
 		].includes(message.messageType);
 
-		const isSystemMessage =
-			message.messageType !== Lookup_App_Material_Request_Message_Type_Enum.Message &&
-			message.messageType !== Lookup_App_Material_Request_Message_Type_Enum.ReuseSummary;
+		const isSystemMessage = message.messageType !== MaterialRequestEventType.MESSAGE;
 
 		return (
 			<div
@@ -226,8 +227,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	const renderMessage = (message: MaterialRequestMessage): ReactNode => {
 		// TODO(Senn): add messages for additional conditions when implemented
 		switch (message.messageType) {
-			case Lookup_App_Material_Request_Message_Type_Enum.Message:
-			case Lookup_App_Material_Request_Message_Type_Enum.ReuseSummary:
+			case MaterialRequestEventType.MESSAGE:
 				return renderMessageWrapper(
 					message,
 					message.body && (
@@ -239,7 +239,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 					)
 				);
 
-			case Lookup_App_Material_Request_Message_Type_Enum.Cancelled:
+			case MaterialRequestEventType.CANCELLED:
 				return renderMessageWrapper(
 					message,
 					<div className={clsx(styles['p-conversation-messages__message__body'])}>
@@ -251,7 +251,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 					</div>
 				);
 
-			case Lookup_App_Material_Request_Message_Type_Enum.Denied:
+			case MaterialRequestEventType.DENIED:
 				return renderMessageWrapper(
 					message,
 					<div className={clsx(styles['p-conversation-messages__message__body'])}>
@@ -288,7 +288,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 					</div>
 				);
 
-			case Lookup_App_Material_Request_Message_Type_Enum.Approved: {
+			case MaterialRequestEventType.APPROVED: {
 				const motivation = (message.body as MaterialRequestMessageBodyStatusUpdateWithMotivation)
 					?.motivation;
 				return renderMessageWrapper(
@@ -324,7 +324,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 				);
 			}
 
-			case Lookup_App_Material_Request_Message_Type_Enum.DownloadExpired:
+			case MaterialRequestEventType.DOWNLOAD_EXPIRED:
 				return renderMessageWrapper(
 					message,
 					<>
@@ -346,7 +346,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 					</>
 				);
 
-			case Lookup_App_Material_Request_Message_Type_Enum.DownloadAvailable:
+			case MaterialRequestEventType.DOWNLOAD_AVAILABLE:
 				return renderMessageWrapper(
 					message,
 					<>
@@ -459,15 +459,13 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	};
 
 	return (
-		<>
-			<div className={clsx(styles['p-material-request-detail__conversation'])}>
-				{renderContent()}
-			</div>
-			<MaterialRequestDownloadBlade
-				location="material-request-conversation-download-button"
-				downloadUrl={downloadUrl}
-				onClose={() => setDownloadUrl(null)}
-			/>
-		</>
+		<div
+			className={clsx(
+				'p-material-request-detail__conversation',
+				styles['p-material-request-detail__conversation']
+			)}
+		>
+			{renderContent()}
+		</div>
 	);
 };

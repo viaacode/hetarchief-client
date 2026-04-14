@@ -33,7 +33,6 @@ $padding-horizontal-mobile: abstracts.$spacer-sm;
 	&.c-blade--size-wide {
 		max-width: 90%;
 
-
 		@media (max-width: abstracts.$breakpoint-sm) {
 			max-width: 100%;
 		}
