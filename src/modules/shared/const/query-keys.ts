@@ -41,4 +41,5 @@ export enum QUERY_KEYS {
 	getIeObjectForContentEncloseBlock = 'getIeObjectForContentEncloseBlock',
 	getContentPageByPath = 'getContentPageByPath',
 	getMaterialRequestMessages = 'getMaterialRequestMessages',
+	getMaterialRequestMessagesUnreadCount = 'getMaterialRequestMessagesUnreadCount',
 }

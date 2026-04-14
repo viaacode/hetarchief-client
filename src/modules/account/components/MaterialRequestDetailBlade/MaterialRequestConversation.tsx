@@ -34,14 +34,17 @@ const MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE = 20;
 
 interface MaterialRequestConversationProps {
 	materialRequest: MaterialRequest;
+	onMessagesLoaded: () => void;
 }
 
 export const MaterialRequestConversation: FC<MaterialRequestConversationProps> = ({
 	materialRequest,
+	onMessagesLoaded,
 }) => {
 	const scrollableRef = useRef<HTMLDivElement>(null);
 	const scrollTriggerRef = useRef<HTMLDivElement>(null);
 	const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
+	const [hasNotified, setHasNotified] = useState(false);
 	const previousScrollHeightRef = useRef<number | null>(null);
 	const user = useSelector(selectCommonUser);
 	const [editorKey, setEditorKey] = useState(uuid()); // To force rich text editor to rerender
@@ -51,6 +54,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	const {
 		data: messages,
 		isLoading: isLoadingMessages,
+		isFetching: isFetchingMessages,
 		fetchNextPage,
 		hasNextPage,
 		isFetchingNextPage,
@@ -71,6 +75,9 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 			onSuccess: () => {
 				setCurrentMessage('');
 				setEditorKey(uuid()); // Force rerender of rich text editor
+				scrollableRef.current?.scrollTo({
+					top: Number.MAX_SAFE_INTEGER, // scroll all the way to the bottom
+				});
 			},
 			onError: (err) => {
 				console.error(err);
@@ -102,6 +109,16 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 			setHasScrolledToBottom(true);
 		}
 	}, [messages, hasScrolledToBottom]);
+
+	/**
+	 * Notifies that the messages were loaded
+	 */
+	useEffect(() => {
+		if (!isFetchingMessages && !hasNotified) {
+			onMessagesLoaded();
+			setHasNotified(true);
+		}
+	}, [isFetchingMessages, hasNotified, onMessagesLoaded]);
 
 	// Capture scrollHeight before every render so useLayoutEffect can correct after any page append
 	const pageCount = messages?.pages?.length ?? 0;

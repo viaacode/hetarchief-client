@@ -1,3 +1,4 @@
+import { useGetMaterialRequestConversationUnreadCount } from '@account/components/MaterialRequestDetailBlade/hooks/useGetMaterialRequestConversationUnreadCount';
 import { MaterialRequestConversation } from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversation';
 import { MaterialRequestDownloadBlade } from '@account/components/MaterialRequestDownloadBlade/MaterialRequestDownloadBlade';
 import { MaterialRequestEvaluatorOptions } from '@account/components/MaterialRequestEvaluatorOptions/MaterialRequestEvaluatorOptions';
@@ -134,14 +135,21 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		[currentMaterialRequestDetail, locale]
 	);
 
+	const { data: unreadCount, refetch: refetchUnreadCount } =
+		useGetMaterialRequestConversationUnreadCount(
+			currentMaterialRequestDetail?.id,
+			activeTab !== MaterialRequestDetailBladeTabs.Conversation
+		);
+
 	const tabs: TabProps[] = useMemo(
 		() =>
 			MATERIAL_REQUEST_DETAILS_TABS(
 				activeTab as MaterialRequestDetailBladeTabs,
 				isRequester || canUserEvaluate,
-				isMobile
+				isMobile,
+				unreadCount?.count ?? 0
 			),
-		[isMobile, isRequester, canUserEvaluate, activeTab]
+		[isMobile, isRequester, canUserEvaluate, activeTab, unreadCount]
 	);
 
 	useEffect(() => {
@@ -212,7 +220,12 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 
 		switch (activeTab) {
 			case MaterialRequestDetailBladeTabs.Conversation:
-				return <MaterialRequestConversation materialRequest={currentMaterialRequestDetail} />;
+				return (
+					<MaterialRequestConversation
+						materialRequest={currentMaterialRequestDetail}
+						onMessagesLoaded={() => refetchUnreadCount().then(noop)}
+					/>
+				);
 			case MaterialRequestDetailBladeTabs.Documents:
 				return <MaterialRequestDocuments materialRequest={currentMaterialRequestDetail} />;
 		}

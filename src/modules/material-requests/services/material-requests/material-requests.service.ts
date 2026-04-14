@@ -205,4 +205,10 @@ export abstract class MaterialRequestsService {
 			})
 			.json();
 	}
+
+	public static getUnreadMessages(materialRequestId: string): Promise<{ count: number }> {
+		return ApiService.getApi()
+			.get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/messages/count-unread`)
+			.json();
+	}
 }
