@@ -10,6 +10,7 @@ import {
 	determineHasDownloadExpired,
 	handleDownloadMaterialRequest,
 } from '@account/utils/handle-download-material-request';
+import { isMaterialRequestClosed } from '@account/utils/is-material-request-closed';
 import { selectCommonUser } from '@auth/store/user';
 import {
 	type MaterialRequest,
@@ -23,7 +24,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
-import { asDate, formatLongDate } from '@shared/utils/dates';
+import { asDate, formatLongDate, formatMediumDateWithTime } from '@shared/utils/dates';
 import clsx from 'clsx';
 import { format } from 'date-fns';
 import Link from 'next/link';
@@ -73,11 +74,6 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	const { mutate: sendMessage, isPending: isSending } = useSendMaterialRequestMessage(
 		materialRequest.id
 	);
-
-	const isRequestClosed =
-		materialRequest.status === MaterialRequestStatus.DENIED ||
-		materialRequest.status === MaterialRequestStatus.CANCELLED ||
-		determineHasDownloadExpired(materialRequest);
 
 	const handleSendMessage = useCallback(() => {
 		if (!currentMessage.trim()) return;
@@ -247,9 +243,11 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 				return renderMessageWrapper(
 					message,
 					<div className={clsx(styles['p-conversation-messages__message__body'])}>
-						{message.senderProfile.organisation?.name ||
-							`${message.senderProfile.firstName} ${message.senderProfile.lastName}`}{' '}
-						{tText('annuleerde de aanvraag.')}
+						{tText('{{name}} annuleerde de aanvraag.', {
+							name:
+								message.senderProfile.organisation?.name ||
+								`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
+						})}
 					</div>
 				);
 
@@ -257,14 +255,36 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 				return renderMessageWrapper(
 					message,
 					<div className={clsx(styles['p-conversation-messages__message__body'])}>
-						<div>
-							{message.senderProfile.organisation?.name ||
-								`${message.senderProfile.firstName} ${message.senderProfile.lastName}`}{' '}
-							{tText('keurde de aanvraag af met de volgende boodschap:')}
-						</div>
-						<div className="u-mt-16 u-text-italic">
-							{(message.body as MaterialRequestMessageBodyStatusUpdateWithMotivation).motivation}
-						</div>
+						{(message.body as MaterialRequestMessageBodyStatusUpdateWithMotivation)?.motivation ? (
+							<>
+								<div>
+									{tText('{{name}} keurde de aanvraag af met de volgende boodschap:', {
+										name:
+											message.senderProfile.organisation?.name ||
+											`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
+									})}
+								</div>
+
+								<div
+									className={clsx(
+										styles['p-conversation-messages__message__body--status-motivation']
+									)}
+								>
+									{
+										(message.body as MaterialRequestMessageBodyStatusUpdateWithMotivation)
+											.motivation
+									}
+								</div>
+							</>
+						) : (
+							<div>
+								{tText('{{name}} keurde de aanvraag af.', {
+									name:
+										message.senderProfile.organisation?.name ||
+										`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
+								})}
+							</div>
+						)}
 					</div>
 				);
 
@@ -277,17 +297,27 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 						{motivation ? (
 							<>
 								<div>
-									{message.senderProfile.organisation?.name ||
-										`${message.senderProfile.firstName} ${message.senderProfile.lastName}`}{' '}
-									{tText('keurde de aanvraag goed met de volgende boodschap:')}
+									{tText('{{name}} keurde de aanvraag goed met de volgende boodschap:', {
+										name:
+											message.senderProfile.organisation?.name ||
+											`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
+									})}
 								</div>
-								<div className="u-mt-16 u-text-italic">{motivation}</div>
+								<div
+									className={clsx(
+										styles['p-conversation-messages__message__body--status-motivation']
+									)}
+								>
+									{motivation}
+								</div>
 							</>
 						) : (
 							<div>
-								{message.senderProfile.organisation?.name ||
-									`${message.senderProfile.firstName} ${message.senderProfile.lastName}`}{' '}
-								{tText('keurde de aanvraag goed.')}
+								{tText('{{name}} keurde de aanvraag goed.', {
+									name:
+										message.senderProfile.organisation?.name ||
+										`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
+								})}
 							</div>
 						)}
 					</div>
@@ -299,14 +329,18 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 					message,
 					<>
 						<div
+							className={clsx(styles['p-conversation-messages__message__body--download-expired'])}
+						>
+							{tText('Download is verlopen', {
+								date: formatMediumDateWithTime(asDate(message.createdAt)),
+							})}
+							.
+						</div>
+						<div
 							className={clsx(
-								styles['p-conversation-messages__message__body'],
-								'u-font-weight-700'
+								styles['p-conversation-messages__message__body--download-expired-subtext']
 							)}
 						>
-							{tText('Download is verlopen op')} {format(message.createdAt, 'dd MMM yyyy')}.
-						</div>
-						<div className="u-text-italic">
 							{tText('De download is niet langer beschikbaar, dus deze aanvraag wordt afgesloten.')}
 						</div>
 					</>
@@ -325,14 +359,14 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 							)}
 							variants={['dark']}
 							onClick={() => handleDownloadMaterialRequest(materialRequest).then(setDownloadUrl)}
-							className={clsx(
-								'u-mt-16',
-								styles['p-conversation-messages__message__download-button']
-							)}
+							className={clsx(styles['p-conversation-messages__message__download-button'])}
+							disabled={determineHasDownloadExpired(materialRequest)}
 						/>
-						<div className={clsx('u-mt-16', 'u-color-grey', 'u-text-italic')}>
-							<Icon name={IconNamesLight.Info} /> {tText('De download is beschikbaar tot en met')}{' '}
-							{formatLongDate(asDate(materialRequest.downloadExpiresAt))}
+						<div className={clsx(styles['p-conversation-messages__message__download-expiration'])}>
+							<Icon name={IconNamesLight.Info} />{' '}
+							{tText('De download is beschikbaar tot en met', {
+								date: formatLongDate(asDate(materialRequest.downloadExpiresAt)),
+							})}
 						</div>
 					</>
 				);
@@ -359,6 +393,30 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 							<Loading fullscreen={false} locationId="ConversationLoadMore" />
 						</div>
 					)}
+
+					{!isFetchingNextPage && !hasNextPage && (
+						<div className={clsx(styles['p-conversation-messages__empty-state'])}>
+							{materialRequest.requesterId === user?.profileId ? (
+								<div className={clsx(styles['p-conversation-messages__empty-state__text'])}>
+									{tText(
+										'Je hebt een nieuwe aanvraag tot hergebruik verstuurd naar {{name}}. Start hieronder je conversatie.',
+										{ name: materialRequest.maintainerName }
+									)}
+								</div>
+							) : (
+								<div className={clsx(styles['p-conversation-messages__empty-state__text'])}>
+									{tText(
+										'Je hebt een nieuwe aanvraag tot hergebruik ontvangen van {{name}}. Start hieronder je conversatie.',
+										{
+											name:
+												materialRequest.requesterOrganisation || materialRequest.requesterFullName,
+										}
+									)}
+								</div>
+							)}
+						</div>
+					)}
+
 					{[...(messages?.pages || [])].reverse().map((page) => {
 						return [...page.items].reverse().map(renderMessage);
 					})}
@@ -372,8 +430,8 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 								overflowY: 'auto',
 							},
 						}}
-						disabled={isRequestClosed}
-						className={isRequestClosed ? 'disabled' : undefined}
+						disabled={isMaterialRequestClosed(materialRequest)}
+						className={isMaterialRequestClosed(materialRequest) ? 'disabled' : undefined}
 						id={`material-request-conversation--${editorKey}`}
 						value={currentMessage}
 						onChange={(value) => setCurrentMessage(value)}
@@ -389,7 +447,9 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 						variants={['text']}
 						// Replace this icon with a send icon when Jelle and JN add the icons to the font
 						icon={<Icon name={IconNamesLight.Email} />}
-						disabled={!currentMessage.length || isSending || isRequestClosed}
+						disabled={
+							!currentMessage.length || isSending || isMaterialRequestClosed(materialRequest)
+						}
 						tabIndex={!currentMessage.length ? undefined : -1}
 						onClick={handleSendMessage}
 					/>

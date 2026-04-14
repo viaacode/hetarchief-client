@@ -34,6 +34,14 @@ $bottom-tabs-height-mobile: 5.6rem; // bottom tabs
 		padding: abstracts.$spacer-sm 0;
 	}
 
+	&__empty-state {
+		&__text {
+			text-align: center;
+			color: abstracts.$grey;
+			margin-bottom: abstracts.$spacer-sm;
+		}
+	}
+
 	&__message {
 		border-radius: abstracts.$spacer-sm;
 		padding: abstracts.$spacer-sm;
@@ -79,6 +87,33 @@ $bottom-tabs-height-mobile: 5.6rem; // bottom tabs
 
 		&__body {
 			margin-top: abstracts.$spacer-xxs;
+
+			&--status-motivation {
+				font-style: italic;
+				margin-top: abstracts.$spacer-xs;
+			}
+
+			&--expired {
+				font-weight: abstracts.$font-weight-bold;
+			}
+
+			&--download-expired {
+				font-weight: abstracts.$font-weight-bold;
+			}
+
+			&--download-expired-subtext {
+				font-style: italic;
+			}
+		}
+
+		&__download-button {
+			margin-top: abstracts.$spacer-sm;
+		}
+
+		&__download-expiration {
+			margin-top: abstracts.$spacer-sm;
+			color: abstracts.$grey;
+			font-style: italic;
 		}
 
 		&__attachment {
