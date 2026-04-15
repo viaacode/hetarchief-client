@@ -1,5 +1,6 @@
 import { isMaterialRequestClosed } from '@account/utils/is-material-request-closed';
 import { useGetMaterialRequestAttachments } from '@material-requests/hooks/get-material-request-attachments';
+import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from '@material-requests/services';
 import {
 	type MaterialRequest,
 	type MaterialRequestAttachment,
@@ -164,7 +165,7 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 		return (
 			<Link
 				passHref
-				href={`${publicRuntimeConfig.PROXY_URL}/material-request-messages/${materialRequest.id}/attachments/download-zip`}
+				href={`${publicRuntimeConfig.PROXY_URL}/${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequest.id}/attachments/download-zip`}
 				target="_blank"
 				rel="noopener noreferrer"
 				aria-label={tText(
