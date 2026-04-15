@@ -64,4 +64,8 @@ $badge-font-size: 1.4rem;
 
 		padding: 0;
 	}
+
+	&--small.c-badge--error {
+		@include badge-variant($cherry, $white, 0.6rem);
+	}
 }

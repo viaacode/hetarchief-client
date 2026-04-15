@@ -1,6 +1,15 @@
 @use "../../../../styles/abstracts" as abstracts;
 
 .p-material-request-detail {
+	:global(.c-badge--error){
+		box-shadow: 0 0 abstracts.$spacer-xs 0 abstracts.$cherry;
+
+		@media (max-width: abstracts.$breakpoint-md) {
+			margin-left: calc(#{abstracts.$spacer-xs} * -1);
+			margin-top: calc(#{abstracts.$spacer-xxs} * -1);
+		}
+	}
+
 	@media (min-width: abstracts.$breakpoint-md) {
 		:global(.c-blade__title){
 			padding-bottom: 0;
@@ -22,6 +31,11 @@
 					color: abstracts.$black;
 					font-weight: abstracts.$font-weight-bold;
 					border-bottom: 3px solid abstracts.$teal;
+				}
+
+				:global(.c-tab__label) {
+					display: inline-flex;
+					gap: abstracts.$spacer-xs;
 				}
 			}
 		}

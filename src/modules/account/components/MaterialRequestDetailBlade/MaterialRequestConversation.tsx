@@ -10,7 +10,7 @@ import {
 	type MaterialRequestMessageBodyMessage,
 	type MaterialRequestMessageBodyStatusUpdateWithMotivation,
 } from '@material-requests/types';
-import { Button, RichTextEditorWithInternalState } from '@meemoo/react-components';
+import { Button, keysEnter, RichTextEditorWithInternalState } from '@meemoo/react-components';
 import Html from '@shared/components/Html/Html';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -39,15 +39,18 @@ const MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE = 20;
 interface MaterialRequestConversationProps {
 	materialRequest: MaterialRequest;
 	handleDownload: () => void;
+	onMessagesLoaded: () => void;
 }
 
 export const MaterialRequestConversation: FC<MaterialRequestConversationProps> = ({
 	materialRequest,
 	handleDownload,
+	onMessagesLoaded,
 }) => {
 	const scrollableRef = useRef<HTMLDivElement>(null);
 	const scrollTriggerRef = useRef<HTMLDivElement>(null);
 	const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
+	const [hasNotified, setHasNotified] = useState(false);
 	const previousScrollHeightRef = useRef<number | null>(null);
 	const user = useSelector(selectCommonUser);
 	const [editorKey, setEditorKey] = useState(uuid()); // To force rich text editor to rerender
@@ -57,6 +60,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	const {
 		data: messages,
 		isLoading: isLoadingMessages,
+		isFetching: isFetchingMessages,
 		fetchNextPage,
 		hasNextPage,
 		isFetchingNextPage,
@@ -77,6 +81,9 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 			onSuccess: () => {
 				setCurrentMessage('');
 				setEditorKey(uuid()); // Force rerender of rich text editor
+				scrollableRef.current?.scrollTo({
+					top: Number.MAX_SAFE_INTEGER, // scroll all the way to the bottom
+				});
 			},
 			onError: (err) => {
 				console.error(err);
@@ -108,6 +115,16 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 			setHasScrolledToBottom(true);
 		}
 	}, [messages, hasScrolledToBottom]);
+
+	/**
+	 * Notifies that the messages were loaded
+	 */
+	useEffect(() => {
+		if (!isFetchingMessages && !hasNotified) {
+			onMessagesLoaded();
+			setHasNotified(true);
+		}
+	}, [isFetchingMessages, hasNotified, onMessagesLoaded]);
 
 	// Capture scrollHeight before every render so useLayoutEffect can correct after any page append
 	const pageCount = messages?.pages?.length ?? 0;
@@ -428,6 +445,18 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 								maxHeight: '150px',
 								overflowY: 'auto',
 							},
+							// @ts-expect-error: This method does exists on the braft editor so ts-ignoring this to get the error gone
+							keyBindingFn: (evt: KeyboardEvent) => {
+								if (evt.ctrlKey || evt.shiftKey || evt.altKey || evt.metaKey) {
+									// In case of these buttons being pressed, we will allow the enter to go through
+									// Otherwise it will be impossible to get more than 1 entry in a list
+									return;
+								}
+
+								if (keysEnter.includes(evt.key)) {
+									handleSendMessage();
+								}
+							},
 						}}
 						disabled={isMaterialRequestClosed(materialRequest)}
 						className={
@@ -441,7 +470,25 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 						placeholder={tText(
 							'modules/account/components/material-request-detail-blade/material-request-detail-blade___typ-je-bericht'
 						)}
-						controls={['bold', 'italic', 'underline', 'list-ul', 'list-ol', 'link']}
+						controls={[
+							'bold',
+							'italic',
+							'underline',
+							'list-ul',
+							'list-ol',
+							'link',
+							{
+								type: 'customButton',
+								component: (
+									// TODO: replace this with an upload component and its validation logic
+									<Button
+										variants={['sm', 'text']}
+										onClick={() => console.log('custom clicked')}
+										icon={<Icon name={IconNamesLight.File} />}
+									/>
+								),
+							},
+						]}
 						key={editorKey}
 					/>
 					<Button
