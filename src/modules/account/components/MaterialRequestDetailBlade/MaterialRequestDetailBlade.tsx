@@ -203,6 +203,12 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		}
 	};
 
+	const onHandleDownload = () => {
+		if (currentMaterialRequestDetail) {
+			handleDownloadMaterialRequest(currentMaterialRequestDetail).then(setDownloadUrl);
+		}
+	};
+
 	const renderContent = () => {
 		if (!currentMaterialRequestDetail) {
 			return null;
@@ -223,6 +229,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				return (
 					<MaterialRequestConversation
 						materialRequest={currentMaterialRequestDetail}
+						handleDownload={onHandleDownload}
 						onMessagesLoaded={() => refetchUnreadCount().then(noop)}
 					/>
 				);
@@ -299,9 +306,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 						}
 						disabled={!downloadStatusSucceeded}
 						variants={['inline-block', 'dark']}
-						onClick={() =>
-							handleDownloadMaterialRequest(currentMaterialRequestDetail).then(setDownloadUrl)
-						}
+						onClick={() => onHandleDownload()}
 					/>
 				)}
 			</>
