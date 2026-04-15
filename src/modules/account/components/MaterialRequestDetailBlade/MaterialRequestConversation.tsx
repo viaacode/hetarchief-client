@@ -1,9 +1,6 @@
 import { useGetMaterialRequestConversationInfinite } from '@account/components/MaterialRequestDetailBlade/hooks/useGetMaterialRequestConversationInfinite';
 import { useSendMaterialRequestMessage } from '@account/components/MaterialRequestDetailBlade/hooks/useSendMaterialRequestMessage';
-import {
-	determineHasDownloadExpired,
-	handleDownloadMaterialRequest,
-} from '@account/utils/handle-download-material-request';
+import { determineHasDownloadExpired } from '@account/utils/handle-download-material-request';
 import { isMaterialRequestClosed } from '@account/utils/is-material-request-closed';
 import { selectCommonUser } from '@auth/store/user';
 import {
@@ -12,14 +9,13 @@ import {
 	type MaterialRequestMessage,
 	type MaterialRequestMessageBodyMessage,
 	type MaterialRequestMessageBodyStatusUpdateWithMotivation,
-	MaterialRequestStatus,
 } from '@material-requests/types';
 import { Button, RichTextEditorWithInternalState } from '@meemoo/react-components';
 import Html from '@shared/components/Html/Html';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
-import { tText } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import { asDate, formatLongDate, formatMediumDateWithTime } from '@shared/utils/dates';
 import clsx from 'clsx';
@@ -42,10 +38,12 @@ const MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE = 20;
 
 interface MaterialRequestConversationProps {
 	materialRequest: MaterialRequest;
+	handleDownload: () => void;
 }
 
 export const MaterialRequestConversation: FC<MaterialRequestConversationProps> = ({
 	materialRequest,
+	handleDownload,
 }) => {
 	const scrollableRef = useRef<HTMLDivElement>(null);
 	const scrollTriggerRef = useRef<HTMLDivElement>(null);
@@ -55,7 +53,6 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	const [editorKey, setEditorKey] = useState(uuid()); // To force rich text editor to rerender
 
 	const [currentMessage, setCurrentMessage] = useState<string>('');
-	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
 	const {
 		data: messages,
@@ -358,15 +355,17 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 								'modules/account/components/material-request-detail-blade/material-request-detail-blade___downlooad-materiaal'
 							)}
 							variants={['dark']}
-							onClick={() => handleDownloadMaterialRequest(materialRequest).then(setDownloadUrl)}
+							onClick={handleDownload}
 							className={clsx(styles['p-conversation-messages__message__download-button'])}
 							disabled={determineHasDownloadExpired(materialRequest)}
 						/>
 						<div className={clsx(styles['p-conversation-messages__message__download-expiration'])}>
-							<Icon name={IconNamesLight.Info} />{' '}
-							{tText('De download is beschikbaar tot en met', {
-								date: formatLongDate(asDate(materialRequest.downloadExpiresAt)),
-							})}
+							<Icon name={IconNamesLight.Info} />
+							<span>
+								{tText('De download is beschikbaar tot en met', {
+									date: formatLongDate(asDate(materialRequest.downloadExpiresAt)),
+								})}
+							</span>
 						</div>
 					</>
 				);
@@ -398,14 +397,14 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 						<div className={clsx(styles['p-conversation-messages__empty-state'])}>
 							{materialRequest.requesterId === user?.profileId ? (
 								<div className={clsx(styles['p-conversation-messages__empty-state__text'])}>
-									{tText(
+									{tHtml(
 										'Je hebt een nieuwe aanvraag tot hergebruik verstuurd naar {{name}}. Start hieronder je conversatie.',
 										{ name: materialRequest.maintainerName }
 									)}
 								</div>
 							) : (
 								<div className={clsx(styles['p-conversation-messages__empty-state__text'])}>
-									{tText(
+									{tHtml(
 										'Je hebt een nieuwe aanvraag tot hergebruik ontvangen van {{name}}. Start hieronder je conversatie.',
 										{
 											name:
@@ -431,7 +430,11 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 							},
 						}}
 						disabled={isMaterialRequestClosed(materialRequest)}
-						className={isMaterialRequestClosed(materialRequest) ? 'disabled' : undefined}
+						className={
+							isMaterialRequestClosed(materialRequest)
+								? styles['p-conversation-messages__editor--disabled']
+								: undefined
+						}
 						id={`material-request-conversation--${editorKey}`}
 						value={currentMessage}
 						onChange={(value) => setCurrentMessage(value)}

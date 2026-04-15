@@ -83,7 +83,7 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 
 		&--system {
 			background-color: transparent;
-			border: 1px solid #e6e6e6;
+			border: 1px solid abstracts.$silver;
 		}
 
 		&__sender {
@@ -117,9 +117,12 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 		}
 
 		&__download-expiration {
+			display: inline-flex;
 			margin-top: abstracts.$spacer-sm;
 			color: abstracts.$grey;
 			font-style: italic;
+			gap: abstracts.$spacer-xxs;
+			line-height: abstracts.$line-height-md;
 		}
 
 		&__attachment {
@@ -173,13 +176,13 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 				border: 1px solid abstracts.$silver !important;
 				border-radius: 0 0 abstracts.$spacer-xs abstracts.$spacer-xs;
 			}
+		}
 
-			&:global(.disabled) {
-				:global(.control-item.button),
-				:global(.control-item.dropdown) {
-					pointer-events: none !important;
-					opacity: 0.5 !important;
-				}
+		&--disabled {
+			:global(.control-item.button),
+			:global(.control-item.dropdown) {
+				pointer-events: none !important;
+				opacity: 0.5 !important;
 			}
 		}
 

@@ -195,6 +195,12 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		}
 	};
 
+	const onHandleDownload = () => {
+		if (currentMaterialRequestDetail) {
+			handleDownloadMaterialRequest(currentMaterialRequestDetail).then(setDownloadUrl);
+		}
+	};
+
 	const renderContent = () => {
 		if (!currentMaterialRequestDetail) {
 			return null;
@@ -212,7 +218,12 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 
 		switch (activeTab) {
 			case MaterialRequestDetailBladeTabs.Conversation:
-				return <MaterialRequestConversation materialRequest={currentMaterialRequestDetail} />;
+				return (
+					<MaterialRequestConversation
+						materialRequest={currentMaterialRequestDetail}
+						handleDownload={onHandleDownload}
+					/>
+				);
 			case MaterialRequestDetailBladeTabs.Documents:
 				return <MaterialRequestDocuments materialRequest={currentMaterialRequestDetail} />;
 		}
@@ -286,9 +297,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 						}
 						disabled={!downloadStatusSucceeded}
 						variants={['inline-block', 'dark']}
-						onClick={() =>
-							handleDownloadMaterialRequest(currentMaterialRequestDetail).then(setDownloadUrl)
-						}
+						onClick={() => onHandleDownload()}
 					/>
 				)}
 			</>
