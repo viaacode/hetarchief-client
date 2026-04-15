@@ -240,17 +240,18 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 			{renderMessageHeader()}
 			<div>{format(message.createdAt, 'dd MMM yyyy, HH:mm')}</div>
 			{renderMessageContent()}
-			{message.attachmentUrl && (
+			{message.attachments?.map((attachment) => (
 				<Link
-					href={message.attachmentUrl}
+					key={`conversation-messages__message__attachment__${attachment.id}`}
+					href={attachment.attachmentUrl}
 					target="_blank"
 					passHref
 					className={clsx(styles['p-conversation-messages__message__attachment'])}
 				>
 					<Icon name={IconNamesLight.File}></Icon>
-					{message.attachmentFilename}
+					{attachment.attachmentFilename}
 				</Link>
-			)}
+			))}
 		</div>
 	);
 };

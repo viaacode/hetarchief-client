@@ -101,8 +101,7 @@ export type MaterialRequestMessageBody =
 	| MaterialRequestMessageBodyStatusUpdateWithMotivation;
 
 export interface MaterialRequestMessage extends MaterialRequestEvent {
-	attachmentUrl: string | null;
-	attachmentFilename: string | null;
+	attachments?: MaterialRequestAttachment[];
 }
 
 export enum MaterialRequestReuseFormKey {
