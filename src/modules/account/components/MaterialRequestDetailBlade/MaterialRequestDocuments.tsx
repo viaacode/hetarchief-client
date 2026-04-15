@@ -1,6 +1,10 @@
 import { isMaterialRequestClosed } from '@account/utils/is-material-request-closed';
 import { useGetMaterialRequestAttachments } from '@material-requests/hooks/get-material-request-attachments';
-import type { MaterialRequest, MaterialRequestAttachment } from '@material-requests/types';
+import {
+	type MaterialRequest,
+	type MaterialRequestAttachment,
+	MaterialRequestStatus,
+} from '@material-requests/types';
 import { Button, PaginationBar, Table } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -13,9 +17,10 @@ import { asDate, formatMediumDateWithTime } from '@shared/utils/dates';
 import { isMobileSize } from '@shared/utils/is-mobile';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import clsx from 'clsx';
+import { noop } from 'lodash-es';
 import getConfig from 'next/config';
 import Link from 'next/link';
-import React, { type FC, useMemo, useState } from 'react';
+import React, { type FC, useEffect, useMemo, useState } from 'react';
 import type {
 	Column,
 	ColumnInstance,
@@ -49,6 +54,7 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 
 	const {
 		data: attachments,
+		refetch: refetchAttachments,
 		isLoading,
 		isFetching,
 		isError,
@@ -59,6 +65,16 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 		page,
 		MATERIAL_REQUEST_DOCUMENTS_PAGE_SIZE
 	);
+
+	// Refetch the documents when the status changes to cancelled or denied. That's when the summary is generated
+	useEffect(() => {
+		if (
+			materialRequest.status === MaterialRequestStatus.CANCELLED ||
+			materialRequest.status === MaterialRequestStatus.DENIED
+		) {
+			refetchAttachments().then(noop);
+		}
+	}, [materialRequest.status, refetchAttachments]);
 
 	const columns: Column<MaterialRequestAttachment>[] = [
 		{
