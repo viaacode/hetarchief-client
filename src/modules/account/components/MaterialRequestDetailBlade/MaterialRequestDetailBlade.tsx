@@ -413,7 +413,9 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			return (
 				<Button
 					variants={['dark']}
-					label={tText('Aanvraag beoordelen mobiel')}
+					label={tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvraag-beoordelen-mobiel'
+					)}
 					onClick={() => setShowEvaluatorOptions(true)}
 				></Button>
 			);
@@ -652,8 +654,12 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				{...getBladeHeaderProps(false)}
 				footerButtons={[
 					{
-						label: tText('Keer terug'),
-						mobileLabel: tText('Keer terug'),
+						label: tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___keer-terug'
+						),
+						mobileLabel: tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___keer-terug'
+						),
 						type: 'secondary',
 						enforceSecondary: true,
 						onClick: () => setShowEvaluatorOptions(false),

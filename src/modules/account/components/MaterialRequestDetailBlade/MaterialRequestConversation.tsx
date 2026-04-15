@@ -257,11 +257,14 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 				return renderMessageWrapper(
 					message,
 					<div className={clsx(styles['p-conversation-messages__message__body'])}>
-						{tText('{{name}} annuleerde de aanvraag.', {
-							name:
-								message.senderProfile.organisation?.name ||
-								`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
-						})}
+						{tText(
+							'modules/account/components/material-request-detail-blade/material-request-conversation___name-annuleerde-de-aanvraag',
+							{
+								name:
+									message.senderProfile.organisation?.name ||
+									`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
+							}
+						)}
 					</div>
 				);
 
@@ -272,11 +275,14 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 						{(message.body as MaterialRequestMessageBodyStatusUpdateWithMotivation)?.motivation ? (
 							<>
 								<div>
-									{tText('{{name}} keurde de aanvraag af met de volgende boodschap:', {
-										name:
-											message.senderProfile.organisation?.name ||
-											`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
-									})}
+									{tText(
+										'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-af-met-de-volgende-boodschap',
+										{
+											name:
+												message.senderProfile.organisation?.name ||
+												`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
+										}
+									)}
 								</div>
 
 								<div
@@ -292,11 +298,14 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 							</>
 						) : (
 							<div>
-								{tText('{{name}} keurde de aanvraag af.', {
-									name:
-										message.senderProfile.organisation?.name ||
-										`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
-								})}
+								{tText(
+									'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-af',
+									{
+										name:
+											message.senderProfile.organisation?.name ||
+											`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
+									}
+								)}
 							</div>
 						)}
 					</div>
@@ -311,11 +320,14 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 						{motivation ? (
 							<>
 								<div>
-									{tText('{{name}} keurde de aanvraag goed met de volgende boodschap:', {
-										name:
-											message.senderProfile.organisation?.name ||
-											`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
-									})}
+									{tText(
+										'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-goed-met-de-volgende-boodschap',
+										{
+											name:
+												message.senderProfile.organisation?.name ||
+												`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
+										}
+									)}
 								</div>
 								<div
 									className={clsx(
@@ -327,11 +339,14 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 							</>
 						) : (
 							<div>
-								{tText('{{name}} keurde de aanvraag goed.', {
-									name:
-										message.senderProfile.organisation?.name ||
-										`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
-								})}
+								{tText(
+									'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-goed',
+									{
+										name:
+											message.senderProfile.organisation?.name ||
+											`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
+									}
+								)}
 							</div>
 						)}
 					</div>
@@ -345,9 +360,12 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 						<div
 							className={clsx(styles['p-conversation-messages__message__body--download-expired'])}
 						>
-							{tText('Download is verlopen', {
-								date: formatMediumDateWithTime(asDate(message.createdAt)),
-							})}
+							{tText(
+								'modules/account/components/material-request-detail-blade/material-request-conversation___download-is-verlopen',
+								{
+									date: formatMediumDateWithTime(asDate(message.createdAt)),
+								}
+							)}
 							.
 						</div>
 						<div
@@ -355,7 +373,9 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 								styles['p-conversation-messages__message__body--download-expired-subtext']
 							)}
 						>
-							{tText('De download is niet langer beschikbaar, dus deze aanvraag wordt afgesloten.')}
+							{tText(
+								'modules/account/components/material-request-detail-blade/material-request-conversation___de-download-is-niet-langer-beschikbaar-dus-deze-aanvraag-wordt-afgesloten'
+							)}
 						</div>
 					</>
 				);
@@ -365,7 +385,9 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 					message,
 					<>
 						<div className={clsx(styles['p-conversation-messages__message__body'])}>
-							{tText('Het aangevraagde materiaal is beschikbaar voor download')}
+							{tText(
+								'modules/account/components/material-request-detail-blade/material-request-conversation___het-aangevraagde-materiaal-is-beschikbaar-voor-download'
+							)}
 						</div>
 						<Button
 							label={tText(
@@ -379,9 +401,12 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 						<div className={clsx(styles['p-conversation-messages__message__download-expiration'])}>
 							<Icon name={IconNamesLight.Info} />
 							<span>
-								{tText('De download is beschikbaar tot en met', {
-									date: formatLongDate(asDate(materialRequest.downloadExpiresAt)),
-								})}
+								{tText(
+									'modules/account/components/material-request-detail-blade/material-request-conversation___de-download-is-beschikbaar-tot-en-met',
+									{
+										date: formatLongDate(asDate(materialRequest.downloadExpiresAt)),
+									}
+								)}
 							</span>
 						</div>
 					</>
@@ -415,14 +440,14 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 							{materialRequest.requesterId === user?.profileId ? (
 								<div className={clsx(styles['p-conversation-messages__empty-state__text'])}>
 									{tHtml(
-										'Je hebt een nieuwe aanvraag tot hergebruik verstuurd naar {{name}}. Start hieronder je conversatie.',
+										'modules/account/components/material-request-detail-blade/material-request-conversation___je-hebt-een-nieuwe-aanvraag-tot-hergebruik-verstuurd-naar-name-start-hieronder-je-conversatie',
 										{ name: materialRequest.maintainerName }
 									)}
 								</div>
 							) : (
 								<div className={clsx(styles['p-conversation-messages__empty-state__text'])}>
 									{tHtml(
-										'Je hebt een nieuwe aanvraag tot hergebruik ontvangen van {{name}}. Start hieronder je conversatie.',
+										'modules/account/components/material-request-detail-blade/material-request-conversation___je-hebt-een-nieuwe-aanvraag-tot-hergebruik-ontvangen-van-name-start-hieronder-je-conversatie',
 										{
 											name:
 												materialRequest.requesterOrganisation || materialRequest.requesterFullName,
