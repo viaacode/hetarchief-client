@@ -11,8 +11,12 @@
 	}
 
 	@media (min-width: abstracts.$breakpoint-md) {
-		:global(.c-blade__title){
-			padding-bottom: 0;
+		:has(&__tabs ) {
+			:global(#material-request-detail-blade){
+				:global(.c-blade__title){
+					padding-bottom: 0;
+				}
+			}
 		}
 
 		&__tabs {
@@ -98,7 +102,7 @@
 		}
 	}
 
-	&__title{
+	&__title {
 		> :last-child {
 			margin-top: abstracts.$spacer-xs;
 		}
