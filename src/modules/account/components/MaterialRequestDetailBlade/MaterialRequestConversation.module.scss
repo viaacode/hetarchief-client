@@ -133,9 +133,11 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 			display: inline-flex;
 			flex-direction: column;
 			gap: abstracts.$spacer-xs;
-			width: auto;
+			width: fit-content;
 			text-decoration: none;
 			min-width: 20%;
+			white-space: pre-wrap;
+			word-break: break-word;
 
 			[class*="Icon_c-icon"] {
 				font-size: abstracts.$font-size-lg !important;

@@ -101,8 +101,7 @@ export type MaterialRequestMessageBody =
 	| MaterialRequestMessageBodyStatusUpdateWithMotivation;
 
 export interface MaterialRequestMessage extends MaterialRequestEvent {
-	attachmentUrl: string | null;
-	attachmentFilename: string | null;
+	attachments?: MaterialRequestAttachment[];
 }
 
 export enum MaterialRequestReuseFormKey {
@@ -210,6 +209,8 @@ export enum MaterialRequestEventType {
 	ADDITIONAL_CONDITIONS_DENIED = 'ADDITIONAL_CONDITIONS_DENIED',
 	DOWNLOAD_AVAILABLE = 'DOWNLOAD_AVAILABLE',
 	DOWNLOAD_EXPIRED = 'DOWNLOAD_EXPIRED',
+	FINAL_SUMMARY = 'FINAL_SUMMARY',
+	REUSE_SUMMARY = 'REUSE_SUMMARY',
 }
 
 export enum MaterialRequestRequesterCapacity {
