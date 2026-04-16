@@ -3,7 +3,7 @@ import { useSendMaterialRequestMessage } from '@account/components/MaterialReque
 import { MaterialRequestConversationMessage } from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversationMessage';
 import { isMaterialRequestClosed } from '@account/utils/is-material-request-closed';
 import { selectCommonUser } from '@auth/store/user';
-import type { MaterialRequest } from '@material-requests/types';
+import { type MaterialRequest, MaterialRequestStatus } from '@material-requests/types';
 import { Button, keysEnter, RichTextEditorWithInternalState } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -11,6 +11,7 @@ import { Loading } from '@shared/components/Loading';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import clsx from 'clsx';
+import { noop } from 'lodash-es';
 import React, { type FC, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuid } from 'uuid';
@@ -46,6 +47,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		fetchNextPage,
 		hasNextPage,
 		isFetchingNextPage,
+		refetch: refetchMessages,
 	} = useGetMaterialRequestConversationInfinite(
 		materialRequest.id,
 		MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE
@@ -108,6 +110,16 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		}
 	}, [isFetchingMessages, hasNotified, onMessagesLoaded]);
 
+	// Refetch the documents when the status changes to cancelled or denied. That's when the summary is generated
+	useEffect(() => {
+		if (
+			materialRequest.status === MaterialRequestStatus.CANCELLED ||
+			materialRequest.status === MaterialRequestStatus.DENIED
+		) {
+			refetchMessages().then(noop);
+		}
+	}, [materialRequest.status, refetchMessages]);
+
 	// Capture scrollHeight before every render so useLayoutEffect can correct after any page append
 	const pageCount = messages?.pages?.length ?? 0;
 	if (scrollableRef.current && hasScrolledToBottom) {
@@ -140,7 +152,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		fetchNextPage().then(() => {
 			// Prefetch one extra page ahead so the user never hits the top
 			if (hasNextPage) {
-				fetchNextPage();
+				fetchNextPage().then(noop);
 			}
 		});
 	}, [hasNextPage, isFetchingNextPage, hasScrolledToBottom, fetchNextPage]);
