@@ -1,0 +1,11 @@
+@use 'src/styles/abstracts' as *;
+
+.c-message-file-upload {
+	&__button {
+		cursor: pointer;
+	}
+
+	&__input {
+		display: none;
+	}
+}
