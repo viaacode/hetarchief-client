@@ -149,20 +149,28 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 			?.motivation;
 
 		const isApproved = message.messageType === MaterialRequestEventType.APPROVED;
+		let title: React.ReactNode;
 
 		if (motivation) {
+			if (isApproved) {
+				title = tHtml(
+					'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-goed-met-de-volgende-boodschap',
+					{
+						name: senderName,
+					}
+				);
+			} else {
+				title = tHtml(
+					'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-af-met-de-volgende-boodschap',
+					{
+						name: senderName,
+					}
+				);
+			}
+
 			return (
 				<div className={clsx(styles['p-conversation-messages__message__body'])}>
-					<div>
-						{tHtml(
-							isApproved
-								? 'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-goed-met-de-volgende-boodschap'
-								: 'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-af-met-de-volgende-boodschap',
-							{
-								name: senderName,
-							}
-						)}
-					</div>
+					<div>{title}</div>
 					<div
 						className={clsx(styles['p-conversation-messages__message__body--status-motivation'])}
 					>
@@ -172,18 +180,22 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 			);
 		}
 
-		return (
-			<div className={clsx(styles['p-conversation-messages__message__body'])}>
-				{tHtml(
-					isApproved
-						? 'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-goed'
-						: 'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-af',
-					{
-						name: senderName,
-					}
-				)}
-			</div>
-		);
+		if (isApproved) {
+			title = tHtml(
+				'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-goed',
+				{
+					name: senderName,
+				}
+			);
+		} else {
+			title = tHtml(
+				'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-af',
+				{
+					name: senderName,
+				}
+			);
+		}
+		return <div className={clsx(styles['p-conversation-messages__message__body'])}>{title}</div>;
 	};
 
 	const renderMessageContent = () => {
