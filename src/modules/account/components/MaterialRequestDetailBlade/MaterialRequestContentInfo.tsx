@@ -283,6 +283,7 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 				}
 			</>,
 			<AudioOrVideoPlayer
+				className={styles['p-material-request-detail__content-info__content-block-media']}
 				locationId="Material request detail blade"
 				representation={objectRepresentation}
 				dctermsFormat={objectDctermsFormat}
