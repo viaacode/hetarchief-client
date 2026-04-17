@@ -118,6 +118,8 @@ export enum IconNamesLight {
 	FileJpg = 'file-jpg--light',
 	FilePdf = 'file-pdf--light',
 	FilePng = 'file-png--light',
+	FileXls = 'file-xls--light',
+	FileCsv = 'file-csv--light',
 }
 
 export enum IconNamesSolid {

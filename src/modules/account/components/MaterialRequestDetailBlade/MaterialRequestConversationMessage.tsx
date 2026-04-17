@@ -246,11 +246,16 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 			case 'doc':
 			case 'docx':
 				return IconNamesLight.FileDoc;
+			case 'xls':
+			case 'xlsx':
+				return IconNamesLight.FileXls;
 			case 'jpg':
 			case 'jpeg':
 				return IconNamesLight.FileJpg;
 			case 'png':
 				return IconNamesLight.FilePng;
+			case 'csv':
+				return IconNamesLight.FileCsv;
 			default:
 				return IconNamesLight.File;
 		}
