@@ -89,7 +89,12 @@ const MessageFileUpload: FC<MessageFileUploadProps> = ({ onFileSelected, disable
 			<Button
 				variants={['sm', 'text']}
 				onClick={handleButtonClick}
-				icon={<Icon name={IconNamesLight.File} />}
+				icon={
+					<Icon
+						name={IconNamesLight.File}
+						className={clsx(styles['c-message-file-upload__icon'])}
+					/>
+				}
 				disabled={disabled}
 				className={clsx(styles['c-message-file-upload__button'])}
 			/>

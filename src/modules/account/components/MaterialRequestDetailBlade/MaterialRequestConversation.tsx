@@ -491,7 +491,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 								const index = Number.parseInt(String(id).split('-').pop() || '0', 10);
 								setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
 							}}
-							variants={['closable']}
+							variants={['closable', 'silver']}
 						/>
 					</div>
 					<RichTextEditorWithInternalState
