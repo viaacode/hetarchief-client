@@ -1,44 +1,27 @@
 import { useGetMaterialRequestConversationInfinite } from '@account/components/MaterialRequestDetailBlade/hooks/useGetMaterialRequestConversationInfinite';
 import { useSendMaterialRequestMessage } from '@account/components/MaterialRequestDetailBlade/hooks/useSendMaterialRequestMessage';
-import { MessageFileUpload } from '@account/components/MaterialRequestDetailBlade/MessageFileUpload';
-import { determineHasDownloadExpired } from '@account/utils/handle-download-material-request';
+import { MaterialRequestConversationMessage } from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversationMessage';
 import { isMaterialRequestClosed } from '@account/utils/is-material-request-closed';
 import { selectCommonUser } from '@auth/store/user';
-import {
-	type MaterialRequest,
-	MaterialRequestEventType,
-	type MaterialRequestMessage,
-	type MaterialRequestMessageBodyMessage,
-	type MaterialRequestMessageBodyStatusUpdateWithMotivation,
-} from '@material-requests/types';
+import { type MaterialRequest, MaterialRequestStatus } from '@material-requests/types';
 import {
 	Button,
 	keysEnter,
 	RichTextEditorWithInternalState,
 	TagList,
 } from '@meemoo/react-components';
-import Html from '@shared/components/Html/Html';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
-import { asDate, formatLongDate, formatMediumDateWithTime } from '@shared/utils/dates';
 import clsx from 'clsx';
-import { format } from 'date-fns';
-import Link from 'next/link';
-import React, {
-	type FC,
-	type ReactNode,
-	useCallback,
-	useEffect,
-	useLayoutEffect,
-	useRef,
-	useState,
-} from 'react';
+import { noop } from 'lodash-es';
+import React, { type FC, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuid } from 'uuid';
 import styles from './MaterialRequestConversation.module.scss';
+import { MessageFileUpload } from './MessageFileUpload';
 
 const MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE = 20;
 
@@ -72,6 +55,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		fetchNextPage,
 		hasNextPage,
 		isFetchingNextPage,
+		refetch: refetchMessages,
 	} = useGetMaterialRequestConversationInfinite(
 		materialRequest.id,
 		MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE
@@ -172,7 +156,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		fetchNextPage().then(() => {
 			// Prefetch one extra page ahead so the user never hits the top
 			if (hasNextPage) {
-				fetchNextPage();
+				fetchNextPage().then(noop);
 			}
 		});
 	}, [hasNextPage, isFetchingNextPage, hasScrolledToBottom, fetchNextPage]);
@@ -195,232 +179,6 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		observer.observe(sentinel);
 		return () => observer.disconnect();
 	}, [handleLoadMore, hasScrolledToBottom]);
-
-	/**
-	 * Add padding to message wrapper based on file list height to prevent overlap
-	 */
-	useEffect(() => {
-		const fileList = fileListRef.current;
-		const messageWrapper = scrollableRef.current;
-
-		if (!messageWrapper) {
-			return;
-		}
-
-		if (fileList && selectedFiles.length > 0) {
-			const fileListHeight = fileList.offsetHeight;
-			messageWrapper.style.paddingBottom = `${fileListHeight}px`;
-		} else {
-			messageWrapper.style.paddingBottom = '';
-		}
-	}, [selectedFiles]);
-
-	/**
-	 * Determines if the message is rendered
-	 * - on the right in green (own)
-	 * - on the left in grey (other)
-	 */
-	const isOwnMessage = (message: MaterialRequestMessage): boolean => {
-		return message.senderProfile.id === user?.profileId;
-	};
-
-	const renderOrganisationName = (message: MaterialRequestMessage) => {
-		if (message.senderProfile.organisation?.name) {
-			return `${message.senderProfile.organisation?.name} (${message.senderProfile.firstName})`;
-		} else {
-			return `${message.senderProfile.firstName} ${message.senderProfile.lastName}`;
-		}
-	};
-
-	const renderMessageWrapper = (message: MaterialRequestMessage, content: ReactNode): ReactNode => {
-		const isFinalMessage = [
-			MaterialRequestEventType.CANCELLED,
-			MaterialRequestEventType.DENIED,
-			MaterialRequestEventType.APPROVED,
-			MaterialRequestEventType.DOWNLOAD_EXPIRED,
-		].includes(message.messageType);
-
-		const isSystemMessage = message.messageType !== MaterialRequestEventType.MESSAGE;
-
-		return (
-			<div
-				className={clsx(
-					styles['p-conversation-messages__message'],
-					styles[`p-conversation-messages__message--${message.messageType}`],
-					isOwnMessage(message)
-						? styles[`p-conversation-messages__message--own`]
-						: styles[`p-conversation-messages__message--other`],
-					isFinalMessage && styles['p-conversation-messages__message--final'],
-					isSystemMessage && styles['p-conversation-messages__message--system']
-				)}
-			>
-				<div className={clsx(styles['p-conversation-messages__message__sender'])}>
-					{renderOrganisationName(message)}
-				</div>
-				<div>{format(message.createdAt, 'dd MMM yyyy, HH:mm')}</div>
-				{content}
-				{message.attachmentUrl && (
-					<Link href={message.attachmentUrl} target="_blank" passHref>
-						<div className={clsx(styles['p-conversation-messages__message__attachment'])}>
-							<Icon name={IconNamesLight.File}></Icon>
-							<span>{message.attachmentFilename}</span>
-						</div>
-					</Link>
-				)}
-			</div>
-		);
-	};
-
-	const renderMessage = (message: MaterialRequestMessage): ReactNode => {
-		// TODO(Senn): add messages for additional conditions when implemented
-		switch (message.messageType) {
-			case MaterialRequestEventType.MESSAGE:
-				return renderMessageWrapper(
-					message,
-					message.body && (
-						<Html
-							type={'div'}
-							className={clsx(styles['p-conversation-messages__message__body'])}
-							content={(message.body as MaterialRequestMessageBodyMessage).message}
-						/>
-					)
-				);
-
-			case MaterialRequestEventType.CANCELLED:
-				return renderMessageWrapper(
-					message,
-					<div className={clsx(styles['p-conversation-messages__message__body'])}>
-						{tText('{{name}} annuleerde de aanvraag.', {
-							name:
-								message.senderProfile.organisation?.name ||
-								`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
-						})}
-					</div>
-				);
-
-			case MaterialRequestEventType.DENIED:
-				return renderMessageWrapper(
-					message,
-					<div className={clsx(styles['p-conversation-messages__message__body'])}>
-						{(message.body as MaterialRequestMessageBodyStatusUpdateWithMotivation)?.motivation ? (
-							<>
-								<div>
-									{tText('{{name}} keurde de aanvraag af met de volgende boodschap:', {
-										name:
-											message.senderProfile.organisation?.name ||
-											`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
-									})}
-								</div>
-
-								<div
-									className={clsx(
-										styles['p-conversation-messages__message__body--status-motivation']
-									)}
-								>
-									{
-										(message.body as MaterialRequestMessageBodyStatusUpdateWithMotivation)
-											.motivation
-									}
-								</div>
-							</>
-						) : (
-							<div>
-								{tText('{{name}} keurde de aanvraag af.', {
-									name:
-										message.senderProfile.organisation?.name ||
-										`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
-								})}
-							</div>
-						)}
-					</div>
-				);
-
-			case MaterialRequestEventType.APPROVED: {
-				const motivation = (message.body as MaterialRequestMessageBodyStatusUpdateWithMotivation)
-					?.motivation;
-				return renderMessageWrapper(
-					message,
-					<div className={clsx(styles['p-conversation-messages__message__body'])}>
-						{motivation ? (
-							<>
-								<div>
-									{tText('{{name}} keurde de aanvraag goed met de volgende boodschap:', {
-										name:
-											message.senderProfile.organisation?.name ||
-											`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
-									})}
-								</div>
-								<div
-									className={clsx(
-										styles['p-conversation-messages__message__body--status-motivation']
-									)}
-								>
-									{motivation}
-								</div>
-							</>
-						) : (
-							<div>
-								{tText('{{name}} keurde de aanvraag goed.', {
-									name:
-										message.senderProfile.organisation?.name ||
-										`${message.senderProfile.firstName} ${message.senderProfile.lastName}`,
-								})}
-							</div>
-						)}
-					</div>
-				);
-			}
-
-			case MaterialRequestEventType.DOWNLOAD_EXPIRED:
-				return renderMessageWrapper(
-					message,
-					<>
-						<div
-							className={clsx(styles['p-conversation-messages__message__body--download-expired'])}
-						>
-							{tText('Download is verlopen', {
-								date: formatMediumDateWithTime(asDate(message.createdAt)),
-							})}
-							.
-						</div>
-						<div
-							className={clsx(
-								styles['p-conversation-messages__message__body--download-expired-subtext']
-							)}
-						>
-							{tText('De download is niet langer beschikbaar, dus deze aanvraag wordt afgesloten.')}
-						</div>
-					</>
-				);
-
-			case MaterialRequestEventType.DOWNLOAD_AVAILABLE:
-				return renderMessageWrapper(
-					message,
-					<>
-						<div className={clsx(styles['p-conversation-messages__message__body'])}>
-							{tText('Het aangevraagde materiaal is beschikbaar voor download')}
-						</div>
-						<Button
-							label={tText(
-								'modules/account/components/material-request-detail-blade/material-request-detail-blade___downlooad-materiaal'
-							)}
-							variants={['dark']}
-							onClick={handleDownload}
-							className={clsx(styles['p-conversation-messages__message__download-button'])}
-							disabled={determineHasDownloadExpired(materialRequest)}
-						/>
-						<div className={clsx(styles['p-conversation-messages__message__download-expiration'])}>
-							<Icon name={IconNamesLight.Info} />
-							<span>
-								{tText('De download is beschikbaar tot en met', {
-									date: formatLongDate(asDate(materialRequest.downloadExpiresAt)),
-								})}
-							</span>
-						</div>
-					</>
-				);
-		}
-	};
 
 	const renderContent = () => {
 		if (isLoadingMessages) {
@@ -448,14 +206,14 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 							{materialRequest.requesterId === user?.profileId ? (
 								<div className={clsx(styles['p-conversation-messages__empty-state__text'])}>
 									{tHtml(
-										'Je hebt een nieuwe aanvraag tot hergebruik verstuurd naar {{name}}. Start hieronder je conversatie.',
+										'modules/account/components/material-request-detail-blade/material-request-conversation___je-hebt-een-nieuwe-aanvraag-tot-hergebruik-verstuurd-naar-name-start-hieronder-je-conversatie',
 										{ name: materialRequest.maintainerName }
 									)}
 								</div>
 							) : (
 								<div className={clsx(styles['p-conversation-messages__empty-state__text'])}>
 									{tHtml(
-										'Je hebt een nieuwe aanvraag tot hergebruik ontvangen van {{name}}. Start hieronder je conversatie.',
+										'modules/account/components/material-request-detail-blade/material-request-conversation___je-hebt-een-nieuwe-aanvraag-tot-hergebruik-ontvangen-van-name-start-hieronder-je-conversatie',
 										{
 											name:
 												materialRequest.requesterOrganisation || materialRequest.requesterFullName,
@@ -467,7 +225,16 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 					)}
 
 					{[...(messages?.pages || [])].reverse().map((page) => {
-						return [...page.items].reverse().map(renderMessage);
+						return [...page.items]
+							.reverse()
+							.map((message) => (
+								<MaterialRequestConversationMessage
+									key={`p-conversation-messages__${message.id}`}
+									message={message}
+									materialRequest={materialRequest}
+									handleDownload={handleDownload}
+								/>
+							));
 					})}
 				</div>
 				<div className={clsx(styles['p-conversation-messages__editor'])}>

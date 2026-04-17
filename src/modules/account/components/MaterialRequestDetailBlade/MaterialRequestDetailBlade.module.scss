@@ -11,8 +11,14 @@
 	}
 
 	@media (min-width: abstracts.$breakpoint-md) {
-		:global(.c-blade__title){
-			padding-bottom: 0;
+		:has(&__tabs ) {
+			// Only if the blade has tabs (not for non-reuse requests) and the detail blade itself should not have padding
+			// This is a wide blade with the tabs on top. But not for all subsequent blades like approving/denying a request
+			:global(#material-request-detail-blade){
+				:global(.c-blade__title){
+					padding-bottom: 0;
+				}
+			}
 		}
 
 		&__tabs {
@@ -98,7 +104,7 @@
 		}
 	}
 
-	&__title{
+	&__title {
 		> :last-child {
 			margin-top: abstracts.$spacer-xs;
 		}

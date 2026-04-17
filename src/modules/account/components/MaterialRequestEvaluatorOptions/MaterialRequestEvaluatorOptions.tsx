@@ -72,33 +72,49 @@ export const MaterialRequestEvaluatorOptions: FC<MaterialRequestEvaluatorOptions
 	return (
 		<div className={clsx(styles['p-material-request-detail-evaluator-options'])}>
 			<span className={clsx(styles['p-material-request-evaluator-options__title'])}>
-				{tText('Aanvraag beoordelen descriptive title')}
+				{tText(
+					'modules/account/components/material-request-evaluator-options/material-request-evaluator-options___aanvraag-beoordelen-descriptive-title'
+				)}
 			</span>
 			<span className={clsx(styles['p-material-request-detail-evaluator-options__description'])}>
-				{tText('Kies voor de gewenste optie om de aanvraag te beoordelen.')}
+				{tText(
+					'modules/account/components/material-request-evaluator-options/material-request-evaluator-options___kies-voor-de-gewenste-optie-om-de-aanvraag-te-beoordelen'
+				)}
 			</span>
 			{!requestHasAdditionalConditionsAsked &&
 				renderEvaluatorButton(
 					'approve',
 					IconNamesLight.Check,
-					tText('Goedkeuren knop label'),
-					tText('Goedkeuren knop beschrijving'),
+					tText(
+						'modules/account/components/material-request-evaluator-options/material-request-evaluator-options___goedkeuren-knop-label'
+					),
+					tText(
+						'modules/account/components/material-request-evaluator-options/material-request-evaluator-options___goedkeuren-knop-beschrijving'
+					),
 					false,
 					onApproveRequest
 				)}
 			{renderEvaluatorButton(
 				'additional-conditions',
 				IconNamesLight.Check,
-				tText('Goedkeuren mit voorwaarden knop label'),
-				tText('Goedkeuren mit voorwaarden knop beschrijving'),
+				tText(
+					'modules/account/components/material-request-evaluator-options/material-request-evaluator-options___goedkeuren-mit-voorwaarden-knop-label'
+				),
+				tText(
+					'modules/account/components/material-request-evaluator-options/material-request-evaluator-options___goedkeuren-mit-voorwaarden-knop-beschrijving'
+				),
 				requestHasAdditionalConditionsAsked,
 				onRequestAdditionalConditions
 			)}
 			{renderEvaluatorButton(
 				'deny',
 				IconNamesLight.Times,
-				tText('Afkeuren knop label'),
-				tText('Afkeuren knop beschrijving'),
+				tText(
+					'modules/account/components/material-request-evaluator-options/material-request-evaluator-options___afkeuren-knop-label'
+				),
+				tText(
+					'modules/account/components/material-request-evaluator-options/material-request-evaluator-options___afkeuren-knop-beschrijving'
+				),
 				false,
 				onDeclineRequest
 			)}
