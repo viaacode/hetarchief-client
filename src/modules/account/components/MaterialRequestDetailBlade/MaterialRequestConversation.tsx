@@ -11,7 +11,12 @@ import {
 	type MaterialRequestMessageBodyMessage,
 	type MaterialRequestMessageBodyStatusUpdateWithMotivation,
 } from '@material-requests/types';
-import { Button, keysEnter, RichTextEditorWithInternalState } from '@meemoo/react-components';
+import {
+	Button,
+	keysEnter,
+	RichTextEditorWithInternalState,
+	TagList,
+} from '@meemoo/react-components';
 import Html from '@shared/components/Html/Html';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -83,7 +88,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 
 		// Send single message with text and all selected files
 		sendMessage(
-			{ message: currentMessage, files: selectedFiles.length > 0 ? selectedFiles : undefined },
+			{ message: currentMessage, files: selectedFiles },
 			{
 				onSuccess: () => {
 					setCurrentMessage('');
@@ -468,31 +473,26 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 				<div className={clsx(styles['p-conversation-messages__editor'])}>
 					<div
 						ref={fileListRef}
-						className={clsx(styles['p-conversation-messages__selected-files'], {
-							[styles['p-conversation-messages__selected-files--hidden']]:
-								selectedFiles.length === 0,
-						})}
+						className={clsx(styles['p-conversation-messages__selected-files'])}
 					>
-						{selectedFiles.map((file, index) => (
-							<div
-								key={`${file.name}-${index}`}
-								className={clsx(styles['p-conversation-messages__file-item'])}
-							>
-								<div className={clsx(styles['p-conversation-messages__file-item__info'])}>
-									<Icon name={IconNamesLight.File} />
-									<span>{file.name}</span>
-									<span>({Math.round((file.size / 1024 / 1024) * 100) / 100} MB)</span>
-								</div>
-								<button
-									type="button"
-									className={clsx(styles['p-conversation-messages__file-item__remove'])}
-									onClick={() => setSelectedFiles(selectedFiles.filter((_, i) => i !== index))}
-									aria-label={`Verwijder ${file.name}`}
-								>
-									<Icon name={IconNamesLight.Times} />
-								</button>
-							</div>
-						))}
+						<TagList
+							tags={selectedFiles.map((file, index) => ({
+								id: `${file.name}-${index}`,
+								label: (
+									<>
+										<Icon name={IconNamesLight.File} />
+										<span>{file.name}</span>
+										<span> ({Math.round((file.size / 1024 / 1024) * 100) / 100} MB)</span>
+									</>
+								),
+							}))}
+							closeIcon={<Icon name={IconNamesLight.Times} aria-hidden />}
+							onTagClosed={(id) => {
+								const index = Number.parseInt(String(id).split('-').pop() || '0', 10);
+								setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
+							}}
+							variants={['closable']}
+						/>
 					</div>
 					<RichTextEditorWithInternalState
 						braft={{
@@ -552,9 +552,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 						// Replace this icon with a send icon when Jelle and JN add the icons to the font
 						icon={<Icon name={IconNamesLight.Email} />}
 						disabled={
-							(!currentMessage.length && selectedFiles.length === 0) ||
-							isSending ||
-							isMaterialRequestClosed(materialRequest)
+							!currentMessage.length || isSending || isMaterialRequestClosed(materialRequest)
 						}
 						tabIndex={!currentMessage.length && selectedFiles.length === 0 ? undefined : -1}
 						onClick={handleSendMessage}

@@ -200,29 +200,21 @@ export abstract class MaterialRequestsService {
 		message: string,
 		files?: File[]
 	): Promise<MaterialRequestMessage> {
-		if (files && files.length > 0) {
-			const formData = new FormData();
-			formData.append('message', message);
+		const formData = new FormData();
+		formData.append('message', message);
 
-			files.forEach((file) => {
-				formData.append('files', file);
-			});
+		files?.forEach((file) => {
+			formData.append('files', file);
+		});
 
-			const headers = {
-				'Content-Type': undefined, // Overwrite application/json to allow multipart/form-data
-			};
-
-			return ApiService.getApi()
-				.post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/messages`, {
-					body: formData,
-					headers,
-				})
-				.json();
-		}
+		const headers = {
+			'Content-Type': undefined, // Overwrite application/json to allow multipart/form-data
+		};
 
 		return ApiService.getApi()
 			.post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/messages`, {
-				json: { message },
+				body: formData,
+				headers,
 			})
 			.json();
 	}

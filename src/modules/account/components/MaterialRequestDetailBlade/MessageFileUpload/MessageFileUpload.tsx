@@ -7,7 +7,11 @@ import clsx from 'clsx';
 import React, { type FC, useRef } from 'react';
 
 import styles from './MessageFileUpload.module.scss';
-import type { MessageFileUploadProps } from './MessageFileUpload.types';
+
+interface MessageFileUploadProps {
+	onFileSelected: (file: File) => void;
+	disabled?: boolean;
+}
 
 const MAX_FILE_SIZE = 30 * 1024 * 1024; // 30MB in bytes
 const ALLOWED_FILE_TYPES = [
@@ -33,7 +37,6 @@ const MessageFileUpload: FC<MessageFileUploadProps> = ({ onFileSelected, disable
 
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
-			console.log(file.size);
 
 			if (file.size > MAX_FILE_SIZE) {
 				toastService.notify({
