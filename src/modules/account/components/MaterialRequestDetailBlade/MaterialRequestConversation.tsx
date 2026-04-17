@@ -37,6 +37,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	const previousScrollHeightRef = useRef<number | null>(null);
 	const user = useSelector(selectCommonUser);
 	const [editorKey, setEditorKey] = useState(uuid()); // To force rich text editor to rerender
+	const editorId = `#material-request-conversation--${editorKey}`;
 
 	const [currentMessage, setCurrentMessage] = useState<string>('');
 
@@ -176,6 +177,44 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		return () => observer.disconnect();
 	}, [handleLoadMore, hasScrolledToBottom]);
 
+	useEffect(() => {
+		let braftComponent = document.querySelector(
+			`${editorId} .DraftEditor-editorContainer .public-DraftEditor-content`
+		) as HTMLDivElement;
+
+		if (braftComponent) {
+			braftComponent?.focus();
+			return;
+		}
+
+		const observer = new MutationObserver((mutations, observer) => {
+			for (const mutation of mutations) {
+				if (mutation.type !== 'childList') {
+					break;
+				}
+
+				for (const addedNode of mutation.addedNodes) {
+					const asDiv = addedNode as Element;
+
+					if (asDiv?.id === editorId) {
+						braftComponent = asDiv.querySelector(
+							`.DraftEditor-editorContainer .public-DraftEditor-content`
+						) as HTMLDivElement;
+						braftComponent?.focus();
+						observer.disconnect();
+						break;
+					}
+				}
+			}
+		});
+
+		observer.observe(document.body, {
+			childList: true,
+			subtree: true,
+		});
+		return () => observer.disconnect();
+	}, [editorId]);
+
 	const renderContent = () => {
 		if (isLoadingMessages) {
 			return (
@@ -260,7 +299,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 								? styles['p-conversation-messages__editor--disabled']
 								: undefined
 						}
-						id={`material-request-conversation--${editorKey}`}
+						id={editorId}
 						value={currentMessage}
 						onChange={(value) => setCurrentMessage(value)}
 						placeholder={tText(
