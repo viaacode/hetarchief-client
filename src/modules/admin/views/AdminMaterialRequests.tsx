@@ -300,6 +300,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 				currentMaterialRequestDetail={
 					currentMaterialRequestId ? resolvedMaterialRequest : undefined
 				}
+				refetchMaterialRequest={refetchCurrentMaterialRequestDetail}
 				afterStatusChanged={onMaterialRequestStatusChange}
 			/>
 		);

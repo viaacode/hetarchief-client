@@ -3,7 +3,12 @@ import { useSendMaterialRequestMessage } from '@account/components/MaterialReque
 import { MaterialRequestConversationMessage } from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversationMessage';
 import { isMaterialRequestClosed } from '@account/utils/is-material-request-closed';
 import { selectCommonUser } from '@auth/store/user';
-import { type MaterialRequest, MaterialRequestStatus } from '@material-requests/types';
+import {
+	type MaterialRequest,
+	MaterialRequestDownloadStatus,
+	MaterialRequestEventType,
+	MaterialRequestStatus,
+} from '@material-requests/types';
 import {
 	Button,
 	keysEnter,
@@ -15,6 +20,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
+import type { QueryObserverResult } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { noop } from 'lodash-es';
 import React, {
@@ -35,12 +41,14 @@ const MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE = 20;
 
 interface MaterialRequestConversationProps {
 	materialRequest: MaterialRequest;
+	refetchMaterialRequest: () => Promise<QueryObserverResult<MaterialRequest | null, Error>>;
 	handleDownload: () => void;
 	onMessagesLoaded: () => void;
 }
 
 export const MaterialRequestConversation: FC<MaterialRequestConversationProps> = ({
 	materialRequest,
+	refetchMaterialRequest,
 	handleDownload,
 	onMessagesLoaded,
 }) => {
@@ -149,14 +157,31 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		}
 	}, [isFetchingMessages, hasNotified, onMessagesLoaded]);
 
-	// Capture scrollHeight before every render so useLayoutEffect can correct after any page append
+	/**
+	 * Refetches the material request when a download event doesn't match the download status of the material request
+	 */
+	useEffect(() => {
+		const hasDownloadAvailableMessage: boolean = !!messages?.pages?.[0]?.items?.find(
+			(message) => message.messageType === MaterialRequestEventType.DOWNLOAD_AVAILABLE
+		);
+		const materialRequestHasNoDownload =
+			!materialRequest?.downloadStatus ||
+			[MaterialRequestDownloadStatus.NEW, MaterialRequestDownloadStatus.PENDING].includes(
+				materialRequest?.downloadStatus
+			);
+		if (hasDownloadAvailableMessage && materialRequestHasNoDownload) {
+			refetchMaterialRequest().then(noop);
+		}
+	}, [messages, materialRequest?.downloadStatus, refetchMaterialRequest]);
+
+	// Capture scrollHeight before every render so useLayoutEffect can correct after every page that is appended to the dom
 	const pageCount = messages?.pages?.length ?? 0;
 	if (scrollableRef.current && hasScrolledToBottom) {
 		previousScrollHeightRef.current = scrollableRef.current.scrollHeight;
 	}
 
 	/**
-	 * Preserve scroll position after older messages are prepended.
+	 * Preserve scroll-position after older messages are prepended.
 	 * Runs synchronously after DOM mutation but before paint.
 	 */
 
