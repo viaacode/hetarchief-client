@@ -297,7 +297,11 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 							));
 					})}
 				</div>
-				<div className={clsx(styles['p-conversation-messages__editor'])}>
+				<div
+					className={clsx(styles['p-conversation-messages__editor'])}
+					// Ensure the buttons of the rich text editor are not focusable when the rich text editor is disabled
+					{...{ inert: isMaterialRequestClosed(materialRequest) ? '' : undefined }}
+				>
 					<div
 						ref={fileListRef}
 						className={clsx(styles['p-conversation-messages__selected-files'])}
