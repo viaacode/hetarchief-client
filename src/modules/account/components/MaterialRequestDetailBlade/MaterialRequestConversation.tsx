@@ -119,6 +119,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		);
 	}, [sendMessageDisabled, currentMessage, selectedFiles, sendMessage]);
 
+	// Refetch the messages when the material request gets closed while viewing the conversation to get the latest messages and reflect the closed status in the UI
 	useEffect(() => {
 		if (
 			materialRequest.status === MaterialRequestStatus.CANCELLED ||
