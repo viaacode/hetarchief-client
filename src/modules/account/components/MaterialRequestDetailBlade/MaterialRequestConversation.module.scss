@@ -161,7 +161,7 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 		height: $rich-text-editor-height-desktop;
 		padding: 0 abstracts.$spacer-sm;
 		position: relative;
-		overflow: hidden;
+		overflow: visible;
 
 		:global(.c-rich-text-editor) {
 			height: $rich-text-editor-height-desktop;
@@ -177,6 +177,17 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 
 				:global(.separator-line) {
 					border: 1px solid abstracts.$silver;
+				}
+
+				// Focus styles for toolbar buttons
+				:global(.control-item.button),
+				:global(.control-item.dropdown),
+				:global(.dropdown-handler) {
+					@include abstracts.focus-outline;
+
+					&:focus-visible {
+						border-radius: 2px;
+					}
 				}
 			}
 
@@ -210,5 +221,18 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 			}
 		}
 	}
-}
 
+	&__selected-files {
+		position: absolute;
+		bottom: 100%;
+		left: 0;
+		right: 0;
+		padding: abstracts.$spacer-md abstracts.$spacer-sm abstracts.$spacer-xs;
+		background: linear-gradient(to bottom, transparent, abstracts.$white 2rem);
+		margin-right: 1rem; // Leave space for scrollbar
+
+		&:empty {
+			display: none;
+		}
+	}
+}

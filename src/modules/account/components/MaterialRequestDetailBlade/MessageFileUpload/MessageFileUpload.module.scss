@@ -1,0 +1,22 @@
+@use 'src/styles/abstracts' as *;
+
+.c-message-file-upload {
+	&__button {
+		cursor: pointer;
+
+		@include focus-outline;
+
+		&:focus-visible {
+			border-radius: 2px;
+		}
+	}
+
+	&__input {
+		display: none;
+	}
+
+	&__icon {
+		color: #6a6f7b;
+		font-size: $font-size-2xm;
+	}
+}

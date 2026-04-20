@@ -4,7 +4,12 @@ import { MaterialRequestConversationMessage } from '@account/components/Material
 import { isMaterialRequestClosed } from '@account/utils/is-material-request-closed';
 import { selectCommonUser } from '@auth/store/user';
 import { type MaterialRequest, MaterialRequestStatus } from '@material-requests/types';
-import { Button, keysEnter, RichTextEditorWithInternalState } from '@meemoo/react-components';
+import {
+	Button,
+	keysEnter,
+	RichTextEditorWithInternalState,
+	TagList,
+} from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -12,10 +17,19 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import clsx from 'clsx';
 import { noop } from 'lodash-es';
-import React, { type FC, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, {
+	type FC,
+	useCallback,
+	useEffect,
+	useLayoutEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuid } from 'uuid';
 import styles from './MaterialRequestConversation.module.scss';
+import { MessageFileUpload } from './MessageFileUpload';
 
 const MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE = 20;
 
@@ -32,6 +46,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 }) => {
 	const scrollableRef = useRef<HTMLDivElement>(null);
 	const scrollTriggerRef = useRef<HTMLDivElement>(null);
+	const fileListRef = useRef<HTMLDivElement>(null);
 	const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
 	const [hasNotified, setHasNotified] = useState(false);
 	const previousScrollHeightRef = useRef<number | null>(null);
@@ -40,6 +55,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	const editorId = `material-request-conversation--${editorKey}`;
 
 	const [currentMessage, setCurrentMessage] = useState<string>('');
+	const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
 	const {
 		data: messages,
@@ -58,29 +74,55 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		materialRequest.id
 	);
 
+	const isMessageEmpty = useMemo(() => {
+		const textContent = currentMessage.replace(/<[^>]*>/g, '').trim();
+		return !textContent;
+	}, [currentMessage]);
+
+	const sendMessageDisabled = useMemo(
+		() => isMessageEmpty || isSending || isMaterialRequestClosed(materialRequest),
+		[isMessageEmpty, isSending, materialRequest]
+	);
+
 	const handleSendMessage = useCallback(() => {
-		if (!currentMessage.trim()) {
+		if (sendMessageDisabled) {
 			return;
 		}
-		sendMessage(currentMessage, {
-			onSuccess: () => {
-				setCurrentMessage('');
-				setEditorKey(uuid()); // Force rerender of rich text editor
-			},
-			onError: (err) => {
-				console.error(err);
-				toastService.notify({
-					maxLines: 3,
-					title: tText(
-						'modules/account/components/material-request-detail-blade/material-request-conversation___er-ging-iets-mis'
-					),
-					description: tText(
-						'modules/account/components/material-request-detail-blade/material-request-conversation___het-bericht-kon-niet-worden-verzonden'
-					),
-				});
-			},
-		});
-	}, [currentMessage, sendMessage]);
+
+		// Send single message with text and all selected files
+		sendMessage(
+			{ message: currentMessage, files: selectedFiles },
+			{
+				onSuccess: () => {
+					setCurrentMessage('');
+					setSelectedFiles([]);
+					setEditorKey(uuid()); // Force rerender of rich text editor
+				},
+				onError: (err) => {
+					console.error(err);
+					toastService.notify({
+						maxLines: 3,
+						title: tText(
+							'modules/account/components/material-request-detail-blade/material-request-conversation___er-ging-iets-mis'
+						),
+						description: tText(
+							'modules/account/components/material-request-detail-blade/material-request-conversation___het-bericht-kon-niet-worden-verzonden'
+						),
+					});
+				},
+			}
+		);
+	}, [sendMessageDisabled, currentMessage, selectedFiles, sendMessage]);
+
+	// Refetch the messages when the material request gets closed while viewing the conversation to get the latest messages and reflect the closed status in the UI
+	useEffect(() => {
+		if (
+			materialRequest.status === MaterialRequestStatus.CANCELLED ||
+			materialRequest.status === MaterialRequestStatus.DENIED
+		) {
+			refetchMessages().then(noop);
+		}
+	}, [materialRequest.status, refetchMessages]);
 
 	/**
 	 * Scrolls to the bottom of the messages once at page load after the first messages have been loaded.
@@ -106,16 +148,6 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 			setHasNotified(true);
 		}
 	}, [isFetchingMessages, hasNotified, onMessagesLoaded]);
-
-	// Refetch the documents when the status changes to cancelled or denied. That's when the summary is generated
-	useEffect(() => {
-		if (
-			materialRequest.status === MaterialRequestStatus.CANCELLED ||
-			materialRequest.status === MaterialRequestStatus.DENIED
-		) {
-			refetchMessages().then(noop);
-		}
-	}, [materialRequest.status, refetchMessages]);
 
 	// Capture scrollHeight before every render so useLayoutEffect can correct after any page append
 	const pageCount = messages?.pages?.length ?? 0;
@@ -266,6 +298,29 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 					})}
 				</div>
 				<div className={clsx(styles['p-conversation-messages__editor'])}>
+					<div
+						ref={fileListRef}
+						className={clsx(styles['p-conversation-messages__selected-files'])}
+					>
+						<TagList
+							tags={selectedFiles.map((file, index) => ({
+								id: `${file.name}-${index}`,
+								label: (
+									<>
+										<Icon name={IconNamesLight.File} />
+										<span>{file.name}</span>
+										<span> ({Math.round((file.size / 1024 / 1024) * 100) / 100} MB)</span>
+									</>
+								),
+							}))}
+							closeIcon={<Icon name={IconNamesLight.Times} aria-hidden />}
+							onTagClosed={(id) => {
+								const index = Number.parseInt(String(id).split('-').pop() || '0', 10);
+								setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
+							}}
+							variants={['closable', 'silver']}
+						/>
+					</div>
 					<RichTextEditorWithInternalState
 						braft={{
 							contentStyle: {
@@ -308,11 +363,9 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 							{
 								type: 'customButton',
 								component: (
-									// TODO: replace this with an upload component and its validation logic
-									<Button
-										variants={['sm', 'text']}
-										onClick={() => console.log('custom clicked')}
-										icon={<Icon name={IconNamesLight.File} />}
+									<MessageFileUpload
+										onFileSelected={(file) => setSelectedFiles((prev) => [...prev, file])}
+										disabled={isMaterialRequestClosed(materialRequest)}
 									/>
 								),
 							},
@@ -325,10 +378,8 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 						variants={['text']}
 						// Replace this icon with a send icon when Jelle and JN add the icons to the font
 						icon={<Icon name={IconNamesLight.PaperPlane} />}
-						disabled={
-							!currentMessage.length || isSending || isMaterialRequestClosed(materialRequest)
-						}
-						tabIndex={!currentMessage.length ? undefined : -1}
+						disabled={sendMessageDisabled}
+						tabIndex={sendMessageDisabled ? -1 : undefined}
 						onClick={handleSendMessage}
 					/>
 				</div>

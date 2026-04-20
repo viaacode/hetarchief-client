@@ -197,11 +197,24 @@ export abstract class MaterialRequestsService {
 
 	public static sendMessage(
 		materialRequestId: string,
-		message: string
+		message: string,
+		files?: File[]
 	): Promise<MaterialRequestMessage> {
+		const formData = new FormData();
+		formData.append('message', message);
+
+		files?.forEach((file) => {
+			formData.append('files', file);
+		});
+
+		const headers = {
+			'Content-Type': undefined, // Overwrite application/json to allow multipart/form-data
+		};
+
 		return ApiService.getApi()
 			.post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/messages`, {
-				json: { message },
+				body: formData,
+				headers,
 			})
 			.json();
 	}
