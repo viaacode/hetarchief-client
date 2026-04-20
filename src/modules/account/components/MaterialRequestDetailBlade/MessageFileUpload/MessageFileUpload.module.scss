@@ -3,6 +3,12 @@
 .c-message-file-upload {
 	&__button {
 		cursor: pointer;
+
+		@include focus-outline;
+
+		&:focus-visible {
+			border-radius: 2px;
+		}
 	}
 
 	&__input {

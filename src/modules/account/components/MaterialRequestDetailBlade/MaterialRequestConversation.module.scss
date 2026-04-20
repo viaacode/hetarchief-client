@@ -172,6 +172,17 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 				:global(.separator-line) {
 					border: 1px solid abstracts.$silver;
 				}
+
+				// Focus styles for toolbar buttons
+				:global(.control-item.button),
+				:global(.control-item.dropdown),
+				:global(.dropdown-handler) {
+					@include abstracts.focus-outline;
+
+					&:focus-visible {
+						border-radius: 2px;
+					}
+				}
 			}
 
 			:global(.bf-content) {
