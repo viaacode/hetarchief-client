@@ -3,6 +3,16 @@
 .c-message-file-upload {
 	&__button {
 		cursor: pointer;
+
+		// File upload focus style
+		&:focus {
+			outline: 0;
+		}
+
+		&:focus-visible {
+			outline: 1px solid $teal !important;
+			border-radius: 0 !important;
+		}
 	}
 
 	&__input {
