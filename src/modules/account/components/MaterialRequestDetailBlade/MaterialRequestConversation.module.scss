@@ -155,7 +155,7 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 		height: $rich-text-editor-height-desktop;
 		padding: 0 abstracts.$spacer-sm;
 		position: relative;
-		overflow: hidden;
+		overflow: visible;
 
 		:global(.c-rich-text-editor) {
 			height: $rich-text-editor-height-desktop;
@@ -204,5 +204,18 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 			}
 		}
 	}
-}
 
+	&__selected-files {
+		position: absolute;
+		bottom: 100%;
+		left: 0;
+		right: 0;
+		padding: abstracts.$spacer-md abstracts.$spacer-sm abstracts.$spacer-xs;
+		background: linear-gradient(to bottom, transparent, abstracts.$white 2rem);
+		margin-right: 1rem; // Leave space for scrollbar
+
+		&:empty {
+			display: none;
+		}
+	}
+}
