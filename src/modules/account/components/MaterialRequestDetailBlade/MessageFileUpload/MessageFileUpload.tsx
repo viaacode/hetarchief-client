@@ -31,35 +31,39 @@ const MessageFileUpload: FC<MessageFileUploadProps> = ({ onFileSelected, disable
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const files = e.target.files;
-		if (!files || files.length === 0) return;
+
+		if (!files?.length) {
+			return;
+		}
 
 		const validFiles: File[] = [];
+		let hasInvalidFiles = false;
 
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
 
 			if (file.size > MAX_FILE_SIZE) {
-				toastService.notify({
-					maxLines: 3,
-					title: tText('Bestand te groot'),
-					description: tText(`${file.name} mag niet groter zijn dan 30MB.`),
-				});
+				hasInvalidFiles = true;
 				continue;
 			}
 
 			const fileExtension = `.${file.name.split('.').pop()?.toLowerCase()}`;
 			if (!ALLOWED_FILE_TYPES.includes(fileExtension)) {
-				toastService.notify({
-					maxLines: 3,
-					title: tText('Bestandstype niet toegestaan'),
-					description: tText(
-						`${file.name}: Alleen de volgende bestandstypen zijn toegestaan: PDF, DOC(X), XLS(X), JPG, PNG, CSV.`
-					),
-				});
+				hasInvalidFiles = true;
 				continue;
 			}
 
 			validFiles.push(file);
+		}
+
+		if (hasInvalidFiles) {
+			toastService.notify({
+				maxLines: 3,
+				title: tText('Niet alle bestanden zijn correct'),
+				description: tText(
+					'Sommige bestanden voldoen niet aan de vereisten (max. 30MB, toegestane types: PDF, DOC(X), XLS(X), JPG, PNG, CSV).'
+				),
+			});
 		}
 
 		validFiles.forEach((file) => {
