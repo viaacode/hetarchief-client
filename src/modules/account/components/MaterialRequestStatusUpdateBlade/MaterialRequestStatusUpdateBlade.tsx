@@ -150,9 +150,15 @@ export const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBla
 			currentLayer={currentLayer}
 			onClose={() => onCloseModal(false)}
 			isManaged
-			title={tText(
-				'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag'
-			)}
+			title={
+				status === MaterialRequestStatus.APPROVED
+					? tText(
+							'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-goedkeuren-titel'
+						)
+					: tText(
+							'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-afkeuren-titel'
+						)
+			}
 			ariaLabel={tText(
 				'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___materiaal-aanvraag-goedkeuren-of-afkeuren-blade-aria-label'
 			)}
@@ -180,10 +186,10 @@ export const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBla
 						<label htmlFor="motivation-input">
 							{status === MaterialRequestStatus.APPROVED
 								? tHtml(
-										'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-goedkeuren'
+										'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-goedkeuren-description'
 									)
 								: tHtml(
-										'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-afkeuren'
+										'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-afkeuren-description'
 									)}
 						</label>
 					</dt>
