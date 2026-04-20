@@ -59,9 +59,11 @@ const MessageFileUpload: FC<MessageFileUploadProps> = ({ onFileSelected, disable
 		if (hasInvalidFiles) {
 			toastService.notify({
 				maxLines: 3,
-				title: tText('Niet alle bestanden zijn correct'),
+				title: tText(
+					'modules/account/components/material-request-detail-blade/message-file-upload/message-file-upload___niet-alle-bestanden-zijn-correct'
+				),
 				description: tText(
-					'Sommige bestanden voldoen niet aan de vereisten (max. 30MB, toegestane types: PDF, DOC(X), XLS(X), JPG, PNG, CSV).'
+					'modules/account/components/material-request-detail-blade/message-file-upload/message-file-upload___sommige-bestanden-voldoen-niet-aan-de-vereisten-max-30-mb-toegestane-types-pdf-doc-x-xls-x-jpg-png-csv'
 				),
 			});
 		}
