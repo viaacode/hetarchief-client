@@ -37,6 +37,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	const previousScrollHeightRef = useRef<number | null>(null);
 	const user = useSelector(selectCommonUser);
 	const [editorKey, setEditorKey] = useState(uuid()); // To force rich text editor to rerender
+	const editorId = `material-request-conversation--${editorKey}`;
 
 	const [currentMessage, setCurrentMessage] = useState<string>('');
 
@@ -65,9 +66,6 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 			onSuccess: () => {
 				setCurrentMessage('');
 				setEditorKey(uuid()); // Force rerender of rich text editor
-				scrollableRef.current?.scrollTo({
-					top: Number.MAX_SAFE_INTEGER, // scroll all the way to the bottom
-				});
 			},
 			onError: (err) => {
 				console.error(err);
@@ -86,19 +84,18 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 
 	/**
 	 * Scrolls to the bottom of the messages once at page load after the first messages have been loaded.
+	 * And after every message that has been send
 	 */
+	// biome-ignore lint/correctness/useExhaustiveDependencies: We only want to scroll when the message count changes of the first page
 	useEffect(() => {
-		if (
-			!hasScrolledToBottom &&
-			(messages?.pages?.[0]?.items || []).length &&
-			scrollableRef.current
-		) {
+		if ((messages?.pages?.[0]?.items || []).length && scrollableRef.current) {
 			scrollableRef.current.scrollTo({
 				top: Number.MAX_SAFE_INTEGER, // scroll all the way to the bottom
+				behavior: hasScrolledToBottom ? 'smooth' : 'instant',
 			});
 			setHasScrolledToBottom(true);
 		}
-	}, [messages, hasScrolledToBottom]);
+	}, [messages?.pages?.[0]?.items]);
 
 	/**
 	 * Notifies that the messages were loaded
@@ -175,6 +172,41 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		observer.observe(sentinel);
 		return () => observer.disconnect();
 	}, [handleLoadMore, hasScrolledToBottom]);
+
+	const getEditorAndFocus = useCallback(() => {
+		const braftComponent = document.querySelector(
+			`#${editorId} .DraftEditor-editorContainer .public-DraftEditor-content`
+		) as HTMLDivElement;
+
+		if (braftComponent) {
+			braftComponent?.focus();
+			return true;
+		}
+		return false;
+	}, [editorId]);
+
+	useEffect(() => {
+		let success = getEditorAndFocus();
+
+		if (success) {
+			return;
+		}
+
+		const observer = new MutationObserver((_, observer) => {
+			success = getEditorAndFocus();
+
+			if (success) {
+				observer.disconnect();
+				return;
+			}
+		});
+
+		observer.observe(document.body, {
+			childList: true,
+			subtree: true,
+		});
+		return () => observer.disconnect();
+	}, [getEditorAndFocus]);
 
 	const renderContent = () => {
 		if (isLoadingMessages) {
@@ -260,7 +292,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 								? styles['p-conversation-messages__editor--disabled']
 								: undefined
 						}
-						id={`material-request-conversation--${editorKey}`}
+						id={editorId}
 						value={currentMessage}
 						onChange={(value) => setCurrentMessage(value)}
 						placeholder={tText(
