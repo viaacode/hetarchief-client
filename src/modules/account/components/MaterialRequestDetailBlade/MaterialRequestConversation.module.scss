@@ -180,7 +180,7 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 					@include abstracts.focus-outline;
 
 					&:focus-visible {
-						border-radius: 2px !important;
+						border-radius: 2px;
 					}
 				}
 			}

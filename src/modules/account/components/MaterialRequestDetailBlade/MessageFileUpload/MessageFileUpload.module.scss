@@ -7,7 +7,7 @@
 		@include focus-outline;
 
 		&:focus-visible {
-			border-radius: 2px !important;
+			border-radius: 2px;
 		}
 	}
 
