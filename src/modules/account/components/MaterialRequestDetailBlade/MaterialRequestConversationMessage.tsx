@@ -237,6 +237,30 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 		);
 	};
 
+	const determineAttachmentIcon = (fileName: string) => {
+		const extension = fileName.split('.').pop()?.toLowerCase();
+
+		switch (extension) {
+			case 'pdf':
+				return IconNamesLight.FilePdf;
+			case 'doc':
+			case 'docx':
+				return IconNamesLight.FileDoc;
+			case 'xls':
+			case 'xlsx':
+				return IconNamesLight.FileXls;
+			case 'jpg':
+			case 'jpeg':
+				return IconNamesLight.FileJpg;
+			case 'png':
+				return IconNamesLight.FilePng;
+			case 'csv':
+				return IconNamesLight.FileCsv;
+			default:
+				return IconNamesLight.File;
+		}
+	};
+
 	return (
 		<div
 			className={clsx(
@@ -252,18 +276,20 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 			{renderMessageHeader()}
 			<div>{format(message.createdAt, 'dd MMM yyyy, HH:mm')}</div>
 			{renderMessageContent()}
-			{message.attachments?.map((attachment) => (
-				<Link
-					key={`conversation-messages__message__attachment__${attachment.id}`}
-					href={attachment.attachmentUrl}
-					target="_blank"
-					passHref
-					className={clsx(styles['p-conversation-messages__message__attachment'])}
-				>
-					<Icon name={IconNamesLight.File}></Icon>
-					{attachment.attachmentFilename}
-				</Link>
-			))}
+			<div className={clsx(styles['p-conversation-messages__message-attachments'])}>
+				{message.attachments?.map((attachment) => (
+					<Link
+						key={`conversation-messages__message__attachment__${attachment.id}`}
+						href={attachment.attachmentUrl}
+						target="_blank"
+						passHref
+						className={clsx(styles['p-conversation-messages__message__attachment'])}
+					>
+						<Icon name={determineAttachmentIcon(attachment.attachmentFilename)}></Icon>
+						{attachment.attachmentFilename}
+					</Link>
+				))}
+			</div>
 		</div>
 	);
 };
