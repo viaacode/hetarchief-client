@@ -79,11 +79,8 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	}, [currentMessage]);
 
 	const sendMessageDisabled = useMemo(
-		() =>
-			(isMessageEmpty && selectedFiles.length === 0) ||
-			isSending ||
-			isMaterialRequestClosed(materialRequest),
-		[isMessageEmpty, selectedFiles.length, isSending, materialRequest]
+		() => isMessageEmpty || isSending || isMaterialRequestClosed(materialRequest),
+		[isMessageEmpty, isSending, materialRequest]
 	);
 
 	const handleSendMessage = useCallback(() => {
