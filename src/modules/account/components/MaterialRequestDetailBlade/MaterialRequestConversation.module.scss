@@ -177,13 +177,7 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 				:global(.control-item.button),
 				:global(.control-item.dropdown),
 				:global(.dropdown-handler) {
-					&:focus {
-						outline: 0;
-					}
-
-					&:focus-visible {
-						outline: 1px solid abstracts.$teal;
-					}
+					@include abstracts.focus-outline;
 				}
 			}
 
