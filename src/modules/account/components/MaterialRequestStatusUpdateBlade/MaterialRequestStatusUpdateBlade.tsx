@@ -180,10 +180,10 @@ export const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBla
 						<label htmlFor="motivation-input">
 							{status === MaterialRequestStatus.APPROVED
 								? tHtml(
-										'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-goedkeuren'
+										'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-goedkeuren-description'
 									)
 								: tHtml(
-										'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-afkeuren'
+										'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-afkeuren-description'
 									)}
 						</label>
 					</dt>
