@@ -17,7 +17,15 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import clsx from 'clsx';
 import { noop } from 'lodash-es';
-import React, { type FC, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, {
+	type FC,
+	useCallback,
+	useEffect,
+	useLayoutEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuid } from 'uuid';
 import styles from './MaterialRequestConversation.module.scss';
@@ -65,8 +73,21 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		materialRequest.id
 	);
 
+	const isMessageEmpty = useMemo(() => {
+		const textContent = currentMessage.replace(/<[^>]*>/g, '').trim();
+		return !textContent;
+	}, [currentMessage]);
+
+	const sendMessageDisabled = useMemo(
+		() =>
+			(isMessageEmpty && selectedFiles.length === 0) ||
+			isSending ||
+			isMaterialRequestClosed(materialRequest),
+		[isMessageEmpty, selectedFiles.length, isSending, materialRequest]
+	);
+
 	const handleSendMessage = useCallback(() => {
-		if (!currentMessage.trim() && selectedFiles.length === 0) {
+		if (sendMessageDisabled) {
 			return;
 		}
 
@@ -96,7 +117,16 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 				},
 			}
 		);
-	}, [currentMessage, selectedFiles, sendMessage]);
+	}, [sendMessageDisabled, currentMessage, selectedFiles, sendMessage]);
+
+	useEffect(() => {
+		if (
+			materialRequest.status === MaterialRequestStatus.CANCELLED ||
+			materialRequest.status === MaterialRequestStatus.DENIED
+		) {
+			refetchMessages().then(noop);
+		}
+	}, [materialRequest.status, refetchMessages]);
 
 	/**
 	 * Scrolls to the bottom of the messages once at page load after the first messages have been loaded.
@@ -318,10 +348,8 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 						variants={['text']}
 						// Replace this icon with a send icon when Jelle and JN add the icons to the font
 						icon={<Icon name={IconNamesLight.Email} />}
-						disabled={
-							!currentMessage.length || isSending || isMaterialRequestClosed(materialRequest)
-						}
-						tabIndex={!currentMessage.length && selectedFiles.length === 0 ? undefined : -1}
+						disabled={sendMessageDisabled}
+						tabIndex={sendMessageDisabled ? -1 : undefined}
 						onClick={handleSendMessage}
 					/>
 				</div>
