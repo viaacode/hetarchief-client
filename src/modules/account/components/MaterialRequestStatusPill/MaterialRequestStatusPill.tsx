@@ -46,6 +46,7 @@ const MaterialRequestStatusPill: FC<MaterialRequestStatusPillProps> = ({
 			<Pill
 				icon={determineIcon()}
 				label={label}
+				ariaLabel={label}
 				className={clsx(
 					styles['c-material-request-status-pill__pill'],
 					styles[`c-material-request-status-pill__pill--${status.toLowerCase()}`]
