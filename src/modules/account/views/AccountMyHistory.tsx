@@ -33,6 +33,8 @@ import { type FC, type MouseEvent, type ReactNode, useMemo, useState } from 'rea
 import type { Row, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
+import styles from './AccountMyHistory.module.scss';
+
 export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const router = useRouter();
 	const locale = useLocale();
@@ -155,7 +157,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 		return (
 			<AccountLayout
-				className="p-account-my-history"
+				className={styles['p-account-my-history']}
 				pageTitle={tText('pages/account/mijn-bezoek-historiek/index___mijn-bezoek-historiek')}
 			>
 				{!hasData && (
