@@ -260,6 +260,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 				currentMaterialRequestDetail={
 					currentMaterialRequestId ? resolvedMaterialRequest : undefined
 				}
+				refetchMaterialRequest={refetchCurrentMaterialRequestDetail}
 				afterStatusChanged={onMaterialRequestStatusChange}
 			/>
 		);
