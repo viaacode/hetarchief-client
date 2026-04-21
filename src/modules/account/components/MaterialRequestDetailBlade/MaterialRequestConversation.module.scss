@@ -170,6 +170,7 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 				display: flex;
 				flex-direction: column;
 
+				// Mobile
 				@media (max-width: abstracts.$breakpoint-md) {
 					flex-direction: column-reverse;
 				}
@@ -180,6 +181,7 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 				border: 1px solid abstracts.$silver;
 				border-radius: abstracts.$spacer-xs abstracts.$spacer-xs 0 0;
 
+				// Mobile
 				@media (max-width: abstracts.$breakpoint-md) {
 					border-radius: 0 0 abstracts.$spacer-xs abstracts.$spacer-xs;
 					margin-bottom: 1rem;
@@ -209,6 +211,7 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 				border: 1px solid abstracts.$silver !important;
 				border-radius: 0 0 abstracts.$spacer-xs abstracts.$spacer-xs;
 
+				// Mobile
 				@media (max-width: abstracts.$breakpoint-md) {
 					border-radius: abstracts.$spacer-xs abstracts.$spacer-xs 0 0;
 				}
@@ -232,6 +235,7 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 
 			@include abstracts.focus-outline;
 
+			// Mobile
 			@media (max-width: abstracts.$breakpoint-md) {
 				right: 1.4rem;
 				bottom: 4.5rem;
