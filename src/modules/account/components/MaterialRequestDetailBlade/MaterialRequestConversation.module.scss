@@ -166,10 +166,24 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 		:global(.c-rich-text-editor) {
 			height: $rich-text-editor-height-desktop;
 
+			:global(.bf-container) {
+				display: flex;
+				flex-direction: column;
+
+				@media (max-width: abstracts.$breakpoint-md) {
+					flex-direction: column-reverse;
+				}
+			}
+
 			:global(.bf-controlbar) {
 				background-color: abstracts.$platinum;
 				border: 1px solid abstracts.$silver;
 				border-radius: abstracts.$spacer-xs abstracts.$spacer-xs 0 0;
+
+				@media (max-width: abstracts.$breakpoint-md) {
+					border-radius: 0 0 abstracts.$spacer-xs abstracts.$spacer-xs;
+					margin-bottom: 1rem;
+				}
 
 				&::before {
 					display: none;
@@ -194,6 +208,10 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 			:global(.bf-content) {
 				border: 1px solid abstracts.$silver !important;
 				border-radius: 0 0 abstracts.$spacer-xs abstracts.$spacer-xs;
+
+				@media (max-width: abstracts.$breakpoint-md) {
+					border-radius: abstracts.$spacer-xs abstracts.$spacer-xs 0 0;
+				}
 			}
 		}
 
@@ -214,10 +232,9 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 
 			@include abstracts.focus-outline;
 
-			// Mobile
 			@media (max-width: abstracts.$breakpoint-md) {
 				right: 1.4rem;
-				bottom: 1.0rem;
+				bottom: 4.5rem;
 			}
 		}
 	}
