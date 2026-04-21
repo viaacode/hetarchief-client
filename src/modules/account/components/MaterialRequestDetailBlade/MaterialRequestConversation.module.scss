@@ -227,9 +227,9 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 		bottom: 100%;
 		left: 0;
 		right: 0;
-		padding: abstracts.$spacer-md abstracts.$spacer-sm abstracts.$spacer-xs;
+		padding: abstracts.$spacer-md abstracts.$spacer-sm 2px;
 		background: linear-gradient(to bottom, transparent, abstracts.$white 2rem);
-		margin-right: 1rem; // Leave space for scrollbar
+		margin-right: 2rem; // Leave space for scrollbar
 
 		&:empty {
 			display: none;
