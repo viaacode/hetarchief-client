@@ -240,27 +240,37 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		return () => observer.disconnect();
 	}, [handleLoadMore, hasScrolledToBottom]);
 
-	const getEditorAndFocus = useCallback(() => {
+	const getEditorAndFocusOrDisable = useCallback(() => {
 		const braftComponent = document.querySelector(
 			`#${editorId} .DraftEditor-editorContainer .public-DraftEditor-content`
 		) as HTMLDivElement;
 
 		if (braftComponent) {
 			braftComponent?.focus();
+
+			const isDisabled = isMaterialRequestClosed(materialRequest);
+			const braftControls = document.querySelectorAll<HTMLElement>(
+				'.bf-controlbar button.control-item, .bf-controlbar .dropdown-handler'
+			);
+
+			braftControls.forEach((control) => {
+				control.tabIndex = isDisabled ? -1 : 0;
+			});
+
 			return true;
 		}
 		return false;
-	}, [editorId]);
+	}, [editorId, materialRequest]);
 
 	useEffect(() => {
-		let success = getEditorAndFocus();
+		let success = getEditorAndFocusOrDisable();
 
 		if (success) {
 			return;
 		}
 
 		const observer = new MutationObserver((_, observer) => {
-			success = getEditorAndFocus();
+			success = getEditorAndFocusOrDisable();
 
 			if (success) {
 				observer.disconnect();
@@ -273,7 +283,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 			subtree: true,
 		});
 		return () => observer.disconnect();
-	}, [getEditorAndFocus]);
+	}, [getEditorAndFocusOrDisable]);
 
 	const renderContent = () => {
 		if (isLoadingMessages) {
