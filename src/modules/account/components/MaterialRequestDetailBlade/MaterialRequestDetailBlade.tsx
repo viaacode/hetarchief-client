@@ -44,7 +44,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { toastService } from '@shared/services/toast-service';
-import { asDate, formatLongDate } from '@shared/utils/dates';
+import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { isMobileSize } from '@shared/utils/is-mobile';
 import type { QueryObserverResult } from '@tanstack/react-query';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
@@ -249,7 +249,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 
 		const { downloadStatus } = currentMaterialRequestDetail;
 		const hasDownloadExpired = determineHasDownloadExpired(currentMaterialRequestDetail);
-		const downloadExpirationDate = formatLongDate(
+		const downloadExpirationDate = formatMediumDate(
 			asDate(currentMaterialRequestDetail.downloadExpiresAt)
 		);
 		const downloadStatusSucceeded = downloadStatus === MaterialRequestDownloadStatus.SUCCEEDED;
