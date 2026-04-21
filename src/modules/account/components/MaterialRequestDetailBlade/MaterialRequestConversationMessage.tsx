@@ -38,7 +38,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 	 * - on the right in green (own)
 	 * - on the left in grey (other)
 	 */
-	const isOwnMessage = message.senderProfile.id === user?.profileId;
+	const isOwnMessage = message.senderProfile?.id === user?.profileId;
 
 	// Cancelled, denied and download expired are all closable events. Final summary will always be added after that
 	const isFinalMessage = [
@@ -54,14 +54,14 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 		message.messageType !== MaterialRequestEventType.REUSE_SUMMARY;
 
 	const senderName =
-		message.senderProfile.organisation?.name ||
-		`${message.senderProfile.firstName} ${message.senderProfile.lastName}`;
+		message.senderProfile?.organisation?.name ||
+		`${message.senderProfile?.firstName} ${message.senderProfile?.lastName}`;
 
 	const renderOrganisationName = () => {
-		if (message.senderProfile.organisation?.name) {
-			return `${message.senderProfile.organisation?.name} (${message.senderProfile.firstName})`;
+		if (message.senderProfile?.organisation?.name) {
+			return `${message.senderProfile?.organisation?.name} (${message.senderProfile?.firstName})`;
 		} else {
-			return `${message.senderProfile.firstName} ${message.senderProfile.lastName}`;
+			return `${message.senderProfile?.firstName} ${message.senderProfile?.lastName}`;
 		}
 	};
 
