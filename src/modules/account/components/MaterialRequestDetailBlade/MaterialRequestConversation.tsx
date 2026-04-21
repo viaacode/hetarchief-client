@@ -205,27 +205,37 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		return () => observer.disconnect();
 	}, [handleLoadMore, hasScrolledToBottom]);
 
-	const getEditorAndFocus = useCallback(() => {
+	const getEditorAndFocusOrDisable = useCallback(() => {
 		const braftComponent = document.querySelector(
 			`#${editorId} .DraftEditor-editorContainer .public-DraftEditor-content`
 		) as HTMLDivElement;
 
 		if (braftComponent) {
 			braftComponent?.focus();
+
+			const isDisabled = isMaterialRequestClosed(materialRequest);
+			const braftControls = document.querySelectorAll<HTMLElement>(
+				'.bf-controlbar button.control-item, .bf-controlbar .dropdown-handler'
+			);
+
+			braftControls.forEach((control) => {
+				control.tabIndex = isDisabled ? -1 : 0;
+			});
+
 			return true;
 		}
 		return false;
-	}, [editorId]);
+	}, [editorId, materialRequest]);
 
 	useEffect(() => {
-		let success = getEditorAndFocus();
+		let success = getEditorAndFocusOrDisable();
 
 		if (success) {
 			return;
 		}
 
 		const observer = new MutationObserver((_, observer) => {
-			success = getEditorAndFocus();
+			success = getEditorAndFocusOrDisable();
 
 			if (success) {
 				observer.disconnect();
@@ -238,7 +248,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 			subtree: true,
 		});
 		return () => observer.disconnect();
-	}, [getEditorAndFocus]);
+	}, [getEditorAndFocusOrDisable]);
 
 	const renderContent = () => {
 		if (isLoadingMessages) {
@@ -297,11 +307,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 							));
 					})}
 				</div>
-				<div
-					className={clsx(styles['p-conversation-messages__editor'])}
-					// Ensure the buttons of the rich text editor are not focusable when the rich text editor is disabled
-					{...{ inert: isMaterialRequestClosed(materialRequest) ? '' : undefined }}
-				>
+				<div className={clsx(styles['p-conversation-messages__editor'])}>
 					<div
 						ref={fileListRef}
 						className={clsx(styles['p-conversation-messages__selected-files'])}

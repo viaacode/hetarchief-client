@@ -199,7 +199,8 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 
 		&--disabled {
 			:global(.control-item.button),
-			:global(.control-item.dropdown) {
+			:global(.control-item.dropdown),
+			:global(.dropdown-handler) {
 				pointer-events: none !important;
 				opacity: 0.5 !important;
 			}
