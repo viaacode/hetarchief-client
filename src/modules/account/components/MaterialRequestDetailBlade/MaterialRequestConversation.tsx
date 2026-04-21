@@ -64,6 +64,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 
 	const [currentMessage, setCurrentMessage] = useState<string>('');
 	const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+	const [fileListHeight, setFileListHeight] = useState<number>(0);
 
 	const {
 		data: messages,
@@ -121,6 +122,15 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 			}
 		);
 	}, [sendMessageDisabled, currentMessage, selectedFiles, sendMessage]);
+
+	// Measure the file list height and adjust message wrapper accordingly
+	// biome-ignore lint/correctness/useExhaustiveDependencies: We want to re-measure when files are added or removed
+	useLayoutEffect(() => {
+		if (fileListRef.current) {
+			const height = fileListRef.current.offsetHeight;
+			setFileListHeight(height);
+		}
+	}, [selectedFiles]);
 
 	// Refetch the messages when the material request gets closed while viewing the conversation to get the latest messages and reflect the closed status in the UI
 	useEffect(() => {
@@ -278,6 +288,9 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 				<div
 					className={clsx(styles['p-conversation-messages__message-wrapper'])}
 					ref={scrollableRef}
+					style={{
+						paddingBottom: fileListHeight > 0 ? `${fileListHeight}px` : undefined,
+					}}
 				>
 					<div ref={scrollTriggerRef} />
 					{isFetchingNextPage && (
