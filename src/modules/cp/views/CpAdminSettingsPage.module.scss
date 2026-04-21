@@ -1,0 +1,13 @@
+.p-cp-settings {
+	&__c-no-visitors-error {
+		display: flex;
+		place-content: center center;
+		flex-flow: column wrap;
+		max-width: 50rem;
+		text-align: center;
+		gap: 2rem;
+		margin-left: auto;
+		margin-right: auto;
+		height: 50vh;
+	}
+}
