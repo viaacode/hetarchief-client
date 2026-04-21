@@ -538,8 +538,8 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 							)}
 							startSliderAriaLabel={tText('startSliderAriaLabel')}
 							endSliderAriaLabel={tText('endSliderAriaLabel')}
-							startSliderId={tText('startSliderId')}
-							endSliderId={tText('endSliderId')}
+							startSliderId="material-request-for-reuse-blade__start-slider-id"
+							endSliderId="material-request-for-reuse-blade__end-slider-id"
 						/>
 					</div>
 				)}
