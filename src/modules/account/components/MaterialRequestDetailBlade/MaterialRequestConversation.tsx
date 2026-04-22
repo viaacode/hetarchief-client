@@ -89,8 +89,11 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	}, [currentMessage]);
 
 	const sendMessageDisabled = useMemo(
-		() => isMessageEmpty || isSending || isMaterialRequestClosed(materialRequest),
-		[isMessageEmpty, isSending, materialRequest]
+		() =>
+			(isMessageEmpty && selectedFiles.length === 0) ||
+			isSending ||
+			isMaterialRequestClosed(materialRequest),
+		[isMessageEmpty, selectedFiles, isSending, materialRequest]
 	);
 
 	const handleSendMessage = useCallback(() => {
@@ -168,21 +171,47 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	}, [isFetchingMessages, hasNotified, onMessagesLoaded]);
 
 	/**
-	 * Refetches the material request when a download event doesn't match the download status of the material request
+	 * Refetches the material request when a event doesn't match the (download) status of the material request
 	 */
 	useEffect(() => {
-		const hasDownloadAvailableMessage: boolean = !!messages?.pages?.[0]?.items?.find(
-			(message) => message.messageType === MaterialRequestEventType.DOWNLOAD_AVAILABLE
+		let shouldRefreshRequest = false;
+
+		const hasMessageFromEvaluator = !!messages?.pages?.[0]?.items?.find(
+			(message) =>
+				message.messageType === MaterialRequestEventType.MESSAGE &&
+				!!message.senderProfile?.id &&
+				message.senderProfile?.id !== user?.profileId
 		);
-		const materialRequestHasNoDownload =
-			!materialRequest?.downloadStatus ||
-			[MaterialRequestDownloadStatus.NEW, MaterialRequestDownloadStatus.PENDING].includes(
-				materialRequest?.downloadStatus
+
+		const hasStatusUpdateMessage = !!messages?.pages?.[0]?.items?.find((message) =>
+			[
+				MaterialRequestEventType.APPROVED,
+				MaterialRequestEventType.DENIED,
+				MaterialRequestEventType.ADDITIONAL_CONDITIONS,
+				MaterialRequestEventType.DOWNLOAD_AVAILABLE,
+			].includes(message.messageType)
+		);
+
+		if (materialRequest.status === MaterialRequestStatus.NEW) {
+			shouldRefreshRequest = hasMessageFromEvaluator || hasStatusUpdateMessage;
+		} else if (materialRequest.status === MaterialRequestStatus.PENDING) {
+			shouldRefreshRequest = hasStatusUpdateMessage;
+		} else if (materialRequest.status === MaterialRequestStatus.APPROVED) {
+			const hasDownloadAvailableMessage: boolean = !!messages?.pages?.[0]?.items?.find(
+				(message) => message.messageType === MaterialRequestEventType.DOWNLOAD_AVAILABLE
 			);
-		if (hasDownloadAvailableMessage && materialRequestHasNoDownload) {
+			const materialRequestHasNoDownload =
+				!materialRequest?.downloadStatus ||
+				[MaterialRequestDownloadStatus.NEW, MaterialRequestDownloadStatus.PENDING].includes(
+					materialRequest?.downloadStatus
+				);
+			shouldRefreshRequest = hasDownloadAvailableMessage && materialRequestHasNoDownload;
+		}
+
+		if (shouldRefreshRequest) {
 			refetchMaterialRequest().then(noop);
 		}
-	}, [messages, materialRequest?.downloadStatus, refetchMaterialRequest]);
+	}, [messages, materialRequest, refetchMaterialRequest, user?.profileId]);
 
 	// Capture scrollHeight before every render so useLayoutEffect can correct after every page that is appended to the dom
 	const pageCount = messages?.pages?.length ?? 0;
