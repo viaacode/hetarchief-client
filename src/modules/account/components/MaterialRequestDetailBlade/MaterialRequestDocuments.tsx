@@ -12,6 +12,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
 import { sortingIcons } from '@shared/components/Table';
+import { getFileNameIcon } from '@shared/helpers/get-file-name-icon';
 import { tText } from '@shared/helpers/translate';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { asDate, formatMediumDateWithTime } from '@shared/utils/dates';
@@ -285,7 +286,7 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 												className={clsx(
 													styles['p-material-request-detail__documents__list-item-icon']
 												)}
-												name={IconNamesLight.File}
+												name={getFileNameIcon(item.attachmentFilename)}
 											/>
 											<div
 												className={clsx(
