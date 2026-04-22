@@ -15,7 +15,6 @@ import { getFileNameIcon } from '@shared/helpers/get-file-name-icon';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { asDate, formatLongDate, formatMediumDateWithTime } from '@shared/utils/dates';
 import clsx from 'clsx';
-import { format } from 'date-fns';
 import Link from 'next/link';
 import React, { type FC } from 'react';
 import { useSelector } from 'react-redux';
@@ -247,7 +246,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 			)}
 		>
 			{renderMessageHeader()}
-			<div>{format(message.createdAt, 'dd MMM yyyy, HH:mm')}</div>
+			<div>{formatMediumDateWithTime(asDate(message.createdAt))}</div>
 			{renderMessageContent()}
 			<div className={clsx(styles['p-conversation-messages__message-attachments'])}>
 				{message.attachments?.map((attachment) => (
