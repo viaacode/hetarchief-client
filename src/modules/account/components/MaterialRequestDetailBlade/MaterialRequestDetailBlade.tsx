@@ -285,22 +285,14 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		return (
 			<>
 				{downloadInformationMessage && (
-					<span
-						className={clsx(
-							styles['p-material-request-detail__download-message'],
-							'u-flex',
-							'u-align-center',
-							'u-flex-row',
-							'u-pt-12',
-							'u-mr-8'
-						)}
-					>
+					<span className={styles['p-material-request-detail__download-message']}>
 						{!isMobile && <Icon name={IconNamesLight.Exclamation} className="u-mr-4" />}
 						{downloadInformationMessage}
 					</span>
 				)}
 				{!hasDownloadExpired && !downloadStatusFailed && (
 					<Button
+						className={styles['p-material-request-detail__download-button']}
 						label={
 							downloadStatusSucceeded
 								? tText(
@@ -341,7 +333,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 									'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag'
 								)
 					}
-					variants={['dark']}
+					variants={['outline']}
 					onClick={() => setShowConfirmModal(true)}
 				/>
 			);
@@ -502,7 +494,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			size: isMobile ? BladeSizeType.THIN : BladeSizeType.WIDE,
 			showHeaderBackgroundByDefault: true,
 			showTitleSmaller: true,
-			title: isRequester
+			title: allowRequestCancellation
 				? tText(
 						'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvraag-aan'
 					)
@@ -513,7 +505,9 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				<>
 					<div className={clsx(styles['p-material-request-detail__title'])}>
 						<h3 className={clsx(styles['p-material-request-detail__title--text'])}>
-							{currentMaterialRequestDetail.maintainerName}
+							{allowRequestCancellation
+								? currentMaterialRequestDetail.maintainerName
+								: currentMaterialRequestDetail.requesterOrganisation}
 						</h3>
 						{isMobile && (
 							<div className={clsx(styles['p-material-request-detail__action-bar'])}>
