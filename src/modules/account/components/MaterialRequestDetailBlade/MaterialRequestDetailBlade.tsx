@@ -141,7 +141,8 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	const { data: unreadCount, refetch: refetchUnreadCount } =
 		useGetMaterialRequestConversationUnreadCount(
 			currentMaterialRequestDetail?.id,
-			activeTab !== MaterialRequestDetailBladeTabs.Conversation
+			activeTab !== MaterialRequestDetailBladeTabs.Conversation &&
+				!currentMaterialRequestDetail?.isArchived
 		);
 
 	const tabs: TabProps[] = useMemo(
@@ -220,6 +221,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		// No tabs to show, so always render all content in the blade
 		if (
 			!currentMaterialRequestDetail.reuseForm ||
+			currentMaterialRequestDetail.isArchived ||
 			activeTab === MaterialRequestDetailBladeTabs.Information
 		) {
 			return (
@@ -466,12 +468,14 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	};
 
 	const getBladeHeaderProps = (includeCTAs: boolean): BladeHeaderProps => {
-		if (!currentMaterialRequestDetail?.reuseForm) {
+		if (!currentMaterialRequestDetail?.reuseForm || currentMaterialRequestDetail?.isArchived) {
 			return {
-				title: tText(
-					'modules/account/components/material-request-detail-blade/material-requests___detail'
-				),
-				stickySubtitle: <MaterialRequestInformation />,
+				title: currentMaterialRequestDetail?.isArchived
+					? tText('Gearchiveerde aanvraag')
+					: tText(
+							'modules/account/components/material-request-detail-blade/material-requests___detail'
+						),
+				stickySubtitle: !currentMaterialRequestDetail?.isArchived && <MaterialRequestInformation />,
 				subtitle: currentMaterialRequestDetail ? (
 					<MaterialCard
 						openInNewTab={true}
@@ -537,7 +541,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	};
 
 	const getBladeFooterProps = (): BladeFooterProps => {
-		if (!currentMaterialRequestDetail?.reuseForm) {
+		if (!currentMaterialRequestDetail?.reuseForm || currentMaterialRequestDetail?.isArchived) {
 			return {
 				footerButtons: [
 					{
