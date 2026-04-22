@@ -146,7 +146,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	useEffect(() => {
 		if (isOpen) {
 			setReasonInputValue(reason || '');
-			if (hideViewTypeOption && canDownloadNewspaper && !type) {
+			if (canDownloadNewspaper) {
 				setTypeSelected(MaterialRequestType.MORE_INFO);
 			} else {
 				setTypeSelected(type);
@@ -154,7 +154,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			setNoTypeSelectedOnSave(false);
 			refetchPotentialDuplicates().then(noop);
 		}
-	}, [isOpen, reason, type, refetchPotentialDuplicates, hideViewTypeOption, canDownloadNewspaper]);
+	}, [isOpen, reason, type, refetchPotentialDuplicates, canDownloadNewspaper]);
 
 	const onCloseModal = (shouldTriggerComplexReuseFlow: boolean) => {
 		onClose(shouldTriggerComplexReuseFlow);
