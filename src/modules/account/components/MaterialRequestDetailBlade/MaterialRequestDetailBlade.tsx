@@ -283,22 +283,14 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		return (
 			<>
 				{downloadInformationMessage && (
-					<span
-						className={clsx(
-							styles['p-material-request-detail__download-message'],
-							'u-flex',
-							'u-align-center',
-							'u-flex-row',
-							'u-pt-12',
-							'u-mr-8'
-						)}
-					>
+					<span className={styles['p-material-request-detail__download-message']}>
 						{!isMobile && <Icon name={IconNamesLight.Exclamation} className="u-mr-4" />}
 						{downloadInformationMessage}
 					</span>
 				)}
 				{!hasDownloadExpired && !downloadStatusFailed && (
 					<Button
+						className={styles['p-material-request-detail__download-button']}
 						label={
 							downloadStatusSucceeded
 								? tText(
