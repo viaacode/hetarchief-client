@@ -595,11 +595,11 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		<BladeManager
 			currentLayer={getBladeLayerIndex()}
 			onCloseBlade={() => {
-				if (isDetailStatusBladeOpenWithStatus) {
-					setShowEvaluatorOptions(false);
-					setIsDetailStatusBladeOpenWithStatus(undefined);
-				} else if (isMobile && showEvaluatorOptions) {
-					setIsDetailStatusBladeOpenWithStatus(undefined);
+				// Blade to approve/deny is open or
+				// On mobile we have evaluator options open
+				if (isDetailStatusBladeOpenWithStatus || (isMobile && showEvaluatorOptions)) {
+					setShowEvaluatorOptions(false); // close evaluator options
+					setIsDetailStatusBladeOpenWithStatus(undefined); // close status blade
 				} else {
 					onClose(hasStatusChanged);
 				}
