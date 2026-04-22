@@ -66,7 +66,7 @@ export const MATERIAL_REQUEST_DETAILS_TABS = (
 						tText(
 							'modules/account/components/material-request-detail-blade/material-request-detail-blade___conversatie'
 						),
-						IconNamesLight.Contact,
+						IconNamesLight.Message,
 						isMobile
 					),
 					getTab(
@@ -74,7 +74,7 @@ export const MATERIAL_REQUEST_DETAILS_TABS = (
 						tText(
 							'modules/account/components/material-request-detail-blade/material-request-detail-blade___documenten'
 						),
-						IconNamesLight.File,
+						IconNamesLight.Files,
 						isMobile
 					),
 				]

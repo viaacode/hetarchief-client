@@ -275,6 +275,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 				currentMaterialRequestDetail={
 					currentMaterialRequestId ? resolvedMaterialRequest : undefined
 				}
+				refetchMaterialRequest={refetchCurrentMaterialRequestDetail}
 				afterStatusChanged={onMaterialRequestStatusChange}
 			/>
 		);

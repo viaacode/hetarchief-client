@@ -51,7 +51,7 @@ export interface MaterialRequestEvent {
 	messageType: MaterialRequestEventType;
 	body: MaterialRequestMessageBody;
 	createdAt: string;
-	senderProfile: {
+	senderProfile?: {
 		id: string;
 		mail: string;
 		firstName: string;

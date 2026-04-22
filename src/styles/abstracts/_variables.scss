@@ -66,6 +66,7 @@ $shadow-24-black-61: 0 0 24px color.adjust($black, $alpha: -0.39);
  * Spacers
  */
 
+$spacer-xxxs: 0.2rem;
 $spacer-xxs: 0.4rem;
 $spacer-xs: 0.8rem;
 $spacer-sm: 1.6rem;
@@ -81,8 +82,8 @@ $spacer-3xl: 12rem;
 
 // Font families
 $font-family-primary: "SofiaPro";
-$font-family-icons-light: meemoo-icons-light;
-$font-family-icons-solid: meemoo-icons-solid;
+$font-family-icons-light: meemoocons-light;
+$font-family-icons-solid: meemoocons-solid;
 
 // Sizes
 $font-size-4xl: 6.4rem;

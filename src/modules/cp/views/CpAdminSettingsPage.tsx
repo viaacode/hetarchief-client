@@ -1,15 +1,17 @@
-import type { FC } from 'react';
-import { useSelector } from 'react-redux';
-
 import { Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { VisitorSpaceSettings } from '@cp/components/VisitorSpaceSettings';
 import { CPAdminLayout } from '@cp/layouts';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tHtml, tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
+import type { FC } from 'react';
+import { useSelector } from 'react-redux';
+import styles from './CpAdminSettingsPage.module.scss';
 
 export const CpAdminSettingsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	/**
@@ -27,11 +29,28 @@ export const CpAdminSettingsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 
 	const renderPageContent = () => {
 		if (!user?.visitorSpaceSlug) {
-			return tHtml('pages/beheer/instellingen/index___geen-maintainer-id-gevonden');
+			return (
+				<CPAdminLayout
+					className={styles['p-cp-settings']}
+					pageTitle={tText('pages/beheer/instellingen/index___instellingen')}
+				>
+					<div className={styles['p-cp-settings__c-no-visitors-error']}>
+						<span>
+							<Icon name={IconNamesLight.NotAvailable} className="u-font-size-64 u-color-silver" />
+						</span>
+						<p>
+							{tHtml(
+								'modules/cp/views/cp-admin-settings-page___aanbieder-maintainer-name-met-or-id-maintainer-id-heeft-geen-bezoekersruimte-op-hetarchief-be',
+								{ maintainerName: user?.organisationName, maintainerId: user?.organisationId }
+							)}
+						</p>
+					</div>
+				</CPAdminLayout>
+			);
 		}
 		return (
 			<CPAdminLayout
-				className="p-cp-settings"
+				className={styles['p-cp-settings']}
 				pageTitle={tText('pages/beheer/instellingen/index___instellingen')}
 			>
 				<VisitorSpaceSettings action="edit" visitorSpaceSlug={user?.visitorSpaceSlug} />

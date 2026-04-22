@@ -1,0 +1,15 @@
+@use '../../../styles/abstracts' as abstracts;
+
+.p-account-my-history {
+	:global(.c-table__row .c-table__cell--body:last-child) {
+		padding: 0 !important;
+
+		:global(button) {
+			max-width: calc(100% - #{abstracts.$spacer-sm});
+
+			:global(:focus-within) {
+				outline: 1px solid abstracts.$teal;
+			}
+		}
+	}
+}

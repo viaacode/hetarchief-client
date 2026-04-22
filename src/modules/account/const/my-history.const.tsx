@@ -68,7 +68,7 @@ export const HistoryTableColumns = (
 			const visit = data.row.original;
 			return (
 				<Button
-					className="u-font-size-14 u-py-16 u-text-left"
+					className="u-font-size-14 u-p-8 u-m-2 u-text-left"
 					variants={['text', 'block', 'fill', 'underline']}
 					onClick={(e: MouseEvent) => {
 						e.stopPropagation();

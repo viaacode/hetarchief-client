@@ -44,8 +44,9 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { toastService } from '@shared/services/toast-service';
-import { asDate, formatLongDate } from '@shared/utils/dates';
+import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { isMobileSize } from '@shared/utils/is-mobile';
+import type { QueryObserverResult } from '@tanstack/react-query';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
@@ -64,6 +65,7 @@ interface MaterialRequestDetailBladeProps {
 	onClose: (statusChanged: boolean) => void;
 	allowRequestCancellation: boolean;
 	currentMaterialRequestDetail: MaterialRequest | undefined;
+	refetchMaterialRequest: () => Promise<QueryObserverResult<MaterialRequest | null, Error>>;
 	afterStatusChanged: () => void;
 }
 
@@ -71,6 +73,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	onClose,
 	allowRequestCancellation,
 	currentMaterialRequestDetail,
+	refetchMaterialRequest,
 	afterStatusChanged,
 }) => {
 	const locale = useLocale();
@@ -229,6 +232,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				return (
 					<MaterialRequestConversation
 						materialRequest={currentMaterialRequestDetail}
+						refetchMaterialRequest={refetchMaterialRequest}
 						handleDownload={onHandleDownload}
 						onMessagesLoaded={() => refetchUnreadCount().then(noop)}
 					/>
@@ -245,7 +249,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 
 		const { downloadStatus } = currentMaterialRequestDetail;
 		const hasDownloadExpired = determineHasDownloadExpired(currentMaterialRequestDetail);
-		const downloadExpirationDate = formatLongDate(
+		const downloadExpirationDate = formatMediumDate(
 			asDate(currentMaterialRequestDetail.downloadExpiresAt)
 		);
 		const downloadStatusSucceeded = downloadStatus === MaterialRequestDownloadStatus.SUCCEEDED;
@@ -591,11 +595,11 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		<BladeManager
 			currentLayer={getBladeLayerIndex()}
 			onCloseBlade={() => {
-				if (isDetailStatusBladeOpenWithStatus) {
-					setShowEvaluatorOptions(false);
-					setIsDetailStatusBladeOpenWithStatus(undefined);
-				} else if (isMobile && showEvaluatorOptions) {
-					setIsDetailStatusBladeOpenWithStatus(undefined);
+				// Blade to approve/deny is open or
+				// On mobile we have evaluator options open
+				if (isDetailStatusBladeOpenWithStatus || (isMobile && showEvaluatorOptions)) {
+					setShowEvaluatorOptions(false); // close evaluator options
+					setIsDetailStatusBladeOpenWithStatus(undefined); // close status blade
 				} else {
 					onClose(hasStatusChanged);
 				}

@@ -11,10 +11,10 @@ import { Button } from '@meemoo/react-components';
 import Html from '@shared/components/Html/Html';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { getFileNameIcon } from '@shared/helpers/get-file-name-icon';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { asDate, formatLongDate, formatMediumDateWithTime } from '@shared/utils/dates';
 import clsx from 'clsx';
-import { format } from 'date-fns';
 import Link from 'next/link';
 import React, { type FC } from 'react';
 import { useSelector } from 'react-redux';
@@ -38,7 +38,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 	 * - on the right in green (own)
 	 * - on the left in grey (other)
 	 */
-	const isOwnMessage = message.senderProfile.id === user?.profileId;
+	const isOwnMessage = message.senderProfile?.id === user?.profileId;
 
 	// Cancelled, denied and download expired are all closable events. Final summary will always be added after that
 	const isFinalMessage = [
@@ -53,15 +53,11 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 		message.messageType !== MaterialRequestEventType.MESSAGE &&
 		message.messageType !== MaterialRequestEventType.REUSE_SUMMARY;
 
-	const senderName =
-		message.senderProfile.organisation?.name ||
-		`${message.senderProfile.firstName} ${message.senderProfile.lastName}`;
-
-	const renderOrganisationName = () => {
-		if (message.senderProfile.organisation?.name) {
-			return `${message.senderProfile.organisation?.name} (${message.senderProfile.firstName})`;
+	const messageSenderName = () => {
+		if (message.senderProfile?.organisation?.name) {
+			return `${message.senderProfile?.organisation?.name} (${message.senderProfile?.firstName})`;
 		} else {
-			return `${message.senderProfile.firstName} ${message.senderProfile.lastName}`;
+			return `${message.senderProfile?.firstName} ${message.senderProfile?.lastName}`;
 		}
 	};
 
@@ -81,7 +77,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 				{tHtml(
 					'modules/account/components/material-request-detail-blade/material-request-conversation___name-annuleerde-de-aanvraag',
 					{
-						name: senderName,
+						name: messageSenderName(),
 					}
 				)}
 			</div>
@@ -156,14 +152,14 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 				title = tHtml(
 					'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-goed-met-de-volgende-boodschap',
 					{
-						name: senderName,
+						name: messageSenderName(),
 					}
 				);
 			} else {
 				title = tHtml(
 					'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-af-met-de-volgende-boodschap',
 					{
-						name: senderName,
+						name: messageSenderName(),
 					}
 				);
 			}
@@ -184,14 +180,14 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 			title = tHtml(
 				'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-goed',
 				{
-					name: senderName,
+					name: messageSenderName(),
 				}
 			);
 		} else {
 			title = tHtml(
 				'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-af',
 				{
-					name: senderName,
+					name: messageSenderName(),
 				}
 			);
 		}
@@ -232,7 +228,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 
 		return (
 			<div className={clsx(styles['p-conversation-messages__message__sender'])}>
-				{renderOrganisationName()}
+				{messageSenderName()}
 			</div>
 		);
 	};
@@ -250,20 +246,22 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 			)}
 		>
 			{renderMessageHeader()}
-			<div>{format(message.createdAt, 'dd MMM yyyy, HH:mm')}</div>
+			<div>{formatMediumDateWithTime(asDate(message.createdAt))}</div>
 			{renderMessageContent()}
-			{message.attachments?.map((attachment) => (
-				<Link
-					key={`conversation-messages__message__attachment__${attachment.id}`}
-					href={attachment.attachmentUrl}
-					target="_blank"
-					passHref
-					className={clsx(styles['p-conversation-messages__message__attachment'])}
-				>
-					<Icon name={IconNamesLight.File}></Icon>
-					{attachment.attachmentFilename}
-				</Link>
-			))}
+			<div className={clsx(styles['p-conversation-messages__message-attachments'])}>
+				{message.attachments?.map((attachment) => (
+					<Link
+						key={`conversation-messages__message__attachment__${attachment.id}`}
+						href={attachment.attachmentUrl}
+						target="_blank"
+						passHref
+						className={clsx(styles['p-conversation-messages__message__attachment'])}
+					>
+						<Icon name={getFileNameIcon(attachment.attachmentFilename)}></Icon>
+						{attachment.attachmentFilename}
+					</Link>
+				))}
+			</div>
 		</div>
 	);
 };

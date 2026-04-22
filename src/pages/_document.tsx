@@ -1,8 +1,7 @@
+import { TranslationService } from '@shared/services/translation-service/translation.service';
 import getConfig from 'next/config';
 import { type DocumentProps, Head, Html, Main, NextScript } from 'next/document';
 import React, { type ReactElement } from 'react';
-
-import { TranslationService } from '@shared/services/translation-service/translation.service';
 
 declare type DocumentFiles = {
 	sharedFiles: readonly string[];
@@ -88,7 +87,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 				/>
 				<link
 					rel="preload"
-					href="/fonts/meemoo-icons-light/meemoo-icons-light.woff"
+					href="/fonts/meemoocons-light/meemoocons-light.woff"
 					as="font"
 					type="font/woff"
 					crossOrigin="anonymous"

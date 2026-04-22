@@ -3,7 +3,12 @@ import { useSendMaterialRequestMessage } from '@account/components/MaterialReque
 import { MaterialRequestConversationMessage } from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversationMessage';
 import { isMaterialRequestClosed } from '@account/utils/is-material-request-closed';
 import { selectCommonUser } from '@auth/store/user';
-import { type MaterialRequest, MaterialRequestStatus } from '@material-requests/types';
+import {
+	type MaterialRequest,
+	MaterialRequestDownloadStatus,
+	MaterialRequestEventType,
+	MaterialRequestStatus,
+} from '@material-requests/types';
 import {
 	Button,
 	keysEnter,
@@ -15,6 +20,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
+import type { QueryObserverResult } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { noop } from 'lodash-es';
 import React, {
@@ -35,12 +41,14 @@ const MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE = 20;
 
 interface MaterialRequestConversationProps {
 	materialRequest: MaterialRequest;
+	refetchMaterialRequest: () => Promise<QueryObserverResult<MaterialRequest | null, Error>>;
 	handleDownload: () => void;
 	onMessagesLoaded: () => void;
 }
 
 export const MaterialRequestConversation: FC<MaterialRequestConversationProps> = ({
 	materialRequest,
+	refetchMaterialRequest,
 	handleDownload,
 	onMessagesLoaded,
 }) => {
@@ -52,9 +60,11 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	const previousScrollHeightRef = useRef<number | null>(null);
 	const user = useSelector(selectCommonUser);
 	const [editorKey, setEditorKey] = useState(uuid()); // To force rich text editor to rerender
+	const editorId = `material-request-conversation--${editorKey}`;
 
 	const [currentMessage, setCurrentMessage] = useState<string>('');
 	const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+	const [fileListHeight, setFileListHeight] = useState<number>(0);
 
 	const {
 		data: messages,
@@ -79,8 +89,11 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	}, [currentMessage]);
 
 	const sendMessageDisabled = useMemo(
-		() => isMessageEmpty || isSending || isMaterialRequestClosed(materialRequest),
-		[isMessageEmpty, isSending, materialRequest]
+		() =>
+			(isMessageEmpty && selectedFiles.length === 0) ||
+			isSending ||
+			isMaterialRequestClosed(materialRequest),
+		[isMessageEmpty, selectedFiles, isSending, materialRequest]
 	);
 
 	const handleSendMessage = useCallback(() => {
@@ -96,9 +109,6 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 					setCurrentMessage('');
 					setSelectedFiles([]);
 					setEditorKey(uuid()); // Force rerender of rich text editor
-					scrollableRef.current?.scrollTo({
-						top: Number.MAX_SAFE_INTEGER, // scroll all the way to the bottom
-					});
 				},
 				onError: (err) => {
 					console.error(err);
@@ -116,6 +126,15 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		);
 	}, [sendMessageDisabled, currentMessage, selectedFiles, sendMessage]);
 
+	// Measure the file list height and adjust message wrapper accordingly
+	// biome-ignore lint/correctness/useExhaustiveDependencies: We want to re-measure when files are added or removed
+	useLayoutEffect(() => {
+		if (fileListRef.current) {
+			const height = fileListRef.current.offsetHeight;
+			setFileListHeight(height);
+		}
+	}, [selectedFiles]);
+
 	// Refetch the messages when the material request gets closed while viewing the conversation to get the latest messages and reflect the closed status in the UI
 	useEffect(() => {
 		if (
@@ -128,19 +147,18 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 
 	/**
 	 * Scrolls to the bottom of the messages once at page load after the first messages have been loaded.
+	 * And after every message that has been send
 	 */
+	// biome-ignore lint/correctness/useExhaustiveDependencies: We only want to scroll when the message count changes of the first page
 	useEffect(() => {
-		if (
-			!hasScrolledToBottom &&
-			(messages?.pages?.[0]?.items || []).length &&
-			scrollableRef.current
-		) {
+		if ((messages?.pages?.[0]?.items || []).length && scrollableRef.current) {
 			scrollableRef.current.scrollTo({
 				top: Number.MAX_SAFE_INTEGER, // scroll all the way to the bottom
+				behavior: hasScrolledToBottom ? 'smooth' : 'instant',
 			});
 			setHasScrolledToBottom(true);
 		}
-	}, [messages, hasScrolledToBottom]);
+	}, [messages?.pages?.[0]?.items]);
 
 	/**
 	 * Notifies that the messages were loaded
@@ -152,14 +170,57 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		}
 	}, [isFetchingMessages, hasNotified, onMessagesLoaded]);
 
-	// Capture scrollHeight before every render so useLayoutEffect can correct after any page append
+	/**
+	 * Refetches the material request when a event doesn't match the (download) status of the material request
+	 */
+	useEffect(() => {
+		let shouldRefreshRequest = false;
+
+		const hasMessageFromEvaluator = !!messages?.pages?.[0]?.items?.find(
+			(message) =>
+				message.messageType === MaterialRequestEventType.MESSAGE &&
+				!!message.senderProfile?.id &&
+				message.senderProfile?.id !== user?.profileId
+		);
+
+		const hasStatusUpdateMessage = !!messages?.pages?.[0]?.items?.find((message) =>
+			[
+				MaterialRequestEventType.APPROVED,
+				MaterialRequestEventType.DENIED,
+				MaterialRequestEventType.ADDITIONAL_CONDITIONS,
+				MaterialRequestEventType.DOWNLOAD_AVAILABLE,
+			].includes(message.messageType)
+		);
+
+		if (materialRequest.status === MaterialRequestStatus.NEW) {
+			shouldRefreshRequest = hasMessageFromEvaluator || hasStatusUpdateMessage;
+		} else if (materialRequest.status === MaterialRequestStatus.PENDING) {
+			shouldRefreshRequest = hasStatusUpdateMessage;
+		} else if (materialRequest.status === MaterialRequestStatus.APPROVED) {
+			const hasDownloadAvailableMessage: boolean = !!messages?.pages?.[0]?.items?.find(
+				(message) => message.messageType === MaterialRequestEventType.DOWNLOAD_AVAILABLE
+			);
+			const materialRequestHasNoDownload =
+				!materialRequest?.downloadStatus ||
+				[MaterialRequestDownloadStatus.NEW, MaterialRequestDownloadStatus.PENDING].includes(
+					materialRequest?.downloadStatus
+				);
+			shouldRefreshRequest = hasDownloadAvailableMessage && materialRequestHasNoDownload;
+		}
+
+		if (shouldRefreshRequest) {
+			refetchMaterialRequest().then(noop);
+		}
+	}, [messages, materialRequest, refetchMaterialRequest, user?.profileId]);
+
+	// Capture scrollHeight before every render so useLayoutEffect can correct after every page that is appended to the dom
 	const pageCount = messages?.pages?.length ?? 0;
 	if (scrollableRef.current && hasScrolledToBottom) {
 		previousScrollHeightRef.current = scrollableRef.current.scrollHeight;
 	}
 
 	/**
-	 * Preserve scroll position after older messages are prepended.
+	 * Preserve scroll-position after older messages are prepended.
 	 * Runs synchronously after DOM mutation but before paint.
 	 */
 
@@ -208,6 +269,51 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		return () => observer.disconnect();
 	}, [handleLoadMore, hasScrolledToBottom]);
 
+	const getEditorAndFocusOrDisable = useCallback(() => {
+		const braftComponent = document.querySelector(
+			`#${editorId} .DraftEditor-editorContainer .public-DraftEditor-content`
+		) as HTMLDivElement;
+
+		if (braftComponent) {
+			braftComponent?.focus();
+
+			const isDisabled = isMaterialRequestClosed(materialRequest);
+			const braftControls = document.querySelectorAll<HTMLElement>(
+				'.bf-controlbar button.control-item, .bf-controlbar .dropdown-handler'
+			);
+
+			braftControls.forEach((control) => {
+				control.tabIndex = isDisabled ? -1 : 0;
+			});
+
+			return true;
+		}
+		return false;
+	}, [editorId, materialRequest]);
+
+	useEffect(() => {
+		let success = getEditorAndFocusOrDisable();
+
+		if (success) {
+			return;
+		}
+
+		const observer = new MutationObserver((_, observer) => {
+			success = getEditorAndFocusOrDisable();
+
+			if (success) {
+				observer.disconnect();
+				return;
+			}
+		});
+
+		observer.observe(document.body, {
+			childList: true,
+			subtree: true,
+		});
+		return () => observer.disconnect();
+	}, [getEditorAndFocusOrDisable]);
+
 	const renderContent = () => {
 		if (isLoadingMessages) {
 			return (
@@ -221,6 +327,9 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 				<div
 					className={clsx(styles['p-conversation-messages__message-wrapper'])}
 					ref={scrollableRef}
+					style={{
+						paddingBottom: fileListHeight > 0 ? `${fileListHeight}px` : undefined,
+					}}
 				>
 					<div ref={scrollTriggerRef} />
 					{isFetchingNextPage && (
@@ -315,7 +424,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 								? styles['p-conversation-messages__editor--disabled']
 								: undefined
 						}
-						id={`material-request-conversation--${editorKey}`}
+						id={editorId}
 						value={currentMessage}
 						onChange={(value) => setCurrentMessage(value)}
 						placeholder={tText(
@@ -345,7 +454,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 						className={clsx(styles['p-conversation-messages__editor__send-button'])}
 						variants={['text']}
 						// Replace this icon with a send icon when Jelle and JN add the icons to the font
-						icon={<Icon name={IconNamesLight.Email} />}
+						icon={<Icon name={IconNamesLight.PaperPlane} />}
 						disabled={sendMessageDisabled}
 						tabIndex={sendMessageDisabled ? -1 : undefined}
 						onClick={handleSendMessage}

@@ -31,6 +31,7 @@ import {
 	setMaterialRequestCount,
 	setShowFooter,
 	setShowMaterialRequestCenter,
+	setShowZendesk,
 } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { isTabletPortraitSize } from '@shared/utils/is-mobile';
@@ -77,6 +78,10 @@ export const AccountMyMaterialRequestsList: FC<DefaultSeoInfo> = ({ url, canonic
 		(): MaterialRequest[] => materialRequestsResponse?.items || [],
 		[materialRequestsResponse]
 	);
+
+	useEffect(() => {
+		dispatch(setShowZendesk(false));
+	}, [dispatch]);
 
 	useEffect(() => {
 		materialRequests && dispatch(setMaterialRequestCount(materialRequests.length));

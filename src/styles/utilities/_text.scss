@@ -1,7 +1,7 @@
-@use "../abstracts" as *;
+@use "../abstracts" as abstracts;
 
 .u-text-ellipsis {
-	@include text-ellipsis;
+	@include abstracts.text-ellipsis;
 }
 
 [class*="u-text-ellipsis--"] {
@@ -40,7 +40,7 @@
 }
 
 .u-text-default-font {
-	font-family: $font-family-primary;
+	font-family: abstracts.$font-family-primary;
 }
 
 /**
@@ -65,15 +65,15 @@
  */
 
 .u-font-size-12 {
-	font-size: $font-size-xs;
+	font-size: abstracts.$font-size-xs;
 }
 
 .u-font-size-14 {
-	font-size: $font-size-sm;
+	font-size: abstracts.$font-size-sm;
 }
 
 .u-font-size-18 {
-	font-size: $font-size-md;
+	font-size: abstracts.$font-size-md;
 }
 
 .u-font-size-22 {
@@ -81,11 +81,15 @@
 }
 
 .u-font-size-24 {
-	font-size: $font-size-lg;
+	font-size: abstracts.$font-size-lg;
 }
 
 .u-font-size-28 {
-	font-size: $font-size-xl;
+	font-size: abstracts.$font-size-xl;
+}
+
+.u-font-size-64 {
+	font-size: abstracts.$font-size-4xl;
 }
 
 /**
@@ -93,7 +97,7 @@
  */
 
 .u-font-weight-400 {
-	font-weight: $font-weight-normal;
+	font-weight: abstracts.$font-weight-normal;
 }
 
 /**
@@ -101,11 +105,11 @@
  */
 
 .u-line-height-1-25 {
-	line-height: $line-height-1xl;
+	line-height: abstracts.$line-height-1xl;
 }
 
 .u-line-height-1-4 {
-	line-height: $line-height-3xl;
+	line-height: abstracts.$line-height-3xl;
 }
 
 /**
