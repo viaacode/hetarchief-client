@@ -498,7 +498,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			size: isMobile ? BladeSizeType.THIN : BladeSizeType.WIDE,
 			showHeaderBackgroundByDefault: true,
 			showTitleSmaller: true,
-			title: isRequester
+			title: allowRequestCancellation
 				? tText(
 						'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvraag-aan'
 					)
@@ -509,7 +509,9 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				<>
 					<div className={clsx(styles['p-material-request-detail__title'])}>
 						<h3 className={clsx(styles['p-material-request-detail__title--text'])}>
-							{currentMaterialRequestDetail.maintainerName}
+							{allowRequestCancellation
+								? currentMaterialRequestDetail.maintainerName
+								: currentMaterialRequestDetail.requesterOrganisation}
 						</h3>
 						{isMobile && (
 							<div className={clsx(styles['p-material-request-detail__action-bar'])}>
