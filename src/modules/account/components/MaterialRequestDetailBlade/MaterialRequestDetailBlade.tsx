@@ -339,7 +339,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 									'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag'
 								)
 					}
-					variants={['dark']}
+					variants={['outline']}
 					onClick={() => setShowConfirmModal(true)}
 				/>
 			);
