@@ -10,6 +10,17 @@
 		gap: abstracts.$spacer-sm;
 	}
 
+	&--archived {
+		flex-direction: column;
+		gap: abstracts.$spacer-sm;
+
+		.p-material-request-detail__content-info__general-information {
+			width: 100%;
+			border-bottom: none;
+			padding-bottom: 0;
+		}
+	}
+
 	&__reuse-form {
 		width: 50%;
 
@@ -25,7 +36,6 @@
 			padding-bottom: abstracts.$spacer-sm;
 			border-bottom: 1px solid abstracts.$silver;
 			width: 100%;
-
 		}
 	}
 

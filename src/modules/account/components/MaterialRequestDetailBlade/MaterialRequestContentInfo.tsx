@@ -72,19 +72,21 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 		);
 	};
 
-	const renderRequestStatus = () => {
-		const formattedStatusDates = [
-			tText(
-				'modules/account/components/material-request-detail-blade/material-request-detail-blade___aangevraagd-op',
-				{
-					requestedAt: formatLongDate(
-						asDate(
-							currentMaterialRequestDetail.requestedAt || currentMaterialRequestDetail.createdAt
-						)
+	const renderRequestStatus = (includeRequestedAt: boolean) => {
+		const formattedStatusDates = includeRequestedAt
+			? [
+					tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___aangevraagd-op',
+						{
+							requestedAt: formatLongDate(
+								asDate(
+									currentMaterialRequestDetail.requestedAt || currentMaterialRequestDetail.createdAt
+								)
+							),
+						}
 					),
-				}
-			),
-		];
+				]
+			: [];
 
 		return (
 			<dl className={styles['p-material-request-detail__content-info__content-block']}>
@@ -194,6 +196,10 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 	};
 
 	const renderMotivation = () => {
+		if (currentMaterialRequestDetail.isArchived) {
+			return null;
+		}
+
 		let event: MaterialRequestEvent | undefined;
 
 		const renderAdditionConditions = (_event: MaterialRequestEvent) => {
@@ -326,18 +332,19 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 					currentMaterialRequestDetail.requestGroupName
 				)}
 				{renderMotivation()}
-				{renderContentBlock(
-					tText(
-						'modules/account/components/material-request-detail-blade/material-request-content-info___type-aanvraag'
-					),
-					tText(
-						'modules/navigation/components/material-request-center-blade/material-request-center-blade___aanvraag-tot',
-						{
-							requestType:
-								GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[currentMaterialRequestDetail.type],
-						}
-					)
-				)}
+				{!currentMaterialRequestDetail.isArchived &&
+					renderContentBlock(
+						tText(
+							'modules/account/components/material-request-detail-blade/material-request-content-info___type-aanvraag'
+						),
+						tText(
+							'modules/navigation/components/material-request-center-blade/material-request-center-blade___aanvraag-tot',
+							{
+								requestType:
+									GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[currentMaterialRequestDetail.type],
+							}
+						)
+					)}
 			</div>
 		);
 	};
@@ -345,6 +352,9 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 	const renderReuseForm = () => {
 		if (!currentMaterialRequestDetail.reuseForm) {
 			return;
+		}
+		if (currentMaterialRequestDetail.isArchived) {
+			return renderRequestStatus(false);
 		}
 
 		const materialRequestEntries = createLabelValuePairMaterialRequestReuseForm(
@@ -363,7 +373,7 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 	if (!currentMaterialRequestDetail.reuseForm) {
 		return (
 			<>
-				{renderRequestStatus()}
+				{renderRequestStatus(true)}
 				{renderContentBlock(
 					tText(
 						'modules/account/components/material-request-detail-blade/material-request-detail-blade___naam-aanvraag'
@@ -405,7 +415,13 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 	}
 
 	return (
-		<div className={styles['p-material-request-detail__content-info']}>
+		<div
+			className={clsx(
+				styles['p-material-request-detail__content-info'],
+				currentMaterialRequestDetail.isArchived &&
+					styles['p-material-request-detail__content-info--archived']
+			)}
+		>
 			{renderReuseForm()}
 			{renderGeneralInformation()}
 		</div>
