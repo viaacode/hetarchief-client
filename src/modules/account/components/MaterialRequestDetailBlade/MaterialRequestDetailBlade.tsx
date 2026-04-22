@@ -141,7 +141,8 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	const { data: unreadCount, refetch: refetchUnreadCount } =
 		useGetMaterialRequestConversationUnreadCount(
 			currentMaterialRequestDetail?.id,
-			activeTab !== MaterialRequestDetailBladeTabs.Conversation
+			activeTab !== MaterialRequestDetailBladeTabs.Conversation &&
+				!currentMaterialRequestDetail?.isArchived
 		);
 
 	const tabs: TabProps[] = useMemo(
