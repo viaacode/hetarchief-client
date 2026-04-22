@@ -53,11 +53,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 		message.messageType !== MaterialRequestEventType.MESSAGE &&
 		message.messageType !== MaterialRequestEventType.REUSE_SUMMARY;
 
-	const senderName =
-		message.senderProfile?.organisation?.name ||
-		`${message.senderProfile?.firstName} ${message.senderProfile?.lastName}`;
-
-	const renderOrganisationName = () => {
+	const messageSenderName = () => {
 		if (message.senderProfile?.organisation?.name) {
 			return `${message.senderProfile?.organisation?.name} (${message.senderProfile?.firstName})`;
 		} else {
@@ -81,7 +77,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 				{tHtml(
 					'modules/account/components/material-request-detail-blade/material-request-conversation___name-annuleerde-de-aanvraag',
 					{
-						name: senderName,
+						name: messageSenderName(),
 					}
 				)}
 			</div>
@@ -156,14 +152,14 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 				title = tHtml(
 					'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-goed-met-de-volgende-boodschap',
 					{
-						name: senderName,
+						name: messageSenderName(),
 					}
 				);
 			} else {
 				title = tHtml(
 					'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-af-met-de-volgende-boodschap',
 					{
-						name: senderName,
+						name: messageSenderName(),
 					}
 				);
 			}
@@ -184,14 +180,14 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 			title = tHtml(
 				'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-goed',
 				{
-					name: senderName,
+					name: messageSenderName(),
 				}
 			);
 		} else {
 			title = tHtml(
 				'modules/account/components/material-request-detail-blade/material-request-conversation___name-keurde-de-aanvraag-af',
 				{
-					name: senderName,
+					name: messageSenderName(),
 				}
 			);
 		}
@@ -232,7 +228,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 
 		return (
 			<div className={clsx(styles['p-conversation-messages__message__sender'])}>
-				{renderOrganisationName()}
+				{messageSenderName()}
 			</div>
 		);
 	};
