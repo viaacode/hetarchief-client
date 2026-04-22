@@ -139,6 +139,7 @@
 			&:has(.p-material-request-detail__download-message) {
 				flex-direction: column;
 				align-items: start;
+				gap: abstracts.$spacer-xs;
 			}
 		}
 	}
