@@ -63,48 +63,50 @@ export const GET_ACCOUNT_NAVIGATION_LINKS = (locale: Locale): NavigationLinkInfo
 	if (hasOwnMaterialRequestsPerm) {
 		if (hasOtherMaterialRequestsPerm) {
 			links.push({
-				id: 'account-material-requests',
-				label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
-				href: ROUTES_BY_LOCALE[locale].accountMyMaterialRequests,
-				hasDivider: true,
-				children: [
-					{
-						id: 'account-material-requests-outgoing',
-						label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
-						href: ROUTES_BY_LOCALE[locale].accountMyMaterialRequests,
-						hasDivider: true,
-					},
-					...(isMeemooAdmin
-						? [
-								{
-									id: 'account-material-requests-incoming',
-									label: tText('modules/account/const/index___uitgaande-materiaalaanvragen'),
-									href: ROUTES_BY_LOCALE[locale].adminMaterialRequests,
-									hasDivider: true,
-								},
-							]
-						: [
-								{
-									id: 'account-material-requests-incoming',
-									label: tText('modules/account/const/index___uitgaande-materiaalaanvragen'),
-									href: ROUTES_BY_LOCALE[locale].cpAdminMaterialRequests,
-									hasDivider: true,
-								},
-							]),
-				],
+				...GET_ACCOUNT_OUTGOING_MATERIAL_REQUEST_LINKS(locale),
+				children: GET_ACCOUNT_MATERIAL_REQUEST_LINKS(locale, isMeemooAdmin),
 			});
 		} else {
-			links.push({
-				id: 'account-material-requests',
-				label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
-				href: ROUTES_BY_LOCALE[locale].accountMyMaterialRequests,
-				hasDivider: true,
-			});
+			links.push(GET_ACCOUNT_OUTGOING_MATERIAL_REQUEST_LINKS(locale));
 		}
 	}
 
 	return links;
 };
+
+const GET_ACCOUNT_MATERIAL_REQUEST_LINKS = (
+	locale: Locale,
+	isMeemooAdmin: boolean
+): NavigationLinkInfo[] => {
+	if (isMeemooAdmin) {
+		return [
+			GET_ACCOUNT_OUTGOING_MATERIAL_REQUEST_LINKS(locale),
+			{
+				id: 'account-material-requests-admin',
+				label: tText('modules/account/const/index___alle-materiaalaanvragen'),
+				href: ROUTES_BY_LOCALE[locale].adminMaterialRequests,
+				hasDivider: true,
+			},
+		];
+	}
+
+	return [
+		GET_ACCOUNT_OUTGOING_MATERIAL_REQUEST_LINKS(locale),
+		{
+			id: 'account-material-requests-incoming',
+			label: tText('modules/account/const/index___inkomende-materiaalaanvragen'),
+			href: ROUTES_BY_LOCALE[locale].cpAdminMaterialRequests,
+			hasDivider: true,
+		},
+	];
+};
+
+const GET_ACCOUNT_OUTGOING_MATERIAL_REQUEST_LINKS = (locale: Locale): NavigationLinkInfo => ({
+	id: 'account-material-requests-outgoing',
+	label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
+	href: ROUTES_BY_LOCALE[locale].accountMyMaterialRequests,
+	hasDivider: true,
+});
 
 export const GET_TRANSLATED_LANGUAGE_LABELS = () => ({
 	nl: tText('modules/account/const/index___nederlands'),

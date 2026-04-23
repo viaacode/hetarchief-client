@@ -7,13 +7,21 @@ import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import type { FC } from 'react';
+import { type FC, useCallback } from 'react';
 
 import styles from './AccountLayout.module.scss';
 
 const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle }) => {
 	const { asPath } = useRouter();
 	const locale = useLocale();
+
+	const shouldBeActive = useCallback((currentPath: string, parentPath: string) => {
+		if (!parentPath) {
+			return false;
+		}
+		const basePath = currentPath.split('?')[0].split('#')[0];
+		return basePath === parentPath || currentPath.startsWith(`${parentPath}/`);
+	}, []);
 
 	const sidebarLinks: ListNavigationItem[] = GET_ACCOUNT_NAVIGATION_LINKS(locale).map(
 		({ id, label, href, children }) => ({
@@ -23,7 +31,7 @@ const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle 
 					{label}
 				</Link>
 			),
-			active: asPath.includes(href),
+			active: shouldBeActive(asPath, href),
 			children: children?.map(({ id, label, href }) => ({
 				id,
 				node: ({ linkClassName }) => (
@@ -31,7 +39,7 @@ const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle 
 						{label}
 					</Link>
 				),
-				active: asPath.includes(href),
+				active: shouldBeActive(asPath, href),
 			})),
 		})
 	);
