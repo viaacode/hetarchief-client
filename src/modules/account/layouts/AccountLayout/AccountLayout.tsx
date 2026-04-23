@@ -1,14 +1,13 @@
-import clsx from 'clsx';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import type { FC } from 'react';
-
 import { GET_ACCOUNT_NAVIGATION_LINKS } from '@account/const';
 import type { AccountLayoutProps } from '@account/layouts';
 import type { ListNavigationItem } from '@shared/components/ListNavigation';
 import { tHtml } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
+import clsx from 'clsx';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import type { FC } from 'react';
 
 import styles from './AccountLayout.module.scss';
 
@@ -17,7 +16,7 @@ const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle 
 	const locale = useLocale();
 
 	const sidebarLinks: ListNavigationItem[] = GET_ACCOUNT_NAVIGATION_LINKS(locale).map(
-		({ id, label, href }) => ({
+		({ id, label, href, children }) => ({
 			id,
 			node: ({ linkClassName }) => (
 				<Link href={href} className={linkClassName} aria-label={label}>
@@ -25,6 +24,15 @@ const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle 
 				</Link>
 			),
 			active: asPath.includes(href),
+			children: children?.map(({ id, label, href }) => ({
+				id,
+				node: ({ linkClassName }) => (
+					<Link href={href} className={linkClassName} aria-label={label}>
+						{label}
+					</Link>
+				),
+				active: asPath.includes(href),
+			})),
 		})
 	);
 

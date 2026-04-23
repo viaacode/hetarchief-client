@@ -1,11 +1,11 @@
-import type { ReactNode } from 'react';
-import { type Schema, boolean, object } from 'yup';
-
 import type { CommunicationFormState } from '@account/types';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import type { Locale } from '@shared/utils/i18n';
+import type { ReactNode } from 'react';
+import { boolean, object, type Schema } from 'yup';
 
 export * from './my-folders.const';
 export * from './my-history.const';
@@ -16,6 +16,7 @@ interface NavigationLinkInfo {
 	label: string;
 	href: string;
 	hasDivider?: boolean;
+	children?: NavigationLinkInfo[];
 }
 
 export const COMMUNICATION_FORM_SCHEMA = (): Schema<CommunicationFormState> =>
@@ -29,8 +30,10 @@ export const GET_ACCOUNT_NAVIGATION_LINKS = (locale: Locale): NavigationLinkInfo
 	const hasAccountHistoryPerm = useHasAnyPermission(
 		Permission.READ_PERSONAL_APPROVED_VISIT_REQUESTS
 	);
-	const hasMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
+	const hasOwnMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
+	const hasOtherMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_ANY_MATERIAL_REQUESTS);
 	const hasPersonalFolderPerm = useHasAnyPermission(Permission.MANAGE_FOLDERS);
+	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
 
 	const links: NavigationLinkInfo[] = [
 		{
@@ -57,13 +60,47 @@ export const GET_ACCOUNT_NAVIGATION_LINKS = (locale: Locale): NavigationLinkInfo
 		});
 	}
 
-	if (hasMaterialRequestsPerm) {
-		links.push({
-			id: 'account-material-requests',
-			label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
-			href: ROUTES_BY_LOCALE[locale].accountMyMaterialRequests,
-			hasDivider: true,
-		});
+	if (hasOwnMaterialRequestsPerm) {
+		if (hasOtherMaterialRequestsPerm) {
+			links.push({
+				id: 'account-material-requests',
+				label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
+				href: ROUTES_BY_LOCALE[locale].accountMyMaterialRequests,
+				hasDivider: true,
+				children: [
+					{
+						id: 'account-material-requests-outgoing',
+						label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
+						href: ROUTES_BY_LOCALE[locale].accountMyMaterialRequests,
+						hasDivider: true,
+					},
+					...(isMeemooAdmin
+						? [
+								{
+									id: 'account-material-requests-incoming',
+									label: tText('modules/account/const/index___uitgaande-materiaalaanvragen'),
+									href: ROUTES_BY_LOCALE[locale].adminMaterialRequests,
+									hasDivider: true,
+								},
+							]
+						: [
+								{
+									id: 'account-material-requests-incoming',
+									label: tText('modules/account/const/index___uitgaande-materiaalaanvragen'),
+									href: ROUTES_BY_LOCALE[locale].cpAdminMaterialRequests,
+									hasDivider: true,
+								},
+							]),
+				],
+			});
+		} else {
+			links.push({
+				id: 'account-material-requests',
+				label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
+				href: ROUTES_BY_LOCALE[locale].accountMyMaterialRequests,
+				hasDivider: true,
+			});
+		}
 	}
 
 	return links;
