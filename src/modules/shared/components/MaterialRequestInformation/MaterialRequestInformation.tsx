@@ -18,9 +18,13 @@ const MaterialRequestInformation: FC = () => {
 	return (
 		<p className={clsx(styles['c-material-request-information'])}>
 			<Icon name={IconNamesLight.Info} aria-hidden />
-			{tHtml(
-				'modules/shared/components/material-request-information/material-request-information___meer-informatie-over-aanvragen'
-			)}
+			{commonUser?.isKeyUser
+				? tHtml(
+						'modules/shared/components/material-request-information/material-request-information___meer-informatie-over-aanvragen-sleutel-gebruiker'
+					)
+				: tHtml(
+						'modules/shared/components/material-request-information/material-request-information___meer-informatie-over-aanvragen'
+					)}
 		</p>
 	);
 };
