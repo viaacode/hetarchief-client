@@ -22,6 +22,10 @@
 		}
 	}
 
+	&__content-wrapper {
+		min-height: 40rem;
+	}
+
 	&__searchbar,
 	&__dropdown {
 		margin-right: $spacer-sm;
@@ -44,6 +48,29 @@
 			.c-multi-select__checkbox-list-item {
 				border-top: none !important;
 			}
+		}
+	}
+
+	&__checkbox-wrapper {
+		display: flex;
+		align-items: center;
+		padding: 0 $spacer-md;
+		background-color: $white;
+		border: 1px solid $silver;
+		border-radius: 4rem;
+		height: 4.8rem;
+		cursor: pointer;
+
+		&:hover {
+			border-color: $zinc;
+		}
+	}
+
+	&__archive-checkbox {
+		width: 100%;
+
+		.c-checkbox__label {
+			cursor: pointer;
 		}
 	}
 

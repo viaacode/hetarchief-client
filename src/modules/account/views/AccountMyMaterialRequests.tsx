@@ -21,8 +21,12 @@ import {
 	type MaterialRequestType,
 } from '@material-requests/types';
 import {
+	Checkbox,
+	keysEnter,
+	keysSpacebar,
 	MultiSelect,
 	type MultiSelectOption,
+	onKey,
 	PaginationBar,
 	type Row,
 	Table,
@@ -72,6 +76,9 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	const [selectedDownloadFilters, setSelectedDownloadFilters] = useState<string[]>(
 		(filters[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL] || []) as string[]
 	);
+	const [showArchived, setShowArchived] = useState<boolean>(
+		filters[QUERY_PARAM_KEY.IS_ARCHIVED] === 'true'
+	);
 
 	const hasOwnMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
 	const hasAnyMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_ANY_MATERIAL_REQUESTS);
@@ -106,6 +113,9 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		}),
 		...(!isNil(filters.hasDownloadUrl) && {
 			hasDownloadUrl: filters.hasDownloadUrl as string[],
+		}),
+		...(!isNil(filters.isArchived) && {
+			isArchived: filters.isArchived === 'true',
 		}),
 	});
 	const [currentMaterialRequestId, setCurrentMaterialRequestId] = useQueryParam(
@@ -203,6 +213,15 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		});
 	}, [selectedDownloadFilters]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+	useEffect(() => {
+		setFilters({
+			...filters,
+			isArchived: showArchived ? 'true' : 'false',
+			page: 1,
+		});
+	}, [showArchived]);
+
 	const onSortChange = (
 		orderProp: string | undefined,
 		orderDirection: AvoSearchOrderDirection | undefined
@@ -282,6 +301,9 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	};
 
 	const renderContent = (): ReactNode => {
+		if (noData) {
+			return null;
+		}
 		return (
 			<div className="l-container">
 				<Table<MaterialRequest>
@@ -299,7 +321,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 					pagination={renderPagination}
 					onSortChange={onSortChange}
 					onRowClick={onRowClick}
-					showTable={!noData && !isFetching}
+					showTable={true}
 					enableRowFocusOnClick={true}
 				/>
 			</div>
@@ -421,6 +443,29 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 								onClick: setSelectedDownloadFilters,
 							}}
 						/>
+
+						<div
+							className={clsx(
+								'p-material-requests__dropdown',
+								'p-material-requests__checkbox-wrapper'
+							)}
+						>
+							<Checkbox
+								className="p-material-requests__archive-checkbox"
+								label={tText('Toon gearchiveerde aanvragen')}
+								checked={showArchived}
+								checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
+								onKeyDown={(e) => {
+									onKey(e, [...keysEnter, ...keysSpacebar], () => {
+										if (keysSpacebar.includes(e.key)) {
+											e.preventDefault();
+										}
+										setShowArchived(!showArchived);
+									});
+								}}
+								onClick={() => setShowArchived(!showArchived)}
+							/>
+						</div>
 					</div>
 
 					<SearchBar
@@ -457,15 +502,21 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		}
 		return (
 			<AccountLayout className="p-account-my-material-requests" pageTitle={renderPageTitle()}>
-				<div
-					className={clsx('l-container l-container--edgeless-to-lg', {
-						'u-text-center u-color-neutral u-py-48': isFetching || noData,
-					})}
-				>
+				<div className="l-container l-container--edgeless-to-lg">
 					{isComplexReuseFlow && renderFiltersForComplexReuseFlow()}
-					{isFetching && <Loading locationId="Material requests overview" />}
-					{noData && !isFetching && renderEmptyMessage()}
-					{renderContent()}
+					<div
+						className={clsx('p-material-requests__content-wrapper', {
+							'u-text-center u-color-neutral u-py-48': noData && !isFetching,
+						})}
+					>
+						{isFetching && (
+							<div className="u-text-center u-py-24">
+								<Loading locationId="Material requests overview" />
+							</div>
+						)}
+						{noData && !isFetching && renderEmptyMessage()}
+						{!noData && renderContent()}
+					</div>
 				</div>
 				{renderDetailBlade()}
 			</AccountLayout>
