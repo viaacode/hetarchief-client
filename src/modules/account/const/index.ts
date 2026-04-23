@@ -64,6 +64,7 @@ export const GET_ACCOUNT_NAVIGATION_LINKS = (locale: Locale): NavigationLinkInfo
 		if (hasOtherMaterialRequestsPerm) {
 			links.push({
 				...GET_ACCOUNT_OUTGOING_MATERIAL_REQUEST_LINKS(locale),
+				label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
 				children: GET_ACCOUNT_MATERIAL_REQUEST_LINKS(locale, isMeemooAdmin),
 			});
 		} else {
@@ -103,7 +104,7 @@ const GET_ACCOUNT_MATERIAL_REQUEST_LINKS = (
 
 const GET_ACCOUNT_OUTGOING_MATERIAL_REQUEST_LINKS = (locale: Locale): NavigationLinkInfo => ({
 	id: 'account-material-requests-outgoing',
-	label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
+	label: tText('modules/account/const/index___mijn-uitgaande-materiaalaanvragen'),
 	href: ROUTES_BY_LOCALE[locale].accountMyMaterialRequests,
 	hasDivider: true,
 });

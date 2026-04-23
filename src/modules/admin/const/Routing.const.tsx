@@ -94,7 +94,7 @@ export const GET_ADMIN_MATERIAL_REQUEST_LINKS = (locale: Locale): AdminNavigatio
 	},
 	{
 		id: 'material-requests-outgoing',
-		label: tText('modules/admin/const/routing___uitgaande-materiaalaanvragen'),
+		label: tText('modules/admin/const/routing___mijn-uitgaande-materiaalaanvragen'),
 		href: ROUTES_BY_LOCALE[locale].accountMyMaterialRequests,
 	},
 ];
