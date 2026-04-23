@@ -11,6 +11,7 @@ export interface MaterialRequest {
 	id: string;
 	isPending: boolean;
 	isArchived: boolean;
+	archivationDate: string | null;
 	status: MaterialRequestStatus;
 	maintainerId: string;
 	maintainerLogo: string;
