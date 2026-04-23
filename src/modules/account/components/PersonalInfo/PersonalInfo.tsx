@@ -349,25 +349,6 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 				isBladeInvalid={!isFormValid}
 				closable={false}
 				title={tText('modules/account/components/personal-info/personal-info___details')}
-				stickySubtitle={
-					<div className={styles['c-personal-info__edit-user-data']}>
-						<a
-							href={tText(
-								'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-hyperlink'
-							)}
-							target="_blank"
-							rel="noopener noreferrer"
-							aria-label={tText(
-								'modules/account/components/personal-info/personal-info___bewerk-je-gegevens-button-aria-label'
-							)}
-						>
-							{tText(
-								'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-label'
-							)}
-						</a>
-						<Icon className="u-ml-8" name={IconNamesLight.Extern} />
-					</div>
-				}
 				footerButtons={getFooterButtons()}
 			>
 				<div className={styles['c-personal-info__content-group']}>
@@ -390,7 +371,26 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 					<p>
 						<div className={clsx(styles['c-personal-info__content-group-subtitle'])}>
 							{commonUser?.organisation?.name ? (
-								commonUser.organisation?.name
+								<>
+									{commonUser.organisation?.name}
+									<div className={styles['c-personal-info__edit-user-data']}>
+										<a
+											href={tText(
+												'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-hyperlink'
+											)}
+											target="_blank"
+											rel="noopener noreferrer"
+											aria-label={tText(
+												'modules/account/components/personal-info/personal-info___bewerk-je-gegevens-button-aria-label'
+											)}
+										>
+											{tText(
+												'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-label'
+											)}
+										</a>
+										<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+									</div>
+								</>
 							) : (
 								<TextInput
 									id="personal-info__organisation-input"
