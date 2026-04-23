@@ -22,8 +22,12 @@ import {
 	type MaterialRequestType,
 } from '@material-requests/types';
 import {
+	Checkbox,
+	keysEnter,
+	keysSpacebar,
 	MultiSelect,
 	type MultiSelectOption,
+	onKey,
 	PaginationBar,
 	Table,
 } from '@meemoo/react-components';
@@ -68,6 +72,9 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	const [selectedDownloadFilters, setSelectedDownloadFilters] = useState<string[]>(
 		(filters[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL] || []) as string[]
 	);
+	const [showArchived, setShowArchived] = useState<boolean>(
+		filters[QUERY_PARAM_KEY.IS_ARCHIVED] === 'true'
+	);
 
 	const commonUser = useSelector(selectCommonUser);
 	const isComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
@@ -92,6 +99,9 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		}),
 		...(!isNil(filters.hasDownloadUrl) && {
 			hasDownloadUrl: filters.hasDownloadUrl as string[],
+		}),
+		...(!isNil(filters.isArchived) && {
+			isArchived: filters.isArchived === 'true',
 		}),
 		orderProp: (filters.orderProp as MaterialRequestKeys) || 'requestedAt',
 		orderDirection:
@@ -198,6 +208,15 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 			page: 1,
 		});
 	}, [selectedDownloadFilters]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+	useEffect(() => {
+		setFilters({
+			...filters,
+			isArchived: showArchived ? 'true' : 'false',
+			page: 1,
+		});
+	}, [showArchived]);
 
 	const onSortChange = (
 		orderProp: string | undefined,
@@ -413,6 +432,32 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		);
 	};
 
+	const renderArchiveCheckbox = () => {
+		return (
+			<div
+				className={clsx('p-material-requests__dropdown', 'p-material-requests__checkbox-wrapper')}
+			>
+				<Checkbox
+					className="p-material-requests__archive-checkbox"
+					label={tText(
+						'modules/cp/views/cp-admin-material-requests___toon-gearchiveerde-aanvragen'
+					)}
+					checked={showArchived}
+					checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
+					onKeyDown={(e) => {
+						onKey(e, [...keysEnter, ...keysSpacebar], () => {
+							if (keysSpacebar.includes(e.key)) {
+								e.preventDefault();
+							}
+							setShowArchived(!showArchived);
+						});
+					}}
+					onClick={() => setShowArchived(!showArchived)}
+				/>
+			</div>
+		);
+	};
+
 	const renderSearchInput = () => {
 		return (
 			<SearchBar
@@ -441,6 +486,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 					{renderTypeFilter()}
 					{renderStatusFilter()}
 					{renderDownloadFilter()}
+					{renderArchiveCheckbox()}
 				</div>
 				{renderSearchInput()}
 			</>

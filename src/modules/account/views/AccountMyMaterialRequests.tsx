@@ -352,6 +352,32 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		);
 	};
 
+	const renderArchiveCheckbox = () => {
+		return (
+			<div
+				className={clsx('p-material-requests__dropdown', 'p-material-requests__checkbox-wrapper')}
+			>
+				<Checkbox
+					className="p-material-requests__archive-checkbox"
+					label={tText(
+						'modules/account/views/account-my-material-requests___toon-gearchiveerde-aanvragen'
+					)}
+					checked={showArchived}
+					checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
+					onKeyDown={(e) => {
+						onKey(e, [...keysEnter, ...keysSpacebar], () => {
+							if (keysSpacebar.includes(e.key)) {
+								e.preventDefault();
+							}
+							setShowArchived(!showArchived);
+						});
+					}}
+					onClick={() => setShowArchived(!showArchived)}
+				/>
+			</div>
+		);
+	};
+
 	const renderFiltersForComplexReuseFlow = () => {
 		return (
 			<div className="l-container">
@@ -444,28 +470,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 							}}
 						/>
 
-						<div
-							className={clsx(
-								'p-material-requests__dropdown',
-								'p-material-requests__checkbox-wrapper'
-							)}
-						>
-							<Checkbox
-								className="p-material-requests__archive-checkbox"
-								label={tText('Toon gearchiveerde aanvragen')}
-								checked={showArchived}
-								checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
-								onKeyDown={(e) => {
-									onKey(e, [...keysEnter, ...keysSpacebar], () => {
-										if (keysSpacebar.includes(e.key)) {
-											e.preventDefault();
-										}
-										setShowArchived(!showArchived);
-									});
-								}}
-								onClick={() => setShowArchived(!showArchived)}
-							/>
-						</div>
+						{renderArchiveCheckbox()}
 					</div>
 
 					<SearchBar
