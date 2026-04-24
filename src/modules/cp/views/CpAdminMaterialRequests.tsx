@@ -205,18 +205,10 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		setFilters({
 			...filters,
 			hasDownloadUrl: selectedDownloadFilters,
-			page: 1,
-		});
-	}, [selectedDownloadFilters]);
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
-	useEffect(() => {
-		setFilters({
-			...filters,
 			isArchived: showArchived ? 'true' : 'false',
 			page: 1,
 		});
-	}, [showArchived]);
+	}, [selectedDownloadFilters, showArchived]);
 
 	const onSortChange = (
 		orderProp: string | undefined,
@@ -409,7 +401,8 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 				onChange={noop}
 				className={clsx(
 					'p-material-requests__dropdown',
-					'p-material-requests__dropdown-no-dividers'
+					'p-material-requests__dropdown-no-dividers',
+					{ 'p-material-requests__dropdown--disabled': showArchived }
 				)}
 				iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
 				iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
@@ -420,16 +413,23 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 				confirmOptions={{
 					label: tText('modules/cp/views/cp-admin-material-requests___pas-toe'),
 					variants: ['black'],
-					onClick: setSelectedDownloadFilters,
+					onClick: showArchived ? noop : setSelectedDownloadFilters,
 				}}
 				resetOptions={{
 					icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />,
 					label: tText('modules/cp/views/cp-admin-material-requests___reset'),
 					variants: ['text'],
-					onClick: setSelectedDownloadFilters,
+					onClick: showArchived ? noop : setSelectedDownloadFilters,
 				}}
 			/>
 		);
+	};
+
+	const handleArchiveToggle = () => {
+		if (!showArchived) {
+			setSelectedDownloadFilters([]);
+		}
+		setShowArchived(!showArchived);
 	};
 
 	const renderArchiveCheckbox = () => {
@@ -449,10 +449,10 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 							if (keysSpacebar.includes(e.key)) {
 								e.preventDefault();
 							}
-							setShowArchived(!showArchived);
+							handleArchiveToggle();
 						});
 					}}
-					onClick={() => setShowArchived(!showArchived)}
+					onClick={handleArchiveToggle}
 				/>
 			</div>
 		);

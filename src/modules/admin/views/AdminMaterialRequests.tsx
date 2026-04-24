@@ -228,9 +228,10 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		setFilters({
 			...filters,
 			hasDownloadUrl: selectedDownloadFilters,
+			isArchived: showArchived ? 'true' : 'false',
 			page: 1,
 		});
-	}, [selectedDownloadFilters]);
+	}, [selectedDownloadFilters, showArchived]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: we want to set the filters if selectedMaintainers changes, but we cannot set it as a dependency or we get a loop
 	useEffect(() => {
@@ -240,15 +241,6 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 			page: 1,
 		});
 	}, [selectedMaintainers]);
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
-	useEffect(() => {
-		setFilters({
-			...filters,
-			isArchived: showArchived ? 'true' : 'false',
-			page: 1,
-		});
-	}, [showArchived]);
 
 	const onSortChange = (
 		orderProp: string | undefined,
@@ -426,7 +418,8 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 				onChange={noop}
 				className={clsx(
 					'p-admin-material-requests__dropdown',
-					'p-admin-material-requests__dropdown-no-dividers'
+					'p-admin-material-requests__dropdown-no-dividers',
+					{ 'p-admin-material-requests__dropdown--disabled': showArchived }
 				)}
 				iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
 				iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
@@ -435,13 +428,13 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 				confirmOptions={{
 					label: tText('pages/admin/materiaalaanvragen/index___pas-toe'),
 					variants: ['black'],
-					onClick: setSelectedDownloadFilters,
+					onClick: showArchived ? noop : setSelectedDownloadFilters,
 				}}
 				resetOptions={{
 					icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />,
 					label: tText('pages/admin/materiaalaanvragen/index___reset'),
 					variants: ['text'],
-					onClick: setSelectedDownloadFilters,
+					onClick: showArchived ? noop : setSelectedDownloadFilters,
 				}}
 			/>
 		);
@@ -481,6 +474,13 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		);
 	};
 
+	const handleArchiveToggle = () => {
+		if (!showArchived) {
+			setSelectedDownloadFilters([]);
+		}
+		setShowArchived(!showArchived);
+	};
+
 	const renderArchiveCheckbox = () => {
 		if (!isComplexReuseFlow) {
 			return null;
@@ -502,10 +502,10 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 							if (keysSpacebar.includes(e.key)) {
 								e.preventDefault();
 							}
-							setShowArchived(!showArchived);
+							handleArchiveToggle();
 						});
 					}}
-					onClick={() => setShowArchived(!showArchived)}
+					onClick={handleArchiveToggle}
 				/>
 			</div>
 		);

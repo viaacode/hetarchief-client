@@ -209,18 +209,10 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		setFilters({
 			...filters,
 			hasDownloadUrl: selectedDownloadFilters,
-			page: 1,
-		});
-	}, [selectedDownloadFilters]);
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
-	useEffect(() => {
-		setFilters({
-			...filters,
 			isArchived: showArchived ? 'true' : 'false',
 			page: 1,
 		});
-	}, [showArchived]);
+	}, [selectedDownloadFilters, showArchived]);
 
 	const onSortChange = (
 		orderProp: string | undefined,
@@ -301,9 +293,6 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	};
 
 	const renderContent = (): ReactNode => {
-		if (noData) {
-			return null;
-		}
 		return (
 			<div className="l-container">
 				<Table<MaterialRequest>
@@ -321,7 +310,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 					pagination={renderPagination}
 					onSortChange={onSortChange}
 					onRowClick={onRowClick}
-					showTable={true}
+					showTable={!noData && !isFetching}
 					enableRowFocusOnClick={true}
 				/>
 			</div>
@@ -352,6 +341,13 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		);
 	};
 
+	const handleArchiveToggle = () => {
+		if (!showArchived) {
+			setSelectedDownloadFilters([]);
+		}
+		setShowArchived(!showArchived);
+	};
+
 	const renderArchiveCheckbox = () => {
 		return (
 			<div
@@ -369,10 +365,10 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 							if (keysSpacebar.includes(e.key)) {
 								e.preventDefault();
 							}
-							setShowArchived(!showArchived);
+							handleArchiveToggle();
 						});
 					}}
-					onClick={() => setShowArchived(!showArchived)}
+					onClick={handleArchiveToggle}
 				/>
 			</div>
 		);
@@ -449,11 +445,13 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 							onChange={noop}
 							className={clsx(
 								'p-material-requests__dropdown',
-								'p-material-requests__dropdown-no-dividers'
+								'p-material-requests__dropdown-no-dividers',
+								{ 'p-material-requests__dropdown--disabled': showArchived }
 							)}
 							iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
 							iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 							iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+							isDisabled={showArchived}
 							checkboxHeader={tText(
 								'modules/account/views/account-my-material-requests___aanvraag-met-download'
 							)}
@@ -520,7 +518,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 							</div>
 						)}
 						{noData && !isFetching && renderEmptyMessage()}
-						{!noData && renderContent()}
+						{renderContent()}
 					</div>
 				</div>
 				{renderDetailBlade()}
