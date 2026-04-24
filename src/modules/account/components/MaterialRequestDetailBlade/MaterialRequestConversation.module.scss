@@ -242,6 +242,12 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 			// Mobile
 			@media (max-width: abstracts.$breakpoint-md) {
 				right: 1.4rem;
+				bottom: 1rem;
+			}
+		}
+
+		&--keyboard-open &__send-button {
+			@media (max-width: abstracts.$breakpoint-md) {
 				bottom: 0.5rem;
 			}
 		}
