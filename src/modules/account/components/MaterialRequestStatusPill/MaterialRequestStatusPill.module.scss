@@ -1,41 +1,48 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-material-request-status-pill {
-	display: flex;
+	display: inline-flex;
 	flex-direction: row;
 	align-items: center;
 	min-width: 0;
+	margin-bottom: abstracts.$spacer-xxs;
+	margin-right: abstracts.$spacer-xxs;
 
 	&__pill{
 		height: 3rem;
 		width: 4rem;
-		font-size: $font-size-2xm;
+		font-size: abstracts.$font-size-2xm;
 
 		&--new, &--cancelled {
-			background-color: $grey;
-			color: $white;
+			background-color: abstracts.$grey;
+			color: abstracts.$white;
 		}
 
 		&--pending {
-			background-color: $mustard;
-			color: $black;
+			background-color: abstracts.$mustard;
+			color: abstracts.$black;
 		}
 
 		&--approved {
-			background-color: $teal-dark;
-			color: $white;
+			background-color: abstracts.$teal-dark;
+			color: abstracts.$white;
 		}
 
 		&--denied {
-			background-color: $cherry;
-			color: $white;
+			background-color: abstracts.$cherry;
+			color: abstracts.$white;
+		}
+
+		&--archived {
+			background-color: abstracts.$grey;
+			color: abstracts.$white;
 		}
 	}
 
 	&__label {
-		color: $neutral;
-		margin-left: $spacer-xs;
+		color: abstracts.$neutral;
+		margin-left: abstracts.$spacer-xs;
 
-		@include text-ellipsis;
+		@include abstracts.text-ellipsis;
 	}
 }

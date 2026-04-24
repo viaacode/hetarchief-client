@@ -166,7 +166,10 @@ const getStatusColumn = (disableSort: boolean): Column<MaterialRequest> =>
 		accessor: MaterialRequestKeys.status,
 		disableSortBy: disableSort,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
-			<MaterialRequestStatusPill status={original.status} />
+			<>
+				<MaterialRequestStatusPill status={original.status} />
+				<MaterialRequestStatusPill status={'ARCHIVED' as const} />
+			</>
 		),
 	}) as Column<MaterialRequest>;
 

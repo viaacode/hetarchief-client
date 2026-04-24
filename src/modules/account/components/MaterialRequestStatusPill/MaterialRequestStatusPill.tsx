@@ -8,7 +8,7 @@ import type { FC } from 'react';
 import styles from './MaterialRequestStatusPill.module.scss';
 
 interface MaterialRequestStatusPillProps {
-	status: MaterialRequestStatus;
+	status: MaterialRequestStatus | 'ARCHIVED';
 	showLabel?: boolean;
 }
 
@@ -34,6 +34,8 @@ const MaterialRequestStatusPill: FC<MaterialRequestStatusPillProps> = ({
 				return IconNamesLight.Forbidden;
 			case MaterialRequestStatus.CANCELLED:
 				return IconNamesLight.Trash;
+			case 'ARCHIVED':
+				return IconNamesLight.PaperClip;
 
 			default:
 				// This should not happen

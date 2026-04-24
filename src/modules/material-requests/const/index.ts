@@ -33,7 +33,7 @@ export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE = (): Record<
 });
 
 export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_STATUS = (): Record<
-	MaterialRequestStatus,
+	MaterialRequestStatus | 'ARCHIVED',
 	string
 > => ({
 	[MaterialRequestStatus.NEW]: tText('modules/material-requests/const/index___status-new'),
@@ -46,6 +46,7 @@ export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_STATUS = (): Record<
 		'modules/material-requests/const/index___status-cancelled'
 	),
 	[MaterialRequestStatus.NONE]: tText('modules/material-requests/const/index___status-none'),
+	ARCHIVED: tText('Gearchiveerd'),
 });
 
 export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DOWNLOAD_QUALITY = (): Record<
@@ -214,6 +215,6 @@ export const MATERIAL_REQUESTS_COLUMN_WIDTH_LOOKUP: Record<MaterialRequestKeys, 
 	[MaterialRequestKeys.type]: '13rem',
 	[MaterialRequestKeys.requestedAt]: '15rem',
 	[MaterialRequestKeys.requestGroupName]: '25rem',
-	[MaterialRequestKeys.status]: '9rem',
+	[MaterialRequestKeys.status]: '11rem',
 	[MaterialRequestKeys.downloadStatus]: '10rem',
 } as Record<MaterialRequestKeys, string>;
