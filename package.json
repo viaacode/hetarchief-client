@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@emotion/cache": "11.11.0",
+    "@floating-ui/react": "0.27.18",
     "@flowplayer/player": "3.32.1",
     "@hookform/resolvers": "2.9.11",
     "@meemoo/admin-core-ui": "5.2.60",
@@ -48,7 +49,6 @@
     "@reduxjs/toolkit": "1.9.6",
     "@studiohyperdrive/pagination": "1.0.0",
     "@tanstack/react-query": "5.90.8",
-    "@floating-ui/react": "0.27.18",
     "@types/openseadragon": "3.0.10",
     "@viaa/avo2-components": "6.2.11",
     "@viaa/avo2-types": "5.0.13",
@@ -108,6 +108,7 @@
     "string-strip-html": "8.5.0",
     "ts-retry-promise": "0.8.1",
     "use-debouncy": "5.0.1",
+    "use-detect-keyboard-open": "^0.4.0",
     "use-query-params": "1.2.3",
     "uuid": "11.1.0",
     "xml2js": "0.6.2",

@@ -33,6 +33,7 @@ import React, {
 	useState,
 } from 'react';
 import { useSelector } from 'react-redux';
+import useDetectKeyboardOpen from 'use-detect-keyboard-open';
 import { v4 as uuid } from 'uuid';
 import styles from './MaterialRequestConversation.module.scss';
 import { MessageFileUpload } from './MessageFileUpload';
@@ -61,6 +62,7 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 	const user = useSelector(selectCommonUser);
 	const [editorKey, setEditorKey] = useState(uuid()); // To force rich text editor to rerender
 	const editorId = `material-request-conversation--${editorKey}`;
+	const isKeyboardOpen = useDetectKeyboardOpen();
 
 	const [currentMessage, setCurrentMessage] = useState<string>('');
 	const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -335,7 +337,11 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 							));
 					})}
 				</div>
-				<div className={clsx(styles['p-conversation-messages__editor'])}>
+				<div
+					className={clsx(styles['p-conversation-messages__editor'], {
+						[styles['p-conversation-messages__editor--keyboard-open']]: isKeyboardOpen,
+					})}
+				>
 					<div
 						ref={fileListRef}
 						className={clsx(styles['p-conversation-messages__selected-files'])}
