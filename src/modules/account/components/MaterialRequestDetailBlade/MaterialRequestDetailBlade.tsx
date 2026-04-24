@@ -463,7 +463,9 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		if (!currentMaterialRequestDetail?.reuseForm || currentMaterialRequestDetail?.isArchived) {
 			return {
 				title: currentMaterialRequestDetail?.isArchived
-					? tText('Gearchiveerde aanvraag')
+					? tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___gearchiveerde-aanvraag'
+						)
 					: tText(
 							'modules/account/components/material-request-detail-blade/material-requests___detail'
 						),
