@@ -1,8 +1,6 @@
 @use "src/styles/abstracts" as *;
 
-$component: "c-tooltip-component";
-
-.#{$component} {
+.c-tooltip-component {
 	background-color: $black;
 	border: 1px solid $black;
 	max-width: 19rem !important;
@@ -21,31 +19,7 @@ $component: "c-tooltip-component";
 	}
 
 	&__arrow {
-		background-color: $black;
-		width: 0 !important;
-
-		&::before {
-			border: 6px solid $black !important;
-		}
-	}
-
-	&.c-tooltip-component--right > .c-tooltip-component__arrow {
-		right: 6px !important;
-		transform: translate(0, -7px) !important;
-		clip: unset !important;
-	}
-
-	&.c-tooltip-component--right > .c-tooltip-component__arrow {
-		left: -6px !important;
-		transform: translate(0, -7px) !important;
-		clip: unset !important;
-	}
-
-	&.c-tooltip-component--top > .c-tooltip-component__arrow {
-		bottom: -2px !important;
-		transform: translate(-7px, 0) !important;
-		clip: unset !important;
-		left: 50%;
+		fill: $black;
 	}
 
 	&--show {
