@@ -146,7 +146,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 	};
 
 	const renderFinalSummary = () => {
-		if (!materialRequest.archivationDate) {
+		if (!materialRequest.willBeArchivedAt) {
 			return null;
 		}
 
@@ -155,7 +155,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 				{tHtml(
 					'De aanvraag werd afgesloten, hieronder vind je een samenvatting. Alle documenten worden nog tot en met {{date}} bijgehouden',
 					{
-						date: formatMediumDate(asDate(materialRequest.archivationDate)),
+						date: formatMediumDate(asDate(materialRequest.willBeArchivedAt)),
 					}
 				)}
 			</div>
