@@ -35,6 +35,11 @@ $page: "p-admin-material-requests";
 			box-shadow: $shadow-24-black-08;
 		}
 
+		&--disabled {
+			opacity: 0.5;
+			pointer-events: none;
+		}
+
 		&-no-dividers {
 			.c-button {
 				width: 100%;
@@ -43,6 +48,29 @@ $page: "p-admin-material-requests";
 			.c-multi-select__checkbox-list-item {
 				border-top: none !important;
 			}
+		}
+	}
+
+	&__checkbox-wrapper {
+		display: flex;
+		align-items: center;
+		padding: 0 $spacer-md;
+		background-color: $white;
+		border: 1px solid $silver;
+		border-radius: $border-radius;
+		height: $button-height;
+		cursor: pointer;
+
+		&:hover {
+			border-color: $zinc;
+		}
+	}
+
+	&__archive-checkbox {
+		width: 100%;
+
+		.c-checkbox__label {
+			cursor: pointer;
 		}
 	}
 }

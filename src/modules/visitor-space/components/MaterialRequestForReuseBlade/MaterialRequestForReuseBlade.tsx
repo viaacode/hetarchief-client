@@ -536,10 +536,14 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 							endInputAriaLabel={tText(
 								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___eind-tijd-van-de-video-audio-selectie-input-aria-label'
 							)}
-							startSliderAriaLabel={tText('startSliderAriaLabel')}
-							endSliderAriaLabel={tText('endSliderAriaLabel')}
-							startSliderId="material-request-for-reuse-blade__start-slider-id"
-							endSliderId="material-request-for-reuse-blade__end-slider-id"
+							startSliderAriaLabel={tText(
+								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___start-tijd-van-de-video-audio-selectie-input-aria-label'
+							)}
+							endSliderAriaLabel={tText(
+								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___eind-tijd-van-de-video-audio-selectie-input-aria-label'
+							)}
+							startSliderId="material-request_for-reuse-blade__start-slider-id"
+							endSliderId="material-request_for-reuse-blade__end-slider-id"
 						/>
 					</div>
 				)}

@@ -282,20 +282,20 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 					href={
 						commonUser?.isKeyUser
 							? tText(
-									'Ik nam kennis en ga akkoord met de Aanvullende gebruiksvoorwaarden bij aanvragen - hyperlink - sleutelgebruiker'
+									'modules/account/components/personal-info/personal-info___ik-nam-kennis-en-ga-akkoord-met-de-aanvullende-gebruiksvoorwaarden-bij-aanvragen-hyperlink-sleutelgebruiker'
 								)
 							: tText(
-									'Ik nam kennis en ga akkoord met de Aanvullende gebruiksvoorwaarden bij aanvragen - hyperlink'
+									'modules/account/components/personal-info/personal-info___ik-nam-kennis-en-ga-akkoord-met-de-aanvullende-gebruiksvoorwaarden-bij-aanvragen-hyperlink'
 								)
 					}
 					target="_blank"
 					rel="noopener noreferrer"
 					aria-label={tText(
-						'Ik nam kennis en ga akkoord met de Aanvullende gebruiksvoorwaarden bij aanvragen - aria label'
+						'modules/account/components/personal-info/personal-info___ik-nam-kennis-en-ga-akkoord-met-de-aanvullende-gebruiksvoorwaarden-bij-aanvragen-aria-label'
 					)}
 				>
 					{tText(
-						'Ik nam kennis en ga akkoord met de Aanvullende gebruiksvoorwaarden bij aanvragen'
+						'modules/account/components/personal-info/personal-info___ik-nam-kennis-en-ga-akkoord-met-de-aanvullende-gebruiksvoorwaarden-bij-aanvragen'
 					)}
 				</a>
 				<Icon className="u-ml-8" name={IconNamesLight.Extern} />

@@ -25,6 +25,7 @@ export const ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
 	[QUERY_PARAM_KEY.TYPE]: withDefault(ArrayParam, []),
 	[QUERY_PARAM_KEY.STATUS]: withDefault(ArrayParam, []),
 	[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL]: withDefault(ArrayParam, []),
+	[QUERY_PARAM_KEY.IS_ARCHIVED]: withDefault(StringParam, 'false'),
 	maintainerIds: withDefault(ArrayParam, []),
 };
 

@@ -14,7 +14,7 @@
 
 		&-dropdowns {
 			display: flex;
-			flex-direction: row;
+			flex-flow: row wrap;
 
 			@media (max-width: $breakpoint-xl) {
 				flex-direction: column;
@@ -25,7 +25,7 @@
 	&__searchbar,
 	&__dropdown {
 		margin-right: $spacer-sm;
-		margin-bottom: 0;
+		margin-bottom: $spacer-sm;
 
 		@media (max-width: $breakpoint-xl) {
 			margin-right: 0;
@@ -36,6 +36,11 @@
 			box-shadow: $shadow-24-black-08;
 		}
 
+		&--disabled {
+			opacity: 0.5;
+			pointer-events: none;
+		}
+
 		&-no-dividers {
 			.c-button {
 				width: 100%;
@@ -44,6 +49,29 @@
 			.c-multi-select__checkbox-list-item {
 				border-top: none !important;
 			}
+		}
+	}
+
+	&__checkbox-wrapper {
+		display: flex;
+		align-items: center;
+		padding: 0 $spacer-md;
+		background-color: $white;
+		border: 1px solid $silver;
+		border-radius: $border-radius;
+		height: $button-height;
+		cursor: pointer;
+
+		&:hover {
+			border-color: $zinc;
+		}
+	}
+
+	&__archive-checkbox {
+		width: 100%;
+
+		.c-checkbox__label {
+			cursor: pointer;
 		}
 	}
 

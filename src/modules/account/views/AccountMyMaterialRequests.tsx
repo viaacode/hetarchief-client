@@ -21,8 +21,12 @@ import {
 	type MaterialRequestType,
 } from '@material-requests/types';
 import {
+	Checkbox,
+	keysEnter,
+	keysSpacebar,
 	MultiSelect,
 	type MultiSelectOption,
+	onKey,
 	PaginationBar,
 	type Row,
 	Table,
@@ -72,6 +76,9 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	const [selectedDownloadFilters, setSelectedDownloadFilters] = useState<string[]>(
 		(filters[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL] || []) as string[]
 	);
+	const [showArchived, setShowArchived] = useState<boolean>(
+		filters[QUERY_PARAM_KEY.IS_ARCHIVED] === 'true'
+	);
 
 	const hasViewOwnMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
 	const hasViewOtherMaterialRequestsPerm = useHasAnyPermission(
@@ -108,6 +115,9 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		}),
 		...(!isNil(filters.hasDownloadUrl) && {
 			hasDownloadUrl: filters.hasDownloadUrl as string[],
+		}),
+		...(!isNil(filters.isArchived) && {
+			isArchived: filters.isArchived === 'true',
 		}),
 	});
 	const [currentMaterialRequestId, setCurrentMaterialRequestId] = useQueryParam(
@@ -204,6 +214,15 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 			page: 1,
 		});
 	}, [selectedDownloadFilters]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+	useEffect(() => {
+		setFilters({
+			...filters,
+			isArchived: showArchived ? 'true' : 'false',
+			page: 1,
+		});
+	}, [showArchived]);
 
 	const onSortChange = (
 		orderProp: string | undefined,
@@ -332,6 +351,36 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		);
 	};
 
+	const handleArchiveToggle = () => {
+		setShowArchived(!showArchived);
+	};
+
+	const renderArchiveCheckbox = () => {
+		return (
+			<div
+				className={clsx('p-material-requests__dropdown', 'p-material-requests__checkbox-wrapper')}
+			>
+				<Checkbox
+					className="p-material-requests__archive-checkbox"
+					label={tText(
+						'modules/account/views/account-my-material-requests___toon-gearchiveerde-aanvragen'
+					)}
+					checked={showArchived}
+					checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
+					onKeyDown={(e) => {
+						onKey(e, [...keysEnter, ...keysSpacebar], () => {
+							if (keysSpacebar.includes(e.key)) {
+								e.preventDefault();
+							}
+							handleArchiveToggle();
+						});
+					}}
+					onClick={handleArchiveToggle}
+				/>
+			</div>
+		);
+	};
+
 	const renderFiltersForComplexReuseFlow = () => {
 		return (
 			<div className="l-container">
@@ -403,11 +452,13 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 							onChange={noop}
 							className={clsx(
 								'p-material-requests__dropdown',
-								'p-material-requests__dropdown-no-dividers'
+								'p-material-requests__dropdown-no-dividers',
+								{ 'p-material-requests__dropdown--disabled': showArchived }
 							)}
 							iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
 							iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 							iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+							isDisabled={showArchived}
 							checkboxHeader={tText(
 								'modules/account/views/account-my-material-requests___aanvraag-met-download'
 							)}
@@ -423,6 +474,8 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 								onClick: setSelectedDownloadFilters,
 							}}
 						/>
+
+						{renderArchiveCheckbox()}
 					</div>
 
 					<SearchBar
@@ -459,15 +512,21 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		}
 		return (
 			<AccountLayout className="p-account-my-material-requests" pageTitle={renderPageTitle()}>
-				<div
-					className={clsx('l-container l-container--edgeless-to-lg', {
-						'u-text-center u-color-neutral u-py-48': isFetching || noData,
-					})}
-				>
+				<div className="l-container l-container--edgeless-to-lg">
 					{isComplexReuseFlow && renderFiltersForComplexReuseFlow()}
-					{isFetching && <Loading locationId="Material requests overview" />}
-					{noData && !isFetching && renderEmptyMessage()}
-					{renderContent()}
+					<div
+						className={clsx({
+							'u-text-center u-color-neutral u-py-48': noData && !isFetching,
+						})}
+					>
+						{isFetching && (
+							<div className="u-text-center u-py-24">
+								<Loading locationId="Material requests overview" />
+							</div>
+						)}
+						{noData && !isFetching && renderEmptyMessage()}
+						{renderContent()}
+					</div>
 				</div>
 				{renderDetailBlade()}
 			</AccountLayout>
