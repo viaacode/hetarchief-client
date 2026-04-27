@@ -1,4 +1,4 @@
-import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import type { Locale } from '@shared/utils/i18n';
 
@@ -45,7 +45,8 @@ export const ADMIN_NAVIGATION_LINKS = (locale: Locale): AdminNavigationLink[] =>
 	{
 		id: 'material-requests',
 		label: tText('modules/admin/const/routing___materiaalaanvragen'),
-		href: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].materialRequests}`,
+		href: ROUTES_BY_LOCALE[locale].adminMaterialRequests,
+		children: GET_ADMIN_MATERIAL_REQUEST_LINKS,
 	},
 	{
 		id: 'alerts',
@@ -82,5 +83,18 @@ export const GET_ADMIN_USERS_LINKS = (locale: Locale): AdminNavigationLink[] => 
 		id: 'permissions',
 		label: tText('modules/admin/const/routing___groepen-en-permissies'),
 		href: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].userManagement}/${ROUTE_PARTS_BY_LOCALE[locale].permissions}`,
+	},
+];
+
+export const GET_ADMIN_MATERIAL_REQUEST_LINKS = (locale: Locale): AdminNavigationLink[] => [
+	{
+		id: 'material-requests-admin',
+		label: tText('modules/admin/const/routing___materiaalaanvragen'),
+		href: ROUTES_BY_LOCALE[locale].adminMaterialRequests,
+	},
+	{
+		id: 'material-requests-outgoing',
+		label: tText('modules/admin/const/routing___mijn-uitgaande-materiaalaanvragen'),
+		href: ROUTES_BY_LOCALE[locale].accountMyMaterialRequests,
 	},
 ];
