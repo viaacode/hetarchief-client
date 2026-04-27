@@ -40,7 +40,7 @@ export const CpAdminSettingsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 						</span>
 						<p>
 							{tHtml(
-								'Aanbieder {{maintainerName}} met or-id {{maintainerId}} heeft geen bezoekersruimte op hetarchief.be.',
+								'modules/cp/views/cp-admin-settings-page___aanbieder-maintainer-name-met-or-id-maintainer-id-heeft-geen-bezoekersruimte-op-hetarchief-be',
 								{ maintainerName: user?.organisationName, maintainerId: user?.organisationId }
 							)}
 						</p>

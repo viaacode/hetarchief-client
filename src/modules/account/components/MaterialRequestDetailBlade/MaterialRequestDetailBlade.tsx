@@ -44,7 +44,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { toastService } from '@shared/services/toast-service';
-import { asDate, formatLongDate } from '@shared/utils/dates';
+import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { isMobileSize } from '@shared/utils/is-mobile';
 import type { QueryObserverResult } from '@tanstack/react-query';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
@@ -143,7 +143,8 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	const { data: unreadCount, refetch: refetchUnreadCount } =
 		useGetMaterialRequestConversationUnreadCount(
 			currentMaterialRequestDetail?.id,
-			activeTab !== MaterialRequestDetailBladeTabs.Conversation
+			activeTab !== MaterialRequestDetailBladeTabs.Conversation &&
+				!currentMaterialRequestDetail?.isArchived
 		);
 
 	const tabs: TabProps[] = useMemo(
@@ -222,6 +223,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		// No tabs to show, so always render all content in the blade
 		if (
 			!currentMaterialRequestDetail.reuseForm ||
+			currentMaterialRequestDetail.isArchived ||
 			activeTab === MaterialRequestDetailBladeTabs.Information
 		) {
 			return (
@@ -251,7 +253,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 
 		const { downloadStatus } = currentMaterialRequestDetail;
 		const hasDownloadExpired = determineHasDownloadExpired(currentMaterialRequestDetail);
-		const downloadExpirationDate = formatLongDate(
+		const downloadExpirationDate = formatMediumDate(
 			asDate(currentMaterialRequestDetail.downloadExpiresAt)
 		);
 		const downloadStatusSucceeded = downloadStatus === MaterialRequestDownloadStatus.SUCCEEDED;
@@ -285,22 +287,14 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		return (
 			<>
 				{downloadInformationMessage && (
-					<span
-						className={clsx(
-							styles['p-material-request-detail__download-message'],
-							'u-flex',
-							'u-align-center',
-							'u-flex-row',
-							'u-pt-12',
-							'u-mr-8'
-						)}
-					>
+					<span className={styles['p-material-request-detail__download-message']}>
 						{!isMobile && <Icon name={IconNamesLight.Exclamation} className="u-mr-4" />}
 						{downloadInformationMessage}
 					</span>
 				)}
 				{!hasDownloadExpired && !downloadStatusFailed && (
 					<Button
+						className={styles['p-material-request-detail__download-button']}
 						label={
 							downloadStatusSucceeded
 								? tText(
@@ -341,7 +335,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 									'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleer-aanvraag'
 								)
 					}
-					variants={['dark']}
+					variants={['outline']}
 					onClick={() => setShowConfirmModal(true)}
 				/>
 			);
@@ -468,12 +462,14 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	};
 
 	const getBladeHeaderProps = (includeCTAs: boolean): BladeHeaderProps => {
-		if (!currentMaterialRequestDetail?.reuseForm) {
+		if (!currentMaterialRequestDetail?.reuseForm || currentMaterialRequestDetail?.isArchived) {
 			return {
-				title: tText(
-					'modules/account/components/material-request-detail-blade/material-requests___detail'
-				),
-				stickySubtitle: <MaterialRequestInformation />,
+				title: currentMaterialRequestDetail?.isArchived
+					? tText('Gearchiveerde aanvraag')
+					: tText(
+							'modules/account/components/material-request-detail-blade/material-requests___detail'
+						),
+				stickySubtitle: !currentMaterialRequestDetail?.isArchived && <MaterialRequestInformation />,
 				subtitle: currentMaterialRequestDetail ? (
 					<MaterialCard
 						openInNewTab={true}
@@ -500,7 +496,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			size: isMobile ? BladeSizeType.THIN : BladeSizeType.WIDE,
 			showHeaderBackgroundByDefault: true,
 			showTitleSmaller: true,
-			title: isRequester
+			title: allowRequestCancellation
 				? tText(
 						'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvraag-aan'
 					)
@@ -511,7 +507,9 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				<>
 					<div className={clsx(styles['p-material-request-detail__title'])}>
 						<h3 className={clsx(styles['p-material-request-detail__title--text'])}>
-							{currentMaterialRequestDetail.maintainerName}
+							{allowRequestCancellation
+								? currentMaterialRequestDetail.maintainerName
+								: currentMaterialRequestDetail.requesterOrganisation}
 						</h3>
 						{isMobile && (
 							<div className={clsx(styles['p-material-request-detail__action-bar'])}>
@@ -539,7 +537,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	};
 
 	const getBladeFooterProps = (): BladeFooterProps => {
-		if (!currentMaterialRequestDetail?.reuseForm) {
+		if (!currentMaterialRequestDetail?.reuseForm || currentMaterialRequestDetail?.isArchived) {
 			return {
 				footerButtons: [
 					{
@@ -597,11 +595,11 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		<BladeManager
 			currentLayer={getBladeLayerIndex()}
 			onCloseBlade={() => {
-				if (isDetailStatusBladeOpenWithStatus) {
-					setShowEvaluatorOptions(false);
-					setIsDetailStatusBladeOpenWithStatus(undefined);
-				} else if (isMobile && showEvaluatorOptions) {
-					setIsDetailStatusBladeOpenWithStatus(undefined);
+				// Blade to approve/deny is open or
+				// On mobile we have evaluator options open
+				if (isDetailStatusBladeOpenWithStatus || (isMobile && showEvaluatorOptions)) {
+					setShowEvaluatorOptions(false); // close evaluator options
+					setIsDetailStatusBladeOpenWithStatus(undefined); // close status blade
 				} else {
 					onClose(hasStatusChanged);
 				}

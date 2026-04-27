@@ -139,6 +139,7 @@
 			&:has(.p-material-request-detail__download-message) {
 				flex-direction: column;
 				align-items: start;
+				gap: abstracts.$spacer-xs;
 			}
 		}
 	}
@@ -151,8 +152,17 @@
 		}
 	}
 
-	&__download-message {
-		color: abstracts.$grey;
-		font-size: abstracts.$font-size-base;
+	&__download {
+		&-message {
+			color: abstracts.$grey;
+			font-size: abstracts.$font-size-base;
+			display: flex;
+			align-items: start;
+			flex-direction: row;
+		}
+
+		&-button {
+			margin-left: abstracts.$spacer-sm;
+		}
 	}
 }

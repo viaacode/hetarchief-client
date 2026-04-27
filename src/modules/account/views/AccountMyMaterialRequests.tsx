@@ -73,8 +73,10 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		(filters[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL] || []) as string[]
 	);
 
-	const hasOwnMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
-	const hasAnyMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_ANY_MATERIAL_REQUESTS);
+	const hasViewOwnMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
+	const hasViewOtherMaterialRequestsPerm = useHasAnyPermission(
+		Permission.VIEW_ANY_MATERIAL_REQUESTS
+	);
 	const locale = useLocale();
 	const commonUser = useSelector(selectCommonUser);
 	const isComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
@@ -321,7 +323,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		return (
 			<>
 				{tText('pages/account/mijn-profiel/index___mijn-materiaalaanvragen')}
-				{hasAnyMaterialRequestsPerm && (
+				{hasViewOtherMaterialRequestsPerm && (
 					<div className="u-color-neutral u-font-size-14 u-font-weight-400 u-pt-8">
 						<Link href={incomingRequestHyperlink}>{incomingRequestLabel}</Link>
 					</div>
@@ -445,7 +447,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	};
 
 	const renderPageContent = () => {
-		if (!hasOwnMaterialRequestsPerm) {
+		if (!hasViewOwnMaterialRequestsPerm) {
 			return (
 				<ErrorNoAccess
 					visitorSpaceSlug={null}

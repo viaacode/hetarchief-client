@@ -1874,6 +1874,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 						isOpen={activeBlade === MediaActions.RequestMaterial}
 						onClose={onCloseBlade}
 						materialRequest={getMaterialRequest(mediaInfo)}
+						canDownloadNewspaper={canDownloadNewspaper}
 						layer={1}
 						currentLayer={1}
 					/>

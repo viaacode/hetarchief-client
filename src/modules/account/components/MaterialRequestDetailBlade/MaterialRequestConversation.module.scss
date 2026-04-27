@@ -224,7 +224,8 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 
 		&--disabled {
 			:global(.control-item.button),
-			:global(.control-item.dropdown) {
+			:global(.control-item.dropdown),
+			:global(.dropdown-handler) {
 				pointer-events: none !important;
 				opacity: 0.5 !important;
 			}
@@ -242,13 +243,14 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 			// Mobile
 			@media (max-width: abstracts.$breakpoint-md) {
 				right: 1.4rem;
-				bottom: 1rem;
+				bottom: 2rem;
 			}
 		}
 
+		// When keyboard is open, move send button lower
 		&--keyboard-open &__send-button {
 			@media (max-width: abstracts.$breakpoint-md) {
-				bottom: 0.5rem;
+				bottom: 0.4rem;
 			}
 		}
 	}

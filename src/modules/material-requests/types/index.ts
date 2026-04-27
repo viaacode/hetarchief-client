@@ -10,6 +10,7 @@ export interface MaterialRequest {
 	createdAt: string;
 	id: string;
 	isPending: boolean;
+	isArchived: boolean;
 	status: MaterialRequestStatus;
 	maintainerId: string;
 	maintainerLogo: string;
@@ -51,7 +52,7 @@ export interface MaterialRequestEvent {
 	messageType: MaterialRequestEventType;
 	body: MaterialRequestMessageBody;
 	createdAt: string;
-	senderProfile: {
+	senderProfile?: {
 		id: string;
 		mail: string;
 		firstName: string;

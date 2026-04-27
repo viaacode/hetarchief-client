@@ -88,10 +88,11 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 					triggerButtonProps={{
 						icon: <Icon name={IconNamesLight.Contact} aria-hidden />,
 						variants: ['silver', 'sm'],
+						ariaLabel: tText(
+							'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___toon-contact-informatie-van-deze-bezoekersruimte-button-aria-label'
+						),
 					}}
-					id={tText(
-						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___toon-contact-informatie-van-deze-bezoekersruimte-button-aria-label'
-					)}
+					id={`c-visitor-space-card-controls__actions-dropdown--${room.contactInfo.email}`}
 				>
 					{/* biome-ignore lint/a11y/useKeyWithClickEvents: only prevents the click event propagation */}
 					<ul
