@@ -205,10 +205,18 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		setFilters({
 			...filters,
 			hasDownloadUrl: selectedDownloadFilters,
+			page: 1,
+		});
+	}, [selectedDownloadFilters]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+	useEffect(() => {
+		setFilters({
+			...filters,
 			isArchived: showArchived ? 'true' : 'false',
 			page: 1,
 		});
-	}, [selectedDownloadFilters, showArchived]);
+	}, [showArchived]);
 
 	const onSortChange = (
 		orderProp: string | undefined,
@@ -426,9 +434,6 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	};
 
 	const handleArchiveToggle = () => {
-		if (!showArchived) {
-			setSelectedDownloadFilters([]);
-		}
 		setShowArchived(!showArchived);
 	};
 

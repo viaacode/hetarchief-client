@@ -228,10 +228,18 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		setFilters({
 			...filters,
 			hasDownloadUrl: selectedDownloadFilters,
+			page: 1,
+		});
+	}, [selectedDownloadFilters]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+	useEffect(() => {
+		setFilters({
+			...filters,
 			isArchived: showArchived ? 'true' : 'false',
 			page: 1,
 		});
-	}, [selectedDownloadFilters, showArchived]);
+	}, [showArchived]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: we want to set the filters if selectedMaintainers changes, but we cannot set it as a dependency or we get a loop
 	useEffect(() => {
@@ -475,16 +483,10 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	};
 
 	const handleArchiveToggle = () => {
-		if (!showArchived) {
-			setSelectedDownloadFilters([]);
-		}
 		setShowArchived(!showArchived);
 	};
 
 	const renderArchiveCheckbox = () => {
-		if (!isComplexReuseFlow) {
-			return null;
-		}
 		return (
 			<div
 				className={clsx(
@@ -536,11 +538,17 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 					<div className="l-container">
 						<div className={clsx('p-admin-material-requests__header')}>
 							<div className="p-admin-material-requests__header-dropdowns">
-								{renderTypeFilter()}
-								{renderStatusFilter()}
-								{renderDownloadFilter()}
-								{renderMaintainerFilter()}
-								{renderArchiveCheckbox()}
+								{isComplexReuseFlow ? (
+									<>
+										{renderTypeFilter()}
+										{renderStatusFilter()}
+										{renderDownloadFilter()}
+										{renderMaintainerFilter()}
+										{renderArchiveCheckbox()}
+									</>
+								) : (
+									renderArchiveCheckbox()
+								)}
 							</div>
 
 							{renderSearchInput()}

@@ -14,7 +14,7 @@
 
 		&-dropdowns {
 			display: flex;
-			flex-direction: row;
+			flex-flow: row wrap;
 
 			@media (max-width: $breakpoint-xl) {
 				flex-direction: column;
@@ -22,14 +22,10 @@
 		}
 	}
 
-	&__content-wrapper {
-		min-height: 40rem;
-	}
-
 	&__searchbar,
 	&__dropdown {
 		margin-right: $spacer-sm;
-		margin-bottom: 0;
+		margin-bottom: $spacer-sm;
 
 		@media (max-width: $breakpoint-xl) {
 			margin-right: 0;

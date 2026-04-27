@@ -41,7 +41,7 @@ export abstract class MaterialRequestsService {
 						...(search?.trim() ? { query: `%${search}%` } : {}),
 						...(type && { type }),
 						...(status && { status }),
-						...(hasDownloadUrl && { hasDownloadUrl }),
+						...(hasDownloadUrl && isArchived !== true && { hasDownloadUrl }),
 						...(maintainerIds && { maintainerIds }),
 						...(!isNil(isPending) && { isPending }),
 						...(!isNil(isArchived) && { isArchived }),

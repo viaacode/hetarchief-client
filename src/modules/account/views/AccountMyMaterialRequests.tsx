@@ -209,10 +209,18 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		setFilters({
 			...filters,
 			hasDownloadUrl: selectedDownloadFilters,
+			page: 1,
+		});
+	}, [selectedDownloadFilters]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+	useEffect(() => {
+		setFilters({
+			...filters,
 			isArchived: showArchived ? 'true' : 'false',
 			page: 1,
 		});
-	}, [selectedDownloadFilters, showArchived]);
+	}, [showArchived]);
 
 	const onSortChange = (
 		orderProp: string | undefined,
@@ -342,9 +350,6 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	};
 
 	const handleArchiveToggle = () => {
-		if (!showArchived) {
-			setSelectedDownloadFilters([]);
-		}
 		setShowArchived(!showArchived);
 	};
 
@@ -506,9 +511,19 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		return (
 			<AccountLayout className="p-account-my-material-requests" pageTitle={renderPageTitle()}>
 				<div className="l-container l-container--edgeless-to-lg">
-					{isComplexReuseFlow && renderFiltersForComplexReuseFlow()}
+					{isComplexReuseFlow ? (
+						renderFiltersForComplexReuseFlow()
+					) : (
+						<div className="l-container">
+							<div className="p-material-requests__header">
+								<div className="p-material-requests__header-dropdowns">
+									{renderArchiveCheckbox()}
+								</div>
+							</div>
+						</div>
+					)}
 					<div
-						className={clsx('p-material-requests__content-wrapper', {
+						className={clsx({
 							'u-text-center u-color-neutral u-py-48': noData && !isFetching,
 						})}
 					>
