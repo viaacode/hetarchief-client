@@ -16,7 +16,7 @@ import { isNil } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { type FC, useEffect, useMemo } from 'react';
+import { type FC, useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './CPAdminLayout.module.scss';
@@ -28,6 +28,14 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 
 	const user = useSelector(selectUser);
 
+	const shouldBeActive = useCallback((currentPath: string, parentPath: string) => {
+		if (!parentPath) {
+			return false;
+		}
+		const basePath = currentPath.split('?')[0].split('#')[0];
+		return basePath === parentPath || currentPath.startsWith(`${parentPath}/`);
+	}, []);
+
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
 			CP_ADMIN_NAVIGATION_LINKS(
@@ -35,7 +43,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 				user?.permissions || [],
 				user?.visitorSpaceSlug,
 				user?.groupName === GroupName.CP_ADMIN
-			).map(({ id, label, href, iconName }) => {
+			).map(({ id, label, href, iconName, children }) => {
 				const url =
 					id !== CP_ADMIN_SEARCH_VISITOR_SPACE_KEY
 						? href
@@ -54,10 +62,20 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 							<span>{label}</span>
 						</Link>
 					),
-					active: asPath.includes(url),
+					active: shouldBeActive(asPath, url),
+					children: children?.map(({ id, label, href }) => ({
+						id,
+						node: ({ linkClassName }) => (
+							<Link href={href} className={linkClassName} aria-label={label}>
+								{!isNil(iconName) && <Icon className="u-mr-4" name={iconName} aria-hidden />}
+								<span>{label}</span>
+							</Link>
+						),
+						active: shouldBeActive(asPath, href),
+					})),
 				};
 			}),
-		[asPath, locale, user?.visitorSpaceSlug, user?.permissions, user?.groupName]
+		[asPath, locale, user?.visitorSpaceSlug, user?.permissions, user?.groupName, shouldBeActive]
 	);
 
 	useEffect(() => {
