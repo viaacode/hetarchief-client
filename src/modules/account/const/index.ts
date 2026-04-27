@@ -30,8 +30,10 @@ export const GET_ACCOUNT_NAVIGATION_LINKS = (locale: Locale): NavigationLinkInfo
 	const hasAccountHistoryPerm = useHasAnyPermission(
 		Permission.READ_PERSONAL_APPROVED_VISIT_REQUESTS
 	);
-	const hasOwnMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
-	const hasOtherMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_ANY_MATERIAL_REQUESTS);
+	const hasViewOwnMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
+	const hasViewOtherMaterialRequestsPerm = useHasAnyPermission(
+		Permission.VIEW_ANY_MATERIAL_REQUESTS
+	);
 	const hasPersonalFolderPerm = useHasAnyPermission(Permission.MANAGE_FOLDERS);
 	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
 
@@ -60,8 +62,8 @@ export const GET_ACCOUNT_NAVIGATION_LINKS = (locale: Locale): NavigationLinkInfo
 		});
 	}
 
-	if (hasOwnMaterialRequestsPerm) {
-		if (hasOtherMaterialRequestsPerm) {
+	if (hasViewOwnMaterialRequestsPerm) {
+		if (hasViewOtherMaterialRequestsPerm) {
 			links.push({
 				...GET_ACCOUNT_OUTGOING_MATERIAL_REQUEST_LINKS(locale),
 				label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
