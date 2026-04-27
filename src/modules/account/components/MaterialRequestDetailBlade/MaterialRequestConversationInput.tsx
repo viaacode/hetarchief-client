@@ -22,6 +22,7 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
+import useDetectKeyboardOpen from 'use-detect-keyboard-open';
 import { v4 as uuid } from 'uuid';
 import styles from './MaterialRequestConversation.module.scss';
 import { MessageFileUpload } from './MessageFileUpload';
@@ -36,7 +37,7 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 		const fileListRef = useRef<HTMLDivElement>(null);
 		const [editorKey, setEditorKey] = useState(uuid()); // To force rich text editor to rerender
 		const editorId = `material-request-conversation--${editorKey}`;
-
+		const isKeyboardOpen = useDetectKeyboardOpen();
 		const [currentMessage, setCurrentMessage] = useState<string>('');
 		const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
@@ -141,7 +142,11 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 		}, [getEditorAndFocusOrDisable]);
 
 		return (
-			<div className={clsx(styles['p-conversation-messages__editor'])}>
+			<div
+				className={clsx(styles['p-conversation-messages__editor'], {
+					[styles['p-conversation-messages__editor--keyboard-open']]: isKeyboardOpen,
+				})}
+			>
 				<div ref={fileListRef} className={clsx(styles['p-conversation-messages__selected-files'])}>
 					<TagList
 						tags={selectedFiles.map((file, index) => ({

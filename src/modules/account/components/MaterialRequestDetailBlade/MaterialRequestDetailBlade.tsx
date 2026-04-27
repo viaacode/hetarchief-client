@@ -54,6 +54,7 @@ import { isNil, noop } from 'lodash-es';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import useDetectKeyboardOpen from 'use-detect-keyboard-open';
 import { StringParam, useQueryParam } from 'use-query-params';
 import MaterialRequestContentInfo from './MaterialRequestContentInfo';
 import styles from './MaterialRequestDetailBlade.module.scss';
@@ -84,6 +85,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();
 	const isMobile = isMobileSize(windowSize);
+	const isKeyboardOpen = useDetectKeyboardOpen();
 
 	const [showEvaluatorOptions, setShowEvaluatorOptions] = useState(false);
 	const [hasStatusChanged, setHasStatusChanged] = useState(false);
@@ -557,7 +559,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			ignoreFooterButtons: true,
 			stickyFooter: true,
 			removePaddingForCustomFooter: isMobile,
-			customFooter: isMobile && (
+			customFooter: isMobile && !isKeyboardOpen && (
 				<Tabs
 					className={clsx(styles['p-material-request-detail__tabs'])}
 					tabs={tabs}
