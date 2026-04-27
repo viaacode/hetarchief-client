@@ -8,6 +8,14 @@ import { isNil } from 'lodash-es';
 
 export const CP_ADMIN_SEARCH_VISITOR_SPACE_KEY = 'search-visitor-space';
 
+interface NavigationLinkInfo {
+	id: string;
+	label: string;
+	href: string;
+	iconName?: IconName;
+	children?: NavigationLinkInfo[];
+}
+
 /**
  * Key users with evaluator role are permitted in CP admin and will get the option hardcoded
  * So we need the possibility check on permissions and other user settings
@@ -23,12 +31,7 @@ export const CP_ADMIN_NAVIGATION_LINKS = (
 	permissions: Permission[],
 	maintainerSlug?: string,
 	isCpAdmin: boolean = false
-): {
-	id: string;
-	label: string;
-	href: string;
-	iconName?: IconName;
-}[] => {
+): NavigationLinkInfo[] => {
 	return [
 		...(permissions.includes(Permission.MANAGE_CP_VISIT_REQUESTS)
 			? [
@@ -45,6 +48,7 @@ export const CP_ADMIN_NAVIGATION_LINKS = (
 						id: 'material-requests',
 						label: tText('modules/cp/const/index___materiaalaanvragen'),
 						href: ROUTES_BY_LOCALE[locale].cpAdminMaterialRequests,
+						children: GET_CP_ADMIN_MATERIAL_REQUEST_LINKS(locale),
 					},
 				]
 			: []),
@@ -78,3 +82,16 @@ export const CP_ADMIN_NAVIGATION_LINKS = (
 			: []),
 	];
 };
+
+const GET_CP_ADMIN_MATERIAL_REQUEST_LINKS = (locale: Locale): NavigationLinkInfo[] => [
+	{
+		id: 'material-requests-incoming',
+		label: tText('modules/cp/const/index___inkomende-materiaalaanvragen'),
+		href: ROUTES_BY_LOCALE[locale].cpAdminMaterialRequests,
+	},
+	{
+		id: 'account-material-requests-outgoing',
+		label: tText('modules/account/const/index___mijn-uitgaande-materiaalaanvragen'),
+		href: ROUTES_BY_LOCALE[locale].accountMyMaterialRequests,
+	},
+];
