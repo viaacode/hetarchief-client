@@ -513,17 +513,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		return (
 			<AccountLayout className="p-account-my-material-requests" pageTitle={renderPageTitle()}>
 				<div className="l-container l-container--edgeless-to-lg">
-					{isComplexReuseFlow ? (
-						renderFiltersForComplexReuseFlow()
-					) : (
-						<div className="l-container">
-							<div className="p-material-requests__header">
-								<div className="p-material-requests__header-dropdowns">
-									{renderArchiveCheckbox()}
-								</div>
-							</div>
-						</div>
-					)}
+					{isComplexReuseFlow && renderFiltersForComplexReuseFlow()}
 					<div
 						className={clsx({
 							'u-text-center u-color-neutral u-py-48': noData && !isFetching,

@@ -421,13 +421,13 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 				confirmOptions={{
 					label: tText('modules/cp/views/cp-admin-material-requests___pas-toe'),
 					variants: ['black'],
-					onClick: showArchived ? noop : setSelectedDownloadFilters,
+					onClick: setSelectedDownloadFilters,
 				}}
 				resetOptions={{
 					icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />,
 					label: tText('modules/cp/views/cp-admin-material-requests___reset'),
 					variants: ['text'],
-					onClick: showArchived ? noop : setSelectedDownloadFilters,
+					onClick: setSelectedDownloadFilters,
 				}}
 			/>
 		);

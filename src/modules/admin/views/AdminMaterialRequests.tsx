@@ -436,13 +436,13 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 				confirmOptions={{
 					label: tText('pages/admin/materiaalaanvragen/index___pas-toe'),
 					variants: ['black'],
-					onClick: showArchived ? noop : setSelectedDownloadFilters,
+					onClick: setSelectedDownloadFilters,
 				}}
 				resetOptions={{
 					icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />,
 					label: tText('pages/admin/materiaalaanvragen/index___reset'),
 					variants: ['text'],
-					onClick: showArchived ? noop : setSelectedDownloadFilters,
+					onClick: setSelectedDownloadFilters,
 				}}
 			/>
 		);
@@ -538,17 +538,11 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 					<div className="l-container">
 						<div className={clsx('p-admin-material-requests__header')}>
 							<div className="p-admin-material-requests__header-dropdowns">
-								{isComplexReuseFlow ? (
-									<>
-										{renderTypeFilter()}
-										{renderStatusFilter()}
-										{renderDownloadFilter()}
-										{renderMaintainerFilter()}
-										{renderArchiveCheckbox()}
-									</>
-								) : (
-									renderArchiveCheckbox()
-								)}
+								{renderTypeFilter()}
+								{renderStatusFilter()}
+								{renderDownloadFilter()}
+								{renderMaintainerFilter()}
+								{renderArchiveCheckbox()}
 							</div>
 
 							{renderSearchInput()}
