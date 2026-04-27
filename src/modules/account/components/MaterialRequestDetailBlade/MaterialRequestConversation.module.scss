@@ -243,14 +243,13 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 			// Mobile
 			@media (max-width: abstracts.$breakpoint-md) {
 				right: 1.4rem;
-				bottom: 2rem;
 			}
 		}
 
 		// When keyboard is open, move send button lower
 		&--keyboard-open &__send-button {
 			@media (max-width: abstracts.$breakpoint-md) {
-				bottom: 0.4rem;
+				bottom: abstracts.$spacer-xxs;
 			}
 		}
 	}
