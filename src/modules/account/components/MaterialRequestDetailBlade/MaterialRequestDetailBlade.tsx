@@ -45,7 +45,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { toastService } from '@shared/services/toast-service';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
-import { isMobileSize } from '@shared/utils/is-mobile';
+import { isLessThanXlSize, isMobileSize } from '@shared/utils/is-mobile';
 import type { QueryObserverResult } from '@tanstack/react-query';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
@@ -84,6 +84,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();
 	const isMobile = isMobileSize(windowSize);
+	const isTablePortrait = isLessThanXlSize(windowSize);
 
 	const [showEvaluatorOptions, setShowEvaluatorOptions] = useState(false);
 	const [hasStatusChanged, setHasStatusChanged] = useState(false);
@@ -271,7 +272,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 							'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-verlopen-op',
 							{ downloadExpirationDate }
 						);
-			} else if (!isMobile) {
+			} else if (!isTablePortrait) {
 				// We only want to show the expiration date on desktop
 				downloadInformationMessage = tText(
 					'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-is-beschikbaar-tot-en-met',
@@ -283,7 +284,12 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		return (
 			<>
 				{downloadInformationMessage && (
-					<span className={styles['p-material-request-detail__download-message']}>
+					<span
+						className={clsx(
+							styles['p-material-request-detail__download-message'],
+							downloadStatusFailed && styles['p-material-request-detail__download-message--failed']
+						)}
+					>
 						{!isMobile && <Icon name={IconNamesLight.Exclamation} className="u-mr-4" />}
 						{downloadInformationMessage}
 					</span>
