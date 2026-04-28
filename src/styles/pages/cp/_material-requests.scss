@@ -24,11 +24,9 @@
 
 	&__searchbar,
 	&__dropdown {
-		margin-right: $spacer-sm;
 		margin-bottom: $spacer-sm;
 
 		@media (max-width: $breakpoint-xl) {
-			margin-right: 0;
 			margin-bottom: $spacer-xs;
 		}
 
@@ -49,6 +47,22 @@
 			.c-multi-select__checkbox-list-item {
 				border-top: none !important;
 			}
+		}
+	}
+
+	&__searchbar {
+		align-self: flex-start;
+
+		@media (max-width: $breakpoint-xl) {
+			width: 100%;
+		}
+	}
+
+	&__dropdown {
+		margin-right: $spacer-sm;
+
+		@media (max-width: $breakpoint-xl) {
+			margin-right: 0;
 		}
 	}
 
