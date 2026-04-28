@@ -549,7 +549,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 						</div>
 					</div>
 					<div
-						className={clsx('l-container', {
+						className={clsx('l-container l-container--edgeless-to-lg', {
 							'u-text-center u-color-neutral u-py-48': isLoadingMaterialRequests || noData,
 						})}
 					>

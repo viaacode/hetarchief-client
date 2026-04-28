@@ -295,26 +295,24 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 
 	const renderContent = (): ReactNode => {
 		return (
-			<div className="l-container">
-				<Table<MaterialRequest>
-					className="u-mt-24 p-material-requests__table"
-					options={{
-						columns: getMaterialRequestTableColumns(isTabletPortrait),
-						data: materialRequests?.items || [],
-						initialState: {
-							pageSize: CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
-							sortBy: sortFilters,
-						} as TableState<MaterialRequest>,
-					}}
-					getColumnProps={getMaterialRequestTableColumnProps}
-					sortingIcons={sortingIcons}
-					pagination={renderPagination}
-					onSortChange={onSortChange}
-					onRowClick={onRowClick}
-					showTable={!noData && !isFetching}
-					enableRowFocusOnClick={true}
-				/>
-			</div>
+			<Table<MaterialRequest>
+				className="u-mt-24 p-material-requests__table"
+				options={{
+					columns: getMaterialRequestTableColumns(isTabletPortrait),
+					data: materialRequests?.items || [],
+					initialState: {
+						pageSize: CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
+						sortBy: sortFilters,
+					} as TableState<MaterialRequest>,
+				}}
+				getColumnProps={getMaterialRequestTableColumnProps}
+				sortingIcons={sortingIcons}
+				pagination={renderPagination}
+				onSortChange={onSortChange}
+				onRowClick={onRowClick}
+				showTable={!noData && !isFetching}
+				enableRowFocusOnClick={true}
+			/>
 		);
 	};
 

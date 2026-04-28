@@ -20,6 +20,12 @@ $l-container-padding-xs: 2rem;
 				padding-left: 0;
 				padding-right: 0;
 			}
+
+			.p-material-requests__header {
+				@media (max-width: $breakpoint-lg) {
+					padding: 0 $spacer-sm;
+				}
+			}
 		}
 	}
 }

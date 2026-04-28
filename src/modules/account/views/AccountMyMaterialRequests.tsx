@@ -304,7 +304,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 
 	const renderContent = (): ReactNode => {
 		return (
-			<div className="l-container">
+			<div className="l-container--edgeless-to-lg">
 				<Table<MaterialRequest>
 					className="u-mt-24 p-material-requests__table p-account-my-material-requests__table"
 					options={{
@@ -383,118 +383,116 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 
 	const renderFiltersForComplexReuseFlow = () => {
 		return (
-			<div className="l-container">
-				<div className="p-material-requests__header">
-					<div className="p-material-requests__header-dropdowns">
-						<MultiSelect
-							variant="rounded"
-							label={tText('modules/account/views/account-my-material-requests___type')}
-							id="account-my-material-requests___type-material-request"
-							options={typesList}
-							onChange={noop}
-							className={clsx(
-								'p-material-requests__dropdown',
-								'p-material-requests__dropdown-no-dividers'
-							)}
-							iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
-							iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-							iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-							checkboxHeader={tText(
-								'modules/account/views/account-my-material-requests___type-aanvraag'
-							)}
-							confirmOptions={{
-								label: tText('modules/account/views/account-my-material-requests___pas-toe'),
-								variants: ['black'],
-								onClick: setSelectedTypes,
-							}}
-							resetOptions={{
-								icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
-								label: tText('modules/account/views/account-my-material-requests___reset'),
-								variants: ['text'],
-								onClick: setSelectedTypes,
-							}}
-						/>
-
-						<MultiSelect
-							variant="rounded"
-							label={tText('modules/account/views/account-my-material-requests___status')}
-							id="account-my-material-requests___status-material-request"
-							options={statusList}
-							onChange={noop}
-							className={clsx(
-								'p-material-requests__dropdown',
-								'p-material-requests__dropdown-no-dividers'
-							)}
-							iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
-							iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-							iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-							checkboxHeader={tText(
-								'modules/account/views/account-my-material-requests___status-aanvraag'
-							)}
-							confirmOptions={{
-								label: tText('modules/account/views/account-my-material-requests___pas-toe'),
-								variants: ['black'],
-								onClick: setSelectedStatuses,
-							}}
-							resetOptions={{
-								icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />,
-								label: tText('modules/account/views/account-my-material-requests___reset'),
-								variants: ['text'],
-								onClick: setSelectedStatuses,
-							}}
-						/>
-
-						<MultiSelect
-							variant="rounded"
-							label={tText('modules/account/views/account-my-material-requests___download')}
-							id="account-my-material-requests___download-filter-material-request"
-							options={downloadUrlList}
-							onChange={noop}
-							className={clsx(
-								'p-material-requests__dropdown',
-								'p-material-requests__dropdown-no-dividers',
-								{ 'p-material-requests__dropdown--disabled': showArchived }
-							)}
-							iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
-							iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-							iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
-							isDisabled={showArchived}
-							checkboxHeader={tText(
-								'modules/account/views/account-my-material-requests___aanvraag-met-download'
-							)}
-							confirmOptions={{
-								label: tText('modules/account/views/account-my-material-requests___pas-toe'),
-								variants: ['black'],
-								onClick: setSelectedDownloadFilters,
-							}}
-							resetOptions={{
-								icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />,
-								label: tText('modules/account/views/account-my-material-requests___reset'),
-								variants: ['text'],
-								onClick: setSelectedDownloadFilters,
-							}}
-						/>
-
-						{renderArchiveCheckbox()}
-					</div>
-
-					<SearchBar
-						id="materiaalaanvragen-searchbar"
-						value={search}
-						className="p-material-requests__searchbar"
-						placeholder={tText('modules/account/views/account-my-material-requests___zoek')}
-						onChange={setSearch}
-						onSearch={(newValue) =>
-							setFilters({
-								[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: newValue,
-								page: 1,
-							})
-						}
-						ariaLabel={tText(
-							'modules/account/views/account-my-material-requests___zoek-naar-materiaal-aanvraag-input-aria-label'
+			<div className="p-material-requests__header">
+				<div className="p-material-requests__header-dropdowns">
+					<MultiSelect
+						variant="rounded"
+						label={tText('modules/account/views/account-my-material-requests___type')}
+						id="account-my-material-requests___type-material-request"
+						options={typesList}
+						onChange={noop}
+						className={clsx(
+							'p-material-requests__dropdown',
+							'p-material-requests__dropdown-no-dividers'
 						)}
+						iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+						iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+						iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+						checkboxHeader={tText(
+							'modules/account/views/account-my-material-requests___type-aanvraag'
+						)}
+						confirmOptions={{
+							label: tText('modules/account/views/account-my-material-requests___pas-toe'),
+							variants: ['black'],
+							onClick: setSelectedTypes,
+						}}
+						resetOptions={{
+							icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} />,
+							label: tText('modules/account/views/account-my-material-requests___reset'),
+							variants: ['text'],
+							onClick: setSelectedTypes,
+						}}
 					/>
+
+					<MultiSelect
+						variant="rounded"
+						label={tText('modules/account/views/account-my-material-requests___status')}
+						id="account-my-material-requests___status-material-request"
+						options={statusList}
+						onChange={noop}
+						className={clsx(
+							'p-material-requests__dropdown',
+							'p-material-requests__dropdown-no-dividers'
+						)}
+						iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+						iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+						iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+						checkboxHeader={tText(
+							'modules/account/views/account-my-material-requests___status-aanvraag'
+						)}
+						confirmOptions={{
+							label: tText('modules/account/views/account-my-material-requests___pas-toe'),
+							variants: ['black'],
+							onClick: setSelectedStatuses,
+						}}
+						resetOptions={{
+							icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />,
+							label: tText('modules/account/views/account-my-material-requests___reset'),
+							variants: ['text'],
+							onClick: setSelectedStatuses,
+						}}
+					/>
+
+					<MultiSelect
+						variant="rounded"
+						label={tText('modules/account/views/account-my-material-requests___download')}
+						id="account-my-material-requests___download-filter-material-request"
+						options={downloadUrlList}
+						onChange={noop}
+						className={clsx(
+							'p-material-requests__dropdown',
+							'p-material-requests__dropdown-no-dividers',
+							{ 'p-material-requests__dropdown--disabled': showArchived }
+						)}
+						iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+						iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+						iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
+						isDisabled={showArchived}
+						checkboxHeader={tText(
+							'modules/account/views/account-my-material-requests___aanvraag-met-download'
+						)}
+						confirmOptions={{
+							label: tText('modules/account/views/account-my-material-requests___pas-toe'),
+							variants: ['black'],
+							onClick: setSelectedDownloadFilters,
+						}}
+						resetOptions={{
+							icon: <Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />,
+							label: tText('modules/account/views/account-my-material-requests___reset'),
+							variants: ['text'],
+							onClick: setSelectedDownloadFilters,
+						}}
+					/>
+
+					{renderArchiveCheckbox()}
 				</div>
+
+				<SearchBar
+					id="materiaalaanvragen-searchbar"
+					value={search}
+					className="p-material-requests__searchbar"
+					placeholder={tText('modules/account/views/account-my-material-requests___zoek')}
+					onChange={setSearch}
+					onSearch={(newValue) =>
+						setFilters({
+							[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: newValue,
+							page: 1,
+						})
+					}
+					ariaLabel={tText(
+						'modules/account/views/account-my-material-requests___zoek-naar-materiaal-aanvraag-input-aria-label'
+					)}
+				/>
 			</div>
 		);
 	};
