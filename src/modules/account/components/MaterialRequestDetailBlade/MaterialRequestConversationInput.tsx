@@ -219,7 +219,7 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 					className={clsx(styles['p-conversation-messages__editor__send-button'])}
 					variants={['text']}
 					// Replace this icon with a send icon when Jelle and JN add the icons to the font
-					icon={<Icon name={IconNamesLight.PaperPlane} />}
+					icon={isSending ? <Spinner /> : <Icon name={IconNamesLight.PaperPlane} />}
 					disabled={sendMessageDisabled}
 					tabIndex={sendMessageDisabled ? -1 : undefined}
 					onClick={handleSendMessage}
