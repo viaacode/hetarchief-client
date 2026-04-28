@@ -2,15 +2,9 @@ import { useGetMaterialRequestConversationInfinite } from '@account/components/M
 import { MaterialRequestConversationInput } from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversationInput';
 import { MaterialRequestConversationMessage } from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversationMessage';
 import { selectCommonUser } from '@auth/store/user';
-import {
-	type MaterialRequest,
-	MaterialRequestDownloadStatus,
-	MaterialRequestEventType,
-	MaterialRequestStatus,
-} from '@material-requests/types';
+import type { MaterialRequest } from '@material-requests/types';
 import { Loading } from '@shared/components/Loading';
 import { tHtml } from '@shared/helpers/translate';
-import type { QueryObserverResult } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { noop } from 'lodash-es';
 import React, { type FC, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
@@ -21,14 +15,12 @@ const MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE = 20;
 
 interface MaterialRequestConversationProps {
 	materialRequest: MaterialRequest;
-	refetchMaterialRequest: () => Promise<QueryObserverResult<MaterialRequest | null, Error>>;
 	handleDownload: () => void;
 	onMessagesLoaded: () => void;
 }
 
 export const MaterialRequestConversation: FC<MaterialRequestConversationProps> = ({
 	materialRequest,
-	refetchMaterialRequest,
 	handleDownload,
 	onMessagesLoaded,
 }) => {
@@ -48,21 +40,10 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 		fetchNextPage,
 		hasNextPage,
 		isFetchingNextPage,
-		refetch: refetchMessages,
 	} = useGetMaterialRequestConversationInfinite(
 		materialRequest.id,
 		MATERIAL_REQUEST_CONVERSATION_PAGE_SIZE
 	);
-
-	// Refetch the messages when the material request gets closed while viewing the conversation to get the latest messages and reflect the closed status in the UI
-	useEffect(() => {
-		if (
-			materialRequest.status === MaterialRequestStatus.CANCELLED ||
-			materialRequest.status === MaterialRequestStatus.DENIED
-		) {
-			refetchMessages().then(noop);
-		}
-	}, [materialRequest.status, refetchMessages]);
 
 	/**
 	 * Scrolls to the bottom of the messages once at page load after the first messages have been loaded.
@@ -88,49 +69,6 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 			setHasNotified(true);
 		}
 	}, [isFetchingMessages, hasNotified, onMessagesLoaded]);
-
-	/**
-	 * Refetches the material request when a event doesn't match the (download) status of the material request
-	 */
-	useEffect(() => {
-		let shouldRefreshRequest = false;
-
-		const hasMessageFromEvaluator = !!messages?.pages?.[0]?.items?.find(
-			(message) =>
-				message.messageType === MaterialRequestEventType.MESSAGE &&
-				!!message.senderProfile?.id &&
-				message.senderProfile?.id !== user?.profileId
-		);
-
-		const hasStatusUpdateMessage = !!messages?.pages?.[0]?.items?.find((message) =>
-			[
-				MaterialRequestEventType.APPROVED,
-				MaterialRequestEventType.DENIED,
-				MaterialRequestEventType.ADDITIONAL_CONDITIONS,
-				MaterialRequestEventType.DOWNLOAD_AVAILABLE,
-			].includes(message.messageType)
-		);
-
-		if (materialRequest.status === MaterialRequestStatus.NEW) {
-			shouldRefreshRequest = hasMessageFromEvaluator || hasStatusUpdateMessage;
-		} else if (materialRequest.status === MaterialRequestStatus.PENDING) {
-			shouldRefreshRequest = hasStatusUpdateMessage;
-		} else if (materialRequest.status === MaterialRequestStatus.APPROVED) {
-			const hasDownloadAvailableMessage: boolean = !!messages?.pages?.[0]?.items?.find(
-				(message) => message.messageType === MaterialRequestEventType.DOWNLOAD_AVAILABLE
-			);
-			const materialRequestHasNoDownload =
-				!materialRequest?.downloadStatus ||
-				[MaterialRequestDownloadStatus.NEW, MaterialRequestDownloadStatus.PENDING].includes(
-					materialRequest?.downloadStatus
-				);
-			shouldRefreshRequest = hasDownloadAvailableMessage && materialRequestHasNoDownload;
-		}
-
-		if (shouldRefreshRequest) {
-			refetchMaterialRequest().then(noop);
-		}
-	}, [messages, materialRequest, refetchMaterialRequest, user?.profileId]);
 
 	// Capture scrollHeight before every render so useLayoutEffect can correct after every page that is appended to the dom
 	const pageCount = messages?.pages?.length ?? 0;

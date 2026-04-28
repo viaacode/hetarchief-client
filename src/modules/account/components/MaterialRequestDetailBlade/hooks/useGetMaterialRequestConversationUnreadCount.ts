@@ -15,6 +15,6 @@ export function useGetMaterialRequestConversationUnreadCount(
 		refetchOnReconnect: true,
 		refetchOnWindowFocus: true,
 		enabled: enabled && !!materialRequestId,
-		refetchInterval: 10_000, // every 10 seconds
+		refetchInterval: 5_000, // every 5 seconds
 	});
 }

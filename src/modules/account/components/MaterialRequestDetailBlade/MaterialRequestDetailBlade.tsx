@@ -1,4 +1,5 @@
 import { useGetMaterialRequestConversationUnreadCount } from '@account/components/MaterialRequestDetailBlade/hooks/useGetMaterialRequestConversationUnreadCount';
+import { useGetMaterialRequestStatus } from '@account/components/MaterialRequestDetailBlade/hooks/useGetMaterialRequestStatus';
 import { MaterialRequestConversation } from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversation';
 import { MaterialRequestDownloadBlade } from '@account/components/MaterialRequestDownloadBlade/MaterialRequestDownloadBlade';
 import { MaterialRequestEvaluatorOptions } from '@account/components/MaterialRequestEvaluatorOptions/MaterialRequestEvaluatorOptions';
@@ -46,13 +47,12 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { toastService } from '@shared/services/toast-service';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { isMobileSize } from '@shared/utils/is-mobile';
-import type { QueryObserverResult } from '@tanstack/react-query';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
 import { isNil, noop } from 'lodash-es';
 import { stringifyUrl } from 'query-string';
-import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type FC, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useDetectKeyboardOpen from 'use-detect-keyboard-open';
 import { StringParam, useQueryParam } from 'use-query-params';
@@ -66,16 +66,12 @@ interface MaterialRequestDetailBladeProps {
 	onClose: (statusChanged: boolean) => void;
 	allowRequestCancellation: boolean;
 	currentMaterialRequestDetail: MaterialRequest | undefined;
-	refetchMaterialRequest: () => Promise<QueryObserverResult<MaterialRequest | null, Error>>;
-	afterStatusChanged: () => void;
 }
 
 export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	onClose,
 	allowRequestCancellation,
 	currentMaterialRequestDetail,
-	refetchMaterialRequest,
-	afterStatusChanged,
 }) => {
 	const locale = useLocale();
 	const user = useSelector(selectCommonUser);
@@ -88,7 +84,6 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	const isKeyboardOpen = useDetectKeyboardOpen();
 
 	const [showEvaluatorOptions, setShowEvaluatorOptions] = useState(false);
-	const [hasStatusChanged, setHasStatusChanged] = useState(false);
 	const [isDetailStatusBladeOpenWithStatus, setIsDetailStatusBladeOpenWithStatus] = useState<
 		MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED | undefined
 	>(undefined);
@@ -97,54 +92,73 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	const [activeTabRaw, setActiveTab] = useQueryParam(QUERY_PARAM_KEY.ACTIVE_TAB, StringParam);
 	const activeTab = activeTabRaw || MaterialRequestDetailBladeTabs.Information;
 
-	const handleStatusChanged = useCallback(() => {
-		setHasStatusChanged(true);
-		afterStatusChanged();
-	}, [afterStatusChanged]);
+	const { data: materialRequestStatus, refetch: refetchMaterialRequestStatus } =
+		useGetMaterialRequestStatus(currentMaterialRequestDetail?.id);
+
+	const materialRequest: MaterialRequest | undefined = useMemo(() => {
+		if (!currentMaterialRequestDetail) {
+			return undefined;
+		}
+		return {
+			...currentMaterialRequestDetail,
+			...(materialRequestStatus || {}),
+		};
+	}, [currentMaterialRequestDetail, materialRequestStatus]);
+
+	const hasStatusChanged = useMemo(
+		() => currentMaterialRequestDetail?.status !== materialRequestStatus?.status,
+		[currentMaterialRequestDetail, materialRequestStatus]
+	);
 
 	const isRequester = useMemo(
-		() => currentMaterialRequestDetail?.requesterId === user?.profileId,
-		[currentMaterialRequestDetail?.requesterId, user?.profileId]
+		() => materialRequest?.requesterId === user?.profileId,
+		[materialRequest?.requesterId, user?.profileId]
 	);
 	const canUserEvaluate = useMemo(
 		() => !!user?.isEvaluator && !isRequester,
 		[user?.isEvaluator, isRequester]
 	);
 	const canRequestBeEvaluated = useMemo(
-		() => currentMaterialRequestDetail?.status === MaterialRequestStatus.PENDING && canUserEvaluate,
-		[currentMaterialRequestDetail?.status, canUserEvaluate]
+		() => materialRequest?.status === MaterialRequestStatus.PENDING && canUserEvaluate,
+		[materialRequest?.status, canUserEvaluate]
 	);
 	const requestHasAdditionalConditionsAsked = useMemo(() => {
-		const lastEvent = getLastEvent(currentMaterialRequestDetail);
+		const lastEvent = getLastEvent(materialRequest);
 		return (
-			currentMaterialRequestDetail?.status === MaterialRequestStatus.PENDING &&
+			materialRequest?.status === MaterialRequestStatus.PENDING &&
 			lastEvent?.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS
 		);
-	}, [currentMaterialRequestDetail]);
+	}, [materialRequest]);
 
 	const itemLink = useMemo(
 		() =>
-			currentMaterialRequestDetail
+			materialRequest
 				? stringifyUrl({
-						url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${currentMaterialRequestDetail.maintainerSlug}/${currentMaterialRequestDetail.objectSchemaIdentifier}`,
-						query: isNil(currentMaterialRequestDetail.reuseForm?.endTime)
+						url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${materialRequest.maintainerSlug}/${materialRequest.objectSchemaIdentifier}`,
+						query: isNil(materialRequest.reuseForm?.endTime)
 							? {}
 							: {
 									[QUERY_PARAM_KEY.CUE_POINTS]: [
-										currentMaterialRequestDetail.reuseForm?.startTime,
-										currentMaterialRequestDetail.reuseForm?.endTime,
+										materialRequest.reuseForm?.startTime,
+										materialRequest.reuseForm?.endTime,
 									].join(CUE_POINTS_SEPARATOR),
 								},
 					})
 				: '',
-		[currentMaterialRequestDetail, locale]
+		[materialRequest, locale]
+	);
+
+	const hasFinalSummary = useMemo(
+		() => getLastEvent(materialRequest)?.messageType === MaterialRequestEventType.FINAL_SUMMARY,
+		[materialRequest]
 	);
 
 	const { data: unreadCount, refetch: refetchUnreadCount } =
 		useGetMaterialRequestConversationUnreadCount(
-			currentMaterialRequestDetail?.id,
-			activeTab !== MaterialRequestDetailBladeTabs.Conversation &&
-				!currentMaterialRequestDetail?.isArchived
+			materialRequest?.id,
+			// Only fetch the unreadCount when we are not on the conversation tab
+			// And only when the request is not yet closed with a final summary
+			activeTab !== MaterialRequestDetailBladeTabs.Conversation && !hasFinalSummary
 		);
 
 	const tabs: TabProps[] = useMemo(
@@ -158,18 +172,14 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		[isMobile, isRequester, canUserEvaluate, activeTab, unreadCount]
 	);
 
+	// Set the status to pending when an evaluator opens a request with status new
 	useEffect(() => {
-		if (currentMaterialRequestDetail?.status === MaterialRequestStatus.NEW && canUserEvaluate) {
-			MaterialRequestsService.setAsPending(currentMaterialRequestDetail.id).then(() => {
-				handleStatusChanged();
-			});
+		if (materialRequest?.status === MaterialRequestStatus.NEW && canUserEvaluate) {
+			MaterialRequestsService.setAsPending(materialRequest.id).then(() =>
+				refetchMaterialRequestStatus()
+			);
 		}
-	}, [
-		currentMaterialRequestDetail?.id,
-		currentMaterialRequestDetail?.status,
-		canUserEvaluate,
-		handleStatusChanged,
-	]);
+	}, [materialRequest?.id, materialRequest?.status, canUserEvaluate, refetchMaterialRequestStatus]);
 
 	// Resetting the active tab on close of the blade
 	useEffect(() => {
@@ -179,7 +189,8 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	}, [isDetailBladeOpen, setActiveTab]);
 
 	const onFailedRequest = () => {
-		handleStatusChanged(); // Trigger this even when it fails because some step in the process could be the cause
+		// Trigger this even when it fails because some step in the process could be the cause
+		refetchMaterialRequestStatus().then(noop);
 
 		toastService.notify({
 			maxLines: 3,
@@ -194,68 +205,63 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 
 	const onCancelRequest = async () => {
 		try {
-			if (!currentMaterialRequestDetail) {
+			if (!materialRequest) {
 				return;
 			}
 			setShowConfirmModal(false);
-			const response = await MaterialRequestsService.cancel(currentMaterialRequestDetail.id);
+			const response = await MaterialRequestsService.cancel(materialRequest.id);
 			if (response === undefined) {
 				onFailedRequest();
 				return;
 			}
-			handleStatusChanged();
+			refetchMaterialRequestStatus().then(noop);
 		} catch (_err) {
 			onFailedRequest();
 		}
 	};
 
 	const onHandleDownload = () => {
-		if (currentMaterialRequestDetail) {
-			handleDownloadMaterialRequest(currentMaterialRequestDetail).then(setDownloadUrl);
+		if (materialRequest) {
+			handleDownloadMaterialRequest(materialRequest).then(setDownloadUrl);
 		}
 	};
 
 	const renderContent = () => {
-		if (!currentMaterialRequestDetail) {
+		if (!materialRequest) {
 			return null;
 		}
 
 		// No tabs to show, so always render all content in the blade
 		if (
-			!currentMaterialRequestDetail.reuseForm ||
-			currentMaterialRequestDetail.isArchived ||
+			!materialRequest.reuseForm ||
+			materialRequest.isArchived ||
 			activeTab === MaterialRequestDetailBladeTabs.Information
 		) {
-			return (
-				<MaterialRequestContentInfo currentMaterialRequestDetail={currentMaterialRequestDetail} />
-			);
+			return <MaterialRequestContentInfo currentMaterialRequestDetail={materialRequest} />;
 		}
 
 		switch (activeTab) {
 			case MaterialRequestDetailBladeTabs.Conversation:
 				return (
 					<MaterialRequestConversation
-						materialRequest={currentMaterialRequestDetail}
-						refetchMaterialRequest={refetchMaterialRequest}
+						materialRequest={materialRequest}
 						handleDownload={onHandleDownload}
-						onMessagesLoaded={() => refetchUnreadCount().then(noop)}
+						onMessagesLoaded={() => !!unreadCount && refetchUnreadCount().then(noop)}
 					/>
 				);
 			case MaterialRequestDetailBladeTabs.Documents:
-				return <MaterialRequestDocuments materialRequest={currentMaterialRequestDetail} />;
+				return <MaterialRequestDocuments materialRequest={materialRequest} />;
 		}
 	};
 
 	const renderDownload = () => {
-		if (!currentMaterialRequestDetail) {
+		if (!materialRequest) {
 			return null;
 		}
 
-		const { downloadStatus } = currentMaterialRequestDetail;
-		const hasDownloadExpired = determineHasDownloadExpired(currentMaterialRequestDetail);
-		const downloadExpirationDate = formatMediumDate(
-			asDate(currentMaterialRequestDetail.downloadExpiresAt)
-		);
+		const { downloadStatus } = materialRequest;
+		const hasDownloadExpired = determineHasDownloadExpired(materialRequest);
+		const downloadExpirationDate = formatMediumDate(asDate(materialRequest.downloadExpiresAt));
 		const downloadStatusSucceeded = downloadStatus === MaterialRequestDownloadStatus.SUCCEEDED;
 		const downloadStatusFailed = downloadStatus === MaterialRequestDownloadStatus.FAILED;
 		let downloadInformationMessage = '';
@@ -314,15 +320,12 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	};
 
 	const renderRequesterCTA = () => {
-		if (!isRequester || !currentMaterialRequestDetail) {
+		if (!isRequester || !materialRequest) {
 			return null;
 		}
 
 		// Is the requester allowed to cancel?
-		if (
-			currentMaterialRequestDetail.status === MaterialRequestStatus.NEW &&
-			allowRequestCancellation
-		) {
+		if (materialRequest.status === MaterialRequestStatus.NEW && allowRequestCancellation) {
 			return (
 				<Button
 					className={clsx(styles['p-material-request-detail__cancel-button'])}
@@ -361,13 +364,13 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		}
 
 		// Status is approved so render the download status
-		if (currentMaterialRequestDetail.status === MaterialRequestStatus.APPROVED) {
+		if (materialRequest.status === MaterialRequestStatus.APPROVED) {
 			return renderDownload();
 		}
 	};
 
 	const renderCTA = () => {
-		if (!currentMaterialRequestDetail) {
+		if (!materialRequest) {
 			return null;
 		}
 
@@ -377,19 +380,16 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 
 		if (!canRequestBeEvaluated) {
 			// Status is approved so render the download status
-			if (
-				currentMaterialRequestDetail.status === MaterialRequestStatus.APPROVED &&
-				canUserEvaluate
-			) {
+			if (materialRequest.status === MaterialRequestStatus.APPROVED && canUserEvaluate) {
 				return renderDownload();
 			}
 			return null;
 		}
 
 		// Request can be evaluated and user has additional conditions approved
-		const lastEvent = getLastEvent(currentMaterialRequestDetail);
+		const lastEvent = getLastEvent(materialRequest);
 		if (
-			currentMaterialRequestDetail.status === MaterialRequestStatus.PENDING &&
+			materialRequest.status === MaterialRequestStatus.PENDING &&
 			lastEvent?.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED
 		) {
 			// TODO: add logic for manual start of the download
@@ -446,7 +446,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				</DropdownButton>
 				<DropdownContent>
 					<MaterialRequestEvaluatorOptions
-						currentMaterialRequestDetail={currentMaterialRequestDetail}
+						currentMaterialRequestDetail={materialRequest}
 						onApproveRequest={() =>
 							setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.APPROVED)
 						}
@@ -462,30 +462,30 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	};
 
 	const getBladeHeaderProps = (includeCTAs: boolean): BladeHeaderProps => {
-		if (!currentMaterialRequestDetail?.reuseForm || currentMaterialRequestDetail?.isArchived) {
+		if (!materialRequest?.reuseForm || materialRequest?.isArchived) {
 			return {
-				title: currentMaterialRequestDetail?.isArchived
+				title: materialRequest?.isArchived
 					? tText(
 							'modules/account/components/material-request-detail-blade/material-request-detail-blade___gearchiveerde-aanvraag'
 						)
 					: tText(
 							'modules/account/components/material-request-detail-blade/material-requests___detail'
 						),
-				stickySubtitle: !currentMaterialRequestDetail?.isArchived && <MaterialRequestInformation />,
-				subtitle: currentMaterialRequestDetail ? (
+				stickySubtitle: !materialRequest?.isArchived && <MaterialRequestInformation />,
+				subtitle: materialRequest ? (
 					<MaterialCard
 						openInNewTab={true}
-						objectSchemaIdentifier={currentMaterialRequestDetail.objectSchemaIdentifier}
-						title={currentMaterialRequestDetail.objectSchemaName}
-						thumbnail={currentMaterialRequestDetail.objectThumbnailUrl}
+						objectSchemaIdentifier={materialRequest.objectSchemaIdentifier}
+						title={materialRequest.objectSchemaName}
+						thumbnail={materialRequest.objectThumbnailUrl}
 						hideThumbnail={true}
 						orientation="vertical"
 						link={itemLink}
-						type={currentMaterialRequestDetail.objectDctermsFormat ?? null}
-						publishedBy={currentMaterialRequestDetail.maintainerName}
-						publishedOrCreatedDate={currentMaterialRequestDetail.objectPublishedOrCreatedDate}
+						type={materialRequest.objectDctermsFormat ?? null}
+						publishedBy={materialRequest.maintainerName}
+						publishedOrCreatedDate={materialRequest.objectPublishedOrCreatedDate}
 						icon={getIconFromObjectType(
-							currentMaterialRequestDetail.objectDctermsFormat,
+							materialRequest.objectDctermsFormat,
 							isObjectEssenceAccessibleToUser
 						)}
 					/>
@@ -510,18 +510,16 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 					<div className={clsx(styles['p-material-request-detail__title'])}>
 						<h3 className={clsx(styles['p-material-request-detail__title--text'])}>
 							{allowRequestCancellation
-								? currentMaterialRequestDetail.maintainerName
-								: currentMaterialRequestDetail.requesterOrganisation}
+								? materialRequest.maintainerName
+								: materialRequest.requesterOrganisation}
 						</h3>
 						{isMobile && (
 							<div className={clsx(styles['p-material-request-detail__action-bar'])}>
-								<MaterialRequestStatusPill status={currentMaterialRequestDetail.status} showLabel />
+								<MaterialRequestStatusPill status={materialRequest.status} showLabel />
 								{includeCTAs && renderCTA()}
 							</div>
 						)}
-						{!isMobile && (
-							<MaterialRequestStatusPill status={currentMaterialRequestDetail.status} showLabel />
-						)}
+						{!isMobile && <MaterialRequestStatusPill status={materialRequest.status} showLabel />}
 					</div>
 					{!isMobile && (
 						<div className={clsx(styles['p-material-request-detail__action-bar'])}>
@@ -539,7 +537,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	};
 
 	const getBladeFooterProps = (): BladeFooterProps => {
-		if (!currentMaterialRequestDetail?.reuseForm || currentMaterialRequestDetail?.isArchived) {
+		if (!materialRequest?.reuseForm || materialRequest?.isArchived) {
 			return {
 				footerButtons: [
 					{
@@ -572,7 +570,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	};
 
 	const getBladeLayerIndex = () => {
-		if (!currentMaterialRequestDetail) {
+		if (!materialRequest) {
 			return 0;
 		}
 
@@ -672,9 +670,9 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 					} as BladeFooterButton,
 				]}
 			>
-				{currentMaterialRequestDetail && (
+				{materialRequest && (
 					<MaterialRequestEvaluatorOptions
-						currentMaterialRequestDetail={currentMaterialRequestDetail}
+						currentMaterialRequestDetail={materialRequest}
 						onApproveRequest={() =>
 							setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.APPROVED)
 						}
@@ -688,16 +686,13 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			</Blade>
 			<MaterialRequestStatusUpdateBlade
 				isOpen={!!isDetailStatusBladeOpenWithStatus}
-				onClose={(statusUpdated) => {
-					if (statusUpdated) {
-						setHasStatusChanged(true);
-					}
+				onClose={() => {
+					refetchMaterialRequestStatus().then(noop);
 					setShowEvaluatorOptions(false);
 					setIsDetailStatusBladeOpenWithStatus(undefined);
 				}}
 				status={isDetailStatusBladeOpenWithStatus}
-				currentMaterialRequestDetail={currentMaterialRequestDetail}
-				afterStatusChanged={afterStatusChanged}
+				currentMaterialRequestDetail={materialRequest}
 				layer={isDetailBladeOpen ? (isMobile ? 3 : 2) : 99}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 			/>

@@ -276,10 +276,6 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		setCurrentMaterialRequestId(row.original?.id);
 	};
 
-	const onMaterialRequestStatusChange = async () => {
-		await refetchCurrentMaterialRequestDetail();
-	};
-
 	const renderDetailBlade = () => {
 		if (!resolvedMaterialRequest) {
 			return null;
@@ -296,8 +292,6 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 				currentMaterialRequestDetail={
 					currentMaterialRequestId ? resolvedMaterialRequest : undefined
 				}
-				refetchMaterialRequest={refetchCurrentMaterialRequestDetail}
-				afterStatusChanged={onMaterialRequestStatusChange}
 			/>
 		);
 	};

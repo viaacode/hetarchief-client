@@ -1,10 +1,11 @@
+import { getLastEvent } from '@account/utils/get-last-material-request-event';
 import { isMaterialRequestClosed } from '@account/utils/is-material-request-closed';
 import { useGetMaterialRequestAttachments } from '@material-requests/hooks/get-material-request-attachments';
 import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from '@material-requests/services';
 import {
 	type MaterialRequest,
 	type MaterialRequestAttachment,
-	MaterialRequestStatus,
+	MaterialRequestEventType,
 } from '@material-requests/types';
 import { Button, PaginationBar, Table } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
@@ -68,15 +69,16 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 		MATERIAL_REQUEST_DOCUMENTS_PAGE_SIZE
 	);
 
-	// Refetch the documents when the status changes to cancelled or denied. That's when the summary is generated
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Only refetch when the request history changes
 	useEffect(() => {
-		if (
-			materialRequest.status === MaterialRequestStatus.CANCELLED ||
-			materialRequest.status === MaterialRequestStatus.DENIED
-		) {
+		if (isFetching || isLoading) {
+			return;
+		}
+
+		if (getLastEvent(materialRequest)?.messageType === MaterialRequestEventType.FINAL_SUMMARY) {
 			refetchAttachments().then(noop);
 		}
-	}, [materialRequest.status, refetchAttachments]);
+	}, [materialRequest.history, refetchAttachments]);
 
 	const columns: Column<MaterialRequestAttachment>[] = [
 		{
@@ -146,7 +148,7 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 		column: HeaderGroup<MaterialRequestAttachment> | ColumnInstance<MaterialRequestAttachment>
 	): Partial<TableHeaderProps> | Partial<TableCellProps> => {
 		if (column.id === 'createdAt') {
-			const columnWidth = '17rem';
+			const columnWidth = '18rem';
 			return {
 				style: {
 					width: columnWidth,

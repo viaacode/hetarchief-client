@@ -1,5 +1,5 @@
 import { MaterialRequestsService } from '@material-requests/services';
-import type { MaterialRequestMessage } from '@material-requests/types';
+import { MaterialRequestEventType, type MaterialRequestMessage } from '@material-requests/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import type { IPagination } from '@studiohyperdrive/pagination';
 import {
@@ -30,7 +30,18 @@ export function useGetMaterialRequestConversationInfinite(
 		refetchOnMount: 'always',
 		refetchOnReconnect: 'always',
 		refetchOnWindowFocus: 'always',
-		refetchInterval: 10_000, // every 10 seconds
-		enabled,
+		enabled: enabled && !!materialRequestId,
+		refetchInterval: (query) => {
+			const lastMessages = (query.state.data?.pages?.[0]?.items || []) as MaterialRequestMessage[];
+
+			const hasFinalSummary =
+				lastMessages.at(0)?.messageType === MaterialRequestEventType.FINAL_SUMMARY;
+
+			if (!hasFinalSummary) {
+				return 5_000;
+			}
+
+			return false;
+		},
 	});
 }
