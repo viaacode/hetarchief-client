@@ -206,6 +206,7 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 							type: 'customButton',
 							component: (
 								<MessageFileUpload
+									selectedFiles={selectedFiles}
 									onFileSelected={(file) => setSelectedFiles((prev) => [...prev, file])}
 									disabled={isMaterialRequestClosed(materialRequest)}
 								/>
