@@ -7,6 +7,7 @@ import {
 	type MaterialRequestMessage,
 	type MaterialRequestSendAll,
 	MaterialRequestStatus,
+	type MaterialRequestStatuses,
 	type MaterialRequestUpdate,
 } from '@material-requests/types';
 import { ApiService } from '@shared/services/api-service';
@@ -66,6 +67,21 @@ export abstract class MaterialRequestsService {
 				stringifyUrl({
 					url: `${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}`,
 					query: { resolveThumbnailUrl: true },
+				})
+			)
+			.json();
+	}
+
+	public static async getMaterialRequestStatusById(
+		id: string | null
+	): Promise<MaterialRequestStatuses | null> {
+		if (!id) {
+			return null;
+		}
+		return ApiService.getApi()
+			.get(
+				stringifyUrl({
+					url: `${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}/status`,
 				})
 			)
 			.json();
