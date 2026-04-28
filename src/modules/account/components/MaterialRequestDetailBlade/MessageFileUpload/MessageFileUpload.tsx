@@ -4,16 +4,17 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import clsx from 'clsx';
-import React, { type FC, useRef } from 'react';
+import React, { type FC, useMemo, useRef } from 'react';
 
 import styles from './MessageFileUpload.module.scss';
 
 interface MessageFileUploadProps {
 	onFileSelected: (file: File) => void;
 	disabled?: boolean;
+	selectedFiles: File[];
 }
 
-const MAX_FILE_SIZE = 30 * 1024 * 1024; // 30MB in bytes
+const MAX_FILE_SIZE_TOTAL = 25 * 1024 * 1024; // 25MB in bytes
 const ALLOWED_FILE_TYPES = [
 	'.pdf',
 	'.doc',
@@ -26,8 +27,21 @@ const ALLOWED_FILE_TYPES = [
 	'.csv',
 ];
 
-const MessageFileUpload: FC<MessageFileUploadProps> = ({ onFileSelected, disabled = false }) => {
+const MessageFileUpload: FC<MessageFileUploadProps> = ({
+	onFileSelected,
+	selectedFiles,
+	disabled = false,
+}) => {
 	const fileInputRef = useRef<HTMLInputElement>(null);
+	const totalFileSize = useMemo(() => {
+		let totalSize = 0;
+
+		selectedFiles.forEach((file) => {
+			totalSize += file.size;
+		});
+
+		return totalSize;
+	}, [selectedFiles]);
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const files = e.target.files;
@@ -42,7 +56,7 @@ const MessageFileUpload: FC<MessageFileUploadProps> = ({ onFileSelected, disable
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
 
-			if (file.size > MAX_FILE_SIZE) {
+			if (totalFileSize + file.size > MAX_FILE_SIZE_TOTAL) {
 				hasInvalidFiles = true;
 				continue;
 			}

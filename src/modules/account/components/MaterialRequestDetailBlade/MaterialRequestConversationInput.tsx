@@ -9,6 +9,7 @@ import {
 } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { Spinner } from '@shared/components/Spinner/Spinner';
 import { tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import clsx from 'clsx';
@@ -49,12 +50,14 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 			return !textContent;
 		}, [currentMessage]);
 
+		const inputDisabled = useMemo(
+			() => isSending || isMaterialRequestClosed(materialRequest),
+			[isSending, materialRequest]
+		);
+
 		const sendMessageDisabled = useMemo(
-			() =>
-				(isMessageEmpty && selectedFiles.length === 0) ||
-				isSending ||
-				isMaterialRequestClosed(materialRequest),
-			[isMessageEmpty, selectedFiles, isSending, materialRequest]
+			() => (isMessageEmpty && selectedFiles.length === 0) || inputDisabled,
+			[isMessageEmpty, selectedFiles, inputDisabled]
 		);
 
 		const handleSendMessage = useCallback(() => {
@@ -182,11 +185,9 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 							}
 						},
 					}}
-					disabled={isMaterialRequestClosed(materialRequest)}
+					disabled={inputDisabled}
 					className={
-						isMaterialRequestClosed(materialRequest)
-							? styles['p-conversation-messages__editor--disabled']
-							: undefined
+						inputDisabled ? styles['p-conversation-messages__editor--disabled'] : undefined
 					}
 					id={editorId}
 					value={currentMessage}
@@ -205,6 +206,7 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 							type: 'customButton',
 							component: (
 								<MessageFileUpload
+									selectedFiles={selectedFiles}
 									onFileSelected={(file) => setSelectedFiles((prev) => [...prev, file])}
 									disabled={isMaterialRequestClosed(materialRequest)}
 								/>
@@ -218,7 +220,7 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 					className={clsx(styles['p-conversation-messages__editor__send-button'])}
 					variants={['text']}
 					// Replace this icon with a send icon when Jelle and JN add the icons to the font
-					icon={<Icon name={IconNamesLight.PaperPlane} />}
+					icon={isSending ? <Spinner /> : <Icon name={IconNamesLight.PaperPlane} />}
 					disabled={sendMessageDisabled}
 					tabIndex={sendMessageDisabled ? -1 : undefined}
 					onClick={handleSendMessage}
