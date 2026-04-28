@@ -213,7 +213,6 @@ export abstract class MaterialRequestsService {
 				headers: {
 					'Content-Type': undefined, // Overwrite application/json to allow multipart/form-data
 				},
-				timeout: 60_000,
 			})
 			.json();
 	}
