@@ -165,6 +165,7 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 
 		:global(.c-rich-text-editor) {
 			height: $rich-text-editor-height-desktop;
+			overflow: hidden;
 
 			:global(.bf-controlbar) {
 				background-color: abstracts.$platinum;
