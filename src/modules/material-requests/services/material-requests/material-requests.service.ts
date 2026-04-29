@@ -207,14 +207,12 @@ export abstract class MaterialRequestsService {
 			formData.append('files', file);
 		});
 
-		const headers = {
-			'Content-Type': undefined, // Overwrite application/json to allow multipart/form-data
-		};
-
 		return ApiService.getApi()
 			.post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/messages`, {
 				body: formData,
-				headers,
+				headers: {
+					'Content-Type': undefined, // Overwrite application/json to allow multipart/form-data
+				},
 			})
 			.json();
 	}
