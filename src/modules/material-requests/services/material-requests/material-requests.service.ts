@@ -18,6 +18,8 @@ import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from './material-requests.service.
 import type { GetMaterialRequestsProps } from './material-requests.service.types';
 
 export abstract class MaterialRequestsService {
+	public static POLLING_INTERVAL = 5_000; // every 5 seconds
+
 	public static async getAll({
 		search,
 		type,
@@ -78,13 +80,7 @@ export abstract class MaterialRequestsService {
 		if (!id) {
 			return null;
 		}
-		return ApiService.getApi()
-			.get(
-				stringifyUrl({
-					url: `${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}/status`,
-				})
-			)
-			.json();
+		return ApiService.getApi().get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}/status`).json();
 	}
 
 	public static async handleDownload(id: string): Promise<string> {

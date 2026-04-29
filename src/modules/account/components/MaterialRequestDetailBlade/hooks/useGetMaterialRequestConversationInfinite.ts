@@ -38,7 +38,7 @@ export function useGetMaterialRequestConversationInfinite(
 				lastMessages.at(0)?.messageType === MaterialRequestEventType.FINAL_SUMMARY;
 
 			if (!hasFinalSummary) {
-				return 5_000;
+				return MaterialRequestsService.POLLING_INTERVAL;
 			}
 
 			return false;
