@@ -182,7 +182,7 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 							numberOfAttachments: attachments?.total,
 						}
 					)}
-					variants={['outline', isMobile ? 'sm' : 'md']}
+					variants={['info', isMobile ? 'sm' : 'md']}
 					iconStart={<Icon name={IconNamesLight.Download} aria-hidden="true" />}
 					tabIndex={-1}
 				/>
