@@ -63,10 +63,10 @@
 				justify-content: center;
 				color: abstracts.$zinc;
 				font-weight: abstracts.$font-weight-normal;
-				padding: abstracts.$spacer-sm;
+				padding: 1.2rem; // No spacer because we need something in between $spacer-sm and $spacer-xs
 
 				:global(.c-tab__icon) {
-					font-size: abstracts.$font-size-lg;
+					font-size: abstracts.$font-size-1xl;
 					margin-right: 0;
 				}
 
