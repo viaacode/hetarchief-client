@@ -4,6 +4,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import clsx from 'clsx';
+import { sumBy } from 'lodash-es';
 import React, { type FC, useMemo, useRef } from 'react';
 
 import styles from './MessageFileUpload.module.scss';
@@ -33,15 +34,10 @@ const MessageFileUpload: FC<MessageFileUploadProps> = ({
 	disabled = false,
 }) => {
 	const fileInputRef = useRef<HTMLInputElement>(null);
-	const totalFileSize = useMemo(() => {
-		let totalSize = 0;
-
-		selectedFiles.forEach((file) => {
-			totalSize += file.size;
-		});
-
-		return totalSize;
-	}, [selectedFiles]);
+	const totalFileSize = useMemo(
+		() => sumBy(selectedFiles, (file) => file.size) || 0,
+		[selectedFiles]
+	);
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const files = e.target.files;
