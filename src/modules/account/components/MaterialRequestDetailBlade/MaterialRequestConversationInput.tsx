@@ -26,24 +26,6 @@ import { v4 as uuid } from 'uuid';
 import styles from './MaterialRequestConversation.module.scss';
 import { MessageFileUpload } from './MessageFileUpload';
 
-const truncateFilename = (filename: string, maxLength: number): string => {
-	if (filename.length <= maxLength) {
-		return filename;
-	}
-
-	const lastDotIndex = filename.lastIndexOf('.');
-	const extension = lastDotIndex > 0 ? filename.substring(lastDotIndex) : '';
-	const nameWithoutExtension = lastDotIndex > 0 ? filename.substring(0, lastDotIndex) : filename;
-
-	const maxNameLength = maxLength - extension.length - 3;
-
-	if (maxNameLength <= 0) {
-		return `${filename.substring(0, maxLength - 3)}...`;
-	}
-
-	return `${nameWithoutExtension.substring(0, maxNameLength)}...${extension}`;
-};
-
 type MaterialRequestConversationInputProps = {
 	materialRequest: MaterialRequest;
 	onAttachmentsChanged: (fileListHeight: number) => void;
@@ -167,7 +149,7 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 							label: (
 								<>
 									<Icon name={IconNamesLight.File} />
-									<span>{truncateFilename(file.name, 30)}</span>
+									<span>{file.name}</span>
 									<span> ({Math.round((file.size / 1024 / 1024) * 100) / 100} MB)</span>
 								</>
 							),
