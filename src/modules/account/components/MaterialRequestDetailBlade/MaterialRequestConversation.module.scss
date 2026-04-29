@@ -198,7 +198,7 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 
 				:global(.DraftEditor-editorContainer),
 				:global(.public-DraftEditor-content) {
-					padding-right: abstracts.$spacer-lg;
+					padding-right: abstracts.$spacer-md;
 				}
 			}
 		}
