@@ -49,17 +49,17 @@
 		background-color: $silver !important;
 	}
 
-	// Using padding 1em because rem-based $spacer-sm causes misalignment (Flowplayer uses em-based layout)
 	.fp-header {
 		align-items: center !important;
-		padding: 1em !important;
+		justify-content: space-between !important;
 
 		.fp-right {
-			display: flex !important;
-			align-items: center !important;
-			justify-content: flex-end !important;
-			flex: 1 !important;
-			text-align: right !important;
+			position: absolute !important;
+			left: 50% !important;
+			top: 50% !important;
+			transform: translate(-50%, -50%) !important;
+			text-align: center !important;
+			background: transparent !important;
 		}
 	}
 }
