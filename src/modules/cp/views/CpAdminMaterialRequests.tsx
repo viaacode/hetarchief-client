@@ -247,10 +247,6 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		});
 	};
 
-	const onMaterialRequestStatusChange = async () => {
-		await refetchCurrentMaterialRequestDetail();
-	};
-
 	const renderPagination = ({ gotoPage }: { gotoPage: (i: number) => void }): ReactNode => (
 		<PaginationBar
 			showFirstAndLastButtons
@@ -279,8 +275,6 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 				currentMaterialRequestDetail={
 					currentMaterialRequestId ? resolvedMaterialRequest : undefined
 				}
-				refetchMaterialRequest={refetchCurrentMaterialRequestDetail}
-				afterStatusChanged={onMaterialRequestStatusChange}
 			/>
 		);
 	};

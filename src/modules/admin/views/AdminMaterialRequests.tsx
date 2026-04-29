@@ -302,10 +302,6 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		setCurrentMaterialRequestId(row.original?.id || null);
 	};
 
-	const onMaterialRequestStatusChange = async () => {
-		await refetchCurrentMaterialRequestDetail();
-	};
-
 	const renderDetailBlade = () => {
 		return (
 			<MaterialRequestDetailBlade
@@ -319,8 +315,6 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 				currentMaterialRequestDetail={
 					currentMaterialRequestId ? resolvedMaterialRequest : undefined
 				}
-				refetchMaterialRequest={refetchCurrentMaterialRequestDetail}
-				afterStatusChanged={onMaterialRequestStatusChange}
 			/>
 		);
 	};

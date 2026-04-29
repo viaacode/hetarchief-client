@@ -47,6 +47,11 @@ export interface MaterialRequest {
 	history: MaterialRequestEvent[];
 }
 
+export type MaterialRequestStatuses = Pick<
+	MaterialRequest,
+	'id' | 'status' | 'downloadStatus' | 'updatedAt' | 'history'
+>;
+
 export interface MaterialRequestEvent {
 	id: string;
 	materialRequestId: string;

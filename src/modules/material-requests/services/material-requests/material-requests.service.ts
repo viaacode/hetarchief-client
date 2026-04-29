@@ -7,6 +7,7 @@ import {
 	type MaterialRequestMessage,
 	type MaterialRequestSendAll,
 	MaterialRequestStatus,
+	type MaterialRequestStatuses,
 	type MaterialRequestUpdate,
 } from '@material-requests/types';
 import { ApiService } from '@shared/services/api-service';
@@ -17,6 +18,8 @@ import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from './material-requests.service.
 import type { GetMaterialRequestsProps } from './material-requests.service.types';
 
 export abstract class MaterialRequestsService {
+	public static POLLING_INTERVAL = 5_000; // every 5 seconds
+
 	public static async getAll({
 		search,
 		type,
@@ -69,6 +72,15 @@ export abstract class MaterialRequestsService {
 				})
 			)
 			.json();
+	}
+
+	public static async getMaterialRequestStatusById(
+		id: string | null
+	): Promise<MaterialRequestStatuses | null> {
+		if (!id) {
+			return null;
+		}
+		return ApiService.getApi().get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}/status`).json();
 	}
 
 	public static async handleDownload(id: string): Promise<string> {

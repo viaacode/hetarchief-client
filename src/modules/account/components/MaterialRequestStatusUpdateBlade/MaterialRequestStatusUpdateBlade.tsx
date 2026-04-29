@@ -21,7 +21,6 @@ interface MaterialRequestStatusUpdateBladeProps {
 	onClose: (statusChanged: boolean) => void;
 	status?: MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED;
 	currentMaterialRequestDetail: MaterialRequest | undefined;
-	afterStatusChanged: () => void;
 	layer: number;
 	currentLayer: number;
 }
@@ -31,7 +30,6 @@ export const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBla
 	onClose,
 	status,
 	currentMaterialRequestDetail,
-	afterStatusChanged,
 	layer,
 	currentLayer,
 }) => {
@@ -85,7 +83,6 @@ export const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBla
 				onFailedRequest();
 				return;
 			}
-			afterStatusChanged();
 			onCloseModal(true);
 		} catch (_err) {
 			onFailedRequest();
@@ -93,8 +90,6 @@ export const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBla
 	};
 
 	const onFailedRequest = () => {
-		afterStatusChanged(); // Trigger this even when it fails because some step in the process could be the cause
-
 		toastService.notify({
 			maxLines: 3,
 			title: tText(
