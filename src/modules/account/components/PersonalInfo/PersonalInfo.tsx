@@ -20,9 +20,11 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
 import { getLocalisedOptions } from '@shared/utils/dates';
+import { isTabletPortraitSize } from '@shared/utils/is-mobile';
 import { useIsComplexReuseFlowUser } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
 import { format } from 'date-fns';
@@ -41,6 +43,10 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 	const commonUser = useSelector(selectCommonUser);
 	const locale = useLocale();
 	const isComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
+
+	// We need different functionalities for different viewport sizes
+	const windowSize = useWindowSizeContext();
+	const isTabletPortrait = isTabletPortraitSize(windowSize);
 
 	const { data: preferences } = useGetNewsletterPreferences(commonUser?.email);
 	const shouldRenderNewsletterCheckbox: boolean = !preferences?.newsletter;
@@ -254,7 +260,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 					'modules/account/components/personal-info/personal-info___door-je-aanvraag-een-naam-te-geven-behoud-je-het-overzicht-van-de-objecten-die-samen-in-een-aanvraag-uitgevoerd-werden'
 				)}
 			</p>
-			<Tooltip position="left">
+			<Tooltip position={isTabletPortrait ? 'top' : 'left'}>
 				<TooltipTrigger>
 					<TextInput
 						id="personal-info__material-request-group-name"
