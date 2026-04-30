@@ -1,9 +1,0 @@
-@use "../../../../styles/abstracts" as abstracts;
-
-.c-request-material-additional-conditions {
-	&__subtitle {
-		font-size: abstracts.$font-size-md;
-		font-weight: abstracts.$font-weight-bold;
-	}
-}
-

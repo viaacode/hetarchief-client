@@ -1,42 +1,55 @@
+import type {
+	MaterialRequest,
+	MaterialRequestMessageBodyAdditionalConditions,
+} from '@material-requests/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { tText } from '@shared/helpers/translate';
 import { type FC, useEffect, useState } from 'react';
-import styles from './MaterialRequestAdditionalConditionsBlade.module.scss';
-import type { MaterialRequestAdditionalConditionsBladeProps } from './MaterialRequestAdditionalConditionsBlade.types';
+import { BladeStepSubtitle } from '../BladeStepSubtitle/BladeStepSubtitle';
+
+interface MaterialRequestAdditionalConditionsBladeProps {
+	isOpen: boolean;
+	onClose: () => void;
+	onSubmit: (conditions: MaterialRequestMessageBodyAdditionalConditions | null) => void;
+	currentMaterialRequestDetail: MaterialRequest | undefined;
+	layer: number;
+	currentLayer: number;
+}
 
 export const MaterialRequestAdditionalConditionsBlade: FC<
 	MaterialRequestAdditionalConditionsBladeProps
-> = ({ isOpen, onClose, onSubmit, initialConditions, layer, currentLayer }) => {
-	const [conditions, setConditions] = useState(initialConditions || '');
+> = ({ isOpen, onClose, onSubmit, layer, currentLayer }) => {
+	const [conditions, setConditions] =
+		useState<MaterialRequestMessageBodyAdditionalConditions | null>(null);
 
 	useEffect(() => {
 		if (isOpen) {
-			setConditions(initialConditions || '');
+			setConditions(null);
 		}
-	}, [isOpen, initialConditions]);
+	}, [isOpen]);
 
 	const handleSubmit = () => {
 		onSubmit(conditions);
-		setConditions('');
+		setConditions(null);
 	};
 
 	const handleCancel = () => {
 		onClose();
-		setConditions('');
+		setConditions(null);
 	};
 
 	const getFooterButtons = (): BladeFooterButtonProps => {
 		return [
 			{
 				label: tText('Naar volgende stap'),
-				mobileLabel: tText('Naar volgende stap'),
+				mobileLabel: tText('Naar volgende stap - mobile'),
 				type: 'primary',
 				onClick: handleSubmit,
 			},
 			{
 				label: tText('Annuleer'),
-				mobileLabel: tText('Annuleer'),
+				mobileLabel: tText('Annuleer - mobile'),
 				type: 'secondary',
 				onClick: handleCancel,
 			},
@@ -52,11 +65,7 @@ export const MaterialRequestAdditionalConditionsBlade: FC<
 			onClose={onClose}
 			title={tText('Bijkomende voorwaarden')}
 			ariaLabel={tText('Bijkomende voorwaarden')}
-			stickySubtitle={
-				<span className={styles['c-request-material-additional-conditions__subtitle']}>
-					{tText('Stap 1 van 2')}
-				</span>
-			}
+			stickySubtitle={<BladeStepSubtitle label={tText('Stap 1 van 2')} />}
 			footerButtons={getFooterButtons()}
 		>
 			<div>

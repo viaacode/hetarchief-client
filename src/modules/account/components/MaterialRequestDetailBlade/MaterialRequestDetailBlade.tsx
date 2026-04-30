@@ -16,6 +16,7 @@ import {
 	type MaterialRequest,
 	MaterialRequestDownloadStatus,
 	MaterialRequestEventType,
+	type MaterialRequestMessageBodyAdditionalConditions,
 	MaterialRequestStatus,
 } from '@material-requests/types';
 import {
@@ -50,6 +51,7 @@ import { isLessThanXlSize, isMobileSize } from '@shared/utils/is-mobile';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
+import { se } from 'date-fns/locale';
 import { isNil, noop } from 'lodash-es';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, useEffect, useMemo, useState } from 'react';
@@ -93,7 +95,8 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	const [isAdditionalConditionsBladeOpen, setIsAdditionalConditionsBladeOpen] = useState(false);
 	const [isAdditionalConditionsResolutionBladeOpen, setIsAdditionalConditionsResolutionBladeOpen] =
 		useState(false);
-	const [submittedConditions, setSubmittedConditions] = useState<string>('');
+	const [submittedConditions, setSubmittedConditions] =
+		useState<MaterialRequestMessageBodyAdditionalConditions | null>(null);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 	const [activeTabRaw, setActiveTab] = useQueryParam(QUERY_PARAM_KEY.ACTIVE_TAB, StringParam);
@@ -580,31 +583,39 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		};
 	};
 
+	// Helper functions to calculate blade layers
+	const getDetailBladeLayer = (): number => (isDetailBladeOpen ? 1 : 99);
+
+	const getEvaluatorOptionsBladeLayer = (): number => (showEvaluatorOptions && isMobile ? 2 : 99);
+
+	const getStatusUpdateBladeLayer = (): number =>
+		isDetailStatusBladeOpenWithStatus ? (isMobile ? 3 : 2) : 99;
+
+	const getAdditionalConditionsBladeLayer = (): number =>
+		isAdditionalConditionsBladeOpen && isDetailBladeOpen ? (isMobile ? 3 : 2) : 99;
+
+	const getAdditionalConditionsResolutionBladeLayer = (): number =>
+		isAdditionalConditionsResolutionBladeOpen ? (isMobile ? 4 : 3) : 99;
+
 	const getBladeLayerIndex = () => {
 		if (!materialRequest) {
 			return 0;
 		}
 
 		if (isAdditionalConditionsResolutionBladeOpen) {
-			if (isMobile) {
-				return 4;
-			}
-			return 3;
+			return getAdditionalConditionsResolutionBladeLayer();
 		}
 
 		if (isDetailStatusBladeOpenWithStatus || isAdditionalConditionsBladeOpen) {
-			if (isMobile) {
-				return 3;
-			}
-			return 2;
+			return isMobile ? 3 : 2;
 		}
 
 		if (showEvaluatorOptions && isMobile) {
-			return 2;
+			return getEvaluatorOptionsBladeLayer();
 		}
 
 		if (isDetailBladeOpen) {
-			return 1;
+			return getDetailBladeLayer();
 		}
 		return 0;
 	};
@@ -613,21 +624,30 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		<BladeManager
 			currentLayer={getBladeLayerIndex()}
 			onCloseBlade={() => {
-				// Blade to approve/deny or additional conditions is open or
-				// On mobile we have evaluator options open
-				if (
-					isDetailStatusBladeOpenWithStatus ||
-					isAdditionalConditionsBladeOpen ||
-					isAdditionalConditionsResolutionBladeOpen ||
-					(isMobile && showEvaluatorOptions)
-				) {
-					setShowEvaluatorOptions(false); // close evaluator options
-					setIsDetailStatusBladeOpenWithStatus(undefined); // close status blade
-					setIsAdditionalConditionsBladeOpen(false); // close additional conditions blade
-					setIsAdditionalConditionsResolutionBladeOpen(false); // close resolution blade
-				} else {
-					onClose(hasStatusChanged);
+				// Check deepest blade first (resolution blade)
+				if (isAdditionalConditionsResolutionBladeOpen) {
+					setShowEvaluatorOptions(false);
+					setIsAdditionalConditionsBladeOpen(false);
+					setIsAdditionalConditionsResolutionBladeOpen(false);
+					return;
 				}
+
+				// Check additional conditions blade
+				if (isAdditionalConditionsBladeOpen) {
+					setShowEvaluatorOptions(false);
+					setIsAdditionalConditionsBladeOpen(false);
+					return;
+				}
+
+				// Blade to approve/deny is open or on mobile we have evaluator options open
+				if (isDetailStatusBladeOpenWithStatus || (isMobile && showEvaluatorOptions)) {
+					setShowEvaluatorOptions(false);
+					setIsDetailStatusBladeOpenWithStatus(undefined);
+					return;
+				}
+
+				// Close the main detail blade
+				onClose(hasStatusChanged);
 			}}
 			opacityStep={0.1}
 		>
@@ -635,7 +655,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				id="material-request-detail-blade"
 				className={clsx(styles['p-material-request-detail'])}
 				isOpen={isDetailBladeOpen}
-				layer={isDetailBladeOpen ? 1 : 99}
+				layer={getDetailBladeLayer()}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 				onClose={() => onClose(hasStatusChanged)}
 				ariaLabel={tText(
@@ -674,7 +694,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			<Blade
 				id="material-request-evaluation-detail-blade"
 				isOpen={isMobile && showEvaluatorOptions}
-				layer={showEvaluatorOptions && isMobile ? 2 : 99}
+				layer={getEvaluatorOptionsBladeLayer()}
 				currentLayer={showEvaluatorOptions ? getBladeLayerIndex() : 9999}
 				onClose={() => setShowEvaluatorOptions(false)}
 				ariaLabel={tText(
@@ -719,31 +739,22 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				}}
 				status={isDetailStatusBladeOpenWithStatus}
 				currentMaterialRequestDetail={materialRequest}
-				layer={isDetailStatusBladeOpenWithStatus && isDetailBladeOpen ? (isMobile ? 3 : 2) : 99}
+				layer={getStatusUpdateBladeLayer()}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 			/>
 			<MaterialRequestAdditionalConditionsBlade
-				isOpen={isAdditionalConditionsBladeOpen || isAdditionalConditionsResolutionBladeOpen}
+				isOpen={isAdditionalConditionsBladeOpen}
 				onClose={() => {
 					setShowEvaluatorOptions(false);
 					setIsAdditionalConditionsBladeOpen(false);
-					setSubmittedConditions('');
+					setSubmittedConditions(null);
 				}}
 				onSubmit={(conditions) => {
-					setShowEvaluatorOptions(false);
 					setSubmittedConditions(conditions);
 					setIsAdditionalConditionsResolutionBladeOpen(true);
 				}}
-				initialConditions={submittedConditions}
 				currentMaterialRequestDetail={materialRequest}
-				layer={
-					(isAdditionalConditionsBladeOpen || isAdditionalConditionsResolutionBladeOpen) &&
-					isDetailBladeOpen
-						? isMobile
-							? 3
-							: 2
-						: 99
-				}
+				layer={getAdditionalConditionsBladeLayer()}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 			/>
 
@@ -752,19 +763,13 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				onClose={() => {
 					setIsAdditionalConditionsResolutionBladeOpen(false);
 					setIsAdditionalConditionsBladeOpen(false);
-					setSubmittedConditions('');
+					setSubmittedConditions(null);
 				}}
 				onBack={() => {
 					setIsAdditionalConditionsResolutionBladeOpen(false);
 				}}
-				onSubmit={(conditions) => {
-					console.log(conditions);
-				}}
 				currentMaterialRequestDetail={materialRequest}
-				conditionsAccepted={false}
-				layer={
-					isAdditionalConditionsResolutionBladeOpen && isDetailBladeOpen ? (isMobile ? 4 : 3) : 99
-				}
+				layer={getAdditionalConditionsResolutionBladeLayer()}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 			/>
 		</BladeManager>
