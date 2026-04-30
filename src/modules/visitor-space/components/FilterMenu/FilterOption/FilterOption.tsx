@@ -79,6 +79,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 		[SearchFilterId.Mentions]: '33.5rem',
 		[SearchFilterId.Language]: '53.7rem',
 		[SearchFilterId.Maintainers]: '63.7rem',
+		[SearchFilterId.Reusability]: '20rem',
 		[SearchFilterId.Advanced]: '60.1rem',
 	};
 	const renderModal = (): ReactElement => {

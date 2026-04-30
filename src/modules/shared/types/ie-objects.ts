@@ -48,6 +48,7 @@ export enum IeObjectsSearchFilterField {
 	CONSULTABLE_ONLY_ON_LOCATION = 'isConsultableOnlyOnLocation',
 	CONSULTABLE_MEDIA = 'isConsultableMedia',
 	CONSULTABLE_PUBLIC_DOMAIN = 'isConsultablePublicDomain',
+	REUSABILITY = 'herbruikbaarheid',
 	CAST = 'cast',
 	IDENTIFIER = 'identifier',
 	OBJECT_TYPE = 'objectType',

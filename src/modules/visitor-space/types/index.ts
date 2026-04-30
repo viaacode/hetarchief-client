@@ -1,10 +1,9 @@
 import type { DefaultComponentProps } from '@meemoo/admin-core-ui/admin';
 import type { SelectOption, TagInfo } from '@meemoo/react-components';
-import type { ReactNode } from 'react';
-import type { FieldValues, UseFormHandleSubmit } from 'react-hook-form';
-
 import type { IeObjectType } from '@shared/types/ie-objects';
 import type { OnFilterMenuFormSubmit } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import type { ReactNode } from 'react';
+import type { FieldValues, UseFormHandleSubmit } from 'react-hook-form';
 
 import type { FilterProperty, Operator } from './filter-properties';
 
@@ -37,6 +36,7 @@ export enum SearchFilterId {
 	ConsultableOnlyOnLocation = 'onLocation',
 	ConsultableMedia = 'media',
 	ConsultablePublicDomain = 'publicDomain',
+	Reusability = 'herbruikbaarheid',
 	ObjectType = 'objectType',
 	Cast = 'cast',
 	SpacialCoverage = 'spacialCoverage',
