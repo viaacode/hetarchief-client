@@ -56,6 +56,8 @@ import React, { type FC, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useDetectKeyboardOpen from 'use-detect-keyboard-open';
 import { StringParam, useQueryParam } from 'use-query-params';
+import { MaterialRequestAdditionalConditionsBlade } from '../MaterialRequestAdditionalConditionsBlade/MaterialRequestAdditionalConditionsBlade';
+import { MaterialRequestAdditionalConditionsResolutionBlade } from '../MaterialRequestAdditionalConditionsResolutionBlade/MaterialRequestAdditionalConditionsResolutionBlade';
 import MaterialRequestContentInfo from './MaterialRequestContentInfo';
 import styles from './MaterialRequestDetailBlade.module.scss';
 import { MaterialRequestDocuments } from './MaterialRequestDocuments';
@@ -88,6 +90,10 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	const [isDetailStatusBladeOpenWithStatus, setIsDetailStatusBladeOpenWithStatus] = useState<
 		MaterialRequestStatus.APPROVED | MaterialRequestStatus.DENIED | undefined
 	>(undefined);
+	const [isAdditionalConditionsBladeOpen, setIsAdditionalConditionsBladeOpen] = useState(false);
+	const [isAdditionalConditionsResolutionBladeOpen, setIsAdditionalConditionsResolutionBladeOpen] =
+		useState(false);
+	const [submittedConditions, setSubmittedConditions] = useState<string>('');
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 	const [activeTabRaw, setActiveTab] = useQueryParam(QUERY_PARAM_KEY.ACTIVE_TAB, StringParam);
@@ -459,8 +465,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 						onDeclineRequest={() =>
 							setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
 						}
-						// TODO: add logic to request additional conditions
-						onRequestAdditionalConditions={noop}
+						onRequestAdditionalConditions={() => setIsAdditionalConditionsBladeOpen(true)}
 					/>
 				</DropdownContent>
 			</Dropdown>
@@ -580,7 +585,14 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			return 0;
 		}
 
-		if (isDetailStatusBladeOpenWithStatus) {
+		if (isAdditionalConditionsResolutionBladeOpen) {
+			if (isMobile) {
+				return 4;
+			}
+			return 3;
+		}
+
+		if (isDetailStatusBladeOpenWithStatus || isAdditionalConditionsBladeOpen) {
 			if (isMobile) {
 				return 3;
 			}
@@ -601,11 +613,18 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		<BladeManager
 			currentLayer={getBladeLayerIndex()}
 			onCloseBlade={() => {
-				// Blade to approve/deny is open or
+				// Blade to approve/deny or additional conditions is open or
 				// On mobile we have evaluator options open
-				if (isDetailStatusBladeOpenWithStatus || (isMobile && showEvaluatorOptions)) {
+				if (
+					isDetailStatusBladeOpenWithStatus ||
+					isAdditionalConditionsBladeOpen ||
+					isAdditionalConditionsResolutionBladeOpen ||
+					(isMobile && showEvaluatorOptions)
+				) {
 					setShowEvaluatorOptions(false); // close evaluator options
 					setIsDetailStatusBladeOpenWithStatus(undefined); // close status blade
+					setIsAdditionalConditionsBladeOpen(false); // close additional conditions blade
+					setIsAdditionalConditionsResolutionBladeOpen(false); // close resolution blade
 				} else {
 					onClose(hasStatusChanged);
 				}
@@ -685,8 +704,9 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 						onDeclineRequest={() =>
 							setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
 						}
-						// TODO: add logic to request additional conditions
-						onRequestAdditionalConditions={noop}
+						onRequestAdditionalConditions={() => {
+							setIsAdditionalConditionsBladeOpen(true);
+						}}
 					/>
 				)}
 			</Blade>
@@ -699,7 +719,52 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				}}
 				status={isDetailStatusBladeOpenWithStatus}
 				currentMaterialRequestDetail={materialRequest}
-				layer={isDetailBladeOpen ? (isMobile ? 3 : 2) : 99}
+				layer={isDetailStatusBladeOpenWithStatus && isDetailBladeOpen ? (isMobile ? 3 : 2) : 99}
+				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
+			/>
+			<MaterialRequestAdditionalConditionsBlade
+				isOpen={isAdditionalConditionsBladeOpen || isAdditionalConditionsResolutionBladeOpen}
+				onClose={() => {
+					setShowEvaluatorOptions(false);
+					setIsAdditionalConditionsBladeOpen(false);
+					setSubmittedConditions('');
+				}}
+				onSubmit={(conditions) => {
+					setShowEvaluatorOptions(false);
+					setSubmittedConditions(conditions);
+					setIsAdditionalConditionsResolutionBladeOpen(true);
+				}}
+				initialConditions={submittedConditions}
+				currentMaterialRequestDetail={materialRequest}
+				layer={
+					(isAdditionalConditionsBladeOpen || isAdditionalConditionsResolutionBladeOpen) &&
+					isDetailBladeOpen
+						? isMobile
+							? 3
+							: 2
+						: 99
+				}
+				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
+			/>
+
+			<MaterialRequestAdditionalConditionsResolutionBlade
+				isOpen={isAdditionalConditionsResolutionBladeOpen}
+				onClose={() => {
+					setIsAdditionalConditionsResolutionBladeOpen(false);
+					setIsAdditionalConditionsBladeOpen(false);
+					setSubmittedConditions('');
+				}}
+				onBack={() => {
+					setIsAdditionalConditionsResolutionBladeOpen(false);
+				}}
+				onSubmit={(conditions) => {
+					console.log(conditions);
+				}}
+				currentMaterialRequestDetail={materialRequest}
+				conditionsAccepted={false}
+				layer={
+					isAdditionalConditionsResolutionBladeOpen && isDetailBladeOpen ? (isMobile ? 4 : 3) : 99
+				}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 			/>
 		</BladeManager>
