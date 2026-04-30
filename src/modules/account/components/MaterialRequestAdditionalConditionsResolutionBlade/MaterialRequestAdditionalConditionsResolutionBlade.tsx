@@ -2,7 +2,7 @@ import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { tText } from '@shared/helpers/translate';
 import type { FC } from 'react';
-
+import styles from './MaterialRequestAdditionalConditionsResolutionBlade.module.scss';
 import type { MaterialRequestAdditionalConditionsResolutionBladeProps } from './MaterialRequestAdditionalConditionsResolutionBlade.types';
 
 export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
@@ -34,6 +34,11 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 			onClose={onClose}
 			title={tText('Bijkomende voorwaarden')}
 			ariaLabel={tText('Bijkomende voorwaarden')}
+			stickySubtitle={
+				<span className={styles['c-request-material-additional-conditions-resolution__subtitle']}>
+					{tText('Stap 2 van 2')}
+				</span>
+			}
 			footerButtons={getFooterButtons()}
 		>
 			<div>
