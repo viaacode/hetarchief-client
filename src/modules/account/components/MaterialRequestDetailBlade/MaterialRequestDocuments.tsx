@@ -170,7 +170,10 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 				target="_blank"
 				rel="noopener noreferrer"
 				aria-label={tText(
-					'modules/account/components/material-request-detail-blade/material-request-documents___download-alles'
+					'modules/account/components/material-request-detail-blade/material-request-documents___download-alles',
+					{
+						numberOfAttachments: attachments?.total,
+					}
 				)}
 			>
 				<Button
