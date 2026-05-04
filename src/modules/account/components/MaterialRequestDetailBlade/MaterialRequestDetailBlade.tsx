@@ -94,9 +94,13 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	const [isAdditionalConditionsBladeOpen, setIsAdditionalConditionsBladeOpen] = useState(false);
 	const [isAdditionalConditionsResolutionBladeOpen, setIsAdditionalConditionsResolutionBladeOpen] =
 		useState(false);
+	const [additionalConditions, setAdditionalConditions] =
+		useState<MaterialRequestMessageBodyAdditionalConditions | null>(null);
 	const [submittedConditions, setSubmittedConditions] =
 		useState<MaterialRequestMessageBodyAdditionalConditions | null>(null);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
+	const [showAdditionalConditionsConfirmModal, setShowAdditionalConditionsConfirmModal] =
+		useState(false);
 	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 	const [activeTabRaw, setActiveTab] = useQueryParam(QUERY_PARAM_KEY.ACTIVE_TAB, StringParam);
 	const activeTab = activeTabRaw || MaterialRequestDetailBladeTabs.Information;
@@ -596,6 +600,41 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	const getAdditionalConditionsResolutionBladeLayer = (): number =>
 		isAdditionalConditionsResolutionBladeOpen ? (isMobile ? 4 : 3) : 99;
 
+	// Handler for closing additional conditions blade (step 1) with confirmation
+	const handleCloseAdditionalConditionsBlade = () => {
+		// Check if there's any data filled in (conditions were set)
+		if (additionalConditions?.conditions && additionalConditions.conditions.length > 0) {
+			setShowAdditionalConditionsConfirmModal(true);
+		} else {
+			// No data filled in, close without confirmation
+			setShowEvaluatorOptions(false);
+			setIsAdditionalConditionsBladeOpen(false);
+			setAdditionalConditions(null);
+			setSubmittedConditions(null);
+		}
+	};
+
+	// Handler for closing resolution blade (step 2) with confirmation
+	const handleCloseResolutionBlade = () => {
+		// Step 2 is only accessible if step 1 had data, so always show confirmation
+		setShowAdditionalConditionsConfirmModal(true);
+	};
+
+	// Handler for confirming the close (user chose to cancel and lose data)
+	const handleConfirmCloseAdditionalConditions = () => {
+		setShowAdditionalConditionsConfirmModal(false);
+		setShowEvaluatorOptions(false);
+		setIsAdditionalConditionsBladeOpen(false);
+		setIsAdditionalConditionsResolutionBladeOpen(false);
+		setAdditionalConditions(null);
+		setSubmittedConditions(null);
+	};
+
+	// Handler for cancelling the close (user chose to continue working)
+	const handleCancelCloseAdditionalConditions = () => {
+		setShowAdditionalConditionsConfirmModal(false);
+	};
+
 	const getBladeLayerIndex = () => {
 		if (!materialRequest) {
 			return 0;
@@ -623,18 +662,15 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		<BladeManager
 			currentLayer={getBladeLayerIndex()}
 			onCloseBlade={() => {
-				// Check deepest blade first (resolution blade)
+				// Check deepest blade first (resolution blade - step 2)
 				if (isAdditionalConditionsResolutionBladeOpen) {
-					setShowEvaluatorOptions(false);
-					setIsAdditionalConditionsBladeOpen(false);
-					setIsAdditionalConditionsResolutionBladeOpen(false);
+					handleCloseResolutionBlade();
 					return;
 				}
 
-				// Check additional conditions blade
+				// Check additional conditions blade (step 1)
 				if (isAdditionalConditionsBladeOpen) {
-					setShowEvaluatorOptions(false);
-					setIsAdditionalConditionsBladeOpen(false);
+					handleCloseAdditionalConditionsBlade();
 					return;
 				}
 
@@ -743,16 +779,13 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			/>
 			<MaterialRequestAdditionalConditionsBlade
 				isOpen={isAdditionalConditionsBladeOpen}
-				onClose={() => {
-					setShowEvaluatorOptions(false);
-					setIsAdditionalConditionsBladeOpen(false);
-					setSubmittedConditions(null);
-				}}
-				onSubmit={(conditions) => {
-					setSubmittedConditions(conditions);
+				onClose={handleCloseAdditionalConditionsBlade}
+				onSubmit={() => {
+					setSubmittedConditions(additionalConditions);
 					setIsAdditionalConditionsResolutionBladeOpen(true);
 				}}
-				initialConditions={submittedConditions}
+				conditions={additionalConditions}
+				onConditionsChange={setAdditionalConditions}
 				currentMaterialRequestDetail={materialRequest}
 				layer={getAdditionalConditionsBladeLayer()}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
@@ -760,18 +793,43 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 
 			<MaterialRequestAdditionalConditionsResolutionBlade
 				isOpen={isAdditionalConditionsResolutionBladeOpen}
-				onClose={() => {
-					setIsAdditionalConditionsResolutionBladeOpen(false);
-					setIsAdditionalConditionsBladeOpen(false);
-					setSubmittedConditions(null);
-				}}
+				onClose={handleCloseResolutionBlade}
 				onBack={() => {
 					setIsAdditionalConditionsResolutionBladeOpen(false);
+				}}
+				onSuccess={() => {
+					refetchMaterialRequestStatus().then(noop);
+					setShowEvaluatorOptions(false);
+					setIsAdditionalConditionsBladeOpen(false);
+					setIsAdditionalConditionsResolutionBladeOpen(false);
+					setAdditionalConditions(null);
+					setSubmittedConditions(null);
 				}}
 				conditions={submittedConditions}
 				currentMaterialRequestDetail={materialRequest}
 				layer={getAdditionalConditionsResolutionBladeLayer()}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
+			/>
+
+			<ConfirmationModal
+				isOpen={showAdditionalConditionsConfirmModal}
+				onClose={handleCancelCloseAdditionalConditions}
+				onConfirm={handleConfirmCloseAdditionalConditions}
+				onCancel={handleCancelCloseAdditionalConditions}
+				text={{
+					title: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___onopgeslagen-wijzigingen'
+					),
+					description: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___er-zijn-nog-onopgeslagen-wijzigingen-weet-je-zeker-dat-je-wil-annuleren'
+					),
+					yes: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___ja-annuleer'
+					),
+					no: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___nee-verder-werken'
+					),
+				}}
 			/>
 		</BladeManager>
 	);

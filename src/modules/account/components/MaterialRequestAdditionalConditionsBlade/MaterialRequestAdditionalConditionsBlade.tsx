@@ -17,28 +17,35 @@ import styles from './MaterialRequestAdditionalConditionsBlade.module.scss';
 interface MaterialRequestAdditionalConditionsBladeProps {
 	isOpen: boolean;
 	onClose: () => void;
-	onSubmit: (conditions: MaterialRequestMessageBodyAdditionalConditions | null) => void;
+	onSubmit: () => void;
 	currentMaterialRequestDetail: MaterialRequest | undefined;
-	initialConditions?: MaterialRequestMessageBodyAdditionalConditions | null;
+	conditions?: MaterialRequestMessageBodyAdditionalConditions | null;
+	onConditionsChange: (conditions: MaterialRequestMessageBodyAdditionalConditions | null) => void;
 	layer: number;
 	currentLayer: number;
 }
 
 export const MaterialRequestAdditionalConditionsBlade: FC<
 	MaterialRequestAdditionalConditionsBladeProps
-> = ({ isOpen, onClose, onSubmit, initialConditions, layer, currentLayer }) => {
-	const [conditions, setConditions] =
-		useState<MaterialRequestMessageBodyAdditionalConditions | null>(null);
+> = ({
+	isOpen,
+	onClose,
+	onSubmit,
+	conditions: controlledConditions,
+	onConditionsChange,
+	layer,
+	currentLayer,
+}) => {
 	const [showValidation, setShowValidation] = useState(false);
+
+	const conditions = controlledConditions || null;
 
 	useEffect(() => {
 		if (isOpen) {
-			// Initialize from initialConditions if they exist (coming back from step 2)
-			setConditions(initialConditions || null);
-			// Reset validation
+			// Reset validation when blade opens
 			setShowValidation(false);
 		}
-	}, [isOpen, initialConditions]);
+	}, [isOpen]);
 
 	const conditionOptions: CheckboxAccordionOption<MaterialRequestAdditionalConditionsType>[] =
 		useMemo(
@@ -92,13 +99,11 @@ export const MaterialRequestAdditionalConditionsBlade: FC<
 			return;
 		}
 
-		onSubmit(conditions);
+		onSubmit();
 	};
 
 	const handleCancel = () => {
 		onClose();
-		setConditions(null);
-		setShowValidation(false);
 	};
 
 	const getFooterButtons = (): BladeFooterButtonProps => {
@@ -143,7 +148,7 @@ export const MaterialRequestAdditionalConditionsBlade: FC<
 					options={conditionOptions}
 					selectedOptions={conditions?.conditions || []}
 					onChange={(conditionsArray) => {
-						setConditions(
+						onConditionsChange(
 							conditionsArray.length > 0
 								? {
 										conditions: conditionsArray,
