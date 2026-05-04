@@ -1,12 +1,11 @@
-import {
-	type MaterialRequest,
-	MaterialRequestAdditionalConditionsType,
-	type MaterialRequestMessageBodyAdditionalConditions,
+import type {
+	MaterialRequest,
+	MaterialRequestMessageBodyAdditionalConditions,
 } from '@material-requests/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { tText } from '@shared/helpers/translate';
-import type { FC } from 'react';
+import { type FC, useEffect } from 'react';
 import { BladeStepSubtitle } from '../BladeStepSubtitle/BladeStepSubtitle';
 
 interface MaterialRequestAdditionalConditionsResolutionBladeProps {
@@ -14,15 +13,22 @@ interface MaterialRequestAdditionalConditionsResolutionBladeProps {
 	onClose: () => void;
 	onBack: () => void;
 	currentMaterialRequestDetail: MaterialRequest | undefined;
+	conditions: MaterialRequestMessageBodyAdditionalConditions | null;
 	layer: number;
 	currentLayer: number;
 }
 
 export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 	MaterialRequestAdditionalConditionsResolutionBladeProps
-> = ({ isOpen, onClose, onBack, layer, currentLayer }) => {
-	const handleSubmitConditions = (conditions: MaterialRequestMessageBodyAdditionalConditions) => {
-		console.log(conditions);
+> = ({ isOpen, onClose, onBack, conditions, layer, currentLayer }) => {
+	useEffect(() => {
+		if (isOpen && conditions) {
+			console.log('Conditions received in Resolution Blade:', conditions);
+		}
+	}, [isOpen, conditions]);
+
+	const handleSubmitConditions = () => {
+		console.log('Submitting conditions:', conditions);
 	};
 
 	const getFooterButtons = (): BladeFooterButtonProps => {
@@ -31,16 +37,7 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 				label: tText('Bijkomende voorwaarden opleggen'),
 				mobileLabel: tText('Bijkomende voorwaarden opleggen - mobile'),
 				type: 'primary',
-				onClick: () =>
-					handleSubmitConditions({
-						conditions: [
-							{
-								type: MaterialRequestAdditionalConditionsType.ATTRIBUTION,
-								text: 'test',
-							},
-						],
-						autoApproveAfterAcceptAdditionalConditions: false,
-					}),
+				onClick: handleSubmitConditions,
 			},
 			{
 				label: tText('Keer terug'),

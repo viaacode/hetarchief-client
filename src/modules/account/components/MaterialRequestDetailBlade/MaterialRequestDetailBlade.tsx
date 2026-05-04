@@ -51,10 +51,9 @@ import { isLessThanXlSize, isMobileSize } from '@shared/utils/is-mobile';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
-import { se } from 'date-fns/locale';
 import { isNil, noop } from 'lodash-es';
 import { stringifyUrl } from 'query-string';
-import React, { type FC, useEffect, useMemo, useState } from 'react';
+import { type FC, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useDetectKeyboardOpen from 'use-detect-keyboard-open';
 import { StringParam, useQueryParam } from 'use-query-params';
@@ -753,6 +752,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 					setSubmittedConditions(conditions);
 					setIsAdditionalConditionsResolutionBladeOpen(true);
 				}}
+				initialConditions={submittedConditions}
 				currentMaterialRequestDetail={materialRequest}
 				layer={getAdditionalConditionsBladeLayer()}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
@@ -768,6 +768,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				onBack={() => {
 					setIsAdditionalConditionsResolutionBladeOpen(false);
 				}}
+				conditions={submittedConditions}
 				currentMaterialRequestDetail={materialRequest}
 				layer={getAdditionalConditionsResolutionBladeLayer()}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}

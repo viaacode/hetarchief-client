@@ -1,0 +1,66 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-checkbox-accordion";
+
+.#{$component} {
+	margin-top: $spacer-md;
+
+	:global(.c-form-control) {
+		:global(.c-form-control__label) {
+			margin-bottom: $spacer-xs;
+			font-weight: $font-weight-bold;
+			font-size: $font-size-md;
+		}
+	}
+
+	&__item {
+		&-body {
+			display: block;
+			margin-left: $spacer-lg;
+			font-size: $font-size-sm;
+			line-height: 2rem;
+			padding: $spacer-xs $spacer-sm $spacer-xs 0;
+		}
+
+		&-closed {
+			.c-checkbox-accordion__item-body {
+				display: none;
+			}
+		}
+
+		&-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		&-header-title {
+			padding: $spacer-xs $spacer-xs $spacer-xs 0;
+		}
+
+		&-icon {
+			color: $grey;
+		}
+
+		&-description {
+			margin-bottom: $spacer-sm;
+		}
+
+		&-textarea {
+			textarea {
+				resize: none;
+			}
+		}
+
+		&-char-count {
+			margin-top: $spacer-xxs;
+			font-size: $font-size-sm;
+			color: $grey;
+			text-align: right;
+		}
+
+		&-error {
+			margin-top: $spacer-xs;
+		}
+	}
+}
