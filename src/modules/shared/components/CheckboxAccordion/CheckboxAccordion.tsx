@@ -4,7 +4,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from './CheckboxAccordion.module.scss';
 import type { CheckboxAccordionOption, CheckboxAccordionProps } from './CheckboxAccordion.types';
 
@@ -18,25 +18,6 @@ function CheckboxAccordion<ValueType>({
 	showValidation = false,
 }: CheckboxAccordionProps<ValueType>) {
 	const [openOptions, setOpenOptions] = useState<Set<ValueType>>(new Set());
-
-	// Open items with validation errors when showValidation becomes true
-	useEffect(() => {
-		if (showValidation) {
-			const itemsWithErrors = selectedOptions
-				.filter((item) => !item.text || item.text.trim() === '')
-				.map((item) => item.type);
-
-			if (itemsWithErrors.length > 0) {
-				setOpenOptions((prev) => {
-					const newOpenOptions = new Set(prev);
-					itemsWithErrors.forEach((type) => {
-						newOpenOptions.add(type);
-					});
-					return newOpenOptions;
-				});
-			}
-		}
-	}, [showValidation, selectedOptions]);
 
 	const toggleOpenOption = (value: ValueType) => {
 		const newOpenOptions = new Set(openOptions);
@@ -72,7 +53,6 @@ function CheckboxAccordion<ValueType>({
 		if (text && !existingItem) {
 			onChange([...selectedOptions, { type: value, text }]);
 		} else if (existingItem) {
-			// Update the text value
 			onChange(selectedOptions.map((item) => (item.type === value ? { ...item, text } : item)));
 		}
 	};

@@ -9,8 +9,10 @@ import { CheckboxAccordion } from '@shared/components/CheckboxAccordion';
 import type { CheckboxAccordionOption } from '@shared/components/CheckboxAccordion/CheckboxAccordion.types';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tText } from '@shared/helpers/translate';
+import clsx from 'clsx';
 import { type FC, useEffect, useMemo, useState } from 'react';
 import { BladeStepSubtitle } from '../BladeStepSubtitle/BladeStepSubtitle';
+import styles from './MaterialRequestAdditionalConditionsBlade.module.scss';
 
 interface MaterialRequestAdditionalConditionsBladeProps {
 	isOpen: boolean;
@@ -125,6 +127,7 @@ export const MaterialRequestAdditionalConditionsBlade: FC<
 			onClose={onClose}
 			title={tText('Bijkomende voorwaarden')}
 			ariaLabel={tText('Bijkomende voorwaarden')}
+			isBladeInvalid={showValidation}
 			stickySubtitle={<BladeStepSubtitle label={tText('Stap 1 van 2')} />}
 			footerButtons={getFooterButtons()}
 		>
@@ -153,9 +156,11 @@ export const MaterialRequestAdditionalConditionsBlade: FC<
 					showValidation={showValidation}
 				/>
 
-				{showValidation && (!conditions?.conditions || conditions.conditions.length === 0) && (
-					<RedFormWarning error={tText('Selecteer minstens 1 voorwaarde')} />
-				)}
+				<div className={clsx(styles['c-material-request-additional-conditions-blade__validation'])}>
+					{showValidation && (!conditions?.conditions || conditions.conditions.length === 0) && (
+						<RedFormWarning error={tText('Selecteer minstens 1 voorwaarde')} />
+					)}
+				</div>
 			</div>
 		</Blade>
 	);
