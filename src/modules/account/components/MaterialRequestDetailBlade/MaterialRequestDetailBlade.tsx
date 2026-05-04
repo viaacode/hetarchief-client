@@ -600,9 +600,8 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	const getAdditionalConditionsResolutionBladeLayer = (): number =>
 		isAdditionalConditionsResolutionBladeOpen ? (isMobile ? 4 : 3) : 99;
 
-	// Handler for closing additional conditions blade (step 1) with confirmation
 	const handleCloseAdditionalConditionsBlade = () => {
-		// Check if there's any data filled in (conditions were set)
+		// Check if there's any data filled in
 		if (additionalConditions?.conditions && additionalConditions.conditions.length > 0) {
 			setShowAdditionalConditionsConfirmModal(true);
 		} else {
@@ -616,11 +615,11 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 
 	// Handler for closing resolution blade (step 2) with confirmation
 	const handleCloseResolutionBlade = () => {
-		// Step 2 is only accessible if step 1 had data, so always show confirmation
+		// Step 2 is only accessible if step 1 had data, so always show confirmation dialog
 		setShowAdditionalConditionsConfirmModal(true);
 	};
 
-	// Handler for confirming the close (user chose to cancel and lose data)
+	// Handler for confirming the close
 	const handleConfirmCloseAdditionalConditions = () => {
 		setShowAdditionalConditionsConfirmModal(false);
 		setShowEvaluatorOptions(false);
@@ -630,7 +629,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		setSubmittedConditions(null);
 	};
 
-	// Handler for cancelling the close (user chose to continue working)
+	// Handler for cancelling the close
 	const handleCancelCloseAdditionalConditions = () => {
 		setShowAdditionalConditionsConfirmModal(false);
 	};
