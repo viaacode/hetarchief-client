@@ -619,13 +619,13 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		setShowAdditionalConditionsConfirmModal(true);
 	};
 
-	// Handler for confirming the close
-	const handleConfirmCloseAdditionalConditions = () => {
+	// Handler for confirming the confirmation modal
+	const handleConfirmAdditionalConditionsConfirmationModal = () => {
 		resetAdditionalConditionsFlow();
 	};
 
-	// Handler for cancelling the close
-	const handleCancelCloseAdditionalConditions = () => {
+	// Handler for cancelling the confirmation modal
+	const handleCancelAdditionalConditionsConfirmationModal = () => {
 		setShowAdditionalConditionsConfirmModal(false);
 	};
 
@@ -807,9 +807,9 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 
 			<ConfirmationModal
 				isOpen={showAdditionalConditionsConfirmModal}
-				onClose={handleCancelCloseAdditionalConditions}
-				onConfirm={handleConfirmCloseAdditionalConditions}
-				onCancel={handleCancelCloseAdditionalConditions}
+				onClose={handleCancelAdditionalConditionsConfirmationModal}
+				onConfirm={handleConfirmAdditionalConditionsConfirmationModal}
+				onCancel={handleCancelAdditionalConditionsConfirmationModal}
 				text={{
 					title: tText('Onopgeslagen wijzigingen'),
 					description: tText(
