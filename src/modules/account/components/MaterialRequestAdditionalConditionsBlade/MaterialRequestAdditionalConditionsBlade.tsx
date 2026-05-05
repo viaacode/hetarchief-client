@@ -125,9 +125,9 @@ export const MaterialRequestAdditionalConditionsBlade: FC<
 			layer={layer}
 			currentLayer={currentLayer}
 			onClose={onClose}
-			title={tText('Bijkomende voorwaarden')}
-			ariaLabel={tText('Bijkomende voorwaarden')}
 			isBladeInvalid={showValidation}
+			title={tText('Bijkomende voorwaarden')}
+			ariaLabel={tText('Bijkomende voorwaarden - aria label')}
 			stickySubtitle={<BladeStepSubtitle label={tText('Stap 1 van 2')} />}
 			footerButtons={getFooterButtons()}
 		>
