@@ -584,18 +584,15 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	};
 
 	// Helper functions to calculate blade layers
-	const getDetailBladeLayer = (): number => (isDetailBladeOpen ? 1 : 99);
+	const getDetailBladeLayer = (): number => 1;
 
-	const getEvaluatorOptionsBladeLayer = (): number => (showEvaluatorOptions && isMobile ? 2 : 99);
+	const getEvaluatorOptionsBladeLayer = (): number => 2;
 
-	const getStatusUpdateBladeLayer = (): number =>
-		isDetailStatusBladeOpenWithStatus ? (isMobile ? 3 : 2) : 99;
+	const getStatusUpdateBladeLayer = (): number => (isMobile ? 3 : 2);
 
-	const getAdditionalConditionsBladeLayer = (): number =>
-		isAdditionalConditionsBladeOpen && isDetailBladeOpen ? (isMobile ? 3 : 2) : 99;
+	const getAdditionalConditionsBladeLayer = (): number => (isMobile ? 3 : 2);
 
-	const getAdditionalConditionsResolutionBladeLayer = (): number =>
-		isAdditionalConditionsResolutionBladeOpen ? (isMobile ? 4 : 3) : 99;
+	const getAdditionalConditionsResolutionBladeLayer = (): number => (isMobile ? 4 : 3);
 
 	const getBladeLayerIndex = () => {
 		if (!materialRequest) {
@@ -607,7 +604,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		}
 
 		if (isDetailStatusBladeOpenWithStatus || isAdditionalConditionsBladeOpen) {
-			return isMobile ? 3 : 2;
+			return getAdditionalConditionsBladeLayer();
 		}
 
 		if (showEvaluatorOptions && isMobile) {
@@ -655,7 +652,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				id="material-request-detail-blade"
 				className={clsx(styles['p-material-request-detail'])}
 				isOpen={isDetailBladeOpen}
-				layer={getDetailBladeLayer()}
+				layer={isDetailBladeOpen ? getDetailBladeLayer() : 99}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 				onClose={() => onClose(hasStatusChanged)}
 				ariaLabel={tText(
@@ -694,7 +691,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			<Blade
 				id="material-request-evaluation-detail-blade"
 				isOpen={isMobile && showEvaluatorOptions}
-				layer={getEvaluatorOptionsBladeLayer()}
+				layer={showEvaluatorOptions && isMobile ? getEvaluatorOptionsBladeLayer() : 99}
 				currentLayer={showEvaluatorOptions ? getBladeLayerIndex() : 9999}
 				onClose={() => setShowEvaluatorOptions(false)}
 				ariaLabel={tText(
@@ -739,7 +736,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				}}
 				status={isDetailStatusBladeOpenWithStatus}
 				currentMaterialRequestDetail={materialRequest}
-				layer={getStatusUpdateBladeLayer()}
+				layer={isDetailStatusBladeOpenWithStatus ? getStatusUpdateBladeLayer() : 99}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 			/>
 			<MaterialRequestAdditionalConditionsBlade
@@ -754,7 +751,11 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 					setIsAdditionalConditionsResolutionBladeOpen(true);
 				}}
 				currentMaterialRequestDetail={materialRequest}
-				layer={getAdditionalConditionsBladeLayer()}
+				layer={
+					isAdditionalConditionsBladeOpen && isDetailBladeOpen
+						? getAdditionalConditionsBladeLayer()
+						: 99
+				}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 			/>
 
@@ -769,7 +770,11 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 					setIsAdditionalConditionsResolutionBladeOpen(false);
 				}}
 				currentMaterialRequestDetail={materialRequest}
-				layer={getAdditionalConditionsResolutionBladeLayer()}
+				layer={
+					isAdditionalConditionsResolutionBladeOpen
+						? getAdditionalConditionsResolutionBladeLayer()
+						: 99
+				}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 			/>
 		</BladeManager>
