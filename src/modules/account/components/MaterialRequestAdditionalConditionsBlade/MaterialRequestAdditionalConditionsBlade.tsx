@@ -123,4 +123,3 @@ export const MaterialRequestAdditionalConditionsBlade: FC<
 		</Blade>
 	);
 };
-MATERIAL_REQUEST_ADDITIONAL_CONDITIONS_OPTIONS();
