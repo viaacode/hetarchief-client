@@ -218,7 +218,9 @@ export abstract class MaterialRequestsService {
 		formData.append('message', message);
 
 		files?.forEach((file) => {
-			formData.append('files', file);
+			// Replace all soft-hyphen characters from the filename to avoid weird name changing on the proxy
+			// See also: https://meemoo.atlassian.net/browse/ARC-3668
+			formData.append('files', new File([file], file.name.replace(/\u00AD/g, '')));
 		});
 
 		return ApiService.getApi()
