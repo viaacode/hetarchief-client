@@ -1,9 +1,8 @@
 import type { TagsInputProps } from '@meemoo/react-components';
-import type { Dispatch, ReactNode, SetStateAction } from 'react';
-import type { ActionMeta, InputActionMeta, OnChangeValue } from 'react-select';
-
 import type { DefaultComponentProps } from '@shared/types';
 import type { TagIdentity } from '@visitor-space/types';
+import type { Dispatch, ReactNode, SetStateAction } from 'react';
+import type { ActionMeta, InputActionMeta, OnChangeValue } from 'react-select';
 
 export type TagSearchBarProps<IsMulti extends boolean = false> = DefaultComponentProps &
 	Omit<TagsInputProps<IsMulti>, 'rootClassName' | 'classNamePrefix' | 'variants'> & {
@@ -29,4 +28,3 @@ export type TagSearchBarValue<IsMulti extends boolean> = OnChangeValue<TagIdenti
 export type TagSearchBarMeta<Value = TagIdentity> = ActionMeta<Value>;
 
 export type OnSearchSingle = (newValue: string, meta?: InputActionMeta) => void;
-export type OnSearchMulti = (newValue: TagSearchBarValue<true>, meta?: TagSearchBarMeta) => void;

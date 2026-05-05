@@ -3,7 +3,7 @@ import type { IeObjectFile } from '@ie-objects/ie-objects.types';
 import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { soundwave } from '@shared/components/MediaCard/__mocks__/media-card';
+import { soundwave } from '@shared/components/MediaCard/MediaCard.consts';
 import { tText } from '@shared/helpers/translate';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import clsx from 'clsx';

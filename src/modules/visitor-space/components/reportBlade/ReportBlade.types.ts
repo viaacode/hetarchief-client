@@ -15,9 +15,3 @@ export interface ReportSelected {
 	schemaIdentifier: string;
 	title?: string; // string-only, not ReactNode
 }
-
-export interface ReportFormStatePair {
-	folder: string;
-	ie: string;
-	checked?: boolean;
-}

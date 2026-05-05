@@ -18,8 +18,6 @@ export const selectOpenNavigationDropdownId = (state: AppState): string | null =
 export const selectHasUnreadNotifications = (state: AppState): boolean =>
 	state.ui.hasUnreadNotifications;
 export const selectShowZendesk = (state: AppState): boolean => state.ui.showZendesk;
-export const selectLockScrollRecord = (state: AppState): AppState['ui']['lockScroll'] =>
-	state.ui.lockScroll;
 export const selectIsScrollLocked = (state: AppState): boolean =>
 	!!Object.values(state.ui.lockScroll || {}).find((val) => val === true);
 export const selectMaterialRequestCount = (state: AppState): number =>
