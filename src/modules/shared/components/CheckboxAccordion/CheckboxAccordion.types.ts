@@ -15,6 +15,7 @@ export interface CheckboxAccordionItem<ValueType> {
 }
 
 export interface CheckboxAccordionProps<ValueType> extends DefaultComponentProps {
+	prefix: string;
 	title?: string;
 	options: CheckboxAccordionOption<ValueType>[];
 	selectedOptions: CheckboxAccordionItem<ValueType>[];

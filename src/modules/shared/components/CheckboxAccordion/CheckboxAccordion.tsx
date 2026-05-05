@@ -4,12 +4,13 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './CheckboxAccordion.module.scss';
 import type { CheckboxAccordionOption, CheckboxAccordionProps } from './CheckboxAccordion.types';
 
 function CheckboxAccordion<ValueType>({
 	className,
+	prefix,
 	title,
 	options,
 	selectedOptions,
@@ -18,6 +19,21 @@ function CheckboxAccordion<ValueType>({
 	showValidation = false,
 }: CheckboxAccordionProps<ValueType>) {
 	const [openOptions, setOpenOptions] = useState<Set<ValueType>>(new Set());
+
+	// Open accordion with validation when submitting
+	useEffect(() => {
+		if (showValidation) {
+			setOpenOptions((prev) => {
+				const newOpenOptions = new Set(prev);
+				selectedOptions.forEach((item) => {
+					if (!item.text) {
+						newOpenOptions.add(item.type);
+					}
+				});
+				return newOpenOptions;
+			});
+		}
+	}, [showValidation, selectedOptions]);
 
 	const toggleOpenOption = (value: ValueType) => {
 		const newOpenOptions = new Set(openOptions);
@@ -63,14 +79,12 @@ function CheckboxAccordion<ValueType>({
 		const isChecked = !!existingItem;
 		const textValue = existingItem?.text || '';
 		const hasError = showValidation && isChecked && !textValue;
+		const textAreaMaxLength = option.maxLength || 500;
 
 		return (
 			<div
-				className={clsx(styles['c-checkbox-accordion__item'], {
-					[styles['c-checkbox-accordion__item-selected']]: isChecked,
-					[styles['c-checkbox-accordion__item-closed']]: !isOpen,
-				})}
-				key={String(option.value)}
+				className={styles['c-checkbox-accordion__item']}
+				key={`${prefix}__option-${String(option.value)}`}
 			>
 				<div className={clsx(styles['c-checkbox-accordion__item-header'])}>
 					<div className={clsx(styles['c-checkbox-accordion__item-header-title'])}>
@@ -81,45 +95,45 @@ function CheckboxAccordion<ValueType>({
 							onChange={(e) => handleCheckboxChange(option.value, e.target.checked)}
 						/>
 					</div>
-					{option.description && (
-						<Button
-							className={clsx(styles['c-checkbox-accordion__item-icon'])}
-							icon={
-								<Icon
-									name={isOpen ? IconNamesLight.AngleUp : IconNamesLight.AngleDown}
-									aria-hidden
-								/>
-							}
-							variants="text"
-							ariaLabel={isOpen ? tText('Sluit accordion') : tText('Open accordion')}
-							onClick={() => toggleOpenOption(option.value)}
-						/>
-					)}
+
+					<Button
+						className={styles['c-checkbox-accordion__item-icon']}
+						icon={
+							<Icon name={isOpen ? IconNamesLight.AngleUp : IconNamesLight.AngleDown} aria-hidden />
+						}
+						variants="text"
+						ariaLabel={isOpen ? tText('Sluit accordion') : tText('Open accordion')}
+						onClick={() => toggleOpenOption(option.value)}
+					/>
 				</div>
-				{isOpen && option.description && (
-					<div className={clsx(styles['c-checkbox-accordion__item-body'])}>
-						<div className={clsx(styles['c-checkbox-accordion__item-description'])}>
-							{option.description}
-						</div>
-						<div className={clsx(styles['c-checkbox-accordion__item-textarea'])}>
-							<TextArea
-								id={`checkbox-accordion-${String(option.value)}`}
-								value={textValue}
-								onChange={(e) => handleTextChange(option.value, e.target.value)}
-								maxLength={option.maxLength || 500}
-								ariaLabel={option.label}
-							/>
-							<div className={clsx(styles['c-checkbox-accordion__item-char-count'])}>
-								{textValue.length} / {option.maxLength || 500}
+
+				{isOpen && (
+					<>
+						<div className={clsx(styles['c-checkbox-accordion__item-body'])}>
+							<div className={clsx(styles['c-checkbox-accordion__item-description'])}>
+								{option.description}
 							</div>
-							{hasError && (
-								<RedFormWarning
-									className={clsx(styles['c-checkbox-accordion__item-error'])}
-									error={tText('Dit veld is verplicht')}
+							<div className={clsx(styles['c-checkbox-accordion__item-textarea'])}>
+								<TextArea
+									id={`${prefix}__textarea-${String(option.value)}`}
+									value={textValue}
+									onChange={(e) => handleTextChange(option.value, e.target.value)}
+									maxLength={textAreaMaxLength}
+									ariaLabel={option.label}
 								/>
-							)}
+								<div className={clsx(styles['c-checkbox-accordion__item-char-count'])}>
+									{textValue.length} / {textAreaMaxLength}
+								</div>
+							</div>
 						</div>
-					</div>
+
+						{hasError && (
+							<RedFormWarning
+								className={clsx(styles['c-checkbox-accordion__item-error'])}
+								error={tText('Dit veld is verplicht')}
+							/>
+						)}
+					</>
 				)}
 			</div>
 		);
@@ -133,7 +147,7 @@ function CheckboxAccordion<ValueType>({
 			<RedFormWarning
 				className={clsx(styles['c-checkbox-accordion__form-error'])}
 				error={error}
-				key="form-error--checkbox-accordion"
+				key={`${prefix}__form-error`}
 			/>,
 		];
 	};

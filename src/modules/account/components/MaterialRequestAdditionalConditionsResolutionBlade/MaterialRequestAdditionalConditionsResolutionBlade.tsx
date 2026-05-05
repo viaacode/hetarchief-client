@@ -109,8 +109,8 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 				label: tText('Keer terug'),
 				mobileLabel: tText('Keer terug - mobile'),
 				type: 'secondary',
-				onClick: onBack || onClose,
 				disabled: isSubmitting,
+				onClick: onBack,
 			},
 		];
 	};
@@ -122,9 +122,9 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 			layer={layer}
 			currentLayer={currentLayer}
 			onClose={onClose}
-			title={tText('Bijkomende voorwaarden')}
-			ariaLabel={tText('Bijkomende voorwaarden')}
 			isBladeInvalid={showValidation}
+			title={tText('Bijkomende voorwaarden')}
+			ariaLabel={tText('Bijkomende voorwaarden - aria label')}
 			stickySubtitle={<BladeStepSubtitle label={tText('Stap 2 van 2')} />}
 			footerButtons={getFooterButtons()}
 		>
