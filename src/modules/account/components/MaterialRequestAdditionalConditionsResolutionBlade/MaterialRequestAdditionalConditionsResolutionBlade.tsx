@@ -45,29 +45,27 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	useEffect(() => {
-		if (isOpen && conditions) {
-			console.log('Conditions received in Resolution Blade:', conditions);
+		if (isOpen) {
 			// Reset validation when blade opens
 			setShowValidation(false);
 		}
-	}, [isOpen, conditions]);
+	}, [isOpen]);
 
 	// Reset radio selection only when conditions are cleared (full cancellation)
 	useEffect(() => {
 		if (!conditions) {
 			setAutoApproveAfterAcceptAdditionalConditions(null);
-			setShowValidation(false);
 		}
 	}, [conditions]);
 
 	const handleSubmitConditions = async () => {
-		// Validate that a radio option is selected
-		if (autoApproveAfterAcceptAdditionalConditions === null) {
-			setShowValidation(true);
+		if (!currentMaterialRequestDetail?.id || !conditions) {
 			return;
 		}
 
-		if (!currentMaterialRequestDetail?.id || !conditions) {
+		// Validate that a radio option is selected
+		if (autoApproveAfterAcceptAdditionalConditions === null) {
+			setShowValidation(true);
 			return;
 		}
 
@@ -85,7 +83,7 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 			});
 
 			onSuccess();
-		} catch (err) {
+		} catch (_err) {
 			toastService.notify({
 				maxLines: 3,
 				title: tText('er ging iets mis'),
@@ -128,47 +126,50 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 			stickySubtitle={<BladeStepSubtitle label={tText('Stap 2 van 2')} />}
 			footerButtons={getFooterButtons()}
 		>
-			<>
-				<RadioButton
-					className={clsx(
-						styles['c-material-request-additional-conditions-resolution-blade__radio']
-					)}
-					label={tText('De aanvraag automatisch wordt goedgekeurd')}
-					checked={autoApproveAfterAcceptAdditionalConditions === true}
-					onClick={() => setAutoApproveAfterAcceptAdditionalConditions(true)}
-				/>
-
-				<p
-					className={
-						styles['c-material-request-additional-conditions-resolution-blade__radio-subtext']
-					}
-				>
-					{tText('In dit geval zal het materiaal onmiddelijk klaargemaakt worden voor download.')}
-				</p>
-
-				<RadioButton
-					className={clsx(
-						styles['c-material-request-additional-conditions-resolution-blade__radio']
-					)}
-					label={tText('De aanvraag automatisch wordt afgekeurd')}
-					checked={autoApproveAfterAcceptAdditionalConditions === false}
-					onClick={() => setAutoApproveAfterAcceptAdditionalConditions(false)}
-				/>
-
-				<p
-					className={clsx(
-						styles['c-material-request-additional-conditions-resolution-blade__radio-subtext']
-					)}
-				>
-					{tText(
-						'In dit geval zal je eerst nog manueel de finale goedkeuring moeten geven vooraleer het materiaal klaargemaakt wordt voor download.'
-					)}
-				</p>
-
-				{showValidation && autoApproveAfterAcceptAdditionalConditions === null && (
-					<RedFormWarning error={tText('Selecteer één van de opties')} />
+			<p
+				className={styles['c-material-request-additional-conditions-resolution-blade__description']}
+			>
+				{tText(
+					'Duid het gewenst verloop aan na het doorsturen van het voorstel met bijkomende voorwaarden. Wanneer de aanvrager de voorwaarden aanvaardt, wil ik dat:'
 				)}
-			</>
+			</p>
+
+			<RadioButton
+				className={clsx(styles['c-material-request-additional-conditions-resolution-blade__radio'])}
+				label={tText('De aanvraag automatisch wordt goedgekeurd')}
+				aria-label={tText('De aanvraag automatisch wordt goedgekeurd - aria label')}
+				checked={autoApproveAfterAcceptAdditionalConditions === true}
+				onClick={() => setAutoApproveAfterAcceptAdditionalConditions(true)}
+			/>
+
+			<p
+				className={
+					styles['c-material-request-additional-conditions-resolution-blade__radio-subtext']
+				}
+			>
+				{tText('In dit geval zal het materiaal onmiddelijk klaargemaakt worden voor download.')}
+			</p>
+
+			<RadioButton
+				className={clsx(styles['c-material-request-additional-conditions-resolution-blade__radio'])}
+				label={tText('De aanvraag automatisch wordt afgekeurd')}
+				checked={autoApproveAfterAcceptAdditionalConditions === false}
+				onClick={() => setAutoApproveAfterAcceptAdditionalConditions(false)}
+			/>
+
+			<p
+				className={clsx(
+					styles['c-material-request-additional-conditions-resolution-blade__radio-subtext']
+				)}
+			>
+				{tText(
+					'In dit geval zal je eerst nog manueel de finale goedkeuring moeten geven vooraleer het materiaal klaargemaakt wordt voor download.'
+				)}
+			</p>
+
+			{showValidation && autoApproveAfterAcceptAdditionalConditions === null && (
+				<RedFormWarning error={tText('Selecteer één van de opties')} />
+			)}
 		</Blade>
 	);
 };

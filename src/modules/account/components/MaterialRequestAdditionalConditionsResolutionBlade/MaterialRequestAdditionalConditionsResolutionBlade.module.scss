@@ -1,6 +1,10 @@
 @use "../../../../styles/abstracts" as abstracts;
 
 .c-material-request-additional-conditions-resolution-blade {
+	&__description {
+		margin-bottom: abstracts.$spacer-md;
+	}
+
 	&__radio-subtext {
 		font-style: italic;
 		font-size: abstracts.$font-size-sm;

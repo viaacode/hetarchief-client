@@ -14,7 +14,7 @@ interface MaterialRequestAdditionalConditionsBladeProps {
 	isOpen: boolean;
 	onClose: () => void;
 	onSubmit: (conditions: MaterialRequestMessageBodyAdditionalConditions | null) => void;
-	conditions?: MaterialRequestMessageBodyAdditionalConditions | null;
+	conditions: MaterialRequestMessageBodyAdditionalConditions | null;
 	onConditionsChange: (conditions: MaterialRequestMessageBodyAdditionalConditions | null) => void;
 	layer: number;
 	currentLayer: number;
@@ -22,35 +22,41 @@ interface MaterialRequestAdditionalConditionsBladeProps {
 
 export const MaterialRequestAdditionalConditionsBlade: FC<
 	MaterialRequestAdditionalConditionsBladeProps
-> = ({
-	isOpen,
-	onClose,
-	onSubmit,
-	conditions: controlledConditions,
-	onConditionsChange,
-	layer,
-	currentLayer,
-}) => {
-	const conditions = controlledConditions || null;
+> = ({ isOpen, onClose, onSubmit, conditions, onConditionsChange, layer, currentLayer }) => {
 	const hasNoConditions = !conditions?.conditions || conditions.conditions.length === 0;
 	const [showValidation, setShowValidation] = useState(false);
 
+	useEffect(() => {
+		if (isOpen) {
+			// Reset validation when blade opens
+			setShowValidation(false);
+		}
+	}, [isOpen]);
+
 	const handleSubmit = () => {
-		// Validate that at least one condition is selected
-		if (hasNoConditions) {
-			setShowValidation(true);
-			return;
-		}
+		// Reset validation to trigger accordion reopening on subsequent submits
+		setShowValidation(false);
 
-		// Validate that all checked conditions have text
-		const hasInvalidCondition = conditions.conditions.some((c) => !c.text || c.text.trim() === '');
+		// setTimeout to ensure state update happens before setting back to true
+		setTimeout(() => {
+			// Validate that at least one condition is selected
+			if (hasNoConditions) {
+				setShowValidation(true);
+				return;
+			}
 
-		if (hasInvalidCondition) {
-			setShowValidation(true);
-			return;
-		}
+			// Validate that all checked conditions have text
+			const hasInvalidCondition = conditions.conditions.some(
+				(c) => !c.text || c.text.trim() === ''
+			);
 
-		onSubmit(conditions);
+			if (hasInvalidCondition) {
+				setShowValidation(true);
+				return;
+			}
+
+			onSubmit(conditions);
+		}, 0);
 	};
 
 	const handleCancel = () => {

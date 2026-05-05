@@ -96,8 +96,6 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		useState(false);
 	const [additionalConditions, setAdditionalConditions] =
 		useState<MaterialRequestMessageBodyAdditionalConditions | null>(null);
-	const [submittedConditions, setSubmittedConditions] =
-		useState<MaterialRequestMessageBodyAdditionalConditions | null>(null);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const [showAdditionalConditionsConfirmModal, setShowAdditionalConditionsConfirmModal] =
 		useState(false);
@@ -597,16 +595,21 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 
 	const getAdditionalConditionsResolutionBladeLayer = (): number => (isMobile ? 4 : 3);
 
+	const resetAdditionalConditionsFlow = () => {
+		setShowAdditionalConditionsConfirmModal(false);
+		setShowEvaluatorOptions(false);
+		setIsAdditionalConditionsBladeOpen(false);
+		setIsAdditionalConditionsResolutionBladeOpen(false);
+		setAdditionalConditions(null);
+	};
+
 	const handleCloseAdditionalConditionsBlade = () => {
 		// Check if there's any data filled in
 		if (additionalConditions?.conditions && additionalConditions.conditions.length > 0) {
 			setShowAdditionalConditionsConfirmModal(true);
 		} else {
 			// No data filled in, close without confirmation
-			setShowEvaluatorOptions(false);
-			setIsAdditionalConditionsBladeOpen(false);
-			setAdditionalConditions(null);
-			setSubmittedConditions(null);
+			resetAdditionalConditionsFlow();
 		}
 	};
 
@@ -618,12 +621,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 
 	// Handler for confirming the close
 	const handleConfirmCloseAdditionalConditions = () => {
-		setShowAdditionalConditionsConfirmModal(false);
-		setShowEvaluatorOptions(false);
-		setIsAdditionalConditionsBladeOpen(false);
-		setIsAdditionalConditionsResolutionBladeOpen(false);
-		setAdditionalConditions(null);
-		setSubmittedConditions(null);
+		resetAdditionalConditionsFlow();
 	};
 
 	// Handler for cancelling the close
@@ -777,7 +775,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				isOpen={isAdditionalConditionsBladeOpen}
 				onClose={handleCloseAdditionalConditionsBlade}
 				onSubmit={() => {
-					setSubmittedConditions(additionalConditions);
+					setAdditionalConditions(additionalConditions);
 					setIsAdditionalConditionsResolutionBladeOpen(true);
 				}}
 				conditions={additionalConditions}
@@ -796,15 +794,8 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				onBack={() => {
 					setIsAdditionalConditionsResolutionBladeOpen(false);
 				}}
-				onSuccess={() => {
-					refetchMaterialRequestStatus().then(noop);
-					setShowEvaluatorOptions(false);
-					setIsAdditionalConditionsBladeOpen(false);
-					setIsAdditionalConditionsResolutionBladeOpen(false);
-					setAdditionalConditions(null);
-					setSubmittedConditions(null);
-				}}
-				conditions={submittedConditions}
+				onSuccess={resetAdditionalConditionsFlow}
+				conditions={additionalConditions}
 				currentMaterialRequestDetail={materialRequest}
 				layer={
 					isAdditionalConditionsResolutionBladeOpen
@@ -820,18 +811,12 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				onConfirm={handleConfirmCloseAdditionalConditions}
 				onCancel={handleCancelCloseAdditionalConditions}
 				text={{
-					title: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___onopgeslagen-wijzigingen'
-					),
+					title: tText('Onopgeslagen wijzigingen'),
 					description: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___er-zijn-nog-onopgeslagen-wijzigingen-weet-je-zeker-dat-je-wil-annuleren'
+						'Er zijn nog onopgeslagen wijzigingen. Weet je zeker dat je wil annuleren?'
 					),
-					yes: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___ja-annuleer'
-					),
-					no: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___nee-verder-werken'
-					),
+					yes: tText('Ja, annuleer'),
+					no: tText('Nee, verder werken'),
 				}}
 			/>
 		</BladeManager>
