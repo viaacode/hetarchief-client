@@ -775,16 +775,11 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				isOpen={isAdditionalConditionsBladeOpen}
 				onClose={handleCloseAdditionalConditionsBlade}
 				onSubmit={() => {
-					setAdditionalConditions(additionalConditions);
 					setIsAdditionalConditionsResolutionBladeOpen(true);
 				}}
 				conditions={additionalConditions}
 				onConditionsChange={setAdditionalConditions}
-				layer={
-					isAdditionalConditionsBladeOpen && isDetailBladeOpen
-						? getAdditionalConditionsBladeLayer()
-						: 99
-				}
+				layer={isAdditionalConditionsBladeOpen ? getAdditionalConditionsBladeLayer() : 99}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 			/>
 
@@ -796,6 +791,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				}}
 				onSuccess={resetAdditionalConditionsFlow}
 				conditions={additionalConditions}
+				onConditionsChange={setAdditionalConditions}
 				currentMaterialRequestDetail={materialRequest}
 				layer={
 					isAdditionalConditionsResolutionBladeOpen
@@ -813,10 +809,10 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				text={{
 					title: tText('Onopgeslagen wijzigingen'),
 					description: tText(
-						'Er zijn nog onopgeslagen wijzigingen. Weet je zeker dat je wil annuleren?'
+						'Er zijn nog onopgeslagen wijzigingen in de bijkomende gebruiksvoorwaarden. Weet je zeker dat je wil annuleren?'
 					),
-					yes: tText('Ja, annuleer'),
-					no: tText('Nee, verder werken'),
+					yes: tText('Ja, annuleer wijzigingen in de bijkomende gebruiksvoorwaarden'),
+					no: tText('Nee, behoud wijzigingen in de bijkomende gebruiksvoorwaarden'),
 				}}
 			/>
 		</BladeManager>

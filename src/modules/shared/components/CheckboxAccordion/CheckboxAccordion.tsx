@@ -21,7 +21,9 @@ function CheckboxAccordion<ValueType>({
 	const [openOptions, setOpenOptions] = useState<Set<ValueType>>(new Set());
 
 	useEffect(() => {
-		if (!showValidation) return;
+		if (!showValidation) {
+			return;
+		}
 
 		// Find options that have errors (checked but empty)
 		setOpenOptions((prev) => {

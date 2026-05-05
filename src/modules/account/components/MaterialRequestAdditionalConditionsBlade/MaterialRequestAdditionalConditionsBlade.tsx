@@ -56,7 +56,7 @@ export const MaterialRequestAdditionalConditionsBlade: FC<
 			}
 
 			onSubmit(conditions);
-		}, 0);
+		});
 	};
 
 	const handleCancel = () => {
@@ -110,7 +110,7 @@ export const MaterialRequestAdditionalConditionsBlade: FC<
 							? {
 									conditions: conditionsArray,
 									autoApproveAfterAcceptAdditionalConditions:
-										conditions?.autoApproveAfterAcceptAdditionalConditions ?? false,
+										conditions?.autoApproveAfterAcceptAdditionalConditions || null,
 								}
 							: null
 					);

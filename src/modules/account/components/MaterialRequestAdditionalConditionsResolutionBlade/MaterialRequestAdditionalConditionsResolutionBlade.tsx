@@ -20,6 +20,7 @@ interface MaterialRequestAdditionalConditionsResolutionBladeProps {
 	onBack: () => void;
 	currentMaterialRequestDetail: MaterialRequest | undefined;
 	conditions: MaterialRequestMessageBodyAdditionalConditions | null;
+	onConditionsChange: (conditions: MaterialRequestMessageBodyAdditionalConditions | null) => void;
 	onSuccess: () => void;
 	layer: number;
 	currentLayer: number;
@@ -32,15 +33,12 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 	onClose,
 	onBack,
 	conditions,
+	onConditionsChange,
 	onSuccess,
 	currentMaterialRequestDetail,
 	layer,
 	currentLayer,
 }) => {
-	const [
-		autoApproveAfterAcceptAdditionalConditions,
-		setAutoApproveAfterAcceptAdditionalConditions,
-	] = useState<boolean | null>(null);
 	const [showValidation, setShowValidation] = useState(false);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -51,30 +49,23 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 		}
 	}, [isOpen]);
 
-	// Reset radio selection only when conditions are cleared (full cancellation)
-	useEffect(() => {
-		if (!conditions) {
-			setAutoApproveAfterAcceptAdditionalConditions(null);
-		}
-	}, [conditions]);
-
 	const handleSubmitConditions = async () => {
 		if (!currentMaterialRequestDetail?.id || !conditions) {
 			return;
 		}
 
 		// Validate that a radio option is selected
-		if (autoApproveAfterAcceptAdditionalConditions === null) {
+		if (conditions.autoApproveAfterAcceptAdditionalConditions === null) {
 			setShowValidation(true);
 			return;
 		}
 
 		try {
 			setIsSubmitting(true);
-			await MaterialRequestsService.addAdditionalConditions(currentMaterialRequestDetail.id, {
-				...conditions,
-				autoApproveAfterAcceptAdditionalConditions,
-			});
+			await MaterialRequestsService.addAdditionalConditions(
+				currentMaterialRequestDetail.id,
+				conditions
+			);
 
 			toastService.notify({
 				maxLines: 3,
@@ -138,8 +129,15 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 				className={clsx(styles['c-material-request-additional-conditions-resolution-blade__radio'])}
 				label={tText('De aanvraag automatisch wordt goedgekeurd')}
 				aria-label={tText('De aanvraag automatisch wordt goedgekeurd - aria label')}
-				checked={autoApproveAfterAcceptAdditionalConditions === true}
-				onClick={() => setAutoApproveAfterAcceptAdditionalConditions(true)}
+				checked={conditions?.autoApproveAfterAcceptAdditionalConditions === true}
+				onClick={() => {
+					if (conditions) {
+						onConditionsChange({
+							...conditions,
+							autoApproveAfterAcceptAdditionalConditions: true,
+						});
+					}
+				}}
 			/>
 
 			<p
@@ -153,8 +151,15 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 			<RadioButton
 				className={clsx(styles['c-material-request-additional-conditions-resolution-blade__radio'])}
 				label={tText('De aanvraag automatisch wordt afgekeurd')}
-				checked={autoApproveAfterAcceptAdditionalConditions === false}
-				onClick={() => setAutoApproveAfterAcceptAdditionalConditions(false)}
+				checked={conditions?.autoApproveAfterAcceptAdditionalConditions === false}
+				onClick={() => {
+					if (conditions) {
+						onConditionsChange({
+							...conditions,
+							autoApproveAfterAcceptAdditionalConditions: false,
+						});
+					}
+				}}
 			/>
 
 			<p
@@ -167,9 +172,11 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 				)}
 			</p>
 
-			{showValidation && autoApproveAfterAcceptAdditionalConditions === null && (
-				<RedFormWarning error={tText('Selecteer één van de opties')} />
-			)}
+			{showValidation &&
+				(conditions?.autoApproveAfterAcceptAdditionalConditions === null ||
+					conditions?.autoApproveAfterAcceptAdditionalConditions === undefined) && (
+					<RedFormWarning error={tText('Selecteer één van de opties')} />
+				)}
 		</Blade>
 	);
 };
