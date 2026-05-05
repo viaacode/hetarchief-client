@@ -27,7 +27,7 @@ export const AccountMyMaterialRequestsListSent: FC<DefaultSeoInfo> = ({ url, can
 						)}
 					</h1>
 					<div className={styles['p-application-list-success__image-wrapper']}>
-						<Image unoptimized src="/images/request-sent.svg" alt="" fill sizes="100vw" />
+						<Image src="/images/request-sent.svg" alt="" fill sizes="100vw" />
 					</div>
 				</div>
 

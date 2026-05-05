@@ -19,5 +19,5 @@ const OriginalNextImage = NextImage.default;
 
 Object.defineProperty(NextImage, 'default', {
 	configurable: true,
-	value: (props) => <OriginalNextImage {...props} unoptimized loader={({ src }) => src} />,
+	value: (props) => <OriginalNextImage {...props} loader={({ src }) => src} />,
 });

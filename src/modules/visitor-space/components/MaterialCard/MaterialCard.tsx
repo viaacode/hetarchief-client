@@ -7,6 +7,7 @@ import { SimpleIeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 import clsx from 'clsx';
 import { isValid } from 'date-fns';
+import Image from 'next/image';
 import { default as NextLink } from 'next/link';
 import type { FC, ReactNode } from 'react';
 import styles from './MaterialCard.module.scss';
@@ -96,8 +97,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 		return (
 			<div className={clsx(styles['c-material-card__header'])}>
 				{/* No alt tag since the link already contains the title of the object that we're linking to */}
-				{/** biome-ignore lint/performance/noImgElement: we need this*/}
-				<img
+				<Image
 					src={imagePath}
 					alt={
 						typeof title === 'string'
@@ -106,8 +106,8 @@ const MaterialCard: FC<MaterialCardProps> = ({
 									'modules/visitor-space/components/material-card/material-card___image-of-the-media-object'
 								)
 					}
-					width="100%"
-					height="100%"
+					fill
+					sizes="100%"
 				/>
 				{icon ? (
 					<div className={clsx(styles['c-material-card__header-icon'])}>

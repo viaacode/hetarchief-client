@@ -63,7 +63,11 @@ module.exports = withTM({
 		// Fix issues with react-query:
 		// https://github.com/TanStack/query/issues/3595#issuecomment-1276468579
 		if (options.isServer) {
-			config.externals = ['@tanstack/react-query', 'use-query-params', ...config.externals];
+			config.externals = [
+				'@tanstack/react-query',
+				'use-query-params',
+				...config.externals,
+			];
 		}
 
 		// Use biome linting instead of eslint for the build
@@ -101,6 +105,7 @@ module.exports = withTM({
 		tsconfigPath: './tsconfig.build.json',
 	},
 	images: {
+		unoptimized: true,
 		remotePatterns: [
 			{
 				protocol: 'https',
@@ -127,7 +132,8 @@ module.exports = withTM({
 		GOOGLE_TAG_MANAGER_ID: process.env.GOOGLE_TAG_MANAGER_ID,
 		ENABLE_GOOGLE_INDEXING: process.env.ENABLE_GOOGLE_INDEXING,
 		IIIF_IMAGE_API: process.env.IIIF_IMAGE_API,
-		ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW: process.env.ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW,
+		ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW:
+			process.env.ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW,
 	},
 	async headers() {
 		if (process.env.ENABLE_GOOGLE_INDEXING === 'false') {
@@ -243,8 +249,7 @@ module.exports = withTM({
 				permanent: true,
 			},
 			{
-				source:
-					'/catalog\\?utf8=\\%E2\\%9C\\%93&q=&search_field=all_fields&search_field=advanced&all_fields=hond',
+				source: '/catalog\\?utf8=\\%E2\\%9C\\%93&q=&search_field=all_fields&search_field=advanced&all_fields=hond',
 				destination: '/zoeken',
 				permanent: true,
 			},

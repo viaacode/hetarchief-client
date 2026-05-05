@@ -76,7 +76,6 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 		// No renderer
 		return imageUrl ? (
 			<Image
-				unoptimized
 				src={imageUrl}
 				alt={file.name}
 				fill
