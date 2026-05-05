@@ -1,31 +1,15 @@
 @use "src/styles/abstracts" as *;
 
-$component: "c-checkbox-accordion";
-
-.#{$component} {
+.c-checkbox-accordion {
 	margin-top: $spacer-md;
-
-	:global(.c-form-control) {
-		:global(.c-form-control__label) {
-			margin-bottom: $spacer-xs;
-			font-weight: $font-weight-bold;
-			font-size: $font-size-md;
-		}
-	}
 
 	&__item {
 		&-body {
 			display: block;
 			margin-left: $spacer-lg;
 			font-size: $font-size-sm;
-			line-height: 2rem;
+			line-height: $line-height-4xl;
 			padding: $spacer-xs $spacer-sm $spacer-xs 0;
-		}
-
-		&-closed {
-			.c-checkbox-accordion__item-body {
-				display: none;
-			}
 		}
 
 		&-header {
@@ -38,12 +22,10 @@ $component: "c-checkbox-accordion";
 			padding: $spacer-xs $spacer-xs $spacer-xs 0;
 		}
 
-		&-icon {
-			color: $grey;
-		}
-
 		&-description {
 			margin-bottom: $spacer-sm;
+			font-style: italic;
+			color: $shade;
 		}
 
 		&-textarea {
@@ -60,7 +42,7 @@ $component: "c-checkbox-accordion";
 		}
 
 		&-error {
-			margin-top: $spacer-xs;
+			margin-left: $spacer-lg;
 		}
 	}
 }

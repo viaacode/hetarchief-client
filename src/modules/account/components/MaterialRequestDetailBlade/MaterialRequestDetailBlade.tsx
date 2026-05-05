@@ -750,7 +750,6 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 					setIsAdditionalConditionsResolutionBladeOpen(true);
 				}}
 				initialConditions={submittedConditions}
-				currentMaterialRequestDetail={materialRequest}
 				layer={
 					isAdditionalConditionsBladeOpen && isDetailBladeOpen
 						? getAdditionalConditionsBladeLayer()

@@ -5,7 +5,7 @@ import type {
 import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { tText } from '@shared/helpers/translate';
-import { type FC, useEffect } from 'react';
+import type { FC } from 'react';
 import { BladeStepSubtitle } from '../BladeStepSubtitle/BladeStepSubtitle';
 
 interface MaterialRequestAdditionalConditionsResolutionBladeProps {
@@ -21,12 +21,6 @@ interface MaterialRequestAdditionalConditionsResolutionBladeProps {
 export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 	MaterialRequestAdditionalConditionsResolutionBladeProps
 > = ({ isOpen, onClose, onBack, conditions, layer, currentLayer }) => {
-	useEffect(() => {
-		if (isOpen && conditions) {
-			console.log('Conditions received in Resolution Blade:', conditions);
-		}
-	}, [isOpen, conditions]);
-
 	const handleSubmitConditions = () => {
 		console.log('Submitting conditions:', conditions);
 	};
