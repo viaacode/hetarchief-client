@@ -5,6 +5,7 @@ import {
 	type MaterialRequestDetail,
 	type MaterialRequestMaintainer,
 	type MaterialRequestMessage,
+	type MaterialRequestMessageBodyAdditionalConditions,
 	type MaterialRequestSendAll,
 	MaterialRequestStatus,
 	type MaterialRequestStatuses,
@@ -236,6 +237,19 @@ export abstract class MaterialRequestsService {
 	public static getUnreadMessages(materialRequestId: string): Promise<{ count: number }> {
 		return ApiService.getApi()
 			.get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/messages/count-unread`)
+			.json();
+	}
+
+	public static async addAdditionalConditions(
+		materialRequestId: string,
+		conditions: MaterialRequestMessageBodyAdditionalConditions
+	): Promise<void> {
+		return ApiService.getApi()
+			.post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/extra-conditions/add`, {
+				json: {
+					extraConditions: conditions,
+				},
+			})
 			.json();
 	}
 }
