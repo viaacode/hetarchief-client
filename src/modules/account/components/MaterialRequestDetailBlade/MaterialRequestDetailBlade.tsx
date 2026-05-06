@@ -111,6 +111,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		if (!currentMaterialRequestDetail) {
 			return undefined;
 		}
+
 		return {
 			...currentMaterialRequestDetail,
 			...(materialRequestStatus || {}),
