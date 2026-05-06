@@ -105,15 +105,11 @@ export const MaterialRequestAdditionalConditionsBlade: FC<
 				options={MATERIAL_REQUEST_ADDITIONAL_CONDITIONS_OPTIONS()}
 				selectedOptions={conditions?.conditions || []}
 				onChange={(conditionsArray) => {
-					onConditionsChange(
-						conditionsArray.length > 0
-							? {
-									conditions: conditionsArray,
-									autoApproveAfterAcceptAdditionalConditions:
-										conditions?.autoApproveAfterAcceptAdditionalConditions ?? null,
-								}
-							: null
-					);
+					onConditionsChange({
+						conditions: conditionsArray,
+						autoApproveAfterAcceptAdditionalConditions:
+							conditions?.autoApproveAfterAcceptAdditionalConditions ?? null,
+					});
 				}}
 				showValidation={showValidation}
 			/>
