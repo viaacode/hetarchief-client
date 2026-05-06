@@ -163,7 +163,8 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 	};
 
 	const renderAdditionalConditions = () => {
-		const isRequester = user?.profileId === materialRequest.profileId;
+		//TODO(Senn): implement CTA message for requester
+		// const isRequester = user?.profileId === materialRequest.profileId;
 
 		return (
 			<>
@@ -172,7 +173,8 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 						name: messageSenderName(),
 					})}
 				</div>
-				{isRequester && (
+
+				{/* {isRequester && (
 					<Button
 						label={tText('Voorwaarden evalueren')}
 						variants={['dark']}
@@ -180,7 +182,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 						onClick={() => console.log('TODO: Evaluate conditions')}
 						className={clsx(styles['p-conversation-messages__message__download-button'])}
 					/>
-				)}
+				)} */}
 			</>
 		);
 	};
