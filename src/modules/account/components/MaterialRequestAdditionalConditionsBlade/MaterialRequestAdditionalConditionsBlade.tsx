@@ -110,7 +110,7 @@ export const MaterialRequestAdditionalConditionsBlade: FC<
 							? {
 									conditions: conditionsArray,
 									autoApproveAfterAcceptAdditionalConditions:
-										conditions?.autoApproveAfterAcceptAdditionalConditions || null,
+										conditions?.autoApproveAfterAcceptAdditionalConditions ?? null,
 								}
 							: null
 					);

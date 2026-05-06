@@ -10,6 +10,7 @@ import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning
 import { tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import clsx from 'clsx';
+import { isNil } from 'lodash';
 import { type FC, useEffect, useState } from 'react';
 import { BladeStepSubtitle } from '../BladeStepSubtitle/BladeStepSubtitle';
 import styles from './MaterialRequestAdditionalConditionsResolutionBlade.module.scss';
@@ -173,7 +174,7 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 			</p>
 
 			{showValidation &&
-				(conditions?.autoApproveAfterAcceptAdditionalConditions === null ||
+				(isNil(conditions?.autoApproveAfterAcceptAdditionalConditions) ||
 					conditions?.autoApproveAfterAcceptAdditionalConditions === undefined) && (
 					<RedFormWarning error={tText('Selecteer één van de opties')} />
 				)}

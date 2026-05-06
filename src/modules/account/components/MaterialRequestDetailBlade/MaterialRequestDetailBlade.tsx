@@ -96,7 +96,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		useState(false);
 	const [additionalConditions, setAdditionalConditions] =
 		useState<MaterialRequestMessageBodyAdditionalConditions | null>(null);
-	const [showConfirmModal, setShowConfirmModal] = useState(false);
+	const [showMaterialRequestConfirmModal, setShowMaterialRequestConfirmModal] = useState(false);
 	const [showAdditionalConditionsConfirmModal, setShowAdditionalConditionsConfirmModal] =
 		useState(false);
 	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
@@ -219,7 +219,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			if (!materialRequest) {
 				return;
 			}
-			setShowConfirmModal(false);
+			setShowMaterialRequestConfirmModal(false);
 			const response = await MaterialRequestsService.cancel(materialRequest.id);
 			if (response === undefined) {
 				onFailedRequest();
@@ -355,7 +355,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 								)
 					}
 					variants={['outline']}
-					onClick={() => setShowConfirmModal(true)}
+					onClick={() => setShowMaterialRequestConfirmModal(true)}
 				/>
 			);
 		}
@@ -605,7 +605,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 
 	const handleCloseAdditionalConditionsBlade = () => {
 		// Check if there's any data filled in
-		if (additionalConditions?.conditions && additionalConditions.conditions.length > 0) {
+		if (additionalConditions?.conditions.length) {
 			setShowAdditionalConditionsConfirmModal(true);
 		} else {
 			// No data filled in, close without confirmation
@@ -709,10 +709,10 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 						),
 					}}
 					fullWidthButtonWrapper
-					isOpen={showConfirmModal}
-					onClose={() => setShowConfirmModal(false)}
+					isOpen={showMaterialRequestConfirmModal}
+					onClose={() => setShowMaterialRequestConfirmModal(false)}
 					onCancel={onCancelRequest}
-					onConfirm={() => setShowConfirmModal(false)}
+					onConfirm={() => setShowMaterialRequestConfirmModal(false)}
 				/>
 			</Blade>
 			<MaterialRequestDownloadBlade
