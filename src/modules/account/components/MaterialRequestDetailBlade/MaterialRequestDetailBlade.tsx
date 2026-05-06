@@ -808,6 +808,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				onClose={handleCancelAdditionalConditionsConfirmationModal}
 				onConfirm={handleConfirmAdditionalConditionsConfirmationModal}
 				onCancel={handleCancelAdditionalConditionsConfirmationModal}
+				fullWidthButtonWrapper
 				text={{
 					title: tText('Onopgeslagen wijzigingen'),
 					description: tText(
