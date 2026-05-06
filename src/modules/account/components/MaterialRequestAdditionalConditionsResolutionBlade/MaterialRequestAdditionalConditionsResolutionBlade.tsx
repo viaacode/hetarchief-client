@@ -173,11 +173,9 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 				)}
 			</p>
 
-			{showValidation &&
-				(isNil(conditions?.autoApproveAfterAcceptAdditionalConditions) ||
-					conditions?.autoApproveAfterAcceptAdditionalConditions === undefined) && (
-					<RedFormWarning error={tText('Selecteer één van de opties')} />
-				)}
+			{showValidation && isNil(conditions?.autoApproveAfterAcceptAdditionalConditions) && (
+				<RedFormWarning error={tText('Selecteer één van de opties')} />
+			)}
 		</Blade>
 	);
 };
