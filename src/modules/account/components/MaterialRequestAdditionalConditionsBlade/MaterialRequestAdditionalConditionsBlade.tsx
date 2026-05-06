@@ -14,50 +14,53 @@ interface MaterialRequestAdditionalConditionsBladeProps {
 	isOpen: boolean;
 	onClose: () => void;
 	onSubmit: (conditions: MaterialRequestMessageBodyAdditionalConditions | null) => void;
-	initialConditions: MaterialRequestMessageBodyAdditionalConditions | null;
+	conditions: MaterialRequestMessageBodyAdditionalConditions | null;
+	onConditionsChange: (conditions: MaterialRequestMessageBodyAdditionalConditions | null) => void;
 	layer: number;
 	currentLayer: number;
 }
 
 export const MaterialRequestAdditionalConditionsBlade: FC<
 	MaterialRequestAdditionalConditionsBladeProps
-> = ({ isOpen, onClose, onSubmit, initialConditions, layer, currentLayer }) => {
-	const [conditions, setConditions] =
-		useState<MaterialRequestMessageBodyAdditionalConditions | null>(null);
-	const [showValidation, setShowValidation] = useState(false);
+> = ({ isOpen, onClose, onSubmit, conditions, onConditionsChange, layer, currentLayer }) => {
 	const hasNoConditions = !conditions?.conditions || conditions.conditions.length === 0;
+	const [showValidation, setShowValidation] = useState(false);
 
 	useEffect(() => {
 		if (isOpen) {
-			// Initialize from initialConditions if they exist (coming back from step 2)
-			setConditions(initialConditions);
-			// Reset validation
+			// Reset validation when blade opens
 			setShowValidation(false);
 		}
-	}, [isOpen, initialConditions]);
+	}, [isOpen]);
 
 	const handleSubmit = () => {
-		// Validate that at least one condition is selected
-		if (hasNoConditions) {
-			setShowValidation(true);
-			return;
-		}
+		// Reset validation to trigger accordion reopening on subsequent submits
+		setShowValidation(false);
 
-		// Validate that all checked conditions have text
-		const hasInvalidCondition = conditions.conditions.some((c) => !c.text || c.text.trim() === '');
+		// setTimeout to ensure state update happens before setting back to true
+		setTimeout(() => {
+			// Validate that at least one condition is selected
+			if (hasNoConditions) {
+				setShowValidation(true);
+				return;
+			}
 
-		if (hasInvalidCondition) {
-			setShowValidation(true);
-			return;
-		}
+			// Validate that all checked conditions have text
+			const hasInvalidCondition = conditions.conditions.some(
+				(c) => !c.text || c.text.trim() === ''
+			);
 
-		onSubmit(conditions);
+			if (hasInvalidCondition) {
+				setShowValidation(true);
+				return;
+			}
+
+			onSubmit(conditions);
+		});
 	};
 
 	const handleCancel = () => {
 		onClose();
-		setConditions(null);
-		setShowValidation(false);
 	};
 
 	const getFooterButtons = (): BladeFooterButtonProps => {
@@ -102,15 +105,11 @@ export const MaterialRequestAdditionalConditionsBlade: FC<
 				options={MATERIAL_REQUEST_ADDITIONAL_CONDITIONS_OPTIONS()}
 				selectedOptions={conditions?.conditions || []}
 				onChange={(conditionsArray) => {
-					setConditions(
-						conditionsArray.length > 0
-							? {
-									conditions: conditionsArray,
-									autoApproveAfterAcceptAdditionalConditions:
-										conditions?.autoApproveAfterAcceptAdditionalConditions ?? false,
-								}
-							: null
-					);
+					onConditionsChange({
+						conditions: conditionsArray,
+						autoApproveAfterAcceptAdditionalConditions:
+							conditions?.autoApproveAfterAcceptAdditionalConditions ?? null,
+					});
 				}}
 				showValidation={showValidation}
 			/>

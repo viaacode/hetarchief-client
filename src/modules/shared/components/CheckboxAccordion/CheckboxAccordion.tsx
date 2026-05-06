@@ -20,19 +20,21 @@ function CheckboxAccordion<ValueType>({
 }: CheckboxAccordionProps<ValueType>) {
 	const [openOptions, setOpenOptions] = useState<Set<ValueType>>(new Set());
 
-	// Open accordion with validation when submitting
 	useEffect(() => {
-		if (showValidation) {
-			setOpenOptions((prev) => {
-				const newOpenOptions = new Set(prev);
-				selectedOptions.forEach((item) => {
-					if (!item.text) {
-						newOpenOptions.add(item.type);
-					}
-				});
-				return newOpenOptions;
-			});
+		if (!showValidation) {
+			return;
 		}
+
+		// Find options that have errors (checked but empty)
+		setOpenOptions((prev) => {
+			const newOpenOptions = new Set(prev);
+			selectedOptions.forEach((item) => {
+				if (!item.text) {
+					newOpenOptions.add(item.type);
+				}
+			});
+			return newOpenOptions;
+		});
 	}, [showValidation, selectedOptions]);
 
 	const toggleOpenOption = (value: ValueType) => {
