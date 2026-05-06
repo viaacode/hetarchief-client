@@ -1,4 +1,4 @@
-import type { MaterialRequestRequesterCapacity } from '@material-requests/types';
+import type { MaterialRequest, MaterialRequestRequesterCapacity } from '@material-requests/types';
 import type { ReactNode } from 'react';
 
 export interface PersonalInfoType {
@@ -10,8 +10,7 @@ export interface PersonalInfoType {
 
 export interface PersonalInfoProps {
 	children?: ReactNode;
-	hasRequests: boolean;
-	mostRecentMaterialRequestName: string;
+	materialRequests: MaterialRequest[];
 	onCancel: () => void;
 	onSuccess: () => void;
 }
