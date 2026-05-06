@@ -1,0 +1,48 @@
+@use "src/styles/abstracts" as *;
+
+.c-checkbox-accordion {
+	margin-top: $spacer-md;
+
+	&__item {
+		&-body {
+			display: block;
+			margin-left: $spacer-lg;
+			font-size: $font-size-sm;
+			line-height: $line-height-4xl;
+			padding: $spacer-xs $spacer-sm $spacer-xs 0;
+		}
+
+		&-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		&-header-title {
+			padding: $spacer-xs $spacer-xs $spacer-xs 0;
+		}
+
+		&-description {
+			margin-bottom: $spacer-sm;
+			font-style: italic;
+			color: $shade;
+		}
+
+		&-textarea {
+			textarea {
+				resize: none;
+			}
+		}
+
+		&-char-count {
+			margin-top: $spacer-xxs;
+			font-size: $font-size-sm;
+			color: $grey;
+			text-align: right;
+		}
+
+		&-error {
+			margin-left: $spacer-lg;
+		}
+	}
+}
