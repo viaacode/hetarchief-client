@@ -154,9 +154,23 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 
 			<RadioButton
 				className={clsx(styles['c-material-request-additional-conditions-resolution-blade__radio'])}
-				label={tText(
-					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-aanvraag-automatisch-wordt-goedgekeurd'
-				)}
+				label={
+					<>
+						{tText(
+							'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-aanvraag-automatisch-wordt-goedgekeurd'
+						)}
+
+						<span
+							className={clsx(
+								styles['c-material-request-additional-conditions-resolution-blade__radio-subtext']
+							)}
+						>
+							{tText(
+								'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___in-dit-geval-zal-het-materiaal-onmiddelijk-klaargemaakt-worden-voor-download'
+							)}
+						</span>
+					</>
+				}
 				aria-label={tText(
 					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-aanvraag-automatisch-wordt-goedgekeurd-aria-label'
 				)}
@@ -171,20 +185,27 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 				}}
 			/>
 
-			<p
-				className={
-					styles['c-material-request-additional-conditions-resolution-blade__radio-subtext']
-				}
-			>
-				{tText(
-					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___in-dit-geval-zal-het-materiaal-onmiddelijk-klaargemaakt-worden-voor-download'
-				)}
-			</p>
-
 			<RadioButton
 				className={clsx(styles['c-material-request-additional-conditions-resolution-blade__radio'])}
-				label={tText(
-					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-aanvraag-automatisch-wordt-afgekeurd'
+				label={
+					<>
+						{tText(
+							'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-aanvraag-automatisch-wordt-afgekeurd'
+						)}
+
+						<span
+							className={clsx(
+								styles['c-material-request-additional-conditions-resolution-blade__radio-subtext']
+							)}
+						>
+							{tText(
+								'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___in-dit-geval-zal-je-eerst-nog-manueel-de-finale-goedkeuring-moeten-geven-vooraleer-het-materiaal-klaargemaakt-wordt-voor-download'
+							)}
+						</span>
+					</>
+				}
+				aria-label={tText(
+					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-aanvraag-moet-expliciet-worden-goedgekeurd-aria-label'
 				)}
 				checked={conditions?.autoApproveAfterAcceptAdditionalConditions === false}
 				onClick={() => {
@@ -196,16 +217,6 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 					}
 				}}
 			/>
-
-			<p
-				className={clsx(
-					styles['c-material-request-additional-conditions-resolution-blade__radio-subtext']
-				)}
-			>
-				{tText(
-					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___in-dit-geval-zal-je-eerst-nog-manueel-de-finale-goedkeuring-moeten-geven-vooraleer-het-materiaal-klaargemaakt-wordt-voor-download'
-				)}
-			</p>
 
 			{showValidation && isNil(conditions?.autoApproveAfterAcceptAdditionalConditions) && (
 				<RedFormWarning
