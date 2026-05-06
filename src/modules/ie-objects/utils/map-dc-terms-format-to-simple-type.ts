@@ -17,5 +17,6 @@ export function mapDcTermsFormatToSimpleType(
 	if (!format) {
 		return 'unknown';
 	}
+
 	return MAP_DC_TERMS_FORMAT_TO_SIMPLE_TYPE[format] || format;
 }

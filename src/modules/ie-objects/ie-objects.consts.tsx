@@ -12,7 +12,11 @@ import {
 import type { MenuItemInfo, TabProps } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
-import { GET_TYPE_TO_LABEL_MAP, getIconFromObjectType } from '@shared/components/MediaCard';
+import {
+	GET_TYPE_TO_ARIA_LABEL_MAP,
+	GET_TYPE_TO_LABEL_MAP,
+	getIconFromObjectType,
+} from '@shared/components/MediaCard';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate } from '@shared/utils/dates';
@@ -141,12 +145,14 @@ export const OBJECT_DETAIL_TABS = (
 		{
 			id: ObjectDetailTabs.Metadata,
 			label: tText('modules/ie-objects/const/index___metadata'),
+			ariaLabel: tText('modules/ie-objects/const/index___metadata-aria-label'),
 			icon: <Icon name={IconNamesLight.Info} aria-hidden />,
 			active: ObjectDetailTabs.Metadata === activeTab,
 		},
 		{
 			id: ObjectDetailTabs.Media,
 			label: GET_TYPE_TO_LABEL_MAP(typeWithDefault),
+			ariaLabel: GET_TYPE_TO_ARIA_LABEL_MAP(typeWithDefault),
 			icon: <Icon name={getIconFromObjectType(typeWithDefault, mediaAvailable)} aria-hidden />,
 			active: ObjectDetailTabs.Media === activeTab,
 		},
@@ -155,6 +161,7 @@ export const OBJECT_DETAIL_TABS = (
 					{
 						id: ObjectDetailTabs.Ocr,
 						label: tText('modules/ie-objects/ie-objects___ocr'),
+						ariaLabel: tText('modules/ie-objects/ie-objects___ocr-aria-label'),
 						icon: <Icon name={IconNamesLight.Ocr} aria-hidden />,
 						active: ObjectDetailTabs.Ocr === activeTab,
 					},
