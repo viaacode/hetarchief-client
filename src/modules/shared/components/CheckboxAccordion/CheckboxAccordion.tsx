@@ -19,23 +19,33 @@ function CheckboxAccordion<ValueType>({
 	showValidation = false,
 }: CheckboxAccordionProps<ValueType>) {
 	const [openOptions, setOpenOptions] = useState<Set<ValueType>>(new Set());
+	const [fieldsWithErrors, setFieldsWithErrors] = useState<Set<ValueType>>(new Set());
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Only run when showValidation changes, not when selectedOptions changes
 	useEffect(() => {
 		if (!showValidation) {
+			setFieldsWithErrors(new Set());
 			return;
 		}
 
-		// Find options that have errors (checked but empty)
+		// Find out which fields have errors when validation is triggered
+		const errors = new Set<ValueType>();
+		selectedOptions.forEach((item) => {
+			if (!item.text) {
+				errors.add(item.type);
+			}
+		});
+		setFieldsWithErrors(errors);
+
+		// Open accordions with errors
 		setOpenOptions((prev) => {
 			const newOpenOptions = new Set(prev);
-			selectedOptions.forEach((item) => {
-				if (!item.text) {
-					newOpenOptions.add(item.type);
-				}
+			errors.forEach((type) => {
+				newOpenOptions.add(type);
 			});
 			return newOpenOptions;
 		});
-	}, [showValidation, selectedOptions]);
+	}, [showValidation]);
 
 	const toggleOpenOption = (value: ValueType) => {
 		const newOpenOptions = new Set(openOptions);
@@ -80,7 +90,7 @@ function CheckboxAccordion<ValueType>({
 		const existingItem = selectedOptions.find((item) => item.type === option.value);
 		const isChecked = !!existingItem;
 		const textValue = existingItem?.text || '';
-		const hasError = showValidation && isChecked && !textValue;
+		const hasError = showValidation && fieldsWithErrors.has(option.value);
 		const textAreaMaxLength = option.maxLength || 500;
 
 		return (
