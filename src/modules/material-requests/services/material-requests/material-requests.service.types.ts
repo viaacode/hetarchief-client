@@ -14,6 +14,7 @@ export interface GetMaterialRequestsProps {
 	hasDownloadUrl?: string[];
 	maintainerIds?: string[];
 	isPending?: boolean;
+	isArchived?: boolean;
 	page?: number;
 	size?: number;
 	orderProp?: keyof MaterialRequest;

@@ -1,4 +1,3 @@
-import MaterialRequestTermAgreementBlade from '@account/components/MaterialRequestTermAgreementBlade/MaterialRequestTermAgreementBlade';
 import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
 import { selectCommonUser } from '@auth/store/user';
 import { MaterialRequestsService } from '@material-requests/services';
@@ -29,17 +28,12 @@ import { useIsComplexReuseFlowUser } from '@visitor-space/hooks/is-complex-reuse
 import clsx from 'clsx';
 import { format } from 'date-fns';
 import { noop } from 'lodash-es';
-import React, { type FC, useEffect, useState } from 'react';
+import React, { type FC, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './PersonalInfo.module.scss';
 import type { PersonalInfoFormState, PersonalInfoProps } from './PersonalInfo.types';
 
-const PersonalInfo: FC<PersonalInfoProps> = ({
-	mostRecentMaterialRequestName,
-	hasRequests,
-	onCancel,
-	onSuccess,
-}) => {
+const PersonalInfo: FC<PersonalInfoProps> = ({ materialRequests, onCancel, onSuccess }) => {
 	const commonUser = useSelector(selectCommonUser);
 	const locale = useLocale();
 	const isComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
@@ -62,25 +56,31 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestRequesterCapacity | undefined>(
 		isComplexReuseFlow ? MaterialRequestRequesterCapacity.WORK : undefined
 	);
-	const [agreedToTerms, setAgreedToTerms] = useState(false);
-	const [showTermAgreement, setShowTermAgreement] = useState(false);
 	const [isFormValid, setIsFormValid] = useState(true);
 	const [errors, setFormErrors] = useState<Partial<Record<keyof PersonalInfoFormState, string>>>(
 		{}
 	);
 
+	const hasComplexRequests = useMemo(
+		() => materialRequests.some((request) => !!request.reuseForm),
+		[materialRequests]
+	);
+
 	useEffect(() => {
+		const mostRecentMaterialRequestName =
+			materialRequests.length > 0 ? materialRequests[0].objectSchemaName : '';
 		const formattedDate = format(new Date(), 'MM-yyyy', { ...getLocalisedOptions() });
 
 		setRequestGroupName(
 			`${mostRecentMaterialRequestName.substring(0, MAX_NAME_LENGTH - formattedDate.length - 1)} ${formattedDate}`
 		);
-	}, [mostRecentMaterialRequestName]);
+	}, [materialRequests]);
 
 	const validateForm = () => {
 		setIsFormValid(true);
+
 		const errors = {
-			hasRequests: !hasRequests
+			hasRequests: !materialRequests.length
 				? tText(
 						'modules/account/components/personal-info/personal-info___er-zijn-geen-aanvragen-te-vervolledigen'
 					)
@@ -91,25 +91,16 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 					)
 				: undefined,
 			requestGroupName:
-				isComplexReuseFlow && requestGroupName.length === 0
+				hasComplexRequests && requestGroupName.length === 0
 					? tText(
 							'modules/account/components/personal-info/personal-info___de-aanvraag-naam-is-verplicht'
-						)
-					: undefined,
-			agreedToTerms:
-				isComplexReuseFlow && !agreedToTerms
-					? tText(
-							'modules/account/components/personal-info/personal-info___keur-de-aanvullende-gebruiksvoorwaarden-bij-aanvragen-goed'
 						)
 					: undefined,
 		};
 
 		setFormErrors(errors);
 		const isInvalid =
-			!!errors.hasRequests ||
-			!!errors.requesterCapacity ||
-			!!errors.requestGroupName ||
-			!!errors.agreedToTerms;
+			!!errors.hasRequests || !!errors.requesterCapacity || !!errors.requestGroupName;
 
 		setTimeout(() => {
 			setIsFormValid(!isInvalid);
@@ -160,79 +151,25 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 		}
 	};
 
-	const renderAgreeTermsCheckbox = () => {
-		if (!isComplexReuseFlow) {
-			return null;
-		}
-		return (
-			<FormControl
-				errors={[
-					<RedFormWarning error={errors.agreedToTerms} key={`form-error--agreed-to-terms`} />,
-				]}
-			>
-				<Checkbox
-					className={styles['c-personal-info__checkbox']}
-					checked={agreedToTerms}
-					label={
-						<>
-							{tText(
-								'modules/account/components/personal-info/personal-info___ik-nam-kennis-en-ga-akkoord-met-de'
-							)}{' '}
-							{/** biome-ignore lint/a11y/noStaticElementInteractions: We need hyperlink behavior in the label*/}
-							{/** biome-ignore lint/a11y/useKeyWithClickEvents: We need hyperlink behavior in the label */}
-							<span
-								onClick={(event) => {
-									event.preventDefault();
-									setShowTermAgreement(true);
-								}}
-								className={clsx(styles['c-personal-info__checkbox-hyperlink'])}
-							>
-								{tText(
-									'modules/account/components/personal-info/personal-info___aanvullende-gebruiksvoorwaarden-bij-aanvragen'
-								)}
-							</span>
-						</>
-					}
-					onClick={() => setAgreedToTerms((prevState) => !prevState)}
-				/>
-			</FormControl>
-		);
-	};
-
 	const renderNewsletterCheckbox = () => {
 		if (!shouldRenderNewsletterCheckbox) {
 			return null;
 		}
 		return (
-			<Checkbox
-				className={styles['c-personal-info__checkbox']}
-				checked={isSubscribedToNewsletter}
-				label={tHtml(
-					'modules/account/components/personal-info/personal-info___ik-wens-me-in-te-schrijven-voor-de-nieuwsbrief'
-				)}
-				onClick={() => setIsSubscribedToNewsletter((prevState) => !prevState)}
-			/>
+			<div className={clsx(styles['c-personal-info__content-group'])}>
+				<Checkbox
+					className={styles['c-personal-info__checkbox']}
+					checked={isSubscribedToNewsletter}
+					label={tHtml(
+						'modules/account/components/personal-info/personal-info___ik-wens-me-in-te-schrijven-voor-de-nieuwsbrief'
+					)}
+					onClick={() => setIsSubscribedToNewsletter((prevState) => !prevState)}
+				/>
+			</div>
 		);
 	};
 
-	const renderCheckboxes = () => {
-		const agreedToTermsCheckbox = renderAgreeTermsCheckbox();
-		const newsletterCheckbox = renderNewsletterCheckbox();
-
-		if (agreedToTermsCheckbox || newsletterCheckbox) {
-			return (
-				<div className={clsx(styles['c-personal-info__content-group'])}>
-					{agreedToTermsCheckbox}
-					{newsletterCheckbox}
-				</div>
-			);
-		}
-
-		return null;
-	};
-
 	const onFailedRequest = () => {
-		setAgreedToTerms(false);
 		setIsSubscribedToNewsletter(false);
 		toastService.notify({
 			maxLines: 3,
@@ -347,98 +284,118 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 		];
 	};
 
+	const renderStickySubtitle = () => {
+		return (
+			<div className={styles['c-personal-info__terms-agreement']}>
+				<a
+					href={
+						commonUser?.isKeyUser
+							? tText(
+									'modules/account/components/personal-info/personal-info___ik-nam-kennis-en-ga-akkoord-met-de-aanvullende-gebruiksvoorwaarden-bij-aanvragen-hyperlink-sleutelgebruiker'
+								)
+							: tText(
+									'modules/account/components/personal-info/personal-info___ik-nam-kennis-en-ga-akkoord-met-de-aanvullende-gebruiksvoorwaarden-bij-aanvragen-hyperlink'
+								)
+					}
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label={tText(
+						'modules/account/components/personal-info/personal-info___ik-nam-kennis-en-ga-akkoord-met-de-aanvullende-gebruiksvoorwaarden-bij-aanvragen-aria-label'
+					)}
+				>
+					{tText(
+						'modules/account/components/personal-info/personal-info___ik-nam-kennis-en-ga-akkoord-met-de-aanvullende-gebruiksvoorwaarden-bij-aanvragen'
+					)}
+				</a>
+				<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+			</div>
+		);
+	};
+
 	return (
-		<>
-			<BladeContent
-				id="personal-info-blade-content"
-				className={styles['c-personal-info']}
-				isBladeInvalid={!isFormValid}
-				closable={false}
-				title={tText('modules/account/components/personal-info/personal-info___details')}
-				stickySubtitle={
-					<div className={styles['c-personal-info__edit-user-data']}>
-						<a
-							href={tText(
-								'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-hyperlink'
-							)}
-							target="_blank"
-							rel="noopener noreferrer"
-							aria-label={tText(
-								'modules/account/components/personal-info/personal-info___bewerk-je-gegevens-button-aria-label'
-							)}
-						>
-							{tText(
-								'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-label'
-							)}
-						</a>
-						<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+		<BladeContent
+			id="personal-info-blade-content"
+			className={styles['c-personal-info']}
+			isBladeInvalid={!isFormValid}
+			closable={false}
+			title={tText('modules/account/components/personal-info/personal-info___details')}
+			stickySubtitle={renderStickySubtitle()}
+			footerButtons={getFooterButtons()}
+		>
+			<div className={styles['c-personal-info__content-group']}>
+				<strong>
+					{tHtml('modules/account/components/personal-info/personal-info___over-jou')}
+				</strong>
+				<p>
+					<div className={clsx(styles['c-personal-info__content-group-subtitle'])}>
+						{commonUser?.fullName}
 					</div>
-				}
-				footerButtons={getFooterButtons()}
-			>
-				<div className={styles['c-personal-info__content-group']}>
-					<strong>
-						{tHtml('modules/account/components/personal-info/personal-info___over-jou')}
-					</strong>
-					<p>
-						<div className={clsx(styles['c-personal-info__content-group-subtitle'])}>
-							{commonUser?.fullName}
-						</div>
-						<div className={clsx(styles['c-personal-info__content-group-value'])}>
-							{commonUser?.email}
-						</div>
-					</p>
-				</div>
-				<div className={styles['c-personal-info__content-group']}>
-					<strong>
-						{tHtml('modules/account/components/personal-info/personal-info___jouw-organisatie')}
-					</strong>
-					<p>
-						<div className={clsx(styles['c-personal-info__content-group-subtitle'])}>
-							{commonUser?.organisation?.name ? (
-								commonUser.organisation?.name
-							) : (
-								<TextInput
-									id="personal-info__organisation-input"
-									value={organisationInputValue}
-									onChange={(e) => setOrganisationInputValue(e.target.value)}
-									autoComplete="organization"
-									ariaLabel={tText(
-										'modules/account/components/personal-info/personal-info___organisatie-naam-input-aria-label'
-									)}
-								/>
-							)}
-						</div>
-						{commonUser?.organisation?.data?.sector && (
-							<div className={clsx(styles['c-personal-info__content-group-value'])}>
-								{commonUser?.organisation?.data?.sector}
-							</div>
+					<div className={clsx(styles['c-personal-info__content-group-value'])}>
+						{commonUser?.email}
+					</div>
+				</p>
+			</div>
+			<div className={styles['c-personal-info__content-group']}>
+				<strong>
+					{tHtml('modules/account/components/personal-info/personal-info___jouw-organisatie')}
+				</strong>
+				<p>
+					<div className={clsx(styles['c-personal-info__content-group-subtitle'])}>
+						{commonUser?.organisation?.name ? (
+							<>
+								{commonUser.organisation?.name}
+								<div className={styles['c-personal-info__edit-user-data']}>
+									<a
+										href={tText(
+											'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-hyperlink'
+										)}
+										target="_blank"
+										rel="noopener noreferrer"
+										aria-label={tText(
+											'modules/account/components/personal-info/personal-info___bewerk-je-gegevens-button-aria-label'
+										)}
+									>
+										{tText(
+											'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-label'
+										)}
+									</a>
+									<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+								</div>
+							</>
+						) : (
+							<TextInput
+								id="personal-info__organisation-input"
+								value={organisationInputValue}
+								onChange={(e) => setOrganisationInputValue(e.target.value)}
+								autoComplete="organization"
+								ariaLabel={tText(
+									'modules/account/components/personal-info/personal-info___organisatie-naam-input-aria-label'
+								)}
+							/>
 						)}
-					</p>
-				</div>
-				{hasRequests ? (
-					<>
-						{isComplexReuseFlow ? renderNameEntry() : renderCapacity()}
-						{renderCheckboxes()}
-					</>
-				) : (
-					errors.hasRequests && (
-						<FormControl
-							errors={[
-								<RedFormWarning error={errors.hasRequests} key={`form-error--has-requests`} />,
-							]}
-						></FormControl>
-					)
-				)}
-			</BladeContent>
-			<MaterialRequestTermAgreementBlade
-				isOpen={showTermAgreement}
-				onClose={(agreed) => {
-					setShowTermAgreement(false);
-					setAgreedToTerms(agreed);
-				}}
-			/>
-		</>
+					</div>
+					{commonUser?.organisation?.data?.sector && (
+						<div className={clsx(styles['c-personal-info__content-group-value'])}>
+							{commonUser?.organisation?.data?.sector}
+						</div>
+					)}
+				</p>
+			</div>
+			{materialRequests.length > 0 ? (
+				<>
+					{hasComplexRequests ? renderNameEntry() : renderCapacity()}
+					{renderNewsletterCheckbox()}
+				</>
+			) : (
+				errors.hasRequests && (
+					<FormControl
+						errors={[
+							<RedFormWarning error={errors.hasRequests} key={`form-error--has-requests`} />,
+						]}
+					></FormControl>
+				)
+			)}
+		</BladeContent>
 	);
 };
 

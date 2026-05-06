@@ -23,6 +23,7 @@ export enum QUERY_PARAM_KEY {
 	TYPE = 'type',
 	STATUS = 'status',
 	HAS_DOWNLOAD_URL = 'hasDownloadUrl',
+	IS_ARCHIVED = 'isArchived',
 	ORDER_PROP = 'orderProp',
 	ORDER_DIRECTION = 'orderDirection',
 	PAGE = 'page',

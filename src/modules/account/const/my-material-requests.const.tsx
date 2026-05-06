@@ -22,6 +22,7 @@ export const ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
 	[QUERY_PARAM_KEY.TYPE]: withDefault(ArrayParam, []),
 	[QUERY_PARAM_KEY.STATUS]: withDefault(ArrayParam, []),
 	[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL]: withDefault(ArrayParam, []),
+	[QUERY_PARAM_KEY.IS_ARCHIVED]: withDefault(StringParam, 'false'),
 	[QUERY_PARAM_KEY.ORDER_PROP]: withDefault(StringParam, MaterialRequestKeys.requestedAt),
 	[QUERY_PARAM_KEY.ORDER_DIRECTION]: withDefault(SortDirectionParam, undefined),
 	[QUERY_PARAM_KEY.PAGE]: withDefault(NumberParam, 1),

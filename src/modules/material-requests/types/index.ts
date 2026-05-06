@@ -10,6 +10,8 @@ export interface MaterialRequest {
 	createdAt: string;
 	id: string;
 	isPending: boolean;
+	isArchived: boolean;
+	willBeArchivedAt: string | null;
 	status: MaterialRequestStatus;
 	maintainerId: string;
 	maintainerLogo: string;
@@ -44,6 +46,11 @@ export interface MaterialRequest {
 	downloadExpiresAt?: string;
 	history: MaterialRequestEvent[];
 }
+
+export type MaterialRequestStatuses = Pick<
+	MaterialRequest,
+	'id' | 'status' | 'downloadStatus' | 'updatedAt' | 'history'
+>;
 
 export interface MaterialRequestEvent {
 	id: string;
@@ -88,7 +95,7 @@ export interface MaterialRequestMessageBodyMessage {
 
 export interface MaterialRequestMessageBodyAdditionalConditions {
 	conditions: Condition[];
-	autoApproveAfterAcceptAdditionalConditions: boolean;
+	autoApproveAfterAcceptAdditionalConditions: boolean | null;
 }
 
 export interface MaterialRequestMessageBodyStatusUpdateWithMotivation {

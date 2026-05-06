@@ -48,9 +48,22 @@
 	}
 }
 
+
 /**
  * Elements
  */
+
+.c-button.u-text-ellipsis {
+	.c-button__content {
+		max-width: 100%;
+	}
+
+	.c-button__label {
+		@include text-ellipsis(false);
+
+		max-width: 100%;
+	}
+}
 
 .c-button__content {
 	display: inline-flex;

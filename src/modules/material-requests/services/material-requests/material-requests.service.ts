@@ -5,8 +5,10 @@ import {
 	type MaterialRequestDetail,
 	type MaterialRequestMaintainer,
 	type MaterialRequestMessage,
+	type MaterialRequestMessageBodyAdditionalConditions,
 	type MaterialRequestSendAll,
 	MaterialRequestStatus,
+	type MaterialRequestStatuses,
 	type MaterialRequestUpdate,
 } from '@material-requests/types';
 import { ApiService } from '@shared/services/api-service';
@@ -17,6 +19,8 @@ import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from './material-requests.service.
 import type { GetMaterialRequestsProps } from './material-requests.service.types';
 
 export abstract class MaterialRequestsService {
+	public static POLLING_INTERVAL = 5_000; // every 5 seconds
+
 	public static async getAll({
 		search,
 		type,
@@ -24,6 +28,7 @@ export abstract class MaterialRequestsService {
 		hasDownloadUrl,
 		maintainerIds,
 		isPending,
+		isArchived,
 		page,
 		size,
 		orderProp,
@@ -40,9 +45,10 @@ export abstract class MaterialRequestsService {
 						...(search?.trim() ? { query: `%${search}%` } : {}),
 						...(type && { type }),
 						...(status && { status }),
-						...(hasDownloadUrl && { hasDownloadUrl }),
+						...(hasDownloadUrl && isArchived !== true && { hasDownloadUrl }),
 						...(maintainerIds && { maintainerIds }),
 						...(!isNil(isPending) && { isPending }),
+						...(!isNil(isArchived) && { isArchived }),
 						...(page && { page }),
 						...(size && { size }),
 						...(orderProp && { orderProp }),
@@ -67,6 +73,15 @@ export abstract class MaterialRequestsService {
 				})
 			)
 			.json();
+	}
+
+	public static async getMaterialRequestStatusById(
+		id: string | null
+	): Promise<MaterialRequestStatuses | null> {
+		if (!id) {
+			return null;
+		}
+		return ApiService.getApi().get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}/status`).json();
 	}
 
 	public static async handleDownload(id: string): Promise<string> {
@@ -204,7 +219,9 @@ export abstract class MaterialRequestsService {
 		formData.append('message', message);
 
 		files?.forEach((file) => {
-			formData.append('files', file);
+			// Replace all soft-hyphen characters from the filename to avoid weird name changing on the proxy
+			// See also: https://meemoo.atlassian.net/browse/ARC-3668
+			formData.append('files', new File([file], file.name.replace(/\u00AD/g, '')));
 		});
 
 		return ApiService.getApi()
@@ -220,6 +237,19 @@ export abstract class MaterialRequestsService {
 	public static getUnreadMessages(materialRequestId: string): Promise<{ count: number }> {
 		return ApiService.getApi()
 			.get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/messages/count-unread`)
+			.json();
+	}
+
+	public static async addAdditionalConditions(
+		materialRequestId: string,
+		conditions: MaterialRequestMessageBodyAdditionalConditions
+	): Promise<void> {
+		return ApiService.getApi()
+			.post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/extra-conditions/add`, {
+				json: {
+					extraConditions: conditions,
+				},
+			})
 			.json();
 	}
 }

@@ -23,8 +23,12 @@ import {
 	type MaterialRequestType,
 } from '@material-requests/types';
 import {
+	Checkbox,
+	keysEnter,
+	keysSpacebar,
 	MultiSelect,
 	type MultiSelectOption,
+	onKey,
 	PaginationBar,
 	Table,
 } from '@meemoo/react-components';
@@ -78,6 +82,9 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	const [selectedDownloadFilters, setSelectedDownloadFilters] = useState<string[]>(
 		(filters[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL] || []) as string[]
 	);
+	const [showArchived, setShowArchived] = useState<boolean>(
+		filters[QUERY_PARAM_KEY.IS_ARCHIVED] === 'true'
+	);
 	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 
 	const {
@@ -104,6 +111,9 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		}),
 		...(!isNil(filters.hasDownloadUrl) && {
 			hasDownloadUrl: filters.hasDownloadUrl as string[],
+		}),
+		...(!isNil(filters.isArchived) && {
+			isArchived: filters.isArchived === 'true',
 		}),
 		maintainerIds: filters.maintainerIds as string[],
 	});
@@ -222,6 +232,15 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		});
 	}, [selectedDownloadFilters]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+	useEffect(() => {
+		setFilters({
+			...filters,
+			isArchived: showArchived ? 'true' : 'false',
+			page: 1,
+		});
+	}, [showArchived]);
+
 	// biome-ignore lint/correctness/useExhaustiveDependencies: we want to set the filters if selectedMaintainers changes, but we cannot set it as a dependency or we get a loop
 	useEffect(() => {
 		setFilters({
@@ -283,10 +302,6 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		setCurrentMaterialRequestId(row.original?.id || null);
 	};
 
-	const onMaterialRequestStatusChange = async () => {
-		await refetchCurrentMaterialRequestDetail();
-	};
-
 	const renderDetailBlade = () => {
 		return (
 			<MaterialRequestDetailBlade
@@ -300,8 +315,6 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 				currentMaterialRequestDetail={
 					currentMaterialRequestId ? resolvedMaterialRequest : undefined
 				}
-				refetchMaterialRequest={refetchCurrentMaterialRequestDetail}
-				afterStatusChanged={onMaterialRequestStatusChange}
 			/>
 		);
 	};
@@ -407,7 +420,8 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 				onChange={noop}
 				className={clsx(
 					'p-admin-material-requests__dropdown',
-					'p-admin-material-requests__dropdown-no-dividers'
+					'p-admin-material-requests__dropdown-no-dividers',
+					{ 'p-admin-material-requests__dropdown--disabled': showArchived }
 				)}
 				iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
 				iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
@@ -462,6 +476,37 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		);
 	};
 
+	const handleArchiveToggle = () => {
+		setShowArchived(!showArchived);
+	};
+
+	const renderArchiveCheckbox = () => {
+		return (
+			<div
+				className={clsx(
+					'p-admin-material-requests__dropdown',
+					'p-admin-material-requests__checkbox-wrapper'
+				)}
+			>
+				<Checkbox
+					className="p-admin-material-requests__archive-checkbox"
+					label={tText('pages/admin/materiaalaanvragen/index___toon-gearchiveerde-aanvragen')}
+					checked={showArchived}
+					checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
+					onKeyDown={(e) => {
+						onKey(e, [...keysEnter, ...keysSpacebar], () => {
+							if (keysSpacebar.includes(e.key)) {
+								e.preventDefault();
+							}
+							handleArchiveToggle();
+						});
+					}}
+					onClick={handleArchiveToggle}
+				/>
+			</div>
+		);
+	};
+
 	const renderSearchInput = () => {
 		return (
 			<SearchBar
@@ -491,13 +536,14 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 								{renderStatusFilter()}
 								{renderDownloadFilter()}
 								{renderMaintainerFilter()}
+								{renderArchiveCheckbox()}
 							</div>
 
 							{renderSearchInput()}
 						</div>
 					</div>
 					<div
-						className={clsx('l-container', {
+						className={clsx('l-container l-container--edgeless-to-lg', {
 							'u-text-center u-color-neutral u-py-48': isLoadingMaterialRequests || noData,
 						})}
 					>

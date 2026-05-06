@@ -35,6 +35,7 @@ import styles from './MaterialRequestBlade.module.scss';
 interface MaterialRequestBladeProps {
 	isOpen: boolean;
 	isEditMode?: boolean;
+	canDownloadNewspaper?: boolean;
 	onClose: (shouldTriggerComplexReuseFlow: boolean) => void;
 	materialRequest: MaterialRequest;
 	refetchMaterialRequests?: () => void;
@@ -45,6 +46,7 @@ interface MaterialRequestBladeProps {
 export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	isOpen,
 	isEditMode = false,
+	canDownloadNewspaper = false,
 	onClose,
 	materialRequest,
 	refetchMaterialRequests,
@@ -144,11 +146,15 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	useEffect(() => {
 		if (isOpen) {
 			setReasonInputValue(reason || '');
-			setTypeSelected(type);
+			if (canDownloadNewspaper) {
+				setTypeSelected(MaterialRequestType.MORE_INFO);
+			} else {
+				setTypeSelected(type);
+			}
 			setNoTypeSelectedOnSave(false);
 			refetchPotentialDuplicates().then(noop);
 		}
-	}, [isOpen, reason, type, refetchPotentialDuplicates]);
+	}, [isOpen, reason, type, refetchPotentialDuplicates, canDownloadNewspaper]);
 
 	const onCloseModal = (shouldTriggerComplexReuseFlow: boolean) => {
 		onClose(shouldTriggerComplexReuseFlow);
@@ -538,18 +544,20 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 								onClick={() => setTypeSelected(MaterialRequestType.VIEW)}
 							/>
 						)}
-						<RadioButton
-							aria-labelledby="radio-group-label"
-							className={styles['c-request-material__radio-button']}
-							label={tText(
-								'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
-							)}
-							aria-label={tText(
-								'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
-							)}
-							checked={typeSelected === MaterialRequestType.REUSE}
-							onClick={() => setTypeSelected(MaterialRequestType.REUSE)}
-						/>
+						{!canDownloadNewspaper && (
+							<RadioButton
+								aria-labelledby="radio-group-label"
+								className={styles['c-request-material__radio-button']}
+								label={tText(
+									'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
+								)}
+								aria-label={tText(
+									'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
+								)}
+								checked={typeSelected === MaterialRequestType.REUSE}
+								onClick={() => setTypeSelected(MaterialRequestType.REUSE)}
+							/>
+						)}
 						<RadioButton
 							aria-labelledby="radio-group-label"
 							className={styles['c-request-material__radio-button']}
