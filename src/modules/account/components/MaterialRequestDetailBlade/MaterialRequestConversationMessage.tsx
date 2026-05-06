@@ -162,6 +162,29 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 		);
 	};
 
+	const renderAdditionalConditions = () => {
+		const isRequester = user?.profileId === materialRequest.profileId;
+
+		return (
+			<>
+				<div className={clsx(styles['p-conversation-messages__message__body'])}>
+					{tHtml('<strong>{{name}}</strong> stuurde bijkomende gebruiksvoorwaarden', {
+						name: messageSenderName(),
+					})}
+				</div>
+				{isRequester && (
+					<Button
+						label={tText('Voorwaarden evalueren')}
+						variants={['dark']}
+						// TODO(senn): implement evaluate conditions flow
+						onClick={() => console.log('TODO: Evaluate conditions')}
+						className={clsx(styles['p-conversation-messages__message__download-button'])}
+					/>
+				)}
+			</>
+		);
+	};
+
 	const renderStatusUpdate = () => {
 		const motivation = (message.body as MaterialRequestMessageBodyStatusUpdateWithMotivation)
 			?.motivation;
@@ -238,6 +261,8 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 				return renderFinalSummary();
 
 			case MaterialRequestEventType.ADDITIONAL_CONDITIONS:
+				return renderAdditionalConditions();
+
 			case MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED:
 			case MaterialRequestEventType.ADDITIONAL_CONDITIONS_DENIED: {
 				return 'TODO: implement these messages';

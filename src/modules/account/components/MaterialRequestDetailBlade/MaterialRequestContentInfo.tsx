@@ -8,9 +8,11 @@ import {
 import {
 	GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD,
 	type MaterialRequest,
+	MaterialRequestAdditionalConditionsType,
 	type MaterialRequestDownloadQuality,
 	type MaterialRequestEvent,
 	MaterialRequestEventType,
+	type MaterialRequestMessageBodyAdditionalConditions,
 	type MaterialRequestMessageBodyStatusUpdateWithMotivation,
 } from '@material-requests/types';
 import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
@@ -202,13 +204,47 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 
 		let event: MaterialRequestEvent | undefined;
 
-		const renderAdditionConditions = (_event: MaterialRequestEvent) => {
-			// TODO: render additional condition
+		const renderAdditionConditions = (event: MaterialRequestEvent) => {
+			const conditions = (event.body as MaterialRequestMessageBodyAdditionalConditions)?.conditions;
+
+			if (!conditions) {
+				return null;
+			}
+
+			const getConditionLabel = (type: MaterialRequestAdditionalConditionsType): string => {
+				switch (type) {
+					case MaterialRequestAdditionalConditionsType.PERMISSION_LICENSE_OWNER:
+						return tText('Toestemming rechthebbende - content info');
+					case MaterialRequestAdditionalConditionsType.ATTRIBUTION:
+						return tText('Naamsvermelding - content info');
+					case MaterialRequestAdditionalConditionsType.PAYMENT:
+						return tText('Betaling - content info');
+					case MaterialRequestAdditionalConditionsType.EXTRA_USE_LIMITATION:
+						return tText('Extra gebruiksbeperking - content info');
+					default:
+						return '';
+				}
+			};
+
 			return renderContentBlock(
 				tText(
 					'modules/account/components/material-request-detail-blade/material-request-detail-blade___motivatie'
 				),
-				'TODO: render additional condition'
+				<>
+					{conditions.map((condition, index) => (
+						<div
+							key={`condition-${index}`}
+							className={
+								styles[
+									'p-material-request-detail__content-info__content-block-additional-condition'
+								]
+							}
+						>
+							<strong>{getConditionLabel(condition.type)}</strong>
+							<div>{condition.text}</div>
+						</div>
+					))}
+				</>
 			);
 		};
 
@@ -232,6 +268,13 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 		);
 		if (event) {
 			return doRenderMotivation(event);
+		}
+
+		event = currentMaterialRequestDetail.history.find(
+			(item) => item.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS
+		);
+		if (event) {
+			return renderAdditionConditions(event);
 		}
 
 		event = currentMaterialRequestDetail.history.find(

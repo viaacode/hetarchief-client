@@ -110,9 +110,11 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		if (!currentMaterialRequestDetail) {
 			return undefined;
 		}
+
+		const { history: _, ...statusUpdates } = materialRequestStatus || {};
 		return {
 			...currentMaterialRequestDetail,
-			...(materialRequestStatus || {}),
+			...statusUpdates,
 		};
 	}, [currentMaterialRequestDetail, materialRequestStatus]);
 
