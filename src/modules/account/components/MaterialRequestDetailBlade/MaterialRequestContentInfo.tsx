@@ -221,8 +221,6 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 						return tText('Betaling - content info');
 					case MaterialRequestAdditionalConditionsType.EXTRA_USE_LIMITATION:
 						return tText('Extra gebruiksbeperking - content info');
-					default:
-						return '';
 				}
 			};
 
@@ -233,7 +231,7 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 				<>
 					{conditions.map((condition, index) => (
 						<div
-							key={`condition-${index}`}
+							key={`content-block-additional-condition__${condition.type}`}
 							className={
 								styles[
 									'p-material-request-detail__content-info__content-block-additional-condition'
@@ -270,22 +268,12 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 			return doRenderMotivation(event);
 		}
 
-		event = currentMaterialRequestDetail.history.find(
-			(item) => item.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS
-		);
-		if (event) {
-			return renderAdditionConditions(event);
-		}
-
-		event = currentMaterialRequestDetail.history.find(
-			(item) => item.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED
-		);
-		if (event) {
-			return renderAdditionConditions(event);
-		}
-
-		event = currentMaterialRequestDetail.history.find(
-			(item) => item.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS_DENIED
+		event = currentMaterialRequestDetail.history.find((item) =>
+			[
+				MaterialRequestEventType.ADDITIONAL_CONDITIONS,
+				MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED,
+				MaterialRequestEventType.ADDITIONAL_CONDITIONS_DENIED,
+			].includes(item.messageType)
 		);
 		if (event) {
 			return renderAdditionConditions(event);
