@@ -6,33 +6,55 @@ export const MATERIAL_REQUEST_ADDITIONAL_CONDITIONS_OPTIONS =
 	(): CheckboxAccordionOption<MaterialRequestAdditionalConditionsType>[] => {
 		return [
 			{
-				label: tText('Toestemming rechthebbende'),
+				label: tText(
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___toestemming-rechthebbende'
+				),
 				value: MaterialRequestAdditionalConditionsType.PERMISSION_LICENSE_OWNER,
 				description: tText(
-					'Beschrijf hier welke toestemming de aanvrager moet verkrijgen van de rechthebbende.'
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___beschrijf-hier-welke-toestemming-de-aanvrager-moet-verkrijgen-van-de-rechthebbende'
 				),
-				placeholder: tText('Beschrijf de voorwaarde...'),
+				placeholder: tText(
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___beschrijf-de-voorwaarde'
+				),
 				maxLength: 500,
 			},
 			{
-				label: tText('Naamsvermelding'),
+				label: tText(
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___naamsvermelding'
+				),
 				value: MaterialRequestAdditionalConditionsType.ATTRIBUTION,
-				description: tText('Beschrijf hier hoe de aanvrager de naamsvermelding moet uitvoeren.'),
-				placeholder: tText('Beschrijf de voorwaarde...'),
+				description: tText(
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___beschrijf-hier-hoe-de-aanvrager-de-naamsvermelding-moet-uitvoeren'
+				),
+				placeholder: tText(
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___beschrijf-de-voorwaarde'
+				),
 				maxLength: 500,
 			},
 			{
-				label: tText('Betaling'),
+				label: tText(
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___betaling'
+				),
 				value: MaterialRequestAdditionalConditionsType.PAYMENT,
-				description: tText('Beschrijf hier welke betaling de aanvrager moet uitvoeren.'),
-				placeholder: tText('Beschrijf de voorwaarde...'),
+				description: tText(
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___beschrijf-hier-welke-betaling-de-aanvrager-moet-uitvoeren'
+				),
+				placeholder: tText(
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___beschrijf-de-voorwaarde'
+				),
 				maxLength: 500,
 			},
 			{
-				label: tText('Extra gebruiksbeperking'),
+				label: tText(
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___extra-gebruiksbeperking'
+				),
 				value: MaterialRequestAdditionalConditionsType.EXTRA_USE_LIMITATION,
-				description: tText('Beschrijf hier welke extra gebruiksbeperkingen van toepassing zijn.'),
-				placeholder: tText('Beschrijf de voorwaarde...'),
+				description: tText(
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___beschrijf-hier-welke-extra-gebruiksbeperkingen-van-toepassing-zijn'
+				),
+				placeholder: tText(
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___beschrijf-de-voorwaarde'
+				),
 				maxLength: 500,
 			},
 		];

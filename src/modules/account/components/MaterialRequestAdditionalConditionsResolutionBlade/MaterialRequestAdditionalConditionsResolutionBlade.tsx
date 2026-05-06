@@ -70,16 +70,24 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 
 			toastService.notify({
 				maxLines: 3,
-				title: tText('bijkomende voorwaarden opgelegd'),
-				description: tText('de bijkomende voorwaarden zijn succesvol opgelegd.'),
+				title: tText(
+					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___bijkomende-voorwaarden-opgelegd'
+				),
+				description: tText(
+					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-bijkomende-voorwaarden-zijn-succesvol-opgelegd'
+				),
 			});
 
 			onSuccess();
 		} catch (_err) {
 			toastService.notify({
 				maxLines: 3,
-				title: tText('er ging iets mis'),
-				description: tText('Er ging iets mis tijdens het opleggen van de bijkomende voorwaarden.'),
+				title: tText(
+					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___er-ging-iets-mis'
+				),
+				description: tText(
+					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___er-ging-iets-mis-tijdens-het-opleggen-van-de-bijkomende-voorwaarden'
+				),
 			});
 		} finally {
 			setIsSubmitting(false);
@@ -89,15 +97,23 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 	const getFooterButtons = (): BladeFooterButtonProps => {
 		return [
 			{
-				label: tText('Bijkomende voorwaarden opleggen'),
-				mobileLabel: tText('Bijkomende voorwaarden opleggen - mobile'),
+				label: tText(
+					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___bijkomende-voorwaarden-opleggen'
+				),
+				mobileLabel: tText(
+					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___bijkomende-voorwaarden-opleggen-mobile'
+				),
 				type: 'primary',
 				onClick: handleSubmitConditions,
 				disabled: isSubmitting,
 			},
 			{
-				label: tText('Keer terug'),
-				mobileLabel: tText('Keer terug - mobile'),
+				label: tText(
+					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___keer-terug'
+				),
+				mobileLabel: tText(
+					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___keer-terug-mobile'
+				),
 				type: 'secondary',
 				disabled: isSubmitting,
 				onClick: onBack,
@@ -113,23 +129,37 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 			currentLayer={currentLayer}
 			onClose={onClose}
 			isBladeInvalid={showValidation}
-			title={tText('Bijkomende voorwaarden')}
-			ariaLabel={tText('Bijkomende voorwaarden - aria label')}
-			stickySubtitle={<BladeStepSubtitle label={tText('Stap 2 van 2')} />}
+			title={tText(
+				'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___bijkomende-voorwaarden'
+			)}
+			ariaLabel={tText(
+				'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___bijkomende-voorwaarden-aria-label'
+			)}
+			stickySubtitle={
+				<BladeStepSubtitle
+					label={tText(
+						'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___stap-2-van-2'
+					)}
+				/>
+			}
 			footerButtons={getFooterButtons()}
 		>
 			<p
 				className={styles['c-material-request-additional-conditions-resolution-blade__description']}
 			>
 				{tText(
-					'Duid het gewenst verloop aan na het doorsturen van het voorstel met bijkomende voorwaarden. Wanneer de aanvrager de voorwaarden aanvaardt, wil ik dat:'
+					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___duid-het-gewenst-verloop-aan-na-het-doorsturen-van-het-voorstel-met-bijkomende-voorwaarden-wanneer-de-aanvrager-de-voorwaarden-aanvaardt-wil-ik-dat'
 				)}
 			</p>
 
 			<RadioButton
 				className={clsx(styles['c-material-request-additional-conditions-resolution-blade__radio'])}
-				label={tText('De aanvraag automatisch wordt goedgekeurd')}
-				aria-label={tText('De aanvraag automatisch wordt goedgekeurd - aria label')}
+				label={tText(
+					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-aanvraag-automatisch-wordt-goedgekeurd'
+				)}
+				aria-label={tText(
+					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-aanvraag-automatisch-wordt-goedgekeurd-aria-label'
+				)}
 				checked={conditions?.autoApproveAfterAcceptAdditionalConditions === true}
 				onClick={() => {
 					if (conditions) {
@@ -146,12 +176,16 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 					styles['c-material-request-additional-conditions-resolution-blade__radio-subtext']
 				}
 			>
-				{tText('In dit geval zal het materiaal onmiddelijk klaargemaakt worden voor download.')}
+				{tText(
+					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___in-dit-geval-zal-het-materiaal-onmiddelijk-klaargemaakt-worden-voor-download'
+				)}
 			</p>
 
 			<RadioButton
 				className={clsx(styles['c-material-request-additional-conditions-resolution-blade__radio'])}
-				label={tText('De aanvraag automatisch wordt afgekeurd')}
+				label={tText(
+					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-aanvraag-automatisch-wordt-afgekeurd'
+				)}
 				checked={conditions?.autoApproveAfterAcceptAdditionalConditions === false}
 				onClick={() => {
 					if (conditions) {
@@ -169,12 +203,16 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 				)}
 			>
 				{tText(
-					'In dit geval zal je eerst nog manueel de finale goedkeuring moeten geven vooraleer het materiaal klaargemaakt wordt voor download.'
+					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___in-dit-geval-zal-je-eerst-nog-manueel-de-finale-goedkeuring-moeten-geven-vooraleer-het-materiaal-klaargemaakt-wordt-voor-download'
 				)}
 			</p>
 
 			{showValidation && isNil(conditions?.autoApproveAfterAcceptAdditionalConditions) && (
-				<RedFormWarning error={tText('Selecteer één van de opties')} />
+				<RedFormWarning
+					error={tText(
+						'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___selecteer-een-van-de-opties'
+					)}
+				/>
 			)}
 		</Blade>
 	);

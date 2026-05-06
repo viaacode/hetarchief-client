@@ -153,7 +153,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 		return (
 			<div className={clsx(styles['p-conversation-messages__message__body'])}>
 				{tHtml(
-					'De aanvraag werd afgesloten, hieronder vind je een samenvatting. Alle documenten worden nog tot en met {{date}} bijgehouden',
+					'modules/account/components/material-request-detail-blade/material-request-conversation-message___de-aanvraag-werd-afgesloten-hieronder-vind-je-een-samenvatting-alle-documenten-worden-nog-tot-en-met-date-bijgehouden',
 					{
 						date: formatMediumDate(asDate(materialRequest.willBeArchivedAt)),
 					}
@@ -169,9 +169,12 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 		return (
 			<>
 				<div className={clsx(styles['p-conversation-messages__message__body'])}>
-					{tHtml('<strong>{{name}}</strong> stuurde bijkomende gebruiksvoorwaarden', {
-						name: messageSenderName(),
-					})}
+					{tHtml(
+						'modules/account/components/material-request-detail-blade/material-request-conversation-message___strong-name-strong-stuurde-bijkomende-gebruiksvoorwaarden',
+						{
+							name: messageSenderName(),
+						}
+					)}
 				</div>
 
 				{/* {isRequester && (

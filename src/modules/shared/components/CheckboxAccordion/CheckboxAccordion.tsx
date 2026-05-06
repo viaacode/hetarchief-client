@@ -114,7 +114,15 @@ function CheckboxAccordion<ValueType>({
 							<Icon name={isOpen ? IconNamesLight.AngleUp : IconNamesLight.AngleDown} aria-hidden />
 						}
 						variants="text"
-						ariaLabel={isOpen ? tText('Sluit accordion') : tText('Open accordion')}
+						ariaLabel={
+							isOpen
+								? tText(
+										'modules/shared/components/checkbox-accordion/checkbox-accordion___sluit-accordion'
+									)
+								: tText(
+										'modules/shared/components/checkbox-accordion/checkbox-accordion___open-accordion'
+									)
+						}
 						onClick={() => toggleOpenOption(option.value)}
 					/>
 				</div>
@@ -142,7 +150,9 @@ function CheckboxAccordion<ValueType>({
 						{hasError && (
 							<RedFormWarning
 								className={clsx(styles['c-checkbox-accordion__item-error'])}
-								error={tText('Dit veld is verplicht')}
+								error={tText(
+									'modules/shared/components/checkbox-accordion/checkbox-accordion___dit-veld-is-verplicht'
+								)}
 							/>
 						)}
 					</>

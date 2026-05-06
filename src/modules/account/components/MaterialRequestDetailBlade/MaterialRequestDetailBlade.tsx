@@ -810,12 +810,18 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				onCancel={handleCancelAdditionalConditionsConfirmationModal}
 				fullWidthButtonWrapper
 				text={{
-					title: tText('Onopgeslagen wijzigingen'),
-					description: tText(
-						'Er zijn nog onopgeslagen wijzigingen in de bijkomende gebruiksvoorwaarden. Weet je zeker dat je wil annuleren?'
+					title: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___onopgeslagen-wijzigingen'
 					),
-					yes: tText('Ja, annuleer wijzigingen in de bijkomende gebruiksvoorwaarden'),
-					no: tText('Nee, behoud wijzigingen in de bijkomende gebruiksvoorwaarden'),
+					description: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___er-zijn-nog-onopgeslagen-wijzigingen-in-de-bijkomende-gebruiksvoorwaarden-weet-je-zeker-dat-je-wil-annuleren'
+					),
+					yes: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___ja-annuleer-wijzigingen-in-de-bijkomende-gebruiksvoorwaarden'
+					),
+					no: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___nee-behoud-wijzigingen-in-de-bijkomende-gebruiksvoorwaarden'
+					),
 				}}
 			/>
 		</BladeManager>

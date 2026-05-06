@@ -66,14 +66,22 @@ export const MaterialRequestAdditionalConditionsBlade: FC<
 	const getFooterButtons = (): BladeFooterButtonProps => {
 		return [
 			{
-				label: tText('Naar volgende stap'),
-				mobileLabel: tText('Naar volgende stap - mobile'),
+				label: tText(
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___naar-volgende-stap'
+				),
+				mobileLabel: tText(
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___naar-volgende-stap-mobile'
+				),
 				type: 'primary',
 				onClick: handleSubmit,
 			},
 			{
-				label: tText('Annuleer'),
-				mobileLabel: tText('Annuleer - mobile'),
+				label: tText(
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___annuleer'
+				),
+				mobileLabel: tText(
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___annuleer-mobile'
+				),
 				type: 'secondary',
 				onClick: handleCancel,
 			},
@@ -88,20 +96,32 @@ export const MaterialRequestAdditionalConditionsBlade: FC<
 			currentLayer={currentLayer}
 			onClose={onClose}
 			isBladeInvalid={showValidation}
-			title={tText('Bijkomende voorwaarden')}
-			ariaLabel={tText('Bijkomende voorwaarden - aria label')}
-			stickySubtitle={<BladeStepSubtitle label={tText('Stap 1 van 2')} />}
+			title={tText(
+				'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___bijkomende-voorwaarden'
+			)}
+			ariaLabel={tText(
+				'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___bijkomende-voorwaarden-aria-label'
+			)}
+			stickySubtitle={
+				<BladeStepSubtitle
+					label={tText(
+						'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___stap-1-van-2'
+					)}
+				/>
+			}
 			footerButtons={getFooterButtons()}
 		>
 			<p>
 				{tText(
-					'Selecteer en beschrijf welke bijkomende voorwaarden je wil opleggen. Je voorstel wordt naar de aanvrager gestuurd, die de bijkomende voorwaarden kan nalezen en accepteren.'
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___selecteer-en-beschrijf-welke-bijkomende-voorwaarden-je-wil-opleggen-je-voorstel-wordt-naar-de-aanvrager-gestuurd-die-de-bijkomende-voorwaarden-kan-nalezen-en-accepteren'
 				)}
 			</p>
 
 			<CheckboxAccordion
 				prefix="material-request-additional-conditions"
-				title={tText('Voorwaarden')}
+				title={tText(
+					'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___voorwaarden'
+				)}
 				options={MATERIAL_REQUEST_ADDITIONAL_CONDITIONS_OPTIONS()}
 				selectedOptions={conditions?.conditions || []}
 				onChange={(conditionsArray) => {
@@ -116,7 +136,11 @@ export const MaterialRequestAdditionalConditionsBlade: FC<
 
 			{showValidation && hasNoConditions && (
 				<div className={clsx(styles['c-material-request-additional-conditions-blade__validation'])}>
-					<RedFormWarning error={tText('Selecteer minstens 1 voorwaarde')} />
+					<RedFormWarning
+						error={tText(
+							'modules/account/components/material-request-additional-conditions-blade/material-request-additional-conditions-blade___selecteer-minstens-1-voorwaarde'
+						)}
+					/>
 				</div>
 			)}
 		</Blade>

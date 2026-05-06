@@ -214,13 +214,21 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 			const getConditionLabel = (type: MaterialRequestAdditionalConditionsType): string => {
 				switch (type) {
 					case MaterialRequestAdditionalConditionsType.PERMISSION_LICENSE_OWNER:
-						return tText('Toestemming rechthebbende - content info');
+						return tText(
+							'modules/account/components/material-request-detail-blade/material-request-content-info___toestemming-rechthebbende-content-info'
+						);
 					case MaterialRequestAdditionalConditionsType.ATTRIBUTION:
-						return tText('Naamsvermelding - content info');
+						return tText(
+							'modules/account/components/material-request-detail-blade/material-request-content-info___naamsvermelding-content-info'
+						);
 					case MaterialRequestAdditionalConditionsType.PAYMENT:
-						return tText('Betaling - content info');
+						return tText(
+							'modules/account/components/material-request-detail-blade/material-request-content-info___betaling-content-info'
+						);
 					case MaterialRequestAdditionalConditionsType.EXTRA_USE_LIMITATION:
-						return tText('Extra gebruiksbeperking - content info');
+						return tText(
+							'modules/account/components/material-request-detail-blade/material-request-content-info___extra-gebruiksbeperking-content-info'
+						);
 				}
 			};
 
@@ -229,7 +237,7 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 					'modules/account/components/material-request-detail-blade/material-request-detail-blade___motivatie'
 				),
 				<>
-					{conditions.map((condition, index) => (
+					{conditions.map((condition) => (
 						<div
 							key={`content-block-additional-condition__${condition.type}`}
 							className={
