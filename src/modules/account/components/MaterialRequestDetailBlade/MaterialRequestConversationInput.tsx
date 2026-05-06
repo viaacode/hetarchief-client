@@ -229,6 +229,7 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 					disabled={sendMessageDisabled}
 					tabIndex={sendMessageDisabled ? -1 : undefined}
 					onClick={handleSendMessage}
+					ariaLabel={tText('Bericht versturen')}
 				/>
 			</div>
 		);
