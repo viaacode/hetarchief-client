@@ -96,7 +96,8 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		useState(false);
 	const [additionalConditions, setAdditionalConditions] =
 		useState<MaterialRequestMessageBodyAdditionalConditions | null>(null);
-	const [showMaterialRequestConfirmModal, setShowMaterialRequestConfirmModal] = useState(false);
+	const [showCancelMaterialRequestConfirmModal, setShowCancelMaterialRequestConfirmModal] =
+		useState(false);
 	const [showAdditionalConditionsConfirmModal, setShowAdditionalConditionsConfirmModal] =
 		useState(false);
 	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
@@ -219,7 +220,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			if (!materialRequest) {
 				return;
 			}
-			setShowMaterialRequestConfirmModal(false);
+			setShowCancelMaterialRequestConfirmModal(false);
 			const response = await MaterialRequestsService.cancel(materialRequest.id);
 			if (response === undefined) {
 				onFailedRequest();
@@ -355,7 +356,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 								)
 					}
 					variants={['outline']}
-					onClick={() => setShowMaterialRequestConfirmModal(true)}
+					onClick={() => setShowCancelMaterialRequestConfirmModal(true)}
 				/>
 			);
 		}
@@ -709,10 +710,10 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 						),
 					}}
 					fullWidthButtonWrapper
-					isOpen={showMaterialRequestConfirmModal}
-					onClose={() => setShowMaterialRequestConfirmModal(false)}
+					isOpen={showCancelMaterialRequestConfirmModal}
+					onClose={() => setShowCancelMaterialRequestConfirmModal(false)}
 					onCancel={onCancelRequest}
-					onConfirm={() => setShowMaterialRequestConfirmModal(false)}
+					onConfirm={() => setShowCancelMaterialRequestConfirmModal(false)}
 				/>
 			</Blade>
 			<MaterialRequestDownloadBlade
