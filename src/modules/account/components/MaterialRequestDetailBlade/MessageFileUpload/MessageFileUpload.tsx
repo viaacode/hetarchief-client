@@ -48,11 +48,13 @@ const MessageFileUpload: FC<MessageFileUploadProps> = ({
 
 		const validFiles: File[] = [];
 		let hasInvalidFiles = false;
+		let sizeToCheck = totalFileSize;
 
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
+			sizeToCheck += file.size;
 
-			if (totalFileSize + file.size > MAX_FILE_SIZE_TOTAL) {
+			if (sizeToCheck > MAX_FILE_SIZE_TOTAL) {
 				hasInvalidFiles = true;
 				continue;
 			}
@@ -101,6 +103,7 @@ const MessageFileUpload: FC<MessageFileUploadProps> = ({
 				onChange={handleFileChange}
 				disabled={disabled}
 				className={clsx(styles['c-message-file-upload__input'])}
+				aria-hidden
 			/>
 			<Button
 				variants={['sm', 'text']}
@@ -111,6 +114,7 @@ const MessageFileUpload: FC<MessageFileUploadProps> = ({
 						className={clsx(styles['c-message-file-upload__icon'])}
 					/>
 				}
+				ariaLabel={tText('Voeg bijlages toe aan het bericht dat je wil versturen')}
 				disabled={disabled}
 				className={clsx(styles['c-message-file-upload__button'])}
 			/>

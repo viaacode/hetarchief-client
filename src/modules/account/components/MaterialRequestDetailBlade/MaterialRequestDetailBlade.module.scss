@@ -71,7 +71,7 @@
 					margin-right: 0;
 				}
 
-				&:global(.c-tab__label) {
+				:global(.c-tab__label) {
 					display: none;
 				}
 
