@@ -229,7 +229,9 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 					disabled={sendMessageDisabled}
 					tabIndex={sendMessageDisabled ? -1 : undefined}
 					onClick={handleSendMessage}
-					ariaLabel={tText('Bericht versturen')}
+					ariaLabel={tText(
+						'modules/account/components/material-request-detail-blade/material-request-conversation-input___bericht-versturen'
+					)}
 				/>
 			</div>
 		);

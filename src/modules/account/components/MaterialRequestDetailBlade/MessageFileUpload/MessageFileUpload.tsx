@@ -114,7 +114,9 @@ const MessageFileUpload: FC<MessageFileUploadProps> = ({
 						className={clsx(styles['c-message-file-upload__icon'])}
 					/>
 				}
-				ariaLabel={tText('Voeg bijlages toe aan het bericht dat je wil versturen')}
+				ariaLabel={tText(
+					'modules/account/components/material-request-detail-blade/message-file-upload/message-file-upload___voeg-bijlages-toe-aan-het-bericht-dat-je-wil-versturen'
+				)}
 				disabled={disabled}
 				className={clsx(styles['c-message-file-upload__button'])}
 			/>
