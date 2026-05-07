@@ -103,6 +103,7 @@
 			&-text {
 				display: flex;
 				flex-direction: column;
+				word-break: break-word;
 
 				:last-child{
 					color: abstracts.$zinc;

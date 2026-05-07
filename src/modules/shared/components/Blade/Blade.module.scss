@@ -27,6 +27,10 @@ $padding-horizontal-mobile: abstracts.$spacer-sm;
 
 	&.c-blade--size-thin {
 		max-width: abstracts.$blade-max-width;
+
+		* {
+			max-width: abstracts.$blade-max-width;
+		}
 	}
 
 	&.c-blade--size-wide {
@@ -174,7 +178,6 @@ $padding-horizontal-mobile: abstracts.$spacer-sm;
 		background: $sticky-background;
 		padding: abstracts.$spacer-sm $padding-horizontal;
 		width: 100%;
-		max-width: 100%;
 
 		&__no-padding {
 			padding: 0;
