@@ -101,6 +101,7 @@ const MessageFileUpload: FC<MessageFileUploadProps> = ({
 				onChange={handleFileChange}
 				disabled={disabled}
 				className={clsx(styles['c-message-file-upload__input'])}
+				aria-hidden
 			/>
 			<Button
 				variants={['sm', 'text']}
@@ -111,6 +112,7 @@ const MessageFileUpload: FC<MessageFileUploadProps> = ({
 						className={clsx(styles['c-message-file-upload__icon'])}
 					/>
 				}
+				ariaLabel={tText('Voeg bijlages toe aan het bericht dat je wil versturen')}
 				disabled={disabled}
 				className={clsx(styles['c-message-file-upload__button'])}
 			/>

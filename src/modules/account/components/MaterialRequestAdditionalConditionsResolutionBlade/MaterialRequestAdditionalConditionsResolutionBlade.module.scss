@@ -6,9 +6,10 @@
 	}
 
 	&__radio-subtext {
+		display: flex;
 		font-style: italic;
 		font-size: abstracts.$font-size-sm;
 		color: abstracts.$shade;
-		margin: abstracts.$spacer-xxs 0 abstracts.$spacer-md abstracts.$spacer-lg;
+		margin: abstracts.$spacer-xxs 0 abstracts.$spacer-md 0;
 	}
 }
