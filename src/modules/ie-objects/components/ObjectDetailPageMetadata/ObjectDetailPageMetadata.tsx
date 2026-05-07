@@ -1000,12 +1000,12 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							</span>
 						</Metadata>
 					)}
-					{!!avRightsInfo?.reuseLabel && (
+					{avRightsInfo !== undefined && (
 						<Metadata
 							title={tHtml('modules/ie-objects/object-detail-page___rechten')}
 							key="metadata-av-rights-info"
 							renderRight={
-								avRightsInfo.reuseCategoryId ? (
+								avRightsInfo?.reuseCategoryId ? (
 									<a target="_blank" href={avRightsInfo.reuseCategoryId} rel="noreferrer">
 										<Button
 											variants={['white']}
@@ -1018,12 +1018,17 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 								) : undefined
 							}
 						>
-							{avRightsInfo.reuseCategoryId ? (
+							{avRightsInfo?.reuseCategoryId ? (
 								<a target="_blank" href={avRightsInfo.reuseCategoryId} rel="noreferrer">
 									{avRightsInfo.reuseLabel}
 								</a>
 							) : (
-								<span>{avRightsInfo.reuseLabel}</span>
+								<span>
+									{avRightsInfo?.reuseLabel ||
+										tText(
+											'modules/ie-objects/object-detail-page___geen-rechteninformatie-beschikbaar'
+										)}
+								</span>
 							)}
 						</Metadata>
 					)}

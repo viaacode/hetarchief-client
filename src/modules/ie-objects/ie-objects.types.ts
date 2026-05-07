@@ -106,7 +106,7 @@ export interface IeObject {
 	alternativeTitle?: string[];
 	digitizationDate?: string;
 	children?: number;
-	rightsInfo?: IeObjectRightsInfo;
+	rightsInfo?: IeObjectRightsInfo | null;
 	pages?: IeObjectPage[];
 	mentions?: Mention[];
 }
