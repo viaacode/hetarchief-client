@@ -4,21 +4,26 @@ import { keepPreviousData, type UseQueryResult, useQuery } from '@tanstack/react
 
 export const useGetIeObjectTicketServiceTokens = (
 	filePaths: string[],
+	schemaIdentifier: string | undefined | null,
 	options: Partial<{ enabled: boolean; keepPreviousData: boolean }> = {}
 ): UseQueryResult<Record<string, string | null>> => {
+	const { enabled = true, ...queryOptions } = options;
 	return useQuery({
-		queryKey: [QUERY_KEYS.getIeObjectPlayerTicketToken, filePaths],
+		queryKey: [QUERY_KEYS.getIeObjectPlayerTicketToken, schemaIdentifier, filePaths],
 		queryFn: async () => {
 			if (!filePaths || filePaths.length === 0) {
 				return {};
 			}
-			const tokens = await IeObjectsService.getTicketServiceTokens(filePaths);
+			const tokens = await IeObjectsService.getTicketServiceTokens(
+				filePaths,
+				schemaIdentifier as string
+			);
 			return Object.fromEntries(
 				filePaths.map((filePath, index) => [filePath, tokens[index] || null])
 			);
 		},
-		enabled: true,
+		enabled: enabled && !!schemaIdentifier,
 		placeholderData: keepPreviousData,
-		...options,
+		...queryOptions,
 	});
 };

@@ -106,6 +106,7 @@ export interface IeObject {
 	alternativeTitle?: string[];
 	digitizationDate?: string;
 	children?: number;
+	rightsInfo?: IeObjectRightsInfo;
 	pages?: IeObjectPage[];
 	mentions?: Mention[];
 }
@@ -169,6 +170,14 @@ export interface IeObjectRepresentation {
 	edmIsNextInSequence: string;
 	updatedAt: string;
 	files: IeObjectFile[];
+}
+
+export interface IeObjectRightsInfo {
+	reuseLabel: string;
+	reuseCategoryId?: string | null;
+	reuseCategoryLabel?: string | null;
+	reuseCategoryGroup?: string | null;
+	licenseDistributor?: string | null;
 }
 
 export interface IeObjectSearchAggregationPair<T> {

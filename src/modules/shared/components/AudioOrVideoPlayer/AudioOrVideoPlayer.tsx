@@ -32,6 +32,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	onMediaDurationLoaded,
 	representation,
 	dctermsFormat,
+	schemaIdentifier,
 	maintainerLogo,
 	locationId,
 	cuePoints,
@@ -57,7 +58,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		isLoading: isLoadingPlayableUrl,
 		isFetching: isFetchingPlayableUrl,
 		isError: isErrorPlayableUrl,
-	} = useGetIeObjectsTicketUrl(fileStoredAt, !!fileStoredAt);
+	} = useGetIeObjectsTicketUrl(fileStoredAt, schemaIdentifier, !!fileStoredAt);
 
 	const {
 		data: mediaDuration,
@@ -94,6 +95,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	const peakFileStoredAt: string | null = getFilesByType(JSON_FORMATS)?.[0]?.storedAt || null;
 	const { data: peakJson, isLoading: isLoadingPeakFile } = useGetPeakFile(
 		peakFileStoredAt,
+		schemaIdentifier,
 		dctermsFormat === IeObjectType.AUDIO || dctermsFormat === IeObjectType.AUDIO_FRAGMENT
 	);
 
