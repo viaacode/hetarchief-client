@@ -5,6 +5,7 @@ import { SearchPageMediaType } from '@shared/types/ie-objects';
 import { AdvancedFilterForm } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm';
 import { ConsultableMediaFilterForm } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm';
 import { ConsultableOnlyOnLocationFilterForm } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm';
+import { ConsultablePublicDomainFilterForm } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm';
 import { CreatorFilterForm } from '@visitor-space/components/CreatorFilterForm/CreatorFilterForm';
 import {
 	type FilterMenuFilterOption,
@@ -19,6 +20,8 @@ import { ReleaseDateFilterForm } from '@visitor-space/components/ReleaseDateFilt
 import ReusabilityFilterForm from '@visitor-space/components/ReusabilityFilterForm/ReusabilityFilterForm';
 import { SearchFilterId } from '@visitor-space/types';
 import getConfig from 'next/config';
+
+const { publicRuntimeConfig } = getConfig();
 
 const ALL_TABS: SearchPageMediaType[] = [
 	SearchPageMediaType.All,
@@ -112,13 +115,22 @@ export const SEARCH_PAGE_FILTERS = (
 		tabs: ALL_TABS,
 	},
 	{
+		id: SearchFilterId.ConsultablePublicDomain,
+		label: tText('modules/visitor-space/const/visitor-space-filters___publiek-domain'),
+		form: ConsultablePublicDomainFilterForm,
+		type: FilterMenuType.Checkbox,
+		tabs: ALL_TABS,
+		isDisabled: () => {
+			return !isGlobalArchive || !isKeyUser;
+		},
+	},
+	{
 		id: SearchFilterId.Reusability,
 		label: tText('modules/visitor-space/const/visitor-space-filters___herbruikbaarheid'),
 		form: ReusabilityFilterForm,
 		type: FilterMenuType.Modal,
 		tabs: ALL_TABS,
 		isDisabled: () => {
-			const { publicRuntimeConfig } = getConfig();
 			const rightsFiltersForEverybody =
 				publicRuntimeConfig.ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY === 'true';
 			return !rightsFiltersForEverybody && !isKeyUser;

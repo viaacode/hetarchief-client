@@ -549,7 +549,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				break;
 
 			case SearchFilterId.Reusability:
-				data = (values as ReusabilityFilterFormState).herbruikbaarheid;
+				data = (values as ReusabilityFilterFormState).reusability;
 				break;
 
 			case SearchFilterId.ConsultableOnlyOnLocation: {

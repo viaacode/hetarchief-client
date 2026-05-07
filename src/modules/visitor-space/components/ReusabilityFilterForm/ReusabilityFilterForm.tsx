@@ -16,7 +16,7 @@ import type {
 } from './ReusabilityFilterForm.types';
 
 const defaultValues: ReusabilityFilterFormState = {
-	herbruikbaarheid: [],
+	reusability: [],
 };
 
 const ReusabilityFilterForm: FC<ReusabilityFilterFormProps> = ({ children, className }) => {
@@ -69,11 +69,11 @@ const ReusabilityFilterForm: FC<ReusabilityFilterFormProps> = ({ children, class
 
 			{children({
 				values: {
-					herbruikbaarheid: selectedKeys.map(keyToValue),
+					reusability: selectedKeys.map(keyToValue),
 				},
 				reset: () => {
 					reset();
-					setSelectedKeys(defaultValues.herbruikbaarheid);
+					setSelectedKeys(defaultValues.reusability);
 				},
 				handleSubmit,
 			})}

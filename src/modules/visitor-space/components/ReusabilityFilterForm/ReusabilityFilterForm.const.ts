@@ -9,17 +9,17 @@ export const REUSABILITY_FILTER_FORM_QUERY_PARAM_CONFIG = {
 
 export const REUSABILITY_OPTIONS = () => [
 	{
-		key: 'vrij-herbruikbaar',
+		key: 'freely-reusable',
 		label: tText('modules/visitor-space/components/reusability-filter-form___vrij-herbruikbaar'),
 	},
 	{
-		key: 'herbruikbaar-onder-voorwaarden',
+		key: 'reusable-with-conditions',
 		label: tText(
 			'modules/visitor-space/components/reusability-filter-form___herbruikbaar-onder-voorwaarden'
 		),
 	},
 	{
-		key: 'misschien-herbruikbaar',
+		key: 'possibly-reusable',
 		label: tText(
 			'modules/visitor-space/components/reusability-filter-form___misschien-herbruikbaar'
 		),
