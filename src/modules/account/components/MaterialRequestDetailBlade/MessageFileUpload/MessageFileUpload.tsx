@@ -48,11 +48,13 @@ const MessageFileUpload: FC<MessageFileUploadProps> = ({
 
 		const validFiles: File[] = [];
 		let hasInvalidFiles = false;
+		let sizeToCheck = totalFileSize;
 
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
+			sizeToCheck += file.size;
 
-			if (totalFileSize + file.size > MAX_FILE_SIZE_TOTAL) {
+			if (sizeToCheck > MAX_FILE_SIZE_TOTAL) {
 				hasInvalidFiles = true;
 				continue;
 			}
