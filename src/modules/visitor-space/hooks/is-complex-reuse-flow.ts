@@ -22,11 +22,13 @@ export function useIsComplexReuseFlow(materialRequest: MaterialRequest | undefin
 	return checkIsComplexReuseFlow(materialRequest, commonUser);
 }
 
+export function isComplexReuseFlowEnabled() {
+	return publicRuntimeConfig.ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW === 'true';
+}
+
 export function useIsComplexReuseFlowUser(user: AvoUserCommonUser | null) {
 	const isKeyUser: boolean = user?.isKeyUser || false;
-	const isComplexReuseFlowEnabled =
-		publicRuntimeConfig.ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW === 'true';
-	return isKeyUser && isComplexReuseFlowEnabled;
+	return isKeyUser && isComplexReuseFlowEnabled();
 }
 
 /**
