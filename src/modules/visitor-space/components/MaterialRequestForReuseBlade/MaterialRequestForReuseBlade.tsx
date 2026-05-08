@@ -821,6 +821,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 									id="material-request-for-reuse-blade__distribution-type-other-explanation"
 									value={formValues.distributionTypeOtherExplanation}
 									disabled={formValues.distributionType !== MaterialRequestDistributionType.OTHER}
+									maxLength={300}
 									onChange={(evt) =>
 										setFormValue(
 											MaterialRequestReuseFormKey.distributionTypeOtherExplanation,
