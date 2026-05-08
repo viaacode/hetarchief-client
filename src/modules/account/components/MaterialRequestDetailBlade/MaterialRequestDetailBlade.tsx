@@ -170,8 +170,10 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		useGetMaterialRequestConversationUnreadCount(
 			materialRequest?.id,
 			// Only fetch the unreadCount when we are not on the conversation tab
-			// And only when the request is not yet closed with a final summary
-			activeTab !== MaterialRequestDetailBladeTabs.Conversation && !hasFinalSummary
+			// And only when the request is not yet closed with a final summary or is not archived
+			activeTab !== MaterialRequestDetailBladeTabs.Conversation &&
+				!hasFinalSummary &&
+				!materialRequest?.isArchived
 		);
 
 	const tabs: TabProps[] = useMemo(
