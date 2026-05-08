@@ -623,12 +623,12 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 
 	// Handler for confirming the confirmation modal
 	const handleConfirmAdditionalConditionsConfirmationModal = () => {
-		resetAdditionalConditionsFlow();
+		setShowAdditionalConditionsConfirmModal(false);
 	};
 
 	// Handler for cancelling the confirmation modal
 	const handleCancelAdditionalConditionsConfirmationModal = () => {
-		setShowAdditionalConditionsConfirmModal(false);
+		resetAdditionalConditionsFlow();
 	};
 
 	const getBladeLayerIndex = () => {
@@ -817,10 +817,10 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 						'modules/account/components/material-request-detail-blade/material-request-detail-blade___er-zijn-nog-onopgeslagen-wijzigingen-in-de-bijkomende-gebruiksvoorwaarden-weet-je-zeker-dat-je-wil-annuleren'
 					),
 					yes: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___ja-annuleer-wijzigingen-in-de-bijkomende-gebruiksvoorwaarden'
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___nee-behoud-wijzigingen-in-de-bijkomende-gebruiksvoorwaarden'
 					),
 					no: tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___nee-behoud-wijzigingen-in-de-bijkomende-gebruiksvoorwaarden'
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___ja-annuleer-wijzigingen-in-de-bijkomende-gebruiksvoorwaarden'
 					),
 				}}
 			/>
