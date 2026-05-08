@@ -6,6 +6,7 @@ import {
 	type MaterialRequestMessage,
 	type MaterialRequestMessageBodyMessage,
 	type MaterialRequestMessageBodyStatusUpdateWithMotivation,
+	MaterialRequestStatus,
 } from '@material-requests/types';
 import { Button } from '@meemoo/react-components';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
@@ -197,6 +198,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 
 	const renderAdditionalConditionsAccepted = () => {
 		const isRequester = user?.profileId === materialRequest.profileId;
+		const isApproved = materialRequest.status === MaterialRequestStatus.APPROVED;
 
 		if (isRequester) {
 			return (
@@ -218,14 +220,16 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 						name: messageSenderName(),
 					})}
 				</div>
-				<Button
-					label={tText(
-						'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-beschikbaar-maken'
-					)}
-					variants={['dark']}
-					onClick={() => setShowMakeDownloadAvailableConfirmModal(true)}
-					className={clsx(styles['p-conversation-messages__message__download-button'])}
-				/>
+				{!isApproved && (
+					<Button
+						label={tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-beschikbaar-maken'
+						)}
+						variants={['dark']}
+						onClick={() => setShowMakeDownloadAvailableConfirmModal(true)}
+						className={clsx(styles['p-conversation-messages__message__download-button'])}
+					/>
+				)}
 			</>
 		);
 	};
