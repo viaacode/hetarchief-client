@@ -530,7 +530,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							styles['c-request-material__radio-buttons-container']
 						)}
 					>
-						{!hideViewTypeOption && (
+						{!hideViewTypeOption && !canDownloadNewspaper && (
 							<RadioButton
 								aria-labelledby="radio-group-label"
 								className={styles['c-request-material__radio-button']}
