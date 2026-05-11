@@ -270,7 +270,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				return;
 			}
 			const response = await MaterialRequestsService.approve(materialRequest.id);
-			if (response === undefined) {
+			if (!response) {
 				onFailedMakeDownloadAvailable();
 				return;
 			}
