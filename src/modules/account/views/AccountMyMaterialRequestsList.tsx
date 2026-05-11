@@ -255,10 +255,7 @@ export const AccountMyMaterialRequestsList: FC<DefaultSeoInfo> = ({ url, canonic
 					</div>
 				</div>
 				<PersonalInfo
-					mostRecentMaterialRequestName={
-						materialRequests.length > 0 ? materialRequests[0].objectSchemaName : ''
-					}
-					hasRequests={materialRequests.length > 0}
+					materialRequests={materialRequests}
 					onCancel={onCancelRequest}
 					onSuccess={onSuccessRequest}
 				/>

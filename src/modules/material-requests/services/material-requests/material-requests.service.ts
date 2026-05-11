@@ -5,6 +5,7 @@ import {
 	type MaterialRequestDetail,
 	type MaterialRequestMaintainer,
 	type MaterialRequestMessage,
+	type MaterialRequestMessageBodyAdditionalConditions,
 	type MaterialRequestSendAll,
 	MaterialRequestStatus,
 	type MaterialRequestStatuses,
@@ -218,7 +219,9 @@ export abstract class MaterialRequestsService {
 		formData.append('message', message);
 
 		files?.forEach((file) => {
-			formData.append('files', file);
+			// Replace all soft-hyphen characters from the filename to avoid weird name changing on the proxy
+			// See also: https://meemoo.atlassian.net/browse/ARC-3668
+			formData.append('files', new File([file], file.name.replace(/\u00AD/g, '')));
 		});
 
 		return ApiService.getApi()
@@ -234,6 +237,19 @@ export abstract class MaterialRequestsService {
 	public static getUnreadMessages(materialRequestId: string): Promise<{ count: number }> {
 		return ApiService.getApi()
 			.get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/messages/count-unread`)
+			.json();
+	}
+
+	public static async addAdditionalConditions(
+		materialRequestId: string,
+		conditions: MaterialRequestMessageBodyAdditionalConditions
+	): Promise<void> {
+		return ApiService.getApi()
+			.post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/extra-conditions/add`, {
+				json: {
+					extraConditions: conditions,
+				},
+			})
 			.json();
 	}
 }

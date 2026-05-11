@@ -86,5 +86,13 @@
 			object-fit: cover;
 			object-position: center;
 		}
+
+		&-additional-condition {
+			margin-bottom: abstracts.$spacer-xs;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
 	}
 }

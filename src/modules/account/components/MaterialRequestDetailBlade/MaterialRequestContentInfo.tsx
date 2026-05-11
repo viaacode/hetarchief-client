@@ -8,9 +8,11 @@ import {
 import {
 	GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD,
 	type MaterialRequest,
+	MaterialRequestAdditionalConditionsType,
 	type MaterialRequestDownloadQuality,
 	type MaterialRequestEvent,
 	MaterialRequestEventType,
+	type MaterialRequestMessageBodyAdditionalConditions,
 	type MaterialRequestMessageBodyStatusUpdateWithMotivation,
 } from '@material-requests/types';
 import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
@@ -202,13 +204,53 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 
 		let event: MaterialRequestEvent | undefined;
 
-		const renderAdditionConditions = (_event: MaterialRequestEvent) => {
-			// TODO: render additional condition
+		const renderAdditionConditions = (event: MaterialRequestEvent) => {
+			const conditions = (event.body as MaterialRequestMessageBodyAdditionalConditions)?.conditions;
+
+			if (!conditions) {
+				return null;
+			}
+
+			const getConditionLabel = (type: MaterialRequestAdditionalConditionsType): string => {
+				switch (type) {
+					case MaterialRequestAdditionalConditionsType.PERMISSION_LICENSE_OWNER:
+						return tText(
+							'modules/account/components/material-request-detail-blade/material-request-content-info___toestemming-rechthebbende-content-info'
+						);
+					case MaterialRequestAdditionalConditionsType.ATTRIBUTION:
+						return tText(
+							'modules/account/components/material-request-detail-blade/material-request-content-info___naamsvermelding-content-info'
+						);
+					case MaterialRequestAdditionalConditionsType.PAYMENT:
+						return tText(
+							'modules/account/components/material-request-detail-blade/material-request-content-info___betaling-content-info'
+						);
+					case MaterialRequestAdditionalConditionsType.EXTRA_USE_LIMITATION:
+						return tText(
+							'modules/account/components/material-request-detail-blade/material-request-content-info___extra-gebruiksbeperking-content-info'
+						);
+				}
+			};
+
 			return renderContentBlock(
 				tText(
 					'modules/account/components/material-request-detail-blade/material-request-detail-blade___motivatie'
 				),
-				'TODO: render additional condition'
+				<>
+					{conditions.map((condition) => (
+						<div
+							key={`content-block-additional-condition__${condition.type}`}
+							className={
+								styles[
+									'p-material-request-detail__content-info__content-block-additional-condition'
+								]
+							}
+						>
+							<strong>{getConditionLabel(condition.type)}</strong>
+							<div>{condition.text}</div>
+						</div>
+					))}
+				</>
 			);
 		};
 
@@ -234,15 +276,12 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 			return doRenderMotivation(event);
 		}
 
-		event = currentMaterialRequestDetail.history.find(
-			(item) => item.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED
-		);
-		if (event) {
-			return renderAdditionConditions(event);
-		}
-
-		event = currentMaterialRequestDetail.history.find(
-			(item) => item.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS_DENIED
+		event = currentMaterialRequestDetail.history.find((item) =>
+			[
+				MaterialRequestEventType.ADDITIONAL_CONDITIONS,
+				MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED,
+				MaterialRequestEventType.ADDITIONAL_CONDITIONS_DENIED,
+			].includes(item.messageType)
 		);
 		if (event) {
 			return renderAdditionConditions(event);

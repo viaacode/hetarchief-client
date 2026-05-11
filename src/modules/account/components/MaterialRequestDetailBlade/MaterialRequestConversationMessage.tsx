@@ -153,12 +153,40 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 		return (
 			<div className={clsx(styles['p-conversation-messages__message__body'])}>
 				{tHtml(
-					'De aanvraag werd afgesloten, hieronder vind je een samenvatting. Alle documenten worden nog tot en met {{date}} bijgehouden',
+					'modules/account/components/material-request-detail-blade/material-request-conversation-message___de-aanvraag-werd-afgesloten-hieronder-vind-je-een-samenvatting-alle-documenten-worden-nog-tot-en-met-date-bijgehouden',
 					{
 						date: formatMediumDate(asDate(materialRequest.willBeArchivedAt)),
 					}
 				)}
 			</div>
+		);
+	};
+
+	const renderAdditionalConditions = () => {
+		//TODO(Senn): implement CTA message for requester
+		// const isRequester = user?.profileId === materialRequest.profileId;
+
+		return (
+			<>
+				<div className={clsx(styles['p-conversation-messages__message__body'])}>
+					{tHtml(
+						'modules/account/components/material-request-detail-blade/material-request-conversation-message___strong-name-strong-stuurde-bijkomende-gebruiksvoorwaarden',
+						{
+							name: messageSenderName(),
+						}
+					)}
+				</div>
+
+				{/* {isRequester && (
+					<Button
+						label={tText('Voorwaarden evalueren')}
+						variants={['dark']}
+						// TODO(senn): implement evaluate conditions flow
+						onClick={() => console.log('TODO: Evaluate conditions')}
+						className={clsx(styles['p-conversation-messages__message__download-button'])}
+					/>
+				)} */}
+			</>
 		);
 	};
 
@@ -238,6 +266,8 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 				return renderFinalSummary();
 
 			case MaterialRequestEventType.ADDITIONAL_CONDITIONS:
+				return renderAdditionalConditions();
+
 			case MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED:
 			case MaterialRequestEventType.ADDITIONAL_CONDITIONS_DENIED: {
 				return 'TODO: implement these messages';

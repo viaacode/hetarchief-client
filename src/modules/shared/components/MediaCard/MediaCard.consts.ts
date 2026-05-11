@@ -42,6 +42,27 @@ export function GET_TYPE_TO_LABEL_MAP(type: IeObjectType): string | undefined {
 	}[simpleType];
 }
 
+export function GET_TYPE_TO_ARIA_LABEL_MAP(type: IeObjectType): string {
+	const simpleType = mapDcTermsFormatToSimpleType(type);
+	return {
+		[SimpleIeObjectType.AUDIO]: tText(
+			'modules/shared/components/media-card/media-card___audio-aria-label'
+		),
+		[SimpleIeObjectType.VIDEO]: tText(
+			'modules/shared/components/media-card/media-card___video-aria-label'
+		),
+		[SimpleIeObjectType.NEWSPAPER]: tText(
+			'modules/shared/components/media-card/media-card___krant-aria-label'
+		),
+		[SimpleIeObjectType.IMAGE]: tText(
+			'modules/shared/components/media-card/media-card___afbeelding-aria-label'
+		),
+		unknown: tText(
+			'modules/shared/components/media-card/media-card___object-type-niet-gekend-aria-label'
+		),
+	}[simpleType];
+}
+
 export const TRUNCATED_TEXT_LENGTH = 50;
 
 export const soundwave =
