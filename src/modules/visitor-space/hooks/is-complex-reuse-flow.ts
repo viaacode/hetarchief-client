@@ -46,7 +46,7 @@ export function checkIsComplexReuseFlow(
 			isObjectEssenceAccessibleToUser: false,
 		};
 	}
-	if (publicRuntimeConfig.ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW !== 'true') {
+	if (!isComplexReuseFlowEnabled()) {
 		return {
 			isComplexReuseFlow: false,
 			isObjectEssenceAccessibleToUser: !!materialRequest?.objectThumbnailUrl,
