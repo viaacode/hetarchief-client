@@ -22,6 +22,12 @@ $page: "p-admin-material-requests";
 		}
 	}
 
+	&__searchbar {
+		@media (max-width: $breakpoint-xl) {
+			margin-bottom: $spacer-xs;
+		}
+	}
+
 	&__dropdown {
 		margin-right: $spacer-sm;
 		margin-bottom: 0;
