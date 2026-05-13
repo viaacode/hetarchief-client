@@ -169,6 +169,12 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 	};
 
 	const renderAdditionalConditions = () => {
+		const conditionsEvaluated = materialRequest.history?.some(
+			(event) =>
+				event.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED ||
+				event.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS_DENIED
+		);
+
 		return (
 			<>
 				<div className={clsx(styles['p-conversation-messages__message__body'])}>
@@ -180,7 +186,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 					)}
 				</div>
 
-				{isRequester && (
+				{isRequester && !conditionsEvaluated && (
 					<Button
 						label={tText('Voorwaarden evalueren')}
 						variants={['dark']}

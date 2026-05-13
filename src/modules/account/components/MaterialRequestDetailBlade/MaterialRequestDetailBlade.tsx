@@ -285,6 +285,10 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		}
 	};
 
+	const onHandleDenyRequest = () => {
+		setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED);
+	};
+
 	const renderContent = () => {
 		if (!materialRequest) {
 			return null;
@@ -517,9 +521,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 						onApproveRequest={() =>
 							setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.APPROVED)
 						}
-						onDeclineRequest={() =>
-							setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
-						}
+						onDeclineRequest={onHandleDenyRequest}
 						onRequestAdditionalConditions={() => setIsAdditionalConditionsBladeOpen(true)}
 					/>
 				</DropdownContent>
@@ -813,9 +815,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 						onApproveRequest={() =>
 							setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.APPROVED)
 						}
-						onDeclineRequest={() =>
-							setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
-						}
+						onDeclineRequest={onHandleDenyRequest}
 						onRequestAdditionalConditions={() => {
 							setIsAdditionalConditionsBladeOpen(true);
 						}}
@@ -833,6 +833,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				currentMaterialRequestDetail={materialRequest}
 				layer={isDetailStatusBladeOpenWithStatus ? getStatusUpdateBladeLayer() : 99}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
+				hasPendingAdditionalConditions={requestHasAdditionalConditionsAsked}
 			/>
 			<MaterialRequestAdditionalConditionsBlade
 				isOpen={isAdditionalConditionsBladeOpen}
@@ -867,7 +868,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			<MaterialRequestEvaluateConditionsBlade
 				isOpen={!!evaluateConditionsMessage}
 				onClose={() => setEvaluateConditionsMessage(null)}
-				message={evaluateConditionsMessage as MaterialRequestMessage}
+				message={evaluateConditionsMessage}
 				layer={evaluateConditionsMessage ? getEvaluateConditionsBladeLayer() : 99}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 				materialRequestId={currentMaterialRequestDetail?.id}
