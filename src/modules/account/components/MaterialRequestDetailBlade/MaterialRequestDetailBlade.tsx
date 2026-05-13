@@ -96,7 +96,6 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	const [isAdditionalConditionsBladeOpen, setIsAdditionalConditionsBladeOpen] = useState(false);
 	const [isAdditionalConditionsResolutionBladeOpen, setIsAdditionalConditionsResolutionBladeOpen] =
 		useState(false);
-	const [isEvaluateConditionsBladeOpen, setIsEvaluateConditionsBladeOpen] = useState(false);
 	const [evaluateConditionsMessage, setEvaluateConditionsMessage] =
 		useState<MaterialRequestMessage | null>(null);
 	const [additionalConditions, setAdditionalConditions] =
@@ -263,7 +262,6 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 
 	const onOpenEvaluateConditions = (message: MaterialRequestMessage) => {
 		setEvaluateConditionsMessage(message);
-		setIsEvaluateConditionsBladeOpen(true);
 	};
 
 	const onMakeDownloadAvailable = async () => {
@@ -309,7 +307,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 						handleDownload={onHandleDownload}
 						onMessagesLoaded={() => !!unreadCount && refetchUnreadCount().then(noop)}
 						onOpenEvaluateConditions={onOpenEvaluateConditions}
-						onMakeDownloadAvailable={onMakeDownloadAvailable}
+						onMakeDownloadAvailable={() => setShowMakeDownloadAvailableConfirmModal(true)}
 					/>
 				);
 			case MaterialRequestDetailBladeTabs.Documents:
@@ -427,7 +425,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 								)
 					}
 					variants={['dark']}
-					onClick={() => lastEvent && onOpenEvaluateConditions(lastEvent as MaterialRequestMessage)}
+					onClick={() => onOpenEvaluateConditions(lastEvent as MaterialRequestMessage)}
 				/>
 			);
 		}
@@ -693,7 +691,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			return getAdditionalConditionsResolutionBladeLayer();
 		}
 
-		if (isEvaluateConditionsBladeOpen) {
+		if (evaluateConditionsMessage) {
 			return getEvaluateConditionsBladeLayer();
 		}
 
@@ -728,8 +726,8 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				}
 
 				// Check evaluate conditions blade
-				if (isEvaluateConditionsBladeOpen) {
-					setIsEvaluateConditionsBladeOpen(false);
+				if (evaluateConditionsMessage) {
+					setEvaluateConditionsMessage(null);
 					return;
 				}
 
@@ -866,21 +864,18 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 			/>
 
-			{evaluateConditionsMessage && (
-				<MaterialRequestEvaluateConditionsBlade
-					isOpen={isEvaluateConditionsBladeOpen}
-					onClose={() => setIsEvaluateConditionsBladeOpen(false)}
-					message={evaluateConditionsMessage}
-					layer={isEvaluateConditionsBladeOpen ? getEvaluateConditionsBladeLayer() : 99}
-					currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
-					materialRequestId={currentMaterialRequestDetail?.id || ''}
-					onSuccess={() => {
-						setIsEvaluateConditionsBladeOpen(false);
-						setEvaluateConditionsMessage(null);
-						refetchMaterialRequestStatus().then(noop);
-					}}
-				/>
-			)}
+			<MaterialRequestEvaluateConditionsBlade
+				isOpen={!!evaluateConditionsMessage}
+				onClose={() => setEvaluateConditionsMessage(null)}
+				message={evaluateConditionsMessage as MaterialRequestMessage}
+				layer={evaluateConditionsMessage ? getEvaluateConditionsBladeLayer() : 99}
+				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
+				materialRequestId={currentMaterialRequestDetail?.id}
+				onSuccess={() => {
+					setEvaluateConditionsMessage(null);
+					refetchMaterialRequestStatus().then(noop);
+				}}
+			/>
 
 			<ConfirmationModal
 				isOpen={showAdditionalConditionsConfirmModal}

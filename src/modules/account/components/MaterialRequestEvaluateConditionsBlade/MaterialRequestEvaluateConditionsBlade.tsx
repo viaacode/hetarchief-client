@@ -1,8 +1,8 @@
+import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_ADDITIONAL_CONDITIONS_TYPE } from '@material-requests/const';
 import { useEvaluateExtraConditions } from '@material-requests/hooks/evaluate-extra-conditions';
-import {
-	MaterialRequestAdditionalConditionsType,
-	type MaterialRequestMessage,
-	type MaterialRequestMessageBodyAdditionalConditions,
+import type {
+	MaterialRequestMessage,
+	MaterialRequestMessageBodyAdditionalConditions,
 } from '@material-requests/types';
 import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
@@ -18,35 +18,26 @@ interface MaterialRequestEvaluateConditionsBladeProps {
 	message: MaterialRequestMessage;
 	layer: number;
 	currentLayer: number;
-	materialRequestId: string;
+	materialRequestId: string | undefined;
 	onSuccess: () => void;
 }
-
-const getConditionLabel = (type: MaterialRequestAdditionalConditionsType): string => {
-	switch (type) {
-		case MaterialRequestAdditionalConditionsType.PERMISSION_LICENSE_OWNER:
-			return tText('Toestemming rechthebbende - evaluate conditions blade');
-		case MaterialRequestAdditionalConditionsType.ATTRIBUTION:
-			return tText('Naamsvermelding - evaluate conditions blade');
-		case MaterialRequestAdditionalConditionsType.PAYMENT:
-			return tText('Betaling - evaluate conditions blade');
-		case MaterialRequestAdditionalConditionsType.EXTRA_USE_LIMITATION:
-			return tText('Extra gebruiksbeperking - evaluate conditions blade');
-	}
-};
 
 export const MaterialRequestEvaluateConditionsBlade: FC<
 	MaterialRequestEvaluateConditionsBladeProps
 > = ({ isOpen, onClose, message, layer, currentLayer, materialRequestId, onSuccess }) => {
+	const conditionLabels = GET_MATERIAL_REQUEST_TRANSLATIONS_BY_ADDITIONAL_CONDITIONS_TYPE();
 	const conditions = (message.body as MaterialRequestMessageBodyAdditionalConditions)?.conditions;
 	const [showDeclineConfirmModal, setShowDeclineConfirmModal] = useState(false);
-	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	const { mutateAsync: evaluateExtraConditions } = useEvaluateExtraConditions();
+	const { mutateAsync: evaluateExtraConditions, isPending: isSubmitting } =
+		useEvaluateExtraConditions();
 
 	const handleAccept = async () => {
+		if (!materialRequestId) {
+			return;
+		}
+
 		try {
-			setIsSubmitting(true);
 			await evaluateExtraConditions({ materialRequestId, action: 'accept' });
 
 			toastService.notify({
@@ -66,8 +57,6 @@ export const MaterialRequestEvaluateConditionsBlade: FC<
 				title: tText('Er ging iets mis'),
 				description: tText('Er ging iets mis bij het accepteren van de voorwaarden.'),
 			});
-		} finally {
-			setIsSubmitting(false);
 		}
 	};
 
@@ -76,8 +65,11 @@ export const MaterialRequestEvaluateConditionsBlade: FC<
 	};
 
 	const handleDeclineConfirm = async () => {
+		if (!materialRequestId) {
+			return;
+		}
+
 		try {
-			setIsSubmitting(true);
 			await evaluateExtraConditions({ materialRequestId, action: 'decline' });
 
 			toastService.notify({
@@ -99,8 +91,6 @@ export const MaterialRequestEvaluateConditionsBlade: FC<
 				title: tText('Er ging iets mis'),
 				description: tText('Er ging iets mis bij het annuleren van de aanvraag.'),
 			});
-		} finally {
-			setIsSubmitting(false);
 		}
 	};
 
@@ -159,7 +149,7 @@ export const MaterialRequestEvaluateConditionsBlade: FC<
 							<strong
 								className={styles['c-material-request-evaluate-conditions-blade__condition-title']}
 							>
-								{getConditionLabel(condition.type)}
+								{conditionLabels[condition.type]}
 							</strong>
 							<div
 								className={styles['c-material-request-evaluate-conditions-blade__condition-text']}

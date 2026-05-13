@@ -9,7 +9,6 @@ import {
 	MaterialRequestStatus,
 } from '@material-requests/types';
 import { Button } from '@meemoo/react-components';
-import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import Html from '@shared/components/Html/Html';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -23,7 +22,7 @@ import {
 } from '@shared/utils/dates';
 import clsx from 'clsx';
 import Link from 'next/link';
-import React, { type FC, useState } from 'react';
+import React, { type FC } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './MaterialRequestConversation.module.scss';
 
@@ -43,8 +42,6 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 	onMakeDownloadAvailable,
 }) => {
 	const user = useSelector(selectCommonUser);
-	const [showMakeDownloadAvailableConfirmModal, setShowMakeDownloadAvailableConfirmModal] =
-		useState(false);
 
 	/**
 	 * Determines if the message is rendered
@@ -52,6 +49,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 	 * - on the left in grey (other)
 	 */
 	const isOwnMessage = message.senderProfile?.id === user?.profileId;
+	const isRequester = user?.profileId === materialRequest.profileId;
 
 	// Cancelled, denied and download expired are all closable events. Final summary will always be added after that
 	const isFinalMessage = [
@@ -171,8 +169,6 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 	};
 
 	const renderAdditionalConditions = () => {
-		const isRequester = user?.profileId === materialRequest.profileId;
-
 		return (
 			<>
 				<div className={clsx(styles['p-conversation-messages__message__body'])}>
@@ -197,14 +193,13 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 	};
 
 	const renderAdditionalConditionsAccepted = () => {
-		const isRequester = user?.profileId === materialRequest.profileId;
 		const isApproved = materialRequest.status === MaterialRequestStatus.APPROVED;
 
 		if (isRequester) {
 			return (
 				<div className={clsx(styles['p-conversation-messages__message__body'])}>
 					{tHtml(
-						'<strong>{{name}}</strong> aanvaardde de bijkomende gebruiksvoorwaarden. De download wordt beschikbaar gemaakt na finale goedkeuring van de aanbieder.',
+						'{{name}} aanvaardde de bijkomende gebruiksvoorwaarden. De download wordt beschikbaar gemaakt na finale goedkeuring van de aanbieder.',
 						{
 							name: messageSenderName(),
 						}
@@ -216,7 +211,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 		return (
 			<>
 				<div className={clsx(styles['p-conversation-messages__message__body'])}>
-					{tHtml('<strong>{{name}}</strong> aanvaardde de bijkomende gebruiksvoorwaarden', {
+					{tHtml('{{name}} aanvaardde de bijkomende gebruiksvoorwaarden', {
 						name: messageSenderName(),
 					})}
 				</div>
@@ -226,7 +221,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 							'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-beschikbaar-maken'
 						)}
 						variants={['dark']}
-						onClick={() => setShowMakeDownloadAvailableConfirmModal(true)}
+						onClick={onMakeDownloadAvailable}
 						className={clsx(styles['p-conversation-messages__message__download-button'])}
 					/>
 				)}
@@ -238,7 +233,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 		return (
 			<div className={clsx(styles['p-conversation-messages__message__body'])}>
 				{tHtml(
-					'<strong>{{name}}</strong> weigerde de bijkomende gebruiksvoorwaarden. De aanvraag wordt afgesloten.',
+					'{{name}} weigerde de bijkomende gebruiksvoorwaarden. De aanvraag wordt afgesloten.',
 					{
 						name: messageSenderName(),
 					}
@@ -375,24 +370,6 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 					</Link>
 				))}
 			</div>
-			<ConfirmationModal
-				text={{
-					title: tText(
-						'modules/account/components/material-request-detail-blade/material-request-conversation-message___download-beschikbaar-maken'
-					),
-					description: tHtml('Ben je zeker dat je de download beschikbaar wil maken?'),
-					yes: tText('ja, download beschikbaar maken'),
-					no: tText('nee, download beschikbaar maken annuleren'),
-				}}
-				fullWidthButtonWrapper
-				isOpen={showMakeDownloadAvailableConfirmModal}
-				onClose={() => setShowMakeDownloadAvailableConfirmModal(false)}
-				onConfirm={() => {
-					setShowMakeDownloadAvailableConfirmModal(false);
-					onMakeDownloadAvailable();
-				}}
-				onCancel={() => setShowMakeDownloadAvailableConfirmModal(false)}
-			/>
 		</div>
 	);
 };
