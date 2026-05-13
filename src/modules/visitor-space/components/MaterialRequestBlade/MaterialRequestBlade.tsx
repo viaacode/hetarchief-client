@@ -530,9 +530,8 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							styles['c-request-material__radio-buttons-container']
 						)}
 					>
-						{!hideViewTypeOption && (
+						{!hideViewTypeOption && !canDownloadNewspaper && (
 							<RadioButton
-								aria-labelledby="radio-group-label"
 								className={styles['c-request-material__radio-button']}
 								label={tText(
 									'modules/visitor-space/components/material-request-blade/material-request-blade___view'
@@ -546,7 +545,6 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						)}
 						{!canDownloadNewspaper && (
 							<RadioButton
-								aria-labelledby="radio-group-label"
 								className={styles['c-request-material__radio-button']}
 								label={tText(
 									'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
@@ -559,7 +557,6 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 							/>
 						)}
 						<RadioButton
-							aria-labelledby="radio-group-label"
 							className={styles['c-request-material__radio-button']}
 							label={tText(
 								'modules/visitor-space/components/material-request-blade/material-request-blade___more-info'
