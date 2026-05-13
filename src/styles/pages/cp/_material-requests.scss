@@ -15,9 +15,11 @@
 		&-dropdowns {
 			display: flex;
 			flex-flow: row wrap;
+			gap: $spacer-sm;
 
 			@media (max-width: $breakpoint-xl) {
 				flex-direction: column;
+				gap: $spacer-xxxs;
 			}
 		}
 	}
@@ -59,11 +61,9 @@
 	}
 
 	&__dropdown {
-		margin-right: $spacer-sm;
 		margin-bottom: 0;
 
 		@media (max-width: $breakpoint-xl) {
-			margin-right: 0;
 			margin-bottom: $spacer-xs;
 		}
 	}
