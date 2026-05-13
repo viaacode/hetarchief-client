@@ -20,6 +20,7 @@ export enum IconNamesLight {
 	Compress = 'compress--light',
 	Contact = 'contact--light',
 	Copy = 'copy--light',
+	Copyright = 'copyright--light',
 	CopyrightPublicDomain = 'copyright-public-domain--light',
 	CopyrightUndetermined = 'copyright-undetermined--light',
 	Description = 'description--light',
