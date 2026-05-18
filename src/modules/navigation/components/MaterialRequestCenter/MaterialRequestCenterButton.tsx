@@ -44,30 +44,30 @@ const MaterialRequestCenterButton: FC = () => {
 	};
 
 	useEffect(() => {
-		// Trigger animation on initial load if there are material requests
-		if (isNil(previousMaterialCount)) {
-			setPreviousMaterialCount(materialRequestCount);
-			if (materialRequestCount > 0) {
-				setIsAnimated(true);
-			}
-			return;
-		}
-		// Trigger animation when material request count changes
+		// Ward: set isAnimated to true only if materialRequest is updated after initialisation
 		if (materialRequestCount !== previousMaterialCount) {
 			setPreviousMaterialCount(materialRequestCount);
-			if (materialRequestCount > 0) {
-				setIsAnimated(false);
-
-				requestAnimationFrame(() => {
-					setIsAnimated(true);
-				});
-			}
+			setIsAnimated(true);
 		}
 	}, [materialRequestCount, previousMaterialCount]);
 
 	const onCloseMaterialRequestCenter = () => {
 		dispatch(setShowMaterialRequestCenter(false));
 	};
+
+	useEffect(() => {
+		const handleAnimationEnd = () => {
+			setIsAnimated(false);
+		};
+
+		const badgeElement = animationRef.current;
+
+		badgeElement?.addEventListener('animationend', handleAnimationEnd);
+
+		return () => {
+			badgeElement?.removeEventListener('animationend', handleAnimationEnd);
+		};
+	}, []);
 
 	return (
 		<>
