@@ -117,6 +117,14 @@ import styles from './ObjectDetailPageMetadata.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
 
+const AV_OBJECT_TYPES = [
+	IeObjectType.AUDIO,
+	IeObjectType.AUDIO_FRAGMENT,
+	IeObjectType.FILM,
+	IeObjectType.VIDEO,
+	IeObjectType.VIDEO_FRAGMENT,
+];
+
 export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	mediaInfo,
 	currentPage,
@@ -831,6 +839,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 
 		const showAlert = !mediaInfo.description;
 		const rightsStatusInfo = isNewspaper ? getIeObjectRightsStatusInfo(mediaInfo, locale) : null;
+		const avRightsInfo = AV_OBJECT_TYPES.includes(mediaInfo.dctermsFormat)
+			? mediaInfo.rightsInfo
+			: null;
 		let rightsAttributionText: string | null = null;
 		if (
 			isNewspaper &&
@@ -987,6 +998,38 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									{rightsStatusInfo?.label}
 								</a>
 							</span>
+						</Metadata>
+					)}
+					{!!avRightsInfo && (
+						<Metadata
+							title={tHtml('modules/ie-objects/object-detail-page___rechten')}
+							key="metadata-av-rights-info"
+							renderRight={
+								avRightsInfo?.reuseCategoryId ? (
+									<a target="_blank" href={avRightsInfo.reuseCategoryId} rel="noreferrer">
+										<Button
+											variants={['white']}
+											icon={<Icon name={IconNamesLight.Extern} aria-hidden />}
+											title={tText(
+												'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
+											)}
+										/>
+									</a>
+								) : undefined
+							}
+						>
+							{avRightsInfo?.reuseCategoryId ? (
+								<a target="_blank" href={avRightsInfo.reuseCategoryId} rel="noreferrer">
+									{avRightsInfo.reuseLabel}
+								</a>
+							) : (
+								<span>
+									{avRightsInfo?.reuseLabel ||
+										tText(
+											'modules/ie-objects/object-detail-page___geen-rechteninformatie-beschikbaar'
+										)}
+								</span>
+							)}
 						</Metadata>
 					)}
 					{renderSimpleMetadataField(
