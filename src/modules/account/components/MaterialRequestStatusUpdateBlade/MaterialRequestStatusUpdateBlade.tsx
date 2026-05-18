@@ -155,92 +155,90 @@ export const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBla
 	};
 
 	return (
-		<>
-			<Blade
-				id="material-request-status-update-blade"
-				className={styles['c-request-material-status-update']}
-				isOpen={isOpen}
-				layer={layer}
-				currentLayer={currentLayer}
-				onClose={() => onCloseModal(false)}
-				isManaged
-				title={
-					status === MaterialRequestStatus.APPROVED
-						? tText(
-								'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-goedkeuren-titel'
-							)
-						: tText(
-								'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-afkeuren-titel'
-							)
-				}
-				ariaLabel={tText(
-					'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___materiaal-aanvraag-goedkeuren-of-afkeuren-blade-aria-label'
-				)}
-				stickySubtitle={<MaterialRequestInformation />}
-				subtitle={
-					<MaterialCard
-						openInNewTab={true}
-						objectSchemaIdentifier={objectSchemaIdentifier}
-						title={objectName}
-						thumbnail={objectThumbnailUrl}
-						hideThumbnail={true}
-						orientation="vertical"
-						link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectSchemaIdentifier}`}
-						type={objectDctermsFormat}
-						publishedBy={maintainerName}
-						publishedOrCreatedDate={objectPublishedOrCreatedDate}
-						icon={getIconFromObjectType(objectDctermsFormat, isObjectEssenceAccessibleToUser)}
-					/>
-				}
-				footerButtons={getFooterButtons()}
-			>
-				<div className={styles['c-request-material-status-update__content']}>
-					<dl>
-						<dt className={styles['c-request-material-status-update__content-label']}>
-							<label htmlFor="motivation-input">
-								{status === MaterialRequestStatus.APPROVED
-									? tHtml(
-											'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-goedkeuren-description'
-										)
-									: tHtml(
-											'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-afkeuren-description'
-										)}
-							</label>
-						</dt>
-						<dd className={styles['c-request-material-status-update__content-value']}>
-							<FormControl
-								label={
-									status === MaterialRequestStatus.APPROVED
-										? tText(
-												'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___motivatie-aanvraag-goedkeuren'
-											)
-										: tText(
-												'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___motivatie-aanvraag-afkeuren'
-											)
-								}
-								errors={[
-									<MaxLengthIndicator
-										maxLength={MAX_MOTIVATION_LENGTH}
-										value={motivationInputValue}
-										key={`form-error--motivation`}
-									/>,
-								]}
-							>
-								<TextArea
-									id="motivation-input"
-									className={styles['c-request-material-status-update__motivation-input']}
-									maxLength={MAX_MOTIVATION_LENGTH}
-									onChange={(e) => setMotivationInputValue(e.target.value)}
-									value={motivationInputValue}
-									ariaLabel={tText(
-										'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___motivatie-voor-het-goedkeuren-of-afkeuren-van-de-aanvraag-input-aria-label'
+		<Blade
+			id="material-request-status-update-blade"
+			className={styles['c-request-material-status-update']}
+			isOpen={isOpen}
+			layer={layer}
+			currentLayer={currentLayer}
+			onClose={() => onCloseModal(false)}
+			isManaged
+			title={
+				status === MaterialRequestStatus.APPROVED
+					? tText(
+							'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-goedkeuren-titel'
+						)
+					: tText(
+							'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-afkeuren-titel'
+						)
+			}
+			ariaLabel={tText(
+				'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___materiaal-aanvraag-goedkeuren-of-afkeuren-blade-aria-label'
+			)}
+			stickySubtitle={<MaterialRequestInformation />}
+			subtitle={
+				<MaterialCard
+					openInNewTab={true}
+					objectSchemaIdentifier={objectSchemaIdentifier}
+					title={objectName}
+					thumbnail={objectThumbnailUrl}
+					hideThumbnail={true}
+					orientation="vertical"
+					link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${objectSchemaIdentifier}`}
+					type={objectDctermsFormat}
+					publishedBy={maintainerName}
+					publishedOrCreatedDate={objectPublishedOrCreatedDate}
+					icon={getIconFromObjectType(objectDctermsFormat, isObjectEssenceAccessibleToUser)}
+				/>
+			}
+			footerButtons={getFooterButtons()}
+		>
+			<div className={styles['c-request-material-status-update__content']}>
+				<dl>
+					<dt className={styles['c-request-material-status-update__content-label']}>
+						<label htmlFor="motivation-input">
+							{status === MaterialRequestStatus.APPROVED
+								? tHtml(
+										'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-goedkeuren-description'
+									)
+								: tHtml(
+										'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___aanvraag-afkeuren-description'
 									)}
-								/>
-							</FormControl>
-						</dd>
-					</dl>
-				</div>
-			</Blade>
+						</label>
+					</dt>
+					<dd className={styles['c-request-material-status-update__content-value']}>
+						<FormControl
+							label={
+								status === MaterialRequestStatus.APPROVED
+									? tText(
+											'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___motivatie-aanvraag-goedkeuren'
+										)
+									: tText(
+											'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___motivatie-aanvraag-afkeuren'
+										)
+							}
+							errors={[
+								<MaxLengthIndicator
+									maxLength={MAX_MOTIVATION_LENGTH}
+									value={motivationInputValue}
+									key={`form-error--motivation`}
+								/>,
+							]}
+						>
+							<TextArea
+								id="motivation-input"
+								className={styles['c-request-material-status-update__motivation-input']}
+								maxLength={MAX_MOTIVATION_LENGTH}
+								onChange={(e) => setMotivationInputValue(e.target.value)}
+								value={motivationInputValue}
+								ariaLabel={tText(
+									'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___motivatie-voor-het-goedkeuren-of-afkeuren-van-de-aanvraag-input-aria-label'
+								)}
+							/>
+						</FormControl>
+					</dd>
+				</dl>
+			</div>
 
 			<ConfirmationModal
 				isOpen={showDenyWithPendingConditionsConfirmationModal}
@@ -260,6 +258,6 @@ export const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBla
 					no: tText('Ja, aanvraag afkeuren en verwijder bijkomende gebruiksvoorwaarden'),
 				}}
 			/>
-		</>
+		</Blade>
 	);
 };

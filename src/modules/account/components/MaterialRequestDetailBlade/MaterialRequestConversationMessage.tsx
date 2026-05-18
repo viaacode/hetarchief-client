@@ -169,7 +169,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 	};
 
 	const renderAdditionalConditions = () => {
-		const conditionsEvaluated = materialRequest.history?.some(
+		const conditionsEvaluated = materialRequest.history.some(
 			(event) =>
 				event.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED ||
 				event.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS_DENIED

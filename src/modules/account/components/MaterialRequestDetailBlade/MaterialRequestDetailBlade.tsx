@@ -285,10 +285,6 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		}
 	};
 
-	const onHandleDenyRequest = () => {
-		setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED);
-	};
-
 	const renderContent = () => {
 		if (!materialRequest) {
 			return null;
@@ -521,7 +517,9 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 						onApproveRequest={() =>
 							setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.APPROVED)
 						}
-						onDeclineRequest={onHandleDenyRequest}
+						onDeclineRequest={() =>
+							setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
+						}
 						onRequestAdditionalConditions={() => setIsAdditionalConditionsBladeOpen(true)}
 					/>
 				</DropdownContent>
@@ -815,7 +813,9 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 						onApproveRequest={() =>
 							setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.APPROVED)
 						}
-						onDeclineRequest={onHandleDenyRequest}
+						onDeclineRequest={() =>
+							setIsDetailStatusBladeOpenWithStatus(MaterialRequestStatus.DENIED)
+						}
 						onRequestAdditionalConditions={() => {
 							setIsAdditionalConditionsBladeOpen(true);
 						}}
