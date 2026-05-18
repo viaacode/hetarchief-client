@@ -5,12 +5,18 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import type { NotificationCenterProps } from '@shared/components/NotificationCenter/NotificationCenter.types';
 import { tHtml, tText } from '@shared/helpers/translate';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import {
+	GET_DESCRIPTION_FROM_NOTIFICATION,
+	GET_TITLE_FROM_NOTIFICATION,
+} from '@shared/services/notifications-service/notifications.consts';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import {
 	type Notification,
 	NotificationStatus,
 } from '@shared/services/notifications-service/notifications.types';
 import { toastService } from '@shared/services/toast-service';
+import { isMobileSize } from '@shared/utils/is-mobile';
 import clsx from 'clsx';
 import { partition } from 'lodash-es';
 import Link from 'next/link';
@@ -39,6 +45,9 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 
 	const { mutateAsync: markOneNotificationAsRead } = useMarkOneNotificationsAsReadHook();
 	const { mutateAsync: markAllNotificationsAsRead } = useMarkAllNotificationsAsReadHook();
+
+	const windowSize = useWindowSizeContext();
+	const isMobile = isMobileSize(windowSize);
 
 	/**
 	 * Keeps a cache of the notification read status when the user marks a notification as read.
@@ -126,13 +135,13 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 						active={getNotificationStatus(notification) === NotificationStatus.UNREAD}
 					/>
 
-					{notification.title}
+					{GET_TITLE_FROM_NOTIFICATION(notification, isMobile)}
 				</h5>
 
 				<Html
 					type="span"
 					className="u-color-neutral u-text-default-font u-font-size-12"
-					content={notification.description}
+					content={GET_DESCRIPTION_FROM_NOTIFICATION(notification, isMobile)}
 				/>
 			</article>
 		);
