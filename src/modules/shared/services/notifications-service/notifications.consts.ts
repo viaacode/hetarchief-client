@@ -150,7 +150,7 @@ export const GET_DESCRIPTION_FROM_NOTIFICATION = (
 
 		case NotificationType.MATERIAL_REQUEST_DENIED:
 			return isMobile
-				? tText('{{maintainer}} keurde jouw aanvraag voor hun digitaal materiaal af.', {
+				? tText('{{maintainer}} keurde jouw aanvraag voor hun digitaal materiaal af. - mobiel', {
 						maintainer: notification.materialRequestMaintainer,
 					})
 				: tText('{{maintainer}} keurde jouw aanvraag voor hun digitaal materiaal af.', {
@@ -160,7 +160,7 @@ export const GET_DESCRIPTION_FROM_NOTIFICATION = (
 		case NotificationType.MATERIAL_REQUEST_DOWNLOAD_AVAILABLE:
 			return isMobile
 				? tText(
-						'Je kan het digitaal materiaal van {{maintainer}} dat je aangevraagd hebt nu downloaden.',
+						'Je kan het digitaal materiaal van {{maintainer}} dat je aangevraagd hebt nu downloaden.- mobiel',
 						{
 							maintainer: notification.materialRequestMaintainer,
 						}
@@ -175,7 +175,7 @@ export const GET_DESCRIPTION_FROM_NOTIFICATION = (
 		case NotificationType.MATERIAL_REQUEST_DOWNLOAD_ALMOST_EXPIRED:
 			return isMobile
 				? tText(
-						'Je kan het digitaal materiaal van {{maintainer}} dat je aangevraagd hebt nog maar 7 dagen downloaden vooraleer het vervalt.',
+						'Je kan het digitaal materiaal van {{maintainer}} dat je aangevraagd hebt nog maar 7 dagen downloaden vooraleer het vervalt.- mobiel',
 						{
 							maintainer: notification.materialRequestMaintainer,
 						}
@@ -190,7 +190,7 @@ export const GET_DESCRIPTION_FROM_NOTIFICATION = (
 		case NotificationType.MATERIAL_REQUEST_DOWNLOAD_EXECUTED:
 			return isMobile
 				? tText(
-						'{{name}} heeft n.a.v. een goedgekeurde aanvraag jouw digitaal materiaal gedownload.',
+						'{{name}} heeft n.a.v. een goedgekeurde aanvraag jouw digitaal materiaal gedownload. - mobiel',
 						{
 							name: notification.materialRequestRequester,
 						}
@@ -205,7 +205,7 @@ export const GET_DESCRIPTION_FROM_NOTIFICATION = (
 		case NotificationType.MATERIAL_REQUEST_ADDITIONAL_CONDITIONS_SEND:
 			return isMobile
 				? tText(
-						'{{maintainer}} legt voor jouw aanvraag voor hun digitaal materiaal bijkomende gebruikersvoorwaarden op.',
+						'{{maintainer}} legt voor jouw aanvraag voor hun digitaal materiaal bijkomende gebruikersvoorwaarden op. - mobiel',
 						{
 							maintainer: notification.materialRequestMaintainer,
 						}
@@ -220,7 +220,7 @@ export const GET_DESCRIPTION_FROM_NOTIFICATION = (
 		case NotificationType.MATERIAL_REQUEST_ADDITIONAL_CONDITIONS_ACCEPTED:
 			return isMobile
 				? tText(
-						'{{name}} aanvaardt jouw bijkomende gebruikersvoorwaarden voor een materiaalaanvraag voor jouw digitaal materiaal.',
+						'{{name}} aanvaardt jouw bijkomende gebruikersvoorwaarden voor een materiaalaanvraag voor jouw digitaal materiaal. - mobiel',
 						{
 							name: notification.materialRequestRequester,
 						}
