@@ -19,9 +19,6 @@ import { NewspaperSeriesNameFilterForm } from '@visitor-space/components/Newspap
 import { ReleaseDateFilterForm } from '@visitor-space/components/ReleaseDateFilterForm';
 import ReusabilityFilterForm from '@visitor-space/components/ReusabilityFilterForm/ReusabilityFilterForm';
 import { SearchFilterId } from '@visitor-space/types';
-import getConfig from 'next/config';
-
-const { publicRuntimeConfig } = getConfig();
 
 const ALL_TABS: SearchPageMediaType[] = [
 	SearchPageMediaType.All,
@@ -130,11 +127,6 @@ export const SEARCH_PAGE_FILTERS = (
 		form: ReusabilityFilterForm,
 		type: FilterMenuType.Modal,
 		tabs: ALL_TABS,
-		isDisabled: () => {
-			const rightsFiltersForEverybody =
-				publicRuntimeConfig.ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY === 'true';
-			return !rightsFiltersForEverybody && !isKeyUser;
-		},
 	},
 	{
 		id: SearchFilterId.LocationCreated,

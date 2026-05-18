@@ -44,6 +44,12 @@ export enum SearchFilterId {
 	Identifier = 'identifier',
 }
 
+export enum ReusabilityFilterOption {
+	FREELY_REUSABLE = 'freely-reusable',
+	REUSABLE_WITH_CONDITIONS = 'reusable-with-conditions',
+	POSSIBLY_REUSABLE = 'possibly-reusable',
+}
+
 export enum ElasticsearchFieldNames {
 	Medium = 'dcterms_medium',
 	Genre = 'schema_genre',
