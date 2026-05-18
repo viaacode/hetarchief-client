@@ -1,7 +1,7 @@
 import type { SelectOption } from '@meemoo/react-components';
-import { FILTER_LABEL_VALUE_DELIMITER } from '@visitor-space/types';
-import { SearchPageMediaType } from '@shared/types/ie-objects';
 import { tText } from '@shared/helpers/translate';
+import { SearchPageMediaType } from '@shared/types/ie-objects';
+import { FILTER_LABEL_VALUE_DELIMITER, ReusabilityFilterOption } from '@visitor-space/types';
 import { compact } from 'lodash-es';
 
 export enum RightsLabel {
@@ -24,16 +24,16 @@ export const RIGHTS_LABELS_FOR_NEWSPAPERS = [
 	RightsLabel.COPYRIGHT_UNDETERMINED,
 ];
 
-export const RIGHTS_LABELS_BY_REUSABILITY: Record<string, RightsLabel[]> = {
-	'freely-reusable': [RightsLabel.PUBLIC_DOMAIN, RightsLabel.CC0],
-	'reusable-with-conditions': [
+export const RIGHTS_LABELS_BY_REUSABILITY: Record<ReusabilityFilterOption, RightsLabel[]> = {
+	[ReusabilityFilterOption.FREELY_REUSABLE]: [RightsLabel.PUBLIC_DOMAIN, RightsLabel.CC0],
+	[ReusabilityFilterOption.REUSABLE_WITH_CONDITIONS]: [
 		RightsLabel.NO_COPYRIGHT_CONTRACTUAL_RESTRICTIONS,
 		RightsLabel.CC_BY,
 		RightsLabel.CC_BY_NC_ND,
 		RightsLabel.CC_BY_SA,
 		RightsLabel.CC_BY_NC,
 	],
-	'possibly-reusable': [
+	[ReusabilityFilterOption.POSSIBLY_REUSABLE]: [
 		RightsLabel.COPYRIGHT_UNDETERMINED,
 		RightsLabel.IN_COPYRIGHT,
 		RightsLabel.COPYRIGHT_NOT_EVALUATED,
@@ -118,7 +118,7 @@ export const getRightsOptions = ({
 		: compact([reusabilityValues]);
 	const allowedByReusability = compact(valuesArray).flatMap((value) => {
 		const key = value.split(FILTER_LABEL_VALUE_DELIMITER)[0];
-		return RIGHTS_LABELS_BY_REUSABILITY[key] || [];
+		return RIGHTS_LABELS_BY_REUSABILITY[key as ReusabilityFilterOption] || [];
 	});
 	const allowedByMediaType =
 		mediaType === SearchPageMediaType.Newspaper ? RIGHTS_LABELS_FOR_NEWSPAPERS : [];
