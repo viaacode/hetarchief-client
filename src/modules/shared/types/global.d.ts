@@ -18,6 +18,10 @@ declare global {
 			readonly ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW: 'true' | 'false';
 		}
 	}
+
+	interface Window {
+		zE: (...args) => unknown;
+	}
 }
 
 export {};

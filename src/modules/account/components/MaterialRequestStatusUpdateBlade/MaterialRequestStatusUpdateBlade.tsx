@@ -3,6 +3,7 @@ import { type MaterialRequest, MaterialRequestStatus } from '@material-requests/
 import { FormControl, TextArea } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
+import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
 import { MaterialRequestInformation } from '@shared/components/MaterialRequestInformation';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
@@ -23,6 +24,7 @@ interface MaterialRequestStatusUpdateBladeProps {
 	currentMaterialRequestDetail: MaterialRequest | undefined;
 	layer: number;
 	currentLayer: number;
+	hasPendingAdditionalConditions?: boolean;
 }
 
 export const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBladeProps> = ({
@@ -32,12 +34,17 @@ export const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBla
 	currentMaterialRequestDetail,
 	layer,
 	currentLayer,
+	hasPendingAdditionalConditions = false,
 }) => {
 	const locale = useLocale();
 	const MAX_MOTIVATION_LENGTH = 300;
 	const { isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(currentMaterialRequestDetail);
 
 	const [motivationInputValue, setMotivationInputValue] = useState('');
+	const [
+		showDenyWithPendingConditionsConfirmationModal,
+		setShowDenyWithPendingConditionsConfirmationModal,
+	] = useState(false);
 
 	/**
 	 * Reset form when the model is opened
@@ -45,6 +52,7 @@ export const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBla
 	useEffect(() => {
 		if (isOpen) {
 			setMotivationInputValue('');
+			setShowDenyWithPendingConditionsConfirmationModal(false);
 		}
 	}, [isOpen]);
 
@@ -65,9 +73,19 @@ export const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBla
 	const onCloseModal = (statusChanged: boolean) => {
 		onClose(statusChanged);
 		setMotivationInputValue('');
+		setShowDenyWithPendingConditionsConfirmationModal(false);
 	};
 
 	const onApproveOrDeny = async () => {
+		if (status === MaterialRequestStatus.DENIED && hasPendingAdditionalConditions) {
+			setShowDenyWithPendingConditionsConfirmationModal(true);
+			return;
+		}
+
+		await performApproveOrDeny();
+	};
+
+	const performApproveOrDeny = async () => {
 		try {
 			const response =
 				status === MaterialRequestStatus.APPROVED
@@ -221,6 +239,25 @@ export const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBla
 					</dd>
 				</dl>
 			</div>
+
+			<ConfirmationModal
+				isOpen={showDenyWithPendingConditionsConfirmationModal}
+				onClose={() => setShowDenyWithPendingConditionsConfirmationModal(false)}
+				onConfirm={() => setShowDenyWithPendingConditionsConfirmationModal(false)}
+				onCancel={() => {
+					setShowDenyWithPendingConditionsConfirmationModal(false);
+					performApproveOrDeny();
+				}}
+				fullWidthButtonWrapper
+				text={{
+					title: tText('Afkeuren en bijkomende gebruiksvoorwaarden verwijderen'),
+					description: tText(
+						'Als je de aanvraag afkeurt, worden de verzonden bijkomende gebruiksvoorwaarden verwijderd. Weet je zeker dat je wil doorgaan?'
+					),
+					yes: tText('Nee, keer terug en behoud bijkomende gebruiksvoorwaarden'),
+					no: tText('Ja, aanvraag afkeuren en verwijder bijkomende gebruiksvoorwaarden'),
+				}}
+			/>
 		</Blade>
 	);
 };

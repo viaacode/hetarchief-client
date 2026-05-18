@@ -345,9 +345,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({ materialRequests, onCancel, onSuc
 								{commonUser.organisation?.name}
 								<div className={styles['c-personal-info__edit-user-data']}>
 									<a
-										href={tText(
-											'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-hyperlink'
-										)}
+										onClick={() => window.zE('webWidget', 'toggle')}
 										target="_blank"
 										rel="noopener noreferrer"
 										aria-label={tText(
@@ -358,7 +356,6 @@ const PersonalInfo: FC<PersonalInfoProps> = ({ materialRequests, onCancel, onSuc
 											'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-label'
 										)}
 									</a>
-									<Icon className="u-ml-8" name={IconNamesLight.Extern} />
 								</div>
 							</>
 						) : (

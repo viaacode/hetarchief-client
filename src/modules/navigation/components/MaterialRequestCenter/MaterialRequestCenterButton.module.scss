@@ -22,7 +22,7 @@ $pill-color: color.adjust(red, $lightness: 10%);
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			color: $black;
+			color: $white;
 			font-weight: $font-weight-bold;
 			font-size: $badge-font-size;
 			border-radius: 0.8rem;
@@ -30,7 +30,7 @@ $pill-color: color.adjust(red, $lightness: 10%);
 			left: 2.5rem;
 			width: 2rem;
 			height: 1.6rem;
-			background-color: $coral;
+			background-color: red;
 			transition:
 				color 0.5s,
 				border-color 0.5s,
