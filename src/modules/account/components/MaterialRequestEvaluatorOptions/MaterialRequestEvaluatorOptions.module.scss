@@ -40,6 +40,11 @@
 			padding-left: $spacer-xs;
 			margin-left: auto;
 
+			// Safari only
+			@supports (background: -webkit-named-image(i)) {
+				padding-right: $spacer-md;
+			}
+
 			// Enable Ligatures
 			font-feature-settings: "liga";
 			font-variant-ligatures: discretionary-ligatures;
