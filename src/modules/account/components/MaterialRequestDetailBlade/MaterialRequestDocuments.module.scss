@@ -57,7 +57,7 @@
 			width: fit-content;
 		}
 
-		:last-child {
+		> :last-child {
 			font-weight: abstracts.$font-weight-bold;
 		}
 
