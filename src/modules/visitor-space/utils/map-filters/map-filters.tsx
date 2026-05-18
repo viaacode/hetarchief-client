@@ -10,6 +10,7 @@ import { isString } from 'lodash-es';
 
 import { AdvancedFilterArrayParam } from '../../const/advanced-filter-array-param';
 import { getMetadataSearchFilters } from '../../const/advanced-filters.consts';
+import { getRightsLabel } from '../../const/rights-filter.const';
 import {
 	type AdvancedFilter,
 	FILTER_LABEL_VALUE_DELIMITER,
@@ -117,6 +118,10 @@ export const mapAdvancedToTags = (
 					value = `${split[0]} - ${split[1]}`;
 					filterOperatorLabel = undefined;
 				}
+				break;
+
+			case FilterProperty.RIGHTS:
+				value = getRightsLabel(value) || value;
 				break;
 
 			default:
