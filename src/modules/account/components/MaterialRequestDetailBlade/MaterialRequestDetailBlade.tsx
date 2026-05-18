@@ -833,6 +833,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				currentMaterialRequestDetail={materialRequest}
 				layer={isDetailStatusBladeOpenWithStatus ? getStatusUpdateBladeLayer() : 99}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
+				hasPendingAdditionalConditions={requestHasAdditionalConditionsAsked}
 			/>
 			<MaterialRequestAdditionalConditionsBlade
 				isOpen={isAdditionalConditionsBladeOpen}
@@ -867,7 +868,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			<MaterialRequestEvaluateConditionsBlade
 				isOpen={!!evaluateConditionsMessage}
 				onClose={() => setEvaluateConditionsMessage(null)}
-				message={evaluateConditionsMessage as MaterialRequestMessage}
+				message={evaluateConditionsMessage}
 				layer={evaluateConditionsMessage ? getEvaluateConditionsBladeLayer() : 99}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 				materialRequestId={currentMaterialRequestDetail?.id}

@@ -15,7 +15,7 @@ import styles from './MaterialRequestEvaluateConditionsBlade.module.scss';
 interface MaterialRequestEvaluateConditionsBladeProps {
 	isOpen: boolean;
 	onClose: () => void;
-	message: MaterialRequestMessage;
+	message: MaterialRequestMessage | null;
 	layer: number;
 	currentLayer: number;
 	materialRequestId: string | undefined;
@@ -26,7 +26,9 @@ export const MaterialRequestEvaluateConditionsBlade: FC<
 	MaterialRequestEvaluateConditionsBladeProps
 > = ({ isOpen, onClose, message, layer, currentLayer, materialRequestId, onSuccess }) => {
 	const conditionLabels = GET_MATERIAL_REQUEST_TRANSLATIONS_BY_ADDITIONAL_CONDITIONS_TYPE();
-	const conditions = (message.body as MaterialRequestMessageBodyAdditionalConditions)?.conditions;
+	const conditions = message
+		? (message.body as MaterialRequestMessageBodyAdditionalConditions)?.conditions
+		: [];
 	const [showDeclineConfirmModal, setShowDeclineConfirmModal] = useState(false);
 
 	const { mutateAsync: evaluateExtraConditions, isPending: isSubmitting } =
@@ -164,15 +166,15 @@ export const MaterialRequestEvaluateConditionsBlade: FC<
 			<ConfirmationModal
 				isOpen={showDeclineConfirmModal}
 				onClose={handleDeclineCancel}
-				onConfirm={handleDeclineConfirm}
-				onCancel={handleDeclineCancel}
+				onConfirm={handleDeclineCancel}
+				onCancel={handleDeclineConfirm}
 				text={{
 					title: tText('Aanvraag annuleren?'),
 					description: tText(
 						'Ben je zeker dat je deze aanvraag wilt annuleren? Deze actie kan niet ongedaan gemaakt worden.'
 					),
-					yes: tText('Ja, annuleer aanvraag'),
-					no: tText('Nee, keer terug'),
+					yes: tText('Nee, keer terug'),
+					no: tText('Ja, annuleer aanvraag'),
 				}}
 			/>
 		</>
