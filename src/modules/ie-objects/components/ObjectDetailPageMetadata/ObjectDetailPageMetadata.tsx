@@ -1000,7 +1000,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							</span>
 						</Metadata>
 					)}
-					{avRightsInfo !== undefined && (
+					{!!avRightsInfo && (
 						<Metadata
 							title={tHtml('modules/ie-objects/object-detail-page___rechten')}
 							key="metadata-av-rights-info"
