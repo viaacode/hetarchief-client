@@ -50,9 +50,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({ materialRequests, onCancel, onSuc
 	const [isSubscribedToNewsletter, setIsSubscribedToNewsletter] = useState<boolean>(
 		preferences?.newsletter || false
 	);
-	const [organisationInputValue, setOrganisationInputValue] = useState<string>(
-		commonUser?.organisation?.name || ''
-	);
+	const [organisationInputValue, setOrganisationInputValue] = useState<string>('');
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestRequesterCapacity | undefined>(
 		isComplexReuseFlow ? MaterialRequestRequesterCapacity.WORK : undefined
 	);
@@ -119,7 +117,8 @@ const PersonalInfo: FC<PersonalInfoProps> = ({ materialRequests, onCancel, onSuc
 
 			await MaterialRequestsService.sendAll({
 				type: typeSelected as MaterialRequestRequesterCapacity,
-				organisation: organisationInputValue,
+				organisationName: organisationInputValue,
+				organisationId: commonUser?.organisation?.or_id,
 				requestGroupName,
 			});
 

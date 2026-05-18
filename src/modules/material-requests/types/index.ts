@@ -187,7 +187,8 @@ export interface MaterialRequestUpdate {
 
 export interface MaterialRequestSendAll {
 	type: MaterialRequestRequesterCapacity;
-	organisation?: string;
+	organisationId?: string;
+	organisationName?: string;
 	requestGroupName?: string;
 }
 
