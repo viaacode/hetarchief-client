@@ -26,6 +26,7 @@ import { asDate, formatMediumDate } from '@shared/utils/dates';
 import clsx from 'clsx';
 import { isValid } from 'date-fns';
 import { isNil } from 'lodash-es';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { type FC, type MouseEvent, type ReactNode, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -308,15 +309,15 @@ const MediaCard: FC<MediaCardProps> = ({
 				)}
 			>
 				{/* No alt tag since the link already contains the title of the object that we're linking to */}
-				{/** biome-ignore lint/performance/noImgElement: we need this*/}
-				<img
+				<Image
 					src={imagePath}
 					alt={
 						typeof title === 'string'
 							? title
 							: tText('modules/shared/components/media-card/media-card___image-of-the-media-object')
 					}
-					width="100%"
+					fill={true}
+					sizes="100%"
 				/>
 				{!isNil(icon) && (
 					<>

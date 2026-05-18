@@ -1,8 +1,8 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
-
+import { footerCenterNavigationItems } from './__mocks__/footer';
 import Footer from './Footer';
-import { footerCenterNavigationItems, footerLinks } from './__mocks__/footer';
+import { footerLinks } from './Footer.const';
 
 export default {
 	title: 'Components/Footer',

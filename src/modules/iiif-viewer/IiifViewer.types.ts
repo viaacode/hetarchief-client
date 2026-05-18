@@ -50,21 +50,6 @@ export interface IiifViewerProps {
 	enableSelection?: boolean;
 }
 
-export interface IiifViewerFunctions {
-	iiifZoomToRect: (rect: Rect) => void;
-	iiifZoomTo: (x: number, y: number) => void;
-	iiifRotate: (rotateRight: boolean) => void;
-	iiifFullscreen: (expand: boolean) => void;
-	iiifZoom: (multiplier: number) => void;
-	iiifGoToHome: () => void;
-	iiifGoToPage: (pageIndex: number) => void;
-	waitForReadyState: () => Promise<void>;
-	updateHighlightedAltoTexts: (
-		highlightedAltoTexts: TextLine[],
-		selectedAltoText: TextLine | null
-	) => void;
-}
-
 export interface TextLine {
 	text: string;
 	x: number;

@@ -9,7 +9,7 @@ import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pend
 import { AdminConfigManager } from '@meemoo/admin-core-ui/client';
 import { Alert } from '@meemoo/react-components';
 import { Footer } from '@navigation/components/Footer';
-import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';
+import { footerLinks } from '@navigation/components/Footer/Footer.const';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
 import { Navigation } from '@navigation/components/Navigation/Navigation';

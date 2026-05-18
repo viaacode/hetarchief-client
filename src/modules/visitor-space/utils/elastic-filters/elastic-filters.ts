@@ -187,20 +187,3 @@ export const mapFiltersToElastic = (query: SearchPageQueryParams): IeObjectsSear
 	);
 	return nonEmptyFilters;
 };
-
-export const mapRefineFilterToElastic = (
-	refineFilters: { field: IeObjectsSearchFilterField; value: string }[]
-): IeObjectsSearchFilter[] =>
-	refineFilters.map(
-		({
-			field,
-			value,
-		}: {
-			field: IeObjectsSearchFilterField;
-			value: string;
-		}): IeObjectsSearchFilter => ({
-			field,
-			operator: IeObjectsSearchOperator.CONTAINS,
-			value: value,
-		})
-	);

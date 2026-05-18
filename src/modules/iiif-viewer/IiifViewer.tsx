@@ -31,6 +31,7 @@ import { isMobileSize } from '@shared/utils/is-mobile';
 import clsx from 'clsx';
 import { debounce } from 'lodash';
 import { clamp, compact, isNil, round } from 'lodash-es';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import type { TiledImageOptions, TileSource, Viewer } from 'openseadragon';
 import { parseUrl } from 'query-string';
@@ -943,8 +944,7 @@ export const IiifViewer = ({
 								className={activeImageIndex === index ? 'active' : ''}
 							>
 								{imageInfo.thumbnailUrl ? (
-									// biome-ignore lint/performance/noImgElement: this is how it works
-									<img
+									<Image
 										src={imageInfo.thumbnailUrl}
 										alt={tText(
 											'modules/iiif-viewer/iiif-viewer___go-to-newspaper-page-page-number-alt-label',
@@ -952,6 +952,7 @@ export const IiifViewer = ({
 												pageNumber: index + 1,
 											}
 										)}
+										fill
 									/>
 								) : (
 									<div
@@ -986,12 +987,12 @@ export const IiifViewer = ({
 								}}
 								type="button"
 							>
-								{/* biome-ignore lint/performance/noImgElement: this is how it works */}
-								<img
-									src={imageInfo.thumbnailUrl}
+								<Image
+									src={imageInfo.thumbnailUrl ?? ''}
 									alt={tText('modules/iiif-viewer/iiif-viewer___go-to-newspaper-page-page-number', {
 										pageNumber: index + 1,
 									})}
+									fill
 								/>
 							</button>
 						);

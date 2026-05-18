@@ -236,14 +236,6 @@ export class IeObjectsService {
 			.json();
 	}
 
-	public static async lookupNvdgoId(
-		mediaMosaId: string
-	): Promise<{ schema_identifier: string; title: string; maintainerSlug: string }> {
-		return await ApiService.getApi()
-			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/lookup/nvdgo/${mediaMosaId}`)
-			.json();
-	}
-
 	static getAutocompleteFieldOptions(
 		field: AutocompleteField,
 		query: string,

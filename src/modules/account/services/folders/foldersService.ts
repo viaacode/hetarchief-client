@@ -3,11 +3,7 @@ import { ApiService } from '@shared/services/api-service';
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
-import {
-	FOLDERS_SERVICE_BASE_URL,
-	FOLDERS_SERVICE_EXPORT_URL,
-	FOLDERS_SERVICE_OBJECTS_URL,
-} from './folders.const';
+import { FOLDERS_SERVICE_BASE_URL, FOLDERS_SERVICE_OBJECTS_URL } from './folders.const';
 
 export abstract class FoldersService {
 	public static async getAll(): Promise<IPagination<Folder>> {
@@ -72,15 +68,6 @@ export abstract class FoldersService {
 				`${FOLDERS_SERVICE_BASE_URL}/${folderUuid}/${FOLDERS_SERVICE_OBJECTS_URL}/${objectSchemaIdentifier}`
 			)
 			.json();
-	}
-
-	public static async getExport(folderUuid?: string): Promise<Blob | null> {
-		if (!folderUuid) {
-			return null;
-		}
-		return await ApiService.getApi()
-			.get(`${FOLDERS_SERVICE_BASE_URL}/${folderUuid}/${FOLDERS_SERVICE_EXPORT_URL}`)
-			.then((r) => r.blob());
 	}
 
 	/**
