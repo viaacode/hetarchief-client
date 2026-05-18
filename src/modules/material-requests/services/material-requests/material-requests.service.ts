@@ -252,4 +252,13 @@ export abstract class MaterialRequestsService {
 			})
 			.json();
 	}
+
+	public static async evaluateAdditionalConditions(
+		materialRequestId: string,
+		action: 'accept' | 'decline'
+	): Promise<void> {
+		return ApiService.getApi()
+			.post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/extra-conditions/${action}`)
+			.json();
+	}
 }

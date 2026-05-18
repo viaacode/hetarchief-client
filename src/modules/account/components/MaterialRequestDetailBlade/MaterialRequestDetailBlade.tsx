@@ -2,6 +2,7 @@ import { useGetMaterialRequestConversationUnreadCount } from '@account/component
 import { useGetMaterialRequestStatus } from '@account/components/MaterialRequestDetailBlade/hooks/useGetMaterialRequestStatus';
 import { MaterialRequestConversation } from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversation';
 import { MaterialRequestDownloadBlade } from '@account/components/MaterialRequestDownloadBlade/MaterialRequestDownloadBlade';
+import { MaterialRequestEvaluateConditionsBlade } from '@account/components/MaterialRequestEvaluateConditionsBlade/MaterialRequestEvaluateConditionsBlade';
 import { MaterialRequestEvaluatorOptions } from '@account/components/MaterialRequestEvaluatorOptions/MaterialRequestEvaluatorOptions';
 import { MaterialRequestStatusPill } from '@account/components/MaterialRequestStatusPill';
 import { MaterialRequestStatusUpdateBlade } from '@account/components/MaterialRequestStatusUpdateBlade/MaterialRequestStatusUpdateBlade';
@@ -16,6 +17,7 @@ import {
 	type MaterialRequest,
 	MaterialRequestDownloadStatus,
 	MaterialRequestEventType,
+	type MaterialRequestMessage,
 	type MaterialRequestMessageBodyAdditionalConditions,
 	MaterialRequestStatus,
 } from '@material-requests/types';
@@ -94,9 +96,13 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	const [isAdditionalConditionsBladeOpen, setIsAdditionalConditionsBladeOpen] = useState(false);
 	const [isAdditionalConditionsResolutionBladeOpen, setIsAdditionalConditionsResolutionBladeOpen] =
 		useState(false);
+	const [evaluateConditionsMessage, setEvaluateConditionsMessage] =
+		useState<MaterialRequestMessage | null>(null);
 	const [additionalConditions, setAdditionalConditions] =
 		useState<MaterialRequestMessageBodyAdditionalConditions | null>(null);
 	const [showCancelMaterialRequestConfirmModal, setShowCancelMaterialRequestConfirmModal] =
+		useState(false);
+	const [showMakeDownloadAvailableConfirmModal, setShowMakeDownloadAvailableConfirmModal] =
 		useState(false);
 	const [showAdditionalConditionsConfirmModal, setShowAdditionalConditionsConfirmModal] =
 		useState(false);
@@ -218,6 +224,19 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		});
 	};
 
+	const onFailedMakeDownloadAvailable = () => {
+		// Trigger this even when it fails because some step in the process could be the cause
+		refetchMaterialRequestStatus().then(noop);
+
+		toastService.notify({
+			maxLines: 3,
+			title: tText(
+				'modules/account/components/material-request-detail-blade/material-request-detail-blade___er-ging-iets-mis'
+			),
+			description: tText('Er ging iets mis tijdens het beschikbaar maken van de download'),
+		});
+	};
+
 	const onCancelRequest = async () => {
 		try {
 			if (!materialRequest) {
@@ -238,6 +257,31 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	const onHandleDownload = () => {
 		if (materialRequest) {
 			handleDownloadMaterialRequest(materialRequest).then(setDownloadUrl);
+		}
+	};
+
+	const onOpenEvaluateConditions = (message: MaterialRequestMessage) => {
+		setEvaluateConditionsMessage(message);
+	};
+
+	const onMakeDownloadAvailable = async () => {
+		try {
+			if (!materialRequest) {
+				return;
+			}
+			const response = await MaterialRequestsService.approve(materialRequest.id);
+			if (!response) {
+				onFailedMakeDownloadAvailable();
+				return;
+			}
+			refetchMaterialRequestStatus().then(noop);
+			toastService.notify({
+				maxLines: 3,
+				title: tText('Download beschikbaar maken gelukt'),
+				description: tText('De download wordt nu voorbereid'),
+			});
+		} catch (_err) {
+			onFailedMakeDownloadAvailable();
 		}
 	};
 
@@ -262,6 +306,8 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 						materialRequest={materialRequest}
 						handleDownload={onHandleDownload}
 						onMessagesLoaded={() => !!unreadCount && refetchUnreadCount().then(noop)}
+						onOpenEvaluateConditions={onOpenEvaluateConditions}
+						onMakeDownloadAvailable={() => setShowMakeDownloadAvailableConfirmModal(true)}
 					/>
 				);
 			case MaterialRequestDetailBladeTabs.Documents:
@@ -366,7 +412,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 
 		// Did the evaluator ask for additional conditions?
 		if (requestHasAdditionalConditionsAsked) {
-			// TODO: add logic to evaluate additional conditions
+			const lastEvent = getLastEvent(materialRequest);
 			return (
 				<Button
 					label={
@@ -379,6 +425,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 								)
 					}
 					variants={['dark']}
+					onClick={() => onOpenEvaluateConditions(lastEvent as MaterialRequestMessage)}
 				/>
 			);
 		}
@@ -412,7 +459,6 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			materialRequest.status === MaterialRequestStatus.PENDING &&
 			lastEvent?.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED
 		) {
-			// TODO: add logic for manual start of the download
 			return (
 				<Button
 					label={
@@ -425,6 +471,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 								)
 					}
 					variants={['dark']}
+					onClick={() => setShowMakeDownloadAvailableConfirmModal(true)}
 				/>
 			);
 		}
@@ -599,6 +646,8 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 
 	const getAdditionalConditionsResolutionBladeLayer = (): number => (isMobile ? 4 : 3);
 
+	const getEvaluateConditionsBladeLayer = (): number => (isMobile ? 3 : 2);
+
 	const resetAdditionalConditionsFlow = () => {
 		setShowAdditionalConditionsConfirmModal(false);
 		setShowEvaluatorOptions(false);
@@ -642,6 +691,10 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			return getAdditionalConditionsResolutionBladeLayer();
 		}
 
+		if (evaluateConditionsMessage) {
+			return getEvaluateConditionsBladeLayer();
+		}
+
 		if (isDetailStatusBladeOpenWithStatus || isAdditionalConditionsBladeOpen) {
 			return getAdditionalConditionsBladeLayer();
 		}
@@ -669,6 +722,12 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				// Check additional conditions blade (step 1)
 				if (isAdditionalConditionsBladeOpen) {
 					handleCloseAdditionalConditionsBlade();
+					return;
+				}
+
+				// Check evaluate conditions blade
+				if (evaluateConditionsMessage) {
+					setEvaluateConditionsMessage(null);
 					return;
 				}
 
@@ -774,6 +833,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				currentMaterialRequestDetail={materialRequest}
 				layer={isDetailStatusBladeOpenWithStatus ? getStatusUpdateBladeLayer() : 99}
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
+				hasPendingAdditionalConditions={requestHasAdditionalConditionsAsked}
 			/>
 			<MaterialRequestAdditionalConditionsBlade
 				isOpen={isAdditionalConditionsBladeOpen}
@@ -805,6 +865,19 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
 			/>
 
+			<MaterialRequestEvaluateConditionsBlade
+				isOpen={!!evaluateConditionsMessage}
+				onClose={() => setEvaluateConditionsMessage(null)}
+				message={evaluateConditionsMessage}
+				layer={evaluateConditionsMessage ? getEvaluateConditionsBladeLayer() : 99}
+				currentLayer={isDetailBladeOpen ? getBladeLayerIndex() : 9999}
+				materialRequestId={currentMaterialRequestDetail?.id}
+				onSuccess={() => {
+					setEvaluateConditionsMessage(null);
+					refetchMaterialRequestStatus().then(noop);
+				}}
+			/>
+
 			<ConfirmationModal
 				isOpen={showAdditionalConditionsConfirmModal}
 				onClose={handleCancelAdditionalConditionsConfirmationModal}
@@ -823,6 +896,30 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 					),
 					no: tText(
 						'modules/account/components/material-request-detail-blade/material-request-detail-blade___ja-annuleer-wijzigingen-in-de-bijkomende-gebruiksvoorwaarden'
+					),
+				}}
+			/>
+			<ConfirmationModal
+				isOpen={showMakeDownloadAvailableConfirmModal}
+				onClose={() => setShowMakeDownloadAvailableConfirmModal(false)}
+				onConfirm={() => {
+					setShowMakeDownloadAvailableConfirmModal(false);
+					onMakeDownloadAvailable();
+				}}
+				onCancel={() => setShowMakeDownloadAvailableConfirmModal(false)}
+				fullWidthButtonWrapper
+				text={{
+					title: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-beschikbaar-maken'
+					),
+					description: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___ben-je-zeker-dat-je-de-download-beschikbaar-wil-maken'
+					),
+					yes: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___ja-download-beschikbaar-maken'
+					),
+					no: tText(
+						'modules/account/components/material-request-detail-blade/material-request-detail-blade___annuleren'
 					),
 				}}
 			/>
