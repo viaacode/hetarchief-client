@@ -16,6 +16,7 @@ declare global {
 			readonly GOOGLE_TAG_MANAGER_ID: string | null;
 			readonly SITEMAP_URL: string;
 			readonly ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW: 'true' | 'false';
+			readonly ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY: 'true' | 'false';
 		}
 	}
 

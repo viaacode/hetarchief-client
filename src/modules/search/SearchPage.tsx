@@ -97,6 +97,7 @@ import type { LanguageFilterFormState } from '@visitor-space/components/Language
 import type { MaintainerFilterFormState } from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
 import type { MediumFilterFormState } from '@visitor-space/components/MediumFilterForm';
 import type { ReleaseDateFilterFormState } from '@visitor-space/components/ReleaseDateFilterForm';
+import type { ReusabilityFilterFormState } from '@visitor-space/components/ReusabilityFilterForm/ReusabilityFilterForm.types';
 import {
 	GLOBAL_ARCHIVE,
 	SEARCH_PAGE_QUERY_PARAM_CONFIG,
@@ -547,6 +548,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				data = (values as MaintainerFilterFormState).maintainers;
 				break;
 
+			case SearchFilterId.Reusability:
+				data = (values as ReusabilityFilterFormState).reusability;
+				break;
+
 			case SearchFilterId.ConsultableOnlyOnLocation: {
 				// Info: remove query param if false (= set to undefined)
 				const filterValue = (values as ConsultableOnlyOnLocationFilterFormState)[
@@ -612,6 +617,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				case SearchFilterId.Language:
 				case SearchFilterId.Medium:
 				case SearchFilterId.Maintainers:
+				case SearchFilterId.Reusability:
 				case QUERY_PARAM_KEY.SEARCH_QUERY_KEY:
 				case SearchFilterId.Creator:
 				case SearchFilterId.LocationCreated:

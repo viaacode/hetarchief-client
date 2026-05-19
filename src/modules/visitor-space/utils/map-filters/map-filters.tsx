@@ -1,16 +1,16 @@
 import type { SelectOption } from '@meemoo/react-components';
-import { format, parseISO } from 'date-fns';
-import { isString } from 'lodash-es';
-
 import { SEPARATOR } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import type { IeObjectsSearchFilter } from '@shared/types/ie-objects';
 import { formatDate } from '@shared/utils/dates';
 import type { SearchPageQueryParams } from '@visitor-space/const';
+import { format, parseISO } from 'date-fns';
+import { isString } from 'lodash-es';
 
 import { AdvancedFilterArrayParam } from '../../const/advanced-filter-array-param';
 import { getMetadataSearchFilters } from '../../const/advanced-filters.consts';
+import { getRightsLabel } from '../../const/rights-filter.const';
 import {
 	type AdvancedFilter,
 	FILTER_LABEL_VALUE_DELIMITER,
@@ -120,6 +120,10 @@ export const mapAdvancedToTags = (
 				}
 				break;
 
+			case FilterProperty.RIGHTS:
+				value = getRightsLabel(value) || value;
+				break;
+
 			default:
 				break;
 		}
@@ -219,6 +223,11 @@ export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] =>
 			query[SearchFilterId.Maintainers] || [],
 			tText('modules/visitor-space/utils/map-filters/map-filters___aanbieders'),
 			SearchFilterId.Maintainers
+		),
+		...mapArrayParamToTags(
+			query[SearchFilterId.Reusability] || [],
+			tText('modules/visitor-space/utils/map-filters/map-filters___herbruikbaarheid'),
+			SearchFilterId.Reusability
 		),
 		...mapAdvancedToTags(query[SearchFilterId.Advanced] || []),
 	];

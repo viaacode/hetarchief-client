@@ -332,6 +332,7 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 				locationId="Material request detail blade"
 				representation={objectRepresentation}
 				dctermsFormat={objectDctermsFormat}
+				schemaIdentifier={currentMaterialRequestDetail.objectSchemaIdentifier}
 				cuePoints={
 					reuseForm?.endTime
 						? { start: reuseForm.startTime as number, end: reuseForm.endTime as number }

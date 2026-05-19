@@ -105,6 +105,9 @@ export const getFilterLabel = (prop: FilterProperty): string => {
 			[FilterProperty.PUBLISHED_AT]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___publicatiedatum'
 			),
+			[FilterProperty.RIGHTS]: tText(
+				'modules/visitor-space/utils/advanced-filters/metadata___rechten'
+			),
 			[FilterProperty.PUBLISHER]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___publisher'
 			),
