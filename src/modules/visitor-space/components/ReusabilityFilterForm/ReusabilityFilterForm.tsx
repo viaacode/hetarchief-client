@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form';
 import { useQueryParams } from 'use-query-params';
 
 import {
+	GET_REUSABILITY_OPTIONS,
 	REUSABILITY_FILTER_FORM_QUERY_PARAM_CONFIG,
-	REUSABILITY_OPTIONS,
 } from './ReusabilityFilterForm.const';
 import type {
 	ReusabilityFilterFormProps,
@@ -35,7 +35,7 @@ const ReusabilityFilterForm: FC<ReusabilityFilterFormProps> = ({ children, class
 		defaultValues,
 	});
 
-	const options = REUSABILITY_OPTIONS();
+	const options = GET_REUSABILITY_OPTIONS();
 
 	const keyToValue = (key: string): string => {
 		const option = options.find((o) => o.key === key);

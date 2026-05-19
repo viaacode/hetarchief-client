@@ -7,7 +7,7 @@ export const REUSABILITY_FILTER_FORM_QUERY_PARAM_CONFIG = {
 	[SearchFilterId.Reusability]: ArrayParam,
 };
 
-export const REUSABILITY_OPTIONS = () => [
+export const GET_REUSABILITY_OPTIONS = () => [
 	{
 		key: ReusabilityFilterOption.FREELY_REUSABLE,
 		label: tText('modules/visitor-space/components/reusability-filter-form___vrij-herbruikbaar'),

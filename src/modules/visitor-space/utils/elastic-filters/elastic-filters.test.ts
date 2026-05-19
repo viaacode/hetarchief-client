@@ -1,7 +1,10 @@
 import { IeObjectsSearchFilterField, IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import type { SearchPageQueryParams } from '@visitor-space/const';
+import { RightsLabel } from '@visitor-space/const/rights-filter.const';
 import {
 	FILTER_LABEL_VALUE_DELIMITER,
+	FilterProperty,
+	Operator,
 	ReusabilityFilterOption,
 	SearchFilterId,
 } from '@visitor-space/types';
@@ -27,6 +30,25 @@ describe('mapFiltersToElastic()', () => {
 				ReusabilityFilterOption.REUSABLE_WITH_CONDITIONS,
 				ReusabilityFilterOption.POSSIBLY_REUSABLE,
 			],
+		});
+	});
+
+	it('should map advanced rights labels to the proxy rights filter contract', () => {
+		const filters = mapFiltersToElastic({
+			[SearchFilterId.Advanced]: [
+				{
+					prop: FilterProperty.RIGHTS,
+					op: Operator.EQUALS,
+					val: RightsLabel.IN_COPYRIGHT,
+					renderKey: 'rights-filter',
+				},
+			],
+		} as SearchPageQueryParams);
+
+		expect(filters.find(({ field }) => field === IeObjectsSearchFilterField.RIGHTS)).toEqual({
+			field: IeObjectsSearchFilterField.RIGHTS,
+			operator: IeObjectsSearchOperator.IS,
+			value: RightsLabel.IN_COPYRIGHT,
 		});
 	});
 });
