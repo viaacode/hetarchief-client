@@ -233,7 +233,9 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			title: tText(
 				'modules/account/components/material-request-detail-blade/material-request-detail-blade___er-ging-iets-mis'
 			),
-			description: tText('Er ging iets mis tijdens het beschikbaar maken van de download'),
+			description: tText(
+				'modules/account/components/material-request-detail-blade/material-request-detail-blade___er-ging-iets-mis-tijdens-het-beschikbaar-maken-van-de-download'
+			),
 		});
 	};
 
@@ -277,8 +279,12 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 			refetchMaterialRequestStatus().then(noop);
 			toastService.notify({
 				maxLines: 3,
-				title: tText('Download beschikbaar maken gelukt'),
-				description: tText('De download wordt nu voorbereid'),
+				title: tText(
+					'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-beschikbaar-maken-gelukt'
+				),
+				description: tText(
+					'modules/account/components/material-request-detail-blade/material-request-detail-blade___de-download-wordt-nu-voorbereid'
+				),
 			});
 		} catch (_err) {
 			onFailedMakeDownloadAvailable();

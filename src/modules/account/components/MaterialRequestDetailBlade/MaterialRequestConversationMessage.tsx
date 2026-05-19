@@ -188,7 +188,9 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 
 				{isRequester && !conditionsEvaluated && (
 					<Button
-						label={tText('Voorwaarden evalueren')}
+						label={tText(
+							'modules/account/components/material-request-detail-blade/material-request-conversation-message___voorwaarden-evalueren'
+						)}
 						variants={['dark']}
 						onClick={() => onOpenEvaluateConditions(message)}
 						className={clsx(styles['p-conversation-messages__message__download-button'])}
@@ -205,7 +207,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 			return (
 				<div className={clsx(styles['p-conversation-messages__message__body'])}>
 					{tHtml(
-						'{{name}} aanvaardde de bijkomende gebruiksvoorwaarden. De download wordt beschikbaar gemaakt na finale goedkeuring van de aanbieder.',
+						'modules/account/components/material-request-detail-blade/material-request-conversation-message___name-aanvaardde-de-bijkomende-gebruiksvoorwaarden-de-download-wordt-beschikbaar-gemaakt-na-finale-goedkeuring-van-de-aanbieder',
 						{
 							name: messageSenderName(),
 						}
@@ -217,9 +219,12 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 		return (
 			<>
 				<div className={clsx(styles['p-conversation-messages__message__body'])}>
-					{tHtml('{{name}} aanvaardde de bijkomende gebruiksvoorwaarden', {
-						name: messageSenderName(),
-					})}
+					{tHtml(
+						'modules/account/components/material-request-detail-blade/material-request-conversation-message___name-aanvaardde-de-bijkomende-gebruiksvoorwaarden',
+						{
+							name: messageSenderName(),
+						}
+					)}
 				</div>
 				{!isApproved && (
 					<Button
@@ -239,7 +244,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 		return (
 			<div className={clsx(styles['p-conversation-messages__message__body'])}>
 				{tHtml(
-					'{{name}} weigerde de bijkomende gebruiksvoorwaarden. De aanvraag wordt afgesloten.',
+					'modules/account/components/material-request-detail-blade/material-request-conversation-message___name-weigerde-de-bijkomende-gebruiksvoorwaarden-de-aanvraag-wordt-afgesloten',
 					{
 						name: messageSenderName(),
 					}

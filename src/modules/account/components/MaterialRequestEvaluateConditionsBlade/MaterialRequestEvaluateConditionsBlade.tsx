@@ -44,8 +44,12 @@ export const MaterialRequestEvaluateConditionsBlade: FC<
 
 			toastService.notify({
 				maxLines: 3,
-				title: tText('Voorwaarden geaccepteerd'),
-				description: tText('De bijkomende voorwaarden zijn geaccepteerd.'),
+				title: tText(
+					'modules/account/components/material-request-evaluate-conditions-blade/material-request-evaluate-conditions-blade___voorwaarden-geaccepteerd'
+				),
+				description: tText(
+					'modules/account/components/material-request-evaluate-conditions-blade/material-request-evaluate-conditions-blade___de-bijkomende-voorwaarden-zijn-geaccepteerd'
+				),
 			});
 
 			onSuccess();
@@ -56,8 +60,12 @@ export const MaterialRequestEvaluateConditionsBlade: FC<
 			});
 			toastService.notify({
 				maxLines: 3,
-				title: tText('Er ging iets mis'),
-				description: tText('Er ging iets mis bij het accepteren van de voorwaarden.'),
+				title: tText(
+					'modules/account/components/material-request-evaluate-conditions-blade/material-request-evaluate-conditions-blade___er-ging-iets-mis'
+				),
+				description: tText(
+					'modules/account/components/material-request-evaluate-conditions-blade/material-request-evaluate-conditions-blade___er-ging-iets-mis-bij-het-accepteren-van-de-voorwaarden'
+				),
 			});
 		}
 	};
@@ -76,8 +84,12 @@ export const MaterialRequestEvaluateConditionsBlade: FC<
 
 			toastService.notify({
 				maxLines: 3,
-				title: tText('Aanvraag geannuleerd'),
-				description: tText('De aanvraag is geannuleerd.'),
+				title: tText(
+					'modules/account/components/material-request-evaluate-conditions-blade/material-request-evaluate-conditions-blade___aanvraag-geannuleerd'
+				),
+				description: tText(
+					'modules/account/components/material-request-evaluate-conditions-blade/material-request-evaluate-conditions-blade___de-aanvraag-is-geannuleerd'
+				),
 			});
 
 			setShowDeclineConfirmModal(false);
@@ -90,8 +102,12 @@ export const MaterialRequestEvaluateConditionsBlade: FC<
 			});
 			toastService.notify({
 				maxLines: 3,
-				title: tText('Er ging iets mis'),
-				description: tText('Er ging iets mis bij het annuleren van de aanvraag.'),
+				title: tText(
+					'modules/account/components/material-request-evaluate-conditions-blade/material-request-evaluate-conditions-blade___er-ging-iets-mis'
+				),
+				description: tText(
+					'modules/account/components/material-request-evaluate-conditions-blade/material-request-evaluate-conditions-blade___er-ging-iets-mis-bij-het-annuleren-van-de-aanvraag'
+				),
 			});
 		}
 	};
@@ -103,15 +119,23 @@ export const MaterialRequestEvaluateConditionsBlade: FC<
 	const getFooterButtons = (): BladeFooterButtonProps => {
 		return [
 			{
-				label: tText('Voorwaarden accepteren'),
-				mobileLabel: tText('Voorwaarden accepteren - mobile'),
+				label: tText(
+					'modules/account/components/material-request-evaluate-conditions-blade/material-request-evaluate-conditions-blade___voorwaarden-accepteren'
+				),
+				mobileLabel: tText(
+					'modules/account/components/material-request-evaluate-conditions-blade/material-request-evaluate-conditions-blade___voorwaarden-accepteren-mobile'
+				),
 				type: 'primary',
 				onClick: handleAccept,
 				disabled: isSubmitting,
 			},
 			{
-				label: tText('Aanvraag annuleren'),
-				mobileLabel: tText('Aanvraag annuleren - mobile'),
+				label: tText(
+					'modules/account/components/material-request-evaluate-conditions-blade/material-request-evaluate-conditions-blade___aanvraag-annuleren'
+				),
+				mobileLabel: tText(
+					'modules/account/components/material-request-evaluate-conditions-blade/material-request-evaluate-conditions-blade___aanvraag-annuleren-mobile'
+				),
 				type: 'secondary',
 				onClick: handleDeclineClick,
 				disabled: isSubmitting,
@@ -138,7 +162,7 @@ export const MaterialRequestEvaluateConditionsBlade: FC<
 			>
 				<p className={styles['c-material-request-evaluate-conditions-blade__description']}>
 					{tText(
-						'De aanbieder legt de volgende bijkomende gebruiksvoorwaarden op vooraleer de aanvraag kan goedgekeurd worden deze komen bovenop de voorwaarden die zijn ingevuld in het originele hergebruikformulier'
+						'modules/account/components/material-request-evaluate-conditions-blade/material-request-evaluate-conditions-blade___de-aanbieder-legt-de-volgende-bijkomende-gebruiksvoorwaarden-op-vooraleer-de-aanvraag-kan-goedgekeurd-worden-deze-komen-bovenop-de-voorwaarden-die-zijn-ingevuld-in-het-originele-hergebruikformulier'
 					)}
 				</p>
 
@@ -169,12 +193,18 @@ export const MaterialRequestEvaluateConditionsBlade: FC<
 				onConfirm={handleDeclineCancel}
 				onCancel={handleDeclineConfirm}
 				text={{
-					title: tText('Aanvraag annuleren?'),
-					description: tText(
-						'Ben je zeker dat je deze aanvraag wilt annuleren? Deze actie kan niet ongedaan gemaakt worden.'
+					title: tText(
+						'modules/account/components/material-request-evaluate-conditions-blade/material-request-evaluate-conditions-blade___aanvraag-annuleren'
 					),
-					yes: tText('Nee, keer terug'),
-					no: tText('Ja, annuleer aanvraag'),
+					description: tText(
+						'modules/account/components/material-request-evaluate-conditions-blade/material-request-evaluate-conditions-blade___ben-je-zeker-dat-je-deze-aanvraag-wilt-annuleren-deze-actie-kan-niet-ongedaan-gemaakt-worden'
+					),
+					yes: tText(
+						'modules/account/components/material-request-evaluate-conditions-blade/material-request-evaluate-conditions-blade___nee-keer-terug'
+					),
+					no: tText(
+						'modules/account/components/material-request-evaluate-conditions-blade/material-request-evaluate-conditions-blade___ja-annuleer-aanvraag'
+					),
 				}}
 			/>
 		</>

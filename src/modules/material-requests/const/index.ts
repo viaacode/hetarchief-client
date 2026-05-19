@@ -54,14 +54,16 @@ export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_ADDITIONAL_CONDITIONS_TYPE = (
 	string
 > => ({
 	[MaterialRequestAdditionalConditionsType.PERMISSION_LICENSE_OWNER]: tText(
-		'Toestemming rechthebbende - evaluate conditions blade'
+		'modules/material-requests/const/index___toestemming-rechthebbende-evaluate-conditions-blade'
 	),
 	[MaterialRequestAdditionalConditionsType.ATTRIBUTION]: tText(
-		'Naamsvermelding - evaluate conditions blade'
+		'modules/material-requests/const/index___naamsvermelding-evaluate-conditions-blade'
 	),
-	[MaterialRequestAdditionalConditionsType.PAYMENT]: tText('Betaling - evaluate conditions blade'),
+	[MaterialRequestAdditionalConditionsType.PAYMENT]: tText(
+		'modules/material-requests/const/index___betaling-evaluate-conditions-blade'
+	),
 	[MaterialRequestAdditionalConditionsType.EXTRA_USE_LIMITATION]: tText(
-		'Extra gebruiksbeperking - evaluate conditions blade'
+		'modules/material-requests/const/index___extra-gebruiksbeperking-evaluate-conditions-blade'
 	),
 });
 

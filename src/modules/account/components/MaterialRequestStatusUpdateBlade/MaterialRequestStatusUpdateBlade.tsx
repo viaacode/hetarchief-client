@@ -250,12 +250,18 @@ export const MaterialRequestStatusUpdateBlade: FC<MaterialRequestStatusUpdateBla
 				}}
 				fullWidthButtonWrapper
 				text={{
-					title: tText('Afkeuren en bijkomende gebruiksvoorwaarden verwijderen'),
-					description: tText(
-						'Als je de aanvraag afkeurt, worden de verzonden bijkomende gebruiksvoorwaarden verwijderd. Weet je zeker dat je wil doorgaan?'
+					title: tText(
+						'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___afkeuren-en-bijkomende-gebruiksvoorwaarden-verwijderen'
 					),
-					yes: tText('Nee, keer terug en behoud bijkomende gebruiksvoorwaarden'),
-					no: tText('Ja, aanvraag afkeuren en verwijder bijkomende gebruiksvoorwaarden'),
+					description: tText(
+						'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___als-je-de-aanvraag-afkeurt-worden-de-verzonden-bijkomende-gebruiksvoorwaarden-verwijderd-weet-je-zeker-dat-je-wil-doorgaan'
+					),
+					yes: tText(
+						'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___nee-keer-terug-en-behoud-bijkomende-gebruiksvoorwaarden'
+					),
+					no: tText(
+						'modules/account/components/material-request-status-update-blade/material-request-status-update-blade___ja-aanvraag-afkeuren-en-verwijder-bijkomende-gebruiksvoorwaarden'
+					),
 				}}
 			/>
 		</Blade>

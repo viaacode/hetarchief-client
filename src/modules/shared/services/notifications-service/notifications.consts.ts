@@ -58,48 +58,84 @@ export const GET_TITLE_FROM_NOTIFICATION = (
 
 		case NotificationType.NEW_MATERIAL_REQUEST:
 			return isMobile
-				? tText('Er is een nieuwe materiaalaanvraag - mobiel')
-				: tText('Er is een nieuwe materiaalaanvraag');
+				? tText(
+						'modules/shared/services/notifications-service/notifications___er-is-een-nieuwe-materiaalaanvraag-mobiel'
+					)
+				: tText(
+						'modules/shared/services/notifications-service/notifications___er-is-een-nieuwe-materiaalaanvraag'
+					);
 
 		case NotificationType.MATERIAL_REQUEST_CANCELLED:
 			return isMobile
-				? tText('Er is een materiaalaanvraag geannuleerd - mobiel')
-				: tText('Er is een materiaalaanvraag geannuleerd.');
+				? tText(
+						'modules/shared/services/notifications-service/notifications___er-is-een-materiaalaanvraag-geannuleerd-mobiel'
+					)
+				: tText(
+						'modules/shared/services/notifications-service/notifications___er-is-een-materiaalaanvraag-geannuleerd'
+					);
 
 		case NotificationType.MATERIAL_REQUEST_APPROVED:
 			return isMobile
-				? tText('Jouw aanvraag voor een digitaal materiaal werd goedgekeurd - mobiel')
-				: tText('Jouw aanvraag voor een digitaal materiaal werd goedgekeurd.');
+				? tText(
+						'modules/shared/services/notifications-service/notifications___jouw-aanvraag-voor-een-digitaal-materiaal-werd-goedgekeurd-mobiel'
+					)
+				: tText(
+						'modules/shared/services/notifications-service/notifications___jouw-aanvraag-voor-een-digitaal-materiaal-werd-goedgekeurd'
+					);
 
 		case NotificationType.MATERIAL_REQUEST_DENIED:
 			return isMobile
-				? tText('Jouw aanvraag voor een digitaal materiaal werd afgekeurd - mobiel')
-				: tText('Jouw aanvraag voor een digitaal materiaal werd afgekeurd.');
+				? tText(
+						'modules/shared/services/notifications-service/notifications___jouw-aanvraag-voor-een-digitaal-materiaal-werd-afgekeurd-mobiel'
+					)
+				: tText(
+						'modules/shared/services/notifications-service/notifications___jouw-aanvraag-voor-een-digitaal-materiaal-werd-afgekeurd'
+					);
 
 		case NotificationType.MATERIAL_REQUEST_DOWNLOAD_AVAILABLE:
 			return isMobile
-				? tText('Er is digitaal materiaal beschikbaar voor download - mobiel')
-				: tText('Er is digitaal materiaal beschikbaar voor download.');
+				? tText(
+						'modules/shared/services/notifications-service/notifications___er-is-digitaal-materiaal-beschikbaar-voor-download-mobiel'
+					)
+				: tText(
+						'modules/shared/services/notifications-service/notifications___er-is-digitaal-materiaal-beschikbaar-voor-download'
+					);
 
 		case NotificationType.MATERIAL_REQUEST_DOWNLOAD_ALMOST_EXPIRED:
 			return isMobile
-				? tText('De downloadtermijn van je aangevraagde object vervalt binnenkort - mobiel')
-				: tText('De downloadtermijn van je aangevraagde object vervalt binnenkort.');
+				? tText(
+						'modules/shared/services/notifications-service/notifications___de-downloadtermijn-van-je-aangevraagde-object-vervalt-binnenkort-mobiel'
+					)
+				: tText(
+						'modules/shared/services/notifications-service/notifications___de-downloadtermijn-van-je-aangevraagde-object-vervalt-binnenkort'
+					);
 
 		case NotificationType.MATERIAL_REQUEST_DOWNLOAD_EXECUTED:
 			return isMobile
-				? tText('Jouw digitaal materiaal werd door een aanvrager gedownload - mobiel')
-				: tText('Jouw digitaal materiaal werd door een aanvrager gedownload.');
+				? tText(
+						'modules/shared/services/notifications-service/notifications___jouw-digitaal-materiaal-werd-door-een-aanvrager-gedownload-mobiel'
+					)
+				: tText(
+						'modules/shared/services/notifications-service/notifications___jouw-digitaal-materiaal-werd-door-een-aanvrager-gedownload'
+					);
 
 		case NotificationType.MATERIAL_REQUEST_ADDITIONAL_CONDITIONS_SEND:
 			return isMobile
-				? tText('Er zijn bijkomende gebruiksvoorwaarden gestuurd voor je aanvraag - mobiel')
-				: tText('Er zijn bijkomende gebruiksvoorwaarden gestuurd voor je aanvraag.');
+				? tText(
+						'modules/shared/services/notifications-service/notifications___er-zijn-bijkomende-gebruiksvoorwaarden-gestuurd-voor-je-aanvraag-mobiel'
+					)
+				: tText(
+						'modules/shared/services/notifications-service/notifications___er-zijn-bijkomende-gebruiksvoorwaarden-gestuurd-voor-je-aanvraag'
+					);
 
 		case NotificationType.MATERIAL_REQUEST_ADDITIONAL_CONDITIONS_ACCEPTED:
 			return isMobile
-				? tText('Jouw bijkomende gebruiksvoorwaarden werden aanvaard - mobiel')
-				: tText('Jouw bijkomende gebruiksvoorwaarden werden aanvaard.');
+				? tText(
+						'modules/shared/services/notifications-service/notifications___jouw-bijkomende-gebruiksvoorwaarden-werden-aanvaard-mobiel'
+					)
+				: tText(
+						'modules/shared/services/notifications-service/notifications___jouw-bijkomende-gebruiksvoorwaarden-werden-aanvaard'
+					);
 	}
 };
 
@@ -120,53 +156,74 @@ export const GET_DESCRIPTION_FROM_NOTIFICATION = (
 
 		case NotificationType.NEW_MATERIAL_REQUEST:
 			return isMobile
-				? tText('{{name}} stuurde een aanvraag in voor jouw digitaal materiaal. - mobiel', {
-						name: notification.materialRequestRequester,
-					})
-				: tText('{{name}} stuurde een aanvraag in voor jouw digitaal materiaal.', {
-						name: notification.materialRequestRequester,
-					});
-
-		case NotificationType.MATERIAL_REQUEST_CANCELLED:
-			return isMobile
 				? tText(
-						'{{name}} annuleerde een materiaalaanvraag voor jouw digitaal materiaal. - mobiel',
+						'modules/shared/services/notifications-service/notifications___name-stuurde-een-aanvraag-in-voor-jouw-digitaal-materiaal-mobiel',
 						{
 							name: notification.materialRequestRequester,
 						}
 					)
-				: tText('{{name}} annuleerde een materiaalaanvraag voor jouw digitaal materiaal.', {
-						name: notification.materialRequestRequester,
-					});
+				: tText(
+						'modules/shared/services/notifications-service/notifications___name-stuurde-een-aanvraag-in-voor-jouw-digitaal-materiaal',
+						{
+							name: notification.materialRequestRequester,
+						}
+					);
+
+		case NotificationType.MATERIAL_REQUEST_CANCELLED:
+			return isMobile
+				? tText(
+						'modules/shared/services/notifications-service/notifications___name-annuleerde-een-materiaalaanvraag-voor-jouw-digitaal-materiaal-mobiel',
+						{
+							name: notification.materialRequestRequester,
+						}
+					)
+				: tText(
+						'modules/shared/services/notifications-service/notifications___name-annuleerde-een-materiaalaanvraag-voor-jouw-digitaal-materiaal',
+						{
+							name: notification.materialRequestRequester,
+						}
+					);
 
 		case NotificationType.MATERIAL_REQUEST_APPROVED:
 			return isMobile
-				? tText('{{maintainer}} keurde jouw aanvraag voor hun digitaal materiaal goed. - mobiel', {
-						maintainer: notification.materialRequestMaintainer,
-					})
-				: tText('{{maintainer}} keurde jouw aanvraag voor hun digitaal materiaal goed.', {
-						maintainer: notification.materialRequestMaintainer,
-					});
-
-		case NotificationType.MATERIAL_REQUEST_DENIED:
-			return isMobile
-				? tText('{{maintainer}} keurde jouw aanvraag voor hun digitaal materiaal af. - mobiel', {
-						maintainer: notification.materialRequestMaintainer,
-					})
-				: tText('{{maintainer}} keurde jouw aanvraag voor hun digitaal materiaal af.', {
-						maintainer: notification.materialRequestMaintainer,
-					});
-
-		case NotificationType.MATERIAL_REQUEST_DOWNLOAD_AVAILABLE:
-			return isMobile
 				? tText(
-						'Je kan het digitaal materiaal van {{maintainer}} dat je aangevraagd hebt nu downloaden.- mobiel',
+						'modules/shared/services/notifications-service/notifications___maintainer-keurde-jouw-aanvraag-voor-hun-digitaal-materiaal-goed-mobiel',
 						{
 							maintainer: notification.materialRequestMaintainer,
 						}
 					)
 				: tText(
-						'Je kan het digitaal materiaal van {{maintainer}} dat je aangevraagd hebt nu downloaden.',
+						'modules/shared/services/notifications-service/notifications___maintainer-keurde-jouw-aanvraag-voor-hun-digitaal-materiaal-goed',
+						{
+							maintainer: notification.materialRequestMaintainer,
+						}
+					);
+
+		case NotificationType.MATERIAL_REQUEST_DENIED:
+			return isMobile
+				? tText(
+						'modules/shared/services/notifications-service/notifications___maintainer-keurde-jouw-aanvraag-voor-hun-digitaal-materiaal-af-mobiel',
+						{
+							maintainer: notification.materialRequestMaintainer,
+						}
+					)
+				: tText(
+						'modules/shared/services/notifications-service/notifications___maintainer-keurde-jouw-aanvraag-voor-hun-digitaal-materiaal-af',
+						{
+							maintainer: notification.materialRequestMaintainer,
+						}
+					);
+
+		case NotificationType.MATERIAL_REQUEST_DOWNLOAD_AVAILABLE:
+			return isMobile
+				? tText(
+						'modules/shared/services/notifications-service/notifications___je-kan-het-digitaal-materiaal-van-maintainer-dat-je-aangevraagd-hebt-nu-downloaden-mobiel',
+						{
+							maintainer: notification.materialRequestMaintainer,
+						}
+					)
+				: tText(
+						'modules/shared/services/notifications-service/notifications___je-kan-het-digitaal-materiaal-van-maintainer-dat-je-aangevraagd-hebt-nu-downloaden',
 						{
 							maintainer: notification.materialRequestMaintainer,
 						}
@@ -175,13 +232,13 @@ export const GET_DESCRIPTION_FROM_NOTIFICATION = (
 		case NotificationType.MATERIAL_REQUEST_DOWNLOAD_ALMOST_EXPIRED:
 			return isMobile
 				? tText(
-						'Je kan het digitaal materiaal van {{maintainer}} dat je aangevraagd hebt nog maar 7 dagen downloaden vooraleer het vervalt.- mobiel',
+						'modules/shared/services/notifications-service/notifications___je-kan-het-digitaal-materiaal-van-maintainer-dat-je-aangevraagd-hebt-nog-maar-7-dagen-downloaden-vooraleer-het-vervalt-mobiel',
 						{
 							maintainer: notification.materialRequestMaintainer,
 						}
 					)
 				: tText(
-						'Je kan het digitaal materiaal van {{maintainer}} dat je aangevraagd hebt nog maar 7 dagen downloaden vooraleer het vervalt.',
+						'modules/shared/services/notifications-service/notifications___je-kan-het-digitaal-materiaal-van-maintainer-dat-je-aangevraagd-hebt-nog-maar-7-dagen-downloaden-vooraleer-het-vervalt',
 						{
 							maintainer: notification.materialRequestMaintainer,
 						}
@@ -190,13 +247,13 @@ export const GET_DESCRIPTION_FROM_NOTIFICATION = (
 		case NotificationType.MATERIAL_REQUEST_DOWNLOAD_EXECUTED:
 			return isMobile
 				? tText(
-						'{{name}} heeft n.a.v. een goedgekeurde aanvraag jouw digitaal materiaal gedownload. - mobiel',
+						'modules/shared/services/notifications-service/notifications___name-heeft-n-a-v-een-goedgekeurde-aanvraag-jouw-digitaal-materiaal-gedownload-mobiel',
 						{
 							name: notification.materialRequestRequester,
 						}
 					)
 				: tText(
-						'{{name}} heeft n.a.v. een goedgekeurde aanvraag jouw digitaal materiaal gedownload.',
+						'modules/shared/services/notifications-service/notifications___name-heeft-n-a-v-een-goedgekeurde-aanvraag-jouw-digitaal-materiaal-gedownload',
 						{
 							name: notification.materialRequestRequester,
 						}
@@ -205,13 +262,13 @@ export const GET_DESCRIPTION_FROM_NOTIFICATION = (
 		case NotificationType.MATERIAL_REQUEST_ADDITIONAL_CONDITIONS_SEND:
 			return isMobile
 				? tText(
-						'{{maintainer}} legt voor jouw aanvraag voor hun digitaal materiaal bijkomende gebruikersvoorwaarden op. - mobiel',
+						'modules/shared/services/notifications-service/notifications___maintainer-legt-voor-jouw-aanvraag-voor-hun-digitaal-materiaal-bijkomende-gebruikersvoorwaarden-op-mobiel',
 						{
 							maintainer: notification.materialRequestMaintainer,
 						}
 					)
 				: tText(
-						'{{maintainer}} legt voor jouw aanvraag voor hun digitaal materiaal bijkomende gebruikersvoorwaarden op.',
+						'modules/shared/services/notifications-service/notifications___maintainer-legt-voor-jouw-aanvraag-voor-hun-digitaal-materiaal-bijkomende-gebruikersvoorwaarden-op',
 						{
 							maintainer: notification.materialRequestMaintainer,
 						}
@@ -220,13 +277,13 @@ export const GET_DESCRIPTION_FROM_NOTIFICATION = (
 		case NotificationType.MATERIAL_REQUEST_ADDITIONAL_CONDITIONS_ACCEPTED:
 			return isMobile
 				? tText(
-						'{{name}} aanvaardt jouw bijkomende gebruikersvoorwaarden voor een materiaalaanvraag voor jouw digitaal materiaal. - mobiel',
+						'modules/shared/services/notifications-service/notifications___name-aanvaardt-jouw-bijkomende-gebruikersvoorwaarden-voor-een-materiaalaanvraag-voor-jouw-digitaal-materiaal-mobiel',
 						{
 							name: notification.materialRequestRequester,
 						}
 					)
 				: tText(
-						'{{name}} aanvaardt jouw bijkomende gebruikersvoorwaarden voor een materiaalaanvraag voor jouw digitaal materiaal.',
+						'modules/shared/services/notifications-service/notifications___name-aanvaardt-jouw-bijkomende-gebruikersvoorwaarden-voor-een-materiaalaanvraag-voor-jouw-digitaal-materiaal',
 						{
 							name: notification.materialRequestRequester,
 						}
