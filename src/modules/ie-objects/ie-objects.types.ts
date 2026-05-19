@@ -30,6 +30,12 @@ export interface IsPartOfCollection {
 	publisher?: any;
 }
 
+export interface IeObjectRightsInfo {
+	reuseLabel: string;
+	reuseCategoryUrl: string;
+	licenseDistributor?: string;
+}
+
 export interface IeObject {
 	dctermsAvailable: string;
 	dctermsFormat: IeObjectType;
@@ -106,6 +112,7 @@ export interface IeObject {
 	alternativeTitle?: string[];
 	digitizationDate?: string;
 	children?: number;
+	rightsInfo?: IeObjectRightsInfo;
 	pages?: IeObjectPage[];
 	mentions?: Mention[];
 }

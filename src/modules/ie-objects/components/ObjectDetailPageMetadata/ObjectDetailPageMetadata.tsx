@@ -11,6 +11,7 @@ import {
 import type { MetadataItem } from '@ie-objects/components/Metadata';
 import Metadata from '@ie-objects/components/Metadata/Metadata';
 import { NamesList } from '@ie-objects/components/NamesList/NamesList';
+import { ObjectDetailPageMetadataRights } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadataRights';
 import type { ObjectDetailPageMetadataProps } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata.types';
 import { SearchLinkTag } from '@ie-objects/components/SearchLinkTag/SearchLinkTag';
 import { useGetIeObjectPreviousNextIds } from '@ie-objects/hooks/use-get-ie-object-previous-next-ids';
@@ -831,6 +832,10 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 
 		const showAlert = !mediaInfo.description;
 		const rightsStatusInfo = isNewspaper ? getIeObjectRightsStatusInfo(mediaInfo, locale) : null;
+		const avRightsInfo = !isNewspaper ? mediaInfo.rightsInfo : null;
+		const rightsMoreInfoTitle = tText(
+			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
+		);
 		let rightsAttributionText: string | null = null;
 		if (
 			isNewspaper &&
@@ -948,46 +953,34 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						renderDate(mediaInfo.datePublished)
 					)}
 					{!!rightsStatusInfo && (
-						<Metadata
+						<ObjectDetailPageMetadataRights
 							title={tHtml('modules/ie-objects/object-detail-page___rechten')}
 							className={styles['p-object-detail__metadata-content__rights-status']}
-							key="metadata-rights-status"
-							renderRight={
-								<a target="_blank" href={rightsStatusInfo.externalLink} rel="noreferrer">
-									<Button
-										variants={['white']}
-										icon={<Icon name={IconNamesLight.Extern} aria-hidden />}
-										title={tText(
-											'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
-										)}
-									/>
-								</a>
-							}
-						>
-							<span className="u-flex u-flex-items-center u-gap-xs">
-								<a
-									href={rightsStatusInfo.internalLink}
-									className="u-text-no-decoration"
-									target="_blank"
-									rel="noreferrer"
-									title={tText(
-										'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
-									)}
-								>
-									{rightsStatusInfo.icon}
-								</a>
-								<a
-									href={rightsStatusInfo.internalLink}
-									target="_blank"
-									rel="noreferrer"
-									title={tText(
-										'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
-									)}
-								>
-									{rightsStatusInfo?.label}
-								</a>
-							</span>
-						</Metadata>
+							label={rightsStatusInfo.label}
+							labelIcon={rightsStatusInfo.icon}
+							labelUrl={rightsStatusInfo.internalLink}
+							moreInfoUrl={rightsStatusInfo.externalLink}
+							moreInfoTitle={rightsMoreInfoTitle}
+						/>
+					)}
+					{!!avRightsInfo && (
+						<ObjectDetailPageMetadataRights
+							title={tHtml('modules/ie-objects/object-detail-page___rechten')}
+							className={styles['p-object-detail__metadata-content__rights-status']}
+							label={avRightsInfo.reuseLabel}
+							labelUrl={avRightsInfo.reuseCategoryUrl}
+							moreInfoUrl={tText(
+								'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-internal-link',
+								{
+									languageCode: locale,
+								}
+							)}
+							moreInfoTitle={rightsMoreInfoTitle}
+							copyrightHolder={mediaInfo.copyrightHolder}
+							copyrightHolderLabel={tText('modules/ie-objects/ie-objects___rechthebbende')}
+							licenseDistributor={avRightsInfo.licenseDistributor}
+							licenseDistributorLabel={tText('modules/ie-objects/ie-objects___licentiegever')}
+						/>
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___rechtenstatus'),
@@ -1175,10 +1168,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						tText('modules/ie-objects/ie-objects___paginanummer'),
 						mediaInfo?.pageNumber
 					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___auteursrechthouder'),
-						mediaInfo?.copyrightHolder
-					)}
+					{!avRightsInfo &&
+						renderSimpleMetadataField(
+							tText('modules/ie-objects/ie-objects___auteursrechthouder'),
+							mediaInfo?.copyrightHolder
+						)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___oorsprong'),
 						mediaInfo.meemooOriginalCp
