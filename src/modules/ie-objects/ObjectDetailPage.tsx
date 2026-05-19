@@ -288,7 +288,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		},
 		[getRepresentationByType]
 	);
-	const [isFlowPlayerMediaAvailable, setIsFlowPlayerMediaAvailable] = useState(false);
+
+	const [isFlowPlayerMediaAvailable, setIsFlowPlayerMediaAvailable] = useState<boolean | null>(
+		null
+	);
 
 	const allFilesToDisplayInCurrentPage =
 		(mediaInfo?.pages || []).flatMap((page) =>
@@ -1269,7 +1272,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			case IeObjectType.VIDEO:
 			case IeObjectType.VIDEO_FRAGMENT:
 			case IeObjectType.FILM:
-				return isMobile
+				return isFlowPlayerMediaAvailable === null
 					? !!getFilesByType(FLOWPLAYER_FORMATS)?.[0]?.storedAt
 					: isFlowPlayerMediaAvailable;
 
@@ -1280,7 +1283,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			default:
 				return false;
 		}
-	}, [mediaInfo?.dctermsFormat, isMobile, isFlowPlayerMediaAvailable, getFilesByType]);
+	}, [mediaInfo?.dctermsFormat, isFlowPlayerMediaAvailable, getFilesByType]);
 
 	const tabs: TabProps[] = useMemo(() => {
 		return OBJECT_DETAIL_TABS(
@@ -1446,7 +1449,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				paused={isMediaPaused}
 				onPlay={handleOnPlay}
 				onPause={handleOnPause}
-				onMediaReady={isMobile ? noop : setIsFlowPlayerMediaAvailable}
+				onMediaReady={setIsFlowPlayerMediaAvailable}
 			/>
 		);
 	};
