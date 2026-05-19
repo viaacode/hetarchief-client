@@ -175,7 +175,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	}, []);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
-	const [isFlowPlayerMediaAvailable, setIsFlowPlayerMediaAvailable] = useState(false);
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
 	const [isRelatedObjectsBladeOpen, setIsRelatedObjectsBladeOpen] = useState(false);
 	const [hasNewsPaperBeenRendered, setHasNewsPaperBeenRendered] = useState(false);
@@ -288,6 +287,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			);
 		},
 		[getRepresentationByType]
+	);
+
+	const [isFlowPlayerMediaAvailable, setIsFlowPlayerMediaAvailable] = useState<boolean | null>(
+		null
 	);
 
 	const allFilesToDisplayInCurrentPage =
@@ -1269,7 +1272,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			case IeObjectType.VIDEO:
 			case IeObjectType.VIDEO_FRAGMENT:
 			case IeObjectType.FILM:
-				return isFlowPlayerMediaAvailable;
+				return isFlowPlayerMediaAvailable ?? !!getFilesByType(FLOWPLAYER_FORMATS)?.[0]?.storedAt;
 
 			case IeObjectType.NEWSPAPER: {
 				return !!getFilesByType(IMAGE_API_FORMATS)?.[0]?.storedAt;
