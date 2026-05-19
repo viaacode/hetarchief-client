@@ -118,6 +118,14 @@ import styles from './ObjectDetailPageMetadata.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
 
+const AV_OBJECT_TYPES = [
+	IeObjectType.AUDIO,
+	IeObjectType.AUDIO_FRAGMENT,
+	IeObjectType.FILM,
+	IeObjectType.VIDEO,
+	IeObjectType.VIDEO_FRAGMENT,
+];
+
 export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	mediaInfo,
 	currentPage,
@@ -832,7 +840,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 
 		const showAlert = !mediaInfo.description;
 		const rightsStatusInfo = isNewspaper ? getIeObjectRightsStatusInfo(mediaInfo, locale) : null;
-		const avRightsInfo = !isNewspaper ? mediaInfo.rightsInfo : null;
+		const avRightsInfo = AV_OBJECT_TYPES.includes(mediaInfo.dctermsFormat)
+			? mediaInfo.rightsInfo
+			: null;
 		const rightsMoreInfoTitle = tText(
 			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
 		);
@@ -968,7 +978,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							title={tHtml('modules/ie-objects/object-detail-page___rechten')}
 							className={styles['p-object-detail__metadata-content__rights-status']}
 							label={avRightsInfo.reuseLabel}
-							labelUrl={avRightsInfo.reuseCategoryUrl}
+							labelUrl={avRightsInfo.reuseCategoryId || undefined}
 							moreInfoUrl={tText(
 								'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-internal-link',
 								{

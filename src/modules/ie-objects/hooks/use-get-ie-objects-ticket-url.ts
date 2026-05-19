@@ -4,13 +4,15 @@ import { keepPreviousData, type UseQueryResult, useQuery } from '@tanstack/react
 
 export const useGetIeObjectsTicketUrl = (
 	fileStoredAt: string | undefined | null,
+	schemaIdentifier: string | undefined | null,
 	enabled: boolean = true
 ): UseQueryResult<string | null> => {
 	return useQuery({
-		queryKey: [QUERY_KEYS.getIeObjectPlayerTicket, fileStoredAt],
-		queryFn: () => IeObjectsService.getPlayableUrl(fileStoredAt as string),
+		queryKey: [QUERY_KEYS.getIeObjectPlayerTicket, schemaIdentifier, fileStoredAt],
+		queryFn: () =>
+			IeObjectsService.getPlayableUrl(fileStoredAt as string, schemaIdentifier as string),
 		placeholderData: keepPreviousData,
-		enabled: enabled && !!fileStoredAt,
+		enabled: enabled && !!fileStoredAt && !!schemaIdentifier,
 		staleTime: 30 * 60 * 1000, // 30 minutes
 	});
 };
