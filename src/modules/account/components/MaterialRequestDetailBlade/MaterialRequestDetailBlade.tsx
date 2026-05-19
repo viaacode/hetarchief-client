@@ -111,7 +111,11 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	const activeTab = activeTabRaw || MaterialRequestDetailBladeTabs.Information;
 
 	const { data: materialRequestStatus, refetch: refetchMaterialRequestStatus } =
-		useGetMaterialRequestStatus(currentMaterialRequestDetail?.id);
+		useGetMaterialRequestStatus(
+			currentMaterialRequestDetail?.id,
+			// Only fetch the status when the request has a reuse form and is not archived
+			!!currentMaterialRequestDetail?.reuseForm && !currentMaterialRequestDetail?.isArchived
+		);
 
 	const materialRequest: MaterialRequest | undefined = useMemo(() => {
 		if (!currentMaterialRequestDetail) {
@@ -176,8 +180,9 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		useGetMaterialRequestConversationUnreadCount(
 			materialRequest?.id,
 			// Only fetch the unreadCount when we are not on the conversation tab
-			// And only when the request is not yet closed with a final summary or is not archived
+			// And only when the request has a reuse form and is not yet closed with a final summary or is not archived
 			activeTab !== MaterialRequestDetailBladeTabs.Conversation &&
+				!!materialRequest?.reuseForm &&
 				!hasFinalSummary &&
 				!materialRequest?.isArchived
 		);
