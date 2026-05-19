@@ -1272,9 +1272,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			case IeObjectType.VIDEO:
 			case IeObjectType.VIDEO_FRAGMENT:
 			case IeObjectType.FILM:
-				return isFlowPlayerMediaAvailable === null
-					? !!getFilesByType(FLOWPLAYER_FORMATS)?.[0]?.storedAt
-					: isFlowPlayerMediaAvailable;
+				return isFlowPlayerMediaAvailable ?? !!getFilesByType(FLOWPLAYER_FORMATS)?.[0]?.storedAt;
 
 			case IeObjectType.NEWSPAPER: {
 				return !!getFilesByType(IMAGE_API_FORMATS)?.[0]?.storedAt;
