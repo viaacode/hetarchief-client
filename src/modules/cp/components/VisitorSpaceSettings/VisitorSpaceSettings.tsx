@@ -285,12 +285,6 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 					});
 
 					await refetchVisitorSpace();
-					if (!!values.slug && values.slug !== visitorSpace?.slug) {
-						// Slug was changed, redirect to the new url
-						await router.replace(
-							`/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaceManagement}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaces}/${values.slug}`
-						);
-					}
 				}
 			} catch (err) {
 				await refetchVisitorSpace();
@@ -305,15 +299,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 				});
 			}
 		},
-		[
-			formValues,
-			locale,
-			refetchVisitorSpace,
-			router,
-			validateFormValues,
-			visitorSpace?.id,
-			visitorSpace?.slug,
-		]
+		[formValues, refetchVisitorSpace, validateFormValues, visitorSpace?.id]
 	);
 
 	/**
@@ -477,38 +463,18 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 
 						<FormControl
 							className={styles['c-cp-settings__site-settings-input']}
-							errors={[<RedFormWarning error={formErrors.slug} key="form-error--slug" />]}
 							id={labelKeys.slug}
 							label={tHtml('modules/cp/components/site-settings-form/site-settings-form___slug')}
 						>
 							<TextInput
 								id={labelKeys.slug}
-								onChange={(evt) =>
-									updateValues({
-										slug: evt.currentTarget.value,
-									})
-								}
 								value={formValues?.slug || ''}
+								disabled={true}
 								ariaLabel={tText(
 									'modules/cp/components/visitor-space-settings/visitor-space-settings___naam-van-de-bezoekersruimte-als-slug-in-de-url-input-aria-label'
 								)}
 							/>
 						</FormControl>
-
-						{(formValues?.orId !== visitorSpace?.orId || formValues?.slug !== visitorSpace?.slug) &&
-							renderCancelSaveButtons(
-								() =>
-									updateValues({
-										orId: visitorSpace?.orId,
-										slug: visitorSpace?.slug,
-									}),
-								() =>
-									action === 'create'
-										? createSpace()
-										: updateSpace({
-												slug: formValues?.slug,
-											})
-							)}
 					</div>
 				</Box>
 			</article>
@@ -517,15 +483,11 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 		showSiteSettings,
 		maintainer,
 		maintainerOptions,
-
 		action,
 		formErrors.orId,
-		formErrors.slug,
 		formValues?.slug,
 		formValues?.orId,
 		visitorSpace?.orId,
-		visitorSpace?.slug,
-		renderCancelSaveButtons,
 		updateValues,
 		createSpace,
 		updateSpace,
