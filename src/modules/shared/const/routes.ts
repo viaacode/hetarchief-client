@@ -46,6 +46,7 @@ export enum RoutePart {
 	confirmation = 'confirmation',
 	failed = 'failed',
 	pid = 'pid',
+	organisations = 'organisations',
 }
 
 const ROUTE_PARTS_NL: Record<RoutePart, string> = {
@@ -92,6 +93,7 @@ const ROUTE_PARTS_NL: Record<RoutePart, string> = {
 	confirmation: 'bevestiging',
 	failed: 'mislukt',
 	pid: 'pid',
+	organisations: 'organisaties',
 } as const;
 
 const ROUTE_PARTS_EN: Record<RoutePart, string> = {
@@ -138,6 +140,7 @@ const ROUTE_PARTS_EN: Record<RoutePart, string> = {
 	confirmation: 'confirmation',
 	failed: 'failed',
 	pid: 'pid',
+	organisations: 'organisations',
 } as const;
 
 // Note: Also used to set 'Bezoekersruimtes' active state if url does not start with any of the following prefixes
@@ -198,6 +201,7 @@ export enum RouteKey {
 	adminNavigationItemEdit = 'adminNavigationItemEdit',
 	adminPermissions = 'adminPermissions',
 	adminTranslations = 'adminTranslations',
+	adminOrganisations = 'adminOrganisations',
 	adminUserManagement = 'adminUserManagement',
 	adminUsers = 'adminUsers',
 	adminVisitRequests = 'adminVisitRequests',
@@ -254,6 +258,7 @@ const ROUTES_NL: Record<RouteKey, string> = {
 	adminNavigationItemEdit: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.navigation}/:navigationBarId/:navigationItemId/${ROUTE_PARTS_NL.edit}`,
 	adminPermissions: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.userManagement}/${ROUTE_PARTS_NL.permissions}`,
 	adminTranslations: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.translations}`,
+	adminOrganisations: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.organisations}`,
 	adminUserManagement: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.userManagement}`,
 	adminUsers: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.userManagement}/${ROUTE_PARTS_NL.users}`,
 	adminVisitRequests: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.visitorSpaceManagement}/${ROUTE_PARTS_NL.visitRequests}`,
@@ -310,6 +315,7 @@ const ROUTES_EN: Record<RouteKey, string> = {
 	adminNavigationItemEdit: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.navigation}/:navigationBarId/:navigationItemId/${ROUTE_PARTS_EN.edit}`,
 	adminPermissions: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.userManagement}/${ROUTE_PARTS_EN.permissions}`,
 	adminTranslations: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.translations}`,
+	adminOrganisations: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.organisations}`,
 	adminUserManagement: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.userManagement}`,
 	adminUsers: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.userManagement}/${ROUTE_PARTS_EN.users}`,
 	adminVisitRequests: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.visitorSpaceManagement}/${ROUTE_PARTS_EN.visitRequests}`,
