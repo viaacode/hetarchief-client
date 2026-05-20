@@ -12,6 +12,7 @@ import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { Loading } from '@shared/components/Loading';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SearchBar } from '@shared/components/SearchBar';
@@ -181,12 +182,12 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 
 	const renderOrganisationsTable = (): ReactNode => {
 		if (isLoadingOrganisations) {
-			return <div>Laden...</div>;
+			return <Loading locationId="Organisations overview" />;
 		}
 		if (!organisations.length) {
 			return (
 				<span className="c-organisations-content__no-results">
-					Er zijn geen organisaties gevonden
+					{tText('Er zijn geen organisaties gevonden')}
 				</span>
 			);
 		}
@@ -212,6 +213,7 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 		if (!activeOrganisation) {
 			return null;
 		}
+
 		return (
 			<>
 				<div className="c-organisations-blade__field">
