@@ -11,8 +11,8 @@ import {
 import type { MetadataItem } from '@ie-objects/components/Metadata';
 import Metadata from '@ie-objects/components/Metadata/Metadata';
 import { NamesList } from '@ie-objects/components/NamesList/NamesList';
-import { ObjectDetailPageMetadataRights } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadataRights';
 import type { ObjectDetailPageMetadataProps } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata.types';
+import { ObjectDetailPageMetadataRights } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadataRights';
 import { SearchLinkTag } from '@ie-objects/components/SearchLinkTag/SearchLinkTag';
 import { useGetIeObjectPreviousNextIds } from '@ie-objects/hooks/use-get-ie-object-previous-next-ids';
 import { useIsPublicNewspaper } from '@ie-objects/hooks/use-get-is-public-newspaper';
@@ -49,6 +49,11 @@ import { checkIeObjectPermissions } from '@ie-objects/utils/check-ie-object-perm
 import { isInAFolder } from '@ie-objects/utils/folders';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { getFirstMentionHighlight } from '@ie-objects/utils/get-first-mention-highlight';
+import {
+	getIeObjectAvRightsIcon,
+	getIeObjectAvRightsLabel,
+	getIeObjectAvRightsUrl,
+} from '@ie-objects/utils/get-ie-object-av-rights-icon';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import {
 	mapArrayToMetadataData,
@@ -843,6 +848,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		const avRightsInfo = AV_OBJECT_TYPES.includes(mediaInfo.dctermsFormat)
 			? mediaInfo.rightsInfo
 			: null;
+		const avRightsIcon = avRightsInfo ? getIeObjectAvRightsIcon(avRightsInfo) : null;
+		const avRightsLabel = avRightsInfo ? getIeObjectAvRightsLabel(avRightsInfo) : null;
+		const avRightsUrl = avRightsInfo ? getIeObjectAvRightsUrl(avRightsInfo) : undefined;
 		const rightsMoreInfoTitle = tText(
 			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
 		);
@@ -942,6 +950,37 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					<Metadata title={renderMaintainerMetaTitle(mediaInfo)} key={'metadata-maintainer'}>
 						{renderMaintainerMetaData(mediaInfo)}
 					</Metadata>
+					{!!rightsStatusInfo && (
+						<ObjectDetailPageMetadataRights
+							title={tHtml('modules/ie-objects/object-detail-page___rechten')}
+							className={styles['p-object-detail__metadata-content__rights-status']}
+							label={rightsStatusInfo.label}
+							labelIcon={rightsStatusInfo.icon}
+							labelUrl={rightsStatusInfo.internalLink}
+							moreInfoUrl={rightsStatusInfo.externalLink}
+							moreInfoTitle={rightsMoreInfoTitle}
+						/>
+					)}
+					{!!avRightsInfo && (
+						<ObjectDetailPageMetadataRights
+							title={tHtml('modules/ie-objects/object-detail-page___rechten')}
+							className={styles['p-object-detail__metadata-content__rights-status']}
+							label={avRightsLabel}
+							labelIcon={avRightsIcon}
+							labelUrl={avRightsUrl}
+							moreInfoUrl={tText(
+								'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-internal-link',
+								{
+									languageCode: locale,
+								}
+							)}
+							moreInfoTitle={rightsMoreInfoTitle}
+							copyrightHolder={mediaInfo.copyrightHolder}
+							copyrightHolderLabel={tText('modules/ie-objects/ie-objects___rechthebbende')}
+							licenseDistributor={avRightsInfo.licenseDistributor}
+							licenseDistributorLabel={tText('modules/ie-objects/ie-objects___licentiegever')}
+						/>
+					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___media-type'),
 						mediaInfo.dctermsFormat
@@ -961,36 +1000,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___publicatiedatum'),
 						renderDate(mediaInfo.datePublished)
-					)}
-					{!!rightsStatusInfo && (
-						<ObjectDetailPageMetadataRights
-							title={tHtml('modules/ie-objects/object-detail-page___rechten')}
-							className={styles['p-object-detail__metadata-content__rights-status']}
-							label={rightsStatusInfo.label}
-							labelIcon={rightsStatusInfo.icon}
-							labelUrl={rightsStatusInfo.internalLink}
-							moreInfoUrl={rightsStatusInfo.externalLink}
-							moreInfoTitle={rightsMoreInfoTitle}
-						/>
-					)}
-					{!!avRightsInfo && (
-						<ObjectDetailPageMetadataRights
-							title={tHtml('modules/ie-objects/object-detail-page___rechten')}
-							className={styles['p-object-detail__metadata-content__rights-status']}
-							label={avRightsInfo.reuseLabel}
-							labelUrl={avRightsInfo.reuseCategoryId || undefined}
-							moreInfoUrl={tText(
-								'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-internal-link',
-								{
-									languageCode: locale,
-								}
-							)}
-							moreInfoTitle={rightsMoreInfoTitle}
-							copyrightHolder={mediaInfo.copyrightHolder}
-							copyrightHolderLabel={tText('modules/ie-objects/ie-objects___rechthebbende')}
-							licenseDistributor={avRightsInfo.licenseDistributor}
-							licenseDistributorLabel={tText('modules/ie-objects/ie-objects___licentiegever')}
-						/>
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___rechtenstatus'),
