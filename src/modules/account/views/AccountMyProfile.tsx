@@ -222,9 +222,9 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 		if (
 			publicRuntimeConfig.USE_KEYCLOAK_INSTEAD_OF_SSUM === 'true' &&
-			publicRuntimeConfig.KEYCLOAK_HOST
+			publicRuntimeConfig.KEYCLOAK_ACCOUNT_URL
 		) {
-			editUrl = publicRuntimeConfig.KEYCLOAK_HOST.replace('{locale}', currentAccountLocale);
+			editUrl = publicRuntimeConfig.KEYCLOAK_ACCOUNT_URL.replace('{locale}', currentAccountLocale);
 		} else {
 			editUrl = publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL.replace('{locale}', currentAccountLocale);
 		}

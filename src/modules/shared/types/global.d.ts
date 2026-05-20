@@ -7,7 +7,7 @@ declare global {
 			readonly NODE_ENV: 'development' | 'production' | 'test';
 			readonly CLIENT_URL: string;
 			readonly SSUM_EDIT_ACCOUNT_URL: string;
-			readonly KEYCLOAK_HOST: string;
+			readonly KEYCLOAK_ACCOUNT_URL: string;
 			readonly USE_KEYCLOAK_INSTEAD_OF_SSUM: 'true' | 'false';
 			readonly PORT: string;
 			readonly PROXY_URL: string;
