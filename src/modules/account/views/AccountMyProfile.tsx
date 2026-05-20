@@ -217,35 +217,48 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		);
 	};
 
-	const renderEditProfile = (): ReactNode => (
-		<div className="p-account-my-profile__edit">
-			{/* Redirect to SSUM edit profile page => After SSUM redirect to the logout url => after logout redirect to client profile page */}
-			{/* Which will redirect to the client homepage => after user logs in, redirect to client profile page */}
-			<Link
-				href={stringifyUrl({
-					url: publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL.replace('{locale}', currentAccountLocale),
-					query: {
-						redirect_to: stringifyUrl({
-							url: `${publicRuntimeConfig.PROXY_URL}/auth/global-logout`,
-							query: {
-								returnToUrl: window.location.href,
-							},
-						}),
-					},
-				})}
-				passHref
-				aria-label={tText('pages/account/mijn-profiel/index___wijzig-mijn-gegevens')}
-			>
-				<Button
-					className="u-p-0"
-					iconStart={<Icon name={IconNamesLight.Edit} aria-hidden />}
-					label={tText('pages/account/mijn-profiel/index___wijzig-mijn-gegevens')}
-					variants="text"
-					tabIndex={-1}
-				/>
-			</Link>
-		</div>
-	);
+	const renderEditProfile = (): ReactNode => {
+		let editUrl: string;
+
+		if (
+			publicRuntimeConfig.USE_KEYCLOAK_INSTEAD_OF_SSUM === 'true' &&
+			publicRuntimeConfig.KEYCLOAK_ACCOUNT_URL
+		) {
+			editUrl = publicRuntimeConfig.KEYCLOAK_ACCOUNT_URL.replace('{locale}', currentAccountLocale);
+		} else {
+			editUrl = publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL.replace('{locale}', currentAccountLocale);
+		}
+
+		return (
+			<div className="p-account-my-profile__edit">
+				{/* Redirect to SSUM edit profile page => After SSUM redirect to the logout url => after logout redirect to client profile page */}
+				{/* Which will redirect to the client homepage => after user logs in, redirect to client profile page */}
+				<Link
+					href={stringifyUrl({
+						url: editUrl,
+						query: {
+							redirect_to: stringifyUrl({
+								url: `${publicRuntimeConfig.PROXY_URL}/auth/global-logout`,
+								query: {
+									returnToUrl: window.location.href,
+								},
+							}),
+						},
+					})}
+					passHref
+					aria-label={tText('pages/account/mijn-profiel/index___wijzig-mijn-gegevens')}
+				>
+					<Button
+						className="u-p-0"
+						iconStart={<Icon name={IconNamesLight.Edit} aria-hidden />}
+						label={tText('pages/account/mijn-profiel/index___wijzig-mijn-gegevens')}
+						variants="text"
+						tabIndex={-1}
+					/>
+				</Link>
+			</div>
+		);
+	};
 
 	const renderOrganisation = (): ReactNode => {
 		if (isNil(commonUser?.organisation?.name)) {
