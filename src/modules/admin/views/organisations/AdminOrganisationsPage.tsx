@@ -22,7 +22,7 @@ import { tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import type { SearchOrderDirection } from '@viaa/avo2-types/dist/modules/search';
-import { type FC, type ReactElement, type ReactNode, useMemo, useState } from 'react';
+import { type FC, type ReactElement, type ReactNode, useCallback, useMemo, useState } from 'react';
 import type { Column, Row, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -45,10 +45,14 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 		orderDirection: filters.orderDirection,
 	});
 
-	const organisations = (organisationsData?.items || []).map((org) => ({
-		...org,
-		id: org.org_identifier,
-	}));
+	const organisations = useMemo(
+		() =>
+			(organisationsData?.items || []).map((org) => ({
+				...org,
+				id: org.org_identifier,
+			})),
+		[organisationsData?.items]
+	);
 
 	const totalItems = organisationsData?.total || 0;
 
@@ -88,80 +92,92 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 				desc: filters.orderDirection !== 'asc',
 			},
 		];
-	}, [filters]);
+	}, [filters.orderProp, filters.orderDirection]);
 
-	const onSortChange = (
-		orderProp: string | undefined,
-		orderDirection: SearchOrderDirection | undefined
-	) => {
-		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
-			setFilters({
-				...filters,
-				orderProp,
-				orderDirection: orderDirection || 'asc',
-				page: 1,
+	const onSortChange = useCallback(
+		(orderProp: string | undefined, orderDirection: SearchOrderDirection | undefined) => {
+			setFilters((currentFilters) => {
+				if (
+					currentFilters.orderProp !== orderProp ||
+					currentFilters.orderDirection !== orderDirection
+				) {
+					return {
+						...currentFilters,
+						orderProp,
+						orderDirection: orderDirection || 'asc',
+						page: 1,
+					};
+				}
+				return currentFilters;
 			});
-		}
-	};
+		},
+		[setFilters]
+	);
 
-	const handleEditButtonClicked = (organisation: Organisation) => {
+	const onPageChange = useCallback(
+		(pageZeroBased: number, gotoPage: (i: number) => void): void => {
+			gotoPage(pageZeroBased);
+			setFilters((currentFilters) => ({
+				...currentFilters,
+				page: pageZeroBased + 1,
+			}));
+		},
+		[setFilters]
+	);
+
+	const handleEditButtonClicked = useCallback((organisation: Organisation) => {
 		setActiveOrganisation(organisation);
 		setEditedSlug(organisation.slug);
-	};
+	}, []);
 
-	const organisationsTableColumns: Column<Organisation>[] = [
-		{
-			id: 'name',
-			Header: tText('Organisatie naam - table header'),
-			accessor: 'name',
-		},
-		{
-			id: 'id',
-			Header: tText('Organisatie ID - table header'),
-			accessor: 'org_identifier',
-		},
-		{
-			id: 'slug',
-			Header: tText('Slug - table header'),
-			accessor: 'slug',
-		},
-		{
-			Header: '',
-			id: 'actions',
-			Cell: ({ row }: { row: Row<Organisation> }): ReactElement => {
-				const organisation = row.original;
-				return (
-					<div className="c-organisations-table__actions">
-						<Button
-							variants={['text', 'icon']}
-							icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
-							aria-label={tText('edit organisatie - aria label')}
-							onClick={() => handleEditButtonClicked(organisation)}
-						/>
-					</div>
-				);
+	const organisationsTableColumns: Column<Organisation>[] = useMemo(
+		() => [
+			{
+				id: 'name',
+				Header: tText('Organisatie naam - table header'),
+				accessor: 'name',
 			},
-		},
-	];
+			{
+				id: 'id',
+				Header: tText('Organisatie ID - table header'),
+				accessor: 'org_identifier',
+			},
+			{
+				id: 'slug',
+				Header: tText('Slug - table header'),
+				accessor: 'slug',
+			},
+			{
+				Header: '',
+				id: 'actions',
+				Cell: ({ row }: { row: Row<Organisation> }): ReactElement => {
+					const organisation = row.original;
+					return (
+						<div className="c-organisations-table__actions">
+							<Button
+								variants={['text', 'icon']}
+								icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
+								aria-label={tText('edit organisatie - aria label')}
+								onClick={() => handleEditButtonClicked(organisation)}
+							/>
+						</div>
+					);
+				},
+			},
+		],
+		[handleEditButtonClicked]
+	);
 
-	const getPagination = ({ gotoPage }: { gotoPage: (page: number) => void }) => {
-		return (
-			<PaginationBar
-				{...getDefaultPaginationBarProps()}
-				showFirstAndLastButtons
-				startItem={Math.max(0, filters.page - 1) * OrganisationsTablePageSize}
-				itemsPerPage={OrganisationsTablePageSize}
-				totalItems={totalItems}
-				onPageChange={(pageZeroBased) => {
-					gotoPage(pageZeroBased);
-					setFilters({
-						...filters,
-						page: pageZeroBased + 1,
-					});
-				}}
-			/>
-		);
-	};
+	const renderPagination = ({ gotoPage }: { gotoPage: (i: number) => void }): ReactNode => (
+		<PaginationBar
+			{...getDefaultPaginationBarProps()}
+			showFirstAndLastButtons
+			startItem={Math.max(0, filters.page - 1) * OrganisationsTablePageSize}
+			itemsPerPage={OrganisationsTablePageSize}
+			totalItems={totalItems}
+			onPageChange={(pageZeroBased: number) => onPageChange(pageZeroBased, gotoPage)}
+		/>
+	);
 
 	const renderOrganisationsTable = (): ReactNode => {
 		if (isLoadingOrganisations) {
@@ -186,7 +202,7 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 				}}
 				onSortChange={onSortChange}
 				sortingIcons={sortingIcons}
-				pagination={getPagination}
+				pagination={renderPagination}
 				enableRowFocusOnClick={true}
 			/>
 		);
@@ -277,14 +293,12 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 							ariaLabel={tText('Zoekbalk - aria label')}
 							placeholder={tText('Zoek op naam, ID, of slug')}
 							onChange={setSearch}
-							onSearch={(value) => {
-								setSearch(value || '');
+							onSearch={(value) =>
 								setFilters({
-									...filters,
 									[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: value || undefined,
 									page: 1,
-								});
-							}}
+								})
+							}
 						/>
 						{renderOrganisationsTable()}
 					</div>
