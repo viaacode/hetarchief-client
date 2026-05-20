@@ -1,3 +1,4 @@
+import { Permission } from '@account/const';
 import {
 	ADMIN_ORGANISATIONS_QUERY_PARAM_CONFIG,
 	OrganisationsTablePageSize,
@@ -12,6 +13,7 @@ import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.type
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
+import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table/Table.const';
@@ -301,7 +303,11 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 				relativeUrl={url}
 				canonicalUrl={canonicalUrl}
 			/>
-			{renderPageContent()}
+
+			<PermissionsCheck allPermissions={[Permission.CAN_MANAGE_ORGANISATION_SLUGS]}>
+				{renderPageContent()}
+			</PermissionsCheck>
+
 			{renderPopup({
 				title: tText('Organisatie bewerken - edit blade titel'),
 				body: renderPopupBody(),
