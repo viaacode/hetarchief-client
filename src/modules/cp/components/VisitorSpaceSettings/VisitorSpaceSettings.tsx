@@ -35,7 +35,7 @@ import type {
 } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 import clsx from 'clsx';
-import { isEqual, kebabCase } from 'lodash-es';
+import { isEqual } from 'lodash-es';
 import { useRouter } from 'next/router';
 import React, {
 	type FC,
@@ -449,7 +449,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 								value={selectedMaintainerOption}
 								onChange={async (newValue) => {
 									const value = (newValue as SingleValue<SelectOption>)?.value as string;
-									const slug = kebabCase((newValue as SingleValue<SelectOption>)?.label as string);
+									const slug = contentPartners?.find((cp) => cp.id === value)?.slug as string;
 
 									if (value !== formValues?.orId || '') {
 										updateValues?.({
