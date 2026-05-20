@@ -57,6 +57,7 @@ const FILTER_NAME_WITH_ACRONYM: [FilterProperty, string][] = [
 	[FilterProperty.PUBLISHED_AT, 'pa'],
 	[FilterProperty.PUBLISHER, 'pu'],
 	[FilterProperty.RELEASE_DATE, 'rd'],
+	[FilterProperty.RIGHTS, 'ri'],
 	[FilterProperty.SPACIAL_COVERAGE, 'sc'],
 	[FilterProperty.TEMPORAL_COVERAGE, 'tc'],
 	[FilterProperty.TITLE, 'ti'],

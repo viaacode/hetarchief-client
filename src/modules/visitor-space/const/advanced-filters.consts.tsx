@@ -8,6 +8,7 @@ import {
 import AutocompleteFieldInput, {
 	type AutocompleteFieldInputProps,
 } from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
+import { AdvancedRightsSelect } from '@visitor-space/components/AdvancedRightsSelect/AdvancedRightsSelect';
 import { DateInput } from '@visitor-space/components/DateInput';
 import type { DateInputProps } from '@visitor-space/components/DateInput/DateInput';
 import { DateRangeInput } from '@visitor-space/components/DateRangeInput';
@@ -65,6 +66,7 @@ export const ADVANCED_FILTERS: FilterProperty[] = [
 	FilterProperty.MENTIONS,
 	FilterProperty.OBJECT_TYPE,
 	FilterProperty.LOCATION_CREATED,
+	FilterProperty.RIGHTS,
 	FilterProperty.PUBLISHED_AT,
 	FilterProperty.LANGUAGE,
 	FilterProperty.TITLE,
@@ -383,6 +385,11 @@ export const FILTERS_OPTIONS_CONFIG = (): AdvancedFiltersConfig => {
 		[FilterProperty.LANGUAGE]: {
 			...EQUALS(operatorLabels, IeObjectsSearchFilterField.LANGUAGE, LanguageSelect),
 			...EQUALS_NOT(operatorLabels, IeObjectsSearchFilterField.LANGUAGE, LanguageSelect),
+		},
+
+		[FilterProperty.RIGHTS]: {
+			...EQUALS(operatorLabels, IeObjectsSearchFilterField.RIGHTS, AdvancedRightsSelect),
+			...EQUALS_NOT(operatorLabels, IeObjectsSearchFilterField.RIGHTS, AdvancedRightsSelect),
 		},
 
 		[FilterProperty.MEDIUM]: {

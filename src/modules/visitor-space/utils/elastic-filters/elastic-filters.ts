@@ -179,6 +179,14 @@ export const mapFiltersToElastic = (query: SearchPageQueryParams): IeObjectsSear
 			operator: IeObjectsSearchOperator.IS,
 			value: query[SearchFilterId.ConsultablePublicDomain] ? 'true' : '',
 		},
+		// Reusability
+		{
+			field: IeObjectsSearchFilterField.REUSABILITY,
+			operator: IeObjectsSearchOperator.IS,
+			multiValue: (compact(query[SearchFilterId.Reusability] || []) as string[]).map(
+				(value: string) => value.split(FILTER_LABEL_VALUE_DELIMITER)[0] as string
+			),
+		},
 		// Advanced
 		...(query.advanced || []).flatMap(mapAdvancedToElastic),
 	];

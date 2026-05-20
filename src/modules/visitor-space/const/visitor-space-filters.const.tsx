@@ -17,7 +17,11 @@ import { MediumFilterForm } from '@visitor-space/components/MediumFilterForm';
 import { MentionsFilterForm } from '@visitor-space/components/MentionsFilterForm/MentionsFilterForm';
 import { NewspaperSeriesNameFilterForm } from '@visitor-space/components/NewspaperSeriesNameFilterForm/NewspaperSeriesNameFilterForm';
 import { ReleaseDateFilterForm } from '@visitor-space/components/ReleaseDateFilterForm';
+import ReusabilityFilterForm from '@visitor-space/components/ReusabilityFilterForm/ReusabilityFilterForm';
 import { SearchFilterId } from '@visitor-space/types';
+import getConfig from 'next/config';
+
+const { publicRuntimeConfig } = getConfig();
 
 const ALL_TABS: SearchPageMediaType[] = [
 	SearchPageMediaType.All,
@@ -87,16 +91,6 @@ export const SEARCH_PAGE_FILTERS = (
 		},
 	},
 	{
-		id: SearchFilterId.ConsultablePublicDomain,
-		label: tText('modules/visitor-space/const/visitor-space-filters___publiek-domain'),
-		form: ConsultablePublicDomainFilterForm,
-		type: FilterMenuType.Checkbox,
-		tabs: [SearchPageMediaType.Newspaper],
-		isDisabled: () => {
-			return false;
-		},
-	},
-	{
 		id: SearchFilterId.Maintainers,
 		label: tText('modules/visitor-space/const/index___aanbieder'),
 		form: MaintainerFilterForm,
@@ -119,6 +113,28 @@ export const SEARCH_PAGE_FILTERS = (
 		form: ReleaseDateFilterForm,
 		type: FilterMenuType.Modal,
 		tabs: ALL_TABS,
+	},
+	{
+		id: SearchFilterId.ConsultablePublicDomain,
+		label: tText('modules/visitor-space/const/visitor-space-filters___publiek-domain'),
+		form: ConsultablePublicDomainFilterForm,
+		type: FilterMenuType.Checkbox,
+		tabs: ALL_TABS,
+		isDisabled: () => {
+			return !isGlobalArchive || !isKeyUser;
+		},
+	},
+	{
+		id: SearchFilterId.Reusability,
+		label: tText('modules/visitor-space/const/visitor-space-filters___herbruikbaarheid'),
+		form: ReusabilityFilterForm,
+		type: FilterMenuType.Modal,
+		tabs: ALL_TABS,
+		isDisabled: () => {
+			const rightsFiltersForEverybody =
+				publicRuntimeConfig.ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY === 'true';
+			return !rightsFiltersForEverybody && !isKeyUser;
+		},
 	},
 	{
 		id: SearchFilterId.LocationCreated,
