@@ -1,3 +1,4 @@
+import { Permission } from '@account/const';
 import {
 	ADMIN_ORGANISATIONS_QUERY_PARAM_CONFIG,
 	OrganisationsTablePageSize,
@@ -11,6 +12,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
+import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table/Table.const';
@@ -72,8 +74,7 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 				description: tText('De organisatie is succesvol bijgewerkt. - success toast'),
 			});
 
-			setActiveOrganisation(null);
-			setEditedSlug('');
+			closeBlade();
 		} catch (_err) {
 			toastService.notify({
 				title: tText('Er ging iets mis - error toast'),
@@ -204,12 +205,12 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 		);
 	};
 
-	const renderBlade = () => {
-		const closeBlade = () => {
-			setActiveOrganisation(null);
-			setEditedSlug('');
-		};
+	const closeBlade = () => {
+		setActiveOrganisation(null);
+		setEditedSlug('');
+	};
 
+	const renderBlade = () => {
 		const getFooterButtons = (): BladeFooterButtonProps => {
 			return [
 				{
@@ -237,29 +238,25 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 				ariaLabel={tText('Organisatie bewerken - blade aria label')}
 			>
 				<div className="c-organisations-blade__content">
-					{activeOrganisation && (
-						<>
-							<div className="c-organisations-blade__field">
-								<strong>{tText('Organisatie - edit blade')}:</strong> {activeOrganisation.name}
-							</div>
-							<div className="c-organisations-blade__field">
-								<strong>{tText('Organisatie ID - edit blade')}:</strong>{' '}
-								{activeOrganisation.org_identifier}
-							</div>
-							<div>
-								<label htmlFor="slug-input" className="c-organisations-blade__label">
-									<strong>{tText('Slug - edit blade')}:</strong>
-								</label>
-								<TextArea
-									id="slug-input"
-									className="c-organisations-blade__textarea"
-									ariaLabel={tText('Organisatie slug input - edit blade')}
-									value={editedSlug}
-									onChange={(e) => setEditedSlug(e.target.value)}
-								/>
-							</div>
-						</>
-					)}
+					<div className="c-organisations-blade__field">
+						<strong>{tText('Organisatie - edit blade')}:</strong> {activeOrganisation?.name}
+					</div>
+					<div className="c-organisations-blade__field">
+						<strong>{tText('Organisatie ID - edit blade')}:</strong>{' '}
+						{activeOrganisation?.org_identifier}
+					</div>
+					<div>
+						<label htmlFor="slug-input" className="c-organisations-blade__label">
+							<strong>{tText('Slug - edit blade')}:</strong>
+						</label>
+						<TextArea
+							id="slug-input"
+							className="c-organisations-blade__textarea"
+							ariaLabel={tText('Organisatie slug input - edit blade')}
+							value={editedSlug}
+							onChange={(e) => setEditedSlug(e.target.value)}
+						/>
+					</div>
 				</div>
 			</Blade>
 		);
@@ -302,11 +299,12 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 				canonicalUrl={canonicalUrl}
 			/>
 
-			{/* <PermissionsCheck allPermissions={[Permission.CAN_MANAGE_ORGANISATION_SLUGS]}> */}
-			{renderPageContent()}
-			{/* </PermissionsCheck> */}
-
-			{renderBlade()}
+			<PermissionsCheck allPermissions={[Permission.CAN_MANAGE_ORGANISATION_SLUGS]}>
+				<div>
+					{renderPageContent()}
+					{renderBlade()}
+				</div>
+			</PermissionsCheck>
 		</>
 	);
 };
