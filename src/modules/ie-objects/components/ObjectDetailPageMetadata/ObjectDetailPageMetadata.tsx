@@ -54,7 +54,9 @@ import {
 	getIeObjectAvRightsLabel,
 	getIeObjectAvRightsUrl,
 } from '@ie-objects/utils/get-ie-object-av-rights-icon';
+import { getIeObjectProviderIdentifierLinkProps } from '@ie-objects/utils/get-ie-object-provider-identifier-link-props';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
+import { getIeObjectSourceAttribution } from '@ie-objects/utils/get-ie-object-source-attribution';
 import {
 	mapArrayToMetadataData,
 	mapObjectOrArrayToMetadata,
@@ -71,6 +73,9 @@ import {
 	DropdownButton,
 	DropdownContent,
 	MenuContent,
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
 } from '@meemoo/react-components';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { Blade } from '@shared/components/Blade/Blade';
@@ -107,6 +112,7 @@ import {
 	Operator,
 	SearchFilterId,
 } from '@visitor-space/types';
+import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import clsx from 'clsx';
 import { compact, indexOf, isEmpty, isNil, isString, noop, sortBy } from 'lodash-es';
 import getConfig from 'next/config';
@@ -747,6 +753,29 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		return mediaInfo.collectionName;
 	};
 
+	const renderProviderIdentifier = (mediaInfo: IeObject): ReactNode => {
+		const linkProps = getIeObjectProviderIdentifierLinkProps(mediaInfo, isKiosk);
+
+		if (!linkProps) {
+			return null;
+		}
+
+		if (!linkProps.href) {
+			return linkProps.label;
+		}
+
+		return (
+			<a
+				className={styles['p-object-detail__provider-identifier-link']}
+				href={linkProps.href}
+				target="_blank"
+				rel="noreferrer"
+			>
+				{linkProps.label}
+			</a>
+		);
+	};
+
 	const renderPreviousButton = (enabled: boolean) => {
 		const previousButtonIcon = <Icon name={IconNamesLight.ArrowLeft} aria-hidden />;
 		const previousButtonLabel = tText(
@@ -854,21 +883,28 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		const rightsMoreInfoTitle = tText(
 			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
 		);
-		let rightsAttributionText: string | null = null;
-		if (
-			isNewspaper &&
-			mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) &&
-			rightsStatusInfo
-		) {
-			// https://meemoo.atlassian.net/browse/ARC-3165
-			rightsAttributionText = compact([
-				mediaInfo.name,
-				mediaInfo.dateCreated,
-				mediaInfo.maintainerName,
-				rightsStatusInfo.label,
-				'hetarchief.be',
-			]).join(', ');
-		}
+		const rightsAttributionText = getIeObjectSourceAttribution(mediaInfo, locale);
+		const sourceAttributionDisclaimer = tHtml(
+			'modules/ie-objects/object-detail-page___deze-bronvermelding-is-automatisch-gegenereerd-en-kan-fouten-bevatten-a-href-bronvermelding-fouten-meer-info-a'
+		);
+		const renderSourceAttributionDisclaimerTooltip = () => (
+			<NoServerSideRendering>
+				<Tooltip position="top" offset={10}>
+					<TooltipTrigger>
+						<button
+							type="button"
+							className={styles['p-object-detail__source-attribution-info']}
+							aria-label={tText(
+								'modules/ie-objects/object-detail-page___deze-bronvermelding-is-automatisch-gegenereerd-en-kan-fouten-bevatten-a-href-bronvermelding-fouten-meer-info-a'
+							)}
+						>
+							<Icon name={IconNamesLight.Info} aria-hidden />
+						</button>
+					</TooltipTrigger>
+					<TooltipContent>{sourceAttributionDisclaimer}</TooltipContent>
+				</Tooltip>
+			</NoServerSideRendering>
+		);
 
 		return (
 			<div className={styles['p-object-detail__metadata-wrapper']}>
@@ -889,29 +925,23 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					{renderMetaDataActions()}
 
 					{!!rightsAttributionText && (
-						<>
-							<Alert
-								content={tHtml(
-									'modules/ie-objects/object-detail-page___deze-bronvermelding-is-automatisch-gegenereerd-en-kan-fouten-bevatten-a-href-bronvermelding-fouten-meer-info-a'
-								)}
-							/>
-							<Metadata
-								title={tHtml('modules/ie-objects/object-detail-page___bronvermelding')}
-								key="metadata-source-attribution"
-								renderRight={
-									<CopyButton
-										text={rightsAttributionText}
-										title={tText(
-											'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___kopieer-de-bronvermelding-naar-je-klembord'
-										)}
-										variants={['white']}
-									/>
-								}
-								className="u-bt-0"
-							>
-								<span>{rightsAttributionText}</span>
-							</Metadata>
-						</>
+						<Metadata
+							title={tHtml('modules/ie-objects/object-detail-page___bronvermelding')}
+							key="metadata-source-attribution"
+							renderedTitleRight={renderSourceAttributionDisclaimerTooltip()}
+							renderRight={
+								<CopyButton
+									text={rightsAttributionText}
+									title={tText(
+										'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___kopieer-de-bronvermelding-naar-je-klembord'
+									)}
+									variants={['white']}
+								/>
+							}
+							className="u-bt-0"
+						>
+							<span>{rightsAttributionText}</span>
+						</Metadata>
 					)}
 
 					<MetaDataFieldWithHighlightingAndMaxLength
@@ -977,7 +1007,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							moreInfoTitle={rightsMoreInfoTitle}
 							copyrightHolder={mediaInfo.copyrightHolder}
 							copyrightHolderLabel={tText('modules/ie-objects/ie-objects___rechthebbende')}
-							licenseDistributor={avRightsInfo.licenseDistributor}
+							licenseDistributor={avRightsInfo.licenseDistributor || undefined}
 							licenseDistributorLabel={tText('modules/ie-objects/ie-objects___licentiegever')}
 						/>
 					)}
@@ -1011,7 +1041,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___identifier-bij-aanbieder'),
-						mediaInfo.meemooLocalId
+						renderProviderIdentifier(mediaInfo)
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___editie-nummer'),
@@ -1181,7 +1211,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___bronvermelding'),
-						mediaInfo?.creditText
+						rightsAttributionText ? undefined : mediaInfo?.creditText
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___paginanummer'),
