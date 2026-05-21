@@ -51,11 +51,36 @@ describe('getIeObjectAvRightsIcon', () => {
 		expect(container).toHaveTextContent('copyright-public-domain');
 	});
 
+	it('uses the rights URL lookup for labels and icons', () => {
+		const rightsInfo = {
+			reuseLabel: 'Creative Commons',
+			reuseCategoryUrl: 'https://creativecommons.org/publicdomain/zero/1.0/',
+		};
+		const { container } = render(getIeObjectAvRightsIcon(rightsInfo));
+
+		expect(container).toHaveTextContent('copyright-public-domain');
+		expect(getIeObjectAvRightsLabel(rightsInfo)).toBe('CC0');
+	});
+
 	it('returns no icon when no rights information is available', () => {
 		const { container } = render(
 			getIeObjectAvRightsIcon({ reuseLabel: 'geen rechteninformatie beschikbaar' })
 		);
 
 		expect(container).toBeEmptyDOMElement();
+	});
+
+	it('handles missing rights info in the helper functions', () => {
+		const { container } = render(getIeObjectAvRightsIcon(undefined));
+
+		expect(container).toBeEmptyDOMElement();
+		expect(getIeObjectAvRightsLabel(undefined)).toBeNull();
+		expect(getIeObjectAvRightsUrl(undefined)).toBeUndefined();
+	});
+
+	it('detects missing rights info case-insensitively', () => {
+		expect(
+			getIeObjectAvRightsUrl({ reuseLabel: 'Geen rechteninformatie beschikbaar' })
+		).toBeUndefined();
 	});
 });
