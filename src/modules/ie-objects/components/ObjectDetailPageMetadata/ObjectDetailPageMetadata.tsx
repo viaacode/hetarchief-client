@@ -848,9 +848,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		const avRightsInfo = AV_OBJECT_TYPES.includes(mediaInfo.dctermsFormat)
 			? mediaInfo.rightsInfo
 			: null;
-		const avRightsIcon = avRightsInfo ? getIeObjectAvRightsIcon(avRightsInfo) : null;
-		const avRightsLabel = avRightsInfo ? getIeObjectAvRightsLabel(avRightsInfo) : null;
-		const avRightsUrl = avRightsInfo ? getIeObjectAvRightsUrl(avRightsInfo) : undefined;
+		const avRightsIcon = getIeObjectAvRightsIcon(avRightsInfo);
+		const avRightsLabel = getIeObjectAvRightsLabel(avRightsInfo);
+		const avRightsUrl = getIeObjectAvRightsUrl(avRightsInfo);
 		const rightsMoreInfoTitle = tText(
 			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
 		);
