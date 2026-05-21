@@ -1,12 +1,9 @@
-import { Permission } from '@account/const';
 import {
 	ADMIN_ORGANISATIONS_QUERY_PARAM_CONFIG,
 	OrganisationsTablePageSize,
 } from '@admin/const/Organisations.const';
 import { useGetOrganisations } from '@admin/hooks/get-organisations';
 import { AdminLayout } from '@admin/layouts';
-import { OrganisationsService } from '@admin/services/organisations';
-import type { Organisation } from '@admin/views/organisations/organisations.types';
 import { Button, PaginationBar, Table, TextArea } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
@@ -14,12 +11,13 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
-import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SearchBar } from '@shared/components/SearchBar';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table/Table.const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
+import { OrganisationService } from '@shared/services/organisation-service/organisation.service';
+import type { OrganisationListItem } from '@shared/services/organisation-service/organisation.types';
 import { toastService } from '@shared/services/toast-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import type { SearchOrderDirection } from '@viaa/avo2-types/dist/modules/search';
@@ -28,7 +26,7 @@ import type { Column, Row, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
-	const [activeOrganisation, setActiveOrganisation] = useState<Organisation | null>(null);
+	const [activeOrganisation, setActiveOrganisation] = useState<OrganisationListItem | null>(null);
 	const [editedSlug, setEditedSlug] = useState<string>('');
 
 	const [filters, setFilters] = useQueryParams(ADMIN_ORGANISATIONS_QUERY_PARAM_CONFIG);
@@ -42,7 +40,7 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 		query: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || undefined,
 		page: filters.page,
 		size: OrganisationsTablePageSize,
-		orderProp: filters.orderProp as keyof Organisation | undefined,
+		orderProp: filters.orderProp as keyof OrganisationListItem | undefined,
 		orderDirection: filters.orderDirection,
 	});
 
@@ -63,7 +61,7 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 		}
 
 		try {
-			await OrganisationsService.update(activeOrganisation.org_identifier, {
+			await OrganisationService.update(activeOrganisation.org_identifier, {
 				slug: editedSlug,
 			});
 
@@ -126,48 +124,45 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 		[setFilters]
 	);
 
-	const handleEditButtonClicked = useCallback((organisation: Organisation) => {
+	const handleEditButtonClicked = (organisation: OrganisationListItem) => {
 		setActiveOrganisation(organisation);
 		setEditedSlug(organisation.slug);
-	}, []);
+	};
 
-	const organisationsTableColumns: Column<Organisation>[] = useMemo(
-		() => [
-			{
-				id: 'name',
-				Header: tText('Organisatie naam - table header'),
-				accessor: 'name',
+	const organisationsTableColumns: Column<OrganisationListItem>[] = [
+		{
+			id: 'name',
+			Header: tText('Organisatie naam - table header'),
+			accessor: 'name',
+		},
+		{
+			id: 'id',
+			Header: tText('Organisatie ID - table header'),
+			accessor: 'org_identifier',
+		},
+		{
+			id: 'slug',
+			Header: tText('Slug - table header'),
+			accessor: 'slug',
+		},
+		{
+			Header: '',
+			id: 'actions',
+			Cell: ({ row }: { row: Row<OrganisationListItem> }): ReactElement => {
+				const organisation = row.original;
+				return (
+					<div className="c-organisations-table__actions">
+						<Button
+							variants={['text', 'icon']}
+							icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
+							aria-label={tText('edit organisatie - aria label')}
+							onClick={() => handleEditButtonClicked(organisation)}
+						/>
+					</div>
+				);
 			},
-			{
-				id: 'id',
-				Header: tText('Organisatie ID - table header'),
-				accessor: 'org_identifier',
-			},
-			{
-				id: 'slug',
-				Header: tText('Slug - table header'),
-				accessor: 'slug',
-			},
-			{
-				Header: '',
-				id: 'actions',
-				Cell: ({ row }: { row: Row<Organisation> }): ReactElement => {
-					const organisation = row.original;
-					return (
-						<div className="c-organisations-table__actions">
-							<Button
-								variants={['text', 'icon']}
-								icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
-								aria-label={tText('edit organisatie - aria label')}
-								onClick={() => handleEditButtonClicked(organisation)}
-							/>
-						</div>
-					);
-				},
-			},
-		],
-		[handleEditButtonClicked]
-	);
+		},
+	];
 
 	const renderPagination = ({ gotoPage }: { gotoPage: (i: number) => void }): ReactNode => (
 		<PaginationBar
@@ -192,14 +187,14 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 			);
 		}
 		return (
-			<Table<Organisation>
+			<Table<OrganisationListItem>
 				options={{
 					columns: organisationsTableColumns,
 					data: organisations,
 					initialState: {
 						pageSize: OrganisationsTablePageSize,
 						sortBy: sortFilters,
-					} as TableState<Organisation>,
+					} as TableState<OrganisationListItem>,
 				}}
 				onSortChange={onSortChange}
 				sortingIcons={sortingIcons}
@@ -209,62 +204,25 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 		);
 	};
 
-	const renderPopupBody = () => {
-		if (!activeOrganisation) {
-			return null;
-		}
+	const renderBlade = () => {
+		const closeBlade = () => {
+			setActiveOrganisation(null);
+			setEditedSlug('');
+		};
 
-		return (
-			<>
-				<div className="c-organisations-blade__field">
-					<strong>{tText('Organisatie - edit blade')}:</strong> {activeOrganisation.name}
-				</div>
-				<div className="c-organisations-blade__field">
-					<strong>{tText('Organisatie ID - edit blade')}:</strong>{' '}
-					{activeOrganisation.org_identifier}
-				</div>
-				<div>
-					<label htmlFor="slug-input" className="c-organisations-blade__label">
-						<strong>{tText('Slug - edit blade')}:</strong>
-					</label>
-					<TextArea
-						id="slug-input"
-						className="c-organisations-blade__textarea"
-						ariaLabel={tText('Organisatie slug input - edit blade')}
-						value={editedSlug}
-						onChange={(e) => setEditedSlug(e.target.value)}
-					/>
-				</div>
-			</>
-		);
-	};
-
-	const renderPopup = ({
-		title,
-		body,
-		isOpen,
-		onSave,
-		onClose,
-	}: {
-		title: string;
-		body: ReactNode;
-		isOpen: boolean;
-		onSave: () => void;
-		onClose: () => void;
-	}) => {
 		const getFooterButtons = (): BladeFooterButtonProps => {
 			return [
 				{
 					label: tText('Bewaar wijzigingen - org edit blade'),
 					mobileLabel: tText('Bewaar wijzigingen - org edit blade - mobile'),
 					type: 'primary',
-					onClick: onSave,
+					onClick: saveActiveOrganisation,
 				},
 				{
 					label: tText('Annuleer - org edit blade'),
 					mobileLabel: tText('Annuleer - org edit blade - mobile'),
 					type: 'secondary',
-					onClick: onClose,
+					onClick: closeBlade,
 				},
 			];
 		};
@@ -272,13 +230,37 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 		return (
 			<Blade
 				footerButtons={getFooterButtons()}
-				isOpen={isOpen}
-				onClose={onClose}
-				title={title}
+				isOpen={!!activeOrganisation}
+				onClose={closeBlade}
+				title={tText('Organisatie bewerken - edit blade titel')}
 				id="organisations-blade"
 				ariaLabel={tText('Organisatie bewerken - blade aria label')}
 			>
-				<div className="c-organisations-blade__content">{body}</div>
+				<div className="c-organisations-blade__content">
+					{activeOrganisation && (
+						<>
+							<div className="c-organisations-blade__field">
+								<strong>{tText('Organisatie - edit blade')}:</strong> {activeOrganisation.name}
+							</div>
+							<div className="c-organisations-blade__field">
+								<strong>{tText('Organisatie ID - edit blade')}:</strong>{' '}
+								{activeOrganisation.org_identifier}
+							</div>
+							<div>
+								<label htmlFor="slug-input" className="c-organisations-blade__label">
+									<strong>{tText('Slug - edit blade')}:</strong>
+								</label>
+								<TextArea
+									id="slug-input"
+									className="c-organisations-blade__textarea"
+									ariaLabel={tText('Organisatie slug input - edit blade')}
+									value={editedSlug}
+									onChange={(e) => setEditedSlug(e.target.value)}
+								/>
+							</div>
+						</>
+					)}
+				</div>
 			</Blade>
 		);
 	};
@@ -320,20 +302,11 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 				canonicalUrl={canonicalUrl}
 			/>
 
-			<PermissionsCheck allPermissions={[Permission.CAN_MANAGE_ORGANISATION_SLUGS]}>
-				{renderPageContent()}
-			</PermissionsCheck>
+			{/* <PermissionsCheck allPermissions={[Permission.CAN_MANAGE_ORGANISATION_SLUGS]}> */}
+			{renderPageContent()}
+			{/* </PermissionsCheck> */}
 
-			{renderPopup({
-				title: tText('Organisatie bewerken - edit blade titel'),
-				body: renderPopupBody(),
-				isOpen: !!activeOrganisation,
-				onSave: saveActiveOrganisation,
-				onClose: () => {
-					setActiveOrganisation(null);
-					setEditedSlug('');
-				},
-			})}
+			{renderBlade()}
 		</>
 	);
 };

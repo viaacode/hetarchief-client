@@ -1,17 +1,19 @@
-import type { Organisation } from '@admin/views/organisations/organisations.types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
+import { OrganisationService } from '@shared/services/organisation-service/organisation.service';
+import type {
+	GetOrganisationsProps,
+	OrganisationListItem,
+} from '@shared/services/organisation-service/organisation.types';
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { keepPreviousData, type UseQueryResult, useQuery } from '@tanstack/react-query';
-
-import { type GetOrganisationsProps, OrganisationsService } from '../services/organisations';
 
 export const useGetOrganisations = (
 	props: GetOrganisationsProps,
 	enabled: boolean = true
-): UseQueryResult<IPagination<Organisation>> =>
+): UseQueryResult<IPagination<OrganisationListItem>> =>
 	useQuery({
 		queryKey: [QUERY_KEYS.getOrganisations, props],
-		queryFn: () => OrganisationsService.getAll(props),
+		queryFn: () => OrganisationService.getAll(props),
 		placeholderData: keepPreviousData,
 		enabled,
 	});

@@ -39,7 +39,7 @@ export const ADMIN_NAVIGATION_LINKS = (locale: Locale): AdminNavigationLink[] =>
 	{
 		id: 'organisations-admin',
 		label: 'Organisaties',
-		href: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].organisations}`,
+		href: ROUTES_BY_LOCALE[locale].adminOrganisations,
 	},
 	{
 		id: 'users-admin',
