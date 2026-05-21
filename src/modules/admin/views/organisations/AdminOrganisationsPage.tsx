@@ -67,7 +67,7 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 				slug: editedSlug,
 			});
 
-			await refetchOrganisations();
+			refetchOrganisations();
 
 			toastService.notify({
 				title: tText('Organisatie bijgewerkt - success toast'),
@@ -300,10 +300,10 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 			/>
 
 			<PermissionsCheck allPermissions={[Permission.CAN_MANAGE_ORGANISATION_SLUGS]}>
-				<div>
+				<>
 					{renderPageContent()}
 					{renderBlade()}
-				</div>
+				</>
 			</PermissionsCheck>
 		</>
 	);
