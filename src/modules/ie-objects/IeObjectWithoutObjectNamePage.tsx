@@ -36,7 +36,7 @@ export const IeObjectWithoutObjectNamePage: FC<MaintainerSearchPageProps> = () =
 			const parsedUrl = parseUrl(window.location.href);
 			const objectTitleSlug = kebabCase(ieObjectInfo?.name || '');
 			const searchUrl = stringifyUrl({
-				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${ieObjectInfo?.maintainerSlug || slug}/${schemaIdentifier}/${objectTitleSlug || 'titel'}`,
+				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${ieObjectInfo?.maintainerSlug || slug}/${ieObjectInfo?.schemaIdentifier || schemaIdentifier}/${objectTitleSlug || 'titel'}`,
 				query: parsedUrl.query,
 			});
 
