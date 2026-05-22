@@ -67,7 +67,7 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 				slug: editedSlug,
 			});
 
-			refetchOrganisations();
+			refetchOrganisations().then(noop);
 
 			toastService.notify({
 				title: tText('Organisatie bijgewerkt - success toast'),
