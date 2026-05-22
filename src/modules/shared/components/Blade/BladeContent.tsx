@@ -202,13 +202,8 @@ export const BladeContent: FC<BladeContentProps> = ({
 					variants={buttonConfig.variants}
 					onClick={() => buttonConfig.onClick?.()}
 					disabled={buttonConfig.disabled}
-					iconStart={
-						buttonConfig.showSpinner ? (
-							<Spinner />
-						) : buttonConfig.icon ? (
-							<Icon name={buttonConfig.icon} aria-hidden />
-						) : undefined
-					}
+					iconStart={buttonConfig.icon ? <Icon name={buttonConfig.icon} aria-hidden /> : undefined}
+					iconEnd={buttonConfig.showSpinner ? <Spinner size={16} /> : undefined}
 					tabIndex={isWrappedInLink ? -1 : undefined}
 				/>
 			);
