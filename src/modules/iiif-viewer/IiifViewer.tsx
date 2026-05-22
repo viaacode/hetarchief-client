@@ -942,8 +942,7 @@ export const IiifViewer = ({
 								className={activeImageIndex === index ? 'active' : ''}
 							>
 								{imageInfo.thumbnailUrl ? (
-									// biome-ignore lint/performance/noImgElement: thumbnail in scroll list should not use Next image (image gets stretched)
-									<img
+									<Image
 										src={imageInfo.thumbnailUrl}
 										alt={tText(
 											'modules/iiif-viewer/iiif-viewer___go-to-newspaper-page-page-number-alt-label',
