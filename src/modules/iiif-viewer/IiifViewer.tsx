@@ -24,6 +24,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
+import { useSize } from '@shared/hooks/use-size';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { isBrowser, isServerSideRendering } from '@shared/utils/is-browser';
@@ -35,12 +36,9 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import type { TiledImageOptions, TileSource, Viewer } from 'openseadragon';
 import { parseUrl } from 'query-string';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-
 import styles from './IiifViewer.module.scss';
-import 'react-perfect-scrollbar/dist/css/styles.css';
-import { useSize } from '@shared/hooks/use-size';
 
 export const IiifViewer = ({
 	imageInfosWithTokens,
@@ -944,7 +942,8 @@ export const IiifViewer = ({
 								className={activeImageIndex === index ? 'active' : ''}
 							>
 								{imageInfo.thumbnailUrl ? (
-									<Image
+									// biome-ignore lint/performance/noImgElement: thumbnail in scroll list should not use Next image (image gets stretched)
+									<img
 										src={imageInfo.thumbnailUrl}
 										alt={tText(
 											'modules/iiif-viewer/iiif-viewer___go-to-newspaper-page-page-number-alt-label',
@@ -952,7 +951,6 @@ export const IiifViewer = ({
 												pageNumber: index + 1,
 											}
 										)}
-										fill
 									/>
 								) : (
 									<div
