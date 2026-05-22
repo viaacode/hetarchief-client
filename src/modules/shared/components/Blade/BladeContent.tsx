@@ -3,6 +3,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import warningStyles from '@shared/components/RedFormWarning/RedFormWarning.module.scss';
+import { Spinner } from '@shared/components/Spinner/Spinner';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useSize } from '@shared/hooks/use-size';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
@@ -201,7 +202,13 @@ export const BladeContent: FC<BladeContentProps> = ({
 					variants={buttonConfig.variants}
 					onClick={() => buttonConfig.onClick?.()}
 					disabled={buttonConfig.disabled}
-					iconStart={buttonConfig.icon && <Icon name={buttonConfig.icon} aria-hidden />}
+					iconStart={
+						buttonConfig.showSpinner ? (
+							<Spinner />
+						) : buttonConfig.icon ? (
+							<Icon name={buttonConfig.icon} aria-hidden />
+						) : undefined
+					}
 					tabIndex={isWrappedInLink ? -1 : undefined}
 				/>
 			);
