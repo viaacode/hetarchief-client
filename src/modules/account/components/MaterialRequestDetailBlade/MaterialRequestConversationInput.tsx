@@ -177,6 +177,7 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 							maxHeight: '150px',
 							overflowY: 'auto',
 						},
+						stripPastedStyles: true,
 						// @ts-expect-error: This method does exists on the braft editor so ts-ignoring this to get the error gone
 						keyBindingFn: (evt: KeyboardEvent) => {
 							if (evt.ctrlKey || evt.shiftKey || evt.altKey || evt.metaKey) {
