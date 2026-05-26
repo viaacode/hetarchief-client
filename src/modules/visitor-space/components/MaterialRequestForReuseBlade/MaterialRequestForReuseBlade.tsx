@@ -481,6 +481,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 						locationId="material request re-uage blade"
 						representation={materialRequest.objectRepresentation}
 						dctermsFormat={materialRequest.objectDctermsFormat}
+						schemaIdentifier={materialRequest.objectSchemaIdentifier}
 						maintainerLogo={
 							materialRequest?.maintainerLogo ? materialRequest.maintainerLogo : undefined
 						}

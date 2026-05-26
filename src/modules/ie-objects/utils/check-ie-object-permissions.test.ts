@@ -3719,3 +3719,20 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		});
 	});
 });
+
+describe('checkIeObjectPermissions AV download guard', () => {
+	it('never allows essence downloads for non-newspapers, even with public-content and download permission', () => {
+		const result = checkIeObjectPermissions({
+			isNewspaper: false,
+			hasLicensePublicDomainOrCopyrightUndetermined: true,
+			hasLicensePublicContent: true,
+			hasLicenseVisitorToolMetadataAllOrContent: true,
+			hasAccessToVisitorSpace: true,
+			hasPermissionExportObject: true,
+			hasPermissionDownloadObject: true,
+			isLoggedOutUser: false,
+		});
+
+		expect(result.canDownloadEssence).toEqual(false);
+	});
+});

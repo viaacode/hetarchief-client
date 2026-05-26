@@ -1,6 +1,5 @@
-import type { QueryParamConfig } from 'use-query-params';
-
 import { TEMP_FILTER_KEY_PREFIX } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import type { QueryParamConfig } from 'use-query-params';
 import { v4 as uuidV4 } from 'uuid';
 import { type AdvancedFilter, FilterProperty, Operator } from '../types';
 
@@ -57,6 +56,7 @@ const FILTER_NAME_WITH_ACRONYM: [FilterProperty, string][] = [
 	[FilterProperty.PUBLISHED_AT, 'pa'],
 	[FilterProperty.PUBLISHER, 'pu'],
 	[FilterProperty.RELEASE_DATE, 'rd'],
+	[FilterProperty.RIGHTS, 'ri'],
 	[FilterProperty.SPACIAL_COVERAGE, 'sc'],
 	[FilterProperty.TEMPORAL_COVERAGE, 'tc'],
 	[FilterProperty.TITLE, 'ti'],

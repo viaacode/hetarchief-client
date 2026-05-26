@@ -23,6 +23,7 @@ import type { OrganisationListItem } from '@shared/services/organisation-service
 import { toastService } from '@shared/services/toast-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import type { SearchOrderDirection } from '@viaa/avo2-types/dist/modules/search';
+import { noop } from 'lodash-es';
 import { type FC, type ReactElement, type ReactNode, useCallback, useMemo, useState } from 'react';
 import type { Column, Row, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';

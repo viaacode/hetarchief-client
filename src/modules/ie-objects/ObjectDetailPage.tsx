@@ -359,6 +359,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const { data: ticketServiceTokensByPath, isLoading: isLoadingTickets } =
 		useGetIeObjectTicketServiceTokens(
 			iiifViewerImageInfos.map((imageInfo) => imageInfo.imageUrl),
+			mediaInfo?.schemaIdentifier,
 			{
 				enabled: iiifViewerImageInfos.length > 0,
 			}
@@ -1441,6 +1442,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				locationId="object detail page"
 				representation={getRepresentationByCurrentFileIndex()}
 				dctermsFormat={mediaInfo.dctermsFormat}
+				schemaIdentifier={mediaInfo.schemaIdentifier}
 				maintainerLogo={mediaInfo?.maintainerOverlay ? mediaInfo.maintainerLogo : undefined}
 				cuePoints={cuePoints}
 				poster={undefined}

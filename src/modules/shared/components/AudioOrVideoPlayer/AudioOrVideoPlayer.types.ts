@@ -15,6 +15,7 @@ export type AudioOrVideoPlayerProps = {
 	onMediaReady: (isAvailable: boolean, playableFile: IeObjectFile | null) => void;
 	onMediaDurationLoaded?: (duration: number) => void;
 	dctermsFormat: IeObjectType | null;
+	schemaIdentifier: string | undefined;
 	representation: IeObjectRepresentation | null | undefined;
 	maintainerLogo: string | null | undefined;
 	cuePoints: CuePoints | undefined;

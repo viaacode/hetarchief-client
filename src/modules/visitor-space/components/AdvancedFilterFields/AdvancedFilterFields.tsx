@@ -13,6 +13,7 @@ import { SEPARATOR } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { AdvancedFilterFieldsProps } from '@visitor-space/components/AdvancedFilterFields/AdvancedFilterFields.types';
+import { AdvancedRightsSelect } from '@visitor-space/components/AdvancedRightsSelect/AdvancedRightsSelect';
 import AutocompleteFieldInput, {
 	type AutocompleteFieldInputProps,
 } from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
@@ -178,19 +179,22 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			}
 
 			case ReactSelect:
+			case AdvancedRightsSelect:
 			case MediaTypeSelect:
 			case GenreSelect:
 			case MediumSelect:
 			case ObjectTypeSelect: {
 				const SelectComponent = filterConfig.inputComponent as FC<ReactSelectProps>;
 				const selectComponentProps = filterConfig.inputComponentProps as ReactSelectProps;
+				const selectedValue = getSelectValue(
+					((props as ReactSelectProps).options || []) as SelectOption[],
+					filterValue.val
+				);
 				const value =
-					getSelectValue(
-						((props as ReactSelectProps).options || []) as SelectOption[],
-						filterValue.val
-					) || filterValue.val
+					selectedValue ||
+					(filterValue.val
 						? { label: filterValue.val as string, value: filterValue.val as string }
-						: undefined;
+						: undefined);
 
 				return (
 					<SelectComponent

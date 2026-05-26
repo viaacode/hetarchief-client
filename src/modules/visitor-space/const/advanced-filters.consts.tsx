@@ -5,6 +5,7 @@ import {
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
 } from '@shared/types/ie-objects';
+import { AdvancedRightsSelect } from '@visitor-space/components/AdvancedRightsSelect/AdvancedRightsSelect';
 import AutocompleteFieldInput, {
 	type AutocompleteFieldInputProps,
 } from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
@@ -65,6 +66,7 @@ export const ADVANCED_FILTERS: FilterProperty[] = [
 	FilterProperty.MENTIONS,
 	FilterProperty.OBJECT_TYPE,
 	FilterProperty.LOCATION_CREATED,
+	FilterProperty.RIGHTS,
 	FilterProperty.PUBLISHED_AT,
 	FilterProperty.LANGUAGE,
 	FilterProperty.TITLE,
@@ -383,6 +385,11 @@ export const FILTERS_OPTIONS_CONFIG = (): AdvancedFiltersConfig => {
 		[FilterProperty.LANGUAGE]: {
 			...EQUALS(operatorLabels, IeObjectsSearchFilterField.LANGUAGE, LanguageSelect),
 			...EQUALS_NOT(operatorLabels, IeObjectsSearchFilterField.LANGUAGE, LanguageSelect),
+		},
+
+		[FilterProperty.RIGHTS]: {
+			...EQUALS(operatorLabels, IeObjectsSearchFilterField.RIGHTS, AdvancedRightsSelect),
+			...EQUALS_NOT(operatorLabels, IeObjectsSearchFilterField.RIGHTS, AdvancedRightsSelect),
 		},
 
 		[FilterProperty.MEDIUM]: {

@@ -141,7 +141,10 @@ export class IeObjectsService {
 			.json();
 	}
 
-	public static async getPlayableUrl(fileStoredAt: string | null): Promise<string | null> {
+	public static async getPlayableUrl(
+		fileStoredAt: string | null,
+		schemaIdentifier: string
+	): Promise<string | null> {
 		if (!fileStoredAt) {
 			return null;
 		}
@@ -153,6 +156,7 @@ export class IeObjectsService {
 				stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_TICKET_URL}`,
 					query: {
+						schemaIdentifier,
 						browsePath: fileStoredAtWithoutTimeCodes,
 					},
 				})
@@ -170,12 +174,16 @@ export class IeObjectsService {
 		});
 	}
 
-	public static async getTicketServiceTokens(filePaths: string[]): Promise<string[]> {
+	public static async getTicketServiceTokens(
+		filePaths: string[],
+		schemaIdentifier: string
+	): Promise<string[]> {
 		const tokens = await ApiService.getApi()
 			.get(
 				stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_TICKET_SERVICE_URL}`,
 					query: {
+						schemaIdentifier,
 						filePaths,
 					},
 				})

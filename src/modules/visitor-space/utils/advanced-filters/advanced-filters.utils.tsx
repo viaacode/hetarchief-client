@@ -1,12 +1,11 @@
-import { sortBy } from 'lodash-es';
-
 import { tText } from '@shared/helpers/translate';
 import {
 	ADVANCED_FILTERS,
-	type FilterConfig,
 	FILTERS_OPTIONS_CONFIG,
+	type FilterConfig,
 	REGULAR_FILTERS,
 } from '@visitor-space/const/advanced-filters.consts';
+import { sortBy } from 'lodash-es';
 
 import {
 	FilterProperty,
@@ -104,6 +103,9 @@ export const getFilterLabel = (prop: FilterProperty): string => {
 			),
 			[FilterProperty.PUBLISHED_AT]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___publicatiedatum'
+			),
+			[FilterProperty.RIGHTS]: tText(
+				'modules/visitor-space/utils/advanced-filters/metadata___rechten'
 			),
 			[FilterProperty.PUBLISHER]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___publisher'
