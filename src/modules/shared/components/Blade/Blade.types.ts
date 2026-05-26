@@ -114,6 +114,7 @@ export interface BladeFooterButton {
 	mobileLabel: string; // The label used on mobile
 	title?: string;
 	ariaLabel?: string;
+	showSpinner?: boolean;
 	type: 'primary' | 'secondary';
 	enforceSecondary?: boolean; // Only used when we have just 1 button, and need to be secondary
 	onClick?: () => void;
