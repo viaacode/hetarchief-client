@@ -35,6 +35,12 @@ export interface MaterialRequest {
 	requesterMail: string;
 	requesterOrganisation?: string;
 	requesterOrganisationSector?: string;
+	requesterOrganisationAddress?: string;
+	requesterOrganisationId?: string;
+	requesterOrganisationLocality?: string;
+	requesterOrganisationName?: string;
+	requesterOrganisationPostalCode?: string;
+	requesterOrganisationVAT?: string;
 	type: MaterialRequestType;
 	reuseForm?: MaterialRequestReuseForm;
 	updatedAt: string;

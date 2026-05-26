@@ -17,3 +17,22 @@ export interface OrganisationContactPoint {
 	contactType: string;
 	email: string;
 }
+
+export interface OrganisationListItem {
+	id: string;
+	org_identifier: string;
+	name: string;
+	slug: string;
+}
+
+export interface GetOrganisationsProps {
+	query?: string;
+	page?: number;
+	size?: number;
+	orderProp?: keyof OrganisationListItem;
+	orderDirection?: string;
+}
+
+export interface UpdateOrganisationProps {
+	slug: string;
+}

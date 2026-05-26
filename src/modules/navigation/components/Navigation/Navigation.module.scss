@@ -116,7 +116,8 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 
 		&--open {
 			@media (max-width: $breakpoint-xxl) {
-				z-index: get-z-layer("nav-dropdown"); // under overlay
+				position: relative;
+				z-index: get-z-layer("nav-hamburger"); // above overlay
 			}
 		}
 	}
