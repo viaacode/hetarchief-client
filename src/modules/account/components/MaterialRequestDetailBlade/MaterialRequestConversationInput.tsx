@@ -190,6 +190,7 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 						'list-ul',
 						'list-ol',
 						'link',
+						'remove-styles',
 						{
 							type: 'customButton',
 							component: (
