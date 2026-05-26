@@ -71,16 +71,22 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 			refetchOrganisations().then(noop);
 
 			toastService.notify({
-				title: tText('Organisatie bijgewerkt - success toast'),
-				description: tText('De organisatie is succesvol bijgewerkt. - success toast'),
+				title: tText(
+					'modules/admin/views/organisations/admin-organisations-page___organisatie-bijgewerkt-success-toast'
+				),
+				description: tText(
+					'modules/admin/views/organisations/admin-organisations-page___de-organisatie-is-succesvol-bijgewerkt-success-toast'
+				),
 			});
 
 			closeBlade();
 		} catch (_err) {
 			toastService.notify({
-				title: tText('Er ging iets mis - error toast'),
+				title: tText(
+					'modules/admin/views/organisations/admin-organisations-page___er-ging-iets-mis-error-toast'
+				),
 				description: tText(
-					'Het bijwerken van de organisatie is mislukt. Probeer het later opnieuw. - error toast'
+					'modules/admin/views/organisations/admin-organisations-page___het-bijwerken-van-de-organisatie-is-mislukt-probeer-het-later-opnieuw-error-toast'
 				),
 			});
 		}
@@ -134,17 +140,23 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 	const organisationsTableColumns: Column<OrganisationListItem>[] = [
 		{
 			id: 'name',
-			Header: tText('Organisatie naam - table header'),
+			Header: tText(
+				'modules/admin/views/organisations/admin-organisations-page___organisatie-naam-table-header'
+			),
 			accessor: 'name',
 		},
 		{
 			id: 'id',
-			Header: tText('Organisatie ID - table header'),
+			Header: tText(
+				'modules/admin/views/organisations/admin-organisations-page___organisatie-id-table-header'
+			),
 			accessor: 'org_identifier',
 		},
 		{
 			id: 'slug',
-			Header: tText('Slug - table header'),
+			Header: tText(
+				'modules/admin/views/organisations/admin-organisations-page___slug-table-header'
+			),
 			accessor: 'slug',
 		},
 		{
@@ -157,7 +169,9 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 						<Button
 							variants={['text', 'icon']}
 							icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
-							aria-label={tText('edit organisatie - aria label')}
+							aria-label={tText(
+								'modules/admin/views/organisations/admin-organisations-page___edit-organisatie-aria-label'
+							)}
 							onClick={() => handleEditButtonClicked(organisation)}
 						/>
 					</div>
@@ -184,7 +198,9 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 		if (!organisations.length) {
 			return (
 				<span className="c-organisations-content__no-results">
-					{tText('Er zijn geen organisaties gevonden')}
+					{tText(
+						'modules/admin/views/organisations/admin-organisations-page___er-zijn-geen-organisaties-gevonden'
+					)}
 				</span>
 			);
 		}
@@ -215,14 +231,22 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 		const getFooterButtons = (): BladeFooterButtonProps => {
 			return [
 				{
-					label: tText('Bewaar wijzigingen - org edit blade'),
-					mobileLabel: tText('Bewaar wijzigingen - org edit blade - mobile'),
+					label: tText(
+						'modules/admin/views/organisations/admin-organisations-page___bewaar-wijzigingen-org-edit-blade'
+					),
+					mobileLabel: tText(
+						'modules/admin/views/organisations/admin-organisations-page___bewaar-wijzigingen-org-edit-blade-mobile'
+					),
 					type: 'primary',
 					onClick: saveActiveOrganisation,
 				},
 				{
-					label: tText('Annuleer - org edit blade'),
-					mobileLabel: tText('Annuleer - org edit blade - mobile'),
+					label: tText(
+						'modules/admin/views/organisations/admin-organisations-page___annuleer-org-edit-blade'
+					),
+					mobileLabel: tText(
+						'modules/admin/views/organisations/admin-organisations-page___annuleer-org-edit-blade-mobile'
+					),
 					type: 'secondary',
 					onClick: closeBlade,
 				},
@@ -234,26 +258,48 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 				footerButtons={getFooterButtons()}
 				isOpen={!!activeOrganisation}
 				onClose={closeBlade}
-				title={tText('Organisatie bewerken - edit blade titel')}
+				title={tText(
+					'modules/admin/views/organisations/admin-organisations-page___organisatie-bewerken-edit-blade-titel'
+				)}
 				id="organisations-blade"
-				ariaLabel={tText('Organisatie bewerken - blade aria label')}
+				ariaLabel={tText(
+					'modules/admin/views/organisations/admin-organisations-page___organisatie-bewerken-blade-aria-label'
+				)}
 			>
 				<div className="c-organisations-blade__content">
 					<div className="c-organisations-blade__field">
-						<strong>{tText('Organisatie - edit blade')}:</strong> {activeOrganisation?.name}
+						<strong>
+							{tText(
+								'modules/admin/views/organisations/admin-organisations-page___organisatie-edit-blade'
+							)}
+							:
+						</strong>{' '}
+						{activeOrganisation?.name}
 					</div>
 					<div className="c-organisations-blade__field">
-						<strong>{tText('Organisatie ID - edit blade')}:</strong>{' '}
+						<strong>
+							{tText(
+								'modules/admin/views/organisations/admin-organisations-page___organisatie-id-edit-blade'
+							)}
+							:
+						</strong>{' '}
 						{activeOrganisation?.org_identifier}
 					</div>
 					<div>
 						<label htmlFor="slug-input" className="c-organisations-blade__label">
-							<strong>{tText('Slug - edit blade')}:</strong>
+							<strong>
+								{tText(
+									'modules/admin/views/organisations/admin-organisations-page___slug-edit-blade'
+								)}
+								:
+							</strong>
 						</label>
 						<TextArea
 							id="slug-input"
 							className="c-organisations-blade__textarea"
-							ariaLabel={tText('Organisatie slug input - edit blade')}
+							ariaLabel={tText(
+								'modules/admin/views/organisations/admin-organisations-page___organisatie-slug-input-edit-blade'
+							)}
 							value={editedSlug}
 							onChange={(e) => setEditedSlug(e.target.value)}
 						/>
@@ -272,8 +318,12 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 							id="organisations-overview__search-input"
 							className="c-organisations-overview__search-input"
 							value={search}
-							ariaLabel={tText('Zoekbalk - aria label')}
-							placeholder={tText('Zoek op naam, ID, of slug')}
+							ariaLabel={tText(
+								'modules/admin/views/organisations/admin-organisations-page___zoekbalk-aria-label'
+							)}
+							placeholder={tText(
+								'modules/admin/views/organisations/admin-organisations-page___zoek-op-naam-id-of-slug'
+							)}
 							onChange={setSearch}
 							onSearch={(value) =>
 								setFilters({
