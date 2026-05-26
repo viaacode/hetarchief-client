@@ -1,0 +1,38 @@
+@use "src/styles/abstracts" as abstracts;
+
+.c-organisations-table {
+	&__actions {
+		text-align: right;
+	}
+}
+
+.c-organisations-overview {
+	&__search-input {
+		margin-bottom: abstracts.$spacer-md;
+	}
+}
+
+.c-organisations-blade {
+	&__field {
+		margin-bottom: abstracts.$spacer-md;
+	}
+
+	&__label {
+		margin-bottom: abstracts.$spacer-xs;
+		display: block;
+	}
+
+	&__textarea {
+		resize: none;
+	}
+
+	&__content {
+		padding: abstracts.$spacer-md;
+	}
+}
+
+.c-organisations-content {
+	&__container {
+		margin-bottom: abstracts.$spacer-1xl;
+	}
+}
