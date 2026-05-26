@@ -54,6 +54,7 @@ import {
 	getIeObjectAvRightsLabel,
 	getIeObjectAvRightsUrl,
 } from '@ie-objects/utils/get-ie-object-av-rights-icon';
+import { getIeObjectAvRightsAttributionText } from '@ie-objects/utils/get-ie-object-av-rights-attribution-text';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import {
 	mapArrayToMetadataData,
@@ -854,6 +855,13 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		const rightsMoreInfoTitle = tText(
 			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
 		);
+		const shouldShowAvRightsAttribution =
+			AV_OBJECT_TYPES.includes(mediaInfo.dctermsFormat) &&
+			[
+				IeObjectLicense.PUBLIEK_CONTENT,
+				IeObjectLicense.INTRA_CP_CONTENT,
+				IeObjectLicense.BEZOEKERTOOL_CONTENT,
+			].some((license) => mediaInfo?.licenses?.includes(license));
 		let rightsAttributionText: string | null = null;
 		if (
 			isNewspaper &&
@@ -868,6 +876,13 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				rightsStatusInfo.label,
 				'hetarchief.be',
 			]).join(', ');
+		}
+		if (shouldShowAvRightsAttribution) {
+			rightsAttributionText = getIeObjectAvRightsAttributionText(
+				mediaInfo,
+				locale as Locale,
+				avRightsLabel
+			);
 		}
 
 		return (
@@ -977,7 +992,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							moreInfoTitle={rightsMoreInfoTitle}
 							copyrightHolder={mediaInfo.copyrightHolder}
 							copyrightHolderLabel={tText('modules/ie-objects/ie-objects___rechthebbende')}
-							licenseDistributor={avRightsInfo.licenseDistributor}
+							licenseDistributor={avRightsInfo.licenseDistributor || undefined}
 							licenseDistributorLabel={tText('modules/ie-objects/ie-objects___licentiegever')}
 						/>
 					)}
