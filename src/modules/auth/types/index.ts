@@ -18,6 +18,11 @@ export interface User {
 	idp: Idp;
 	organisationId: string | null;
 	organisationName: string | null;
+	organisationSector?: string;
+	organisationAddress?: string;
+	organisationLocality?: string;
+	organisationPostalCode?: string;
+	organisationVAT?: string;
 	sector: string | null;
 	visitorSpaceSlug?: string;
 	permissions: Permission[];
