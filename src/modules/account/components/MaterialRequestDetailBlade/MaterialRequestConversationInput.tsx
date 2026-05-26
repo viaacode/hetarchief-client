@@ -1,12 +1,7 @@
 import { useSendMaterialRequestMessage } from '@account/components/MaterialRequestDetailBlade/hooks/useSendMaterialRequestMessage';
 import { isMaterialRequestClosed } from '@account/utils/is-material-request-closed';
 import type { MaterialRequest } from '@material-requests/types';
-import {
-	Button,
-	keysEnter,
-	RichTextEditorWithInternalState,
-	TagList,
-} from '@meemoo/react-components';
+import { Button, RichTextEditorWithInternalState, TagList } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Spinner } from '@shared/components/Spinner/Spinner';
@@ -176,18 +171,6 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 							minHeight: '100px',
 							maxHeight: '150px',
 							overflowY: 'auto',
-						},
-						// @ts-expect-error: This method does exists on the braft editor so ts-ignoring this to get the error gone
-						keyBindingFn: (evt: KeyboardEvent) => {
-							if (evt.ctrlKey || evt.shiftKey || evt.altKey || evt.metaKey) {
-								// In case of these buttons being pressed, we will allow the enter to go through
-								// Otherwise it will be impossible to get more than 1 entry in a list
-								return;
-							}
-
-							if (keysEnter.includes(evt.key)) {
-								handleSendMessage();
-							}
 						},
 					}}
 					disabled={inputDisabled}
