@@ -54,7 +54,10 @@ import {
 	getIeObjectAvRightsLabel,
 	getIeObjectAvRightsUrl,
 } from '@ie-objects/utils/get-ie-object-av-rights-icon';
-import { getIeObjectAvRightsAttributionText } from '@ie-objects/utils/get-ie-object-av-rights-attribution-text';
+import {
+	type AvRightsAttributionTranslations,
+	getIeObjectAvRightsAttributionText,
+} from '@ie-objects/utils/get-ie-object-av-rights-attribution-text';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import {
 	mapArrayToMetadataData,
@@ -856,12 +859,17 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
 		);
 		const shouldShowAvRightsAttribution =
-			AV_OBJECT_TYPES.includes(mediaInfo.dctermsFormat) &&
-			[
-				IeObjectLicense.PUBLIEK_CONTENT,
-				IeObjectLicense.INTRA_CP_CONTENT,
-				IeObjectLicense.BEZOEKERTOOL_CONTENT,
-			].some((license) => mediaInfo?.licenses?.includes(license));
+			AV_OBJECT_TYPES.includes(mediaInfo.dctermsFormat) && !!mediaInfo.thumbnailUrl;
+		const avRightsAttributionTranslations: AvRightsAttributionTranslations = {
+			unknownCreator: tText(
+				'modules/ie-objects/utils/get-ie-object-av-rights-attribution-text___unknown-creator'
+			),
+			missingRightsInfo: tText(
+				'modules/ie-objects/utils/get-ie-object-av-rights-attribution-text___no-rights-information-available'
+			),
+			and: tText('modules/ie-objects/utils/get-ie-object-av-rights-attribution-text___and'),
+			etAl: tText('modules/ie-objects/utils/get-ie-object-av-rights-attribution-text___e-a'),
+		};
 		let rightsAttributionText: string | null = null;
 		if (
 			isNewspaper &&
@@ -880,7 +888,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		if (shouldShowAvRightsAttribution) {
 			rightsAttributionText = getIeObjectAvRightsAttributionText(
 				mediaInfo,
-				locale as Locale,
+				avRightsAttributionTranslations,
 				avRightsLabel
 			);
 		}

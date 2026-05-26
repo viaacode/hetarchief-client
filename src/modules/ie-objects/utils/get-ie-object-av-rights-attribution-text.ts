@@ -1,22 +1,14 @@
 import type { IeObject } from '@ie-objects/ie-objects.types';
-import { Locale } from '@shared/utils/i18n';
 import { compact, uniq } from 'lodash-es';
 
 const PRODUCER_ROLE_PARTS = ['producer', 'producent', 'production'];
 const BROADCASTER_ROLE_PARTS = ['broadcaster', 'omroep'];
 
-function getLocalizedUnknownCreator(locale: Locale): string {
-	return locale === Locale.en ? 'Unknown creator' : 'Onbekende maker';
-}
-
-function getLocalizedMissingRightsInfo(locale: Locale): string {
-	return locale === Locale.en
-		? 'no rights information available'
-		: 'geen rechteninformatie beschikbaar';
-}
-
-function getLocalizedAnd(locale: Locale): string {
-	return locale === Locale.en ? 'and' : 'en';
+export interface AvRightsAttributionTranslations {
+	unknownCreator: string;
+	missingRightsInfo: string;
+	and: string;
+	etAl: string;
 }
 
 function normalizeRole(role: string): string {
@@ -86,11 +78,14 @@ function getAttributionCreatorNames(ieObject: IeObject): string[] {
 	return toTextValues(ieObject.maintainerName);
 }
 
-export function formatAvRightsAttributionNames(names: string[], locale: Locale): string {
+export function formatAvRightsAttributionNames(
+	names: string[],
+	translations: AvRightsAttributionTranslations
+): string {
 	const uniqueNames = uniq(compact(names.map((name) => name.trim())));
 
 	if (uniqueNames.length === 0) {
-		return getLocalizedUnknownCreator(locale);
+		return translations.unknownCreator;
 	}
 
 	if (uniqueNames.length === 1) {
@@ -98,28 +93,28 @@ export function formatAvRightsAttributionNames(names: string[], locale: Locale):
 	}
 
 	if (uniqueNames.length === 2) {
-		return `${uniqueNames[0]} ${getLocalizedAnd(locale)} ${uniqueNames[1]}`;
+		return `${uniqueNames[0]} ${translations.and} ${uniqueNames[1]}`;
 	}
 
 	if (uniqueNames.length === 3) {
-		return `${uniqueNames[0]}, ${uniqueNames[1]} ${getLocalizedAnd(locale)} ${uniqueNames[2]}`;
+		return `${uniqueNames[0]}, ${uniqueNames[1]} ${translations.and} ${uniqueNames[2]}`;
 	}
 
-	return `${uniqueNames.slice(0, 3).join(', ')}, e.a.`;
+	return `${uniqueNames.slice(0, 3).join(', ')}, ${translations.etAl}`;
 }
 
 export function getIeObjectAvRightsAttributionText(
 	ieObject: IeObject,
-	locale: Locale,
+	translations: AvRightsAttributionTranslations,
 	usageCategoryLabel?: string | null
 ): string | null {
 	const creatorNames = getAttributionCreatorNames(ieObject);
-	const creatorLabel = formatAvRightsAttributionNames(creatorNames, locale);
+	const creatorLabel = formatAvRightsAttributionNames(creatorNames, translations);
 	const usageCategory =
 		usageCategoryLabel ||
 		ieObject.rightsInfo?.reuseCategoryLabel ||
 		ieObject.rightsInfo?.reuseLabel ||
-		getLocalizedMissingRightsInfo(locale);
+		translations.missingRightsInfo;
 
 	return compact([
 		creatorLabel,

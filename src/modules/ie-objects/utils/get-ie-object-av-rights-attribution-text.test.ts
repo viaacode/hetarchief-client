@@ -1,9 +1,9 @@
 import { IeObjectLicense, type IeObject } from '@ie-objects/ie-objects.types';
 import { IeObjectType } from '@shared/types/ie-objects';
-import { Locale } from '@shared/utils/i18n';
 import { describe, expect, it } from 'vitest';
 
 import {
+	type AvRightsAttributionTranslations,
 	formatAvRightsAttributionNames,
 	getIeObjectAvRightsAttributionText,
 } from './get-ie-object-av-rights-attribution-text';
@@ -23,6 +23,20 @@ const baseIeObject = {
 	},
 } as IeObject;
 
+const nlTranslations: AvRightsAttributionTranslations = {
+	unknownCreator: 'Onbekende maker',
+	missingRightsInfo: 'geen rechteninformatie beschikbaar',
+	and: 'en',
+	etAl: 'e.a.',
+};
+
+const enTranslations: AvRightsAttributionTranslations = {
+	unknownCreator: 'Unknown creator',
+	missingRightsInfo: 'no rights information available',
+	and: 'and',
+	etAl: 'et al.',
+};
+
 describe('getIeObjectAvRightsAttributionText', () => {
 	it('uses the copyright holder before maker, producer and maintainer', () => {
 		expect(
@@ -35,7 +49,7 @@ describe('getIeObjectAvRightsAttributionText', () => {
 						productionCompany: ['Producer A'],
 					},
 				},
-				Locale.nl
+				nlTranslations
 			)
 		).toBe('Panenka, Het Huis, 2023-01-02, VRT, Auteursrechtelijk beschermd, hetarchief.be');
 	});
@@ -50,7 +64,7 @@ describe('getIeObjectAvRightsAttributionText', () => {
 						productionCompany: ['Producer A'],
 					},
 				},
-				Locale.nl,
+				nlTranslations,
 				'CC-NC'
 			)
 		).toBe('Dans La Pluie en MIAT, Het Huis, 2023-01-02, VRT, CC-NC, hetarchief.be');
@@ -65,7 +79,7 @@ describe('getIeObjectAvRightsAttributionText', () => {
 						productionCompany: ['Roses Are Blue'],
 					},
 				},
-				Locale.nl
+				nlTranslations
 			)
 		).toBe(
 			'Roses Are Blue, Het Huis, 2023-01-02, VRT, Auteursrechtelijk beschermd, hetarchief.be'
@@ -73,7 +87,7 @@ describe('getIeObjectAvRightsAttributionText', () => {
 	});
 
 	it('falls back to the maintainer as broadcasting organisation', () => {
-		expect(getIeObjectAvRightsAttributionText(baseIeObject, Locale.nl)).toBe(
+		expect(getIeObjectAvRightsAttributionText(baseIeObject, nlTranslations)).toBe(
 			'VRT, Het Huis, 2023-01-02, VRT, Auteursrechtelijk beschermd, hetarchief.be'
 		);
 	});
@@ -85,7 +99,7 @@ describe('getIeObjectAvRightsAttributionText', () => {
 					...baseIeObject,
 					maintainerName: '',
 				},
-				Locale.nl
+				nlTranslations
 			)
 		).toContain('Onbekende maker');
 		expect(
@@ -94,18 +108,18 @@ describe('getIeObjectAvRightsAttributionText', () => {
 					...baseIeObject,
 					maintainerName: '',
 				},
-				Locale.en
+				enTranslations
 			)
 		).toContain('Unknown creator');
 	});
 
 	it('formats two, three and more than three names', () => {
-		expect(formatAvRightsAttributionNames(['A', 'B'], Locale.nl)).toBe('A en B');
-		expect(formatAvRightsAttributionNames(['A', 'B', 'C'], Locale.nl)).toBe('A, B en C');
-		expect(formatAvRightsAttributionNames(['A', 'B', 'C', 'D'], Locale.nl)).toBe(
+		expect(formatAvRightsAttributionNames(['A', 'B'], nlTranslations)).toBe('A en B');
+		expect(formatAvRightsAttributionNames(['A', 'B', 'C'], nlTranslations)).toBe('A, B en C');
+		expect(formatAvRightsAttributionNames(['A', 'B', 'C', 'D'], nlTranslations)).toBe(
 			'A, B, C, e.a.'
 		);
-		expect(formatAvRightsAttributionNames(['A', 'B'], Locale.en)).toBe('A and B');
+		expect(formatAvRightsAttributionNames(['A', 'B'], enTranslations)).toBe('A and B');
 	});
 
 	it('uses a translated fallback when rights info is missing', () => {
@@ -115,7 +129,7 @@ describe('getIeObjectAvRightsAttributionText', () => {
 					...baseIeObject,
 					rightsInfo: undefined,
 				},
-				Locale.nl,
+				nlTranslations,
 				null
 			)
 		).toBe('VRT, Het Huis, 2023-01-02, VRT, geen rechteninformatie beschikbaar, hetarchief.be');
