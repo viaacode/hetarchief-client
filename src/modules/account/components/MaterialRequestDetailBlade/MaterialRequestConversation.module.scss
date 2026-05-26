@@ -200,6 +200,11 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 			:global(.bf-content) {
 				border: 1px solid abstracts.$silver !important;
 				border-radius: 0 0 abstracts.$spacer-xs abstracts.$spacer-xs;
+
+				:global(.DraftEditor-editorContainer),
+				:global(.public-DraftEditor-content) {
+					padding-right: abstracts.$spacer-md;
+				}
 			}
 		}
 

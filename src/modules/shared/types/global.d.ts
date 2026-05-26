@@ -19,6 +19,10 @@ declare global {
 			readonly ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY: 'true' | 'false';
 		}
 	}
+
+	interface Window {
+		zE: (...args) => unknown;
+	}
 }
 
 export {};

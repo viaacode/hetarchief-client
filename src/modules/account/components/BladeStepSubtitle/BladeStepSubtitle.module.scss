@@ -1,0 +1,6 @@
+@use "../../../../styles/abstracts" as abstracts;
+
+.c-blade-step-subtitle {
+	font-size: abstracts.$font-size-md;
+	font-weight: abstracts.$font-weight-bold;
+}

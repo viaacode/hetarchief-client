@@ -95,7 +95,7 @@ export interface MaterialRequestMessageBodyMessage {
 
 export interface MaterialRequestMessageBodyAdditionalConditions {
 	conditions: Condition[];
-	autoApproveAfterAcceptAdditionalConditions: boolean;
+	autoApproveAfterAcceptAdditionalConditions: boolean | null;
 }
 
 export interface MaterialRequestMessageBodyStatusUpdateWithMotivation {

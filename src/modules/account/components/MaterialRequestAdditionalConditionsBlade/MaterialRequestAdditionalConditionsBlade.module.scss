@@ -1,0 +1,7 @@
+@use "../../../../styles/abstracts" as abstracts;
+
+.c-material-request-additional-conditions-blade {
+	&__validation {
+		margin-top: abstracts.$spacer-sm;
+	}
+}

@@ -3,6 +3,7 @@ import { selectCommonUser } from '@auth/store/user';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestRequesterCapacity } from '@material-requests/types';
 import {
+	Button,
 	Checkbox,
 	FormControl,
 	RadioButton,
@@ -28,17 +29,12 @@ import { useIsComplexReuseFlowUser } from '@visitor-space/hooks/is-complex-reuse
 import clsx from 'clsx';
 import { format } from 'date-fns';
 import { noop } from 'lodash-es';
-import React, { type FC, useEffect, useState } from 'react';
+import React, { type FC, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './PersonalInfo.module.scss';
 import type { PersonalInfoFormState, PersonalInfoProps } from './PersonalInfo.types';
 
-const PersonalInfo: FC<PersonalInfoProps> = ({
-	mostRecentMaterialRequestName,
-	hasRequests,
-	onCancel,
-	onSuccess,
-}) => {
+const PersonalInfo: FC<PersonalInfoProps> = ({ materialRequests, onCancel, onSuccess }) => {
 	const commonUser = useSelector(selectCommonUser);
 	const locale = useLocale();
 	const isComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
@@ -66,18 +62,26 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 		{}
 	);
 
+	const hasComplexRequests = useMemo(
+		() => materialRequests.some((request) => !!request.reuseForm),
+		[materialRequests]
+	);
+
 	useEffect(() => {
+		const mostRecentMaterialRequestName =
+			materialRequests.length > 0 ? materialRequests[0].objectSchemaName : '';
 		const formattedDate = format(new Date(), 'MM-yyyy', { ...getLocalisedOptions() });
 
 		setRequestGroupName(
 			`${mostRecentMaterialRequestName.substring(0, MAX_NAME_LENGTH - formattedDate.length - 1)} ${formattedDate}`
 		);
-	}, [mostRecentMaterialRequestName]);
+	}, [materialRequests]);
 
 	const validateForm = () => {
 		setIsFormValid(true);
+
 		const errors = {
-			hasRequests: !hasRequests
+			hasRequests: !materialRequests.length
 				? tText(
 						'modules/account/components/personal-info/personal-info___er-zijn-geen-aanvragen-te-vervolledigen'
 					)
@@ -88,7 +92,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 					)
 				: undefined,
 			requestGroupName:
-				isComplexReuseFlow && requestGroupName.length === 0
+				hasComplexRequests && requestGroupName.length === 0
 					? tText(
 							'modules/account/components/personal-info/personal-info___de-aanvraag-naam-is-verplicht'
 						)
@@ -342,21 +346,17 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 							<>
 								{commonUser.organisation?.name}
 								<div className={styles['c-personal-info__edit-user-data']}>
-									<a
-										href={tText(
-											'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-hyperlink'
+									<Button
+										label={tText(
+											'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-label'
 										)}
-										target="_blank"
-										rel="noopener noreferrer"
+										variants={['text', 'underline', 'sm', 'neutral']}
+										className={styles['c-personal-info__edit-user-data-button']}
 										aria-label={tText(
 											'modules/account/components/personal-info/personal-info___bewerk-je-gegevens-button-aria-label'
 										)}
-									>
-										{tText(
-											'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-label'
-										)}
-									</a>
-									<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+										onClick={() => window.zE('webWidget', 'toggle')}
+									/>
 								</div>
 							</>
 						) : (
@@ -378,9 +378,9 @@ const PersonalInfo: FC<PersonalInfoProps> = ({
 					)}
 				</p>
 			</div>
-			{hasRequests ? (
+			{materialRequests.length > 0 ? (
 				<>
-					{isComplexReuseFlow ? renderNameEntry() : renderCapacity()}
+					{hasComplexRequests ? renderNameEntry() : renderCapacity()}
 					{renderNewsletterCheckbox()}
 				</>
 			) : (

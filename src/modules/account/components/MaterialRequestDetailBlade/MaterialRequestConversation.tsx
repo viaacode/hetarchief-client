@@ -2,7 +2,7 @@ import { useGetMaterialRequestConversationInfinite } from '@account/components/M
 import { MaterialRequestConversationInput } from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversationInput';
 import { MaterialRequestConversationMessage } from '@account/components/MaterialRequestDetailBlade/MaterialRequestConversationMessage';
 import { selectCommonUser } from '@auth/store/user';
-import type { MaterialRequest } from '@material-requests/types';
+import type { MaterialRequest, MaterialRequestMessage } from '@material-requests/types';
 import { Loading } from '@shared/components/Loading';
 import { tHtml } from '@shared/helpers/translate';
 import clsx from 'clsx';
@@ -17,12 +17,16 @@ interface MaterialRequestConversationProps {
 	materialRequest: MaterialRequest;
 	handleDownload: () => void;
 	onMessagesLoaded: () => void;
+	onOpenEvaluateConditions: (message: MaterialRequestMessage) => void;
+	onMakeDownloadAvailable: () => void;
 }
 
 export const MaterialRequestConversation: FC<MaterialRequestConversationProps> = ({
 	materialRequest,
 	handleDownload,
 	onMessagesLoaded,
+	onOpenEvaluateConditions,
+	onMakeDownloadAvailable,
 }) => {
 	const scrollableRef = useRef<HTMLDivElement>(null);
 	const scrollTriggerRef = useRef<HTMLDivElement>(null);
@@ -182,6 +186,8 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 									message={message}
 									materialRequest={materialRequest}
 									handleDownload={handleDownload}
+									onOpenEvaluateConditions={onOpenEvaluateConditions}
+									onMakeDownloadAvailable={onMakeDownloadAvailable}
 								/>
 							));
 					})}

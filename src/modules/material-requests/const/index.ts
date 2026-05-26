@@ -1,5 +1,6 @@
 import {
 	type MaterialRequest,
+	MaterialRequestAdditionalConditionsType,
 	MaterialRequestCopyrightDisplay,
 	MaterialRequestDistributionAccess,
 	MaterialRequestDistributionDigitalOnline,
@@ -46,6 +47,22 @@ export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_STATUS = (): Record<
 		'modules/material-requests/const/index___status-cancelled'
 	),
 	[MaterialRequestStatus.NONE]: tText('modules/material-requests/const/index___status-none'),
+});
+
+export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_ADDITIONAL_CONDITIONS_TYPE = (): Record<
+	MaterialRequestAdditionalConditionsType,
+	string
+> => ({
+	[MaterialRequestAdditionalConditionsType.PERMISSION_LICENSE_OWNER]: tText(
+		'Toestemming rechthebbende - evaluate conditions blade'
+	),
+	[MaterialRequestAdditionalConditionsType.ATTRIBUTION]: tText(
+		'Naamsvermelding - evaluate conditions blade'
+	),
+	[MaterialRequestAdditionalConditionsType.PAYMENT]: tText('Betaling - evaluate conditions blade'),
+	[MaterialRequestAdditionalConditionsType.EXTRA_USE_LIMITATION]: tText(
+		'Extra gebruiksbeperking - evaluate conditions blade'
+	),
 });
 
 export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_DOWNLOAD_QUALITY = (): Record<

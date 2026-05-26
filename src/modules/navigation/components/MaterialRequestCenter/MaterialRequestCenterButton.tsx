@@ -45,10 +45,6 @@ const MaterialRequestCenterButton: FC = () => {
 
 	useEffect(() => {
 		// Ward: set isAnimated to true only if materialRequest is updated after initialisation
-		if (isNil(previousMaterialCount)) {
-			setPreviousMaterialCount(materialRequestCount);
-			return;
-		}
 		if (materialRequestCount !== previousMaterialCount) {
 			setPreviousMaterialCount(materialRequestCount);
 			setIsAnimated(true);

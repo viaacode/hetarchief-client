@@ -10,9 +10,7 @@ module.exports = {
 	},
 	backend: {
 		loadPath: `${process.env.PROXY_URL}/admin/translations/{{lng}}.json`,
-		backendOptions: {
-			expirationTime: 60 * 60 * 1000, // 1 hour
-		},
+		reloadInterval: 60 * 60 * 1000, // 1 hour (server-side i18next instance refresh)
 	},
 	use: [HttpApi],
 	ns: ['common'],
