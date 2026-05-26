@@ -344,8 +344,10 @@ const PersonalInfo: FC<PersonalInfoProps> = ({ materialRequests, onCancel, onSuc
 							<>
 								{commonUser.organisation?.name}
 								<div className={clsx(styles['c-personal-info__content-group-value'])}>
-									{user?.organisationAddress}, {user?.organisationPostalCode}{' '}
-									{user?.organisationLocality}
+									{user?.organisationAddress}
+								</div>
+								<div className={clsx(styles['c-personal-info__content-group-value'])}>
+									{`${user?.organisationPostalCode} ${user?.organisationLocality}`}
 								</div>
 								<div className={clsx(styles['c-personal-info__content-group-value'])}>
 									{user?.organisationVAT}

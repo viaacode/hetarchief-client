@@ -240,9 +240,7 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 					<div
 						key={`content-block-additional-condition__${condition.type}`}
 						className={
-							styles[
-								'p-material-request-detail__content-info__content-block-additional-condition'
-							]
+							styles['p-material-request-detail__content-info__content-block-additional-condition']
 						}
 					>
 						<strong>{getConditionLabel(condition.type)}</strong>
@@ -361,10 +359,8 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 			),
 
 			<>
-				<div>
-					{requesterOrganisationAddress}, {requesterOrganisationPostalCode}{' '}
-					{requesterOrganisationLocality}
-				</div>
+				<div>{requesterOrganisationAddress}</div>
+				<div>{`${requesterOrganisationPostalCode} ${requesterOrganisationLocality}`}</div>
 				<div>{requesterOrganisationVAT}</div>
 				<div>{requesterOrganisationSector}</div>
 			</>,
