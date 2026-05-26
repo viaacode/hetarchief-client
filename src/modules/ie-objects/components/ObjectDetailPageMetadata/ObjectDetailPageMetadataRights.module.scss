@@ -1,0 +1,51 @@
+@use "src/styles/abstracts" as *;
+
+.c-object-detail-page-metadata-rights {
+	&__content {
+		display: flex;
+		flex-direction: column;
+		gap: $spacer-xs;
+	}
+
+	&__label {
+		display: flex;
+		align-items: center;
+		gap: $spacer-xs;
+		font-size: $font-size-lg;
+		font-weight: $font-weight-bold;
+		line-height: $line-height-1xl;
+	}
+
+	&__label-icon {
+		display: inline-flex;
+		flex-shrink: 0;
+		align-items: center;
+		width: $font-size-1xl;
+		height: $font-size-1xl;
+		line-height: 1;
+		text-decoration: none;
+
+		:global([class*="c-icon"]) {
+			font-size: $font-size-1xl;
+			line-height: 1;
+		}
+	}
+
+	&__label-text {
+		color: inherit;
+
+		&--link {
+			text-decoration: underline;
+			text-underline-offset: 0.2rem;
+		}
+	}
+
+	&__metadata-item {
+		display: flex;
+		flex-direction: column;
+
+		strong {
+			color: $black;
+		}
+	}
+}
