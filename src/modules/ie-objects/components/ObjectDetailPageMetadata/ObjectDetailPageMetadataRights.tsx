@@ -4,6 +4,8 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import type { ReactNode } from 'react';
 
+import styles from './ObjectDetailPageMetadataRights.module.scss';
+
 export interface ObjectDetailPageMetadataRightsProps {
 	title: ReactNode;
 	className?: string;
@@ -31,13 +33,15 @@ export function ObjectDetailPageMetadataRights({
 	licenseDistributor,
 	licenseDistributorLabel,
 }: ObjectDetailPageMetadataRightsProps) {
-	const renderLabel = (content: ReactNode) => {
+	const renderLabel = (content: ReactNode, className?: string, linkedClassName?: string) => {
 		if (!labelUrl) {
-			return content;
+			return <span className={className}>{content}</span>;
 		}
 
+		const linkClassName = [className, linkedClassName].filter(Boolean).join(' ');
+
 		return (
-			<a href={labelUrl} target="_blank" rel="noreferrer">
+			<a href={labelUrl} target="_blank" rel="noreferrer" className={linkClassName}>
 				{content}
 			</a>
 		);
@@ -60,21 +64,26 @@ export function ObjectDetailPageMetadataRights({
 				) : null
 			}
 		>
-			<span className="u-flex u-flex-col u-gap-xs">
-				<span className="u-flex u-flex-items-center u-gap-xs">
-					{labelIcon && renderLabel(labelIcon)}
-					{renderLabel(label)}
+			<span className={styles['c-object-detail-page-metadata-rights__content']}>
+				<span className={styles['c-object-detail-page-metadata-rights__label']}>
+					{labelIcon &&
+						renderLabel(labelIcon, styles['c-object-detail-page-metadata-rights__label-icon'])}
+					{renderLabel(
+						label,
+						styles['c-object-detail-page-metadata-rights__label-text'],
+						styles['c-object-detail-page-metadata-rights__label-text--link']
+					)}
 				</span>
 				{copyrightHolder && copyrightHolderLabel && (
-					<span>
-						<strong>{copyrightHolderLabel}: </strong>
-						{copyrightHolder}
+					<span className={styles['c-object-detail-page-metadata-rights__metadata-item']}>
+						<strong>{copyrightHolderLabel}</strong>
+						<span>{copyrightHolder}</span>
 					</span>
 				)}
 				{licenseDistributor && licenseDistributorLabel && (
-					<span>
-						<strong>{licenseDistributorLabel}: </strong>
-						{licenseDistributor}
+					<span className={styles['c-object-detail-page-metadata-rights__metadata-item']}>
+						<strong>{licenseDistributorLabel}</strong>
+						<span>{licenseDistributor}</span>
 					</span>
 				)}
 			</span>

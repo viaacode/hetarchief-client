@@ -3,6 +3,7 @@ import { selectCommonUser, selectUser } from '@auth/store/user';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestRequesterCapacity } from '@material-requests/types';
 import {
+	Button,
 	Checkbox,
 	FormControl,
 	RadioButton,
@@ -356,18 +357,17 @@ const PersonalInfo: FC<PersonalInfoProps> = ({ materialRequests, onCancel, onSuc
 									{user?.sector}
 								</div>
 								<div className={styles['c-personal-info__edit-user-data']}>
-									<a
-										onClick={() => window.zE('webWidget', 'toggle')}
-										target="_blank"
-										rel="noopener noreferrer"
+									<Button
+										label={tText(
+											'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-label'
+										)}
+										variants={['text', 'underline', 'sm', 'neutral']}
+										className={styles['c-personal-info__edit-user-data-button']}
 										aria-label={tText(
 											'modules/account/components/personal-info/personal-info___bewerk-je-gegevens-button-aria-label'
 										)}
-									>
-										{tText(
-											'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-label'
-										)}
-									</a>
+										onClick={() => window.zE('webWidget', 'toggle')}
+									/>
 								</div>
 							</>
 						) : (

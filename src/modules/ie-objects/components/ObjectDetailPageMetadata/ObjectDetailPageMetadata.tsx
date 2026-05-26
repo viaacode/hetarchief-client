@@ -50,6 +50,11 @@ import { checkIeObjectPermissions } from '@ie-objects/utils/check-ie-object-perm
 import { isInAFolder } from '@ie-objects/utils/folders';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { getFirstMentionHighlight } from '@ie-objects/utils/get-first-mention-highlight';
+import {
+	getIeObjectAvRightsIcon,
+	getIeObjectAvRightsLabel,
+	getIeObjectAvRightsUrl,
+} from '@ie-objects/utils/get-ie-object-av-rights-icon';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import {
 	mapArrayToMetadataData,
@@ -853,6 +858,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			? getIeObjectRightsStatusInfo(mediaInfo, locale)
 			: null;
 		const rightsInfoAudioVideo = getRightsInfoForAudioVideo(mediaInfo);
+		const avRightsIcon = getIeObjectAvRightsIcon(rightsInfoAudioVideo);
+		const avRightsLabel = getIeObjectAvRightsLabel(rightsInfoAudioVideo);
+		const avRightsUrl = getIeObjectAvRightsUrl(rightsInfoAudioVideo);
 		const rightsMoreInfoTitle = tText(
 			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
 		);
@@ -1034,6 +1042,26 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						renderDate(mediaInfo.datePublished)
 					)}
 					{renderRightsInfo(mediaInfo)}
+					{renderSimpleMetadataField(
+						tText('modules/ie-objects/ie-objects___media-type'),
+						mediaInfo.dctermsFormat
+					)}
+					{renderSimpleMetadataField(
+						tText('modules/ie-objects/ie-objects___bestandstype'),
+						activeFile?.mimeType
+					)}
+					{renderSimpleMetadataField(
+						tText('modules/ie-objects/const/index___pid'),
+						mediaInfo.schemaIdentifier
+					)}
+					{renderSimpleMetadataField(
+						tText('modules/ie-objects/ie-objects___titel-van-de-reeks'),
+						renderSeriesTitle(mediaInfo)
+					)}
+					{renderSimpleMetadataField(
+						tText('modules/ie-objects/const/index___publicatiedatum'),
+						renderDate(mediaInfo.datePublished)
+					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___rechtenstatus'),
 						mediaInfo?.copyrightNotice

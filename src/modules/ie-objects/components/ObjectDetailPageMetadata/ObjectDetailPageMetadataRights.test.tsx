@@ -26,9 +26,9 @@ describe('Component: <ObjectDetailPageMetadataRights />', () => {
 			'href',
 			'https://creativecommons.org/publicdomain/zero/1.0/'
 		);
-		expect(screen.getByText(/Rechthebbende:/)).toBeInTheDocument();
+		expect(screen.getByText('Rechthebbende')).toBeInTheDocument();
 		expect(screen.getByText('SABAM')).toBeInTheDocument();
-		expect(screen.getByText(/Licentiegever:/)).toBeInTheDocument();
+		expect(screen.getByText('Licentiegever')).toBeInTheDocument();
 		expect(screen.getByText('VRT')).toBeInTheDocument();
 	});
 
