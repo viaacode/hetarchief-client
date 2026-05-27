@@ -34,9 +34,3 @@ export enum LogEventType {
 	// Triggered in the frontend
 	ITEM_REQUEST_DOWNLOAD_EXECUTED = 'be.hetarchief.reuse.downloadexecuted',
 }
-
-export interface LogEvent {
-	type: LogEventType;
-	path: string;
-	data?: Record<string, unknown>;
-}

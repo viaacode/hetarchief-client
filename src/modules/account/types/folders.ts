@@ -54,5 +54,3 @@ export interface SharedFolderResponse {
 	folderName: string;
 	status: SharedFolderStatus;
 }
-
-export type EditFolderFormState = CreateFolderFormState;

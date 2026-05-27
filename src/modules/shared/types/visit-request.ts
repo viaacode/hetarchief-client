@@ -60,11 +60,6 @@ export interface VisitNote {
 
 export type VisitRow = { row: { original: VisitRequest } };
 
-export interface VisitSpaceCount {
-	count: number;
-	id?: string;
-}
-
 export interface VisitAccessStatus {
 	status: AccessStatus;
 }

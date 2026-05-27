@@ -41,13 +41,6 @@ export const FLOWPLAYER_FORMATS: string[] = [
 	...FLOWPLAYER_VIDEO_FORMATS,
 	...FLOWPLAYER_AUDIO_FORMATS,
 ];
-export const IMAGE_FORMATS: string[] = [
-	'image/png',
-	'image/jpeg',
-	'image/gif',
-	'image/tiff',
-	'image/bmp',
-];
 export const IMAGE_API_FORMATS: string[] = ['image/jph', 'image/jp2'];
 export const IMAGE_BROWSE_COPY_FORMATS: string[] = ['image/jpeg'];
 export const XML_FORMATS: string[] = ['application/xml'];

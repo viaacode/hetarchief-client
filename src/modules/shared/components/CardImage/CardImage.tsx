@@ -34,7 +34,6 @@ const CardImage: FC<CardImageProps> = ({
 			{image && (
 				<div className={styles['c-card-image__background--image']}>
 					<Image
-						unoptimized
 						src={image}
 						alt={name || id || 'background'}
 						fill
@@ -49,7 +48,6 @@ const CardImage: FC<CardImageProps> = ({
 			{logo && (
 				<div className={styles['c-card-image__logo']}>
 					<Image
-						unoptimized
 						className={styles['c-card-image__logo-image']}
 						src={logo}
 						alt={name || id || 'logo'}

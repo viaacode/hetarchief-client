@@ -1,53 +1,4 @@
 import type { NavigationInfo } from '@navigation/services/navigation-service';
-import type { ComponentLink } from '@shared/types';
-
-export const footerTestLinks: ComponentLink[][] = [
-	[
-		{
-			label: 'link',
-			to: 'https://www.test.com',
-			external: true,
-		},
-		{
-			label: 'link',
-			to: 'https://www.test.com',
-		},
-		{
-			label: 'link',
-			to: 'https://www.test.com',
-		},
-	],
-	[
-		{
-			label: 'link',
-			to: 'https://www.test.com',
-			external: true,
-		},
-		{
-			label: 'link',
-			to: 'https://www.test.com',
-		},
-		{
-			label: 'link',
-			to: 'https://www.test.com',
-		},
-	],
-	[
-		{
-			label: 'link',
-			to: 'https://www.test.com',
-			external: true,
-		},
-		{
-			label: 'link',
-			to: 'https://www.test.com',
-		},
-		{
-			label: 'link',
-			to: 'https://www.test.com',
-		},
-	],
-];
 
 export const footerCenterNavigationItems: NavigationInfo[] = [
 	{
@@ -93,13 +44,3 @@ export const footerCenterNavigationItems: NavigationInfo[] = [
 		createdAt: '2022-02-21T16:36:42.466659+00:00',
 	},
 ];
-
-export const footerLinks = (footerNavigationInfos: NavigationInfo[]): ComponentLink[] => {
-	return footerNavigationInfos.map((item) => {
-		return {
-			label: item.label,
-			to: item.contentPath,
-			external: item.linkTarget === '_blank',
-		};
-	});
-};

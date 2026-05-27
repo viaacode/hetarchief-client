@@ -24,7 +24,7 @@ describe('Components', () => {
 		it('Should render notifications', () => {
 			const { queryAllByText } = renderNotificationCenter({});
 
-			const notifications = queryAllByText(NOTIFICATIONS_FIRST_PAGE.items[0].description);
+			const notifications = queryAllByText(NOTIFICATIONS_FIRST_PAGE.items[0].description as string);
 
 			expect(notifications).toHaveLength(NOTIFICATIONS_FIRST_PAGE.items.length);
 		});

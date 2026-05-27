@@ -57,7 +57,7 @@
 			width: fit-content;
 		}
 
-		:last-child {
+		> :last-child {
 			font-weight: abstracts.$font-weight-bold;
 		}
 
@@ -103,6 +103,7 @@
 			&-text {
 				display: flex;
 				flex-direction: column;
+				word-break: break-word;
 
 				:last-child{
 					color: abstracts.$zinc;

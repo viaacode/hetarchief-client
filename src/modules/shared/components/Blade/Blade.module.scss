@@ -9,16 +9,15 @@ $padding-horizontal-mobile: abstracts.$spacer-sm;
 .c-blade {
 	background-color: abstracts.$white;
 	color: abstracts.$black;
-	bottom: 0;
 	display: grid;
 	grid-template-rows: auto auto 1fr auto;
 	margin-left: 4rem;
-	max-height: 100%;
 	width: 100%;
 	pointer-events: none;
 	position: fixed;
 	right: 0;
 	top: 0;
+	bottom: 0;
 	transform: translateX(100%);
 	transition:
 		transform abstracts.$animate-default,
@@ -28,6 +27,10 @@ $padding-horizontal-mobile: abstracts.$spacer-sm;
 
 	&.c-blade--size-thin {
 		max-width: abstracts.$blade-max-width;
+
+		* {
+			max-width: abstracts.$blade-max-width;
+		}
 	}
 
 	&.c-blade--size-wide {
@@ -175,7 +178,6 @@ $padding-horizontal-mobile: abstracts.$spacer-sm;
 		background: $sticky-background;
 		padding: abstracts.$spacer-sm $padding-horizontal;
 		width: 100%;
-		max-width: 100%;
 
 		&__no-padding {
 			padding: 0;

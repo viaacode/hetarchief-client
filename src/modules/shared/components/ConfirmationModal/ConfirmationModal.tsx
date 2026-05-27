@@ -40,7 +40,7 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 					label={
 						no || tText('modules/shared/components/confirmation-modal/confirmation-modal___nee')
 					}
-					className="u-mx-4"
+					className="u-mx-4 u-text-ellipsis"
 					name={'cancel'}
 					onClick={onCancel}
 					variants={['text']}
@@ -49,7 +49,7 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 					label={
 						yes || tText('modules/shared/components/confirmation-modal/confirmation-modal___ja')
 					}
-					className="u-mx-4"
+					className="u-mx-4 u-text-ellipsis"
 					name={'confirm'}
 					onClick={onConfirm}
 					variants={['dark']}

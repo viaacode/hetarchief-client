@@ -99,6 +99,7 @@ export default appWithTranslation(MyApp, {
 	},
 	backend: {
 		loadPath: `${publicRuntimeConfig.PROXY_URL}/admin/translations/{{lng}}.json`,
+		reloadInterval: 60 * 60 * 1000, // 1 hour (server-side i18next instance refresh)
 	},
 	use: [HttpApi],
 	ns: ['common'],

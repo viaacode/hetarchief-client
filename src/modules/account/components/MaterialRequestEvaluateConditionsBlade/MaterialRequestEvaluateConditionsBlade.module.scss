@@ -1,0 +1,24 @@
+@use 'src/styles/abstracts' as *;
+
+.c-material-request-evaluate-conditions-blade {
+	&__description {
+		margin-bottom: $spacer-sm;
+	}
+
+	&__conditions {
+		display: flex;
+		flex-direction: column;
+	}
+
+	&__condition {
+		padding: $spacer-sm $spacer-sm $spacer-sm 0;
+	}
+
+	&__condition-title {
+		margin-bottom: $spacer-sm;
+	}
+
+	&__condition-text {
+		margin-top: $spacer-xs;
+	}
+}

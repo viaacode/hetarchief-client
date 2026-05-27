@@ -95,7 +95,7 @@ export interface MaterialRequestMessageBodyMessage {
 
 export interface MaterialRequestMessageBodyAdditionalConditions {
 	conditions: Condition[];
-	autoApproveAfterAcceptAdditionalConditions: boolean;
+	autoApproveAfterAcceptAdditionalConditions: boolean | null;
 }
 
 export interface MaterialRequestMessageBodyStatusUpdateWithMotivation {
@@ -187,7 +187,8 @@ export interface MaterialRequestUpdate {
 
 export interface MaterialRequestSendAll {
 	type: MaterialRequestRequesterCapacity;
-	organisation?: string;
+	organisationId?: string;
+	organisationName?: string;
 	requestGroupName?: string;
 }
 

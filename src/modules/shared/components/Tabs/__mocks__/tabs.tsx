@@ -1,8 +1,9 @@
+import type { TabProps } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { SearchPageMediaType } from '@shared/types/ie-objects';
 
-export const mockTabs = [
+export const mockTabs: TabProps[] = [
 	{
 		id: SearchPageMediaType.All,
 		label: (
@@ -45,7 +46,7 @@ export const mockTabs = [
 	},
 ];
 
-export const mockAdminTabs = [
+export const mockAdminTabs: TabProps[] = [
 	{
 		id: 'all',
 		label: 'Alle',
