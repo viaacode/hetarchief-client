@@ -33,7 +33,6 @@ export interface MaterialRequest {
 	requesterFullName: string;
 	requesterId: string;
 	requesterMail: string;
-	requesterOrganisation?: string;
 	requesterOrganisationSector?: string;
 	requesterOrganisationAddress?: string;
 	requesterOrganisationId?: string;

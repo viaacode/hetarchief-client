@@ -169,7 +169,8 @@ export const MaterialRequestConversation: FC<MaterialRequestConversationProps> =
 										'modules/account/components/material-request-detail-blade/material-request-conversation___je-hebt-een-nieuwe-aanvraag-tot-hergebruik-ontvangen-van-name-start-hieronder-je-conversatie',
 										{
 											name:
-												materialRequest.requesterOrganisation || materialRequest.requesterFullName,
+												materialRequest.requesterOrganisationName ||
+												materialRequest.requesterFullName,
 										}
 									)}
 								</div>

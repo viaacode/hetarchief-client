@@ -588,7 +588,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 						<h3 className={clsx(styles['p-material-request-detail__title--text'])}>
 							{allowRequestCancellation
 								? materialRequest.maintainerName
-								: materialRequest.requesterOrganisation}
+								: materialRequest.requesterOrganisationName}
 						</h3>
 						{isMobile && (
 							<div className={clsx(styles['p-material-request-detail__action-bar'])}>
