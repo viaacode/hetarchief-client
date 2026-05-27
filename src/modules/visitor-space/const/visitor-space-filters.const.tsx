@@ -5,7 +5,6 @@ import { SearchPageMediaType } from '@shared/types/ie-objects';
 import { AdvancedFilterForm } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm';
 import { ConsultableMediaFilterForm } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm';
 import { ConsultableOnlyOnLocationFilterForm } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm';
-import { ConsultablePublicDomainFilterForm } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm';
 import { CreatorFilterForm } from '@visitor-space/components/CreatorFilterForm/CreatorFilterForm';
 import {
 	type FilterMenuFilterOption,
@@ -113,16 +112,6 @@ export const SEARCH_PAGE_FILTERS = (
 		form: ReleaseDateFilterForm,
 		type: FilterMenuType.Modal,
 		tabs: ALL_TABS,
-	},
-	{
-		id: SearchFilterId.ConsultablePublicDomain,
-		label: tText('modules/visitor-space/const/visitor-space-filters___publiek-domain'),
-		form: ConsultablePublicDomainFilterForm,
-		type: FilterMenuType.Checkbox,
-		tabs: ALL_TABS,
-		isDisabled: () => {
-			return !isGlobalArchive || !isKeyUser;
-		},
 	},
 	{
 		id: SearchFilterId.Reusability,

@@ -173,13 +173,7 @@ export const mapFiltersToElastic = (query: SearchPageQueryParams): IeObjectsSear
 			operator: IeObjectsSearchOperator.IS,
 			value: query[SearchFilterId.ConsultableMedia] ? 'true' : '',
 		},
-		// Consultable Public Domain
-		{
-			field: IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN,
-			operator: IeObjectsSearchOperator.IS,
-			value: query[SearchFilterId.ConsultablePublicDomain] ? 'true' : '',
-		},
-		// Reusability
+// Reusability
 		{
 			field: IeObjectsSearchFilterField.REUSABILITY,
 			operator: IeObjectsSearchOperator.IS,
