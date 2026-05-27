@@ -359,12 +359,14 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 				'modules/account/components/material-request-detail-blade/material-request-detail-blade___aanvragende-organisatie'
 			),
 
-			<>
-				<div>{requesterOrganisationAddress}</div>
-				<div>{`${requesterOrganisationPostalCode} ${requesterOrganisationLocality}`}</div>
-				<div>{requesterOrganisationVAT}</div>
-				<div>{requesterOrganisationSector}</div>
-			</>,
+			requesterOrganisationAddress ? (
+				<>
+					<div>{requesterOrganisationAddress}</div>
+					<div>{`${requesterOrganisationPostalCode} ${requesterOrganisationLocality}`}</div>
+					<div>{requesterOrganisationVAT}</div>
+					<div>{requesterOrganisationSector}</div>
+				</>
+			) : null,
 
 			<span
 				className={styles['p-material-request-detail__content-info__content-block-subtitle-black']}
