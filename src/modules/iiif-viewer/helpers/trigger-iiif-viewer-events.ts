@@ -20,27 +20,6 @@ export async function iiifZoomToRect(iiifViewerInitialized: Promise<void>, textL
 	window.dispatchEvent(event);
 }
 
-export async function iiifRotate(iiifViewerInitialized: Promise<void>, rotateRight: boolean) {
-	await iiifViewerInitialized;
-	const event: Event = new Event(IiifViewerAction.IIIF_VIEWER_ROTATE);
-	(event as IiifViewerEvent).functionProps = { rotateRight };
-	window.dispatchEvent(event);
-}
-
-export async function iiifFullscreen(iiifViewerInitialized: Promise<void>, expand: boolean) {
-	await iiifViewerInitialized;
-	const event: Event = new Event(IiifViewerAction.IIIF_VIEWER_FULLSCREEN);
-	(event as IiifViewerEvent).functionProps = { expand };
-	window.dispatchEvent(event);
-}
-
-export async function iiifZoom(iiifViewerInitialized: Promise<void>, multiplier: number) {
-	await iiifViewerInitialized;
-	const event: Event = new Event(IiifViewerAction.IIIF_VIEWER_ZOOM);
-	(event as IiifViewerEvent).functionProps = { multiplier };
-	window.dispatchEvent(event);
-}
-
 export async function iiifZoomTo(iiifViewerInitialized: Promise<void>, x: number, y: number) {
 	await iiifViewerInitialized;
 	const event: Event = new Event(IiifViewerAction.IIIF_VIEWER_ZOOM_TO);

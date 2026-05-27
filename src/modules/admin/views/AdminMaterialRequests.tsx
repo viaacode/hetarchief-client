@@ -512,6 +512,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 			<SearchBar
 				id={globalLabelKeys.adminLayout.title}
 				value={search}
+				className="p-material-requests__searchbar"
 				ariaLabel={tText('modules/admin/views/admin-material-requests___zoekbalk-aria-label')}
 				placeholder={tText('pages/admin/materiaalaanvragen/index___zoek')}
 				onChange={setSearch}
@@ -543,7 +544,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 						</div>
 					</div>
 					<div
-						className={clsx('l-container', {
+						className={clsx('l-container l-container--edgeless-to-lg', {
 							'u-text-center u-color-neutral u-py-48': isLoadingMaterialRequests || noData,
 						})}
 					>

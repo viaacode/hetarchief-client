@@ -1,10 +1,9 @@
+import { tText } from '@shared/helpers/translate';
+import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { FC } from 'react';
-
-import { tText } from '@shared/helpers/translate';
-import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 
 import styles from './ErrorPage.module.scss';
 import type { ErrorPageProps } from './ErrorPage.types';
@@ -28,7 +27,6 @@ const ErrorPage: FC<ErrorPageProps> = ({
 					{title && <h1 className={styles['c-error-page__title']}>{title}</h1>}
 					<div className={styles['c-error-page__image-wrapper']}>
 						<Image
-							unoptimized
 							src={image.image}
 							alt=""
 							fill

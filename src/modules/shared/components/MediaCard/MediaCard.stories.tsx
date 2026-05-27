@@ -1,10 +1,9 @@
+import { IeObjectType } from '@shared/types/ie-objects';
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import type { CSSProperties } from 'react';
-
-import { IeObjectType } from '@shared/types/ie-objects';
-
+import { thumbnail } from './__mocks__/media-card';
 import MediaCard from './MediaCard';
-import { soundwave, thumbnail } from './__mocks__/media-card';
+import { soundwave } from './MediaCard.consts';
 
 export default {
 	title: 'Components/MediaCard',

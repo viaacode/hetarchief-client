@@ -6,6 +6,7 @@ import {
 	type MaterialRequestMessage,
 	type MaterialRequestMessageBodyMessage,
 	type MaterialRequestMessageBodyStatusUpdateWithMotivation,
+	MaterialRequestStatus,
 } from '@material-requests/types';
 import { Button } from '@meemoo/react-components';
 import Html from '@shared/components/Html/Html';
@@ -29,12 +30,16 @@ interface MaterialRequestConversationMessageProps {
 	message: MaterialRequestMessage;
 	materialRequest: MaterialRequest;
 	handleDownload: () => void;
+	onOpenEvaluateConditions: (message: MaterialRequestMessage) => void;
+	onMakeDownloadAvailable: () => void;
 }
 
 export const MaterialRequestConversationMessage: FC<MaterialRequestConversationMessageProps> = ({
 	message,
 	materialRequest,
 	handleDownload,
+	onOpenEvaluateConditions,
+	onMakeDownloadAvailable,
 }) => {
 	const user = useSelector(selectCommonUser);
 
@@ -44,6 +49,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 	 * - on the left in grey (other)
 	 */
 	const isOwnMessage = message.senderProfile?.id === user?.profileId;
+	const isRequester = user?.profileId === materialRequest.profileId;
 
 	// Cancelled, denied and download expired are all closable events. Final summary will always be added after that
 	const isFinalMessage = [
@@ -153,9 +159,94 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 		return (
 			<div className={clsx(styles['p-conversation-messages__message__body'])}>
 				{tHtml(
-					'De aanvraag werd afgesloten, hieronder vind je een samenvatting. Alle documenten worden nog tot en met {{date}} bijgehouden',
+					'modules/account/components/material-request-detail-blade/material-request-conversation-message___de-aanvraag-werd-afgesloten-hieronder-vind-je-een-samenvatting-alle-documenten-worden-nog-tot-en-met-date-bijgehouden',
 					{
 						date: formatMediumDate(asDate(materialRequest.willBeArchivedAt)),
+					}
+				)}
+			</div>
+		);
+	};
+
+	const renderAdditionalConditions = () => {
+		const conditionsEvaluated = materialRequest.history.some(
+			(event) =>
+				event.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED ||
+				event.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS_DENIED
+		);
+
+		return (
+			<>
+				<div className={clsx(styles['p-conversation-messages__message__body'])}>
+					{tHtml(
+						'modules/account/components/material-request-detail-blade/material-request-conversation-message___strong-name-strong-stuurde-bijkomende-gebruiksvoorwaarden',
+						{
+							name: messageSenderName(),
+						}
+					)}
+				</div>
+
+				{isRequester && !conditionsEvaluated && (
+					<Button
+						label={tText(
+							'modules/account/components/material-request-detail-blade/material-request-conversation-message___voorwaarden-evalueren'
+						)}
+						variants={['dark']}
+						onClick={() => onOpenEvaluateConditions(message)}
+						className={clsx(styles['p-conversation-messages__message__download-button'])}
+					/>
+				)}
+			</>
+		);
+	};
+
+	const renderAdditionalConditionsAccepted = () => {
+		const isApproved = materialRequest.status === MaterialRequestStatus.APPROVED;
+
+		if (isRequester) {
+			return (
+				<div className={clsx(styles['p-conversation-messages__message__body'])}>
+					{tHtml(
+						'modules/account/components/material-request-detail-blade/material-request-conversation-message___name-aanvaardde-de-bijkomende-gebruiksvoorwaarden-de-download-wordt-beschikbaar-gemaakt-na-finale-goedkeuring-van-de-aanbieder',
+						{
+							name: messageSenderName(),
+						}
+					)}
+				</div>
+			);
+		}
+
+		return (
+			<>
+				<div className={clsx(styles['p-conversation-messages__message__body'])}>
+					{tHtml(
+						'modules/account/components/material-request-detail-blade/material-request-conversation-message___name-aanvaardde-de-bijkomende-gebruiksvoorwaarden',
+						{
+							name: messageSenderName(),
+						}
+					)}
+				</div>
+				{!isApproved && (
+					<Button
+						label={tText(
+							'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-beschikbaar-maken'
+						)}
+						variants={['dark']}
+						onClick={onMakeDownloadAvailable}
+						className={clsx(styles['p-conversation-messages__message__download-button'])}
+					/>
+				)}
+			</>
+		);
+	};
+
+	const renderAdditionalConditionsDenied = () => {
+		return (
+			<div className={clsx(styles['p-conversation-messages__message__body'])}>
+				{tHtml(
+					'modules/account/components/material-request-detail-blade/material-request-conversation-message___name-weigerde-de-bijkomende-gebruiksvoorwaarden-de-aanvraag-wordt-afgesloten',
+					{
+						name: messageSenderName(),
 					}
 				)}
 			</div>
@@ -238,13 +329,16 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 				return renderFinalSummary();
 
 			case MaterialRequestEventType.ADDITIONAL_CONDITIONS:
+				return renderAdditionalConditions();
+
 			case MaterialRequestEventType.ADDITIONAL_CONDITIONS_ACCEPTED:
+				return renderAdditionalConditionsAccepted();
+
 			case MaterialRequestEventType.ADDITIONAL_CONDITIONS_DENIED: {
-				return 'TODO: implement these messages';
+				return renderAdditionalConditionsDenied();
 			}
 		}
 	};
-
 	const renderMessageHeader = () => {
 		// No header for system messages
 		if (isSystemMessage) {

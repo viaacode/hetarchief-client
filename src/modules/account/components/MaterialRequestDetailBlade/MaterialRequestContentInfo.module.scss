@@ -73,6 +73,10 @@
 			padding-bottom: abstracts.$spacer-xxs;
 		}
 
+		&-subtitle-black {
+			color: abstracts.$black;
+		}
+
 		&-value {
 			color: abstracts.$grey;
 			padding: 0;
@@ -85,6 +89,14 @@
 			aspect-ratio: 16/9;
 			object-fit: cover;
 			object-position: center;
+		}
+
+		&-additional-condition {
+			margin-bottom: abstracts.$spacer-xs;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
 		}
 	}
 }

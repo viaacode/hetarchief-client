@@ -1,0 +1,15 @@
+@use "../../../../styles/abstracts" as abstracts;
+
+.c-material-request-additional-conditions-resolution-blade {
+	&__description {
+		margin-bottom: abstracts.$spacer-md;
+	}
+
+	&__radio-subtext {
+		display: flex;
+		font-style: italic;
+		font-size: abstracts.$font-size-sm;
+		color: abstracts.$shade;
+		margin: abstracts.$spacer-xxs 0 abstracts.$spacer-md 0;
+	}
+}

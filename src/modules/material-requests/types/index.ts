@@ -35,6 +35,12 @@ export interface MaterialRequest {
 	requesterMail: string;
 	requesterOrganisation?: string;
 	requesterOrganisationSector?: string;
+	requesterOrganisationAddress?: string;
+	requesterOrganisationId?: string;
+	requesterOrganisationLocality?: string;
+	requesterOrganisationName?: string;
+	requesterOrganisationPostalCode?: string;
+	requesterOrganisationVAT?: string;
 	type: MaterialRequestType;
 	reuseForm?: MaterialRequestReuseForm;
 	updatedAt: string;
@@ -95,7 +101,7 @@ export interface MaterialRequestMessageBodyMessage {
 
 export interface MaterialRequestMessageBodyAdditionalConditions {
 	conditions: Condition[];
-	autoApproveAfterAcceptAdditionalConditions: boolean;
+	autoApproveAfterAcceptAdditionalConditions: boolean | null;
 }
 
 export interface MaterialRequestMessageBodyStatusUpdateWithMotivation {
@@ -187,7 +193,8 @@ export interface MaterialRequestUpdate {
 
 export interface MaterialRequestSendAll {
 	type: MaterialRequestRequesterCapacity;
-	organisation?: string;
+	organisationId?: string;
+	organisationName?: string;
 	requestGroupName?: string;
 }
 

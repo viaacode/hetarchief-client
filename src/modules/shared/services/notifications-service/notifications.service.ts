@@ -66,8 +66,9 @@ export abstract class NotificationsService {
 	public static getPath(notification: Notification): string | null {
 		return (
 			GET_PATH_FROM_NOTIFICATION_TYPE()
-				[notification.type]?.replace('{visitRequestId}', notification.visitId)
-				?.replace('{slug}', notification.visitorSpaceSlug) || null
+				[notification.type]?.replace('{visitRequestId}', notification.visitId || '')
+				?.replace('{slug}', notification.visitorSpaceSlug || '')
+				?.replace('{materialRequestId}', notification.materialRequestId || '') || null
 		);
 	}
 

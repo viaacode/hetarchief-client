@@ -22,10 +22,3 @@ export const SHARE_FOLDER_FORM_SCHEMA = (): Schema<ShareFolderBladeFormState> =>
 export const labelKeys: Record<keyof ShareFolderBladeFormState, string> = {
 	email: 'ShareFolderBlade__email',
 };
-
-export interface EmailTemplate {
-	data: {
-		to: string;
-		consentToTrack: string;
-	};
-}

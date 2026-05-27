@@ -543,8 +543,8 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 							endSliderAriaLabel={tText(
 								'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___eind-tijd-van-de-video-audio-selectie-input-aria-label'
 							)}
-							startSliderId="material-request_for-reuse-blade__start-slider-id"
-							endSliderId="material-request_for-reuse-blade__end-slider-id"
+							startSliderId="material-request-for-reuse-blade__start-slider-id"
+							endSliderId="material-request-for-reuse-blade__end-slider-id"
 						/>
 					</div>
 				)}
@@ -763,17 +763,19 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 							title=""
 							radioButtonGroupLabel={kebabCase('distributionTypeDigitalOnline')}
 							selectedOption={formValues.distributionTypeDigitalOnline}
-							onChange={(value) =>
-								setFormValue(MaterialRequestReuseFormKey.distributionTypeDigitalOnline, value)
-							}
+							onChange={(value) => {
+								setFormValue(MaterialRequestReuseFormKey.distributionTypeDigitalOnline, value);
+								setFormValue(
+									MaterialRequestReuseFormKey.distributionType,
+									MaterialRequestDistributionType.DIGITAL_ONLINE
+								);
+							}}
 							options={[
 								{
 									label: tText(
 										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-digitale-ontsluiting-via-netwerkverbinding-een-besloten-dienst-label'
 									),
 									value: MaterialRequestDistributionDigitalOnline.INTERNAL,
-									disabled:
-										formValues.distributionType !== MaterialRequestDistributionType.DIGITAL_ONLINE,
 									description: tText(
 										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-digitale-ontsluiting-via-netwerkverbinding-een-besloten-dienst-omschrijving'
 									),
@@ -783,8 +785,6 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-digitale-ontsluiting-via-netwerkverbinding-publiek-zonder-authenticatie-label'
 									),
 									value: MaterialRequestDistributionDigitalOnline.NO_AUTH,
-									disabled:
-										formValues.distributionType !== MaterialRequestDistributionType.DIGITAL_ONLINE,
 									description: tText(
 										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-digitale-ontsluiting-via-netwerkverbinding-publiek-zonder-authenticatie-omschrijving'
 									),
@@ -794,8 +794,6 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-digitale-ontsluiting-via-netwerkverbinding-publiek-met-authenticatie-label'
 									),
 									value: MaterialRequestDistributionDigitalOnline.WITH_AUTH,
-									disabled:
-										formValues.distributionType !== MaterialRequestDistributionType.DIGITAL_ONLINE,
 									description: tText(
 										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___type-ontsluiting-digitale-ontsluiting-via-netwerkverbinding-publiek-met-authenticatie-omschrijving'
 									),
@@ -822,6 +820,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 									id="material-request-for-reuse-blade__distribution-type-other-explanation"
 									value={formValues.distributionTypeOtherExplanation}
 									disabled={formValues.distributionType !== MaterialRequestDistributionType.OTHER}
+									maxLength={300}
 									onChange={(evt) =>
 										setFormValue(
 											MaterialRequestReuseFormKey.distributionTypeOtherExplanation,

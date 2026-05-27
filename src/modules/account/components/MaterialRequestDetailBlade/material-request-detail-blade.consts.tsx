@@ -23,7 +23,7 @@ export const MATERIAL_REQUEST_DETAILS_TABS = (
 		if (isMobile) {
 			return {
 				id,
-				label: '',
+				label,
 				icon: (
 					<>
 						<Icon name={icon} aria-hidden />

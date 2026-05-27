@@ -200,6 +200,11 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 			:global(.bf-content) {
 				border: 1px solid abstracts.$silver !important;
 				border-radius: 0 0 abstracts.$spacer-xs abstracts.$spacer-xs;
+
+				:global(.DraftEditor-editorContainer),
+				:global(.public-DraftEditor-content) {
+					padding-right: abstracts.$spacer-md;
+				}
 			}
 		}
 
@@ -207,6 +212,8 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 		&--keyboard-open {
 			@media (max-width: abstracts.$breakpoint-md) {
 				:global(.c-rich-text-editor) {
+					overflow: visible !important;
+
 					:global(.bf-container) {
 						flex-direction: column-reverse;
 					}
@@ -217,7 +224,21 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 					}
 
 					:global(.bf-content) {
+						overflow: visible !important;
+						height: auto !important;
 						border-radius: abstracts.$spacer-xs abstracts.$spacer-xs 0 0;
+					}
+
+					:global(.link-editor-dropdown .dropdown-content) {
+						top: auto;
+						bottom: 100%;
+						margin-top: 0;
+						margin-bottom: abstracts.$spacer-xs;
+					}
+
+					:global(.link-editor-dropdown .dropdown-content .dropdown-arrow) {
+						top: auto;
+						bottom: -3px;
 					}
 				}
 			}

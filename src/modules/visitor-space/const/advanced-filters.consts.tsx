@@ -5,10 +5,10 @@ import {
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
 } from '@shared/types/ie-objects';
+import { AdvancedRightsSelect } from '@visitor-space/components/AdvancedRightsSelect/AdvancedRightsSelect';
 import AutocompleteFieldInput, {
 	type AutocompleteFieldInputProps,
 } from '@visitor-space/components/AutocompleteFieldInput/AutocompleteFieldInput';
-import { AdvancedRightsSelect } from '@visitor-space/components/AdvancedRightsSelect/AdvancedRightsSelect';
 import { DateInput } from '@visitor-space/components/DateInput';
 import type { DateInputProps } from '@visitor-space/components/DateInput/DateInput';
 import { DateRangeInput } from '@visitor-space/components/DateRangeInput';

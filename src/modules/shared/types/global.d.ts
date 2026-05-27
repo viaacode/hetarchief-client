@@ -7,6 +7,8 @@ declare global {
 			readonly NODE_ENV: 'development' | 'production' | 'test';
 			readonly CLIENT_URL: string;
 			readonly SSUM_EDIT_ACCOUNT_URL: string;
+			readonly KEYCLOAK_ACCOUNT_URL: string;
+			readonly USE_KEYCLOAK_INSTEAD_OF_SSUM: 'true' | 'false';
 			readonly PORT: string;
 			readonly PROXY_URL: string;
 			readonly DEBUG_TOOLS: 'true' | 'false';
@@ -18,6 +20,10 @@ declare global {
 			readonly ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW: 'true' | 'false';
 			readonly ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY: 'true' | 'false';
 		}
+	}
+
+	interface Window {
+		zE: (...args) => unknown;
 	}
 }
 

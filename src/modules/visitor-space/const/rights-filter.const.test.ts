@@ -5,8 +5,9 @@ import { getRightsOptions, RightsLabel } from './rights-filter.const';
 
 describe('getRightsOptions', () => {
 	it('should narrow rights options to newspaper labels on the newspaper tab', () => {
-		expect(getRightsOptions({ mediaType: SearchPageMediaType.Newspaper }).map(({ value }) => value))
-			.toEqual([RightsLabel.PUBLIC_DOMAIN, RightsLabel.COPYRIGHT_UNDETERMINED]);
+		expect(
+			getRightsOptions({ mediaType: SearchPageMediaType.Newspaper }).map(({ value }) => value)
+		).toEqual([RightsLabel.PUBLIC_DOMAIN, RightsLabel.COPYRIGHT_UNDETERMINED]);
 	});
 
 	it('should narrow rights options to the selected reusability category', () => {

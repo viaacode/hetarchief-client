@@ -1,3 +1,4 @@
+import { MIN_LENGTH_SCHEMA_IDENTIFIER_V2 } from '@ie-objects/ie-objects.consts';
 import type { IeObject } from '@ie-objects/ie-objects.types';
 import { ObjectDetailPage } from '@ie-objects/ObjectDetailPage';
 import { prefetchDetailPageQueries } from '@ie-objects/ObjectDetailPage.helpers';
@@ -36,11 +37,18 @@ export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	const schemaIdentifier = context.query.ie as string;
+	let newSchemaIdentifier = schemaIdentifier;
 
 	let ieObject: IeObject | null = null;
 	let showHard404IfNotFound = true;
 	try {
-		ieObject = (await IeObjectsService.getBySchemaIdentifiers([schemaIdentifier], true))?.[0];
+		if (schemaIdentifier.length > MIN_LENGTH_SCHEMA_IDENTIFIER_V2) {
+			// This is an old schema identifier (v2), we need to convert it to a new one (v3)
+			const v3IdentifierResponse = await IeObjectsService.lookupV2Id(schemaIdentifier);
+			newSchemaIdentifier = v3IdentifierResponse.schemaIdentifierV3;
+		}
+
+		ieObject = (await IeObjectsService.getBySchemaIdentifiers([newSchemaIdentifier], true))?.[0];
 		// biome-ignore lint/suspicious/noExplicitAny: we just do not know
 	} catch (err: any) {
 		if (err?.response?.status === 403) {
@@ -56,18 +64,18 @@ export async function getServerSideProps(
 
 	let seoInfo: IeObjectSeo | null = null;
 	try {
-		seoInfo = await IeObjectsService.getSeoBySchemaIdentifier(schemaIdentifier);
+		seoInfo = await IeObjectsService.getSeoBySchemaIdentifier(newSchemaIdentifier);
 	} catch (err) {
 		console.error(`Failed to fetch media info by id: ${context.query.ie}`, err);
 	}
 
 	return getDefaultStaticProps(context, context.resolvedUrl, {
 		queryClient: await prefetchDetailPageQueries(
-			schemaIdentifier,
+			newSchemaIdentifier,
 			ieObject?.maintainerId,
 			ieObject?.maintainerSlug
 		),
-		schemaIdentifier,
+		schemaIdentifier: newSchemaIdentifier,
 		title: seoInfo?.name,
 		description: seoInfo?.description,
 		image: seoInfo?.thumbnailUrl,

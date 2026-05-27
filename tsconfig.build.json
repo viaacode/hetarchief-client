@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "src/**/*.stories.*", "src/**/*.test.*"],
+  "exclude": ["node_modules", "src/**/*.stories.*", "src/**/*.test.*", "src/**/__mocks__/*", "tests"],
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
     "plugins": [

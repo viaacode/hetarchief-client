@@ -55,15 +55,16 @@ function getRightsSearchText(rightsInfo?: IeObjectRightsInfo | null): string {
 	);
 }
 
-function getRightsCategoryConfig(rightsInfo?: IeObjectRightsInfo | null): RightsCategoryConfig | null {
+function getRightsCategoryConfig(
+	rightsInfo?: IeObjectRightsInfo | null
+): RightsCategoryConfig | null {
 	const rightsUrl = normalizeRightsValue(
 		rightsInfo?.reuseCategoryUrl || rightsInfo?.reuseCategoryId || ''
 	);
 
 	return (
-		Object.entries(RIGHTS_CATEGORY_CONFIGS).find(([urlPart]) =>
-			rightsUrl.includes(urlPart)
-		)?.[1] || null
+		Object.entries(RIGHTS_CATEGORY_CONFIGS).find(([urlPart]) => rightsUrl.includes(urlPart))?.[1] ||
+		null
 	);
 }
 
@@ -71,9 +72,7 @@ function getRightsCategoryLabel(config: RightsCategoryConfig): string {
 	return tText(config.labelKey) || config.fallbackLabel;
 }
 
-export function getIeObjectAvRightsUrl(
-	rightsInfo?: IeObjectRightsInfo | null
-): string | undefined {
+export function getIeObjectAvRightsUrl(rightsInfo?: IeObjectRightsInfo | null): string | undefined {
 	if (getRightsSearchText(rightsInfo).includes('geen rechteninformatie')) {
 		return undefined;
 	}

@@ -1,12 +1,11 @@
-import { sortBy } from 'lodash-es';
-
 import { tText } from '@shared/helpers/translate';
 import {
 	ADVANCED_FILTERS,
-	type FilterConfig,
 	FILTERS_OPTIONS_CONFIG,
+	type FilterConfig,
 	REGULAR_FILTERS,
 } from '@visitor-space/const/advanced-filters.consts';
+import { sortBy } from 'lodash-es';
 
 import {
 	FilterProperty,

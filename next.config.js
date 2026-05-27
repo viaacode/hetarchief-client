@@ -101,6 +101,7 @@ module.exports = withTM({
 		tsconfigPath: './tsconfig.build.json',
 	},
 	images: {
+		unoptimized: true,
 		remotePatterns: [
 			{
 				protocol: 'https',
@@ -119,6 +120,8 @@ module.exports = withTM({
 		PORT: process.env.PORT,
 		CLIENT_URL: process.env.CLIENT_URL,
 		SSUM_EDIT_ACCOUNT_URL: process.env.SSUM_EDIT_ACCOUNT_URL,
+		KEYCLOAK_ACCOUNT_URL: process.env.KEYCLOAK_ACCOUNT_URL,
+		USE_KEYCLOAK_INSTEAD_OF_SSUM: process.env.USE_KEYCLOAK_INSTEAD_OF_SSUM,
 		PROXY_URL: process.env.PROXY_URL,
 		DEBUG_TOOLS: process.env.DEBUG_TOOLS,
 		ZENDESK_KEY: process.env.ZENDESK_KEY,
@@ -244,8 +247,7 @@ module.exports = withTM({
 				permanent: true,
 			},
 			{
-				source:
-					'/catalog\\?utf8=\\%E2\\%9C\\%93&q=&search_field=all_fields&search_field=advanced&all_fields=hond',
+				source: '/catalog\\?utf8=\\%E2\\%9C\\%93&q=&search_field=all_fields&search_field=advanced&all_fields=hond',
 				destination: '/zoeken',
 				permanent: true,
 			},

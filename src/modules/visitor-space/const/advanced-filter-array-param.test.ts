@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
-
+import { FilterProperty, Operator } from '../types';
 import { AdvancedFilterArrayParam } from './advanced-filter-array-param';
 import { RightsLabel } from './rights-filter.const';
-import { FilterProperty, Operator } from '../types';
 
 describe('AdvancedFilterArrayParam', () => {
 	it('should encode and decode rights filters', () => {

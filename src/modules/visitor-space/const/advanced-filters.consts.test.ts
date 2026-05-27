@@ -1,9 +1,8 @@
 import { IeObjectsSearchFilterField, IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import { getAdvancedProperties, getOperators } from '@visitor-space/utils/advanced-filters';
 import { describe, expect, it } from 'vitest';
-
-import { getMetadataSearchFilters } from './advanced-filters.consts';
 import { FilterProperty, Operator } from '../types';
+import { getMetadataSearchFilters } from './advanced-filters.consts';
 
 describe('advanced filters config', () => {
 	it('should expose rights as an advanced filter with is and is-not operators', () => {
