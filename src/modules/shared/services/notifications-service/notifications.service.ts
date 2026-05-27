@@ -5,12 +5,17 @@ import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
 import { TranslationService } from '@shared/services/translation-service/translation.service';
 import { asDate } from '@shared/utils/dates';
+import { isMobileSize } from '@shared/utils/is-mobile';
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { QueryClient } from '@tanstack/react-query';
 import type { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 
-import { GET_PATH_FROM_NOTIFICATION_TYPE } from './notifications.consts';
+import {
+	GET_DESCRIPTION_FROM_NOTIFICATION,
+	GET_PATH_FROM_NOTIFICATION_TYPE,
+	GET_TITLE_FROM_NOTIFICATION,
+} from './notifications.consts';
 import {
 	type MarkAllAsReadResult,
 	type Notification,
@@ -121,9 +126,14 @@ export abstract class NotificationsService {
 
 			if (newNotifications.length === 1) {
 				// one => show details on the one notification
+				const windowSize =
+					typeof window !== 'undefined'
+						? { width: window.innerWidth, height: window.innerHeight }
+						: { width: 0, height: 0 };
+				const isMobile = isMobileSize(windowSize);
 				toastService.notify({
-					title: newNotifications[0].title,
-					description: newNotifications[0].description,
+					title: GET_TITLE_FROM_NOTIFICATION(newNotifications[0], isMobile),
+					description: GET_DESCRIPTION_FROM_NOTIFICATION(newNotifications[0], isMobile),
 					buttonLabel: tText(
 						'modules/shared/services/notifications-service/notifications___bekijk'
 					),
