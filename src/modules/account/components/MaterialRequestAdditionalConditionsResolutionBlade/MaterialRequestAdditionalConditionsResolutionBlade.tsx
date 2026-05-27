@@ -154,7 +154,9 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 			</p>
 
 			<FormControl
-				label={tText('Goedkeuring')}
+				label={tText(
+					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___goedkeuring'
+				)}
 				errors={
 					showValidation && isNil(conditions?.autoApproveAfterAcceptAdditionalConditions)
 						? [
