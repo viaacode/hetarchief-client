@@ -3,7 +3,7 @@ import type {
 	MaterialRequest,
 	MaterialRequestMessageBodyAdditionalConditions,
 } from '@material-requests/types';
-import { RadioButton } from '@meemoo/react-components';
+import { FormControl, RadioButton } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
@@ -153,79 +153,91 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 				)}
 			</p>
 
-			<RadioButton
-				className={clsx(styles['c-material-request-additional-conditions-resolution-blade__radio'])}
-				label={
-					<>
-						{tText(
-							'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-aanvraag-automatisch-wordt-goedgekeurd'
-						)}
-
-						<span
-							className={clsx(
-								styles['c-material-request-additional-conditions-resolution-blade__radio-subtext']
-							)}
-						>
-							{tText(
-								'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___in-dit-geval-zal-het-materiaal-onmiddelijk-klaargemaakt-worden-voor-download'
-							)}
-						</span>
-					</>
+			<FormControl
+				label={tText('Goedkeuring')}
+				errors={
+					showValidation && isNil(conditions?.autoApproveAfterAcceptAdditionalConditions)
+						? [
+								<RedFormWarning
+									error={tText(
+										'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___selecteer-een-van-de-opties'
+									)}
+									key="form-error--auto-approve-after-accept-additional-conditions"
+								/>,
+							]
+						: []
 				}
-				aria-label={tText(
-					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-aanvraag-automatisch-wordt-goedgekeurd-aria-label'
-				)}
-				checked={conditions?.autoApproveAfterAcceptAdditionalConditions === true}
-				onClick={() => {
-					if (conditions) {
-						onConditionsChange({
-							...conditions,
-							autoApproveAfterAcceptAdditionalConditions: true,
-						});
-					}
-				}}
-			/>
-
-			<RadioButton
-				className={clsx(styles['c-material-request-additional-conditions-resolution-blade__radio'])}
-				label={
-					<>
-						{tText(
-							'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-aanvraag-automatisch-wordt-afgekeurd'
-						)}
-
-						<span
-							className={clsx(
-								styles['c-material-request-additional-conditions-resolution-blade__radio-subtext']
-							)}
-						>
-							{tText(
-								'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___in-dit-geval-zal-je-eerst-nog-manueel-de-finale-goedkeuring-moeten-geven-vooraleer-het-materiaal-klaargemaakt-wordt-voor-download'
-							)}
-						</span>
-					</>
-				}
-				aria-label={tText(
-					'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-aanvraag-moet-expliciet-worden-goedgekeurd-aria-label'
-				)}
-				checked={conditions?.autoApproveAfterAcceptAdditionalConditions === false}
-				onClick={() => {
-					if (conditions) {
-						onConditionsChange({
-							...conditions,
-							autoApproveAfterAcceptAdditionalConditions: false,
-						});
-					}
-				}}
-			/>
-
-			{showValidation && isNil(conditions?.autoApproveAfterAcceptAdditionalConditions) && (
-				<RedFormWarning
-					error={tText(
-						'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___selecteer-een-van-de-opties'
+			>
+				<RadioButton
+					className={clsx(
+						styles['c-material-request-additional-conditions-resolution-blade__radio']
 					)}
+					label={
+						<>
+							{tText(
+								'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-aanvraag-automatisch-wordt-goedgekeurd'
+							)}
+
+							<span
+								className={clsx(
+									styles['c-material-request-additional-conditions-resolution-blade__radio-subtext']
+								)}
+							>
+								{tText(
+									'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___in-dit-geval-zal-het-materiaal-onmiddelijk-klaargemaakt-worden-voor-download'
+								)}
+							</span>
+						</>
+					}
+					aria-label={tText(
+						'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-aanvraag-automatisch-wordt-goedgekeurd-aria-label'
+					)}
+					checked={conditions?.autoApproveAfterAcceptAdditionalConditions === true}
+					onClick={() => {
+						if (conditions) {
+							onConditionsChange({
+								...conditions,
+								autoApproveAfterAcceptAdditionalConditions: true,
+							});
+						}
+					}}
 				/>
-			)}
+
+				<RadioButton
+					className={clsx(
+						styles['c-material-request-additional-conditions-resolution-blade__radio']
+					)}
+					label={
+						<>
+							{tText(
+								'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-aanvraag-automatisch-wordt-afgekeurd'
+							)}
+
+							<span
+								className={clsx(
+									styles['c-material-request-additional-conditions-resolution-blade__radio-subtext']
+								)}
+							>
+								{tText(
+									'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___in-dit-geval-zal-je-eerst-nog-manueel-de-finale-goedkeuring-moeten-geven-vooraleer-het-materiaal-klaargemaakt-wordt-voor-download'
+								)}
+							</span>
+						</>
+					}
+					aria-label={tText(
+						'modules/account/components/material-request-additional-conditions-resolution-blade/material-request-additional-conditions-resolution-blade___de-aanvraag-moet-expliciet-worden-goedgekeurd-aria-label'
+					)}
+					checked={conditions?.autoApproveAfterAcceptAdditionalConditions === false}
+					onClick={() => {
+						if (conditions) {
+							onConditionsChange({
+								...conditions,
+								autoApproveAfterAcceptAdditionalConditions: false,
+							});
+						}
+					}}
+				/>
+			</FormControl>
 		</Blade>
 	);
 };
