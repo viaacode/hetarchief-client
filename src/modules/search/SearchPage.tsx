@@ -88,7 +88,6 @@ import {
 import type { AdvancedFilterFormState } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.types';
 import type { ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
 import type { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
-import type { ConsultablePublicDomainFilterFormState } from '@visitor-space/components/ConsultablePublicDomainFilterForm/ConsultablePublicDomainFilterForm.types';
 import type { DurationFilterFormState } from '@visitor-space/components/DurationFilterForm';
 import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
 import type { GenreFilterFormState } from '@visitor-space/components/GenreFilterForm';
@@ -570,14 +569,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				break;
 			}
 
-			case SearchFilterId.ConsultablePublicDomain:
-				// Info: remove query param if false (= set to undefined)
-				data =
-					(values as ConsultablePublicDomainFilterFormState)[
-						IeObjectsSearchFilterField.CONSULTABLE_PUBLIC_DOMAIN
-					] || undefined;
-				break;
-
 			case SearchFilterId.Advanced:
 				data = (values as AdvancedFilterFormState).advanced.filter((advanced) => {
 					return !isNil(advanced.val) && advanced.val !== initialFields().val;
@@ -636,8 +627,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 					break;
 
 				case SearchFilterId.ConsultableOnlyOnLocation:
-				case SearchFilterId.ConsultableMedia:
-				case SearchFilterId.ConsultablePublicDomain: {
+				case SearchFilterId.ConsultableMedia: {
 					// eslint-disable-next-line no-case-declarations
 					const newValue = `${tag.value ?? 'false'}`.replace(tagPrefix(tag.key), '');
 					updatedQuery[tag.key] = newValue === 'true' ? 'false' : 'true';
