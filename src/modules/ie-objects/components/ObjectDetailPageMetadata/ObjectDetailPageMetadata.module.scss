@@ -73,6 +73,37 @@ $maintainer-logo-height: 7rem;
 	gap: $spacer-xs;
 }
 
+.p-object-detail__source-attribution-info {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-left: $spacer-xxs;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: $black;
+	cursor: pointer;
+
+	:global([class*="c-icon"]) {
+		font-size: $font-size-base;
+	}
+
+	&:focus-visible {
+		outline: 0.2rem solid $teal;
+		outline-offset: 0.2rem;
+	}
+}
+
+.p-object-detail__provider-identifier-link {
+	text-decoration: underline;
+	text-underline-offset: 0.2rem;
+
+	&:hover,
+	&:focus {
+		text-decoration-thickness: 0.2rem;
+	}
+}
+
 // maintainer logo
 .p-object-detail__sidebar__content-logo {
 	width: 100%;
