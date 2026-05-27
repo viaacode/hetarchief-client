@@ -1,32 +1,32 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-object-detail-page-metadata-rights {
 	&__content {
 		display: flex;
 		flex-direction: column;
-		gap: $spacer-xs;
+		gap: abstracts.$spacer-xs;
 	}
 
 	&__label {
 		display: flex;
 		align-items: center;
-		gap: $spacer-xs;
-		font-size: $font-size-base;
-		font-weight: $font-weight-bold;
-		line-height: $line-height-1xl;
+		gap: abstracts.$spacer-xs;
+		font-size: abstracts.$font-size-base;
+		font-weight: abstracts.$font-weight-bold;
+		line-height: abstracts.$line-height-1xl;
 	}
 
 	&__label-icon {
 		display: inline-flex;
 		flex-shrink: 0;
 		align-items: center;
-		width: $font-size-1xl;
-		height: $font-size-1xl;
+		width: abstracts.$font-size-1xl;
+		height: abstracts.$font-size-1xl;
 		line-height: 1;
 		text-decoration: none;
 
 		:global([class*="c-icon"]) {
-			font-size: $font-size-1xl;
+			font-size: abstracts.$font-size-1xl;
 			line-height: 1;
 		}
 	}
@@ -45,7 +45,9 @@
 		flex-direction: column;
 
 		strong {
-			color: $black;
+			color: abstracts.$black;
+			padding-top: abstracts.$spacer-sm;
+			padding-bottom: abstracts.$spacer-xxs;
 		}
 	}
 }
