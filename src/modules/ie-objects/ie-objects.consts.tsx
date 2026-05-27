@@ -134,12 +134,14 @@ export const OBJECT_DETAIL_TABS = (
 		{
 			id: ObjectDetailTabs.Metadata,
 			label: tText('modules/ie-objects/const/index___metadata'),
+			ariaLabel: tText('modules/ie-objects/const/index___metadata'),
 			icon: <Icon name={IconNamesLight.Info} aria-hidden />,
 			active: ObjectDetailTabs.Metadata === activeTab,
 		},
 		{
 			id: ObjectDetailTabs.Media,
 			label: GET_TYPE_TO_LABEL_MAP(typeWithDefault),
+			ariaLabel: GET_TYPE_TO_LABEL_MAP(typeWithDefault),
 			icon: <Icon name={getIconFromObjectType(typeWithDefault, mediaAvailable)} aria-hidden />,
 			active: ObjectDetailTabs.Media === activeTab,
 		},
@@ -148,6 +150,7 @@ export const OBJECT_DETAIL_TABS = (
 					{
 						id: ObjectDetailTabs.Ocr,
 						label: tText('modules/ie-objects/ie-objects___ocr'),
+						ariaLabel: tText('modules/ie-objects/ie-objects___ocr'),
 						icon: <Icon name={IconNamesLight.Ocr} aria-hidden />,
 						active: ObjectDetailTabs.Ocr === activeTab,
 					},

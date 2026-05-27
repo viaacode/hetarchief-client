@@ -45,22 +45,27 @@ export const requestStatusFilters = (): TabProps[] => {
 		{
 			id: RequestStatusAll.ALL,
 			label: tText('modules/cp/const/requests___alle'),
+			ariaLabel: tText('modules/cp/const/requests___alle'),
 		},
 		{
 			id: VisitStatus.PENDING,
 			label: tText('modules/cp/const/requests___open'),
+			ariaLabel: tText('modules/cp/const/requests___open'),
 		},
 		{
 			id: VisitStatus.APPROVED,
 			label: tText('modules/cp/const/requests___goedgekeurd'),
+			ariaLabel: tText('modules/cp/const/requests___goedgekeurd'),
 		},
 		{
 			id: VisitStatus.DENIED,
 			label: tText('modules/cp/const/requests___geweigerd'),
+			ariaLabel: tText('modules/cp/const/requests___geweigerd'),
 		},
 		{
 			id: VisitStatus.CANCELLED_BY_VISITOR,
 			label: tText('modules/cp/const/requests___geannuleerd'),
+			ariaLabel: tText('modules/cp/const/requests___geannuleerd'),
 		},
 	];
 };

@@ -24,6 +24,7 @@ export const MATERIAL_REQUEST_DETAILS_TABS = (
 			return {
 				id,
 				label,
+				ariaLabel: label,
 				icon: (
 					<>
 						<Icon name={icon} aria-hidden />
@@ -46,6 +47,7 @@ export const MATERIAL_REQUEST_DETAILS_TABS = (
 					)}
 				</>
 			),
+			ariaLabel: label,
 			active: id === activeTab,
 		};
 	};

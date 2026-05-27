@@ -151,18 +151,22 @@ export const VisitorSpaceStatusOptions = (): TabProps[] => {
 		{
 			id: 'ALL',
 			label: tText('modules/visitor-space/const/index___alles'),
+			ariaLabel: tText('modules/visitor-space/const/index___alles'),
 		},
 		{
 			id: VisitorSpaceStatus.Requested,
 			label: tText('modules/visitor-space/const/index___in-aanvraag'),
+			ariaLabel: tText('modules/visitor-space/const/index___in-aanvraag'),
 		},
 		{
 			id: VisitorSpaceStatus.Active,
 			label: tText('modules/visitor-space/const/index___gepubliceerd'),
+			ariaLabel: tText('modules/visitor-space/const/index___gepubliceerd'),
 		},
 		{
 			id: VisitorSpaceStatus.Inactive,
 			label: tText('modules/visitor-space/const/index___gedepubliceerd'),
+			ariaLabel: tText('modules/visitor-space/const/index___gedepubliceerd'),
 		},
 	];
 };

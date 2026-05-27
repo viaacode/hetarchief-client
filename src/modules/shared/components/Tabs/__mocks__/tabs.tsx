@@ -12,6 +12,7 @@ export const mockTabs: TabProps[] = [
 				<small>(52)</small>
 			</>
 		),
+		ariaLabel: 'Alles',
 		active: true,
 	},
 	{
@@ -22,6 +23,7 @@ export const mockTabs: TabProps[] = [
 				<small>(52)</small>
 			</>
 		),
+		ariaLabel: 'Audio',
 		icon: <Icon name={IconNamesLight.Audio} aria-hidden />,
 	},
 	{
@@ -32,6 +34,7 @@ export const mockTabs: TabProps[] = [
 				<small>(0)</small>
 			</>
 		),
+		ariaLabel: 'Video',
 		icon: <Icon name={IconNamesLight.Video} aria-hidden />,
 	},
 	{
@@ -42,6 +45,7 @@ export const mockTabs: TabProps[] = [
 				<small>(0)</small>
 			</>
 		),
+		ariaLabel: 'Kranten',
 		icon: <Icon name={IconNamesLight.Newspaper} aria-hidden />,
 	},
 ];
@@ -50,18 +54,22 @@ export const mockAdminTabs: TabProps[] = [
 	{
 		id: 'all',
 		label: 'Alle',
+		ariaLabel: 'Alle',
 		active: true,
 	},
 	{
 		id: 'all',
 		label: 'Open',
+		ariaLabel: 'Open',
 	},
 	{
 		id: 'all',
 		label: 'Goedgekeurd',
+		ariaLabel: 'Goedgekeurd',
 	},
 	{
 		id: 'all',
 		label: 'Geweigerd',
+		ariaLabel: 'Geweigerd',
 	},
 ];

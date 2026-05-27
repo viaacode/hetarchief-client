@@ -27,7 +27,7 @@ export function getIconFromObjectType(
 	}[simpleType];
 }
 
-export function GET_TYPE_TO_LABEL_MAP(type: IeObjectType): string | undefined {
+export function GET_TYPE_TO_LABEL_MAP(type: IeObjectType): string {
 	const simpleType = mapDcTermsFormatToSimpleType(type);
 	return {
 		[SimpleIeObjectType.AUDIO]: tText('modules/shared/components/media-card/media-card___audio'),
