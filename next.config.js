@@ -63,11 +63,7 @@ module.exports = withTM({
 		// Fix issues with react-query:
 		// https://github.com/TanStack/query/issues/3595#issuecomment-1276468579
 		if (options.isServer) {
-			config.externals = [
-				'@tanstack/react-query',
-				'use-query-params',
-				...config.externals,
-			];
+			config.externals = ['@tanstack/react-query', 'use-query-params', ...config.externals];
 		}
 
 		// Use biome linting instead of eslint for the build
@@ -124,6 +120,8 @@ module.exports = withTM({
 		PORT: process.env.PORT,
 		CLIENT_URL: process.env.CLIENT_URL,
 		SSUM_EDIT_ACCOUNT_URL: process.env.SSUM_EDIT_ACCOUNT_URL,
+		KEYCLOAK_ACCOUNT_URL: process.env.KEYCLOAK_ACCOUNT_URL,
+		USE_KEYCLOAK_INSTEAD_OF_SSUM: process.env.USE_KEYCLOAK_INSTEAD_OF_SSUM,
 		PROXY_URL: process.env.PROXY_URL,
 		DEBUG_TOOLS: process.env.DEBUG_TOOLS,
 		ZENDESK_KEY: process.env.ZENDESK_KEY,

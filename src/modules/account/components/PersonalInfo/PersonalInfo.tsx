@@ -1,8 +1,9 @@
 import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
-import { selectCommonUser } from '@auth/store/user';
+import { selectCommonUser, selectUser } from '@auth/store/user';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestRequesterCapacity } from '@material-requests/types';
 import {
+	Button,
 	Checkbox,
 	FormControl,
 	RadioButton,
@@ -35,6 +36,7 @@ import type { PersonalInfoFormState, PersonalInfoProps } from './PersonalInfo.ty
 
 const PersonalInfo: FC<PersonalInfoProps> = ({ materialRequests, onCancel, onSuccess }) => {
 	const commonUser = useSelector(selectCommonUser);
+	const user = useSelector(selectUser);
 	const locale = useLocale();
 	const isComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
 
@@ -282,7 +284,6 @@ const PersonalInfo: FC<PersonalInfoProps> = ({ materialRequests, onCancel, onSuc
 			},
 		];
 	};
-
 	const renderStickySubtitle = () => {
 		return (
 			<div className={styles['c-personal-info__terms-agreement']}>
@@ -343,19 +344,30 @@ const PersonalInfo: FC<PersonalInfoProps> = ({ materialRequests, onCancel, onSuc
 						{commonUser?.organisation?.name ? (
 							<>
 								{commonUser.organisation?.name}
+								<div className={clsx(styles['c-personal-info__content-group-value'])}>
+									{user?.organisationAddress}
+								</div>
+								<div className={clsx(styles['c-personal-info__content-group-value'])}>
+									{`${user?.organisationPostalCode} ${user?.organisationLocality}`}
+								</div>
+								<div className={clsx(styles['c-personal-info__content-group-value'])}>
+									{user?.organisationVAT}
+								</div>
+								<div className={clsx(styles['c-personal-info__content-group-value'])}>
+									{user?.sector}
+								</div>
 								<div className={styles['c-personal-info__edit-user-data']}>
-									<a
-										onClick={() => window.zE('webWidget', 'toggle')}
-										target="_blank"
-										rel="noopener noreferrer"
+									<Button
+										label={tText(
+											'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-label'
+										)}
+										variants={['text', 'underline', 'sm', 'neutral']}
+										className={styles['c-personal-info__edit-user-data-button']}
 										aria-label={tText(
 											'modules/account/components/personal-info/personal-info___bewerk-je-gegevens-button-aria-label'
 										)}
-									>
-										{tText(
-											'modules/account/components/personal-info/personal-info___aanpassing-van-jouw-gegevens-aanvragen-label'
-										)}
-									</a>
+										onClick={() => window.zE('webWidget', 'toggle')}
+									/>
 								</div>
 							</>
 						) : (

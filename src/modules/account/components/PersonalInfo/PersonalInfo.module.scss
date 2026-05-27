@@ -6,6 +6,7 @@
 
 	&__terms-agreement,
 	&__edit-user-data {
+		margin-top: $spacer-sm;
 		color: $neutral;
 		font-size: $font-size-sm;
 		cursor: pointer;
@@ -81,5 +82,10 @@
 		&-hyperlink {
 			text-decoration: underline;
 		}
+	}
+
+	&__edit-user-data-button {
+		padding: 0 !important;
+		border-radius: 0;
 	}
 }

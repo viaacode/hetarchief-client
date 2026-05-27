@@ -35,6 +35,7 @@ import {
 	type IeObject,
 	IeObjectAccessThrough,
 	IeObjectLicense,
+	type IeObjectRightsInfo,
 	IsPartOfKey,
 	MediaActions,
 	type Mention,
@@ -842,22 +843,75 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		[locale]
 	);
 
-	const renderMetaData = () => {
-		if (isNil(mediaInfo)) {
-			return;
-		}
+	const getRightsInfoForAudioVideo = (mediaInfo: IeObject): IeObjectRightsInfo | null => {
+		const isAudioOrVideo = AV_OBJECT_TYPES.includes(mediaInfo.dctermsFormat);
+		return isAudioOrVideo ? mediaInfo.rightsInfo || null : null;
+	};
 
-		const showAlert = !mediaInfo.description;
-		const rightsStatusInfo = isNewspaper ? getIeObjectRightsStatusInfo(mediaInfo, locale) : null;
-		const avRightsInfo = AV_OBJECT_TYPES.includes(mediaInfo.dctermsFormat)
-			? mediaInfo.rightsInfo
+	/**
+	 * Render the rights-info for a newspaper or audio / video object, if available.
+	 * For newspapers, we use the getIeObjectRightsStatusInfo util to get a user-friendly label and icon based on the rights-status of the object.
+	 * 		this is stored as licenses on the object itself (legacy)
+	 * For audio / video objects, we use the rightsInfo property of the mediaInfo, which is only present for AV media types.
+	 * 		this is stored as rights in graph.rights table (currelty still a fixed list of rights per object, but in the future this will be filled dynamically from the £Knowledge graph of meemoo)
+	 *
+	 * @param mediaInfo
+	 */
+	const renderRightsInfo = (mediaInfo: IeObject) => {
+		const rightsInfoNewspapers = isNewspaper
+			? getIeObjectRightsStatusInfo(mediaInfo, locale)
 			: null;
-		const avRightsIcon = getIeObjectAvRightsIcon(avRightsInfo);
-		const avRightsLabel = getIeObjectAvRightsLabel(avRightsInfo);
-		const avRightsUrl = getIeObjectAvRightsUrl(avRightsInfo);
+		const rightsInfoAudioVideo = getRightsInfoForAudioVideo(mediaInfo);
+		const avRightsIcon = getIeObjectAvRightsIcon(rightsInfoAudioVideo);
+		const avRightsLabel = getIeObjectAvRightsLabel(rightsInfoAudioVideo);
+		const avRightsUrl = getIeObjectAvRightsUrl(rightsInfoAudioVideo);
 		const rightsMoreInfoTitle = tText(
 			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
 		);
+
+		if (rightsInfoNewspapers) {
+			return (
+				<ObjectDetailPageMetadataRights
+					title={tHtml('modules/ie-objects/object-detail-page___rechten')}
+					className={styles['p-object-detail__metadata-content__rights-status']}
+					label={rightsInfoNewspapers.label}
+					labelIcon={rightsInfoNewspapers.icon}
+					labelUrl={rightsInfoNewspapers.internalLink}
+					moreInfoUrl={rightsInfoNewspapers.externalLink}
+					moreInfoTitle={rightsMoreInfoTitle}
+				/>
+			);
+		}
+		if (rightsInfoAudioVideo) {
+			return (
+				<ObjectDetailPageMetadataRights
+					title={tHtml('modules/ie-objects/object-detail-page___rechten')}
+					className={styles['p-object-detail__metadata-content__rights-status']}
+					label={avRightsLabel}
+					labelIcon={avRightsIcon}
+					labelUrl={avRightsUrl}
+					moreInfoUrl={tText(
+						'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-internal-link',
+						{
+							languageCode: locale,
+						}
+					)}
+					moreInfoTitle={rightsMoreInfoTitle}
+					copyrightHolder={mediaInfo.copyrightHolder}
+					copyrightHolderLabel={tText('modules/ie-objects/ie-objects___rechthebbende')}
+					licenseDistributor={rightsInfoAudioVideo.licenseDistributor || undefined}
+					licenseDistributorLabel={tText('modules/ie-objects/ie-objects___licentiegever')}
+				/>
+			);
+		}
+	};
+
+	const renderRightsAttributionText = (mediaInfo: IeObject) => {
+		const rightsInfoNewspapers = isNewspaper
+			? getIeObjectRightsStatusInfo(mediaInfo, locale)
+			: null;
+		const rightsInfoAudioVideo = getRightsInfoForAudioVideo(mediaInfo);
+		const avRightsLabel = getIeObjectAvRightsLabel(rightsInfoAudioVideo);
 		const shouldShowAvRightsAttribution =
 			AV_OBJECT_TYPES.includes(mediaInfo.dctermsFormat) && !!mediaInfo.thumbnailUrl;
 		const avRightsAttributionTranslations: AvRightsAttributionTranslations = {
@@ -870,18 +924,19 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			and: tText('modules/ie-objects/utils/get-ie-object-av-rights-attribution-text___and'),
 			etAl: tText('modules/ie-objects/utils/get-ie-object-av-rights-attribution-text___e-a'),
 		};
+
 		let rightsAttributionText: string | null = null;
 		if (
 			isNewspaper &&
 			mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) &&
-			rightsStatusInfo
+			rightsInfoNewspapers
 		) {
 			// https://meemoo.atlassian.net/browse/ARC-3165
 			rightsAttributionText = compact([
 				mediaInfo.name,
 				mediaInfo.dateCreated,
 				mediaInfo.maintainerName,
-				rightsStatusInfo.label,
+				rightsInfoNewspapers.label,
 				'hetarchief.be',
 			]).join(', ');
 		}
@@ -891,6 +946,49 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				avRightsAttributionTranslations,
 				avRightsLabel
 			);
+		}
+		if (rightsAttributionText) {
+			return (
+				<>
+					<Alert
+						content={tHtml(
+							'modules/ie-objects/object-detail-page___deze-bronvermelding-is-automatisch-gegenereerd-en-kan-fouten-bevatten-a-href-bronvermelding-fouten-meer-info-a'
+						)}
+					/>
+					<Metadata
+						title={tHtml('modules/ie-objects/object-detail-page___bronvermelding')}
+						key="metadata-source-attribution"
+						renderRight={
+							<CopyButton
+								text={rightsAttributionText}
+								title={tText(
+									'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___kopieer-de-bronvermelding-naar-je-klembord'
+								)}
+								variants={['white']}
+							/>
+						}
+						className="u-bt-0"
+					>
+						<span>{rightsAttributionText}</span>
+					</Metadata>
+				</>
+			);
+		}
+	};
+
+	const renderAuthorRightsHolder = (mediaInfo: IeObject) => {
+		const rightsInfoAudioVideo = getRightsInfoForAudioVideo(mediaInfo);
+		if (!rightsInfoAudioVideo) {
+			return renderSimpleMetadataField(
+				tText('modules/ie-objects/ie-objects___auteursrechthouder'),
+				mediaInfo?.copyrightHolder
+			);
+		}
+	};
+
+	const renderMetaData = () => {
+		if (isNil(mediaInfo)) {
+			return;
 		}
 
 		return (
@@ -911,31 +1009,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 
 					{renderMetaDataActions()}
 
-					{!!rightsAttributionText && (
-						<>
-							<Alert
-								content={tHtml(
-									'modules/ie-objects/object-detail-page___deze-bronvermelding-is-automatisch-gegenereerd-en-kan-fouten-bevatten-a-href-bronvermelding-fouten-meer-info-a'
-								)}
-							/>
-							<Metadata
-								title={tHtml('modules/ie-objects/object-detail-page___bronvermelding')}
-								key="metadata-source-attribution"
-								renderRight={
-									<CopyButton
-										text={rightsAttributionText}
-										title={tText(
-											'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___kopieer-de-bronvermelding-naar-je-klembord'
-										)}
-										variants={['white']}
-									/>
-								}
-								className="u-bt-0"
-							>
-								<span>{rightsAttributionText}</span>
-							</Metadata>
-						</>
-					)}
+					{renderRightsAttributionText(mediaInfo)}
 
 					<MetaDataFieldWithHighlightingAndMaxLength
 						title={tText('modules/visitor-space/utils/metadata/metadata___beschrijving')}
@@ -944,7 +1018,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						onReadMoreClicked={setSelectedMetadataField}
 					/>
 
-					{showAlert && !isNewspaper && (
+					{!mediaInfo.description && !isNewspaper && (
 						<Alert
 							className="c-Alert__margin-bottom"
 							icon={<Icon name={IconNamesLight.Info} aria-hidden />}
@@ -973,37 +1047,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					<Metadata title={renderMaintainerMetaTitle(mediaInfo)} key={'metadata-maintainer'}>
 						{renderMaintainerMetaData(mediaInfo)}
 					</Metadata>
-					{!!rightsStatusInfo && (
-						<ObjectDetailPageMetadataRights
-							title={tHtml('modules/ie-objects/object-detail-page___rechten')}
-							className={styles['p-object-detail__metadata-content__rights-status']}
-							label={rightsStatusInfo.label}
-							labelIcon={rightsStatusInfo.icon}
-							labelUrl={rightsStatusInfo.internalLink}
-							moreInfoUrl={rightsStatusInfo.externalLink}
-							moreInfoTitle={rightsMoreInfoTitle}
-						/>
-					)}
-					{!!avRightsInfo && (
-						<ObjectDetailPageMetadataRights
-							title={tHtml('modules/ie-objects/object-detail-page___rechten')}
-							className={styles['p-object-detail__metadata-content__rights-status']}
-							label={avRightsLabel}
-							labelIcon={avRightsIcon}
-							labelUrl={avRightsUrl}
-							moreInfoUrl={tText(
-								'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-internal-link',
-								{
-									languageCode: locale,
-								}
-							)}
-							moreInfoTitle={rightsMoreInfoTitle}
-							copyrightHolder={mediaInfo.copyrightHolder}
-							copyrightHolderLabel={tText('modules/ie-objects/ie-objects___rechthebbende')}
-							licenseDistributor={avRightsInfo.licenseDistributor || undefined}
-							licenseDistributorLabel={tText('modules/ie-objects/ie-objects___licentiegever')}
-						/>
-					)}
+					{renderRightsInfo(mediaInfo)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___media-type'),
 						mediaInfo.dctermsFormat
@@ -1210,11 +1254,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						tText('modules/ie-objects/ie-objects___paginanummer'),
 						mediaInfo?.pageNumber
 					)}
-					{!avRightsInfo &&
-						renderSimpleMetadataField(
-							tText('modules/ie-objects/ie-objects___auteursrechthouder'),
-							mediaInfo?.copyrightHolder
-						)}
+					{renderAuthorRightsHolder(mediaInfo)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___oorsprong'),
 						mediaInfo.meemooOriginalCp

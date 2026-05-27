@@ -14,6 +14,7 @@ export interface UserGroupOverviewRef {
 export interface ContentPartner {
 	name: string;
 	id: string;
+	slug: string;
 }
 
 export interface ContentPartnerResponse {

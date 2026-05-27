@@ -105,6 +105,7 @@ export const MaterialRequestAdditionalConditionsResolutionBlade: FC<
 				),
 				type: 'primary',
 				onClick: handleSubmitConditions,
+				showSpinner: isSubmitting,
 				disabled: isSubmitting,
 			},
 			{

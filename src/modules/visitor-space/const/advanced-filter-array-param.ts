@@ -1,6 +1,5 @@
-import type { QueryParamConfig } from 'use-query-params';
-
 import { TEMP_FILTER_KEY_PREFIX } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import type { QueryParamConfig } from 'use-query-params';
 import { v4 as uuidV4 } from 'uuid';
 import { type AdvancedFilter, FilterProperty, Operator } from '../types';
 
