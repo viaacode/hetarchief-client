@@ -214,7 +214,7 @@ export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] =>
 			tText('modules/visitor-space/utils/map-filters/map-filters___alles-wat-raadpleegbaar-is'),
 			SearchFilterId.ConsultableMedia
 		),
-...mapArrayParamToTags(
+		...mapArrayParamToTags(
 			query[SearchFilterId.Maintainers] || [],
 			tText('modules/visitor-space/utils/map-filters/map-filters___aanbieders'),
 			SearchFilterId.Maintainers

@@ -103,6 +103,7 @@ import {
 	LANGUAGES,
 	type LanguageCode,
 } from '@visitor-space/components/LanguageFilterForm/languages';
+import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import {
 	filterNameToAcronym,
 	operatorToAcronym,
@@ -113,7 +114,6 @@ import {
 	Operator,
 	SearchFilterId,
 } from '@visitor-space/types';
-import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import clsx from 'clsx';
 import { compact, indexOf, isEmpty, isNil, isString, noop, sortBy } from 'lodash-es';
 import getConfig from 'next/config';
@@ -1017,8 +1017,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 
 					{renderMetaDataActions()}
 
-					{renderRightsAttributionText(rightsAttributionText)}
-
 					<MetaDataFieldWithHighlightingAndMaxLength
 						title={tText('modules/visitor-space/utils/metadata/metadata___beschrijving')}
 						data={mediaInfo.description}
@@ -1036,6 +1034,8 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							title=""
 						/>
 					)}
+
+					{renderRightsAttributionText(rightsAttributionText)}
 				</div>
 
 				<MetadataList allowTwoColumns={false}>

@@ -173,7 +173,7 @@ export const mapFiltersToElastic = (query: SearchPageQueryParams): IeObjectsSear
 			operator: IeObjectsSearchOperator.IS,
 			value: query[SearchFilterId.ConsultableMedia] ? 'true' : '',
 		},
-// Reusability
+		// Reusability
 		{
 			field: IeObjectsSearchFilterField.REUSABILITY,
 			operator: IeObjectsSearchOperator.IS,

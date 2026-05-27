@@ -1,4 +1,4 @@
-import { IeObjectLicense, type IeObject } from '@ie-objects/ie-objects.types';
+import { type IeObject, IeObjectLicense } from '@ie-objects/ie-objects.types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { describe, expect, it } from 'vitest';
 
@@ -81,9 +81,7 @@ describe('getIeObjectAvRightsAttributionText', () => {
 				},
 				nlTranslations
 			)
-		).toBe(
-			'Roses Are Blue, Het Huis, 2023-01-02, VRT, Auteursrechtelijk beschermd, hetarchief.be'
-		);
+		).toBe('Roses Are Blue, Het Huis, 2023-01-02, VRT, Auteursrechtelijk beschermd, hetarchief.be');
 	});
 
 	it('falls back to the maintainer as broadcasting organisation', () => {
