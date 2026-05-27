@@ -17,7 +17,6 @@ export const MATERIAL_REQUEST_DETAILS_TABS = (
 	const getTab = (
 		id: MaterialRequestDetailBladeTabs,
 		label: string,
-		ariaLabel: string,
 		icon: IconNamesLight,
 		isMobile = false
 	): TabProps => {
@@ -25,7 +24,6 @@ export const MATERIAL_REQUEST_DETAILS_TABS = (
 			return {
 				id,
 				label,
-				ariaLabel,
 				icon: (
 					<>
 						<Icon name={icon} aria-hidden />
@@ -48,7 +46,6 @@ export const MATERIAL_REQUEST_DETAILS_TABS = (
 					)}
 				</>
 			),
-			ariaLabel,
 			active: id === activeTab,
 		};
 	};
@@ -58,9 +55,6 @@ export const MATERIAL_REQUEST_DETAILS_TABS = (
 			MaterialRequestDetailBladeTabs.Information,
 			tText(
 				'modules/account/components/material-request-detail-blade/material-request-detail-blade___info-aanvraag'
-			),
-			tText(
-				'modules/account/components/material-request-detail-blade/material-request-detail-blade___info-aanvraag-aria-label'
 			),
 			IconNamesLight.Info,
 			isMobile
@@ -72,9 +66,6 @@ export const MATERIAL_REQUEST_DETAILS_TABS = (
 						tText(
 							'modules/account/components/material-request-detail-blade/material-request-detail-blade___conversatie'
 						),
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___conversatie-aria-label'
-						),
 						IconNamesLight.Message,
 						isMobile
 					),
@@ -82,9 +73,6 @@ export const MATERIAL_REQUEST_DETAILS_TABS = (
 						MaterialRequestDetailBladeTabs.Documents,
 						tText(
 							'modules/account/components/material-request-detail-blade/material-request-detail-blade___documenten'
-						),
-						tText(
-							'modules/account/components/material-request-detail-blade/material-request-detail-blade___documenten-aria-label'
 						),
 						IconNamesLight.Files,
 						isMobile

@@ -55,6 +55,10 @@ import {
 	getIeObjectAvRightsLabel,
 	getIeObjectAvRightsUrl,
 } from '@ie-objects/utils/get-ie-object-av-rights-icon';
+import {
+	type AvRightsAttributionTranslations,
+	getIeObjectAvRightsAttributionText,
+} from '@ie-objects/utils/get-ie-object-av-rights-attribution-text';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import {
 	mapArrayToMetadataData,
@@ -883,8 +887,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				<ObjectDetailPageMetadataRights
 					title={tHtml('modules/ie-objects/object-detail-page___rechten')}
 					className={styles['p-object-detail__metadata-content__rights-status']}
-					label={rightsInfoAudioVideo.reuseLabel}
-					labelUrl={rightsInfoAudioVideo.reuseCategoryId || undefined}
+					label={avRightsLabel}
+					labelIcon={avRightsIcon}
+					labelUrl={avRightsUrl}
 					moreInfoUrl={tText(
 						'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-internal-link',
 						{
@@ -905,6 +910,20 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		const rightsInfoNewspapers = isNewspaper
 			? getIeObjectRightsStatusInfo(mediaInfo, locale)
 			: null;
+		const rightsInfoAudioVideo = getRightsInfoForAudioVideo(mediaInfo);
+		const avRightsLabel = getIeObjectAvRightsLabel(rightsInfoAudioVideo);
+		const shouldShowAvRightsAttribution =
+			AV_OBJECT_TYPES.includes(mediaInfo.dctermsFormat) && !!mediaInfo.thumbnailUrl;
+		const avRightsAttributionTranslations: AvRightsAttributionTranslations = {
+			unknownCreator: tText(
+				'modules/ie-objects/utils/get-ie-object-av-rights-attribution-text___unknown-creator'
+			),
+			missingRightsInfo: tText(
+				'modules/ie-objects/utils/get-ie-object-av-rights-attribution-text___no-rights-information-available'
+			),
+			and: tText('modules/ie-objects/utils/get-ie-object-av-rights-attribution-text___and'),
+			etAl: tText('modules/ie-objects/utils/get-ie-object-av-rights-attribution-text___e-a'),
+		};
 
 		let rightsAttributionText: string | null = null;
 		if (
@@ -920,6 +939,13 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 				rightsInfoNewspapers.label,
 				'hetarchief.be',
 			]).join(', ');
+		}
+		if (shouldShowAvRightsAttribution) {
+			rightsAttributionText = getIeObjectAvRightsAttributionText(
+				mediaInfo,
+				avRightsAttributionTranslations,
+				avRightsLabel
+			);
 		}
 		if (rightsAttributionText) {
 			return (
@@ -1021,26 +1047,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					<Metadata title={renderMaintainerMetaTitle(mediaInfo)} key={'metadata-maintainer'}>
 						{renderMaintainerMetaData(mediaInfo)}
 					</Metadata>
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___media-type'),
-						mediaInfo.dctermsFormat
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___bestandstype'),
-						activeFile?.mimeType
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___pid'),
-						mediaInfo.schemaIdentifier
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___titel-van-de-reeks'),
-						renderSeriesTitle(mediaInfo)
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___publicatiedatum'),
-						renderDate(mediaInfo.datePublished)
-					)}
 					{renderRightsInfo(mediaInfo)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___media-type'),

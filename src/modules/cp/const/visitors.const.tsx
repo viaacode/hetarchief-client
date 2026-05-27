@@ -26,17 +26,14 @@ export const visitorsStatusFilters = (): TabProps[] => {
 		{
 			id: RequestStatusAll.ALL,
 			label: tText('modules/cp/const/visitors___alle'),
-			ariaLabel: tText('modules/cp/const/visitors___alle-aria-label'),
 		},
 		{
 			id: VisitTimeframe.ACTIVE,
 			label: tText('modules/cp/const/visitors___actief'),
-			ariaLabel: tText('modules/cp/const/visitors___actief-aria-label'),
 		},
 		{
 			id: VisitTimeframe.PAST,
 			label: tText('modules/cp/const/visitors___historiek'),
-			ariaLabel: tText('modules/cp/const/visitors___historiek-aria-label'),
 		},
 	];
 };
