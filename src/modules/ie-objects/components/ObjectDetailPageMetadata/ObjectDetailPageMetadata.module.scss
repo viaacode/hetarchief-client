@@ -95,13 +95,11 @@ $maintainer-logo-height: 7rem;
 }
 
 .p-object-detail__provider-identifier-link {
-	color: inherit;
 	text-decoration: underline;
 	text-underline-offset: 0.2rem;
 
 	&:hover,
 	&:focus {
-		color: inherit;
 		text-decoration-thickness: 0.2rem;
 	}
 }
