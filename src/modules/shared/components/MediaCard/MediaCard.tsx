@@ -316,7 +316,6 @@ const MediaCard: FC<MediaCardProps> = ({
 							? title
 							: tText('modules/shared/components/media-card/media-card___image-of-the-media-object')
 					}
-					fill={true}
 					sizes="100%"
 				/>
 				{!isNil(icon) && (
