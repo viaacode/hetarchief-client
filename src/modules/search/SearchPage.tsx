@@ -698,7 +698,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			// Only show pill when the public collection is selected (https://meemoo.atlassian.net/browse/ARC-1210?focusedCommentId=39708)
 			const hasTempAccess = !isKioskUser && isGlobalArchive && hasAccessToVisitorSpaceOfObject;
 
-			// Search terms can either be
+			// Search terms can either be:
 			// - simple text search or
 			// - they can contain logic operators like: (philip AND mathilde) OR (albert)
 			let plainTextSearchTerms: string | undefined = query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]?.join(

@@ -223,14 +223,16 @@ export interface RelatedIeObjects {
 	children: Partial<RelatedIeObject>[];
 }
 
-export interface IeObjectSearchAggregations {
-	[ElasticsearchFieldNames.Format]: IeObjectSearchAggregation<string>;
-	[ElasticsearchFieldNames.Medium]: IeObjectSearchAggregation<string>;
-	[ElasticsearchFieldNames.ObjectType]: IeObjectSearchAggregation<string>;
-	[ElasticsearchFieldNames.Genre]: IeObjectSearchAggregation<string>;
-	[ElasticsearchFieldNames.Language]: IeObjectSearchAggregation<string>;
-	[ElasticsearchFieldNames.Maintainer]: IeObjectSearchAggregation<string>;
-}
+type aggregateKeys =
+	| ElasticsearchFieldNames.Format
+	| ElasticsearchFieldNames.Medium
+	| ElasticsearchFieldNames.ObjectType
+	| ElasticsearchFieldNames.Genre
+	| ElasticsearchFieldNames.Language
+	| ElasticsearchFieldNames.Maintainer
+	| ElasticsearchFieldNames.Rights;
+
+export type IeObjectSearchAggregations = Record<aggregateKeys, IeObjectSearchAggregation<string>>;
 
 // UI
 

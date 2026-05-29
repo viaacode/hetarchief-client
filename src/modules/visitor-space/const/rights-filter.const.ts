@@ -1,58 +1,37 @@
 import type { SelectOption } from '@meemoo/react-components';
 import { tText } from '@shared/helpers/translate';
-import { SearchPageMediaType } from '@shared/types/ie-objects';
-import { FILTER_LABEL_VALUE_DELIMITER, ReusabilityFilterOption } from '@visitor-space/types';
-import { compact } from 'lodash-es';
+import { compact, uniqBy } from 'lodash-es';
 
 export enum RightsLabel {
-	PUBLIC_DOMAIN = 'public-domain',
-	COPYRIGHT_UNDETERMINED = 'copyright-undetermined',
-	CC0 = 'cc0',
-	NO_COPYRIGHT_CONTRACTUAL_RESTRICTIONS = 'no-copyright-contractual-restrictions',
-	CC_BY = 'cc-by',
-	CC_BY_NC_ND = 'cc-by-nc-nd',
-	CC_BY_SA = 'cc-by-sa',
-	CC_BY_NC = 'cc-by-nc',
-	IN_COPYRIGHT = 'in-copyright',
-	COPYRIGHT_NOT_EVALUATED = 'copyright-not-evaluated',
-	ORPHAN_WORK_EU = 'orphan-work-eu',
-	RIGHTS_HOLDER_UNLOCATABLE = 'rights-holder-unlocatable',
+	PUBLIC_DOMAIN = 'https://creativecommons.org/publicdomain/mark/1.0/',
+	COPYRIGHT_UNDETERMINED = 'https://rightsstatements.org/page/UND/1.0/',
+	CC0 = 'https://creativecommons.org/publicdomain/zero/1.0/',
+	NO_COPYRIGHT_CONTRACTUAL_RESTRICTIONS = 'https://rightsstatements.org/page/NoC-CR/1.0/',
+	CC_BY = 'https://creativecommons.org/licenses/by/4.0/',
+	CC_BY_NC_ND = 'https://creativecommons.org/licenses/by-nc-nd/4.0/',
+	CC_BY_SA = 'https://creativecommons.org/licenses/by-sa/4.0/',
+	CC_BY_NC = 'https://creativecommons.org/licenses/by-nc/4.0/',
+	IN_COPYRIGHT = 'https://rightsstatements.org/page/InC/1.0/',
+	COPYRIGHT_NOT_EVALUATED = 'https://rightsstatements.org/page/CNE/1.0/',
+	ORPHAN_WORK_EU = 'https://rightsstatements.org/page/InC-OW-EU/1.0/',
+	RIGHTS_HOLDER_UNLOCATABLE = 'https://rightsstatements.org/page/InC-RUU/1.0/',
 }
-
-export const RIGHTS_LABELS_FOR_NEWSPAPERS = [
-	RightsLabel.PUBLIC_DOMAIN,
-	RightsLabel.COPYRIGHT_UNDETERMINED,
-];
-
-export const RIGHTS_LABELS_BY_REUSABILITY: Record<ReusabilityFilterOption, RightsLabel[]> = {
-	[ReusabilityFilterOption.FREELY_REUSABLE]: [RightsLabel.PUBLIC_DOMAIN, RightsLabel.CC0],
-	[ReusabilityFilterOption.REUSABLE_WITH_CONDITIONS]: [
-		RightsLabel.NO_COPYRIGHT_CONTRACTUAL_RESTRICTIONS,
-		RightsLabel.CC_BY,
-		RightsLabel.CC_BY_NC_ND,
-		RightsLabel.CC_BY_SA,
-		RightsLabel.CC_BY_NC,
-	],
-	[ReusabilityFilterOption.POSSIBLY_REUSABLE]: [
-		RightsLabel.COPYRIGHT_UNDETERMINED,
-		RightsLabel.IN_COPYRIGHT,
-		RightsLabel.COPYRIGHT_NOT_EVALUATED,
-		RightsLabel.ORPHAN_WORK_EU,
-		RightsLabel.RIGHTS_HOLDER_UNLOCATABLE,
-	],
-};
 
 export const RIGHTS_OPTIONS = (): SelectOption[] => [
 	{
+		// Public domain option that applies to both video/audio and newspapers
 		label: tText('modules/visitor-space/const/rights-filter___publiek-domein'),
 		value: RightsLabel.PUBLIC_DOMAIN,
 	},
 	{
+		// Copyright undetermined option that applies to both video/audio and newspapers
 		label: tText(
 			'modules/visitor-space/const/rights-filter___auteursrechtelijke-bescherming-niet-bepaald'
 		),
 		value: RightsLabel.COPYRIGHT_UNDETERMINED,
 	},
+
+	// Other licenses only apply to audio and video objects, not to newspapers
 	{
 		label: tText('modules/visitor-space/const/rights-filter___cc0'),
 		value: RightsLabel.CC0,
@@ -105,29 +84,20 @@ export const getRightsLabel = (value: string | undefined): string | undefined =>
 	return RIGHTS_OPTIONS().find((option) => option.value === value)?.label;
 };
 
-export const getRightsOptions = ({
-	mediaType,
-	reusabilityValues,
-}: {
-	mediaType?: string | null;
-	reusabilityValues?: (string | null)[] | string | null;
-} = {}): SelectOption[] => {
+export const getRightsOptions = (
+	selectedReusabilityValues: RightsLabel[],
+	rightsOptionsFromElasticsearchAggregates: RightsLabel[]
+): SelectOption[] => {
 	const allOptions = RIGHTS_OPTIONS();
-	const valuesArray = Array.isArray(reusabilityValues)
-		? reusabilityValues
-		: compact([reusabilityValues]);
-	const allowedByReusability = compact(valuesArray).flatMap((value) => {
-		const key = value.split(FILTER_LABEL_VALUE_DELIMITER)[0];
-		return RIGHTS_LABELS_BY_REUSABILITY[key as ReusabilityFilterOption] || [];
-	});
-	const allowedByMediaType =
-		mediaType === SearchPageMediaType.Newspaper ? RIGHTS_LABELS_FOR_NEWSPAPERS : [];
 
-	return allOptions.filter((option) => {
-		const value = option.value as RightsLabel;
-		const matchesReusability =
-			allowedByReusability.length === 0 || allowedByReusability.includes(value);
-		const matchesMediaType = allowedByMediaType.length === 0 || allowedByMediaType.includes(value);
-		return matchesReusability && matchesMediaType;
+	const availableOptions = allOptions.filter((option) => {
+		if (!option.value) {
+			return false;
+		}
+		return rightsOptionsFromElasticsearchAggregates.includes(option.value as RightsLabel);
 	});
+	const selectedOptions = selectedReusabilityValues.map((value) => {
+		return allOptions.find((option) => option.value === value);
+	});
+	return uniqBy(compact([...selectedOptions, ...availableOptions]), (option) => option.value);
 };
