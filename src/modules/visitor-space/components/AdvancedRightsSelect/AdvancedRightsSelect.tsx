@@ -11,7 +11,7 @@ import { useQueryParams } from 'use-query-params';
 
 export const AdvancedRightsSelect: FC<ReactSelectProps> = (props) => {
 	const [query] = useQueryParams(SEARCH_PAGE_QUERY_PARAM_CONFIG);
-	const selectedRightsValues = query[SearchFilterId.Reusability];
+	const selectedRightsValues = query[SearchFilterId.Reusability] || [];
 	const searchAggregateOptions: IeObjectSearchAggregations | undefined = useSelector(
 		selectIeObjectsFilterOptions
 	);
