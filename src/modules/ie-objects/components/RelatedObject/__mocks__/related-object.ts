@@ -8,7 +8,7 @@ export const relatedObjectVideoMock: RelatedObjectProps = {
 		type: IeObjectType.VIDEO,
 		title: 'GIVE: Gecoördineerd Initiatief voor Vlaamse Erfgoeddigitalisering',
 		subtitle: 'Digitaliseren | Toegang & hergebruik',
-		thumbnail: '/images/bg-newsletter.png',
+		thumbnail: '/images/bg-newsletter.jpg',
 		description:
 			'GIVE, het Gecoördineerd Initiatief voor Vlaamse Erfgoeddigitalisering, vormt de paraplu voor vier digitaliseringsprojecten die tegen eind 2023 uitgevoerd zullen worden. Samen met heel wat partners uit het culturele veld zet meemoo zijn schouders onder de digitalisering van kranten, glasplaten en topstukken. Daarnaast zetten we in op metadataverrijking.',
 	},
