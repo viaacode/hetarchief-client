@@ -8,7 +8,7 @@ const QUERY_PARAM_SORT_DIRECTIONS = [
 type SortDirectionTuple = typeof QUERY_PARAM_SORT_DIRECTIONS;
 type SortDirection = SortDirectionTuple[number];
 
-export function isSortDirection(value: string): value is SortDirection {
+function isSortDirection(value: string): value is SortDirection {
 	return QUERY_PARAM_SORT_DIRECTIONS.includes(value as SortDirection);
 }
 

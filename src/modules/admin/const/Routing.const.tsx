@@ -78,7 +78,7 @@ export const GET_ADMIN_SPACES_LINKS = (locale: Locale): AdminNavigationLink[] =>
 	},
 ];
 
-export const GET_ADMIN_USERS_LINKS = (locale: Locale): AdminNavigationLink[] => [
+const GET_ADMIN_USERS_LINKS = (locale: Locale): AdminNavigationLink[] => [
 	{
 		id: 'users',
 		label: tText('modules/admin/const/routing___gebruikers'),
@@ -91,7 +91,7 @@ export const GET_ADMIN_USERS_LINKS = (locale: Locale): AdminNavigationLink[] => 
 	},
 ];
 
-export const GET_ADMIN_MATERIAL_REQUEST_LINKS = (locale: Locale): AdminNavigationLink[] => [
+const GET_ADMIN_MATERIAL_REQUEST_LINKS = (locale: Locale): AdminNavigationLink[] => [
 	{
 		id: 'material-requests-admin',
 		label: tText('modules/admin/const/routing___materiaalaanvragen'),

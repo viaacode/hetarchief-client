@@ -1,10 +1,9 @@
+import { RICH_TEXT_SANITIZATION } from '@shared/const';
 import clsx from 'clsx';
 import DOMPurify from 'isomorphic-dompurify';
 import React, { type FunctionComponent, type ReactNode } from 'react';
 
-import { RICH_TEXT_SANITIZATION } from '@shared/const';
-
-export interface HtmlProps {
+interface HtmlProps {
 	children?: ReactNode;
 	content: string;
 	sanitizePreset?: DOMPurify.Config;

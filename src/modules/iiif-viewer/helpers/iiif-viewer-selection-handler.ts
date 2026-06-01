@@ -51,7 +51,7 @@ export function destroyOpenSeadragonViewerMouseTracker() {
 	setMouseTracker(null);
 }
 
-export function handlePress(
+function handlePress(
 	event: PointerMouseTrackerEvent,
 	// biome-ignore lint/suspicious/noExplicitAny: open sea dragon lib isn't typed yet
 	openSeaDragonLib: any,
@@ -82,7 +82,7 @@ export function handlePress(
 	setSelectionOverlayElement(getSelectionOverlayElement);
 }
 
-export function handleDrag(
+function handleDrag(
 	event: PointerMouseTrackerEvent,
 	// biome-ignore lint/suspicious/noExplicitAny: open sea dragon lib isn't typed yet
 	openSeaDragonLib: any,
@@ -119,7 +119,7 @@ export function handleDrag(
 	);
 }
 
-export function handleRelease(
+function handleRelease(
 	event: PointerMouseTrackerEvent,
 	imageSize: ImageSize,
 	onSelection: (rect: Rect) => void,
@@ -160,7 +160,7 @@ export function handleRelease(
 	resetDragState(openSeaDragonViewer);
 }
 
-export function resetDragState(openSeaDragonViewer: Viewer | null) {
+function resetDragState(openSeaDragonViewer: Viewer | null) {
 	// biome-ignore lint/suspicious/noExplicitAny: window isn't typed yet
 	if ((window as any).selectionOverlayElement as HTMLDivElement | null) {
 		openSeaDragonViewer?.removeOverlay(

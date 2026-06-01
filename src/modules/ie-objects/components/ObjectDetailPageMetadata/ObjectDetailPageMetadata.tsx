@@ -8,8 +8,8 @@ import {
 	DynamicActionMenu,
 	type DynamicActionMenuProps,
 } from '@ie-objects/components/DynamicActionMenu';
-import type { MetadataItem } from '@ie-objects/components/Metadata';
 import Metadata from '@ie-objects/components/Metadata/Metadata';
+import type { MetadataItem } from '@ie-objects/components/Metadata/Metadata.types';
 import { NamesList } from '@ie-objects/components/NamesList/NamesList';
 import type { ObjectDetailPageMetadataProps } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata.types';
 import { ObjectDetailPageMetadataRights } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadataRights';

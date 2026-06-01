@@ -4,7 +4,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import clsx from 'clsx';
 import type { FC } from 'react';
 
-export interface CheckboxFilterFormProps {
+interface CheckboxFilterFormProps {
 	label: string;
 	value: boolean;
 	onChange: (isChecked: boolean) => void;

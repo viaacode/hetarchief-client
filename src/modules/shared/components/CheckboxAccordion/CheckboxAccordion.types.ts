@@ -9,7 +9,7 @@ export interface CheckboxAccordionOption<ValueType> {
 	maxLength?: number;
 }
 
-export interface CheckboxAccordionItem<ValueType> {
+interface CheckboxAccordionItem<ValueType> {
 	type: ValueType;
 	text: string;
 }

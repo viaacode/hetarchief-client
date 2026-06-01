@@ -1,6 +1,6 @@
 import { tText } from '@shared/helpers/translate';
 
-export const checkFileSize = (file?: File): boolean => {
+const checkFileSize = (file?: File): boolean => {
 	let valid = true;
 
 	if (file) {
@@ -13,7 +13,7 @@ export const checkFileSize = (file?: File): boolean => {
 	return valid;
 };
 
-export const checkFileType = (file?: File): boolean => {
+const checkFileType = (file?: File): boolean => {
 	let valid = true;
 
 	if (file) {

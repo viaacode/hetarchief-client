@@ -1,18 +1,18 @@
 import fetch, { Headers } from 'node-fetch';
 
-export enum App {
+enum App {
 	AVO = 'AVO',
 	HET_ARCHIEF = 'HET_ARCHIEF',
 }
-export enum Component {
+enum Component {
 	ADMIN_CORE = 'ADMIN_CORE',
 	FRONTEND = 'FRONTEND',
 	BACKEND = 'BACKEND',
 }
-export type Location = string;
-export type Key = string;
+type Location = string;
+type Key = string;
 
-export enum ValueType {
+enum ValueType {
 	TEXT = 'TEXT',
 	HTML = 'HTML',
 }
@@ -22,7 +22,7 @@ export enum Locale {
 	En = 'en',
 }
 
-export interface TranslationEntry {
+interface TranslationEntry {
 	app: App;
 	component: Component;
 	location: Location;
@@ -32,16 +32,16 @@ export interface TranslationEntry {
 	value_type: ValueType | null;
 }
 
-export const TRANSLATION_SEPARATOR = '___';
+const TRANSLATION_SEPARATOR = '___';
 
-export function getFullKey(
+function getFullKey(
 	translationEntry: TranslationEntry
 ): `${Location}${typeof TRANSLATION_SEPARATOR}${Key}` {
 	return `${translationEntry.location}${TRANSLATION_SEPARATOR}${translationEntry.key}`;
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: variables are too many types to define
-export async function executeDatabaseQuery(query: string, variables: any = {}): Promise<any> {
+async function executeDatabaseQuery(query: string, variables: any = {}): Promise<any> {
 	if (!process.env.GRAPHQL_URL || !process.env.GRAPHQL_SECRET) {
 		throw new Error(
 			'Missing environment variables. One or more of these are missing: GRAPHQL_URL, GRAPHQL_SECRET'

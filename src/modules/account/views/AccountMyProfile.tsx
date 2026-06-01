@@ -11,7 +11,6 @@ import { AccountLayout } from '@account/layouts';
 import type { CommunicationFormState } from '@account/types';
 import { checkLoginAction, selectCommonUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
-import { withAuth } from '@auth/wrappers/with-auth';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
 	Alert,
@@ -49,7 +48,7 @@ import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { type ComponentType, type FC, type ReactNode, useEffect, useState } from 'react';
+import { type FC, type ReactNode, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
@@ -398,5 +397,3 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		</VisitorLayout>
 	);
 };
-
-export default withAuth(AccountMyProfile as ComponentType, true);

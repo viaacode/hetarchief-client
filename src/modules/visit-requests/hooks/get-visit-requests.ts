@@ -10,9 +10,7 @@ import {
 import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
 import type { GetVisitRequestsProps } from '@visit-requests/services/visit-request/visit-request.service.types';
 
-export async function getVisitRequests(
-	props: GetVisitRequestsProps
-): Promise<IPagination<VisitRequest>> {
+async function getVisitRequests(props: GetVisitRequestsProps): Promise<IPagination<VisitRequest>> {
 	return VisitRequestService.getAll(props);
 }
 

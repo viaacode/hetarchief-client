@@ -1,8 +1,7 @@
+import type { DefaultComponentProps } from '@shared/types';
 import type { FC, ReactNode } from 'react';
 
-import type { DefaultComponentProps } from '@shared/types';
-
-export interface AdminLayoutProps extends DefaultComponentProps {
+interface AdminLayoutProps extends DefaultComponentProps {
 	children?: ReactNode;
 	pageTitle?: string;
 	bottomPadding?: boolean;

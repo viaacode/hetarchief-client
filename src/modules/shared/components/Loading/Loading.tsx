@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import type { FC, ReactNode } from 'react';
 import styles from './Loading.module.scss';
 
-export interface LoadingProps extends DefaultComponentProps {
+interface LoadingProps extends DefaultComponentProps {
 	children?: ReactNode;
 	fullscreen?: boolean;
 	mode?: 'light' | 'dark';

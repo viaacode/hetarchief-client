@@ -8,7 +8,7 @@ import {
 	useQuery,
 } from '@tanstack/react-query';
 
-export async function getIeObjectsRelated(
+async function getIeObjectsRelated(
 	ieObjectIri: string | undefined,
 	parentIeObjectIri: string | null
 ): Promise<RelatedIeObjects> {

@@ -1,4 +1,4 @@
-import type { MetadataItem } from '@ie-objects/components/Metadata';
+import type { MetadataItem } from '@ie-objects/components/Metadata/Metadata.types';
 import type { DefaultComponentProps } from '@meemoo/admin-core-ui/admin';
 import { Button } from '@meemoo/react-components';
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';

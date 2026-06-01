@@ -21,7 +21,7 @@ export type TagSearchBarProps<IsMulti extends boolean = false> = DefaultComponen
 		valuePlaceholder?: TagSearchBarValuePlaceholder;
 	};
 
-export type TagSearchBarClearLabel = string | ReactNode;
+type TagSearchBarClearLabel = string | ReactNode;
 export type TagSearchBarValuePlaceholder = string | ReactNode;
 
 export type TagSearchBarValue<IsMulti extends boolean> = OnChangeValue<TagIdentity, IsMulti>;

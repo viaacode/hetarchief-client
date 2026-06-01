@@ -1,3 +1,4 @@
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { EventsService, type LogEventType } from '@shared/services/events-service';
 import { noop } from 'lodash-es';
 import { parse } from 'query-string';
@@ -21,7 +22,7 @@ export function useTriggerEventOnPageLoad({
 		if (
 			!shouldTrigger ||
 			hasTriggeredForUrl[window.location.href] ||
-			parse(window.location.search).preview
+			parse(window.location.search)[QUERY_PARAM_KEY.CONTENT_PAGE_PREVIEW]
 		) {
 			return;
 		}

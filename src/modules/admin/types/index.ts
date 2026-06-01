@@ -11,7 +11,7 @@ export interface UserGroupOverviewRef {
 
 // Content partners
 
-export interface ContentPartner {
+interface ContentPartner {
 	name: string;
 	id: string;
 	slug: string;

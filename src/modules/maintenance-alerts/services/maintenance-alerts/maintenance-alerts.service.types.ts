@@ -1,7 +1,7 @@
 import type { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import type { ReactNode } from 'react';
 
-export enum MaintenanceAlertsOrderProps {
+enum MaintenanceAlertsOrderProps {
 	Id = 'id',
 	Icon = 'icon',
 	FromDate = 'fromDate',

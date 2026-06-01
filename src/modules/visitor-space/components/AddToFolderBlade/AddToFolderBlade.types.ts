@@ -4,7 +4,7 @@ export type AddToFolderBladeProps = FormBladeProps<string[]> & {
 	objectToAdd: AddToFolderSelected | undefined;
 };
 
-export interface AddToFolderSelected {
+interface AddToFolderSelected {
 	schemaIdentifier: string;
 	title?: string; // string-only, not ReactNode
 }

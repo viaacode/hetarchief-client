@@ -37,10 +37,8 @@ import { ScrollableTabs, TabLabel } from '@shared/components/Tabs';
 import { TagSearchBar } from '@shared/components/TagSearchBar';
 import { TagSearchBarInfo } from '@shared/components/TagSearchBar/TagSearchBarInfo/TagSearchBarInfo';
 import type { ToggleOption } from '@shared/components/Toggle';
-import {
-	VisitorSpaceDropdown,
-	type VisitorSpaceDropdownOption,
-} from '@shared/components/VisitorSpaceDropdown';
+import { VisitorSpaceDropdown } from '@shared/components/VisitorSpaceDropdown/VisitorSpaceDropdown';
+import type { VisitorSpaceDropdownOption } from '@shared/components/VisitorSpaceDropdown/VisitorSpaceDropdown.types';
 import {
 	GET_VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
 	ROUTE_PARTS_BY_LOCALE,
@@ -88,11 +86,7 @@ import {
 import type { AdvancedFilterFormState } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.types';
 import type { ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
 import type { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
-import type { DurationFilterFormState } from '@visitor-space/components/DurationFilterForm';
 import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
-import type { GenreFilterFormState } from '@visitor-space/components/GenreFilterForm';
-import type { KeywordsFilterFormState } from '@visitor-space/components/KeywordsFilterForm/KeywordsFilterForm.types';
-import type { LanguageFilterFormState } from '@visitor-space/components/LanguageFilterForm/LanguageFilterForm.types';
 import type { MaintainerFilterFormState } from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
 import type { MediumFilterFormState } from '@visitor-space/components/MediumFilterForm';
 import type { ReleaseDateFilterFormState } from '@visitor-space/components/ReleaseDateFilterForm';
@@ -485,21 +479,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				data = (values as MediumFilterFormState).mediums;
 				break;
 
-			case SearchFilterId.Duration: {
-				const state = values as DurationFilterFormState;
-				data = state.duration
-					? [
-							{
-								renderKey: TEMP_FILTER_KEY_PREFIX + uuidV4(),
-								prop: FilterProperty.DURATION,
-								op: state.operator,
-								val: state.duration,
-							},
-						]
-					: undefined;
-				break;
-			}
-
 			case SearchFilterId.ReleaseDate: {
 				const state = values as ReleaseDateFilterFormState;
 				data = state.releaseDate
@@ -529,18 +508,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 			case SearchFilterId.Mentions:
 				data = (values as { mentions: string }).mentions;
-				break;
-
-			case SearchFilterId.Genre:
-				data = (values as GenreFilterFormState).genres;
-				break;
-
-			case SearchFilterId.Keywords:
-				data = (values as KeywordsFilterFormState).values;
-				break;
-
-			case SearchFilterId.Language:
-				data = (values as LanguageFilterFormState).languages;
 				break;
 
 			case SearchFilterId.Maintainers:

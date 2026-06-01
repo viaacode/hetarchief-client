@@ -9,12 +9,12 @@ export interface RefinableRadioButtonProps extends DefaultComponentProps {
 	id: string;
 }
 
-export interface RefinableRadioButtonInitialState {
+interface RefinableRadioButtonInitialState {
 	selectedOption: string;
 	refinedSelection: string[];
 }
 
-export interface RefinableRadioButtonDefaultOption {
+interface RefinableRadioButtonDefaultOption {
 	id: string;
 	label: string;
 }

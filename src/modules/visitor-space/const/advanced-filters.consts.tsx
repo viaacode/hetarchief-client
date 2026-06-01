@@ -23,7 +23,7 @@ import type { FC } from 'react';
 import DurationInput from '../components/DurationInput/DurationInput';
 import { FilterProperty, Operator } from '../types';
 
-export type FilterInputComponent =
+type FilterInputComponent =
 	| FC<TextInputProps>
 	| FC<ReactSelectProps>
 	| FC<DateInputProps>
@@ -43,7 +43,7 @@ export type FilterConfig = {
 	filters?: IeObjectsSearchFilter[];
 };
 
-export type OperatorAndFilterConfig = {
+type OperatorAndFilterConfig = {
 	[key in Operator]?: FilterConfig;
 };
 
@@ -85,7 +85,7 @@ export const REGULAR_FILTERS: FilterProperty[] = [
 	// TODO Location of publication
 ];
 
-export const GET_OPERATOR_LABELS = (): Record<string, string> => ({
+const GET_OPERATOR_LABELS = (): Record<string, string> => ({
 	from: tText(
 		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___vanaf'
 	),

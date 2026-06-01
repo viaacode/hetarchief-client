@@ -110,5 +110,3 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 		</ul>
 	);
 };
-
-export default VisitorSpaceDropdown;

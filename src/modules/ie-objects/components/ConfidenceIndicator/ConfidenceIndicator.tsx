@@ -1,9 +1,8 @@
+import type { ConfidenceIndicatorProps } from '@ie-objects/components/ConfidenceIndicator/ConfidenceIndicator.types';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@meemoo/react-components';
+import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
 import React, { type FC } from 'react';
-
-import type { ConfidenceIndicatorProps } from '@ie-objects/components/ConfidenceIndicator/ConfidenceIndicator.types';
-import { tText } from '@shared/helpers/translate';
 
 import styles from './ConfidenceIndicator.module.scss';
 
@@ -32,5 +31,3 @@ export const ConfidenceIndicator: FC<ConfidenceIndicatorProps> = ({ className, c
 		</Tooltip>
 	);
 };
-
-export default ConfidenceIndicator;

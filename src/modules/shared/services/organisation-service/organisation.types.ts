@@ -13,7 +13,7 @@ export interface Organisation {
 	formUrl: string | null;
 }
 
-export interface OrganisationContactPoint {
+interface OrganisationContactPoint {
 	contactType: string;
 	email: string;
 }

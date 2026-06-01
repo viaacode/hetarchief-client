@@ -1,11 +1,11 @@
 import type { IeObject, IeObjectSearchAggregations } from '@ie-objects/ie-objects.types';
 import type { IPagination } from '@studiohyperdrive/pagination';
 
-export interface ElasticsearchAggregations {
+interface ElasticsearchAggregations {
 	aggregations: IeObjectSearchAggregations;
 }
 
-export interface IeObjectsSearchTerms {
+interface IeObjectsSearchTerms {
 	searchTerms: string[];
 	// Not yet used, but could be used to show a toast message
 	// about failed logical operator parsing in the search query string

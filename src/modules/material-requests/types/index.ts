@@ -107,7 +107,7 @@ export interface MaterialRequestMessageBodyStatusUpdateWithMotivation {
 	motivation: string;
 }
 
-export type MaterialRequestMessageBody =
+type MaterialRequestMessageBody =
 	| MaterialRequestMessageBodyMessage
 	| MaterialRequestMessageBodyAdditionalConditions
 	| MaterialRequestMessageBodyStatusUpdateWithMotivation;
@@ -233,7 +233,7 @@ export enum MaterialRequestRequesterCapacity {
 	EDUCATION = 'EDUCATION',
 }
 
-export const GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_ARRAY = (): {
+const GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_ARRAY = (): {
 	id: string;
 	label: string;
 }[] => [
