@@ -38,7 +38,7 @@ describe('Component: <MetadataList /> (default)', () => {
 	it('Should display metadata items', () => {
 		const { getAllByRole } = renderMetadataList({ allowTwoColumns: false }, metadataMock);
 
-		const items = getAllByRole('listitem');
+		const items = getAllByRole('term');
 
 		expect(items.length).toBe(metadataMock.length);
 	});
@@ -90,18 +90,18 @@ describe('Component: <MetadataList /> (default)', () => {
 	});
 
 	it('Should display a multiple columns by default', () => {
-		const { getByRole } = renderMetadataList({ allowTwoColumns: true }, metadataMock);
+		const { container } = renderMetadataList({ allowTwoColumns: true }, metadataMock);
 
-		const list = getByRole('list').parentElement;
+		const wrapper = container.firstChild as HTMLElement;
 
-		expect(list).toHaveClass('c-metadata--container-query');
+		expect(wrapper).toHaveClass('c-metadata--container-query');
 	});
 
 	it('Should display a single column when given', () => {
-		const { getByRole } = renderMetadataList({ allowTwoColumns: false }, metadataMock);
+		const { container } = renderMetadataList({ allowTwoColumns: false }, metadataMock);
 
-		const list = getByRole('list').parentElement;
+		const wrapper = container.firstChild as HTMLElement;
 
-		expect(list).not.toHaveClass('c-metadata--container-query');
+		expect(wrapper).not.toHaveClass('c-metadata--container-query');
 	});
 });

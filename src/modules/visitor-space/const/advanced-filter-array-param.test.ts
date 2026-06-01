@@ -14,7 +14,7 @@ describe('AdvancedFilterArrayParam', () => {
 			},
 		]);
 
-		expect(encoded).toBe('rieqin-copyright');
+		expect(encoded).toBe(`rieq${encodeURIComponent(RightsLabel.IN_COPYRIGHT)}`);
 		expect(AdvancedFilterArrayParam.decode(encoded)).toEqual([
 			expect.objectContaining({
 				prop: FilterProperty.RIGHTS,
