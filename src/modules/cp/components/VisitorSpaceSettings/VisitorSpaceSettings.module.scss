@@ -16,6 +16,14 @@ $component: "c-cp-settings";
 			}
 		}
 
+		&-slug-input {
+			:global(.c-input__field:disabled) {
+				background-color: #f2f2f2;
+				border: 1px solid $zinc;
+				color: #999;
+			}
+		}
+
 		&-controls {
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);

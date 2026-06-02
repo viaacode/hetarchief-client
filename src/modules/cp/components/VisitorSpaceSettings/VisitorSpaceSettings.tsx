@@ -467,6 +467,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 							label={tHtml('modules/cp/components/site-settings-form/site-settings-form___slug')}
 						>
 							<TextInput
+								className={styles['c-cp-settings__site-settings-slug-input']}
 								id={labelKeys.slug}
 								value={formValues?.slug || ''}
 								disabled={true}
