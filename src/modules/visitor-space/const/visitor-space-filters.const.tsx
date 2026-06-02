@@ -121,7 +121,7 @@ export const SEARCH_PAGE_FILTERS = (
 		tabs: ALL_TABS,
 		isDisabled: () => {
 			const rightsFiltersForEverybody =
-				publicRuntimeConfig.ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY === 'true';
+				publicRuntimeConfig.ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY !== 'false';
 			return !rightsFiltersForEverybody && !isKeyUser;
 		},
 	},
