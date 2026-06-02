@@ -41,6 +41,11 @@ describe('Component: <MetadataList /> (default)', () => {
 		const items = getAllByRole('term');
 
 		expect(items.length).toBe(metadataMock.length);
+
+		expect(items[0]).toHaveClass('c-metadata__item-title');
+		expect(items[1]).toHaveClass('c-metadata__item-title');
+		expect(items[2]).toHaveClass('c-metadata__item-title');
+		expect(items[3]).toHaveClass('c-metadata__item-title');
 	});
 
 	it('Should display metadata title', () => {
