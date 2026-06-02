@@ -36,7 +36,7 @@ const getSelectLabel = (
 // Prevent duplicate values by prefixing the value with the filter key (e.g. creator--shd)
 export const tagPrefix = (key: string): string => `${key}--`;
 
-export const mapBooleanParamToTag = (value: boolean, label: string, key: string): TagIdentity[] => {
+const mapBooleanParamToTag = (value: boolean, label: string, key: string): TagIdentity[] => {
 	const unique = `${tagPrefix(key)}${value}`;
 
 	if (!value) {
@@ -58,7 +58,7 @@ export const mapBooleanParamToTag = (value: boolean, label: string, key: string)
 	];
 };
 
-export const mapArrayParamToTags = (
+const mapArrayParamToTags = (
 	values: (string | null)[] | string,
 	label: string,
 	key: string
@@ -83,7 +83,7 @@ export const mapArrayParamToTags = (
 		});
 };
 
-export const mapAdvancedToTags = (
+const mapAdvancedToTags = (
 	advanced: Array<AdvancedFilter>,
 	key: SearchFilterId = SearchFilterId.Advanced
 ): TagIdentity[] => {

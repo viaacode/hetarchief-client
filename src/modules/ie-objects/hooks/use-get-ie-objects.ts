@@ -25,7 +25,7 @@ import { VISITOR_SPACE_LICENSES } from '@visitor-space/utils/elastic-filters';
 import { isEmpty, isNil, noop } from 'lodash-es';
 import { useDispatch, useSelector } from 'react-redux';
 
-export async function getIeObjects(
+async function getIeObjects(
 	filters: IeObjectsSearchFilter[],
 	page: number,
 	size: number,

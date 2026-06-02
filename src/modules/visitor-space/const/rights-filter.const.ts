@@ -17,7 +17,7 @@ export enum RightsLabel {
 	RIGHTS_HOLDER_UNLOCATABLE = 'https://rightsstatements.org/page/InC-RUU/1.0/',
 }
 
-export const RIGHTS_OPTIONS = (): SelectOption[] => [
+const RIGHTS_OPTIONS = (): SelectOption[] => [
 	{
 		// Public domain option that applies to both video/audio and newspapers
 		label: tText('modules/visitor-space/const/rights-filter___publiek-domein'),

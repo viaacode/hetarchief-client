@@ -10,6 +10,13 @@ declare const window: any;
 
 window.scrollTo = vi.fn();
 
+class ResizeObserverMock {
+	observe = vi.fn();
+	unobserve = vi.fn();
+	disconnect = vi.fn();
+}
+global.ResizeObserver = ResizeObserverMock as unknown as typeof ResizeObserver;
+
 // Suppress specific console.warn messages during tests
 const originalWarn = console.warn;
 console.warn = (...args: unknown[]) => {

@@ -11,7 +11,7 @@ export interface ReportFormState {
 	email: string;
 }
 
-export interface ReportSelected {
+interface ReportSelected {
 	schemaIdentifier: string;
 	title?: string; // string-only, not ReactNode
 }

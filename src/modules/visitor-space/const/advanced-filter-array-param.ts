@@ -75,7 +75,7 @@ export function filterNameToAcronym(filterName: FilterProperty): string {
 	return filter[1];
 }
 
-export function filterAcronymToName(acronym: string | undefined): FilterProperty {
+function filterAcronymToName(acronym: string | undefined): FilterProperty {
 	if (!acronym) {
 		throw new Error(`Filter name acronym was undefined: ${acronym}`);
 	}
@@ -110,7 +110,7 @@ export function operatorToAcronym(operator: Operator): string {
 	return op[1];
 }
 
-export function operatorAcronymToName(acronym: string | undefined): Operator {
+function operatorAcronymToName(acronym: string | undefined): Operator {
 	if (!acronym) {
 		throw new Error(`Operator acronym undefined: ${acronym}`);
 	}

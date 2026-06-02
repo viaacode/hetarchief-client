@@ -183,12 +183,12 @@ export interface IeObjectRightsInfo {
 	broadcastingOrganization?: string | null;
 }
 
-export interface IeObjectSearchAggregationPair<T> {
+interface IeObjectSearchAggregationPair<T> {
 	key: T;
 	doc_count: number;
 }
 
-export interface IeObjectSearchAggregation<T> {
+interface IeObjectSearchAggregation<T> {
 	buckets: IeObjectSearchAggregationPair<T>[];
 	doc_count_error_upper_bound: number;
 	sum_other_doc_count: number;

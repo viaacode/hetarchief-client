@@ -3,7 +3,7 @@ import { Tag, type TagsInputProps } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 
-export const clearIndicatorCxState = {
+const clearIndicatorCxState = {
 	indicator: true,
 	'clear-indicator': true,
 };
@@ -13,7 +13,7 @@ export const dropdownIndicatorCxState = {
 	'dropdown-indicator': true,
 };
 
-export const multiValueCxState = {
+const multiValueCxState = {
 	'multi-value': true,
 };
 

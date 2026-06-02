@@ -37,7 +37,7 @@ import { StringParam, useQueryParam, withDefault } from 'use-query-params';
 import MaterialCard from '../../../visitor-space/components/MaterialCard/MaterialCard';
 import styles from './MaterialRequestCenterBlade.module.scss';
 
-export enum MaterialRequestBladeId {
+enum MaterialRequestBladeId {
 	Overview = 'overview',
 	EditMaterialRequest = 'edit-material-request',
 	EditMaterialRequestReuseForm = 'edit-material-request-reuse-form',

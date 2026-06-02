@@ -1,8 +1,7 @@
+import type { IconName } from '@shared/components/Icon';
 import type { ReactNode } from 'react';
 
-import type { IconName } from '@shared/components/Icon';
-
-export interface NavigationItemNodeProps {
+interface NavigationItemNodeProps {
 	children?: ReactNode;
 	closeDropdowns: () => void;
 }

@@ -32,10 +32,7 @@ export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
 	orderDirection: withDefault(SortDirectionParam, AvoSearchOrderDirection.DESC),
 };
 
-export const GET_CP_ADMIN_REQUESTS_ACCESS_TYPE_TRANSLATION_KEYS = (): Record<
-	AccessType,
-	string
-> => ({
+const GET_CP_ADMIN_REQUESTS_ACCESS_TYPE_TRANSLATION_KEYS = (): Record<AccessType, string> => ({
 	[AccessType.FULL]: tText('modules/cp/const/requests___volledige-toegang'),
 	[AccessType.FOLDERS]: tText('modules/cp/const/requests___gedeeltelijke-toegang'),
 });

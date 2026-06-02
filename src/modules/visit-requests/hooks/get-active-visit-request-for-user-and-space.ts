@@ -4,7 +4,7 @@ import type { VisitRequest } from '@shared/types/visit-request';
 import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
 import { VisitRequestService } from '@visit-requests/services/visit-request/visit-request.service';
 
-export async function getActiveVisitRequestForUserAndSpace(
+async function getActiveVisitRequestForUserAndSpace(
 	visitorSpaceSlug: string,
 	user: User | null | undefined
 ): Promise<VisitRequest | null> {

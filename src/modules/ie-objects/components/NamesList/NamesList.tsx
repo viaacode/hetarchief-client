@@ -20,7 +20,7 @@ import List, { type ListRowProps } from 'react-virtualized/dist/commonjs/List';
 import styles from './NamesList.module.scss';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import 'react-virtualized/styles.css';
-import ConfidenceIndicator from '@ie-objects/components/ConfidenceIndicator/ConfidenceIndicator';
+import { ConfidenceIndicator } from '@ie-objects/components/ConfidenceIndicator/ConfidenceIndicator';
 import { isServerSideRendering } from '@shared/utils/is-browser';
 
 export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMention }) => {

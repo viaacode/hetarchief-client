@@ -15,7 +15,7 @@ import { isEmpty, isNil } from 'lodash-es';
 
 import { IeObjectsService } from './../services';
 
-export async function getIeObjectFormatCounts(
+async function getIeObjectFormatCounts(
 	filters: IeObjectsSearchFilter[]
 ): Promise<Record<SearchPageMediaType, number>> {
 	const filterQuery = !isNil(filters) && !isEmpty(filters) ? filters : [];

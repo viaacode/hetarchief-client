@@ -51,7 +51,7 @@ export interface VisitRequest {
 	accessType: AccessType;
 }
 
-export interface VisitNote {
+interface VisitNote {
 	authorName: string;
 	createdAt: string;
 	id: string;

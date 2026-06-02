@@ -3,9 +3,8 @@ import queryString from 'query-string';
 
 export type RouteParams = { [key: string]: string | number | undefined };
 
-export const getMissingParams = (route: string): string[] =>
-	route.split('/').filter((r) => r.match(/^:/));
-export const navigationConsoleError = (route: string, missingParams: string[] = []) => {
+const getMissingParams = (route: string): string[] => route.split('/').filter((r) => r.match(/^:/));
+const navigationConsoleError = (route: string, missingParams: string[] = []) => {
 	const paramsString = missingParams.join(', ');
 	console.error(`The following params were not included: [${paramsString}] for route ${route}`);
 };

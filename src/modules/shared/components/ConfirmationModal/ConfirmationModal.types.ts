@@ -10,7 +10,7 @@ export interface ConfirmationModalProps extends Pick<ModalProps, 'isOpen' | 'onC
 	fullWidthButtonWrapper?: boolean;
 }
 
-export interface ConfirmationModalTranslations {
+interface ConfirmationModalTranslations {
 	yes?: string | ReactNode;
 	no?: string | ReactNode;
 	title?: string | ReactNode;

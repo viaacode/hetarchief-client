@@ -208,6 +208,17 @@ export const GET_BLANK_MATERIAL_REQUEST_REUSE_FORM = (): MaterialRequestReuseFor
 	copyrightDisplay: undefined,
 });
 
+const MATERIAL_REQUESTS_COLUMN_WIDTH_LOOKUP: Record<MaterialRequestKeys, string> = {
+	[MaterialRequestKeys.objectSchemaName]: '20rem',
+	[MaterialRequestKeys.maintainerName]: '20rem',
+	[MaterialRequestKeys.requesterFullName]: '20rem',
+	[MaterialRequestKeys.type]: '13rem',
+	[MaterialRequestKeys.requestedAt]: '15rem',
+	[MaterialRequestKeys.requestGroupName]: '25rem',
+	[MaterialRequestKeys.status]: '9rem',
+	[MaterialRequestKeys.downloadStatus]: '10rem',
+} as Record<MaterialRequestKeys, string>;
+
 export const getMaterialRequestTableColumnProps = (
 	column: HeaderGroup<MaterialRequest> | ColumnInstance<MaterialRequest>
 ): Partial<TableHeaderProps> | Partial<TableCellProps> => {
@@ -225,14 +236,3 @@ export const getMaterialRequestTableColumnProps = (
 
 	return {};
 };
-
-export const MATERIAL_REQUESTS_COLUMN_WIDTH_LOOKUP: Record<MaterialRequestKeys, string> = {
-	[MaterialRequestKeys.objectSchemaName]: '20rem',
-	[MaterialRequestKeys.maintainerName]: '20rem',
-	[MaterialRequestKeys.requesterFullName]: '20rem',
-	[MaterialRequestKeys.type]: '13rem',
-	[MaterialRequestKeys.requestedAt]: '15rem',
-	[MaterialRequestKeys.requestGroupName]: '25rem',
-	[MaterialRequestKeys.status]: '9rem',
-	[MaterialRequestKeys.downloadStatus]: '10rem',
-} as Record<MaterialRequestKeys, string>;

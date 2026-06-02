@@ -16,22 +16,6 @@ export interface GetContentBlockEncloseContentReturnType {
 	type: 'IE_OBJECT' | 'CONTENT_PAGE';
 }
 
-export interface IeObject {
-	maintainerId: string;
-	name: string;
-	title: string;
-	description: string;
-	thumbnailUrl: string;
-	dateCreatedLowerBound: string;
-	maintainerName: string;
-	ebucoreObjectType: string;
-	meemooIdentifier: string;
-	maintainerSlug: string;
-	schemaIdentifier: string;
-	dctermsFormat: string;
-	objectType: string;
-}
-
 export interface ContentPage {
 	id: string;
 	title: string;
