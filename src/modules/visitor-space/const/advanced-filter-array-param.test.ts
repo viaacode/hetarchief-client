@@ -14,7 +14,7 @@ describe('AdvancedFilterArrayParam', () => {
 			},
 		]);
 
-		expect(encoded).toBe(`rieq${encodeURIComponent(RightsLabel.IN_COPYRIGHT)}`);
+		expect(encoded).toBe(`rieq${encodeURIComponent('https://rightsstatements.org/page/InC/1.0/')}`);
 		expect(AdvancedFilterArrayParam.decode(encoded)).toEqual([
 			expect.objectContaining({
 				prop: FilterProperty.RIGHTS,
