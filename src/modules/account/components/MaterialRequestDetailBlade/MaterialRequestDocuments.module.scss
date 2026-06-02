@@ -14,7 +14,6 @@
 			font-size: abstracts.$font-size-base;
 			line-height: abstracts.$line-height-base;
 			text-align: left;
-			padding-left: 0;
 
 			@media (max-width: abstracts.$breakpoint-md) {
 				padding: abstracts.$spacer-sm 0;
