@@ -23,7 +23,7 @@ import {
 } from '@shared/utils/dates';
 import clsx from 'clsx';
 import Link from 'next/link';
-import React, { type FC } from 'react';
+import React, { type FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './MaterialRequestConversation.module.scss';
 
@@ -44,18 +44,17 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 }) => {
 	const user = useSelector(selectCommonUser);
 
-	// In case the message is the approved event and there were additional conditions with auto-approval, no need to render this message
-	if (message.messageType === MaterialRequestEventType.APPROVED) {
+	const conditionsHaveBeenAutoApproved = useMemo(() => {
 		const hasConditions = materialRequest.history.find(
 			(event) => event.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS
 		);
+		return !!(hasConditions?.body as MaterialRequestMessageBodyAdditionalConditions)
+			?.autoApproveAfterAcceptAdditionalConditions;
+	}, [materialRequest]);
 
-		if (
-			(hasConditions?.body as MaterialRequestMessageBodyAdditionalConditions)
-				?.autoApproveAfterAcceptAdditionalConditions
-		) {
-			return null;
-		}
+	// In case the message is the approved event and there were additional conditions with auto-approval, no need to render this message
+	if (message.messageType === MaterialRequestEventType.APPROVED && conditionsHaveBeenAutoApproved) {
+		return null;
 	}
 
 	// In case the message the user denied the conditions we do not need to render this because we already have the cancelled event
@@ -226,12 +225,19 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 		if (isRequester) {
 			return (
 				<div className={clsx(styles['p-conversation-messages__message__body'])}>
-					{tHtml(
-						'modules/account/components/material-request-detail-blade/material-request-conversation-message___name-aanvaardde-de-bijkomende-gebruiksvoorwaarden-de-download-wordt-beschikbaar-gemaakt-na-finale-goedkeuring-van-de-aanbieder',
-						{
-							name: messageSenderName(),
-						}
-					)}
+					{conditionsHaveBeenAutoApproved
+						? tHtml(
+								'modules/account/components/material-request-detail-blade/material-request-conversation-message___name-aanvaardde-de-bijkomende-gebruiksvoorwaarden-aanvrager',
+								{
+									name: messageSenderName(),
+								}
+							)
+						: tHtml(
+								'modules/account/components/material-request-detail-blade/material-request-conversation-message___name-aanvaardde-de-bijkomende-gebruiksvoorwaarden-de-download-wordt-beschikbaar-gemaakt-na-finale-goedkeuring-van-de-aanbieder',
+								{
+									name: messageSenderName(),
+								}
+							)}
 				</div>
 			);
 		}
