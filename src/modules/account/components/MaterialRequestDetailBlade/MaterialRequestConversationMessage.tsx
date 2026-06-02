@@ -44,7 +44,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 }) => {
 	const user = useSelector(selectCommonUser);
 
-	const conditionsHaveBeenAutoApproved = useMemo(() => {
+	const autoApproveEnabled = useMemo(() => {
 		const hasConditions = materialRequest.history.find(
 			(event) => event.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS
 		);
@@ -53,7 +53,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 	}, [materialRequest]);
 
 	// In case the message is the approved event and there were additional conditions with auto-approval, no need to render this message
-	if (message.messageType === MaterialRequestEventType.APPROVED && conditionsHaveBeenAutoApproved) {
+	if (message.messageType === MaterialRequestEventType.APPROVED && autoApproveEnabled) {
 		return null;
 	}
 
@@ -225,7 +225,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 		if (isRequester) {
 			return (
 				<div className={clsx(styles['p-conversation-messages__message__body'])}>
-					{conditionsHaveBeenAutoApproved
+					{autoApproveEnabled
 						? tHtml(
 								'modules/account/components/material-request-detail-blade/material-request-conversation-message___name-aanvaardde-de-bijkomende-gebruiksvoorwaarden-aanvrager',
 								{
