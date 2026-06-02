@@ -142,7 +142,8 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 						}
 					);
 				case MaterialRequestEventType.CANCELLED:
-				case MaterialRequestEventType.ADDITIONAL_CONDITIONS_DENIED:
+					// Not rendering the additional conditions denied since this also creates a canceled event and there is no need to render twice the same message
+					// case MaterialRequestEventType.ADDITIONAL_CONDITIONS_DENIED:
 					return tText(
 						'modules/account/components/material-request-detail-blade/material-request-detail-blade___geannulleerd-op',
 						{

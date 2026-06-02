@@ -4,6 +4,7 @@ import {
 	type MaterialRequest,
 	MaterialRequestEventType,
 	type MaterialRequestMessage,
+	type MaterialRequestMessageBodyAdditionalConditions,
 	type MaterialRequestMessageBodyMessage,
 	type MaterialRequestMessageBodyStatusUpdateWithMotivation,
 	MaterialRequestStatus,
@@ -42,6 +43,25 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 	onMakeDownloadAvailable,
 }) => {
 	const user = useSelector(selectCommonUser);
+
+	// In case the message is the approved event and there were additional conditions with auto-approval, no need to render this message
+	if (message.messageType === MaterialRequestEventType.APPROVED) {
+		const hasConditions = materialRequest.history.find(
+			(event) => event.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS
+		);
+
+		if (
+			(hasConditions?.body as MaterialRequestMessageBodyAdditionalConditions)
+				?.autoApproveAfterAcceptAdditionalConditions
+		) {
+			return null;
+		}
+	}
+
+	// In case the message the user denied the conditions we do not need to render this because we already have the cancelled event
+	if (message.messageType === MaterialRequestEventType.ADDITIONAL_CONDITIONS_DENIED) {
+		return null;
+	}
 
 	/**
 	 * Determines if the message is rendered
@@ -258,6 +278,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 			?.motivation;
 
 		const isApproved = message.messageType === MaterialRequestEventType.APPROVED;
+
 		let title: React.ReactNode;
 
 		if (motivation) {
