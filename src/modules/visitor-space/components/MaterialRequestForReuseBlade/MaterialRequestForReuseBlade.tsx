@@ -831,6 +831,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 										'modules/visitor-space/components/material-request-for-reuse-blade/material-request-for-reuse-blade___geef-hier-een-uitleg-over-het-type-ontsluiting-dat-je-wenst-te-gebruiken-input-aria-label'
 									)}
 								/>
+								<MaxLengthIndicator
+									maxLength={300}
+									value={formValues.distributionTypeOtherExplanation}
+								/>
 							</FormControl>
 						</>
 					),
