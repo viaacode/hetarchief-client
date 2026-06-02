@@ -1,25 +1,23 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-cp-settings";
-
-.#{$component} {
+.c-cp-settings {
 	&__site-settings {
 		display: flex;
-		gap: $spacer-sm;
+		gap: abstracts.$spacer-sm;
 
 		&-input {
 			flex-grow: 1;
 
 			label {
 				display: block;
-				font-weight: $font-weight-bold;
+				font-weight: abstracts.$font-weight-bold;
 			}
 		}
 
 		&-slug-input {
 			:global(.c-input__field:disabled) {
 				background-color: #f2f2f2;
-				border: 1px solid $zinc;
+				border: 1px solid abstracts.$zinc;
 				color: #999;
 			}
 		}
@@ -27,8 +25,8 @@ $component: "c-cp-settings";
 		&-controls {
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
-			grid-template-rows: auto $button-height;
-			gap: $spacer-sm;
+			grid-template-rows: auto abstracts.$button-height;
+			gap: abstracts.$spacer-sm;
 
 			&--create {
 				grid-template-rows: auto;
@@ -37,28 +35,28 @@ $component: "c-cp-settings";
 	}
 
 	&__setting-block {
-		padding-bottom: $spacer-md * 2;
+		padding-bottom: abstracts.$spacer-md * 2;
 	}
 
 	&__box {
-		padding: $spacer-sm;
+		padding: abstracts.$spacer-sm;
 		background-color: white;
 
-		@media (min-width: $breakpoint-md) {
-			padding: $spacer-lg;
+		@media (min-width: abstracts.$breakpoint-md) {
+			padding: abstracts.$spacer-lg;
 		}
 	}
 
 	&__title {
-		font-size: $font-size-lg;
-		padding-bottom: $spacer-sm;
+		font-size: abstracts.$font-size-lg;
+		padding-bottom: abstracts.$spacer-sm;
 	}
 
 	&__description {
-		padding-bottom: $spacer-lg;
-		color: $neutral;
-		font-size: $font-size-sm;
-		line-height: $line-height-3xl;
+		padding-bottom: abstracts.$spacer-lg;
+		color: abstracts.$neutral;
+		font-size: abstracts.$font-size-sm;
+		line-height: abstracts.$line-height-3xl;
 	}
 
 	&__cancel-save {
@@ -69,8 +67,8 @@ $component: "c-cp-settings";
 	&__bezoekersruimte {
 		&-controls {
 			display: grid;
-			gap: 2rem $spacer-lg;
-			grid-template-rows: repeat(3, auto) $button-height;
+			gap: 2rem abstracts.$spacer-lg;
+			grid-template-rows: repeat(3, auto) abstracts.$button-height;
 		}
 
 		&-color-picker {
@@ -82,31 +80,31 @@ $component: "c-cp-settings";
 		&-image-buttons {
 			display: flex;
 			flex-wrap: wrap;
-			gap: $spacer-sm;
+			gap: abstracts.$spacer-sm;
 		}
 	}
 
 	&__logo-and-color {
 		&__label {
-			font-weight: $font-weight-bold;
-			padding-bottom: $spacer-sm;
+			font-weight: abstracts.$font-weight-bold;
+			padding-bottom: abstracts.$spacer-sm;
 		}
 
 		&__hint {
-			padding-left: $spacer-sm;
-			font-size: $font-size-sm;
-			font-weight: $font-weight-normal;
-			color: $neutral;
+			padding-left: abstracts.$spacer-sm;
+			font-size: abstracts.$font-size-sm;
+			font-weight: abstracts.$font-weight-normal;
+			color: abstracts.$neutral;
 		}
 
 		&__controls {
 			display: grid;
-			gap: $spacer-lg;
+			gap: abstracts.$spacer-lg;
 		}
 
 		&__image {
-			background-color: $platinum;
-			border: 0.2rem dashed $neutral;
+			background-color: abstracts.$platinum;
+			border: 0.2rem dashed abstracts.$neutral;
 
 			&--no-border {
 				border: none;
@@ -114,7 +112,7 @@ $component: "c-cp-settings";
 		}
 
 		&__color-control {
-			padding-top: $spacer-xs;
+			padding-top: abstracts.$spacer-xs;
 
 			:global(.c-color-picker) {
 				max-width: 20.4rem;
@@ -124,10 +122,10 @@ $component: "c-cp-settings";
 		&__image-buttons {
 			display: flex;
 			flex-wrap: wrap;
-			gap: $spacer-sm;
+			gap: abstracts.$spacer-sm;
 		}
 
-		@media (min-width: $breakpoint-lg) {
+		@media (min-width: abstracts.$breakpoint-lg) {
 			&__controls {
 				grid-template-columns: 2fr 3fr;
 			}
@@ -140,31 +138,31 @@ $component: "c-cp-settings";
 
 	&__language-tab {
 		color: black;
-		background-color: $silver;
-		border: 1px solid $zinc;
+		background-color: abstracts.$silver;
+		border: 1px solid abstracts.$zinc;
 		border-bottom: none;
-		padding: calc($spacer-xs + 2px);
+		padding: calc(#{abstracts.$spacer-xs} + 2px);
 		border-radius: 0;
-		font-weight: $font-weight-normal;
+		font-weight: abstracts.$font-weight-normal;
 
 		&:hover {
-			background-color: $teal-24;
-			border: 1px solid $zinc;
+			background-color: abstracts.$teal-24;
+			border: 1px solid abstracts.$zinc;
 			border-bottom: none;
 		}
 
 		&:active {
-			background-color: $teal;
+			background-color: abstracts.$teal;
 		}
 
 		&--active {
-			background-color: $teal-30;
-			font-weight: $font-weight-bold;
+			background-color: abstracts.$teal-30;
+			font-weight: abstracts.$font-weight-bold;
 		}
 	}
 
 	&__rich-text {
-		margin-bottom: $spacer-lg;
+		margin-bottom: abstracts.$spacer-lg;
 
 		&--no-heading {
 			.c-rich-text-editor {
@@ -175,14 +173,14 @@ $component: "c-cp-settings";
 		}
 	}
 
-	@media (min-width: $breakpoint-lg) {
+	@media (min-width: abstracts.$breakpoint-lg) {
 		&__cancel-save {
 			grid-column: 1 / 3;
 		}
 
 		&__logo-and-color-controls {
 			grid-template-columns: 2fr 3fr;
-			grid-template-rows: repeat(2, auto) $button-height;
+			grid-template-rows: repeat(2, auto) abstracts.$button-height;
 		}
 
 		&__bezoekersruimte-image {
