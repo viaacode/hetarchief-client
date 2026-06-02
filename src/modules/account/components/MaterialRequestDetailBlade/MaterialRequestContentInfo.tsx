@@ -142,7 +142,6 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 						}
 					);
 				case MaterialRequestEventType.CANCELLED:
-				case MaterialRequestEventType.ADDITIONAL_CONDITIONS_DENIED:
 					return tText(
 						'modules/account/components/material-request-detail-blade/material-request-detail-blade___geannulleerd-op',
 						{
