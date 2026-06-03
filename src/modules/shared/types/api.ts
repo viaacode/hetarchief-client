@@ -6,7 +6,7 @@ interface ElasticsearchAggregations {
 }
 
 interface IeObjectsSearchTerms {
-	searchTerms: string[];
+	searchTerms: { isLiteral: boolean; value: string }[];
 	// Not yet used, but could be used to show a toast message
 	// about failed logical operator parsing in the search query string
 	searchTermsParsedSuccessfully: boolean;

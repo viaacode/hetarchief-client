@@ -1,18 +1,17 @@
+import {
+	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
+	QUERY_PARAM_KEY,
+} from '@shared/const/query-param-keys';
 import clsx from 'clsx';
 import type { FC } from 'react';
 import Highlighter from 'react-highlight-words';
 import { StringParam, useQueryParam, withDefault } from 'use-query-params';
 
-import {
-	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
-	QUERY_PARAM_KEY,
-} from '@shared/const/query-param-keys';
-
 import styles from './HighlightSearchTerms.module.scss';
 
 interface HighlightSearchTermsProps {
 	toHighlight: string;
-	searchTerms?: string[];
+	searchTerms?: { isLiteral: boolean; value: string }[];
 	activeSearchTermIndex?: number;
 	enabled?: boolean;
 	fullHeight?: boolean;
@@ -35,7 +34,7 @@ const HighlightSearchTerms: FC<HighlightSearchTermsProps> = ({
 	const getSearchWords = (): string[] => {
 		let searchWords: string[];
 		if (searchTerms) {
-			searchWords = searchTerms;
+			searchWords = searchTerms.map((item) => item.value);
 		} else if (highlightedSearchTerms) {
 			searchWords = decodeURIComponent(highlightedSearchTerms).split(
 				HIGHLIGHTED_SEARCH_TERMS_SEPARATOR

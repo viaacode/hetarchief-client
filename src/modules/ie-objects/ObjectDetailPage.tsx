@@ -44,6 +44,13 @@ import {
 	type RelatedIeObject,
 } from '@ie-objects/ie-objects.types';
 import {
+	isBeginningOrEndOfWord,
+	isLiteralSearchTerm,
+	normalizeText,
+	parseSearchTerms,
+	resolveSearchTerm,
+} from '@ie-objects/search-term.consts';
+import {
 	IE_OBJECTS_SERVICE_EXPORT,
 	NEWSPAPERS_SERVICE_BASE_URL,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
@@ -74,11 +81,7 @@ import { Loading } from '@shared/components/Loading';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ROUTES_BY_LOCALE } from '@shared/const';
-import {
-	CUE_POINTS_SEPARATOR,
-	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
-	QUERY_PARAM_KEY,
-} from '@shared/const/query-param-keys';
+import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { BooleanParamWithDefault } from '@shared/helpers/boolean-param-with-default';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -107,7 +110,16 @@ import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 import clsx from 'clsx';
 import type { HTTPError } from 'ky';
-import { capitalize, compact, intersection, isNil, kebabCase, lowerCase, noop } from 'lodash-es';
+import {
+	capitalize,
+	compact,
+	intersection,
+	isEqual,
+	isNil,
+	kebabCase,
+	lowerCase,
+	noop,
+} from 'lodash-es';
 import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -204,6 +216,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const [searchTermsTemp, setSearchTermsTemp] = useState<string>('');
 	// Search terms are used to store the search terms after the user has confirmed the search
 	const [searchTerms, setSearchTerms] = useState<string>('');
+	const searchTermWords = useMemo(() => parseSearchTerms(searchTerms), [searchTerms]);
 
 	const [, setShowAuthQueryKey] = useQueryParam(QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY, StringParam);
 	const [activeBlade, setActiveBlade] = useQueryParam(
@@ -465,46 +478,62 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					return representation.schemaTranscript;
 				})
 			);
-			pageOcrTextsTemp.push(pageTranscripts[0]?.toLowerCase() || null);
+			pageOcrTextsTemp.push(normalizeText(pageTranscripts[0] || ''));
 		}
 		return pageOcrTextsTemp;
 	}, [mediaInfo?.pages]);
 
 	const searchResults = useMemo((): OcrSearchResult[] => {
-		if (!searchTerms) {
+		if (!searchTermWords) {
 			return [];
 		}
 		const searchResultsTemp: OcrSearchResult[] = [];
-		const searchTermWords = searchTerms
-			.toLowerCase()
-			.split(' ')
-			.map((word) => word.trim())
-			.filter((word) => !!word);
+
 		for (const searchTerm of searchTermWords) {
+			const isLiteral = isLiteralSearchTerm(searchTerm);
+			const resolvedSearchTerm = resolveSearchTerm(searchTerm);
+
 			pageOcrTranscripts.forEach((pageOcrTranscript, pageIndex) => {
 				if (!pageOcrTranscript) {
 					return; // Skip this page since it doesn't have an ocr transcript
 				}
-				let searchTermCharacterOffset: number = pageOcrTranscript.indexOf(searchTerm);
+				let searchTermCharacterOffset: number = pageOcrTranscript.indexOf(resolvedSearchTerm);
 				let searchTermIndexOnPage = 0;
 				while (searchTermCharacterOffset !== -1) {
-					const searchResult: OcrSearchResult = {
-						pageIndex,
-						searchTerm,
-						searchTermCharacterOffset,
-						searchTermIndexOnPage,
-					};
-					searchResultsTemp.push(searchResult);
+					let shouldAddItem = false;
+
+					if (isLiteral) {
+						shouldAddItem = true;
+					} else {
+						const prevChar = pageOcrTranscript.charAt(searchTermCharacterOffset - 1);
+						const nextChar = pageOcrTranscript.charAt(
+							searchTermCharacterOffset + resolvedSearchTerm.length
+						);
+
+						if (!isBeginningOrEndOfWord(prevChar, nextChar)) {
+							shouldAddItem = true;
+						}
+					}
+					if (shouldAddItem) {
+						const searchResult: OcrSearchResult = {
+							pageIndex,
+							searchTerm: resolvedSearchTerm,
+							searchTermCharacterOffset,
+							searchTermIndexOnPage,
+						};
+						searchResultsTemp.push(searchResult);
+						searchTermIndexOnPage += 1;
+					}
+
 					searchTermCharacterOffset = pageOcrTranscript?.indexOf(
-						searchTerm,
+						resolvedSearchTerm,
 						searchTermCharacterOffset + 1
 					);
-					searchTermIndexOnPage += 1;
 				}
 			});
 		}
 		return searchResultsTemp;
-	}, [searchTerms, pageOcrTranscripts]);
+	}, [searchTermWords, pageOcrTranscripts]);
 
 	const arePagesOcrTextsAvailable = compact(pageOcrTranscripts).length !== 0;
 
@@ -514,15 +543,119 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const canDownloadNewspaper: boolean =
 		(useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user) && isPublicNewspaper;
 
-	const getAltoTextsOnCurrentPageForSearchTerms = useCallback((): TextLine[] => {
-		const searchTermParts = searchTerms.toLowerCase().split(' ');
-		return (
-			simplifiedAltoInfo?.altoJsonContent?.text?.filter((altoText) => {
-				const lowercaseAltoText = altoText.text.toLowerCase();
-				return searchTermParts.some((searchTermWord) => lowercaseAltoText.includes(searchTermWord));
-			}) || []
-		);
-	}, [searchTerms, simplifiedAltoInfo?.altoJsonContent?.text]);
+	const altoTextsOnCurrentPageForSearchTerms = useMemo((): {
+		text: TextLine;
+		tabbable: boolean;
+	}[] => {
+		const altoItems = simplifiedAltoInfo?.altoJsonContent?.text || [];
+
+		if (!searchTermWords || !altoItems) {
+			return [];
+		}
+		const matchedAltoItems = new Set<{
+			text: TextLine;
+			tabbable: boolean;
+		}>();
+
+		for (const searchTerm of searchTermWords) {
+			const isLiteral = isLiteralSearchTerm(searchTerm);
+			const resolvedSearchTerm = resolveSearchTerm(searchTerm);
+			let matches: {
+				text: TextLine;
+				tabbable: boolean;
+			}[] = [];
+
+			if (isLiteral) {
+				const tokens = resolvedSearchTerm.split(' ');
+
+				// Single token literal => contains
+				if (tokens.length === 1) {
+					matches = altoItems
+						.filter((item) => item.text.includes(tokens[0]))
+						.map((item) => ({
+							text: item,
+							tabbable: true,
+						}));
+					continue;
+				}
+
+				matches.concat(
+					...altoItems
+						.filter((item) => item.text.includes(resolvedSearchTerm))
+						.map((item) => ({
+							text: item,
+							tabbable: true,
+						}))
+				);
+
+				for (
+					let altoItemIndex = 0;
+					altoItemIndex <= altoItems.length - tokens.length;
+					altoItemIndex++
+				) {
+					let found = true;
+
+					for (let tokenIndex = 0; tokenIndex < tokens.length; tokenIndex++) {
+						const normalizedValue = normalizeText(altoItems[altoItemIndex + tokenIndex].text);
+						const currentSearchPart = tokens[tokenIndex];
+
+						if (tokenIndex === 0) {
+							if (!normalizedValue.endsWith(currentSearchPart)) {
+								found = false;
+								break;
+							}
+						} else if (tokenIndex === tokens.length - 1) {
+							if (!normalizedValue.startsWith(currentSearchPart)) {
+								found = false;
+								break;
+							}
+						} else if (normalizedValue !== currentSearchPart) {
+							found = false;
+							break;
+						}
+					}
+
+					if (found) {
+						matches.push(
+							...altoItems.slice(altoItemIndex, altoItemIndex + 1).map((item) => ({
+								text: item,
+								tabbable: true,
+							}))
+						);
+						matches.push(
+							...altoItems.slice(altoItemIndex + 1, altoItemIndex + tokens.length).map((item) => ({
+								text: item,
+								tabbable: false,
+							}))
+						);
+					}
+				}
+			} else {
+				matches = altoItems
+					.filter((item) => {
+						const normalizedValue = normalizeText(item.text);
+						return (
+							normalizedValue.startsWith(resolvedSearchTerm) ||
+							normalizedValue.endsWith(resolvedSearchTerm)
+						);
+					})
+					.map((item) => ({
+						text: item,
+						tabbable: true,
+					}));
+			}
+
+			for (const matchedItem of matches) {
+				matchedAltoItems.add(matchedItem);
+			}
+		}
+		return [...matchedAltoItems];
+	}, [searchTermWords, simplifiedAltoInfo?.altoJsonContent?.text]);
+
+	const tabbableAltoTextsOnCurrentPageForSearchTerms = useMemo(
+		() => altoTextsOnCurrentPageForSearchTerms.filter((item) => item.tabbable),
+		[altoTextsOnCurrentPageForSearchTerms]
+	);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	const handleSearch = useCallback(
@@ -811,7 +944,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			// If the simplifiedAltoJson is still loaded from the previous page, we need to wait for it to be loaded before updating the highlights
 			return;
 		}
-		const highlights: TextLine[] = getAltoTextsOnCurrentPageForSearchTerms();
+		const highlights: TextLine[] = tabbableAltoTextsOnCurrentPageForSearchTerms.map(
+			(item) => item.text
+		);
 		let currentHighlightedAltoText: TextLine | null = null;
 		if (!isNil(currentSearchResultIndex) && !isNil(currentSearchResult?.searchTermIndexOnPage)) {
 			// Only update the current search result if it is available during search
@@ -845,7 +980,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		highlightMode,
 		currentSearchResultIndex,
 		searchResults,
-		getAltoTextsOnCurrentPageForSearchTerms,
+		tabbableAltoTextsOnCurrentPageForSearchTerms,
 		isTextOverlayVisible,
 		iiifViewerInitializedPromise,
 		currentPageIndex,
@@ -888,8 +1023,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			!hasAppliedUrlSearchTerms &&
 			simplifiedAltoInfo?.altoJsonContent
 		) {
-			const newSearchTerms: string = highlightedSearchTerms
-				.split(HIGHLIGHTED_SEARCH_TERMS_SEPARATOR)
+			const newSearchTerms: string = JSON.parse(highlightedSearchTerms)
+				.map((item: { isLiteral: boolean; value: string }) =>
+					item.isLiteral ? `"${item.value}"` : item.value
+				)
 				.join(' ');
 			setSearchTermsTemp(newSearchTerms);
 			setSearchTerms(newSearchTerms);
@@ -1537,16 +1674,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	};
 
 	const renderedOcrText = useMemo(() => {
-		const searchTermWords = compact(searchTerms.split(' '));
 		let searchTermIndex = 0;
 		return (
 			<div className={styles['p-object-detail__ocr__words-container']}>
 				{simplifiedAltoInfo?.altoJsonContent?.text?.map((textLocation, textIndex) => {
-					const isMarked: boolean =
-						!!searchTerms &&
-						searchTermWords.some((searchWord) =>
-							textLocation.text.toLowerCase().includes(searchWord)
-						);
+					const foundAltoText = altoTextsOnCurrentPageForSearchTerms.find((item) =>
+						isEqual(item.text, textLocation)
+					);
+					const isMarked: boolean = !!foundAltoText;
+					const isTabbable: boolean = !!foundAltoText?.tabbable;
 
 					// Search results are counted per page, so we need to subtract the amount of results in previous page
 					const searchResultsOnPreviousPages: number =
@@ -1554,7 +1690,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					const searchResultIndexWithinCurrentPage: number =
 						(currentSearchResultIndex || 0) - searchResultsOnPreviousPages;
 					const isActive: boolean =
-						!!searchTerms && isMarked && searchTermIndex === searchResultIndexWithinCurrentPage;
+						!!searchTermWords &&
+						isTabbable &&
+						searchTermIndex === searchResultIndexWithinCurrentPage;
 
 					const wordElement = (
 						// biome-ignore lint/a11y/noStaticElementInteractions: We need it this way
@@ -1579,7 +1717,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 						</span>
 					);
 
-					if (isMarked) {
+					if (isTabbable) {
 						searchTermIndex += 1;
 					}
 
@@ -1588,8 +1726,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			</div>
 		);
 	}, [
-		searchTerms,
+		searchTermWords,
 		simplifiedAltoInfo?.altoJsonContent?.text,
+		altoTextsOnCurrentPageForSearchTerms,
 		searchResults,
 		currentSearchResultIndex,
 		ieObjectId,
