@@ -1,5 +1,7 @@
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { isString } from 'lodash-es';
+import { parseUrl } from 'query-string';
 
 export const useGetFileDuration = (playableUrl: string | undefined | null) => {
 	return useQuery<number>({
@@ -10,6 +12,23 @@ export const useGetFileDuration = (playableUrl: string | undefined | null) => {
 					return reject(undefined);
 				}
 
+				// Url contains t=x,y then the video has been dynamically cut by the media service
+				// So we can determine the duration from that instantly
+				const parsedUrl = parseUrl(playableUrl);
+				if (parsedUrl.query.t && isString(parsedUrl.query.t)) {
+					const [start, end] = parsedUrl.query.t.split(',');
+					if (/[0-9]+/.test(start) && /[0-9]+/.test(end)) {
+						const startTime = Number(start);
+						const endTime = Number(end);
+
+						if (startTime < endTime) {
+							// Valid time cut format
+							return resolve(endTime - startTime);
+						}
+					}
+				}
+
+				// Else, get video duration from file header
 				const video = document.createElement('video');
 				video.preload = 'metadata';
 
