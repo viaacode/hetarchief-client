@@ -17,13 +17,11 @@ export function filterTranscriptionBySearchTerms(
 ): OcrSearchResult[] {
 	const searchResultsTemp: OcrSearchResult[] = [];
 
-	const resolvedSearchTerms = searchTerms?.filter((item) => !!item && item !== '""') || [];
-
-	if (!searchTerms?.length) {
+	if (!searchTerms.length) {
 		return [];
 	}
 
-	for (const searchTerm of resolvedSearchTerms) {
+	for (const searchTerm of searchTerms) {
 		const isLiteral = isLiteralSearchTerm(searchTerm);
 		const resolvedSearchTerm = resolveSearchTerm(searchTerm);
 

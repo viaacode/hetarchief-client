@@ -1,3 +1,5 @@
+import { uniq } from 'lodash-es';
+
 export function isLiteralSearchTerm(searchTerm: string): boolean {
 	return searchTerm.startsWith('"') && searchTerm.endsWith('"');
 }
@@ -62,5 +64,5 @@ export function stringifySearchTerms(normalizedSearchTerm: string): string[] {
 		}
 	}
 
-	return result;
+	return uniq(result.filter((item) => !!item && item !== '""'));
 }

@@ -41,7 +41,7 @@ export function filterAltoBySearchTerms(
 						tabbable: true,
 					}));
 			} else {
-				matches.concat(
+				matches.push(
 					...altoItems
 						.filter((item) => normalizeText(item.text).includes(resolvedSearchTerm))
 						.map((item) => ({
@@ -78,18 +78,17 @@ export function filterAltoBySearchTerms(
 					}
 
 					if (found) {
-						matches.push(
-							...altoItems.slice(altoItemIndex, altoItemIndex + 1).map((item) => ({
-								text: item,
-								tabbable: true,
-							}))
-						);
-						matches.push(
-							...altoItems.slice(altoItemIndex + 1, altoItemIndex + tokens.length).map((item) => ({
-								text: item,
+						matches.push({
+							text: altoItems[altoItemIndex],
+							tabbable: true,
+						});
+
+						for (let i = 1; i < tokens.length; i++) {
+							matches.push({
+								text: altoItems[altoItemIndex + i],
 								tabbable: false,
-							}))
-						);
+							});
+						}
 					}
 				}
 			}

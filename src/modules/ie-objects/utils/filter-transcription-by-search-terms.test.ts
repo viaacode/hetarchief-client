@@ -4,20 +4,6 @@ import { filterTranscriptionBySearchTerms } from './filter-transcription-by-sear
 describe('filterTranscriptionBySearchTerms', () => {
 	it('returns empty array when searchTerms is empty or undefined', () => {
 		expect(filterTranscriptionBySearchTerms(['some text'], [])).toEqual([]);
-		expect(
-			filterTranscriptionBySearchTerms(['some text'], undefined as unknown as string[])
-		).toEqual([]);
-	});
-
-	it('ignores empty search terms', () => {
-		expect(filterTranscriptionBySearchTerms(['hello world'], ['', 'hello'])).toEqual([
-			{
-				pageIndex: 0,
-				searchTerm: 'hello',
-				searchTermCharacterOffset: 0,
-				searchTermIndexOnPage: 0,
-			},
-		]);
 	});
 
 	it('returns empty array when no matches are found', () => {
