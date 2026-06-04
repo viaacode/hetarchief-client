@@ -42,7 +42,6 @@ import {
 	ObjectDetailTabs,
 	type RelatedIeObject,
 } from '@ie-objects/ie-objects.types';
-import { normalizeText, stringifySearchTerms } from '@ie-objects/search-term.consts';
 import {
 	IE_OBJECTS_SERVICE_EXPORT,
 	NEWSPAPERS_SERVICE_BASE_URL,
@@ -51,6 +50,7 @@ import { filterAltoBySearchTerms } from '@ie-objects/utils/filter-alto-by-search
 import { filterTranscriptionBySearchTerms } from '@ie-objects/utils/filter-transcription-by-search-terms';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
+import { normalizeText, stringifySearchTerms } from '@ie-objects/utils/search-term.util';
 import { OcrSearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/OcrSearchInputWithResultsPagination';
 import {
 	iiifGoToHome,

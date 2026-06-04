@@ -1,5 +1,5 @@
 import type { OcrSearchResult } from '@ie-objects/ie-objects.types';
-import { isLiteralSearchTerm, resolveSearchTerm } from '@ie-objects/search-term.consts';
+import { isLiteralSearchTerm, resolveSearchTerm } from '@ie-objects/utils/search-term.util';
 
 const IS_CHAR_PART_OF_WORD = /[a-zA-Z0-9]/i;
 

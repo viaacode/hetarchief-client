@@ -2,7 +2,7 @@ import {
 	isLiteralSearchTerm,
 	normalizeText,
 	resolveSearchTerm,
-} from '@ie-objects/search-term.consts';
+} from '@ie-objects/utils/search-term.util';
 import type { TextLine } from '@iiif-viewer/IiifViewer.types';
 
 export function filterAltoBySearchTerms(
