@@ -40,20 +40,15 @@ import {
 	type IeObjectRepresentation,
 	MediaActions,
 	ObjectDetailTabs,
-	type OcrSearchResult,
 	type RelatedIeObject,
 } from '@ie-objects/ie-objects.types';
-import {
-	isBeginningOrEndOfWord,
-	isLiteralSearchTerm,
-	normalizeText,
-	parseSearchTerms,
-	resolveSearchTerm,
-} from '@ie-objects/search-term.consts';
+import { normalizeText, parseSearchTerms } from '@ie-objects/search-term.consts';
 import {
 	IE_OBJECTS_SERVICE_EXPORT,
 	NEWSPAPERS_SERVICE_BASE_URL,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
+import { filterAltoBySearchTerms } from '@ie-objects/utils/filter-alto-by-search-terms';
+import { filterTranscriptionBySearchTerms } from '@ie-objects/utils/filter-transcription-by-search-terms';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
 import { OcrSearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/OcrSearchInputWithResultsPagination';
@@ -484,57 +479,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		return pageOcrTextsTemp;
 	}, [mediaInfo?.pages]);
 
-	const searchResults = useMemo((): OcrSearchResult[] => {
-		if (!searchTermWords) {
-			return [];
-		}
-		const searchResultsTemp: OcrSearchResult[] = [];
-
-		for (const searchTerm of searchTermWords) {
-			const isLiteral = isLiteralSearchTerm(searchTerm);
-			const resolvedSearchTerm = resolveSearchTerm(searchTerm);
-
-			pageOcrTranscripts.forEach((pageOcrTranscript, pageIndex) => {
-				if (!pageOcrTranscript) {
-					return; // Skip this page since it doesn't have an ocr transcript
-				}
-				let searchTermCharacterOffset: number = pageOcrTranscript.indexOf(resolvedSearchTerm);
-				let searchTermIndexOnPage = 0;
-				while (searchTermCharacterOffset !== -1) {
-					let shouldAddItem = false;
-
-					if (isLiteral) {
-						shouldAddItem = true;
-					} else {
-						const prevChar = pageOcrTranscript.charAt(searchTermCharacterOffset - 1);
-						const nextChar = pageOcrTranscript.charAt(
-							searchTermCharacterOffset + resolvedSearchTerm.length
-						);
-
-						if (!isBeginningOrEndOfWord(prevChar, nextChar)) {
-							shouldAddItem = true;
-						}
-					}
-					if (shouldAddItem) {
-						const searchResult: OcrSearchResult = {
-							pageIndex,
-							searchTerm: resolvedSearchTerm,
-							searchTermCharacterOffset,
-							searchTermIndexOnPage,
-						};
-						searchResultsTemp.push(searchResult);
-						searchTermIndexOnPage += 1;
-					}
-
-					searchTermCharacterOffset = pageOcrTranscript?.indexOf(
-						resolvedSearchTerm,
-						searchTermCharacterOffset + 1
-					);
-				}
-			});
-		}
-		return searchResultsTemp;
-	}, [searchTermWords, pageOcrTranscripts]);
+	const searchResults = useMemo(
+		() => filterTranscriptionBySearchTerms(pageOcrTranscripts, searchTermWords),
+		[searchTermWords, pageOcrTranscripts]
+	);
 
 	const arePagesOcrTextsAvailable = compact(pageOcrTranscripts).length !== 0;
 
@@ -544,115 +492,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const canDownloadNewspaper: boolean =
 		(useHasAnyPermission(Permission.DOWNLOAD_OBJECT) || !user) && isPublicNewspaper;
 
-	const altoTextsOnCurrentPageForSearchTerms = useMemo((): {
-		text: TextLine;
-		tabbable: boolean;
-	}[] => {
-		const altoItems = simplifiedAltoInfo?.altoJsonContent?.text || [];
-
-		if (!searchTermWords || !altoItems) {
-			return [];
-		}
-		const matchedAltoItems = new Set<{
-			text: TextLine;
-			tabbable: boolean;
-		}>();
-
-		for (const searchTerm of searchTermWords) {
-			const isLiteral = isLiteralSearchTerm(searchTerm);
-			const resolvedSearchTerm = resolveSearchTerm(searchTerm);
-			let matches: {
-				text: TextLine;
-				tabbable: boolean;
-			}[] = [];
-
-			if (isLiteral) {
-				const tokens = resolvedSearchTerm.split(' ');
-
-				// Single token literal => contains
-				if (tokens.length === 1) {
-					matches = altoItems
-						.filter((item) => normalizeText(item.text).includes(tokens[0]))
-						.map((item) => ({
-							text: item,
-							tabbable: true,
-						}));
-				} else {
-					matches.concat(
-						...altoItems
-							.filter((item) => normalizeText(item.text).includes(resolvedSearchTerm))
-							.map((item) => ({
-								text: item,
-								tabbable: true,
-							}))
-					);
-
-					for (
-						let altoItemIndex = 0;
-						altoItemIndex <= altoItems.length - tokens.length;
-						altoItemIndex++
-					) {
-						let found = true;
-
-						for (let tokenIndex = 0; tokenIndex < tokens.length; tokenIndex++) {
-							const normalizedValue = normalizeText(altoItems[altoItemIndex + tokenIndex].text);
-							const currentSearchPart = tokens[tokenIndex];
-
-							if (tokenIndex === 0) {
-								if (!normalizedValue.endsWith(currentSearchPart)) {
-									found = false;
-									break;
-								}
-							} else if (tokenIndex === tokens.length - 1) {
-								if (!normalizedValue.startsWith(currentSearchPart)) {
-									found = false;
-									break;
-								}
-							} else if (normalizedValue !== currentSearchPart) {
-								found = false;
-								break;
-							}
-						}
-
-						if (found) {
-							matches.push(
-								...altoItems.slice(altoItemIndex, altoItemIndex + 1).map((item) => ({
-									text: item,
-									tabbable: true,
-								}))
-							);
-							matches.push(
-								...altoItems
-									.slice(altoItemIndex + 1, altoItemIndex + tokens.length)
-									.map((item) => ({
-										text: item,
-										tabbable: false,
-									}))
-							);
-						}
-					}
-				}
-			} else {
-				matches = altoItems
-					.filter((item) => {
-						const normalizedValue = normalizeText(item.text);
-						return (
-							normalizedValue.startsWith(resolvedSearchTerm) ||
-							normalizedValue.endsWith(resolvedSearchTerm)
-						);
-					})
-					.map((item) => ({
-						text: item,
-						tabbable: true,
-					}));
-			}
-
-			for (const matchedItem of matches) {
-				matchedAltoItems.add(matchedItem);
-			}
-		}
-		return [...matchedAltoItems];
-	}, [searchTermWords, simplifiedAltoInfo?.altoJsonContent?.text]);
+	const altoTextsOnCurrentPageForSearchTerms = useMemo(
+		() => filterAltoBySearchTerms(simplifiedAltoInfo?.altoJsonContent?.text || [], searchTermWords),
+		[searchTermWords, simplifiedAltoInfo?.altoJsonContent?.text]
+	);
 
 	const tabbableAltoTextsOnCurrentPageForSearchTerms = useMemo(
 		() => altoTextsOnCurrentPageForSearchTerms.filter((item) => item.tabbable),

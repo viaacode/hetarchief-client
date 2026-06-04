@@ -1,4 +1,4 @@
-export const IS_CHAR_PART_OF_WORD = /[\w-]/i;
+export const IS_CHAR_PART_OF_WORD = /[a-zA-Z0-9]/i;
 
 export function isBeginningOrEndOfWord(prevChar: string, nextChar: string): boolean {
 	const isStartOfWord = !IS_CHAR_PART_OF_WORD.test(prevChar);
