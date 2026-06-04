@@ -15,12 +15,13 @@ export function filterTranscriptionBySearchTerms(
 	pageOcrTranscripts: (string | null)[],
 	searchTerms: string[]
 ): OcrSearchResult[] {
-	if (!searchTerms) {
-		return [];
-	}
 	const searchResultsTemp: OcrSearchResult[] = [];
 
-	const resolvedSearchTerms = searchTerms.filter((item) => !!item && item !== '');
+	const resolvedSearchTerms = searchTerms?.filter((item) => !!item && item !== '""') || [];
+
+	if (!searchTerms?.length) {
+		return [];
+	}
 
 	for (const searchTerm of resolvedSearchTerms) {
 		const isLiteral = isLiteralSearchTerm(searchTerm);

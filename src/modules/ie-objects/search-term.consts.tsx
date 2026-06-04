@@ -1,13 +1,3 @@
-export const IS_CHAR_PART_OF_WORD = /[a-zA-Z0-9]/i;
-
-export function isBeginningOrEndOfWord(prevChar: string, nextChar: string): boolean {
-	const isStartOfWord = !IS_CHAR_PART_OF_WORD.test(prevChar);
-	const isEndOfWord = !IS_CHAR_PART_OF_WORD.test(nextChar);
-	const isMiddleOfWord = !isStartOfWord && !isEndOfWord;
-
-	return !isMiddleOfWord;
-}
-
 export function isLiteralSearchTerm(searchTerm: string): boolean {
 	return searchTerm.startsWith('"') && searchTerm.endsWith('"');
 }
@@ -23,7 +13,7 @@ export function normalizeText(value: string): string {
 		.replace(/([\u0300-\u036f])/g, '');
 }
 
-export function parseSearchTerms(normalizedSearchTerm: string): string[] {
+export function stringifySearchTerms(normalizedSearchTerm: string): string[] {
 	const result: string[] = [];
 	const normalizedSearchTermString = normalizeText(normalizedSearchTerm);
 	let i = 0;

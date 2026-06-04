@@ -42,7 +42,7 @@ import {
 	ObjectDetailTabs,
 	type RelatedIeObject,
 } from '@ie-objects/ie-objects.types';
-import { normalizeText, parseSearchTerms } from '@ie-objects/search-term.consts';
+import { normalizeText, stringifySearchTerms } from '@ie-objects/search-term.consts';
 import {
 	IE_OBJECTS_SERVICE_EXPORT,
 	NEWSPAPERS_SERVICE_BASE_URL,
@@ -212,7 +212,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const [searchTermsTemp, setSearchTermsTemp] = useState<string>('');
 	// Search terms are used to store the search terms after the user has confirmed the search
 	const [searchTerms, setSearchTerms] = useState<string>('');
-	const searchTermWords = useMemo(() => parseSearchTerms(searchTerms), [searchTerms]);
+	const searchTermWords = useMemo(() => stringifySearchTerms(searchTerms), [searchTerms]);
 
 	const [, setShowAuthQueryKey] = useQueryParam(QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY, StringParam);
 	const [activeBlade, setActiveBlade] = useQueryParam(
