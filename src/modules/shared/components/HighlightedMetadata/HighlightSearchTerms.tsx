@@ -2,6 +2,7 @@ import {
 	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
 	QUERY_PARAM_KEY,
 } from '@shared/const/query-param-keys';
+import type { IeObjectsSearchTermObject } from '@shared/types/api';
 import clsx from 'clsx';
 import type { FC } from 'react';
 import Highlighter from 'react-highlight-words';
@@ -11,7 +12,7 @@ import styles from './HighlightSearchTerms.module.scss';
 
 interface HighlightSearchTermsProps {
 	toHighlight: string;
-	searchTerms?: { isLiteral: boolean; value: string }[];
+	searchTerms?: IeObjectsSearchTermObject[];
 	activeSearchTermIndex?: number;
 	enabled?: boolean;
 	fullHeight?: boolean;

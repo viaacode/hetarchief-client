@@ -1,8 +1,9 @@
+import type { IeObjectsSearchTermObject } from '@shared/types/api';
 import { minBy, truncate } from 'lodash-es';
 
 export function extractSnippetBySearchTerm(
 	fullText: string,
-	searchTerms: { isLiteral: boolean; value: string }[],
+	searchTerms: IeObjectsSearchTermObject[],
 	snippetLength: number
 ): string {
 	const [firstSearchTermFound, firstOccurrenceIndex] = minBy(
@@ -25,7 +26,10 @@ export function extractSnippetBySearchTerm(
 	}
 	if (firstSearchTermFoundValue.length > snippetLength) {
 		// search term is larger than snippet => show beginning of search term
-		return `...${truncate(firstSearchTermFoundValue, { length: snippetLength, omission: '...' })}`;
+		return `...${truncate(firstSearchTermFoundValue, {
+			length: snippetLength,
+			omission: '...',
+		})}`;
 	}
 	// Search term is less than the snippet length => cut around the search term with leading and trailing ...
 	const extraCharacters = snippetLength - firstSearchTermFoundValue.length;

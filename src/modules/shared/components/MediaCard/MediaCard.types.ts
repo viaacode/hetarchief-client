@@ -1,4 +1,5 @@
 import type { IeObjectLicense } from '@ie-objects/ie-objects.types';
+import type { IeObjectsSearchTermObject } from '@shared/types/api';
 import type { IeObjectType } from '@shared/types/ie-objects';
 import type { ReactNode } from 'react';
 
@@ -12,7 +13,7 @@ export interface MediaCardProps {
 	buttons?: ReactNode;
 	description?: ReactNode;
 	duration?: string;
-	keywords?: { isLiteral: boolean; value: string }[];
+	keywords?: IeObjectsSearchTermObject[];
 	name?: string;
 	id?: string;
 	objectId?: string;

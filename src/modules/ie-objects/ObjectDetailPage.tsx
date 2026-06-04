@@ -94,6 +94,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectLastSearchParams, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
+import type { IeObjectsSearchTermObject } from '@shared/types/api';
 import { IeObjectType } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
@@ -571,63 +572,64 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				// Single token literal => contains
 				if (tokens.length === 1) {
 					matches = altoItems
-						.filter((item) => item.text.includes(tokens[0]))
+						.filter((item) => normalizeText(item.text).includes(tokens[0]))
 						.map((item) => ({
 							text: item,
 							tabbable: true,
 						}));
-					continue;
-				}
-
-				matches.concat(
-					...altoItems
-						.filter((item) => item.text.includes(resolvedSearchTerm))
-						.map((item) => ({
-							text: item,
-							tabbable: true,
-						}))
-				);
-
-				for (
-					let altoItemIndex = 0;
-					altoItemIndex <= altoItems.length - tokens.length;
-					altoItemIndex++
-				) {
-					let found = true;
-
-					for (let tokenIndex = 0; tokenIndex < tokens.length; tokenIndex++) {
-						const normalizedValue = normalizeText(altoItems[altoItemIndex + tokenIndex].text);
-						const currentSearchPart = tokens[tokenIndex];
-
-						if (tokenIndex === 0) {
-							if (!normalizedValue.endsWith(currentSearchPart)) {
-								found = false;
-								break;
-							}
-						} else if (tokenIndex === tokens.length - 1) {
-							if (!normalizedValue.startsWith(currentSearchPart)) {
-								found = false;
-								break;
-							}
-						} else if (normalizedValue !== currentSearchPart) {
-							found = false;
-							break;
-						}
-					}
-
-					if (found) {
-						matches.push(
-							...altoItems.slice(altoItemIndex, altoItemIndex + 1).map((item) => ({
+				} else {
+					matches.concat(
+						...altoItems
+							.filter((item) => normalizeText(item.text).includes(resolvedSearchTerm))
+							.map((item) => ({
 								text: item,
 								tabbable: true,
 							}))
-						);
-						matches.push(
-							...altoItems.slice(altoItemIndex + 1, altoItemIndex + tokens.length).map((item) => ({
-								text: item,
-								tabbable: false,
-							}))
-						);
+					);
+
+					for (
+						let altoItemIndex = 0;
+						altoItemIndex <= altoItems.length - tokens.length;
+						altoItemIndex++
+					) {
+						let found = true;
+
+						for (let tokenIndex = 0; tokenIndex < tokens.length; tokenIndex++) {
+							const normalizedValue = normalizeText(altoItems[altoItemIndex + tokenIndex].text);
+							const currentSearchPart = tokens[tokenIndex];
+
+							if (tokenIndex === 0) {
+								if (!normalizedValue.endsWith(currentSearchPart)) {
+									found = false;
+									break;
+								}
+							} else if (tokenIndex === tokens.length - 1) {
+								if (!normalizedValue.startsWith(currentSearchPart)) {
+									found = false;
+									break;
+								}
+							} else if (normalizedValue !== currentSearchPart) {
+								found = false;
+								break;
+							}
+						}
+
+						if (found) {
+							matches.push(
+								...altoItems.slice(altoItemIndex, altoItemIndex + 1).map((item) => ({
+									text: item,
+									tabbable: true,
+								}))
+							);
+							matches.push(
+								...altoItems
+									.slice(altoItemIndex + 1, altoItemIndex + tokens.length)
+									.map((item) => ({
+										text: item,
+										tabbable: false,
+									}))
+							);
+						}
 					}
 				}
 			} else {
@@ -1024,9 +1026,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			simplifiedAltoInfo?.altoJsonContent
 		) {
 			const newSearchTerms: string = JSON.parse(highlightedSearchTerms)
-				.map((item: { isLiteral: boolean; value: string }) =>
-					item.isLiteral ? `"${item.value}"` : item.value
-				)
+				.map((item: IeObjectsSearchTermObject) => (item.isLiteral ? `"${item.value}"` : item.value))
 				.join(' ');
 			setSearchTermsTemp(newSearchTerms);
 			setSearchTerms(newSearchTerms);
