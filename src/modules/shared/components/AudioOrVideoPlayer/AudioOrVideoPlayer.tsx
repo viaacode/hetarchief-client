@@ -58,7 +58,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		isLoading: isLoadingPlayableUrl,
 		isFetching: isFetchingPlayableUrl,
 		isError: isErrorPlayableUrl,
-	} = useGetIeObjectsTicketUrl(fileId, schemaIdentifier, !!fileId);
+	} = useGetIeObjectsTicketUrl(fileId, schemaIdentifier);
 
 	const {
 		data: mediaDuration,
