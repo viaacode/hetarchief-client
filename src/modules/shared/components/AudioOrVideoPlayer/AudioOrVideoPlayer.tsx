@@ -52,13 +52,13 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 
 	const currentPlayableFile: IeObjectFile | null = allFilesToInRepresentation?.[0] || null;
 
-	const fileStoredAt: string | null = currentPlayableFile?.storedAt ?? null;
+	const fileId: string | null = currentPlayableFile?.id ?? null;
 	const {
 		data: playableUrl,
 		isLoading: isLoadingPlayableUrl,
 		isFetching: isFetchingPlayableUrl,
 		isError: isErrorPlayableUrl,
-	} = useGetIeObjectsTicketUrl(fileStoredAt, schemaIdentifier, !!fileStoredAt);
+	} = useGetIeObjectsTicketUrl(fileId, schemaIdentifier, !!fileId);
 
 	const {
 		data: mediaDuration,
@@ -69,7 +69,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	useEffect(() => {
 		if (!isLoadingPlayableUrl && !isFetchingPlayableUrl) {
 			// Force flowplayer rerender after successful fetch
-			setFlowPlayerKey(fileStoredAt);
+			setFlowPlayerKey(fileId);
 			onMediaReady(
 				!isErrorPlayableUrl && !!playableUrl && !!currentPlayableFile,
 				currentPlayableFile
@@ -81,7 +81,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		isErrorPlayableUrl,
 		playableUrl,
 		currentPlayableFile,
-		fileStoredAt,
+		fileId,
 		onMediaReady,
 	]);
 
@@ -92,9 +92,9 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	}, [mediaDuration, onMediaDurationLoaded, isLoadingMediaDuration, isErrorMediaDuration]);
 
 	// peak file
-	const peakFileStoredAt: string | null = getFilesByType(JSON_FORMATS)?.[0]?.storedAt || null;
+	const peakFile: IeObjectFile | null = getFilesByType(JSON_FORMATS)?.[0] || null;
 	const { data: peakJson, isLoading: isLoadingPeakFile } = useGetPeakFile(
-		peakFileStoredAt,
+		peakFile?.id,
 		schemaIdentifier,
 		dctermsFormat === IeObjectType.AUDIO || dctermsFormat === IeObjectType.AUDIO_FRAGMENT
 	);
@@ -114,7 +114,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		let start = mapTimeToNumber(representation?.schemaStartTime) || 0;
 		let end = mapTimeToNumber(representation?.schemaEndTime) || mediaDuration;
 
-		// Only cuepoints if there are any set and they do not fall outside the range of the video itself
+		// Only cuepoints if there are any set, and they do not fall outside the range of the video itself
 		if (cuePoints) {
 			if (cuePoints.start && cuePoints.start > start && (isNil(end) || cuePoints.start < end)) {
 				start = cuePoints.start;
@@ -169,7 +169,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	}
 	// Audio player
 	if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(currentPlayableFile.mimeType)) {
-		if (peakFileStoredAt && isLoadingPeakFile) {
+		if (peakFile?.storedAt && isLoadingPeakFile) {
 			return (
 				<Loading
 					fullscreen

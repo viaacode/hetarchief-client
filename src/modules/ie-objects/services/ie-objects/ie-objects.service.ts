@@ -16,7 +16,7 @@ import {
 import type { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { SearchSortProp } from '@visitor-space/types';
 import { isEmpty } from 'lodash-es';
-import { parseUrl, stringifyUrl } from 'query-string';
+import { stringifyUrl } from 'query-string';
 
 import {
 	IE_OBJECT_SERVICE_SEO_URL,
@@ -143,36 +143,24 @@ export class IeObjectsService {
 	}
 
 	public static async getPlayableUrl(
-		fileStoredAt: string | null,
+		fileId: string | null,
 		schemaIdentifier: string
 	): Promise<string | null> {
-		if (!fileStoredAt) {
+		if (!fileId) {
 			return null;
 		}
 
-		const fileStoredAtWithoutTimeCodes = fileStoredAt.split('#')[0];
-
-		const fullVideoPlayableUrl = await ApiService.getApi()
+		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_TICKET_URL}`,
 					query: {
 						schemaIdentifier,
-						browsePath: fileStoredAtWithoutTimeCodes,
+						fileId,
 					},
 				})
 			)
 			.text();
-
-		// Add timecodes if the file.schemaIdentifier contains a #t=x,x suffix
-		// eg: https://archief-media-qas.viaa.be/viaa/ERFGOEDCELKERF/b21722686aa34b239f77068d131c6155d72b5454df734b2690b42de537f753a0/browse.mp4#t=151,242
-		// https://meemoo.atlassian.net/browse/ARC-1856
-		const timeCodes = fileStoredAt.split('#')[1];
-		const parsedUrl = parseUrl(fullVideoPlayableUrl);
-		return stringifyUrl({
-			url: parsedUrl.url + (timeCodes ? `#${timeCodes}` : ''),
-			query: parsedUrl.query,
-		});
 	}
 
 	public static async getTicketServiceTokens(
