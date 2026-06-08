@@ -14,6 +14,11 @@
 		opacity 0.2s ease-in-out,
 		visibility 0.2s linear 0.2s;
 
+	p {
+		font-size: inherit;
+		line-height: inherit;
+	}
+
 	&-trigger {
 		display: inline-block !important;
 	}
