@@ -44,10 +44,7 @@ import {
 	ROUTE_PARTS_BY_LOCALE,
 	ROUTES_BY_LOCALE,
 } from '@shared/const';
-import {
-	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
-	QUERY_PARAM_KEY,
-} from '@shared/const/query-param-keys';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { numberWithCommas } from '@shared/helpers';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -668,19 +665,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			// Search terms can either be:
 			// - simple text search or
 			// - they can contain logic operators like: (philip AND mathilde) OR (albert)
-			let plainTextSearchTerms: string | undefined = query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]?.join(
-				HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
-			);
-			if (
-				plainTextSearchTerms?.includes('(') ||
-				plainTextSearchTerms?.includes(')') ||
-				plainTextSearchTerms?.includes('AND') ||
-				plainTextSearchTerms?.includes('OR') ||
-				plainTextSearchTerms?.includes('NOT')
-			) {
-				// Complex logic operators are present in the search terms => use the search terms that were parsed on the backend:
-				plainTextSearchTerms = searchResults?.searchTerms.join(HIGHLIGHTED_SEARCH_TERMS_SEPARATOR);
-			}
+			const plainTextSearchTerms = searchResults?.searchTerms
+				? JSON.stringify(searchResults?.searchTerms)
+				: '';
+
 			const link: string | undefined = stringifyUrl({
 				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${item.maintainerSlug}/${item.schemaIdentifier}/${kebabCase(item.name) || 'titel'}`,
 				query: {
@@ -712,14 +700,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				numOfChildren: item.children || 0,
 			};
 		});
-	}, [
-		isKioskUser,
-		locale,
-		searchResults?.items,
-		searchResults?.searchTerms,
-		isGlobalArchive,
-		query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
-	]);
+	}, [isKioskUser, locale, isGlobalArchive, searchResults]);
 
 	const openAndScrollToAdvancedFilters = () => {
 		setFilterMenuOpen(true);

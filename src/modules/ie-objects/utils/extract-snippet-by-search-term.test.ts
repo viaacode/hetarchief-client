@@ -6,7 +6,7 @@ describe('Extract snippet by search term', () => {
 		expect(
 			extractSnippetBySearchTerm(
 				'This is a long piece of text and it has multiple words in it',
-				['does not exist'],
+				[{ isLiteral: false, value: 'does not exist' }],
 				40
 			)
 		).toBe('This is a long piece of text and it h...');
@@ -16,7 +16,7 @@ describe('Extract snippet by search term', () => {
 		expect(
 			extractSnippetBySearchTerm(
 				'This is a long piece of text and it has multiple words in it',
-				['This is a long piece'],
+				[{ isLiteral: false, value: 'This is a long piece' }],
 				40
 			)
 		).toBe('This is a long piece of text and it h...');
@@ -26,7 +26,12 @@ describe('Extract snippet by search term', () => {
 		expect(
 			extractSnippetBySearchTerm(
 				'This is a long piece of text and it has multiple words in it',
-				['This is a long piece of text and it has multiple words in'],
+				[
+					{
+						isLiteral: false,
+						value: 'This is a long piece of text and it has multiple words in',
+					},
+				],
 				40
 			)
 		).toBe('This is a long piece of text and it h...');
@@ -36,7 +41,7 @@ describe('Extract snippet by search term', () => {
 		expect(
 			extractSnippetBySearchTerm(
 				'This is a long piece of text and it has multiple words in it',
-				['long piece of text'],
+				[{ isLiteral: false, value: 'long piece of text' }],
 				40
 			)
 		).toBe('This is a long piece of text and it h...');
@@ -46,7 +51,7 @@ describe('Extract snippet by search term', () => {
 		expect(
 			extractSnippetBySearchTerm(
 				'This is a long piece of text and it has multiple words in it',
-				['has multiple words in it'],
+				[{ isLiteral: false, value: 'has multiple words in it' }],
 				40
 			)
 		).toBe('... of text and it has multiple words in it');
@@ -56,7 +61,7 @@ describe('Extract snippet by search term', () => {
 		expect(
 			extractSnippetBySearchTerm(
 				'This is a long piece of text and it has multiple words in it',
-				['multiple words in'],
+				[{ isLiteral: false, value: 'multiple words in' }],
 				40
 			)
 		).toBe('... of text and it has multiple words in it');
@@ -66,7 +71,10 @@ describe('Extract snippet by search term', () => {
 		expect(
 			extractSnippetBySearchTerm(
 				'This is a long piece of text and it has multiple words in it',
-				['long piece of text', 'a long'],
+				[
+					{ isLiteral: false, value: 'long piece of text' },
+					{ isLiteral: false, value: 'a long' },
+				],
 				40
 			)
 		).toBe('This is a long piece of text and it h...');
@@ -76,7 +84,10 @@ describe('Extract snippet by search term', () => {
 		expect(
 			extractSnippetBySearchTerm(
 				'This is a long piece of text and it has multiple words in it',
-				['multiple words in', 'words in'],
+				[
+					{ isLiteral: false, value: 'multiple words in' },
+					{ isLiteral: false, value: 'words in' },
+				],
 				40
 			)
 		).toBe('... of text and it has multiple words in it');
@@ -86,7 +97,10 @@ describe('Extract snippet by search term', () => {
 		expect(
 			extractSnippetBySearchTerm(
 				'This is a Long Piece of Text and it has Multiple Words in it',
-				['multiple words in', 'words in it'],
+				[
+					{ isLiteral: false, value: 'multiple words in' },
+					{ isLiteral: false, value: 'words in it' },
+				],
 				40
 			)
 		).toBe('... of Text and it has Multiple Words in it');
@@ -96,7 +110,7 @@ describe('Extract snippet by search term', () => {
 		expect(
 			extractSnippetBySearchTerm(
 				'This is a Long Piece of Text and it has Multiple Words in it',
-				['NOT FOUND'],
+				[{ isLiteral: false, value: 'NOT FOUND' }],
 				40
 			)
 		).toBe('This is a Long Piece of Text and it h...');

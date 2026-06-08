@@ -158,6 +158,11 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 		[filters]
 	);
 
+	const mappedKeywords = useMemo(
+		() => keywords.map((value) => ({ value, isLiteral: true })),
+		[keywords]
+	);
+
 	/**
 	 * Effects
 	 */
@@ -504,14 +509,12 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 		return (
 			<div className="l-container">
 				<MediaCardList
-					keywords={keywords}
+					keywords={mappedKeywords}
 					items={folderMedia?.data?.items.map((media) => {
 						let link: string | undefined = stringifyUrl({
 							url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${media.maintainerSlug}/${media.schemaIdentifier}/${kebabCase(media.name) || 'titel'}`,
 							query: {
-								[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: (keywords || []).join(
-									HIGHLIGHTED_SEARCH_TERMS_SEPARATOR
-								),
+								[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: JSON.stringify(mappedKeywords),
 							},
 						});
 						if (isEmpty(media.accessThrough)) {

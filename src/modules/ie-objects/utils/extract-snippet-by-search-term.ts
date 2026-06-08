@@ -1,20 +1,22 @@
+import type { IeObjectsSearchTermObject } from '@shared/types/api';
 import { minBy, truncate } from 'lodash-es';
 
 export function extractSnippetBySearchTerm(
 	fullText: string,
-	searchTerms: string[],
+	searchTerms: IeObjectsSearchTermObject[],
 	snippetLength: number
 ): string {
 	const [firstSearchTermFound, firstOccurrenceIndex] = minBy(
 		searchTerms.map((searchTerm) => [
 			searchTerm,
-			fullText.toLowerCase().indexOf(searchTerm.toLowerCase()),
+			fullText.toLowerCase().indexOf(searchTerm.value.toLowerCase()),
 		]),
 		(termsAndOccurrence) => termsAndOccurrence[1]
 	) || [null, null];
+	const firstSearchTermFoundValue = firstSearchTermFound?.value;
 	if (
 		!firstOccurrenceIndex ||
-		!firstSearchTermFound ||
+		!firstSearchTermFoundValue ||
 		firstOccurrenceIndex === -1 ||
 		firstOccurrenceIndex === 0
 	) {
@@ -22,15 +24,18 @@ export function extractSnippetBySearchTerm(
 		// or first occurrence at start of text
 		return truncate(fullText, { length: snippetLength, omission: '...' });
 	}
-	if (firstSearchTermFound.length > snippetLength) {
+	if (firstSearchTermFoundValue.length > snippetLength) {
 		// search term is larger than snippet => show beginning of search term
-		return `...${truncate(firstSearchTermFound, { length: snippetLength, omission: '...' })}`;
+		return `...${truncate(firstSearchTermFoundValue, {
+			length: snippetLength,
+			omission: '...',
+		})}`;
 	}
 	// Search term is less than the snippet length => cut around the search term with leading and trailing ...
-	const extraCharacters = snippetLength - firstSearchTermFound.length;
+	const extraCharacters = snippetLength - firstSearchTermFoundValue.length;
 	// const startOfCut = Math.max(firstOccurrenceIndex - Math.floor(extraCharacters / 2), 0);
 	const endOfCut = Math.min(
-		firstOccurrenceIndex + firstSearchTermFound.length + Math.ceil(extraCharacters / 2),
+		firstOccurrenceIndex + firstSearchTermFoundValue.length + Math.ceil(extraCharacters / 2),
 		fullText.length
 	);
 	const startOfCut = endOfCut - snippetLength;
