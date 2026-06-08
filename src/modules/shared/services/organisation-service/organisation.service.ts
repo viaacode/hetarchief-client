@@ -23,7 +23,7 @@ export class OrganisationService {
 				stringifyUrl({
 					url: `${ORGANISATIONS_SERVICE_BASE_URL}/slugs`,
 					query: {
-						...(query?.trim() ? { query } : {}),
+						...(query?.trim() ? { query: `%${query}%` } : {}),
 						...(page && { page }),
 						...(size && { size }),
 						...(orderProp && { orderProp: String(orderProp) }),
