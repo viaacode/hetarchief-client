@@ -48,6 +48,7 @@ import {
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { checkIeObjectPermissions } from '@ie-objects/utils/check-ie-object-permissions';
 import { isInAFolder } from '@ie-objects/utils/folders';
+import { formatDateTime } from '@ie-objects/utils/format-date-time';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { getFirstMentionHighlight } from '@ie-objects/utils/get-first-mention-highlight';
 import {
@@ -122,10 +123,8 @@ import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import Callout from '../../../shared/components/Callout/Callout';
 import MetadataList from '../Metadata/MetadataList';
-
 import styles from './ObjectDetailPageMetadata.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
@@ -1249,6 +1248,8 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___creatiedatum'),
 						mediaInfo.dateCreated
+							? formatDateTime(new Date(mediaInfo.dateCreated), 'short', false)
+							: null
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___datum-drager'),

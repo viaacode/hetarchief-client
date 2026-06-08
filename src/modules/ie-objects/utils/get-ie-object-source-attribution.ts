@@ -6,6 +6,7 @@ import {
 import { IeObjectType } from '@shared/types/ie-objects';
 import { Locale } from '@shared/utils/i18n';
 import { compact } from 'lodash-es';
+import { formatDateTime } from './format-date-time';
 
 const MISSING_RIGHTS_INFO = 'geen rechteninformatie beschikbaar';
 const UNKNOWN_CREATOR_BY_LOCALE: Record<Locale, string> = {
@@ -149,10 +150,12 @@ export function getIeObjectSourceAttribution(
 	}
 
 	if (AV_OBJECT_TYPES.includes(ieObject.dctermsFormat) && hasAvEssence(ieObject)) {
+		const preferredDate = ieObject.dateCreated ?? ieObject.datePublished;
+
 		return buildAttribution([
 			formatSourceAttributionNames(getCreatorNames(ieObject, locale)),
 			ieObject.name,
-			ieObject.dateCreated || ieObject.datePublished,
+			preferredDate ? formatDateTime(new Date(preferredDate), 'short') : null,
 			ieObject.maintainerName,
 			getUsageCategory(ieObject.rightsInfo),
 			'hetarchief.be',
