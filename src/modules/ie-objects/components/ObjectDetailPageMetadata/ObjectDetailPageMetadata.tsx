@@ -48,7 +48,6 @@ import {
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { checkIeObjectPermissions } from '@ie-objects/utils/check-ie-object-permissions';
 import { isInAFolder } from '@ie-objects/utils/folders';
-import { formatDateTime } from '@ie-objects/utils/format-date-time';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { getFirstMentionHighlight } from '@ie-objects/utils/get-first-mention-highlight';
 import {
@@ -98,6 +97,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectBreadcrumbs } from '@shared/store/ui';
 import { IeObjectType } from '@shared/types/ie-objects';
+import { formatDateTime } from '@shared/utils/dates';
 import { Locale } from '@shared/utils/i18n';
 import { isMobileSize } from '@shared/utils/is-mobile';
 import {
@@ -1248,7 +1248,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___creatiedatum'),
 						mediaInfo.dateCreated
-							? formatDateTime(new Date(mediaInfo.dateCreated), 'short', false)
+							? formatDateTime(new Date(mediaInfo.dateCreated), locale, 'short', false)
 							: null
 					)}
 					{renderSimpleMetadataField(

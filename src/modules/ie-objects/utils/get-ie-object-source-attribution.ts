@@ -4,9 +4,9 @@ import {
 	type IeObjectRightsInfo,
 } from '@ie-objects/ie-objects.types';
 import { IeObjectType } from '@shared/types/ie-objects';
+import { formatDateTime } from '@shared/utils/dates';
 import { Locale } from '@shared/utils/i18n';
 import { compact } from 'lodash-es';
-import { formatDateTime } from './format-date-time';
 
 const MISSING_RIGHTS_INFO = 'geen rechteninformatie beschikbaar';
 const UNKNOWN_CREATOR_BY_LOCALE: Record<Locale, string> = {
@@ -155,7 +155,7 @@ export function getIeObjectSourceAttribution(
 		return buildAttribution([
 			formatSourceAttributionNames(getCreatorNames(ieObject, locale)),
 			ieObject.name,
-			preferredDate ? formatDateTime(new Date(preferredDate), 'short') : null,
+			preferredDate ? formatDateTime(new Date(preferredDate), locale, 'short') : null,
 			ieObject.maintainerName,
 			getUsageCategory(ieObject.rightsInfo),
 			'hetarchief.be',

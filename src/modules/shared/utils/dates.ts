@@ -1,7 +1,6 @@
-import { format, formatDistanceToNow, isSameDay, isToday } from 'date-fns';
-
 import { TranslationService } from '@shared/services/translation-service/translation.service';
-import { type Locale, getLocaleFromI18nLanguage } from './i18n';
+import { format, formatDistanceToNow, isSameDay, isToday } from 'date-fns';
+import { getLocaleFromI18nLanguage, type Locale } from './i18n';
 
 // Shared
 
@@ -117,3 +116,18 @@ export const formatDistanceTodayWithoutTime = (input: Date | string): string => 
 export const formatSameDayTimeOrDate = (date?: Date): string => {
 	return date && isToday(date) ? formatTime(date) : formatDate(date);
 };
+
+// 13-04-2022, 09u30 || 4-13-2022, 9:30 AM
+export function formatDateTime(
+	date: Date,
+	locale: string,
+	dateStyle: 'medium' | 'short' = 'medium',
+	showTime = true
+): string {
+	const formattedDateTime = date.toLocaleString(locale, {
+		dateStyle: dateStyle,
+		...(showTime ? { timeStyle: 'short' } : {}),
+	});
+
+	return dateStyle === 'short' ? formattedDateTime.replace(/\//g, '-') : formattedDateTime;
+}
