@@ -1,17 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { filterTranscriptionBySearchTerms } from './filter-transcription-by-search-terms';
+import { findSearchTermsInTranscription } from './find-search-terms-in-transcription';
 
-describe('filterTranscriptionBySearchTerms', () => {
+describe('findSearchTermsInTranscription', () => {
 	it('returns empty array when searchTerms is empty or undefined', () => {
-		expect(filterTranscriptionBySearchTerms(['some text'], [])).toEqual([]);
+		expect(findSearchTermsInTranscription(['some text'], [])).toEqual([]);
 	});
 
 	it('returns empty array when no matches are found', () => {
-		expect(filterTranscriptionBySearchTerms(['hello world'], ['banana'])).toEqual([]);
+		expect(findSearchTermsInTranscription(['hello world'], ['banana'])).toEqual([]);
 	});
 
 	it('skips null and empty OCR pages safely', () => {
-		expect(filterTranscriptionBySearchTerms([null, '', 'hello world'], ['hello'])).toEqual([
+		expect(findSearchTermsInTranscription([null, '', 'hello world'], ['hello'])).toEqual([
 			{
 				pageIndex: 2,
 				searchTerm: 'hello',
@@ -22,7 +22,7 @@ describe('filterTranscriptionBySearchTerms', () => {
 	});
 
 	it('finds multiple occurrences of a word on the same page', () => {
-		expect(filterTranscriptionBySearchTerms(['hello world hello'], ['hello'])).toEqual([
+		expect(findSearchTermsInTranscription(['hello world hello'], ['hello'])).toEqual([
 			{
 				pageIndex: 0,
 				searchTerm: 'hello',
@@ -39,7 +39,7 @@ describe('filterTranscriptionBySearchTerms', () => {
 	});
 
 	it('only matches word-boundary occurrences for non-literal terms', () => {
-		expect(filterTranscriptionBySearchTerms(['partial particle art'], ['art'])).toEqual([
+		expect(findSearchTermsInTranscription(['partial particle art'], ['art'])).toEqual([
 			{
 				pageIndex: 0,
 				searchTerm: 'art',
@@ -50,7 +50,7 @@ describe('filterTranscriptionBySearchTerms', () => {
 	});
 
 	it('matches at beginning of word', () => {
-		expect(filterTranscriptionBySearchTerms(['article'], ['art'])).toEqual([
+		expect(findSearchTermsInTranscription(['article'], ['art'])).toEqual([
 			{
 				pageIndex: 0,
 				searchTerm: 'art',
@@ -61,7 +61,7 @@ describe('filterTranscriptionBySearchTerms', () => {
 	});
 
 	it('matches at end of word', () => {
-		expect(filterTranscriptionBySearchTerms(['cart'], ['art'])).toEqual([
+		expect(findSearchTermsInTranscription(['cart'], ['art'])).toEqual([
 			{
 				pageIndex: 0,
 				searchTerm: 'art',
@@ -72,7 +72,7 @@ describe('filterTranscriptionBySearchTerms', () => {
 	});
 
 	it('matches full word', () => {
-		expect(filterTranscriptionBySearchTerms(['art'], ['art'])).toEqual([
+		expect(findSearchTermsInTranscription(['art'], ['art'])).toEqual([
 			{
 				pageIndex: 0,
 				searchTerm: 'art',
@@ -83,7 +83,7 @@ describe('filterTranscriptionBySearchTerms', () => {
 	});
 
 	it('matches words next to punctuation', () => {
-		expect(filterTranscriptionBySearchTerms(['hello, world. (hello)'], ['hello'])).toEqual([
+		expect(findSearchTermsInTranscription(['hello, world. (hello)'], ['hello'])).toEqual([
 			{
 				pageIndex: 0,
 				searchTerm: 'hello',
@@ -101,7 +101,7 @@ describe('filterTranscriptionBySearchTerms', () => {
 
 	it('handles literal search terms ignoring word boundaries', () => {
 		expect(
-			filterTranscriptionBySearchTerms(['find this sentence inside text'], ['"this sentence"'])
+			findSearchTermsInTranscription(['find this sentence inside text'], ['"this sentence"'])
 		).toEqual([
 			{
 				pageIndex: 0,
@@ -113,7 +113,7 @@ describe('filterTranscriptionBySearchTerms', () => {
 	});
 
 	it('finds multiple literal matches', () => {
-		expect(filterTranscriptionBySearchTerms(['abcabcabc'], ['"abc"'])).toEqual([
+		expect(findSearchTermsInTranscription(['abcabcabc'], ['"abc"'])).toEqual([
 			{
 				pageIndex: 0,
 				searchTerm: 'abc',
@@ -136,7 +136,7 @@ describe('filterTranscriptionBySearchTerms', () => {
 	});
 
 	it('finds overlapping literal matches', () => {
-		expect(filterTranscriptionBySearchTerms(['ababa'], ['"aba"'])).toEqual([
+		expect(findSearchTermsInTranscription(['ababa'], ['"aba"'])).toEqual([
 			{
 				pageIndex: 0,
 				searchTerm: 'aba',
@@ -153,7 +153,7 @@ describe('filterTranscriptionBySearchTerms', () => {
 	});
 
 	it('aggregates matches across multiple pages in deterministic order', () => {
-		expect(filterTranscriptionBySearchTerms(['alpha beta', 'beta alpha'], ['beta'])).toEqual([
+		expect(findSearchTermsInTranscription(['alpha beta', 'beta alpha'], ['beta'])).toEqual([
 			{
 				pageIndex: 0,
 				searchTerm: 'beta',
@@ -170,7 +170,7 @@ describe('filterTranscriptionBySearchTerms', () => {
 	});
 
 	it('resets searchTermIndexOnPage for each page', () => {
-		expect(filterTranscriptionBySearchTerms(['beta beta', 'beta beta'], ['beta'])).toEqual([
+		expect(findSearchTermsInTranscription(['beta beta', 'beta beta'], ['beta'])).toEqual([
 			{
 				pageIndex: 0,
 				searchTerm: 'beta',
@@ -199,7 +199,7 @@ describe('filterTranscriptionBySearchTerms', () => {
 	});
 
 	it('processes multiple search terms in input order', () => {
-		expect(filterTranscriptionBySearchTerms(['hello world', 'foo bar'], ['hello', 'bar'])).toEqual([
+		expect(findSearchTermsInTranscription(['hello world', 'foo bar'], ['hello', 'bar'])).toEqual([
 			{
 				pageIndex: 0,
 				searchTerm: 'hello',
@@ -216,7 +216,7 @@ describe('filterTranscriptionBySearchTerms', () => {
 	});
 
 	it('preserves grouping order of search terms', () => {
-		const result = filterTranscriptionBySearchTerms(['hello bar'], ['bar', 'hello']);
+		const result = findSearchTermsInTranscription(['hello bar'], ['bar', 'hello']);
 
 		expect(result).toEqual([
 			{

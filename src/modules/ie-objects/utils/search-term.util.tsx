@@ -8,14 +8,19 @@ export function resolveSearchTerm(searchTerm: string): string {
 	return isLiteralSearchTerm(searchTerm) ? searchTerm.slice(1, -1) : searchTerm;
 }
 
-export function normalizeText(value: string): string {
-	return value
+export function normalizeText(value: string | undefined | null = ''): string {
+	return (value || '')
 		.toLowerCase()
 		.normalize('NFD')
 		.replace(/([\u0300-\u036f])/g, '');
 }
 
-export function stringifySearchTerms(normalizedSearchTerm: string): string[] {
+/**
+ * Parses a search term string that contains literal and regular text
+ * eg: '"saturday 4th" "" celebration d-day " " some other word'
+ * is parsed to: ["saturday 4th", "celebration", "d-day", "some", "other", "word"]
+ **/
+export function parseSearchTerms(normalizedSearchTerm: string): string[] {
 	const result: string[] = [];
 	const normalizedSearchTermString = normalizeText(normalizedSearchTerm);
 	let i = 0;

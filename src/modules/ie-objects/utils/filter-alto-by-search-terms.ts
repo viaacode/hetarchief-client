@@ -5,6 +5,10 @@ import {
 } from '@ie-objects/utils/search-term.util';
 import type { TextLine } from '@iiif-viewer/IiifViewer.types';
 
+/**
+ * Searches through the alto words to find the search terms.
+ * Search terms can be literal strings or loose words. eg: '"this exact text"' or 'spin'
+ **/
 export function filterAltoBySearchTerms(
 	altoItems: TextLine[],
 	searchTerms: string[]

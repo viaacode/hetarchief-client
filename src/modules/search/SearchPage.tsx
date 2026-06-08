@@ -44,10 +44,7 @@ import {
 	ROUTE_PARTS_BY_LOCALE,
 	ROUTES_BY_LOCALE,
 } from '@shared/const';
-import {
-	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
-	QUERY_PARAM_KEY,
-} from '@shared/const/query-param-keys';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { numberWithCommas } from '@shared/helpers';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -668,7 +665,9 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			// Search terms can either be:
 			// - simple text search or
 			// - they can contain logic operators like: (philip AND mathilde) OR (albert)
-			const plainTextSearchTerms = searchResults ? JSON.stringify(searchResults?.searchTerms) : '';
+			const plainTextSearchTerms = searchResults?.searchTerms
+				? JSON.stringify(searchResults?.searchTerms)
+				: '';
 
 			const link: string | undefined = stringifyUrl({
 				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${item.maintainerSlug}/${item.schemaIdentifier}/${kebabCase(item.name) || 'titel'}`,

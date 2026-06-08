@@ -11,7 +11,7 @@ function isBeginningOrEndOfWord(prevChar: string, nextChar: string): boolean {
 	return !isMiddleOfWord;
 }
 
-export function filterTranscriptionBySearchTerms(
+export function findSearchTermsInTranscription(
 	pageOcrTranscripts: (string | null)[],
 	searchTerms: string[]
 ): OcrSearchResult[] {

@@ -47,10 +47,10 @@ import {
 	NEWSPAPERS_SERVICE_BASE_URL,
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { filterAltoBySearchTerms } from '@ie-objects/utils/filter-alto-by-search-terms';
-import { filterTranscriptionBySearchTerms } from '@ie-objects/utils/filter-transcription-by-search-terms';
+import { findSearchTermsInTranscription } from '@ie-objects/utils/find-search-terms-in-transcription';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
-import { normalizeText, stringifySearchTerms } from '@ie-objects/utils/search-term.util';
+import { normalizeText, parseSearchTerms } from '@ie-objects/utils/search-term.util';
 import { OcrSearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/OcrSearchInputWithResultsPagination';
 import {
 	iiifGoToHome,
@@ -212,7 +212,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const [searchTermsTemp, setSearchTermsTemp] = useState<string>('');
 	// Search terms are used to store the search terms after the user has confirmed the search
 	const [searchTerms, setSearchTerms] = useState<string>('');
-	const searchTermWords = useMemo(() => stringifySearchTerms(searchTerms), [searchTerms]);
+	const searchTermWords = useMemo(() => parseSearchTerms(searchTerms), [searchTerms]);
 
 	const [, setShowAuthQueryKey] = useQueryParam(QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY, StringParam);
 	const [activeBlade, setActiveBlade] = useQueryParam(
@@ -480,7 +480,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	}, [mediaInfo?.pages]);
 
 	const searchResults = useMemo(
-		() => filterTranscriptionBySearchTerms(pageOcrTranscripts, searchTermWords),
+		() => findSearchTermsInTranscription(pageOcrTranscripts, searchTermWords),
 		[searchTermWords, pageOcrTranscripts]
 	);
 
@@ -868,12 +868,21 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			!hasAppliedUrlSearchTerms &&
 			simplifiedAltoInfo?.altoJsonContent
 		) {
-			const newSearchTerms: string = JSON.parse(highlightedSearchTerms)
-				.map((item: IeObjectsSearchTermObject) => (item.isLiteral ? `"${item.value}"` : item.value))
-				.join(' ');
+			let newSearchTerms = '';
+
+			try {
+				newSearchTerms = JSON.parse(highlightedSearchTerms)
+					.map((item: IeObjectsSearchTermObject) =>
+						item.isLiteral ? `"${item.value}"` : item.value
+					)
+					.join(' ');
+			} catch (_error) {
+				console.error('Could not parse search terms, wrong format: ', highlightedSearchTerms);
+			}
+
 			setSearchTermsTemp(newSearchTerms);
 			setSearchTerms(newSearchTerms);
-			handleSearch(newSearchTerms);
+			handleSearch(newSearchTerms).then(noop);
 			handleIsTextOverlayVisibleChange(true);
 			setHasAppliedUrlSearchTerms(true);
 		}
