@@ -26,7 +26,7 @@ async function getIeObjectFormatCounts(
 
 	// Get all possible media types
 	return Object.fromEntries(
-		results.aggregations[ElasticsearchFieldNames.Format].buckets.map(
+		(results.aggregations?.[ElasticsearchFieldNames.Format]?.buckets || []).map(
 			(bucket): [SearchPageMediaType, number] => [
 				bucket.key as SearchPageMediaType,
 				bucket.doc_count,
