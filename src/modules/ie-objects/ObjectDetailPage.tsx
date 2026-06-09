@@ -954,8 +954,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 * Trigger events for viewing the ie object
 	 */
 	useEffect(() => {
-		if (mediaInfo && hasCheckedLogin && hasTriggeredViewEventForHref !== window.location.href) {
-			setHasTriggeredViewEventForHref(window.location.href);
+		// The url without any query params
+		const locationWithoutSearch = window.location.href.replace(window.location.search, '');
+
+		if (mediaInfo && hasCheckedLogin && hasTriggeredViewEventForHref !== locationWithoutSearch) {
+			setHasTriggeredViewEventForHref(locationWithoutSearch);
 			const path = window.location.href;
 			const eventData = {
 				type: mapDcTermsFormatToSimpleType(mediaInfo.dctermsFormat),
