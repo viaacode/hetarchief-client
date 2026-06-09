@@ -2,7 +2,7 @@ import type { IeObject, IeObjectSearchAggregations } from '@ie-objects/ie-object
 import type { IPagination } from '@studiohyperdrive/pagination';
 
 interface ElasticsearchAggregations {
-	aggregations: IeObjectSearchAggregations;
+	aggregations: IeObjectSearchAggregations | undefined;
 }
 
 export interface IeObjectsSearchTermObject {
