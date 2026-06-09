@@ -9,7 +9,7 @@ export function useGetOrganisationBySlug(
 	enabled: boolean = true
 ): UseQueryResult<Organisation | null> {
 	return useQuery({
-		queryKey: [QUERY_KEYS.getIeObjectsInfo, slug],
+		queryKey: [QUERY_KEYS.getOrganisationBySlug, slug],
 		queryFn: () => OrganisationService.getBySlug(slug as string, ignoreAuthError),
 		enabled,
 	});

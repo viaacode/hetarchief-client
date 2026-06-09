@@ -35,4 +35,5 @@ export enum QUERY_KEYS {
 	getMaterialRequestMessagesUnreadCount = 'getMaterialRequestMessagesUnreadCount',
 	getMaterialRequestStatus = 'getMaterialRequestStatus',
 	getOrganisations = 'getOrganisations',
+	getOrganisationBySlug = 'getOrganisationBySlug',
 }
