@@ -4,6 +4,7 @@ import {
 	type IeObjectRightsInfo,
 } from '@ie-objects/ie-objects.types';
 import { IeObjectType } from '@shared/types/ie-objects';
+import { formatDateTime } from '@shared/utils/dates';
 import { Locale } from '@shared/utils/i18n';
 import { compact } from 'lodash-es';
 
@@ -149,10 +150,12 @@ export function getIeObjectSourceAttribution(
 	}
 
 	if (AV_OBJECT_TYPES.includes(ieObject.dctermsFormat) && hasAvEssence(ieObject)) {
+		const preferredDate = ieObject.dateCreated ?? ieObject.datePublished;
+
 		return buildAttribution([
 			formatSourceAttributionNames(getCreatorNames(ieObject, locale)),
 			ieObject.name,
-			ieObject.dateCreated || ieObject.datePublished,
+			preferredDate ? formatDateTime(new Date(preferredDate), locale, 'short') : null,
 			ieObject.maintainerName,
 			getUsageCategory(ieObject.rightsInfo),
 			'hetarchief.be',

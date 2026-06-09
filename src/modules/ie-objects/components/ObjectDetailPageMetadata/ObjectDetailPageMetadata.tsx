@@ -97,6 +97,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectBreadcrumbs } from '@shared/store/ui';
 import { IeObjectType } from '@shared/types/ie-objects';
+import { formatDateTime } from '@shared/utils/dates';
 import { Locale } from '@shared/utils/i18n';
 import { isMobileSize } from '@shared/utils/is-mobile';
 import {
@@ -122,10 +123,8 @@ import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import Callout from '../../../shared/components/Callout/Callout';
 import MetadataList from '../Metadata/MetadataList';
-
 import styles from './ObjectDetailPageMetadata.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
@@ -1249,6 +1248,8 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___creatiedatum'),
 						mediaInfo.dateCreated
+							? formatDateTime(new Date(mediaInfo.dateCreated), locale, 'short', false)
+							: null
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___datum-drager'),
