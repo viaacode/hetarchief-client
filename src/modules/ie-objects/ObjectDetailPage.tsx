@@ -535,6 +535,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			}
 
 			setSearchTerms(newSearchTerms.toLowerCase());
+			setCurrentSearchResultIndex(-1);
 			handleIsTextOverlayVisibleChange(true);
 
 			const parsedUrl = parseUrl(window.location.href);
