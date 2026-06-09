@@ -136,6 +136,27 @@
 
 		@media (max-width: abstracts.$breakpoint-md) {
 			align-items: center;
+			gap: abstracts.$spacer-xs;
+
+			:global(.c-button) {
+				flex: 1 1 0;
+				width: 0;
+				min-width: 0;
+				max-width: 100%;
+			}
+
+			:global(.c-button__content) {
+				width: 100%;
+				min-width: 0;
+				max-width: 100%;
+			}
+
+			:global(.c-button__label) {
+				width: 100%;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
 
 			&:has(.p-material-request-detail__download-message) {
 				flex-direction: column;
