@@ -1,3 +1,5 @@
+@use "sass:math";
+/* stylelint-disable no-descending-specificity */
 @use "src/styles/abstracts" as abstracts;
 
 .c-organisations-table {
@@ -34,5 +36,36 @@
 .c-organisations-content {
 	&__container {
 		margin-bottom: abstracts.$spacer-1xl;
+	}
+}
+
+.c-input-with-icon {
+	position: relative;
+
+	.c-input {
+		background-color: abstracts.$white;
+		border: 1px solid abstracts.$zinc;
+		font-size: abstracts.$font-size-base;
+		outline: 1px solid transparent;
+		padding: 1.4rem 1.6rem;
+		height: 5.6rem;
+		width: 100%;
+		border-radius: abstracts.$input-border-radius;
+
+		&:focus {
+			border-color: abstracts.$teal;
+		}
+
+		&:disabled {
+			cursor: not-allowed;
+			color: abstracts.$zinc;
+			border-color: abstracts.$silver;
+		}
+	}
+
+	.o-svg-icon {
+		position: absolute;
+		right: 2rem;
+		top: calc(50% - 1rem) !important;
 	}
 }
