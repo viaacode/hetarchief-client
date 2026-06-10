@@ -1,4 +1,5 @@
 import { useGetIeObjectBySchemaIdentifier } from '@ie-objects/hooks/use-get-ie-object-by-schema-identifier';
+import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -23,12 +24,12 @@ export const MaintainerSearchPage: FC<MaintainerSearchPageProps> = () => {
 	 *  /zoeken/:object-id (deprecated, use /pid/object-id instead)
 	 */
 	const { slug: orgSlugOrObjectSchemaIdentifier } = router.query;
-	const { data: organisation } = useGetOrganisationBySlug(
+	const { data: organisation, isError: isErrorOrganisation } = useGetOrganisationBySlug(
 		(orgSlugOrObjectSchemaIdentifier || null) as string | null,
 		true,
 		!!orgSlugOrObjectSchemaIdentifier
 	);
-	const { data: ieObjectInfo } = useGetIeObjectBySchemaIdentifier(
+	const { data: ieObjectInfo, isError: isErrorObject } = useGetIeObjectBySchemaIdentifier(
 		orgSlugOrObjectSchemaIdentifier as string,
 		false,
 		{
@@ -59,6 +60,10 @@ export const MaintainerSearchPage: FC<MaintainerSearchPageProps> = () => {
 			router.replace(searchUrl, undefined, { shallow: true });
 		}
 	}, [router, ieObjectInfo, locale]);
+
+	if (isErrorOrganisation && isErrorObject) {
+		return <ErrorNotFound />;
+	}
 
 	return <Loading locationId="maintainer search page redirect" fullscreen />;
 };
