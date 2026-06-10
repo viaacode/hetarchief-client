@@ -48,7 +48,7 @@ import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { type FC, type ReactNode, useEffect, useState } from 'react';
+import { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
@@ -62,7 +62,10 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const dispatch = useAppDispatch();
 	const locale = useLocale();
 	const commonUser = useSelector(selectCommonUser);
-	const currentAccountLocale = (commonUser?.language || Locale.nl) as Locale;
+	const currentAccountLocale = useMemo(
+		() => (commonUser?.language || Locale.nl) as Locale,
+		[commonUser?.language]
+	);
 	const router = useRouter();
 	const queryClient = useQueryClient();
 	const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false);
@@ -87,10 +90,10 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const canEdit = Object.keys(commonUser?.idps || {}).includes(Idp.HETARCHIEF) && canEditProfile;
 
 	useEffect(() => {
-		if (currentAccountLocale && !selectedLanguage) {
+		if (currentAccountLocale) {
 			setSelectedLanguage(currentAccountLocale);
 		}
-	}, [currentAccountLocale, selectedLanguage]);
+	}, [currentAccountLocale]);
 
 	useEffect(() => {
 		if (isNil(preferences)) {
