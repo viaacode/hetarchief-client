@@ -6,35 +6,37 @@ import { compact } from 'lodash-es';
 import type { ReactNode } from 'react';
 
 interface RightsCategoryConfig {
-	labelKey: string;
+	labelValue: string;
 	fallbackLabel: string;
 	icon: IconNamesLight;
 }
 
-const RIGHTS_CATEGORY_CONFIGS: Readonly<Record<string, RightsCategoryConfig>> = {
+const GET_RIGHTS_CATEGORY_CONFIGS = (): Readonly<Record<string, RightsCategoryConfig>> => ({
 	'creativecommons.org/publicdomain/zero': {
-		labelKey: 'modules/visitor-space/const/rights-filter___cc0',
+		labelValue: tText('modules/visitor-space/const/rights-filter___cc0'),
 		fallbackLabel: 'CC0',
 		icon: IconNamesLight.CopyrightPublicDomain,
 	},
 	'rightsstatements.org/page/cne': {
-		labelKey:
-			'modules/visitor-space/const/rights-filter___auteursrechtelijke-bescherming-niet-bepaald',
+		labelValue: tText(
+			'modules/visitor-space/const/rights-filter___auteursrechtelijke-bescherming-niet-bepaald'
+		),
 		fallbackLabel: 'Auteursrechtelijke bescherming niet bepaald',
 		icon: IconNamesLight.CopyrightUndetermined,
 	},
 	'rightsstatements.org/page/inc-ruu': {
-		labelKey:
-			'modules/visitor-space/const/rights-filter___rechthebbenden-niet-lokaliseerbaar-of-niet-identificeerbaar',
+		labelValue: tText(
+			'modules/visitor-space/const/rights-filter___rechthebbenden-niet-lokaliseerbaar-of-niet-identificeerbaar'
+		),
 		fallbackLabel: 'Rechthebbenden niet lokaliseerbaar of niet identificeerbaar',
 		icon: IconNamesLight.CopyrightUndetermined,
 	},
 	'rightsstatements.org/page/inc': {
-		labelKey: 'modules/visitor-space/const/rights-filter___auteursrechtelijk-beschermd',
+		labelValue: tText('modules/visitor-space/const/rights-filter___auteursrechtelijk-beschermd'),
 		fallbackLabel: 'Auteursrechtelijk beschermd',
 		icon: IconNamesLight.CopyrightProtected,
 	},
-};
+});
 
 function normalizeRightsValue(value: string): string {
 	return value
@@ -63,13 +65,14 @@ function getRightsCategoryConfig(
 	);
 
 	return (
-		Object.entries(RIGHTS_CATEGORY_CONFIGS).find(([urlPart]) => rightsUrl.includes(urlPart))?.[1] ||
-		null
+		Object.entries(GET_RIGHTS_CATEGORY_CONFIGS()).find(([urlPart]) =>
+			rightsUrl.includes(urlPart)
+		)?.[1] || null
 	);
 }
 
 function getRightsCategoryLabel(config: RightsCategoryConfig): string {
-	return tText(config.labelKey) || config.fallbackLabel;
+	return config.labelValue || config.fallbackLabel;
 }
 
 export function getIeObjectAvRightsUrl(rightsInfo?: IeObjectRightsInfo | null): string | undefined {
