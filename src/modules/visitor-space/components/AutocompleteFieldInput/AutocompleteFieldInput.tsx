@@ -37,8 +37,6 @@ export interface AutocompleteFieldInputProps {
 	inputId: string;
 }
 
-const MIN_WORD_LENGTH_FOR_AUTOCOMPLETE = 3;
-
 const AutocompleteFieldInput: FC<AutocompleteFieldInputProps & UserProps> = ({
 	onChange,
 	value,

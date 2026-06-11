@@ -359,9 +359,12 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 					'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___waarde'
 				)}
 			>
-				{renderField({
-					id: `${labelKeys.value}__${index}`,
-				})}
+				{/* Ensure input field rerenders when operator or filter changed */}
+				<div key={`advanced-filter-input--${filterValue.prop}`} className="u-full-width">
+					{renderField({
+						id: `${labelKeys.value}__${index}`,
+					})}
+				</div>
 
 				{index > 0 && (
 					<Button
