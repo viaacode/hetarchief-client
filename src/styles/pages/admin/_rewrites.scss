@@ -308,38 +308,6 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 		max-width: none;
 	}
 
-	.c-input-with-icon {
-		position: relative;
-
-		.c-input {
-			@include reset-input-field;
-
-			background-color: $white;
-			border: 1px solid $zinc;
-			font-size: $font-size-base;
-			outline: 1px solid transparent;
-			padding: 1.4rem 1.6rem;
-			height: 5.6rem;
-			border-radius: $input-border-radius;
-
-			&:focus {
-				border-color: $teal;
-			}
-
-			&:disabled {
-				cursor: not-allowed;
-				color: $zinc;
-				border-color: $silver;
-			}
-		}
-
-		.o-svg-icon {
-			position: absolute;
-			top: calc(50% - 1rem);
-			right: 2rem;
-		}
-	}
-
 	.u-text-muted {
 		color: $neutral;
 	}

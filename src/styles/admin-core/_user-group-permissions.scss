@@ -1,8 +1,8 @@
-@import "../../styles/abstracts";
+@use "../../styles/abstracts" as abstracts;
 
 .p-admin-permissions {
 	.c-table__scroller {
-		margin-top: $spacer-md;
+		margin-top: abstracts.$spacer-md;
 	}
 
 	.c-table__wrapper--header {
