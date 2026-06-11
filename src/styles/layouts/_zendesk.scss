@@ -1,7 +1,8 @@
 @use "src/styles/abstracts" as *;
 
+/* Limit launcher button height, to avoid too much overlay on the page */
 #launcher {
-	width: 150px !important;
+	width: 190px !important;
 }
 
 body.hide-zendesk-widget #launcher {
