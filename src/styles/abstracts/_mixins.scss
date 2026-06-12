@@ -251,42 +251,6 @@
 	.#{$_root}__value-container {
 		padding-left: variables.$spacer-sm;
 	}
-
-	.#{$_root}__menu {
-		border: 1px solid variables.$zinc;
-		border-top: none;
-		margin: 0;
-		border-radius: 0;
-		box-shadow: none;
-	}
-
-	.#{$_root}__menu-list {
-		padding: 0;
-	}
-
-	.#{$_root}__option {
-		border-right: 4px solid transparent;
-		color: variables.$black;
-		transition:
-			background-color variables.$animate-default,
-			border-color variables.$animate-default,
-			border-right-width variables.$animate-sm-in;
-
-		&--is-focused,
-		&--is-selected,
-		&:not(&--is-selected):hover {
-			background-color: color.adjust(variables.$teal, $alpha: -0.76);
-		}
-
-		&--is-selected {
-			border-color: variables.$teal;
-
-			&.#{$_root}__option--is-focused,
-			&:hover {
-				border-right-width: 6px;
-			}
-		}
-	}
 }
 
 /**

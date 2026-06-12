@@ -48,8 +48,8 @@ export enum IeObjectsSearchFilterField {
 	CONSULTABLE_ONLY_ON_LOCATION = 'isConsultableOnlyOnLocation',
 	CONSULTABLE_MEDIA = 'isConsultableMedia',
 	CONSULTABLE_PUBLIC_DOMAIN = 'isConsultablePublicDomain',
-	REUSABILITY = 'reusability',
-	RIGHTS = 'rights',
+	REUSABILITY = 'reusability', // free, conditional, maybe
+	RIGHTS = 'rights', // Single term to cover both newspaper rights (dcterms_rights_statement) and Audio/Video object rights (reuse_category.id)
 	CAST = 'cast',
 	IDENTIFIER = 'identifier',
 	OBJECT_TYPE = 'objectType',

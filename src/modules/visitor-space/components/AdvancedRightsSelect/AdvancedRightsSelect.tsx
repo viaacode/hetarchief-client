@@ -2,7 +2,7 @@ import type { IeObjectSearchAggregations } from '@ie-objects/ie-objects.types';
 import { ReactSelect, type ReactSelectProps } from '@meemoo/react-components';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { SEARCH_PAGE_QUERY_PARAM_CONFIG } from '@visitor-space/const';
-import { getRightsOptions, type RightsLabel } from '@visitor-space/const/rights-filter.const';
+import { getRightsOptions, RightsLabel } from '@visitor-space/const/rights-filter.const';
 import { ElasticsearchFieldNames, SearchFilterId } from '@visitor-space/types';
 import type { FC } from 'react';
 import { useSelector } from 'react-redux';
@@ -15,10 +15,23 @@ export const AdvancedRightsSelect: FC<ReactSelectProps> = (props) => {
 	const searchAggregateOptions: IeObjectSearchAggregations | undefined = useSelector(
 		selectIeObjectsFilterOptions
 	);
-	const availableRightsValues =
-		searchAggregateOptions?.[ElasticsearchFieldNames.Rights]?.buckets?.map(
-			(bucket) => bucket.key as RightsLabel
-		) || [];
+
+	// Combine buckets from both aggregation types (dcterms_rights_statement for newspapers,
+	// reuse_category.id for audio/video). Match values case-insensitively against the RightsLabel enum.
+	const allRightsLabels = Object.values(RightsLabel) as string[];
+	const availableRightsValues = [
+		...(searchAggregateOptions?.[ElasticsearchFieldNames.RightsForNewspaper]?.buckets || []),
+		...(searchAggregateOptions?.[ElasticsearchFieldNames.RightsForAudioVideo]?.buckets || []),
+	].reduce<RightsLabel[]>((acc, bucket) => {
+		const match = allRightsLabels.find(
+			(label) => label.toLowerCase() === (bucket.key as string).toLowerCase()
+		) as RightsLabel | undefined;
+		if (match && !acc.includes(match)) {
+			acc.push(match);
+		}
+		return acc;
+	}, []);
+
 	const options = getRightsOptions(selectedRightsValues, availableRightsValues);
 	const selectedValue = (props.value as SingleValue<{ label: string; value: string }>)?.value;
 

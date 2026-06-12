@@ -48,7 +48,7 @@
 	// Ensure dropdowns fit in the minimal body (1 default field & add-new button)
 	:global(.c-react-select__menu-list) {
 		overflow: auto;
-		max-height: $spacer-1xl * 4;
+		max-height: $spacer-1xl * 6;
 	}
 
 	&--overflow {
