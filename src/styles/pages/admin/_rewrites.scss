@@ -163,6 +163,11 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger,
 	}
 }
 
+.c-modal .c-toolbar button[class*="c-button"].c-button--icon.c-button--borderless {
+	width: fit-content;
+}
+
+
 button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	border-color: $zinc;
 	background-color: $white;
