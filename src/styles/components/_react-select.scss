@@ -1,5 +1,47 @@
-@use "../abstracts" as *;
+@use "sass:color";
+@use "../abstracts" as abstracts;
 
 .c-react-select {
-	@include react-select-base("c-react-select");
+	@include abstracts.react-select-base("c-react-select");
+}
+
+.c-tags-input__menu-portal,
+.c-react-select__menu-portal {
+	.c-tags-input__menu,
+	.c-react-select__menu {
+		border: 1px solid abstracts.$zinc;
+		border-top: none;
+		margin: 0;
+		border-radius: 0;
+		box-shadow: none;
+	}
+
+	.c-tags-input__menu-list,
+	.c-react-select__menu-list {
+		padding: 0;
+	}
+
+	.c-tags-input__option,
+	.c-react-select__option {
+		border-right: 4px solid transparent;
+		color: abstracts.$black;
+		transition: background-color abstracts.$animate-default,
+		border-color abstracts.$animate-default,
+		border-right-width abstracts.$animate-sm-in;
+
+		&--is-focused,
+		&--is-selected,
+		&:not(&--is-selected):hover {
+			background-color: color.adjust(abstracts.$teal, $alpha: -0.76);
+		}
+
+		&--is-selected {
+			border-color: abstracts.$teal;
+
+			&.c-react-select__option--is-focused,
+			&:hover {
+				border-right-width: 6px;
+			}
+		}
+	}
 }

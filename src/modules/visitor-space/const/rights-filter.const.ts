@@ -1,6 +1,6 @@
 import type { SelectOption } from '@meemoo/react-components';
 import { tText } from '@shared/helpers/translate';
-import { compact, uniqBy } from 'lodash-es';
+import { compact, sortBy, uniqBy } from 'lodash-es';
 
 export enum RightsLabel {
 	PUBLIC_DOMAIN = 'https://creativecommons.org/publicdomain/mark/1.0/',
@@ -99,5 +99,7 @@ export const getRightsOptions = (
 	const selectedOptions = selectedReusabilityValues.map((value) => {
 		return allOptions.find((option) => option.value === value);
 	});
-	return uniqBy(compact([...selectedOptions, ...availableOptions]), (option) => option.value);
+	const rights = compact([...selectedOptions, ...availableOptions]);
+	const uniqueRights = uniqBy(rights, (option) => option.value);
+	return sortBy(uniqueRights, (option) => option.label);
 };

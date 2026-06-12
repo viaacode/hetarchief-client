@@ -80,7 +80,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 		[SearchFilterId.Language]: '53.7rem',
 		[SearchFilterId.Maintainers]: '63.7rem',
 		[SearchFilterId.Reusability]: '20rem',
-		[SearchFilterId.Advanced]: '60.1rem',
+		[SearchFilterId.Advanced]: '80rem',
 	};
 	const renderModal = (): ReactElement => {
 		return (

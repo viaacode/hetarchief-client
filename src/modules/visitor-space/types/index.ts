@@ -57,7 +57,8 @@ export enum ElasticsearchFieldNames {
 	Format = 'dcterms_format',
 	ObjectType = 'ebucore_object_type',
 	Maintainer = 'schema_maintainer.schema_identifier',
-	Rights = 'dcterms_rights_statement',
+	RightsForNewspaper = 'dcterms_rights_statement',
+	RightsForAudioVideo = 'reuse_category.id',
 }
 
 export enum VisitorSpaceOrderProps {

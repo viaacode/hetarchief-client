@@ -230,7 +230,8 @@ type aggregateKeys =
 	| ElasticsearchFieldNames.Genre
 	| ElasticsearchFieldNames.Language
 	| ElasticsearchFieldNames.Maintainer
-	| ElasticsearchFieldNames.Rights;
+	| ElasticsearchFieldNames.RightsForNewspaper
+	| ElasticsearchFieldNames.RightsForAudioVideo;
 
 export type IeObjectSearchAggregations = Record<aggregateKeys, IeObjectSearchAggregation<string>>;
 

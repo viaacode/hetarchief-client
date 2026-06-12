@@ -1,16 +1,16 @@
 @use "sass:color";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-advanced-filter-fields {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	gap: $spacer-sm;
+	gap: abstracts.$spacer-sm;
 	padding: 2rem;
-	border-bottom: 1px solid color.adjust($black, $alpha: -0.8);
-	background-color: $platinum;
+	border-bottom: 1px solid color.adjust(abstracts.$black, $alpha: -0.8);
+	background-color: abstracts.$platinum;
 
-	@media (min-width: $breakpoint-md) {
-		padding: $spacer-lg;
+	@media (min-width: abstracts.$breakpoint-md) {
+		padding: abstracts.$spacer-lg;
 	}
 }
 
@@ -21,7 +21,7 @@
 		display: flex;
 
 		:global(.c-button) {
-			margin-left: $spacer-sm;
+			margin-left: abstracts.$spacer-sm;
 			flex-shrink: 0;
 		}
 	}
