@@ -17,7 +17,7 @@ export const AdvancedRightsSelect: FC<ReactSelectProps> = (props) => {
 	);
 
 	// Combine buckets from both aggregation types (dcterms_rights_statement for newspapers,
-	// reuse_category.id for audio/video). Normalise to uppercase to match the RightsLabel enum.
+	// reuse_category.id for audio/video). Match values case-insensitively against the RightsLabel enum.
 	const allRightsLabels = Object.values(RightsLabel) as string[];
 	const availableRightsValues = [
 		...(searchAggregateOptions?.[ElasticsearchFieldNames.RightsForNewspaper]?.buckets || []),

@@ -39,6 +39,7 @@
 			border-color: abstracts.$teal;
 
 			&.c-react-select__option--is-focused,
+			&.c-tags-input__option--is-focused,
 			&:hover {
 				border-right-width: 6px;
 			}
