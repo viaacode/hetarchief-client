@@ -4,7 +4,7 @@ import {
 	type IeObjectRightsInfo,
 } from '@ie-objects/ie-objects.types';
 import { IeObjectType } from '@shared/types/ie-objects';
-import { formatDateTime } from '@shared/utils/dates';
+import { asDate, formatDateTime } from '@shared/utils/dates';
 import { Locale } from '@shared/utils/i18n';
 import { compact } from 'lodash-es';
 
@@ -148,14 +148,16 @@ export function getIeObjectSourceAttribution(
 	if (!hasEssenceAccess(ieObject)) {
 		return null;
 	}
+	const preferredDate = asDate(ieObject.dateCreated ?? ieObject.datePublished);
+	const formattedDate = preferredDate
+		? formatDateTime(preferredDate, locale, 'short', false)
+		: null;
 
 	if (AV_OBJECT_TYPES.includes(ieObject.dctermsFormat) && hasAvEssence(ieObject)) {
-		const preferredDate = ieObject.dateCreated ?? ieObject.datePublished;
-
 		return buildAttribution([
 			formatSourceAttributionNames(getCreatorNames(ieObject, locale)),
 			ieObject.name,
-			preferredDate ? formatDateTime(new Date(preferredDate), locale, 'short') : null,
+			formattedDate,
 			ieObject.maintainerName,
 			getUsageCategory(ieObject.rightsInfo),
 			'hetarchief.be',
@@ -165,7 +167,7 @@ export function getIeObjectSourceAttribution(
 	if (ieObject.dctermsFormat === IeObjectType.NEWSPAPER && hasNewspaperEssence(ieObject)) {
 		return buildAttribution([
 			ieObject.name,
-			ieObject.dateCreated || ieObject.datePublished,
+			formattedDate,
 			ieObject.maintainerName,
 			getUsageCategory(ieObject.rightsInfo),
 			'hetarchief.be',
