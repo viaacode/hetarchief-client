@@ -26,6 +26,16 @@ export function isComplexReuseFlowEnabled() {
 	return publicRuntimeConfig.ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW === 'true';
 }
 
+export function isComplexReuseFlowDisabledForMaintainer(maintainerId: string) {
+	const disabledOrganisations: string[] = (
+		publicRuntimeConfig.DISABLE_COMPLEX_REUSE_FLOW_FOR_ORGANISATIONS || ''
+	)
+		.split(',')
+		.map((orId: string) => orId.trim())
+		.filter((orId: string) => !!orId);
+	return disabledOrganisations.includes(maintainerId);
+}
+
 export function useIsComplexReuseFlowUser(user: AvoUserCommonUser | null) {
 	const isKeyUser: boolean = user?.isKeyUser || false;
 	return isKeyUser && isComplexReuseFlowEnabled();
@@ -46,12 +56,17 @@ export function checkIsComplexReuseFlow(
 			isObjectEssenceAccessibleToUser: false,
 		};
 	}
-	if (!isComplexReuseFlowEnabled()) {
+
+	if (
+		!isComplexReuseFlowEnabled() ||
+		isComplexReuseFlowDisabledForMaintainer(materialRequest?.maintainerId as string)
+	) {
 		return {
 			isComplexReuseFlow: false,
 			isObjectEssenceAccessibleToUser: !!materialRequest?.objectThumbnailUrl,
 		};
 	}
+
 	const simpleType = mapDcTermsFormatToSimpleType(materialRequest?.objectDctermsFormat);
 	const isComplexReuseFlow: boolean =
 		(simpleType === SimpleIeObjectType.AUDIO || simpleType === SimpleIeObjectType.VIDEO) &&
