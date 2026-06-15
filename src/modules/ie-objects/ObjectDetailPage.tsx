@@ -1,5 +1,5 @@
 import { GroupName, Permission } from '@account/const';
-import { selectHasCheckedLogin, selectUser } from '@auth/store/user';
+import { selectCommonUser, selectHasCheckedLogin, selectUser } from '@auth/store/user';
 import type { User } from '@auth/types';
 import {
 	RequestAccessBlade,
@@ -87,6 +87,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
+import { mapUserToGroupNameAndKeyUser } from '@shared/services/events-service/events.service.const';
 import { toastService } from '@shared/services/toast-service';
 import { selectLastSearchParams, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import type { IeObjectsSearchTermObject } from '@shared/types/api';
@@ -149,6 +150,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const locale = useLocale();
 	const dispatch = useDispatch();
 	const user: User | null = useSelector(selectUser);
+	const commonUser = useSelector(selectCommonUser);
 	const hasCheckedLogin: boolean = useSelector(selectHasCheckedLogin);
 	const lastSearchParams = useSelector(selectLastSearchParams);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
@@ -965,7 +967,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				type: mapDcTermsFormatToSimpleType(mediaInfo.dctermsFormat),
 				fragment_id: mediaInfo.schemaIdentifier,
 				pid: mediaInfo.schemaIdentifier,
-				user_group_name: user?.groupName ?? GroupName.ANONYMOUS,
+				user_group_name: mapUserToGroupNameAndKeyUser(commonUser),
 				or_id: mediaInfo.maintainerId,
 			};
 
@@ -978,7 +980,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	}, [
 		hasAccessToVisitorSpaceOfObject,
 		mediaInfo,
-		user?.groupName,
+		commonUser,
 		hasCheckedLogin,
 		hasTriggeredViewEventForHref,
 	]);
@@ -1147,7 +1149,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 						type: mapDcTermsFormatToSimpleType(mediaInfo?.dctermsFormat),
 						fragment_id: mediaInfo?.schemaIdentifier,
 						pid: mediaInfo?.schemaIdentifier,
-						user_group_name: user?.groupName,
+						user_group_name: mapUserToGroupNameAndKeyUser(commonUser),
 						or_id: mediaInfo?.maintainerId,
 					};
 
