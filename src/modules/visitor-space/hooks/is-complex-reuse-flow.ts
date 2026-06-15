@@ -38,7 +38,11 @@ export function isComplexReuseFlowDisabledForMaintainer(maintainerId: string) {
 
 export function useIsComplexReuseFlowUser(user: AvoUserCommonUser | null) {
 	const isKeyUser: boolean = user?.isKeyUser || false;
-	return isKeyUser && isComplexReuseFlowEnabled();
+	return (
+		isKeyUser &&
+		isComplexReuseFlowEnabled() &&
+		!isComplexReuseFlowDisabledForMaintainer(user?.organisation?.or_id || '')
+	);
 }
 
 /**
