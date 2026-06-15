@@ -1357,7 +1357,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 */
 	const handleOnPageChanged = (newPageIndex: number): void => {
 		if (currentPageIndex !== newPageIndex) {
-			setCurrentPageIndex(newPageIndex, 'replaceIn');
+			// Needing to parse the current url because the router keeps the first route in memory
+			// https://meemoo.atlassian.net/browse/ARC-3587
+			const parsedUrl = parseUrl(window.location.href);
+			const newUrl = stringifyUrl({
+				url: parsedUrl.url,
+				query: {
+					...parsedUrl.query,
+					[QUERY_PARAM_KEY.ACTIVE_PAGE]: newPageIndex,
+				},
+			});
+			router.replace(newUrl, undefined, { shallow: true }).then(noop);
 		}
 	};
 
