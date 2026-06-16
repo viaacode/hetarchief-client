@@ -1,5 +1,5 @@
 import { GroupName, Permission } from '@account/const';
-import { selectHasCheckedLogin, selectUser } from '@auth/store/user';
+import { selectCommonUser, selectHasCheckedLogin, selectUser } from '@auth/store/user';
 import type { User } from '@auth/types';
 import {
 	RequestAccessBlade,
@@ -87,6 +87,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
+import { mapUserToGroupNameAndKeyUser } from '@shared/services/events-service/events.service.const';
 import { toastService } from '@shared/services/toast-service';
 import { selectLastSearchParams, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import type { IeObjectsSearchTermObject } from '@shared/types/api';
@@ -149,6 +150,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const locale = useLocale();
 	const dispatch = useDispatch();
 	const user: User | null = useSelector(selectUser);
+	const commonUser = useSelector(selectCommonUser);
 	const hasCheckedLogin: boolean = useSelector(selectHasCheckedLogin);
 	const lastSearchParams = useSelector(selectLastSearchParams);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
@@ -596,12 +598,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		}
 
 		const cuePointsFromUrl = parsedUrl.query[QUERY_PARAM_KEY.CUE_POINTS] || '';
-		const cuePointsArray = (cuePointsFromUrl as string)?.split(CUE_POINTS_SEPARATOR);
-		if (cuePointsArray?.length > 0) {
-			setCuePoints({
-				start: Number.parseFloat(cuePointsArray[0]),
-				end: Number.parseFloat(cuePointsArray[1]),
-			});
+		if (cuePointsFromUrl) {
+			const cuePointsArray = (cuePointsFromUrl as string)?.split(CUE_POINTS_SEPARATOR);
+			if (cuePointsArray?.length > 0) {
+				setCuePoints({
+					start: Number.parseFloat(cuePointsArray[0]),
+					end: Number.parseFloat(cuePointsArray[1]),
+				});
+			}
 		}
 	}, []);
 
@@ -965,7 +969,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				type: mapDcTermsFormatToSimpleType(mediaInfo.dctermsFormat),
 				fragment_id: mediaInfo.schemaIdentifier,
 				pid: mediaInfo.schemaIdentifier,
-				user_group_name: user?.groupName ?? GroupName.ANONYMOUS,
+				user_group_name: mapUserToGroupNameAndKeyUser(commonUser),
 				or_id: mediaInfo.maintainerId,
 			};
 
@@ -978,7 +982,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	}, [
 		hasAccessToVisitorSpaceOfObject,
 		mediaInfo,
-		user?.groupName,
+		commonUser,
 		hasCheckedLogin,
 		hasTriggeredViewEventForHref,
 	]);
@@ -1147,7 +1151,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 						type: mapDcTermsFormatToSimpleType(mediaInfo?.dctermsFormat),
 						fragment_id: mediaInfo?.schemaIdentifier,
 						pid: mediaInfo?.schemaIdentifier,
-						user_group_name: user?.groupName,
+						user_group_name: mapUserToGroupNameAndKeyUser(commonUser),
 						or_id: mediaInfo?.maintainerId,
 					};
 
@@ -1357,7 +1361,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 */
 	const handleOnPageChanged = (newPageIndex: number): void => {
 		if (currentPageIndex !== newPageIndex) {
-			setCurrentPageIndex(newPageIndex, 'replaceIn');
+			// Needing to parse the current url because the router keeps the first route in memory
+			// https://meemoo.atlassian.net/browse/ARC-3587
+			const parsedUrl = parseUrl(window.location.href);
+			const newUrl = stringifyUrl({
+				url: parsedUrl.url,
+				query: {
+					...parsedUrl.query,
+					[QUERY_PARAM_KEY.ACTIVE_PAGE]: newPageIndex,
+				},
+			});
+			router.replace(newUrl, undefined, { shallow: true }).then(noop);
 		}
 	};
 

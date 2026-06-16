@@ -7,7 +7,7 @@ declare global {
 			readonly NODE_ENV: 'development' | 'production' | 'test';
 			readonly CLIENT_URL: string;
 			readonly SSUM_EDIT_ACCOUNT_URL: string;
-			readonly KEYCLOAK_ACCOUNT_URL: string;
+			readonly KEYCLOAK_ACCOUNT_EDIT_URL: string;
 			readonly USE_KEYCLOAK_INSTEAD_OF_SSUM: 'true' | 'false';
 			readonly PORT: string;
 			readonly PROXY_URL: string;
@@ -18,6 +18,7 @@ declare global {
 			readonly GOOGLE_TAG_MANAGER_ID: string | null;
 			readonly SITEMAP_URL: string;
 			readonly ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW: 'true' | 'false';
+			readonly DISABLE_COMPLEX_REUSE_FLOW_FOR_ORGANISATIONS: string;
 			readonly ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY: 'true' | 'false';
 		}
 	}

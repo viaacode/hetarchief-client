@@ -17,7 +17,11 @@ import {
 } from '@material-requests/types';
 import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate, formatMediumDateWithTime } from '@shared/utils/dates';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
@@ -34,6 +38,7 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 	currentMaterialRequestDetail,
 }) => {
 	const { isObjectEssenceAccessibleToUser } = useIsComplexReuseFlow(currentMaterialRequestDetail);
+	const locale = useLocale();
 
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 
@@ -428,6 +433,22 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 		return (
 			<div className={styles['p-material-request-detail__content-info__reuse-form']}>
 				{renderThumbnail()}
+				{renderContentBlock(
+					tText(
+						'modules/account/components/material-request-detail-blade/material-request-content-info___pid'
+					),
+					<a
+						href={ROUTES_BY_LOCALE[locale].permalink.replace(
+							':pid',
+							currentMaterialRequestDetail.objectSchemaIdentifier
+						)}
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						{currentMaterialRequestDetail.objectSchemaIdentifier}
+						<Icon className="u-ml-8" name={IconNamesLight.Extern} aria-hidden />
+					</a>
+				)}
 				{materialRequestEntries.map(({ label, value }) => renderContentBlock(label, value))}
 			</div>
 		);

@@ -1,18 +1,14 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-tooltip-component {
-	background-color: $black;
-	border: 1px solid $black;
+	background-color: abstracts.$black;
+	border: 1px solid abstracts.$black;
 	max-width: 19rem !important;
 	padding: 0.5rem;
-	color: $white;
-	opacity: 0;
+	color: abstracts.$white;
 	font-size: 1.3rem;
-	font-weight: $font-weight-light;
+	font-weight: abstracts.$font-weight-light;
 	line-height: 1.428; // 20px equivalent
-	transition:
-		opacity 0.2s ease-in-out,
-		visibility 0.2s linear 0.2s;
 
 	p {
 		font-size: inherit;
@@ -24,7 +20,7 @@
 	}
 
 	&__arrow {
-		fill: $black;
+		fill: abstracts.$black;
 	}
 
 	&--show {
