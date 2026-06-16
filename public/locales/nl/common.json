@@ -74,6 +74,7 @@
   "modules/account/components/material-request-detail-blade/material-request-content-info___extra-gebruiksbeperking-content-info": "Extra gebruiksbeperking",
   "modules/account/components/material-request-detail-blade/material-request-content-info___geschiedenis": "Geschiedenis",
   "modules/account/components/material-request-detail-blade/material-request-content-info___naamsvermelding-content-info": "Naamsvermelding",
+  "modules/account/components/material-request-detail-blade/material-request-content-info___pid": "Pid",
   "modules/account/components/material-request-detail-blade/material-request-content-info___toestemming-rechthebbende-content-info": "Toestemming rechthebbende",
   "modules/account/components/material-request-detail-blade/material-request-content-info___type-aanvraag": "Type aanvraag",
   "modules/account/components/material-request-detail-blade/material-request-conversation-input___bericht-versturen": "Bericht versturen",
