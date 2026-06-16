@@ -47,7 +47,10 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { isLessThanXlSize } from '@shared/utils/is-mobile';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
-import { useIsComplexReuseFlowUser } from '@visitor-space/hooks/is-complex-reuse-flow';
+import {
+	isComplexReuseFlowDisabledForMaintainer,
+	useIsComplexReuseFlowUser,
+} from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
 import { isEmpty, isNil, noop } from 'lodash-es';
 import Link from 'next/link';
@@ -77,7 +80,12 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	);
 
 	const commonUser = useSelector(selectCommonUser);
-	const isComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
+	const userHasAccessToComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
+	const maintainerHasComplexReuseFlowEnabled = !isComplexReuseFlowDisabledForMaintainer(
+		commonUser?.organisation?.or_id
+	);
+	const isComplexReuseFlow =
+		userHasAccessToComplexReuseFlow && maintainerHasComplexReuseFlowEnabled;
 	const locale = useLocale();
 
 	const {

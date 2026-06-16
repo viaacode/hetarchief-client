@@ -26,7 +26,11 @@ export function isComplexReuseFlowEnabled() {
 	return publicRuntimeConfig.ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW === 'true';
 }
 
-export function isComplexReuseFlowDisabledForMaintainer(maintainerId: string) {
+export function isComplexReuseFlowDisabledForMaintainer(maintainerId: string = '') {
+	if (!maintainerId) {
+		return false;
+	}
+
 	const disabledOrganisations: string[] = (
 		publicRuntimeConfig.DISABLE_COMPLEX_REUSE_FLOW_FOR_ORGANISATIONS || ''
 	)
@@ -38,11 +42,7 @@ export function isComplexReuseFlowDisabledForMaintainer(maintainerId: string) {
 
 export function useIsComplexReuseFlowUser(user: AvoUserCommonUser | null) {
 	const isKeyUser: boolean = user?.isKeyUser || false;
-	return (
-		isKeyUser &&
-		isComplexReuseFlowEnabled() &&
-		!isComplexReuseFlowDisabledForMaintainer(user?.organisation?.or_id || '')
-	);
+	return isKeyUser && isComplexReuseFlowEnabled();
 }
 
 /**
@@ -63,7 +63,7 @@ export function checkIsComplexReuseFlow(
 
 	if (
 		!isComplexReuseFlowEnabled() ||
-		isComplexReuseFlowDisabledForMaintainer(materialRequest?.maintainerId as string)
+		isComplexReuseFlowDisabledForMaintainer(materialRequest?.maintainerId)
 	) {
 		return {
 			isComplexReuseFlow: false,
