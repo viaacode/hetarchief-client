@@ -501,7 +501,10 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 							handleArchiveToggle();
 						});
 					}}
-					onClick={handleArchiveToggle}
+					onClick={(e) => {
+						handleArchiveToggle();
+						e.currentTarget.blur();
+					}}
 				/>
 			</div>
 		);
