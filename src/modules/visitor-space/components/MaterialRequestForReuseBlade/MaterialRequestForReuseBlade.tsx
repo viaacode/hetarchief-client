@@ -205,7 +205,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			setFormErrors({});
 			const formErrors = (await validateForm(
 				newFormValues,
-				MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA()
+				MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA(isObjectEssenceAccessibleToUser)
 			)) as Partial<Record<MaterialRequestReuseFormKey, string | undefined>>;
 			if (formErrors) {
 				setFormErrors(formErrors);
@@ -214,7 +214,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 
 			return true;
 		},
-		[]
+		[isObjectEssenceAccessibleToUser]
 	);
 
 	const onAddToList = async () => {
@@ -234,7 +234,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			const formValuesToSend = {
 				...formValues,
 			};
-			if (formValues.startTime === 0 && formValues.endTime === mediaDuration) {
+			if (!isObjectEssenceAccessibleToUser) {
+				formValuesToSend.durationType = MaterialRequestDurationType.FULL;
+			} else if (formValues.startTime === 0 && formValues.endTime === mediaDuration) {
 				formValuesToSend[MaterialRequestReuseFormKey.durationType] =
 					MaterialRequestDurationType.FULL;
 			} else {
@@ -251,6 +253,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				reuseForm: formValuesToSend,
 			});
 			if (response === undefined) {
+				console.error(
+					new Error('Failed to create material request because the response was undefined.')
+				);
 				onFailedRequest();
 				return;
 			}
@@ -268,7 +273,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			});
 			await onSuccessCreated();
 			onCloseModal();
-		} catch (_err) {
+		} catch (err) {
+			console.error(new Error('Failed to create material request. Unexpected error:'));
+			console.error(err);
 			onFailedRequest();
 		}
 	};

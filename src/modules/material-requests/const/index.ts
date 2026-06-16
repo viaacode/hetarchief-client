@@ -189,7 +189,7 @@ export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_COPYRIGHT = (): Record<
 
 export const GET_BLANK_MATERIAL_REQUEST_REUSE_FORM = (): MaterialRequestReuseForm => ({
 	representationId: undefined,
-	startTime: 0,
+	startTime: undefined,
 	endTime: undefined,
 	durationType: undefined,
 	downloadQuality: undefined,
