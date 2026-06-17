@@ -35,7 +35,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 	const handleSend = async () => {
 		try {
 			setFormErrors({});
-			const { errors } = await validateForm({ email: email }, SHARE_FOLDER_FORM_SCHEMA());
+			const errors = await validateForm({ email: email }, SHARE_FOLDER_FORM_SCHEMA());
 
 			if (errors) {
 				setFormErrors(errors);

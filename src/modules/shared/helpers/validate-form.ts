@@ -1,10 +1,5 @@
 import type { Schema, ValidationError } from 'yup';
 
-type ValidationResult =
-	| { errors: Record<string, string>; validFormValues: null }
-	// biome-ignore lint/suspicious/noExplicitAny: todo use generics
-	| { errors: null; validFormValues: any };
-
 /**
  * Validate a form field values object against a yup schema
  * @param formValues
@@ -15,27 +10,24 @@ export async function validateForm(
 	formValues: any,
 	// biome-ignore lint/suspicious/noExplicitAny: todo use generics
 	formSchema: Schema<any>
-): Promise<ValidationResult> {
+): Promise<Record<string, string> | null> {
 	try {
-		const validFormValues = await formSchema.validate(formValues, {
+		await formSchema.validate(formValues, {
 			strict: true,
 			abortEarly: false,
 		});
 
-		return { errors: null, validFormValues };
+		return null;
 	} catch (err) {
 		const validationError = err as ValidationError;
 		if (!validationError.inner) {
 			console.error(err);
-			return { errors: {}, validFormValues: null };
+			return null;
 		}
-		return {
-			errors: Object.fromEntries(
-				validationError.inner.map((error) => {
-					return [error.path, error.message];
-				})
-			),
-			validFormValues: null,
-		};
+		return Object.fromEntries(
+			validationError.inner.map((error) => {
+				return [error.path, error.message];
+			})
+		);
 	}
 }

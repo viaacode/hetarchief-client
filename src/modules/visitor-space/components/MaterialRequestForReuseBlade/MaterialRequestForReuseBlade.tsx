@@ -200,15 +200,22 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		dispatch(setMaterialRequestCount(response.items.length));
 	};
 
-	const normalizeAndValidateFormValues = useCallback(
+	const getNormalizedAndValidFormValues = useCallback(
 		async (
 			newFormValues: MaterialRequestReuseForm | undefined
 		): Promise<MaterialRequestReuseForm | null> => {
 			setFormErrors({});
+			if (!newFormValues) {
+				return null;
+			}
 
 			const formValuesToValidate = { ...newFormValues };
 
+			// Compute durationType before validation so the schema can enforce its presence
+			// So the backend can know when to export the whole video and when to export only a partial
 			if (!isObjectEssenceAccessibleToUser) {
+				formValuesToValidate.startTime = undefined;
+				formValuesToValidate.endTime = undefined;
 				formValuesToValidate.durationType = MaterialRequestDurationType.FULL;
 			} else if (
 				formValuesToValidate.startTime === 0 &&
@@ -221,7 +228,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					MaterialRequestDurationType.PARTIAL;
 			}
 
-			const { errors, validFormValues } = await validateForm(
+			const errors = await validateForm(
 				formValuesToValidate,
 				MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA(isObjectEssenceAccessibleToUser)
 			);
@@ -230,7 +237,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				return null;
 			}
 
-			return validFormValues;
+			return formValuesToValidate;
 		},
 		[isObjectEssenceAccessibleToUser, mediaDuration]
 	);
@@ -241,20 +248,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				return;
 			}
 
-			// Compute durationType before validation so the schema can enforce its presence
-			// So the backend can know when to export the whole video and when to export only a partial
-			const formValuesToSend: MaterialRequestReuseForm = {
-				...formValues,
-				[MaterialRequestReuseFormKey.durationType]:
-					formValues.startTime === 0 && formValues.endTime === mediaDuration
-						? MaterialRequestDurationType.FULL
-						: MaterialRequestDurationType.PARTIAL,
-			};
-
-			const validFormValues = await normalizeAndValidateFormValues(formValuesToSend);
+			const validFormValues = await getNormalizedAndValidFormValues(formValues);
 
 			if (!validFormValues) {
-				return;
+				return; // Errors have been set in the getNormalizedAndValidFormValues function
 			}
 
 			const response = await MaterialRequestsService.create({
@@ -299,7 +296,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				return;
 			}
 
-			const isFormValid = await normalizeAndValidateFormValues(formValues);
+			const isFormValid = await getNormalizedAndValidFormValues(formValues);
 
 			if (!isFormValid) {
 				return;

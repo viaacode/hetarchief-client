@@ -178,7 +178,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 			newFormValues: VisitorSpaceSettingsFormValues | undefined,
 			showToasts: boolean
 		): Promise<boolean> => {
-			const { errors } = await validateForm(newFormValues, VISITOR_SPACE_VALIDATION_SCHEMA());
+			const errors = await validateForm(newFormValues, VISITOR_SPACE_VALIDATION_SCHEMA());
 			const fileErrors = validateFile(newFormValues?.file) as Partial<
 				Record<keyof CreateVisitorSpaceSettings, string | undefined>
 			>;

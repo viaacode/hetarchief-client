@@ -78,7 +78,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 		try {
 			setIsSubmittingForm(true);
 			setFormErrors({});
-			const { errors } = await validateForm(
+			const errors = await validateForm(
 				{
 					reportMessage,
 					email: email,

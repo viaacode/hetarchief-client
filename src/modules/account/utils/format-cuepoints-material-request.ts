@@ -11,7 +11,9 @@ import { isNil } from 'lodash-es';
 
 // If duration is less than an hour, we format the date as mm:ss, otherwise wwe format as hh:mm:ss
 const formatTimeStamp = (value: number | undefined) => {
-	if (isNil(value)) return '';
+	if (isNil(value)) {
+		return '';
+	}
 
 	if (value < 60 * 60) {
 		return formatDurationMinutesSeconds(value);
