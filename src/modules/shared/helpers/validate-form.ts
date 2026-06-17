@@ -1,16 +1,16 @@
 import type { Schema, ValidationError } from 'yup';
 
 /**
- * Validate form field values object against a joi schema
+ * Validate a form field values object against a yup schema
  * @param formValues
  * @param formSchema
  */
 export async function validateForm(
-	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
+	// biome-ignore lint/suspicious/noExplicitAny: todo use generics
 	formValues: any,
-	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
+	// biome-ignore lint/suspicious/noExplicitAny: todo use generics
 	formSchema: Schema<any>
-): Promise<null | Record<string, string>> {
+): Promise<Record<string, string> | null> {
 	try {
 		await formSchema.validate(formValues, {
 			strict: true,
@@ -20,6 +20,10 @@ export async function validateForm(
 		return null;
 	} catch (err) {
 		const validationError = err as ValidationError;
+		if (!validationError.inner) {
+			console.error(err);
+			return null;
+		}
 		return Object.fromEntries(
 			validationError.inner.map((error) => {
 				return [error.path, error.message];

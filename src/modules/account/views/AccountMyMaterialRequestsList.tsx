@@ -39,7 +39,7 @@ import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitorLayout } from '@visitor-layout/index';
 import { checkIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
-import { isEmpty, isNil } from 'lodash-es';
+import { isEmpty } from 'lodash-es';
 import { useRouter } from 'next/router';
 import { type FC, type ReactNode, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
@@ -151,9 +151,7 @@ export const AccountMyMaterialRequestsList: FC<DefaultSeoInfo> = ({ url, canonic
 			materialRequestEntries = [
 				{
 					label: tText('modules/account/views/account-my-application-list___materiaal-selectie'),
-					value: isNil(materialRequest.reuseForm.endTime)
-						? tText('modules/account/views/account-my-application-list___volledig-bestand')
-						: formatCuePointsMaterialRequest(materialRequest.reuseForm),
+					value: formatCuePointsMaterialRequest(materialRequest.reuseForm),
 				},
 				{
 					label: tText('modules/account/views/account-my-application-list___downloadkwaliteit'),

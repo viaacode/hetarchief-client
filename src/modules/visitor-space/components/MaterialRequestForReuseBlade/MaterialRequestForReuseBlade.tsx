@@ -200,21 +200,46 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		dispatch(setMaterialRequestCount(response.items.length));
 	};
 
-	const validateFormValues = useCallback(
-		async (newFormValues: MaterialRequestReuseForm | undefined): Promise<boolean> => {
+	const getNormalizedAndValidFormValues = useCallback(
+		async (
+			newFormValues: MaterialRequestReuseForm | undefined
+		): Promise<MaterialRequestReuseForm | null> => {
 			setFormErrors({});
-			const formErrors = (await validateForm(
-				newFormValues,
-				MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA()
-			)) as Partial<Record<MaterialRequestReuseFormKey, string | undefined>>;
-			if (formErrors) {
-				setFormErrors(formErrors);
-				return false;
+			if (!newFormValues) {
+				return null;
 			}
 
-			return true;
+			const formValuesToValidate = { ...newFormValues };
+
+			// Compute durationType before validation so the schema can enforce its presence
+			// So the backend can know when to export the whole video and when to export only a partial
+			if (!isObjectEssenceAccessibleToUser) {
+				formValuesToValidate.startTime = undefined;
+				formValuesToValidate.endTime = undefined;
+				formValuesToValidate.durationType = MaterialRequestDurationType.FULL;
+			} else if (
+				formValuesToValidate.startTime === 0 &&
+				formValuesToValidate.endTime === mediaDuration
+			) {
+				formValuesToValidate[MaterialRequestReuseFormKey.durationType] =
+					MaterialRequestDurationType.FULL;
+			} else {
+				formValuesToValidate[MaterialRequestReuseFormKey.durationType] =
+					MaterialRequestDurationType.PARTIAL;
+			}
+
+			const errors = await validateForm(
+				formValuesToValidate,
+				MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA(isObjectEssenceAccessibleToUser)
+			);
+			if (errors) {
+				setFormErrors(errors);
+				return null;
+			}
+
+			return formValuesToValidate;
 		},
-		[]
+		[isObjectEssenceAccessibleToUser, mediaDuration]
 	);
 
 	const onAddToList = async () => {
@@ -223,23 +248,10 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				return;
 			}
 
-			const formValid = await validateFormValues(formValues);
+			const validFormValues = await getNormalizedAndValidFormValues(formValues);
 
-			if (!formValid) {
-				return;
-			}
-
-			// Omit start time and end time if they are equal to 0 and media duration respectively
-			// So the backend can know when yo export the whole video and when to export only a partial
-			const formValuesToSend = {
-				...formValues,
-			};
-			if (formValues.startTime === 0 && formValues.endTime === mediaDuration) {
-				formValuesToSend[MaterialRequestReuseFormKey.durationType] =
-					MaterialRequestDurationType.FULL;
-			} else {
-				formValuesToSend[MaterialRequestReuseFormKey.durationType] =
-					MaterialRequestDurationType.PARTIAL;
+			if (!validFormValues) {
+				return; // Errors have been set in the getNormalizedAndValidFormValues function
 			}
 
 			const response = await MaterialRequestsService.create({
@@ -248,9 +260,12 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				type: MaterialRequestType.REUSE,
 				reason: '',
 				requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
-				reuseForm: formValuesToSend,
+				reuseForm: validFormValues,
 			});
 			if (response === undefined) {
+				console.error(
+					new Error('Failed to create material request because the response was undefined.')
+				);
 				onFailedRequest();
 				return;
 			}
@@ -268,7 +283,9 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			});
 			await onSuccessCreated();
 			onCloseModal();
-		} catch (_err) {
+		} catch (err) {
+			console.error(new Error('Failed to create material request. Unexpected error:'));
+			console.error(err);
 			onFailedRequest();
 		}
 	};
@@ -279,7 +296,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				return;
 			}
 
-			const isFormValid = await validateFormValues(formValues);
+			const isFormValid = await getNormalizedAndValidFormValues(formValues);
 
 			if (!isFormValid) {
 				return;

@@ -351,10 +351,8 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 			/>
 
 			<PermissionsCheck allPermissions={[Permission.CAN_MANAGE_ORGANISATION_SLUGS]}>
-				<>
-					{renderPageContent()}
-					{renderBlade()}
-				</>
+				{renderPageContent()}
+				{renderBlade()}
 			</PermissionsCheck>
 		</>
 	);

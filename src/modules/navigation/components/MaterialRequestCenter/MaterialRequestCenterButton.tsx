@@ -12,7 +12,6 @@ import {
 } from '@shared/store/ui';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import clsx from 'clsx';
-import { isNil } from 'lodash-es';
 import { type FC, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
