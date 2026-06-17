@@ -18,10 +18,12 @@ import { GenreSelect } from '@visitor-space/components/GenreSelect';
 import { LanguageSelect } from '@visitor-space/components/LanguageSelect/LanguageSelect';
 import { MediumSelect } from '@visitor-space/components/MediumSelect/MediumSelect';
 import { getFilterLabel } from '@visitor-space/utils/advanced-filters';
+import getConfig from 'next/config';
 import type { FC } from 'react';
-
 import DurationInput from '../components/DurationInput/DurationInput';
 import { FilterProperty, Operator } from '../types';
+
+const { publicRuntimeConfig } = getConfig();
 
 type FilterInputComponent =
 	| FC<TextInputProps>
@@ -66,7 +68,9 @@ export const ADVANCED_FILTERS: FilterProperty[] = [
 	FilterProperty.MENTIONS,
 	FilterProperty.OBJECT_TYPE,
 	FilterProperty.LOCATION_CREATED,
-	FilterProperty.RIGHTS,
+	...(publicRuntimeConfig.ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY === 'true'
+		? [FilterProperty.RIGHTS]
+		: []),
 	FilterProperty.PUBLISHED_AT,
 	FilterProperty.LANGUAGE,
 	FilterProperty.TITLE,

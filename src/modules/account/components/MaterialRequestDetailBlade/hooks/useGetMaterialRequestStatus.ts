@@ -2,7 +2,7 @@ import { getLastEvent } from '@account/utils/get-last-material-request-event';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestEventType, type MaterialRequestStatuses } from '@material-requests/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { keepPreviousData, type Query, type UseQueryResult, useQuery } from '@tanstack/react-query';
+import { type Query, type UseQueryResult, useQuery } from '@tanstack/react-query';
 
 export function useGetMaterialRequestStatus(
 	materialRequestId: string | undefined,
@@ -12,7 +12,6 @@ export function useGetMaterialRequestStatus(
 		queryKey: [QUERY_KEYS.getMaterialRequestStatus, materialRequestId],
 		queryFn: (): Promise<MaterialRequestStatuses | null> =>
 			MaterialRequestsService.getMaterialRequestStatusById(materialRequestId as string),
-		placeholderData: keepPreviousData,
 		refetchOnMount: 'always',
 		refetchOnReconnect: true,
 		refetchOnWindowFocus: true,
