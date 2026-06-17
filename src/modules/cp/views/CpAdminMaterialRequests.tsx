@@ -51,7 +51,16 @@ import { useIsComplexReuseFlowUser } from '@visitor-space/hooks/is-complex-reuse
 import clsx from 'clsx';
 import { isEmpty, isNil, noop } from 'lodash-es';
 import Link from 'next/link';
-import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
+import {
+	type FC,
+	type MouseEvent,
+	type ReactNode,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import { useSelector } from 'react-redux';
 import type { Row, SortingRule, TableState } from 'react-table';
 import { StringParam, useQueryParam, useQueryParams } from 'use-query-params';
@@ -79,6 +88,8 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	const commonUser = useSelector(selectCommonUser);
 	const isComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
 	const locale = useLocale();
+	const router = useRouter();
+	const previousFiltersRef = useRef<typeof filters | null>(null);
 
 	const {
 		data: materialRequests,
@@ -238,6 +249,40 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 			});
 		}
 	};
+
+	const hasOnlyMaterialRequestQueryParam =
+		!!currentMaterialRequestId &&
+		Object.keys(router.query).length > 0 &&
+		Object.keys(router.query).every((key) => key === QUERY_PARAM_KEY.MATERIAL_REQUEST);
+
+	useEffect(() => {
+		if (hasOnlyMaterialRequestQueryParam) {
+			return;
+		}
+
+		previousFiltersRef.current = { ...filters };
+	}, [hasOnlyMaterialRequestQueryParam, filters]);
+
+	useEffect(() => {
+		const previousFilters = previousFiltersRef.current;
+
+		if (!hasOnlyMaterialRequestQueryParam || !previousFilters) {
+			return;
+		}
+
+		setSearch((previousFilters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] as string) || '');
+		setSelectedTypes((previousFilters[QUERY_PARAM_KEY.TYPE] as string[]) || []);
+		setSelectedStatuses((previousFilters[QUERY_PARAM_KEY.STATUS] as string[]) || []);
+		setSelectedDownloadFilters(
+			(previousFilters[QUERY_PARAM_KEY.HAS_DOWNLOAD_URL] as string[]) || []
+		);
+		setShowArchived(previousFilters[QUERY_PARAM_KEY.IS_ARCHIVED] === 'true');
+
+		setFilters((current) => ({
+			...current,
+			...previousFilters,
+		}));
+	}, [hasOnlyMaterialRequestQueryParam, setFilters]);
 
 	const onPageChange = (pageZeroBased: number, gotoPage: (i: number) => void): void => {
 		gotoPage(pageZeroBased);
