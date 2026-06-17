@@ -89,7 +89,7 @@ export const SEARCH_PAGE_FILTERS = (
 			type: FilterMenuType.Checkbox,
 			tabs: ALL_TABS,
 			isDisabled: () => {
-				return !isGlobalArchive || isKioskUser;
+				return isKioskUser;
 			},
 		},
 		{
