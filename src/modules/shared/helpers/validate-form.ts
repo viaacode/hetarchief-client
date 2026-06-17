@@ -6,7 +6,7 @@ type ValidationResult =
 	| { errors: null; validFormValues: any };
 
 /**
- * Validate form field values object against a joi schema
+ * Validate a form field values object against a yup schema
  * @param formValues
  * @param formSchema
  */
@@ -25,6 +25,10 @@ export async function validateForm(
 		return { errors: null, validFormValues };
 	} catch (err) {
 		const validationError = err as ValidationError;
+		if (!validationError.inner) {
+			console.error(err);
+			return { errors: {}, validFormValues: null };
+		}
 		return {
 			errors: Object.fromEntries(
 				validationError.inner.map((error) => {

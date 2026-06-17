@@ -23,10 +23,7 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ShareFolderBlade } from '@shared/components/ShareFolderBlade';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
-import {
-	HIGHLIGHTED_SEARCH_TERMS_SEPARATOR,
-	QUERY_PARAM_KEY,
-} from '@shared/const/query-param-keys';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';

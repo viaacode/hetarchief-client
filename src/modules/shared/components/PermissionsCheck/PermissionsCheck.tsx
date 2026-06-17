@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import Loading from '../Loading/Loading';
 
 type PermissionsCheckProps = {
-	children: ReactElement;
+	children: ReactElement | ReactElement[];
 	allPermissions?: Permission[];
 	anyPermissions?: Permission[];
 };
@@ -53,7 +53,7 @@ const PermissionsCheck: FC<PermissionsCheckProps> = ({
 	if (!hasRequiredPermissions) {
 		return <Loading fullscreen locationId="permission check" />;
 	}
-	return children;
+	return <>{children}</>;
 };
 
 export default PermissionsCheck;

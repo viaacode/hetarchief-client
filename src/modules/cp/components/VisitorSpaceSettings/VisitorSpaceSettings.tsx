@@ -178,16 +178,13 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 			newFormValues: VisitorSpaceSettingsFormValues | undefined,
 			showToasts: boolean
 		): Promise<boolean> => {
-			const formErrors = (await validateForm(
-				newFormValues,
-				VISITOR_SPACE_VALIDATION_SCHEMA()
-			)) as Partial<Record<keyof CreateVisitorSpaceSettings, string | undefined>>;
+			const { errors } = await validateForm(newFormValues, VISITOR_SPACE_VALIDATION_SCHEMA());
 			const fileErrors = validateFile(newFormValues?.file) as Partial<
 				Record<keyof CreateVisitorSpaceSettings, string | undefined>
 			>;
-			if (formErrors || fileErrors) {
+			if (errors || fileErrors) {
 				setFormErrors({
-					...(formErrors || {}),
+					...(errors || {}),
 					...(fileErrors || {}),
 				});
 				if (showToasts) {
@@ -452,7 +449,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 									const slug = contentPartners?.find((cp) => cp.id === value)?.slug as string;
 
 									if (value !== formValues?.orId || '') {
-										updateValues?.({
+										await updateValues?.({
 											orId: value,
 											slug: slug,
 										});
@@ -488,10 +485,8 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 		formErrors.orId,
 		formValues?.slug,
 		formValues?.orId,
-		visitorSpace?.orId,
+		contentPartners?.find,
 		updateValues,
-		createSpace,
-		updateSpace,
 	]);
 
 	const renderedImageAndColor = useMemo(() => {

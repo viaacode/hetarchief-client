@@ -221,16 +221,16 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					MaterialRequestDurationType.PARTIAL;
 			}
 
-			const validationResult = await validateForm(
+			const { errors, validFormValues } = await validateForm(
 				formValuesToValidate,
 				MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA(isObjectEssenceAccessibleToUser)
 			);
-			if (validationResult.errors) {
-				setFormErrors(validationResult.errors);
+			if (errors) {
+				setFormErrors(errors);
 				return null;
 			}
 
-			return validationResult.validFormValues;
+			return validFormValues;
 		},
 		[isObjectEssenceAccessibleToUser, mediaDuration]
 	);
