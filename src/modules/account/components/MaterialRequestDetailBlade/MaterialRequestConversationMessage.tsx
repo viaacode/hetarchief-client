@@ -222,8 +222,8 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 	const renderAdditionalConditionsAccepted = () => {
 		const isApproved = materialRequest.status === MaterialRequestStatus.APPROVED;
 
-		if (isRequester) {
-			return (
+		return (
+			<>
 				<div className={clsx(styles['p-conversation-messages__message__body'])}>
 					{autoApproveEnabled
 						? tHtml(
@@ -239,20 +239,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 								}
 							)}
 				</div>
-			);
-		}
-
-		return (
-			<>
-				<div className={clsx(styles['p-conversation-messages__message__body'])}>
-					{tHtml(
-						'modules/account/components/material-request-detail-blade/material-request-conversation-message___name-aanvaardde-de-bijkomende-gebruiksvoorwaarden',
-						{
-							name: messageSenderName(),
-						}
-					)}
-				</div>
-				{!isApproved && (
+				{!isRequester && !isApproved && (
 					<Button
 						label={tText(
 							'modules/account/components/material-request-detail-blade/material-request-detail-blade___download-beschikbaar-maken'
