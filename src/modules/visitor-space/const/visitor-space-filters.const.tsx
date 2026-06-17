@@ -42,123 +42,125 @@ export const SEARCH_PAGE_FILTERS = (
 	isKioskUser: boolean,
 	isKeyUser: boolean,
 	activeTab: SearchPageMediaType
-): FilterMenuFilterOption[] => [
-	{
-		id: SearchFilterId.ConsultableMedia,
-		label: {
-			[SearchPageMediaType.All]: tText(
-				'modules/visitor-space/const/index___alles-wat-raadpleegbaar-is'
-			),
-			[SearchPageMediaType.Video]: tText(
-				'modules/visitor-space/const/visitor-space-filters___direct-kijken'
-			),
-			[SearchPageMediaType.Audio]: tText(
-				'modules/visitor-space/const/visitor-space-filters___direct-luisteren'
-			),
-			[SearchPageMediaType.Newspaper]: tText(
-				'modules/visitor-space/const/visitor-space-filters___direct-lezen'
-			),
-		}[activeTab],
-		form: ConsultableMediaFilterForm,
-		type: FilterMenuType.Checkbox,
-		tabs: ALL_TABS,
-		isDisabled: () => {
-			return !isGlobalArchive || !isKeyUser;
+): FilterMenuFilterOption[] => {
+	const rightsFiltersForEverybody =
+		publicRuntimeConfig.ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY === 'true';
+	return [
+		{
+			id: SearchFilterId.ConsultableMedia,
+			label: {
+				[SearchPageMediaType.All]: tText(
+					'modules/visitor-space/const/index___alles-wat-raadpleegbaar-is'
+				),
+				[SearchPageMediaType.Video]: tText(
+					'modules/visitor-space/const/visitor-space-filters___direct-kijken'
+				),
+				[SearchPageMediaType.Audio]: tText(
+					'modules/visitor-space/const/visitor-space-filters___direct-luisteren'
+				),
+				[SearchPageMediaType.Newspaper]: tText(
+					'modules/visitor-space/const/visitor-space-filters___direct-lezen'
+				),
+			}[activeTab],
+			form: ConsultableMediaFilterForm,
+			type: FilterMenuType.Checkbox,
+			tabs: ALL_TABS,
+			isDisabled: () => {
+				return !isGlobalArchive || (!isKeyUser && !rightsFiltersForEverybody);
+			},
 		},
-	},
-	{
-		id: SearchFilterId.ConsultableOnlyOnLocation,
-		label: {
-			[SearchPageMediaType.All]: tText(
-				'modules/visitor-space/const/index___enkel-ter-plaatse-beschikbaar'
-			),
-			[SearchPageMediaType.Video]: tText(
-				'modules/visitor-space/const/visitor-space-filters___ter-plaatse-kijken'
-			),
-			[SearchPageMediaType.Audio]: tText(
-				'modules/visitor-space/const/visitor-space-filters___ter-plaatse-luisteren'
-			),
-			[SearchPageMediaType.Newspaper]: tText(
-				'modules/visitor-space/const/visitor-space-filters___ter-plaatse-lezen'
-			),
-		}[activeTab],
-		form: ConsultableOnlyOnLocationFilterForm,
-		type: FilterMenuType.Checkbox,
-		tabs: ALL_TABS,
-		isDisabled: () => {
-			return !isGlobalArchive || isKioskUser;
+		{
+			id: SearchFilterId.ConsultableOnlyOnLocation,
+			label: {
+				[SearchPageMediaType.All]: tText(
+					'modules/visitor-space/const/index___enkel-ter-plaatse-beschikbaar'
+				),
+				[SearchPageMediaType.Video]: tText(
+					'modules/visitor-space/const/visitor-space-filters___ter-plaatse-kijken'
+				),
+				[SearchPageMediaType.Audio]: tText(
+					'modules/visitor-space/const/visitor-space-filters___ter-plaatse-luisteren'
+				),
+				[SearchPageMediaType.Newspaper]: tText(
+					'modules/visitor-space/const/visitor-space-filters___ter-plaatse-lezen'
+				),
+			}[activeTab],
+			form: ConsultableOnlyOnLocationFilterForm,
+			type: FilterMenuType.Checkbox,
+			tabs: ALL_TABS,
+			isDisabled: () => {
+				return !isGlobalArchive || isKioskUser;
+			},
 		},
-	},
-	{
-		id: SearchFilterId.Maintainers,
-		label: tText('modules/visitor-space/const/index___aanbieder'),
-		form: MaintainerFilterForm,
-		type: FilterMenuType.Modal,
-		tabs: ALL_TABS,
-		isDisabled: () => {
-			return !isGlobalArchive || isKioskUser;
+		{
+			id: SearchFilterId.Maintainers,
+			label: tText('modules/visitor-space/const/index___aanbieder'),
+			form: MaintainerFilterForm,
+			type: FilterMenuType.Modal,
+			tabs: ALL_TABS,
+			isDisabled: () => {
+				return !isGlobalArchive || isKioskUser;
+			},
 		},
-	},
-	{
-		id: SearchFilterId.NewspaperSeriesName,
-		label: tText('modules/visitor-space/const/visitor-space-filters___reeks'),
-		form: NewspaperSeriesNameFilterForm,
-		type: FilterMenuType.Modal,
-		tabs: [SearchPageMediaType.Newspaper],
-	},
-	{
-		id: SearchFilterId.ReleaseDate,
-		label: tText('modules/visitor-space/const/visitor-space-filters___uitgavedatum'),
-		form: ReleaseDateFilterForm,
-		type: FilterMenuType.Modal,
-		tabs: ALL_TABS,
-	},
-	{
-		id: SearchFilterId.Reusability,
-		label: tText('modules/visitor-space/const/visitor-space-filters___herbruikbaarheid'),
-		form: ReusabilityFilterForm,
-		type: FilterMenuType.Modal,
-		tabs: ALL_TABS,
-		isDisabled: () => {
-			const rightsFiltersForEverybody =
-				publicRuntimeConfig.ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY === 'true';
-			return !rightsFiltersForEverybody && !isKeyUser;
+		{
+			id: SearchFilterId.NewspaperSeriesName,
+			label: tText('modules/visitor-space/const/visitor-space-filters___reeks'),
+			form: NewspaperSeriesNameFilterForm,
+			type: FilterMenuType.Modal,
+			tabs: [SearchPageMediaType.Newspaper],
 		},
-	},
-	{
-		id: SearchFilterId.LocationCreated,
-		label: tText('modules/visitor-space/const/visitor-space-filters___plaats-van-uitgave'),
-		form: LocationCreatedFilterForm,
-		type: FilterMenuType.Modal,
-		tabs: [SearchPageMediaType.Newspaper],
-	},
-	{
-		id: SearchFilterId.Medium,
-		label: tText('modules/visitor-space/const/index___analoge-drager'),
-		form: MediumFilterForm,
-		type: FilterMenuType.Modal,
-		tabs: [SearchPageMediaType.All, SearchPageMediaType.Video, SearchPageMediaType.Audio],
-	},
-	{
-		id: SearchFilterId.Creator,
-		label: tText('modules/visitor-space/const/index___maker'),
-		form: CreatorFilterForm,
-		type: FilterMenuType.Modal,
-		tabs: [SearchPageMediaType.All, SearchPageMediaType.Video, SearchPageMediaType.Audio],
-	},
-	{
-		id: SearchFilterId.Mentions,
-		label: tText('modules/visitor-space/const/visitor-space-filters___namenlijst-gesneuvelden'),
-		form: MentionsFilterForm,
-		type: FilterMenuType.Modal,
-		tabs: [SearchPageMediaType.Newspaper],
-	},
-	{
-		id: SearchFilterId.Advanced,
-		icon: IconNamesLight.DotsHorizontal,
-		label: tText('modules/visitor-space/const/index___geavanceerd'),
-		form: AdvancedFilterForm,
-		type: FilterMenuType.Modal,
-		tabs: ALL_TABS,
-	},
-];
+		{
+			id: SearchFilterId.ReleaseDate,
+			label: tText('modules/visitor-space/const/visitor-space-filters___uitgavedatum'),
+			form: ReleaseDateFilterForm,
+			type: FilterMenuType.Modal,
+			tabs: ALL_TABS,
+		},
+		{
+			id: SearchFilterId.Reusability,
+			label: tText('modules/visitor-space/const/visitor-space-filters___herbruikbaarheid'),
+			form: ReusabilityFilterForm,
+			type: FilterMenuType.Modal,
+			tabs: ALL_TABS,
+			isDisabled: () => {
+				return !rightsFiltersForEverybody && !isKeyUser;
+			},
+		},
+		{
+			id: SearchFilterId.LocationCreated,
+			label: tText('modules/visitor-space/const/visitor-space-filters___plaats-van-uitgave'),
+			form: LocationCreatedFilterForm,
+			type: FilterMenuType.Modal,
+			tabs: [SearchPageMediaType.Newspaper],
+		},
+		{
+			id: SearchFilterId.Medium,
+			label: tText('modules/visitor-space/const/index___analoge-drager'),
+			form: MediumFilterForm,
+			type: FilterMenuType.Modal,
+			tabs: [SearchPageMediaType.All, SearchPageMediaType.Video, SearchPageMediaType.Audio],
+		},
+		{
+			id: SearchFilterId.Creator,
+			label: tText('modules/visitor-space/const/index___maker'),
+			form: CreatorFilterForm,
+			type: FilterMenuType.Modal,
+			tabs: [SearchPageMediaType.All, SearchPageMediaType.Video, SearchPageMediaType.Audio],
+		},
+		{
+			id: SearchFilterId.Mentions,
+			label: tText('modules/visitor-space/const/visitor-space-filters___namenlijst-gesneuvelden'),
+			form: MentionsFilterForm,
+			type: FilterMenuType.Modal,
+			tabs: [SearchPageMediaType.Newspaper],
+		},
+		{
+			id: SearchFilterId.Advanced,
+			icon: IconNamesLight.DotsHorizontal,
+			label: tText('modules/visitor-space/const/index___geavanceerd'),
+			form: AdvancedFilterForm,
+			type: FilterMenuType.Modal,
+			tabs: ALL_TABS,
+		},
+	];
+};
