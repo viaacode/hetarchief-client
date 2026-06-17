@@ -4,6 +4,7 @@ import {
 	MaterialRequestDistributionDigitalOnline,
 	MaterialRequestDistributionType,
 	MaterialRequestDownloadQuality,
+	MaterialRequestDurationType,
 	MaterialRequestEditing,
 	MaterialRequestGeographicalUsage,
 	MaterialRequestIntendedUsage,
@@ -57,8 +58,9 @@ export const MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA = (
 					.transform(() => undefined);
 			}
 		),
-		// Optional, since this is a computed field that is set after the validation of the form
-		[MaterialRequestReuseFormKey.durationType]: string().optional(),
+		[MaterialRequestReuseFormKey.durationType]: mixed<MaterialRequestDurationType>()
+			.oneOf(Object.values(MaterialRequestDurationType))
+			.required(),
 		[MaterialRequestReuseFormKey.downloadQuality]: mixed<MaterialRequestDownloadQuality>()
 			.oneOf(Object.values(MaterialRequestDownloadQuality))
 			.required(

@@ -200,21 +200,39 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		dispatch(setMaterialRequestCount(response.items.length));
 	};
 
-	const validateFormValues = useCallback(
-		async (newFormValues: MaterialRequestReuseForm | undefined): Promise<boolean> => {
+	const normalizeAndValidateFormValues = useCallback(
+		async (
+			newFormValues: MaterialRequestReuseForm | undefined
+		): Promise<MaterialRequestReuseForm | null> => {
 			setFormErrors({});
-			const formErrors = (await validateForm(
-				newFormValues,
-				MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA(isObjectEssenceAccessibleToUser)
-			)) as Partial<Record<MaterialRequestReuseFormKey, string | undefined>>;
-			if (formErrors) {
-				setFormErrors(formErrors);
-				return false;
+
+			const formValuesToValidate = { ...newFormValues };
+
+			if (!isObjectEssenceAccessibleToUser) {
+				formValuesToValidate.durationType = MaterialRequestDurationType.FULL;
+			} else if (
+				formValuesToValidate.startTime === 0 &&
+				formValuesToValidate.endTime === mediaDuration
+			) {
+				formValuesToValidate[MaterialRequestReuseFormKey.durationType] =
+					MaterialRequestDurationType.FULL;
+			} else {
+				formValuesToValidate[MaterialRequestReuseFormKey.durationType] =
+					MaterialRequestDurationType.PARTIAL;
 			}
 
-			return true;
+			const validationResult = await validateForm(
+				formValuesToValidate,
+				MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA(isObjectEssenceAccessibleToUser)
+			);
+			if (validationResult.errors) {
+				setFormErrors(validationResult.errors);
+				return null;
+			}
+
+			return validationResult.validFormValues;
 		},
-		[isObjectEssenceAccessibleToUser]
+		[isObjectEssenceAccessibleToUser, mediaDuration]
 	);
 
 	const onAddToList = async () => {
@@ -223,25 +241,20 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				return;
 			}
 
-			const formValid = await validateFormValues(formValues);
-
-			if (!formValid) {
-				return;
-			}
-
-			// Omit start time and end time if they are equal to 0 and media duration respectively
-			// So the backend can know when yo export the whole video and when to export only a partial
-			const formValuesToSend = {
+			// Compute durationType before validation so the schema can enforce its presence
+			// So the backend can know when to export the whole video and when to export only a partial
+			const formValuesToSend: MaterialRequestReuseForm = {
 				...formValues,
+				[MaterialRequestReuseFormKey.durationType]:
+					formValues.startTime === 0 && formValues.endTime === mediaDuration
+						? MaterialRequestDurationType.FULL
+						: MaterialRequestDurationType.PARTIAL,
 			};
-			if (!isObjectEssenceAccessibleToUser) {
-				formValuesToSend.durationType = MaterialRequestDurationType.FULL;
-			} else if (formValues.startTime === 0 && formValues.endTime === mediaDuration) {
-				formValuesToSend[MaterialRequestReuseFormKey.durationType] =
-					MaterialRequestDurationType.FULL;
-			} else {
-				formValuesToSend[MaterialRequestReuseFormKey.durationType] =
-					MaterialRequestDurationType.PARTIAL;
+
+			const validFormValues = await normalizeAndValidateFormValues(formValuesToSend);
+
+			if (!validFormValues) {
+				return;
 			}
 
 			const response = await MaterialRequestsService.create({
@@ -250,7 +263,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				type: MaterialRequestType.REUSE,
 				reason: '',
 				requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
-				reuseForm: formValuesToSend,
+				reuseForm: validFormValues,
 			});
 			if (response === undefined) {
 				console.error(
@@ -286,7 +299,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				return;
 			}
 
-			const isFormValid = await validateFormValues(formValues);
+			const isFormValid = await normalizeAndValidateFormValues(formValues);
 
 			if (!isFormValid) {
 				return;

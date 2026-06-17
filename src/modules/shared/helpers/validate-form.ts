@@ -1,29 +1,37 @@
 import type { Schema, ValidationError } from 'yup';
 
+type ValidationResult =
+	| { errors: Record<string, string>; validFormValues: null }
+	// biome-ignore lint/suspicious/noExplicitAny: todo use generics
+	| { errors: null; validFormValues: any };
+
 /**
  * Validate form field values object against a joi schema
  * @param formValues
  * @param formSchema
  */
 export async function validateForm(
-	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
+	// biome-ignore lint/suspicious/noExplicitAny: todo use generics
 	formValues: any,
-	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
+	// biome-ignore lint/suspicious/noExplicitAny: todo use generics
 	formSchema: Schema<any>
-): Promise<null | Record<string, string>> {
+): Promise<ValidationResult> {
 	try {
-		await formSchema.validate(formValues, {
+		const validFormValues = await formSchema.validate(formValues, {
 			strict: true,
 			abortEarly: false,
 		});
 
-		return null;
+		return { errors: null, validFormValues };
 	} catch (err) {
 		const validationError = err as ValidationError;
-		return Object.fromEntries(
-			validationError.inner.map((error) => {
-				return [error.path, error.message];
-			})
-		);
+		return {
+			errors: Object.fromEntries(
+				validationError.inner.map((error) => {
+					return [error.path, error.message];
+				})
+			),
+			validFormValues: null,
+		};
 	}
 }
