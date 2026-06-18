@@ -22,28 +22,7 @@ const MaterialRequestStatusPill: FC<MaterialRequestStatusPillProps> = ({
 	includeStatusNone = false,
 }) => {
 	const label = GET_MATERIAL_REQUEST_TRANSLATIONS_BY_STATUS()[status];
-
-	if (status === MaterialRequestStatus.NONE) {
-		if (includeStatusNone) {
-			return (
-				<div className={styles['c-material-request-status-pill']}>
-					<Pill
-						icon={IconNamesLight.Info}
-						label={label}
-						ariaLabel={label}
-						className={clsx(
-							styles['c-material-request-status-pill__pill'],
-							styles['c-material-request-status-pill__pill--none']
-						)}
-					/>
-					{showLabel && (
-						<span className={styles['c-material-request-status-pill__label']}>{label}</span>
-					)}
-				</div>
-			);
-		}
-		return null;
-	}
+	const shouldRenderStatusNone = status === MaterialRequestStatus.NONE && includeStatusNone;
 
 	const determineIcon = () => {
 		switch (status) {
@@ -64,17 +43,17 @@ const MaterialRequestStatusPill: FC<MaterialRequestStatusPillProps> = ({
 		}
 	};
 
+	const pillIcon = status === MaterialRequestStatus.NONE ? IconNamesLight.Info : determineIcon();
+	const pillClassName = clsx(
+		styles['c-material-request-status-pill__pill'],
+		status === MaterialRequestStatus.NONE
+			? styles['c-material-request-status-pill__pill--none']
+			: styles[`c-material-request-status-pill__pill--${status.toLowerCase()}`]
+	);
+
 	return (
 		<div className={styles['c-material-request-status-pill']}>
-			<Pill
-				icon={determineIcon()}
-				label={label}
-				ariaLabel={label}
-				className={clsx(
-					styles['c-material-request-status-pill__pill'],
-					styles[`c-material-request-status-pill__pill--${status.toLowerCase()}`]
-				)}
-			/>
+			<Pill icon={pillIcon} label={label} ariaLabel={label} className={pillClassName} />
 			{showLabel && (
 				<span className={styles['c-material-request-status-pill__label']}>{label}</span>
 			)}
