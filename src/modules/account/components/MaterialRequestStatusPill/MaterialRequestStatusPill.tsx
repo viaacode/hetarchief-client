@@ -10,13 +10,15 @@ import styles from './MaterialRequestStatusPill.module.scss';
 interface MaterialRequestStatusPillProps {
 	status: MaterialRequestStatus;
 	showLabel?: boolean;
+	includeStatusNone?: boolean;
 }
 
 const MaterialRequestStatusPill: FC<MaterialRequestStatusPillProps> = ({
 	status,
 	showLabel = false,
+	includeStatusNone = false,
 }) => {
-	if (status === MaterialRequestStatus.NONE) {
+	if (status === MaterialRequestStatus.NONE && !includeStatusNone) {
 		return null;
 	}
 
@@ -34,6 +36,8 @@ const MaterialRequestStatusPill: FC<MaterialRequestStatusPillProps> = ({
 				return IconNamesLight.Forbidden;
 			case MaterialRequestStatus.CANCELLED:
 				return IconNamesLight.Trash;
+			case MaterialRequestStatus.NONE:
+				return IconNamesLight.Info;
 
 			default:
 				// This should not happen

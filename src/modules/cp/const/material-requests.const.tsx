@@ -5,6 +5,7 @@ import {
 	type MaterialRequest,
 	MaterialRequestKeys,
 	type MaterialRequestRow,
+	MaterialRequestStatus,
 	MaterialRequestType,
 } from '@material-requests/types';
 import { CopyButton } from '@shared/components/CopyButton';
@@ -121,7 +122,7 @@ const getStatusColumn = (disableSort: boolean): Column<MaterialRequest> =>
 		disableSortBy: disableSort,
 		accessor: MaterialRequestKeys.status,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
-			<MaterialRequestStatusPill status={original.status} />
+			<MaterialRequestStatusPill status={original.status} includeStatusNone />
 		),
 	}) as Column<MaterialRequest>;
 
