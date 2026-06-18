@@ -483,7 +483,6 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 				label={tText('pages/admin/materiaalaanvragen/index___toon-gearchiveerde-aanvragen')}
 				checked={showArchived}
 				onToggle={handleArchiveToggle}
-				blurOnClick
 			/>
 		);
 	};

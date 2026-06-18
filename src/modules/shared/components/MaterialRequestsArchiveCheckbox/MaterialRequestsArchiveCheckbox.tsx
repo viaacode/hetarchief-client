@@ -9,7 +9,6 @@ type MaterialRequestsArchiveCheckboxProps = {
 	label: string;
 	checked: boolean;
 	onToggle: () => void;
-	blurOnClick?: boolean;
 };
 
 export const MaterialRequestsArchiveCheckbox: FC<MaterialRequestsArchiveCheckboxProps> = ({
