@@ -10,14 +10,12 @@ import {
 import type { IeObjectFile } from '@ie-objects/ie-objects.types';
 import { FlowPlayer, type FlowPlayerProps } from '@meemoo/react-components';
 import { Loading } from '@shared/components/Loading';
-import { getValidStartAndEnd } from '@shared/helpers/cut-start-and-end';
 import { useGetFileDuration } from '@shared/hooks/use-get-file-duration';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { isNil } from 'lodash-es';
 import getConfig from 'next/config';
 import React, { type FC, useCallback, useEffect, useState } from 'react';
-import { convertDurationStringToSeconds } from '../../helpers/duration';
 import type { AudioOrVideoPlayerProps } from './AudioOrVideoPlayer.types';
 
 const { publicRuntimeConfig } = getConfig();
@@ -107,31 +105,6 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		return <ObjectPlaceholder {...getTicketErrorPlaceholderLabels()} />;
 	}
 
-	const getStartAndEnd = () => {
-		const mapTimeToNumber = (value: string | undefined) =>
-			value ? convertDurationStringToSeconds(value) : undefined;
-
-		let start = mapTimeToNumber(representation?.schemaStartTime) || 0;
-		let end = mapTimeToNumber(representation?.schemaEndTime) || mediaDuration;
-
-		// Only cuepoints if there are any set, and they do not fall outside the range of the video itself
-		if (cuePoints) {
-			if (cuePoints.start && cuePoints.start > start && (isNil(end) || cuePoints.start < end)) {
-				start = cuePoints.start;
-			}
-
-			if (
-				cuePoints.end &&
-				(isNil(end) || (cuePoints.end && cuePoints.end < end && cuePoints.end > start))
-			) {
-				end = cuePoints.end;
-			}
-		}
-
-		return getValidStartAndEnd(start, end, mediaDuration);
-	};
-
-	const [start, end]: [number | null, number | null] = getStartAndEnd();
 	const shared: Partial<FlowPlayerProps> = {
 		className,
 		title: currentPlayableFile?.name,
@@ -147,8 +120,6 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		peakColorInactive: '#adadad', // zinc
 		peakColorActive: '#00857d', // $teal
 		peakHeightFactor: 0.6,
-		start,
-		end,
 	};
 
 	if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(currentPlayableFile.mimeType)) {

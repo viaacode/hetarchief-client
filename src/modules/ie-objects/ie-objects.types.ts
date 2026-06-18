@@ -152,6 +152,10 @@ export interface IeObjectFile {
 	duration: string;
 	edmIsNextInSequence: string;
 	createdAt: string;
+	mediaFragment: {
+		startTime: number;
+		endTime: number;
+	} | null;
 }
 
 export interface IeObjectPage {
@@ -162,7 +166,6 @@ export interface IeObjectPage {
 export interface IeObjectRepresentation {
 	id: string;
 	schemaName: string;
-	isMediaFragmentOf: string;
 	schemaInLanguage: string;
 	schemaStartTime: string;
 	schemaEndTime: string;
@@ -170,6 +173,7 @@ export interface IeObjectRepresentation {
 	schemaTranscriptUrl: string | null;
 	edmIsNextInSequence: string;
 	updatedAt: string;
+	isMediaFragmentOf: string;
 	files: IeObjectFile[];
 }
 
