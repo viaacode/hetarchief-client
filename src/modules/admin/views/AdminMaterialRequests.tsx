@@ -480,11 +480,6 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	const renderArchiveCheckbox = () => {
 		return (
 			<MaterialRequestsArchiveCheckbox
-				className={clsx(
-					'p-admin-material-requests__dropdown',
-					'p-admin-material-requests__checkbox-wrapper'
-				)}
-				checkboxClassName="p-admin-material-requests__archive-checkbox"
 				label={tText('pages/admin/materiaalaanvragen/index___toon-gearchiveerde-aanvragen')}
 				checked={showArchived}
 				onToggle={handleArchiveToggle}

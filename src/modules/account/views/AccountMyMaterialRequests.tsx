@@ -349,8 +349,6 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	const renderArchiveCheckbox = () => {
 		return (
 			<MaterialRequestsArchiveCheckbox
-				className={clsx('p-material-requests__dropdown', 'p-material-requests__checkbox-wrapper')}
-				checkboxClassName="p-material-requests__archive-checkbox"
 				label={tText(
 					'modules/account/views/account-my-material-requests___toon-gearchiveerde-aanvragen'
 				)}

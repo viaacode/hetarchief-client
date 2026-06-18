@@ -68,29 +68,6 @@
 		}
 	}
 
-	&__checkbox-wrapper {
-		display: flex;
-		align-items: center;
-		padding: 0 $spacer-md;
-		background-color: $white;
-		border: 1px solid $silver;
-		border-radius: $border-radius;
-		height: $button-height;
-		cursor: pointer;
-
-		&:hover {
-			border-color: $zinc;
-		}
-	}
-
-	&__archive-checkbox {
-		width: 100%;
-
-		.c-checkbox__label {
-			cursor: pointer;
-		}
-	}
-
 	&__table {
 		overflow: auto;
 

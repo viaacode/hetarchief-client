@@ -437,8 +437,6 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	const renderArchiveCheckbox = () => {
 		return (
 			<MaterialRequestsArchiveCheckbox
-				className={clsx('p-material-requests__dropdown', 'p-material-requests__checkbox-wrapper')}
-				checkboxClassName="p-material-requests__archive-checkbox"
 				label={tText('modules/cp/views/cp-admin-material-requests___toon-gearchiveerde-aanvragen')}
 				checked={showArchived}
 				onToggle={handleArchiveToggle}

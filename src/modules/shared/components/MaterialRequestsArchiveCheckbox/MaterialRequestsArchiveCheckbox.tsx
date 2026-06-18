@@ -1,11 +1,11 @@
 import { Checkbox, keysEnter, keysSpacebar, onKey } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import clsx from 'clsx';
 import type { FC } from 'react';
+import styles from './MaterialRequestsArchiveCheckbox.module.scss';
 
 type MaterialRequestsArchiveCheckboxProps = {
-	className: string;
-	checkboxClassName: string;
 	label: string;
 	checked: boolean;
 	onToggle: () => void;
@@ -13,16 +13,14 @@ type MaterialRequestsArchiveCheckboxProps = {
 };
 
 export const MaterialRequestsArchiveCheckbox: FC<MaterialRequestsArchiveCheckboxProps> = ({
-	className,
-	checkboxClassName,
 	label,
 	checked,
 	onToggle,
 }) => {
 	return (
-		<div className={className}>
+		<div className={styles['c-material-requests-archive-checkbox-wrapper']}>
 			<Checkbox
-				className={checkboxClassName}
+				className={styles['c-material-requests-archive-checkbox-wrapper__checkbox']}
 				label={label}
 				checked={checked}
 				checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
