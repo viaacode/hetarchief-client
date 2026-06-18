@@ -1,8 +1,7 @@
-import { toast, type ToastOptions } from 'react-toastify';
-
 import { Toast, type ToastProps } from '@shared/components/Toast';
 import { tText } from '@shared/helpers/translate';
 import type { Optional } from '@shared/types/utils';
+import { type ToastOptions, toast } from 'react-toastify';
 
 class ToastService {
 	public notify(
@@ -14,8 +13,8 @@ class ToastService {
 		}: Optional<ToastProps, 'maxLines' | 'buttonLabel' | 'onClose'>,
 		toastOptions?: ToastOptions
 	): string {
-		const onToastClose = (closeToast?: () => void) => {
-			onClose?.();
+		const onToastClose = async (closeToast?: () => void) => {
+			await onClose?.();
 			closeToast?.();
 		};
 

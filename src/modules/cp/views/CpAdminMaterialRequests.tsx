@@ -15,6 +15,7 @@ import { CPAdminLayout } from '@cp/layouts';
 import { getMaterialRequestTableColumnProps } from '@material-requests/const';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
+import { useRestoreFiltersOnNotificationOpen } from '@material-requests/hooks/use-restore-filters-on-notification-open';
 import {
 	type MaterialRequest,
 	MaterialRequestKeys,
@@ -243,6 +244,15 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 			});
 		}
 	};
+
+	// restore filters on notification open (if navigated to this page)
+	useRestoreFiltersOnNotificationOpen(currentMaterialRequestId, filters, setFilters, {
+		setSearch,
+		setSelectedTypes,
+		setSelectedStatuses,
+		setSelectedDownloadFilters,
+		setShowArchived,
+	});
 
 	const onPageChange = (pageZeroBased: number, gotoPage: (i: number) => void): void => {
 		gotoPage(pageZeroBased);
