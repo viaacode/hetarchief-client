@@ -23,18 +23,15 @@ import {
 	type MaterialRequestType,
 } from '@material-requests/types';
 import {
-	Checkbox,
-	keysEnter,
-	keysSpacebar,
 	MultiSelect,
 	type MultiSelectOption,
-	onKey,
 	PaginationBar,
 	Table,
 } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
+import { MaterialRequestsArchiveCheckbox } from '@shared/components/MaterialRequestsArchiveCheckbox';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SearchBar } from '@shared/components/SearchBar';
@@ -482,31 +479,17 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 
 	const renderArchiveCheckbox = () => {
 		return (
-			<div
+			<MaterialRequestsArchiveCheckbox
 				className={clsx(
 					'p-admin-material-requests__dropdown',
 					'p-admin-material-requests__checkbox-wrapper'
 				)}
-			>
-				<Checkbox
-					className="p-admin-material-requests__archive-checkbox"
-					label={tText('pages/admin/materiaalaanvragen/index___toon-gearchiveerde-aanvragen')}
-					checked={showArchived}
-					checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
-					onKeyDown={(e) => {
-						onKey(e, [...keysEnter, ...keysSpacebar], () => {
-							if (keysSpacebar.includes(e.key)) {
-								e.preventDefault();
-							}
-							handleArchiveToggle();
-						});
-					}}
-					onClick={(e) => {
-						handleArchiveToggle();
-						e.currentTarget.blur();
-					}}
-				/>
-			</div>
+				checkboxClassName="p-admin-material-requests__archive-checkbox"
+				label={tText('pages/admin/materiaalaanvragen/index___toon-gearchiveerde-aanvragen')}
+				checked={showArchived}
+				onToggle={handleArchiveToggle}
+				blurOnClick
+			/>
 		);
 	};
 
