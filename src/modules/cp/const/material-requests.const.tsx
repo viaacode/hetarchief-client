@@ -8,10 +8,7 @@ import {
 	MaterialRequestStatus,
 	MaterialRequestType,
 } from '@material-requests/types';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@meemoo/react-components';
 import { CopyButton } from '@shared/components/CopyButton';
-import { Icon } from '@shared/components/Icon';
-import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
@@ -124,28 +121,12 @@ const getStatusColumn = (disableSort: boolean): Column<MaterialRequest> =>
 		Header: tText('modules/cp/const/material-requests___status'),
 		disableSortBy: disableSort,
 		accessor: MaterialRequestKeys.status,
-		Cell: ({ row: { original } }: MaterialRequestRow) => {
-			if (original.status === MaterialRequestStatus.NONE) {
-				return (
-					<Tooltip position="top">
-						<TooltipTrigger>
-							<span
-								className="p-material-requests__table-info-icon"
-								role="img"
-								aria-label={tText('Dit is een niet uitgebreide materiaal aanvraag zonder status')}
-							>
-								<Icon name={IconNamesLight.Info} aria-hidden />
-							</span>
-						</TooltipTrigger>
-						<TooltipContent>
-							{tText('Dit is een niet uitgebreide materiaal aanvraag zonder status')}
-						</TooltipContent>
-					</Tooltip>
-				);
-			}
-
-			return <MaterialRequestStatusPill status={original.status} />;
-		},
+		Cell: ({ row: { original } }: MaterialRequestRow) => (
+			<MaterialRequestStatusPill
+				status={original.status}
+				showNone={original.status === MaterialRequestStatus.NONE}
+			/>
+		),
 	}) as Column<MaterialRequest>;
 
 const getDownloadColumn = (): Column<MaterialRequest> =>

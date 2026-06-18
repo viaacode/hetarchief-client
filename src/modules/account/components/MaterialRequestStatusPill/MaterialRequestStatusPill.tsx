@@ -1,7 +1,10 @@
 import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_STATUS } from '@material-requests/const';
 import { MaterialRequestStatus } from '@material-requests/types';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@meemoo/react-components';
+import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Pill } from '@shared/components/Pill';
+import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
 import type { FC } from 'react';
 
@@ -10,13 +13,33 @@ import styles from './MaterialRequestStatusPill.module.scss';
 interface MaterialRequestStatusPillProps {
 	status: MaterialRequestStatus;
 	showLabel?: boolean;
+	showNone?: boolean;
 }
 
 const MaterialRequestStatusPill: FC<MaterialRequestStatusPillProps> = ({
 	status,
 	showLabel = false,
+	showNone = false,
 }) => {
 	if (status === MaterialRequestStatus.NONE) {
+		if (showNone) {
+			return (
+				<Tooltip position="top">
+					<TooltipTrigger>
+						<span
+							className="p-material-requests__table-info-icon"
+							role="img"
+							aria-label={tText('Dit is een niet uitgebreide materiaal aanvraag zonder status')}
+						>
+							<Icon name={IconNamesLight.Info} aria-hidden />
+						</span>
+					</TooltipTrigger>
+					<TooltipContent>
+						{tText('Dit is een niet uitgebreide materiaal aanvraag zonder status')}
+					</TooltipContent>
+				</Tooltip>
+			);
+		}
 		return null;
 	}
 
