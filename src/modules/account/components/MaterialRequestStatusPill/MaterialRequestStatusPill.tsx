@@ -30,18 +30,14 @@ const MaterialRequestStatusPill: FC<MaterialRequestStatusPillProps> = ({
 					<Pill
 						icon={IconNamesLight.Info}
 						label={label}
-						ariaLabel={tText(
-							'Dit is een niet uitgebreide materiaal aanvraag zonder status - aria label'
-						)}
+						ariaLabel={label}
 						className={clsx(
 							styles['c-material-request-status-pill__pill'],
 							styles['c-material-request-status-pill__pill--none']
 						)}
 					/>
 					{showLabel && (
-						<span className={styles['c-material-request-status-pill__label']}>
-							{GET_MATERIAL_REQUEST_TRANSLATIONS_BY_STATUS()[status]}
-						</span>
+						<span className={styles['c-material-request-status-pill__label']}>{label}</span>
 					)}
 				</div>
 			);
