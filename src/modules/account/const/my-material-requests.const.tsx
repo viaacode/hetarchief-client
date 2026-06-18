@@ -166,10 +166,7 @@ const getStatusColumn = (disableSort: boolean): Column<MaterialRequest> =>
 		accessor: MaterialRequestKeys.status,
 		disableSortBy: disableSort,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
-			<MaterialRequestStatusPill
-				status={original.status}
-				showNone={original.status === MaterialRequestStatus.NONE}
-			/>
+			<MaterialRequestStatusPill status={original.status} includeStatusNone={true} />
 		),
 	}) as Column<MaterialRequest>;
 

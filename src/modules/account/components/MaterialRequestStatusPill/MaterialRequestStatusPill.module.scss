@@ -11,7 +11,7 @@
 		width: 4rem;
 		font-size: $font-size-2xm;
 
-		&--new, &--cancelled {
+		&--new, &--cancelled, &--none {
 			background-color: $grey;
 			color: $white;
 		}
@@ -30,6 +30,12 @@
 			background-color: $cherry;
 			color: $white;
 		}
+	}
+
+	&__info-icon {
+		color: $neutral;
+		font-size: $font-size-1xl;
+		padding-left: $spacer-xxs;
 	}
 
 	&__label {

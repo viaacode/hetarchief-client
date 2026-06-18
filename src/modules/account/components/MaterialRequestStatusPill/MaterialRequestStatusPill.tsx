@@ -13,37 +13,41 @@ import styles from './MaterialRequestStatusPill.module.scss';
 interface MaterialRequestStatusPillProps {
 	status: MaterialRequestStatus;
 	showLabel?: boolean;
-	showNone?: boolean;
+	includeStatusNone?: boolean;
 }
 
 const MaterialRequestStatusPill: FC<MaterialRequestStatusPillProps> = ({
 	status,
 	showLabel = false,
-	showNone = false,
+	includeStatusNone = false,
 }) => {
+	const label = GET_MATERIAL_REQUEST_TRANSLATIONS_BY_STATUS()[status];
+
 	if (status === MaterialRequestStatus.NONE) {
-		if (showNone) {
+		if (includeStatusNone) {
 			return (
-				<Tooltip position="top">
-					<TooltipTrigger>
-						<span
-							className="p-material-requests__table-info-icon"
-							role="img"
-							aria-label={tText('Dit is een niet uitgebreide materiaal aanvraag zonder status')}
-						>
-							<Icon name={IconNamesLight.Info} aria-hidden />
+				<div className={styles['c-material-request-status-pill']}>
+					<Pill
+						icon={IconNamesLight.Info}
+						label={label}
+						ariaLabel={tText(
+							'Dit is een niet uitgebreide materiaal aanvraag zonder status - aria label'
+						)}
+						className={clsx(
+							styles['c-material-request-status-pill__pill'],
+							styles['c-material-request-status-pill__pill--none']
+						)}
+					/>
+					{showLabel && (
+						<span className={styles['c-material-request-status-pill__label']}>
+							{GET_MATERIAL_REQUEST_TRANSLATIONS_BY_STATUS()[status]}
 						</span>
-					</TooltipTrigger>
-					<TooltipContent>
-						{tText('Dit is een niet uitgebreide materiaal aanvraag zonder status')}
-					</TooltipContent>
-				</Tooltip>
+					)}
+				</div>
 			);
 		}
 		return null;
 	}
-
-	const label = GET_MATERIAL_REQUEST_TRANSLATIONS_BY_STATUS()[status];
 
 	const determineIcon = () => {
 		switch (status) {
