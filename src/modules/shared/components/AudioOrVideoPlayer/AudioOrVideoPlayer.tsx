@@ -8,7 +8,7 @@ import {
 	JSON_FORMATS,
 } from '@ie-objects/ie-objects.consts';
 import type { IeObjectFile } from '@ie-objects/ie-objects.types';
-import { FlowPlayer, type FlowPlayerProps } from '@meemoo/react-components';
+import { FlowPlayer, type FlowPlayerProps, getValidStartAndEnd } from '@meemoo/react-components';
 import { Loading } from '@shared/components/Loading';
 import { useGetFileDuration } from '@shared/hooks/use-get-file-duration';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
@@ -105,6 +105,33 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		return <ObjectPlaceholder {...getTicketErrorPlaceholderLabels()} />;
 	}
 
+	const getStartAndEnd = () => {
+		let cueStart: number | null = null;
+		let cueEnd: number | null = null;
+
+		// Only cuepoints if there are any set, and they do not fall outside the range of the video itself
+		if (cuePoints) {
+			if (
+				cuePoints.start &&
+				cuePoints.start > 0 &&
+				(isNil(mediaDuration) || cuePoints.start < mediaDuration)
+			) {
+				cueStart = cuePoints.start;
+			}
+
+			if (
+				cuePoints.end &&
+				(isNil(mediaDuration) ||
+					(cuePoints.end && cuePoints.end < mediaDuration && cuePoints.end > 0))
+			) {
+				cueEnd = cuePoints.end;
+			}
+		}
+
+		return getValidStartAndEnd(cueStart, cueEnd, mediaDuration);
+	};
+
+	const [start, end]: [number | null, number | null] = getStartAndEnd();
 	const shared: Partial<FlowPlayerProps> = {
 		className,
 		title: currentPlayableFile?.name,
@@ -120,6 +147,8 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		peakColorInactive: '#adadad', // zinc
 		peakColorActive: '#00857d', // $teal
 		peakHeightFactor: 0.6,
+		start,
+		end,
 	};
 
 	if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(currentPlayableFile.mimeType)) {

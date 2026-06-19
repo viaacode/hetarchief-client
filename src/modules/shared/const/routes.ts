@@ -284,7 +284,7 @@ const ROUTES_NL: Record<RouteKey, string> = {
 	visitRequested: `/${ROUTE_PARTS_NL.visit}/:slug/${ROUTE_PARTS_NL.accessRequested}`,
 	visitorSpaceManagement: `/${ROUTE_PARTS_NL.admin}/${ROUTE_PARTS_NL.visitorSpaceManagement}`,
 	permalink: `/${ROUTE_PARTS_NL.pid}/:pid`,
-	detailPage: `/${ROUTE_PARTS_NL.search}/:maintainerSlug/:pid`,
+	detailPage: `/${ROUTE_PARTS_NL.search}/:maintainerSlug/:pid/:title`,
 } as const;
 
 const ROUTES_EN: Record<RouteKey, string> = {
