@@ -1,14 +1,14 @@
 @use "sass:color";
-@use "../abstracts" as *;
+@use "../abstracts" as abstracts;
 
 .c-tag {
 	display: flex;
 	align-items: center;
 	height: 3.2rem;
-	padding: $spacer-xs $spacer-sm;
+	padding: abstracts.$spacer-xs abstracts.$spacer-sm;
 	border-radius: 1.6rem;
-	background-color: $teal-66;
-	color: $black;
+	background-color: abstracts.$teal-66;
+	color: abstracts.$black;
 }
 
 /**
@@ -16,18 +16,19 @@
  */
 
 .c-tag__close {
-	@extend %reset-button;
-
+	border: none;
+	background: none;
+	color: inherit;
 	display: flex;
 	text-decoration: none;
-	padding: $spacer-xxs;
-	margin: 0 1.2rem 0 $spacer-xxs;
-	font-size: $font-size-md;
+	padding: abstracts.$spacer-xxs;
+	margin: 0 1.2rem 0 abstracts.$spacer-xxs;
+	font-size: abstracts.$font-size-md;
 	cursor: pointer;
-	transition: color $animate-sm-in;
+	transition: color abstracts.$animate-sm-in;
 
 	&:hover {
-		color: color.adjust($black, $alpha: -0.3);
+		color: color.adjust(abstracts.$black, $alpha: -0.3);
 	}
 }
 
@@ -43,89 +44,87 @@
 
 // Colors
 .c-tag--black {
-	background-color: $black;
-	color: $white;
+	background-color: abstracts.$black;
+	color: abstracts.$white;
 }
 
 .c-tag--silver {
-	background-color: $silver;
+	background-color: abstracts.$silver;
 }
 
 // Sizes
 .c-tag--medium,
 .c-tag--small {
-	font-size: $font-size-xs;
-	font-weight: $font-weight-bold;
+	font-size: abstracts.$font-size-xs;
+	font-weight: abstracts.$font-weight-bold;
 
 	.c-tag__close {
-		font-size: $font-size-sm;
+		font-size: abstracts.$font-size-sm;
 	}
 }
 
 .c-tag--medium {
 	height: 2.4rem;
 	border-radius: 1.2rem;
-	padding: calc(#{$spacer-xs} / 2) $spacer-xs;
+	padding: abstracts.$spacer-xxs abstracts.$spacer-xs;
 
 	.c-tag__close {
-		padding: calc(#{$spacer-xs} / 2);
-		padding-right: $spacer-xs;
+		padding: abstracts.$spacer-xxs abstracts.$spacer-xs abstracts.$spacer-xxs abstracts.$spacer-xxs;
 	}
 }
 
 .c-tag--small {
 	height: 1.5rem;
-	padding: 0 $spacer-xs;
+	padding: 0 abstracts.$spacer-xs;
 	border-radius: 0.75rem;
 
 	.c-tag__close {
-		padding: 0 calc(#{$spacer-xs} / 2);
-		padding-right: calc(#{$spacer-xs} / 2);
+		padding: 0 abstracts.$spacer-xxs;
 	}
 }
 
 // interaction
 .c-tag--clickable {
 	transition:
-		background-color $animate-default,
-		color $animate-default,
-		outline $animate-default;
+		background-color abstracts.$animate-default,
+		color abstracts.$animate-default,
+		outline abstracts.$animate-default;
 
 	&:not(.c-tag--disabled) {
 		&:hover {
-			background-color: $shade;
-			color: $white;
+			background-color: abstracts.$shade;
+			color: abstracts.$white;
 		}
 
 		&:active {
-			background-color: $teal-66;
-			color: $black;
+			background-color: abstracts.$teal-66;
+			color: abstracts.$black;
 		}
 
-		&:not(:active, :hover):focus {
-			outline: 2px solid $black;
+		&:not(:active):not(:hover):focus {
+			outline: 2px solid abstracts.$black;
 		}
 
 		&.c-tag--medium,
 		&.c-tag--small {
 			&:hover {
-				background-color: $shade;
-				color: $white;
+				background-color: abstracts.$shade;
+				color: abstracts.$white;
 			}
 
 			&:active {
-				background-color: $seagreen;
-				color: $white;
+				background-color: abstracts.$seagreen;
+				color: abstracts.$white;
 			}
 
-			&:not(:active, :hover):focus {
-				outline: 2px solid $teal-66;
+			&:not(:active):not(:hover):focus {
+				outline: 2px solid abstracts.$teal-66;
 			}
 		}
 	}
 }
 
 .c-tag--disabled {
-	background-color: $silver;
-	color: $zinc;
+	background-color: abstracts.$silver;
+	color: abstracts.$zinc;
 }

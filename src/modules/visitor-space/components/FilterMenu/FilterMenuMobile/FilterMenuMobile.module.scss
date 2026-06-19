@@ -1,20 +1,20 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-filter-menu-mobile {
 	position: fixed;
 	inset: 0;
-	z-index: get-z-layer("filter-menu-mobile");
-	background-color: $black;
-	color: $white;
+	z-index: abstracts.get-z-layer("filter-menu-mobile");
+	background-color: abstracts.$black;
+	color: abstracts.$white;
 	overflow-y: auto;
 
 	:global(.c-tag-list) {
-		margin: $spacer-sm 0 $spacer-md;
+		margin: abstracts.$spacer-sm 0 abstracts.$spacer-md;
 	}
 
 	:global(.c-tag-list__tag--large) {
-		background-color: $teal;
-		color: $black;
+		background-color: abstracts.$teal;
+		color: abstracts.$black;
 	}
 }
 
@@ -27,26 +27,26 @@
 }
 
 .c-filter-menu-mobile__back {
-	margin-left: -$spacer-md;
-	font-size: $font-size-md;
+	margin-left: -#{abstracts.$spacer-md};
+	font-size: abstracts.$font-size-md;
 
 	span {
-		color: $white;
+		color: abstracts.$white;
 	}
 }
 
 .c-filter-menu-mobile__tags {
 	:global(.c-tag) {
 		padding-right: 0;
-		background-color: $teal;
+		background-color: abstracts.$teal;
 	}
 }
 
 .c-filter-menu-mobile__filters {
 	.c-filter-menu__filter {
 		width: 100%;
-		padding-right: $spacer-sm;
-		font-weight: $font-weight-normal;
+		padding-right: abstracts.$spacer-sm;
+		font-weight: abstracts.$font-weight-normal;
 		text-align: left;
 		border-radius: 0;
 		border-top: 1px solid rgb(255 255 255 / 10%);
@@ -61,20 +61,20 @@
 		}
 
 		:global(.c-button__icon) {
-			font-size: $font-size-lg;
+			font-size: abstracts.$font-size-lg;
 		}
 
 		&--active {
-			background-color: $white;
-			border-color: $white;
-			color: $black;
+			background-color: abstracts.$white;
+			border-color: abstracts.$white;
+			color: abstracts.$black;
 
 			&:hover {
-				background-color: $white;
-				border-color: $white;
+				background-color: abstracts.$white;
+				border-color: abstracts.$white;
 			}
 
-			&:not(:active, :hover):focus {
+			&:not(:active):not(:hover):focus {
 				outline: none;
 			}
 		}
@@ -82,7 +82,7 @@
 }
 
 .c-filter-menu-mobile__form {
-	height: calc(100% - #{$c-navigation-height-md});
+	height: calc(100% - #{abstracts.$c-navigation-height-md});
 }
 
 .c-filter-menu-mobile__option {
@@ -94,11 +94,11 @@
 		top: 0;
 		bottom: 0;
 		left: 0;
-		background-color: $teal;
+		background-color: abstracts.$teal;
 		width: 0.8rem;
 		transform: scaleX(0);
-		transition: transform $animate-default;
-		z-index: get-z-layer("filter");
+		transition: transform abstracts.$animate-default;
+		z-index: abstracts.get-z-layer("filter");
 	}
 }
 
@@ -111,8 +111,8 @@
 }
 
 .c-filter-menu-mobile--active {
-	background-color: $white;
-	color: $black;
+	background-color: abstracts.$white;
+	color: abstracts.$black;
 }
 
 .c-filter-menu-mobile__option--operative {

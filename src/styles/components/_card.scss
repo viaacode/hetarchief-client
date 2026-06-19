@@ -1,17 +1,15 @@
 @use "sass:map";
 @use "sass:math";
-@use "src/styles/abstracts" as *;
-
-$component: "c-card";
+@use "src/styles/abstracts" as abstracts;
 
 // Mixins
 
 @mixin c-card-image-overflow {
 	// Spill the image over the border if it's not padded and the card has a border
-	&.#{$component}--padded-content {
-		&:not(.#{$component}--edge-none) {
-			.#{$component}__image-wrapper {
-				margin: -$card-edge-size;
+	&.c-card--padded-content {
+		&:not(.c-card--edge-none) {
+			.c-card__image-wrapper {
+				margin: -#{abstracts.$card-edge-size};
 				@content;
 			}
 		}
@@ -21,22 +19,22 @@ $component: "c-card";
 @mixin m-card-horizontal {
 	flex-direction: row;
 
-	.#{$component}__top-wrapper {
+	.c-card__top-wrapper {
 		display: flex;
 	}
 
-	.#{$component}__bottom-wrapper {
+	.c-card__bottom-wrapper {
 		flex-grow: 1;
 		min-width: 0;
 		display: flex;
 		flex-direction: column;
 	}
 
-	.#{$component}__children-wrapper {
+	.c-card__children-wrapper {
 		flex-grow: 1;
 	}
 
-	.#{$component}__image-wrapper {
+	.c-card__image-wrapper {
 		flex-grow: 1;
 		min-width: 0;
 	}
@@ -45,14 +43,14 @@ $component: "c-card";
 		margin-right: 0;
 	}
 
-	&.#{$component}--padded-both {
-		.#{$component}__image-wrapper {
-			margin-bottom: $spacer-sm;
+	&.c-card--padded-both {
+		.c-card__image-wrapper {
+			margin-bottom: abstracts.$spacer-sm;
 		}
 
-		.#{$component}__title-wrapper,
-		.#{$component}__subtitle-wrapper,
-		.#{$component}__children-wrapper {
+		.c-card__title-wrapper,
+		.c-card__subtitle-wrapper,
+		.c-card__children-wrapper {
 			margin-left: 0;
 		}
 	}
@@ -69,39 +67,39 @@ $component: "c-card";
 // Placeholders
 
 %s-card-horizontal-whitespace {
-	margin-left: $spacer-sm;
-	margin-right: $spacer-sm;
+	margin-left: abstracts.$spacer-sm;
+	margin-right: abstracts.$spacer-sm;
 }
 
 %s-card-content-whitespace {
 	// Note: I shouldn't let whitespace be influenced by color mode but this saves us a lot of className exposure
-	&.#{$component}--mode-dark {
-		.#{$component} {
+	&.c-card--mode-dark {
+		.c-card {
 			&__header-wrapper {
-				margin-bottom: math.div($spacer-md, 2);
-				margin-top: $spacer-sm;
+				margin-bottom: math.div(abstracts.$spacer-md, 2);
+				margin-top: abstracts.$spacer-sm;
 
-				@media (min-width: $breakpoint-md) {
-					margin-bottom: $spacer-sm * 2;
-					margin-top: $spacer-lg + $spacer-xs;
+				@media (min-width: abstracts.$breakpoint-md) {
+					margin-bottom: abstracts.$spacer-sm * 2;
+					margin-top: abstracts.$spacer-lg + abstracts.$spacer-xs;
 				}
 			}
 
 			&__children-wrapper {
-				margin-bottom: $spacer-md;
-				color: $zinc;
+				margin-bottom: abstracts.$spacer-md;
+				color: abstracts.$zinc;
 
-				@media (min-width: $breakpoint-md) {
-					margin-right: $spacer-lg;
+				@media (min-width: abstracts.$breakpoint-md) {
+					margin-right: abstracts.$spacer-lg;
 				}
 			}
 		}
 	}
 
-	.#{$component} {
+	.c-card {
 		&__header-wrapper {
-			margin-bottom: $spacer-xs;
-			margin-top: $spacer-sm;
+			margin-bottom: abstracts.$spacer-xs;
+			margin-top: abstracts.$spacer-sm;
 		}
 
 		&__title-wrapper,
@@ -116,14 +114,14 @@ $component: "c-card";
 		}
 
 		&__children-wrapper {
-			margin-bottom: $spacer-sm;
+			margin-bottom: abstracts.$spacer-sm;
 		}
 	}
 }
 
 // Component
 
-.#{$component} {
+.c-card {
 	display: flex;
 
 	&[role="button"] {
@@ -140,7 +138,7 @@ $component: "c-card";
 		position: absolute;
 		left: 0;
 		right: 0;
-		z-index: get-z-layer("foreground");
+		z-index: abstracts.get-z-layer("foreground");
 		text-align: right;
 	}
 
@@ -154,7 +152,7 @@ $component: "c-card";
 		flex-grow: 1;
 		min-width: 0;
 		overflow-wrap: break-word;
-		line-height: $line-height-1xl;
+		line-height: abstracts.$line-height-1xl;
 	}
 
 	&__toolbar-wrapper {
@@ -165,9 +163,9 @@ $component: "c-card";
 	&__subtitle,
 	&__children {
 		&-wrapper {
-			font-size: $font-size-sm;
-			line-height: $line-height-4xl;
-			color: $neutral;
+			font-size: abstracts.$font-size-sm;
+			line-height: abstracts.$line-height-4xl;
+			color: abstracts.$neutral;
 		}
 	}
 
@@ -175,7 +173,7 @@ $component: "c-card";
 
 	&--edge {
 		&-zinc {
-			border: $card-edge-size solid $zinc-40;
+			border: abstracts.$card-edge-size solid abstracts.$zinc-40;
 		}
 	}
 
@@ -183,16 +181,16 @@ $component: "c-card";
 		&-both {
 			@extend %s-card-content-whitespace;
 
-			.#{$component} {
+			.c-card {
 				&__image-wrapper,
 				&__tags-wrapper {
 					@extend %s-card-horizontal-whitespace;
 
-					margin-top: $spacer-sm;
+					margin-top: abstracts.$spacer-sm;
 				}
 
 				&__tags-wrapper {
-					padding: $spacer-xs;
+					padding: abstracts.$spacer-xs;
 				}
 			}
 		}
@@ -202,19 +200,19 @@ $component: "c-card";
 		}
 
 		&-vertical {
-			.#{$component} {
+			.c-card {
 				&__header-wrapper {
-					margin-bottom: math.div($spacer-md, 2);
-					margin-top: math.div($spacer-md, 2);
+					margin-bottom: math.div(abstracts.$spacer-md, 2);
+					margin-top: math.div(abstracts.$spacer-md, 2);
 
-					@media (min-width: $breakpoint-md) {
-						margin-bottom: $spacer-sm;
-						margin-top: $spacer-sm * 1.5;
+					@media (min-width: abstracts.$breakpoint-md) {
+						margin-bottom: abstracts.$spacer-sm;
+						margin-top: abstracts.$spacer-sm * 1.5;
 					}
 				}
 
 				&__children-wrapper {
-					margin-bottom: $spacer-sm;
+					margin-bottom: abstracts.$spacer-sm;
 				}
 			}
 		}
@@ -227,11 +225,11 @@ $component: "c-card";
 			@include m-card-horizontal;
 
 			&--at-md {
-				@media (max-width: $breakpoint-md) {
+				@media (max-width: abstracts.$breakpoint-md) {
 					@include m-card-vertical;
 				}
 
-				@media (min-width: $breakpoint-md) {
+				@media (min-width: abstracts.$breakpoint-md) {
 					@include m-card-horizontal;
 				}
 			}
@@ -241,11 +239,11 @@ $component: "c-card";
 			@include m-card-vertical;
 
 			&--at-md {
-				@media (max-width: $breakpoint-md) {
+				@media (max-width: abstracts.$breakpoint-md) {
 					@include m-card-horizontal;
 				}
 
-				@media (min-width: $breakpoint-md) {
+				@media (min-width: abstracts.$breakpoint-md) {
 					@include m-card-vertical;
 				}
 			}
@@ -254,17 +252,17 @@ $component: "c-card";
 
 	&--mode {
 		&-light {
-			background-color: $white;
+			background-color: abstracts.$white;
 		}
 
 		&-dark {
-			background-color: $black;
+			background-color: abstracts.$black;
 
-			.#{$component} {
+			.c-card {
 				&__title,
 				&__toolbar {
 					&-wrapper {
-						color: $white;
+						color: abstracts.$white;
 					}
 				}
 			}
@@ -272,42 +270,42 @@ $component: "c-card";
 	}
 
 	&--offset {
-		margin-left: $card-offset * 0.8;
-		margin-top: $card-offset * 0.8;
+		margin-left: abstracts.$card-offset * 0.8;
+		margin-top: abstracts.$card-offset * 0.8;
 
-		&.#{$component}--orientation-horizontal {
-			.#{$component} {
+		&.c-card--orientation-horizontal {
+			.c-card {
 				&__image {
 					&-wrapper {
 						align-self: flex-start;
-						box-shadow: $shadow-24-black-24;
-						transform: translate(-($card-offset * 0.8), -($card-offset * 0.8));
+						box-shadow: abstracts.$shadow-24-black-24;
+						transform: translate(-(abstracts.$card-offset * 0.8), -(abstracts.$card-offset * 0.8));
 					}
 				}
 			}
 		}
 
-		@media (max-width: $breakpoint-md) {
-			&.#{$component}--orientation-horizontal {
-				.#{$component} {
+		@media (max-width: abstracts.$breakpoint-md) {
+			&.c-card--orientation-horizontal {
+				.c-card {
 					&__image {
 						&-wrapper {
-							margin-right: 0 - $card-offset * 0.8;
+							margin-right: 0 - abstracts.$card-offset * 0.8;
 						}
 					}
 				}
 			}
 		}
 
-		@media (min-width: $breakpoint-md) {
-			margin-left: $card-offset;
-			margin-top: $card-offset;
+		@media (min-width: abstracts.$breakpoint-md) {
+			margin-left: abstracts.$card-offset;
+			margin-top: abstracts.$card-offset;
 
-			&.#{$component}--orientation-horizontal {
-				.#{$component} {
+			&.c-card--orientation-horizontal {
+				.c-card {
 					&__image {
 						&-wrapper {
-							transform: translate(-$card-offset, -$card-offset);
+							transform: translate(-#{abstracts.$card-offset}, -#{abstracts.$card-offset});
 						}
 					}
 				}
@@ -316,6 +314,6 @@ $component: "c-card";
 	}
 
 	&--shadow {
-		box-shadow: $shadow-24-black-04;
+		box-shadow: abstracts.$shadow-24-black-04;
 	}
 }

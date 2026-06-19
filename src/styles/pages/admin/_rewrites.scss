@@ -1,22 +1,22 @@
 @use "sass:math";
 /* stylelint-disable no-descending-specificity */
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$c-table-border: 1px solid $silver;
+$c-table-border: 1px solid abstracts.$silver;
 
 // Table
 
 table[class*="c-table--styled"] {
 	thead {
 		th {
-			@include text-ellipsis;
+			@include abstracts.text-ellipsis;
 
 			padding: 1.6rem 2.4rem;
 			position: relative;
 			text-align: left;
-			font-weight: $font-weight-bold;
+			font-weight: abstracts.$font-weight-bold;
 			font-size: 1.2rem;
-			line-height: $line-height-1xl;
+			line-height: abstracts.$line-height-1xl;
 			color: #727272;
 			user-select: none;
 		}
@@ -36,19 +36,19 @@ table[class*="c-table--styled"] {
 	}
 
 	tbody {
-		background-color: $white;
+		background-color: abstracts.$white;
 		border-bottom: $c-table-border;
 		border-top: $c-table-border;
 
-		@media (min-width: $breakpoint-lg) {
-			box-shadow: $shadow-24-black-08;
+		@media (min-width: abstracts.$breakpoint-lg) {
+			box-shadow: abstracts.$shadow-24-black-08;
 		}
 
 		td {
 			text-align: left;
-			padding: $spacer-sm $spacer-md;
-			font-size: $font-size-sm;
-			line-height: $line-height-lg;
+			padding: abstracts.$spacer-sm abstracts.$spacer-md;
+			font-size: abstracts.$font-size-sm;
+			line-height: abstracts.$line-height-lg;
 		}
 	}
 
@@ -63,31 +63,31 @@ table[class*="c-table--styled"] {
 			width: 3.6rem;
 			height: 3.6rem;
 			border-radius: 1.8rem;
-			background-color: $silver;
-			color: $black;
+			background-color: abstracts.$silver;
+			color: abstracts.$black;
 			border: none;
 
 			&:hover {
-				background-color: $shade;
-				border-color: $shade;
-				color: $white;
+				background-color: abstracts.$shade;
+				border-color: abstracts.$shade;
+				color: abstracts.$white;
 			}
 
 			&:active {
-				background-color: $teal-dark;
-				border-color: $teal-dark;
-				color: $white;
+				background-color: abstracts.$teal-dark;
+				border-color: abstracts.$teal-dark;
+				color: abstracts.$white;
 			}
 
 			&:focus,
 			.focus-visible:focus:not(:focus-visible) {
-				outline: 2px solid $teal;
+				outline: 2px solid abstracts.$teal;
 			}
 
 			&:disabled {
 				border: none;
-				background-color: $silver;
-				color: $zinc;
+				background-color: abstracts.$silver;
+				color: abstracts.$zinc;
 			}
 		}
 	}
@@ -97,11 +97,11 @@ table[class*="c-table--styled"] {
 	:not(.Table-module_c-table--styled__H4Ms4) tbody td:first-child,
 		// tables with row focus will add an additional column for the focus so we need to add the padding on the second child
 	:has(.c-table__with-row-focus) tbody td:nth-child(2){
-		padding-left: $spacer-md;
+		padding-left: abstracts.$spacer-md;
 	}
 
 	:not(.Table-module_c-table--styled__H4Ms4) tbody td:last-child {
-		padding-right: $spacer-md;
+		padding-right: abstracts.$spacer-md;
 	}
 }
 
@@ -112,10 +112,10 @@ div[class*="c-pagination"]:not(div[class*="c-pagination__btn"]) {
 }
 
 div[class*="c-pagination__btn"] {
-	color: $zinc;
+	color: abstracts.$zinc;
 
 	&:hover {
-		color: $shade;
+		color: abstracts.$shade;
 		background-color: transparent;
 	}
 }
@@ -123,12 +123,12 @@ div[class*="c-pagination__btn"] {
 div[class*="c-pagination__btn--active"] {
 	background-color: #009690;
 	color: #fff;
-	font-weight: $font-weight-bold;
+	font-weight: abstracts.$font-weight-bold;
 	border-radius: 50%;
 
 	&:hover {
 		background-color: #009690;
-		color: $white;
+		color: abstracts.$white;
 	}
 }
 
@@ -142,24 +142,24 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger,
 .c-accordion__item > .u-spacer-bottom button[class*="c-button"],
 .c-modal .c-toolbar button[class*="c-button"] {
 	display: inline-block;
-	padding: 1.4rem $button-horizontal-whitespace;
-	border: 1px solid $teal-dark;
-	font-family: $font-family-primary;
-	font-size: $font-size-base;
-	font-weight: $font-weight-bold;
+	padding: 1.4rem abstracts.$button-horizontal-whitespace;
+	border: 1px solid abstracts.$teal-dark;
+	font-family: abstracts.$font-family-primary;
+	font-size: abstracts.$font-size-base;
+	font-weight: abstracts.$font-weight-bold;
 	line-height: 1.125;
 	text-align: center;
 	border-radius: 4rem;
 	cursor: pointer;
 	outline: 2px solid transparent;
 	transition:
-		color $animate-default,
-		background-color $animate-default,
-		border-color $animate-default;
+		color abstracts.$animate-default,
+		background-color abstracts.$animate-default,
+		border-color abstracts.$animate-default;
 
 	.c-button__label,
 	div[class*="c-button__label"] {
-		font-weight: $font-weight-normal;
+		font-weight: abstracts.$font-weight-normal;
 	}
 }
 
@@ -169,18 +169,18 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger,
 
 
 button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
-	border-color: $zinc;
-	background-color: $white;
-	color: $black;
+	border-color: abstracts.$zinc;
+	background-color: abstracts.$white;
+	color: abstracts.$black;
 
 	&:hover {
-		background-color: $silver;
+		background-color: abstracts.$silver;
 	}
 
 	&:active {
-		background-color: $teal-dark;
-		border-color: $teal-dark;
-		color: $white;
+		background-color: abstracts.$teal-dark;
+		border-color: abstracts.$teal-dark;
+		color: abstracts.$white;
 	}
 
 	/**
@@ -192,11 +192,11 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		border-color: transparent;
-		outline: 2px solid $teal;
+		outline: 2px solid abstracts.$teal;
 	}
 
 	&:focus:not(:focus-visible) {
-		border-color: $zinc;
+		border-color: abstracts.$zinc;
 	}
 
 	// Filter table filters with values inside
@@ -204,7 +204,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 		margin: 6px 0 6px 6px;
 
 		.c-tag {
-			background-color: $teal-medium;
+			background-color: abstracts.$teal-medium;
 		}
 	}
 }
@@ -214,18 +214,18 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 .c-filter-table button[class*="c-button--primary"],
 .c-button-toolbar button[class*="c-button--primary"] {
 	max-height: 5.6rem;
-	background-color: $teal-dark;
-	color: $white;
-	border-radius: $input-border-radius;
+	background-color: abstracts.$teal-dark;
+	color: abstracts.$white;
+	border-radius: abstracts.$input-border-radius;
 
 	&:hover {
-		background-color: $shade;
-		border-color: $shade;
+		background-color: abstracts.$shade;
+		border-color: abstracts.$shade;
 	}
 
 	&:active {
-		background-color: $teal-dark;
-		border-color: $teal-dark;
+		background-color: abstracts.$teal-dark;
+		border-color: abstracts.$teal-dark;
 	}
 
 	/**
@@ -236,7 +236,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
-		outline: 2px solid $black;
+		outline: 2px solid abstracts.$black;
 	}
 
 	/**
@@ -251,8 +251,8 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 
 .c-admin__actions .c-button-toolbar {
 	.c-button__icon.o-svg-icon svg {
-		height: $button-icon-size;
-		width: $button-icon-size;
+		height: abstracts.$button-icon-size;
+		width: abstracts.$button-icon-size;
 	}
 }
 
@@ -264,20 +264,20 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 .c-admin__actions button[class*="c-button--tertiary"],
 .c-button-toolbar button[class*="c-button--tertiary"] {
 	max-height: 5.6rem;
-	background-color: $silver;
-	border-color: $silver;
-	color: $black;
+	background-color: abstracts.$silver;
+	border-color: abstracts.$silver;
+	color: abstracts.$black;
 
 	&:hover {
-		background-color: $shade;
-		border-color: $shade;
-		color: $white;
+		background-color: abstracts.$shade;
+		border-color: abstracts.$shade;
+		color: abstracts.$white;
 	}
 
 	&:active {
-		background-color: $teal-dark;
-		border-color: $teal-dark;
-		color: $white;
+		background-color: abstracts.$teal-dark;
+		border-color: abstracts.$teal-dark;
+		color: abstracts.$white;
 	}
 
 	/**
@@ -288,14 +288,14 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
-		outline: 2px solid $teal;
+		outline: 2px solid abstracts.$teal;
 	}
 }
 
 .c-button-toolbar button[class*="c-button"]:disabled {
-	background-color: $silver;
-	color: $zinc;
-	border-color: $silver;
+	background-color: abstracts.$silver;
+	color: abstracts.$zinc;
+	border-color: abstracts.$silver;
 	pointer-events: none;
 }
 
@@ -314,7 +314,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	}
 
 	.u-text-muted {
-		color: $neutral;
+		color: abstracts.$neutral;
 	}
 }
 
@@ -323,40 +323,40 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 .c-modal {
 	.c-toolbar {
 		.c-modal__title {
-			font-size: $font-size-1xl;
-			font-weight: $font-weight-bold;
+			font-size: abstracts.$font-size-1xl;
+			font-weight: abstracts.$font-weight-bold;
 		}
 
 		button[class*="c-button"] {
-			padding: $spacer-xxs $spacer-md;
+			padding: abstracts.$spacer-xxs abstracts.$spacer-md;
 			border: none;
 		}
 
 		.c-apply-filter-button {
-			background-color: $black;
-			border-color: $black;
+			background-color: abstracts.$black;
+			border-color: abstracts.$black;
 
 			&:focus,
 			.focus-visible:focus:not(:focus-visible) {
-				outline: 2px solid $teal;
+				outline: 2px solid abstracts.$teal;
 			}
 		}
 
 		button[class*="c-button--secondary"] {
-			background-color: $silver;
-			border-color: $silver;
-			color: $black;
+			background-color: abstracts.$silver;
+			border-color: abstracts.$silver;
+			color: abstracts.$black;
 
 			&:hover {
-				background-color: $shade;
-				border-color: $shade;
-				color: $white;
+				background-color: abstracts.$shade;
+				border-color: abstracts.$shade;
+				color: abstracts.$white;
 			}
 
 			&:active {
-				background-color: $teal-dark;
-				border-color: $teal-dark;
-				color: $white;
+				background-color: abstracts.$teal-dark;
+				border-color: abstracts.$teal-dark;
+				color: abstracts.$white;
 			}
 
 			/**
@@ -367,7 +367,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 
 			&:focus,
 			.focus-visible:focus:not(:focus-visible) {
-				outline: 2px solid $teal;
+				outline: 2px solid abstracts.$teal;
 			}
 		}
 	}
@@ -375,12 +375,12 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	.c-checkbox-group {
 		display: flex;
 		flex-direction: column;
-		row-gap: $spacer-sm;
-		padding-top: $spacer-xs;
+		row-gap: abstracts.$spacer-sm;
+		padding-top: abstracts.$spacer-xs;
 	}
 
 	.c-checkbox {
-		color: $black;
+		color: abstracts.$black;
 
 		label {
 			display: flex;
@@ -388,7 +388,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 		}
 
 		input {
-			margin-right: $spacer-xs;
+			margin-right: abstracts.$spacer-xs;
 		}
 
 		input[type="checkbox"]::after {
@@ -397,11 +397,11 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 			top: -0.2rem;
 			left: -0.1rem;
 			position: relative;
-			background-color: $white;
+			background-color: abstracts.$white;
 			content: "";
 			display: inline-block;
 			visibility: visible;
-			border: 0.2rem solid $black;
+			border: 0.2rem solid abstracts.$black;
 		}
 
 		input[type="checkbox"]:checked::after {
@@ -410,11 +410,11 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 			top: -0.2rem;
 			left: -0.1rem;
 			position: relative;
-			background-color: $white;
+			background-color: abstracts.$white;
 			content: "";
 			display: inline-block;
 			visibility: visible;
-			border: 0.5rem solid $black;
+			border: 0.5rem solid abstracts.$black;
 		}
 	}
 
@@ -423,9 +423,9 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 			.c-radio-group {
 				display: flex;
 				flex-direction: column;
-				row-gap: $spacer-sm;
-				padding-top: $spacer-xs;
-				color: $black;
+				row-gap: abstracts.$spacer-sm;
+				padding-top: abstracts.$spacer-xs;
+				color: abstracts.$black;
 			}
 
 			.c-radio {
@@ -435,7 +435,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 				}
 
 				input {
-					margin-right: $spacer-xs;
+					margin-right: abstracts.$spacer-xs;
 				}
 
 				input[type="radio"]::after {
@@ -445,11 +445,11 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 					top: -0.2rem;
 					left: -0.1rem;
 					position: relative;
-					background-color: $white;
+					background-color: abstracts.$white;
 					content: "";
 					display: inline-block;
 					visibility: visible;
-					border: 0.2rem solid $black;
+					border: 0.2rem solid abstracts.$black;
 				}
 
 				input[type="radio"]:checked::after {
@@ -459,23 +459,23 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 					top: -0.2rem;
 					left: -0.1rem;
 					position: relative;
-					background-color: $white;
+					background-color: abstracts.$white;
 					content: "";
 					display: inline-block;
 					visibility: visible;
-					border: 0.5rem solid $black;
+					border: 0.5rem solid abstracts.$black;
 				}
 			}
 		}
 
 		.o-form-group-layout--standard {
-			margin-top: $spacer-xs;
+			margin-top: abstracts.$spacer-xs;
 		}
 
 		.c-content-page-publish-modal__display-date {
 			.o-form-group__label {
 				display: block;
-				padding-bottom: $spacer-xs;
+				padding-bottom: abstracts.$spacer-xs;
 			}
 
 			.u-spacer {
@@ -500,11 +500,11 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 				}
 
 				.c-tooltip {
-					background-color: $white;
-					border: 0.1rem solid $zinc;
+					background-color: abstracts.$white;
+					border: 0.1rem solid abstracts.$zinc;
 
 					&--right {
-						margin-left: $spacer-xs;
+						margin-left: abstracts.$spacer-xs;
 					}
 
 					&__arrow {
@@ -522,7 +522,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	.c-dropdown__trigger,
 	.c-checkbox-dropdown__trigger {
 		.c-checkbox-dropdown-modal__trigger {
-			padding: 0 $spacer-md;
+			padding: 0 abstracts.$spacer-md;
 		}
 
 		[class*="TagList-module_c-tag-list"] {
@@ -533,22 +533,22 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 
 	.c-dropdown__menu {
 		.o-form-group__label {
-			font-size: $font-size-sm;
-			color: $neutral;
+			font-size: abstracts.$font-size-sm;
+			color: abstracts.$neutral;
 		}
 
 		.c-checkbox-group,
 		.c-radio-group--inline {
 			display: flex;
 			flex-direction: column;
-			row-gap: $spacer-sm;
-			padding-top: $spacer-xs;
-			color: $black;
+			row-gap: abstracts.$spacer-sm;
+			padding-top: abstracts.$spacer-xs;
+			color: abstracts.$black;
 		}
 
 		.c-checkbox,
 		.c-radio {
-			color: $black;
+			color: abstracts.$black;
 
 			label {
 				display: flex;
@@ -556,7 +556,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 			}
 
 			input {
-				margin-right: $spacer-xs;
+				margin-right: abstracts.$spacer-xs;
 			}
 
 			input[type="radio"]::after,
@@ -568,7 +568,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 				top: -0.2rem;
 				left: -0.1rem;
 				position: relative;
-				background-color: $white;
+				background-color: abstracts.$white;
 				content: "";
 				display: inline-block;
 				visibility: visible;
@@ -576,39 +576,39 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 
 			input[type="radio"]::after {
 				border-radius: 0.75rem;
-				border: 0.2rem solid $black;
+				border: 0.2rem solid abstracts.$black;
 			}
 
 			input[type="radio"]:checked::after {
 				border-radius: 0.75rem;
-				border: 0.5rem solid $black;
+				border: 0.5rem solid abstracts.$black;
 			}
 
 			input[type="checkbox"]::after {
-				border: 0.2rem solid $black;
+				border: 0.2rem solid abstracts.$black;
 			}
 
 			input[type="checkbox"]:checked::after {
-				border: 0.5rem solid $black;
+				border: 0.5rem solid abstracts.$black;
 			}
 		}
 
 		.o-grid {
-			padding-top: $spacer-xs;
+			padding-top: abstracts.$spacer-xs;
 
 			input {
-				@include reset-input-field;
+				@include abstracts.reset-input-field;
 
-				background-color: $white;
-				border: 1px solid $zinc;
-				font-size: $font-size-base;
+				background-color: abstracts.$white;
+				border: 1px solid abstracts.$zinc;
+				font-size: abstracts.$font-size-base;
 				outline: 1px solid transparent;
-				padding: $spacer-xs;
+				padding: abstracts.$spacer-xs;
 				height: 2.8rem;
 				border-radius: 1.4rem;
 
 				&:focus {
-					border-color: $teal;
+					border-color: abstracts.$teal;
 				}
 			}
 		}
@@ -620,27 +620,27 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 			}
 
 			.c-select__menu {
-				color: $black;
+				color: abstracts.$black;
 
 				.c-select__option:hover {
-					background-color: $silver;
+					background-color: abstracts.$silver;
 				}
 			}
 		}
 
 		.o-form-group__controls .c-apply-filter-button {
-			background-color: $black;
-			border-color: $black;
+			background-color: abstracts.$black;
+			border-color: abstracts.$black;
 
 			&:focus,
 			.focus-visible:focus:not(:focus-visible) {
-				outline: 2px solid $teal;
+				outline: 2px solid abstracts.$teal;
 			}
 
 			&:disabled {
-				background-color: $silver;
-				color: $zinc;
-				border-color: $silver;
+				background-color: abstracts.$silver;
+				color: abstracts.$zinc;
+				border-color: abstracts.$silver;
 			}
 		}
 	}
@@ -666,11 +666,11 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 
 .c-content-block-preview {
 	.c-quote__text {
-		font-size: $font-size-1xl;
+		font-size: abstracts.$font-size-1xl;
 	}
 
 	.c-quote__author {
-		color: $neutral;
+		color: abstracts.$neutral;
 
 		.c-avatar {
 			width: auto;
@@ -686,11 +686,11 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 // other
 
 .c-form-help-text {
-	padding-top: $spacer-xs;
+	padding-top: abstracts.$spacer-xs;
 }
 
 .c-form-help-text--error {
-	color: $cherry;
+	color: abstracts.$cherry;
 }
 
 .u-clickable {

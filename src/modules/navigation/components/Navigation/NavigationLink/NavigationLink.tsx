@@ -18,7 +18,7 @@ const NavigationLink: FC<NavigationLinkProps> = ({
 }) => {
 	const rootCls = clsx(
 		className,
-		isDropdownItem ? 'c-dropdown-menu__item' : styles['c-navigtion__link'],
+		isDropdownItem ? 'c-dropdown-menu__item' : styles['c-navigation__link'],
 		{
 			[styles['c-navigation__link--dropdown']]: isDropdown,
 		}

@@ -37,7 +37,7 @@
 		display: inline-flex;
 		padding: 0.6rem;
 
-		&:not(:active, :hover):focus {
+		&:not(:active):not(:hover):focus {
 			outline: 2px solid abstracts.$teal;
 			border-radius: 0.5rem;
 		}

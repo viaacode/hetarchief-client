@@ -1,12 +1,12 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-tag-search-bar-button {
 	display: inline-flex;
 
-	&:not(:active, :hover):focus {
-		outline: 2px solid $teal;
+	&:not(:active):not(:hover):focus {
+		outline: 2px solid abstracts.$teal;
 		border-radius: 0.5rem;
 	}
 
-	@include more-clickable-element;
+	@include abstracts.more-clickable-element;
 }

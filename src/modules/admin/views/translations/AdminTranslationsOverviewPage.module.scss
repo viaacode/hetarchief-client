@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-translations-overview {
 	:global(.c-input) {
@@ -9,28 +9,28 @@
 		:global(.c-input__field) {
 			margin: 0;
 			height: 5.6rem;
-			border-radius: $input-border-radius;
+			border-radius: abstracts.$input-border-radius;
 		}
 	}
 
 	:global(.c-translations-content__no-results) {
-		padding: $spacer-sm;
+		padding: abstracts.$spacer-sm;
 		display: block;
-		color: $neutral;
+		color: abstracts.$neutral;
 	}
 
 	:global(table) {
-		margin-top: $spacer-md;
+		margin-top: abstracts.$spacer-md;
 
 		:global(.c-table__cell--header) {
 			text-align: left;
-			padding-left: $spacer-md;
+			padding-left: abstracts.$spacer-md;
 		}
 
 		:global(.c-table__row) {
 			:global(> td:first-child) {
 				width: 40%;
-				padding-left: $spacer-md;
+				padding-left: abstracts.$spacer-md;
 			}
 
 			:global(> td:not(:first-child)) {
@@ -38,42 +38,42 @@
 				padding: 0;
 
 				> button {
-					padding: $spacer-md;
+					padding: abstracts.$spacer-md;
 					min-height: 10rem;
 					font-family: SofiaPro, sans-serif;
-					font-size: $font-size-sm;
+					font-size: abstracts.$font-size-sm;
 
 					&:global(:hover) {
-						background-color: $platinum;
+						background-color: abstracts.$platinum;
 						cursor: pointer;
 					}
 
 					p {
-						font-size: $font-size-sm;
+						font-size: abstracts.$font-size-sm;
 					}
 				}
 			}
 		}
 
 		:global(.u-text-muted) {
-			color: $neutral;
+			color: abstracts.$neutral;
 		}
 	}
 
 	:global(.c-table__with-row-focus) {
 		:global(.c-table__row) {
 			:global(> td:first-child) {
-				min-width: $focus-cell-width;
-				max-width: $focus-cell-width;
-				width: $focus-cell-width;
+				min-width: abstracts.$focus-cell-width;
+				max-width: abstracts.$focus-cell-width;
+				width: abstracts.$focus-cell-width;
 			}
 
 			:global(> td:nth-child(2)) {
 				width: 40%;
-				padding-left: $spacer-md;
+				padding-left: abstracts.$spacer-md;
 			}
 
-			:global(> td:not(:first-child, :nth-child(2))) {
+			:global(> td:not(:first-child):not(:nth-child(2))) {
 				width: 30%;
 				padding: 0;
 			}
@@ -83,27 +83,27 @@
 
 .c-translations-overview__blade-body {
 	:global(.c-rich-text-editor) {
-		margin-top: $spacer-md;
+		margin-top: abstracts.$spacer-md;
 	}
 
 	:global(.c-translation-overview__textarea) {
 		width: 100%;
 		min-height: 40rem;
-		border: 1px solid $zinc;
+		border: 1px solid abstracts.$zinc;
 		border-radius: 0;
 		padding: 1.5rem;
 		font-family: SofiaPro, sans-serif;
-		font-size: $font-size-base;
+		font-size: abstracts.$font-size-base;
 		outline: none;
 
 		&:global(:focus-visible),
 		&:global(:active) {
-			border: 1px solid $teal;
+			border: 1px solid abstracts.$teal;
 		}
 	}
 
 	:global(.c-button--copy-to-clipboard) {
-		margin-left: -$spacer-md;
+		margin-left: -#{abstracts.$spacer-md};
 
 		:global(.c-button__content) {
 			display: flex;
@@ -113,12 +113,12 @@
 			text-align: left;
 
 			:global(> div:first-child) {
-				margin-bottom: $spacer-xs;
+				margin-bottom: abstracts.$spacer-xs;
 			}
 		}
 	}
 }
 
 .c-translations-overview__blade-footer :global(.c-button:first-child) {
-	margin-bottom: $spacer-xs;
+	margin-bottom: abstracts.$spacer-xs;
 }

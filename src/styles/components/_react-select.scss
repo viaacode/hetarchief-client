@@ -31,7 +31,7 @@
 
 		&--is-focused,
 		&--is-selected,
-		&:not(&--is-selected):hover {
+		&:not(.c-react-select__option--is-selected):hover {
 			background-color: color.adjust(abstracts.$teal, $alpha: -0.76);
 		}
 

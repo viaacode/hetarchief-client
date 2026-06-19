@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .p-admin-vertalingen {
 	table {
@@ -7,41 +7,41 @@
 	}
 
 	tbody {
-		background-color: $white;
+		background-color: abstracts.$white;
 
-		@media (min-width: $breakpoint-lg) {
-			box-shadow: $shadow-24-black-08;
+		@media (min-width: abstracts.$breakpoint-lg) {
+			box-shadow: abstracts.$shadow-24-black-08;
 		}
 	}
 
 	.c-keyvalue-label.c-keyvalue-path {
-		font-size: $font-size-sm;
-		color: $neutral;
+		font-size: abstracts.$font-size-sm;
+		color: abstracts.$neutral;
 	}
 
 	.c-input {
 		resize: none !important;
 
-		@include reset-input-field;
+		@include abstracts.reset-input-field;
 
-		background-color: $white;
-		border: 1px solid $silver;
-		font-size: $font-size-base;
+		background-color: abstracts.$white;
+		border: 1px solid abstracts.$silver;
+		font-size: abstracts.$font-size-base;
 		outline: 1px solid transparent;
 		padding: 1.4rem 1.6rem;
 
 		&:focus {
-			border-color: $teal;
+			border-color: abstracts.$teal;
 		}
 	}
 
 	textarea[class*="c-input"] {
 		border: none;
-		font-size: $font-size-sm;
+		font-size: abstracts.$font-size-sm;
 	}
 
 	.c-toolbar {
-		padding-bottom: $spacer-1xl;
+		padding-bottom: abstracts.$spacer-1xl;
 
 		.c-toolbar__right {
 			width: 100%;
@@ -49,7 +49,7 @@
 
 			.c-input {
 				height: 5.6rem;
-				border-radius: $input-border-radius;
+				border-radius: abstracts.$input-border-radius;
 			}
 
 			.o-svg-icon {

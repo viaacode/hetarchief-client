@@ -1,7 +1,5 @@
 @use "sass:math";
-@use "src/styles/abstracts" as *;
-
-$component: "c-content-input";
+@use "src/styles/abstracts" as abstracts;
 
 @mixin hide-without-interaction-loss {
 	position: absolute;
@@ -12,13 +10,13 @@ $component: "c-content-input";
 	overflow: hidden;
 }
 
-.#{$component} {
+.c-content-input {
 	display: flex;
 	flex-flow: row nowrap;
 
 	&__field,
 	&__value {
-		@include reset-input-field;
+		@include abstracts.reset-input-field;
 
 		background: none;
 		border: none;
@@ -35,7 +33,7 @@ $component: "c-content-input";
 		&:focus,
 		&:focus-visible,
 		&:focus-within {
-			outline: 2px solid $teal;
+			outline: 2px solid abstracts.$teal;
 		}
 	}
 
@@ -53,59 +51,59 @@ $component: "c-content-input";
 	&__cancel {
 		flex-grow: 0;
 		flex-shrink: 0;
-		margin-left: $spacer-xs;
+		margin-left: abstracts.$spacer-xs;
 	}
 
 	&__icon {
 		&--start {
-			margin-right: $spacer-xxs;
+			margin-right: abstracts.$spacer-xxs;
 		}
 
 		&--end {
 			.c-button {
-				margin-left: $spacer-xs;
+				margin-left: abstracts.$spacer-xs;
 
-				@media (min-width: $breakpoint-md) {
-					margin-left: $spacer-sm;
+				@media (min-width: abstracts.$breakpoint-md) {
+					margin-left: abstracts.$spacer-sm;
 				}
 			}
 		}
 	}
 
 	&--normal {
-		.#{$component} {
+		.c-content-input {
 			&__field,
 			&__value {
-				font-size: $font-size-base;
-				min-height: $button-height-sm;
-				line-height: $button-height-sm;
+				font-size: abstracts.$font-size-base;
+				min-height: abstracts.$button-height-sm;
+				line-height: abstracts.$button-height-sm;
 			}
 		}
 	}
 
 	&--title {
-		.#{$component} {
+		.c-content-input {
 			&__field,
 			&__value {
-				font-size: $font-size-3xl;
-				font-weight: $font-weight-bold;
-				min-height: $font-size-3xl * (math.div(56, 48));
+				font-size: abstracts.$font-size-3xl;
+				font-weight: abstracts.$font-weight-bold;
+				min-height: abstracts.$font-size-3xl * (math.div(56, 48));
 			}
 
 			&__value {
-				line-height: $font-size-3xl * (math.div(56, 48));
+				line-height: abstracts.$font-size-3xl * (math.div(56, 48));
 			}
 
 			// Avoid cut-off of "g, q, p, ..."
 			&__field {
-				line-height: $line-height-2xl;
+				line-height: abstracts.$line-height-2xl;
 				transform: translateY(-0.075em);
 			}
 		}
 	}
 
 	&--open {
-		.#{$component} {
+		.c-content-input {
 			&__value {
 				@include hide-without-interaction-loss;
 			}
@@ -113,7 +111,7 @@ $component: "c-content-input";
 	}
 
 	&--closed {
-		.#{$component} {
+		.c-content-input {
 			&__field {
 				@include hide-without-interaction-loss;
 			}

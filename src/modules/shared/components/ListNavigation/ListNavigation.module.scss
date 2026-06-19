@@ -1,11 +1,10 @@
 @use "sass:map";
 @use "sass:color";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$teal-24: color.adjust($teal, $alpha: -0.76);
-$component: "c-list-navigation";
+$teal-24: color.adjust(abstracts.$teal, $alpha: -0.76);
 
-.#{$component} {
+.c-list-navigation {
 	max-width: 100%;
 	min-width: 0; // avoid flex-pushing
 
@@ -17,19 +16,19 @@ $component: "c-list-navigation";
 		display: block;
 
 		&--active {
-			font-weight: $font-weight-bold;
+			font-weight: abstracts.$font-weight-bold;
 		}
 
 		&:hover {
 			cursor: pointer;
 
-			@media (min-width: $breakpoint-xxl) {
-				background-color: $silver;
+			@media (min-width: abstracts.$breakpoint-xxl) {
+				background-color: abstracts.$silver;
 			}
 		}
 
-		&:not(:active, :hover):focus {
-			outline: 1px solid $teal;
+		&:not(:active):not(:hover):focus {
+			outline: 1px solid abstracts.$teal;
 		}
 
 		&--no-interaction {
@@ -38,7 +37,7 @@ $component: "c-list-navigation";
 				cursor: default;
 			}
 
-			&:not(:active, :hover):focus {
+			&:not(:active):not(:hover):focus {
 				outline: inherit;
 			}
 		}
@@ -48,39 +47,38 @@ $component: "c-list-navigation";
 		display: flex;
 		align-items: center;
 		text-decoration: none;
-		padding: 1.6rem 1.6rem 1.6rem $spacer-lg;
+		padding: 1.6rem 1.6rem 1.6rem abstracts.$spacer-lg;
 
 		&--indent {
 			&--1 {
-				padding-left: $spacer-lg * 2;
+				padding-left: abstracts.$spacer-lg * 2;
 			}
 
 			&--2 {
-				padding-left: $spacer-lg * 3;
+				padding-left: abstracts.$spacer-lg * 3;
 			}
 		}
 	}
 
 	&__button:global(.c-button) {
 		height: auto;
-		padding: 1.2rem $spacer-sm;
-		padding-left: $spacer-md;
+		padding: 1.2rem abstracts.$spacer-sm 1.2rem abstracts.$spacer-md;
 		text-align: left;
 	}
 
 	&__divider {
 		height: 0.1rem;
-		margin: $spacer-xs $spacer-md;
-		background-color: $silver;
+		margin: abstracts.$spacer-xs abstracts.$spacer-md;
+		background-color: abstracts.$silver;
 	}
 
 	&--white {
 		.c-list-navigation__item--active {
-			background-color: $teal-24;
-			border-right: 0.4rem solid $teal;
+			background-color: abstracts.$teal-24;
+			border-right: 0.4rem solid abstracts.$teal;
 
 			&:hover {
-				background-color: $teal-24;
+				background-color: abstracts.$teal-24;
 			}
 		}
 	}
@@ -88,11 +86,11 @@ $component: "c-list-navigation";
 	&--platinum {
 		/* stylelint-disable-next-line no-descending-specificity */
 		.c-list-navigation__item--active {
-			background-color: $black;
+			background-color: abstracts.$black;
 			color: white;
 
 			&:hover {
-				background-color: $black;
+				background-color: abstracts.$black;
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-input {
 	position: relative;
@@ -9,17 +9,17 @@
  */
 
 .c-input__field {
-	@include reset-input-field;
+	@include abstracts.reset-input-field;
 
-	background-color: $white;
-	border: 1px solid $zinc;
-	font-size: $font-size-base;
-	height: $button-height;
+	background-color: abstracts.$white;
+	border: 1px solid abstracts.$zinc;
+	font-size: abstracts.$font-size-base;
+	height: abstracts.$button-height;
 	outline: 1px solid transparent;
 	padding: 1.4rem 1.6rem;
 
 	&:focus {
-		border-color: $teal;
+		border-color: abstracts.$teal;
 	}
 }
 
@@ -28,12 +28,12 @@
 	top: 50%;
 	transform: translateY(-50%);
 	display: inline-flex;
-	font-size: $font-size-lg;
-	color: $neutral;
+	font-size: abstracts.$font-size-lg;
+	color: abstracts.$neutral;
 	pointer-events: none;
 
 	.c-button__icon {
-		@include more-clickable-element;
+		@include abstracts.more-clickable-element;
 	}
 }
 
@@ -77,16 +77,16 @@
 
 .c-input--disabled {
 	.c-input__field {
-		border-color: $silver;
+		border-color: abstracts.$silver;
 		cursor: not-allowed;
 	}
 }
 
 .c-input--rounded {
 	.c-input__field {
-		padding-left: $spacer-md;
-		padding-right: $spacer-md;
-		border-radius: $button-radius;
+		padding-left: abstracts.$spacer-md;
+		padding-right: abstracts.$spacer-md;
+		border-radius: abstracts.$button-radius;
 	}
 
 	&.c-input--lg {
@@ -97,7 +97,7 @@
 
 	&.c-input--md {
 		.c-input__field {
-			border-radius: $input-border-radius;
+			border-radius: abstracts.$input-border-radius;
 		}
 	}
 
@@ -131,7 +131,7 @@
 .c-input--icon--double {
 	&.c-input--icon-end {
 		.c-input__icon .c-button:not(:last-child) {
-			margin-right: $spacer-xxs;
+			margin-right: abstracts.$spacer-xxs;
 		}
 	}
 }
@@ -140,11 +140,11 @@
 .c-input--grey {
 	/* stylelint-disable-next-line no-descending-specificity */
 	.c-input__field {
-		background-color: $silver;
-		border-color: $silver;
+		background-color: abstracts.$silver;
+		border-color: abstracts.$silver;
 
 		&:focus {
-			border-color: $teal;
+			border-color: abstracts.$teal;
 		}
 	}
 }
@@ -152,10 +152,10 @@
 .c-input--grey-border {
 	/* stylelint-disable-next-line no-descending-specificity */
 	.c-input__field {
-		border-color: $silver;
+		border-color: abstracts.$silver;
 
 		&:focus {
-			border-color: $teal;
+			border-color: abstracts.$teal;
 		}
 	}
 }
@@ -163,10 +163,10 @@
 .c-input--black-border {
 	/* stylelint-disable-next-line no-descending-specificity */
 	.c-input__field {
-		border-color: $black;
+		border-color: abstracts.$black;
 
 		&:focus {
-			border-color: $teal;
+			border-color: abstracts.$teal;
 		}
 	}
 }
@@ -175,10 +175,10 @@
 
 /* stylelint-disable-next-line no-duplicate-selectors */
 .c-input {
-	&:not(.c-input--grey, .c-input--disabled, :focus-within):hover {
+	&:not(.c-input--grey):not(.c-input--disabled):not(:focus-within):hover {
 		/* stylelint-disable-next-line no-descending-specificity */
 		.c-input__field {
-			outline-color: $zinc;
+			outline-color: abstracts.$zinc;
 		}
 	}
 }

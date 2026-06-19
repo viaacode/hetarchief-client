@@ -1,32 +1,32 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-button {
 	display: inline-block;
-	padding: 1.4rem $button-horizontal-whitespace;
-	border: 1px solid $teal-dark;
-	font-family: $font-family-primary;
-	font-size: $font-size-base;
-	font-weight: $font-weight-bold;
+	padding: 1.4rem abstracts.$button-horizontal-whitespace;
+	border: 1px solid abstracts.$teal-dark;
+	font-family: abstracts.$font-family-primary;
+	font-size: abstracts.$font-size-base;
+	font-weight: abstracts.$font-weight-bold;
 	line-height: 1.125;
 	text-align: center;
-	background-color: $teal-dark;
+	background-color: abstracts.$teal-dark;
 	border-radius: 4rem;
-	color: $white;
+	color: abstracts.$white;
 	cursor: pointer;
 	outline: 2px solid transparent;
 	transition:
-		color $animate-default,
-		background-color $animate-default,
-		border-color $animate-default;
+		color abstracts.$animate-default,
+		background-color abstracts.$animate-default,
+		border-color abstracts.$animate-default;
 
 	&:hover {
-		background-color: $shade;
-		border-color: $shade;
+		background-color: abstracts.$shade;
+		border-color: abstracts.$shade;
 	}
 
 	&:active {
-		background-color: $teal-extra-dark;
-		border-color: $teal-extra-dark;
+		background-color: abstracts.$teal-extra-dark;
+		border-color: abstracts.$teal-extra-dark;
 	}
 
 	/**
@@ -36,7 +36,7 @@
 	*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
-		outline: 2px solid $black;
+		outline: 2px solid abstracts.$black;
 	}
 
 	/**
@@ -59,7 +59,7 @@
 	}
 
 	.c-button__label {
-		@include text-ellipsis(false);
+		@include abstracts.text-ellipsis(false);
 
 		max-width: 100%;
 	}
@@ -75,7 +75,7 @@
 
 .c-button__icon {
 	display: inline-flex;
-	font-size: $font-size-md;
+	font-size: abstracts.$font-size-md;
 
 	&--start {
 		margin-right: 4px;
@@ -92,8 +92,8 @@
 
 // Colors
 .c-button--black {
-	background-color: $black;
-	border-color: $black;
+	background-color: abstracts.$black;
+	border-color: abstracts.$black;
 
 	/**
 	* Cross-browser styles for explicit focus via
@@ -102,25 +102,25 @@
 	*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
-		outline: 2px solid $teal;
+		outline: 2px solid abstracts.$teal;
 	}
 }
 
 // White
 .c-button--white {
-	background-color: $white;
-	border-color: $white;
-	color: $black;
+	background-color: abstracts.$white;
+	border-color: abstracts.$white;
+	color: abstracts.$black;
 
 	&:hover {
-		background-color: $silver;
-		border-color: $silver;
+		background-color: abstracts.$silver;
+		border-color: abstracts.$silver;
 	}
 
 	&:active {
-		background-color: $teal-dark;
-		border-color: $teal-dark;
-		color: $white;
+		background-color: abstracts.$teal-dark;
+		border-color: abstracts.$teal-dark;
+		color: abstracts.$white;
 	}
 
 	/**
@@ -130,26 +130,26 @@
 	*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
-		outline: 2px solid $teal;
+		outline: 2px solid abstracts.$teal;
 	}
 }
 
 // Silver
 .c-button--silver {
-	background-color: $silver;
-	border-color: $silver;
-	color: $black;
+	background-color: abstracts.$silver;
+	border-color: abstracts.$silver;
+	color: abstracts.$black;
 
 	&:hover {
-		background-color: $shade;
-		border-color: $shade;
-		color: $white;
+		background-color: abstracts.$shade;
+		border-color: abstracts.$shade;
+		color: abstracts.$white;
 	}
 
 	&:active {
-		background-color: $teal-dark;
-		border-color: $teal-dark;
-		color: $white;
+		background-color: abstracts.$teal-dark;
+		border-color: abstracts.$teal-dark;
+		color: abstracts.$white;
 	}
 
 	/**
@@ -159,30 +159,30 @@
 	*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
-		outline: 2px solid $teal;
+		outline: 2px solid abstracts.$teal;
 	}
 }
 
 // Silver
 .c-button--platinum {
-	background-color: $platinum;
-	border-color: $platinum;
-	color: $black;
+	background-color: abstracts.$platinum;
+	border-color: abstracts.$platinum;
+	color: abstracts.$black;
 
 	&:hover {
-		background-color: $shade;
-		border-color: $shade;
-		color: $white;
+		background-color: abstracts.$shade;
+		border-color: abstracts.$shade;
+		color: abstracts.$white;
 	}
 
 	&:active {
-		background-color: $teal-dark;
-		border-color: $teal-dark;
-		color: $white;
+		background-color: abstracts.$teal-dark;
+		border-color: abstracts.$teal-dark;
+		color: abstracts.$white;
 	}
 
-	&:not(:active, :hover):focus {
-		outline: 2px solid $teal;
+	&:not(:active):not(:hover):focus {
+		outline: 2px solid abstracts.$teal;
 	}
 }
 
@@ -193,27 +193,27 @@
 }
 
 .c-button--sm {
-	@include generate-button-small;
+	@include abstracts.generate-button-small;
 }
 
 .c-button--md {
-	height: $button-height;
+	height: abstracts.$button-height;
 }
 
 // Variants
 .c-button--outline {
-	background-color: $white;
-	border-color: $black;
-	color: $black;
+	background-color: abstracts.$white;
+	border-color: abstracts.$black;
+	color: abstracts.$black;
 
 	&:hover {
-		background-color: $silver;
+		background-color: abstracts.$silver;
 	}
 
 	&:active {
-		background-color: $teal-dark;
-		border-color: $teal-dark;
-		color: $white;
+		background-color: abstracts.$teal-dark;
+		border-color: abstracts.$teal-dark;
+		color: abstracts.$white;
 	}
 
 	/**
@@ -224,28 +224,28 @@
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		border-color: transparent;
-		outline: 2px solid $teal;
+		outline: 2px solid abstracts.$teal;
 	}
 
 	&:focus:not(:focus-visible) {
-		border-color: $black;
+		border-color: abstracts.$black;
 	}
 }
 
 .c-button--text {
-	font-weight: $font-weight-normal;
+	font-weight: abstracts.$font-weight-normal;
 	background-color: transparent;
 	border-color: transparent;
-	color: $black;
+	color: abstracts.$black;
 
 	&:hover {
 		background-color: transparent;
 		border-color: transparent;
-		color: $neutral;
+		color: abstracts.$neutral;
 	}
 
 	&:active {
-		color: $teal-dark;
+		color: abstracts.$teal-dark;
 		background-color: transparent;
 		border-color: transparent;
 	}
@@ -257,19 +257,19 @@
 	*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
-		outline: 2px solid $teal;
+		outline: 2px solid abstracts.$teal;
 	}
 
 	&.c-button--neutral {
-		font-size: $font-size-sm;
-		color: $neutral;
+		font-size: abstracts.$font-size-sm;
+		color: abstracts.$neutral;
 
 		&:hover {
-			color: $shade;
+			color: abstracts.$shade;
 		}
 
 		&:active {
-			color: $teal;
+			color: abstracts.$teal;
 		}
 	}
 
@@ -282,18 +282,18 @@
 	}
 
 	&.c-button--white {
-		color: $white;
+		color: abstracts.$white;
 	}
 }
 
 .c-button--icon {
-	width: $button-height;
-	height: $button-height;
+	width: abstracts.$button-height;
+	height: abstracts.$button-height;
 	padding: 0;
 	border-radius: 50%;
 
 	.c-button__icon {
-		font-size: $font-size-lg;
+		font-size: abstracts.$font-size-lg;
 		text-align: left;
 	}
 
@@ -326,72 +326,72 @@
 
 .c-button--light {
 	&:hover {
-		border: 0.1rem solid $zinc;
-		color: $zinc;
+		border: 0.1rem solid abstracts.$zinc;
+		color: abstracts.$zinc;
 	}
 }
 
 .c-button--dark {
-	border-color: $black;
-	background-color: $black;
-	color: $white;
+	border-color: abstracts.$black;
+	background-color: abstracts.$black;
+	color: abstracts.$white;
 
 	&:hover {
-		border: 0.1rem solid $zinc;
-		background-color: $white;
-		color: $zinc;
+		border: 0.1rem solid abstracts.$zinc;
+		background-color: abstracts.$white;
+		color: abstracts.$zinc;
 	}
 }
 
 .c-button--inline-input {
-	background-color: $black;
-	color: $white;
-	border: 0.1rem solid $zinc;
+	background-color: abstracts.$black;
+	color: abstracts.$white;
+	border: 0.1rem solid abstracts.$zinc;
 	border-left: none;
 	border-radius: 0;
-	font-size: $font-size-base;
-	font-weight: $font-weight-normal;
-	height: $button-height;
+	font-size: abstracts.$font-size-base;
+	font-weight: abstracts.$font-weight-normal;
+	height: abstracts.$button-height;
 	outline: 0.1rem solid transparent;
-	padding: 1.4rem $spacer-sm;
+	padding: 1.4rem abstracts.$spacer-sm;
 
 	&:focus {
-		border: 0.1rem solid $teal;
+		border: 0.1rem solid abstracts.$teal;
 		outline: 0.1rem solid transparent;
 	}
 
 	&:hover {
-		background-color: $zinc;
-		border-color: $zinc;
+		background-color: abstracts.$zinc;
+		border-color: abstracts.$zinc;
 	}
 }
 
 .c-button--info {
-	border: 0.1rem solid $black;
-	font-weight: $font-weight-light;
-	background-color: $white;
-	color: $black;
+	border: 0.1rem solid abstracts.$black;
+	font-weight: abstracts.$font-weight-light;
+	background-color: abstracts.$white;
+	color: abstracts.$black;
 
 	&:hover {
-		background-color: $white;
-		border-color: $zinc;
-		color: $zinc;
+		background-color: abstracts.$white;
+		border-color: abstracts.$zinc;
+		color: abstracts.$zinc;
 	}
 }
 
 // States
 .c-button--disabled {
-	background-color: $silver;
-	border-color: $silver;
-	color: $zinc;
+	background-color: abstracts.$silver;
+	border-color: abstracts.$silver;
+	color: abstracts.$zinc;
 	cursor: not-allowed;
 	outline: none;
 
 	&:active,
 	&:hover {
-		background-color: $silver;
-		border-color: $silver;
-		color: $zinc;
+		background-color: abstracts.$silver;
+		border-color: abstracts.$silver;
+		color: abstracts.$zinc;
 	}
 
 	/**
@@ -405,22 +405,22 @@
 	}
 
 	&.c-button--outline {
-		background-color: $white;
-		border-color: $zinc;
-		color: $zinc;
+		background-color: abstracts.$white;
+		border-color: abstracts.$zinc;
+		color: abstracts.$zinc;
 
-		&:not(:active, :hover):focus {
-			border-color: $zinc;
+		&:not(:active):not(:hover):focus {
+			border-color: abstracts.$zinc;
 		}
 
 		&:focus:not(:focus-visible) {
-			border-color: $zinc;
+			border-color: abstracts.$zinc;
 		}
 	}
 
 	&.c-button--text {
 		background-color: transparent;
 		border-color: transparent;
-		color: $zinc;
+		color: abstracts.$zinc;
 	}
 }

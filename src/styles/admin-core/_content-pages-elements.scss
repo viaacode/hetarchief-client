@@ -1,39 +1,39 @@
 @use "sass:color";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-admin__content .c-navbar {
 	background-color: transparent;
 	border: none;
 
 	.o-container {
-		background-color: $white;
-		border-radius: $button-radius;
-		border: 0.1rem solid $silver;
+		background-color: abstracts.$white;
+		border-radius: abstracts.$button-radius;
+		border: 0.1rem solid abstracts.$silver;
 
 		nav[class*="c-tabs"] {
-			padding: 0 $spacer-lg;
+			padding: 0 abstracts.$spacer-lg;
 		}
 	}
 
 	.c-tab-item {
-		color: $black;
+		color: abstracts.$black;
 	}
 
 	.c-tab-item__active {
-		box-shadow: inset 0 -0.3rem 0 $teal;
+		box-shadow: inset 0 -0.3rem 0 abstracts.$teal;
 	}
 }
 
 .c-admin__content .o-container-vertical.o-container-vertical--small {
 	.o-container {
-		background-color: $white;
+		background-color: abstracts.$white;
 
-		@media (min-width: $breakpoint-lg) {
-			box-shadow: $shadow-24-black-08;
+		@media (min-width: abstracts.$breakpoint-lg) {
+			box-shadow: abstracts.$shadow-24-black-08;
 		}
 
 		.c-h4 {
-			padding: $spacer-sm $spacer-md;
+			padding: abstracts.$spacer-sm abstracts.$spacer-md;
 		}
 
 		table {
@@ -42,11 +42,11 @@
 		}
 
 		tr:not(:last-of-type) {
-			border-bottom: 0.1rem solid $silver;
+			border-bottom: 0.1rem solid abstracts.$silver;
 		}
 
 		th {
-			padding: $spacer-sm $spacer-md;
+			padding: abstracts.$spacer-sm abstracts.$spacer-md;
 		}
 
 		ul[class*="c-tag-list"] {
@@ -55,45 +55,45 @@
 		}
 
 		li[class*="c-tag"] {
-			background-color: $silver;
-			color: $black;
+			background-color: abstracts.$silver;
+			color: abstracts.$black;
 			border: none;
 		}
 	}
 }
 
 .c-select {
-	color: $black;
+	color: abstracts.$black;
 
 	.c-select__option--is-selected {
-		background-color: $teal-dark !important;
+		background-color: abstracts.$teal-dark !important;
 	}
 
 	.c-select__option:hover {
-		background-color: $silver;
+		background-color: abstracts.$silver;
 	}
 }
 
 .o-form-group-layout--standard,
 .p-content-page-publish-modal {
 	label[class*="o-form-group__label"] {
-		color: $black;
-		font-size: $font-size-sm;
+		color: abstracts.$black;
+		font-size: abstracts.$font-size-sm;
 	}
 
 	.c-input {
-		@include reset-input-field;
+		@include abstracts.reset-input-field;
 
-		background-color: $white;
-		border: 1px solid $zinc;
-		font-size: $font-size-base;
+		background-color: abstracts.$white;
+		border: 1px solid abstracts.$zinc;
+		font-size: abstracts.$font-size-base;
 		outline: 1px solid transparent;
 		padding: 1.4rem 1.6rem;
 		height: 5.6rem;
-		border-radius: $input-border-radius;
+		border-radius: abstracts.$input-border-radius;
 
 		&:focus {
-			border-color: $teal;
+			border-color: abstracts.$teal;
 		}
 	}
 
@@ -107,57 +107,57 @@
 	.c-color-select .react-select__control,
 	.c-icon-picker .react-select__control {
 		height: 5.6rem;
-		border-radius: $input-border-radius;
-		background-color: $white;
-		border-color: $zinc;
+		border-radius: abstracts.$input-border-radius;
+		background-color: abstracts.$white;
+		border-color: abstracts.$zinc;
 
 		.c-select__value-container {
-			padding-left: $spacer-sm;
+			padding-left: abstracts.$spacer-sm;
 		}
 
 		&.c-select__control--is-focused {
 			box-shadow: none;
-			border-color: $teal;
+			border-color: abstracts.$teal;
 		}
 
 		.c-select__placeholder,
 		.c-select__indicator svg,
 		.c-tags-input__indicator svg,
 		.react-select__indicator svg {
-			color: $neutral;
+			color: abstracts.$neutral;
 		}
 
 		.c-tags-input__value-container,
 		.react-select__value-container {
-			padding-left: $spacer-sm;
+			padding-left: abstracts.$spacer-sm;
 		}
 
 		.c-tags-input__multi-value {
 			display: flex;
 			align-items: center;
 			height: 3.2rem;
-			padding: $spacer-xs $spacer-sm;
+			padding: abstracts.$spacer-xs abstracts.$spacer-sm;
 			border-radius: 1.6rem;
-			background-color: $teal-66;
-			color: $black;
+			background-color: abstracts.$teal-66;
+			color: abstracts.$black;
 			border: none;
 			text-decoration: none;
-			margin: 0 1.2rem 0 $spacer-xxs;
-			font-size: $font-size-md;
+			margin: 0 1.2rem 0 abstracts.$spacer-xxs;
+			font-size: abstracts.$font-size-md;
 			cursor: pointer;
-			transition: color $animate-sm-in;
+			transition: color abstracts.$animate-sm-in;
 
 			&:hover {
-				color: color.adjust($black, $alpha: -0.3);
+				color: color.adjust(abstracts.$black, $alpha: -0.3);
 			}
 		}
 
 		div[class*="c-tags-input__multi-value__remove"] {
 			background-color: transparent;
-			color: $black;
+			color: abstracts.$black;
 
 			&:hover {
-				background-color: $teal-dark;
+				background-color: abstracts.$teal-dark;
 				box-shadow: none;
 			}
 		}
@@ -167,22 +167,22 @@
 .c-content-edit-view__sidebar {
 	.o-sidebar__content {
 		& > .c-navbar {
-			background-color: $white;
+			background-color: abstracts.$white;
 		}
 
 		& > .c-navbar div[class*="c-select__control"] {
 			border-radius: 1.9rem;
 			background-color: transparent;
-			border-color: $zinc;
+			border-color: abstracts.$zinc;
 
 			&.c-select__control--is-focused {
 				box-shadow: none;
-				border-color: $teal;
+				border-color: abstracts.$teal;
 			}
 
 			.c-select__placeholder,
 			.c-select__indicator svg {
-				color: $neutral;
+				color: abstracts.$neutral;
 			}
 		}
 	}
@@ -192,10 +192,10 @@
 	div[class*="c-dropdown__menu"] {
 		border: none;
 		border-radius: 0;
-		color: $black;
+		color: abstracts.$black;
 
 		.c-menu__item:not(:last-of-type) {
-			border-bottom: 0.1rem solid $silver;
+			border-bottom: 0.1rem solid abstracts.$silver;
 		}
 	}
 }
