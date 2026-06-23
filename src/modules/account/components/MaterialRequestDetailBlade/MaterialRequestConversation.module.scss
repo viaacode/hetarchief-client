@@ -1,10 +1,5 @@
 @use "../../../../styles/abstracts" as abstracts;
-
-// Desktop
-$rich-text-editor-height-desktop: 20rem; // rich text editor
-
-// Mobile
-$rich-text-editor-height-mobile: 14.7rem; // rich text editor
+@use "./MaterialRequestConversation.const.scss" as editorVariables;
 
 .p-material-request-detail__conversation{
 	position: relative;
@@ -16,7 +11,7 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 
 	// Desktop
 	&__message-wrapper {
-		height: calc(100% - $rich-text-editor-height-desktop);
+		height: calc(100% - #{editorVariables.$rich-text-editor-height-desktop});
 		overflow-y: scroll;
 		padding: abstracts.$spacer-md;
 	}
@@ -24,7 +19,7 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 	// Mobile
 	@media (max-width: abstracts.$breakpoint-md) {
 		&__message-wrapper {
-			height: calc(100% - $rich-text-editor-height-desktop);
+			height: calc(100% - #{editorVariables.$rich-text-editor-height-desktop});
 			overflow-y: scroll;
 			padding: abstracts.$spacer-sm;
 		}
@@ -154,139 +149,6 @@ $rich-text-editor-height-mobile: 14.7rem; // rich text editor
 				background-color: abstracts.$platinum;
 				border: 1px solid abstracts.$zinc;
 			}
-		}
-	}
-
-	&__editor {
-		height: $rich-text-editor-height-desktop;
-		padding: 0 abstracts.$spacer-sm;
-		position: relative;
-		overflow: visible;
-
-		:global(.c-rich-text-editor) {
-			height: $rich-text-editor-height-desktop;
-			overflow: hidden;
-
-			:global(.bf-container) {
-				display: flex;
-				flex-direction: column;
-			}
-
-			:global(.bf-controlbar) {
-				background-color: abstracts.$platinum;
-				border: 1px solid abstracts.$silver;
-				border-radius: abstracts.$spacer-xs abstracts.$spacer-xs 0 0;
-
-				&::before {
-					display: none;
-				}
-
-				:global(.separator-line) {
-					border: 1px solid abstracts.$silver;
-				}
-
-				// Focus styles for toolbar buttons
-				:global(.control-item.button),
-				:global(.control-item.dropdown),
-				:global(.dropdown-handler) {
-					@include abstracts.focus-outline;
-
-					&:focus-visible {
-						border-radius: 2px;
-					}
-				}
-			}
-
-			:global(.bf-content) {
-				border: 1px solid abstracts.$silver !important;
-				border-radius: 0 0 abstracts.$spacer-xs abstracts.$spacer-xs;
-
-				:global(.DraftEditor-editorContainer),
-				:global(.public-DraftEditor-content) {
-					padding-right: abstracts.$spacer-md;
-				}
-			}
-		}
-
-		// Keyboard open on mobile: move toolbar to bottom
-		&--keyboard-open {
-			@media (max-width: abstracts.$breakpoint-md) {
-				:global(.c-rich-text-editor) {
-					overflow: visible !important;
-
-					:global(.bf-container) {
-						flex-direction: column-reverse;
-					}
-
-					:global(.bf-controlbar) {
-						border-radius: 0 0 abstracts.$spacer-xs abstracts.$spacer-xs;
-						margin-bottom: abstracts.$spacer-xs;
-					}
-
-					:global(.bf-content) {
-						overflow: visible !important;
-						height: auto !important;
-						border-radius: abstracts.$spacer-xs abstracts.$spacer-xs 0 0;
-					}
-
-					:global(.link-editor-dropdown .dropdown-content) {
-						top: auto;
-						bottom: 100%;
-						margin-top: 0;
-						margin-bottom: abstracts.$spacer-xs;
-					}
-
-					:global(.link-editor-dropdown .dropdown-content .dropdown-arrow) {
-						top: auto;
-						bottom: -3px;
-					}
-				}
-			}
-		}
-
-		&--disabled {
-			:global(.control-item.button),
-			:global(.control-item.dropdown),
-			:global(.dropdown-handler) {
-				pointer-events: none !important;
-				opacity: 0.5 !important;
-			}
-		}
-
-		&__send-button {
-			position: absolute;
-			right: 1.8rem;
-			bottom: 1.6rem;
-			padding: 1rem;
-			z-index: 3;
-
-			@include abstracts.focus-outline;
-
-			// Mobile
-			@media (max-width: abstracts.$breakpoint-md) {
-				right: abstracts.$spacer-sm;
-			}
-		}
-
-		// When keyboard is open, move send button lower
-		&--keyboard-open &__send-button {
-			@media (max-width: abstracts.$breakpoint-md) {
-				bottom: abstracts.$spacer-xxs;
-			}
-		}
-	}
-
-	&__selected-files {
-		position: absolute;
-		bottom: 100%;
-		left: 0;
-		right: 0;
-		padding: abstracts.$spacer-md abstracts.$spacer-sm 2px;
-		background: linear-gradient(to bottom, transparent, abstracts.$white 2rem);
-		margin-right: 2rem; // Leave space for scrollbar
-
-		&:empty {
-			display: none;
 		}
 	}
 }

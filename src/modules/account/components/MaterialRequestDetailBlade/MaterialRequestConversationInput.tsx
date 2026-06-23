@@ -5,7 +5,7 @@ import { Button, RichTextEditorWithInternalState, TagList } from '@meemoo/react-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Spinner } from '@shared/components/Spinner/Spinner';
-import { tText } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import clsx from 'clsx';
 import React, {
@@ -20,7 +20,7 @@ import React, {
 } from 'react';
 import useDetectKeyboardOpen from 'use-detect-keyboard-open';
 import { v4 as uuid } from 'uuid';
-import styles from './MaterialRequestConversation.module.scss';
+import styles from './MaterialRequestConversationInput.module.scss';
 import { MessageFileUpload } from './MessageFileUpload';
 
 type MaterialRequestConversationInputProps = {
@@ -145,26 +145,37 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 					[styles['p-conversation-messages__editor--keyboard-open']]: isKeyboardOpen,
 				})}
 			>
-				<div ref={fileListRef} className={clsx(styles['p-conversation-messages__selected-files'])}>
-					<TagList
-						tags={selectedFiles.map((file, index) => ({
-							id: `${file.name}-${index}`,
-							label: (
-								<>
-									<Icon name={IconNamesLight.File} />
-									<span>{file.name}</span>
-									<span> ({Math.round((file.size / 1024 / 1024) * 100) / 100} MB)</span>
-								</>
-							),
-						}))}
-						closeIcon={<Icon name={IconNamesLight.Times} aria-hidden />}
-						onTagClosed={(id) => {
-							const index = Number.parseInt(String(id).split('-').pop() || '0', 10);
-							setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
-						}}
-						variants={['closable', 'silver']}
-					/>
-				</div>
+				{selectedFiles.length > 0 && (
+					<div
+						ref={fileListRef}
+						className={clsx(styles['p-conversation-messages__selected-files'])}
+					>
+						<TagList
+							tags={selectedFiles.map((file, index) => ({
+								id: `${file.name}-${index}`,
+								label: (
+									<>
+										<Icon name={IconNamesLight.File} />
+										<span>{file.name}</span>
+										<span> ({Math.round((file.size / 1024 / 1024) * 100) / 100} MB)</span>
+									</>
+								),
+							}))}
+							closeIcon={<Icon name={IconNamesLight.Times} aria-hidden />}
+							onTagClosed={(id) => {
+								const index = Number.parseInt(String(id).split('-').pop() || '0', 10);
+								setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
+							}}
+							variants={['closable', 'silver']}
+						/>
+						<p>
+							<Icon name={IconNamesLight.Info}></Icon>
+							{tHtml(
+								'modules/account/components/material-request-detail-blade/material-request-conversation-input___er-zijn-bestanden-geselecteerd-maar-nog-niet-verzonden'
+							)}
+						</p>
+					</div>
+				)}
 				<RichTextEditorWithInternalState
 					braft={{
 						contentStyle: {
