@@ -121,9 +121,12 @@ export const formatSameDayTimeOrDate = (date?: Date): string => {
 export function formatDateTime(
 	date: Date,
 	locale: string,
-	dateStyle: 'medium' | 'short' = 'medium',
+	dateStyle: 'medium' | 'short' | 'international' = 'medium',
 	showTime = true
 ): string {
+	if (dateStyle === 'international') {
+		return format(date, 'yyyy-MM-dd');
+	}
 	const formattedDateTime = date.toLocaleString(locale, {
 		dateStyle: dateStyle,
 		...(showTime ? { timeStyle: 'short' } : {}),

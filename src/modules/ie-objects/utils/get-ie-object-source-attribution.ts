@@ -150,7 +150,7 @@ export function getIeObjectSourceAttribution(
 	}
 	const preferredDate = asDate(ieObject.dateCreated ?? ieObject.datePublished);
 	const formattedDate = preferredDate
-		? formatDateTime(preferredDate, locale, 'short', false)
+		? formatDateTime(preferredDate, locale, 'international', false)
 		: null;
 
 	if (AV_OBJECT_TYPES.includes(ieObject.dctermsFormat) && hasAvEssence(ieObject)) {
