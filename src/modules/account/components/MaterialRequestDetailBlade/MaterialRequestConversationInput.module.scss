@@ -86,6 +86,13 @@
 				}
 			}
 		}
+
+		// When keyboard is open, move send button lower
+		.p-conversation-messages__editor__send-button {
+			@media (max-width: abstracts.$breakpoint-md) {
+				bottom: abstracts.$spacer-xxs;
+			}
+		}
 	}
 
 	.p-conversation-messages--disabled {
@@ -109,13 +116,6 @@
 		// Mobile
 		@media (max-width: abstracts.$breakpoint-md) {
 			right: abstracts.$spacer-sm;
-		}
-	}
-
-	// When keyboard is open, move send button lower
-	&--keyboard-open &__send-button {
-		@media (max-width: abstracts.$breakpoint-md) {
-			bottom: abstracts.$spacer-xxs;
 		}
 	}
 
