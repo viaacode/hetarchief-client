@@ -600,7 +600,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		const cuePointsFromUrl = parsedUrl.query[QUERY_PARAM_KEY.CUE_POINTS] || '';
 		if (cuePointsFromUrl) {
 			const cuePointsArray = (cuePointsFromUrl as string)?.split(CUE_POINTS_SEPARATOR);
-			if (cuePointsArray?.length > 0) {
+			if (cuePointsArray?.length === 2) {
 				setCuePoints({
 					start: Number.parseFloat(cuePointsArray[0]),
 					end: Number.parseFloat(cuePointsArray[1]),
