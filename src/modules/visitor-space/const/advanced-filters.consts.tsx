@@ -68,9 +68,7 @@ export const ADVANCED_FILTERS: FilterProperty[] = [
 	FilterProperty.MENTIONS,
 	FilterProperty.OBJECT_TYPE,
 	FilterProperty.LOCATION_CREATED,
-	...(publicRuntimeConfig.ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY === 'true'
-		? [FilterProperty.RIGHTS]
-		: []),
+	FilterProperty.RIGHTS,
 	FilterProperty.PUBLISHED_AT,
 	FilterProperty.LANGUAGE,
 	FilterProperty.TITLE,

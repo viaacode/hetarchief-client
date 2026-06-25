@@ -11,6 +11,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { SEPARATOR } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
+import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { AdvancedFilterFieldsProps } from '@visitor-space/components/AdvancedFilterFields/AdvancedFilterFields.types';
 import { AdvancedRightsSelect } from '@visitor-space/components/AdvancedRightsSelect/AdvancedRightsSelect';
@@ -43,12 +44,15 @@ import {
 	getFilterConfig,
 	getOperators,
 } from 'modules/visitor-space/utils/advanced-filters';
+import getConfig from 'next/config';
 import React, { type FC } from 'react';
 import type { MultiValue, SingleValue } from 'react-select';
 import type { FilterProperty, IdentityAdvancedFilter, Operator } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import DurationInput, { defaultValue } from '../DurationInput/DurationInput';
 import styles from './AdvancedFilterFields.module.scss';
+
+const { publicRuntimeConfig } = getConfig();
 
 const labelKeys = {
 	prefix: 'AdvancedFilterFields',
@@ -64,6 +68,9 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	onRemove,
 }) => {
 	const locale = useLocale();
+	const isKeyUser = useIsKeyUser();
+	const ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY =
+		publicRuntimeConfig.ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY === 'true';
 
 	// Computed
 
@@ -321,8 +328,11 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 							val: undefined,
 						});
 					}}
-					options={getAdvancedProperties()}
-					value={getSelectValue(getAdvancedProperties(), filterValue.prop)}
+					options={getAdvancedProperties(isKeyUser, ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY)}
+					value={getSelectValue(
+						getAdvancedProperties(isKeyUser, ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY),
+						filterValue.prop
+					)}
 				/>
 			</FormControl>
 
