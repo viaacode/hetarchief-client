@@ -53,7 +53,7 @@
 	}
 
 	// Keyboard open on mobile: move toolbar to bottom
-	.p-conversation-messages--keyboard-open {
+	&--keyboard-open {
 		@media (max-width: abstracts.$breakpoint-md) {
 			:global(.c-rich-text-editor) {
 				overflow: visible !important;
@@ -86,16 +86,9 @@
 				}
 			}
 		}
-
-		// When keyboard is open, move send button lower
-		.p-conversation-messages__editor__send-button {
-			@media (max-width: abstracts.$breakpoint-md) {
-				bottom: abstracts.$spacer-xxs;
-			}
-		}
 	}
 
-	.p-conversation-messages--disabled {
+	&--disabled {
 		:global(.control-item.button),
 		:global(.control-item.dropdown),
 		:global(.dropdown-handler) {
@@ -104,7 +97,7 @@
 		}
 	}
 
-	.p-conversation-messages__send-button {
+	&__send-button {
 		position: absolute;
 		right: 1.8rem;
 		bottom: 1.6rem;
@@ -119,7 +112,14 @@
 		}
 	}
 
-	.p-conversation-messages__selected-files {
+	// When keyboard is open, move send button lower
+	&--keyboard-open &__send-button {
+		@media (max-width: abstracts.$breakpoint-md) {
+			bottom: abstracts.$spacer-xxs;
+		}
+	}
+
+	&__selected-files {
 		position: absolute;
 		bottom: 100%;
 		left: 0;
@@ -142,3 +142,5 @@
 		}
 	}
 }
+
+

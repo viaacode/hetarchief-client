@@ -148,7 +148,7 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 				{selectedFiles.length > 0 && (
 					<div
 						ref={fileListRef}
-						className={clsx(styles['p-conversation-messages__selected-files'])}
+						className={clsx(styles['p-conversation-messages__editor__selected-files'])}
 					>
 						<TagList
 							tags={selectedFiles.map((file, index) => ({
