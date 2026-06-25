@@ -6,7 +6,18 @@ import { getMetadataSearchFilters } from './advanced-filters.consts';
 
 describe('advanced filters config', () => {
 	it('should expose rights as an advanced filter with is and is-not operators', () => {
-		expect(getAdvancedProperties().map(({ value }) => value)).toContain(FilterProperty.RIGHTS);
+		expect(getAdvancedProperties(true, true).map(({ value }) => value)).toContain(
+			FilterProperty.RIGHTS
+		);
+		expect(getAdvancedProperties(true, false).map(({ value }) => value)).toContain(
+			FilterProperty.RIGHTS
+		);
+		expect(getAdvancedProperties(false, true).map(({ value }) => value)).toContain(
+			FilterProperty.RIGHTS
+		);
+		expect(getAdvancedProperties(false, false).map(({ value }) => value)).not.toContain(
+			FilterProperty.RIGHTS
+		);
 		expect(getOperators(FilterProperty.RIGHTS).map(({ value }) => value)).toEqual([
 			Operator.EQUALS,
 			Operator.EQUALS_NOT,
