@@ -25,17 +25,9 @@ export const getRegularProperties = (): PropertyOptions => {
 		(option) => option.label
 	);
 };
-export const getAdvancedProperties = (
-	isKeyUser: boolean,
-	ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY: boolean
-): PropertyOptions => {
-	let advancedFilterKeys = ADVANCED_FILTERS;
-	if (!ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY && !isKeyUser) {
-		// Filter out the rights filter for non-key users if the feature flag is disabled
-		advancedFilterKeys = advancedFilterKeys.filter((key) => key !== FilterProperty.RIGHTS);
-	}
+export const getAdvancedProperties = (): PropertyOptions => {
 	return sortBy(
-		advancedFilterKeys.map((key) => {
+		ADVANCED_FILTERS.map((key) => {
 			return {
 				label: getFilterLabel(key as FilterProperty),
 				value: key as FilterProperty,

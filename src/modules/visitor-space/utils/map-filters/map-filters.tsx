@@ -95,8 +95,7 @@ const mapAdvancedToTags = (
 
 		const filterPropLabel =
 			getSelectLabel(getRegularProperties(), filterProp) ||
-			// Get all advanced properties, since we'll only map over the ones that the user has active
-			getSelectLabel(getAdvancedProperties(true, true), filterProp);
+			getSelectLabel(getAdvancedProperties(), filterProp);
 		let filterOperatorLabel = getSelectLabel(getOperators(filterProp), filterOp);
 		let value = advanced.val;
 

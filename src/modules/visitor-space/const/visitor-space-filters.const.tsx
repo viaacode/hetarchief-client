@@ -43,7 +43,7 @@ export const SEARCH_PAGE_FILTERS = (
 	isKeyUser: boolean,
 	activeTab: SearchPageMediaType
 ): FilterMenuFilterOption[] => {
-	const rightsFiltersForEverybody =
+	const ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY =
 		publicRuntimeConfig.ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY === 'true';
 	return [
 		{
@@ -66,7 +66,7 @@ export const SEARCH_PAGE_FILTERS = (
 			type: FilterMenuType.Checkbox,
 			tabs: ALL_TABS,
 			isDisabled: () => {
-				return !isKeyUser && !rightsFiltersForEverybody;
+				return !isKeyUser && !ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY;
 			},
 		},
 		{
@@ -123,7 +123,7 @@ export const SEARCH_PAGE_FILTERS = (
 			type: FilterMenuType.Modal,
 			tabs: ALL_TABS,
 			isDisabled: () => {
-				return !rightsFiltersForEverybody && !isKeyUser;
+				return !ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY && !isKeyUser;
 			},
 		},
 		{

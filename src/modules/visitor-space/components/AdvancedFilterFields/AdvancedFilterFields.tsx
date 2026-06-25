@@ -68,9 +68,6 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	onRemove,
 }) => {
 	const locale = useLocale();
-	const isKeyUser = useIsKeyUser();
-	const ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY =
-		publicRuntimeConfig.ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY === 'true';
 
 	// Computed
 
@@ -328,11 +325,8 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 							val: undefined,
 						});
 					}}
-					options={getAdvancedProperties(isKeyUser, ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY)}
-					value={getSelectValue(
-						getAdvancedProperties(isKeyUser, ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY),
-						filterValue.prop
-					)}
+					options={getAdvancedProperties()}
+					value={getSelectValue(getAdvancedProperties(), filterValue.prop)}
 				/>
 			</FormControl>
 
