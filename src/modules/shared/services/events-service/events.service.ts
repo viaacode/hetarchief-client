@@ -1,8 +1,8 @@
-import { ApiService } from '../api-service';
-
 import { isServerSideRendering } from '@shared/utils/is-browser';
-import { EVENTS_BASE_URL } from './events.service.const';
+import { ApiService } from '../api-service';
 import type { LogEventType } from './events.service.types';
+
+export const EVENTS_BASE_URL = 'events';
 
 export class EventsService {
 	public static async triggerEvent(

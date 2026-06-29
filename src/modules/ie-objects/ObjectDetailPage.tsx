@@ -1,5 +1,5 @@
 import { GroupName, Permission } from '@account/const';
-import { selectCommonUser, selectHasCheckedLogin, selectUser } from '@auth/store/user';
+import { selectHasCheckedLogin, selectUser } from '@auth/store/user';
 import type { User } from '@auth/types';
 import {
 	RequestAccessBlade,
@@ -87,7 +87,6 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
-import { mapUserToGroupNameAndKeyUser } from '@shared/services/events-service/events.service.const';
 import { toastService } from '@shared/services/toast-service';
 import { selectLastSearchParams, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import type { IeObjectsSearchTermObject } from '@shared/types/api';
@@ -150,7 +149,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const locale = useLocale();
 	const dispatch = useDispatch();
 	const user: User | null = useSelector(selectUser);
-	const commonUser = useSelector(selectCommonUser);
 	const hasCheckedLogin: boolean = useSelector(selectHasCheckedLogin);
 	const lastSearchParams = useSelector(selectLastSearchParams);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
@@ -958,6 +956,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	/**
 	 * Trigger events for viewing the ie object
 	 */
+
+	const mapIeObjectToEventData = useCallback(() => {
+		return {
+			type: mapDcTermsFormatToSimpleType(mediaInfo?.dctermsFormat),
+			fragment_id: mediaInfo?.schemaIdentifier,
+			pid: mediaInfo?.schemaIdentifier,
+			or_id: mediaInfo?.maintainerId,
+		};
+	}, [mediaInfo]);
+
 	useEffect(() => {
 		// The url without any query params
 		const locationWithoutSearch = window.location.href.replace(window.location.search, '');
@@ -965,13 +973,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		if (mediaInfo && hasCheckedLogin && hasTriggeredViewEventForHref !== locationWithoutSearch) {
 			setHasTriggeredViewEventForHref(locationWithoutSearch);
 			const path = window.location.href;
-			const eventData = {
-				type: mapDcTermsFormatToSimpleType(mediaInfo.dctermsFormat),
-				fragment_id: mediaInfo.schemaIdentifier,
-				pid: mediaInfo.schemaIdentifier,
-				user_group_name: mapUserToGroupNameAndKeyUser(commonUser),
-				or_id: mediaInfo.maintainerId,
-			};
+			const eventData = mapIeObjectToEventData();
 
 			if (hasAccessToVisitorSpaceOfObject) {
 				EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_VIEW, path, eventData).then(noop);
@@ -982,9 +984,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	}, [
 		hasAccessToVisitorSpaceOfObject,
 		mediaInfo,
-		commonUser,
 		hasCheckedLogin,
 		hasTriggeredViewEventForHref,
+		mapIeObjectToEventData,
 	]);
 
 	/**
@@ -1120,13 +1122,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 
 		const externalFormUrl = getExternalMaterialRequestUrlIfAvailable(mediaInfo, isAnonymous, user);
 		if (externalFormUrl) {
-			EventsService.triggerEvent(LogEventType.ITEM_REQUEST, window.location.href, {
-				fragment_id: mediaInfo?.schemaIdentifier,
-				pid: mediaInfo?.schemaIdentifier,
-				user_group_name: user?.groupName,
-				or_id: mediaInfo?.maintainerId,
-				type: mapDcTermsFormatToSimpleType(mediaInfo?.dctermsFormat),
-			}).then(noop);
+			EventsService.triggerEvent(
+				LogEventType.ITEM_REQUEST,
+				window.location.href,
+				mapIeObjectToEventData()
+			).then(noop);
 
 			// The external url is opened with an actual link, so safari doesn't block the popup
 			window.open(externalFormUrl, '_blank');
@@ -1147,13 +1147,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				// Skip triggering event on server side rendering since window is not available
 				if (!oldHasMediaPlayed && !isServerSideRendering()) {
 					const path = window.location.href;
-					const eventData = {
-						type: mapDcTermsFormatToSimpleType(mediaInfo?.dctermsFormat),
-						fragment_id: mediaInfo?.schemaIdentifier,
-						pid: mediaInfo?.schemaIdentifier,
-						user_group_name: mapUserToGroupNameAndKeyUser(commonUser),
-						or_id: mediaInfo?.maintainerId,
-					};
+					const eventData = mapIeObjectToEventData();
 
 					if (hasAccessToVisitorSpaceOfObject) {
 						EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_PLAY, path, eventData).then(noop);
