@@ -957,7 +957,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 * Trigger events for viewing the ie object
 	 */
 
-	const mapObjectToEventData = useCallback(() => {
+	const mapIeObjectToEventData = useCallback(() => {
 		return {
 			type: mapDcTermsFormatToSimpleType(mediaInfo?.dctermsFormat),
 			fragment_id: mediaInfo?.schemaIdentifier,
@@ -973,7 +973,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		if (mediaInfo && hasCheckedLogin && hasTriggeredViewEventForHref !== locationWithoutSearch) {
 			setHasTriggeredViewEventForHref(locationWithoutSearch);
 			const path = window.location.href;
-			const eventData = mapObjectToEventData();
+			const eventData = mapIeObjectToEventData();
 
 			if (hasAccessToVisitorSpaceOfObject) {
 				EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_VIEW, path, eventData).then(noop);
@@ -986,7 +986,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		mediaInfo,
 		hasCheckedLogin,
 		hasTriggeredViewEventForHref,
-		mapObjectToEventData,
+		mapIeObjectToEventData,
 	]);
 
 	/**
@@ -1125,7 +1125,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			EventsService.triggerEvent(
 				LogEventType.ITEM_REQUEST,
 				window.location.href,
-				mapObjectToEventData()
+				mapIeObjectToEventData()
 			).then(noop);
 
 			// The external url is opened with an actual link, so safari doesn't block the popup
@@ -1147,7 +1147,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				// Skip triggering event on server side rendering since window is not available
 				if (!oldHasMediaPlayed && !isServerSideRendering()) {
 					const path = window.location.href;
-					const eventData = mapObjectToEventData();
+					const eventData = mapIeObjectToEventData();
 
 					if (hasAccessToVisitorSpaceOfObject) {
 						EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_PLAY, path, eventData).then(noop);
