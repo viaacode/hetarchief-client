@@ -42,11 +42,15 @@ module.exports = withTM({
 		 * Ignore warnings about big page data, since we load translations like that
 		 * https://meemoo.atlassian.net/browse/ARC-1932
 		 */
-		largePageDataBytes: 300 * 1000,
+		largePageDataBytes: 400 * 1000,
 
 		// Attempt to improve css loading
 		// https://meemoo.atlassian.net/browse/ARC-2913
-		optimizeCss: true,
+		optimizeCss: {
+			// https://meemoo.atlassian.net/browse/ARC-3192: reduce log lines for inline optimization or timings
+			// Default is info, but warning should be enough: https://www.npmjs.com/package/critters#loglevel
+			logLevel: 'warn',
+		},
 	},
 	eslint: {
 		ignoreDuringBuilds: true, // We're using biome instead of eslint
@@ -72,13 +76,6 @@ module.exports = withTM({
 				'process.env.BIOME_LINT': JSON.stringify(true),
 			})
 		);
-
-		// Ignore NextJS warnings about skipped css rules that are not compatible with server side rendering
-		// https://meemoo.atlassian.net/browse/ARC-3192
-		config.ignoreWarnings = [
-			{ message: /rules skipped due to selector errors/i },
-			{ message: /Empty sub-selector/i },
-		];
 
 		// Ensure certain packages are always resolved to one version instead of other versions from admin-core or component libraries
 		config.resolve.alias = {
@@ -132,7 +129,8 @@ module.exports = withTM({
 		IIIF_IMAGE_API: process.env.IIIF_IMAGE_API,
 		ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW:
 			process.env.ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW,
-		DISABLE_COMPLEX_REUSE_FLOW_FOR_ORGANISATIONS: process.env.DISABLE_COMPLEX_REUSE_FLOW_FOR_ORGANISATIONS,
+		DISABLE_COMPLEX_REUSE_FLOW_FOR_ORGANISATIONS:
+			process.env.DISABLE_COMPLEX_REUSE_FLOW_FOR_ORGANISATIONS,
 		ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY: process.env.ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY,
 	},
 	async headers() {
