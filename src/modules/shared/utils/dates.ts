@@ -1,5 +1,5 @@
 import { TranslationService } from '@shared/services/translation-service/translation.service';
-import { format, formatDistanceToNow, isSameDay, isToday } from 'date-fns';
+import { format, formatDistanceToNow, isSameDay, isToday, isValid } from 'date-fns';
 import { getLocaleFromI18nLanguage, type Locale } from './i18n';
 
 // Shared
@@ -13,21 +13,26 @@ export const asDate = (input: Date | string | undefined | null): Date | undefine
 		return undefined;
 	}
 
+	let result: Date | undefined;
+
 	if (input instanceof Date) {
-		return input;
-	}
-	if (isNumber) {
-		return new Date(Number(input));
-	}
-	if (typeof input === 'string') {
+		result = input;
+	} else if (isNumber) {
+		result = new Date(Number(input));
+	} else if (typeof input === 'string') {
 		const lowercased = input.toLowerCase();
 		const timezoned =
 			lowercased?.includes('t') && !lowercased.endsWith('z') && !lowercased.includes('+')
 				? `${input}Z`
 				: input;
 
-		return new Date(timezoned);
+		result = new Date(timezoned);
 	}
+
+	if (isValid(result)) {
+		return result;
+	}
+
 	return undefined;
 };
 
