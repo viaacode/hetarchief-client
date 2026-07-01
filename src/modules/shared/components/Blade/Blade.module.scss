@@ -49,7 +49,6 @@ $padding-horizontal-mobile: abstracts.$spacer-sm;
 		background-color: abstracts.$white;
 		color: abstracts.$black;
 		border-left: 1px solid abstracts.$silver;
-		max-height: calc(#{abstracts.$view-height} - #{abstracts.$c-navigation-height-md});
 
 		@media (min-width: abstracts.$breakpoint-md) {
 			max-height: calc(#{abstracts.$view-height} - #{abstracts.$c-navigation-height});
@@ -228,7 +227,7 @@ $padding-horizontal-mobile: abstracts.$spacer-sm;
 				justify-content: space-between;
 			}
 
-			&:not(&--size-wide){
+			&:not(.c-blade__footer-buttons--size-wide) {
 				:global(.c-button), a {
 					display: block;
 					width: 100%;
