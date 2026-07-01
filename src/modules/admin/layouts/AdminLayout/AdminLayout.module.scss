@@ -19,6 +19,10 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
+
+	@media (max-width: $breakpoint-md) {
+		font-size: 2.8rem;
+	}
 }
 
 .c-admin__actions {
@@ -28,5 +32,9 @@
 
 	> :not(:last-child) {
 		margin-right: 0.8rem;
+	}
+
+	&:empty {
+		display: none;
 	}
 }
