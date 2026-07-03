@@ -1,15 +1,12 @@
 import type { IeObjectFile, IeObjectRepresentation } from '@ie-objects/ie-objects.types';
+import type { CuePoints } from '@meemoo/admin-core-ui/admin';
 import type { IeObjectType } from '@shared/types/ie-objects';
-
-export interface CuePoints {
-	end: number | null;
-	start: number | null;
-}
 
 export type AudioOrVideoPlayerProps = {
 	className?: string;
 	allowFullScreen?: boolean;
-	paused: boolean;
+	isPaused: boolean;
+	autoplay?: boolean;
 	onPlay: () => void;
 	onPause: () => void;
 	onMediaReady: (isAvailable: boolean, playableFile: IeObjectFile | null) => void;
@@ -21,4 +18,5 @@ export type AudioOrVideoPlayerProps = {
 	cuePoints: CuePoints | undefined;
 	locationId: string;
 	poster: string | undefined;
+	onTimeUpdate?: (newTime: number) => void;
 };

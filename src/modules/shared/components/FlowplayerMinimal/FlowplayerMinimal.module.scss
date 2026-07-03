@@ -1,0 +1,105 @@
+@use "sass:color";
+@use "src/styles/abstracts" as abstracts;
+
+$track-left-margin: 1.6rem;
+$track-bottom-margin: 1.8rem;
+$bottom-bar-height: 4rem;
+$track-max-width: 44rem;
+$track-height: 0.4rem;
+
+.c-flowplayer-minimal {
+	position: relative;
+
+	:global(.fp-ui) {
+		display: none;
+	}
+
+
+	:global(.c-flowplayer-minimal__play-toggle) {
+		position: absolute;
+		inset: 0 0 0 0;
+		background: none;
+		border: none;
+
+		&:hover {
+			background-color: color.adjust(abstracts.$white, $alpha: -0.9);
+		}
+	}
+
+	:global(.c-flowplayer-minimal__trackbar-hitbox) {
+		position: absolute;
+		bottom: 0;
+		left: $track-left-margin;
+		height: $bottom-bar-height;
+		width: calc(100% - $track-left-margin - $track-left-margin);
+		max-width: $track-max-width;
+		z-index: 1;
+
+		&:global(:hover) {
+			:global(.c-flowplayer-minimal__trackbar__filled) {
+				display: none;
+			}
+
+			:global(.c-flowplayer-minimal__trackbar__hover) {
+				display: block;
+			}
+		}
+
+		:global(.c-flowplayer-minimal__trackbar) {
+			background-color: color.adjust(abstracts.$neutral, $alpha: -0.4);
+			width: 100%;
+			height: $track-height;
+			border-radius: $track-height / 2;
+			position: absolute;
+			bottom: $track-bottom-margin;
+			left: 0;
+		}
+
+		:global(.c-flowplayer-minimal__trackbar__hover),
+		:global(.c-flowplayer-minimal__trackbar__filled) {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 0;
+			height: $track-height;
+			border-radius: $track-height / 2;
+			background-color: abstracts.$teal;
+			pointer-events: none;
+		}
+
+		:global(.c-flowplayer-minimal__trackbar__hover) {
+			width: 0;
+			//background-color: color.adjust(abstracts.$teal, $alpha: -20%);
+			background-color: abstracts.$teal;
+			display: none;
+
+			&:global(::after) {
+				content: '';
+				position: absolute;
+				right: 0;
+				top: 50%;
+				transform: translateY(-50%);
+				width: 0.4rem;
+				height: 1.6rem;
+				border-radius: 0.2rem;
+				background-color: abstracts.$teal;
+
+			}
+		}
+	}
+
+	:global(.c-flowplayer-minimal__icon) {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		background-color: abstracts.$black;
+		color: abstracts.$white;
+		width: $bottom-bar-height;
+		height: $bottom-bar-height;
+		padding: 0.8rem;
+		font-size: 2.2rem;
+		text-align: center;
+		line-height: 1.2;
+	}
+}
+
