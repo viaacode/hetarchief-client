@@ -15,7 +15,9 @@ export async function middleware(request: NextRequest) {
 		if (pathName.includes('/zoeken') || pathName.includes('/search')) {
 			const headers: Record<string, string> = {};
 			request.headers.forEach((value, key) => {
-				if (key !== 'cookie') headers[key] = value;
+				if (key !== 'cookie') {
+					headers[key] = value;
+				}
 			});
 			console.log('request headers: ', headers);
 		}
