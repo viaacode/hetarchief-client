@@ -61,3 +61,5 @@ tmp/
 # ignore Claude AI files
 .claude/
 AGENTS.md
+
+*.log
