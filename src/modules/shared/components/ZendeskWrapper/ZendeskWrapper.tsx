@@ -1,11 +1,16 @@
+import getConfig from '@shared/config/public-runtime-config';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { selectShowZendesk } from '@shared/store/ui';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import React, { type FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Zendesk, { type IZendeskProps } from 'react-zendesk';
+import ZendeskImport, { type IZendeskProps } from 'react-zendesk';
+
+// react-zendesk is a CommonJS module; under Next 16 / webpack ESM interop the default export
+// can be wrapped in a `.default` property, so unwrap it defensively.
+// biome-ignore lint/suspicious/noExplicitAny: CJS/ESM interop
+const Zendesk = (ZendeskImport as any).default ?? ZendeskImport;
 
 const { publicRuntimeConfig } = getConfig();
 

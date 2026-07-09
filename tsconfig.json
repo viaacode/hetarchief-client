@@ -49,5 +49,5 @@
     "tests/**/*.ts",
     "node_modules/vitest/globals.d.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "src/**/*.stories.tsx", "src/**/*.stories.mdx"]
 }

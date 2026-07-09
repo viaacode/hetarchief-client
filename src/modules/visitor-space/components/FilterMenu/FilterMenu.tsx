@@ -12,7 +12,7 @@ import {
 	VISITOR_SPACE_ACTIVE_SORT_MAP,
 } from '@visitor-space/const';
 import clsx from 'clsx';
-import { isEmpty, isNil } from 'lodash-es';
+import { isEmpty, isNil } from 'es-toolkit/compat';
 import { type FC, type ReactNode, useEffect, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 

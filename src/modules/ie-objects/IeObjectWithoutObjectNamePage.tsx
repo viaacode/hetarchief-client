@@ -4,7 +4,7 @@ import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { keepPreviousData } from '@tanstack/react-query';
-import { kebabCase } from 'lodash-es';
+import { kebabCase } from 'es-toolkit/compat';
 import { useRouter } from 'next/router';
 import { parseUrl, stringifyUrl } from 'query-string';
 import { type FC, useEffect } from 'react';

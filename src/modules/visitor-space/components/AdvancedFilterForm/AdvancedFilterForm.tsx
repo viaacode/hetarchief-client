@@ -5,7 +5,7 @@ import { getRandomId } from '@shared/helpers/get-random-id';
 import { tHtml, tText } from '@shared/helpers/translate';
 import type { AdvancedFilter, IdentityAdvancedFilter } from '@visitor-space/types';
 import clsx from 'clsx';
-import { omit } from 'lodash-es';
+import { omit } from 'es-toolkit/compat';
 import { type FC, useState } from 'react';
 import type { UseFormHandleSubmit } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form/dist/types/form';

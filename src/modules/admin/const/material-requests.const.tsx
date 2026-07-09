@@ -4,16 +4,14 @@ import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/co
 import {
 	type MaterialRequest,
 	MaterialRequestKeys,
-	type MaterialRequestRow,
-	MaterialRequestStatus,
 	MaterialRequestType,
 } from '@material-requests/types';
+import type { Column } from '@meemoo/react-components';
 import { CopyButton } from '@shared/components/CopyButton';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
-import type { Column } from 'react-table';
 import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
 export const ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE = 20;
@@ -62,10 +60,10 @@ export const GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = (): {
 
 const getRequesterColumn = (disableSort: boolean): Column<MaterialRequest> =>
 	({
-		Header: tText('modules/admin/const/material-requests___aanvrager'),
-		accessor: MaterialRequestKeys.requesterFullName,
-		disableSortBy: disableSort,
-		Cell: ({ row: { original } }: MaterialRequestRow) => (
+		header: tText('modules/admin/const/material-requests___aanvrager'),
+		accessorKey: MaterialRequestKeys.requesterFullName,
+		enableSorting: !disableSort,
+		cell: ({ row: { original } }) => (
 			<span className="p-material-requests__table-titel-material">
 				<span className="p-material-requests__table-titel-material__requester">
 					{original.requesterFullName}
@@ -87,10 +85,10 @@ const getRequesterColumn = (disableSort: boolean): Column<MaterialRequest> =>
 
 const getMaterialColumn = (): Column<MaterialRequest> =>
 	({
-		Header: tText('modules/admin/const/material-requests___materiaal'),
-		accessor: MaterialRequestKeys.objectSchemaName,
-		disableSortBy: true,
-		Cell: ({ row: { original } }: MaterialRequestRow) => (
+		header: tText('modules/admin/const/material-requests___materiaal'),
+		accessorKey: MaterialRequestKeys.objectSchemaName,
+		enableSorting: false,
+		cell: ({ row: { original } }) => (
 			<span className="p-material-requests__table-titel-material">
 				<span className="p-material-requests__table-titel-material__name">
 					{original.objectSchemaName}
@@ -104,24 +102,24 @@ const getMaterialColumn = (): Column<MaterialRequest> =>
 
 const getMaintainerColumn = (): Column<MaterialRequest> =>
 	({
-		Header: tText('modules/admin/const/material-requests___aanbieder'),
-		accessor: MaterialRequestKeys.maintainerName,
-		Cell: ({ row: { original } }: MaterialRequestRow) => (
+		header: tText('modules/admin/const/material-requests___aanbieder'),
+		accessorKey: MaterialRequestKeys.maintainerName,
+		cell: ({ row: { original } }) => (
 			<span className="u-color-neutral">{original.maintainerName}</span>
 		),
 	}) as Column<MaterialRequest>;
 
 const getTitleColumn = (): Column<MaterialRequest> =>
 	({
-		Header: tText('modules/admin/const/material-requests___titel-materiaal'),
-		accessor: MaterialRequestKeys.objectSchemaName,
+		header: tText('modules/admin/const/material-requests___titel-materiaal'),
+		accessorKey: MaterialRequestKeys.objectSchemaName,
 	}) as Column<MaterialRequest>;
 
 const getRequestedAtColumn = (): Column<MaterialRequest> =>
 	({
-		Header: tText('modules/admin/const/material-requests___datum'),
-		accessor: MaterialRequestKeys.requestedAt,
-		Cell: ({ row: { original } }: MaterialRequestRow) => {
+		header: tText('modules/admin/const/material-requests___datum'),
+		accessorKey: MaterialRequestKeys.requestedAt,
+		cell: ({ row: { original } }) => {
 			const date = formatMediumDate(asDate(original.requestedAt || original.createdAt));
 			return (
 				<span className="u-color-neutral" title={date}>
@@ -133,10 +131,10 @@ const getRequestedAtColumn = (): Column<MaterialRequest> =>
 
 const getTypeColumn = (disableSort: boolean): Column<MaterialRequest> =>
 	({
-		Header: tText('modules/admin/const/material-requests___type'),
-		accessor: MaterialRequestKeys.type,
-		disableSortBy: disableSort,
-		Cell: ({ row: { original } }: MaterialRequestRow) => (
+		header: tText('modules/admin/const/material-requests___type'),
+		accessorKey: MaterialRequestKeys.type,
+		enableSorting: !disableSort,
+		cell: ({ row: { original } }) => (
 			<span className="u-color-neutral p-material-requests__table-type">
 				{GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[original.type]}
 			</span>
@@ -145,20 +143,18 @@ const getTypeColumn = (disableSort: boolean): Column<MaterialRequest> =>
 
 const getStatusColumn = (disableSort: boolean): Column<MaterialRequest> =>
 	({
-		Header: tText('modules/admin/const/material-requests___status'),
-		accessor: MaterialRequestKeys.status,
-		disableSortBy: disableSort,
-		Cell: ({ row: { original } }: MaterialRequestRow) => (
+		header: tText('modules/admin/const/material-requests___status'),
+		accessorKey: MaterialRequestKeys.status,
+		enableSorting: !disableSort,
+		cell: ({ row: { original } }) => (
 			<MaterialRequestStatusPill status={original.status} includeStatusNone />
 		),
 	}) as Column<MaterialRequest>;
 
 const getDownloadColumn = (): Column<MaterialRequest> =>
 	({
-		Header: tText('modules/admin/const/material-requests___download'),
-		accessor: MaterialRequestKeys.downloadStatus,
-		disableSortBy: true,
-		Cell: ({ row: { original } }: MaterialRequestRow) => (
-			<MaterialRequestDownloadButton materialRequest={original} />
-		),
+		header: tText('modules/admin/const/material-requests___download'),
+		accessorKey: MaterialRequestKeys.downloadStatus,
+		enableSorting: false,
+		cell: ({ row: { original } }) => <MaterialRequestDownloadButton materialRequest={original} />,
 	}) as Column<MaterialRequest>;

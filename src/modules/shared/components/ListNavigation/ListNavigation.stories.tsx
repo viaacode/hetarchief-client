@@ -1,19 +1,18 @@
-import { action } from '@storybook/addon-actions';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
-
-import ListNavigation from './ListNavigation';
+import { action } from 'storybook/actions';
 import {
 	primaryListNavigationMock,
 	secondaryListNavigationMock,
 } from './__mocks__/list-navigation';
+import ListNavigation from './ListNavigation';
 
 export default {
 	title: 'Components/ListNavigation',
 	component: ListNavigation,
-} as ComponentMeta<typeof ListNavigation>;
+} as Meta<typeof ListNavigation>;
 
-const Template: ComponentStory<typeof ListNavigation> = (args) => <ListNavigation {...args} />;
+const Template: StoryFn<typeof ListNavigation> = (args) => <ListNavigation {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {

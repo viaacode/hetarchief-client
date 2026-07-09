@@ -6,7 +6,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { mapFiltersToTags } from '@visitor-space/utils/map-filters';
 import clsx from 'clsx';
-import { isNil } from 'lodash-es';
+import { isNil } from 'es-toolkit/compat';
 import { type FC, type ReactElement, useEffect, useState } from 'react';
 
 import type { SearchSortProp } from '../../../types';

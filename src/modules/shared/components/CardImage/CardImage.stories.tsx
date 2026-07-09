@@ -1,15 +1,14 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
-
-import CardImage from './CardImage';
 import { cardImageMock } from './__mocks__/card-image';
+import CardImage from './CardImage';
 
 export default {
 	title: 'Components/CardImage',
 	component: CardImage,
-} as ComponentMeta<typeof CardImage>;
+} as Meta<typeof CardImage>;
 
-const Template: ComponentStory<typeof CardImage> = (args) => <CardImage {...args} />;
+const Template: StoryFn<typeof CardImage> = (args) => <CardImage {...args} />;
 
 export const Short = Template.bind({});
 Short.args = {

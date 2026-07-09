@@ -35,7 +35,7 @@ import type {
 } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 import clsx from 'clsx';
-import { isEqual } from 'lodash-es';
+import { isEqual } from 'es-toolkit/compat';
 import { useRouter } from 'next/router';
 import React, {
 	type FC,

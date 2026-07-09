@@ -7,32 +7,30 @@ import {
 	type MaterialRequestAttachment,
 	MaterialRequestEventType,
 } from '@material-requests/types';
-import { Button, PaginationBar, Table } from '@meemoo/react-components';
+import {
+	Button,
+	type Column,
+	PaginationBar,
+	type SortingRule,
+	Table,
+} from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
 import { sortingIcons } from '@shared/components/Table';
+import getConfig from '@shared/config/public-runtime-config';
 import { getFileNameIcon } from '@shared/helpers/get-file-name-icon';
 import { tText } from '@shared/helpers/translate';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { asDate, formatMediumDateWithTime } from '@shared/utils/dates';
 import { isMobileSize } from '@shared/utils/is-mobile';
+import type { Column as TableColumnInstance } from '@tanstack/react-table';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import clsx from 'clsx';
-import { noop } from 'lodash-es';
-import getConfig from 'next/config';
+import { noop } from 'es-toolkit/compat';
 import Link from 'next/link';
-import React, { type FC, useEffect, useMemo, useState } from 'react';
-import type {
-	Column,
-	ColumnInstance,
-	HeaderGroup,
-	SortingRule,
-	TableCellProps,
-	TableHeaderProps,
-	TableState,
-} from 'react-table';
+import React, { type FC, type HTMLAttributes, useEffect, useMemo, useState } from 'react';
 import styles from './MaterialRequestDocuments.module.scss';
 
 interface MaterialRequestDocumentsProps {
@@ -82,12 +80,12 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 
 	const columns: Column<MaterialRequestAttachment>[] = [
 		{
-			Header: tText(
+			header: tText(
 				'modules/account/components/material-request-detail-blade/material-request-documents___naam-document'
 			),
-			accessor: 'attachmentFilename',
-			disableSortBy: true,
-			Cell: ({ row: { original } }) => (
+			accessorKey: 'attachmentFilename',
+			enableSorting: false,
+			cell: ({ row: { original } }) => (
 				<Link
 					className={clsx(
 						styles['p-material-request-detail__documents__table-cell'],
@@ -103,11 +101,11 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 			),
 		} as Column<MaterialRequestAttachment>,
 		{
-			Header: tText(
+			header: tText(
 				'modules/account/components/material-request-detail-blade/material-request-documents___datum'
 			),
-			accessor: 'createdAt',
-			Cell: ({ row: { original } }) => {
+			accessorKey: 'createdAt',
+			cell: ({ row: { original } }) => {
 				const date = formatMediumDateWithTime(asDate(original.createdAt));
 				return (
 					<span
@@ -125,7 +123,7 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 	];
 
 	const sortFilters = useMemo(
-		(): SortingRule<{ id: string; desc: boolean }>[] => [
+		(): SortingRule[] => [
 			{
 				id: orderProp,
 				desc: orderDirection !== AvoSearchOrderDirection.ASC,
@@ -145,8 +143,8 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 	};
 
 	const getTableColumnProps = (
-		column: HeaderGroup<MaterialRequestAttachment> | ColumnInstance<MaterialRequestAttachment>
-	): Partial<TableHeaderProps> | Partial<TableCellProps> => {
+		column: TableColumnInstance<MaterialRequestAttachment, unknown>
+	): HTMLAttributes<HTMLElement> => {
 		if (column.id === 'createdAt') {
 			const columnWidth = '18rem';
 			return {
@@ -206,15 +204,15 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 						columns,
 						data: attachments?.items || [],
 						initialState: {
-							sortBy: sortFilters,
-							pageSize: MATERIAL_REQUEST_DOCUMENTS_PAGE_SIZE,
-						} as TableState<MaterialRequestAttachment>,
+							sorting: sortFilters,
+							pagination: { pageIndex: 0, pageSize: MATERIAL_REQUEST_DOCUMENTS_PAGE_SIZE },
+						},
 					}}
 					sortingIcons={sortingIcons}
 					onSortChange={onSortChange}
 					showTable={true}
 					enableRowFocusOnClick={true}
-					pagination={({ gotoPage }) => (
+					pagination={(table) => (
 						<PaginationBar
 							showFirstAndLastButtons
 							{...getDefaultPaginationBarProps()}
@@ -222,7 +220,7 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 							totalItems={attachments?.total || 0}
 							itemsPerPage={MATERIAL_REQUEST_DOCUMENTS_PAGE_SIZE}
 							onPageChange={(pageZeroBased: number) => {
-								gotoPage(pageZeroBased);
+								table.setPageIndex(pageZeroBased);
 								setPage(pageZeroBased + 1);
 							}}
 						/>

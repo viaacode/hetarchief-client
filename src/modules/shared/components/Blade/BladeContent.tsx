@@ -232,7 +232,7 @@ export const BladeContent: FC<BladeContentProps> = ({
 					stickyFooter && styles['c-blade__footer-sticky'],
 					contentHasBeenScrolled && [styles['c-blade__content-scrolled']],
 					ignoreFooterButtons &&
-						customFooter &&
+						!!customFooter &&
 						removePaddingForCustomFooter &&
 						styles['c-blade__footer__no-padding']
 				)}

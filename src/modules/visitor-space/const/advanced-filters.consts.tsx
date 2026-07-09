@@ -1,4 +1,5 @@
 import { type ReactSelectProps, TextInput, type TextInputProps } from '@meemoo/react-components';
+import getConfig from '@shared/config/public-runtime-config';
 import { tText } from '@shared/helpers/translate';
 import {
 	type IeObjectsSearchFilter,
@@ -18,7 +19,6 @@ import { GenreSelect } from '@visitor-space/components/GenreSelect';
 import { LanguageSelect } from '@visitor-space/components/LanguageSelect/LanguageSelect';
 import { MediumSelect } from '@visitor-space/components/MediumSelect/MediumSelect';
 import { getFilterLabel } from '@visitor-space/utils/advanced-filters';
-import getConfig from 'next/config';
 import type { FC } from 'react';
 import DurationInput from '../components/DurationInput/DurationInput';
 import { FilterProperty, Operator } from '../types';

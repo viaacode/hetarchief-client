@@ -1,15 +1,15 @@
 import { TextInput } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
 export default {
 	title: 'Components/TextInput',
 	component: TextInput,
-} as ComponentMeta<typeof TextInput>;
+} as Meta<typeof TextInput>;
 
-const Template: ComponentStory<typeof TextInput> = (args) => <TextInput {...args} />;
+const Template: StoryFn<typeof TextInput> = (args) => <TextInput {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {};

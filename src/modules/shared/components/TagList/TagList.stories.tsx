@@ -1,10 +1,9 @@
 import { TagList } from '@meemoo/react-components';
-import { action } from '@storybook/addon-actions';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import React from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import type { Meta, StoryFn } from '@storybook/react';
+import React from 'react';
+import { action } from 'storybook/actions';
 
 const tags = [
 	{
@@ -33,9 +32,9 @@ const tags = [
 export default {
 	title: 'Components/TagList',
 	component: TagList,
-} as ComponentMeta<typeof TagList>;
+} as Meta<typeof TagList>;
 
-const Template: ComponentStory<typeof TagList> = (args) => <TagList {...args} />;
+const Template: StoryFn<typeof TagList> = (args) => <TagList {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

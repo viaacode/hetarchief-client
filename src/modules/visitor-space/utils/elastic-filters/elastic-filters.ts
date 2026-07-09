@@ -7,7 +7,7 @@ import {
 	SearchPageMediaType,
 } from '@shared/types/ie-objects';
 import type { VisitRequest } from '@shared/types/visit-request';
-import { compact, isString } from 'lodash-es';
+import { compact, isString } from 'es-toolkit/compat';
 
 import type { SearchPageQueryParams } from '../../const';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '../../types';

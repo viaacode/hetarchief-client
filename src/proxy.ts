@@ -9,9 +9,9 @@ interface IeObjectRedirectInfo {
 	title: string;
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
 	try {
-		console.log('middleware triggered for URL: ', request.url);
+		console.log('proxy triggered for URL: ', request.url);
 		const pathName = request.nextUrl.pathname;
 
 		// https://meemoo.atlassian.net/browse/ARC-3185
@@ -53,10 +53,10 @@ export async function middleware(request: NextRequest) {
 			);
 		}
 
-		// Other routes are not handled by this middleware
+		// Other routes are not handled by this proxy
 		return NextResponse.next();
 	} catch (err) {
-		console.error('Error in middleware: ', err);
+		console.error('Error in proxy: ', err);
 		return NextResponse.rewrite(new URL('/__force-404', request.url));
 	}
 }

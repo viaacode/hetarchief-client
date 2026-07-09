@@ -1,24 +1,23 @@
-import { Button } from '@meemoo/react-components';
+import { Button, type Column } from '@meemoo/react-components';
 import { CopyButton } from '@shared/components/CopyButton';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RequestStatusBadge } from '@shared/components/RequestStatusBadge';
 import { tText } from '@shared/helpers/translate';
-import type { VisitRequest, VisitRow } from '@shared/types/visit-request';
+import type { VisitRequest } from '@shared/types/visit-request';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils/dates';
-import { truncate } from 'lodash-es';
+import { truncate } from 'es-toolkit/compat';
 import React from 'react';
-import type { Column } from 'react-table';
 
 export const RequestTableColumns = (): Column<VisitRequest>[] => [
 	{
-		Header: tText('modules/admin/const/requests___bezoekersruimte'),
-		accessor: 'spaceName',
+		header: tText('modules/admin/const/requests___bezoekersruimte'),
+		accessorKey: 'spaceName',
 	},
 	{
-		Header: tText('modules/admin/const/requests___naam'),
-		accessor: 'visitorName',
-		Cell: ({ row }: VisitRow) => {
+		header: tText('modules/admin/const/requests___naam'),
+		accessorKey: 'visitorName',
+		cell: ({ row }) => {
 			return (
 				// biome-ignore lint/a11y/useAriaPropsSupportedByRole: it still works
 				<span className="u-color-neutral" aria-label={row.original.visitorName}>
@@ -28,9 +27,9 @@ export const RequestTableColumns = (): Column<VisitRequest>[] => [
 		},
 	},
 	{
-		Header: tText('modules/admin/const/requests___emailadres'),
-		accessor: 'visitorMail',
-		Cell: ({ row }: VisitRow) => (
+		header: tText('modules/admin/const/requests___emailadres'),
+		accessorKey: 'visitorMail',
+		cell: ({ row }) => (
 			<CopyButton
 				className="u-color-neutral u-p-0 c-table__copy"
 				icon={undefined}
@@ -46,9 +45,9 @@ export const RequestTableColumns = (): Column<VisitRequest>[] => [
 		),
 	},
 	{
-		Header: tText('modules/admin/const/requests___tijdstip'),
-		accessor: 'createdAt',
-		Cell: ({ row }: VisitRow) => {
+		header: tText('modules/admin/const/requests___tijdstip'),
+		accessorKey: 'createdAt',
+		cell: ({ row }) => {
 			return (
 				<span
 					className="u-color-neutral"
@@ -60,16 +59,16 @@ export const RequestTableColumns = (): Column<VisitRequest>[] => [
 		},
 	},
 	{
-		Header: tText('modules/admin/const/requests___status'),
-		accessor: 'status',
-		Cell: ({ row }: VisitRow) => {
+		header: tText('modules/admin/const/requests___status'),
+		accessorKey: 'status',
+		cell: ({ row }) => {
 			return <RequestStatusBadge status={row.original.status} />;
 		},
 	},
 	{
-		Header: '',
+		header: '',
 		id: 'cp-requests-table-actions',
-		Cell: () => {
+		cell: () => {
 			return (
 				<Button
 					className="p-cp-requests__actions"

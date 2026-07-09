@@ -1,16 +1,15 @@
 import { Tab } from '@meemoo/react-components';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import React from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import type { Meta, StoryFn } from '@storybook/react';
+import React from 'react';
 
 export default {
 	title: 'Components/Tab',
 	component: Tab,
-} as ComponentMeta<typeof Tab>;
+} as Meta<typeof Tab>;
 
-const Template: ComponentStory<typeof Tab> = (args) => <Tab {...args} />;
+const Template: StoryFn<typeof Tab> = (args) => <Tab {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

@@ -24,7 +24,6 @@ import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { useUpdateVisitRequest } from '@visit-requests/hooks/update-visit';
 import { VisitTimeframe } from '@visit-requests/types';
 import React, { type FC, type ReactNode, useMemo, useState } from 'react';
-import type { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
@@ -168,15 +167,15 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 									columns: VisitorsTableColumns(denyVisitRequest, editVisitRequest),
 									data: visitRequests?.items || [],
 									initialState: {
-										pageSize: VisitorsTablePageSize,
-										sortBy: sortFilters,
-									} as TableState<VisitRequest>,
+										pagination: { pageIndex: 0, pageSize: VisitorsTablePageSize },
+										sorting: sortFilters,
+									},
 								}}
 								onSortChange={onSortChange}
 								sortingIcons={sortingIcons}
 								showTable={hasData}
 								enableRowFocusOnClick={true}
-								pagination={({ gotoPage }) => {
+								pagination={(table) => {
 									return (
 										<PaginationBar
 											{...getDefaultPaginationBarProps()}
@@ -184,7 +183,7 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 											startItem={Math.max(0, filters.page - 1) * VisitorsTablePageSize}
 											totalItems={visitRequests?.total || 0}
 											onPageChange={(pageZeroBased) => {
-												gotoPage(pageZeroBased);
+												table.setPageIndex(pageZeroBased);
 												// setSelected(null);
 												setFilters({
 													...filters,

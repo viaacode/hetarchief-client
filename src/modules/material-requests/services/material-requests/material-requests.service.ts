@@ -13,7 +13,7 @@ import {
 } from '@material-requests/types';
 import { ApiService } from '@shared/services/api-service';
 import type { IPagination } from '@studiohyperdrive/pagination';
-import { isNil } from 'lodash-es';
+import { isNil } from 'es-toolkit/compat';
 import { stringifyUrl } from 'query-string';
 import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from './material-requests.service.const';
 import type { GetMaterialRequestsProps } from './material-requests.service.types';

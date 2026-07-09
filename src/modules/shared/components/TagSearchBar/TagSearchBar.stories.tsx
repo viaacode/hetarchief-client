@@ -1,15 +1,15 @@
-import { action } from '@storybook/addon-actions';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
+import { action } from 'storybook/actions';
 
 import TagSearchBar from './TagSearchBar';
 
 export default {
 	title: 'Components/TagSearchBar',
 	component: TagSearchBar,
-} as ComponentMeta<typeof TagSearchBar>;
+} as Meta<typeof TagSearchBar>;
 
-const Template: ComponentStory<typeof TagSearchBar> = (args) => <TagSearchBar {...args} />;
+const Template: StoryFn<typeof TagSearchBar> = (args) => <TagSearchBar {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

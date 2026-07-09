@@ -1,4 +1,4 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 import { footerCenterNavigationItems } from './__mocks__/footer';
 import Footer from './Footer';
@@ -7,9 +7,9 @@ import { footerLinks } from './Footer.const';
 export default {
 	title: 'Components/Footer',
 	component: Footer,
-} as ComponentMeta<typeof Footer>;
+} as Meta<typeof Footer>;
 
-const Template: ComponentStory<typeof Footer> = (args) => <Footer {...args} />;
+const Template: StoryFn<typeof Footer> = (args) => <Footer {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

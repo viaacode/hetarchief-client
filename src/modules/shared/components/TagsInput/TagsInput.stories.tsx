@@ -1,9 +1,8 @@
 import { TagsInput, type TagsInputProps } from '@meemoo/react-components';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React, { cloneElement, type ReactElement, useState } from 'react';
-
-import { TAGS_INPUT_COMPONENTS } from './TagsInput.const';
 import { tagsInputOptionsMock } from './__mocks__/tags-input';
+import { TAGS_INPUT_COMPONENTS } from './TagsInput.const';
 
 const TagsInputStoryComponent = ({ children }: { children: ReactElement }) => {
 	const [values, setValues] = useState<TagsInputProps['value']>(tagsInputOptionsMock);
@@ -21,9 +20,9 @@ const TagsInputStoryComponent = ({ children }: { children: ReactElement }) => {
 export default {
 	title: 'Components/TagsInput',
 	component: TagsInput,
-} as ComponentMeta<typeof TagsInput>;
+} as Meta<typeof TagsInput>;
 
-const Template: ComponentStory<typeof TagsInput> = (args) => (
+const Template: StoryFn<typeof TagsInput> = (args) => (
 	<TagsInputStoryComponent>
 		<TagsInput components={{ ...TAGS_INPUT_COMPONENTS }} {...args} />
 	</TagsInputStoryComponent>

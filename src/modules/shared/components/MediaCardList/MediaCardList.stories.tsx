@@ -1,7 +1,6 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
-
-import MediaCardList from './MediaCardList';
+import type { Meta, StoryFn } from '@storybook/react';
 import { mock } from './__mocks__/media-card-list-mocks';
+import MediaCardList from './MediaCardList';
 
 export default {
 	title: 'Components/MediaCardList',
@@ -15,13 +14,13 @@ export default {
 			],
 		},
 	},
-} as ComponentMeta<typeof MediaCardList>;
+} as Meta<typeof MediaCardList>;
 
-const Template: ComponentStory<typeof MediaCardList> = (args, { loaded: { items } }) => (
+const Template: StoryFn<typeof MediaCardList> = (args, { loaded: { items } }) => (
 	<MediaCardList {...args} {...items} />
 );
 
-export const Grid: ComponentStory<typeof MediaCardList> = Template.bind({});
+export const Grid: StoryFn<typeof MediaCardList> = Template.bind({});
 Grid.args = {
 	view: 'grid',
 	sidebar: <p style={{ textAlign: 'center' }}>&lt;sidebar&gt;</p>,
@@ -35,7 +34,7 @@ Grid.parameters = {
 	backgrounds: { default: 'platinum' },
 };
 
-export const List: ComponentStory<typeof MediaCardList> = Template.bind({});
+export const List: StoryFn<typeof MediaCardList> = Template.bind({});
 List.args = { ...Grid.args, view: 'list' };
 List.loaders = [
 	async () => ({

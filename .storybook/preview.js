@@ -1,23 +1,18 @@
-import * as NextImage from 'next/image';
-
 import './styleguide.scss';
 
-// Global parameters
-export const parameters = {
-	actions: { argTypesRegex: '^on[A-Z].*' },
-	controls: {
-		matchers: {
-			color: /(background|color)$/i,
-			date: /Date$/,
+// next/image is handled automatically by the @storybook/nextjs framework, so the previous
+// manual unoptimized-image override is no longer needed.
+
+/** @type {import('@storybook/nextjs').Preview} */
+const preview = {
+	parameters: {
+		controls: {
+			matchers: {
+				color: /(background|color)$/i,
+				date: /Date$/,
+			},
 		},
 	},
 };
 
-// Allow Storybook to load unoptimized images, removing the dependency on the Next server
-// src: https://github.com/vercel/next.js/issues/18393#issuecomment-909636489
-const OriginalNextImage = NextImage.default;
-
-Object.defineProperty(NextImage, 'default', {
-	configurable: true,
-	value: (props) => <OriginalNextImage {...props} loader={({ src }) => src} />,
-});
+export default preview;

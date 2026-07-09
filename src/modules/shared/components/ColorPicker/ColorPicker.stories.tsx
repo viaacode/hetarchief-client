@@ -1,7 +1,7 @@
 import { ColorPicker } from '@meemoo/react-components';
-import { action } from '@storybook/addon-actions';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React, { useState } from 'react';
+import { action } from 'storybook/actions';
 
 export default {
 	title: 'Components/ColorPicker',
@@ -13,9 +13,9 @@ export default {
 			},
 		},
 	},
-} as ComponentMeta<typeof ColorPicker>;
+} as Meta<typeof ColorPicker>;
 
-const Template: ComponentStory<typeof ColorPicker> = (args) => {
+const Template: StoryFn<typeof ColorPicker> = (args) => {
 	const [color, setColor] = useState<string>(args.color as string);
 
 	return (

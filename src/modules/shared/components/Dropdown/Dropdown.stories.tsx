@@ -1,9 +1,9 @@
 import { Dropdown, DropdownButton, DropdownContent, MenuContent } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { action } from '@storybook/addon-actions';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React, { cloneElement, type ReactElement, useState } from 'react';
+import { action } from 'storybook/actions';
 
 import { menuItemsWithIcons } from './__mocks__/dropdown';
 
@@ -30,9 +30,9 @@ const DropdownStoryComponent = ({ children }: { children: ReactElement }) => {
 export default {
 	title: 'Components/Dropdown',
 	component: Dropdown,
-} as ComponentMeta<typeof Dropdown>;
+} as Meta<typeof Dropdown>;
 
-const Template: ComponentStory<typeof Dropdown> = (args) => (
+const Template: StoryFn<typeof Dropdown> = (args) => (
 	<DropdownStoryComponent>
 		<Dropdown {...args}>
 			<MenuContent
@@ -44,7 +44,7 @@ const Template: ComponentStory<typeof Dropdown> = (args) => (
 	</DropdownStoryComponent>
 );
 
-const TemplateCustomButton: ComponentStory<typeof Dropdown> = (args) => (
+const TemplateCustomButton: StoryFn<typeof Dropdown> = (args) => (
 	<DropdownStoryComponent>
 		<Dropdown {...args}>
 			<DropdownButton>

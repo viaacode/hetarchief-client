@@ -7,7 +7,7 @@ import {
 	Permission,
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
-import { PaginationBar, Table } from '@meemoo/react-components';
+import { PaginationBar, type Row, Table } from '@meemoo/react-components';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { Loading } from '@shared/components/Loading';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
@@ -30,7 +30,6 @@ import { VisitorLayout } from '@visitor-layout/index';
 import { SearchFilterId } from '@visitor-space/types';
 import { useRouter } from 'next/router';
 import { type FC, type MouseEvent, type ReactNode, useMemo, useState } from 'react';
-import type { Row, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import styles from './AccountMyHistory.module.scss';
@@ -178,15 +177,15 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 							columns: HistoryTableColumns(onPlanVisitClicked),
 							data: filteredVisits || [],
 							initialState: {
-								pageSize: HistoryItemListSize,
-								sortBy: sortFilters,
-							} as TableState<VisitRequest>,
+								pagination: { pageIndex: 0, pageSize: HistoryItemListSize },
+								sorting: sortFilters,
+							},
 						}}
 						onSortChange={onSortChange}
 						sortingIcons={sortingIcons}
 						showTable={hasData}
 						enableRowFocusOnClick={true}
-						pagination={({ gotoPage }) => {
+						pagination={(table) => {
 							return (
 								<PaginationBar
 									{...getDefaultPaginationBarProps()}
@@ -194,7 +193,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 									startItem={Math.max(0, filters.page - 1) * HistoryItemListSize}
 									totalItems={visits.data?.total || 0}
 									onPageChange={(pageZeroBased: number) => {
-										gotoPage(pageZeroBased);
+										table.setPageIndex(pageZeroBased);
 										setFilters({
 											...filters,
 											page: pageZeroBased + 1,

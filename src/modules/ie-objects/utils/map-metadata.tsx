@@ -4,7 +4,7 @@ import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import type { Locale } from '@shared/utils/i18n';
 import { SearchFilterId } from '@visitor-space/types';
-import { capitalize, isArray, isEmpty, isString, lowerCase, uniq } from 'lodash-es';
+import { capitalize, isArray, isEmpty, isString, lowerCase, uniq } from 'es-toolkit/compat';
 import type { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import type { ReactNode } from 'react';

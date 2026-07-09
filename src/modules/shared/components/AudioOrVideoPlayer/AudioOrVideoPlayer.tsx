@@ -10,11 +10,11 @@ import {
 import type { IeObjectFile } from '@ie-objects/ie-objects.types';
 import { FlowPlayer, type FlowPlayerProps, getValidStartAndEnd } from '@meemoo/react-components';
 import { Loading } from '@shared/components/Loading';
+import getConfig from '@shared/config/public-runtime-config';
 import { useGetFileDuration } from '@shared/hooks/use-get-file-duration';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import { IeObjectType } from '@shared/types/ie-objects';
-import { isNil } from 'lodash-es';
-import getConfig from 'next/config';
+import { isNil } from 'es-toolkit/compat';
 import React, { type FC, useCallback, useEffect, useState } from 'react';
 import type { AudioOrVideoPlayerProps } from './AudioOrVideoPlayer.types';
 

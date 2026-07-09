@@ -1,4 +1,4 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React, { useState } from 'react';
 
 import Modal from './Modal';
@@ -6,9 +6,9 @@ import Modal from './Modal';
 export default {
 	title: 'Components/Modal',
 	component: Modal,
-} as ComponentMeta<typeof Modal>;
+} as Meta<typeof Modal>;
 
-const Template: ComponentStory<typeof Modal> = (args) => {
+const Template: StoryFn<typeof Modal> = (args) => {
 	const [isOpen, setOpen] = useState(false);
 
 	return (
@@ -37,7 +37,7 @@ const Template: ComponentStory<typeof Modal> = (args) => {
 	);
 };
 
-export const Primary: ComponentStory<typeof Modal> = Template.bind({});
+export const Primary: StoryFn<typeof Modal> = Template.bind({});
 Primary.args = {
 	title: 'The quick brown fox jumps over the lazy dog',
 	children: (
@@ -70,7 +70,7 @@ Primary.args = {
 	),
 };
 
-export const WithFooter: ComponentStory<typeof Modal> = Template.bind({});
+export const WithFooter: StoryFn<typeof Modal> = Template.bind({});
 WithFooter.args = {
 	...Primary.args,
 	footer: (
@@ -80,7 +80,7 @@ WithFooter.args = {
 	),
 };
 
-export const CustomHeading: ComponentStory<typeof Modal> = Template.bind({});
+export const CustomHeading: StoryFn<typeof Modal> = Template.bind({});
 CustomHeading.args = {
 	...WithFooter.args,
 	heading: (

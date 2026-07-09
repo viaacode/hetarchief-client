@@ -1,9 +1,8 @@
 import type { ContentPageInfo } from '@meemoo/admin-core-ui/client';
-import { startsWith } from 'lodash-es';
-import getConfig from 'next/config';
-import { stringifyUrl } from 'query-string';
-
+import getConfig from '@shared/config/public-runtime-config';
 import type { Locale } from '@shared/utils/i18n';
+import { startsWith } from 'es-toolkit/compat';
+import { stringifyUrl } from 'query-string';
 
 const { publicRuntimeConfig } = getConfig();
 

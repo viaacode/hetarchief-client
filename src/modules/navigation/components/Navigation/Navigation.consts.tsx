@@ -22,7 +22,7 @@ import type { Locale } from '@shared/utils/i18n';
 import { type AvoUserCommonUser, PermissionName } from '@viaa/avo2-types';
 import { SearchFilterId, type VisitorSpaceInfo } from '@visitor-space/types';
 import clsx from 'clsx';
-import { groupBy, intersection, isNil } from 'lodash-es';
+import { groupBy, intersection, isNil } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
 import type { MouseEventHandler, ReactNode } from 'react';

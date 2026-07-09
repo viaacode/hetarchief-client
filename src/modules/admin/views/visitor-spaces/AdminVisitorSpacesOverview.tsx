@@ -35,7 +35,6 @@ import {
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import React, { type FC, type ReactNode, useMemo, useState } from 'react';
-import type { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
@@ -191,15 +190,15 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalU
 						),
 						data: visitorSpaces?.items || [],
 						initialState: {
-							pageSize: VisitorSpacesOverviewTablePageSize,
-							sortBy: sortFilters,
-						} as TableState<VisitorSpaceInfo>,
+							pagination: { pageIndex: 0, pageSize: VisitorSpacesOverviewTablePageSize },
+							sorting: sortFilters,
+						},
 					}}
 					onSortChange={onSortChange}
 					sortingIcons={sortingIcons}
 					showTable={!noData && !isFetching}
 					enableRowFocusOnClick={true}
-					pagination={({ gotoPage }) => {
+					pagination={(table) => {
 						return (
 							<PaginationBar
 								{...getDefaultPaginationBarProps()}
@@ -207,7 +206,7 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalU
 								startItem={Math.max(0, filters.page - 1) * VisitorSpacesOverviewTablePageSize}
 								totalItems={visitorSpaces?.total || 0}
 								onPageChange={(pageZeroBased) => {
-									gotoPage(pageZeroBased);
+									table.setPageIndex(pageZeroBased);
 									setFilters({
 										...filters,
 										page: pageZeroBased + 1,

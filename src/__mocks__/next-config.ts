@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-vi.mock('next/config', () => ({
+vi.mock('@shared/config/public-runtime-config', () => ({
 	default: () => ({
 		publicRuntimeConfig: {
 			CLIENT_URL: '/client-url',

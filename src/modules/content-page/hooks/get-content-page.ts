@@ -2,7 +2,7 @@ import { ContentPageService, type DbContentPage } from '@meemoo/admin-core-ui/cl
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import type { Locale } from '@shared/utils/i18n';
 import { type QueryClient, type UseQueryResult, useQuery } from '@tanstack/react-query';
-import { startsWith } from 'lodash-es';
+import { startsWith } from 'es-toolkit/compat';
 
 export async function getContentPageByLanguageAndPath(
 	language: Locale,

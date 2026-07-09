@@ -25,7 +25,7 @@ import { setMaterialRequestCount, setShowMaterialRequestCenter } from '@shared/s
 import type { AvoUserCommonUser } from '@viaa/avo2-types';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
-import { noop } from 'lodash-es';
+import { noop } from 'es-toolkit/compat';
 import React, { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParam, withDefault } from 'use-query-params';

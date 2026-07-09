@@ -6,22 +6,16 @@
  *   Why: https://nextjs.org/docs/messages/css-npm
  *   RFC: https://github.com/vercel/next.js/discussions/27953
  */
-const nextTranspileModules = require('next-transpile-modules');
 const path = require('node:path');
 
 // const withBundleAnalyzer = bundleAnalyser({
 // 	enabled: process.env.ANALYZE === 'true',
 // });
 
-const withTM = nextTranspileModules([
-	'ky-universal',
-	'@viaa/avo2-components',
-	'@meemoo/react-components',
-]);
-
 /** @type {import("next").NextConfig} */
 // module.exports = withBundleAnalyzer(
-module.exports = withTM({
+module.exports = {
+	transpilePackages: ['ky-universal', '@viaa/avo2-components', '@meemoo/react-components'],
 	i18n: {
 		locales: ['nl', 'en'],
 		defaultLocale: 'nl',
@@ -30,6 +24,12 @@ module.exports = withTM({
 	// https://stackoverflow.com/questions/71847778/why-my-nextjs-component-is-rendering-twice
 	// Disabling react 18 strict mode, otherwise the zendesk widget is rendered twice
 	reactStrictMode: false,
+	// SCSS modules use root-relative imports like `@use 'src/styles/abstracts'`.
+	// sass-loader v16 (Next 16, modern Sass API) needs the project root added explicitly as a load path.
+	sassOptions: {
+		loadPaths: [path.resolve(__dirname)],
+		includePaths: [path.resolve(__dirname)],
+	},
 	experimental: {
 		/**
 		 * Necessary to prevent errors like:
@@ -47,9 +47,6 @@ module.exports = withTM({
 		// Attempt to improve css loading
 		// https://meemoo.atlassian.net/browse/ARC-2913
 		optimizeCss: true,
-	},
-	eslint: {
-		ignoreDuringBuilds: true, // We're using biome instead of eslint
 	},
 	webpack: (config, options) => {
 		config.mode = 'production';
@@ -88,11 +85,8 @@ module.exports = withTM({
 			'react-select': path.resolve('./node_modules/react-select'),
 			'react-select/creatable': path.resolve('./node_modules/react-select/creatable'),
 			'react-select/async': path.resolve('./node_modules/react-select/async'),
-			'react-popper': path.resolve('./node_modules/react-popper'),
 			'react-hook-form': path.resolve('./node_modules/react-hook-form'),
-			'react-table': path.resolve('./node_modules/react-table'),
 			'react-datepicker': path.resolve('./node_modules/react-datepicker'),
-			lodash$: path.resolve('./node_modules/lodash-es'),
 		};
 
 		return config;
@@ -114,27 +108,6 @@ module.exports = withTM({
 		],
 	},
 	productionBrowserSourceMaps: true, // process.env.DEBUG_TOOLS === 'true',
-	publicRuntimeConfig: {
-		NEXT_TELEMETRY_DISABLED: process.env.NEXT_TELEMETRY_DISABLED,
-		NODE_ENV: process.env.NODE_ENV,
-		PORT: process.env.PORT,
-		CLIENT_URL: process.env.CLIENT_URL,
-		SSUM_EDIT_ACCOUNT_URL: process.env.SSUM_EDIT_ACCOUNT_URL,
-		KEYCLOAK_ACCOUNT_EDIT_URL: process.env.KEYCLOAK_ACCOUNT_EDIT_URL,
-		USE_KEYCLOAK_INSTEAD_OF_SSUM: process.env.USE_KEYCLOAK_INSTEAD_OF_SSUM,
-		PROXY_URL: process.env.PROXY_URL,
-		DEBUG_TOOLS: process.env.DEBUG_TOOLS,
-		ZENDESK_KEY: process.env.ZENDESK_KEY,
-		FLOW_PLAYER_TOKEN: process.env.FLOW_PLAYER_TOKEN,
-		FLOW_PLAYER_ID: process.env.FLOW_PLAYER_ID,
-		GOOGLE_TAG_MANAGER_ID: process.env.GOOGLE_TAG_MANAGER_ID,
-		ENABLE_GOOGLE_INDEXING: process.env.ENABLE_GOOGLE_INDEXING,
-		IIIF_IMAGE_API: process.env.IIIF_IMAGE_API,
-		ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW:
-			process.env.ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW,
-		DISABLE_COMPLEX_REUSE_FLOW_FOR_ORGANISATIONS: process.env.DISABLE_COMPLEX_REUSE_FLOW_FOR_ORGANISATIONS,
-		ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY: process.env.ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY,
-	},
 	async headers() {
 		if (process.env.ENABLE_GOOGLE_INDEXING === 'false') {
 			return [
@@ -447,4 +420,4 @@ module.exports = withTM({
 			},
 		];
 	},
-});
+};

@@ -1,15 +1,14 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
-
-import CollapsableBlade from './CollapsableBlade';
 import { collapsableBladeMock } from './__mocks__/CollapsedBlade.mock';
+import CollapsableBlade from './CollapsableBlade';
 
 export default {
 	title: 'Components/CollapsableBlade',
 	component: CollapsableBlade,
-} as ComponentMeta<typeof CollapsableBlade>;
+} as Meta<typeof CollapsableBlade>;
 
-const Template: ComponentStory<typeof CollapsableBlade> = (args) => <CollapsableBlade {...args} />;
+const Template: StoryFn<typeof CollapsableBlade> = (args) => <CollapsableBlade {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

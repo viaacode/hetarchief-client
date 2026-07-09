@@ -12,7 +12,7 @@ import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
 import { SearchFilterId } from '@visitor-space/types';
 import clsx from 'clsx';
-import { isNil } from 'lodash-es';
+import { isNil } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';

@@ -1,4 +1,4 @@
-import { sortBy } from 'lodash-es';
+import { sortBy } from 'es-toolkit/compat';
 
 enum CharacterType {
 	LETTER = 0,

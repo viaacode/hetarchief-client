@@ -1,5 +1,3 @@
-@use "../src/styles/main.scss" with (
-	// This is necessary because storybook's sass loader doesn't rewrite url("...") values
-	// so all linked assets must be relative to the output
-	$base-font-path: "../public"
-);
+// @storybook/nextjs serves ../public at the root (see staticDirs in main.js), so the default
+// $base-font-path ("") produces absolute /fonts/... URLs that resolve from the served public dir.
+@use "../src/styles/main";

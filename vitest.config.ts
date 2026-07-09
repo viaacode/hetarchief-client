@@ -60,7 +60,6 @@ export default defineConfig({
 		},
 		alias: {
 			...aliasConfig,
-			'lodash-es': resolve(__dirname, 'node_modules/lodash/index.js'),
 			'@meemoo/react-components': resolve(
 				__dirname,
 				'node_modules/@meemoo/react-components/dist/index.js'
@@ -75,7 +74,7 @@ export default defineConfig({
 				inline: [
 					'@meemoo/react-components',
 					'@viaa/avo2-components',
-					'lodash-es',
+					'es-toolkit',
 					'ky',
 					'string-strip-html',
 				],
@@ -85,7 +84,6 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			...aliasConfig,
-			'lodash-es': resolve(__dirname, 'node_modules/lodash/index.js'),
 			'@meemoo/react-components': resolve(
 				__dirname,
 				'node_modules/@meemoo/react-components/dist/index.js'

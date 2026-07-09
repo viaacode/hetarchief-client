@@ -1,13 +1,13 @@
 import { TextArea } from '@meemoo/react-components';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
 export default {
 	title: 'Components/TextArea',
 	component: TextArea,
-} as ComponentMeta<typeof TextArea>;
+} as Meta<typeof TextArea>;
 
-const Template: ComponentStory<typeof TextArea> = (args) => <TextArea {...args} />;
+const Template: StoryFn<typeof TextArea> = (args) => <TextArea {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {};

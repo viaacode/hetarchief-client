@@ -1,8 +1,7 @@
-import ky from 'ky-universal';
-import type { KyInstance } from 'ky/distribution/types/ky';
-import getConfig from 'next/config';
-
 import { AuthService } from '@auth/services/auth-service';
+import getConfig from '@shared/config/public-runtime-config';
+import type { KyInstance } from 'ky/distribution/types/ky';
+import ky from 'ky-universal';
 
 const { publicRuntimeConfig } = getConfig();
 

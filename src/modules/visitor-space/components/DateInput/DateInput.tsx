@@ -5,7 +5,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { isValid } from 'date-fns';
-import { noop } from 'lodash-es';
+import { noop } from 'es-toolkit/compat';
 import type { FC } from 'react';
 import ReactDatePicker from 'react-datepicker';
 
@@ -45,8 +45,8 @@ const DateInput: FC<DateInputProps> = ({
 			<ReactDatePicker
 				{...getDatePickerDefaultProps(locale)}
 				id={id}
-				onChange={(newDate) => onChange(newDate)}
-				onBlur={onBlur}
+				onChange={(newDate: Date | null) => onChange(newDate)}
+				onBlur={(event) => onBlur(event.nativeEvent)}
 				className={className}
 				disabled={disabled}
 				selected={isValid(value) ? value : defaultValue}

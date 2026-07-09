@@ -107,8 +107,8 @@ import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/util
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
+import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'es-toolkit/compat';
 import type { HTTPError } from 'ky';
-import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { stringifyUrl } from 'query-string';

@@ -1,7 +1,7 @@
 import { CheckboxList, Dropdown, RadioButton } from '@meemoo/react-components';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import clsx from 'clsx';
-import { isEmpty, isNil, without } from 'lodash-es';
+import { isEmpty, isNil, without } from 'es-toolkit/compat';
 import { type FC, type ReactElement, type ReactNode, useState } from 'react';
 
 import { Icon } from '../Icon';

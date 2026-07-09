@@ -1,4 +1,4 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React, { useState } from 'react';
 
 import ConfirmationModal from './ConfirmationModal';
@@ -6,9 +6,9 @@ import ConfirmationModal from './ConfirmationModal';
 export default {
 	title: 'Components/ConfirmationModal',
 	component: ConfirmationModal,
-} as ComponentMeta<typeof ConfirmationModal>;
+} as Meta<typeof ConfirmationModal>;
 
-const Template: ComponentStory<typeof ConfirmationModal> = (args) => {
+const Template: StoryFn<typeof ConfirmationModal> = (args) => {
 	const [isOpen, setOpen] = useState(false);
 
 	return (
@@ -28,4 +28,4 @@ const Template: ComponentStory<typeof ConfirmationModal> = (args) => {
 	);
 };
 
-export const Primary: ComponentStory<typeof ConfirmationModal> = Template.bind({});
+export const Primary: StoryFn<typeof ConfirmationModal> = Template.bind({});

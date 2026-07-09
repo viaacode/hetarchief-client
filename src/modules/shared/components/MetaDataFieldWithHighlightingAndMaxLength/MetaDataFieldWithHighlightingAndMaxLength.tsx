@@ -3,7 +3,7 @@ import type { DefaultComponentProps } from '@meemoo/admin-core-ui/admin';
 import { Button } from '@meemoo/react-components';
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import { tText } from '@shared/helpers/translate';
-import { isString } from 'lodash-es';
+import { isString } from 'es-toolkit/compat';
 import type { FC, ReactNode } from 'react';
 import { METADATA_FIELD_MAX_LENGTH } from './MetaDataFieldWithHighlightingAndMaxLength.const';
 import styles from './MetaDataFieldWithHighlightingAndMaxLength.module.scss';

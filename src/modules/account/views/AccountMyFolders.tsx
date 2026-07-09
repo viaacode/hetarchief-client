@@ -36,7 +36,7 @@ import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import clsx from 'clsx';
-import { isEmpty, isNil, kebabCase } from 'lodash-es';
+import { isEmpty, isNil, kebabCase } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';

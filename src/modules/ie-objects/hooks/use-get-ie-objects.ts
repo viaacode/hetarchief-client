@@ -22,7 +22,7 @@ import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { SEARCH_RESULTS_PAGE_SIZE } from '@visitor-space/const';
 import { SearchSortProp } from '@visitor-space/types';
 import { VISITOR_SPACE_LICENSES } from '@visitor-space/utils/elastic-filters';
-import { isEmpty, isNil, noop } from 'lodash-es';
+import { isEmpty, isNil, noop } from 'es-toolkit/compat';
 import { useDispatch, useSelector } from 'react-redux';
 
 async function getIeObjects(

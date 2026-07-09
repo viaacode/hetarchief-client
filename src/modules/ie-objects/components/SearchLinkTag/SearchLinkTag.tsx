@@ -1,11 +1,10 @@
-import { TagList } from '@meemoo/react-components';
-import { compact } from 'lodash-es';
-import Link from 'next/link';
-import type { FC } from 'react';
-
 import type { SearchLinkTagProps } from '@ie-objects/components/SearchLinkTag/SearchLinkTag.types';
 import { mapKeywordsToTags } from '@ie-objects/utils/map-metadata';
+import { TagList } from '@meemoo/react-components';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
+import { compact } from 'es-toolkit/compat';
+import Link from 'next/link';
+import type { FC } from 'react';
 
 import styles from './SearchLinkTag.module.scss';
 

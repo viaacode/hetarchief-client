@@ -1,43 +1,15 @@
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-
-module.exports = {
-	stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
-	addons: [
-		{
-			name: '@storybook/preset-scss',
-			options: {
-				sassLoaderOptions: {
-					sassOptions: {
-						includePaths: ['src'],
-					},
-				},
-			},
-		},
-		'@storybook/addon-links',
-		'@storybook/addon-essentials',
-		'@storybook/addon-a11y',
-	],
-	framework: '@storybook/react',
-	core: {
-		builder: 'webpack5',
+/** @type {import('@storybook/nextjs').StorybookConfig} */
+const config = {
+	stories: ['../src/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
+	addons: ['@storybook/addon-a11y', '@storybook/addon-docs'],
+	framework: {
+		// The Next.js framework handles the webpack config, SCSS, next/image, next/font,
+		// path aliases and next.config settings (incl. sassOptions) automatically.
+		name: '@storybook/nextjs',
+		options: {},
 	},
-	staticDirs: ['./static', '../public'],
+	staticDirs: ['../public'],
 	typescript: { reactDocgen: false },
-	webpackFinal: async (config) => {
-		config.resolve.plugins = [
-			...(config.resolve.plugins || []),
-			new TsconfigPathsPlugin({
-				extensions: config.resolve.extensions,
-			}),
-		];
-		config.resolve = {
-			...config.resolve,
-			fallback: {
-				...config.resolve.fallback,
-				fs: false,
-			},
-		};
-
-		return config;
-	},
 };
+
+module.exports = config;

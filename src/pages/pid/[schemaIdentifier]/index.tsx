@@ -17,7 +17,7 @@ import { setShowZendesk } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { QueryClient } from '@tanstack/react-query';
 import { VisitorLayout } from '@visitor-layout/index';
-import { kebabCase } from 'lodash-es';
+import { kebabCase } from 'es-toolkit/compat';
 import type { GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import type { GetServerSidePropsContext } from 'next/types';
