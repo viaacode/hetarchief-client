@@ -63,13 +63,6 @@ module.exports = {
 			config.externals = ['@tanstack/react-query', 'use-query-params', ...config.externals];
 		}
 
-		// Use biome linting instead of eslint for the build
-		config.plugins.push(
-			new (require('webpack').DefinePlugin)({
-				'process.env.BIOME_LINT': JSON.stringify(true),
-			})
-		);
-
 		// Ignore NextJS warnings about skipped css rules that are not compatible with server side rendering
 		// https://meemoo.atlassian.net/browse/ARC-3192
 		config.ignoreWarnings = [
@@ -93,6 +86,10 @@ module.exports = {
 	},
 	typescript: {
 		tsconfigPath: './tsconfig.build.json',
+	},
+	// We lint with Biome, not ESLint -- Biome itself gates the build via the "biome ci" step in the build scripts
+	eslint: {
+		ignoreDuringBuilds: true,
 	},
 	images: {
 		unoptimized: true,

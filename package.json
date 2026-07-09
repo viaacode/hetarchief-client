@@ -9,9 +9,9 @@
   ],
   "scripts": {
     "dev": "dotenv -e .env.local -- node ./scripts/generate-env-config.js && next dev --webpack -p 3200",
-    "build-with-analyse": "cross-env ANALYZE=true next build --webpack",
-    "build": "next build --webpack",
-    "build-production": "cross-env NODE_ENV=production next build --webpack",
+    "build-with-analyse": "biome ci && cross-env ANALYZE=true next build --webpack",
+    "build": "biome ci && next build --webpack",
+    "build-production": "biome ci && cross-env NODE_ENV=production next build --webpack",
     "start": "next start",
     "start-production-locally": "dotenv -e .env.local -- node ./scripts/generate-env-config.js && cross-env NODE_ENV=production next start -p 3200",
     "docker-start": "node ./scripts/generate-env-config.js && node ./scripts/copy-robots-txt-file.js && next start",
