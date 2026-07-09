@@ -228,7 +228,7 @@ $padding-horizontal-mobile: abstracts.$spacer-sm;
 				justify-content: space-between;
 			}
 
-			&:not(&--size-wide){
+			&:not(.c-blade__footer-buttons--size-wide) {
 				:global(.c-button), a {
 					display: block;
 					width: 100%;
