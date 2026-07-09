@@ -1,6 +1,5 @@
-import type { ReactNode } from 'react';
-
 import type { VisitRequest } from '@shared/types/visit-request';
+import type { ReactNode } from 'react';
 
 export interface VisitDetailBladeProps {
 	children?: ReactNode;

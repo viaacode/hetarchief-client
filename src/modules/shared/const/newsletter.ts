@@ -1,7 +1,6 @@
-import { object, type Schema, string } from 'yup';
-
 import { tText } from '@shared/helpers/translate';
 import type { NewsletterFormState } from '@shared/types/newsletter';
+import { object, type Schema, string } from 'yup';
 
 export const NEWSLETTER_FORM_SCHEMA = (): Schema<NewsletterFormState> => {
 	return object({

@@ -1,7 +1,6 @@
 import { RadioButton } from '@meemoo/react-components';
-import type { FC } from 'react';
-
 import { tText } from '@shared/helpers/translate';
+import type { FC } from 'react';
 
 import styles from './SelectDateOrYear.module.scss';
 

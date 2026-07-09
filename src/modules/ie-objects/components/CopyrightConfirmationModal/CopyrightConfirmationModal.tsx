@@ -1,11 +1,10 @@
-import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import type { FC } from 'react';
-
 import type { CopyrightConfirmationModalProps } from '@ie-objects/components/CopyrightConfirmationModal/CopyrightConfirmationModal.types';
+import { Button } from '@meemoo/react-components';
 import { Modal } from '@shared/components/Modal';
 import { globalLabelKeys } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
+import clsx from 'clsx';
+import type { FC } from 'react';
 
 import styles from './CopyrightConfirmationModal.module.scss';
 

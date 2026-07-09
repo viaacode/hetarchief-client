@@ -1,11 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { type FC, useCallback, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useQueryParams } from 'use-query-params';
-
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import CheckboxFilterForm from '@visitor-space/components/CheckboxFilterForm/CheckboxFilterForm';
 import { SearchFilterId } from '@visitor-space/types';
+import { type FC, useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useQueryParams } from 'use-query-params';
 
 import {
 	CONSULTABLE_MEDIA_FILTER_FORM_QUERY_PARAM_CONFIG,

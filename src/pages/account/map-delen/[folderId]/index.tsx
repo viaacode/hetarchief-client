@@ -1,12 +1,11 @@
-import type { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
-import { useRouter } from 'next/router';
-import type { ComponentType } from 'react';
-
 import { AccountAcceptSharedFolder } from '@account/views/AccountAcceptSharedFolder';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import type { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
+import { useRouter } from 'next/router';
+import type { ComponentType } from 'react';
 
 const AccountSharedFolderDutch: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
 	const router = useRouter();

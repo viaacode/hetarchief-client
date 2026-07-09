@@ -1,8 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { type FC, useCallback, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useQueryParams } from 'use-query-params';
-
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import CheckboxFilterForm from '@visitor-space/components/CheckboxFilterForm/CheckboxFilterForm';
 import type {
@@ -10,6 +6,9 @@ import type {
 	ConsultableOnlyOnLocationFilterFormState,
 } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
 import { SearchFilterId } from '@visitor-space/types';
+import { type FC, useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useQueryParams } from 'use-query-params';
 
 import {
 	CONSULTABLE_ONLY_ON_LOCATION_FILTER_FORM_SCHEMA,

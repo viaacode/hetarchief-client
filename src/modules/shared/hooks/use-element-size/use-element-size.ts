@@ -1,7 +1,6 @@
 import useResizeObserver from '@react-hook/resize-observer';
-import { useState } from 'react';
-
 import useIsomorphicLayoutEffect from '@shared/hooks/use-isomorphic-layout-effect';
+import { useState } from 'react';
 
 import type { UseElementSize } from './use-element-size.types';
 

@@ -1,9 +1,8 @@
-import { type FC, type ReactNode, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-
 import { GroupName } from '@account/const';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { setShowZendesk } from '@shared/store/ui';
+import { type FC, type ReactNode, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 /**
  * Layout to wrap all pages for visitors (eg: not cp admin, not meemoo admin, but visitor pages)

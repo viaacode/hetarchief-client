@@ -1,7 +1,6 @@
 import { Checkbox, keysEnter, keysSpacebar, onKey } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import clsx from 'clsx';
 import type { FC } from 'react';
 import styles from './MaterialRequestsArchiveCheckbox.module.scss';
 

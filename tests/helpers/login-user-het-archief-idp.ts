@@ -1,4 +1,4 @@
-import { type Page, expect } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { Locale } from '@shared/utils/i18n';
 

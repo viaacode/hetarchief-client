@@ -1,8 +1,7 @@
 import { ReactSelect, type ReactSelectProps } from '@meemoo/react-components';
-import type { FC } from 'react';
-
 import { tText } from '@shared/helpers/translate';
 import { IeObjectType } from '@shared/types/ie-objects';
+import type { FC } from 'react';
 
 import type { MediaTypeOptions } from '../../types';
 

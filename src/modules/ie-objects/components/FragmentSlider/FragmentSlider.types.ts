@@ -1,7 +1,6 @@
-import type { ReactNode } from 'react';
-
 import type { IeObjectFile } from '@ie-objects/ie-objects.types';
 import type { DefaultComponentProps } from '@shared/types';
+import type { ReactNode } from 'react';
 
 export interface FragmentSliderProps extends DefaultComponentProps {
 	children?: ReactNode;

@@ -1,2 +1,2 @@
-export * from './RefinableRadioButton.types';
 export * from './RefinableRadioButton';
+export * from './RefinableRadioButton.types';

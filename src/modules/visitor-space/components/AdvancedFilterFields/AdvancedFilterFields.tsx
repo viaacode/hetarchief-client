@@ -9,7 +9,6 @@ import {
 } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import getConfig from '@shared/config/public-runtime-config';
 import { SEPARATOR } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -50,8 +49,6 @@ import type { FilterProperty, IdentityAdvancedFilter, Operator } from '../../typ
 import { getSelectValue } from '../../utils/select';
 import DurationInput, { defaultValue } from '../DurationInput/DurationInput';
 import styles from './AdvancedFilterFields.module.scss';
-
-const { publicRuntimeConfig } = getConfig();
 
 const labelKeys = {
 	prefix: 'AdvancedFilterFields',

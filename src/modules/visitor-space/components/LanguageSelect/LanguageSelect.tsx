@@ -1,16 +1,15 @@
 import { ReactSelect, type ReactSelectProps } from '@meemoo/react-components';
-import type { FC } from 'react';
-import { useSelector } from 'react-redux';
-
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
 import {
-	type LanguageCode,
 	LANGUAGES,
+	type LanguageCode,
 } from '@visitor-space/components/LanguageFilterForm/languages';
 import { ElasticsearchFieldNames } from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
+import type { FC } from 'react';
+import { useSelector } from 'react-redux';
 
 export const LanguageSelect: FC<ReactSelectProps> = (props) => {
 	const locale = useLocale();

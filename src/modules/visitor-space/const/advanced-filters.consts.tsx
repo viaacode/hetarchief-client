@@ -1,5 +1,4 @@
 import { type ReactSelectProps, TextInput, type TextInputProps } from '@meemoo/react-components';
-import getConfig from '@shared/config/public-runtime-config';
 import { tText } from '@shared/helpers/translate';
 import {
 	type IeObjectsSearchFilter,
@@ -22,8 +21,6 @@ import { getFilterLabel } from '@visitor-space/utils/advanced-filters';
 import type { FC } from 'react';
 import DurationInput from '../components/DurationInput/DurationInput';
 import { FilterProperty, Operator } from '../types';
-
-const { publicRuntimeConfig } = getConfig();
 
 type FilterInputComponent =
 	| FC<TextInputProps>
