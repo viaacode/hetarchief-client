@@ -1,5 +1,6 @@
 @use "sass:color";
 @use "sass:map";
+@use "sass:math";
 @use "src/styles/abstracts" as abstracts;
 
 $c-navigation-border-height: 0.5rem;
@@ -361,7 +362,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 			content: "";
 			position: absolute;
 			top: 50%;
-			left: -$c-navigation-item-spacing / 2;
+			left: math.div(-$c-navigation-item-spacing, 2);
 			width: 0.1rem;
 			height: 4.4rem;
 			background-color: $c-navigation-list-divider-color;
