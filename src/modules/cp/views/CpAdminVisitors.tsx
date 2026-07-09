@@ -84,11 +84,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 
 	// Events
 
-	// Memoized so its identity is stable across renders that don't change `filters`.
-	// The Table component re-runs an internal effect whenever this prop's identity
-	// changes, so an unmemoized callback here causes it to re-fire on every render of
-	// this page (not just on an actual sort change), flooding the History API and
-	// tripping Chrome's navigation throttle (crbug.com/1038223).
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Wee need the useCallback otherwise we get a render loop, but no need to update the method each time the filters change
 	const onSortChange = useCallback(
 		(orderProp: string | undefined, orderDirection: AvoSearchOrderDirection | undefined) => {
 			if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
@@ -100,7 +96,7 @@ export const CpAdminVisitorsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 				});
 			}
 		},
-		[filters, setFilters]
+		[]
 	);
 
 	const denyVisitRequest = (visitRequest: VisitRequest) => {

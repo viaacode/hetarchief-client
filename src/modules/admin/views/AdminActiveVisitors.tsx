@@ -71,6 +71,15 @@ export const AdminActiveVisitors: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =
 	// tripping Chrome's navigation throttle (crbug.com/1038223).
 	const onSortChange = useCallback(
 		(orderProp: string | undefined, orderDirection: AvoSearchOrderDirection | undefined) => {
+			// The Table calls this with (undefined, undefined) whenever no column is actively
+			// sorted -- not just once on mount, but every time this callback's identity changes
+			// (i.e. every time `filters` changes, e.g. on pagination or any other filter change).
+			// A real user sort click always produces a defined `orderProp`, so this case carries
+			// no genuine sort change and must be ignored, or it would stomp unrelated filter
+			// changes (like the current page) by unconditionally resetting `page` back to 1.
+			if (orderProp === undefined && orderDirection === undefined) {
+				return;
+			}
 			if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 				setFilters({
 					...filters,

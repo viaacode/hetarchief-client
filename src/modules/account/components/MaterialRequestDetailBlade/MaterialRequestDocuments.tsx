@@ -139,16 +139,19 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 		[orderProp, orderDirection]
 	);
 
-	// Memoized so its identity is stable across renders that don't change orderProp/orderDirection.
-	// The Table component re-runs an internal effect whenever this prop's identity
-	// changes, so an unmemoized callback here causes it to re-fire on every render of
-	// this page (not just on an actual sort change), flooding the History API and
-	// tripping Chrome's navigation throttle (crbug.com/1038223).
 	const onSortChange = useCallback(
 		(
 			newOrderProp: string | undefined,
 			newOrderDirection: AvoSearchOrderDirection | undefined
 		): void => {
+			// The Table calls this with (undefined, undefined) whenever no column is actively
+			// sorted -- not just once on mount, but every time this callback's identity changes
+			// (i.e. every time orderProp/orderDirection change). A real user sort click always
+			// produces a defined newOrderProp, so this case carries no genuine sort change and
+			// must be ignored, or it would overwrite the initial sort direction on mount.
+			if (newOrderProp === undefined && newOrderDirection === undefined) {
+				return;
+			}
 			if (newOrderProp !== orderProp || newOrderDirection !== orderDirection) {
 				setOrderProp(newOrderProp || 'createdAt');
 				setOrderDirection(newOrderDirection || AvoSearchOrderDirection.DESC);
