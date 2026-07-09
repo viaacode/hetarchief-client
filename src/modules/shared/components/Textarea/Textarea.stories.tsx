@@ -10,9 +10,14 @@ export default {
 const Template: StoryFn<typeof TextArea> = (args) => <TextArea {...args} />;
 
 export const Default = Template.bind({});
-Default.args = {};
+Default.args = {
+	id: 'textarea-default',
+	ariaLabel: 'Textarea',
+};
 
 export const Disabled = Template.bind({});
 Disabled.args = {
+	id: 'textarea-disabled',
+	ariaLabel: 'Textarea',
 	disabled: true,
 };

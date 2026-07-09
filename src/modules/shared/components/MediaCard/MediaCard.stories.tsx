@@ -60,6 +60,8 @@ const Template: StoryFn<typeof MediaCard> = (args) => {
 export const Grid: StoryFn<typeof MediaCard> = Template.bind({});
 Grid.args = {
 	view: 'grid',
+	icon: null,
+	link: undefined,
 	publishedOrCreatedDate: new Date().toDateString(),
 	publishedBy: 'Studio Hyperdrive',
 	description:

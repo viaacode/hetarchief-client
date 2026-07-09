@@ -19,19 +19,27 @@ Default.args = {
 	onInputChange: action('Input changed'),
 	onClear: action('Value cleared'),
 	onSearch: action('Search triggered'),
+	setInputValue: action('Set input value'),
+	isLoading: false,
 };
 
 export const AllowCreate = Template.bind({});
 AllowCreate.args = {
 	allowCreate: true,
+	setInputValue: action('Set input value'),
+	isLoading: false,
 };
 
 export const Large = Template.bind({});
 Large.args = {
 	size: 'lg',
+	setInputValue: action('Set input value'),
+	isLoading: false,
 };
 
 export const Medium = Template.bind({});
 Medium.args = {
 	size: 'md',
+	setInputValue: action('Set input value'),
+	isLoading: false,
 };

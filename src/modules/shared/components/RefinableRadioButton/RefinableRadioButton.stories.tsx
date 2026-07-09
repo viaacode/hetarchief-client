@@ -14,6 +14,11 @@ const Template: StoryFn<typeof RefinableRadioButton> = (args) => <RefinableRadio
 
 export const Default = Template.bind({});
 Default.args = {
+	id: 'refinable-radio-button',
 	options: MOCK_OPTIONS,
+	value: {
+		selectedOption: 'type-1',
+		refinedSelection: [],
+	},
 	onChange: action('On change'),
 };

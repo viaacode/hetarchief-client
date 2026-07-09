@@ -15,6 +15,7 @@ export const Default = Template.bind({});
 Default.args = {
 	id: 'tab-id',
 	label: 'Tab me!',
+	ariaLabel: 'Tab me!',
 	active: false,
 };
 
@@ -22,6 +23,7 @@ export const Active = Template.bind({});
 Active.args = {
 	id: 'tab-id',
 	label: 'Tab me!',
+	ariaLabel: 'Tab me!',
 	active: true,
 };
 
@@ -29,6 +31,7 @@ export const WithIcon = Template.bind({});
 WithIcon.args = {
 	id: 'tab-id',
 	label: 'Audio',
+	ariaLabel: 'Audio',
 	active: false,
 	icon: <Icon name={IconNamesLight.Audio} />,
 };
@@ -42,6 +45,7 @@ WithCustomLabel.args = {
 			<small>(52)</small>
 		</>
 	),
+	ariaLabel: 'Video',
 	active: false,
 	icon: <Icon name={IconNamesLight.Video} />,
 };

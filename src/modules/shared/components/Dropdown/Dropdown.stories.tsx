@@ -65,6 +65,7 @@ const TemplateCustomButton: StoryFn<typeof Dropdown> = (args) => (
 
 export const Default = Template.bind({});
 Default.args = {
+	id: 'dropdown-default',
 	label: 'Dropdown',
 	icon: <Icon name={IconNamesLight.Timer} aria-hidden />,
 	iconOpen: <Icon name={IconNamesLight.AngleDown} aria-hidden />,
@@ -74,6 +75,7 @@ Default.args = {
 
 export const RightOpen = Template.bind({});
 RightOpen.args = {
+	id: 'dropdown-right-open',
 	label: 'Dropdown',
 	icon: <Icon name={IconNamesLight.Timer} aria-hidden />,
 	iconOpen: <Icon name={IconNamesLight.AngleDown} aria-hidden />,
@@ -83,4 +85,6 @@ RightOpen.args = {
 };
 
 export const CustomButton = TemplateCustomButton.bind({});
-CustomButton.args = {};
+CustomButton.args = {
+	id: 'dropdown-custom-button',
+};
