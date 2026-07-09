@@ -48,7 +48,7 @@ module.exports = {
 		// https://meemoo.atlassian.net/browse/ARC-2913
 		optimizeCss: true,
 	},
-	webpack: (config, options) => {
+	webpack: (config) => {
 		config.mode = 'production';
 
 		// Required for ky-universal top level await used in admin core inside the api service
@@ -56,12 +56,6 @@ module.exports = {
 
 		// https://stackoverflow.com/a/68098547/373207
 		config.resolve.fallback = { fs: false, path: false };
-
-		// Fix issues with react-query:
-		// https://github.com/TanStack/query/issues/3595#issuecomment-1276468579
-		if (options.isServer) {
-			config.externals = ['@tanstack/react-query', 'use-query-params', ...config.externals];
-		}
 
 		// Ignore NextJS warnings about skipped css rules that are not compatible with server side rendering
 		// https://meemoo.atlassian.net/browse/ARC-3192
@@ -87,10 +81,10 @@ module.exports = {
 	typescript: {
 		tsconfigPath: './tsconfig.build.json',
 	},
-	// We lint with Biome, not ESLint -- Biome itself gates the build via the "biome ci" step in the build scripts
-	eslint: {
-		ignoreDuringBuilds: true,
-	},
+	// Fix issues with react-query on the server:
+	// https://github.com/TanStack/query/issues/3595#issuecomment-1276468579
+	// Framework-level (not webpack-specific), so it also applies once we move to Turbopack.
+	serverExternalPackages: ['@tanstack/react-query', 'use-query-params'],
 	images: {
 		unoptimized: true,
 		remotePatterns: [
