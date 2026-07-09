@@ -23,7 +23,15 @@ import { useGetVisitRequest } from '@visit-requests/hooks/get-visit-request';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { RequestStatusAll } from '@visit-requests/types';
 import clsx from 'clsx';
-import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
+import {
+	type FC,
+	type MouseEvent,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import type { VisitRequestOverviewProps } from './VisitRequestsOverview.types';
@@ -112,19 +120,24 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 
 	// Events
 
-	const onSortChange = (
-		orderProp: string | undefined,
-		orderDirection: AvoSearchOrderDirection | undefined
-	) => {
-		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
-			setFilters({
-				...filters,
-				orderProp: orderProp || 'startAt',
-				orderDirection: orderDirection || AvoSearchOrderDirection.DESC,
-				page: 1,
-			});
-		}
-	};
+	// Memoized so its identity is stable across renders that don't change `filters`.
+	// The Table component re-runs an internal effect whenever this prop's identity
+	// changes, so an unmemoized callback here causes it to re-fire on every render of
+	// this page (not just on an actual sort change), flooding the History API and
+	// tripping Chrome's navigation throttle (crbug.com/1038223).
+	const onSortChange = useCallback(
+		(orderProp: string | undefined, orderDirection: AvoSearchOrderDirection | undefined) => {
+			if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
+				setFilters({
+					...filters,
+					orderProp: orderProp || 'startAt',
+					orderDirection: orderDirection || AvoSearchOrderDirection.DESC,
+					page: 1,
+				});
+			}
+		},
+		[filters, setFilters]
+	);
 
 	const onRowClick = (_evt: MouseEvent<HTMLTableRowElement>, row: Row<VisitRequest>) => {
 		if (!canUpdateVisitRequests) {

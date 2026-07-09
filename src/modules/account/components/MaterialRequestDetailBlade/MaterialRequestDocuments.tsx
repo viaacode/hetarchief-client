@@ -30,7 +30,14 @@ import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import { noop } from 'es-toolkit/compat';
 import Link from 'next/link';
-import React, { type FC, type HTMLAttributes, useEffect, useMemo, useState } from 'react';
+import React, {
+	type FC,
+	type HTMLAttributes,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import styles from './MaterialRequestDocuments.module.scss';
 
 interface MaterialRequestDocumentsProps {
@@ -132,15 +139,23 @@ export const MaterialRequestDocuments: FC<MaterialRequestDocumentsProps> = ({
 		[orderProp, orderDirection]
 	);
 
-	const onSortChange = (
-		newOrderProp: string | undefined,
-		newOrderDirection: AvoSearchOrderDirection | undefined
-	): void => {
-		if (newOrderProp !== orderProp || newOrderDirection !== orderDirection) {
-			setOrderProp(newOrderProp || 'createdAt');
-			setOrderDirection(newOrderDirection || AvoSearchOrderDirection.DESC);
-		}
-	};
+	// Memoized so its identity is stable across renders that don't change orderProp/orderDirection.
+	// The Table component re-runs an internal effect whenever this prop's identity
+	// changes, so an unmemoized callback here causes it to re-fire on every render of
+	// this page (not just on an actual sort change), flooding the History API and
+	// tripping Chrome's navigation throttle (crbug.com/1038223).
+	const onSortChange = useCallback(
+		(
+			newOrderProp: string | undefined,
+			newOrderDirection: AvoSearchOrderDirection | undefined
+		): void => {
+			if (newOrderProp !== orderProp || newOrderDirection !== orderDirection) {
+				setOrderProp(newOrderProp || 'createdAt');
+				setOrderDirection(newOrderDirection || AvoSearchOrderDirection.DESC);
+			}
+		},
+		[orderProp, orderDirection]
+	);
 
 	const getTableColumnProps = (
 		column: TableColumnInstance<MaterialRequestAttachment, unknown>

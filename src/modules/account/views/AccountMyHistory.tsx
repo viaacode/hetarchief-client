@@ -29,7 +29,7 @@ import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitorLayout } from '@visitor-layout/index';
 import { SearchFilterId } from '@visitor-space/types';
 import { useRouter } from 'next/router';
-import { type FC, type MouseEvent, type ReactNode, useMemo, useState } from 'react';
+import { type FC, type MouseEvent, type ReactNode, useCallback, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import styles from './AccountMyHistory.module.scss';
@@ -70,33 +70,38 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 	// Events
 
-	const onSortChange = (
-		orderProp: string | undefined,
-		orderDirection: AvoSearchOrderDirection | undefined
-	) => {
-		let orderPropResolved: string | undefined = orderProp;
-		let orderDirectionResolved: AvoSearchOrderDirection | undefined = orderDirection;
-		if (orderPropResolved === HistoryTableAccessComboId) {
-			orderPropResolved = HistoryTableAccessFrom;
-		}
-		if (!orderPropResolved) {
-			orderPropResolved = 'startAt';
-		}
-		if (!orderDirectionResolved) {
-			orderDirectionResolved = AvoSearchOrderDirection.DESC;
-		}
-		if (
-			filters.orderProp !== orderPropResolved ||
-			filters.orderDirection !== orderDirectionResolved
-		) {
-			setFilters({
-				...filters,
-				orderProp: orderPropResolved,
-				orderDirection,
-				page: 1,
-			});
-		}
-	};
+	// Memoized so its identity is stable across renders that don't change `filters`.
+	// The Table component re-runs an internal effect whenever this prop's identity
+	// changes, so an unmemoized callback here causes it to re-fire on every render of
+	// this page (not just on an actual sort change), flooding the History API and
+	// tripping Chrome's navigation throttle (crbug.com/1038223).
+	const onSortChange = useCallback(
+		(orderProp: string | undefined, orderDirection: AvoSearchOrderDirection | undefined) => {
+			let orderPropResolved: string | undefined = orderProp;
+			let orderDirectionResolved: AvoSearchOrderDirection | undefined = orderDirection;
+			if (orderPropResolved === HistoryTableAccessComboId) {
+				orderPropResolved = HistoryTableAccessFrom;
+			}
+			if (!orderPropResolved) {
+				orderPropResolved = 'startAt';
+			}
+			if (!orderDirectionResolved) {
+				orderDirectionResolved = AvoSearchOrderDirection.DESC;
+			}
+			if (
+				filters.orderProp !== orderPropResolved ||
+				filters.orderDirection !== orderDirectionResolved
+			) {
+				setFilters({
+					...filters,
+					orderProp: orderPropResolved,
+					orderDirection,
+					page: 1,
+				});
+			}
+		},
+		[filters, setFilters]
+	);
 
 	const onPlanVisitClicked = async (visit: VisitRequest) => {
 		try {

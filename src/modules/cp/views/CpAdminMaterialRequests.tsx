@@ -54,7 +54,15 @@ import {
 import clsx from 'clsx';
 import { isEmpty, isNil, noop } from 'es-toolkit/compat';
 import Link from 'next/link';
-import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
+import {
+	type FC,
+	type MouseEvent,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import { useSelector } from 'react-redux';
 import { StringParam, useQueryParam, useQueryParams } from 'use-query-params';
 
@@ -225,26 +233,31 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		});
 	}, [showArchived]);
 
-	const onSortChange = (
-		orderProp: string | undefined,
-		orderDirection: AvoSearchOrderDirection | undefined
-	): void => {
-		if (filters.orderProp === MaterialRequestKeys.requestedAt && orderDirection === undefined) {
-			setFilters({
-				...filters,
-				orderProp: orderProp || 'requestedAt',
-				orderDirection: AvoSearchOrderDirection.ASC,
-				page: 1,
-			});
-		} else if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
-			setFilters({
-				...filters,
-				orderProp: orderProp || 'requestedAt',
-				orderDirection: orderDirection || AvoSearchOrderDirection.DESC,
-				page: 1,
-			});
-		}
-	};
+	// Memoized so its identity is stable across renders that don't change `filters`.
+	// The Table component re-runs an internal effect whenever this prop's identity
+	// changes, so an unmemoized callback here causes it to re-fire on every render of
+	// this page (not just on an actual sort change), flooding the History API and
+	// tripping Chrome's navigation throttle (crbug.com/1038223).
+	const onSortChange = useCallback(
+		(orderProp: string | undefined, orderDirection: AvoSearchOrderDirection | undefined): void => {
+			if (filters.orderProp === MaterialRequestKeys.requestedAt && orderDirection === undefined) {
+				setFilters({
+					...filters,
+					orderProp: orderProp || 'requestedAt',
+					orderDirection: AvoSearchOrderDirection.ASC,
+					page: 1,
+				});
+			} else if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
+				setFilters({
+					...filters,
+					orderProp: orderProp || 'requestedAt',
+					orderDirection: orderDirection || AvoSearchOrderDirection.DESC,
+					page: 1,
+				});
+			}
+		},
+		[filters, setFilters]
+	);
 
 	// restore filters on notification open (if navigated to this page)
 	useRestoreFiltersOnNotificationOpen(currentMaterialRequestId, filters, setFilters, {

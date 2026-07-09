@@ -34,7 +34,7 @@ import {
 } from '@visitor-space/types';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import React, { type FC, type ReactNode, useMemo, useState } from 'react';
+import React, { type FC, type ReactNode, useCallback, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
@@ -78,19 +78,24 @@ export const AdminVisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url, canonicalU
 
 	// Events
 
-	const onSortChange = (
-		orderProp: string | undefined,
-		orderDirection: AvoSearchOrderDirection | undefined
-	) => {
-		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
-			setFilters({
-				...filters,
-				orderProp: orderProp || 'created_at',
-				orderDirection: orderDirection || AvoSearchOrderDirection.DESC,
-				page: 1,
-			});
-		}
-	};
+	// Memoized so its identity is stable across renders that don't change `filters`.
+	// The Table component re-runs an internal effect whenever this prop's identity
+	// changes, so an unmemoized callback here causes it to re-fire on every render of
+	// this page (not just on an actual sort change), flooding the History API and
+	// tripping Chrome's navigation throttle (crbug.com/1038223).
+	const onSortChange = useCallback(
+		(orderProp: string | undefined, orderDirection: AvoSearchOrderDirection | undefined) => {
+			if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
+				setFilters({
+					...filters,
+					orderProp: orderProp || 'created_at',
+					orderDirection: orderDirection || AvoSearchOrderDirection.DESC,
+					page: 1,
+				});
+			}
+		},
+		[filters, setFilters]
+	);
 
 	// Callbacks
 	const onFailedRequest = () => {

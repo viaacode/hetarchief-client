@@ -128,10 +128,12 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		};
 	}, [currentMaterialRequestDetail, materialRequestStatus]);
 
-	const hasStatusChanged = useMemo(
-		() => currentMaterialRequestDetail?.status !== materialRequestStatus?.status,
-		[currentMaterialRequestDetail, materialRequestStatus]
-	);
+	const hasStatusChanged = useMemo(() => {
+		if (currentMaterialRequestDetail?.status === MaterialRequestStatus.NONE) {
+			return false;
+		}
+		return currentMaterialRequestDetail?.status !== materialRequestStatus?.status;
+	}, [currentMaterialRequestDetail, materialRequestStatus]);
 
 	const isRequester = useMemo(
 		() => materialRequest?.requesterId === user?.profileId,
