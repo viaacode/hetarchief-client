@@ -949,6 +949,8 @@ export const IiifViewer = ({
 												pageNumber: index + 1,
 											}
 										)}
+										fill
+										sizes="100%"
 									/>
 								) : (
 									<div
@@ -989,6 +991,7 @@ export const IiifViewer = ({
 										pageNumber: index + 1,
 									})}
 									fill
+									sizes="100%"
 								/>
 							</button>
 						);

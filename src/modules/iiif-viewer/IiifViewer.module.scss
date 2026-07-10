@@ -267,6 +267,8 @@ $controls-margin-bottom: $spacer-sm;
 			> img {
 				width: 100%;
 				vertical-align: bottom;
+				object-fit: contain;
+				position: relative !important;
 			}
 
 			&:global(.active),

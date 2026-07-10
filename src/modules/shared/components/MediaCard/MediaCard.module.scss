@@ -113,7 +113,7 @@ $media-card-list-view-height: 13rem;
 		&--list {
 			min-height: $media-card-list-view-height;
 
-			span > img {
+			img {
 				max-height: unset !important;
 				min-height: unset !important;
 			}
@@ -126,7 +126,7 @@ $media-card-list-view-height: 13rem;
 		&--blade {
 			min-height: $media-card-list-view-height;
 
-			span > img {
+			img {
 				max-height: unset !important;
 				min-height: unset !important;
 			}
