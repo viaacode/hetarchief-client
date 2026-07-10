@@ -1,7 +1,6 @@
-import { stringifyUrl } from 'query-string';
-
 import { ApiService } from '@shared/services/api-service';
 import type { Locale } from '@shared/utils/i18n';
+import { stringifyUrl } from 'query-string';
 
 import type { NavigationInfo, NavigationPlacement } from './navigation.types';
 

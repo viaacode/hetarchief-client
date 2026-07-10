@@ -1,7 +1,3 @@
-import { QueryClient } from '@tanstack/react-query';
-import type { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
-import type { ComponentType } from 'react';
-
 import { withAuth } from '@auth/wrappers/with-auth';
 import { makeServerSideRequestGetIeObjectFormatCounts } from '@ie-objects/hooks/use-get-ie-object-format-counts';
 import { makeServerSideRequestGetIeObjects } from '@ie-objects/hooks/use-get-ie-objects';
@@ -9,7 +5,10 @@ import SearchPage from '@search/SearchPage';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { QueryClient } from '@tanstack/react-query';
 import { makeServerSideRequestGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
+import type { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
+import type { ComponentType } from 'react';
 
 type SearchPageProps = DefaultSeoInfo;
 

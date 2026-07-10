@@ -19,7 +19,9 @@ test('T28: Test login flow engels', async ({ page, context }) => {
 	);
 
 	// Language switcher should be visible
-	const languageSwitcher = page.locator(moduleClassSelector('c-language-switcher__select'));
+	const languageSwitcher = page.locator(
+		moduleClassSelector('LanguageSwitcher', 'c-language-switcher__select')
+	);
 	await expect(languageSwitcher).toBeVisible();
 
 	// Change language to English
@@ -31,7 +33,7 @@ test('T28: Test login flow engels', async ({ page, context }) => {
 		.click();
 
 	// Check the login and register button changes language
-	let loginButton = page.locator(moduleClassSelector('c-navigation__auth'));
+	let loginButton = page.locator(moduleClassSelector('Navigation', 'c-navigation__auth'));
 	await expect(loginButton).toHaveText(
 		SITE_TRANSLATIONS.en['modules/auth/components/auth-modal/auth-modal___inloggen-of-registreren']
 	);
@@ -40,11 +42,14 @@ test('T28: Test login flow engels', async ({ page, context }) => {
 	expect(page.url()).toContain('/en');
 
 	// Click the main archives logo at the top left of the screen
-	const logo = page.locator(moduleClassSelector('c-navigation__item')).first().locator('a');
+	const logo = page
+		.locator(moduleClassSelector('NavigationList', 'c-navigation__item'))
+		.first()
+		.locator('a');
 	await logo.click();
 
 	// Check the login and register button is still in english
-	loginButton = page.locator(moduleClassSelector('c-navigation__auth'));
+	loginButton = page.locator(moduleClassSelector('Navigation', 'c-navigation__auth'));
 	await expect(loginButton).toHaveText(
 		SITE_TRANSLATIONS.en['modules/auth/components/auth-modal/auth-modal___inloggen-of-registreren']
 	);

@@ -1,6 +1,5 @@
-import type { InputHTMLAttributes, ReactNode } from 'react';
-
 import type { DefaultComponentProps } from '@shared/types';
+import type { InputHTMLAttributes, ReactNode } from 'react';
 
 export interface FileInputProps
 	extends DefaultComponentProps,

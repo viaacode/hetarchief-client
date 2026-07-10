@@ -3,7 +3,7 @@ import { ApiService } from '@shared/services/api-service';
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { QueryClient } from '@tanstack/react-query';
 import type { AvoSearchOrderDirection } from '@viaa/avo2-types';
-import { sortBy } from 'lodash-es';
+import { sortBy } from 'es-toolkit/compat';
 import { stringifyUrl } from 'query-string';
 import {
 	type VisitorSpaceInfo,

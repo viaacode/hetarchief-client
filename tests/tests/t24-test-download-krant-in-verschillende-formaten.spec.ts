@@ -66,6 +66,7 @@ test('T24: Download krant in verschillende formaten', async ({ page, context }) 
 			'modules/ie-objects/components/copyright-confirmation-modal/copyright-confirmation-modal___ga-door-met-downloaden'
 		];
 	const continueDownloadButtonSelector = `.ReactModal__Content--after-open ${moduleClassSelector(
+		'CopyrightConfirmationModal',
 		'c-copyright-modal__content__button-wrapper'
 	)} .c-button--black`;
 	const continueDownloadButton = page.locator(continueDownloadButtonSelector);

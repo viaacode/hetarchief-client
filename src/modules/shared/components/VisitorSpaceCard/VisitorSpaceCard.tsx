@@ -3,7 +3,7 @@ import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper'
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { Locale } from '@shared/utils/i18n';
 import clsx from 'clsx';
-import { kebabCase } from 'lodash-es';
+import { kebabCase } from 'es-toolkit/compat';
 import { type FC, useLayoutEffect, useRef, useState } from 'react';
 
 import { CardImage } from '../CardImage';

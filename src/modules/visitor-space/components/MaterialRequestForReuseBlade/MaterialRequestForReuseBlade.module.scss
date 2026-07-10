@@ -173,6 +173,7 @@
 					:global(.c-input-range__thumb){
 						height: calc($multi-range-thumb-size * 2);
 						width: calc($multi-range-thumb-size * 2);
+						background: none;
 					}
 
 					&:global(.c-input-range__disabled) {

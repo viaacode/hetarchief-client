@@ -1,4 +1,4 @@
-import { type Page, expect } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { Locale } from '@shared/utils/i18n';
 
@@ -24,7 +24,9 @@ export async function loginUserHetArchiefIdp(
 	await expect(loginOrRegisterButton).toBeVisible();
 
 	// Check auth modal is open
-	const authModalHeading = page.locator(moduleClassSelector('c-auth-modal__heading')).first();
+	const authModalHeading = page
+		.locator(moduleClassSelector('AuthModal', 'c-auth-modal__heading'))
+		.first();
 	if (!(await authModalHeading.isVisible())) {
 		// Click on login or register
 		await loginOrRegisterButton.click();

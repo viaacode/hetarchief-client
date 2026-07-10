@@ -1,13 +1,13 @@
 import { RadioButton } from '@meemoo/react-components';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
 export default {
 	title: 'Components/RadioButton',
 	component: RadioButton,
-} as ComponentMeta<typeof RadioButton>;
+} as Meta<typeof RadioButton>;
 
-const Template: ComponentStory<typeof RadioButton> = (args) => <RadioButton {...args} />;
+const Template: StoryFn<typeof RadioButton> = (args) => <RadioButton {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

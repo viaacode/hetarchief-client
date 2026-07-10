@@ -1,17 +1,17 @@
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { action } from '@storybook/addon-actions';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
+import { action } from 'storybook/actions';
 
 import Callout from './Callout';
 
 export default {
 	title: 'Components/Callout',
 	component: Callout,
-} as ComponentMeta<typeof Callout>;
+} as Meta<typeof Callout>;
 
-const Template: ComponentStory<typeof Callout> = (args) => <Callout {...args} />;
+const Template: StoryFn<typeof Callout> = (args) => <Callout {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

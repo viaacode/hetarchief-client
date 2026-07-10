@@ -1,7 +1,6 @@
 import { Button } from '@meemoo/react-components';
-import type { FC } from 'react';
-
 import { ErrorPage } from '@shared/components/ErrorPage';
+import type { FC } from 'react';
 
 interface ErrorNotFoundProps {
 	nlTranslations?: Record<string, string>;

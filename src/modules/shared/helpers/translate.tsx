@@ -1,15 +1,14 @@
-import type { TOptions } from 'i18next';
-import { i18n } from 'next-i18next';
-import React, { type ReactNode } from 'react';
-
 import Html from '@shared/components/Html/Html';
+import type { TOptions } from 'i18next';
+import { i18n } from 'next-i18next/pages';
+import React, { type ReactNode } from 'react';
 
 /**
  * Wrapper around tText() that renders the translated text as html
  * @param key
  * @param params
  */
-export function tHtml(key: string, params?: TOptions): ReactNode | string {
+export function tHtml(key: string, params?: object): ReactNode | string {
 	const translatedValue: string = tText(
 		/* IGNORE_ADMIN_CORE_TRANSLATIONS_EXTRACTION */
 		key,
@@ -24,11 +23,11 @@ export function tHtml(key: string, params?: TOptions): ReactNode | string {
  * @param key
  * @param params
  */
-export function tText(key: string, params?: TOptions): string {
+export function tText(key: string, params?: object): string {
 	return (
 		i18n?.t(key, {
 			...params,
 			defaultValue: `${(key.split('___')[1] || key).replace('-', ' ')} ***`,
-		}) || ''
+		} as TOptions) || ''
 	);
 }

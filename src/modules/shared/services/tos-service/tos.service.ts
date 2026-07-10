@@ -1,6 +1,5 @@
-import type { Options } from 'ky/distribution/types/options';
-
 import type { User } from '@auth/types';
+import type { Options } from 'ky/distribution/types/options';
 
 import { ApiService } from '../api-service';
 

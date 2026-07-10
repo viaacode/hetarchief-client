@@ -1,2 +1,2 @@
-export * from './TabLabel';
 export * from './ScrollableTabs';
+export * from './TabLabel';

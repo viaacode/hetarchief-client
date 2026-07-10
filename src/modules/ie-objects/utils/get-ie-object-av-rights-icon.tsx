@@ -2,7 +2,7 @@ import type { IeObjectRightsInfo } from '@ie-objects/ie-objects.types';
 import Icon from '@shared/components/Icon/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
-import { compact } from 'lodash-es';
+import { compact } from 'es-toolkit/compat';
 import type { ReactNode } from 'react';
 
 interface RightsCategoryConfig {

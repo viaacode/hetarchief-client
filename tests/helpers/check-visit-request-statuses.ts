@@ -35,7 +35,7 @@ export async function checkVisitRequestStatuses(page: Page): Promise<{
 
 	// Check number of pending on the "all" tab
 	const numberOfPending = await page
-		.locator(moduleClassSelector('c-request-status-badge'), {
+		.locator(moduleClassSelector('RequestStatusBadge', 'c-request-status-badge'), {
 			hasText:
 				SITE_TRANSLATIONS.nl[
 					'modules/cp/components/request-status-chip/request-status-chip___open-aanvraag'
@@ -51,7 +51,9 @@ export async function checkVisitRequestStatuses(page: Page): Promise<{
 
 	// Check the total number of visit requests on the "all" tab
 	const totalNumberOfRequests = await page
-		.locator(`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row`)
+		.locator(
+			`${moduleClassSelector('SidebarLayout', 'l-sidebar__main')} .c-table__wrapper--body .c-table__row`
+		)
 		.count();
 
 	// Check total number of requests

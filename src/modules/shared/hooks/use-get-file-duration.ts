@@ -1,6 +1,6 @@
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { isString } from 'lodash-es';
+import { isString } from 'es-toolkit/compat';
 import { parseUrl } from 'query-string';
 
 export const useGetFileDuration = (playableUrl: string | undefined | null) => {

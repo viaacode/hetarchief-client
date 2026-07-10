@@ -1,12 +1,12 @@
 import type { IeObject } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
 import { AdminConfigManager, fetchWithLogoutJson } from '@meemoo/admin-core-ui/client';
+import getConfig from '@shared/config/public-runtime-config';
 import { QUERY_KEYS } from '@shared/const';
 import { Locale } from '@shared/utils/i18n';
 import { keepPreviousData, useQueries } from '@tanstack/react-query';
 import type { AvoCorePickerItem } from '@viaa/avo2-types';
-import { compact, kebabCase } from 'lodash-es';
-import getConfig from 'next/config';
+import { compact, kebabCase } from 'es-toolkit/compat';
 import { stringifyUrl } from 'query-string';
 import { stripHtml } from 'string-strip-html';
 import type { MappedElement } from '../BlockContentEnclose.types';

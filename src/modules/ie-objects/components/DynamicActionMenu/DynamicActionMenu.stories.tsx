@@ -1,16 +1,15 @@
-import { action } from '@storybook/addon-actions';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
-
-import DynamicActionMenu from './DynamicActionMenu';
+import { action } from 'storybook/actions';
 import { dynamicActionMenuMock } from './__mocks__/dynamic-action-menu';
+import DynamicActionMenu from './DynamicActionMenu';
 
 export default {
 	title: 'Components/DynamicActionMenu',
 	component: DynamicActionMenu,
-} as ComponentMeta<typeof DynamicActionMenu>;
+} as Meta<typeof DynamicActionMenu>;
 
-const Template: ComponentStory<typeof DynamicActionMenu> = (args) => (
+const Template: StoryFn<typeof DynamicActionMenu> = (args) => (
 	<div style={{ backgroundColor: 'beige', width: '50vw', padding: '1rem 0' }}>
 		<p>Vergroot/verklein het scherm om de overflow in actie te zien.</p>
 		<p>Altijd zichtbaar: {dynamicActionMenuMock.limit} items</p>

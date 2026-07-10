@@ -28,7 +28,7 @@ import { isTabletPortraitSize } from '@shared/utils/is-mobile';
 import { useIsComplexReuseFlowUser } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
 import { format } from 'date-fns';
-import { noop } from 'lodash-es';
+import { noop } from 'es-toolkit/compat';
 import React, { type FC, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './PersonalInfo.module.scss';

@@ -222,7 +222,11 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						variants={['silver', 'sm']}
 						name="Edit"
 						icon={
-							<Icon className={clsx('u-font-size-18')} name={IconNamesLight.Edit} aria-hidden />
+							<Icon
+								name={IconNamesLight.Edit}
+								aria-hidden
+								className={styles['c-material-request-center-blade__material-actions-button-icon']}
+							/>
 						}
 						ariaLabel={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-materiaal-aanvraag-aan'
@@ -237,7 +241,11 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						variants={['silver', 'sm']}
 						name="Delete"
 						icon={
-							<Icon className={clsx('u-font-size-18')} name={IconNamesLight.Trash} aria-hidden />
+							<Icon
+								name={IconNamesLight.Trash}
+								aria-hidden
+								className={styles['c-material-request-center-blade__material-actions-button-icon']}
+							/>
 						}
 						ariaLabel={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder-materiaal-aanvraag'

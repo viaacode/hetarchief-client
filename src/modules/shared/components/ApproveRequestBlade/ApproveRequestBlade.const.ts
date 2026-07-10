@@ -1,8 +1,7 @@
-import { type Schema, array, date, mixed, object, ref, string } from 'yup';
-
 import type { ApproveRequestFormState } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.types';
 import { tText } from '@shared/helpers/translate';
 import { AccessType } from '@shared/types/visit-request';
+import { array, date, mixed, object, ref, type Schema, string } from 'yup';
 
 export const APPROVE_REQUEST_FORM_SCHEMA = (): Schema<ApproveRequestFormState> => {
 	return object({

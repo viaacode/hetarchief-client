@@ -1,15 +1,15 @@
 import { Checkbox } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
 export default {
 	title: 'Components/Checkbox',
 	component: Checkbox,
-} as ComponentMeta<typeof Checkbox>;
+} as Meta<typeof Checkbox>;
 
-const Template: ComponentStory<typeof Checkbox> = (args) => <Checkbox {...args} />;
+const Template: StoryFn<typeof Checkbox> = (args) => <Checkbox {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

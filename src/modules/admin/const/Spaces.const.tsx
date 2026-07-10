@@ -1,5 +1,4 @@
-import type { AdminVisitorSpaceInfoRow } from '@admin/types';
-import { Button } from '@meemoo/react-components';
+import { Button, type Column } from '@meemoo/react-components';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -16,7 +15,6 @@ import {
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
 import Link from 'next/link';
-import type { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 export const VisitorSpacesOverviewTablePageSize = 20;
@@ -34,17 +32,17 @@ export const VisitorSpacesOverviewTableColumns = (
 	showEditButton = false,
 	showStatusDropdown = false,
 	locale: Locale = Locale.nl
-): (Column<VisitorSpaceInfo> & { disableSortBy?: boolean })[] => [
+): Column<VisitorSpaceInfo>[] => [
 	{
-		Header: tText('modules/admin/const/spaces___bezoekersruimte'),
+		header: tText('modules/admin/const/spaces___bezoekersruimte'),
 		id: VisitorSpaceOrderProps.OrganisationName,
-		accessor: 'name',
+		accessorKey: 'name',
 	},
 	{
-		Header: tText('modules/admin/const/spaces___geactiveerd-op'),
+		header: tText('modules/admin/const/spaces___geactiveerd-op'),
 		id: VisitorSpaceOrderProps.CreatedAt,
-		accessor: 'createdAt',
-		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
+		accessorKey: 'createdAt',
+		cell: ({ row }) => {
 			const formatted = formatMediumDate(asDate(row.original.createdAt));
 			return (
 				<span className="u-color-neutral" title={formatted}>
@@ -54,36 +52,36 @@ export const VisitorSpacesOverviewTableColumns = (
 		},
 	},
 	{
-		Header: tText('modules/admin/const/spaces___emailadres'),
+		header: tText('modules/admin/const/spaces___emailadres'),
 		id: 'email',
-		accessor: 'contactInfo.email' as keyof VisitorSpaceInfo,
-		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
+		accessorKey: 'contactInfo.email',
+		cell: ({ row }) => {
 			return (
 				<span className="u-color-neutral" title={row.original.contactInfo.email || ''}>
 					{row.original.contactInfo.email}
 				</span>
 			);
 		},
-		disableSortBy: true,
+		enableSorting: false,
 	},
 	{
-		Header: tText('modules/admin/const/spaces___telefoonnummer'),
+		header: tText('modules/admin/const/spaces___telefoonnummer'),
 		id: 'telephone',
-		accessor: 'contactInfo.telephone' as keyof VisitorSpaceInfo,
-		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
+		accessorKey: 'contactInfo.telephone',
+		cell: ({ row }) => {
 			return (
 				<span className="u-color-neutral" title={row.original.contactInfo.telephone || ''}>
 					{row.original.contactInfo.telephone}
 				</span>
 			);
 		},
-		disableSortBy: true,
+		enableSorting: false,
 	},
 	{
-		Header: tText('modules/admin/const/spaces___publicatiestatus'),
+		header: tText('modules/admin/const/spaces___publicatiestatus'),
 		id: VisitorSpaceOrderProps.Status,
-		accessor: 'status',
-		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
+		accessorKey: 'status',
+		cell: ({ row }) => {
 			// TODO: update when backend is up to date
 			let status = '';
 			switch (row.original.status) {
@@ -106,9 +104,9 @@ export const VisitorSpacesOverviewTableColumns = (
 		},
 	},
 	{
-		Header: '',
+		header: '',
 		id: 'admin-visitor-spaces-overview-table-actions',
-		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
+		cell: ({ row }) => {
 			// TODO: update when backend is up to date
 			const status = row.original.status;
 

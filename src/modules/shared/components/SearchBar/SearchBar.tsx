@@ -2,7 +2,7 @@ import { Button, TextInput } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
-import { isString } from 'lodash-es';
+import { isString } from 'es-toolkit/compat';
 import type { FC } from 'react';
 import type { SearchBarProps } from './SearchBar.types';
 

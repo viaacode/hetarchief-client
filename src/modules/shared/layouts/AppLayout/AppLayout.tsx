@@ -32,6 +32,7 @@ import { useGetNotifications } from '@shared/components/NotificationCenter/hooks
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
 import { ZendeskWrapper } from '@shared/components/ZendeskWrapper';
+import getConfig from '@shared/config/public-runtime-config';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { changeApplicationLocale } from '@shared/helpers/change-application-locale';
@@ -66,7 +67,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import type { AvoUserCommonUser } from '@viaa/avo2-types';
 import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visits';
 import clsx from 'clsx';
-import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { parse, stringifyUrl } from 'query-string';

@@ -27,30 +27,28 @@
 			padding-left: abstracts.$spacer-md;
 		}
 
-		:global(.c-table__row) {
-			:global(> td:first-child) {
-				width: 40%;
-				padding-left: abstracts.$spacer-md;
-			}
+		:global(.c-table__row > td:first-child) {
+			width: 40%;
+			padding-left: abstracts.$spacer-md;
+		}
 
-			:global(> td:not(:first-child)) {
-				width: 30%;
-				padding: 0;
+		:global(.c-table__row > td:not(:first-child)) {
+			width: 30%;
+			padding: 0;
 
-				> button {
-					padding: abstracts.$spacer-md;
-					min-height: 10rem;
-					font-family: SofiaPro, sans-serif;
+			> button {
+				padding: abstracts.$spacer-md;
+				min-height: 10rem;
+				font-family: SofiaPro, sans-serif;
+				font-size: abstracts.$font-size-sm;
+
+				&:global(:hover) {
+					background-color: abstracts.$platinum;
+					cursor: pointer;
+				}
+
+				p {
 					font-size: abstracts.$font-size-sm;
-
-					&:global(:hover) {
-						background-color: abstracts.$platinum;
-						cursor: pointer;
-					}
-
-					p {
-						font-size: abstracts.$font-size-sm;
-					}
 				}
 			}
 		}
@@ -61,22 +59,20 @@
 	}
 
 	:global(.c-table__with-row-focus) {
-		:global(.c-table__row) {
-			:global(> td:first-child) {
-				min-width: abstracts.$focus-cell-width;
-				max-width: abstracts.$focus-cell-width;
-				width: abstracts.$focus-cell-width;
-			}
+		:global(.c-table__row > td:first-child) {
+			min-width: abstracts.$focus-cell-width;
+			max-width: abstracts.$focus-cell-width;
+			width: abstracts.$focus-cell-width;
+		}
 
-			:global(> td:nth-child(2)) {
-				width: 40%;
-				padding-left: abstracts.$spacer-md;
-			}
+		:global(.c-table__row > td:nth-child(2)) {
+			width: 40%;
+			padding-left: abstracts.$spacer-md;
+		}
 
-			:global(> td:not(:first-child):not(:nth-child(2))) {
-				width: 30%;
-				padding: 0;
-			}
+		:global(.c-table__row > td:not(:first-child):not(:nth-child(2))) {
+			width: 30%;
+			padding: 0;
 		}
 	}
 }
@@ -111,10 +107,10 @@
 			align-items: flex-start;
 			white-space: initial;
 			text-align: left;
+		}
 
-			:global(> div:first-child) {
-				margin-bottom: abstracts.$spacer-xs;
-			}
+		:global(.c-button__content > div:first-child) {
+			margin-bottom: abstracts.$spacer-xs;
 		}
 	}
 }

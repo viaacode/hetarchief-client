@@ -9,13 +9,17 @@ export async function goToPublicCatalogOnSearchPage(page: Page) {
 
 	const countsBeforePublic = await getSearchTabBarCounts(page);
 
-	await page.locator(`li${moduleClassSelector('c-visitor-spaces-dropdown__active')}`).click();
+	await page
+		.locator(
+			`li${moduleClassSelector('VisitorSpaceDropdown', 'c-visitor-spaces-dropdown__active')}`
+		)
+		.click();
 
 	const publicCatalogLabel =
 		SITE_TRANSLATIONS.nl[
 			'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-publieke-catalogus'
 		];
-	const dropdownOptionsSelector = `${moduleClassSelector('c-visitor-spaces-dropdown--open')} ${moduleClassSelector('c-visitor-spaces-dropdown__list')} li`;
+	const dropdownOptionsSelector = `${moduleClassSelector('VisitorSpaceDropdown', 'c-visitor-spaces-dropdown--open')} ${moduleClassSelector('VisitorSpaceDropdown', 'c-visitor-spaces-dropdown__list')} li`;
 	const publicCatalogOption = page.locator(dropdownOptionsSelector).first();
 	await expect(publicCatalogOption).toBeVisible();
 	await expect(publicCatalogOption).toContainText(publicCatalogLabel);

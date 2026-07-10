@@ -1,16 +1,15 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import React from 'react';
-
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import type { Meta, StoryFn } from '@storybook/react';
+import React from 'react';
 
 import Placeholder from './Placeholder';
 
 export default {
 	title: 'Components/Placeholder',
 	component: Placeholder,
-} as ComponentMeta<typeof Placeholder>;
+} as Meta<typeof Placeholder>;
 
-const Template: ComponentStory<typeof Placeholder> = (args) => <Placeholder {...args} />;
+const Template: StoryFn<typeof Placeholder> = (args) => <Placeholder {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

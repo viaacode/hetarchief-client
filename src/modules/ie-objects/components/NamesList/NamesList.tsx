@@ -5,7 +5,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
-import { compact, sortBy } from 'lodash-es';
+import { compact, sortBy } from 'es-toolkit/compat';
 import React, {
 	type ChangeEvent,
 	type CSSProperties,

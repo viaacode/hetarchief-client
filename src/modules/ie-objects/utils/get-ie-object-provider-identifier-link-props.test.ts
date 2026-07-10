@@ -1,6 +1,5 @@
-import { getIeObjectProviderIdentifierLinkProps } from './get-ie-object-provider-identifier-link-props';
-
 import { describe, expect, it } from 'vitest';
+import { getIeObjectProviderIdentifierLinkProps } from './get-ie-object-provider-identifier-link-props';
 
 describe('getIeObjectProviderIdentifierLinkProps', () => {
 	it('returns a link target for non-kiosk users when a provider pURI is available', () => {

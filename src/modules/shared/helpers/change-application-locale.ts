@@ -6,7 +6,7 @@ import { isRootSlugRoute } from '@shared/helpers/is-root-slug-route';
 import { Locale } from '@shared/utils/i18n';
 import type { QueryClient } from '@tanstack/react-query';
 import type { AvoUserCommonUser } from '@viaa/avo2-types';
-import { reverse, sortBy, trimEnd } from 'lodash-es';
+import { reverse, sortBy, trimEnd } from 'es-toolkit/compat';
 import type { NextRouter } from 'next/router';
 
 /**

@@ -1,6 +1,5 @@
-import type { FC, ReactNode } from 'react';
-
 import type { DefaultComponentProps } from '@shared/types';
+import type { FC, ReactNode } from 'react';
 
 import type { NavigationSectionProps } from './NavigationSection/NavigationSection.types';
 

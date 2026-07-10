@@ -10,6 +10,7 @@ import {
 } from '@meemoo/admin-core-ui/admin';
 import { Loading } from '@shared/components/Loading';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import getConfig from '@shared/config/public-runtime-config';
 import { KNOWN_STATIC_ROUTES, QUERY_KEYS, ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -20,9 +21,8 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
 import { QueryClient } from '@tanstack/react-query';
 import { VisitorLayout } from '@visitor-layout/index';
-import { noop } from 'lodash-es';
+import { noop } from 'es-toolkit/compat';
 import type { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { type ComponentType, type FC, useEffect } from 'react';
 import ErrorNoAccess from '../modules/shared/components/ErrorNoAccess/ErrorNoAccess';

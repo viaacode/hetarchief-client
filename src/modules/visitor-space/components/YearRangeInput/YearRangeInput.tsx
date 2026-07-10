@@ -1,11 +1,10 @@
 import type { TextInputProps } from '@meemoo/react-components';
-import { endOfDay } from 'date-fns';
-import { type ChangeEvent, type FC, useState } from 'react';
-
 import { SEPARATOR } from '@shared/const';
 import { YEAR_LENGTH } from '@shared/const/date';
 import { tText } from '@shared/helpers/translate';
 import { asDate } from '@shared/utils/dates';
+import { endOfDay } from 'date-fns';
+import { type ChangeEvent, type FC, useState } from 'react';
 
 import { YearInput } from '../YearInput';
 

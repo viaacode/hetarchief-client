@@ -1,11 +1,10 @@
-import { Button } from '@meemoo/react-components';
+import { Button, type Column } from '@meemoo/react-components';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import type { VisitRequest, VisitRow } from '@shared/types/visit-request';
+import type { VisitRequest } from '@shared/types/visit-request';
 import { formatSameDayRange } from '@shared/utils/dates';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import type { MouseEvent } from 'react';
-import type { Column, UseSortByColumnOptions } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 export const HistoryItemListSize = 20;
@@ -19,23 +18,23 @@ export const ACCOUNT_HISTORY_QUERY_PARAM_CONFIG = {
 export const HistoryTableAccessComboId = 'account-history-from-to';
 export const HistoryTableAccessFrom = 'startAt';
 
-export type HistoryTableColumnProps = Column<VisitRequest> & UseSortByColumnOptions<VisitRequest>;
+export type HistoryTableColumnProps = Column<VisitRequest>;
 
 export const HistoryTableColumns = (
 	onPlanVisit: (visit: VisitRequest) => void
 ): HistoryTableColumnProps[] => [
 	{
-		Header: tText('modules/account/const/my-history___bezoekersruimte') || '',
-		accessor: 'spaceName',
-		Cell: (data: VisitRow) => {
+		header: tText('modules/account/const/my-history___bezoekersruimte') || '',
+		accessorKey: 'spaceName',
+		cell: (data) => {
 			const visit = data.row.original;
 			return <span>{visit.spaceName}</span>;
 		},
 	},
 	{
-		Header: tText('modules/account/const/my-history___toegang-van') || '',
-		accessor: HistoryTableAccessFrom,
-		Cell: (data: VisitRow) => {
+		header: tText('modules/account/const/my-history___toegang-van') || '',
+		accessorKey: HistoryTableAccessFrom,
+		cell: (data) => {
 			const visit = data.row.original;
 			return (
 				<span className="u-color-neutral">{formatSameDayRange(visit.startAt, undefined)}</span>
@@ -43,18 +42,18 @@ export const HistoryTableColumns = (
 		},
 	},
 	{
-		Header: tText('modules/account/const/my-history___toegang-tot') || '',
-		accessor: 'endAt',
-		Cell: (data: VisitRow) => {
+		header: tText('modules/account/const/my-history___toegang-tot') || '',
+		accessorKey: 'endAt',
+		cell: (data) => {
 			const visit = data.row.original;
 			return <span className="u-color-neutral">{formatSameDayRange(undefined, visit.endAt)}</span>;
 		},
 	},
 	{
-		Header: tText('modules/account/const/my-history___toegang') || '',
+		header: tText('modules/account/const/my-history___toegang') || '',
 		id: HistoryTableAccessComboId,
-		accessor: HistoryTableAccessFrom,
-		Cell: (data: VisitRow) => {
+		accessorKey: HistoryTableAccessFrom,
+		cell: (data) => {
 			const visit = data.row.original;
 			return (
 				<span className="u-color-neutral">{formatSameDayRange(visit.startAt, visit.endAt)}</span>
@@ -62,9 +61,9 @@ export const HistoryTableColumns = (
 		},
 	},
 	{
-		Header: '',
+		header: '',
 		id: 'account-history-placeholder',
-		Cell: (data: VisitRow) => {
+		cell: (data) => {
 			const visit = data.row.original;
 			return (
 				<Button

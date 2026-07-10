@@ -26,6 +26,8 @@ import {
 	MultiSelect,
 	type MultiSelectOption,
 	PaginationBar,
+	type Row,
+	type SortingRule,
 	Table,
 } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
@@ -50,11 +52,18 @@ import {
 	useIsComplexReuseFlowUser,
 } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
-import { isEmpty, isNil, noop } from 'lodash-es';
+import { isEmpty, isNil, noop } from 'es-toolkit/compat';
 import Link from 'next/link';
-import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
+import {
+	type FC,
+	type MouseEvent,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import { useSelector } from 'react-redux';
-import type { Row, SortingRule, TableState } from 'react-table';
 import { StringParam, useQueryParam, useQueryParams } from 'use-query-params';
 
 export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
@@ -179,7 +188,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	}, [selectedDownloadFilters]);
 
 	const sortFilters = useMemo(
-		(): SortingRule<{ id: MaterialRequestKeys; desc: boolean }>[] => [
+		(): SortingRule[] => [
 			{
 				id: filters.orderProp,
 				desc: filters.orderDirection !== AvoSearchOrderDirection.ASC,
@@ -224,26 +233,27 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		});
 	}, [showArchived]);
 
-	const onSortChange = (
-		orderProp: string | undefined,
-		orderDirection: AvoSearchOrderDirection | undefined
-	): void => {
-		if (filters.orderProp === MaterialRequestKeys.requestedAt && orderDirection === undefined) {
-			setFilters({
-				...filters,
-				orderProp: orderProp || 'requestedAt',
-				orderDirection: AvoSearchOrderDirection.ASC,
-				page: 1,
-			});
-		} else if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
-			setFilters({
-				...filters,
-				orderProp: orderProp || 'requestedAt',
-				orderDirection: orderDirection || AvoSearchOrderDirection.DESC,
-				page: 1,
-			});
-		}
-	};
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Wee need the useCallback otherwise we get a render loop, but no need to update the method each time the filters change
+	const onSortChange = useCallback(
+		(orderProp: string | undefined, orderDirection: AvoSearchOrderDirection | undefined): void => {
+			if (filters.orderProp === MaterialRequestKeys.requestedAt && orderDirection === undefined) {
+				setFilters({
+					...filters,
+					orderProp: orderProp || 'requestedAt',
+					orderDirection: AvoSearchOrderDirection.ASC,
+					page: 1,
+				});
+			} else if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
+				setFilters({
+					...filters,
+					orderProp: orderProp || 'requestedAt',
+					orderDirection: orderDirection || AvoSearchOrderDirection.DESC,
+					page: 1,
+				});
+			}
+		},
+		[]
+	);
 
 	// restore filters on notification open (if navigated to this page)
 	useRestoreFiltersOnNotificationOpen(currentMaterialRequestId, filters, setFilters, {
@@ -262,7 +272,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		});
 	};
 
-	const renderPagination = ({ gotoPage }: { gotoPage: (i: number) => void }): ReactNode => (
+	const renderPagination = ({ setPageIndex }: { setPageIndex: (i: number) => void }): ReactNode => (
 		<PaginationBar
 			showFirstAndLastButtons
 			{...getDefaultPaginationBarProps()}
@@ -270,7 +280,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 			startItem={Math.max(0, filters.page - 1) * CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}
 			totalItems={materialRequests?.total || 0}
 			itemsPerPage={CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}
-			onPageChange={(pageZeroBased: number) => onPageChange(pageZeroBased, gotoPage)}
+			onPageChange={(pageZeroBased: number) => onPageChange(pageZeroBased, setPageIndex)}
 		/>
 	);
 
@@ -310,9 +320,9 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 					columns: getMaterialRequestTableColumns(isTabletPortrait),
 					data: materialRequests?.items || [],
 					initialState: {
-						pageSize: CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
-						sortBy: sortFilters,
-					} as TableState<MaterialRequest>,
+						pagination: { pageIndex: 0, pageSize: CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE },
+						sorting: sortFilters,
+					},
 				}}
 				getColumnProps={getMaterialRequestTableColumnProps}
 				sortingIcons={sortingIcons}

@@ -1,15 +1,14 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
-
-import ObjectPlaceholder from './ObjectPlaceholder';
 import { objectPlaceholderMock } from './__mocks__/object-placeholder';
+import ObjectPlaceholder from './ObjectPlaceholder';
 
 export default {
 	title: 'Components/ObjectPlaceholder',
 	component: ObjectPlaceholder,
-} as ComponentMeta<typeof ObjectPlaceholder>;
+} as Meta<typeof ObjectPlaceholder>;
 
-const Template: ComponentStory<typeof ObjectPlaceholder> = (args) => (
+const Template: StoryFn<typeof ObjectPlaceholder> = (args) => (
 	<div style={{ height: '90vh', width: '50vw' }}>
 		<ObjectPlaceholder {...args} />
 	</div>

@@ -1,5 +1,5 @@
 import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
-import { compact, isString } from 'lodash-es';
+import { compact, isString } from 'es-toolkit/compat';
 import type { FC, ReactElement, ReactNode } from 'react';
 
 interface HighlightedMetadataProps {

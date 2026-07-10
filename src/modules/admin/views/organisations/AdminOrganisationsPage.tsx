@@ -5,6 +5,7 @@ import {
 } from '@admin/const/Organisations.const';
 import { useGetOrganisations } from '@admin/hooks/get-organisations';
 import { AdminLayout } from '@admin/layouts';
+import type { Column, Row } from '@meemoo/react-components';
 import { Button, PaginationBar, Table, TextArea } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
@@ -23,9 +24,8 @@ import type { OrganisationListItem } from '@shared/services/organisation-service
 import { toastService } from '@shared/services/toast-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import type { SearchOrderDirection } from '@viaa/avo2-types/dist/modules/search';
-import { noop } from 'lodash-es';
+import { noop } from 'es-toolkit/compat';
 import { type FC, type ReactElement, type ReactNode, useCallback, useMemo, useState } from 'react';
-import type { Column, Row, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
@@ -95,7 +95,7 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 	const sortFilters = useMemo(() => {
 		return [
 			{
-				id: filters.orderProp,
+				id: filters.orderProp ?? '',
 				desc: filters.orderDirection !== 'asc',
 			},
 		];
@@ -140,29 +140,29 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 	const organisationsTableColumns: Column<OrganisationListItem>[] = [
 		{
 			id: 'name',
-			Header: tText(
+			header: tText(
 				'modules/admin/views/organisations/admin-organisations-page___organisatie-naam-table-header'
 			),
-			accessor: 'name',
+			accessorKey: 'name',
 		},
 		{
 			id: 'id',
-			Header: tText(
+			header: tText(
 				'modules/admin/views/organisations/admin-organisations-page___organisatie-id-table-header'
 			),
-			accessor: 'org_identifier',
+			accessorKey: 'org_identifier',
 		},
 		{
 			id: 'slug',
-			Header: tText(
+			header: tText(
 				'modules/admin/views/organisations/admin-organisations-page___slug-table-header'
 			),
-			accessor: 'slug',
+			accessorKey: 'slug',
 		},
 		{
-			Header: '',
+			header: '',
 			id: 'actions',
-			Cell: ({ row }: { row: Row<OrganisationListItem> }): ReactElement => {
+			cell: ({ row }: { row: Row<OrganisationListItem> }): ReactElement => {
 				const organisation = row.original;
 				return (
 					<div className="c-organisations-table__actions">
@@ -180,14 +180,14 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 		},
 	];
 
-	const renderPagination = ({ gotoPage }: { gotoPage: (i: number) => void }): ReactNode => (
+	const renderPagination = ({ setPageIndex }: { setPageIndex: (i: number) => void }): ReactNode => (
 		<PaginationBar
 			{...getDefaultPaginationBarProps()}
 			showFirstAndLastButtons
 			startItem={Math.max(0, filters.page - 1) * OrganisationsTablePageSize}
 			itemsPerPage={OrganisationsTablePageSize}
 			totalItems={totalItems}
-			onPageChange={(pageZeroBased: number) => onPageChange(pageZeroBased, gotoPage)}
+			onPageChange={(pageZeroBased: number) => onPageChange(pageZeroBased, setPageIndex)}
 		/>
 	);
 
@@ -210,9 +210,9 @@ export const AdminOrganisationsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 					columns: organisationsTableColumns,
 					data: organisations,
 					initialState: {
-						pageSize: OrganisationsTablePageSize,
-						sortBy: sortFilters,
-					} as TableState<OrganisationListItem>,
+						pagination: { pageIndex: 0, pageSize: OrganisationsTablePageSize },
+						sorting: sortFilters,
+					},
 				}}
 				onSortChange={onSortChange}
 				sortingIcons={sortingIcons}

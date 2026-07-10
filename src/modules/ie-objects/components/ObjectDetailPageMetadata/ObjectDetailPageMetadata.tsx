@@ -88,6 +88,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { Pill } from '@shared/components/Pill';
+import getConfig from '@shared/config/public-runtime-config';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -116,8 +117,7 @@ import {
 	SearchFilterId,
 } from '@visitor-space/types';
 import clsx from 'clsx';
-import { compact, indexOf, isEmpty, isNil, isString, noop, sortBy } from 'lodash-es';
-import getConfig from 'next/config';
+import { compact, indexOf, isEmpty, isNil, isString, noop, sortBy } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';

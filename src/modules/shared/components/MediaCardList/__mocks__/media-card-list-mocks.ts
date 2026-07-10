@@ -4,7 +4,7 @@ import {
 	type MediaCardProps,
 } from '@shared/components/MediaCard';
 import { IeObjectType } from '@shared/types/ie-objects';
-import { shuffle } from 'lodash-es';
+import { shuffle } from 'es-toolkit/compat';
 import type { MediaCardListProps } from '../MediaCardList.types';
 
 export const mock = async (

@@ -75,6 +75,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import getConfig from '@shared/config/public-runtime-config';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { BooleanParamWithDefault } from '@shared/helpers/boolean-param-with-default';
@@ -105,7 +106,6 @@ import { VisitorSpaceNavigation } from '@visitor-space/components/VisitorSpaceNa
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 import clsx from 'clsx';
-import type { HTTPError } from 'ky';
 import {
 	capitalize,
 	compact,
@@ -115,8 +115,8 @@ import {
 	kebabCase,
 	lowerCase,
 	noop,
-} from 'lodash-es';
-import getConfig from 'next/config';
+} from 'es-toolkit/compat';
+import type { HTTPError } from 'ky';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { parseUrl, stringifyUrl } from 'query-string';
@@ -903,10 +903,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 */
 	const scrollActiveSearchWordIntoView = useCallback(() => {
 		const activeSearchResultElem = document.querySelector(
-			moduleClassSelector('p-object-detail__ocr__word--marked--active')
+			moduleClassSelector('ObjectDetailPage', 'p-object-detail__ocr__word--marked--active')
 		) as HTMLSpanElement | null;
 		const scrollable = document.querySelector(
-			moduleClassSelector('p-object-detail__ocr__words-container')
+			moduleClassSelector('ObjectDetailPage', 'p-object-detail__ocr__words-container')
 		);
 
 		// If word was not found, try again in 100ms

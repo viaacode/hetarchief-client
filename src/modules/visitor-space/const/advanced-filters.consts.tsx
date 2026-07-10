@@ -18,12 +18,9 @@ import { GenreSelect } from '@visitor-space/components/GenreSelect';
 import { LanguageSelect } from '@visitor-space/components/LanguageSelect/LanguageSelect';
 import { MediumSelect } from '@visitor-space/components/MediumSelect/MediumSelect';
 import { getFilterLabel } from '@visitor-space/utils/advanced-filters';
-import getConfig from 'next/config';
 import type { FC } from 'react';
 import DurationInput from '../components/DurationInput/DurationInput';
 import { FilterProperty, Operator } from '../types';
-
-const { publicRuntimeConfig } = getConfig();
 
 type FilterInputComponent =
 	| FC<TextInputProps>

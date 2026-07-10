@@ -1,10 +1,9 @@
-import { action } from '@storybook/addon-actions';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React, { cloneElement, type ReactElement, useState } from 'react';
-
+import { action } from 'storybook/actions';
+import { toggleMock } from './__mocks__/toggle';
 import Toggle from './Toggle';
 import type { ToggleOption } from './Toggle.types';
-import { toggleMock } from './__mocks__/toggle';
 
 const ToggleStoryComponent = ({
 	children,
@@ -36,9 +35,9 @@ const ToggleStoryComponent = ({
 export default {
 	title: 'Components/Toggle',
 	component: Toggle,
-} as ComponentMeta<typeof Toggle>;
+} as Meta<typeof Toggle>;
 
-const Template: ComponentStory<typeof Toggle> = (args) => (
+const Template: StoryFn<typeof Toggle> = (args) => (
 	<ToggleStoryComponent>
 		<Toggle {...args} />
 	</ToggleStoryComponent>

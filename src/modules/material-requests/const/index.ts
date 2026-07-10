@@ -16,7 +16,8 @@ import {
 	MaterialRequestType,
 } from '@material-requests/types';
 import { tText } from '@shared/helpers/translate';
-import type { ColumnInstance, HeaderGroup, TableCellProps, TableHeaderProps } from 'react-table';
+import type { Column as TableColumnInstance } from '@tanstack/react-table';
+import type { HTMLAttributes } from 'react';
 
 export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE = (): Record<
 	MaterialRequestType,
@@ -220,8 +221,8 @@ const MATERIAL_REQUESTS_COLUMN_WIDTH_LOOKUP: Record<MaterialRequestKeys, string>
 } as Record<MaterialRequestKeys, string>;
 
 export const getMaterialRequestTableColumnProps = (
-	column: HeaderGroup<MaterialRequest> | ColumnInstance<MaterialRequest>
-): Partial<TableHeaderProps> | Partial<TableCellProps> => {
+	column: TableColumnInstance<MaterialRequest, unknown>
+): HTMLAttributes<HTMLElement> => {
 	const columnWidth = MATERIAL_REQUESTS_COLUMN_WIDTH_LOOKUP[column.id as MaterialRequestKeys];
 
 	if (columnWidth) {

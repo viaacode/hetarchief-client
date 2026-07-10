@@ -1,7 +1,6 @@
-import { object, type Schema, string } from 'yup';
-
 import type { Folder } from '@account/types';
 import { tText } from '@shared/helpers/translate';
+import { object, type Schema, string } from 'yup';
 
 export const EDIT_FOLDER_VALIDATION_SCHEMA = (): Schema<
 	Partial<Pick<Folder, 'name' | 'description'>>

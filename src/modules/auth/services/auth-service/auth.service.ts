@@ -1,15 +1,14 @@
-import { QueryClient } from '@tanstack/react-query';
-import type { Options } from 'ky/distribution/types/options';
-import { omit, trimEnd } from 'lodash-es';
-import getConfig from 'next/config';
-import type { NextRouter } from 'next/router';
-import { type StringifiableRecord, parseUrl, stringifyUrl } from 'query-string';
-
-import { ROUTES_BY_LOCALE, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import getConfig from '@shared/config/public-runtime-config';
+import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { ApiService } from '@shared/services/api-service';
 import { TranslationService } from '@shared/services/translation-service/translation.service';
 import { Locale } from '@shared/utils/i18n';
+import { QueryClient } from '@tanstack/react-query';
+import { omit, trimEnd } from 'es-toolkit/compat';
+import type { Options } from 'ky/distribution/types/options';
+import type { NextRouter } from 'next/router';
+import { parseUrl, type StringifiableRecord, stringifyUrl } from 'query-string';
 
 import type { CheckLoginResponse } from './auth.service.types';
 

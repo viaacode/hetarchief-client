@@ -11,7 +11,7 @@ import {
 	useQuery,
 } from '@tanstack/react-query';
 import { ElasticsearchFieldNames } from '@visitor-space/types';
-import { isEmpty, isNil } from 'lodash-es';
+import { isEmpty, isNil } from 'es-toolkit/compat';
 
 import { IeObjectsService } from './../services';
 

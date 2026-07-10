@@ -7,6 +7,33 @@
 @use "variables" as variables;
 @use "functions" as functions;
 
+/**
+ * Module class selector
+ * Matches a CSS module's generated class name regardless of whether the module was compiled by
+ * webpack (`Component_local-class__hash`) or Turbopack (`Component-module-scss-module__hash__local-class`).
+ * Use for plain selectors (not inside a .module.scss file's :global(...) -- see
+ * module-class-selector-global below for that case).
+ * eg: @include module-class-selector("Icon", "c-icon") { color: red; }
+ */
+@mixin module-class-selector($component, $local-class, $suffix: "__") {
+	#{functions.module-class-selector($component, $local-class, $suffix)} {
+		@content;
+	}
+}
+
+/**
+ * Same as module-class-selector, but for use inside a .module.scss file where the selector needs
+ * to be wrapped in :global(...) -- :global() only accepts a single selector, not a comma-separated
+ * list, so each bundler alternative gets its own :global(...) wrapper instead.
+ * eg: @include module-class-selector-global("Icon", "c-icon") { color: red; }
+ */
+@mixin module-class-selector-global($component, $local-class, $suffix: "__") {
+	:global(#{functions.module-class-selector-webpack($component, $local-class, $suffix)}),
+	:global(#{functions.module-class-selector-turbopack($component, $local-class, $suffix)}) {
+		@content;
+	}
+}
+
 @mixin text-ellipsis($block: false) {
 	overflow: hidden;
 	text-overflow: ellipsis;

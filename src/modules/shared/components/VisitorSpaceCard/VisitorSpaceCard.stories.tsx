@@ -1,13 +1,12 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
-
-import VisitorSpaceCard from './VisitorSpaceCard';
-import { VisitorSpaceCardType } from './VisitorSpaceCard.const';
 import {
 	AccessGranted,
 	AccessRequested,
 	mockVisitorSpaceCardProps,
 } from './__mocks__/visitor-space-card';
+import VisitorSpaceCard from './VisitorSpaceCard';
+import { VisitorSpaceCardType } from './VisitorSpaceCard.const';
 
 export default {
 	title: 'Components/VisitorSpaceCard',
@@ -21,10 +20,10 @@ export default {
 			],
 		},
 	},
-} as ComponentMeta<typeof VisitorSpaceCard>;
+} as Meta<typeof VisitorSpaceCard>;
 
-const Template: ComponentStory<typeof VisitorSpaceCard> = (args) => <VisitorSpaceCard {...args} />;
-const TemplateWithNoBg: ComponentStory<typeof VisitorSpaceCard> = (args) => (
+const Template: StoryFn<typeof VisitorSpaceCard> = (args) => <VisitorSpaceCard {...args} />;
+const TemplateWithNoBg: StoryFn<typeof VisitorSpaceCard> = (args) => (
 	<>
 		<VisitorSpaceCard {...args} />
 		<div className="u-pt-32">

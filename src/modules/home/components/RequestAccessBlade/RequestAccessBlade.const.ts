@@ -1,6 +1,5 @@
-import { boolean, object, type Schema, string } from 'yup';
-
 import { tText } from '@shared/helpers/translate';
+import { boolean, object, type Schema, string } from 'yup';
 
 import type { RequestAccessFormState } from './RequestAccessBlade.types';
 

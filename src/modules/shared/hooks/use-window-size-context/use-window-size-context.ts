@@ -1,6 +1,5 @@
-import { useContext } from 'react';
-
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
+import { useContext } from 'react';
 
 import type { UseWindowSizeContext } from './use-window-size-context.types';
 

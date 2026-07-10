@@ -1,15 +1,14 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
-
-import Toast from './Toast';
 import { toastMock } from './__mocks__/toast';
+import Toast from './Toast';
 
 export default {
 	title: 'Components/Toast',
 	component: Toast,
-} as ComponentMeta<typeof Toast>;
+} as Meta<typeof Toast>;
 
-const Template: ComponentStory<typeof Toast> = (args) => <Toast {...args} />;
+const Template: StoryFn<typeof Toast> = (args) => <Toast {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

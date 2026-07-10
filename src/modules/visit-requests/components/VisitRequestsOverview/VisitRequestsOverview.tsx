@@ -23,8 +23,15 @@ import { useGetVisitRequest } from '@visit-requests/hooks/get-visit-request';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { RequestStatusAll } from '@visit-requests/types';
 import clsx from 'clsx';
-import { type FC, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
-import type { TableState } from 'react-table';
+import {
+	type FC,
+	type MouseEvent,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import type { VisitRequestOverviewProps } from './VisitRequestsOverview.types';
@@ -113,19 +120,20 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 
 	// Events
 
-	const onSortChange = (
-		orderProp: string | undefined,
-		orderDirection: AvoSearchOrderDirection | undefined
-	) => {
-		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
-			setFilters({
-				...filters,
-				orderProp: orderProp || 'startAt',
-				orderDirection: orderDirection || AvoSearchOrderDirection.DESC,
-				page: 1,
-			});
-		}
-	};
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Wee need the useCallback otherwise we get a render loop, but no need to update the method each time the filters change
+	const onSortChange = useCallback(
+		(orderProp: string | undefined, orderDirection: AvoSearchOrderDirection | undefined) => {
+			if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
+				setFilters({
+					...filters,
+					orderProp: orderProp || 'startAt',
+					orderDirection: orderDirection || AvoSearchOrderDirection.DESC,
+					page: 1,
+				});
+			}
+		},
+		[]
+	);
 
 	const onRowClick = (_evt: MouseEvent<HTMLTableRowElement>, row: Row<VisitRequest>) => {
 		if (!canUpdateVisitRequests) {
@@ -174,16 +182,16 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 							columns: columns,
 							data: filteredVisits || [],
 							initialState: {
-								pageSize: RequestTablePageSize,
-								sortBy: sortFilters,
-							} as TableState<VisitRequest>,
+								pagination: { pageIndex: 0, pageSize: RequestTablePageSize },
+								sorting: sortFilters,
+							},
 						}}
 						onRowClick={onRowClick}
 						onSortChange={onSortChange}
 						sortingIcons={sortingIcons}
 						showTable={!noData && !isLoadingVisitRequests}
 						enableRowFocusOnClick={true}
-						pagination={({ gotoPage }) => {
+						pagination={(table) => {
 							return (
 								<PaginationBar
 									{...getDefaultPaginationBarProps()}
@@ -191,7 +199,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 									startItem={Math.max(0, filters.page - 1) * RequestTablePageSize}
 									totalItems={visits?.total || 0}
 									onPageChange={(pageZeroBased) => {
-										gotoPage(pageZeroBased);
+										table.setPageIndex(pageZeroBased);
 										setFilters({
 											...filters,
 											page: pageZeroBased + 1,

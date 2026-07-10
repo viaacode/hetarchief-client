@@ -11,7 +11,6 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { SEPARATOR } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { AdvancedFilterFieldsProps } from '@visitor-space/components/AdvancedFilterFields/AdvancedFilterFields.types';
 import { AdvancedRightsSelect } from '@visitor-space/components/AdvancedRightsSelect/AdvancedRightsSelect';
@@ -38,21 +37,18 @@ import type {
 } from '@visitor-space/const/advanced-filters.consts';
 import clsx from 'clsx';
 import { parseISO } from 'date-fns';
-import { kebabCase } from 'lodash-es';
+import { kebabCase } from 'es-toolkit/compat';
 import {
 	getAdvancedProperties,
 	getFilterConfig,
 	getOperators,
 } from 'modules/visitor-space/utils/advanced-filters';
-import getConfig from 'next/config';
 import React, { type FC } from 'react';
 import type { MultiValue, SingleValue } from 'react-select';
 import type { FilterProperty, IdentityAdvancedFilter, Operator } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import DurationInput, { defaultValue } from '../DurationInput/DurationInput';
 import styles from './AdvancedFilterFields.module.scss';
-
-const { publicRuntimeConfig } = getConfig();
 
 const labelKeys = {
 	prefix: 'AdvancedFilterFields',
@@ -151,9 +147,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						to={to}
 						onChange={(newFromDate: Date | undefined, newToDate: Date | undefined) =>
 							onFieldChange({
-								val:
-									`${newFromDate?.toISOString()}${SEPARATOR}${newToDate?.toISOString()}` ??
-									undefined,
+								val: `${newFromDate?.toISOString()}${SEPARATOR}${newToDate?.toISOString()}`,
 							})
 						}
 					/>

@@ -57,7 +57,7 @@ test('T10.2: Test actieve toegang basisgebruiker: Zoek term', async ({ page, con
 
 	// Check item contains search term
 	const markedWord = await page
-		.locator(`${moduleClassSelector('c-media-card-list__content')} article mark`)
+		.locator(`${moduleClassSelector('MediaCardList', 'c-media-card-list__content')} article mark`)
 		.first()
 		.innerText();
 	expect(markedWord.toLowerCase()).toEqual(SEARCH_TERM);

@@ -53,7 +53,7 @@ import { isLessThanXlSize, isMobileSize } from '@shared/utils/is-mobile';
 import { MaterialCard } from '@visitor-space/components/MaterialCard';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
-import { isNil, noop } from 'lodash-es';
+import { isNil, noop } from 'es-toolkit/compat';
 import { stringifyUrl } from 'query-string';
 import { type FC, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -128,10 +128,12 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 		};
 	}, [currentMaterialRequestDetail, materialRequestStatus]);
 
-	const hasStatusChanged = useMemo(
-		() => currentMaterialRequestDetail?.status !== materialRequestStatus?.status,
-		[currentMaterialRequestDetail, materialRequestStatus]
-	);
+	const hasStatusChanged = useMemo(() => {
+		if (currentMaterialRequestDetail?.status === MaterialRequestStatus.NONE) {
+			return false;
+		}
+		return currentMaterialRequestDetail?.status !== materialRequestStatus?.status;
+	}, [currentMaterialRequestDetail, materialRequestStatus]);
 
 	const isRequester = useMemo(
 		() => materialRequest?.requesterId === user?.profileId,

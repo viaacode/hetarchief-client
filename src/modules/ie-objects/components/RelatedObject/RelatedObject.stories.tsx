@@ -1,15 +1,14 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
-
-import RelatedObject from './RelatedObject';
 import { relatedObjectEmptyMock, relatedObjectVideoMock } from './__mocks__/related-object';
+import RelatedObject from './RelatedObject';
 
 export default {
 	title: 'Components/RelatedObject',
 	component: RelatedObject,
-} as ComponentMeta<typeof RelatedObject>;
+} as Meta<typeof RelatedObject>;
 
-const Template: ComponentStory<typeof RelatedObject> = (args) => <RelatedObject {...args} />;
+const Template: StoryFn<typeof RelatedObject> = (args) => <RelatedObject {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

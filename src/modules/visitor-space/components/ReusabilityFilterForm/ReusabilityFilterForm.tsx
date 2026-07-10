@@ -1,7 +1,7 @@
 import { CheckboxList } from '@meemoo/react-components';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
 import clsx from 'clsx';
-import { compact, without } from 'lodash-es';
+import { compact, without } from 'es-toolkit/compat';
 import { type FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQueryParams } from 'use-query-params';

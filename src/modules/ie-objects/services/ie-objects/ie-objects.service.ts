@@ -15,7 +15,7 @@ import {
 } from '@shared/types/ie-objects';
 import type { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { SearchSortProp } from '@visitor-space/types';
-import { isEmpty } from 'lodash-es';
+import { isEmpty } from 'es-toolkit/compat';
 import { stringifyUrl } from 'query-string';
 
 import {

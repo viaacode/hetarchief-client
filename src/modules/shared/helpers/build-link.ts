@@ -1,4 +1,4 @@
-import { get, isString } from 'lodash-es';
+import { get, isString } from 'es-toolkit/compat';
 import queryString from 'query-string';
 
 export type RouteParams = { [key: string]: string | number | undefined };

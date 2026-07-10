@@ -1,5 +1,5 @@
 import type { MentionHighlight } from '@ie-objects/ie-objects.types';
-import { isNil, minBy } from 'lodash-es';
+import { isNil, minBy } from 'es-toolkit/compat';
 
 const SAME_LINE_Y_THRESHOLD = 5;
 

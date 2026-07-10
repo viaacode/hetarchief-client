@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import { CardImage } from '@shared/components/CardImage';
 import Html from '@shared/components/Html/Html';
 import { ROUTES_BY_LOCALE } from '@shared/const';
@@ -7,6 +5,7 @@ import { tHtml } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { Locale } from '@shared/utils/i18n';
 import { VisitorSpaceNavigation } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation';
+import type { FC } from 'react';
 
 import type { WaitingPageProps } from './WaitingPage.types';
 

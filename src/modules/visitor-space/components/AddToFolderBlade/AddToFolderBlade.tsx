@@ -10,7 +10,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import clsx from 'clsx';
-import { compact, isNil } from 'lodash-es';
+import { compact, isNil } from 'es-toolkit/compat';
 import { type FC, useEffect, useState } from 'react';
 
 import styles from './AddToFolderBlade.module.scss';

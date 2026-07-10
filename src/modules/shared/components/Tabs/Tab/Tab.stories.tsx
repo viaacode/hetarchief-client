@@ -1,21 +1,21 @@
 import { Tab } from '@meemoo/react-components';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import React from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import type { Meta, StoryFn } from '@storybook/react';
+import React from 'react';
 
 export default {
 	title: 'Components/Tab',
 	component: Tab,
-} as ComponentMeta<typeof Tab>;
+} as Meta<typeof Tab>;
 
-const Template: ComponentStory<typeof Tab> = (args) => <Tab {...args} />;
+const Template: StoryFn<typeof Tab> = (args) => <Tab {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
 	id: 'tab-id',
 	label: 'Tab me!',
+	ariaLabel: 'Tab me!',
 	active: false,
 };
 
@@ -23,6 +23,7 @@ export const Active = Template.bind({});
 Active.args = {
 	id: 'tab-id',
 	label: 'Tab me!',
+	ariaLabel: 'Tab me!',
 	active: true,
 };
 
@@ -30,6 +31,7 @@ export const WithIcon = Template.bind({});
 WithIcon.args = {
 	id: 'tab-id',
 	label: 'Audio',
+	ariaLabel: 'Audio',
 	active: false,
 	icon: <Icon name={IconNamesLight.Audio} />,
 };
@@ -43,6 +45,7 @@ WithCustomLabel.args = {
 			<small>(52)</small>
 		</>
 	),
+	ariaLabel: 'Video',
 	active: false,
 	icon: <Icon name={IconNamesLight.Video} />,
 };

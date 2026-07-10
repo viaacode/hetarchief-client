@@ -1,6 +1,5 @@
-import type { ReactNode } from 'react';
-
 import type { DefaultComponentProps } from '@shared/types';
+import type { ReactNode } from 'react';
 
 import type { VisitorSpaceInfo } from '../../types';
 

@@ -1,9 +1,8 @@
-import * as toolkitRaw from '@reduxjs/toolkit';
-import { createWrapper } from 'next-redux-wrapper';
-
 import { userSlice } from '@auth/store/user';
+import * as toolkitRaw from '@reduxjs/toolkit';
 import { IeObjectsSlice } from '@shared/store/ie-objects';
 import { tosSlice } from '@shared/store/tos';
+import { createWrapper } from 'next-redux-wrapper';
 
 import type { AppStore } from './store.types';
 import { uiSlice } from './ui';

@@ -86,7 +86,7 @@ $component: "p-account-my-folders";
 
 		// Hide icon on desktop
 		&__hide-icon {
-			display: none;
+			display: none !important;
 		}
 
 		&__limited-access-icon {

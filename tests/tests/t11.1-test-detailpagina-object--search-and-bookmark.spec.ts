@@ -66,7 +66,7 @@ test('T11.1: Test detailpagina object + materiaal aanvraag doen: search en bookm
 
 	// Check item contains search term
 	const markedWord = await page
-		.locator(`${moduleClassSelector('c-media-card-list__content')} article mark`)
+		.locator(`${moduleClassSelector('MediaCardList', 'c-media-card-list__content')} article mark`)
 		.first()
 		.innerText();
 	expect(markedWord.toLowerCase()).toEqual(SEARCH_TERM.split(' ')[0].toLowerCase());
@@ -92,7 +92,7 @@ test('T11.1: Test detailpagina object + materiaal aanvraag doen: search en bookm
 
 	// Add object to Favorites folder
 	let folderList = page.locator(
-		`.c-blade--active ${moduleClassSelector('c-add-to-folder-blade__list')}`
+		`.c-blade--active ${moduleClassSelector('AddToFolderBlade', 'c-add-to-folder-blade__list')}`
 	);
 	let checkboxes = folderList.locator('.c-checkbox__check-icon');
 	expect(await checkboxes.count()).toEqual(2);
@@ -137,7 +137,11 @@ test('T11.1: Test detailpagina object + materiaal aanvraag doen: search en bookm
 
 	// Check page title
 	await expect(
-		page.locator(`${moduleClassSelector('p-object-detail__metadata-content')} h3`).first()
+		page
+			.locator(
+				`${moduleClassSelector('ObjectDetailPageMetadata', 'p-object-detail__metadata-content')} h3`
+			)
+			.first()
 	).toContainText('Het Annoncenblad van Mol en omliggende dorpen'); // w950g5230s
 
 	/**
@@ -153,7 +157,7 @@ test('T11.1: Test detailpagina object + materiaal aanvraag doen: search en bookm
 
 	// Add object to Favorites folder
 	folderList = page.locator(
-		`.c-blade--active ${moduleClassSelector('c-add-to-folder-blade__list')}`
+		`.c-blade--active ${moduleClassSelector('AddToFolderBlade', 'c-add-to-folder-blade__list')}`
 	);
 	checkboxes = folderList.locator('.c-checkbox__check-icon');
 	expect(await checkboxes.count()).toEqual(2);

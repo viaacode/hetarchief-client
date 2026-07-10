@@ -1,12 +1,11 @@
-import clsx from 'clsx';
-import { format } from 'date-fns';
-import { stringifyUrl } from 'query-string';
-import React, { type FC, useEffect, useState } from 'react';
-
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import clsx from 'clsx';
+import { format } from 'date-fns';
+import { stringifyUrl } from 'query-string';
+import React, { type FC, useEffect, useState } from 'react';
 
 import styles from './CookiePolicy.module.scss';
 

@@ -140,7 +140,7 @@
 			white-space: pre-wrap;
 			word-break: break-word;
 
-			[class*="Icon_c-icon"] {
+			@include abstracts.module-class-selector("Icon", "c-icon") {
 				font-size: abstracts.$font-size-lg !important;
 				margin-left: -4px; // left align icon to text
 			}

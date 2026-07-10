@@ -1,7 +1,6 @@
-import { capitalize, lowerCase } from 'lodash-es';
-
 import { AlertIconNames, IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
+import { capitalize, lowerCase } from 'es-toolkit/compat';
 
 import type { IconName } from './Icon.types';
 

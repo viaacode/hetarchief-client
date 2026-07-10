@@ -59,6 +59,10 @@
 
 			&-button {
 				margin-right: $spacer-xs;
+
+				&-icon {
+					font-size: $font-size-md !important;
+				}
 			}
 		}
 	}

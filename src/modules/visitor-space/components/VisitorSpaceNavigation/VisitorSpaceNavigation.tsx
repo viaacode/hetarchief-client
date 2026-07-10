@@ -10,7 +10,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import type { VisitorSpaceNavigationProps } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation.types';
 import clsx from 'clsx';
-import { isNil } from 'lodash-es';
+import { isNil } from 'es-toolkit/compat';
 import React, { type FC, type ReactNode } from 'react';
 
 import styles from './VisitorSpaceNavigation.module.scss';

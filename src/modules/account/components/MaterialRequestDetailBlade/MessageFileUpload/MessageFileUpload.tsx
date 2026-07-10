@@ -4,7 +4,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import { toastService } from '@shared/services/toast-service';
 import clsx from 'clsx';
-import { sumBy } from 'lodash-es';
+import { sumBy } from 'es-toolkit/compat';
 import React, { type FC, useMemo, useRef } from 'react';
 
 import styles from './MessageFileUpload.module.scss';

@@ -46,7 +46,7 @@ test('T10.4: Test actieve toegang basisgebruiker: Release date filter', async ({
 
 	// Click the submit button for the filter
 	const submitFilterButton = page.locator(
-		`#c-filter-form--releaseDate ${moduleClassSelector('c-filter-form__submit')}`
+		`#c-filter-form--releaseDate ${moduleClassSelector('FilterForm', 'c-filter-form__submit')}`
 	);
 	await submitFilterButton.scrollIntoViewIfNeeded();
 	await expect(submitFilterButton).toBeVisible();
