@@ -8,6 +8,18 @@
  */
 const path = require('node:path');
 
+/**
+ * Critters (invoked by Next for `experimental.optimizeCss` below) logs a "N rules skipped due to
+ * selector errors" warning at build/request time: our browserslist config still resolves to some
+ * very old browser targets (e.g. old iOS Safari), which makes postcss-preset-env/autoprefixer emit
+ * legacy selector-list fallbacks (:lang() chains for logical properties, -webkit-any() for :is())
+ * that Critters' selector parser can't understand. It only affects critical-CSS *inlining* -- the
+ * full stylesheet still loads normally, so this is cosmetic noise, not a functional issue.
+ * runtime doesn't consistently forward the object's fields to Critters), but this env var does --
+ * it's Next's own documented escape hatch (see node_modules/next/dist/server/post-process.js).
+ */
+process.env.CRITTERS_LOG_LEVEL = process.env.CRITTERS_LOG_LEVEL || 'error';
+
 // const withBundleAnalyzer = bundleAnalyser({
 // 	enabled: process.env.ANALYZE === 'true',
 // });
@@ -33,11 +45,16 @@ module.exports = {
 	experimental: {
 		/**
 		 * Necessary to prevent errors like:
-		 * - Module not found: ESM packages (lodash-es) need to be imported.
+		 * - Module not found: ESM packages need to be imported.
 		 *   Use 'import' to reference the package instead.
 		 *   Solution: https://nextjs.org/docs/messages/import-esm-externals
+		 * Originally added for @viaa/avo2-components (see transpilePackages above).
+		 * Turbopack doesn't support this option at all -- it's a fatal error under
+		 * `next build --turbopack` and silently ignored (with a warning) under
+		 * `next dev --turbopack` -- so it's skipped entirely when Turbopack is active.
+		 * process.env.TURBOPACK is set internally by Next.js before next.config.js loads.
 		 */
-		esmExternals: 'loose',
+		esmExternals: process.env.TURBOPACK ? undefined : 'loose',
 		/**
 		 * Ignore warnings about big page data, since we load translations like that
 		 * https://meemoo.atlassian.net/browse/ARC-1932
@@ -67,12 +84,12 @@ module.exports = {
 		// Ensure certain packages are always resolved to one version instead of other versions from admin-core or component libraries
 		config.resolve.alias = {
 			...config.resolve.alias,
-			'@tanstack/react-query': path.resolve('./node_modules/@tanstack/react-query'),
-			'use-query-params': path.resolve('./node_modules/use-query-params'),
-			'react-select': path.resolve('./node_modules/react-select'),
-			'react-select/creatable': path.resolve('./node_modules/react-select/creatable'),
-			'react-select/async': path.resolve('./node_modules/react-select/async'),
-			'react-hook-form': path.resolve('./node_modules/react-hook-form'),
+			'@tanstack/react-query': './node_modules/@tanstack/react-query',
+			'use-query-params': './node_modules/use-query-params',
+			'react-select': './node_modules/react-select',
+			'react-select/creatable': './node_modules/react-select/creatable',
+			'react-select/async': './node_modules/react-select/async',
+			'react-hook-form': './node_modules/react-hook-form',
 			'react-datepicker': path.resolve('./node_modules/react-datepicker'),
 		};
 
@@ -85,6 +102,19 @@ module.exports = {
 	// https://github.com/TanStack/query/issues/3595#issuecomment-1276468579
 	// Framework-level (not webpack-specific), so it also applies once we move to Turbopack.
 	serverExternalPackages: ['@tanstack/react-query', 'use-query-params'],
+	// Turbopack equivalent of the webpack config.resolve.alias dedupe hack below.
+	// Only takes effect when running with --turbopack (npm run dev:turbo); webpack still uses its own block.
+	turbopack: {
+		resolveAlias: {
+			'@tanstack/react-query': './node_modules/@tanstack/react-query',
+			'use-query-params': './node_modules/use-query-params',
+			'react-select': './node_modules/react-select',
+			'react-select/creatable': './node_modules/react-select/creatable',
+			'react-select/async': './node_modules/react-select/async',
+			'react-hook-form': './node_modules/react-hook-form',
+			'react-datepicker': './node_modules/react-datepicker',
+		},
+	},
 	images: {
 		unoptimized: true,
 		remotePatterns: [

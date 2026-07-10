@@ -9,6 +9,8 @@
   ],
   "scripts": {
     "dev": "dotenv -e .env.local -- node ./scripts/generate-env-config.js && next dev --webpack -p 3200",
+    "dev:webpack": "dotenv -e .env.local -- node ./scripts/generate-env-config.js && next dev --webpack -p 3200",
+    "dev:turbo": "dotenv -e .env.local -- node ./scripts/generate-env-config.js && next dev --turbopack -p 3200",
     "build-with-analyse": "biome ci && cross-env ANALYZE=true next build --webpack",
     "build": "biome ci && next build --webpack",
     "build-production": "biome ci && cross-env NODE_ENV=production next build --webpack",
