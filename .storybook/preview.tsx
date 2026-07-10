@@ -8,9 +8,6 @@ import { Provider } from 'react-redux';
 import NextQueryParamProvider from '../src/modules/shared/providers/NextQueryParamProvider/NextQueryParamProvider';
 import { makeStore } from '../src/modules/shared/store/store';
 
-// next/image is handled automatically by the @storybook/nextjs framework, so the previous
-// manual unoptimized-image override is no longer needed.
-
 // Mirror the app's provider stack (see src/pages/_app.tsx) so components that read the
 // Redux store (useSelector/useDispatch), fire react-query hooks (useQuery), or read query
 // params (useQueryParams) can render in isolation. Without these such stories throw e.g.
