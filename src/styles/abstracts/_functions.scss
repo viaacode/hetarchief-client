@@ -40,6 +40,7 @@
 
 // webpack keeps the component name and local class contiguous (`Component_local-class__hash`), so
 // one attribute selector suffices.
+// Deprecated but kept for backwards compatibility
 @function module-class-selector-webpack($component, $local-class, $suffix: "__") {
 	@return '[class*="#{$component}_#{$local-class}#{$suffix}"]';
 }

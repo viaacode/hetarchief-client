@@ -13,6 +13,7 @@
  * @param suffix
  */
 export function moduleClassSelector(component: string, localClass: string, suffix = '__'): string {
+	// TODO: remove the webpack backwards compatibility when turbopack is confirmed to be working good
 	const webpack = `[class*="${component}_${localClass}${suffix}"]`;
 	const turbopack = `[class*="${component}-module-scss-module${suffix}"][class*="${suffix}${localClass}"]`;
 	return `${webpack}, ${turbopack}`;
