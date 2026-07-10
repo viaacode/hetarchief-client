@@ -147,9 +147,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						to={to}
 						onChange={(newFromDate: Date | undefined, newToDate: Date | undefined) =>
 							onFieldChange({
-								val:
-									`${newFromDate?.toISOString()}${SEPARATOR}${newToDate?.toISOString()}` ??
-									undefined,
+								val: `${newFromDate?.toISOString()}${SEPARATOR}${newToDate?.toISOString()}`,
 							})
 						}
 					/>
