@@ -512,7 +512,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		return (
 			<AdminLayout pageTitle={tText('pages/admin/materiaalaanvragen/index___materiaalaanvragen')}>
 				<AdminLayout.Content>
-					<div className="l-container">
+					<div className="l-container l-container--edgeless-to-lg">
 						<div className={clsx('p-admin-material-requests__header')}>
 							<div className="p-admin-material-requests__header-dropdowns">
 								{renderTypeFilter()}
@@ -524,15 +524,15 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 
 							{renderSearchInput()}
 						</div>
-					</div>
-					<div
-						className={clsx('l-container l-container--edgeless-to-lg', {
-							'u-text-center u-color-neutral u-py-48': isLoadingMaterialRequests || noData,
-						})}
-					>
-						{isLoadingMaterialRequests && <Loading locationId="Material requests overview" />}
-						{noData && !isLoadingMaterialRequests && renderEmptyMessage()}
-						{renderContent()}
+						<div
+							className={clsx({
+								'u-text-center u-color-neutral u-py-48': noData && !isLoadingMaterialRequests,
+							})}
+						>
+							{isLoadingMaterialRequests && <Loading locationId="Material requests overview" />}
+							{noData && !isLoadingMaterialRequests && renderEmptyMessage()}
+							{renderContent()}
+						</div>
 					</div>
 					{renderDetailBlade()}
 				</AdminLayout.Content>

@@ -1,4 +1,3 @@
-import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { Locale } from '../tests/helpers/get-site-translations';
@@ -11,8 +10,17 @@ interface IeObjectRedirectInfo {
 
 export async function proxy(request: NextRequest) {
 	try {
-		console.log('proxy triggered for URL: ', request.url);
 		const pathName = request.nextUrl.pathname;
+		console.log('middleware triggered for URL: ', request.url);
+		if (pathName.includes('/zoeken') || pathName.includes('/search')) {
+			const headers: Record<string, string> = {};
+			request.headers.forEach((value, key) => {
+				if (key !== 'cookie') {
+					headers[key] = value;
+				}
+			});
+			console.log('request headers: ', headers);
+		}
 
 		// https://meemoo.atlassian.net/browse/ARC-3185
 		if (pathName === '/sitemap.xml.gz') {
@@ -42,9 +50,8 @@ export async function proxy(request: NextRequest) {
 				);
 				return NextResponse.rewrite(new URL('/__force-404', request.url));
 			}
-			const search = pathName.startsWith(`/${Locale.En}/`)
-				? `${Locale.En}/${ROUTE_PARTS_BY_LOCALE.en.search}`
-				: ROUTE_PARTS_BY_LOCALE.nl.search;
+			// Do not import ROUTE_PARTS_BY_LOCALE, since it creates an import chain that pulls in dom purify that needs window. and that isn't available during ssr
+			const search = pathName.startsWith(`/${Locale.En}/`) ? `${Locale.En}/search` : 'zoeken';
 			const maintainerSlug = ieObjectRedirectInfo.maintainerSlug;
 			const title = ieObjectRedirectInfo.title ? ieObjectRedirectInfo.title.replace(/ /g, '-') : '';
 
@@ -53,14 +60,26 @@ export async function proxy(request: NextRequest) {
 			);
 		}
 
-		// Other routes are not handled by this proxy
+		// Other routes are not handled by this middleware
 		return NextResponse.next();
 	} catch (err) {
-		console.error('Error in proxy: ', err);
+		console.error('Error in middleware: ', err);
 		return NextResponse.rewrite(new URL('/__force-404', request.url));
 	}
 }
 
 export const config = {
-	matcher: ['/media/:path*', '/:locale/media/:path*', '/sitemap.xml.gz'],
+	matcher: [
+		'/media/:path*',
+		'/:locale/media/:path*',
+		'/sitemap.xml.gz',
+		'/zoeken',
+		'/zoeken/:path*',
+		'/search',
+		'/search/:path*',
+		'/nl/zoeken',
+		'/nl/zoeken/:path*',
+		'/en/search',
+		'/en/search/:path*',
+	],
 };

@@ -79,6 +79,7 @@ export async function getServerSideProps(
 		title: seoInfo?.name,
 		description: seoInfo?.description,
 		image: seoInfo?.thumbnailUrl,
+		maintainerSlug: seoInfo?.maintainerSlug ?? ieObject?.maintainerSlug ?? null,
 	});
 }
 

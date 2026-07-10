@@ -487,7 +487,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 
 	const renderFilters = () => {
 		return (
-			<>
+			<div className="p-material-requests__header">
 				<div className="p-material-requests__header-dropdowns">
 					{renderTypeFilter()}
 					{renderStatusFilter()}
@@ -495,25 +495,24 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 					{renderArchiveCheckbox()}
 				</div>
 				{renderSearchInput()}
-			</>
+			</div>
 		);
 	};
 
 	const renderPageContent = () => {
 		return (
 			<CPAdminLayout className="p-material-requests" pageTitle={renderPageTitle()}>
-				<div className="l-container">
-					<div className="p-material-requests__header">{renderFilters()}</div>
-				</div>
-
-				<div
-					className={clsx('l-container l-container--edgeless-to-lg', {
-						'u-text-center u-color-neutral u-py-48': isFetching || noData,
-					})}
-				>
-					{isFetching && <Loading locationId="Material requests overview" />}
-					{noData && !isFetching && renderEmptyMessage()}
-					{renderContent()}
+				<div className="l-container l-container--edgeless-to-lg">
+					{renderFilters()}
+					<div
+						className={clsx({
+							'u-text-center u-color-neutral u-py-48': noData && !isFetching,
+						})}
+					>
+						{isFetching && <Loading locationId="Material requests overview" />}
+						{noData && !isFetching && renderEmptyMessage()}
+						{renderContent()}
+					</div>
 				</div>
 				{renderDetailBlade()}
 			</CPAdminLayout>

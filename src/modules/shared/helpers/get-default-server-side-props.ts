@@ -23,6 +23,12 @@ export async function getDefaultStaticProps(
 		description?: string | null;
 		image?: string | null;
 		canonicalUrl?: string | null;
+		/**
+		 * When provided, skips the SEO endpoint fetch and uses this value to build
+		 * the canonical URL. Pass from callers that already fetched SEO themselves
+		 * to avoid a duplicate blocking request.
+		 */
+		maintainerSlug?: string | null;
 	}
 ): Promise<GetStaticPropsResult<DefaultSeoInfo>> {
 	const locale = (context.locale || Locale.nl) as Locale;
@@ -38,18 +44,27 @@ export async function getDefaultStaticProps(
 
 	// If schemaIdentifier is provided, we can prefetch some seo ie-object info
 	if (options?.schemaIdentifier && !options?.schemaIdentifier?.includes('/')) {
-		let seoInfo: IeObjectSeo | null = null;
-		try {
-			seoInfo = await IeObjectsService.getSeoBySchemaIdentifier(options?.schemaIdentifier);
-		} catch (err) {
-			console.error(`Failed to fetch media seo info by id: ${context.query.ie}`, err);
+		let maintainerSlug: string | null | undefined;
+
+		if (options?.maintainerSlug) {
+			// Caller already fetched SEO data; skip the duplicate API call
+			options.title = options.title || 'Het Archief';
+			maintainerSlug = options.maintainerSlug;
+		} else {
+			let seoInfo: IeObjectSeo | null = null;
+			try {
+				seoInfo = await IeObjectsService.getSeoBySchemaIdentifier(options?.schemaIdentifier);
+			} catch (err) {
+				console.error(`Failed to fetch media seo info by id: ${context.query.ie}`, err);
+			}
+
+			options.title = options.title || seoInfo?.name || 'Het Archief';
+			options.description = options.description || seoInfo?.description || null;
+			options.image = options.image || seoInfo?.thumbnailUrl || null;
+			maintainerSlug = seoInfo?.maintainerSlug;
 		}
 
-		options.title = options.title || seoInfo?.name || 'Het Archief';
-		options.description = options.description || seoInfo?.description || null;
-		options.image = options.image || seoInfo?.thumbnailUrl || null;
 		const baseUrl = publicRuntimeConfig.CLIENT_URL;
-		const maintainerSlug = seoInfo?.maintainerSlug;
 		if (baseUrl && maintainerSlug && options.schemaIdentifier && options.title) {
 			options.canonicalUrl =
 				options.canonicalUrl ||
