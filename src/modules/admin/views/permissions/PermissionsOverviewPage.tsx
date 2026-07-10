@@ -22,7 +22,7 @@ const UserGroupOverview = lazy(() =>
 
 export const PermissionsOverview: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	// Access child functions
-	const permissionsRef = useRef<UserGroupOverviewRef>();
+	const permissionsRef = useRef<UserGroupOverviewRef>(null);
 
 	const [hasChanges, setHasChanges] = useState<boolean>(false);
 

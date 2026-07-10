@@ -25,7 +25,7 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 	const [isBlurred, setIsBlurred] = useState<boolean>(true);
 	const [needsScrolling, setNeedsScrolling] = useState<boolean>(false);
 
-	const fragmentsRef = useRef(null);
+	const fragmentsRef = useRef<HTMLDivElement>(null);
 	const blurTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	const fragmentsSize = useElementSize(fragmentsRef);
