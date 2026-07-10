@@ -38,18 +38,6 @@ module.exports = {
 	},
 	experimental: {
 		/**
-		 * Necessary to prevent errors like:
-		 * - Module not found: ESM packages need to be imported.
-		 *   Use 'import' to reference the package instead.
-		 *   Solution: https://nextjs.org/docs/messages/import-esm-externals
-		 * Originally added for @viaa/avo2-components (see transpilePackages above).
-		 * Turbopack doesn't support this option at all -- it's a fatal error under
-		 * `next build --turbopack` and silently ignored (with a warning) under
-		 * `next dev --turbopack` -- so it's skipped entirely when Turbopack is active.
-		 * process.env.TURBOPACK is set internally by Next.js before next.config.js loads.
-		 */
-		esmExternals: process.env.TURBOPACK ? undefined : 'loose',
-		/**
 		 * Ignore warnings about big page data, since we load translations like that
 		 * https://meemoo.atlassian.net/browse/ARC-1932
 		 */
@@ -59,39 +47,12 @@ module.exports = {
 		// https://meemoo.atlassian.net/browse/ARC-2913
 		optimizeCss: true,
 	},
-	webpack: (config) => {
-		config.mode = 'production';
-
-		// Required for ky-universal top level await used in admin core inside the api service
-		config.experiments = { topLevelAwait: true, layers: true };
-
-		// https://stackoverflow.com/a/68098547/373207
-		config.resolve.fallback = { fs: false, path: false };
-
-		// Ensure certain packages are always resolved to one version instead of other versions from admin-core or component libraries
-		// webpack's resolve.alias needs absolute paths (unlike turbopack.resolveAlias below, which needs relative ones).
-		config.resolve.alias = {
-			...config.resolve.alias,
-			'@tanstack/react-query': path.resolve('./node_modules/@tanstack/react-query'),
-			'use-query-params': path.resolve('./node_modules/use-query-params'),
-			'react-select': path.resolve('./node_modules/react-select'),
-			'react-select/creatable': path.resolve('./node_modules/react-select/creatable'),
-			'react-select/async': path.resolve('./node_modules/react-select/async'),
-			'react-hook-form': path.resolve('./node_modules/react-hook-form'),
-			'react-datepicker': path.resolve('./node_modules/react-datepicker'),
-		};
-
-		return config;
-	},
 	typescript: {
 		tsconfigPath: './tsconfig.build.json',
 	},
 	// Fix issues with react-query on the server:
 	// https://github.com/TanStack/query/issues/3595#issuecomment-1276468579
-	// Framework-level (not webpack-specific), so it also applies once we move to Turbopack.
 	serverExternalPackages: ['@tanstack/react-query', 'use-query-params'],
-	// Turbopack equivalent of the webpack config.resolve.alias dedupe hack below.
-	// Only takes effect when running with --turbopack (npm run dev:turbo); webpack still uses its own block.
 	turbopack: {
 		resolveAlias: {
 			'@tanstack/react-query': './node_modules/@tanstack/react-query',
