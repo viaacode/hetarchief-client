@@ -905,10 +905,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 */
 	const scrollActiveSearchWordIntoView = useCallback(() => {
 		const activeSearchResultElem = document.querySelector(
-			moduleClassSelector('p-object-detail__ocr__word--marked--active')
+			moduleClassSelector('ObjectDetailPage', 'p-object-detail__ocr__word--marked--active')
 		) as HTMLSpanElement | null;
 		const scrollable = document.querySelector(
-			moduleClassSelector('p-object-detail__ocr__words-container')
+			moduleClassSelector('ObjectDetailPage', 'p-object-detail__ocr__words-container')
 		);
 
 		// If word was not found, try again in 100ms

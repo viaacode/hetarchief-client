@@ -1,11 +1,5 @@
-/* eslint-disable @typescript-eslint/no-var-requires, import/order */
 // const bundleAnalyser = require('@next/bundle-analyzer');
-/*
- * next-transpile-modules is necessary because:
- * - Global CSS cannot be imported from within node_modules.
- *   Why: https://nextjs.org/docs/messages/css-npm
- *   RFC: https://github.com/vercel/next.js/discussions/27953
- */
+
 const path = require('node:path');
 
 /**
@@ -34,7 +28,7 @@ module.exports = {
 		localeDetection: false,
 	},
 	// https://stackoverflow.com/questions/71847778/why-my-nextjs-component-is-rendering-twice
-	// Disabling react 18 strict mode, otherwise the zendesk widget is rendered twice
+	// Disabling react strict mode, otherwise the zendesk widget is rendered twice
 	reactStrictMode: false,
 	// SCSS modules use root-relative imports like `@use 'src/styles/abstracts'`.
 	// sass-loader v16 (Next 16, modern Sass API) needs the project root added explicitly as a load path.
@@ -74,22 +68,16 @@ module.exports = {
 		// https://stackoverflow.com/a/68098547/373207
 		config.resolve.fallback = { fs: false, path: false };
 
-		// Ignore NextJS warnings about skipped css rules that are not compatible with server side rendering
-		// https://meemoo.atlassian.net/browse/ARC-3192
-		config.ignoreWarnings = [
-			{ message: /rules skipped due to selector errors/i },
-			{ message: /Empty sub-selector/i },
-		];
-
 		// Ensure certain packages are always resolved to one version instead of other versions from admin-core or component libraries
+		// webpack's resolve.alias needs absolute paths (unlike turbopack.resolveAlias below, which needs relative ones).
 		config.resolve.alias = {
 			...config.resolve.alias,
-			'@tanstack/react-query': './node_modules/@tanstack/react-query',
-			'use-query-params': './node_modules/use-query-params',
-			'react-select': './node_modules/react-select',
-			'react-select/creatable': './node_modules/react-select/creatable',
-			'react-select/async': './node_modules/react-select/async',
-			'react-hook-form': './node_modules/react-hook-form',
+			'@tanstack/react-query': path.resolve('./node_modules/@tanstack/react-query'),
+			'use-query-params': path.resolve('./node_modules/use-query-params'),
+			'react-select': path.resolve('./node_modules/react-select'),
+			'react-select/creatable': path.resolve('./node_modules/react-select/creatable'),
+			'react-select/async': path.resolve('./node_modules/react-select/async'),
+			'react-hook-form': path.resolve('./node_modules/react-hook-form'),
 			'react-datepicker': path.resolve('./node_modules/react-datepicker'),
 		};
 

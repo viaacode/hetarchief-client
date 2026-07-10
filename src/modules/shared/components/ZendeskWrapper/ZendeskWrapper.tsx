@@ -35,7 +35,7 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 
 	const updateFooterHeight = useCallback(() => {
 		setFooterHeight(
-			document.querySelector(moduleClassSelector('c-footer'))?.clientHeight || 0 // 0 when no footer is found
+			document.querySelector(moduleClassSelector('Footer', 'c-footer'))?.clientHeight || 0 // 0 when no footer is found
 		);
 	}, []);
 

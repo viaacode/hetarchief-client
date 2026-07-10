@@ -26,3 +26,36 @@
 @function get-z-layer($_key: "base") {
 	@return base-getter($_key, $z-layers, "$z-layers");
 }
+
+/**
+ * CSS modules
+ *
+ * Matches a CSS module's generated class name, requiring both the component name and the local
+ * class to be present, regardless of whether the module was compiled by webpack
+ * (`Component_local-class__hash`) or Turbopack (`Component-module-scss-module__hash__local-class`)
+ * -- the generated hash sits on the opposite side of the local class name depending on the bundler.
+ * eg: module-class-selector("Icon", "c-icon")
+ *  => '[class*="Icon_c-icon__"], [class*="Icon-module-scss-module__"][class*="__c-icon"]'
+ */
+
+// webpack keeps the component name and local class contiguous (`Component_local-class__hash`), so
+// one attribute selector suffices.
+@function module-class-selector-webpack($component, $local-class, $suffix: "__") {
+	@return '[class*="#{$component}_#{$local-class}#{$suffix}"]';
+}
+
+// Turbopack separates the component name from the local class with an unpredictable hash
+// (`Component-module-scss-module__hash__local-class`), so instead of one contiguous string we
+// chain two attribute selectors -- each anchored to a fixed, hash-independent part -- which must
+// both match the same class attribute regardless of what sits between them.
+@function module-class-selector-turbopack($component, $local-class, $suffix: "__") {
+	@return '[class*="#{$component}-module-scss-module#{$suffix}"][class*="#{$suffix}#{$local-class}"]';
+}
+
+// Combines both bundler alternatives. Split out into the two functions above for cases that can't
+// use a plain comma list: interpolating a comma-joined pair after a combinator does not distribute
+// the combinator across both branches, and :global(...) does not accept a comma-separated list as
+// its argument (use the module-class-selector-global mixin for that case instead).
+@function module-class-selector($component, $local-class, $suffix: "__") {
+	@return "#{module-class-selector-webpack($component, $local-class, $suffix)}, #{module-class-selector-turbopack($component, $local-class, $suffix)}";
+}

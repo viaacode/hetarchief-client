@@ -17,7 +17,9 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_PASSWORD as string
 	);
 	// Check navbar is visible
-	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
+	await expect(
+		page.locator(`nav${moduleClassSelector('Navigation', 'c-navigation')}`)
+	).toBeVisible();
 
 	// Check logged in status
 	await expect(page.locator('.c-avatar__text')).toContainText('VRT');

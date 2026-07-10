@@ -37,7 +37,9 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	);
 
 	// Check navbar exists
-	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
+	await expect(
+		page.locator(`nav${moduleClassSelector('Navigation', 'c-navigation')}`)
+	).toBeVisible();
 
 	// Admin should not be visible and beheer should be visible
 	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Admin' })).toHaveCount(0);
@@ -107,7 +109,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	 */
 
 	// Click the pending visit request
-	const rowSelector = `${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`;
+	const rowSelector = `${moduleClassSelector('SidebarLayout', 'l-sidebar__main')} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`;
 	const pendingVisitRow = page.locator(rowSelector, { hasText: 'Sleutelgebruiker Test' }).first();
 	await expect(pendingVisitRow).toBeVisible();
 	await pendingVisitRow.click();
@@ -128,14 +130,14 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Check request summary contains requester name
 	let summaryHtml = await page
-		.locator(`.c-blade--active ${moduleClassSelector('c-visit-summary')}`)
+		.locator(`.c-blade--active ${moduleClassSelector('VisitSummary', 'c-visit-summary')}`)
 		.innerHTML();
 	expect(summaryHtml).toContain('Sleutelgebruiker Test');
 	expect(summaryHtml).toContain('test with second account');
 	expect(summaryHtml).toContain('next monday');
 
 	// Check buttons for approve and deny are visible
-	const bladeButtonsSelector = `.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button`;
+	const bladeButtonsSelector = `.c-blade--active ${moduleClassSelector('BladeContent', 'c-blade__footer')} .c-button`;
 	let approveButton = page.locator(bladeButtonsSelector, {
 		hasText:
 			SITE_TRANSLATIONS.nl[
@@ -179,7 +181,9 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await page.click('.react-datepicker__time-list-item:has-text("00:00")');
 
 	// Click the approve button
-	await page.click(`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button--black`);
+	await page.click(
+		`.c-blade--active ${moduleClassSelector('BladeContent', 'c-blade__footer')} .c-button--black`
+	);
 
 	// Blade closes
 	await expect(page.locator('.c-blade--active')).not.toBeVisible();
@@ -233,7 +237,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Click the pending visit request
 	const pendingVisitRequestCel = page
 		.locator(
-			`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
+			`${moduleClassSelector('SidebarLayout', 'l-sidebar__main')} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
 			{ hasText: 'Meemoo admin Test' }
 		)
 		.first();
@@ -256,7 +260,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Check request summary contains requester name
 	summaryHtml = await page
-		.locator(`.c-blade--active ${moduleClassSelector('c-visit-summary')}`)
+		.locator(`.c-blade--active ${moduleClassSelector('VisitSummary', 'c-visit-summary')}`)
 		.innerHTML();
 	expect(summaryHtml).toContain('Meemoo');
 	expect(summaryHtml).toContain('admin');
@@ -264,7 +268,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Check buttons for approve and deny are visible
 	approveButton = page.locator(
-		`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button`,
+		`.c-blade--active ${moduleClassSelector('BladeContent', 'c-blade__footer')} .c-button`,
 		{
 			hasText:
 				SITE_TRANSLATIONS.nl[
@@ -274,7 +278,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	);
 	await expect(approveButton).toBeVisible();
 	denyButton = page.locator(
-		`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button`,
+		`.c-blade--active ${moduleClassSelector('BladeContent', 'c-blade__footer')} .c-button`,
 		{
 			hasText:
 				SITE_TRANSLATIONS.nl[
@@ -297,12 +301,15 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Click the deny button on the second blade
 	await page
-		.locator(`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button`, {
-			hasText:
-				SITE_TRANSLATIONS.nl[
-					'modules/cp/components/decline-request-blade/decline-request-blade___keur-af'
-				],
-		})
+		.locator(
+			`.c-blade--active ${moduleClassSelector('BladeContent', 'c-blade__footer')} .c-button`,
+			{
+				hasText:
+					SITE_TRANSLATIONS.nl[
+						'modules/cp/components/decline-request-blade/decline-request-blade___keur-af'
+					],
+			}
+		)
 		.click();
 
 	// Blade closes

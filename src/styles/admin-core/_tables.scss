@@ -30,7 +30,7 @@
 			.c-menu__label {
 				font-size: abstracts.$font-size-sm;
 
-				[class*="Icon_c-icon__"] {
+				@include abstracts.module-class-selector("Icon", "c-icon") {
 					font-size: abstracts.$font-size-md;
 				}
 			}

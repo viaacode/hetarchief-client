@@ -114,7 +114,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 				}
 			}
 
-			:global([class*="ObjectDetailPage_p-object-detail__sidebar__"]) {
+			@include abstracts.module-class-selector-global("ObjectDetailPage", "p-object-detail__sidebar") {
 				// Sidebar can take the space of the tabs if there is no media, since only one tab would be visible or desktop
 				@media (min-width: abstracts.$breakpoint-lg) {
 					grid-row: 2 / 5 !important;
@@ -397,7 +397,8 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	}
 
 	&:global(.p-object-detail--newspaper) {
-		:global([class*="p-object-detail__wrapper"] > [class^="ObjectDetailPage_p-object-detail__sidebar__"]) {
+		:global([class*="p-object-detail__wrapper"] > #{abstracts.module-class-selector-webpack("ObjectDetailPage", "p-object-detail__sidebar")}),
+		:global([class*="p-object-detail__wrapper"] > #{abstracts.module-class-selector-turbopack("ObjectDetailPage", "p-object-detail__sidebar")}) {
 			grid-row: 3 / 5;
 			grid-column: 3;
 

@@ -129,7 +129,7 @@ $material-card-list-view-height: 10rem;
 
 	&:global(.c-material-card--newspaper) {
 		// https://meemoo.atlassian.net/browse/ARC-2546
-		:global([class*="MediaCard_c-material-card__header__"]) {
+		@include module-class-selector-global("MaterialCard", "c-material-card__header") {
 			background-color: #f8f8f8;
 			position: relative;
 

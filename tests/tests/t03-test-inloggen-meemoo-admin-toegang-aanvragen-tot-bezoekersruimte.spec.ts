@@ -36,7 +36,7 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 
 	// Click Bezoek een aanbieder
 	await page
-		.locator(`a${moduleClassSelector('c-navigation__link--dropdown')}`, {
+		.locator(`a${moduleClassSelector('NavigationLink', 'c-navigation__link--dropdown')}`, {
 			hasText: 'Bezoek een aanbieder',
 		})
 		.first()
@@ -78,7 +78,7 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 
 	// Click on 'Bezoek een aanbieder'
 	await page
-		.locator(`a${moduleClassSelector('c-navigation__link')}`, {
+		.locator(`a${moduleClassSelector('NavigationLink', 'c-navigation__link')}`, {
 			hasText: 'Bezoek een aanbieder',
 		})
 		.first()

@@ -23,7 +23,7 @@ test('T21: iiif viewer bladeren paginas', async ({ page, context }) => {
 
 	// Check second page thumbnail button is visible
 	const secondPageThumbnail = page.locator(
-		`${moduleClassSelector('c-iiif-viewer__iiif__reference-strip')} [alt="page 2"]`
+		`${moduleClassSelector('IiifViewer', 'c-iiif-viewer__iiif__reference-strip')} [alt="page 2"]`
 	);
 	await expect(secondPageThumbnail).toBeVisible();
 
@@ -35,7 +35,7 @@ test('T21: iiif viewer bladeren paginas', async ({ page, context }) => {
 
 	// Check first page thumbnail button is visible
 	const firstPageThumbnail = page.locator(
-		`${moduleClassSelector('c-iiif-viewer__iiif__reference-strip')} [alt="page 1"]`
+		`${moduleClassSelector('IiifViewer', 'c-iiif-viewer__iiif__reference-strip')} [alt="page 1"]`
 	);
 	await expect(firstPageThumbnail).toBeVisible();
 

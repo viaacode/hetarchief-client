@@ -1,7 +1,6 @@
 @use "../../../styles/abstracts" as abstracts;
 
-[class*="SidebarLayout_l-sidebar__main"],
-.c-modal__body {
+%filters-input-with-icon {
 	.c-input-with-icon {
 		position: relative;
 
@@ -34,4 +33,12 @@
 			top: calc(50% - 1rem) !important;
 		}
 	}
+}
+
+@include abstracts.module-class-selector("SidebarLayout", "l-sidebar__main") {
+	@extend %filters-input-with-icon;
+}
+
+.c-modal__body {
+	@extend %filters-input-with-icon;
 }

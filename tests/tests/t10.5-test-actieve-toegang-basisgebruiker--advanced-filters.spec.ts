@@ -51,7 +51,9 @@ test('T10.5: Test actieve toegang basisgebruiker: Geavanceerde filters', async (
 	// Set title filter
 	const TITLE_FILTER_VALUE = 'Planning';
 	const firstAdvancedEntry = advancedFilterMenu
-		.locator(moduleClassSelector('c-advanced-filter-fields__p', '_'))
+		.locator(
+			moduleClassSelector('AdvancedFilterFields', 'c-advanced-filter-fields__field-container')
+		)
 		.nth(0);
 	await expect(firstAdvancedEntry).toBeVisible();
 
@@ -71,7 +73,9 @@ test('T10.5: Test actieve toegang basisgebruiker: Geavanceerde filters', async (
 	// Set second advanced filter entry
 	const DESCRIPTION_FILTER_VALUE = 'Beeldverslag';
 	const secondAdvancedEntry = advancedFilterMenu
-		.locator(moduleClassSelector('c-advanced-filter-fields__p', '_'))
+		.locator(
+			moduleClassSelector('AdvancedFilterFields', 'c-advanced-filter-fields__field-container')
+		)
 		.nth(1);
 	await expect(secondAdvancedEntry).toBeVisible();
 	const filter2TypeSelect = secondAdvancedEntry.locator('.c-form-control .c-react-select').first();
@@ -89,7 +93,9 @@ test('T10.5: Test actieve toegang basisgebruiker: Geavanceerde filters', async (
 	// TODO add filter on language once more items with languages are added
 
 	// Click apply button
-	const applyButton = advancedFilterMenu.locator(moduleClassSelector('c-filter-form__submit'));
+	const applyButton = advancedFilterMenu.locator(
+		moduleClassSelector('FilterForm', 'c-filter-form__submit')
+	);
 	await expect(applyButton).toBeVisible();
 	await applyButton.click();
 
