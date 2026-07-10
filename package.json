@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "dev": "dotenv -e .env.local -- node ./scripts/generate-env-config.js && next dev -p 3200",
-    "build-with-analyse": "biome ci && cross-env ANALYZE=true next build",
+    "build-with-analyse": "biome ci && next experimental-analyze",
     "build": "biome ci && next build",
     "start": "next start",
     "start-production-locally": "dotenv -e .env.local -- node ./scripts/generate-env-config.js && cross-env NODE_ENV=production next start -p 3200",
@@ -115,7 +115,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.4",
-    "@next/bundle-analyzer": "13.4.6",
     "@storybook/addon-a11y": "10.4.6",
     "@storybook/addon-docs": "10.4.6",
     "@storybook/nextjs": "10.4.6",

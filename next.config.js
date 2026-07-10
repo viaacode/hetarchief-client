@@ -1,5 +1,3 @@
-// const bundleAnalyser = require('@next/bundle-analyzer');
-
 const path = require('node:path');
 
 /**
@@ -14,12 +12,7 @@ const path = require('node:path');
  */
 process.env.CRITTERS_LOG_LEVEL = process.env.CRITTERS_LOG_LEVEL || 'error';
 
-// const withBundleAnalyzer = bundleAnalyser({
-// 	enabled: process.env.ANALYZE === 'true',
-// });
-
 /** @type {import("next").NextConfig} */
-// module.exports = withBundleAnalyzer(
 module.exports = {
 	transpilePackages: ['ky-universal', '@viaa/avo2-components', '@meemoo/react-components'],
 	i18n: {
