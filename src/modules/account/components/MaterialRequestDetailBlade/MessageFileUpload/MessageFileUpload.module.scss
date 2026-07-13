@@ -3,12 +3,10 @@
 .c-message-file-upload {
 	&__button {
 		cursor: pointer;
+		border-radius: 0 !important;
+		height: 100% !important;
 
 		@include focus-outline;
-
-		&:focus-visible {
-			border-radius: 2px;
-		}
 	}
 
 	&__input {
@@ -16,7 +14,7 @@
 	}
 
 	&__icon {
-		color: #6a6f7b;
-		font-size: $font-size-2xm;
+		font-size: $font-size-md !important;;
+		height: 1.8rem !important;
 	}
 }
