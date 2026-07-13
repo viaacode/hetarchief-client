@@ -171,6 +171,16 @@
     "stylelint": "16.14.1",
     "typescript": "5.9.3"
   },
+  "allowScripts": {
+    "@parcel/watcher@2.5.1": true,
+    "core-js@3.49.0": true,
+    "core-js-pure@3.49.0": true,
+    "es5-ext@0.10.64": true,
+    "esbuild@0.27.2": true,
+    "fsevents@2.3.3": true,
+    "lefthook@1.10.10": true,
+    "sharp@0.34.5": true
+  },
   "browserslist": [
     ">0.3%",
     "not ie 11",
