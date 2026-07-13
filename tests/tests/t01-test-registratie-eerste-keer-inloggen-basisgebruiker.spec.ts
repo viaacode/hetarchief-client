@@ -28,7 +28,9 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	);
 
 	// Check navbar exists
-	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
+	await expect(
+		page.locator(`nav${moduleClassSelector('Navigation', 'c-navigation')}`)
+	).toBeVisible();
 
 	// Click on login or register
 	const loginOrRegisterLabel =
@@ -36,7 +38,9 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await page.locator(`text=${loginOrRegisterLabel}`).first().click();
 
 	// Check auth modal opens up
-	const authModalHeading = page.locator(moduleClassSelector('c-auth-modal__heading')).first();
+	const authModalHeading = page
+		.locator(moduleClassSelector('AuthModal', 'c-auth-modal__heading'))
+		.first();
 	expect(authModalHeading).toBeDefined();
 
 	// Click the register button and wait for captcha to load
@@ -107,7 +111,9 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Beheer' })).toHaveCount(0);
 
 	// Check navbar exists
-	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
+	await expect(
+		page.locator(`nav${moduleClassSelector('Navigation', 'c-navigation')}`)
+	).toBeVisible();
 
 	// Wait for close to save the videos
 	await context.close();

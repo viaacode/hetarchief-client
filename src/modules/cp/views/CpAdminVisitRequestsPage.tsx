@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import { Permission } from '@account/const';
 import { RequestTableColumns } from '@cp/const/requests.const';
 import { CPAdminLayout } from '@cp/layouts';
@@ -8,6 +6,7 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import VisitRequestsOverview from '@visit-requests/components/VisitRequestsOverview/VisitRequestsOverview';
+import type { FC } from 'react';
 
 export const CpAdminVisitRequestsPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const renderPageContent = () => {

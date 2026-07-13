@@ -1,7 +1,6 @@
+import { ApiService } from '@shared/services/api-service';
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
-
-import { ApiService } from '@shared/services/api-service';
 
 import type { Alert } from '../../types';
 

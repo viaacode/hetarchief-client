@@ -1,4 +1,4 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
 import { mockAdminTabs, mockTabs } from '../__mocks__/tabs';
@@ -16,15 +16,15 @@ export default {
 			],
 		},
 	},
-} as ComponentMeta<typeof ScrollableTabs>;
+} as Meta<typeof ScrollableTabs>;
 
-const GradientTemplate: ComponentStory<typeof ScrollableTabs> = (args) => (
+const GradientTemplate: StoryFn<typeof ScrollableTabs> = (args) => (
 	<div style={{ width: '460px', maxWidth: '100%' }}>
 		<ScrollableTabs {...args} />
 	</div>
 );
 
-const Template: ComponentStory<typeof ScrollableTabs> = (args) => <ScrollableTabs {...args} />;
+const Template: StoryFn<typeof ScrollableTabs> = (args) => <ScrollableTabs {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

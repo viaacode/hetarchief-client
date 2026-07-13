@@ -107,7 +107,7 @@ table[class*="c-table--styled"] {
 
 // Pagination
 
-div[class*="c-pagination"]:not(div[class*="c-pagination__btn"]) {
+div[class*="c-pagination"]:not([class*="c-pagination__btn"]) {
 	justify-content: flex-end;
 }
 
@@ -525,7 +525,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 			padding: 0 abstracts.$spacer-md;
 		}
 
-		[class*="TagList-module_c-tag-list"] {
+		[class*="c-tag-list"] {
 			margin: 0;
 			padding: 0;
 		}

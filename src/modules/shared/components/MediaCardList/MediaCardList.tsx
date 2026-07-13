@@ -5,7 +5,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 import { isServerSideRendering } from '@shared/utils/is-browser';
 import clsx from 'clsx';
-import { compact } from 'lodash-es';
+import { compact } from 'es-toolkit/compat';
 import { type FC, memo, type ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
 import { type IdentifiableMediaCard, MediaCard } from '../MediaCard';

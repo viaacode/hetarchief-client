@@ -1,5 +1,5 @@
 import { IeObjectType } from '@shared/types/ie-objects';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import type { CSSProperties } from 'react';
 import { thumbnail } from './__mocks__/media-card';
 import MediaCard from './MediaCard';
@@ -8,7 +8,7 @@ import { soundwave } from './MediaCard.consts';
 export default {
 	title: 'Components/MediaCard',
 	component: MediaCard,
-} as ComponentMeta<typeof MediaCard>;
+} as Meta<typeof MediaCard>;
 
 const container: CSSProperties = {
 	display: 'flex',
@@ -16,7 +16,7 @@ const container: CSSProperties = {
 };
 const column: CSSProperties = { flex: '1 1 0', margin: '10px' };
 
-const Template: ComponentStory<typeof MediaCard> = (args) => {
+const Template: StoryFn<typeof MediaCard> = (args) => {
 	return (
 		<section
 			style={{
@@ -57,16 +57,18 @@ const Template: ComponentStory<typeof MediaCard> = (args) => {
 	);
 };
 
-export const Grid: ComponentStory<typeof MediaCard> = Template.bind({});
+export const Grid: StoryFn<typeof MediaCard> = Template.bind({});
 Grid.args = {
 	view: 'grid',
+	icon: null,
+	link: undefined,
 	publishedOrCreatedDate: new Date().toDateString(),
 	publishedBy: 'Studio Hyperdrive',
 	description:
 		'Donec nunc odio, fermentum vel laoreet at, luctus lobortis mauris. Nullam metus lectus, semper vitae nisi in, mollis porttitor nisi. Vivamus pharetra accumsan congue. Aenean commodo leo felis, a placerat velit facilisis non. Proin sollicitudin ultrices mi in viverra. Nam gravida, neque vel porttitor malesuada, velit mi placerat sapien, in fermentum ante neque vitae odio. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec imperdiet nibh in nisi sagittis, et fermentum turpis dictum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla sollicitudin ipsum eget fermentum iaculis. Nunc facilisis nibh orci, eget euismod lacus suscipit et. Maecenas et tellus consectetur, ornare elit vitae, ullamcorper dolor. Proin vel semper quam. Quisque consequat orci nec semper facilisis. ',
 };
 
-export const List: ComponentStory<typeof MediaCard> = Template.bind({});
+export const List: StoryFn<typeof MediaCard> = Template.bind({});
 List.args = {
 	...Grid.args,
 	view: 'list',

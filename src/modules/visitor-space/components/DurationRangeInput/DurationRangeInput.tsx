@@ -1,7 +1,6 @@
 import type { TextInputProps } from '@meemoo/react-components';
-import type { ChangeEvent, FC } from 'react';
-
 import { SEPARATOR } from '@shared/const';
+import type { ChangeEvent, FC } from 'react';
 
 import { DurationInput } from '../DurationInput';
 

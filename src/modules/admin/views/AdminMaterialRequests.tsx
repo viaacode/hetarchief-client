@@ -22,6 +22,7 @@ import {
 	type MaterialRequestStatus,
 	type MaterialRequestType,
 } from '@material-requests/types';
+import type { Row, SortingRule } from '@meemoo/react-components';
 import {
 	MultiSelect,
 	type MultiSelectOption,
@@ -46,17 +47,17 @@ import { isLessThanXlSize } from '@shared/utils/is-mobile';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { useIsComplexReuseFlowUser } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
-import { isEmpty, isNil, noop } from 'lodash-es';
+import { isEmpty, isNil, noop } from 'es-toolkit/compat';
 import React, {
 	type FC,
 	type MouseEvent,
 	type ReactNode,
+	useCallback,
 	useEffect,
 	useMemo,
 	useState,
 } from 'react';
 import { useSelector } from 'react-redux';
-import type { Row, SortingRule, TableState } from 'react-table';
 import { StringParam, useQueryParam, useQueryParams } from 'use-query-params';
 
 export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
@@ -193,7 +194,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	);
 
 	const sortFilters = useMemo(
-		(): SortingRule<{ id: MaterialRequestKeys; desc: boolean }>[] => [
+		(): SortingRule[] => [
 			{
 				id: filters.orderProp,
 				desc: filters.orderDirection !== AvoSearchOrderDirection.ASC,
@@ -247,26 +248,27 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		});
 	}, [selectedMaintainers]);
 
-	const onSortChange = (
-		orderProp: string | undefined,
-		orderDirection: AvoSearchOrderDirection | undefined
-	): void => {
-		if (filters.orderProp === MaterialRequestKeys.requestedAt && orderDirection === undefined) {
-			setFilters({
-				...filters,
-				orderProp: orderProp || 'requestedAt',
-				orderDirection: AvoSearchOrderDirection.ASC,
-				page: 1,
-			});
-		} else if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
-			setFilters({
-				...filters,
-				orderProp: orderProp || 'requestedAt',
-				orderDirection: orderDirection || AvoSearchOrderDirection.DESC,
-				page: 1,
-			});
-		}
-	};
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Wee need the useCallback otherwise we get a render loop, but no need to update the method each time the filters change
+	const onSortChange = useCallback(
+		(orderProp: string | undefined, orderDirection: AvoSearchOrderDirection | undefined): void => {
+			if (filters.orderProp === MaterialRequestKeys.requestedAt && orderDirection === undefined) {
+				setFilters({
+					...filters,
+					orderProp: orderProp || 'requestedAt',
+					orderDirection: AvoSearchOrderDirection.ASC,
+					page: 1,
+				});
+			} else if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
+				setFilters({
+					...filters,
+					orderProp: orderProp || 'requestedAt',
+					orderDirection: orderDirection || AvoSearchOrderDirection.DESC,
+					page: 1,
+				});
+			}
+		},
+		[]
+	);
 
 	const onPageChange = (pageZeroBased: number, gotoPage: (i: number) => void): void => {
 		gotoPage(pageZeroBased);
@@ -276,7 +278,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		});
 	};
 
-	const renderPagination = ({ gotoPage }: { gotoPage: (i: number) => void }): ReactNode => (
+	const renderPagination = ({ setPageIndex }: { setPageIndex: (i: number) => void }): ReactNode => (
 		<PaginationBar
 			showFirstAndLastButtons
 			{...getDefaultPaginationBarProps()}
@@ -284,7 +286,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 			startItem={Math.max(0, filters.page - 1) * ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}
 			totalItems={materialRequests?.total || 0}
 			itemsPerPage={ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE}
-			onPageChange={(pageZeroBased: number) => onPageChange(pageZeroBased, gotoPage)}
+			onPageChange={(pageZeroBased: number) => onPageChange(pageZeroBased, setPageIndex)}
 		/>
 	);
 
@@ -324,9 +326,9 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 					columns: getAdminMaterialRequestTableColumns(isTabletPortrait),
 					data: materialRequests?.items || [],
 					initialState: {
-						pageSize: ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
-						sortBy: sortFilters,
-					} as TableState<MaterialRequest>,
+						pagination: { pageIndex: 0, pageSize: ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE },
+						sorting: sortFilters,
+					},
 				}}
 				getColumnProps={getMaterialRequestTableColumnProps}
 				sortingIcons={sortingIcons}
@@ -510,7 +512,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		return (
 			<AdminLayout pageTitle={tText('pages/admin/materiaalaanvragen/index___materiaalaanvragen')}>
 				<AdminLayout.Content>
-					<div className="l-container">
+					<div className="l-container l-container--edgeless-to-lg">
 						<div className={clsx('p-admin-material-requests__header')}>
 							<div className="p-admin-material-requests__header-dropdowns">
 								{renderTypeFilter()}
@@ -522,15 +524,15 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 
 							{renderSearchInput()}
 						</div>
-					</div>
-					<div
-						className={clsx('l-container l-container--edgeless-to-lg', {
-							'u-text-center u-color-neutral u-py-48': isLoadingMaterialRequests || noData,
-						})}
-					>
-						{isLoadingMaterialRequests && <Loading locationId="Material requests overview" />}
-						{noData && !isLoadingMaterialRequests && renderEmptyMessage()}
-						{renderContent()}
+						<div
+							className={clsx({
+								'u-text-center u-color-neutral u-py-48': noData && !isLoadingMaterialRequests,
+							})}
+						>
+							{isLoadingMaterialRequests && <Loading locationId="Material requests overview" />}
+							{noData && !isLoadingMaterialRequests && renderEmptyMessage()}
+							{renderContent()}
+						</div>
 					</div>
 					{renderDetailBlade()}
 				</AdminLayout.Content>

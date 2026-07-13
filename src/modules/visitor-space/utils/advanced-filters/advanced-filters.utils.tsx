@@ -5,7 +5,7 @@ import {
 	type FilterConfig,
 	REGULAR_FILTERS,
 } from '@visitor-space/const/advanced-filters.consts';
-import { sortBy } from 'lodash-es';
+import { sortBy } from 'es-toolkit/compat';
 
 import {
 	FilterProperty,

@@ -1,5 +1,5 @@
+import getConfig from '@shared/config/public-runtime-config';
 import { TranslationService } from '@shared/services/translation-service/translation.service';
-import getConfig from 'next/config';
 import { type DocumentProps, Head, Html, Main, NextScript } from 'next/document';
 import React, { type ReactElement } from 'react';
 
@@ -28,6 +28,8 @@ const Document = (props: DocumentProps): ReactElement => {
 	return (
 		<Html lang={locale}>
 			<CustomHead>
+				{/* Runtime public environment variables (window.__ENV__), generated at container start by scripts/generate-env-config.js */}
+				<script src="/env-config.js" />
 				{/*eslint-disable-next-line*/}
 				<script
 					id="Cookiebot"

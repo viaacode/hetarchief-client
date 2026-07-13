@@ -19,7 +19,9 @@ export async function loginUserMeemooIdp(
 		.click();
 
 	// Check auth modal opens up
-	const authModalHeading = page.locator(moduleClassSelector('c-auth-modal__heading')).first();
+	const authModalHeading = page
+		.locator(moduleClassSelector('AuthModal', 'c-auth-modal__heading'))
+		.first();
 	expect(authModalHeading).toBeDefined();
 
 	// Click the login button

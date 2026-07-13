@@ -1,11 +1,10 @@
 import { ReactSelect, type ReactSelectProps } from '@meemoo/react-components';
-import type { FC } from 'react';
-import { useSelector } from 'react-redux';
-
 import { tText } from '@shared/helpers/translate';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
 import { ElasticsearchFieldNames } from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
+import type { FC } from 'react';
+import { useSelector } from 'react-redux';
 
 const GenreSelect: FC<ReactSelectProps> = (props) => {
 	const filterOptions: string[] =

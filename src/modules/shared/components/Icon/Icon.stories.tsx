@@ -1,5 +1,5 @@
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
 import Icon from './Icon';
@@ -7,10 +7,10 @@ import Icon from './Icon';
 export default {
 	title: 'Components/Icon',
 	component: Icon,
-} as ComponentMeta<typeof Icon>;
+} as Meta<typeof Icon>;
 
 // biome-ignore lint/suspicious/noExplicitAny: storybook
-const AllIconsTemplate: ComponentStory<any> = () => (
+const AllIconsTemplate: StoryFn<any> = () => (
 	<>
 		{[...Object.values(IconNamesLight), ...Object.values(IconNamesSolid)].map(
 			(iconName: IconNamesLight | IconNamesSolid) => (
@@ -33,7 +33,7 @@ const AllIconsTemplate: ComponentStory<any> = () => (
 		)}
 	</>
 );
-const Template: ComponentStory<typeof Icon> = (args) => <Icon {...args} />;
+const Template: StoryFn<typeof Icon> = (args) => <Icon {...args} />;
 
 AllIconsTemplate.bind({});
 

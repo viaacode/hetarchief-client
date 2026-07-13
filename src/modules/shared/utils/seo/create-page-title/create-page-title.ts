@@ -1,6 +1,5 @@
-import { truncate } from 'lodash-es';
-
 import { tText } from '@shared/helpers/translate';
+import { truncate } from 'es-toolkit/compat';
 
 export const createPageTitle = (title?: string | null): string => {
 	if (!title) {

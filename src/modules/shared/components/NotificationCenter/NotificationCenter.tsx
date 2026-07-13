@@ -18,7 +18,7 @@ import {
 import { toastService } from '@shared/services/toast-service';
 import { isMobileSize } from '@shared/utils/is-mobile';
 import clsx from 'clsx';
-import { partition } from 'lodash-es';
+import { partition } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { type FC, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';

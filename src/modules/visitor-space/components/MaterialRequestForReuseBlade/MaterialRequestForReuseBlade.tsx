@@ -43,7 +43,7 @@ import type { RadioButtonAccordionOption } from '@visitor-space/components/Radio
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
 import { parseISO } from 'date-fns';
-import { isNil, kebabCase, noop } from 'lodash-es';
+import { isNil, kebabCase, noop } from 'es-toolkit/compat';
 import { useRouter } from 'next/router';
 import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

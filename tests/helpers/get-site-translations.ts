@@ -1,4 +1,4 @@
-import fetch, { Headers } from 'node-fetch';
+// Uses the global fetch / Headers (available in Node 20.9+ and jsdom)
 
 enum App {
 	AVO = 'AVO',

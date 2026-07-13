@@ -48,7 +48,7 @@ vi.mock('@visitor-space/components/ReleaseDateFilterForm', () => ({
 vi.mock('@visitor-space/components/ReusabilityFilterForm/ReusabilityFilterForm', () => ({
 	default: () => null,
 }));
-vi.mock('next/config', () => ({
+vi.mock('@shared/config/public-runtime-config', () => ({
 	default: () => ({
 		publicRuntimeConfig: {
 			ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY: 'true',

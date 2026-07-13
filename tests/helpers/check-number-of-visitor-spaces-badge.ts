@@ -5,7 +5,7 @@ export async function checkNumberOfVisitorSpacesBadge(
 	page: Page,
 	expectedNumberOfVisitorSpaces: number
 ): Promise<void> {
-	const navBar = page.locator(`nav${moduleClassSelector('c-navigation')}`);
+	const navBar = page.locator(`nav${moduleClassSelector('Navigation', 'c-navigation')}`);
 	await expect(navBar).toBeVisible();
 	const visitorSpacesAccessBadge = navBar.locator('a[href="/bezoek"] .c-badge');
 	await expect(visitorSpacesAccessBadge).toBeVisible();

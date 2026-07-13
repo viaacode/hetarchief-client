@@ -1,4 +1,4 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
 import HetArchiefLogo from './HetArchiefLogo';
@@ -7,9 +7,9 @@ import { HetArchiefLogoType } from './HetArchiefLogo.const';
 export default {
 	title: 'Components/Logo',
 	component: HetArchiefLogo,
-} as ComponentMeta<typeof HetArchiefLogo>;
+} as Meta<typeof HetArchiefLogo>;
 
-const Template: ComponentStory<typeof HetArchiefLogo> = (args) => <HetArchiefLogo {...args} />;
+const Template: StoryFn<typeof HetArchiefLogo> = (args) => <HetArchiefLogo {...args} />;
 
 export const LogoComponent = Template.bind({});
 LogoComponent.args = { type: HetArchiefLogoType.Dark };

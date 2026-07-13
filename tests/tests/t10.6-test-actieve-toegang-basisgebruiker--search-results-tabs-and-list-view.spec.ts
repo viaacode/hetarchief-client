@@ -39,7 +39,7 @@ test('T10.6: Test actieve toegang basisgebruiker: zoek resultaten tabs en lijst 
 	// TODO go to next page => not enough search results
 
 	// Switch to list view
-	const listToggleButton = page.locator(moduleClassSelector('c-toggle__option'), {
+	const listToggleButton = page.locator(moduleClassSelector('Toggle', 'c-toggle__option'), {
 		hasText: IconName.ListView,
 	});
 	await expect(listToggleButton).toBeVisible();

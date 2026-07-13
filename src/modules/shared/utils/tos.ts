@@ -1,5 +1,5 @@
 import { isAfter, parseISO } from 'date-fns';
-import { isString } from 'lodash-es';
+import { isString } from 'es-toolkit/compat';
 
 export function isCurrentTosAccepted(
 	acceptedAt: Date | string | null | undefined,

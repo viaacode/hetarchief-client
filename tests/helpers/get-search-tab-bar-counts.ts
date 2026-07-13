@@ -10,7 +10,7 @@ export interface SearchTabCounts {
 
 export async function getSearchTabBarCounts(page: Page): Promise<SearchTabCounts> {
 	await page.waitForTimeout(1000);
-	const tabBar = page.locator(moduleClassSelector('c-scrollable-tabs'));
+	const tabBar = page.locator(moduleClassSelector('ScrollableTabs', 'c-scrollable-tabs'));
 	const allTab = await tabBar.locator('.c-tab--all small').innerText();
 	const videosTab = await tabBar.locator('.c-tab--video small').innerText();
 	const audioTab = await tabBar.locator('.c-tab--audio small').innerText();

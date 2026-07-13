@@ -1,5 +1,6 @@
 // TODO rename this to SEARCH_FILTERS since these are not specific to a visitor space anymore in fase2
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import getConfig from '@shared/config/public-runtime-config';
 import { tText } from '@shared/helpers/translate';
 import { SearchPageMediaType } from '@shared/types/ie-objects';
 import { AdvancedFilterForm } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm';
@@ -18,7 +19,6 @@ import { NewspaperSeriesNameFilterForm } from '@visitor-space/components/Newspap
 import { ReleaseDateFilterForm } from '@visitor-space/components/ReleaseDateFilterForm';
 import ReusabilityFilterForm from '@visitor-space/components/ReusabilityFilterForm/ReusabilityFilterForm';
 import { SearchFilterId } from '@visitor-space/types';
-import getConfig from 'next/config';
 
 const { publicRuntimeConfig } = getConfig();
 

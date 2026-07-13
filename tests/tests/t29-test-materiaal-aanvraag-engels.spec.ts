@@ -40,7 +40,7 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 	await addToMaterialRequestListButton.click();
 
 	// Check the blade "Add to requests" opens
-	const addToRequestsBlade = page.locator(moduleClassSelector('c-blade--visible'));
+	const addToRequestsBlade = page.locator(moduleClassSelector('Blade', 'c-blade--visible'));
 	await expect(addToRequestsBlade).toBeVisible();
 	await expect(addToRequestsBlade).toContainText(
 		SITE_TRANSLATIONS.en[
@@ -50,13 +50,13 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 
 	// Select the first radio button
 	const firstRadioButton = addToRequestsBlade
-		.locator(moduleClassSelector('c-request-material__radio-button'))
+		.locator(moduleClassSelector('MaterialRequestBlade', 'c-request-material__radio-button'))
 		.first();
 	await firstRadioButton.click();
 
 	// Click the "Add" button (desktop button)
 	const addButton = addToRequestsBlade.locator(
-		`.u-hide-lt-bp2 ${moduleClassSelector('c-request-material__voeg-toe-button')}`
+		`.u-hide-lt-bp2 ${moduleClassSelector('MaterialRequestBlade', 'c-request-material__voeg-toe-button')}`
 	);
 	await expect(addButton).toBeVisible();
 	await addButton.click();
@@ -74,14 +74,17 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 
 	// Check the material list has a badge with the number 1
 	let materialListBadge = page.locator(
-		moduleClassSelector('c-material-request-center__icon-container-badge')
+		moduleClassSelector(
+			'MaterialRequestCenterButton',
+			'c-material-request-center__icon-container-badge'
+		)
 	);
 	await expect(materialListBadge).toBeVisible();
 	await expect(materialListBadge).toHaveText('1');
 
 	// Click the material list icon
 	const materialListIcon = page.locator(
-		`.c-button${moduleClassSelector('c-material-request-center')}`
+		`.c-button${moduleClassSelector('MaterialRequestCenterButton', 'c-material-request-center')}`
 	);
 	await materialListIcon.click();
 
@@ -97,7 +100,10 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 	// Wait for items to load: Wait for "Applications for" label
 	await expect(
 		materialListBlade.locator(
-			moduleClassSelector('c-material-request-center-blade__maintainer-details'),
+			moduleClassSelector(
+				'MaterialRequestCenterBlade',
+				'c-material-request-center-blade__maintainer-details'
+			),
 			{
 				hasText:
 					SITE_TRANSLATIONS.en[
@@ -109,7 +115,10 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 
 	// Click the confirm your detail button
 	const confirmDetailsButton = materialListBlade.locator(
-		moduleClassSelector('c-material-request-center-blade__send-button')
+		moduleClassSelector(
+			'MaterialRequestCenterBlade',
+			'c-material-request-center-blade__send-button'
+		)
 	);
 	await expect(confirmDetailsButton).toBeVisible();
 	await confirmDetailsButton.click();
@@ -120,7 +129,7 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 			'modules/navigation/components/personal-info-blade/personal-info-blade___persoonlijke-gegevens'
 		];
 	await expect(
-		page.locator(moduleClassSelector('c-blade__title'), {
+		page.locator(moduleClassSelector('BladeContent', 'c-blade__title'), {
 			hasText: bladeTitle,
 		})
 	).toBeVisible();
@@ -130,7 +139,7 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 
 	// Check name is filled in:
 	const nameLabel = personalDetailsBlade
-		.locator(moduleClassSelector('c-personal-info-blade__content-label'))
+		.locator(moduleClassSelector('PersonalInfo', 'c-personal-info-blade__content-label'))
 		.first();
 	await expect(nameLabel).toBeVisible();
 	await expect(nameLabel).toContainText(
@@ -140,14 +149,14 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 	);
 
 	const nameValue = personalDetailsBlade
-		.locator(moduleClassSelector('c-personal-info-blade__content-value'))
+		.locator(moduleClassSelector('PersonalInfo', 'c-personal-info-blade__content-value'))
 		.first();
 	await expect(nameValue).toBeVisible();
 	await expect(nameValue).toContainText('Basis 3 Gebruiker 3');
 
 	// Check email is filled in:
 	const emailLabel = personalDetailsBlade
-		.locator(moduleClassSelector('c-personal-info-blade__content-label'))
+		.locator(moduleClassSelector('PersonalInfo', 'c-personal-info-blade__content-label'))
 		.nth(1);
 	await expect(emailLabel).toBeVisible();
 	await expect(emailLabel).toContainText(
@@ -155,21 +164,21 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 	);
 
 	const emailValue = personalDetailsBlade
-		.locator(moduleClassSelector('c-personal-info-blade__content-value'))
+		.locator(moduleClassSelector('PersonalInfo', 'c-personal-info-blade__content-value'))
 		.nth(1);
 	await expect(emailValue).toBeVisible();
 	await expect(emailValue).toContainText('hetarchief2.0+basisgebruiker3@meemoo.be');
 
 	// Check organisation is empty
 	const orgInputField = page.locator(
-		`${moduleClassSelector('c-personal-info-blade__requester-capacity')} .c-input__field[type="text"]`
+		`${moduleClassSelector('PersonalInfo', 'c-personal-info-blade__requester-capacity')} .c-input__field[type="text"]`
 	);
 	await expect(orgInputField).toBeVisible();
 	expect(await orgInputField.inputValue()).toEqual('');
 
 	// Check checkbox for subscribe newsletter is visible (desktop)
 	const subscribeNewsletterCheckbox = page.locator(
-		`.u-hide-lt-bp2 ${moduleClassSelector('c-personal-info-blade__checkbox')}`
+		`.u-hide-lt-bp2 ${moduleClassSelector('PersonalInfo', 'c-personal-info-blade__checkbox')}`
 	);
 	const subscribeToNewsletterLabel =
 		SITE_TRANSLATIONS.en[
@@ -180,7 +189,7 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 
 	// Check the radio button for "I ask for fragments in the context of private research"
 	const privateResearchRadioButton = page.locator(
-		moduleClassSelector('c-personal-info-blade__radio-button'),
+		moduleClassSelector('PersonalInfo', 'c-personal-info-blade__radio-button'),
 		{
 			hasText:
 				SITE_TRANSLATIONS.en[
@@ -193,7 +202,7 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 
 	// Click the submit button
 	const submitButton = personalDetailsBlade.locator(
-		`.u-hide-lt-bp2 ${moduleClassSelector('c-personal-info-blade__send-button')}`
+		`.u-hide-lt-bp2 ${moduleClassSelector('PersonalInfo', 'c-personal-info-blade__send-button')}`
 	);
 	await expect(submitButton).toBeVisible();
 	await submitButton.click();
@@ -208,7 +217,10 @@ test('T29: Test materiaal aanvraag flow engels', async ({ page, context }) => {
 
 	// Check the material list does not have a badge
 	materialListBadge = page.locator(
-		moduleClassSelector('c-material-request-center__icon-container-badge')
+		moduleClassSelector(
+			'MaterialRequestCenterButton',
+			'c-material-request-center__icon-container-badge'
+		)
 	);
 	await expect(materialListBadge).not.toBeVisible();
 

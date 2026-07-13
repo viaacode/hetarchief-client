@@ -1,11 +1,10 @@
 import { Button } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { type FC, Fragment, useState } from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { LanguageSwitcher } from '@shared/components/LanguageSwitcher/LanguageSwitcher';
 import { Overlay } from '@shared/components/Overlay';
+import clsx from 'clsx';
+import { type FC, Fragment, useState } from 'react';
 
 import styles from '../Navigation.module.scss';
 import { NavigationDropdown } from '../NavigationDropdown';

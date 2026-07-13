@@ -8,7 +8,7 @@ import type { Organisation } from '@shared/services/organisation-service/organis
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import type { Locale } from '@shared/utils/i18n';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
-import { kebabCase } from 'lodash-es';
+import { kebabCase } from 'es-toolkit/compat';
 import type { GetServerSidePropsResult } from 'next';
 import type { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';

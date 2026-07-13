@@ -113,7 +113,7 @@ $media-card-list-view-height: 13rem;
 		&--list {
 			min-height: $media-card-list-view-height;
 
-			span > img {
+			img {
 				max-height: unset !important;
 				min-height: unset !important;
 			}
@@ -126,7 +126,7 @@ $media-card-list-view-height: 13rem;
 		&--blade {
 			min-height: $media-card-list-view-height;
 
-			span > img {
+			img {
 				max-height: unset !important;
 				min-height: unset !important;
 			}
@@ -242,7 +242,7 @@ $media-card-list-view-height: 13rem;
 	&:global(.c-media-card--video),
 	&:global(.c-media-card--audio) {
 		// https://meemoo.atlassian.net/browse/ARC-2546
-		:global([class*="MediaCard_c-media-card__header__"]) {
+		@include module-class-selector-global("MediaCard", "c-media-card__header") {
 			img {
 				object-fit: cover;
 				object-position: top;
@@ -254,21 +254,17 @@ $media-card-list-view-height: 13rem;
 
 	&:global(.c-media-card--newspaper) {
 		// https://meemoo.atlassian.net/browse/ARC-2546
-		:global([class*="MediaCard_c-media-card__header__"]) {
+		@include module-class-selector-global("MediaCard", "c-media-card__header") {
 			background-color: #f8f8f8;
-			position: relative;
 
 			&:global([class*="c-media-card__header--no-content"]) {
 				background-color: transparent;
 			}
 
 			img {
-				width: 100%;
-				height: auto;
-				position: absolute;
-				top: 0;
-				transform: scale(0.7);
-				transform-origin: top;
+				max-width: 70%;
+				height: 100%;
+				margin: auto;
 			}
 		}
 	}

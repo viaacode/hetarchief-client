@@ -36,43 +36,48 @@ export const mockData = [1, 2, 3, 4, 5, 6, 7, 8].map((data) => {
 
 export const mockColumns: Column<TableData>[] = [
 	{
-		Header: 'Location',
-		accessor: 'room',
+		header: 'Location',
+		accessorKey: 'room',
 	},
 	{
-		Header: 'Name',
-		accessor: 'name',
+		header: 'Name',
+		accessorKey: 'name',
 	},
 	{
-		Header: 'Email',
-		accessor: 'email',
+		header: 'Email',
+		accessorKey: 'email',
 	},
 	{
-		Header: 'Timestamp',
-		accessor: 'created_at',
+		header: 'Timestamp',
+		accessorKey: 'created_at',
 		// biome-ignore lint/suspicious/noExplicitAny: No typing yet
-		Cell: ({ value }: { value: number }): ReactElement<any, any> => (
-			<>{formatDateTime(new Date(value))}</>
+		cell: ({ getValue }): ReactElement<any, any> => (
+			<>{formatDateTime(new Date(getValue() as number))}</>
 		),
 	},
 	{
-		Header: 'Status',
-		accessor: 'approved',
+		header: 'Status',
+		accessorKey: 'approved',
 		// biome-ignore lint/suspicious/noExplicitAny: No typing yet
-		Cell: ({ value }: { value: boolean }): ReactElement<any, any> => (
-			<div style={{ display: 'flex', alignItems: 'center' }}>
-				<Badge
-					className="u-mr-8"
-					text={<Icon name={value ? IconNamesLight.Check : IconNamesLight.Forbidden} aria-hidden />}
-					type={value ? 'success' : 'error'}
-				/>
-				{value ? 'Ja' : 'Nee'}
-			</div>
-		),
+		cell: ({ getValue }): ReactElement<any, any> => {
+			const value = getValue() as boolean;
+			return (
+				<div style={{ display: 'flex', alignItems: 'center' }}>
+					<Badge
+						className="u-mr-8"
+						text={
+							<Icon name={value ? IconNamesLight.Check : IconNamesLight.Forbidden} aria-hidden />
+						}
+						type={value ? 'success' : 'error'}
+					/>
+					{value ? 'Ja' : 'Nee'}
+				</div>
+			);
+		},
 	},
 	{
 		id: 'Actions',
-		Cell: (
+		cell: () => (
 			<Button
 				icon={<Icon name={IconNamesLight.DotsVertical} aria-hidden />}
 				ariaLabel={tText('modules/shared/components/table/mocks/table___meer-acties')}

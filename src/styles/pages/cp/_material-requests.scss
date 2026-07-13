@@ -10,6 +10,8 @@
 
 		@media (max-width: $breakpoint-xl) {
 			flex-direction: column;
+			gap: $spacer-xs;
+			padding: 0 $spacer-sm;
 		}
 
 		&-dropdowns {
@@ -19,19 +21,20 @@
 
 			@media (max-width: $breakpoint-xl) {
 				flex-direction: column;
-				gap: $spacer-xxxs;
+				gap: $spacer-xs;
 			}
 		}
 	}
 
-	&__searchbar,
-	&__dropdown {
-		margin-bottom: 0;
+	&__searchbar {
+		height: fit-content;
 
 		@media (max-width: $breakpoint-xl) {
-			margin-bottom: $spacer-xs;
+			width: 100%;
 		}
+	}
 
+	&__dropdown {
 		&--open {
 			box-shadow: $shadow-24-black-08;
 		}
@@ -49,22 +52,6 @@
 			.c-multi-select__checkbox-list-item {
 				border-top: none !important;
 			}
-		}
-	}
-
-	&__searchbar {
-		align-self: flex-start;
-
-		@media (max-width: $breakpoint-xl) {
-			width: 100%;
-		}
-	}
-
-	&__dropdown {
-		margin-bottom: 0;
-
-		@media (max-width: $breakpoint-xl) {
-			margin-bottom: $spacer-xs;
 		}
 	}
 

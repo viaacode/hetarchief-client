@@ -38,14 +38,18 @@ test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina',
 	 */
 
 	// Get metadata sidebar width
-	const pageDetailWrapper = page.locator(moduleClassSelector('p-object-detail__wrapper'));
-	const sidebarSelector = ` > ${moduleClassSelector('p-object-detail__sidebar')}`;
+	const pageDetailWrapper = page.locator(
+		moduleClassSelector('ObjectDetailPage', 'p-object-detail__wrapper')
+	);
+	const sidebarSelector = ` > ${moduleClassSelector('ObjectDetailPage', 'p-object-detail__sidebar')}`;
 	const sidebarWidthBeforeExpand =
 		(await pageDetailWrapper.locator(sidebarSelector)?.boundingBox())?.width || 0;
 	expect(sidebarWidthBeforeExpand).toBeGreaterThan(0);
 
 	// Change metadata sidebar size
-	let expanderButton = page.locator(moduleClassSelector('p-object-detail__expand-button'));
+	let expanderButton = page.locator(
+		moduleClassSelector('ObjectDetailPage', 'p-object-detail__expand-button')
+	);
 	await expect(expanderButton).toBeVisible();
 	await expanderButton.click();
 
@@ -61,7 +65,9 @@ test('T11.2: Test detailpagina object + materiaal aanvraag doen: detail pagina',
 	expect(sidebarWidthAfterExpand).toBeGreaterThan(sidebarWidthBeforeExpand);
 
 	// Collapse metadata sidebar
-	expanderButton = page.locator(moduleClassSelector('p-object-detail__expand-button'));
+	expanderButton = page.locator(
+		moduleClassSelector('ObjectDetailPage', 'p-object-detail__expand-button')
+	);
 	await expect(expanderButton).toBeVisible();
 	await expanderButton.click();
 

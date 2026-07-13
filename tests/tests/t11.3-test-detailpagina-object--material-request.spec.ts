@@ -70,9 +70,12 @@ test('T11.3: Test detailpagina object + materiaal aanvraag doen: materiaal aanvr
 
 	// Click request list icon
 	await page
-		.locator(`nav span${moduleClassSelector('c-material-request-center')}`, {
-			hasText: IconName.Request,
-		})
+		.locator(
+			`nav span${moduleClassSelector('MaterialRequestCenterButton', 'c-material-request-center')}`,
+			{
+				hasText: IconName.Request,
+			}
+		)
 		.click();
 	// await checkBladeTitle(page, 'Aanvraaglijst');
 
@@ -93,7 +96,7 @@ test('T11.3: Test detailpagina object + materiaal aanvraag doen: materiaal aanvr
 
 	// Expect firstname, lastname and email address to be filled in, organisation to be empty
 	const prefilledData = await page
-		.locator(moduleClassSelector('c-personal-info-blade__content-value'))
+		.locator(moduleClassSelector('PersonalInfo', 'c-personal-info-blade__content-value'))
 		.allInnerTexts();
 	expect(prefilledData).toContain('Basis Gebruiker 2');
 	expect(prefilledData).toContain('hetarchief2.0+basisgebruiker2@meemoo.be');

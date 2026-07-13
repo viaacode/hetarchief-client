@@ -7,7 +7,7 @@ import {
 	formatDurationMinutesSeconds,
 } from '@meemoo/react-components';
 import { tText } from '@shared/helpers/translate';
-import { isNil } from 'lodash-es';
+import { isNil } from 'es-toolkit/compat';
 
 // If duration is less than an hour, we format the date as mm:ss, otherwise wwe format as hh:mm:ss
 const formatTimeStamp = (value: number | undefined) => {

@@ -15,11 +15,13 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	await goToPageAndAcceptCookies(page, context, process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check navbar exists
-	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
+	await expect(
+		page.locator(`nav${moduleClassSelector('Navigation', 'c-navigation')}`)
+	).toBeVisible();
 
 	// Click on 'Bezoek een aanbieder'
 	await page
-		.locator(`a${moduleClassSelector('c-navigation__link')}`, {
+		.locator(`a${moduleClassSelector('NavigationLink', 'c-navigation__link')}`, {
 			hasText: 'Bezoek een aanbieder', // Comes from the database navigation item, so we cannot use SITE_TRANSLATIONS
 		})
 		.first()
@@ -44,7 +46,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	// Check if email and phone number of VRT are visible
 	const vrtCard = page.locator('.c-visitor-space-card--name--vrt');
 	await expect(vrtCard).toBeVisible();
-	const selector = `.c-menu--visible--default ${moduleClassSelector('c-visitor-space-card-controls__contact-list')} p`;
+	const selector = `.c-menu--visible--default ${moduleClassSelector('VisitorSpaceCardControls', 'c-visitor-space-card-controls__contact-list')} p`;
 	const visitorSpaceInfos = vrtCard.locator(selector);
 	await expect(visitorSpaceInfos.nth(0)).toBeVisible();
 	await expect(visitorSpaceInfos.nth(1)).toBeVisible();
@@ -62,7 +64,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 
 	// Expect login modal to be visible
 	const loginModalTitle = page.locator(
-		`${moduleClassSelector('c-hetarchief-modal')} .ReactModal__Content--after-open`,
+		`${moduleClassSelector('Modal', 'c-hetarchief-modal')} .ReactModal__Content--after-open`,
 		{
 			hasText:
 				SITE_TRANSLATIONS.nl[
@@ -90,11 +92,13 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	await page.locator('a[href="/"]').first().click();
 
 	// Check navbar exists
-	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`).first()).toBeVisible();
+	await expect(
+		page.locator(`nav${moduleClassSelector('Navigation', 'c-navigation')}`).first()
+	).toBeVisible();
 
 	// Click on 'Bezoek een aanbieder'
 	await page
-		.locator(`a${moduleClassSelector('c-navigation__link')}`, {
+		.locator(`a${moduleClassSelector('NavigationLink', 'c-navigation__link')}`, {
 			hasText: 'Bezoek een aanbieder', // Comes from the database navigation item, so we cannot use SITE_TRANSLATIONS
 		})
 		.first()

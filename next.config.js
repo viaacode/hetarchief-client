@@ -1,43 +1,35 @@
-/* eslint-disable @typescript-eslint/no-var-requires, import/order */
-// const bundleAnalyser = require('@next/bundle-analyzer');
-/*
- * next-transpile-modules is necessary because:
- * - Global CSS cannot be imported from within node_modules.
- *   Why: https://nextjs.org/docs/messages/css-npm
- *   RFC: https://github.com/vercel/next.js/discussions/27953
- */
-const nextTranspileModules = require('next-transpile-modules');
 const path = require('node:path');
 
-// const withBundleAnalyzer = bundleAnalyser({
-// 	enabled: process.env.ANALYZE === 'true',
-// });
-
-const withTM = nextTranspileModules([
-	'ky-universal',
-	'@viaa/avo2-components',
-	'@meemoo/react-components',
-]);
+/**
+ * Critters (invoked by Next for `experimental.optimizeCss` below) logs a "N rules skipped due to
+ * selector errors" warning at build/request time: our browserslist config still resolves to some
+ * very old browser targets (e.g. old iOS Safari), which makes postcss-preset-env/autoprefixer emit
+ * legacy selector-list fallbacks (:lang() chains for logical properties, -webkit-any() for :is())
+ * that Critters' selector parser can't understand. It only affects critical-CSS *inlining* -- the
+ * full stylesheet still loads normally, so this is cosmetic noise, not a functional issue.
+ * runtime doesn't consistently forward the object's fields to Critters), but this env var does --
+ * it's Next's own documented escape hatch (see node_modules/next/dist/server/post-process.js).
+ */
+process.env.CRITTERS_LOG_LEVEL = process.env.CRITTERS_LOG_LEVEL || 'error';
 
 /** @type {import("next").NextConfig} */
-// module.exports = withBundleAnalyzer(
-module.exports = withTM({
+module.exports = {
+	transpilePackages: ['ky-universal', '@viaa/avo2-components', '@meemoo/react-components'],
 	i18n: {
 		locales: ['nl', 'en'],
 		defaultLocale: 'nl',
 		localeDetection: false,
 	},
 	// https://stackoverflow.com/questions/71847778/why-my-nextjs-component-is-rendering-twice
-	// Disabling react 18 strict mode, otherwise the zendesk widget is rendered twice
+	// Disabling react strict mode, otherwise the zendesk widget is rendered twice
 	reactStrictMode: false,
+	// SCSS modules use root-relative imports like `@use 'src/styles/abstracts'`.
+	// sass-loader v16 (Next 16, modern Sass API) needs the project root added explicitly as a load path.
+	sassOptions: {
+		loadPaths: [path.resolve(__dirname)],
+		includePaths: [path.resolve(__dirname)],
+	},
 	experimental: {
-		/**
-		 * Necessary to prevent errors like:
-		 * - Module not found: ESM packages (lodash-es) need to be imported.
-		 *   Use 'import' to reference the package instead.
-		 *   Solution: https://nextjs.org/docs/messages/import-esm-externals
-		 */
-		esmExternals: 'loose',
 		/**
 		 * Ignore warnings about big page data, since we load translations like that
 		 * https://meemoo.atlassian.net/browse/ARC-1932
@@ -48,57 +40,22 @@ module.exports = withTM({
 		// https://meemoo.atlassian.net/browse/ARC-2913
 		optimizeCss: true,
 	},
-	eslint: {
-		ignoreDuringBuilds: true, // We're using biome instead of eslint
-	},
-	webpack: (config, options) => {
-		config.mode = 'production';
-
-		// Required for ky-universal top level await used in admin core inside the api service
-		config.experiments = { topLevelAwait: true, layers: true };
-
-		// https://stackoverflow.com/a/68098547/373207
-		config.resolve.fallback = { fs: false, path: false };
-
-		// Fix issues with react-query:
-		// https://github.com/TanStack/query/issues/3595#issuecomment-1276468579
-		if (options.isServer) {
-			config.externals = ['@tanstack/react-query', 'use-query-params', ...config.externals];
-		}
-
-		// Use biome linting instead of eslint for the build
-		config.plugins.push(
-			new (require('webpack').DefinePlugin)({
-				'process.env.BIOME_LINT': JSON.stringify(true),
-			})
-		);
-
-		// Ignore NextJS warnings about skipped css rules that are not compatible with server side rendering
-		// https://meemoo.atlassian.net/browse/ARC-3192
-		config.ignoreWarnings = [
-			{ message: /rules skipped due to selector errors/i },
-			{ message: /Empty sub-selector/i },
-		];
-
-		// Ensure certain packages are always resolved to one version instead of other versions from admin-core or component libraries
-		config.resolve.alias = {
-			...config.resolve.alias,
-			'@tanstack/react-query': path.resolve('./node_modules/@tanstack/react-query'),
-			'use-query-params': path.resolve('./node_modules/use-query-params'),
-			'react-select': path.resolve('./node_modules/react-select'),
-			'react-select/creatable': path.resolve('./node_modules/react-select/creatable'),
-			'react-select/async': path.resolve('./node_modules/react-select/async'),
-			'react-popper': path.resolve('./node_modules/react-popper'),
-			'react-hook-form': path.resolve('./node_modules/react-hook-form'),
-			'react-table': path.resolve('./node_modules/react-table'),
-			'react-datepicker': path.resolve('./node_modules/react-datepicker'),
-			lodash$: path.resolve('./node_modules/lodash-es'),
-		};
-
-		return config;
-	},
 	typescript: {
 		tsconfigPath: './tsconfig.build.json',
+	},
+	// Fix issues with react-query on the server:
+	// https://github.com/TanStack/query/issues/3595#issuecomment-1276468579
+	serverExternalPackages: ['@tanstack/react-query', 'use-query-params'],
+	turbopack: {
+		resolveAlias: {
+			'@tanstack/react-query': './node_modules/@tanstack/react-query',
+			'use-query-params': './node_modules/use-query-params',
+			'react-select': './node_modules/react-select',
+			'react-select/creatable': './node_modules/react-select/creatable',
+			'react-select/async': './node_modules/react-select/async',
+			'react-hook-form': './node_modules/react-hook-form',
+			'react-datepicker': './node_modules/react-datepicker',
+		},
 	},
 	images: {
 		unoptimized: true,
@@ -114,27 +71,6 @@ module.exports = withTM({
 		],
 	},
 	productionBrowserSourceMaps: true, // process.env.DEBUG_TOOLS === 'true',
-	publicRuntimeConfig: {
-		NEXT_TELEMETRY_DISABLED: process.env.NEXT_TELEMETRY_DISABLED,
-		NODE_ENV: process.env.NODE_ENV,
-		PORT: process.env.PORT,
-		CLIENT_URL: process.env.CLIENT_URL,
-		SSUM_EDIT_ACCOUNT_URL: process.env.SSUM_EDIT_ACCOUNT_URL,
-		KEYCLOAK_ACCOUNT_EDIT_URL: process.env.KEYCLOAK_ACCOUNT_EDIT_URL,
-		USE_KEYCLOAK_INSTEAD_OF_SSUM: process.env.USE_KEYCLOAK_INSTEAD_OF_SSUM,
-		PROXY_URL: process.env.PROXY_URL,
-		DEBUG_TOOLS: process.env.DEBUG_TOOLS,
-		ZENDESK_KEY: process.env.ZENDESK_KEY,
-		FLOW_PLAYER_TOKEN: process.env.FLOW_PLAYER_TOKEN,
-		FLOW_PLAYER_ID: process.env.FLOW_PLAYER_ID,
-		GOOGLE_TAG_MANAGER_ID: process.env.GOOGLE_TAG_MANAGER_ID,
-		ENABLE_GOOGLE_INDEXING: process.env.ENABLE_GOOGLE_INDEXING,
-		IIIF_IMAGE_API: process.env.IIIF_IMAGE_API,
-		ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW:
-			process.env.ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW,
-		DISABLE_COMPLEX_REUSE_FLOW_FOR_ORGANISATIONS: process.env.DISABLE_COMPLEX_REUSE_FLOW_FOR_ORGANISATIONS,
-		ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY: process.env.ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY,
-	},
 	async headers() {
 		if (process.env.ENABLE_GOOGLE_INDEXING === 'false') {
 			return [
@@ -447,4 +383,4 @@ module.exports = withTM({
 			},
 		];
 	},
-});
+};

@@ -1,6 +1,5 @@
-import type { DehydratedState } from '@tanstack/react-query';
-
 import type { Locale } from '@shared/utils/i18n';
+import type { DehydratedState } from '@tanstack/react-query';
 
 export interface DefaultSeoInfo {
 	url: string;

@@ -1,5 +1,6 @@
 @use "sass:color";
 @use "sass:map";
+@use "sass:math";
 
 // Set real view height in src/modules/shared/hooks/use-window-size/use-window-size.ts
 // To avoid the browser ui on mobile devices
@@ -224,9 +225,9 @@ $button-radius-size: 1.8rem;
 $button-height: 4.8rem;
 $button-height-sm: 3.6rem;
 $button-height-xs: 2.8rem;
-$button-radius: $button-height / 2;
-$button-radius-sm: $button-height-sm / 2;
-$button-radius-xs: $button-height-xs / 2;
+$button-radius: math.div($button-height, 2);
+$button-radius-sm: math.div($button-height-sm, 2);
+$button-radius-xs: math.div($button-height-xs, 2);
 $border-radius: 4.6rem;
 $border-radius-sm: 2.4rem;
 

@@ -61,7 +61,7 @@
 		}
 
 		.react-datepicker-wrapper.c-datepicker {
-			&:not(.react-datepicker-wrapper.c-datepicker--time) {
+			&:not(.c-datepicker--time) {
 				@media (max-width: $breakpoint-lg) {
 					margin-bottom: $spacer-sm;
 				}

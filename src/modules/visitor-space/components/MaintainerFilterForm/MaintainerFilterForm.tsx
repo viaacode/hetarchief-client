@@ -16,7 +16,7 @@ import {
 } from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 import clsx from 'clsx';
-import { compact, keyBy, mapValues, noop, without } from 'lodash-es';
+import { compact, keyBy, mapValues, noop, without } from 'es-toolkit/compat';
 import { type FC, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';

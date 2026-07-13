@@ -39,7 +39,7 @@ import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitorLayout } from '@visitor-layout/index';
 import { checkIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
-import { isEmpty } from 'lodash-es';
+import { isEmpty } from 'es-toolkit/compat';
 import { useRouter } from 'next/router';
 import { type FC, type ReactNode, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';

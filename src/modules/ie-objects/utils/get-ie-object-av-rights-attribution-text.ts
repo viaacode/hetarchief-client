@@ -1,5 +1,5 @@
 import type { IeObject } from '@ie-objects/ie-objects.types';
-import { compact, uniq } from 'lodash-es';
+import { compact, uniq } from 'es-toolkit/compat';
 
 const PRODUCER_ROLE_PARTS = ['producer', 'producent', 'production'];
 const BROADCASTER_ROLE_PARTS = ['broadcaster', 'omroep'];

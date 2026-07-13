@@ -1,6 +1,6 @@
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { EventsService, type LogEventType } from '@shared/services/events-service';
-import { noop } from 'lodash-es';
+import { noop } from 'es-toolkit/compat';
 import { parse } from 'query-string';
 import { useEffect, useState } from 'react';
 

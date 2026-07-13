@@ -2,7 +2,7 @@ import { GET_TYPE_TO_ICON_MAP } from '@content-page/components/blocks/BlockConte
 import { SmartLink } from '@meemoo/admin-core-ui/client';
 import { Icon, type IconName } from '@shared/components/Icon';
 import { Button } from '@viaa/avo2-components';
-import { compact } from 'lodash-es';
+import { compact } from 'es-toolkit/compat';
 import type { FC } from 'react';
 import React, { useMemo } from 'react';
 

@@ -7,7 +7,7 @@ import {
 	ColorPicker,
 	FormControl,
 	ReactSelect,
-	RichTextEditorWithInternalState,
+	RichTextEditor,
 	type SelectOption,
 	TextInput,
 } from '@meemoo/react-components';
@@ -35,7 +35,7 @@ import type {
 } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 import clsx from 'clsx';
-import { isEqual } from 'lodash-es';
+import { isEqual } from 'es-toolkit/compat';
 import { useRouter } from 'next/router';
 import React, {
 	type FC,
@@ -339,13 +339,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 		) => {
 			return (
 				<div style={{ display: visible ? 'block' : 'none' }}>
-					<RichTextEditorWithInternalState
-						braft={{
-							draftProps: {
-								ariaDescribedBy: `${labelKeys[fieldName]}__description`,
-								ariaLabelledBy: `${labelKeys[fieldName]}__label`,
-							},
-						}}
+					<RichTextEditor
 						id={labelKeys[fieldName]}
 						value={visitorSpace?.[fieldName] ?? '<p></p>'}
 						onChange={(value) => updateValues({ [fieldName]: value })}

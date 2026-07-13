@@ -1,7 +1,6 @@
-import type { ReactNode } from 'react';
-
 import type { IdentifiableMediaCard, MediaCardProps } from '@shared/components/MediaCard';
 import type { DefaultComponentProps } from '@shared/types';
+import type { ReactNode } from 'react';
 
 export interface MediaCardListProps
 	extends Pick<MediaCardProps, 'view' | 'keywords'>,

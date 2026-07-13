@@ -1,6 +1,6 @@
 import type { SelectOption } from '@meemoo/react-components';
 import { tText } from '@shared/helpers/translate';
-import { compact, sortBy, uniqBy } from 'lodash-es';
+import { compact, sortBy, uniqBy } from 'es-toolkit/compat';
 
 export enum RightsLabel {
 	PUBLIC_DOMAIN = 'https://creativecommons.org/publicdomain/mark/1.0/',

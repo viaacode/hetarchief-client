@@ -1,5 +1,5 @@
 import type { IeObjectsSearchTermObject } from '@shared/types/api';
-import { minBy, truncate } from 'lodash-es';
+import { minBy, truncate } from 'es-toolkit/compat';
 
 export function extractSnippetBySearchTerm(
 	fullText: string,

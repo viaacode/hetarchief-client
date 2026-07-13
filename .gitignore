@@ -25,12 +25,14 @@ yarn-error.log*
 .env.*
 .env
 !.env.template
+/public/env-config.js
 
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
+next-env.d.ts
 
 # Project specific
 /storybook-static
@@ -61,3 +63,5 @@ tmp/
 # ignore Claude AI files
 .claude/
 AGENTS.md
+
+*.log

@@ -30,8 +30,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { isBrowser, isServerSideRendering } from '@shared/utils/is-browser';
 import { isMobileSize } from '@shared/utils/is-mobile';
 import clsx from 'clsx';
-import { debounce } from 'lodash';
-import { clamp, compact, isNil, round } from 'lodash-es';
+import { clamp, compact, debounce, isNil, round } from 'es-toolkit/compat';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import type { TiledImageOptions, TileSource, Viewer } from 'openseadragon';
@@ -950,6 +949,8 @@ export const IiifViewer = ({
 												pageNumber: index + 1,
 											}
 										)}
+										fill
+										sizes="100%"
 									/>
 								) : (
 									<div
@@ -990,6 +991,7 @@ export const IiifViewer = ({
 										pageNumber: index + 1,
 									})}
 									fill
+									sizes="100%"
 								/>
 							</button>
 						);

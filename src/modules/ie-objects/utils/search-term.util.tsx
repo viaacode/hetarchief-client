@@ -1,4 +1,4 @@
-import { uniq } from 'lodash-es';
+import { uniq } from 'es-toolkit/compat';
 
 export function isLiteralSearchTerm(searchTerm: string): boolean {
 	return searchTerm.startsWith('"') && searchTerm.endsWith('"');

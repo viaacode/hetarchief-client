@@ -30,14 +30,14 @@ test('T25: Krant metadata', async ({ page, context }) => {
 	);
 
 	// Check if metadata field "Media type" is "newspaper"
-	let metadataField1 = page.locator(moduleClassSelector('c-metadata__item'), {
+	let metadataField1 = page.locator(moduleClassSelector('Metadata', 'c-metadata__item'), {
 		hasText: SITE_TRANSLATIONS.nl['modules/ie-objects/ie-objects___media-type'],
 	});
 	await expect(metadataField1).toBeVisible();
 	await expect(metadataField1.locator(`text=${IconName.Newspaper}`)).toBeVisible();
 
 	// Check if the metadata field "OCR Software" is hidden
-	const metadataField2 = page.locator(moduleClassSelector('c-metadata__item'), {
+	const metadataField2 = page.locator(moduleClassSelector('Metadata', 'c-metadata__item'), {
 		hasText: SITE_TRANSLATIONS.nl['modules/ie-objects/ie-objects___ocr-software'],
 	});
 	await expect(metadataField2).not.toBeVisible();
@@ -45,7 +45,7 @@ test('T25: Krant metadata', async ({ page, context }) => {
 	// Logout
 	await page.goto(`${process.env.TEST_CLIENT_ENDPOINT as string}/uitloggen`);
 	await expect(
-		page.locator(moduleClassSelector('c-navigation__auth'), {
+		page.locator(moduleClassSelector('Navigation', 'c-navigation__auth'), {
 			hasText:
 				SITE_TRANSLATIONS.nl[
 					'modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren'
@@ -71,7 +71,7 @@ test('T25: Krant metadata', async ({ page, context }) => {
 	);
 
 	// Check if metadata field "Fysieke drager" is "newspaper"
-	metadataField1 = page.locator(moduleClassSelector('c-metadata__item'), {
+	metadataField1 = page.locator(moduleClassSelector('Metadata', 'c-metadata__item'), {
 		hasText: SITE_TRANSLATIONS.nl['modules/ie-objects/ie-objects___fysieke-drager'],
 	});
 	await expect(metadataField1).toBeVisible();

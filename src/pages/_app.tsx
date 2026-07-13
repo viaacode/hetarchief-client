@@ -1,5 +1,6 @@
 import { getAdminCoreConfig } from '@admin/wrappers/admin-core-config';
 import { AdminConfigManager } from '@meemoo/admin-core-ui/client';
+import getConfig from '@shared/config/public-runtime-config';
 import { AppLayout } from '@shared/layouts/AppLayout';
 import NextQueryParamProvider from '@shared/providers/NextQueryParamProvider/NextQueryParamProvider';
 import { ApiService } from '@shared/services/api-service'; // Set global locale:
@@ -9,12 +10,11 @@ import { isServerSideRendering } from '@shared/utils/is-browser';
 import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { setDefaultOptions } from 'date-fns';
 import nlBE from 'date-fns/locale/nl-BE';
+import { lowerCase, upperFirst } from 'es-toolkit/compat';
 import HttpApi from 'i18next-http-backend';
-import { lowerCase, upperFirst } from 'lodash-es';
 import type { AppProps } from 'next/app';
-import getConfig from 'next/config';
 import Head from 'next/head';
-import { appWithTranslation } from 'next-i18next';
+import { appWithTranslation } from 'next-i18next/pages';
 import React, { type ReactElement, useEffect } from 'react';
 import { Provider } from 'react-redux';
 
@@ -103,7 +103,7 @@ export default appWithTranslation(MyApp, {
 	},
 	use: [HttpApi],
 	ns: ['common'],
-	parseMissingKeyHandler: (key) => {
+	parseMissingKeyHandler: (key: string) => {
 		if (key.includes('___')) {
 			return `${upperFirst(lowerCase(key.split('___').pop()))} ***`;
 		}

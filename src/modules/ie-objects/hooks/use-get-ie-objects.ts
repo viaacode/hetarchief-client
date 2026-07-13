@@ -1,5 +1,3 @@
-import { GroupName } from '@account/const';
-import { selectUser } from '@auth/store/user';
 import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { EventsService, LogEventType } from '@shared/services/events-service';
@@ -22,8 +20,8 @@ import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { SEARCH_RESULTS_PAGE_SIZE } from '@visitor-space/const';
 import { SearchSortProp } from '@visitor-space/types';
 import { VISITOR_SPACE_LICENSES } from '@visitor-space/utils/elastic-filters';
-import { isEmpty, isNil, noop } from 'lodash-es';
-import { useDispatch, useSelector } from 'react-redux';
+import { isEmpty, isNil, noop } from 'es-toolkit/compat';
+import { useDispatch } from 'react-redux';
 
 async function getIeObjects(
 	filters: IeObjectsSearchFilter[],
@@ -46,7 +44,6 @@ export const useGetIeObjects = (
 	enabled: boolean = true
 ): UseQueryResult<GetIeObjectsResponse> => {
 	const dispatch = useDispatch();
-	const user = useSelector(selectUser);
 
 	return useQuery({
 		queryKey: [QUERY_KEYS.getIeObjectsResults, args],
@@ -72,7 +69,6 @@ export const useGetIeObjects = (
 					page: args.page,
 					size: args.size,
 					sort: args.sort,
-					user_group_name: user?.groupName || GroupName.ANONYMOUS,
 				}
 			).then(noop); // We don't want to wait for events calls
 

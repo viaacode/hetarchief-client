@@ -4,8 +4,8 @@ import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context'
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { selectHasOpenConfirmationModal } from '@shared/store/ui';
 import clsx from 'clsx';
+import { isUndefined } from 'es-toolkit/compat';
 import FocusTrap from 'focus-trap-react';
-import { isUndefined } from 'lodash-es';
 import { type FC, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Overlay } from '../Overlay';

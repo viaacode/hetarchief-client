@@ -6,7 +6,7 @@ import type { MaterialRequest, MaterialRequestMessage } from '@material-requests
 import { Loading } from '@shared/components/Loading';
 import { tHtml } from '@shared/helpers/translate';
 import clsx from 'clsx';
-import { noop } from 'lodash-es';
+import { noop } from 'es-toolkit/compat';
 import React, { type FC, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './MaterialRequestConversation.module.scss';

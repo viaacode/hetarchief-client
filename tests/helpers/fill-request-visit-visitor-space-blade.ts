@@ -11,7 +11,7 @@ export async function fillRequestVisitVisitorSpaceBlade(
 	const SITE_TRANSLATIONS = await getSiteTranslations();
 
 	// Get active blade
-	const activeBlade = page.locator(moduleClassSelector('c-blade--visible'));
+	const activeBlade = page.locator(moduleClassSelector('Blade', 'c-blade--visible'));
 	await expect(activeBlade).toBeVisible();
 
 	// Fill in 'reason'
@@ -37,12 +37,15 @@ export async function fillRequestVisitVisitorSpaceBlade(
 
 	// Click on 'Verstuur'
 	await page
-		.locator(`${moduleClassSelector('c-request-access-blade')} .c-button__label`, {
-			hasText:
-				SITE_TRANSLATIONS.nl[
-					'modules/home/components/request-access-blade/request-access-blade___verstuur'
-				],
-		})
+		.locator(
+			`${moduleClassSelector('RequestAccessBlade', 'c-request-access-blade')} .c-button__label`,
+			{
+				hasText:
+					SITE_TRANSLATIONS.nl[
+						'modules/home/components/request-access-blade/request-access-blade___verstuur'
+					],
+			}
+		)
 		.click();
 
 	// Check success message on success page

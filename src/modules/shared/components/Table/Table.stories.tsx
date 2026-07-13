@@ -1,10 +1,9 @@
 import { PaginationBar, Table } from '@meemoo/react-components';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import React from 'react';
-
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/PaginationBar.consts';
+import type { Meta, StoryFn } from '@storybook/react';
+import React from 'react';
 
 import { mockColumns, mockData } from './__mocks__/table';
 
@@ -20,9 +19,9 @@ export default {
 			],
 		},
 	},
-} as ComponentMeta<typeof Table>;
+} as Meta<typeof Table>;
 
-const Template: ComponentStory<typeof Table> = (args) => <Table {...args} />;
+const Template: StoryFn<typeof Table> = (args) => <Table {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

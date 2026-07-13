@@ -83,7 +83,7 @@
 		}
 	}
 
-	:global([class*="Blade_c-blade__body-wrapper--content"]) {
+	@include abstracts.module-class-selector-global("Blade", "c-blade__body-wrapper--content") {
 		&:has([class*="p-material-request-detail__conversation"]){
 			padding: 0;
 			overflow: hidden;

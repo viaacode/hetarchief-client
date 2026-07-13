@@ -1,4 +1,4 @@
-import { Button, type TabProps } from '@meemoo/react-components';
+import { Button, type Column, type TabProps } from '@meemoo/react-components';
 import { CopyButton } from '@shared/components/CopyButton';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -6,18 +6,12 @@ import { RequestStatusBadge } from '@shared/components/RequestStatusBadge';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import {
-	AccessType,
-	type VisitRequest,
-	type VisitRow,
-	VisitStatus,
-} from '@shared/types/visit-request';
+import { AccessType, type VisitRequest, VisitStatus } from '@shared/types/visit-request';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils/dates';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { RequestStatusAll } from '@visit-requests/types';
-import { truncate } from 'lodash-es';
+import { truncate } from 'es-toolkit/compat';
 import React from 'react';
-import type { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 export const RequestTablePageSize = 20;
@@ -69,13 +63,13 @@ export const requestStatusFilters = (): TabProps[] => {
 
 export const RequestTableColumns = (): Column<VisitRequest>[] => [
 	{
-		Header: tText('modules/cp/const/requests___naam'),
-		accessor: 'visitorName',
+		header: tText('modules/cp/const/requests___naam'),
+		accessorKey: 'visitorName',
 	},
 	{
-		Header: tText('modules/cp/const/requests___emailadres'),
-		accessor: 'visitorMail',
-		Cell: ({ row }: VisitRow) => (
+		header: tText('modules/cp/const/requests___emailadres'),
+		accessorKey: 'visitorMail',
+		cell: ({ row }) => (
 			<CopyButton
 				className="u-color-neutral u-p-0 c-table__copy"
 				icon={undefined}
@@ -91,9 +85,9 @@ export const RequestTableColumns = (): Column<VisitRequest>[] => [
 		),
 	},
 	{
-		Header: tText('modules/cp/const/requests___tijdstip'),
-		accessor: 'createdAt',
-		Cell: ({ row }: VisitRow) => {
+		header: tText('modules/cp/const/requests___tijdstip'),
+		accessorKey: 'createdAt',
+		cell: ({ row }) => {
 			return (
 				<span
 					className="u-color-neutral"
@@ -105,16 +99,16 @@ export const RequestTableColumns = (): Column<VisitRequest>[] => [
 		},
 	},
 	{
-		Header: tText('modules/cp/const/requests___status'),
-		accessor: 'status',
-		Cell: ({ row }: VisitRow) => {
+		header: tText('modules/cp/const/requests___status'),
+		accessorKey: 'status',
+		cell: ({ row }) => {
 			return <RequestStatusBadge status={row.original.status} />;
 		},
 	},
 	{
-		Header: tText('modules/cp/const/requests___soort-toegang'),
-		accessor: 'accessType',
-		Cell: ({ row }: VisitRow) => {
+		header: tText('modules/cp/const/requests___soort-toegang'),
+		accessorKey: 'accessType',
+		cell: ({ row }) => {
 			return (
 				<span className="u-color-neutral">
 					{row.original.status === VisitStatus.PENDING
@@ -125,9 +119,9 @@ export const RequestTableColumns = (): Column<VisitRequest>[] => [
 		},
 	},
 	{
-		Header: '',
+		header: '',
 		id: 'cp-requests-table-edit',
-		Cell: () => {
+		cell: () => {
 			return (
 				<Button
 					className="p-cp-requests__edit"

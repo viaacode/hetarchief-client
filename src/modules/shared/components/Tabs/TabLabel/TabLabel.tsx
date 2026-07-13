@@ -1,6 +1,5 @@
-import type { FC } from 'react';
-
 import clsx from 'clsx';
+import type { FC } from 'react';
 import type { TabLabelProps } from './TabLabel.types';
 
 const TabLabel: FC<TabLabelProps> = ({ count, label }) => {

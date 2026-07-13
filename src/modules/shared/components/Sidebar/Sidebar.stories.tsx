@@ -1,4 +1,4 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
 import Sidebar from './Sidebar';
@@ -7,9 +7,9 @@ import styles from './Sidebar.module.scss';
 export default {
 	title: 'Components/Sidebar',
 	component: Sidebar,
-} as ComponentMeta<typeof Sidebar>;
+} as Meta<typeof Sidebar>;
 
-const Template: ComponentStory<typeof Sidebar> = (args) => (
+const Template: StoryFn<typeof Sidebar> = (args) => (
 	<div style={{ height: '90vh' }}>
 		<Sidebar {...args} />
 	</div>

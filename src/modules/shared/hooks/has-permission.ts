@@ -1,8 +1,7 @@
-import { intersection } from 'lodash-es';
-import { useSelector } from 'react-redux';
-
 import type { Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
+import { intersection } from 'es-toolkit/compat';
+import { useSelector } from 'react-redux';
 
 /**
  * Checks that the user has all permissions listed

@@ -1,4 +1,4 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
 import Overlay from './Overlay';
@@ -6,9 +6,9 @@ import Overlay from './Overlay';
 export default {
 	title: 'Components/Overlay',
 	component: Overlay,
-} as ComponentMeta<typeof Overlay>;
+} as Meta<typeof Overlay>;
 
-const Template: ComponentStory<typeof Overlay> = (args) => (
+const Template: StoryFn<typeof Overlay> = (args) => (
 	<>
 		<div>
 			<h1>Title</h1>

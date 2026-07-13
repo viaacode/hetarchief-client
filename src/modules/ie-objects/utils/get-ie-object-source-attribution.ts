@@ -6,7 +6,7 @@ import {
 import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatDateTime } from '@shared/utils/dates';
 import { Locale } from '@shared/utils/i18n';
-import { compact } from 'lodash-es';
+import { compact } from 'es-toolkit/compat';
 
 const MISSING_RIGHTS_INFO = 'geen rechteninformatie beschikbaar';
 const UNKNOWN_CREATOR_BY_LOCALE: Record<Locale, string> = {

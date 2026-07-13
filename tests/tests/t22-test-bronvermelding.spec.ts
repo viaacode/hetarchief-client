@@ -23,7 +23,7 @@ test('T22: bronvermelding', async ({ page, context }) => {
 	// Scroll into view attribution metadata
 	const attributionLabel = SITE_TRANSLATIONS.nl['modules/ie-objects/ie-objects___bronvermelding'];
 	const attributionMetadata = page
-		.locator(moduleClassSelector('c-metadata__item'), {
+		.locator(moduleClassSelector('Metadata', 'c-metadata__item'), {
 			hasText: attributionLabel,
 		})
 		.first();

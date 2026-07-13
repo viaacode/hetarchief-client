@@ -2,7 +2,7 @@ import { QUERY_KEYS } from '@shared/const/query-keys';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import type { GetNewsletterPreferencesResponse } from '@shared/types/newsletter';
 import { type UseQueryResult, useQuery } from '@tanstack/react-query';
-import { isEmpty, isNil } from 'lodash-es';
+import { isEmpty, isNil } from 'es-toolkit/compat';
 
 export const useGetNewsletterPreferences = (
 	email: string | undefined

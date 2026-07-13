@@ -18,7 +18,7 @@ import { SEARCH_PAGE_QUERY_PARAM_CONFIG } from '@visitor-space/const';
 import { SearchFilterId } from '@visitor-space/types';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
 import clsx from 'clsx';
-import { sortBy } from 'lodash-es';
+import { sortBy } from 'es-toolkit/compat';
 import { type FC, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import type { ActionMeta, SingleValue } from 'react-select';

@@ -27,7 +27,7 @@ test('T26: kranten tab en zoekresultaten', async ({ page, context }) => {
 	await waitForSearchPage(page, () => newspaperTab.click(), 'newspaper');
 
 	// Check all search results are newspapers
-	const searchResultsSelector = `${moduleClassSelector('c-media-card-list--masonry')} article${moduleClassSelector('c-media-card')}`;
+	const searchResultsSelector = `${moduleClassSelector('MediaCardList', 'c-media-card-list--masonry')} article${moduleClassSelector('MediaCard', 'c-media-card')}`;
 	const searchResults = page.locator(searchResultsSelector);
 
 	// First newspaper

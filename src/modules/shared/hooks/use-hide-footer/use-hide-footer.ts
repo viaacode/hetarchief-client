@@ -1,7 +1,6 @@
+import { setShowFooter } from '@shared/store/ui';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-
-import { setShowFooter } from '@shared/store/ui';
 
 import type { UseHideFooter } from './use-hide-footer.types';
 

@@ -1,6 +1,5 @@
-import { object, type Schema, string } from 'yup';
-
 import { tText } from '@shared/helpers/translate';
+import { object, type Schema, string } from 'yup';
 
 import type { ReportFormState } from './ReportBlade.types';
 

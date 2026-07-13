@@ -7,7 +7,7 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 import { keepPreviousData } from '@tanstack/react-query';
 import { useGetOrganisationBySlug } from '@visitor-space/hooks/get-organisation-by-slug';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
-import { kebabCase } from 'lodash-es';
+import { kebabCase } from 'es-toolkit/compat';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { type FC, useEffect } from 'react';

@@ -7,7 +7,7 @@ import { type RefObject, useEffect, useLayoutEffect } from 'react';
  * @param subProperty optional sub-property of the element to observe (e.g., for nested elements under a library object. Scrollbar._container)
  */
 export function useSize<T extends HTMLElement>(
-	ref: RefObject<T>,
+	ref: RefObject<T | null>,
 	onResize: (element: HTMLElement) => void,
 	subProperty?: string
 ) {

@@ -1,7 +1,7 @@
 import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 import {
 	MOCK_HAMBURGER_PROPS,
@@ -13,9 +13,9 @@ import { Navigation } from './Navigation';
 export default {
 	title: 'Components/Navigation',
 	component: Navigation,
-} as ComponentMeta<typeof Navigation>;
+} as Meta<typeof Navigation>;
 
-const Template: ComponentStory<typeof Navigation> = (args) => (
+const Template: StoryFn<typeof Navigation> = (args) => (
 	<Navigation {...args}>
 		<Navigation.Left
 			placement="left"
@@ -27,7 +27,7 @@ const Template: ComponentStory<typeof Navigation> = (args) => (
 	</Navigation>
 );
 
-const ContextualTemplate: ComponentStory<typeof Navigation> = (args) => (
+const ContextualTemplate: StoryFn<typeof Navigation> = (args) => (
 	<Navigation {...args}>
 		<Navigation.Left placement="left">
 			{/* biome-ignore lint/a11y/useValidAnchor: storybook */}

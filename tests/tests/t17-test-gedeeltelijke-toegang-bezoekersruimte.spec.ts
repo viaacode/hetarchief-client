@@ -47,7 +47,9 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	 * Go to 'Bezoek een aanbieder'
 	 */
 	// Click on "Bezoek een aanbieder" navigation item
-	await page.click(`${moduleClassSelector('c-navigation__link--dropdown')}[href="/bezoek"]`);
+	await page.click(
+		`${moduleClassSelector('NavigationLink', 'c-navigation__link--dropdown')}[href="/bezoek"]`
+	);
 
 	// Click on "Zoeken naar aanbieders" navigation option
 	const findAnOrganisationLabel =
@@ -75,7 +77,9 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	//await new Promise((resolve) => setTimeout(resolve, 1 * 1000)); // TODO: replace this
 
 	// Check navbar exists
-	await expect(page.locator(`nav${moduleClassSelector('c-navigation')}`)).toBeVisible();
+	await expect(
+		page.locator(`nav${moduleClassSelector('Navigation', 'c-navigation')}`)
+	).toBeVisible();
 
 	// Login cp admin amsab isg
 	await loginUserHetArchiefIdp(
@@ -115,7 +119,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Click the pending visit request
 	await page
 		.locator(
-			`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
+			`${moduleClassSelector('SidebarLayout', 'l-sidebar__main')} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
 			{ hasText: 'Basis Gebruiker 2' }
 		)
 		.first()
@@ -131,14 +135,14 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Check request summary contains requester name
 	let summaryHtml = await page
-		.locator(`.c-blade--active ${moduleClassSelector('c-visit-summary')}`)
+		.locator(`.c-blade--active ${moduleClassSelector('VisitSummary', 'c-visit-summary')}`)
 		.innerHTML();
 	expect(summaryHtml).toContain('Basis Gebruiker 2');
 	expect(summaryHtml).toContain(REASON);
 
 	// Check buttons for approve and deny are visible
 	let approveButton = page.locator(
-		`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button`,
+		`.c-blade--active ${moduleClassSelector('BladeContent', 'c-blade__footer')} .c-button`,
 		{
 			hasText:
 				SITE_TRANSLATIONS.nl[
@@ -148,7 +152,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	);
 	await expect(approveButton).toBeVisible();
 	let denyButton = page.locator(
-		`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button`,
+		`.c-blade--active ${moduleClassSelector('BladeContent', 'c-blade__footer')} .c-button`,
 		{
 			hasText:
 				SITE_TRANSLATIONS.nl[
@@ -192,17 +196,17 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	expect(await existingFolders.count()).toBe(1);
 
 	// Click next to the blade to close it, need to click it two times
-	const notBlade = page.locator(moduleClassSelector('c-overlay--visible')).first();
+	const notBlade = page.locator(moduleClassSelector('Overlay', 'c-overlay--visible')).first();
 	await notBlade.click();
 	await notBlade.click();
 
 	// expect the blade to not be visible
-	await expect(page.locator(moduleClassSelector('c-overlay--visible'))).toHaveCount(0);
+	await expect(page.locator(moduleClassSelector('Overlay', 'c-overlay--visible'))).toHaveCount(0);
 	await new Promise((resolve) => setTimeout(resolve, 1000)); // TODO: replace this
 
 	// Click on 'Naar mijn bezoekertool'
 	const goToMyVisitorSpaceLink = page.locator(
-		`${moduleClassSelector('c-list-navigation__link')}[href="/zoeken?aanbieder=amsab-isg"]`,
+		`${moduleClassSelector('ListNavigation', 'c-list-navigation__link')}[href="/zoeken?aanbieder=amsab-isg"]`,
 		{
 			hasText: IconName.Search,
 		}
@@ -214,7 +218,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Check user is in correct space
 	const dropdownWithAmsabISG = page.locator(
-		moduleClassSelector('c-visitor-spaces-dropdown__active-label'),
+		moduleClassSelector('VisitorSpaceDropdown', 'c-visitor-spaces-dropdown__active-label'),
 		{ hasText: 'Amsab-ISG' }
 	);
 	await expect(dropdownWithAmsabISG).toBeVisible();
@@ -269,7 +273,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	expect(bookmarkFolderCounts[FOLDER_NAME]).toEqual(1);
 
 	const folderList = page.locator(
-		`.c-blade--active ${moduleClassSelector('c-add-to-folder-blade__list')}`
+		`.c-blade--active ${moduleClassSelector('AddToFolderBlade', 'c-add-to-folder-blade__list')}`
 	);
 
 	// Check favorites folder
@@ -319,7 +323,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Click the pending visit request
 	await page
 		.locator(
-			`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
+			`${moduleClassSelector('SidebarLayout', 'l-sidebar__main')} .c-table__wrapper--body .c-table__row .c-table__cell:first-child`,
 			{ hasText: 'Basis Gebruiker 2' }
 		)
 		.first()
@@ -335,14 +339,14 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Check request summary contains requester name
 	summaryHtml = await page
-		.locator(`.c-blade--active ${moduleClassSelector('c-visit-summary')}`)
+		.locator(`.c-blade--active ${moduleClassSelector('VisitSummary', 'c-visit-summary')}`)
 		.innerHTML();
 	expect(summaryHtml).toContain('Basis Gebruiker 2');
 	expect(summaryHtml).toContain(REASON);
 
 	// Check buttons for approve and deny are visible
 	approveButton = page.locator(
-		`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button`,
+		`.c-blade--active ${moduleClassSelector('BladeContent', 'c-blade__footer')} .c-button`,
 		{
 			hasText:
 				SITE_TRANSLATIONS.nl[
@@ -352,7 +356,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	);
 	await expect(approveButton).toBeVisible();
 	denyButton = page.locator(
-		`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button`,
+		`.c-blade--active ${moduleClassSelector('BladeContent', 'c-blade__footer')} .c-button`,
 		{
 			hasText:
 				SITE_TRANSLATIONS.nl[
@@ -400,7 +404,9 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await page.click('.react-datepicker__time-list-item:has-text("00:00")');
 
 	// Click the approve button
-	await page.click(`.c-blade--active ${moduleClassSelector('c-blade__footer')} .c-button--black`);
+	await page.click(
+		`.c-blade--active ${moduleClassSelector('BladeContent', 'c-blade__footer')} .c-button--black`
+	);
 
 	// Blade closes
 	await expect(page.locator('.c-blade--active')).not.toBeVisible();
@@ -415,13 +421,18 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	await new Promise((resolve) => setTimeout(resolve, 3 * 1000)); // TODO: temp
 	const approvedRequest = page
-		.locator(`${moduleClassSelector('l-sidebar__main')} .c-table__wrapper--body .c-table__row`, {
-			hasText: 'Basis Gebruiker 2',
-		})
+		.locator(
+			`${moduleClassSelector('SidebarLayout', 'l-sidebar__main')} .c-table__wrapper--body .c-table__row`,
+			{
+				hasText: 'Basis Gebruiker 2',
+			}
+		)
 		.first();
 
 	expect(
-		await approvedRequest.locator(moduleClassSelector('c-request-status-badge')).innerText()
+		await approvedRequest
+			.locator(moduleClassSelector('RequestStatusBadge', 'c-request-status-badge'))
+			.innerText()
 	).toContain(
 		SITE_TRANSLATIONS.nl[
 			'modules/cp/components/request-status-chip/request-status-chip___goedgekeurd'
@@ -459,7 +470,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await newFolder.click();
 
 	const folderObject = page.locator(
-		`${moduleClassSelector('c-media-card-list')} ${moduleClassSelector('c-media-card-list__content')}`
+		`${moduleClassSelector('MediaCardList', 'c-media-card-list')} ${moduleClassSelector('MediaCardList', 'c-media-card-list__content')}`
 	);
 	await expect(folderObject).toHaveCount(1);
 	const organisationLabel =
@@ -514,7 +525,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Check there is maximum one thumbnail available
 	expect(
-		await page.locator(moduleClassSelector('c-media-card__header-wrapper')).count()
+		await page.locator(moduleClassSelector('MediaCard', 'c-media-card__header-wrapper')).count()
 	).toBeLessThanOrEqual(1);
 
 	// Check the purple banner
@@ -535,7 +546,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	await expect(
 		page
-			.locator(`${moduleClassSelector('c-pill--expanded')} span`, {
+			.locator(`${moduleClassSelector('Pill', 'c-pill--expanded')} span`, {
 				hasText:
 					SITE_TRANSLATIONS.nl[
 						'modules/shared/components/media-card/media-card___tijdelijke-toegang'

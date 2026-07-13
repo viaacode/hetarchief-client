@@ -10,7 +10,6 @@
 		max-height: 5.6rem;
 		display: inline-block;
 		padding: 1.4rem $button-horizontal-whitespace;
-		padding: 1.4rem 2.4rem;
 		border: 1px solid $teal-dark;
 		font-family: $font-family-primary;
 		font-size: $font-size-base;
@@ -120,7 +119,7 @@
 
 // Outline
 
-button[class*="c-button"][class*="c-button--tertiary"][class*="skins-module_c-button--tertiary"] {
+button[class*="c-button"][class*="c-button--tertiary"] {
 	background-color: $white;
 	border-color: $black;
 	color: $black;

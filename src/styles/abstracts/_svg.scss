@@ -2,7 +2,7 @@
 @use "variables" as *;
 
 @function as-rgb($color) {
-	@return "rgb(#{color.red($color)},#{color.green($color)},#{color.blue($color)})";
+	@return "rgb(#{color.channel($color, 'red', $space: rgb)},#{color.channel($color, 'green', $space: rgb)},#{color.channel($color, 'blue', $space: rgb)})";
 }
 
 @mixin chevron-down-background($color) {

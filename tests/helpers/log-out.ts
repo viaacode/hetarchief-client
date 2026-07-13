@@ -10,7 +10,9 @@ export async function logout(page: Page): Promise<void> {
 	const SITE_TRANSLATIONS = await getSiteTranslations();
 
 	// Click the avatar
-	await page.locator(`${moduleClassSelector('c-navigation__list')} .c-avatar`).click();
+	await page
+		.locator(`${moduleClassSelector('NavigationList', 'c-navigation__list')} .c-avatar`)
+		.click();
 
 	// Click the logout option
 	await page

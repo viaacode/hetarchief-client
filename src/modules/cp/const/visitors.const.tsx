@@ -1,16 +1,15 @@
-import { Button, type TabProps } from '@meemoo/react-components';
+import { Button, type Column, type TabProps } from '@meemoo/react-components';
 import { CopyButton } from '@shared/components/CopyButton';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
 import { UnreadMarker } from '@shared/components/UnreadMarker';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import type { VisitRequest, VisitRow } from '@shared/types/visit-request';
+import type { VisitRequest } from '@shared/types/visit-request';
 import { asDate, formatSameDayRange } from '@shared/utils/dates';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { RequestStatusAll, VisitTimeframe } from '@visit-requests/types';
 import { isWithinInterval } from 'date-fns';
-import type { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 export const CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG = {
@@ -46,13 +45,13 @@ export const VisitorsTableColumns = (
 	editVisitRequest: (visitRequest: VisitRequest) => void
 ): Column<VisitRequest>[] => [
 	{
-		Header: tText('modules/cp/const/visitors___naam'),
-		accessor: 'visitorName',
+		header: tText('modules/cp/const/visitors___naam'),
+		accessorKey: 'visitorName',
 	},
 	{
-		Header: tText('modules/cp/const/visitors___emailadres'),
-		accessor: 'visitorMail',
-		Cell: ({ row }: VisitRow) => (
+		header: tText('modules/cp/const/visitors___emailadres'),
+		accessorKey: 'visitorMail',
+		cell: ({ row }) => (
 			<CopyButton
 				className="u-color-neutral u-p-0 c-table__copy"
 				icon={undefined}
@@ -67,9 +66,9 @@ export const VisitorsTableColumns = (
 		),
 	},
 	{
-		Header: tText('modules/cp/const/visitors___toegang'),
-		accessor: 'startAt',
-		Cell: ({ row }: VisitRow) => {
+		header: tText('modules/cp/const/visitors___toegang'),
+		accessorKey: 'startAt',
+		cell: ({ row }) => {
 			const start = asDate(row.original.startAt);
 			const end = asDate(row.original.endAt);
 
@@ -85,16 +84,16 @@ export const VisitorsTableColumns = (
 		},
 	},
 	{
-		Header: tText('modules/cp/const/visitors___goedgekeurd-door'),
-		accessor: 'updatedByName',
-		Cell: ({ row }: VisitRow) => {
+		header: tText('modules/cp/const/visitors___goedgekeurd-door'),
+		accessorKey: 'updatedByName',
+		cell: ({ row }) => {
 			return <span className="u-color-neutral">{row.original.updatedByName}</span>;
 		},
 	},
 	{
-		Header: '',
+		header: '',
 		id: 'cp-visitors-histories-table-actions',
-		Cell: ({ row }: VisitRow) => {
+		cell: ({ row }) => {
 			return (
 				<DropdownMenu
 					id={`visit-request-overview__actions-dropdown--${row.original.id}`}

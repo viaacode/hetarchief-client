@@ -10,7 +10,7 @@ export async function getFolderObjectCounts(page: Page): Promise<Record<string, 
 
 	// Wait until the favorites folder link is loaded
 	const favoritesListItem = page.locator(
-		`li${moduleClassSelector('c-add-to-folder-blade__list-item')}`,
+		`li${moduleClassSelector('AddToFolderBlade', 'c-add-to-folder-blade__list-item')}`,
 		{
 			hasText: FAVORITES_FOLDER_NAME,
 		}
@@ -19,7 +19,7 @@ export async function getFolderObjectCounts(page: Page): Promise<Record<string, 
 
 	// Fetch all folder links
 	const folderListItems = page.locator(
-		`.c-blade--active li${moduleClassSelector('c-add-to-folder-blade__list-item')}`
+		`.c-blade--active li${moduleClassSelector('AddToFolderBlade', 'c-add-to-folder-blade__list-item')}`
 	);
 	const counts: Record<string, number> = {};
 	const numberOfFolder = await folderListItems.count();
@@ -27,15 +27,17 @@ export async function getFolderObjectCounts(page: Page): Promise<Record<string, 
 		const name = await page
 			.locator(
 				`.c-blade--active li${moduleClassSelector(
+					'AddToFolderBlade',
 					'c-add-to-folder-blade__list-item'
-				)} >> nth=${i} >> ${moduleClassSelector('c-add-to-folder-blade__list-item__label')}`
+				)} >> nth=${i} >> ${moduleClassSelector('AddToFolderBlade', 'c-add-to-folder-blade__list-item__label')}`
 			)
 			.textContent();
 		const count = await page
 			.locator(
 				`.c-blade--active li${moduleClassSelector(
+					'AddToFolderBlade',
 					'c-add-to-folder-blade__list-item'
-				)} >> nth=${i} >> ${moduleClassSelector('c-add-to-folder-blade__list-item__count')}`
+				)} >> nth=${i} >> ${moduleClassSelector('AddToFolderBlade', 'c-add-to-folder-blade__list-item__count')}`
 			)
 			.textContent();
 		if (!name || !count) {

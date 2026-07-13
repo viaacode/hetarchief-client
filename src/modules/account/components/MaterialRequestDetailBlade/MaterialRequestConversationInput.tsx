@@ -1,7 +1,7 @@
 import { useSendMaterialRequestMessage } from '@account/components/MaterialRequestDetailBlade/hooks/useSendMaterialRequestMessage';
 import { isMaterialRequestClosed } from '@account/utils/is-material-request-closed';
 import type { MaterialRequest } from '@material-requests/types';
-import { Button, RichTextEditorWithInternalState, TagList } from '@meemoo/react-components';
+import { Button, RichTextEditor, TagList } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Spinner } from '@shared/components/Spinner/Spinner';
@@ -176,14 +176,7 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 						</p>
 					</div>
 				)}
-				<RichTextEditorWithInternalState
-					braft={{
-						contentStyle: {
-							minHeight: '100px',
-							maxHeight: '150px',
-							overflowY: 'auto',
-						},
-					}}
+				<RichTextEditor
 					disabled={inputDisabled}
 					className={
 						inputDisabled ? styles['p-conversation-messages__editor--disabled'] : undefined

@@ -32,7 +32,7 @@ import { VisitTimeframe } from '@visit-requests/types';
 import DateInput from '@visitor-space/components/DateInput/DateInput';
 import clsx from 'clsx';
 import { addHours, areIntervalsOverlapping, endOfDay, startOfDay } from 'date-fns';
-import { isEmpty } from 'lodash-es';
+import { isEmpty } from 'es-toolkit/compat';
 import Link from 'next/link';
 import React, { type FC, useCallback, useEffect, useState } from 'react';
 import { Controller, type ControllerRenderProps, type FieldError, useForm } from 'react-hook-form';
@@ -344,7 +344,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					<DateInput
 						id={labelKeys.accessFrom}
 						onBlur={field.onBlur}
-						onChange={(date) => onFromDateChange(date, field)}
+						onChange={(date: Date | null) => onFromDateChange(date, field)}
 						value={field.value}
 						ariaLabel={tText(
 							'modules/shared/components/approve-request-blade/approve-request-blade___toegang-vanaf-datum-input-aria-label'
@@ -357,7 +357,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						minTime={startOfDay(field.value || now)}
 						name={field.name}
 						onBlur={field.onBlur}
-						onChange={(date) => onFromDateChange(date, field)}
+						onChange={(date: Date | null) => onFromDateChange(date, field)}
 						selected={field.value}
 						value={formatTime(field.value)}
 						ariaLabel={tText(
@@ -386,7 +386,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					<DateInput
 						id={labelKeys.accessTo}
 						onBlur={field.onBlur}
-						onChange={(date) => onSimpleDateChange(date, field)}
+						onChange={(date: Date | null) => onSimpleDateChange(date, field)}
 						value={field.value}
 						ariaLabel={tText(
 							'modules/shared/components/approve-request-blade/approve-request-blade___toegang-tot-datum-input-aria-label'
@@ -399,7 +399,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						minTime={startOfDay(field.value || now)}
 						name={field.name}
 						onBlur={field.onBlur}
-						onChange={(date) => onSimpleDateChange(date, field)}
+						onChange={(date: Date | null) => onSimpleDateChange(date, field)}
 						selected={field.value}
 						value={formatTime(field.value)}
 						ariaLabel={tText(

@@ -2,10 +2,10 @@ import { selectCommonUser } from '@auth/store/user';
 import { IE_OBJECT_INTRA_CP_LICENSES } from '@ie-objects/ie-objects.consts';
 import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
 import type { MaterialRequest } from '@material-requests/types';
+import getConfig from '@shared/config/public-runtime-config';
 import { SimpleIeObjectType } from '@shared/types/ie-objects';
 import type { AvoUserCommonUser } from '@viaa/avo2-types';
-import { intersection } from 'lodash-es';
-import getConfig from 'next/config';
+import { intersection } from 'es-toolkit/compat';
 import { useSelector } from 'react-redux';
 
 const { publicRuntimeConfig } = getConfig();

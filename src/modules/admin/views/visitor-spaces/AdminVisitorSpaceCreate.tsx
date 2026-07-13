@@ -1,5 +1,3 @@
-import React, { type FC } from 'react';
-
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { VisitorSpaceSettings } from '@cp/components/VisitorSpaceSettings';
@@ -7,6 +5,7 @@ import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsChe
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { tText } from '@shared/helpers/translate';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import React, { type FC } from 'react';
 
 export const AdminVisitorSpaceCreate: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const renderPageContent = () => {

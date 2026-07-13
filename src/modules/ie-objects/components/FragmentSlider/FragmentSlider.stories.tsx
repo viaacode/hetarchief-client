@@ -1,16 +1,15 @@
-import { action } from '@storybook/addon-actions';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
-
-import { FragmentSlider } from './FragmentSlider';
+import { action } from 'storybook/actions';
 import { fragmentSliderMock } from './__mocks__/fragmentSlider';
+import { FragmentSlider } from './FragmentSlider';
 
 export default {
 	title: 'Components/FragmentSlider',
 	component: FragmentSlider,
-} as ComponentMeta<typeof FragmentSlider>;
+} as Meta<typeof FragmentSlider>;
 
-const Template: ComponentStory<typeof FragmentSlider> = (args) => <FragmentSlider {...args} />;
+const Template: StoryFn<typeof FragmentSlider> = (args) => <FragmentSlider {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

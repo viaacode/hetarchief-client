@@ -25,7 +25,7 @@ import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 import clsx from 'clsx';
 import { isValid } from 'date-fns';
-import { isNil } from 'lodash-es';
+import { isNil } from 'es-toolkit/compat';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { type FC, type MouseEvent, type ReactNode, useState } from 'react';
@@ -316,7 +316,12 @@ const MediaCard: FC<MediaCardProps> = ({
 							? title
 							: tText('modules/shared/components/media-card/media-card___image-of-the-media-object')
 					}
+					fill
 					sizes="100%"
+					style={{
+						objectFit: 'cover',
+						objectPosition: 'top',
+					}}
 				/>
 				{!isNil(icon) && (
 					<>

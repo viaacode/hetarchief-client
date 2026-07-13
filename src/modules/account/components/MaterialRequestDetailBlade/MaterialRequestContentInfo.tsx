@@ -28,7 +28,7 @@ import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate, formatMediumDateWithTime } from '@shared/utils/dates';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
-import { kebabCase, noop } from 'lodash-es';
+import { kebabCase, noop } from 'es-toolkit/compat';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, type ReactNode, useState } from 'react';
 import styles from './MaterialRequestContentInfo.module.scss';

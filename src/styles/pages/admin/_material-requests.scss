@@ -1,8 +1,6 @@
 @use "src/styles/abstracts" as *;
 
-$page: "p-admin-material-requests";
-
-.#{$page} {
+.p-admin-material-requests {
 	&__header {
 		display: flex;
 		justify-content: space-between;
@@ -10,6 +8,8 @@ $page: "p-admin-material-requests";
 
 		@media (max-width: $breakpoint-xl) {
 			flex-direction: column;
+			gap: $spacer-xs;
+			padding: 0 $spacer-sm;
 		}
 
 		&-dropdowns {
@@ -19,7 +19,7 @@ $page: "p-admin-material-requests";
 
 			@media (max-width: $breakpoint-xl) {
 				flex-direction: column;
-				gap: $spacer-xxxs;
+				gap: $spacer-xs;
 			}
 		}
 	}
@@ -31,12 +31,6 @@ $page: "p-admin-material-requests";
 	}
 
 	&__dropdown {
-		margin-bottom: 0;
-
-		@media (max-width: $breakpoint-xl) {
-			margin-bottom: $spacer-xs;
-		}
-
 		&--open {
 			box-shadow: $shadow-24-black-08;
 		}
