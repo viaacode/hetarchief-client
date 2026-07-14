@@ -75,6 +75,7 @@
 
 	&:focus-visible {
 		outline: 2px solid variables.$teal;
+		outline-offset: -2px;
 	}
 }
 

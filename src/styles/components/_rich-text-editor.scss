@@ -1,12 +1,38 @@
 @use "src/styles/abstracts" as abstracts;
 
 .c-rich-text-editor {
+	border: none;
+
 	.c-rich-text-editor__headings-popup .c-rich-text-editor__headings-option--h1 {
 		display: none; // Hide h1 option in headings dropdown
 	}
 
 	.c-rich-text-editor__toolbar {
 		background-color: abstracts.$teal-30;
+		border: 1px solid abstracts.$zinc;
+		border-bottom: none;
+		border-radius: 0;
+		gap: 0;
+		padding: 0;
+
+		// stylelint-disable-next-line property-no-unknown
+		row-rule: 1px solid abstracts.$zinc; // Not supported every where but using this so it starts to show when possible
+
+		button,
+		.c-rich-text-editor__custom-button {
+			border: none;
+			margin-left: 0;
+
+			@include abstracts.focus-outline;
+
+			height: 3.6rem;
+			padding: 0 9px;
+
+			> :first-child {
+				min-width: 1.8rem;
+				height: 1.8rem;
+			}
+		}
 
 		.c-rich-text-editor__separator {
 			background-color: abstracts.$zinc;
@@ -15,6 +41,12 @@
 
 	.c-rich-text-editor__content {
 		font-family: SofiaPro, sans-serif;
+		border: 1px solid abstracts.$zinc;
+		padding: 15px;
+
+		* {
+			line-height: normal;
+		}
 
 		a {
 			color: abstracts.$teal;
@@ -24,6 +56,16 @@
 		textarea {
 			border: 1px solid abstracts.$zinc !important;
 		}
+
+		p {
+			margin: 0;
+		}
+	}
+
+	&.is-fullscreen {
+		display: flex;
+		flex-direction: column;
+		z-index: 9999 !important;
 	}
 }
 
