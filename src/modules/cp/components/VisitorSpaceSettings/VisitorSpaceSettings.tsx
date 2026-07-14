@@ -344,11 +344,12 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 						value={visitorSpace?.[fieldName] ?? '<p></p>'}
 						onChange={(value) => updateValues({ [fieldName]: value })}
 						className={styles['c-cp-settings__description']}
+						locale={locale}
 					/>
 				</div>
 			);
 		},
-		[updateValues, visitorSpace]
+		[updateValues, visitorSpace, locale]
 	);
 
 	const renderedFooter = useMemo(() => {

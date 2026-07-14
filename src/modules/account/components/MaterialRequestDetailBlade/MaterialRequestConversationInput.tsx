@@ -6,6 +6,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Spinner } from '@shared/components/Spinner/Spinner';
 import { tHtml, tText } from '@shared/helpers/translate';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import clsx from 'clsx';
 import React, {
@@ -30,6 +31,8 @@ type MaterialRequestConversationInputProps = {
 
 export const MaterialRequestConversationInput: FC<MaterialRequestConversationInputProps> = memo(
 	({ materialRequest, onAttachmentsChanged }) => {
+		const locale = useLocale();
+
 		const fileListRef = useRef<HTMLDivElement>(null);
 		const [editorKey, setEditorKey] = useState(uuid()); // To force rich text editor to rerender
 		const editorId = `material-request-conversation--${editorKey}`;
@@ -182,6 +185,7 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 						inputDisabled ? styles['p-conversation-messages__editor--disabled'] : undefined
 					}
 					id={editorId}
+					locale={locale}
 					value={currentMessage}
 					onChange={(value) => setCurrentMessage(value)}
 					placeholder={tText(
