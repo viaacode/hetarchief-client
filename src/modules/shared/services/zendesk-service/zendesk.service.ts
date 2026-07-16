@@ -1,3 +1,4 @@
+// @ts-expect-error: Yes it does exist!
 import type { Requests } from 'node-zendesk';
 
 import { ApiService } from '../api-service';

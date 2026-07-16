@@ -8,7 +8,8 @@
     "Robbe Bierebeeck <robbe.bierebeeck@studiohyperdrive.be>"
   ],
   "scripts": {
-    "dev": "dotenv -e .env.local -- node ./scripts/generate-env-config.js && next dev -p 3200",
+    "dev-with-env": "dotenv -e .env.local -- node ./scripts/generate-env-config.js && next dev -p 3200",
+    "dev": "next dev -p 3200",
     "build-with-analyse": "biome ci && next experimental-analyze",
     "build": "biome ci && next build",
     "start": "next start",
