@@ -31,13 +31,15 @@ import type { FunctionComponent } from 'react';
 const { publicRuntimeConfig } = getConfig();
 
 const InternalLink = (linkInfo: LinkInfo) => {
-	const { to, ...rest } = linkInfo;
+	const { to, onKeyUp, ...rest } = linkInfo;
 
 	if (!to) {
-		return <p {...rest} />;
+		// biome-ignore lint/suspicious/noExplicitAny: todo figure out why event handlers do not match
+		return <p {...rest} onKeyUp={(evt) => onKeyUp?.(evt as any)} />;
 	}
 
-	return <Link href={to} passHref {...rest} />;
+	// biome-ignore lint/suspicious/noExplicitAny: todo figure out why event handlers do not match
+	return <Link href={to} passHref {...rest} onKeyUp={(evt) => onKeyUp?.(evt as any)} />;
 };
 
 // When a content page is saved, for clear the Next.js cache
