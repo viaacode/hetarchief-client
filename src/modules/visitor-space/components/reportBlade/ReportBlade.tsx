@@ -8,7 +8,6 @@ import { useZendesk } from '@shared/hooks/use-zendesk';
 import { toastService } from '@shared/services/toast-service';
 import { REPORT_FORM_SCHEMA } from '@visitor-space/components/reportBlade/ReportBlade.const';
 import clsx from 'clsx';
-// @ts-expect-error: Yes it does exist!
 import type { Requests } from 'node-zendesk';
 import { type FC, useCallback, useEffect, useState } from 'react';
 
