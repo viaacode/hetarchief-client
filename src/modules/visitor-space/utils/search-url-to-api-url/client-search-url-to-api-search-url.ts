@@ -18,7 +18,7 @@ export interface IeObjectsSearchBody {
  * (`services.search.searchUrlToApiUrl`) so the admin-core package doesn't need its own port of
  * this client-side filter logic.
  */
-export const searchUrlToApiUrl = (searchQuery: string, size: number): IeObjectsSearchBody => {
+export const clientSearchUrlToApiSearchUrl = (searchQuery: string): IeObjectsSearchBody => {
 	try {
 		const url = new URL(searchQuery);
 		const encodedQuery = parseQueryString(url.search);
@@ -29,11 +29,11 @@ export const searchUrlToApiUrl = (searchQuery: string, size: number): IeObjectsS
 
 		return {
 			filters: mapFiltersToElastic(query),
-			size,
+			size: 20,
 			page: query.page || 1,
 		};
 	} catch {
 		// Invalid URL (already blocked by the editor validator) => return an empty search.
-		return { filters: [], size, page: 1 };
+		return { filters: [], size: 20, page: 1 };
 	}
 };
