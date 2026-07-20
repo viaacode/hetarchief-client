@@ -23,6 +23,7 @@ import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
 import type { Locale } from '@shared/utils/i18n';
 import { AvoCoreDatabaseType, type AvoUserCommonUser } from '@viaa/avo2-types';
+import { searchUrlToApiUrl } from '@visitor-space/utils/search-url-to-api-url/search-url-to-api-url';
 import Link from 'next/link';
 import type { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
@@ -96,7 +97,9 @@ export function getAdminCoreConfig(
 			customNavigationElements: [NAVIGATION_DROPDOWN.VISITOR_SPACES],
 		},
 		icon: {
-			component: ({ name }: { name: string }) => <Icon name={name as IconName} />,
+			component: ({ name, className }: { name: string; className?: string }) => (
+				<Icon name={name as IconName} className={className} />
+			),
 			componentProps: {
 				add: { name: IconNamesLight.Plus },
 				angleDown: { name: IconNamesLight.AngleDown },
@@ -210,6 +213,9 @@ export function getAdminCoreConfig(
 				clear: async (_key: string) => Promise.resolve(),
 			},
 			getContentPageByLanguageAndPathEndpoint: null,
+			search: {
+				clientSearchUrlToApiSearchUrl: searchUrlToApiUrl,
+			},
 		},
 		database: {
 			proxyUrl: publicRuntimeConfig.PROXY_URL,
