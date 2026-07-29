@@ -87,6 +87,7 @@ export function getAdminCoreConfig(
 				ContentBlockType.ContentEncloseGrid,
 				ContentBlockType.Breadcrumbs,
 				ContentBlockType.OverviewWithCarousel,
+				ContentBlockType.HomepageBanner,
 				ContentBlockType.HighlightText,
 			],
 			defaultPageWidth: ContentPageWidth.LARGE,
