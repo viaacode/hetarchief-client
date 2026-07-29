@@ -280,15 +280,6 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		}
 	}
 
-	// A dropdown parent that only groups its children, so in the hamburger menu it reads as a label
-	&--group-label {
-		color: abstracts.$grey;
-
-		@media (min-width: abstracts.$breakpoint-xxl) {
-			color: abstracts.$white;
-		}
-	}
-
 	&--wrapper {
 		display: flex;
 		align-items: center;

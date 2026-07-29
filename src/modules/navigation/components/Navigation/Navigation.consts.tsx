@@ -177,13 +177,14 @@ const getSearchDropdown = (
 	];
 
 	return {
-		// Both the label and the chevron only open the dropdown, so this parent is not a link
-		node: renderLink(navigationLabel, '', {
-			className: linkCls(
-				'u-whitespace-nowrap',
-				styles['c-navigation__link--dropdown'],
-				styles['c-navigation__link--group-label']
-			),
+		node: renderLink(navigationLabel, searchPath, {
+			className: linkClasses,
+			// Make link clickable in hamburger menu, on desktop the label only opens the dropdown
+			onClick: (e) => {
+				if (window.innerWidth > Breakpoints.xxl) {
+					e.preventDefault();
+				}
+			},
 		}),
 		id: 'search',
 		path: searchPath,
