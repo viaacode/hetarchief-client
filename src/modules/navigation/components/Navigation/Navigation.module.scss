@@ -135,10 +135,12 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 
 		&--start {
 			margin-right: abstracts.$spacer-xxs;
+			color: abstracts.$black;
 		}
 
 		&--end {
 			margin-left: auto;
+			color: abstracts.$grey;
 		}
 	}
 
@@ -275,6 +277,15 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	&--dropdown:hover {
 		@media (max-width: abstracts.$breakpoint-xxl) {
 			background-color: abstracts.$silver;
+		}
+	}
+
+	// A dropdown parent that only groups its children, so in the hamburger menu it reads as a label
+	&--group-label {
+		color: abstracts.$grey;
+
+		@media (min-width: abstracts.$breakpoint-xxl) {
+			color: abstracts.$white;
 		}
 	}
 
